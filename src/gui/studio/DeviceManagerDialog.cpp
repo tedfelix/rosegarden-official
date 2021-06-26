@@ -58,10 +58,9 @@ DeviceManagerDialog::~DeviceManagerDialog()
 }
 
 
-DeviceManagerDialog::DeviceManagerDialog(QWidget * parent,
-                                     RosegardenDocument *
-                                     doc) : QMainWindow(parent),
-    Ui::DeviceManagerDialogUi(), m_doc(doc)
+DeviceManagerDialog::DeviceManagerDialog(QWidget *parent) :
+    QMainWindow(parent),
+    Ui::DeviceManagerDialogUi()
 {
     RG_DEBUG << "DeviceManagerDialog::ctor";
 
@@ -73,7 +72,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget * parent,
     m_noPortName = tr("[ No port ]");
 
     //m_doc = 0;    // RG document
-    m_studio = &m_doc->getStudio();
+    m_studio = &RosegardenDocument::currentDocument->getStudio();
 
     setupUi(this);
 
@@ -970,9 +969,11 @@ DeviceManagerDialog::connectSignalsToSlots()
     // which is send by the AlsaDriver, when devices have been added or removed,
     // or if AlsaDriver::checkForNewClients() found any news
     //
-    connect( m_doc,
-        &RosegardenDocument::devicesResyncd, this,
-        &DeviceManagerDialog::slotResyncDevicesReceived );
+    connect(
+        RosegardenDocument::currentDocument,
+            &RosegardenDocument::devicesResyncd,
+        this,
+            &DeviceManagerDialog::slotResyncDevicesReceived );
     
 //     //
 //     connect( m_doc,

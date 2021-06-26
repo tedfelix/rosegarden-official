@@ -215,7 +215,7 @@ using namespace Accidentals;
 NotationView::NotationView(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
                            QWidget *parent) :
-    EditViewBase(doc, segments, parent),
+    EditViewBase(segments, parent),
     m_document(doc),
     m_durationMode(InsertingRests),
     m_durationPressed(nullptr),
@@ -506,7 +506,7 @@ adoptCompositionSegment(Segment *s)
         // we already have it
         return;
     }
-    Composition& comp = m_doc->getComposition();
+    Composition& comp = RosegardenDocument::currentDocument->getComposition();
     if (comp.findSegment(s) == comp.end()) {
         // segment is not in composition
         RG_WARNING << "segment" << s << "not found in composition";
@@ -529,7 +529,7 @@ unadoptCompositionSegment(Segment *s)
         // we do not have it
         return;
     }
-    Composition& comp = m_doc->getComposition();
+    Composition& comp = RosegardenDocument::currentDocument->getComposition();
     if (comp.findSegment(s) == comp.end()) {
         // segment is not in composition
         RG_WARNING << "segment" << s << "not found in composition";
@@ -1170,7 +1170,7 @@ NotationView::setupActions()
     spacingActionMenu->setObjectName("stretch_actionmenu");
 
     m_notationWidget->getScene()->setHSpacing(
-            m_doc->getComposition().m_notationSpacing);
+            RosegardenDocument::currentDocument->getComposition().m_notationSpacing);
     m_availableSpacings = NotationHLayout::getAvailableSpacings();
 
     ag = new QActionGroup(this);
@@ -1184,7 +1184,7 @@ NotationView::setupActions()
         ag->addAction(a);
         a->setText(QString("%1%").arg(*i));
         a->setCheckable(true);
-        a->setChecked(*i == m_doc->getComposition().m_notationSpacing);
+        a->setChecked(*i == RosegardenDocument::currentDocument->getComposition().m_notationSpacing);
 
         spacingActionMenu->addAction(a);
     }
@@ -1533,14 +1533,14 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
         heading = tr("LilyPond preview options");
     }
 
-    LilyPondOptionsDialog dialog(this, m_doc, caption, heading, true);
+    LilyPondOptionsDialog dialog(this, RosegardenDocument::currentDocument, caption, heading, true);
     if (dialog.exec() != QDialog::Accepted) {
         return false;
     }
 
     RosegardenMainViewWidget * view = RosegardenMainWindow::self()->getView();
 
-    LilyPondExporter e(m_doc, view->getSelection(), std::string(QFile::encodeName(file)), this);
+    LilyPondExporter e(RosegardenDocument::currentDocument, view->getSelection(), std::string(QFile::encodeName(file)), this);
 
     if (!e.write()) {
         QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
@@ -2102,7 +2102,7 @@ NotationView::slotCurrentStaffUp()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT pointerPosition = m_doc->getComposition().getPosition();
+    timeT pointerPosition = RosegardenDocument::currentDocument->getComposition().getPosition();
     // if the pointer has moved take that time
     if (pointerPosition != m_oldPointerPosition) {
         m_oldPointerPosition = pointerPosition;
@@ -2122,7 +2122,7 @@ NotationView::slotCurrentStaffDown()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT pointerPosition = m_doc->getComposition().getPosition();
+    timeT pointerPosition = RosegardenDocument::currentDocument->getComposition().getPosition();
     // if the pointer has moved take that time
     if (pointerPosition != m_oldPointerPosition) {
         m_oldPointerPosition = pointerPosition;
@@ -3643,7 +3643,7 @@ NotationView::slotEditSwitchPreset()
                             clefIndexToClef(dialog.getClef())));
     }
 
-    m_doc->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -3845,7 +3845,7 @@ NotationView::slotRegenerateScene()
     m_notationWidget->slotSetFontName(m_fontName);
     m_notationWidget->slotSetFontSize(m_fontSize);
     m_notationWidget->getScene()->setHSpacing(
-            m_doc->getComposition().m_notationSpacing);
+            RosegardenDocument::currentDocument->getComposition().m_notationSpacing);
 
     // restore zoom factors
     m_notationWidget->setVerticalZoomFactor(vZoomFactor);
@@ -4546,8 +4546,8 @@ NotationView::slotSpacingComboChanged(int index)
     int spacing = m_availableSpacings[index];
     if (m_notationWidget) m_notationWidget->getScene()->setHSpacing(spacing);
 
-    m_doc->getComposition().m_notationSpacing = spacing;
-    m_doc->slotDocumentModified();
+    RosegardenDocument::currentDocument->getComposition().m_notationSpacing = spacing;
+    RosegardenDocument::currentDocument->slotDocumentModified();
 
     QString action = QString("spacing_%1").arg(spacing);
     findAction(action)->setChecked(true);

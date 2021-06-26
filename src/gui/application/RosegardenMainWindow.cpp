@@ -1189,10 +1189,10 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 
     if (m_markerEditor)
         m_markerEditor->setDocument(RosegardenDocument::currentDocument);
-    if (m_tempoView) {
-        delete m_tempoView;
-        m_tempoView = nullptr;
-    }
+
+    delete m_tempoView;
+    m_tempoView = nullptr;
+
     if (m_triggerSegmentManager)
         m_triggerSegmentManager->setDocument(RosegardenDocument::currentDocument);
 
@@ -6755,7 +6755,7 @@ RosegardenMainWindow::slotManageMIDIDevices()
     }
     if (!m_deviceManager) {
 
-        m_deviceManager = new DeviceManagerDialog(this, RosegardenDocument::currentDocument);
+        m_deviceManager = new DeviceManagerDialog(this);
         
         connect(m_deviceManager, SIGNAL(editBanks(DeviceId)),
                 this, SLOT(slotEditBanks(DeviceId)));
@@ -7024,7 +7024,7 @@ RosegardenMainWindow::slotEditTempos(timeT t)
         return ;
     }
 
-    m_tempoView = new TempoView(RosegardenDocument::currentDocument, getView(), m_editTempoController, t);
+    m_tempoView = new TempoView(getView(), m_editTempoController, t);
 
     connect(m_tempoView, &TempoView::closing,
             this, &RosegardenMainWindow::slotTempoViewClosed);

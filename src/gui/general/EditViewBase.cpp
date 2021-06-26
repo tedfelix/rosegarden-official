@@ -40,12 +40,10 @@
 namespace Rosegarden
 {
 
-EditViewBase::EditViewBase(RosegardenDocument *doc,
-                           std::vector<Segment *> segments,
+EditViewBase::EditViewBase(std::vector<Segment *> segments,
                            QWidget * /* parent */) :
     // QMainWindow(parent),   // See following comments
     QMainWindow(nullptr),
-    m_doc(doc),
     m_segments(segments),
     m_configDialogPageIndex(0),
     m_shortcuts(nullptr)
@@ -66,7 +64,9 @@ EditViewBase::EditViewBase(RosegardenDocument *doc,
     //
     // setAttribute(Qt::WA_ShowWithoutActivating);
 
-    m_doc->attachEditView(this);
+    // Store so that we attach and detach from the same document.
+    m_doc = RosegardenDocument::currentDocument;
+    RosegardenDocument::currentDocument->attachEditView(this);
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotTestClipboard()));
@@ -76,6 +76,7 @@ EditViewBase::EditViewBase(RosegardenDocument *doc,
 
 EditViewBase::~EditViewBase()
 {
+    // Use m_doc to make sure we detach from the same document we attached to.
     m_doc->detachEditView(this);
     slotSaveOptions();
 }
@@ -342,7 +343,7 @@ QString
 EditViewBase::getTitle(const QString& view)
 {
     QString title;
-    QString indicator = (m_doc->isModified() ? "*" : "");
+    QString indicator = (RosegardenDocument::currentDocument->isModified() ? "*" : "");
     if (m_segments.size() == 1) {
         
         TrackId trackId = m_segments[0]->getTrack();

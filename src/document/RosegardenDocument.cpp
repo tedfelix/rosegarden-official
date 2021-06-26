@@ -157,7 +157,8 @@ RosegardenDocument::RosegardenDocument(
 
 RosegardenDocument::~RosegardenDocument()
 {
-    RG_DEBUG << "~RosegardenDocument()";
+    RG_DEBUG << "dtor";
+
     m_beingDestroyed = true;
 
     m_audioPeaksThread.finish();
@@ -167,7 +168,8 @@ RosegardenDocument::~RosegardenDocument()
 
     //     ControlRulerCanvasRepository::clear();
 
-    if (m_clearCommandHistory) CommandHistory::getInstance()->clear(); // before Composition is deleted
+    if (m_clearCommandHistory)
+        CommandHistory::getInstance()->clear(); // before Composition is deleted
 
     release();
 }

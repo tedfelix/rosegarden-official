@@ -94,7 +94,7 @@ namespace Rosegarden
 EventView::EventView(RosegardenDocument *doc,
                      std::vector<Segment *> segments,
                      QWidget *parent):
-        ListEditView(doc, segments, 2, parent),
+        ListEditView(segments, 2, parent),
         m_eventFilter(Note | Text | SystemExclusive | Controller |
                       ProgramChange | PitchBend | Indication | Other |
                       GeneratedRegion | SegmentID),

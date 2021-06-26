@@ -18,9 +18,6 @@
 #ifndef RG_EDITVIEWBASE_H
 #define RG_EDITVIEWBASE_H
 
-#include <set>
-#include <string>
-#include <vector>
 #include "base/Event.h"
 #include "ActionFileClient.h"
 
@@ -30,12 +27,19 @@
 class QShortcut;
 class QCloseEvent;
 
+#include <set>
+#include <string>
+#include <vector>
+
+
 namespace Rosegarden
 {
+
+
 class Clipboard;
 class Command;
-class Segment;
 class RosegardenDocument;
+class Segment;
 class Event;
 
  
@@ -44,8 +48,7 @@ class EditViewBase : public QMainWindow, public ActionFileClient
     Q_OBJECT
 
 public:
-    EditViewBase(RosegardenDocument *doc,
-                 std::vector<Segment *> segments,
+    EditViewBase(std::vector<Segment *> segments,
                  QWidget *parent);
 
     ~EditViewBase() override;
@@ -230,14 +233,19 @@ protected:
     /// form a suitable title string for the window
     QString getTitle(const QString& view);
 
-    RosegardenDocument* m_doc;
-
     /// The Segment(s) that are being edited.
     std::vector<Segment *> m_segments;
 
     int m_configDialogPageIndex;
 
     QShortcut *m_shortcuts;
+
+    /// We need this so that we can attach/detach from the same document.
+    /**
+     * DO NOT REMOVE!  Prefer RosegardenDocument::currentDocument to this
+     * if that makes sense.  Only use this for connection/disconnection.
+     */
+    RosegardenDocument *m_doc;
 };
 
 

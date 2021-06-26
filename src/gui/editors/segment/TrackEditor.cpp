@@ -207,8 +207,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     const int canvasHeight = m_trackCellHeight *
                        std::max(40u, m_doc->getComposition().getNbTracks());
 
-    m_trackButtons = new TrackButtons(m_doc,
-                                      m_trackCellHeight,
+    m_trackButtons = new TrackButtons(m_trackCellHeight,
                                       m_showTrackLabels,
                                       canvasHeight,  // overall height
                                       m_trackButtonScroll);  // parent

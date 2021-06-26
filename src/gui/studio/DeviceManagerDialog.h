@@ -50,7 +50,7 @@ class DeviceManagerDialog : public QMainWindow, public Ui::DeviceManagerDialogUi
     
 public:
     
-    DeviceManagerDialog (QWidget* parent, RosegardenDocument* doc);
+    DeviceManagerDialog (QWidget* parent);
     ~DeviceManagerDialog() override;
     
     /**
@@ -140,7 +140,6 @@ public slots:
     void slotResyncDevicesReceived();
     
 protected:
-    RosegardenDocument *m_doc;
     Studio *m_studio;
     
     /**

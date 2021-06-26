@@ -65,7 +65,8 @@ AudioPlayQueue::AudioPlayQueue() :
 
 AudioPlayQueue::~AudioPlayQueue()
 {
-    RG_DEBUG << "dtor";
+    RG_DEBUG << "dtor...";
+    RG_DEBUG << "This tends to be the last thing you'll see on a normal exit.";
 
     clear();
 }

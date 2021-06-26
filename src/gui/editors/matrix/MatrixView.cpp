@@ -124,7 +124,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
                  std::vector<Segment *> segments,
                  bool drumMode,
                  QWidget *parent) :
-    EditViewBase(doc, segments, parent),
+    EditViewBase(segments, parent),
     m_tracking(true),
     m_quantizations(BasicQuantizer::getStandardQuantizations()),
     m_drumMode(drumMode),
