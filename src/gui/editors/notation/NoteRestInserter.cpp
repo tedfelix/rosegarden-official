@@ -1243,7 +1243,7 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
             command->addCommand(new TupletCommand
                                 (segment, time, note.getDuration(),
                                  m_widget->getUntupledCount(),
-                                 m_widget->getTupledCount(), true)); // #1046934: "has timing already"
+                                 m_widget->getTupledCount(), false)); // #1046934: "has timing already"
             command->addCommand(insertionCommand);
             activeCommand = command;
         }
