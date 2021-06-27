@@ -37,9 +37,8 @@ private Q_SLOTS:
 
 void TestLilypondExport::initTestCase()
 {
-    // We certainly don't want to mess up the user's QSettings or allow
-    // the user's QSettings to affect the tests.  Use a separate file.
-    QCoreApplication::setApplicationName("test_lilypond_export");
+    // Make sure settings end up in the right place.
+    QCoreApplication::setOrganizationName("rosegardenmusic");
 
     // Change the settings so that they are consistent and not affected
     // by defaults.

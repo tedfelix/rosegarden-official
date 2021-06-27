@@ -31,10 +31,10 @@ namespace Rosegarden
 {
 
 
-CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
-    m_doc(doc)
+CompositionMapper::CompositionMapper()
 {
-    const Composition &composition = m_doc->getComposition();
+    const Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
 
     // For each Segment in the Composition
     for (Segment *segment : composition) {
@@ -108,7 +108,8 @@ CompositionMapper::mapSegment(Segment *segment)
     }
 
     QSharedPointer<SegmentMapper> mapper =
-        SegmentMapper::makeMapperForSegment(m_doc, segment);
+        SegmentMapper::makeMapperForSegment(
+                RosegardenDocument::currentDocument, segment);
 
     if (mapper)
         m_segmentMappers[segment] = mapper;

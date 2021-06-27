@@ -45,6 +45,9 @@ private:
 
 void TestNotationViewSelection::initTestCase()
 {
+    // Make sure settings end up in the right place.
+    QCoreApplication::setOrganizationName("rosegardenmusic");
+
     // Make sure RD knows about itself.
     RosegardenDocument::currentDocument = &m_doc;
 
