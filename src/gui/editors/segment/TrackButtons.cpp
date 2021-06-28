@@ -77,20 +77,18 @@ namespace Rosegarden
 {
 
 
-TrackButtons::TrackButtons(RosegardenDocument* doc,
-                           int trackCellHeight,
+TrackButtons::TrackButtons(int trackCellHeight,
                            bool showTrackLabels,
                            int overallHeight,
                            QWidget* parent) :
         QFrame(parent),
-        m_doc(doc),
         m_layout(new QVBoxLayout(this)),
         m_recordSigMapper(new QSignalMapper(this)),
         m_muteSigMapper(new QSignalMapper(this)),
         m_soloSigMapper(new QSignalMapper(this)),
         m_clickedSigMapper(new QSignalMapper(this)),
         m_instListSigMapper(new QSignalMapper(this)),
-        m_tracks(doc->getComposition().getNbTracks()),
+        m_tracks(RosegardenDocument::currentDocument->getComposition().getNbTracks()),
 //        m_offset(4),
         m_trackCellHeight(trackCellHeight),
         m_popupTrackPos(0)
@@ -139,7 +137,8 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
     //
     setMinimumHeight(overallHeight);
 
-    m_doc->getComposition().addObserver(this);
+    // We never remove the observer so we should be ok here.
+    RosegardenDocument::currentDocument->getComposition().addObserver(this);
 
     // We do not care about RWM::documentLoaded() because if a new
     // document is being loaded, we are going away.  A new TrackButtons
@@ -151,10 +150,10 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
 
 TrackButtons::~TrackButtons()
 {
-    // CRASH!  Probably m_doc is gone...
+    // CRASH!  Probably RosegardenDocument::currentDocument is gone...
     // Probably don't need to disconnect as we only go away when the
     // doc and composition do.  shared_ptr would help here.
-    //m_doc->getComposition().removeObserver(this);
+    //RosegardenDocument::currentDocument->getComposition().removeObserver(this);
 }
 
 void
@@ -198,14 +197,14 @@ TrackButtons::updateUI(Track *track)
     // *** Record LED
 
     Instrument *ins =
-        m_doc->getStudio().getInstrumentById(track->getInstrument());
+            RosegardenDocument::currentDocument->getStudio().getInstrumentById(track->getInstrument());
     m_recordLeds[pos]->setColor(getRecordLedColour(ins));
 
     // Note: setRecord() used to be used to do this.  But that would
     //       set the track in the composition to record as well as setting
     //       the button on the UI.  This seems better and works fine.
     bool recording =
-        m_doc->getComposition().isTrackRecording(track->getId());
+            RosegardenDocument::currentDocument->getComposition().isTrackRecording(track->getId());
     setRecordButton(pos, recording);
 
 
@@ -243,14 +242,14 @@ TrackButtons::updateUI(Track *track)
     label->updateLabel();
 
     label->setSelected(
-            track->getId() == m_doc->getComposition().getSelectedTrack());
+            track->getId() == RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
 
 }
 
 void
 TrackButtons::makeButtons()
 {
-    if (!m_doc)
+    if (!RosegardenDocument::currentDocument)
         return;
 
     //RG_DEBUG << "makeButtons()";
@@ -258,7 +257,7 @@ TrackButtons::makeButtons()
     // Create a horizontal box filled with widgets for each track
 
     for (int i = 0; i < m_tracks; ++i) {
-        Track *track = m_doc->getComposition().getTrackByPosition(i);
+        Track *track = RosegardenDocument::currentDocument->getComposition().getTrackByPosition(i);
 
         if (!track)
             continue;
@@ -309,7 +308,7 @@ TrackButtons::populateButtons()
 
     // For each track, copy info from Track object to the widgets
     for (int i = 0; i < m_tracks; ++i) {
-        Track *track = m_doc->getComposition().getTrackByPosition(i);
+        Track *track = RosegardenDocument::currentDocument->getComposition().getTrackByPosition(i);
 
         if (!track)
             continue;
@@ -324,13 +323,13 @@ TrackButtons::slotToggleMute(int pos)
 {
     //RG_DEBUG << "TrackButtons::slotToggleMute( position =" << pos << ")";
 
-    if (!m_doc)
+    if (!RosegardenDocument::currentDocument)
         return;
 
     if (pos < 0  ||  pos >= m_tracks)
         return;
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
     Track *track = comp.getTrackByPosition(pos);
 
     if (!track)
@@ -341,15 +340,15 @@ TrackButtons::slotToggleMute(int pos)
 
     // Notify observers
     comp.notifyTrackChanged(track);
-    m_doc->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void TrackButtons::toggleSolo()
 {
-    if (!m_doc)
+    if (!RosegardenDocument::currentDocument)
         return;
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
     int pos = comp.getTrackPositionById(comp.getSelectedTrack());
 
     if (pos == -1)
@@ -363,13 +362,13 @@ TrackButtons::slotToggleSolo(int pos)
 {
     //RG_DEBUG << "slotToggleSolo( position =" << pos << ")";
 
-    if (!m_doc)
+    if (!RosegardenDocument::currentDocument)
         return;
 
     if (pos < 0  ||  pos >= m_tracks)
         return;
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
     Track *track = comp.getTrackByPosition(pos);
 
     if (!track)
@@ -406,7 +405,7 @@ TrackButtons::slotToggleSolo(int pos)
 
     // Notify observers
     comp.notifyTrackChanged(track);
-    m_doc->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -457,10 +456,10 @@ TrackButtons::slotUpdateTracks()
     RG_DEBUG << "  elapsed: " << t.restart();
 #endif
 
-    if (!m_doc)
+    if (!RosegardenDocument::currentDocument)
         return;
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
     const int newNbTracks = comp.getNbTracks();
 
     if (newNbTracks < 0) {
@@ -478,7 +477,7 @@ TrackButtons::slotUpdateTracks()
     } else if (newNbTracks > m_tracks) {  // if added
         // For each added track
         for (int i = m_tracks; i < newNbTracks; ++i) {
-            Track *track = m_doc->getComposition().getTrackByPosition(i);
+            Track *track = RosegardenDocument::currentDocument->getComposition().getTrackByPosition(i);
             if (track) {
                 // Make a new button
                 QFrame *trackHBox = makeButton(track);
@@ -536,10 +535,10 @@ TrackButtons::slotToggleRecord(int position)
 
     if (position < 0  ||  position >= m_tracks)
         return;
-    if (!m_doc)
+    if (!RosegardenDocument::currentDocument)
         return;
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
     Track *track = comp.getTrackByPosition(position);
 
     if (!track)
@@ -553,9 +552,9 @@ TrackButtons::slotToggleRecord(int position)
 
     // Notify observers
     comp.notifyTrackChanged(track);
-    m_doc->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 
-    m_doc->checkAudioPath(track);
+    RosegardenDocument::currentDocument->checkAudioPath(track);
 }
 
 void
@@ -608,9 +607,9 @@ TrackButtons::getHighlightedTracks()
 void
 TrackButtons::slotRenameTrack(QString longLabel, QString shortLabel, TrackId trackId)
 {
-    if (!m_doc) return;
+    if (!RosegardenDocument::currentDocument) return;
 
-    Track *track = m_doc->getComposition().getTrackById(trackId);
+    Track *track = RosegardenDocument::currentDocument->getComposition().getTrackById(trackId);
 
     if (!track) return;
 
@@ -622,7 +621,7 @@ TrackButtons::slotRenameTrack(QString longLabel, QString shortLabel, TrackId tra
 
     // Rename the track
     CommandHistory::getInstance()->addCommand(
-            new RenameTrackCommand(&m_doc->getComposition(),
+            new RenameTrackCommand(&RosegardenDocument::currentDocument->getComposition(),
                                    trackId,
                                    longLabel,
                                    shortLabel));
@@ -641,7 +640,7 @@ void
 TrackButtons::slotSetMetersByInstrument(float value,
                                         InstrumentId id)
 {
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
     for (int i = 0; i < m_tracks; ++i) {
         Track *track = comp.getTrackByPosition(i);
@@ -657,14 +656,14 @@ TrackButtons::slotInstrumentMenu(int trackId)
 {
     //RG_DEBUG << "TrackButtons::slotInstrumentMenu( trackId =" << trackId << ")";
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
     const int position = comp.getTrackById(trackId)->getPosition();
     Track *track = comp.getTrackByPosition(position);
 
     Instrument *instrument = nullptr;
 
     if (track != nullptr) {
-        instrument = m_doc->getStudio().getInstrumentById(
+        instrument = RosegardenDocument::currentDocument->getStudio().getInstrumentById(
                 track->getInstrument());
     }
 
@@ -723,7 +722,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         havePixmaps = true;
     }
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
     // clear the popup
     instrumentPopup->clear();
@@ -736,7 +735,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     int currentDevId = -1;
 
     // Get the list
-    Studio &studio = m_doc->getStudio();
+    Studio &studio = RosegardenDocument::currentDocument->getStudio();
     InstrumentList list = studio.getPresentationInstruments();
 
     // For each instrument
@@ -960,8 +959,8 @@ TrackButtons::selectInstrument(Track *track, Instrument *instrument)
     // In case the sequencer is currently playing, we need to regenerate
     // all the events with the new channel number.
 
-    Composition &comp = m_doc->getComposition();
-    SequenceManager *sequenceManager = m_doc->getSequenceManager();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
+    SequenceManager *sequenceManager = RosegardenDocument::currentDocument->getSequenceManager();
 
     // For each segment in the composition
     for (Composition::iterator i = comp.begin();
@@ -988,7 +987,7 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
     //RG_DEBUG << "slotInstrumentSelected(): instrumentIndex =" << instrumentIndex;
 
     Instrument *instrument =
-            m_doc->getStudio().getInstrumentFromList(instrumentIndex);
+            RosegardenDocument::currentDocument->getStudio().getInstrumentFromList(instrumentIndex);
 
     //RG_DEBUG << "slotInstrumentSelected(): instrument " << inst;
 
@@ -997,7 +996,7 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
         return;
     }
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
     Track *track = comp.getTrackByPosition(m_popupTrackPos);
 
     if (!track) {
@@ -1017,7 +1016,7 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
     // ??? This is what we should do.
     //comp.notifyTrackChanged(track);
 
-    m_doc->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 
     // Notify IPB, ControlBlock, and SequenceManager.
     selectInstrument(track, instrument);
@@ -1041,7 +1040,7 @@ TrackButtons::slotSynchroniseWithComposition()
 {
     //RG_DEBUG << "slotSynchroniseWithComposition()";
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
     for (int i = 0; i < m_tracks; i++) {
         updateUI(comp.getTrackByPosition(i));
@@ -1053,7 +1052,7 @@ void
 TrackButtons::slotLabelSelected(int position)
 {
     Track *track =
-        m_doc->getComposition().getTrackByPosition(position);
+            RosegardenDocument::currentDocument->getComposition().getTrackByPosition(position);
 
     if (track) {
         emit trackSelected(track->getId());
@@ -1071,14 +1070,14 @@ TrackButtons::slotTPBInstrumentSelected(TrackId trackId, int instrumentIndex)
     //     track position and the instrument index.  slotInstrumentSelected()
     //     could call it.
     m_popupTrackPos =
-            m_doc->getComposition().getTrackById(trackId)->getPosition();
+            RosegardenDocument::currentDocument->getComposition().getTrackById(trackId)->getPosition();
     slotInstrumentSelected(instrumentIndex);
 }
 
 int
 TrackButtons::trackHeight(TrackId trackId)
 {
-    int multiple = m_doc->
+    int multiple = RosegardenDocument::currentDocument->
             getComposition().getMaxContemporaneousSegmentsOnTrack(trackId);
     if (multiple == 0)
         multiple = 1;
@@ -1153,7 +1152,7 @@ TrackButtons::makeButton(Track *track)
     // *** Record LED ***
 
     Rosegarden::Instrument *ins =
-        m_doc->getStudio().getInstrumentById(track->getInstrument());
+            RosegardenDocument::currentDocument->getStudio().getInstrumentById(track->getInstrument());
 
     LedButton *record = new LedButton(getRecordLedColour(ins), trackHBox);
     record->setToolTip(tr("Record on this track"));
@@ -1276,7 +1275,7 @@ void
 TrackButtons::trackSelectionChanged(const Composition *, TrackId trackId)
 {
     //RG_DEBUG << "TrackButtons::trackSelectionChanged()" << trackId;
-    Track *track = m_doc->getComposition().getTrackById(trackId);
+    Track *track = RosegardenDocument::currentDocument->getComposition().getTrackById(trackId);
     if (!track)
         return;
 
@@ -1296,11 +1295,11 @@ void
 TrackButtons::slotTrackSelected(int trackId)
 {
     // Select the track.
-    m_doc->getComposition().setSelectedTrack(trackId);
+    RosegardenDocument::currentDocument->getComposition().setSelectedTrack(trackId);
 
     // Old notification mechanism
     // ??? This should be replaced with emitDocumentModified() below.
-    m_doc->getComposition().notifyTrackSelectionChanged(trackId);
+    RosegardenDocument::currentDocument->getComposition().notifyTrackSelectionChanged(trackId);
 
     // Older mechanism.  Keeping this until we can completely replace it
     // with emitDocumentModified() below.
@@ -1308,7 +1307,7 @@ TrackButtons::slotTrackSelected(int trackId)
 
     // New notification mechanism.
     // This should replace all others.
-    m_doc->emitDocumentModified();
+    RosegardenDocument::currentDocument->emitDocumentModified();
 }
 
 void

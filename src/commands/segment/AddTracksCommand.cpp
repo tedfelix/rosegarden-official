@@ -77,7 +77,7 @@ AddTracksCommand::~AddTracksCommand()
 
 void AddTracksCommand::execute()
 {
-    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
     if (!document)
         return;
 
@@ -190,7 +190,7 @@ void AddTracksCommand::execute()
 
 void AddTracksCommand::unexecute()
 {
-    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
     if (!document)
         return;
 

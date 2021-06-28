@@ -45,6 +45,12 @@ private:
 
 void TestNotationViewSelection::initTestCase()
 {
+    // Make sure settings end up in the right place.
+    QCoreApplication::setOrganizationName("rosegardenmusic");
+
+    // Make sure RD knows about itself.
+    RosegardenDocument::currentDocument = &m_doc;
+
     // Loading from a file
     const QString input = QFINDTESTDATA("../data/examples/test_selection.rg");
     QVERIFY(!input.isEmpty()); // file not found

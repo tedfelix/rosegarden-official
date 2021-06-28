@@ -64,8 +64,7 @@ public:
      * \arg cols : number of columns, main column is always rightmost
      *
      */
-    ListEditView(RosegardenDocument *doc,
-                 std::vector<Segment *> segments,
+    ListEditView(std::vector<Segment *> segments,
                  unsigned int cols,
                  QWidget *parent);
 

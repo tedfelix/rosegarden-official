@@ -32,7 +32,7 @@
 namespace Rosegarden
 {
 
-MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenDocument* doc,
+MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenDocument *doc,
         timeT time,
         Key key,
         bool convert,

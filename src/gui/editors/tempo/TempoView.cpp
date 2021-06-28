@@ -60,8 +60,8 @@
 namespace Rosegarden
 {
 
-TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, EditTempoController *editTempoController, timeT openTime):
-        ListEditView(doc, std::vector<Segment *>(), 2, parent),
+TempoView::TempoView(QWidget *parent, EditTempoController *editTempoController, timeT openTime):
+        ListEditView(std::vector<Segment *>(), 2, parent),
         m_editTempoController(editTempoController),
         m_filter(Tempo | TimeSignature),
         m_ignoreUpdates(true)
@@ -95,7 +95,7 @@ TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, EditTempoControll
 
     updateViewCaption();
 
-    doc->getComposition().addObserver(this);
+    m_doc->getComposition().addObserver(this);
 
     // Connect double clicker
     //
@@ -135,8 +135,13 @@ TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, EditTempoControll
 
 TempoView::~TempoView()
 {
-    if (!getDocument()->isBeingDestroyed() && !isCompositionDeleted()) {
-        getDocument()->getComposition().removeObserver(this);
+    // We use m_doc instead of RosegardenDocument::currentDocument to
+    // make sure that we disconnect from the old document when the
+    // documents are switching.
+    if (m_doc  &&
+        !m_doc->isBeingDestroyed()  &&
+        !isCompositionDeleted()) {
+        m_doc->getComposition().removeObserver(this);
     }
 }
 
@@ -145,6 +150,7 @@ TempoView::closeEvent(QCloseEvent *e)
 {
     slotSaveOptions();
     emit closing();
+
     EditViewBase::closeEvent(e);
 }
 
@@ -153,7 +159,7 @@ TempoView::tempoChanged(const Composition *comp)
 {
     if (m_ignoreUpdates)
         return ;
-    if (comp == &getDocument()->getComposition()) {
+    if (comp == &RosegardenDocument::currentDocument->getComposition()) {
         applyLayout();
     }
 }
@@ -163,7 +169,7 @@ TempoView::timeSignatureChanged(const Composition *comp)
 {
     if (m_ignoreUpdates)
         return ;
-    if (comp == &getDocument()->getComposition()) {
+    if (comp == &RosegardenDocument::currentDocument->getComposition()) {
         applyLayout();
     }
 }
@@ -180,7 +186,7 @@ TempoView::applyLayout(int /*staffNo*/)
     //
     m_list->clear();
 
-    Composition *comp = &getDocument()->getComposition();
+    Composition *comp = &RosegardenDocument::currentDocument->getComposition();
 
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
@@ -350,7 +356,7 @@ TempoView::makeTimeString(timeT time, int timeMode)
     case 0:  // musical time
         {
             int bar, beat, fraction, remainder;
-            getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+            RosegardenDocument::currentDocument->getComposition().getMusicalTimeForAbsoluteTime
             (time, bar, beat, fraction, remainder);
             ++bar;
             return QString("%1%2%3-%4%5-%6%7-%8%9   ")
@@ -368,7 +374,7 @@ TempoView::makeTimeString(timeT time, int timeMode)
     case 1:  // real time
         {
             RealTime rt =
-                getDocument()->getComposition().getElapsedRealTime(time);
+                RosegardenDocument::currentDocument->getComposition().getElapsedRealTime(time);
             //    return QString("%1   ").arg(rt.toString().c_str());
             return QString("%1   ").arg(rt.toText().c_str());
         }
@@ -501,7 +507,7 @@ TempoView::slotEditInsertTimeSignature()
             insertTime = item->getTime();
     }
 
-    Composition &composition(m_doc->getComposition());
+    Composition &composition(RosegardenDocument::currentDocument->getComposition());
     Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(insertTime);
 
     TimeSignatureDialog dialog(this, &composition, insertTime, sig, true);
@@ -721,7 +727,7 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
 
     case TempoListItem::TimeSignature:
     {
-        Composition &composition(getDocument()->getComposition());
+        Composition &composition(RosegardenDocument::currentDocument->getComposition());
         Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
         
         TimeSignatureDialog dialog(this, &composition, time, sig, true);
@@ -751,7 +757,7 @@ void
 TempoView::updateViewCaption()
 {
     setWindowTitle(tr("%1 - Tempo and Time Signature Editor")
-                .arg(getDocument()->getTitle()));
+                .arg(RosegardenDocument::currentDocument->getTitle()));
 }
 
 void

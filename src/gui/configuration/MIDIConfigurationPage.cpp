@@ -535,7 +535,7 @@ MIDIConfigurationPage::apply()
 
     // Update the metronome mapped segment with new clock ticks if needed.
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
     const MidiMetronome *metronome = studio.getMetronomeFromDevice(
             studio.getMetronomeDevice());

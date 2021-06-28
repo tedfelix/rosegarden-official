@@ -53,7 +53,7 @@ public:
     static QString ToolName();
 
 protected:
-    SegmentMover(CompositionView*, RosegardenDocument*);
+    SegmentMover(CompositionView *, RosegardenDocument *);
 
     void setContextHelp2(Qt::KeyboardModifiers modifiers =
                          Qt::KeyboardModifiers());

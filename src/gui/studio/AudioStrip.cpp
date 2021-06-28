@@ -126,7 +126,7 @@ void AudioStrip::createWidgets()
     if (m_id == NoInstrument)
         return;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     // Get the appropriate instrument based on the ID.
@@ -312,7 +312,7 @@ void AudioStrip::createWidgets()
 
 void AudioStrip::updateWidgets()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     // Get the appropriate instrument based on the ID.
@@ -451,7 +451,7 @@ AudioStrip::controlChange(int cc)
         if (!isInput())
             return;
 
-        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+        RosegardenDocument *doc = RosegardenDocument::currentDocument;
         Studio &studio = doc->getStudio();
 
         // Get the appropriate instrument based on the ID.
@@ -468,7 +468,7 @@ AudioStrip::controlChange(int cc)
         if (!isInput())
             return;
 
-        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+        RosegardenDocument *doc = RosegardenDocument::currentDocument;
         Studio &studio = doc->getStudio();
 
         // Get the appropriate instrument based on the ID.
@@ -505,7 +505,7 @@ void AudioStrip::slotLabelClicked()
     if (newAlias == oldAlias)
         return;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     // Get the appropriate instrument based on the ID.
@@ -519,7 +519,7 @@ void AudioStrip::slotLabelClicked()
 void
 AudioStrip::slotFaderLevelChanged(float dB)
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     // If this is an input Fader
@@ -575,7 +575,7 @@ AudioStrip::slotFaderLevelChanged(float dB)
 void
 AudioStrip::slotPanChanged(float pan)
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     if (isInput()) {
@@ -635,7 +635,7 @@ AudioStrip::updateExternalController()
     if (m_externalControllerChannel > 15)
         return;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     Instrument *instrument = studio.getInstrumentById(m_id);
@@ -649,7 +649,7 @@ AudioStrip::updateExternalController()
 void
 AudioStrip::slotChannelsChanged()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     Instrument *instrument = studio.getInstrumentById(m_id);
@@ -700,7 +700,7 @@ AudioStrip::slotUpdateMeter()
 void
 AudioStrip::updateInputMeter()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
     // No SequenceManager?  Bail.
     if (!doc->getSequenceManager())

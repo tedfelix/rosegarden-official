@@ -213,7 +213,7 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 
     // Track Right
     if (controlNumber == 59  &&  value == 127) {
-        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+        RosegardenDocument *doc = RosegardenDocument::currentDocument;
         Composition &comp = doc->getComposition();
 
         if ((m_page + 1) * 8 >= comp.getTracks().size()) {
@@ -322,7 +322,7 @@ void KorgNanoKontrol2::processFader(MidiByte controlNumber, MidiByte value)
 {
     const int trackNumber = controlNumber + m_page*8;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Composition &comp = doc->getComposition();
 
     const Track *track = comp.getTrackByPosition(trackNumber);
@@ -360,7 +360,7 @@ void KorgNanoKontrol2::processKnob(MidiByte controlNumber, MidiByte value)
 {
     const int trackNumber = controlNumber - 16 + m_page*8;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Composition &comp = doc->getComposition();
 
     const Track *track = comp.getTrackByPosition(trackNumber);
@@ -397,7 +397,7 @@ void KorgNanoKontrol2::processSolo(MidiByte controlNumber)
 {
     const int trackNumber = controlNumber - 32 + m_page*8;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Composition &comp = doc->getComposition();
 
     Track *track = comp.getTrackByPosition(trackNumber);
@@ -415,7 +415,7 @@ void KorgNanoKontrol2::processMute(MidiByte controlNumber)
 {
     const int trackNumber = controlNumber - 48 + m_page*8;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Composition &comp = doc->getComposition();
 
     Track *track = comp.getTrackByPosition(trackNumber);
@@ -433,7 +433,7 @@ void KorgNanoKontrol2::processRecord(MidiByte controlNumber)
 {
     const int trackNumber = controlNumber - 64 + m_page*8;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Composition &comp = doc->getComposition();
 
     Track *track = comp.getTrackByPosition(trackNumber);
@@ -564,7 +564,7 @@ void KorgNanoKontrol2::refreshLEDs()
     //       this class will be able to send the sysex messages.  See
     //       init().
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Composition &comp = doc->getComposition();
 
     // For each Track

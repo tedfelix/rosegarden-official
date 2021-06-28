@@ -258,7 +258,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     layout->addWidget(new QLabel(tr("Sequencer status"), frame), row, 0);
 
     QString status(tr("Unknown"));
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     SequenceManager *mgr = doc->getSequenceManager();
     if (mgr) {
         int driverStatus = mgr->getSoundDriverStatus() & (AUDIO_OK | MIDI_OK);

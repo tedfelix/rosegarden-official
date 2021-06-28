@@ -60,7 +60,7 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     // ??? If the doc changes, this will get disconnected.  Who do we have
     //     to connect to to get wind of document changes?
     //     RMW::documentAboutToChange()?
-    connect(RosegardenMainWindow::self()->getDocument(),
+    connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,
             this, &AudioMixerWindow2::slotDocumentModified);
     // Connect for "external controller" events.
@@ -152,7 +152,7 @@ AudioMixerWindow2::~AudioMixerWindow2()
 void
 AudioMixerWindow2::updateStripCounts()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     // Verify Input Strips
@@ -300,7 +300,7 @@ AudioMixerWindow2::updateStripCounts()
 
 void AudioMixerWindow2::updateWidgets()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     // Menu items.
@@ -386,7 +386,7 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
     // Extract the number of inputs from the action name.
     unsigned count = name.mid(7).toUInt();
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     studio.setRecordInCount(count);
@@ -415,7 +415,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
     // Extract the count from the name.
     int count = name.mid(11).toInt();
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     // Add one for the master buss.
@@ -444,7 +444,7 @@ AudioMixerWindow2::slotPanningLaw()
 
     AudioLevel::setPanLaw(panLaw);
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
     doc->slotDocumentModified();
 }
@@ -452,7 +452,7 @@ AudioMixerWindow2::slotPanningLaw()
 void
 AudioMixerWindow2::slotShowAudioFaders()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     studio.amwShowAudioFaders = !studio.amwShowAudioFaders;
@@ -463,7 +463,7 @@ AudioMixerWindow2::slotShowAudioFaders()
 void
 AudioMixerWindow2::slotShowSynthFaders()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     studio.amwShowSynthFaders = !studio.amwShowSynthFaders;
@@ -474,7 +474,7 @@ AudioMixerWindow2::slotShowSynthFaders()
 void
 AudioMixerWindow2::slotShowAudioSubmasters()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     studio.amwShowAudioSubmasters = !studio.amwShowAudioSubmasters;
@@ -485,7 +485,7 @@ AudioMixerWindow2::slotShowAudioSubmasters()
 void
 AudioMixerWindow2::slotShowUnassignedFaders()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     studio.amwShowUnassignedFaders = !studio.amwShowUnassignedFaders;

@@ -160,7 +160,7 @@ OpenOrCloseRangeCommand::execute()
 
     // If we are opening up a range, try to preserve the loop range.
     if (m_opening) {
-        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+        RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
         // If the paste point is prior to the loop range
         if (m_beginTime <= m_loopBegin) {
@@ -201,7 +201,7 @@ OpenOrCloseRangeCommand::unexecute()
     m_markersPost.RemoveFromComposition(m_composition);
     m_markersPre.AddToComposition(m_composition);
     
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
     // Put back the loop range
     doc->setLoop(m_loopBegin, m_loopEnd);

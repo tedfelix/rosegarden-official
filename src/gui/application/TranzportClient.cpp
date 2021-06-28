@@ -53,7 +53,7 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
     datawheel(currentbuf[6]),
     status(currentbuf[1]),
     m_rgGUIApp(rgGUIApp),
-    m_rgDocument(rgGUIApp->getDocument()),
+    m_rgDocument(RosegardenDocument::currentDocument),
     m_composition(&m_rgDocument->getComposition())
 {
     m_descriptor = open("/dev/tranzport0",O_RDWR);
@@ -436,8 +436,8 @@ TranzportClient::readData()
             }
             device_online = true;
 
-            m_rgDocument = m_rgGUIApp->getDocument();
-            m_composition = &m_rgGUIApp->getDocument()->getComposition();
+            m_rgDocument = RosegardenDocument::currentDocument;
+            m_composition = &RosegardenDocument::currentDocument->getComposition();
             stateUpdate();
         }
 
@@ -656,7 +656,7 @@ TranzportClient::readData()
 #define DATAWHEEL_VALUE (1 + (0xFF - (datawheel)))
                 if (current_buttons & Loop) {
                     loop_end_time -= (1 + (0xFF - datawheel)) *
-                        m_rgGUIApp->getDocument()->getComposition().getDurationForMusicalTime(loop_end_time, 0,1,0,0);
+                        RosegardenDocument::currentDocument->getComposition().getDurationForMusicalTime(loop_end_time, 0,1,0,0);
                     m_rgDocument->setLoop(loop_start_time, loop_end_time);
                 }
 

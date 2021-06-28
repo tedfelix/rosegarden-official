@@ -46,7 +46,7 @@ public:
      * This takes a RosegardenDocument pointer so that we can use this without
      * having a UI.  This is in support of the command line "--convert" feature.
      */
-    CompositionMapper(RosegardenDocument *doc);
+    CompositionMapper();
 
     /// Get the SegmentMapper for a Segment
     QSharedPointer<MappedEventBuffer> getMappedEventBuffer(Segment *);
@@ -72,14 +72,6 @@ public:
 private:
     /// Creates a SegmentMapper and adds it to the container.
     void mapSegment(Segment *);
-
-    /// Passed to the SegmentMapper objects that are created.
-    /**
-     * We keep this so that we can have it even if there is no window.
-     * DO NOT be tempted to call RosegardenMainWindow::getDocument() instead.
-     * That will break command line file conversion (--convert).
-     */
-    RosegardenDocument *m_doc;
 };
 
 

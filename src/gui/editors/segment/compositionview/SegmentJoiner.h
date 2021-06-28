@@ -54,12 +54,12 @@ public:
     //virtual void mouseReleaseEvent(QMouseEvent *);
  
     // don't do double clicks
-    //virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+    //virtual void contentsMouseDoubleClickEvent(QMouseEvent *);
 
     static QString ToolName();
 
 protected:
-    SegmentJoiner(CompositionView*, RosegardenDocument*);
+    SegmentJoiner(CompositionView *, RosegardenDocument *);
 };
 
 

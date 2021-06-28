@@ -60,22 +60,21 @@ bool ListEditView::m_inPaintEvent = false;
 const unsigned int ListEditView::NbLayoutRows = 6;
 
 
-ListEditView::ListEditView(RosegardenDocument *doc,
-                           std::vector<Segment *> segments,
+ListEditView::ListEditView(std::vector<Segment *> segments,
                            unsigned int cols,
                            QWidget *parent) :
-    EditViewBase(doc, segments, parent),
+    EditViewBase(segments, parent),
     m_viewNumber( -1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
     m_centralFrame(nullptr),
     m_grid(nullptr),
     m_mainCol(cols - 1),
-    m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
+    m_compositionRefreshStatusId(RosegardenDocument::currentDocument->getComposition().getNewRefreshStatusId()),
     m_needUpdate(false),
     m_pendingPaintEvent(nullptr),
     m_havePendingPaintEvent(false),
     m_inCtor(true),
-    m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
+    m_timeSigNotifier(new EditViewTimeSigNotifier(RosegardenDocument::currentDocument))
 {
     setStatusBar( new QStatusBar(this) );
 
@@ -285,13 +284,13 @@ void ListEditView::initSegmentRefreshStatusIds()
 
 bool ListEditView::isCompositionModified()
 {
-    return getDocument()->getComposition().getRefreshStatus
+    return RosegardenDocument::currentDocument->getComposition().getRefreshStatus
            (m_compositionRefreshStatusId).needsRefresh();
 }
 
 void ListEditView::setCompositionModified(bool c)
 {
-    getDocument()->getComposition().getRefreshStatus
+    RosegardenDocument::currentDocument->getComposition().getRefreshStatus
     (m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 

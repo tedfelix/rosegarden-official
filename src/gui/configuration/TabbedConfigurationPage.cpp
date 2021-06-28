@@ -17,6 +17,7 @@
 
 #include "TabbedConfigurationPage.h"
 
+#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 
 #include <QString>
@@ -31,7 +32,7 @@ namespace Rosegarden
 TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent) :
     QWidget(parent)
 {
-    m_doc = RosegardenMainWindow::self()->getDocument();
+    m_doc = RosegardenDocument::currentDocument;
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_tabWidget = new QTabWidget(this);

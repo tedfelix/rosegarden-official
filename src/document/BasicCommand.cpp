@@ -372,7 +372,7 @@ BasicCommand::requireSegment()
 
     RG_DEBUG << "requireSegment()...";
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Composition &composition = doc->getComposition();
 
     // Get the marked Segment.

@@ -39,8 +39,8 @@ class SegmentColourMapCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentColourMapCommand)
 
 public:
-    SegmentColourMapCommand(      RosegardenDocument*      doc,
-                            const ColourMap& map);
+    SegmentColourMapCommand(RosegardenDocument *doc,
+                            const ColourMap &map);
     ~SegmentColourMapCommand() override;
 
     static QString getGlobalName()
@@ -49,7 +49,7 @@ public:
     void execute() override;
     void unexecute() override;
 protected:
-    RosegardenDocument *                m_doc;
+    RosegardenDocument *m_doc;
     ColourMap             m_oldMap;
     ColourMap             m_newMap;
 };

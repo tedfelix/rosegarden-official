@@ -172,7 +172,7 @@ AudioRouteMenu::getNumEntries()
     if (m_instrumentId == NoInstrument)
         return 0;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
     switch (m_direction) {
@@ -211,7 +211,7 @@ AudioRouteMenu::getCurrentEntry()
     if (m_instrumentId == NoInstrument)
         return 0;
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
     Instrument *instrument = studio.getInstrumentById(m_instrumentId);
     if (!instrument)
@@ -268,7 +268,7 @@ AudioRouteMenu::getEntryText(int entry)
 
     case In: {
             RosegardenDocument *doc =
-                    RosegardenMainWindow::self()->getDocument();
+                    RosegardenDocument::currentDocument;
             Studio &studio = doc->getStudio();
             Instrument *instrument = studio.getInstrumentById(m_instrumentId);
             if (!instrument)
@@ -330,7 +330,7 @@ AudioRouteMenu::slotEntrySelected(int i)
         return;
 
     RosegardenDocument *doc =
-            RosegardenMainWindow::self()->getDocument();
+            RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
     Instrument *instrument = studio.getInstrumentById(m_instrumentId);
     if (!instrument)

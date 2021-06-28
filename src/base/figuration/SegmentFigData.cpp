@@ -31,7 +31,7 @@
 #include "base/figuration/SegmentID.h"
 #include "commands/edit/EventInsertionCommand.h"
 #include "document/BasicCommand.h"
-#include "document/DocumentGet.h"
+#include "document/RosegardenDocument.h"
 #include "misc/Debug.h"
 
 #include <QObject>
@@ -151,7 +151,7 @@ update(ChordSegmentMap& chordSources,
        MacroCommand* command)
 {
     Q_CHECK_PTR(command);
-    Composition *comp = DocumentGet::getComposition();
+    Composition *comp = &RosegardenDocument::currentDocument->getComposition();
     Segment* s = m_s;
     // Initialize `target' as nullptr.  We allocate it just-in-time
     // because we use and release it in some iterations.

@@ -83,8 +83,7 @@ public:
      *     m_labelDisplayMode and changeLabelDisplayMode().
      * @param[in] overallHeight   Height of the entire TrackButtons frame.
      */
-    TrackButtons(RosegardenDocument* doc,
-                 int trackCellHeight,
+    TrackButtons(int trackCellHeight,
                  bool showTrackLabels,
                  int overallHeight,
                  QWidget* parent = nullptr);
@@ -302,8 +301,6 @@ protected:
 
 
     //--------------- Data members ---------------------------------
-
-    RosegardenDocument               *m_doc;
 
     /// Layout used to stack the trackHBoxes vertically
     QVBoxLayout                      *m_layout;

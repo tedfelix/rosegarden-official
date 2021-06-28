@@ -50,7 +50,7 @@ public:
     static QString ToolName();
 
 protected:
-    SegmentEraser(CompositionView*, RosegardenDocument*);
+    SegmentEraser(CompositionView *, RosegardenDocument *);
 };
 
 

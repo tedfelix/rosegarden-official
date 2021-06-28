@@ -349,6 +349,8 @@ static void convert(const QStringList &args)
             true,  // clearCommandHistory
             false);  // m_useSequencer
 
+    RosegardenDocument::currentDocument = &doc;
+
     bool ok;
 
     ok = doc.openDocument(

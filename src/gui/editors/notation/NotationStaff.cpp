@@ -1095,7 +1095,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             elt->event()->get
             <Int>(Controller::NUMBER, controlNumber);
 
-            Studio *studio = &m_notationScene->getDocument()->getStudio();
+            Studio *studio = &RosegardenDocument::currentDocument->getStudio();
             Track *track = getSegment().getComposition()->getTrackById
                            (getSegment().getTrack());
 

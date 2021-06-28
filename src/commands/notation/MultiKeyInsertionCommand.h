@@ -44,7 +44,7 @@ class MultiKeyInsertionCommand : public MacroCommand
 
 public:
     
-    MultiKeyInsertionCommand(RosegardenDocument* doc,
+    MultiKeyInsertionCommand(RosegardenDocument *doc,
                              timeT time,
                              Key key,
                              bool shouldConvert,

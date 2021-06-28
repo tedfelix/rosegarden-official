@@ -379,7 +379,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
     // if we actually need a different one.
 
     Composition &comp =
-            RosegardenMainWindow::self()->getDocument()->getComposition();
+            RosegardenDocument::currentDocument->getComposition();
 
     ControlList list = md->getControlParameters();
 
@@ -877,7 +877,7 @@ MIDIInstrumentParameterPanel::slotDocumentLoaded(RosegardenDocument *doc)
 void
 MIDIInstrumentParameterPanel::slotDocumentModified(bool)
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
     // Get the selected Track's Instrument.
     InstrumentId instrumentId =
@@ -959,7 +959,7 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
     // Update the Instrument.
     getSelectedInstrument()->setPercussion(checked);
 
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 
     // At this point, the bank will be invalid.  We could select
     // the first valid bank/program for the current mode (percussion
@@ -984,7 +984,7 @@ MIDIInstrumentParameterPanel::slotBankClicked(bool checked)
     // Update the Instrument.
     getSelectedInstrument()->setSendBankSelect(checked);
 
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -998,7 +998,7 @@ MIDIInstrumentParameterPanel::slotProgramClicked(bool checked)
     // Update the Instrument.
     getSelectedInstrument()->setSendProgramChange(checked);
 
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -1019,7 +1019,7 @@ MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
     // Update the Instrument.
     getSelectedInstrument()->setSendBankSelect(checked);
 
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -1123,7 +1123,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     // Why?  It reduces the number of notifications which improves
     // performance.  It avoids sending notifications when an object's
     // state is inconsistent.  It avoids endless loops.
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -1180,7 +1180,7 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(
 
     // Just one change notification for the three potential changes.
     // See comments in slotSelectBank() for further discussion.
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -1237,7 +1237,7 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 
     // Just one change notification for the two potential changes.
     // See comments in slotSelectBank() for further discussion.
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -1267,7 +1267,7 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 
     getSelectedInstrument()->sendChannelSetup();
 
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 // In place of the old sendBankAndProgram, instruments themselves now
@@ -1297,7 +1297,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
             static_cast<MidiByte>(controllerNumber),
             static_cast<MidiByte>(value));
     Instrument::emitControlChange(getSelectedInstrument(), controllerNumber);
-    RosegardenMainWindow::self()->getDocument()->setModified();
+    RosegardenDocument::currentDocument->setModified();
 }
 
 void

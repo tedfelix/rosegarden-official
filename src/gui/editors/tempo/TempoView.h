@@ -63,7 +63,7 @@ class TempoView : public ListEditView, public CompositionObserver
     };
 
 public:
-    TempoView(RosegardenDocument *doc, QWidget *parent, EditTempoController *editTempoController, timeT openTime);
+    TempoView(QWidget *parent, EditTempoController *editTempoController, timeT openTime);
     ~TempoView() override;
 
     virtual bool applyLayout(int staffNo = -1);

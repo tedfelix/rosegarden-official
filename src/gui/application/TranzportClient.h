@@ -47,7 +47,7 @@ class TranzportClient : public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
-    TranzportClient(RosegardenMainWindow* rgGUIApp);
+    TranzportClient(RosegardenMainWindow *rgGUIApp);
       
     ~TranzportClient() override;
 
@@ -156,8 +156,8 @@ public:
 private:
     int m_descriptor;
       
-    QSocketNotifier * m_socketReadNotifier;
-    QSocketNotifier* m_socketWriteNotifier;
+    QSocketNotifier *m_socketReadNotifier;
+    QSocketNotifier *m_socketWriteNotifier;
 
     bool device_online;
 
@@ -168,9 +168,9 @@ private:
     volatile uint8_t& datawheel;
     volatile uint8_t& status;
 
-    RosegardenMainWindow* m_rgGUIApp;
-    RosegardenDocument* m_rgDocument;
-    Composition* m_composition;
+    RosegardenMainWindow *m_rgGUIApp;
+    RosegardenDocument *m_rgDocument;
+    Composition *m_composition;
 
     static const uint8_t LCDLength = 20;
     TranzportClient(const TranzportClient&);
@@ -179,7 +179,7 @@ private:
     std::queue<CommandType> commands;
       
     // CompositionObserver overrides
-    void trackChanged(const Composition *c, Track* t) override;
+    void trackChanged(const Composition *c, Track *t) override;
     // tracksAdded() need not be overridden as adding a track will not change
     // anything the TranzPort would display.
     // tracksDeleted() should probably be overridden to clear the display on

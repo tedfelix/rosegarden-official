@@ -364,7 +364,7 @@ bool ChannelManager::makeReady(
         bool looping = false;
         RosegardenMainWindow *mainWindow = RosegardenMainWindow::self();
         if (mainWindow) {
-            looping = RosegardenMainWindow::self()->getDocument()->
+            looping = RosegardenDocument::currentDocument->
                 getComposition().isLooping();
         }
 

@@ -875,7 +875,7 @@ SegmentParameterBox::slotTransposeSelected(int value)
         (*i)->setTranspose(transposeValue);
     }
 
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -930,7 +930,7 @@ SegmentParameterBox::setSegmentDelay(long delayValue)
 
     }
 
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
 void
@@ -977,7 +977,7 @@ SegmentParameterBox::slotColourChanged(int index)
 #if 0
 // This will never happen since the "Add Color" option is never added.
     if (index == m_addColourPos) {
-        ColourMap newMap = RosegardenMainWindow::self()->getDocument()->getComposition().getSegmentColourMap();
+        ColourMap newMap = RosegardenDocument::currentDocument->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
 
@@ -998,7 +998,7 @@ SegmentParameterBox::slotColourChanged(int index)
                 Colour newRColour = newColour;
                 newMap.addItem(newRColour, qstrtostr(newName));
                 SegmentColourMapCommand *command =
-                        new SegmentColourMapCommand(RosegardenMainWindow::self()->getDocument(), newMap);
+                        new SegmentColourMapCommand(RosegardenDocument::currentDocument, newMap);
                 CommandHistory::getInstance()->addCommand(command);
                 slotDocColoursChanged();
             }

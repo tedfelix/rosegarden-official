@@ -169,7 +169,7 @@ void
 AddTracksDialog::initDeviceComboBox()
 {
     const DeviceList &deviceList =
-            *(RosegardenMainWindow::self()->getDocument()->getStudio().getDevices());
+            *(RosegardenDocument::currentDocument->getStudio().getDevices());
 
     // Sort them into this set.
     std::set<const Device *, DeviceLess> deviceSet;
@@ -194,8 +194,7 @@ void AddTracksDialog::updateInstrumentComboBox()
 {
     m_instrument->clear();
 
-    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
-    Studio &studio = rmw->getDocument()->getStudio();
+    Studio &studio = RosegardenDocument::currentDocument->getStudio();
 
     const Device *device = studio.getDevice(m_device->currentData().toUInt());
     if (!device)
@@ -217,7 +216,7 @@ namespace
     int getSelectedTrackPosition()
     {
         const Composition &comp =
-                RosegardenMainWindow::self()->getDocument()->getComposition();
+                RosegardenDocument::currentDocument->getComposition();
         const Track *track = comp.getTrackById(comp.getSelectedTrack());
 
         if (track)
@@ -253,8 +252,7 @@ void AddTracksDialog::accept()
     if (m_device->currentIndex() < 0)
         return;
 
-    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
-    Studio &studio = rmw->getDocument()->getStudio();
+    Studio &studio = RosegardenDocument::currentDocument->getStudio();
 
     const Device *device = studio.getDevice(m_device->currentData().toUInt());
     if (!device)
