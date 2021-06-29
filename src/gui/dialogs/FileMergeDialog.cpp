@@ -57,7 +57,7 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
 
     ++row;
 
-    m_importTimeSignaturesAndTempos = nullptr;
+    m_mergeTimesAndTempos = nullptr;
 
     if (timingsDiffer) {
         // Import different time signatures or tempos.
@@ -67,9 +67,9 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
         ++row;
 
         layout->addWidget(new QLabel(tr("Import these as well")), row, 0);
-        m_importTimeSignaturesAndTempos = new QCheckBox;
-        m_importTimeSignaturesAndTempos->setChecked(false);
-        layout->addWidget(m_importTimeSignaturesAndTempos, row, 1);
+        m_mergeTimesAndTempos = new QCheckBox;
+        m_mergeTimesAndTempos->setChecked(false);
+        layout->addWidget(m_mergeTimesAndTempos, row, 1);
 
         ++row;
     }
@@ -91,19 +91,17 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
     layout->addWidget(buttonBox, row, 0, 1, 2);
 }
 
-int
-FileMergeDialog::getMergeOptions()
+bool
+FileMergeDialog::getMergeAtEnd()
 {
-    int options = 0;
+    return (m_mergeLocation->currentIndex() == 1);
+}
 
-    if (m_mergeLocation->currentIndex() == 1)
-        options |= MERGE_AT_END;
-
-    if (m_importTimeSignaturesAndTempos  &&
-        m_importTimeSignaturesAndTempos->isChecked())
-        options |= MERGE_KEEP_NEW_TIMINGS;
-
-    return options;
+bool
+FileMergeDialog::getMergeTimesAndTempos()
+{
+    return (m_mergeTimesAndTempos  &&
+            m_mergeTimesAndTempos->isChecked());
 }
 
 void

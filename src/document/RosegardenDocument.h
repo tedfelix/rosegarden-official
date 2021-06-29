@@ -47,16 +47,13 @@ class NoteOnRecSet;
 namespace Rosegarden
 {
 
+
 class SequenceManager;
 class RosegardenMainViewWidget;
 class MappedEventList;
 class Event;
 class EditViewBase;
 class AudioPluginManager;
-
-
-static const int MERGE_AT_END           = (1 << 0);
-static const int MERGE_KEEP_NEW_TIMINGS = (1 << 1);
 
 
 /// The document object for a document-view model.
@@ -223,7 +220,9 @@ public:
     /**
      * merge another document into this one
      */
-    void mergeDocument(RosegardenDocument *doc, int options);
+    void mergeDocument(RosegardenDocument *doc,
+                       bool mergeAtEnd,
+                       bool mergeTimesAndTempos);
 
     /**
      * saves the document under filename and format.

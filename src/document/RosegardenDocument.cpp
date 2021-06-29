@@ -672,12 +672,13 @@ RosegardenDocument::stealLockFile(RosegardenDocument *other)
 
 void
 RosegardenDocument::mergeDocument(RosegardenDocument *doc,
-                                  int options)
+                                  bool mergeAtEnd,
+                                  bool mergeTimesAndTempos)
 {
     MacroCommand *command = new MacroCommand(tr("Merge"));
 
     timeT time0 = 0;
-    if (options & MERGE_AT_END) {
+    if (mergeAtEnd) {
         time0 = getComposition().getBarEndForTime(getComposition().getDuration());
     }
 
@@ -714,7 +715,7 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
 
         doc->getComposition().detachSegment(s);
 
-        if (options & MERGE_AT_END) {
+        if (mergeAtEnd) {
             s->setStartTime(s->getStartTime() + time0);
             segmentEndTime += time0;
         }
@@ -746,7 +747,7 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
 #endif
 
     // Keep new time signatures and tempos from the file being merged in.
-    if (options & MERGE_KEEP_NEW_TIMINGS) {
+    if (mergeTimesAndTempos) {
         // Copy time signatures from the document being merged.
         for (int i = 0; i < doc->getComposition().getTimeSignatureCount(); ++i) {
             std::pair<timeT, TimeSignature> ts =

@@ -42,14 +42,15 @@ class FileMergeDialog : public QDialog
 public:
     FileMergeDialog(QWidget *parent, bool timingsDiffer);
 
-    int getMergeOptions();
+    bool getMergeAtEnd();
+    bool getMergeTimesAndTempos();
 
 public slots:
     void slotHelpRequested();
     
 private:
     QComboBox *m_mergeLocation;
-    QCheckBox *m_importTimeSignaturesAndTempos;
+    QCheckBox *m_mergeTimesAndTempos;
 };
 
 
