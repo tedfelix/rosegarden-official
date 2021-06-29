@@ -27,8 +27,7 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QWidget>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QUrl>
 #include <QDesktopServices>
 
@@ -44,40 +43,52 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
     setWindowTitle(tr("Merge File"));
     setModal(true);
 
-    // ??? Switch to grid layout.
-    QVBoxLayout *layout = new QVBoxLayout;
+    QGridLayout *layout = new QGridLayout;
     setLayout(layout);
 
-    QWidget *hbox = new QWidget;
-    QHBoxLayout *hboxLayout = new QHBoxLayout;
-    hbox->setLayout(hboxLayout);
-    layout->addWidget(hbox);
+    int row = 0;
 
     // Merge new file at
-    hboxLayout->addWidget(new QLabel(tr("Merge new file  ")));
+    layout->addWidget(new QLabel(tr("Merge new file")), row, 0);
     m_mergeLocation = new QComboBox;
-    hboxLayout->addWidget(m_mergeLocation);
-    hbox->setLayout(hboxLayout);
     m_mergeLocation->addItem(tr("At start of existing composition"));
     m_mergeLocation->addItem(tr("From end of existing composition"));
+    layout->addWidget(m_mergeLocation, row, 1);
 
-    // Import different time signatures or tempos.
+    ++row;
+
     m_importTimeSignaturesAndTempos = nullptr;
 
     if (timingsDiffer) {
-        layout->addWidget(new QLabel(tr("The file has different time signatures or tempos.")));
-        m_importTimeSignaturesAndTempos = new QCheckBox(tr("Import these as well"));
-        layout->addWidget(m_importTimeSignaturesAndTempos);
+        // Import different time signatures or tempos.
+        layout->addWidget(
+                new QLabel(tr("The file has different time signatures or tempos.")),
+                row, 0, 1, 2);
+        ++row;
+
+        layout->addWidget(new QLabel(tr("Import these as well")), row, 0);
+        m_importTimeSignaturesAndTempos = new QCheckBox;
         m_importTimeSignaturesAndTempos->setChecked(false);
+        layout->addWidget(m_importTimeSignaturesAndTempos, row, 1);
+
+        ++row;
     }
 
+    // Spacer
+    layout->setRowMinimumHeight(row, 8);
+
+    ++row;
+
     // Button Box
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox =
+            new QDialogButtonBox(QDialogButtonBox::Ok |
+                                 QDialogButtonBox::Cancel |
+                                 QDialogButtonBox::Help);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(buttonBox, &QDialogButtonBox::helpRequested,
             this, &FileMergeDialog::slotHelpRequested);
-    layout->addWidget(buttonBox);
+    layout->addWidget(buttonBox, row, 0, 1, 2);
 }
 
 int
