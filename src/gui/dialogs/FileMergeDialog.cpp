@@ -15,80 +15,85 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[FileMergeDialog]"
 
 #include "FileMergeDialog.h"
 
+#include "misc/Debug.h"
+#include "document/RosegardenDocument.h"
+
 #include <QComboBox>
-#include <QDialog>
 #include <QDialogButtonBox>
 #include <QCheckBox>
 #include <QLabel>
-#include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QUrl>
 #include <QDesktopServices>
-#include "document/RosegardenDocument.h"
 
 
 namespace Rosegarden
 {
 
-FileMergeDialog::FileMergeDialog(QWidget *parent,
-                                 QString /*fileName*/,
-                                 bool timingsDiffer) :
-        QDialog(parent)
-{
-    setModal(true);
-    setWindowTitle(tr("Merge File"));
 
+FileMergeDialog::FileMergeDialog(QWidget *parent,
+                                 bool timingsDiffer) :
+    QDialog(parent)
+{
+    setWindowTitle(tr("Merge File"));
+    setModal(true);
+
+    // ??? Switch to grid layout.
     QVBoxLayout *layout = new QVBoxLayout;
     setLayout(layout);
-
 
     QWidget *hbox = new QWidget;
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     hbox->setLayout(hboxLayout);
     layout->addWidget(hbox);
-    hboxLayout->addWidget(new QLabel(tr("Merge new file  ")));
 
-    m_choice = new QComboBox;
-    hboxLayout->addWidget(m_choice);
+    // Merge new file at
+    hboxLayout->addWidget(new QLabel(tr("Merge new file  ")));
+    m_mergeLocation = new QComboBox;
+    hboxLayout->addWidget(m_mergeLocation);
     hbox->setLayout(hboxLayout);
-    m_choice->addItem(tr("At start of existing composition"));
-    m_choice->addItem(tr("From end of existing composition"));
-    m_useTimings = nullptr;
+    m_mergeLocation->addItem(tr("At start of existing composition"));
+    m_mergeLocation->addItem(tr("From end of existing composition"));
+
+    // Import different time signatures or tempos.
+    m_importTimeSignaturesAndTempos = nullptr;
 
     if (timingsDiffer) {
         layout->addWidget(new QLabel(tr("The file has different time signatures or tempos.")));
-        m_useTimings = new QCheckBox(tr("Import these as well"));
-        layout->addWidget(m_useTimings);
-        m_useTimings->setChecked(false);
+        m_importTimeSignaturesAndTempos = new QCheckBox(tr("Import these as well"));
+        layout->addWidget(m_importTimeSignaturesAndTempos);
+        m_importTimeSignaturesAndTempos->setChecked(false);
     }
+
+    // Button Box
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &FileMergeDialog::slotHelpRequested);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &FileMergeDialog::slotHelpRequested);
     layout->addWidget(buttonBox);
 }
 
 int
 FileMergeDialog::getMergeOptions()
 {
-    int options = MERGE_KEEP_OLD_TIMINGS | MERGE_IN_NEW_TRACKS;
+    int options = 0;
 
-    if (m_choice->currentIndex() == 1) {
+    if (m_mergeLocation->currentIndex() == 1)
         options |= MERGE_AT_END;
-    }
 
-    if (m_useTimings && m_useTimings->isChecked()) {
+    if (m_importTimeSignaturesAndTempos  &&
+        m_importTimeSignaturesAndTempos->isChecked())
         options |= MERGE_KEEP_NEW_TIMINGS;
-    }
 
     return options;
 }
-
 
 void
 FileMergeDialog::slotHelpRequested()
@@ -101,4 +106,6 @@ FileMergeDialog::slotHelpRequested()
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
+
+
 }

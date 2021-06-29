@@ -4529,7 +4529,7 @@ RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
                 }
             }
 
-            FileMergeDialog dialog(this, filePath, timingsDiffer);
+            FileMergeDialog dialog(this, timingsDiffer);
             if (dialog.exec() == QDialog::Accepted) {
                 RosegardenDocument::currentDocument->mergeDocument(doc, dialog.getMergeOptions());
             }

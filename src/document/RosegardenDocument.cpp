@@ -688,23 +688,13 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
 
     int firstAlteredTrack = yrMinTrack;
 
-    if (options & MERGE_IN_NEW_TRACKS) {
+    //!!! worry about instruments and other studio stuff later... if at all
+    command->addCommand(new AddTracksCommand
+                        (yrNrTracks,
+                         MidiInstrumentBase,
+                         -1));
 
-        //!!! worry about instruments and other studio stuff later... if at all
-        command->addCommand(new AddTracksCommand
-                            (yrNrTracks,
-                             MidiInstrumentBase,
-                             -1));
-
-        firstAlteredTrack = myMaxTrack + 1;
-
-    } else if (yrMaxTrack > myMaxTrack) {
-
-        command->addCommand(new AddTracksCommand
-                            (yrMaxTrack - myMaxTrack,
-                             MidiInstrumentBase,
-                             -1));
-    }
+    firstAlteredTrack = myMaxTrack + 1;
 
     TrackId firstNewTrackId = getComposition().getNewTrackId();
     timeT lastSegmentEndTime = 0;
@@ -720,11 +710,7 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
         Track *t = doc->getComposition().getTrackById(yrTrack);
         if (t) yrTrack = t->getPosition();
 
-        int myTrack = yrTrack;
-
-        if (options & MERGE_IN_NEW_TRACKS) {
-            myTrack = yrTrack - yrMinTrack + myMaxTrack + 1;
-        }
+        const int myTrack = yrTrack - yrMinTrack + myMaxTrack + 1;
 
         doc->getComposition().detachSegment(s);
 
@@ -744,21 +730,30 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
         command->addCommand(new SegmentInsertCommand(&getComposition(), s, tid));
     }
 
-    if (!(options & MERGE_KEEP_OLD_TIMINGS)) {
+#if 0
+    // Remove time signatures and tempos from the merge destination document.
+    // ??? This seems a tad extreme.
+    if (removeTemposAndTimeSignatures) {
+        // Strip time signatures
         for (int i = getComposition().getTimeSignatureCount() - 1; i >= 0; --i) {
             getComposition().removeTimeSignature(i);
         }
+        // Strip tempo changes
         for (int i = getComposition().getTempoChangeCount() - 1; i >= 0; --i) {
             getComposition().removeTempoChange(i);
         }
     }
+#endif
 
+    // Keep new time signatures and tempos from the file being merged in.
     if (options & MERGE_KEEP_NEW_TIMINGS) {
+        // Copy time signatures from the document being merged.
         for (int i = 0; i < doc->getComposition().getTimeSignatureCount(); ++i) {
             std::pair<timeT, TimeSignature> ts =
                 doc->getComposition().getTimeSignatureChange(i);
             getComposition().addTimeSignature(ts.first + time0, ts.second);
         }
+        // Copy tempos from the document being merged.
         for (int i = 0; i < doc->getComposition().getTempoChangeCount(); ++i) {
             std::pair<timeT, tempoT> t =
                 doc->getComposition().getTempoChange(i);
