@@ -671,64 +671,77 @@ RosegardenDocument::stealLockFile(RosegardenDocument *other)
 }
 
 void
-RosegardenDocument::mergeDocument(RosegardenDocument *doc,
+RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
                                   bool mergeAtEnd,
                                   bool mergeTimesAndTempos)
 {
     MacroCommand *command = new MacroCommand(tr("Merge"));
 
+    // Destination start time.
     timeT time0 = 0;
     if (mergeAtEnd) {
-        time0 = getComposition().getBarEndForTime(getComposition().getDuration());
+        // ??? I think this is off by +1.  15360 on my test.
+        time0 = getComposition().getBarEndForTime(getComposition().getDuration() - 1);
+        RG_DEBUG << "mergeDocument(): time0 = " << time0;
     }
 
-    int myMaxTrack = getComposition().getNbTracks();
-    int yrMinTrack = 0;
-    int yrMaxTrack = doc->getComposition().getNbTracks();
-    int yrNrTracks = yrMaxTrack - yrMinTrack + 1;
+    // yr = merge source (srcDoc)
+    // my = merge destination (this)
 
-    int firstAlteredTrack = yrMinTrack;
+    const int srcNrTracks = srcDoc->getComposition().getNbTracks();
+    const int destMaxTrack = getComposition().getNbTracks();
 
-    //!!! worry about instruments and other studio stuff later... if at all
-    command->addCommand(new AddTracksCommand
-                        (yrNrTracks,
-                         MidiInstrumentBase,
-                         -1));
+    // !!! worry about instruments and other studio stuff later... if at all
+    // ??? Actually, we should at the very least preserve the Instrument
+    //     type to the best of our ability.
 
-    firstAlteredTrack = myMaxTrack + 1;
+    command->addCommand(new AddTracksCommand(
+            srcNrTracks,  // numberOfTracks
+            MidiInstrumentBase,  // instrumentId
+            -1));  // position (at end)
 
-    TrackId firstNewTrackId = getComposition().getNewTrackId();
-    timeT lastSegmentEndTime = 0;
+    // Destination.
+    const TrackId firstNewTrackId = getComposition().getNewTrackId();
+    // Keep track of the max end time so we can expand the composition
+    // if needed.
+    timeT maxEndTime = 0;
 
-    for (Composition::iterator i = doc->getComposition().begin(), j = i;
-         i != doc->getComposition().end(); i = j) {
+    // For each Segment in the source document
+    for (Composition::iterator i = srcDoc->getComposition().begin(), j = i;
+         i != srcDoc->getComposition().end();
+         i = j) {
 
+        // Move to the next so that we can detach the current.
         ++j;
-        Segment *s = *i;
-        timeT segmentEndTime = s->getEndMarkerTime();
+        Segment *segment = *i;
+        timeT segmentEndTime = segment->getEndMarkerTime();
 
-        int yrTrack = s->getTrack();
-        Track *t = doc->getComposition().getTrackById(yrTrack);
-        if (t) yrTrack = t->getPosition();
+        TrackId srcTrackId = segment->getTrack();
+        Track *t = srcDoc->getComposition().getTrackById(srcTrackId);
+        if (t)
+            srcTrackId = t->getPosition();
 
-        const int myTrack = yrTrack - yrMinTrack + myMaxTrack + 1;
+        const TrackId destTrackId = srcTrackId + destMaxTrack + 1;
 
-        doc->getComposition().detachSegment(s);
+        // Ok to do this as we've got j pointing to the next Segment.
+        srcDoc->getComposition().detachSegment(segment);
 
         if (mergeAtEnd) {
-            s->setStartTime(s->getStartTime() + time0);
+            segment->setStartTime(segment->getStartTime() + time0);
             segmentEndTime += time0;
         }
-        if (segmentEndTime > lastSegmentEndTime) {
-            lastSegmentEndTime = segmentEndTime;
+        if (segmentEndTime > maxEndTime) {
+            maxEndTime = segmentEndTime;
         }
 
-        Track *track = getComposition().getTrackByPosition(myTrack);
+        Track *track = getComposition().getTrackByPosition(destTrackId);
         TrackId tid = 0;
-        if (track) tid = track->getId();
-        else tid = firstNewTrackId + yrTrack - yrMinTrack;
+        if (track)
+            tid = track->getId();
+        else
+            tid = firstNewTrackId + srcTrackId;
 
-        command->addCommand(new SegmentInsertCommand(&getComposition(), s, tid));
+        command->addCommand(new SegmentInsertCommand(&getComposition(), segment, tid));
     }
 
 #if 0
@@ -746,33 +759,36 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
     }
 #endif
 
-    // Keep new time signatures and tempos from the file being merged in.
+    // Merge in time signatures and tempos from the merge source
     if (mergeTimesAndTempos) {
-        // Copy time signatures from the document being merged.
-        for (int i = 0; i < doc->getComposition().getTimeSignatureCount(); ++i) {
+        // Copy time signatures from the merge source.
+        for (int i = 0; i < srcDoc->getComposition().getTimeSignatureCount(); ++i) {
             std::pair<timeT, TimeSignature> ts =
-                doc->getComposition().getTimeSignatureChange(i);
+                srcDoc->getComposition().getTimeSignatureChange(i);
             getComposition().addTimeSignature(ts.first + time0, ts.second);
         }
-        // Copy tempos from the document being merged.
-        for (int i = 0; i < doc->getComposition().getTempoChangeCount(); ++i) {
+        // Copy tempos from the merge source.
+        for (int i = 0; i < srcDoc->getComposition().getTempoChangeCount(); ++i) {
             std::pair<timeT, tempoT> t =
-                doc->getComposition().getTempoChange(i);
+                srcDoc->getComposition().getTempoChange(i);
             getComposition().addTempoAtTime(t.first + time0, t.second);
         }
     }
 
-    if (lastSegmentEndTime > getComposition().getEndMarker()) {
-        command->addCommand(new ChangeCompositionLengthCommand
-                            (&getComposition(),
-                             getComposition().getStartMarker(),
-                             lastSegmentEndTime,
-                             getComposition().autoExpandEnabled()));
+    if (maxEndTime > getComposition().getEndMarker()) {
+        command->addCommand(new ChangeCompositionLengthCommand(
+                &getComposition(),  // composition
+                getComposition().getStartMarker(),  // startTime
+                maxEndTime,  // endTime
+                getComposition().autoExpandEnabled()));  // autoExpand
     }
 
+    // ??? At some point, somebody wipes the command history.  I'm
+    //     guessing it has to do with the source document?
     CommandHistory::getInstance()->addCommand(command);
 
-    emit makeTrackVisible(firstAlteredTrack + yrNrTracks/2 + 1);
+    // Make sure the center of the action is visible.
+    emit makeTrackVisible(destMaxTrack + 1 + srcNrTracks/2 + 1);
 }
 
 void RosegardenDocument::sendChannelSetups(bool reset)
