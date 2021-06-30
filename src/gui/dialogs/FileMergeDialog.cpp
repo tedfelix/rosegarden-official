@@ -38,7 +38,10 @@ namespace Rosegarden
 
 FileMergeDialog::FileMergeDialog(QWidget *parent,
                                  bool timingsDiffer) :
-    QDialog(parent)
+    QDialog(parent),
+    m_differentSigsOrTempos(nullptr),
+    m_mergeSigsAndTemposLabel(nullptr),
+    m_mergeSigsAndTempos(nullptr)
 {
     setWindowTitle(tr("Merge File"));
     setModal(true);
@@ -53,26 +56,26 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
     m_mergeLocation = new QComboBox;
     m_mergeLocation->addItem(tr("At start of existing composition"));
     m_mergeLocation->addItem(tr("From end of existing composition"));
+    connect(m_mergeLocation,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &FileMergeDialog::slotModified);
+
     layout->addWidget(m_mergeLocation, row, 1);
 
     ++row;
 
-    m_mergeTimesAndTempos = nullptr;
-
     if (timingsDiffer) {
         // Import different time signatures or tempos.
-        layout->addWidget(
-                new QLabel(tr("The file has different time signatures or tempos.")),
-                row, 0, 1, 2);
+        m_differentSigsOrTempos =
+                new QLabel(tr("The file has different time signatures or tempos."));
+        layout->addWidget(m_differentSigsOrTempos, row, 0, 1, 2);
         ++row;
 
-        // ??? This checkbox should probably be disabled when merging
-        //     at the end.  In that case, merging the times and tempos
-        //     should be assumed to be what the user wants.  It makes sense.
-        layout->addWidget(new QLabel(tr("Import these as well")), row, 0);
-        m_mergeTimesAndTempos = new QCheckBox;
-        m_mergeTimesAndTempos->setChecked(false);
-        layout->addWidget(m_mergeTimesAndTempos, row, 1);
+        m_mergeSigsAndTemposLabel = new QLabel(tr("Import these as well"));
+        layout->addWidget(m_mergeSigsAndTemposLabel, row, 0);
+        m_mergeSigsAndTempos = new QCheckBox;
+        m_mergeSigsAndTempos->setChecked(false);
+        layout->addWidget(m_mergeSigsAndTempos, row, 1);
 
         ++row;
     }
@@ -103,8 +106,16 @@ FileMergeDialog::getMergeAtEnd()
 bool
 FileMergeDialog::getMergeTimesAndTempos()
 {
-    return (m_mergeTimesAndTempos  &&
-            m_mergeTimesAndTempos->isChecked());
+    // If we're merging at the end, it only makes sense to include the
+    // sigs and tempos.
+    if (getMergeAtEnd())
+        return true;
+
+    // We're merging over top.  We need the user's input on whether
+    // we should merge the sigs and tempos over top of each other.
+
+    return (m_mergeSigsAndTempos  &&
+            m_mergeSigsAndTempos->isChecked());
 }
 
 void
@@ -117,6 +128,25 @@ FileMergeDialog::slotHelpRequested()
     // free to create one.
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en");
     QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+FileMergeDialog::slotModified()
+{
+    // If the sigs and tempos differ
+    if (m_differentSigsOrTempos) {
+        if (getMergeAtEnd()) {
+            // Hide these because we will always merge the sigs and tempos
+            // when merging at the end.
+            m_differentSigsOrTempos->hide();
+            m_mergeSigsAndTemposLabel->hide();
+            m_mergeSigsAndTempos->hide();
+        } else {
+            m_differentSigsOrTempos->show();
+            m_mergeSigsAndTemposLabel->show();
+            m_mergeSigsAndTempos->show();
+        }
+    }
 }
 
 

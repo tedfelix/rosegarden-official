@@ -22,9 +22,10 @@
 #include <QDialog>
 #include <QString>
 
-class QWidget;
 class QCheckBox;
 class QComboBox;
+class QLabel;
+class QWidget;
 
 
 namespace Rosegarden
@@ -47,10 +48,15 @@ public:
 
 public slots:
     void slotHelpRequested();
-    
+
+private slots:
+    void slotModified();
+
 private:
     QComboBox *m_mergeLocation;
-    QCheckBox *m_mergeTimesAndTempos;
+    QLabel *m_differentSigsOrTempos;
+    QLabel *m_mergeSigsAndTemposLabel;
+    QCheckBox *m_mergeSigsAndTempos;
 };
 
 
