@@ -710,7 +710,8 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
     // if needed.
     timeT maxEndTime = 0;
 
-    // For each Segment in the source document
+    // For each Segment in the source document, move it to the destination
+    // document (this).
     for (Composition::iterator i = srcDoc->getComposition().begin(), j = i;
          i != srcDoc->getComposition().end();
          i = j) {
@@ -718,34 +719,39 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
         // Move to the next so that we can detach the current.
         ++j;
         Segment *segment = *i;
-        timeT segmentEndTime = segment->getEndMarkerTime();
 
-        TrackId srcTrackId = segment->getTrack();
-        Track *t = srcDoc->getComposition().getTrackById(srcTrackId);
-        if (t)
-            srcTrackId = t->getPosition();
+        Track *srcTrack =
+                srcDoc->getComposition().getTrackById(segment->getTrack());
+        if (!srcTrack)
+            continue;
 
-        const TrackId destTrackId = srcTrackId + destMaxTrack + 1;
+        const int destTrackPosition =
+                srcTrack->getPosition() + destMaxTrack + 1;
 
-        // Ok to do this as we've got j pointing to the next Segment.
+        Track *destTrack = getComposition().getTrackByPosition(destTrackPosition);
+        TrackId destTrackId = NoTrack;
+        // When we turn this into a command, this will be true.  For now
+        // it is false because the destination tracks do not yet exist.
+        // The AddTracksCommand hasn't been run yet.
+        if (destTrack)
+            destTrackId = destTrack->getId();
+        else
+            destTrackId = firstNewTrackId + srcTrack->getPosition();
+
+        // Move the Segment from the srcDoc to the dest (this).
+        // Ok to detach as we've got j pointing to the next Segment.
         srcDoc->getComposition().detachSegment(segment);
+        command->addCommand(new SegmentInsertCommand(
+                &getComposition(), segment, destTrackId));
 
+        // Update maxEndTime
+        timeT segmentEndTime = segment->getEndMarkerTime();
         if (mergeAtEnd) {
             segment->setStartTime(segment->getStartTime() + time0);
             segmentEndTime += time0;
         }
-        if (segmentEndTime > maxEndTime) {
+        if (segmentEndTime > maxEndTime)
             maxEndTime = segmentEndTime;
-        }
-
-        Track *track = getComposition().getTrackByPosition(destTrackId);
-        TrackId tid = 0;
-        if (track)
-            tid = track->getId();
-        else
-            tid = firstNewTrackId + srcTrackId;
-
-        command->addCommand(new SegmentInsertCommand(&getComposition(), segment, tid));
     }
 
 #if 0
@@ -765,6 +771,9 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
 
     // Merge in time signatures and tempos from the merge source
     if (mergeTimesAndTempos) {
+        // ??? Since these are not being done with Commands, these changes
+        //     cannot be undone.  Another point in favor of making this
+        //     entire process into a new command.
         // Copy time signatures from the merge source.
         for (int i = 0; i < srcDoc->getComposition().getTimeSignatureCount(); ++i) {
             std::pair<timeT, TimeSignature> ts =
