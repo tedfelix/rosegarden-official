@@ -66,6 +66,9 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
                 row, 0, 1, 2);
         ++row;
 
+        // ??? This checkbox should probably be disabled when merging
+        //     at the end.  In that case, merging the times and tempos
+        //     should be assumed to be what the user wants.  It makes sense.
         layout->addWidget(new QLabel(tr("Import these as well")), row, 0);
         m_mergeTimesAndTempos = new QCheckBox;
         m_mergeTimesAndTempos->setChecked(false);

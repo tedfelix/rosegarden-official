@@ -4508,43 +4508,10 @@ RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
     if (!RosegardenDocument::currentDocument)
         return;
 
-    // ??? Pull the following out into a timesAndTemposDiffer(c1, c2) so we
-    //     can return from the middle.
-
-    bool timingsDiffer = false;
     const Composition &srcComp = srcDoc->getComposition();
     const Composition &destComp =
             RosegardenDocument::currentDocument->getComposition();
-
-    // compare tempos and time sigs in the two -- rather laborious
-
-    if (destComp.getTimeSignatureCount() != srcComp.getTimeSignatureCount()) {
-        timingsDiffer = true;
-    } else {
-        for (int i = 0; i < destComp.getTimeSignatureCount(); ++i) {
-            std::pair<timeT, TimeSignature> t1 =
-                destComp.getTimeSignatureChange(i);
-            std::pair<timeT, TimeSignature> t2 =
-                srcComp.getTimeSignatureChange(i);
-            if (t1.first != t2.first || t1.second != t2.second) {
-                timingsDiffer = true;
-                break;
-            }
-        }
-    }
-
-    if (destComp.getTempoChangeCount() != srcComp.getTempoChangeCount()) {
-        timingsDiffer = true;
-    } else {
-        for (int i = 0; i < destComp.getTempoChangeCount(); ++i) {
-            std::pair<timeT, tempoT> t1 = destComp.getTempoChange(i);
-            std::pair<timeT, tempoT> t2 = srcComp.getTempoChange(i);
-            if (t1.first != t2.first || t1.second != t2.second) {
-                timingsDiffer = true;
-                break;
-            }
-        }
-    }
+    const bool timingsDiffer = !srcComp.compareSignaturesAndTempos(destComp);
 
     FileMergeDialog dialog(this, timingsDiffer);
     if (dialog.exec() == QDialog::Accepted) {

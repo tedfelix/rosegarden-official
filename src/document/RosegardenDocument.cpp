@@ -681,6 +681,7 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
     MacroCommand *command = new MacroCommand(tr("Merge"));
 
     // Destination start time.
+    // ??? We should allow for "at cursor position" as well.
     timeT time0 = 0;
     if (mergeAtEnd) {
         time0 = getComposition().getBarEndForTime(
@@ -754,40 +755,31 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
             maxEndTime = segmentEndTime;
     }
 
-#if 0
-    // Remove time signatures and tempos from the merge destination document.
-    // ??? This seems a tad extreme.
-    if (removeTemposAndTimeSignatures) {
-        // Strip time signatures
-        for (int i = getComposition().getTimeSignatureCount() - 1; i >= 0; --i) {
-            getComposition().removeTimeSignature(i);
-        }
-        // Strip tempo changes
-        for (int i = getComposition().getTempoChangeCount() - 1; i >= 0; --i) {
-            getComposition().removeTempoChange(i);
-        }
-    }
-#endif
+    // ??? Since the rest of this is not being done with Commands, these
+    //     changes cannot be undone.  Another point in favor of making this
+    //     entire process into a new command.
 
     // Merge in time signatures and tempos from the merge source
     if (mergeTimesAndTempos) {
-        // ??? Since these are not being done with Commands, these changes
-        //     cannot be undone.  Another point in favor of making this
-        //     entire process into a new command.
         // Copy time signatures from the merge source.
-        for (int i = 0; i < srcDoc->getComposition().getTimeSignatureCount(); ++i) {
+        for (int i = 0;
+             i < srcDoc->getComposition().getTimeSignatureCount();
+             ++i) {
             std::pair<timeT, TimeSignature> ts =
                 srcDoc->getComposition().getTimeSignatureChange(i);
             getComposition().addTimeSignature(ts.first + time0, ts.second);
         }
         // Copy tempos from the merge source.
-        for (int i = 0; i < srcDoc->getComposition().getTempoChangeCount(); ++i) {
+        for (int i = 0;
+             i < srcDoc->getComposition().getTempoChangeCount();
+             ++i) {
             std::pair<timeT, tempoT> t =
                 srcDoc->getComposition().getTempoChange(i);
             getComposition().addTempoAtTime(t.first + time0, t.second);
         }
     }
 
+    // If the Composition needs to be expanded, expand it.
     if (maxEndTime > getComposition().getEndMarker()) {
         command->addCommand(new ChangeCompositionLengthCommand(
                 &getComposition(),  // composition
@@ -796,8 +788,6 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
                 getComposition().autoExpandEnabled()));  // autoExpand
     }
 
-    // ??? At some point, somebody wipes the command history.  I'm
-    //     guessing it has to do with the source document?
     CommandHistory::getInstance()->addCommand(command);
 
     // Make sure the center of the action is visible.

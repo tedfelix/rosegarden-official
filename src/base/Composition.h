@@ -16,7 +16,6 @@
 #ifndef RG_COMPOSITION_H
 #define RG_COMPOSITION_H
 
-
 #include "RealTime.h"
 #include "base/Segment.h"
 #include "Track.h"
@@ -649,6 +648,9 @@ public:
     tempoT getMaxTempo() const { 
         return ((m_maxTempo != 0) ? m_maxTempo : m_defaultTempo);
     }
+
+    /// Compare time signatures and tempos between two Composition objects.
+    bool compareSignaturesAndTempos(const Composition &other) const;
 
 
     //////
