@@ -1334,7 +1334,11 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
         revert = (newFileInfo.absoluteFilePath() == RosegardenDocument::currentDocument->getAbsFilePath());
     }
 
-    RosegardenDocument *doc = createDocument(filePath, type, !revert);
+    RosegardenDocument *doc = createDocument(
+            filePath,
+            type,  // importType
+            !revert,  // lock
+            true);  // clearHistory
 
     if (!doc)
         return;
@@ -1389,7 +1393,7 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
 
 RosegardenDocument *
 RosegardenMainWindow::createDocument(
-        QString filePath, ImportType importType, bool lock)
+        QString filePath, ImportType importType, bool lock, bool clearHistory)
 {
     // ??? This and the create functions it calls might make more sense in
     //     RosegardenDocument.
@@ -1482,7 +1486,10 @@ RosegardenMainWindow::createDocument(
     case ImportRG4:
     case ImportCheckType:
     default:
-        doc = createDocumentFromRGFile(filePath, lock);
+        doc = createDocumentFromRGFile(
+                filePath,
+                lock,
+                clearHistory);
         break;
 
     case ImportRGD:  // Satisfy compiler warning.
@@ -1497,7 +1504,7 @@ RosegardenMainWindow::createDocument(
 
 RosegardenDocument *
 RosegardenMainWindow::createDocumentFromRGFile(
-        const QString &filePath, bool lock)
+        const QString &filePath, bool lock, bool clearHistory)
 {
     // ??? This and its caller should probably be moved into
     //     RosegardenDocument as static factory functions.
@@ -1546,7 +1553,7 @@ RosegardenMainWindow::createDocumentFromRGFile(
             new RosegardenDocument(this,
                     m_pluginManager,
                     true,  // skipAutoload
-                    true,  // clearCommandHistory
+                    clearHistory,  // clearCommandHistory
                     m_useSequencer);  // enableSound
 
     // Read the document from the file.
@@ -4490,59 +4497,64 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
 void
 RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
 {
-    RosegardenDocument *doc = createDocument(filePath, type);
+    RosegardenDocument *srcDoc = createDocument(
+            filePath,
+            type,  // importType
+            true,  // lock
+            false);  // clearHistory
+    if (!srcDoc)
+        return;
 
-    if (doc) {
-        if (RosegardenDocument::currentDocument) {
+    if (!RosegardenDocument::currentDocument)
+        return;
 
-            bool timingsDiffer = false;
-            Composition &c1 = RosegardenDocument::currentDocument->getComposition();
-            Composition &c2 = doc->getComposition();
+    // ??? Pull the following out into a timesAndTemposDiffer(c1, c2) so we
+    //     can return from the middle.
 
-            // compare tempos and time sigs in the two -- rather laborious
+    bool timingsDiffer = false;
+    const Composition &srcComp = srcDoc->getComposition();
+    const Composition &destComp =
+            RosegardenDocument::currentDocument->getComposition();
 
-            if (c1.getTimeSignatureCount() != c2.getTimeSignatureCount()) {
+    // compare tempos and time sigs in the two -- rather laborious
+
+    if (destComp.getTimeSignatureCount() != srcComp.getTimeSignatureCount()) {
+        timingsDiffer = true;
+    } else {
+        for (int i = 0; i < destComp.getTimeSignatureCount(); ++i) {
+            std::pair<timeT, TimeSignature> t1 =
+                destComp.getTimeSignatureChange(i);
+            std::pair<timeT, TimeSignature> t2 =
+                srcComp.getTimeSignatureChange(i);
+            if (t1.first != t2.first || t1.second != t2.second) {
                 timingsDiffer = true;
-            } else {
-                for (int i = 0; i < c1.getTimeSignatureCount(); ++i) {
-                    std::pair<timeT, TimeSignature> t1 =
-                        c1.getTimeSignatureChange(i);
-                    std::pair<timeT, TimeSignature> t2 =
-                        c2.getTimeSignatureChange(i);
-                    if (t1.first != t2.first || t1.second != t2.second) {
-                        timingsDiffer = true;
-                        break;
-                    }
-                }
+                break;
             }
-
-            if (c1.getTempoChangeCount() != c2.getTempoChangeCount()) {
-                timingsDiffer = true;
-            } else {
-                for (int i = 0; i < c1.getTempoChangeCount(); ++i) {
-                    std::pair<timeT, tempoT> t1 = c1.getTempoChange(i);
-                    std::pair<timeT, tempoT> t2 = c2.getTempoChange(i);
-                    if (t1.first != t2.first || t1.second != t2.second) {
-                        timingsDiffer = true;
-                        break;
-                    }
-                }
-            }
-
-            FileMergeDialog dialog(this, timingsDiffer);
-            if (dialog.exec() == QDialog::Accepted) {
-                RosegardenDocument::currentDocument->mergeDocument(
-                        doc,
-                        dialog.getMergeAtEnd(),
-                        dialog.getMergeTimesAndTempos());
-            }
-
-            delete doc;
-
-        } else {  // ??? I don't think it's possible for RosegardenDocument::currentDocument to be nullptr.
-            setDocument(doc);
         }
     }
+
+    if (destComp.getTempoChangeCount() != srcComp.getTempoChangeCount()) {
+        timingsDiffer = true;
+    } else {
+        for (int i = 0; i < destComp.getTempoChangeCount(); ++i) {
+            std::pair<timeT, tempoT> t1 = destComp.getTempoChange(i);
+            std::pair<timeT, tempoT> t2 = srcComp.getTempoChange(i);
+            if (t1.first != t2.first || t1.second != t2.second) {
+                timingsDiffer = true;
+                break;
+            }
+        }
+    }
+
+    FileMergeDialog dialog(this, timingsDiffer);
+    if (dialog.exec() == QDialog::Accepted) {
+        RosegardenDocument::currentDocument->mergeDocument(
+                srcDoc,
+                dialog.getMergeAtEnd(),
+                dialog.getMergeTimesAndTempos());
+    }
+
+    delete srcDoc;
 }
 
 void RosegardenMainWindow::processRecordedEvents()

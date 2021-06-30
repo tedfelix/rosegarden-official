@@ -355,13 +355,16 @@ protected:
      * Create document from a file
      */
     RosegardenDocument *createDocument(
-            QString filePath, ImportType type = ImportRG4, bool lock = true);
+            QString filePath,
+            ImportType type,
+            bool lock,
+            bool clearHistory);
     
     /**
      * Create a document from RG file
      */
     RosegardenDocument *createDocumentFromRGFile(
-            const QString &filePath, bool lock = true);
+            const QString &filePath, bool lock, bool clearHistory);
 
     /**
      * Create document from MIDI file
