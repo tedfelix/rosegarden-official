@@ -675,30 +675,34 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
                                   bool mergeAtEnd,
                                   bool mergeTimesAndTempos)
 {
+    // Merging from the merge source (srcDoc) into the merge destination
+    // (this).
+
     MacroCommand *command = new MacroCommand(tr("Merge"));
 
     // Destination start time.
     timeT time0 = 0;
     if (mergeAtEnd) {
-        // ??? I think this is off by +1.  15360 on my test.
-        time0 = getComposition().getBarEndForTime(getComposition().getDuration() - 1);
-        RG_DEBUG << "mergeDocument(): time0 = " << time0;
+        time0 = getComposition().getBarEndForTime(
+                getComposition().getDuration() - 1);
     }
-
-    // yr = merge source (srcDoc)
-    // my = merge destination (this)
 
     const int srcNrTracks = srcDoc->getComposition().getNbTracks();
     const int destMaxTrack = getComposition().getNbTracks();
-
-    // !!! worry about instruments and other studio stuff later... if at all
-    // ??? Actually, we should at the very least preserve the Instrument
-    //     type to the best of our ability.
 
     command->addCommand(new AddTracksCommand(
             srcNrTracks,  // numberOfTracks
             MidiInstrumentBase,  // instrumentId
             -1));  // position (at end)
+
+    // ??? What about bringing over the Track names and the Instrument
+    //     types (MIDI/Audio/SoftSynth) at the very least?
+
+    // ??? At this point it becomes clear that continuing with the
+    //     MacroCommand approach isn't going to cut it.  This would all be
+    //     much simpler as its own command.  That way we have direct access
+    //     to both documents and the ability to do whatever we want without
+    //     having to find or create a command for each piece of the process.
 
     // Destination.
     const TrackId firstNewTrackId = getComposition().getNewTrackId();

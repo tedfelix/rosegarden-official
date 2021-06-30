@@ -810,7 +810,15 @@ private:
 
     /**
      * Tells this document whether it should clear the command history upon
-     * construction.  Usually true.
+     * construction and destruction.  Usually true.  Set this to false for
+     * temporary documents (like when merging).
+     *
+     * ??? Since the CommandHistory is so closely coupled with the document,
+     *     *it should be a member*.  That way it goes away when the document
+     *     goes away.  It is created (and maybe not even used) when a new
+     *     document is created.  This would simplify things for parts of the
+     *     system that need temporary documents and don't want the command
+     *     history cleared.  Right now it's a tangled mess.
      */
     bool m_clearCommandHistory;
 
