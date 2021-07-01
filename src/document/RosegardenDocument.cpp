@@ -689,7 +689,7 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
     }
 
     const int srcNrTracks = srcDoc->getComposition().getNbTracks();
-    const int destMaxTrack = getComposition().getNbTracks();
+    const int destMaxTrackPos = getComposition().getNbTracks() - 1;
 
     command->addCommand(new AddTracksCommand(
             srcNrTracks,  // numberOfTracks
@@ -727,7 +727,7 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
             continue;
 
         const int destTrackPosition =
-                srcTrack->getPosition() + destMaxTrack + 1;
+                srcTrack->getPosition() + destMaxTrackPos + 1;
 
         Track *destTrack = getComposition().getTrackByPosition(destTrackPosition);
         TrackId destTrackId = NoTrack;
@@ -791,7 +791,7 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
     CommandHistory::getInstance()->addCommand(command);
 
     // Make sure the center of the action is visible.
-    emit makeTrackVisible(destMaxTrack + 1 + srcNrTracks/2 + 1);
+    emit makeTrackVisible(destMaxTrackPos + 1 + srcNrTracks/2 + 1);
 }
 
 void RosegardenDocument::sendChannelSetups(bool reset)

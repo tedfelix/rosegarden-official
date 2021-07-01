@@ -67,6 +67,7 @@ public:
     void setSolo(bool solo)  { m_solo = solo; }
     bool isSolo() const  { return m_solo; }
 
+    /// Zero-based Track position on the UI.
     void setPosition(int position) { m_position = position; }
     /// Zero-based Track position on the UI.
     int getPosition() const { return m_position; }

@@ -124,6 +124,7 @@ public:
 
     bool haveTrack(TrackId track) const;
 
+    /// Zero-based position on UI.
     Track* getTrackByPosition(int position) const;
  
     int getTrackPositionById(TrackId track) const; // -1 if not found
