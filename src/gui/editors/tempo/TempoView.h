@@ -19,14 +19,11 @@
 #define RG_TEMPOVIEW_H
 
 #include "base/Composition.h"
-#include "base/NotationTypes.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/general/ListEditView.h"
+#include "base/TimeT.h"
+
 #include <QSize>
 #include <QString>
-#include <vector>
-#include "base/Event.h"
-
 
 class QWidget;
 class QTreeWidgetItem;
@@ -35,22 +32,24 @@ class QCheckBox;
 class QGroupBox;
 class QTreeWidget;
 
+#include <vector>
+
 
 namespace Rosegarden
 {
 
+
 class Segment;
-class RosegardenDocument;
-class Composition;
 class EditTempoController;
 
+
+/// Tempo and Time Signature Editor
 /**
  * Tempo and time signature list-style editor.  This has some code
  * in common with EventView, but not enough to make them any more
- * shareable than simply through EditViewBase.  Hopefully this one
+ * sharable than simply through EditViewBase.  Hopefully this one
  * should prove considerably simpler, anyway.
  */
-
 class TempoView : public ListEditView, public CompositionObserver
 {
     Q_OBJECT
@@ -63,14 +62,16 @@ class TempoView : public ListEditView, public CompositionObserver
     };
 
 public:
-    TempoView(QWidget *parent, EditTempoController *editTempoController, timeT openTime);
+    TempoView(QWidget *parent,
+              EditTempoController *editTempoController,
+              timeT openTime);
     ~TempoView() override;
 
     virtual bool applyLayout(int staffNo = -1);
 
     void refreshSegment(Segment *segment,
-                                timeT startTime = 0,
-                                timeT endTime = 0) override;
+                        timeT startTime = 0,
+                        timeT endTime = 0) override;
 
     void updateView() override;
 
@@ -79,16 +80,14 @@ public:
     virtual QSize getViewSize(); 
     virtual void setViewSize(QSize);
 
-    // Set the button states to the current filter positions
-    //
+    /// Set the button states to the current filter positions
     void setButtonsToFilter();
 
-    // Menu creation and show
-    //
+    /// Menu creation and show
     void createMenu();
 
     // Composition Observer callbacks
-    //
+
     void timeSignatureChanged(const Composition *) override;
     void tempoChanged(const Composition *) override;
 
@@ -116,12 +115,10 @@ public slots:
     void slotHelpRequested();
     void slotHelpAbout();
 
-    // on double click on the event list
-    //
+    /// on double click on the list
     void slotPopupEditor(QTreeWidgetItem*, int col = 0);
 
-    // Change filter parameters
-    //
+    /// Change filter parameters
     void slotModifyFilter(int);
 
 protected slots:
@@ -139,21 +136,21 @@ private:
     void updateViewCaption() override;
 
     //--------------- Data members ---------------------------------
+
     EditTempoController *m_editTempoController;
-    QTreeWidget   *m_list;
-    int          m_filter;
+    QTreeWidget *m_list;
+    int m_filter;
 
-    static int   m_lastSetFilter;
+    static int m_lastSetFilter;
 
-    QGroupBox   *m_filterGroup;
-    QCheckBox      *m_tempoCheckBox;
-    QCheckBox      *m_timeSigCheckBox;
+    QGroupBox *m_filterGroup;
+    QCheckBox *m_tempoCheckBox;
+    QCheckBox *m_timeSigCheckBox;
 
     std::vector<int> m_listSelection;
 
     bool m_ignoreUpdates;
 };
-
 
 
 }

@@ -858,10 +858,9 @@ public slots:
      */
     void slotEditAsNotation();
 
-    /**
-     * open a tempo/timesig edit view
-     */
+    /// Open Tempo and Time Signature Editor
     void slotEditTempos();
+    /// Open Tempo and Time Signature Editor
     void slotEditTempos(timeT openAtTime);
 
     /**
