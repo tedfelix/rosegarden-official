@@ -24,7 +24,6 @@
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
-//#include "base/Studio.h"
 
 #include <QApplication>
 
@@ -61,22 +60,19 @@ MergeFileCommand::~MergeFileCommand()
 
 void MergeFileCommand::execute()
 {
+    // If we are redoing...
+    if (m_undone) {
+        redo();
+        // Switch back to "done" mode.
+        m_undone = false;
+        return;
+    }
+
     RosegardenDocument *destDoc = RosegardenDocument::currentDocument;
     if (!destDoc)
         return;
 
     Composition &destComp = destDoc->getComposition();
-
-    // If we are redoing...
-    if (m_undone) {
-
-        //redo();
-
-        // Switch back to "done" mode.
-        m_undone = false;
-
-        return;
-    }
 
     // First time through...
 
@@ -162,6 +158,9 @@ void MergeFileCommand::execute()
         segment->setTrack(destTrackId);
         destComp.addSegment(segment);
 
+        // Save for redo.
+        m_newSegments.push_back(segment);
+
         // Update maxEndTime
         timeT segmentEndTime = segment->getEndMarkerTime();
         if (m_mergeAtEnd) {
@@ -171,6 +170,10 @@ void MergeFileCommand::execute()
         if (segmentEndTime > maxEndTime)
             maxEndTime = segmentEndTime;
     }
+
+    // ??? At this point, I suspect the SequencerManager needs to be
+    //     updated like we do for undo.  Otherwise the new Segments will
+    //     not be aware of their tempo changes.
 
     // Merge in time signatures and tempos from the merge source
     if (m_mergeTimesAndTempos) {
@@ -229,11 +232,13 @@ void MergeFileCommand::execute()
     // If the Composition needs to be expanded, expand it.
     if (maxEndTime > destComp.getEndMarker()) {
         // For undo.  Capture before we modify.
-        m_compositionExpanded = true;
         m_oldCompositionEnd = destComp.getEndMarker();
 
         // Expand the Composition.
         destComp.setEndMarker(maxEndTime);
+
+        m_compositionExpanded = true;
+        m_newCompositionEnd = maxEndTime;
     }
 
     // Make sure the center of the action is visible.
@@ -280,8 +285,6 @@ void MergeFileCommand::unexecute()
 
             // If this Segment is on the track we are deleting
             if ((*segmentIter2)->getTrack() == trackId) {
-                // Save the Segment for redo.
-                m_newSegments.push_back(*segmentIter2);
                 // Remove the Segment from the Composition.
                 composition.detachSegment(*segmentIter2);
             }
@@ -331,6 +334,45 @@ void MergeFileCommand::unexecute()
 
 
     m_undone = true;
+}
+
+void MergeFileCommand::redo()
+{
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    if (!document)
+        return;
+
+    Composition &composition = document->getComposition();
+
+    // Add the Tracks.
+    for (size_t trackIndex = 0; trackIndex < m_newTracks.size(); ++trackIndex) {
+        composition.addTrack(m_newTracks[trackIndex]);
+    }
+
+    // Add the Segments.
+    composition.addAllSegments(m_newSegments);
+
+    // ??? At this point, I suspect the SequencerManager needs to be
+    //     updated like we do for undo.  Otherwise the new Segments will
+    //     not be aware of their tempo changes.
+
+    // Add the time signatures.
+    for (const TimeSignatureMap::value_type &pair : m_newTimeSignatures) {
+        composition.addTimeSignature(pair.first, pair.second);
+    }
+
+    // Add the tempos.
+    for (const TempoChangeMap::value_type &pair : m_newTempoChanges) {
+        composition.addTempoAtTime(pair.first, pair.second);
+    }
+
+    // Expand the composition.
+    if (m_compositionExpanded)
+        composition.setEndMarker(m_newCompositionEnd);
+
+    // Make sure the center of the action is visible.
+    // ???
+    //emit makeTrackVisible(destMaxTrackPos + 1 + srcNrTracks/2 + 1);
 }
 
 

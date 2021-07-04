@@ -18,7 +18,7 @@
 #pragma once
 
 #include "document/Command.h"  // for NamedCommand
-#include "base/Composition.h"  // for tempoT
+#include "base/Composition.h"  // for tempoT and SegmentVec
 #include "base/NotationTypes.h"  // for TimeSignature
 #include "base/TimeT.h"
 #include "base/Track.h"
@@ -76,19 +76,24 @@ private:
     /// Whether this command expanded the Composition.
     bool m_compositionExpanded;
     timeT m_oldCompositionEnd;
+    timeT m_newCompositionEnd;
 
     /// Segments added by this command.
     /**
      * Only valid after undo and used for redo.
      */
-    std::vector<Segment *> m_newSegments;
+    Composition::SegmentVec m_newSegments;
+
+    void redo();
 
     // *** STATUS
 
-    /// Tracks in m_newTracks are no longer in the Composition (we've been undone).
+    /// Command has been undone.
     /**
      * ??? Seems like a concept that many commands might find useful.  Why
      *     isn't there a Command::m_undone?
+     * ??? There are actually four states: notDone, done, undone, redone
+     *     But only "undone" is important in most cases.
      */
     bool m_undone;
 };
