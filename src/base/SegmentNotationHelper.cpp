@@ -880,9 +880,20 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
 
     timeT duration = modelEvent->getDuration();
 
-    if (i != end() && (*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
-        duration = duration * (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT) /
-            (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+    iterator j = i;
+    while (j != end()) {
+        // ignore non note/rest
+        bool noteOrRest = (*j)->isa(Note::EventType) ||
+            (*j)->isa(Note::EventRestType);
+        if (noteOrRest) {
+            break;
+        } else {
+            j++;
+        }
+    }
+    if (j != end() && (*j)->has(BEAMED_GROUP_TUPLET_BASE)) {
+        duration = duration * (*j)->get<Int>(BEAMED_GROUP_TUPLED_COUNT) /
+            (*j)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
     }
 
     RG_DEBUG << "duration" << duration;
@@ -1458,11 +1469,19 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 
     for (iterator i = segment().findTime(t); i != end(); ++i) {
 
+        // skip anything that is not a note or a rest
+        bool noteOrRest = (*i)->isa(Note::EventType) ||
+            (*i)->isa(Note::EventRestType);
+        if (! noteOrRest) continue;
+
         if (!haveStartNotationTime) {
             notationTime = (*i)->getNotationAbsoluteTime();
-            fillWithRestsTo = notationTime + (untupled * unit);
+            fillWithRestsTo = notationTime + (tupled * unit);
             haveStartNotationTime = true;
         }
+
+        RG_DEBUG << "SegmentNotationHelper::makeTupletGroup iter" <<
+            *i << (*i)->getNotationAbsoluteTime();
 
         if ((*i)->getNotationAbsoluteTime() >=
             notationTime + (untupled * unit)) break;
@@ -1496,6 +1515,27 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 
         toInsert.push_back(e);
         toErase.push_back(i);
+        // At the end of a segment we may run out of events before the
+        // tuplet is complete. So complete it here
+        iterator j = i;
+        j++;
+        if (j == end()) {
+            // yes i is the last event
+            timeT noteEnd = e->getAbsoluteTime() + e->getDuration();
+            timeT tupletEnd = notationTime + (tupled * unit);
+            if (tupletEnd > noteEnd) {
+                RG_DEBUG << "SegmentNotationHelper::makeTupletGroup:" <<
+                    "adding last event to the segment" << noteEnd << tupletEnd;
+                Event *el = new Event(**i, noteEnd, tupletEnd - noteEnd);
+                el->set<Int>(BEAMED_GROUP_ID, groupId);
+                el->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_TUPLED);
+                
+                el->set<Int>(BEAMED_GROUP_TUPLET_BASE, unit);
+                el->set<Int>(BEAMED_GROUP_TUPLED_COUNT, tupled);
+                el->set<Int>(BEAMED_GROUP_UNTUPLED_COUNT, untupled);
+                toInsert.push_back(el);
+            }
+        }
     }
 
     for (list<iterator>::iterator i = toErase.begin();
@@ -1509,6 +1549,8 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
     }
 
     if (haveStartNotationTime) {
+        RG_DEBUG << "SegmentNotationHelper::makeTupletGroup: fillWithRests" <<
+            notationTime + (tupled * unit) << fillWithRestsTo;
         segment().fillWithRests(notationTime + (tupled * unit),
                                 fillWithRestsTo);
     }
