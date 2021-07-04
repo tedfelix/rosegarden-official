@@ -174,24 +174,55 @@ void MergeFileCommand::execute()
 
     // Merge in time signatures and tempos from the merge source
     if (m_mergeTimesAndTempos) {
-        // Copy time signatures from the merge source.
+        // For each time signature in the source document
         for (int i = 0;
              i < srcComp.getTimeSignatureCount();
              ++i) {
             std::pair<timeT, TimeSignature> ts =
                     srcComp.getTimeSignatureChange(i);
-            destComp.addTimeSignature(ts.first + time0, ts.second);
+
+            const timeT targetTime = ts.first + time0;
+
+            // Check for clobber
+            const int clobberNum = destComp.getTimeSignatureNumberAt(ts.first);
+            std::pair<timeT, TimeSignature> clobberTS =
+                    destComp.getTimeSignatureChange(clobberNum);
+            // If there is already a time signature at this exact time
+            if (clobberTS.first == targetTime) {
+                // It will be clobbered.  Add to clobbered time signature list.
+                m_clobberedTimeSignatures[clobberTS.first] = clobberTS.second;
+            }
+
+            destComp.addTimeSignature(targetTime, ts.second);
+
             // For undo.
-            m_newTimeSignatures[ts.first + time0] = ts.second;
+            m_newTimeSignatures[targetTime] = ts.second;
         }
+
         // Copy tempos from the merge source.
+        // For each tempo change in the source document
         for (int i = 0;
              i < srcComp.getTempoChangeCount();
              ++i) {
             std::pair<timeT, tempoT> t = srcComp.getTempoChange(i);
-            destComp.addTempoAtTime(t.first + time0, t.second);
+
+            const timeT targetTime = t.first + time0;
+
+            // Check for clobber
+            const int clobberNum = destComp.getTempoChangeNumberAt(t.first);
+            std::pair<timeT, tempoT> clobberedTempoChange =
+                    destComp.getTempoChange(clobberNum);
+            // If there is already a tempo change at this exact time
+            if (clobberedTempoChange.first == targetTime) {
+                // It will be clobbered.  Add to clobbered tempo change list.
+                m_clobberedTempoChanges[clobberedTempoChange.first] =
+                        clobberedTempoChange.second;
+            }
+
+            destComp.addTempoAtTime(targetTime, t.second);
+
             // For undo.
-            m_newTempos[t.first + time0] = t.second;
+            m_newTempoChanges[targetTime] = t.second;
         }
     }
 
@@ -239,7 +270,7 @@ void MergeFileCommand::unexecute()
 
         const SegmentMultiSet &segments = composition.getSegments();
 
-        // For each Segment in the Somposition.
+        // For each Segment in the Composition.
         for (SegmentMultiSet::const_iterator segmentIter = segments.begin();
              segmentIter != segments.end();
              /* incremented inside */) {
@@ -275,11 +306,21 @@ void MergeFileCommand::unexecute()
         composition.removeTimeSignature(timeSignatureNumber);
     }
 
+    // Put back the clobbered time signatures.
+    for (const TimeSignatureMap::value_type &pair : m_clobberedTimeSignatures) {
+        composition.addTimeSignature(pair.first, pair.second);
+    }
+
     // Remove the tempos
-    for (const TempoMap::value_type &pair : m_newTempos) {
+    for (const TempoChangeMap::value_type &pair : m_newTempoChanges) {
         const int tempoChangeNumber =
                 composition.getTempoChangeNumberAt(pair.first);
         composition.removeTempoChange(tempoChangeNumber);
+    }
+
+    // Put back the clobbered time signatures.
+    for (const TempoChangeMap::value_type &pair : m_clobberedTempoChanges) {
+        composition.addTempoAtTime(pair.first, pair.second);
     }
 
     // Reverse any Composition expansion.

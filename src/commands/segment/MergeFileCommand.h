@@ -61,13 +61,17 @@ private:
     /// Tracks created by this command.
     std::vector<Track *> m_newTracks;
 
-    /// Time signatures added by this command.
     typedef std::map<timeT, TimeSignature> TimeSignatureMap;
+    /// Time signatures added by this command.
     TimeSignatureMap m_newTimeSignatures;
+    /// Time signatures clobbered by this command.
+    TimeSignatureMap m_clobberedTimeSignatures;
 
-    /// Tempos added by this command.
-    typedef std::map<timeT, tempoT> TempoMap;
-    TempoMap m_newTempos;
+    typedef std::map<timeT, tempoT> TempoChangeMap;
+    /// Tempo changes added by this command.
+    TempoChangeMap m_newTempoChanges;
+    /// Tempo changes clobbered by this command.
+    TempoChangeMap m_clobberedTempoChanges;
 
     /// Whether this command expanded the Composition.
     bool m_compositionExpanded;
