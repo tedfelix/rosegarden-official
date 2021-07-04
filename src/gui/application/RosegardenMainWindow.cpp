@@ -2685,22 +2685,24 @@ RosegardenMainWindow::slotRescaleSelection()
 }
 
 bool
-RosegardenMainWindow::testAudioPath(QString op)
+RosegardenMainWindow::testAudioPath(QString operation)
 {
     try {
         RosegardenDocument::currentDocument->getAudioFileManager().testAudioPath();
     } catch (const AudioFileManager::BadAudioPathException &) {
-        // changing the following parent to 0 fixes a nasty style problem cheap:
-        if (QMessageBox::warning
-                (nullptr, tr("Warning"),
-                 tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?", op.toStdString().c_str()),
-                QMessageBox::Yes | QMessageBox::Cancel,
-                 QMessageBox::Cancel 
-               ) == QMessageBox::Yes
-          ){
+        // Changing the parent to nullptr fixes a nasty style problem cheaply.
+        // ??? What style problem?
+        if (QMessageBox::warning(
+                nullptr,  // parent
+                tr("Warning"),  // title
+                tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?",
+                        operation.toStdString().c_str()),  // text
+                QMessageBox::Yes | QMessageBox::Cancel,  // buttons
+                QMessageBox::Cancel) ==  // defaultButton
+                        QMessageBox::Yes) {
             slotOpenAudioPathSettings();
         }
-    return false;
+        return false;
     }
     return true;
 }
@@ -4497,15 +4499,15 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
 void
 RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
 {
+    if (!RosegardenDocument::currentDocument)
+        return;
+
     RosegardenDocument *srcDoc = createDocument(
             filePath,
             type,  // importType
             true,  // lock
             false);  // clearHistory
     if (!srcDoc)
-        return;
-
-    if (!RosegardenDocument::currentDocument)
         return;
 
     const Composition &srcComp = srcDoc->getComposition();
@@ -5637,20 +5639,6 @@ RosegardenMainWindow::isSequencerRunning()
     //RG_DEBUG << "isSequencerRunning: m_useSequencer = "
     //         << m_useSequencer << ", m_sequencerThread = " << m_sequencerThread;
     return m_useSequencer && (m_sequencerThread != nullptr);
-}
-
-void
-RosegardenMainWindow::alive()
-{
-    // ??? This routine appears to never be called.
-
-    //RG_DEBUG << "alive()";
-
-    if (RosegardenDocument::currentDocument && RosegardenDocument::currentDocument->getStudio().haveMidiDevices()) {
-        enterActionState("got_midi_devices"); //@@@ JAS orig. 0
-    } else {
-        leaveActionState("got_midi_devices"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-    }
 }
 
 void
