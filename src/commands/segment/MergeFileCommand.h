@@ -18,13 +18,15 @@
 #pragma once
 
 #include "document/Command.h"  // for NamedCommand
-//#include "base/Instrument.h"
+#include "base/Composition.h"  // for tempoT
+#include "base/NotationTypes.h"  // for TimeSignature
+#include "base/TimeT.h"
 #include "base/Track.h"
 
 #include <QCoreApplication>  // for Q_DECLARE_TR_FUNCTIONS()
 
 #include <vector>
-//#include <map>
+#include <map>
 
 
 namespace Rosegarden
@@ -47,13 +49,37 @@ public:
     void unexecute() override;
 
 private:
+    // *** ATTRIBUTES
+
     // This is only valid during execute().  It is then cleared.
     RosegardenDocument *m_sourceDocument;
     bool m_mergeAtEnd;
     bool m_mergeTimesAndTempos;
 
+    // *** UNDO
+
     /// Tracks created by this command.
     std::vector<Track *> m_newTracks;
+
+    /// Time signatures added by this command.
+    typedef std::map<timeT, TimeSignature> TimeSignatureMap;
+    TimeSignatureMap m_newTimeSignatures;
+
+    /// Tempos added by this command.
+    typedef std::map<timeT, tempoT> TempoMap;
+    TempoMap m_newTempos;
+
+    /// Whether this command expanded the Composition.
+    bool m_compositionExpanded;
+    timeT m_oldCompositionEnd;
+
+    /// Segments added by this command.
+    /**
+     * Only valid after undo and used for redo.
+     */
+    std::vector<Segment *> m_newSegments;
+
+    // *** STATUS
 
     /// Tracks in m_newTracks are no longer in the Composition (we've been undone).
     /**

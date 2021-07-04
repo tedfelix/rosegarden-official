@@ -22,8 +22,11 @@
 #include "base/Composition.h"
 #include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
-//#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/seqmanager/SequenceManager.h"
 //#include "base/Studio.h"
+
+#include <QApplication>
 
 #include <algorithm>
 
@@ -39,6 +42,7 @@ MergeFileCommand::MergeFileCommand(RosegardenDocument *srcDoc,
     m_sourceDocument(srcDoc),
     m_mergeAtEnd(mergeAtEnd),
     m_mergeTimesAndTempos(mergeTimesAndTempos),
+    m_compositionExpanded(false),
     m_undone(false)
 {
 
@@ -66,7 +70,7 @@ void MergeFileCommand::execute()
     // If we are redoing...
     if (m_undone) {
 
-        // ...
+        //redo();
 
         // Switch back to "done" mode.
         m_undone = false;
@@ -111,7 +115,11 @@ void MergeFileCommand::execute()
         // ??? Definitely not just MidiInstrumentBase.
         //     AudioInstrumentBase and SoftSynthInstrumentBase too.
         //     We probably need to be smarter and search for a valid
-        //     Device and use its first InstrumentId.
+        //     Device and use its first InstrumentId.  Probably need to test
+        //     this and see.  E.g. add a second MIDI device and remove
+        //     the first.  Then MidiInstrumentBase is most likely no longer
+        //     valid.  Check out the fireworks.  Do the same for SoftSynth
+        //     and Audio tracks.
         destTrack->setInstrument(MidiInstrumentBase);
 
         // Add it to the Composition.
@@ -121,9 +129,6 @@ void MergeFileCommand::execute()
         m_newTracks.push_back(destTrack);
     }
 
-    // Destination.
-    // ??? I don't think this is how this version will work.
-    //const TrackId firstNewTrackId = destComp.getNewTrackId();
     // Keep track of the max end time so we can expand the composition
     // if needed.
     timeT maxEndTime = 0;
@@ -176,6 +181,8 @@ void MergeFileCommand::execute()
             std::pair<timeT, TimeSignature> ts =
                     srcComp.getTimeSignatureChange(i);
             destComp.addTimeSignature(ts.first + time0, ts.second);
+            // For undo.
+            m_newTimeSignatures[ts.first + time0] = ts.second;
         }
         // Copy tempos from the merge source.
         for (int i = 0;
@@ -183,23 +190,105 @@ void MergeFileCommand::execute()
              ++i) {
             std::pair<timeT, tempoT> t = srcComp.getTempoChange(i);
             destComp.addTempoAtTime(t.first + time0, t.second);
+            // For undo.
+            m_newTempos[t.first + time0] = t.second;
         }
     }
 
     // If the Composition needs to be expanded, expand it.
-    if (maxEndTime > destComp.getEndMarker())
+    if (maxEndTime > destComp.getEndMarker()) {
+        // For undo.  Capture before we modify.
+        m_compositionExpanded = true;
+        m_oldCompositionEnd = destComp.getEndMarker();
+
+        // Expand the Composition.
         destComp.setEndMarker(maxEndTime);
+    }
 
     // Make sure the center of the action is visible.
     // ???
     //emit makeTrackVisible(destMaxTrackPos + 1 + srcNrTracks/2 + 1);
 
     // This doesn't live past the first execution of the command.
+    // ??? Can we move all of RosegardenMainWindow::mergeFile()
+    //     and RosegardenDocument::mergeDocument() into here?
+    //     Then we can move the source document read into here.
+    //     I think the answer is "no".  The issue is that both the
+    //     file selection dialog and FileMergeDialog offer Cancel buttons.
+    //     And there's no way to cancel a command from within its execute().
+    //     At least I don't think there is.  I think we'll stick to this.
     m_sourceDocument = nullptr;
 }
 
 void MergeFileCommand::unexecute()
 {
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    if (!document)
+        return;
+
+    Composition &composition = document->getComposition();
+
+    // Remove the added Tracks from the composition.
+
+    // Keep a list for Composition notification.
+    std::vector<TrackId> trackIds;
+
+    // For each new Track, detach it from the Composition.
+    for (size_t trackIndex = 0; trackIndex < m_newTracks.size(); ++trackIndex) {
+        const TrackId trackId = m_newTracks[trackIndex]->getId();
+
+        const SegmentMultiSet &segments = composition.getSegments();
+
+        // For each Segment in the Somposition.
+        for (SegmentMultiSet::const_iterator segmentIter = segments.begin();
+             segmentIter != segments.end();
+             /* incremented inside */) {
+            // Increment before use.  Otherwise detachSegment() will
+            // invalidate our iterator.
+            SegmentMultiSet::const_iterator segmentIter2 = segmentIter++;
+
+            // If this Segment is on the track we are deleting
+            if ((*segmentIter2)->getTrack() == trackId) {
+                // Save the Segment for redo.
+                m_newSegments.push_back(*segmentIter2);
+                // Remove the Segment from the Composition.
+                composition.detachSegment(*segmentIter2);
+            }
+        }
+
+        composition.detachTrack(m_newTracks[trackIndex]);
+        trackIds.push_back(trackId);
+    }
+
+    composition.notifyTracksDeleted(trackIds);
+
+    // Have to refresh the SequenceManager before continuing.
+    // Otherwise it will still have the old Segments.
+    RosegardenMainWindow::self()->getSequenceManager()->update();
+    // Empty the queue as the above calls postEvent() instead of sendEvent().
+    QApplication::processEvents();
+
+    // Remove the time signatures
+    for (const TimeSignatureMap::value_type &pair : m_newTimeSignatures) {
+        const int timeSignatureNumber =
+                composition.getTimeSignatureNumberAt(pair.first);
+        composition.removeTimeSignature(timeSignatureNumber);
+    }
+
+    // Remove the tempos
+    for (const TempoMap::value_type &pair : m_newTempos) {
+        const int tempoChangeNumber =
+                composition.getTempoChangeNumberAt(pair.first);
+        composition.removeTempoChange(tempoChangeNumber);
+    }
+
+    // Reverse any Composition expansion.
+    if (m_compositionExpanded)
+        composition.setEndMarker(m_oldCompositionEnd);
+
+    // More?
+
+
     m_undone = true;
 }
 
