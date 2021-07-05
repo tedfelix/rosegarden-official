@@ -107,9 +107,9 @@ public:
 
     void setName(const std::string &name) { m_name = name; }
     void setAlias(const std::string &alias) { m_alias = alias; }
-    InstrumentType getType() const { return m_type; }
 
     void setType(InstrumentType type) { m_type = type; }
+    InstrumentType getType() const { return m_type; }
 
 
     // ---------------- Fixed channels -----------------

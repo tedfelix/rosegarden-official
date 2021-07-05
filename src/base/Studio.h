@@ -152,7 +152,8 @@ public:
 
     // Return the device list
     //
-    DeviceList* getDevices() { return &m_devices; }
+    DeviceList *getDevices()  { return &m_devices; }
+    const DeviceList *getDevices() const  { return &m_devices; }
 
     // Const iterators
     //
@@ -165,11 +166,11 @@ public:
 
     // Get device of audio type (there is only one)
     //
-    Device *getAudioDevice();
+    Device *getAudioDevice() const;
 
     // Get device of soft synth type (there is only one)
     //
-    Device *getSoftSynthDevice();
+    Device *getSoftSynthDevice() const;
 
     bool haveMidiDevices() const;
 
