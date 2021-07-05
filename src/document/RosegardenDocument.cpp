@@ -53,6 +53,7 @@
 #include "commands/segment/SegmentInsertCommand.h"
 #include "commands/segment/SegmentRecordCommand.h"
 #include "commands/segment/ChangeCompositionLengthCommand.h"
+#include "commands/segment/MergeFileCommand.h"
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include "gui/general/ClefIndex.h"
@@ -678,120 +679,11 @@ RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
     // Merging from the merge source (srcDoc) into the merge destination
     // (this).
 
-    MacroCommand *command = new MacroCommand(tr("Merge"));
-
-    // Destination start time.
-    // ??? We should allow for "at cursor position" as well.
-    timeT time0 = 0;
-    if (mergeAtEnd) {
-        time0 = getComposition().getBarEndForTime(
-                getComposition().getDuration() - 1);
-    }
-
-    const int srcNrTracks = srcDoc->getComposition().getNbTracks();
-    const int destMaxTrackPos = getComposition().getNbTracks() - 1;
-
-    command->addCommand(new AddTracksCommand(
-            srcNrTracks,  // numberOfTracks
-            MidiInstrumentBase,  // instrumentId
-            -1));  // position (at end)
-
-    // ??? What about bringing over the Track names and the Instrument
-    //     types (MIDI/Audio/SoftSynth) at the very least?
-
-    // ??? At this point it becomes clear that continuing with the
-    //     MacroCommand approach isn't going to cut it.  This would all be
-    //     much simpler as its own command.  That way we have direct access
-    //     to both documents and the ability to do whatever we want without
-    //     having to find or create a command for each piece of the process.
-
-    // Destination.
-    const TrackId firstNewTrackId = getComposition().getNewTrackId();
-    // Keep track of the max end time so we can expand the composition
-    // if needed.
-    timeT maxEndTime = 0;
-
-    // For each Segment in the source document, move it to the destination
-    // document (this).
-    for (Composition::iterator i = srcDoc->getComposition().begin(), j = i;
-         i != srcDoc->getComposition().end();
-         i = j) {
-
-        // Move to the next so that we can detach the current.
-        ++j;
-        Segment *segment = *i;
-
-        Track *srcTrack =
-                srcDoc->getComposition().getTrackById(segment->getTrack());
-        if (!srcTrack)
-            continue;
-
-        const int destTrackPosition =
-                srcTrack->getPosition() + destMaxTrackPos + 1;
-
-        Track *destTrack = getComposition().getTrackByPosition(destTrackPosition);
-        TrackId destTrackId = NoTrack;
-        // When we turn this into a command, this will be true.  For now
-        // it is false because the destination tracks do not yet exist.
-        // The AddTracksCommand hasn't been run yet.
-        if (destTrack)
-            destTrackId = destTrack->getId();
-        else
-            destTrackId = firstNewTrackId + srcTrack->getPosition();
-
-        // Move the Segment from the srcDoc to the dest (this).
-        // Ok to detach as we've got j pointing to the next Segment.
-        srcDoc->getComposition().detachSegment(segment);
-        command->addCommand(new SegmentInsertCommand(
-                &getComposition(), segment, destTrackId));
-
-        // Update maxEndTime
-        timeT segmentEndTime = segment->getEndMarkerTime();
-        if (mergeAtEnd) {
-            segment->setStartTime(segment->getStartTime() + time0);
-            segmentEndTime += time0;
-        }
-        if (segmentEndTime > maxEndTime)
-            maxEndTime = segmentEndTime;
-    }
-
-    // ??? Since the rest of this is not being done with Commands, these
-    //     changes cannot be undone.  Another point in favor of making this
-    //     entire process into a new command.
-
-    // Merge in time signatures and tempos from the merge source
-    if (mergeTimesAndTempos) {
-        // Copy time signatures from the merge source.
-        for (int i = 0;
-             i < srcDoc->getComposition().getTimeSignatureCount();
-             ++i) {
-            std::pair<timeT, TimeSignature> ts =
-                srcDoc->getComposition().getTimeSignatureChange(i);
-            getComposition().addTimeSignature(ts.first + time0, ts.second);
-        }
-        // Copy tempos from the merge source.
-        for (int i = 0;
-             i < srcDoc->getComposition().getTempoChangeCount();
-             ++i) {
-            std::pair<timeT, tempoT> t =
-                srcDoc->getComposition().getTempoChange(i);
-            getComposition().addTempoAtTime(t.first + time0, t.second);
-        }
-    }
-
-    // If the Composition needs to be expanded, expand it.
-    if (maxEndTime > getComposition().getEndMarker()) {
-        command->addCommand(new ChangeCompositionLengthCommand(
-                &getComposition(),  // composition
-                getComposition().getStartMarker(),  // startTime
-                maxEndTime,  // endTime
-                getComposition().autoExpandEnabled()));  // autoExpand
-    }
-
-    CommandHistory::getInstance()->addCommand(command);
-
-    // Make sure the center of the action is visible.
-    emit makeTrackVisible(destMaxTrackPos + 1 + srcNrTracks/2 + 1);
+    CommandHistory::getInstance()->addCommand(
+            new MergeFileCommand(
+                    srcDoc,
+                    mergeAtEnd,
+                    mergeTimesAndTempos));
 }
 
 void RosegardenDocument::sendChannelSetups(bool reset)
