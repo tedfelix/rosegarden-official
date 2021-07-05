@@ -378,11 +378,11 @@ NotationGroup::calculateBeam(NotationStaff &staff)
                           (NotationProperties::BEAM_ABOVE);
     }
 
-    timeT crotchet = Note(Note::Crotchet).getDuration();
+    timeT quaver = Note(Note::Quaver).getDuration();
 
     beam.necessary =
-        (*initialNote)->getViewDuration() < crotchet &&
-        (*finalNote)->getViewDuration() < crotchet;
+        (*initialNote)->getViewDuration() <= quaver &&
+        (*finalNote)->getViewDuration() <= quaver;
 
     beam.necessary = beam.necessary &&
         (((*finalNote)->getViewAbsoluteTime() >
@@ -838,12 +838,12 @@ NotationGroup::applyBeam(NotationStaff &staff)
 void
 NotationGroup::applyTuplingLine(NotationStaff &staff)
 {
-    //    RG_DEBUG << "applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type;
+    RG_DEBUG << "applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type;
 
     if (m_type != Tupled)
         return ;
 
-    //    RG_DEBUG << "applyTuplingLine: line is necessary";
+    RG_DEBUG << "applyTuplingLine: line is necessary";
 
     Beam beam(calculateBeam(staff));
 
