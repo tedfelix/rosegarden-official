@@ -24,6 +24,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
+#include "base/Studio.h"
 
 #include <QApplication>
 
@@ -49,11 +50,74 @@ MergeFileCommand::MergeFileCommand(RosegardenDocument *srcDoc,
 
 MergeFileCommand::~MergeFileCommand()
 {
-    // If the Tracks are no longer in the Composition, we'll have
+    // If the Tracks/Segments are no longer in the Composition, we'll have
     // to delete them ourselves.
     if (m_undone) {
         for (size_t i = 0; i < m_newTracks.size(); ++i) {
             delete m_newTracks[i];
+        }
+        for (size_t i = 0; i < m_newSegments.size(); ++i) {
+            delete m_newSegments[i];
+        }
+    }
+}
+
+// Find the first MIDI Device's first Instrument ID.
+// ??? Specialized, but a candidate for promotion to Studio.
+InstrumentId getFirstMidiInstrumentId(const Studio &destStudio)
+{
+    const DeviceList *deviceList = destStudio.getDevices();
+
+    // For each Device in the Studio
+    for (const Device *device : *deviceList) {
+        // if this is not a MIDI device, try the next.
+        if (device->getType() != Device::Midi)
+            continue;
+        // Skip input devices.
+        if (device->isInput())
+            continue;
+
+        // Get the Device's Instruments.
+        InstrumentList instruments = device->getPresentationInstruments();
+        if (instruments.empty())
+            return MidiInstrumentBase;
+
+        // Return the Device's first Instrument ID
+        return instruments[0]->getId();
+    }
+
+    return MidiInstrumentBase;
+}
+
+// Copy the type from the srcTrack to the destTrack.
+void copyType(const Studio &srcStudio, const Track *srcTrack,
+              const Studio &destStudio, Track *destTrack)
+{
+    const Instrument *instrument = srcStudio.getInstrumentFor(srcTrack);
+    if (!instrument)
+        return;
+
+    switch (instrument->getType()) {
+        case Instrument::Audio: {
+            const Device *audioDevice = destStudio.getAudioDevice();
+            const InstrumentId instrumentId =
+                    audioDevice->getPresentationInstruments()[0]->getId();
+            destTrack->setInstrument(instrumentId);
+            break;
+        }
+        case Instrument::SoftSynth: {
+            const Device *synthDevice = destStudio.getSoftSynthDevice();
+            const InstrumentId instrumentId =
+                    synthDevice->getPresentationInstruments()[0]->getId();
+            destTrack->setInstrument(instrumentId);
+            break;
+        }
+        case Instrument::InvalidInstrument:
+        case Instrument::Midi:
+        default: {
+            // Use the first MIDI Device's first Instrument ID.
+            destTrack->setInstrument(getFirstMidiInstrumentId(destStudio));
+            break;
         }
     }
 }
@@ -107,16 +171,10 @@ void MergeFileCommand::execute()
         destTrack->setPosition(destMaxTrackPos + 1 + srcTrackPosition);
         // Copy the Track label
         destTrack->setLabel(srcTrack->getLabel());
-        // Copy the Track instrument type
-        // ??? Definitely not just MidiInstrumentBase.
-        //     AudioInstrumentBase and SoftSynthInstrumentBase too.
-        //     We probably need to be smarter and search for a valid
-        //     Device and use its first InstrumentId.  Probably need to test
-        //     this and see.  E.g. add a second MIDI device and remove
-        //     the first.  Then MidiInstrumentBase is most likely no longer
-        //     valid.  Check out the fireworks.  Do the same for SoftSynth
-        //     and Audio tracks.
-        destTrack->setInstrument(MidiInstrumentBase);
+
+        // Copy the Track Instrument type
+        copyType(m_sourceDocument->getStudio(), srcTrack,
+                 destDoc->getStudio(), destTrack);
 
         // Add it to the Composition.
         destComp.addTrack(destTrack);
@@ -242,7 +300,7 @@ void MergeFileCommand::execute()
     }
 
     // Make sure the center of the action is visible.
-    // ???
+    // ??? Or just make the last Track visible?
     //emit makeTrackVisible(destMaxTrackPos + 1 + srcNrTracks/2 + 1);
 
     // This doesn't live past the first execution of the command.
@@ -371,7 +429,7 @@ void MergeFileCommand::redo()
         composition.setEndMarker(m_newCompositionEnd);
 
     // Make sure the center of the action is visible.
-    // ???
+    // ??? Or just make the last Track visible?
     //emit makeTrackVisible(destMaxTrackPos + 1 + srcNrTracks/2 + 1);
 }
 
