@@ -296,6 +296,7 @@ protected:
     RosegardenDocument *createDocument(
             QString filePath,
             ImportType type,
+            bool permanent,
             bool lock,
             bool clearHistory);
     
@@ -303,7 +304,8 @@ protected:
      * Create a document from RG file
      */
     RosegardenDocument *createDocumentFromRGFile(
-            const QString &filePath, bool lock, bool clearHistory);
+            const QString &filePath, bool permanent, bool lock,
+            bool clearHistory);
 
     /**
      * Create document from MIDI file

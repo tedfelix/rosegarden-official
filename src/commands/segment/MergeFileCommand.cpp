@@ -229,10 +229,6 @@ void MergeFileCommand::execute()
             maxEndTime = segmentEndTime;
     }
 
-    // ??? At this point, I suspect the SequencerManager needs to be
-    //     updated like we do for undo.  Otherwise the new Segments will
-    //     not be aware of their tempo changes.
-
     // Merge in time signatures and tempos from the merge source
     if (m_mergeTimesAndTempos) {
         // For each time signature in the source document
@@ -293,6 +289,8 @@ void MergeFileCommand::execute()
         m_oldCompositionEnd = destComp.getEndMarker();
 
         // Expand the Composition.
+        // ??? Check against ChangeCompositionLengthCommand.  Is there anything
+        //     else that needs doing?
         destComp.setEndMarker(maxEndTime);
 
         m_compositionExpanded = true;

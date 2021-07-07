@@ -1337,6 +1337,7 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
     RosegardenDocument *doc = createDocument(
             filePath,
             type,  // importType
+            true,  // permanent
             !revert,  // lock
             true);  // clearHistory
 
@@ -1393,7 +1394,8 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
 
 RosegardenDocument *
 RosegardenMainWindow::createDocument(
-        QString filePath, ImportType importType, bool lock, bool clearHistory)
+        QString filePath, ImportType importType, bool permanent,
+        bool lock, bool clearHistory)
 {
     // ??? This and the create functions it calls might make more sense in
     //     RosegardenDocument.
@@ -1488,6 +1490,7 @@ RosegardenMainWindow::createDocument(
     default:
         doc = createDocumentFromRGFile(
                 filePath,
+                permanent,
                 lock,
                 clearHistory);
         break;
@@ -1504,7 +1507,7 @@ RosegardenMainWindow::createDocument(
 
 RosegardenDocument *
 RosegardenMainWindow::createDocumentFromRGFile(
-        const QString &filePath, bool lock, bool clearHistory)
+        const QString &filePath, bool permanent, bool lock, bool clearHistory)
 {
     // ??? This and its caller should probably be moved into
     //     RosegardenDocument as static factory functions.
@@ -1557,7 +1560,11 @@ RosegardenMainWindow::createDocumentFromRGFile(
                     m_useSequencer);  // enableSound
 
     // Read the document from the file.
-    bool readOk = newDoc->openDocument(openFilePath, true, false, lock);
+    bool readOk = newDoc->openDocument(
+            openFilePath,  // filename
+            permanent,  // permanent
+            false,  // squelchProcessDialog
+            lock);  // enableLock
 
     // If the read failed, bail.
     if (!readOk) {
@@ -4505,6 +4512,7 @@ RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
     RosegardenDocument *srcDoc = createDocument(
             filePath,
             type,  // importType
+            false,  // permanent
             true,  // lock
             false);  // clearHistory
     if (!srcDoc)
