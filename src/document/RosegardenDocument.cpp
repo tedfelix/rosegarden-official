@@ -2875,15 +2875,15 @@ Instrument *
 RosegardenDocument::
 getInstrument(Segment *segment)
 {
-    if (!segment || !(segment->getComposition())) {
+    if (!segment)
         return nullptr;
-    }
+    if (!(segment->getComposition()))
+        return nullptr;
 
-    Studio &studio = getStudio();
+    const Track *track =
+            segment->getComposition()->getTrackById(segment->getTrack());
     Instrument *instrument =
-        studio.getInstrumentById
-        (segment->getComposition()->getTrackById(segment->getTrack())->
-         getInstrument());
+            getStudio().getInstrumentById(track->getInstrument());
     return instrument;
 }
 

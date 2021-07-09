@@ -326,16 +326,23 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
                 segmentsHaveMore = true;
                 
 #ifdef DEBUG_META_ITERATOR
-                RG_DEBUG << "fetchEventsNoncompeting() : " << endTime
-                         << " seeing evt from segment #" << i
-                         << " : trackId: " << event->getTrackId()
-                         << " channel: " << (unsigned int) event->getRecordedChannel()
-                         << " - inst: " << event->getInstrument()
-                         << " - type: " << event->getType()
-                         << " - time: " << event->getEventTime()
-                         << " - duration: " << event->getDuration()
-                         << " - data1: " << (unsigned int)event->getData1()
-                         << " - data2: " << (unsigned int)event->getData2();
+                RG_DEBUG << "  Event...";
+                QString trackId = QString::number(event->getTrackId());
+                if (event->getTrackId() == NoTrack)
+                    trackId += " (NoTrack)";
+                RG_DEBUG << "    Track ID:" << trackId <<
+                            " channel:" << (unsigned int) event->getRecordedChannel() <<
+                            " inst:" << event->getInstrument();
+                QString eventType = QString::number(event->getType());
+                if (event->getType() & MappedEvent::MidiNote)
+                    eventType += " (MidiNote)";
+                if (event->getType() & MappedEvent::MidiNoteOneShot)
+                    eventType += " (MidiNoteOneShot)";
+                RG_DEBUG << "    Event type:" << eventType <<
+                            " time:" << event->getEventTime() <<
+                            " duration:" << event->getDuration() <<
+                            " data1:" << (unsigned int)event->getData1() <<
+                            " data2:" << (unsigned int)event->getData2();
 #endif
 
                 if (iter->shouldPlay(event, startTime)) {
