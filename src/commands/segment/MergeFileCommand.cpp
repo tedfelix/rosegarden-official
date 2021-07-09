@@ -154,6 +154,9 @@ void MergeFileCommand::execute()
     const int srcNrTracks = srcComp.getNbTracks();
     const int destMaxTrackPos = destComp.getNbTracks() - 1;
 
+    // Keep a list for Composition notification.
+    std::vector<TrackId> trackIds;
+
     // For each Track in the source Composition, create a new Track in the
     // destination Composition.
     for (int srcTrackPosition = 0;
@@ -165,6 +168,7 @@ void MergeFileCommand::execute()
             continue;
 
         const TrackId destTrackId = destComp.getNewTrackId();
+        trackIds.push_back(destTrackId);
 
         // Create the Track
         Track *destTrack = new Track(destTrackId);
@@ -182,6 +186,9 @@ void MergeFileCommand::execute()
         // For undo.
         m_newTracks.push_back(destTrack);
     }
+
+    // ??? Too early?
+    destComp.notifyTracksAdded(trackIds);
 
     // Keep track of the max end time so we can expand the composition
     // if needed.
@@ -400,10 +407,17 @@ void MergeFileCommand::redo()
 
     Composition &composition = document->getComposition();
 
+    // Keep a list for Composition notification.
+    std::vector<TrackId> trackIds;
+
     // Add the Tracks.
     for (size_t trackIndex = 0; trackIndex < m_newTracks.size(); ++trackIndex) {
         composition.addTrack(m_newTracks[trackIndex]);
+        trackIds.push_back(m_newTracks[trackIndex]->getId());
     }
+
+    // ??? Too early?
+    composition.notifyTracksAdded(trackIds);
 
     // Add the Segments.
     composition.addAllSegments(m_newSegments);
