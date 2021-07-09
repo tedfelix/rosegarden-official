@@ -390,6 +390,8 @@ void MergeFileCommand::unexecute()
     }
 
     // Reverse any Composition expansion.
+    // ??? Check against ChangeCompositionLengthCommand.  Is there anything
+    //     else that needs doing?
     if (m_compositionExpanded)
         composition.setEndMarker(m_oldCompositionEnd);
 
@@ -437,6 +439,8 @@ void MergeFileCommand::redo()
     }
 
     // Expand the composition.
+    // ??? Check against ChangeCompositionLengthCommand.  Is there anything
+    //     else that needs doing?
     if (m_compositionExpanded)
         composition.setEndMarker(m_newCompositionEnd);
 
