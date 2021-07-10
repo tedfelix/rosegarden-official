@@ -1,3 +1,19 @@
+====== ROSEGARDEN 21.06.1 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 21.06.1
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+This is a point release with a single stability fix...
+
+===== Bug Fixes =====
+
+  * Fixed a crash when building with Qt 5.14 and above and running
+    with multiple monitors.  Bug #1599.  [aff4a928]
+
+
 ====== ROSEGARDEN 21.06 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 21.06
@@ -255,7 +271,7 @@ The Rosegarden team is proud to announce the release of version 19.06
 of Rosegarden, a MIDI sequencer that features a rich understanding of
 music notation along with basic support for digital audio.
 
-http://www.rosegardenmusic.com/
+  http://www.rosegardenmusic.com/
 
 Highlights of 19.06 include cleanup and bug fixes.
 
@@ -296,7 +312,7 @@ The Rosegarden team is proud to announce the release of version 18.12 of
 Rosegarden, a MIDI sequencer that features a rich understanding of music
 notation along with basic support for digital audio.
 
-http://www.rosegardenmusic.com/
+  http://www.rosegardenmusic.com/
 
 Highlights of 18.12 include cleanup and migration to newer technologies
 (Qt5 and C++11).
@@ -329,7 +345,7 @@ The Rosegarden team is proud to announce the release of version 18.06
 of Rosegarden, a MIDI sequencer that features a rich understanding of
 music notation along with basic support for digital audio.
 
-http://www.rosegardenmusic.com/
+  http://www.rosegardenmusic.com/
 
 18.06 brings more simplification of the code and further progress
 toward simplifying the UI notification mechanisms that keep the UI in
@@ -376,7 +392,7 @@ The Rosegarden team is proud to announce the release of version 17.12
 of Rosegarden, a MIDI sequencer that features a rich understanding of
 music notation along with basic support for digital audio.
 
-http://www.rosegardenmusic.com/
+  http://www.rosegardenmusic.com/
 
 17.12 brings us numerous bug fixes by Yves Guillemot and Ted Felix.
 Ted has also continued his work on cleaning up the source base with a
@@ -434,4 +450,67 @@ volume, pan, etc... control change knobs and faders.
 
   * Karl Marksteiner
   * Lucas
+
+
+====== ROSEGARDEN 17.04, codename "Twice in a Blue Moon" RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 17.04
+of Rosegarden, an audio and MIDI sequencer and musical notation editor
+for Linux.
+
+  http://www.rosegardenmusic.com/
+
+The most visible change in 17.04 is that David Faure has generously
+replaced our very brittle and complex style system with a complete
+rewrite using QStyle (r14968).  Ted Felix invested the past ten months
+grinding through bugs, and cleaning Rosegarden's code to make it more
+efficient and maintainable.  Significant areas cleaned up include: the
+Track Parameters box (r14707-r14762), TrackButtons (r14765-r14770),
+progress dialogs (r14793-r14899), and the Audio Mixer window
+(r14910-r15013).  Yves Guillemot and David Faure squashed a few bugs as
+well.
+
+===== Bug Fixes =====
+
+  * Fix memory leak: delete StartupLogo when closing it (r14737)
+  * Add compilation fix for Ubuntu 16.04.01 LTS (r14738)
+  * TrackParameterBox: Fix initial track label problem (r14761)
+  * Fix #1534: Send channel setup when output is changed (r14743)
+  * TrackParameterBox: Make color combo visible for audio tracks
+    (r14762)
+  * autoload: Fix audio track colors (r14763)
+  * Fix #1532: Crash when trying to edit a triggered segment (r14772)
+  * Fix #1536: Crash on dangling Instrument IDs (r14776)
+  * Fix "Always use default studio" stickiness (r14781)
+  * Fix #1538: No sound when entering notes with keyboard (r14783)
+  * Fix time stamp bug in MIDI file export (r14785)
+  * Improve progress dialogs throughout the application (r14793-r14899)
+  * Repair control rulers in Qt 5 builds
+  * Cleanup incorrect name and filter during audio file export
+  * Fix compilation with -DQT_STRICT_ITERATORS (r14903)
+  * Fix compilation without jack (r14904)
+  * Enable -DQT_NO_URL_CAST_FROM_STRING and fix compilation accordingly
+    (r14905)
+  * Fix "all piano" issue with empty connections (r14906)
+  * Fix MIDI import connection problem (r14907)
+  * Fix a bug in the parallels checker, bug #1544 (r14959)
+  * Fix #1491 Xruns on exit (r14981)
+  * Fix wait cursor (r14985)
+
+===== New Features =====
+
+  * Hide unused frames for audio tracks in track parameters (r14729)
+  * Improve handling of collapsing frames in track parameters and
+    document properties (r14714)
+  * Track 20 recent files, rather than 10 (r14868)
+  * Replace stylesheet with custom QStyle (r14968)
+
+===== People who contributed device files to the Rosegarden Library =====
+
+  * Rainer Hans Liffers
+  * JP Morris
+
+===== People who contributed translations =====
+
+  * Jose Alfredo Murcia Andrés
 

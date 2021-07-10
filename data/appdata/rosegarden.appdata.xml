@@ -55,6 +55,16 @@
     </mimetypes>
     <releases>
 
+      <release type="stable" version="21.06.1" date="2021-07-09">
+        <url>https://rosegardenmusic.com/wiki/dev:21.06.1</url>
+        <description>
+          <p>This version includes the following bug fix:</p>
+          <ul>
+            <li>Fixed a crash when building with Qt 5.14 and above and running with multiple monitors.  Bug #1599.  [aff4a928]</li>
+          </ul>
+        </description>
+      </release>
+
       <release type="stable" version="21.06" date="2021-06-02">
         <url>https://rosegardenmusic.com/wiki/dev:21.06</url>
         <description>
