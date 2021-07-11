@@ -44,8 +44,11 @@ void TestConvert::test1()
 
     bool ok;
 
+    const QString input =
+        QFINDTESTDATA("../data/examples/aylindaamiga.rg");
+    
     ok = doc.openDocument(
-            "../../data/examples/aylindaamiga.rg",
+            input,
             false,  // permanent
             true,  // squelchProgressDialog
             false);  // enableLock
