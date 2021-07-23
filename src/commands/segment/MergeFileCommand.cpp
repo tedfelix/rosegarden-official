@@ -22,9 +22,11 @@
 #include "base/Composition.h"
 #include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "base/Studio.h"
+#include "gui/editors/segment/TrackEditor.h"
 
 #include <QApplication>
 
@@ -296,26 +298,32 @@ void MergeFileCommand::execute()
         m_oldCompositionEnd = destComp.getEndMarker();
 
         // Expand the Composition.
-        // ??? Check against ChangeCompositionLengthCommand.  Is there anything
-        //     else that needs doing?
         destComp.setEndMarker(maxEndTime);
 
         m_compositionExpanded = true;
         m_newCompositionEnd = maxEndTime;
     }
 
-    // Make sure the center of the action is visible.
-    // ??? Or just make the last Track visible?
-    //emit makeTrackVisible(destMaxTrackPos + 1 + srcNrTracks/2 + 1);
+    // Make sure the last Track is visible.
+    // ??? There are two reasons this isn't working.
+    //
+    //   1. The UI hasn't updated yet, so the Tracks aren't there yet.
+    //      We would need a way to queue up a scroll for after the UI
+    //      updates.  CompositionView::scrollToTrackDelayed().  Or we
+    //      might just make it a part of the refresh logic.  If we are
+    //      adding a track, make sure it is visible.
+    //
+    //   2. TrackEditor::slotScrollToTrack()'s math is wrong.  See comments
+    //      there.
+    //
+    //CompositionView *view = RosegardenMainWindow::self()->getView()->
+    //        getTrackEditor()->getCompositionView();
+    //view->scrollToTrackDelayed(destMaxTrackPos + 1 + srcNrTracks + 1);
+    //
+    RosegardenMainWindow::self()->getView()->getTrackEditor()->
+            slotScrollToTrack(destMaxTrackPos + 1 + srcNrTracks + 1);
 
     // This doesn't live past the first execution of the command.
-    // ??? Can we move all of RosegardenMainWindow::mergeFile()
-    //     and RosegardenDocument::mergeDocument() into here?
-    //     Then we can move the source document read into here.
-    //     I think the answer is "no".  The issue is that both the
-    //     file selection dialog and FileMergeDialog offer Cancel buttons.
-    //     And there's no way to cancel a command from within its execute().
-    //     At least I don't think there is.  I think we'll stick to this.
     m_sourceDocument = nullptr;
 }
 
@@ -390,8 +398,6 @@ void MergeFileCommand::unexecute()
     }
 
     // Reverse any Composition expansion.
-    // ??? Check against ChangeCompositionLengthCommand.  Is there anything
-    //     else that needs doing?
     if (m_compositionExpanded)
         composition.setEndMarker(m_oldCompositionEnd);
 
@@ -439,8 +445,6 @@ void MergeFileCommand::redo()
     }
 
     // Expand the composition.
-    // ??? Check against ChangeCompositionLengthCommand.  Is there anything
-    //     else that needs doing?
     if (m_compositionExpanded)
         composition.setEndMarker(m_newCompositionEnd);
 

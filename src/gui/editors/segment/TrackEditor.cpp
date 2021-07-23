@@ -529,6 +529,11 @@ void
 TrackEditor::slotScrollToTrack(int track)
 {
     // Find the vertical track pos
+    // ??? This is wrong.  Tracks can be variable height.  We need to use the
+    //     proper math for this.  See CompositionModelImpl::getTrackYCoords().
+    //     SnapGrid::getYBinCoordinate(pos) is even closer.
+    //     CompositionModelImpl::m_grid is the SnapGrid in effect.
+    //     So we really need a CompositionView::scrollToTrack(int trackPos).
     int newY = track * m_trackCellHeight;
 
     m_compositionView->scrollVert(newY);
