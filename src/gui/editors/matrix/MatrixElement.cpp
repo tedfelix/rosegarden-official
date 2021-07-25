@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixElement]"
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixElement.h"
 #include "MatrixScene.h"
@@ -31,6 +33,7 @@
 #include "base/BaseProperties.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/DefaultVelocityColour.h"
+#include "gui/general/MidiPitchLabel.h"
 
 
 namespace Rosegarden
@@ -45,6 +48,7 @@ MatrixElement::MatrixElement(MatrixScene *scene, Event *event,
     m_drum(drum),
     m_current(true),
     m_item(nullptr),
+    m_textItem(nullptr),
     m_pitchOffset(pitchOffset)
 {
     reconfigure();
@@ -52,7 +56,12 @@ MatrixElement::MatrixElement(MatrixScene *scene, Event *event,
 
 MatrixElement::~MatrixElement()
 {
+    RG_DEBUG << "deleting item:" << m_item << this;
     delete m_item;
+    if (m_textItem) {
+        RG_DEBUG << "deleting text item:" << m_textItem << this;
+        delete m_textItem;
+    }
 }
 
 void
@@ -127,8 +136,10 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         fres = resolution + 1;
         QGraphicsPolygonItem *item = dynamic_cast<QGraphicsPolygonItem *>(m_item);
         if (!item) {
+            RG_DEBUG << "reconfigure drum deleting item:" << m_item << this;
             delete m_item;
             item = new QGraphicsPolygonItem;
+            RG_DEBUG << "reconfigure drum created item:" << m_item << this;
             m_item = item;
             m_scene->addItem(m_item);
         }
@@ -145,9 +156,11 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     } else {
         QGraphicsRectItem *item = dynamic_cast<QGraphicsRectItem *>(m_item);
         if (!item) {
+            RG_DEBUG << "reconfigure deleting item:" << m_item << this;
             delete m_item;
             item = new QGraphicsRectItem;
             m_item = item;
+            RG_DEBUG << "reconfigure created item:" << m_item << this;
             m_scene->addItem(m_item);
         }
         float width = m_width;
@@ -160,11 +173,30 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         item->setPen
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
         item->setBrush(QBrush(colour, brushPattern));
+
+        QGraphicsSimpleTextItem *textItem =
+            dynamic_cast<QGraphicsSimpleTextItem *>(m_textItem);
+        if (! textItem) {
+            RG_DEBUG << "reconfigure deleting text item:" << m_textItem << this;
+            delete m_textItem;
+            textItem = new QGraphicsSimpleTextItem;
+            m_textItem = textItem;
+            //RG_DEBUG << "reconfigure created text item:" << m_textItem << this;
+            m_scene->addItem(m_textItem);
+        }
+
+        QString noteName = MidiPitchLabel(pitch).getQString();
+        m_textItem->setText(noteName);
+        QFont font;
+        font.setPixelSize(8);
+        textItem->setFont(font);
+        
     }
 
     setLayoutX(x0);
 
     m_item->setData(MatrixElementData, QVariant::fromValue((void *)this));
+    m_textItem->setData(MatrixElementData, QVariant::fromValue((void *)this));
 
     // set the Y position taking m_pitchOffset into account, subtracting the
     // opposite of whatever the originating segment transpose was
@@ -173,7 +205,10 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 //              << (pitch ) << " m_pitchOffset: " << m_pitchOffset
 //              << std::endl;
 
-    m_item->setPos(x0, (127 - pitch - m_pitchOffset) * (resolution + 1));
+    double pitchy = (127 - pitch - m_pitchOffset) * (resolution + 1);
+    m_item->setPos(x0, pitchy);
+
+    m_textItem->setPos(x0, pitchy);
 
     // set a tooltip explaining why this event is drawn in a different pattern
     if (tiedNote) m_item->setToolTip(QObject::tr("This event is tied to another event."));

@@ -22,6 +22,7 @@
 
 class QColor;
 class QGraphicsItem;
+class QGraphicsSimpleTextItem;
 
 namespace Rosegarden
 {
@@ -72,6 +73,7 @@ protected:
     bool m_drum;
     bool m_current;
     QGraphicsItem *m_item;
+    QGraphicsSimpleTextItem *m_textItem;
     double m_width;
     double m_velocity;
 
