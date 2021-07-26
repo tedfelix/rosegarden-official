@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixView]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixView.h"
 
@@ -208,6 +209,9 @@ MatrixView::MatrixView(RosegardenDocument *doc,
                          ).toBool();
     findAction("show_tempo_ruler")->setChecked(view);
     m_matrixWidget->setTempoRulerVisible(view);
+
+    findAction("show_note_names")->
+        setChecked(qStrToBool(settings.value("show_note_names")));
     
     settings.endGroup();
     
@@ -494,6 +498,8 @@ MatrixView::setupActions()
     createAction("help_about_app", SLOT(slotHelpAbout()));
     createAction("help_about_qt", SLOT(slotHelpAboutQt()));
     createAction("donate", SLOT(slotDonate()));
+
+    createAction("show_note_names", SLOT(slotShowNames()));
     
     // grid snap values
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
@@ -532,6 +538,7 @@ MatrixView::setupActions()
             createAction(actionName, SLOT(slotSetSnapFromAction()));
         }
     }
+
 }
 
 
@@ -1550,6 +1557,18 @@ MatrixView::slotDonate()
 {
     QDesktopServices::openUrl(QUrl(
             "https://www.rosegardenmusic.com/wiki/donations"));
+}
+
+void
+MatrixView::slotShowNames()
+{
+    bool show = findAction("show_note_names")->isChecked();
+    RG_DEBUG << "show names:" << show;
+    QSettings settings;
+    settings.beginGroup(MatrixViewConfigGroup);
+    settings.setValue("show_note_names", show);
+    settings.endGroup();
+    m_matrixWidget->getScene()->updateAll();
 }
 
 void

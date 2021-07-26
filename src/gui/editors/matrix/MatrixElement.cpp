@@ -16,17 +16,19 @@
 */
 
 #define RG_MODULE_STRING "[MatrixElement]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixElement.h"
 #include "MatrixScene.h"
 #include "misc/Debug.h"
 #include "base/RulerScale.h"
+#include "misc/ConfigGroups.h"
 
 #include <QGraphicsRectItem>
 #include <QGraphicsPolygonItem>
 #include <QBrush>
 #include <QColor>
+#include <QSettings>
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -174,29 +176,39 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
         item->setBrush(QBrush(colour, brushPattern));
 
-        QGraphicsSimpleTextItem *textItem =
-            dynamic_cast<QGraphicsSimpleTextItem *>(m_textItem);
-        if (! textItem) {
-            RG_DEBUG << "reconfigure deleting text item:" << m_textItem << this;
-            delete m_textItem;
-            textItem = new QGraphicsSimpleTextItem;
-            m_textItem = textItem;
-            //RG_DEBUG << "reconfigure created text item:" << m_textItem << this;
-            m_scene->addItem(m_textItem);
+        QSettings settings;
+        settings.beginGroup(MatrixViewConfigGroup);
+        bool showName = settings.value("show_note_names", false).toBool();
+        settings.endGroup();
+
+        if (m_textItem) {
+            if (! showName) {
+                RG_DEBUG << "reconfigure deleting text item:" << m_textItem << this;
+                delete m_textItem;
+                m_textItem = nullptr;
+            }
+        } else {
+            if (showName) {
+                m_textItem = new QGraphicsSimpleTextItem;
+                RG_DEBUG << "reconfigure created text item:" << m_textItem << this;
+                m_scene->addItem(m_textItem);
+            }
         }
 
-        QString noteName = MidiPitchLabel(pitch).getQString();
-        m_textItem->setText(noteName);
-        QFont font;
-        font.setPixelSize(8);
-        textItem->setFont(font);
-        
+        if (m_textItem) {
+            QString noteName = MidiPitchLabel(pitch).getQString();
+            m_textItem->setText(noteName);
+            QFont font;
+            font.setPixelSize(8);
+            m_textItem->setFont(font);
+            m_textItem->setData(MatrixElementData,
+                                QVariant::fromValue((void *)this));
+        }
     }
 
     setLayoutX(x0);
 
     m_item->setData(MatrixElementData, QVariant::fromValue((void *)this));
-    m_textItem->setData(MatrixElementData, QVariant::fromValue((void *)this));
 
     // set the Y position taking m_pitchOffset into account, subtracting the
     // opposite of whatever the originating segment transpose was
@@ -208,7 +220,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     double pitchy = (127 - pitch - m_pitchOffset) * (resolution + 1);
     m_item->setPos(x0, pitchy);
 
-    m_textItem->setPos(x0, pitchy);
+    if (m_textItem) {
+            m_textItem->setPos(x0 + 1, pitchy - 1);
+        }
 
     // set a tooltip explaining why this event is drawn in a different pattern
     if (tiedNote) m_item->setToolTip(QObject::tr("This event is tied to another event."));

@@ -29,6 +29,7 @@
   </Menu>
 
   <Menu name="View">
+    <Action name="show_note_names" text="Show note names" checked="false" />
     <text>&amp;View</text>
     <Menu name="Grid">
       <text>&amp;Grid</text>

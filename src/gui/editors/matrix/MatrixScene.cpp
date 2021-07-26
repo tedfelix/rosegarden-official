@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixScene]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixScene.h"
 
@@ -945,5 +946,13 @@ MatrixScene::setVerticalZoomFactor(double factor)
     }
 }
 
+void
+MatrixScene::updateAll()
+{
+    for (std::vector<MatrixViewSegment *>::iterator i = m_viewSegments.begin();
+         i != m_viewSegments.end(); ++i) {
+        (*i)->updateAll();
+    }
+}
 
 }

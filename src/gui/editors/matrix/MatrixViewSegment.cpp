@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixViewSegment]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixViewSegment.h"
 
@@ -117,6 +118,17 @@ MatrixViewSegment::updateElements(timeT from, timeT to)
         e->reconfigure();
         if (i == j) break;
         ++i;
+    }
+}
+
+void
+MatrixViewSegment::updateAll()
+{
+    for(ViewElementList::iterator i = m_viewElementList->begin();
+        i != m_viewElementList->end();
+        ++i) {
+        MatrixElement *e = static_cast<MatrixElement *>(*i);
+        e->reconfigure();
     }
 }
 

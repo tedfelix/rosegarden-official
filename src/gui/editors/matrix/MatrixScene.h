@@ -129,6 +129,9 @@ public:
     /// Pass on to all Segments
     void setVerticalZoomFactor(double factor);
 
+    /// update all ViewSegments
+    void updateAll();
+
 signals:
     void mousePressed(const MatrixMouseEvent *e);
     void mouseMoved(const MatrixMouseEvent *e);

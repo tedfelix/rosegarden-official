@@ -186,6 +186,9 @@ protected slots:
     void slotHelpAboutQt();
     void slotDonate();
 
+    // view
+    void slotShowNames();
+
     void slotShowContextHelp(const QString &);
         
     void slotAddTempo();

@@ -43,6 +43,8 @@ public:
 
     void updateElements(timeT from, timeT to);
 
+    void updateAll();
+
 protected:
 //!!!    const MidiKeyMapping *getKeyMapping() const;
 
