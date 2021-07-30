@@ -309,16 +309,14 @@ void MergeFileCommand::execute()
     //
     //   1. The UI hasn't updated yet, so the Tracks aren't there yet.
     //      We would need a way to queue up a scroll for after the UI
-    //      updates.  CompositionView::scrollToTrackDelayed().  Or we
-    //      might just make it a part of the refresh logic.  If we are
-    //      adding a track, make sure it is visible.
+    //      updates.  CompositionView::deferredScrollToTrack().
     //
     //   2. TrackEditor::slotScrollToTrack()'s math is wrong.  See comments
     //      there.
     //
     //CompositionView *view = RosegardenMainWindow::self()->getView()->
     //        getTrackEditor()->getCompositionView();
-    //view->scrollToTrackDelayed(destMaxTrackPos + 1 + srcNrTracks + 1);
+    //view->deferredScrollToTrack(destMaxTrackPos + 1 + srcNrTracks + 1);
     //
     RosegardenMainWindow::self()->getView()->getTrackEditor()->
             slotScrollToTrack(destMaxTrackPos + 1 + srcNrTracks + 1);
