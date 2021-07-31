@@ -194,6 +194,7 @@ private:
 
     int m_resolution;
     EventSelection *m_selection; // I own this
+    bool m_highlightingBlackNotes;
 
     int m_currentSegmentIndex;
 
@@ -205,6 +206,8 @@ private:
 
     void setupMouseEvent(QGraphicsSceneMouseEvent *, MatrixMouseEvent &) const;
     void recreateLines();
+    void recreateTriadHighlights();
+    void recreateBlackkeyHighlights();
     void recreatePitchHighlights();
     void updateCurrentSegment();
     void setSelectionElementStatus(EventSelection *, bool set);

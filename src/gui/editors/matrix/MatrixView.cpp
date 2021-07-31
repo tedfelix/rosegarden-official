@@ -212,6 +212,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     findAction("show_note_names")->
         setChecked(qStrToBool(settings.value("show_note_names")));
+    findAction("highlight_black_notes")->
+        setChecked(qStrToBool(settings.value("highlight_black_notes")));
     
     settings.endGroup();
     
@@ -500,6 +502,7 @@ MatrixView::setupActions()
     createAction("donate", SLOT(slotDonate()));
 
     createAction("show_note_names", SLOT(slotShowNames()));
+    createAction("highlight_black_notes", SLOT(slotHighlightBlackNotes()));
     
     // grid snap values
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
@@ -1567,6 +1570,18 @@ MatrixView::slotShowNames()
     QSettings settings;
     settings.beginGroup(MatrixViewConfigGroup);
     settings.setValue("show_note_names", show);
+    settings.endGroup();
+    m_matrixWidget->getScene()->updateAll();
+}
+
+void
+MatrixView::slotHighlightBlackNotes()
+{
+    bool show = findAction("highlight_black_notes")->isChecked();
+    RG_DEBUG << "highlight black notes:" << show;
+    QSettings settings;
+    settings.beginGroup(MatrixViewConfigGroup);
+    settings.setValue("highlight_black_notes", show);
     settings.endGroup();
     m_matrixWidget->getScene()->updateAll();
 }

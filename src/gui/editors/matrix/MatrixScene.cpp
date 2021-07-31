@@ -65,6 +65,7 @@ MatrixScene::MatrixScene() :
     m_snapGrid(nullptr),
     m_resolution(8),
     m_selection(nullptr),
+    m_highlightingBlackNotes(false),
     m_currentSegmentIndex(0)
 {
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
@@ -415,18 +416,18 @@ MatrixScene::recreateLines()
 }
 
 void
-MatrixScene::recreatePitchHighlights()
+MatrixScene::recreateTriadHighlights()
 {
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
     timeT k0 = segment->getClippedStartTime();
     timeT k1 = segment->getClippedStartTime();
-
+    
     int i = 0;
-
+    
     while (k0 < segment->getEndMarkerTime()) {
-
+        
         Rosegarden::Key key = segment->getKeyAtTime(k0);
 
         // offset the highlights according to how far this key's tonic pitch is
@@ -510,6 +511,110 @@ MatrixScene::recreatePitchHighlights()
         m_highlights[i]->hide();
         ++i;
     }
+}
+ 
+void
+MatrixScene::recreateBlackkeyHighlights()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+    
+    timeT k0 = segment->getClippedStartTime();
+    timeT k1 = segment->getEndMarkerTime();
+    
+    int i = 0;
+    
+    double x0 = m_scale->getXForTime(k0);
+    double x1 = m_scale->getXForTime(k1);
+    
+    int bkcount = 5;
+    int bksteps[bkcount];
+    bksteps[0] = 1;
+    bksteps[1] = 3;
+    bksteps[2] = 6;
+    bksteps[3] = 8;
+    bksteps[4] = 10;
+    for (int j = 0; j < bkcount; ++j) {
+        
+        int pitch = bksteps[j];
+        while (pitch < 128) {
+            
+            QGraphicsRectItem *rect;
+            
+            if (i < (int)m_highlights.size()) {
+                rect = m_highlights[i];
+            } else {
+                rect = new QGraphicsRectItem;
+                rect->setZValue(-11);
+                rect->setPen(Qt::NoPen);
+                addItem(rect);
+                m_highlights.push_back(rect);
+            }
+            
+            rect->setBrush(GUIPalette::getColour
+                           (GUIPalette::MatrixPitchHighlight));
+            
+            rect->setRect(0, 0, x1 - x0, m_resolution + 1);
+            rect->setPos(x0, (127 - pitch) * (m_resolution + 1));
+            rect->show();
+            
+            pitch += 12;
+            
+            ++i;
+        }
+    }
+    
+    while (i < (int)m_highlights.size()) {
+        m_highlights[i]->hide();
+        ++i;
+    }
+}
+
+void
+MatrixScene::recreatePitchHighlights()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+
+    QSettings settings;
+    settings.beginGroup(MatrixViewConfigGroup);
+    bool highlightBlackNotes =
+        settings.value("highlight_black_notes", false).toBool();
+    settings.endGroup();
+
+    if (highlightBlackNotes) {
+        RG_DEBUG << "highlight the black notes";
+        // highlight the black notes
+        if (! m_highlightingBlackNotes) {
+            // hide all highlights from triad highlight
+            RG_DEBUG << "hide all old triad highlights";
+            int i = 0;
+            while (i < (int)m_highlights.size()) {
+                m_highlights[i]->hide();
+                ++i;
+            }
+        }
+        m_highlightingBlackNotes = true;
+        recreateBlackkeyHighlights();
+        return;
+    }
+
+    // Not highlighting black notes so highlight the major/minor triad
+
+    RG_DEBUG << "highlight key triad";
+    if (m_highlightingBlackNotes) {
+        // hide all highlights of black notes
+        RG_DEBUG << "hide all old blacknote highlights";
+        int i = 0;
+        while (i < (int)m_highlights.size()) {
+            m_highlights[i]->hide();
+            ++i;
+        }
+        m_highlightingBlackNotes = false;
+    }
+    
+    recreateTriadHighlights();
+
 }
 
 void
@@ -953,6 +1058,7 @@ MatrixScene::updateAll()
          i != m_viewSegments.end(); ++i) {
         (*i)->updateAll();
     }
+    recreatePitchHighlights();
 }
 
 }
