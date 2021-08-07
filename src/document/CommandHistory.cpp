@@ -175,7 +175,12 @@ CommandHistory::addCommand(Command *command, bool execute, bool bundle)
     // can we reach savedAt?
     if ((int)m_undoStack.size() < m_savedAt) m_savedAt = -1; // nope
 
-    m_undoStack.push(command);
+    emit aboutToExecuteCommand();
+
+    CommandInfo commInfo;
+    commInfo.command = command;
+    commInfo.pointerPosition = m_pointerPosition;
+    m_undoStack.push(commInfo);
     clipCommands();
     
     if (execute) {
@@ -340,13 +345,15 @@ CommandHistory::undo()
 
     closeBundle();
 
-    Command *command = m_undoStack.top();
-    command->unexecute();
-    emit updateLinkedSegments(command);
+    CommandInfo commInfo = m_undoStack.top();
+    commInfo.command->unexecute();
+    emit updateLinkedSegments(commInfo.command);
     emit commandExecuted();
-    emit commandUnexecuted(command);
+    emit commandUnexecuted(commInfo.command);
+    m_pointerPosition = commInfo.pointerPosition;
+    emit commandUndone();
 
-    m_redoStack.push(command);
+    m_redoStack.push(commInfo);
     m_undoStack.pop();
 
     clipCommands();
@@ -366,13 +373,13 @@ CommandHistory::redo()
 
     closeBundle();
 
-    Command *command = m_redoStack.top();
-    command->execute();
-    emit updateLinkedSegments(command);
+    CommandInfo commInfo = m_redoStack.top();
+    commInfo.command->execute();
+    emit updateLinkedSegments(commInfo.command);
     emit commandExecuted();
-    emit commandExecuted(command);
+    emit commandExecuted(commInfo.command);
 
-    m_undoStack.push(command);
+    m_undoStack.push(commInfo);
     m_redoStack.pop();
     // no need to clip
 
@@ -441,8 +448,8 @@ CommandHistory::clipStack(CommandStack &stack, int limit)
 
         for (i = 0; i < limit; ++i) {
 #ifdef DEBUG_COMMAND_HISTORY
-            Command *command = stack.top();
-            std::cerr << "CommandHistory::clipStack: Saving recent command: " << command->getName().toLocal8Bit().data() << " at " << command << std::endl;
+            CommandInfo commInfo = stack.top();
+            std::cerr << "CommandHistory::clipStack: Saving recent command: " << commInfo.command->getName().toLocal8Bit().data() << " at " << command << std::endl;
 #endif
             tempStack.push(stack.top());
             stack.pop();
@@ -461,12 +468,12 @@ void
 CommandHistory::clearStack(CommandStack &stack)
 {
     while (!stack.empty()) {
-        Command *command = stack.top();
+        CommandInfo commInfo = stack.top();
         // Not safe to call getName() on a command about to be deleted
 #ifdef DEBUG_COMMAND_HISTORY
         std::cerr << "CommandHistory::clearStack: About to delete command " << command << std::endl;
 #endif
-        delete command;
+        delete commInfo.command;
         stack.pop();
     }
 }
@@ -532,7 +539,7 @@ CommandHistory::updateActions()
 
         } else {
 
-            QString commandName = stack.top()->getName();
+            QString commandName = stack.top().command->getName();
             commandName.replace(QRegularExpression("&"), "");
 
             QString text = (undo ? tr("&Undo %1") : tr("Re&do %1"))
@@ -553,11 +560,11 @@ CommandHistory::updateActions()
 
         while (j < m_menuLimit && !stack.empty()) {
 
-            Command *command = stack.top();
-            tempStack.push(command);
+            CommandInfo commInfo = stack.top();
+            tempStack.push(commInfo);
             stack.pop();
 
-            QString commandName = command->getName();
+            QString commandName = commInfo.command->getName();
             commandName.replace(QRegularExpression("&"), "");
 
             QString text;
@@ -582,5 +589,16 @@ CommandHistory::enableUndo(bool enable)
     updateActions();
 }
 
+void
+CommandHistory::setPointerPosition(timeT pos)
+{
+    m_pointerPosition = pos;
+}
+
+timeT
+CommandHistory::getPointerPosition() const
+{
+    return m_pointerPosition;
+}
 
 }

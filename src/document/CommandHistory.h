@@ -30,6 +30,8 @@ class QMenu;
 class QToolBar;
 class QTimer;
 
+#include "base/TimeT.h"
+
 namespace Rosegarden 
 {
 
@@ -127,6 +129,12 @@ public:
     /// Enable/Disable undo (during playback).
     void enableUndo(bool enable);
 
+    /// set pointer position
+    void setPointerPosition(timeT pos);
+
+    /// get pointer position
+    timeT getPointerPosition() const;
+
 public slots:
     /**
      * Checkpoint function that should be called when the document is
@@ -189,6 +197,15 @@ signals:
      */
     void documentRestored();
 
+    /**
+     * Emitted just before a command is executed
+     */
+    void aboutToExecuteCommand();
+
+    /**
+     * Emitted just after a command is undone
+     */
+    void commandUndone();
 
 protected:
     CommandHistory();
@@ -213,7 +230,12 @@ protected:
     void updateActions();
 
     // Command Stacks
-    typedef std::stack<Command *> CommandStack;
+    struct CommandInfo
+    {
+        Command *command;
+        timeT pointerPosition;
+    };
+    typedef std::stack<CommandInfo> CommandStack;
     CommandStack m_undoStack;
     CommandStack m_redoStack;
     void clipStack(CommandStack &stack, int limit);
@@ -240,6 +262,10 @@ protected:
 
     /// Enable/Disable undo (during playback).
     bool m_enableUndo;
+
+    // pointer position
+    timeT m_pointerPosition;
+
     
 };
 

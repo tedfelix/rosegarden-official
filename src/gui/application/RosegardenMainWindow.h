@@ -1554,6 +1554,10 @@ public slots:
                             QString text,
                             QString informativeText);
 
+    // slots for save and restore of pointer position
+    void slotAboutToExecuteCommand();
+    void slotCommandUndone();
+
 protected slots:
     void setupRecentFilesMenu();
 

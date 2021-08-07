@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenMainWindow]"
+// #define RG_NO_DEBUG_PRINT
 
 #include "RosegardenMainWindow.h"
 
@@ -397,6 +398,16 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
             &SequenceManager::sendWarning,
             this,
             &RosegardenMainWindow::slotDisplayWarning);
+
+    connect(CommandHistory::getInstance(),
+            &CommandHistory::aboutToExecuteCommand,
+            this,
+            &RosegardenMainWindow::slotAboutToExecuteCommand);
+
+    connect(CommandHistory::getInstance(),
+            &CommandHistory::commandUndone,
+            this,
+            &RosegardenMainWindow::slotCommandUndone);
 
     if (m_useSequencer) {
         // Check the sound driver status and warn the user of any
@@ -8262,6 +8273,25 @@ RosegardenMainWindow::slotDisplayWarning(int type,
         default: break;
     }
 
+}
+
+void
+RosegardenMainWindow::slotAboutToExecuteCommand()
+{
+    // save the pointer position to the command history
+    timeT pointerPos =
+        RosegardenDocument::currentDocument->getComposition().getPosition();
+    RG_DEBUG << "about to execute a command" << pointerPos;
+    CommandHistory::getInstance()->setPointerPosition(pointerPos);
+}
+ 
+void
+RosegardenMainWindow::slotCommandUndone()
+{
+    // reset the pointer position from the command history
+    timeT pointerPos = CommandHistory::getInstance()->getPointerPosition();
+    RG_DEBUG << "command undone" << pointerPos;
+    RosegardenDocument::currentDocument->slotSetPointerPosition(pointerPos);
 }
 
 void
