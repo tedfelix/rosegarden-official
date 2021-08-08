@@ -409,6 +409,11 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
             this,
             &RosegardenMainWindow::slotCommandUndone);
 
+    connect(CommandHistory::getInstance(),
+            &CommandHistory::commandRedone,
+            this,
+            &RosegardenMainWindow::slotCommandRedone);
+
     if (m_useSequencer) {
         // Check the sound driver status and warn the user of any
         // problems.  This warning has to happen early, in case it
@@ -1243,6 +1248,11 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
             SLOT(update()));
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             SLOT(slotTestClipboard()));
+
+    // use QueuedConnection here because the position update can
+    // happen after the command is executed
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecutedInitially()),
+            SLOT(slotUpdatePosition()), Qt::QueuedConnection);
 
     // start the autosave timer
     m_autoSaveTimer->start(RosegardenDocument::currentDocument->getAutoSavePeriod() * 1000);
@@ -8292,6 +8302,25 @@ RosegardenMainWindow::slotCommandUndone()
     timeT pointerPos = CommandHistory::getInstance()->getPointerPosition();
     RG_DEBUG << "command undone" << pointerPos;
     RosegardenDocument::currentDocument->slotSetPointerPosition(pointerPos);
+}
+
+void
+RosegardenMainWindow::slotCommandRedone()
+{
+    // reset the pointer position from the command history
+    timeT pointerPos = CommandHistory::getInstance()->getPointerPosition();
+    RG_DEBUG << "command redone" << pointerPos;
+    RosegardenDocument::currentDocument->slotSetPointerPosition(pointerPos);
+}
+
+void
+RosegardenMainWindow::slotUpdatePosition()
+{
+    // set the pointer position in the command history
+    timeT pointerPos =
+        RosegardenDocument::currentDocument->getComposition().getPosition();
+    RG_DEBUG << "update position in command history" << pointerPos;
+    CommandHistory::getInstance()->setPointerPositionForRedo(pointerPos);
 }
 
 void

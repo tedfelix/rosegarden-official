@@ -132,6 +132,9 @@ public:
     /// set pointer position
     void setPointerPosition(timeT pos);
 
+    /// set pointer position
+    void setPointerPositionForRedo(timeT pos);
+
     /// get pointer position
     timeT getPointerPosition() const;
 
@@ -203,9 +206,19 @@ signals:
     void aboutToExecuteCommand();
 
     /**
-     * Emitted just after a command is undone
+     * Emitted just after a command undo
      */
     void commandUndone();
+
+    /**
+     * Emitted just after a command redo
+     */
+    void commandRedone();
+
+    /**
+     * Emitted when a command is initially executed (not on redo)
+     */
+    void commandExecutedInitially();
 
 protected:
     CommandHistory();
@@ -233,7 +246,8 @@ protected:
     struct CommandInfo
     {
         Command *command;
-        timeT pointerPosition;
+        timeT pointerPositionBefore;  // for undo
+        timeT pointerPositionAfter;   // for redo
     };
     typedef std::stack<CommandInfo> CommandStack;
     CommandStack m_undoStack;
@@ -265,7 +279,6 @@ protected:
 
     // pointer position
     timeT m_pointerPosition;
-
     
 };
 

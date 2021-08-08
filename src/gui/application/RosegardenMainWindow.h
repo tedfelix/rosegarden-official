@@ -1557,6 +1557,8 @@ public slots:
     // slots for save and restore of pointer position
     void slotAboutToExecuteCommand();
     void slotCommandUndone();
+    void slotCommandRedone();
+    void slotUpdatePosition();
 
 protected slots:
     void setupRecentFilesMenu();

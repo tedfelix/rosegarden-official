@@ -179,7 +179,7 @@ CommandHistory::addCommand(Command *command, bool execute, bool bundle)
 
     CommandInfo commInfo;
     commInfo.command = command;
-    commInfo.pointerPosition = m_pointerPosition;
+    commInfo.pointerPositionBefore = m_pointerPosition;
     m_undoStack.push(commInfo);
     clipCommands();
     
@@ -192,8 +192,11 @@ CommandHistory::addCommand(Command *command, bool execute, bool bundle)
     emit updateLinkedSegments(command);
     emit commandExecuted();
     emit commandExecuted(command);
+    emit commandExecutedInitially();
 
     updateActions();
+    // pointerPositionAfter can not be updated here as the cursor
+    // position is changed after the addCommand call
 }
 
 void
@@ -350,7 +353,7 @@ CommandHistory::undo()
     emit updateLinkedSegments(commInfo.command);
     emit commandExecuted();
     emit commandUnexecuted(commInfo.command);
-    m_pointerPosition = commInfo.pointerPosition;
+    m_pointerPosition = commInfo.pointerPositionBefore;
     emit commandUndone();
 
     m_redoStack.push(commInfo);
@@ -378,6 +381,8 @@ CommandHistory::redo()
     emit updateLinkedSegments(commInfo.command);
     emit commandExecuted();
     emit commandExecuted(commInfo.command);
+    m_pointerPosition = commInfo.pointerPositionAfter;
+    emit commandRedone();
 
     m_undoStack.push(commInfo);
     m_redoStack.pop();
@@ -593,6 +598,19 @@ void
 CommandHistory::setPointerPosition(timeT pos)
 {
     m_pointerPosition = pos;
+}
+
+void
+CommandHistory::setPointerPositionForRedo(timeT pos)
+{
+    // This call happens after a command has been initially
+    // executed. That means the relevant command is on the top of the
+    // undo stack. The pointerPositionAfter value must be set for this
+    // command.
+ 
+    if ((int)m_undoStack.size() == 0) return;
+    CommandInfo& top = m_undoStack.top();
+    top.pointerPositionAfter = pos;
 }
 
 timeT
