@@ -556,8 +556,6 @@ signals:
      */
     void newAudioRecordingSegment(Segment*);
 
-    void makeTrackVisible(int trackPosition);
-
     void stoppedAudioRecording();
     void stoppedMIDIRecording();
     void audioFileFinalized(Segment*);

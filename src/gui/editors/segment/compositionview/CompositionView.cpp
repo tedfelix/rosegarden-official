@@ -1518,9 +1518,11 @@ void CompositionView::makeTrackPosVisible(int trackPos)
     if (!m_model)
         return;
 
-    const int newY = m_model->grid().getYBinCoordinate(trackPos);
+    // Figure out where it is.
+    const int y = m_model->grid().getYBinCoordinate(trackPos);
 
-    scrollVert(newY);
+    // Make it visible.
+    scrollVert(y);
 }
 
 

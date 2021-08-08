@@ -1263,11 +1263,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     delete oldDoc;
     oldDoc = nullptr;
 
-    if (getView() && getView()->getTrackEditor()) {
-        connect(RosegardenDocument::currentDocument, &RosegardenDocument::makeTrackVisible,
-                getView()->getTrackEditor(), &TrackEditor::slotScrollToTrack);
-    }
-
     // Make sure the view and the new document match.
     m_view->slotSynchroniseWithComposition();
 
