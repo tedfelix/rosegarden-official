@@ -190,7 +190,6 @@ void MergeFileCommand::execute()
         m_newTracks.push_back(destTrack);
     }
 
-    // ??? Too early?
     destComp.notifyTracksAdded(trackIds);
 
     // Keep track of the max end time so we can expand the composition
@@ -395,9 +394,6 @@ void MergeFileCommand::unexecute()
     if (m_compositionExpanded)
         composition.setEndMarker(m_oldCompositionEnd);
 
-    // More?
-
-
     m_undone = true;
 }
 
@@ -418,15 +414,18 @@ void MergeFileCommand::redo()
         trackIds.push_back(m_newTracks[trackIndex]->getId());
     }
 
-    // ??? Too early?
     composition.notifyTracksAdded(trackIds);
 
     // Add the Segments.
     composition.addAllSegments(m_newSegments);
 
-    // ??? At this point, I suspect the SequencerManager needs to be
-    //     updated like we do for undo.  Otherwise the new Segments will
-    //     not be aware of their tempo changes.
+    // ??? This doesn't appear to be needed.  We don't do it for execute().
+    //     Just seemed like it might be needed since unexecute() needs it.
+    // Have to refresh the SequenceManager before continuing.
+    // Otherwise the new Segments will not be aware of their tempo changes.
+    //RosegardenMainWindow::self()->getSequenceManager()->update();
+    // Empty the queue as the above calls postEvent() instead of sendEvent().
+    //QApplication::processEvents();
 
     // Add the time signatures.
     for (const TimeSignatureMap::value_type &pair : m_newTimeSignatures) {
@@ -442,9 +441,17 @@ void MergeFileCommand::redo()
     if (m_compositionExpanded)
         composition.setEndMarker(m_newCompositionEnd);
 
-    // Make sure the center of the action is visible.
-    // ??? Or just make the last Track visible?
-    //emit makeTrackVisible(destMaxTrackPos + 1 + srcNrTracks/2 + 1);
+    // Make sure the last Track is visible.
+
+    CompositionView *view = RosegardenMainWindow::self()->getView()->
+            getTrackEditor()->getCompositionView();
+    if (view) {
+        // Make sure the CompositionView (segment canvas) size is expanded
+        // to hold the new Tracks.
+        view->slotUpdateSize();
+
+        view->makeTrackPosVisible(composition.getNbTracks() - 1);
+    }
 }
 
 
