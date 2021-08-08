@@ -41,11 +41,6 @@ CommandHistory::CommandHistory() :
     m_redoLimit(50),
     m_menuLimit(15),
     m_savedAt(0),
-    m_currentCompound(nullptr),
-    m_executeCompound(false),
-    m_currentBundle(nullptr),
-    m_bundleTimer(nullptr),
-    m_bundleTimeout(5000),
     m_enableUndo(true)
 {
     // All Edit > Undo menu items share this QAction object.
@@ -106,7 +101,6 @@ CommandHistory::clear()
 #ifdef DEBUG_COMMAND_HISTORY
     std::cerr << "CommandHistory::clear()" << std::endl;
 #endif
-    closeBundle();
     m_savedAt = -1;
     clearStack(m_undoStack);
     clearStack(m_redoStack);
@@ -134,34 +128,9 @@ CommandHistory::addCommand(Command *command)
 {
     if (!command) return;
 
-    if (m_currentCompound) {
-        addToCompound(command, m_executeCompound);
-        return;
-    }
-
-    addCommand(command, true);
-}
-
-void
-CommandHistory::addCommand(Command *command, bool execute, bool bundle)
-{
-    if (!command) return;
-
 #ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::addCommand: " << command->getName().toLocal8Bit().data() << " at " << command << ": execute = " << execute << ", bundle = " << bundle << " (m_currentCompound = " << m_currentCompound << ", m_currentBundle = " << m_currentBundle << ")" << std::endl;
+    std::cerr << "CommandHistory::addCommand: " << command->getName().toLocal8Bit().data() << " at " << command << std::endl;
 #endif
-
-    if (m_currentCompound) {
-        addToCompound(command, execute);
-        return;
-    }
-
-    if (bundle) {
-        addToBundle(command, execute);
-        return;
-    } else if (m_currentBundle) {
-        closeBundle();
-    }
 
 #ifdef DEBUG_COMMAND_HISTORY
     if (!m_redoStack.empty()) {
@@ -183,9 +152,8 @@ CommandHistory::addCommand(Command *command, bool execute, bool bundle)
     m_undoStack.push(commInfo);
     clipCommands();
     
-    if (execute) {
-        command->execute();
-    }
+    // Execute the command
+    command->execute();
 
     // Emit even if we aren't executing the command, because
     // someone must have executed it for this to make any sense
@@ -200,144 +168,6 @@ CommandHistory::addCommand(Command *command, bool execute, bool bundle)
 }
 
 void
-CommandHistory::addToBundle(Command *command, bool execute)
-{
-    if (m_currentBundle) {
-        if (!command || (command->getName() != m_currentBundleName)) {
-#ifdef DEBUG_COMMAND_HISTORY
-            std::cerr << "CommandHistory::addToBundle: "
-                      << command->getName().toStdString()
-                      << ": closing current bundle" << std::endl;
-#endif
-            closeBundle();
-        }
-    }
-
-    if (!command) return;
-
-    if (!m_currentBundle) {
-
-#ifdef DEBUG_COMMAND_HISTORY
-        std::cerr << "CommandHistory::addToBundle: "
-                  << command->getName().toStdString()
-                  << ": creating new bundle" << std::endl;
-#endif
-
-        // need to addCommand before setting m_currentBundle, as addCommand
-        // with bundle false will reset m_currentBundle to 0
-        MacroCommand *mc = new BundleCommand(command->getName());
-        addCommand(mc, false);
-        m_currentBundle = mc;
-        m_currentBundleName = command->getName();
-    }
-
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::addToBundle: "
-              << command->getName().toStdString()
-              << ": adding to bundle" << std::endl;
-#endif
-
-    if (execute) command->execute();
-    m_currentBundle->addCommand(command);
-
-    // Emit even if we aren't executing the command, because
-    // someone must have executed it for this to make any sense
-    emit updateLinkedSegments(command);
-    emit commandExecuted();
-    emit commandExecuted(command);
-
-    updateActions();
-
-    delete m_bundleTimer;
-    m_bundleTimer = new QTimer(this);
-    connect(m_bundleTimer, &QTimer::timeout, this, &CommandHistory::bundleTimerTimeout);
-    m_bundleTimer->start(m_bundleTimeout);
-}
-
-void
-CommandHistory::closeBundle()
-{
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::closeBundle" << std::endl;
-#endif
-
-    m_currentBundle = nullptr;
-    m_currentBundleName = "";
-}
-
-void
-CommandHistory::bundleTimerTimeout()
-{
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::bundleTimerTimeout: bundle is " << m_currentBundle << std::endl;
-#endif
-
-    closeBundle();
-}
-
-void
-CommandHistory::addToCompound(Command *command, bool execute)
-{
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::addToCompound: " << command->getName().toLocal8Bit().data() << std::endl;
-#endif
-    if (!m_currentCompound) {
-        std::cerr << "CommandHistory::addToCompound: ERROR: no compound operation in value()!" << std::endl;
-        return;
-    }
-
-    if (execute) command->execute();
-    m_currentCompound->addCommand(command);
-}
-
-void
-CommandHistory::startCompoundOperation(QString name, bool execute)
-{
-    if (m_currentCompound) {
-        std::cerr << "CommandHistory::startCompoundOperation: ERROR: compound operation already in value()!" << std::endl;
-        std::cerr << "(name is " << m_currentCompound->getName().toLocal8Bit().data() << ")" << std::endl;
-        return;
-    }
- 
-    closeBundle();
-   
-    m_currentCompound = new MacroCommand(name);
-    m_executeCompound = execute;
-}
-
-void
-CommandHistory::endCompoundOperation()
-{
-    if (!m_currentCompound) {
-        std::cerr << "CommandHistory::endCompoundOperation: ERROR: no compound operation in value()!" << std::endl;
-        return;
-    }
-
-    MacroCommand *toAdd = m_currentCompound;
-    m_currentCompound = nullptr;
-
-    if (toAdd->haveCommands()) {
-
-        // We don't execute the macro command here, because we have
-        // been executing the individual commands as we went along if
-        // m_executeCompound was true.
-        addCommand(toAdd, false);
-    }
-}    
-
-void
-CommandHistory::addExecutedCommand(Command *command)
-{
-    addCommand(command, false);
-}
-
-void
-CommandHistory::addCommandAndExecute(Command *command)
-{
-    addCommand(command, true);
-}
-
-void
 CommandHistory::undo()
 {
     if (m_undoStack.empty()) return;
@@ -345,8 +175,6 @@ CommandHistory::undo()
 #ifdef DEBUG_COMMAND_HISTORY
     std::cerr << "CommandHistory::undo()" << std::endl;
 #endif
-
-    closeBundle();
 
     CommandInfo commInfo = m_undoStack.top();
     commInfo.command->unexecute();
@@ -373,8 +201,6 @@ CommandHistory::redo()
 #ifdef DEBUG_COMMAND_HISTORY
     std::cerr << "CommandHistory::redo()" << std::endl;
 #endif
-
-    closeBundle();
 
     CommandInfo commInfo = m_redoStack.top();
     commInfo.command->execute();
@@ -419,15 +245,8 @@ CommandHistory::setMenuLimit(int limit)
 }
 
 void
-CommandHistory::setBundleTimeout(int ms)
-{
-    m_bundleTimeout = ms;
-}
-
-void
 CommandHistory::documentSaved()
 {
-    closeBundle();
     m_savedAt = (int)m_undoStack.size();
 }
 

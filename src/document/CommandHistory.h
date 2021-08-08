@@ -66,35 +66,9 @@ public:
 
     /// Add a command to the command history.
     /**
-     * The command will normally be executed before being added; but
-     * if a compound operation is in use (see startCompoundOperation
-     * below), the execute status of the compound operation will
-     * determine whether the command is executed or not.
+     * The command will be executed before being added
      */
     void addCommand(Command *command);
-    
-    /// Add a command to the command history.
-    /**
-     * If execute is true, the command will be executed before being
-     * added.  Otherwise it will be assumed to have been already
-     * executed -- a command should not be added to the history unless
-     * its work has actually been done somehow!
-     *
-     * If a compound operation is in use (see startCompoundOperation
-     * below), the execute value passed to this method will override
-     * the execute status of the compound operation.  In this way it's
-     * possible to have a compound operation mixing both to-execute
-     * and pre-executed commands.
-     *
-     * If bundle is true, the command will be a candidate for bundling
-     * with any adjacent bundleable commands that have the same name,
-     * into a single compound command.  This is useful for small
-     * commands that may be executed repeatedly altering the same data
-     * (e.g. type text, set a parameter) whose number and extent is
-     * not known in advance.  The bundle parameter will be ignored if
-     * a compound operation is already in use.
-     */
-    void addCommand(Command *command, bool execute, bool bundle = false);
     
     /// Return the maximum number of items in the undo history.
     int getUndoLimit() const { return m_undoLimit; }
@@ -113,18 +87,6 @@ public:
 
     /// Set the maximum number of items in the menus.
     void setMenuLimit(int limit);
-
-    /// Return the time after which a bundle will be closed if nothing is added.
-    int getBundleTimeout() const { return m_bundleTimeout; }
-
-    /// Set the time after which a bundle will be closed if nothing is added.
-    void setBundleTimeout(int msec);
-
-    /// Start recording commands to batch up into a single compound command.
-    void startCompoundOperation(QString name, bool execute);
-
-    /// Finish recording commands and store the compound command.
-    void endCompoundOperation();
 
     /// Enable/Disable undo (during playback).
     void enableUndo(bool enable);
@@ -147,25 +109,12 @@ public slots:
      */
     virtual void documentSaved();
 
-    /**
-     * Add a command to the history that has already been executed,
-     * without executing it again.  Equivalent to addCommand(command, false).
-     */
-    void addExecutedCommand(Command *);
-
-    /**
-     * Add a command to the history and also execute it.  Equivalent
-     * to addCommand(command, true).
-     */
-    void addCommandAndExecute(Command *);
-
     void undo();
     void redo();
 
 protected slots:
     void undoActivated(QAction *);
     void redoActivated(QAction *);
-    void bundleTimerTimeout();
     
 signals:
     /**
@@ -260,19 +209,6 @@ protected:
     int m_redoLimit;
     int m_menuLimit;
     int m_savedAt;
-
-    // Compound
-    MacroCommand *m_currentCompound;
-    bool m_executeCompound;
-    void addToCompound(Command *command, bool execute);
-
-    // Bundle
-    MacroCommand *m_currentBundle;
-    QString m_currentBundleName;
-    QTimer *m_bundleTimer;
-    int m_bundleTimeout;
-    void addToBundle(Command *command, bool execute);
-    void closeBundle();
 
     /// Enable/Disable undo (during playback).
     bool m_enableUndo;
