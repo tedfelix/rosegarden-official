@@ -20,6 +20,7 @@
 #include "MergeFileCommand.h"
 
 #include "base/Composition.h"
+#include "gui/editors/segment/compositionview/CompositionView.h"
 #include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainViewWidget.h"
@@ -305,21 +306,16 @@ void MergeFileCommand::execute()
     }
 
     // Make sure the last Track is visible.
-    // ??? There are two reasons this isn't working.
-    //
-    //   1. The UI hasn't updated yet, so the Tracks aren't there yet.
-    //      We would need a way to queue up a scroll for after the UI
-    //      updates.  CompositionView::deferredScrollToTrack().
-    //
-    //   2. TrackEditor::slotScrollToTrack()'s math is wrong.  See comments
-    //      there.
-    //
-    //CompositionView *view = RosegardenMainWindow::self()->getView()->
-    //        getTrackEditor()->getCompositionView();
-    //view->deferredScrollToTrack(destMaxTrackPos + 1 + srcNrTracks + 1);
-    //
-    RosegardenMainWindow::self()->getView()->getTrackEditor()->
-            slotScrollToTrack(destMaxTrackPos + 1 + srcNrTracks + 1);
+
+    CompositionView *view = RosegardenMainWindow::self()->getView()->
+            getTrackEditor()->getCompositionView();
+    if (view) {
+        // Make sure the CompositionView (segment canvas) size is expanded
+        // to hold the new Tracks.
+        view->slotUpdateSize();
+
+        view->makeTrackPosVisible(destMaxTrackPos + 1 + srcNrTracks + 1);
+    }
 
     // This doesn't live past the first execution of the command.
     m_sourceDocument = nullptr;
