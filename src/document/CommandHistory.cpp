@@ -155,8 +155,6 @@ CommandHistory::addCommand(Command *command)
     // Execute the command
     command->execute();
 
-    // Emit even if we aren't executing the command, because
-    // someone must have executed it for this to make any sense
     emit updateLinkedSegments(command);
     emit commandExecuted();
     emit commandExecuted(command);
