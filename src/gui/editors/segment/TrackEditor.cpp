@@ -526,15 +526,6 @@ TrackEditor::addCommandToHistory(Command *command)
 }
 
 void
-TrackEditor::slotScrollToTrack(int track)
-{
-    // Find the vertical track pos
-    int newY = track * m_trackCellHeight;
-
-    m_compositionView->scrollVert(newY);
-}
-
-void
 TrackEditor::deleteSelectedSegments()
 {
     SegmentSelection segments = m_compositionView->getSelectedSegments();

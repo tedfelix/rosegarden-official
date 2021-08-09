@@ -24,7 +24,6 @@
 #include "base/Track.h"
 
 #include <QCoreApplication>  // for Q_DECLARE_TR_FUNCTIONS()
-#include <QString>
 
 #include <vector>
 #include <map>
@@ -32,9 +31,6 @@
 
 namespace Rosegarden
 {
-
-
-class Composition;
 
 
 class AddTracksCommand : public NamedCommand

@@ -22,37 +22,43 @@
 #include <QDialog>
 #include <QString>
 
-
-class QWidget;
 class QCheckBox;
 class QComboBox;
+class QLabel;
+class QWidget;
 
 
 namespace Rosegarden
 {
 
 
-
+/// The "Merge File" dialog.
+/**
+ * Launched from: File > Merge > Merge File...
+ */
 class FileMergeDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    FileMergeDialog(QWidget *parent, QString fileName, bool timingsDiffer);
+    FileMergeDialog(QWidget *parent, bool timingsDiffer);
 
-    int getMergeOptions();
+    bool getMergeAtEnd();
+    bool getMergeTimesAndTempos();
 
 public slots:
     void slotHelpRequested();
-    
+
+private slots:
+    void slotModified();
+
 private:
-    QComboBox *m_choice;
-    QCheckBox *m_useTimings;
+    QComboBox *m_mergeLocation;
+    QLabel *m_differentSigsOrTempos;
+    QLabel *m_mergeSigsAndTemposLabel;
+    QCheckBox *m_mergeSigsAndTempos;
 };
 
-
-// Locate a file
-//
 
 }
 

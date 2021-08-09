@@ -293,7 +293,7 @@ void ChannelManager::insertEvent(
         bool /*firstOutput*/,
         MappedInserterBase &inserter)
 {
-    //RG_DEBUG << "insertEvent(): playing on" << (m_instrument ? m_instrument->getPresentationName().c_str() : "nothing") << "at" << reftime << (firstOutput ? "needs init" : "doesn't need init");
+    //RG_DEBUG << "insertEvent(): playing on" << (m_instrument ? m_instrument->getPresentationName().c_str() : "nothing") << "at" << reftime;
 
     // ??? firstOutput was always ignored.  What would happen if we actually
     //     honored it?  E.g.:

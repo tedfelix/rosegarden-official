@@ -86,6 +86,9 @@ public:
      */
     void setTool(const QString &toolName);
 
+    /// Scroll in such a way that the track position is visible.
+    void makeTrackPosVisible(int trackPos);
+
     // *** Segments
 
     /// Enables/disables display of the text labels on each segment.
@@ -590,10 +593,7 @@ private:
     void updateAll2(const QRect &rect);
 
     /// Update segments and artifacts within the entire viewport.
-    void updateAll() {
-        segmentsNeedRefresh();
-        slotUpdateArtifacts();
-    }
+    void updateAll();
 
     /// Draw the segments and artifacts on the viewport (screen).
     void drawAll();

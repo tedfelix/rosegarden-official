@@ -379,6 +379,12 @@ void CompositionView::updateAll2(const QRect &rect)
     updateArtifacts(rect);
 }
 
+void CompositionView::updateAll()
+{
+    segmentsNeedRefresh();
+    slotUpdateArtifacts();
+}
+
 void CompositionView::slotAllNeedRefresh(const QRect &rect)
 {
     // Bail if drawing is turned off in the settings.
@@ -1505,6 +1511,18 @@ void CompositionView::slotControlChange(Instrument *instrument, int cc)
 
     // Signal that a refresh is needed on the next timer.
     slotAllNeedRefresh(viewportContentsRect);
+}
+
+void CompositionView::makeTrackPosVisible(int trackPos)
+{
+    if (!m_model)
+        return;
+
+    // Figure out where it is.
+    const int y = m_model->grid().getYBinCoordinate(trackPos);
+
+    // Make it visible.
+    scrollVert(y);
 }
 
 

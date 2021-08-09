@@ -101,6 +101,8 @@ public:
      * The main test case for this is selecting tracks with the
      * arrow keys and making sure the view scrolls to show the
      * selected track.
+     *
+     * ??? Rename: makeVisible(int y)?
      */
     void scrollVert(int y);
 

@@ -53,6 +53,7 @@
 #include "commands/segment/SegmentInsertCommand.h"
 #include "commands/segment/SegmentRecordCommand.h"
 #include "commands/segment/ChangeCompositionLengthCommand.h"
+#include "commands/segment/MergeFileCommand.h"
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include "gui/general/ClefIndex.h"
@@ -671,112 +672,18 @@ RosegardenDocument::stealLockFile(RosegardenDocument *other)
 }
 
 void
-RosegardenDocument::mergeDocument(RosegardenDocument *doc,
-                                  int options)
+RosegardenDocument::mergeDocument(RosegardenDocument *srcDoc,
+                                  bool mergeAtEnd,
+                                  bool mergeTimesAndTempos)
 {
-    MacroCommand *command = new MacroCommand(tr("Merge"));
+    // Merging from the merge source (srcDoc) into the merge destination
+    // (this).
 
-    timeT time0 = 0;
-    if (options & MERGE_AT_END) {
-        time0 = getComposition().getBarEndForTime(getComposition().getDuration());
-    }
-
-    int myMaxTrack = getComposition().getNbTracks();
-    int yrMinTrack = 0;
-    int yrMaxTrack = doc->getComposition().getNbTracks();
-    int yrNrTracks = yrMaxTrack - yrMinTrack + 1;
-
-    int firstAlteredTrack = yrMinTrack;
-
-    if (options & MERGE_IN_NEW_TRACKS) {
-
-        //!!! worry about instruments and other studio stuff later... if at all
-        command->addCommand(new AddTracksCommand
-                            (yrNrTracks,
-                             MidiInstrumentBase,
-                             -1));
-
-        firstAlteredTrack = myMaxTrack + 1;
-
-    } else if (yrMaxTrack > myMaxTrack) {
-
-        command->addCommand(new AddTracksCommand
-                            (yrMaxTrack - myMaxTrack,
-                             MidiInstrumentBase,
-                             -1));
-    }
-
-    TrackId firstNewTrackId = getComposition().getNewTrackId();
-    timeT lastSegmentEndTime = 0;
-
-    for (Composition::iterator i = doc->getComposition().begin(), j = i;
-         i != doc->getComposition().end(); i = j) {
-
-        ++j;
-        Segment *s = *i;
-        timeT segmentEndTime = s->getEndMarkerTime();
-
-        int yrTrack = s->getTrack();
-        Track *t = doc->getComposition().getTrackById(yrTrack);
-        if (t) yrTrack = t->getPosition();
-
-        int myTrack = yrTrack;
-
-        if (options & MERGE_IN_NEW_TRACKS) {
-            myTrack = yrTrack - yrMinTrack + myMaxTrack + 1;
-        }
-
-        doc->getComposition().detachSegment(s);
-
-        if (options & MERGE_AT_END) {
-            s->setStartTime(s->getStartTime() + time0);
-            segmentEndTime += time0;
-        }
-        if (segmentEndTime > lastSegmentEndTime) {
-            lastSegmentEndTime = segmentEndTime;
-        }
-
-        Track *track = getComposition().getTrackByPosition(myTrack);
-        TrackId tid = 0;
-        if (track) tid = track->getId();
-        else tid = firstNewTrackId + yrTrack - yrMinTrack;
-
-        command->addCommand(new SegmentInsertCommand(&getComposition(), s, tid));
-    }
-
-    if (!(options & MERGE_KEEP_OLD_TIMINGS)) {
-        for (int i = getComposition().getTimeSignatureCount() - 1; i >= 0; --i) {
-            getComposition().removeTimeSignature(i);
-        }
-        for (int i = getComposition().getTempoChangeCount() - 1; i >= 0; --i) {
-            getComposition().removeTempoChange(i);
-        }
-    }
-
-    if (options & MERGE_KEEP_NEW_TIMINGS) {
-        for (int i = 0; i < doc->getComposition().getTimeSignatureCount(); ++i) {
-            std::pair<timeT, TimeSignature> ts =
-                doc->getComposition().getTimeSignatureChange(i);
-            getComposition().addTimeSignature(ts.first + time0, ts.second);
-        }
-        for (int i = 0; i < doc->getComposition().getTempoChangeCount(); ++i) {
-            std::pair<timeT, tempoT> t =
-                doc->getComposition().getTempoChange(i);
-            getComposition().addTempoAtTime(t.first + time0, t.second);
-        }
-    }
-
-    if (lastSegmentEndTime > getComposition().getEndMarker()) {
-        command->addCommand(new ChangeCompositionLengthCommand
-                            (&getComposition(),
-                             getComposition().getStartMarker(),
-                             lastSegmentEndTime,
-                             getComposition().autoExpandEnabled()));
-    }
-
-    CommandHistory::getInstance()->addCommand(command);
-
-    emit makeTrackVisible(firstAlteredTrack + yrNrTracks/2 + 1);
+    CommandHistory::getInstance()->addCommand(
+            new MergeFileCommand(
+                    srcDoc,
+                    mergeAtEnd,
+                    mergeTimesAndTempos));
 }
 
 void RosegardenDocument::sendChannelSetups(bool reset)
@@ -2968,15 +2875,15 @@ Instrument *
 RosegardenDocument::
 getInstrument(Segment *segment)
 {
-    if (!segment || !(segment->getComposition())) {
+    if (!segment)
         return nullptr;
-    }
+    if (!(segment->getComposition()))
+        return nullptr;
 
-    Studio &studio = getStudio();
+    const Track *track =
+            segment->getComposition()->getTrackById(segment->getTrack());
     Instrument *instrument =
-        studio.getInstrumentById
-        (segment->getComposition()->getTrackById(segment->getTrack())->
-         getInstrument());
+            getStudio().getInstrumentById(track->getInstrument());
     return instrument;
 }
 

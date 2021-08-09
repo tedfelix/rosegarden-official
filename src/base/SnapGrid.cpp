@@ -153,28 +153,43 @@ SnapGrid::getYBin(int y) const
 }
 
 int
-SnapGrid::getYBinCoordinate(int bin) const
+SnapGrid::getYBinCoordinate(int requestedBin) const
 {
-    if (m_ysnap == 0) return bin;
+    // A "bin" is a track position.
+
+    if (m_ysnap == 0)
+        return requestedBin;
 
     int y = 0;
 
-    std::map<int, int>::const_iterator i = m_ymultiple.begin();
+    typedef std::map<int /* trackPos */, int /* height */> SegmentHeightMap;
 
-    int nextbin = -1;
-    if (i != m_ymultiple.end()) nextbin = i->first;
+    SegmentHeightMap::const_iterator oSegmentHeightIter =
+            m_ymultiple.begin();
 
-    for (int b = 0; b < bin; ++b) {
+    // Next bin that has an entry in the Segment height map.
+    int nextBin = -1;
+    if (oSegmentHeightIter != m_ymultiple.end())
+        nextBin = oSegmentHeightIter->first;
 
-        if (nextbin == b) {
+    // For each bin from 0 to the requested bin
+    for (int bin = 0; bin < requestedBin; ++bin) {
 
-            y += i->second * m_ysnap;
-            ++i;
-            if (i == m_ymultiple.end()) nextbin = -1;
-            else nextbin = i->first;
+        // If this bin is in the Segment height map
+        if (nextBin == bin) {
+
+            // Use the height in the Segment height map.
+            y += oSegmentHeightIter->second * m_ysnap;
+
+            ++oSegmentHeightIter;
+            if (oSegmentHeightIter == m_ymultiple.end())
+                nextBin = -1;
+            else
+                nextBin = oSegmentHeightIter->first;
 
         } else {
 
+            // Go with the height of a single track.
             y += m_ysnap;
         }
     }
