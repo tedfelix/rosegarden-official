@@ -228,12 +228,13 @@ void MergeFileCommand::execute()
         // Save for redo.
         m_newSegments.push_back(segment);
 
-        // Update maxEndTime
-        timeT segmentEndTime = segment->getEndMarkerTime();
-        if (m_mergeAtEnd) {
+        // If merging at end, shift Segment to end.
+        if (m_mergeAtEnd)
             segment->setStartTime(segment->getStartTime() + time0);
-            segmentEndTime += time0;
-        }
+
+        const timeT segmentEndTime = segment->getEndTime();
+
+        // Update maxEndTime
         if (segmentEndTime > maxEndTime)
             maxEndTime = segmentEndTime;
     }
@@ -296,6 +297,10 @@ void MergeFileCommand::execute()
     if (maxEndTime > destComp.getEndMarker()) {
         // For undo.  Capture before we modify.
         m_oldCompositionEnd = destComp.getEndMarker();
+
+        // Round to the next bar.  Subtract one to avoid an extra empty bar
+        // when Segments end exactly on the bar..
+        maxEndTime = destComp.getBarEndForTime(maxEndTime - 1);
 
         // Expand the Composition.
         destComp.setEndMarker(maxEndTime);

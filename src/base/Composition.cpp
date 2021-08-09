@@ -666,10 +666,12 @@ Composition::setStartMarker(const timeT &sM)
 }
 
 void
-Composition::setEndMarker(const timeT &eM)
+Composition::setEndMarker(const timeT &endMarker)
 {
-    bool shorten = (eM < m_endMarker);
-    m_endMarker = eM;
+    const bool shorten = (endMarker < m_endMarker);
+
+    m_endMarker = endMarker;
+
     clearVoiceCaches();
     updateRefreshStatuses();
     notifyEndMarkerChange(shorten);
