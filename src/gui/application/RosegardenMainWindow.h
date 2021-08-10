@@ -108,18 +108,21 @@ class ConfigureDialog;
   *
   * This class owns many of the key objects in the system, including:
   *
+  *   * getSequenceManager() returns the SequenceManager instance.
+  *   * getView() returns the RosegardenMainViewWidget instance which
+  *     contains the TrackEditor.
+  *   * getTransport() returns the TransportDialog instance.
+  *   * m_clipboard is the Clipboard.
   *   * m_sequencerThread is the SequencerThread.
   *   * m_segmentParameterBox is the "Segment Parameters" box.
   *   * m_trackParameterBox is the "Track Parameters" box.
   *   * m_instrumentParameterBox is the "Instrument Parameters" box.
-  *   * getView() returns the RosegardenMainViewWidget instance which
-  *     contains the TrackEditor.
-  *   * getTransport() returns the TransportDialog instance.
   *
   * Note: The RosegardenDocument instance has moved to
   *       RosegardenDocument::currentDocument.
   */
-class ROSEGARDENPRIVATE_EXPORT RosegardenMainWindow : public QMainWindow, public ActionFileClient
+class ROSEGARDENPRIVATE_EXPORT RosegardenMainWindow :
+        public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
     
@@ -141,9 +144,6 @@ public:
     /// Global access to the single instance of this class.
     static RosegardenMainWindow *self() { return m_myself; }
     
-    /// Return current Main Toolbar
-//    QToolBar *toolBar( const char *name="\0" );
-    
     RosegardenMainViewWidget *getView() { return m_view; }
 
     TransportDialog *getTransport();
@@ -158,79 +158,41 @@ public:
         ImportRGD
     };
 
-    /**
-     * open a Rosegarden file
-     */
+    /// open a Rosegarden file
     virtual void openFile(QString filePath) { openFile(filePath, ImportCheckType); }
 
-    /**
-     * open a file, explicitly specifying its type
-     */
+    /// open a file, explicitly specifying its type
     void openFile(QString filePath, ImportType type);
 
-    /**
-     * decode and open a project file
-     */
+    /// decode and open a project file
     void importProject(QString filePath);
 
-    /**
-     * open a URL
-     */
+    /// open a URL
     virtual void openURL(QString url);
 
-    /**
-     * merge a file with the existing document
-     */ 
+    /// merge a file with the existing document
     virtual void mergeFile(QString filePath) { mergeFile(filePath, ImportCheckType); }
     
-    /**
-     * merge a file, explicitly specifying its type
-     */
+    /// merge a file, explicitly specifying its type
     void mergeFile(QString filePath, ImportType type);
 
-    /**
-     * open a URL
-     */
     void openURL(const QUrl &url);
 
-    /**
-     * export a MIDI file
-     */
     void exportMIDIFile(QString url);
 
-    /**
-     * export a Csound scorefile
-     */
+    /// export a Csound scorefile
     void exportCsoundFile(QString url);
 
-    /**
-     * export a Mup file
-     */
     void exportMupFile(QString url);
 
-    /**
-     * export a LilyPond file
-     */
     bool exportLilyPondFile(QString url, bool forPreview = false);
 
-    /**
-     * export a MusicXml file
-     */
     void exportMusicXmlFile(QString url);
 
-    /**
-     * Get the sequence manager object
-     */
     SequenceManager *getSequenceManager() { return m_seqManager; }
 
-    /**
-     * Get a value() bar
-     */
     ProgressBar *getCPUBar() { return m_cpuBar; }
 
-    /**
-     * Get a device manager object
-     */
     QPointer<DeviceManagerDialog> getDeviceManager()  { return m_deviceManager; }
 
     /**
@@ -240,66 +202,43 @@ public:
     QVector<QString> createRecordAudioFiles(const QVector<InstrumentId> &);
 
     QVector<InstrumentId> getArmedInstruments();
- 
+
+    /// Start the sequencer thread
     /**
-     * Start the sequencer auxiliary process
-     * (built in the 'sequencer' directory)
-     *
      * @see slotSequencerExited()
      */
     bool launchSequencer();
 
 #ifdef HAVE_LIBJACK
-    /*
-     * Launch and control JACK if required to by configuration 
-     */
+    /// Launch and control JACK if required to by configuration
     bool launchJack();
 
 #endif // HAVE_LIBJACK
 
 
+    /// Returns whether sound is enabled.
     /**
-     * Returns whether sound is enabled.
      * false if the '--nosound' option was given
      * true otherwise.
      */
     bool isUsingSequencer();
 
-    /**
-     * Returns whether there's a sequencer running.
-     * The result is dynamically updated depending on the sequencer's
-     * status.
-     */
     bool isSequencerRunning();
 
-    /*
-     * The sequencer calls this method when it's running to
-     * allow us to sync data with it.
-     *
-     */
-    virtual void alive();
-    
     /*
      * Tell the application whether this is the first time this
      * version of RG has been run
      */
-    void setIsFirstRun(bool first) { m_firstRun = first; }
+    void setIsFirstRun(bool first)  { m_firstRun = first; }
 
+    /// Wait in a sub-event-loop until all child dialogs have been closed.
     /*
-     * Wait in a sub-event-loop until all child dialogs
-     * have been closed.  Ignores the TransportDialog.
+     * Ignores the TransportDialog.
      */
     void awaitDialogClearance() const;
 
-    /*
-     * Return the clipboard
-     */
-    Clipboard *getClipboard() { return m_clipboard; }
-
-    /**
-     * Return the plugin native GUI manager, if we have one
-     */
-    AudioPluginOSCGUIManager *getPluginGUIManager() { return m_pluginGUIManager; }
+    /// Return the plugin native GUI manager, if we have one
+    AudioPluginOSCGUIManager *getPluginGUIManager()  { return m_pluginGUIManager; }
 
     /** Query the AudioFileManager to see if the audio path exists, is readable,
      * writable, etc., and offer to dump the user in the document properties
@@ -309,7 +248,7 @@ public:
      */
     bool testAudioPath(QString op); // and open the dialog to set it if unset
 
-    bool haveAudioImporter() const { return m_haveAudioImporter; }
+    bool haveAudioImporter() const  { return m_haveAudioImporter; }
 
     void uiUpdateKludge();
 
@@ -355,13 +294,18 @@ protected:
      * Create document from a file
      */
     RosegardenDocument *createDocument(
-            QString filePath, ImportType type = ImportRG4, bool lock = true);
+            QString filePath,
+            ImportType type,
+            bool permanent,
+            bool lock,
+            bool clearHistory);
     
     /**
      * Create a document from RG file
      */
     RosegardenDocument *createDocumentFromRGFile(
-            const QString &filePath, bool lock = true);
+            const QString &filePath, bool permanent, bool lock,
+            bool clearHistory);
 
     /**
      * Create document from MIDI file
@@ -916,10 +860,9 @@ public slots:
      */
     void slotEditAsNotation();
 
-    /**
-     * open a tempo/timesig edit view
-     */
+    /// Open Tempo and Time Signature Editor
     void slotEditTempos();
+    /// Open Tempo and Time Signature Editor
     void slotEditTempos(timeT openAtTime);
 
     /**

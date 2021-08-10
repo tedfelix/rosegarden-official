@@ -1284,11 +1284,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     delete oldDoc;
     oldDoc = nullptr;
 
-    if (getView() && getView()->getTrackEditor()) {
-        connect(RosegardenDocument::currentDocument, &RosegardenDocument::makeTrackVisible,
-                getView()->getTrackEditor(), &TrackEditor::slotScrollToTrack);
-    }
-
     // Make sure the view and the new document match.
     m_view->slotSynchroniseWithComposition();
 
@@ -1355,7 +1350,12 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
         revert = (newFileInfo.absoluteFilePath() == RosegardenDocument::currentDocument->getAbsFilePath());
     }
 
-    RosegardenDocument *doc = createDocument(filePath, type, !revert);
+    RosegardenDocument *doc = createDocument(
+            filePath,
+            type,  // importType
+            true,  // permanent
+            !revert,  // lock
+            true);  // clearHistory
 
     if (!doc)
         return;
@@ -1410,7 +1410,8 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
 
 RosegardenDocument *
 RosegardenMainWindow::createDocument(
-        QString filePath, ImportType importType, bool lock)
+        QString filePath, ImportType importType, bool permanent,
+        bool lock, bool clearHistory)
 {
     // ??? This and the create functions it calls might make more sense in
     //     RosegardenDocument.
@@ -1503,7 +1504,11 @@ RosegardenMainWindow::createDocument(
     case ImportRG4:
     case ImportCheckType:
     default:
-        doc = createDocumentFromRGFile(filePath, lock);
+        doc = createDocumentFromRGFile(
+                filePath,
+                permanent,
+                lock,
+                clearHistory);
         break;
 
     case ImportRGD:  // Satisfy compiler warning.
@@ -1518,7 +1523,7 @@ RosegardenMainWindow::createDocument(
 
 RosegardenDocument *
 RosegardenMainWindow::createDocumentFromRGFile(
-        const QString &filePath, bool lock)
+        const QString &filePath, bool permanent, bool lock, bool clearHistory)
 {
     // ??? This and its caller should probably be moved into
     //     RosegardenDocument as static factory functions.
@@ -1567,11 +1572,15 @@ RosegardenMainWindow::createDocumentFromRGFile(
             new RosegardenDocument(this,
                     m_pluginManager,
                     true,  // skipAutoload
-                    true,  // clearCommandHistory
+                    clearHistory,  // clearCommandHistory
                     m_useSequencer);  // enableSound
 
     // Read the document from the file.
-    bool readOk = newDoc->openDocument(openFilePath, true, false, lock);
+    bool readOk = newDoc->openDocument(
+            openFilePath,  // filename
+            permanent,  // permanent
+            false,  // squelchProcessDialog
+            lock);  // enableLock
 
     // If the read failed, bail.
     if (!readOk) {
@@ -2699,22 +2708,24 @@ RosegardenMainWindow::slotRescaleSelection()
 }
 
 bool
-RosegardenMainWindow::testAudioPath(QString op)
+RosegardenMainWindow::testAudioPath(QString operation)
 {
     try {
         RosegardenDocument::currentDocument->getAudioFileManager().testAudioPath();
     } catch (const AudioFileManager::BadAudioPathException &) {
-        // changing the following parent to 0 fixes a nasty style problem cheap:
-        if (QMessageBox::warning
-                (nullptr, tr("Warning"),
-                 tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?", op.toStdString().c_str()),
-                QMessageBox::Yes | QMessageBox::Cancel,
-                 QMessageBox::Cancel 
-               ) == QMessageBox::Yes
-          ){
+        // Changing the parent to nullptr fixes a nasty style problem cheaply.
+        // ??? What style problem?
+        if (QMessageBox::warning(
+                nullptr,  // parent
+                tr("Warning"),  // title
+                tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?",
+                        operation.toStdString().c_str()),  // text
+                QMessageBox::Yes | QMessageBox::Cancel,  // buttons
+                QMessageBox::Cancel) ==  // defaultButton
+                        QMessageBox::Yes) {
             slotOpenAudioPathSettings();
         }
-    return false;
+        return false;
     }
     return true;
 }
@@ -4511,56 +4522,32 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
 void
 RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
 {
-    RosegardenDocument *doc = createDocument(filePath, type);
+    if (!RosegardenDocument::currentDocument)
+        return;
 
-    if (doc) {
-        if (RosegardenDocument::currentDocument) {
+    RosegardenDocument *srcDoc = createDocument(
+            filePath,
+            type,  // importType
+            false,  // permanent
+            true,  // lock
+            false);  // clearHistory
+    if (!srcDoc)
+        return;
 
-            bool timingsDiffer = false;
-            Composition &c1 = RosegardenDocument::currentDocument->getComposition();
-            Composition &c2 = doc->getComposition();
+    const Composition &srcComp = srcDoc->getComposition();
+    const Composition &destComp =
+            RosegardenDocument::currentDocument->getComposition();
+    const bool timingsDiffer = !srcComp.compareSignaturesAndTempos(destComp);
 
-            // compare tempos and time sigs in the two -- rather laborious
-
-            if (c1.getTimeSignatureCount() != c2.getTimeSignatureCount()) {
-                timingsDiffer = true;
-            } else {
-                for (int i = 0; i < c1.getTimeSignatureCount(); ++i) {
-                    std::pair<timeT, TimeSignature> t1 =
-                        c1.getTimeSignatureChange(i);
-                    std::pair<timeT, TimeSignature> t2 =
-                        c2.getTimeSignatureChange(i);
-                    if (t1.first != t2.first || t1.second != t2.second) {
-                        timingsDiffer = true;
-                        break;
-                    }
-                }
-            }
-
-            if (c1.getTempoChangeCount() != c2.getTempoChangeCount()) {
-                timingsDiffer = true;
-            } else {
-                for (int i = 0; i < c1.getTempoChangeCount(); ++i) {
-                    std::pair<timeT, tempoT> t1 = c1.getTempoChange(i);
-                    std::pair<timeT, tempoT> t2 = c2.getTempoChange(i);
-                    if (t1.first != t2.first || t1.second != t2.second) {
-                        timingsDiffer = true;
-                        break;
-                    }
-                }
-            }
-
-            FileMergeDialog dialog(this, filePath, timingsDiffer);
-            if (dialog.exec() == QDialog::Accepted) {
-                RosegardenDocument::currentDocument->mergeDocument(doc, dialog.getMergeOptions());
-            }
-
-            delete doc;
-
-        } else {  // ??? I don't think it's possible for RosegardenDocument::currentDocument to be nullptr.
-            setDocument(doc);
-        }
+    FileMergeDialog dialog(this, timingsDiffer);
+    if (dialog.exec() == QDialog::Accepted) {
+        RosegardenDocument::currentDocument->mergeDocument(
+                srcDoc,
+                dialog.getMergeAtEnd(),
+                dialog.getMergeTimesAndTempos());
     }
+
+    delete srcDoc;
 }
 
 void RosegardenMainWindow::processRecordedEvents()
@@ -5676,20 +5663,6 @@ RosegardenMainWindow::isSequencerRunning()
     //RG_DEBUG << "isSequencerRunning: m_useSequencer = "
     //         << m_useSequencer << ", m_sequencerThread = " << m_sequencerThread;
     return m_useSequencer && (m_sequencerThread != nullptr);
-}
-
-void
-RosegardenMainWindow::alive()
-{
-    // ??? This routine appears to never be called.
-
-    //RG_DEBUG << "alive()";
-
-    if (RosegardenDocument::currentDocument && RosegardenDocument::currentDocument->getStudio().haveMidiDevices()) {
-        enterActionState("got_midi_devices"); //@@@ JAS orig. 0
-    } else {
-        leaveActionState("got_midi_devices"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-    }
 }
 
 void

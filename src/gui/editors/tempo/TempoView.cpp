@@ -60,11 +60,15 @@
 namespace Rosegarden
 {
 
-TempoView::TempoView(QWidget *parent, EditTempoController *editTempoController, timeT openTime):
-        ListEditView(std::vector<Segment *>(), 2, parent),
-        m_editTempoController(editTempoController),
-        m_filter(Tempo | TimeSignature),
-        m_ignoreUpdates(true)
+
+TempoView::TempoView(
+        QWidget *parent,
+        EditTempoController *editTempoController,
+        timeT openTime) :
+    ListEditView(std::vector<Segment *>(), 2, parent),
+    m_editTempoController(editTempoController),
+    m_filter(Tempo | TimeSignature),
+    m_ignoreUpdates(true)
 {
     initStatusBar();
     setupActions();
@@ -314,20 +318,22 @@ TempoView::makeInitialSelection(timeT time)
     TempoListItem *goodItem = nullptr;
     int goodItemNo = 0;
 
-    for (int i = 0; m_list->topLevelItem(i); ++i) {
+    for (int i = 0; (m_list->topLevelItem(i) != nullptr); ++i) {
 
-        TempoListItem *item = dynamic_cast<TempoListItem *>
-                                (m_list->topLevelItem(i));
+        TempoListItem *item =
+                dynamic_cast<TempoListItem *>(m_list->topLevelItem(i));
 
-//         m_list->setSelected(item, false);
+        // Nothing found, try the next.  This might end the loop.
+        // ??? Any way to get the item count?
+        if (!item)
+            continue;
+
         item->setSelected(false);
 
-        if (item) {
-            if (item->getTime() > time)
-                break;
-            goodItem = item;
-            goodItemNo = i;
-        }
+        if (item->getTime() > time)
+            break;
+        goodItem = item;
+        goodItemNo = i;
     }
 
     if (goodItem) {

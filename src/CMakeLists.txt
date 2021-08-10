@@ -666,6 +666,7 @@ set(rg_CPPS
   commands/segment/SegmentLabelCommand.cpp
   commands/segment/SegmentInsertCommand.cpp
   commands/segment/AddTracksCommand.cpp
+  commands/segment/MergeFileCommand.cpp
   commands/segment/SegmentColourMapCommand.cpp
   commands/segment/SegmentRecordCommand.cpp
   commands/segment/SegmentQuickCopyCommand.cpp

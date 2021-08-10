@@ -47,18 +47,13 @@ class NoteOnRecSet;
 namespace Rosegarden
 {
 
+
 class SequenceManager;
 class RosegardenMainViewWidget;
 class MappedEventList;
 class Event;
 class EditViewBase;
 class AudioPluginManager;
-
-
-static const int MERGE_AT_END           = (1 << 0);
-static const int MERGE_IN_NEW_TRACKS    = (1 << 1);
-static const int MERGE_KEEP_OLD_TIMINGS = (1 << 2);
-static const int MERGE_KEEP_NEW_TIMINGS = (1 << 3);
 
 
 /// The document object for a document-view model.
@@ -225,7 +220,9 @@ public:
     /**
      * merge another document into this one
      */
-    void mergeDocument(RosegardenDocument *doc, int options);
+    void mergeDocument(RosegardenDocument *doc,
+                       bool mergeAtEnd,
+                       bool mergeTimesAndTempos);
 
     /**
      * saves the document under filename and format.
@@ -559,8 +556,6 @@ signals:
      */
     void newAudioRecordingSegment(Segment*);
 
-    void makeTrackVisible(int trackPosition);
-
     void stoppedAudioRecording();
     void stoppedMIDIRecording();
     void audioFileFinalized(Segment*);
@@ -813,7 +808,15 @@ private:
 
     /**
      * Tells this document whether it should clear the command history upon
-     * construction.  Usually true.
+     * construction and destruction.  Usually true.  Set this to false for
+     * temporary documents (like when merging).
+     *
+     * ??? Since the CommandHistory is so closely coupled with the document,
+     *     *it should be a member*.  That way it goes away when the document
+     *     goes away.  It is created (and maybe not even used) when a new
+     *     document is created.  This would simplify things for parts of the
+     *     system that need temporary documents and don't want the command
+     *     history cleared.  Right now it's a tangled mess.
      */
     bool m_clearCommandHistory;
 

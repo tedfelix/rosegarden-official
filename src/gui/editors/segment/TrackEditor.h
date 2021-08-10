@@ -106,15 +106,6 @@ public:
     void turnRepeatingSegmentToRealCopies();
     void turnLinkedSegmentsToRealCopies();
 
-public slots:
-
-    /// Scroll the view such that the numbered track is on-screen
-    /**
-     * RosegardenMainWindow::setDocument() connects this to
-     * RosegardenDocument::makeTrackVisible(int).
-     */
-    void slotScrollToTrack(int trackPosition);
-
 signals:
     /**
      * init() connects this to RosegardenMainViewWidget::stateChange().

@@ -666,10 +666,12 @@ Composition::setStartMarker(const timeT &sM)
 }
 
 void
-Composition::setEndMarker(const timeT &eM)
+Composition::setEndMarker(const timeT &endMarker)
 {
-    bool shorten = (eM < m_endMarker);
-    m_endMarker = eM;
+    const bool shorten = (endMarker < m_endMarker);
+
+    m_endMarker = endMarker;
+
     clearVoiceCaches();
     updateRefreshStatuses();
     notifyEndMarkerChange(shorten);
@@ -1194,6 +1196,39 @@ Composition::updateExtremeTempos()
         m_minTempo = m_defaultTempo;
         m_maxTempo = m_defaultTempo;
     }
+}
+
+bool
+Composition::compareSignaturesAndTempos(const Composition &other) const
+{
+    if (getTimeSignatureCount() != other.getTimeSignatureCount())
+        return false;
+
+    // For each time signature
+    for (int i = 0; i < getTimeSignatureCount(); ++i) {
+        std::pair<timeT, TimeSignature> t1 =
+            getTimeSignatureChange(i);
+        std::pair<timeT, TimeSignature> t2 =
+            other.getTimeSignatureChange(i);
+        // If they do not match
+        if (t1.first != t2.first || t1.second != t2.second)
+            return false;
+    }
+
+    if (getTempoChangeCount() != other.getTempoChangeCount())
+        return false;
+
+    // For each tempo change
+    for (int i = 0; i < getTempoChangeCount(); ++i) {
+        std::pair<timeT, tempoT> t1 = getTempoChange(i);
+        std::pair<timeT, tempoT> t2 = other.getTempoChange(i);
+        // If they do not match
+        if (t1.first != t2.first || t1.second != t2.second)
+            return false;
+    }
+
+    // They match perfectly.
+    return true;
 }
 
 RealTime

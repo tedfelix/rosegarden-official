@@ -3792,8 +3792,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
         if (!isSoftSynth) {
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            RG_DEBUG << "processMidiOut[" << now << "]: instrument " << rgEvent->getInstrument();
-            RG_DEBUG << "processMidiOut():     pitch: " << (int)rgEvent->getPitch() << ", velocity " << (int)rgEvent->getVelocity() << ", duration " << rgEvent->getDuration();
+            RG_DEBUG << "processMidiOut[" << now << "]: instrument" << rgEvent->getInstrument() << " pitch:" << (int)rgEvent->getPitch() << " velocity" << (int)rgEvent->getVelocity() << "duration " << rgEvent->getDuration();
 #endif
 
             snd_seq_ev_set_subs(&alsaEvent);

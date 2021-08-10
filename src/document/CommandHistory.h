@@ -48,6 +48,11 @@ class ActionFileClient;
  * and Redo menu or toolbar with the same command history, and it
  * keeps them all up-to-date at once.  This makes it effective in
  * systems where multiple views may be editing the same data.
+ *
+ * ??? This should be a member of RosegardenDocument.  Then it can
+ *     be destroyed when the current document is destroyed, and it
+ *     can be ignored when a temporary document is created.  As a
+ *     global Singleton this is too confusing.
  */
 class CommandHistory : public QObject
 {

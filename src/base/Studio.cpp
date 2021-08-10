@@ -796,24 +796,26 @@ Studio::getDevice(DeviceId id) const
 }
 
 Device *
-Studio::getAudioDevice()
+Studio::getAudioDevice() const
 {
-    std::vector<Device*>::iterator it;
-
-    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
-        if ((*it)->getType() == Device::Audio) return *it;
+    // For each Device
+    for (Device *device : m_devices) {
+        // Audio?  Return it.
+        if (device->getType() == Device::Audio)
+            return device;
     }
 
     return nullptr;
 }
 
 Device *
-Studio::getSoftSynthDevice()
+Studio::getSoftSynthDevice() const
 {
-    std::vector<Device*>::iterator it;
-
-    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
-        if ((*it)->getType() == Device::SoftSynth) return *it;
+    // For each Device
+    for (Device *device : m_devices) {
+        // SoftSynth?  Return it.
+        if (device->getType() == Device::SoftSynth)
+            return device;
     }
 
     return nullptr;
