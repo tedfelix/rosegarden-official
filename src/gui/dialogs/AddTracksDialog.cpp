@@ -139,7 +139,7 @@ namespace
     // Sort the devices in a logic way for the UI.
     class DeviceLess {
     public:
-        bool operator()(const Device *lhs, const Device *rhs)
+        bool operator()(const Device *lhs, const Device *rhs) const
         {
             if (lhs->getType() == rhs->getType())
                 return (lhs->getName() < rhs->getName());
@@ -149,7 +149,7 @@ namespace
         }
 
     private:
-        int getPriority(const Device *device)
+        int getPriority(const Device *device) const
         {
             switch (device->getType()) {
             case Device::Midi:
