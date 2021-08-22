@@ -2947,44 +2947,60 @@ RosegardenDocument::createLock(const QString &absFilePath) // static
     QLockFile *lockFile = new QLockFile(lockFilename(absFilePath));
     lockFile->setStaleLockTime(0);
 
-    if (!lockFile->tryLock()) {
-        if (lockFile->error() == QLockFile::LockFailedError) {
-            // Read in the existing lock file.
-            qint64 pid;
-            QString hostname;
-            QString appname;
-            if (!lockFile->getLockInfo(&pid, &hostname, &appname)) {
-                RG_WARNING << "createLock(): Failed to read lock file information! Permission problem? Deleted meanwhile?";
-            }
-            QString message;
-            QTextStream out(&message);
-            out << tr("Lock Filename: ") << lockFilename(absFilePath) << '\n';
-            out << tr("Process ID: ") << pid << '\n';
-            out << tr("Host: ") << hostname << '\n';
-            out << tr("Application: ") << appname << '\n';
-            out.flush();
+    // If the lock is successful, return it.
+    if (lockFile->tryLock())
+        return lockFile;
 
-            // Present a dialog to the user with the info.
-            StartupLogo::hideIfStillThere();
-            QMessageBox::warning(
-                    RosegardenMainWindow::self(),
-                    tr("Rosegarden"),
-                    tr("Could not lock file.\n\n"
-                        "Another user or instance of Rosegarden may already be\n"
-                        "editing this file.  If you are sure no one else is\n"
-                        "editing this file, delete the lock file and try again.\n\n") +
-                    message);
-            // Maybe we can add a button which would call lockFile->removeStaleLockFile()?
-            // On the other hand with QLockFile it's much more rare to need to do this
-            // since it detects when the owning process went away and then we don't get here.
+    // Lock has failed.
 
+    if (lockFile->error() == QLockFile::LockFailedError) {
+
+        // Present a dialog to the user with the info.
+
+        // Read in the existing lock file.
+        qint64 pid;
+        QString hostname;
+        QString appname;
+        if (!lockFile->getLockInfo(&pid, &hostname, &appname))
+            RG_WARNING << "createLock(): Failed to read lock file information! Permission problem? Deleted meanwhile?";
+
+        QString message;
+        message +=
+                tr("Could not lock file.\n\n"
+                   "Another user or instance of Rosegarden may already be\n"
+                   "editing this file.  If you are sure no one else is\n"
+                   "editing this file, you may press Ignore to open the file.\n\n");
+        message += tr("Lock Filename: ") + lockFilename(absFilePath) + '\n';
+        message += tr("Process ID: ") + QString::number(pid) + '\n';
+        message += tr("Host: ") + hostname + '\n';
+        message += tr("Application: ") + appname + '\n';
+
+        StartupLogo::hideIfStillThere();
+
+        QMessageBox::StandardButton result = QMessageBox::warning(
+                RosegardenMainWindow::self(),
+                tr("Rosegarden"),
+                message,
+                QMessageBox::Ok | QMessageBox::Ignore,
+                QMessageBox::Ok);
+
+        // Honor the lock and skip the open.
+        if (result == QMessageBox::Ok) {
             delete lockFile;
             return nullptr;
         }
-        // This is why we don't handle the other error codes from tryLock:
-        // If we do not have permission, don't worry about it.  Pretend the lock
-        // was successful.  After all, we won't be able to save.
+
+        // Ignore the lock and open the file.
+
+        lockFile->removeStaleLockFile();
+        // This should succeed now.
+        lockFile->tryLock();
+        return lockFile;
     }
+
+    // This is why we don't handle the other error codes from tryLock:
+    // If we do not have permission, don't worry about it.  Pretend the lock
+    // was successful.  After all, we won't be able to save.
 
     return lockFile;
 }
