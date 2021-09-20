@@ -240,14 +240,17 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
 
     // slotNewDocument() will finish the initialization.
 
-    // * ForNotation
+    // * For Notation
 
+    // ??? Should this be "for printing"?  That would be clearer.
     QLabel *forNotationLabel = new QLabel(tr("For Notation"), this);
     forNotationLabel->setFont(m_font);
+    QString toolTip = tr("<qt><p>Include this segment when printing (LilyPond).</p></qt>");
+    forNotationLabel->setToolTip(toolTip);
 
     m_forNotation = new TristateCheckBox(this);
     m_forNotation->setFont(m_font);
-    m_forNotation->setToolTip(tr("<qt><p>Use this segment when generating notation (LilyPond).</p></qt>"));
+    m_forNotation->setToolTip(toolTip);
     connect(m_forNotation, &QCheckBox::clicked,
             this, &SegmentParameterBox::slotForNotationClicked);
 
