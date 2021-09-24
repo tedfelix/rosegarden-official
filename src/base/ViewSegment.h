@@ -60,7 +60,7 @@ public:
     /**
      * Return the location of the given event in this ViewSegment
      */
-    ViewElementList::iterator findEvent(Event *);
+    ViewElementList::iterator findEvent(const Event *);
 
     /**
      * SegmentObserver method - called after the event has been added to

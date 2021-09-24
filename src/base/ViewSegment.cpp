@@ -69,7 +69,7 @@ ViewSegment::wrapEvent(Event *e)
 }
 
 ViewElementList::iterator
-ViewSegment::findEvent(Event *e)
+ViewSegment::findEvent(const Event *e)
 {
     // Note that we have to create this using the virtual
     // makeViewElement(), because the result of equal_range() depends on
@@ -80,7 +80,8 @@ ViewSegment::findEvent(Event *e)
     // ViewElementList -- ViewElementList has no equivalent of
     // makeViewElement.)
 
-    ViewElement *dummy = makeViewElement(e);
+    // Cast away const since this is a temp we will not modify.
+    ViewElement *dummy = makeViewElement(const_cast<Event *>(e));
     
     std::pair<ViewElementList::iterator,
               ViewElementList::iterator>

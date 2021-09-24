@@ -874,12 +874,12 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 }
 
 void
-MatrixScene::slotRulerSelectionChanged(EventSelection *s)
+MatrixScene::slotRulerSelectionChanged(EventSelection *rulerSelection)
 {
-    RG_DEBUG << "MatrixScene: caught " << (s ? "useful" : "null" ) << " selection change from ruler";
     if (m_selection) {
-        if (s) m_selection->addFromSelection(s);
-        setSelectionElementStatus(m_selection, true);
+        // ??? We only add.  We never delete.  This will get out of sync.
+        if (rulerSelection)
+            m_selection->addFromSelection(rulerSelection);
     }
 }
 
@@ -929,27 +929,30 @@ MatrixScene::setSelectionElementStatus(EventSelection *s, bool set)
 
     MatrixViewSegment *vs = nullptr;
 
-    for (std::vector<MatrixViewSegment *>::iterator i = m_viewSegments.begin();
-         i != m_viewSegments.end(); ++i) {
+    // Find the MatrixViewSegment for the EventSelection's Segment.
+    for (MatrixViewSegment *currentViewSegment : m_viewSegments) {
 
-        if (&(*i)->getSegment() == &s->getSegment()) {
-            vs = *i;
+        if (&currentViewSegment->getSegment() == &s->getSegment()) {
+            vs = currentViewSegment;
             break;
         }
+
     }
 
     if (!vs) return;
 
-    for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
-         i != s->getSegmentEvents().end(); ++i) {
+    for (const Event *e : s->getSegmentEvents()) {
 
-        Event *e = *i;
+        ViewElementList::iterator viewElementIter = vs->findEvent(e);
+        // Not in the view?  Try the next.
+        if (viewElementIter == vs->getViewElementList()->end())
+            continue;
 
-        ViewElementList::iterator vsi = vs->findEvent(e);
-        if (vsi == vs->getViewElementList()->end()) continue;
+        MatrixElement *element =
+                dynamic_cast<MatrixElement *>(*viewElementIter);
+        if (element)
+            element->setSelected(set);
 
-        MatrixElement *el = static_cast<MatrixElement *>(*vsi);
-        el->setSelected(set);
     }
 }
 
@@ -960,7 +963,7 @@ MatrixScene::previewSelection(EventSelection *s,
     if (!s) return;
     if (!m_document->isSoundEnabled()) return;
 
-    for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
+    for (EventContainer::iterator i = s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {
 
         Event *e = *i;

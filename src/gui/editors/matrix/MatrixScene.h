@@ -88,8 +88,8 @@ public:
     void handleEventAdded(Event *);
     void handleEventRemoved(Event *);
 
-    EventSelection *getSelection() const override { return m_selection; }
     void setSelection(EventSelection* s, bool preview) override;
+    EventSelection *getSelection() const override  { return m_selection; }
     void selectAll();
     int calculatePitchFromY(int y) const;
 
@@ -186,8 +186,9 @@ private:
 
     /// The Segments we are editing.
     std::vector<Segment *> m_segments; // I do not own these
+    typedef std::vector<MatrixViewSegment *> ViewSegmentVector;
     /// The MatrixViewSegment for each Segment we are editing.
-    std::vector<MatrixViewSegment *> m_viewSegments; // I own these
+    ViewSegmentVector m_viewSegments; // I own these
     int findSegmentIndex(const Segment *segment) const;
     /// The Segment that is currently being displayed.
     /**
@@ -202,7 +203,9 @@ private:
     SnapGrid *m_snapGrid; // I own this
 
     int m_resolution;
+
     EventSelection *m_selection; // I own this
+
     HighlightType m_highlightType;
 
     // These are the background items -- the grid lines and the shadings
