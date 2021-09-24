@@ -1955,7 +1955,7 @@ NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 
     if (!staff) return nullptr;
 
-    for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
+    for (EventContainer::iterator i = s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {
 
         Event *e = *i;
@@ -1978,7 +1978,7 @@ NotationScene::previewSelection(EventSelection *s,
     if (!s) return;
     if (!m_document->isSoundEnabled()) return;
 
-    for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
+    for (EventContainer::iterator i = s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {
 
         Event *e = *i;

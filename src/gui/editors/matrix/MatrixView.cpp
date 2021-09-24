@@ -1197,9 +1197,9 @@ MatrixView::slotFilterSelection()
         bool haveEvent = false;
 
         EventSelection *newSelection = new EventSelection(*segment);
-        EventSelection::eventcontainer &ec =
+        EventContainer &ec =
             existingSelection->getSegmentEvents();
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                     ec.begin(); i != ec.end(); ++i) {
             if (dialog.keepEvent(*i)) {
                 haveEvent = true;
@@ -1232,7 +1232,7 @@ MatrixView::slotSetCurrentVelocityFromSelection()
     float totalVelocity = 0;
     int count = 0;
 
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
              getSelection()->getSegmentEvents().begin();
          i != getSelection()->getSegmentEvents().end(); ++i) {
 
@@ -2168,7 +2168,7 @@ MatrixView::slotExtendSelectionBackward(bool bar)
 
     } else { // remove an event
 
-        EventSelection::eventcontainer::iterator i =
+        EventContainer::iterator i =
             es->getSegmentEvents().end();
 
         std::vector<Event *> toErase;
@@ -2238,7 +2238,7 @@ MatrixView::slotExtendSelectionForward(bool bar)
 
     } else { // remove an event
 
-        EventSelection::eventcontainer::iterator i =
+        EventContainer::iterator i =
             es->getSegmentEvents().begin();
 
         std::vector<Event *> toErase;

@@ -40,7 +40,7 @@ UnTupletCommand::registerCommand(CommandRegistry *r)
 void
 UnTupletCommand::modifySegment()
 {
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
                 m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 

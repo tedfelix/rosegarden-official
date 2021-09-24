@@ -45,7 +45,7 @@ FixNotationQuantizeCommand::modifySegment()
     std::vector<Event *> toInsert;
     Segment &segment(m_selection->getSegment());
 
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     //!!! the Quantizer needs a fixQuantizedValues(EventSelection*)
     //method, but it hasn't got one yet so for the moment we're doing

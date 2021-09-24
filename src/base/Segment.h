@@ -59,21 +59,13 @@ class Composition;
 class SegmentLinker;
 class BasicCommand;
 
-/// Container of Event objects.
+/// Container of Events.
 /**
  * EventContainer is a precursor to Segment, used in code that needs
  * to store events but doesn't need all the ancillary data and
  * behaviors that Segment provides.
- *
- * ??? The STL container classes are not intended to be derived from.
- *     They provide no virtual dtor.  EventContainer should instead
- *     have a std::multiset member object.
  */
-class ROSEGARDENPRIVATE_EXPORT EventContainer : public std::multiset<Event*, Event::EventCmp>
-{
- public:
-    iterator findEventOfType(iterator i, const std::string &type);
-};
+typedef std::multiset<Event *, Event::EventCmp> EventContainer;
 
 /// Container of Event objects.
 /**
@@ -93,6 +85,10 @@ class ROSEGARDENPRIVATE_EXPORT EventContainer : public std::multiset<Event*, Eve
  * Segment, try SegmentPerformanceHelper for duration calculations.
  *
  * The Segment owns the Events its items are pointing at.
+ *
+ * ??? The STL container classes are not intended to be derived from.
+ *     They provide no virtual dtor.  Segment should instead
+ *     have an EventContainer member object.
  */
 class ROSEGARDENPRIVATE_EXPORT Segment : public QObject, public EventContainer
 {

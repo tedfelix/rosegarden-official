@@ -248,7 +248,7 @@ InterpretCommand::applyHairpins()
     Segment &segment(getSegment());
     int velocityToApply = -1;
 
-    for (EventSelection::eventcontainer::iterator ecitr =
+    for (EventContainer::iterator ecitr =
                 m_selection->getSegmentEvents().begin();
             ecitr != m_selection->getSegmentEvents().end(); ++ecitr) {
 
@@ -366,7 +366,7 @@ InterpretCommand::stressBeats()
 {
     Composition *c = getSegment().getComposition();
 
-    for (EventSelection::eventcontainer::iterator itr =
+    for (EventContainer::iterator itr =
                 m_selection->getSegmentEvents().begin();
             itr != m_selection->getSegmentEvents().end(); ++itr) {
 
@@ -437,7 +437,7 @@ InterpretCommand::articulate()
         <Event *> toInsert;
     Segment &segment(getSegment());
 
-    for (EventSelection::eventcontainer::iterator ecitr =
+    for (EventContainer::iterator ecitr =
                 m_selection->getSegmentEvents().begin();
             ecitr != m_selection->getSegmentEvents().end(); ++ecitr) {
 

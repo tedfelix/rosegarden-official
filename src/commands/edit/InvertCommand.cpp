@@ -33,7 +33,7 @@ using namespace BaseProperties;
 void
 InvertCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
     long highestPitch, lowestPitch;
 	highestPitch=0; lowestPitch=0;	// remove compiler warning;
 	

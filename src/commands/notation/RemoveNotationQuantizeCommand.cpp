@@ -39,7 +39,7 @@ RemoveNotationQuantizeCommand::registerCommand(CommandRegistry *r)
 void
 RemoveNotationQuantizeCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     std::vector<Event *> toInsert;
     std::vector<Event *> toErase;

@@ -284,8 +284,8 @@ Clipboard::newSegment(const EventSelection *copyFrom)
     Segment *s = copyFrom->getSegment().clone(false);
     s->erase(s->begin(), s->end());
 
-    const EventSelection::eventcontainer &events(copyFrom->getSegmentEvents());
-    for (EventSelection::eventcontainer::const_iterator i = events.begin();
+    const EventContainer &events(copyFrom->getSegmentEvents());
+    for (EventContainer::const_iterator i = events.begin();
          i != events.end(); ++i) {
         s->insert(new Event(**i));
     }

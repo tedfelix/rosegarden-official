@@ -1263,9 +1263,9 @@ NotationView::slotUpdateMenuStates()
         // notes so if the selection contains only tied notes we
         // should disable the command
         bool allTied = true;
-        EventSelection::eventcontainer &ec =
+        EventContainer &ec =
             selection->getSegmentEvents();
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                  ec.begin(); i != ec.end(); ++i) {
             if ((*i)->isa(Note::EventType)) {
                 bool tiedNote = ((*i)->has(BaseProperties::TIED_FORWARD) ||
@@ -1994,9 +1994,9 @@ NotationView::slotFilterSelection()
         bool haveEvent = false;
 
         EventSelection *newSelection = new EventSelection(*segment);
-        EventSelection::eventcontainer &ec =
+        EventContainer &ec =
             existingSelection->getSegmentEvents();
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                  ec.begin(); i != ec.end(); ++i) {
             if (dialog.keepEvent(*i)) {
                 haveEvent = true;
@@ -3213,7 +3213,7 @@ NotationView::slotMakeOrnament()
     if (!getSelection())
         return ;
 
-    EventSelection::eventcontainer &ec =
+    EventContainer &ec =
         getSelection()->getSegmentEvents();
 
     int basePitch = -1;
@@ -3221,7 +3221,7 @@ NotationView::slotMakeOrnament()
 
     QSharedPointer<NoteStyle> style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
 
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
              ec.begin(); i != ec.end(); ++i) {
         if ((*i)->isa(Note::EventType)) {
             if ((*i)->has(BaseProperties::PITCH)) {
@@ -3370,10 +3370,10 @@ ForAllSelection(opOnEvent op)
     EventSelection *selection = getSelection();
     if (!selection) { return; }
 
-    EventSelection::eventcontainer ec =
+    EventContainer ec =
         selection->getSegmentEvents();
 
-    for (EventSelection::eventcontainer::iterator i = ec.begin();
+    for (EventContainer::iterator i = ec.begin();
          i != ec.end();
          ++i) {
         CALL_MEMBER_FN(*this,op)(*i, getCurrentSegment());

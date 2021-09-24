@@ -50,7 +50,7 @@ ChangeSlurPositionCommand::getArgument(QString actionName, CommandArgumentQuerie
 void
 ChangeSlurPositionCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i) {

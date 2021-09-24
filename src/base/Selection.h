@@ -43,8 +43,6 @@ public:
 class ROSEGARDENPRIVATE_EXPORT EventSelection : public SegmentObserver
 {
 public:
-    typedef EventContainer eventcontainer;
-
     /**
      * Construct an empty EventSelection based on the given Segment.
      */

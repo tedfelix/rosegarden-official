@@ -113,7 +113,7 @@ AddFingeringMarkCommand::modifySegment()
 {
     if (m_fingering == "") return;
 
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
     Segment &segment(m_selection->getSegment());
 
     std::set<Event *> done;

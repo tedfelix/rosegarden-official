@@ -61,7 +61,7 @@ void
 PlaceControllersCommand::
 modifySegment()
 {
-    typedef EventSelection::eventcontainer container;
+    typedef EventContainer container;
     typedef container::iterator iterator;
 
     timeT prevEventTime = -1;

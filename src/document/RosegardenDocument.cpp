@@ -2143,7 +2143,7 @@ RosegardenDocument::transposeRecordedSegment(Segment *s)
                  // pull transpose from the destination track
                  int semitones = t->getTranspose();
 
-                 for (EventSelection::eventcontainer::iterator i =
+                 for (EventContainer::iterator i =
                       selectedWholeSegment->getSegmentEvents().begin();
                      i != selectedWholeSegment->getSegmentEvents().end(); ++i) {
                      

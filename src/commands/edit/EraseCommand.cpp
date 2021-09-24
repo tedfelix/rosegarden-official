@@ -70,7 +70,7 @@ EraseCommand::eraseInSegment(EventSelection *selection)
     bool erasedLongEffectEvent = false;
         
     std::vector<Event *> toErase;
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = selection->getSegmentEvents().begin();
             i != selection->getSegmentEvents().end(); ++i) {

@@ -40,7 +40,7 @@ RetrogradeCommand::modifySegment()
     timeT a0 = m_selection->getStartTime();
     timeT a1 = m_selection->getEndTime();
 
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     bool useNotationTimings = false;
 

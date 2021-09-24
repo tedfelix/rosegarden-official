@@ -41,7 +41,7 @@ UntieNotesCommand::registerCommand(CommandRegistry *r)
 void
 UntieNotesCommand::modifySegment()
 {
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
                 m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 

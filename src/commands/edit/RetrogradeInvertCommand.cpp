@@ -37,7 +37,7 @@ using namespace BaseProperties;
 void
 RetrogradeInvertCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     long highestPitch, lowestPitch;
 

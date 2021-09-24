@@ -42,7 +42,7 @@ BreakCommand::registerCommand(CommandRegistry *r)
 void
 BreakCommand::modifySegment()
 {
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
                 m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 

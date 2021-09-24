@@ -254,7 +254,7 @@ Quantizer::unquantize(EventSelection *selection) const
 
     Segment *s = &selection->getSegment();
 
-    Rosegarden::EventSelection::eventcontainer::iterator it
+    Rosegarden::EventContainer::iterator it
         = selection->getSegmentEvents().begin();
 
     for (; it != selection->getSegmentEvents().end(); ++it) {

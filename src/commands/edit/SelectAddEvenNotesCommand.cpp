@@ -275,6 +275,22 @@ SelectAddEvenNotesCommand::findBeatEvents(Segment &s,
     return result;
 }
 
+namespace
+{
+    // Find the next Event of "type".
+    EventContainer::iterator
+    findEventOfType(EventContainer &c,
+                    EventContainer::iterator i,
+                    const std::string &type)
+    {
+        for (; i != c.end(); ++i) {
+            Event *e = *i;
+            if (e->isa(type)) { return i; }
+        }
+        return i;
+    }
+}
+
 // Find evenly-spaced notes
 // @param eventSelection A selection whose first two events should be
 // the first two beats.
@@ -292,14 +308,13 @@ findBeatEvents(EventSelection *eventSelection)
      * Get the first two note Events in selection.  If they don't
      * exist, just bail out.
      */
-    iterator i1 =
-        segmentEvents.findEventOfType(segmentEvents.begin(), Note::EventType);
+    iterator i1 = findEventOfType(
+            segmentEvents, segmentEvents.begin(), Note::EventType);
     if (i1 == segmentEvents.end()) { return BeatEventVector(); }
     Event *e1 = *i1;
     ++i1;
 
-    iterator i2 =
-        segmentEvents.findEventOfType(i1, Note::EventType);
+    iterator i2 = findEventOfType(segmentEvents, i1, Note::EventType);
     if (i2 == segmentEvents.end()) { return BeatEventVector(); }
     Event *e2 = *i2;
 

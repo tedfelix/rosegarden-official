@@ -37,7 +37,7 @@ AddDotCommand::modifySegment()
     EventVec toErase;
     EventVec toInsert;
 
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
     timeT endTime = getEndTime();
     SegmentNotationHelper segmentNotationHelper(m_selection->getSegment());
 

@@ -51,7 +51,7 @@ ChangeTiePositionCommand::getArgument(QString actionName, CommandArgumentQuerier
 void
 ChangeTiePositionCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i) {
