@@ -18,32 +18,46 @@
 #ifndef RG_MASKTRIGGERCOMMAND_H
 #define RG_MASKTRIGGERCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
+#include "document/BasicCommand.h"
+#include "base/Selection.h"
+
+#include <QCoreApplication>
+#include <QString>
+
 
 namespace Rosegarden
 {
-class EventSelection;
 
 
-/** Add or subtract a constant from all event velocities.
-    Use SelectionPropertyCommand if you want to do something more
-    creative. */
-class MaskTriggerCommand : public BasicSelectionCommand
+/// Mask/Unmask Ornament
+/**
+ * Notation > Note > Ornaments >
+ *   - Skip This Part of Ornament (Mask Tied Note)
+ *   - Don't Skip This Part of Ornament (Unmask Tied Note)
+ */
+class MaskTriggerCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MaskTriggerCommand)
 
 public:
     MaskTriggerCommand(EventSelection &selection, bool sounding) :
-        BasicSelectionCommand(getGlobalName(sounding), selection, true),
-        m_selection(&selection), m_sounding(sounding) { }
-
-	static QString getGlobalName(bool sounding);
+        BasicCommand(getGlobalName(sounding),
+                     selection.getSegment(),
+                     selection.getStartTime(),
+                     selection.getEndTime(),
+                     true),  // bruteForceRedo
+        m_selection(&selection),
+        m_sounding(sounding)
+    { }
 
 protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static QString getGlobalName(bool sounding);
+
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
     bool m_sounding;
 };
 
