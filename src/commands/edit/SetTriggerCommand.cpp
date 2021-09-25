@@ -18,17 +18,14 @@
 
 #include "SetTriggerCommand.h"
 
+#include "base/BaseProperties.h"
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
-#include "base/TriggerSegment.h"
-#include "document/BasicSelectionCommand.h"
-#include "base/BaseProperties.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
-using namespace BaseProperties;
+
 
 void
 SetTriggerCommand::modifySegment()
@@ -41,12 +38,10 @@ SetTriggerCommand::modifySegment()
         if (!m_notesOnly ||
             ((*i)->isa(Note::EventType) &&
              !(*i)->has(BaseProperties::TIED_BACKWARD))) {
-            (*i)->set
-            <Int>(TRIGGER_SEGMENT_ID, m_triggerSegmentId);
-            (*i)->set
-            <Bool>(TRIGGER_SEGMENT_RETUNE, m_retune);
-            (*i)->set
-            <String>(TRIGGER_SEGMENT_ADJUST_TIMES, m_timeAdjust);
+            (*i)->set<Int>(BaseProperties::TRIGGER_SEGMENT_ID, m_triggerSegmentId);
+            (*i)->set<Bool>(BaseProperties::TRIGGER_SEGMENT_RETUNE, m_retune);
+            (*i)->set<String>(BaseProperties::TRIGGER_SEGMENT_ADJUST_TIMES,
+                              m_timeAdjust);
             if (m_mark != Marks::NoMark) {
                 Marks::addMark(**i, m_mark, true);
             }
@@ -65,5 +60,6 @@ SetTriggerCommand::modifySegment()
     if (rec)
         rec->updateReferences();
 }
+
 
 }

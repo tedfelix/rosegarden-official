@@ -15,27 +15,29 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "SelectionPropertyCommand.h"
 
-#include "base/parameterpattern/ParameterPattern.h"
-#include "document/BasicSelectionCommand.h"
+#include "base/Selection.h"
 
 
 namespace Rosegarden
 {
 
-SelectionPropertyCommand::SelectionPropertyCommand(ParameterPattern::Result result):
-        BasicSelectionCommand(getGlobalName(), 
-                              *(result.getSelection()),
-                              true),
-        m_result(result)
-{}
+
+SelectionPropertyCommand::SelectionPropertyCommand(
+        ParameterPattern::Result result):
+    BasicCommand(tr("Set &Property"),
+                 *(result.getSelection()),
+                 true),  // bruteForceRedo
+    m_result(result)
+{
+}
 
 void
 SelectionPropertyCommand::modifySegment()
 {
     m_result.modifySegment();
 }
+
 
 }
