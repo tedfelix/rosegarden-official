@@ -16,50 +16,60 @@
 */
 
 #include "PlaceControllersCommand.h"
+
+#include "gui/rulers/ControllerEventAdapter.h"
 #include "base/ControlParameter.h"
 #include "base/MidiTypes.h"
 #include "base/Segment.h"
-#include "gui/rulers/ControllerEventAdapter.h"
+#include "base/Selection.h"
 
-#include <QtGlobal>
 
 namespace Rosegarden
 {
 
-PlaceControllersCommand::PlaceControllersCommand
-(EventSelection &selection,
- const Instrument *instrument,
- const ControlParameter *cp) :
-  BasicSelectionCommand(globalName, selection, true),
+
+namespace
+{
+    int getDefaultValue(const Instrument *instrument,
+                        const ControlParameter *cp)
+    {
+        if (!instrument)
+            return 0;
+        if (!cp)
+            return 0;
+
+        // For controllers, use the static value if there is one.
+        if (cp->getType() == Controller::EventType) {
+            try {
+                return instrument->getControllerValue(cp->getControllerNumber());
+            } catch (...) {
+                return cp->getDefault();
+            }
+        } else {  // Pitchbend (probably)
+            return 8192;
+        }
+    }
+}
+
+
+PlaceControllersCommand::PlaceControllersCommand(
+        EventSelection &selection,
+        const Instrument *instrument,
+        const ControlParameter *cp) :
+    BasicCommand(tr("Place Controllers"),
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime(),
+                 true),  // bruteForceRedo
     m_selection(&selection),
     m_eventType(cp->getType()),
     m_controllerId(cp->getControllerNumber()),
     m_controllerValue(getDefaultValue(instrument, cp))
-{ }
-                                    
-const QString &PlaceControllersCommand::globalName = "Place controllers";
-
-int
-PlaceControllersCommand::getDefaultValue(const Instrument *instrument,
-                                         const ControlParameter *cp)
 {
-    Q_CHECK_PTR(cp);
-    if (cp->getType() == Controller::EventType)
-        // For controllers, use the static value if there is one.
-        {
-            try {
-                return
-                    instrument->getControllerValue(cp->getControllerNumber()); }
-            catch (...) { return cp->getDefault(); }
-        }
-    else
-        // For pitchBend, we use zero.
-        { return 8192; }
 }
 
 void
-PlaceControllersCommand::
-modifySegment()
+PlaceControllersCommand::modifySegment()
 {
     typedef EventContainer container;
     typedef container::iterator iterator;
