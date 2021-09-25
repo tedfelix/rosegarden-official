@@ -20,15 +20,27 @@
 
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
 #include "base/BaseProperties.h"
+
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
+
+ChangeVelocityCommand::ChangeVelocityCommand(
+        int delta, EventSelection &selection, bool rounddelta) :
+    BasicCommand(name(delta),
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime(),
+                 true),  // bruteForceRedo
+    m_selection(&selection),
+    m_delta(delta),
+    m_rounddelta(rounddelta)
+{
+}
 
 void
 ChangeVelocityCommand::modifySegment()
@@ -41,24 +53,34 @@ ChangeVelocityCommand::modifySegment()
         if ((*i)->isa(Note::EventType)) {
 
             long velocity = 100;
-            (*i)->get
-            <Int>(VELOCITY, velocity);
+            (*i)->get<Int>(BaseProperties::VELOCITY, velocity);
 
             // round velocity up to the next multiple of delta
-	    if(m_rounddelta) {
+            if (m_rounddelta) {
                 velocity /= m_delta;
                 velocity *= m_delta;
                 velocity += m_delta;
-	    } else
-	        velocity+=m_delta;
+            } else {
+                velocity += m_delta;
+            }
 
             if (velocity < 0)
                 velocity = 0;
             if (velocity > 127)
                 velocity = 127;
-            (*i)->set<Int>(VELOCITY, velocity);
+            (*i)->set<Int>(BaseProperties::VELOCITY, velocity);
         }
     }
 }
+
+QString
+ChangeVelocityCommand::name(int delta)
+{
+    if (delta > 0)
+        return tr("&Increase Velocity");
+    else
+        return tr("&Reduce Velocity");
+}
+
 
 }
