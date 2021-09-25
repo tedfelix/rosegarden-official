@@ -23,7 +23,7 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
-#include "document/BasicSelectionCommand.h"
+
 #include <QString>
 
 
