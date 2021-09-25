@@ -23,7 +23,6 @@
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
-#include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
 
 #include <QString>
@@ -34,9 +33,13 @@ namespace Rosegarden
 
 
 EraseCommand::EraseCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection),
-        m_relayoutEndTime(getEndTime())
+    BasicCommand(tr("&Erase"),
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime(),
+                 true),  // bruteForceRedo
+    m_selection(&selection),
+    m_relayoutEndTime(getEndTime())
 {
     // nothing else
 }

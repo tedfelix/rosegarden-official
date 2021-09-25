@@ -15,20 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "InvertCommand.h"
 
 #include "base/NotationTypes.h"
-#include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
 #include "base/BaseProperties.h"
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 InvertCommand::modifySegment()
@@ -43,8 +38,7 @@ InvertCommand::modifySegment()
 
         if ((*i)->isa(Note::EventType)) {
             try {
-                long pitch = (*i)->get
-                             <Int>(PITCH);
+                long pitch = (*i)->get<Int>(BaseProperties::PITCH);
                 if (firstNote) {
                     highestPitch = pitch;
                     lowestPitch = pitch;
@@ -64,13 +58,11 @@ InvertCommand::modifySegment()
 
         if ((*i)->isa(Note::EventType)) {
             try {
-                long pitch = (*i)->get
-                             <Int>(PITCH);
+                long pitch = (*i)->get<Int>(BaseProperties::PITCH);
                 pitch = lowestPitch + (highestPitch - pitch);
                 pitch += m_semitones;
-                (*i)->set
-                <Int>(PITCH, pitch);
-                (*i)->unset(ACCIDENTAL);
+                (*i)->set<Int>(BaseProperties::PITCH, pitch);
+                (*i)->unset(BaseProperties::ACCIDENTAL);
             } catch (...) { }
         }
     }

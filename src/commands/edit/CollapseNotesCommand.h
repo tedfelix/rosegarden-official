@@ -19,31 +19,31 @@
 #ifndef RG_COLLAPSENOTESCOMMAND_H
 #define RG_COLLAPSENOTESCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
+#include "document/BasicCommand.h"
+#include "base/Selection.h"
+
 #include <QString>
 #include <QCoreApplication>
-
-
-class Collapse;
 
 
 namespace Rosegarden
 {
 
-class EventSelection;
 
-
-class CollapseNotesCommand : public BasicSelectionCommand
+class CollapseNotesCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CollapseNotesCommand)
 
 public:
     CollapseNotesCommand(EventSelection &selection, bool splitAtBars) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
+        BasicCommand(tr("Collapse &Equal-Pitch Notes"),
+                     selection.getSegment(),
+                     selection.getStartTime(),
+                     selection.getEndTime(),
+                     true),  // bruteForceRedo
         m_selection(&selection),
-        m_splitAtBars(splitAtBars) { }
-
-    static QString getGlobalName() { return tr("Collapse &Equal-Pitch Notes"); }
+        m_splitAtBars(splitAtBars)
+    { }
 
 protected:
     void modifySegment() override;
@@ -53,9 +53,6 @@ private:
     bool m_splitAtBars;
 };
 
-
-// Set the (numerical) property of a selection according given pattern.
-//
 
 }
 
