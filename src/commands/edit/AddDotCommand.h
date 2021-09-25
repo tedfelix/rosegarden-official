@@ -38,7 +38,6 @@ class AddDotCommand : public BasicCommand
 
 public:
     AddDotCommand(EventSelection &selection, bool notationOnly) :
-        //BasicSelectionCommand(getGlobalName(), selection, true),
         BasicCommand(tr("&Add Dot"),
                      selection.getSegment(),
                      selection.getStartTime(),
