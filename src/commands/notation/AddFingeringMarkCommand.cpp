@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "AddFingeringMarkCommand.h"
 
 #include "base/NotationTypes.h"
@@ -24,13 +23,12 @@
 #include "base/Selection.h"
 #include "base/Sets.h"
 #include "misc/Strings.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 AddFingeringMarkCommand::registerCommand(CommandRegistry *r)

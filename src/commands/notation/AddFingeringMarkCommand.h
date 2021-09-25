@@ -18,36 +18,36 @@
 #ifndef RG_ADDFINGERINGMARKCOMMAND_H
 #define RG_ADDFINGERINGMARKCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <string>
-#include <vector>
-#include <QString>
+#include "document/BasicCommand.h"
 
 #include <QCoreApplication>
+#include <QString>
+
+#include <string>
+#include <vector>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
-class AddFingeringMarkCommand : public BasicSelectionCommand
+
+class AddFingeringMarkCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddFingeringMarkCommand)
 
 public:
     AddFingeringMarkCommand(std::string fingering,
                             EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(fingering), selection, true),
-        m_selection(&selection), m_fingering(fingering) { }
-
-    static QString getGlobalName(std::string fingering = "");
-    static QString getActionName(std::string fingering = "");
+        BasicCommand(getGlobalName(fingering), selection, true),
+        m_selection(&selection),
+        m_fingering(fingering)
+    { }
 
     static std::string getArgument(QString actionName, CommandArgumentQuerier &);
-
-    static std::vector<std::string> getStandardFingerings();
 
     static void registerCommand(CommandRegistry *r);
 
@@ -55,6 +55,10 @@ protected:
     void modifySegment() override;
 
 private:
+    static QString getGlobalName(std::string fingering = "");
+    static QString getActionName(std::string fingering = "");
+    static std::vector<std::string> getStandardFingerings();
+
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     std::string m_fingering;
 };
