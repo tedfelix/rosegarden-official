@@ -19,17 +19,17 @@
 
 #include "RetrogradeCommand.h"
 
-#include "base/Event.h"
 #include "misc/Debug.h"
+#include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
+
 #include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 RetrogradeCommand::modifySegment()
@@ -111,5 +111,6 @@ RetrogradeCommand::modifySegment()
 
     segment.normalizeRests(a0, a1);
 }
+
 
 }

@@ -100,6 +100,11 @@ protected:
                  timeT start, timeT end,
                  bool bruteForceRedoRequired = false);
 
+    /// Delegates to the above using selection's Segment and start/end.
+    BasicCommand(const QString &name,
+                 EventSelection &selection,
+                 bool bruteForceRedo = false);
+
     // Brute force execute() ctor.
     /**
      * To be used when events to insert are known when the command is
