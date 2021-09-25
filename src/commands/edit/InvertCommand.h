@@ -20,13 +20,15 @@
 #define RG_INVERTCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Selection.h"
 
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
+
+class EventSelection;
 
 
 class InvertCommand : public BasicCommand
@@ -36,9 +38,7 @@ class InvertCommand : public BasicCommand
 public:
     InvertCommand(int semitones, EventSelection &selection) :
         BasicCommand(tr("&Invert"),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime(),
+                     selection,
                      true),  // bruteForceRedo
         m_selection(&selection),
         m_semitones(semitones)

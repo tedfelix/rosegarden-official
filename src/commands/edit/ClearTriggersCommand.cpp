@@ -19,6 +19,7 @@
 #include "ClearTriggersCommand.h"
 
 #include "base/BaseProperties.h"
+#include "base/Selection.h"
 
 
 namespace Rosegarden

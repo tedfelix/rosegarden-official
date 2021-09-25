@@ -57,9 +57,7 @@ PlaceControllersCommand::PlaceControllersCommand(
         const Instrument *instrument,
         const ControlParameter *cp) :
     BasicCommand(tr("Place Controllers"),
-                 selection.getSegment(),
-                 selection.getStartTime(),
-                 selection.getEndTime(),
+                 selection,
                  true),  // bruteForceRedo
     m_selection(&selection),
     m_eventType(cp->getType()),

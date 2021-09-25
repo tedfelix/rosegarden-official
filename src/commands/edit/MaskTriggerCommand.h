@@ -19,7 +19,6 @@
 #define RG_MASKTRIGGERCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Selection.h"
 
 #include <QCoreApplication>
 #include <QString>
@@ -27,6 +26,9 @@
 
 namespace Rosegarden
 {
+
+
+class EventSelection;
 
 
 /// Mask/Unmask Ornament
@@ -42,9 +44,7 @@ class MaskTriggerCommand : public BasicCommand
 public:
     MaskTriggerCommand(EventSelection &selection, bool sounding) :
         BasicCommand(getGlobalName(sounding),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime(),
+                     selection,
                      true),  // bruteForceRedo
         m_selection(&selection),
         m_sounding(sounding)

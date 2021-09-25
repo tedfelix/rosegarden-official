@@ -24,11 +24,10 @@
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
 
-#include <QString>
-
 
 namespace Rosegarden
 {
+
 
 void
 AddDotCommand::modifySegment()
@@ -108,5 +107,6 @@ AddDotCommand::modifySegment()
     timeT endBarTime = comp->getBarEnd(barNo);
     m_selection->getSegment().normalizeRests(getStartTime(), endBarTime);
 }
+
 
 }

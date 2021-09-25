@@ -19,7 +19,6 @@
 #define RG_CHANGEVELOCITYCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Selection.h"
 
 #include <QString>
 #include <QCoreApplication>
@@ -27,6 +26,9 @@
 
 namespace Rosegarden
 {
+
+
+class EventSelection;
 
 
 /// Add or subtract a constant from all event velocities.

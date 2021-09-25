@@ -34,9 +34,7 @@ namespace Rosegarden
 
 EraseCommand::EraseCommand(EventSelection &selection) :
     BasicCommand(tr("&Erase"),
-                 selection.getSegment(),
-                 selection.getStartTime(),
-                 selection.getEndTime(),
+                 selection,
                  true),  // bruteForceRedo
     m_selection(&selection),
     m_relayoutEndTime(getEndTime())

@@ -32,9 +32,7 @@ namespace Rosegarden
 ChangeVelocityCommand::ChangeVelocityCommand(
         int delta, EventSelection &selection, bool rounddelta) :
     BasicCommand(name(delta),
-                 selection.getSegment(),
-                 selection.getStartTime(),
-                 selection.getEndTime(),
+                 selection,
                  true),  // bruteForceRedo
     m_selection(&selection),
     m_delta(delta),

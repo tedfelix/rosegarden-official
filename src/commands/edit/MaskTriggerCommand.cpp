@@ -19,6 +19,7 @@
 
 #include "base/BaseProperties.h"
 #include "base/NotationTypes.h"
+#include "base/Selection.h"
 
 
 namespace Rosegarden

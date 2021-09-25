@@ -19,7 +19,6 @@
 #define RG_CLEARTRIGGERSCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Selection.h"
 
 #include <QString>
 
@@ -28,15 +27,16 @@ namespace Rosegarden
 {
 
 
+class EventSelection;
+
+
 class ClearTriggersCommand : public BasicCommand
 {
 public:
     ClearTriggersCommand(EventSelection &selection,
                          QString name) :
         BasicCommand(name,
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime(),
+                     selection,
                      true),  // bruteForceRedo
         m_selection(&selection)
     { }

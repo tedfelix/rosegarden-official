@@ -20,13 +20,15 @@
 #define RG_RETROGRADECOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Selection.h"
 
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
+
+class EventSelection;
 
 
 class RetrogradeCommand : public BasicCommand

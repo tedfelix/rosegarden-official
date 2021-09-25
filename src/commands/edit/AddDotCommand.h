@@ -20,16 +20,15 @@
 #define RG_ADDDOTCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Selection.h"
 
-#include <QString>
 #include <QCoreApplication>  // For Q_DECLARE_TR_FUNCTIONS()
-
-
 
 
 namespace Rosegarden
 {
+
+
+class EventSelection;
 
 
 class AddDotCommand : public BasicCommand
@@ -39,9 +38,7 @@ class AddDotCommand : public BasicCommand
 public:
     AddDotCommand(EventSelection &selection, bool notationOnly) :
         BasicCommand(tr("&Add Dot"),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime(),
+                     selection,
                      true),  // bruteForceRedo
         m_selection(&selection),
         m_notationOnly(notationOnly)
@@ -54,8 +51,6 @@ private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_notationOnly;
 };
-
-
 
 
 }

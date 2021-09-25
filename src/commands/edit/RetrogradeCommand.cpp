@@ -23,6 +23,7 @@
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
+#include "base/Selection.h"
 
 #include <QString>
 

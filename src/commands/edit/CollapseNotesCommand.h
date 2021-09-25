@@ -20,14 +20,15 @@
 #define RG_COLLAPSENOTESCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Selection.h"
 
-#include <QString>
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
+
+class EventSelection;
 
 
 class CollapseNotesCommand : public BasicCommand
@@ -37,9 +38,7 @@ class CollapseNotesCommand : public BasicCommand
 public:
     CollapseNotesCommand(EventSelection &selection, bool splitAtBars) :
         BasicCommand(tr("Collapse &Equal-Pitch Notes"),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime(),
+                     selection,
                      true),  // bruteForceRedo
         m_selection(&selection),
         m_splitAtBars(splitAtBars)
