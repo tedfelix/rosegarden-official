@@ -15,21 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "AddMarkCommand.h"
 
 #include "misc/Strings.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 QString
 AddMarkCommand::getGlobalName(Mark markType)
@@ -108,18 +104,6 @@ AddMarkCommand::getActionName(Mark mark)
     return QString("add_%1").arg(strtoqstr(mark));
 }
 
-QString
-AddMarkCommand::getShortcut(Mark /* mark */)
-{
-    return "";
-}    
-
-QString
-AddMarkCommand::getIconName(Mark mark)
-{
-    return strtoqstr(mark);
-}    
-
 Mark
 AddMarkCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 {
@@ -152,10 +136,11 @@ AddMarkCommand::modifySegment()
         }
 
         long n = 0;
-        (*i)->get<Int>(MARK_COUNT, n);
-        (*i)->set<Int>(MARK_COUNT, n + 1);
-        (*i)->set<String>(getMarkPropertyName(n), m_mark);
+        (*i)->get<Int>(BaseProperties::MARK_COUNT, n);
+        (*i)->set<Int>(BaseProperties::MARK_COUNT, n + 1);
+        (*i)->set<String>(BaseProperties::getMarkPropertyName(n), m_mark);
     }
 }
+
 
 }

@@ -15,17 +15,18 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "AddSlashesCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
+
+#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 AddSlashesCommand::registerCommand(CommandRegistry *r)
@@ -66,5 +67,6 @@ AddSlashesCommand::modifySegment()
         }
     }
 }
+
 
 }
