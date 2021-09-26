@@ -19,37 +19,32 @@
 #ifndef RG_CHANGESTYLECOMMAND_H
 #define RG_CHANGESTYLECOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
+#include "document/BasicCommand.h"
 #include "gui/editors/notation/NoteStyle.h"
-#include <QString>
+
 #include <QCoreApplication>
-
-
-class Change;
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class ChangeStyleCommand : public BasicSelectionCommand
+class ChangeStyleCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeStyleCommand)
 
 public:
     ChangeStyleCommand(NoteStyleName style,
                        EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(style), selection, true),
-        m_selection(&selection), m_style(style) { }
-
-    static QString getGlobalName() {
-        return tr("Change &Note Style");
-    }
-
-    static QString getGlobalName(NoteStyleName style);
+        BasicCommand(getGlobalName(style), selection, true),
+        m_selection(&selection),
+        m_style(style)
+    { }
 
     static NoteStyleName getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
@@ -58,10 +53,13 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static QString getGlobalName(NoteStyleName style);
+
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
+
     NoteStyleName m_style;
 };
-
 
 
 }

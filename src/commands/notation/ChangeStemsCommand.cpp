@@ -20,14 +20,15 @@
 
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "document/CommandRegistry.h"
+
 #include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 ChangeStemsCommand::registerCommand(CommandRegistry *r)
@@ -60,5 +61,6 @@ ChangeStemsCommand::modifySegment()
         }
     }
 }
+
 
 }

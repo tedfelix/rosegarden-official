@@ -15,18 +15,16 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "CycleSlashesCommand.h"
 
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
-#include "document/BasicSelectionCommand.h"
-#include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
 
 
 namespace Rosegarden
 {
+
 
 void
 CycleSlashesCommand::modifySegment()
@@ -63,5 +61,6 @@ CycleSlashesCommand::modifySegment()
         if (n) (*i)->set<Int>(NotationProperties::SLASHES, n);
     }
 }
+
 
 }
