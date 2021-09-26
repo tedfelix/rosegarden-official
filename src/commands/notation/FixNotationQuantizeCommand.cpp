@@ -22,13 +22,12 @@
 #include "base/Quantizer.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 FixNotationQuantizeCommand::registerCommand(CommandRegistry *r)
@@ -90,5 +89,6 @@ FixNotationQuantizeCommand::modifySegment()
 
     //!!! normalizeRests?
 }
+
 
 }
