@@ -27,22 +27,13 @@
 #include "base/Sets.h"
 #include "base/BaseProperties.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
+
 #include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
-
-const int InterpretCommand::NoInterpretation  = 0;
-const int InterpretCommand::GuessDirections   = (1<<0);
-const int InterpretCommand::ApplyTextDynamics = (1<<1);
-const int InterpretCommand::ApplyHairpins     = (1<<2);
-const int InterpretCommand::StressBeats       = (1<<3);
-const int InterpretCommand::Articulate        = (1<<4);
-const int InterpretCommand::AllInterpretations= (1<<5) - 1;
 
 InterpretCommand::~InterpretCommand()
 {
@@ -148,8 +139,7 @@ InterpretCommand::applyTextDynamics()
 
         if (t >= startTime &&
                 (*i)->isa(Note::EventType) && m_selection->contains(*i)) {
-            (*i)->set
-            <Int>(VELOCITY, velocity);
+            (*i)->set<Int>(BaseProperties::VELOCITY, velocity);
         }
     }
 }
@@ -270,8 +260,7 @@ InterpretCommand::applyHairpins()
             inditr = findEnclosingIndication(e, Indication::Decrescendo);
             if (inditr == m_indications.end()) {
                 if (velocityToApply > 0) {
-                    e->set
-                    <Int>(VELOCITY, velocityToApply);
+                    e->set<Int>(BaseProperties::VELOCITY, velocityToApply);
                 }
                 continue;
             }
@@ -288,7 +277,7 @@ InterpretCommand::applyHairpins()
         while (itr == segment.end() ||
                 (*itr)->getAbsoluteTime() > hairpinStartTime ||
                 !(*itr)->isa(Note::EventType) ||
-                !(*itr)->has(VELOCITY)) {
+                !(*itr)->has(BaseProperties::VELOCITY)) {
             if (itr == segment.begin()) {
                 itr = segment.end();
                 break;
@@ -298,8 +287,7 @@ InterpretCommand::applyHairpins()
 
         long startingVelocity = 100;
         if (itr != segment.end()) {
-            (*itr)->get
-            <Int>(VELOCITY, startingVelocity);
+            (*itr)->get<Int>(BaseProperties::VELOCITY, startingVelocity);
         }
 
         // The ending velocity is harder.  If there's a dynamic change
@@ -355,8 +343,7 @@ InterpretCommand::applyHairpins()
             velocity = 10;
         if (velocity > 127)
             velocity = 127;
-        e->set
-        <Int>(VELOCITY, velocity);
+        e->set<Int>(BaseProperties::VELOCITY, velocity);
         velocityToApply = velocity;
     }
 }
@@ -386,15 +373,13 @@ InterpretCommand::stressBeats()
         // do this even if velocityChange == 0, in case the event
         // has no velocity yet
         long velocity = 100;
-        e->get
-        <Int>(VELOCITY, velocity);
+        e->get<Int>(BaseProperties::VELOCITY, velocity);
         velocity += velocity * velocityChange / 100;
         if (velocity < 10)
             velocity = 10;
         if (velocity > 127)
             velocity = 127;
-        e->set
-        <Int>(VELOCITY, velocity);
+        e->set<Int>(BaseProperties::VELOCITY, velocity);
     }
 }
 
@@ -548,27 +533,25 @@ InterpretCommand::articulate()
             // do this even if velocityChange == 0, in case the event
             // has no velocity yet
             long velocity = 100;
-            e->get
-            <Int>(VELOCITY, velocity);
+            e->get<Int>(BaseProperties::VELOCITY, velocity);
             velocity += velocity * velocityChange / 100;
             if (velocity < 10)
                 velocity = 10;
             if (velocity > 127)
                 velocity = 127;
-            e->set
-            <Int>(VELOCITY, velocity);
+            e->set<Int>(BaseProperties::VELOCITY, velocity);
 
             timeT duration = e->getNotationDuration();
 
             // don't mess with the duration of a tied note
             bool tied = false;
-            e->get<Bool>(TIED_FORWARD, tied);
+            e->get<Bool>(BaseProperties::TIED_FORWARD, tied);
             if (!tied)
-                e->get<Bool>(TIED_BACKWARD, tied);
+                e->get<Bool>(BaseProperties::TIED_BACKWARD, tied);
             if (tied) {
                 durationChange = 0;
                 NOTATION_DEBUG << "InterpretCommand::modifySegment: Tied "
-                               << (e->has(TIED_FORWARD) ? "for" : "back")
+                               << (e->has(BaseProperties::TIED_FORWARD) ? "for" : "back")
                                << "ward note encountered, durationChange is "
                                << durationChange;
             }
@@ -651,5 +634,6 @@ InterpretCommand::findEnclosingIndication(Event *e,
 
     return m_indications.end();
 }
+
 
 }
