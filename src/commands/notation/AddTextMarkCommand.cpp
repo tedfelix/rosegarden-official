@@ -15,21 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "AddTextMarkCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
 #include "document/CommandRegistry.h"
 #include "misc/Strings.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 AddTextMarkCommand::registerCommand(CommandRegistry *r)
@@ -57,10 +53,12 @@ AddTextMarkCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         long n = 0;
-        (*i)->get<Int>(MARK_COUNT, n);
-        (*i)->set<Int>(MARK_COUNT, n + 1);
-        (*i)->set<String>(getMarkPropertyName(n), Marks::getTextMark(m_text));
+        (*i)->get<Int>(BaseProperties::MARK_COUNT, n);
+        (*i)->set<Int>(BaseProperties::MARK_COUNT, n + 1);
+        (*i)->set<String>(BaseProperties::getMarkPropertyName(n),
+                          Marks::getTextMark(m_text));
     }
 }
+
 
 }

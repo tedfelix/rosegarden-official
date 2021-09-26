@@ -19,31 +19,33 @@
 #ifndef RG_ADDTEXTMARKCOMMAND_H
 #define RG_ADDTEXTMARKCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <string>
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
+#include <QString>
 
-
+#include <string>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
-class AddTextMarkCommand : public BasicSelectionCommand
+
+class AddTextMarkCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTextMarkCommand)
 
 public:
     AddTextMarkCommand(std::string text,
                        EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection), m_text(text) { }
-
-    static QString getGlobalName() { return tr("Add Te&xt Mark..."); }
+        BasicCommand(getGlobalName(), selection, true),
+        m_selection(&selection),
+        m_text(text)
+    { }
 
     static std::string getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
@@ -52,10 +54,12 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static QString getGlobalName() { return tr("Add Te&xt Mark..."); }
+
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
     std::string m_text;
 };
-
 
 
 }
