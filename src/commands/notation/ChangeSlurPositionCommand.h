@@ -19,31 +19,33 @@
 #ifndef RG_CHANGESLURPOSITIONCOMMAND_H
 #define RG_CHANGESLURPOSITIONCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
-class Slur;
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class ChangeSlurPositionCommand : public BasicSelectionCommand
+class ChangeSlurPositionCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeSlurPositionCommand)
 
 public:
     ChangeSlurPositionCommand(bool above, EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(above), selection, true),
-        m_selection(&selection), m_above(above) { }
+        BasicCommand(getGlobalName(above), selection, true),
+        m_selection(&selection),
+        m_above(above)
+    { }
 
-    static QString getGlobalName(bool above) {
+    static QString getGlobalName(bool above)
+    {
         return above ? tr("Slur &Above") : tr("Slur &Below");
     }
 
@@ -54,10 +56,11 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
+
     bool m_above;
 };
-
 
 
 }

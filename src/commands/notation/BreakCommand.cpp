@@ -15,21 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "BreakCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "base/BaseProperties.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 BreakCommand::registerCommand(CommandRegistry *r)
@@ -47,10 +43,11 @@ BreakCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         (*i)->unset(NotationProperties::BEAMED);
-        (*i)->unset(BEAMED_GROUP_ID);
-        (*i)->unset(BEAMED_GROUP_TYPE);
+        (*i)->unset(BaseProperties::BEAMED_GROUP_ID);
+        (*i)->unset(BaseProperties::BEAMED_GROUP_TYPE);
         (*i)->clearNonPersistentProperties();
     }
 }
+
 
 }
