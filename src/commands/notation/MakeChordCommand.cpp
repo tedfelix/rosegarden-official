@@ -15,20 +15,18 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "MakeChordCommand.h"
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 MakeChordCommand::registerCommand(CommandRegistry *r)
@@ -73,5 +71,6 @@ MakeChordCommand::modifySegment()
 
     //!!! should select all notes in chord now
 }
+
 
 }

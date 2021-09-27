@@ -19,32 +19,32 @@
 #ifndef RG_MAKEACCIDENTALSCAUTIONARYCOMMAND_H
 #define RG_MAKEACCIDENTALSCAUTIONARYCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
 
 #include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class MakeAccidentalsCautionaryCommand : public BasicSelectionCommand
+class MakeAccidentalsCautionaryCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MakeAccidentalsCautionaryCommand)
 
 public:
     MakeAccidentalsCautionaryCommand(bool cautionary,
                                      EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(cautionary), selection, true),
+        BasicCommand(getGlobalName(cautionary), selection, true),
         m_selection(&selection),
-        m_cautionary(cautionary) { }
+        m_cautionary(cautionary)
+    { }
     
-    static QString getGlobalName(bool cautionary);
-        
     static bool getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
@@ -52,7 +52,11 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static QString getGlobalName(bool cautionary);
+
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
+
     bool m_cautionary;
 };
 
