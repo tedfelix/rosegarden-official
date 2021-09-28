@@ -19,30 +19,28 @@
 #ifndef RG_RESTORESTEMSCOMMAND_H
 #define RG_RESTORESTEMSCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class RestoreStemsCommand : public BasicSelectionCommand
+class RestoreStemsCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreStemsCommand)
 
 public:
     RestoreStemsCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection) { }
-
-    static QString getGlobalName() { return tr("&Restore Stems"); }
+        BasicCommand(tr("&Restore Stems"), selection, true),
+        m_selection(&selection)
+    { }
 
     static void registerCommand(CommandRegistry *);
 
@@ -50,9 +48,9 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
 };
-
 
 
 }

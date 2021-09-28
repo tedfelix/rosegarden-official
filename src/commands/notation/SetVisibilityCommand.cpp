@@ -15,20 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "SetVisibilityCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
-
-using namespace BaseProperties;
 
 
 void
@@ -58,11 +53,12 @@ SetVisibilityCommand::modifySegment()
          i != m_selection->getSegmentEvents().end(); ++i) {
 
         if (m_visible) {
-            (*i)->unset(INVISIBLE);
+            (*i)->unset(BaseProperties::INVISIBLE);
         } else {
-            (*i)->set<Bool>(INVISIBLE, true);
+            (*i)->set<Bool>(BaseProperties::INVISIBLE, true);
         }
     }
 }
+
 
 }

@@ -19,31 +19,30 @@
 #ifndef RG_SETVISIBILITYCOMMAND_H
 #define RG_SETVISIBILITYCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class SetVisibilityCommand : public BasicSelectionCommand
+class SetVisibilityCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetVisibilityCommand)
 
 public:
     SetVisibilityCommand(bool visible, EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
+        BasicCommand(tr("Set Visibility"), selection, true),
         m_selection(&selection),
-        m_visible(visible) { }
-
-    static QString getGlobalName() { return tr("Set Visibility"); }
+        m_visible(visible)
+    { }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
@@ -52,7 +51,9 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
+
     bool m_visible;
 };
 
