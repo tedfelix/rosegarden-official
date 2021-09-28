@@ -15,18 +15,16 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "RemoveNotationQuantizeCommand.h"
 
 #include "base/Event.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 RemoveNotationQuantizeCommand::registerCommand(CommandRegistry *r)
@@ -75,5 +73,6 @@ RemoveNotationQuantizeCommand::modifySegment()
         m_selection->getSegment().insert(*i);
     }
 }
+
 
 }

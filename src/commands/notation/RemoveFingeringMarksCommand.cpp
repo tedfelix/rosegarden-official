@@ -15,17 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "RemoveFingeringMarksCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 RemoveFingeringMarksCommand::registerCommand(CommandRegistry *r)
@@ -52,5 +50,6 @@ RemoveFingeringMarksCommand::modifySegment()
         }
     }
 }
+
 
 }

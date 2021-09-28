@@ -15,12 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "RemoveMarksCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
 #include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
 
@@ -28,7 +25,6 @@
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 RemoveMarksCommand::registerCommand(CommandRegistry *r)
@@ -47,14 +43,14 @@ RemoveMarksCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         long n = 0;
-        (*i)->get
-        <Int>(MARK_COUNT, n);
-        (*i)->unset(MARK_COUNT);
+        (*i)->get<Int>(BaseProperties::MARK_COUNT, n);
+        (*i)->unset(BaseProperties::MARK_COUNT);
 
         for (int j = 0; j < n; ++j) {
-            (*i)->unset(getMarkPropertyName(j));
+            (*i)->unset(BaseProperties::getMarkPropertyName(j));
         }
     }
 }
+
 
 }

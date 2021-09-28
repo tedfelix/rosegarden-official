@@ -19,38 +19,37 @@
 #ifndef RG_REMOVENOTATIONQUANTIZECOMMAND_H
 #define RG_REMOVENOTATIONQUANTIZECOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class RemoveNotationQuantizeCommand : public BasicSelectionCommand
+class RemoveNotationQuantizeCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveNotationQuantizeCommand)
 
 public:
     RemoveNotationQuantizeCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection) { }
-    
-    static QString getGlobalName() { return tr("Remo&ve Notation Quantization"); }
-    
+        BasicCommand(tr("Remo&ve Notation Quantization"), selection, true),
+        m_selection(&selection)
+    { }
+
     static void registerCommand(CommandRegistry *r);
 
 protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
 };
 
 
