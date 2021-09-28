@@ -591,7 +591,6 @@ set(rg_CPPS
   commands/notation/RemoveMarksCommand.cpp
   commands/notation/RestoreTiesCommand.cpp
   commands/notation/MakeChordCommand.cpp
-  commands/notation/MarkParallelCommand.cpp
   commands/notation/BreakCommand.cpp
   commands/notation/MakeNotesViableCommand.cpp
   commands/notation/UntieNotesCommand.cpp

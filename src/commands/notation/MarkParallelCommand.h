@@ -23,42 +23,35 @@
  *      Author: lambache
  */
 
-#ifndef SRC_COMMANDS_NOTATION_MARKPARALLELCOMMAND_H_
-#define SRC_COMMANDS_NOTATION_MARKPARALLELCOMMAND_H_
+#ifndef MARKPARALLELCOMMAND_H
+#define MARKPARALLELCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include "base/BaseProperties.h"
+#include "document/BasicCommand.h"
 
-#include <QString>
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
-
-class EventSelection;
-class CommandRegistry;
-
+/// ??? This "command" does nothing and is used only to trigger a repaint.  Get rid of it.
 class MarkParallelCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MarkParallelCommand)
 
 public:
-    MarkParallelCommand(Segment &segment, timeT begin, timeT end);
-
-    static QString getGlobalName() { return tr("Mark Parallel"); }
-
-    //static void registerCommand(CommandRegistry *r);
+    MarkParallelCommand(Segment &segment, timeT begin, timeT end) :
+        BasicCommand(tr("Mark Parallel"), segment, begin, end)
+    {
+    }
 
 protected:
-    void modifySegment() override;
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    void modifySegment() override  { }
+
 };
 
 
 }
 
-#endif /* SRC_COMMANDS_NOTATION_MARKPARALLELCOMMAND_H_ */
+#endif
