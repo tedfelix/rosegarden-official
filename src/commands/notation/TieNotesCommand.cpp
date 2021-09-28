@@ -15,23 +15,18 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "TieNotesCommand.h"
 
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
 #include "document/CommandRegistry.h"
-#include "base/Selection.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 TieNotesCommand::registerCommand(CommandRegistry *r)
@@ -46,29 +41,30 @@ TieNotesCommand::modifySegment()
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
 
-    //!!! move part of this to SegmentNotationHelper?
+    // Move part of this to SegmentNotationHelper?
 
-    for (EventContainer::iterator i =
-                m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+    // For each event in the selection
+    for (Event *event : m_selection->getSegmentEvents()) {
 
-        //	bool tiedForward;
-        //	if ((*i)->get<Bool>(TIED_FORWARD, tiedForward) && tiedForward) {
-        //	    continue;
-        //	}
+        Segment::iterator currNoteIter = segment.findSingle(event);
+        Segment::iterator nextNoteIter;
 
-        Segment::iterator si = segment.findSingle(*i);
-        Segment::iterator sj;
-        while ((sj = helper.getNextAdjacentNote(si, true, false)) !=
+        while ((nextNoteIter = helper.getNextAdjacentNote(currNoteIter, true, false)) !=
                 segment.end()) {
-            if (!m_selection->contains(*sj))
+            if (!m_selection->contains(*nextNoteIter))
                 break;
-            (*si)->set<Bool>(TIED_FORWARD, true);
-            (*si)->unset(TIE_IS_ABOVE);
-            (*sj)->set<Bool>(TIED_BACKWARD, true);
-            si = sj;
+
+            // Tie the current note to the next.
+            (*currNoteIter)->set<Bool>(BaseProperties::TIED_FORWARD, true);
+            (*currNoteIter)->unset(BaseProperties::TIE_IS_ABOVE);
+
+            // Tie the next note to the current.
+            (*nextNoteIter)->set<Bool>(BaseProperties::TIED_BACKWARD, true);
+
+            currNoteIter = nextNoteIter;
         }
     }
 }
+
 
 }
