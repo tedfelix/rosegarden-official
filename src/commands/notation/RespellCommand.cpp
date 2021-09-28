@@ -20,16 +20,15 @@
 
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
+
 #include <QString>
 
 
 namespace Rosegarden
 {
-using namespace BaseProperties;
-using namespace Accidentals;
+
 
 QString
 RespellCommand::getGlobalName(RespellType type)
@@ -39,15 +38,15 @@ RespellCommand::getGlobalName(RespellType type)
     case RespellType::Set: {
             QString s(tr("Respell with %1"));
             //!!! should be in notationstrings:
-            if (type.accidental == DoubleSharp) {
+            if (type.accidental == Accidentals::DoubleSharp) {
                 s = s.arg(tr("Do&uble Sharp"));
-            } else if (type.accidental == Sharp) {
+            } else if (type.accidental == Accidentals::Sharp) {
                 s = s.arg(tr("&Sharp"));
-            } else if (type.accidental == Flat) {
+            } else if (type.accidental == Accidentals::Flat) {
                 s = s.arg(tr("&Flat"));
-            } else if (type.accidental == DoubleFlat) {
+            } else if (type.accidental == Accidentals::DoubleFlat) {
                 s = s.arg(tr("Dou&ble Flat"));
-            } else if (type.accidental == Natural) {
+            } else if (type.accidental == Accidentals::Natural) {
                 s = s.arg(tr("&Natural"));
             } else {
                 s = s.arg(tr("N&one"));
@@ -73,18 +72,18 @@ RespellCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 {
     RespellType type;
     type.type = RespellType::Set;
-    type.accidental = Natural;
+    type.accidental = Accidentals::Natural;
 
     if (actionName == "respell_doubleflat") {
-        type.accidental = DoubleFlat;
+        type.accidental = Accidentals::DoubleFlat;
     } else if (actionName == "respell_flat") {
-        type.accidental = Flat;
+        type.accidental = Accidentals::Flat;
     } else if (actionName == "respell_natural") {
-        type.accidental = Natural;
+        type.accidental = Accidentals::Natural;
     } else if (actionName == "respell_sharp") {
-        type.accidental = Sharp;
+        type.accidental = Accidentals::Sharp;
     } else if (actionName == "respell_doublesharp") {
-        type.accidental = DoubleSharp;
+        type.accidental = Accidentals::DoubleSharp;
     } else if (actionName == "respell_restore") {
         type.type = RespellType::Restore;
     } else if (actionName == "respell_up") {
@@ -102,32 +101,32 @@ RespellCommand::registerCommand(CommandRegistry *r)
     RespellType type;
     type.type = RespellType::Set;
 
-    type.accidental = DoubleFlat;
+    type.accidental = Accidentals::DoubleFlat;
     r->registerCommand
         ("respell_doubleflat",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = Flat;
+    type.accidental = Accidentals::Flat;
     r->registerCommand
         ("respell_flat",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = Natural;
+    type.accidental = Accidentals::Natural;
     r->registerCommand
         ("respell_natural",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = Sharp;
+    type.accidental = Accidentals::Sharp;
     r->registerCommand
         ("respell_sharp",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = DoubleSharp;
+    type.accidental = Accidentals::DoubleSharp;
     r->registerCommand
         ("respell_doublesharp",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = Natural;
+    type.accidental = Accidentals::Natural;
     
     type.type = RespellType::Up;
     r->registerCommand
@@ -158,28 +157,28 @@ RespellCommand::modifySegment()
             if (m_type.type == RespellType::Up ||
                 m_type.type == RespellType::Down) {
 
-                Accidental acc = NoAccidental;
-                (*i)->get<String>(ACCIDENTAL, acc);
+                Accidental acc = Accidentals::NoAccidental;
+                (*i)->get<String>(BaseProperties::ACCIDENTAL, acc);
 
                 if (m_type.type == RespellType::Down) {
-                    if (acc == DoubleFlat) {
-                        acc = Flat;
-                    } else if (acc == Flat || acc == NoAccidental) {
-                        acc = Sharp;
-                    } else if (acc == Sharp) {
-                        acc = DoubleSharp;
+                    if (acc == Accidentals::DoubleFlat) {
+                        acc = Accidentals::Flat;
+                    } else if (acc == Accidentals::Flat || acc == Accidentals::NoAccidental) {
+                        acc = Accidentals::Sharp;
+                    } else if (acc == Accidentals::Sharp) {
+                        acc = Accidentals::DoubleSharp;
                     }
                 } else {
-                    if (acc == Flat) {
-                        acc = DoubleFlat;
-                    } else if (acc == Sharp || acc == NoAccidental) {
-                        acc = Flat;
-                    } else if (acc == DoubleSharp) {
-                        acc = Sharp;
+                    if (acc == Accidentals::Flat) {
+                        acc = Accidentals::DoubleFlat;
+                    } else if (acc == Accidentals::Sharp || acc == Accidentals::NoAccidental) {
+                        acc = Accidentals::Flat;
+                    } else if (acc == Accidentals::DoubleSharp) {
+                        acc = Accidentals::Sharp;
                     }
                 }
 
-                (*i)->set<String>(ACCIDENTAL, acc);
+                (*i)->set<String>(BaseProperties::ACCIDENTAL, acc);
 
             } else if (m_type.type == RespellType::Set) {
 
@@ -189,21 +188,22 @@ RespellCommand::modifySegment()
                 // 1 = C#, 3 = D#, 6 = F#, 8 = G#, 10 = A#
                 long pitch;
                 pitch = 0;  // Avoid a "may be used uninitialized" compilation warning
-                (*i)->get<Int>(PITCH, pitch);
+                (*i)->get<Int>(BaseProperties::PITCH, pitch);
                 pitch %= 12;
                 if ((pitch == 1 || pitch == 3 || pitch == 6 || pitch == 8 || pitch == 10 )
-                    && m_type.accidental == Natural) {
+                    && m_type.accidental == Accidentals::Natural) {
                     // fail silently; is there anything to do here?
                 } else {
-                    (*i)->set<String>(ACCIDENTAL, m_type.accidental);
+                    (*i)->set<String>(BaseProperties::ACCIDENTAL, m_type.accidental);
                 }
 
             } else {
 
-                (*i)->unset(ACCIDENTAL);
+                (*i)->unset(BaseProperties::ACCIDENTAL);
             }
         }
     }
 }
+
 
 }
