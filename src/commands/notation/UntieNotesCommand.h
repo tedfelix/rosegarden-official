@@ -19,30 +19,28 @@
 #ifndef RG_UNTIENOTESCOMMAND_H
 #define RG_UNTIENOTESCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class UntieNotesCommand : public BasicSelectionCommand
+class UntieNotesCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::UntieNotesCommand)
 
 public:
     UntieNotesCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection) { }
-
-    static QString getGlobalName() { return tr("&Untie"); }
+        BasicCommand(tr("&Untie"), selection, true),
+        m_selection(&selection)
+    { }
 
     static void registerCommand(CommandRegistry *r);
 
@@ -50,10 +48,10 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
 };
     
-
 
 }
 

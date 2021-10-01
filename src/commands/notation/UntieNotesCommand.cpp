@@ -15,13 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "UntieNotesCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
-
-#include <QString>
 #include "base/BaseProperties.h"
 #include "document/CommandRegistry.h"
 
@@ -29,7 +25,6 @@
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 UntieNotesCommand::registerCommand(CommandRegistry *r)
@@ -42,13 +37,15 @@ void
 UntieNotesCommand::modifySegment()
 {
     for (EventContainer::iterator i =
-                m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+             m_selection->getSegmentEvents().begin();
+         i != m_selection->getSegmentEvents().end();
+         ++i) {
 
-        (*i)->unset(TIED_FORWARD);
-        (*i)->unset(TIE_IS_ABOVE);
-        (*i)->unset(TIED_BACKWARD);
+        (*i)->unset(BaseProperties::TIED_FORWARD);
+        (*i)->unset(BaseProperties::TIE_IS_ABOVE);
+        (*i)->unset(BaseProperties::TIED_BACKWARD);
     }
 }
+
 
 }

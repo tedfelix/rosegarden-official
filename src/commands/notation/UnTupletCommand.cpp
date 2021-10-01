@@ -15,20 +15,16 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "UnTupletCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 UnTupletCommand::registerCommand(CommandRegistry *r)
@@ -41,15 +37,17 @@ void
 UnTupletCommand::modifySegment()
 {
     for (EventContainer::iterator i =
-                m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+             m_selection->getSegmentEvents().begin();
+         i != m_selection->getSegmentEvents().end();
+         ++i) {
 
-        (*i)->unset(BEAMED_GROUP_ID);
-        (*i)->unset(BEAMED_GROUP_TYPE);
-        (*i)->unset(BEAMED_GROUP_TUPLET_BASE);
-        (*i)->unset(BEAMED_GROUP_TUPLED_COUNT);
-        (*i)->unset(BEAMED_GROUP_UNTUPLED_COUNT);
+        (*i)->unset(BaseProperties::BEAMED_GROUP_ID);
+        (*i)->unset(BaseProperties::BEAMED_GROUP_TYPE);
+        (*i)->unset(BaseProperties::BEAMED_GROUP_TUPLET_BASE);
+        (*i)->unset(BaseProperties::BEAMED_GROUP_TUPLED_COUNT);
+        (*i)->unset(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT);
     }
 }
+
 
 }

@@ -19,40 +19,38 @@
 #ifndef RG_UNTUPLETCOMMAND_H
 #define RG_UNTUPLETCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class UnTupletCommand : public BasicSelectionCommand
+class UnTupletCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::UnTupletCommand)
 
 public:
     UnTupletCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection) { }
-
-    static QString getGlobalName() {
-        return tr("&Untuplet");
-    }
+        BasicCommand(tr("&Untuplet"), selection, true),
+        m_selection(&selection)
+    { }
 
     static void registerCommand(CommandRegistry *r);
 
 protected:
     void modifySegment() override;
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-};
 
+private:
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
+};
 
 
 }
