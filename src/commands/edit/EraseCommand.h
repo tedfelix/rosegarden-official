@@ -23,7 +23,6 @@
 #include "base/TimeT.h"
 
 #include <QCoreApplication>
-#include <QString>
 
 
 namespace Rosegarden
@@ -39,7 +38,7 @@ class EraseCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::EraseCommand)
 
 public:
-    EraseCommand(EventSelection &selection);
+    EraseCommand(EventSelection *selection);
     ~EraseCommand() override;
 
     // Return whether any deletions that affect later in the segment

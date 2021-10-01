@@ -32,11 +32,11 @@ namespace Rosegarden
 {
 
 
-EraseCommand::EraseCommand(EventSelection &selection) :
+EraseCommand::EraseCommand(EventSelection *selection) :
     BasicCommand(tr("&Erase"),
-                 selection,
+                 *selection,
                  true),  // bruteForceRedo
-    m_selection(&selection),
+    m_selection(selection),
     m_relayoutEndTime(getEndTime())
 {
     // nothing else

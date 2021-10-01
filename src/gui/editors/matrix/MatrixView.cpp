@@ -925,7 +925,7 @@ MatrixView::slotEditDelete()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
-    CommandHistory::getInstance()->addCommand(new EraseCommand(*selection));
+    CommandHistory::getInstance()->addCommand(new EraseCommand(selection));
 }
 
 void

@@ -34,7 +34,7 @@ CutCommand::CutCommand(EventSelection &selection,
         MacroCommand(getGlobalName())
 {
     addCommand(new CopyCommand(selection, clipboard));
-    addCommand(new EraseCommand(selection));
+    addCommand(new EraseCommand(&selection));
 }
 
 CutCommand::CutCommand(SegmentSelection &selection,

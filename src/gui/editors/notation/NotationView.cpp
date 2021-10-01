@@ -1769,7 +1769,7 @@ NotationView::slotEditDelete()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
-    CommandHistory::getInstance()->addCommand(new EraseCommand(*selection));
+    CommandHistory::getInstance()->addCommand(new EraseCommand(selection));
 }
 
 void
@@ -4739,7 +4739,7 @@ NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
     CopyCommand *cc = new CopyCommand(*selection, c);
     cc->execute();
 
-    command->addCommand(new EraseCommand(*selection));
+    command->addCommand(new EraseCommand(selection));
 
     command->addCommand(new PasteEventsCommand
                         (*segment, c, insertionTime,
@@ -5296,7 +5296,7 @@ NotationView::slotNewLayerFromSelection()
     if (clipseg) RG_DEBUG << *clipseg;
     RG_DEBUG << "Clipboard contents done";
 
-    macro->addCommand(new EraseCommand(*selection));
+    macro->addCommand(new EraseCommand(selection));
 
     // use overlay paste to avoid checking for space; paste to new
     // "layer" identify the layer with the segment marking.
