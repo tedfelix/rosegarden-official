@@ -812,14 +812,25 @@ MatrixView::getCurrentSegment()
 EventSelection *
 MatrixView::getSelection() const
 {
-    if (m_matrixWidget) return m_matrixWidget->getSelection();
-    else return nullptr;
+    if (!m_matrixWidget)
+        return nullptr;
+
+    return m_matrixWidget->getSelection();
 }
 
 void
 MatrixView::setSelection(EventSelection *s, bool preview)
 {
     if (m_matrixWidget) m_matrixWidget->setSelection(s, preview);
+}
+
+EventSelection *
+MatrixView::getRulerSelection() const
+{
+    if (!m_matrixWidget)
+        return nullptr;
+
+    return m_matrixWidget->getRulerSelection();
 }
 
 timeT
@@ -923,10 +934,19 @@ MatrixView::slotEditPaste()
 void
 MatrixView::slotEditDelete()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand(new EraseCommand(selection));
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new EraseCommand(getSelection(),
+                             getRulerSelection()));
 }
+
 
 void
 MatrixView::slotQuantizeSelection(int q)

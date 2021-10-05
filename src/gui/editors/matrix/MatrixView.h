@@ -79,8 +79,10 @@ public:
     int getCurrentVelocity() const;
 
     Segment *getCurrentSegment() override;
-    EventSelection *getSelection() const override;
+
     void setSelection(EventSelection *s, bool preview) override;
+    EventSelection *getSelection() const override;
+    EventSelection *getRulerSelection() const;
 
     void updateViewCaption() override { }//!!!
 

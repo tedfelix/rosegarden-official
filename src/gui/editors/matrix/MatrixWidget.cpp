@@ -446,8 +446,10 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &MatrixScene::selectionChanged,
             m_controlsWidget, &ControlRulerWidget::slotSelectionChanged);
 
-    connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
-            m_scene, &MatrixScene::slotRulerSelectionChanged);
+    // ??? This was problematic as it only responded to additions and not
+    //     deletions.  Clean this up.
+    //connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
+    //        m_scene, &MatrixScene::slotRulerSelectionChanged);
 
     connect(m_scene, SIGNAL(selectionChanged()),
             this, SIGNAL(selectionChanged()));
@@ -775,6 +777,15 @@ MatrixWidget::setSelection(EventSelection *s, bool preview)
         return;
 
     m_scene->setSelection(s, preview);
+}
+
+EventSelection *
+MatrixWidget::getRulerSelection() const
+{
+    if (!m_controlsWidget)
+        return nullptr;
+
+    return m_controlsWidget->getSelection();
 }
 
 const SnapGrid *

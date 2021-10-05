@@ -25,18 +25,19 @@
 #include "base/BaseProperties.h"
 #include "gui/editors/notation/NotationProperties.h"
 
-#include <QString>
-
 
 namespace Rosegarden
 {
 
 
-EraseCommand::EraseCommand(EventSelection *selection) :
+EraseCommand::EraseCommand(
+        EventSelection *selection1,
+        EventSelection *selection2) :
     BasicCommand(tr("&Erase"),
-                 *selection,
+                 *selection1,  // assume both selections are in the same Segment
                  true),  // bruteForceRedo
-    m_selection(selection),
+    m_selection1(selection1),
+    m_selection2(selection2),
     m_relayoutEndTime(getEndTime())
 {
     // nothing else
@@ -51,30 +52,30 @@ EraseCommand::~EraseCommand()
 void
 EraseCommand::modifySegment()
 {
-    bool needRelayOut = eraseInSegment(m_selection);
+    const bool needRelayOut = eraseInSegment(m_selection1)  ||
+                              eraseInSegment(m_selection2);
+
     if (needRelayOut)
-        { m_relayoutEndTime = getSegment().getEndTime(); }
+        m_relayoutEndTime = getSegment().getEndTime();
 }
 
-// Erase the events in segment that are in selection.
-// @return
-// whether any deletions that affect later in the segment were done,
-// meaning key or clef deletions.
 bool
 EraseCommand::eraseInSegment(EventSelection *selection)
 {
-    RG_DEBUG << "EraseCommand::eraseInSegment";
-    timeT startTime  = selection->getStartTime();
-    timeT endTime    = selection->getEndTime();
-    Segment &segment = selection->getSegment();
-    
-    bool erasedLongEffectEvent = false;
-        
-    std::vector<Event *> toErase;
-    EventContainer::iterator i;
+    //RG_DEBUG << "eraseInSegment()";
 
-    for (i = selection->getSegmentEvents().begin();
-            i != selection->getSegmentEvents().end(); ++i) {
+    if (!selection)
+        return false;
+
+    Segment &segment = selection->getSegment();
+
+    bool erasedLongEffectEvent = false;
+
+    std::vector<Event *> toErase;
+
+    for (EventContainer::iterator i = selection->getSegmentEvents().begin();
+         i != selection->getSegmentEvents().end();
+         ++i) {
 
         if ((*i)->isa(Clef::EventType) ||
                 (*i)->isa(Key ::EventType)) {
@@ -163,7 +164,8 @@ EraseCommand::eraseInSegment(EventSelection *selection)
         segment.eraseSingle(toErase[j]);
     }
 
-    segment.normalizeRests(startTime, endTime);
+    segment.normalizeRests(selection->getStartTime(), selection->getEndTime());
+
     return erasedLongEffectEvent;
 }
 
@@ -172,5 +174,6 @@ EraseCommand::getRelayoutEndTime()
 {
     return m_relayoutEndTime;
 }
+
 
 }

@@ -38,11 +38,16 @@ class EraseCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::EraseCommand)
 
 public:
-    EraseCommand(EventSelection *selection);
+    /// Allow for multiple selections.  E.g. matrix and CC ruler.
+    EraseCommand(EventSelection *selection1,
+                 EventSelection *selection2 = nullptr);
     ~EraseCommand() override;
 
-    // Return whether any deletions that affect later in the segment
-    // were done, meaning key or clef deletions.
+    /// Erase the events in segment that are in selection.
+    /**
+     * Return whether any deletions that affect later in the segment
+     * were done, meaning key or clef deletions.
+     */
     static bool eraseInSegment(EventSelection *selection);
     
     timeT getRelayoutEndTime() override;
@@ -56,7 +61,8 @@ private:
      *
      * QSharedPointer would be nice.
      */
-    EventSelection *m_selection;
+    EventSelection *m_selection1;
+    EventSelection *m_selection2;
 
     timeT m_relayoutEndTime;
 };
