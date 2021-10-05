@@ -579,7 +579,7 @@ MatrixScene::recreatePitchHighlights()
     QSettings settings;
     settings.beginGroup(MatrixViewConfigGroup);
     bool highlightBlackNotes =
-        settings.value("highlight_black_notes", false).toBool();
+        settings.value("highlight_black_notes", true).toBool();
     settings.endGroup();
 
     if (highlightBlackNotes) {
