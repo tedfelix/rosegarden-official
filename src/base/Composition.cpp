@@ -641,7 +641,7 @@ Composition::updateTriggerSegmentReferences()
 
 
 timeT
-Composition::getDuration() const
+Composition::getDuration(bool withRepeats) const
 {
     timeT maxDuration = 0;
 
@@ -649,6 +649,9 @@ Composition::getDuration() const
          i != m_segments.end(); ++i) {
 
         timeT segmentTotal = (*i)->getEndTime();
+        if (withRepeats) {
+            segmentTotal = (*i)->getRepeatEndTime();
+        }
 
         if (segmentTotal > maxDuration) {
             maxDuration = segmentTotal;

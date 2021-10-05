@@ -4779,7 +4779,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     if (m_seqManager) {
         // If we're playing and we're past the end...
         if (m_seqManager->getTransportStatus() == PLAYING  &&
-            t > comp.getEndMarker()) {
+            t > comp.getDuration(true)) {
 
             // Stop
             slotStop();

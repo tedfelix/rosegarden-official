@@ -100,7 +100,7 @@ public:
     /**
      * Return the absolute end time of the segment that ends last
      */
-    timeT getDuration() const;
+    timeT getDuration(bool withRepeats = false) const;
 
 
     //////
