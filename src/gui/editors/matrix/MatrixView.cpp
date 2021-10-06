@@ -213,7 +213,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     findAction("show_note_names")->
         setChecked(qStrToBool(settings.value("show_note_names")));
     findAction("highlight_black_notes")->
-        setChecked(qStrToBool(settings.value("highlight_black_notes")));
+        setChecked(qStrToBool(settings.value("highlight_black_notes", true)));
     
     settings.endGroup();
     
