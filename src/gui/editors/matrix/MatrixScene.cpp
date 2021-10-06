@@ -65,7 +65,7 @@ MatrixScene::MatrixScene() :
     m_snapGrid(nullptr),
     m_resolution(8),
     m_selection(nullptr),
-    m_highlightingBlackNotes(false),
+    m_highlightType(HT_BlackKeys),
     m_currentSegmentIndex(0)
 {
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
@@ -578,14 +578,14 @@ MatrixScene::recreatePitchHighlights()
 
     QSettings settings;
     settings.beginGroup(MatrixViewConfigGroup);
-    bool highlightBlackNotes =
-        settings.value("highlight_black_notes", true).toBool();
+    HighlightType chosenHighlightType = static_cast<HighlightType>(
+        settings.value("highlight_type", HT_BlackKeys).toInt());
     settings.endGroup();
 
-    if (highlightBlackNotes) {
+    if (chosenHighlightType == HT_BlackKeys) {
         RG_DEBUG << "highlight the black notes";
         // highlight the black notes
-        if (! m_highlightingBlackNotes) {
+        if (m_highlightType != chosenHighlightType) {
             // hide all highlights from triad highlight
             RG_DEBUG << "hide all old triad highlights";
             int i = 0;
@@ -594,7 +594,7 @@ MatrixScene::recreatePitchHighlights()
                 ++i;
             }
         }
-        m_highlightingBlackNotes = true;
+        m_highlightType = HT_BlackKeys;
         recreateBlackkeyHighlights();
         return;
     }
@@ -602,7 +602,7 @@ MatrixScene::recreatePitchHighlights()
     // Not highlighting black notes so highlight the major/minor triad
 
     RG_DEBUG << "highlight key triad";
-    if (m_highlightingBlackNotes) {
+    if (m_highlightType != HT_Triads) {
         // hide all highlights of black notes
         RG_DEBUG << "hide all old blacknote highlights";
         int i = 0;
@@ -610,7 +610,7 @@ MatrixScene::recreatePitchHighlights()
             m_highlights[i]->hide();
             ++i;
         }
-        m_highlightingBlackNotes = false;
+        m_highlightType = HT_BlackKeys;
     }
     
     recreateTriadHighlights();

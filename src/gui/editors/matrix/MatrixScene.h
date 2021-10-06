@@ -78,6 +78,8 @@ public:
     MatrixScene();
     ~MatrixScene() override;
 
+    enum HighlightType { HT_BlackKeys, HT_Triads };
+
     void setMatrixWidget(MatrixWidget *w) { m_widget = w; };
     MatrixWidget *getMatrixWidget() { return m_widget; };
 
@@ -194,7 +196,7 @@ private:
 
     int m_resolution;
     EventSelection *m_selection; // I own this
-    bool m_highlightingBlackNotes;
+    HighlightType m_highlightType;
 
     int m_currentSegmentIndex;
 

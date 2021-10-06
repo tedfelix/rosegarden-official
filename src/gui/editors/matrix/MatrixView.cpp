@@ -212,9 +212,22 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     findAction("show_note_names")->
         setChecked(qStrToBool(settings.value("show_note_names")));
-    findAction("highlight_black_notes")->
-        setChecked(qStrToBool(settings.value("highlight_black_notes", true)));
-    
+    MatrixScene::HighlightType chosenHighlightType =
+        static_cast<MatrixScene::HighlightType>(
+            settings.value("highlight_type",
+                           MatrixScene::HT_BlackKeys).toInt());
+    settings.endGroup();
+    switch (chosenHighlightType) {
+    case MatrixScene::HT_BlackKeys:
+        findAction("highlight_black_notes")->setChecked(true);
+        break;
+    case MatrixScene::HT_Triads:
+        findAction("highlight_triads")->setChecked(true);
+        break;
+    default:
+        findAction("highlight_black_notes")->setChecked(true);
+        break;
+    }    
     settings.endGroup();
     
     if (segments.size() > 1) {
@@ -502,7 +515,12 @@ MatrixView::setupActions()
     createAction("donate", SLOT(slotDonate()));
 
     createAction("show_note_names", SLOT(slotShowNames()));
-    createAction("highlight_black_notes", SLOT(slotHighlightBlackNotes()));
+    createAction("highlight_black_notes", SLOT(slotHighlight()));
+    createAction("highlight_triads", SLOT(slotHighlight()));
+    // add the highlight actions to an ActionGroup
+    QActionGroup *ag = new QActionGroup(this);
+    ag->addAction(findAction("highlight_black_notes"));
+    ag->addAction(findAction("highlight_triads"));
     
     // grid snap values
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
@@ -1575,14 +1593,24 @@ MatrixView::slotShowNames()
 }
 
 void
-MatrixView::slotHighlightBlackNotes()
+MatrixView::slotHighlight()
 {
-    bool show = findAction("highlight_black_notes")->isChecked();
-    RG_DEBUG << "highlight black notes:" << show;
-    QSettings settings;
-    settings.beginGroup(MatrixViewConfigGroup);
-    settings.setValue("highlight_black_notes", show);
-    settings.endGroup();
+    const QObject *s = sender();
+    QString name = s->objectName();
+    if (name == "highlight_black_notes") {
+        RG_DEBUG << "highlight black notes";
+        QSettings settings;
+        settings.beginGroup(MatrixViewConfigGroup);
+        settings.setValue("highlight_type", MatrixScene::HT_BlackKeys);
+        settings.endGroup();
+    }
+    if (name == "highlight_triads") {
+        RG_DEBUG << "highlight triads";
+        QSettings settings;
+        settings.beginGroup(MatrixViewConfigGroup);
+        settings.setValue("highlight_type", MatrixScene::HT_Triads);
+        settings.endGroup();
+    }
     m_matrixWidget->getScene()->updateAll();
 }
 

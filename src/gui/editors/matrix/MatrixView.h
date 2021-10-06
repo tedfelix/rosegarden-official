@@ -188,7 +188,7 @@ protected slots:
 
     // view
     void slotShowNames();
-    void slotHighlightBlackNotes();
+    void slotHighlight();
 
     void slotShowContextHelp(const QString &);
         

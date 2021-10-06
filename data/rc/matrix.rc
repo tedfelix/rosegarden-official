@@ -29,9 +29,13 @@
   </Menu>
 
   <Menu name="View">
-    <Action name="show_note_names" text="Show note names" checked="false" />
-    <Action name="highlight_black_notes" text="Highlight black notes" checked="false" />
     <text>&amp;View</text>
+    <Action name="show_note_names" text="Show note names" checked="false" />
+    <Menu name="Highlight">
+      <text>&amp;Highlight</text>
+      <Action name="highlight_black_notes" text="Highlight black notes" checked="false" />
+      <Action name="highlight_triads" text="Highlight triads" checked="false" />
+    </Menu>
     <Menu name="Grid">
       <text>&amp;Grid</text>
       <Action name="snap_none" text="&amp;No Snap" />
