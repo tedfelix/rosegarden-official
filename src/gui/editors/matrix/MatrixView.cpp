@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixView]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixView.h"
 
@@ -117,9 +117,12 @@
 #include <QStatusBar>
 #include <QDesktopServices>
 
+#include <algorithm>
+
 
 namespace Rosegarden
 {
+
 
 MatrixView::MatrixView(RosegardenDocument *doc,
                  std::vector<Segment *> segments,
@@ -294,17 +297,16 @@ MatrixView::closeEvent(QCloseEvent *event)
 void
 MatrixView::slotSegmentDeleted(Segment *s)
 {
-    MATRIX_DEBUG << "MatrixView::slotSegmentDeleted: " << s;
+    RG_DEBUG << "slotSegmentDeleted()";
 
-    // remove from vector
-    for (std::vector<Segment *>::iterator i = m_segments.begin();
-         i != m_segments.end(); ++i) {
-        if (*i == s) {
-            m_segments.erase(i);
-            NOTATION_DEBUG << "MatrixView::slotSegmentDeleted: Erased segment from vector, have " << m_segments.size() << " segment(s) remaining";
-            return;
-        }
-    }
+    std::vector<Segment *>::const_iterator segmentIter =
+            std::find(m_segments.begin(), m_segments.end(), s);
+
+    // If found, delete it.
+    if (segmentIter != m_segments.end())
+        m_segments.erase(segmentIter);
+
+    RG_DEBUG << "  Segments remaining:" << m_segments.size();
 }
 
 void
