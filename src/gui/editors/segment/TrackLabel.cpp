@@ -65,6 +65,9 @@ TrackLabel::TrackLabel(TrackId id,
                   "<p>Click and hold with either mouse button to assign"
                   " this track to an instrument.</p>"
                   "</qt>"));
+
+    // Trick setSelected() into making an actual change.
+    m_selected = true;
     setSelected(false);
 }
 
