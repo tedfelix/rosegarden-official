@@ -839,6 +839,7 @@ RosegardenMainWindow::setupActions()
     createAction("fastforwardtoend", SLOT(slotFastForwardToEnd()));
     createAction("toggle_tracking", SLOT(slotToggleTracking()));
     createAction("panic", SLOT(slotPanic()));
+    createAction("loop_reset", SLOT(slotLoopReset()));
     createAction("debug_dump_segments", SLOT(slotDebugDump()));
 
     createAction("repeat_segment_onoff", SLOT(slotToggleRepeat()));
@@ -4807,7 +4808,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
 
             // Limit the end to the end of the composition.
             // RECURSION: Causes this method to be re-invoked.
-            RosegardenDocument::currentDocument->slotSetPointerPosition(comp.getEndMarker());
+            RosegardenDocument::currentDocument->slotSetPointerPosition(comp.getDuration(true));
 
             return;
 
@@ -5758,8 +5759,16 @@ RosegardenMainWindow::slotFastforward()
 void
 RosegardenMainWindow::slotSetLoop()
 {
-    // restore loop
-    RosegardenDocument::currentDocument->setLoop(m_storedLoopStart, m_storedLoopEnd);
+    // if no loop is stored in m_storedLoop... then loop the whole song
+    if (m_storedLoopStart == m_storedLoopEnd) {
+        Composition &comp =
+            RosegardenDocument::currentDocument->getComposition();
+        RosegardenDocument::currentDocument->setLoop(0, comp.getDuration(true));
+    } else {
+        // restore loop
+        RosegardenDocument::currentDocument->setLoop
+            (m_storedLoopStart, m_storedLoopEnd);
+    }
 }
 
 void
@@ -7819,6 +7828,14 @@ RosegardenMainWindow::slotPanic()
     slotStop();
 
     m_seqManager->panic();
+}
+
+void
+RosegardenMainWindow::slotLoopReset()
+{
+    m_storedLoopStart = 0;
+    m_storedLoopEnd = 0;
+    RosegardenDocument::currentDocument->setLoop(0, 0);
 }
 
 void
