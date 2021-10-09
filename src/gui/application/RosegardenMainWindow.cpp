@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenMainWindow]"
+// #define RG_NO_DEBUG_PRINT
 
 #include "RosegardenMainWindow.h"
 
@@ -397,6 +398,21 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
             &SequenceManager::sendWarning,
             this,
             &RosegardenMainWindow::slotDisplayWarning);
+
+    connect(CommandHistory::getInstance(),
+            &CommandHistory::aboutToExecuteCommand,
+            this,
+            &RosegardenMainWindow::slotAboutToExecuteCommand);
+
+    connect(CommandHistory::getInstance(),
+            &CommandHistory::commandUndone,
+            this,
+            &RosegardenMainWindow::slotCommandUndone);
+
+    connect(CommandHistory::getInstance(),
+            &CommandHistory::commandRedone,
+            this,
+            &RosegardenMainWindow::slotCommandRedone);
 
     if (m_useSequencer) {
         // Check the sound driver status and warn the user of any
@@ -1232,6 +1248,11 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
             SLOT(update()));
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             SLOT(slotTestClipboard()));
+
+    // use QueuedConnection here because the position update can
+    // happen after the command is executed
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecutedInitially()),
+            SLOT(slotUpdatePosition()), Qt::QueuedConnection);
 
     // start the autosave timer
     m_autoSaveTimer->start(RosegardenDocument::currentDocument->getAutoSavePeriod() * 1000);
@@ -8235,6 +8256,44 @@ RosegardenMainWindow::slotDisplayWarning(int type,
         default: break;
     }
 
+}
+
+void
+RosegardenMainWindow::slotAboutToExecuteCommand()
+{
+    // save the pointer position to the command history
+    timeT pointerPos =
+        RosegardenDocument::currentDocument->getComposition().getPosition();
+    RG_DEBUG << "about to execute a command" << pointerPos;
+    CommandHistory::getInstance()->setPointerPosition(pointerPos);
+}
+ 
+void
+RosegardenMainWindow::slotCommandUndone()
+{
+    // reset the pointer position from the command history
+    timeT pointerPos = CommandHistory::getInstance()->getPointerPosition();
+    RG_DEBUG << "command undone" << pointerPos;
+    RosegardenDocument::currentDocument->slotSetPointerPosition(pointerPos);
+}
+
+void
+RosegardenMainWindow::slotCommandRedone()
+{
+    // reset the pointer position from the command history
+    timeT pointerPos = CommandHistory::getInstance()->getPointerPosition();
+    RG_DEBUG << "command redone" << pointerPos;
+    RosegardenDocument::currentDocument->slotSetPointerPosition(pointerPos);
+}
+
+void
+RosegardenMainWindow::slotUpdatePosition()
+{
+    // set the pointer position in the command history
+    timeT pointerPos =
+        RosegardenDocument::currentDocument->getComposition().getPosition();
+    RG_DEBUG << "update position in command history" << pointerPos;
+    CommandHistory::getInstance()->setPointerPositionForRedo(pointerPos);
 }
 
 void
