@@ -525,6 +525,10 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 void
 MatrixWidget::generatePitchRuler()
 {
+    // No current Segment?  Bail.
+    if (m_scene->getCurrentSegment() == nullptr)
+        return;
+
     delete m_pianoScene;   // Delete the old m_pitchRuler if any
     m_localMapping.reset();
     bool isPercussion = false;

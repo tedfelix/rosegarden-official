@@ -60,13 +60,13 @@ using namespace BaseProperties;
 MatrixScene::MatrixScene() :
     m_widget(nullptr),
     m_document(nullptr),
+    m_currentSegmentIndex(0),
     m_scale(nullptr),
     m_referenceScale(nullptr),
     m_snapGrid(nullptr),
     m_resolution(8),
     m_selection(nullptr),
-    m_highlightType(HT_BlackKeys),
-    m_currentSegmentIndex(0)
+    m_highlightType(HT_BlackKeys)
 {
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotCommandExecuted()));
@@ -237,6 +237,12 @@ MatrixScene::setCurrentSegment(Segment *s)
             m_currentSegmentIndex = i;
             recreatePitchHighlights();
             updateCurrentSegment();
+
+            // ??? All callers call m_widget->updateSegmentChangerBackground()
+            //     next.  We should just call it here.
+            //if (m_widget)
+            //    m_widget->updateSegmentChangerBackground();
+
             return;
         }
     }
@@ -260,7 +266,10 @@ MatrixScene::getNextSegment()
 MatrixViewSegment *
 MatrixScene::getCurrentViewSegment()
 {
-    if (m_viewSegments.empty()) return nullptr;
+    if (m_viewSegments.empty())
+        return nullptr;
+
+    // ??? Why doesn't this use m_currentSegmentIndex?
     return m_viewSegments[0];
 }
 
@@ -765,32 +774,52 @@ MatrixScene::segmentEndMarkerTimeChanged(const Segment *, bool)
 }
 
 void
-MatrixScene::timeSignatureChanged(const Composition *c)
+MatrixScene::segmentRemoved(const Composition *, Segment *removedSegment)
 {
-    if (!m_document || !c || (c != &m_document->getComposition())) return;
-}
+    if (!removedSegment)
+        return;
+    if (m_segments.empty())
+        return;
 
-void
-MatrixScene::segmentRemoved(const Composition *c, Segment *s)
-{
-    MATRIX_DEBUG << "MatrixScene::segmentRemoved(" << c << "," << s << ")";
+    const int removedSegmentIndex = findSegmentIndex(removedSegment);
 
-    if (!m_document || !c || (c != &m_document->getComposition())) return;
+    // Not found?  Bail.
+    if (removedSegmentIndex == -1)
+        return;
 
-    for (std::vector<MatrixViewSegment *>::iterator i = m_viewSegments.begin();
-         i != m_viewSegments.end(); ++i) {
-        if (s == &(*i)->getSegment()) {
-            emit segmentDeleted(s);
-            delete *i;
-            m_viewSegments.erase(i);
-            break;
-        }
+    // If we're about to remove the one they are looking at and
+    // there is another to switch to...
+    if (removedSegmentIndex == m_currentSegmentIndex  &&
+        m_segments.size() > 1) {
+
+        // Switch to another Segment.
+
+        // Try the next.
+        size_t newSegmentIndex = m_currentSegmentIndex + 1;
+        // No next, go with the previous.
+        if (newSegmentIndex == m_segments.size())
+            newSegmentIndex = m_currentSegmentIndex - 1;
+
+        setCurrentSegment(m_segments[newSegmentIndex]);
+        if (m_widget)
+            m_widget->updateSegmentChangerBackground();
+
     }
 
-    if (m_viewSegments.empty()) {
-        MATRIX_DEBUG << "(Scene is now empty)";
+    emit segmentDeleted(removedSegment);
+
+    delete m_viewSegments[removedSegmentIndex];
+    m_viewSegments.erase(m_viewSegments.cbegin() + removedSegmentIndex);
+
+    m_segments.erase(m_segments.cbegin() + removedSegmentIndex);
+
+    // Adjust m_currentSegmentIndex
+    if (m_currentSegmentIndex > removedSegmentIndex)
+        --m_currentSegmentIndex;
+
+    // No more Segments?
+    if (m_segments.empty())
         emit sceneDeleted();
-    }
 }
 
 void
@@ -1060,5 +1089,18 @@ MatrixScene::updateAll()
     }
     recreatePitchHighlights();
 }
+
+int
+MatrixScene::findSegmentIndex(const Segment *segment) const
+{
+    for (int i = 0; i < static_cast<int>(m_segments.size()); ++i) {
+        if (m_segments[i] == segment)
+            return i;
+    }
+
+    // Not found.
+    return -1;
+}
+
 
 }

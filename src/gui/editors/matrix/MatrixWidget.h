@@ -108,6 +108,9 @@ public:
                      std::vector<Segment *> segments);
     /// MatrixScene::getCurrentSegment()
     Segment *getCurrentSegment();
+    /// Updates the wheel background and segment label text.
+    void updateSegmentChangerBackground();
+
     /// MatrixScene::segmentsContainNotes()
     bool segmentsContainNotes() const;
 
@@ -336,7 +339,6 @@ private:
     QWidget *m_changerWidget;
     Thumbwheel *m_segmentChanger;
     int m_lastSegmentChangerValue;
-    void updateSegmentChangerBackground();
     QLabel *m_segmentLabel;
 
 
