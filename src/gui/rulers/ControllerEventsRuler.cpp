@@ -149,20 +149,21 @@ ControllerEventsRuler::init()
 {
     if (!m_controller)
         return;
+    if (!m_segment)
+        return;
 
     clear();
-    
+
     // Reset range information for this controller type
     setMaxItemValue(m_controller->getMax());
     setMinItemValue(m_controller->getMin());
 
-    for (Segment::iterator it = m_segment->begin();
-            it != m_segment->end(); ++it) {
-        if (isOnThisRuler(*it)) {
-            addControlItem2(*it);
-        }
+    // For each Event in the Segment
+    for (Event *event : *m_segment) {
+        if (isOnThisRuler(event))
+            addControlItem2(event);
     }
-    
+
     update();
 }
 

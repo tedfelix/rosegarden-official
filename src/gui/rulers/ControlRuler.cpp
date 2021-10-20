@@ -429,13 +429,6 @@ void ControlRuler::updateSegment()
     updateSelection();
 }
 
-void ControlRuler::slotUpdate()
-{
-    //RG_DEBUG << "slotUpdate()";
-
-///TODO Set some update flag?
-}
-
 void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
 {
     // notationLayoutUpdated should be called after notation has adjusted the layout
@@ -557,6 +550,9 @@ QPointF ControlRuler::mapWidgetToItem(QPoint *point)
 
 void ControlRuler::slotSetPannedRect(QRectF pr)
 {
+    if (pr.isNull())
+        RG_WARNING << "slotSetPannedRect(): WARNING: Rect is null.";
+
     m_pannedRect = pr;
     m_xScale = (double) m_pannedRect.width() / (double) width();
     m_yScale = 1.0f / (double) height();

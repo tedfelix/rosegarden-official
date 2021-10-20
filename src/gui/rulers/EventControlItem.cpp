@@ -14,17 +14,24 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-#include <QPolygon>
+
+#define RG_MODULE_STRING "[EventControlItem]"
 
 #include "EventControlItem.h"
+
 #include "ControllerEventAdapter.h"
 #include "ControllerEventsRuler.h"
 #include "ControlRuler.h"
 #include "base/BaseProperties.h"
+#include "misc/Debug.h"
 #include "base/Event.h"
 #include "base/RulerScale.h"
 
+#include <QPolygon>
+
+
 namespace Rosegarden {
+
 
 EventControlItem::EventControlItem(ControlRuler *controlRuler,
         ControllerEventAdapter *eventAdapter,
@@ -59,8 +66,10 @@ void EventControlItem::updateFromEvent()
     long value = 0;
     m_eventAdapter->getValue(value);
 
-    double xscale = m_controlRuler->getXScale();
-    reconfigure(m_controlRuler->getRulerScale()->getXForTime(m_eventAdapter->getTime())*xscale,
+    const double xScale = m_controlRuler->getXScale();
+
+    reconfigure(m_controlRuler->getRulerScale()->getXForTime(
+                        m_eventAdapter->getTime()) * xScale,
                 m_controlRuler->valueToY(value));
 }
 
