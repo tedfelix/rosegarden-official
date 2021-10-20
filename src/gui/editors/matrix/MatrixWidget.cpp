@@ -448,8 +448,6 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
             m_scene, &MatrixScene::slotRulerSelectionChanged);
 
-    m_controlsWidget->launchMatrixRulers(segments);
-
     connect(m_scene, SIGNAL(selectionChanged()),
             this, SIGNAL(selectionChanged()));
 

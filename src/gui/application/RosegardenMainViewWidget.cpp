@@ -728,14 +728,23 @@ void RosegardenMainViewWidget::slotEditSegmentPercussionMatrix(Segment* p)
 void RosegardenMainViewWidget::slotEditSegmentsMatrix(std::vector<Segment *> segmentsToEdit)
 {
     MatrixView *view = createMatrixView(segmentsToEdit, false);
-    if (view) view->show();
+    if (view) {
+        view->show();
+        // We have to do this here because the rulers need information
+        // that isn't available until the MatrixView is shown.  (xScale)
+        view->launchRulers(segmentsToEdit);
+    }
 }
 
 void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segment *> segmentsToEdit)
 {
     MatrixView *view = createMatrixView(segmentsToEdit, true);
-    if (view) view->show();
-
+    if (view) {
+        view->show();
+        // We have to do this here because the rulers need information
+        // that isn't available until the MatrixView is shown.  (xScale)
+        view->launchRulers(segmentsToEdit);
+    }
 }
 
 MatrixView *

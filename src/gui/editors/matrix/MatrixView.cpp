@@ -280,6 +280,21 @@ MatrixView::~MatrixView()
 }
 
 void
+MatrixView::launchRulers(std::vector<Segment *> segments)
+{
+    if (!m_matrixWidget)
+        return;
+
+    ControlRulerWidget *controlRulerWidget =
+            m_matrixWidget->getControlsWidget();
+
+    if (!controlRulerWidget)
+        return;
+
+    controlRulerWidget->launchMatrixRulers(segments);
+}
+
+void
 MatrixView::closeEvent(QCloseEvent *event)
 {
     // Save window geometry and toolbar/dock state
