@@ -441,6 +441,21 @@ NotationView::~NotationView()
     delete m_commandRegistry;
 }
 
+void
+NotationView::launchRulers(std::vector<Segment *> segments)
+{
+    if (!m_notationWidget)
+        return;
+
+    ControlRulerWidget *controlRulerWidget =
+            m_notationWidget->getControlsWidget();
+
+    if (!controlRulerWidget)
+        return;
+
+    controlRulerWidget->launchNotationRulers(segments);
+}
+
 bool
 NotationView::hasSegment(Segment * seg) const
 {

@@ -391,7 +391,12 @@ void RosegardenMainViewWidget::slotEditSegmentNotation(Segment *p)
 void RosegardenMainViewWidget::slotEditSegmentsNotation(std::vector<Segment *> segmentsToEdit)
 {
     NotationView *view = createNotationView(segmentsToEdit);
-    if (view) view->show();
+    if (view) {
+        view->show();
+        // We have to do this here because the rulers need information
+        // that isn't available until the NotationView is shown.  (xScale)
+        view->launchRulers(segmentsToEdit);
+    }
 }
 
 NotationView *
