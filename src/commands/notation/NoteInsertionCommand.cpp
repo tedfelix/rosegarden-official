@@ -265,7 +265,8 @@ NoteInsertionCommand::modifySegment()
                 long pitch;
                 if ((*i)->get<Int>(PITCH, pitch) && pitch == m_pitch) {
                     // allow grace note and note with the same pitch
-                    if (! (*i)->get<Bool>(IS_GRACE_NOTE)) {
+                    if (! (*i)->has(IS_GRACE_NOTE) ||
+                        ! (*i)->get<Bool>(IS_GRACE_NOTE)) {
                         helper.deleteNote(*i);
                     }
                     break;
