@@ -278,8 +278,8 @@ signals:
 
 private:
 
-    NotationView *createNotationView(std::vector<Segment *>);
-    MatrixView *createMatrixView(std::vector<Segment *>, bool drumMode);
+    void createNotationView(std::vector<Segment *>);
+    void createMatrixView(std::vector<Segment *>, bool drumMode);
     EventView *createEventView(std::vector<Segment *>);
     PitchTrackerView *createPitchTrackerView(std::vector<Segment *>);
 

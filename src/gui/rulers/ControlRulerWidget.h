@@ -46,9 +46,12 @@ class SelectionSituation;
 class ViewElement;
 class ViewSegment;
 
+/// The rulers and tabs that appear below the Matrix and Notation editors.
 /**
- * The ruler area (m_stackedWidget) and the tabs (m_tabBar) that appear below
- * the Matrix and Notation editors.
+ * m_stackedWidget - The rulers.
+ * m_tabBar - The tabs.
+ *
+ * For the actual rulers themselves, see ControlRuler and its derivers.
  */
 class ControlRulerWidget : public QWidget
 {

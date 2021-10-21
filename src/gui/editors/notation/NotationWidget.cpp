@@ -509,8 +509,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_controlRulerWidget, &ControlRulerWidget::mouseRelease,
             this, &NotationWidget::slotCRWMouseRelease);
 
-    m_controlRulerWidget->launchNotationRulers(segments);
-
     m_segmentLabel = new QLabel("Segment Label");
     m_segmentLabel->setAlignment(Qt::AlignHCenter);
     m_segmentLabel->setAutoFillBackground(true);

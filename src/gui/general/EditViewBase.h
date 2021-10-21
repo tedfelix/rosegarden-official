@@ -159,8 +159,6 @@ public slots:
     virtual void slotOpenInEventList();
     virtual void slotOpenInPitchTracker();
 
-    virtual void slotSegmentDeleted(Segment *);
-    
     /**
      * Set the start time of the current segment
      */

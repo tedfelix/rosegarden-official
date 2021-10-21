@@ -157,8 +157,6 @@ signals:
     void showContextHelp(const QString &);
 
 public slots:
-    /// override RosegardenCanvasView - we don't want to change the main hscrollbar
-    virtual void slotUpdate();
 //    virtual void slotUpdateElementsHPos();
     virtual void slotScrollHorizSmallSteps(int);
     virtual void slotSetPannedRect(QRectF);

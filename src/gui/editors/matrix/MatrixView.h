@@ -48,8 +48,8 @@ class Device;
 class ControlRulerWidget;
 class ControlParameter;
 
+/// Top-level window containing the matrix editor.
 /**
- * MatrixView is the top-level window containing the matrix editor.
  * This class manages menus and toolbars, and provides implementations
  * of any functions carried out from menu and toolbar actions.  It
  * does not manage the editing tools (MatrixWidget does this) or the
@@ -67,6 +67,9 @@ public:
 		  QWidget *parent = nullptr);
 
     ~MatrixView() override;
+
+    /// To allow clients to launch the rulers after the view is up.
+    void launchRulers(std::vector<Segment *> segments);
 
     void closeEvent(QCloseEvent *event) override;
 
@@ -103,7 +106,7 @@ signals:
 
 protected slots:
     /// Remove a segment from our list when it is deleted from the composition
-    void slotSegmentDeleted(Segment *) override;
+    void slotSegmentDeleted(Segment *);
 
     /// All segments have been deleted (close editor)
     void slotSceneDeleted();
@@ -188,7 +191,7 @@ protected slots:
 
     // view
     void slotShowNames();
-    void slotHighlightBlackNotes();
+    void slotHighlight();
 
     void slotShowContextHelp(const QString &);
         

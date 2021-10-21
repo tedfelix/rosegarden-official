@@ -409,6 +409,9 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
     // Add to ruler list.
     m_controlRulerList.push_back(controlRuler);
 
+    if (m_pannedRect.isNull())
+        RG_WARNING << "addRuler(): WARNING: Panned rect is null.";
+
     // Configure the ruler.
     controlRuler->slotSetPannedRect(m_pannedRect);
     slotSetTool(m_currentToolName);

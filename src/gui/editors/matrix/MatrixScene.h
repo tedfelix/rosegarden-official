@@ -78,6 +78,8 @@ public:
     MatrixScene();
     ~MatrixScene() override;
 
+    enum HighlightType { HT_BlackKeys, HT_Triads };
+
     void setMatrixWidget(MatrixWidget *w) { m_widget = w; };
     MatrixWidget *getMatrixWidget() { return m_widget; };
 
@@ -176,15 +178,22 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
 
     void segmentRemoved(const Composition *, Segment *) override; // CompositionObserver
-    void timeSignatureChanged(const Composition *) override; // CompositionObserver
 
 private:
     MatrixWidget *m_widget; // I do not own this
 
     RosegardenDocument *m_document; // I do not own this
 
+    /// The Segments we are editing.
     std::vector<Segment *> m_segments; // I do not own these
+    /// The MatrixViewSegment for each Segment we are editing.
     std::vector<MatrixViewSegment *> m_viewSegments; // I own these
+    int findSegmentIndex(const Segment *segment) const;
+    /// The Segment that is currently being displayed.
+    /**
+     * An index into both m_segments and m_viewSegments.
+     */
+    int m_currentSegmentIndex;
 
     RulerScale *m_scale; // I own this (it maps between time and scene x)
     ZoomableRulerScale *m_referenceScale; // I own this (it refers to m_scale
@@ -194,9 +203,7 @@ private:
 
     int m_resolution;
     EventSelection *m_selection; // I own this
-    bool m_highlightingBlackNotes;
-
-    int m_currentSegmentIndex;
+    HighlightType m_highlightType;
 
     // These are the background items -- the grid lines and the shadings
     // used to highlight the first, third and fifth in the current key

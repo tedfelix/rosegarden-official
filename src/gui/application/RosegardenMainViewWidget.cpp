@@ -390,11 +390,10 @@ void RosegardenMainViewWidget::slotEditSegmentNotation(Segment *p)
 
 void RosegardenMainViewWidget::slotEditSegmentsNotation(std::vector<Segment *> segmentsToEdit)
 {
-    NotationView *view = createNotationView(segmentsToEdit);
-    if (view) view->show();
+    createNotationView(segmentsToEdit);
 }
 
-NotationView *
+void
 RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEdit)
 {
     NotationView *notationView =
@@ -465,8 +464,6 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
 // //!!!        notationView->scrollToTime(centerSegmentView);
 // //!!!        notationView->updateView();
 //     }
-
-    return notationView;
 }
 
 // mostly copied from slotEditSegmentNotationView, but some changes
@@ -727,18 +724,15 @@ void RosegardenMainViewWidget::slotEditSegmentPercussionMatrix(Segment* p)
 
 void RosegardenMainViewWidget::slotEditSegmentsMatrix(std::vector<Segment *> segmentsToEdit)
 {
-    MatrixView *view = createMatrixView(segmentsToEdit, false);
-    if (view) view->show();
+    createMatrixView(segmentsToEdit, false);
 }
 
 void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segment *> segmentsToEdit)
 {
-    MatrixView *view = createMatrixView(segmentsToEdit, true);
-    if (view) view->show();
-
+    createMatrixView(segmentsToEdit, true);
 }
 
-MatrixView *
+void
 RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit, bool drumMode)
 {
     MatrixView *matrixView = new MatrixView(RosegardenDocument::currentDocument,
@@ -810,7 +804,6 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
 // //!!!        matrixView->updateView();
 //     }
 
-    return matrixView;
 }
 
 void RosegardenMainViewWidget::slotEditSegmentEventList(Segment *p)
@@ -1763,7 +1756,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
     int tracking = settings.value("recordtracking", 0).toUInt() ;
     settings.endGroup();
 
-    if (tracking != 1)
+    if (tracking == 0)
         return ;
 
     RG_DEBUG << "slotUpdateRecordingSegment(): segment is " << segment << ", lastRecordingSegment is " << lastRecordingSegment << ", opening a new view";
@@ -1771,16 +1764,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
     std::vector<Segment *> segments;
     segments.push_back(segment);
 
-    NotationView *view = createNotationView(segments);
-    if (!view) return ;
-
-    /* signal no longer exists
-        QObject::connect
-    	(RosegardenDocument::currentDocument, SIGNAL(recordingSegmentUpdated(Segment *, timeT)),
-    	 view, SLOT(slotUpdateRecordingSegment(Segment *, timeT)));
-    */
-
-    view->show();
+    createNotationView(segments);
 }
 
 void

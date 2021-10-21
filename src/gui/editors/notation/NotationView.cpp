@@ -425,6 +425,11 @@ NotationView::NotationView(RosegardenDocument *doc,
     readOptions();
 
     m_notationWidget->scrollToTopLeft();
+
+    show();
+    // We have to do this after show() because the rulers need information
+    // that isn't available until the NotationView is shown.  (xScale)
+    launchRulers(segments);
 }
 
 NotationView::~NotationView()
@@ -439,6 +444,21 @@ NotationView::~NotationView()
     }
     
     delete m_commandRegistry;
+}
+
+void
+NotationView::launchRulers(std::vector<Segment *> segments)
+{
+    if (!m_notationWidget)
+        return;
+
+    ControlRulerWidget *controlRulerWidget =
+            m_notationWidget->getControlsWidget();
+
+    if (!controlRulerWidget)
+        return;
+
+    controlRulerWidget->launchNotationRulers(segments);
 }
 
 bool

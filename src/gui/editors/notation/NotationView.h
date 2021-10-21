@@ -63,6 +63,8 @@ public:
 
     ~NotationView() override;
 
+    void launchRulers(std::vector<Segment *> segments);
+
     Segment *getCurrentSegment() override;
     EventSelection *getSelection() const override;
     void setSelection(EventSelection* s, bool preview = false) override;

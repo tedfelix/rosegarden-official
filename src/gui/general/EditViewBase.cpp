@@ -86,19 +86,6 @@ Clipboard *EditViewBase::getClipboard()
     return Clipboard::mainClipboard();
 }
 
-void
-EditViewBase::slotSegmentDeleted(Segment *s)
-{
-    RG_DEBUG << "EditViewBase::slotSegmentDeleted";
-    for (std::vector<Segment *>::iterator i = m_segments.begin();
-         i != m_segments.end(); ++i) {
-        if (*i == s) {
-            m_segments.erase(i);
-            return;
-        }
-    }
-}
-
 void EditViewBase::slotSaveOptions()
 {
 }
