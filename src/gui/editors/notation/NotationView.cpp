@@ -425,6 +425,11 @@ NotationView::NotationView(RosegardenDocument *doc,
     readOptions();
 
     m_notationWidget->scrollToTopLeft();
+
+    show();
+    // We have to do this after show() because the rulers need information
+    // that isn't available until the NotationView is shown.  (xScale)
+    launchRulers(segments);
 }
 
 NotationView::~NotationView()

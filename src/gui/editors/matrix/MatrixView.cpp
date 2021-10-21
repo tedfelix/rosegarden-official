@@ -272,6 +272,11 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     m_matrixWidget->showInitialPointer();    
     
     readOptions();
+
+    show();
+    // We have to do this after show() because the rulers need information
+    // that isn't available until the MatrixView is shown.  (xScale)
+    launchRulers(segments);
 }
 
 MatrixView::~MatrixView()
