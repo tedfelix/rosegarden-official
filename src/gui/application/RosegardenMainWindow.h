@@ -1661,6 +1661,10 @@ private:
     /// For the fast-forward button on a keyboard controller.
     Typematic m_fastForwardTypematic;
 
+    /// Flag for looping whole song
+    bool m_loopingAll;
+    timeT m_loopAllEndTime;
+
 private slots:
     void signalAction(int);
 

@@ -305,7 +305,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_tranzport(nullptr),
 //  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(nullptr),
-    m_cpuMeterTimer(new QTimer(this))
+    m_cpuMeterTimer(new QTimer(this)),
+    m_loopingAll(false),
+    m_loopAllEndTime(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -5763,11 +5765,14 @@ RosegardenMainWindow::slotSetLoop()
     if (m_storedLoopStart == m_storedLoopEnd) {
         Composition &comp =
             RosegardenDocument::currentDocument->getComposition();
-        RosegardenDocument::currentDocument->setLoop(0, comp.getDuration(true));
+        m_loopAllEndTime = comp.getDuration(true);
+        RosegardenDocument::currentDocument->setLoop(0, m_loopAllEndTime);
+        m_loopingAll = true;
     } else {
         // restore loop
         RosegardenDocument::currentDocument->setLoop
             (m_storedLoopStart, m_storedLoopEnd);
+        m_loopingAll = false;
     }
 }
 
@@ -5779,6 +5784,7 @@ RosegardenMainWindow::slotUnsetLoop()
     // store the loop
     m_storedLoopStart = comp.getLoopStart();
     m_storedLoopEnd = comp.getLoopEnd();
+    m_loopingAll = false;
 
     // clear the loop at the composition and propagate to the rest
     // of the display items
@@ -6193,6 +6199,18 @@ RosegardenMainWindow::slotDocumentModified(bool m)
         slotStateChanged("saved_file_modified", m);
     } else {
         slotStateChanged("new_file_modified", m);
+    }
+
+    // if we are looping the entire song recalculate end position
+    if (m_loopingAll) {
+        Composition &comp =
+            RosegardenDocument::currentDocument->getComposition();
+        timeT compEnd = comp.getDuration(true);
+        // we need this check to avoid infinite recurstion
+        if (m_loopAllEndTime != compEnd) {
+            m_loopAllEndTime = compEnd;
+            RosegardenDocument::currentDocument->setLoop(0, m_loopAllEndTime);
+        }
     }
 
 }
@@ -7835,6 +7853,7 @@ RosegardenMainWindow::slotLoopReset()
 {
     m_storedLoopStart = 0;
     m_storedLoopEnd = 0;
+    m_loopingAll = false;
     RosegardenDocument::currentDocument->setLoop(0, 0);
 }
 
