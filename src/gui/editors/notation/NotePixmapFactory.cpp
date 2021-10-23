@@ -3266,7 +3266,7 @@ QFont
 NotePixmapFactory::getTextFont(const Text &text) const
 {
     std::string type(text.getTextType());
-    TextFontCache::iterator i = m_textFontCache.find(type.c_str());
+    TextFontCache::iterator i = m_textFontCache.find(type);
     if (i != m_textFontCache.end())
         return i->second;
 
@@ -3358,7 +3358,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
                    << textFont.toString() << "' for type " << type.c_str()
                    << " text : " << text.getText().c_str();
 
-    m_textFontCache[type.c_str()] = textFont;
+    m_textFontCache[type] = textFont;
     return textFont;
 }
 
