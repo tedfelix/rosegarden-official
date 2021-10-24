@@ -409,7 +409,7 @@ protected:
     
     NotePixmapPainter *m_p;
 
-    typedef std::map<const char *, QFont> TextFontCache;
+    typedef std::map<std::string, QFont> TextFontCache;
     mutable TextFontCache m_textFontCache;
 };
 
