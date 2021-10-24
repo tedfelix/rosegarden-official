@@ -86,6 +86,7 @@ public:
 
     EventSelection *getSelection() const override;
     void setSelection(EventSelection* s, bool preview) override;
+    EventSelection *getRulerSelection() const;
 
     timeT getInsertionTime(bool allowEndTime = false) const;
 

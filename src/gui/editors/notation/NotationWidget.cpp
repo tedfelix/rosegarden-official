@@ -1088,6 +1088,15 @@ NotationWidget::setSelection(EventSelection *selection, bool preview)
     if (m_scene) m_scene->setSelection(selection, preview);
 }
 
+EventSelection *
+NotationWidget::getRulerSelection() const
+{
+    if (!m_controlRulerWidget)
+        return nullptr;
+
+    return m_controlRulerWidget->getSelection();
+}
+
 timeT
 NotationWidget::getInsertionTime(bool allowEndTime) const
 {

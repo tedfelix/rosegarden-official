@@ -1746,6 +1746,15 @@ NotationView::setSelection(EventSelection *selection, bool preview)
     if (m_notationWidget) m_notationWidget->setSelection(selection, preview);
 }
 
+EventSelection *
+NotationView::getRulerSelection() const
+{
+    if (!m_notationWidget)
+        return nullptr;
+
+    return m_notationWidget->getRulerSelection();
+}
+
 timeT
 NotationView::getInsertionTime(bool allowEndTime) const
 {
@@ -1767,9 +1776,17 @@ NotationView::slotEditCut()
 void
 NotationView::slotEditDelete()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand(new EraseCommand(selection));
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new EraseCommand(getSelection(),
+                             getRulerSelection()));
 }
 
 void
