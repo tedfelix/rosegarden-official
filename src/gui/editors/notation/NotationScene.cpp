@@ -887,8 +887,6 @@ NotationScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
-    ///! Warning, this short-circuits NotationView::setCurrentStaff...
-    if (nme.staff) setCurrentStaff(nme.staff);
     emit mousePressed(&nme);
 }
 
@@ -905,7 +903,11 @@ NotationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
+    
     emit mouseReleased(&nme);
+    
+    ///! Warning, this short-circuits NotationView::setCurrentStaff...
+    if (nme.staff && !m_selection) setCurrentStaff(nme.staff);
 }
 
 void
@@ -1879,10 +1881,6 @@ NotationScene::setSelection(EventSelection *s,
 
     if (m_selection) {
         newStaff = setSelectionElementStatus(m_selection, true);
-    }
-
-    if (newStaff) {
-        setCurrentStaff(newStaff);
     }
 
     if (oldSelection && m_selection && oldStaff && newStaff &&
