@@ -223,12 +223,6 @@ public:
     void dumpBarDataMap();
 
 signals:
-    void mousePressed(const NotationMouseEvent *e);
-    void mouseMoved(const NotationMouseEvent *e);
-    void mouseReleased(const NotationMouseEvent *e);
-    void mouseDoubleClicked(const NotationMouseEvent *e);
-    void wheelTurned(int, const NotationMouseEvent *e);
-
     void sceneNeedsRebuilding();
 
     void eventRemoved(Event *);

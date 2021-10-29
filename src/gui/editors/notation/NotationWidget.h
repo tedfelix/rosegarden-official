@@ -140,6 +140,12 @@ public:
 
     void updateSegmentChangerBackground();
     void updatePointerPosition(bool moveView = false);
+    
+    void dispatchMousePress(const NotationMouseEvent *);
+    void dispatchMouseRelease(const NotationMouseEvent *);
+    void dispatchMouseMove(const NotationMouseEvent *);
+    void dispatchMouseDoubleClick(const NotationMouseEvent *);
+    void dispatchWheelTurned(int, const NotationMouseEvent *);
 
 signals:
     void sceneNeedsRebuilding();
@@ -185,12 +191,6 @@ private:
     void updatePointer(timeT t);
 
 private slots:
-    void slotDispatchMousePress(const NotationMouseEvent *);
-    void slotDispatchMouseRelease(const NotationMouseEvent *);
-    void slotDispatchMouseMove(const NotationMouseEvent *);
-    void slotDispatchMouseDoubleClick(const NotationMouseEvent *);
-    void slotDispatchWheelTurned(int, const NotationMouseEvent *);
-
     void slotPointerPositionChanged(timeT t);
 
     // Standard Ruler

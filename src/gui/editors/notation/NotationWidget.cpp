@@ -428,21 +428,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_referenceScale = new ZoomableRulerScale(m_scene->getRulerScale());
 
-    connect(m_scene, &NotationScene::mousePressed,
-            this, &NotationWidget::slotDispatchMousePress);
-
-    connect(m_scene, &NotationScene::mouseMoved,
-            this, &NotationWidget::slotDispatchMouseMove);
-
-    connect(m_scene, &NotationScene::mouseReleased,
-            this, &NotationWidget::slotDispatchMouseRelease);
-
-    connect(m_scene, &NotationScene::mouseDoubleClicked,
-            this, &NotationWidget::slotDispatchMouseDoubleClick);
-
-    connect(m_scene, &NotationScene::wheelTurned,
-            this, &NotationWidget::slotDispatchWheelTurned);
-
     // Bug #2960243: the Qt::QueuedConnection flag is mandatory to avoid
     // a crash after deleting the notation scene from inside its own code.
     connect(m_scene, &NotationScene::sceneNeedsRebuilding,
@@ -1025,7 +1010,7 @@ NotationWidget::slotTRMouseRelease()
 }
 
 void
-NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
+NotationWidget::dispatchMousePress(const NotationMouseEvent *e)
 {
     if (!m_currentTool)
         return;
@@ -1045,7 +1030,7 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 }
 
 void
-NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
+NotationWidget::dispatchMouseMove(const NotationMouseEvent *e)
 {
     if (!m_currentTool)
         return;
@@ -1061,7 +1046,7 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 }
 
 void
-NotationWidget::slotDispatchMouseRelease(const NotationMouseEvent *e)
+NotationWidget::dispatchMouseRelease(const NotationMouseEvent *e)
 {
     m_autoScroller.stop();
 
@@ -1072,14 +1057,14 @@ NotationWidget::slotDispatchMouseRelease(const NotationMouseEvent *e)
 }
 
 void
-NotationWidget::slotDispatchMouseDoubleClick(const NotationMouseEvent *e)
+NotationWidget::dispatchMouseDoubleClick(const NotationMouseEvent *e)
 {
     if (!m_currentTool) return;
     m_currentTool->handleMouseDoubleClick(e);
 }
 
 void
-NotationWidget::slotDispatchWheelTurned(int delta, const NotationMouseEvent *e)
+NotationWidget::dispatchWheelTurned(int delta, const NotationMouseEvent *e)
 {
     if (!m_currentTool) return;
     m_currentTool->handleWheelTurned(delta, e);

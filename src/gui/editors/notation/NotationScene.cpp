@@ -887,7 +887,7 @@ NotationScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
-    emit mousePressed(&nme);
+    m_widget->dispatchMousePress(&nme);
 }
 
 void
@@ -895,7 +895,7 @@ NotationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
-    emit mouseMoved(&nme);
+    m_widget->dispatchMouseMove(&nme);
 }
 
 void
@@ -903,8 +903,7 @@ NotationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
-    
-    emit mouseReleased(&nme);
+    m_widget->dispatchMouseRelease(&nme);
     
     ///! Warning, this short-circuits NotationView::setCurrentStaff...
     if (nme.staff && !m_selection) setCurrentStaff(nme.staff);
@@ -915,7 +914,7 @@ NotationScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
-    emit mouseDoubleClicked(&nme);
+    m_widget->dispatchMouseDoubleClick(&nme);
 }
 
 void
@@ -924,7 +923,7 @@ NotationScene::wheelEvent(QGraphicsSceneWheelEvent *e)
     if (m_widget->getCurrentTool()->needsWheelEvents()) {
         NotationMouseEvent nme;
         setupMouseEvent(e, nme);
-        emit wheelTurned(e->delta(), &nme);
+        m_widget->dispatchWheelTurned(e->delta(), &nme);
         e->accept();    // Don't pass the event to the view
     }
 }
@@ -961,7 +960,7 @@ NotationScene::processKeyboardEvent(QKeyEvent * keyEvent)
                         QApplication::queryKeyboardModifiers(), nme);
 
         // Handle it as a mouse event
-        emit mouseMoved(&nme);
+        m_widget->dispatchMouseMove(&nme);;
     }
 }
 
