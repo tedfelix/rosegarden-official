@@ -69,7 +69,9 @@ NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     m_selectionToMerge(nullptr),
     m_justSelectedBar(false),
     m_wholeStaffSelectionComplete(false),
-    m_ties(ties)
+    m_ties(ties),
+    m_doubleClick(false),
+    m_lastStaff(nullptr)
 {
     //connect(m_widget, SIGNAL(usedSelection()),
     //        this, SLOT(slotHideSelection()));
@@ -102,6 +104,8 @@ NotationSelector::~NotationSelector()
 void
 NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 {
+    m_doubleClick = false;
+    
     if (m_justSelectedBar) {
         handleMouseTripleClick(e);
         m_justSelectedBar = false;
@@ -152,6 +156,8 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 void
 NotationSelector::handleRightButtonPress(const NotationMouseEvent *e)
 {
+    m_doubleClick = false;
+
     // if nothing selected, permit the possibility of selecting
     // something before showing the menu
     RG_DEBUG << "NotationSelector::handleRightButtonPress";
@@ -178,6 +184,8 @@ void NotationSelector::slotClickTimeout()
 
 void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
+    m_doubleClick = true;
+
     RG_DEBUG << "NotationSelector::handleMouseDoubleClick";
 
     // Only double click on left mouse button is currently used (fix #1493)
@@ -381,9 +389,20 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     m_selectionOrigin = QPointF();
     m_wholeStaffSelectionComplete = false;
     
-        
-    ///! Warning, this short-circuits NotationView::setCurrentStaff...
-    if (e->staff && !m_scene->getSelection()) m_scene->setCurrentStaff(e->staff);
+    if (m_doubleClick) {
+        // Undo what has been done at previous mouse release
+        if (m_lastStaff) {
+            m_scene->setCurrentStaff(m_lastStaff);
+        }
+    }
+    
+    if (e->staff && !m_scene->getSelection()) {
+        m_lastStaff = m_scene->getCurrentStaff();
+        ///! Warning, this short-circuits NotationView::setCurrentStaff...
+        m_scene->setCurrentStaff(e->staff);
+    } else {
+        m_lastStaff = nullptr; 
+    }
 }
 
 void NotationSelector::drag(int x, int y, bool final)

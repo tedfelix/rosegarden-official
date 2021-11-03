@@ -160,6 +160,10 @@ protected:
     bool m_justSelectedBar;
     bool m_wholeStaffSelectionComplete;
     bool m_ties;
+    
+private:
+    bool m_doubleClick;
+    NotationStaff *m_lastStaff;
 };
 
 class NotationSelectorNoTies : public NotationSelector
