@@ -904,9 +904,6 @@ NotationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
     m_widget->dispatchMouseRelease(&nme);
-    
-    ///! Warning, this short-circuits NotationView::setCurrentStaff...
-    if (nme.staff && !m_selection) setCurrentStaff(nme.staff);
 }
 
 void

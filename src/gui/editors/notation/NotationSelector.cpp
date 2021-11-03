@@ -380,6 +380,10 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     m_selectionRect->hide();
     m_selectionOrigin = QPointF();
     m_wholeStaffSelectionComplete = false;
+    
+        
+    ///! Warning, this short-circuits NotationView::setCurrentStaff...
+    if (e->staff && !m_scene->getSelection()) m_scene->setCurrentStaff(e->staff);
 }
 
 void NotationSelector::drag(int x, int y, bool final)
