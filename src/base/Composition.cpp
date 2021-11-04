@@ -14,7 +14,7 @@
 */
 
 #define RG_MODULE_STRING "[Composition]"
-// #define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "Composition.h"
 
