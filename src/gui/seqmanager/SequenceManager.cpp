@@ -17,7 +17,7 @@
 
 #define RG_MODULE_STRING "[SequenceManager]"
 
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "SequenceManager.h"
 
@@ -1539,7 +1539,7 @@ void SequenceManager::segmentAdded(Segment* s)
 
 void SequenceManager::segmentDeleted(Segment* s)
 {
-    RG_DEBUG << "segmentDeleted(" << s << ")";
+    RG_DEBUG << "segmentDeleted(" << (void *)s << ")";
 
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine has already

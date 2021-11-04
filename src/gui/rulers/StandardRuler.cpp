@@ -139,7 +139,7 @@ void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
      doc, &RosegardenDocument::slotSetLoop);
 
     QObject::connect
-    (m_loopRuler, &LoopRuler::setLoop,
+    (m_loopRuler, &LoopRuler::setLoopRange,
      doc, &RosegardenDocument::slotSetLoop);
 
     QObject::connect

@@ -248,6 +248,33 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     settings.endGroup();
 #endif
 
+    settings.beginGroup(SequencerOptionsConfigGroup);
+
+    layout->addWidget(new QLabel(tr("Stop playback at end of last segment"),
+                                 frame), row, 0);
+    m_stopPlaybackAtEnd = new QCheckBox(frame);
+    m_stopPlaybackAtEnd->setChecked(
+        settings.value("stopatend", false).toBool());
+    connect(m_stopPlaybackAtEnd, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_stopPlaybackAtEnd, row, 1, row- row+1, 2);
+
+    ++row;
+
+    layout->addWidget(new QLabel(tr("Loop entire song if no range is set"),
+                                 frame), row, 0);
+    m_loopSong = new QCheckBox(frame);
+    m_loopSong->setChecked(
+        settings.value("loopentiresong", false).toBool());
+    connect(m_loopSong, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_loopSong, row, 1, row- row+1, 2);
+
+    ++row;
+
+    settings.endGroup();
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     // Skip a row.  Leave some space for the next field.
@@ -540,6 +567,13 @@ void GeneralConfigurationPage::apply()
 
     settings.endGroup();
 #endif // HAVE_LIBJACK
+
+    settings.beginGroup(SequencerOptionsConfigGroup);
+
+    settings.setValue("stopatend", m_stopPlaybackAtEnd->isChecked());
+    settings.setValue("loopentiresong", m_loopSong->isChecked());
+
+    settings.endGroup();
 
     // Presentation tab
 

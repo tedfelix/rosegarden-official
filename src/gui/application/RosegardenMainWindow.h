@@ -1360,9 +1360,6 @@ public slots:
     /// Panic button pressed
     void slotPanic();
 
-    /// Reset loop memory
-    void slotLoopReset();
-
     // Auto-save
     //
     void slotAutoSave();

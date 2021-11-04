@@ -757,10 +757,11 @@ public:
 
     void setLoopStart(const timeT &lS) { m_loopStart = lS; }
     void setLoopEnd(const timeT &lE) { m_loopEnd = lE; }
+    void setLooping(bool loop);
 
     // Determine if we're currently looping
     //
-    bool isLooping() const { return (m_loopStart != m_loopEnd); }
+    bool isLooping() const { return m_isLooping; }
 
 
     
@@ -1090,11 +1091,11 @@ protected:
     timeT                             m_endMarker;
     bool                              m_autoExpand;
 
-    // Loop start and end positions.  If they're both the same
-    // value (usually 0) then there's no loop set.
-    //
+    // Loop start and end positions.
     timeT                             m_loopStart;
     timeT                             m_loopEnd;
+    // we may have a loop (or range) set but not be in looping mode
+    bool                              m_isLooping;
 
     Configuration                     m_metadata;
 

@@ -63,7 +63,10 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4)),
     m_loopingMode(false),
     m_startLoop(0),
-    m_endLoop(0)
+    m_endLoop(0),
+    m_storedLoopStart(0),
+    m_storedLoopEnd(0),
+    m_loopSet(false)
 {
     // Always snap loop extents to beats; by default apply no snap to
     // pointer position
@@ -71,7 +74,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     m_loopGrid->setSnapTime(SnapGrid::SnapToBeat);
 
-    setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Right-click and drag to set a range for looping or editing.</p><p>Right-click to clear the loop or range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
+    setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Right-click and drag to set a range for looping or editing.</p><p>Right-click to toggle the range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
 }
 
 LoopRuler::~LoopRuler()
@@ -317,31 +320,41 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
 void
 LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
-    // If we were in looping mode
-    if (m_loopingMode) {
-        m_loopingMode = false;
-
-        // If there was no drag, cancel the loop.
-        if (m_endLoop == m_startLoop) {
-            m_startLoop = 0;
-            m_endLoop = 0;
-
-            // to clear any other loop rulers
-            emit setLoop(m_startLoop, m_endLoop);
-            update();
-        } else {  // There was drag
-            // Make sure start < end
-            if (m_endLoop < m_startLoop)
-                std::swap(m_startLoop, m_endLoop);
-
-            emit setLoop(m_startLoop, m_endLoop);
+    // No change to looping mode here
+    // If there was no drag, toggle the loop.
+    if (m_endLoop == m_startLoop) {
+        m_startLoop = 0;
+        m_endLoop = 0;
+        if (m_loopSet) {
+            // unset the loop
+            m_loopSet = false;
+        } else {
+            if (m_storedLoopStart == m_storedLoopEnd) {
+                // no stored loop - do nothing
+            } else {
+                // reinstate the stored loop
+                m_startLoop = m_storedLoopStart;
+                m_endLoop = m_storedLoopEnd;
+                m_loopSet = true;
+            }
         }
-
-        emit stopMouseMove();
-        m_activeMousePress = false;
-
-        return;
+        // to clear any other loop rulers
+        emit setLoopRange(m_startLoop, m_endLoop);
+        update();
+    } else {  // There was drag
+        // Make sure start < end
+        if (m_endLoop < m_startLoop)
+            std::swap(m_startLoop, m_endLoop);
+        m_storedLoopStart = m_startLoop;
+        m_storedLoopEnd = m_endLoop;
+        m_loopSet = true;
+        emit setLoopRange(m_startLoop, m_endLoop);
     }
+    
+    emit stopMouseMove();
+    m_activeMousePress = false;
+    
+    return;
 
 	if (mouseEvent->button() == Qt::LeftButton) {
         // we need to re-emit this signal so that when the user releases

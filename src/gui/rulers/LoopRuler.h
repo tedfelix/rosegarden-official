@@ -81,7 +81,7 @@ signals:
     void setPlayPosition(timeT);
 
     /// Set a playing loop
-    void setLoop(timeT, timeT);
+    void setLoopRange(timeT, timeT);
 
     /// Set the loop end position on mouse drag
     void dragLoopToPosition(timeT);
@@ -128,6 +128,9 @@ private:
     bool m_loopingMode;
     timeT m_startLoop;
     timeT m_endLoop;
+    timeT m_storedLoopStart;
+    timeT m_storedLoopEnd;
+    bool m_loopSet;
 };
 
 

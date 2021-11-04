@@ -665,12 +665,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString loopStartStr = atts.value("loopstart").toString();
         QString loopEndStr = atts.value("loopend").toString();
 
+        int loopStart = 0;
+        int loopEnd = 0;
         if (!loopStartStr.isEmpty() && !loopEndStr.isEmpty()) {
-            int loopStart = loopStartStr.toInt();
-            int loopEnd = loopEndStr.toInt();
+            loopStart = loopStartStr.toInt();
+            loopEnd = loopEndStr.toInt();
 
             getComposition().setLoopStart(loopStart);
             getComposition().setLoopEnd(loopEnd);
+        }
+
+        QString isLooping = atts.value("islooping").toString();
+        if (isLooping.isEmpty()) {
+            // old document - use start = end
+            getComposition().setLooping(loopStart != loopEnd);
+        } else {
+            if (isLooping.toInt() == 1)
+                getComposition().setLooping(true);
+            else
+                getComposition().setLooping(false);
         }
 
         QString selectedTrackStr = atts.value("selected").toString();
