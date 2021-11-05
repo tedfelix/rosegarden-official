@@ -69,9 +69,7 @@ NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     m_selectionToMerge(nullptr),
     m_justSelectedBar(false),
     m_wholeStaffSelectionComplete(false),
-    m_ties(ties),
-    m_doubleClick(false),
-    m_lastStaff(nullptr)
+    m_ties(ties)
 {
     //connect(m_widget, SIGNAL(usedSelection()),
     //        this, SLOT(slotHideSelection()));
@@ -92,8 +90,12 @@ NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     createAction("make_invisible", SLOT(slotMakeInvisible()));
     createAction("make_visible", SLOT(slotMakeVisible()));
 
-
     createMenu();
+    
+    m_releaseTimer = new QTimer(this);
+    m_releaseTimer->setSingleShot(true);
+    connect(m_releaseTimer, &QTimer::timeout,
+            this, &NotationSelector::slotHandleMouseRelease);
 }
 
 NotationSelector::~NotationSelector()
@@ -104,7 +106,7 @@ NotationSelector::~NotationSelector()
 void
 NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 {
-    m_doubleClick = false;
+    m_releaseTimer->stop();     // It may be a triple click
     
     if (m_justSelectedBar) {
         handleMouseTripleClick(e);
@@ -156,7 +158,7 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 void
 NotationSelector::handleRightButtonPress(const NotationMouseEvent *e)
 {
-    m_doubleClick = false;
+    m_releaseTimer->stop();     // Useful here ???
 
     // if nothing selected, permit the possibility of selecting
     // something before showing the menu
@@ -184,8 +186,8 @@ void NotationSelector::slotClickTimeout()
 
 void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
-    m_doubleClick = true;
-
+    m_releaseTimer->stop();
+    
     RG_DEBUG << "NotationSelector::handleMouseDoubleClick";
 
     // Only double click on left mouse button is currently used (fix #1493)
@@ -299,6 +301,24 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 
 void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 {
+    // Make a copy of the event as it may no more exist after the timer delay
+    m_releaseArg = *e;
+    
+    std::cout << "staff = " << e->staff << "   " << m_releaseArg.staff << "\n";
+    std::cout << "element = " << e->element << "   " << m_releaseArg.element << "\n";
+    std::cout << "exact = " << e->exact << "   " << m_releaseArg.exact << "\n";
+    std::cout << "clef = " << e->clef.getClefType() << "   " << m_releaseArg.clef.getClefType() << "\n";
+    std::cout << "key = " << e->key.getName() << "   " << m_releaseArg.key.getName() << "\n";
+    std::cout << "time = " << e->time << "   " << m_releaseArg.time << "\n";
+    
+    m_releaseTimer->start(QApplication::doubleClickInterval());
+}
+    
+void NotationSelector::slotHandleMouseRelease()
+{
+    
+    NotationMouseEvent * e = &m_releaseArg;
+    
     //RG_DEBUG << "NotationSelector::handleMouseRelease.";
     m_updateRect = false;
 
@@ -389,19 +409,10 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     m_selectionOrigin = QPointF();
     m_wholeStaffSelectionComplete = false;
     
-    if (m_doubleClick) {
-        // Undo what has been done at previous mouse release
-        if (m_lastStaff) {
-            m_scene->setCurrentStaff(m_lastStaff);
-        }
-    }
-    
     if (e->staff && !m_scene->getSelection()) {
-        m_lastStaff = m_scene->getCurrentStaff();
         ///! Warning, this short-circuits NotationView::setCurrentStaff...
         m_scene->setCurrentStaff(e->staff);
-    } else {
-        m_lastStaff = nullptr; 
+        m_widget->setPointerPosition(e->time);
     }
 }
 

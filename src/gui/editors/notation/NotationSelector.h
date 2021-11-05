@@ -19,7 +19,7 @@
 #define RG_NOTATIONSELECTOR_H
 
 #include "NotationTool.h"
-
+#include "NotationMouseEvent.h"
 #include "base/Event.h"
 
 #include <QString>
@@ -122,6 +122,7 @@ public slots:
     void slotMakeVisible();
 
     void slotClickTimeout();
+    void slotHandleMouseRelease();
 
 protected:
     NotationSelector(NotationWidget *, bool ties = true);
@@ -162,8 +163,8 @@ protected:
     bool m_ties;
     
 private:
-    bool m_doubleClick;
-    NotationStaff *m_lastStaff;
+    QTimer *m_releaseTimer;
+    NotationMouseEvent m_releaseArg;
 };
 
 class NotationSelectorNoTies : public NotationSelector
