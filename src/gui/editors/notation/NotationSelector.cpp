@@ -106,9 +106,10 @@ NotationSelector::~NotationSelector()
 void
 NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 {
-    m_releaseTimer->stop();     // It may be a triple click
     
     if (m_justSelectedBar) {
+        // It's a triple click
+        m_releaseTimer->stop();     // Don't call previous button release code
         handleMouseTripleClick(e);
         m_justSelectedBar = false;
         return ;
@@ -186,7 +187,7 @@ void NotationSelector::slotClickTimeout()
 
 void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
-    m_releaseTimer->stop();
+    m_releaseTimer->stop();      // Don't call previous button release code
     
     RG_DEBUG << "NotationSelector::handleMouseDoubleClick";
 
@@ -304,19 +305,13 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     // Make a copy of the event as it may no more exist after the timer delay
     m_releaseArg = *e;
     
-    std::cout << "staff = " << e->staff << "   " << m_releaseArg.staff << "\n";
-    std::cout << "element = " << e->element << "   " << m_releaseArg.element << "\n";
-    std::cout << "exact = " << e->exact << "   " << m_releaseArg.exact << "\n";
-    std::cout << "clef = " << e->clef.getClefType() << "   " << m_releaseArg.clef.getClefType() << "\n";
-    std::cout << "key = " << e->key.getName() << "   " << m_releaseArg.key.getName() << "\n";
-    std::cout << "time = " << e->time << "   " << m_releaseArg.time << "\n";
-    
+    // Wait a possible double click before executing the code
     m_releaseTimer->start(QApplication::doubleClickInterval());
 }
     
 void NotationSelector::slotHandleMouseRelease()
 {
-    
+    // Use the memorized event
     NotationMouseEvent * e = &m_releaseArg;
     
     //RG_DEBUG << "NotationSelector::handleMouseRelease.";
@@ -409,10 +404,11 @@ void NotationSelector::slotHandleMouseRelease()
     m_selectionOrigin = QPointF();
     m_wholeStaffSelectionComplete = false;
     
+    // If nothing selected, move the insertion pointer:
     if (e->staff && !m_scene->getSelection()) {
         ///! Warning, this short-circuits NotationView::setCurrentStaff...
-        m_scene->setCurrentStaff(e->staff);
-        m_widget->setPointerPosition(e->time);
+        m_scene->setCurrentStaff(e->staff);     // to the mouse pointer staff
+        m_widget->setPointerPosition(e->time);  // to the mouse pointer time
     }
 }
 

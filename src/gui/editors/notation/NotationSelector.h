@@ -163,8 +163,10 @@ protected:
     bool m_ties;
     
 private:
+    // m_releaseTimer delays execution of mouse button release related code to *
+    // allow the execution of a possible double click.
     QTimer *m_releaseTimer;
-    NotationMouseEvent m_releaseArg;
+    NotationMouseEvent m_releaseArg; 
 };
 
 class NotationSelectorNoTies : public NotationSelector
