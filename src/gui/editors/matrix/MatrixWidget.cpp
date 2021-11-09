@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixWidget]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixWidget.h"
 
@@ -894,6 +895,7 @@ MatrixWidget::slotDispatchMousePress(const MatrixMouseEvent *e)
         m_currentTool->handleRightButtonPress(e);
     }
 
+    RG_DEBUG << "slotDispatchMousePress autoscroll start";
     m_autoScroller.start();
 }
 
@@ -911,6 +913,7 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
 
     FollowMode followMode = m_currentTool->handleMouseMove(e);
 
+    RG_DEBUG << "slotDispatchMouseMove mode" << followMode;
     m_autoScroller.setFollowMode(followMode);
 }
 
@@ -922,6 +925,7 @@ MatrixWidget::slotDispatchMouseRelease(const MatrixMouseEvent *e)
     if (!m_currentTool)
         return;
 
+    RG_DEBUG << "slotDispatchMouseRelease autoscroll stop";
     m_currentTool->handleMouseRelease(e);
 }
 

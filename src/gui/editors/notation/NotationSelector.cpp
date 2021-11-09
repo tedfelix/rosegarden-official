@@ -244,6 +244,7 @@ void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 FollowMode
 NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 {
+    RG_DEBUG << "handleMouseMove" << e;
     if (!m_updateRect) return NO_FOLLOW;
 
 //    std::cout << "NotationSelector::handleMouseMove: staff is " 

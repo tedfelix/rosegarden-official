@@ -16,10 +16,9 @@
 */
 
 #define RG_MODULE_STRING "[NotationWidget]"
-
-#include "NotationWidget.h"
 #define RG_NO_DEBUG_PRINT 1
 
+#include "NotationWidget.h"
 #include "NotationScene.h"
 #include "NotationToolBox.h"
 #include "NoteRestInserter.h"
@@ -373,6 +372,8 @@ NotationWidget::NotationWidget() :
             this, &NotationWidget::slotGenerateHeaders);
     m_headersTimer->setSingleShot(true);
     m_headersTimer->setInterval(100);  // 0.1 s
+
+    m_view->setMouseTracking(true);
 
     m_autoScroller.connectScrollArea(m_view);
 }
@@ -1041,6 +1042,7 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
         m_currentTool->handleRightButtonPress(e);
     }
 
+    RG_DEBUG << "slotDispatchMousePress autoscroll start";
     m_autoScroller.start();
 }
 
@@ -1052,6 +1054,7 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 
     FollowMode followMode = m_currentTool->handleMouseMove(e);
 
+    RG_DEBUG << "slotDispatchMouseMove mode" << followMode;
     m_autoScroller.setFollowMode(followMode);
 
     if (e->staff) {
@@ -1063,6 +1066,7 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 void
 NotationWidget::slotDispatchMouseRelease(const NotationMouseEvent *e)
 {
+    RG_DEBUG << "slotDispatchMouseRelease autoscroll stop";
     m_autoScroller.stop();
 
     if (!m_currentTool)
