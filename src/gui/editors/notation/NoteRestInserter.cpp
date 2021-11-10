@@ -15,10 +15,11 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NoteRestInserter]"
+#define RG_NO_DEBUG_PRINT 1
+
 #include "NoteRestInserter.h"
 #include "misc/Debug.h"
-
-
 #include "base/BaseProperties.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
@@ -227,7 +228,6 @@ void NoteRestInserter::ready()
 
     if (m_alwaysPreview) {
         setCursorShape();
-        m_widget->getView()->setMouseTracking(true);
     } else {
         m_widget->setCanvasCursor(Qt::CrossCursor);
     }
@@ -251,7 +251,6 @@ void NoteRestInserter::stow()
 
     if (m_alwaysPreview) {
         clearPreview();
-        m_widget->getView()->setMouseTracking(false);
     }
     m_ready = false;
 }
