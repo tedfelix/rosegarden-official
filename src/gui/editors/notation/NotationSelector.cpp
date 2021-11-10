@@ -193,7 +193,7 @@ void NotationSelector::slotClickTimeout()
 
 void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
-    m_releaseTimer->stop();      // Don't call previous button release code
+    m_releaseTimer->stop();      // Don't move insertion cursor
     m_doubleClick = true;
     
     RG_DEBUG << "NotationSelector::handleMouseDoubleClick";
@@ -356,17 +356,7 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
             } else {
                 m_scene->setSingleSelectedEvent(m_selectedStaff, m_clickedElement, true);
             }
-            /*
-                    } else if (m_selectedStaff) {
-             
-                        // If we clicked on no event but on a staff, move the
-                        // insertion cursor to the point where we clicked. 
-                        // Actually we only really want this to happen if
-                        // we aren't double-clicking -- consider using a timer
-                        // to establish whether a double-click is going to happen
-             
-                        m_nParentView->slotSetInsertCursorPosition(e->x(), (int)e->y());
-            */
+
         } else {
             // Nothing selected or a group of events added to selection
             setViewCurrentSelection(false);
@@ -402,8 +392,14 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     m_selectionOrigin = QPointF();
     m_wholeStaffSelectionComplete = false;
     
-    // If nothing selected, move the insertion pointer
-    if (m_doubleClick || m_tripleClick) return;  // Something is selected
+    // If we clicked on no event but on a staff, move the insertion cursor
+    // to the point where we clicked. In such a case nothing has been selected.
+    
+    // If double or triple click, something is selected or the click was
+    // outside any staff.
+    if (m_doubleClick || m_tripleClick) return;
+    
+    // If simple click, look at clicked staff and current selection
     if (e->staff && !m_scene->getSelection()) {
         m_pointerStaff = e->staff;
         m_pointerTime = e->time;
