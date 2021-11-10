@@ -122,7 +122,7 @@ public slots:
     void slotMakeVisible();
 
     void slotClickTimeout();
-    void slotHandleMouseRelease();
+    void slotMoveInsertionCursor();
 
 protected:
     NotationSelector(NotationWidget *, bool ties = true);
@@ -163,10 +163,13 @@ protected:
     bool m_ties;
     
 private:
+    bool m_doubleClick;
+    bool m_tripleClick;
+    NotationStaff * m_pointerStaff;
+    timeT m_pointerTime;
     // m_releaseTimer delays execution of mouse button release related code to *
     // allow the execution of a possible double click.
     QTimer *m_releaseTimer;
-    NotationMouseEvent m_releaseArg; 
 };
 
 class NotationSelectorNoTies : public NotationSelector
