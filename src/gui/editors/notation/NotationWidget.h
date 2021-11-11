@@ -146,6 +146,9 @@ public:
     void dispatchMouseMove(const NotationMouseEvent *);
     void dispatchMouseDoubleClick(const NotationMouseEvent *);
     void dispatchWheelTurned(int, const NotationMouseEvent *);
+    
+    //  Valid or inhibit scrolling to kept the cursor in the view
+    void setScroll(bool scroll) { m_noScroll = !scroll; }
 
 signals:
     void sceneNeedsRebuilding();
@@ -340,6 +343,8 @@ private:
     QTimer *m_resizeTimer;
 
     bool m_updatesSuspended;
+    
+    bool m_noScroll;    // If true, don't scroll to keep the cursor in the view
 
     void locatePanner(bool vertical);
 

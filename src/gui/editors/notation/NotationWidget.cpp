@@ -128,7 +128,8 @@ NotationWidget::NotationWidget() :
     m_graceMode(false),
     m_tupledCount(2),
     m_untupledCount(3),
-    m_updatesSuspended(false)
+    m_updatesSuspended(false),
+    m_noScroll(false)
 {
 
     m_resizeTimer = new QTimer(this);
@@ -956,8 +957,8 @@ NotationWidget::slotPointerPositionChanged(timeT t)
 {
     updatePointer(t);
 
-    if (m_playTracking)
-        m_view->ensurePositionPointerInView(true);  // page
+    if (m_playTracking && !m_noScroll)
+        m_view->ensurePositionPointerInView(true);  // page  
 }
 
 void
@@ -1752,8 +1753,8 @@ NotationWidget::slotStaffChanged()
 {
     // Draw the pointer
     updatePointer(m_document->getComposition().getPosition());
-    // Make sure it's in view.
-    m_view->ensurePositionPointerInView(false);
+    // Make sure it's in view (if scrolling is not inhibited).
+    if (!m_noScroll) m_view->ensurePositionPointerInView(false);
 }
 
 void

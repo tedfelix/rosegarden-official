@@ -411,10 +411,17 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 
 void NotationSelector::slotMoveInsertionCursor()
 {
-    // Move the insertion cursor to the mouse pointer position
+    // Move the insertion cursor to the mouse pointer position.
+    
+    // We just clicked on a staff in the window, so no scroll is needed
+    // and we don't want to see any move of the staves
+    m_widget->setScroll(false);
+
     ///! Warning, this short-circuits NotationView::setCurrentStaff...
     m_scene->setCurrentStaff(m_pointerStaff);
     m_widget->setPointerPosition(m_pointerTime);
+    
+    m_widget->setScroll(true);
 }
 
 void NotationSelector::drag(int x, int y, bool final)
