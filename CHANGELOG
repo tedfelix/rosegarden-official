@@ -1,3 +1,53 @@
+====== ROSEGARDEN 21.12 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 21.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fix crash with certain multi-monitor setups with Qt 5.14+.
+    Bug #1599.  [9713720]
+  * In the matrix editor, "Collapse equal pitch notes" no longer ties
+    notes.  Bug #1575.  [07845e1]
+  * Fix "Command-line file printing utility" preference combobox.
+    Bug #1531.  [ef141a6]
+  * Notation: Fix selection of last note in segment using
+    Shift+Right-arrow.  Bug #1600.  [211f2c4] [5f9e348]
+  * Fix note insertion steals grace note.  Bug #1520.  [d2ff1d4]
+    [1ddd230]
+  * Fix tuplet insertion problems.  Bug #1464.  [10abb18] and prior.
+  * Fix undo loses cursor position.  Bug #927.  [481fdc3] and prior.
+  * Fix crash when deleting segments shown in Matrix.  [5f71149]
+  * Matrix: Fix ruler events all on the left at launch.  [a7fd912]
+  * Notation: Fix ruler events on the left at launch.  [f5a4e6d]
+  * Notation: Fix unreliable text style.  Bug #1609.  [0fc9382]
+  * Fix link error with pipewire-jack.  [881ea5a]
+  * Fix unexpected auto-scroll in notation.  Bug #1612.  [226c921]
+
+===== New Features =====
+
+  * Add "Use native file dialogs" preference.  [b9da2db] [a1dcc44]
+    [6765fa9]
+  * Add Device and Instrument fields to Add Tracks dialog.
+    [9dc1183]-[3900ea7]
+  * Add display of note names on notes in Matrix.  Feature #489.
+    [de7ff8f] and prior.
+  * Add indication of black keys across grid in Matrix.  Feature #489.
+    [de7ff8f] and prior.
+  * Rewrite and completion of the "File > Merge > Merge file..."
+    command.  [bdd1e6a] and prior.
+  * Add "Ignore" button to Lock File warning dialog.  [0626734]
+
+===== Additional Contributors =====
+
+  * Michael Stockinger (www.stockinger.org) - German Translation
+
+
 ====== ROSEGARDEN 21.06 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 21.06
