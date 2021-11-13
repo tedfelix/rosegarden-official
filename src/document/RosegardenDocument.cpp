@@ -1115,7 +1115,7 @@ void RosegardenDocument::setSequenceManager(SequenceManager *sm)
 //
 int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
 int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
-int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 6;
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 7;
 
 bool RosegardenDocument::saveDocument(const QString& filename,
                                     QString& errMsg,

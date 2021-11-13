@@ -914,6 +914,12 @@ public:
     // LYRICS WITH REPEATED SEGMENTS
     void distributeVerses();
 
+    // follow playback flags
+    bool getEditorFollowPlayback() const { return m_editorFollowPlayback; }
+    void setEditorFollowPlayback(bool b) { m_editorFollowPlayback = b; }
+    bool getTrackFollowPlayback() const { return m_trackFollowPlayback; }
+    void setTrackFollowPlayback(bool b) { m_trackFollowPlayback = b; }
+
     //////
     // DEBUG FACILITIES
     void dump() const;
@@ -1119,6 +1125,9 @@ protected:
     //
     mutable std::map<TrackId, int>    m_trackVoiceCountCache;
     mutable std::map<const Segment *, int>  m_segmentVoiceIndexCache;
+
+    bool                              m_editorFollowPlayback;
+    bool                              m_trackFollowPlayback;
 };
 
 

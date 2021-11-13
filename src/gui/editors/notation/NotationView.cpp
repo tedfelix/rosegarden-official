@@ -430,6 +430,11 @@ NotationView::NotationView(RosegardenDocument *doc,
     // We have to do this after show() because the rulers need information
     // that isn't available until the NotationView is shown.  (xScale)
     launchRulers(segments);
+
+    bool follow_pb = RosegardenDocument::currentDocument->getComposition().
+        getEditorFollowPlayback();
+    RG_DEBUG << "set toggle_tracking checked" << follow_pb;
+    findAction("toggle_tracking")->setChecked(follow_pb);
 }
 
 NotationView::~NotationView()

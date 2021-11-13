@@ -750,6 +750,33 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             getComposition().m_notationSpacing = 100;
         }
 
+        QString editorFollowPlaybackStr =
+            atts.value("editorfollowplayback").toString();
+        if (!editorFollowPlaybackStr.isEmpty()) {
+            if (editorFollowPlaybackStr.toInt() == 1) {
+                getComposition().setEditorFollowPlayback(true);
+            } else {
+                getComposition().setEditorFollowPlayback(false);
+            }
+        } else {
+            // Default to true.
+            getComposition().setEditorFollowPlayback(true);
+        }
+
+        QString trackFollowPlaybackStr =
+            atts.value("trackfollowplayback").toString();
+        if (!trackFollowPlaybackStr.isEmpty()) {
+            if (trackFollowPlaybackStr.toInt() == 1) {
+                getComposition().setTrackFollowPlayback(true);
+            } else {
+                getComposition().setTrackFollowPlayback(false);
+            }
+        } else {
+            // Default to true.
+            getComposition().setTrackFollowPlayback(true);
+        }
+
+
     } else if (lcName == "track") {
 
         if (m_section != InComposition) {

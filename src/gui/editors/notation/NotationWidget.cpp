@@ -604,6 +604,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &NotationScene::currentStaffChanged,
             this, &NotationWidget::slotStaffChanged);
 
+    m_playTracking = m_document->getComposition().getEditorFollowPlayback();
 }
 
 void
@@ -886,6 +887,7 @@ NotationWidget::slotSetGuitarChordInserter()
 void
 NotationWidget::slotSetPlayTracking(bool tracking)
 {
+    m_document->getComposition().setEditorFollowPlayback(tracking);
     m_playTracking = tracking;
     if (m_playTracking) {
         m_view->ensurePositionPointerInView(true);

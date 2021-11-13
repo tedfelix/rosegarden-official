@@ -129,7 +129,6 @@ MatrixView::MatrixView(RosegardenDocument *doc,
                  bool drumMode,
                  QWidget *parent) :
     EditViewBase(segments, parent),
-    m_tracking(true),
     m_quantizations(BasicQuantizer::getStandardQuantizations()),
     m_drumMode(drumMode),
     m_inChordMode(false)
@@ -189,6 +188,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
         MATRIX_DEBUG << "newest state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked();
     }
 
+    m_tracking = m_document->getComposition().getEditorFollowPlayback();
+    findAction("toggle_tracking")->setChecked(m_tracking);
     m_matrixWidget->setScrollToFollowPlayback(m_tracking);
 
     slotUpdateWindowTitle();
@@ -1275,6 +1276,7 @@ MatrixView::slotToggleTracking()
 {
     m_tracking = !m_tracking;
     m_matrixWidget->setScrollToFollowPlayback(m_tracking);
+    m_document->getComposition().setEditorFollowPlayback(m_tracking);
 }
 
 void
