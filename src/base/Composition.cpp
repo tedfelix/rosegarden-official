@@ -243,7 +243,7 @@ Composition::Composition() :
     m_recordMetronome(true),
     m_nextTriggerSegmentId(0),
     m_editorFollowPlayback(true),
-    m_trackFollowPlayback(true)
+    m_mainFollowPlayback(true)
 {
     // nothing else
 }
@@ -2020,7 +2020,7 @@ std::string Composition::toXmlString() const
     composition << "\" notationspacing=\"" << m_notationSpacing;
 
     composition << "\" editorfollowplayback=\"" << m_editorFollowPlayback;
-    composition << "\" trackfollowplayback=\"" << m_trackFollowPlayback;
+    composition << "\" mainfollowplayback=\"" << m_mainFollowPlayback;
 
     composition << "\">" << std::endl << std::endl;
 

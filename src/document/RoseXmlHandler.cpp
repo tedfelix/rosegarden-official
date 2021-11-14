@@ -763,17 +763,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             getComposition().setEditorFollowPlayback(true);
         }
 
-        QString trackFollowPlaybackStr =
-            atts.value("trackfollowplayback").toString();
-        if (!trackFollowPlaybackStr.isEmpty()) {
-            if (trackFollowPlaybackStr.toInt() == 1) {
-                getComposition().setTrackFollowPlayback(true);
+        QString mainFollowPlaybackStr =
+            atts.value("mainfollowplayback").toString();
+        if (!mainFollowPlaybackStr.isEmpty()) {
+            if (mainFollowPlaybackStr.toInt() == 1) {
+                getComposition().setMainFollowPlayback(true);
             } else {
-                getComposition().setTrackFollowPlayback(false);
+                getComposition().setMainFollowPlayback(false);
             }
         } else {
             // Default to true.
-            getComposition().setTrackFollowPlayback(true);
+            getComposition().setMainFollowPlayback(true);
         }
 
 

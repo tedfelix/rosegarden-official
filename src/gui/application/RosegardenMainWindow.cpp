@@ -1126,7 +1126,7 @@ RosegardenMainWindow::initView()
     // play tracking in the track editor is stored in the composition
     QAction *trackingAction = findAction("toggle_tracking");
     if (trackingAction) {
-        trackingAction->setChecked(comp.getTrackFollowPlayback());
+        trackingAction->setChecked(comp.getMainFollowPlayback());
     }
 
     m_view->show();

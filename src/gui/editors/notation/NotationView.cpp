@@ -431,10 +431,11 @@ NotationView::NotationView(RosegardenDocument *doc,
     // that isn't available until the NotationView is shown.  (xScale)
     launchRulers(segments);
 
-    bool follow_pb = RosegardenDocument::currentDocument->getComposition().
-        getEditorFollowPlayback();
-    RG_DEBUG << "set toggle_tracking checked" << follow_pb;
-    findAction("toggle_tracking")->setChecked(follow_pb);
+    const bool followPlayback =
+            RosegardenDocument::currentDocument->getComposition().
+            getEditorFollowPlayback();
+    RG_DEBUG << "set toggle_tracking checked" << followPlayback;
+    findAction("toggle_tracking")->setChecked(followPlayback);
 }
 
 NotationView::~NotationView()

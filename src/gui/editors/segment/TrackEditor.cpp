@@ -112,7 +112,7 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
     updateCanvasSize();
 
     Composition &comp = m_doc->getComposition();
-    m_playTracking = comp.getTrackFollowPlayback();
+    m_playTracking = comp.getMainFollowPlayback();
 }
 
 void
@@ -513,7 +513,7 @@ TrackEditor::toggleTracking()
 {
     m_playTracking = !m_playTracking;
     Composition &comp = m_doc->getComposition();
-    comp.setTrackFollowPlayback(m_playTracking);
+    comp.setMainFollowPlayback(m_playTracking);
 
 }
 

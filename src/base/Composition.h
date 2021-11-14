@@ -914,11 +914,14 @@ public:
     // LYRICS WITH REPEATED SEGMENTS
     void distributeVerses();
 
-    // follow playback flags
+    /// Follow playback for Matrix and Notation.
     bool getEditorFollowPlayback() const { return m_editorFollowPlayback; }
+    /// Follow playback for Matrix and Notation.
     void setEditorFollowPlayback(bool b) { m_editorFollowPlayback = b; }
-    bool getTrackFollowPlayback() const { return m_trackFollowPlayback; }
-    void setTrackFollowPlayback(bool b) { m_trackFollowPlayback = b; }
+    /// Follow playback for the main window.
+    bool getMainFollowPlayback() const { return m_mainFollowPlayback; }
+    /// Follow playback for the main window.
+    void setMainFollowPlayback(bool b) { m_mainFollowPlayback = b; }
 
     //////
     // DEBUG FACILITIES
@@ -1126,8 +1129,10 @@ protected:
     mutable std::map<TrackId, int>    m_trackVoiceCountCache;
     mutable std::map<const Segment *, int>  m_segmentVoiceIndexCache;
 
+    /// Follow playback for Matrix and Notation.
     bool                              m_editorFollowPlayback;
-    bool                              m_trackFollowPlayback;
+    /// Follow playback for the main window.
+    bool                              m_mainFollowPlayback;
 };
 
 
