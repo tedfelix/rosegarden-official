@@ -1237,13 +1237,24 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
                                  time + note.getDuration() * 2,
                                  Note::getNearestNote(note.getDuration() * 2))); // have to find out what these 2 mean
             //## }
-            //# These comments should probably be deleted.
 
-            command->addCommand(new TupletCommand
-                                (segment, time, note.getDuration(),
-                                 m_widget->getUntupledCount(),
-                                 m_widget->getTupledCount(), false)); // #1046934: "has timing already"
+            // ??? History of the groupHasTimingAlready field...
+            //     Bug #629: Changed to true to fix.
+            //     Bug #1464: Changed back to false which re-introduced the
+            //                problems with tuplets eating following notes.
+            //     November 26, 2021 changing this back to true to fix the
+            //     re-introduced problems.  This breaks entering 7 in 4.
+            //     Leaving it this way for 21.12.
+            command->addCommand(new TupletCommand(
+                    segment,
+                    time,  // startTime
+                    note.getDuration(),  // unit
+                    m_widget->getUntupledCount(),
+                    m_widget->getTupledCount(),
+                    true));  // groupHasTimingAlready
+
             command->addCommand(insertionCommand);
+
             activeCommand = command;
         }
     }
