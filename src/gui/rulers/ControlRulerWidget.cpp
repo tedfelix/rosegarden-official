@@ -196,7 +196,8 @@ ControlRulerWidget::launchRulers()
         if (ruler.type == Controller::EventType) {
             const ControlParameter *cp = getControlParameter2(
                     m_viewSegment->getSegment(), ruler.ccNumber);
-            addControlRuler(*cp);
+            if (cp)
+                addControlRuler(*cp);
         } else if (ruler.type == PitchBend::EventType) {
             RG_DEBUG << "launchInitialRulers(): Launching pitchbend ruler";
             addControlRuler(ControlParameter::getPitchBend());
