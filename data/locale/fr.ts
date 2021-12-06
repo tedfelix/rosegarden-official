@@ -2932,22 +2932,22 @@
     <message>
         <location line="-2373"/>
         <source>Show note names</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer le nom des notes</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Highlight</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Faire ressortir</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Highlight black notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Les touches noires du piano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Highlight triads</source>
-        <translation type="unfinished"></translation>
+        <translation>Les triades</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -3996,7 +3996,7 @@
     <message>
         <location line="+60"/>
         <source>Dump segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Dump segments (debug)</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -11136,12 +11136,12 @@ Voulez-vous utiliser
     <message>
         <location line="+8"/>
         <source>Number of Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de pistes</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Position</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -11166,12 +11166,12 @@ Voulez-vous utiliser
     <message>
         <location line="+12"/>
         <source>Device</source>
-        <translation type="unfinished">Périphérique</translation>
+        <translation>Périphérique</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrument</translation>
+        <translation>Instrument</translation>
     </message>
 </context>
 <context>
@@ -14607,7 +14607,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+9"/>
         <source>Merge new file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner le nouveau fichier</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -14862,17 +14862,17 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+22"/>
         <source>Dark mode (Thorn style)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode sombre (style Thorn)</translation>
     </message>
     <message>
         <location line="+88"/>
         <source>Use native file dialogs</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser les dialogues de fichiers natifs</translation>
     </message>
     <message>
         <location line="+68"/>
         <source>HPLIP (HP Printers)</source>
-        <translation type="unfinished"></translation>
+        <translation>HPLIP (imprimantes HP)</translation>
     </message>
     <message>
         <location line="+137"/>
@@ -17772,7 +17772,7 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message>
         <location filename="../../src/commands/segment/MergeFileCommand.cpp" line="+44"/>
         <source>Merge File</source>
-        <translation type="unfinished">Fusionner le fichier</translation>
+        <translation>Fusionner le fichier</translation>
     </message>
 </context>
 <context>
@@ -20907,7 +20907,14 @@ editing this file.  If you are sure no one else is
 editing this file, you may press Ignore to open the file.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Verrouillage du fichier impossible.
+
+Le fichier est peut-être en cours d&apos;édition par un 
+autre utilisateur ou par une autre instance de Rosegarden.
+Si vous êtes certain que ce n&apos;est pas le cas, vous pouvez
+presser le bouton &quot;Ignorer&quot; pour ouvrir le fichier.
+
+</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -22372,7 +22379,7 @@ Erreur obtenue : %2</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Include this segment when printing (LilyPond).&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Cocher pour autoriser l&apos;impression de ce segment (LilyPond).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Use this segment when generating notation (LilyPond).&lt;/p&gt;&lt;/qt&gt;</source>
