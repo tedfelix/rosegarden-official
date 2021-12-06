@@ -86,7 +86,11 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
 
     setMenuName("controller_events_ruler_menu");
 
-    RG_DEBUG << "ctor:" << controller->getName();
+    RG_DEBUG << "ctor";
+    if (controller)
+        RG_DEBUG << "  Controller name:" << controller->getName();
+    else
+        RG_DEBUG << "  Controller is nullptr";
     RG_DEBUG << "  Segment from " << segment->getSegment().getStartTime() << " to " << segment->getSegment().getEndTime();
     RG_DEBUG << "  Position x = " << rulerScale->getXForTime(segment->getSegment().getStartTime()) << " to " << rulerScale->getXForTime(segment->getSegment().getEndTime());
 }
