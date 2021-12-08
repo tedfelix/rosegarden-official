@@ -20,7 +20,6 @@ Included in this release...
     Shift+Right-arrow.  Bug #1600.  [211f2c4] [5f9e348]
   * Fix note insertion steals grace note.  Bug #1520.  [d2ff1d4]
     [1ddd230]
-  * Fix tuplet insertion problems.  Bug #1464.  [10abb18] and prior.
   * Fix undo loses cursor position.  Bug #927.  [481fdc3] and prior.
   * Fix crash when deleting segments shown in Matrix.  [5f71149]
   * Matrix: Fix ruler events all on the left at launch.  [a7fd912]
@@ -28,6 +27,7 @@ Included in this release...
   * Notation: Fix unreliable text style.  Bug #1609.  [0fc9382]
   * Fix link error with pipewire-jack.  [881ea5a]
   * Fix unexpected auto-scroll in notation.  Bug #1612.  [226c921]
+  * Fix crash when restoring rulers in the editors.  [f710b6]
 
 ===== New Features =====
 
