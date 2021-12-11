@@ -866,11 +866,13 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
     if (m_selection) {
         setSelectionElementStatus(m_selection, true);
         emit QGraphicsScene::selectionChanged();
+        emit selectionChangedES(m_selection);
     }
 
     if (preview) previewSelection(m_selection, oldSelection);
     delete oldSelection;
     emit QGraphicsScene::selectionChanged();
+    emit selectionChangedES(m_selection);
 }
 
 void

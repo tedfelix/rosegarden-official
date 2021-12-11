@@ -443,7 +443,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &MatrixScene::currentViewSegmentChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
     
-    connect(m_scene, &MatrixScene::selectionChanged,
+    connect(m_scene, &MatrixScene::selectionChangedES,
             m_controlsWidget, &ControlRulerWidget::slotSelectionChanged);
 
     // ??? This was problematic as it only responded to additions and not
@@ -451,8 +451,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     //connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
     //        m_scene, &MatrixScene::slotRulerSelectionChanged);
 
-    connect(m_scene, SIGNAL(selectionChanged()),
-            this, SIGNAL(selectionChanged()));
+    connect(m_scene, &MatrixScene::selectionChanged,
+            this, &MatrixWidget::selectionChanged);
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,

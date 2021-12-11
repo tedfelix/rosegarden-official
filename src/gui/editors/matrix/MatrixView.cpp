@@ -739,26 +739,24 @@ MatrixView::slotUpdateMenuStates()
 }
 
 void
-MatrixView::
-conformRulerSelectionState()
+MatrixView::conformRulerSelectionState()
 {
-    ControlRulerWidget * cr = m_matrixWidget->getControlsWidget();
-    if (cr->isAnyRulerVisible())
-        {
-            cr->slotSelectionChanged(getSelection());
+    ControlRulerWidget *controlRulerWidget =
+            m_matrixWidget->getControlsWidget();
 
-            enterActionState("have_control_ruler");
-            if (cr->hasSelection())
-                { enterActionState("have_controller_selection"); }
-            else
-                { leaveActionState("have_controller_selection"); }
-        }
-    else {
+    if (controlRulerWidget->isAnyRulerVisible()) {
+        enterActionState("have_control_ruler");
+
+        if (controlRulerWidget->hasSelection())
+            enterActionState("have_controller_selection");
+        else
+            leaveActionState("have_controller_selection");
+    } else {
         leaveActionState("have_control_ruler");
         // No ruler implies no controller selection
         leaveActionState("have_controller_selection"); 
     }
- }
+}
 
 void
 MatrixView::slotSetPaintTool()
