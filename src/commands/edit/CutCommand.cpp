@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[CutCommand]"
 
 #include "CutCommand.h"
 
@@ -23,6 +24,8 @@
 #include "commands/segment/SegmentEraseCommand.h"
 #include "CopyCommand.h"
 #include "EraseCommand.h"
+#include "misc/Debug.h"
+
 #include <QString>
 
 
@@ -35,6 +38,29 @@ CutCommand::CutCommand(EventSelection &selection,
 {
     addCommand(new CopyCommand(selection, clipboard));
     addCommand(new EraseCommand(&selection));
+}
+
+CutCommand::CutCommand(
+        EventSelection *selection1,
+        EventSelection *selection2,
+        Clipboard *clipboard) :
+    MacroCommand(getGlobalName())
+{
+    // Set any empties to nullptr to avoid doing extra work.
+    if (selection1  &&  selection1->getSegmentEvents().empty())
+        selection1 = nullptr;
+    if (selection2  &&  selection2->getSegmentEvents().empty())
+        selection2 = nullptr;
+
+    // Nothing to do?  Bail.
+    if (!selection1  &&  !selection2)
+        return;
+
+    addCommand(new CopyCommand(selection1, selection2, clipboard));
+    if (selection1)
+        addCommand(new EraseCommand(selection1));
+    if (selection2)
+        addCommand(new EraseCommand(selection2));
 }
 
 CutCommand::CutCommand(SegmentSelection &selection,

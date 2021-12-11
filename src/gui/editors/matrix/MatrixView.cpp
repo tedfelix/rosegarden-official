@@ -896,20 +896,35 @@ MatrixView::slotSetSnap(timeT t)
 void
 MatrixView::slotEditCut()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, getClipboard()));
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CutCommand(getSelection(),
+                           getRulerSelection(),
+                           getClipboard()));
 }
 
 void
 MatrixView::slotEditCopy()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, getClipboard()));
-//    emit usedSelection();//!!!
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CopyCommand(getSelection(),
+                           getRulerSelection(),
+                           getClipboard()));
 }
 
 void

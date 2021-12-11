@@ -117,10 +117,17 @@ public:
                     bool expandRepeats);
 
     /**
-     * Add a new segment to the clipboard, containing copied of
+     * Add a new segment to the clipboard, containing copies of
      * the events in the given selection.
      */
     Segment *newSegment(const EventSelection *copyFrom);
+
+    /**
+     * Add a new segment to the clipboard, containing copies of
+     * the events in the given selection(s).  Either may be nullptr.
+     */
+    Segment *newSegment(const EventSelection *selection1,
+                        const EventSelection *selection2);
 
     /**
      * Add a time signature selection to this clipboard, replacing any

@@ -15,14 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[CopyCommand]"
 
 #include "CopyCommand.h"
 
 #include "misc/AppendLabel.h"
+#include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/Selection.h"
+
 #include <QString>
 
 
@@ -39,6 +42,43 @@ CopyCommand::CopyCommand(EventSelection &selection,
     std::string label = selection.getSegment().getLabel();
     m_sourceClipboard->newSegment(&selection)->setLabel(
             appendLabel(label, qstrtostr(tr("(excerpt)"))));
+}
+
+CopyCommand::CopyCommand(
+        EventSelection *selection1,
+        EventSelection *selection2,
+        Clipboard *clipboard) :
+    NamedCommand(getGlobalName()),
+    m_sourceClipboard(new Clipboard),
+    m_targetClipboard(clipboard),
+    m_savedClipboard(nullptr)
+{
+    RG_DEBUG << "ctor 3";
+    RG_DEBUG << "  selection1:" << selection1;
+    if (selection1)
+        RG_DEBUG << "  selection1 size:" << selection1->getAddedEvents();
+    RG_DEBUG << "  selection2:" << selection2;
+    if (selection2)
+        RG_DEBUG << "  selection2 size:" << selection2->getAddedEvents();
+
+    if (!selection1  &&  !selection2)
+        return;
+
+    // Create a new Segment in the source Clipboard containing the
+    // selected Events.
+    Segment *newSegment = m_sourceClipboard->newSegment(selection1, selection2);
+
+    if (!newSegment)
+        return;
+
+    // Add "(excerpt)" to the Segment's label.
+    // ??? Why?  This is a temporary Segment in the clipboard.
+    std::string label;
+    if (selection1)
+        label = selection1->getSegment().getLabel();
+    else if (selection2)
+        label = selection2->getSegment().getLabel();
+    newSegment->setLabel(appendLabel(label, qstrtostr(tr("(excerpt)"))));
 }
 
 CopyCommand::CopyCommand(SegmentSelection &selection,

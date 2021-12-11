@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Clipboard]"
+
 #include "Clipboard.h"
 #include "Selection.h"
 #include "misc/Debug.h"
@@ -279,20 +281,63 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 Segment *
 Clipboard::newSegment(const EventSelection *copyFrom)
 {
+    if (!copyFrom)
+        return nullptr;
+
     // create with clone function so as to inherit track, instrument etc
     // but clone as a segment only, even if it's actually a linked segment
-    Segment *s = copyFrom->getSegment().clone(false);
-    s->erase(s->begin(), s->end());
+    Segment *segment = copyFrom->getSegment().clone(false);
+    // Clear out the Events.
+    segment->clear();
 
-    const EventContainer &events(copyFrom->getSegmentEvents());
-    for (EventContainer::const_iterator i = events.begin();
-         i != events.end(); ++i) {
-        s->insert(new Event(**i));
+    // Copy the Events from the EventSelection into the Segment
+    for (const Event *event : copyFrom->getSegmentEvents()) {
+        segment->insert(new Event(*event));
     }
 
-    m_segments.insert(s);
+    m_segments.insert(segment);
     m_partial = true;
-    return s;
+
+    return segment;
+}
+
+Segment *
+Clipboard::newSegment(const EventSelection *selection1,
+                      const EventSelection *selection2)
+{
+    // No selections?  Nothing to do.
+    if (!selection1  &&  !selection2)
+        return nullptr;
+
+    // Fall back on the single selection version if that's all we have.
+    if (!selection1)
+        return newSegment(selection2);
+    if (!selection2)
+        return newSegment(selection1);
+
+    // At this point, we are guaranteed to have two selections.
+
+    // create with clone function so as to inherit track, instrument etc
+    // but clone as a segment only, even if it's actually a linked segment
+    Segment *segment = selection1->getSegment().clone(false);
+    // Clear out the Events.
+    //segment->erase(segment->begin(), segment->end());
+    segment->clear();
+
+    // First Selection
+    for (const Event *event : selection1->getSegmentEvents()) {
+        segment->insert(new Event(*event));
+    }
+
+    // Second Selection
+    for (const Event *event : selection2->getSegmentEvents()) {
+        segment->insert(new Event(*event));
+    }
+
+    m_segments.insert(segment);
+    m_partial = true;
+
+    return segment;
 }
 
 void

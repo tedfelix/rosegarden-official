@@ -44,6 +44,10 @@ public:
     CutCommand(EventSelection &selection,
                Clipboard *clipboard);
 
+    CutCommand(EventSelection *selection1,
+               EventSelection *selection2,
+               Clipboard *clipboard);
+
     /// Make a CutCommand that cuts whole Segments
     CutCommand(SegmentSelection &selection,
                Clipboard *clipboard);
