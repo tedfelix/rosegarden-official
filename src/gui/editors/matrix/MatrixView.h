@@ -266,7 +266,6 @@ protected slots:
 protected:
     const SnapGrid *getSnapGrid() const;
     void readOptions() override;
-    void conformRulerSelectionState();
     void insertControllerSequence(const ControlParameter &cp);
 
 private:

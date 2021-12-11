@@ -203,6 +203,11 @@ signals:
     void sceneDeleted();
     /// Forwarded from MatrixScene::selectionChanged()
     void selectionChanged();
+    /// Forwarded from ControlRulerWidget::childRulerSelectionChanged().
+    /*
+     * Connected to MatrixView::slotUpdateMenuStates().
+     */
+    void rulerSelectionChanged();
 
     void showContextHelp(const QString &);
 

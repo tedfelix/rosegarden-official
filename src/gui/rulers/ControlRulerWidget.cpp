@@ -497,7 +497,7 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
     addRuler(controlRuler, name);
 
     // Update selection drawing in matrix view.
-    emit childRulerSelectionChanged(nullptr);
+    emit childRulerSelectionChanged();
 }
 
 void
@@ -610,9 +610,9 @@ ControlRulerWidget::slotSetTool(const QString &toolName)
 }
 
 void
-ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *s)
+ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *)
 {
-    emit childRulerSelectionChanged(s);
+    emit childRulerSelectionChanged();
 }
 
 bool
@@ -642,7 +642,10 @@ ControlRulerWidget::hasSelection()
     if (!ruler)
         return false;
 
-    return (ruler->getEventSelection() != nullptr);
+    if (!ruler->getEventSelection())
+        return false;
+
+    return !ruler->getEventSelection()->empty();
 }
 
 EventSelection *

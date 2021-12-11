@@ -446,10 +446,9 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &MatrixScene::selectionChangedES,
             m_controlsWidget, &ControlRulerWidget::slotSelectionChanged);
 
-    // ??? This was problematic as it only responded to additions and not
-    //     deletions.  Clean this up.
-    //connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
-    //        m_scene, &MatrixScene::slotRulerSelectionChanged);
+    // Forward for MatrixView
+    connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
+            this, &MatrixWidget::rulerSelectionChanged);
 
     connect(m_scene, &MatrixScene::selectionChanged,
             this, &MatrixWidget::selectionChanged);

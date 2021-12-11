@@ -707,6 +707,8 @@ ControlRuler::clearSelectedItems()
     if (m_eventSelection) delete m_eventSelection;
 
     m_eventSelection = new EventSelection(*m_segment);
+
+    emit rulerSelectionChanged(m_eventSelection);
 }
 
 void ControlRuler::updateSelection()

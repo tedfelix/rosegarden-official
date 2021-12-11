@@ -169,6 +169,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     connect(m_matrixWidget, &MatrixWidget::selectionChanged,
             this, &MatrixView::slotUpdateMenuStates);
+    connect(m_matrixWidget, &MatrixWidget::rulerSelectionChanged,
+            this, &MatrixView::slotUpdateMenuStates);
 
     // Toggle the desired tool off and then trigger it on again, to
     // make sure its signal is called at least once (as would not
@@ -729,33 +731,43 @@ MatrixView::slotShowContextHelp(const QString &help)
 void
 MatrixView::slotUpdateMenuStates()
 {
-    EventSelection *s = getSelection();
-    if (s && !s->getSegmentEvents().empty()) {
-        enterActionState("have_selection");
-    } else {
-        leaveActionState("have_selection");
-    }
-    conformRulerSelectionState();
-}
+    EventSelection *selection = getSelection();
 
-void
-MatrixView::conformRulerSelectionState()
-{
+    const bool haveNoteSelection =
+            (selection  &&  !selection->getSegmentEvents().empty());
+
+    if (haveNoteSelection)
+        enterActionState("have_note_selection");
+    else
+        leaveActionState("have_note_selection");
+
     ControlRulerWidget *controlRulerWidget =
             m_matrixWidget->getControlsWidget();
+
+    bool haveControllerSelection = false;
 
     if (controlRulerWidget->isAnyRulerVisible()) {
         enterActionState("have_control_ruler");
 
-        if (controlRulerWidget->hasSelection())
+        if (controlRulerWidget->hasSelection()) {
+            RG_DEBUG << "  Entering action state have_controller_selection";
             enterActionState("have_controller_selection");
-        else
+            haveControllerSelection = true;
+        } else {
+            RG_DEBUG << "  Leaving action state have_controller_selection";
             leaveActionState("have_controller_selection");
+        }
     } else {
         leaveActionState("have_control_ruler");
         // No ruler implies no controller selection
         leaveActionState("have_controller_selection"); 
     }
+
+    // "have_selection" is enabled when either of the others is.
+    if (haveNoteSelection  ||  haveControllerSelection)
+        enterActionState("have_selection");
+    else
+        leaveActionState("have_selection");
 }
 
 void
@@ -1304,21 +1316,21 @@ void
 MatrixView::slotToggleVelocityRuler()
 {
     m_matrixWidget->showVelocityRuler();
-    conformRulerSelectionState();
+    slotUpdateMenuStates();
 }
 
 void
 MatrixView::slotTogglePitchbendRuler()
 {
     m_matrixWidget->showPitchBendRuler();
-    conformRulerSelectionState();
+    slotUpdateMenuStates();
 }
 
 void
 MatrixView::slotAddControlRuler(QAction *action)
 {
     m_matrixWidget->addControlRuler(action);
-    conformRulerSelectionState();
+    slotUpdateMenuStates();
 }
 
 void

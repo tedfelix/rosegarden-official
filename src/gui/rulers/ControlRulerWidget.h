@@ -139,7 +139,7 @@ signals:
     void mouseRelease();
 
     /// See ControlRuler::rulerSelectionChanged() for details.
-    void childRulerSelectionChanged(EventSelection *);
+    void childRulerSelectionChanged();
 
     void showContextHelp(const QString &);
 

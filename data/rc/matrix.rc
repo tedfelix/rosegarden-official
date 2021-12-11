@@ -377,10 +377,8 @@
   <Action name="add_control_ruler" />
 </ToolBar>
 
-<State name="have_selection">
+<State name="have_note_selection">
   <enable>
-    <Action name="edit_cut"/>
-    <Action name="edit_copy"/>
     <Action name="quantize"/>
     <Action name="collapse_notes"/>
     <Action name="legatoize"/>
@@ -420,6 +418,13 @@
     <Action name="cut_controllers"/>
     <Action name="copy_controllers"/>
     <Action name="set_controllers"/>
+  </enable>
+</State>
+
+<State name="have_selection">
+  <enable>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
   </enable>
 </State>
 
