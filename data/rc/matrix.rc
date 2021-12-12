@@ -167,8 +167,6 @@
 
   <Menu name="controllers">
     <text>Co&amp;ntrollers</text>
-    <Action name="cut_controllers" text="Cut Controller Events (&amp;X)" />
-    <Action name="copy_controllers" text="&amp;Copy Controller Events" />
     <Action name="set_controllers" text="&amp;Set Controller Values" />
     <Action name="place_controllers" text="&amp;Place a Controller for Each Note" />
     <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
@@ -415,8 +413,6 @@
 
 <State name="have_controller_selection">
   <enable>
-    <Action name="cut_controllers"/>
-    <Action name="copy_controllers"/>
     <Action name="set_controllers"/>
   </enable>
 </State>
@@ -431,8 +427,6 @@
 
 <State name="have_control_ruler">
   <enable>
-    <Action name="cut_controllers" />
-    <Action name="copy_controllers" />
     <Action name="set_controllers" />
     <Action name="place_controllers" />
   </enable>

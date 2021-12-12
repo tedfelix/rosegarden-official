@@ -410,8 +410,6 @@ MatrixView::setupActions()
 
     //"controllers" Menubar menu
     createAction("controller_sequence", SLOT(slotControllerSequence()));
-    createAction("copy_controllers",  SLOT(slotEditCopyControllers()));
-    createAction("cut_controllers",   SLOT(slotEditCutControllers()));
     createAction("set_controllers",   SLOT(slotSetControllers()));
     createAction("place_controllers", SLOT(slotPlaceControllers()));
 
@@ -1095,26 +1093,6 @@ MatrixView::slotSetVelocitiesToCurrent()
 {
     ParameterPattern::
         setVelocitiesFlat(getSelection(), getCurrentVelocity());
-}
-
-void
-MatrixView::slotEditCopyControllers()
-{
-    ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
-    EventSelection *selection = cr->getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, getClipboard()));
-}
-
-void
-MatrixView::slotEditCutControllers()
-{
-    ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
-    EventSelection *selection = cr->getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, getClipboard()));
 }
 
 void

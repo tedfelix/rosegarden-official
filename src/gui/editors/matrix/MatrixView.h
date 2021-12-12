@@ -121,8 +121,6 @@ protected slots:
     void slotVelocityDown();
     void slotSetVelocities();
     void slotSetVelocitiesToCurrent();
-    void slotEditCutControllers();
-    void slotEditCopyControllers();
     void slotSetControllers();
     void slotPlaceControllers();
     
