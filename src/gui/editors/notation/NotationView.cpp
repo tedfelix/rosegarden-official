@@ -1776,6 +1776,14 @@ NotationView::slotEditCut()
 void
 NotationView::slotEditDelete()
 {
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+    CommandHistory::getInstance()->addCommand(new EraseCommand(selection));
+
+#if 0
+    // Future version that allows delete/copy/paste to work with
+    // both notes and controllers.  Lot more work to do before this
+    // is ready.  See Matrix.
     const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
     const bool haveRulerSelection =
             (getRulerSelection()  &&  !getRulerSelection()->empty());
@@ -1787,6 +1795,7 @@ NotationView::slotEditDelete()
     CommandHistory::getInstance()->addCommand(
             new EraseCommand(getSelection(),
                              getRulerSelection()));
+#endif
 }
 
 void
