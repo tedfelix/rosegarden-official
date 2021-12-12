@@ -84,7 +84,7 @@ ControlRulerWidget::ControlRulerWidget() :
     layout->addWidget(m_tabBar);
     
     connect(m_tabBar, &QTabBar::currentChanged,
-            m_stackedWidget, &QStackedWidget::setCurrentIndex);
+            this, &ControlRulerWidget::tabChanged);
     
     connect(m_tabBar, &ControlRulerTabBar::tabCloseRequest,
             this, &ControlRulerWidget::slotRemoveRuler);
@@ -684,6 +684,15 @@ ControlRulerWidget::getSituation()
         return nullptr;
 
     return new SelectionSituation(cp->getType(), selection);
+}
+
+void
+ControlRulerWidget::tabChanged(int index)
+{
+    m_stackedWidget->setCurrentIndex(index);
+
+    // Make sure the selection on the current tab is used.
+    emit childRulerSelectionChanged();
 }
 
 
