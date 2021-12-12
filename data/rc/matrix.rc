@@ -423,6 +423,7 @@
 
 <State name="have_selection">
   <enable>
+    <Action name="delete"/>
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
   </enable>
