@@ -1797,17 +1797,5 @@ allEventsChanged(const Segment *s)
     }
 }
 
-// Find the next Event of "type".
-EventContainer::iterator
-EventContainer::findEventOfType(EventContainer::iterator i,
-                                const std::string &type)
-{
-    for (; i != end(); ++i) {
-        Event *e = *i;
-        if (e->isa(type)) { return i; }
-    }
-    return i;
-}
 
 }
-

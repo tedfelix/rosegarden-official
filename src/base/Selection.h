@@ -43,8 +43,6 @@ public:
 class ROSEGARDENPRIVATE_EXPORT EventSelection : public SegmentObserver
 {
 public:
-    typedef EventContainer eventcontainer;
-
     /**
      * Construct an empty EventSelection based on the given Segment.
      */
@@ -159,6 +157,7 @@ public:
      * Return the number of events added to this selection.
      */
     unsigned int getAddedEvents() const { return m_segmentEvents.size(); }
+    bool empty() const  { return m_segmentEvents.empty(); }
 
     const EventContainer &getSegmentEvents() const { return m_segmentEvents; }
     EventContainer &getSegmentEvents()             { return m_segmentEvents; }

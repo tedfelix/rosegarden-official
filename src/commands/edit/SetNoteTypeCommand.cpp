@@ -22,12 +22,11 @@
 #include "base/NotationTypes.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 SetNoteTypeCommand::modifySegment()
@@ -36,7 +35,7 @@ SetNoteTypeCommand::modifySegment()
     EventVec toErase;
     EventVec toInsert;
 
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
     timeT endTime = getEndTime();
     SegmentNotationHelper segmentNotationHelper(m_selection->getSegment());
 
@@ -85,5 +84,6 @@ SetNoteTypeCommand::modifySegment()
 
     m_selection->getSegment().normalizeRests(getStartTime(), endTime);
 }
+
 
 }

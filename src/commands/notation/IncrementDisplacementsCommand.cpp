@@ -19,16 +19,13 @@
 #include "IncrementDisplacementsCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 IncrementDisplacementsCommand::registerCommand(CommandRegistry *r)
@@ -69,19 +66,18 @@ IncrementDisplacementsCommand::getArgument(QString actionName, CommandArgumentQu
 void
 IncrementDisplacementsCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         long prevX = 0, prevY = 0;
-        (*i)->get<Int>(DISPLACED_X, prevX);
-        (*i)->get<Int>(DISPLACED_Y, prevY);
-        (*i)->setMaybe<Int>(DISPLACED_X, prevX + long(m_dx));
-        (*i)->setMaybe<Int>(DISPLACED_Y, prevY + long(m_dy));
+        (*i)->get<Int>(BaseProperties::DISPLACED_X, prevX);
+        (*i)->get<Int>(BaseProperties::DISPLACED_Y, prevY);
+        (*i)->setMaybe<Int>(BaseProperties::DISPLACED_X, prevX + long(m_dx));
+        (*i)->setMaybe<Int>(BaseProperties::DISPLACED_Y, prevY + long(m_dy));
     }
 }
-
 
 
 }

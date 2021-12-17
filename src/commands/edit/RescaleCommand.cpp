@@ -88,7 +88,7 @@ RescaleCommand::modifySegment()
 
     Segment &segment = m_selection->getSegment();
 
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
                 m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 

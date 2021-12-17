@@ -39,7 +39,7 @@ void TestSegmentTransposeCommand::testSegmentBbtoF()
     mockCommand->execute();
 	
     EventSelection m_selection(*segment1, segment1->getStartTime(), segment1->getEndMarkerTime());
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
     for (i = m_selection.getSegmentEvents().begin();
          i != m_selection.getSegmentEvents().end(); ++i) {
         if ((*i)->isa(Note::EventType)) {
@@ -71,7 +71,7 @@ void TestSegmentTransposeCommand::testGistoAis()
     mockCommand->execute();
 	
     EventSelection m_selection(*segment1, segment1->getStartTime(), segment1->getEndMarkerTime());
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
     for (i = m_selection.getSegmentEvents().begin();
          i != m_selection.getSegmentEvents().end(); ++i) {
         if ((*i)->isa(Note::EventType)) {
@@ -104,7 +104,7 @@ void TestSegmentTransposeCommand::testSegmentCisToC()
     mockCommand->execute();
 	
     EventSelection m_selection(*segment1, segment1->getStartTime(), segment1->getEndMarkerTime());
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
     for (i = m_selection.getSegmentEvents().begin();
             i != m_selection.getSegmentEvents().end(); ++i) {
         if ((*i)->isa(Note::EventType)) {

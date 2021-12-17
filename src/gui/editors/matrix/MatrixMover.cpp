@@ -173,7 +173,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     m_lastPlayedPitch = pitch;
 
     if (m_quickCopy && selection) {
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                  selection->getSegmentEvents().begin();
              i != selection->getSegmentEvents().end(); ++i) {
 
@@ -224,7 +224,7 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
     long pitchOffset = selection->getSegment().getTranspose();
     diffPitch += (pitchOffset * -1);
 
-    for (EventSelection::eventcontainer::iterator it =
+    for (EventContainer::iterator it =
              selection->getSegmentEvents().begin();
          it != selection->getSegmentEvents().end(); ++it) {
 
@@ -326,7 +326,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 
     MacroCommand *macro = new MacroCommand(commandLabel);
 
-    EventSelection::eventcontainer::iterator it =
+    EventContainer::iterator it =
         selection->getSegmentEvents().begin();
 
     Segment &segment = m_currentViewSegment->getSegment();

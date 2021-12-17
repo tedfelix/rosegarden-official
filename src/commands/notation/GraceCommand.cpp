@@ -55,7 +55,7 @@ timeT
 GraceCommand::getEffectiveEndTime(EventSelection &
                                   selection)
 {
-    EventSelection::eventcontainer::iterator i =
+    EventContainer::iterator i =
         selection.getSegmentEvents().end();
     if (i == selection.getSegmentEvents().begin())
         return selection.getEndTime();
@@ -79,7 +79,7 @@ GraceCommand::modifySegment()
 
     // first turn the selected events into grace notes
 
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
                 m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 

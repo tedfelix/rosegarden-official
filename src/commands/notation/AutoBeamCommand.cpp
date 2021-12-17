@@ -20,17 +20,13 @@
 
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
-#include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 AutoBeamCommand::registerCommand(CommandRegistry *r)
@@ -44,7 +40,9 @@ void
 AutoBeamCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
-    helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
+    helper.autoBeam(getStartTime(), getEndTime(),
+                    BaseProperties::GROUP_TYPE_BEAMED);
 }
+
 
 }

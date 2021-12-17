@@ -19,11 +19,10 @@
 #ifndef RG_ERASECOMMAND_H
 #define RG_ERASECOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include "base/Event.h"
+#include "document/BasicCommand.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
-#include <QString>
 
 
 namespace Rosegarden
@@ -34,18 +33,21 @@ class EventSelection;
 
 
 /// Erase a selection from within a segment
-class EraseCommand : public BasicSelectionCommand
+class EraseCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::EraseCommand)
 
 public:
-    EraseCommand(EventSelection &selection);
+    /// Allow for multiple selections.  E.g. matrix and CC ruler.
+    EraseCommand(EventSelection *selection1,
+                 EventSelection *selection2 = nullptr);
     ~EraseCommand() override;
 
-    static QString getGlobalName() { return tr("&Erase"); }
-
-    // Return whether any deletions that affect later in the segment
-    // were done, meaning key or clef deletions.
+    /// Erase the events in segment that are in selection.
+    /**
+     * Return whether any deletions that affect later in the segment
+     * were done, meaning key or clef deletions.
+     */
     static bool eraseInSegment(EventSelection *selection);
     
     timeT getRelayoutEndTime() override;
@@ -55,11 +57,12 @@ protected:
 
 private:
     /**
-     * Only used on first execute (cf BasicSelectionCommand::bruteForceRedo).
+     * Only used on first execute (cf BasicCommand::bruteForceRedo).
      *
      * QSharedPointer would be nice.
      */
-    EventSelection *m_selection;
+    EventSelection *m_selection1;
+    EventSelection *m_selection2;
 
     timeT m_relayoutEndTime;
 };

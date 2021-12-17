@@ -15,21 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "BeamCommand.h"
 
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 BeamCommand::registerCommand(CommandRegistry *r)
@@ -44,15 +40,17 @@ BeamCommand::modifySegment()
 {
     int id = getSegment().getNextId();
 
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
                 m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Note::EventType)) {
-            (*i)->set<Int>(BEAMED_GROUP_ID, id);
-            (*i)->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_BEAMED);
+            (*i)->set<Int>(BaseProperties::BEAMED_GROUP_ID, id);
+            (*i)->set<String>(BaseProperties::BEAMED_GROUP_TYPE,
+                              BaseProperties::GROUP_TYPE_BEAMED);
         }
     }
 }
+
 
 }

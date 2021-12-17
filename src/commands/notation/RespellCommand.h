@@ -18,20 +18,21 @@
 #ifndef RG_RESPELLCOMMAND_H
 #define RG_RESPELLCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
 
 #include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class RespellCommand : public BasicSelectionCommand
+class RespellCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RespellCommand)
 
@@ -47,11 +48,10 @@ public:
 
     RespellCommand(RespellType type,
                    EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(type), selection, true),
+        BasicCommand(getGlobalName(type), selection, true),
         m_selection(&selection),
-        m_type(type) { }
-
-    static QString getGlobalName(RespellType type);
+        m_type(type)
+    { }
 
     static RespellType getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
@@ -60,7 +60,10 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static QString getGlobalName(RespellType type);
+
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
     RespellType m_type;
 };
 

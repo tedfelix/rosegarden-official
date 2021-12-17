@@ -664,7 +664,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
     if (!m_startedFineDrag) {
         // back up original properties
 
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                     selection->getSegmentEvents().begin();
                 i != selection->getSegmentEvents().end(); ++i) {
             long prevX = 0, prevY = 0;
@@ -692,7 +692,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
         // reset original values (and remove backup values) before
         // applying command
 
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                     selection->getSegmentEvents().begin();
                 i != selection->getSegmentEvents().end(); ++i) {
             long prevX = 0, prevY = 0;
@@ -712,7 +712,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
 
         timeT startTime = 0, endTime = 0;
 
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                     selection->getSegmentEvents().begin();
                 i != selection->getSegmentEvents().end(); ++i) {
             long prevX = 0, prevY = 0;

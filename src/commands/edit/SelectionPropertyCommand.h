@@ -19,28 +19,23 @@
 #ifndef RG_SELECTIONPROPERTYCOMMAND_H
 #define RG_SELECTIONPROPERTYCOMMAND_H
 
-#include "base/PropertyName.h"
 #include "base/parameterpattern/ParameterPattern.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
-class Set;
 
 
 namespace Rosegarden
 {
 
-class SelectionPropertyCommand : public BasicSelectionCommand
+
+class SelectionPropertyCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SelectionPropertyCommand)
 
 public:
 
     SelectionPropertyCommand(ParameterPattern::Result result);
-
-    static QString getGlobalName() { return tr("Set &Property"); }
 
     void modifySegment() override;
 

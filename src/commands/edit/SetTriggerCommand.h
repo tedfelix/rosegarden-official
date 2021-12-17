@@ -19,24 +19,22 @@
 #define RG_SETTRIGGERCOMMAND_H
 
 #include "base/TriggerSegment.h"
-#include "document/BasicSelectionCommand.h"
-#include <string>
+#include "document/BasicCommand.h"
+
 #include <QString>
-#include <QCoreApplication>
 
-
+#include <string>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 
 
-class SetTriggerCommand : public BasicSelectionCommand
+class SetTriggerCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetTriggerCommand)
-
 public:
     SetTriggerCommand(EventSelection &selection,
                       TriggerSegmentId triggerSegmentId,
@@ -44,8 +42,10 @@ public:
                       bool retune,
                       std::string timeAdjust,
                       Mark mark,
-                      QString name = nullptr) :
-        BasicSelectionCommand(!name.isEmpty() ? name : getGlobalName(), selection, true),
+                      QString name) :
+        BasicCommand(name,
+                     selection,
+                     true),  // bruteForceRedo
         m_selection(&selection),
         m_triggerSegmentId(triggerSegmentId),
         m_notesOnly(notesOnly),
@@ -53,10 +53,6 @@ public:
         m_timeAdjust(timeAdjust),
         m_mark(mark)
     { }
-
-    static QString getGlobalName() {
-        return tr("Tri&gger Segment");
-    }
 
 protected:
     void modifySegment() override;
@@ -69,7 +65,6 @@ private:
     std::string m_timeAdjust;
     Mark m_mark;
 };
-
 
 
 }

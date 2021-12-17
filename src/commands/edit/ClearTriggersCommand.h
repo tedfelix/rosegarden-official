@@ -18,41 +18,36 @@
 #ifndef RG_CLEARTRIGGERSCOMMAND_H
 #define RG_CLEARTRIGGERSCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
+#include "document/BasicCommand.h"
+
 #include <QString>
-#include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 
 
-class ClearTriggersCommand : public BasicSelectionCommand
+class ClearTriggersCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ClearTriggersCommand)
-
 public:
     ClearTriggersCommand(EventSelection &selection,
-                         QString name = nullptr) :
-        BasicSelectionCommand(!name.isEmpty() ? name : getGlobalName(), selection, true),
+                         QString name) :
+        BasicCommand(name,
+                     selection,
+                     true),  // bruteForceRedo
         m_selection(&selection)
     { }
-
-    static QString getGlobalName() {
-        return tr("&Clear Triggers");
-    }
 
 protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
 };
-
 
 
 }

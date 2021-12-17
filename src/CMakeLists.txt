@@ -566,7 +566,6 @@ set(rg_CPPS
   commands/notation/GraceCommand.cpp
   commands/notation/RespellCommand.cpp
   commands/notation/TieNotesCommand.cpp
-  commands/notation/UnGraceCommand.cpp
   commands/notation/KeyInsertionCommand.cpp
   commands/notation/GuitarChordInsertionCommand.cpp
   commands/notation/GeneratedRegionInsertionCommand.cpp
@@ -591,7 +590,6 @@ set(rg_CPPS
   commands/notation/RemoveMarksCommand.cpp
   commands/notation/RestoreTiesCommand.cpp
   commands/notation/MakeChordCommand.cpp
-  commands/notation/MarkParallelCommand.cpp
   commands/notation/BreakCommand.cpp
   commands/notation/MakeNotesViableCommand.cpp
   commands/notation/UntieNotesCommand.cpp

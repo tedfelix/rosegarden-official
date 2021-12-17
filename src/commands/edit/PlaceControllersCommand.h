@@ -18,41 +18,44 @@
 #ifndef RG_PLACECONTROLLERSCOMMAND_H
 #define RG_PLACECONTROLLERSCOMMAND_H
 
-#include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
+#include "document/BasicCommand.h"
 
-#include <QString>
+#include <QCoreApplication>  // For Q_DECLARE_TR_FUNCTIONS()
+
 
 namespace Rosegarden
 {
+
+
+class ControlParameter;
+class EventSelection;
 class Instrument;
- class ControlParameter;
-  
-   /* Place a default-valued controller where each note begins */
-class PlaceControllersCommand  : public BasicSelectionCommand
+
+
+/// Place a default CC where each note begins.
+class PlaceControllersCommand : public BasicCommand
 {
- public:
- PlaceControllersCommand(EventSelection &selection,
-                         const Instrument *instrument,
-                         const ControlParameter *cp);
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::PlaceControllersCommand)
 
- protected:
-  void modifySegment() override;
-  static int getDefaultValue(const Instrument *instrument,
-                             const ControlParameter *cp);
+public:
+    PlaceControllersCommand(EventSelection &selection,
+                            const Instrument *instrument,
+                            const ControlParameter *cp);
 
- private:
-  EventSelection *m_selection;
-  // Event type (pitchbend or controller)
-  const std::string m_eventType;
-  // Controller number (Ignored for pitchbend)
-  const int m_controllerId;
-  // Value to place.
-  const int m_controllerValue;
+protected:
+    void modifySegment() override;
 
-  // controller type
-  static const QString &globalName;
+private:
+    EventSelection *m_selection;
+
+    // Event type (pitchbend or controller)
+    const std::string m_eventType;
+    // Controller number (Ignored for pitchbend)
+    const int m_controllerId;
+    // Value to place.
+    const int m_controllerValue;
 };
+
 
 }
 

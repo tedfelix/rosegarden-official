@@ -466,7 +466,7 @@ ControllerEventsRuler::addControlLine(
         // we end up with the segment expanded to the beginning of the
         // composition.
         if (selection->getAddedEvents() != 0)
-            macro->addCommand(new EraseCommand(*selection));
+            macro->addCommand(new EraseCommand(selection));
         else
             delete selection;
 

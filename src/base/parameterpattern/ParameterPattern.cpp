@@ -51,7 +51,7 @@ ParameterPattern::Result::getSelection()
 void
 ParameterPattern::Result::modifySegment()
 {
-    typedef EventSelection::eventcontainer::iterator iterator;
+    typedef EventContainer::iterator iterator;
     const EventSelection *selection = m_situation->getEventSelection();
 
     iterator begin =

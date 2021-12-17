@@ -20,20 +20,19 @@
 #define RG_SETNOTETYPECOMMAND_H
 
 #include "base/NotationTypes.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 
 
-class SetNoteTypeCommand : public BasicSelectionCommand
+class SetNoteTypeCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetNoteTypeCommand)
 
@@ -41,21 +40,19 @@ public:
     SetNoteTypeCommand(EventSelection &selection,
                        Note::Type type,
                        bool notationOnly) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
+        BasicCommand(tr("&Set Note Type"), selection, true),
         m_selection(&selection),
         m_type(type),
         m_notationOnly(notationOnly)
     { }
 
-    static QString getGlobalName() {
-        return tr("&Set Note Type");
-    }
-
 protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
+
     Note::Type m_type;
     bool m_notationOnly;
 };

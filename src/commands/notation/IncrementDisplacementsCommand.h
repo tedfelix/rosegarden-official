@@ -19,39 +19,41 @@
 #ifndef RG_INCREMENTDISPLACEMENTSCOMMAND_H
 #define RG_INCREMENTDISPLACEMENTSCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
 #include <QPoint>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class IncrementDisplacementsCommand : public BasicSelectionCommand
+class IncrementDisplacementsCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::IncrementDisplacementsCommand)
 
 public:
     IncrementDisplacementsCommand(QPoint relative,
                                   EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
+        BasicCommand(getGlobalName(), selection, true),
         m_selection(&selection),
         m_dx(relative.x()),
-        m_dy(relative.y()) { }
+        m_dy(relative.y())
+    { }
 
     IncrementDisplacementsCommand(EventSelection &selection,
                                   long dx, long dy) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
+        BasicCommand(getGlobalName(), selection, true),
         m_selection(&selection),
         m_dx(dx),
-        m_dy(dy) { }
-
-    static QString getGlobalName() { return tr("Fine Reposition"); }
+        m_dy(dy)
+    { }
 
     static void registerCommand(CommandRegistry *r);
     static QPoint getArgument(QString actionName, CommandArgumentQuerier &);
@@ -60,7 +62,10 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static QString getGlobalName() { return tr("Fine Reposition"); }
+
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
     long m_dx;
     long m_dy;
 };

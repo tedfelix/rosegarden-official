@@ -1085,7 +1085,7 @@ EventView::slotEditDelete()
             m_listSelection.push_back(itemIndex);
         }
 
-        addCommandToHistory(new EraseCommand(*deleteSelection));
+        addCommandToHistory(new EraseCommand(deleteSelection));
         updateView();
     }
 }

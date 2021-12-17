@@ -84,7 +84,7 @@ ControlRulerWidget::ControlRulerWidget() :
     layout->addWidget(m_tabBar);
     
     connect(m_tabBar, &QTabBar::currentChanged,
-            m_stackedWidget, &QStackedWidget::setCurrentIndex);
+            this, &ControlRulerWidget::tabChanged);
     
     connect(m_tabBar, &ControlRulerTabBar::tabCloseRequest,
             this, &ControlRulerWidget::slotRemoveRuler);
@@ -497,7 +497,7 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
     addRuler(controlRuler, name);
 
     // Update selection drawing in matrix view.
-    emit childRulerSelectionChanged(nullptr);
+    emit childRulerSelectionChanged();
 }
 
 void
@@ -610,9 +610,9 @@ ControlRulerWidget::slotSetTool(const QString &toolName)
 }
 
 void
-ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *s)
+ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *)
 {
-    emit childRulerSelectionChanged(s);
+    emit childRulerSelectionChanged();
 }
 
 bool
@@ -642,7 +642,10 @@ ControlRulerWidget::hasSelection()
     if (!ruler)
         return false;
 
-    return (ruler->getEventSelection() != nullptr);
+    if (!ruler->getEventSelection())
+        return false;
+
+    return !ruler->getEventSelection()->empty();
 }
 
 EventSelection *
@@ -681,6 +684,15 @@ ControlRulerWidget::getSituation()
         return nullptr;
 
     return new SelectionSituation(cp->getType(), selection);
+}
+
+void
+ControlRulerWidget::tabChanged(int index)
+{
+    m_stackedWidget->setCurrentIndex(index);
+
+    // Make sure the selection on the current tab is used.
+    emit childRulerSelectionChanged();
 }
 
 

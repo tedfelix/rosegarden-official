@@ -443,14 +443,15 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &MatrixScene::currentViewSegmentChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
     
-    connect(m_scene, &MatrixScene::selectionChanged,
+    connect(m_scene, &MatrixScene::selectionChangedES,
             m_controlsWidget, &ControlRulerWidget::slotSelectionChanged);
 
+    // Forward for MatrixView
     connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
-            m_scene, &MatrixScene::slotRulerSelectionChanged);
+            this, &MatrixWidget::rulerSelectionChanged);
 
-    connect(m_scene, SIGNAL(selectionChanged()),
-            this, SIGNAL(selectionChanged()));
+    connect(m_scene, &MatrixScene::selectionChanged,
+            this, &MatrixWidget::selectionChanged);
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
@@ -775,6 +776,15 @@ MatrixWidget::setSelection(EventSelection *s, bool preview)
         return;
 
     m_scene->setSelection(s, preview);
+}
+
+EventSelection *
+MatrixWidget::getRulerSelection() const
+{
+    if (!m_controlsWidget)
+        return nullptr;
+
+    return m_controlsWidget->getSelection();
 }
 
 const SnapGrid *

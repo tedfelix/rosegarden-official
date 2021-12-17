@@ -15,27 +15,21 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "TransposeCommand.h"
 
-#include <iostream>
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
 #include "base/BaseProperties.h"
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
-using namespace Accidentals;
 
 void
 TransposeCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
     
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i) {
@@ -58,20 +52,20 @@ TransposeCommand::modifySegment()
                 Accidental newAccidental;
                 newNoteEvent->get<String>(BaseProperties::ACCIDENTAL, newAccidental);
 
-                (*i)->set<Int>(PITCH, newPitch.getPerformancePitch());
-                (*i)->set<String>(ACCIDENTAL, newAccidental);
+                (*i)->set<Int>(BaseProperties::PITCH, newPitch.getPerformancePitch());
+                (*i)->set<String>(BaseProperties::ACCIDENTAL, newAccidental);
             } else {
                 try {
-                    long pitch = (*i)->get<Int>(PITCH);
+                    long pitch = (*i)->get<Int>(BaseProperties::PITCH);
                     pitch += m_semitones;
 
                     // fix #1415: constrain results to valid MIDI pitches
                     if (pitch > 127) pitch = 127;
                     if (pitch < 0) pitch = 0;
 
-                    (*i)->set<Int>(PITCH, pitch);
+                    (*i)->set<Int>(BaseProperties::PITCH, pitch);
                     if ((m_semitones % 12) != 0) {
-                        (*i)->unset(ACCIDENTAL);
+                        (*i)->unset(BaseProperties::ACCIDENTAL);
                     }
                 } catch (...) { }
             }
@@ -79,5 +73,6 @@ TransposeCommand::modifySegment()
         }
     }
 }
+
 
 }

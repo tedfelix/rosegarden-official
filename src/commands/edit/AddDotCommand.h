@@ -19,33 +19,30 @@
 #ifndef RG_ADDDOTCOMMAND_H
 #define RG_ADDDOTCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>  // For Q_DECLARE_TR_FUNCTIONS()
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 
 
-class AddDotCommand : public BasicSelectionCommand
+class AddDotCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddDotCommand)
 
 public:
     AddDotCommand(EventSelection &selection, bool notationOnly) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
+        BasicCommand(tr("&Add Dot"),
+                     selection,
+                     true),  // bruteForceRedo
         m_selection(&selection),
         m_notationOnly(notationOnly)
     { }
-
-    static QString getGlobalName() {
-        return tr("&Add Dot");
-    }
 
 protected:
     void modifySegment() override;
@@ -54,8 +51,6 @@ private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_notationOnly;
 };
-
-
 
 
 }

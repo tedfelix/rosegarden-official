@@ -219,7 +219,7 @@ BasicQuantizer::getStandardQuantization(EventSelection *s)
 
     if (!s) return 0;
 
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
              s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {
 

@@ -19,33 +19,28 @@
 #ifndef RG_RETROGRADEINVERTCOMMAND_H
 #define RG_RETROGRADEINVERTCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 
 
-class RetrogradeInvertCommand : public BasicSelectionCommand
+class RetrogradeInvertCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RetrogradeInvertCommand)
 
 public:
     RetrogradeInvertCommand(int semitones, EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(semitones), selection, true),
-        m_selection(&selection), m_semitones(semitones) { }
-
-    static QString getGlobalName(int semitones = 0) {
-        switch (semitones) {
-        default:  return tr("Re&trograde Invert");
-        }
-    }
+        BasicCommand(tr("Re&trograde Invert"), selection, true),
+        m_selection(&selection),
+        m_semitones(semitones)
+    { }
 
 protected:
     void modifySegment() override;
@@ -54,7 +49,6 @@ private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     int m_semitones;
 };
-
 
 
 }

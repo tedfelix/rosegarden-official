@@ -19,40 +19,49 @@
 #ifndef RG_AUTOBEAMCOMMAND_H
 #define RG_AUTOBEAMCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-class Segment;
+
+//class Segment;
 class EventSelection;
 class CommandRegistry;
 
 
-class AutoBeamCommand : public BasicSelectionCommand
+class AutoBeamCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AutoBeamCommand)
 
 public:
     AutoBeamCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection) { }
+        BasicCommand(getGlobalName(), selection)
+    { }
 
+#if 0
+    // Unused.
     AutoBeamCommand(Segment &segment) :
-        BasicSelectionCommand(getGlobalName(), segment) { }
-
-    static QString getGlobalName() { return tr("&Auto-Beam"); }
+        BasicCommand(
+                getGlobalName(),
+                segment,
+                segment.getStartTime(),
+                segment.getEndMarkerTime())
+    { }
+#endif
 
     static void registerCommand(CommandRegistry *r);
 
 protected:
     void modifySegment() override;
-};
 
+private:
+    static QString getGlobalName() { return tr("&Auto-Beam"); }
+};
 
 
 }

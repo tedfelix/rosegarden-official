@@ -65,6 +65,17 @@ BasicCommand::BasicCommand(const QString &name, Segment &segment,
 
 }
 
+BasicCommand::BasicCommand(const QString &name,
+                           EventSelection &selection,
+                           bool bruteForceRedo) :
+    BasicCommand(name,
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime(),
+                 bruteForceRedo)
+{
+}
+
 // Variant ctor to be used when events to insert are known when
 // the command is cted.  Implies brute force redo.
 BasicCommand::BasicCommand(const QString &name,

@@ -130,7 +130,7 @@ MatrixResizer::handleMouseMove(const MatrixMouseEvent *e)
     EventSelection* selection = m_scene->getSelection();
     if (!selection || selection->getAddedEvents() == 0) return NO_FOLLOW;
 
-    EventSelection::eventcontainer::iterator it =
+    EventContainer::iterator it =
         selection->getSegmentEvents().begin();
 
     for (; it != selection->getSegmentEvents().end(); ++it) {
@@ -184,7 +184,7 @@ MatrixResizer::handleMouseRelease(const MatrixMouseEvent *e)
 
     MacroCommand *macro = new MacroCommand(commandLabel);
 
-    EventSelection::eventcontainer::iterator it =
+    EventContainer::iterator it =
         selection->getSegmentEvents().begin();
 
     Segment &segment = m_currentViewSegment->getSegment();
