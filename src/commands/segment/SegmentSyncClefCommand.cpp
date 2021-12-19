@@ -37,7 +37,7 @@ SegmentSyncClefCommand::processSegment(Segment &segment, const Clef& clef)
     // TODO delete it somewhere.
     EventSelection * wholeSegment = new EventSelection(segment, segment.getStartTime(), segment.getEndMarkerTime());
 
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = wholeSegment->getSegmentEvents().begin();
         i != wholeSegment->getSegmentEvents().end(); ++i) {

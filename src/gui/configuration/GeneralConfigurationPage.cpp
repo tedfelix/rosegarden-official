@@ -328,8 +328,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     row = 0;
 
-    // Use Thorn style
-    label = new QLabel(tr("Use Thorn style"), frame);
+    // Dark mode (Thorn style)
+    label = new QLabel(tr("Dark mode (Thorn style)"), frame);
     tipText = tr("<qt>When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.</qt>");
     label->setToolTip(tipText);
     layout->addWidget(label, row, 0);

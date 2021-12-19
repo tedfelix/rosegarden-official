@@ -139,7 +139,7 @@ signals:
     void mouseRelease();
 
     /// See ControlRuler::rulerSelectionChanged() for details.
-    void childRulerSelectionChanged(EventSelection *);
+    void childRulerSelectionChanged();
 
     void showContextHelp(const QString &);
 
@@ -195,6 +195,8 @@ private:
     std::vector<ViewElement *> m_selectedElements;
 
 private slots:
+    void tabChanged(int index);
+
     /**
      * ControlRuler::rulerSelectionChanged() is connected to this
      * slot.  This slot picks up child ruler selection changes and emits

@@ -68,7 +68,7 @@ public:
     friend class SelectionPropertyCommand;
     friend class ControlRulerWidget;
 
-    typedef EventSelection::eventcontainer::iterator iterator;
+    typedef EventContainer::iterator iterator;
     typedef std::pair<timeT,timeT> StartAndDuration;
     typedef ParameterPatternBareParameters BareParams;
     typedef std::vector<ParameterPattern *> ParameterPatternVec;

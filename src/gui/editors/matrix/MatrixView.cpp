@@ -129,7 +129,6 @@ MatrixView::MatrixView(RosegardenDocument *doc,
                  bool drumMode,
                  QWidget *parent) :
     EditViewBase(segments, parent),
-    m_tracking(true),
     m_quantizations(BasicQuantizer::getStandardQuantizations()),
     m_drumMode(drumMode),
     m_inChordMode(false)
@@ -169,6 +168,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     connect(m_matrixWidget, &MatrixWidget::selectionChanged,
             this, &MatrixView::slotUpdateMenuStates);
+    connect(m_matrixWidget, &MatrixWidget::rulerSelectionChanged,
+            this, &MatrixView::slotUpdateMenuStates);
 
     // Toggle the desired tool off and then trigger it on again, to
     // make sure its signal is called at least once (as would not
@@ -187,6 +188,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
         MATRIX_DEBUG << "newest state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked();
     }
 
+    m_tracking = m_document->getComposition().getEditorFollowPlayback();
+    findAction("toggle_tracking")->setChecked(m_tracking);
     m_matrixWidget->setScrollToFollowPlayback(m_tracking);
 
     slotUpdateWindowTitle();
@@ -408,8 +411,6 @@ MatrixView::setupActions()
 
     //"controllers" Menubar menu
     createAction("controller_sequence", SLOT(slotControllerSequence()));
-    createAction("copy_controllers",  SLOT(slotEditCopyControllers()));
-    createAction("cut_controllers",   SLOT(slotEditCutControllers()));
     createAction("set_controllers",   SLOT(slotSetControllers()));
     createAction("place_controllers", SLOT(slotPlaceControllers()));
 
@@ -729,36 +730,44 @@ MatrixView::slotShowContextHelp(const QString &help)
 void
 MatrixView::slotUpdateMenuStates()
 {
-    EventSelection *s = getSelection();
-    if (s && !s->getSegmentEvents().empty()) {
-        enterActionState("have_selection");
-    } else {
-        leaveActionState("have_selection");
-    }
-    conformRulerSelectionState();
-}
+    EventSelection *selection = getSelection();
 
-void
-MatrixView::
-conformRulerSelectionState()
-{
-    ControlRulerWidget * cr = m_matrixWidget->getControlsWidget();
-    if (cr->isAnyRulerVisible())
-        {
-            cr->slotSelectionChanged(getSelection());
+    const bool haveNoteSelection =
+            (selection  &&  !selection->getSegmentEvents().empty());
 
-            enterActionState("have_control_ruler");
-            if (cr->hasSelection())
-                { enterActionState("have_controller_selection"); }
-            else
-                { leaveActionState("have_controller_selection"); }
+    if (haveNoteSelection)
+        enterActionState("have_note_selection");
+    else
+        leaveActionState("have_note_selection");
+
+    ControlRulerWidget *controlRulerWidget =
+            m_matrixWidget->getControlsWidget();
+
+    bool haveControllerSelection = false;
+
+    if (controlRulerWidget->isAnyRulerVisible()) {
+        enterActionState("have_control_ruler");
+
+        if (controlRulerWidget->hasSelection()) {
+            RG_DEBUG << "  Entering action state have_controller_selection";
+            enterActionState("have_controller_selection");
+            haveControllerSelection = true;
+        } else {
+            RG_DEBUG << "  Leaving action state have_controller_selection";
+            leaveActionState("have_controller_selection");
         }
-    else {
+    } else {
         leaveActionState("have_control_ruler");
         // No ruler implies no controller selection
         leaveActionState("have_controller_selection"); 
     }
- }
+
+    // "have_selection" is enabled when either of the others is.
+    if (haveNoteSelection  ||  haveControllerSelection)
+        enterActionState("have_selection");
+    else
+        leaveActionState("have_selection");
+}
 
 void
 MatrixView::slotSetPaintTool()
@@ -812,14 +821,25 @@ MatrixView::getCurrentSegment()
 EventSelection *
 MatrixView::getSelection() const
 {
-    if (m_matrixWidget) return m_matrixWidget->getSelection();
-    else return nullptr;
+    if (!m_matrixWidget)
+        return nullptr;
+
+    return m_matrixWidget->getSelection();
 }
 
 void
 MatrixView::setSelection(EventSelection *s, bool preview)
 {
     if (m_matrixWidget) m_matrixWidget->setSelection(s, preview);
+}
+
+EventSelection *
+MatrixView::getRulerSelection() const
+{
+    if (!m_matrixWidget)
+        return nullptr;
+
+    return m_matrixWidget->getRulerSelection();
 }
 
 timeT
@@ -885,20 +905,35 @@ MatrixView::slotSetSnap(timeT t)
 void
 MatrixView::slotEditCut()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, getClipboard()));
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CutCommand(getSelection(),
+                           getRulerSelection(),
+                           getClipboard()));
 }
 
 void
 MatrixView::slotEditCopy()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, getClipboard()));
-//    emit usedSelection();//!!!
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CopyCommand(getSelection(),
+                           getRulerSelection(),
+                           getClipboard()));
 }
 
 void
@@ -923,10 +958,19 @@ MatrixView::slotEditPaste()
 void
 MatrixView::slotEditDelete()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand(new EraseCommand(*selection));
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new EraseCommand(getSelection(),
+                             getRulerSelection()));
 }
+
 
 void
 MatrixView::slotQuantizeSelection(int q)
@@ -1050,26 +1094,6 @@ MatrixView::slotSetVelocitiesToCurrent()
 {
     ParameterPattern::
         setVelocitiesFlat(getSelection(), getCurrentVelocity());
-}
-
-void
-MatrixView::slotEditCopyControllers()
-{
-    ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
-    EventSelection *selection = cr->getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, getClipboard()));
-}
-
-void
-MatrixView::slotEditCutControllers()
-{
-    ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
-    EventSelection *selection = cr->getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, getClipboard()));
 }
 
 void
@@ -1197,9 +1221,9 @@ MatrixView::slotFilterSelection()
         bool haveEvent = false;
 
         EventSelection *newSelection = new EventSelection(*segment);
-        EventSelection::eventcontainer &ec =
+        EventContainer &ec =
             existingSelection->getSegmentEvents();
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                     ec.begin(); i != ec.end(); ++i) {
             if (dialog.keepEvent(*i)) {
                 haveEvent = true;
@@ -1232,7 +1256,7 @@ MatrixView::slotSetCurrentVelocityFromSelection()
     float totalVelocity = 0;
     int count = 0;
 
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
              getSelection()->getSegmentEvents().begin();
          i != getSelection()->getSegmentEvents().end(); ++i) {
 
@@ -1252,6 +1276,7 @@ MatrixView::slotToggleTracking()
 {
     m_tracking = !m_tracking;
     m_matrixWidget->setScrollToFollowPlayback(m_tracking);
+    m_document->getComposition().setEditorFollowPlayback(m_tracking);
 }
 
 void
@@ -1271,21 +1296,21 @@ void
 MatrixView::slotToggleVelocityRuler()
 {
     m_matrixWidget->showVelocityRuler();
-    conformRulerSelectionState();
+    slotUpdateMenuStates();
 }
 
 void
 MatrixView::slotTogglePitchbendRuler()
 {
     m_matrixWidget->showPitchBendRuler();
-    conformRulerSelectionState();
+    slotUpdateMenuStates();
 }
 
 void
 MatrixView::slotAddControlRuler(QAction *action)
 {
     m_matrixWidget->addControlRuler(action);
-    conformRulerSelectionState();
+    slotUpdateMenuStates();
 }
 
 void
@@ -2168,7 +2193,7 @@ MatrixView::slotExtendSelectionBackward(bool bar)
 
     } else { // remove an event
 
-        EventSelection::eventcontainer::iterator i =
+        EventContainer::iterator i =
             es->getSegmentEvents().end();
 
         std::vector<Event *> toErase;
@@ -2238,7 +2263,7 @@ MatrixView::slotExtendSelectionForward(bool bar)
 
     } else { // remove an event
 
-        EventSelection::eventcontainer::iterator i =
+        EventContainer::iterator i =
             es->getSegmentEvents().begin();
 
         std::vector<Event *> toErase;

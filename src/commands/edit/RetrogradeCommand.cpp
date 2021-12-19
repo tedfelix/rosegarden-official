@@ -19,17 +19,18 @@
 
 #include "RetrogradeCommand.h"
 
-#include "base/Event.h"
 #include "misc/Debug.h"
+#include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
+
 #include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 RetrogradeCommand::modifySegment()
@@ -40,7 +41,7 @@ RetrogradeCommand::modifySegment()
     timeT a0 = m_selection->getStartTime();
     timeT a1 = m_selection->getEndTime();
 
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     bool useNotationTimings = false;
 
@@ -111,5 +112,6 @@ RetrogradeCommand::modifySegment()
 
     segment.normalizeRests(a0, a1);
 }
+
 
 }

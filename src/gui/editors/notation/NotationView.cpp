@@ -430,6 +430,12 @@ NotationView::NotationView(RosegardenDocument *doc,
     // We have to do this after show() because the rulers need information
     // that isn't available until the NotationView is shown.  (xScale)
     launchRulers(segments);
+
+    const bool followPlayback =
+            RosegardenDocument::currentDocument->getComposition().
+            getEditorFollowPlayback();
+    RG_DEBUG << "set toggle_tracking checked" << followPlayback;
+    findAction("toggle_tracking")->setChecked(followPlayback);
 }
 
 NotationView::~NotationView()
@@ -1263,9 +1269,9 @@ NotationView::slotUpdateMenuStates()
         // notes so if the selection contains only tied notes we
         // should disable the command
         bool allTied = true;
-        EventSelection::eventcontainer &ec =
+        EventContainer &ec =
             selection->getSegmentEvents();
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                  ec.begin(); i != ec.end(); ++i) {
             if ((*i)->isa(Note::EventType)) {
                 bool tiedNote = ((*i)->has(BaseProperties::TIED_FORWARD) ||
@@ -1746,6 +1752,15 @@ NotationView::setSelection(EventSelection *selection, bool preview)
     if (m_notationWidget) m_notationWidget->setSelection(selection, preview);
 }
 
+EventSelection *
+NotationView::getRulerSelection() const
+{
+    if (!m_notationWidget)
+        return nullptr;
+
+    return m_notationWidget->getRulerSelection();
+}
+
 timeT
 NotationView::getInsertionTime(bool allowEndTime) const
 {
@@ -1769,7 +1784,24 @@ NotationView::slotEditDelete()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
-    CommandHistory::getInstance()->addCommand(new EraseCommand(*selection));
+    CommandHistory::getInstance()->addCommand(new EraseCommand(selection));
+
+#if 0
+    // Future version that allows delete/copy/paste to work with
+    // both notes and controllers.  Lot more work to do before this
+    // is ready.  See Matrix.
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new EraseCommand(getSelection(),
+                             getRulerSelection()));
+#endif
 }
 
 void
@@ -1994,9 +2026,9 @@ NotationView::slotFilterSelection()
         bool haveEvent = false;
 
         EventSelection *newSelection = new EventSelection(*segment);
-        EventSelection::eventcontainer &ec =
+        EventContainer &ec =
             existingSelection->getSegmentEvents();
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                  ec.begin(); i != ec.end(); ++i) {
             if (dialog.keepEvent(*i)) {
                 haveEvent = true;
@@ -3213,7 +3245,7 @@ NotationView::slotMakeOrnament()
     if (!getSelection())
         return ;
 
-    EventSelection::eventcontainer &ec =
+    EventContainer &ec =
         getSelection()->getSegmentEvents();
 
     int basePitch = -1;
@@ -3221,7 +3253,7 @@ NotationView::slotMakeOrnament()
 
     QSharedPointer<NoteStyle> style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
 
-    for (EventSelection::eventcontainer::iterator i =
+    for (EventContainer::iterator i =
              ec.begin(); i != ec.end(); ++i) {
         if ((*i)->isa(Note::EventType)) {
             if ((*i)->has(BaseProperties::PITCH)) {
@@ -3370,10 +3402,10 @@ ForAllSelection(opOnEvent op)
     EventSelection *selection = getSelection();
     if (!selection) { return; }
 
-    EventSelection::eventcontainer ec =
+    EventContainer ec =
         selection->getSegmentEvents();
 
-    for (EventSelection::eventcontainer::iterator i = ec.begin();
+    for (EventContainer::iterator i = ec.begin();
          i != ec.end();
          ++i) {
         CALL_MEMBER_FN(*this,op)(*i, getCurrentSegment());
@@ -4739,7 +4771,7 @@ NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
     CopyCommand *cc = new CopyCommand(*selection, c);
     cc->execute();
 
-    command->addCommand(new EraseCommand(*selection));
+    command->addCommand(new EraseCommand(selection));
 
     command->addCommand(new PasteEventsCommand
                         (*segment, c, insertionTime,
@@ -5296,7 +5328,7 @@ NotationView::slotNewLayerFromSelection()
     if (clipseg) RG_DEBUG << *clipseg;
     RG_DEBUG << "Clipboard contents done";
 
-    macro->addCommand(new EraseCommand(*selection));
+    macro->addCommand(new EraseCommand(selection));
 
     // use overlay paste to avoid checking for space; paste to new
     // "layer" identify the layer with the segment marking.

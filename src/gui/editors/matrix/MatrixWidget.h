@@ -138,6 +138,7 @@ public:
     EventSelection *getSelection() const override;
     /// MatrixScene::setSelection()
     void setSelection(EventSelection *s, bool preview) override;
+    EventSelection *getRulerSelection() const;
 
 
     // Tools
@@ -202,6 +203,11 @@ signals:
     void sceneDeleted();
     /// Forwarded from MatrixScene::selectionChanged()
     void selectionChanged();
+    /// Forwarded from ControlRulerWidget::childRulerSelectionChanged().
+    /*
+     * Connected to MatrixView::slotUpdateMenuStates().
+     */
+    void rulerSelectionChanged();
 
     void showContextHelp(const QString &);
 
@@ -418,6 +424,7 @@ private:
     TempoRuler *m_tempoRuler; // I own this
     StandardRuler *m_topStandardRuler; // I own this
     StandardRuler *m_bottomStandardRuler; // I own this
+    // ??? Rename: m_controlRuler
     ControlRulerWidget *m_controlsWidget; // I own this
 
     /// Used by all rulers to make sure they are all zoomed to the same scale.

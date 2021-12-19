@@ -18,30 +18,34 @@
 #ifndef RG_ADDSLASHESCOMMAND_H
 #define RG_ADDSLASHESCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
-class EventSelection;
-class CommandRegistry;
 
-class CycleSlashesCommand : public BasicSelectionCommand
+class EventSelection;
+
+
+class CycleSlashesCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CycleSlashesCommand)
 
 public:
     CycleSlashesCommand(EventSelection &selection) :
-        BasicSelectionCommand(tr("Cycle Slashes"), selection, true),
-        m_selection(&selection) { }
+        BasicCommand(tr("Cycle Slashes"), selection, true),
+        m_selection(&selection)
+    { }
 
 protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
 };    
 
 

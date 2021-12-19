@@ -48,6 +48,10 @@ public:
     CopyCommand(EventSelection &selection,
                 Clipboard *clipboard);
 
+    CopyCommand(EventSelection *selection1,
+                EventSelection *selection2,
+                Clipboard *clipboard);
+
     /// Make a CopyCommand that copies whole Segments
     CopyCommand(SegmentSelection &selection,
                 Clipboard *clipboard);

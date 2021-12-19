@@ -15,19 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "DeCounterpointCommand.h"
 
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 DeCounterpointCommand::registerCommand(CommandRegistry *r)
@@ -55,5 +53,6 @@ DeCounterpointCommand::modifySegment()
         segment.normalizeRests(getStartTime(), getEndTime());
     }
 }
+
 
 }

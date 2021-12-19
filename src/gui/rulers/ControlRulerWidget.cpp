@@ -84,7 +84,7 @@ ControlRulerWidget::ControlRulerWidget() :
     layout->addWidget(m_tabBar);
     
     connect(m_tabBar, &QTabBar::currentChanged,
-            m_stackedWidget, &QStackedWidget::setCurrentIndex);
+            this, &ControlRulerWidget::tabChanged);
     
     connect(m_tabBar, &ControlRulerTabBar::tabCloseRequest,
             this, &ControlRulerWidget::slotRemoveRuler);
@@ -196,7 +196,8 @@ ControlRulerWidget::launchRulers()
         if (ruler.type == Controller::EventType) {
             const ControlParameter *cp = getControlParameter2(
                     m_viewSegment->getSegment(), ruler.ccNumber);
-            addControlRuler(*cp);
+            if (cp)
+                addControlRuler(*cp);
         } else if (ruler.type == PitchBend::EventType) {
             RG_DEBUG << "launchInitialRulers(): Launching pitchbend ruler";
             addControlRuler(ControlParameter::getPitchBend());
@@ -496,7 +497,7 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
     addRuler(controlRuler, name);
 
     // Update selection drawing in matrix view.
-    emit childRulerSelectionChanged(nullptr);
+    emit childRulerSelectionChanged();
 }
 
 void
@@ -609,9 +610,9 @@ ControlRulerWidget::slotSetTool(const QString &toolName)
 }
 
 void
-ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *s)
+ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *)
 {
-    emit childRulerSelectionChanged(s);
+    emit childRulerSelectionChanged();
 }
 
 bool
@@ -641,7 +642,10 @@ ControlRulerWidget::hasSelection()
     if (!ruler)
         return false;
 
-    return (ruler->getEventSelection() != nullptr);
+    if (!ruler->getEventSelection())
+        return false;
+
+    return !ruler->getEventSelection()->empty();
 }
 
 EventSelection *
@@ -680,6 +684,15 @@ ControlRulerWidget::getSituation()
         return nullptr;
 
     return new SelectionSituation(cp->getType(), selection);
+}
+
+void
+ControlRulerWidget::tabChanged(int index)
+{
+    m_stackedWidget->setCurrentIndex(index);
+
+    // Make sure the selection on the current tab is used.
+    emit childRulerSelectionChanged();
 }
 
 

@@ -119,6 +119,9 @@ void copyType(const Studio &srcStudio, const Track *srcTrack,
         case Instrument::Midi:
         default: {
             // Use the first MIDI Device's first Instrument ID.
+            // ??? It would be nice to be smarter and somehow detect the
+            //     same Devices between the two files and preserve the
+            //     channel/bank/program info.
             destTrack->setInstrument(getFirstMidiInstrumentId(destStudio));
             break;
         }

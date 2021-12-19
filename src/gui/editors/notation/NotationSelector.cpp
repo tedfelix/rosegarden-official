@@ -69,7 +69,12 @@ NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     m_selectionToMerge(nullptr),
     m_justSelectedBar(false),
     m_wholeStaffSelectionComplete(false),
-    m_ties(ties)
+    m_ties(ties),
+    m_doubleClick(false),
+    m_tripleClick(false),
+    m_pointerStaff(nullptr),
+    m_pointerTime(0),
+    m_releaseTimer(nullptr)
 {
     //connect(m_widget, SIGNAL(usedSelection()),
     //        this, SLOT(slotHideSelection()));
@@ -90,8 +95,12 @@ NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     createAction("make_invisible", SLOT(slotMakeInvisible()));
     createAction("make_visible", SLOT(slotMakeVisible()));
 
-
     createMenu();
+    
+    m_releaseTimer = new QTimer(this);
+    m_releaseTimer->setSingleShot(true);
+    connect(m_releaseTimer, &QTimer::timeout,
+            this, &NotationSelector::slotMoveInsertionCursor);
 }
 
 NotationSelector::~NotationSelector()
@@ -102,7 +111,11 @@ NotationSelector::~NotationSelector()
 void
 NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 {
+    m_doubleClick = false;
+    m_tripleClick = false;
+    
     if (m_justSelectedBar) {
+        // It's a triple click
         handleMouseTripleClick(e);
         m_justSelectedBar = false;
         return ;
@@ -152,6 +165,8 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 void
 NotationSelector::handleRightButtonPress(const NotationMouseEvent *e)
 {
+    m_releaseTimer->stop();     // Useful here ???
+
     // if nothing selected, permit the possibility of selecting
     // something before showing the menu
     RG_DEBUG << "NotationSelector::handleRightButtonPress";
@@ -178,6 +193,9 @@ void NotationSelector::slotClickTimeout()
 
 void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
+    m_releaseTimer->stop();      // Don't move insertion cursor
+    m_doubleClick = true;
+    
     RG_DEBUG << "NotationSelector::handleMouseDoubleClick";
 
     // Only double click on left mouse button is currently used (fix #1493)
@@ -215,6 +233,7 @@ void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 
     if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
+    m_tripleClick = true;
 
     NotationStaff *staff = e->staff;
     if (!staff) return;
@@ -244,6 +263,7 @@ void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 FollowMode
 NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 {
+    RG_DEBUG << "handleMouseMove" << e;
     if (!m_updateRect) return NO_FOLLOW;
 
 //    std::cout << "NotationSelector::handleMouseMove: staff is " 
@@ -288,7 +308,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 
     return (FOLLOW_HORIZONTAL | FOLLOW_VERTICAL);
 }
-
+    
 void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 {
     //RG_DEBUG << "NotationSelector::handleMouseRelease.";
@@ -337,18 +357,9 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
             } else {
                 m_scene->setSingleSelectedEvent(m_selectedStaff, m_clickedElement, true);
             }
-            /*
-                    } else if (m_selectedStaff) {
-             
-                        // If we clicked on no event but on a staff, move the
-                        // insertion cursor to the point where we clicked. 
-                        // Actually we only really want this to happen if
-                        // we aren't double-clicking -- consider using a timer
-                        // to establish whether a double-click is going to happen
-             
-                        m_nParentView->slotSetInsertCursorPosition(e->x(), (int)e->y());
-            */
+
         } else {
+            // Nothing selected or a group of events added to selection
             setViewCurrentSelection(false);
         }
 
@@ -372,6 +383,7 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
             // here:
             drag(e->sceneX, e->sceneY, true);
         } else {
+            // A group of events is selected
             setViewCurrentSelection(false);
         }
     }
@@ -380,6 +392,36 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     m_selectionRect->hide();
     m_selectionOrigin = QPointF();
     m_wholeStaffSelectionComplete = false;
+    
+    // If we clicked on no event but on a staff, move the insertion cursor
+    // to the point where we clicked. In such a case nothing has been selected.
+    
+    // If double or triple click, something is selected or the click was
+    // outside any staff.
+    if (m_doubleClick || m_tripleClick) return;
+    
+    // If simple click, look at clicked staff and current selection
+    if (e->staff && !m_scene->getSelection()) {
+        m_pointerStaff = e->staff;
+        m_pointerTime = e->time;
+        // Wait a possible double click before executing the code
+        m_releaseTimer->start(QApplication::doubleClickInterval());
+    }
+}
+
+void NotationSelector::slotMoveInsertionCursor()
+{
+    // Move the insertion cursor to the mouse pointer position.
+    
+    // We just clicked on a staff in the window, so no scroll is needed
+    // and we don't want to see any move of the staves
+    m_widget->setScroll(false);
+
+    ///! Warning, this short-circuits NotationView::setCurrentStaff...
+    m_scene->setCurrentStaff(m_pointerStaff);
+    m_widget->setPointerPosition(m_pointerTime);
+    
+    m_widget->setScroll(true);
 }
 
 void NotationSelector::drag(int x, int y, bool final)
@@ -622,7 +664,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
     if (!m_startedFineDrag) {
         // back up original properties
 
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                     selection->getSegmentEvents().begin();
                 i != selection->getSegmentEvents().end(); ++i) {
             long prevX = 0, prevY = 0;
@@ -650,7 +692,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
         // reset original values (and remove backup values) before
         // applying command
 
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                     selection->getSegmentEvents().begin();
                 i != selection->getSegmentEvents().end(); ++i) {
             long prevX = 0, prevY = 0;
@@ -670,7 +712,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
 
         timeT startTime = 0, endTime = 0;
 
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                     selection->getSegmentEvents().begin();
                 i != selection->getSegmentEvents().end(); ++i) {
             long prevX = 0, prevY = 0;

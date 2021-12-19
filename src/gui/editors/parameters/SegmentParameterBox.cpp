@@ -243,6 +243,8 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     // * For Notation
 
     // ??? Should this be "for printing"?  That would be clearer.
+    //     Users seem to like "Exclude from Printing" which will require
+    //     reversing the logic and placing the label to the right.
     QLabel *forNotationLabel = new QLabel(tr("For Notation"), this);
     forNotationLabel->setFont(m_font);
     QString toolTip = tr("<qt><p>Include this segment when printing (LilyPond).</p></qt>");

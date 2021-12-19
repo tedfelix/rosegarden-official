@@ -19,36 +19,29 @@
 #ifndef RG_MAKENOTESVIABLECOMMAND_H
 #define RG_MAKENOTESVIABLECOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
-class Segment;
+
 class EventSelection;
 class CommandRegistry;
 
 
-/// MakeNotesViable works on a selection or entire segment
-class MakeNotesViableCommand : public BasicSelectionCommand
+/// Tie notes at barlines.
+class MakeNotesViableCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MakeNotesViableCommand)
 
 public:
     MakeNotesViableCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection) { }
-
-    MakeNotesViableCommand(Segment &segment) :
-        BasicSelectionCommand(getGlobalName(), segment, true),
-        m_selection(nullptr) { }
-
-    static QString getGlobalName() { return tr("Tie Notes at &Barlines"); }
+        BasicCommand(tr("Tie Notes at &Barlines"), selection, true),
+        m_selection(&selection)
+    { }
 
     static void registerCommand(CommandRegistry *r);
 

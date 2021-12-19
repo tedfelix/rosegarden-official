@@ -93,9 +93,9 @@ getMinMax() const
     // them.
     int min = std::numeric_limits<int>::max(),
         max = std::numeric_limits<int>::min();
-    const EventSelection::eventcontainer &events =
+    const EventContainer &events =
             m_selection->getSegmentEvents();
-    for (EventSelection::eventcontainer::const_iterator i = events.begin();
+    for (EventContainer::const_iterator i = events.begin();
          i != events.end();
          ++i) {
         if (isSuitable(*i)) { 
@@ -116,9 +116,9 @@ calcMeanValue() const
 {
     float total = 0;
     int count = 0;
-    const EventSelection::eventcontainer &events =
+    const EventContainer &events =
             m_selection->getSegmentEvents();
-    for (EventSelection::eventcontainer::const_iterator i = events.begin();
+    for (EventContainer::const_iterator i = events.begin();
          i != events.end();
          ++i) {
         if (isSuitable(*i)) {

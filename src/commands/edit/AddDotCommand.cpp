@@ -23,12 +23,11 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 AddDotCommand::modifySegment()
@@ -37,7 +36,7 @@ AddDotCommand::modifySegment()
     EventVec toErase;
     EventVec toInsert;
 
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
     timeT endTime = getEndTime();
     SegmentNotationHelper segmentNotationHelper(m_selection->getSegment());
 
@@ -108,5 +107,6 @@ AddDotCommand::modifySegment()
     timeT endBarTime = comp->getBarEnd(barNo);
     m_selection->getSegment().normalizeRests(getStartTime(), endBarTime);
 }
+
 
 }

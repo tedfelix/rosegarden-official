@@ -15,20 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "ChangeTiePositionCommand.h"
 
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
-#include "document/BasicSelectionCommand.h"
-#include "gui/editors/notation/NotationProperties.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 ChangeTiePositionCommand::registerCommand(CommandRegistry *r)
@@ -51,7 +48,7 @@ ChangeTiePositionCommand::getArgument(QString actionName, CommandArgumentQuerier
 void
 ChangeTiePositionCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i) {
@@ -62,5 +59,6 @@ ChangeTiePositionCommand::modifySegment()
         }
     }
 }
+
 
 }

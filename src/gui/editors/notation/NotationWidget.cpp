@@ -16,10 +16,9 @@
 */
 
 #define RG_MODULE_STRING "[NotationWidget]"
-
-#include "NotationWidget.h"
 #define RG_NO_DEBUG_PRINT 1
 
+#include "NotationWidget.h"
 #include "NotationScene.h"
 #include "NotationToolBox.h"
 #include "NoteRestInserter.h"
@@ -129,7 +128,8 @@ NotationWidget::NotationWidget() :
     m_graceMode(false),
     m_tupledCount(2),
     m_untupledCount(3),
-    m_updatesSuspended(false)
+    m_updatesSuspended(false),
+    m_noScroll(false)
 {
 
     m_resizeTimer = new QTimer(this);
@@ -374,6 +374,8 @@ NotationWidget::NotationWidget() :
     m_headersTimer->setSingleShot(true);
     m_headersTimer->setInterval(100);  // 0.1 s
 
+    m_view->setMouseTracking(true);
+
     m_autoScroller.connectScrollArea(m_view);
 }
 
@@ -427,21 +429,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_scene->setStaffs(document, segments);
 
     m_referenceScale = new ZoomableRulerScale(m_scene->getRulerScale());
-
-    connect(m_scene, &NotationScene::mousePressed,
-            this, &NotationWidget::slotDispatchMousePress);
-
-    connect(m_scene, &NotationScene::mouseMoved,
-            this, &NotationWidget::slotDispatchMouseMove);
-
-    connect(m_scene, &NotationScene::mouseReleased,
-            this, &NotationWidget::slotDispatchMouseRelease);
-
-    connect(m_scene, &NotationScene::mouseDoubleClicked,
-            this, &NotationWidget::slotDispatchMouseDoubleClick);
-
-    connect(m_scene, &NotationScene::wheelTurned,
-            this, &NotationWidget::slotDispatchWheelTurned);
 
     // Bug #2960243: the Qt::QueuedConnection flag is mandatory to avoid
     // a crash after deleting the notation scene from inside its own code.
@@ -617,6 +604,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &NotationScene::currentStaffChanged,
             this, &NotationWidget::slotStaffChanged);
 
+    m_playTracking = m_document->getComposition().getEditorFollowPlayback();
 }
 
 void
@@ -899,6 +887,7 @@ NotationWidget::slotSetGuitarChordInserter()
 void
 NotationWidget::slotSetPlayTracking(bool tracking)
 {
+    m_document->getComposition().setEditorFollowPlayback(tracking);
     m_playTracking = tracking;
     if (m_playTracking) {
         m_view->ensurePositionPointerInView(true);
@@ -970,8 +959,8 @@ NotationWidget::slotPointerPositionChanged(timeT t)
 {
     updatePointer(t);
 
-    if (m_playTracking)
-        m_view->ensurePositionPointerInView(true);  // page
+    if (m_playTracking && !m_noScroll)
+        m_view->ensurePositionPointerInView(true);  // page  
 }
 
 void
@@ -1025,7 +1014,7 @@ NotationWidget::slotTRMouseRelease()
 }
 
 void
-NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
+NotationWidget::dispatchMousePress(const NotationMouseEvent *e)
 {
     if (!m_currentTool)
         return;
@@ -1041,17 +1030,19 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
         m_currentTool->handleRightButtonPress(e);
     }
 
+    RG_DEBUG << "slotDispatchMousePress autoscroll start";
     m_autoScroller.start();
 }
 
 void
-NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
+NotationWidget::dispatchMouseMove(const NotationMouseEvent *e)
 {
     if (!m_currentTool)
         return;
 
     FollowMode followMode = m_currentTool->handleMouseMove(e);
 
+    RG_DEBUG << "slotDispatchMouseMove mode" << followMode;
     m_autoScroller.setFollowMode(followMode);
 
     if (e->staff) {
@@ -1061,8 +1052,9 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 }
 
 void
-NotationWidget::slotDispatchMouseRelease(const NotationMouseEvent *e)
+NotationWidget::dispatchMouseRelease(const NotationMouseEvent *e)
 {
+    RG_DEBUG << "slotDispatchMouseRelease autoscroll stop";
     m_autoScroller.stop();
 
     if (!m_currentTool)
@@ -1072,14 +1064,14 @@ NotationWidget::slotDispatchMouseRelease(const NotationMouseEvent *e)
 }
 
 void
-NotationWidget::slotDispatchMouseDoubleClick(const NotationMouseEvent *e)
+NotationWidget::dispatchMouseDoubleClick(const NotationMouseEvent *e)
 {
     if (!m_currentTool) return;
     m_currentTool->handleMouseDoubleClick(e);
 }
 
 void
-NotationWidget::slotDispatchWheelTurned(int delta, const NotationMouseEvent *e)
+NotationWidget::dispatchWheelTurned(int delta, const NotationMouseEvent *e)
 {
     if (!m_currentTool) return;
     m_currentTool->handleWheelTurned(delta, e);
@@ -1096,6 +1088,15 @@ void
 NotationWidget::setSelection(EventSelection *selection, bool preview)
 {
     if (m_scene) m_scene->setSelection(selection, preview);
+}
+
+EventSelection *
+NotationWidget::getRulerSelection() const
+{
+    if (!m_controlRulerWidget)
+        return nullptr;
+
+    return m_controlRulerWidget->getSelection();
 }
 
 timeT
@@ -1763,8 +1764,8 @@ NotationWidget::slotStaffChanged()
 {
     // Draw the pointer
     updatePointer(m_document->getComposition().getPosition());
-    // Make sure it's in view.
-    m_view->ensurePositionPointerInView(false);
+    // Make sure it's in view (if scrolling is not inhibited).
+    if (!m_noScroll) m_view->ensurePositionPointerInView(false);
 }
 
 void

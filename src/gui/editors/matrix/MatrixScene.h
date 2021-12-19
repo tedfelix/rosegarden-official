@@ -88,8 +88,8 @@ public:
     void handleEventAdded(Event *);
     void handleEventRemoved(Event *);
 
-    EventSelection *getSelection() const override { return m_selection; }
     void setSelection(EventSelection* s, bool preview) override;
+    EventSelection *getSelection() const override  { return m_selection; }
     void selectAll();
     int calculatePitchFromY(int y) const;
 
@@ -143,25 +143,17 @@ signals:
     void eventRemoved(Event *e);
 
     void currentViewSegmentChanged(ViewSegment *);
-    //void selectionChanged(); // already defined in QGraphicsScene
+
+    /// Emitted when the user changes the selection.
     /**
      * MatrixWidget::setSegments() connects this to
      * ControlRulerWidget::slotSelectionChanged().
      *
-     * ??? I don't think this is ever emitted.  Need to determine if that
-     *     is the case.  Create a new test slot and connect it to this.
-     *     Then see if that test slot ever gets called.  Might want to
-     *     confirm that it isn't the other selectionChanged() signal
-     *     somehow triggering this if we do get a call.  Also connect a
-     *     test slot to the other signal to confirm that is working.
-     *     Remove this signal and the connect() that uses it if we can
-     *     determine that it is never emitted.
-     *
-     * ??? Rename: selectionChangedES() to avoid overload.  We'll need to
-     *     test thoroughly to make sure nothing is broken.  However, if
-     *     this really is never emitted, it will be hard to test.  See above.
+     * This is used to keep the velocity ruler in sync with the selected
+     * events.
      */
-    void selectionChanged(EventSelection *s);
+    void selectionChangedES(EventSelection *s);
+
     void segmentDeleted(Segment *);
     void sceneDeleted(); // all segments have been removed
 
@@ -186,8 +178,9 @@ private:
 
     /// The Segments we are editing.
     std::vector<Segment *> m_segments; // I do not own these
+    typedef std::vector<MatrixViewSegment *> ViewSegmentVector;
     /// The MatrixViewSegment for each Segment we are editing.
-    std::vector<MatrixViewSegment *> m_viewSegments; // I own these
+    ViewSegmentVector m_viewSegments; // I own these
     int findSegmentIndex(const Segment *segment) const;
     /// The Segment that is currently being displayed.
     /**
@@ -202,7 +195,9 @@ private:
     SnapGrid *m_snapGrid; // I own this
 
     int m_resolution;
+
     EventSelection *m_selection; // I own this
+
     HighlightType m_highlightType;
 
     // These are the background items -- the grid lines and the shadings

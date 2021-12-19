@@ -22,13 +22,12 @@
 #include "base/Quantizer.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 FixNotationQuantizeCommand::registerCommand(CommandRegistry *r)
@@ -45,7 +44,7 @@ FixNotationQuantizeCommand::modifySegment()
     std::vector<Event *> toInsert;
     Segment &segment(m_selection->getSegment());
 
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     //!!! the Quantizer needs a fixQuantizedValues(EventSelection*)
     //method, but it hasn't got one yet so for the moment we're doing
@@ -90,5 +89,6 @@ FixNotationQuantizeCommand::modifySegment()
 
     //!!! normalizeRests?
 }
+
 
 }

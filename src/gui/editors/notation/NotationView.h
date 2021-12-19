@@ -493,7 +493,9 @@ private:
 protected:
     // !!! Duplicates m_doc in base class
     RosegardenDocument *m_document;
+
     NotationWidget *m_notationWidget;
+    EventSelection *getRulerSelection() const;
     
 private:
     void extendSelectionHelper(bool forward, EventSelection *es, const std::vector<Event *> &eventVec, bool select);

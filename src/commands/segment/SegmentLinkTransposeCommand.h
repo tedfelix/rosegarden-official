@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2010 the Rosegarden development team.
+    Copyright 2000-2021 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,19 +19,20 @@
 #ifndef RG_SEGMENTLINKTRANSPOSECOMMAND_H
 #define RG_SEGMENTLINKTRANSPOSECOMMAND_H
 
-#include "document/Command.h"
 #include "document/BasicCommand.h"
-#include "document/BasicSelectionCommand.h"
-#include "base/Selection.h"
+#include "document/Command.h"
+#include "base/Segment.h"
 
 #include <QCoreApplication>
+
+#include <vector>
+
 
 namespace Rosegarden
 {
 
-class LinkedSegment;
 
-
+/// Hidden feature of the Segment Parameters box (SegmentParameterBox).
 class SegmentLinkTransposeCommand : public MacroCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentLinkTransposeCommand)
@@ -45,8 +46,6 @@ public:
     void execute() override;
     void unexecute() override;
 
-    static QString getGlobalName() { return tr("Transpose Linked Segments"); }
-
 private:
     std::vector<Segment *> m_linkedSegs;
 
@@ -57,6 +56,8 @@ private:
     std::vector<Segment::LinkTransposeParams> m_oldLinkTransposeParams;
 };
 
+// ********************************************************************
+
 class SegmentLinkResetTransposeCommand : public MacroCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentLinkResetTransposeCommand)
@@ -64,22 +65,24 @@ class SegmentLinkResetTransposeCommand : public MacroCommand
 public:
     SegmentLinkResetTransposeCommand(std::vector<Segment *> &linkedSegs);
 
-    static QString getGlobalName() {
-        return tr("Reset Transpose on Linked Segments"); }
 };
 
-class SingleSegmentLinkResetTransposeCommand : public BasicSelectionCommand
+// ********************************************************************
+
+class SingleSegmentLinkResetTransposeCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SingleSegmentLinkResetTransposeCommand)
 
 public:
     SingleSegmentLinkResetTransposeCommand(Segment &linkedSeg) :
-        BasicSelectionCommand(getGlobalName(), linkedSeg, true),
+        BasicCommand(tr("Reset Transpose on Linked Segment"),
+                     linkedSeg,
+                     linkedSeg.getStartTime(),
+                     linkedSeg.getEndMarkerTime(),
+                     true),  // bruteForceRedo
         m_linkedSeg(&linkedSeg),
-        m_linkTransposeParams(m_linkedSeg->getLinkTransposeParams()) { }
-
-    static QString getGlobalName() {
-        return tr("Reset Transpose on Linked Segment"); }
+        m_linkTransposeParams(m_linkedSeg->getLinkTransposeParams())
+    { }
 
     void execute() override;
     void unexecute() override;
@@ -91,6 +94,7 @@ private:
     Segment *m_linkedSeg;
     Segment::LinkTransposeParams m_linkTransposeParams;
 };
+
 
 }
 

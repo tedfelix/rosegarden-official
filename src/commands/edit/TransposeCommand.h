@@ -18,7 +18,8 @@
 #ifndef RG_TRANSPOSECOMMAND_H
 #define RG_TRANSPOSECOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
+#include "document/BasicCommand.h"
+
 #include <QString>
 #include <QCoreApplication>
 
@@ -26,27 +27,29 @@
 namespace Rosegarden
 {
 
+
 class EventSelection;
 
 
-class TransposeCommand : public BasicSelectionCommand
+class TransposeCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::TransposeCommand)
 
 public:
     TransposeCommand(int semitones, EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(semitones), selection, true),
-        m_selection(&selection), m_semitones(semitones), m_diatonic(false) { }
+        BasicCommand(getGlobalName(semitones), selection, true),
+        m_selection(&selection),
+        m_semitones(semitones),
+        m_diatonic(false)
+    { }
 
     TransposeCommand(int semitones, int steps, EventSelection &selection) :
-        BasicSelectionCommand(getDiatonicGlobalName(semitones), selection, true),
-        m_selection(&selection), m_semitones(semitones), m_steps(steps), m_diatonic(true) { }
-
-    static QString getDiatonicGlobalName(int semitones = 0) {
-        switch (semitones) {
-        default:  return tr("Transpose by &Interval...");
-        }
-    }
+        BasicCommand(tr("Transpose by &Interval..."), selection, true),
+        m_selection(&selection),
+        m_semitones(semitones),
+        m_steps(steps),
+        m_diatonic(true)
+    { }
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
@@ -62,12 +65,14 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
+
     int m_semitones;
     int m_steps;
     bool m_diatonic;
 };
-
 
 
 }

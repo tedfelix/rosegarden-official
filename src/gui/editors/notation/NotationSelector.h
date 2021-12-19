@@ -19,7 +19,7 @@
 #define RG_NOTATIONSELECTOR_H
 
 #include "NotationTool.h"
-
+#include "NotationMouseEvent.h"
 #include "base/Event.h"
 
 #include <QString>
@@ -122,6 +122,7 @@ public slots:
     void slotMakeVisible();
 
     void slotClickTimeout();
+    void slotMoveInsertionCursor();
 
 protected:
     NotationSelector(NotationWidget *, bool ties = true);
@@ -160,6 +161,15 @@ protected:
     bool m_justSelectedBar;
     bool m_wholeStaffSelectionComplete;
     bool m_ties;
+    
+private:
+    bool m_doubleClick;
+    bool m_tripleClick;
+    NotationStaff * m_pointerStaff;
+    timeT m_pointerTime;
+    // m_releaseTimer delays execution of mouse button release related code to *
+    // allow the execution of a possible double click.
+    QTimer *m_releaseTimer;
 };
 
 class NotationSelectorNoTies : public NotationSelector

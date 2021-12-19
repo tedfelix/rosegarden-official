@@ -15,20 +15,16 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "RestoreTiesCommand.h"
 
-#include "base/NotationTypes.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
-#include "gui/editors/notation/NotationProperties.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 RestoreTiesCommand::registerCommand(CommandRegistry *r)
@@ -41,7 +37,7 @@ RestoreTiesCommand::registerCommand(CommandRegistry *r)
 void
 RestoreTiesCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i) {
@@ -49,5 +45,6 @@ RestoreTiesCommand::modifySegment()
         (*i)->unset(BaseProperties::TIE_IS_ABOVE);
     }
 }
+
 
 }

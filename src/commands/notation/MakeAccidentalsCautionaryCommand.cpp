@@ -15,19 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "MakeAccidentalsCautionaryCommand.h"
 
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 MakeAccidentalsCautionaryCommand::registerCommand(CommandRegistry *r)
@@ -59,7 +57,7 @@ MakeAccidentalsCautionaryCommand::getGlobalName(bool cautionary)
 void
 MakeAccidentalsCautionaryCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
@@ -75,5 +73,6 @@ MakeAccidentalsCautionaryCommand::modifySegment()
         }
     }
 }
+
 
 }

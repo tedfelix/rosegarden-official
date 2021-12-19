@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixWidget]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixWidget.h"
 
@@ -442,14 +443,15 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &MatrixScene::currentViewSegmentChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
     
-    connect(m_scene, &MatrixScene::selectionChanged,
+    connect(m_scene, &MatrixScene::selectionChangedES,
             m_controlsWidget, &ControlRulerWidget::slotSelectionChanged);
 
+    // Forward for MatrixView
     connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
-            m_scene, &MatrixScene::slotRulerSelectionChanged);
+            this, &MatrixWidget::rulerSelectionChanged);
 
-    connect(m_scene, SIGNAL(selectionChanged()),
-            this, SIGNAL(selectionChanged()));
+    connect(m_scene, &MatrixScene::selectionChanged,
+            this, &MatrixWidget::selectionChanged);
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
@@ -776,6 +778,15 @@ MatrixWidget::setSelection(EventSelection *s, bool preview)
     m_scene->setSelection(s, preview);
 }
 
+EventSelection *
+MatrixWidget::getRulerSelection() const
+{
+    if (!m_controlsWidget)
+        return nullptr;
+
+    return m_controlsWidget->getSelection();
+}
+
 const SnapGrid *
 MatrixWidget::getSnapGrid() const
 {
@@ -894,6 +905,7 @@ MatrixWidget::slotDispatchMousePress(const MatrixMouseEvent *e)
         m_currentTool->handleRightButtonPress(e);
     }
 
+    RG_DEBUG << "slotDispatchMousePress autoscroll start";
     m_autoScroller.start();
 }
 
@@ -911,6 +923,7 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
 
     FollowMode followMode = m_currentTool->handleMouseMove(e);
 
+    RG_DEBUG << "slotDispatchMouseMove mode" << followMode;
     m_autoScroller.setFollowMode(followMode);
 }
 
@@ -922,6 +935,7 @@ MatrixWidget::slotDispatchMouseRelease(const MatrixMouseEvent *e)
     if (!m_currentTool)
         return;
 
+    RG_DEBUG << "slotDispatchMouseRelease autoscroll stop";
     m_currentTool->handleMouseRelease(e);
 }
 

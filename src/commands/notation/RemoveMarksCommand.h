@@ -19,30 +19,27 @@
 #ifndef RG_REMOVEMARKSCOMMAND_H
 #define RG_REMOVEMARKSCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
 
-class RemoveMarksCommand : public BasicSelectionCommand
+class RemoveMarksCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveMarksCommand)
 
 public:
     RemoveMarksCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
+        BasicCommand(tr("&Remove All Marks"), selection, true),
         m_selection(&selection) { }
-
-    static QString getGlobalName() { return tr("&Remove All Marks"); }
 
     static void registerCommand(CommandRegistry *r);
 

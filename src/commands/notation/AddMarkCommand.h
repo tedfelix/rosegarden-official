@@ -19,32 +19,31 @@
 #ifndef RG_ADDMARKCOMMAND_H
 #define RG_ADDMARKCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
 
 #include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
-class AddMarkCommand : public BasicSelectionCommand
+
+class AddMarkCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddMarkCommand)
 
 public:
     AddMarkCommand(Mark mark,
                    EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(mark), selection, true),
-        m_selection(&selection), m_mark(mark) { }
-
-    static QString getGlobalName(Mark mark);
-    static QString getActionName(Mark mark);
-    static QString getShortcut(Mark mark);
-    static QString getIconName(Mark mark);
+        BasicCommand(getGlobalName(mark), selection, true),
+        m_selection(&selection),
+        m_mark(mark)
+    { }
 
     static Mark getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
@@ -53,10 +52,13 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static QString getGlobalName(Mark mark);
+    static QString getActionName(Mark mark);
+
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
     Mark m_mark;
 };
-
 
 
 }

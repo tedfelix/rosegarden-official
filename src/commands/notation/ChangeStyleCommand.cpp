@@ -15,21 +15,19 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "ChangeStyleCommand.h"
 
 #include "misc/Strings.h"
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 ChangeStyleCommand::registerCommand(CommandRegistry *r)
@@ -76,7 +74,7 @@ ChangeStyleCommand::getGlobalName(NoteStyleName style)
 void
 ChangeStyleCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i) {
@@ -91,5 +89,6 @@ ChangeStyleCommand::modifySegment()
         }
     }
 }
+
 
 }

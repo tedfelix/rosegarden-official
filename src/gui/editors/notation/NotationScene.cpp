@@ -887,9 +887,7 @@ NotationScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
-    ///! Warning, this short-circuits NotationView::setCurrentStaff...
-    if (nme.staff) setCurrentStaff(nme.staff);
-    emit mousePressed(&nme);
+    m_widget->dispatchMousePress(&nme);
 }
 
 void
@@ -897,7 +895,7 @@ NotationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
-    emit mouseMoved(&nme);
+    m_widget->dispatchMouseMove(&nme);
 }
 
 void
@@ -905,7 +903,7 @@ NotationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
-    emit mouseReleased(&nme);
+    m_widget->dispatchMouseRelease(&nme);
 }
 
 void
@@ -913,7 +911,7 @@ NotationScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
-    emit mouseDoubleClicked(&nme);
+    m_widget->dispatchMouseDoubleClick(&nme);
 }
 
 void
@@ -922,7 +920,7 @@ NotationScene::wheelEvent(QGraphicsSceneWheelEvent *e)
     if (m_widget->getCurrentTool()->needsWheelEvents()) {
         NotationMouseEvent nme;
         setupMouseEvent(e, nme);
-        emit wheelTurned(e->delta(), &nme);
+        m_widget->dispatchWheelTurned(e->delta(), &nme);
         e->accept();    // Don't pass the event to the view
     }
 }
@@ -959,7 +957,7 @@ NotationScene::processKeyboardEvent(QKeyEvent * keyEvent)
                         QApplication::queryKeyboardModifiers(), nme);
 
         // Handle it as a mouse event
-        emit mouseMoved(&nme);
+        m_widget->dispatchMouseMove(&nme);;
     }
 }
 
@@ -1881,10 +1879,6 @@ NotationScene::setSelection(EventSelection *s,
         newStaff = setSelectionElementStatus(m_selection, true);
     }
 
-    if (newStaff) {
-        setCurrentStaff(newStaff);
-    }
-
     if (oldSelection && m_selection && oldStaff && newStaff &&
         (oldStaff == newStaff)) {
 
@@ -1961,7 +1955,7 @@ NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 
     if (!staff) return nullptr;
 
-    for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
+    for (EventContainer::iterator i = s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {
 
         Event *e = *i;
@@ -1984,7 +1978,7 @@ NotationScene::previewSelection(EventSelection *s,
     if (!s) return;
     if (!m_document->isSoundEnabled()) return;
 
-    for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
+    for (EventContainer::iterator i = s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {
 
         Event *e = *i;

@@ -172,7 +172,7 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
     int maxVelocity = 0;
     int minVelocity = 127;
 
-    for (EventSelection::eventcontainer::iterator it =
+    for (EventContainer::iterator it =
              selection->getSegmentEvents().begin();
          it != selection->getSegmentEvents().end(); ++it) {
 
@@ -203,7 +203,7 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 
 	/** Might be something for the feature
 	EventSelection* selection = m_mParentView->getCurrentSelection();
-	EventSelection::eventcontainer::iterator it = selection->getSegmentEvents().begin();
+	EventContainer::iterator it = selection->getSegmentEvents().begin();
 	MatrixElement *element = 0;
 	for (; it != selection->getSegmentEvents().end(); it++) {
 	    element = m_currentViewSegment->getElement(*it);

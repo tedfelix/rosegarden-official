@@ -92,7 +92,6 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
     m_compositionView(nullptr),
     m_compositionModel(nullptr),
-    m_playTracking(true),
     m_trackCellHeight(0),
     m_trackButtons(nullptr),
     m_trackButtonScroll(nullptr),
@@ -111,6 +110,9 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
     init(mainViewWidget);
 
     updateCanvasSize();
+
+    Composition &comp = m_doc->getComposition();
+    m_playTracking = comp.getMainFollowPlayback();
 }
 
 void
@@ -510,6 +512,9 @@ void
 TrackEditor::toggleTracking()
 {
     m_playTracking = !m_playTracking;
+    Composition &comp = m_doc->getComposition();
+    comp.setMainFollowPlayback(m_playTracking);
+
 }
 
 void

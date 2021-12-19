@@ -46,6 +46,11 @@ public:
     {
         setTristate(true);
     }
+    explicit TristateCheckBox(const QString &text, QWidget *parent = nullptr) :
+        QCheckBox(text, parent)
+    {
+        setTristate(true);
+    }
 
 protected:
     void nextCheckState() override

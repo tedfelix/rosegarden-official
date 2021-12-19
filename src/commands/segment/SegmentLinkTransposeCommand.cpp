@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2010 the Rosegarden development team.
+    Copyright 2000-2021 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,19 +15,20 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "SegmentLinkTransposeCommand.h"
 
 #include "SegmentTransposeCommand.h"
 #include "base/SegmentLinker.h"
 
+
 namespace Rosegarden
 {
-    
+
+
 SegmentLinkTransposeCommand::SegmentLinkTransposeCommand(
         std::vector<Segment *> linkedSegs, bool changeKey, int steps,
         int semitones, bool transposeSegmentBack) :
-    MacroCommand(getGlobalName()),
+    MacroCommand(tr("Transpose Linked Segments")),
     m_linkedSegs(linkedSegs),
     m_linkTransposeParams(changeKey,steps,semitones,transposeSegmentBack)
 {
@@ -73,7 +74,7 @@ SegmentLinkTransposeCommand::unexecute()
 
 SegmentLinkResetTransposeCommand::SegmentLinkResetTransposeCommand(
                                     std::vector<Segment *> &linkedSegs) :
-    MacroCommand(getGlobalName())
+    MacroCommand(tr("Reset Transpose on Linked Segments"))
 {
     //make this command not update link siblings by default
     setUpdateLinks(false);
@@ -102,5 +103,6 @@ SingleSegmentLinkResetTransposeCommand::unexecute()
     m_linkedSeg->setLinkTransposeParams(m_linkTransposeParams);
     BasicCommand::unexecute();
 }
+
 
 }

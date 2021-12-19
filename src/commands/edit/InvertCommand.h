@@ -19,33 +19,30 @@
 #ifndef RG_INVERTCOMMAND_H
 #define RG_INVERTCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 
 
-class InvertCommand : public BasicSelectionCommand
+class InvertCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::InvertCommand)
 
 public:
     InvertCommand(int semitones, EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(semitones), selection, true),
-        m_selection(&selection), m_semitones(semitones) { }
-
-    static QString getGlobalName(int semitones = 0) {
-        switch (semitones) {
-        default:  return tr("&Invert");
-        }
-    }
+        BasicCommand(tr("&Invert"),
+                     selection,
+                     true),  // bruteForceRedo
+        m_selection(&selection),
+        m_semitones(semitones)
+    { }
 
 protected:
     void modifySegment() override;
@@ -54,7 +51,6 @@ private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     int m_semitones;
 };
-
 
 
 }

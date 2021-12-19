@@ -15,19 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "MakeNotesViableCommand.h"
 
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 void
 MakeNotesViableCommand::registerCommand(CommandRegistry *r)
@@ -55,5 +53,6 @@ MakeNotesViableCommand::modifySegment()
         segment.normalizeRests(getStartTime(), getEndTime());
     }
 }
+
 
 }

@@ -19,24 +19,29 @@
 #ifndef RG_ADDSLASHESCOMMAND_H
 #define RG_ADDSLASHESCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
-class AddSlashesCommand : public BasicSelectionCommand
+
+class AddSlashesCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddSlashesCommand)
 
 public:
     AddSlashesCommand(int number, EventSelection &selection) :
-        BasicSelectionCommand(tr("Slashes"), selection, true),
-        m_selection(&selection), m_number(number) { }
+        BasicCommand(tr("Slashes"), selection, true),
+        m_selection(&selection),
+        m_number(number)
+    { }
 
     static int getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
@@ -45,7 +50,8 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
     int m_number;
 };    
 

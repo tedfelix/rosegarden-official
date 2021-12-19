@@ -95,7 +95,7 @@ SegmentTransposeCommand::processSegment(
         Rosegarden::Key newInitialKey = initialKey.transpose(semitones, steps);
 
         // For each Event in the Segment
-        for (EventSelection::eventcontainer::iterator i =
+        for (EventContainer::iterator i =
                      wholeSegment->getSegmentEvents().begin();
              i != wholeSegment->getSegmentEvents().end();
              ++i) {

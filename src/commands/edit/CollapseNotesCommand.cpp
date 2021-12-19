@@ -21,7 +21,7 @@
 #include "base/Event.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
+
 #include <QString>
 
 
@@ -57,7 +57,7 @@ CollapseNotesCommand::modifySegment()
 
     QSet<Event *> seen;
 
-    EventSelection::eventcontainer::iterator i =
+    EventContainer::iterator i =
         m_selection->getSegmentEvents().begin();
 
     while (i != m_selection->getSegmentEvents().end()) {

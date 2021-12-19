@@ -1125,13 +1125,10 @@ RosegardenMainWindow::initView()
     comp.notifyTrackSelectionChanged(comp.getSelectedTrack());
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
-    // play tracking on in the editor by default: turn off if need be
-    /* was toggle */ 
-    // old. QAction *trackingAction = dynamic_cast<QAction*>
-    //                                (actionCollection()->action("toggle_tracking"));
+    // play tracking in the track editor is stored in the composition
     QAction *trackingAction = findAction("toggle_tracking");
-    if (trackingAction && !trackingAction->isChecked()) {
-        m_view->getTrackEditor()->toggleTracking();
+    if (trackingAction) {
+        trackingAction->setChecked(comp.getMainFollowPlayback());
     }
 
     m_view->show();

@@ -86,6 +86,7 @@ public:
 
     EventSelection *getSelection() const override;
     void setSelection(EventSelection* s, bool preview) override;
+    EventSelection *getRulerSelection() const;
 
     timeT getInsertionTime(bool allowEndTime = false) const;
 
@@ -140,6 +141,15 @@ public:
 
     void updateSegmentChangerBackground();
     void updatePointerPosition(bool moveView = false);
+    
+    void dispatchMousePress(const NotationMouseEvent *);
+    void dispatchMouseRelease(const NotationMouseEvent *);
+    void dispatchMouseMove(const NotationMouseEvent *);
+    void dispatchMouseDoubleClick(const NotationMouseEvent *);
+    void dispatchWheelTurned(int, const NotationMouseEvent *);
+    
+    //  Valid or inhibit scrolling to kept the cursor in the view
+    void setScroll(bool scroll) { m_noScroll = !scroll; }
 
 signals:
     void sceneNeedsRebuilding();
@@ -185,12 +195,6 @@ private:
     void updatePointer(timeT t);
 
 private slots:
-    void slotDispatchMousePress(const NotationMouseEvent *);
-    void slotDispatchMouseRelease(const NotationMouseEvent *);
-    void slotDispatchMouseMove(const NotationMouseEvent *);
-    void slotDispatchMouseDoubleClick(const NotationMouseEvent *);
-    void slotDispatchWheelTurned(int, const NotationMouseEvent *);
-
     void slotPointerPositionChanged(timeT t);
 
     // Standard Ruler
@@ -340,6 +344,8 @@ private:
     QTimer *m_resizeTimer;
 
     bool m_updatesSuspended;
+    
+    bool m_noScroll;    // If true, don't scroll to keep the cursor in the view
 
     void locatePanner(bool vertical);
 

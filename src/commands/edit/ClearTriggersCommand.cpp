@@ -18,29 +18,26 @@
 
 #include "ClearTriggersCommand.h"
 
-#include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
 #include "base/BaseProperties.h"
+#include "base/Selection.h"
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 ClearTriggersCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    for (EventContainer::iterator i = m_selection->getSegmentEvents().begin();
+         i != m_selection->getSegmentEvents().end();
+         ++i) {
 
-    for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
-
-        (*i)->unset(TRIGGER_SEGMENT_ID);
-        (*i)->unset(TRIGGER_SEGMENT_RETUNE);
-        (*i)->unset(TRIGGER_SEGMENT_ADJUST_TIMES);
+        (*i)->unset(BaseProperties::TRIGGER_SEGMENT_ID);
+        (*i)->unset(BaseProperties::TRIGGER_SEGMENT_RETUNE);
+        (*i)->unset(BaseProperties::TRIGGER_SEGMENT_ADJUST_TIMES);
     }
 }
+
 
 }

@@ -18,7 +18,8 @@
 #ifndef RG_CHANGEVELOCITYCOMMAND_H
 #define RG_CHANGEVELOCITYCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
+#include "document/BasicCommand.h"
+
 #include <QString>
 #include <QCoreApplication>
 
@@ -26,30 +27,29 @@
 namespace Rosegarden
 {
 
+
 class EventSelection;
 
 
-/** Add or subtract a constant from all event velocities.
-    Use SelectionPropertyCommand if you want to do something more
-    creative. */
-class ChangeVelocityCommand : public BasicSelectionCommand
+/// Add or subtract a constant from all event velocities.
+/**
+ * Use SelectionPropertyCommand if you want to do something more
+ * creative.
+ */
+class ChangeVelocityCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeVelocityCommand)
 
 public:
-    ChangeVelocityCommand(int delta, EventSelection &selection,bool rounddelta=true) :
-        BasicSelectionCommand(getGlobalName(delta), selection, true),
-        m_selection(&selection), m_delta(delta),m_rounddelta(rounddelta) { }
-
-    static QString getGlobalName(int delta = 0) {
-        if (delta > 0) return tr("&Increase Velocity");
-        else return tr("&Reduce Velocity");
-    }
+    ChangeVelocityCommand(
+            int delta, EventSelection &selection, bool rounddelta = true);
 
 protected:
     void modifySegment() override;
 
 private:
+    static QString name(int delta);
+
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     int m_delta;
     bool m_rounddelta;

@@ -79,8 +79,10 @@ public:
     int getCurrentVelocity() const;
 
     Segment *getCurrentSegment() override;
-    EventSelection *getSelection() const override;
+
     void setSelection(EventSelection *s, bool preview) override;
+    EventSelection *getSelection() const override;
+    EventSelection *getRulerSelection() const;
 
     void updateViewCaption() override { }//!!!
 
@@ -119,8 +121,6 @@ protected slots:
     void slotVelocityDown();
     void slotSetVelocities();
     void slotSetVelocitiesToCurrent();
-    void slotEditCutControllers();
-    void slotEditCopyControllers();
     void slotSetControllers();
     void slotPlaceControllers();
     
@@ -264,7 +264,6 @@ protected slots:
 protected:
     const SnapGrid *getSnapGrid() const;
     void readOptions() override;
-    void conformRulerSelectionState();
     void insertControllerSequence(const ControlParameter &cp);
 
 private:

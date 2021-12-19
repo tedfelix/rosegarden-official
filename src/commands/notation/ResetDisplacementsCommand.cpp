@@ -15,20 +15,16 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "ResetDisplacementsCommand.h"
 
 #include "base/Selection.h"
-#include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
 #include "document/CommandRegistry.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 void
 ResetDisplacementsCommand::registerCommand(CommandRegistry *r)
@@ -41,14 +37,15 @@ ResetDisplacementsCommand::registerCommand(CommandRegistry *r)
 void
 ResetDisplacementsCommand::modifySegment()
 {
-    EventSelection::eventcontainer::iterator i;
+    EventContainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 
-        (*i)->unset(DISPLACED_X);
-        (*i)->unset(DISPLACED_Y);
+        (*i)->unset(BaseProperties::DISPLACED_X);
+        (*i)->unset(BaseProperties::DISPLACED_Y);
     }
 }
+
 
 }

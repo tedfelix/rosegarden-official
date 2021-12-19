@@ -19,35 +19,38 @@
 #ifndef RG_BEAMCOMMAND_H
 #define RG_BEAMCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandRegistry;
 
-class BeamCommand : public BasicSelectionCommand
+
+class BeamCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::BeamCommand)
 
 public:
     BeamCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection) { }
-
-    static QString getGlobalName() { return tr("&Beam Group"); }
+        BasicCommand(tr("&Beam Group"), selection, true),
+        m_selection(&selection)
+    { }
 
     static void registerCommand(CommandRegistry *r);
     
 protected:
     void modifySegment() override;
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-};
 
+private:
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
+};
 
 
 }

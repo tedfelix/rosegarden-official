@@ -19,33 +19,29 @@
 #ifndef RG_CHANGESTEMSCOMMAND_H
 #define RG_CHANGESTEMSCOMMAND_H
 
-#include "document/BasicSelectionCommand.h"
-#include <QString>
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
-
-
-class Stems;
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
+class CommandArgumentQuerier;
 class CommandRegistry;
 
 
-class ChangeStemsCommand : public BasicSelectionCommand
+class ChangeStemsCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeStemsCommand)
 
 public:
     ChangeStemsCommand(bool up, EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(up), selection, true),
+        BasicCommand(getGlobalName(up), selection, true),
         m_selection(&selection), m_up(up) { }
-
-    static QString getGlobalName(bool up) {
-        return up ? tr("Stems &Up") : tr("Stems &Down");
-    }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
@@ -54,10 +50,16 @@ protected:
     void modifySegment() override;
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static QString getGlobalName(bool up)
+    {
+        return up ? tr("Stems &Up") : tr("Stems &Down");
+    }
+
+    // only used on 1st execute (cf bruteForceRedo)
+    EventSelection *m_selection;
+
     bool m_up;
 };
-
 
 
 }
