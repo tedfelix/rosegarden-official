@@ -307,7 +307,10 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_warningWidget(nullptr),
     m_cpuMeterTimer(new QTimer(this)),
     m_loopingAll(false),
-    m_loopAllEndTime(0)
+    m_loopAllEndTime(0),
+    m_deferred_loop(false),
+    m_deferred_loop_start(0),
+    m_deferred_loop_end(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -4799,6 +4802,16 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     settings.endGroup();
 
     //RG_DEBUG << "slotSetPointerPosition(): t = " << t;
+    if (m_deferred_loop &&
+        t >= m_deferred_loop_start &&
+        t <= m_deferred_loop_end) {
+        // now we set the loop
+        RG_DEBUG << "Setting deferred loop";
+        comp.setLooping(true);
+        m_seqManager->setLoop(m_deferred_loop_start, m_deferred_loop_end);
+        m_deferred_loop = false;
+        m_loopingAll = false;
+    }
 
     if (m_seqManager) {
         // If we're playing and we're past the end...
@@ -5650,11 +5663,20 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
     try {
         RosegardenDocument::currentDocument->slotDocumentModified();
 
-        m_seqManager->setLoop(lhs, rhs);
         // toggle the loop button
+        getTransport()->LoopButton()->setChecked(true);
         if (lhs != rhs) {
-            comp.setLooping(true);
-            getTransport()->LoopButton()->setChecked(true);
+            // special case - if the whole song is looping we defer
+            // the loop until we are in the loop range
+            if (m_loopingAll) {
+                RG_DEBUG << "defer looping" << lhs << rhs;
+                m_deferred_loop = true;
+                m_deferred_loop_start = lhs;
+                m_deferred_loop_end = rhs;
+            } else {
+                comp.setLooping(true);
+                m_seqManager->setLoop(lhs, rhs);
+            }
             
             enterActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
         } else {
@@ -5756,6 +5778,8 @@ RosegardenMainWindow::slotStop()
     } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
+    // cancel any deferred looping
+    m_deferred_loop = false;
 }
 
 void

@@ -1662,6 +1662,11 @@ private:
     bool m_loopingAll;
     timeT m_loopAllEndTime;
 
+    // for deferred looping
+    bool m_deferred_loop;
+    timeT m_deferred_loop_start;
+    timeT m_deferred_loop_end;
+
 private slots:
     void signalAction(int);
 
