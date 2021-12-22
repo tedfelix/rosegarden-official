@@ -532,7 +532,32 @@ NoteRestInserter::insertNote(Segment &segment, timeT insertionTime,
             // Since a note could have been split and tied, we need to rely on
             // the full duration of the original note calculate the position of
             // the pointer.
-            timeT nextLocation = insertionTime + note.getDuration();
+            timeT trueDuration = note.getDuration();
+            if (m_widget->isInTupletMode()) {
+                // find start of tuple
+                timeT baseUnit = note.getDuration() *
+                    m_widget->getTupledCount();
+                RG_DEBUG << "Base unit:" << baseUnit;
+                int tupletStartRatio = insertionTime / baseUnit;
+                timeT tupletStart = tupletStartRatio * baseUnit;
+                timeT approxNoteDuration = note.getDuration() *
+                    m_widget->getTupledCount() / m_widget->getUntupledCount();
+                RG_DEBUG << "tuplet start:" << tupletStart;
+                double posInTupleD = ((double)(insertionTime - tupletStart) / 
+                                      (double)approxNoteDuration);
+                int posInTuple = (int)(posInTupleD + 0.5);
+                int posNextInTuple = posInTuple + 1;
+                RG_DEBUG << "next position in tuple" << posNextInTuple;
+                double noteEndTimeD = (double)tupletStart +
+                    (double)(posNextInTuple * note.getDuration() *
+                             m_widget->getTupledCount()) /
+                    (double)m_widget->getUntupledCount();
+                timeT noteEndTime = (timeT)(noteEndTimeD + 0.5);
+                RG_DEBUG << "note end time:" << noteEndTime;
+                trueDuration = noteEndTime - insertionTime;
+                RG_DEBUG << "true duration:" << trueDuration;
+            }
+            timeT nextLocation = insertionTime + trueDuration;
             m_widget->setPointerPosition(nextLocation);
         }
     }

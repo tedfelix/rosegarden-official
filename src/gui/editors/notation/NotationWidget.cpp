@@ -915,6 +915,8 @@ NotationWidget::updatePointer(timeT t)
     if (!m_scene)
         return;
 
+    RG_DEBUG << "updatePointer: " << t;
+
     SequenceManager *seqMgr = m_document->getSequenceManager();
 
     bool rolling =
