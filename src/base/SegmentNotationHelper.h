@@ -540,6 +540,11 @@ public:
      */
     void autoSlur(timeT startTime, timeT endTime, bool legatoOnly);
 
+    /// get duration of tuplet note
+    timeT getTupletNoteDuration(timeT baseDuration, // untupled duration
+                                timeT insertionTime,
+                                int tupled,
+                                int untupled);
     
 protected:
     const Quantizer &basicQuantizer();

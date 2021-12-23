@@ -45,6 +45,7 @@
 #include "NotePixmapFactory.h"
 #include "NoteStyleFactory.h"
 #include "document/Command.h"
+#include "base/SegmentNotationHelper.h"
 
 #include <QApplication>
 #include <QAction>
@@ -535,27 +536,12 @@ NoteRestInserter::insertNote(Segment &segment, timeT insertionTime,
             timeT trueDuration = note.getDuration();
             if (m_widget->isInTupletMode()) {
                 // find start of tuple
-                timeT baseUnit = note.getDuration() *
-                    m_widget->getTupledCount();
-                RG_DEBUG << "Base unit:" << baseUnit;
-                int tupletStartRatio = insertionTime / baseUnit;
-                timeT tupletStart = tupletStartRatio * baseUnit;
-                timeT approxNoteDuration = note.getDuration() *
-                    m_widget->getTupledCount() / m_widget->getUntupledCount();
-                RG_DEBUG << "tuplet start:" << tupletStart;
-                double posInTupleD = ((double)(insertionTime - tupletStart) / 
-                                      (double)approxNoteDuration);
-                int posInTuple = (int)(posInTupleD + 0.5);
-                int posNextInTuple = posInTuple + 1;
-                RG_DEBUG << "next position in tuple" << posNextInTuple;
-                double noteEndTimeD = (double)tupletStart +
-                    (double)(posNextInTuple * note.getDuration() *
-                             m_widget->getTupledCount()) /
-                    (double)m_widget->getUntupledCount();
-                timeT noteEndTime = (timeT)(noteEndTimeD + 0.5);
-                RG_DEBUG << "note end time:" << noteEndTime;
-                trueDuration = noteEndTime - insertionTime;
-                RG_DEBUG << "true duration:" << trueDuration;
+                SegmentNotationHelper helper(segment);
+                trueDuration =
+                    helper.getTupletNoteDuration(note.getDuration(),
+                                                 insertionTime,
+                                                 m_widget->getTupledCount(),
+                                                 m_widget->getUntupledCount());
             }
             timeT nextLocation = insertionTime + trueDuration;
             m_widget->setPointerPosition(nextLocation);
@@ -1205,7 +1191,13 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
     // #1046934: make it possible to insert triplet at end of segment!
     if (m_widget->isInTupletMode()) {
-        noteEnd = time + (note.getDuration() * m_widget->getTupledCount() / m_widget->getUntupledCount());
+        SegmentNotationHelper helper(segment);
+        timeT noteDuration =
+            helper.getTupletNoteDuration(note.getDuration(),
+                                         time,
+                                         m_widget->getTupledCount(),
+                                         m_widget->getUntupledCount());
+        noteEnd = time + noteDuration;
     }
 
     if (time < segment.getStartTime() ||
@@ -1215,7 +1207,8 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     }
 
     if (isaRestInserter()) {
-        insertionCommand = new RestInsertionCommand(segment, time, endTime, note);
+        insertionCommand =
+            new RestInsertionCommand(segment, time, noteEnd, note);
     } else {
         pitch += getOttavaShift(segment, time) * 12;
 
@@ -1225,7 +1218,7 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
         }
 
         insertionCommand = new NoteInsertionCommand
-            (segment, time, endTime, note, pitch, accidental,
+            (segment, time, noteEnd, note, pitch, accidental,
              (m_autoBeam && !m_widget->isInTupletMode() && !m_widget->isInGraceMode()) ?
              NoteInsertionCommand::AutoBeamOn : NoteInsertionCommand::AutoBeamOff,
              m_autoTieBarlines ?
@@ -1392,4 +1385,3 @@ void NoteRestInserter::slotNotesSelected()
 QString NoteRestInserter::ToolName() { return "noterestinserter"; }
 
 }
-
