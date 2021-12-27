@@ -214,7 +214,7 @@ SequenceManager::play()
 }
 
 void
-SequenceManager::stop()
+SequenceManager::stop(bool autoStop)
 {
     if (!m_doc)
         return;
@@ -256,7 +256,7 @@ SequenceManager::stop()
     // response - then we can fiddle about with the audio file
     // without worrying about the sequencer causing problems
     // with access to the same audio files.
-    RosegardenSequencer::getInstance()->stop();
+    RosegardenSequencer::getInstance()->stop(autoStop);
 
     // restore
     QApplication::restoreOverrideCursor();

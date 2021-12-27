@@ -136,7 +136,7 @@ public:
     /// Start or pause playback.
     void play();
     /// Stop playback.
-    void stop();
+    void stop(bool autoStop = false);
     /// Start recording.
     void record(bool countIn);
 

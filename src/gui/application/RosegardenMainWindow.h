@@ -1658,6 +1658,8 @@ private:
     /// For the fast-forward button on a keyboard controller.
     Typematic m_fastForwardTypematic;
 
+    void doStop(bool autoStop);
+
 private slots:
     void signalAction(int);
 

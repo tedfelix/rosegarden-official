@@ -57,7 +57,7 @@ public:
     bool initialise() override;
 
     void initialisePlayback(const RealTime &position) override;
-    void stopPlayback() override;
+    void stopPlayback(bool autoStop) override;
     void punchOut() override;
     void resetPlayback(const RealTime &oldPosition, const RealTime &position) override;
     void allNotesOff();

@@ -300,7 +300,7 @@ RosegardenSequencer::record(const RealTime &time,
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
                 SEQUENCER_DEBUG << "ERROR: RosegardenSequencer::record(): Failed to create correct number of audio files (wanted " << audioInstruments.size() << ", got " << audioFileNames.size() << ")";
 #endif
-                stop();
+                stop(true);
                 return false;
             }
         }
@@ -327,7 +327,7 @@ RosegardenSequencer::record(const RealTime &time,
         if (m_driver->record(RECORD_ON,
                              armedInstrumentsVec,
                              audioFileNamesVec) == false) {
-            stop();
+            stop(false);
             return false;
         }
     } else {
@@ -353,7 +353,7 @@ RosegardenSequencer::record(const RealTime &time,
 }
 
 void
-RosegardenSequencer::stop()
+RosegardenSequencer::stop(bool autoStop)
 {
     LOCKED;
 
@@ -367,7 +367,7 @@ RosegardenSequencer::stop()
     SEQUENCER_DEBUG << "RosegardenSequencer::stop() - stopping";
 #endif
     // process pending NOTE OFFs and stop the Sequencer
-    m_driver->stopPlayback();
+    m_driver->stopPlayback(autoStop);
 
     // the Sequencer doesn't need to know these once
     // we've stopped.

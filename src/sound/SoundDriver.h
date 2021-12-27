@@ -127,7 +127,7 @@ public:
 
     virtual void initialisePlayback(const RealTime & /*position*/)  { }
     void setMappedInstrument(MappedInstrument *mI);
-    virtual void stopPlayback()  { }
+    virtual void stopPlayback(bool)  { }
     virtual bool record(
             RecordStatus /*recordStatus*/,
             const std::vector<InstrumentId> & /*armedInstruments*/,
