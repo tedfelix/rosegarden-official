@@ -1667,6 +1667,9 @@ private:
     timeT m_deferred_loop_start;
     timeT m_deferred_loop_end;
 
+    // end of last segment in composition
+    timeT m_endOfLatestSegment;
+
 private slots:
     void signalAction(int);
 

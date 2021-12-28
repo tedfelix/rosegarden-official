@@ -99,6 +99,7 @@
 #include "document/RosegardenDocument.h"
 #include "document/MetadataHelper.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Preferences.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/AddTracksDialog.h"
 #include "gui/dialogs/AboutDialog.h"
@@ -310,7 +311,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_loopAllEndTime(0),
     m_deferred_loop(false),
     m_deferred_loop_start(0),
-    m_deferred_loop_end(0)
+    m_deferred_loop_end(0),
+    m_endOfLatestSegment(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -4796,10 +4798,7 @@ void
 RosegardenMainWindow::slotSetPointerPosition(timeT t)
 {
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool stopatEnd = settings.value("stopatend", false).toBool();
-    settings.endGroup();
+    bool stopatEnd = Preferences::getStopAtEnd();
 
     //RG_DEBUG << "slotSetPointerPosition(): t = " << t;
     if (m_deferred_loop &&
@@ -4816,7 +4815,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     if (m_seqManager) {
         // If we're playing and we're past the end...
         timeT stopTime = comp.getEndMarker();
-        if (stopatEnd) stopTime = comp.getDuration(true);
+        if (stopatEnd) stopTime = m_endOfLatestSegment;
         if (m_seqManager->getTransportStatus() == PLAYING  &&
             t > stopTime) {
 
@@ -6250,7 +6249,7 @@ RosegardenMainWindow::slotDeleteMarker(int id, timeT time, QString name, QString
 void
 RosegardenMainWindow::slotDocumentModified(bool m)
 {
-    //RG_DEBUG << "slotDocumentModified(" << m << ") - doc path = " << RosegardenDocument::currentDocument->getAbsFilePath();
+    RG_DEBUG << "slotDocumentModified(" << m << ") - doc path = " << RosegardenDocument::currentDocument->getAbsFilePath();
 
     if (!RosegardenDocument::currentDocument->getAbsFilePath().isEmpty()) {
         slotStateChanged("saved_file_modified", m);
@@ -6258,14 +6257,17 @@ RosegardenMainWindow::slotDocumentModified(bool m)
         slotStateChanged("new_file_modified", m);
     }
 
+    Composition &comp =
+        RosegardenDocument::currentDocument->getComposition();
+    m_endOfLatestSegment = comp.getDuration(true);
+
     // if we are looping the entire song recalculate end position
     if (m_loopingAll) {
-        Composition &comp =
-            RosegardenDocument::currentDocument->getComposition();
-        timeT compEnd = comp.getDuration(true);
         // we need this check to avoid infinite recurstion
-        if (m_loopAllEndTime != compEnd) {
-            m_loopAllEndTime = compEnd;
+        if (m_loopAllEndTime != m_endOfLatestSegment) {
+            m_loopAllEndTime = m_endOfLatestSegment;
+            RG_DEBUG << "slotDocumentModified setting loop all end: " <<
+                m_loopAllEndTime;
             m_seqManager->setLoop(0, m_loopAllEndTime);
         }
     }

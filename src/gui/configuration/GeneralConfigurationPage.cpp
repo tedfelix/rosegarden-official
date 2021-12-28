@@ -253,8 +253,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     layout->addWidget(new QLabel(tr("Stop playback at end of last segment"),
                                  frame), row, 0);
     m_stopPlaybackAtEnd = new QCheckBox(frame);
-    m_stopPlaybackAtEnd->setChecked(
-        settings.value("stopatend", false).toBool());
+    m_stopPlaybackAtEnd->setChecked(Preferences::getStopAtEnd());
     connect(m_stopPlaybackAtEnd, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
 
@@ -570,7 +569,7 @@ void GeneralConfigurationPage::apply()
 
     settings.beginGroup(SequencerOptionsConfigGroup);
 
-    settings.setValue("stopatend", m_stopPlaybackAtEnd->isChecked());
+    Preferences::setStopAtEnd(m_stopPlaybackAtEnd->isChecked());
     settings.setValue("loopentiresong", m_loopSong->isChecked());
 
     settings.endGroup();

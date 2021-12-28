@@ -29,6 +29,7 @@ namespace
     bool sendProgramChangesWhenLooping = true;
     bool sendControlChangesWhenLooping = true;
     bool useNativeFileDialogs = true;
+    bool stopAtEnd = false;
 }
 
 void Preferences::setSendProgramChangesWhenLooping(bool value)
@@ -112,5 +113,30 @@ bool Preferences::getUseNativeFileDialogs()
     return useNativeFileDialogs;
 }
 
+void Preferences::setStopAtEnd(bool value)
+{
+    QSettings settings;
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    settings.setValue("stopatend", value);
+    stopAtEnd = value;
+}
+
+bool Preferences::getStopAtEnd()
+{
+    static bool firstGet = true;
+    
+    if (firstGet) {
+        firstGet = false;
+        
+        QSettings settings;
+        settings.beginGroup(SequencerOptionsConfigGroup);
+        stopAtEnd =
+            settings.value("stopatend", "false").toBool();
+        // Write it back out so we can find it if it wasn't there.
+        settings.setValue("stopatend", stopAtEnd);
+    }
+    
+    return stopAtEnd;
+}
 
 }
