@@ -140,6 +140,7 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 
     if (e->exact) {
         m_clickedElement = e->element;
+        RG_DEBUG << "exact click" << *(m_clickedElement->event());
         if (m_clickedElement) {
             m_lastDragPitch = -400;
             m_lastDragTime = m_clickedElement->event()->getNotationAbsoluteTime();
@@ -355,6 +356,9 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
                 m_selectionToMerge = nullptr;
 
             } else {
+                RG_DEBUG << "setSingleSelectedEvent" <<
+                    m_clickedElement->event()->getType() <<
+                    m_clickedElement->event()->getAbsoluteTime();
                 m_scene->setSingleSelectedEvent(m_selectedStaff, m_clickedElement, true);
             }
 

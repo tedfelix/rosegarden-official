@@ -1853,6 +1853,14 @@ NotationScene::setSelection(EventSelection *s,
                             bool preview)
 {
     NOTATION_DEBUG << "NotationScene::setSelection: " << s;
+    if (s) {
+        const EventContainer ec = s->getSegmentEvents();
+        for (EventContainer::iterator i = ec.begin();
+             i != ec.end(); ++i) {
+            Event *e = *i;
+            NOTATION_DEBUG << "Selection contains" << *e;
+        }
+    }
 
     if (!m_selection && !s) return;
     if (m_selection == s) return;
@@ -1879,13 +1887,37 @@ NotationScene::setSelection(EventSelection *s,
         newStaff = setSelectionElementStatus(m_selection, true);
     }
 
+    timeT oldFrom = 0;
+    timeT oldTo = 0;
+    timeT newFrom = 0;
+    timeT newTo = 0;
+
+    if (oldSelection) {
+        oldFrom = oldSelection->getStartTime();
+        if (oldSelection->getNotationStartTime() < oldFrom) {
+            oldFrom = oldSelection->getNotationStartTime();
+        }
+        oldTo = oldSelection->getEndTime();
+        if (oldSelection->getNotationEndTime() > oldTo) {
+            oldTo = oldSelection->getNotationEndTime();
+        }
+    }
+    if (m_selection) {
+        newFrom = m_selection->getStartTime();
+        if (m_selection->getNotationStartTime() < newFrom) {
+            newFrom = m_selection->getNotationStartTime();
+        }
+        newTo = m_selection->getEndTime();
+        if (m_selection->getNotationEndTime() > newTo) {
+            newTo = m_selection->getNotationEndTime();
+        }
+    }
+
+    RG_DEBUG "From and to times:" << oldFrom << oldTo << newFrom << newTo;
+
     if (oldSelection && m_selection && oldStaff && newStaff &&
         (oldStaff == newStaff)) {
 
-        timeT oldFrom = oldSelection->getStartTime();
-        timeT oldTo = oldSelection->getEndTime();
-        timeT newFrom = m_selection->getStartTime();
-        timeT newTo = m_selection->getEndTime();
 
         // if the regions overlap, render once
         if ((oldFrom <= newFrom && oldTo >= newFrom) ||
@@ -1898,12 +1930,10 @@ NotationScene::setSelection(EventSelection *s,
         }
     } else {
         if (oldSelection && oldStaff) {
-        oldStaff->renderElements(oldSelection->getStartTime(),
-                                 oldSelection->getEndTime());
+            oldStaff->renderElements(oldFrom, oldTo);
         }
         if (m_selection && newStaff) {
-        newStaff->renderElements(m_selection->getStartTime(),
-                                 m_selection->getEndTime());
+            newStaff->renderElements(newFrom, newTo);
         }
     }
 
