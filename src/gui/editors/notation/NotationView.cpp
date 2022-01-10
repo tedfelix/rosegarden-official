@@ -259,8 +259,8 @@ NotationView::NotationView(RosegardenDocument *doc,
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdateMenuStates()));
 
-    connect(m_notationWidget->getScene(), SIGNAL(selectionChanged()),
-            this, SLOT(slotUpdateMenuStates()));
+    connect(m_notationWidget->getScene(), &NotationScene::selectionChanged,
+            this, &NotationView::slotUpdateMenuStates);
 
     //Initialize NoteRestInserter and DurationToolbar
     initializeNoteRestInserter();
@@ -584,8 +584,8 @@ NotationView::setWidgetSegments()
                        m_adoptedSegments.end());
     m_notationWidget->setSegments(m_document, allSegments);
     // Reconnect because there's a new scene.
-    connect(m_notationWidget->getScene(), SIGNAL(selectionChanged()),
-            this, SLOT(slotUpdateMenuStates()));
+    connect(m_notationWidget->getScene(), &NotationScene::selectionChanged,
+            this, &NotationView::slotUpdateMenuStates);
 }
 
 void
@@ -1334,21 +1334,19 @@ NotationView::slotUpdateMenuStates()
 }
 
 void
-NotationView::
-conformRulerSelectionState()
+NotationView::conformRulerSelectionState()
 {
-    ControlRulerWidget * cr = m_notationWidget->getControlsWidget();
-    if (cr->isAnyRulerVisible())
-        {
-            cr->slotSelectionChanged(getSelection());
+    ControlRulerWidget *controlRulerWidget =
+            m_notationWidget->getControlsWidget();
 
-            enterActionState("have_control_ruler");
-            if (cr->hasSelection())
-                { enterActionState("have_controller_selection"); }
-            else
-                { leaveActionState("have_controller_selection"); }
-        }
-    else {
+    if (controlRulerWidget->isAnyRulerVisible()) {
+        enterActionState("have_control_ruler");
+
+        if (controlRulerWidget->hasSelection())
+            enterActionState("have_controller_selection");
+        else
+            leaveActionState("have_controller_selection");
+    } else {
         leaveActionState("have_control_ruler");
         // No ruler implies no controller selection
         leaveActionState("have_controller_selection"); 

@@ -1911,7 +1911,7 @@ NotationScene::setSelection(EventSelection *s,
 
     delete oldSelection;
 
-    emit selectionChanged(m_selection);
+    emit selectionChangedES(m_selection);
     emit QGraphicsScene::selectionChanged();
 }
 

@@ -479,7 +479,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &NotationScene::layoutUpdated,
             m_controlRulerWidget, &ControlRulerWidget::slotUpdateRulers);
 
-    connect(m_scene, &NotationScene::selectionChanged,
+    connect(m_scene, &NotationScene::selectionChangedES,
             m_controlRulerWidget, &ControlRulerWidget::slotSelectionChanged);
 
     connect(m_scene, &NotationScene::currentViewSegmentChanged,

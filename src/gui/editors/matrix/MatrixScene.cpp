@@ -865,6 +865,8 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 
     if (m_selection) {
         setSelectionElementStatus(m_selection, true);
+        // ??? But we are going to do this at the end of this routine.
+        //     Is this needed?  Notation only does this at the end.
         emit QGraphicsScene::selectionChanged();
         emit selectionChangedES(m_selection);
     }
