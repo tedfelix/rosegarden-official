@@ -876,16 +876,6 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 }
 
 void
-MatrixScene::slotRulerSelectionChanged(EventSelection *rulerSelection)
-{
-    if (m_selection) {
-        // ??? We only add.  We never delete.  This will get out of sync.
-        if (rulerSelection)
-            m_selection->addFromSelection(rulerSelection);
-    }
-}
-
-void
 MatrixScene::setSingleSelectedEvent(MatrixViewSegment *vs,
                                     MatrixElement *e,
                                     bool preview)
