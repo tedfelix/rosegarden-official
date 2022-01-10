@@ -123,6 +123,19 @@ void LoopRuler::scrollHoriz(int x)
     update();
 }
 
+bool LoopRuler::reinstateLoop()
+{
+    if (m_storedLoopStart != m_storedLoopEnd) {
+        // reinstate the stored loop
+        m_startLoop = m_storedLoopStart;
+        m_endLoop = m_storedLoopEnd;
+        m_loopSet = true;
+        emit setLoopRange(m_startLoop, m_endLoop);
+        return true;
+    }
+    return false;
+}
+
 QSize LoopRuler::sizeHint() const
 {
     double width =

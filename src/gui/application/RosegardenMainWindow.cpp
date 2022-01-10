@@ -5832,8 +5832,12 @@ RosegardenMainWindow::slotSetLoop()
             m_seqManager->setLoop(0, m_loopAllEndTime);
             m_loopingAll = true;
         } else {
-            // reset the loop button
-            getTransport()->LoopButton()->setChecked(false);
+            // attempt to reinstate a stored loop
+            bool reinstated = getView()->getTrackEditor()->reinstateLoop();
+            if (! reinstated) {
+                // reset the loop button
+                getTransport()->LoopButton()->setChecked(false);
+            }
         }
     }
 }

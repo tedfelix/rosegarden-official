@@ -69,6 +69,8 @@ public:
     bool hasActiveMousePress() { return m_activeMousePress; }
 
     bool getLoopingMode() { return m_loopingMode; }
+
+    bool reinstateLoop();
     
 signals:
     /// Set the pointer position on mouse single click

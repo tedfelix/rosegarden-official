@@ -106,6 +106,8 @@ public:
     void turnRepeatingSegmentToRealCopies();
     void turnLinkedSegmentsToRealCopies();
 
+    bool reinstateLoop();
+
 signals:
     /**
      * init() connects this to RosegardenMainViewWidget::stateChange().

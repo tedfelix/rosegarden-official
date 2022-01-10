@@ -608,6 +608,13 @@ TrackEditor::turnLinkedSegmentsToRealCopies()
     addCommandToHistory(macro);
 }
 
+bool TrackEditor::reinstateLoop()
+{
+    bool topr = m_topStandardRuler->getLoopRuler()->reinstateLoop();
+    bool bottomr = m_bottomStandardRuler->getLoopRuler()->reinstateLoop();
+    return (topr || bottomr);
+}
+
 void
 TrackEditor::slotVerticalScrollTrackButtons(int y)
 {
