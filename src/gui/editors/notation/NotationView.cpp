@@ -1773,23 +1773,23 @@ NotationView::getInsertionTime(bool allowEndTime) const
 void
 NotationView::slotEditCut()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, getClipboard()));
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CutCommand(getSelection(),
+                           getRulerSelection(),
+                           getClipboard()));
 }
 
 void
 NotationView::slotEditDelete()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand(new EraseCommand(selection));
-
-#if 0
-    // Future version that allows delete/copy/paste to work with
-    // both notes and controllers.  Lot more work to do before this
-    // is ready.  See Matrix.
     const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
     const bool haveRulerSelection =
             (getRulerSelection()  &&  !getRulerSelection()->empty());
@@ -1801,16 +1801,23 @@ NotationView::slotEditDelete()
     CommandHistory::getInstance()->addCommand(
             new EraseCommand(getSelection(),
                              getRulerSelection()));
-#endif
 }
 
 void
 NotationView::slotEditCopy()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, getClipboard()));
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CopyCommand(getSelection(),
+                            getRulerSelection(),
+                            getClipboard()));
 }
 
 void
