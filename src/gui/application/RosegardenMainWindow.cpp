@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenMainWindow]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenMainWindow.h"
 
@@ -5689,6 +5689,7 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
                 // we have no range and we are not looping the whole
                 // song so exit looping
                 comp.setLooping(false);
+                m_seqManager->setLoop(0, 0);
                 getTransport()->LoopButton()->setChecked(false);
             }
             leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
@@ -5830,6 +5831,9 @@ RosegardenMainWindow::slotSetLoop()
             m_loopAllEndTime = comp.getDuration(true);
             m_seqManager->setLoop(0, m_loopAllEndTime);
             m_loopingAll = true;
+        } else {
+            // reset the loop button
+            getTransport()->LoopButton()->setChecked(false);
         }
     }
 }
@@ -5850,7 +5854,10 @@ RosegardenMainWindow::slotUnsetLoop()
 void
 RosegardenMainWindow::slotSetLoopStart()
 {
-    // Check so that start time is before endtime, othervise move upp the
+    RG_DEBUG << "slotSetLoopStart" <<
+        RosegardenDocument::currentDocument->getComposition().getPosition() <<
+        RosegardenDocument::currentDocument->getComposition().getLoopEnd();
+    // Check so that start time is before endtime, otherwise move up the
     // endtime to that same pos.
     if (RosegardenDocument::currentDocument->getComposition().getPosition() < RosegardenDocument::currentDocument->getComposition().getLoopEnd()) {
         RosegardenDocument::currentDocument->setLoop(RosegardenDocument::currentDocument->getComposition().getPosition(), RosegardenDocument::currentDocument->getComposition().getLoopEnd());
@@ -5862,7 +5869,11 @@ RosegardenMainWindow::slotSetLoopStart()
 void
 RosegardenMainWindow::slotSetLoopStop()
 {
-    // Check so that end time is after start time, othervise move upp the
+    RG_DEBUG << "slotSetLoopStop" <<
+        RosegardenDocument::currentDocument->getComposition().getPosition() <<
+        RosegardenDocument::currentDocument->getComposition().getLoopStart();
+
+    // Check so that end time is after start time, otherwise move up the
     // start time to that same pos.
     if (RosegardenDocument::currentDocument->getComposition().getLoopStart() < RosegardenDocument::currentDocument->getComposition().getPosition()) {
         RosegardenDocument::currentDocument->setLoop(RosegardenDocument::currentDocument->getComposition().getLoopStart(), RosegardenDocument::currentDocument->getComposition().getPosition());
