@@ -131,8 +131,10 @@ bool LoopRuler::reinstateLoop()
         m_endLoop = m_storedLoopEnd;
         m_loopSet = true;
         emit setLoopRange(m_startLoop, m_endLoop);
+        RG_DEBUG << "reinstateLoop OK";
         return true;
     }
+    RG_DEBUG << "reinstateLoop no stored loop";
     return false;
 }
 
@@ -334,6 +336,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
 void
 LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
+    RG_DEBUG << "mouseReleaseEvent loopingMode:" << m_loopingMode;
     // If we were in looping mode
     if (m_loopingMode) {
         m_loopingMode = false;
@@ -343,12 +346,14 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
             m_endLoop = 0;
             if (m_loopSet) {
                 // unset the loop
+                RG_DEBUG << "mouseReleaseEvent unset loop";
                 m_loopSet = false;
             } else {
                 if (m_storedLoopStart == m_storedLoopEnd) {
                     // no stored loop - do nothing
                 } else {
                     // reinstate the stored loop
+                    RG_DEBUG << "mouseReleaseEvent reinstate stored loop";
                     m_startLoop = m_storedLoopStart;
                     m_endLoop = m_storedLoopEnd;
                     m_loopSet = true;
@@ -437,6 +442,7 @@ void LoopRuler::slotSetLoopMarker(timeT startLoop,
     m_startLoop = startLoop;
     m_endLoop = endLoop;
     if (m_startLoop != m_endLoop) {
+        m_loopSet = true;
         m_storedLoopStart = m_startLoop;
         m_storedLoopEnd = m_endLoop;
     }
