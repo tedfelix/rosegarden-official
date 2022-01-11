@@ -479,7 +479,6 @@ private:
     void setCurrentNotePixmap(QPixmap);
     void setCurrentNotePixmapFrom(QAction *);
 
-    void conformRulerSelectionState();
     void insertControllerSequence(const ControlParameter &cp);
     bool isShowable(Event *e);
     void setWidgetSegments();

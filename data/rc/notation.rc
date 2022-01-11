@@ -833,11 +833,8 @@
   </enable>
 </State>
 
-<State name="have_selection">
+<State name="have_notation_selection">
   <enable>
-    <Action name="edit_cut"/>
-    <Action name="edit_copy"/>
-    <Action name="delete"/>
     <Action name="cut_and_close"/>
     <Action name="debug_dump"/>
     <Action name="preview_selection"/>
@@ -866,6 +863,14 @@
     <Action name="move_events_down_staff"/>
     <Action name="general_move_events_up_staff"/>
     <Action name="general_move_events_down_staff"/>
+  </enable>
+</State>
+
+<State name="have_selection">
+  <enable>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="delete"/>
   </enable>
 </State>
 
