@@ -150,8 +150,6 @@ protected slots:
     void slotVelocityUp();
     void slotVelocityDown();
     void slotSetVelocities();
-    void slotEditCutControllers();
-    void slotEditCopyControllers();
     void slotSetControllers();
     void slotPlaceControllers();
 

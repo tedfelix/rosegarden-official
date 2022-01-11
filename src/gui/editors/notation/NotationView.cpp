@@ -824,8 +824,6 @@ NotationView::setupActions()
     //Where are "make_invisible" & "make_visible" created?
 
     //"controllers" Menubar menu
-    createAction("copy_controllers",  SLOT(slotEditCopyControllers()));
-    createAction("cut_controllers",   SLOT(slotEditCutControllers()));
     createAction("set_controllers",   SLOT(slotSetControllers()));
     createAction("place_controllers", SLOT(slotPlaceControllers()));
 
@@ -2114,26 +2112,6 @@ NotationView::slotSetVelocities()
 {
     ParameterPattern::
         setVelocities(this, getSelection());
-}
-
-void
-NotationView::slotEditCopyControllers()
-{
-    ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
-    EventSelection *selection = cr->getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, getClipboard()));
-}
-
-void
-NotationView::slotEditCutControllers()
-{
-    ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
-    EventSelection *selection = cr->getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, getClipboard()));
 }
 
 void
