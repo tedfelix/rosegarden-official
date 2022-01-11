@@ -53,14 +53,6 @@ CopyCommand::CopyCommand(
     m_targetClipboard(clipboard),
     m_savedClipboard(nullptr)
 {
-    RG_DEBUG << "ctor 3";
-    RG_DEBUG << "  selection1:" << selection1;
-    if (selection1)
-        RG_DEBUG << "  selection1 size:" << selection1->getAddedEvents();
-    RG_DEBUG << "  selection2:" << selection2;
-    if (selection2)
-        RG_DEBUG << "  selection2 size:" << selection2->getAddedEvents();
-
     if (!selection1  &&  !selection2)
         return;
 
