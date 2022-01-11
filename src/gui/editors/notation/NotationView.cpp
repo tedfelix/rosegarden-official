@@ -1842,9 +1842,11 @@ void
 NotationView::slotEditCutAndClose()
 {
     EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutAndCloseCommand(*selection, getClipboard()));
+    if (!selection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CutAndCloseCommand(selection, getClipboard()));
 }
 
 void
@@ -4773,7 +4775,7 @@ NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
     timeT insertionTime = selection->getStartTime();
 
     Clipboard *c = new Clipboard;
-    CopyCommand *cc = new CopyCommand(*selection, c);
+    CopyCommand *cc = new CopyCommand(selection, c);
     cc->execute();
 
     command->addCommand(new EraseCommand(selection));
@@ -5324,7 +5326,7 @@ NotationView::slotNewLayerFromSelection()
     timeT insertionTime = selection->getStartTime();
 
     Clipboard *c = new Clipboard;
-    CopyCommand *cc = new CopyCommand(*selection, c);
+    CopyCommand *cc = new CopyCommand(selection, c);
     cc->execute();
 
     RG_DEBUG << "CopyCommand done";

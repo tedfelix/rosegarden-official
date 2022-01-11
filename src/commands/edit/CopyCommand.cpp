@@ -32,15 +32,15 @@
 namespace Rosegarden
 {
 
-CopyCommand::CopyCommand(EventSelection &selection,
+CopyCommand::CopyCommand(EventSelection *selection,
                          Clipboard *clipboard) :
         NamedCommand(getGlobalName()),
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;
     m_savedClipboard = nullptr;
-    std::string label = selection.getSegment().getLabel();
-    m_sourceClipboard->newSegment(&selection)->setLabel(
+    std::string label = selection->getSegment().getLabel();
+    m_sourceClipboard->newSegment(selection)->setLabel(
             appendLabel(label, qstrtostr(tr("(excerpt)"))));
 }
 

@@ -32,12 +32,12 @@
 namespace Rosegarden
 {
 
-CutCommand::CutCommand(EventSelection &selection,
+CutCommand::CutCommand(EventSelection *selection,
                        Clipboard *clipboard) :
         MacroCommand(getGlobalName())
 {
     addCommand(new CopyCommand(selection, clipboard));
-    addCommand(new EraseCommand(&selection));
+    addCommand(new EraseCommand(selection));
 }
 
 CutCommand::CutCommand(

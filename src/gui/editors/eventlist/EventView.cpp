@@ -935,7 +935,7 @@ EventView::slotEditCut()
             m_listSelection.push_back(itemIndex);
         }
 
-        addCommandToHistory(new CutCommand(*cutSelection,
+        addCommandToHistory(new CutCommand(cutSelection,
                                            getClipboard()));
     }
 }
@@ -981,7 +981,7 @@ EventView::slotEditCopy()
     }
 
     if (copySelection) {
-        addCommandToHistory(new CopyCommand(*copySelection,
+        addCommandToHistory(new CopyCommand(copySelection,
                                             getClipboard()));
     }
 }
