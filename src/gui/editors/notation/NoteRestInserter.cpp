@@ -1073,7 +1073,7 @@ void NoteRestInserter::showPreview(bool play)
 void NoteRestInserter::clearPreview()
 {
     if (m_scene) {
-        m_scene->clearPreviewNote(m_clickStaff);
+        m_scene->clearPreviewNote();
     }
 }
 

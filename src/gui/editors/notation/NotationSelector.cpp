@@ -558,7 +558,7 @@ void NotationSelector::drag(int x, int y, bool final)
 
     } else {
 
-        m_scene->clearPreviewNote(targetStaff);
+        m_scene->clearPreviewNote();
 
         MacroCommand *command = new MacroCommand(MoveCommand::getGlobalName());
         bool haveSomething = false;
