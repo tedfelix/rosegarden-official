@@ -1913,7 +1913,7 @@ NotationScene::setSelection(EventSelection *s,
         }
     }
 
-    RG_DEBUG "From and to times:" << oldFrom << oldTo << newFrom << newTo;
+    RG_DEBUG << "From and to times:" << oldFrom << oldTo << newFrom << newTo;
 
     if (oldSelection && m_selection && oldStaff && newStaff &&
         (oldStaff == newStaff)) {
