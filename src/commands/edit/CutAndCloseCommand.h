@@ -42,7 +42,7 @@ class CutAndCloseCommand : public MacroCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CutAndCloseCommand)
 
 public:
-    CutAndCloseCommand(EventSelection &selection,
+    CutAndCloseCommand(EventSelection *selection,
                        Clipboard *clipboard);
 
     static QString getGlobalName() { return tr("C&ut and Close"); }
@@ -57,7 +57,9 @@ protected:
             NamedCommand("Close"),
             m_segment(segment),
             m_gapEnd(fromTime),
-            m_gapStart(toTime) { }
+            m_gapStart(toTime),
+            m_staticEvents(0)
+        { }
 
         void execute() override;
         void unexecute() override;

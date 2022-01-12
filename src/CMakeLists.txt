@@ -77,7 +77,6 @@ set(rg_CPPS
   document/RosegardenDocument.cpp
   document/XmlStorableEvent.cpp
   document/CommandHistory.cpp
-  document/BasicSelectionCommand.cpp
   document/XmlSubHandler.cpp
   document/MetadataHelper.cpp
   misc/ConfigGroups.cpp

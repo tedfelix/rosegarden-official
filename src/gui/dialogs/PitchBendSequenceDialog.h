@@ -53,8 +53,8 @@ class Segment;
  *
  * ??? Rename: ControllerSequenceDialog
  *
- * @authors Jani (original author?),
- *          Tom Breton (Tehom),
+ * @authors Jani Frilander (original pitchbend-only version),
+ *          Tom Breton (Tehom) (expanded to include all controllers),
  *          Tim Munro
  */
 class PitchBendSequenceDialog : public QDialog

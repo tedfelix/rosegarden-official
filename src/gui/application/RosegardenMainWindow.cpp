@@ -2264,8 +2264,8 @@ RosegardenMainWindow::slotEditCut()
     TmpStatusMsg msg(tr("Cutting selection..."), this);
 
     SegmentSelection selection(m_view->getSelection());
-    CommandHistory::getInstance()->addCommand
-    (new CutCommand(selection, m_clipboard));
+    CommandHistory::getInstance()->addCommand(
+            new CutCommand(selection, m_clipboard));
 }
 
 void
@@ -2276,8 +2276,8 @@ RosegardenMainWindow::slotEditCopy()
     TmpStatusMsg msg(tr("Copying selection to clipboard..."), this);
 
     SegmentSelection selection(m_view->getSelection());
-    CommandHistory::getInstance()->addCommand
-    (new CopyCommand(selection, m_clipboard));
+    CommandHistory::getInstance()->addCommand(
+            new CopyCommand(selection, m_clipboard));
 }
 
 void

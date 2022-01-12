@@ -45,7 +45,7 @@ class CopyCommand : public NamedCommand
 
 public:
     /// Make a CopyCommand that copies events from within a Segment
-    CopyCommand(EventSelection &selection,
+    CopyCommand(EventSelection *selection,
                 Clipboard *clipboard);
 
     CopyCommand(EventSelection *selection1,

@@ -1941,7 +1941,7 @@ NotationScene::setSelection(EventSelection *s,
 
     delete oldSelection;
 
-    emit selectionChanged(m_selection);
+    emit selectionChangedES(m_selection);
     emit QGraphicsScene::selectionChanged();
 }
 
@@ -1974,6 +1974,7 @@ NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 
     NotationStaff *staff = nullptr;
 
+    // Find the NotationStaff for the EventSelection's Segment.
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
          i != m_staffs.end(); ++i) {
 
@@ -1990,12 +1991,16 @@ NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 
         Event *e = *i;
 
-        ViewElementList::iterator staffi = staff->findEvent(e);
-        if (staffi == staff->getViewElementList()->end()) continue;
+        ViewElementList::iterator staffElementIter = staff->findEvent(e);
+        // Not in the view?  Try the next.
+        if (staffElementIter == staff->getViewElementList()->end())
+            continue;
 
-        NotationElement *el = static_cast<NotationElement *>(*staffi);
+        NotationElement *element =
+                dynamic_cast<NotationElement *>(*staffElementIter);
 
-        el->setSelected(set);
+        if (element)
+            element->setSelected(set);
     }
 
     return staff;

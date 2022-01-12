@@ -577,12 +577,11 @@ void NotationSelector::drag(int x, int y, bool final)
         }
 
         if (targetStaff != m_selectedStaff) {
-            command->addCommand(new MoveAcrossSegmentsCommand
-                                (m_selectedStaff->getSegment(),
-                                 targetStaff->getSegment(),
-                                 dragTime - clickedTime + selection->getStartTime(),
-                                 true,
-                                 *selection));
+            command->addCommand(new MoveAcrossSegmentsCommand(
+                    &targetStaff->getSegment(),  // secondSegment
+                    dragTime - clickedTime + selection->getStartTime(),  // newStartTime
+                    true,  // notation
+                    selection));
             haveSomething = true;
         } else {
             timeT endTime = m_selectedStaff->getSegment().getEndTime();

@@ -39,11 +39,10 @@ class MoveAcrossSegmentsCommand : public MacroCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MoveAcrossSegmentsCommand)
 
 public:
-    MoveAcrossSegmentsCommand(Segment &firstSegment,
-                              Segment &secondSegment,
+    MoveAcrossSegmentsCommand(Segment *secondSegment,
                               timeT newStartTime,
                               bool notation,
-                              EventSelection &selection);
+                              EventSelection *selection);
     ~MoveAcrossSegmentsCommand() override;
 
     static QString getGlobalName();
