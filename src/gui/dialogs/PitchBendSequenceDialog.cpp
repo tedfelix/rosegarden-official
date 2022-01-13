@@ -21,6 +21,7 @@
 
 #include "base/ControlParameter.h"
 #include "base/MidiTypes.h"  // EventType
+#include "sound/Midi.h"
 #include "base/RealTime.h"
 #include "base/Selection.h"  // EventSelection
 #include "commands/edit/EventInsertionCommand.h"
@@ -72,6 +73,23 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     Q_ASSERT_X(m_startTime < m_endTime,
                "PitchBendSequenceDialog ctor",
                "Time range invalid.");
+
+
+    // Compute m_default.
+    if (m_controlParameter.getType() == PitchBend::EventType)
+        m_default = 0;
+    else if (m_controlParameter.getControllerNumber() == MIDI_CONTROLLER_PAN)
+        m_default = 0;
+    else
+        m_default = m_controlParameter.getDefault();
+
+    // Compute m_center.
+    if (m_controlParameter.getType() == PitchBend::EventType)
+        m_center = m_controlParameter.getDefault();
+    else if (m_controlParameter.getControllerNumber() == MIDI_CONTROLLER_PAN)
+        m_center = m_controlParameter.getDefault();
+    else
+        m_center = 0;
 
     setModal(true);
 
@@ -191,9 +209,9 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     const WhatVaries whatVaries =
         isPitchbend() ? Pitch :
         // Volume
-        (m_controlParameter.getControllerNumber() == 7) ? Volume :
+        (m_controlParameter.getControllerNumber() == MIDI_CONTROLLER_VOLUME) ? Volume :
         // Expression
-        (m_controlParameter.getControllerNumber() == 11) ? Volume :
+        (m_controlParameter.getControllerNumber() == MIDI_CONTROLLER_EXPRESSION) ? Volume :
         Other;
 
     const double minSpinboxValue = getMinSpinboxValue();
@@ -639,7 +657,7 @@ double
 PitchBendSequenceDialog::getMaxSpinboxValue() const
 {
     const int rangeAboveDefault =
-            m_controlParameter.getMax() - m_controlParameter.getDefault();
+            m_controlParameter.getMax() - m_center;
 
     if (useValue())
         return rangeAboveDefault;
@@ -652,7 +670,7 @@ PitchBendSequenceDialog::getMinSpinboxValue() const
 {
     // rangeBelowDefault and return value will be negative or zero.
     const int rangeBelowDefault =
-            m_controlParameter.getMin() - m_controlParameter.getDefault();
+            m_controlParameter.getMin() - m_center;
 
     if (useValue())
         return rangeBelowDefault;
@@ -675,7 +693,7 @@ PitchBendSequenceDialog::
 spinboxToValue(const QDoubleSpinBox *spinbox) const
 {
     int value =
-            spinboxToValueDelta(spinbox) + m_controlParameter.getDefault();
+            spinboxToValueDelta(spinbox) + m_center;
 
     return m_controlParameter.clamp(value);
 }
@@ -804,12 +822,15 @@ PitchBendSequenceDialog::restorePreset(int preset)
     settings.beginReadArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
 
-    m_startAtValue->setValue(settings.value("pre_bend_value", 0).toDouble());
+    m_startAtValue->setValue(settings.value(
+            "pre_bend_value",
+            m_default).toDouble());
     m_wait->setValue(settings.value("pre_bend_duration_value", 0).toDouble());
     m_rampDuration->setValue(
             settings.value("sequence_ramp_duration", 100).toDouble());
-    m_endValue->setValue(
-            settings.value("sequence_ramp_end_value", 0).toDouble());
+    m_endValue->setValue(settings.value(
+            "sequence_ramp_end_value",
+            m_default).toDouble());
 
     m_startAmplitude->setValue(
             settings.value("vibrato_start_amplitude", 0).toDouble());
