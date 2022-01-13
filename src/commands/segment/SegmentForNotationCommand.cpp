@@ -29,7 +29,7 @@ namespace Rosegarden
 SegmentForNotationCommand::SegmentForNotationCommand(
     SegmentSelection &segments,
     const bool flag):
-        NamedCommand(tr("Toggle For Notation")),
+        NamedCommand(tr("Toggle Exclude From Printing")),
         m_newForNotationFlag(flag)
 {
     for (SegmentSelection::iterator i = segments.begin();
@@ -46,8 +46,8 @@ void
 SegmentForNotationCommand::execute()
 {
     for (size_t i = 0; i < m_segments.size(); ++i) {
-        m_oldForNotationFlags.push_back(m_segments[i]->getForNotation());
-        m_segments[i]->setForNotation(m_newForNotationFlag);
+        m_oldForNotationFlags.push_back(!m_segments[i]->getExcludeFromPrinting());
+        m_segments[i]->setExcludeFromPrinting(!m_newForNotationFlag);
     }
 }
 
@@ -55,7 +55,7 @@ void
 SegmentForNotationCommand::unexecute()
 {
     for (size_t i = 0; i < m_segments.size(); ++i)
-        m_segments[i]->setForNotation(m_oldForNotationFlags[i]);
+        m_segments[i]->setExcludeFromPrinting(!m_oldForNotationFlags[i]);
 }
 
 }

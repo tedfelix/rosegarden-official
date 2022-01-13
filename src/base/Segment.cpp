@@ -90,7 +90,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_participation(normal),
     m_verseCount(-1),   // -1 => computation needed
     m_verse(0),
-    m_forNotation(true)
+    m_excludeFromPrinting(false)
 {
     RG_DEBUG << "ctor" << this;
 }
@@ -142,7 +142,7 @@ Segment::Segment(const Segment &segment):
     m_participation(segment.m_participation),
     m_verseCount(-1),   // -1 => computation needed
     m_verse(0),   // Needs a global recomputation on the whole composition
-    m_forNotation(segment.m_forNotation)
+    m_excludeFromPrinting(segment.m_excludeFromPrinting)
 {
     RG_DEBUG << "cctor" << this;
     for (const_iterator it = segment.begin();
@@ -215,18 +215,12 @@ Segment::getRealSegment() const {
 }
 
 void
-Segment::setForNotation(bool f, bool all) {
-    if (m_segmentLinker && all) {
-        // If the segment is linked, set the flag for each segment
-        m_segmentLinker->setForNotation(f);
-    } else {
-        m_forNotation = f;
-    }
-}
-
-bool
-Segment::getForNotation() const {
-    return m_forNotation;
+Segment::setExcludeFromPrinting(bool exclude, bool linkedSegmentsAlso)
+{
+    if (m_segmentLinker  &&  linkedSegmentsAlso)
+        m_segmentLinker->setExcludeFromPrinting(exclude);
+    else
+        m_excludeFromPrinting = exclude;
 }
 
 void

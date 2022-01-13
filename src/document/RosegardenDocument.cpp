@@ -1415,7 +1415,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         outStream << "\" viewfeatures=\"" << segment->getViewFeatures();
     }
 
-    if (segment->getForNotation() != true) {
+    if (segment->getExcludeFromPrinting()) {
         outStream << "\" fornotation=\"" << "false";
     }
 

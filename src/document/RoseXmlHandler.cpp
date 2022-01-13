@@ -1029,7 +1029,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString forNotationStr = atts.value("fornotation").toString();
         if (!forNotationStr.isEmpty()) {
             bool forNotation = (forNotationStr.toUpper() == "TRUE");
-            m_currentSegment->setForNotation(forNotation);
+            m_currentSegment->setExcludeFromPrinting(!forNotation);
         }
 
         m_currentTime = startTime;
