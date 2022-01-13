@@ -33,7 +33,7 @@ class Segment;
 
 class SegmentExcludeFromPrintingCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentForNotationCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentExcludeFromPrintingCommand)
 
 public:
     SegmentExcludeFromPrintingCommand(
