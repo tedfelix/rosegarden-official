@@ -15,16 +15,16 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[SegmentForNotationCommand]"
+#define RG_MODULE_STRING "[SegmentExcludeFromPrintingCommand]"
 
-#include "SegmentForNotationCommand.h"
+#include "SegmentExcludeFromPrintingCommand.h"
 
 
 namespace Rosegarden
 {
 
 
-SegmentForNotationCommand::SegmentForNotationCommand(
+SegmentExcludeFromPrintingCommand::SegmentExcludeFromPrintingCommand(
         SegmentSelection &segments,
         bool exclude):
     NamedCommand(tr("Change Exclude From Printing")),
@@ -37,7 +37,7 @@ SegmentForNotationCommand::SegmentForNotationCommand(
 }
 
 void
-SegmentForNotationCommand::execute()
+SegmentExcludeFromPrintingCommand::execute()
 {
     // For each Segment
     for (size_t i = 0; i < m_segments.size(); ++i) {
@@ -49,7 +49,7 @@ SegmentForNotationCommand::execute()
 }
 
 void
-SegmentForNotationCommand::unexecute()
+SegmentExcludeFromPrintingCommand::unexecute()
 {
     // For each Segment
     for (size_t i = 0; i < m_segments.size(); ++i) {

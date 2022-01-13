@@ -32,7 +32,7 @@
 #include "commands/segment/SegmentCommandRepeat.h"
 #include "commands/segment/SegmentLabelCommand.h"
 #include "commands/segment/SegmentLinkTransposeCommand.h"
-#include "commands/segment/SegmentForNotationCommand.h"
+#include "commands/segment/SegmentExcludeFromPrintingCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/IntervalDialog.h"
@@ -1038,7 +1038,7 @@ SegmentParameterBox::slotExcludeFromPrintingClicked(bool checked)
         return;
 
     CommandHistory::getInstance()->addCommand(
-            new SegmentForNotationCommand(segmentSelection, checked));
+            new SegmentExcludeFromPrintingCommand(segmentSelection, checked));
 }
 
 void

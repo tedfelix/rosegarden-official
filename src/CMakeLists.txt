@@ -708,7 +708,7 @@ set(rg_CPPS
   commands/segment/SegmentSplitCommand.cpp
   commands/segment/CutRangeCommand.cpp
   commands/segment/SegmentEraseCommand.cpp
-  commands/segment/SegmentForNotationCommand.cpp
+  commands/segment/SegmentExcludeFromPrintingCommand.cpp
   commands/studio/CreateOrDeleteDeviceCommand.cpp
   commands/studio/RemoveControlParameterCommand.cpp
   commands/studio/ModifyControlParameterCommand.cpp

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_SEGMENTFORNOTATIONCOMMAND_H
-#define RG_SEGMENTFORNOTATIONCOMMAND_H
+#ifndef RG_SEGMENTEXCLUDEFROMPRINTINGCOMMAND_H
+#define RG_SEGMENTEXCLUDEFROMPRINTINGCOMMAND_H
 
 #include "base/Selection.h"  // for SegmentSelection
 #include "document/Command.h"  // for NamedCommand
@@ -32,13 +31,12 @@ namespace Rosegarden
 
 class Segment;
 
-/// ??? Rename: SegmentExcludeFromPrinting
-class SegmentForNotationCommand : public NamedCommand
+class SegmentExcludeFromPrintingCommand : public NamedCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentForNotationCommand)
 
 public:
-    SegmentForNotationCommand(
+    SegmentExcludeFromPrintingCommand(
             SegmentSelection &segments,
 			bool exclude);
 
