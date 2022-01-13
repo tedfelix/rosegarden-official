@@ -1026,10 +1026,19 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_currentSegment->setViewFeatures(viewFeaturesStr.toInt());
         }
 
-        QString forNotationStr = atts.value("fornotation").toString();
-        if (!forNotationStr.isEmpty()) {
-            bool forNotation = (forNotationStr.toUpper() == "TRUE");
-            m_currentSegment->setExcludeFromPrinting(!forNotation);
+        const QString excludeFromPrintingStr =
+                atts.value("excludefromprinting").toString();
+        if (!excludeFromPrintingStr.isEmpty()) {
+            const bool excludeFromPrinting =
+                    (excludeFromPrintingStr.toLower() == "true");
+            m_currentSegment->setExcludeFromPrinting(excludeFromPrinting);
+        } else {
+            // Look for the older "fornotation".
+            QString forNotationStr = atts.value("fornotation").toString();
+            if (!forNotationStr.isEmpty()) {
+                bool forNotation = (forNotationStr.toUpper() == "TRUE");
+                m_currentSegment->setExcludeFromPrinting(!forNotation);
+            }
         }
 
         m_currentTime = startTime;

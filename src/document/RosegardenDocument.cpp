@@ -1115,7 +1115,7 @@ void RosegardenDocument::setSequenceManager(SequenceManager *sm)
 //
 int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
 int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
-int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 7;
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 8;
 
 bool RosegardenDocument::saveDocument(const QString& filename,
                                     QString& errMsg,
@@ -1416,7 +1416,10 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
     }
 
     if (segment->getExcludeFromPrinting()) {
+        // For compatibility with older versions of rg.
         outStream << "\" fornotation=\"" << "false";
+        // New value to match UI.
+        outStream << "\" excludefromprinting=\"" << "true";
     }
 
     const timeT *endMarker = segment->getRawEndMarkerTime();
