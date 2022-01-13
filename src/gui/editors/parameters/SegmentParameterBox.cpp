@@ -1032,13 +1032,13 @@ void
 SegmentParameterBox::slotExcludeFromPrintingClicked(bool checked)
 {
     SegmentSelection segmentSelection = getSelectedSegments();
-    
+
     // No selected Segments?  Bail.
     if (segmentSelection.empty())
         return;
-    
+
     CommandHistory::getInstance()->addCommand(
-            new SegmentForNotationCommand(segmentSelection, !checked));
+            new SegmentForNotationCommand(segmentSelection, checked));
 }
 
 void

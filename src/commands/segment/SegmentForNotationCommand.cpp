@@ -15,47 +15,48 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SegmentForNotationCommand]"
 
 #include "SegmentForNotationCommand.h"
-
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 SegmentForNotationCommand::SegmentForNotationCommand(
-    SegmentSelection &segments,
-    const bool flag):
-        NamedCommand(tr("Toggle Exclude From Printing")),
-        m_newForNotationFlag(flag)
+        SegmentSelection &segments,
+        bool exclude):
+    NamedCommand(tr("Change Exclude From Printing")),
+    m_newExcludeFromPrinting(exclude)
 {
-    for (SegmentSelection::iterator i = segments.begin();
-         i != segments.end();
-         ++i) {
-        m_segments.push_back(*i);
+    // Copy Segment pointers from incoming std::set to our std::vector.
+    for (Segment *segment : segments) {
+        m_segments.push_back(segment);
     }
 }
-
-SegmentForNotationCommand::~SegmentForNotationCommand()
-{}
 
 void
 SegmentForNotationCommand::execute()
 {
+    // For each Segment
     for (size_t i = 0; i < m_segments.size(); ++i) {
-        m_oldForNotationFlags.push_back(!m_segments[i]->getExcludeFromPrinting());
-        m_segments[i]->setExcludeFromPrinting(!m_newForNotationFlag);
+        // Remember the old for unexecute().
+        m_oldExcludeFromPrinting.push_back(m_segments[i]->getExcludeFromPrinting());
+        // Switch to the new.
+        m_segments[i]->setExcludeFromPrinting(m_newExcludeFromPrinting);
     }
 }
 
 void
 SegmentForNotationCommand::unexecute()
 {
-    for (size_t i = 0; i < m_segments.size(); ++i)
-        m_segments[i]->setExcludeFromPrinting(!m_oldForNotationFlags[i]);
+    // For each Segment
+    for (size_t i = 0; i < m_segments.size(); ++i) {
+        // Restore the old.
+        m_segments[i]->setExcludeFromPrinting(m_oldExcludeFromPrinting[i]);
+    }
 }
+
 
 }
