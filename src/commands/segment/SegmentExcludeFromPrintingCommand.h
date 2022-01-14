@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,40 +15,44 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_SEGMENTFORNOTATIONCOMMAND_H
-#define RG_SEGMENTFORNOTATIONCOMMAND_H
+#ifndef RG_SEGMENTEXCLUDEFROMPRINTINGCOMMAND_H
+#define RG_SEGMENTEXCLUDEFROMPRINTINGCOMMAND_H
 
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include "document/Command.h"
-#include <QString>
-#include <vector>
+#include "base/Selection.h"  // for SegmentSelection
+#include "document/Command.h"  // for NamedCommand
+
 #include <QCoreApplication>
+#include <vector>
 
 
 namespace Rosegarden
 {
 
 
-class SegmentForNotationCommand : public NamedCommand
+class Segment;
+
+class SegmentExcludeFromPrintingCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentForNotationCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentExcludeFromPrintingCommand)
 
 public:
-    SegmentForNotationCommand(SegmentSelection &segments,
-			      const bool flag);
-    ~SegmentForNotationCommand() override;
-    
-    static QString getGlobalName()
-        { return tr("Change Segment Notation flag..."); }
+    SegmentExcludeFromPrintingCommand(
+            SegmentSelection &segments,
+			bool exclude);
 
     void execute() override;
     void unexecute() override;
-protected:
 
-    std::vector<Segment*>     m_segments;
-    std::vector<bool>         m_oldForNotationFlags;
-    bool                      m_newForNotationFlag;
+private:
+
+    /// Segments affected by the command.
+    std::vector<Segment *> m_segments;
+
+    bool m_newExcludeFromPrinting;
+
+    /// One for each Segment affected by the command.
+    std::vector<bool> m_oldExcludeFromPrinting;
+
 };
 
 
