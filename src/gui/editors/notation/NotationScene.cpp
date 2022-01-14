@@ -1853,15 +1853,6 @@ NotationScene::setSelection(EventSelection *s,
                             bool preview)
 {
     NOTATION_DEBUG << "NotationScene::setSelection: " << s;
-    if (s) {
-        const EventContainer ec = s->getSegmentEvents();
-        for (EventContainer::iterator i = ec.begin();
-             i != ec.end(); ++i) {
-            Event *e = *i;
-            NOTATION_DEBUG << "Selection contains" << *e;
-        }
-    }
-
     if (!m_selection && !s) return;
     if (m_selection == s) return;
     if (m_selection && s && *m_selection == *s) {
@@ -1893,24 +1884,16 @@ NotationScene::setSelection(EventSelection *s,
     timeT newTo = 0;
 
     if (oldSelection) {
-        oldFrom = oldSelection->getStartTime();
-        if (oldSelection->getNotationStartTime() < oldFrom) {
-            oldFrom = oldSelection->getNotationStartTime();
-        }
-        oldTo = oldSelection->getEndTime();
-        if (oldSelection->getNotationEndTime() > oldTo) {
-            oldTo = oldSelection->getNotationEndTime();
-        }
+        oldFrom = std::min(oldSelection->getStartTime(),
+                           oldSelection->getNotationStartTime());
+        oldTo = std::max(oldSelection->getEndTime(),
+                         oldSelection->getNotationEndTime());
     }
     if (m_selection) {
-        newFrom = m_selection->getStartTime();
-        if (m_selection->getNotationStartTime() < newFrom) {
-            newFrom = m_selection->getNotationStartTime();
-        }
-        newTo = m_selection->getEndTime();
-        if (m_selection->getNotationEndTime() > newTo) {
-            newTo = m_selection->getNotationEndTime();
-        }
+        newFrom = std::min(m_selection->getStartTime(),
+                           m_selection->getNotationStartTime());
+        newTo = std::max(m_selection->getEndTime(),
+                         m_selection->getNotationEndTime());
     }
 
     RG_DEBUG << "From and to times:" << oldFrom << oldTo << newFrom << newTo;

@@ -487,15 +487,6 @@ void
 NotationStaff::renderElements(NotationElementList::iterator from,
                               NotationElementList::iterator to)
 {
-
-    for (NotationElementList::iterator it = from, nextIt = from;
-         it != to; it = nextIt) {
-        
-        RG_DEBUG << "renderElements iter" << *((*it)->event());
-
-        ++nextIt;
-    }
-
     //    RG_DEBUG << "NotationStaff " << this << "::renderElements()";
     //Profiler profiler("NotationStaff::renderElements");
 
