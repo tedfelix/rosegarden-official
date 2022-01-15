@@ -31,7 +31,6 @@
 #include <QPushButton>
 #include <QTabWidget>
 
-#include <stdint.h>
 #include <sys/statvfs.h>
 
 
@@ -88,14 +87,11 @@ AudioPropertiesPage::updateWidgets()
 #if 0
     // Windoze version that needs rewriting for the newer compiler.
 
-    ULARGE_INTEGER available, total, totalFree;
+    ULARGE_INTEGER available1, total1, totalFree1;
     if (GetDiskFreeSpaceExA(m_path->text().toLocal8Bit().data(),
                             &available, &total, &totalFree)) {
-        __int64 a = available.QuadPart;
-        __int64 t = total.QuadPart;
-        __int64 u = 0;
-        if (t > a) u = t - a;
-        updateWidgets2(t / 1024, a / 1024);
+        unsigned long long available = available1.QuadPart;
+        unsigned long long total = total1.QuadPart;
     } else {
         std::cerr << "WARNING: GetDiskFreeSpaceEx failed: error code "
                   << GetLastError() << std::endl;
@@ -107,19 +103,22 @@ AudioPropertiesPage::updateWidgets()
     struct statvfs buf;
 
     if (statvfs(m_path->text().toLocal8Bit().data(), &buf)) {
-        RG_WARNING << "statvfs() failed";
-        m_diskSpace->setText("XXXX");
-        m_minutesAtStereo->setText("XXXX");
+        RG_WARNING << "statvfs() failed.  errno:" << errno;
+        m_diskSpace->setText("----");
+        m_minutesAtStereo->setText("----");
         return;
     }
 
-    // Use 64 bit math to handle gigantic drives in the future.
-    const uint64_t available = (uint64_t)buf.f_bavail * (uint64_t)buf.f_bsize;
-    const uint64_t total = (uint64_t)buf.f_blocks * (uint64_t)buf.f_bsize;
+    // Use 64-bit math to handle gigantic drives in the future.
+    const unsigned long long available =
+            (unsigned long long)buf.f_bavail * (unsigned long long)buf.f_bsize;
+    const unsigned long long total =
+            (unsigned long long)buf.f_blocks * (unsigned long long)buf.f_bsize;
 
-    const uint64_t mebibytes = 1024 * 1024;
+    const unsigned long long mebibytes = 1024 * 1024;
 
-    const double percentUsed = 100.0 - (double)available / (double)total * 100.0;
+    const double percentUsed =
+            100 - (long double)available / (long double)total * 100;
 
     m_diskSpace->setText(tr("%1 MiB out of %2 MiB (%3% used)").
             arg(QLocale().toString(double(available / mebibytes), 'f', 0)).
@@ -128,7 +127,8 @@ AudioPropertiesPage::updateWidgets()
 
     // Recording time
 
-    int sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
+    unsigned int sampleRate =
+            RosegardenSequencer::getInstance()->getSampleRate();
 
     // No sample rate?  Pick something typical.
     if (sampleRate == 0)
