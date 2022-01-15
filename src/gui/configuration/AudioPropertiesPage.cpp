@@ -15,69 +15,60 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioPropertiesPage]"
 
 #include "AudioPropertiesPage.h"
-#include "misc/Strings.h"
+
+#include "sound/AudioFileManager.h"
 #include "misc/Debug.h"
+#include "gui/widgets/FileDialog.h"
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
-#include "gui/studio/AudioPluginManager.h"
-#include "gui/general/FileSource.h"
-#include "sound/AudioFileManager.h"
-#include "TabbedConfigurationPage.h"
-#include "gui/widgets/FileDialog.h"
 
-#include <QSettings>
-#include <QFile>
-#include <QByteArray>
-#include <QDataStream>
 #include <QFrame>
+#include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <QString>
 #include <QTabWidget>
-#include <QWidget>
-#include <QLayout>
 
 #include <stdint.h>
-
-#ifndef WIN32
 #include <sys/statvfs.h>
-#endif
-
 
 
 namespace Rosegarden
 {
 
+
 AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
     TabbedConfigurationPage(parent)
 {
-    AudioFileManager &afm = m_doc->getAudioFileManager();
-
     QFrame *frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
+
+    // Audio file path
     layout->addWidget(new QLabel(tr("Audio file path:"), frame), 0, 0);
-    m_path = new QLabel(afm.getAudioPath(), frame);
+
+    m_path = new QLabel(frame);
     layout->addWidget(m_path, 0, 1);
 
     m_changePathButton =
         new QPushButton(tr("Choose..."), frame);
-
     layout->addWidget(m_changePathButton, 0, 2);
 
+    // Disk space remaining
     m_diskSpace = new QLabel(frame);
     layout->addWidget(new QLabel(tr("Disk space remaining:"), frame), 1, 0);
-    layout->addWidget(m_diskSpace, 1, 1);
+    layout->addWidget(m_diskSpace, 1, 1, 1, 2);
 
+    // Recording time
     m_minutesAtStereo = new QLabel(frame);
     layout->addWidget(
-        new QLabel(tr("Equivalent minutes of 16-bit stereo:"),
+        new QLabel(tr("16-bit stereo recording time:"),
                    frame), 2, 0);
 
-    layout->addWidget(m_minutesAtStereo, 2, 1, Qt::AlignCenter);
+    layout->addWidget(m_minutesAtStereo, 2, 1, 1, 2);
 
     layout->setRowStretch(3, 2);
     frame->setLayout(layout);
@@ -93,6 +84,11 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
 void
 AudioPropertiesPage::updateWidgets()
 {
+    AudioFileManager &afm = m_doc->getAudioFileManager();
+    const QString audioPath = afm.getAudioPath();
+
+    m_path->setText(audioPath);
+
 #if 0
     // Windoze version that needs rewriting for the newer compiler.
 
@@ -110,55 +106,55 @@ AudioPropertiesPage::updateWidgets()
     }
 #endif
 
-    uint64_t available{};
-    uint64_t total{};
 
     struct statvfs buf;
 
-    if (statvfs(m_path->text().toLocal8Bit().data(), &buf)) {
+    if (statvfs(audioPath.toLocal8Bit().data(), &buf)) {
         RG_WARNING << "statvfs failed";
+        m_diskSpace->setText("XXXX");
+        m_minutesAtStereo->setText("XXXX");
         return;
     }
 
-    //RG_DEBUG << "statvfs(" << m_path->text().toLocal8Bit().data() << ") says available: " << buf.f_bavail << ", total: " << buf.f_blocks << ", block size: " << buf.f_bsize;
+    // Use 64 bit math to handle gigantic drives in the future.
+    const uint64_t available = (uint64_t)buf.f_bavail * (uint64_t)buf.f_bsize;
+    const uint64_t total = (uint64_t)buf.f_blocks * (uint64_t)buf.f_bsize;
 
-    // Do the multiplies and divides in this order to reduce the
-    // likelihood of arithmetic overflow.
-    available = ((buf.f_bavail / 1024) * buf.f_bsize);
-    total = ((buf.f_blocks / 1024) * buf.f_bsize);
-
+    // ??? Inline this.
     updateWidgets2(total, available);
 }
 
 void
 AudioPropertiesPage::updateWidgets2(
-        unsigned long total,
-        unsigned long available)
+        uint64_t total,
+        uint64_t available)
 {
-    m_diskSpace->setText(tr("%1 kB out of %2 kB (%3% used)")
-                          //KIO::convertSizeFromKB
-              .arg(available)
-                          //KIO::convertSizeFromKB
-              .arg(total)
-                          .arg(100 - (int)(100.0 * available / total) ));
+    const uint64_t mebibytes = 1024 * 1024;
 
-
-    // AudioPluginManager *apm = m_doc->getPluginManager();
+    m_diskSpace->setText(tr("%1 MiB out of %2 MiB (%3% used)").
+            arg(available / mebibytes).
+            arg(total / mebibytes).
+            arg(100 - lround((double)available / (double)total * 100.0) ));
 
     int sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
-    // Work out total bytes and divide this by the sample rate times the
-    // number of channels (2) times the number of bytes per sample (2)
-    // times 60 seconds.
-    //
-    float stereoMins = ( float(available) * 1024.0 ) /
-                       ( float(sampleRate) * 2.0 * 2.0 * 60.0 );
+    // No sample rate?  Pick something typical.
+    if (sampleRate == 0)
+        sampleRate = 48000;
+
+    constexpr int numberOfChannels = 2;
+    constexpr int bytesPerSample = 2;  // 16-bits
+    constexpr double secondsToMinutes = 1/60.0;
+
+    const double stereoMins =
+            double(available / sampleRate / numberOfChannels / bytesPerSample) *
+            secondsToMinutes;
     const QString minsStr = QString::asprintf("%8.1f", stereoMins);
 
-    m_minutesAtStereo->
-    setText(QString("%1 %2 %3Hz").arg(minsStr)
-            .arg(tr("minutes at"))
-            .arg(sampleRate));
+    m_minutesAtStereo->setText(
+            QString("%1 %2 %3Hz").arg(minsStr).
+                                  arg(tr("minutes at")).
+                                  arg(sampleRate));
 }
 
 void
@@ -176,6 +172,7 @@ void
 AudioPropertiesPage::apply()
 {
     AudioFileManager &afm = m_doc->getAudioFileManager();
+
     QString oldDir = afm.getAudioPath();
     QString newDir = m_path->text();
 
@@ -184,5 +181,6 @@ AudioPropertiesPage::apply()
         m_doc->slotDocumentModified();
     }
 }
+
 
 }

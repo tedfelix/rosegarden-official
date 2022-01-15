@@ -64,11 +64,8 @@ private:
     void updateWidgets();
 
     /// Update "disk space" and "minutes at stereo" fields.
-    /**
-     * ??? inline this into the end of updateWidgets().
-     */
-    void updateWidgets2(unsigned long kBSize,
-                        unsigned long kBAvail);
+    void updateWidgets2(uint64_t kBSize,
+                        uint64_t kBAvail);
 
 };
 
