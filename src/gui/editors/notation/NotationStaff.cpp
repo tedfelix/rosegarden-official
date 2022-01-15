@@ -471,8 +471,15 @@ NotationStaff::getNoteNameAtSceneCoords(double x, int y,
 void
 NotationStaff::renderElements(timeT from, timeT to)
 {
+    RG_DEBUG << "renderElements time" << from << to;
     NotationElementList::iterator i = getViewElementList()->findTime(from);
     NotationElementList::iterator j = getViewElementList()->findTime(to);
+    if (i != getViewElementList()->end() &&
+        j != getViewElementList()->end()) {
+        RG_DEBUG << "renderElements time" <<
+            *((*i)->event()) <<
+            *((*j)->event());
+    }
     renderElements(i, j);
 }
 
@@ -487,6 +494,8 @@ NotationStaff::renderElements(NotationElementList::iterator from,
         (to != getViewElementList()->end() ? (*to)->getViewAbsoluteTime() :
          getSegment().getEndMarkerTime());
     timeT startTime = (from != to ? (*from)->getViewAbsoluteTime() : endTime);
+
+    RG_DEBUG << "renderElements iter" << startTime << endTime;
 
     Clef currentClef = getSegment().getClefAtTime(startTime);
     // Since the redundant clefs and keys may be hide, the current key may
@@ -504,8 +513,8 @@ NotationStaff::renderElements(NotationElementList::iterator from,
         ++nextIt;
 
         bool selected = isSelected(it);
-        //      RG_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
-        //                           << " (selected = " << selected << ")";
+        RG_DEBUG << "Rendering at " << (*it)->event()->getAbsoluteTime()
+                 << " (selected = " << selected << ")";
 
         renderSingleElement(it, currentClef, currentKey, selected);
     }
@@ -1589,6 +1598,8 @@ bool
 NotationStaff::isSelected(NotationElementList::iterator it)
 {
     const EventSelection *selection = m_notationScene->getSelection();
+    RG_DEBUG << "isSelected selection:" << selection << "event:" <<
+        (*it)->event();
     return selection && selection->contains((*it)->event());
 }
 

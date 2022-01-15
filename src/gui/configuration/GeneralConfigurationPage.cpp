@@ -457,7 +457,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_pdfViewer = new QComboBox(frame);
     m_pdfViewer->setToolTip(tipText);
-    m_pdfViewer->addItem(tr("Okular (KDE 4.x)"));
+    m_pdfViewer->addItem(tr("Okular (KDE)"));
     m_pdfViewer->addItem(tr("Evince (GNOME)"));
     m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"));
     m_pdfViewer->addItem(tr("MuPDF"));

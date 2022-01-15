@@ -897,17 +897,15 @@ public:
      */
     const Segment * getRealSegment() const;
     
+    /// Exclude from printing (lilypond).
     /**
-     * Set the flag f for using this segment in notation.
-     * If all is false, the flag is not set for the linked segments.
-     * The default is to set the flag for each of the linked segments.
+     * linkedSegmentsAlso parameter is provided to prevent recursion when
+     * setting the linked segments.  See
+     * SegmentLinker::setExcludeFromPrinting().
      */
-    void setForNotation(bool f, bool all = true);
-
-    /**
-     * Get the flag for using this segment in notation
-     */
-    bool getForNotation() const;
+    void setExcludeFromPrinting(bool exclude, bool linkedSegmentsAlso = true);
+    /// Exclude from printing (lilypond).
+    bool getExcludeFromPrinting() const  { return m_excludeFromPrinting; }
 
     /// Mark a Segment
     /**
@@ -1046,7 +1044,7 @@ private:
     int m_verseCount;  // -1 means not computed still
     int m_verse;       // Used to distribute lyrics among repeated segments
 
-    bool m_forNotation;
+    bool m_excludeFromPrinting;
 
 };
 

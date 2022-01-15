@@ -77,7 +77,6 @@ set(rg_CPPS
   document/RosegardenDocument.cpp
   document/XmlStorableEvent.cpp
   document/CommandHistory.cpp
-  document/BasicSelectionCommand.cpp
   document/XmlSubHandler.cpp
   document/MetadataHelper.cpp
   misc/ConfigGroups.cpp
@@ -709,7 +708,7 @@ set(rg_CPPS
   commands/segment/SegmentSplitCommand.cpp
   commands/segment/CutRangeCommand.cpp
   commands/segment/SegmentEraseCommand.cpp
-  commands/segment/SegmentForNotationCommand.cpp
+  commands/segment/SegmentExcludeFromPrintingCommand.cpp
   commands/studio/CreateOrDeleteDeviceCommand.cpp
   commands/studio/RemoveControlParameterCommand.cpp
   commands/studio/ModifyControlParameterCommand.cpp

@@ -129,10 +129,11 @@ constexpr MidiByte MIDI_SEQUENCER_SPECIFIC     = 0x7F;
 // Some controllers
 //
 constexpr MidiByte MIDI_CONTROLLER_BANK_MSB      = 0x00;
-constexpr MidiByte MIDI_CONTROLLER_VOLUME        = 0x07;
 constexpr MidiByte MIDI_CONTROLLER_BANK_LSB      = 0x20;
 constexpr MidiByte MIDI_CONTROLLER_MODULATION    = 0x01;
+constexpr MidiByte MIDI_CONTROLLER_VOLUME        = 0x07;
 constexpr MidiByte MIDI_CONTROLLER_PAN           = 0x0A;
+constexpr MidiByte MIDI_CONTROLLER_EXPRESSION    = 0x0B;
 constexpr MidiByte MIDI_CONTROLLER_SUSTAIN       = 0x40;
 constexpr MidiByte MIDI_CONTROLLER_RESONANCE     = 0x47;
 constexpr MidiByte MIDI_CONTROLLER_RELEASE       = 0x48;

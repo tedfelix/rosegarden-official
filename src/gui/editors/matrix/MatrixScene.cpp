@@ -865,6 +865,8 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 
     if (m_selection) {
         setSelectionElementStatus(m_selection, true);
+        // ??? But we are going to do this at the end of this routine.
+        //     Is this needed?  Notation only does this at the end.
         emit QGraphicsScene::selectionChanged();
         emit selectionChangedES(m_selection);
     }
@@ -873,16 +875,6 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
     delete oldSelection;
     emit QGraphicsScene::selectionChanged();
     emit selectionChangedES(m_selection);
-}
-
-void
-MatrixScene::slotRulerSelectionChanged(EventSelection *rulerSelection)
-{
-    if (m_selection) {
-        // ??? We only add.  We never delete.  This will get out of sync.
-        if (rulerSelection)
-            m_selection->addFromSelection(rulerSelection);
-    }
 }
 
 void

@@ -29,29 +29,30 @@
 namespace Rosegarden
 {
 
-MoveAcrossSegmentsCommand::MoveAcrossSegmentsCommand(Segment &,
-        Segment &secondSegment,
+MoveAcrossSegmentsCommand::MoveAcrossSegmentsCommand(
+        Segment *secondSegment,
         timeT newStartTime,
         bool notation,
-        EventSelection &selection) :
-        MacroCommand(getGlobalName()),
-        m_clipboard(new Clipboard())
+        EventSelection *selection) :
+    MacroCommand(getGlobalName()),
+    m_clipboard(new Clipboard())
 {
     addCommand(new CutCommand(selection, m_clipboard));
 
-    timeT newEndTime = newStartTime + selection.getEndTime() - selection.getStartTime();
-    Segment::iterator i = secondSegment.findTime(newEndTime);
-    if (i == secondSegment.end())
-        newEndTime = secondSegment.getEndTime();
+    timeT newEndTime =
+            newStartTime + selection->getEndTime() - selection->getStartTime();
+    Segment::iterator i = secondSegment->findTime(newEndTime);
+    if (i == secondSegment->end())
+        newEndTime = secondSegment->getEndTime();
     else
         newEndTime = (*i)->getAbsoluteTime();
 
-    addCommand(new PasteEventsCommand(secondSegment, m_clipboard,
+    addCommand(new PasteEventsCommand(*secondSegment, m_clipboard,
                                       newStartTime,
                                       newEndTime,
-                                      notation ?
-                                      PasteEventsCommand::NoteOverlay :
-                                      PasteEventsCommand::MatrixOverlay));
+                                      notation ?  // ??? always true
+                                          PasteEventsCommand::NoteOverlay :
+                                          PasteEventsCommand::MatrixOverlay));
 }
 
 MoveAcrossSegmentsCommand::~MoveAcrossSegmentsCommand()

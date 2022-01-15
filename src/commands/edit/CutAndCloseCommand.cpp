@@ -33,14 +33,14 @@
 namespace Rosegarden
 {
 
-CutAndCloseCommand::CutAndCloseCommand(EventSelection &selection,
+CutAndCloseCommand::CutAndCloseCommand(EventSelection *selection,
                                        Clipboard *clipboard) :
         MacroCommand(getGlobalName())
 {
     addCommand(new CutCommand(selection, clipboard));
-    addCommand(new CloseCommand(&selection.getSegment(),
-                                selection.getEndTime(),
-                                selection.getStartTime()));
+    addCommand(new CloseCommand(&selection->getSegment(),
+                                selection->getEndTime(),
+                                selection->getStartTime()));
 }
 
 void

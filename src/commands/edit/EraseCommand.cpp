@@ -34,7 +34,7 @@ EraseCommand::EraseCommand(
         EventSelection *selection1,
         EventSelection *selection2) :
     BasicCommand(tr("&Erase"),
-                 *selection1,  // assume both selections are in the same Segment
+                 selection1 ? *selection1 : *selection2,  // assume both selections are in the same Segment
                  true),  // bruteForceRedo
     m_selection1(selection1),
     m_selection2(selection2),

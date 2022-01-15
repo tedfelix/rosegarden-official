@@ -227,8 +227,15 @@ signals:
 
     void eventRemoved(Event *);
 
-    //void selectionChanged(); // defined in QGraphicsScene
-    void selectionChanged(EventSelection *);
+    /// Emitted when the user changes the selection.
+    /**
+     * NotationWidget::setSegments() connects this to
+     * ControlRulerWidget::slotSelectionChanged().
+     *
+     * This is used to keep the velocity ruler in sync with the selected
+     * events.
+     */
+    void selectionChangedES(EventSelection *);
 
     void layoutUpdated(timeT,timeT);
     void staffsPositionned();

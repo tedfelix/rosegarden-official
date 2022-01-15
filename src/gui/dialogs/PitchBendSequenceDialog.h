@@ -53,8 +53,8 @@ class Segment;
  *
  * ??? Rename: ControllerSequenceDialog
  *
- * @authors Jani (original author?),
- *          Tom Breton (Tehom),
+ * @authors Jani Frilander (original pitchbend-only version),
+ *          Tom Breton (Tehom) (expanded to include all controllers),
  *          Tim Munro
  */
 class PitchBendSequenceDialog : public QDialog
@@ -106,6 +106,10 @@ private:
     bool isController() const;
     // ??? Promote to ControlParameter.
     bool isPitchbend() const;
+    /// 0 for pitchbend and pan.  Otherwise CC default.
+    int m_default;
+    /// Center to use for pitchbend (8192) and pan (64).  Otherwise 0.
+    int m_center;
 
     const timeT m_startTime;
     const timeT m_endTime;
