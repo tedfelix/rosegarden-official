@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,8 +19,8 @@
 #define RG_AUDIOPROPERTIESPAGE_H
 
 #include "TabbedConfigurationPage.h"
-#include <QString>
 
+#include <QString>
 
 class QWidget;
 class QPushButton;
@@ -31,47 +30,46 @@ class QLabel;
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 
 
-/**
- * Audio Properties page
- *
- * (document-wide settings)
- */
+/// Audio Properties page.  Document-wide settings.
 class AudioPropertiesPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
     AudioPropertiesPage(QWidget *parent);
+
     void apply() override;
 
     static QString iconLabel() { return tr("Audio"); }
     static QString title()     { return tr("Audio Settings"); }
     static QString iconName()  { return "configure-audio"; }
 
-protected slots:
-    void slotFileDialog();
+private slots:
 
-    // Work out and display remaining disk space and time left 
-    // at current path.
-    //
-    void calculateStats();
+    /// Called by the Change Path button.
+    void slotChangePath();
 
-    void slotFoundMountPoint(const QString&,
-                             unsigned long kBSize,
-                             unsigned long kBUsed,
-                             unsigned long kBAvail);
-    
-protected:
+private:
 
-    //--------------- Data members ---------------------------------
+    QLabel *m_path;
+    QLabel *m_diskSpace;
+    QLabel *m_minutesAtStereo;
 
-    QLabel           *m_path;
-    QLabel           *m_diskSpace;
-    QLabel           *m_minutesAtStereo;
+    QPushButton *m_changePathButton;
 
-    QPushButton      *m_changePathButton;
+    /// Work out and display remaining disk space and time left at current path.
+    void updateWidgets();
+
+    /// Update "disk space" and "minutes at stereo" fields.
+    /**
+     * ??? inline this into the end of updateWidgets().
+     */
+    void updateWidgets2(unsigned long kBSize,
+                        unsigned long kBAvail);
+
 };
 
 

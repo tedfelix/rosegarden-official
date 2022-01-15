@@ -82,18 +82,20 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
     layout->setRowStretch(3, 2);
     frame->setLayout(layout);
 
-    calculateStats();
+    updateWidgets();
 
     connect(m_changePathButton, &QAbstractButton::released,
-            this, &AudioPropertiesPage::slotFileDialog);
+            this, &AudioPropertiesPage::slotChangePath);
 
     addTab(frame, tr("Modify audio path"));
 }
 
 void
-AudioPropertiesPage::calculateStats()
+AudioPropertiesPage::updateWidgets()
 {
-#ifdef WIN32
+#if 0
+    // Windoze version that needs rewriting for the newer compiler.
+
     ULARGE_INTEGER available, total, totalFree;
     if (GetDiskFreeSpaceExA(m_path->text().toLocal8Bit().data(),
                             &available, &total, &totalFree)) {
@@ -101,40 +103,44 @@ AudioPropertiesPage::calculateStats()
         __int64 t = total.QuadPart;
         __int64 u = 0;
         if (t > a) u = t - a;
-        slotFoundMountPoint(m_path->text(), t / 1024, u / 1024, a / 1024);
+        updateWidgets2(t / 1024, a / 1024);
     } else {
         std::cerr << "WARNING: GetDiskFreeSpaceEx failed: error code "
                   << GetLastError() << std::endl;
     }
-#else
-    struct statvfs buf;
-    if (!statvfs(m_path->text().toLocal8Bit().data(), &buf)) {
-        // do the multiplies and divides in this order to reduce the
-        // likelihood of arithmetic overflow
-        RG_DEBUG << "statvfs(" << m_path->text().toLocal8Bit().data() << ") says available: " << buf.f_bavail << ", total: " << buf.f_blocks << ", block size: " << buf.f_bsize;
-        uint64_t available = ((buf.f_bavail / 1024) * buf.f_bsize);
-        uint64_t total = ((buf.f_blocks / 1024) * buf.f_bsize);
-        uint64_t used = 0;
-        if (total > available) used = total - available;
-        slotFoundMountPoint(m_path->text(), total, used, available);
-    } else {
-        perror("statvfs failed");
-    }
 #endif
+
+    uint64_t available{};
+    uint64_t total{};
+
+    struct statvfs buf;
+
+    if (statvfs(m_path->text().toLocal8Bit().data(), &buf)) {
+        RG_WARNING << "statvfs failed";
+        return;
+    }
+
+    //RG_DEBUG << "statvfs(" << m_path->text().toLocal8Bit().data() << ") says available: " << buf.f_bavail << ", total: " << buf.f_blocks << ", block size: " << buf.f_bsize;
+
+    // Do the multiplies and divides in this order to reduce the
+    // likelihood of arithmetic overflow.
+    available = ((buf.f_bavail / 1024) * buf.f_bsize);
+    total = ((buf.f_blocks / 1024) * buf.f_bsize);
+
+    updateWidgets2(total, available);
 }
 
 void
-AudioPropertiesPage::slotFoundMountPoint(const QString&,
-        unsigned long kBSize,
-        unsigned long /*kBUsed*/,
-        unsigned long kBAvail )
+AudioPropertiesPage::updateWidgets2(
+        unsigned long total,
+        unsigned long available)
 {
-    m_diskSpace->setText(tr("%1 kB out of %2 kB (%3% kB used)")
+    m_diskSpace->setText(tr("%1 kB out of %2 kB (%3% used)")
                           //KIO::convertSizeFromKB
-              .arg(kBAvail)
+              .arg(available)
                           //KIO::convertSizeFromKB
-              .arg(kBSize)
-                          .arg(100 - (int)(100.0 * kBAvail / kBSize) ));
+              .arg(total)
+                          .arg(100 - (int)(100.0 * available / total) ));
 
 
     // AudioPluginManager *apm = m_doc->getPluginManager();
@@ -145,7 +151,7 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
     // number of channels (2) times the number of bytes per sample (2)
     // times 60 seconds.
     //
-    float stereoMins = ( float(kBAvail) * 1024.0 ) /
+    float stereoMins = ( float(available) * 1024.0 ) /
                        ( float(sampleRate) * 2.0 * 2.0 * 60.0 );
     const QString minsStr = QString::asprintf("%8.1f", stereoMins);
 
@@ -156,14 +162,14 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
 }
 
 void
-AudioPropertiesPage::slotFileDialog()
+AudioPropertiesPage::slotChangePath()
 {
     QString selectedDirectory = FileDialog::getExistingDirectory(this, tr("Audio Recording Path"), m_path->text());
 
     if (!selectedDirectory.isEmpty()) {
         m_path->setText(selectedDirectory);
     }
-    calculateStats();
+    updateWidgets();
 }
 
 void
