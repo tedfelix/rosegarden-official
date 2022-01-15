@@ -365,9 +365,9 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         // All audio files recorded or derived in this session are
         // about to become orphans
 
-        for (std::vector<AudioFile *>::const_iterator i =
-                    m_audioFileManager.begin();
-                i != m_audioFileManager.end(); ++i) {
+        for (AudioFileVector::const_iterator i =
+                    m_audioFileManager.cbegin();
+                i != m_audioFileManager.cend(); ++i) {
 
             if (m_audioFileManager.wasAudioFileRecentlyRecorded((*i)->getId())) {
                 recordedOrphans.push_back((*i)->getFilename());
@@ -390,9 +390,9 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
         bool stillHave = false;
 
-        for (std::vector<AudioFile *>::const_iterator j =
-                 m_audioFileManager.begin();
-                j != m_audioFileManager.end(); ++j) {
+        for (AudioFileVector::const_iterator j =
+                 m_audioFileManager.cbegin();
+                j != m_audioFileManager.cend(); ++j) {
             if ((*j)->getFilename() == *i) {
                 stillHave = true;
                 break;
@@ -412,9 +412,9 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
         bool stillHave = false;
 
-        for (std::vector<AudioFile *>::const_iterator j =
-                 m_audioFileManager.begin();
-                j != m_audioFileManager.end(); ++j) {
+        for (AudioFileVector::const_iterator j =
+                 m_audioFileManager.cbegin();
+                j != m_audioFileManager.cend(); ++j) {
             if ((*j)->getFilename() == *i) {
                 stillHave = true;
                 break;
@@ -2447,8 +2447,8 @@ RosegardenDocument::prepareAudio()
     //
     RosegardenSequencer::getInstance()->clearAllAudioFiles();
 
-    for (AudioFileManagerIterator it = m_audioFileManager.begin();
-         it != m_audioFileManager.end(); it++) {
+    for (AudioFileVector::const_iterator it = m_audioFileManager.cbegin();
+         it != m_audioFileManager.cend(); it++) {
 
         bool result = RosegardenSequencer::getInstance()->
             addAudioFile((*it)->getFilename(),

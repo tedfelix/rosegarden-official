@@ -22,11 +22,12 @@
 #include <vector>
 #include <set>
 
-#include <QPixmap>
 #include <QObject>
 #include <QUrl>
 #include <QPointer>
 #include <QProgressDialog>
+
+class QPixmap;
 
 #include "AudioFile.h"
 #include "PeakFileManager.h"
@@ -34,12 +35,13 @@
 #include "base/XmlExportable.h"
 #include "base/Exception.h"
 
-class QProcess;
 
 namespace Rosegarden
 {
 
-typedef std::vector<AudioFile *>::const_iterator AudioFileManagerIterator;
+
+typedef std::vector<AudioFile *> AudioFileVector;
+
 
 /**
  * AudioFileManager loads and maps audio files to their
@@ -54,7 +56,10 @@ typedef std::vector<AudioFile *>::const_iterator AudioFileManagerIterator;
  * ones.  However, the audio file manager itself within
  * Rosegarden is stored in the GUI process.  This class
  * is not (and should not be) used elsewhere within the
- * sound or sequencer libraries.
+ * sound or sequencer libraries.  (Does this mean we can
+ * remove the lock?  testAudioPath() is called by SequenceManager,
+ * but I'm not sure which thread that runs in.  AudioPeaksThread
+ * calls getPreview().)
  */
 class AudioFileManager : public QObject, public XmlExportable
 {
@@ -121,10 +126,10 @@ public:
     AudioFile* getAudioFile(AudioFileId id);
 
     /// Get an iterator into the list of AudioFile objects.
-    AudioFileManagerIterator begin() const
+    AudioFileVector::const_iterator cbegin() const
         { return m_audioFiles.begin(); }
 
-    AudioFileManagerIterator end() const
+    AudioFileVector::const_iterator cend() const
         { return m_audioFiles.end(); }
 
     /// Remove one audio file.
@@ -132,9 +137,9 @@ public:
     /// Remove all audio files.
     void clear();
 
-    /// Get the audio record path
+    /// Get the audio file path
     QString getAudioPath() const  { return m_audioPath; }
-    /// Set the audio record path
+    /// Set the audio file path
     void setAudioPath(const QString &path);
 
     /// Throw if the current audio path does not exist or is not writable
@@ -280,7 +285,7 @@ public:
 
 private:
     /// The audio files we are managing.
-    std::vector<AudioFile *> m_audioFiles;
+    AudioFileVector m_audioFiles;
 
     /**
      * Create an audio file by importing (i.e. converting and/or
@@ -310,8 +315,12 @@ private:
 
     /// See if we can find a given file in our search path
     /**
+     * First tries to find the file based on the name provided.
+     * If that fails, it removes the path and searches for the
+     * name in m_audioPath.
+     *
      * Returns the first occurrence of a match or the empty
-     * std::string if no match.
+     * string if no match.
      */
     QString getFileInPath(const QString &file);
 

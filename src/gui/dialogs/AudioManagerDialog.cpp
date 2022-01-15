@@ -275,8 +275,8 @@ AudioManagerDialog::slotPopulateFileList()
     // clear file list and disable associated action buttons
     m_fileList->clear();
     // AudioListItem* auItem;
-    if (m_doc->getAudioFileManager().begin() ==
-            m_doc->getAudioFileManager().end()) {
+    if (m_doc->getAudioFileManager().cbegin() ==
+            m_doc->getAudioFileManager().cend()) {
         // Turn off selection and report empty list
         //
         // auItem = new AudioListItem(m_fileList, QStringList(tr("<no audio files>")));
@@ -311,9 +311,9 @@ AudioManagerDialog::slotPopulateFileList()
     RealTime segmentDuration;
     bool wrongSampleRates = false;
 
-    for (std::vector<AudioFile*>::const_iterator
-            it = m_doc->getAudioFileManager().begin();
-            it != m_doc->getAudioFileManager().end();
+    for (AudioFileVector::const_iterator
+            it = m_doc->getAudioFileManager().cbegin();
+            it != m_doc->getAudioFileManager().cend();
             ++it) {
         try {
             //RG_DEBUG << "slotPopulateFileList(): 1";
@@ -477,11 +477,10 @@ AudioManagerDialog::getCurrentSelection()
         return nullptr;
     }
 
-    std::vector<AudioFile*>::const_iterator it;
-
-    for (it = m_doc->getAudioFileManager().begin();
-            it != m_doc->getAudioFileManager().end();
-            ++it) {
+    for (AudioFileVector::const_iterator it =
+             m_doc->getAudioFileManager().cbegin();
+         it != m_doc->getAudioFileManager().cend();
+         ++it) {
         // If we match then return the valid AudioFile
         //
         if (item->getId() == (*it)->getId()) {
@@ -794,8 +793,8 @@ AudioManagerDialog::updateActionState(bool haveSelection)
 {
     //RG_DEBUG << "updateActionState(" << (haveSelection ? "true" : "false") << ")";
 
-    if (m_doc->getAudioFileManager().begin() ==
-            m_doc->getAudioFileManager().end()) {
+    if (m_doc->getAudioFileManager().cbegin() ==
+            m_doc->getAudioFileManager().cend()) {
         leaveActionState("have_audio_files"); //@@@ JAS orig. KXMLGUIClient::StateReverse
     } else {
         enterActionState("have_audio_files"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
@@ -861,9 +860,9 @@ AudioManagerDialog::slotRemoveAll()
     // delete segments
     emit deleteSegments(selection);
 
-    for (std::vector<AudioFile*>::const_iterator
-            aIt = m_doc->getAudioFileManager().begin();
-            aIt != m_doc->getAudioFileManager().end(); ++aIt) {
+    for (AudioFileVector::const_iterator
+            aIt = m_doc->getAudioFileManager().cbegin();
+            aIt != m_doc->getAudioFileManager().cend(); ++aIt) {
         m_doc->notifyAudioFileRemoval((*aIt)->getId());
     }
 
@@ -898,9 +897,9 @@ AudioManagerDialog::slotRemoveAllUnused()
     }
 
     std::vector<AudioFileId> toDelete;
-    for (std::vector<AudioFile*>::const_iterator
-            aIt = m_doc->getAudioFileManager().begin();
-            aIt != m_doc->getAudioFileManager().end(); ++aIt) {
+    for (AudioFileVector::const_iterator
+            aIt = m_doc->getAudioFileManager().cbegin();
+            aIt != m_doc->getAudioFileManager().cend(); ++aIt) {
         if (audioFiles.find((*aIt)->getId()) == audioFiles.end())
             toDelete.push_back((*aIt)->getId());
     }
@@ -935,9 +934,9 @@ AudioManagerDialog::slotDeleteUnused()
     std::vector<QString> toDelete;
     std::map<QString, AudioFileId> nameMap;
 
-    for (std::vector<AudioFile*>::const_iterator
-            aIt = m_doc->getAudioFileManager().begin();
-            aIt != m_doc->getAudioFileManager().end(); ++aIt) {
+    for (AudioFileVector::const_iterator
+            aIt = m_doc->getAudioFileManager().cbegin();
+            aIt != m_doc->getAudioFileManager().cend(); ++aIt) {
         if (audioFiles.find((*aIt)->getId()) == audioFiles.end()) {
             toDelete.push_back((*aIt)->getFilename());
             nameMap[(*aIt)->getFilename()] = (*aIt)->getId();

@@ -106,6 +106,8 @@ AudioFileManager::~AudioFileManager()
 AudioFileId
 AudioFileManager::addFile(const QString &filePath)
 {
+    // ??? Seems excessive to lock the entire routine.  Only the push_back()
+    //     at the end actually needs to be locked.
     MutexLock lock (&audioFileManagerLock)
         ;
 
@@ -360,29 +362,30 @@ AudioFileManager::insertFile(const std::string &name,
 void
 AudioFileManager::setAudioPath(const QString &path)
 {
-    MutexLock lock (&audioFileManagerLock)
-        ;
+    if (path.isEmpty())
+        return;
 
-    if (path.size() != 0) {
-        QString hPath = path;
-        QString homePath = getenv("HOME");
-    
-        // add a trailing / if we don't have one
-        if (hPath[hPath.size() - 1] != '/')
-            hPath += "/";
+    QString hPath = path;
+    QString homePath = getenv("HOME");
 
-        // get the home directory
-        // ??? Use tildeToHome().
-        if (hPath[0] == '~') {
-            hPath.remove(0, 1);
-            hPath = homePath + hPath;
-        }
+    // add a trailing / if we don't have one
+    if (hPath[hPath.size() - 1] != '/')
+        hPath += "/";
+
+    // get the home directory
+    // ??? Use tildeToHome().
+    if (hPath[0] == '~') {
+        hPath.remove(0, 1);
+        hPath = homePath + hPath;
+    }
+
+    // ??? If the user is changing the path, ask them if they want to move
+    //     all the audio files to the new path.  If so, do that.
+
+    {
+        MutexLock lock (&audioFileManagerLock);
 
         m_audioPath = hPath;
-    } else {
-#ifdef DEBUG_AUDIOFILEMANAGER
-        RG_DEBUG << "setAudioPath() - zero length path, do nothing";
-#endif
     }
 
 }
