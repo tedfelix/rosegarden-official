@@ -106,7 +106,8 @@ public:
     void turnRepeatingSegmentToRealCopies();
     void turnLinkedSegmentsToRealCopies();
 
-    bool reinstateLoop();
+    bool reinstateRange();
+    void hideRange();
 
 signals:
     /**

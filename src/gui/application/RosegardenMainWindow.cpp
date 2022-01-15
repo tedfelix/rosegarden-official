@@ -5833,7 +5833,7 @@ RosegardenMainWindow::slotSetLoop()
             m_loopingAll = true;
         } else {
             // attempt to reinstate a stored loop
-            bool reinstated = getView()->getTrackEditor()->reinstateLoop();
+            bool reinstated = getView()->getTrackEditor()->reinstateRange();
             if (! reinstated) {
                 // reset the loop button
                 getTransport()->LoopButton()->setChecked(false);
@@ -5845,14 +5845,21 @@ RosegardenMainWindow::slotSetLoop()
 void
 RosegardenMainWindow::slotUnsetLoop()
 {
-
-    // store the loop
     m_loopingAll = false;
 
     Composition &comp =
         RosegardenDocument::currentDocument->getComposition();
     comp.setLooping(false);
     m_seqManager->setLoop(0, 0);
+    
+    QSettings settings;
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    bool loopSong = settings.value("loopentiresong", false).toBool();
+    settings.endGroup();
+    
+    if (!loopSong) {
+        getView()->getTrackEditor()->hideRange();
+    }
 }
 
 void

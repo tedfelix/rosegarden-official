@@ -123,7 +123,7 @@ void LoopRuler::scrollHoriz(int x)
     update();
 }
 
-bool LoopRuler::reinstateLoop()
+bool LoopRuler::reinstateRange()
 {
     if (m_storedLoopStart != m_storedLoopEnd) {
         // reinstate the stored loop
@@ -131,11 +131,19 @@ bool LoopRuler::reinstateLoop()
         m_endLoop = m_storedLoopEnd;
         m_loopSet = true;
         emit setLoopRange(m_startLoop, m_endLoop);
-        RG_DEBUG << "reinstateLoop OK";
+        RG_DEBUG << "reinstateRange OK";
         return true;
     }
-    RG_DEBUG << "reinstateLoop no stored loop";
+    RG_DEBUG << "reinstateRange no stored range";
     return false;
+}
+
+void LoopRuler::hideRange()
+{
+    m_startLoop = 0;
+    m_endLoop = 0;
+    m_loopSet = false;
+    emit setLoopRange(m_startLoop, m_endLoop);
 }
 
 QSize LoopRuler::sizeHint() const

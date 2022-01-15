@@ -70,7 +70,8 @@ public:
 
     bool getLoopingMode() { return m_loopingMode; }
 
-    bool reinstateLoop();
+    bool reinstateRange();
+    void hideRange();
     
 signals:
     /// Set the pointer position on mouse single click

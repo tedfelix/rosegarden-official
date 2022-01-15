@@ -608,11 +608,17 @@ TrackEditor::turnLinkedSegmentsToRealCopies()
     addCommandToHistory(macro);
 }
 
-bool TrackEditor::reinstateLoop()
+bool TrackEditor::reinstateRange()
 {
-    bool topr = m_topStandardRuler->getLoopRuler()->reinstateLoop();
-    bool bottomr = m_bottomStandardRuler->getLoopRuler()->reinstateLoop();
+    bool topr = m_topStandardRuler->getLoopRuler()->reinstateRange();
+    bool bottomr = m_bottomStandardRuler->getLoopRuler()->reinstateRange();
     return (topr || bottomr);
+}
+
+void TrackEditor::hideRange()
+{
+    m_topStandardRuler->getLoopRuler()->hideRange();
+    m_bottomStandardRuler->getLoopRuler()->hideRange();
 }
 
 void
