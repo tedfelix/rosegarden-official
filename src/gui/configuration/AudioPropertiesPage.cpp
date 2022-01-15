@@ -119,10 +119,12 @@ AudioPropertiesPage::updateWidgets()
 
     const uint64_t mebibytes = 1024 * 1024;
 
+    const double percentUsed = 100.0 - (double)available / (double)total * 100.0;
+
     m_diskSpace->setText(tr("%1 MiB out of %2 MiB (%3% used)").
-            arg(available / mebibytes).
-            arg(total / mebibytes).
-            arg(100 - lround((double)available / (double)total * 100.0) ));
+            arg(QLocale().toString(double(available / mebibytes), 'f', 0)).
+            arg(QLocale().toString(double(total / mebibytes), 'f', 0)).
+            arg(QLocale().toString(percentUsed, 'f', 1)));
 
     // Recording time
 
@@ -139,12 +141,10 @@ AudioPropertiesPage::updateWidgets()
     const double stereoMins =
             double(available / sampleRate / numberOfChannels / bytesPerSample) *
             secondsToMinutes;
-    const QString minsStr = QString::asprintf("%8.1f", stereoMins);
 
-    m_minutesAtStereo->setText(
-            QString("%1 %2 %3Hz 16-bit stereo").arg(minsStr).
-                                  arg(tr("minutes at")).
-                                  arg(sampleRate));
+    m_minutesAtStereo->setText(tr("%1 minutes at %3Hz 16-bit stereo").
+            arg(QLocale().toString(stereoMins, 'f', 1)).
+            arg(QLocale().toString((double)sampleRate, 'f', 0)));
 }
 
 void
