@@ -60,12 +60,8 @@ private:
 
     QPushButton *m_changePathButton;
 
-    /// Work out and display remaining disk space and time left at current path.
+    /// Display remaining disk space and recording time at current path.
     void updateWidgets();
-
-    /// Update "disk space" and "minutes at stereo" fields.
-    void updateWidgets2(uint64_t kBSize,
-                        uint64_t kBAvail);
 
 };
 

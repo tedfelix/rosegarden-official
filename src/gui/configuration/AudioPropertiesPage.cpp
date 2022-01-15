@@ -44,17 +44,18 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
 {
     QFrame *frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);
+
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
     // Audio file path
     layout->addWidget(new QLabel(tr("Audio file path:"), frame), 0, 0);
 
-    m_path = new QLabel(frame);
+    AudioFileManager &afm = m_doc->getAudioFileManager();
+    m_path = new QLabel(afm.getAudioPath(), frame);
     layout->addWidget(m_path, 0, 1);
 
-    m_changePathButton =
-        new QPushButton(tr("Choose..."), frame);
+    m_changePathButton = new QPushButton(tr("Choose..."), frame);
     layout->addWidget(m_changePathButton, 0, 2);
 
     // Disk space remaining
@@ -64,9 +65,9 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
 
     // Recording time
     m_minutesAtStereo = new QLabel(frame);
-    layout->addWidget(
-        new QLabel(tr("16-bit stereo recording time:"),
-                   frame), 2, 0);
+    layout->addWidget(new QLabel(tr("Recording time:"),
+                                 frame),
+                      2, 0);
 
     layout->addWidget(m_minutesAtStereo, 2, 1, 1, 2);
 
@@ -84,11 +85,6 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
 void
 AudioPropertiesPage::updateWidgets()
 {
-    AudioFileManager &afm = m_doc->getAudioFileManager();
-    const QString audioPath = afm.getAudioPath();
-
-    m_path->setText(audioPath);
-
 #if 0
     // Windoze version that needs rewriting for the newer compiler.
 
@@ -106,11 +102,12 @@ AudioPropertiesPage::updateWidgets()
     }
 #endif
 
+    // Disk space remaining
 
     struct statvfs buf;
 
-    if (statvfs(audioPath.toLocal8Bit().data(), &buf)) {
-        RG_WARNING << "statvfs failed";
+    if (statvfs(m_path->text().toLocal8Bit().data(), &buf)) {
+        RG_WARNING << "statvfs() failed";
         m_diskSpace->setText("XXXX");
         m_minutesAtStereo->setText("XXXX");
         return;
@@ -120,21 +117,14 @@ AudioPropertiesPage::updateWidgets()
     const uint64_t available = (uint64_t)buf.f_bavail * (uint64_t)buf.f_bsize;
     const uint64_t total = (uint64_t)buf.f_blocks * (uint64_t)buf.f_bsize;
 
-    // ??? Inline this.
-    updateWidgets2(total, available);
-}
-
-void
-AudioPropertiesPage::updateWidgets2(
-        uint64_t total,
-        uint64_t available)
-{
     const uint64_t mebibytes = 1024 * 1024;
 
     m_diskSpace->setText(tr("%1 MiB out of %2 MiB (%3% used)").
             arg(available / mebibytes).
             arg(total / mebibytes).
             arg(100 - lround((double)available / (double)total * 100.0) ));
+
+    // Recording time
 
     int sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
@@ -152,7 +142,7 @@ AudioPropertiesPage::updateWidgets2(
     const QString minsStr = QString::asprintf("%8.1f", stereoMins);
 
     m_minutesAtStereo->setText(
-            QString("%1 %2 %3Hz").arg(minsStr).
+            QString("%1 %2 %3Hz 16-bit stereo").arg(minsStr).
                                   arg(tr("minutes at")).
                                   arg(sampleRate));
 }
@@ -160,11 +150,23 @@ AudioPropertiesPage::updateWidgets2(
 void
 AudioPropertiesPage::slotChangePath()
 {
-    QString selectedDirectory = FileDialog::getExistingDirectory(this, tr("Audio Recording Path"), m_path->text());
+    // ??? We need to also support directories that do not exist.
+    QString selectedDirectory = FileDialog::getExistingDirectory(
+            this, tr("Audio Recording Path"), m_path->text());
 
-    if (!selectedDirectory.isEmpty()) {
-        m_path->setText(selectedDirectory);
-    }
+    if (selectedDirectory.isEmpty())
+        return;
+
+    // ??? If the directory doesn't exist, prompt to create it.
+
+    // ??? If the directory cannot be created or written to, let the
+    //     user know and leave.
+
+    // ??? We also need to support relative paths (./audio) so that it is
+    //     safe to move/copy the rg project directory.
+
+    m_path->setText(selectedDirectory);
+
     updateWidgets();
 }
 
@@ -173,10 +175,10 @@ AudioPropertiesPage::apply()
 {
     AudioFileManager &afm = m_doc->getAudioFileManager();
 
-    QString oldDir = afm.getAudioPath();
-    QString newDir = m_path->text();
+    const QString newDir = m_path->text();
 
-    if (newDir != oldDir) {
+    // If there's been a change, update the AudioFileManager.
+    if (newDir != afm.getAudioPath()) {
         afm.setAudioPath(newDir);
         m_doc->slotDocumentModified();
     }
