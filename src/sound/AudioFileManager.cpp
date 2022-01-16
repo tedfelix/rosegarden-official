@@ -360,24 +360,20 @@ AudioFileManager::insertFile(const std::string &name,
 }
 
 void
-AudioFileManager::setAudioPath(const QString &path)
+AudioFileManager::setAudioPath(const QString &newPath)
 {
-    if (path.isEmpty())
+    if (newPath.isEmpty())
         return;
 
-    QString hPath = path;
+    QString newPath2 = newPath;
 
     // add a trailing / if we don't have one
-    if (hPath[hPath.size() - 1] != '/')
-        hPath += "/";
+    // ??? Or should we put this in tildeToHome() and rename that to
+    //     pathToStandard()?  homeToTilde() might become pathToInternal().
+    if (newPath2.back() != '/')
+        newPath2 += "/";
 
-    // get the home directory
-    // ??? Use tildeToHome().
-    if (hPath[0] == '~') {
-        hPath.remove(0, 1);
-        QString homePath = getenv("HOME");
-        hPath = homePath + hPath;
-    }
+    newPath2 = tildeToHome(newPath2);
 
 #if 0
     // ??? I think we need a new chooseAudioPath() that takes a parent window
@@ -396,7 +392,7 @@ AudioFileManager::setAudioPath(const QString &path)
         if (result == QMessageBox::Yes) {
             // Physically move the files, and adjust their paths to
             // point to the new location.
-            moveFiles(m_audioPath, hPath);
+            moveFiles(m_audioPath, newPath2);
 
             // ??? reload the files from their new locations?
         }
@@ -406,7 +402,7 @@ AudioFileManager::setAudioPath(const QString &path)
     {
         MutexLock lock (&audioFileManagerLock);
 
-        m_audioPath = hPath;
+        m_audioPath = newPath2;
     }
 
 }
