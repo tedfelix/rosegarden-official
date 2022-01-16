@@ -50,7 +50,7 @@ public:
 private slots:
 
     /// Called by the Change Path button.
-    void slotChangePath();
+    void slotChoosePath();
 
 private:
 

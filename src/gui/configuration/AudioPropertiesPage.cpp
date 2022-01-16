@@ -28,6 +28,7 @@
 #include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QTabWidget>
 
@@ -76,7 +77,7 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
     updateWidgets();
 
     connect(m_changePathButton, &QAbstractButton::released,
-            this, &AudioPropertiesPage::slotChangePath);
+            this, &AudioPropertiesPage::slotChoosePath);
 
     addTab(frame, tr("Modify audio path"));
 }
@@ -148,38 +149,50 @@ AudioPropertiesPage::updateWidgets()
 }
 
 void
-AudioPropertiesPage::slotChangePath()
+AudioPropertiesPage::slotChoosePath()
 {
-    // ??? We need to also support directories that do not exist.
-    QString selectedDirectory = FileDialog::getExistingDirectory(
-            this, tr("Audio Recording Path"), m_path->text());
+    while (true)
+    {
+        QString selectedPath = FileDialog::getExistingDirectory(
+                this, tr("Choose Audio File Path"), m_path->text());
 
-    if (selectedDirectory.isEmpty())
+        if (selectedPath.isEmpty())
+            return;
+
+        QFileInfo fileInfo(selectedPath);
+
+        // If the directory cannot be written to, let the user try again.
+        if (!fileInfo.isWritable()) {
+            QMessageBox::information(
+                    this,
+                    tr("Choose Audio File Path"),
+                    tr("Selected path cannot be written to.  Please try another."));
+
+            // Try again.
+            continue;
+        }
+
+        // ??? Should we support relative paths (./audio) so that it is
+        //     safe to move/copy the rg project directory?
+
+        m_path->setText(selectedPath);
+
+        updateWidgets();
+
         return;
-
-    // ??? If the directory doesn't exist, prompt to create it.
-
-    // ??? If the directory cannot be created or written to, let the
-    //     user know and leave.
-
-    // ??? We also need to support relative paths (./audio) so that it is
-    //     safe to move/copy the rg project directory.
-
-    m_path->setText(selectedDirectory);
-
-    updateWidgets();
+    }
 }
 
 void
 AudioPropertiesPage::apply()
 {
-    AudioFileManager &afm = m_doc->getAudioFileManager();
+    AudioFileManager &audioFileManager = m_doc->getAudioFileManager();
 
-    const QString newDir = m_path->text();
+    const QString newPath = m_path->text();
 
     // If there's been a change, update the AudioFileManager.
-    if (newDir != afm.getAudioPath()) {
-        afm.setAudioPath(newDir);
+    if (newPath != audioFileManager.getAudioPath()) {
+        audioFileManager.setAudioPath(newPath);
         m_doc->slotDocumentModified();
     }
 }
