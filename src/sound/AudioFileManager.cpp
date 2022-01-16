@@ -366,7 +366,6 @@ AudioFileManager::setAudioPath(const QString &path)
         return;
 
     QString hPath = path;
-    QString homePath = getenv("HOME");
 
     // add a trailing / if we don't have one
     if (hPath[hPath.size() - 1] != '/')
@@ -376,11 +375,33 @@ AudioFileManager::setAudioPath(const QString &path)
     // ??? Use tildeToHome().
     if (hPath[0] == '~') {
         hPath.remove(0, 1);
+        QString homePath = getenv("HOME");
         hPath = homePath + hPath;
     }
 
-    // ??? If the user is changing the path, ask them if they want to move
-    //     all the audio files to the new path.  If so, do that.
+#if 0
+    // ??? I think we need a new chooseAudioPath() that takes a parent window
+    //     for pop-ups.  The other option would be to break this process into
+    //     pieces and expect the caller to call each piece in the right order.
+
+    // ??? We'll likely need to lock all this?
+
+    // If the user is changing the path and we have audio files...
+    if (userChange  &&  !empty()) {
+        QMessageBox::StandardButton result = QMessageBox::question(
+                parent,
+                tr("Choose Audio Path"),
+                tr("Would you like to move the document's audio files to the new path?"));
+
+        if (result == QMessageBox::Yes) {
+            // Physically move the files, and adjust their paths to
+            // point to the new location.
+            moveFiles(m_audioPath, hPath);
+
+            // ??? reload the files from their new locations?
+        }
+    }
+#endif
 
     {
         MutexLock lock (&audioFileManagerLock);
@@ -950,6 +971,8 @@ AudioFileManager::getAudioFile(AudioFileId id)
     MutexLock lock (&audioFileManagerLock)
         ;
 
+    // ??? A std::map<AudioFileId, AudioFile *> would be faster.
+
     // For each AudioFile
     for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
          it != m_audioFiles.end();
@@ -1195,6 +1218,5 @@ AudioFileManager::getActualSampleRates() const
     return rates;
 }
 
+
 }
-
-

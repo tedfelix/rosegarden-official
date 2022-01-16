@@ -174,6 +174,9 @@ AudioPropertiesPage::slotChoosePath()
 
         // ??? Should we support relative paths (./audio) so that it is
         //     safe to move/copy the rg project directory?
+        //     Actually, the handling for the audiopath tag in
+        //     RoseXmlHandler assumes "./" if there is no ~ or / at
+        //     the beginning of the path.
 
         m_path->setText(selectedPath);
 

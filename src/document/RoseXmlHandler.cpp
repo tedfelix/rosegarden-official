@@ -1223,8 +1223,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             // anyway.  So instead let's just start by looking in the
             // same place as the .rg file.
 
+            // Try the .rg file's path.
+
             QString docPath = m_doc->getAbsFilePath();
             QString dirPath = QFileInfo(docPath).path();
+
+            // Set the file path for the rest of the audio files as well
+            // in case we find this missing one.  The assumption is that
+            // all of the other files are here as well.
             getAudioFileManager().setAudioPath(dirPath);
 
             RG_DEBUG << "Attempting to find audio file " << file
@@ -1271,6 +1277,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                          id.toInt()) == false);
 
                 if (newPath != "") {
+                    // We assume all the rest of the files are in this
+                    // new path as well.  Adjusting the audio path should
+                    // clear up any further locate pop-ups.
                     getAudioFileManager().setAudioPath(newPath);
                     // Set a document post-modify flag
                     //m_doc->setModified(true);
@@ -1300,6 +1309,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
+        // If the path doesn't start with ~ or /, use the document path.
         if (!search.startsWith("/") && !search.startsWith("~")) {
             QString docPath = m_doc->getAbsFilePath();
             QString dirPath = QFileInfo(docPath).path();

@@ -43,7 +43,13 @@ namespace Rosegarden
 typedef std::vector<AudioFile *> AudioFileVector;
 
 
+/// Repository of AudioFile objects.
 /**
+ * Not to be confused with AudioManagerDialog which is the "Audio File
+ * Manager" dialog.
+ *
+ * RosegardenDocument::m_audioFileManager is the only instance.
+ *
  * AudioFileManager loads and maps audio files to their
  * internal references (ids).  A point of contact for
  * AudioFile information - loading a Composition should
@@ -60,6 +66,10 @@ typedef std::vector<AudioFile *> AudioFileVector;
  * remove the lock?  testAudioPath() is called by SequenceManager,
  * but I'm not sure which thread that runs in.  AudioPeaksThread
  * calls getPreview().)
+ *
+ * On the lock front, notice that cbegin() and cend() are in no way
+ * thread-safe.  What is the locking for?  AudioPeaksThread?  If
+ * so, it should be explicitly geared to that and nothing else.
  */
 class AudioFileManager : public QObject, public XmlExportable
 {
@@ -67,30 +77,6 @@ class AudioFileManager : public QObject, public XmlExportable
 public:
     AudioFileManager();
     ~AudioFileManager() override;
-
-    class BadAudioPathException : public Exception
-    {
-    public:
-        BadAudioPathException(QString path) :
-            Exception(QObject::tr("Bad audio file path ") + path), m_path(path) { }
-        BadAudioPathException(QString path, QString file, int line) :
-            Exception(QObject::tr("Bad audio file path ") + path, file, line), m_path(path) { }
-        BadAudioPathException(const SoundFile::BadSoundFileException &e) :
-            Exception(QObject::tr("Bad audio file path (malformed file?) ") + e.getPath()), m_path(e.getPath()) { }
-
-        ~BadAudioPathException() throw() override { }
-
-        QString getPath() const { return m_path; }
-
-    private:
-        QString m_path;
-    };
-
-private:
-    AudioFileManager(const AudioFileManager &aFM);
-    AudioFileManager &operator=(const AudioFileManager &);
-
-public:
 
     /// Create an AudioFile object from an absolute path
     /**
@@ -126,11 +112,18 @@ public:
     AudioFile* getAudioFile(AudioFileId id);
 
     /// Get an iterator into the list of AudioFile objects.
+    /**
+     * NOT THREAD SAFE.
+     */
     AudioFileVector::const_iterator cbegin() const
         { return m_audioFiles.begin(); }
 
+    /// NOT THREAD SAFE.
     AudioFileVector::const_iterator cend() const
         { return m_audioFiles.end(); }
+
+    /// NOT THREAD SAFE.
+    bool empty() const  { return m_audioFiles.empty(); }
 
     /// Remove one audio file.
     bool removeFile(AudioFileId id);
@@ -283,8 +276,38 @@ public:
     /// Get the last file in the vector - the last created.
     //AudioFile *getLastAudioFile();
 
+    class BadAudioPathException : public Exception
+    {
+    public:
+        BadAudioPathException(QString path) :
+            Exception(QObject::tr("Bad audio file path ") + path), m_path(path) { }
+        BadAudioPathException(QString path, QString file, int line) :
+            Exception(QObject::tr("Bad audio file path ") + path, file, line), m_path(path) { }
+        BadAudioPathException(const SoundFile::BadSoundFileException &e) :
+            Exception(QObject::tr("Bad audio file path (malformed file?) ") + e.getPath()), m_path(e.getPath()) { }
+
+        ~BadAudioPathException() throw() override { }
+
+        QString getPath() const { return m_path; }
+
+    private:
+        QString m_path;
+    };
+
 private:
+    // Hide copy ctor and op=.
+    AudioFileManager(const AudioFileManager &aFM);
+    AudioFileManager &operator=(const AudioFileManager &);
+
     /// The audio files we are managing.
+    /**
+     * These objects are owned by this class.  The dtor deletes them.
+     *
+     * The IDs are stored in the AudioFile objects.  See AudioFile::getId().
+     *
+     * ??? Would this be faster as a std::map<AudioFileId, AudioFile *>?
+     *     See getAudioFile().
+     */
     AudioFileVector m_audioFiles;
 
     /**
