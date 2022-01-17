@@ -133,7 +133,7 @@ public:
     /// Get the audio file path
     QString getAudioPath() const  { return m_audioPath; }
     /// Set the audio file path
-    void setAudioPath(const QString &path);
+    void setAudioPath(const QString &newPath, bool moveFiles = false);
 
     /// Throw if the current audio path does not exist or is not writable
     /**
@@ -232,10 +232,14 @@ public:
                                 const RealTime &highlightEnd,
                                 QPixmap *pixmap);
 
-    /// Convert the user's home directory to a "~".
-    QString homeToTilde(const QString &path) const;
-    /// Expand "~" to the user's home directory.
-    QString tildeToHome(const QString &path) const;
+    /// Convert a path or file name to use internal path rules.
+    /**
+     * An internal path may use "~" to represent a user's home directory
+     * as with bash.  This should ease moving files from one user to another.
+     * This function checks for the user's home directory in the path and
+     * replaces it with "~".
+     */
+    QString pathToInternal(const QString &path) const;
 
     /// Get a split point vector from a peak file
     /**
@@ -356,6 +360,8 @@ private:
     unsigned int m_lastAudioFileID;
 
     QString m_audioPath;
+
+    void moveFiles(const QString &newPath);
 
     PeakFileManager m_peakManager;
 

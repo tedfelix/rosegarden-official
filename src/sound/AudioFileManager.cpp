@@ -38,6 +38,8 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"  // qstrtostr() and friends
 #include "sequencer/RosegardenSequencer.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "sound/audiostream/AudioReadStream.h"
 #include "sound/audiostream/AudioReadStreamFactory.h"
 #include "sound/audiostream/AudioWriteStream.h"
@@ -47,6 +49,55 @@
 
 // #define DEBUG_AUDIOFILEMANAGER
 // #define DEBUG_AUDIOFILEMANAGER_INSERT_FILE
+
+namespace
+{
+
+    /// Convert an internal file name to standard form.
+    QString tildeToHome(const QString &fileName)
+    {
+        QString newFileName = fileName;
+
+        // Convert tilde to home dir.
+        if (newFileName.mid(0,2) == "~/") {
+            newFileName.remove(0, 1);
+            newFileName = QDir::homePath() + newFileName;
+        }
+
+        return newFileName;
+    }
+
+    /// Convert an internal path (without file name) to standard form.
+    /**
+     * Converts "~" to the user's home path.  Also makes sure there is a
+     * trailing "/" to ease assembling a full path from its pieces.
+     *
+     * Opposite of pathToInternal().
+     */
+    QString pathToStandard(const QString &path)
+    {
+        QString standardPath = path;
+
+        // Convert tilde to home dir.
+        if (standardPath.mid(0,2) == "~/") {
+            standardPath.remove(0, 1);
+            standardPath = QDir::homePath() + standardPath;
+        }
+
+        standardPath = QDir::cleanPath(standardPath);
+
+        // Add a trailing "/" if needed.
+        // ??? Since the standard form is temporary and never stored, why
+        //     not just add a "/" when we need it?  Then we don't need to
+        //     do this and this routine will be the same as tildeToHome().
+        //     Double-slashes are fine.
+        if (standardPath.back() != '/')
+            standardPath += "/";
+
+        return standardPath;
+    }
+
+}
 
 namespace Rosegarden
 {
@@ -106,8 +157,6 @@ AudioFileManager::~AudioFileManager()
 AudioFileId
 AudioFileManager::addFile(const QString &filePath)
 {
-    // ??? Seems excessive to lock the entire routine.  Only the push_back()
-    //     at the end actually needs to be locked.
     MutexLock lock (&audioFileManagerLock)
         ;
 
@@ -360,49 +409,30 @@ AudioFileManager::insertFile(const std::string &name,
 }
 
 void
-AudioFileManager::setAudioPath(const QString &newPath)
+AudioFileManager::setAudioPath(const QString &newPath, bool i_moveFiles)
 {
     if (newPath.isEmpty())
         return;
 
     QString newPath2 = newPath;
 
-    // add a trailing / if we don't have one
-    // ??? Or should we put this in tildeToHome() and rename that to
-    //     pathToStandard()?  homeToTilde() might become pathToInternal().
-    if (newPath2.back() != '/')
-        newPath2 += "/";
+    newPath2 = pathToStandard(newPath2);
 
-    newPath2 = tildeToHome(newPath2);
-
-#if 0
-    // ??? I think we need a new chooseAudioPath() that takes a parent window
-    //     for pop-ups.  The other option would be to break this process into
-    //     pieces and expect the caller to call each piece in the right order.
-
-    // ??? We'll likely need to lock all this?
-
-    // If the user is changing the path and we have audio files...
-    if (userChange  &&  !empty()) {
-        QMessageBox::StandardButton result = QMessageBox::question(
-                parent,
-                tr("Choose Audio Path"),
-                tr("Would you like to move the document's audio files to the new path?"));
-
-        if (result == QMessageBox::Yes) {
-            // Physically move the files, and adjust their paths to
-            // point to the new location.
-            moveFiles(m_audioPath, newPath2);
-
-            // ??? reload the files from their new locations?
-        }
+    if (i_moveFiles) {
+        // Physically move the files, and adjust their paths to
+        // point to the new location.
+        moveFiles(newPath2);
     }
-#endif
 
     {
         MutexLock lock (&audioFileManagerLock);
 
         m_audioPath = newPath2;
+    }
+
+    if (i_moveFiles) {
+        // Force a save.
+        RosegardenMainWindow::self()->slotFileSave();
     }
 
 }
@@ -814,7 +844,7 @@ AudioFileManager::getLastAudioFile()
 #endif
 
 QString
-AudioFileManager::homeToTilde(const QString &path) const
+AudioFileManager::pathToInternal(const QString &path) const
 {
     QString rS = path;
     QString homePath = getenv("HOME");
@@ -832,20 +862,6 @@ AudioFileManager::homeToTilde(const QString &path) const
     return rS;
 }
 
-QString
-AudioFileManager::tildeToHome(const QString &path) const
-{
-    QString rS = path;
-    const QString homePath = QDir::homePath();
-
-    if (rS.mid(0, 2) == "~/") {
-        rS.remove(0, 1); // erase tilde and prepend HOME env
-        rS = homePath + rS;
-    }
-
-    return rS;
-}
-
 std::string
 AudioFileManager::toXmlString() const
 {
@@ -853,7 +869,7 @@ AudioFileManager::toXmlString() const
         ;
 
     std::stringstream audioFiles;
-    QString audioPath = homeToTilde(m_audioPath);
+    QString audioPath = pathToInternal(m_audioPath);
 
     audioFiles << "<audiofiles";
     if (m_expectedSampleRate != 0) {
@@ -883,7 +899,7 @@ AudioFileManager::toXmlString() const
         if (getDirectory(fileName) == m_audioPath)
             fileName = getShortFilename(fileName);
         else
-            fileName = homeToTilde(fileName);
+            fileName = pathToInternal(fileName);
 
         audioFiles << "    <audio id=\"" << (*it)->getId()
                    << "\" file=\"" << fileName
@@ -1212,6 +1228,56 @@ AudioFileManager::getActualSampleRates() const
     }
 
     return rates;
+}
+
+void
+AudioFileManager::moveFiles(const QString &newPath)
+{
+    MutexLock lock (&audioFileManagerLock)
+        ;
+
+    QString newPath2 = pathToStandard(newPath);
+
+    // for each audio file
+    for (AudioFile *audioFile : m_audioFiles)
+    {
+        QString oldName = tildeToHome(audioFile->getFilename());
+
+        // Figure out where it really is.
+        oldName = getFileInPath(oldName);
+        // Not found?  Try the next.
+        // ??? Probably want to keep track of these to tell the user.
+        //     Maybe return the number failed.  Or a list of failed
+        //     file names.
+        if (oldName.isEmpty())
+            continue;
+
+        QFileInfo fileInfo(oldName);
+        QString newName = newPath2 + fileInfo.fileName();
+
+        // Close the old file.
+        audioFile->close();
+
+        // Move it to the new path.
+        QFile::rename(oldName, newName);
+
+        // ??? Probably should check for rename() error.
+
+        // Adjust the stored path for this file.
+        audioFile->setFilename(newName);
+
+        // ??? Delete the .pk file in the old directory.
+        //     See PeakFileManager and PeakFile.  Maybe add a new
+        //     PeakFileManager::moveFile()?  Or something?
+
+        // Open the file in its new location.
+        audioFile->open();
+    }
+
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+
+    // Reset audio so that we can hear the audio files again.
+    doc->prepareAudio();
 }
 
 

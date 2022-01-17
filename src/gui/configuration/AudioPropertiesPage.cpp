@@ -193,10 +193,27 @@ AudioPropertiesPage::apply()
 
     const QString newPath = m_path->text();
 
-    // If there's been a change, update the AudioFileManager.
+    // If there's been a change...
     if (newPath != audioFileManager.getAudioPath()) {
-        audioFileManager.setAudioPath(newPath);
-        m_doc->slotDocumentModified();
+
+        bool moveFiles = false;
+
+        if (!audioFileManager.empty()) {
+            QMessageBox::StandardButton result = QMessageBox::question(
+                    this,
+                    tr("Choose Audio Path"),
+                    tr("Would you like to move the document's audio files to the new path?  Please note that this will force a save of the file."));
+
+            moveFiles = (result == QMessageBox::Yes);
+        }
+
+        // Update the AudioFileManager.
+        audioFileManager.setAudioPath(newPath, moveFiles);
+
+        // Moving the files will force a save.  Only needed if files
+        // aren't moving.
+        if (!moveFiles)
+            m_doc->slotDocumentModified();
     }
 }
 
