@@ -19,6 +19,7 @@
 
 #include <vector>
 
+#include <QFile>
 #include <QProgressDialog>
 
 #include "AudioFile.h"
@@ -26,17 +27,10 @@
 #include "PeakFile.h"
 #include "misc/Debug.h"
 
+
 namespace Rosegarden
 {
 
-
-PeakFileManager::PeakFileManager()
-{
-}
-
-PeakFileManager::~PeakFileManager()
-{
-}
 
 bool
 PeakFileManager::insertAudioFile(AudioFile *audioFile)
@@ -72,6 +66,20 @@ PeakFileManager::removeAudioFile(AudioFile *audioFile)
     }
 
     return false;
+}
+
+void
+PeakFileManager::deletePeakFile(AudioFile *audioFile)
+{
+    if (audioFile->getType() == WAV) {
+        PeakFile *peakFile = getPeakFile(audioFile);
+        if (!peakFile)
+            return;
+
+        peakFile->close();
+        QFile::remove(peakFile->getFilename());
+        removeAudioFile(audioFile);
+    }
 }
 
 PeakFile *

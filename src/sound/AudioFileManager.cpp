@@ -1255,6 +1255,11 @@ AudioFileManager::moveFiles(const QString &newPath)
         QFileInfo fileInfo(oldName);
         QString newName = newPath2 + fileInfo.fileName();
 
+        // Delete the old peak file.
+        // ??? It would be more clever to just move the .pk file.
+        //     Might want to look into doing that instead.
+        m_peakManager.deletePeakFile(audioFile);
+
         // Close the old file.
         audioFile->close();
 
@@ -1266,17 +1271,16 @@ AudioFileManager::moveFiles(const QString &newPath)
         // Adjust the stored path for this file.
         audioFile->setFilename(newName);
 
-        // ??? Delete the .pk file in the old directory.
-        //     See PeakFileManager and PeakFile.  Maybe add a new
-        //     PeakFileManager::moveFile()?  Or something?
-
         // Open the file in its new location.
         audioFile->open();
+
+        // Create the peak file in the new location.
+        m_peakManager.generatePeaks(audioFile);
     }
 
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
-    // Reset audio so that we can hear the audio files again.
+    // Reset sequencer audio so that we can hear the audio files again.
     doc->prepareAudio();
 }
 
