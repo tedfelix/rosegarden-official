@@ -173,16 +173,10 @@ protected:
     MidiByte                          m_lsb;
     Instrument                       *m_instrument;
 
-    /// Whether a <controlchange> tag was found.  MIDI <instrument> only.
-    bool m_controlChangeEncountered;
-    /// Deprecated <volume> tag encountered.  MIDI <instrument> only.
-    bool m_volumeEncountered;
-    /// Value in the <volume> tag.  MIDI <instrument> only.
-    MidiByte m_volume;
-    /// Deprecated <pan> tag encountered.  MIDI <instrument> only.
-    bool m_panEncountered;
-    /// Value in the <pan> tag.  MIDI <instrument> only.
-    MidiByte m_pan;
+    /// We have a volume CC.  Ignore old-style <volume> tags.
+    bool m_haveVolumeCC;
+    /// We have a pan CC.  Ignore old-style <pan> tags.
+    bool m_havePanCC;
 
     Buss                             *m_buss;
     AudioPluginInstance              *m_plugin;

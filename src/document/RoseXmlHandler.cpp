@@ -233,11 +233,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_msb(0),
     m_lsb(0),
     m_instrument(nullptr),
-    m_controlChangeEncountered(false),
-    m_volumeEncountered(false),
-    m_volume(100),
-    m_panEncountered(false),
-    m_pan(64),
+    m_haveVolumeCC(false),
+    m_havePanCC(false),
     m_buss(nullptr),
     m_plugin(nullptr),
     m_pluginInBuss(false),
@@ -1029,10 +1026,19 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_currentSegment->setViewFeatures(viewFeaturesStr.toInt());
         }
 
-        QString forNotationStr = atts.value("fornotation").toString();
-        if (!forNotationStr.isEmpty()) {
-            bool forNotation = (forNotationStr.toUpper() == "TRUE");
-            m_currentSegment->setForNotation(forNotation);
+        const QString excludeFromPrintingStr =
+                atts.value("excludefromprinting").toString();
+        if (!excludeFromPrintingStr.isEmpty()) {
+            const bool excludeFromPrinting =
+                    (excludeFromPrintingStr.toLower() == "true");
+            m_currentSegment->setExcludeFromPrinting(excludeFromPrinting);
+        } else {
+            // Look for the older "fornotation".
+            QString forNotationStr = atts.value("fornotation").toString();
+            if (!forNotationStr.isEmpty()) {
+                bool forNotation = (forNotationStr.toUpper() == "TRUE");
+                m_currentSegment->setExcludeFromPrinting(!forNotation);
+            }
         }
 
         m_currentTime = startTime;
@@ -1805,10 +1811,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_section == InInstrument) {
             if (m_instrument) {
                 if (m_instrument->getType() == Instrument::Midi) {
-                    // For MIDI Instruments, hold onto this in case we don't
-                    // run into any <controlchange> tags.
-                    m_pan = value;
-                    m_panEncountered = true;
+                    // If we've not encountered a pan CC, go with this.
+                    if (!m_havePanCC) {
+                        m_instrument->setControllerValue(
+                                MIDI_CONTROLLER_PAN, value);
+                    }
                 } else {
                     // For softsynth and audio Instruments, just set the
                     // pan as usual.
@@ -1839,10 +1846,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_instrument) {
             if (m_instrument->getType() == Instrument::Midi) {
-                // For MIDI Instruments, hold onto this in case we don't
-                // run into any <controlchange> tags.
-                m_volume = value;
-                m_volumeEncountered = true;
+                // If we've not encountered a volume CC, go with this.
+                if (!m_haveVolumeCC) {
+                    m_instrument->setControllerValue(
+                            MIDI_CONTROLLER_VOLUME, value);
+                }
             } else {
                 // For Audio and SoftSynth Instruments, translate into level.
                 // Backward compatibility: "volume" was in a 0-127
@@ -1888,12 +1896,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         MidiByte type = atts.value("type").toInt();
         MidiByte value = atts.value("value").toInt();
 
-        if (m_instrument) {
+        if (m_instrument)
             m_instrument->setControllerValue(type, value);
-        }
 
-        // No need to fall back on the old <volume> and <pan> tags.
-        m_controlChangeEncountered = true;
+        // If we've got a volume CC, ignore any <volume> tags.
+        if (type == MIDI_CONTROLLER_VOLUME)
+            m_haveVolumeCC = true;
+        // If we've got a pan CC, ignore any <pan> tags.
+        if (type == MIDI_CONTROLLER_PAN)
+            m_havePanCC = true;
 
     } else if (lcName == "plugin" || lcName == "synth") {
 
@@ -2112,11 +2123,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         m_section = InInstrument;
 
-        m_controlChangeEncountered = false;
-        m_volumeEncountered = false;
-        m_volume = 100;  // A nominal default.
-        m_panEncountered = false;
-        m_pan = 64;  // A nominal default.
+        m_haveVolumeCC = false;
+        m_havePanCC = false;
 
         InstrumentId id = mapToActualInstrument(atts.value("id").toInt());
 
@@ -2473,44 +2481,6 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         m_buss = nullptr;
 
     } else if (lcName == "instrument") {
-
-        // If there were no <controlchange> tags within the <instrument>.
-        if (!m_controlChangeEncountered) {
-            // Fall back on the deprecated <volume> and <pan> tags if they
-            // are available.
-
-            // This only happens with MIDI instruments.  Audio instruments
-            // are taken care of immediately when their <pan> and <level>
-            // tags are encountered.
-
-            if (m_volumeEncountered) {
-                MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
-                if (midiDevice) {
-                    // If volume has a knob in the MIPP, go ahead and set the
-                    // CC value in the Instrument.  (If we do this when there
-                    // is no knob, CCs go out when they shouldn't.)
-                    if (midiDevice->isVisibleControlParameter(
-                            MIDI_CONTROLLER_VOLUME)) {
-                        m_instrument->setControllerValue(
-                                MIDI_CONTROLLER_VOLUME, m_volume);
-                    }
-                }
-            }
-
-            if (m_panEncountered) {
-                MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
-                if (midiDevice) {
-                    // If pan has a knob in the MIPP, go ahead and set the
-                    // CC value in the Instrument.  (If we do this when there
-                    // is no knob, CCs go out when they shouldn't.)
-                    if (midiDevice->isVisibleControlParameter(
-                            MIDI_CONTROLLER_PAN)) {
-                        m_instrument->setControllerValue(
-                                MIDI_CONTROLLER_PAN, m_pan);
-                    }
-                }
-            }
-        }
 
         // Exit the <instrument> section.
         m_section = InStudio;

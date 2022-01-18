@@ -259,8 +259,10 @@ NotationView::NotationView(RosegardenDocument *doc,
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdateMenuStates()));
 
-    connect(m_notationWidget->getScene(), SIGNAL(selectionChanged()),
-            this, SLOT(slotUpdateMenuStates()));
+    connect(m_notationWidget->getScene(), &NotationScene::selectionChanged,
+            this, &NotationView::slotUpdateMenuStates);
+    connect(m_notationWidget, &NotationWidget::rulerSelectionChanged,
+            this, &NotationView::slotUpdateMenuStates);
 
     //Initialize NoteRestInserter and DurationToolbar
     initializeNoteRestInserter();
@@ -584,8 +586,8 @@ NotationView::setWidgetSegments()
                        m_adoptedSegments.end());
     m_notationWidget->setSegments(m_document, allSegments);
     // Reconnect because there's a new scene.
-    connect(m_notationWidget->getScene(), SIGNAL(selectionChanged()),
-            this, SLOT(slotUpdateMenuStates()));
+    connect(m_notationWidget->getScene(), &NotationScene::selectionChanged,
+            this, &NotationView::slotUpdateMenuStates);
 }
 
 void
@@ -822,8 +824,6 @@ NotationView::setupActions()
     //Where are "make_invisible" & "make_visible" created?
 
     //"controllers" Menubar menu
-    createAction("copy_controllers",  SLOT(slotEditCopyControllers()));
-    createAction("cut_controllers",   SLOT(slotEditCutControllers()));
     createAction("set_controllers",   SLOT(slotSetControllers()));
     createAction("place_controllers", SLOT(slotPlaceControllers()));
 
@@ -1231,12 +1231,10 @@ NotationView::slotUpdateMenuStates()
 {
     //NOTATION_DEBUG << "NotationView::slotUpdateMenuStates";
 
-    // 1. set selection-related states
-
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
     // case the two overlap at all)
-    leaveActionState("have_selection");
+    leaveActionState("have_notation_selection");
     leaveActionState("have_notes_in_selection");
     leaveActionState("have_rests_in_selection");
     leaveActionState("have_clefs_in_selection");
@@ -1245,13 +1243,18 @@ NotationView::slotUpdateMenuStates()
 
     if (!m_notationWidget) return;
 
-    EventSelection *selection = m_notationWidget->getSelection();
+    // * Selection states
 
-    if (selection) {
+    EventSelection *selection = m_notationWidget->getSelection();
+    const bool haveNotationSelection =
+            (selection  &&  !selection->getSegmentEvents().empty());
+
+    if (haveNotationSelection) {
 
         //NOTATION_DEBUG << "NotationView::slotUpdateMenuStates: Have selection; it's " << selection << " covering range from " << selection->getStartTime() << " to " << selection->getEndTime() << " (" << selection->getSegmentEvents().size() << " events)";
 
-        enterActionState("have_selection");
+        enterActionState("have_notation_selection");
+
         if (selection->contains(Note::EventType)) {
             enterActionState("have_notes_in_selection");
         }
@@ -1295,8 +1298,11 @@ NotationView::slotUpdateMenuStates()
         //NOTATION_DEBUG << "Do not have a selection";
     }
 
-    // 2. set inserter-related states
-    NoteRestInserter *currentTool = dynamic_cast<NoteRestInserter *>(m_notationWidget->getCurrentTool());
+
+    // * Set inserter-related states
+
+    NoteRestInserter *currentTool =
+            dynamic_cast<NoteRestInserter *>(m_notationWidget->getCurrentTool());
     if (currentTool) {
         //NOTATION_DEBUG << "Have NoteRestInserter ";
         enterActionState("note_rest_tool_current");
@@ -1315,15 +1321,49 @@ NotationView::slotUpdateMenuStates()
         }
     }
 
-    // 3. linked segment specific states
+
+    // * Linked segment specific states
+
     Segment *segment = getCurrentSegment();
     if (segment && segment->isLinked()) {
         enterActionState("have_linked_segment");
     }
 
-    conformRulerSelectionState();
 
-    // 4. multiple staffs - this can change through er. add layer
+    // * Control Ruler states
+
+    ControlRulerWidget *controlRulerWidget =
+            m_notationWidget->getControlsWidget();
+
+    bool haveControllerSelection = false;
+
+    if (controlRulerWidget->isAnyRulerVisible()) {
+        enterActionState("have_control_ruler");
+
+        if (controlRulerWidget->hasSelection()) {
+            enterActionState("have_controller_selection");
+            haveControllerSelection = true;
+        } else {
+            leaveActionState("have_controller_selection");
+        }
+    } else {
+        leaveActionState("have_control_ruler");
+        // No ruler implies no controller selection
+        leaveActionState("have_controller_selection"); 
+    }
+
+
+    // * Selection state part 2
+
+    // "have_selection" is enabled when either of the others is.
+    if (haveNotationSelection  ||  haveControllerSelection)
+        enterActionState("have_selection");
+    else
+        leaveActionState("have_selection");
+
+
+    // * Multiple staffs - this can change through eg. add layer
+
     RG_DEBUG << "segment size" << m_segments.size();
     if (m_segments.size() > 1) {
         enterActionState("have_multiple_staffs");
@@ -1331,28 +1371,6 @@ NotationView::slotUpdateMenuStates()
         leaveActionState("have_multiple_staffs");
     }
 
-}
-
-void
-NotationView::
-conformRulerSelectionState()
-{
-    ControlRulerWidget * cr = m_notationWidget->getControlsWidget();
-    if (cr->isAnyRulerVisible())
-        {
-            cr->slotSelectionChanged(getSelection());
-
-            enterActionState("have_control_ruler");
-            if (cr->hasSelection())
-                { enterActionState("have_controller_selection"); }
-            else
-                { leaveActionState("have_controller_selection"); }
-        }
-    else {
-        leaveActionState("have_control_ruler");
-        // No ruler implies no controller selection
-        leaveActionState("have_controller_selection"); 
-    }
 }
 
 void
@@ -1773,23 +1791,23 @@ NotationView::getInsertionTime(bool allowEndTime) const
 void
 NotationView::slotEditCut()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, getClipboard()));
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CutCommand(getSelection(),
+                           getRulerSelection(),
+                           getClipboard()));
 }
 
 void
 NotationView::slotEditDelete()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand(new EraseCommand(selection));
-
-#if 0
-    // Future version that allows delete/copy/paste to work with
-    // both notes and controllers.  Lot more work to do before this
-    // is ready.  See Matrix.
     const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
     const bool haveRulerSelection =
             (getRulerSelection()  &&  !getRulerSelection()->empty());
@@ -1801,25 +1819,34 @@ NotationView::slotEditDelete()
     CommandHistory::getInstance()->addCommand(
             new EraseCommand(getSelection(),
                              getRulerSelection()));
-#endif
 }
 
 void
 NotationView::slotEditCopy()
 {
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, getClipboard()));
+    const bool haveSelection = (getSelection()  &&  !getSelection()->empty());
+    const bool haveRulerSelection =
+            (getRulerSelection()  &&  !getRulerSelection()->empty());
+
+    // Have neither?  Bail.
+    if (!haveSelection  &&  !haveRulerSelection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CopyCommand(getSelection(),
+                            getRulerSelection(),
+                            getClipboard()));
 }
 
 void
 NotationView::slotEditCutAndClose()
 {
     EventSelection *selection = getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutAndCloseCommand(*selection, getClipboard()));
+    if (!selection)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CutAndCloseCommand(selection, getClipboard()));
 }
 
 void
@@ -2087,26 +2114,6 @@ NotationView::slotSetVelocities()
 {
     ParameterPattern::
         setVelocities(this, getSelection());
-}
-
-void
-NotationView::slotEditCopyControllers()
-{
-    ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
-    EventSelection *selection = cr->getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, getClipboard()));
-}
-
-void
-NotationView::slotEditCutControllers()
-{
-    ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
-    EventSelection *selection = cr->getSelection();
-    if (!selection) return;
-    CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, getClipboard()));
 }
 
 void
@@ -4609,14 +4616,14 @@ void
 NotationView::slotToggleVelocityRuler()
 {
     m_notationWidget->slotToggleVelocityRuler();
-    conformRulerSelectionState();
+    slotUpdateMenuStates();
 }
 
 void
 NotationView::slotTogglePitchbendRuler()
 {
     m_notationWidget->slotTogglePitchbendRuler();
-    conformRulerSelectionState();
+    slotUpdateMenuStates();
 }
 
 void
@@ -4624,7 +4631,7 @@ NotationView::slotAddControlRuler(QAction *action)
 {
     NOTATION_DEBUG << "NotationView::slotAddControlRuler(" << action << ")";
     m_notationWidget->slotAddControlRuler(action);
-    conformRulerSelectionState();
+    slotUpdateMenuStates();
 }
 
 Device *
@@ -4768,7 +4775,7 @@ NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
     timeT insertionTime = selection->getStartTime();
 
     Clipboard *c = new Clipboard;
-    CopyCommand *cc = new CopyCommand(*selection, c);
+    CopyCommand *cc = new CopyCommand(selection, c);
     cc->execute();
 
     command->addCommand(new EraseCommand(selection));
@@ -5319,7 +5326,7 @@ NotationView::slotNewLayerFromSelection()
     timeT insertionTime = selection->getStartTime();
 
     Clipboard *c = new Clipboard;
-    CopyCommand *cc = new CopyCommand(*selection, c);
+    CopyCommand *cc = new CopyCommand(selection, c);
     cc->execute();
 
     RG_DEBUG << "CopyCommand done";

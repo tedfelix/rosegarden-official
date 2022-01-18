@@ -1853,7 +1853,6 @@ NotationScene::setSelection(EventSelection *s,
                             bool preview)
 {
     NOTATION_DEBUG << "NotationScene::setSelection: " << s;
-
     if (!m_selection && !s) return;
     if (m_selection == s) return;
     if (m_selection && s && *m_selection == *s) {
@@ -1879,13 +1878,29 @@ NotationScene::setSelection(EventSelection *s,
         newStaff = setSelectionElementStatus(m_selection, true);
     }
 
+    timeT oldFrom = 0;
+    timeT oldTo = 0;
+    timeT newFrom = 0;
+    timeT newTo = 0;
+
+    if (oldSelection) {
+        oldFrom = std::min(oldSelection->getStartTime(),
+                           oldSelection->getNotationStartTime());
+        oldTo = std::max(oldSelection->getEndTime(),
+                         oldSelection->getNotationEndTime());
+    }
+    if (m_selection) {
+        newFrom = std::min(m_selection->getStartTime(),
+                           m_selection->getNotationStartTime());
+        newTo = std::max(m_selection->getEndTime(),
+                         m_selection->getNotationEndTime());
+    }
+
+    RG_DEBUG << "From and to times:" << oldFrom << oldTo << newFrom << newTo;
+
     if (oldSelection && m_selection && oldStaff && newStaff &&
         (oldStaff == newStaff)) {
 
-        timeT oldFrom = oldSelection->getStartTime();
-        timeT oldTo = oldSelection->getEndTime();
-        timeT newFrom = m_selection->getStartTime();
-        timeT newTo = m_selection->getEndTime();
 
         // if the regions overlap, render once
         if ((oldFrom <= newFrom && oldTo >= newFrom) ||
@@ -1898,12 +1913,10 @@ NotationScene::setSelection(EventSelection *s,
         }
     } else {
         if (oldSelection && oldStaff) {
-        oldStaff->renderElements(oldSelection->getStartTime(),
-                                 oldSelection->getEndTime());
+            oldStaff->renderElements(oldFrom, oldTo);
         }
         if (m_selection && newStaff) {
-        newStaff->renderElements(m_selection->getStartTime(),
-                                 m_selection->getEndTime());
+            newStaff->renderElements(newFrom, newTo);
         }
     }
 
@@ -1911,7 +1924,7 @@ NotationScene::setSelection(EventSelection *s,
 
     delete oldSelection;
 
-    emit selectionChanged(m_selection);
+    emit selectionChangedES(m_selection);
     emit QGraphicsScene::selectionChanged();
 }
 
@@ -1944,6 +1957,7 @@ NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 
     NotationStaff *staff = nullptr;
 
+    // Find the NotationStaff for the EventSelection's Segment.
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
          i != m_staffs.end(); ++i) {
 
@@ -1960,12 +1974,16 @@ NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 
         Event *e = *i;
 
-        ViewElementList::iterator staffi = staff->findEvent(e);
-        if (staffi == staff->getViewElementList()->end()) continue;
+        ViewElementList::iterator staffElementIter = staff->findEvent(e);
+        // Not in the view?  Try the next.
+        if (staffElementIter == staff->getViewElementList()->end())
+            continue;
 
-        NotationElement *el = static_cast<NotationElement *>(*staffi);
+        NotationElement *element =
+                dynamic_cast<NotationElement *>(*staffElementIter);
 
-        el->setSelected(set);
+        if (element)
+            element->setSelected(set);
     }
 
     return staff;

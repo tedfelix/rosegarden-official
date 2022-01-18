@@ -416,8 +416,6 @@
   </Menu>
   <Menu name="controllers">
     <text>Co&amp;ntrollers</text>
-    <Action name="cut_controllers" text="Cut Controller Events (&amp;X)" />
-    <Action name="copy_controllers" text="&amp;Copy Controller Events" />
     <Action name="set_controllers" text="&amp;Set Controller Values" />
     <Action name="place_controllers" text="&amp;Place a Controller for Each Note" />
     <Action name="expression_sequence" text="Insert &amp;Expression Controller Sequence..." />
@@ -833,11 +831,8 @@
   </enable>
 </State>
 
-<State name="have_selection">
+<State name="have_notation_selection">
   <enable>
-    <Action name="edit_cut"/>
-    <Action name="edit_copy"/>
-    <Action name="delete"/>
     <Action name="cut_and_close"/>
     <Action name="debug_dump"/>
     <Action name="preview_selection"/>
@@ -866,6 +861,14 @@
     <Action name="move_events_down_staff"/>
     <Action name="general_move_events_up_staff"/>
     <Action name="general_move_events_down_staff"/>
+  </enable>
+</State>
+
+<State name="have_selection">
+  <enable>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="delete"/>
   </enable>
 </State>
 
@@ -1022,16 +1025,12 @@
 
 <State name="have_controller_selection">
   <enable>
-    <Action name="cut_controllers"/>
-    <Action name="copy_controllers"/>
     <Action name="set_controllers"/>
   </enable>
 </State>
 
 <State name="have_control_ruler">
   <enable>
-    <Action name="cut_controllers" />
-    <Action name="copy_controllers" />
     <Action name="set_controllers" />
     <Action name="place_controllers" />
   </enable>

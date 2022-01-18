@@ -157,6 +157,11 @@ signals:
     void hoveredOverNoteChanged(QString);
     void headersVisibilityChanged(bool);
     void showContextHelp(const QString &);
+    /// Forwarded from ControlRulerWidget::childRulerSelectionChanged().
+    /*
+     * Connected to NotationView::slotUpdateMenuStates().
+     */
+    void rulerSelectionChanged();
 
 public slots:
     void slotSetTool(QString name);

@@ -140,6 +140,7 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 
     if (e->exact) {
         m_clickedElement = e->element;
+        RG_DEBUG << "exact click" << *(m_clickedElement->event());
         if (m_clickedElement) {
             m_lastDragPitch = -400;
             m_lastDragTime = m_clickedElement->event()->getNotationAbsoluteTime();
@@ -355,6 +356,9 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
                 m_selectionToMerge = nullptr;
 
             } else {
+                RG_DEBUG << "setSingleSelectedEvent" <<
+                    m_clickedElement->event()->getType() <<
+                    m_clickedElement->event()->getAbsoluteTime();
                 m_scene->setSingleSelectedEvent(m_selectedStaff, m_clickedElement, true);
             }
 
@@ -573,12 +577,11 @@ void NotationSelector::drag(int x, int y, bool final)
         }
 
         if (targetStaff != m_selectedStaff) {
-            command->addCommand(new MoveAcrossSegmentsCommand
-                                (m_selectedStaff->getSegment(),
-                                 targetStaff->getSegment(),
-                                 dragTime - clickedTime + selection->getStartTime(),
-                                 true,
-                                 *selection));
+            command->addCommand(new MoveAcrossSegmentsCommand(
+                    &targetStaff->getSegment(),  // secondSegment
+                    dragTime - clickedTime + selection->getStartTime(),  // newStartTime
+                    true,  // notation
+                    selection));
             haveSomething = true;
         } else {
             timeT endTime = m_selectedStaff->getSegment().getEndTime();

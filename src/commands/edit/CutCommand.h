@@ -41,7 +41,7 @@ class CutCommand : public MacroCommand
 
 public:
     /// Make a CutCommand that cuts events from within a Segment
-    CutCommand(EventSelection &selection,
+    CutCommand(EventSelection *selection,
                Clipboard *clipboard);
 
     CutCommand(EventSelection *selection1,

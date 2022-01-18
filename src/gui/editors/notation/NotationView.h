@@ -150,8 +150,6 @@ protected slots:
     void slotVelocityUp();
     void slotVelocityDown();
     void slotSetVelocities();
-    void slotEditCutControllers();
-    void slotEditCopyControllers();
     void slotSetControllers();
     void slotPlaceControllers();
 
@@ -479,7 +477,6 @@ private:
     void setCurrentNotePixmap(QPixmap);
     void setCurrentNotePixmapFrom(QAction *);
 
-    void conformRulerSelectionState();
     void insertControllerSequence(const ControlParameter &cp);
     bool isShowable(Event *e);
     void setWidgetSegments();

@@ -308,7 +308,7 @@ a quarter sine wave contour</source>
         <location line="+49"/>
         <location line="+140"/>
         <location line="+157"/>
-        <location line="+1211"/>
+        <location line="+1209"/>
         <location line="+48"/>
         <location line="+73"/>
         <location line="+1951"/>
@@ -318,7 +318,7 @@ a quarter sine wave contour</source>
         <translation>&amp;Datei</translation>
     </message>
     <message>
-        <location line="-4728"/>
+        <location line="-4726"/>
         <source>&amp;Add Audio File...</source>
         <translation>&amp;Audio-Datei hinzufügen...</translation>
     </message>
@@ -334,7 +334,7 @@ a quarter sine wave contour</source>
         <location line="+49"/>
         <location line="+131"/>
         <location line="+166"/>
-        <location line="+1211"/>
+        <location line="+1209"/>
         <location line="+48"/>
         <location line="+75"/>
         <location line="+2004"/>
@@ -344,13 +344,13 @@ a quarter sine wave contour</source>
         <translation>Schlie&amp;ßen</translation>
     </message>
     <message>
-        <location line="-4718"/>
+        <location line="-4716"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+131"/>
         <location line="+166"/>
-        <location line="+1334"/>
+        <location line="+1332"/>
         <location line="+2013"/>
         <location line="+827"/>
         <location line="+106"/>
@@ -358,7 +358,7 @@ a quarter sine wave contour</source>
         <translation>B&amp;earbeiten</translation>
     </message>
     <message>
-        <location line="-4726"/>
+        <location line="-4724"/>
         <source>&amp;Unload Audio File</source>
         <translation>Audio-Datei hera&amp;usnehmen</translation>
     </message>
@@ -392,7 +392,7 @@ a quarter sine wave contour</source>
         <location line="+1"/>
         <location line="+48"/>
         <location line="+1"/>
-        <location line="+1197"/>
+        <location line="+1195"/>
         <location line="+173"/>
         <location line="+1"/>
         <location line="+69"/>
@@ -414,12 +414,12 @@ a quarter sine wave contour</source>
         <translation>Richtlinien für Fehler&amp;berichte</translation>
     </message>
     <message>
-        <location line="-4351"/>
+        <location line="-4349"/>
         <location line="+59"/>
         <location line="+52"/>
         <location line="+135"/>
         <location line="+49"/>
-        <location line="+1200"/>
+        <location line="+1198"/>
         <location line="+171"/>
         <location line="+70"/>
         <location line="+1705"/>
@@ -430,59 +430,59 @@ a quarter sine wave contour</source>
         <translation>Über Roseg&amp;arden</translation>
     </message>
     <message>
-        <location line="-4749"/>
-        <location line="+1497"/>
+        <location line="-4747"/>
+        <location line="+1495"/>
         <location line="+1946"/>
         <source>General Toolbar</source>
         <translation>Allgemeine Symbolleiste</translation>
     </message>
     <message>
-        <location line="-3431"/>
+        <location line="-3429"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+131"/>
-        <location line="+4340"/>
+        <location line="+4338"/>
         <location line="+106"/>
         <source>&amp;Nothing to undo</source>
         <translation>&amp;Nichts rückgängig zu machen</translation>
     </message>
     <message>
-        <location line="-4687"/>
+        <location line="-4685"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+131"/>
-        <location line="+4340"/>
+        <location line="+4338"/>
         <location line="+106"/>
         <source>N&amp;othing to redo</source>
         <translation>Nichts zu wiederh&amp;olen</translation>
     </message>
     <message>
-        <location line="-4687"/>
+        <location line="-4685"/>
         <location line="+156"/>
         <location line="+269"/>
-        <location line="+1334"/>
+        <location line="+1332"/>
         <location line="+2013"/>
         <location line="+659"/>
         <source>&amp;Copy</source>
         <translation>&amp;Kopieren</translation>
     </message>
     <message>
-        <location line="-4422"/>
+        <location line="-4420"/>
         <location line="+156"/>
         <location line="+269"/>
-        <location line="+1334"/>
+        <location line="+1332"/>
         <location line="+2013"/>
         <location line="+659"/>
         <source>&amp;Paste</source>
         <translation>&amp;Einfügen</translation>
     </message>
     <message>
-        <location line="-4411"/>
+        <location line="-4409"/>
         <location line="+189"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+36"/>
-        <location line="+1130"/>
+        <location line="+1128"/>
         <location line="+72"/>
         <location line="+163"/>
         <location line="+1940"/>
@@ -492,19 +492,19 @@ a quarter sine wave contour</source>
         <translation>Zum Auswahlwerkzeug wechseln</translation>
     </message>
     <message>
-        <location line="-4634"/>
+        <location line="-4632"/>
         <location line="+189"/>
-        <location line="+4323"/>
+        <location line="+4321"/>
         <location line="+123"/>
         <source>Switch to Inserting Notes</source>
         <translation>Zum Einfügen von Noten wechseln</translation>
     </message>
     <message>
-        <location line="-4634"/>
+        <location line="-4632"/>
         <location line="+189"/>
         <location line="+104"/>
         <location line="+36"/>
-        <location line="+1139"/>
+        <location line="+1137"/>
         <location line="+27"/>
         <location line="+36"/>
         <location line="+2074"/>
@@ -515,10 +515,10 @@ a quarter sine wave contour</source>
         <translation>Zum Löschwerkzeug wechseln</translation>
     </message>
     <message>
-        <location line="-4633"/>
+        <location line="-4631"/>
         <location line="+49"/>
         <location line="+297"/>
-        <location line="+1211"/>
+        <location line="+1209"/>
         <location line="+48"/>
         <location line="+73"/>
         <location line="+1991"/>
@@ -527,7 +527,7 @@ a quarter sine wave contour</source>
         <translation>&amp;Speichern</translation>
     </message>
     <message>
-        <location line="-4434"/>
+        <location line="-4432"/>
         <source>&amp;Insert Event</source>
         <translation>Event e&amp;infügen</translation>
     </message>
@@ -549,14 +549,14 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <location line="+269"/>
-        <location line="+1334"/>
+        <location line="+1332"/>
         <location line="+2013"/>
         <location line="+659"/>
         <source>Cu&amp;t</source>
         <translation>A&amp;usschneiden</translation>
     </message>
     <message>
-        <location line="-4248"/>
+        <location line="-4246"/>
         <source>&amp;Select All</source>
         <translation>Alle&amp;s auswählen</translation>
     </message>
@@ -568,12 +568,12 @@ a quarter sine wave contour</source>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1367"/>
+        <location line="+1365"/>
         <source>&amp;Filter Selection</source>
         <translation>Noten-Events &amp;filtern</translation>
     </message>
     <message>
-        <location line="-1645"/>
+        <location line="-1643"/>
         <source>Set Se&amp;gment Start Time...</source>
         <translation>Anfangszeit des Se&amp;gmentes setzen...</translation>
     </message>
@@ -586,7 +586,7 @@ a quarter sine wave contour</source>
         <location line="+2"/>
         <location line="+55"/>
         <location line="+230"/>
-        <location line="+1368"/>
+        <location line="+1366"/>
         <location line="+2008"/>
         <location line="+789"/>
         <location line="+60"/>
@@ -594,58 +594,58 @@ a quarter sine wave contour</source>
         <translation>&amp;Anzeige</translation>
     </message>
     <message>
-        <location line="-4509"/>
+        <location line="-4507"/>
         <location line="+55"/>
-        <location line="+4395"/>
+        <location line="+4393"/>
         <location line="+60"/>
         <source>&amp;Musical Times</source>
         <translation>&amp;Musikalische Zeiten</translation>
     </message>
     <message>
-        <location line="-4509"/>
+        <location line="-4507"/>
         <location line="+55"/>
-        <location line="+4395"/>
+        <location line="+4393"/>
         <location line="+60"/>
         <source>&amp;Real Times</source>
         <translation>&amp;Reale Zeiten</translation>
     </message>
     <message>
-        <location line="-4509"/>
+        <location line="-4507"/>
         <location line="+55"/>
-        <location line="+4395"/>
+        <location line="+4393"/>
         <location line="+60"/>
         <source>Ra&amp;w Times</source>
         <translation>&amp;Unveränderte Zeit</translation>
     </message>
     <message>
-        <location line="-4507"/>
+        <location line="-4505"/>
         <location line="+398"/>
-        <location line="+1289"/>
+        <location line="+1287"/>
         <location line="+2078"/>
         <source>Se&amp;gment</source>
         <translation>Se&amp;gment</translation>
     </message>
     <message>
-        <location line="-3764"/>
+        <location line="-3762"/>
         <location line="+398"/>
-        <location line="+1289"/>
+        <location line="+1287"/>
         <location line="+2087"/>
         <source>Edit &amp;With</source>
         <translation>Bearbeiten mi&amp;t</translation>
     </message>
     <message>
-        <location line="-3773"/>
+        <location line="-3771"/>
         <location line="+400"/>
-        <location line="+1288"/>
+        <location line="+1286"/>
         <location line="+2095"/>
         <location line="+373"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation>Im Matri&amp;x-Editor öffnen</translation>
     </message>
     <message>
-        <location line="-4155"/>
+        <location line="-4153"/>
         <location line="+398"/>
-        <location line="+3402"/>
+        <location line="+3400"/>
         <location line="+373"/>
         <source>Open in &amp;Notation Editor</source>
         <translation>Im &amp;Notensatz-Editor öffnen</translation>
@@ -835,16 +835,16 @@ a quarter sine wave contour</source>
         <translation>St&amp;atusanzeige verstecken</translation>
     </message>
     <message>
-        <location line="-4434"/>
-        <location line="+1254"/>
+        <location line="-4432"/>
+        <location line="+1252"/>
         <location line="+3192"/>
         <source>Actions Toolbar</source>
         <translation>Aktion-Symbolleiste</translation>
     </message>
     <message>
-        <location line="-4445"/>
+        <location line="-4443"/>
         <location line="+48"/>
-        <location line="+4398"/>
+        <location line="+4396"/>
         <location line="+57"/>
         <source>Time Toolbar</source>
         <translation>Zeit-Symbolleiste</translation>
@@ -914,7 +914,7 @@ a quarter sine wave contour</source>
         <translation>Der Taktart entsprechend Akzente auf bestimmte Taktschläge setzen</translation>
     </message>
     <message>
-        <location line="-3367"/>
+        <location line="-3365"/>
         <source>Insert Marker</source>
         <translation>Markierung einfügen</translation>
     </message>
@@ -936,40 +936,40 @@ a quarter sine wave contour</source>
     <message>
         <location line="+10"/>
         <location line="+72"/>
-        <location line="+1130"/>
+        <location line="+1128"/>
         <location line="+36"/>
         <location line="+54"/>
         <source>Switch to Move Tool</source>
         <translation>Zum Bewegungswerkzeug wechseln</translation>
     </message>
     <message>
-        <location line="-1283"/>
+        <location line="-1281"/>
         <location line="+27"/>
-        <location line="+1175"/>
+        <location line="+1173"/>
         <location line="+18"/>
         <location line="+45"/>
         <source>Switch to Draw Tool</source>
         <translation>Zum Zeichenwerkzeug wechseln</translation>
     </message>
     <message>
-        <location line="-1256"/>
+        <location line="-1254"/>
         <location line="+36"/>
         <location line="+36"/>
-        <location line="+1166"/>
+        <location line="+1164"/>
         <location line="+45"/>
         <source>Switch to Resize Tool</source>
         <translation>Zum Größenänderungswerkzeug wechseln</translation>
     </message>
     <message>
-        <location line="-1137"/>
-        <location line="+3356"/>
+        <location line="-1135"/>
+        <location line="+3354"/>
         <location line="+650"/>
         <location line="+159"/>
         <source>&amp;Delete</source>
         <translation>&amp;Löschen</translation>
     </message>
     <message>
-        <location line="-4123"/>
+        <location line="-4121"/>
         <source>&amp;Grid</source>
         <translation>&amp;Raster</translation>
     </message>
@@ -1045,57 +1045,57 @@ a quarter sine wave contour</source>
     </message>
     <message>
         <location line="+41"/>
-        <location line="+1288"/>
+        <location line="+1286"/>
         <location line="+2008"/>
         <source>&amp;Composition</source>
         <translation>&amp;Komposition</translation>
     </message>
     <message>
-        <location line="-3295"/>
-        <location line="+1288"/>
+        <location line="-3293"/>
+        <location line="+1286"/>
         <location line="+2008"/>
         <location line="+697"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>Te&amp;mpoänderung hinzufügen...</translation>
     </message>
     <message>
-        <location line="-3992"/>
-        <location line="+1288"/>
+        <location line="-3990"/>
+        <location line="+1286"/>
         <location line="+2008"/>
         <location line="+705"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>Taktartänderun&amp;g hinzufügen...</translation>
     </message>
     <message>
-        <location line="-3998"/>
-        <location line="+1289"/>
+        <location line="-3996"/>
+        <location line="+1287"/>
         <location line="+2123"/>
         <location line="+373"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Im &amp;Eventlisten-Editor öffnen</translation>
     </message>
     <message>
-        <location line="-3778"/>
-        <location line="+1580"/>
+        <location line="-3776"/>
+        <location line="+1578"/>
         <source>Ad&amp;just</source>
         <translation>An&amp;passen</translation>
     </message>
     <message>
-        <location line="-1579"/>
-        <location line="+1765"/>
+        <location line="-1577"/>
+        <location line="+1763"/>
         <source>&amp;Quantize</source>
         <translation>&amp;Quantisieren</translation>
     </message>
     <message>
-        <location line="-1764"/>
-        <location line="+1765"/>
+        <location line="-1762"/>
+        <location line="+1763"/>
         <location line="+1657"/>
         <location line="+435"/>
         <source>&amp;Quantize...</source>
         <translation>&amp;Quantisieren...</translation>
     </message>
     <message>
-        <location line="-3848"/>
+        <location line="-3846"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation>Letzte Quantisierung wiede&amp;rholen</translation>
     </message>
@@ -1106,36 +1106,36 @@ a quarter sine wave contour</source>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1564"/>
+        <location line="+1562"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>Not&amp;en gleicher Tonhöhe zusammenfassen</translation>
     </message>
     <message>
-        <location line="-1555"/>
-        <location line="+1831"/>
+        <location line="-1553"/>
+        <location line="+1829"/>
         <location line="+1580"/>
         <source>Jog &amp;Left</source>
         <translation>Jog nach &amp;links</translation>
     </message>
     <message>
-        <location line="-3402"/>
+        <location line="-3400"/>
         <source>&amp;Jog Right</source>
         <translation>&amp;Jog nach rechts</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1787"/>
+        <location line="+1785"/>
         <source>&amp;Increase Velocity</source>
         <translation>Anschlagstärke er&amp;höhen</translation>
     </message>
     <message>
-        <location line="-1778"/>
-        <location line="+1787"/>
+        <location line="-1776"/>
+        <location line="+1785"/>
         <source>&amp;Reduce Velocity</source>
         <translation>Anschlagstärke ve&amp;rringern</translation>
     </message>
     <message>
-        <location line="-1778"/>
+        <location line="-1776"/>
         <source>&amp;Set to Current Velocity</source>
         <translation>Aktuelle Anschlagstärke &amp;setzen</translation>
     </message>
@@ -1151,61 +1151,61 @@ a quarter sine wave contour</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1703"/>
+        <location line="+1701"/>
         <source>&amp;Halve Durations</source>
         <translation>Notendauer &amp;halbieren</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1692"/>
+        <location line="+1701"/>
         <source>&amp;Double Durations</source>
         <translation>Noten&amp;dauer verdoppeln</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1692"/>
+        <location line="+1701"/>
         <source>Stretch or S&amp;quash...</source>
         <translation>Notenwerte &amp;strecken oder stauchen...</translation>
     </message>
     <message>
-        <location line="-1702"/>
-        <location line="+1703"/>
+        <location line="-1700"/>
+        <location line="+1701"/>
         <source>Trans&amp;pose</source>
         <translation>Trans&amp;ponieren</translation>
     </message>
     <message>
-        <location line="-1702"/>
-        <location line="+1703"/>
+        <location line="-1700"/>
+        <location line="+1701"/>
         <source>&amp;Up a Semitone</source>
         <translation>Halbton a&amp;ufwärts</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1692"/>
+        <location line="+1701"/>
         <source>&amp;Down a Semitone</source>
         <translation>Halbton a&amp;bwärts</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1692"/>
+        <location line="+1701"/>
         <source>Up an &amp;Octave</source>
         <translation>&amp;Oktave höher</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1692"/>
+        <location line="+1701"/>
         <source>Down an Octa&amp;ve</source>
         <translation>Okta&amp;ve herunter</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1692"/>
+        <location line="+1701"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation>Um Halbtöne &amp;transponieren...</translation>
     </message>
     <message>
-        <location line="-1702"/>
-        <location line="+1159"/>
+        <location line="-1700"/>
+        <location line="+1157"/>
         <location line="+544"/>
         <location line="+1605"/>
         <location line="+436"/>
@@ -1213,35 +1213,35 @@ a quarter sine wave contour</source>
         <translation>Um ein &amp;Intervall transponieren...</translation>
     </message>
     <message>
-        <location line="-3743"/>
+        <location line="-3741"/>
         <source>&amp;Convert</source>
         <translation>Auswahl sp&amp;iegeln</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1703"/>
+        <location line="+1701"/>
         <source>&amp;Invert</source>
         <translation>Tonhöhenverlauf sp&amp;iegeln</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1695"/>
+        <location line="-1692"/>
+        <location line="+1693"/>
         <source>&amp;Retrograde</source>
         <translation>&amp;Zeitlich spiegeln (retro)</translation>
     </message>
     <message>
-        <location line="-1686"/>
-        <location line="+1687"/>
+        <location line="-1684"/>
+        <location line="+1685"/>
         <source>Re&amp;trograde Invert</source>
         <translation>Zei&amp;tlich und tonhöhig spiegeln</translation>
     </message>
     <message>
-        <location line="-1686"/>
+        <location line="-1684"/>
         <source>Trigger Se&amp;gment...</source>
         <translation>Trigger Se&amp;gment...</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+151"/>
         <location line="+1803"/>
         <location line="+1462"/>
         <source>&amp;Tools</source>
@@ -1419,45 +1419,45 @@ a quarter sine wave contour</source>
         <translation>Schritt&amp;weise Aufnahme</translation>
     </message>
     <message>
-        <location line="-2833"/>
-        <location line="+1293"/>
+        <location line="-2831"/>
+        <location line="+1291"/>
         <location line="+2002"/>
         <source>&amp;Toolbars</source>
         <translation>&amp;Symbolleisten</translation>
     </message>
     <message>
-        <location line="-3288"/>
-        <location line="+1301"/>
+        <location line="-3286"/>
+        <location line="+1299"/>
         <location line="+1994"/>
         <source>&amp;Rulers</source>
         <translation>L&amp;ineale</translation>
     </message>
     <message>
-        <location line="-3414"/>
+        <location line="-3412"/>
         <source>Select &amp;All Events</source>
         <translation>&amp;Alle Events auswählen</translation>
     </message>
     <message>
         <location line="+120"/>
-        <location line="+1301"/>
+        <location line="+1299"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation>&amp;Akkordnamen-Lineal anzeigen</translation>
     </message>
     <message>
-        <location line="-1300"/>
-        <location line="+1302"/>
+        <location line="-1298"/>
+        <location line="+1300"/>
         <source>Show &amp;Tempo Ruler</source>
         <translation>&amp;Tempo-Lineal anzeigen</translation>
     </message>
     <message>
-        <location line="-1301"/>
-        <location line="+1302"/>
+        <location line="-1299"/>
+        <location line="+1300"/>
         <source>Show &amp;Velocity Ruler</source>
         <translation>Lineal für A&amp;nschlagstärke zeigen</translation>
     </message>
     <message>
-        <location line="-1301"/>
-        <location line="+1302"/>
+        <location line="-1299"/>
+        <location line="+1300"/>
         <source>Show Pitch &amp;Bend Ruler</source>
         <translation>Lineal für Tonhöhen&amp;beugung zeigen</translation>
     </message>
@@ -1475,7 +1475,7 @@ a quarter sine wave contour</source>
         <translation>Lineal-Symbolleiste</translation>
     </message>
     <message>
-        <location line="-3038"/>
+        <location line="-3036"/>
         <source>Show To&amp;ols</source>
         <translation>&amp;Werkzeuge anzeigen</translation>
     </message>
@@ -1485,7 +1485,7 @@ a quarter sine wave contour</source>
         <translation>&amp;Trigger entfernen</translation>
     </message>
     <message>
-        <location line="+851"/>
+        <location line="+849"/>
         <location line="+48"/>
         <location line="+2610"/>
         <source>&amp;Record</source>
@@ -1688,8 +1688,8 @@ a quarter sine wave contour</source>
         <translation>Spurtitel an&amp;zeigen</translation>
     </message>
     <message>
-        <location line="-1275"/>
-        <location line="+1288"/>
+        <location line="-1273"/>
+        <location line="+1286"/>
         <location line="+2103"/>
         <location line="+373"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
@@ -1701,8 +1701,8 @@ a quarter sine wave contour</source>
         <translation>Notenschl&amp;üssel ändern...</translation>
     </message>
     <message>
-        <location line="-1289"/>
-        <location line="+1291"/>
+        <location line="-1287"/>
+        <location line="+1289"/>
         <source>Add &amp;Key Change...</source>
         <translation>&amp;Tonart ändern...</translation>
     </message>
@@ -2030,8 +2030,8 @@ a quarter sine wave contour</source>
         <translation>Notenhälse wiederhe&amp;rstellen</translation>
     </message>
     <message>
-        <location line="-1490"/>
-        <location line="+1491"/>
+        <location line="-1488"/>
+        <location line="+1489"/>
         <source>&amp;Phrase</source>
         <translation>Sa&amp;tz (phrase)</translation>
     </message>
@@ -2101,14 +2101,14 @@ a quarter sine wave contour</source>
         <translation>Bindebogen unterhal&amp;b setzen</translation>
     </message>
     <message>
-        <location line="-1559"/>
-        <location line="+1560"/>
+        <location line="-1557"/>
+        <location line="+1558"/>
         <source>T&amp;ie</source>
         <translation>&amp;Haltebogen setzen</translation>
     </message>
     <message>
-        <location line="-1551"/>
-        <location line="+1560"/>
+        <location line="-1549"/>
+        <location line="+1558"/>
         <source>&amp;Untie</source>
         <translation>Haltebogen &amp;lösen</translation>
     </message>
@@ -2617,25 +2617,25 @@ a quarter sine wave contour</source>
         <translation>Vortragszeichen-Symbolleiste</translation>
     </message>
     <message>
-        <location line="-3033"/>
+        <location line="-3031"/>
         <source>Show T&amp;ransport Toolbar</source>
         <translation>&amp;Bedienfeld-Symbolleiste anzeigen</translation>
     </message>
     <message>
-        <location line="+886"/>
+        <location line="+884"/>
         <location line="+1946"/>
         <location line="+911"/>
         <source>Rosegarden &amp;Manual</source>
         <translation>Rosegarden &amp;Handbuch</translation>
     </message>
     <message>
-        <location line="-4116"/>
+        <location line="-4114"/>
         <location line="+285"/>
         <source>Preferences...</source>
         <translation>Einstellungen...</translation>
     </message>
     <message>
-        <location line="+294"/>
+        <location line="+292"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation>Positionszeiger zurück und auswäh&amp;len</translation>
     </message>
@@ -2668,13 +2668,13 @@ a quarter sine wave contour</source>
         <translation>Schritt vorwärts (rechts)</translation>
     </message>
     <message>
-        <location line="-2691"/>
+        <location line="-2689"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+131"/>
         <location line="+166"/>
-        <location line="+1211"/>
+        <location line="+1209"/>
         <location line="+48"/>
         <location line="+75"/>
         <location line="+2004"/>
@@ -2685,7 +2685,7 @@ a quarter sine wave contour</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location line="-4720"/>
+        <location line="-4718"/>
         <source>&amp;Action</source>
         <translation>&amp;Aktion</translation>
     </message>
@@ -2710,7 +2710,7 @@ a quarter sine wave contour</source>
         <location line="+52"/>
         <location line="+135"/>
         <location line="+49"/>
-        <location line="+1198"/>
+        <location line="+1196"/>
         <location line="+173"/>
         <location line="+70"/>
         <location line="+1703"/>
@@ -2722,12 +2722,12 @@ a quarter sine wave contour</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location line="-4728"/>
+        <location line="-4726"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+131"/>
         <location line="+166"/>
-        <location line="+1334"/>
+        <location line="+1332"/>
         <location line="+2013"/>
         <location line="+659"/>
         <location line="+168"/>
@@ -2737,12 +2737,12 @@ a quarter sine wave contour</source>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location line="-4687"/>
+        <location line="-4685"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+131"/>
         <location line="+166"/>
-        <location line="+1334"/>
+        <location line="+1332"/>
         <location line="+2013"/>
         <location line="+659"/>
         <location line="+168"/>
@@ -2752,10 +2752,10 @@ a quarter sine wave contour</source>
         <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location line="-4687"/>
+        <location line="-4685"/>
         <location line="+156"/>
         <location line="+269"/>
-        <location line="+1334"/>
+        <location line="+1332"/>
         <location line="+2013"/>
         <location line="+659"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
@@ -2763,10 +2763,10 @@ a quarter sine wave contour</source>
         <translation>Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
-        <location line="-4422"/>
+        <location line="-4420"/>
         <location line="+156"/>
         <location line="+269"/>
-        <location line="+1334"/>
+        <location line="+1332"/>
         <location line="+2013"/>
         <location line="+659"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
@@ -2774,10 +2774,10 @@ a quarter sine wave contour</source>
         <translation>Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
-        <location line="-4407"/>
+        <location line="-4405"/>
         <location line="+49"/>
         <location line="+297"/>
-        <location line="+1211"/>
+        <location line="+1209"/>
         <location line="+48"/>
         <location line="+73"/>
         <location line="+1991"/>
@@ -2787,8 +2787,8 @@ a quarter sine wave contour</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location line="-4434"/>
-        <location line="+1133"/>
+        <location line="-4432"/>
+        <location line="+1131"/>
         <location line="+1918"/>
         <location line="+852"/>
         <location line="+373"/>
@@ -2798,8 +2798,8 @@ a quarter sine wave contour</source>
         <translation>I</translation>
     </message>
     <message>
-        <location line="-4462"/>
-        <location line="+1667"/>
+        <location line="-4460"/>
+        <location line="+1665"/>
         <location line="+2004"/>
         <location line="+650"/>
         <source>Delete</source>
@@ -2807,8 +2807,8 @@ a quarter sine wave contour</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location line="-4312"/>
-        <location line="+1052"/>
+        <location line="-4310"/>
+        <location line="+1050"/>
         <location line="+1918"/>
         <location line="+906"/>
         <location line="+373"/>
@@ -2818,9 +2818,9 @@ a quarter sine wave contour</source>
         <translation>E</translation>
     </message>
     <message>
-        <location line="-4470"/>
+        <location line="-4468"/>
         <location line="+269"/>
-        <location line="+1334"/>
+        <location line="+1332"/>
         <location line="+2013"/>
         <location line="+659"/>
         <source>Ctrl+X, F20, Shift+Del</source>
@@ -2828,9 +2828,9 @@ a quarter sine wave contour</source>
         <translation>Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
-        <location line="-4248"/>
+        <location line="-4246"/>
         <location line="+278"/>
-        <location line="+1358"/>
+        <location line="+1356"/>
         <location line="+2036"/>
         <location line="+780"/>
         <source>Ctrl+A</source>
@@ -2838,26 +2838,26 @@ a quarter sine wave contour</source>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location line="-4443"/>
+        <location line="-4441"/>
         <location line="+278"/>
-        <location line="+1358"/>
+        <location line="+1356"/>
         <location line="+2816"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
         <translation>Escape</translation>
     </message>
     <message>
-        <location line="-4165"/>
-        <location line="+1367"/>
+        <location line="-4163"/>
+        <location line="+1365"/>
         <source>Ctrl+F</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location line="-1567"/>
+        <location line="-1565"/>
         <location line="+36"/>
         <location line="+36"/>
-        <location line="+575"/>
+        <location line="+573"/>
         <location line="+555"/>
         <location line="+72"/>
         <location line="+1176"/>
@@ -2868,9 +2868,9 @@ a quarter sine wave contour</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location line="-4208"/>
+        <location line="-4206"/>
         <location line="+72"/>
-        <location line="+593"/>
+        <location line="+591"/>
         <location line="+537"/>
         <location line="+36"/>
         <location line="+54"/>
@@ -2881,9 +2881,9 @@ a quarter sine wave contour</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location line="-4208"/>
+        <location line="-4206"/>
         <location line="+27"/>
-        <location line="+611"/>
+        <location line="+609"/>
         <location line="+564"/>
         <location line="+18"/>
         <location line="+45"/>
@@ -2895,10 +2895,10 @@ a quarter sine wave contour</source>
         <translation>F3</translation>
     </message>
     <message>
-        <location line="-4208"/>
+        <location line="-4206"/>
         <location line="+36"/>
         <location line="+36"/>
-        <location line="+584"/>
+        <location line="+582"/>
         <location line="+582"/>
         <location line="+45"/>
         <location line="+2638"/>
@@ -2908,9 +2908,9 @@ a quarter sine wave contour</source>
         <translation>F6</translation>
     </message>
     <message>
-        <location line="-4199"/>
+        <location line="-4197"/>
         <location line="+36"/>
-        <location line="+575"/>
+        <location line="+573"/>
         <location line="+564"/>
         <location line="+27"/>
         <location line="+36"/>
@@ -2922,7 +2922,7 @@ a quarter sine wave contour</source>
         <translation>F4</translation>
     </message>
     <message>
-        <location line="-4123"/>
+        <location line="-4121"/>
         <source>Nothing to &amp;Undo</source>
         <translation>Nichts rückgängig zu machen (&amp;U)</translation>
     </message>
@@ -2933,7 +2933,7 @@ a quarter sine wave contour</source>
     </message>
     <message>
         <location line="+43"/>
-        <location line="+4165"/>
+        <location line="+4163"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Delete, Ctrl+D</translation>
@@ -2945,70 +2945,70 @@ a quarter sine wave contour</source>
         <translation>Sequenz von Tonhöhen&amp;beugung-Events einfügen...</translation>
     </message>
     <message>
-        <location line="-2010"/>
-        <location line="+2360"/>
+        <location line="-2008"/>
+        <location line="+2358"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
         <translation>0</translation>
     </message>
     <message>
-        <location line="-2350"/>
-        <location line="+2341"/>
+        <location line="-2348"/>
+        <location line="+2339"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
         <translation>3</translation>
     </message>
     <message>
-        <location line="-2331"/>
-        <location line="+2322"/>
+        <location line="-2329"/>
+        <location line="+2320"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
         <translation>6</translation>
     </message>
     <message>
-        <location line="-2312"/>
-        <location line="+2303"/>
+        <location line="-2310"/>
+        <location line="+2301"/>
         <source>8</source>
         <comment>keyboard shortcut</comment>
         <translation>8</translation>
     </message>
     <message>
-        <location line="-2293"/>
-        <location line="+2284"/>
+        <location line="-2291"/>
+        <location line="+2282"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
         <translation>4</translation>
     </message>
     <message>
-        <location line="-2274"/>
-        <location line="+2265"/>
+        <location line="-2272"/>
+        <location line="+2263"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
         <translation>2</translation>
     </message>
     <message>
-        <location line="-2256"/>
-        <location line="+2247"/>
+        <location line="-2254"/>
+        <location line="+2245"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
         <translation>1</translation>
     </message>
     <message>
-        <location line="-2238"/>
-        <location line="+2229"/>
+        <location line="-2236"/>
+        <location line="+2227"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
         <translation>5</translation>
     </message>
     <message>
-        <location line="-2215"/>
-        <location line="+1302"/>
+        <location line="-2213"/>
+        <location line="+1300"/>
         <source>Add &amp;Control Ruler</source>
         <translation>Lineal für ausgewählten &amp;Kontroller zeigen</translation>
     </message>
     <message>
-        <location line="-1261"/>
-        <location line="+1765"/>
+        <location line="-1259"/>
+        <location line="+1763"/>
         <location line="+1657"/>
         <location line="+435"/>
         <source>=</source>
@@ -3016,97 +3016,97 @@ a quarter sine wave contour</source>
         <translation>=</translation>
     </message>
     <message>
-        <location line="-3848"/>
-        <location line="+3422"/>
+        <location line="-3846"/>
+        <location line="+3420"/>
         <location line="+435"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
         <translation>+</translation>
     </message>
     <message>
-        <location line="-3848"/>
+        <location line="-3846"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
         <translation>-</translation>
     </message>
     <message>
         <location line="+18"/>
-        <location line="+1831"/>
+        <location line="+1829"/>
         <location line="+1580"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Left</translation>
     </message>
     <message>
-        <location line="-3402"/>
-        <location line="+1831"/>
+        <location line="-3400"/>
+        <location line="+1829"/>
         <location line="+1580"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Right</translation>
     </message>
     <message>
-        <location line="-3402"/>
-        <location line="+1787"/>
+        <location line="-3400"/>
+        <location line="+1785"/>
         <location line="+1681"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Up</translation>
     </message>
     <message>
-        <location line="-3459"/>
-        <location line="+1787"/>
+        <location line="-3457"/>
+        <location line="+1785"/>
         <location line="+1663"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Down</translation>
     </message>
     <message>
-        <location line="-3438"/>
-        <location line="+1703"/>
+        <location line="-3436"/>
+        <location line="+1701"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1692"/>
+        <location line="+1701"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+H</translation>
     </message>
     <message>
-        <location line="-1692"/>
-        <location line="+1703"/>
+        <location line="-1690"/>
+        <location line="+1701"/>
         <location line="+1742"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Up</translation>
     </message>
     <message>
-        <location line="-3436"/>
-        <location line="+1703"/>
+        <location line="-3434"/>
+        <location line="+1701"/>
         <location line="+1724"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Down</translation>
     </message>
     <message>
-        <location line="-3418"/>
-        <location line="+1703"/>
+        <location line="-3416"/>
+        <location line="+1701"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Up</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1692"/>
+        <location line="+1701"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Down</translation>
     </message>
     <message>
-        <location line="-1691"/>
+        <location line="-1689"/>
         <source>Shift+Alt+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Alt+I</translation>
@@ -3118,14 +3118,12 @@ a quarter sine wave contour</source>
         <translation>Shift+Alt+R</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <location line="+1733"/>
+        <location line="+1737"/>
         <source>Cut Controller Events (&amp;X)</source>
         <translation>Kontroller-Events ausschneiden (&amp;X)</translation>
     </message>
     <message>
-        <location line="-1732"/>
-        <location line="+1733"/>
+        <location line="+1"/>
         <source>&amp;Copy Controller Events</source>
         <translation>Kontroller-Events ko&amp;pieren</translation>
     </message>
@@ -3882,7 +3880,7 @@ a quarter sine wave contour</source>
         <translation>Alt+0</translation>
     </message>
     <message>
-        <location line="-1394"/>
+        <location line="-1392"/>
         <source>Show A&amp;ctions Toolbar</source>
         <translation>A&amp;ktion-Symbolleiste anzeigen</translation>
     </message>
@@ -3893,7 +3891,7 @@ a quarter sine wave contour</source>
     </message>
     <message>
         <location line="+196"/>
-        <location line="+1733"/>
+        <location line="+1731"/>
         <source>Co&amp;ntrollers</source>
         <translation>Ko&amp;ntroller</translation>
     </message>
@@ -4073,8 +4071,8 @@ a quarter sine wave contour</source>
         <translation>Ctrl+)</translation>
     </message>
     <message>
-        <location line="-1547"/>
-        <location line="+1560"/>
+        <location line="-1545"/>
+        <location line="+1558"/>
         <source>~</source>
         <comment>keyboard shortcut</comment>
         <translation>~</translation>
@@ -4114,14 +4112,14 @@ a quarter sine wave contour</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location line="-3025"/>
-        <location line="+1564"/>
+        <location line="-3023"/>
+        <location line="+1562"/>
         <source>Ctrl+=</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+=</translation>
     </message>
     <message>
-        <location line="-1727"/>
+        <location line="-1725"/>
         <source>Show note names</source>
         <translation>Notennamen zeigen</translation>
     </message>
@@ -4142,7 +4140,7 @@ a quarter sine wave contour</source>
     </message>
     <message>
         <location line="+110"/>
-        <location line="+1560"/>
+        <location line="+1558"/>
         <source>`</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -5001,15 +4999,15 @@ a quarter sine wave contour</source>
         <translation>Strecken &amp;oder Stauchen...</translation>
     </message>
     <message>
-        <location line="-3447"/>
-        <location line="+1293"/>
+        <location line="-3445"/>
+        <location line="+1291"/>
         <location line="+2156"/>
         <source>Set Start &amp;Time...</source>
         <translation>Star&amp;tzeit setzen...</translation>
     </message>
     <message>
-        <location line="-3448"/>
-        <location line="+1293"/>
+        <location line="-3446"/>
+        <location line="+1291"/>
         <location line="+2156"/>
         <source>Set &amp;Duration...</source>
         <translation>&amp;Dauer setzen...</translation>
@@ -5151,9 +5149,9 @@ a quarter sine wave contour</source>
         <translation>P&amp;unch-In-Aufnahme</translation>
     </message>
     <message>
-        <location line="-4083"/>
+        <location line="-4081"/>
         <location line="+366"/>
-        <location line="+1293"/>
+        <location line="+1291"/>
         <location line="+2002"/>
         <source>Show Main &amp;Toolbar</source>
         <translation>&amp;Haupt-Symbolleiste anzeigen</translation>
@@ -5174,9 +5172,9 @@ a quarter sine wave contour</source>
         <translation>&amp;Zoom-Symbolleiste anzeigen</translation>
     </message>
     <message>
-        <location line="-3665"/>
+        <location line="-3663"/>
         <location line="+370"/>
-        <location line="+1301"/>
+        <location line="+1299"/>
         <location line="+2020"/>
         <source>Show St&amp;atusbar</source>
         <translation>St&amp;atusanzeige zeigen</translation>
@@ -10517,9 +10515,9 @@ a quarter sine wave contour</source>
         <translation>%1. %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+445"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="+636"/>
         <location line="+7"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+445"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -10534,10 +10532,10 @@ a quarter sine wave contour</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1688"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1020"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1088"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+467"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+468"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1098"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1026"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1699"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Kontroller %2 %3</translation>
     </message>
@@ -11135,7 +11133,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
 <context>
     <name>Rosegarden::AddDotCommand</name>
     <message>
-        <location filename="../../src/commands/edit/AddDotCommand.h" line="+47"/>
+        <location filename="../../src/commands/edit/AddDotCommand.h" line="+40"/>
         <source>&amp;Add Dot</source>
         <translation>&amp;Punktierung setzen</translation>
     </message>
@@ -11143,7 +11141,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
 <context>
     <name>Rosegarden::AddFingeringMarkCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="+54"/>
+        <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="+52"/>
         <source>Add Other &amp;Fingering...</source>
         <translation>Anderen &amp;Fingersatz notieren...</translation>
     </message>
@@ -11252,7 +11250,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
 <context>
     <name>Rosegarden::AddMarkCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="+41"/>
+        <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="+37"/>
         <source>S&amp;forzando</source>
         <translation>S&amp;forzando</translation>
     </message>
@@ -11378,12 +11376,12 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
 <context>
     <name>Rosegarden::AddSlashesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddSlashesCommand.h" line="+38"/>
+        <location filename="../../src/commands/notation/AddSlashesCommand.h" line="+41"/>
         <source>Slashes</source>
         <translation>Tonwiederholung</translation>
     </message>
     <message>
-        <location filename="../../src/commands/notation/AddSlashesCommand.cpp" line="+34"/>
+        <location filename="../../src/commands/notation/AddSlashesCommand.cpp" line="+35"/>
         <source>&amp;None</source>
         <translation>Kei&amp;n</translation>
     </message>
@@ -11399,12 +11397,12 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
 <context>
     <name>Rosegarden::AddTextMarkCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddTextMarkCommand.h" line="+46"/>
+        <location filename="../../src/commands/notation/AddTextMarkCommand.h" line="+57"/>
         <source>Add Te&amp;xt Mark...</source>
         <translation>Te&amp;xt...</translation>
     </message>
     <message>
-        <location filename="../../src/commands/notation/AddTextMarkCommand.cpp" line="+46"/>
+        <location filename="../../src/commands/notation/AddTextMarkCommand.cpp" line="+42"/>
         <source>Text:</source>
         <translation>Text:</translation>
     </message>
@@ -12566,7 +12564,7 @@ here.</source>
 <context>
     <name>Rosegarden::AutoBeamCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AutoBeamCommand.h" line="+48"/>
+        <location filename="../../src/commands/notation/AutoBeamCommand.h" line="+63"/>
         <source>&amp;Auto-Beam</source>
         <translation>&amp;Automatische Balken</translation>
     </message>
@@ -12801,7 +12799,7 @@ Bank einfügen</translation>
 <context>
     <name>Rosegarden::BeamCommand</name>
     <message>
-        <location filename="../../src/commands/notation/BeamCommand.h" line="+42"/>
+        <location filename="../../src/commands/notation/BeamCommand.h" line="+41"/>
         <source>&amp;Beam Group</source>
         <translation>&amp;Balken erzeugen</translation>
     </message>
@@ -12832,7 +12830,7 @@ Bank einfügen</translation>
 <context>
     <name>Rosegarden::BreakCommand</name>
     <message>
-        <location filename="../../src/commands/notation/BreakCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/BreakCommand.h" line="+41"/>
         <source>&amp;Unbeam</source>
         <translation>Balken e&amp;ntfernen</translation>
     </message>
@@ -12848,7 +12846,7 @@ Bank einfügen</translation>
 <context>
     <name>Rosegarden::ChangeSlurPositionCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ChangeSlurPositionCommand.h" line="+47"/>
+        <location filename="../../src/commands/notation/ChangeSlurPositionCommand.h" line="+49"/>
         <source>Slur &amp;Above</source>
         <translation>Bindebogen oberh&amp;alb setzen</translation>
     </message>
@@ -12861,7 +12859,7 @@ Bank einfügen</translation>
 <context>
     <name>Rosegarden::ChangeStemsCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ChangeStemsCommand.h" line="+47"/>
+        <location filename="../../src/commands/notation/ChangeStemsCommand.h" line="+55"/>
         <source>Stems &amp;Up</source>
         <translation>Notenhälse a&amp;ufwärts</translation>
     </message>
@@ -12874,15 +12872,14 @@ Bank einfügen</translation>
 <context>
     <name>Rosegarden::ChangeStyleCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ChangeStyleCommand.h" line="+49"/>
         <source>Change &amp;Note Style</source>
-        <translation>&amp;Notenstil ändern</translation>
+        <translation type="vanished">&amp;Notenstil ändern</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::ChangeTiePositionCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ChangeTiePositionCommand.h" line="+44"/>
+        <location filename="../../src/commands/notation/ChangeTiePositionCommand.h" line="+56"/>
         <source>Tie &amp;Above</source>
         <translation>Haltebogen oberh&amp;alb setzen</translation>
     </message>
@@ -12895,12 +12892,12 @@ Bank einfügen</translation>
 <context>
     <name>Rosegarden::ChangeVelocityCommand</name>
     <message>
-        <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="+45"/>
+        <location filename="../../src/commands/edit/ChangeVelocityCommand.cpp" line="+78"/>
         <source>&amp;Increase Velocity</source>
         <translation>Anschlagstärke er&amp;höhen</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>&amp;Reduce Velocity</source>
         <translation>Anschlagstärke ve&amp;rringern</translation>
     </message>
@@ -13035,9 +13032,8 @@ your harmonies and attempts to guess what chords your composition contains.  The
 <context>
     <name>Rosegarden::ClearTriggersCommand</name>
     <message>
-        <location filename="../../src/commands/edit/ClearTriggersCommand.h" line="+46"/>
         <source>&amp;Clear Triggers</source>
-        <translation>Trigger lös&amp;chen</translation>
+        <translation type="vanished">Trigger lös&amp;chen</translation>
     </message>
 </context>
 <context>
@@ -13180,7 +13176,7 @@ das verlinkte Segment setzen...</translation>
 <context>
     <name>Rosegarden::CollapseNotesCommand</name>
     <message>
-        <location filename="../../src/commands/edit/CollapseNotesCommand.h" line="+46"/>
+        <location filename="../../src/commands/edit/CollapseNotesCommand.h" line="+40"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>Gleich hohe Not&amp;en zusammenfassen</translation>
     </message>
@@ -13736,7 +13732,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+494"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+495"/>
         <source>Velocity</source>
         <translation>Anschlagstärke</translation>
     </message>
@@ -13752,7 +13748,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+301"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+305"/>
         <source>Unsupported Event Type</source>
         <translation>Nicht unterstützter Eventtyp</translation>
     </message>
@@ -13780,12 +13776,13 @@ last time apply was pressed)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::CopyCommand</name>
     <message>
-        <location filename="../../src/commands/edit/CopyCommand.h" line="+63"/>
+        <location filename="../../src/commands/edit/CopyCommand.h" line="+67"/>
         <source>&amp;Copy</source>
         <translation>&amp;Kopieren</translation>
     </message>
     <message>
-        <location filename="../../src/commands/edit/CopyCommand.cpp" line="+41"/>
+        <location filename="../../src/commands/edit/CopyCommand.cpp" line="+44"/>
+        <location line="+37"/>
         <source>(excerpt)</source>
         <translation>(Auszug)</translation>
     </message>
@@ -13860,7 +13857,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::CutCommand</name>
     <message>
-        <location filename="../../src/commands/edit/CutCommand.h" line="+51"/>
+        <location filename="../../src/commands/edit/CutCommand.h" line="+55"/>
         <source>Cu&amp;t</source>
         <translation>A&amp;usschneiden</translation>
     </message>
@@ -13876,7 +13873,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::CutToTriggerSegmentCommand</name>
     <message>
-        <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+50"/>
+        <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+52"/>
         <source>Make Ornament</source>
         <translation>Verzierung erzeugen</translation>
     </message>
@@ -13884,7 +13881,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::CycleSlashesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="+37"/>
+        <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="+39"/>
         <source>Cycle Slashes</source>
         <translation>Tonwiederholung zyklisch erhöhen</translation>
     </message>
@@ -13892,7 +13889,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::DeCounterpointCommand</name>
     <message>
-        <location filename="../../src/commands/notation/DeCounterpointCommand.h" line="+51"/>
+        <location filename="../../src/commands/notation/DeCounterpointCommand.h" line="+41"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
         <translation>Überlappende A&amp;kkorde trennen und verbinden</translation>
     </message>
@@ -14298,7 +14295,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::EraseCommand</name>
     <message>
-        <location filename="../../src/commands/edit/EraseCommand.h" line="+45"/>
+        <location filename="../../src/commands/edit/EraseCommand.cpp" line="+36"/>
         <source>&amp;Erase</source>
         <translation>Lösch&amp;en</translation>
     </message>
@@ -15052,7 +15049,7 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::FixNotationQuantizeCommand</name>
     <message>
-        <location filename="../../src/commands/notation/FixNotationQuantizeCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/FixNotationQuantizeCommand.h" line="+41"/>
         <source>Fi&amp;x Notation Quantization</source>
         <translation>Notensatzquantisierung &amp;korrigieren</translation>
     </message>
@@ -15948,7 +15945,7 @@ Beispieltext aus Datei:</translation>
 <context>
     <name>Rosegarden::IncrementDisplacementsCommand</name>
     <message>
-        <location filename="../../src/commands/notation/IncrementDisplacementsCommand.h" line="+54"/>
+        <location filename="../../src/commands/notation/IncrementDisplacementsCommand.h" line="+65"/>
         <source>Fine Reposition</source>
         <translation>Feines Positionieren</translation>
     </message>
@@ -16040,7 +16037,7 @@ Beispieltext aus Datei:</translation>
 <context>
     <name>Rosegarden::InterpretCommand</name>
     <message>
-        <location filename="../../src/commands/notation/InterpretCommand.h" line="+65"/>
+        <location filename="../../src/commands/notation/InterpretCommand.h" line="+57"/>
         <source>&amp;Interpret...</source>
         <translation>&amp;Interpretieren...</translation>
     </message>
@@ -16296,7 +16293,7 @@ Beispieltext aus Datei:</translation>
 <context>
     <name>Rosegarden::InvertCommand</name>
     <message>
-        <location filename="../../src/commands/edit/InvertCommand.h" line="+46"/>
+        <location filename="../../src/commands/edit/InvertCommand.h" line="+40"/>
         <source>&amp;Invert</source>
         <translation>Sp&amp;iegeln</translation>
     </message>
@@ -17460,7 +17457,7 @@ es auf sämtliche Perkussion Tabellen und Schlagzeuge, die im Studio konfigurier
 <context>
     <name>Rosegarden::MakeAccidentalsCautionaryCommand</name>
     <message>
-        <location filename="../../src/commands/notation/MakeAccidentalsCautionaryCommand.cpp" line="+54"/>
+        <location filename="../../src/commands/notation/MakeAccidentalsCautionaryCommand.cpp" line="+52"/>
         <source>Use &amp;Cautionary Accidentals</source>
         <translation>Erinnerung&amp;svorzeichen anwenden</translation>
     </message>
@@ -17481,7 +17478,7 @@ es auf sämtliche Perkussion Tabellen und Schlagzeuge, die im Studio konfigurier
 <context>
     <name>Rosegarden::MakeNotesViableCommand</name>
     <message>
-        <location filename="../../src/commands/notation/MakeNotesViableCommand.h" line="+51"/>
+        <location filename="../../src/commands/notation/MakeNotesViableCommand.h" line="+42"/>
         <source>Tie Notes at &amp;Barlines</source>
         <translation>Noten an Taktstrichen ver&amp;binden</translation>
     </message>
@@ -17690,8 +17687,7 @@ not heard unless you are working in compound time.)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::MarkParallelCommand</name>
     <message>
-        <location filename="../../src/commands/notation/MarkParallelCommand.cpp" line="+44"/>
-        <location filename="../../src/commands/notation/MarkParallelCommand.h" line="+52"/>
+        <location filename="../../src/commands/notation/MarkParallelCommand.h" line="+45"/>
         <source>Mark Parallel</source>
         <translation></translation>
     </message>
@@ -17838,12 +17834,12 @@ Doppelklicken um den Markierungs-Editor zu öffnen.</translation>
 <context>
     <name>Rosegarden::MaskTriggerCommand</name>
     <message>
-        <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="+35"/>
+        <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="+52"/>
         <source>&amp;Unmask Ornament</source>
         <translation>Verzierung aufdecken (&amp;U)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>&amp;Mask Ornament</source>
         <translation>Verzierung verstecken (&amp;M)</translation>
     </message>
@@ -18094,7 +18090,7 @@ zu ändern</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1428"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1452"/>
         <source>Unknown note insert action %1</source>
         <translation>Unbekannte Noten-Einfügeaktion %1</translation>
     </message>
@@ -18118,7 +18114,7 @@ zu ändern</translation>
         </translation>
     </message>
     <message>
-        <location line="-1290"/>
+        <location line="-1314"/>
         <source> Grid: </source>
         <translation> Raster: </translation>
     </message>
@@ -18158,12 +18154,12 @@ zu ändern</translation>
         <translation>Aus</translation>
     </message>
     <message>
-        <location line="+402"/>
+        <location line="+425"/>
         <source>Set Controller Values</source>
         <translation>Kontrollerwerte setzen</translation>
     </message>
     <message>
-        <location line="+487"/>
+        <location line="+488"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
@@ -18210,7 +18206,7 @@ zu ändern</translation>
         <translation>Anzahl zu transponierender Halbtöne: </translation>
     </message>
     <message>
-        <location line="-325"/>
+        <location line="-326"/>
         <source>Trigger Segment</source>
         <translation>Getriggertes Segment</translation>
     </message>
@@ -18220,7 +18216,7 @@ zu ändern</translation>
         <translation>Trigger entfernen</translation>
     </message>
     <message>
-        <location line="-789"/>
+        <location line="-810"/>
         <source>Matrix</source>
         <translation>Matrix</translation>
     </message>
@@ -18228,7 +18224,7 @@ zu ändern</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-874"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-884"/>
         <source>Zoom</source>
         <translation>Vergößerung</translation>
     </message>
@@ -18248,7 +18244,7 @@ zu ändern</translation>
         <translation>Vergrößerung zurücksetzen</translation>
     </message>
     <message>
-        <location line="+1188"/>
+        <location line="+1198"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
@@ -18258,7 +18254,7 @@ zu ändern</translation>
         <translation>Spur %1 (%2) | %3</translation>
     </message>
     <message>
-        <location line="-1264"/>
+        <location line="-1274"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rad rotieren lassen, um das aktive Segment 
 zu ändern&lt;/qt&gt;</translation>
@@ -19393,7 +19389,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>  Keine Auswahl </translation>
     </message>
     <message>
-        <location line="+2584"/>
+        <location line="+2610"/>
         <source>Notation</source>
         <translation>Notensatz</translation>
     </message>
@@ -19415,7 +19411,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-2300"/>
+        <location line="-2326"/>
         <source>Unknown spacing action %1</source>
         <translation>Abstandsaktion %1 ist unbekannt</translation>
     </message>
@@ -19440,7 +19436,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>LilyPond-Vorschau Einstellungen</translation>
     </message>
     <message>
-        <location line="+302"/>
+        <location line="+328"/>
         <source>Clipboard is empty</source>
         <translation>Die Zwischenablage ist leer</translation>
     </message>
@@ -19450,7 +19446,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Mehrere Segmente können nicht in Eines eingefügt werden</translation>
     </message>
     <message>
-        <location line="-813"/>
+        <location line="-839"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Entsprechend Auswahl interpretieren (bei keiner Auswahl werden alle Interpretationen angewandt).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -19461,7 +19457,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location line="+57"/>
         <location line="+26"/>
         <location line="+25"/>
-        <location line="+105"/>
+        <location line="+131"/>
         <location line="+58"/>
         <location line="+886"/>
         <location line="+81"/>
@@ -19471,7 +19467,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3064"/>
+        <location line="-3090"/>
         <source>Printing with LilyPond...</source>
         <translation>Drucken mit LilyPond...</translation>
     </message>
@@ -19495,7 +19491,7 @@ Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
 eingeschränkten wählen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+240"/>
+        <location line="+266"/>
         <source>Inserting clipboard contents...</source>
         <translation>Inhalt der Zwischenablage einfügen...</translation>
     </message>
@@ -19718,7 +19714,7 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1455"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1466"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
@@ -19743,7 +19739,7 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
         <translation>Spur-Beschriftungen schließen</translation>
     </message>
     <message>
-        <location line="+1465"/>
+        <location line="+1476"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
@@ -20416,6 +20412,14 @@ no other tracker clients are open.</source>
         <location line="+19"/>
         <source>Pitch estimate method</source>
         <translation>Methode zur Tonhöhenschätzung</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::PlaceControllersCommand</name>
+    <message>
+        <location filename="../../src/commands/edit/PlaceControllersCommand.cpp" line="+59"/>
+        <source>Place Controllers</source>
+        <translation>Kontroller platzieren</translation>
     </message>
 </context>
 <context>
@@ -21109,7 +21113,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::RemoveFingeringMarksCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RemoveFingeringMarksCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RemoveFingeringMarksCommand.h" line="+41"/>
         <source>&amp;Remove Fingerings</source>
         <translation>Alle Finge&amp;rsätze entfernen</translation>
     </message>
@@ -21125,7 +21129,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::RemoveMarksCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="+41"/>
         <source>&amp;Remove All Marks</source>
         <translation>Alle A&amp;rtikulationen entfernen</translation>
     </message>
@@ -21133,7 +21137,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::RemoveNotationQuantizeCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RemoveNotationQuantizeCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RemoveNotationQuantizeCommand.h" line="+41"/>
         <source>Remo&amp;ve Notation Quantization</source>
         <translation>Notensatzquantisierung &amp;entfernen</translation>
     </message>
@@ -21204,7 +21208,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::ResetDisplacementsCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ResetDisplacementsCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/ResetDisplacementsCommand.h" line="+42"/>
         <source>&amp;Restore Positions</source>
         <translation>Be&amp;rechnete Positionen wiederherstellen</translation>
     </message>
@@ -21212,7 +21216,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::RespellCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RespellCommand.cpp" line="+40"/>
+        <location filename="../../src/commands/notation/RespellCommand.cpp" line="+39"/>
         <source>Respell with %1</source>
         <translation>Enharmonisch verwechseln mit %1</translation>
     </message>
@@ -21270,7 +21274,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::RestoreSlursCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RestoreSlursCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RestoreSlursCommand.h" line="+41"/>
         <source>&amp;Restore Slur Positions</source>
         <translation>Er&amp;rechnete Bindebögen wiederherstellen</translation>
     </message>
@@ -21278,7 +21282,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::RestoreStemsCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RestoreStemsCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RestoreStemsCommand.h" line="+41"/>
         <source>&amp;Restore Stems</source>
         <translation>Er&amp;rechnete Notenhälse wiederherstellen</translation>
     </message>
@@ -21286,7 +21290,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::RestoreTiesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RestoreTiesCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RestoreTiesCommand.h" line="+41"/>
         <source>&amp;Restore Tie Positions</source>
         <translation>Be&amp;rechnete Haltebögen wiederherstellen</translation>
     </message>
@@ -21294,7 +21298,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::RetrogradeCommand</name>
     <message>
-        <location filename="../../src/commands/edit/RetrogradeCommand.h" line="+46"/>
+        <location filename="../../src/commands/edit/RetrogradeCommand.h" line="+40"/>
         <source>&amp;Retrograde</source>
         <translation>&amp;Zeitlich spiegeln (retro)</translation>
     </message>
@@ -21302,7 +21306,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
 <context>
     <name>Rosegarden::RetrogradeInvertCommand</name>
     <message>
-        <location filename="../../src/commands/edit/RetrogradeInvertCommand.h" line="+46"/>
+        <location filename="../../src/commands/edit/RetrogradeInvertCommand.h" line="+40"/>
         <source>Re&amp;trograde Invert</source>
         <translation>Zeitlich und &amp;tonhöhig spiegeln</translation>
     </message>
@@ -21335,7 +21339,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+1430"/>
+        <location line="+1457"/>
         <source>Loading plugins...</source>
         <translation>Plugins werden geladen...</translation>
     </message>
@@ -21785,7 +21789,7 @@ permission and re-add it</source>
         <translation type="obsolete">%1 - %2</translation>
     </message>
     <message>
-        <location line="+499"/>
+        <location line="+496"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Die Datei &quot;%1&quot; existiert nicht</translation>
     </message>
@@ -21901,12 +21905,12 @@ Fehler war: %2</translation>
         <translation>Datei öffnen</translation>
     </message>
     <message>
-        <location line="-1084"/>
+        <location line="-1081"/>
         <source>Ctrl+R</source>
         <translation>Strg+R</translation>
     </message>
     <message>
-        <location line="+925"/>
+        <location line="+922"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
@@ -22191,8 +22195,8 @@ the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location line="-6627"/>
-        <location line="+335"/>
+        <location line="-6624"/>
+        <location line="+332"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -22336,12 +22340,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Bitte Beenden und erneut Starten, damit der Ton wieder funktioniert.</translation>
     </message>
     <message>
-        <location line="-5007"/>
+        <location line="-5004"/>
         <source>Starting sequencer...</source>
         <translation>Sequencer starten...</translation>
     </message>
     <message>
-        <location line="+1138"/>
+        <location line="+1135"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translatorcomment>Datei &quot;%1&quot; ist ein Rosegardengerät und muss mittels MIDI-Gerätmanager importiert werden.</translatorcomment>
         <translation></translation>
@@ -22957,7 +22961,7 @@ right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt
 <context>
     <name>Rosegarden::SegmentLinkResetTransposeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+68"/>
+        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.cpp" line="+77"/>
         <source>Reset Transpose on Linked Segments</source>
         <translation>Transponieren von verlinkten Segmenten zurücksetzen</translation>
     </message>
@@ -22973,7 +22977,7 @@ right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt
 <context>
     <name>Rosegarden::SegmentLinkTransposeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="-20"/>
+        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.cpp" line="-46"/>
         <source>Transpose Linked Segments</source>
         <translation>Verlinkte Segmente transponieren</translation>
     </message>
@@ -23034,12 +23038,12 @@ right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt
     </message>
     <message>
         <location line="-21"/>
-        <location line="+145"/>
+        <location line="+147"/>
         <source>Transpose</source>
         <translation>Transponieren</translation>
     </message>
     <message>
-        <location line="-98"/>
+        <location line="-100"/>
         <source>Delay</source>
         <translation>Verzögerung</translation>
     </message>
@@ -23100,7 +23104,7 @@ es seltsame Effekte auf die Darstellung der Noten im Notensatzeditor haben.&lt;/
         <translation>&lt;qt&gt;&lt;p&gt;Ändert die Farbe von jedem ausgewählten Segment&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+12"/>
         <source>For Notation</source>
         <translation>Notensatz</translation>
     </message>
@@ -23145,13 +23149,13 @@ verwenden (LilyPond).&lt;/p&gt;&lt;/qt&gt;</translation>
         <translation>Neuen Namen eingeben:</translation>
     </message>
     <message>
-        <location line="-817"/>
+        <location line="-819"/>
         <source>Off</source>
         <translation>Aus</translation>
     </message>
     <message>
         <location line="+54"/>
-        <location line="+384"/>
+        <location line="+386"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
@@ -23643,7 +23647,7 @@ it; Ctrl + Alt for a linked copy; double-click to edit</source>
 <context>
     <name>Rosegarden::SelectionPropertyCommand</name>
     <message>
-        <location filename="../../src/commands/edit/SelectionPropertyCommand.h" line="+43"/>
+        <location filename="../../src/commands/edit/SelectionPropertyCommand.cpp" line="+29"/>
         <source>Set &amp;Property</source>
         <translation>&amp;Eigenschaft setzen</translation>
     </message>
@@ -23813,7 +23817,7 @@ server due to a problem with your configuration, your system installation, or bo
 <context>
     <name>Rosegarden::SetNoteTypeCommand</name>
     <message>
-        <location filename="../../src/commands/edit/SetNoteTypeCommand.h" line="+51"/>
+        <location filename="../../src/commands/edit/SetNoteTypeCommand.h" line="+43"/>
         <source>&amp;Set Note Type</source>
         <translation>Notentyp &amp;setzen</translation>
     </message>
@@ -23821,9 +23825,8 @@ server due to a problem with your configuration, your system installation, or bo
 <context>
     <name>Rosegarden::SetTriggerCommand</name>
     <message>
-        <location filename="../../src/commands/edit/SetTriggerCommand.h" line="+58"/>
         <source>Tri&amp;gger Segment</source>
-        <translation>Getri&amp;ggertes Segment</translation>
+        <translation type="vanished">Getri&amp;ggertes Segment</translation>
     </message>
 </context>
 <context>
@@ -23861,7 +23864,7 @@ server due to a problem with your configuration, your system installation, or bo
 <context>
     <name>Rosegarden::SetVisibilityCommand</name>
     <message>
-        <location filename="../../src/commands/notation/SetVisibilityCommand.h" line="+46"/>
+        <location filename="../../src/commands/notation/SetVisibilityCommand.h" line="+42"/>
         <source>Set Visibility</source>
         <translation>Sichtbarkeit setzen</translation>
     </message>
@@ -24138,7 +24141,7 @@ server due to a problem with your configuration, your system installation, or bo
 <context>
     <name>Rosegarden::SingleSegmentLinkResetTransposeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+34"/>
+        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+78"/>
         <source>Reset Transpose on Linked Segment</source>
         <translation>Transponierung von verlinkten Segmenten zurücksetzen</translation>
     </message>
@@ -25082,7 +25085,7 @@ server due to a problem with your configuration, your system installation, or bo
 <context>
     <name>Rosegarden::TieNotesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/TieNotesCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/TieNotesCommand.h" line="+41"/>
         <source>&amp;Tie</source>
         <translation>&amp;Verbinden</translation>
     </message>
@@ -25306,12 +25309,12 @@ server due to a problem with your configuration, your system installation, or bo
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+367"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+369"/>
         <source>Delete Tracks</source>
         <translation>Spuren löschen</translation>
     </message>
     <message>
-        <location line="+174"/>
+        <location line="+177"/>
         <source>Delete Segments</source>
         <translation>Segmente löschen</translation>
     </message>
@@ -25970,7 +25973,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>Um ein &amp;Intervall transponieren...</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+9"/>
         <source>&amp;Up a Semitone</source>
         <translation>Halbton a&amp;ufwärts</translation>
     </message>
@@ -26243,15 +26246,14 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::UnGraceCommand</name>
     <message>
-        <location filename="../../src/commands/notation/UnGraceCommand.h" line="+43"/>
         <source>Ung&amp;race</source>
-        <translation>Verzie&amp;rung entfernen</translation>
+        <translation type="vanished">Verzie&amp;rung entfernen</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::UnTupletCommand</name>
     <message>
-        <location filename="../../src/commands/notation/UnTupletCommand.h" line="+46"/>
+        <location filename="../../src/commands/notation/UnTupletCommand.h" line="+41"/>
         <source>&amp;Untuplet</source>
         <translation>T&amp;uolen auflösen</translation>
     </message>
@@ -26259,7 +26261,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::UntieNotesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/UntieNotesCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/UntieNotesCommand.h" line="+41"/>
         <source>&amp;Untie</source>
         <translation>L&amp;ösen</translation>
     </message>
@@ -26682,7 +26684,7 @@ sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger en
     <name>S:</name>
     <message>
         <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
+        <comment>We recommend pointing help URLs to a wiki page in your native language.</comment>
         <translation></translation>
     </message>
 </context>

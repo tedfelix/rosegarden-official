@@ -64,10 +64,8 @@ public:
         return m_reference;
     }
     
-    /**
-     * Set the flag for using a segment in notation for each linked segment
-     */
-    void setForNotation(bool f);
+    /// Exclude from printing (lilypond) for each linked segment.
+    void setExcludeFromPrinting(bool exclude);
 
 protected slots:
     void slotUpdateLinkedSegments(Command* command);

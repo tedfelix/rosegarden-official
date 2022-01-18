@@ -732,6 +732,8 @@ MatrixView::slotUpdateMenuStates()
 {
     EventSelection *selection = getSelection();
 
+    // Note Selection
+
     const bool haveNoteSelection =
             (selection  &&  !selection->getSegmentEvents().empty());
 
@@ -739,6 +741,8 @@ MatrixView::slotUpdateMenuStates()
         enterActionState("have_note_selection");
     else
         leaveActionState("have_note_selection");
+
+    // Controller Selection
 
     ControlRulerWidget *controlRulerWidget =
             m_matrixWidget->getControlsWidget();
@@ -749,11 +753,9 @@ MatrixView::slotUpdateMenuStates()
         enterActionState("have_control_ruler");
 
         if (controlRulerWidget->hasSelection()) {
-            RG_DEBUG << "  Entering action state have_controller_selection";
             enterActionState("have_controller_selection");
             haveControllerSelection = true;
         } else {
-            RG_DEBUG << "  Leaving action state have_controller_selection";
             leaveActionState("have_controller_selection");
         }
     } else {

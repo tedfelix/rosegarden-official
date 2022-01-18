@@ -353,9 +353,9 @@ void CompositionModelImpl::getSegmentRect(
         unsigned linkId = segment.getLinker()->getSegmentLinkerId();
         label += QString(" L{%1}").arg(linkId);
     }
-    if (! segment.getForNotation()) {
+    if (segment.getExcludeFromPrinting()) {
         // Add a marker for this
-        label += QString("   (xn)");
+        label += QString("   (xp)");
     }
     if (segment.isAudio()) {
         // Remove anything in parens and the filename suffix.
