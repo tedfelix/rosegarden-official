@@ -106,6 +106,8 @@ private:
     QCheckBox *m_enableEditingDuringPlayback;
     QCheckBox *m_cleanRecentFilesList;
     QCheckBox *m_useJackTransport;
+    QCheckBox *m_stopPlaybackAtEnd;
+    QCheckBox *m_loopSong;
 
     // Presentation tab
     QCheckBox *m_Thorn;

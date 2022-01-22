@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[LoopRuler]"
+#define RG_NO_DEBUG_PRINT
 
 #include "LoopRuler.h"
 
@@ -63,7 +64,10 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4)),
     m_loopingMode(false),
     m_startLoop(0),
-    m_endLoop(0)
+    m_endLoop(0),
+    m_storedLoopStart(0),
+    m_storedLoopEnd(0),
+    m_loopSet(false)
 {
     // Always snap loop extents to beats; by default apply no snap to
     // pointer position
@@ -71,7 +75,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     m_loopGrid->setSnapTime(SnapGrid::SnapToBeat);
 
-    setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Right-click and drag to set a range for looping or editing.</p><p>Right-click to clear the loop or range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
+    setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Right-click and drag to set a range for looping or editing.</p><p>Right-click to toggle the range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
 }
 
 LoopRuler::~LoopRuler()
@@ -117,6 +121,29 @@ void LoopRuler::scrollHoriz(int x)
     RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt end?";
 */
     update();
+}
+
+bool LoopRuler::reinstateRange()
+{
+    if (m_storedLoopStart != m_storedLoopEnd) {
+        // reinstate the stored loop
+        m_startLoop = m_storedLoopStart;
+        m_endLoop = m_storedLoopEnd;
+        m_loopSet = true;
+        emit setLoopRange(m_startLoop, m_endLoop);
+        RG_DEBUG << "reinstateRange OK";
+        return true;
+    }
+    RG_DEBUG << "reinstateRange no stored range";
+    return false;
+}
+
+void LoopRuler::hideRange()
+{
+    m_startLoop = 0;
+    m_endLoop = 0;
+    m_loopSet = false;
+    emit setLoopRange(m_startLoop, m_endLoop);
 }
 
 QSize LoopRuler::sizeHint() const
@@ -317,33 +344,47 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
 void
 LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
+    RG_DEBUG << "mouseReleaseEvent loopingMode:" << m_loopingMode;
     // If we were in looping mode
     if (m_loopingMode) {
         m_loopingMode = false;
-
-        // If there was no drag, cancel the loop.
+        // If there was no drag, toggle the loop.
         if (m_endLoop == m_startLoop) {
             m_startLoop = 0;
             m_endLoop = 0;
-
+            if (m_loopSet) {
+                // unset the loop
+                RG_DEBUG << "mouseReleaseEvent unset loop";
+                m_loopSet = false;
+            } else {
+                if (m_storedLoopStart == m_storedLoopEnd) {
+                    // no stored loop - do nothing
+                } else {
+                    // reinstate the stored loop
+                    RG_DEBUG << "mouseReleaseEvent reinstate stored loop";
+                    m_startLoop = m_storedLoopStart;
+                    m_endLoop = m_storedLoopEnd;
+                    m_loopSet = true;
+                }
+            }
             // to clear any other loop rulers
-            emit setLoop(m_startLoop, m_endLoop);
+            emit setLoopRange(m_startLoop, m_endLoop);
             update();
         } else {  // There was drag
             // Make sure start < end
             if (m_endLoop < m_startLoop)
                 std::swap(m_startLoop, m_endLoop);
-
-            emit setLoop(m_startLoop, m_endLoop);
+            m_storedLoopStart = m_startLoop;
+            m_storedLoopEnd = m_endLoop;
+            m_loopSet = true;
+            emit setLoopRange(m_startLoop, m_endLoop);
         }
 
         emit stopMouseMove();
         m_activeMousePress = false;
-
-        return;
     }
 
-	if (mouseEvent->button() == Qt::LeftButton) {
+    if (mouseEvent->button() == Qt::LeftButton) {
         // we need to re-emit this signal so that when the user releases
         // the button after dragging the pointer, the pointer's position
         // is updated again in the other views (typically, in the seg.
@@ -404,8 +445,15 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 void LoopRuler::slotSetLoopMarker(timeT startLoop,
                                   timeT endLoop)
 {
+    RG_DEBUG << "slotSetLoopMarker:" << startLoop << endLoop;
+
     m_startLoop = startLoop;
     m_endLoop = endLoop;
+    if (m_startLoop != m_endLoop) {
+        m_loopSet = true;
+        m_storedLoopStart = m_startLoop;
+        m_storedLoopEnd = m_endLoop;
+    }
 
     update();
 }

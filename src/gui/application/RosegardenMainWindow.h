@@ -1581,11 +1581,6 @@ private:
 
     bool m_originatingJump;
 
-    // Use these in conjunction with the loop button to
-    // remember where a loop was if we've ever set one.
-    timeT m_storedLoopStart;
-    timeT m_storedLoopEnd;
-
     bool m_useSequencer;
 
     QSharedPointer<AudioPluginManager> m_pluginManager;
@@ -1657,6 +1652,18 @@ private:
     Typematic m_rewindTypematic;
     /// For the fast-forward button on a keyboard controller.
     Typematic m_fastForwardTypematic;
+
+    /// Flag for looping whole song
+    bool m_loopingAll;
+    timeT m_loopAllEndTime;
+
+    // for deferred looping
+    bool m_deferredLoop;
+    timeT m_deferredLoopStart;
+    timeT m_deferredLoopEnd;
+
+    // end of last segment in composition
+    timeT m_endOfLatestSegment;
 
 private slots:
     void signalAction(int);

@@ -106,6 +106,9 @@ public:
     void turnRepeatingSegmentToRealCopies();
     void turnLinkedSegmentsToRealCopies();
 
+    bool reinstateRange();
+    void hideRange();
+
 signals:
     /**
      * init() connects this to RosegardenMainViewWidget::stateChange().
