@@ -106,7 +106,7 @@ public:
     void clearAllAudioFiles();
 
     /// Stop the sequencer
-    void stop();
+    void stop(bool autoStop);
 
     /// Set a MappedInstrument at the Sequencer
     /**

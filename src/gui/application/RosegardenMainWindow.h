@@ -1665,6 +1665,8 @@ private:
     // end of last segment in composition
     timeT m_endOfLatestSegment;
 
+    void doStop(bool autoStop);
+
 private slots:
     void signalAction(int);
 

@@ -4817,8 +4817,8 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
         if (m_seqManager->getTransportStatus() == PLAYING  &&
             t > stopTime) {
 
-            // Stop
-            slotStop();
+            // Stop - automatic stop - not triggered by the user
+            doStop(true);
 
             // Limit the end to the end of the composition.
             // RECURSION: Causes this method to be re-invoked.
@@ -5762,6 +5762,12 @@ RosegardenMainWindow::slotStartAtTime(RealTime rt)
 void
 RosegardenMainWindow::slotStop()
 {
+    doStop(false);
+}
+
+void
+RosegardenMainWindow::doStop(bool autoStop)
+{
     if (m_seqManager &&
         m_seqManager->getCountdownDialog()) {
         disconnect(m_seqManager->getCountdownDialog(), &CountdownDialog::stopped,
@@ -5772,7 +5778,7 @@ RosegardenMainWindow::slotStop()
 
     try {
         if (m_seqManager)
-            m_seqManager->stop();
+            m_seqManager->stop(autoStop);
     } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
