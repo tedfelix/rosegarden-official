@@ -38,7 +38,6 @@ class BeatsBarsDialog : public QDialog
     Q_OBJECT
         
 public:
-    BeatsBarsDialog();
     BeatsBarsDialog(QWidget *parent);
 
     int getQuantity() { return m_spinBox->value(); }
