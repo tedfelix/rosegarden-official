@@ -124,10 +124,10 @@ void Preferences::setStopAtEnd(bool value)
 bool Preferences::getStopAtEnd()
 {
     static bool firstGet = true;
-    
+
     if (firstGet) {
         firstGet = false;
-        
+
         QSettings settings;
         settings.beginGroup(SequencerOptionsConfigGroup);
         stopAtEnd =
@@ -135,8 +135,9 @@ bool Preferences::getStopAtEnd()
         // Write it back out so we can find it if it wasn't there.
         settings.setValue("stopatend", stopAtEnd);
     }
-    
+
     return stopAtEnd;
 }
+
 
 }

@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenMainWindow]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenMainWindow.h"
 
@@ -276,8 +276,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_transport(nullptr),
     m_audioManagerDialog(nullptr),
     m_originatingJump(false),
-    m_storedLoopStart(0),
-    m_storedLoopEnd(0),
     m_useSequencer(enableSound),
     m_autoSaveTimer(new QTimer(this)),
     m_clipboard(Clipboard::mainClipboard()),
@@ -309,9 +307,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_cpuMeterTimer(new QTimer(this)),
     m_loopingAll(false),
     m_loopAllEndTime(0),
-    m_deferred_loop(false),
-    m_deferred_loop_start(0),
-    m_deferred_loop_end(0),
+    m_deferredLoop(false),
+    m_deferredLoopStart(0),
+    m_deferredLoopEnd(0),
     m_endOfLatestSegment(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -4801,14 +4799,14 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     bool stopatEnd = Preferences::getStopAtEnd();
 
     //RG_DEBUG << "slotSetPointerPosition(): t = " << t;
-    if (m_deferred_loop &&
-        t >= m_deferred_loop_start &&
-        t <= m_deferred_loop_end) {
+    if (m_deferredLoop &&
+        t >= m_deferredLoopStart &&
+        t <= m_deferredLoopEnd) {
         // now we set the loop
         RG_DEBUG << "Setting deferred loop";
         comp.setLooping(true);
-        m_seqManager->setLoop(m_deferred_loop_start, m_deferred_loop_end);
-        m_deferred_loop = false;
+        m_seqManager->setLoop(m_deferredLoopStart, m_deferredLoopEnd);
+        m_deferredLoop = false;
         m_loopingAll = false;
     }
 
@@ -5669,14 +5667,14 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
             // the loop until we are in the loop range
             if (m_loopingAll) {
                 RG_DEBUG << "defer looping" << lhs << rhs;
-                m_deferred_loop = true;
-                m_deferred_loop_start = lhs;
-                m_deferred_loop_end = rhs;
+                m_deferredLoop = true;
+                m_deferredLoopStart = lhs;
+                m_deferredLoopEnd = rhs;
             } else {
                 comp.setLooping(true);
                 m_seqManager->setLoop(lhs, rhs);
             }
-            
+
             enterActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
         } else {
             if (loopSong && comp.isLooping()) {
@@ -5779,7 +5777,7 @@ RosegardenMainWindow::slotStop()
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
     // cancel any deferred looping
-    m_deferred_loop = false;
+    m_deferredLoop = false;
 }
 
 void
@@ -5851,12 +5849,12 @@ RosegardenMainWindow::slotUnsetLoop()
         RosegardenDocument::currentDocument->getComposition();
     comp.setLooping(false);
     m_seqManager->setLoop(0, 0);
-    
+
     QSettings settings;
     settings.beginGroup(SequencerOptionsConfigGroup);
     bool loopSong = settings.value("loopentiresong", false).toBool();
     settings.endGroup();
-    
+
     if (!loopSong) {
         getView()->getTrackEditor()->hideRange();
     }

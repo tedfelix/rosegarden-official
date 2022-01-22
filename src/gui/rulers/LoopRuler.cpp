@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[LoopRuler]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "LoopRuler.h"
 
@@ -379,7 +379,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
             m_loopSet = true;
             emit setLoopRange(m_startLoop, m_endLoop);
         }
-    
+
         emit stopMouseMove();
         m_activeMousePress = false;
     }
@@ -390,7 +390,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
         // is updated again in the other views (typically, in the seg.
         // canvas while the user has dragged the pointer in an edit view)
         emit setPointerPosition(m_grid->snapX(m_lastMouseXPos));
-        
+
         emit stopMouseMove();
         m_activeMousePress = false;
     }

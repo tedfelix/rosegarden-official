@@ -261,7 +261,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("Loop entire song if no range is set"),
+    layout->addWidget(new QLabel(tr("Advanced Looping (experimental)"),
                                  frame), row, 0);
     m_loopSong = new QCheckBox(frame);
     m_loopSong->setChecked(
