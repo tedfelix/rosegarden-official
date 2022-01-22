@@ -116,6 +116,7 @@
 #include <QToolButton>
 #include <QStatusBar>
 #include <QDesktopServices>
+#include <QShortcut>
 
 #include <algorithm>
 
@@ -583,6 +584,9 @@ MatrixView::setupActions()
         }
     }
 
+    // This shortcut is always enabled, unlike the "clear_selection" action
+    QShortcut *shortcut = new QShortcut(Qt::Key_Escape, this);
+    connect(shortcut, &QShortcut::activated, this, &MatrixView::slotEscapePressed);
 }
 
 
@@ -1203,6 +1207,19 @@ void
 MatrixView::slotClearSelection()
 {
     if (m_matrixWidget) m_matrixWidget->clearSelection();
+}
+
+void MatrixView::slotEscapePressed()
+{
+    // Esc switches us back to the select tool (see bug #1615)
+    auto *toolAction = findAction("select");
+    if (!toolAction->isChecked()) {
+        toolAction->setChecked(true);
+        slotSetSelectTool();
+    }
+
+    // ... and clears selection
+    m_matrixWidget->clearSelection();
 }
 
 void

@@ -165,6 +165,7 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QApplication>
+#include <QShortcut>
 
 #include <algorithm>
 #include <set>
@@ -1224,6 +1225,10 @@ NotationView::setupActions()
             this, &NotationView::slotCurrentSegmentNext);
     connect(m_notationWidget, &NotationWidget::currentSegmentPrior,
             this, &NotationView::slotCurrentSegmentPrior);
+
+    // This shortcut is always enabled, unlike the "clear_selection" action
+    QShortcut *shortcut = new QShortcut(Qt::Key_Escape, this);
+    connect(shortcut, &QShortcut::activated, this, &NotationView::slotEscapePressed);
 }
 
 void 
@@ -1978,17 +1983,20 @@ NotationView::slotPreviewSelection()
 void
 NotationView::slotClearSelection()
 {
-    // Actually we don't clear the selection immediately: if we're
-    // using some tool other than the select tool, then the first
-    // press switches us back to the select tool.
+    setSelection(nullptr, false);
+}
 
-    NotationSelector *selector = dynamic_cast<NotationSelector *>(m_notationWidget->getCurrentTool());
-
-    if (!selector) {
+void NotationView::slotEscapePressed()
+{
+    // Esc switches us back to the select tool (see bug #1615)
+    auto *toolAction = findAction("select");
+    if (!toolAction->isChecked()) {
+        toolAction->setChecked(true);
         slotSetSelectTool();
-    } else {
-        setSelection(nullptr, false);
     }
+
+    // ... and clears selection
+    slotClearSelection();
 }
 
 void

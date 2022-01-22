@@ -141,6 +141,7 @@ protected slots:
     void slotPreviewSelection();
     void slotClearLoop();
     void slotClearSelection();
+    void slotEscapePressed();
     void slotEditSelectFromStart();
     void slotEditSelectToEnd();
     void slotEditSelectWholeStaff();

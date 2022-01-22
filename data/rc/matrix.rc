@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::Matrix" version="1500">
+<kpartgui name="Rosegarden::Matrix" version="1501">
   
 <MenuBar>
   <Menu name="file" append="new_merge">
@@ -22,7 +22,7 @@
   <Separator/>
     <Action name="delete" text="&amp;Delete" shortcut="Delete, Ctrl+D" />
     <Action name="select_all" text="Select &amp;All Events" shortcut="Ctrl+A" />
-    <Action name="clear_selection" text="C&amp;lear Selection" shortcut="Escape" />
+    <Action name="clear_selection" text="C&amp;lear Selection" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
   <Separator/>
     <Action name="options_configure" text="Preferences..." icon="configure" />
