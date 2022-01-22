@@ -1318,8 +1318,8 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     RG_DEBUG << "RosegardenDocument::saveDocument() finished";
 
     if (!autosave) {
-        emit documentModified(false);
         m_modified = false;
+        emit documentModified(false);
         CommandHistory::getInstance()->documentSaved();
     }
 
