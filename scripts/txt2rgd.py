@@ -29,7 +29,8 @@
 #                  <user marker> is a field used to help data entry,
 #                                could be anything, e.g. voice number
 #                                but must not contain whitespace, ','
-#                                or '#'. This field is ignored in the output
+#                                or '#'.  This field must not be empty.
+#                                This field is ignored in the output
 #                  <MSB>         MSB (Most Significant Byte) of the bank
 #                                number [range: 0 - 127]
 #                  <LSB>         LSB (Least Significant Byte) of the bank
@@ -298,7 +299,7 @@ with gzip.open(out_file, "wb") as OUT_FH:
                 name = f"{MSB:03u}-{LSB:03u}"
             OUT_FH.write(f"""  <bank name="{name}" msb="{MSB}" lsb="{LSB}">\n"""
                          .encode())
-    
+
             progs = list(data[MSB][LSB].keys())
             progs.sort()
             for prog in progs:
