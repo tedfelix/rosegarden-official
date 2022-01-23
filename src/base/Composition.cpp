@@ -14,6 +14,7 @@
 */
 
 #define RG_MODULE_STRING "[Composition]"
+#define RG_NO_DEBUG_PRINT
 
 #include "Composition.h"
 
@@ -239,6 +240,7 @@ Composition::Composition() :
     m_autoExpand(false),
     m_loopStart(0),
     m_loopEnd(0),
+    m_isLooping(false),
     m_playMetronome(false),
     m_recordMetronome(true),
     m_nextTriggerSegmentId(0),
@@ -643,7 +645,7 @@ Composition::updateTriggerSegmentReferences()
 
 
 timeT
-Composition::getDuration() const
+Composition::getDuration(bool withRepeats) const
 {
     timeT maxDuration = 0;
 
@@ -651,6 +653,9 @@ Composition::getDuration() const
          i != m_segments.end(); ++i) {
 
         timeT segmentTotal = (*i)->getEndTime();
+        if (withRepeats) {
+            segmentTotal = (*i)->getRepeatEndTime();
+        }
 
         if (segmentTotal > maxDuration) {
             maxDuration = segmentTotal;
@@ -697,6 +702,7 @@ Composition::clear()
     m_maxTempo = 0;
     m_loopStart = 0;
     m_loopEnd = 0;
+    m_isLooping = false;
     m_position = 0;
     m_startMarker = 0;
     m_endMarker = getBarRange(defaultNumberOfBars).first;
@@ -1671,6 +1677,13 @@ Composition::setPosition(timeT position)
     m_position = position;
 }
 
+void
+Composition::setLooping(bool loop)
+{
+    RG_DEBUG << "setLooping" << loop;
+    m_isLooping = loop;
+}
+
 void Composition::setPlayMetronome(bool value)
 {
     m_playMetronome = value;
@@ -2001,6 +2014,8 @@ std::string Composition::toXmlString() const
         composition << "\" loopstart=\"" << m_loopStart;
         composition << "\" loopend=\"" << m_loopEnd;
     }
+
+    composition << "\" islooping=\"" << m_isLooping;
 
     composition << "\" startMarker=\"" << m_startMarker;
     composition << "\" endMarker=\"" << m_endMarker;

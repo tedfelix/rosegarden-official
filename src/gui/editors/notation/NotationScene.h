@@ -170,7 +170,7 @@ public:
                         );
 
     /// Remove any visible preview note
-    void clearPreviewNote(NotationStaff *);
+    void clearPreviewNote();
 
     void playNote(Segment &segment, int pitch, int velocity = -1);
 

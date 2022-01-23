@@ -69,6 +69,9 @@ public:
     bool hasActiveMousePress() { return m_activeMousePress; }
 
     bool getLoopingMode() { return m_loopingMode; }
+
+    bool reinstateRange();
+    void hideRange();
     
 signals:
     /// Set the pointer position on mouse single click
@@ -81,7 +84,7 @@ signals:
     void setPlayPosition(timeT);
 
     /// Set a playing loop
-    void setLoop(timeT, timeT);
+    void setLoopRange(timeT, timeT);
 
     /// Set the loop end position on mouse drag
     void dragLoopToPosition(timeT);
@@ -115,8 +118,9 @@ private:
     int  m_currentXOffset;
     int  m_width;
     bool m_activeMousePress;
-    // remeber the mouse x pos in mousePressEvent and in mouseMoveEvent so that
-    // we can emit it in mouseReleaseEvent to update the pointer position in other views
+    // Remember the mouse x pos in mousePressEvent and in mouseMoveEvent so
+    // that we can emit it in mouseReleaseEvent to update the pointer position
+    // in other views
     double m_lastMouseXPos;
 
     RosegardenDocument *m_doc;
@@ -125,9 +129,19 @@ private:
     SnapGrid   *m_loopGrid;
     const SnapGrid   *m_grid;
     QPen        m_quickMarkerPen;
+
     bool m_loopingMode;
     timeT m_startLoop;
     timeT m_endLoop;
+
+    // ??? I suspect that if we upgrade Composition::m_isLooping to be an
+    //     enum with three values: LoopMode_Off, LoopMode_On, LoopMode_All,
+    //     we can use Composition to store the loop and then we can remove
+    //     these three.  This should allow simplification of the code in a
+    //     number of places.
+    timeT m_storedLoopStart;
+    timeT m_storedLoopEnd;
+    bool m_loopSet;
 };
 
 

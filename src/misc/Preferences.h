@@ -48,6 +48,9 @@ namespace Preferences
     void setUseNativeFileDialogs(bool value);
     bool getUseNativeFileDialogs();
 
+    void setStopAtEnd(bool value);
+    bool getStopAtEnd();
+
 }
 
 

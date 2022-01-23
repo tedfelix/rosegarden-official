@@ -2045,7 +2045,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
 
 void
-AlsaDriver::stopPlayback()
+AlsaDriver::stopPlayback(bool autoStop)
 {
 #ifdef DEBUG_ALSA
     RG_DEBUG << "stopPlayback() begin...";
@@ -2066,7 +2066,14 @@ AlsaDriver::stopPlayback()
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
-        m_jackDriver->stopTransport();
+        // if the stop was initiated by the user (eg press stop
+        // button) we should stop the jack transport. If the stop was
+        // automatically initiated from the roesgarden code (eg. at
+        // end of composition) then autoStop is true - we do not stop
+        // the jack transport as other jack clients may be running
+        if (! autoStop) {
+            m_jackDriver->stopTransport();
+        }
         m_needJackStart = NeedNoJackStart;
     }
 #endif

@@ -16,8 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenDocument]"
-
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenDocument.h"
 
@@ -1319,8 +1318,8 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     RG_DEBUG << "RosegardenDocument::saveDocument() finished";
 
     if (!autosave) {
-        emit documentModified(false);
         m_modified = false;
+        emit documentModified(false);
         CommandHistory::getInstance()->documentSaved();
     }
 
@@ -2470,6 +2469,7 @@ RosegardenDocument::slotSetPointerPosition(timeT t)
 void
 RosegardenDocument::setLoop(timeT t0, timeT t1)
 {
+    RG_DEBUG << "setLoop" << t0 << t1;
     m_composition.setLoopStart(t0);
     m_composition.setLoopEnd(t1);
     emit loopChanged(t0, t1);

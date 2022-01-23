@@ -16,7 +16,6 @@
 */
 
 #define RG_MODULE_STRING "[SequenceManager]"
-
 #define RG_NO_DEBUG_PRINT 1
 
 #include "SequenceManager.h"
@@ -214,7 +213,7 @@ SequenceManager::play()
 }
 
 void
-SequenceManager::stop()
+SequenceManager::stop(bool autoStop)
 {
     if (!m_doc)
         return;
@@ -256,7 +255,7 @@ SequenceManager::stop()
     // response - then we can fiddle about with the audio file
     // without worrying about the sequencer causing problems
     // with access to the same audio files.
-    RosegardenSequencer::getInstance()->stop();
+    RosegardenSequencer::getInstance()->stop(autoStop);
 
     // restore
     QApplication::restoreOverrideCursor();
@@ -1539,7 +1538,7 @@ void SequenceManager::segmentAdded(Segment* s)
 
 void SequenceManager::segmentDeleted(Segment* s)
 {
-    RG_DEBUG << "segmentDeleted(" << s << ")";
+    RG_DEBUG << "segmentDeleted(" << (void *)s << ")";
 
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine has already

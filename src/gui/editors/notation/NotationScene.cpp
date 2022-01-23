@@ -879,7 +879,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 void
 NotationScene::slotMouseLeavesView()
 {
-    clearPreviewNote(m_previewNoteStaff);
+    clearPreviewNote();
 }
 
 void
@@ -2036,10 +2036,10 @@ NotationScene::showPreviewNote(NotationStaff *staff, double layoutX,
 }
 
 void
-NotationScene::clearPreviewNote(NotationStaff *staff)
+NotationScene::clearPreviewNote()
 {
-    if (staff) {
-        staff->clearPreviewNote();
+    if (m_previewNoteStaff) {
+        m_previewNoteStaff->clearPreviewNote();
         m_previewNoteStaff = nullptr;
     }
 }
