@@ -213,7 +213,7 @@ RealTime::frame2RealTime(long frame, unsigned int sampleRate)
     return rt;
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::RealTime &t)
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug dbg, const Rosegarden::RealTime &t)
 {
     dbg << t.toString();
     return dbg;

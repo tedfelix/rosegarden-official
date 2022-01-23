@@ -101,18 +101,7 @@ void TestMisc::testEvent() try
     QCOMPARE(e.get<Int>(SOME_INT_PROPERTY), 4l);
 
     qDebug() << "Testing debug dump : ";
-    // ??? Will not compile.
-    // testmisc.cpp:113:11: error: cannot bind non-const lvalue reference of
-    //                             type ‘QDebug&’ to an rvalue of type ‘QDebug’
-    //     Sure enough, this doesn't work either:
-    //         QDebug &qd = qDebug();
-    //     But why does this work in the app?  What is different there?
-    //qDebug() << e;
-    //QDebug(QtDebugMsg) << e;
-    // This works fine, of course.  It's the temporaries that it doesn't
-    // like.  But they are ok in the app.  Hmmm.
-    QDebug qd(QtDebugMsg);
-    qd << e;
+    qDebug() << e;
     qDebug() << "dump finished";
 
 } catch(...) {

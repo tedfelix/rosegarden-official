@@ -130,7 +130,7 @@ inline std::ostream& operator<<(std::ostream &out, PropertyStoreBase &e)
 { e.dump(out); return out; }
 #endif
 
-inline QDebug &operator<<(QDebug &dbg, const PropertyStoreBase &psb)
+inline QDebug operator<<(QDebug dbg, const PropertyStoreBase &psb)
 {
     dbg << psb.getTypeName().c_str() << "-" << psb.unparse().c_str();
     return dbg;

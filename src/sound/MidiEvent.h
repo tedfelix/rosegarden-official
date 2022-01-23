@@ -85,7 +85,7 @@ public:
     void setMetaMessage(const std::string &meta) { m_metaMessage = meta; }
     std::string getMetaMessage() const { return m_metaMessage; }
 
-    friend QDebug &operator<<(QDebug &, const MidiEvent &);
+    friend QDebug operator<<(QDebug, const MidiEvent &);
 
 private:
     /// Delta or absolute time, depending.
@@ -99,7 +99,7 @@ private:
     std::string m_metaMessage;
 };
 
-QDebug &operator<<(QDebug &, const MidiEvent &);
+QDebug operator<<(QDebug, const MidiEvent &);
 
 
 }

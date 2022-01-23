@@ -57,7 +57,7 @@ class ChannelInterval
     friend class ChannelManager;
 
     friend bool operator<(const ChannelInterval &lhs, const ChannelInterval &rhs);
-    friend QDebug &operator<<(QDebug &, const ChannelInterval &);
+    friend QDebug operator<<(QDebug, const ChannelInterval &);
 
 public:
 

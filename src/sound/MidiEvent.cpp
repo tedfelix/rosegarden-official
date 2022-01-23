@@ -85,8 +85,7 @@ MidiEvent::MidiEvent(timeT time,
 {
 }
 
-QDebug &
-operator<<(QDebug &dbg, const MidiEvent &midiEvent)
+QDebug operator<<(QDebug dbg, const MidiEvent &midiEvent)
 {
     timeT tempo;
     int tonality;

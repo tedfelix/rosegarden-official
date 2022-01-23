@@ -27,7 +27,7 @@ namespace Rosegarden
 {
 
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const std::string &);
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug, const std::string &);
 
 class RGNoDebug
 {
