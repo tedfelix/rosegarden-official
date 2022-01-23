@@ -89,7 +89,7 @@ bool operator<(const Chord&, const Chord&);
 
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Guitar::Chord &);
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug, const Rosegarden::Guitar::Chord &);
 
 }
 

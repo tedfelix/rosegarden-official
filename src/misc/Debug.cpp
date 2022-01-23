@@ -24,7 +24,7 @@ namespace Rosegarden
 {
 
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const std::string &s)
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug dbg, const std::string &s)
 {
     dbg << strtoqstr(s);
 

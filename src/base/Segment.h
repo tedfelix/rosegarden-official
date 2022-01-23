@@ -1048,7 +1048,7 @@ private:
 
 };
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Segment &);
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug, const Rosegarden::Segment &);
 
 // Make it a global name.
 typedef Segment::SegmentMultiSet SegmentMultiSet;

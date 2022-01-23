@@ -395,7 +395,7 @@ protected:
     void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
 
 private:
-    friend QDebug &operator<<(QDebug &dbg, const Event &event);
+    friend QDebug operator<<(QDebug dbg, const Event &event);
 
     /// Data that are shared between shallow-copied instances
     struct EventData
@@ -528,7 +528,7 @@ private:
 #endif
 };
 
-extern ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Event &event);
+extern ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug dbg, const Event &event);
 
 template <PropertyType P>
 bool

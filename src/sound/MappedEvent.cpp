@@ -183,8 +183,7 @@ MappedEvent::addDataString(const std::string& data)
         setDataBlockForEvent(this, data, true);
 }
 
-QDebug &
-operator<<(QDebug &dbg, const MappedEvent &mE)
+QDebug operator<<(QDebug dbg, const MappedEvent &mE)
 {
     dbg << "MappedEvent" << "\n";
 

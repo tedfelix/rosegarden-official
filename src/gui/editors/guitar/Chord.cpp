@@ -109,7 +109,7 @@ bool operator<(const Chord& a, const Chord& b)
 
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Guitar::Chord &c)
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug dbg, const Rosegarden::Guitar::Chord &c)
 {
     dbg << "Chord root = " << c.getRoot() << ", ext = '" << c.getExt() << "'";
 

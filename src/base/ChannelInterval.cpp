@@ -46,7 +46,7 @@ assertSane() const
 }
 #endif
 
-QDebug &operator<<(QDebug &dbg, const ChannelInterval &channelInterval) {
+QDebug operator<<(QDebug dbg, const ChannelInterval &channelInterval) {
     dbg
         << "interval" << channelInterval.m_start.toString()
         << "to" << channelInterval.m_end.toString()

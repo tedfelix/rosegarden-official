@@ -1749,7 +1749,7 @@ Segment::dumpObservers()
     }
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Segment &t)
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug dbg, const Rosegarden::Segment &t)
 {
 //    dbg << "Segment for instrument " << t.getTrack()
 //        << " starting at " << t.getStartTime() << '\n';

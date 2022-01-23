@@ -426,7 +426,7 @@ operator<(const Event &a, const Event &b)
     else return a.getSubOrdering() < b.getSubOrdering();
 }
 
-QDebug &operator<<(QDebug &dbg, const Event &event)
+QDebug operator<<(QDebug dbg, const Event &event)
 {
     dbg << "Event type :" << event.m_data->m_type << "\n";
     dbg << "  Absolute Time :" << event.m_data->m_absoluteTime << "\n";
