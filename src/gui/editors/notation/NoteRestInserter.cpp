@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2022 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -127,7 +127,8 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     m_isaRestInserter(false),
     m_wheelIndex(0),
     m_processingWheelTurned(false),
-    m_ready(false)
+    m_ready(false),
+    m_previousPreviewStaff(nullptr)
 {
     QIcon icon;
 
@@ -565,11 +566,10 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e,
         return false;
     }
 
-    if (m_clickHappened && (e->staff != m_clickStaff)) {
-        NOTATION_DEBUG << "computeLocationAndPreview: staff changed from originally clicked one (" << e->staff << " vs " << m_clickStaff << ")";
-        // abandon
+    if (e->staff != m_previousPreviewStaff) {
+        NOTATION_DEBUG << "computeLocationAndPreview: preview staff changed";
         clearPreview();
-        return false;
+        m_previousPreviewStaff = e->staff;
     }
 
     double x = e->sceneX;

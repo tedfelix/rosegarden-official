@@ -2,7 +2,7 @@
 /*
   Rosegarden
   A sequencer and musical notation editor.
-  Copyright 2020 the Rosegarden development team.
+  Copyright 2020-2022 the Rosegarden development team.
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
