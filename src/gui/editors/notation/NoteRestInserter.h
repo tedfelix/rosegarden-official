@@ -183,6 +183,7 @@ protected:
     bool m_processingWheelTurned;  // Use by synchronizeWheel()
 
     bool m_ready;                  // True when the tool is ready
+    NotationStaff *m_previousPreviewStaff;
 
 // Obsolete ?
 //    static const char* m_actionsAccidental[][4];
