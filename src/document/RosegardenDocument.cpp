@@ -1721,15 +1721,8 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
             } else if (sr != 0 && mixed) {
                     
                 StartupLogo::hideIfStillThere();
-                
-                QMessageBox mbox(dynamic_cast<QWidget *>(parent()));
-                mbox.setIcon(QMessageBox::Information);
-                mbox.setWindowTitle(tr("Rosegarden"));
-                mbox.setText(tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr));
-                QPushButton* b1 = mbox.addButton(tr("Inconsistent sample rates"), QMessageBox::AcceptRole);
-                mbox.addButton(tr("file-load-inconsistent-samplerates"), QMessageBox::RejectRole);
-                mbox.setDefaultButton(b1);
-                mbox.exec();
+
+                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr));
                 
                 shownWarning = true;
             }
