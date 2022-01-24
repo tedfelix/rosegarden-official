@@ -817,22 +817,7 @@ MatrixWidget::selectAll()
 void
 MatrixWidget::clearSelection()
 {
-    // Actually we don't clear the selection immediately: if we're
-    // using some tool other than the select tool, then the first
-    // press switches us back to the select tool.
-
-    // ??? Why?  Plus there's a bug.  The toolbar button does not
-    //     become pressed for the select tool.  Instead it still
-    //     shows the old tool.  Recommend changing this to do what
-    //     the user has asked.  Just call setSelection().  I've
-    //     tested it and it works fine.
-
-    MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
-
-    if (!selector)
-        setSelectAndEditTool();
-    else
-        setSelection(nullptr, false);
+    setSelection(nullptr, false);
 }
 
 Segment *

@@ -130,6 +130,7 @@ protected slots:
     void slotPreviewSelection();
     void slotClearLoop();
     void slotClearSelection();
+    void slotEscapePressed();
     void slotFilterSelection();
     void slotEditAddKeySignature();
 

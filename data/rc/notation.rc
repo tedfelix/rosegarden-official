@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::Notation" version="1500">
+<kpartgui name="Rosegarden::Notation" version="1501">
 
 <MenuBar>
   <Menu name="file" append="new_merge">
@@ -40,7 +40,7 @@
     <Action name="select_from_start" text="Select from Sta&amp;rt" />
     <Action name="select_to_end" text="Select to &amp;End" />
     <Action name="select_whole_staff" text="Select Whole St&amp;aff" shortcut="Ctrl+A" />
-    <Action name="clear_selection" text="Clear Select&amp;ion" shortcut="Escape" />
+    <Action name="clear_selection" text="Clear Select&amp;ion" />
 <!--    <Action name="search_select" text="Search and Selec&amp;t" icon="search" shortcut="Ctrl+K" /> -->
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
     <Action name="select_evenly_spaced_notes" text="&amp;Guess Beats" />
