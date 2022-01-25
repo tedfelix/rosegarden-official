@@ -316,7 +316,7 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
     NOTATION_DEBUG << "NoteRestInserter::handleMouseRelease: staff = " <<
         m_clickStaff << ", clicked = " << m_clickHappened;
 
-        NotationStaff *staff = m_clickStaff;
+    NotationStaff *staff = m_clickStaff;
     if (!m_clickHappened || !staff) return;
 
     bool okay = computeLocationAndPreview(e, true);
@@ -352,7 +352,9 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
     if (lastInsertedEvent) {
 
         m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
-
+        // and select the staff
+        m_scene->setCurrentStaff(staff);
+        
         if (!m_widget->isInChordMode()) {
             // Since a note could have been split and tied, we need to rely on
             // the full duration of the original note calculate the position of
