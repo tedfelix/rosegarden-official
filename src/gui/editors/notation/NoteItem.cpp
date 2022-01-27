@@ -72,11 +72,14 @@ NoteItem::paint(QPainter *painter,
 //    NOTATION_DEBUG << "note: transform " << t << " differs from last transform " << m_lastTransform << ", or is not a small transform";
 
     bool tiny = (t.m11() < 0.15 || t.m22() < 0.15);
-    if (!tiny) {
-        QRectF rect = boundingRect();
-        QRectF target = t.mapRect(rect);
-        tiny = (target.width() < 10 && target.height() < 10);
-    }
+
+    // bug 1484 - the following 5 lines are now commented out
+
+    //if (!tiny) {
+    //    QRectF rect = boundingRect();
+    //    QRectF target = t.mapRect(rect);
+    //    tiny = (target.width() < 10 && target.height() < 10);
+    //}
 
     DrawMode mode;
     if (tiny) {
