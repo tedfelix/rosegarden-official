@@ -2035,32 +2035,34 @@ RosegardenMainWindow::slotFileOpenRecent()
 void
 RosegardenMainWindow::slotFileSave()
 {
-    if (!RosegardenDocument::currentDocument /*|| !RosegardenDocument::currentDocument->isModified()*/)
-        return ; // ALWAYS save, even if doc is not modified.
+    // No document to save?  Bail.
+    if (!RosegardenDocument::currentDocument)
+        return;
 
     TmpStatusMsg msg(tr("Saving file..."), this);
 
-    // if it's a new file (no file path), or an imported file
-    // (file path doesn't end with .rg), call saveAs
-    //
+    // If it's a new file (no file path), or an imported file
+    // (file path doesn't end with .rg), do a "save as".
     if (!RosegardenDocument::currentDocument->isRegularDotRGFile()) {
-
         slotFileSaveAs();
+        return;
+    }
 
-    } else {
+    SetWaitCursor waitCursor;
 
-        SetWaitCursor waitCursor;
-        QString errMsg, docFilePath = RosegardenDocument::currentDocument->getAbsFilePath();
+    const QString docFilePath =
+            RosegardenDocument::currentDocument->getAbsFilePath();
 
-        bool res = RosegardenDocument::currentDocument->saveDocument(docFilePath, errMsg);
-        if (!res) {
-            if (! errMsg.isEmpty())
-                QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2")
-                                      .arg(docFilePath).arg(errMsg));
-            else
-                QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1")
-                                      .arg(docFilePath));
-        }
+    QString errMsg;
+    const bool success = RosegardenDocument::currentDocument->
+            saveDocument(docFilePath, errMsg);
+    if (!success) {
+        if (!errMsg.isEmpty())
+            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2")
+                                  .arg(docFilePath).arg(errMsg));
+        else
+            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1")
+                                  .arg(docFilePath));
     }
 }
 
@@ -2198,7 +2200,8 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     SetWaitCursor waitCursor;
 
     QString errMsg;
-    bool res = RosegardenDocument::currentDocument->saveAs(newName, errMsg);
+    const bool success =
+            RosegardenDocument::currentDocument->saveAs(newName, errMsg);
 
     // save template as read-only, even though this is largely pointless
     if (asTemplate) {
@@ -2210,7 +2213,7 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
                              QFile::ReadOther);
     }
 
-    if (!res) {
+    if (!success) {
         if (!errMsg.isEmpty())
             QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2")
                                   .arg(newName).arg(errMsg));
@@ -2218,19 +2221,22 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
             QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1")
                                   .arg(newName));
 
-    } else {
+        // Indicate failure.
+        return false;
 
-        m_recentFiles.add(newName);
-        // Make sure Ctrl+R is correct.
-        setupRecentFilesMenu();
-
-        updateTitle();
-
-        // update the edit view's captions too
-        emit compositionStateUpdate();
     }
 
-    return res;
+    m_recentFiles.add(newName);
+    // Make sure Ctrl+R is correct.
+    setupRecentFilesMenu();
+
+    updateTitle();
+
+    // update the edit view's captions too
+    emit compositionStateUpdate();
+
+    // Indicate success.
+    return true;
 }
 
 void
@@ -8185,21 +8191,22 @@ RosegardenMainWindow::slotManageMetronome()
 void
 RosegardenMainWindow::slotAutoSave()
 {
-    if (!m_seqManager ||
-        m_seqManager->getTransportStatus() == PLAYING ||
+    // Don't autosave when playing or recording.
+    // ??? Shouldn't this be "m_seqManager && !..."?  That way if there
+    //     is no sequence manager (e.g. when the sequencer isn't launched)
+    //     we still will autosave.
+    if (!m_seqManager  ||
+        m_seqManager->getTransportStatus() == PLAYING  ||
         m_seqManager->getTransportStatus() == RECORDING)
-        return ;
+        return;
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
+    // If autosave is disabled, bail.
+    if (!settings.value("autosave", "true").toBool())
+        return;
 
-    if (! qStrToBool(settings.value("autosave", "true"))) {
-        settings.endGroup();
-        return ;
-    }
     RosegardenDocument::currentDocument->slotAutoSave();
-
-    settings.endGroup();
 }
 
 void
