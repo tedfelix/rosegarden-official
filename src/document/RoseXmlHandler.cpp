@@ -1213,6 +1213,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         m_hasActiveAudio = true;
 
+        getAudioFileManager().setAudioLocationConfirmed();
+
         // attempt to insert file into AudioFileManager
         // (this checks the integrity of the file at the
         // same time)

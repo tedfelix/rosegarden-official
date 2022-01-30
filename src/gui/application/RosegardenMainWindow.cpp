@@ -2064,6 +2064,10 @@ RosegardenMainWindow::slotFileSave()
             QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1")
                                   .arg(docFilePath));
     }
+
+    // Let the audio file manager know we've just saved so it can prompt the
+    // user for an audio file location if it needs one.
+    RosegardenDocument::currentDocument->getAudioFileManager().save();
 }
 
 QString
@@ -2224,6 +2228,12 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
         // Indicate failure.
         return false;
 
+    }
+
+    if (!asTemplate) {
+        // Let the audio file manager know we've just saved so it can prompt the
+        // user for an audio file location if it needs one.
+        RosegardenDocument::currentDocument->getAudioFileManager().save();
     }
 
     m_recentFiles.add(newName);

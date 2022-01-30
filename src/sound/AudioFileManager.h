@@ -40,6 +40,8 @@ namespace Rosegarden
 {
 
 
+class RosegardenDocument;
+
 typedef std::vector<AudioFile *> AudioFileVector;
 
 
@@ -75,7 +77,11 @@ class AudioFileManager : public QObject, public XmlExportable
 {
     Q_OBJECT
 public:
-    AudioFileManager();
+    // AudioFileManager needs to know who its document is so that it
+    // can convert relative paths to absolute.
+    // RosegardenDocument::currentDocument doesn't always point to the
+    // correct document.  E.g. at load time.
+    AudioFileManager(RosegardenDocument *doc);
     ~AudioFileManager() override;
 
     /// Create an AudioFile object from an absolute path
@@ -102,6 +108,8 @@ public:
      */
     bool insertFile(const std::string &name, const QString &fileName,
                     AudioFileId id);
+    /// We have audio files at load time, assume user has set location.
+    void setAudioLocationConfirmed()  { m_audioLocationConfirmed = true; }
 
     /// Does a specific file id exist?
     bool fileExists(AudioFileId id);
@@ -261,6 +269,15 @@ public:
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }
 
+    /// Ask the user to pick a save location for audio files.
+    /**
+     * Checks for the first save with audio files and shows a dialog
+     * to help the user select a location.
+     *
+     * Call this after saving the .rg file.
+     */
+    void save();
+
     /// Show entries for debug purposes
     void print();
 
@@ -303,6 +320,10 @@ private:
     AudioFileManager(const AudioFileManager &aFM);
     AudioFileManager &operator=(const AudioFileManager &);
 
+    // We can't use RosegardenDocument::currentDocument as it might
+    // be pointing to the wrong document.
+    RosegardenDocument *m_document;
+
     /// The audio files we are managing.
     /**
      * These objects are owned by this class.  The dtor deletes them.
@@ -334,6 +355,12 @@ private:
      */
     int convertAudioFile(const QString &inFile, const QString &outFile);
 
+    /// Convert an internal file name to standard form.
+    /**
+     * Expand "~" and "." to an absolute path/file name.
+     */
+    QString pathToStandard2(const QString &fileName) const;
+
     /// Get a short file name from a long one (with '/'s)
     QString getShortFilename(const QString &fileName) const;
 
@@ -360,6 +387,8 @@ private:
     unsigned int m_lastAudioFileID;
 
     QString m_audioPath;
+    /// Whether the user has confirmed the audio file path.
+    bool m_audioLocationConfirmed;
 
     void moveFiles(const QString &newPath);
 

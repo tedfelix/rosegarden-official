@@ -131,6 +131,7 @@ RosegardenDocument::RosegardenDocument(
     m_modified(false),
     m_autoSaved(false),
     m_lockFile(nullptr),
+    m_audioFileManager(this),
     m_audioPeaksThread(&m_audioFileManager),
     m_seqManager(nullptr),
     m_pluginManager(pluginManager),
