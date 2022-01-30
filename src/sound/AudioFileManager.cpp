@@ -47,9 +47,6 @@
 
 #include "AudioFileManager.h"
 
-// #define DEBUG_AUDIOFILEMANAGER
-// #define DEBUG_AUDIOFILEMANAGER_INSERT_FILE
-
 namespace
 {
 
@@ -155,10 +152,6 @@ AudioFileManager::addFile(const QString &filePath)
         AudioFileType subType = RIFFAudioFile::identifySubType(filePath);
 
         if (subType == BWF) {
-#ifdef DEBUG_AUDIOFILEMANAGER
-            RG_DEBUG << "FOUND BWF";
-#endif
-
             try {
                 aF = new BWFAudioFile(id, qstrtostr(getShortFilename(filePath)), filePath);
             } catch (const SoundFile::BadSoundFileException &e) {
@@ -234,62 +227,6 @@ AudioFileManager::getDirectory(const QString &path) const
     return rS;
 }
 
-#if 0
-// Create a new AudioFile with unique ID and label - insert from
-// our RG4 file
-//
-AudioFileId
-AudioFileManager::insertFile(const std::string &name,
-                             const QString &fileName)
-{
-    MutexLock lock (&audioFileManagerLock)
-        ;
-
-    // first try to expand any beginning tilde
-    //
-    QString foundFileName = pathToStandard2(fileName);
-
-    // If we've expanded and we can't find the file
-    // then try to find it in audio file directory.
-    //
-    QFileInfo info(foundFileName);
-    if (!info.exists())
-        foundFileName = getFileInPath(foundFileName);
-
-#ifdef DEBUG_AUDIOFILEMANAGER_INSERT_FILE
-    RG_DEBUG << "insertFile() - expanded fileName = \"" << foundFileName << "\"";
-#endif
-
-    // bail if we haven't found any reasonable filename
-    if (foundFileName == "")
-        return false;
-
-    AudioFileId id = getUniqueAudioFileID();
-
-    WAVAudioFile *aF = 0;
-
-    try {
-
-        aF = new WAVAudioFile(id, name, foundFileName);
-
-        // if we don't recognise the file then don't insert it
-        //
-        if (aF->open() == false) {
-            delete aF;
-            RG_WARNING << "insertFile() - don't recognise file type in " << foundFileName;
-            throw BadAudioPathException(foundFileName, __FILE__, __LINE__);
-        }
-        m_audioFiles.push_back(aF);
-
-    } catch (const SoundFile::BadSoundFileException &e) {
-        delete aF;
-        throw BadAudioPathException(e);
-    }
-
-    return id;
-}
-#endif
-
 bool
 AudioFileManager::removeFile(AudioFileId id)
 {
@@ -344,10 +281,6 @@ AudioFileManager::insertFile(const std::string &name,
     QFileInfo info(foundFileName);
     if (!info.exists())
         foundFileName = getFileInPath(foundFileName);
-
-#ifdef DEBUG_AUDIOFILEMANAGER_INSERT_FILE
-    RG_DEBUG << "insertFile() - expanded fileName = \"" << foundFileName << "\"";
-#endif
 
     // If no joy here then we can't find this file
     if (foundFileName == "")
@@ -439,8 +372,6 @@ AudioFileManager::getFileInPath(const QString &file)
     if (searchInfo.exists())
         return searchFile.toLatin1().data();
 
-    RG_DEBUG << "getFileInPath() - searchInfo = " << searchFile;
-
     return "";
 }
 
@@ -505,8 +436,6 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
 {
     MutexLock lock (&audioFileManagerLock)
         ;
-
-    RG_DEBUG << "createRecordingAudioFile(): " << projectName;
 
     // Replace invalid filename characters with "_".
     instrumentAlias.replace(QRegularExpression("[&\\\\\\/%\\*\\?\"'><\\|~: ]"), "_");
@@ -651,8 +580,6 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
 AudioFileId
 AudioFileManager::importFile(const QString &fileName, int sampleRate)
 {
-    RG_DEBUG << "importFile("<< fileName << ", " << sampleRate << ")";
-
     if (m_progressDialog)
         m_progressDialog->setLabelText(tr("Importing audio file..."));
 
@@ -721,8 +648,6 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
 
 int AudioFileManager::convertAudioFile(const QString &inFile, const QString &outFile)
 {
-    RG_DEBUG << "convertAudioFile(): inFile = " << inFile << ", outFile = " << outFile;
-
     AudioReadStream *rs = AudioReadStreamFactory::createReadStream( inFile);
     if (!rs || !rs->isOK()) {
         RG_WARNING << "convertAudioFile(): ERROR: Failed to read audio file";
@@ -797,25 +722,6 @@ int AudioFileManager::convertAudioFile(const QString &inFile, const QString &out
     return 0;
 }
 
-#if 0
-AudioFile *
-AudioFileManager::getLastAudioFile()
-{
-    MutexLock lock (&audioFileManagerLock)
-        ;
-
-    std::vector<AudioFile *>::iterator it = m_audioFiles.begin();
-    AudioFile * audioFile = 0;
-
-    while (it != m_audioFiles.end()) {
-        audioFile = (*it);
-        ++it;
-    }
-
-    return audioFile;
-}
-#endif
-
 QString
 AudioFileManager::pathToInternal(const QString &path) const
 {
@@ -868,10 +774,6 @@ AudioFileManager::toXmlString() const
         // have the audio path in it but has our home directory in it
         // then swap this out for a tilde '~'
         //
-#ifdef DEBUG_AUDIOFILEMANAGER
-        RG_DEBUG << "toXmlString(): DIR = " << getDirectory(fileName) << " :  PATH = " << m_audioPath;
-#endif
-
         if (getDirectory(fileName) == m_audioPath)
             fileName = getShortFilename(fileName);
         else  // not likely to ever happen
@@ -903,11 +805,6 @@ AudioFileManager::generatePreviews()
     }
 
     m_peakManager.setProgressDialog(m_progressDialog);
-
-#ifdef DEBUG_AUDIOFILEMANAGER
-    RG_DEBUG << "generatePreviews() - for " << m_audioFiles.size() << " files";
-#endif
-
 
     // Generate peaks if we need to
 
@@ -982,10 +879,8 @@ AudioFileManager::getPreview(AudioFileId id,
         ;
 
     AudioFile *audioFile = getAudioFile(id);
-
-    if (audioFile == nullptr) {
+    if (!audioFile)
         return std::vector<float>();
-    }
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
         // ??? This happens a lot when recording audio.  Need to detect
@@ -1036,25 +931,15 @@ AudioFileManager::drawPreview(AudioFileId id,
 //    painter.setPen(qApp->palette().color(QPalette::Active,
 //                                         QColorGroup::Mid));
 
-    if (values.size() == 0) {
-#ifdef DEBUG_AUDIOFILEMANAGER
-        RG_WARNING << "drawPreview() - no preview values returned!";
-#endif
-
+    if (values.empty())
         return;
-    }
 
     float yStep = pixmap->height() / 2;
     int channels = audioFile->getChannels();
     float ch1Value, ch2Value;
 
-    if (channels == 0) {
-#ifdef DEBUG_AUDIOFILEMANAGER
-        RG_WARNING << "drawPreview() - no channels in audio file!";
-#endif
-
+    if (channels == 0)
         return;
-    }
 
 
     // Render pixmap
@@ -1135,13 +1020,14 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
             ch2Value = values[i * channels + 1];
         }
 
-        if (i < startWidth || i > endWidth) painter.setPen(Qt::gray);
-//            painter.setPen(qApp->palette().color(QPalette::Active,
-//                                                 QColorGroup::Mid));
+        if (i < startWidth || i > endWidth)
+            painter.setPen(Qt::gray);
+            //painter.setPen(qApp->palette().color(QPalette::Active,
+            //                                     QColorGroup::Mid));
         else
             painter.setPen(Qt::black);
-//            painter.setPen(qApp->palette().color(QPalette::Active,
-//                                                 QColorGroup::Dark));
+            //painter.setPen(qApp->palette().color(QPalette::Active,
+            //                                     QColorGroup::Dark));
 
         painter.drawLine(i, static_cast<int>(yStep - ch1Value * yStep),
                          i, static_cast<int>(yStep + ch2Value * yStep));
@@ -1155,7 +1041,7 @@ AudioFileManager::print()
     MutexLock lock (&audioFileManagerLock)
         ;
 
-#ifdef DEBUG_AUDIOFILEMANAGER
+#if 0
     RG_DEBUG << "print():" << m_audioFiles.size() << "entries";
 
     // For each AudioFile

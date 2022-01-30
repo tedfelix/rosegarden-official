@@ -281,22 +281,6 @@ public:
     /// Show entries for debug purposes
     void print();
 
-    /**
-     * Insert an audio file into the AudioFileManager and get the
-     * first allocated id for it.  Used from the RG file as we already
-     * have both name and filename/path.
-     *
-     * throws BadAudioPathException
-     */
-    //AudioFileId insertFile(const std::string &name,
-    //                       const QString &fileName);
-
-    //const PeakFileManager &getPeakFileManager() const  { return m_peakManager; }
-    //PeakFileManager &getPeakFileManager()  { return m_peakManager; }
-
-    /// Get the last file in the vector - the last created.
-    //AudioFile *getLastAudioFile();
-
     class BadAudioPathException : public Exception
     {
     public:
