@@ -293,13 +293,9 @@ AudioManagerDialog::slotPopulateFileList()
     // enable selection
     m_fileList->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    // for the sample file length
-    RealTime length;
-
     // Create a vector of audio Segments only
     //
     std::vector<Segment*> segments;
-    std::vector<Segment*>::const_iterator iit;
 
     for (Composition::iterator it = m_doc->getComposition().begin();
             it != m_doc->getComposition().end(); ++it) {
@@ -307,88 +303,76 @@ AudioManagerDialog::slotPopulateFileList()
             segments.push_back(*it);
     }
 
-    // duration
     RealTime segmentDuration;
     bool wrongSampleRates = false;
 
-    for (AudioFileVector::const_iterator
-            it = m_doc->getAudioFileManager().cbegin();
-            it != m_doc->getAudioFileManager().cend();
-            ++it) {
+    // For each AudioFile
+    for (AudioFileVector::iterator audioFileIter =
+            m_doc->getAudioFileManager().begin();
+         audioFileIter != m_doc->getAudioFileManager().end();
+         ++audioFileIter) {
+        AudioFile &audioFile = **audioFileIter;
+
         try {
-            //RG_DEBUG << "slotPopulateFileList(): 1";
             m_doc->getAudioFileManager().
-            drawPreview((*it)->getId(),
+            drawPreview(audioFile.getId(),
                         RealTime::zeroTime,
-                        (*it)->getLength(),
+                        audioFile.getLength(),
                         audioPixmap);
-            //RG_DEBUG << "slotPopulateFileList(): 2";
         } catch (const Exception &e) {
-            //RG_DEBUG << "slotPopulateFileList(): 3";
             audioPixmap->fill(); // white
             QPainter p(audioPixmap);
             p.setPen(QColor(Qt::black));
             p.drawText(10, m_previewHeight / 2, QString("<no preview>"));
         }
-        //RG_DEBUG << "slotPopulateFileList(): 4";
-
-        //!!! Why isn't the label the label the user assigned to the file?
-        // Why do we allow the user to assign a label at all, then?
-
-        QString label = (*it)->getShortFilename();
 
         // Set the label, duration, envelope pixmap and filename
-        //
         
-        AudioListItem *item = new AudioListItem(m_fileList, QStringList(label), (*it)->getId());
-        //AudioListItem *item = new AudioListItem(m_fileList, QStringList(label)); //, (*it)->getId());
+        AudioListItem *item = new AudioListItem(
+                m_fileList,
+                QStringList(audioFile.getShortFilename()),  // ??? Why not getLabel()?
+                audioFile.getId());
         
         // Duration
-        //
-        length = (*it)->getLength();
+        const RealTime length = audioFile.getLength();
         const QString msecs = QString::asprintf("%03d", length.nsec / 1000000);
-        item->setText(1,QString("%1.%2s").arg(length.sec).arg(msecs));    // row, col
+        item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
 
         // set start time and duration
         item->setStartTime(RealTime::zeroTime);
         item->setDuration(length);
 
         // Envelope pixmap
-        //
-        item->setIcon(2, QIcon(*audioPixmap));    // row, col    
-        
+        item->setIcon(2, QIcon(*audioPixmap));
 
         // File location
-        //
-        item->setText(6,  m_doc->getAudioFileManager().
-                pathToInternal((*it)->getFilename()));
+        item->setText(6, audioFile.getFilename());
 
         // Resolution
-        //
-        item->setText(5, QString("%1 bits").arg((*it)->getBitsPerSample()));
+        item->setText(5, QString("%1 bits").arg(audioFile.getBitsPerSample()));
 
         // Channels
-        //
-        item->setText(4, QString("%1").arg((*it)->getChannels()));
+        item->setText(4, QString("%1").arg(audioFile.getChannels()));
 
         // Sample rate
-        //
-        if (m_sampleRate != 0 && int((*it)->getSampleRate()) != m_sampleRate) {
+        if (m_sampleRate != 0 && int(audioFile.getSampleRate()) != m_sampleRate) {
             const QString sRate =
                 QString::asprintf("%.1f KHz *",
-                                  float((*it)->getSampleRate()) / 1000.0);
+                                  float(audioFile.getSampleRate()) / 1000.0);
             wrongSampleRates = true;
             item->setText(3, sRate);
         } else {
             const QString sRate =
                 QString::asprintf("%.1f KHz",
-                                  float((*it)->getSampleRate()) / 1000.0);
+                                  float(audioFile.getSampleRate()) / 1000.0);
             item->setText(3, sRate);
         }
 
         // Test audio file element for selection criteria
         //
-        if (findSelection && lastSegment == nullptr && lastId == (*it)->getId()) {
+        if (findSelection  &&
+            lastSegment == nullptr  &&
+            lastId == audioFile.getId()) {
             //m_fileList->setSelected(item, true);
             m_fileList->setCurrentItem(item);
             
@@ -396,58 +380,61 @@ AudioManagerDialog::slotPopulateFileList()
         }
 
         // Add children
-        //
-        for (iit = segments.begin(); iit != segments.end(); ++iit) {
-            if ((*iit)->getAudioFileId() == (*it)->getId()) {
-                AudioListItem *childItem =
-                    new AudioListItem(item,
-                                      QStringList(QString((*iit)->getLabel().c_str())),
-                                      (*it)->getId());
-                segmentDuration = (*iit)->getAudioEndTime() -
-                                  (*iit)->getAudioStartTime();
 
-                // store the start time
-                //
-                childItem->setStartTime((*iit)->getAudioStartTime());
-                childItem->setDuration(segmentDuration);
+        // For each audio segment
+        for (Segment *segment : segments) {
 
-                // Write segment duration
-                //
-                const QString msecs =
-                    QString::asprintf("%03d", segmentDuration.nsec / 1000000);
-                childItem->setText(1, QString("%1.%2s")
-                                   .arg(segmentDuration.sec)
-                                   .arg(msecs));
+            // Not using this audioFile?  Try the next.
+            if (segment->getAudioFileId() != audioFile.getId())
+                continue;
 
-                try {
-                    m_doc->getAudioFileManager().
-                    drawHighlightedPreview((*it)->getId(),
-                                           RealTime::zeroTime,
-                                           (*it)->getLength(),
-                                           (*iit)->getAudioStartTime(),
-                                           (*iit)->getAudioEndTime(),
-                                           audioPixmap);
-                } catch (const Exception &e) {
-                    // should already be set to "no file"
-                }
+            AudioListItem *childItem =
+                new AudioListItem(item,
+                                  QStringList(QString(segment->getLabel().c_str())),
+                                  audioFile.getId());
+            segmentDuration = segment->getAudioEndTime() -
+                              segment->getAudioStartTime();
 
-                // set pixmap
-                //
-                //childItem->setPixmap(2, *audioPixmap);
-                childItem->setIcon(2, QIcon(*audioPixmap));
+            // store the start time
+            //
+            childItem->setStartTime(segment->getAudioStartTime());
+            childItem->setDuration(segmentDuration);
 
-                // set segment
-                //
-                childItem->setSegment(*iit);
+            // Write segment duration
+            //
+            const QString msecs =
+                QString::asprintf("%03d", segmentDuration.nsec / 1000000);
+            childItem->setText(1, QString("%1.%2s")
+                               .arg(segmentDuration.sec)
+                               .arg(msecs));
 
-                if (findSelection && lastSegment == (*iit)) {
-                    m_fileList->setCurrentItem(childItem);    // select
-                    findSelection = false;
-                    foundSelection = true;
-                }
-
-                // Add children
+            try {
+                m_doc->getAudioFileManager().
+                drawHighlightedPreview(audioFile.getId(),
+                                       RealTime::zeroTime,
+                                       audioFile.getLength(),
+                                       segment->getAudioStartTime(),
+                                       segment->getAudioEndTime(),
+                                       audioPixmap);
+            } catch (const Exception &e) {
+                // should already be set to "no file"
             }
+
+            // set pixmap
+            //
+            //childItem->setPixmap(2, *audioPixmap);
+            childItem->setIcon(2, QIcon(*audioPixmap));
+
+            // set segment
+            //
+            childItem->setSegment(segment);
+
+            if (findSelection  &&  lastSegment == segment) {
+                m_fileList->setCurrentItem(childItem);    // select
+                findSelection = false;
+                foundSelection = true;
+            }
+
         }
     }
 

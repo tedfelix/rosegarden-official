@@ -124,10 +124,18 @@ public:
      * NOT THREAD SAFE.
      */
     AudioFileVector::const_iterator cbegin() const
-        { return m_audioFiles.begin(); }
+        { return m_audioFiles.cbegin(); }
 
     /// NOT THREAD SAFE.
     AudioFileVector::const_iterator cend() const
+        { return m_audioFiles.cend(); }
+
+    /// NOT THREAD SAFE.
+    AudioFileVector::iterator begin()
+        { return m_audioFiles.begin(); }
+
+    /// NOT THREAD SAFE.
+    AudioFileVector::iterator end()
         { return m_audioFiles.end(); }
 
     /// NOT THREAD SAFE.
@@ -239,15 +247,6 @@ public:
                                 const RealTime &highlightStart,
                                 const RealTime &highlightEnd,
                                 QPixmap *pixmap);
-
-    /// Convert a path or file name to use internal path rules.
-    /**
-     * An internal path may use "~" to represent a user's home directory
-     * as with bash.  This should ease moving files from one user to another.
-     * This function checks for the user's home directory in the path and
-     * replaces it with "~".
-     */
-    QString pathToInternal(const QString &path) const;
 
     /// Get a split point vector from a peak file
     /**

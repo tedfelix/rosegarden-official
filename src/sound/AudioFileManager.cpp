@@ -745,25 +745,6 @@ int AudioFileManager::convertAudioFile(const QString &inFile, const QString &out
     return 0;
 }
 
-QString
-AudioFileManager::pathToInternal(const QString &path) const
-{
-    QString rS = path;
-    QString homePath = getenv("HOME");
-
-    // if path length is less than homePath then just return unchanged
-    if (rS.length() < homePath.length())
-        return rS;
-
-    // if the first section matches the path then substitute
-    if (rS.mid(0, homePath.length()) == homePath) {
-        rS.remove(0, homePath.length());
-        rS = "~" + rS;
-    }
-
-    return rS;
-}
-
 std::string
 AudioFileManager::toXmlString() const
 {
@@ -788,16 +769,9 @@ AudioFileManager::toXmlString() const
         // ??? We need relative vs. absolute for the audio files as well.
         fileName = (*it)->getFilename();
 
-        // attempt two substitutions - If the prefix to the filename
-        // is the same as the audio path then we can dock the prefix
-        // as it'll be added again next time.  If the path doesn't
-        // have the audio path in it but has our home directory in it
-        // then swap this out for a tilde '~'
-        //
+        // If the absolute audio path is here, remove it.
         if (getDirectory(fileName) == getAbsoluteAudioPath())
             fileName = getShortFilename(fileName);
-        else  // Not likely to ever happen.  ??? Do we even handle this on the read side?
-            fileName = pathToInternal(fileName);
 
         audioFiles << "    <audio id=\"" << (*it)->getId()
                    << "\" file=\"" << fileName
