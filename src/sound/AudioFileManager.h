@@ -115,7 +115,7 @@ public:
     bool fileExists(AudioFileId id);
 
     /// Does a specific file path exist?  Return ID or -1.
-    int fileExists(const QString &path);
+    int fileExists(const QString &absoluteFilePath);
 
     AudioFile* getAudioFile(AudioFileId id);
 

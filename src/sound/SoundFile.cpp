@@ -22,8 +22,8 @@ namespace Rosegarden
 
 {
 
-SoundFile::SoundFile(const QString &fileName):
-        m_absoluteFilePath(fileName),
+SoundFile::SoundFile(const QString &absoluteFilePath):
+        m_absoluteFilePath(absoluteFilePath),
         m_readChunkPtr( -1),
         m_readChunkSize(4096),  // 4k blocks
         m_inFile(nullptr),
@@ -31,7 +31,7 @@ SoundFile::SoundFile(const QString &fileName):
         m_loseBuffer(false),
         m_fileSize(0)
 {
-    RG_DEBUG << "ctor: " << m_absoluteFilePath;
+    //RG_DEBUG << "ctor: " << m_absoluteFilePath;
 }
 
 // Tidies up for any derived classes

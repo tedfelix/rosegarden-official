@@ -54,14 +54,14 @@ public:
     /// The "read" constructor.
     AudioFile(AudioFileId id,
               const std::string &label,
-              const QString &fileName);
+              const QString &absoluteFilePath);
 
 #if 0
     /// The "write" constructor - we only need to
     /// specify a file&label and some parameters and
     /// then write it out.
     ///
-    AudioFile(const QString &fileName,
+    AudioFile(const QString &absoluteFilePath,
               unsigned int channels,
               unsigned int sampleRate,
               unsigned int bitsPerSample);

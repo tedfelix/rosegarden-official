@@ -33,9 +33,9 @@ class BWFAudioFile : public RIFFAudioFile
 public:
     BWFAudioFile(const unsigned int &id,
                  const std::string &name,
-                 const QString &fileName);
+                 const QString &absoluteFilePath);
 
-    BWFAudioFile(const QString &fileName,
+    BWFAudioFile(const QString &absoluteFilePath,
                   unsigned int channels,
                   unsigned int sampleRate,
                   unsigned int bytesPerSecond,

@@ -29,19 +29,19 @@ namespace Rosegarden
 
 WAVAudioFile::WAVAudioFile(const unsigned int &id,
                            const std::string &name,
-                           const QString &fileName):
-        RIFFAudioFile(id, name, fileName)
+                           const QString &absoluteFilePath):
+        RIFFAudioFile(id, name, absoluteFilePath)
 {
     m_type = WAV;
 }
 
-WAVAudioFile::WAVAudioFile(const QString &fileName,
+WAVAudioFile::WAVAudioFile(const QString &absoluteFilePath,
                            unsigned int channels = 1,
                            unsigned int sampleRate = 48000,
                            unsigned int bytesPerSecond = 6000,
                            unsigned int bytesPerFrame = 2,
                            unsigned int bitsPerSample = 16):
-        RIFFAudioFile(fileName, channels, sampleRate, bytesPerSecond, bytesPerFrame, bitsPerSample)
+        RIFFAudioFile(absoluteFilePath, channels, sampleRate, bytesPerSecond, bytesPerFrame, bitsPerSample)
 {
     m_type = WAV;
 }

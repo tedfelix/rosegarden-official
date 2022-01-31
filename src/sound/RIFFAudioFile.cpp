@@ -34,20 +34,20 @@ namespace Rosegarden
 
 RIFFAudioFile::RIFFAudioFile(unsigned int id,
                              const std::string &name,
-                             const QString &fileName):
-    AudioFile(id, name, fileName),
+                             const QString &absoluteFilePath):
+    AudioFile(id, name, absoluteFilePath),
     m_subFormat(PCM),
     m_bytesPerSecond(0),
     m_bytesPerFrame(0)
 {}
 
-RIFFAudioFile::RIFFAudioFile(const QString &fileName,
+RIFFAudioFile::RIFFAudioFile(const QString &absoluteFilePath,
                              unsigned int channels = 1,
                              unsigned int sampleRate = 48000,
                              unsigned int bytesPerSecond = 6000,
                              unsigned int bytesPerFrame = 2,
                              unsigned int bitsPerSample = 16):
-        AudioFile(0, "", fileName)
+        AudioFile(0, "", absoluteFilePath)
 {
     m_bitsPerSample = bitsPerSample;
     m_sampleRate = sampleRate;

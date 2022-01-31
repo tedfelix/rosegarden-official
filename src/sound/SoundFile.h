@@ -39,7 +39,7 @@ class SoundFile
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SoundFile)
 
 public:
-    SoundFile(const QString &fileName);
+    SoundFile(const QString &absoluteFilePath);
     virtual ~SoundFile();
 
     class BadSoundFileException : public Exception

@@ -237,17 +237,24 @@ AudioFileManager::removeFile(AudioFileId id)
         ;
 
     // For each AudioFile
-    for (std::vector<AudioFile *>::iterator it = m_audioFiles.begin();
-         it != m_audioFiles.end();
-         ++it) {
-        if ((*it)->getId() == id) {
-            m_peakManager.removeAudioFile(*it);
-            m_recordedAudioFiles.erase(*it);
-            m_derivedAudioFiles.erase(*it);
-            delete(*it);
-            m_audioFiles.erase(it);
-            return true;
-        }
+    for (AudioFileVector::iterator audioFileIter = m_audioFiles.begin();
+         audioFileIter != m_audioFiles.end();
+         ++audioFileIter) {
+        AudioFile *audioFile = (*audioFileIter);
+
+        // Not the one we're looking for?  Try the next.
+        if (audioFile->getId() != id)
+            continue;
+
+        // Found it
+
+        m_peakManager.removeAudioFile(audioFile);
+        m_recordedAudioFiles.erase(audioFile);
+        m_derivedAudioFiles.erase(audioFile);
+        delete(audioFile);
+        m_audioFiles.erase(audioFileIter);
+
+        return true;
     }
 
     return false;
@@ -399,21 +406,19 @@ AudioFileManager::getFileInPath(const QString &file)
 }
 
 int
-AudioFileManager::fileExists(const QString &path)
+AudioFileManager::fileExists(const QString &absoluteFilePath)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
 
     // For each AudioFile
-    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
-         it != m_audioFiles.end();
-         ++it) {
-        if ((*it)->getAbsoluteFilePath() == path)
-            return (*it)->getId();
+    for (const AudioFile *audioFile : m_audioFiles) {
+        if (audioFile->getAbsoluteFilePath() == absoluteFilePath)
+            return audioFile->getId();
     }
 
+    // Not found.
     return -1;
-
 }
 
 bool
@@ -423,15 +428,12 @@ AudioFileManager::fileExists(AudioFileId id)
         ;
 
     // For each AudioFile
-    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
-         it != m_audioFiles.end();
-         ++it) {
-        if ((*it)->getId() == id)
+    for (const AudioFile *audioFile : m_audioFiles) {
+        if (audioFile->getId() == id)
             return true;
     }
 
     return false;
-
 }
 
 void
@@ -441,12 +443,10 @@ AudioFileManager::clear()
         ;
 
     // For each AudioFile
-    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
-         it != m_audioFiles.end();
-         ++it) {
-        m_recordedAudioFiles.erase(*it);
-        m_derivedAudioFiles.erase(*it);
-        delete(*it);
+    for (AudioFile *audioFile : m_audioFiles) {
+        m_recordedAudioFiles.erase(audioFile);
+        m_derivedAudioFiles.erase(audioFile);
+        delete audioFile;
     }
 
     m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
@@ -763,19 +763,16 @@ AudioFileManager::toXmlString() const
     QString fileName;
 
     // For each AudioFile
-    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
-         it != m_audioFiles.end();
-         ++it) {
-        // ??? We need relative vs. absolute for the audio files as well.
-        fileName = (*it)->getAbsoluteFilePath();
+    for (const AudioFile *audioFile : m_audioFiles) {
+        fileName = audioFile->getAbsoluteFilePath();
 
         // If the absolute audio path is here, remove it.
         if (getDirectory(fileName) == getAbsoluteAudioPath())
             fileName = getShortFilename(fileName);
 
-        audioFiles << "    <audio id=\"" << (*it)->getId()
+        audioFiles << "    <audio id=\"" << audioFile->getId()
                    << "\" file=\"" << fileName
-                   << "\" label=\"" << encode((*it)->getLabel())
+                   << "\" label=\"" << encode(audioFile->getLabel())
                    << "\"/>" << std::endl;
     }
 
@@ -803,11 +800,9 @@ AudioFileManager::generatePreviews()
     // Generate peaks if we need to
 
     // For each AudioFile
-    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
-         it != m_audioFiles.end();
-         ++it) {
-        if (!m_peakManager.hasValidPeaks(*it))
-            m_peakManager.generatePeaks(*it);
+    for (AudioFile *audioFile : m_audioFiles) {
+        if (!m_peakManager.hasValidPeaks(audioFile))
+            m_peakManager.generatePeaks(audioFile);
 
         if (m_progressDialog  &&  m_progressDialog->wasCanceled())
             break;
@@ -853,12 +848,12 @@ AudioFileManager::getAudioFile(AudioFileId id)
     // ??? A std::map<AudioFileId, AudioFile *> would be faster.
 
     // For each AudioFile
-    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
-         it != m_audioFiles.end();
-         ++it) {
-        if ((*it)->getId() == id)
-            return (*it);
+    for (AudioFile *audioFile : m_audioFiles) {
+        if (audioFile->getId() == id)
+            return audioFile;
     }
+
+    // Not found
     return nullptr;
 }
 
@@ -1035,16 +1030,14 @@ AudioFileManager::print()
     MutexLock lock (&audioFileManagerLock)
         ;
 
-#if 0
     RG_DEBUG << "print():" << m_audioFiles.size() << "entries";
 
     // For each AudioFile
-    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
-         it != m_audioFiles.end();
-         ++it) {
-        RG_DEBUG << "  " << (*it)->getId() << " : " << (*it)->getLabel() << " : \"" << (*it)->getAbsoluteFilePath() << "\"";
+    for (AudioFile *audioFile : m_audioFiles) {
+        RG_DEBUG << "  " << audioFile->getId() << " : " <<
+                            audioFile->getLabel() << " : \"" <<
+                            audioFile->getAbsoluteFilePath() << "\"";
     }
-#endif
 }
 
 std::vector<SplitPointPair>
@@ -1075,12 +1068,10 @@ AudioFileManager::getActualSampleRates() const
     std::set<int> rates;
 
     // For each AudioFile
-    for (std::vector<AudioFile *>::const_iterator i = m_audioFiles.begin();
-         i != m_audioFiles.end();
-         ++i) {
-
-        unsigned int sr = (*i)->getSampleRate();
-        if (sr != 0) rates.insert(int(sr));
+    for (const AudioFile *audioFile : m_audioFiles) {
+        int sampleRate = audioFile->getSampleRate();
+        if (sampleRate != 0)
+            rates.insert(sampleRate);
     }
 
     return rates;
