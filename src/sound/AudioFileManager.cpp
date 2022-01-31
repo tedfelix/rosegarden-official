@@ -408,7 +408,7 @@ AudioFileManager::fileExists(const QString &path)
     for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
          it != m_audioFiles.end();
          ++it) {
-        if ((*it)->getFilename() == path)
+        if ((*it)->getAbsoluteFilePath() == path)
             return (*it)->getId();
     }
 
@@ -541,7 +541,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
     AudioFileId newId = getUniqueAudioFileID();
     QString fileName = "";
 
-    QString sourceBase = sourceFile->getShortFilename();
+    QString sourceBase = sourceFile->getFileName();
     if (sourceBase.length() > 4 && sourceBase.mid(0, 3) == "rg-") {
         sourceBase = sourceBase.mid(3);
     }
@@ -767,7 +767,7 @@ AudioFileManager::toXmlString() const
          it != m_audioFiles.end();
          ++it) {
         // ??? We need relative vs. absolute for the audio files as well.
-        fileName = (*it)->getFilename();
+        fileName = (*it)->getAbsoluteFilePath();
 
         // If the absolute audio path is here, remove it.
         if (getDirectory(fileName) == getAbsoluteAudioPath())
@@ -881,9 +881,9 @@ AudioFileManager::getPreview(AudioFileId id,
         //     that we are recording and suppress this.  Or just don't
         //     call this when recording.  The caller has comments in
         //     its catch() to this effect.
-        RG_WARNING << "getPreview(): No peaks for audio file" << audioFile->getFilename() << "(this is probably OK when recording)";
+        RG_WARNING << "getPreview(): No peaks for audio file" << audioFile->getAbsoluteFilePath() << "(this is probably OK when recording)";
         throw PeakFileManager::BadPeakFileException(
-                audioFile->getFilename(), __FILE__, __LINE__);
+                audioFile->getAbsoluteFilePath(), __FILE__, __LINE__);
     }
 
     return m_peakManager.getPreview(audioFile,
@@ -907,9 +907,9 @@ AudioFileManager::drawPreview(AudioFileId id,
         return;
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
-        RG_WARNING << "drawPreview(): No peaks for audio file " << audioFile->getFilename();
+        RG_WARNING << "drawPreview(): No peaks for audio file " << audioFile->getAbsoluteFilePath();
         throw PeakFileManager::BadPeakFileException(
-                audioFile->getFilename(), __FILE__, __LINE__);
+                audioFile->getAbsoluteFilePath(), __FILE__, __LINE__);
     }
 
     std::vector<float> values = m_peakManager.getPreview
@@ -971,9 +971,9 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
         return;
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
-        RG_WARNING << "drawHighlightedPreview(): No peaks for audio file " << audioFile->getFilename();
+        RG_WARNING << "drawHighlightedPreview(): No peaks for audio file " << audioFile->getAbsoluteFilePath();
         throw PeakFileManager::BadPeakFileException
-        (audioFile->getFilename(), __FILE__, __LINE__);
+        (audioFile->getAbsoluteFilePath(), __FILE__, __LINE__);
     }
 
     std::vector<float> values = m_peakManager.getPreview
@@ -1042,7 +1042,7 @@ AudioFileManager::print()
     for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
          it != m_audioFiles.end();
          ++it) {
-        RG_DEBUG << "  " << (*it)->getId() << " : " << (*it)->getLabel() << " : \"" << (*it)->getFilename() << "\"";
+        RG_DEBUG << "  " << (*it)->getId() << " : " << (*it)->getLabel() << " : \"" << (*it)->getAbsoluteFilePath() << "\"";
     }
 #endif
 }
@@ -1128,7 +1128,7 @@ AudioFileManager::moveFiles(const QString &newPath)
     for (AudioFile *audioFile : m_audioFiles)
     {
         // In case it has a tilde or dot (see toXmlString()).
-        QString oldName = toAbsolute(audioFile->getFilename());
+        QString oldName = toAbsolute(audioFile->getAbsoluteFilePath());
 
         // Figure out where it really is.
         // ??? Usually the filename in the AudioFile object is an absolute
@@ -1166,7 +1166,7 @@ AudioFileManager::moveFiles(const QString &newPath)
         }
 
         // Adjust the stored path for this file.
-        audioFile->setFilename(newName);
+        audioFile->setAbsoluteFilePath(newName);
 
         // Open the file in its new location.
         audioFile->open();

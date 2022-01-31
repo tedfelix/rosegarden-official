@@ -23,16 +23,18 @@ namespace Rosegarden
 {
 
 SoundFile::SoundFile(const QString &fileName):
-        m_fileName(fileName),
+        m_absoluteFilePath(fileName),
         m_readChunkPtr( -1),
         m_readChunkSize(4096),  // 4k blocks
         m_inFile(nullptr),
         m_outFile(nullptr),
         m_loseBuffer(false),
         m_fileSize(0)
-{}
+{
+    RG_DEBUG << "ctor: " << m_absoluteFilePath;
+}
 
-// Tidies up for any dervied classes
+// Tidies up for any derived classes
 //
 SoundFile::~SoundFile()
 {
@@ -59,7 +61,7 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
         //
         file->clear();
 
-        throw(BadSoundFileException(m_fileName, "SoundFile::getBytes() - EOF encountered"));
+        throw(BadSoundFileException(m_absoluteFilePath, "SoundFile::getBytes() - EOF encountered"));
     }
 
     if (!(*file)) {
@@ -114,14 +116,14 @@ std::string
 SoundFile::getBytes(unsigned int numberOfBytes)
 {
     if (m_inFile == nullptr)
-        throw(BadSoundFileException(m_fileName, "SoundFile::getBytes - no open file handle"));
+        throw(BadSoundFileException(m_absoluteFilePath, "SoundFile::getBytes - no open file handle"));
 
     if (m_inFile->eof()) {
         // Reset the input stream so it's operational again
         //
         m_inFile->clear();
 
-        throw(BadSoundFileException(m_fileName, "SoundFile::getBytes() - EOF encountered"));
+        throw(BadSoundFileException(m_absoluteFilePath, "SoundFile::getBytes() - EOF encountered"));
     }
 
 
@@ -231,9 +233,9 @@ SoundFile::putBytes(std::ofstream *file, const char *buffer, size_t n)
 
 // Clip off any path from the filename
 QString
-SoundFile::getShortFilename() const
+SoundFile::getFileName() const
 {
-    QString rS = m_fileName;
+    QString rS = m_absoluteFilePath;
     size_t pos = rS.lastIndexOf("/");
 
     if (pos > 0 && ( pos + 1 ) < (size_t)rS.length())

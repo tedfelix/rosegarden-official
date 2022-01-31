@@ -6483,7 +6483,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
             if (aF) {
                 // createRecordingAudioFile doesn't actually write to the disk,
                 // and in principle it shouldn't fail
-                qv.push_back(aF->getFilename());
+                qv.push_back(aF->getAbsoluteFilePath());
                 RosegardenDocument::currentDocument->addRecordAudioSegment(recordInstruments[i],
                                              aF->getId());
             } else {
@@ -6661,10 +6661,10 @@ RosegardenMainWindow::slotAddAudioFile(unsigned int id)
     if (aF == nullptr) return;
 
     int result = RosegardenSequencer::getInstance()->
-        addAudioFile(aF->getFilename(), aF->getId());
+        addAudioFile(aF->getAbsoluteFilePath(), aF->getId());
 
     if (!result) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getFilename()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getAbsoluteFilePath()));
     }
 }
 

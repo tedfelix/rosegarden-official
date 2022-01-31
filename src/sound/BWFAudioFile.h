@@ -65,7 +65,7 @@ public:
     // Peak file name
     //
     QString getPeakFilename() override
-        { return (m_fileName + ".pk"); }
+        { return (m_absoluteFilePath + ".pk"); }
 
 
     //!!! NOT IMPLEMENTED YET

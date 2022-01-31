@@ -330,7 +330,7 @@ AudioManagerDialog::slotPopulateFileList()
         
         AudioListItem *item = new AudioListItem(
                 m_fileList,
-                QStringList(audioFile.getShortFilename()),  // ??? Why not getLabel()?
+                QStringList(audioFile.getFileName()),  // ??? Why not getLabel()?
                 audioFile.getId());
         
         // Duration
@@ -346,7 +346,7 @@ AudioManagerDialog::slotPopulateFileList()
         item->setIcon(2, QIcon(*audioPixmap));
 
         // File location
-        item->setText(6, audioFile.getFilename());
+        item->setText(6, audioFile.getAbsoluteFilePath());
 
         // Resolution
         item->setText(5, QString("%1 bits").arg(audioFile.getBitsPerSample()));
@@ -513,7 +513,7 @@ AudioManagerDialog::slotExportAudio()
                     this,  // parent
                     tr("Save File As"),  // caption
                     QDir::currentPath(),  // dir
-                    sourceFile->getFilename(),  // defaultName
+                    sourceFile->getAbsoluteFilePath(),  // defaultName
                     tr("*.wav|WAV files (*.wav)"));  // filter
 
     if (destFileName.isEmpty())
@@ -641,7 +641,7 @@ AudioManagerDialog::slotRemove()
     if (haveSegments) {
 
         QString question = tr("This will unload audio file \"%1\" and remove all associated segments.  Are you sure?")
-                           .arg(audioFile->getFilename());
+                           .arg(audioFile->getAbsoluteFilePath());
 
         // Ask the question
         int reply = QMessageBox::warning(this, tr("Rosegarden"), question, QMessageBox::Yes | QMessageBox::Cancel , QMessageBox::Cancel);
@@ -694,7 +694,7 @@ AudioManagerDialog::slotPlayPreview()
     // now open up the playing dialog
     //
     m_audioPlayingDialog =
-        new AudioPlayingDialog(this, audioFile->getFilename());
+        new AudioPlayingDialog(this, audioFile->getAbsoluteFilePath());
 
     // Setup timer to pop down dialog after file has completed
     //
@@ -925,8 +925,8 @@ AudioManagerDialog::slotDeleteUnused()
             aIt = m_doc->getAudioFileManager().cbegin();
             aIt != m_doc->getAudioFileManager().cend(); ++aIt) {
         if (audioFiles.find((*aIt)->getId()) == audioFiles.end()) {
-            toDelete.push_back((*aIt)->getFilename());
-            nameMap[(*aIt)->getFilename()] = (*aIt)->getId();
+            toDelete.push_back((*aIt)->getAbsoluteFilePath());
+            nameMap[(*aIt)->getAbsoluteFilePath()] = (*aIt)->getId();
         }
     }
 

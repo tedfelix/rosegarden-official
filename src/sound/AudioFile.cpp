@@ -34,6 +34,7 @@ AudioFile::AudioFile(unsigned int id,
     m_fileInfo = new QFileInfo(fileName);
 }
 
+#if 0
 AudioFile::AudioFile(const QString &fileName,
                      unsigned int channels = 1,
                      unsigned int sampleRate = 48000,
@@ -49,6 +50,7 @@ AudioFile::AudioFile(const QString &fileName,
 {
     m_fileInfo = new QFileInfo(fileName);
 }
+#endif
 
 AudioFile::~AudioFile()
 {

@@ -370,11 +370,11 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
                 i != m_audioFileManager.cend(); ++i) {
 
             if (m_audioFileManager.wasAudioFileRecentlyRecorded((*i)->getId())) {
-                recordedOrphans.push_back((*i)->getFilename());
+                recordedOrphans.push_back((*i)->getAbsoluteFilePath());
             }
 
             if (m_audioFileManager.wasAudioFileRecentlyDerived((*i)->getId())) {
-                derivedOrphans.push_back((*i)->getFilename());
+                derivedOrphans.push_back((*i)->getAbsoluteFilePath());
             }
         }
     }
@@ -393,7 +393,7 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         for (AudioFileVector::const_iterator j =
                  m_audioFileManager.cbegin();
                 j != m_audioFileManager.cend(); ++j) {
-            if ((*j)->getFilename() == *i) {
+            if ((*j)->getAbsoluteFilePath() == *i) {
                 stillHave = true;
                 break;
             }
@@ -415,7 +415,7 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         for (AudioFileVector::const_iterator j =
                  m_audioFileManager.cbegin();
                 j != m_audioFileManager.cend(); ++j) {
-            if ((*j)->getFilename() == *i) {
+            if ((*j)->getAbsoluteFilePath() == *i) {
                 stillHave = true;
                 break;
             }
@@ -2449,11 +2449,11 @@ RosegardenDocument::prepareAudio()
          it != m_audioFileManager.cend(); it++) {
 
         bool result = RosegardenSequencer::getInstance()->
-            addAudioFile((*it)->getFilename(),
+            addAudioFile((*it)->getAbsoluteFilePath(),
                          (*it)->getId());
         if (!result) {
             RG_DEBUG << "prepareAudio() - failed to add file \""
-                     << (*it)->getFilename() << "\"";
+                     << (*it)->getAbsoluteFilePath() << "\"";
         }
     }
 }
@@ -2772,7 +2772,7 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
 
     // Add the file to the sequencer
     RosegardenSequencer::getInstance()->addAudioFile(
-            newAudioFile->getFilename(),
+            newAudioFile->getAbsoluteFilePath(),
             newAudioFile->getId());
 
     // clear down
@@ -2860,13 +2860,13 @@ RosegardenDocument::notifyAudioFileRemoval(AudioFileId id)
 
     if (m_audioFileManager.wasAudioFileRecentlyRecorded(id)) {
         file = m_audioFileManager.getAudioFile(id);
-        if (file) addOrphanedRecordedAudioFile( file->getFilename() );
+        if (file) addOrphanedRecordedAudioFile( file->getAbsoluteFilePath() );
         return;
     }
 
     if (m_audioFileManager.wasAudioFileRecentlyDerived(id)) {
         file = m_audioFileManager.getAudioFile(id);
-        if (file) addOrphanedDerivedAudioFile( file->getFilename() );
+        if (file) addOrphanedDerivedAudioFile( file->getAbsoluteFilePath() );
         return;
     }
 }

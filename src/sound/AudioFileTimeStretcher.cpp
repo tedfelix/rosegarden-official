@@ -58,7 +58,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         return -1;
     }
 
-    RG_DEBUG << "getStretchedAudioFile(): got source file id " << source << ", name " << sourceFile->getFilename();
+    RG_DEBUG << "getStretchedAudioFile(): got source file id " << source << ", name " << sourceFile->getAbsoluteFilePath();
 
     AudioFile *file = m_audioFileManager->createDerivedAudioFile(source, "stretch");
     if (!file) {
@@ -66,12 +66,12 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         return -1;
     }
 
-    RG_DEBUG << "getStretchedAudioFile(): got derived file id " << file->getId() << ", name " << file->getFilename();
+    RG_DEBUG << "getStretchedAudioFile(): got derived file id " << file->getId() << ", name " << file->getAbsoluteFilePath();
 
-    std::ifstream streamIn(sourceFile->getFilename().toLocal8Bit(),
+    std::ifstream streamIn(sourceFile->getAbsoluteFilePath().toLocal8Bit(),
                            std::ios::in | std::ios::binary);
     if (!streamIn) {
-        RG_WARNING << "getStretchedAudioFile(): WARNING: Creation of ifstream failed for file " << sourceFile->getFilename();
+        RG_WARNING << "getStretchedAudioFile(): WARNING: Creation of ifstream failed for file " << sourceFile->getAbsoluteFilePath();
         return -1;
     }
     
@@ -87,7 +87,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     // (like libsndfile, or hey!, we could use libsndfile...)
 
     WAVAudioFile writeFile
-        (file->getFilename(),
+        (file->getAbsoluteFilePath(),
          sourceFile->getChannels(),
          sourceFile->getSampleRate(),
          sourceFile->getSampleRate() * 4 * sourceFile->getChannels(),
@@ -95,7 +95,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
          32);
 
     if (!writeFile.write()) {
-        RG_WARNING << "getStretchedAudioFile(): WARNING: write() failed for file " << file->getFilename();
+        RG_WARNING << "getStretchedAudioFile(): WARNING: write() failed for file " << file->getAbsoluteFilePath();
         return -1;
     }
     
