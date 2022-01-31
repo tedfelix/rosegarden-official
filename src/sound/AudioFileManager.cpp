@@ -52,6 +52,9 @@ namespace
 
     QString addTrailingSlash(const QString &path)
     {
+        if (path.isEmpty())
+            return "/";
+
         QString path2 = path;
 
         // Add a trailing "/" if needed.
@@ -115,7 +118,7 @@ AudioFileManager::AudioFileManager(RosegardenDocument *doc) :
     // ??? This will get immediately overwritten by the path in
     //     autoload.rg.  Maybe we shouldn't call this at all to
     //     avoid confusion.
-    setAudioPath("~/rosegarden");
+    setRelativeAudioPath("~/rosegarden");
 }
 
 AudioFileManager::~AudioFileManager()
@@ -273,7 +276,7 @@ AudioFileManager::insertFile(const std::string &name,
         ;
 
     // first try to expand any beginning tilde
-    QString foundFileName = pathToStandard2(fileName);
+    QString foundFileName = toAbsolute(fileName);
 
     // If we've expanded and we can't find the file
     // then try to find it in audio file directory.
@@ -314,26 +317,36 @@ AudioFileManager::insertFile(const std::string &name,
 }
 
 void
-AudioFileManager::setAudioPath(const QString &newPath, bool i_moveFiles)
+AudioFileManager::setRelativeAudioPath(
+        const QString &i_newRelativePath,
+        bool i_moveFiles)
 {
-    if (newPath.isEmpty())
-        return;
+    QString newRelativePath = i_newRelativePath;
 
-    QString newPath2 = newPath;
+    if (newRelativePath.isEmpty())
+        newRelativePath = ".";
 
-    newPath2 = pathToStandard2(newPath2);
-    newPath2 = addTrailingSlash(newPath2);
+    // If the path doesn't start with "~", "/", or "."...
+    if (newRelativePath.front() != '/'  &&
+        newRelativePath.front() != '~'  &&
+        newRelativePath.front() != '.') {
+        // Use the document path.
+        newRelativePath = "./" + newRelativePath;
+    }
+
+    QString newAbsolutePath = toAbsolute(newRelativePath);
+    newAbsolutePath = addTrailingSlash(newAbsolutePath);
 
     if (i_moveFiles) {
         // Physically move the files, and adjust their paths to
         // point to the new location.
-        moveFiles(newPath2);
+        moveFiles(newAbsolutePath);
     }
 
     {
         MutexLock lock (&audioFileManagerLock);
 
-        m_audioPath = newPath2;
+        m_relativeAudioPath = newRelativePath;
     }
 
     if (i_moveFiles) {
@@ -343,13 +356,21 @@ AudioFileManager::setAudioPath(const QString &newPath, bool i_moveFiles)
 
 }
 
+QString
+AudioFileManager::getAbsoluteAudioPath() const
+{
+    QString absoluteAudioPath = toAbsolute(m_relativeAudioPath);
+    absoluteAudioPath = addTrailingSlash(absoluteAudioPath);
+    return absoluteAudioPath;
+}
+
 void
 AudioFileManager::testAudioPath()
 {
-    QFileInfo info(m_audioPath);
+    QFileInfo info(getAbsoluteAudioPath());
     if (!(info.exists() && info.isDir() && !info.isRelative() &&
             info.isWritable() && info.isReadable()))
-        throw BadAudioPathException(m_audioPath);
+        throw BadAudioPathException(getAbsoluteAudioPath());
 }
 
 QString
@@ -360,18 +381,20 @@ AudioFileManager::getFileInPath(const QString &file)
 
     QFileInfo info(file);
 
+    // If the original file path exists, return it.
     if (info.exists())
         return file;
 
-    // Build the search filename from the audio path and
-    // the file basename.
-    //
-    QString searchFile = m_audioPath + info.fileName();
+    // Check whether file name exists at the audio path.
+
+    QString searchFile = getAbsoluteAudioPath() + info.fileName();
     QFileInfo searchInfo(searchFile);
 
+    // If so, return it.
     if (searchInfo.exists())
         return searchFile.toLatin1().data();
 
+    // Can't find the file.
     return "";
 }
 
@@ -453,7 +476,7 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
                    .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh.mm.ss"))
                    .arg(newId + 1);
 
-        if (QFile(m_audioPath + fileName).exists()) {
+        if (QFile(getAbsoluteAudioPath() + fileName).exists()) {
             fileName = "";
             ++newId;
         }
@@ -462,12 +485,12 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
     // insert file into vector
     WAVAudioFile *aF = nullptr;
 
-    QString aup( m_audioPath );
-    QString fnm(fileName);
-    const QString fpath = m_audioPath + fileName;
+    //QString aup( getAbsoluteAudioPath() );
+    //QString fnm(fileName);
+    const QString fpath = getAbsoluteAudioPath() + fileName;
     try {
         aF = new WAVAudioFile(newId, qstrtostr(fileName), fpath);
-        //aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + qstrtostr(fileName) );
+        //aF = new WAVAudioFile(newId, fileName.data(), getAbsoluteAudioPath() + qstrtostr(fileName) );
         m_audioFiles.push_back(aF);
         m_recordedAudioFiles.insert(aF);
     } catch (const SoundFile::BadSoundFileException &e) {
@@ -532,7 +555,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
             .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
             .arg(newId + 1);
 
-        if (QFile(m_audioPath + fileName).exists()) {
+        if (QFile(getAbsoluteAudioPath() + fileName).exists()) {
             fileName = "";
             ++newId;
         }
@@ -544,7 +567,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
     try {
         aF = new WAVAudioFile(newId,
                               qstrtostr(fileName),
-                              m_audioPath + fileName );
+                              getAbsoluteAudioPath() + fileName );
         m_audioFiles.push_back(aF);
         m_derivedAudioFiles.insert(aF);
     } catch (const SoundFile::BadSoundFileException &e) {
@@ -605,7 +628,7 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
                 .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
                 .arg(newId + 1);
 
-            if (QFile(m_audioPath + targetName).exists()) {
+            if (QFile(getAbsoluteAudioPath() + targetName).exists()) {
                 targetName = "";
                 ++newId;
             }
@@ -618,7 +641,7 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     if (m_progressDialog)
         m_progressDialog->setLabelText(tr("Converting audio file..."));
 
-    QString outFileName = m_audioPath + targetName;
+    QString outFileName = getAbsoluteAudioPath() + targetName;
     int ec = convertAudioFile(fileName, outFileName);
 
     if (ec) {
@@ -635,7 +658,7 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
 
         aF = new WAVAudioFile(newId,
                               qstrtostr(targetName),
-                              m_audioPath + targetName);
+                              getAbsoluteAudioPath() + targetName);
         m_audioFiles.push_back(aF);
         m_derivedAudioFiles.insert(aF);
         // Don't catch SoundFile::BadSoundFileException
@@ -748,17 +771,13 @@ AudioFileManager::toXmlString() const
         ;
 
     std::stringstream audioFiles;
-    // ??? This isn't going to work for the "." case.  We need to keep the
-    //     internal (with "." and "~") and the standard (absolute path)
-    //     versions so that we don't lose information.
-    QString audioPath = pathToInternal(m_audioPath);
 
     audioFiles << "<audiofiles";
     if (m_expectedSampleRate != 0) {
         audioFiles << " expectedRate=\"" << m_expectedSampleRate << "\"";
     }
     audioFiles << ">" << std::endl;
-    audioFiles << "    <audioPath value=\"" << audioPath << "\"/>" << std::endl;
+    audioFiles << "    <audioPath value=\"" << m_relativeAudioPath << "\"/>" << std::endl;
 
     QString fileName;
 
@@ -766,6 +785,7 @@ AudioFileManager::toXmlString() const
     for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
          it != m_audioFiles.end();
          ++it) {
+        // ??? We need relative vs. absolute for the audio files as well.
         fileName = (*it)->getFilename();
 
         // attempt two substitutions - If the prefix to the filename
@@ -774,9 +794,9 @@ AudioFileManager::toXmlString() const
         // have the audio path in it but has our home directory in it
         // then swap this out for a tilde '~'
         //
-        if (getDirectory(fileName) == m_audioPath)
+        if (getDirectory(fileName) == getAbsoluteAudioPath())
             fileName = getShortFilename(fileName);
-        else  // not likely to ever happen
+        else  // Not likely to ever happen.  ??? Do we even handle this on the read side?
             fileName = pathToInternal(fileName);
 
         audioFiles << "    <audio id=\"" << (*it)->getId()
@@ -1093,8 +1113,13 @@ AudioFileManager::getActualSampleRates() const
 }
 
 QString
-AudioFileManager::pathToStandard2(const QString &fileName) const
+AudioFileManager::toAbsolute(const QString &fileName) const
 {
+    RG_DEBUG << "toAbsolute(" << fileName << ")";
+
+    if (fileName.isEmpty())
+        return fileName;
+
     QString newFileName = fileName;
 
     // Convert tilde to home dir.
@@ -1111,6 +1136,8 @@ AudioFileManager::pathToStandard2(const QString &fileName) const
         newFileName = fileInfo.canonicalPath() + newFileName;
     }
 
+    RG_DEBUG << "  result:" << newFileName;
+
     return newFileName;
 }
 
@@ -1120,16 +1147,14 @@ AudioFileManager::moveFiles(const QString &newPath)
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    QString newPath2 = pathToStandard2(newPath);
+    QString newPath2 = toAbsolute(newPath);
     newPath2 = addTrailingSlash(newPath2);
 
     // for each audio file
     for (AudioFile *audioFile : m_audioFiles)
     {
-        // In case it has a tilde or dot, which it shouldn't...
-        // ??? Usually the filename in the AudioFile object is an absolute
-        //     path with name.  We shouldn't need to do this at all.
-        QString oldName = pathToStandard2(audioFile->getFilename());
+        // In case it has a tilde or dot (see toXmlString()).
+        QString oldName = toAbsolute(audioFile->getFilename());
 
         // Figure out where it really is.
         // ??? Usually the filename in the AudioFile object is an absolute
@@ -1156,9 +1181,15 @@ AudioFileManager::moveFiles(const QString &newPath)
         audioFile->close();
 
         // Move it to the new path.
-        QFile::rename(oldName, newName);
+        const bool success = QFile::rename(oldName, newName);
 
-        // ??? Probably should check for rename() error.
+        // Failure is common in some situations.  E.g. renaming to
+        // the same place.
+        if (!success) {
+            RG_DEBUG << "moveFiles(): rename failed for:";
+            RG_DEBUG << "  oldName:" << oldName;
+            RG_DEBUG << "  newName:" << newName;
+        }
 
         // Adjust the stored path for this file.
         audioFile->setFilename(newName);

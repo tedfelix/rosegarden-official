@@ -138,10 +138,10 @@ public:
     /// Remove all audio files.
     void clear();
 
-    /// Get the audio file path
-    QString getAudioPath() const  { return m_audioPath; }
-    /// Set the audio file path
-    void setAudioPath(const QString &newPath, bool moveFiles = false);
+    /// Get the absolute audio path.  E.g. "/home/ted/Documents/project1/audio/"
+    QString getAbsoluteAudioPath() const;
+    /// Set the relative audio file path.  E.g. "./audio"
+    void setRelativeAudioPath(const QString &newPath, bool moveFiles = false);
 
     /// Throw if the current audio path does not exist or is not writable
     /**
@@ -343,7 +343,7 @@ private:
     /**
      * Expand "~" and "." to an absolute path/file name.
      */
-    QString pathToStandard2(const QString &fileName) const;
+    QString toAbsolute(const QString &fileName) const;
 
     /// Get a short file name from a long one (with '/'s)
     QString getShortFilename(const QString &fileName) const;
@@ -355,7 +355,7 @@ private:
     /**
      * First tries to find the file based on the name provided.
      * If that fails, it removes the path and searches for the
-     * name in m_audioPath.
+     * name in m_relativeAudioPath.
      *
      * Returns the first occurrence of a match or the empty
      * string if no match.
@@ -370,7 +370,18 @@ private:
     /// Last Audio File ID that was handed out by getUniqueAudioFileID().
     unsigned int m_lastAudioFileID;
 
-    QString m_audioPath;
+    /// Always in internal format with either a "." or a "~".
+    /**
+     * Propose that we use QFileInfo terminology.
+     *   Path - directory  ./directory
+     *   FilePath - directory and filename  ./directory/filename.ext
+     *   FileName - filename.ext
+     *   Absolute - Starting from root.  /tmp/filename.ext
+     *   Relative - Using "." or "~".  ./audio/filename.ext
+     *   Canonical - Absolute simplified.
+     */
+    QString m_relativeAudioPath;
+
     /// Whether the user has confirmed the audio file path.
     bool m_audioLocationConfirmed;
 

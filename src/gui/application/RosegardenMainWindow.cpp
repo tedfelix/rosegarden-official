@@ -6457,7 +6457,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
         // language if you wish.  The n in <i>n</i>.wav refers to an unknown
         // number, such as might be used in a mathematical equation
                                  tr("<qt><p>You must choose a filename for this composition before recording audio.</p><p>Audio files will be saved to <b>%1</b> as <b>rg-[<i>filename</i>]-[<i>instrument</i>]-<i>date</i>_<i>time</i>-<i>n</i>.wav</b>.  You may wish to rename audio instruments before recording as well.  For more information, please see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en\">Rosegarden Wiki</a>.</p></qt>")
-                                    .arg(RosegardenDocument::currentDocument->getAudioFileManager().getAudioPath()),
+                                    .arg(RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath()),
                                  QMessageBox::Ok,
                                  QMessageBox::Ok);
 
@@ -6502,7 +6502,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
 QString
 RosegardenMainWindow::getAudioFilePath()
 {
-    return RosegardenDocument::currentDocument->getAudioFileManager().getAudioPath();
+    return RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath();
 }
 
 QVector<InstrumentId>
@@ -7386,7 +7386,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
 
     inst->setConfigurationValue
     (qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
-     qstrtostr(RosegardenDocument::currentDocument->getAudioFileManager().getAudioPath()));
+     qstrtostr(RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath()));
 
     // Set opaque string configuration data (e.g. for DSSI plugin)
     //
@@ -8481,7 +8481,7 @@ RosegardenMainWindow::slotSwitchPreset()
 void
 RosegardenMainWindow::checkAudioPath()
 {
-    QString  audioPath = RosegardenDocument::currentDocument->getAudioFileManager().getAudioPath();
+    QString  audioPath = RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath();
     QDir dir(audioPath);
     QString text(tr("<h3>Invalid audio path</h3>"));
     QString correctThis(tr("<p>You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in <b>View -> Document Properties -> Audio</b>.</p>"));

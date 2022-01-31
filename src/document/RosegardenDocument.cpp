@@ -971,7 +971,7 @@ void RosegardenDocument::initialiseStudio()
 
             plugin.setConfigurationValue(
                     qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
-                    qstrtostr(getAudioFileManager().getAudioPath()));
+                    qstrtostr(getAudioFileManager().getAbsoluteAudioPath()));
 
             // Set opaque string configuration data (e.g. for DSSI plugin)
 

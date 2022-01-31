@@ -62,7 +62,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
     AudioFile *file = m_audioFileManager->createDerivedAudioFile(source, "stretch");
     if (!file) {
-        RG_WARNING << "getStretchedAudioFile(): WARNING: createDerivedAudioFile() failed for ID" << source << ", using path: " << m_audioFileManager->getAudioPath();
+        RG_WARNING << "getStretchedAudioFile(): WARNING: createDerivedAudioFile() failed for ID" << source << ", using path: " << m_audioFileManager->getAbsoluteAudioPath();
         return -1;
     }
 

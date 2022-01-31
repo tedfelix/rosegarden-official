@@ -52,7 +52,7 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
     layout->addWidget(new QLabel(tr("Audio file path:"), frame), 0, 0);
 
     AudioFileManager &afm = m_doc->getAudioFileManager();
-    m_path = new QLabel(afm.getAudioPath(), frame);
+    m_path = new QLabel(afm.getAbsoluteAudioPath(), frame);
     layout->addWidget(m_path, 0, 1);
 
     m_changePathButton = new QPushButton(tr("Choose..."), frame);
@@ -194,7 +194,7 @@ AudioPropertiesPage::apply()
     const QString newPath = m_path->text();
 
     // If there's been a change...
-    if (newPath != audioFileManager.getAudioPath()) {
+    if (newPath != audioFileManager.getAbsoluteAudioPath()) {
 
         bool moveFiles = false;
 
@@ -208,7 +208,7 @@ AudioPropertiesPage::apply()
         }
 
         // Update the AudioFileManager.
-        audioFileManager.setAudioPath(newPath, moveFiles);
+        audioFileManager.setRelativeAudioPath(newPath, moveFiles);
 
         // Moving the files will force a save.  Only needed if files
         // aren't moving.

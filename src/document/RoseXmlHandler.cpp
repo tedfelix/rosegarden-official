@@ -1246,7 +1246,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             // Set the file path for the rest of the audio files as well
             // in case we find this missing one.  The assumption is that
             // all of the other files are here as well.
-            getAudioFileManager().setAudioPath(dirPath);
+            getAudioFileManager().setRelativeAudioPath(dirPath);
 
             RG_DEBUG << "Attempting to find audio file " << file
                      << " in path " << dirPath;
@@ -1271,7 +1271,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                     FileLocateDialog fL((QWidget *)m_doc->parent(),
                                         file,
-                                        getAudioFileManager().getAudioPath());
+                                        getAudioFileManager().getAbsoluteAudioPath());
                     int result = fL.exec();
 
                     if (result == QDialog::Accepted) {
@@ -1295,7 +1295,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     // We assume all the rest of the files are in this
                     // new path as well.  Adjusting the audio path should
                     // clear up any further locate pop-ups.
-                    getAudioFileManager().setAudioPath(newPath);
+                    getAudioFileManager().setRelativeAudioPath(newPath);
                     // Set a document post-modify flag
                     //m_doc->setModified(true);
                 }
@@ -1317,23 +1317,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        QString search(atts.value("value").toString());
+        QString audioPath(atts.value("value").toString());
 
-        if (search.isEmpty()) {
+        if (audioPath.isEmpty()) {
             m_errorString = "Audiopath has no value";
             return false;
         }
 
-        // If the path doesn't start with ~ or /, use the document path.
-        if (!search.startsWith("/") && !search.startsWith("~")) {
-            QString docPath = m_doc->getAbsFilePath();
-            QString dirPath = QFileInfo(docPath).path();
-            if (QFileInfo(dirPath).exists()) {
-                search = dirPath + "/" + search;
-            }
-        }
-
-        getAudioFileManager().setAudioPath(search);
+        getAudioFileManager().setRelativeAudioPath(audioPath);
 
     } else if (lcName == "begin") {
 
