@@ -350,17 +350,6 @@ private:
     /// Get a directory from a full file path
     QString getDirectory(const QString &path) const;
 
-    /// See if we can find a given file in our search path
-    /**
-     * First tries to find the file based on the name provided.
-     * If that fails, it removes the path and searches for the
-     * name in m_relativeAudioPath.
-     *
-     * Returns the first occurrence of a match or the empty
-     * string if no match.
-     */
-    QString getFileInPath(const QString &file);
-
     /// Reset ID counter based on actual Audio Files in Composition
     void updateAudioFileID(AudioFileId id);
 

@@ -282,29 +282,32 @@ AudioFileManager::insertFile(const std::string &name,
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    // first try to expand any beginning tilde
-    QString foundFileName = toAbsolute(fileName);
+    // Normally, the file will be found in the audio path.
+    QString absoluteFilePath = getAbsoluteAudioPath() + fileName;
 
-    // If we've expanded and we can't find the file
-    // then try to find it in audio file directory.
-    //
-    QFileInfo info(foundFileName);
-    if (!info.exists())
-        foundFileName = getFileInPath(foundFileName);
+    QFileInfo fileInfo(absoluteFilePath);
+    // If it isn't there...
+    if (!fileInfo.exists()) {
 
-    // If no joy here then we can't find this file
-    if (foundFileName == "")
-        return false;
+        // ...see if the name is already an absolute or relative path.
 
-    // make sure we don't have a file of this ID hanging around already
+        // Try expanding any beginning tilde or dot.
+        absoluteFilePath = toAbsolute(fileName);
+
+        fileInfo.setFile(absoluteFilePath);
+        if (!fileInfo.exists())
+            return false;
+
+    }
+
+    // Make sure we don't have a file of this ID hanging around already.
     removeFile(id);
 
-    // and insert
     WAVAudioFile *aF = nullptr;
 
     try {
 
-        aF = new WAVAudioFile(id, name, foundFileName);
+        aF = new WAVAudioFile(id, name, absoluteFilePath);
 
         // Test the file
         if (aF->open() == false) {
@@ -378,31 +381,6 @@ AudioFileManager::testAudioPath()
     if (!(info.exists() && info.isDir() && !info.isRelative() &&
             info.isWritable() && info.isReadable()))
         throw BadAudioPathException(getAbsoluteAudioPath());
-}
-
-QString
-AudioFileManager::getFileInPath(const QString &file)
-{
-    MutexLock lock (&audioFileManagerLock)
-        ;
-
-    QFileInfo info(file);
-
-    // If the original file path exists, return it.
-    if (info.exists())
-        return file;
-
-    // Check whether file name exists at the audio path.
-
-    QString searchFile = getAbsoluteAudioPath() + info.fileName();
-    QFileInfo searchInfo(searchFile);
-
-    // If so, return it.
-    if (searchInfo.exists())
-        return searchFile.toLatin1().data();
-
-    // Can't find the file.
-    return "";
 }
 
 int
@@ -767,6 +745,7 @@ AudioFileManager::toXmlString() const
         fileName = audioFile->getAbsoluteFilePath();
 
         // If the absolute audio path is here, remove it.
+        // ??? insertFile() is the other side of this.
         if (getDirectory(fileName) == getAbsoluteAudioPath())
             fileName = getShortFilename(fileName);
 
@@ -1118,24 +1097,10 @@ AudioFileManager::moveFiles(const QString &newPath)
     // for each audio file
     for (AudioFile *audioFile : m_audioFiles)
     {
-        // In case it has a tilde or dot (see toXmlString()).
-        QString oldName = toAbsolute(audioFile->getAbsoluteFilePath());
-
-        // Figure out where it really is.
-        // ??? Usually the filename in the AudioFile object is an absolute
-        //     path with name.  We shouldn't need to do this at all.  Just
-        //     check to see if it exists here with QFileInfo.  Don't call
-        //     getFileInPath().
-        oldName = getFileInPath(oldName);
-        // Not found?  Try the next.
-        // ??? Probably want to keep track of these to tell the user.
-        //     Maybe return the number failed.  Or a list of failed
-        //     file names.
-        if (oldName.isEmpty())
-            continue;
+        const QString oldName = audioFile->getAbsoluteFilePath();
 
         QFileInfo fileInfo(oldName);
-        QString newName = newPath2 + fileInfo.fileName();
+        const QString newName = newPath2 + fileInfo.fileName();
 
         // Delete the old peak file.
         // ??? It would be more clever to just move the .pk file.
