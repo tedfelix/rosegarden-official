@@ -86,6 +86,7 @@ set(rg_CPPS
   misc/Version.cpp
   misc/Strings.cpp
   misc/Preferences.cpp
+  gui/dialogs/AudioFileLocationDialog.cpp
   gui/dialogs/PasteNotationDialog.cpp
   gui/dialogs/ConfigureDialogBase.cpp
   gui/dialogs/PitchDialog.cpp

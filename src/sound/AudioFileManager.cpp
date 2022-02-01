@@ -31,6 +31,7 @@
 #include <QDir>
 #include <QRegularExpression>
 
+#include "gui/dialogs/AudioFileLocationDialog.h"
 #include "gui/general/FileSource.h"
 #include "AudioFile.h"
 #include "WAVAudioFile.h"
@@ -44,6 +45,7 @@
 #include "sound/audiostream/AudioReadStreamFactory.h"
 #include "sound/audiostream/AudioWriteStream.h"
 #include "sound/audiostream/AudioWriteStreamFactory.h"
+#include "gui/application/SetWaitCursor.h"
 
 #include "AudioFileManager.h"
 
@@ -855,7 +857,7 @@ AudioFileManager::getPreview(AudioFileId id,
         //     that we are recording and suppress this.  Or just don't
         //     call this when recording.  The caller has comments in
         //     its catch() to this effect.
-        RG_WARNING << "getPreview(): No peaks for audio file" << audioFile->getAbsoluteFilePath() << "(this is probably OK when recording)";
+        //RG_WARNING << "getPreview(): No peaks for audio file" << audioFile->getAbsoluteFilePath() << "(this is probably OK when recording)";
         throw PeakFileManager::BadPeakFileException(
                 audioFile->getAbsoluteFilePath(), __FILE__, __LINE__);
     }
@@ -1059,8 +1061,6 @@ AudioFileManager::getActualSampleRates() const
 QString
 AudioFileManager::toAbsolute(const QString &fileName) const
 {
-    RG_DEBUG << "toAbsolute(" << fileName << ")";
-
     if (fileName.isEmpty())
         return fileName;
 
@@ -1080,8 +1080,6 @@ AudioFileManager::toAbsolute(const QString &fileName) const
         newFileName = fileInfo.canonicalPath() + newFileName;
     }
 
-    RG_DEBUG << "  result:" << newFileName;
-
     return newFileName;
 }
 
@@ -1090,6 +1088,8 @@ AudioFileManager::moveFiles(const QString &newPath)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
+
+    SetWaitCursor setWaitCursor;
 
     QString newPath2 = toAbsolute(newPath);
     newPath2 = addTrailingSlash(newPath2);
@@ -1146,10 +1146,10 @@ AudioFileManager::save()
     if (m_audioFiles.empty())
         return;
 
-    QString audioLocation;
+    QFileInfo fileInfo(m_document->getAbsFilePath());
+    QString documentNameDir = "./" + fileInfo.completeBaseName();
 
-    // ??? Should we use "audio file location" instead of "audio file path"?
-    //     A little more user-oriented.
+    QString audioPath;
 
     // If the preferences indicate prompting
     //if (Preferences::getPromptForAudioLocation())
@@ -1159,9 +1159,11 @@ AudioFileManager::save()
         // ??? Needs to remember the last selected and use it.
         // ??? Needs a "don't ask me again" that clears prompting
         //     and sets the default location.
-        //AudioFileLocationDialog audioFileLocationDialog;
-        //audioFileLocationDialog.exec();  // QDialog modal.
-        //audioPath = audioFileLocationDialog.getPath();
+        AudioFileLocationDialog audioFileLocationDialog(
+                RosegardenMainWindow::self(),
+                documentNameDir);
+        audioFileLocationDialog.exec();
+        audioPath = audioFileLocationDialog.getPath();
 
         // TEST
         //QMessageBox::information(
@@ -1171,7 +1173,10 @@ AudioFileManager::save()
 
     //} else {
 
-        //audioLocation = Preferences::getDefaultAudioLocation();
+        // ??? This is tricky for the document name case.  Maybe the
+        //     dialog should return an enum.  Then we can translate that
+        //     here.
+        //audioPath = Preferences::getDefaultAudioLocation();
 
     }
 
@@ -1180,12 +1185,14 @@ AudioFileManager::save()
     m_audioLocationConfirmed = true;
 
     // Create the path if it doesn't exist.
-    //QDir::mkpath()
+    QDir().mkpath(toAbsolute(audioPath));
+
+    // Handle any errors.
 
     // Make sure the path is writable.
 
     // Set the new location, move the files, and save.
-    //setAudioPath(audioLocation, true);
+    setRelativeAudioPath(audioPath, true);
 }
 
 

@@ -2048,14 +2048,19 @@ RosegardenMainWindow::slotFileSave()
         return;
     }
 
-    SetWaitCursor waitCursor;
-
     const QString docFilePath =
             RosegardenDocument::currentDocument->getAbsFilePath();
 
     QString errMsg;
-    const bool success = RosegardenDocument::currentDocument->
-            saveDocument(docFilePath, errMsg);
+    bool success;
+
+    {
+        SetWaitCursor setWaitCursor;
+
+        success = RosegardenDocument::currentDocument->
+                saveDocument(docFilePath, errMsg);
+    }
+
     if (!success) {
         if (!errMsg.isEmpty())
             QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2")
