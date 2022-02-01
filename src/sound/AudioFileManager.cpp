@@ -37,6 +37,7 @@
 #include "WAVAudioFile.h"
 #include "BWFAudioFile.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"  // qstrtostr() and friends
 #include "sequencer/RosegardenSequencer.h"
 #include "document/RosegardenDocument.h"
@@ -1147,38 +1148,24 @@ AudioFileManager::save()
         return;
 
     QFileInfo fileInfo(m_document->getAbsFilePath());
-    QString documentNameDir = "./" + fileInfo.completeBaseName();
-
-    AudioFileLocationDialog::Location location;
+    const QString documentNameDir = "./" + fileInfo.completeBaseName();
 
     // If the preferences indicate prompting
-    //if (Preferences::getPromptForAudioLocation())
+    if (!Preferences::getAudioFileLocationDlgDontShow())
     {
 
         // Ask the user to pick an audio file path.
-        // ??? Needs to remember the last selected and use it.
-        // ??? Needs a "don't ask me again" that clears prompting
-        //     and sets the default location.
+        // Results go to the Preferences.
         AudioFileLocationDialog audioFileLocationDialog(
                 RosegardenMainWindow::self(),
                 documentNameDir);
         audioFileLocationDialog.exec();
-        location = audioFileLocationDialog.getLocation();
-
-        // TEST
-        //QMessageBox::information(
-        //        RosegardenMainWindow::self(),
-        //        "Select Audio File Location",
-        //        "Prompting for audio path would happen now.");
-
-    //} else {
-
-        // ??? This is tricky for the document name case.  Maybe the
-        //     dialog should return an enum.  Then we can translate that
-        //     here.
-        //location = Preferences::getDefaultAudioLocation();
 
     }
+
+    const AudioFileLocationDialog::Location location =
+            static_cast<AudioFileLocationDialog::Location>(
+                    Preferences::getDefaultAudioLocation());
 
     // Indicate audio location was confirmed by the user.
     // Also avoid recursion loop as the second save will end up here again.

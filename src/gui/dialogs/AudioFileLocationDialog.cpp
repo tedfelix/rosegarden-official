@@ -20,19 +20,14 @@
 #include "AudioFileLocationDialog.h"
 
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 
+#include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QFileInfo>
 #include <QGridLayout>
 #include <QLabel>
 #include <QRadioButton>
-#include <QSettings>
-
-
-namespace
-{
-    const QString AudioFileLocationDialogGroup = "AudioFileLocationDialog";
-}
 
 
 namespace Rosegarden
@@ -67,11 +62,13 @@ AudioFileLocationDialog::AudioFileLocationDialog(
 
     ++row;
 
+    // Audio directory.  Recommended.
     m_audioDir = new QRadioButton(tr("To an \"audio\" directory where the document is saved.  (./audio) (Recommended)"));
     layout->addWidget(m_audioDir, row, 1);
 
     ++row;
 
+    // Document name directory.
     m_documentNameDir = new QRadioButton(
             tr("To a directory named after the document where the document is saved.") +
             "\n  (" + m_documentNameDirStr + ")");
@@ -79,18 +76,48 @@ AudioFileLocationDialog::AudioFileLocationDialog(
 
     ++row;
 
+    // Same directory.
     m_documentDir = new QRadioButton(tr("To the same directory where the document is saved.  (.)"));
     layout->addWidget(m_documentDir, row, 1);
 
     ++row;
 
+    // Central repo.
     m_centralDir = new QRadioButton(tr("To a central audio file repository.  (~/rosegarden-audio)"));
     layout->addWidget(m_centralDir, row, 1);
 
     ++row;
 
+    // Somewhere else.
     m_userDir = new QRadioButton(tr("Somewhere else?"));
     layout->addWidget(m_userDir, row, 1);
+
+    ++row;
+
+    // Spacer
+    layout->setRowMinimumHeight(row, 10);
+
+    ++row;
+    // Note
+    layout->addWidget(new QLabel(tr("Note: You can always move the audio files later by setting the audio location in the document properties.")), row, 0, 1, 2);
+
+    ++row;
+
+    // Spacer
+    layout->setRowMinimumHeight(row, 10);
+
+    ++row;
+
+    // Don't show this again.
+    m_dontShow = new QCheckBox(tr("Use the above selection for all new files and don't display this dialog again."));
+    // ??? Actually, if this dialog becomes the way to set this in the
+    //     document properties, we might want to get this from the settings
+    //     instead.  Or maybe hide this.
+    m_dontShow->setChecked(false);
+    layout->addWidget(m_dontShow, row, 1);
+
+    // Spacer
+    layout->setRowMinimumHeight(row, 10);
 
     ++row;
 
@@ -109,12 +136,10 @@ AudioFileLocationDialog::AudioFileLocationDialog(
 void
 AudioFileLocationDialog::updateWidgets()
 {
-    QSettings settings;
-    settings.beginGroup(AudioFileLocationDialogGroup);
-    m_location = static_cast<Location>(
-            settings.value("location", AudioDir).toInt());
+    const Location location =
+            static_cast<Location>(Preferences::getDefaultAudioLocation());
 
-    switch (m_location) {
+    switch (location) {
     case AudioDir:
         m_audioDir->setChecked(true);
         break;
@@ -135,20 +160,24 @@ AudioFileLocationDialog::updateWidgets()
 
 void AudioFileLocationDialog::accept()
 {
-    if (m_audioDir->isChecked())
-        m_location = AudioDir;
-    if (m_documentNameDir->isChecked())
-        m_location = DocumentNameDir;
-    if (m_documentDir->isChecked())
-        m_location = DocumentDir;
-    if (m_centralDir->isChecked())
-        m_location = CentralDir;
-    if (m_userDir->isChecked())
-        m_location = UserDir;
+    // Copy the user's choices to the Preferences.
 
-    QSettings settings;
-    settings.beginGroup(AudioFileLocationDialogGroup);
-    settings.setValue("location", m_location);
+    Location location = AudioDir;
+
+    if (m_audioDir->isChecked())
+        location = AudioDir;
+    if (m_documentNameDir->isChecked())
+        location = DocumentNameDir;
+    if (m_documentDir->isChecked())
+        location = DocumentDir;
+    if (m_centralDir->isChecked())
+        location = CentralDir;
+    if (m_userDir->isChecked())
+        location = UserDir;
+
+    Preferences::setDefaultAudioLocation(location);
+
+    Preferences::setAudioFileLocationDlgDontShow(m_dontShow->isChecked());
 
     QDialog::accept();
 }

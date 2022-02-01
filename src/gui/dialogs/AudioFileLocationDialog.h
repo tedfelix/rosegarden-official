@@ -20,6 +20,7 @@
 
 #include <QDialog>
 
+class QCheckBox;
 class QRadioButton;
 class QWidget;
 
@@ -42,7 +43,6 @@ public:
         CentralDir,
         UserDir
     };
-    Location getLocation() const  { return m_location; }
 
 public slots:
     virtual void accept() override;
@@ -57,10 +57,9 @@ private:
     QRadioButton *m_centralDir;
     QRadioButton *m_userDir;
 
-    void updateWidgets();
+    QCheckBox *m_dontShow;
 
-    /// Selected location.  Set after user dismisses.
-    Location m_location;
+    void updateWidgets();
 };
 
 

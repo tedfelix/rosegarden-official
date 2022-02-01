@@ -51,6 +51,15 @@ namespace Preferences
     void setStopAtEnd(bool value);
     bool getStopAtEnd();
 
+    // AudioFileLocationDialog settings
+
+    // See AudioFileLocationDialog::Location enum.
+    void setDefaultAudioLocation(int location);
+    int getDefaultAudioLocation();
+
+    void setAudioFileLocationDlgDontShow(bool dontShow);
+    bool getAudioFileLocationDlgDontShow();
+
 }
 
 

@@ -30,6 +30,9 @@ namespace
     bool sendControlChangesWhenLooping = true;
     bool useNativeFileDialogs = true;
     bool stopAtEnd = false;
+
+    bool afldDontShow = false;
+    int afldLocation = 0;
 }
 
 void Preferences::setSendProgramChangesWhenLooping(bool value)
@@ -137,6 +140,61 @@ bool Preferences::getStopAtEnd()
     }
 
     return stopAtEnd;
+}
+
+namespace
+{
+    const QString AudioFileLocationDialogGroup = "AudioFileLocationDialog";
+}
+
+void Preferences::setAudioFileLocationDlgDontShow(bool value)
+{
+    QSettings settings;
+    settings.beginGroup(AudioFileLocationDialogGroup);
+    settings.setValue("dontShow", value);
+    afldDontShow = value;
+}
+
+bool Preferences::getAudioFileLocationDlgDontShow()
+{
+    static bool firstGet = true;
+
+    if (firstGet) {
+        firstGet = false;
+
+        QSettings settings;
+        settings.beginGroup(AudioFileLocationDialogGroup);
+        afldDontShow = settings.value("dontShow", "false").toBool();
+        // Write it back out so we can find it if it wasn't there.
+        settings.setValue("dontShow", afldDontShow);
+    }
+
+    return afldDontShow;
+}
+
+void Preferences::setDefaultAudioLocation(int location)
+{
+    QSettings settings;
+    settings.beginGroup(AudioFileLocationDialogGroup);
+    settings.setValue("location", location);
+    afldLocation = location;
+}
+
+int Preferences::getDefaultAudioLocation()
+{
+    static bool firstGet = true;
+
+    if (firstGet) {
+        firstGet = false;
+
+        QSettings settings;
+        settings.beginGroup(AudioFileLocationDialogGroup);
+        afldLocation = settings.value("location", "0").toInt();
+        // Write it back out so we can find it if it wasn't there.
+        settings.setValue("location", afldLocation);
+    }
+
+    return afldLocation;
 }
 
 
