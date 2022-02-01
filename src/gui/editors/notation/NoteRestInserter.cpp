@@ -352,6 +352,9 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
     if (lastInsertedEvent) {
 
         m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
+        // we need a copy of the time here as setCurrentStaff may
+        // cause m_clickTime to change
+        timeT m_clickTimeCopy = m_clickTime;
         // and select the staff
         m_scene->setCurrentStaff(staff);
         
@@ -359,10 +362,10 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
             // Since a note could have been split and tied, we need to rely on
             // the full duration of the original note calculate the position of
             // the pointer.
-            timeT nextLocation = m_clickTime + note.getDuration();
+            timeT nextLocation = m_clickTimeCopy + note.getDuration();
             m_widget->setPointerPosition(nextLocation);
         } else {
-            m_widget->setPointerPosition(m_clickTime);
+            m_widget->setPointerPosition(m_clickTimeCopy);
         }
     }
 }
