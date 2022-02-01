@@ -35,7 +35,14 @@ class AudioFileLocationDialog : public QDialog
 public:
     AudioFileLocationDialog(QWidget *parent, QString documentNameDir);
 
-    QString getPath() const;
+    enum Location {
+        AudioDir,
+        DocumentNameDir,
+        DocumentDir,
+        CentralDir,
+        UserDir
+    };
+    Location getLocation() const  { return m_location; }
 
 public slots:
     virtual void accept() override;
@@ -51,6 +58,9 @@ private:
     QRadioButton *m_userDir;
 
     void updateWidgets();
+
+    /// Selected location.  Set after user dismisses.
+    Location m_location;
 };
 
 

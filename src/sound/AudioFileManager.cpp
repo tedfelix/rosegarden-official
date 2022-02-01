@@ -1149,7 +1149,7 @@ AudioFileManager::save()
     QFileInfo fileInfo(m_document->getAbsFilePath());
     QString documentNameDir = "./" + fileInfo.completeBaseName();
 
-    QString audioPath;
+    AudioFileLocationDialog::Location location;
 
     // If the preferences indicate prompting
     //if (Preferences::getPromptForAudioLocation())
@@ -1163,7 +1163,7 @@ AudioFileManager::save()
                 RosegardenMainWindow::self(),
                 documentNameDir);
         audioFileLocationDialog.exec();
-        audioPath = audioFileLocationDialog.getPath();
+        location = audioFileLocationDialog.getLocation();
 
         // TEST
         //QMessageBox::information(
@@ -1176,13 +1176,33 @@ AudioFileManager::save()
         // ??? This is tricky for the document name case.  Maybe the
         //     dialog should return an enum.  Then we can translate that
         //     here.
-        //audioPath = Preferences::getDefaultAudioLocation();
+        //location = Preferences::getDefaultAudioLocation();
 
     }
 
     // Indicate audio location was confirmed by the user.
     // Also avoid recursion loop as the second save will end up here again.
     m_audioLocationConfirmed = true;
+
+    QString audioPath = "./audio";
+
+    switch (location) {
+    case AudioFileLocationDialog::AudioDir:
+        audioPath = "./audio";
+        break;
+    case AudioFileLocationDialog::DocumentNameDir:
+        audioPath = documentNameDir;
+        break;
+    case AudioFileLocationDialog::DocumentDir:
+        audioPath = ".";
+        break;
+    case AudioFileLocationDialog::CentralDir:
+        audioPath = "~/rosegarden-audio";
+        break;
+    case AudioFileLocationDialog::UserDir:
+        audioPath = ".";
+        break;
+    }
 
     // Create the path if it doesn't exist.
     QDir().mkpath(toAbsolute(audioPath));

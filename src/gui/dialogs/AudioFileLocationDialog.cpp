@@ -109,35 +109,46 @@ AudioFileLocationDialog::AudioFileLocationDialog(
 void
 AudioFileLocationDialog::updateWidgets()
 {
-    // Read the settings and update the widgets.
+    QSettings settings;
+    settings.beginGroup(AudioFileLocationDialogGroup);
+    m_location = static_cast<Location>(
+            settings.value("location", AudioDir).toInt());
 
-    // We need to preserve the last selection.
-
-    m_audioDir->setChecked(true);
-}
-
-QString
-AudioFileLocationDialog::getPath() const
-{
-    if (m_audioDir->isChecked())
-        return "./audio";
-    if (m_documentNameDir->isChecked())
-        return m_documentNameDirStr;
-    if (m_documentDir->isChecked())
-        return ".";
-    if (m_centralDir->isChecked())
-        return "~/rosegarden-audio";
-    // ??? How do we handle this?
-    if (m_userDir->isChecked())
-        return ".";
-
-    return "./audio";
+    switch (m_location) {
+    case AudioDir:
+        m_audioDir->setChecked(true);
+        break;
+    case DocumentNameDir:
+        m_documentNameDir->setChecked(true);
+        break;
+    case DocumentDir:
+        m_documentDir->setChecked(true);
+        break;
+    case CentralDir:
+        m_centralDir->setChecked(true);
+        break;
+    case UserDir:
+        m_userDir->setChecked(true);
+        break;
+    }
 }
 
 void AudioFileLocationDialog::accept()
 {
-    //QSettings settings;
-    //settings.beginGroup(AudioFileLocationDialogGroup);
+    if (m_audioDir->isChecked())
+        m_location = AudioDir;
+    if (m_documentNameDir->isChecked())
+        m_location = DocumentNameDir;
+    if (m_documentDir->isChecked())
+        m_location = DocumentDir;
+    if (m_centralDir->isChecked())
+        m_location = CentralDir;
+    if (m_userDir->isChecked())
+        m_location = UserDir;
+
+    QSettings settings;
+    settings.beginGroup(AudioFileLocationDialogGroup);
+    settings.setValue("location", m_location);
 
     QDialog::accept();
 }
