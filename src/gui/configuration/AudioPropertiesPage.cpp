@@ -135,6 +135,7 @@ AudioPropertiesPage::updateWidgets()
         m_relativeAudioPath.chop(1);
 
     m_customAudioLocation->setText("");
+    // See AudioFileLocationDialog::Location enum.
     if (m_relativeAudioPath == "./audio") {
         m_audioFileLocation->setCurrentIndex(0);
     } else if (m_relativeAudioPath == m_documentNameDir) {
@@ -202,35 +203,53 @@ AudioPropertiesPage::updateWidgets()
 void
 AudioPropertiesPage::apply()
 {
-#if 0
     AudioFileManager &audioFileManager = m_doc->getAudioFileManager();
 
-    QString newPath = ???;
+    QString newPath;
+
+    // See AudioFileLocationDialog::Location enum.
+    switch (m_audioFileLocation->currentIndex()) {
+    case 0: // AudioFileLocationDialog::AudioDir
+        newPath = "./audio";
+        break;
+    case 1: // AudioFileLocationDialog::DocumentNameDir
+        newPath = m_documentNameDir;
+        break;
+    case 2: // AudioFileLocationDialog::DocumentDir
+        newPath = ".";
+        break;
+    case 3: //AudioFileLocationDialog::CentralDir
+        newPath = "~/rosegarden-audio";
+        break;
+    case 4: //AudioFileLocationDialog::CustomDir
+        newPath = m_customAudioLocation->text();
+        break;
+    }
 
     // If there's been a change...
-    if (newPath != audioFileManager.getAbsoluteAudioPath()) {
+    if (newPath != m_relativeAudioPath) {
 
         bool moveFiles = false;
 
+        // If there are audio files...
         if (!audioFileManager.empty()) {
-            // ??? Honestly, I think this should just be a warning.
-            QMessageBox::StandardButton result = QMessageBox::question(
+            QMessageBox::information(
                     this,
                     tr("Change Audio Path"),
-                    tr("Would you like to move the document's audio files to the new path?  Please note that this will force a save of the file."));
+                    tr("Document's audio files will now be moved to the new location.<br />Please note that this will force a save of the file."));
 
-            moveFiles = (result == QMessageBox::Yes);
+            moveFiles = true;
         }
 
         // Update the AudioFileManager.
         audioFileManager.setRelativeAudioPath(newPath, moveFiles);
 
-        // Moving the files will force a save.  Only needed if files
-        // aren't moving.
+        // Moving the files will force a save.  Set the document modified
+        // flag only if files aren't moving.
         if (!moveFiles)
             m_doc->slotDocumentModified();
+
     }
-#endif
 }
 
 

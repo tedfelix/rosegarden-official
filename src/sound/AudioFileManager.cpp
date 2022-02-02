@@ -351,6 +351,13 @@ AudioFileManager::setRelativeAudioPath(
     newAbsolutePath = addTrailingSlash(newAbsolutePath);
 
     if (i_moveFiles) {
+        // Make the path if needed.
+        QDir().mkpath(newAbsolutePath);
+
+        // Handle any errors.
+
+        // Make sure the path is writable.
+
         // Physically move the files, and adjust their paths to
         // point to the new location.
         moveFiles(newAbsolutePath);
@@ -1060,28 +1067,28 @@ AudioFileManager::getActualSampleRates() const
 }
 
 QString
-AudioFileManager::toAbsolute(const QString &fileName) const
+AudioFileManager::toAbsolute(const QString &relativePath) const
 {
-    if (fileName.isEmpty())
-        return fileName;
+    if (relativePath.isEmpty())
+        return relativePath;
 
-    QString newFileName = fileName;
+    QString absolutePath = relativePath;
 
     // Convert tilde to home dir.
-    if (newFileName.left(1) == "~") {
-        newFileName.remove(0, 1);
-        newFileName = QDir::homePath() + newFileName;
+    if (absolutePath.left(1) == "~") {
+        absolutePath.remove(0, 1);
+        absolutePath = QDir::homePath() + absolutePath;
     }
 
     // Convert dot to .rg file location.
-    if (newFileName.left(1) == "."  &&  m_document) {
-        newFileName.remove(0, 1);
+    if (absolutePath.left(1) == "."  &&  m_document) {
+        absolutePath.remove(0, 1);
         QString absFilePath = m_document->getAbsFilePath();
         QFileInfo fileInfo(absFilePath);
-        newFileName = fileInfo.canonicalPath() + newFileName;
+        absolutePath = fileInfo.canonicalPath() + absolutePath;
     }
 
-    return newFileName;
+    return absolutePath;
 }
 
 void
@@ -1190,13 +1197,6 @@ AudioFileManager::save()
         audioPath = Preferences::getCustomAudioLocation();
         break;
     }
-
-    // Create the path if it doesn't exist.
-    QDir().mkpath(toAbsolute(audioPath));
-
-    // Handle any errors.
-
-    // Make sure the path is writable.
 
     // Set the new location, move the files, and save.
     setRelativeAudioPath(audioPath, true);
