@@ -41,7 +41,7 @@ public:
         DocumentNameDir,
         DocumentDir,
         CentralDir,
-        UserDir
+        CustomDir
     };
 
 public slots:
@@ -55,7 +55,7 @@ private:
     QRadioButton *m_documentNameDir;
     QRadioButton *m_documentDir;
     QRadioButton *m_centralDir;
-    QRadioButton *m_userDir;
+    QRadioButton *m_customDir;
 
     QCheckBox *m_dontShow;
 

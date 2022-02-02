@@ -1186,8 +1186,8 @@ AudioFileManager::save()
     case AudioFileLocationDialog::CentralDir:
         audioPath = "~/rosegarden-audio";
         break;
-    case AudioFileLocationDialog::UserDir:
-        audioPath = ".";
+    case AudioFileLocationDialog::CustomDir:
+        audioPath = Preferences::getCustomAudioLocation();
         break;
     }
 

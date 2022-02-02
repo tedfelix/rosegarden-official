@@ -88,9 +88,10 @@ AudioFileLocationDialog::AudioFileLocationDialog(
 
     ++row;
 
-    // Somewhere else.
-    m_userDir = new QRadioButton(tr("Somewhere else?"));
-    layout->addWidget(m_userDir, row, 1);
+    // Custom location.
+    m_customDir = new QRadioButton(tr("To a custom location.") + "  (" +
+            Preferences::getCustomAudioLocation() + ")");
+    layout->addWidget(m_customDir, row, 1);
 
     ++row;
 
@@ -152,8 +153,8 @@ AudioFileLocationDialog::updateWidgets()
     case CentralDir:
         m_centralDir->setChecked(true);
         break;
-    case UserDir:
-        m_userDir->setChecked(true);
+    case CustomDir:
+        m_customDir->setChecked(true);
         break;
     }
 }
@@ -172,8 +173,8 @@ void AudioFileLocationDialog::accept()
         location = DocumentDir;
     if (m_centralDir->isChecked())
         location = CentralDir;
-    if (m_userDir->isChecked())
-        location = UserDir;
+    if (m_customDir->isChecked())
+        location = CustomDir;
 
     Preferences::setDefaultAudioLocation(location);
 
