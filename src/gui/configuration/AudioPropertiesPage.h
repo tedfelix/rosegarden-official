@@ -22,8 +22,8 @@
 
 #include <QString>
 
+class QComboBox;
 class QWidget;
-class QPushButton;
 class QLabel;
 
 
@@ -31,7 +31,7 @@ namespace Rosegarden
 {
 
 
-class RosegardenDocument;
+class LineEdit;
 
 
 /// Audio Properties page.  Document-wide settings.
@@ -47,18 +47,15 @@ public:
     static QString title()     { return tr("Audio Settings"); }
     static QString iconName()  { return "configure-audio"; }
 
-private slots:
-
-    /// Called by the Change Path button.
-    void slotChoosePath();
-
 private:
+    QString m_docAbsFilePath;
+    QString m_documentNameDir;
 
-    QLabel *m_path;
+    QString m_relativeAudioPath;
+    QComboBox *m_audioFileLocation;
+    LineEdit *m_customAudioLocation;
     QLabel *m_diskSpace;
     QLabel *m_minutesAtStereo;
-
-    QPushButton *m_changePathButton;
 
     /// Display remaining disk space and recording time at current path.
     void updateWidgets();

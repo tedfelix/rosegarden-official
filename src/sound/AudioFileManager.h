@@ -146,10 +146,11 @@ public:
     /// Remove all audio files.
     void clear();
 
-    /// Get the absolute audio path.  E.g. "/home/ted/Documents/project1/audio/"
-    QString getAbsoluteAudioPath() const;
     /// Set the relative audio file path.  E.g. "./audio"
     void setRelativeAudioPath(const QString &newPath, bool moveFiles = false);
+    QString getRelativeAudioPath() const  { return m_relativeAudioPath; }
+    /// Get the absolute audio path.  E.g. "/home/ted/Documents/project1/audio/"
+    QString getAbsoluteAudioPath() const;
 
     /// Throw if the current audio path does not exist or is not writable
     /**
