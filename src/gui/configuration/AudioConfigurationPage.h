@@ -76,6 +76,9 @@ private:
 #endif
 
     QCheckBox *m_showAudioLocation;
+    QComboBox *m_defaultAudioLocation;
+    LineEdit *m_customAudioLocation;
+
     LineEdit *m_externalAudioEditorPath;
 
 #ifdef HAVE_LIBJACK

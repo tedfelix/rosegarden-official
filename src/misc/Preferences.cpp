@@ -26,6 +26,7 @@ namespace Rosegarden
 namespace
 {
     // Cached values for performance...
+
     bool sendProgramChangesWhenLooping = true;
     bool sendControlChangesWhenLooping = true;
     bool useNativeFileDialogs = true;
@@ -33,6 +34,7 @@ namespace
 
     bool afldDontShow = false;
     int afldLocation = 0;
+    QString afldCustomLocation;
 }
 
 void Preferences::setSendProgramChangesWhenLooping(bool value)
@@ -195,6 +197,32 @@ int Preferences::getDefaultAudioLocation()
     }
 
     return afldLocation;
+}
+
+void Preferences::setCustomAudioLocation(QString location)
+{
+    QSettings settings;
+    settings.beginGroup(AudioFileLocationDialogGroup);
+    settings.setValue("customLocation", location);
+    afldCustomLocation = location;
+}
+
+QString Preferences::getCustomAudioLocation()
+{
+    static bool firstGet = true;
+
+    if (firstGet) {
+        firstGet = false;
+
+        QSettings settings;
+        settings.beginGroup(AudioFileLocationDialogGroup);
+        afldCustomLocation =
+                settings.value("customLocation", "./sounds").toString();
+        // Write it back out so we can find it if it wasn't there.
+        settings.setValue("customLocation", afldCustomLocation);
+    }
+
+    return afldCustomLocation;
 }
 
 

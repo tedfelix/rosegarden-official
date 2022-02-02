@@ -53,12 +53,15 @@ namespace Preferences
 
     // AudioFileLocationDialog settings
 
+    void setAudioFileLocationDlgDontShow(bool dontShow);
+    bool getAudioFileLocationDlgDontShow();
+
     // See AudioFileLocationDialog::Location enum.
     void setDefaultAudioLocation(int location);
     int getDefaultAudioLocation();
 
-    void setAudioFileLocationDlgDontShow(bool dontShow);
-    bool getAudioFileLocationDlgDontShow();
+    void setCustomAudioLocation(QString location);
+    QString getCustomAudioLocation();
 
 }
 

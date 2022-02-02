@@ -87,8 +87,8 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     // Audio preview scale
 
-    layout->addWidget(new QLabel(tr("Audio preview scale"),
-                                 frame), row, 0);
+    layout->addWidget(new QLabel(tr("Audio preview scale"), frame),
+                      row, 0);
 
     m_previewStyle = new QComboBox(frame);
     connect(m_previewStyle,
@@ -105,9 +105,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 #ifdef HAVE_LIBJACK
 
     // Record audio files as
-
-    QLabel *label = new QLabel(tr("Record audio files as"), frame);
-    layout->addWidget(label, row, 0);
+    layout->addWidget(new QLabel(tr("Record audio files as"), frame), row, 0);
 
     m_audioRecFormat = new QComboBox(frame);
     connect(m_audioRecFormat,
@@ -126,8 +124,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 #endif
 
     // "Show Audio File Location dialog when saving" checkbox.
-    label = new QLabel(tr("Show Audio File Location dialog when saving"), frame);
-    layout->addWidget(label, row, 0);
+    layout->addWidget(new QLabel(tr("Show Audio File Location dialog when saving"), frame), row, 0);
 
     m_showAudioLocation = new QCheckBox();
     m_showAudioLocation->setChecked(!Preferences::getAudioFileLocationDlgDontShow());
@@ -138,10 +135,37 @@ AudioConfigurationPage::AudioConfigurationPage(
     ++row;
 
     // "Default audio location" combobox.
+    layout->addWidget(new QLabel(tr("Default audio location"), frame),
+                      row, 0);
 
-    // Edit box for "Somewhere else?" location.  Probably need to rename
-    // this to "Custom audio file location" everywhere first.
+    m_defaultAudioLocation = new QComboBox(frame);
+    connect(m_defaultAudioLocation,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &AudioConfigurationPage::slotModified);
+    // Make sure these match the names in AudioFileLocationDialog.
+    // See AudioFileLocationDialog::Location enum.
+    m_defaultAudioLocation->addItem(tr("Audio directory (./audio)"));
+    m_defaultAudioLocation->addItem(tr("Document name directory (./DocumentName)"));
+    m_defaultAudioLocation->addItem(tr("Document directory (.)"));
+    m_defaultAudioLocation->addItem(tr("Central repository (~/rosegarden-audio)"));
+    m_defaultAudioLocation->addItem(tr("Custom location (specify below)"));
+    m_defaultAudioLocation->setCurrentIndex(
+            Preferences::getDefaultAudioLocation());
+    layout->addWidget(m_defaultAudioLocation, row, 1, 1, 2);
 
+    ++row;
+
+    // Custom audio file location
+    layout->addWidget(new QLabel(tr("Custom audio file location"), frame),
+                      row, 0);
+
+    m_customAudioLocation =
+            new LineEdit(Preferences::getCustomAudioLocation(), frame);
+    connect(m_customAudioLocation, &QLineEdit::textChanged,
+            this, &AudioConfigurationPage::slotModified);
+    layout->addWidget(m_customAudioLocation, row, 1);
+
+    ++row;
 
     // External audio editor
 
@@ -272,6 +296,10 @@ AudioConfigurationPage::apply()
 
     Preferences::setAudioFileLocationDlgDontShow(
             !m_showAudioLocation->isChecked());
+    Preferences::setDefaultAudioLocation(
+            m_defaultAudioLocation->currentIndex());
+    Preferences::setCustomAudioLocation(
+            m_customAudioLocation->text());
 
     QString externalAudioEditor = getExternalAudioEditor();
 
