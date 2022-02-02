@@ -29,6 +29,9 @@ namespace Rosegarden
 {
 
 
+class LineEdit;
+
+
 class AudioFileLocationDialog : public QDialog
 {
     Q_OBJECT
@@ -56,6 +59,7 @@ private:
     QRadioButton *m_documentDir;
     QRadioButton *m_centralDir;
     QRadioButton *m_customDir;
+    LineEdit *m_customDirText;
 
     QCheckBox *m_dontShow;
 

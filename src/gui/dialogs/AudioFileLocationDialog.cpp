@@ -20,6 +20,7 @@
 #include "AudioFileLocationDialog.h"
 
 #include "misc/Debug.h"
+#include "gui/widgets/LineEdit.h"
 #include "misc/Preferences.h"
 
 #include <QCheckBox>
@@ -53,7 +54,9 @@ AudioFileLocationDialog::AudioFileLocationDialog(
     int row = 0;
 
     // Label
-    layout->addWidget(new QLabel(tr("Audio files have been introduced in this session.  Where would you like to save them?")), row, 0, 1, 2);
+    layout->addWidget(
+            new QLabel(tr("Audio files have been introduced in this session.  Where would you like to save them?")),
+            row, 0, 1, 3);
 
     ++row;
 
@@ -64,7 +67,7 @@ AudioFileLocationDialog::AudioFileLocationDialog(
 
     // Audio directory.  Recommended.
     m_audioDir = new QRadioButton(tr("To an \"audio\" directory where the document is saved.  (./audio) (Recommended)"));
-    layout->addWidget(m_audioDir, row, 1);
+    layout->addWidget(m_audioDir, row, 1, 1, 2);
 
     ++row;
 
@@ -72,26 +75,28 @@ AudioFileLocationDialog::AudioFileLocationDialog(
     m_documentNameDir = new QRadioButton(
             tr("To a directory named after the document where the document is saved.") +
             "\n  (" + m_documentNameDirStr + ")");
-    layout->addWidget(m_documentNameDir, row, 1);
+    layout->addWidget(m_documentNameDir, row, 1, 1, 2);
 
     ++row;
 
     // Same directory.
     m_documentDir = new QRadioButton(tr("To the same directory where the document is saved.  (.)"));
-    layout->addWidget(m_documentDir, row, 1);
+    layout->addWidget(m_documentDir, row, 1, 1, 2);
 
     ++row;
 
     // Central repo.
     m_centralDir = new QRadioButton(tr("To a central audio file repository.  (~/rosegarden-audio)"));
-    layout->addWidget(m_centralDir, row, 1);
+    layout->addWidget(m_centralDir, row, 1, 1, 2);
 
     ++row;
 
     // Custom location.
-    m_customDir = new QRadioButton(tr("To a custom location.") + "  (" +
-            Preferences::getCustomAudioLocation() + ")");
+    m_customDir = new QRadioButton(tr("To a custom location:"));
     layout->addWidget(m_customDir, row, 1);
+
+    m_customDirText = new LineEdit(Preferences::getCustomAudioLocation());
+    layout->addWidget(m_customDirText, row, 2);
 
     ++row;
 
@@ -100,7 +105,9 @@ AudioFileLocationDialog::AudioFileLocationDialog(
 
     ++row;
     // Note
-    layout->addWidget(new QLabel(tr("Note: You can always move the audio files later by setting the audio location in the document properties.")), row, 0, 1, 2);
+    layout->addWidget(
+            new QLabel(tr("Note: You can always move the audio files later by setting the audio location in the document properties.")),
+            row, 0, 1, 3);
 
     ++row;
 
@@ -115,7 +122,7 @@ AudioFileLocationDialog::AudioFileLocationDialog(
     //     document properties, we might want to get this from the settings
     //     instead.  Or maybe hide this.
     m_dontShow->setChecked(false);
-    layout->addWidget(m_dontShow, row, 1);
+    layout->addWidget(m_dontShow, row, 1, 1, 2);
 
     // Spacer
     layout->setRowMinimumHeight(row, 10);
@@ -127,9 +134,8 @@ AudioFileLocationDialog::AudioFileLocationDialog(
             new QDialogButtonBox(QDialogButtonBox::Ok);
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    //connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-    layout->addWidget(buttonBox, row, 0, 1, 2);
+    layout->addWidget(buttonBox, row, 0, 1, 3);
 
     updateWidgets();
 }
@@ -157,6 +163,8 @@ AudioFileLocationDialog::updateWidgets()
         m_customDir->setChecked(true);
         break;
     }
+
+    m_customDirText->setText(Preferences::getCustomAudioLocation());
 }
 
 void AudioFileLocationDialog::accept()
@@ -177,6 +185,7 @@ void AudioFileLocationDialog::accept()
         location = CustomDir;
 
     Preferences::setDefaultAudioLocation(location);
+    Preferences::setCustomAudioLocation(m_customDirText->text());
 
     Preferences::setAudioFileLocationDlgDontShow(m_dontShow->isChecked());
 
