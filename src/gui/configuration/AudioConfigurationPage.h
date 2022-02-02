@@ -56,43 +56,44 @@ public:
     static QString iconName()  { return "configure-audio"; }
 
 #ifdef HAVE_LIBJACK
-    QString getJackPath() { return m_jackPath->text(); }
+    //QString getJackPath() { return m_jackPath->text(); }
 #endif // HAVE_LIBJACK
 
     static QString getBestAvailableAudioEditor();
 
-protected slots:
+private slots:
     void slotFileDialog();
 
-protected:
+private:
     QString getExternalAudioEditor() { return m_externalAudioEditorPath->text(); }
 
+    // Widgets...
 
-    //--------------- Data members ---------------------------------
+    QComboBox *m_previewStyle;
 
 #ifdef HAVE_LIBJACK
-    QCheckBox *m_startJack;
-    LineEdit  *m_jackPath;
-#endif // HAVE_LIBJACK
+    QComboBox *m_audioRecFormat;
+#endif
 
+    QCheckBox *m_showAudioLocation;
+    LineEdit *m_externalAudioEditorPath;
 
 #ifdef HAVE_LIBJACK
     // Number of JACK input ports our RG client creates - 
     // this decides how many audio input destinations
     // we have.
-    //
-    QCheckBox    *m_createFaderOuts;
-    QCheckBox    *m_createSubmasterOuts;
-    QCheckBox    *m_connectDefaultAudioOutputs;
-    QCheckBox    *m_connectDefaultAudioInputs;
-    QCheckBox    *m_autoStartJackServer;
+    QCheckBox *m_createFaderOuts;
+    QCheckBox *m_createSubmasterOuts;
 
-    QComboBox    *m_audioRecFormat;
+    QCheckBox *m_connectDefaultAudioOutputs;
+    QCheckBox *m_connectDefaultAudioInputs;
 
+    QCheckBox *m_autoStartJackServer;
+
+    //QCheckBox *m_startJack;
+    //LineEdit  *m_jackPath;
 #endif // HAVE_LIBJACK
 
-    LineEdit*  m_externalAudioEditorPath;
-    QComboBox* m_previewStyle;
 
 };
  

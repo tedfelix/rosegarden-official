@@ -34,6 +34,7 @@
 #include "misc/Debug.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/FileDialog.h"
+#include "misc/Preferences.h"
 
 #include <QComboBox>
 #include <QSettings>
@@ -79,8 +80,12 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     settings.beginGroup( GeneralOptionsConfigGroup );
 
+    // Spacer
     layout->setRowMinimumHeight(row, 15);
+
     ++row;
+
+    // Audio preview scale
 
     layout->addWidget(new QLabel(tr("Audio preview scale"),
                                  frame), row, 0);
@@ -98,23 +103,48 @@ AudioConfigurationPage::AudioConfigurationPage(
     settings.endGroup();
 
 #ifdef HAVE_LIBJACK
-    settings.beginGroup( SequencerOptionsConfigGroup );
+
+    // Record audio files as
 
     QLabel *label = new QLabel(tr("Record audio files as"), frame);
+    layout->addWidget(label, row, 0);
+
     m_audioRecFormat = new QComboBox(frame);
     connect(m_audioRecFormat,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &AudioConfigurationPage::slotModified);
     m_audioRecFormat->addItem(tr("16-bit PCM WAV format (smaller files)"));
     m_audioRecFormat->addItem(tr("32-bit float WAV format (higher quality)"));
+    settings.beginGroup( SequencerOptionsConfigGroup );
     m_audioRecFormat->setCurrentIndex( settings.value("audiorecordfileformat", 1).toUInt() );
-    layout->addWidget(label, row, 0);
-    layout->addWidget(m_audioRecFormat, row, 1, row- row+1, 2);
-    ++row;
-
     settings.endGroup();
 
+    layout->addWidget(m_audioRecFormat, row, 1, row- row+1, 2);
+
+    ++row;
+
 #endif
+
+    // "Show Audio File Location dialog when saving" checkbox.
+    label = new QLabel(tr("Show Audio File Location dialog when saving"), frame);
+    layout->addWidget(label, row, 0);
+
+    m_showAudioLocation = new QCheckBox();
+    m_showAudioLocation->setChecked(!Preferences::getAudioFileLocationDlgDontShow());
+    connect(m_showAudioLocation, &QCheckBox::stateChanged,
+            this, &AudioConfigurationPage::slotModified);
+    layout->addWidget(m_showAudioLocation, row, 1);
+
+    ++row;
+
+    // "Default audio location" combobox.
+
+    // Edit box for "Somewhere else?" location.  Probably need to rename
+    // this to "Custom audio file location" everywhere first.
+
+
+    // External audio editor
+
     settings.beginGroup( GeneralOptionsConfigGroup );
 
     layout->addWidget(new QLabel(tr("External audio editor"), frame),
@@ -133,7 +163,8 @@ AudioConfigurationPage::AudioConfigurationPage(
     }
 
     m_externalAudioEditorPath = new LineEdit(externalAudioEditor, frame);
-    connect(m_externalAudioEditorPath, &QLineEdit::textChanged, this, &AudioConfigurationPage::slotModified);
+    connect(m_externalAudioEditorPath, &QLineEdit::textChanged,
+            this, &AudioConfigurationPage::slotModified);
 //    m_externalAudioEditorPath->setMinimumWidth(150);
     layout->addWidget(m_externalAudioEditorPath, row, 1);
     
@@ -145,6 +176,8 @@ AudioConfigurationPage::AudioConfigurationPage(
     ++row;
 
     settings.endGroup();
+
+    // Create JACK Outputs
 
     layout->addWidget(new QLabel(tr("Create JACK outputs"), frame),
                       row, 0);
@@ -218,24 +251,27 @@ void
 AudioConfigurationPage::apply()
 {
     QSettings settings;
-    settings.beginGroup( SequencerOptionsConfigGroup );
 
 #ifdef HAVE_LIBJACK
     // Jack audio inputs
     //
+    settings.beginGroup( SequencerOptionsConfigGroup );
     settings.setValue("audiofaderouts", m_createFaderOuts->isChecked());
     settings.setValue("audiosubmasterouts", m_createSubmasterOuts->isChecked());
     settings.setValue("audiorecordfileformat", m_audioRecFormat->currentIndex());
     settings.setValue("connect_default_jack_outputs", m_connectDefaultAudioOutputs->isChecked());
     settings.setValue("connect_default_jack_inputs", m_connectDefaultAudioInputs->isChecked());
     settings.setValue("autostartjack", m_autoStartJackServer->isChecked());
+    settings.endGroup();
 #endif
 
-    settings.endGroup();
     settings.beginGroup( GeneralOptionsConfigGroup );
 
     int previewstyle = m_previewStyle->currentIndex();
     settings.setValue("audiopreviewstyle", previewstyle);
+
+    Preferences::setAudioFileLocationDlgDontShow(
+            !m_showAudioLocation->isChecked());
 
     QString externalAudioEditor = getExternalAudioEditor();
 
