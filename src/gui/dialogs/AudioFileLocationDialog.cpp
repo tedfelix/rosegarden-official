@@ -66,15 +66,15 @@ AudioFileLocationDialog::AudioFileLocationDialog(
     ++row;
 
     // Audio directory.  Recommended.
-    m_audioDir = new QRadioButton(tr("To an \"audio\" directory where the document is saved.  (./audio) (Recommended)"));
+    m_audioDir = new QRadioButton(tr("To an \"audio\" directory where the document is saved.  (%1) (Recommended)").arg("./audio"));
     layout->addWidget(m_audioDir, row, 1, 1, 2);
 
     ++row;
 
     // Document name directory.
+    // ??? <br /> isn't working here.  Going with \n.
     m_documentNameDir = new QRadioButton(
-            tr("To a directory named after the document where the document is saved.") +
-            "\n  (" + m_documentNameDirStr + ")");
+            tr("To a directory named after the document where the document is saved.\n(%1)").arg(m_documentNameDirStr));
     layout->addWidget(m_documentNameDir, row, 1, 1, 2);
 
     ++row;
@@ -86,13 +86,13 @@ AudioFileLocationDialog::AudioFileLocationDialog(
     ++row;
 
     // Central repo.
-    m_centralDir = new QRadioButton(tr("To a central audio file repository.  (~/rosegarden-audio)"));
+    m_centralDir = new QRadioButton(tr("To a central audio file repository.  (%1)").arg("~/rosegarden-audio"));
     layout->addWidget(m_centralDir, row, 1, 1, 2);
 
     ++row;
 
     // Custom location.
-    m_customDir = new QRadioButton(tr("To a custom location:"));
+    m_customDir = new QRadioButton(tr("To a custom audio file location:"));
     layout->addWidget(m_customDir, row, 1);
 
     m_customDirText = new LineEdit(Preferences::getCustomAudioLocation());

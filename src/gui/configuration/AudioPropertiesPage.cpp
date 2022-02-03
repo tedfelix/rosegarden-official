@@ -68,11 +68,11 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
             this, &AudioPropertiesPage::slotModified);
     // Make sure these match the names in AudioFileLocationDialog.
     // See AudioFileLocationDialog::Location enum.
-    m_audioFileLocation->addItem(tr("Audio directory (./audio)"));
-    m_audioFileLocation->addItem(tr("Document name directory") + " (" + m_documentNameDir + ")");
+    m_audioFileLocation->addItem(tr("Audio directory (%1)").arg("./audio"));
+    m_audioFileLocation->addItem(tr("Document name directory (%1)").arg(m_documentNameDir));
     m_audioFileLocation->addItem(tr("Document directory (.)"));
-    m_audioFileLocation->addItem(tr("Central repository (~/rosegarden-audio)"));
-    m_audioFileLocation->addItem(tr("Custom location (specify below)"));
+    m_audioFileLocation->addItem(tr("Central repository (%1)").arg("~/rosegarden-audio"));
+    m_audioFileLocation->addItem(tr("Custom audio file location (specify below)"));
     layout->addWidget(m_audioFileLocation, row, 1);
 
     ++row;

@@ -144,11 +144,13 @@ AudioConfigurationPage::AudioConfigurationPage(
             this, &AudioConfigurationPage::slotModified);
     // Make sure these match the names in AudioFileLocationDialog.
     // See AudioFileLocationDialog::Location enum.
-    m_defaultAudioLocation->addItem(tr("Audio directory (./audio)"));
+    // Using arg() here to avoid translation of directory names.  Might
+    // want to translate them separately one day.
+    m_defaultAudioLocation->addItem(tr("Audio directory (%1)").arg("./audio"));
     m_defaultAudioLocation->addItem(tr("Document name directory (./DocumentName)"));
     m_defaultAudioLocation->addItem(tr("Document directory (.)"));
-    m_defaultAudioLocation->addItem(tr("Central repository (~/rosegarden-audio)"));
-    m_defaultAudioLocation->addItem(tr("Custom location (specify below)"));
+    m_defaultAudioLocation->addItem(tr("Central repository (%1)").arg("~/rosegarden-audio"));
+    m_defaultAudioLocation->addItem(tr("Custom audio file location (specify below)"));
     m_defaultAudioLocation->setCurrentIndex(
             Preferences::getDefaultAudioLocation());
     layout->addWidget(m_defaultAudioLocation, row, 1, 1, 2);
