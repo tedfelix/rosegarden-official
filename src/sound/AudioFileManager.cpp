@@ -1093,6 +1093,10 @@ AudioFileManager::toAbsolute(const QString &relativePath) const
         absolutePath = QDir::homePath() + absolutePath;
     }
 
+    // Handle double-dot.  A bit messy, but should work.
+    if (absolutePath.left(2) == "..")
+        absolutePath = "./" + absolutePath;
+
     // Convert dot to .rg file location.
     if (absolutePath.left(1) == "."  &&  m_document) {
         absolutePath.remove(0, 1);
