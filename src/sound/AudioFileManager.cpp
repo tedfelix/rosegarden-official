@@ -21,6 +21,7 @@
 
 #include <string>
 #include <sstream>  // std::stringstream
+#include <unistd.h>
 
 #include <QMessageBox>
 #include <QPixmap>
@@ -352,11 +353,23 @@ AudioFileManager::setRelativeAudioPath(
 
     if (i_moveFiles) {
         // Make the path if needed.
-        QDir().mkpath(newAbsolutePath);
+        const bool success = QDir().mkpath(newAbsolutePath);
+        if (!success) {
+            QMessageBox::warning(
+                    RosegardenMainWindow::self(),
+                    tr("Audio File Location"),
+                    tr("Cannot create audio path.<br />%1<br />Audio files will remain in their original location.<br />(%2)").arg(newAbsolutePath).arg(getAbsoluteAudioPath()));
+            return;
+        }
 
-        // Handle any errors.
-
-        // Make sure the path is writable.
+        // Is the new path writable?
+        if (access(qstrtostr(newAbsolutePath).c_str(), W_OK) != 0) {
+            QMessageBox::warning(
+                    RosegardenMainWindow::self(),
+                    tr("Audio File Location"),
+                    tr("Audio path is not writable.<br />%1<br />Audio files will remain in their original location.<br />(%2)").arg(newAbsolutePath).arg(getAbsoluteAudioPath()));
+            return;
+        }
 
         // Physically move the files, and adjust their paths to
         // point to the new location.
@@ -1110,6 +1123,10 @@ AudioFileManager::moveFiles(const QString &newPath)
         QFileInfo fileInfo(oldName);
         const QString newName = newPath2 + fileInfo.fileName();
 
+        // If there is no actual change, try the next.
+        if (newName == oldName)
+            continue;
+
         // Delete the old peak file.
         // ??? It would be more clever to just move the .pk file.
         //     Might want to look into doing that instead.
@@ -1121,12 +1138,10 @@ AudioFileManager::moveFiles(const QString &newPath)
         // Move it to the new path.
         const bool success = QFile::rename(oldName, newName);
 
-        // Failure is common in some situations.  E.g. renaming to
-        // the same place.
         if (!success) {
-            RG_DEBUG << "moveFiles(): rename failed for:";
-            RG_DEBUG << "  oldName:" << oldName;
-            RG_DEBUG << "  newName:" << newName;
+            RG_WARNING << "moveFiles(): rename failed for:";
+            RG_WARNING << "  oldName:" << oldName;
+            RG_WARNING << "  newName:" << newName;
         }
 
         // Adjust the stored path for this file.
