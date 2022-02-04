@@ -351,26 +351,52 @@ AudioFileManager::setRelativeAudioPath(
     QString newAbsolutePath = toAbsolute(newRelativePath);
     newAbsolutePath = addTrailingSlash(newAbsolutePath);
 
+    // ??? This is probably only needed if the directory does not
+    //     exist in the first place and we have no files to move.
+    //     The issue here is that the user should know that if they
+    //     keep changing this, they will leave a trail of empty
+    //     directories.
+    //QMessageBox::information(
+    //        RosegardenMainWindow::self(),
+    //        tr("Audio File Location"),
+    //        tr("Creating the new directory for audio files:<br />%1").
+    //            arg(newAbsolutePath));
+
+    QString originalLocation;
+    // If the files are moving, provide the user with some additional
+    // information in case there is a problem.
+    if (i_moveFiles)
+        originalLocation = tr("<br />Audio files will remain in their original location.<br />(%1)").
+            arg(getAbsoluteAudioPath());
+
+    // Make the path if needed.
+    // We need to make the path even if we are not moving files into it to
+    // make sure it is there for recording.  Otherwise we will end up back
+    // here and the user will be stuck.
+    const bool success = QDir().mkpath(newAbsolutePath);
+    if (!success) {
+        QMessageBox::warning(
+                RosegardenMainWindow::self(),
+                tr("Audio File Location"),
+                tr("Cannot create audio path.<br />%1").
+                    arg(newAbsolutePath) + originalLocation);
+        return;
+    }
+
+    // Is the new path writable?
+    // (We could do this only when moving to allow for opening and working
+    // with read-only audio repositories.  But then we put off the
+    // unpleasant news to recording time.)
+    if (access(qstrtostr(newAbsolutePath).c_str(), W_OK) != 0) {
+        QMessageBox::warning(
+                RosegardenMainWindow::self(),
+                tr("Audio File Location"),
+                tr("Audio path is not writable.<br />%1").
+                    arg(newAbsolutePath) + originalLocation);
+        return;
+    }
+
     if (i_moveFiles) {
-        // Make the path if needed.
-        const bool success = QDir().mkpath(newAbsolutePath);
-        if (!success) {
-            QMessageBox::warning(
-                    RosegardenMainWindow::self(),
-                    tr("Audio File Location"),
-                    tr("Cannot create audio path.<br />%1<br />Audio files will remain in their original location.<br />(%2)").arg(newAbsolutePath).arg(getAbsoluteAudioPath()));
-            return;
-        }
-
-        // Is the new path writable?
-        if (access(qstrtostr(newAbsolutePath).c_str(), W_OK) != 0) {
-            QMessageBox::warning(
-                    RosegardenMainWindow::self(),
-                    tr("Audio File Location"),
-                    tr("Audio path is not writable.<br />%1<br />Audio files will remain in their original location.<br />(%2)").arg(newAbsolutePath).arg(getAbsoluteAudioPath()));
-            return;
-        }
-
         // Physically move the files, and adjust their paths to
         // point to the new location.
         moveFiles(newAbsolutePath);

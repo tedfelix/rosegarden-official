@@ -26,6 +26,7 @@
 #include "sequencer/RosegardenSequencer.h"
 
 #include <QComboBox>
+#include <QDir>
 #include <QFileInfo>
 #include <QFrame>
 #include <QGridLayout>
@@ -62,18 +63,25 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
     layout->addWidget(new QLabel(tr("Audio file location:"), frame),
                       row, 0);
 
-    m_audioFileLocation = new QComboBox(frame);
-    connect(m_audioFileLocation,
-                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
-            this, &AudioPropertiesPage::slotModified);
-    // Make sure these match the names in AudioFileLocationDialog.
-    // See AudioFileLocationDialog::Location enum.
-    m_audioFileLocation->addItem(tr("Audio directory (%1)").arg("./audio"));
-    m_audioFileLocation->addItem(tr("Document name directory (%1)").arg(m_documentNameDir));
-    m_audioFileLocation->addItem(tr("Document directory (.)"));
-    m_audioFileLocation->addItem(tr("Central repository (%1)").arg("~/rosegarden-audio"));
-    m_audioFileLocation->addItem(tr("Custom audio file location (specify below)"));
-    layout->addWidget(m_audioFileLocation, row, 1);
+    // If the document has been saved, put up the combobox.
+    if (m_docAbsFilePath != "") {
+        m_audioFileLocation = new QComboBox(frame);
+        connect(m_audioFileLocation,
+                    static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+                this, &AudioPropertiesPage::slotModified);
+        // Make sure these match the names in AudioFileLocationDialog.
+        // See AudioFileLocationDialog::Location enum.
+        m_audioFileLocation->addItem(tr("Audio directory (%1)").arg("./audio"));
+        m_audioFileLocation->addItem(tr("Document name directory (%1)").arg(m_documentNameDir));
+        m_audioFileLocation->addItem(tr("Document directory (.)"));
+        m_audioFileLocation->addItem(tr("Central repository (%1)").arg("~/rosegarden-audio"));
+        m_audioFileLocation->addItem(tr("Custom audio file location (specify below)"));
+        layout->addWidget(m_audioFileLocation, row, 1);
+    } else {
+        m_audioFileLocation = nullptr;
+        layout->addWidget(new QLabel(tr("Save document first."), frame),
+                          row, 1);
+    }
 
     ++row;
 
@@ -81,10 +89,21 @@ AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
     layout->addWidget(new QLabel(tr("Custom audio file location:"), frame),
                       row, 0);
 
-    m_customAudioLocation = new LineEdit(frame);
-    connect(m_customAudioLocation, &QLineEdit::textChanged,
-            this, &AudioPropertiesPage::slotModified);
-    layout->addWidget(m_customAudioLocation, row, 1);
+    // If the document has been saved, put up the combobox.
+    if (m_docAbsFilePath != "") {
+        m_customAudioLocation = new LineEdit(frame);
+        // If we haven't saved yet, disable this.
+        // ??? Or should we hide it and show an explanatory label here?
+        if (m_docAbsFilePath == "")
+            m_customAudioLocation->setEnabled(false);
+        connect(m_customAudioLocation, &QLineEdit::textChanged,
+                this, &AudioPropertiesPage::slotModified);
+        layout->addWidget(m_customAudioLocation, row, 1);
+    } else {
+        m_customAudioLocation = nullptr;
+        layout->addWidget(new QLabel(tr("Save document first."), frame),
+                          row, 1);
+    }
 
     ++row;
 
@@ -129,24 +148,29 @@ AudioPropertiesPage::updateWidgets()
     }
 #endif
 
-    if (m_relativeAudioPath.isEmpty())
-        m_relativeAudioPath = ".";
-    if (m_relativeAudioPath.back() == "/")
-        m_relativeAudioPath.chop(1);
+    // If we can change the path...
+    if (m_audioFileLocation  &&  m_customAudioLocation) {
+        // ??? Why do this on every update?  Why not move to ctor?
+        if (m_relativeAudioPath.isEmpty())
+            m_relativeAudioPath = ".";
+        // ??? Why do this on every update?  Why not move to ctor?
+        if (m_relativeAudioPath.back() == "/")
+            m_relativeAudioPath.chop(1);
 
-    m_customAudioLocation->setText("");
-    // See AudioFileLocationDialog::Location enum.
-    if (m_relativeAudioPath == "./audio") {
-        m_audioFileLocation->setCurrentIndex(0);
-    } else if (m_relativeAudioPath == m_documentNameDir) {
-        m_audioFileLocation->setCurrentIndex(1);
-    } else if (m_relativeAudioPath == ".") {
-        m_audioFileLocation->setCurrentIndex(2);
-    } else if (m_relativeAudioPath == "~/rosegarden-audio") {
-        m_audioFileLocation->setCurrentIndex(3);
-    } else {
-        m_audioFileLocation->setCurrentIndex(4);
-        m_customAudioLocation->setText(m_relativeAudioPath);
+        m_customAudioLocation->setText("");
+        // See AudioFileLocationDialog::Location enum.
+        if (m_relativeAudioPath == "./audio") {
+            m_audioFileLocation->setCurrentIndex(0);
+        } else if (m_relativeAudioPath == m_documentNameDir) {
+            m_audioFileLocation->setCurrentIndex(1);
+        } else if (m_relativeAudioPath == ".") {
+            m_audioFileLocation->setCurrentIndex(2);
+        } else if (m_relativeAudioPath == "~/rosegarden-audio") {
+            m_audioFileLocation->setCurrentIndex(3);
+        } else {
+            m_audioFileLocation->setCurrentIndex(4);
+            m_customAudioLocation->setText(m_relativeAudioPath);
+        }
     }
 
     // Disk space remaining
@@ -203,6 +227,10 @@ AudioPropertiesPage::updateWidgets()
 void
 AudioPropertiesPage::apply()
 {
+    // If we can't change the path, bail.
+    if (!m_audioFileLocation  ||  !m_customAudioLocation)
+        return;
+
     AudioFileManager &audioFileManager = m_doc->getAudioFileManager();
 
     QString newPath;
@@ -240,9 +268,16 @@ AudioPropertiesPage::apply()
 
             moveFiles = true;
         }
-
         // Update the AudioFileManager.
         audioFileManager.setRelativeAudioPath(newPath, moveFiles);
+
+        // Avoid showing the prompt when they save.
+        // Since we don't store this flag in the document, they can
+        // still save, exit, open, create audio, save and get the prompt.
+        // It might even be surprising if they have the defaults set to
+        // something different along with "don't show".  If someone
+        // complains, we can add the flag to the document.
+        audioFileManager.setAudioLocationConfirmed();
 
         // Moving the files will force a save.  Set the document modified
         // flag only if files aren't moving.
