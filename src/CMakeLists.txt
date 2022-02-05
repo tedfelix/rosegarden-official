@@ -144,6 +144,7 @@ set(rg_CPPS
   gui/dialogs/AudioManagerDialog.cpp
   gui/dialogs/UseOrnamentDialog.cpp
   gui/dialogs/CommentsPopupDialog.cpp
+  gui/dialogs/ShortcutDialog.cpp
   gui/widgets/IconStackedWidget.cpp
   gui/widgets/TristateCheckBox.cpp
   gui/widgets/FileDialog.cpp
@@ -337,6 +338,7 @@ set(rg_CPPS
   gui/general/RosegardenScrollView.cpp
   gui/general/PresetElement.cpp
   gui/general/ActionFileClient.cpp
+  gui/general/ActionData.cpp
   gui/general/BaseTool.cpp
   gui/general/ListEditView.cpp
   gui/general/TempDirectory.cpp

@@ -121,6 +121,7 @@
 #include "gui/dialogs/ManageMetronomeDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/RescaleDialog.h"
+#include "gui/dialogs/ShortcutDialog.h"
 #include "gui/dialogs/SplitByPitchDialog.h"
 #include "gui/dialogs/SplitByRecordingSrcDialog.h"
 #include "gui/dialogs/TimeDialog.h"
@@ -152,6 +153,7 @@
 #include "gui/general/LilyPondProcessor.h"
 #include "gui/general/ProjectPackager.h"
 #include "gui/general/PresetHandlerDialog.h"
+#include "gui/general/ActionData.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/WarningWidget.h"
@@ -326,6 +328,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     connect(m_editTempoController, SIGNAL(editTempos(timeT)),
             this, SLOT(slotEditTempos(timeT)));
 
+    // initialize ActionData for user shortcuts
+    ActionData::getInstance();
+    
     // Need to do this prior to launching the sequencer to
     // avoid ActionFileClient warnings in the debug log due
     // to menu actions not existing yet.  This makes sure they
@@ -699,6 +704,7 @@ RosegardenMainWindow::setupActions()
     //uncomment this when time comes to implement paste as links
     //createAction("edit_paste_as_links", SLOT(slotEditPasteAsLinks()));
 
+    createAction("shortcuts_configure", SLOT(slotConfigureShortcuts()));
     createAction("options_configure", SLOT(slotConfigure()));
 
     createAction("file_import_project", SLOT(slotImportProject()));
@@ -6048,6 +6054,14 @@ RosegardenMainWindow::slotToggleRecordCurrentTrack()
     comp.notifyTrackChanged(track);
 
     RosegardenDocument::currentDocument->checkAudioPath(track);
+}
+
+void
+RosegardenMainWindow::slotConfigureShortcuts()
+{
+    RG_DEBUG << "slotConfigureShortcuts";
+    ShortcutDialog sdlg(this);
+    sdlg.exec();
 }
 
 void
