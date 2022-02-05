@@ -314,7 +314,8 @@ private:
      *
      * The IDs are stored in the AudioFile objects.  See AudioFile::getId().
      *
-     * ??? Would this be faster as a std::map<AudioFileId, AudioFile *>?
+     * ??? Would this be better as an AudioFileMap:
+     *       std::map<AudioFileId, QSharedPointer<AudioFile>>
      *     See getAudioFile().
      */
     AudioFileVector m_audioFiles;
@@ -324,6 +325,8 @@ private:
      * resampling) an existing file using the conversion library.  If
      * you are not sure whether to use addFile() or importFile(), go for
      * importFile().
+     *
+     * Called by importURL().
      *
      * throws BadAudioPathException, BadSoundFileException
      */
