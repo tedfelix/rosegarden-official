@@ -41,8 +41,6 @@ public:
     QString getFileName()  { return m_fileName; }
 
 private slots:
-    void slotSkip();
-    void slotSkipAll();
     void slotLocate();
 
 private:

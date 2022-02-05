@@ -26,7 +26,6 @@
 #include <QFileInfo>
 #include <QLabel>
 #include <QWidget>
-#include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
 
@@ -42,22 +41,21 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
     m_path(path),
     m_fileName(file)
 {
-    setModal(true);
     setWindowTitle(tr("Locate audio file"));
+    setModal(true);
+    setContentsMargins(10, 10, 10, 10);
 
     QGridLayout *gridLayout = new QGridLayout;
     setLayout(gridLayout);
 
     int row = 0;
 
-    const QString label =
-        tr("<p>Could not find audio file:</p><p>&nbsp;&nbsp;%1</p><p>at expected audio file path:</p><p>&nbsp;&nbsp;%2</p><p>Would you like to try and locate this file or cancel file open?</p>").
-                arg(m_fileName).
-                arg(m_path);
+    QLabel *label = new QLabel(
+            tr("<p>Could not find audio file:</p><p>&nbsp;&nbsp;%1</p><p>at expected audio file location:</p><p>&nbsp;&nbsp;%2</p><p>You can either cancel the file open and move the files yourself or locate the missing file and adjust the audio file location to match.</p><p>Which would you like to do?</p>").
+                    arg(m_fileName).
+                    arg(m_path));
 
-    QLabel *labelW = new QLabel(label);
-
-    gridLayout->addWidget(labelW, row, 0);
+    gridLayout->addWidget(label, row, 0);
     gridLayout->setRowStretch(row, 10);
 
     ++row;
@@ -69,61 +67,44 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox;
 
-    QPushButton *user1 = new QPushButton(tr("&Skip"));
-    buttonBox->addButton(user1, QDialogButtonBox::ActionRole);
-    connect(user1, &QAbstractButton::clicked, this, &FileLocateDialog::slotSkip);
+    QPushButton *cancel = new QPushButton(tr("&Cancel File Open"));
+    buttonBox->addButton(cancel, QDialogButtonBox::RejectRole);
 
-    QPushButton *user2 = new QPushButton(tr("Skip &All"));
-    buttonBox->addButton(user2, QDialogButtonBox::ActionRole);
-    connect(user2, &QAbstractButton::clicked, this, &FileLocateDialog::slotSkipAll);
+    QPushButton *locate = new QPushButton(tr("&Locate Missing File"));
+    buttonBox->addButton(locate, QDialogButtonBox::ActionRole);
+    connect(locate, &QAbstractButton::clicked,
+            this, &FileLocateDialog::slotLocate);
 
-    QPushButton *user3 = new QPushButton(tr("&Locate"));
-    buttonBox->addButton(user3, QDialogButtonBox::ActionRole);
-    connect(user3, &QAbstractButton::clicked, this, &FileLocateDialog::slotLocate);
-
-    gridLayout->addWidget(buttonBox, row, 0);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    gridLayout->addWidget(buttonBox, row, 0);
 }
 
 void
 FileLocateDialog::slotLocate()
 {
-    if (!m_fileName.isEmpty()) {
-        m_fileName = FileDialog::getOpenFileName
-            (this,
-             tr("Select an Audio File"),
-             m_path,
-             tr("Requested file") + QString(" (%1)").arg(QFileInfo(m_fileName).fileName()) + ";;" +
-             tr("WAV files") + " (*.wav *.WAV)" + ";;" +
-             tr("All files") + " (*)");
+    // ??? We really just need a directory.  Is there a directory open
+    //     dialog that would show the files to help confirm we are in
+    //     the right place?
+    m_fileName = FileDialog::getOpenFileName(
+            this,  // parent
+            tr("Select an Audio File"),  // caption
+            m_path,  // dir
+            tr("Requested file") +
+                QString(" (%1)").arg(QFileInfo(m_fileName).fileName()) +
+                ";;" +
+            tr("WAV files") + " (*.wav *.WAV)" + ";;" +
+            tr("All files") + " (*)");  // filter
 
-        RG_DEBUG << "FileLocateDialog::slotLocate() : m_file = " << m_fileName;
-
-        if (m_fileName.isEmpty()) {
-            RG_DEBUG << "FileLocateDialog::slotLocate() : reject\n";
-            reject();
-        } else {
-            QFileInfo fileInfo(m_fileName);
-            m_path = fileInfo.path();
-            accept();
-        }
-
-    } else {
+    if (m_fileName.isEmpty())
         reject();
-    }
-}
 
-void
-FileLocateDialog::slotSkip()
-{
-    reject();
-}
+    QFileInfo fileInfo(m_fileName);
+    m_path = fileInfo.path();
 
-void
-FileLocateDialog::slotSkipAll()
-{
-    done( -1);
+    accept();
+
 }
 
 

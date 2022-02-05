@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RoseXmlHandler]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "RoseXmlHandler.h"
 
@@ -323,7 +323,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     if (lcName == "event") {
 
-        //        RG_DEBUG << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime;
+        //RG_DEBUG << "startElement(): found event, current time is " << m_currentTime;
 
         if (m_currentEvent) {
             RG_DEBUG << "RoseXmlHandler::startElement: Warning: new event found at time " << m_currentTime << " before previous event has ended; previous event will be lost";
@@ -2699,36 +2699,13 @@ RoseXmlHandler::setMIDIDeviceName(QString name)
 bool
 RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
 {
-    RG_DEBUG << "locateAudioFile()";
-
     StartupLogo::hideIfStillThere();
 
     // ??? Can we also stop the wait cursor?  It's really annoying here.
     //     We'll want to bring it back as well.
 
-    // ??? Actually we can upgrade the FileLocateDialog to do all of this.
-    QMessageBox::information(
-            nullptr,
-            tr("Rosegarden"),
-            tr("<p>Could not find audio file:</p><p>&nbsp;&nbsp;%1</p><p>at expected audio file path:</p><p>&nbsp;&nbsp;%2</p><p>Please move the audio files for this document to the path above and try opening this document again.</p>").
-                    arg(file).
-                    arg(getAudioFileManager().getAbsoluteAudioPath()),
-                    QMessageBox::Cancel);
-
-#if 0
-    m_errorString = "Audio file not found.";
-    // Abort the load.  Otherwise their audio Segment(s) are gone and
-    // if they save, they've got a serious mess on their hands.
-    return false;
-
-#else
-
     // Let the user look around and try to find the file.
 
-    const QString docFilePath = m_doc->getAbsFilePath();
-    const QString docPath = QFileInfo(docFilePath).path();
-
-    QString newFilePath;
     QString newAudioDirectory;
 
     bool found = false;
@@ -2736,7 +2713,7 @@ RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
     while (!found) {
 
         FileLocateDialog fileLocateDialog(
-                (QWidget *)m_doc->parent(),
+                RosegardenMainWindow::self(),
                 file,
                 getAudioFileManager().getAbsoluteAudioPath());
         int result = fileLocateDialog.exec();
@@ -2748,9 +2725,7 @@ RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
         }
 
         newAudioDirectory = fileLocateDialog.getPath();
-        RG_DEBUG << "  newAudioDirectory:" << newAudioDirectory;
-        newFilePath = newAudioDirectory + "/" + file;
-        RG_DEBUG << "  newFilePath:" << newFilePath;
+        const QString newFilePath = newAudioDirectory + "/" + file;
         QFileInfo fileInfo(newFilePath);
 
         found = fileInfo.exists();
@@ -2767,7 +2742,7 @@ RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
 
     // Continue loading.
     return true;
-#endif
+
 }
 
 
