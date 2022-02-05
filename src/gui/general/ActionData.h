@@ -84,7 +84,9 @@ public:
     bool m_inVisible;  // Are we inside a State/visible tag?
     bool m_inInvisible;  // Are we inside a State/invisible tag?
     QStringList m_currentMenus;
+    QStringList m_currentMenuNames;
     QString m_currentToolbar;
+    QString m_currentToolbarName;
     QString m_currentState;
     QString m_currentText;
     QString m_currentFile;

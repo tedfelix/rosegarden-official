@@ -51,7 +51,6 @@ void ActionData::fillModel(QStandardItemModel *model)
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("Action"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("Icon"));
     model->setHeaderData(3, Qt::Horizontal, QObject::tr("Shortcut"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Menu"));
 
     for (auto i = m_dataMap.begin(); i != m_dataMap.end(); i++) {
         QString file = (*i).first;
@@ -59,21 +58,25 @@ void ActionData::fillModel(QStandardItemModel *model)
         for (auto mit = fdata.actionMap.begin();
              mit != fdata.actionMap.end();
              mit++) {
-            const QString& aname = (*mit).first;
             const ActionInfo& ainfo = (*mit).second;
-            QIcon iconImage;
-            if (ainfo.icon != "")
-                {
-                    iconImage = IconLoader::load(ainfo.icon);
-                }
             QString textAdj = ainfo.text;
             textAdj.remove("&");
             model->insertRow(0);
             model->setData(model->index(0, 0), m_contextMap[file]);
             model->setData(model->index(0, 1), textAdj);
-            model->setData(model->index(0, 2), iconImage);
+            if (ainfo.icon != "") {
+                QIcon icon = IconLoader::load(ainfo.icon);
+                if (! icon.isNull()) {
+                    QPixmap pixmap =
+                        icon.pixmap(icon.availableSizes().first());
+                    QStandardItem* item = new QStandardItem;
+                    item->setIcon(pixmap);
+                    model->setItem(0, 2, item);
+                } else {
+                    model->setData(model->index(0, 3), "");
+                }
+            }
             model->setData(model->index(0, 3), ainfo.shortcut);
-            model->setData(model->index(0, 4), aname);
         }
     }
 }

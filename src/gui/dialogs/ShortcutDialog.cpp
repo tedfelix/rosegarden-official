@@ -39,7 +39,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     setModal(true);
     setWindowTitle(tr("Shortcuts"));
 
-    m_model = new QStandardItemModel(0, 5, this);
+    m_model = new QStandardItemModel(0, 4, this);
 
     ActionData* adata = ActionData::getInstance();
     adata->fillModel(m_model);
@@ -56,21 +56,21 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     proxyView->setSortingEnabled(true);
 
     filterPatternLineEdit = new QLineEdit;
-    filterPatternLabel = new QLabel(tr("&Filter pattern:"));
+    filterPatternLabel = new QLabel(tr("Filter pattern:"));
     
     connect(filterPatternLineEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(filterChanged()));
     
     QGridLayout *proxyLayout = new QGridLayout;
     proxyLayout->addWidget(filterPatternLabel, 0, 0);
-    proxyLayout->addWidget(filterPatternLineEdit, 0, 1, 1, 4);
-    proxyLayout->addWidget(proxyView, 1, 0, 1, 5);
+    proxyLayout->addWidget(filterPatternLineEdit, 0, 1, 1, 3);
+    proxyLayout->addWidget(proxyView, 1, 0, 1, 4);
     
     QVBoxLayout *mainLayout = new QVBoxLayout;
     
     mainLayout->addLayout(proxyLayout);
     setLayout(mainLayout);
-    setWindowTitle(tr("RGTable"));
+    setWindowTitle(tr("Shortcuts"));
     
     proxyView->sortByColumn(1, Qt::AscendingOrder);
 
@@ -81,7 +81,8 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
         settings.value("Shortcut_Table_Widths").toStringList();
     settings.endGroup();
 
-    for (int i = 0; i < columnWidths.size(); i++) {
+    // set column widths (except for last one)
+    for (int i = 0; i < columnWidths.size() - 1; i++) {
         proxyView->setColumnWidth(i, columnWidths[i].toInt());
     }
     
@@ -90,7 +91,8 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
 ShortcutDialog::~ShortcutDialog()
 {
     QStringList columnWidths;
-    for (int i = 0; i < m_model->columnCount(); i++) {
+    // save column widths (except for last one)
+    for (int i = 0; i < m_model->columnCount() - 1; i++) {
         columnWidths << QString::number(proxyView->columnWidth(i));
     }
     QSettings settings;
