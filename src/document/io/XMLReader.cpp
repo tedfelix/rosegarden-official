@@ -63,7 +63,7 @@ bool XMLReader::parse(QFile& xmlFile)
 bool XMLReader::doParse(QXmlStreamReader& reader)
 {
     bool ok = true;
-    while (!reader.atEnd()) {
+    while (ok  &&  !reader.atEnd()) {
         QXmlStreamReader::TokenType token = reader.readNext();
         // Silence gcc compiler warnings due to the switches below not covering all cases, on purpose
 #pragma GCC diagnostic push
