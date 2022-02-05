@@ -2341,6 +2341,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
             else continue;
             InstrumentId iid = mm.getInstrument();
             InstrumentId aid = mapToActualInstrument(iid);
+            (void)aid;
             //RG_DEBUG << "<rosegarden-data>: mapping instrument " << iid << " to " << aid << " for metronome";
             if (md) md->setMetronome(mm);
             else if (sd) sd->setMetronome(mm);
@@ -2746,7 +2747,7 @@ RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
             return false;
         }
 
-        newAudioDirectory = fileLocateDialog.getDirectory();
+        newAudioDirectory = fileLocateDialog.getPath();
         RG_DEBUG << "  newAudioDirectory:" << newAudioDirectory;
         newFilePath = newAudioDirectory + "/" + file;
         RG_DEBUG << "  newFilePath:" << newFilePath;

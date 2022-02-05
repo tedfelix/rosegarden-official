@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -22,13 +21,11 @@
 #include <QDialog>
 #include <QString>
 
-
 class QWidget;
 
 
 namespace Rosegarden
 {
-
 
 
 class FileLocateDialog : public QDialog
@@ -40,17 +37,17 @@ public:
                      const QString &file,
                      const QString &path);
 
-    QString getDirectory() { return m_path; }
-    QString getFilename() { return m_file; }
+    QString getPath()  { return m_path; }
+    QString getFileName()  { return m_fileName; }
 
-protected slots:
-    virtual void slotUser1();
-    virtual void slotUser2();
-    virtual void slotUser3();
+private slots:
+    void slotSkip();
+    void slotSkipAll();
+    void slotLocate();
 
-protected:
-    QString m_file;
+private:
     QString m_path;
+    QString m_fileName;
 };
   
 
