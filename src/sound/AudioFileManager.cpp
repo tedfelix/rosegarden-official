@@ -117,12 +117,6 @@ AudioFileManager::AudioFileManager(RosegardenDocument *doc) :
 
     pthread_mutex_init(&audioFileManagerLock, &attr);
 
-    // Set this through the set method so that the tilde gets
-    // shaken out.
-    // ??? This will get immediately overwritten by the path in
-    //     autoload.rg.  Maybe we shouldn't call this at all to
-    //     avoid confusion.
-    setRelativeAudioPath("~/rosegarden");
 }
 
 AudioFileManager::~AudioFileManager()
