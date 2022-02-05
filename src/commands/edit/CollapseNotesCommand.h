@@ -36,12 +36,12 @@ class CollapseNotesCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CollapseNotesCommand)
 
 public:
-    CollapseNotesCommand(EventSelection &selection, bool splitAtBars) :
+    CollapseNotesCommand(EventSelection &selection, bool makeViable) :
         BasicCommand(tr("Collapse &Equal-Pitch Notes"),
                      selection,
                      true),  // bruteForceRedo
         m_selection(&selection),
-        m_splitAtBars(splitAtBars)
+        m_makeViable(makeViable)
     { }
 
 protected:
@@ -49,7 +49,7 @@ protected:
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    bool m_splitAtBars;
+    bool m_makeViable;
 };
 
 
