@@ -130,8 +130,6 @@ protected:
     void skipToNextPlayDevice();
     InstrumentId mapToActualInstrument(InstrumentId id);
 
-    //--------------- Data members ---------------------------------
-
     RosegardenDocument    *m_doc;
     Segment *m_currentSegment;
     XmlStorableEvent    *m_currentEvent;
@@ -192,8 +190,9 @@ protected:
     bool                              m_deprecation;
     bool                              m_createDevices;
     bool                              m_haveControls;
-    bool                              m_skipAllAudio;
-    bool                              m_hasActiveAudio;
+
+    bool m_hasActiveAudio;
+    bool locateAudioFile(QString id, QString file, QString label);
 
     // In case we encounter an old solo attribute at the composition level,
     // hold onto it and use it to set the solo for the proper track.

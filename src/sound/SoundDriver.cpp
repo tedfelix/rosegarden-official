@@ -254,7 +254,7 @@ SoundDriver::removeAudioFile(unsigned int id)
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
         if ((*it)->getId() == id) {
             RG_DEBUG << "Sequencer::removeAudioFile() = \"" <<
-                (*it)->getFilename() << "\"";
+                (*it)->getAbsoluteFilePath() << "\"";
 
             delete (*it);
             m_audioFiles.erase(it);

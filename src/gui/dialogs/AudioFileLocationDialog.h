@@ -15,12 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_FILELOCATEDIALOG_H
-#define RG_FILELOCATEDIALOG_H
+#ifndef RG_AUDIOFILELOCATIONDIALOG_H
+#define RG_AUDIOFILELOCATIONDIALOG_H
 
 #include <QDialog>
-#include <QString>
 
+class QCheckBox;
+class QRadioButton;
 class QWidget;
 
 
@@ -28,26 +29,43 @@ namespace Rosegarden
 {
 
 
-class FileLocateDialog : public QDialog
+class LineEdit;
+
+
+class AudioFileLocationDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    FileLocateDialog(QWidget *parent,
-                     const QString &file,
-                     const QString &path);
+    AudioFileLocationDialog(QWidget *parent, QString documentNameDir);
 
-    QString getPath()  { return m_path; }
-    QString getFileName()  { return m_fileName; }
+    enum Location {
+        AudioDir,
+        DocumentNameDir,
+        DocumentDir,
+        CentralDir,
+        CustomDir
+    };
 
-private slots:
-    void slotLocate();
+public slots:
+    virtual void accept() override;
 
 private:
-    QString m_path;
-    QString m_fileName;
+    /// E.g. "./MyRosegardenDocument"
+    QString m_documentNameDirStr;
+
+    QRadioButton *m_audioDir;
+    QRadioButton *m_documentNameDir;
+    QRadioButton *m_documentDir;
+    QRadioButton *m_centralDir;
+    QRadioButton *m_customDir;
+    LineEdit *m_customDirText;
+
+    QCheckBox *m_dontShow;
+
+    void updateWidgets();
 };
-  
+
 
 }
 

@@ -243,7 +243,7 @@ ProjectPackager::getAudioFiles()
             // some polite sanity checking to avoid possible crashes
             if (!file) continue;
 
-            list << file->getFilename();
+            list << file->getAbsoluteFilePath();
         }
     }
 

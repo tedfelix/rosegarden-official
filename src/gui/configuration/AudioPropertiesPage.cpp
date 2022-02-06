@@ -21,15 +21,17 @@
 
 #include "sound/AudioFileManager.h"
 #include "misc/Debug.h"
-#include "gui/widgets/FileDialog.h"
+#include "gui/widgets/LineEdit.h"
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
 
+#include <QComboBox>
+#include <QDir>
+#include <QFileInfo>
 #include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
 #include <QMessageBox>
-#include <QPushButton>
 #include <QTabWidget>
 
 #include <sys/statvfs.h>
@@ -42,42 +44,89 @@ namespace Rosegarden
 AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
     TabbedConfigurationPage(parent)
 {
+    m_docAbsFilePath = RosegardenDocument::currentDocument->getAbsFilePath();
+    QFileInfo fileInfo(m_docAbsFilePath);
+    m_documentNameDir = "./" + fileInfo.completeBaseName();
+
+    AudioFileManager &afm = m_doc->getAudioFileManager();
+    m_relativeAudioPath = afm.getRelativeAudioPath();
+
     QFrame *frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);
 
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
-    // Audio file path
-    layout->addWidget(new QLabel(tr("Audio file path:"), frame), 0, 0);
+    int row = 0;
 
-    AudioFileManager &afm = m_doc->getAudioFileManager();
-    m_path = new QLabel(afm.getAudioPath(), frame);
-    layout->addWidget(m_path, 0, 1);
+    // Audio file location
+    layout->addWidget(new QLabel(tr("Audio file location:"), frame),
+                      row, 0);
 
-    m_changePathButton = new QPushButton(tr("Choose..."), frame);
-    layout->addWidget(m_changePathButton, 0, 2);
+    // If the document has been saved, put up the combobox.
+    if (m_docAbsFilePath != "") {
+        m_audioFileLocation = new QComboBox(frame);
+        connect(m_audioFileLocation,
+                    static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+                this, &AudioPropertiesPage::slotModified);
+        // Make sure these match the names in AudioFileLocationDialog.
+        // See AudioFileLocationDialog::Location enum.
+        m_audioFileLocation->addItem(tr("Audio directory (%1)").arg("./audio"));
+        m_audioFileLocation->addItem(tr("Document name directory (%1)").arg(m_documentNameDir));
+        m_audioFileLocation->addItem(tr("Document directory (.)"));
+        m_audioFileLocation->addItem(tr("Central repository (%1)").arg("~/rosegarden-audio"));
+        m_audioFileLocation->addItem(tr("Custom audio file location (specify below)"));
+        layout->addWidget(m_audioFileLocation, row, 1);
+    } else {
+        m_audioFileLocation = nullptr;
+        layout->addWidget(new QLabel(tr("Save document first."), frame),
+                          row, 1);
+    }
+
+    ++row;
+
+    // Custom audio file location
+    layout->addWidget(new QLabel(tr("Custom audio file location:"), frame),
+                      row, 0);
+
+    // If the document has been saved, put up the combobox.
+    if (m_docAbsFilePath != "") {
+        m_customAudioLocation = new LineEdit(frame);
+        // If we haven't saved yet, disable this.
+        // ??? Or should we hide it and show an explanatory label here?
+        if (m_docAbsFilePath == "")
+            m_customAudioLocation->setEnabled(false);
+        connect(m_customAudioLocation, &QLineEdit::textChanged,
+                this, &AudioPropertiesPage::slotModified);
+        layout->addWidget(m_customAudioLocation, row, 1);
+    } else {
+        m_customAudioLocation = nullptr;
+        layout->addWidget(new QLabel(tr("Save document first."), frame),
+                          row, 1);
+    }
+
+    ++row;
 
     // Disk space remaining
     m_diskSpace = new QLabel(frame);
-    layout->addWidget(new QLabel(tr("Disk space remaining:"), frame), 1, 0);
-    layout->addWidget(m_diskSpace, 1, 1, 1, 2);
+    layout->addWidget(new QLabel(tr("Disk space remaining:"), frame), row, 0);
+    layout->addWidget(m_diskSpace, row, 1, 1, 2);
+
+    ++row;
 
     // Recording time
     m_minutesAtStereo = new QLabel(frame);
     layout->addWidget(new QLabel(tr("Recording time:"),
                                  frame),
-                      2, 0);
+                      row, 0);
 
-    layout->addWidget(m_minutesAtStereo, 2, 1, 1, 2);
+    layout->addWidget(m_minutesAtStereo, row, 1, 1, 2);
 
-    layout->setRowStretch(3, 2);
-    frame->setLayout(layout);
+    ++row;
+
+    layout->setRowStretch(row, 2);
 
     updateWidgets();
-
-    connect(m_changePathButton, &QAbstractButton::released,
-            this, &AudioPropertiesPage::slotChoosePath);
 
     addTab(frame, tr("Modify audio path"));
 }
@@ -99,12 +148,39 @@ AudioPropertiesPage::updateWidgets()
     }
 #endif
 
+    // If we can change the path...
+    if (m_audioFileLocation  &&  m_customAudioLocation) {
+        // ??? Why do this on every update?  Why not move to ctor?
+        if (m_relativeAudioPath.isEmpty())
+            m_relativeAudioPath = ".";
+        // ??? Why do this on every update?  Why not move to ctor?
+        if (m_relativeAudioPath.back() == "/")
+            m_relativeAudioPath.chop(1);
+
+        m_customAudioLocation->setText("");
+        // See AudioFileLocationDialog::Location enum.
+        if (m_relativeAudioPath == "./audio") {
+            m_audioFileLocation->setCurrentIndex(0);
+        } else if (m_relativeAudioPath == m_documentNameDir) {
+            m_audioFileLocation->setCurrentIndex(1);
+        } else if (m_relativeAudioPath == ".") {
+            m_audioFileLocation->setCurrentIndex(2);
+        } else if (m_relativeAudioPath == "~/rosegarden-audio") {
+            m_audioFileLocation->setCurrentIndex(3);
+        } else {
+            m_audioFileLocation->setCurrentIndex(4);
+            m_customAudioLocation->setText(m_relativeAudioPath);
+        }
+    }
+
     // Disk space remaining
 
     struct statvfs buf;
 
-    if (statvfs(m_path->text().toLocal8Bit().data(), &buf)) {
-        RG_WARNING << "statvfs() failed.  errno:" << errno;
+    // ??? Go with the drive the document is on.  Or do an AFM::toAbsolute()
+    //     on this path and use that.
+    if (statvfs(m_docAbsFilePath.toLocal8Bit().data(), &buf)) {
+        RG_WARNING << "statvfs(" << m_docAbsFilePath << ") failed.  errno:" << errno;
         m_diskSpace->setText("----");
         m_minutesAtStereo->setText("----");
         return;
@@ -149,71 +225,65 @@ AudioPropertiesPage::updateWidgets()
 }
 
 void
-AudioPropertiesPage::slotChoosePath()
-{
-    while (true)
-    {
-        QString selectedPath = FileDialog::getExistingDirectory(
-                this, tr("Choose Audio File Path"), m_path->text());
-
-        if (selectedPath.isEmpty())
-            return;
-
-        QFileInfo fileInfo(selectedPath);
-
-        // If the directory cannot be written to, let the user try again.
-        if (!fileInfo.isWritable()) {
-            QMessageBox::information(
-                    this,
-                    tr("Choose Audio File Path"),
-                    tr("Selected path cannot be written to.  Please try another."));
-
-            // Try again.
-            continue;
-        }
-
-        // ??? Should we support relative paths (./audio) so that it is
-        //     safe to move/copy the rg project directory?
-        //     Actually, the handling for the audiopath tag in
-        //     RoseXmlHandler assumes "./" if there is no ~ or / at
-        //     the beginning of the path.
-
-        m_path->setText(selectedPath);
-
-        updateWidgets();
-
-        return;
-    }
-}
-
-void
 AudioPropertiesPage::apply()
 {
+    // If we can't change the path, bail.
+    if (!m_audioFileLocation  ||  !m_customAudioLocation)
+        return;
+
     AudioFileManager &audioFileManager = m_doc->getAudioFileManager();
 
-    const QString newPath = m_path->text();
+    QString newPath;
+
+    // See AudioFileLocationDialog::Location enum.
+    switch (m_audioFileLocation->currentIndex()) {
+    case 0: // AudioFileLocationDialog::AudioDir
+        newPath = "./audio";
+        break;
+    case 1: // AudioFileLocationDialog::DocumentNameDir
+        newPath = m_documentNameDir;
+        break;
+    case 2: // AudioFileLocationDialog::DocumentDir
+        newPath = ".";
+        break;
+    case 3: //AudioFileLocationDialog::CentralDir
+        newPath = "~/rosegarden-audio";
+        break;
+    case 4: //AudioFileLocationDialog::CustomDir
+        newPath = m_customAudioLocation->text();
+        break;
+    }
 
     // If there's been a change...
-    if (newPath != audioFileManager.getAudioPath()) {
+    if (newPath != m_relativeAudioPath) {
 
         bool moveFiles = false;
 
+        // If there are audio files...
         if (!audioFileManager.empty()) {
-            QMessageBox::StandardButton result = QMessageBox::question(
+            QMessageBox::information(
                     this,
-                    tr("Choose Audio Path"),
-                    tr("Would you like to move the document's audio files to the new path?  Please note that this will force a save of the file."));
+                    tr("Change Audio Path"),
+                    tr("Document's audio files will now be moved to the new location.<br />Please note that this will force a save of the file."));
 
-            moveFiles = (result == QMessageBox::Yes);
+            moveFiles = true;
         }
-
         // Update the AudioFileManager.
-        audioFileManager.setAudioPath(newPath, moveFiles);
+        audioFileManager.setRelativeAudioPath(newPath, moveFiles);
 
-        // Moving the files will force a save.  Only needed if files
-        // aren't moving.
+        // Avoid showing the prompt when they save.
+        // Since we don't store this flag in the document, they can
+        // still save, exit, open, create audio, save and get the prompt.
+        // It might even be surprising if they have the defaults set to
+        // something different along with "don't show".  If someone
+        // complains, we can add the flag to the document.
+        audioFileManager.setAudioLocationConfirmed();
+
+        // Moving the files will force a save.  Set the document modified
+        // flag only if files aren't moving.
         if (!moveFiles)
             m_doc->slotDocumentModified();
+
     }
 }
 

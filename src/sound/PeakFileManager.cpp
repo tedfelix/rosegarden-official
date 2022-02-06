@@ -77,7 +77,7 @@ PeakFileManager::deletePeakFile(AudioFile *audioFile)
             return;
 
         peakFile->close();
-        QFile::remove(peakFile->getFilename());
+        QFile::remove(peakFile->getAbsoluteFilePath());
         removeAudioFile(audioFile);
     }
 }
@@ -151,7 +151,7 @@ void
 PeakFileManager::generatePeaks(AudioFile *audioFile)
 {
 #ifdef DEBUG_PEAKFILEMANAGER
-    RG_DEBUG << "generatePeaks() - generating peaks for \"" << audioFile->getFilename() << "\"";
+    RG_DEBUG << "generatePeaks() - generating peaks for \"" << audioFile->getAbsoluteFilePath() << "\"";
 #endif
 
     if (audioFile->getType() == WAV) {
@@ -162,15 +162,15 @@ PeakFileManager::generatePeaks(AudioFile *audioFile)
         // Just write out a peak file
         //
         if (currentPeakFile->write() == false) {
-            RG_WARNING << "generatePeaks() - Can't write peak file for " << audioFile->getFilename() << " - no preview generated";
+            RG_WARNING << "generatePeaks() - Can't write peak file for " << audioFile->getAbsoluteFilePath() << " - no preview generated";
             throw BadPeakFileException(
-                    audioFile->getFilename(), __FILE__, __LINE__);
+                    audioFile->getAbsoluteFilePath(), __FILE__, __LINE__);
         }
 
         // If we were cancelled, don't leave a partial peak file lying
         // around.
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
-            QFile file(currentPeakFile->getFilename());
+            QFile file(currentPeakFile->getAbsoluteFilePath());
             file.remove();
             return;
         }

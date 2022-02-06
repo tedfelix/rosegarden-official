@@ -39,7 +39,7 @@ class SoundFile
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SoundFile)
 
 public:
-    SoundFile(const QString &fileName);
+    SoundFile(const QString &absoluteFilePath);
     virtual ~SoundFile();
 
     class BadSoundFileException : public Exception
@@ -65,9 +65,11 @@ public:
     virtual bool write() = 0;
     virtual void close() = 0;
 
-    QString getShortFilename() const;
-    QString getFilename() const { return m_fileName; }
-    void setFilename(const QString &fileName) { m_fileName = fileName; }
+    /// E.g. take1.wav
+    QString getFileName() const;
+    /// E.g. /home/ted/Documents/project1/audio/take1.wav
+    QString getAbsoluteFilePath() const { return m_absoluteFilePath; }
+    void setAbsoluteFilePath(const QString &absoluteFilePath) { m_absoluteFilePath = absoluteFilePath; }
 
     // Useful methods that operate on our file data
     //
@@ -95,7 +97,7 @@ public:
         { if (m_inFile) return m_inFile->eof(); else return true; }
 
 protected:
-    QString m_fileName;
+    QString m_absoluteFilePath;
 
     // get some bytes from an input stream - unbuffered as we can
     // modify the file stream
