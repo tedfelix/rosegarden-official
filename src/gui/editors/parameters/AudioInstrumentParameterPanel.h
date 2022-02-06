@@ -36,16 +36,17 @@ class QColor;
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 class Instrument;
 class InstrumentStaticSignals;
-class InstrumentAliasButton;
 class AudioFaderBox;
 
 
 class AudioInstrumentParameterPanel : public InstrumentParameterPanel
 {
     Q_OBJECT
+
 public:
     AudioInstrumentParameterPanel(QWidget* parent);
 
@@ -85,13 +86,9 @@ public slots:
     /// Editor button.
     void slotSynthGUIButtonClicked();
 
-protected:
-    //--------------- Data members ---------------------------------
-
-    AudioFaderBox *m_audioFader;
-
 private slots:
-    void slotAliasChanged();
+
+    void slotLabelClicked();
 
     /// Called when a new document is loaded.
     void slotDocumentLoaded(RosegardenDocument *);
@@ -100,14 +97,14 @@ private slots:
 
     /// Connected to InstrumentStaticSignals::controlChange().
     void slotControlChange(Instrument *instrument, int cc);
+
 private:
 
-    // This is the tiny button in the upper left that allows the user
-    // to change the name of the audio instrument.
-    InstrumentAliasButton *m_aliasButton;
+    AudioFaderBox *m_audioFader;
 
-    QPixmap                                      m_monoPixmap;
-    QPixmap                                      m_stereoPixmap;
+    QPixmap m_monoPixmap;
+    QPixmap m_stereoPixmap;
+
 };
 
 

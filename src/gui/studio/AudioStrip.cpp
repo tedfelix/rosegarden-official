@@ -511,6 +511,8 @@ void AudioStrip::slotLabelClicked()
     // Get the appropriate instrument based on the ID.
     Instrument *instrument = studio.getInstrumentById(m_id);
 
+    // ??? A command would be better.  Then the user can undo.
+    //     See SegmentLabelCommand.
     instrument->setAlias(newAlias.toStdString());
 
     doc->slotDocumentModified();

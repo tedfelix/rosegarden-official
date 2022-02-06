@@ -177,7 +177,6 @@ set(rg_CPPS
   gui/widgets/TmpStatusMsg.cpp
   gui/widgets/BaseTextFloat.cpp
   gui/widgets/Label.cpp
-  gui/widgets/InstrumentAliasButton.cpp
   gui/widgets/IconButton.cpp
   gui/widgets/StartupLogo.cpp
   gui/widgets/DeferScrollArea.cpp
