@@ -223,7 +223,18 @@ bool ActionData::startElement(const QString&,
             if (m_currentToolbar != "") ainfo.toolbar = m_currentToolbar;
             if (text != "") ainfo.text = text;
             if (icon != "") ainfo.icon = icon;
-            if (shortcut != "") ainfo.shortcut = shortcut;
+            QStringList shortcuts = shortcut.split(", ");
+            QStringList shortcuts_trans;
+            for (int i = 0; i < shortcuts.size(); i++) {
+                // Keyboard shortcuts require the disambiguation
+                // "keyboard shortcut" and this must match
+                // scripts/extract_menu_tr_strings.pl
+                shortcuts_trans.append(translate(shortcuts.at(i),
+                                                 "keyboard shortcut"));
+            }
+            QString shortcut_trans = shortcuts_trans.join(", ");
+    
+            if (shortcut != "") ainfo.shortcut = shortcut_trans;
             if (tooltip != "") ainfo.tooltip = tooltip;
             RG_DEBUG << "data" << m_currentMenus << m_currentToolbar <<
                 actionName << icon <<
@@ -343,6 +354,16 @@ void ActionData::loadData(const QString& name)
     XMLReader reader;
     reader.setHandler(this);
     reader.parse(f);
+}
+
+QString ActionData::translate(QString text, QString disambiguation)
+{
+    // These translations are extracted from data/ui/*.rc files via
+    // scripts/extract*.pl and pulled into the QObject translation context in
+    // one great lump.
+    
+    if (!disambiguation.isEmpty()) return QObject::tr(text.toStdString().c_str(), disambiguation.toStdString().c_str());
+    else return QObject::tr(text.toStdString().c_str());
 }
     
 }

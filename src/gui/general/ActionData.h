@@ -59,6 +59,7 @@ public:
 
 
     void loadData(const QString& name);
+    QString translate(QString text, QString disambiguation = "");
     
     struct ActionInfo
     {
