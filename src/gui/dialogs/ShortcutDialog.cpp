@@ -50,6 +50,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     proxyModel->setFilterKeyColumn(-1);
     
     proxyView = new QTreeView;
+    proxyView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     proxyView->setRootIsDecorated(false);
     proxyView->setAlternatingRowColors(true);
     proxyView->setModel(proxyModel);
