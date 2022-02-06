@@ -154,7 +154,7 @@ AudioPropertiesPage::updateWidgets()
         if (m_relativeAudioPath.isEmpty())
             m_relativeAudioPath = ".";
         // ??? Why do this on every update?  Why not move to ctor?
-        if (m_relativeAudioPath.back() == "/")
+        if (m_relativeAudioPath.back() == '/')
             m_relativeAudioPath.chop(1);
 
         m_customAudioLocation->setText("");
