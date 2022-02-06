@@ -32,6 +32,7 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/AudioVUMeter.h"
 #include "gui/widgets/Fader.h"
+#include "gui/widgets/InputDialog.h"
 #include "gui/widgets/Rotary.h"
 #include "gui/widgets/SqueezedLabel.h"
 #include "InstrumentParameterPanel.h"
@@ -71,27 +72,17 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
 
     // Widgets
 
-    // Alias button
-    // ??? Remove this alias button.  Instead, make the label clickable.
-    //     Use AudioMixerWindow2 as a guide.  It allows changing of the
-    //     Instrument alias by clicking on the Label.  SqueezedLabel will
-    //     need to be upgraded to offer a clicked() signal like Label does.
-    //     Once this is removed, remove InstrumentAliasButton from
-    //     the sourcebase since this is the last user.
-    m_aliasButton = new InstrumentAliasButton(this);
-    m_aliasButton->setFixedSize(10, 6); // golden rectangle
-    m_aliasButton->setToolTip(tr("Click to rename this instrument"));
-    connect(m_aliasButton, &InstrumentAliasButton::changed,
-            this, &AudioInstrumentParameterPanel::slotAliasChanged);
+    // ??? Remove InstrumentAliasButton from the sourcebase.
 
     // Instrument label
-    QFontMetrics metrics(font);
-    int width25 = metrics.boundingRect("1234567890123456789012345").width();
     m_instrumentLabel->setFont(font);
-    m_instrumentLabel->setFixedWidth(width25);
     m_instrumentLabel->setAlignment(Qt::AlignCenter);
-    m_instrumentLabel->setToolTip(tr("Click the button above to rename this instrument"));
-    m_instrumentLabel->setText("REFRESH BUG!"); // no tr(); temporary internal string
+    // ??? Tooltip doesn't actually work on SqueezedLabel.  Need to fix.
+    m_instrumentLabel->setToolTip(tr("Click to rename this instrument"));
+    // No tr(); temporary internal debugging string.
+    m_instrumentLabel->setText("REFRESH BUG!");
+    connect(m_instrumentLabel, &SqueezedLabel::clicked,
+            this, &AudioInstrumentParameterPanel::slotLabelClicked);
 
     // Audio Fader Box
     m_audioFader = new AudioFaderBox(this);
@@ -116,12 +107,9 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setSpacing(5);
     gridLayout->setContentsMargins(0, 0, 0, 0);
-    // The alias button and the label are in 0,0.  The only difference is the
-    // alignment.
-    gridLayout->addWidget(m_aliasButton, 0, 0, 1, 2, Qt::AlignLeft);
-    gridLayout->addWidget(m_instrumentLabel, 0, 0, 1, 2, Qt::AlignCenter);
 
-    gridLayout->addWidget(m_audioFader, 1, 0, 1, 2);
+    gridLayout->addWidget(m_instrumentLabel, 0, 0);
+    gridLayout->addWidget(m_audioFader, 1, 0);
 
     // Make row 2 fill up the rest of the space.
     gridLayout->setRowStretch(2, 1);
@@ -374,8 +362,6 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     setSelectedInstrument(instrument);
     m_instrumentLabel->setText(l);
 
-    m_aliasButton->setInstrument(instrument);
-
     m_audioFader->m_recordFader->setFader(instrument->getRecordLevel());
     m_audioFader->m_fader->setFader(instrument->getLevel());
 
@@ -469,17 +455,6 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 }
 
 void
-AudioInstrumentParameterPanel::slotAliasChanged()
-{
-    RosegardenDocument::currentDocument->slotDocumentModified();
-
-    // ??? This is wrong.  We should connect to the
-    //     RosegardenDocument::documentModified() signal and refresh
-    //     everything in response to it.
-    setupForInstrument(getSelectedInstrument());
-}
-
-void
 AudioInstrumentParameterPanel::slotDocumentLoaded(RosegardenDocument *doc)
 {
     connect(doc, &RosegardenDocument::documentModified,
@@ -543,6 +518,49 @@ AudioInstrumentParameterPanel::slotControlChange(Instrument *instrument, int cc)
         m_audioFader->m_pan->setPosition(instrument->getPan() - 100);
 
     }
+}
+
+void AudioInstrumentParameterPanel::slotLabelClicked()
+{
+    const QString oldAlias = m_instrumentLabel->text();
+    bool ok = false;
+
+    QString newAlias = InputDialog::getText(
+            this,  // parent
+            tr("Rosegarden"),  // title
+            tr("Enter instrument alias:"),  // label
+            LineEdit::Normal,  // mode (echo)
+            oldAlias,  // text
+            &ok);  // ok
+
+    // Cancelled?  Bail.
+    if (!ok)
+        return;
+
+    // No change?  Bail.
+    if (newAlias == oldAlias)
+        return;
+
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+
+    // Get the selected Track's Instrument.
+    InstrumentId instrumentId =
+            doc->getComposition().getSelectedInstrumentId();
+
+    Instrument *instrument = nullptr;
+
+    // If an instrument has been selected.
+    if (instrumentId != NoInstrument)
+        instrument = doc->getStudio().getInstrumentById(instrumentId);
+
+    if (!instrument)
+        return;
+
+    // ??? A command would be better.  Then the user can undo.
+    //     See SegmentLabelCommand.
+    instrument->setAlias(newAlias.toStdString());
+
+    doc->slotDocumentModified();
 }
 
 

@@ -40,10 +40,6 @@ class SqueezedLabelPrivate;
  *
  * @author Ronny Standtke <Ronny.Standtke@gmx.de>
  */
-
-/*
- * QLabel
- */
 class SqueezedLabel : public QLabel
 {
     Q_OBJECT
@@ -75,6 +71,10 @@ public:
     * @param mode The text elide mode.
     */
     void setTextElideMode(Qt::TextElideMode mode);
+
+signals:
+    void clicked();
+    void doubleClicked();
 
 public Q_SLOTS:
     /**
@@ -109,6 +109,13 @@ protected:
     * \reimp
     */
     void contextMenuEvent(QContextMenuEvent*) override;
+
+    void mouseReleaseEvent(QMouseEvent * /*e*/) override
+        { emit clicked(); }
+
+    void mouseDoubleClickEvent(QMouseEvent * /*e*/) override
+        { emit doubleClicked(); }
+
     /**
     * does the dirty work
     */
