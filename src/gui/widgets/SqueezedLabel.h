@@ -72,6 +72,9 @@ public:
     */
     void setTextElideMode(Qt::TextElideMode mode);
 
+    /// Do not hijack the tool tip.  Let the client have control.
+    void allowToolTip();
+
 signals:
     void clicked();
     void doubleClicked();

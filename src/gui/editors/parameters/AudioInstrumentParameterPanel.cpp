@@ -72,10 +72,19 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     // Widgets
 
     // Instrument label
+
+    // Adjust the background color to make it look like an edit box.
+    m_instrumentLabel->setAutoFillBackground(true);
+    QPalette palette = m_instrumentLabel->palette();
+    palette.setColor(QPalette::WindowText, Qt::white);
+    palette.setColor(QPalette::Window, QColor(0x70, 0x70, 0x70));
+    m_instrumentLabel->setPalette(palette);
+
     m_instrumentLabel->setFont(font);
     m_instrumentLabel->setAlignment(Qt::AlignCenter);
-    // ??? Tooltip doesn't actually work on SqueezedLabel.  Need to fix.
-    m_instrumentLabel->setToolTip(tr("Click to rename this instrument"));
+    // Normally, SqueezedLabel hijacks the tooltip.  This tells it not to.
+    m_instrumentLabel->allowToolTip();
+    m_instrumentLabel->setToolTip(tr("Click to rename this instrument."));
     // No tr(); temporary internal debugging string.
     m_instrumentLabel->setText("REFRESH BUG!");
     connect(m_instrumentLabel, &SqueezedLabel::clicked,
@@ -353,11 +362,12 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
     //RG_DEBUG << "this: " << this << " setupForInstrument(" << instrument << ")";
 
-    QString l = QString::fromStdString(instrument->getAlias());
-    if (l.isEmpty()) l = instrument->getLocalizedPresentationName();
+    QString alias = QString::fromStdString(instrument->getAlias());
+    if (alias.isEmpty()) alias = instrument->getLocalizedPresentationName();
 
     setSelectedInstrument(instrument);
-    m_instrumentLabel->setText(l);
+
+    m_instrumentLabel->setText(alias);
 
     m_audioFader->m_recordFader->setFader(instrument->getRecordLevel());
     m_audioFader->m_fader->setFader(instrument->getLevel());

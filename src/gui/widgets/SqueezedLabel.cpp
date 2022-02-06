@@ -47,6 +47,8 @@ public:
 
     QString fullText;
     Qt::TextElideMode elideMode;
+    // Set to true to let the client set the tooltip.
+    bool allowToolTip;
 };
 
 SqueezedLabel::SqueezedLabel(const QString &text , QWidget *parent)
@@ -57,6 +59,7 @@ SqueezedLabel::SqueezedLabel(const QString &text , QWidget *parent)
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     d->fullText = text;
     d->elideMode = Qt::ElideMiddle;
+    d->allowToolTip = false;
     squeezeTextToLabel();
 }
 
@@ -131,10 +134,12 @@ void SqueezedLabel::squeezeTextToLabel() {
 
     if (squeezed) {
         QLabel::setText(squeezedLines.join("\n"));
-        setToolTip(d->fullText);
+        if (!d->allowToolTip)
+            setToolTip(d->fullText);
     } else {
         QLabel::setText(d->fullText);
-        setToolTip(QString());
+        if (!d->allowToolTip)
+            setToolTip(QString());
     }
 }
 
@@ -155,6 +160,11 @@ void SqueezedLabel::setTextElideMode(Qt::TextElideMode mode)
 {
     d->elideMode = mode;
     squeezeTextToLabel();
+}
+
+void SqueezedLabel::allowToolTip()
+{
+    d->allowToolTip = true;
 }
 
 void SqueezedLabel::contextMenuEvent(QContextMenuEvent* ev)
