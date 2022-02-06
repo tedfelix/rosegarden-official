@@ -36,16 +36,17 @@ class QColor;
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 class Instrument;
 class InstrumentStaticSignals;
-class InstrumentAliasButton;
 class AudioFaderBox;
 
 
 class AudioInstrumentParameterPanel : public InstrumentParameterPanel
 {
     Q_OBJECT
+
 public:
     AudioInstrumentParameterPanel(QWidget* parent);
 

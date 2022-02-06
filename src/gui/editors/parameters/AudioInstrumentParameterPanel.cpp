@@ -40,7 +40,6 @@
 #include "sound/MappedStudio.h"
 #include "sound/Midi.h"
 #include "gui/widgets/PluginPushButton.h"
-#include "gui/widgets/InstrumentAliasButton.h"
 #include "gui/widgets/AudioFaderBox.h"
 
 #include <QColor>
@@ -71,8 +70,6 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     font.setBold(false);
 
     // Widgets
-
-    // ??? Remove InstrumentAliasButton from the sourcebase.
 
     // Instrument label
     m_instrumentLabel->setFont(font);
