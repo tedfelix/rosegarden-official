@@ -6456,25 +6456,22 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
     // no way to make "pick this and set that up before you hit this" intuitive,
     // so I've had to throw instructions in their face.
     if (RosegardenDocument::currentDocument->getTitle() == tr("Untitled")) {
-        QMessageBox::information(this,
-                                 tr("Rosegarden"),
+        QMessageBox::StandardButton selected = QMessageBox::information(
+                this,
+                tr("Rosegarden"),
         // TRANSLATOR: you may change "doc:audio-filename-en" to a page in your
         // language if you wish.  The n in <i>n</i>.wav refers to an unknown
         // number, such as might be used in a mathematical equation
-                                 tr("<qt><p>You must choose a filename for this composition before recording audio.</p><p>Audio files will be saved to <b>%1</b> as <b>rg-[<i>filename</i>]-[<i>instrument</i>]-<i>date</i>_<i>time</i>-<i>n</i>.wav</b>.  You may wish to rename audio instruments before recording as well.  For more information, please see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en\">Rosegarden Wiki</a>.</p></qt>")
-                                    .arg(RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath()),
-                                 QMessageBox::Ok,
-                                 QMessageBox::Ok);
+                tr("<qt><p>You must choose a filename for this composition before recording audio.</p><p>Audio files will be saved to <b>%1</b> as <b>rg-[<i>filename</i>]-[<i>instrument</i>]-<i>date</i>_<i>time</i>-<i>n</i>.wav</b>.  You may wish to rename audio instruments before recording as well.  For more information, please see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en\">Rosegarden Wiki</a>.</p></qt>")
+                        .arg(RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath()),
+                QMessageBox::Ok | QMessageBox::Cancel,
+                QMessageBox::Ok);
+
+        // User wants to cancel?  Abort the recording.
+        if (selected == QMessageBox::Cancel)
+            return qv;
 
         slotFileSave();
-
-        //!!!
-        // We should return and cancel here, but the way all of this is strung
-        // together makes that tricky.  Let's see if we ever get a bug about "I
-        // tried to record audio, and it told me I had to choose a new name, and
-        // I decided to test my boundaries as a user and canceled the dialog,
-        // and recording started anyway!"  If so, this is the place!  Anyway,
-        // the aim here is to be helpful, not draconian.
     }
 
     for (int i = 0; i < recordInstruments.size(); ++i) {
