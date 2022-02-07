@@ -168,10 +168,10 @@ public:
     AudioFile *createRecordingAudioFile(
             QString projectName, QString instrumentAlias);
 
-    /// Return whether a file was created by recording within this "session"
+    /// Return whether a file was created by recording since the last save.
     bool wasAudioFileRecentlyRecorded(AudioFileId id);
 
-    /// Return whether a file was created by derivation within this "session"
+    /// Return whether a file was created by derivation since the last save.
     bool wasAudioFileRecentlyDerived(AudioFileId id);
 
     /**
@@ -383,9 +383,8 @@ private:
 
     // All audio files are stored in m_audioFiles.  These additional
     // sets of pointers just refer to those that have been created by
-    // recording or derivations within the current session, and thus
-    // that the user may wish to remove at the end of the session if
-    // the document is not saved.
+    // recording or derivations since the last save, and thus
+    // that the user may wish to remove if the document is not saved.
     std::set<AudioFile *> m_recordedAudioFiles;
     std::set<AudioFile *> m_derivedAudioFiles;
 
