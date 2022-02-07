@@ -20,6 +20,8 @@
 
 #include <QDialog>
 
+#include <list>
+
 class QGroupBox;
 class QTreeView;
 class QLabel;
@@ -28,6 +30,7 @@ class QAbstractItemModel;
 class QSortFilterProxyModel;
 class QStandardItemModel;
 class QItemSelection;
+class QKeySequenceEdit;
 
 namespace Rosegarden
 {
@@ -55,6 +58,7 @@ class ShortcutDialog : public QDialog
      QLabel *m_clabel;
      QLabel *m_alabel;
      QLabel *m_ilabel;
+     std::list<QKeySequenceEdit*> m_ksEditList;
      QString m_editKey;
 };
 

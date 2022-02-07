@@ -15,11 +15,14 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ShortcutDialog]"
+//#define RG_NO_DEBUG_PRINT
 
 #include "ShortcutDialog.h"
 
 #include "gui/general/ActionData.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
 
 #include <QSortFilterProxyModel>
 #include <QTreeView>
@@ -31,6 +34,7 @@
 #include <QStandardItemModel>
 #include <QSettings>
 #include <QItemSelection>
+#include <QKeySequenceEdit>
 
 namespace Rosegarden
 {
@@ -57,7 +61,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     m_proxyView->setAlternatingRowColors(true);
     m_proxyView->setModel(m_proxyModel);
     m_proxyView->setSortingEnabled(true);
-    //m_proxyView->hideColumn(0);
+    m_proxyView->hideColumn(0);
     
     connect(m_proxyView->selectionModel(),
             SIGNAL(selectionChanged(const QItemSelection&,
@@ -104,11 +108,22 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     hlayout->addWidget(m_alabel);
     hlayout->addWidget(m_ilabel);
 
+    QHBoxLayout *hlayout2 = new QHBoxLayout;
+    // up to 4  shortcuts
+    m_ksEditList.push_back(new QKeySequenceEdit);
+    m_ksEditList.push_back(new QKeySequenceEdit);
+    m_ksEditList.push_back(new QKeySequenceEdit);
+    m_ksEditList.push_back(new QKeySequenceEdit);
+    foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
+        hlayout2->addWidget(ksEdit);
+    }
+    
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
     
     mainLayout->addLayout(hlayout);
+    mainLayout->addLayout(hlayout2);
     mainLayout->addWidget(line);
     mainLayout->addLayout(proxyLayout);
 }
@@ -135,16 +150,16 @@ void ShortcutDialog::filterChanged()
 void ShortcutDialog::selectionChanged(const QItemSelection& selected,
                                       const QItemSelection&)
 {
-    qDebug() << "selection changed" << selected;
+    RG_DEBUG << "selection changed" << selected;
     QModelIndexList indexes = selected.indexes();
     if (indexes.empty()) return;
     QModelIndex index = indexes.first();
     int row = index.row();
     int column = index.column();
-    qDebug() << "row" << row << column << "selected";
+    RG_DEBUG << "row" << row << column << "selected";
     QModelIndex i0 = m_proxyModel->index(row, 0);
     m_editKey = m_proxyModel->data(i0, Qt::DisplayRole).toString();
-    qDebug() << "editing key" << m_editKey;
+    RG_DEBUG << "editing key" << m_editKey;
     QModelIndex i1 = m_proxyModel->index(row, 1);
     QString ctext = m_proxyModel->data(i1, Qt::DisplayRole).toString();
     m_clabel->setText(ctext);
@@ -160,6 +175,22 @@ void ShortcutDialog::selectionChanged(const QItemSelection& selected,
         int w = m_ilabel->width();
         int h = m_ilabel->height();
         m_ilabel->setPixmap(pixmap.scaled(w, h, Qt::KeepAspectRatio));
+    }
+    
+    QModelIndex i4 = m_proxyModel->index(row, 4);
+    QString shortcuts =  m_proxyModel->data(i4, Qt::DisplayRole).toString();
+    RG_DEBUG << "got shortcutlist" << shortcuts;
+    QStringList shortcutList = shortcuts.split(", ");
+    int kindex = 0;
+    foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
+        QString scString = "";
+        if (kindex < shortcutList.size()) {
+            scString = shortcutList.at(kindex);
+        }
+        RG_DEBUG << "set keysequence" << scString;
+        QKeySequence ks(scString);
+        ksEdit->setKeySequence(ks);
+        kindex++;
     }
 }
 
