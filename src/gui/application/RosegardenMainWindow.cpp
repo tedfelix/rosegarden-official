@@ -6452,9 +6452,13 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
     //
     // I weighed the user inconvenience carefully, and decided to do this to
     // maximize the value of the new filenames that include the title and
-    // instrument alias.  It's worthelss if they all say "Untitled" and there's
+    // instrument alias.  It's worthless if they all say "Untitled" and there's
     // no way to make "pick this and set that up before you hit this" intuitive,
     // so I've had to throw instructions in their face.
+
+    // If the user has not yet saved the composition, let them know that
+    // they need to save first.  Otherwise all of their audio files will
+    // be called "Untitled".
     if (RosegardenDocument::currentDocument->getTitle() == tr("Untitled")) {
         QMessageBox::StandardButton selected = QMessageBox::information(
                 this,
@@ -6472,6 +6476,10 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
             return qv;
 
         slotFileSave();
+
+        // If they cancelled the save, bail.
+        if (RosegardenDocument::currentDocument->getTitle() == tr("Untitled"))
+            return qv;
     }
 
     for (int i = 0; i < recordInstruments.size(); ++i) {
