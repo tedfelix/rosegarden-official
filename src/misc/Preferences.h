@@ -51,6 +51,18 @@ namespace Preferences
     void setStopAtEnd(bool value);
     bool getStopAtEnd();
 
+    // AudioFileLocationDialog settings
+
+    void setAudioFileLocationDlgDontShow(bool dontShow);
+    bool getAudioFileLocationDlgDontShow();
+
+    // See AudioFileLocationDialog::Location enum.
+    void setDefaultAudioLocation(int location);
+    int getDefaultAudioLocation();
+
+    void setCustomAudioLocation(QString location);
+    QString getCustomAudioLocation();
+
 }
 
 

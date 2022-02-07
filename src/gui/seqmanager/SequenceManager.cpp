@@ -634,7 +634,7 @@ punchin:
             m_transportStatus = STOPPED;
 
             if (haveAudioInstrument) {
-                throw(Exception(QObject::tr("<qt><p>Couldn't start recording audio.</p><p>Please set a valid recording path in <b>Composition -> Edit Document Properties... -> Audio</b></p></qt>")));
+                throw(Exception(QObject::tr("<qt><p>Couldn't start recording audio.</p><p>Make sure the composition has been saved and check the audio file path in <b>Composition -> Edit Document Properties... -> Audio</b></p></qt>")));
             }
         }
     }

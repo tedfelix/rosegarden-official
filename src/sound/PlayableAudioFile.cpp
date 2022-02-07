@@ -367,11 +367,11 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
 
     if (!m_isSmallFile) {
 
-        m_file = new std::ifstream(m_audioFile->getFilename().toLocal8Bit(),
+        m_file = new std::ifstream(m_audioFile->getAbsoluteFilePath().toLocal8Bit(),
                                    std::ios::in | std::ios::binary);
 
         if (!*m_file) {
-            std::cerr << "ERROR: PlayableAudioFile::initialise: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
+            std::cerr << "ERROR: PlayableAudioFile::initialise: Failed to open audio file " << m_audioFile->getAbsoluteFilePath() << std::endl;
             delete m_file;
             m_file = nullptr;
         }
@@ -642,11 +642,11 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
 
     } else if (m_audioFile->getSize() <= smallFileSize) {
 
-        std::ifstream file(m_audioFile->getFilename().toLocal8Bit(),
+        std::ifstream file(m_audioFile->getAbsoluteFilePath().toLocal8Bit(),
                            std::ios::in | std::ios::binary);
 
         if (!file) {
-            std::cerr << "ERROR: PlayableAudioFile::checkSmallFileCache: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
+            std::cerr << "ERROR: PlayableAudioFile::checkSmallFileCache: Failed to open audio file " << m_audioFile->getAbsoluteFilePath() << std::endl;
             return ;
         }
 
@@ -725,10 +725,10 @@ PlayableAudioFile::fillBuffers()
 #endif
 
     if (!m_isSmallFile && (!m_file || !*m_file)) {
-        m_file = new std::ifstream(m_audioFile->getFilename().toLocal8Bit(),
+        m_file = new std::ifstream(m_audioFile->getAbsoluteFilePath().toLocal8Bit(),
                                    std::ios::in | std::ios::binary);
         if (!*m_file) {
-            std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
+            std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getAbsoluteFilePath() << std::endl;
             delete m_file;
             m_file = nullptr;
             return ;
@@ -769,10 +769,10 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
     }
 
     if (!m_isSmallFile && (!m_file || !*m_file)) {
-        m_file = new std::ifstream(m_audioFile->getFilename().toLocal8Bit(),
+        m_file = new std::ifstream(m_audioFile->getAbsoluteFilePath().toLocal8Bit(),
                                    std::ios::in | std::ios::binary);
         if (!*m_file) {
-            std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
+            std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getAbsoluteFilePath() << std::endl;
             delete m_file;
             m_file = nullptr;
             return false;

@@ -40,6 +40,8 @@ namespace Rosegarden
 {
 
 
+class RosegardenDocument;
+
 typedef std::vector<AudioFile *> AudioFileVector;
 
 
@@ -75,7 +77,11 @@ class AudioFileManager : public QObject, public XmlExportable
 {
     Q_OBJECT
 public:
-    AudioFileManager();
+    // AudioFileManager needs to know who its document is so that it
+    // can convert relative paths to absolute.
+    // RosegardenDocument::currentDocument doesn't always point to the
+    // correct document.  E.g. at load time.
+    AudioFileManager(RosegardenDocument *doc);
     ~AudioFileManager() override;
 
     /// Create an AudioFile object from an absolute path
@@ -102,12 +108,14 @@ public:
      */
     bool insertFile(const std::string &name, const QString &fileName,
                     AudioFileId id);
+    /// We have audio files at load time, assume user has set location.
+    void setAudioLocationConfirmed()  { m_audioLocationConfirmed = true; }
 
     /// Does a specific file id exist?
     bool fileExists(AudioFileId id);
 
     /// Does a specific file path exist?  Return ID or -1.
-    int fileExists(const QString &path);
+    int fileExists(const QString &absoluteFilePath);
 
     AudioFile* getAudioFile(AudioFileId id);
 
@@ -116,10 +124,18 @@ public:
      * NOT THREAD SAFE.
      */
     AudioFileVector::const_iterator cbegin() const
-        { return m_audioFiles.begin(); }
+        { return m_audioFiles.cbegin(); }
 
     /// NOT THREAD SAFE.
     AudioFileVector::const_iterator cend() const
+        { return m_audioFiles.cend(); }
+
+    /// NOT THREAD SAFE.
+    AudioFileVector::iterator begin()
+        { return m_audioFiles.begin(); }
+
+    /// NOT THREAD SAFE.
+    AudioFileVector::iterator end()
         { return m_audioFiles.end(); }
 
     /// NOT THREAD SAFE.
@@ -130,10 +146,11 @@ public:
     /// Remove all audio files.
     void clear();
 
-    /// Get the audio file path
-    QString getAudioPath() const  { return m_audioPath; }
-    /// Set the audio file path
-    void setAudioPath(const QString &newPath, bool moveFiles = false);
+    /// Set the relative audio file path.  E.g. "./audio"
+    void setRelativeAudioPath(const QString &newPath, bool moveFiles = false);
+    QString getRelativeAudioPath() const  { return m_relativeAudioPath; }
+    /// Get the absolute audio path.  E.g. "/home/ted/Documents/project1/audio/"
+    QString getAbsoluteAudioPath() const;
 
     /// Throw if the current audio path does not exist or is not writable
     /**
@@ -151,10 +168,10 @@ public:
     AudioFile *createRecordingAudioFile(
             QString projectName, QString instrumentAlias);
 
-    /// Return whether a file was created by recording within this "session"
+    /// Return whether a file was created by recording since the last save.
     bool wasAudioFileRecentlyRecorded(AudioFileId id);
 
-    /// Return whether a file was created by derivation within this "session"
+    /// Return whether a file was created by derivation since the last save.
     bool wasAudioFileRecentlyDerived(AudioFileId id);
 
     /**
@@ -232,15 +249,6 @@ public:
                                 const RealTime &highlightEnd,
                                 QPixmap *pixmap);
 
-    /// Convert a path or file name to use internal path rules.
-    /**
-     * An internal path may use "~" to represent a user's home directory
-     * as with bash.  This should ease moving files from one user to another.
-     * This function checks for the user's home directory in the path and
-     * replaces it with "~".
-     */
-    QString pathToInternal(const QString &path) const;
-
     /// Get a split point vector from a peak file
     /**
      * throws BadPeakFileException, BadAudioPathException
@@ -261,24 +269,17 @@ public:
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }
 
+    /// Ask the user to pick a save location for audio files.
+    /**
+     * Checks for the first save with audio files and shows a dialog
+     * to help the user select a location.
+     *
+     * Call this after saving the .rg file.
+     */
+    void save();
+
     /// Show entries for debug purposes
     void print();
-
-    /**
-     * Insert an audio file into the AudioFileManager and get the
-     * first allocated id for it.  Used from the RG file as we already
-     * have both name and filename/path.
-     *
-     * throws BadAudioPathException
-     */
-    //AudioFileId insertFile(const std::string &name,
-    //                       const QString &fileName);
-
-    //const PeakFileManager &getPeakFileManager() const  { return m_peakManager; }
-    //PeakFileManager &getPeakFileManager()  { return m_peakManager; }
-
-    /// Get the last file in the vector - the last created.
-    //AudioFile *getLastAudioFile();
 
     class BadAudioPathException : public Exception
     {
@@ -303,13 +304,18 @@ private:
     AudioFileManager(const AudioFileManager &aFM);
     AudioFileManager &operator=(const AudioFileManager &);
 
+    // We can't use RosegardenDocument::currentDocument as it might
+    // be pointing to the wrong document.
+    RosegardenDocument *m_document;
+
     /// The audio files we are managing.
     /**
      * These objects are owned by this class.  The dtor deletes them.
      *
      * The IDs are stored in the AudioFile objects.  See AudioFile::getId().
      *
-     * ??? Would this be faster as a std::map<AudioFileId, AudioFile *>?
+     * ??? Would this be better as an AudioFileMap:
+     *       std::map<AudioFileId, QSharedPointer<AudioFile>>
      *     See getAudioFile().
      */
     AudioFileVector m_audioFiles;
@@ -319,6 +325,8 @@ private:
      * resampling) an existing file using the conversion library.  If
      * you are not sure whether to use addFile() or importFile(), go for
      * importFile().
+     *
+     * Called by importURL().
      *
      * throws BadAudioPathException, BadSoundFileException
      */
@@ -334,22 +342,17 @@ private:
      */
     int convertAudioFile(const QString &inFile, const QString &outFile);
 
+    /// Convert a relative path or file path to absolute.
+    /**
+     * Expands "~" and "." to an absolute path.
+     */
+    QString toAbsolute(const QString &relativePath) const;
+
     /// Get a short file name from a long one (with '/'s)
     QString getShortFilename(const QString &fileName) const;
 
     /// Get a directory from a full file path
     QString getDirectory(const QString &path) const;
-
-    /// See if we can find a given file in our search path
-    /**
-     * First tries to find the file based on the name provided.
-     * If that fails, it removes the path and searches for the
-     * name in m_audioPath.
-     *
-     * Returns the first occurrence of a match or the empty
-     * string if no match.
-     */
-    QString getFileInPath(const QString &file);
 
     /// Reset ID counter based on actual Audio Files in Composition
     void updateAudioFileID(AudioFileId id);
@@ -359,7 +362,20 @@ private:
     /// Last Audio File ID that was handed out by getUniqueAudioFileID().
     unsigned int m_lastAudioFileID;
 
-    QString m_audioPath;
+    /// Always in internal format with either a "." or a "~".
+    /**
+     * Propose that we use QFileInfo terminology.
+     *   Path - directory  ./directory
+     *   FilePath - directory and filename  ./directory/filename.ext
+     *   FileName - filename.ext
+     *   Absolute - Starting from root.  /tmp/filename.ext
+     *   Relative - Using "." or "~".  ./audio/filename.ext
+     *   Canonical - Absolute simplified.
+     */
+    QString m_relativeAudioPath;
+
+    /// Whether the user has confirmed the audio file path.
+    bool m_audioLocationConfirmed;
 
     void moveFiles(const QString &newPath);
 
@@ -367,9 +383,8 @@ private:
 
     // All audio files are stored in m_audioFiles.  These additional
     // sets of pointers just refer to those that have been created by
-    // recording or derivations within the current session, and thus
-    // that the user may wish to remove at the end of the session if
-    // the document is not saved.
+    // recording or derivations since the last save, and thus
+    // that the user may wish to remove if the document is not saved.
     std::set<AudioFile *> m_recordedAudioFiles;
     std::set<AudioFile *> m_derivedAudioFiles;
 

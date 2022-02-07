@@ -55,7 +55,7 @@ SegmentEraseCommand::SegmentEraseCommand(Segment *segment,
         unsigned int id = m_segment->getAudioFileId();
         AudioFile *file = mgr->getAudioFile(id);
         if (file)
-            m_audioFileName = file->getFilename();
+            m_audioFileName = file->getAbsoluteFilePath();
     }
 }
 

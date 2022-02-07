@@ -939,7 +939,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
     // Setup the process
     //
     QProcess *process = new QProcess();
-    splitCommand << aF->getFilename();
+    splitCommand << aF->getAbsoluteFilePath();
 
     // Start it
     //

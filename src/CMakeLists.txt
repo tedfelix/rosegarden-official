@@ -86,6 +86,7 @@ set(rg_CPPS
   misc/Version.cpp
   misc/Strings.cpp
   misc/Preferences.cpp
+  gui/dialogs/AudioFileLocationDialog.cpp
   gui/dialogs/PasteNotationDialog.cpp
   gui/dialogs/ConfigureDialogBase.cpp
   gui/dialogs/PitchDialog.cpp
@@ -175,7 +176,6 @@ set(rg_CPPS
   gui/widgets/TmpStatusMsg.cpp
   gui/widgets/BaseTextFloat.cpp
   gui/widgets/Label.cpp
-  gui/widgets/InstrumentAliasButton.cpp
   gui/widgets/IconButton.cpp
   gui/widgets/StartupLogo.cpp
   gui/widgets/DeferScrollArea.cpp

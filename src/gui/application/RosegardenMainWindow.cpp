@@ -2035,33 +2035,44 @@ RosegardenMainWindow::slotFileOpenRecent()
 void
 RosegardenMainWindow::slotFileSave()
 {
-    if (!RosegardenDocument::currentDocument /*|| !RosegardenDocument::currentDocument->isModified()*/)
-        return ; // ALWAYS save, even if doc is not modified.
+    // No document to save?  Bail.
+    if (!RosegardenDocument::currentDocument)
+        return;
 
     TmpStatusMsg msg(tr("Saving file..."), this);
 
-    // if it's a new file (no file path), or an imported file
-    // (file path doesn't end with .rg), call saveAs
-    //
+    // If it's a new file (no file path), or an imported file
+    // (file path doesn't end with .rg), do a "save as".
     if (!RosegardenDocument::currentDocument->isRegularDotRGFile()) {
-
         slotFileSaveAs();
-
-    } else {
-
-        SetWaitCursor waitCursor;
-        QString errMsg, docFilePath = RosegardenDocument::currentDocument->getAbsFilePath();
-
-        bool res = RosegardenDocument::currentDocument->saveDocument(docFilePath, errMsg);
-        if (!res) {
-            if (! errMsg.isEmpty())
-                QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2")
-                                      .arg(docFilePath).arg(errMsg));
-            else
-                QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1")
-                                      .arg(docFilePath));
-        }
+        return;
     }
+
+    const QString docFilePath =
+            RosegardenDocument::currentDocument->getAbsFilePath();
+
+    QString errMsg;
+    bool success;
+
+    {
+        SetWaitCursor setWaitCursor;
+
+        success = RosegardenDocument::currentDocument->
+                saveDocument(docFilePath, errMsg);
+    }
+
+    if (!success) {
+        if (!errMsg.isEmpty())
+            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2")
+                                  .arg(docFilePath).arg(errMsg));
+        else
+            QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1")
+                                  .arg(docFilePath));
+    }
+
+    // Let the audio file manager know we've just saved so it can prompt the
+    // user for an audio file location if it needs one.
+    RosegardenDocument::currentDocument->getAudioFileManager().save();
 }
 
 QString
@@ -2198,7 +2209,8 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     SetWaitCursor waitCursor;
 
     QString errMsg;
-    bool res = RosegardenDocument::currentDocument->saveAs(newName, errMsg);
+    const bool success =
+            RosegardenDocument::currentDocument->saveAs(newName, errMsg);
 
     // save template as read-only, even though this is largely pointless
     if (asTemplate) {
@@ -2210,7 +2222,7 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
                              QFile::ReadOther);
     }
 
-    if (!res) {
+    if (!success) {
         if (!errMsg.isEmpty())
             QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1\nError was : %2")
                                   .arg(newName).arg(errMsg));
@@ -2218,19 +2230,28 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
             QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save document at %1")
                                   .arg(newName));
 
-    } else {
+        // Indicate failure.
+        return false;
 
-        m_recentFiles.add(newName);
-        // Make sure Ctrl+R is correct.
-        setupRecentFilesMenu();
-
-        updateTitle();
-
-        // update the edit view's captions too
-        emit compositionStateUpdate();
     }
 
-    return res;
+    if (!asTemplate) {
+        // Let the audio file manager know we've just saved so it can prompt the
+        // user for an audio file location if it needs one.
+        RosegardenDocument::currentDocument->getAudioFileManager().save();
+    }
+
+    m_recentFiles.add(newName);
+    // Make sure Ctrl+R is correct.
+    setupRecentFilesMenu();
+
+    updateTitle();
+
+    // update the edit view's captions too
+    emit compositionStateUpdate();
+
+    // Indicate success.
+    return true;
 }
 
 void
@@ -6431,29 +6452,34 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
     //
     // I weighed the user inconvenience carefully, and decided to do this to
     // maximize the value of the new filenames that include the title and
-    // instrument alias.  It's worthelss if they all say "Untitled" and there's
+    // instrument alias.  It's worthless if they all say "Untitled" and there's
     // no way to make "pick this and set that up before you hit this" intuitive,
     // so I've had to throw instructions in their face.
+
+    // If the user has not yet saved the composition, let them know that
+    // they need to save first.  Otherwise all of their audio files will
+    // be called "Untitled".
     if (RosegardenDocument::currentDocument->getTitle() == tr("Untitled")) {
-        QMessageBox::information(this,
-                                 tr("Rosegarden"),
+        QMessageBox::StandardButton selected = QMessageBox::information(
+                this,
+                tr("Rosegarden"),
         // TRANSLATOR: you may change "doc:audio-filename-en" to a page in your
         // language if you wish.  The n in <i>n</i>.wav refers to an unknown
         // number, such as might be used in a mathematical equation
-                                 tr("<qt><p>You must choose a filename for this composition before recording audio.</p><p>Audio files will be saved to <b>%1</b> as <b>rg-[<i>filename</i>]-[<i>instrument</i>]-<i>date</i>_<i>time</i>-<i>n</i>.wav</b>.  You may wish to rename audio instruments before recording as well.  For more information, please see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en\">Rosegarden Wiki</a>.</p></qt>")
-                                    .arg(RosegardenDocument::currentDocument->getAudioFileManager().getAudioPath()),
-                                 QMessageBox::Ok,
-                                 QMessageBox::Ok);
+                tr("<qt><p>You must choose a filename for this composition before recording audio.</p><p>Audio files will be saved to <b>%1</b> as <b>rg-[<i>filename</i>]-[<i>instrument</i>]-<i>date</i>_<i>time</i>-<i>n</i>.wav</b>.  You may wish to rename audio instruments before recording as well.  For more information, please see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en\">Rosegarden Wiki</a>.</p></qt>")
+                        .arg(RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath()),
+                QMessageBox::Ok | QMessageBox::Cancel,
+                QMessageBox::Ok);
+
+        // User wants to cancel?  Abort the recording.
+        if (selected == QMessageBox::Cancel)
+            return qv;
 
         slotFileSave();
 
-        //!!!
-        // We should return and cancel here, but the way all of this is strung
-        // together makes that tricky.  Let's see if we ever get a bug about "I
-        // tried to record audio, and it told me I had to choose a new name, and
-        // I decided to test my boundaries as a user and canceled the dialog,
-        // and recording started anyway!"  If so, this is the place!  Anyway,
-        // the aim here is to be helpful, not draconian.
+        // If they cancelled the save, bail.
+        if (RosegardenDocument::currentDocument->getTitle() == tr("Untitled"))
+            return qv;
     }
 
     for (int i = 0; i < recordInstruments.size(); ++i) {
@@ -6467,7 +6493,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
             if (aF) {
                 // createRecordingAudioFile doesn't actually write to the disk,
                 // and in principle it shouldn't fail
-                qv.push_back(aF->getFilename());
+                qv.push_back(aF->getAbsoluteFilePath());
                 RosegardenDocument::currentDocument->addRecordAudioSegment(recordInstruments[i],
                                              aF->getId());
             } else {
@@ -6486,7 +6512,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
 QString
 RosegardenMainWindow::getAudioFilePath()
 {
-    return RosegardenDocument::currentDocument->getAudioFileManager().getAudioPath();
+    return RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath();
 }
 
 QVector<InstrumentId>
@@ -6645,10 +6671,10 @@ RosegardenMainWindow::slotAddAudioFile(unsigned int id)
     if (aF == nullptr) return;
 
     int result = RosegardenSequencer::getInstance()->
-        addAudioFile(aF->getFilename(), aF->getId());
+        addAudioFile(aF->getAbsoluteFilePath(), aF->getId());
 
     if (!result) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getFilename()));
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getAbsoluteFilePath()));
     }
 }
 
@@ -7370,7 +7396,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
 
     inst->setConfigurationValue
     (qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
-     qstrtostr(RosegardenDocument::currentDocument->getAudioFileManager().getAudioPath()));
+     qstrtostr(RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath()));
 
     // Set opaque string configuration data (e.g. for DSSI plugin)
     //
@@ -8185,21 +8211,22 @@ RosegardenMainWindow::slotManageMetronome()
 void
 RosegardenMainWindow::slotAutoSave()
 {
-    if (!m_seqManager ||
-        m_seqManager->getTransportStatus() == PLAYING ||
+    // Don't autosave when playing or recording.
+    // ??? Shouldn't this be "m_seqManager && !..."?  That way if there
+    //     is no sequence manager (e.g. when the sequencer isn't launched)
+    //     we still will autosave.
+    if (!m_seqManager  ||
+        m_seqManager->getTransportStatus() == PLAYING  ||
         m_seqManager->getTransportStatus() == RECORDING)
-        return ;
+        return;
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
+    // If autosave is disabled, bail.
+    if (!settings.value("autosave", "true").toBool())
+        return;
 
-    if (! qStrToBool(settings.value("autosave", "true"))) {
-        settings.endGroup();
-        return ;
-    }
     RosegardenDocument::currentDocument->slotAutoSave();
-
-    settings.endGroup();
 }
 
 void
@@ -8464,7 +8491,7 @@ RosegardenMainWindow::slotSwitchPreset()
 void
 RosegardenMainWindow::checkAudioPath()
 {
-    QString  audioPath = RosegardenDocument::currentDocument->getAudioFileManager().getAudioPath();
+    QString  audioPath = RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath();
     QDir dir(audioPath);
     QString text(tr("<h3>Invalid audio path</h3>"));
     QString correctThis(tr("<p>You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in <b>View -> Document Properties -> Audio</b>.</p>"));

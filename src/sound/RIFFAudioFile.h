@@ -41,9 +41,9 @@ class RIFFAudioFile : public AudioFile
 public:
     RIFFAudioFile(unsigned int id,
                   const std::string &name,
-                  const QString &fileName);
+                  const QString &absoluteFilePath);
 
-    RIFFAudioFile(const QString &fileName,
+    RIFFAudioFile(const QString &absoluteFilePath,
                   unsigned int channels,
                   unsigned int sampleRate,
                   unsigned int bytesPerSecond,

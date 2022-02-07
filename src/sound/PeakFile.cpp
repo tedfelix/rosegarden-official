@@ -84,7 +84,7 @@ PeakFile::open()
 {
     // Set the file size
     //
-    QFileInfo info(m_fileName);
+    QFileInfo info(m_absoluteFilePath);
     m_fileSize = (size_t)info.size(); // cast from qint64
 
     // If we're already open then don't open again
@@ -94,7 +94,7 @@ PeakFile::open()
 
     // Open
     //
-    m_inFile = new std::ifstream(m_fileName.toLocal8Bit(),
+    m_inFile = new std::ifstream(m_absoluteFilePath.toLocal8Bit(),
                                  std::ios::in | std::ios::binary);
     // Check we're open
     //
@@ -128,7 +128,7 @@ PeakFile::parseHeader()
     std::string header = getBytes(128);
 
     if (header.compare(0, 4, AUDIO_BWF_PEAK_ID) != 0) {
-        throw(BadSoundFileException(m_fileName, "PeakFile::parseHeader - can't find LEVL identifier"));
+        throw(BadSoundFileException(m_absoluteFilePath, "PeakFile::parseHeader - can't find LEVL identifier"));
     }
 
     int length = getIntegerFromLittleEndian(header.substr(4, 4));
@@ -136,7 +136,7 @@ PeakFile::parseHeader()
     // Get the length of the header minus the first 8 bytes
     //
     if (length == 0)
-        throw(BadSoundFileException(m_fileName, "PeakFile::parseHeader - can't get header length"));
+        throw(BadSoundFileException(m_absoluteFilePath, "PeakFile::parseHeader - can't get header length"));
 
     // Get the file information
     //
@@ -175,7 +175,7 @@ PeakFile::printStats()
 {
     RG_DEBUG << "printStats()";
 
-    RG_DEBUG << "  STATS for PeakFile" << m_fileName;
+    RG_DEBUG << "  STATS for PeakFile" << m_absoluteFilePath;
     RG_DEBUG << "  ----------------------------";
     RG_DEBUG << "    VERSION =" << m_version;
     RG_DEBUG << "    FORMAT  =" << m_format;
@@ -221,7 +221,7 @@ PeakFile::write()
     }
 
     // create and test that we've made it
-    m_outFile = new std::ofstream(m_fileName.toLocal8Bit(),
+    m_outFile = new std::ofstream(m_absoluteFilePath.toLocal8Bit(),
                                   std::ios::out | std::ios::binary);
     if (!(*m_outFile))
         return false;
@@ -596,7 +596,7 @@ PeakFile::writePeaks(std::ofstream *file)
                     sampleValue = (int)(32767.0 * val);
                     samplePtr += 4;
                 } else {
-                    throw(BadSoundFileException(m_fileName, "PeakFile::writePeaks - unsupported bit depth"));
+                    throw(BadSoundFileException(m_absoluteFilePath, "PeakFile::writePeaks - unsupported bit depth"));
                 }
 
                 // First time for each channel
