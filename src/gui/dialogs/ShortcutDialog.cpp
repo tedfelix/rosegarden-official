@@ -26,9 +26,11 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QStandardItemModel>
 #include <QSettings>
+#include <QItemSelection>
 
 namespace Rosegarden
 {
@@ -39,41 +41,48 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     setModal(true);
     setWindowTitle(tr("Shortcuts"));
 
-    m_model = new QStandardItemModel(0, 4, this);
+    m_model = new QStandardItemModel(0, 5, this);
 
     ActionData* adata = ActionData::getInstance();
     adata->fillModel(m_model);
     
-    proxyModel = new QSortFilterProxyModel;
-    proxyModel->setSourceModel(m_model);
-    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    proxyModel->setFilterKeyColumn(-1);
+    m_proxyModel = new QSortFilterProxyModel;
+    m_proxyModel->setSourceModel(m_model);
+    m_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    m_proxyModel->setFilterKeyColumn(-1);
     
-    proxyView = new QTreeView;
-    proxyView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    proxyView->setRootIsDecorated(false);
-    proxyView->setAlternatingRowColors(true);
-    proxyView->setModel(proxyModel);
-    proxyView->setSortingEnabled(true);
-
-    filterPatternLineEdit = new QLineEdit;
-    filterPatternLabel = new QLabel(tr("Filter pattern:"));
+    m_proxyView = new QTreeView;
+    m_proxyView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_proxyView->setRootIsDecorated(false);
+    m_proxyView->setAlternatingRowColors(true);
+    m_proxyView->setModel(m_proxyModel);
+    m_proxyView->setSortingEnabled(true);
+    //m_proxyView->hideColumn(0);
     
-    connect(filterPatternLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(m_proxyView->selectionModel(),
+            SIGNAL(selectionChanged(const QItemSelection&,
+                                    const QItemSelection&)),
+            this,
+            SLOT(selectionChanged(const QItemSelection&,
+                                  const QItemSelection&)));
+    
+    m_filterPatternLineEdit = new QLineEdit;
+    m_filterPatternLabel = new QLabel(tr("Filter pattern:"));
+    
+    connect(m_filterPatternLineEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(filterChanged()));
     
     QGridLayout *proxyLayout = new QGridLayout;
-    proxyLayout->addWidget(filterPatternLabel, 0, 0);
-    proxyLayout->addWidget(filterPatternLineEdit, 0, 1, 1, 3);
-    proxyLayout->addWidget(proxyView, 1, 0, 1, 4);
+    proxyLayout->addWidget(m_filterPatternLabel, 0, 0);
+    proxyLayout->addWidget(m_filterPatternLineEdit, 0, 1, 1, 3);
+    proxyLayout->addWidget(m_proxyView, 1, 0, 1, 4);
     
     QVBoxLayout *mainLayout = new QVBoxLayout;
     
-    mainLayout->addLayout(proxyLayout);
     setLayout(mainLayout);
     setWindowTitle(tr("Shortcuts"));
     
-    proxyView->sortByColumn(1, Qt::AscendingOrder);
+    m_proxyView->sortByColumn(0, Qt::AscendingOrder);
 
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
@@ -84,9 +93,24 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
 
     // set column widths (except for last one)
     for (int i = 0; i < columnWidths.size() - 1; i++) {
-        proxyView->setColumnWidth(i, columnWidths[i].toInt());
+        m_proxyView->setColumnWidth(i, columnWidths[i].toInt());
     }
+
+    QHBoxLayout *hlayout = new QHBoxLayout;
+    m_clabel = new QLabel;
+    m_alabel = new QLabel;
+    m_ilabel = new QLabel;
+    hlayout->addWidget(m_clabel);
+    hlayout->addWidget(m_alabel);
+    hlayout->addWidget(m_ilabel);
+
+    QFrame* line = new QFrame();
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
     
+    mainLayout->addLayout(hlayout);
+    mainLayout->addWidget(line);
+    mainLayout->addLayout(proxyLayout);
 }
 
 ShortcutDialog::~ShortcutDialog()
@@ -94,7 +118,7 @@ ShortcutDialog::~ShortcutDialog()
     QStringList columnWidths;
     // save column widths (except for last one)
     for (int i = 0; i < m_model->columnCount() - 1; i++) {
-        columnWidths << QString::number(proxyView->columnWidth(i));
+        columnWidths << QString::number(m_proxyView->columnWidth(i));
     }
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
@@ -105,7 +129,38 @@ ShortcutDialog::~ShortcutDialog()
 
 void ShortcutDialog::filterChanged()
 {
-  proxyModel->setFilterFixedString(filterPatternLineEdit->text());
+    m_proxyModel->setFilterFixedString(m_filterPatternLineEdit->text());
+}
+
+void ShortcutDialog::selectionChanged(const QItemSelection& selected,
+                                      const QItemSelection&)
+{
+    qDebug() << "selection changed" << selected;
+    QModelIndexList indexes = selected.indexes();
+    if (indexes.empty()) return;
+    QModelIndex index = indexes.first();
+    int row = index.row();
+    int column = index.column();
+    qDebug() << "row" << row << column << "selected";
+    QModelIndex i0 = m_proxyModel->index(row, 0);
+    m_editKey = m_proxyModel->data(i0, Qt::DisplayRole).toString();
+    qDebug() << "editing key" << m_editKey;
+    QModelIndex i1 = m_proxyModel->index(row, 1);
+    QString ctext = m_proxyModel->data(i1, Qt::DisplayRole).toString();
+    m_clabel->setText(ctext);
+    QModelIndex i2 = m_proxyModel->index(row, 2);
+    QString atext = m_proxyModel->data(i2, Qt::DisplayRole).toString();
+    m_alabel->setText(atext);
+    QModelIndex i3 = m_proxyModel->index(row, 3);
+    QVariant imagev = m_proxyModel->data(i3, Qt::DecorationRole);
+    QIcon icon = imagev.value<QIcon>();
+    if (! icon.isNull()) {
+        QPixmap pixmap =
+            icon.pixmap(icon.availableSizes().first());
+        int w = m_ilabel->width();
+        int h = m_ilabel->height();
+        m_ilabel->setPixmap(pixmap.scaled(w, h, Qt::KeepAspectRatio));
+    }
 }
 
 }

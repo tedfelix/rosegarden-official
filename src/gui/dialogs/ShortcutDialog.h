@@ -27,6 +27,7 @@ class QLineEdit;
 class QAbstractItemModel;
 class QSortFilterProxyModel;
 class QStandardItemModel;
+class QItemSelection;
 
 namespace Rosegarden
 {
@@ -40,17 +41,21 @@ class ShortcutDialog : public QDialog
     ~ShortcutDialog();
     
  private slots:
-   void filterChanged();
-
+     void filterChanged();
+     void selectionChanged(const QItemSelection &selected,
+                           const QItemSelection &deselected);
+     
  private:
-   QSortFilterProxyModel *proxyModel;
-   
-   QGroupBox *sourceGroupBox;
-   QGroupBox *proxyGroupBox;
-   QTreeView *proxyView;
-   QLabel *filterPatternLabel;
-   QLineEdit *filterPatternLineEdit;
-   QStandardItemModel *m_model;
+     QSortFilterProxyModel *m_proxyModel;
+     
+     QTreeView *m_proxyView;
+     QLabel *m_filterPatternLabel;
+     QLineEdit *m_filterPatternLineEdit;
+     QStandardItemModel *m_model;
+     QLabel *m_clabel;
+     QLabel *m_alabel;
+     QLabel *m_ilabel;
+     QString m_editKey;
 };
 
 }
