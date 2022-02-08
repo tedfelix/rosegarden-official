@@ -31,6 +31,7 @@ class QSortFilterProxyModel;
 class QStandardItemModel;
 class QItemSelection;
 class QKeySequenceEdit;
+class QPushButton;
 
 namespace Rosegarden
 {
@@ -44,22 +45,26 @@ class ShortcutDialog : public QDialog
     ~ShortcutDialog();
     
  private slots:
-     void filterChanged();
-     void selectionChanged(const QItemSelection &selected,
-                           const QItemSelection &deselected);
-     
+    void filterChanged();
+    void selectionChanged(const QItemSelection &selected,
+                          const QItemSelection &deselected);
+    void keySequenceEdited();
+    
  private:
-     QSortFilterProxyModel *m_proxyModel;
+    QSortFilterProxyModel *m_proxyModel;
      
-     QTreeView *m_proxyView;
-     QLabel *m_filterPatternLabel;
-     QLineEdit *m_filterPatternLineEdit;
-     QStandardItemModel *m_model;
-     QLabel *m_clabel;
-     QLabel *m_alabel;
-     QLabel *m_ilabel;
-     std::list<QKeySequenceEdit*> m_ksEditList;
-     QString m_editKey;
+    QTreeView *m_proxyView;
+    QLabel *m_filterPatternLabel;
+    QLineEdit *m_filterPatternLineEdit;
+    QStandardItemModel *m_model;
+    QLabel *m_clabel;
+    QLabel *m_alabel;
+    QLabel *m_ilabel;
+    QPushButton *m_setPB;
+    QPushButton *m_defPB;
+    std::list<QKeySequenceEdit*> m_ksEditList;
+    QString m_editKey;
+    int m_editRow;
 };
 
 }

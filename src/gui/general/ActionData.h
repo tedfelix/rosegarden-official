@@ -20,6 +20,7 @@
 
 #include <map>
 #include <list>
+#include <deque>
 
 #include "document/io/XMLHandler.h"
 
@@ -37,6 +38,7 @@ public:
     ~ActionData();
 
     void fillModel(QStandardItemModel *model);
+    QString getKey(int row);
     
  private:
     ActionData();
@@ -75,6 +77,8 @@ public:
     {
         std::map<QString, ActionInfo> actionMap;
     };
+
+    typedef std::list<QKeySequence> KeyList;
     
     std::map<QString, RCFileData> m_dataMap;
     
@@ -92,6 +96,8 @@ public:
     QString m_currentText;
     QString m_currentFile;
     std::map<QString, QString> m_contextMap;
+    std::deque<QString> m_keyStore;
+    std::map<QString, KeyList> m_userShortcuts;
     
     static ActionData* m_instance;
 };

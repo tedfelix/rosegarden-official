@@ -47,11 +47,12 @@ ActionData::~ActionData()
 
 void ActionData::fillModel(QStandardItemModel *model)
 {
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Key"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Context"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Action"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Icon"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Shortcuts"));
+    m_keyStore.clear();
+    
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Context"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Action"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Icon"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Shortcuts"));
 
     for (auto i = m_dataMap.begin(); i != m_dataMap.end(); i++) {
         QString file = (*i).first;
@@ -65,9 +66,9 @@ void ActionData::fillModel(QStandardItemModel *model)
             textAdj.remove("&");
             model->insertRow(0);
             QString key = file + ":" + aname;
-            model->setData(model->index(0, 0), key);
-            model->setData(model->index(0, 1), m_contextMap[file]);
-            model->setData(model->index(0, 2), textAdj);
+            m_keyStore.push_front(key);
+            model->setData(model->index(0, 0), m_contextMap[file]);
+            model->setData(model->index(0, 1), textAdj);
             if (ainfo.icon != "") {
                 QIcon icon = IconLoader::load(ainfo.icon);
                 if (! icon.isNull()) {
@@ -75,14 +76,19 @@ void ActionData::fillModel(QStandardItemModel *model)
                         icon.pixmap(icon.availableSizes().first());
                     QStandardItem* item = new QStandardItem;
                     item->setIcon(pixmap);
-                    model->setItem(0, 3, item);
+                    model->setItem(0, 2, item);
                 } else {
-                    model->setData(model->index(0, 3), "");
+                    model->setData(model->index(0, 2), "");
                 }
             }
-            model->setData(model->index(0, 4), ainfo.shortcut);
+            model->setData(model->index(0, 3), ainfo.shortcut);
         }
     }
+}
+
+QString ActionData::getKey(int row)
+{
+    return m_keyStore[row];
 }
     
 ActionData::ActionData()
