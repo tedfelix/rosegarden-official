@@ -24,9 +24,11 @@
 #include "ResourceFinder.h"
 #include "document/io/XMLReader.h"
 #include "gui/general/IconLoader.h"
+#include "misc/ConfigGroups.h"
 
 #include <QFile>
 #include <QStandardItemModel>
+#include <QSettings>
 
 namespace Rosegarden 
 {
@@ -86,9 +88,38 @@ void ActionData::fillModel(QStandardItemModel *model)
     }
 }
 
-QString ActionData::getKey(int row)
+QString ActionData::getKey(int row) const
 {
     return m_keyStore[row];
+}
+
+bool ActionData::isDefault(const QString& key,
+                           const std::set<QKeySequence>& ksSet) const
+{
+    auto iter = m_userShortcuts.find(key);
+    return (iter == m_userShortcuts.end());
+}
+
+void ActionData::saveUserShortcuts()
+{
+    QSettings settings;
+    settings.beginGroup(UserShortcutsConfigGroup);
+    for (auto it = m_userShortcuts.begin(); it != m_userShortcuts.end(); it++) {
+        const QString& key = (*it).first;
+        const KeySet& keySet = (*it).second;
+        int index = 0;
+        foreach(auto keyseq, keySet) {
+            QString skey = key + QString::number(index);
+            settings.setValue(skey, keyseq);
+        }
+    }
+    settings.endGroup();
+}
+
+void ActionData::setUserShortcuts(const QString& key,
+                                  const std::set<QKeySequence>& ksSet)
+{
+    m_userShortcuts[key] = ksSet;
 }
     
 ActionData::ActionData()
@@ -150,6 +181,20 @@ ActionData::ActionData()
     m_contextMap["tempoview.rc"] = QObject::tr("Tempo view");
     m_contextMap["textinserter.rc"] = QObject::tr("Text inserter");
     m_contextMap["triggermanager.rc"] = QObject::tr("Trigger manager");
+
+    // read user shortcuts
+    QSettings settings;
+    settings.beginGroup(UserShortcutsConfigGroup);
+    QStringList settingsKeys = settings.childKeys();
+    foreach(auto settingsKey, settingsKeys) {
+        QString dataKey = settingsKey;
+        dataKey.chop(1);
+        QVariant keyValue = settings.value(settingsKey);
+        QKeySequence keySeq = keyValue.value<QKeySequence>();
+        RG_DEBUG << "user defined shortcuts - found:" << dataKey << keySeq;
+        m_userShortcuts[dataKey].insert(keySeq);
+    }
+    settings.endGroup();
 }
 
 bool ActionData::startDocument()

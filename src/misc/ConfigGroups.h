@@ -68,6 +68,7 @@ namespace Rosegarden
     extern const char* const NotationQuantizeConfigGroup;
     extern const char* const TextEventDialogConfigGroup;
     extern const QString RecentFilesConfigGroup;
+    extern const QString UserShortcutsConfigGroup;
 
 }
 

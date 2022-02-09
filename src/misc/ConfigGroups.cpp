@@ -61,5 +61,6 @@ namespace Rosegarden
     const char* const NotationQuantizeConfigGroup = "Notation_Quantize_Parameters_Memory";
     const char* const TextEventDialogConfigGroup = "TextEvent_Dialog";
     const QString RecentFilesConfigGroup = "RecentFiles";
+    const QString UserShortcutsConfigGroup = "UserShortcuts";
 
 }

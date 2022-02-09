@@ -19,7 +19,7 @@
 #define RG_ACTIONDATA_H
 
 #include <map>
-#include <list>
+#include <set>
 #include <deque>
 
 #include "document/io/XMLHandler.h"
@@ -38,8 +38,13 @@ public:
     ~ActionData();
 
     void fillModel(QStandardItemModel *model);
-    QString getKey(int row);
-    
+    QString getKey(int row) const;
+    bool isDefault(const QString& key,
+                   const std::set<QKeySequence>& ksSet) const;
+    void saveUserShortcuts();
+    void setUserShortcuts(const QString& key,
+                          const std::set<QKeySequence>& ksSet);
+        
  private:
     ActionData();
     ActionData(const ActionData&);
@@ -78,7 +83,7 @@ public:
         std::map<QString, ActionInfo> actionMap;
     };
 
-    typedef std::list<QKeySequence> KeyList;
+    typedef std::set<QKeySequence> KeySet;
     
     std::map<QString, RCFileData> m_dataMap;
     
@@ -97,7 +102,7 @@ public:
     QString m_currentFile;
     std::map<QString, QString> m_contextMap;
     std::deque<QString> m_keyStore;
-    std::map<QString, KeyList> m_userShortcuts;
+    std::map<QString, KeySet> m_userShortcuts;
     
     static ActionData* m_instance;
 };

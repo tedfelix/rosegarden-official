@@ -49,6 +49,7 @@ class ShortcutDialog : public QDialog
     void selectionChanged(const QItemSelection &selected,
                           const QItemSelection &deselected);
     void keySequenceEdited();
+    void setPBClicked();
     
  private:
     QSortFilterProxyModel *m_proxyModel;

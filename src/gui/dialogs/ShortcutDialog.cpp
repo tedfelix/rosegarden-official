@@ -129,12 +129,17 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     
     QHBoxLayout *hlayout3 = new QHBoxLayout;
     m_setPB = new QPushButton(tr("Set Shortcuts"));
+    connect(m_setPB, SIGNAL(clicked()),
+            this, SLOT(setPBClicked()));
     m_setPB->setEnabled(false);
     m_defPB = new QPushButton(tr("Reset to Defaults"));
     m_defPB->setEnabled(false);
 
+    hlayout3->addStretch();
     hlayout3->addWidget(m_setPB);
+    hlayout3->addStretch();
     hlayout3->addWidget(m_defPB);
+    hlayout3->addStretch();
     
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::HLine);
@@ -159,6 +164,10 @@ ShortcutDialog::~ShortcutDialog()
     settings.setValue("Shortcut_Dialog", this->saveGeometry());
     settings.setValue("Shortcut_Table_Widths", columnWidths);
     settings.endGroup();
+
+    // save any changes to settings
+    ActionData* adata = ActionData::getInstance();
+    adata->saveUserShortcuts();
 }
 
 void ShortcutDialog::filterChanged()
@@ -215,6 +224,7 @@ void ShortcutDialog::selectionChanged(const QItemSelection& selected,
     RG_DEBUG << "got shortcutlist" << shortcuts;
     QStringList shortcutList = shortcuts.split(", ");
     int kindex = 0;
+    std::set<QKeySequence> ksSet;
     foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
         ksEdit->setEnabled(true);
         QString scString = "";
@@ -223,8 +233,12 @@ void ShortcutDialog::selectionChanged(const QItemSelection& selected,
         }
         RG_DEBUG << "set keysequence" << scString;
         QKeySequence ks(scString);
+        ksSet.insert(ks);
         ksEdit->setKeySequence(ks);
         kindex++;
+    }
+    if (! adata->isDefault(m_editKey, ksSet)) {
+        m_defPB->setEnabled(true);
     }
 }
 
@@ -232,7 +246,21 @@ void ShortcutDialog::keySequenceEdited()
 {
     RG_DEBUG << "key sequence edited row:" << m_editRow <<
         "key: " << m_editKey;
-    
+    m_setPB->setEnabled(true);
+}
+
+void ShortcutDialog::setPBClicked()
+{
+    RG_DEBUG << "set shortcut";
+    ActionData* adata = ActionData::getInstance();
+    std::set<QKeySequence> ksSet;
+    foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
+        QKeySequence ks = ksEdit->keySequence();
+        if (! ks.isEmpty()) {
+            ksSet.insert(ks);
+        }
+    }
+    adata->setUserShortcuts(m_editKey, ksSet);
 }
 
 }
