@@ -47,45 +47,13 @@ ActionData::~ActionData()
 {
 }
 
-void ActionData::fillModel(QStandardItemModel *model)
+QStandardItemModel* ActionData::getModel()
 {
-    m_keyStore.clear();
-    
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Context"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Action"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Icon"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Shortcuts"));
-
-    for (auto i = m_dataMap.begin(); i != m_dataMap.end(); i++) {
-        QString file = (*i).first;
-        RCFileData& fdata = (*i).second;
-        for (auto mit = fdata.actionMap.begin();
-             mit != fdata.actionMap.end();
-             mit++) {
-            const QString& aname = (*mit).first;
-            const ActionInfo& ainfo = (*mit).second;
-            QString textAdj = ainfo.text;
-            textAdj.remove("&");
-            model->insertRow(0);
-            QString key = file + ":" + aname;
-            m_keyStore.push_front(key);
-            model->setData(model->index(0, 0), m_contextMap[file]);
-            model->setData(model->index(0, 1), textAdj);
-            if (ainfo.icon != "") {
-                QIcon icon = IconLoader::load(ainfo.icon);
-                if (! icon.isNull()) {
-                    QPixmap pixmap =
-                        icon.pixmap(icon.availableSizes().first());
-                    QStandardItem* item = new QStandardItem;
-                    item->setIcon(pixmap);
-                    model->setItem(0, 2, item);
-                } else {
-                    model->setData(model->index(0, 2), "");
-                }
-            }
-            model->setData(model->index(0, 3), ainfo.shortcut);
-        }
+    if (! m_model) {
+        m_model = new QStandardItemModel(0, 4);
     }
+    fillModel();
+    return m_model;
 }
 
 QString ActionData::getKey(int row) const
@@ -94,7 +62,7 @@ QString ActionData::getKey(int row) const
 }
 
 bool ActionData::isDefault(const QString& key,
-                           const std::set<QKeySequence>& ksSet) const
+                           const std::set<QKeySequence>&) const
 {
     auto iter = m_userShortcuts.find(key);
     return (iter == m_userShortcuts.end());
@@ -104,6 +72,7 @@ void ActionData::saveUserShortcuts()
 {
     QSettings settings;
     settings.beginGroup(UserShortcutsConfigGroup);
+    settings.remove("");
     for (auto it = m_userShortcuts.begin(); it != m_userShortcuts.end(); it++) {
         const QString& key = (*it).first;
         const KeySet& keySet = (*it).second;
@@ -111,6 +80,7 @@ void ActionData::saveUserShortcuts()
         foreach(auto keyseq, keySet) {
             QString skey = key + QString::number(index);
             settings.setValue(skey, keyseq);
+            index++;
         }
     }
     settings.endGroup();
@@ -119,10 +89,29 @@ void ActionData::saveUserShortcuts()
 void ActionData::setUserShortcuts(const QString& key,
                                   const std::set<QKeySequence>& ksSet)
 {
+    QStringList kssl;
+    foreach(auto ks, ksSet) {
+        kssl << ks.toString();
+    }
+    QString scString = kssl.join(", ");
+    RG_DEBUG << "setUserShortcuts:" << key << scString;
     m_userShortcuts[key] = ksSet;
+    updateModel(key);
+}
+
+void ActionData::removeUserShortcuts(const QString& key)
+{
+    RG_DEBUG << "removeUserShortcuts for" << key;
+    auto usiter = m_userShortcuts.find(key);
+    if (usiter != m_userShortcuts.end()) {
+        RG_DEBUG << "remove user shortcuts for" << key;
+        m_userShortcuts.erase(key);
+        updateModel(key);
+    }
 }
     
-ActionData::ActionData()
+ActionData::ActionData() :
+    m_model(0)
 {
     loadData("audiomanager.rc");
     loadData("bankeditor.rc");
@@ -421,4 +410,115 @@ QString ActionData::translate(QString text, QString disambiguation)
     else return QObject::tr(text.toStdString().c_str());
 }
     
+void ActionData::fillModel()
+{
+    m_keyStore.clear();
+    m_model->clear();
+    m_model->insertColumns(0, 5);
+    
+    m_model->setHeaderData(0, Qt::Horizontal, QObject::tr("Context"));
+    m_model->setHeaderData(1, Qt::Horizontal, QObject::tr("Action"));
+    m_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Icon"));
+    m_model->setHeaderData(3, Qt::Horizontal, QObject::tr("Shortcuts"));
+    m_model->setHeaderData(4, Qt::Horizontal, QObject::tr("User defined"));
+
+    QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
+    for (auto i = m_dataMap.begin(); i != m_dataMap.end(); i++) {
+        QString file = (*i).first;
+        RCFileData& fdata = (*i).second;
+        for (auto mit = fdata.actionMap.begin();
+             mit != fdata.actionMap.end();
+             mit++) {
+            const QString& aname = (*mit).first;
+            const ActionInfo& ainfo = (*mit).second;
+            QString textAdj = ainfo.text;
+            textAdj.remove("&");
+            m_model->insertRow(0);
+            QString key = file + ":" + aname;
+            m_keyStore.push_front(key);
+            m_model->setData(m_model->index(0, 0), m_contextMap[file]);
+            m_model->setData(m_model->index(0, 1), textAdj);
+            if (ainfo.icon != "") {
+                QIcon icon = IconLoader::load(ainfo.icon);
+                if (! icon.isNull()) {
+                    QPixmap pixmap =
+                        icon.pixmap(icon.availableSizes().first());
+                    QStandardItem* item = new QStandardItem;
+                    item->setIcon(pixmap);
+                    m_model->setItem(0, 2, item);
+                } else {
+                    m_model->setData(m_model->index(0, 2), "");
+                }
+            }
+            auto usiter = m_userShortcuts.find(key);
+            QString scString = ainfo.shortcut;
+            bool userDefined = false;
+            if (usiter != m_userShortcuts.end()) {
+                // user shortcut
+                userDefined = true;
+                const KeySet& kset = (*usiter).second;
+                QStringList kssl;
+                foreach(auto ks, kset) {
+                    kssl << ks.toString();
+                }
+                scString = kssl.join(", ");
+            }
+            m_model->setData(m_model->index(0, 3), scString);
+            if (userDefined) {
+                QStandardItem* item = new QStandardItem;
+                item->setIcon(udPixmap);
+                m_model->setItem(0, 4, item);
+            }
+        }
+    }
+}
+
+void ActionData::updateModel(const QString& changedKey)
+{
+    RG_DEBUG << "updateModel for key" << changedKey;
+    QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
+    QPixmap noPixmap;
+    int row = m_model->rowCount() - 1;
+    for (auto i = m_dataMap.begin(); i != m_dataMap.end(); i++) {
+        QString file = (*i).first;
+        RCFileData& fdata = (*i).second;
+        for (auto mit = fdata.actionMap.begin();
+             mit != fdata.actionMap.end();
+             mit++) {
+            const QString& aname = (*mit).first;
+            const ActionInfo& ainfo = (*mit).second;
+            QString key = file + ":" + aname;
+
+            if (key == changedKey) {
+                auto usiter = m_userShortcuts.find(key);
+                QString scString = ainfo.shortcut;
+                bool userDefined = false;
+                if (usiter != m_userShortcuts.end()) {
+                    // user shortcut
+                    userDefined = true;
+                    const KeySet& kset = (*usiter).second;
+                    QStringList kssl;
+                    foreach(auto ks, kset) {
+                        kssl << ks.toString();
+                    }
+                    scString = kssl.join(", ");
+                }
+                RG_DEBUG << "updateModel" << row << key << scString;
+                m_model->setData(m_model->index(row, 3), scString);
+                QStandardItem* item = m_model->item(row, 4);
+                if (! item) {
+                    item = new QStandardItem;
+                    m_model->setItem(row, 4, item);
+                }
+                if (userDefined) {
+                    item->setIcon(udPixmap);
+                } else {
+                    item->setIcon(noPixmap);
+                }
+            }
+            row -= 1;
+        }
+    }
+}
+
 }

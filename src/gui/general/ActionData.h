@@ -37,13 +37,14 @@ public:
     static ActionData* getInstance();
     ~ActionData();
 
-    void fillModel(QStandardItemModel *model);
+    QStandardItemModel* getModel();
     QString getKey(int row) const;
     bool isDefault(const QString& key,
                    const std::set<QKeySequence>& ksSet) const;
     void saveUserShortcuts();
     void setUserShortcuts(const QString& key,
                           const std::set<QKeySequence>& ksSet);
+    void removeUserShortcuts(const QString& key);
         
  private:
     ActionData();
@@ -67,6 +68,8 @@ public:
 
     void loadData(const QString& name);
     QString translate(QString text, QString disambiguation = "");
+    void fillModel();
+    void updateModel(const QString& changedKey);
     
     struct ActionInfo
     {
@@ -103,6 +106,7 @@ public:
     std::map<QString, QString> m_contextMap;
     std::deque<QString> m_keyStore;
     std::map<QString, KeySet> m_userShortcuts;
+    QStandardItemModel* m_model;
     
     static ActionData* m_instance;
 };

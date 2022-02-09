@@ -50,8 +50,12 @@ class ShortcutDialog : public QDialog
                           const QItemSelection &deselected);
     void keySequenceEdited();
     void setPBClicked();
+    void defPBClicked();
     
  private:
+
+    void editRow();
+
     QSortFilterProxyModel *m_proxyModel;
      
     QTreeView *m_proxyView;
