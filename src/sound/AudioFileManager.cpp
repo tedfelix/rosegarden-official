@@ -1185,6 +1185,10 @@ AudioFileManager::moveFiles(const QString &newPath)
 void
 AudioFileManager::save()
 {
+    // We've saved, so we don't want to delete the audio files that
+    // have been created up to now.
+    resetRecentlyCreatedFiles();
+
     // If the user has already confirmed the audio location, bail.
     if (m_audioLocationConfirmed)
         return;
