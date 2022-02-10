@@ -36,6 +36,7 @@
 #include <QItemSelection>
 #include <QKeySequenceEdit>
 #include <QPushButton>
+#include <QComboBox>
 
 namespace Rosegarden
 {
@@ -136,10 +137,26 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
             this, SLOT(defPBClicked()));
     m_defPB->setEnabled(false);
 
+    m_warnLabel = new QLabel(tr("Warnings when:"));
+    m_warnSetting = new QComboBox;
+    m_warnSetting->addItem(tr("Never"));
+    m_warnSetting->addItem(tr("Duplicate in same context"));
+    m_warnSetting->addItem(tr("Duplicate in any context"));
+    connect(m_warnSetting, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(warnSettingChanged(int)));
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    settings.value("ShortcutWarnings");
+    m_warnSetting->setCurrentIndex
+        (settings.value("shortcut_warnings", 1).toInt());
+    settings.endGroup();
+    
     hlayout3->addStretch();
     hlayout3->addWidget(m_setPB);
     hlayout3->addStretch();
     hlayout3->addWidget(m_defPB);
+    hlayout3->addStretch();
+    hlayout3->addWidget(m_warnLabel);
+    hlayout3->addWidget(m_warnSetting);
     hlayout3->addStretch();
     
     QFrame* line = new QFrame();
@@ -234,6 +251,17 @@ void ShortcutDialog::defPBClicked()
     editRow();
 }
 
+void ShortcutDialog::warnSettingChanged(int index)
+{
+    RG_DEBUG << "warnSettingChanged" << index;
+    m_warnType = static_cast<WarningType>(index);
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    //settings.value("shortcut_warnings");
+    settings.setValue("shortcut_warnings", m_warnSetting->currentIndex());
+    settings.endGroup();
+}
+            
 void ShortcutDialog::editRow()
 {
     if (m_editRow == -1) return;

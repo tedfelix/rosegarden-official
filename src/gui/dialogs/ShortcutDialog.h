@@ -32,6 +32,7 @@ class QStandardItemModel;
 class QItemSelection;
 class QKeySequenceEdit;
 class QPushButton;
+class QComboBox;
 
 namespace Rosegarden
 {
@@ -51,8 +52,10 @@ class ShortcutDialog : public QDialog
     void keySequenceEdited();
     void setPBClicked();
     void defPBClicked();
+    void warnSettingChanged(int index);
     
  private:
+    enum WarningType { None, SameContext, AllContexts };
 
     void editRow();
 
@@ -67,9 +70,12 @@ class ShortcutDialog : public QDialog
     QLabel *m_ilabel;
     QPushButton *m_setPB;
     QPushButton *m_defPB;
+    QLabel *m_warnLabel;
+    QComboBox *m_warnSetting;
     std::list<QKeySequenceEdit*> m_ksEditList;
     QString m_editKey;
     int m_editRow;
+    WarningType m_warnType;
 };
 
 }
