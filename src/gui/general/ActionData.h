@@ -21,6 +21,7 @@
 #include <map>
 #include <set>
 #include <deque>
+#include <list>
 
 #include "document/io/XMLHandler.h"
 
@@ -37,6 +38,14 @@ public:
     static ActionData* getInstance();
     ~ActionData();
 
+    struct KeyDuplicate
+    {
+        QString key;
+    };
+
+    typedef std::list<KeyDuplicate> KeyDuplicates;
+    typedef std::map<QKeySequence, KeyDuplicates> DuplicateData;
+    
     QStandardItemModel* getModel();
     QString getKey(int row) const;
     bool isDefault(const QString& key,
@@ -45,7 +54,12 @@ public:
     void setUserShortcuts(const QString& key,
                           const std::set<QKeySequence>& ksSet);
     void removeUserShortcuts(const QString& key);
-    QList<QKeySequence> getShortcuts(const QString& key);
+    QList<QKeySequence> getShortcuts(const QString& key) const;
+    void getDuplicateShortcuts(const QString& key,
+                               std::set<QKeySequence> ksSet,
+                               bool resetToDefault,
+                               const QString& context,
+                               DuplicateData& duplicates) const;
     
  private:
     ActionData();
@@ -68,7 +82,7 @@ public:
 
 
     void loadData(const QString& name);
-    QString translate(QString text, QString disambiguation = "");
+    QString translate(QString text, QString disambiguation = "") const;
     void fillModel();
     void updateModel(const QString& changedKey);
     

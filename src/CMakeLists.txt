@@ -146,6 +146,7 @@ set(rg_CPPS
   gui/dialogs/UseOrnamentDialog.cpp
   gui/dialogs/CommentsPopupDialog.cpp
   gui/dialogs/ShortcutDialog.cpp
+  gui/dialogs/ShortcutWarnDialog.cpp
   gui/widgets/IconStackedWidget.cpp
   gui/widgets/TristateCheckBox.cpp
   gui/widgets/FileDialog.cpp

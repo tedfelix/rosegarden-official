@@ -23,6 +23,7 @@
 #include "gui/general/ActionData.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
+#include "gui/dialogs/ShortcutWarnDialog.h"
 
 #include <QSortFilterProxyModel>
 #include <QTreeView>
@@ -240,6 +241,21 @@ void ShortcutDialog::setPBClicked()
             ksSet.insert(ks);
         }
     }
+    if (m_warnType != None) {
+        QString context = "";
+        if (m_warnType == SameContext) {
+            QStringList klist = m_editKey.split(":");
+            context = klist[0];
+        }
+        ActionData::DuplicateData duplicates;
+        adata->getDuplicateShortcuts(m_editKey, ksSet, false,
+                                     context, duplicates);
+        if (! duplicates.empty()) {
+            // ask the user
+            ShortcutWarnDialog warnDialog(this, duplicates);
+            warnDialog.exec();
+        }
+    }
     adata->setUserShortcuts(m_editKey, ksSet);
     m_setPB->setEnabled(false);
     // refresh edit data
@@ -250,6 +266,22 @@ void ShortcutDialog::defPBClicked()
 {
     RG_DEBUG << "set shortcut to default";
     ActionData* adata = ActionData::getInstance();
+    std::set<QKeySequence> ksSet;
+    if (m_warnType != None) {
+        QString context = "";
+        if (m_warnType == SameContext) {
+            QStringList klist = m_editKey.split(":");
+            context = klist[0];
+        }
+        ActionData::DuplicateData duplicates;
+        adata->getDuplicateShortcuts(m_editKey, ksSet, true,
+                                     context, duplicates);
+        if (! duplicates.empty()) {
+            // ask the user
+            ShortcutWarnDialog warnDialog(this, duplicates);
+            warnDialog.exec();
+        }
+    }
     adata->removeUserShortcuts(m_editKey);
     m_defPB->setEnabled(false);
     // refresh edit data

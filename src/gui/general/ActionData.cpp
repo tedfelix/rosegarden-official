@@ -110,8 +110,7 @@ void ActionData::removeUserShortcuts(const QString& key)
     }
 }
 
-QList<QKeySequence> ActionData::getShortcuts(const QString& key)
-{
+QList<QKeySequence> ActionData::getShortcuts(const QString& key) const {
     QList<QKeySequence> ret;
     auto it = m_actionMap.find(key);
     if (it == m_actionMap.end()) {
@@ -135,6 +134,61 @@ QList<QKeySequence> ActionData::getShortcuts(const QString& key)
         }
     }
     return ret;
+}
+
+void ActionData::getDuplicateShortcuts(const QString& key,
+                                       std::set<QKeySequence> ksSet,
+                                       bool resetToDefault,
+                                       const QString& context,
+                                       DuplicateData& duplicates) const
+{
+    std::set<QKeySequence> newKS;
+    std::set<QKeySequence> oldKS;
+    QList<QKeySequence> presentKS = getShortcuts(key);
+    foreach(auto ks, presentKS) {
+        oldKS.insert(ks);
+    }
+    if (resetToDefault) {
+        // the new shortcuts are the defaults old ones are the present ones
+        ActionInfo ainfo = m_actionMap.at(key);
+        if (ainfo.shortcut != "") {
+            QStringList shortcuts = ainfo.shortcut.split(", ");
+            RG_DEBUG << "getDuplicateShortcuts resetToDefault" << shortcuts;
+            for (int i = 0; i < shortcuts.size(); i++) {
+                QKeySequence defks(shortcuts.at(i));
+                newKS.insert(defks);
+            }
+        }
+        
+    } else {
+        // ksSet is the new shortcut set the old one is the present one
+        newKS = ksSet;
+    }
+
+    std::set<QKeySequence> addedKS;
+    std::set_difference(newKS.begin(), newKS.end(),
+                        oldKS.begin(), oldKS.end(),
+                        std::inserter(addedKS, addedKS.begin()));
+
+    foreach(auto ks, addedKS) {
+        RG_DEBUG << "getDuplicateShortcuts added" << ks;
+        KeyDuplicates kdups;
+        for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
+            const QString& mkey = (*i).first;
+            const ActionInfo& ainfo = (*i).second;
+            // ignore passed key
+            if (mkey == key) continue;
+            QList<QKeySequence> mKSL = getShortcuts(mkey);
+            if (mKSL.contains(ks)) {
+                // this entry also uses the KeySequence ks
+                RG_DEBUG << "found duplicate for" << ks << mkey;
+                KeyDuplicate kdup;
+                kdup.key = mkey;
+                kdups.push_back(kdup);
+            }
+        }
+        duplicates[ks] = kdups;
+    }
 }
     
 ActionData::ActionData() :
@@ -426,7 +480,7 @@ void ActionData::loadData(const QString& name)
     reader.parse(f);
 }
 
-QString ActionData::translate(QString text, QString disambiguation)
+QString ActionData::translate(QString text, QString disambiguation) const
 {
     // These translations are extracted from data/ui/*.rc files via
     // scripts/extract*.pl and pulled into the QObject translation context in
@@ -445,8 +499,8 @@ void ActionData::fillModel()
     m_model->setHeaderData(0, Qt::Horizontal, QObject::tr("Context"));
     m_model->setHeaderData(1, Qt::Horizontal, QObject::tr("Action"));
     m_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Icon"));
-    m_model->setHeaderData(3, Qt::Horizontal, QObject::tr("Shortcuts"));
-    m_model->setHeaderData(4, Qt::Horizontal, QObject::tr("User defined"));
+    m_model->setHeaderData(3, Qt::Horizontal, QObject::tr("User defined"));
+    m_model->setHeaderData(4, Qt::Horizontal, QObject::tr("Shortcuts"));
 
     QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
     for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
@@ -485,11 +539,11 @@ void ActionData::fillModel()
             }
             scString = kssl.join(", ");
         }
-        m_model->setData(m_model->index(0, 3), scString);
+        m_model->setData(m_model->index(0, 4), scString);
         if (userDefined) {
             QStandardItem* item = new QStandardItem;
             item->setIcon(udPixmap);
-            m_model->setItem(0, 4, item);
+            m_model->setItem(0, 3, item);
         }
     }
 }
@@ -519,11 +573,11 @@ void ActionData::updateModel(const QString& changedKey)
                 scString = kssl.join(", ");
             }
             RG_DEBUG << "updateModel" << row << key << scString;
-            m_model->setData(m_model->index(row, 3), scString);
-            QStandardItem* item = m_model->item(row, 4);
+            m_model->setData(m_model->index(row, 4), scString);
+            QStandardItem* item = m_model->item(row, 3);
             if (! item) {
                 item = new QStandardItem;
-                m_model->setItem(row, 4, item);
+                m_model->setItem(row, 3, item);
             }
             if (userDefined) {
                 item->setIcon(udPixmap);
