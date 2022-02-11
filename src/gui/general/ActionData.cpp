@@ -109,6 +109,33 @@ void ActionData::removeUserShortcuts(const QString& key)
         updateModel(key);
     }
 }
+
+QList<QKeySequence> ActionData::getShortcuts(const QString& key)
+{
+    QList<QKeySequence> ret;
+    auto it = m_actionMap.find(key);
+    if (it == m_actionMap.end()) {
+        // action not found
+        return ret;
+    }
+    ActionInfo ainfo = (*it).second;
+    auto usiter = m_userShortcuts.find(key);
+    if (usiter != m_userShortcuts.end()) {
+        // take the user shortcuts
+        const KeySet& keySet = (*usiter).second;
+        foreach(auto keyseq, keySet) {
+            ret << keyseq;
+        }
+    } else {
+        // no user shortcuts - use the defaults
+        QStringList shortcuts = ainfo.shortcut.split(", ");
+        QList<QKeySequence> shortcutList;
+        for (int i = 0; i < shortcuts.size(); i++) {
+            ret.append(translate(shortcuts.at(i), "keyboard shortcut"));
+        }
+    }
+    return ret;
+}
     
 ActionData::ActionData() :
     m_model(0)

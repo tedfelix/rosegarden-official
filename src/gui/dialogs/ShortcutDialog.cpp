@@ -85,7 +85,12 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     
     setLayout(mainLayout);
     setWindowTitle(tr("Shortcuts"));
-    
+
+    QLabel* helpLabel = new QLabel;
+    helpLabel->setWordWrap(true);
+    helpLabel->setText(tr("To edit a shortcut select the action in the table below. To change a shortcut click on the shortcut and press the new key sequence. To reomve a shortcut press and release ctrl alt or shift. Press \"set Shortcuts\" to make the change. Changes will take effect affter restarting Rosegarden"));
+    mainLayout->addWidget(helpLabel);
+                       
     m_proxyView->sortByColumn(0, Qt::AscendingOrder);
 
     QSettings settings;
@@ -95,8 +100,8 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
         settings.value("Shortcut_Table_Widths").toStringList();
     settings.endGroup();
 
-    // set column widths (except for last one)
-    for (int i = 0; i < columnWidths.size() - 1; i++) {
+    // set column widths
+    for (int i = 0; i < columnWidths.size(); i++) {
         m_proxyView->setColumnWidth(i, columnWidths[i].toInt());
     }
 

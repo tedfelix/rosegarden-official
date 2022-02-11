@@ -16,8 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionFileParser]"
-
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "ActionFileParser.h"
 
@@ -28,6 +27,7 @@
 #include <QFileInfo>
 #include <QMainWindow>
 #include <QMenuBar>
+#include <QRegularExpression>
 
 #include "IconLoader.h"
 #include "ResourceFinder.h"
@@ -36,7 +36,7 @@
 #include "base/Profiler.h"
 #include "document/CommandHistory.h"
 #include "document/io/XMLReader.h"
-
+#include "gui/general/ActionData.h"
 
 namespace Rosegarden
 {
@@ -176,8 +176,8 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
         //!!! return values
         if (text != "") setActionText(actionName, text);
         if (icon != "") setActionIcon(actionName, icon);
-        if (shortcut != "") setActionShortcut(actionName, shortcut,
-            shortcutContext.toLower() == "application");
+        setActionShortcut(actionName, shortcut,
+                          shortcutContext.toLower() == "application");
         if (tooltip != "") setActionToolTip(actionName, tooltip);
         if (group != "") setActionGroup(actionName, group);
         if (checked != "") setActionChecked(actionName,
@@ -456,7 +456,7 @@ ActionFileParser::setActionIcon(QString actionName, QString icon)
 bool
 ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool isApplicationContext)
 {
-    if (actionName == "" || shortcut == "") return false;
+    if (actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
@@ -465,14 +465,17 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
      * Enable one or multiple shortcuts.  Only the first shortcut, which is
      * considered as the primary one, will be shown in the menus.
      */
-    QStringList shortcuts = shortcut.split(", ");
-    QList<QKeySequence> shortcutList;
-    for (int i = 0; i < shortcuts.size(); i++) {
-
-        // Keyboard shortcuts require the disambiguation "keyboard shortcut"
-        // and this must match scripts/extract_menu_tr_strings.pl
-        shortcutList.append(translate(shortcuts.at(i), "keyboard shortcut"));
-    }
+    // Do not use the shortcut here - if there are user defined
+    // shortcuts get all from ActionData
+    ActionData* adata = ActionData::getInstance();
+    QString basefile = m_currentFile;
+    basefile.remove(QRegularExpression("^.*/"));
+    QString key = basefile + ":" + actionName;
+    QList<QKeySequence> shortcutList = adata->getShortcuts(key);
+    RG_DEBUG << "setActionShortcut default shortcut for" << actionName <<
+        "key:" << key <<
+        "is" << shortcut << "setting shortcuts" << shortcutList;
+    
     action->setShortcuts(shortcutList);
 
     /*

@@ -45,7 +45,8 @@ public:
     void setUserShortcuts(const QString& key,
                           const std::set<QKeySequence>& ksSet);
     void removeUserShortcuts(const QString& key);
-        
+    QList<QKeySequence> getShortcuts(const QString& key);
+    
  private:
     ActionData();
     ActionData(const ActionData&);
