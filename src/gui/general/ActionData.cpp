@@ -254,15 +254,14 @@ bool ActionData::startElement(const QString&,
         QString checked = atts.value("checked").toString();
 
         if (!m_currentMenus.empty() || m_currentToolbar != "") {
-            std::map<QString, ActionInfo>& amap =
-                m_dataMap[m_currentFile].actionMap;
-            auto it = amap.find(actionName);
-            if (it == amap.end()) {
+            QString key = m_currentFile + ":" + actionName;
+            auto it = m_actionMap.find(key);
+            if (it == m_actionMap.end()) {
                 // new action
                 ActionInfo ainfo;
-                amap[actionName] = ainfo;
+                m_actionMap[key] = ainfo;
             }
-            ActionInfo& ainfo = amap[actionName];
+            ActionInfo& ainfo = m_actionMap[key];
             if (! m_currentMenus.empty()) ainfo.menus = m_currentMenus;
             if (m_currentToolbar != "") ainfo.toolbar = m_currentToolbar;
             if (text != "") ainfo.text = translate(text);
@@ -283,7 +282,7 @@ bool ActionData::startElement(const QString&,
             RG_DEBUG << "data" << m_currentMenus << m_currentToolbar <<
                 actionName << icon <<
                 shortcut << tooltip;
-            RG_DEBUG << "map size" << m_currentFile << amap.size();
+            RG_DEBUG << "map size" << m_currentFile << m_actionMap.size();
         }
     } else if (name == "state") {
 
@@ -423,33 +422,62 @@ void ActionData::fillModel()
     m_model->setHeaderData(4, Qt::Horizontal, QObject::tr("User defined"));
 
     QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
-    for (auto i = m_dataMap.begin(); i != m_dataMap.end(); i++) {
-        QString file = (*i).first;
-        RCFileData& fdata = (*i).second;
-        for (auto mit = fdata.actionMap.begin();
-             mit != fdata.actionMap.end();
-             mit++) {
-            const QString& aname = (*mit).first;
-            const ActionInfo& ainfo = (*mit).second;
-            QString textAdj = ainfo.text;
-            textAdj.remove("&");
-            m_model->insertRow(0);
-            QString key = file + ":" + aname;
-            m_keyStore.push_front(key);
-            m_model->setData(m_model->index(0, 0), m_contextMap[file]);
-            m_model->setData(m_model->index(0, 1), textAdj);
-            if (ainfo.icon != "") {
-                QIcon icon = IconLoader::load(ainfo.icon);
-                if (! icon.isNull()) {
-                    QPixmap pixmap =
-                        icon.pixmap(icon.availableSizes().first());
-                    QStandardItem* item = new QStandardItem;
-                    item->setIcon(pixmap);
-                    m_model->setItem(0, 2, item);
-                } else {
-                    m_model->setData(m_model->index(0, 2), "");
-                }
+    for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
+        const QString& key = (*i).first;
+        const ActionInfo& ainfo = (*i).second;
+        QString textAdj = ainfo.text;
+        QStringList klist = key.split(":");
+        QString file = klist[0];
+        textAdj.remove("&");
+        m_model->insertRow(0);
+        m_keyStore.push_front(key);
+        m_model->setData(m_model->index(0, 0), m_contextMap[file]);
+        m_model->setData(m_model->index(0, 1), textAdj);
+        if (ainfo.icon != "") {
+            QIcon icon = IconLoader::load(ainfo.icon);
+            if (! icon.isNull()) {
+                QPixmap pixmap =
+                    icon.pixmap(icon.availableSizes().first());
+                QStandardItem* item = new QStandardItem;
+                item->setIcon(pixmap);
+                m_model->setItem(0, 2, item);
+            } else {
+                m_model->setData(m_model->index(0, 2), "");
             }
+        }
+        auto usiter = m_userShortcuts.find(key);
+        QString scString = ainfo.shortcut;
+        bool userDefined = false;
+        if (usiter != m_userShortcuts.end()) {
+            // user shortcut
+            userDefined = true;
+            const KeySet& kset = (*usiter).second;
+            QStringList kssl;
+            foreach(auto ks, kset) {
+                kssl << ks.toString();
+            }
+            scString = kssl.join(", ");
+        }
+        m_model->setData(m_model->index(0, 3), scString);
+        if (userDefined) {
+            QStandardItem* item = new QStandardItem;
+            item->setIcon(udPixmap);
+            m_model->setItem(0, 4, item);
+        }
+    }
+}
+
+void ActionData::updateModel(const QString& changedKey)
+{
+    RG_DEBUG << "updateModel for key" << changedKey;
+    QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
+    QPixmap noPixmap;
+    int row = m_model->rowCount() - 1;
+    for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
+        const QString& key = (*i).first;
+        const ActionInfo& ainfo = (*i).second;
+
+        if (key == changedKey) {
             auto usiter = m_userShortcuts.find(key);
             QString scString = ainfo.shortcut;
             bool userDefined = false;
@@ -463,61 +491,20 @@ void ActionData::fillModel()
                 }
                 scString = kssl.join(", ");
             }
-            m_model->setData(m_model->index(0, 3), scString);
+            RG_DEBUG << "updateModel" << row << key << scString;
+            m_model->setData(m_model->index(row, 3), scString);
+            QStandardItem* item = m_model->item(row, 4);
+            if (! item) {
+                item = new QStandardItem;
+                m_model->setItem(row, 4, item);
+            }
             if (userDefined) {
-                QStandardItem* item = new QStandardItem;
                 item->setIcon(udPixmap);
-                m_model->setItem(0, 4, item);
+            } else {
+                item->setIcon(noPixmap);
             }
         }
-    }
-}
-
-void ActionData::updateModel(const QString& changedKey)
-{
-    RG_DEBUG << "updateModel for key" << changedKey;
-    QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
-    QPixmap noPixmap;
-    int row = m_model->rowCount() - 1;
-    for (auto i = m_dataMap.begin(); i != m_dataMap.end(); i++) {
-        QString file = (*i).first;
-        RCFileData& fdata = (*i).second;
-        for (auto mit = fdata.actionMap.begin();
-             mit != fdata.actionMap.end();
-             mit++) {
-            const QString& aname = (*mit).first;
-            const ActionInfo& ainfo = (*mit).second;
-            QString key = file + ":" + aname;
-
-            if (key == changedKey) {
-                auto usiter = m_userShortcuts.find(key);
-                QString scString = ainfo.shortcut;
-                bool userDefined = false;
-                if (usiter != m_userShortcuts.end()) {
-                    // user shortcut
-                    userDefined = true;
-                    const KeySet& kset = (*usiter).second;
-                    QStringList kssl;
-                    foreach(auto ks, kset) {
-                        kssl << ks.toString();
-                    }
-                    scString = kssl.join(", ");
-                }
-                RG_DEBUG << "updateModel" << row << key << scString;
-                m_model->setData(m_model->index(row, 3), scString);
-                QStandardItem* item = m_model->item(row, 4);
-                if (! item) {
-                    item = new QStandardItem;
-                    m_model->setItem(row, 4, item);
-                }
-                if (userDefined) {
-                    item->setIcon(udPixmap);
-                } else {
-                    item->setIcon(noPixmap);
-                }
-            }
-            row -= 1;
-        }
+        row -= 1;
     }
 }
 

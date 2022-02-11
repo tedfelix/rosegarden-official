@@ -81,14 +81,9 @@ public:
         QString tooltip;
     };
     
-    struct RCFileData
-    {
-        std::map<QString, ActionInfo> actionMap;
-    };
-
     typedef std::set<QKeySequence> KeySet;
     
-    std::map<QString, RCFileData> m_dataMap;
+    std::map<QString, ActionInfo> m_actionMap;
     
     bool m_inMenuBar;
     bool m_inText;
