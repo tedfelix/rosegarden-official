@@ -35,7 +35,6 @@ class QTreeWidgetItem;
 class QLabel;
 class QDropEvent;
 class QCloseEvent;
-class QShortcut;
 class QUrl;
 
 //class KURL;
@@ -84,10 +83,6 @@ public:
     // Can we playback audio currently?
     //
     void setAudioSubsystemStatus(bool ok);
-
-    // Return the shortcut object
-    //
-    QShortcut* getShortcuts() { return m_shortcuts; }
 
     // Add a new file to the audio file manager
     //
@@ -189,8 +184,6 @@ protected:
     AudioListView *m_fileList;
     WarningGroupBox    *m_wrongSampleRates;
     RosegardenDocument *m_doc;
-
-    QShortcut           *m_shortcuts;
 
     AudioFileId  m_playingAudioFile;
     AudioPlayingDialog      *m_audioPlayingDialog;

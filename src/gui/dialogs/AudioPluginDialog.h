@@ -36,7 +36,6 @@ class QGridLayout;
 //class QFrame;
 class QGroupBox;
 class QCheckBox;
-class QShortcut;
 class QComboBox;
 
 
@@ -63,8 +62,6 @@ public:
     ~AudioPluginDialog() override;
 
     PluginContainer* getPluginContainer() const { return m_pluginContainer; }
-
-    QShortcut* getShortcuts() { return m_shortcuts; }
 
     bool isSynth() { return m_index == int(Instrument::SYNTH_PLUGIN_POSITION); }
 
@@ -140,8 +137,6 @@ protected:
 
     bool                 m_generating;
     bool                 m_guiShown;
-
-    QShortcut              *m_shortcuts;
 
     void                 populatePluginCategoryList();
     void                 populatePluginList();

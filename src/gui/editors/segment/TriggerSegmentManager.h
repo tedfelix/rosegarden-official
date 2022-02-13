@@ -32,8 +32,6 @@ class QPushButton;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QCloseEvent;
-class QShortcut;
-
 
 namespace Rosegarden
 {
@@ -59,8 +57,6 @@ public:
 
     // reset the document
     void setDocument(RosegardenDocument *doc);
-
-    QShortcut* getShortcuts() { return m_shortcuts; }
 
 public slots:
     void slotUpdate();
@@ -100,8 +96,6 @@ protected:
     QTreeWidget               *m_listView;
 
     bool                     m_modified;
-
-    QShortcut *m_shortcuts;
 };
 
 

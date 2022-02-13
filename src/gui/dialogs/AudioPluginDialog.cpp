@@ -38,7 +38,6 @@
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QShortcut>
 #include <QCheckBox>
 #include <QFrame>
 #include <QGroupBox>
@@ -194,8 +193,6 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_defaultButton->setToolTip(tr("Reset plugin controls to factory defaults"));
     
     m_generating = false;
-
-    m_shortcuts = new QShortcut(this);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
                  QDialogButtonBox::Close | QDialogButtonBox::Help);

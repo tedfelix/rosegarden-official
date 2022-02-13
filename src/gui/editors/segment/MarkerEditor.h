@@ -27,15 +27,12 @@
 
 #include "base/Event.h"
 
-
 class QWidget;
 class QPushButton;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QLabel;
 class QCloseEvent;
-class QShortcut;
-
 
 namespace Rosegarden
 {
@@ -67,8 +64,6 @@ public:
 
     // update pointer position
     void updatePosition();
-
-    QShortcut* getShortcuts() { return m_shortcuts; }
 
 public slots:
     void slotUpdate();
@@ -114,8 +109,6 @@ protected:
     QTreeWidget               *m_listView;
 
     bool                     m_modified;
-
-    QShortcut *m_shortcuts;
 };
 
 

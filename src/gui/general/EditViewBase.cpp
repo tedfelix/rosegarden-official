@@ -30,7 +30,6 @@
 
 #include "misc/Debug.h"
 
-#include <QShortcut>
 #include <QTabWidget>
 #include <QAction>
 #include <QStatusBar>
@@ -45,8 +44,7 @@ EditViewBase::EditViewBase(std::vector<Segment *> segments,
     // QMainWindow(parent),   // See following comments
     QMainWindow(nullptr),
     m_segments(segments),
-    m_configDialogPageIndex(0),
-    m_shortcuts(nullptr)
+    m_configDialogPageIndex(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     // Address #1508:  Show the edit windows without activating them, so either
@@ -70,8 +68,6 @@ EditViewBase::EditViewBase(std::vector<Segment *> segments,
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotTestClipboard()));
-
-    m_shortcuts = new QShortcut(this);
 }
 
 EditViewBase::~EditViewBase()

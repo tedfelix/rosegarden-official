@@ -25,9 +25,7 @@
 #include "document/RosegardenDocument.h"
 
 #include <QMainWindow>
-#include <QShortcut>
 #include <QWidget>
-
 
 namespace Rosegarden
 {
@@ -39,7 +37,6 @@ MixerWindow::MixerWindow(QWidget *parent,
     m_studio(&document->getStudio()),
     m_currentId(0)
 {
-    m_shortcuts = new QShortcut(this);
     setAttribute(Qt::WA_DeleteOnClose);
 }
 

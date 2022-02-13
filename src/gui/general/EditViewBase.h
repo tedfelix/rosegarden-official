@@ -24,7 +24,6 @@
 #include <QMainWindow>
 #include <QString>
 
-class QShortcut;
 class QCloseEvent;
 
 #include <set>
@@ -54,11 +53,6 @@ public:
     ~EditViewBase() override;
 
     Clipboard *getClipboard();
-
-    /**
-     * Return our local shortcut object
-     */
-    QShortcut* getShortcuts() { return m_shortcuts; }
 
     /**
      * Let tools know if their current element has gone
@@ -235,8 +229,6 @@ protected:
     std::vector<Segment *> m_segments;
 
     int m_configDialogPageIndex;
-
-    QShortcut *m_shortcuts;
 
     /// We need this so that we can attach/detach from the same document.
     /**

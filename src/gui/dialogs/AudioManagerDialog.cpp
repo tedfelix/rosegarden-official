@@ -78,7 +78,6 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QUrl>
-#include <QShortcut>
 #include <QKeySequence>
 #include <QSettings>
 #include <QDrag>
@@ -194,16 +193,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
             SLOT(slotDropped(QDropEvent*, QTreeWidget*, QList<QUrl>)));
 
 
-    //
-    // setup local shortcuts
-    //
-
-    // delete
-    //
-    m_shortcuts = new QShortcut(QKeySequence(Qt::Key_Delete), this);
-    connect(m_shortcuts, &QShortcut::activated, this, &AudioManagerDialog::slotRemove);
-    
-    
     slotPopulateFileList();
 
     // Connect command history for updates
