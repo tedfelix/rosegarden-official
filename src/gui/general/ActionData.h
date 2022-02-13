@@ -92,7 +92,7 @@ public:
         QString toolbar;
         QString text;
         QString icon;
-        QString shortcut;
+        std::set<QKeySequence> shortcuts;
         QString tooltip;
     };
     

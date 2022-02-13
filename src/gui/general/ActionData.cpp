@@ -70,12 +70,7 @@ bool ActionData::isDefault(const QString& key,
         return true;
     }
     ActionInfo ainfo = (*it).second;
-    QStringList shortcuts = ainfo.shortcut.split(", ");
-    std::set<QKeySequence> defSet;
-    for (int i = 0; i < shortcuts.size(); i++) {
-        defSet.insert(shortcuts.at(i));
-    }
-    return (ksSet == defSet);
+    return (ksSet == ainfo.shortcuts);
 }
 
 void ActionData::saveUserShortcuts()
@@ -101,7 +96,7 @@ void ActionData::setUserShortcuts(const QString& key,
 {
     QStringList kssl;
     foreach(auto ks, ksSet) {
-        kssl << ks.toString();
+        kssl << ks.toString(QKeySequence::NativeText);
     }
     QString scString = kssl.join(", ");
     RG_DEBUG << "setUserShortcuts:" << key << scString;
@@ -135,10 +130,7 @@ std::set<QKeySequence> ActionData::getShortcuts(const QString& key) const {
         ret = keySet;
     } else {
         // no user shortcuts - use the defaults
-        QStringList shortcuts = ainfo.shortcut.split(", ");
-        for (int i = 0; i < shortcuts.size(); i++) {
-            ret.insert(translate(shortcuts.at(i), "keyboard shortcut"));
-        }
+        ret = ainfo.shortcuts;
     }
     return ret;
 }
@@ -154,15 +146,7 @@ void ActionData::getDuplicateShortcuts(const QString& key,
     if (resetToDefault) {
         // the new shortcuts are the defaults old ones are the present ones
         ActionInfo ainfo = m_actionMap.at(key);
-        if (ainfo.shortcut != "") {
-            QStringList shortcuts = ainfo.shortcut.split(", ");
-            RG_DEBUG << "getDuplicateShortcuts resetToDefault" << shortcuts;
-            for (int i = 0; i < shortcuts.size(); i++) {
-                QKeySequence defks(shortcuts.at(i));
-                newKS.insert(defks);
-            }
-        }
-        
+        newKS = ainfo.shortcuts;
     } else {
         // ksSet is the new shortcut set the old one is the present one
         newKS = ksSet;
@@ -180,6 +164,9 @@ void ActionData::getDuplicateShortcuts(const QString& key,
             const QString& mkey = (*i).first;
             // ignore passed key
             if (mkey == key) continue;
+            QStringList mklist = mkey.split(":");
+            QString mcontext = mklist[0];
+            if (mcontext != "" || mcontext != context) continue;
             std::set<QKeySequence> mKSL = getShortcuts(mkey);
             if (mKSL.find(ks) != mKSL.end()) {
                 // this entry also uses the KeySequence ks
@@ -189,7 +176,9 @@ void ActionData::getDuplicateShortcuts(const QString& key,
                 kdups.push_back(kdup);
             }
         }
-        duplicates[ks] = kdups;
+        if (! kdups.empty()) {
+            duplicates[ks] = kdups;
+        }
     }
 }
     
@@ -351,16 +340,11 @@ bool ActionData::startElement(const QString&,
             if (icon != "") ainfo.icon = icon;
             QStringList shortcuts = shortcut.split(", ");
             QStringList shortcuts_trans;
+            std::set<QKeySequence> scSet;
             for (int i = 0; i < shortcuts.size(); i++) {
-                // Keyboard shortcuts require the disambiguation
-                // "keyboard shortcut" and this must match
-                // scripts/extract_menu_tr_strings.pl
-                shortcuts_trans.append(translate(shortcuts.at(i),
-                                                 "keyboard shortcut"));
+                scSet.insert(QKeySequence(shortcuts.at(i)));
             }
-            QString shortcut_trans = shortcuts_trans.join(", ");
-    
-            if (shortcut != "") ainfo.shortcut = shortcut_trans;
+            ainfo.shortcuts = scSet;
             if (tooltip != "") ainfo.tooltip = tooltip;
             RG_DEBUG << "data" << m_currentMenus << m_currentToolbar <<
                 actionName << icon <<
@@ -529,18 +513,19 @@ void ActionData::fillModel()
             }
         }
         auto usiter = m_userShortcuts.find(key);
-        QString scString = ainfo.shortcut;
         bool userDefined = false;
+        KeySet kset = ainfo.shortcuts;
         if (usiter != m_userShortcuts.end()) {
             // user shortcut
             userDefined = true;
-            const KeySet& kset = (*usiter).second;
-            QStringList kssl;
-            foreach(auto ks, kset) {
-                kssl << ks.toString();
-            }
-            scString = kssl.join(", ");
+            kset = (*usiter).second;
         }
+        QStringList kssl;
+        foreach(auto ks, kset) {
+            kssl << ks.toString(QKeySequence::NativeText);
+        }
+        QString scString = kssl.join(", ");
+
         m_model->setData(m_model->index(0, 4), scString);
         if (userDefined) {
             QStandardItem* item = new QStandardItem;
@@ -562,18 +547,18 @@ void ActionData::updateModel(const QString& changedKey)
 
         if (key == changedKey) {
             auto usiter = m_userShortcuts.find(key);
-            QString scString = ainfo.shortcut;
+            KeySet kset = ainfo.shortcuts;
             bool userDefined = false;
             if (usiter != m_userShortcuts.end()) {
                 // user shortcut
                 userDefined = true;
-                const KeySet& kset = (*usiter).second;
-                QStringList kssl;
-                foreach(auto ks, kset) {
-                    kssl << ks.toString();
-                }
-                scString = kssl.join(", ");
+                kset = (*usiter).second;
             }
+            QStringList kssl;
+            foreach(auto ks, kset) {
+                kssl << ks.toString(QKeySequence::NativeText);
+            }
+            QString scString = kssl.join(", ");
             RG_DEBUG << "updateModel" << row << key << scString;
             m_model->setData(m_model->index(row, 4), scString);
             QStandardItem* item = m_model->item(row, 3);

@@ -348,7 +348,10 @@ void ShortcutDialog::editRow()
         RG_DEBUG << "set keysequence" << ks;
         ksEdit->setKeySequence(ks);
     }
-    if (! adata->isDefault(m_editKey, ksSet)) {
+    RG_DEBUG << "editRow is default:" << adata->isDefault(m_editKey, ksSet);
+    if (adata->isDefault(m_editKey, ksSet)) {
+        m_defPB->setEnabled(false);
+    } else {
         m_defPB->setEnabled(true);
     }
 }

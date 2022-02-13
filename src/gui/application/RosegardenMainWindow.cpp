@@ -153,7 +153,6 @@
 #include "gui/general/LilyPondProcessor.h"
 #include "gui/general/ProjectPackager.h"
 #include "gui/general/PresetHandlerDialog.h"
-#include "gui/general/ActionData.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/WarningWidget.h"
@@ -328,9 +327,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     connect(m_editTempoController, SIGNAL(editTempos(timeT)),
             this, SLOT(slotEditTempos(timeT)));
 
-    // initialize ActionData for user shortcuts
-    ActionData::getInstance();
-    
     // Need to do this prior to launching the sequencer to
     // avoid ActionFileClient warnings in the debug log due
     // to menu actions not existing yet.  This makes sure they
