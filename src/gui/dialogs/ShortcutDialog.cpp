@@ -44,7 +44,8 @@ namespace Rosegarden
 
 ShortcutDialog::ShortcutDialog(QWidget *parent) :
     QDialog(parent),
-    m_editRow(-1)
+    m_editRow(-1),
+    m_selectionChanged(false)
 {
     setModal(true);
     setWindowTitle(tr("Shortcuts"));
@@ -203,6 +204,7 @@ void ShortcutDialog::selectionChanged(const QItemSelection& selected,
                                       const QItemSelection&)
 {
     RG_DEBUG << "selection changed" << selected;
+    m_selectionChanged = true;
     QModelIndexList indexes = selected.indexes();
     if (indexes.empty()) {
         foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
@@ -256,10 +258,12 @@ void ShortcutDialog::setPBClicked()
             warnDialog.exec();
         }
     }
-    adata->setUserShortcuts(m_editKey, ksSet);
     m_setPB->setEnabled(false);
-    // refresh edit data
-    editRow();
+    m_selectionChanged = false;
+    adata->setUserShortcuts(m_editKey, ksSet);
+
+    // If the selection has not changed - refresh edit data
+    if (! m_selectionChanged) editRow();
 }
 
 void ShortcutDialog::defPBClicked()
@@ -282,10 +286,12 @@ void ShortcutDialog::defPBClicked()
             warnDialog.exec();
         }
     }
-    adata->removeUserShortcuts(m_editKey);
     m_defPB->setEnabled(false);
-    // refresh edit data
-    editRow();
+    m_selectionChanged = false;
+    adata->removeUserShortcuts(m_editKey);
+
+    // If the selection has not changed - refresh edit data
+    if (! m_selectionChanged) editRow();
 }
 
 void ShortcutDialog::warnSettingChanged(int index)
@@ -301,10 +307,12 @@ void ShortcutDialog::warnSettingChanged(int index)
             
 void ShortcutDialog::editRow()
 {
+    RG_DEBUG << "editRow:" << m_editRow;
     if (m_editRow == -1) return;
     QModelIndex rindex = m_proxyModel->index(m_editRow, 0);
     QModelIndex srcIndex = m_proxyModel->mapToSource(rindex);
     RG_DEBUG << "src row" << srcIndex.row();
+    if (srcIndex.row() == -1) return;
     ActionData* adata = ActionData::getInstance();
     m_editKey = adata->getKey(srcIndex.row());
     RG_DEBUG << "editing key" << m_editKey;
@@ -328,23 +336,17 @@ void ShortcutDialog::editRow()
         m_ilabel->setPixmap(noPixmap);
     }
     
-    QModelIndex i3 = m_proxyModel->index(m_editRow, 3);
-    QString shortcuts =  m_proxyModel->data(i3, Qt::DisplayRole).toString();
-    RG_DEBUG << "got shortcutlist" << shortcuts;
-    QStringList shortcutList = shortcuts.split(", ");
-    int kindex = 0;
-    std::set<QKeySequence> ksSet;
+    std::set<QKeySequence> ksSet = adata->getShortcuts(m_editKey);
+    auto ksiter = ksSet.begin();
     foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
         ksEdit->setEnabled(true);
-        QString scString = "";
-        if (kindex < shortcutList.size()) {
-            scString = shortcutList.at(kindex);
+        QKeySequence ks;
+        if (ksiter != ksSet.end()) {
+            ks = (*ksiter);
+            ksiter++;
         }
-        RG_DEBUG << "set keysequence" << scString;
-        QKeySequence ks(scString);
-        ksSet.insert(ks);
+        RG_DEBUG << "set keysequence" << ks;
         ksEdit->setKeySequence(ks);
-        kindex++;
     }
     if (! adata->isDefault(m_editKey, ksSet)) {
         m_defPB->setEnabled(true);

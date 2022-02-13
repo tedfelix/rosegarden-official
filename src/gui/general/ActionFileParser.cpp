@@ -471,7 +471,11 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
     QString basefile = m_currentFile;
     basefile.remove(QRegularExpression("^.*/"));
     QString key = basefile + ":" + actionName;
-    QList<QKeySequence> shortcutList = adata->getShortcuts(key);
+    std::set<QKeySequence> shortcutSet = adata->getShortcuts(key);
+    QList<QKeySequence> shortcutList;
+    foreach(auto ks, shortcutSet) {
+        shortcutList.append(ks);
+    }
     RG_DEBUG << "setActionShortcut default shortcut for" << actionName <<
         "key:" << key <<
         "is" << shortcut << "setting shortcuts" << shortcutList;

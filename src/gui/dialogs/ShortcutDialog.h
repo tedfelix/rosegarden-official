@@ -76,6 +76,7 @@ class ShortcutDialog : public QDialog
     QString m_editKey;
     int m_editRow;
     WarningType m_warnType;
+    bool m_selectionChanged;
 };
 
 }

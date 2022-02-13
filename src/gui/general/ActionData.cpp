@@ -62,10 +62,20 @@ QString ActionData::getKey(int row) const
 }
 
 bool ActionData::isDefault(const QString& key,
-                           const std::set<QKeySequence>&) const
+                           const std::set<QKeySequence>& ksSet) const
 {
-    auto iter = m_userShortcuts.find(key);
-    return (iter == m_userShortcuts.end());
+    auto it = m_actionMap.find(key);
+    if (it == m_actionMap.end()) {
+        // action not found
+        return true;
+    }
+    ActionInfo ainfo = (*it).second;
+    QStringList shortcuts = ainfo.shortcut.split(", ");
+    std::set<QKeySequence> defSet;
+    for (int i = 0; i < shortcuts.size(); i++) {
+        defSet.insert(shortcuts.at(i));
+    }
+    return (ksSet == defSet);
 }
 
 void ActionData::saveUserShortcuts()
@@ -110,8 +120,8 @@ void ActionData::removeUserShortcuts(const QString& key)
     }
 }
 
-QList<QKeySequence> ActionData::getShortcuts(const QString& key) const {
-    QList<QKeySequence> ret;
+std::set<QKeySequence> ActionData::getShortcuts(const QString& key) const {
+    std::set<QKeySequence> ret;
     auto it = m_actionMap.find(key);
     if (it == m_actionMap.end()) {
         // action not found
@@ -122,15 +132,12 @@ QList<QKeySequence> ActionData::getShortcuts(const QString& key) const {
     if (usiter != m_userShortcuts.end()) {
         // take the user shortcuts
         const KeySet& keySet = (*usiter).second;
-        foreach(auto keyseq, keySet) {
-            ret << keyseq;
-        }
+        ret = keySet;
     } else {
         // no user shortcuts - use the defaults
         QStringList shortcuts = ainfo.shortcut.split(", ");
-        QList<QKeySequence> shortcutList;
         for (int i = 0; i < shortcuts.size(); i++) {
-            ret.append(translate(shortcuts.at(i), "keyboard shortcut"));
+            ret.insert(translate(shortcuts.at(i), "keyboard shortcut"));
         }
     }
     return ret;
@@ -143,11 +150,7 @@ void ActionData::getDuplicateShortcuts(const QString& key,
                                        DuplicateData& duplicates) const
 {
     std::set<QKeySequence> newKS;
-    std::set<QKeySequence> oldKS;
-    QList<QKeySequence> presentKS = getShortcuts(key);
-    foreach(auto ks, presentKS) {
-        oldKS.insert(ks);
-    }
+    std::set<QKeySequence> oldKS = getShortcuts(key);
     if (resetToDefault) {
         // the new shortcuts are the defaults old ones are the present ones
         ActionInfo ainfo = m_actionMap.at(key);
@@ -164,7 +167,7 @@ void ActionData::getDuplicateShortcuts(const QString& key,
         // ksSet is the new shortcut set the old one is the present one
         newKS = ksSet;
     }
-
+    
     std::set<QKeySequence> addedKS;
     std::set_difference(newKS.begin(), newKS.end(),
                         oldKS.begin(), oldKS.end(),
@@ -175,11 +178,10 @@ void ActionData::getDuplicateShortcuts(const QString& key,
         KeyDuplicates kdups;
         for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
             const QString& mkey = (*i).first;
-            const ActionInfo& ainfo = (*i).second;
             // ignore passed key
             if (mkey == key) continue;
-            QList<QKeySequence> mKSL = getShortcuts(mkey);
-            if (mKSL.contains(ks)) {
+            std::set<QKeySequence> mKSL = getShortcuts(mkey);
+            if (mKSL.find(ks) != mKSL.end()) {
                 // this entry also uses the KeySequence ks
                 RG_DEBUG << "found duplicate for" << ks << mkey;
                 KeyDuplicate kdup;
