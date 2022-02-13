@@ -214,6 +214,7 @@ void ShortcutDialog::selectionChanged(const QItemSelection& selected,
         m_defPB->setEnabled(false);
         m_editRow = -1;
         m_editKey = "";
+        editRow(); // to reset the edit data
         return;
     }
     
@@ -308,11 +309,23 @@ void ShortcutDialog::warnSettingChanged(int index)
 void ShortcutDialog::editRow()
 {
     RG_DEBUG << "editRow:" << m_editRow;
-    if (m_editRow == -1) return;
+    if (m_editRow == -1) {
+        m_clabel->setText("");
+        m_alabel->setText("");
+        QPixmap noPixmap;
+        m_ilabel->setPixmap(noPixmap);
+        return;
+    }
     QModelIndex rindex = m_proxyModel->index(m_editRow, 0);
     QModelIndex srcIndex = m_proxyModel->mapToSource(rindex);
     RG_DEBUG << "src row" << srcIndex.row();
-    if (srcIndex.row() == -1) return;
+    if (srcIndex.row() == -1) {
+        m_clabel->setText("");
+        m_alabel->setText("");
+        QPixmap noPixmap;
+        m_ilabel->setPixmap(noPixmap);
+        return;
+    }
     ActionData* adata = ActionData::getInstance();
     m_editKey = adata->getKey(srcIndex.row());
     RG_DEBUG << "editing key" << m_editKey;

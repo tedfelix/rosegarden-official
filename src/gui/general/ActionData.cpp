@@ -166,7 +166,7 @@ void ActionData::getDuplicateShortcuts(const QString& key,
             if (mkey == key) continue;
             QStringList mklist = mkey.split(":");
             QString mcontext = mklist[0];
-            if (mcontext != "" || mcontext != context) continue;
+            if (context != "" && mcontext != context) continue;
             std::set<QKeySequence> mKSL = getShortcuts(mkey);
             if (mKSL.find(ks) != mKSL.end()) {
                 // this entry also uses the KeySequence ks
@@ -338,11 +338,13 @@ bool ActionData::startElement(const QString&,
             if (m_currentToolbar != "") ainfo.toolbar = m_currentToolbar;
             if (text != "") ainfo.text = translate(text);
             if (icon != "") ainfo.icon = icon;
-            QStringList shortcuts = shortcut.split(", ");
-            QStringList shortcuts_trans;
             std::set<QKeySequence> scSet;
-            for (int i = 0; i < shortcuts.size(); i++) {
-                scSet.insert(QKeySequence(shortcuts.at(i)));
+            if (shortcut != "") {
+                QStringList shortcuts = shortcut.split(", ");
+                QStringList shortcuts_trans;
+                for (int i = 0; i < shortcuts.size(); i++) {
+                    scSet.insert(QKeySequence(shortcuts.at(i)));
+                }
             }
             ainfo.shortcuts = scSet;
             if (tooltip != "") ainfo.tooltip = tooltip;
