@@ -338,15 +338,16 @@ bool ActionData::startElement(const QString&,
             if (m_currentToolbar != "") ainfo.toolbar = m_currentToolbar;
             if (text != "") ainfo.text = translate(text);
             if (icon != "") ainfo.icon = icon;
-            std::set<QKeySequence> scSet;
             if (shortcut != "") {
                 QStringList shortcuts = shortcut.split(", ");
-                QStringList shortcuts_trans;
                 for (int i = 0; i < shortcuts.size(); i++) {
-                    scSet.insert(QKeySequence(shortcuts.at(i)));
+                    RG_DEBUG << "read xml shortcut for" << key <<
+                        QKeySequence(shortcuts.at(i));
+                    ainfo.shortcuts.insert(QKeySequence(shortcuts.at(i)));
                 }
             }
-            ainfo.shortcuts = scSet;
+            RG_DEBUG << "read xml number of shortcuts" << key
+                     << ainfo.shortcuts.size();
             if (tooltip != "") ainfo.tooltip = tooltip;
             RG_DEBUG << "data" << m_currentMenus << m_currentToolbar <<
                 actionName << icon <<
