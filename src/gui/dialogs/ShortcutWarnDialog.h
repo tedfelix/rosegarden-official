@@ -30,7 +30,7 @@ class ShortcutWarnDialog : public QDialog
     Q_OBJECT
 
  public:
-    ShortcutWarnDialog(QWidget *parent, ActionData::DuplicateData ddata);
+    ShortcutWarnDialog(ActionData::DuplicateData ddata);
     ~ShortcutWarnDialog();
     
 };

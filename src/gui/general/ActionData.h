@@ -41,6 +41,8 @@ public:
     struct KeyDuplicate
     {
         QString key;
+        QString actionText;
+        QString context;
     };
 
     typedef std::list<KeyDuplicate> KeyDuplicates;

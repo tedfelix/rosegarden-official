@@ -100,7 +100,12 @@ void ActionData::setUserShortcuts(const QString& key,
     }
     QString scString = kssl.join(", ");
     RG_DEBUG << "setUserShortcuts:" << key << scString;
-    m_userShortcuts[key] = ksSet;
+    if (ksSet == m_actionMap[key].shortcuts) {
+        // setting back to default
+        m_userShortcuts.erase(key);
+    } else {
+        m_userShortcuts[key] = ksSet;
+    }
     updateModel(key);
 }
 
@@ -141,6 +146,7 @@ void ActionData::getDuplicateShortcuts(const QString& key,
                                        const QString& context,
                                        DuplicateData& duplicates) const
 {
+    duplicates.clear();
     std::set<QKeySequence> newKS;
     std::set<QKeySequence> oldKS = getShortcuts(key);
     if (resetToDefault) {
@@ -173,6 +179,13 @@ void ActionData::getDuplicateShortcuts(const QString& key,
                 RG_DEBUG << "found duplicate for" << ks << mkey;
                 KeyDuplicate kdup;
                 kdup.key = mkey;
+                const ActionInfo& mainfo = m_actionMap.at(mkey);
+                QString textAdj = mainfo.text;
+                textAdj.remove("&");
+                kdup.actionText = textAdj;
+                QStringList mklist = mkey.split(":");
+                QString mfile = mklist[0];
+                kdup.context = m_contextMap.at(mfile);
                 kdups.push_back(kdup);
             }
         }
@@ -339,15 +352,16 @@ bool ActionData::startElement(const QString&,
             if (text != "") ainfo.text = translate(text);
             if (icon != "") ainfo.icon = icon;
             if (shortcut != "") {
+                RG_DEBUG << "read xml xmlshortcut" << shortcut;
                 QStringList shortcuts = shortcut.split(", ");
                 for (int i = 0; i < shortcuts.size(); i++) {
                     RG_DEBUG << "read xml shortcut for" << key <<
                         QKeySequence(shortcuts.at(i));
                     ainfo.shortcuts.insert(QKeySequence(shortcuts.at(i)));
                 }
+                RG_DEBUG << "read xml number of shortcuts" << key
+                         << ainfo.shortcuts.size();
             }
-            RG_DEBUG << "read xml number of shortcuts" << key
-                     << ainfo.shortcuts.size();
             if (tooltip != "") ainfo.tooltip = tooltip;
             RG_DEBUG << "data" << m_currentMenus << m_currentToolbar <<
                 actionName << icon <<
@@ -530,11 +544,14 @@ void ActionData::fillModel()
         QString scString = kssl.join(", ");
 
         m_model->setData(m_model->index(0, 4), scString);
+        QStandardItem* item = new QStandardItem;
         if (userDefined) {
-            QStandardItem* item = new QStandardItem;
             item->setIcon(udPixmap);
-            m_model->setItem(0, 3, item);
+            item->setText(" "); // for sorting
+        } else {
+            item->setText("");
         }
+            m_model->setItem(0, 3, item);
     }
 }
 
@@ -571,8 +588,10 @@ void ActionData::updateModel(const QString& changedKey)
             }
             if (userDefined) {
                 item->setIcon(udPixmap);
+                item->setText(" "); // for sorting
             } else {
                 item->setIcon(noPixmap);
+                item->setText("");
             }
         }
         row -= 1;

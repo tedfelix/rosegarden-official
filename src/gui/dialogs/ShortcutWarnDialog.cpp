@@ -20,15 +20,51 @@
 
 #include "ShortcutWarnDialog.h"
 
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QFrame>
+
 namespace Rosegarden
 {
 
-    ShortcutWarnDialog::ShortcutWarnDialog(QWidget *parent,
-                                           ActionData::DuplicateData ddata)
+    ShortcutWarnDialog::ShortcutWarnDialog(ActionData::DuplicateData ddata)
 {
     setModal(true);
     setWindowTitle(tr("Shortcut warnings"));
     
+    QVBoxLayout *layout = new QVBoxLayout;
+    setLayout(layout);
+
+    foreach(auto dp, ddata) {
+        const QKeySequence& ks = (dp).first;
+        const ActionData::KeyDuplicates& kdups = (dp).second;
+        QLabel* ksl = new QLabel(ks.toString(QKeySequence::NativeText));
+        layout->addWidget(ksl);
+
+        foreach(auto kdup, kdups) {
+            QHBoxLayout* hlayout = new QHBoxLayout;
+            layout->addLayout(hlayout);
+            QLabel* cLabel = new QLabel(kdup.context);
+            QLabel* aLabel = new QLabel(kdup.actionText);
+            hlayout->addWidget(cLabel);
+            hlayout->addWidget(aLabel);
+        }
+
+        QFrame* line = new QFrame();
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+        layout->addWidget(line);
+    }
+    
+    QDialogButtonBox *buttonBox =
+        new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted,
+                     this, &QDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected,
+                     this, &QDialog::reject);
+    layout->addWidget(buttonBox);
 }
 
 ShortcutWarnDialog::~ShortcutWarnDialog()

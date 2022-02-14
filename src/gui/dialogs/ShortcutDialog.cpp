@@ -230,6 +230,14 @@ void ShortcutDialog::keySequenceEdited()
 {
     RG_DEBUG << "key sequence edited row:" << m_editRow <<
         "key: " << m_editKey;
+    // limit to just one shortcut
+    foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
+        QKeySequence ks = ksEdit->keySequence();
+        if (! ks.isEmpty()) {
+            QKeySequence singleKey(ks[0]);
+            ksEdit->setKeySequence(singleKey);
+        }
+    }
     m_setPB->setEnabled(true);
 }
 
@@ -255,8 +263,14 @@ void ShortcutDialog::setPBClicked()
                                      context, duplicates);
         if (! duplicates.empty()) {
             // ask the user
-            ShortcutWarnDialog warnDialog(this, duplicates);
-            warnDialog.exec();
+            ShortcutWarnDialog warnDialog(duplicates);
+            if (warnDialog.exec() == QDialog::Accepted) {
+                RG_DEBUG << "defPBClicked warnDialog accepted";
+            } else {
+                RG_DEBUG << "defPBClicked warnDialog rejected";
+                // do nothing
+                return;
+            }
         }
     }
     m_setPB->setEnabled(false);
@@ -283,8 +297,14 @@ void ShortcutDialog::defPBClicked()
                                      context, duplicates);
         if (! duplicates.empty()) {
             // ask the user
-            ShortcutWarnDialog warnDialog(this, duplicates);
-            warnDialog.exec();
+            ShortcutWarnDialog warnDialog(duplicates);
+            if (warnDialog.exec() == QDialog::Accepted) {
+                RG_DEBUG << "defPBClicked warnDialog accepted";
+            } else {
+                RG_DEBUG << "defPBClicked warnDialog rejected";
+                // do nothing
+                return;
+            }
         }
     }
     m_defPB->setEnabled(false);
