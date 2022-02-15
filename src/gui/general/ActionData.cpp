@@ -152,12 +152,19 @@ void ActionData::getDuplicateShortcuts(const QString& key,
                                        const QString& context,
                                        DuplicateData& duplicates) const
 {
-    duplicates.clear();
+    ActionInfo ainfo = m_actionMap.at(key);
+    QString etextAdj = ainfo.text;
+    QStringList eklist = key.split(":");
+    QString efile = eklist[0];
+    etextAdj.remove("&");
+    duplicates.editKey = key;
+    duplicates.editActionText = etextAdj;    
+    duplicates.editContext = m_contextMap.at(efile);
+    duplicates.duplicateMap.clear();
     std::set<QKeySequence> newKS;
     std::set<QKeySequence> oldKS = getShortcuts(key);
     if (resetToDefault) {
         // the new shortcuts are the defaults old ones are the present ones
-        ActionInfo ainfo = m_actionMap.at(key);
         newKS = ainfo.shortcuts;
     } else {
         // ksSet is the new shortcut set the old one is the present one
@@ -196,7 +203,7 @@ void ActionData::getDuplicateShortcuts(const QString& key,
             }
         }
         if (! kdups.empty()) {
-            duplicates[ks] = kdups;
+            duplicates.duplicateMap[ks] = kdups;
         }
     }
 }

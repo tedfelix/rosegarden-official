@@ -32,7 +32,25 @@ class ShortcutWarnDialog : public QDialog
  public:
     ShortcutWarnDialog(ActionData::DuplicateData ddata);
     ~ShortcutWarnDialog();
+
+ private:
+    struct KeyDuplicateButton
+    {
+        QString key;
+        QPushButton* button;
+    };
+
+    typedef std::list<KeyDuplicateButton> KeyDuplicateButtons;
     
+    struct DuplicateButtons
+    {
+        QString editKey;
+        QPushButton* editButton;
+        std::map<QKeySequence, KeyDuplicateButtons> duplicateButtonMap;
+    };
+
+    
+    DuplicateButtons m_duplicateButtons;
 };
 
 }

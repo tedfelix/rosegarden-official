@@ -46,7 +46,14 @@ public:
     };
 
     typedef std::list<KeyDuplicate> KeyDuplicates;
-    typedef std::map<QKeySequence, KeyDuplicates> DuplicateData;
+
+    struct DuplicateData
+    {
+        QString editKey;
+        QString editActionText;
+        QString editContext;
+        std::map<QKeySequence, KeyDuplicates> duplicateMap;
+    };
     
     QStandardItemModel* getModel();
     QString getKey(int row) const;

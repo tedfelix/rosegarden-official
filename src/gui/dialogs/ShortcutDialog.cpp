@@ -261,7 +261,7 @@ void ShortcutDialog::setPBClicked()
         ActionData::DuplicateData duplicates;
         adata->getDuplicateShortcuts(m_editKey, ksSet, false,
                                      context, duplicates);
-        if (! duplicates.empty()) {
+        if (! duplicates.duplicateMap.empty()) {
             // ask the user
             ShortcutWarnDialog warnDialog(duplicates);
             if (warnDialog.exec() == QDialog::Accepted) {
@@ -295,7 +295,7 @@ void ShortcutDialog::defPBClicked()
         ActionData::DuplicateData duplicates;
         adata->getDuplicateShortcuts(m_editKey, ksSet, true,
                                      context, duplicates);
-        if (! duplicates.empty()) {
+        if (! duplicates.duplicateMap.empty()) {
             // ask the user
             ShortcutWarnDialog warnDialog(duplicates);
             if (warnDialog.exec() == QDialog::Accepted) {
@@ -381,6 +381,7 @@ void ShortcutDialog::editRow()
         RG_DEBUG << "set keysequence" << ks;
         ksEdit->setKeySequence(ks);
     }
+    m_setPB->setEnabled(false);
     RG_DEBUG << "editRow is default:" << adata->isDefault(m_editKey, ksSet);
     if (adata->isDefault(m_editKey, ksSet)) {
         m_defPB->setEnabled(false);

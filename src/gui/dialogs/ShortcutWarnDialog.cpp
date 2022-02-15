@@ -21,9 +21,9 @@
 #include "ShortcutWarnDialog.h"
 
 #include <QDialogButtonBox>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QLabel>
+#include <QPushButton>
 #include <QFrame>
 
 namespace Rosegarden
@@ -34,28 +34,47 @@ namespace Rosegarden
     setModal(true);
     setWindowTitle(tr("Shortcut warnings"));
     
-    QVBoxLayout *layout = new QVBoxLayout;
+    QGridLayout* layout = new QGridLayout;
     setLayout(layout);
 
-    foreach(auto dp, ddata) {
+    int row = 0;
+    QLabel *ecLabel = new QLabel(ddata.editContext);
+    QLabel *eaLabel = new QLabel(ddata.editActionText);
+    layout->addWidget(ecLabel, row, 0);
+    layout->addWidget(eaLabel, row, 1);
+    row++;
+    foreach(auto dp, ddata.duplicateMap) {
         const QKeySequence& ks = (dp).first;
         const ActionData::KeyDuplicates& kdups = (dp).second;
         QLabel* ksl = new QLabel(ks.toString(QKeySequence::NativeText));
-        layout->addWidget(ksl);
-
+        QPushButton *ebutton = new QPushButton(tr("set Shortcut"));
+        m_duplicateButtons.editKey = ddata.editKey;
+        m_duplicateButtons.editButton = ebutton;
+        ebutton->setCheckable(true);
+        layout->addWidget(ksl, row, 0, 1, 2);
+        layout->addWidget(ebutton, row, 2);
+        row++;
+        
         foreach(auto kdup, kdups) {
-            QHBoxLayout* hlayout = new QHBoxLayout;
-            layout->addLayout(hlayout);
             QLabel* cLabel = new QLabel(kdup.context);
             QLabel* aLabel = new QLabel(kdup.actionText);
-            hlayout->addWidget(cLabel);
-            hlayout->addWidget(aLabel);
+            QPushButton *button = new QPushButton(tr("remove Shortcut"));
+            KeyDuplicateButton kdb;
+            kdb.key = kdup.key;
+            kdb.button = button;
+            m_duplicateButtons.duplicateButtonMap[ks].push_back(kdb);
+            button->setCheckable(true);
+            layout->addWidget(cLabel, row, 0);
+            layout->addWidget(aLabel, row, 1);
+            layout->addWidget(button, row, 2);
+            row++;
         }
 
         QFrame* line = new QFrame();
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
-        layout->addWidget(line);
+        layout->addWidget(line, row, 0, 1, 3);
+        row++;
     }
     
     QDialogButtonBox *buttonBox =
@@ -64,7 +83,7 @@ namespace Rosegarden
                      this, &QDialog::accept);
     QObject::connect(buttonBox, &QDialogButtonBox::rejected,
                      this, &QDialog::reject);
-    layout->addWidget(buttonBox);
+    layout->addWidget(buttonBox, row, 0, 1, 3);
 }
 
 ShortcutWarnDialog::~ShortcutWarnDialog()
