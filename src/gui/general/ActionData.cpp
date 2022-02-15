@@ -81,9 +81,15 @@ void ActionData::saveUserShortcuts()
     for (auto it = m_userShortcuts.begin(); it != m_userShortcuts.end(); it++) {
         const QString& key = (*it).first;
         const KeySet& keySet = (*it).second;
+        if (keySet.empty()) {
+            QString skey = key + QString::number(0);
+            RG_DEBUG << "settings set" << skey << "";
+            settings.setValue(skey, "");
+        }
         int index = 0;
         foreach(auto keyseq, keySet) {
             QString skey = key + QString::number(index);
+            RG_DEBUG << "settings set" << skey << keyseq;
             settings.setValue(skey, keyseq);
             index++;
         }
