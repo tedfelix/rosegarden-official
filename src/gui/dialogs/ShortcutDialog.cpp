@@ -252,6 +252,10 @@ void ShortcutDialog::setPBClicked()
             ksSet.insert(ks);
         }
     }
+
+    bool shortcutsSet = false;
+    // setting a shortcut may change the selection
+    m_selectionChanged = false;
     if (m_warnType != None) {
         QString context = "";
         if (m_warnType == SameContext) {
@@ -266,6 +270,8 @@ void ShortcutDialog::setPBClicked()
             ShortcutWarnDialog warnDialog(duplicates);
             if (warnDialog.exec() == QDialog::Accepted) {
                 RG_DEBUG << "defPBClicked warnDialog accepted";
+                // the shortcuts have been changed by the warnDialog
+                shortcutsSet = true;
             } else {
                 RG_DEBUG << "defPBClicked warnDialog rejected";
                 // do nothing
@@ -274,8 +280,9 @@ void ShortcutDialog::setPBClicked()
         }
     }
     m_setPB->setEnabled(false);
-    m_selectionChanged = false;
-    adata->setUserShortcuts(m_editKey, ksSet);
+    if (! shortcutsSet) {
+        adata->setUserShortcuts(m_editKey, ksSet);
+    }
 
     // If the selection has not changed - refresh edit data
     if (! m_selectionChanged) editRow();

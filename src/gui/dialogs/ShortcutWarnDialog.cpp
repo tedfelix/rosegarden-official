@@ -20,6 +20,9 @@
 
 #include "ShortcutWarnDialog.h"
 
+#include "misc/Debug.h"
+#include "gui/general/ActionData.h"
+
 #include <QDialogButtonBox>
 #include <QGridLayout>
 #include <QLabel>
@@ -37,6 +40,7 @@ namespace Rosegarden
     QGridLayout* layout = new QGridLayout;
     setLayout(layout);
 
+    m_duplicateButtons.editKey = ddata.editKey;
     int row = 0;
     QLabel *ecLabel = new QLabel(ddata.editContext);
     QLabel *eaLabel = new QLabel(ddata.editActionText);
@@ -48,9 +52,9 @@ namespace Rosegarden
         const ActionData::KeyDuplicates& kdups = (dp).second;
         QLabel* ksl = new QLabel(ks.toString(QKeySequence::NativeText));
         QPushButton *ebutton = new QPushButton(tr("set Shortcut"));
-        m_duplicateButtons.editKey = ddata.editKey;
-        m_duplicateButtons.editButton = ebutton;
         ebutton->setCheckable(true);
+        KeyDuplicateButtons keyDupButtons;
+        keyDupButtons.editButton = ebutton;
         layout->addWidget(ksl, row, 0, 1, 2);
         layout->addWidget(ebutton, row, 2);
         row++;
@@ -59,16 +63,17 @@ namespace Rosegarden
             QLabel* cLabel = new QLabel(kdup.context);
             QLabel* aLabel = new QLabel(kdup.actionText);
             QPushButton *button = new QPushButton(tr("remove Shortcut"));
+            button->setCheckable(true);
             KeyDuplicateButton kdb;
             kdb.key = kdup.key;
             kdb.button = button;
-            m_duplicateButtons.duplicateButtonMap[ks].push_back(kdb);
-            button->setCheckable(true);
+            keyDupButtons.buttonList.push_back(kdb);
             layout->addWidget(cLabel, row, 0);
             layout->addWidget(aLabel, row, 1);
             layout->addWidget(button, row, 2);
             row++;
         }
+        m_duplicateButtons.duplicateButtonMap[ks] = keyDupButtons;
 
         QFrame* line = new QFrame();
         line->setFrameShape(QFrame::HLine);
@@ -80,7 +85,7 @@ namespace Rosegarden
     QDialogButtonBox *buttonBox =
         new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     QObject::connect(buttonBox, &QDialogButtonBox::accepted,
-                     this, &QDialog::accept);
+                     this, &ShortcutWarnDialog::OKclicked);
     QObject::connect(buttonBox, &QDialogButtonBox::rejected,
                      this, &QDialog::reject);
     layout->addWidget(buttonBox, row, 0, 1, 3);
@@ -88,6 +93,33 @@ namespace Rosegarden
 
 ShortcutWarnDialog::~ShortcutWarnDialog()
 {
+}
+
+void ShortcutWarnDialog::OKclicked()
+{
+    // do what the user wants
+    RG_DEBUG << "OKclicked";
+    ActionData* adata = ActionData::getInstance();
+    foreach(auto pair, m_duplicateButtons.duplicateButtonMap) {
+        const QKeySequence& ks = pair.first;
+        const KeyDuplicateButtons& keyDupButtons = pair.second;
+        RG_DEBUG << "editButton checked:" <<
+            keyDupButtons.editButton->isChecked();
+        if (keyDupButtons.editButton->isChecked()) {
+            RG_DEBUG << "setting shortcut" << ks <<
+                "for" << m_duplicateButtons.editKey;
+            adata->addUserShortcut(m_duplicateButtons.editKey, ks);
+        }
+        foreach(auto kdb, keyDupButtons.buttonList) {
+            if (kdb.button->isChecked()) {
+                RG_DEBUG << "removing shorcut" << ks <<
+                    "from" << kdb.key;
+                adata->removeUserShortcut(kdb.key, ks);
+            }
+        }
+    }
+    
+    accept();
 }
 
 }

@@ -115,6 +115,32 @@ void ActionData::setUserShortcuts(const QString& key,
     updateModel(key);
 }
 
+void ActionData::addUserShortcut(const QString& key,
+                                 const QKeySequence& ks)
+{
+    RG_DEBUG << "add shortcut" << ks << "to" << key;
+    auto iter = m_userShortcuts.find(key);
+    if (iter == m_userShortcuts.end()) {
+        // no user shortcut yet
+        std::set<QKeySequence> ksSet;
+        ksSet.insert(ks);
+        setUserShortcuts(key, ksSet);
+    } else {
+        std::set<QKeySequence> ksSet = (*iter).second;
+        ksSet.insert(ks);
+        setUserShortcuts(key, ksSet);
+    }
+}
+    
+void ActionData::removeUserShortcut(const QString& key,
+                                    const QKeySequence& ks)
+{
+    RG_DEBUG << "remove shortcut" << ks << "from" << key;
+    std::set<QKeySequence> ksSet = getShortcuts(key);
+    ksSet.erase(ks);
+    setUserShortcuts(key, ksSet);
+}
+    
 void ActionData::removeUserShortcuts(const QString& key)
 {
     RG_DEBUG << "removeUserShortcuts for" << key;
