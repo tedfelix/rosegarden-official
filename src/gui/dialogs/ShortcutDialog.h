@@ -52,6 +52,7 @@ class ShortcutDialog : public QDialog
     void keySequenceEdited();
     void setPBClicked();
     void defPBClicked();
+    void clearPBClicked();
     void warnSettingChanged(int index);
     
  private:
@@ -70,6 +71,7 @@ class ShortcutDialog : public QDialog
     QLabel *m_ilabel;
     QPushButton *m_setPB;
     QPushButton *m_defPB;
+    QPushButton *m_clearPB;
     QLabel *m_warnLabel;
     QComboBox *m_warnSetting;
     std::list<QKeySequenceEdit*> m_ksEditList;

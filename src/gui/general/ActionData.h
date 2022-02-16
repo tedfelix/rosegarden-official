@@ -73,6 +73,9 @@ public:
                                bool resetToDefault,
                                const QString& context,
                                DuplicateData& duplicates) const;
+
+    void resetChanges();
+    bool dataChanged() const;
     
  private:
     ActionData();
@@ -107,6 +110,7 @@ public:
         QString icon;
         std::set<QKeySequence> shortcuts;
         QString tooltip;
+        bool global;
     };
     
     typedef std::set<QKeySequence> KeySet;
@@ -129,6 +133,7 @@ public:
     std::map<QString, QString> m_contextMap;
     std::deque<QString> m_keyStore;
     std::map<QString, KeySet> m_userShortcuts;
+    std::map<QString, KeySet> m_userShortcutsCopy;
     QStandardItemModel* m_model;
     
     static ActionData* m_instance;

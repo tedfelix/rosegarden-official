@@ -38,6 +38,7 @@
 #include <QKeySequenceEdit>
 #include <QPushButton>
 #include <QComboBox>
+#include <QMessageBox>
 
 namespace Rosegarden
 {
@@ -51,6 +52,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     setWindowTitle(tr("Shortcuts"));
     
     ActionData* adata = ActionData::getInstance();
+    adata->resetChanges();
     m_model = adata->getModel();
     
     m_proxyModel = new QSortFilterProxyModel;
@@ -90,7 +92,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
 
     QLabel* helpLabel = new QLabel;
     helpLabel->setWordWrap(true);
-    helpLabel->setText(tr("To edit a shortcut select the action in the table below. To change a shortcut click on the shortcut and press the new key sequence. To reomve a shortcut press and release ctrl alt or shift. Press \"set Shortcuts\" to make the change. Changes will take effect affter restarting Rosegarden"));
+    helpLabel->setText(tr("To edit a shortcut select the action in the table below. To change a shortcut click on the shortcut and press the new key sequence. To reomve a shortcut press and release ctrl alt or shift. Press \"set Shortcuts\" to make the change. Changes will take effect in new windows and after restarting Rosegarden. Note - some actions are global and valid for all windows. These are marked with a light blue background."));
     mainLayout->addWidget(helpLabel);
                        
     m_proxyView->sortByColumn(0, Qt::AscendingOrder);
@@ -143,6 +145,10 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     connect(m_defPB, SIGNAL(clicked()),
             this, SLOT(defPBClicked()));
     m_defPB->setEnabled(false);
+    m_clearPB = new QPushButton(tr("Remove all shortcuts"));
+    connect(m_clearPB, SIGNAL(clicked()),
+            this, SLOT(clearPBClicked()));
+    m_clearPB->setEnabled(false);
 
     m_warnLabel = new QLabel(tr("Warnings when:"));
     m_warnSetting = new QComboBox;
@@ -161,6 +167,8 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     hlayout3->addWidget(m_setPB);
     hlayout3->addStretch();
     hlayout3->addWidget(m_defPB);
+    hlayout3->addStretch();
+    hlayout3->addWidget(m_clearPB);
     hlayout3->addStretch();
     hlayout3->addWidget(m_warnLabel);
     hlayout3->addWidget(m_warnSetting);
@@ -193,6 +201,11 @@ ShortcutDialog::~ShortcutDialog()
     // save any changes to settings
     ActionData* adata = ActionData::getInstance();
     adata->saveUserShortcuts();
+    if (adata->dataChanged()) {
+        QMessageBox::information(this,
+                                 tr("Shortcuts changed"),
+                                 tr("Some shortcuts have changed. These will only take effect in new windows. Restart Rosegarden for all changes to take effect"));
+    }
 }
 
 void ShortcutDialog::filterChanged()
@@ -212,6 +225,7 @@ void ShortcutDialog::selectionChanged(const QItemSelection& selected,
         }
         m_setPB->setEnabled(false);
         m_defPB->setEnabled(false);
+        m_clearPB->setEnabled(false);
         m_editRow = -1;
         m_editKey = "";
         editRow(); // to reset the edit data
@@ -322,6 +336,16 @@ void ShortcutDialog::defPBClicked()
     if (! m_selectionChanged) editRow();
 }
 
+void ShortcutDialog::clearPBClicked()
+{
+    RG_DEBUG << "remove all shortcuts";
+    ActionData* adata = ActionData::getInstance();
+    std::set<QKeySequence> ksSet;
+    m_selectionChanged = false;
+    adata->setUserShortcuts(m_editKey, ksSet);
+    if (! m_selectionChanged) editRow();
+}
+
 void ShortcutDialog::warnSettingChanged(int index)
 {
     RG_DEBUG << "warnSettingChanged" << index;
@@ -395,6 +419,7 @@ void ShortcutDialog::editRow()
     } else {
         m_defPB->setEnabled(true);
     }
+    m_clearPB->setEnabled(! ksSet.empty());
 }
 
 }

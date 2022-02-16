@@ -207,18 +207,19 @@ void ActionData::getDuplicateShortcuts(const QString& key,
         KeyDuplicates kdups;
         for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
             const QString& mkey = (*i).first;
+            const ActionInfo& mainfo = m_actionMap.at(mkey);
             // ignore passed key
             if (mkey == key) continue;
             QStringList mklist = mkey.split(":");
             QString mcontext = mklist[0];
-            if (context != "" && mcontext != context) continue;
+            bool contextRelevant = (mcontext == context || mainfo.global);
+            if (context != "" && ! contextRelevant) continue;
             std::set<QKeySequence> mKSL = getShortcuts(mkey);
             if (mKSL.find(ks) != mKSL.end()) {
                 // this entry also uses the KeySequence ks
                 RG_DEBUG << "found duplicate for" << ks << mkey;
                 KeyDuplicate kdup;
                 kdup.key = mkey;
-                const ActionInfo& mainfo = m_actionMap.at(mkey);
                 QString textAdj = mainfo.text;
                 textAdj.remove("&");
                 kdup.actionText = textAdj;
@@ -232,6 +233,16 @@ void ActionData::getDuplicateShortcuts(const QString& key,
             duplicates.duplicateMap[ks] = kdups;
         }
     }
+}
+
+void ActionData::resetChanges()
+{
+    m_userShortcutsCopy = m_userShortcuts;
+}
+    
+bool ActionData::dataChanged() const
+{
+    return (m_userShortcutsCopy != m_userShortcuts);
 }
     
 ActionData::ActionData() :
@@ -308,6 +319,7 @@ ActionData::ActionData() :
         m_userShortcuts[dataKey].insert(keySeq);
     }
     settings.endGroup();
+    m_userShortcutsCopy = m_userShortcuts;
 }
 
 bool ActionData::startDocument()
@@ -383,6 +395,7 @@ bool ActionData::startElement(const QString&,
             if (it == m_actionMap.end()) {
                 // new action
                 ActionInfo ainfo;
+                ainfo.global = false;
                 m_actionMap[key] = ainfo;
             }
             ActionInfo& ainfo = m_actionMap[key];
@@ -401,6 +414,7 @@ bool ActionData::startElement(const QString&,
                 RG_DEBUG << "read xml number of shortcuts" << key
                          << ainfo.shortcuts.size();
             }
+            if (shortcutContext == "application") ainfo.global = true;
             if (tooltip != "") ainfo.tooltip = tooltip;
             RG_DEBUG << "data" << m_currentMenus << m_currentToolbar <<
                 actionName << icon <<
@@ -590,7 +604,15 @@ void ActionData::fillModel()
         } else {
             item->setText("");
         }
-            m_model->setItem(0, 3, item);
+        m_model->setItem(0, 3, item);
+        if (ainfo.global) {
+            QVariant bg(QBrush(Qt::cyan));
+            m_model->setData(m_model->index(0, 0), bg, Qt::BackgroundRole);
+            m_model->setData(m_model->index(0, 1), bg, Qt::BackgroundRole);
+            m_model->setData(m_model->index(0, 2), bg, Qt::BackgroundRole);
+            m_model->setData(m_model->index(0, 3), bg, Qt::BackgroundRole);
+            m_model->setData(m_model->index(0, 4), bg, Qt::BackgroundRole);
+        }
     }
 }
 
