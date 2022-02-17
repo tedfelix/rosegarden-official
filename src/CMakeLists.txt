@@ -22,7 +22,6 @@ include_directories(
 )
 
 set(rg_OPTIONAL_LIBS )
-set(rg_OPTIONAL_LIB_DIRS )
 
 # For each optional dependency: if found, set a -D definition, a -I include path, and add lib to the list
 if(SNDFILE_FOUND)
@@ -35,7 +34,6 @@ if(JACK_FOUND)
     include_directories(${JACK_INCLUDE_DIRS})
     add_definitions(-DHAVE_LIBJACK)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${JACK_LIBRARIES})
-    set(rg_OPTIONAL_LIB_DIRS ${rg_OPTIONAL_LIB_DIRS} ${JACK_LIBRARY_DIRS})
 endif()
 
 if(LIRCCLIENT_FOUND)
@@ -872,10 +870,6 @@ target_link_libraries(rosegardenprivate
   ${FFTW3F_LIBRARIES}
   ${SAMPLERATE_LIBRARIES}
   ${rg_OPTIONAL_LIBS}
-)
-target_link_directories(rosegardenprivate
-  PUBLIC
-  ${rg_OPTIONAL_LIB_DIRS}
 )
 
 #########################
