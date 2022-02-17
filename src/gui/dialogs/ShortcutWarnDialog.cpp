@@ -42,6 +42,8 @@ namespace Rosegarden
     setLayout(hLayout);
     
     QFrame* scrollFrame = new QFrame;
+    // make room for scrollbar
+    scrollFrame->setContentsMargins(0, 0, 20, 0);
 
     QScrollArea* scrollArea = new QScrollArea;
     scrollArea->setWidgetResizable(true);
