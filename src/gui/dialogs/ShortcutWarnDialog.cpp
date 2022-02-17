@@ -28,6 +28,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QFrame>
+#include <QScrollArea>
 
 namespace Rosegarden
 {
@@ -37,8 +38,20 @@ namespace Rosegarden
     setModal(true);
     setWindowTitle(tr("Shortcut warnings"));
     
+    QHBoxLayout *hLayout = new QHBoxLayout;
+    setLayout(hLayout);
+    
+    QFrame* scrollFrame = new QFrame;
+
+    QScrollArea* scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setWidget(scrollFrame);
+    hLayout->addWidget(scrollArea);
+
     QGridLayout* layout = new QGridLayout;
-    setLayout(layout);
+    scrollFrame->setLayout(layout);
 
     m_duplicateButtons.editKey = ddata.editKey;
     int row = 0;
