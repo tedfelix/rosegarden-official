@@ -62,7 +62,7 @@ namespace
         QString path2 = path;
 
         // Add a trailing "/" if needed.
-        if (path2.at(path2.size()-1) != '/')
+        if (!path2.endsWith('/'))
             path2 += "/";
 
         return path2;
