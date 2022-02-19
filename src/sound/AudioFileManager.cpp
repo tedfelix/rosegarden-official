@@ -335,9 +335,9 @@ AudioFileManager::setRelativeAudioPath(
         newRelativePath = ".";
 
     // If the path doesn't start with "~", "/", or "."...
-    if (newRelativePath.front() != '/'  &&
-        newRelativePath.front() != '~'  &&
-        newRelativePath.front() != '.') {
+    if (!newRelativePath.startsWith('/') &&
+        !newRelativePath.startsWith('~') &&
+        !newRelativePath.startsWith('.')) {
         // Use the document path.
         newRelativePath = "./" + newRelativePath;
     }
