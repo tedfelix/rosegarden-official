@@ -244,6 +244,11 @@ bool ActionData::dataChanged() const
 {
     return (m_userShortcutsCopy != m_userShortcuts);
 }
+
+void ActionData::undoChanges()
+{
+    m_userShortcuts = m_userShortcutsCopy;
+}
     
 ActionData::ActionData() :
     m_model(0)

@@ -39,6 +39,7 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QMessageBox>
+#include <QDialogButtonBox>
 
 namespace Rosegarden
 {
@@ -177,12 +178,20 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
+
+    QDialogButtonBox *buttonBox =
+        new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted,
+                     this, &QDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected,
+                     this, &ShortcutDialog::reject);
     
     mainLayout->addLayout(hlayout);
     mainLayout->addLayout(hlayout2);
     mainLayout->addLayout(hlayout3);
     mainLayout->addWidget(line);
     mainLayout->addLayout(proxyLayout);
+    mainLayout->addWidget(buttonBox);
 }
 
 ShortcutDialog::~ShortcutDialog()
@@ -355,6 +364,14 @@ void ShortcutDialog::warnSettingChanged(int index)
     //settings.value("shortcut_warnings");
     settings.setValue("shortcut_warnings", m_warnSetting->currentIndex());
     settings.endGroup();
+}
+
+void ShortcutDialog::reject()
+{
+    // if cancel is pressed we must undo all the changes
+    ActionData* adata = ActionData::getInstance();
+    adata->undoChanges();
+    QDialog::reject();
 }
             
 void ShortcutDialog::editRow()

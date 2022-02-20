@@ -76,6 +76,7 @@ public:
 
     void resetChanges();
     bool dataChanged() const;
+    void undoChanges();
     
  private:
     ActionData();

@@ -54,6 +54,7 @@ class ShortcutDialog : public QDialog
     void defPBClicked();
     void clearPBClicked();
     void warnSettingChanged(int index);
+    void reject() override;
     
  private:
     enum WarningType { None, SameContext, AllContexts };
