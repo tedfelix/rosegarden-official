@@ -166,7 +166,12 @@ pkg_check_modules(SAMPLERATE REQUIRED samplerate>=0.1.2)
 pkg_check_modules(SNDFILE sndfile>=1.0.16)
 add_feature_info(SNDFILE SNDFILE_FOUND "Better support for WAV files")
 
-pkg_check_modules(JACK jack)
+pkg_check_modules(PC_JACK jack)
+# Use find_library to turn it into a full path
+find_library(JACK_LIBRARIES NAMES ${PC_JACK_LIBRARIES} jack PATHS ${PC_JACK_LIBRARY_DIRS})
+if(JACK_LIBRARIES)
+    set(JACK_FOUND TRUE)
+endif()
 if(JACK_FOUND)
     add_feature_info(JACK JACK_FOUND "Library for accessing the JACK server (http://jackaudio.org).")
 else()
