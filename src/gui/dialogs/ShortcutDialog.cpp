@@ -56,7 +56,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     adata->resetChanges();
     m_model = adata->getModel();
     
-    m_proxyModel = new QSortFilterProxyModel;
+    m_proxyModel = new QSortFilterProxyModel(this);
     m_proxyModel->setSourceModel(m_model);
     m_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_proxyModel->setFilterKeyColumn(-1);
