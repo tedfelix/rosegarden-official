@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionFileParser]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "ActionFileParser.h"
 
@@ -40,7 +40,7 @@
 
 namespace Rosegarden
 {
-   
+
 ActionFileParser::ActionFileParser(QObject *actionOwner) :
     m_actionOwner(actionOwner),
     m_inMenuBar(false),
@@ -97,16 +97,16 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
     QString name = qName.toLower();
 
     if (name == "menubar") {
-        
+
         m_inMenuBar = true;
-        
+
     } else if (name == "menu") {
 
         QString menuName = atts.value("name").toString();
         if (menuName == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No menu name provided in menu element";
         }
-        
+
         if (m_inEnable) {
             enableMenuInState(m_currentState, menuName);
         } else if (m_inDisable) {
@@ -182,7 +182,7 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
         if (group != "") setActionGroup(actionName, group);
         if (checked != "") setActionChecked(actionName,
             checked.toLower() == "true");
-        
+
         // this can appear in menu, toolbar, state/enable, state/disable,
         // state/visible, state/invisible
 
@@ -255,9 +255,9 @@ ActionFileParser::endElement(const QString& /* namespaceURI */,
     QString name = qName.toLower();
 
     if (name == "menubar") {
-        
+
         m_inMenuBar = false;
-        
+
     } else if (name == "menu") {
 
         m_currentMenus.pop_back();
@@ -279,26 +279,26 @@ ActionFileParser::endElement(const QString& /* namespaceURI */,
         }
 
     } else if (name == "state") {
-        
+
         m_currentState = "";
 
     } else if (name == "enable") {
-        
+
         m_inEnable = false;
 
     } else if (name == "disable") {
-        
+
         m_inDisable = false;
 
     } else if (name == "visible") {
-        
+
         m_inVisible = false;
 
     } else if (name == "invisible") {
-        
+
         m_inInvisible = false;
     }
-        
+
     return true;
 }
 
@@ -423,10 +423,10 @@ ActionFileParser::translate(QString text,
     // These translations are extracted from data/ui/*.rc files via
     // scripts/extract*.pl and pulled into the QObject translation context in
     // one great lump.
-    
+
     if (!disambiguation.isEmpty()) return QObject::tr(text.toStdString().c_str(), disambiguation.toStdString().c_str());
     else return QObject::tr(text.toStdString().c_str());
-}                                       
+}
 
 bool
 ActionFileParser::setActionText(QString actionName, QString text)
@@ -479,7 +479,7 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
     RG_DEBUG << "setActionShortcut default shortcut for" << actionName <<
         "key:" << key <<
         "is" << shortcut << "setting shortcuts" << shortcutList;
-    
+
     action->setShortcuts(shortcutList);
 
     /*
@@ -857,7 +857,7 @@ ActionFileParser::slotObjectDestroyed()
 
 ActionFileMenuWrapper::ActionFileMenuWrapper(QMenu *menu, QObject *parent) :
     QObject(parent),
-    m_menu(menu) 
+    m_menu(menu)
 {
     setObjectName(menu->objectName());
 }

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ShortcutDialog]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "ShortcutDialog.h"
 
@@ -51,43 +51,43 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
 {
     setModal(true);
     setWindowTitle(tr("Shortcuts"));
-    
+
     ActionData* adata = ActionData::getInstance();
     adata->resetChanges();
     m_model = adata->getModel();
-    
+
     m_proxyModel = new QSortFilterProxyModel(this);
     m_proxyModel->setSourceModel(m_model);
     m_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_proxyModel->setFilterKeyColumn(-1);
-    
+
     m_proxyView = new QTreeView;
     m_proxyView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_proxyView->setRootIsDecorated(false);
     m_proxyView->setAlternatingRowColors(true);
     m_proxyView->setModel(m_proxyModel);
     m_proxyView->setSortingEnabled(true);
-    
+
     connect(m_proxyView->selectionModel(),
             SIGNAL(selectionChanged(const QItemSelection&,
                                     const QItemSelection&)),
             this,
             SLOT(selectionChanged(const QItemSelection&,
                                   const QItemSelection&)));
-    
+
     m_filterPatternLineEdit = new QLineEdit;
     m_filterPatternLabel = new QLabel(tr("Filter pattern:"));
-    
+
     connect(m_filterPatternLineEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(filterChanged()));
-    
+
     QGridLayout *proxyLayout = new QGridLayout;
     proxyLayout->addWidget(m_filterPatternLabel, 0, 0);
     proxyLayout->addWidget(m_filterPatternLineEdit, 0, 1, 1, 3);
     proxyLayout->addWidget(m_proxyView, 1, 0, 1, 4);
-    
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    
+
     setLayout(mainLayout);
     setWindowTitle(tr("Shortcuts"));
 
@@ -95,7 +95,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     helpLabel->setWordWrap(true);
     helpLabel->setText(tr("To edit a shortcut select the action in the table below. To change a shortcut click on the shortcut and press the new key sequence. To reomve a shortcut press and release ctrl alt or shift. Press \"set Shortcuts\" to make the change. Changes will take effect in new windows and after restarting Rosegarden. Note - some actions are global and valid for all windows. These are marked with a light blue background."));
     mainLayout->addWidget(helpLabel);
-                       
+
     m_proxyView->sortByColumn(0, Qt::AscendingOrder);
 
     QSettings settings;
@@ -123,7 +123,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     hlayout->addWidget(m_clabel);
     hlayout->addWidget(m_alabel);
     hlayout->addWidget(m_ilabel);
-    
+
     QHBoxLayout *hlayout2 = new QHBoxLayout;
     // up to 4  shortcuts
     m_ksEditList.push_back(new QKeySequenceEdit);
@@ -136,7 +136,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
                 this, SLOT(keySequenceEdited()));
         ksEdit->setEnabled(false);
     }
-    
+
     QHBoxLayout *hlayout3 = new QHBoxLayout;
     m_setPB = new QPushButton(tr("Set Shortcuts"));
     connect(m_setPB, SIGNAL(clicked()),
@@ -163,7 +163,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     m_warnSetting->setCurrentIndex
         (settings.value("shortcut_warnings", 1).toInt());
     settings.endGroup();
-    
+
     hlayout3->addStretch();
     hlayout3->addWidget(m_setPB);
     hlayout3->addStretch();
@@ -174,7 +174,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     hlayout3->addWidget(m_warnLabel);
     hlayout3->addWidget(m_warnSetting);
     hlayout3->addStretch();
-    
+
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
@@ -185,7 +185,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
                      this, &QDialog::accept);
     QObject::connect(buttonBox, &QDialogButtonBox::rejected,
                      this, &ShortcutDialog::reject);
-    
+
     mainLayout->addLayout(hlayout);
     mainLayout->addLayout(hlayout2);
     mainLayout->addLayout(hlayout3);
@@ -240,7 +240,7 @@ void ShortcutDialog::selectionChanged(const QItemSelection& selected,
         editRow(); // to reset the edit data
         return;
     }
-    
+
     QModelIndex index = indexes.first();
     int row = index.row();
     int column = index.column();
@@ -373,7 +373,7 @@ void ShortcutDialog::reject()
     adata->undoChanges();
     QDialog::reject();
 }
-            
+
 void ShortcutDialog::editRow()
 {
     RG_DEBUG << "editRow:" << m_editRow;
@@ -416,7 +416,7 @@ void ShortcutDialog::editRow()
         QPixmap noPixmap;
         m_ilabel->setPixmap(noPixmap);
     }
-    
+
     std::set<QKeySequence> ksSet = adata->getShortcuts(m_editKey);
     auto ksiter = ksSet.begin();
     foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {

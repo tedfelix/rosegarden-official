@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionData]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "ActionData.h"
 
@@ -30,7 +30,7 @@
 #include <QStandardItemModel>
 #include <QSettings>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 ActionData* ActionData::m_instance = 0;
@@ -42,7 +42,7 @@ ActionData* ActionData::getInstance()
     }
     return m_instance;
 }
-  
+
 ActionData::~ActionData()
 {
 }
@@ -131,7 +131,7 @@ void ActionData::addUserShortcut(const QString& key,
         setUserShortcuts(key, ksSet);
     }
 }
-    
+
 void ActionData::removeUserShortcut(const QString& key,
                                     const QKeySequence& ks)
 {
@@ -140,7 +140,7 @@ void ActionData::removeUserShortcut(const QString& key,
     ksSet.erase(ks);
     setUserShortcuts(key, ksSet);
 }
-    
+
 void ActionData::removeUserShortcuts(const QString& key)
 {
     RG_DEBUG << "removeUserShortcuts for" << key;
@@ -184,7 +184,7 @@ void ActionData::getDuplicateShortcuts(const QString& key,
     QString efile = eklist[0];
     etextAdj.remove("&");
     duplicates.editKey = key;
-    duplicates.editActionText = etextAdj;    
+    duplicates.editActionText = etextAdj;
     duplicates.editContext = m_contextMap.at(efile);
     duplicates.duplicateMap.clear();
     std::set<QKeySequence> newKS;
@@ -196,7 +196,7 @@ void ActionData::getDuplicateShortcuts(const QString& key,
         // ksSet is the new shortcut set the old one is the present one
         newKS = ksSet;
     }
-    
+
     std::set<QKeySequence> addedKS;
     std::set_difference(newKS.begin(), newKS.end(),
                         oldKS.begin(), oldKS.end(),
@@ -239,7 +239,7 @@ void ActionData::resetChanges()
 {
     m_userShortcutsCopy = m_userShortcuts;
 }
-    
+
 bool ActionData::dataChanged() const
 {
     return (m_userShortcutsCopy != m_userShortcuts);
@@ -249,7 +249,7 @@ void ActionData::undoChanges()
 {
     m_userShortcuts = m_userShortcutsCopy;
 }
-    
+
 ActionData::ActionData() :
     m_model(0)
 {
@@ -331,35 +331,35 @@ bool ActionData::startDocument()
 {
     return true;
 }
-    
+
 bool ActionData::startElement(const QString&,
                               const QString&,
                               const QString& qName,
                               const QXmlStreamAttributes& atts)
 {
     QString name = qName.toLower();
-    
+
     if (name == "menubar") {
-        
+
         m_inMenuBar = true;
-        
+
     } else if (name == "menu") {
-        
+
         QString menuName = atts.value("name").toString();
         if (menuName == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No menu name provided in menu element";
         }
-        
+
         m_currentMenus.push_back(menuName);
-        
+
     } else if (name == "toolbar") {
-        
+
         QString toolbarName = atts.value("name").toString();
         if (toolbarName == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No toolbar name provided in toolbar element";
         }
         m_currentToolbar = toolbarName;
-        
+
     } else if (name == "text") {
 
         // used to provide label for menu or title for toolbar, but
@@ -369,14 +369,14 @@ bool ActionData::startElement(const QString&,
             m_inText = true;
             m_currentText = "";
         }
-        
+
     } else if (name == "action") {
-        
+
         QString actionName = atts.value("name").toString();
         if (actionName == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No action name provided in action element";
         }
-        
+
         if (m_currentMenus.empty() && m_currentToolbar == "" &&
             (m_currentState == "" || (!m_inEnable && !m_inDisable
             && !m_inVisible && !m_inInvisible))) {
@@ -385,7 +385,7 @@ bool ActionData::startElement(const QString&,
                        << "\" appears outside (valid) menu, toolbar or state "
                        << "enable/disable/visible/invisible element";
         }
-        
+
         QString text = atts.value("text").toString();
         QString icon = atts.value("icon").toString();
         QString shortcut = atts.value("shortcut").toString();
@@ -433,7 +433,7 @@ bool ActionData::startElement(const QString&,
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No state name provided in state element";
         }
         m_currentState = stateName;
-        
+
     } else if (name == "enable") {
 
         if (m_currentState == "") {
@@ -450,30 +450,30 @@ bool ActionData::startElement(const QString&,
             m_inDisable = true;
         }
     } else if (name == "visible") {
-        
+
         if (m_currentState == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): Visible element appears outside state element";
         } else {
             m_inVisible = true;
         }
     } else if (name == "invisible") {
-        
+
         if (m_currentState == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): Invisible element appears outside state element";
         } else {
             m_inInvisible = true;
         }
     }
-    
+
     return true;
 }
-    
+
 bool ActionData::endElement(const QString&,
                             const QString&,
                             const QString& qName)
 {
     QString name = qName.toLower();
-    
+
     if (name == "menubar") {
         m_inMenuBar = false;
     } else if (name == "menu") {
@@ -495,21 +495,21 @@ bool ActionData::endElement(const QString&,
     } else if (name == "invisible") {
         m_inInvisible = false;
     }
-        
+
     return true;
 }
-    
+
 bool ActionData::characters(const QString& ch)
 {
     if (m_inText) m_currentText += ch;
     return true;
 }
-    
+
 bool ActionData::endDocument()
 {
     return true;
 }
-    
+
 bool ActionData::fatalError(int lineNumber, int columnNumber,
                             const QString& msg)
 {
@@ -519,12 +519,12 @@ bool ActionData::fatalError(int lineNumber, int columnNumber,
         .arg(lineNumber)
         .arg(columnNumber)
         .arg(m_currentFile);
-    
+
     RG_WARNING << errorString.toLocal8Bit().data();
-    
+
     return false;
 }
-    
+
 void ActionData::loadData(const QString& name)
 {
     QString file = ResourceFinder().getResourcePath("rc", name);
@@ -546,17 +546,17 @@ QString ActionData::translate(QString text, QString disambiguation) const
     // These translations are extracted from data/ui/*.rc files via
     // scripts/extract*.pl and pulled into the QObject translation context in
     // one great lump.
-    
+
     if (!disambiguation.isEmpty()) return QObject::tr(text.toStdString().c_str(), disambiguation.toStdString().c_str());
     else return QObject::tr(text.toStdString().c_str());
 }
-    
+
 void ActionData::fillModel()
 {
     m_keyStore.clear();
     m_model->clear();
     m_model->insertColumns(0, 5);
-    
+
     m_model->setHeaderData(0, Qt::Horizontal, QObject::tr("Context"));
     m_model->setHeaderData(1, Qt::Horizontal, QObject::tr("Action"));
     m_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Icon"));
