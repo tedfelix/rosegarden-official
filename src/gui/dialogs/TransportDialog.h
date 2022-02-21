@@ -43,7 +43,6 @@ class QWidget;
 class QTimer;
 class QPushButton;
 class QCloseEvent;
-class QShortcut;
 class QDialog;
 
 namespace Rosegarden
@@ -79,10 +78,6 @@ public:
 
     void setSMPTEResolution(int framesPerSecond, int bitsPerFrame);
     void getSMPTEResolution(int &framesPerSecond, int &bitsPerFrame);
-
-    // Return the shortcut object
-    //
-    QShortcut* getShortcuts() { return m_shortcuts; }
 
     // RosegardenTransport member accessors
     QPushButton* MetronomeButton()   { return ui->MetronomeButton; }
@@ -233,7 +228,6 @@ private:
 
     void updateTimeDisplay();
 
-    QShortcut *m_shortcuts;
     bool    m_isExpanded;
 
     bool m_isBackgroundSet;

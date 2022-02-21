@@ -35,7 +35,6 @@
 #include "misc/ConfigGroups.h"
 
 #include <QSettings>
-#include <QShortcut>
 #include <QColor>
 #include <QByteArray>
 #include <QDataStream>
@@ -100,7 +99,6 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_enableMIDILabels(true),
     //m_panelOpen(),
     //m_panelClosed(),
-    m_shortcuts(nullptr),
     m_isExpanded(true),
     m_isBackgroundSet(false),
     m_sampleRate(0)
@@ -282,10 +280,6 @@ TransportDialog::TransportDialog(QWidget *parent):
             this, &TransportDialog::slotEditTime);
     connect(ui->ThousandthsPixmap, &Label::doubleClicked,
             this, &TransportDialog::slotEditTime);
-
-    // shortcut object
-    //
-    m_shortcuts = new QShortcut(this);
 
     // Note: For Thorn style, ThornStyle sets the transport's background
     //       to dark gray.  See AppEventFilter::polishWidget() in

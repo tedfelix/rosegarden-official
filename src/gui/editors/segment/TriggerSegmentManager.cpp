@@ -47,7 +47,6 @@
 #include <QTreeWidget>
 #include <QMessageBox>
 #include <QSettings>
-#include <QShortcut>
 #include <QDialog>
 #include <QFrame>
 #include <QIcon>
@@ -152,8 +151,6 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     initDialog();
 
 //     setAutoSaveSettings(TriggerManagerConfigGroup, true);    //&&&
-
-    m_shortcuts = new QShortcut(this);
 }
 
 TriggerSegmentManager::~TriggerSegmentManager()

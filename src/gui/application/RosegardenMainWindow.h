@@ -1245,6 +1245,11 @@ public slots:
     void slotToggleRecordCurrentTrack();
     
     /**
+     * Show the shortcut configure dialog
+     */
+    void slotConfigureShortcuts();
+
+    /**
      * Show the configure dialog
      */
     void slotConfigure();

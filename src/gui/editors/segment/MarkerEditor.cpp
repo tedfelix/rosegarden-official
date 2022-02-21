@@ -41,7 +41,6 @@
 #include <QLayout>
 #include <QVBoxLayout>
 #include <QAction>
-#include <QShortcut>
 #include <QDialog>
 #include <QFrame>
 #include <QGroupBox>
@@ -191,8 +190,6 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     initDialog();
 
 //     setAutoSaveSettings(MarkerEditorConfigGroup, true);    //&&&
-
-    m_shortcuts = new QShortcut(this);
 
     setAttribute(Qt::WA_DeleteOnClose);
 }

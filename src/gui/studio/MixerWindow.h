@@ -24,11 +24,8 @@
 
 #include <QMainWindow>
 
-
 class QWidget;
 class QCloseEvent;
-class QShortcut;
-
 
 namespace Rosegarden
 {
@@ -43,7 +40,6 @@ class MixerWindow: public QMainWindow
 
 public:
     MixerWindow(QWidget *parent, RosegardenDocument *document);
-    QShortcut* getShortcuts() { return m_shortcuts; }
 
 signals:
     void closing();
@@ -65,9 +61,6 @@ protected:
     RosegardenDocument *m_document;
     Studio *m_studio;
     InstrumentId m_currentId;
-
-    QShortcut *m_shortcuts;
-
 };
 
 

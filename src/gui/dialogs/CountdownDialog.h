@@ -21,13 +21,10 @@
 
 #include <QDialog>
 
-
 class QWidget;
 class QString;
 class QPushButton;
 class QLabel;
-class QShortcut;
-
 
 namespace Rosegarden
 {
@@ -48,8 +45,6 @@ public:
     int getTotalTime() const { return m_totalTime; }
     void setTotalTime(int seconds);
 
-    QShortcut* getShortcuts() { return m_shortcuts; }
-
 signals:
     void completed(); // m_totalTime has elapsed
     void stopped();   // someone pushed the stop button
@@ -69,8 +64,6 @@ protected:
 
     int           m_progressBarWidth;
     int           m_progressBarHeight;
-
-    QShortcut       *m_shortcuts;
 };
 
 

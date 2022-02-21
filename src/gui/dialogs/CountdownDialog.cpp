@@ -21,7 +21,6 @@
 #include <QLayout>
 
 #include "CountdownBar.h"
-#include <qshortcut.h>
 #include <QDialog>
 #include <QLabel>
 #include <QPushButton>
@@ -78,9 +77,6 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     // Set the total time to show the bar in initial position
     //
     setElapsedTime(0);
-
-    m_shortcuts = new QShortcut(this);
-
 }
 
 void
