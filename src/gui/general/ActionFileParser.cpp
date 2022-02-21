@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionFileParser]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "ActionFileParser.h"
 
@@ -786,7 +786,7 @@ ActionFileParser::setVisible(QAction *a, bool e)
 void
 ActionFileParser::enterActionState(QString stateName)
 {
-    Profiler p("ActionFileParser::enterActionState");
+    //Profiler p("ActionFileParser::enterActionState");
     for (ActionSet::iterator i = m_stateInvisibleMap[stateName].begin();
          i != m_stateInvisibleMap[stateName].end(); ++i) {
         setVisible(*i, false);
@@ -808,7 +808,7 @@ ActionFileParser::enterActionState(QString stateName)
 void
 ActionFileParser::leaveActionState(QString stateName)
 {
-    Profiler p("ActionFileParser::leaveActionState");
+    //Profiler p("ActionFileParser::leaveActionState");
     for (ActionSet::iterator i = m_stateEnableMap[stateName].begin();
          i != m_stateEnableMap[stateName].end(); ++i) {
         setEnabled(*i, false);
