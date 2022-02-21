@@ -50,7 +50,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     m_selectionChanged(false)
 {
     setModal(true);
-    setWindowTitle(tr("Shortcuts"));
+    setWindowTitle(tr("Keyboard Shortcuts"));
     
     ActionData* adata = ActionData::getInstance();
     adata->resetChanges();
@@ -89,11 +89,11 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     QVBoxLayout *mainLayout = new QVBoxLayout;
     
     setLayout(mainLayout);
-    setWindowTitle(tr("Shortcuts"));
 
     QLabel* helpLabel = new QLabel;
     helpLabel->setWordWrap(true);
-    helpLabel->setText(tr("To edit a shortcut select the action in the table below. To change a shortcut click on the shortcut and press the new key sequence. To reomve a shortcut press and release ctrl alt or shift. Press \"set Shortcuts\" to make the change. Changes will take effect in new windows and after restarting Rosegarden. Note - some actions are global and valid for all windows. These are marked with a light blue background."));
+    helpLabel->setText(tr("<p>Select an action in the table below then click one of the four <b>Press shortcut</b> fields at the top.  Press the new shortcut key and click the <b>Set Shortcuts</b> button.  A single shortcut can be removed by pressing Shift in the <b>Press shortcut</b> field.</p><p><i>Actions marked with a <span style=\"background-color:cyan; color:black\">light blue background</span> are global and valid for all windows.</i></p>"));
+
     mainLayout->addWidget(helpLabel);
                        
     m_proxyView->sortByColumn(0, Qt::AscendingOrder);
@@ -154,8 +154,8 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     m_warnLabel = new QLabel(tr("Warnings when:"));
     m_warnSetting = new QComboBox;
     m_warnSetting->addItem(tr("Never"));
-    m_warnSetting->addItem(tr("Duplicate in same context"));
-    m_warnSetting->addItem(tr("Duplicate in any context"));
+    m_warnSetting->addItem(tr("Conflict in same context"));
+    m_warnSetting->addItem(tr("Conflict in any context"));
     connect(m_warnSetting, SIGNAL(currentIndexChanged(int)),
             this, SLOT(warnSettingChanged(int)));
     settings.beginGroup(GeneralOptionsConfigGroup);
@@ -212,8 +212,8 @@ ShortcutDialog::~ShortcutDialog()
     adata->saveUserShortcuts();
     if (adata->dataChanged()) {
         QMessageBox::information(this,
-                                 tr("Shortcuts changed"),
-                                 tr("Some shortcuts have changed. These will only take effect in new windows. Restart Rosegarden for all changes to take effect"));
+                                 tr("Shortcuts Changed"),
+                                 tr("You must restart Rosegarden for shortcut changes to take effect."));
     }
 }
 

@@ -25,6 +25,8 @@
 namespace Rosegarden
 {
 
+
+/// Shortcut Conflicts dialog.
 class ShortcutWarnDialog : public QDialog
 {
     Q_OBJECT
