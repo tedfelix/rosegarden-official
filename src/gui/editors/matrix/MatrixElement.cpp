@@ -105,6 +105,8 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch)
 void
 MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 {
+    RG_DEBUG << "reconfigure" << time << duration <<
+        pitch << velocity << m_current;
     const RulerScale *scale = m_scene->getRulerScale();
     int resolution = m_scene->getYResolution();
 
@@ -129,6 +131,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         colour = Qt::cyan;
     } else {
         colour = DefaultVelocityColour::getInstance()->getColour(velocity);
+    }
+    if (!m_current) {
+        colour = QColor(200, 200, 200);
     }
     colour.setAlpha(160);
 
@@ -196,6 +201,8 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         }
 
         if (m_textItem) {
+            m_textItem->setZValue(1.0); // keep text above notes
+            m_textItem->setBrush(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
             QString noteName = MidiPitchLabel(pitch).getQString();
             m_textItem->setText(noteName);
             QFont font;
@@ -237,6 +244,7 @@ MatrixElement::isNote() const
 void
 MatrixElement::setSelected(bool selected)
 {
+    RG_DEBUG << "setSelected" << event()->getAbsoluteTime() << selected;
     QAbstractGraphicsShapeItem *item =
         dynamic_cast<QAbstractGraphicsShapeItem *>(m_item);
     if (!item) return;
@@ -255,6 +263,8 @@ MatrixElement::setSelected(bool selected)
 void
 MatrixElement::setCurrent(bool current)
 {
+    RG_DEBUG << "setCurrent" << event()->getAbsoluteTime() <<
+        current << m_current;
     if (m_current == current) return;
 
     QAbstractGraphicsShapeItem *item =
@@ -262,7 +272,7 @@ MatrixElement::setCurrent(bool current)
     if (!item) return;
 
     QColor colour;
-    
+
     if (!current) {
         colour = QColor(200, 200, 200);
     } else {
