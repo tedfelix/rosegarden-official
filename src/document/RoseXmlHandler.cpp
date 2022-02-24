@@ -2716,13 +2716,23 @@ RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
                 RosegardenMainWindow::self(),
                 file,
                 getAudioFileManager().getAbsoluteAudioPath());
-        int result = fileLocateDialog.exec();
+        fileLocateDialog.exec();
+
+        FileLocateDialog::Result result = fileLocateDialog.getResult();
 
         // If the user decides to abort, cancel the load.
-        if (result != QDialog::Accepted) {
+        if (result == FileLocateDialog::Cancel) {
             m_errorString = "Audio file not found.";
             return false;
         }
+
+        if (result == FileLocateDialog::Skip) {
+            // ??? We need a way to communicate "skip" to our caller.
+            m_errorString = "Skip not yet supported.";
+            return false;
+        }
+
+        // Locate
 
         newAudioDirectory = fileLocateDialog.getPath();
         const QString newFilePath = newAudioDirectory + "/" + file;
