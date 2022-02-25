@@ -247,6 +247,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_createDevices(createNewDevicesWhenNeeded),
     m_haveControls(false),
     m_hasActiveAudio(false),
+    m_audioSkipWarning(false),
     m_oldSolo(false),
     m_progressDialog(progressDialog)
 {}
@@ -2723,13 +2724,24 @@ RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
         // If the user decides to abort, cancel the load.
         if (result == FileLocateDialog::Cancel) {
             m_errorString = "Audio file not found.";
+            // Stop loading this file.
             return false;
         }
 
         if (result == FileLocateDialog::Skip) {
-            // ??? We need a way to communicate "skip" to our caller.
-            m_errorString = "Skip not yet supported.";
-            return false;
+            // If the audio skip warning hasn't been issued, issue it.
+            if (!m_audioSkipWarning) {
+                QMessageBox::warning(
+                        RosegardenMainWindow::self(),
+                        tr("Rosegarden"),
+                        tr("Skipping a file will remove its audio segments from the composition."));
+
+                // But don't issue it again.
+                m_audioSkipWarning = true;
+            }
+
+            // Continue loading.
+            return true;
         }
 
         // Locate

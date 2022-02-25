@@ -105,11 +105,10 @@ FileLocateDialog::slotButtonClicked(QAbstractButton *button)
                 tr("WAV files") + " (*.wav *.WAV)" + ";;" +
                 tr("All files") + " (*)");  // filter
 
-        if (m_fileName.isEmpty())
-            reject();
-
-        QFileInfo fileInfo(m_fileName);
-        m_path = fileInfo.path();
+        if (!m_fileName.isEmpty()) {
+            QFileInfo fileInfo(m_fileName);
+            m_path = fileInfo.path();
+        }
     }
 
     // Always accept.  The buttons are all actions.  There isn't really a
