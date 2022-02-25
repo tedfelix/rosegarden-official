@@ -55,6 +55,7 @@
 #include "XmlStorableEvent.h"
 #include "XmlSubHandler.h"
 
+#include <QApplication>
 #include <QMessageBox>
 #include <QByteArray>
 #include <QColor>
@@ -2702,8 +2703,9 @@ RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
 {
     StartupLogo::hideIfStillThere();
 
-    // ??? Can we also stop the wait cursor?  It's really annoying here.
-    //     We'll want to bring it back as well.
+    // Get rid of the wait cursor so it doesn't interfere with the
+    // dialogs.
+    QApplication::restoreOverrideCursor();
 
     // Let the user look around and try to find the file.
 

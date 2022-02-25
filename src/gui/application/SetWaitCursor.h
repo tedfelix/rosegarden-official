@@ -23,7 +23,7 @@ namespace Rosegarden
 {
 
 /**
- * Temporarily change the global cursor to waitCursor
+ * Temporarily change the global cursor to a wait cursor.
  */
 class SetWaitCursor
 {
