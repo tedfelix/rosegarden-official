@@ -119,7 +119,8 @@ void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
     ev->set<Int>(BaseProperties::PITCH, e->pitch);
     ev->set<Int>(BaseProperties::VELOCITY, velocity);
 
-    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode());
+    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(),
+                                         m_scene->getCurrentSegment());
 
     // preview
     m_scene->playNote(m_currentViewSegment->getSegment(), e->pitch, velocity);
@@ -136,9 +137,11 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
     m_currentViewSegment = e->viewSegment;
     if (!m_currentViewSegment) return;
 
+    const Segment *eventSegment = nullptr;
+    if (e->element) eventSegment = e->element->getSegment();
+
     // Don't create an overlapping event on the same note on the same channel
-    if (e->element) {
-        RG_DEBUG << "handleLeftButtonPress(): overlap with another matrix element";
+    if (e->element && eventSegment == m_scene->getCurrentSegment()) {
         // In percussion matrix, we delete the existing event rather
         // than just ignoring it -- this is reasonable as the event
         // has no meaningful duration, so we can just toggle it on and
@@ -150,6 +153,11 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
                                            e->element->event());
                 CommandHistory::getInstance()->addCommand(command);
             }
+        }
+        else {
+            RG_WARNING << "handleLeftButtonPress(): Will not create note at "
+                          "same pitch and time as existing note in active "
+                          "segment.";
         }
         delete m_currentElement;
         m_currentElement = nullptr;
@@ -177,7 +185,9 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     RG_DEBUG << "handleLeftButtonPress(): I'm working from segment \"" << m_currentViewSegment->getSegment().getLabel() << "\"" << "  clicked pitch: " << e->pitch << " adjusted pitch: " << adjustedPitch;
 
-    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(), pitchOffset);
+    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(),
+                                         pitchOffset,
+                                         m_scene->getCurrentSegment());
 
     // preview
     m_scene->playNote(m_currentViewSegment->getSegment(), adjustedPitch, velocity);
@@ -229,7 +239,10 @@ MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
     delete m_currentElement;
     delete oldEv;
 
-    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(), pitchOffset);
+    // const Segment *segment = e->element ? e->element->getSegment() : nullptr;
+    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(),
+                                         pitchOffset,
+                                         m_scene->getCurrentSegment());
 
     if (preview) {
         m_scene->playNote(m_currentViewSegment->getSegment(), adjustedPitch, velocity);

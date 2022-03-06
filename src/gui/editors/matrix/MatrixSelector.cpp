@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixSelector]"
+#define RG_NO_DEBUG_PRINT 1
+
 #include "MatrixSelector.h"
 
 #include "misc/Strings.h"
@@ -198,7 +201,16 @@ MatrixSelector::handleMidButtonPress(const MatrixMouseEvent *e)
     m_event = nullptr;
 
     // Don't allow overlapping elements on the same channel
-    if (e->element) return;
+    // if (e->element) return;
+    if (e->element &&
+        e->element->getScene() &&
+        e->element->getSegment() ==
+        e->element->getScene()->getCurrentSegment()) {
+        RG_WARNING << "handleMidButtonPress(): Will not create note at "
+                      "same pitch and time as existing note in active "
+                      "segment.";
+        return;
+    }
 
     m_dispatchTool =
         dynamic_cast<MatrixTool *>
@@ -222,6 +234,18 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
     if (!vs) return;
 
     if (element) {
+        // Don't allow editing note's parameters if not in active segment
+        // because there might be multiple overlapping non-active segment's
+        // notes at same pitch/time, and one chosen would be semi-arbitrary
+        // (e.g. first segment(??) in lowest numbered track).
+        if (!(element &&
+              element->getScene() &&
+              element->getSegment() ==
+              element->getScene()->getCurrentSegment())) {
+            RG_WARNING << "handleMouseDoubleClick(): Note must be "
+                          "in active segment.";
+            return;
+        }
 
         if (element->event()->isa(Note::EventType) &&
             element->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
@@ -534,7 +558,8 @@ MatrixSelector::getSelection(EventSelection *&selection)
         for (int i = 0; i < l.size(); ++i) {
             QGraphicsItem *item = l[i];
             MatrixElement *element = MatrixElement::getMatrixElement(item);
-            if (element) {
+            if (element && element->getSegment() ==
+                           element->getScene()->getCurrentSegment()) {
                 //!!! NB. In principle, this element might not come
                 //!!! from the right segment (in practice we only have
                 //!!! one segment, but that may change)

@@ -78,6 +78,13 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
     if (!e->element) return;
 
+    if (e->element->getSegment() !=
+        e->element->getScene()->getCurrentSegment()) {
+        RG_WARNING << "handleLeftButtonPress(): Will only adjust velocity "
+                      "of notes in active segment.";
+        return;
+    }
+
     // Mouse position is no more related to pitch
     m_widget->showHighlight(false);
 

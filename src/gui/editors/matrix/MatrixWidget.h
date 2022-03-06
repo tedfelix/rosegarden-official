@@ -370,6 +370,9 @@ private:
      * the PitchRuler.
      */
     bool m_drumMode;
+    // For determining if pitch ruler needs to be regenerated when
+    // changing segments.
+    enum class PrevPitchRulerType {NONE, PIANO, PERCUSSION} m_prevPitchRulerType;
 
     /// First note selected when doing a run up/down the keyboard.
     /**

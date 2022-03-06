@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixMover]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixMover.h"
 
@@ -81,6 +82,9 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     if (!e->element) return;
 
+    Segment *segment = m_scene->getCurrentSegment();
+    if (!segment) return;
+
     // Check the scene's current segment (apparently not necessarily the same
     // segment referred to by the scene's current view segment) for this event;
     // return if not found, indicating that this event is from some other,
@@ -92,14 +96,8 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     // than being able to click on non-active elements to create new events by
     // accident, and will probably fly.  Especially since the multi-segment
     // matrix is new, and we're defining the terms of how it works.
-    Segment *segment = m_scene->getCurrentSegment();
-    if (!segment) return;
-    bool found = false;
-    for (Segment::iterator i = segment->begin(); i != segment->end(); ++i) {
-        if ((*i) == e->element->event()) found = true;
-    }
+    if (e->element->getSegment() != segment) {
 
-    if (!found) {
         RG_WARNING << "handleLeftButtonPress(): Clicked element not owned by active segment.  Returning...";
         return;
     }
@@ -179,7 +177,8 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
             MatrixElement *duplicate = new MatrixElement
                 (m_scene, new Event(**i),
-                 m_widget->isDrumMode(), pitchOffset);
+                 m_widget->isDrumMode(), pitchOffset,
+                 m_scene->getCurrentSegment());
 
             m_duplicateElements.push_back(duplicate);
         }

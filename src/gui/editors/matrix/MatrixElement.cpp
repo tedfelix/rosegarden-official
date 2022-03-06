@@ -20,6 +20,7 @@
 
 #include "MatrixElement.h"
 #include "MatrixScene.h"
+
 #include "misc/Debug.h"
 #include "base/RulerScale.h"
 #include "misc/ConfigGroups.h"
@@ -37,22 +38,27 @@
 #include "gui/rulers/DefaultVelocityColour.h"
 #include "gui/general/MidiPitchLabel.h"
 
-
 namespace Rosegarden
 {
 
 static const int MatrixElementData = 2;
 
 MatrixElement::MatrixElement(MatrixScene *scene, Event *event,
-                             bool drum, long pitchOffset) :
+                             bool drum, long pitchOffset,
+                             const Segment *segment) :
     ViewElement(event),
     m_scene(scene),
     m_drum(drum),
     m_current(true),
     m_item(nullptr),
     m_textItem(nullptr),
-    m_pitchOffset(pitchOffset)
+    m_pitchOffset(pitchOffset),
+    m_segment(segment)
 {
+    RG_DEBUG << "MatrixElement()";
+    if (segment && scene && segment != scene->getCurrentSegment()) {
+        m_current = false;
+    }
     reconfigure();
 }
 
@@ -107,6 +113,7 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 {
     RG_DEBUG << "reconfigure" << time << duration <<
         pitch << velocity << m_current;
+
     const RulerScale *scale = m_scene->getRulerScale();
     int resolution = m_scene->getYResolution();
 
@@ -135,7 +142,11 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     if (!m_current) {
         colour = QColor(200, 200, 200);
     }
-    colour.setAlpha(160);
+
+    // Turned off because adds little or no information to user (another
+    // segment's notes are underneath?) and generally just confusingly
+    // changes velocity color of notes.
+    // colour.setAlpha(160);
 
     double fres(resolution);
 
@@ -201,7 +212,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         }
 
         if (m_textItem) {
-            m_textItem->setZValue(1.0); // keep text above notes
+            // text above note, see constants in .h file
+            m_textItem->setZValue(m_current ? ACTIVE_SEGMENT_TEXT_Z
+                                            : NORMAL_SEGMENT_TEXT_Z);
             m_textItem->setBrush(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
             QString noteName = MidiPitchLabel(pitch).getQString();
             m_textItem->setText(noteName);
@@ -226,6 +239,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 
     double pitchy = (127 - pitch - m_pitchOffset) * (resolution + 1);
     m_item->setPos(x0, pitchy);
+    // See constants in .h file
+    m_item->setZValue(m_current ? ACTIVE_SEGMENT_NOTE_Z
+                                : NORMAL_SEGMENT_NOTE_Z);
 
     if (m_textItem) {
             m_textItem->setPos(x0 + 1, pitchy - 1);
@@ -279,14 +295,20 @@ MatrixElement::setCurrent(bool current)
         if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
             colour = Qt::gray;
         } else {
-            long velocity = 100;
+            long velocity = m_velocity;  // was 100 -- why?
             event()->get<Int>(BaseProperties::VELOCITY, velocity);
             colour = DefaultVelocityColour::getInstance()->getColour(velocity);
         }
     }
 
     item->setBrush(colour);
-    item->setZValue(current ? 1 : 0);
+
+    // See constants in .h file
+    m_item->setZValue(current ? ACTIVE_SEGMENT_NOTE_Z : NORMAL_SEGMENT_NOTE_Z);
+    if (m_textItem) {
+        m_textItem->setZValue(current ? ACTIVE_SEGMENT_TEXT_Z
+                                      : NORMAL_SEGMENT_TEXT_Z);
+    }
 
     if (current) {
         item->setPen

@@ -183,7 +183,7 @@ private:
     /**
      * An index into both m_segments and m_viewSegments.
      */
-    int m_currentSegmentIndex;
+    unsigned m_currentSegmentIndex;
 
     RulerScale *m_scale; // I own this (it maps between time and scene x)
     ZoomableRulerScale *m_referenceScale; // I own this (it refers to m_scale

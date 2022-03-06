@@ -119,6 +119,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_pianoView(nullptr),
     m_onlyKeyMapping(false),
     m_drumMode(drumMode),
+    m_prevPitchRulerType(PrevPitchRulerType::NONE),
     m_firstNote(0),
     m_lastNote(0),
     m_highlightVisible(true),
@@ -179,7 +180,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     bool useRed = true;
     m_segmentChanger = new Thumbwheel(Qt::Vertical, useRed);
     m_segmentChanger->setToolTip(tr("<qt>Rotate wheel to change the active segment</qt>"));
-    m_segmentChanger->setFixedWidth(18);
+    m_segmentChanger->setFixedWidth(32); // was 18, widen to make easier to grab
     m_segmentChanger->setMinimumValue(-120);
     m_segmentChanger->setMaximumValue(120);
     m_segmentChanger->setDefaultValue(0);
@@ -529,7 +530,6 @@ MatrixWidget::generatePitchRuler()
     if (m_scene->getCurrentSegment() == nullptr)
         return;
 
-    delete m_pianoScene;   // Delete the old m_pitchRuler if any
     m_localMapping.reset();
     bool isPercussion = false;
 
@@ -555,7 +555,18 @@ MatrixWidget::generatePitchRuler()
             isPercussion = false;
         }
     }
-    if (mapping && !m_localMapping->getMap().empty()) {
+
+    if (isPercussion) {
+        if (m_prevPitchRulerType == PrevPitchRulerType::PERCUSSION) return;
+        m_prevPitchRulerType = PrevPitchRulerType::PERCUSSION;
+    } else {
+        if (m_prevPitchRulerType == PrevPitchRulerType::PIANO) return;
+        m_prevPitchRulerType = PrevPitchRulerType::PIANO;
+    }
+
+    delete m_pianoScene;   // Delete the old m_pitchRuler if any
+
+    if (mapping && !m_localMapping->getMap().empty()){
         m_pitchRuler = new PercussionPitchRuler(nullptr, m_localMapping,
                                                 m_scene->getYResolution());
     } else {
@@ -1397,11 +1408,14 @@ MatrixWidget::slotSegmentChangerMoved(int v)
     int steps = v - m_lastSegmentChangerValue;
     if (steps < 0) steps *= -1;
 
+    bool    segmentChanged = true;
     for (int i = 0; i < steps; ++i) {
         if (v < m_lastSegmentChangerValue)
             nextSegment();
         else if (v > m_lastSegmentChangerValue)
             previousSegment();
+        else
+            segmentChanged = false;
     }
 
     m_lastSegmentChangerValue = v;
@@ -1410,14 +1424,19 @@ MatrixWidget::slotSegmentChangerMoved(int v)
     // If we are switching between a pitched instrument segment and a pecussion
     // segment or betwween two percussion segments with different percussion
     // sets, the pitch ruler may need to be regenerated.
-    // TODO : test if regeneration is really needed before doing it
-    generatePitchRuler();
+    //
+    // Only call if necessary, and generatePitchRuler() also checks
+    // if percussion->normal or normal->percussion.
+    if (segmentChanged) {
+        clearSelection();
+        generatePitchRuler();
+    }
 }
 
 void
 MatrixWidget::updateSegmentChangerBackground()
 {
-    const Composition &composition = m_document->getComposition();
+    Composition &composition = m_document->getComposition();
     const Segment *segment = m_scene->getCurrentSegment();
 
     // set the changer widget background to the now current segment's
@@ -1429,9 +1448,14 @@ MatrixWidget::updateSegmentChangerBackground()
     palette.setColor(QPalette::Window, segmentColor);
     m_changerWidget->setPalette(palette);
 
-    const Track *track = composition.getTrackById(segment->getTrack());
+    const TrackId trackId = segment->getTrack();
+    const Track *track = composition.getTrackById(trackId);
     if (!track)
         return;
+
+    // Set active track so that external MIDI notes play with
+    // correct instrument (regardless whether Step Recording is on or off)
+    composition.setSelectedTrack(trackId);
 
     QString trackLabel = QString::fromStdString(track->getLabel());
     if (trackLabel == "")

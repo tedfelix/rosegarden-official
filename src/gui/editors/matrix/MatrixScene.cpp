@@ -223,7 +223,7 @@ Segment *
 MatrixScene::getCurrentSegment()
 {
     if (m_segments.empty()) return nullptr;
-    if (m_currentSegmentIndex >= int(m_segments.size())) {
+    if (m_currentSegmentIndex >= m_segments.size()) {
         m_currentSegmentIndex = int(m_segments.size()) - 1;
     }
     return m_segments[m_currentSegmentIndex];
@@ -270,7 +270,15 @@ MatrixScene::getCurrentViewSegment()
         return nullptr;
 
     // ??? Why doesn't this use m_currentSegmentIndex?
-    return m_viewSegments[0];
+    // return m_viewSegments[0];
+
+    // It should. Otherwise these callers work incorrectly
+    //      MatrixView::slotExtendSelectionBackward(bool)
+    //      MatrixView::slotExtendSelectionForward(bool)
+    //      MatrixWidget::slotKeyPressed(unsigned, bool)
+    //      MatrixWidget::slotKeySelected(unsigned, bool)
+    //      MatrixWidget::slotKeyReleased(unsigned, bool)
+    return m_viewSegments[m_currentSegmentIndex];
 }
 
 bool
@@ -322,7 +330,7 @@ MatrixScene::recreateLines()
              line = m_horizontals[i];
          } else {
              line = new QGraphicsLineItem;
-             line->setZValue(-9);
+             line->setZValue(MatrixElement::HORIZONTAL_LINE_Z);
              line->setPen(QPen(GUIPalette::getColour
                                (GUIPalette::MatrixHorizontalLine), pw));
              addItem(line);
@@ -403,7 +411,8 @@ MatrixScene::recreateLines()
                 line->setPen(QPen(GUIPalette::getColour(GUIPalette::BeatLine), pw));
             }
 
-            line->setZValue(index > 0 ? -10 : -8);
+            line->setZValue(index > 0 ? MatrixElement::VERTICAL_BEAT_LINE_Z
+                                      : MatrixElement::VERTICAL_BAR_LINE_Z);
             line->setLine(x, 0, x, 128 * (m_resolution + 1));
 
             line->show();
@@ -489,7 +498,7 @@ MatrixScene::recreateTriadHighlights()
                     rect = m_highlights[i];
                 } else {
                     rect = new QGraphicsRectItem;
-                    rect->setZValue(-11);
+                    rect->setZValue(MatrixElement::HIGHLIGHT_Z);
                     rect->setPen(Qt::NoPen);
                     addItem(rect);
                     m_highlights.push_back(rect);
@@ -554,7 +563,7 @@ MatrixScene::recreateBlackkeyHighlights()
                 rect = m_highlights[i];
             } else {
                 rect = new QGraphicsRectItem;
-                rect->setZValue(-11);
+                rect->setZValue(MatrixElement::HIGHLIGHT_Z);
                 rect->setPen(Qt::NoPen);
                 addItem(rect);
                 m_highlights.push_back(rect);
@@ -644,7 +653,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     mme.element = nullptr;
 
     QList<QGraphicsItem *> l = items(e->scenePos());
-//    MATRIX_DEBUG << "Found " << l.size() << " items at " << e->scenePos();
+//   MATRIX_DEBUG << "Found " << l.size() << " items at " << e->scenePos();
     for (int i = 0; i < l.size(); ++i) {
         MatrixElement *element = MatrixElement::getMatrixElement(l[i]);
         if (element) {
@@ -789,7 +798,7 @@ MatrixScene::segmentRemoved(const Composition *, Segment *removedSegment)
 
     // If we're about to remove the one they are looking at and
     // there is another to switch to...
-    if (removedSegmentIndex == m_currentSegmentIndex  &&
+    if (removedSegmentIndex == static_cast<int>(m_currentSegmentIndex) &&
         m_segments.size() > 1) {
 
         // Switch to another Segment.
@@ -814,7 +823,7 @@ MatrixScene::segmentRemoved(const Composition *, Segment *removedSegment)
     m_segments.erase(m_segments.cbegin() + removedSegmentIndex);
 
     // Adjust m_currentSegmentIndex
-    if (m_currentSegmentIndex > removedSegmentIndex)
+    if (static_cast<int>(m_currentSegmentIndex) > removedSegmentIndex)
         --m_currentSegmentIndex;
 
     // No more Segments?
@@ -979,7 +988,7 @@ void
 MatrixScene::updateCurrentSegment()
 {
     MATRIX_DEBUG << "MatrixScene::updateCurrentSegment: current is " << m_currentSegmentIndex;
-    for (int i = 0; i < (int)m_viewSegments.size(); ++i) {
+    for (unsigned i = 0; i < m_viewSegments.size(); ++i) {
         bool current = (i == m_currentSegmentIndex);
         ViewElementList *vel = m_viewSegments[i]->getViewElementList();
         for (ViewElementList::const_iterator j = vel->begin();

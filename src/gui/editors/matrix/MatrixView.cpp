@@ -955,7 +955,13 @@ MatrixView::slotEditPaste()
         return;
     } else {
         CommandHistory::getInstance()->addCommand(command);
-        setSelection(command->getSubsequentSelection(), false);
+
+        // PasteEventsCommand class does not override its
+        // BasicCommand base class's getSubsequentSelection()
+        // which always returns null.
+        // Therefore setSelection() always simply clears the current
+        // selection, which is unneccesary and counter-intuitive.
+     // setSelection(command->getSubsequentSelection(), false);
     }
 }
 

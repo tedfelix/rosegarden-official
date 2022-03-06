@@ -45,6 +45,8 @@ public:
 
     void updateAll();
 
+    MatrixScene* getMatrixScene() const { return m_scene; }
+
 protected:
 //!!!    const MidiKeyMapping *getKeyMapping() const;
 
