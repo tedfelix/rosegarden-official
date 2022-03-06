@@ -35,7 +35,7 @@ namespace Rosegarden
 {
 
 MatrixViewSegment::MatrixViewSegment(MatrixScene *scene,
-				     Segment *segment,
+                                     Segment *segment,
                                      bool drum) :
     ViewSegment(*segment),
     m_scene(scene),

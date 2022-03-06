@@ -142,8 +142,8 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 
     m_velocityDelta = 128 * m_velocityScale;
 
-	// Preview calculated velocity info on element
-	// Dupe from MatrixMover
+        // Preview calculated velocity info on element
+        // Dupe from MatrixMover
     EventSelection* selection = m_scene->getSelection();
 
 
@@ -201,20 +201,20 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
     }
 
 
-	/** Might be something for the feature
-	EventSelection* selection = m_mParentView->getCurrentSelection();
-	EventContainer::iterator it = selection->getSegmentEvents().begin();
-	MatrixElement *element = 0;
-	for (; it != selection->getSegmentEvents().end(); it++) {
-	    element = m_currentViewSegment->getElement(*it);
-	    if (element) {
-		// Somehow show the calculated velocity for each selected element
-		// char label[16];
-		// sprintf(label,"%d",(*it->getVelocity())*m_velocityScale);
-		// element->label(label) /// DOES NOT EXISTS
-	    }
-	}
-	*/
+        /** Might be something for the feature
+        EventSelection* selection = m_mParentView->getCurrentSelection();
+        EventContainer::iterator it = selection->getSegmentEvents().begin();
+        MatrixElement *element = 0;
+        for (; it != selection->getSegmentEvents().end(); it++) {
+            element = m_currentViewSegment->getElement(*it);
+            if (element) {
+                // Somehow show the calculated velocity for each selected element
+                // char label[16];
+                // sprintf(label,"%d",(*it->getVelocity())*m_velocityScale);
+                // element->label(label) /// DOES NOT EXISTS
+            }
+        }
+        */
 
     // Preview velocity delta in contexthelp
     if (minVelocity == maxVelocity) {

@@ -50,7 +50,7 @@ protected:
 
     /**
      * Override from ViewSegment
-     * Wrap only notes 
+     * Wrap only notes
      */
     bool wrapEvent(Event*) override;
 

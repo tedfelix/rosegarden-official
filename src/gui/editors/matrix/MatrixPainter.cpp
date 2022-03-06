@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -43,7 +43,7 @@
 namespace Rosegarden
 {
 
-MatrixPainter::MatrixPainter(MatrixWidget *widget) : 
+MatrixPainter::MatrixPainter(MatrixWidget *widget) :
     MatrixTool("matrixpainter.rc", "MatrixPainter", widget),
     m_clickTime(0),
     m_currentElement(nullptr),
@@ -105,27 +105,27 @@ void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
         m_currentElement = nullptr;
         return;
     }
-    
+
     /*
     // Grid needed for the event duration rounding
-    
+
     int velocity = m_widget->getCurrentVelocity();
-    
+
     RG_DEBUG << "handleMouseDoubleClick(): velocity = " << velocity;
-    
+
     m_clickTime = e->snappedLeftTime;
-    
+
     Event *ev = new Event(Note::EventType, e->snappedLeftTime, e->snapUnit);
     ev->set<Int>(BaseProperties::PITCH, e->pitch);
     ev->set<Int>(BaseProperties::VELOCITY, velocity);
-    
+
     m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode());
-    
+
     // preview
     m_scene->playNote(m_currentViewSegment->getSegment(), e->pitch, velocity);
     */
-        
-    
+
+
 }// end handleMouseDoubleClick()
 
 
@@ -277,13 +277,13 @@ void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)
                                        time,
                                        endTime,
                                        m_currentElement->event());
-        
+
         CommandHistory::getInstance()->addCommand(command);
-        
+
         Event* ev = m_currentElement->event();
         delete m_currentElement;
         delete ev;
-        
+
         ev = command->getLastInsertedEvent();
         if (ev) {
             m_scene->setSingleSelectedEvent
@@ -343,7 +343,7 @@ void MatrixPainter::setBasicContextHelp()
         setContextHelp(tr("Click and drag to draw a note; Shift to avoid snapping to grid"));
     } else {
         setContextHelp(tr("Click and drag to draw a note"));
-    }        
+    }
 }
 
 QString MatrixPainter::ToolName() { return "painter"; }

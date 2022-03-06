@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -136,7 +136,7 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
         if ((x + width) - resizeStart > 10) resizeStart = x + width - 10;
 
         m_dispatchTool = nullptr;
-        
+
         if (e->sceneX > resizeStart) {
             m_dispatchTool =
                 dynamic_cast<MatrixTool *>
@@ -261,25 +261,25 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
         }
 
     } /*
-    	  
+
           #988167: Matrix:Multiclick select methods don't work in matrix editor
           Postponing this, as it falls foul of world-matrix transformation
           etiquette and other such niceties
-     
-    	  else {
-     
-    	QRect rect = staff->getBarExtents(ev->x(), ev->y());
-     
-    	m_selectionRect->setX(rect.x() + 2);
-    	m_selectionRect->setY(rect.y());
-    	m_selectionRect->setSize(rect.width() - 4, rect.height());
-     
-    	m_selectionRect->show();
-    	m_updateRect = false;
-    	
-    	m_justSelectedBar = true;
-    	QTimer::singleShot(QApplication::doubleClickInterval(), this,
-    			   SLOT(slotClickTimeout()));
+
+          else {
+
+        QRect rect = staff->getBarExtents(ev->x(), ev->y());
+
+        m_selectionRect->setX(rect.x() + 2);
+        m_selectionRect->setY(rect.y());
+        m_selectionRect->setSize(rect.width() - 4, rect.height());
+
+        m_selectionRect->show();
+        m_updateRect = false;
+
+        m_justSelectedBar = true;
+        QTimer::singleShot(QApplication::doubleClickInterval(), this,
+                           SLOT(slotClickTimeout()));
         } */
 }
 
@@ -336,7 +336,7 @@ MatrixSelector::handleMouseMove(const MatrixMouseEvent *e)
 
     setViewCurrentSelection(false);
 
-    
+
 
 /*
     int w = int(p.x() - m_selectionRect->x());
@@ -487,7 +487,7 @@ MatrixSelector::setViewCurrentSelection(bool always)
 
     if (m_selectionToMerge && selection &&
         m_selectionToMerge->getSegment() == selection->getSegment()) {
-        
+
         selection->addFromSelection(m_selectionToMerge);
         m_scene->setSelection(selection, true);
 
@@ -557,14 +557,14 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
     MatrixElement *element = e->element;
 
     if (!element) {
-        
+
         setContextHelp
             (tr("Click and drag to select; middle-click and drag to draw new note"));
 
     } else {
-        
+
         // same logic as in handleLeftButtonPress
-        
+
         float x = element->getLayoutX();
         float width = element->getWidth();
         float resizeStart = int(double(width) * 0.85) + x;
@@ -593,7 +593,7 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
                 } else {
                     setContextHelp(tr("Click and drag to copy note"));
                 }
-            }                
+            }
         }
     }
 }

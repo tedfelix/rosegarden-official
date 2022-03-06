@@ -231,7 +231,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     m_Hzoom->setMinimumValue(-25);
     m_Hzoom->setMaximumValue(60);
-    m_Hzoom->setDefaultValue(0); 
+    m_Hzoom->setDefaultValue(0);
     m_Hzoom->setBright(false);
     controlsLayout->addWidget(m_Hzoom, 1, 0);
     connect(m_Hzoom, &Thumbwheel::valueChanged, this,
@@ -255,7 +255,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_reset->setToolTip(tr("Reset Zoom"));
     controlsLayout->addWidget(m_reset, 1, 1, Qt::AlignCenter);
 
-    connect(m_reset, &QAbstractButton::clicked, this, 
+    connect(m_reset, &QAbstractButton::clicked, this,
             &MatrixWidget::slotResetZoomClicked);
 
     pannerLayout->addWidget(controls);
@@ -442,7 +442,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     // ( ^^^ it's because m_scene is only set after construction --cc)
     connect(m_scene, &MatrixScene::currentViewSegmentChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
-    
+
     connect(m_scene, &MatrixScene::selectionChangedES,
             m_controlsWidget, &ControlRulerWidget::slotSelectionChanged);
 
@@ -1084,7 +1084,7 @@ MatrixWidget::addControlRuler(QAction *action)
                                      .arg(QObject::tr(it->getName().c_str()))
                                      .arg(it->getControllerNumber())
                                      .arg(hexValue);
-        
+
         if (name != itemStr)
             continue;
 
@@ -1094,7 +1094,7 @@ MatrixWidget::addControlRuler(QAction *action)
 
 //      if (i == menuIndex) m_controlsWidget->slotAddControlRuler(*p);
 //      else i++;
-    }   
+    }
 }
 
 void
@@ -1524,7 +1524,7 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
     slotHoveredOverKeyChanged(y);
 
 //    getCanvasView()->scrollVertSmallSteps(y);
-    
+
     int evPitch = m_scene->calculatePitchFromY(y);
 
     // If we are part of a run up the keyboard, don't send redundant
