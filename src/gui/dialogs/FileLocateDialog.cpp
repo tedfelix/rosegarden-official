@@ -38,6 +38,7 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
                                    const QString &file,
                                    const QString &path):
     QDialog(parent),
+    m_result(Cancel),
     m_path(path),
     m_fileName(file)
 {
@@ -67,44 +68,53 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox;
 
-    QPushButton *cancel = new QPushButton(tr("&Cancel File Open"));
-    buttonBox->addButton(cancel, QDialogButtonBox::RejectRole);
-
     QPushButton *locate = new QPushButton(tr("&Locate Missing File"));
+    locate->setProperty("Action", static_cast<int>(Locate));
     buttonBox->addButton(locate, QDialogButtonBox::ActionRole);
-    connect(locate, &QAbstractButton::clicked,
-            this, &FileLocateDialog::slotLocate);
 
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    QPushButton *skip = new QPushButton(tr("&Skip This Audio File"));
+    skip->setProperty("Action", static_cast<int>(Skip));
+    buttonBox->addButton(skip, QDialogButtonBox::ActionRole);
+
+    QPushButton *cancel = new QPushButton(tr("&Cancel File Open"));
+    cancel->setProperty("Action", static_cast<int>(Cancel));
+    buttonBox->addButton(cancel, QDialogButtonBox::ActionRole);
+
+    connect(buttonBox, &QDialogButtonBox::clicked,
+            this, &FileLocateDialog::slotButtonClicked);
 
     gridLayout->addWidget(buttonBox, row, 0);
 }
 
 void
-FileLocateDialog::slotLocate()
+FileLocateDialog::slotButtonClicked(QAbstractButton *button)
 {
-    // ??? We really just need a directory.  Is there a directory open
-    //     dialog that would show the files to help confirm we are in
-    //     the right place?
-    m_fileName = FileDialog::getOpenFileName(
-            this,  // parent
-            tr("Select an Audio File"),  // caption
-            m_path,  // dir
-            tr("Requested file") +
-                QString(" (%1)").arg(QFileInfo(m_fileName).fileName()) +
-                ";;" +
-            tr("WAV files") + " (*.wav *.WAV)" + ";;" +
-            tr("All files") + " (*)");  // filter
+    m_result = static_cast<Result>(button->property("Action").toInt());
 
-    if (m_fileName.isEmpty())
-        reject();
+    if (m_result == Locate) {
+        // ??? We really just need a directory.  Is there a directory open
+        //     dialog that would show the files to help confirm we are in
+        //     the right place?
+        m_fileName = FileDialog::getOpenFileName(
+                this,  // parent
+                tr("Select an Audio File"),  // caption
+                m_path,  // dir
+                tr("Requested file") +
+                    QString(" (%1)").arg(QFileInfo(m_fileName).fileName()) +
+                    ";;" +
+                tr("WAV files") + " (*.wav *.WAV)" + ";;" +
+                tr("All files") + " (*)");  // filter
 
-    QFileInfo fileInfo(m_fileName);
-    m_path = fileInfo.path();
+        if (!m_fileName.isEmpty()) {
+            QFileInfo fileInfo(m_fileName);
+            m_path = fileInfo.path();
+        }
+    }
 
+    // Always accept.  The buttons are all actions.  There isn't really a
+    // concept of "reject" at this level.  Call getResult() to find out which
+    // button was pressed.
     accept();
-
 }
 
 

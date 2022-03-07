@@ -87,9 +87,8 @@
   <Separator/>
     <Action name="select_all" text="Select &amp;All Segments" shortcut="Ctrl+A" />
   <Separator/>
-    <Action name="shortcuts_configure" text="S&amp;hortcuts..." />
-  <Separator/>
     <Action name="options_configure" text="&amp;Preferences..." icon="configure" />
+    <Action name="shortcuts_configure" text="Keyboard S&amp;hortcuts..." />
   </Menu>
 
   <Menu name="settings">

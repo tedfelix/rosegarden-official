@@ -21,6 +21,7 @@
 #include <QDialog>
 #include <QString>
 
+class QAbstractButton;
 class QWidget;
 
 
@@ -37,13 +38,19 @@ public:
                      const QString &file,
                      const QString &path);
 
+    enum Result { Locate, Skip, Cancel };
+    Result getResult() const  { return m_result; }
+
     QString getPath()  { return m_path; }
     QString getFileName()  { return m_fileName; }
 
 private slots:
-    void slotLocate();
+
+    void slotButtonClicked(QAbstractButton *button);
 
 private:
+    Result m_result;
+
     QString m_path;
     QString m_fileName;
 };

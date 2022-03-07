@@ -55,6 +55,7 @@
 #include "XmlStorableEvent.h"
 #include "XmlSubHandler.h"
 
+#include <QApplication>
 #include <QMessageBox>
 #include <QByteArray>
 #include <QColor>
@@ -247,6 +248,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_createDevices(createNewDevicesWhenNeeded),
     m_haveControls(false),
     m_hasActiveAudio(false),
+    m_audioSkipWarning(false),
     m_oldSolo(false),
     m_progressDialog(progressDialog)
 {}
@@ -2701,8 +2703,9 @@ RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
 {
     StartupLogo::hideIfStillThere();
 
-    // ??? Can we also stop the wait cursor?  It's really annoying here.
-    //     We'll want to bring it back as well.
+    // Get rid of the wait cursor so it doesn't interfere with the
+    // dialogs.
+    QApplication::restoreOverrideCursor();
 
     // Let the user look around and try to find the file.
 
@@ -2716,13 +2719,34 @@ RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
                 RosegardenMainWindow::self(),
                 file,
                 getAudioFileManager().getAbsoluteAudioPath());
-        int result = fileLocateDialog.exec();
+        fileLocateDialog.exec();
+
+        FileLocateDialog::Result result = fileLocateDialog.getResult();
 
         // If the user decides to abort, cancel the load.
-        if (result != QDialog::Accepted) {
+        if (result == FileLocateDialog::Cancel) {
             m_errorString = "Audio file not found.";
+            // Stop loading this file.
             return false;
         }
+
+        if (result == FileLocateDialog::Skip) {
+            // If the audio skip warning hasn't been issued, issue it.
+            if (!m_audioSkipWarning) {
+                QMessageBox::warning(
+                        RosegardenMainWindow::self(),
+                        tr("Rosegarden"),
+                        tr("Skipping a file will remove its audio segments from the composition."));
+
+                // But don't issue it again.
+                m_audioSkipWarning = true;
+            }
+
+            // Continue loading.
+            return true;
+        }
+
+        // Locate
 
         newAudioDirectory = fileLocateDialog.getPath();
         const QString newFilePath = newAudioDirectory + "/" + file;

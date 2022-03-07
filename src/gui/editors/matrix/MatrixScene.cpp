@@ -75,7 +75,7 @@ MatrixScene::MatrixScene() :
 MatrixScene::~MatrixScene()
 {
     RG_DEBUG << "MatrixScene::~MatrixScene() - start";
-    
+
     if (m_document) {
         if (!isCompositionDeleted()) { // implemented in CompositionObserver
             m_document->getComposition().removeObserver(this);
@@ -157,7 +157,7 @@ MatrixScene::setSegments(RosegardenDocument *document,
     // We should show diamonds instead of bars whenever we are in
     // "drum mode" (i.e. whenever we were invoked using the percussion
     // matrix menu option instead of the normal matrix one).
-    
+
     // The question of whether to show the key names instead of the
     // piano keyboard is a separate one, handled in MatrixWidget, and
     // it depends solely on whether a key mapping exists for the
@@ -165,15 +165,15 @@ MatrixScene::setSegments(RosegardenDocument *document,
     // matrix or not).
 
     // Nevertheless, if the key names are shown, we need a little more space
-    // between horizontal lines. That's why m_resolution depends from 
+    // between horizontal lines. That's why m_resolution depends from
     // keyMapping.
 
-    // But since several segments may be edited in the same matrix, we 
+    // But since several segments may be edited in the same matrix, we
     // have to deal with simultaneous display of segments using piano keyboard
     // and segments using key mapping.
     // Key mapping may be displayed with piano keyboard resolution (even if
     // space is a bit short for the text) but the opposite is not possible.
-    // So the only (easy) way I found is to use the resolution fitting with 
+    // So the only (easy) way I found is to use the resolution fitting with
     // piano keyboard when at least one segment needs it.
 
     bool drumMode = false;
@@ -314,30 +314,30 @@ MatrixScene::recreateLines()
     double endPos = m_scale->getXForTime(end);
 
     // Draw horizontal lines
-    int i = 0; 	   	 
-    while (i < 127) { 	 
-         int y = (i + 1) * (m_resolution + 1); 	 
-         QGraphicsLineItem *line; 	 
-         if (i < (int)m_horizontals.size()) { 	 
-             line = m_horizontals[i]; 	 
-         } else { 	 
-             line = new QGraphicsLineItem; 	 
-             line->setZValue(-9); 	 
-             line->setPen(QPen(GUIPalette::getColour 	 
-                               (GUIPalette::MatrixHorizontalLine), pw)); 	 
-             addItem(line); 	 
-             m_horizontals.push_back(line); 	 
-         } 	 
-         line->setLine(startPos, y, endPos, y); 	 
-         line->show(); 	 
-         ++i; 	 
-     } 	 
+    int i = 0;
+    while (i < 127) {
+         int y = (i + 1) * (m_resolution + 1);
+         QGraphicsLineItem *line;
+         if (i < (int)m_horizontals.size()) {
+             line = m_horizontals[i];
+         } else {
+             line = new QGraphicsLineItem;
+             line->setZValue(-9);
+             line->setPen(QPen(GUIPalette::getColour
+                               (GUIPalette::MatrixHorizontalLine), pw));
+             addItem(line);
+             m_horizontals.push_back(line);
+         }
+         line->setLine(startPos, y, endPos, y);
+         line->show();
+         ++i;
+     }
 
 
      // Hide the other lines, if there are any.  Just a double check.
-     while (i < (int)m_horizontals.size()) { 	 
-         m_horizontals[i]->hide(); 	 
-         ++i; 	 
+     while (i < (int)m_horizontals.size()) {
+         m_horizontals[i]->hide();
+         ++i;
     }
 
     setSceneRect(QRectF(startPos, 0, endPos - startPos, 128 * (m_resolution + 1)));
@@ -380,7 +380,7 @@ MatrixScene::recreateLines()
                 x += dx;
                 continue;
             }
-            
+
             // Exit if we have passed the end of last segment end time.
             if (x > endPos) {
                 break;
@@ -405,7 +405,7 @@ MatrixScene::recreateLines()
 
             line->setZValue(index > 0 ? -10 : -8);
             line->setLine(x, 0, x, 128 * (m_resolution + 1));
-            
+
             line->show();
             x += dx;
             ++i;
@@ -419,7 +419,7 @@ MatrixScene::recreateLines()
     }
 
     recreatePitchHighlights();
-    
+
     // Force update so all vertical lines are drawn correctly
     update();
 }
@@ -432,11 +432,11 @@ MatrixScene::recreateTriadHighlights()
 
     timeT k0 = segment->getClippedStartTime();
     timeT k1 = segment->getClippedStartTime();
-    
+
     int i = 0;
-    
+
     while (k0 < segment->getEndMarkerTime()) {
-        
+
         Rosegarden::Key key = segment->getKeyAtTime(k0);
 
         // offset the highlights according to how far this key's tonic pitch is
@@ -521,21 +521,21 @@ MatrixScene::recreateTriadHighlights()
         ++i;
     }
 }
- 
+
 void
 MatrixScene::recreateBlackkeyHighlights()
 {
     Segment *segment = getCurrentSegment();
     if (!segment) return;
-    
+
     timeT k0 = segment->getClippedStartTime();
     timeT k1 = segment->getEndMarkerTime();
-    
+
     int i = 0;
-    
+
     double x0 = m_scale->getXForTime(k0);
     double x1 = m_scale->getXForTime(k1);
-    
+
     int bkcount = 5;
     int bksteps[bkcount];
     bksteps[0] = 1;
@@ -544,12 +544,12 @@ MatrixScene::recreateBlackkeyHighlights()
     bksteps[3] = 8;
     bksteps[4] = 10;
     for (int j = 0; j < bkcount; ++j) {
-        
+
         int pitch = bksteps[j];
         while (pitch < 128) {
-            
+
             QGraphicsRectItem *rect;
-            
+
             if (i < (int)m_highlights.size()) {
                 rect = m_highlights[i];
             } else {
@@ -559,20 +559,20 @@ MatrixScene::recreateBlackkeyHighlights()
                 addItem(rect);
                 m_highlights.push_back(rect);
             }
-            
+
             rect->setBrush(GUIPalette::getColour
                            (GUIPalette::MatrixPitchHighlight));
-            
+
             rect->setRect(0, 0, x1 - x0, m_resolution + 1);
             rect->setPos(x0, (127 - pitch) * (m_resolution + 1));
             rect->show();
-            
+
             pitch += 12;
-            
+
             ++i;
         }
     }
-    
+
     while (i < (int)m_highlights.size()) {
         m_highlights[i]->hide();
         ++i;
@@ -621,7 +621,7 @@ MatrixScene::recreatePitchHighlights()
         }
         m_highlightType = HT_BlackKeys;
     }
-    
+
     recreateTriadHighlights();
 
 }
@@ -834,9 +834,9 @@ void
 MatrixScene::handleEventRemoved(Event *e)
 {
     if (m_selection && m_selection->contains(e)) m_selection->removeEvent(e);
-    if (e->getType() == Rosegarden::Key::EventType) {
-        recreatePitchHighlights();
-    }
+    // we can not use e here (already deleted) but if it was a
+    // Rosegarden::Key::EventType we must recreatePitchHighlights
+    recreatePitchHighlights();
     update();
     emit eventRemoved(e);
 }
@@ -1085,6 +1085,7 @@ MatrixScene::updateAll()
         (*i)->updateAll();
     }
     recreatePitchHighlights();
+    updateCurrentSegment();
 }
 
 int

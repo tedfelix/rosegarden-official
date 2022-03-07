@@ -37,6 +37,8 @@ class QComboBox;
 namespace Rosegarden
 {
 
+
+/// Keyboard Shortcuts dialog
 class ShortcutDialog : public QDialog
 {
     Q_OBJECT

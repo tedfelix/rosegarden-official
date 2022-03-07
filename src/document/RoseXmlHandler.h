@@ -192,7 +192,10 @@ protected:
     bool                              m_haveControls;
 
     bool m_hasActiveAudio;
+
     bool locateAudioFile(QString id, QString file, QString label);
+    /// Whether the audio skip warning has been issued.
+    bool m_audioSkipWarning;
 
     // In case we encounter an old solo attribute at the composition level,
     // hold onto it and use it to set the solo for the proper track.
