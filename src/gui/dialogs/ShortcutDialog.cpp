@@ -40,6 +40,7 @@
 #include <QComboBox>
 #include <QMessageBox>
 #include <QDialogButtonBox>
+#include <QKeyEvent>
 
 namespace Rosegarden
 {
@@ -371,6 +372,15 @@ void ShortcutDialog::reject()
     ActionData* adata = ActionData::getInstance();
     adata->undoChanges();
     QDialog::reject();
+}
+
+void ShortcutDialog::keyPressEvent(QKeyEvent *event)
+{
+    // catch enter and return to avoid accepting the dialog with these keys
+    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        return;
+    }
+    QDialog::keyPressEvent(event);
 }
 
 void ShortcutDialog::editRow()

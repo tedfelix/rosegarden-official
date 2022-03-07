@@ -406,7 +406,10 @@ bool ActionData::startElement(const QString&,
             ActionInfo& ainfo = m_actionMap[key];
             if (! m_currentMenus.empty()) ainfo.menus = m_currentMenus;
             if (m_currentToolbar != "") ainfo.toolbar = m_currentToolbar;
-            if (text != "") ainfo.text = translate(text);
+            if (text != "") {
+                ainfo.text = translate(text);
+                RG_DEBUG << "text:" << key << text << ainfo.text;
+            }
             if (icon != "") ainfo.icon = icon;
             if (shortcut != "") {
                 RG_DEBUG << "read xml xmlshortcut" << shortcut;

@@ -46,7 +46,7 @@ class ShortcutDialog : public QDialog
  public:
     ShortcutDialog(QWidget *parent);
     ~ShortcutDialog();
-    
+
  private slots:
     void filterChanged();
     void selectionChanged(const QItemSelection &selected,
@@ -57,14 +57,16 @@ class ShortcutDialog : public QDialog
     void clearPBClicked();
     void warnSettingChanged(int index);
     void reject() override;
-    
+
+    void keyPressEvent(QKeyEvent *event) override;
+
  private:
     enum WarningType { None, SameContext, AllContexts };
 
     void editRow();
 
     QSortFilterProxyModel *m_proxyModel;
-     
+
     QTreeView *m_proxyView;
     QLabel *m_filterPatternLabel;
     QLineEdit *m_filterPatternLineEdit;
