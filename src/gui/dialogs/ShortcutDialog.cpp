@@ -99,7 +99,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
 
     QLabel* helpLabel = new QLabel;
     helpLabel->setWordWrap(true);
-    helpLabel->setText(tr("<p>Select an action in the table below then click one of the four <b>Press shortcut</b> fields at the top.  Press the new shortcut key and click the <b>Set Shortcuts</b> button.  A single shortcut can be removed by pressing Shift in the <b>Press shortcut</b> field.</p><p><i>Actions marked with a <span style=\"background-color:cyan; color:black\">light blue background</span> are global and valid for all windows.</i></p>"));
+    helpLabel->setText(tr("<p>Select an action in the table below then double click one of the four <b>shortcut</b> fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the <b>edit shortcut</b> field.</p><p><i>Actions marked with a <span style=\"background-color:cyan; color:black\">light blue background</span> are global and valid for all windows.</i></p>"));
 
     mainLayout->addWidget(helpLabel);
 
@@ -132,23 +132,6 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     hlayout->addWidget(m_ilabel);
 
     QHBoxLayout *hlayout2 = new QHBoxLayout;
-    // up to 4  shortcuts
-    m_ksEditList.push_back(new QKeySequenceEdit);
-    m_ksEditList.push_back(new QKeySequenceEdit);
-    m_ksEditList.push_back(new QKeySequenceEdit);
-    m_ksEditList.push_back(new QKeySequenceEdit);
-    foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
-        hlayout2->addWidget(ksEdit);
-        connect(ksEdit, SIGNAL(editingFinished()),
-                this, SLOT(keySequenceEdited()));
-        ksEdit->setEnabled(false);
-    }
-
-    QHBoxLayout *hlayout3 = new QHBoxLayout;
-    m_setPB = new QPushButton(tr("Set Shortcuts"));
-    connect(m_setPB, SIGNAL(clicked()),
-            this, SLOT(setPBClicked()));
-    m_setPB->setEnabled(false);
     m_defPB = new QPushButton(tr("Reset to Defaults"));
     connect(m_defPB, SIGNAL(clicked()),
             this, SLOT(defPBClicked()));
@@ -171,16 +154,14 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
         (settings.value("shortcut_warnings", 1).toInt());
     settings.endGroup();
 
-    hlayout3->addStretch();
-    hlayout3->addWidget(m_setPB);
-    hlayout3->addStretch();
-    hlayout3->addWidget(m_defPB);
-    hlayout3->addStretch();
-    hlayout3->addWidget(m_clearPB);
-    hlayout3->addStretch();
-    hlayout3->addWidget(m_warnLabel);
-    hlayout3->addWidget(m_warnSetting);
-    hlayout3->addStretch();
+    hlayout2->addStretch();
+    hlayout2->addWidget(m_defPB);
+    hlayout2->addStretch();
+    hlayout2->addWidget(m_clearPB);
+    hlayout2->addStretch();
+    hlayout2->addWidget(m_warnLabel);
+    hlayout2->addWidget(m_warnSetting);
+    hlayout2->addStretch();
 
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::HLine);
@@ -195,7 +176,6 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
 
     mainLayout->addLayout(hlayout);
     mainLayout->addLayout(hlayout2);
-    mainLayout->addLayout(hlayout3);
     mainLayout->addWidget(line);
     mainLayout->addLayout(proxyLayout);
     mainLayout->addWidget(buttonBox);
@@ -321,10 +301,6 @@ void ShortcutDialog::selectionChanged(const QItemSelection& selected,
     m_selectionChanged = true;
     QModelIndexList indexes = selected.indexes();
     if (indexes.empty()) {
-        foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
-            ksEdit->setEnabled(false);
-        }
-        m_setPB->setEnabled(false);
         m_defPB->setEnabled(false);
         m_clearPB->setEnabled(false);
         m_editRow = -1;
@@ -339,68 +315,6 @@ void ShortcutDialog::selectionChanged(const QItemSelection& selected,
     RG_DEBUG << "row" << row << column << "selected";
     m_editRow = row;
     editRow();
-}
-
-void ShortcutDialog::keySequenceEdited()
-{
-    RG_DEBUG << "key sequence edited row:" << m_editRow <<
-        "key: " << m_editKey;
-    // limit to just one shortcut
-    foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
-        QKeySequence ks = ksEdit->keySequence();
-        if (! ks.isEmpty()) {
-            QKeySequence singleKey(ks[0]);
-            ksEdit->setKeySequence(singleKey);
-        }
-    }
-    m_setPB->setEnabled(true);
-}
-
-void ShortcutDialog::setPBClicked()
-{
-    RG_DEBUG << "set shortcut";
-    ActionData* adata = ActionData::getInstance();
-    std::set<QKeySequence> ksSet;
-    foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
-        QKeySequence ks = ksEdit->keySequence();
-        if (! ks.isEmpty()) {
-            ksSet.insert(ks);
-        }
-    }
-
-    bool shortcutsSet = false;
-    // setting a shortcut may change the selection
-    m_selectionChanged = false;
-    if (m_warnType != None) {
-        QString context = "";
-        if (m_warnType == SameContext) {
-            QStringList klist = m_editKey.split(":");
-            context = klist[0];
-        }
-        ActionData::DuplicateData duplicates;
-        adata->getDuplicateShortcuts(m_editKey, ksSet, false,
-                                     context, duplicates);
-        if (! duplicates.duplicateMap.empty()) {
-            // ask the user
-            ShortcutWarnDialog warnDialog(duplicates);
-            if (warnDialog.exec() == QDialog::Accepted) {
-                RG_DEBUG << "defPBClicked warnDialog accepted";
-                // the shortcuts have been changed by the warnDialog
-                shortcutsSet = true;
-            } else {
-                RG_DEBUG << "defPBClicked warnDialog rejected";
-                // do nothing
-                return;
-            }
-        }
-    }
-    m_setPB->setEnabled(false);
-    if (! shortcutsSet) {
-        adata->setUserShortcuts(m_editKey, ksSet);
-    }
-
-    // If the selection has not changed - refresh edit data
-    if (! m_selectionChanged) editRow();
 }
 
 void ShortcutDialog::defPBClicked()
@@ -521,18 +435,6 @@ void ShortcutDialog::editRow()
     }
 
     std::set<QKeySequence> ksSet = adata->getShortcuts(m_editKey);
-    auto ksiter = ksSet.begin();
-    foreach(QKeySequenceEdit* ksEdit, m_ksEditList) {
-        ksEdit->setEnabled(true);
-        QKeySequence ks;
-        if (ksiter != ksSet.end()) {
-            ks = (*ksiter);
-            ksiter++;
-        }
-        RG_DEBUG << "set keysequence" << ks;
-        ksEdit->setKeySequence(ks);
-    }
-    m_setPB->setEnabled(false);
     RG_DEBUG << "editRow is default:" << adata->isDefault(m_editKey, ksSet);
     if (adata->isDefault(m_editKey, ksSet)) {
         m_defPB->setEnabled(false);
