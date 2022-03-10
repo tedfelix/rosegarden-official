@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionData]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "ActionData.h"
 
@@ -50,7 +50,7 @@ ActionData::~ActionData()
 QStandardItemModel* ActionData::getModel()
 {
     if (! m_model) {
-        m_model = new QStandardItemModel(0, 4);
+        m_model = new QStandardItemModel;
     }
     fillModel();
     return m_model;
@@ -240,7 +240,7 @@ void ActionData::resetChanges()
     m_userShortcutsCopy = m_userShortcuts;
 }
 
-bool ActionData::dataChanged() const
+bool ActionData::hasDataChanged() const
 {
     return (m_userShortcutsCopy != m_userShortcuts);
 }
@@ -558,13 +558,16 @@ void ActionData::fillModel()
 {
     m_keyStore.clear();
     m_model->clear();
-    m_model->insertColumns(0, 5);
+    m_model->insertColumns(0, 8);
 
     m_model->setHeaderData(0, Qt::Horizontal, QObject::tr("Context"));
     m_model->setHeaderData(1, Qt::Horizontal, QObject::tr("Action"));
     m_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Icon"));
     m_model->setHeaderData(3, Qt::Horizontal, QObject::tr("User defined"));
-    m_model->setHeaderData(4, Qt::Horizontal, QObject::tr("Shortcuts"));
+    m_model->setHeaderData(4, Qt::Horizontal, QObject::tr("Shortcut 1"));
+    m_model->setHeaderData(5, Qt::Horizontal, QObject::tr("Shortcut 2"));
+    m_model->setHeaderData(6, Qt::Horizontal, QObject::tr("Shortcut 3"));
+    m_model->setHeaderData(7, Qt::Horizontal, QObject::tr("Shortcut 4"));
 
     QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
     for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
@@ -577,7 +580,9 @@ void ActionData::fillModel()
         m_model->insertRow(0);
         m_keyStore.push_front(key);
         m_model->setData(m_model->index(0, 0), m_contextMap[file]);
+        m_model->item(0, 0)->setEditable(false);
         m_model->setData(m_model->index(0, 1), textAdj);
+        m_model->item(0, 1)->setEditable(false);
         if (ainfo.icon != "") {
             QIcon icon = IconLoader::load(ainfo.icon);
             if (! icon.isNull()) {
@@ -586,10 +591,10 @@ void ActionData::fillModel()
                 QStandardItem* item = new QStandardItem;
                 item->setIcon(pixmap);
                 m_model->setItem(0, 2, item);
-            } else {
-                m_model->setData(m_model->index(0, 2), "");
             }
         }
+        m_model->setData(m_model->index(0, 2), "");
+        m_model->item(0, 2)->setEditable(false);
         auto usiter = m_userShortcuts.find(key);
         bool userDefined = false;
         KeySet kset = ainfo.shortcuts;
@@ -602,9 +607,14 @@ void ActionData::fillModel()
         foreach(auto ks, kset) {
             kssl << ks.toString(QKeySequence::NativeText);
         }
-        QString scString = kssl.join(", ");
 
-        m_model->setData(m_model->index(0, 4), scString);
+        for(int i=0; i<4; i++) {
+            if(i < kssl.length()) {
+                m_model->setData(m_model->index(0, 4 + i), kssl[i]);
+            } else {
+                m_model->setData(m_model->index(0, 4 + i), "");
+            }
+        }
         QStandardItem* item = new QStandardItem;
         if (userDefined) {
             item->setIcon(udPixmap);
@@ -613,14 +623,15 @@ void ActionData::fillModel()
             item->setText("");
         }
         m_model->setItem(0, 3, item);
+        m_model->item(0, 3)->setEditable(false);
         if (ainfo.global) {
             QVariant bg(QBrush(Qt::cyan));
-            m_model->setData(m_model->index(0, 0), bg, Qt::BackgroundRole);
-            m_model->setData(m_model->index(0, 1), bg, Qt::BackgroundRole);
-            m_model->setData(m_model->index(0, 2), bg, Qt::BackgroundRole);
-            m_model->setData(m_model->index(0, 3), bg, Qt::BackgroundRole);
-            m_model->setData(m_model->index(0, 4), bg, Qt::BackgroundRole);
+            for (int col=0; col<8; col++) {
+                m_model->setData(m_model->index(0, col),
+                                 bg, Qt::BackgroundRole);
+            }
         }
+
     }
 }
 
@@ -647,9 +658,14 @@ void ActionData::updateModel(const QString& changedKey)
             foreach(auto ks, kset) {
                 kssl << ks.toString(QKeySequence::NativeText);
             }
-            QString scString = kssl.join(", ");
-            RG_DEBUG << "updateModel" << row << key << scString;
-            m_model->setData(m_model->index(row, 4), scString);
+            RG_DEBUG << "updateModel" << row << key << kssl;
+            for(int i=0; i<4; i++) {
+                if(i < kssl.length()) {
+                    m_model->setData(m_model->index(row, 4 + i), kssl[i]);
+                } else {
+                    m_model->setData(m_model->index(row, 4 + i), "");
+                }
+            }
             QStandardItem* item = m_model->item(row, 3);
             if (! item) {
                 item = new QStandardItem;

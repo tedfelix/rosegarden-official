@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ShortcutDialog]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "ShortcutDialog.h"
 
@@ -24,6 +24,7 @@
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "gui/dialogs/ShortcutWarnDialog.h"
+#include "gui/dialogs/ShortcutDelegate.h"
 
 #include <QSortFilterProxyModel>
 #include <QTreeView>
@@ -56,17 +57,23 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     adata->resetChanges();
     m_model = adata->getModel();
 
+    connect(m_model,
+            SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+            this,
+            SLOT(dataChanged(const QModelIndex&, const QModelIndex&)));
+
     m_proxyModel = new QSortFilterProxyModel(this);
     m_proxyModel->setSourceModel(m_model);
     m_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_proxyModel->setFilterKeyColumn(-1);
 
     m_proxyView = new QTreeView;
-    m_proxyView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_proxyView->setRootIsDecorated(false);
     m_proxyView->setAlternatingRowColors(true);
     m_proxyView->setModel(m_proxyModel);
     m_proxyView->setSortingEnabled(true);
+    m_delegate = new ShortcutDelegate(this);
+    m_proxyView->setItemDelegate(m_delegate);
 
     connect(m_proxyView->selectionModel(),
             SIGNAL(selectionChanged(const QItemSelection&,
@@ -210,11 +217,96 @@ ShortcutDialog::~ShortcutDialog()
     // save any changes to settings
     ActionData* adata = ActionData::getInstance();
     adata->saveUserShortcuts();
-    if (adata->dataChanged()) {
+    if (adata->hasDataChanged()) {
         QMessageBox::information(this,
                                  tr("Shortcuts Changed"),
                                  tr("You must restart Rosegarden for shortcut changes to take effect."));
     }
+    delete m_delegate;
+}
+
+void ShortcutDialog::setModelData(const QKeySequence ks,
+                                  const QModelIndex &index)
+{
+    // index is an index for the proxy model
+    QModelIndex srcIndex = m_proxyModel->mapToSource(index);
+    int row = srcIndex.row();
+    int column = srcIndex.column();
+    ActionData* adata = ActionData::getInstance();
+    QString key = adata->getKey(row);
+    RG_DEBUG << "setModelData" << key << ks;
+    std::set<QKeySequence> ksOld = adata->getShortcuts(key);
+    std::set<QKeySequence> ksSet;
+    unsigned int editIndex = column - 4;
+    RG_DEBUG << "setModelData editIndex:" << editIndex;
+    if (editIndex >= ksOld.size() && !ks.isEmpty()) {
+        ksSet.insert(ks);
+    }
+    unsigned int kssIndex = 0;
+    QKeySequence toRemove;
+    foreach(auto dks, ksOld) {
+        if (kssIndex == editIndex) {
+            if (ks.isEmpty()) {
+                toRemove = dks;
+            } else {
+                ksSet.insert(ks);
+            }
+        } else {
+            ksSet.insert(dks);
+        }
+        kssIndex++;
+    }
+    if (! toRemove.isEmpty()) {
+        ksSet.erase(toRemove);
+    }
+    // debug
+    QStringList sl;
+    foreach(auto k, ksOld) {
+        sl << k.toString();
+    }
+    RG_DEBUG << "setModelData old:" << sl;
+    sl.clear();
+    foreach(auto k, ksSet) {
+        sl << k.toString();
+    }
+    RG_DEBUG << "setModelData new:" << sl;
+    // debug end
+    if (ksSet == ksOld) {
+        RG_DEBUG << "setModelData no change";
+        return;
+    }
+    // setting a shortcut may change the selection
+    m_selectionChanged = false;
+    bool shortcutsSet = false;
+    if (m_warnType != None) {
+        QString context = "";
+        if (m_warnType == SameContext) {
+            QStringList klist = m_editKey.split(":");
+            context = klist[0];
+        }
+        ActionData::DuplicateData duplicates;
+        adata->getDuplicateShortcuts(m_editKey, ksSet, false,
+                                     context, duplicates);
+        if (! duplicates.duplicateMap.empty()) {
+            // ask the user
+            ShortcutWarnDialog warnDialog(duplicates);
+            if (warnDialog.exec() == QDialog::Accepted) {
+                RG_DEBUG << "setModelData warnDialog accepted";
+                // the shortcuts have been changed by the warnDialog
+                shortcutsSet = true;
+            } else {
+                RG_DEBUG << "defPBClicked warnDialog rejected";
+                // do nothing
+                return;
+            }
+        }
+    }
+    if (! shortcutsSet) {
+        adata->setUserShortcuts(m_editKey, ksSet);
+    }
+
+    // If the selection has not changed - refresh edit data
+    if (! m_selectionChanged) editRow();
 }
 
 void ShortcutDialog::filterChanged()
@@ -374,13 +466,15 @@ void ShortcutDialog::reject()
     QDialog::reject();
 }
 
-void ShortcutDialog::keyPressEvent(QKeyEvent *event)
+void ShortcutDialog::dataChanged(const QModelIndex& topLeft,
+                                 const QModelIndex& bottomRight)
 {
-    // catch enter and return to avoid accepting the dialog with these keys
-    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
-        return;
+    RG_DEBUG << "dataChanged" << topLeft.row() << topLeft.column() <<
+        bottomRight.row() << bottomRight.column() <<
+        (topLeft == bottomRight);
+    if (topLeft != bottomRight) {
+        RG_DEBUG << "dataChanged region edit";
     }
-    QDialog::keyPressEvent(event);
 }
 
 void ShortcutDialog::editRow()
@@ -446,6 +540,15 @@ void ShortcutDialog::editRow()
         m_defPB->setEnabled(true);
     }
     m_clearPB->setEnabled(! ksSet.empty());
+}
+
+void ShortcutDialog::keyPressEvent(QKeyEvent *event)
+{
+    // catch enter and return to avoid accepting the dialog with these keys
+    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        return;
+    }
+    QDialog::keyPressEvent(event);
 }
 
 }

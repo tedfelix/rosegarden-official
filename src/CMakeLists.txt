@@ -144,6 +144,7 @@ set(rg_CPPS
   gui/dialogs/UseOrnamentDialog.cpp
   gui/dialogs/CommentsPopupDialog.cpp
   gui/dialogs/ShortcutDialog.cpp
+  gui/dialogs/ShortcutDelegate.cpp
   gui/dialogs/ShortcutWarnDialog.cpp
   gui/widgets/IconStackedWidget.cpp
   gui/widgets/TristateCheckBox.cpp
@@ -801,7 +802,7 @@ add_library(rosegardenprivate ${RG_LIBRARY_TYPE}
 
 # If we've got cmake 3.16.0 or greater, use precompiled headers.
 # Cuts build time almost in half.
-if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0") 
+if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0")
   target_precompile_headers(rosegardenprivate
     PRIVATE
       # There's definitely a point where gcc slows down with too many

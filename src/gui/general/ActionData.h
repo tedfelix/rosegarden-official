@@ -54,7 +54,7 @@ public:
         QString editContext;
         std::map<QKeySequence, KeyDuplicates> duplicateMap;
     };
-    
+
     QStandardItemModel* getModel();
     QString getKey(int row) const;
     bool isDefault(const QString& key,
@@ -75,14 +75,14 @@ public:
                                DuplicateData& duplicates) const;
 
     void resetChanges();
-    bool dataChanged() const;
+    bool hasDataChanged() const;
     void undoChanges();
-    
+
  private:
     ActionData();
     ActionData(const ActionData&);
     void operator=(const ActionData&);
-    
+
     // Xml methods
     bool startDocument() override;
     bool startElement(const QString& namespaceURI,
@@ -102,7 +102,7 @@ public:
     QString translate(QString text, QString disambiguation = "") const;
     void fillModel();
     void updateModel(const QString& changedKey);
-    
+
     struct ActionInfo
     {
         QStringList menus;
@@ -113,11 +113,11 @@ public:
         QString tooltip;
         bool global;
     };
-    
+
     typedef std::set<QKeySequence> KeySet;
-    
+
     std::map<QString, ActionInfo> m_actionMap;
-    
+
     bool m_inMenuBar;
     bool m_inText;
     bool m_inEnable;
@@ -136,11 +136,10 @@ public:
     std::map<QString, KeySet> m_userShortcuts;
     std::map<QString, KeySet> m_userShortcutsCopy;
     QStandardItemModel* m_model;
-    
+
     static ActionData* m_instance;
 };
- 
+
 }
 
 #endif
-

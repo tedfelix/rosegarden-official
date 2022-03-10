@@ -37,6 +37,7 @@ class QComboBox;
 namespace Rosegarden
 {
 
+class ShortcutDelegate;
 
 /// Keyboard Shortcuts dialog
 class ShortcutDialog : public QDialog
@@ -46,6 +47,8 @@ class ShortcutDialog : public QDialog
  public:
     ShortcutDialog(QWidget *parent);
     ~ShortcutDialog();
+
+    void setModelData(const QKeySequence ks, const QModelIndex &index);
 
  private slots:
     void filterChanged();
@@ -57,13 +60,13 @@ class ShortcutDialog : public QDialog
     void clearPBClicked();
     void warnSettingChanged(int index);
     void reject() override;
-
-    void keyPressEvent(QKeyEvent *event) override;
+    void dataChanged(const QModelIndex&, const QModelIndex&);
 
  private:
     enum WarningType { None, SameContext, AllContexts };
 
     void editRow();
+    void keyPressEvent(QKeyEvent *event) override;
 
     QSortFilterProxyModel *m_proxyModel;
 
@@ -84,6 +87,7 @@ class ShortcutDialog : public QDialog
     int m_editRow;
     WarningType m_warnType;
     bool m_selectionChanged;
+    ShortcutDelegate *m_delegate;
 };
 
 }
