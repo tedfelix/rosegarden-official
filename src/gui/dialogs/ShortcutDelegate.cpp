@@ -58,6 +58,11 @@ void ShortcutDelegate::setModelData(QWidget *editor,
     Q_ASSERT(m_editor == editor);
 
     QKeySequence ks = m_editor->keySequence();
+    // limit to just one shortcut
+    if (! ks.isEmpty()) {
+        QKeySequence singleKey(ks[0]);
+        ks = singleKey;
+    }
     m_dialog->setModelData(ks, index);
 }
 
