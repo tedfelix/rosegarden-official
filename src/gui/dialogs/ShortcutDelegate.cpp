@@ -24,6 +24,7 @@
 #include "gui/dialogs/ShortcutDialog.h"
 
 #include <QKeySequenceEdit>
+#include <QKeyEvent>
 
 namespace Rosegarden
 {
@@ -64,6 +65,17 @@ void ShortcutDelegate::setModelData(QWidget *editor,
         ks = singleKey;
     }
     m_dialog->setModelData(ks, index);
+}
+
+bool ShortcutDelegate::eventFilter(QObject *editor, QEvent *event)
+{
+    if (event->type()==QEvent::KeyPress) {
+        QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        if (key->key()==Qt::Key_Escape) {
+            return false;
+        }
+    }
+    return QStyledItemDelegate::eventFilter(editor, event);
 }
 
 void ShortcutDelegate::ksEditFinished()

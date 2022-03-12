@@ -44,6 +44,8 @@ class ShortcutDelegate : public QStyledItemDelegate
                       QAbstractItemModel *model,
                       const QModelIndex &index) const override;
 
+    bool eventFilter(QObject *editor, QEvent *event) override;
+
  private slots:
     void ksEditFinished();
 
