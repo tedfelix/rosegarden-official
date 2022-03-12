@@ -576,7 +576,11 @@ void ActionData::fillModel()
         QString textAdj = ainfo.text;
         QStringList klist = key.split(":");
         QString file = klist[0];
+        QString aname = klist[1];
         textAdj.remove("&");
+        if (textAdj == "") {
+            textAdj = QObject::tr(aname.toStdString().c_str());
+        }
         m_model->insertRow(0);
         m_keyStore.push_front(key);
         m_model->setData(m_model->index(0, 0), m_contextMap[file]);
