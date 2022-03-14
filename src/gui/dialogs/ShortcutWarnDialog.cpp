@@ -33,7 +33,7 @@
 namespace Rosegarden
 {
 
-    ShortcutWarnDialog::ShortcutWarnDialog(ActionData::DuplicateData ddata)
+ShortcutWarnDialog::ShortcutWarnDialog(ActionData::DuplicateData ddata)
 {
     setModal(true);
     setWindowTitle(tr("Shortcut Conflicts"));

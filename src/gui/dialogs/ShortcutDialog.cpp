@@ -149,9 +149,8 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     connect(m_warnSetting, SIGNAL(currentIndexChanged(int)),
             this, SLOT(warnSettingChanged(int)));
     settings.beginGroup(GeneralOptionsConfigGroup);
-    settings.value("ShortcutWarnings");
-    m_warnSetting->setCurrentIndex
-        (settings.value("shortcut_warnings", 1).toInt());
+    m_warnType = (WarningType)(settings.value("shortcut_warnings", 1).toInt());
+    m_warnSetting->setCurrentIndex(m_warnType);
     settings.endGroup();
 
     hlayout2->addStretch();
@@ -226,9 +225,10 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     QKeySequence toRemove;
     foreach(auto dks, ksOld) {
         if (kssIndex == editIndex) {
-            if (ks.isEmpty()) {
+            if (! dks.isEmpty()) {
                 toRemove = dks;
-            } else {
+            }
+            if (! ks.isEmpty()) {
                 ksSet.insert(ks);
             }
         } else {
@@ -367,7 +367,6 @@ void ShortcutDialog::warnSettingChanged(int index)
     m_warnType = static_cast<WarningType>(index);
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    //settings.value("shortcut_warnings");
     settings.setValue("shortcut_warnings", m_warnSetting->currentIndex());
     settings.endGroup();
 }
