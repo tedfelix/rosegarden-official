@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ShortcutDialog]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "ShortcutDialog.h"
 
@@ -255,38 +255,40 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
         RG_DEBUG << "setModelData no change";
         return;
     }
-    // setting a shortcut may change the selection
-    m_selectionChanged = false;
-    bool shortcutsSet = false;
+    ActionData::DuplicateData duplicates;
     if (m_warnType != None) {
         QString context = "";
         if (m_warnType == SameContext) {
             QStringList klist = m_editKey.split(":");
             context = klist[0];
         }
-        ActionData::DuplicateData duplicates;
         adata->getDuplicateShortcuts(m_editKey, ksSet, false,
                                      context, duplicates);
         if (! duplicates.duplicateMap.empty()) {
             // ask the user
             ShortcutWarnDialog warnDialog(duplicates);
-            if (warnDialog.exec() == QDialog::Accepted) {
-                RG_DEBUG << "setModelData warnDialog accepted";
-                // the shortcuts have been changed by the warnDialog
-                shortcutsSet = true;
-            } else {
-                RG_DEBUG << "defPBClicked warnDialog rejected";
+            if (warnDialog.exec() != QDialog::Accepted) {
+                RG_DEBUG << "setModelData warnDialog rejected";
                 // do nothing
                 return;
             }
         }
     }
-    if (! shortcutsSet) {
-        adata->setUserShortcuts(m_editKey, ksSet);
-    }
 
-    // If the selection has not changed - refresh edit data
-    if (! m_selectionChanged) editRow();
+    // set the shortcuts
+    adata->setUserShortcuts(m_editKey, ksSet);
+    if (m_warnType != None) {
+        // remove the duplicates
+        foreach(auto pair, duplicates.duplicateMap) {
+            const QKeySequence& dks = pair.first;
+            const ActionData::KeyDuplicates& kdups = pair.second;
+            foreach(auto kdup, kdups) {
+                adata->removeUserShortcut(kdup.key, dks);
+            }
+        }
+    }
+    // refresh edit data
+    editRow();
 }
 
 void ShortcutDialog::filterChanged()

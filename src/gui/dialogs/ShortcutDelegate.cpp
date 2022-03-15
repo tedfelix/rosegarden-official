@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ShortcutDelegate]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "ShortcutDelegate.h"
 
