@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-keyboard-layouts>
+
+<rosegarden_keyboards>
+
+  <!--
+      # Keyboard presets for the shortcut editor
+  -->
+
+  <keyboard>
+    <name>none</name>
+    <text>None</text>
+    <shortcuts>
+    </shortcuts>
+  </keyboard>
+
+  <keyboard>
+    <name>german</name>
+    <text>German</text>
+    <shortcuts>
+      <shortcut src="Y" dest="Z" />
+      <shortcut src="Z" dest="Y" />
+      <shortcut src="Shift+Z" dest="Shift+Y" />
+    </shortcuts>
+  </keyboard>
+
+</rosegarden_keyboards>

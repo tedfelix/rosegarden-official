@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionData]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "ActionData.h"
 
@@ -240,6 +240,34 @@ bool ActionData::hasDataChanged() const
 void ActionData::undoChanges()
 {
     m_userShortcuts = m_userShortcutsCopy;
+}
+
+void ActionData::applyTranslation(const QKeySequence& ksSrc,
+                                  const QKeySequence& ksDest)
+{
+    RG_DEBUG << "applyTranslation" << ksSrc << ksDest;
+    for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
+        const QString& mkey = (*i).first;
+        const ActionInfo& mainfo = m_actionMap.at(mkey);
+        const std::set<QKeySequence>& defaultShortcuts = mainfo.shortcuts;
+        if (defaultShortcuts.find(ksSrc) == defaultShortcuts.end()) {
+            // ksSrc not in default set
+            continue;
+        }
+
+        std::set<QKeySequence> scs = getShortcuts(mkey);
+        auto diter = scs.find(ksDest);
+        if (diter != scs.end()) {
+            // no ksDest is already in the set - done
+            continue;
+        }
+        // so ksSrc is in the default set and ksDest is not in the shortcuts
+        // apply change
+        RG_DEBUG << "applyTranslation applying for" << mkey;
+        scs.erase(ksSrc);
+        scs.insert(ksDest);
+        setUserShortcuts(mkey, scs);
+    }
 }
 
 ActionData::ActionData() :

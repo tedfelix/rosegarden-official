@@ -77,6 +77,8 @@ public:
     void resetChanges();
     bool hasDataChanged() const;
     void undoChanges();
+    void applyTranslation(const QKeySequence& ksSrc,
+                          const QKeySequence& ksDest);
 
  private:
     ActionData();

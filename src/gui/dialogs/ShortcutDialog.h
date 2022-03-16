@@ -20,7 +20,7 @@
 
 #include <QDialog>
 
-#include <list>
+#include <map>
 
 class QGroupBox;
 class QTreeView;
@@ -56,6 +56,7 @@ class ShortcutDialog : public QDialog
                           const QItemSelection &deselected);
     void defPBClicked();
     void clearPBClicked();
+    void kbPBClicked();
     void warnSettingChanged(int index);
     void reject() override;
     void dataChanged(const QModelIndex&, const QModelIndex&);
@@ -63,8 +64,16 @@ class ShortcutDialog : public QDialog
  private:
     enum WarningType { None, SameContext, AllContexts };
 
+    struct KeyboardTranslation
+    {
+        QString kbText;
+        std::map<QString, QString> translation;
+    };
+    typedef std::map<QString, KeyboardTranslation> KeyboardTranslations;
+
     void editRow();
     void keyPressEvent(QKeyEvent *event) override;
+    void readKeyboardShortcuts();
 
     QSortFilterProxyModel *m_proxyModel;
 
@@ -79,11 +88,15 @@ class ShortcutDialog : public QDialog
     QPushButton *m_clearPB;
     QLabel *m_warnLabel;
     QComboBox *m_warnSetting;
+    QPushButton *m_keyboardButton;
+    QComboBox *m_keyboard;
     QString m_editKey;
     int m_editRow;
     WarningType m_warnType;
     bool m_selectionChanged;
     ShortcutDelegate *m_delegate;
+    KeyboardTranslations m_keyboardTranslations;
+    std::map<int, QString> m_indexMap;
 };
 
 }
