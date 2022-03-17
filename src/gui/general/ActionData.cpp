@@ -89,8 +89,8 @@ void ActionData::saveUserShortcuts()
         int index = 0;
         foreach(auto keyseq, keySet) {
             QString skey = key + QString::number(index);
-            RG_DEBUG << "settings set" << skey << keyseq;
-            settings.setValue(skey, keyseq);
+            RG_DEBUG << "settings set" << skey << keyseq.toString();
+            settings.setValue(skey, keyseq.toString());
             index++;
         }
     }
