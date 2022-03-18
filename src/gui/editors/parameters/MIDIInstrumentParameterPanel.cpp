@@ -39,6 +39,7 @@
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 
+#include <QAbstractItemView>
 #include <QComboBox>
 #include <QCheckBox>
 #include <QColor>
@@ -154,6 +155,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_programComboBox->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
     m_programComboBox->setMaxVisibleItems(maxVisibleItems);
     m_programComboBox->setMinimumContentsLength(minimumContentsLength);
+    m_programComboBox->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     connect(m_programComboBox,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MIDIInstrumentParameterPanel::slotSelectProgram);
