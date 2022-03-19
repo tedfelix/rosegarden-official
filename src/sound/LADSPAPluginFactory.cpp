@@ -498,14 +498,22 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 void
 LADSPAPluginFactory::loadLibrary(QString soName)
 {
-    RG_DEBUG << "loadLibrary(" << soName << ")";
+    // Since we crash when loading misbehaving plugins, logging this at
+    // "info" level to make sure we see it.  Do not remove the RG_INFO
+    // logging in here even though it can be pretty noisy.
+    RG_INFO << "loadLibrary(" << soName << ") begin...";
 
     QByteArray bso = soName.toLocal8Bit();
+    // ??? This is one place where we might crash when a plugin misbehaves
+    //     at startup.  See bug #1474.
     void *libraryHandle = dlopen(bso.data(), RTLD_NOW);
     if (!libraryHandle) {
         RG_WARNING << "loadLibrary() failed for" << soName << "-" << dlerror();
         return;
     }
+
+    // If you don't see this, a plugin crashed on load.
+    RG_INFO << "  " << soName << "plugin loaded successfully";
 
     m_libraryHandles[soName] = libraryHandle;
 }
@@ -615,16 +623,19 @@ LADSPAPluginFactory::getLRDFPath(QString &baseUri)
 void
 LADSPAPluginFactory::discoverPlugins()
 {
-    RG_DEBUG << "discoverPlugins() begin...";
+    //RG_DEBUG << "discoverPlugins() begin...";
 
     std::vector<QString> pathList = getPluginPath();
 
+//#if !defined NDEBUG
+#if 0
     RG_DEBUG << "discoverPlugins() Paths:";
     for (std::vector<QString>::iterator i = pathList.begin();
          i != pathList.end();
          ++i) {
         RG_DEBUG << "  " << *i;
     }
+#endif
 
     // Initialise liblrdf and read the description files
     //
@@ -666,7 +677,7 @@ LADSPAPluginFactory::discoverPlugins()
     //
     lrdf_cleanup();
 
-    RG_DEBUG << "discoverPlugins() end...";
+    //RG_DEBUG << "discoverPlugins() end...";
 }
 
 void
