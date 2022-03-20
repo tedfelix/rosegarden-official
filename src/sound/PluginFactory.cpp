@@ -38,14 +38,14 @@ PluginFactory::instance(QString pluginType)
 {
     if (pluginType == "ladspa") {
         if (!ladspaInstance) {
-            RG_DEBUG << "PluginFactory::instance(" << pluginType << "): creating new LADSPAPluginFactory";
+            //RG_DEBUG << "instance(" << pluginType << "): creating new LADSPAPluginFactory";
             ladspaInstance = new LADSPAPluginFactory();
             ladspaInstance->discoverPlugins();
         }
         return ladspaInstance;
     } else if (pluginType == "dssi") {
         if (!dssiInstance) {
-            RG_DEBUG << "PluginFactory::instance(" << pluginType << "): creating new DSSIPluginFactory";
+            //RG_DEBUG << "instance(" << pluginType << "): creating new DSSIPluginFactory";
             dssiInstance = new DSSIPluginFactory();
             dssiInstance->discoverPlugins();
         }
@@ -66,6 +66,8 @@ PluginFactory::instanceFor(QString identifier)
 void
 PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
 {
+    RG_INFO << "enumerateAllPlugins() begin...  Enumerating and loading all plugins...";
+
     PluginFactory *factory;
 
     // Plugins can change the locale, store it for reverting afterwards
@@ -87,6 +89,8 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
         factory->enumeratePlugins(list);
 
     setlocale(LC_ALL, loc);
+
+    RG_INFO << "enumerateAllPlugins() end.";
 }
 
 PluginFactory::~PluginFactory()
