@@ -38,7 +38,6 @@
       <shortcut src="Ctrl+Shift+W" dest="Ctrl+Shift+Z" />
       <shortcut src="Z" dest="W" />
       <shortcut src="Shift+Z" dest="Shift+W" />
-      <shortcut src="Ctrl+Shift+Z" dest="Ctrl+Shift+W" />
     </shortcuts>
   </keyboard>
 
