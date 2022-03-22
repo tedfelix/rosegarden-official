@@ -21,6 +21,24 @@
       <shortcut src="Y" dest="Z" />
       <shortcut src="Z" dest="Y" />
       <shortcut src="Shift+Z" dest="Shift+Y" />
+      <shortcut src="Shift+Y" dest="Shift+Z" />
+    </shortcuts>
+  </keyboard>
+
+  <keyboard>
+    <name>french</name>
+    <text>French</text>
+    <shortcuts>
+      <shortcut src="A" dest="Q" />
+      <shortcut src="Shift+A" dest="Shift+Q" />
+      <shortcut src="Q" dest="A" />
+      <shortcut src="Shift+Q" dest="Shift+A" />
+      <shortcut src="W" dest="Z" />
+      <shortcut src="Shift+W" dest="Shift+Z" />
+      <shortcut src="Ctrl+Shift+W" dest="Ctrl+Shift+Z" />
+      <shortcut src="Z" dest="W" />
+      <shortcut src="Shift+Z" dest="Shift+W" />
+      <shortcut src="Ctrl+Shift+Z" dest="Ctrl+Shift+W" />
     </shortcuts>
   </keyboard>
 
