@@ -80,8 +80,11 @@ CollapseNotesCommand::modifySegment()
 
         ++i;
     }
-    helper.makeNotesViable(m_selection->getStartTime(), endTime, m_splitAtBars);
-    
+    if (m_makeViable) {
+        helper.makeNotesViable(m_selection->getStartTime(),
+                               endTime,
+                               true);
+    }
 }
 
 }
