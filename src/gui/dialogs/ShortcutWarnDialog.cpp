@@ -54,30 +54,32 @@ ShortcutWarnDialog::ShortcutWarnDialog(ActionData::DuplicateData ddata)
     scrollFrame->setLayout(layout);
 
     int row = 0;
-    QLabel *ecLabel = new QLabel(ddata.editContext);
-    QLabel *eaLabel = new QLabel(ddata.editActionText);
-    layout->addWidget(ecLabel, row, 0);
-    layout->addWidget(eaLabel, row, 1);
-    row++;
-    foreach(auto dp, ddata.duplicateMap) {
-        const QKeySequence& ks = (dp).first;
-        const ActionData::KeyDuplicates& kdups = (dp).second;
-        QLabel* ksl = new QLabel(ks.toString(QKeySequence::NativeText));
-        QLabel* elabel = new QLabel(tr("set Shortcut"));
-        layout->addWidget(ksl, row, 0, 1, 2);
-        layout->addWidget(elabel, row, 2);
+    foreach(auto pair, ddata) {
+        const ActionData::DuplicateDataForKey& ddatak = pair.second;
+        QLabel *ecLabel = new QLabel(ddatak.editContext);
+        QLabel *eaLabel = new QLabel(ddatak.editActionText);
+        layout->addWidget(ecLabel, row, 0);
+        layout->addWidget(eaLabel, row, 1);
         row++;
-
-        foreach(auto kdup, kdups) {
-            QLabel* cLabel = new QLabel(kdup.context);
-            QLabel* aLabel = new QLabel(kdup.actionText);
-            QLabel* rLabel = new QLabel(tr("remove Shortcut"));
-            layout->addWidget(cLabel, row, 0);
-            layout->addWidget(aLabel, row, 1);
-            layout->addWidget(rLabel, row, 2);
+        foreach(auto dp, ddatak.duplicateMap) {
+            const QKeySequence& ks = (dp).first;
+            const ActionData::KeyDuplicates& kdups = (dp).second;
+            QLabel* ksl = new QLabel(ks.toString(QKeySequence::NativeText));
+            QLabel* elabel = new QLabel(tr("set Shortcut"));
+            layout->addWidget(ksl, row, 0, 1, 2);
+            layout->addWidget(elabel, row, 2);
             row++;
-        }
 
+            foreach(auto kdup, kdups) {
+                QLabel* cLabel = new QLabel(kdup.context);
+                QLabel* aLabel = new QLabel(kdup.actionText);
+                QLabel* rLabel = new QLabel(tr("remove Shortcut"));
+                layout->addWidget(cLabel, row, 0);
+                layout->addWidget(aLabel, row, 1);
+                layout->addWidget(rLabel, row, 2);
+                row++;
+            }
+        }
         QFrame* line = new QFrame();
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);

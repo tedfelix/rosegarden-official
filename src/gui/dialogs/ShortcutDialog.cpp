@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ShortcutDialog]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "ShortcutDialog.h"
 
@@ -48,9 +48,7 @@ namespace Rosegarden
 {
 
 ShortcutDialog::ShortcutDialog(QWidget *parent) :
-    QDialog(parent),
-    m_editRow(-1),
-    m_selectionChanged(false)
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(tr("Keyboard Shortcuts"));
@@ -75,6 +73,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     m_proxyView->setSortingEnabled(true);
     m_delegate = new ShortcutDelegate(this);
     m_proxyView->setItemDelegate(m_delegate);
+    m_proxyView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     connect(m_proxyView->selectionModel(),
             SIGNAL(selectionChanged(const QItemSelection&,
@@ -133,14 +132,21 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     hlayout->addWidget(m_ilabel);
 
     QHBoxLayout *hlayout2 = new QHBoxLayout;
-    m_defPB = new QPushButton(tr("Reset to Defaults"));
+    m_defPB = new QPushButton(tr("Reset Selected"));
     connect(m_defPB, SIGNAL(clicked()),
             this, SLOT(defPBClicked()));
     m_defPB->setEnabled(false);
-    m_clearPB = new QPushButton(tr("Remove all shortcuts"));
+    m_defPB->setToolTip(tr("Reset selected actions' shortcuts to defaults"));
+    m_clearPB = new QPushButton(tr("Remove shortcuts"));
     connect(m_clearPB, SIGNAL(clicked()),
             this, SLOT(clearPBClicked()));
     m_clearPB->setEnabled(false);
+    m_clearPB->setToolTip(tr("Remove all shortcuts from selected actions"));
+    m_clearAllPB = new QPushButton(tr("Reset All"));
+    connect(m_clearAllPB, SIGNAL(clicked()),
+            this, SLOT(clearAllPBClicked()));
+    m_clearAllPB->setEnabled(true);
+    m_clearAllPB->setToolTip(tr("Reset all shortcuts for all actions"));
 
     m_warnLabel = new QLabel(tr("Warnings when:"));
     m_warnSetting = new QComboBox;
@@ -176,6 +182,8 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     hlayout2->addWidget(m_defPB);
     hlayout2->addStretch();
     hlayout2->addWidget(m_clearPB);
+    hlayout2->addStretch();
+    hlayout2->addWidget(m_clearAllPB);
     hlayout2->addStretch();
     hlayout2->addWidget(m_warnLabel);
     hlayout2->addWidget(m_warnSetting);
@@ -281,12 +289,15 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     if (m_warnType != None) {
         QString context = "";
         if (m_warnType == SameContext) {
-            QStringList klist = m_editKey.split(":");
+            QStringList klist = key.split(":");
             context = klist[0];
         }
-        adata->getDuplicateShortcuts(m_editKey, ksSet, false,
-                                     context, duplicates);
-        if (! duplicates.duplicateMap.empty()) {
+        std::set<QString> keys;
+        keys.insert(key);
+        bool sameContext = (m_warnType == SameContext);
+        adata->getDuplicateShortcuts(keys, ksSet, false,
+                                     sameContext, duplicates);
+        if (! duplicates.empty()) {
             // ask the user
             ShortcutWarnDialog warnDialog(duplicates);
             if (warnDialog.exec() != QDialog::Accepted) {
@@ -298,10 +309,10 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     }
 
     // set the shortcuts
-    adata->setUserShortcuts(m_editKey, ksSet);
+    adata->setUserShortcuts(key, ksSet);
     if (m_warnType != None) {
         // remove the duplicates
-        foreach(auto pair, duplicates.duplicateMap) {
+        foreach(auto pair, duplicates[key].duplicateMap) {
             const QKeySequence& dks = pair.first;
             const ActionData::KeyDuplicates& kdups = pair.second;
             foreach(auto kdup, kdups) {
@@ -318,26 +329,22 @@ void ShortcutDialog::filterChanged()
     m_proxyModel->setFilterFixedString(m_filterPatternLineEdit->text());
 }
 
-void ShortcutDialog::selectionChanged(const QItemSelection& selected,
+void ShortcutDialog::selectionChanged(const QItemSelection&,
                                       const QItemSelection&)
 {
-    RG_DEBUG << "selection changed" << selected;
-    m_selectionChanged = true;
-    QModelIndexList indexes = selected.indexes();
-    if (indexes.empty()) {
-        m_defPB->setEnabled(false);
-        m_clearPB->setEnabled(false);
-        m_editRow = -1;
-        m_editKey = "";
-        editRow(); // to reset the edit data
-        return;
-    }
+    RG_DEBUG << "selection changed";
+    QModelIndexList indexes =
+        m_proxyView->selectionModel()->selectedIndexes();
 
-    QModelIndex index = indexes.first();
-    int row = index.row();
-    int column = index.column();
-    RG_DEBUG << "row" << row << column << "selected";
-    m_editRow = row;
+    m_editRows.clear();
+    std::set<int> selectedRows;
+    foreach(auto index, indexes) {
+        QModelIndex srcIndex = m_proxyModel->mapToSource(index);
+        int row = srcIndex.row();
+        m_editRows.insert(row);
+    }
+    RG_DEBUG << "selectedRows size" << m_editRows.size();
+
     editRow();
 }
 
@@ -347,15 +354,17 @@ void ShortcutDialog::defPBClicked()
     ActionData* adata = ActionData::getInstance();
     std::set<QKeySequence> ksSet;
     ActionData::DuplicateData duplicates;
+    std::set<QString> keys;
+    foreach(auto row, m_editRows) {
+        QString key = adata->getKey(row);
+        keys.insert(key);
+    }
     if (m_warnType != None) {
         QString context = "";
-        if (m_warnType == SameContext) {
-            QStringList klist = m_editKey.split(":");
-            context = klist[0];
-        }
-        adata->getDuplicateShortcuts(m_editKey, ksSet, true,
-                                     context, duplicates);
-        if (! duplicates.duplicateMap.empty()) {
+        bool sameContext = (m_warnType == SameContext);
+        adata->getDuplicateShortcuts(keys, ksSet, true,
+                                     sameContext, duplicates);
+        if (! duplicates.empty()) {
             // ask the user
             ShortcutWarnDialog warnDialog(duplicates);
             if (warnDialog.exec() != QDialog::Accepted) {
@@ -365,32 +374,56 @@ void ShortcutDialog::defPBClicked()
             }
         }
     }
-    m_defPB->setEnabled(false);
-    m_selectionChanged = false;
-    adata->removeUserShortcuts(m_editKey);
-    if (m_warnType != None) {
-        // remove the duplicates
-        foreach(auto pair, duplicates.duplicateMap) {
-            const QKeySequence& dks = pair.first;
-            const ActionData::KeyDuplicates& kdups = pair.second;
-            foreach(auto kdup, kdups) {
-                adata->removeUserShortcut(kdup.key, dks);
+    foreach(auto key, keys) {
+        adata->removeUserShortcuts(key);
+        if (m_warnType != None) {
+            // remove the duplicates
+            foreach(auto pair, duplicates) {
+                const ActionData::DuplicateDataForKey& ddatak = pair.second;
+                foreach(auto dpair, ddatak.duplicateMap) {
+                    const QKeySequence& dks = dpair.first;
+                    const ActionData::KeyDuplicates& kdups = dpair.second;
+                    foreach(auto kdup, kdups) {
+                        adata->removeUserShortcut(kdup.key, dks);
+                    }
+                }
             }
         }
     }
-
-    // If the selection has not changed - refresh edit data
-    if (! m_selectionChanged) editRow();
+    // refresh edit data
+    editRow();
 }
 
 void ShortcutDialog::clearPBClicked()
 {
-    RG_DEBUG << "remove all shortcuts";
+    RG_DEBUG << "remove shortcuts on selection";
     ActionData* adata = ActionData::getInstance();
-    std::set<QKeySequence> ksSet;
-    m_selectionChanged = false;
-    adata->setUserShortcuts(m_editKey, ksSet);
-    if (! m_selectionChanged) editRow();
+    foreach(auto row, m_editRows) {
+        QString key = adata->getKey(row);
+        std::set<QKeySequence> ksSet;
+        adata->setUserShortcuts(key, ksSet);
+    }
+    // refresh edit data
+    editRow();
+}
+
+void ShortcutDialog::clearAllPBClicked()
+{
+    RG_DEBUG << "remove all shortcuts";
+    QMessageBox::StandardButton reply =
+        QMessageBox::warning(
+                             0,
+                             tr("Rosegarden"),
+                             tr("This will reset all shortcuts for all actions across all contexts. Are you sure?"),
+                             QMessageBox::Yes | QMessageBox::No,
+                             QMessageBox::Yes);
+
+    // If not, return.
+    if (reply == QMessageBox::No)
+        return;
+
+    ActionData* adata = ActionData::getInstance();
+    adata->removeAllUserShortcuts();
 }
 
 void ShortcutDialog::kbPBClicked()
@@ -442,55 +475,55 @@ void ShortcutDialog::dataChanged(const QModelIndex& topLeft,
 
 void ShortcutDialog::editRow()
 {
-    RG_DEBUG << "editRow:" << m_editRow;
-    if (m_editRow == -1) {
-        m_clabel->setText("");
-        m_alabel->setText("");
-        QPixmap noPixmap;
-        m_ilabel->setPixmap(noPixmap);
-        return;
-    }
-    QModelIndex rindex = m_proxyModel->index(m_editRow, 0);
-    QModelIndex srcIndex = m_proxyModel->mapToSource(rindex);
-    RG_DEBUG << "src row" << srcIndex.row();
-    if (srcIndex.row() == -1) {
-        m_clabel->setText("");
-        m_alabel->setText("");
-        QPixmap noPixmap;
-        m_ilabel->setPixmap(noPixmap);
-        return;
-    }
+    RG_DEBUG << "editRow:";
     ActionData* adata = ActionData::getInstance();
-    m_editKey = adata->getKey(srcIndex.row());
-    RG_DEBUG << "editing key" << m_editKey;
-    QModelIndex i0 = m_proxyModel->index(m_editRow, 0);
-    QString ctext = m_proxyModel->data(i0, Qt::DisplayRole).toString();
-    m_clabel->setText(ctext);
-    QModelIndex i1 = m_proxyModel->index(m_editRow, 1);
-    QString atext = m_proxyModel->data(i1, Qt::DisplayRole).toString();
-    m_alabel->setText(atext);
-    QModelIndex i2 = m_proxyModel->index(m_editRow, 2);
-    QVariant imagev = m_proxyModel->data(i2, Qt::DecorationRole);
-    QIcon icon = imagev.value<QIcon>();
-    if (! icon.isNull()) {
-        QPixmap pixmap =
-            icon.pixmap(icon.availableSizes().first());
-        int w = m_ilabel->width();
-        int h = m_ilabel->height();
-        m_ilabel->setPixmap(pixmap.scaled(w, h, Qt::KeepAspectRatio));
-    } else {
-        QPixmap noPixmap;
-        m_ilabel->setPixmap(noPixmap);
-    }
+    // clear data
+    m_clabel->setText("");
+    m_alabel->setText("");
+    QPixmap noPixmap;
+    m_ilabel->setPixmap(noPixmap);
+    m_defPB->setEnabled(false);
+    m_clearPB->setEnabled(false);
 
-    std::set<QKeySequence> ksSet = adata->getShortcuts(m_editKey);
-    RG_DEBUG << "editRow is default:" << adata->isDefault(m_editKey, ksSet);
-    if (adata->isDefault(m_editKey, ksSet)) {
-        m_defPB->setEnabled(false);
-    } else {
-        m_defPB->setEnabled(true);
+    foreach(auto row, m_editRows) {
+        RG_DEBUG << "edit row" << row;
+        QString key = adata->getKey(row);
+        RG_DEBUG << "editing key" << key;
+
+        std::set<QKeySequence> ksSet = adata->getShortcuts(key);
+        if (! adata->isDefault(key, ksSet)) {
+            m_defPB->setEnabled(true);
+        }
+        if (! ksSet.empty()) {
+            m_clearPB->setEnabled(true);
+        }
+
+        if (m_editRows.size() == 1) {
+            // single row
+            RG_DEBUG << "edit single row";
+            QString key = adata->getKey(row);
+            RG_DEBUG << "editing key" << key;
+            QModelIndex i0 = m_proxyModel->index(row, 0);
+            QString ctext = m_proxyModel->data(i0, Qt::DisplayRole).toString();
+            m_clabel->setText(ctext);
+            QModelIndex i1 = m_proxyModel->index(row, 1);
+            QString atext = m_proxyModel->data(i1, Qt::DisplayRole).toString();
+            m_alabel->setText(atext);
+            QModelIndex i2 = m_proxyModel->index(row, 2);
+            QVariant imagev = m_proxyModel->data(i2, Qt::DecorationRole);
+            QIcon icon = imagev.value<QIcon>();
+            if (! icon.isNull()) {
+                QPixmap pixmap =
+                    icon.pixmap(icon.availableSizes().first());
+                int w = m_ilabel->width();
+                int h = m_ilabel->height();
+                m_ilabel->setPixmap(pixmap.scaled(w, h, Qt::KeepAspectRatio));
+            } else {
+                QPixmap noPixmap;
+                m_ilabel->setPixmap(noPixmap);
+            }
+        }
     }
-    m_clearPB->setEnabled(! ksSet.empty());
 }
 
 void ShortcutDialog::keyPressEvent(QKeyEvent *event)

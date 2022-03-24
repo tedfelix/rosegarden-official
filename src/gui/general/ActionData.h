@@ -47,13 +47,14 @@ public:
 
     typedef std::list<KeyDuplicate> KeyDuplicates;
 
-    struct DuplicateData
+    struct DuplicateDataForKey
     {
-        QString editKey;
         QString editActionText;
         QString editContext;
         std::map<QKeySequence, KeyDuplicates> duplicateMap;
     };
+
+    typedef std::map<QString, DuplicateDataForKey> DuplicateData;
 
     QStandardItemModel* getModel();
     QString getKey(int row) const;
@@ -67,11 +68,12 @@ public:
     void removeUserShortcut(const QString& key,
                             const QKeySequence& ks);
     void removeUserShortcuts(const QString& key);
+    void removeAllUserShortcuts();
     std::set<QKeySequence> getShortcuts(const QString& key) const;
-    void getDuplicateShortcuts(const QString& key,
+    void getDuplicateShortcuts(const std::set<QString>& keys,
                                std::set<QKeySequence> ksSet,
                                bool resetToDefault,
-                               const QString& context,
+                               bool sameContext,
                                DuplicateData& duplicates) const;
 
     void resetChanges();

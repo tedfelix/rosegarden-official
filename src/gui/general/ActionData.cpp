@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionData]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "ActionData.h"
 
@@ -144,6 +144,13 @@ void ActionData::removeUserShortcuts(const QString& key)
     }
 }
 
+void ActionData::removeAllUserShortcuts()
+{
+    RG_DEBUG << "remove all user shortcuts";
+    m_userShortcuts.clear();
+    updateModel(""); // key empty updates the whole model
+}
+
 std::set<QKeySequence> ActionData::getShortcuts(const QString& key) const {
     std::set<QKeySequence> ret;
     auto it = m_actionMap.find(key);
@@ -164,65 +171,79 @@ std::set<QKeySequence> ActionData::getShortcuts(const QString& key) const {
     return ret;
 }
 
-void ActionData::getDuplicateShortcuts(const QString& key,
+void ActionData::getDuplicateShortcuts(const std::set<QString>& keys,
                                        std::set<QKeySequence> ksSet,
                                        bool resetToDefault,
-                                       const QString& context,
+                                       bool sameContext,
                                        DuplicateData& duplicates) const
 {
-    ActionInfo ainfo = m_actionMap.at(key);
-    QString etextAdj = ainfo.text;
-    QStringList eklist = key.split(":");
-    QString efile = eklist[0];
-    etextAdj.remove("&");
-    duplicates.editKey = key;
-    duplicates.editActionText = etextAdj;
-    duplicates.editContext = m_contextMap.at(efile);
-    duplicates.duplicateMap.clear();
-    std::set<QKeySequence> newKS;
-    std::set<QKeySequence> oldKS = getShortcuts(key);
-    if (resetToDefault) {
-        // the new shortcuts are the defaults old ones are the present ones
-        newKS = ainfo.shortcuts;
-    } else {
-        // ksSet is the new shortcut set the old one is the present one
-        newKS = ksSet;
-    }
+    // the ksSet is only relevant setting for a single key (keys.size() == 1)
 
-    std::set<QKeySequence> addedKS;
-    std::set_difference(newKS.begin(), newKS.end(),
-                        oldKS.begin(), oldKS.end(),
-                        std::inserter(addedKS, addedKS.begin()));
+    duplicates.clear();
+    foreach(auto key, keys) {
+        RG_DEBUG << "Check duplicates for" << key;
+        ActionInfo ainfo = m_actionMap.at(key);
+        QString etextAdj = ainfo.text;
+        QStringList eklist = key.split(":");
+        QString efile = eklist[0];
+        etextAdj.remove("&");
+        DuplicateDataForKey ddatak;
+        ddatak.editActionText = etextAdj;
+        ddatak.editContext = m_contextMap.at(efile);
+        std::set<QKeySequence> newKS;
+        std::set<QKeySequence> oldKS = getShortcuts(key);
+        if (resetToDefault) {
+            // the new shortcuts are the defaults old ones are the present ones
+            newKS = ainfo.shortcuts;
+        } else {
+            // ksSet is the new shortcut set the old one is the present one
+            newKS = ksSet;
+        }
 
-    foreach(auto ks, addedKS) {
-        RG_DEBUG << "getDuplicateShortcuts added" << ks;
-        KeyDuplicates kdups;
-        for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
-            const QString& mkey = (*i).first;
-            const ActionInfo& mainfo = m_actionMap.at(mkey);
-            // ignore passed key
-            if (mkey == key) continue;
-            QStringList mklist = mkey.split(":");
-            QString mcontext = mklist[0];
-            bool contextRelevant = (mcontext == context || mainfo.global);
-            if (context != "" && ! contextRelevant) continue;
-            std::set<QKeySequence> mKSL = getShortcuts(mkey);
-            if (mKSL.find(ks) != mKSL.end()) {
-                // this entry also uses the KeySequence ks
-                RG_DEBUG << "found duplicate for" << ks << mkey;
-                KeyDuplicate kdup;
-                kdup.key = mkey;
-                QString textAdj = mainfo.text;
-                textAdj.remove("&");
-                kdup.actionText = textAdj;
+        std::set<QKeySequence> addedKS;
+        std::set_difference(newKS.begin(), newKS.end(),
+                            oldKS.begin(), oldKS.end(),
+                            std::inserter(addedKS, addedKS.begin()));
+
+        foreach(auto ks, addedKS) {
+            RG_DEBUG << "getDuplicateShortcuts added" << ks;
+            KeyDuplicates kdups;
+            for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
+                const QString& mkey = (*i).first;
+                const ActionInfo& mainfo = m_actionMap.at(mkey);
+                // ignore passed key
+                if (mkey == key) continue;
                 QStringList mklist = mkey.split(":");
-                QString mfile = mklist[0];
-                kdup.context = m_contextMap.at(mfile);
-                kdups.push_back(kdup);
+                QString mcontext = m_contextMap.at(mklist[0]);
+                bool contextRelevant;
+                if (sameContext) {
+                    contextRelevant = (mcontext == ddatak.editContext);
+                } else {
+                    contextRelevant = true;
+                }
+                if (mainfo.global) contextRelevant = true;
+                if (! contextRelevant) continue;
+                std::set<QKeySequence> mKSL = getShortcuts(mkey);
+                if (mKSL.find(ks) != mKSL.end()) {
+                    // this entry also uses the KeySequence ks
+                    RG_DEBUG << "found duplicate for" << ks << mkey;
+                    KeyDuplicate kdup;
+                    kdup.key = mkey;
+                    QString textAdj = mainfo.text;
+                    textAdj.remove("&");
+                    kdup.actionText = textAdj;
+                    QStringList mklist = mkey.split(":");
+                    QString mfile = mklist[0];
+                    kdup.context = m_contextMap.at(mfile);
+                    kdups.push_back(kdup);
+                }
+            }
+            if (! kdups.empty()) {
+                ddatak.duplicateMap[ks] = kdups;
             }
         }
-        if (! kdups.empty()) {
-            duplicates.duplicateMap[ks] = kdups;
+        if (! ddatak.duplicateMap.empty()) {
+            duplicates[key] = ddatak;
         }
     }
 }
@@ -669,7 +690,7 @@ void ActionData::updateModel(const QString& changedKey)
         const QString& key = (*i).first;
         const ActionInfo& ainfo = (*i).second;
 
-        if (key == changedKey) {
+        if (key == changedKey || changedKey == "") {
             auto usiter = m_userShortcuts.find(key);
             KeySet kset = ainfo.shortcuts;
             bool userDefined = false;

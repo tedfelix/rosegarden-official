@@ -21,6 +21,7 @@
 #include <QDialog>
 
 #include <map>
+#include <set>
 
 class QGroupBox;
 class QTreeView;
@@ -56,6 +57,7 @@ class ShortcutDialog : public QDialog
                           const QItemSelection &deselected);
     void defPBClicked();
     void clearPBClicked();
+    void clearAllPBClicked();
     void kbPBClicked();
     void warnSettingChanged(int index);
     void reject() override;
@@ -86,14 +88,13 @@ class ShortcutDialog : public QDialog
     QLabel *m_ilabel;
     QPushButton *m_defPB;
     QPushButton *m_clearPB;
+    QPushButton *m_clearAllPB;
     QLabel *m_warnLabel;
     QComboBox *m_warnSetting;
     QPushButton *m_keyboardButton;
     QComboBox *m_keyboard;
-    QString m_editKey;
-    int m_editRow;
+    std::set<int> m_editRows;
     WarningType m_warnType;
-    bool m_selectionChanged;
     ShortcutDelegate *m_delegate;
     KeyboardTranslations m_keyboardTranslations;
     std::map<int, QString> m_indexMap;
