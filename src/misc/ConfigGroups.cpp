@@ -15,7 +15,7 @@
 
 #include "ConfigGroups.h"
 
-namespace Rosegarden 
+namespace Rosegarden
 {
     //
     // QSettings group names
@@ -62,5 +62,6 @@ namespace Rosegarden
     const char* const TextEventDialogConfigGroup = "TextEvent_Dialog";
     const QString RecentFilesConfigGroup = "RecentFiles";
     const QString UserShortcutsConfigGroup = "UserShortcuts";
+    const QString ShortcutKeyboardConfigGroup = "ShortcutKeyboard";
 
 }

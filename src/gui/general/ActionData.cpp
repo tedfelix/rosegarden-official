@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionData]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "ActionData.h"
 
@@ -53,6 +53,7 @@ QStandardItemModel* ActionData::getModel()
         m_model = new QStandardItemModel;
     }
     fillModel();
+    applyKeyboard(m_actKb);
     return m_model;
 }
 
@@ -94,6 +95,10 @@ void ActionData::saveUserShortcuts()
             index++;
         }
     }
+    settings.endGroup();
+
+    settings.beginGroup(UserShortcutsConfigGroup);
+    settings.setValue("acualkeyboard", m_actKb);
     settings.endGroup();
 }
 
@@ -250,45 +255,74 @@ void ActionData::getDuplicateShortcuts(const std::set<QString>& keys,
 
 void ActionData::resetChanges()
 {
+    m_actKbCopy = m_actKb;
     m_userShortcutsCopy = m_userShortcuts;
 }
 
 bool ActionData::hasDataChanged() const
 {
+    if (m_actKb != m_actKbCopy) {
+        // keyboard has changed
+        return true;
+    }
     return (m_userShortcutsCopy != m_userShortcuts);
 }
 
 void ActionData::undoChanges()
 {
+    m_actKb = m_actKbCopy;
     m_userShortcuts = m_userShortcutsCopy;
 }
 
-void ActionData::applyTranslation(const QKeySequence& ksSrc,
-                                  const QKeySequence& ksDest)
+int ActionData::getKeyboards(std::list<QString>& keyboards)
 {
-    RG_DEBUG << "applyTranslation" << ksSrc << ksDest;
-    for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
-        const QString& mkey = (*i).first;
-        const ActionInfo& mainfo = m_actionMap.at(mkey);
-        const std::set<QKeySequence>& defaultShortcuts = mainfo.shortcuts;
-        if (defaultShortcuts.find(ksSrc) == defaultShortcuts.end()) {
-            // ksSrc not in default set
-            continue;
-        }
-
-        std::set<QKeySequence> scs = getShortcuts(mkey);
-        auto diter = scs.find(ksDest);
-        if (diter != scs.end()) {
-            // no ksDest is already in the set - done
-            continue;
-        }
-        // so ksSrc is in the default set and ksDest is not in the shortcuts
-        // apply change
-        RG_DEBUG << "applyTranslation applying for" << mkey;
-        scs.erase(ksSrc);
-        scs.insert(ksDest);
-        setUserShortcuts(mkey, scs);
+    keyboards.clear();
+    int akIndex = 0;
+    foreach(auto ktpair, m_keyboardTranslations) {
+        int index = ktpair.first;
+        const QString& name = ktpair.second.kbName;
+        RG_DEBUG << "getKeyboards append" << name;
+        keyboards.push_back(m_translatedKeyboardNames[name]);
+        if (index == m_actKb) akIndex = index;
     }
+    return akIndex;
+}
+
+void ActionData::applyKeyboard(int index)
+{
+    RG_DEBUG << "applyKeyboard" << index;
+    m_actKb = index;
+    // first reset to original
+    m_actionMap = m_actionMapOriginal;
+    KeyboardTranslation kbt = m_keyboardTranslations[index];
+    foreach(auto pair, kbt.translation) {
+        const QString& ksSrc = pair.first;
+        const QString& ksDest = pair.second;
+        RG_DEBUG << "applyTranslation" << ksSrc << ksDest;
+        for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
+            const QString& mkey = (*i).first;
+            const ActionInfo& mainfo = m_actionMap.at(mkey);
+            const std::set<QKeySequence>& defaultShortcuts = mainfo.shortcuts;
+            if (defaultShortcuts.find(ksSrc) == defaultShortcuts.end()) {
+                // ksSrc not in default set
+                continue;
+            }
+
+            std::set<QKeySequence> scs = m_actionMapOriginal[mkey].shortcuts;
+            auto diter = scs.find(ksDest);
+            if (diter != scs.end()) {
+                // no ksDest is already in the set - done
+                continue;
+            }
+            // so ksSrc is in the default set and ksDest is not in the shortcuts
+            // apply change
+            RG_DEBUG << "applyTranslation applying for" << mkey;
+            scs.erase(ksSrc);
+            scs.insert(ksDest);
+            m_actionMap[mkey].shortcuts = scs;
+        }
+    }
+    updateModel("");
 }
 
 ActionData::ActionData() :
@@ -366,6 +400,12 @@ ActionData::ActionData() :
     }
     settings.endGroup();
     m_userShortcutsCopy = m_userShortcuts;
+
+    readKeyboardShortcuts();
+    settings.beginGroup(UserShortcutsConfigGroup);
+    m_actKb = settings.value("acualkeyboard", 0).toInt();
+    settings.endGroup();
+    m_actKbCopy = m_actKb;
 }
 
 bool ActionData::startDocument()
@@ -509,6 +549,9 @@ bool ActionData::startElement(const QString&,
         }
     }
 
+    // make a copy of the unmodified map - it will be modified by
+    // keyboard layout shortcuts
+    m_actionMapOriginal = m_actionMap;
     return true;
 }
 
@@ -725,6 +768,71 @@ void ActionData::updateModel(const QString& changedKey)
             }
         }
         row -= 1;
+    }
+}
+
+void ActionData::readKeyboardShortcuts()
+{
+    ResourceFinder().unbundleResource("locale", "keyboard_shortcuts.xml");
+    QString keyboardsXml =
+        ResourceFinder().getResourcePath("locale", "keyboard_shortcuts.xml");
+    if (keyboardsXml == "") {
+        RG_DEBUG << "keyboard_shortcuts.xml not found";
+    }
+    RG_DEBUG << "keyboard_shortcuts.xml found" << keyboardsXml;
+    QFile infile(keyboardsXml);
+
+    if (infile.open(QIODevice::ReadOnly) ) {
+        QXmlStreamReader stream(&infile);
+
+        stream.readNextStartElement();
+        if (stream.name().toString() != "rosegarden_keyboards") {
+            RG_DEBUG << keyboardsXml << "invalid file";
+            return;
+        }
+        QString kbName;
+        KeyboardTranslation trans;
+        int index = 0;
+        while(!stream.atEnd()) {
+            // Read to the next element delimiter
+            do {
+                stream.readNext();
+            } while(!stream.isStartElement() &&
+                    !stream.isEndElement() &&
+                    !stream.atEnd());
+
+            if (stream.atEnd()) break;
+
+            if (stream.isStartElement()) {
+                if (stream.name().toString() == "name") {
+                    kbName = stream.readElementText();
+                } else if (stream.name().toString() == "shortcut") {
+                    QString src =
+                        stream.attributes().value("src").toString();
+                    QString dest =
+                        stream.attributes().value("dest").toString();
+                    trans.translation[src] = dest;
+                } else {
+                    RG_DEBUG << "start element" << stream.name();
+                }
+            }
+
+            if (stream.isEndElement()) {
+                if (stream.name().toString() == "keyboard") {
+                    // Save the keyboard data
+                    RG_DEBUG << "save keyboard data for" << kbName;
+                    trans.kbName = kbName;
+                    m_keyboardTranslations[index] = trans;
+                    index++;
+                    trans.translation.clear();
+                    m_translatedKeyboardNames[kbName] =
+                        QObject::tr(kbName.toStdString().c_str());
+                } else {
+                    RG_DEBUG << "end element" << stream.name();
+                }
+            }
+        }
+        infile.close();
     }
 }
 

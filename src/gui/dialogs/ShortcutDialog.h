@@ -58,7 +58,7 @@ class ShortcutDialog : public QDialog
     void defPBClicked();
     void clearPBClicked();
     void clearAllPBClicked();
-    void kbPBClicked();
+    void keyboardChanged(int index);
     void warnSettingChanged(int index);
     void reject() override;
     void dataChanged(const QModelIndex&, const QModelIndex&);
@@ -66,16 +66,8 @@ class ShortcutDialog : public QDialog
  private:
     enum WarningType { None, SameContext, AllContexts };
 
-    struct KeyboardTranslation
-    {
-        QString kbText;
-        std::map<QString, QString> translation;
-    };
-    typedef std::map<QString, KeyboardTranslation> KeyboardTranslations;
-
     void editRow();
     void keyPressEvent(QKeyEvent *event) override;
-    void readKeyboardShortcuts();
 
     QSortFilterProxyModel *m_proxyModel;
 
@@ -91,12 +83,10 @@ class ShortcutDialog : public QDialog
     QPushButton *m_clearAllPB;
     QLabel *m_warnLabel;
     QComboBox *m_warnSetting;
-    QPushButton *m_keyboardButton;
     QComboBox *m_keyboard;
     std::set<int> m_editRows;
     WarningType m_warnType;
     ShortcutDelegate *m_delegate;
-    KeyboardTranslations m_keyboardTranslations;
     std::map<int, QString> m_indexMap;
 };
 

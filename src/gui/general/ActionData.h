@@ -79,8 +79,9 @@ public:
     void resetChanges();
     bool hasDataChanged() const;
     void undoChanges();
-    void applyTranslation(const QKeySequence& ksSrc,
-                          const QKeySequence& ksDest);
+    // return value is the index of the active keyboard
+    int getKeyboards(std::list<QString>& keyboards);
+    void applyKeyboard(int keyboard);
 
  private:
     ActionData();
@@ -106,6 +107,7 @@ public:
     QString translate(QString text, QString disambiguation = "") const;
     void fillModel();
     void updateModel(const QString& changedKey);
+    void readKeyboardShortcuts();
 
     struct ActionInfo
     {
@@ -121,6 +123,14 @@ public:
     typedef std::set<QKeySequence> KeySet;
 
     std::map<QString, ActionInfo> m_actionMap;
+    std::map<QString, ActionInfo> m_actionMapOriginal;
+
+    struct KeyboardTranslation
+    {
+        QString kbName;
+        std::map<QString, QString> translation;
+    };
+    typedef std::map<int, KeyboardTranslation> KeyboardTranslations;
 
     bool m_inMenuBar;
     bool m_inText;
@@ -140,6 +150,10 @@ public:
     std::map<QString, KeySet> m_userShortcuts;
     std::map<QString, KeySet> m_userShortcutsCopy;
     QStandardItemModel* m_model;
+    KeyboardTranslations m_keyboardTranslations;
+    std::map<QString, QString> m_translatedKeyboardNames;
+    int m_actKb;
+    int m_actKbCopy;
 
     static ActionData* m_instance;
 };

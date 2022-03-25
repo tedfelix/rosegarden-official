@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ShortcutDialog]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "ShortcutDialog.h"
 
@@ -160,23 +160,15 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     m_warnSetting->setCurrentIndex(m_warnType);
     settings.endGroup();
 
-    readKeyboardShortcuts();
-    m_keyboardButton = new QPushButton(tr("Apply keyboard layout"));
-    connect(m_keyboardButton, SIGNAL(clicked()),
-            this, SLOT(kbPBClicked()));
     m_keyboard = new QComboBox;
-    int noneIndex = 0;
-    int index = 0;
-    foreach(auto pair, m_keyboardTranslations) {
-        const QString& name = pair.first;
-        const KeyboardTranslation& kbtrans = pair.second;
-        QString kbText = tr(kbtrans.kbText.toStdString().c_str());
-        m_keyboard->addItem(kbText);
-        m_indexMap[index] = name;
-        if (name == "none") noneIndex = index;
-        index++;
+    std::list<QString> keyboards;
+    int kbIndex = adata->getKeyboards(keyboards);
+    foreach(QString kb, keyboards) {
+        m_keyboard->addItem(kb);
     }
-    m_keyboard->setCurrentIndex(noneIndex);
+    m_keyboard->setCurrentIndex(kbIndex);
+    connect(m_keyboard, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(keyboardChanged(int)));
 
     hlayout2->addStretch();
     hlayout2->addWidget(m_defPB);
@@ -188,7 +180,6 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     hlayout2->addWidget(m_warnLabel);
     hlayout2->addWidget(m_warnSetting);
     hlayout2->addStretch();
-    hlayout2->addWidget(m_keyboardButton);
     hlayout2->addWidget(m_keyboard);
     hlayout2->addStretch();
 
@@ -426,22 +417,11 @@ void ShortcutDialog::clearAllPBClicked()
     adata->removeAllUserShortcuts();
 }
 
-void ShortcutDialog::kbPBClicked()
+void ShortcutDialog::keyboardChanged(int index)
 {
-    int index = m_keyboard->currentIndex();
-    QString name = m_indexMap[index];
-    RG_DEBUG << "kbPBClicked" << name;
-    // apply keyboard layout changes
+    RG_DEBUG << "keyboardChanged" << index;
     ActionData* adata = ActionData::getInstance();
-    const KeyboardTranslation& trans = m_keyboardTranslations[name];
-    foreach(auto pair, trans.translation) {
-        const QString& src = pair.first;
-        const QString& dest = pair.second;
-        QKeySequence ksSrc(src);
-        QKeySequence ksDest(dest);
-        RG_DEBUG << "keyboard translate" << ksSrc << "->" << ksDest;
-        adata->applyTranslation(ksSrc, ksDest);
-    }
+    adata->applyKeyboard(index);
 }
 
 void ShortcutDialog::warnSettingChanged(int index)
@@ -533,69 +513,6 @@ void ShortcutDialog::keyPressEvent(QKeyEvent *event)
         return;
     }
     QDialog::keyPressEvent(event);
-}
-
-void ShortcutDialog::readKeyboardShortcuts()
-{
-    QString keyboardsXml =
-        ResourceFinder().getResourcePath("locale", "keyboard_shortcuts.xml");
-    if (keyboardsXml == "") {
-        RG_DEBUG << "keyboard_shortcuts.xml not found";
-    }
-    RG_DEBUG << "keyboard_shortcuts.xml found" << keyboardsXml;
-    QFile infile(keyboardsXml);
-
-    if (infile.open(QIODevice::ReadOnly) ) {
-        QXmlStreamReader stream(&infile);
-
-        stream.readNextStartElement();
-        if (stream.name().toString() != "rosegarden_keyboards") {
-            RG_DEBUG << keyboardsXml << "invalid file";
-            return;
-        }
-        QString kbName;
-        QString kbText;
-        KeyboardTranslation trans;
-        while(!stream.atEnd()) {
-            // Read to the next element delimiter
-            do {
-                stream.readNext();
-            } while(!stream.isStartElement() &&
-                    !stream.isEndElement() &&
-                    !stream.atEnd());
-
-            if (stream.atEnd()) break;
-
-            if (stream.isStartElement()) {
-                if (stream.name().toString() == "name") {
-                    kbName = stream.readElementText();
-                } else if (stream.name().toString() == "text") {
-                    kbText = stream.readElementText();
-                } else if (stream.name().toString() == "shortcut") {
-                    QString src =
-                        stream.attributes().value("src").toString();
-                    QString dest =
-                        stream.attributes().value("dest").toString();
-                    trans.translation[src] = dest;
-                } else {
-                    RG_DEBUG << "start element" << stream.name();
-                }
-            }
-
-            if (stream.isEndElement()) {
-                if (stream.name().toString() == "keyboard") {
-                    // Save the keyboard data
-                    RG_DEBUG << "save keyboard data for" << kbName;
-                    trans.kbText = kbText;
-                    m_keyboardTranslations[kbName] = trans;
-                    trans.translation.clear();
-                } else {
-                    RG_DEBUG << "end element" << stream.name();
-                }
-            }
-        }
-        infile.close();
-    }
 }
 
 }

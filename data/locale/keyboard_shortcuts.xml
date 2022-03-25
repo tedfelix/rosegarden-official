@@ -8,15 +8,13 @@
   -->
 
   <keyboard>
-    <name>none</name>
-    <text>None</text>
+    <name>None</name>
     <shortcuts>
     </shortcuts>
   </keyboard>
 
   <keyboard>
-    <name>german</name>
-    <text>German</text>
+    <name>German</name>
     <shortcuts>
       <shortcut src="Y" dest="Z" />
       <shortcut src="Z" dest="Y" />
@@ -26,8 +24,7 @@
   </keyboard>
 
   <keyboard>
-    <name>french</name>
-    <text>French</text>
+    <name>French</name>
     <shortcuts>
       <shortcut src="A" dest="Q" />
       <shortcut src="Shift+A" dest="Shift+Q" />

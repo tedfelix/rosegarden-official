@@ -25,7 +25,7 @@
 
 #include <rosegardenprivate_export.h>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
     extern ROSEGARDENPRIVATE_EXPORT const char* const GeneralOptionsConfigGroup;
     extern const char* const LatencyOptionsConfigGroup;
@@ -69,6 +69,7 @@ namespace Rosegarden
     extern const char* const TextEventDialogConfigGroup;
     extern const QString RecentFilesConfigGroup;
     extern const QString UserShortcutsConfigGroup;
+    extern const QString ShortcutKeyboardConfigGroup;
 
 }
 
