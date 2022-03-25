@@ -710,6 +710,10 @@ void ActionData::fillModel()
         } else {
             item->setText("");
         }
+        if (ainfo.shortcuts != m_actionMapOriginal[key].shortcuts) {
+            // keyboard translation change
+            item->setText("k");
+        }
         m_model->setItem(0, 3, item);
         m_model->item(0, 3)->setEditable(false);
         if (ainfo.global) {
@@ -765,6 +769,10 @@ void ActionData::updateModel(const QString& changedKey)
             } else {
                 item->setIcon(noPixmap);
                 item->setText("");
+            }
+            if (ainfo.shortcuts != m_actionMapOriginal[key].shortcuts) {
+                // keyboard translation change
+                item->setText("k");
             }
         }
         row -= 1;
