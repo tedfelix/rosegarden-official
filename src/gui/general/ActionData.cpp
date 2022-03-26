@@ -53,7 +53,6 @@ QStandardItemModel* ActionData::getModel()
         m_model = new QStandardItemModel;
     }
     fillModel();
-    applyKeyboard(m_actKb);
     return m_model;
 }
 
@@ -406,6 +405,7 @@ ActionData::ActionData() :
     m_actKb = settings.value("acualkeyboard", 0).toInt();
     settings.endGroup();
     m_actKbCopy = m_actKb;
+    applyKeyboard(m_actKb);
 }
 
 bool ActionData::startDocument()
@@ -730,6 +730,11 @@ void ActionData::fillModel()
 void ActionData::updateModel(const QString& changedKey)
 {
     RG_DEBUG << "updateModel for key" << changedKey;
+    if (!m_model)
+        {
+            RG_DEBUG << "updateModel - no model yet";
+            return;
+        }
     QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
     QPixmap noPixmap;
     int row = m_model->rowCount() - 1;
