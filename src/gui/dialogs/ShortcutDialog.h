@@ -80,6 +80,7 @@ class ShortcutDialog : public QDialog
     QPushButton *m_clearAllPB;
     QLabel *m_warnLabel;
     QComboBox *m_warnSetting;
+    QLabel *m_keyboardLabel;
     QComboBox *m_keyboard;
     std::set<int> m_editRows;
     WarningType m_warnType;

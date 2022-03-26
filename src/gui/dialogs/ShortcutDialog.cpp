@@ -148,6 +148,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     m_warnSetting->setCurrentIndex(m_warnType);
     settings.endGroup();
 
+    m_keyboardLabel = new QLabel(tr("Apply changes for keyboard:"));
     m_keyboard = new QComboBox;
     std::list<QString> keyboards;
     int kbIndex = adata->getKeyboards(keyboards);
@@ -168,6 +169,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     hlayout->addWidget(m_warnLabel);
     hlayout->addWidget(m_warnSetting);
     hlayout->addStretch();
+    hlayout->addWidget(m_keyboardLabel);
     hlayout->addWidget(m_keyboard);
     hlayout->addStretch();
 
