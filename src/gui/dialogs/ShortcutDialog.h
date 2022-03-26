@@ -75,9 +75,6 @@ class ShortcutDialog : public QDialog
     QLabel *m_filterPatternLabel;
     QLineEdit *m_filterPatternLineEdit;
     QStandardItemModel *m_model;
-    QLabel *m_clabel;
-    QLabel *m_alabel;
-    QLabel *m_ilabel;
     QPushButton *m_defPB;
     QPushButton *m_clearPB;
     QPushButton *m_clearAllPB;

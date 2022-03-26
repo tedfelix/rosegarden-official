@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ShortcutDialog]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "ShortcutDialog.h"
 
@@ -118,20 +118,6 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     }
 
     QHBoxLayout *hlayout = new QHBoxLayout;
-    m_clabel = new QLabel;
-    m_alabel = new QLabel;
-    QFont font = m_clabel->font();
-    font.setPointSize(20);
-    font.setBold(true);
-    m_clabel->setFont(font);
-    m_alabel->setFont(font);
-    m_ilabel = new QLabel;
-    m_ilabel->setStyleSheet("QLabel { background-color : white }");
-    hlayout->addWidget(m_clabel);
-    hlayout->addWidget(m_alabel);
-    hlayout->addWidget(m_ilabel);
-
-    QHBoxLayout *hlayout2 = new QHBoxLayout;
     m_defPB = new QPushButton(tr("Reset Selected"));
     connect(m_defPB, SIGNAL(clicked()),
             this, SLOT(defPBClicked()));
@@ -170,18 +156,18 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     connect(m_keyboard, SIGNAL(currentIndexChanged(int)),
             this, SLOT(keyboardChanged(int)));
 
-    hlayout2->addStretch();
-    hlayout2->addWidget(m_defPB);
-    hlayout2->addStretch();
-    hlayout2->addWidget(m_clearPB);
-    hlayout2->addStretch();
-    hlayout2->addWidget(m_clearAllPB);
-    hlayout2->addStretch();
-    hlayout2->addWidget(m_warnLabel);
-    hlayout2->addWidget(m_warnSetting);
-    hlayout2->addStretch();
-    hlayout2->addWidget(m_keyboard);
-    hlayout2->addStretch();
+    hlayout->addStretch();
+    hlayout->addWidget(m_defPB);
+    hlayout->addStretch();
+    hlayout->addWidget(m_clearPB);
+    hlayout->addStretch();
+    hlayout->addWidget(m_clearAllPB);
+    hlayout->addStretch();
+    hlayout->addWidget(m_warnLabel);
+    hlayout->addWidget(m_warnSetting);
+    hlayout->addStretch();
+    hlayout->addWidget(m_keyboard);
+    hlayout->addStretch();
 
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::HLine);
@@ -195,7 +181,6 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
                      this, &ShortcutDialog::reject);
 
     mainLayout->addLayout(hlayout);
-    mainLayout->addLayout(hlayout2);
     mainLayout->addWidget(line);
     mainLayout->addLayout(proxyLayout);
     mainLayout->addWidget(buttonBox);
@@ -457,11 +442,6 @@ void ShortcutDialog::editRow()
 {
     RG_DEBUG << "editRow:";
     ActionData* adata = ActionData::getInstance();
-    // clear data
-    m_clabel->setText("");
-    m_alabel->setText("");
-    QPixmap noPixmap;
-    m_ilabel->setPixmap(noPixmap);
     m_defPB->setEnabled(false);
     m_clearPB->setEnabled(false);
 
@@ -476,32 +456,6 @@ void ShortcutDialog::editRow()
         }
         if (! ksSet.empty()) {
             m_clearPB->setEnabled(true);
-        }
-
-        if (m_editRows.size() == 1) {
-            // single row
-            RG_DEBUG << "edit single row";
-            QString key = adata->getKey(row);
-            RG_DEBUG << "editing key" << key;
-            QModelIndex i0 = m_proxyModel->index(row, 0);
-            QString ctext = m_proxyModel->data(i0, Qt::DisplayRole).toString();
-            m_clabel->setText(ctext);
-            QModelIndex i1 = m_proxyModel->index(row, 1);
-            QString atext = m_proxyModel->data(i1, Qt::DisplayRole).toString();
-            m_alabel->setText(atext);
-            QModelIndex i2 = m_proxyModel->index(row, 2);
-            QVariant imagev = m_proxyModel->data(i2, Qt::DecorationRole);
-            QIcon icon = imagev.value<QIcon>();
-            if (! icon.isNull()) {
-                QPixmap pixmap =
-                    icon.pixmap(icon.availableSizes().first());
-                int w = m_ilabel->width();
-                int h = m_ilabel->height();
-                m_ilabel->setPixmap(pixmap.scaled(w, h, Qt::KeepAspectRatio));
-            } else {
-                QPixmap noPixmap;
-                m_ilabel->setPixmap(noPixmap);
-            }
         }
     }
 }
