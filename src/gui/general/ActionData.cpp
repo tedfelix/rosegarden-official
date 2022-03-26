@@ -96,8 +96,8 @@ void ActionData::saveUserShortcuts()
     }
     settings.endGroup();
 
-    settings.beginGroup(UserShortcutsConfigGroup);
-    settings.setValue("acualkeyboard", m_actKb);
+    settings.beginGroup(ShortcutKeyboardConfigGroup);
+    settings.setValue("actualkeyboard", m_actKb);
     settings.endGroup();
 }
 
