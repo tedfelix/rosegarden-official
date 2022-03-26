@@ -99,7 +99,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
 
     QLabel* helpLabel = new QLabel;
     helpLabel->setWordWrap(true);
-    helpLabel->setText(tr("<p>Select an action in the table below then double click one of the four <b>shortcut</b> fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the <b>edit shortcut</b> field.</p><p><i>Actions marked with a <span style=\"background-color:cyan; color:black\">light blue background</span> are global and valid for all windows.</i></p>"));
+    helpLabel->setText(tr("<p>Select an action in the table below then double click one of the four <b>Shortcut</b> fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the <b>Shortcut</b> field.</p><p><i>Actions marked with a <span style=\"background-color:cyan; color:black\">light blue background</span> are global and valid for all windows.</i></p>"));
 
     mainLayout->addWidget(helpLabel);
 
@@ -118,6 +118,8 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     }
 
     QHBoxLayout *hlayout = new QHBoxLayout;
+    hlayout->setContentsMargins(0, 10, 0, 10);
+
     m_defPB = new QPushButton(tr("Reset Selected"));
     connect(m_defPB, SIGNAL(clicked()),
             this, SLOT(defPBClicked()));
