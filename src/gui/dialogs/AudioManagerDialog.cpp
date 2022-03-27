@@ -197,8 +197,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     // Connect command history for updates
     //
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotCommandExecuted()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &AudioManagerDialog::slotCommandExecuted);
 
     connect(m_playTimer, &QTimer::timeout,
             this, &AudioManagerDialog::slotCancelPlayingAudio);

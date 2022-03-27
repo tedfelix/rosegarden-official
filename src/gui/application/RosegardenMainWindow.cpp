@@ -1252,10 +1252,12 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
 
 //    CommandHistory::getInstance()->attachView(actionCollection());        //&&& needed ? how to ?
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            SLOT(update()));
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            SLOT(slotTestClipboard()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this,
+            static_cast<void(RosegardenMainWindow::*)()>(
+                    &RosegardenMainWindow::update));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &RosegardenMainWindow::slotTestClipboard);
 
     // use QueuedConnection here because the position update can
     // happen after the command is executed

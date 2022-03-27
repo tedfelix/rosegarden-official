@@ -383,8 +383,8 @@ NotationScene::setStaffs(RosegardenDocument *document,
     }
 
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotCommandExecuted()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &NotationScene::slotCommandExecuted);
 }
 
 
@@ -1262,8 +1262,9 @@ NotationScene::segmentRemoved(const Composition *c, Segment *s)
             // the whole scene is going to be deleted then restored (from
             // NotationView) and to continue processing at best is useless and
             // at the worst may cause a crash when the segment is deleted.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();   // Useful ???
 
             if (m_segmentsDeleted.size() == m_externalSegments.size()) {
@@ -1306,8 +1307,9 @@ NotationScene::segmentRepeatChanged(const Composition *c, Segment *s, bool)
             // Therefore the whole scene is going to be deleted then restored
             // (from NotationView) and there is no point to continue processing
             // signals from the current NotationScene.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 
@@ -1334,8 +1336,9 @@ NotationScene::segmentRepeatEndChanged(const Composition *c, Segment *s, timeT)
             // Therefore the whole scene is going to be deleted then restored
             // (from NotationView) and to continue processing at best is
             // useless and at worst may cause a crash related to deleted clones.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 
@@ -1362,8 +1365,9 @@ NotationScene::segmentStartChanged(const Composition *c, Segment *s, timeT)
             // Therefore the whole scene is going to be deleted then restored
             // (from NotationView) and to continue processing at best is
             // useless and at worst may cause a crash related to deleted clones.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 
@@ -1390,8 +1394,9 @@ NotationScene::segmentEndMarkerChanged(const Composition *c, Segment *s, bool)
             // Therefore the whole scene is going to be deleted then restored
             // (from NotationView) and to continue processing at best is
             // useless and at worst may cause a crash related to deleted clones.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 
@@ -1425,8 +1430,9 @@ NotationScene::trackChanged(const Composition *c, Track *t)
             // The whole scene is going to be deleted then restored
             // (from NotationView). To continue processing at best is
             // useless and at worst may cause a crash related to deleted clones.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 

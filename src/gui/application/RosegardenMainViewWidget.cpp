@@ -212,9 +212,10 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
         						      timeT)));
         */
 
-        QObject::connect
-        (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-         m_trackEditor->getCompositionView(), SLOT(slotUpdateAll()));
+        connect(CommandHistory::getInstance(),
+                    &CommandHistory::commandExecuted,
+                m_trackEditor->getCompositionView(),
+                    &CompositionView::slotUpdateAll);
     }
 }
 

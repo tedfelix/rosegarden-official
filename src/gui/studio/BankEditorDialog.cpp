@@ -266,8 +266,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
 //     CommandHistory::getInstance()->attachView(actionCollection());    //&&&
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotUpdate()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &BankEditorDialog::slotUpdate);
 
     // Button box
     QDialogButtonBox *btnBox = new QDialogButtonBox(/*QDialogButtonBox::Apply  | */

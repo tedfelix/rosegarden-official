@@ -66,8 +66,8 @@ EditViewBase::EditViewBase(std::vector<Segment *> segments,
     m_doc = RosegardenDocument::currentDocument;
     RosegardenDocument::currentDocument->attachEditView(this);
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotTestClipboard()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &EditViewBase::slotTestClipboard);
 }
 
 EditViewBase::~EditViewBase()

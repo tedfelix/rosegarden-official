@@ -79,9 +79,9 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
         layout->addWidget(m_markerRuler);
     }
 
-    QObject::connect
-        (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-         this, SLOT(update()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this,
+            static_cast<void(StandardRuler::*)()>(&StandardRuler::update));
 
     if (RosegardenMainWindow::self()) {
         QObject::connect

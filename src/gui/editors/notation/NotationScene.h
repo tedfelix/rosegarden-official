@@ -262,8 +262,6 @@ signals:
 
 public slots:
     void slotMouseLeavesView(); 
-
-protected slots:
     void slotCommandExecuted();
 
 protected:

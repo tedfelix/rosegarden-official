@@ -309,8 +309,8 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     connect(m_compositionView, &RosegardenScrollView::zoomOut,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotZoomOut);
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotCommandExecuted()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &TrackEditor::slotCommandExecuted);
 
     connect(m_doc, &RosegardenDocument::pointerPositionChanged,
             this, &TrackEditor::slotSetPointerPosition);

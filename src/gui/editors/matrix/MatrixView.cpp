@@ -163,8 +163,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     slotUpdateMenuStates();
     slotTestClipboard();
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotUpdateMenuStates()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &MatrixView::slotUpdateMenuStates);
 
     connect(m_matrixWidget, &MatrixWidget::selectionChanged,
             this, &MatrixView::slotUpdateMenuStates);

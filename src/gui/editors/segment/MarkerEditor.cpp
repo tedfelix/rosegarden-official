@@ -159,8 +159,8 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
 //     CommandHistory::getInstance()->attachView(actionCollection());    //&&&
     
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotUpdate()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &MarkerEditor::slotUpdate);
 
     connect(m_listView, &QTreeWidget::itemDoubleClicked,
             this, &MarkerEditor::slotEdit);

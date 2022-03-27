@@ -84,8 +84,9 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
-    QObject::connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                     this, SLOT(update()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this,
+            static_cast<void(ChordNameRuler::*)()>(&ChordNameRuler::update));
 
     this->setToolTip(tr("<qt><p>Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.</p><p>Turn it on and off with the <b>View -> Rulers</b> menu.</p></qt>"));
 }
@@ -120,8 +121,9 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
-    QObject::connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                     this, SLOT(update()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this,
+            static_cast<void(ChordNameRuler::*)()>(&ChordNameRuler::update));
 
     for (std::vector<Segment *>::iterator i = segments.begin();
             i != segments.end(); ++i) {

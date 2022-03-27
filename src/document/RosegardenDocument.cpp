@@ -142,8 +142,8 @@ RosegardenDocument::RosegardenDocument(
     m_clearCommandHistory(clearCommandHistory),
     m_soundEnabled(enableSound)
 {
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotDocumentModified()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &RosegardenDocument::slotDocumentModified);
 
     connect(CommandHistory::getInstance(), &CommandHistory::documentRestored,
             this, &RosegardenDocument::slotDocumentRestored);

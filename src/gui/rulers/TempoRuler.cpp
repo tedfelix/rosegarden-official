@@ -97,9 +97,9 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 
     m_editTempoController->setDocument(doc); // in case self() just created it
 
-    QObject::connect
-    (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-     this, SLOT(update()));
+    QObject::connect(
+            CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, static_cast<void(TempoRuler::*)()>(&TempoRuler::update));
 
     createAction("insert_tempo_here", SLOT(slotInsertTempoHere()));
     createAction("insert_tempo_at_pointer", SLOT(slotInsertTempoAtPointer()));

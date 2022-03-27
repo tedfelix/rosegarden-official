@@ -148,8 +148,10 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     setupActions();
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotUpdate()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this,
+            static_cast<void(ControlEditorDialog::*)()>(
+                    &ControlEditorDialog::slotUpdate));
 
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
             this, &ControlEditorDialog::slotEdit);

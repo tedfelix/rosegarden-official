@@ -256,8 +256,8 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     setWindowIcon(IconLoader::loadPixmap("window-notation"));
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotUpdateMenuStates()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &NotationView::slotUpdateMenuStates);
 
     connect(m_notationWidget->getScene(), &NotationScene::selectionChanged,
             this, &NotationView::slotUpdateMenuStates);
@@ -3848,8 +3848,8 @@ NotationView::slotRegenerateScene()
     // processing at best is useless and at the worst may cause a
     // crash.  This call could replace the multiple calls in
     // NotationScene.
-    disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-               m_notationWidget->getScene(), SLOT(slotCommandExecuted()));
+    disconnect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+               m_notationWidget->getScene(), &NotationScene::slotCommandExecuted);
 
     // Look for segments to be removed from vector
     std::vector<Segment *> * segmentDeleted =

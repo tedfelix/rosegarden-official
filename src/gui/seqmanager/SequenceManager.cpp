@@ -117,7 +117,8 @@ SequenceManager::setDocument(RosegardenDocument *doc)
         m_doc->getComposition().removeObserver(this);
 
     // Avoid duplicate connections.
-    disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()));
+    disconnect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+               this, &SequenceManager::update);
 
     m_segments.clear();
     m_triggerSegments.clear();
@@ -145,8 +146,8 @@ SequenceManager::setDocument(RosegardenDocument *doc)
 
     m_doc->getComposition().addObserver(this);
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(update()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &SequenceManager::update);
 
     if (doc->isSoundEnabled()) {
         resetCompositionMapper();

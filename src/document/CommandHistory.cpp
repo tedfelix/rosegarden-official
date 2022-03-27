@@ -130,7 +130,7 @@ CommandHistory::addCommand(Command *command)
 
     emit updateLinkedSegments(command);
     emit commandExecuted();
-    emit commandExecuted(command);
+    //emit commandExecuted2(command);
     emit commandExecutedInitially();
 
     updateActions();
@@ -177,7 +177,7 @@ CommandHistory::redo()
     commInfo.command->execute();
     emit updateLinkedSegments(commInfo.command);
     emit commandExecuted();
-    emit commandExecuted(commInfo.command);
+    //emit commandExecuted2(commInfo.command);
     m_pointerPosition = commInfo.pointerPositionAfter;
     emit commandRedone();
 

@@ -132,9 +132,6 @@ signals:
      * Emitted whenever a command has just been executed or
      * unexecuted, whether by addCommand, undo, or redo.  Note in
      * particular that this is emitted by both undo and redo.
-     *
-     * ??? rename: commandExecutedOrUn(), this would make it easier
-     *             to use Qt5 connect() syntax.
      */
     void commandExecuted();
 
@@ -142,8 +139,10 @@ signals:
      * Emitted whenever a command has just been executed, whether by
      * addCommand or redo.  Note that this is not emitted by undo,
      * which emits commandUnexecuted(Command *) instead.
+     *
+     * ??? Appears to be unused.
      */
-    void commandExecuted(Command *);
+    //void commandExecuted2(Command *);
 
     /**
      * Emitted whenever a command has just been unexecuted, whether by
