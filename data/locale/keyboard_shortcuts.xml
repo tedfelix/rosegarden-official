@@ -8,13 +8,13 @@
   -->
 
   <keyboard>
-    <name>None</name>
+    <name>English (qwerty)</name>
     <shortcuts>
     </shortcuts>
   </keyboard>
 
   <keyboard>
-    <name>German</name>
+    <name>German (qwertz)</name>
     <shortcuts>
       <shortcut src="Y" dest="Z" />
       <shortcut src="Z" dest="Y" />
@@ -24,7 +24,7 @@
   </keyboard>
 
   <keyboard>
-    <name>French</name>
+    <name>French (azerty)</name>
     <shortcuts>
       <shortcut src="A" dest="Q" />
       <shortcut src="Shift+A" dest="Shift+Q" />
@@ -35,6 +35,8 @@
       <shortcut src="Ctrl+Shift+W" dest="Ctrl+Shift+Z" />
       <shortcut src="Z" dest="W" />
       <shortcut src="Shift+Z" dest="Shift+W" />
+      <shortcut src="," dest="M" />
+      <shortcut src="Ctrl+Shift+," dest="Ctrl+Shift+M" />
     </shortcuts>
   </keyboard>
 
