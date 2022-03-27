@@ -25,8 +25,11 @@
 
 #include <QString>
 
+
 namespace Rosegarden
 {
+
+
 AdoptSegmentCommand::
 AdoptSegmentCommand(QString name, // 
 		    NotationView &view,
@@ -43,8 +46,8 @@ AdoptSegmentCommand(QString name, //
   m_comp(nullptr)
 {
     RG_DEBUG << "ctor 1" << getName();
-    QObject::connect(&view, SIGNAL(destroyed()),
-                     this, SLOT(slotViewdestroyed()));
+    connect(&view, &NotationView::destroyed,
+            this, &AdoptSegmentCommand::slotViewdestroyed);
 }
 
 AdoptSegmentCommand::
@@ -65,10 +68,10 @@ AdoptSegmentCommand(QString name,
   m_comp(comp)
 {
     RG_DEBUG << "ctor 2" << getName();
-    QObject::connect(&view, SIGNAL(destroyed()),
-                     this, SLOT(slotViewdestroyed()));
+    connect(&view, &NotationView::destroyed,
+            this, &AdoptSegmentCommand::slotViewdestroyed);
 }
-  
+
 AdoptSegmentCommand::
 ~AdoptSegmentCommand()
 {
@@ -77,6 +80,7 @@ AdoptSegmentCommand::
         delete m_segment;
     }
 }
+
 void
 AdoptSegmentCommand::slotViewdestroyed()
 {

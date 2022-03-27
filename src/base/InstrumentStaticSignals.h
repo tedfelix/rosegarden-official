@@ -54,11 +54,6 @@ signals:
      *           this,  // or whomever
      *           &CLASSNAME::slotControlChange);
      *
-     *   // Qt4 style (discouraged, runtime checking only)
-     *   connect(Instrument::getStaticSignals().data(),
-     *               SIGNAL(controlChange(Instrument *, int)),
-     *           SLOT(slotControlChange(Instrument *, int)));
-     *
      * Emit this if you change the value for a control change for
      * an Instrument.  This will trigger an update of relevant portions
      * of the UI (sliders and knobs) to reflect the new values.  This
