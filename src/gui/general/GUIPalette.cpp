@@ -34,8 +34,12 @@ const QColor GUIPalette::PreviewColor = Qt::darkGreen;
 const QColor GUIPalette::OutRangeColor = Qt::red;
 
 
-QColor GUIPalette::getColour(const char* const colourName)
+QColor GUIPalette::getColour(const char * const colourName)
 {
+#if 0
+    // The settings were never actually used.  No part of the code
+    // writes to them.
+
     QSettings config; // should probably become a member var for performance reasons
     config.beginGroup(ColoursConfigGroup);
 
@@ -48,6 +52,9 @@ QColor GUIPalette::getColour(const char* const colourName)
 
     config.endGroup();
     return color;
+#else
+    return getInstance()->m_defaultsMap[colourName];
+#endif
 }
 
 GUIPalette::GUIPalette()
