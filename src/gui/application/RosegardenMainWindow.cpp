@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenMainWindow]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenMainWindow.h"
 
@@ -198,7 +198,6 @@
 #include <QApplication>
 #include <QDesktopServices>
 #include <QSettings>
-#include <QShortcut>
 #include <QMessageBox>
 #include <QProcess>
 #include <QTemporaryFile>
@@ -317,7 +316,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     setObjectName("App");
     m_myself = this;
-    
+
     if (startupStatusMessageReceiver) {
         QObject::connect(this, SIGNAL(startupStatusMessage(QString)),
                          startupStatusMessageReceiver,
@@ -367,10 +366,10 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     // Lookup the configuration parameter that specifies the default
     // arrangement, and instantiate it.
-    
+
     // call inits to invoke all other construction parts
     //
-    emit startupStatusMessage(tr("Initializing view...")); 
+    emit startupStatusMessage(tr("Initializing view..."));
     initStatusBar();
     initZoomToolbar();
 
@@ -478,13 +477,13 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 #endif
 
     // Tranzport
-    try 
+    try
     {
         m_tranzport = new TranzportClient(this);
     }
     catch (const Exception &e)
     {
-        m_tranzport = nullptr;        
+        m_tranzport = nullptr;
         //RG_DEBUG << e.getMessage().c_str();
     }
 
@@ -687,6 +686,7 @@ RosegardenMainWindow::setupActions()
     createAction("file_open", SLOT(slotFileOpen()));
     createAction("file_open_example", SLOT(slotFileOpenExample()));
     createAction("file_open_template", SLOT(slotFileOpenTemplate()));
+    createAction("file_open_most_recent", SLOT(slotFileOpenRecent()));
     createAction("file_save", SLOT(slotFileSave()));
     createAction("file_save_as", SLOT(slotFileSaveAs()));
     createAction("file_save_as_template", SLOT(slotFileSaveAsTemplate()));
@@ -874,8 +874,12 @@ RosegardenMainWindow::setupActions()
     enableAutoRepeat("Transport Toolbar", "rewind");
     enableAutoRepeat("Transport Toolbar", "fast_forward");
 
-    // Do an initial setup of the recent files so that Ctrl+R will
-    // work at startup.
+    // Do an initial setup of the recent files so that Ctrl+R (or
+    // other shortcut) will work at startup.
+    // get the shortcuts for later use
+    QAction* mostRecent = findAction("file_open_most_recent");
+    m_mostRecentShortcuts = mostRecent->shortcuts();
+    RG_DEBUG << "mostRecentShortcuts:" << m_mostRecentShortcuts;
     setupRecentFilesMenu();
 }
 
@@ -912,7 +916,7 @@ RosegardenMainWindow::setupRecentFilesMenu()
 
         if (first) {
             first = false;
-            action->setShortcut(tr("Ctrl+R"));
+            action->setShortcuts(m_mostRecentShortcuts);
         }
     }
 }
@@ -975,7 +979,7 @@ RosegardenMainWindow::initStatusBar()
     QFont font = m_cpuBar->font();
     font.setPixelSize(10);
     m_cpuBar->setFont(font);
-                
+
     m_cpuBar->setTextVisible(false);
     statusBar()->addPermanentWidget(m_cpuBar);
 
@@ -1040,7 +1044,7 @@ RosegardenMainWindow::initView()
     //
     std::string transportMode = RosegardenDocument::currentDocument->getConfiguration().get<String>
         (DocumentConfiguration::TransportMode);
- 
+
 
     slotEnableTransport(true);
 
@@ -1153,7 +1157,7 @@ RosegardenMainWindow::initView()
     //
     QAction *actionx = this->findAction(QString("move"));
     actionx->trigger();
-    
+
     if (RosegardenDocument::currentDocument->getComposition().getNbSegments() > 0){
         QAction *actionx = this->findAction(QString("select"));
         actionx->trigger();
@@ -1161,13 +1165,13 @@ RosegardenMainWindow::initView()
         QAction *actionx = this->findAction(QString("draw"));
         actionx->trigger();
     }
-    
+
     int zoomLevel = RosegardenDocument::currentDocument->getConfiguration().get<Int>(DocumentConfiguration::ZoomLevel);
     m_zoomSlider->setSize(double(zoomLevel) / 1000.0);
     slotChangeZoom(zoomLevel);
 
     enterActionState("new_file"); //@@@ JAS orig. 0
-    
+
     if (findAction("show_chord_name_ruler")->isChecked()) {
         SetWaitCursor swc;
         m_view->initChordNameRuler();
@@ -1302,7 +1306,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     //
     RosegardenDocument::currentDocument->prepareAudio();
 
-    // Remove the audio segments from the clipboard as they point to 
+    // Remove the audio segments from the clipboard as they point to
     // bogus file IDs now.
     m_clipboard->removeAudioSegments();
 
@@ -1430,7 +1434,7 @@ RosegardenMainWindow::createDocument(
                 QMessageBox::Ok, QMessageBox::Ok);
         return nullptr;
     }
-    
+
     if (fileInfo.isDir()) {
         StartupLogo::hideIfStillThere();
         QMessageBox::warning(this, tr("Rosegarden"),
@@ -1766,7 +1770,7 @@ RosegardenMainWindow::showEvent(QShowEvent *e)
     //RG_DEBUG << "showEvent()";
 
     getTransport()->raise();
-    
+
     QMainWindow::showEvent(e);
 }
 
@@ -1799,7 +1803,7 @@ RosegardenMainWindow::slotFileNew()
 
     if (makeNew) {
         setDocument(newDocument());
-        leaveActionState("have_segments"); 
+        leaveActionState("have_segments");
     }
 }
 
@@ -2014,7 +2018,7 @@ RosegardenMainWindow::slotFileOpenRecent()
 {
     QObject *obj = sender();
     QAction *action = dynamic_cast<QAction *>(obj);
-    
+
     if (!action) {
         RG_WARNING << "slotFileOpenRecent(): WARNING: sender is not an action";
         return;
@@ -2082,7 +2086,7 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
                                             QString label)
 {
     // extract first extension listed in descriptiveExtension, for instance,
-    // ".rg" from "Rosegarden files (*.rg)", or ".mid" from 
+    // ".rg" from "Rosegarden files (*.rg)", or ".mid" from
     // "MIDI Files (*.mid *.midi)"
     //
     int left = descriptiveExtension.indexOf("*.");
@@ -2103,10 +2107,10 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     else if (extension == ".csd") path_key = "export_csound";
     else if (extension == ".mup") path_key = "export_mup";
 
-//RG_DEBUG << 
+//RG_DEBUG <<
 //    "getValidWriteFileName() : extension  = " <<
-//    extension << endl << 
-//    "                                                path key   = " << 
+//    extension << endl <<
+//    "                                                path key   = " <<
 //    path_key;
 
     // Get the directory from the settings
@@ -2121,17 +2125,17 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     // the user saved to.  To use the document's directory, replace
     // "directory" in the FileDialog::getSaveFileName() call with
     // originalFileInfo.absolutePath().
-    
+
     // Confirm the overwrite of the file later.
     //
     // (Hah, all these compiler warnings are useful for something after all.
     // This used to not do anything with the label parameter, and always said
     // "Save File" 100% of the time.)
     QString name = FileDialog::getSaveFileName(
-        this, label, directory, 
-        originalFileInfo.baseName(), descriptiveExtension, nullptr, 
-        FileDialog::DontConfirmOverwrite); 
-    
+        this, label, directory,
+        originalFileInfo.baseName(), descriptiveExtension, nullptr,
+        FileDialog::DontConfirmOverwrite);
+
 //RG_DEBUG << "getValidWriteFileName() : " <<
 //            "FileDialog::getSaveFileName returned " << name;
 
@@ -2153,7 +2157,7 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     if (name.contains("~")) {
         name = name.remove(0, name.indexOf("~") + 1);
         name = name.prepend(QDir::homePath());
-        
+
 //RG_DEBUG << "doctored filename after ~ swap: " << name;
 
     }
@@ -2161,16 +2165,16 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     QFileInfo info(name);
 
     if (info.isDir()) {
-        QMessageBox::warning(this, tr("Rosegarden"), 
+        QMessageBox::warning(this, tr("Rosegarden"),
                              tr("You have specified a folder/directory."));
         return "";
     }
 
     if (info.exists()) {
         int overwrite = QMessageBox::question(
-                this, 
-                tr("Rosegarden"), 
-                tr("The specified file exists.  Overwrite?"), 
+                this,
+                tr("Rosegarden"),
+                tr("The specified file exists.  Overwrite?"),
                 QMessageBox::Yes | QMessageBox::No,
                 QMessageBox::No);
 
@@ -2396,7 +2400,7 @@ RosegardenMainWindow::slotPasteRange()
 void
 RosegardenMainWindow::slotDeleteRange()
 {
-    // ??? Dead Code.  There is no reference to the delete_range action in 
+    // ??? Dead Code.  There is no reference to the delete_range action in
     //   the rc.
 
     timeT t0 = RosegardenDocument::currentDocument->getComposition().getLoopStart();
@@ -2835,7 +2839,7 @@ RosegardenMainWindow::createAndSetupTransport()
     m_transport = new TransportDialog(this);
 
     // Transport button callbacks.
-    
+
     connect(m_transport->PlayButton(),
             &QAbstractButton::clicked,
             this,
@@ -3018,14 +3022,14 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
                 i != selection.end(); ++i) {
 
             if ((*i)->getType() == Segment::Audio) {
-                AudioSegmentSplitCommand *subCommand = 
+                AudioSegmentSplitCommand *subCommand =
                     new AudioSegmentSplitCommand(*i, dialog.getTime());
                 if (subCommand->isValid()) {
                     command->addCommand(subCommand);
                     ++segmentCount;
                 }
             } else {
-                SegmentSplitCommand *subCommand = 
+                SegmentSplitCommand *subCommand =
                     new SegmentSplitCommand(*i, dialog.getTime());
                 if (subCommand->isValid()) {
                     command->addCommand(subCommand);
@@ -3042,7 +3046,7 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
 
             m_view->slotAddCommandToHistory(command);
         } else {
-            QMessageBox::information(this, tr("Rosegarden"), 
+            QMessageBox::information(this, tr("Rosegarden"),
                 tr("Split time is not within a selected segment.\n"
                    "No segment will be split."));
         }
@@ -3118,10 +3122,10 @@ RosegardenMainWindow::slotSplitSelectionByDrum()
 
             m_view->slotAddCommandToHistory(command);
         } else {
-            QMessageBox::information(this, tr("Rosegarden"), 
+            QMessageBox::information(this, tr("Rosegarden"),
                 tr("No segment was split."));
         }
-//    }    
+//    }
 }
 
 void
@@ -3174,7 +3178,7 @@ RosegardenMainWindow::slotCreateAnacrusis()
             new ChangeCompositionLengthCommand(&comp,
                                               newCompStart, compositionEnd,
                                               comp.autoExpandEnabled());
-        
+
         bool plural = (selection.size() > 1);
         SegmentReconfigureCommand *reconfigureCommand =
             new SegmentReconfigureCommand(plural ?
@@ -3427,7 +3431,7 @@ void
 RosegardenMainWindow::slotToggleSegmentLabels()
 {
     QAction *act = this->findAction("show_segment_labels");
-    
+
     if (act) {
         m_view->slotShowSegmentLabels(act->isChecked());
     }
@@ -3921,7 +3925,7 @@ RosegardenMainWindow::slotRevertToSaved()
 
     if (RosegardenDocument::currentDocument->isModified()) {
         int revert =
-            QMessageBox::question(this, tr("Rosegarden"), 
+            QMessageBox::question(this, tr("Rosegarden"),
                                        tr("Revert modified document to previous saved version?"));
 
         if (revert == QMessageBox::No)
@@ -4246,7 +4250,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
             analysisHelper.guessTimeSignature(adapter);
         comp->addTimeSignature(0, timeSig);
     }
-    
+
     return newDoc;
 }
 
@@ -4329,7 +4333,7 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
     RG21Loader rg21Loader(&newDoc->getStudio());
 
     if (!rg21Loader.load(file, newDoc->getComposition())) {
-        QMessageBox::critical(this, tr("Rosegarden"), 
+        QMessageBox::critical(this, tr("Rosegarden"),
                            tr("Can't load X11 Rosegarden file.  It appears to be corrupted."));
         delete newDoc;
         return nullptr;
@@ -4868,7 +4872,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
             getView()->getTrackEditor()->updateRulers();
 
         }
-    
+
         // cc 20050520 - jump at the sequencer even if we're not playing,
         // because we might be a transport master of some kind
         try {
@@ -4917,10 +4921,10 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
             getTransport()->displayFrameTime(rT);
         }
     }
-    
+
     // handle transport mode configuration changes
     std::string modeAsString = getTransport()->getCurrentModeAsString();
-    
+
     if (RosegardenDocument::currentDocument->getConfiguration().get<String>
             (DocumentConfiguration::TransportMode) != modeAsString) {
 
@@ -4984,7 +4988,7 @@ RosegardenMainWindow::slotToggleTracking()
 
 void
 RosegardenMainWindow::slotTestStartupTester()
-{   
+{
     if (!m_startupTester) {
         m_startupTester = new StartupTester();
         connect(m_startupTester, &StartupTester::newerVersionAvailable,
@@ -5059,7 +5063,7 @@ RosegardenMainWindow::slotTestStartupTester()
         // Looks like Thorn will have to keep the startup test for
         // audiofile-importer around indefinitely, and so we need to move that
         // irritating @#@^@#^ dialog into the warning widget, and get it out of
-        // my face before I punch it right in the nose.        
+        // my face before I punch it right in the nose.
         m_warningWidget->queueMessage(shortMessage, message);
     }*/
 
@@ -5618,13 +5622,13 @@ RosegardenMainWindow::slotRecord()
             if (QMessageBox::warning
                     (nullptr, tr("Warning"),
                  tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
-                      QMessageBox::Yes | QMessageBox::Cancel, 
+                      QMessageBox::Yes | QMessageBox::Cancel,
                                QMessageBox::Cancel) // default button
                 == QMessageBox::Yes)
             {
                 slotOpenAudioPathSettings();
             }//end if
-        
+
         getTransport()->MetronomeButton()->setChecked(false);
         getTransport()->RecordButton()->setChecked(false);
         getTransport()->PlayButton()->setChecked(false);
@@ -5656,9 +5660,9 @@ RosegardenMainWindow::slotToggleRecord()
         if (QMessageBox::warning
             (this, tr("Error"),
                  tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before you start to record audio.\nWould you like to set it now?"),
-                      QMessageBox::Yes | QMessageBox::Cancel, 
+                      QMessageBox::Yes | QMessageBox::Cancel,
                        QMessageBox::Cancel
-               ) == QMessageBox::Yes 
+               ) == QMessageBox::Yes
        ){
             //tr("Set audio file path")) == QMessageBox::Continue) {
         slotOpenAudioPathSettings();
@@ -5764,7 +5768,7 @@ RosegardenMainWindow::slotPlay()
         QMessageBox::critical(this, tr("Rosegarden"), s);
     } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
-    }  
+    }
 }
 
 void
@@ -6091,7 +6095,7 @@ RosegardenMainWindow::slotConfigure()
 
         connect(m_configDlg, &ConfigureDialog::updateAutoSaveInterval,
                 this, &RosegardenMainWindow::slotUpdateAutoSaveInterval);
-        
+
         // Close the dialog if the document is changed : fix a potential crash
         connect(this, SIGNAL(documentAboutToChange()),
                 m_configDlg, SLOT(slotCancelOrClose()));
@@ -6287,7 +6291,7 @@ RosegardenMainWindow::slotAddMarker(timeT time)
                             qStrToStrUtf8(tr("new marker")),
                             qStrToStrUtf8(tr("no description")) );
 
-    CommandHistory::getInstance()->addCommand(command);    
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -6791,12 +6795,12 @@ RosegardenMainWindow::slotTransposeSegments()
 
     IntervalDialog intervalDialog(this, true, true);
     int ok = intervalDialog.exec();
-    
+
     int semitones = intervalDialog.getChromaticDistance();
     int steps = intervalDialog.getDiatonicDistance();
-    
+
     if (!ok || (semitones == 0 && steps == 0)) return;
-    
+
     CommandHistory::getInstance()->addCommand(
             new SegmentTransposeCommand(
                     m_view->getSelection(),
@@ -6898,13 +6902,13 @@ RosegardenMainWindow::slotManageMIDIDevices()
     if (!m_deviceManager) {
 
         m_deviceManager = new DeviceManagerDialog(this);
-        
+
         connect(m_deviceManager, SIGNAL(editBanks(DeviceId)),
                 this, SLOT(slotEditBanks(DeviceId)));
-        
+
         connect(m_deviceManager.data(), &DeviceManagerDialog::editControllers,
                 this, &RosegardenMainWindow::slotEditControlParameters);
-        
+
         connect(this, &RosegardenMainWindow::documentAboutToChange,
                 m_deviceManager.data(), &QWidget::close);
 
@@ -6912,16 +6916,16 @@ RosegardenMainWindow::slotManageMIDIDevices()
              connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
                      m_midiMixer, &MidiMixerWindow::slotSynchronise);
         }
-        
+
         connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
                      m_trackParameterBox, &TrackParameterBox::devicesChanged);
     }
-    
+
     QToolButton *tb = findChild<QToolButton*>("manage_midi_devices");
     if(tb){
         tb->setDown(true);
     }
-  
+
     // Prevent the device manager from being resized larger or smaller than the
     // size it first renders at.  I tried to correct this in Designer, but long
     // story short, the only way I could get the form preview to behave properly
@@ -7051,7 +7055,7 @@ RosegardenMainWindow::slotEditControlParameters(DeviceId device)
     connect(RosegardenDocument::currentDocument, SIGNAL(devicesResyncd()),
             controlEditor, SLOT(slotUpdate()));
 
-    
+
     controlEditor->resize(780, 360);
     controlEditor->move(50, 80);
     controlEditor->show();
@@ -7826,9 +7830,9 @@ RosegardenMainWindow::slotPlayList()
     if (!m_playList) {
         m_playList = new PlayListDialog(tr("Play List"), this);
         connect(m_playList, &PlayListDialog::closing, this, &RosegardenMainWindow::slotPlayListClosed);
-                
+
         connect(m_playList->getPlayList(), &PlayList::play, this, &RosegardenMainWindow::slotPlayListPlay);
-        
+
     }
 
     m_playList->show();
@@ -8011,7 +8015,7 @@ RosegardenMainWindow::slotSaveDefaultStudio()
     RG_DEBUG << "slotSaveDefaultStudio\n";
 
     int reply = QMessageBox::warning
-                (this, tr("Rosegarden"), tr("Are you sure you want to save this as your default studio?"), 
+                (this, tr("Rosegarden"), tr("Are you sure you want to save this as your default studio?"),
                  QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
     if (reply != QMessageBox::Yes)
@@ -8020,7 +8024,7 @@ RosegardenMainWindow::slotSaveDefaultStudio()
     TmpStatusMsg msg(tr("Saving current document as default studio..."), this);
 
     QString autoloadFile = ResourceFinder().getAutoloadSavePath();
-    
+
     RG_DEBUG << "slotSaveDefaultStudio : saving studio in "
              << autoloadFile;
 
@@ -8169,7 +8173,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 
         CommandHistory::getInstance()->addCommand(command);
         RosegardenDocument::currentDocument->initialiseStudio(); // The other document will have reset it
-        
+
         if (m_view) {
             // ??? Can't just remove this when the time comes.
             // ??? I suspect this call is being made because the Track and
@@ -8265,7 +8269,7 @@ TransportDialog *RosegardenMainWindow::getTransport()
 {
     if (m_transport == nullptr)
         createAndSetupTransport();
-    
+
     return m_transport;
 }
 
@@ -8288,7 +8292,7 @@ RosegardenMainWindow::awaitDialogClearance() const
             if (child->isVisible()  &&
                 child->objectName() != "Rosegarden Transport") {
                 haveDialog = true;
-                break;    
+                break;
             }
         }
 
@@ -8364,7 +8368,7 @@ void
 RosegardenMainWindow::slotSetQuickMarker()
 {
     RG_DEBUG << "slotSetQuickMarker()";
-    
+
     RosegardenDocument::currentDocument->setQuickMarker();
     getView()->getTrackEditor()->updateRulers();
 }
@@ -8416,7 +8420,7 @@ RosegardenMainWindow::slotAboutToExecuteCommand()
     RG_DEBUG << "about to execute a command" << pointerPos;
     CommandHistory::getInstance()->setPointerPosition(pointerPos);
 }
- 
+
 void
 RosegardenMainWindow::slotCommandUndone()
 {
@@ -8455,7 +8459,7 @@ RosegardenMainWindow::slotSwitchPreset()
     // segments" and "all segments on this track" mean.  Definitely more work
     // could be done here.  TODO
     PresetHandlerDialog dialog(this, true);
-    
+
     if (dialog.exec() != QDialog::Accepted) return;
 
     if (dialog.getConvertAllSegments()) {
@@ -8465,7 +8469,7 @@ RosegardenMainWindow::slotSwitchPreset()
 
         // satisfy #1885251 the way that seems most reasonble to me at the
         // moment, only changing track parameters when acting on all segments on
-        // this track from the notation view 
+        // this track from the notation view
         //
         //!!! This won't be undoable, and I'm not sure if that's seriously
         // wrong, or just mildly wrong, but I'm betting somebody will tell me
@@ -8479,8 +8483,8 @@ RosegardenMainWindow::slotSwitchPreset()
 
         CommandHistory::getInstance()->addCommand(new SegmentSyncCommand(
                             comp.getSegments(), selectedTrack,
-                            dialog.getTranspose(), 
-                            dialog.getLowRange(), 
+                            dialog.getTranspose(),
+                            dialog.getLowRange(),
                             dialog.getHighRange(),
                             clefIndexToClef(dialog.getClef())));
 
@@ -8488,9 +8492,9 @@ RosegardenMainWindow::slotSwitchPreset()
 
     } else {
         CommandHistory::getInstance()->addCommand(new SegmentSyncCommand(
-                            m_view->getSelection(), 
-                            dialog.getTranspose(), 
-                            dialog.getLowRange(), 
+                            m_view->getSelection(),
+                            dialog.getTranspose(),
+                            dialog.getLowRange(),
                             dialog.getHighRange(),
                             clefIndexToClef(dialog.getClef())));
     }
@@ -8536,7 +8540,7 @@ RosegardenMainWindow::checkAudioPath()
         }
 
         if (tmp.isOpen()) tmp.close();
-    } 
+    }
 
 // This is all more convenient than intentionally breaking things in my system
 // to trigger warning conditions.  It's not a real test of function, but it
@@ -8786,4 +8790,3 @@ RosegardenMainWindow *RosegardenMainWindow::m_myself = nullptr;
 
 
 }// end namespace Rosegarden
-

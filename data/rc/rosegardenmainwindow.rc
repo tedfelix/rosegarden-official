@@ -44,6 +44,7 @@
     <Action name="file_open_template" text="Open Tem&amp;plate..." />
     <Menu name="file_open_recent" icon="fileopen">
       <text>Open &amp;Recent</text>
+      <Action name="file_open_most_recent" text="Open most recent file" shortcut="Ctrl+R" />
       <!-- JAS custom coded menu -->
     </Menu>
   <Separator/>
@@ -502,7 +503,7 @@
 
 <State name="not_playing">
   <enable>
-    <!-- Only enable these destructive actions when the 
+    <!-- Only enable these destructive actions when the
          sequencer is stopped. -->
     <!-- See also RosegardenMainWindow::m_notPlaying. -->
 

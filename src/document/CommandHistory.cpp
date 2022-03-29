@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -46,7 +46,6 @@ CommandHistory::CommandHistory() :
     // All Edit > Undo menu items share this QAction object.
     m_undoAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
     m_undoAction->setObjectName("edit_undo");
-    m_undoAction->setShortcut(tr("Ctrl+Z"));
     m_undoAction->setStatusTip(tr("Undo the last editing operation"));
     connect(m_undoAction, &QAction::triggered, this, &CommandHistory::undo);
 
@@ -54,7 +53,7 @@ CommandHistory::CommandHistory() :
     m_undoMenuAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
     m_undoMenuAction->setObjectName("edit_toolbar_undo");
     connect(m_undoMenuAction, &QAction::triggered, this, &CommandHistory::undo);
-    
+
     m_undoMenu = new QMenu(tr("&Undo"));
     m_undoMenuAction->setMenu(m_undoMenu);
     connect(m_undoMenu, &QMenu::triggered,
@@ -63,10 +62,9 @@ CommandHistory::CommandHistory() :
     // All Edit > Redo menu items share this QAction object.
     m_redoAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
     m_redoAction->setObjectName("edit_redo");
-    m_redoAction->setShortcut(tr("Ctrl+Shift+Z"));
     m_redoAction->setStatusTip(tr("Redo the last operation that was undone"));
     connect(m_redoAction, &QAction::triggered, this, &CommandHistory::redo);
-    
+
     // Redo button for the main window toolbar.
     m_redoMenuAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
     m_redoMenuAction->setObjectName("edit_toolbar_redo");
@@ -151,7 +149,7 @@ CommandHistory::addCommand(Command *command)
     commInfo.pointerPositionBefore = m_pointerPosition;
     m_undoStack.push(commInfo);
     clipCommands();
-    
+
     // Execute the command
     command->execute();
 
@@ -424,7 +422,7 @@ CommandHistory::setPointerPositionForRedo(timeT pos)
     // executed. That means the relevant command is on the top of the
     // undo stack. The pointerPositionAfter value must be set for this
     // command.
- 
+
     if ((int)m_undoStack.size() == 0) return;
     CommandInfo& top = m_undoStack.top();
     top.pointerPositionAfter = pos;

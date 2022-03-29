@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -36,7 +36,6 @@
 
 #include <QSettings>
 #include <QAction>
-#include <QShortcut>
 #include <QDialog>
 #include <QFrame>
 #include <QIcon>
@@ -82,20 +81,20 @@ ListEditView::ListEditView(std::vector<Segment *> segments,
     m_centralFrame->setObjectName("centralframe");
 	m_centralFrame->setMinimumSize( 500, 300 );
 	m_centralFrame->setMaximumSize( 2200, 1400 );
-	
-	// 
+
+	//
 	m_grid = new QGridLayout(m_centralFrame);
 	m_centralFrame->setLayout( m_grid );
-	
+
 	// Note: We add Widget bottom-right, so the grid gets the propper col,row count
 	// NbLayoutRows, cols
 	//m_grid->addWidget( new QWidget(this), NbLayoutRows, cols);
-	
-	
+
+
 	//this->setLayout( new QVBoxLayout(this) );
 	//this->layout()->addWidget( m_centralFrame );
 	setCentralWidget( m_centralFrame );
-	
+
     initSegmentRefreshStatusIds();
 }
 
@@ -163,7 +162,7 @@ ListEditView::paintEvent(QPaintEvent* e)
     	m_havePendingPaintEvent = true;
     	return;
         }
-    */ 
+    */
     //!!!    m_inPaintEvent = true;
 
     //RG_DEBUG << "paintEvent()";

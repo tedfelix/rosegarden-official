@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
 <kpartgui name="Rosegarden::Matrix" version="1501">
-  
+
 <MenuBar>
   <Menu name="file" append="new_merge">
     <text>&amp;File</text>
@@ -23,6 +23,7 @@
     <Action name="delete" text="&amp;Delete" shortcut="Delete, Ctrl+D" />
     <Action name="select_all" text="Select &amp;All Events" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="C&amp;lear Selection" />
+    <Action name="reset_selection" text="&amp;Reset Selection" shortcut="Escape"/>
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
   <Separator/>
     <Action name="options_configure" text="Preferences..." icon="configure" />
@@ -80,7 +81,7 @@
         <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
         <Action name="toggle_pitchbend_ruler" text="Show Pitch &amp;Bend Ruler" icon="ruler-pitch" checked="false" />
         <Action name="add_control_ruler" text="Add &amp;Control Ruler" icon="ruler-controller" checked="false" />
-      </Menu>  
+      </Menu>
   </Menu> <!-- end of menu View -->
 
   <Menu name="Phrase">
@@ -94,8 +95,8 @@
     <Action name="add_tempo_change" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
     <Action name="add_time_signature" text="Add Time Si&amp;gnature Change..." icon="event-insert-timesig" />
   <Separator/>
-  
-  
+
+
   </Menu>
 
   <!-- JAS name="Segments" in rosegardenui.rc -->
@@ -187,14 +188,14 @@
       <Action name="cursor_next_segment" text="Ne&amp;xt Segment" shortcut="Alt+PgDown" />
     <Separator/>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
-      <Action name="play" text="&amp;Play" icon="transport-play" /> 
-      <Action name="stop" text="&amp;Stop" icon="transport-stop" /> 
+      <Action name="play" text="&amp;Play" icon="transport-play" />
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" />
       <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
       <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
       <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
       <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="Ctrl+Left" />
       <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
-      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" /> 
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" />
       <!-- JAS action called "rewindtobeginning" in rosegardenui.rc.  Is this a different call? -->
       <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
       <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
@@ -203,7 +204,7 @@
       <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
       <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
   </Menu>
-  
+
   <Menu name="Tools">
     <text>&amp;Tools</text>
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
@@ -304,7 +305,7 @@
   <Separator/>
     <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step_by_step" checked="false" />
   </Menu>
-  
+
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
     <Action name="manual" text="Rosegarden &amp;Manual" icon="wiki" shortcut="F1" />
@@ -330,7 +331,7 @@
     <Separator/>
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
-</ToolBar>  
+</ToolBar>
 
 <ToolBar name="Tools Toolbar">
   <text>Tools Toolbar</text>
@@ -464,4 +465,3 @@
 </State>
 
 </kpartgui>
- 

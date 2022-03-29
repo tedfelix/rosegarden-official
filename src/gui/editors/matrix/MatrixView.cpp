@@ -116,7 +116,6 @@
 #include <QToolButton>
 #include <QStatusBar>
 #include <QDesktopServices>
-#include <QShortcut>
 
 #include <algorithm>
 
@@ -138,15 +137,15 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     m_matrixWidget = new MatrixWidget(m_drumMode);
     setCentralWidget(m_matrixWidget);
     m_matrixWidget->setSegments(doc, segments);
-       
+
     // Many actions are created here
     // ??? MEMORY LEAK (confirmed)
     m_commandRegistry = new MatrixCommandRegistry(this);
-    
+
     setupActions();
-    
+
     createMenusAndToolbars("matrix.rc");
-     
+
     findToolbar("General Toolbar");
 
     m_Thorn = ThornStyle::isEnabled();
@@ -154,7 +153,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     initActionsToolbar();
     initRulersToolbar();
     initStatusBar();
-    
+
     connect(m_matrixWidget, &MatrixWidget::editTriggerSegment,
             this, &MatrixView::editTriggerSegment);
 
@@ -234,9 +233,9 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     default:
         findAction("highlight_black_notes")->setChecked(true);
         break;
-    }    
+    }
     settings.endGroup();
-    
+
     if (segments.size() > 1) {
         enterActionState("have_multiple_segments");
     } else {
@@ -273,8 +272,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     // Show the pointer as soon as matrix editor opens (update pointer position,
     // but don't scroll)
-    m_matrixWidget->showInitialPointer();    
-    
+    m_matrixWidget->showInitialPointer();
+
     readOptions();
 
     show();
@@ -361,9 +360,9 @@ MatrixView::slotUpdateWindowTitle(bool)
 void
 MatrixView::setupActions()
 {
-    
+
     setupBaseActions(true);
-    
+
     createAction("select", SLOT(slotSetSelectTool()));
     createAction("draw", SLOT(slotSetPaintTool()));
     createAction("erase", SLOT(slotSetEraseTool()));
@@ -406,9 +405,10 @@ MatrixView::setupActions()
     createAction("preview_selection", SLOT(slotPreviewSelection()));
     createAction("clear_loop", SLOT(slotClearLoop()));
     createAction("clear_selection", SLOT(slotClearSelection()));
+    createAction("reset_selection", SLOT(slotEscapePressed()));
     createAction("filter_selection", SLOT(slotFilterSelection()));
 
-    createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));    
+    createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));
 
     //"controllers" Menubar menu
     createAction("controller_sequence", SLOT(slotControllerSequence()));
@@ -417,11 +417,11 @@ MatrixView::setupActions()
 
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
     createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
-    
+
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
     createAction("add_control_ruler", "");
-    
+
     createAction("add_tempo_change", SLOT(slotAddTempo()));
     createAction("add_time_signature", SLOT(slotAddTimeSignature()));
     createAction("add_key_signature", SLOT(slotEditAddKeySignature()));
@@ -437,10 +437,10 @@ MatrixView::setupActions()
     createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
     createAction("invert", SLOT(slotInvert()));
     createAction("retrograde", SLOT(slotRetrograde()));
-    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));    
+    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));
     createAction("jog_left", SLOT(slotJogLeft()));
     createAction("jog_right", SLOT(slotJogRight()));
-    
+
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
         dynamic_cast<MidiDevice *>(getCurrentDevice());
@@ -480,7 +480,7 @@ MatrixView::setupActions()
 
     findAction("add_control_ruler")->setMenu(addControlRulerMenu);
 
-    // (ported from NotationView) 
+    // (ported from NotationView)
     //JAS insert note section is a rewrite
     //JAS from EditView::createInsertPitchActionMenu()
     for (int octave = 0; octave <= 2; ++octave) {
@@ -530,7 +530,7 @@ MatrixView::setupActions()
     createAction("show_actions_toolbar", SLOT(slotToggleActionsToolBar()));
     createAction("show_rulers_toolbar", SLOT(slotToggleRulersToolBar()));
 
-    
+
     createAction("manual", SLOT(slotHelp()));
     createAction("tutorial", SLOT(slotTutorial()));
     createAction("guidelines", SLOT(slotBugGuidelines()));
@@ -545,7 +545,7 @@ MatrixView::setupActions()
     QActionGroup *ag = new QActionGroup(this);
     ag->addAction(findAction("highlight_black_notes"));
     ag->addAction(findAction("highlight_triads"));
-    
+
     // grid snap values
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
     m_snapValues.clear();
@@ -583,10 +583,6 @@ MatrixView::setupActions()
             createAction(actionName, SLOT(slotSetSnapFromAction()));
         }
     }
-
-    // This shortcut is always enabled, unlike the "clear_selection" action
-    QShortcut *shortcut = new QShortcut(Qt::Key_Escape, this);
-    connect(shortcut, &QShortcut::activated, this, &MatrixView::slotEscapePressed);
 }
 
 
@@ -716,7 +712,7 @@ MatrixView::readOptions()
     setCheckBoxState("show_tools_toolbar", "Tools Toolbar");
     setCheckBoxState("show_transport_toolbar", "Transport Toolbar");
     setCheckBoxState("show_actions_toolbar", "Actions Toolbar");
-    setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");  
+    setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");
 }
 
 void
@@ -765,7 +761,7 @@ MatrixView::slotUpdateMenuStates()
     } else {
         leaveActionState("have_control_ruler");
         // No ruler implies no controller selection
-        leaveActionState("have_controller_selection"); 
+        leaveActionState("have_controller_selection");
     }
 
     // "have_selection" is enabled when either of the others is.
@@ -1118,17 +1114,17 @@ MatrixView::slotPlaceControllers()
 {
     EventSelection *selection = getSelection();
     if (!selection) { return; }
-    
+
     ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
     if (!cr) { return; }
-    
+
     ControlParameter *cp = cr->getControlParameter();
     if (!cp) { return; }
 
     const Instrument *instrument =
         RosegardenDocument::currentDocument->getInstrument(getCurrentSegment());
     if (!instrument) { return; }
-    
+
     PlaceControllersCommand *command =
         new PlaceControllersCommand(*selection,
                                     instrument,
@@ -1512,19 +1508,19 @@ void MatrixView::slotDiatonicTranspose()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
-    
+
     QSettings settings;
     settings.beginGroup(MatrixViewConfigGroup);
-    
+
     IntervalDialog intervalDialog(this);
     int ok = intervalDialog.exec();
     //int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
     int semitones = intervalDialog.getChromaticDistance();
     int steps = intervalDialog.getDiatonicDistance();
     settings.endGroup();
-    
+
     if (!ok || (semitones == 0 && steps == 0)) return;
-    
+
     if (intervalDialog.getChangeKey())
     {
         RG_WARNING << "Transposing changing keys is not currently supported on selections";
@@ -1576,7 +1572,7 @@ void MatrixView::slotInvert()
         return;
     }
 
-    int semitones = 0;    
+    int semitones = 0;
     CommandHistory::getInstance()->addCommand(new InvertCommand
             (semitones, *selection));
 }
@@ -1585,7 +1581,7 @@ void MatrixView::slotRetrograde()
 {
     EventSelection *selection = getSelection();
     if (!selection) return ;
-    
+
     int semitones = 0;
     CommandHistory::getInstance()->addCommand(new RetrogradeCommand
             (semitones, *selection));
@@ -1688,13 +1684,13 @@ MatrixView::slotStepBackward()
 
     // Sanity check.  Move postion marker inside segmet if not
     timeT time = getInsertionTime();  // Un-checked current insertion time
-    
+
     timeT segmentEndTime = segment->getEndMarkerTime();
     if (time > segmentEndTime) {
         // Move to inside the current segment
         time = segment->getStartTime();
     }
-        
+
     time = getSnapGrid()->snapTime(time - 1, SnapGrid::SnapLeft);
 
     if (time < segment->getStartTime()){
@@ -1712,7 +1708,7 @@ MatrixView::slotStepForward(bool force)
 
     // Sanity check.  Move postion marker inside segmet if not
     timeT time = getInsertionTime();  // Un-checked current insertion time
-    
+
     timeT segmentStartTime = segment->getStartTime();
 
     if (!force && ((time < segmentStartTime) ||
@@ -1720,9 +1716,9 @@ MatrixView::slotStepForward(bool force)
         // Move to inside the current segment
         time = segmentStartTime;
     }
-        
+
     time = getSnapGrid()->snapTime(time + 1, SnapGrid::SnapRight);
-    
+
     if (!force && (time > segment->getEndMarkerTime())){
         m_document->slotSetPointerPosition(segment->getEndMarkerTime());
     } else {
@@ -1806,7 +1802,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         insertionTime = getInsertionTime();
     }
     numberOfNotesOn++;
-    
+
 
     MATRIX_DEBUG << "Inserting note at pitch " << pitch;
 
@@ -1829,7 +1825,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         return;
     }
 
-    MatrixInsertionCommand* command = 
+    MatrixInsertionCommand* command =
         new MatrixInsertionCommand(*segment, insertionTime,
                                    endTime, &modelEvent);
 
@@ -2025,8 +2021,8 @@ MatrixView::getPitchFromNoteInsertAction(QString name,
         int pitchOctave = clefPitch.getOctave() + octave;
 
         MATRIX_DEBUG << "MatrixView::getPitchFromNoteInsertAction:"
-                  << " key = " << key.getName() 
-                  << ", clef = " << clef.getClefType() 
+                  << " key = " << key.getName()
+                  << ", clef = " << clef.getClefType()
                   << ", octaveoffset = " << clef.getOctaveOffset();
         MATRIX_DEBUG << "MatrixView::getPitchFromNoteInsertAction: octave = " << pitchOctave;
 
@@ -2113,7 +2109,7 @@ void
 MatrixView::slotToggleStepByStep()
 {
     QAction *action = findAction("toggle_step_by_step");
-            
+
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action";
         return ;
@@ -2129,7 +2125,7 @@ void
 MatrixView::slotStepByStepTargetRequested(QObject *obj)
 {
     QAction *action = findAction("toggle_step_by_step");
-          
+
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action";
         return ;
@@ -2174,7 +2170,7 @@ MatrixView::slotExtendSelectionBackward(bool bar)
     if (!segment) return;
 
     MatrixViewSegment *vs = m_matrixWidget->getScene()->getCurrentViewSegment();
-    ViewElementList *vel = vs->getViewElementList(); 
+    ViewElementList *vel = vs->getViewElementList();
     EventSelection *s = getSelection();
     EventSelection *es = new EventSelection(*segment);
 
@@ -2204,7 +2200,7 @@ MatrixView::slotExtendSelectionBackward(bool bar)
             //
             // Note that here in the matrix, we still wouldn't want to orphan
             // indications, etc., even though they're not visible from here.
-            
+
             if ((*extendFrom)->event()->isa(Note::EventType)) {
                 es->addEvent((*extendFrom)->event());
             }
@@ -2260,7 +2256,7 @@ MatrixView::slotExtendSelectionForward(bool bar)
     if (!segment) return;
 
     MatrixViewSegment *vs = m_matrixWidget->getScene()->getCurrentViewSegment();
-    ViewElementList *vel = vs->getViewElementList(); 
+    ViewElementList *vel = vs->getViewElementList();
     EventSelection *s = getSelection();
     EventSelection *es = new EventSelection(*segment);
 

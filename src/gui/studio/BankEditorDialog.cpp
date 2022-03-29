@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -65,7 +65,6 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QShortcut>
 #include <QDesktopServices>
 #if QT_VERSION >= 0x050000
 #include <QStandardPaths>
@@ -113,10 +112,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     leftPartLayout->setContentsMargins(2, 2, 2, 2);
     leftPart->setLayout(leftPartLayout);
     splitterLayout->addWidget(leftPart);
-    
+
     m_treeWidget = new QTreeWidget;
     leftPartLayout->addWidget(m_treeWidget);
-    
+
     m_treeWidget->setColumnCount(4);
     QStringList sl;
     sl << tr("Device and Banks")
@@ -129,13 +128,13 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);    //qt4
 //    m_treeWidget->setAllColumnsShowFocus(true);
     m_treeWidget->setSortingEnabled(true);
-    
-    /*    
+
+    /*
     m_treeWidget->setShowSortIndicator(true);        //&&&
     m_treeWidget->setItemsRenameable(true);
     m_treeWidget->restoreLayout(BankEditorConfigGroup);
     */
-    
+
     QFrame *bankBox = new QFrame(leftPart);
     leftPartLayout->addWidget(bankBox);
     bankBox->setContentsMargins(1, 1, 1, 1);
@@ -266,7 +265,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             this, &BankEditorDialog::slotVariationChanged);
 
 //     CommandHistory::getInstance()->attachView(actionCollection());    //&&&
-    
+
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
@@ -330,7 +329,7 @@ void
 BankEditorDialog::setupActions()
 {
 //     KAction* close = KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
-    
+
     createAction("file_close", SLOT(slotFileClose()));
 
     connect(m_closeButton, &QAbstractButton::clicked, this, &BankEditorDialog::slotFileClose);
@@ -340,21 +339,21 @@ BankEditorDialog::setupActions()
     createAction("bank_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
-    
+
 //     connect(m_treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*)),
 //             this, SLOT(slotPopulateDeviceEditors(QTreeWidgetItem*)));
 
 //     connect( m_treeWidget, SIGNAL(itemActivated(QTreeWidgetItem*, int)),  //twItem, column
 //              this, SLOT(slotPopulateDeviceEditors(QTreeWidgetItem*, int))  );
-    
-    
+
+
 //     currentItemChanged( QTreeWidgetItem* current, QTreeWidgetItem* previous )
     connect( m_treeWidget, &QTreeWidget::currentItemChanged,  //twItemCurr, teItemPrev
              this, &BankEditorDialog::slotPopulateDeviceEditors  );
-    
-    connect(m_treeWidget, &QTreeWidget::itemChanged, this, 
+
+    connect(m_treeWidget, &QTreeWidget::itemChanged, this,
             &BankEditorDialog::slotModifyDeviceOrBankName);
-    
+
     // some adjustments
 
 /*
@@ -370,7 +369,7 @@ BankEditorDialog::setupActions()
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Redo));
     */
-    
+
     createMenusAndToolbars("bankeditor.rc"); //@@@ JAS orig. 0
 }
 
@@ -397,11 +396,11 @@ BankEditorDialog::initDialog()
         devx = *it;
 //     for ( i=0; i < int(devices->size()); i++ ){
 //         devx = devices->at( i );
-        
+
         if (devx->getType() == Device::Midi) {
-            
+
             midiDevice = dynamic_cast<MidiDevice*>(devx);
-            
+
             if (!midiDevice) continue;
             // skip read-only devices
             if (midiDevice->getDirection() == MidiDevice::Record) continue;
@@ -413,17 +412,17 @@ BankEditorDialog::initDialog()
 
             twItemDevice = new MidiDeviceTreeWidgetItem(midiDevice->getId(), m_treeWidget, itemName);
             //twItemDevice->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable);
-            
+
             m_treeWidget->addTopLevelItem(twItemDevice);  //
-            
+
             twItemDevice->setExpanded(true);
-           
+
             populateDeviceItem(twItemDevice, midiDevice);
         }
     }
 
     populateDeviceEditors(m_treeWidget->topLevelItem(0));
-    
+
     // select the first device item
     m_treeWidget->topLevelItem(0)->setSelected(true);
     m_treeWidget->resizeColumnToContents(0);
@@ -439,13 +438,13 @@ BankEditorDialog::updateDialog()
     DeviceList *devices = m_studio->getDevices();
     DeviceListIterator it;
     bool deviceLabelUpdate = false;
-    
+
     MidiDevice* midiDevice = nullptr;
     QTreeWidgetItem* currentIndex = nullptr;
     MidiDeviceTreeWidgetItem* deviceItem = nullptr;
     QTreeWidgetItem *child = nullptr;
     unsigned int cnt, i;
-    
+
     for (it = devices->begin(); it != devices->end(); ++it) {
 
         if ((*it)->getType() != Device::Midi){
@@ -465,19 +464,19 @@ BankEditorDialog::updateDialog()
         if (m_deviceNameMap.find(midiDevice->getId()) != m_deviceNameMap.end()) {
             // Device already displayed but make sure the label is up to date
             //
-            
-            //QTreeWidgetItem* 
+
+            //QTreeWidgetItem*
             currentIndex = m_treeWidget->currentItem();
-            
+
             if (currentIndex) {
-                //MidiDeviceTreeWidgetItem* 
+                //MidiDeviceTreeWidgetItem*
                 deviceItem = getParentDeviceItem(currentIndex);
-                
+
                 if (deviceItem &&
                         deviceItem->getDeviceId() == midiDevice->getId()) {
-                    
+
                     if( deviceItem->text(0) != strtoqstr(midiDevice->getName()) ){
-                        
+
                         deviceItem->setText(0, strtoqstr(midiDevice->getName()));
                         m_deviceNameMap[midiDevice->getId()] =
                             midiDevice->getName();
@@ -495,9 +494,9 @@ BankEditorDialog::updateDialog()
                     //QTreeWidgetItem *
                     //child = deviceItem->child(0);   // bank/keymap item
                     cnt = deviceItem->childCount();
-                    
+
                     for( i=0; i<cnt; i++ ){
-                        
+
                         //QTreeWidgetItem*
                         child = deviceItem->child( i );
 
@@ -517,7 +516,7 @@ BankEditorDialog::updateDialog()
                         }
 
                     }// end for(i)
-                    
+
                 }
             }// end if( currentIndex )
 
@@ -534,15 +533,15 @@ BankEditorDialog::updateDialog()
 
         QTreeWidgetItem* deviceItem = new MidiDeviceTreeWidgetItem
                                     (midiDevice->getId(), m_treeWidget, itemName);
-        
+
         deviceItem->setExpanded(true);
 
         populateDeviceItem(deviceItem, midiDevice);
         }
-        
+
     }// end for( it = device ...)
-    
-    
+
+
     // delete items whose corresponding devices are no longer present,
     // and update the other ones
     //
@@ -555,7 +554,7 @@ BankEditorDialog::updateDialog()
     cnt = m_treeWidget->topLevelItemCount();
     for( i=0; i<cnt; i++ ){
         sibling = dynamic_cast<MidiDeviceTreeWidgetItem*>( m_treeWidget->topLevelItem(i) );
-        
+
         if (m_deviceNameMap.find(sibling->getDeviceId()) == m_deviceNameMap.end())
             itemsToDelete.push_back(sibling);
         else
@@ -580,7 +579,7 @@ BankEditorDialog::setCurrentDevice(DeviceId device)
     unsigned int i, cnt;
     QTreeWidgetItem* twItem;
     MidiDeviceTreeWidgetItem* deviceItem;
-    
+
     cnt = m_treeWidget->topLevelItemCount();
     for( i = 0; i < cnt; i++ ){
         twItem = m_treeWidget->topLevelItem( i );
@@ -647,19 +646,19 @@ BankEditorDialog::updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem)
                                  banks[i].isPercussion(),
                                  banks[i].getMSB(), banks[i].getLSB());
     }
-    
+
     int cnt, i, n;
-    
+
     cnt = int(keymaps.size());
     for ( i = 0; i < cnt; ++i) {
 
 //         QTreeWidgetItem *child = deviceItem->firstChild();
         bool have = false;
-        
+
         n = 0;
         while (n < deviceItem->childCount()) {
             QTreeWidgetItem *child = deviceItem->child(n);
-            
+
             MidiKeyMapTreeWidgetItem *keyItem =
                 dynamic_cast<MidiKeyMapTreeWidgetItem*>(child);
             if (keyItem) {
@@ -686,9 +685,9 @@ BankEditorDialog::updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem)
 
     n = 0;
     while (n < deviceItem->childCount()) {
-        
+
         QTreeWidgetItem* child = deviceItem->child(n);
-        
+
         MidiBankTreeWidgetItem *bankItem =
             dynamic_cast<MidiBankTreeWidgetItem *>(child);
         if (bankItem) {
@@ -723,7 +722,7 @@ BankEditorDialog::deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int ba
 //     QTreeWidgetItem *child = deviceItem->firstChild();
     MidiBankTreeWidgetItem *bankItem = nullptr;
     QTreeWidgetItem *child = nullptr;
-    
+
     int n = 0;
     while (n < deviceItem->childCount()) {
         child = deviceItem->child(n);
@@ -858,7 +857,7 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         RG_DEBUG << "BankEditorDialog::populateDeviceEditors - got no deviceItem (banks parent item) \n";
         return ;
     }
-    
+
 
     m_lastDevice = deviceItem->getDeviceId();
 
@@ -1456,7 +1455,7 @@ BankEditorDialog::selectDeviceItem(MidiDevice *device)
     MidiDeviceTreeWidgetItem *midiDeviceItem;
     MidiDevice *midiDevice;
     unsigned int i, cnt;
-    
+
     cnt = m_treeWidget->topLevelItemCount();
     for( i=0; i<cnt; i++ ){
         child = m_treeWidget->topLevelItem( i );
@@ -1487,25 +1486,25 @@ BankEditorDialog::selectDeviceBankItem(DeviceId deviceId,
     QTreeWidgetItem *bankChild;
 //     int deviceCount = 0, bankCount = 0;
 
-    
+
     QTreeWidgetItem *twItemDevice = nullptr;
     MidiDeviceTreeWidgetItem *midiDeviceItem = nullptr;
-    
+
     int bankI;
     int devI = 0;
 //     while(n < m_treeWidget->childCount()){
     while( devI < m_treeWidget->topLevelItemCount() ){
 //         bankChild = deviceChild->firstChild();
-        
+
         twItemDevice = m_treeWidget->topLevelItem(devI);
         midiDeviceItem = dynamic_cast<MidiDeviceTreeWidgetItem*>(twItemDevice);
 
         if (midiDeviceItem){    // && bankChild) {
-            
+
             bankI = 0;
             while( bankI < twItemDevice->childCount() ){
                 bankChild = twItemDevice->child(bankI);
-                
+
                 if ((deviceId == midiDeviceItem->getDeviceId()) && (bank == bankI)) {
 //                     m_treeWidget->setSelected(bankChild, true);
                     bankChild->setSelected(true);
@@ -1515,7 +1514,7 @@ BankEditorDialog::selectDeviceBankItem(DeviceId deviceId,
 //             } while ((bankChild = bankChild->nextSibling()));
             }
         }
-        
+
 //         deviceCount++;
 //         bankCount = 0;
         devI += 1;
@@ -1560,7 +1559,7 @@ BankEditorDialog::slotImport()
                       tr("All files") + " (*)", nullptr); ///!!! Should we allow 'All files' here since LinuxSampler files don't need to have an extension?!
 
     QUrl url(url_str);
-    
+
     if (url.isEmpty())
         return ;
 
@@ -1735,10 +1734,10 @@ BankEditorDialog::slotExport()
  *
  * KDE3:
  * QString KFileDialog::getSaveFileName   ( const QString &   startDir =
- * QString::null, 
- *   const QString &   filter = QString::null, 
- *     QWidget *   parent = 0, 
- *       const QString &   caption = QString::null   
+ * QString::null,
+ *   const QString &   filter = QString::null,
+ *     QWidget *   parent = 0,
+ *       const QString &   caption = QString::null
  *        )   [static]
  *
  */
@@ -1782,7 +1781,7 @@ BankEditorDialog::slotExport()
                           tr("The specified file exists.  Overwrite?"),
                           QMessageBox::Yes | QMessageBox::No,
                           QMessageBox::No);
- 
+
         if (overwrite != QMessageBox::Yes)
             return ;
     }

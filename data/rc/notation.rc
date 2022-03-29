@@ -28,13 +28,13 @@
     <Action name="general_paste" text="Pa&amp;ste..." shortcut="Alt+Shift+V" />
     <Action name="delete" text="De&amp;lete" shortcut="Delete" />
   <Separator/>
-    <Action name="move_events_up_staff" 
+    <Action name="move_events_up_staff"
             text="&amp;Move to Staff Above" />
-    <Action name="general_move_events_up_staff" 
+    <Action name="general_move_events_up_staff"
             text="&amp;Move to Staff Above..." />
-    <Action name="move_events_down_staff" 
+    <Action name="move_events_down_staff"
             text="Move to Staff &amp;Below" />
-    <Action name="general_move_events_down_staff" 
+    <Action name="general_move_events_down_staff"
             text="Move to Staff &amp;Below..." />
   <Separator/>
     <Action name="select_from_start" text="Select from Sta&amp;rt" />
@@ -42,6 +42,7 @@
     <Action name="select_whole_staff" text="Select Whole St&amp;aff" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="Clear Select&amp;ion" />
 <!--    <Action name="search_select" text="Search and Selec&amp;t" icon="search" shortcut="Ctrl+K" /> -->
+    <Action name="reset_selection" text="&amp;Reset Selection" shortcut="Escape"/>
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
     <Action name="select_evenly_spaced_notes" text="&amp;Guess Beats" />
   <Separator/>
@@ -204,14 +205,14 @@
       <Action name="show_ornament_expansion" text="&amp;Show Expansion of Ornament" />
       <Action name="mask_ornament" text="Skip This Part of Ornament (&amp;Mask Tied Note)" />
       <Action name="unmask_ornament" text="Don't Skip This Part (&amp;Unmask Tied Note)" />
-      
+
       <!-- JAS No text in menus for 'ornament_actionmenu' action name. -->
       <Action name="ornament_actionmenu" />
     </Menu>
   <Separator/>
     <Menu name="Fingering">
       <text>&amp;Fingerings</text>
-      <Action name="remove_fingering_marks" text="&amp;Remove Fingerings" /> 
+      <Action name="remove_fingering_marks" text="&amp;Remove Fingerings" />
     <Separator/>
       <Action name="add_fingering_0" text="Add Fingering &amp;0 (Thumb)" shortcut="Alt+0" />
       <Action name="add_fingering_1" text="Add Fingering &amp;1" shortcut="Alt+1" />
@@ -437,12 +438,12 @@
       <Action name="cursor_next_segment" text="Ne&amp;xt Segment" shortcut="Alt+PgDown" />
     <Separator/>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
-      <Action name="play" text="&amp;Play" icon="transport-play" tooltip="Play" /> 
-      <Action name="stop" text="&amp;Stop" icon="transport-stop" tooltip="Stop" /> 
+      <Action name="play" text="&amp;Play" icon="transport-play" tooltip="Play" />
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" tooltip="Stop" />
       <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
       <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
       <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="Ctrl+Left" />
-      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" /> 
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" />
       <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" tooltip="Rewind to Beginning" icon="transport-rewind-end" />
       <Action name="playback_pointer_end" text="Fast Forward to &amp;End" tooltip="Fast Forward to End" icon="transport-ffwd-end" />
       <Action name="jump_to_quick_marker" text="&amp;Jump to Quick Marker" shortcut="Ctrl+M" />
@@ -634,7 +635,7 @@
     <Separator/>
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
-</ToolBar>    
+</ToolBar>
 
 <ToolBar name="Tools Toolbar">
   <text>Tools Toolbar</text>
@@ -737,7 +738,7 @@
   <text>Symbols Toolbar</text>
   <Action name="add_segno" />
   <Action name="add_coda" />
-  <Action name="add_breath" /> 
+  <Action name="add_breath" />
 </ToolBar>
 
 <ToolBar name="Marks Toolbar" newline="true" hidden="false" position="right">
@@ -878,7 +879,7 @@
     <Action name="remove_marks"/>
     <Action name="add_pause"/>
     <Action name="add_text_mark"/>
-    <Action name="normalize_rests"/> 
+    <Action name="normalize_rests"/>
     <Action name="collapse_rests_aggressively"/>
     <Action name="expression_sequence"/>
     <Action name="pitch_bend_sequence"/>

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -55,7 +55,6 @@
 #include <QTabWidget>
 #include <QWidget>
 #include <QLayout>
-#include <QShortcut>
 #include <QDesktopServices>
 #include <QToolButton>
 #include <QToolBar>
@@ -317,7 +316,7 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                     instrument->hasFixedChannel())
                 {
                     // Send out the external controller port as well.
-                    
+
                     //!!! really want some notification of whether we have any!
                     int tabIndex = m_tabWidget->currentIndex();
                     if (tabIndex < 0)
@@ -811,7 +810,7 @@ MidiMixerWindow::getIPBForMidiMixer(MidiDevice *dev) const
     for (ControlList::const_iterator it = controlList.begin();
          it != controlList.end(); ++it)
     {
-        if (it->getIPBPosition() != -1 && 
+        if (it->getIPBPosition() != -1 &&
             it->getControllerNumber() != MIDI_CONTROLLER_VOLUME)
             retList.push_back(*it);
     }
