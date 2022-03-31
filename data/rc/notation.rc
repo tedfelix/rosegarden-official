@@ -438,18 +438,18 @@
       <Action name="cursor_next_segment" text="Ne&amp;xt Segment" shortcut="Alt+PgDown" />
     <Separator/>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
-      <Action name="play" text="&amp;Play" icon="transport-play" tooltip="Play" />
-      <Action name="stop" text="&amp;Stop" icon="transport-stop" tooltip="Stop" />
-      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
-      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
+      <Action name="play" text="&amp;Play" icon="transport-play" />
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" />
+      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" shortcut="Left" />
+      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" shortcut="Right" />
       <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="Ctrl+Left" />
       <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" />
-      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" tooltip="Rewind to Beginning" icon="transport-rewind-end" />
-      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" tooltip="Fast Forward to End" icon="transport-ffwd-end" />
+      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
+      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
       <Action name="jump_to_quick_marker" text="&amp;Jump to Quick Marker" shortcut="Ctrl+M" />
       <Action name="toggle_solo" text="S&amp;olo" tooltip="Solo the Active Track" icon="transport-solo" checked="false" />
-      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" tooltip="Scroll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
-      <Action name="panic" text="P&amp;anic" icon="transport-panic" tooltip="Panic! (Ctrl+Alt+P)" shortcut="Alt+Ctrl+P" />
+      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
+      <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
   </Menu>
 
   <Menu name="Tools">
@@ -674,14 +674,14 @@
   <Action name="switch_dots_off" />
 <Separator/>
   <!-- Reference names, but with _ instead of - -->
-  <Action name="breve" icon="breve" checked="false" group="duration_toolbar" tooltip="Double Whole Note (5)" />
-  <Action name="semibreve" icon="semibreve" checked="false" group="duration_toolbar" tooltip="Whole Note (1)" />
-  <Action name="minim" icon="minim" checked="false" group="duration_toolbar" tooltip="Half Note (2)" />
-  <Action name="crotchet" icon="crotchet" checked="true" group="duration_toolbar" tooltip="Quarter Note (4)" />
-  <Action name="quaver" icon="quaver" checked="false" group="duration_toolbar" tooltip="Eighth Note (8)" />
-  <Action name="semiquaver" icon="semiquaver" checked="false" group="duration_toolbar" tooltip="Sixteenth Note (6)" />
-  <Action name="demisemi" icon="demisemi" checked="false" group="duration_toolbar" tooltip="Thirty-Second Note (3)" />
-  <Action name="hemidemisemi" icon="hemidemisemi" checked="false" group="duration_toolbar" tooltip="Sixty-Fourth Note (0)" />
+  <Action name="breve" icon="breve" checked="false" group="duration_toolbar" tooltip="Double Whole Note" />
+  <Action name="semibreve" icon="semibreve" checked="false" group="duration_toolbar" tooltip="Whole Note" />
+  <Action name="minim" icon="minim" checked="false" group="duration_toolbar" tooltip="Half Note" />
+  <Action name="crotchet" icon="crotchet" checked="true" group="duration_toolbar" tooltip="Quarter Note" />
+  <Action name="quaver" icon="quaver" checked="false" group="duration_toolbar" tooltip="Eighth Note" />
+  <Action name="semiquaver" icon="semiquaver" checked="false" group="duration_toolbar" tooltip="Sixteenth Note" />
+  <Action name="demisemi" icon="demisemi" checked="false" group="duration_toolbar" tooltip="Thirty-Second Note" />
+  <Action name="hemidemisemi" icon="hemidemisemi" checked="false" group="duration_toolbar" tooltip="Sixty-Fourth Note" />
   <!-- was Dotted Notes Toolbar -->
   <Action name="dotted_breve" icon="dotted-breve" checked="false" group="duration_toolbar" tooltip="Dotted Double Whole Note" />
   <Action name="dotted_semibreve" icon="dotted-semibreve" checked="false" group="duration_toolbar" tooltip="Dotted Whole Note" />
@@ -691,14 +691,14 @@
   <Action name="dotted_semiquaver" icon="dotted-semiquaver" checked="false" group="duration_toolbar" tooltip="Dotted Sixteenth Note" />
   <Action name="dotted_demisemi" icon="dotted-demisemi" checked="false" group="duration_toolbar" tooltip="Dotted Thirty-Second Note" />
   <!-- was Rests Toolbar -->
-  <Action name="rest_breve" icon="rest-breve" checked="false" group="duration_toolbar" tooltip="Double Whole Rest (5)" />
-  <Action name="rest_semibreve" icon="rest-semibreve" checked="false" group="duration_toolbar" tooltip="Whole Rest (1)" />
-  <Action name="rest_minim" icon="rest-minim" checked="false" group="duration_toolbar" tooltip="Half Rest (2)" />
-  <Action name="rest_crotchet" icon="rest-crotchet" checked="false" group="duration_toolbar" tooltip="Quarter Rest (4)" />
-  <Action name="rest_quaver" icon="rest-quaver" checked="false" group="duration_toolbar" tooltip="Eighth Rest (8)" />
-  <Action name="rest_semiquaver" icon="rest-semiquaver" checked="false" group="duration_toolbar" tooltip="Sixteenth Rest (6)" />
-  <Action name="rest_demisemi" icon="rest-demisemi" checked="false" group="duration_toolbar" tooltip="Thirty-Second Rest (3)" />
-  <Action name="rest_hemidemisemi" icon="rest-hemidemisemi" checked="false" group="duration_toolbar" tooltip="Sixty-Fourth Rest (0)" />
+  <Action name="rest_breve" icon="rest-breve" checked="false" group="duration_toolbar" tooltip="Double Whole Rest" />
+  <Action name="rest_semibreve" icon="rest-semibreve" checked="false" group="duration_toolbar" tooltip="Whole Rest" />
+  <Action name="rest_minim" icon="rest-minim" checked="false" group="duration_toolbar" tooltip="Half Rest" />
+  <Action name="rest_crotchet" icon="rest-crotchet" checked="false" group="duration_toolbar" tooltip="Quarter Rest" />
+  <Action name="rest_quaver" icon="rest-quaver" checked="false" group="duration_toolbar" tooltip="Eighth Rest" />
+  <Action name="rest_semiquaver" icon="rest-semiquaver" checked="false" group="duration_toolbar" tooltip="Sixteenth Rest" />
+  <Action name="rest_demisemi" icon="rest-demisemi" checked="false" group="duration_toolbar" tooltip="Thirty-Second Rest" />
+  <Action name="rest_hemidemisemi" icon="rest-hemidemisemi" checked="false" group="duration_toolbar" tooltip="Sixty-Fourth Rest" />
   <!-- was Dotted Rests Toolbar -->
   <Action name="rest_dotted_breve" icon="dotted-rest-breve" checked="false" group="duration_toolbar" tooltip="Dotted Double Whole Rest" />
   <Action name="rest_dotted_semibreve" icon="dotted-rest-semibreve" checked="false" group="duration_toolbar" tooltip="Dotted Whole Rest" />

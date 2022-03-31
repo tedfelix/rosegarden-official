@@ -191,8 +191,8 @@
       <Action name="play" text="&amp;Play" icon="transport-play" />
       <Action name="stop" text="&amp;Stop" icon="transport-stop" />
       <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
-      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
-      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
+      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" shortcut="Left" />
+      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" shortcut="Right" />
       <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="Ctrl+Left" />
       <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
       <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" />
