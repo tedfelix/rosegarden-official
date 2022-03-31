@@ -636,6 +636,8 @@ MatrixView::initActionsToolbar()
         }
     }
 
+    m_snapGridCombo->setMaxVisibleItems(m_snapValues.size());
+
     connect(m_snapGridCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MatrixView::slotSetSnapFromIndex);

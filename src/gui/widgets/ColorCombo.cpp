@@ -26,6 +26,7 @@
 
 #include "misc/Debug.h"
 
+#include <QAbstractItemView>
 #include <QPixmap>
 #include <QString>
 
@@ -38,6 +39,7 @@ ColorCombo::ColorCombo(QWidget *parent) :
 {
     setEditable(false);
     setMaxVisibleItems(20);
+    view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 void
