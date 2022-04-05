@@ -114,6 +114,7 @@ MidiInserter::
 getAbsoluteTime(RealTime realtime)
 {
     timeT time = m_comp.getElapsedTimeForRealTime(realtime);
+    RG_DEBUG << "getAbsoluteTime" << realtime << time;
     timeT retVal = (time * m_timingDivision) / crotchetDuration;
 #ifdef MIDI_DEBUG
     RG_DEBUG << "Converting RealTime" << realtime
@@ -172,7 +173,7 @@ MidiInserter::
 setup()
 {
     m_conductorTrack.m_previousTime = 0;
-    
+
     // Insert the Rosegarden Signature Track here and any relevant
     // file META information - this will get written out just like
     // any other MIDI track.
@@ -222,6 +223,11 @@ insertCopy(const MappedEvent &evt)
     MidiByte   midiChannel = evt.getRecordedChannel();
     TrackData& trackData   = getTrackData(evt.getTrackId(), midiChannel);
     timeT      midiEventAbsoluteTime = getAbsoluteTime(evt.getEventTime());
+    // to avoid negative times here we subtract the start time
+    timeT start = m_comp.getStartMarker();
+    start = (start * m_timingDivision) / crotchetDuration;
+
+    midiEventAbsoluteTime -= start;
 
     // If we are ramping, calculate a previous tempo that would get us
     // to this event at this time and pre-insert it, unless this
@@ -254,6 +260,8 @@ insertCopy(const MappedEvent &evt)
                     // Yes, we fetch it from "instrument" because
                     // that's what TempoSegmentMapper puts it in.
                     tempoT tempo = evt.getInstrument();
+                    RG_DEBUG << "insertCopy tempo" << evt.getEventTime() <<
+                        midiEventAbsoluteTime << tempo;
                     trackData.insertTempo(midiEventAbsoluteTime, tempo);
                     break;
                 }
@@ -278,7 +286,7 @@ insertCopy(const MappedEvent &evt)
                     }
 
                     timeSigString += (MidiByte) denPowerOf2;
-                
+
                     // The third byte is the number of MIDI clocks per beat.
                     // There are 24 clocks per quarter-note (the MIDI clock
                     // is tempo-independent and is not related to the timebase).
@@ -328,6 +336,8 @@ insertCopy(const MappedEvent &evt)
                     MidiByte pitch         = evt.getData1();
                     MidiByte midiVelocity  = evt.getData2();
 
+                    RG_DEBUG << "insertCopy note" << evt.getEventTime() <<
+                        midiEventAbsoluteTime << pitch << midiVelocity;
                     if ((evt.getType() == MappedEvent::MidiNote) &&
                         (midiVelocity == 0)) {
                         // It's actually a NOTE_OFF.
@@ -364,7 +374,7 @@ insertCopy(const MappedEvent &evt)
 
             case MappedEvent::MidiSystemMessage:
                 {
-                    std::string data = 
+                    std::string data =
                         DataBlockRepository::getInstance()->
                         getDataBlockForEvent(&evt);
 
@@ -408,7 +418,7 @@ insertCopy(const MappedEvent &evt)
 
             case MappedEvent::Marker:
                 {
-                    std::string metaMessage = 
+                    std::string metaMessage =
                         DataBlockRepository::getInstance()->
                         getDataBlockForEvent(&evt);
 
@@ -426,7 +436,7 @@ insertCopy(const MappedEvent &evt)
                 {
                     MidiByte midiTextType = evt.getData1();
 
-                    std::string metaMessage = 
+                    std::string metaMessage =
                         DataBlockRepository::getInstance()->
                         getDataBlockForEvent(&evt);
 
