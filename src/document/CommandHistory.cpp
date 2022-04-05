@@ -45,13 +45,13 @@ CommandHistory::CommandHistory() :
 {
     // All Edit > Undo menu items share this QAction object.
     m_undoAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
-    m_undoAction->setObjectName("edit_undo");
+    m_undoAction->setObjectName("edit_toolbar_undo");
     m_undoAction->setStatusTip(tr("Undo the last editing operation"));
     connect(m_undoAction, &QAction::triggered, this, &CommandHistory::undo);
 
     // Undo button for the main window toolbar.
     m_undoMenuAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
-    m_undoMenuAction->setObjectName("edit_toolbar_undo");
+    m_undoMenuAction->setObjectName("edit_undo");
     connect(m_undoMenuAction, &QAction::triggered, this, &CommandHistory::undo);
 
     m_undoMenu = new QMenu(tr("&Undo"));
@@ -61,13 +61,13 @@ CommandHistory::CommandHistory() :
 
     // All Edit > Redo menu items share this QAction object.
     m_redoAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
-    m_redoAction->setObjectName("edit_redo");
+    m_redoAction->setObjectName("edit_toolbar_redo");
     m_redoAction->setStatusTip(tr("Redo the last operation that was undone"));
     connect(m_redoAction, &QAction::triggered, this, &CommandHistory::redo);
 
     // Redo button for the main window toolbar.
     m_redoMenuAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
-    m_redoMenuAction->setObjectName("edit_toolbar_redo");
+    m_redoMenuAction->setObjectName("edit_redo");
     connect(m_redoMenuAction, &QAction::triggered, this, &CommandHistory::redo);
 
     m_redoMenu = new QMenu(tr("Re&do"));
