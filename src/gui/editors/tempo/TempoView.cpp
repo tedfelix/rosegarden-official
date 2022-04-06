@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[TempoView]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TempoView.h"
 
@@ -92,7 +93,7 @@ TempoView::TempoView(
     m_grid->addWidget(m_filterGroup, 2, 0);
 
     m_list = new QTreeWidget(getCentralWidget());
-    
+
 //     m_list->setItemsRenameable(true);    //&&&
 
     m_grid->addWidget(m_list, 2, 1);
@@ -108,20 +109,20 @@ TempoView::TempoView(
 
     m_list->setAllColumnsShowFocus(true);
     m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    
+
     QStringList sl;
     sl << tr("Time  ")
        << tr("Type  ")
        << tr("Value  ")
        << tr("Properties  ");
-    
+
     m_list->setColumnCount(4);
     m_list->setHeaderLabels(sl);
-    
+
 
 //     for (int col = 0; col < m_list->columnCount(); ++col)
 //         m_list->setRenameable(col, true);    //&&&
-    
+
     readOptions();
     setButtonsToFilter();
 
@@ -218,7 +219,7 @@ TempoView::applyLayout(int /*staffNo*/)
             QString timeString = makeTimeString(sig.first, timeMode);
 
             new TempoListItem(comp, TempoListItem::TimeSignature,
-                              sig.first, i, m_list, 
+                              sig.first, i, m_list,
                             QStringList()
                             << timeString
                               << tr("Time Signature   ")
@@ -428,16 +429,11 @@ void
 TempoView::slotEditDelete()
 {
     QList<QTreeWidgetItem*> selection = m_list->selectedItems();
-    
+
     if (selection.count() == 0) return ;
 
     RG_DEBUG << "TempoView::slotEditDelete - deleting "
     << selection.count() << " items";
-
-    // QTreeWidgetItem *listItem;
-
-    TempoListItem *item;
-    int itemIndex = -1;
 
     m_ignoreUpdates = true;
     bool haveSomething = false;
@@ -448,33 +444,46 @@ TempoView::slotEditDelete()
     // them off again.
     std::vector<Command *> commands;
 
-    while (!selection.isEmpty()) {
-        item = dynamic_cast<TempoListItem*>(selection.first());
+    // Create a map of each selected item in index order.
+    std::map<int, TempoListItem*> itemMap;
+    foreach(auto it, selection) {
+        TempoListItem *item = dynamic_cast<TempoListItem*>(it);
+        if (!item) continue;
+        int index = item->getIndex();
+        itemMap[index] = item;
+    }
 
-        if (itemIndex == -1) itemIndex = m_list->indexOfTopLevelItem(selection.first());
+    if (itemMap.empty()) return;
 
-        if (item) {
-            if (item->getType() == TempoListItem::TimeSignature) {
-                commands.push_back(new RemoveTimeSignatureCommand
-                                   (item->getComposition(),
-                                    item->getIndex()));
-                haveSomething = true;
-            } else {
-                commands.push_back(new RemoveTempoChangeCommand
-                                   (item->getComposition(),
-                                    item->getIndex()));
-                haveSomething = true;
-            }
+    // For each selected item in index order
+    for (auto iter = itemMap.begin(); iter != itemMap.end(); ++iter) {
+        int index = (*iter).first;
+        RG_DEBUG << "deleting item with index" << index;
+        TempoListItem* item = (*iter).second;
+
+        // Add the appropriate command to the "commands" list.
+
+        if (item->getType() == TempoListItem::TimeSignature) {
+            commands.push_back(new RemoveTimeSignatureCommand
+                               (item->getComposition(),
+                                item->getIndex()));
+            haveSomething = true;
+        } else {
+            commands.push_back(new RemoveTempoChangeCommand
+                               (item->getComposition(),
+                                item->getIndex()));
+            haveSomething = true;
         }
+    }
 
-        delete selection.takeFirst();
-    }    
-    
     if (haveSomething) {
         MacroCommand *command = new MacroCommand
                                  (tr("Delete Tempo or Time Signature"));
+        // For each command in reverse order which also happens to be
+        // reverse index order, add the remove command to the macro.
         for (std::vector<Command *>::iterator i = commands.end();
-                i != commands.begin();) {
+             i != commands.begin();
+             /* decrement is inside */) {
             command->addCommand(*--i);
         }
         addCommandToHistory(command);
@@ -735,13 +744,13 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
     {
         Composition &composition(RosegardenDocument::currentDocument->getComposition());
         Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
-        
+
         TimeSignatureDialog dialog(this, &composition, time, sig, true);
-        
+
         if (dialog.exec() == QDialog::Accepted) {
-            
+
             time = dialog.getTime();
-            
+
             if (dialog.shouldNormalizeRests()) {
                 addCommandToHistory
                     (new AddTimeSignatureAndNormalizeCommand
@@ -753,7 +762,7 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
             }
         }
     }
-    
+
     default:
         break;
     }
