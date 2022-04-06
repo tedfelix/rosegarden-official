@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[TempoView]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "TempoView.h"
 
@@ -444,6 +444,7 @@ TempoView::slotEditDelete()
     // them off again.
     std::vector<Command *> commands;
 
+    // Create a map of each selected item in index order.
     std::map<int, TempoListItem*> itemMap;
     foreach(auto it, selection) {
         TempoListItem *item = dynamic_cast<TempoListItem*>(it);
@@ -454,11 +455,13 @@ TempoView::slotEditDelete()
 
     if (itemMap.empty()) return;
 
-    // the map is sorted by index
+    // For each selected item in index order
     for (auto iter = itemMap.begin(); iter != itemMap.end(); ++iter) {
         int index = (*iter).first;
         RG_DEBUG << "deleting item with index" << index;
         TempoListItem* item = (*iter).second;
+
+        // Add the appropriate command to the "commands" list.
 
         if (item->getType() == TempoListItem::TimeSignature) {
             commands.push_back(new RemoveTimeSignatureCommand
@@ -476,8 +479,11 @@ TempoView::slotEditDelete()
     if (haveSomething) {
         MacroCommand *command = new MacroCommand
                                  (tr("Delete Tempo or Time Signature"));
+        // For each command in reverse order which also happens to be
+        // reverse index order, add the remove command to the macro.
         for (std::vector<Command *>::iterator i = commands.end();
-                i != commands.begin();) {
+             i != commands.begin();
+             /* decrement is inside */) {
             command->addCommand(*--i);
         }
         addCommandToHistory(command);
