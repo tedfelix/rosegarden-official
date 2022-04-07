@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionFileParser]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "ActionFileParser.h"
 
@@ -495,6 +495,7 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
 bool
 ActionFileParser::setActionToolTip(QString actionName, QString tooltip)
 {
+    RG_DEBUG << "setActionToolTip" << actionName << tooltip;
     if (actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
@@ -640,12 +641,11 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
     if (m_tooltipMap.find(actionName) != m_tooltipMap.end()) {
         QString tt = m_tooltipMap[actionName];
         toolTipText = QObject::tr(tt.toStdString().c_str());
-        RG_DEBUG << "setting manual tooltip" << toolTipText;
-    }
-    if (! action->text().isEmpty()) {
+        RG_DEBUG << "setting manual tooltip" << actionName << toolTipText;
+    } else if (! action->text().isEmpty()) {
         QString tt = strippedText(action->text());
         toolTipText = QObject::tr(tt.toStdString().c_str());
-        RG_DEBUG << "setting automatic tooltip" << toolTipText;
+        RG_DEBUG << "setting automatic tooltip" << actionName << toolTipText;
     }
 
     if (toolTipText == "") {

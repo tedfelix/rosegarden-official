@@ -291,8 +291,8 @@
   <Action name="file_preview_lilypond"/>
   <Action name="file_print_lilypond"/>
   <Separator/>
-  <Action name="edit_toolbar_undo" text="&amp;Nothing to Undo" icon="undo"/>
-  <Action name="edit_toolbar_redo" text="N&amp;othing to Redo" icon="redo"/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>

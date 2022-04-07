@@ -45,33 +45,23 @@ CommandHistory::CommandHistory() :
 {
     // All Edit > Undo menu items share this QAction object.
     m_undoAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
-    m_undoAction->setObjectName("edit_toolbar_undo");
+    m_undoAction->setObjectName("edit_undo");
     m_undoAction->setStatusTip(tr("Undo the last editing operation"));
     connect(m_undoAction, &QAction::triggered, this, &CommandHistory::undo);
 
-    // Undo button for the main window toolbar.
-    m_undoMenuAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
-    m_undoMenuAction->setObjectName("edit_undo");
-    connect(m_undoMenuAction, &QAction::triggered, this, &CommandHistory::undo);
-
     m_undoMenu = new QMenu(tr("&Undo"));
-    m_undoMenuAction->setMenu(m_undoMenu);
+    m_undoAction->setMenu(m_undoMenu);
     connect(m_undoMenu, &QMenu::triggered,
             this, &CommandHistory::undoActivated);
 
     // All Edit > Redo menu items share this QAction object.
     m_redoAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
-    m_redoAction->setObjectName("edit_toolbar_redo");
+    m_redoAction->setObjectName("edit_redo");
     m_redoAction->setStatusTip(tr("Redo the last operation that was undone"));
     connect(m_redoAction, &QAction::triggered, this, &CommandHistory::redo);
 
-    // Redo button for the main window toolbar.
-    m_redoMenuAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
-    m_redoMenuAction->setObjectName("edit_redo");
-    connect(m_redoMenuAction, &QAction::triggered, this, &CommandHistory::redo);
-
     m_redoMenu = new QMenu(tr("Re&do"));
-    m_redoMenuAction->setMenu(m_redoMenu);
+    m_redoAction->setMenu(m_redoMenu);
     connect(m_redoMenu, &QMenu::triggered,
             this, &CommandHistory::redoActivated);
 }
@@ -104,22 +94,6 @@ CommandHistory::clear()
     clearStack(m_redoStack);
     updateActions();
 }
-
-#if 0
-void
-CommandHistory::registerMenu(QMenu *menu)
-{
-    menu->addAction(m_undoAction);
-    menu->addAction(m_redoAction);
-}
-
-void
-CommandHistory::registerToolbar(QToolBar *toolbar)
-{
-    toolbar->addAction(m_undoMenuAction);
-    toolbar->addAction(m_redoMenuAction);
-}
-#endif
 
 void
 CommandHistory::addCommand(Command *command)
@@ -342,7 +316,6 @@ CommandHistory::updateActions()
     for (int undo = 0; undo <= 1; ++undo) {
 
         QAction *action(undo ? m_undoAction : m_redoAction);
-        QAction *menuAction(undo ? m_undoMenuAction : m_redoMenuAction);
         QMenu *menu(undo ? m_undoMenu : m_redoMenu);
         CommandStack &stack(undo ? m_undoStack : m_redoStack);
 
@@ -353,10 +326,6 @@ CommandHistory::updateActions()
             action->setEnabled(false);
             action->setText(text);
             action->setToolTip(strippedText(text));
-
-            menuAction->setEnabled(false);
-            menuAction->setText(text);
-
         } else {
 
             QString commandName = stack.top().command->getName();
@@ -368,9 +337,6 @@ CommandHistory::updateActions()
             action->setEnabled(m_enableUndo);
             action->setText(text);
             action->setToolTip(strippedText(text));
-
-            menuAction->setEnabled(m_enableUndo);
-            menuAction->setText(text);
         }
 
         menu->clear();
