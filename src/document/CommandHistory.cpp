@@ -19,6 +19,7 @@
 #include "CommandHistory.h"
 
 #include "Command.h"
+#include "gui/general/ActionData.h"
 
 #include <QRegularExpression>
 #include <QMenu>
@@ -318,6 +319,7 @@ CommandHistory::updateActions()
         QAction *action(undo ? m_undoAction : m_redoAction);
         QMenu *menu(undo ? m_undoMenu : m_redoMenu);
         CommandStack &stack(undo ? m_undoStack : m_redoStack);
+        QString actionName(undo ? "edit_undo" : "edit_redo");
 
         if (stack.empty()) {
 
@@ -333,6 +335,20 @@ CommandHistory::updateActions()
 
             QString text = (undo ? tr("&Undo %1") : tr("Re&do %1"))
                 .arg(commandName);
+            ActionData* adata = ActionData::getInstance();
+            QString key = "rosegardenmainwindow.rc:";
+            key += actionName;
+            std::set<QKeySequence> ksSet = adata->getShortcuts(key);
+            QStringList kssl;
+            foreach(auto ks, ksSet) {
+                kssl.append(ks.toString(QKeySequence::NativeText));
+            }
+            QString scString = kssl.join(", ");
+
+            if (kssl.size() > 0) {
+                // add the shortcuts to the tooltip
+                text = text + " (" + scString + ")";
+            }
 
             action->setEnabled(m_enableUndo);
             action->setText(text);
