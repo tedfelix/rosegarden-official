@@ -67,7 +67,7 @@
 
   <Menu name="edit">
     <text>&amp;Edit</text>
-    <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
+    <!-- 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
     <Action name="edit_undo" text="&amp;Nothing to Undo" icon="undo" shortcut="Ctrl+Z" shortcut-context="application" />
     <Action name="edit_redo" text="N&amp;othing to Redo" icon="redo" shortcut="Ctrl+Shift+Z" shortcut-context="application" />
   <Separator/>

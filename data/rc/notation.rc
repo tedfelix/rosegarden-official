@@ -15,7 +15,7 @@
 
   <Menu name="edit">
     <text>&amp;Edit</text>
-    <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
+    <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
   <Separator/>

@@ -11,7 +11,7 @@
 
   <Menu name="edit" append="new_merge">
     <text>&amp;Edit</text>
-    <!-- JAS 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
+    <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
   </Menu>

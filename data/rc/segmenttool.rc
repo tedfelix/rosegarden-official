@@ -13,7 +13,7 @@
   <Action name="edit_event_list" text="Open in &amp;Event List Editor" icon="eventlist" shortcut="E" />
   <Action name="edit_pitch_tracker" text="Open in &amp;Pitch Tracker" icon="pitchtracker" shortcut="I" />
 <Separator/>
-    <!-- JAS 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
+    <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
 <Separator/>
