@@ -68,8 +68,8 @@
   <Menu name="edit">
     <text>&amp;Edit</text>
     <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-    <Action name="edit_undo" text="&amp;Nothing to Undo" icon="undo" shortcut="Ctrl+Z" />
-    <Action name="edit_redo" text="N&amp;othing to Redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <Action name="edit_undo" text="&amp;Nothing to Undo" icon="undo" shortcut="Ctrl+Z" shortcut-context="application" />
+    <Action name="edit_redo" text="N&amp;othing to Redo" icon="redo" shortcut="Ctrl+Shift+Z" shortcut-context="application" />
   <Separator/>
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
@@ -291,8 +291,8 @@
   <Action name="file_preview_lilypond"/>
   <Action name="file_print_lilypond"/>
   <Separator/>
-  <Action name="edit_toolbar_undo" text="&amp;Nothing to Undo" icon="undo"/>
-  <Action name="edit_toolbar_redo" text="N&amp;othing to Redo" icon="redo"/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>

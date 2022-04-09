@@ -11,9 +11,9 @@
 
   <Menu name="edit">
     <text>&amp;Edit</text>
-    <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-    <Action name="edit_undo" text="Nothing to &amp;Undo" icon="undo" shortcut="Ctrl+Z" />
-    <Action name="edit_redo" text="Nothing to &amp;Redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <!-- JAS 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
   <Separator/>
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />

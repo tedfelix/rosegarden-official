@@ -12,9 +12,9 @@
 
   <Menu name="edit" append="new_merge">
     <text>&amp;Edit</text>
-    <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-    <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
-    <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <!-- JAS 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
   <Separator/>
     <Action name="insert" text="&amp;Insert Event" icon="event-insert" shortcut="I" />
     <Action name="delete" text="&amp;Delete Event" icon="event-delete" shortcut="Delete" />
@@ -80,4 +80,3 @@
 </ToolBar>
 
 </kpartgui>
-

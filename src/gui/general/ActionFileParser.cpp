@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionFileParser]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "ActionFileParser.h"
 
@@ -461,6 +461,19 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
 
+    // special case for undo/redo - only take the data from
+    // rosegardenmainwindow
+    QString basefile = m_currentFile;
+    basefile.remove(QRegularExpression("^.*/"));
+    if (actionName == "edit_undo" || actionName == "edit_redo") {
+        if (basefile != "rosegardenmainwindow.rc")
+            {
+                RG_DEBUG << "setActionShortcut ignoring" << actionName <<
+                    "in file" << m_currentFile;
+                return true;
+            }
+        }
+
     /*
      * Enable one or multiple shortcuts.  Only the first shortcut, which is
      * considered as the primary one, will be shown in the menus.
@@ -468,8 +481,6 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
     // Do not use the shortcut here - if there are user defined
     // shortcuts get all from ActionData
     ActionData* adata = ActionData::getInstance();
-    QString basefile = m_currentFile;
-    basefile.remove(QRegularExpression("^.*/"));
     QString key = basefile + ":" + actionName;
     std::set<QKeySequence> shortcutSet = adata->getShortcuts(key);
     QList<QKeySequence> shortcutList;
@@ -495,6 +506,7 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
 bool
 ActionFileParser::setActionToolTip(QString actionName, QString tooltip)
 {
+    RG_DEBUG << "setActionToolTip" << actionName << tooltip;
     if (actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
@@ -636,16 +648,23 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
     if (!toolbar) return false;
     toolbar->addAction(action);
 
+    // special case for undo/redo. The tooltip is generated in
+    // CommandHistory so do not set the tooltip here for those two
+    // actions
+    if (actionName == "edit_undo" || actionName == "edit_redo") {
+        RG_DEBUG << "not setting tooltip for" << actionName;
+        return true;
+    }
+
     QString toolTipText;
     if (m_tooltipMap.find(actionName) != m_tooltipMap.end()) {
         QString tt = m_tooltipMap[actionName];
         toolTipText = QObject::tr(tt.toStdString().c_str());
-        RG_DEBUG << "setting manual tooltip" << toolTipText;
-    }
-    if (! action->text().isEmpty()) {
+        RG_DEBUG << "setting manual tooltip" << actionName << toolTipText;
+    } else if (! action->text().isEmpty()) {
         QString tt = strippedText(action->text());
         toolTipText = QObject::tr(tt.toStdString().c_str());
-        RG_DEBUG << "setting automatic tooltip" << toolTipText;
+        RG_DEBUG << "setting automatic tooltip" << actionName << toolTipText;
     }
 
     if (toolTipText == "") {

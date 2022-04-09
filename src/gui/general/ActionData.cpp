@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionData]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "ActionData.h"
 
@@ -225,7 +225,7 @@ void ActionData::getDuplicateShortcuts(const std::set<QString>& keys,
                 } else {
                     contextRelevant = true;
                 }
-                if (mainfo.global) contextRelevant = true;
+                if (ainfo.global || mainfo.global) contextRelevant = true;
                 if (! contextRelevant) continue;
                 std::set<QKeySequence> mKSL = getShortcuts(mkey);
                 if (mKSL.find(ks) != mKSL.end()) {
@@ -356,6 +356,21 @@ ActionData::ActionData() :
     loadData("textinserter.rc");
     loadData("triggermanager.rc");
 
+    // special case for undo and redo. These actions are in lots of rc
+    // files but there is only one action for each. Adjust the data here.
+    QString key;
+    key = "rosegardenmainwindow.rc:edit_undo";
+    ActionInfo& undoAinfo = m_actionMap[key];
+    undoAinfo.text = "Undo";
+
+    key = "rosegardenmainwindow.rc:edit_redo";
+    ActionInfo& redoAinfo = m_actionMap[key];
+    redoAinfo.text = "Redo";
+
+    // make a copy of the unmodified map - it will be modified by
+    // keyboard layout shortcuts
+    m_actionMapOriginal = m_actionMap;
+
     m_contextMap["audiomanager.rc"] = QObject::tr("Audio manager");
     m_contextMap["bankeditor.rc"] = QObject::tr("Bank editor");
     m_contextMap["clefinserter.rc"] = QObject::tr("Clef inserter");
@@ -467,6 +482,17 @@ bool ActionData::startElement(const QString&,
                        << "enable/disable/visible/invisible element";
         }
 
+        // special case for undo/redo - only take the data from
+        // rosegardenmainwindow
+        if (actionName == "edit_undo" || actionName == "edit_redo") {
+            if (m_currentFile != "rosegardenmainwindow.rc")
+                {
+                    RG_DEBUG << "startElement ignoring" << actionName <<
+                        "in file" << m_currentFile;
+                    return true;
+                }
+        }
+
         QString text = atts.value("text").toString();
         QString icon = atts.value("icon").toString();
         QString shortcut = atts.value("shortcut").toString();
@@ -549,9 +575,6 @@ bool ActionData::startElement(const QString&,
         }
     }
 
-    // make a copy of the unmodified map - it will be modified by
-    // keyboard layout shortcuts
-    m_actionMapOriginal = m_actionMap;
     return true;
 }
 
