@@ -1313,10 +1313,19 @@ TrackButtons::slotTrackSelected(int trackId)
 void
 TrackButtons::slotDocumentModified(bool)
 {
+    // ??? This isn't connected to any signal and is never called.
+    //     See the "TrackButtons Notification Project" page on the wiki:
+    //     https://www.rosegardenmusic.com/wiki/dev:tnp
+
+    // ??? See bug #1625 which requires this.
+
+    // ??? See bug #1623 whose experimental solution in MatrixWidget
+    //     is affected by this.
+
     // Full and immediate update.
-    // ??? Note that updates probably happen elsewhere.  This will result
-    //     in duplicate updates.  All other updates should be removed and
-    //     this should be the only update.
+    // ??? While we are transitioning to this approach, there will likely
+    //     be duplicate updates.  Eventually, all other updates should be
+    //     removed and this should be the only update that occurs.
     slotUpdateTracks();
 }
 

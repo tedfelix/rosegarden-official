@@ -35,6 +35,8 @@ namespace
     bool afldDontShow = false;
     int afldLocation = 0;
     QString afldCustomLocation;
+
+    bool bug1623 = false;
 }
 
 void Preferences::setSendProgramChangesWhenLooping(bool value)
@@ -224,6 +226,24 @@ QString Preferences::getCustomAudioLocation()
 
     return afldCustomLocation;
 }
+
+bool Preferences::getBug1623()
+{
+    static bool firstGet = true;
+
+    if (firstGet) {
+        firstGet = false;
+
+        QSettings settings;
+        settings.beginGroup(ExperimentalConfigGroup);
+        bug1623 = settings.value("bug1623", "false").toBool();
+        // Write it back out so we can find it if it wasn't there.
+        settings.setValue("bug1623", bug1623);
+    }
+
+    return bug1623;
+}
+
 
 
 }

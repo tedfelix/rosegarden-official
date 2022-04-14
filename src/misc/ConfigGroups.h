@@ -70,6 +70,7 @@ namespace Rosegarden
     extern const QString RecentFilesConfigGroup;
     extern const QString UserShortcutsConfigGroup;
     extern const QString ShortcutKeyboardConfigGroup;
+    extern const QString ExperimentalConfigGroup;
 
 }
 

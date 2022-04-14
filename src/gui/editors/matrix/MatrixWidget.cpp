@@ -54,6 +54,7 @@
 
 #include "gui/studio/StudioControl.h"
 
+#include "misc/Preferences.h"
 #include "misc/Debug.h"
 
 #include "base/Composition.h"
@@ -1453,9 +1454,18 @@ MatrixWidget::updateSegmentChangerBackground()
     if (!track)
         return;
 
-    // Set active track so that external MIDI notes play with
-    // correct instrument (regardless whether Step Recording is on or off)
-    composition.setSelectedTrack(trackId);
+    // Experimental feature.  See Bug #1623 and comments below.
+    if (Preferences::getBug1623()) {
+        // Set active track so that external MIDI notes play with
+        // correct instrument (regardless whether Step Recording is on or off)
+        composition.setSelectedTrack(trackId);
+        // Need to call RosegardenDocument::slotDocumentModified() as well
+        // otherwise the UI will not update to stay in sync with this.
+        // Also, TrackButtons does not handle documentModified(), so it
+        // will get out of sync regardless.
+        // See https://www.rosegardenmusic.com/wiki/dev:tnp
+        RosegardenDocument::currentDocument->slotDocumentModified();
+    }
 
     QString trackLabel = QString::fromStdString(track->getLabel());
     if (trackLabel == "")

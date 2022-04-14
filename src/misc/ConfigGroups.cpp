@@ -63,5 +63,6 @@ namespace Rosegarden
     const QString RecentFilesConfigGroup = "RecentFiles";
     const QString UserShortcutsConfigGroup = "UserShortcuts";
     const QString ShortcutKeyboardConfigGroup = "ShortcutKeyboard";
+    const QString ExperimentalConfigGroup = "Experimental";
 
 }

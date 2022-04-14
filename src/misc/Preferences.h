@@ -63,6 +63,9 @@ namespace Preferences
     void setCustomAudioLocation(QString location);
     QString getCustomAudioLocation();
 
+    // Experimental
+    bool getBug1623();
+
 }
 
 
