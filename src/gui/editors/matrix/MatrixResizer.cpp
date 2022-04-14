@@ -77,8 +77,8 @@ MatrixResizer::handleLeftButtonPress(const MatrixMouseEvent *e)
     // Only resize active segment's notes
     if (e->element->getSegment() !=
         e->element->getScene()->getCurrentSegment()) {
-        RG_WARNING << "handleLeftButtonPress(): Will only resize notes "
-                      "in active segment.";
+        RG_DEBUG << "handleLeftButtonPress(): Will only resize notes "
+                    "in active segment.";
         return;
     }
 

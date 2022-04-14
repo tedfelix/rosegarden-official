@@ -80,8 +80,8 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     if (e->element->getSegment() !=
         e->element->getScene()->getCurrentSegment()) {
-        RG_WARNING << "handleLeftButtonPress(): Will only adjust velocity "
-                      "of notes in active segment.";
+        RG_DEBUG << "handleLeftButtonPress(): Will only adjust velocity "
+                    "of notes in active segment.";
         return;
     }
 

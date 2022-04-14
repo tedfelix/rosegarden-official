@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixPainter]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MatrixPainter.h"
 
@@ -155,9 +156,9 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
             }
         }
         else {
-            RG_WARNING << "handleLeftButtonPress(): Will not create note at "
-                          "same pitch and time as existing note in active "
-                          "segment.";
+            RG_DEBUG << "handleLeftButtonPress(): Will not create note at "
+                        "same pitch and time as existing note in active "
+                        "segment.";
         }
         delete m_currentElement;
         m_currentElement = nullptr;

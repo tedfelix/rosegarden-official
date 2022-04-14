@@ -206,9 +206,9 @@ MatrixSelector::handleMidButtonPress(const MatrixMouseEvent *e)
         e->element->getScene() &&
         e->element->getSegment() ==
         e->element->getScene()->getCurrentSegment()) {
-        RG_WARNING << "handleMidButtonPress(): Will not create note at "
-                      "same pitch and time as existing note in active "
-                      "segment.";
+        RG_DEBUG << "handleMidButtonPress(): Will not create note at "
+                    "same pitch and time as existing note in active "
+                    "segment.";
         return;
     }
 
@@ -242,8 +242,8 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
               element->getScene() &&
               element->getSegment() ==
               element->getScene()->getCurrentSegment())) {
-            RG_WARNING << "handleMouseDoubleClick(): Note must be "
-                          "in active segment.";
+            RG_DEBUG << "handleMouseDoubleClick(): Note must be "
+                        "in active segment.";
             return;
         }
 

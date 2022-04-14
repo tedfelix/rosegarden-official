@@ -98,7 +98,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     // matrix is new, and we're defining the terms of how it works.
     if (e->element->getSegment() != segment) {
 
-        RG_WARNING << "handleLeftButtonPress(): Clicked element not owned by active segment.  Returning...";
+        RG_DEBUG << "handleLeftButtonPress(): Clicked element not owned by active segment.  Returning...";
         return;
     }
 
