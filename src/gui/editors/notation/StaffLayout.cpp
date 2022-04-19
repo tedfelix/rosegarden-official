@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -355,7 +355,7 @@ StaffLayout::getWeightedHeightAtSceneCoords(int originalHeight, double x, int y)
     RG_DEBUG << "getWeightedHeightAtSceneCoords: originalHeight: "
                    << originalHeight << " non-weighted height: "
                    << getHeightAtSceneCoords(x, y);
-    
+
     // return the non-weighted height if it already matches (ie. the user
     // clicked pretty close to the center of the note head)
     int nonWeightedHeight = getHeightAtSceneCoords(x, y);
@@ -364,19 +364,22 @@ StaffLayout::getWeightedHeightAtSceneCoords(int originalHeight, double x, int y)
 
     // if no match, calculate an approximate height
     int row = getRowForSceneCoords(x, y);
-    int approximateHeight = (y - getSceneYForTopLine(row)) * getHeightPerLine() / getLineSpacing();
-    approximateHeight = getTopLineHeight() - approximateHeight;
+    RG_DEBUG << "approximateHeight" << y << getSceneYForTopLine(row) <<
+        getHeightPerLine() << getLineSpacing();
+    double approximateHeight = ((double)y - (double)getSceneYForTopLine(row)) *
+        (double)getHeightPerLine() / (double)getLineSpacing();
+    approximateHeight = (double)getTopLineHeight() - approximateHeight;
 
     RG_DEBUG << "approximateHeight: " << approximateHeight
                    << " originalHeight: " << originalHeight;
 
-    int difference = approximateHeight - originalHeight;
-    if (difference < 0) difference *= -1;
+    double difference = approximateHeight - originalHeight;
+    if (difference < 0.0) difference *= -1.0;
 
     // the approximate height is very coarse, so let's try using it as a rough
     // measure of how far the new height differs from the original, and return
     // the original if it's inside the range of "close enough"
-    if (difference > 1) return nonWeightedHeight;
+    if (difference > 1.0) return nonWeightedHeight;
     else return originalHeight;
 }
 
@@ -1013,7 +1016,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
 
     /*!!! No longer really good enough. But we could potentially use the
       bar positions to sort this out
-     
+
         if (m_pageMode && row > 0 && offset == 0.0) {
             offset = (double)m_npf->getBarMargin() / 2;
             length -= offset;
@@ -1063,7 +1066,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
         //                           << "," << y << ")" << endl;
 
         if (m_lineThickness > 1) {
-        
+
             QGraphicsRectItem *line = dynamic_cast<QGraphicsRectItem *>
                 (m_staffLines[row][lineIndex]);
 
@@ -1079,7 +1082,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
             line->show();
 
         } else {
-        
+
             QGraphicsLineItem *line = dynamic_cast<QGraphicsLineItem *>
                 (m_staffLines[row][lineIndex]);
 
@@ -1140,7 +1143,7 @@ StaffLayout::getSceneArea()
             right = getSceneXForLayoutX(m_endLayoutX);
         }
 
-        top = getSceneYForTopOfStaff(firstRow);        
+        top = getSceneYForTopOfStaff(firstRow);
         bottom = getSceneYForTopOfStaff(lastRow) + getHeightOfRow();
 
         break;
@@ -1153,7 +1156,7 @@ StaffLayout::getSceneArea()
         if (lastRow == firstRow) {
             left = getSceneXForLayoutX(m_startLayoutX);
             right = getSceneXForLayoutX(m_endLayoutX);
-            top = getSceneYForTopOfStaff(firstRow);        
+            top = getSceneYForTopOfStaff(firstRow);
             bottom = getSceneYForTopOfStaff(lastRow) + getHeightOfRow();
         } else {
 
@@ -1168,7 +1171,7 @@ StaffLayout::getSceneArea()
                 bottom = getSceneYForTopOfStaff(lastRow) + getHeightOfRow();
             } else {
 
-              /// TODO : Two special cases should be processed here 
+              /// TODO : Two special cases should be processed here
               ///          1 - Only one row on the first page
               ///          2 - Only one row on the last page
 
@@ -1185,7 +1188,7 @@ StaffLayout::getSceneArea()
 
     case LinearMode:
     default:
-      
+
         left = m_startLayoutX;
         right = m_endLayoutX;
         top = getSceneYForTopOfStaff();
