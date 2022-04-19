@@ -1792,11 +1792,9 @@ LilyPondExporter::write()
                     }
 
                     // should a time signature be writed in the current bar ?
-                    bool noTimeSig;
+                    bool noTimeSig = false;
                     if (timeSigInFirstBar) {
                         noTimeSig = barNo == firstBar;
-                    } else {
-                        noTimeSig = barNo != firstBar;
                     }
 
                     // write out a bar's worth of events
