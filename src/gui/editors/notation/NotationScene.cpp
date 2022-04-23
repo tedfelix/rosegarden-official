@@ -121,7 +121,7 @@ NotationScene::~NotationScene()
     delete m_clefKeyContext;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) delete m_staffs[i];
-    
+
     for (std::vector<Segment *>::iterator it = m_clones.begin();
          it != m_clones.end(); ++it) {
         delete (*it);
@@ -307,7 +307,7 @@ NotationScene::setStaffs(RosegardenDocument *document,
         // External segments and clones are now mixed inside m_segments
     } else {
         m_segments = m_externalSegments;
-        // No clone in that case 
+        // No clone in that case
     }
 
 
@@ -356,7 +356,7 @@ NotationScene::setStaffs(RosegardenDocument *document,
     m_visibleStaffs = trackIds.size();
 
     m_clefKeyContext->setSegments(this);
-    
+
     // Remember the names of the tracks
     for (std::set<TrackId>::iterator i = trackIds.begin();
          i != trackIds.end(); ++i) {
@@ -391,9 +391,9 @@ NotationScene::setStaffs(RosegardenDocument *document,
 void
 NotationScene::createClonesFromRepeatedSegments()
 {
-    const Segment::Participation participation = 
+    const Segment::Participation participation =
         m_editRepeated ? Segment::editableClone : Segment::justForShow;
-    
+
     // Create clones (if needed)
     for (std::vector<Segment *>::iterator it = m_externalSegments.begin();
         it != m_externalSegments.end(); ++it) {
@@ -654,13 +654,13 @@ NotationScene::initCurrentStaffIndex()
     // otherwise we'll annoy the user.
     if (m_haveInittedCurrentStaff) { return; }
     m_haveInittedCurrentStaff = true;
-    
+
     // Can't do much if we have no staffs.
     if (m_staffs.empty()) { return; }
 
     Composition &composition = m_document->getComposition();
     timeT targetTime = composition.getPosition();
-    
+
     // Try the globally selected track (which we may not even include
     // any segments from)
     {
@@ -676,7 +676,7 @@ NotationScene::initCurrentStaffIndex()
     {
         // Careful, m_minTrack is an int indicating position, not a
         // TrackId, and must be converted.
-        const Track *track = 
+        const Track *track =
             composition.getTrackByPosition(m_minTrack);
         NotationStaff *staff = getStaffbyTrackAndTime(track, targetTime);
         if (staff) {
@@ -684,7 +684,7 @@ NotationScene::initCurrentStaffIndex()
             return;
         }
     }
-    
+
     // We shouldn't reach here.
     RG_WARNING << "Argh! Failed to find a staff!";
 }
@@ -925,7 +925,7 @@ NotationScene::wheelEvent(QGraphicsSceneWheelEvent *e)
     }
 }
 
-void 
+void
 NotationScene::keyPressEvent(QKeyEvent * keyEvent)
 {
     processKeyboardEvent(keyEvent);
@@ -1249,9 +1249,12 @@ NotationScene::segmentRemoved(const Composition *c, Segment *s)
     NOTATION_DEBUG << "NotationScene::segmentRemoved(" << c << "," << s << ")";
     if (!m_document || !c || (c != &m_document->getComposition())) return;
 
+    std::vector<NotationStaff *>::iterator staffToDelete = m_staffs.end();
+
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
          i != m_staffs.end(); ++i) {
         if (s == &(*i)->getSegment()) {
+            staffToDelete = i;
 
             m_segmentsDeleted.push_back(s); // Remember segment to be deleted
 
@@ -1275,6 +1278,15 @@ NotationScene::segmentRemoved(const Composition *c, Segment *s)
 
             break;
         }
+    }
+    // the sceneNeedsRebuilding signal will cause the scene to be
+    // rebuilt. However this uses a queued connection so the pointer
+    // update after undo is done before this so we must remove the
+    // deleted staff here.
+    if (staffToDelete != m_staffs.end()) {
+        NotationStaff* staff = *staffToDelete;
+        delete staff;
+        m_staffs.erase(staffToDelete);
     }
 }
 
@@ -1406,7 +1418,7 @@ NotationScene::trackChanged(const Composition *c, Track *t)
         // Is the segment part of the changed track ?
         if ((*i)->getTrack() == trackId) {
 
-            // The scene needs a rebuild only if what has changed is the 
+            // The scene needs a rebuild only if what has changed is the
             // name of the track
             if (t->getLabel() == m_trackLabels[trackId]) break;
 
@@ -2192,5 +2204,3 @@ NotationScene::dumpBarDataMap()
 
 
 }
-
-
