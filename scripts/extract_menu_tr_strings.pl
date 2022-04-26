@@ -71,7 +71,7 @@ while (<>) {
     # extract tooltips
     if ($line =~ /tooltip="([^"]*)"/) {
         $tooltip = $1;
-        print "\n/* TRANSLATOR: this is a tooltip. It should not contaion any keyboard shortcuts. These will be automatically added on to the tooltip. */\n";
+        print "\n/* TRANSLATOR: this is a tooltip. It should not contain any keyboard shortcuts. Shortcuts will be added automatically at runtime. */\n";
         print 'QObject::tr("' . $tooltip . '");';
         print "\n\n";
     }
