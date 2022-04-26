@@ -29,12 +29,20 @@ if [ "$NOOBSOLETE" == "1" ]; then
     NOOBSOPT="-noobsolete"
 fi
 
+LUPDATE=lupdate
+if type $LUPDATE 2>/dev/null
+then
+    echo found $LUPDATE
+else
+    LUPDATE=lupdate-qt5
+    echo found $LUPDATE
+fi
+
 # Update the .ts files.
-lupdate $NOOBSOPT `find src -name '*.ui' -o -name '*.cpp' -o -name '*.h'` \
+$LUPDATE $NOOBSOPT `find src -name '*.ui' -o -name '*.cpp' -o -name '*.h'` \
         data/QMenuStrings.cpp data/InstrumentStrings.cpp \
         data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts \
         $TRANSLATIONS $@
 
 # Display statistics.
 scripts/ts-stats
-
