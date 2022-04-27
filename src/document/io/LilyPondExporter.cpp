@@ -266,7 +266,8 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
 
 void
 LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
-                                          std::ofstream &str)
+                                          const Segment *seg,
+                                          const Segment::iterator &j,                                          std::ofstream &str)
 {
     eventstartlist::iterator m = preEventsToStart.begin();
 
@@ -274,7 +275,12 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
 
         try {
             Indication i(**m);
-
+            
+            timeT indicationStart = (*m)->getNotationAbsoluteTime();
+            timeT indicationEnd = indicationStart + i.getIndicationDuration();
+            timeT eventStart = (*j)->getNotationAbsoluteTime();
+            timeT eventEnd = eventStart + (*j)->getNotationDuration();
+            
             if (i.getIndicationType() == Indication::QuindicesimaUp) {
                 str << "\\ottava #2 ";
             } else if (i.getIndicationType() == Indication::OttavaUp) {
@@ -283,6 +289,15 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
                 str << "\\ottava #-1 ";
             } else if (i.getIndicationType() == Indication::QuindicesimaDown) {
                 str << "\\ottava #-2 ";
+            } else if (    i.getIndicationType() == Indication::Crescendo
+                        || i.getIndicationType() == Indication::Decrescendo) {
+                if (indicationEnd >= seg->getEndMarkerTime() &&  
+                    eventEnd >= seg->getEndMarkerTime() &&
+                    eventStart == indicationStart) {
+                        // Crescendo or descrescendo on a note alone.
+                        // Prepare using the invisible rests hack.
+                        str << " << ";
+                }
             }
 
         } catch (const Event::BadType &) {
@@ -300,6 +315,8 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
 
 void
 LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
+                                           const Segment *seg,
+                                           const Segment::iterator &j,
                                            std::ofstream &str)
 {
     eventstartlist::iterator m = postEventsToStart.begin();
@@ -308,6 +325,11 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
 
         try {
             Indication i(**m);
+            
+            timeT indicationStart = (*m)->getNotationAbsoluteTime();
+            timeT indicationEnd = indicationStart + i.getIndicationDuration();
+            timeT eventStart = (*j)->getNotationAbsoluteTime();
+            timeT eventEnd = eventStart + (*j)->getNotationDuration();
 
             if (i.getIndicationType() == Indication::Slur) {
                 if ((*m)->get
@@ -321,10 +343,89 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                     str << "^\\( ";
                 else
                     str << "_\\( ";
-            } else if (i.getIndicationType() == Indication::Crescendo) {
-                str << "\\< ";
-            } else if (i.getIndicationType() == Indication::Decrescendo) {
-                str << "\\> ";
+            } else if (i.getIndicationType() == Indication::Crescendo ||
+                       i.getIndicationType() == Indication::Decrescendo) {    
+                
+
+                if (indicationEnd >= seg->getEndMarkerTime()  
+                        && eventEnd >= seg->getEndMarkerTime()
+                        && eventStart == indicationStart) {
+                    // The indication is limited to only one note and is 
+                    // expressed with invisible rests in Lilypond language.
+
+                    
+                    if (!(*j)->isa(Note::EventType)) {  
+                        std::cerr << "WARNING: a crescendo/decrescendo "
+                                    << "limited to a single rest has been "
+                                    << "found.\n";
+                    } else {
+                        Note::Type type = (*j)->get<Int>(NOTE_TYPE);
+                        Note::Type dots = (*j)->get<Int>(NOTE_DOTS);
+                        
+                        QString lilyDuration("???"); 
+                        switch (type) {
+
+                        case Note::SixtyFourthNote:
+                            lilyDuration = "128";
+                            break;
+
+                        case Note::ThirtySecondNote:
+                            lilyDuration = "64";
+                            break;
+
+                        case Note::SixteenthNote:
+                            lilyDuration = "32";
+                            break;
+
+                        case Note::EighthNote:
+                            lilyDuration = "16";
+                            break;
+
+                        case Note::QuarterNote:
+                            lilyDuration = "8";
+                            break;
+
+                        case Note::HalfNote:
+                            lilyDuration = "4";
+                            break;
+
+                        case Note::WholeNote:
+                            lilyDuration = "2";
+                            break;
+
+                        case Note::DoubleWholeNote:
+                            lilyDuration = "1";
+                            break;
+                            
+                        default:
+                            std::cerr << "WARNING: Unexpected note duration."
+                                        << " Can't translate to LilyPond\n";
+                        }
+                    
+                        // Add possible dots
+                        for (int i = dots; i; i--) {
+                            lilyDuration += ".";
+                        }
+                        
+                        const char * stxt = lilyDuration.toStdString().data();
+                                
+                        const char * itxt =
+                            i.getIndicationType() == Indication::Crescendo
+                                ? "\\< " : "\\> ";
+                            
+                        // Write the indication using silent rests
+                        str << "{ s" << stxt << " " << itxt << "s" << stxt << " \\! } >> ";
+                    }
+
+                } else {
+                    if (i.getIndicationType() == Indication::Crescendo) {
+                        str << "\\< ";
+                    } else {
+                        str << "\\> ";
+                    }
+                }
+
+                
 // Don't seem useful and sometimes are harmful
 //             } else if (i.getIndicationType() == Indication::QuindicesimaUp) {
 //                 // #(set-octavation 2) ... #(set-octavation 0)
@@ -465,10 +566,10 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
         try {
             Indication i(**l);
 
-            timeT indicationEnd =
-                (*l)->getNotationAbsoluteTime() + i.getIndicationDuration();
-            timeT eventEnd =
-                (*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
+            timeT indicationStart = (*l)->getNotationAbsoluteTime();
+            timeT indicationEnd = indicationStart + i.getIndicationDuration();
+            timeT eventStart = (*j)->getNotationAbsoluteTime();
+            timeT eventEnd = eventStart + (*j)->getNotationDuration();
 
             if (indicationEnd < eventEnd ||
                 
@@ -491,7 +592,12 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
                     str << "\\) ";
                 } else if (i.getIndicationType() == Indication::Crescendo ||
                            i.getIndicationType() == Indication::Decrescendo) {
-                    str << "\\! ";
+                    // If (eventStart == indicationStart) the indication is
+                    // limited to only one note and is processed in the
+                    // handleStartingPostEvents method.
+                    if (eventStart != indicationStart) {
+                        str << "\\! ";
+                    }
                 } else if (i.getIndicationType() == Indication::TrillLine) {
                     str << "\\stopTrillSpan ";
                 }
@@ -2490,7 +2596,7 @@ LilyPondExporter::writeBar(Segment *s,
             }
 
             handleEndingPreEvents(preEventsInProgress, i, str);
-            handleStartingPreEvents(preEventsToStart, str);
+            handleStartingPreEvents(preEventsToStart, s, i, str);
 
             if (chord.size() > 1)
                 str << "< ";
@@ -2583,7 +2689,7 @@ LilyPondExporter::writeBar(Segment *s,
                 str << " ";
 
             handleEndingPostEvents(postEventsInProgress, s, i, str);
-            handleStartingPostEvents(postEventsToStart, str);
+            handleStartingPostEvents(postEventsToStart, s, i, str);
 
             if (tiedForward) {
                 if (tiedUp) {
@@ -2649,7 +2755,7 @@ LilyPondExporter::writeBar(Segment *s,
                     str << "R";
                 } else {
                     handleEndingPreEvents(preEventsInProgress, i, str);
-                    handleStartingPreEvents(preEventsToStart, str);
+                    handleStartingPreEvents(preEventsToStart, s, i, str);
 
                     if (offsetRest) {
                         // translate the fine tuning of steps into steps
@@ -2727,7 +2833,7 @@ LilyPondExporter::writeBar(Segment *s,
                 str << " ";
     
                 handleEndingPostEvents(postEventsInProgress, s, i, str);
-                handleStartingPostEvents(postEventsToStart, str);
+                handleStartingPostEvents(postEventsToStart, s, i, str);
             } else {
                 MultiMeasureRestCount--;
             }
