@@ -447,6 +447,7 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
 
 void
 LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
+                                         const Segment *seg,
                                          const Segment::iterator &j,
                                          std::ofstream &str)
 {
@@ -470,10 +471,20 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
                 (*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
 
             if (indicationEnd < eventEnd ||
+                
                 ((i.getIndicationType() == Indication::Slur ||
                   i.getIndicationType() == Indication::PhrasingSlur) &&
-                 indicationEnd == eventEnd)) {
+                 indicationEnd == eventEnd) ||
 
+                 // At the end of a segment there will not be anymore event
+                 // where to put the end of a Crescendo/Decrescendo.
+                 // So we are going to put it immediately (Fix bug #1620).
+                (indicationEnd >= seg->getEndMarkerTime() &&  
+                    eventEnd >= seg->getEndMarkerTime() &&
+                        (i.getIndicationType() == Indication::Crescendo ||
+                         i.getIndicationType() == Indication::Decrescendo)) ) {
+                
+                
                 if (i.getIndicationType() == Indication::Slur) {
                     str << ") ";
                 } else if (i.getIndicationType() == Indication::PhrasingSlur) {
@@ -2571,7 +2582,7 @@ LilyPondExporter::writeBar(Segment *s,
             if (!marks.empty())
                 str << " ";
 
-            handleEndingPostEvents(postEventsInProgress, i, str);
+            handleEndingPostEvents(postEventsInProgress, s, i, str);
             handleStartingPostEvents(postEventsToStart, str);
 
             if (tiedForward) {
@@ -2715,7 +2726,7 @@ LilyPondExporter::writeBar(Segment *s,
 
                 str << " ";
     
-                handleEndingPostEvents(postEventsInProgress, i, str);
+                handleEndingPostEvents(postEventsInProgress, s, i, str);
                 handleStartingPostEvents(postEventsToStart, str);
             } else {
                 MultiMeasureRestCount--;

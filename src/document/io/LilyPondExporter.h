@@ -157,7 +157,9 @@ private:
                                const Segment::iterator &j, std::ofstream &str);
     void handleStartingPostEvents(eventstartlist &postEventsToStart, std::ofstream &str);
     void handleEndingPostEvents(eventendlist &postEventsInProgress,
-                                const Segment::iterator &j, std::ofstream &str);
+                                const Segment *seg,
+                                const Segment::iterator &j,
+                                std::ofstream &str);
 
     // convert note pitch into LilyPond format note name string
     std::string convertPitchToLilyNoteName(int pitch,
