@@ -425,20 +425,6 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                     }
                 }
 
-                
-// Don't seem useful and sometimes are harmful
-//             } else if (i.getIndicationType() == Indication::QuindicesimaUp) {
-//                 // #(set-octavation 2) ... #(set-octavation 0)
-//                 //str << "\\ottava #2 ";
-//             } else if (i.getIndicationType() == Indication::OttavaUp) {
-//                 // #(set-octavation 1) ... #(set-octavation 0)
-//                 str << "\\ottava #1 ";
-//             } else if (i.getIndicationType() == Indication::OttavaDown) {
-//                 // #(set-octavation -1) ... #(set-octavation 0)
-//                 str << "\\ottava #-1 ";
-//             } else if (i.getIndicationType() == Indication::QuindicesimaDown) {
-//                 // #(set-octavation -2) ... #(set-octavation 0)
-//                 str << "\\ottava #-2 ";
             } else if (i.getIndicationType() == Indication::TrillLine) {
                 str << "\\startTrillSpan ";
             }
