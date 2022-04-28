@@ -301,8 +301,10 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
             }
 
         } catch (const Event::BadType &) {
+            std::cerr << "AAAAAAA\n";
             // Not an indication
         } catch (const Event::NoData &e) {
+            std::cerr << "BBBBBBB\n";
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
 
@@ -322,156 +324,163 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
     eventstartlist::iterator m = postEventsToStart.begin();
 
     while (m != postEventsToStart.end()) {
+        
+        // Check for sustainDown or sustainUp events
+        if ((*m)->isa(Controller::EventType) &&
+            (*m)->has(Controller::NUMBER) &&
+            (*m)->has(Controller::VALUE)) {
+            if ((*m)->get <Int>(Controller::NUMBER) == 64) {
+                //
+                // As a first approximation, any positive value for
+                // the pedal event results in a new "Ped." marking.
+                //
+                // If the pedals have been entered with a midi piano,
+                // the pedal may have continuous values from 0 to 127
+                // and there may appear funny output with plenty of 
+                // "Ped." marks indicating the change of pedal pressure.
+                //
+                // One could use the following code to make the pedal
+                // marks transparent, but the invisible syntax has to
+                // be put before the note, while the pedal syntax goes
+                // after the note. Therefore, the following does not work:
+                //
+                //   c' \sustainUp \once \overr...#'transparent \sustainDown
+                //
+                // If a solution which allows to hide the pedal marks,
+                // the example code below which shows how to hide the marks
+                // can be removed.
+                //
+                /*
+                    *if ((*m)->has(INVISIBLE) && (*m)->get <Bool>(INVISIBLE)) {
+                    *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
+                    *}
+                    */
 
-        try {
-            Indication i(**m);
-            
-            timeT indicationStart = (*m)->getNotationAbsoluteTime();
-            timeT indicationEnd = indicationStart + i.getIndicationDuration();
-            timeT eventStart = (*j)->getNotationAbsoluteTime();
-            timeT eventEnd = eventStart + (*j)->getNotationDuration();
-
-            if (i.getIndicationType() == Indication::Slur) {
-                if ((*m)->get
-                    <Bool>(NotationProperties::SLUR_ABOVE))
-                    str << "^( ";
-                else
-                    str << "_( ";
-            } else if (i.getIndicationType() == Indication::PhrasingSlur) {
-                if ((*m)->get
-                    <Bool>(NotationProperties::SLUR_ABOVE))
-                    str << "^\\( ";
-                else
-                    str << "_\\( ";
-            } else if (i.getIndicationType() == Indication::Crescendo ||
-                       i.getIndicationType() == Indication::Decrescendo) {    
-                
-
-                if (indicationEnd >= seg->getEndMarkerTime()  
-                        && eventEnd >= seg->getEndMarkerTime()
-                        && eventStart == indicationStart) {
-                    // The indication is limited to only one note and is 
-                    // expressed with invisible rests in Lilypond language.
-
-                    
-                    if (!(*j)->isa(Note::EventType)) {  
-                        std::cerr << "WARNING: a crescendo/decrescendo "
-                                    << "limited to a single rest has been "
-                                    << "found.\n";
-                    } else {
-                        Note::Type type = (*j)->get<Int>(NOTE_TYPE);
-                        Note::Type dots = (*j)->get<Int>(NOTE_DOTS);
-                        
-                        QString lilyDuration("???"); 
-                        switch (type) {
-
-                        case Note::SixtyFourthNote:
-                            lilyDuration = "128";
-                            break;
-
-                        case Note::ThirtySecondNote:
-                            lilyDuration = "64";
-                            break;
-
-                        case Note::SixteenthNote:
-                            lilyDuration = "32";
-                            break;
-
-                        case Note::EighthNote:
-                            lilyDuration = "16";
-                            break;
-
-                        case Note::QuarterNote:
-                            lilyDuration = "8";
-                            break;
-
-                        case Note::HalfNote:
-                            lilyDuration = "4";
-                            break;
-
-                        case Note::WholeNote:
-                            lilyDuration = "2";
-                            break;
-
-                        case Note::DoubleWholeNote:
-                            lilyDuration = "1";
-                            break;
-                            
-                        default:
-                            std::cerr << "WARNING: Unexpected note duration."
-                                        << " Can't translate to LilyPond\n";
-                        }
-                    
-                        // Add possible dots
-                        for (int i = dots; i; i--) {
-                            lilyDuration += ".";
-                        }
-                        
-                        const char * stxt = lilyDuration.toStdString().data();
-                                
-                        const char * itxt =
-                            i.getIndicationType() == Indication::Crescendo
-                                ? "\\< " : "\\> ";
-                            
-                        // Write the indication using silent rests
-                        str << "{ s" << stxt << " " << itxt << "s" << stxt << " \\! } >> ";
-                    }
-
+                // NOTE: sustain syntax changed in LilyPond 2.12
+                if ((*m)->get <Int>(Controller::VALUE) > 0) {
+                    str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Down " : "On ");
                 } else {
-                    if (i.getIndicationType() == Indication::Crescendo) {
-                        str << "\\< ";
-                    } else {
-                        str << "\\> ";
-                    }
-                }
-
-            } else if (i.getIndicationType() == Indication::TrillLine) {
-                str << "\\startTrillSpan ";
-            }
-
-        } catch (const Event::BadType &) {
-            // Not an indication
-            // Check for sustainDown or sustainUp events
-            if ((*m)->isa(Controller::EventType) &&
-                (*m)->has(Controller::NUMBER) &&
-                (*m)->has(Controller::VALUE)) {
-                if ((*m)->get <Int>(Controller::NUMBER) == 64) {
-                    //
-                    // As a first approximation, any positive value for
-                    // the pedal event results in a new "Ped." marking.
-                    //
-                    // If the pedals have been entered with a midi piano,
-                    // the pedal may have continuous values from 0 to 127
-                    // and there may appear funny output with plenty of 
-                    // "Ped." marks indicating the change of pedal pressure.
-                    //
-                    // One could use the following code to make the pedal
-                    // marks transparent, but the invisible syntax has to
-                    // be put before the note, while the pedal syntax goes
-                    // after the note. Therefore, the following does not work:
-                    //
-                    //   c' \sustainUp \once \overr...#'transparent \sustainDown
-                    //
-                    // If a solution which allows to hide the pedal marks,
-                    // the example code below which shows how to hide the marks
-                    // can be removed.
-                    //
-                    /*
-                     *if ((*m)->has(INVISIBLE) && (*m)->get <Bool>(INVISIBLE)) {
-                     *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
-                     *}
-                     */
-
-                    // NOTE: sustain syntax changed in LilyPond 2.12
-                    if ((*m)->get <Int>(Controller::VALUE) > 0) {
-                        str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Down " : "On ");
-                    } else {
-                        str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Up " : "Off ");
-                    }
+                    str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Up " : "Off ");
                 }
             }
-        } catch (const Event::NoData &e) {
-            RG_WARNING << "Bad indication: " << e.getMessage();
+            
+        } else {
+
+            try {
+                Indication i(**m);
+                
+                timeT indicationStart = (*m)->getNotationAbsoluteTime();
+                timeT indicationEnd = indicationStart + i.getIndicationDuration();
+                timeT eventStart = (*j)->getNotationAbsoluteTime();
+                timeT eventEnd = eventStart + (*j)->getNotationDuration();
+
+                if (i.getIndicationType() == Indication::Slur) {
+                    if ((*m)->get
+                        <Bool>(NotationProperties::SLUR_ABOVE))
+                        str << "^( ";
+                    else
+                        str << "_( ";
+                } else if (i.getIndicationType() == Indication::PhrasingSlur) {
+                    if ((*m)->get
+                        <Bool>(NotationProperties::SLUR_ABOVE))
+                        str << "^\\( ";
+                    else
+                        str << "_\\( ";
+                } else if (i.getIndicationType() == Indication::Crescendo ||
+                        i.getIndicationType() == Indication::Decrescendo) {    
+                    
+
+                    if (indicationEnd >= seg->getEndMarkerTime()  
+                            && eventEnd >= seg->getEndMarkerTime()
+                            && eventStart == indicationStart) {
+                        // The indication is limited to only one note and is 
+                        // expressed with invisible rests in Lilypond language.
+
+                        
+                        if (!(*j)->isa(Note::EventType)) {  
+                            std::cerr << "WARNING: a crescendo/decrescendo "
+                                        << "limited to a single rest has been "
+                                        << "found.\n";
+                        } else {
+                            Note::Type type = (*j)->get<Int>(NOTE_TYPE);
+                            Note::Type dots = (*j)->get<Int>(NOTE_DOTS);
+                            
+                            QString lilyDuration("???"); 
+                            switch (type) {
+
+                            case Note::SixtyFourthNote:
+                                lilyDuration = "128";
+                                break;
+
+                            case Note::ThirtySecondNote:
+                                lilyDuration = "64";
+                                break;
+
+                            case Note::SixteenthNote:
+                                lilyDuration = "32";
+                                break;
+
+                            case Note::EighthNote:
+                                lilyDuration = "16";
+                                break;
+
+                            case Note::QuarterNote:
+                                lilyDuration = "8";
+                                break;
+
+                            case Note::HalfNote:
+                                lilyDuration = "4";
+                                break;
+
+                            case Note::WholeNote:
+                                lilyDuration = "2";
+                                break;
+
+                            case Note::DoubleWholeNote:
+                                lilyDuration = "1";
+                                break;
+                                
+                            default:
+                                std::cerr << "WARNING: Unexpected note duration."
+                                            << " Can't translate to LilyPond\n";
+                            }
+                        
+                            // Add possible dots
+                            for (int i = dots; i; i--) {
+                                lilyDuration += ".";
+                            }
+                            
+                            const char * stxt = lilyDuration.toStdString().data();
+                                    
+                            const char * itxt =
+                                i.getIndicationType() == Indication::Crescendo
+                                    ? "\\< " : "\\> ";
+                                
+                            // Write the indication using silent rests
+                            str << "{ s" << stxt << " " << itxt << "s" << stxt << " \\! } >> ";
+                        }
+
+                    } else {
+                        if (i.getIndicationType() == Indication::Crescendo) {
+                            str << "\\< ";
+                        } else {
+                            str << "\\> ";
+                        }
+                    }
+
+                } else if (i.getIndicationType() == Indication::TrillLine) {
+                    str << "\\startTrillSpan ";
+                }
+
+            } catch (const Event::BadType &) {
+                std::cerr << "CCCCCCC\n";
+                // Not an indication
+
+            } catch (const Event::NoData &e) {
+                std::cerr << "DDDDDDD\n";
+                RG_WARNING << "Bad indication: " << e.getMessage();
+            }
+        
         }
 
         eventstartlist::iterator n(m);
@@ -524,9 +533,11 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
             }
 
         } catch (const Event::BadType &) {
+            std::cerr << "EEEEEEE\n";
             // not an indication
 
         } catch (const Event::NoData &e) {
+            std::cerr << "FFFFFFF\n";
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
     }
@@ -592,9 +603,11 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
             }
 
         } catch (const Event::BadType &) {
+            std::cerr << "GGGGGGG\n";
             // not an indication
 
         } catch (const Event::NoData &e) {
+            std::cerr << "HHHHHHH\n";
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
     }
@@ -2481,7 +2494,7 @@ LilyPondExporter::writeBar(Segment *s,
                    event->has(Controller::VALUE)) {
             if (event->get <Int>(Controller::NUMBER) == 64) {
                 postEventsToStart.insert(event);
-                postEventsInProgress.insert(event);
+                // postEventsInProgress.insert(event);   YGYGYG Useful ???????
             }
         }
 
