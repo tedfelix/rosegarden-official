@@ -230,7 +230,6 @@ NotationView::NotationView(RosegardenDocument *doc,
     m_fontCombo(nullptr),
     m_fontSizeCombo(nullptr),
     m_spacingCombo(nullptr),
-    m_segments(segments),
     m_oldPointerPosition(0),
     m_cursorPosition(0)
 {

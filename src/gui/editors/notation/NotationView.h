@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -48,7 +48,7 @@ class CommandRegistry;
 class ControlRulerWidget;
 class ControlParameter;
 class TriggerSegmentRec;
- 
+
 class ROSEGARDENPRIVATE_EXPORT NotationView : public EditViewBase,
                         public SelectionManager
 {
@@ -73,7 +73,7 @@ public:
     void initRulersToolbar();
     void initStatusBar() override;
     timeT getInsertionTime(bool allowEndTime = false) const;
-    
+
     bool hasSegment(Segment * seg) const;
 
     /** This turns out to be cruft that is rather annoying to eliminate.  We
@@ -158,7 +158,7 @@ protected slots:
     void slotSetSelectNoTiesTool();
 
     void slotSetEraseTool();
-    
+
     /**
      * Restore NoteRestInserter as the current tool and recall its
      * state information.
@@ -182,7 +182,7 @@ protected slots:
      * Switch between dotted and plain variations on the current note or rest
      * duration being inserted (by whatever means insertion is ocurring)
      */
-    void slotToggleDot(); 
+    void slotToggleDot();
 
     /**
      * Cycle through the dots from . to .. to _ back to ., relative to the point
@@ -244,7 +244,7 @@ protected slots:
     void slotMaskOrnament();
     void slotUnmaskOrnament();
     void slotUnadoptSegment();
-   
+
     void slotGroupSimpleTuplet();
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
@@ -404,7 +404,7 @@ private:
      */
     bool exportLilyPondFile(QString url, bool forPreview = false);
 
-    /** 
+    /**
      * Use QTemporaryFile to obtain a tmp filename that is guaranteed to be unique.
      */
     QString getLilyPondTmpFilename();
@@ -454,7 +454,7 @@ private:
      * to the getdocument() and the TimeSignature.
      */
      void initializeNoteRestInserter();
-     
+
     /**
      * Manage the setting of the accidental modes.
      * Function enforces exclusive state of buttons and triggers
@@ -494,7 +494,7 @@ protected:
 
     NotationWidget *m_notationWidget;
     EventSelection *getRulerSelection() const;
-    
+
 private:
     void extendSelectionHelper(bool forward, EventSelection *es, const std::vector<Event *> &eventVec, bool select);
 
@@ -536,8 +536,6 @@ private:
     std::vector<int>     m_availableFontSizes;
     std::vector<int>     m_availableSpacings;
 
-    // !!! Is m_segments ever different than m_segments in base class?
-    SegmentVector      m_segments;      // I do not own these
     // These Segments are not in Composition, they are dummies for
     // viewing a triggered segment's expansion.
     SegmentVector      m_adoptedSegments;    // I own these
