@@ -2501,7 +2501,6 @@ LilyPondExporter::writeBar(Segment *s,
                    event->has(Controller::VALUE)) {
             if (event->get <Int>(Controller::NUMBER) == 64) {
                 postEventsToStart.insert(event);
-                // postEventsInProgress.insert(event);   YGYGYG Useful ???????
             }
         }
 
