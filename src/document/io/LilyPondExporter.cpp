@@ -301,10 +301,8 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
             }
 
         } catch (const Event::BadType &) {
-            std::cerr << "AAAAAAA\n";
             // Not an indication
         } catch (const Event::NoData &e) {
-            std::cerr << "BBBBBBB\n";
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
 
@@ -375,17 +373,19 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                 timeT eventEnd = eventStart + (*j)->getNotationDuration();
 
                 if (i.getIndicationType() == Indication::Slur) {
-                    if ((*m)->get
-                        <Bool>(NotationProperties::SLUR_ABOVE))
-                        str << "^( ";
-                    else
-                        str << "_( ";
+                    if ((*m)->has(NotationProperties::SLUR_ABOVE)) {
+                        if ((*m)->get<Bool>(NotationProperties::SLUR_ABOVE))
+                            str << "^( ";
+                        else
+                            str << "_( ";
+                    }
                 } else if (i.getIndicationType() == Indication::PhrasingSlur) {
-                    if ((*m)->get
-                        <Bool>(NotationProperties::SLUR_ABOVE))
-                        str << "^\\( ";
-                    else
-                        str << "_\\( ";
+                    if ((*m)->has(NotationProperties::SLUR_ABOVE)) {
+                        if ((*m)->get<Bool>(NotationProperties::SLUR_ABOVE))
+                            str << "^\\( ";
+                        else
+                            str << "_\\( ";
+                    }
                 } else if (i.getIndicationType() == Indication::Crescendo ||
                         i.getIndicationType() == Indication::Decrescendo) {    
                     
@@ -399,8 +399,8 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                         
                         if (!(*j)->isa(Note::EventType)) {  
                             std::cerr << "WARNING: a crescendo/decrescendo "
-                                        << "limited to a single rest has been "
-                                        << "found.\n";
+                                      << "limited to a single event which is"
+                                      << " not a note has been found.\n";
                         } else {
                             Note::Type type = (*j)->get<Int>(NOTE_TYPE);
                             Note::Type dots = (*j)->get<Int>(NOTE_DOTS);
@@ -473,11 +473,9 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                 }
 
             } catch (const Event::BadType &) {
-                std::cerr << "CCCCCCC\n";
                 // Not an indication
 
             } catch (const Event::NoData &e) {
-                std::cerr << "DDDDDDD\n";
                 RG_WARNING << "Bad indication: " << e.getMessage();
             }
         
@@ -533,11 +531,9 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
             }
 
         } catch (const Event::BadType &) {
-            std::cerr << "EEEEEEE\n";
             // not an indication
 
         } catch (const Event::NoData &e) {
-            std::cerr << "FFFFFFF\n";
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
     }
@@ -603,11 +599,9 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
             }
 
         } catch (const Event::BadType &) {
-            std::cerr << "GGGGGGG\n";
             // not an indication
 
         } catch (const Event::NoData &e) {
-            std::cerr << "HHHHHHH\n";
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
     }
