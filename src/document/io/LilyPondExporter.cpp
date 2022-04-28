@@ -313,6 +313,55 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
     }
 }
 
+
+// Return the string LilyPond uses to represent half the duration of the 
+// given note type.
+static const char *
+lilyHalfDuration(int noteType)
+{
+    switch (noteType) {
+
+    case Note::SixtyFourthNote:
+        return "128";
+        break;
+
+    case Note::ThirtySecondNote:
+        return "64";
+        break;
+
+    case Note::SixteenthNote:
+        return "32";
+        break;
+
+    case Note::EighthNote:
+        return "16";
+        break;
+
+    case Note::QuarterNote:
+        return "8";
+        break;
+
+    case Note::HalfNote:
+        return "4";
+        break;
+
+    case Note::WholeNote:
+        return "2";
+        break;
+
+    case Note::DoubleWholeNote:
+        return "1";
+        break;
+        
+    default:
+        std::cerr << "ERROR: Unexpected note duration"
+                    << " value " << noteType << " : Can't"
+                    << " translate to LilyPond\n";
+        return "256";   // Try this one, who knows ?
+    }
+}
+
+
 void
 LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                                            const Segment *seg,
@@ -395,69 +444,33 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                             && eventStart == indicationStart) {
                         // The indication is limited to only one note and is 
                         // expressed with invisible rests in Lilypond language.
+                        // (See LilyPond v2.22.2, Notation Reference §1.3.1)
 
-                        
                         if (!(*j)->isa(Note::EventType)) {  
-                            std::cerr << "WARNING: a crescendo/decrescendo "
+                            std::cerr << "ERROR: a crescendo/decrescendo "
                                       << "limited to a single event which is"
                                       << " not a note has been found.\n";
                         } else {
                             Note::Type type = (*j)->get<Int>(NOTE_TYPE);
                             Note::Type dots = (*j)->get<Int>(NOTE_DOTS);
                             
-                            QString lilyDuration("???"); 
-                            switch (type) {
-
-                            case Note::SixtyFourthNote:
-                                lilyDuration = "128";
-                                break;
-
-                            case Note::ThirtySecondNote:
-                                lilyDuration = "64";
-                                break;
-
-                            case Note::SixteenthNote:
-                                lilyDuration = "32";
-                                break;
-
-                            case Note::EighthNote:
-                                lilyDuration = "16";
-                                break;
-
-                            case Note::QuarterNote:
-                                lilyDuration = "8";
-                                break;
-
-                            case Note::HalfNote:
-                                lilyDuration = "4";
-                                break;
-
-                            case Note::WholeNote:
-                                lilyDuration = "2";
-                                break;
-
-                            case Note::DoubleWholeNote:
-                                lilyDuration = "1";
-                                break;
-                                
-                            default:
-                                std::cerr << "WARNING: Unexpected note duration."
-                                            << " Can't translate to LilyPond\n";
-                            }
-                        
+                            QString restsDuration(lilyHalfDuration(type)); 
+                                                    
                             // Add possible dots
                             for (int i = dots; i; i--) {
-                                lilyDuration += ".";
+                                restsDuration += ".";
                             }
                             
-                            const char * stxt = lilyDuration.toStdString().data();
+                            // Duration
+                            const char * d = restsDuration.toStdString().data();
                                     
-                            const char * itxt =
+                            // Indication
+                            const char * in =
                                 i.getIndicationType() == Indication::Crescendo
                                     ? "\\< " : "\\> ";
                                 
                             // Write the indication using silent rests
-                            str << "{ s" << stxt << " " << itxt << "s" << stxt << " \\! } >> ";
+                            str << "{ s" << d << " " << in << "s" << d << " \\! } >> ";
                         }
 
                     } else {
