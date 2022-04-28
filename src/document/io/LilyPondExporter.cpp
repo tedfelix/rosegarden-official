@@ -447,7 +447,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                         // (See LilyPond v2.22.2, Notation Reference §1.3.1)
 
                         if (!(*j)->isa(Note::EventType)) {  
-                            std::cerr << "ERROR: a crescendo/decrescendo "
+                            std::cerr << "WARNING: a crescendo/decrescendo "
                                       << "limited to a single event which is"
                                       << " not a note has been found.\n";
                         } else {
@@ -583,7 +583,7 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
                   i.getIndicationType() == Indication::PhrasingSlur) &&
                  indicationEnd == eventEnd) ||
 
-                 // At the end of a segment there will not be anymore event
+                 // At the end of a segment there will be no more event
                  // where to put the end of a Crescendo/Decrescendo.
                  // So we are going to put it immediately (Fix bug #1620).
                 (indicationEnd >= seg->getEndMarkerTime() &&  
