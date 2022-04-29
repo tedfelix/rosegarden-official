@@ -152,12 +152,21 @@ private:
                                         const std::pair<int, int> &tupletRatio,
                                         bool &overlong);
 
-    void handleStartingPreEvents(eventstartlist &preEventsToStart, std::ofstream &str);
+    void handleStartingPreEvents(eventstartlist &preEventsToStart,
+                                 const Segment *seg,
+                                 const Segment::iterator &j,
+                                 std::ofstream &str);
     void handleEndingPreEvents(eventendlist &preEventsInProgress,
-                               const Segment::iterator &j, std::ofstream &str);
-    void handleStartingPostEvents(eventstartlist &postEventsToStart, std::ofstream &str);
+                               const Segment::iterator &j,
+                               std::ofstream &str);
+    void handleStartingPostEvents(eventstartlist &postEventsToStart,
+                                  const Segment *seg,
+                                  const Segment::iterator &j,
+                                  std::ofstream &str);
     void handleEndingPostEvents(eventendlist &postEventsInProgress,
-                                const Segment::iterator &j, std::ofstream &str);
+                                const Segment *seg,
+                                const Segment::iterator &j,
+                                std::ofstream &str);
 
     // convert note pitch into LilyPond format note name string
     std::string convertPitchToLilyNoteName(int pitch,

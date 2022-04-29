@@ -266,7 +266,8 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
 
 void
 LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
-                                          std::ofstream &str)
+                                          const Segment *seg,
+                                          const Segment::iterator &j,                                          std::ofstream &str)
 {
     eventstartlist::iterator m = preEventsToStart.begin();
 
@@ -274,7 +275,12 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
 
         try {
             Indication i(**m);
-
+            
+            timeT indicationStart = (*m)->getNotationAbsoluteTime();
+            timeT indicationEnd = indicationStart + i.getIndicationDuration();
+            timeT eventStart = (*j)->getNotationAbsoluteTime();
+            timeT eventEnd = eventStart + (*j)->getNotationDuration();
+            
             if (i.getIndicationType() == Indication::QuindicesimaUp) {
                 str << "\\ottava #2 ";
             } else if (i.getIndicationType() == Indication::OttavaUp) {
@@ -283,6 +289,15 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
                 str << "\\ottava #-1 ";
             } else if (i.getIndicationType() == Indication::QuindicesimaDown) {
                 str << "\\ottava #-2 ";
+            } else if (    i.getIndicationType() == Indication::Crescendo
+                        || i.getIndicationType() == Indication::Decrescendo) {
+                if (indicationEnd >= seg->getEndMarkerTime() &&  
+                    eventEnd >= seg->getEndMarkerTime() &&
+                    eventStart == indicationStart) {
+                        // Crescendo or descrescendo on a note alone.
+                        // Prepare using the invisible rests hack.
+                        str << " << ";
+                }
             }
 
         } catch (const Event::BadType &) {
@@ -298,93 +313,185 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
     }
 }
 
+
+// Return the string LilyPond uses to represent half the duration of the 
+// given note type.
+static const char *
+lilyHalfDuration(int noteType)
+{
+    switch (noteType) {
+
+    case Note::SixtyFourthNote:
+        return "128";
+        break;
+
+    case Note::ThirtySecondNote:
+        return "64";
+        break;
+
+    case Note::SixteenthNote:
+        return "32";
+        break;
+
+    case Note::EighthNote:
+        return "16";
+        break;
+
+    case Note::QuarterNote:
+        return "8";
+        break;
+
+    case Note::HalfNote:
+        return "4";
+        break;
+
+    case Note::WholeNote:
+        return "2";
+        break;
+
+    case Note::DoubleWholeNote:
+        return "1";
+        break;
+        
+    default:
+        std::cerr << "ERROR: Unexpected note duration"
+                    << " value " << noteType << " : Can't"
+                    << " translate to LilyPond\n";
+        return "256";   // Try this one, who knows ?
+    }
+}
+
+
 void
 LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
+                                           const Segment *seg,
+                                           const Segment::iterator &j,
                                            std::ofstream &str)
 {
     eventstartlist::iterator m = postEventsToStart.begin();
 
     while (m != postEventsToStart.end()) {
+        
+        // Check for sustainDown or sustainUp events
+        if ((*m)->isa(Controller::EventType) &&
+            (*m)->has(Controller::NUMBER) &&
+            (*m)->has(Controller::VALUE)) {
+            if ((*m)->get <Int>(Controller::NUMBER) == 64) {
+                //
+                // As a first approximation, any positive value for
+                // the pedal event results in a new "Ped." marking.
+                //
+                // If the pedals have been entered with a midi piano,
+                // the pedal may have continuous values from 0 to 127
+                // and there may appear funny output with plenty of 
+                // "Ped." marks indicating the change of pedal pressure.
+                //
+                // One could use the following code to make the pedal
+                // marks transparent, but the invisible syntax has to
+                // be put before the note, while the pedal syntax goes
+                // after the note. Therefore, the following does not work:
+                //
+                //   c' \sustainUp \once \overr...#'transparent \sustainDown
+                //
+                // If a solution which allows to hide the pedal marks,
+                // the example code below which shows how to hide the marks
+                // can be removed.
+                //
+                /*
+                    *if ((*m)->has(INVISIBLE) && (*m)->get <Bool>(INVISIBLE)) {
+                    *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
+                    *}
+                    */
 
-        try {
-            Indication i(**m);
-
-            if (i.getIndicationType() == Indication::Slur) {
-                if ((*m)->get
-                    <Bool>(NotationProperties::SLUR_ABOVE))
-                    str << "^( ";
-                else
-                    str << "_( ";
-            } else if (i.getIndicationType() == Indication::PhrasingSlur) {
-                if ((*m)->get
-                    <Bool>(NotationProperties::SLUR_ABOVE))
-                    str << "^\\( ";
-                else
-                    str << "_\\( ";
-            } else if (i.getIndicationType() == Indication::Crescendo) {
-                str << "\\< ";
-            } else if (i.getIndicationType() == Indication::Decrescendo) {
-                str << "\\> ";
-// Don't seem useful and sometimes are harmful
-//             } else if (i.getIndicationType() == Indication::QuindicesimaUp) {
-//                 // #(set-octavation 2) ... #(set-octavation 0)
-//                 //str << "\\ottava #2 ";
-//             } else if (i.getIndicationType() == Indication::OttavaUp) {
-//                 // #(set-octavation 1) ... #(set-octavation 0)
-//                 str << "\\ottava #1 ";
-//             } else if (i.getIndicationType() == Indication::OttavaDown) {
-//                 // #(set-octavation -1) ... #(set-octavation 0)
-//                 str << "\\ottava #-1 ";
-//             } else if (i.getIndicationType() == Indication::QuindicesimaDown) {
-//                 // #(set-octavation -2) ... #(set-octavation 0)
-//                 str << "\\ottava #-2 ";
-            } else if (i.getIndicationType() == Indication::TrillLine) {
-                str << "\\startTrillSpan ";
-            }
-
-        } catch (const Event::BadType &) {
-            // Not an indication
-            // Check for sustainDown or sustainUp events
-            if ((*m)->isa(Controller::EventType) &&
-                (*m)->has(Controller::NUMBER) &&
-                (*m)->has(Controller::VALUE)) {
-                if ((*m)->get <Int>(Controller::NUMBER) == 64) {
-                    //
-                    // As a first approximation, any positive value for
-                    // the pedal event results in a new "Ped." marking.
-                    //
-                    // If the pedals have been entered with a midi piano,
-                    // the pedal may have continuous values from 0 to 127
-                    // and there may appear funny output with plenty of 
-                    // "Ped." marks indicating the change of pedal pressure.
-                    //
-                    // One could use the following code to make the pedal
-                    // marks transparent, but the invisible syntax has to
-                    // be put before the note, while the pedal syntax goes
-                    // after the note. Therefore, the following does not work:
-                    //
-                    //   c' \sustainUp \once \overr...#'transparent \sustainDown
-                    //
-                    // If a solution which allows to hide the pedal marks,
-                    // the example code below which shows how to hide the marks
-                    // can be removed.
-                    //
-                    /*
-                     *if ((*m)->has(INVISIBLE) && (*m)->get <Bool>(INVISIBLE)) {
-                     *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
-                     *}
-                     */
-
-                    // NOTE: sustain syntax changed in LilyPond 2.12
-                    if ((*m)->get <Int>(Controller::VALUE) > 0) {
-                        str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Down " : "On ");
-                    } else {
-                        str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Up " : "Off ");
-                    }
+                // NOTE: sustain syntax changed in LilyPond 2.12
+                if ((*m)->get <Int>(Controller::VALUE) > 0) {
+                    str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Down " : "On ");
+                } else {
+                    str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Up " : "Off ");
                 }
             }
-        } catch (const Event::NoData &e) {
-            RG_WARNING << "Bad indication: " << e.getMessage();
+            
+        } else {
+
+            try {
+                Indication i(**m);
+                
+                timeT indicationStart = (*m)->getNotationAbsoluteTime();
+                timeT indicationEnd = indicationStart + i.getIndicationDuration();
+                timeT eventStart = (*j)->getNotationAbsoluteTime();
+                timeT eventEnd = eventStart + (*j)->getNotationDuration();
+
+                if (i.getIndicationType() == Indication::Slur) {
+                    if ((*m)->has(NotationProperties::SLUR_ABOVE)) {
+                        if ((*m)->get<Bool>(NotationProperties::SLUR_ABOVE))
+                            str << "^( ";
+                        else
+                            str << "_( ";
+                    }
+                } else if (i.getIndicationType() == Indication::PhrasingSlur) {
+                    if ((*m)->has(NotationProperties::SLUR_ABOVE)) {
+                        if ((*m)->get<Bool>(NotationProperties::SLUR_ABOVE))
+                            str << "^\\( ";
+                        else
+                            str << "_\\( ";
+                    }
+                } else if (i.getIndicationType() == Indication::Crescendo ||
+                        i.getIndicationType() == Indication::Decrescendo) {    
+                    
+
+                    if (indicationEnd >= seg->getEndMarkerTime()  
+                            && eventEnd >= seg->getEndMarkerTime()
+                            && eventStart == indicationStart) {
+                        // The indication is limited to only one note and is 
+                        // expressed with invisible rests in Lilypond language.
+                        // (See LilyPond v2.22.2, Notation Reference §1.3.1)
+
+                        if (!(*j)->isa(Note::EventType)) {  
+                            std::cerr << "WARNING: a crescendo/decrescendo "
+                                      << "limited to a single event which is"
+                                      << " not a note has been found.\n";
+                        } else {
+                            Note::Type type = (*j)->get<Int>(NOTE_TYPE);
+                            Note::Type dots = (*j)->get<Int>(NOTE_DOTS);
+                            
+                            QString restsDuration(lilyHalfDuration(type)); 
+                                                    
+                            // Add possible dots
+                            for (int i = dots; i; i--) {
+                                restsDuration += ".";
+                            }
+                            
+                            // Duration
+                            const char * d = restsDuration.toStdString().data();
+                                    
+                            // Indication
+                            const char * in =
+                                i.getIndicationType() == Indication::Crescendo
+                                    ? "\\< " : "\\> ";
+                                
+                            // Write the indication using silent rests
+                            str << "{ s" << d << " " << in << "s" << d << " \\! } >> ";
+                        }
+
+                    } else {
+                        if (i.getIndicationType() == Indication::Crescendo) {
+                            str << "\\< ";
+                        } else {
+                            str << "\\> ";
+                        }
+                    }
+
+                } else if (i.getIndicationType() == Indication::TrillLine) {
+                    str << "\\startTrillSpan ";
+                }
+
+            } catch (const Event::BadType &) {
+                // Not an indication
+
+            } catch (const Event::NoData &e) {
+                RG_WARNING << "Bad indication: " << e.getMessage();
+            }
+        
         }
 
         eventstartlist::iterator n(m);
@@ -447,6 +554,7 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
 
 void
 LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
+                                         const Segment *seg,
                                          const Segment::iterator &j,
                                          std::ofstream &str)
 {
@@ -464,23 +572,38 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
         try {
             Indication i(**l);
 
-            timeT indicationEnd =
-                (*l)->getNotationAbsoluteTime() + i.getIndicationDuration();
-            timeT eventEnd =
-                (*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
+            timeT indicationStart = (*l)->getNotationAbsoluteTime();
+            timeT indicationEnd = indicationStart + i.getIndicationDuration();
+            timeT eventStart = (*j)->getNotationAbsoluteTime();
+            timeT eventEnd = eventStart + (*j)->getNotationDuration();
 
             if (indicationEnd < eventEnd ||
+                
                 ((i.getIndicationType() == Indication::Slur ||
                   i.getIndicationType() == Indication::PhrasingSlur) &&
-                 indicationEnd == eventEnd)) {
+                 indicationEnd == eventEnd) ||
 
+                 // At the end of a segment there will be no more event
+                 // where to put the end of a Crescendo/Decrescendo.
+                 // So we are going to put it immediately (Fix bug #1620).
+                (indicationEnd >= seg->getEndMarkerTime() &&  
+                    eventEnd >= seg->getEndMarkerTime() &&
+                        (i.getIndicationType() == Indication::Crescendo ||
+                         i.getIndicationType() == Indication::Decrescendo)) ) {
+                
+                
                 if (i.getIndicationType() == Indication::Slur) {
                     str << ") ";
                 } else if (i.getIndicationType() == Indication::PhrasingSlur) {
                     str << "\\) ";
                 } else if (i.getIndicationType() == Indication::Crescendo ||
                            i.getIndicationType() == Indication::Decrescendo) {
-                    str << "\\! ";
+                    // If (eventStart == indicationStart) the indication is
+                    // limited to only one note and is processed in the
+                    // handleStartingPostEvents method.
+                    if (eventStart != indicationStart) {
+                        str << "\\! ";
+                    }
                 } else if (i.getIndicationType() == Indication::TrillLine) {
                     str << "\\stopTrillSpan ";
                 }
@@ -1792,11 +1915,9 @@ LilyPondExporter::write()
                     }
 
                     // should a time signature be writed in the current bar ?
-                    bool noTimeSig;
+                    bool noTimeSig = false;
                     if (timeSigInFirstBar) {
                         noTimeSig = barNo == firstBar;
-                    } else {
-                        noTimeSig = barNo != firstBar;
                     }
 
                     // write out a bar's worth of events
@@ -2380,7 +2501,6 @@ LilyPondExporter::writeBar(Segment *s,
                    event->has(Controller::VALUE)) {
             if (event->get <Int>(Controller::NUMBER) == 64) {
                 postEventsToStart.insert(event);
-                postEventsInProgress.insert(event);
             }
         }
 
@@ -2481,7 +2601,7 @@ LilyPondExporter::writeBar(Segment *s,
             }
 
             handleEndingPreEvents(preEventsInProgress, i, str);
-            handleStartingPreEvents(preEventsToStart, str);
+            handleStartingPreEvents(preEventsToStart, s, i, str);
 
             if (chord.size() > 1)
                 str << "< ";
@@ -2573,8 +2693,8 @@ LilyPondExporter::writeBar(Segment *s,
             if (!marks.empty())
                 str << " ";
 
-            handleEndingPostEvents(postEventsInProgress, i, str);
-            handleStartingPostEvents(postEventsToStart, str);
+            handleEndingPostEvents(postEventsInProgress, s, i, str);
+            handleStartingPostEvents(postEventsToStart, s, i, str);
 
             if (tiedForward) {
                 if (tiedUp) {
@@ -2640,7 +2760,7 @@ LilyPondExporter::writeBar(Segment *s,
                     str << "R";
                 } else {
                     handleEndingPreEvents(preEventsInProgress, i, str);
-                    handleStartingPreEvents(preEventsToStart, str);
+                    handleStartingPreEvents(preEventsToStart, s, i, str);
 
                     if (offsetRest) {
                         // translate the fine tuning of steps into steps
@@ -2717,8 +2837,8 @@ LilyPondExporter::writeBar(Segment *s,
 
                 str << " ";
     
-                handleEndingPostEvents(postEventsInProgress, i, str);
-                handleStartingPostEvents(postEventsToStart, str);
+                handleEndingPostEvents(postEventsInProgress, s, i, str);
+                handleStartingPostEvents(postEventsToStart, s, i, str);
             } else {
                 MultiMeasureRestCount--;
             }
