@@ -792,6 +792,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
     // clicking on something specific
 
     const QList<QGraphicsItem *> collisions = items(scenePos);
+    RG_DEBUG << "setupMouseEvent collisions:" << collisions.size();
 
     NotationElement *clickedNote = nullptr;
     NotationElement *clickedVagueNote = nullptr;
@@ -802,6 +803,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 
         NotationElement *element = NotationElement::getNotationElement(*i);
         if (!element) continue;
+        RG_DEBUG << "setupMouseEvent event:" << *(element->event());
 
         // #957364 (Notation: Hard to select upper note in chords of
         // seconds) -- adjust x-coord for shifted note head
@@ -814,7 +816,16 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 
         if (element->event()->get<Bool>
             (m_properties->NOTE_HEAD_SHIFTED, shifted) && shifted) {
-            cx += nbw;
+            bool stemUp = false;
+            element->event()->get<Bool>(m_properties->VIEW_LOCAL_STEM_UP,
+                                        stemUp);
+            RG_DEBUG << "setupMouseEvent shift" << cx << nbw << stemUp;
+
+            if (stemUp) {
+                cx += nbw;
+            } else {
+                cx -= nbw;
+            }
         }
 
         if (element->isNote() && haveClickHeight) {
@@ -826,28 +837,35 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 
                 if (eventHeight == nme.height) {
 
+                    RG_DEBUG << "setupMouseEvent t1" << nme.sceneX << cx <<
+                        nbw;
                     if (!clickedNote &&
                         nme.sceneX >= cx &&
                         nme.sceneX <= cx + nbw) {
+                        RG_DEBUG << "setupMouseEvent cn1" << element;
                         clickedNote = element;
                     } else if (!clickedVagueNote &&
                                nme.sceneX >= cx - 2 &&
                                nme.sceneX <= cx + nbw + 2) {
+                        RG_DEBUG << "setupMouseEvent cnv1" << element;
                         clickedVagueNote = element;
                     }
 
                 } else if (eventHeight - 1 == nme.height ||
                            eventHeight + 1 == nme.height) {
                     if (!clickedVagueNote) {
+                        RG_DEBUG << "setupMouseEvent cv2" << element;
                         clickedVagueNote = element;
                     }
                 }
             }
         } else if (!element->isNote()) {
             if (!clickedNonNote) {
+                RG_DEBUG << "setupMouseEvent cn2" << element;
                 clickedNonNote = element;
             }
         }
+        RG_DEBUG << "setupMouseEvent" << clickedNote;
     }
 
     nme.exact = false;
