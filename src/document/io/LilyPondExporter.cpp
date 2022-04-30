@@ -1162,7 +1162,7 @@ LilyPondExporter::write()
         str << indent(col) << "\\time "
             << timeSignature.getNumerator() << "/"
             << timeSignature.getDenominator() << std::endl;
-        //  - place skips upto the end of the composition;
+        //  - place skips unto the end of the composition;
         //    this justifies the printed staffs
         str << indent(col);
         writeSkip(timeSignature, lsc.getFirstSegmentStartTime(),
@@ -3027,9 +3027,16 @@ LilyPondExporter::writeTimeSignature(TimeSignature timeSignature,
     // "C" and "4/4" ? (HJJ)
     //
     if (timeSignature.isCommon() == false) {
-        // use numberedtime signature: 4/4
+        // use numbered time signature: 4/4
         str << indent (col)
-            << "\\once \\override Staff.TimeSignature #'style = #'() "
+//             << "\\once \\override Staff.TimeSignature #'style = #'() "
+            << "\\numericTimeSignature "
+            << std::endl;
+    } else {
+        // use default (common) time signature: C
+        str << indent (col)
+//             << "\\once \\override Staff.TimeSignature #'style = #'() "
+            << "\\defaultTimeSignature "
             << std::endl;
     }
     str << indent (col)
