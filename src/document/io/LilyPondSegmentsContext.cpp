@@ -802,7 +802,7 @@ LilyPondSegmentsContext::getFirstSynchronousSegment(Segment * seg)
     if (m_GSSSegIterator->synchronous &&
         (m_GSSSegIterator->segment != m_GSSSegment) &&
         (m_GSSSegIterator->segment->getStartTime() == m_GSSSegment->getStartTime()) &&
-        (m_GSSSegIterator->segment != m_GSSSegment)) {
+        (m_GSSSegIterator->segment->getEndMarkerTime() == m_GSSSegment->getEndMarkerTime())) {
             return &(*m_GSSSegIterator);
     }
 
@@ -827,7 +827,7 @@ LilyPondSegmentsContext::getNextSynchronousSegment()
         if (m_GSSSegIterator->synchronous &&
             (m_GSSSegIterator->segment != m_GSSSegment) &&
             (m_GSSSegIterator->segment->getStartTime() == m_GSSSegment->getStartTime()) &&
-            (m_GSSSegIterator->segment != m_GSSSegment)) {
+            (m_GSSSegIterator->segment->getEndMarkerTime() == m_GSSSegment->getEndMarkerTime())) {
                 return &(*m_GSSSegIterator);
         }
     }
