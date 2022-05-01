@@ -25,7 +25,7 @@
 namespace Rosegarden
 {
 class Event;
-    
+
 class ControlParameter : public XmlExportable
 {
 public:
@@ -58,13 +58,13 @@ public:
     struct ControlPositionCmp
     {
         bool operator()(ControlParameter *c1,
-                        ControlParameter *c2)
+                        ControlParameter *c2) const
         {
             return (c1->getIPBPosition() < c2->getIPBPosition());
         }
 
         bool operator()(const ControlParameter &c1,
-                        const ControlParameter &c2)
+                        const ControlParameter &c2) const
         {
             return (c1.getIPBPosition() < c2.getIPBPosition());
         }
@@ -117,7 +117,7 @@ public:
     Event *newEvent(timeT time, int value) const;
     // True if "e" is this type of controller / pitchbend.
     bool matches(Event *e) const;
-    
+
     static const ControlParameter& getPitchBend();
     static const ControlParameter& getExpression();
 
@@ -127,7 +127,7 @@ protected:
     std::string    m_name;
 
     // The type of event this controller controls (eg "controller" or
-    // "pitchbend"); 
+    // "pitchbend");
     std::string    m_type;
 
     // Descriptive name for this control parameter, or "<none>".

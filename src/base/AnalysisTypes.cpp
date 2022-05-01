@@ -187,7 +187,7 @@ ChordLabel::getName(Key /* key */) const
 }
 
 int
-ChordLabel::rootPitch()
+ChordLabel::rootPitch() const
 {
     return m_data.m_rootPitch;
 }
@@ -765,7 +765,7 @@ AnalysisHelper::PitchProfile::distance(const PitchProfile &other)
 }
 
 double
-AnalysisHelper::PitchProfile::dotProduct(const PitchProfile &other)
+AnalysisHelper::PitchProfile::dotProduct(const PitchProfile &other) const
 {
     double product = 0;
 
@@ -778,7 +778,7 @@ AnalysisHelper::PitchProfile::dotProduct(const PitchProfile &other)
 }
 
 double
-AnalysisHelper::PitchProfile::productScorer(const PitchProfile &other)
+AnalysisHelper::PitchProfile::productScorer(const PitchProfile &other) const
 {
     double cumulativeProduct = 1;
     double numbersInProduct = 0;
@@ -1151,9 +1151,9 @@ AnalysisHelper::guessKeyAtTime(Composition &comp, timeT t,
             }
         }
     }
-    
+
     // Return the most common one, if any.
-    if (!keyCounts.empty()) { 
+    if (!keyCounts.empty()) {
         unsigned int mostFound = 0;
         Key bestKey = Key();
         for (MapKeys::iterator i = keyCounts.begin();
@@ -1173,7 +1173,7 @@ AnalysisHelper::guessKeyAtTime(Composition &comp, timeT t,
     return helper.guessKey(adapter);
 }
 
-// Guess the appropriate key signature for segment at this time.  
+// Guess the appropriate key signature for segment at this time.
 // @returns Key in concert pitch
 // @param t is the target time
 // @param segment is the target segment

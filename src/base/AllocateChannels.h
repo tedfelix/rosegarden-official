@@ -58,11 +58,11 @@ public:
                          Instrument *instrument,
                          RealTime marginBefore,
                          RealTime marginAfter);
-  
+
     // Free a channel interval
     void freeChannelInterval(ChannelInterval &old);
 
-  
+
     // Make it so that "channelNb" can be allocated from.
     void addChannel(ChannelId channelNb);
 
@@ -74,7 +74,8 @@ public:
 private:
 
     // Allocate a channel interval
-    ChannelInterval allocateChannelInterval(RealTime start, RealTime end,
+    ChannelInterval allocateChannelInterval(RealTime startTime,
+                                            RealTime endTime,
                                             Instrument *instrument,
                                             RealTime marginBefore,
                                             RealTime marginAfter);
@@ -112,7 +113,7 @@ class AllocateChannels : public QObject
 public:
     typedef std::set<ChannelId> FixedChannelSet;
 
-    AllocateChannels(ChannelSetup setup);
+    explicit AllocateChannels(ChannelSetup setup);
     ~AllocateChannels() override;
 
     void reallocateToFit(Instrument& instrument, ChannelInterval &ci,
@@ -139,7 +140,7 @@ public:
 
 signals:
     void sigVacateChannel(ChannelId channel);
-  
+
 private:
     // Release channel from channelSet, making it available for normal use.
     void releaseReservedChannel(
@@ -147,7 +148,7 @@ private:
     // Reserve a channel, with respect only to channelSet and
     // m_freeChannels.
     void reserveChannel(ChannelId channel, FixedChannelSet& channelSet);
-      
+
     // Channel intervals for "normal" instruments: Not percussion, not
     // fixed.  ChannelManagers holding pieces of this are connected to
     // sigVacateChannel.

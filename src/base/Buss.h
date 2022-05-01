@@ -31,7 +31,7 @@ typedef unsigned int BussId;
 class Buss : public XmlExportable, public PluginContainer
 {
 public:
-    Buss(BussId id);
+    explicit Buss(BussId id);
 
     void setId(BussId id) { m_id = id; }
     BussId getId() const override { return m_id; }

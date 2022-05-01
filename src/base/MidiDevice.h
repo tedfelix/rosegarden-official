@@ -83,10 +83,10 @@ public:
 
     const BankList &getBanks() const { return m_bankList; }
     BankList getBanks(bool percussion) const;
-    BankList getBanksByMSB(bool percussion, MidiByte msb) const; 
+    BankList getBanksByMSB(bool percussion, MidiByte msb) const;
     BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
     const MidiBank *getBankByName(const std::string &) const;
-    
+
     MidiByteList getDistinctMSBs(bool percussion, int lsb = -1) const;
     MidiByteList getDistinctLSBs(bool percussion, int msb = -1) const;
 
@@ -179,10 +179,10 @@ public:
     // our ControlParameter list.
     //
     bool isUniqueControlParameter(const ControlParameter &con) const;
-    
+
     const ControlParameter *
         findControlParameter(std::string type, MidiByte conNumber) const;
-    
+
     /// The CC or other controller has a knob on the MIPP.
     /**
      * ??? Only CCs can have knobs.  It's misleading to allow a complete
@@ -204,12 +204,12 @@ public:
     { return channel == 9; }
 
     /// See m_userConnection.
-    void setUserConnection(std::string connection)
+    void setUserConnection(const std::string& connection)
             { m_userConnection = connection; }
     std::string getUserConnection() const
             { return m_userConnection; }
     /// See m_currentConnection.
-    void setCurrentConnection(std::string connection)
+    void setCurrentConnection(const std::string& connection)
             { m_currentConnection = connection; }
 
 protected:
@@ -222,7 +222,7 @@ protected:
     // Push the default IPB controllers to the device's Instruments.
     //
     void deviceToInstrControllerPush();
-    
+
     // Add a new control to all of the device's Instruments.
     //
     void addControlToInstrument(const ControlParameter &con);
@@ -253,14 +253,14 @@ protected:
     // ??? This should be easy to change to an object which would simplify
     //     copying of MidiDevice.
     MidiMetronome *m_metronome;
-    
+
     // used when we're presenting the instruments
     InstrumentList  m_presentationInstrumentList;
 
     // Is this device Play or Record?
     //
-    DeviceDirection m_direction; 
-    
+    DeviceDirection m_direction;
+
     // Should we present LSB or MSB of bank info as a Variation number?
     //
     VariationType m_variationType;
