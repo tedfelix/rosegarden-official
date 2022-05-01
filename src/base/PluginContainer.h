@@ -51,7 +51,7 @@ public:
     virtual std::string getAlias() const = 0;
 
 protected:
-    PluginContainer(bool havePlugins);
+    explicit PluginContainer(bool havePlugins);
     virtual ~PluginContainer();
 
     AudioPluginVector m_audioPlugins;

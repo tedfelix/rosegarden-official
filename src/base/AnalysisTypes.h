@@ -69,7 +69,7 @@ public:
     ChordLabel(Key key, int mask, int bass);
     ChordLabel(ChordType type, int rootPitch, int inversion = 0) :
         m_data(type, rootPitch, inversion) { };
-    int rootPitch();
+    int rootPitch() const;
     /**
      * Gives the name of the chord in lead-sheet notation: C, Dm,
      * G#7b5...
@@ -106,7 +106,7 @@ private:
         int m_inversion;
     };
     ChordData m_data;
-    void checkMap();
+    static void checkMap();
 
     typedef std::multimap<int, ChordData> ChordMap;
     static ChordMap m_chordMap;
@@ -122,7 +122,7 @@ public:
     /**
      * Returns the key in force during a given event.
      */
-    Key getKeyForEvent(Event *e, Segment &s);
+    static Key getKeyForEvent(Event *e, Segment &s);
 
     /**
      * Inserts in the given Segment labels for all of the chords found in
@@ -144,7 +144,7 @@ public:
     Key guessKey(CompositionTimeSliceAdapter &c);
 
     /**
-     * Returns a guess at the appropriate key at time t, based on 
+     * Returns a guess at the appropriate key at time t, based on
      * existing key signatures.  May fall back to guessKey.
      */
     static Key
@@ -156,7 +156,7 @@ public:
      */
     static Key
         guessKeyForSegment(timeT t, const Segment *s);
-    
+
     /**
      * Like labelChords, but the algorithm is more complicated. This tries
      * to guess the chords that should go under a beat even when all of the
@@ -191,8 +191,8 @@ protected:
         double& operator[](int i);
         const double& operator[](int i) const;
         double distance(const PitchProfile &other);
-        double dotProduct(const PitchProfile &other);
-        double productScorer(const PitchProfile &other);
+        double dotProduct(const PitchProfile &other) const;
+        double productScorer(const PitchProfile &other) const;
         PitchProfile normalized();
         PitchProfile& operator*=(double d);
         PitchProfile& operator+=(const PitchProfile &d);
@@ -223,12 +223,12 @@ protected:
     static ProgressionMap m_progressionMap;
 
     /// For use by guessHarmonies (refineHarmonyGuessList)
-    void checkProgressionMap();
+    static void checkProgressionMap();
 
     /// For use by checkProgressionMap
-    void addProgressionToMap(Key k,
-                             int firstChordNumber,
-                             int secondChordNumber);
+    static void addProgressionToMap(Key k,
+                                    int firstChordNumber,
+                                    int secondChordNumber);
 
 };
 

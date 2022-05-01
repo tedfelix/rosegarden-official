@@ -124,7 +124,7 @@ public:
     typedef std::map<MidiByte, std::string> KeyNameMap;
 
     MidiKeyMapping();
-    MidiKeyMapping(const std::string &name);
+    explicit MidiKeyMapping(const std::string &name);
     MidiKeyMapping(const std::string &name, const KeyNameMap &map);
 
     bool operator==(const MidiKeyMapping &m) const;
@@ -136,7 +136,7 @@ public:
     KeyNameMap          &getMap() { return m_map; }
     std::string          getMapForKeyName(MidiByte pitch) const;
     void                 setMap(const KeyNameMap &map) { m_map = map; }
-    
+
     /**
      * Return 0 if the supplied argument is the lowest pitch in the
      * mapping, 1 if it is the second-lowest, etc.  Return -1 if it
@@ -181,4 +181,3 @@ typedef unsigned int MidiFilter;
 }
 
 #endif
-
