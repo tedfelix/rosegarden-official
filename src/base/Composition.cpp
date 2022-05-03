@@ -198,6 +198,10 @@ Composition::ReferenceSegment::findRealTime(RealTime t)
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::findNearestTime(timeT t)
 {
+    // ??? This would simplify things and speed them up.
+    //if (m_events.empty())
+    //    return end();
+
     iterator i = findTime(t);
     if (i == end() || (*i)->getAbsoluteTime() > t) {
         if (i == begin()) return end();
@@ -1244,19 +1248,70 @@ Composition::getElapsedRealTime(timeT t) const
 {
     calculateTempoTimestamps();
 
-    timeT start = getStartMarker();
-    RealTime realStart = time2RealTime(start, m_defaultTempo);
+    // In case we have an anacrusis, make sure we have the proper
+    // start time which could be negative.
+    const timeT start = getStartMarker();
+    const RealTime realStart = time2RealTime(start, m_defaultTempo);
 
-    ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
-    if (i == m_tempoSegment.end()) {
-        i = m_tempoSegment.begin();
+    // Elapsed time is dependent on tempo changes.  Find the previous one.
+    ReferenceSegment::iterator tempoIter = m_tempoSegment.findNearestTime(t);
+    // None found?  We should probably use the default tempo.
+    if (tempoIter == m_tempoSegment.end()) {
+        // Try the first, if any.
+        // ??? If present, this will be after t.  So it is useless.
+        // ??? Make this a new firstTempoIter for clarity.
+        tempoIter = m_tempoSegment.begin();
+
+        // If the tempo segment is empty OR the first tempo change is
+        // after the composition start OR t is after the composition start...
+        // ??? We can get rid of the parens by reordering this.  However,
+        //     we should probably reorder this for speed.  The first check
+        //     should be the one that is most frequently true.  And the
+        //     iter check should obviously be before dereferencing.
+        // ??? This will probably always be true since t will always
+        //     be at or after start.  Then again, what if the composition
+        //     start is changed to something large and positive, thus
+        //     cutting off the tempo changes?  Does that delete them?
+        // ??? Previously, this checked against 0.  So it only detected
+        //     anacrusis (negative start time).  With this new version,
+        //     will it be affected by composition start bar which can be
+        //     something other than 1?  The original code translates to
+        //     this:
+        //     If the tempo segment is empty OR the first tempo change
+        //     is after the anacrusis OR t is after the anacrusis.
         if (t >= start ||
-            (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > start)) {
+            (tempoIter == m_tempoSegment.end() ||  // tempo segment empty?
+                 (*tempoIter)->getAbsoluteTime() > start)) {  // tempo change is after composition start?
+            // Perform a simple pulses to seconds conversion using the
+            // default tempo.
             RealTime rt = time2RealTime(t, m_defaultTempo);
             rt = rt - realStart;
             RG_DEBUG << "getElapsedRealTime 1" << t << rt;
             return rt;
         }
+
+        // ??? To get here, we would need:
+        //
+        //       - t prior to the first tempo change (easy to do)
+        //       - t prior to the start of the Composition
+        //       - the first tempo change prior to the start of Composition
+        //
+        //     Is this possible?  Can we have an event and a tempo change
+        //     prior to the start of the Composition?  So, set up the
+        //     first condition, then move the Composition start past that
+        //     point.  I have a feeling that might purge the events and
+        //     the tempo change.
+
+        // ??? Previously to get here we would need:
+        //
+        //       - t prior to the first tempo change (easy to do)
+        //       - t within the anacrusis
+        //       - the first tempo change within the anacrusis
+        //
+        //     Essentially, any tempo change anywhere within the anacrusis will
+        //     apply to the entire anacrusis.  The new code does not do this.
+        //     Can we track down the original and see if that was indeed the
+        //     intent?
     }
 
     RealTime elapsed;
@@ -1264,22 +1319,22 @@ Composition::getElapsedRealTime(timeT t) const
     tempoT target = -1;
     timeT nextTempoTime = t;
 
-    if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
+    if (!getTempoTarget(tempoIter, target, nextTempoTime)) target = -1;
 
     if (target > 0) {
-        elapsed = getTempoTimestamp(*i) +
-            time2RealTime(t - (*i)->getAbsoluteTime(),
-                          tempoT((*i)->get<Int>(TempoProperty)),
-                          nextTempoTime - (*i)->getAbsoluteTime(),
+        elapsed = getTempoTimestamp(*tempoIter) +
+            time2RealTime(t - (*tempoIter)->getAbsoluteTime(),
+                          tempoT((*tempoIter)->get<Int>(TempoProperty)),
+                          nextTempoTime - (*tempoIter)->getAbsoluteTime(),
                           target);
     } else {
-        elapsed = getTempoTimestamp(*i) +
-            time2RealTime(t - (*i)->getAbsoluteTime(),
-                          tempoT((*i)->get<Int>(TempoProperty)));
+        elapsed = getTempoTimestamp(*tempoIter) +
+            time2RealTime(t - (*tempoIter)->getAbsoluteTime(),
+                          tempoT((*tempoIter)->get<Int>(TempoProperty)));
     }
 
 #ifdef DEBUG_TEMPO_STUFF
-    RG_DEBUG << "getElapsedRealTime(): " << t << " -> " << elapsed << " (last tempo change at " << (*i)->getAbsoluteTime() << ")";
+    RG_DEBUG << "getElapsedRealTime(): " << t << " -> " << elapsed << " (last tempo change at " << (*tempoIter)->getAbsoluteTime() << ")";
 #endif
 
     elapsed = elapsed - realStart;

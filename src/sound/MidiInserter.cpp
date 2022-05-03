@@ -223,10 +223,10 @@ insertCopy(const MappedEvent &evt)
     MidiByte   midiChannel = evt.getRecordedChannel();
     TrackData& trackData   = getTrackData(evt.getTrackId(), midiChannel);
     timeT      midiEventAbsoluteTime = getAbsoluteTime(evt.getEventTime());
+
     // to avoid negative times here we subtract the start time
     timeT start = m_comp.getStartMarker();
     start = (start * m_timingDivision) / crotchetDuration;
-
     midiEventAbsoluteTime -= start;
 
     // If we are ramping, calculate a previous tempo that would get us

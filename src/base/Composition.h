@@ -1016,9 +1016,11 @@ protected:
         void eraseEvent(Event *e);
 
         iterator findTime(timeT time);
+        // ??? rename: findPreviousTime()
         iterator findNearestTime(timeT time);
 
         iterator findRealTime(RealTime time);
+        // ??? rename: findPreviousRealTime()
         iterator findNearestRealTime(RealTime time);
 
         std::string getEventType() const { return m_eventType; }
