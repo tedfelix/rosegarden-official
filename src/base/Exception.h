@@ -27,13 +27,13 @@ namespace Rosegarden {
 class ROSEGARDENPRIVATE_EXPORT Exception : public virtual std::exception
 {
 public:
-    Exception(const char *message);
+    explicit Exception(const char *message);
     Exception(const char *message, const char *file, int line);
 
-    Exception(std::string message);
+    explicit Exception(std::string message);
     Exception(std::string message, std::string file, int line);
 
-    Exception(QString message);
+    explicit Exception(QString message);
     Exception(QString message, QString file, int line);
 
     ~Exception() throw () override {}

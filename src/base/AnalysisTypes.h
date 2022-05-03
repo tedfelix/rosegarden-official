@@ -67,7 +67,7 @@ class ChordLabel
 public:
     ChordLabel();
     ChordLabel(Key key, int mask, int bass);
-    ChordLabel(ChordType type, int rootPitch, int inversion = 0) :
+    ChordLabel(const ChordType& type, int rootPitch, int inversion = 0) :
         m_data(type, rootPitch, inversion) { };
     int rootPitch() const;
     /**
@@ -91,7 +91,7 @@ private:
     //      shouldn't I find a neater way to keep a ChordMap?
     struct ChordData
     {
-        ChordData(ChordType type, int rootPitch, int inversion = 0) :
+        ChordData(const ChordType& type, int rootPitch, int inversion = 0) :
             m_type(type),
             m_rootPitch(rootPitch),
             m_inversion(inversion) { };
@@ -210,9 +210,9 @@ protected:
     /// For use by guessHarmonies (refineHarmonyGuessList)
     // #### grep ProgressionMap to something else
     struct ChordProgression {
-        ChordProgression(ChordLabel first_,
-                         ChordLabel second_ = ChordLabel(),
-                         Key key_ = Key());
+        ChordProgression(const ChordLabel& first_,
+                         const ChordLabel& second_ = ChordLabel(),
+                         const Key& key_ = Key());
         ChordLabel first;
         ChordLabel second;
         Key homeKey;

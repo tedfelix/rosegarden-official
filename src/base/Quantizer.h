@@ -119,12 +119,12 @@ protected:
     /**
      * \arg source, target : Description of where to find the
      * times to be quantized, and where to put the quantized results.
-     * 
+     *
      * These may be strings, specifying a prefix for the names
      * of properties to contain the timings, or may be the special
      * value RawEventData in which case the event's absolute time
      * and duration will be used instead of properties.
-     * 
+     *
      * If source specifies a property prefix for properties that are
      * found not to exist, they will be pre-filled from the original
      * timings in the target values before being quantized and then
@@ -132,7 +132,7 @@ protected:
      * directly into the Event's absolute time and duration without
      * losing the original values, because they are backed up
      * automatically into the source properties.)
-     * 
+     *
      * Note that because it's impossible to modify the duration or
      * absolute time of an event after construction, if target is
      * RawEventData the quantizer must re-construct each event in
@@ -173,7 +173,7 @@ protected:
      * as GlobalSource if target == RawEventData and RawEventData
      * otherwise.
      */
-    Quantizer(std::string target);
+    explicit Quantizer(std::string target);
 
     /**
      * To implement a subclass of Quantizer, you should
@@ -183,7 +183,7 @@ protected:
      * simply calls quantizeSingle on each non-rest event in turn.
      * The default implementation of quantizeSingle, as you see,
      * does nothing.
-     * 
+     *
      * Note that implementations of these methods should call
      * getFromSource and setToTarget to get and set the unquantized
      * and quantized data; they should not query the event properties

@@ -139,7 +139,7 @@ public:
 
     typedef std::map<std::string, std::string> ConfigMap;
     void clearConfiguration() { m_config.clear(); }
-    const ConfigMap &getConfiguration() { return m_config; }
+    const ConfigMap &getConfiguration() const { return m_config; }
     std::string getConfigurationValue(std::string k) const;
     void setConfigurationValue(std::string k, std::string v);
 
@@ -158,7 +158,7 @@ protected:
     // Is the plugin actually assigned i.e. should we create
     // a matching instance at the sequencer?
     //
-    bool                               m_assigned; 
+    bool                               m_assigned;
     bool                               m_bypass;
 
     std::string                        m_program;

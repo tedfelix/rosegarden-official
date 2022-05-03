@@ -714,9 +714,9 @@ AnalysisHelper::addProgressionToMap(Key k,
 // AnalysisHelper::ChordProgression
 /////////////////////////////////////////////////
 
-AnalysisHelper::ChordProgression::ChordProgression(ChordLabel first_,
-                                                   ChordLabel second_,
-                                                   Key key_) :
+AnalysisHelper::ChordProgression::ChordProgression(const ChordLabel& first_,
+                                                   const ChordLabel& second_,
+                                                   const Key& key_) :
     first(first_),
     second(second_),
     homeKey(key_)

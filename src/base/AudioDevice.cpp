@@ -24,7 +24,7 @@
 namespace Rosegarden
 {
 
-AudioDevice::AudioDevice() : 
+AudioDevice::AudioDevice() :
     Device(0, "Default Audio Device", Device::Audio)
 {
     createInstruments();
@@ -52,7 +52,7 @@ AudioDevice::AudioDevice(const AudioDevice &dev):
 AudioDevice::~AudioDevice()
 {
 }
-    
+
 void
 AudioDevice::createInstruments()
 {

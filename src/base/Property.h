@@ -25,7 +25,7 @@
 
 #include <rosegardenprivate_export.h>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 enum PropertyType { Int, String, Bool, RealTimeT };
@@ -53,7 +53,7 @@ PropertyDefn<P>::parse(std::string)
 }
 
 template <PropertyType P>
-std::string 
+std::string
 PropertyDefn<P>::unparse(typename PropertyDefn<P>::basic_type)
 {
     throw(0);
@@ -140,7 +140,7 @@ template <PropertyType P>
 class ROSEGARDENPRIVATE_EXPORT PropertyStore : public PropertyStoreBase
 {
 public:
-    PropertyStore(typename PropertyDefn<P>::basic_type d) :
+    explicit PropertyStore(typename PropertyDefn<P>::basic_type d) :
         m_data(d) { }
     PropertyStore(const PropertyStore<P> &p) :
         PropertyStoreBase(p), m_data(p.m_data) { }

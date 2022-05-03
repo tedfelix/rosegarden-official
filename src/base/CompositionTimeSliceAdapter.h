@@ -97,7 +97,7 @@ public:
         friend class CompositionTimeSliceAdapter;
 
     public:
-        iterator(const CompositionTimeSliceAdapter *a = nullptr) :
+        explicit iterator(const CompositionTimeSliceAdapter *a = nullptr) :
             m_a(a), m_curEvent(nullptr), m_curTrack(-1), m_needFill(true) { }
         iterator(const iterator &);
         iterator &operator=(const iterator &);
