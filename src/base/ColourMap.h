@@ -23,7 +23,7 @@
 #include <map>
 #include <string>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 
@@ -91,7 +91,7 @@ public:
 
     /// Add a colour entry using the lowest available ID.
     void addEntry(QColor colour, std::string name);
-    void modifyName(unsigned colourID, std::string name);
+    void modifyName(unsigned colourID, const std::string& name);
     void modifyColour(unsigned colourID, QColor colour);
     void deleteEntry(unsigned colourID);
 

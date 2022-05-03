@@ -38,7 +38,7 @@ public:
                      int def = 0,
                      MidiByte controllerNumber = 0,
                      unsigned int colour = 0,
-                     int ipbPositon = -1);
+                     int ipbPosition = -1);
 
     // ??? UGH!  Get rid of this!!!  There is no dtor here, and XmlExportable
     //     has no dtor.  Implementation is bitwise.  This can *just go away*!

@@ -71,9 +71,9 @@ public:
         m_marginBefore(RealTime::zeroTime),
         m_marginAfter(RealTime::zeroTime)
         { }
-    
+
     // Construct a dummy channelinterval used in searching.
-    ChannelInterval(RealTime t) :
+    explicit ChannelInterval(RealTime t) :
         m_channel(-1),
         m_start(t),
         m_end(m_latestTime),
@@ -82,7 +82,7 @@ public:
         m_marginBefore(RealTime::zeroTime),
         m_marginAfter(RealTime::zeroTime)
         { }
-    
+
     ChannelInterval(ChannelId channel, RealTime start, RealTime end,
                     Instrument *instrumentBefore,
                     Instrument *instrumentAfter,
@@ -121,6 +121,7 @@ public:
         { return m_channel >= 0; }
 
 #if defined NDEBUG
+    // cppcheck-suppress functionStatic
     void assertSane() const {}
 #else
     void assertSane() const;
@@ -129,7 +130,7 @@ public:
 private:
     void setChannelId(ChannelId channel)
         { m_channel = channel; };
-    
+
     ChannelId   m_channel;
     RealTime    m_start;
     RealTime    m_end;
