@@ -1243,6 +1243,50 @@ Composition::compareSignaturesAndTempos(const Composition &other) const
     return true;
 }
 
+#ifndef BUG1627
+// Original version
+RealTime
+Composition::getElapsedRealTime(timeT t) const
+{
+    calculateTempoTimestamps();
+
+    ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
+    if (i == m_tempoSegment.end()) {
+        i = m_tempoSegment.begin();
+        if (t >= 0 ||
+            (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
+            return time2RealTime(t, m_defaultTempo);
+        }
+    }
+
+    RealTime elapsed;
+
+    tempoT target = -1;
+    timeT nextTempoTime = t;
+
+    if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
+
+    if (target > 0) {
+        elapsed = getTempoTimestamp(*i) +
+            time2RealTime(t - (*i)->getAbsoluteTime(),
+                          tempoT((*i)->get<Int>(TempoProperty)),
+                          nextTempoTime - (*i)->getAbsoluteTime(),
+                          target);
+    } else {
+        elapsed = getTempoTimestamp(*i) +
+            time2RealTime(t - (*i)->getAbsoluteTime(),
+                          tempoT((*i)->get<Int>(TempoProperty)));
+    }
+
+#ifdef DEBUG_TEMPO_STUFF
+    RG_DEBUG << "getElapsedRealTime(): " << t << " -> " << elapsed << " (last tempo change at " << (*i)->getAbsoluteTime() << ")";
+#endif
+
+    return elapsed;
+}
+
+#else
+// Version with proposed fix for bug #1627
 RealTime
 Composition::getElapsedRealTime(timeT t) const
 {
@@ -1342,7 +1386,61 @@ Composition::getElapsedRealTime(timeT t) const
 
     return elapsed;
 }
+#endif
 
+#ifndef BUG1627
+// Original version.
+timeT
+Composition::getElapsedTimeForRealTime(RealTime t) const
+{
+    calculateTempoTimestamps();
+
+    ReferenceSegment::iterator i = m_tempoSegment.findNearestRealTime(t);
+    if (i == m_tempoSegment.end()) {
+        i = m_tempoSegment.begin();
+        if (t >= RealTime::zeroTime ||
+            (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
+            return realTime2Time(t, m_defaultTempo);
+        }
+    }
+
+    timeT elapsed;
+
+    tempoT target = -1;
+    timeT nextTempoTime = 0;
+    if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
+
+    if (target > 0) {
+        elapsed = (*i)->getAbsoluteTime() +
+            realTime2Time(t - getTempoTimestamp(*i),
+                          (tempoT)((*i)->get<Int>(TempoProperty)),
+                          nextTempoTime - (*i)->getAbsoluteTime(),
+                          target);
+    } else {
+        elapsed = (*i)->getAbsoluteTime() +
+            realTime2Time(t - getTempoTimestamp(*i),
+                          (tempoT)((*i)->get<Int>(TempoProperty)));
+    }
+
+#ifdef DEBUG_TEMPO_STUFF
+    static int doError = true;
+    if (doError) {
+        doError = false;
+        RealTime cfReal = getElapsedRealTime(elapsed);
+        timeT cfTimeT = getElapsedTimeForRealTime(cfReal);
+        doError = true;
+        RG_DEBUG << "getElapsedTimeForRealTime(): " << t << " -> "
+             << elapsed << " (error " << (cfReal - t)
+             << " or " << (cfTimeT - elapsed) << ", tempo "
+             << (*i)->getAbsoluteTime() << ":"
+             << (tempoT)((*i)->get<Int>(TempoProperty)) << ")";
+    }
+#endif
+    return elapsed;
+}
+
+#else
+// Proposed fix for bug #1627.
 timeT
 Composition::getElapsedTimeForRealTime(RealTime t) const
 {
@@ -1397,6 +1495,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 #endif
     return elapsed;
 }
+#endif
 
 void
 Composition::calculateTempoTimestamps() const
