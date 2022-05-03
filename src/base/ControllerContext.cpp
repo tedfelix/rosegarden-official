@@ -42,7 +42,8 @@ ControllerSearch::
 ControllerSearch(const std::string eventType,
                  int controllerId) :
     m_eventType(eventType),
-    m_controllerId(controllerId)
+    m_controllerId(controllerId),
+    m_instrument(0)
 {}
 
 // Return the last value of controller before noLaterThan in segment s.
@@ -108,7 +109,7 @@ bool
 ControllerSearch::
 matches(Event *e) const
 {
-    return 
+    return
         e->isa(m_eventType) &&
         ((m_eventType != Controller::EventType) ||
          (e->has(Controller::NUMBER) &&
@@ -121,7 +122,7 @@ int
 ControllerContextMap::
 getStaticValue(Instrument *instrument,
                const std::string eventType,
-               int controllerId) 
+               int controllerId)
 {
     if (eventType == Controller::EventType)
         { return instrument->getControllerValue(controllerId); }
@@ -134,7 +135,7 @@ getStaticValue(Instrument *instrument,
 // @author Tom Breton (Tehom)
 int
 ControllerContextMap::
-getControllerValue(Instrument *instrument, Segment *a, Segment *b, 
+getControllerValue(Instrument *instrument, Segment *a, Segment *b,
                    timeT searchTime, const std::string eventType,
                    int controllerId)
 {
@@ -145,7 +146,7 @@ getControllerValue(Instrument *instrument, Segment *a, Segment *b,
                (eventType == PitchBend::EventType),
                "getControllerValue",
                "got an unexpected event type");
-    
+
     // We have cached the latest value of all controllers we've
     // inserted.  Find the relevant cache.
 
@@ -171,7 +172,7 @@ getControllerValue(Instrument *instrument, Segment *a, Segment *b,
     // time we really should look at; mutate searchTime accordingly.
     // Segment A governs timing and repitition.
     bool firstRepeat;
-    // 
+    //
     if (a->isRepeating()) {
         timeT segmentStartTime = a->getStartTime();
         timeT segmentEndTime   = a->getEndMarkerTime();
@@ -204,7 +205,7 @@ getControllerValue(Instrument *instrument, Segment *a, Segment *b,
 
     // Found it so we're done.
     if (foundInEvents.first)
-        { return foundInEvents.second.value(); } 
+        { return foundInEvents.second.value(); }
 
     // If this is a repeat, we've wrapped around, so the value is the
     // last value from a previous repeat, which is the same as cached
@@ -239,7 +240,7 @@ makeAbsolute(const ControlParameter * controlParameter, int value) const
 {
     int max = controlParameter->getMax();
     int min = controlParameter->getMin();
-    value -= controlParameter->getDefault(); 
+    value -= controlParameter->getDefault();
 
     if (value > max) { value = max; }
     if (value < min) { value = min; }
@@ -318,7 +319,7 @@ storeLatestValue(Event *e)
                    "got an unexpected event type");
         // Set it.
         m_PitchBendLatestValue = Maybe(true, toCache);
-    } 
+    }
 }
 
 // Clear the cache.
@@ -333,4 +334,3 @@ clear()
 
 
 } // End namespace Rosegarden
-

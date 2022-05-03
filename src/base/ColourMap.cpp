@@ -21,7 +21,7 @@
 
 #include <sstream>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 
@@ -99,7 +99,7 @@ ColourMap::addEntry(QColor colour, std::string name)
 }
 
 void
-ColourMap::modifyName(unsigned colourID, std::string name)
+ColourMap::modifyName(unsigned colourID, const std::string& name)
 {
     // We don't allow a name to be given to the default colour
     if (colourID == 0)

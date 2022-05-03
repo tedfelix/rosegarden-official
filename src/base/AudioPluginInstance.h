@@ -95,13 +95,13 @@ typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
 class AudioPluginInstance : public XmlExportable
 {
 public:
-    AudioPluginInstance(unsigned int position);
+    explicit AudioPluginInstance(unsigned int position);
 
     AudioPluginInstance(std::string identifier,
                         unsigned int position);
 
     /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
-    void setIdentifier(std::string identifier) { m_identifier = identifier; }
+    void setIdentifier(const std::string& identifier) { m_identifier = identifier; }
     /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     std::string getIdentifier() const { return m_identifier; }
 

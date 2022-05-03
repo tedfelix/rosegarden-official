@@ -115,7 +115,7 @@ public:
     bool autoExpandEnabled() const { return m_autoExpand; }
 
     void setStartMarker(const timeT &sM);
-    void setEndMarker(const timeT &eM);
+    void setEndMarker(const timeT &endMarker);
     void setAutoExpand(bool autoExpand) { m_autoExpand = autoExpand; }
 
 
@@ -130,7 +130,7 @@ public:
     /// Zero-based position on UI.
     Track* getTrackByPosition(int position) const;
 
-    int getTrackPositionById(TrackId track) const; // -1 if not found
+    int getTrackPositionById(TrackId id) const; // -1 if not found
 
     trackcontainer& getTracks() { return m_tracks; }
 
@@ -144,7 +144,7 @@ public:
     TrackId getMaxTrackId() const;
 
     const recordtrackcontainer &getRecordTracks() const { return m_recordTracks; }
-    void setTrackRecording(TrackId track, bool recording);
+    void setTrackRecording(TrackId trackId, bool recording);
     bool isTrackRecording(TrackId track) const;
     bool isInstrumentRecording(InstrumentId instrumentID) const;
 
@@ -250,7 +250,7 @@ public:
     SegmentMultiSet& getSegments() { return m_segments; }
     const SegmentMultiSet& getSegments() const { return m_segments; }
 
-    Segment* getSegmentByMarking(const QString& Marking) const;
+    Segment* getSegmentByMarking(const QString& marking) const;
 
     unsigned int getNbSegments() const { return m_segments.size(); }
 
@@ -413,7 +413,7 @@ public:
      * This is intended for use from file load or from undo/redo.
      */
     TriggerSegmentRec *addTriggerSegment(Segment *, TriggerSegmentId,
-                                         int basePitch = -1, int baseVelocity = -1);
+                                         int pitch = -1, int velocity = -1);
 
     /**
      * Get the ID of the next trigger segment that will be inserted.
@@ -531,7 +531,7 @@ public:
      * isNew to true if the time signature is a new one that did
      * not appear in the previous bar.
      */
-    TimeSignature getTimeSignatureInBar(int n, bool &isNew) const;
+    TimeSignature getTimeSignatureInBar(int barNo, bool &isNew) const;
 
     /**
      * Return the total number of time signature changes in the
@@ -545,7 +545,7 @@ public:
      * getTimeSignatureChange.  Return -1 if there has been no
      * time signature by this time.
      */
-    int getTimeSignatureNumberAt(timeT time) const;
+    int getTimeSignatureNumberAt(timeT t) const;
 
     /**
      * Return the absolute time of and time signature introduced
@@ -614,7 +614,7 @@ public:
      * time, in a range suitable for passing to getTempoChange.
      * Return -1 if the default tempo is in effect at this time.
      */
-    int getTempoChangeNumberAt(timeT time) const;
+    int getTempoChangeNumberAt(timeT t) const;
 
     /**
      * Return the absolute time of and tempo introduced by tempo
@@ -707,9 +707,9 @@ public:
      * Return (by reference) the bar number and beat/division values
      * corresponding to a given absolute time.
      */
-    void getMusicalTimeForAbsoluteTime(timeT absoluteTime,
+    void getMusicalTimeForAbsoluteTime(timeT absTime,
                                        int &bar, int &beat,
-                                       int &fraction, int &remainder);
+                                       int &fraction, int &remainder) const;
 
     /**
      * Return (by reference) the number of bars and beats/divisions
@@ -717,16 +717,16 @@ public:
      * the duration starts is also required, so as to know the correct
      * time signature.
      */
-    void getMusicalTimeForDuration(timeT absoluteTime, timeT duration,
+    void getMusicalTimeForDuration(timeT absTime, timeT duration,
                                    int &bars, int &beats,
-                                   int &fractions, int &remainder);
+                                   int &fractions, int &remainder) const;
 
     /**
      * Return the absolute time corresponding to a given bar number
      * and beat/division values.
      */
     timeT getAbsoluteTimeForMusicalTime(int bar, int beat,
-                                        int fraction, int remainder);
+                                        int fraction, int remainder) const;
 
     /**
      * Return the duration corresponding to a given number of bars and
@@ -734,9 +734,9 @@ public:
      * starts is also required, so as to know the correct time
      * signature.
      */
-    timeT getDurationForMusicalTime(timeT absoluteTime,
+    timeT getDurationForMusicalTime(timeT absTime,
                                     int bars, int beats,
-                                    int fractions, int remainder);
+                                    int fractions, int remainder) const;
 
 
     /**
@@ -990,7 +990,7 @@ protected:
     class ReferenceSegment
     {
     public:
-        explicit ReferenceSegment(std::string eventType);
+        explicit ReferenceSegment(const std::string& eventType);
         ~ReferenceSegment();
 
         typedef std::vector<Event*>::size_type size_type;
@@ -1063,18 +1063,18 @@ protected:
     /// affects m_tempoSegment
     void calculateTempoTimestamps() const;
     mutable bool m_tempoTimestampsNeedCalculating;
-    RealTime time2RealTime(timeT time, tempoT tempo) const;
-    RealTime time2RealTime(timeT time, tempoT tempo,
-                           timeT targetTempoTime, tempoT targetTempo) const;
-    timeT realTime2Time(RealTime rtime, tempoT tempo) const;
-    timeT realTime2Time(RealTime rtime, tempoT tempo,
-                        timeT targetTempoTime, tempoT targetTempo) const;
+    static RealTime time2RealTime(timeT t, tempoT tempo);
+    static RealTime time2RealTime(timeT time, tempoT tempo,
+                                  timeT targetTime, tempoT targetTempo);
+    static timeT realTime2Time(RealTime rt, tempoT tempo);
+    static timeT realTime2Time(RealTime rt, tempoT tempo,
+                               timeT targetTime, tempoT targetTempo);
     bool getTempoTarget(ReferenceSegment::const_iterator i,
                         tempoT &target,
                         timeT &targetTime) const;
 
     static RealTime getTempoTimestamp(const Event *e);
-    static void setTempoTimestamp(Event *e, RealTime r);
+    static void setTempoTimestamp(Event *e, RealTime t);
 
     /// No more than one armed track per instrument.
     void enforceArmRule(const Track *track);

@@ -22,13 +22,14 @@ namespace Rosegarden {
 
 class BasicQuantizer;
 
+// cppcheck-suppress copyCtorAndEqOperator
 class LegatoQuantizer : public Quantizer
 {
 public:
     // The default unit is the shortest note type.  A unit of
     // zero means do no quantization -- unlike for BasicQuantizer
     // this does have a purpose, as it still does the legato step
-    LegatoQuantizer(timeT unit = -1);
+    explicit LegatoQuantizer(timeT unit = -1);
     LegatoQuantizer(std::string source, std::string target, timeT unit = -1);
     LegatoQuantizer(const LegatoQuantizer &);
     ~LegatoQuantizer() override;
@@ -56,4 +57,3 @@ private:
 }
 
 #endif
-

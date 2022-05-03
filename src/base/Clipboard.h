@@ -47,7 +47,7 @@ public:
      * Empty the clipboard.
      */
     void clear();
- 
+
     /**
      * Return true if the clipboard is empty.
      */
@@ -57,7 +57,7 @@ public:
     const_iterator begin() const { return m_segments.begin(); }
     iterator       end()         { return m_segments.end(); }
     const_iterator end() const   { return m_segments.end(); }
-    
+
     /**
      * Return true if the clipboard only contains a single segment.
      * Single-segment and multi-segment are conceptually rather
@@ -186,8 +186,8 @@ public:
     void clearNominalRange() { setNominalRange(0, 0); }
 
     bool hasNominalRange() const { return m_nominalStart != m_nominalEnd; }
-    
-    void getNominalRange(timeT &start, timeT &end);
+
+    void getNominalRange(timeT &start, timeT &end) const;
 
     /**
      * Remove all audio segments from the clipboard.

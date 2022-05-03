@@ -125,7 +125,7 @@ public:
 
     void setNaturalChannel(MidiByte channelId)
     { m_channel = channelId; }
-    
+
     // Get the "natural" channel with regard to its device.  May not
     // be the same channel instrument is playing on.
     MidiByte getNaturalChannel() const { return m_channel; }
@@ -149,7 +149,7 @@ public:
 
     // Volume is 0-127 for MIDI instruments.  It's not used for
     // audio instruments -- see "level" instead.
-    // 
+    //
     void setVolume(MidiByte volume) { m_volume = volume; }
     MidiByte getVolume() const { return m_volume; }
     /// Get a 0-127 volume for both MIDI and Audio Instrument's.
@@ -188,14 +188,14 @@ public:
     const MidiKeyMapping *getKeyMapping() const;
 
     // Convenience functions (strictly redundant with get/setProgram):
-    // 
+    //
     void setProgramChange(MidiByte program);
     MidiByte getProgramChange() const;
 
     void setMSB(MidiByte msb);
     MidiByte getMSB() const;
 
-    void setLSB(MidiByte msb);
+    void setLSB(MidiByte lsb);
     MidiByte getLSB() const;
 
     /// Pick the first valid program in the connected Device.
@@ -307,7 +307,7 @@ private:
     std::string     m_name;
     std::string     m_alias;
     InstrumentType  m_type;
-    
+
     // Standard MIDI controllers and parameters
     MidiByte        m_channel;
     MidiProgram     m_program;
@@ -331,7 +331,7 @@ private:
     // Do we send at this intrument or do we leave these
     // things up to the parent device and God?  These are
     // directly relatable to GUI elements
-    // 
+    //
     bool             m_sendBankSelect;
     bool             m_sendProgramChange;
 

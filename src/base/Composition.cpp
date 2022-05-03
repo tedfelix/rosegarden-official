@@ -70,7 +70,7 @@ Composition::ReferenceSegmentEventCmp::operator()(const Event &e1,
     }
 }
 
-Composition::ReferenceSegment::ReferenceSegment(std::string eventType) :
+Composition::ReferenceSegment::ReferenceSegment(const std::string& eventType) :
     m_eventType(eventType)
 {
     // nothing
@@ -1568,7 +1568,7 @@ static int DEBUG_silence_recursive_tempo_printout = 0;
 #endif
 
 RealTime
-Composition::time2RealTime(timeT t, tempoT tempo) const
+Composition::time2RealTime(timeT t, tempoT tempo)
 {
     static timeT cdur = Note(Note::Crotchet).getDuration();
 
@@ -1598,7 +1598,7 @@ Composition::time2RealTime(timeT t, tempoT tempo) const
 
 RealTime
 Composition::time2RealTime(timeT time, tempoT tempo,
-                           timeT targetTime, tempoT targetTempo) const
+                           timeT targetTime, tempoT targetTempo)
 {
     static timeT cdur = Note(Note::Crotchet).getDuration();
 
@@ -1648,7 +1648,7 @@ Composition::time2RealTime(timeT time, tempoT tempo,
 }
 
 timeT
-Composition::realTime2Time(RealTime rt, tempoT tempo) const
+Composition::realTime2Time(RealTime rt, tempoT tempo)
 {
     static timeT cdur = Note(Note::Crotchet).getDuration();
 
@@ -1677,7 +1677,7 @@ Composition::realTime2Time(RealTime rt, tempoT tempo) const
 
 timeT
 Composition::realTime2Time(RealTime rt, tempoT tempo,
-                           timeT targetTime, tempoT targetTempo) const
+                           timeT targetTime, tempoT targetTempo)
 {
     static timeT cdur = Note(Note::Crotchet).getDuration();
 
@@ -1802,7 +1802,7 @@ Composition::setTempoTimestamp(Event *e, RealTime t)
 void
 Composition::getMusicalTimeForAbsoluteTime(timeT absTime,
                                            int &bar, int &beat,
-                                           int &fraction, int &remainder)
+                                           int &fraction, int &remainder) const
 {
     bar = getBarNumber(absTime);
 
@@ -1820,7 +1820,7 @@ Composition::getMusicalTimeForAbsoluteTime(timeT absTime,
 void
 Composition::getMusicalTimeForDuration(timeT absTime, timeT duration,
                                        int &bars, int &beats,
-                                       int &fractions, int &remainder)
+                                       int &fractions, int &remainder) const
 {
     TimeSignature timeSig = getTimeSignatureAt(absTime);
     timeT barDuration = timeSig.getBarDuration();
@@ -1836,7 +1836,7 @@ Composition::getMusicalTimeForDuration(timeT absTime, timeT duration,
 
 timeT
 Composition::getAbsoluteTimeForMusicalTime(int bar, int beat,
-                                           int fraction, int remainder)
+                                           int fraction, int remainder) const
 {
     timeT t = getBarStart(bar - 1);
     TimeSignature timesig = getTimeSignatureAt(t);
@@ -1849,7 +1849,7 @@ Composition::getAbsoluteTimeForMusicalTime(int bar, int beat,
 timeT
 Composition::getDurationForMusicalTime(timeT absTime,
                                        int bars, int beats,
-                                       int fractions, int remainder)
+                                       int fractions, int remainder) const
 {
     TimeSignature timeSig = getTimeSignatureAt(absTime);
     timeT barDuration = timeSig.getBarDuration();
