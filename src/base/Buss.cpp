@@ -58,7 +58,7 @@ std::string
 Buss::getName() const
 {
     char buffer[20];
-    sprintf(buffer, "Submaster %d", m_id);
+    sprintf(buffer, "Submaster %u", m_id);
     return buffer;
 }
 
@@ -76,4 +76,3 @@ Buss::getAlias() const
 
 
 }
-

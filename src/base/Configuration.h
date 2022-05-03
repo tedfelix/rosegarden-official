@@ -40,14 +40,17 @@ class Configuration : public PropertyMap, public XmlExportable
 public:
     class NoData : public Exception {
     public:
-        NoData(std::string property, std::string file, int line) :
+        NoData(const std::string& property, const std::string& file, int line) :
             Exception("No data found for property " + property, file, line) { }
     };
 
     class BadType : public Exception {
     public:
-        BadType(std::string property, std::string expected, std::string actual,
-                std::string file, int line) :
+        BadType(const std::string& property,
+                const std::string& expected,
+                const std::string& actual,
+                const std::string& file,
+                int line) :
             Exception("Bad type for " + property + " (expected " +
                       expected + ", found " + actual + ")", file, line) { }
     };
@@ -125,7 +128,7 @@ public:
 
     // for exporting -- doesn't write the <configuration> part of
     // the element in case you want to write it into another element
-    // 
+    //
     std::string toXmlString() const override;
 
     // Property names
@@ -146,18 +149,18 @@ Configuration::set(const PropertyName &name,
 
     if (i != end()) {
 
-        // A property with the same name has 
+        // A property with the same name has
         // already been set - recycle it, just change the data
         PropertyStoreBase *sb = i->second;
         (static_cast<PropertyStore<P> *>(sb))->setData(value);
 
     } else {
-        
+
         PropertyStoreBase *p = new PropertyStore<P>(value);
         insert(PropertyPair(name, p));
 
     }
-    
+
 }
 
 template <PropertyType P>
@@ -199,7 +202,7 @@ Configuration::get(const PropertyName &name) const
     }
 }
 
- 
+
 }
 
 #endif // RG_CONFIGURATION_H

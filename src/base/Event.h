@@ -78,7 +78,7 @@ public:
     /// Attempt to access a property that is not present in the Event
     class NoData : public Exception {
     public:
-        NoData(const std::string &property) :
+        explicit NoData(const std::string &property) :
             Exception("No data found for property " + property)
         { }
         NoData(const std::string &property, const std::string &file, int line) :
@@ -506,6 +506,7 @@ private:
         return map;
     }
 
+    // cppcheck-suppress functionConst
     PropertyMap::iterator insert(const PropertyPair &pair, bool persistent)
     {
         PropertyMap **map =

@@ -40,7 +40,7 @@ public:
 
     // An untainted Instrument we can use for playing previews
     //
-    InstrumentId getPreviewInstrument();
+    static InstrumentId getPreviewInstrument();
 
     // Turn into XML string
     //
