@@ -105,25 +105,25 @@ option(USE_QT6 "Compile with Qt6." OFF)
 if (USE_QT6)
   # Qt6 is required.
   find_package(Qt6 "6.0.0" REQUIRED COMPONENTS CoreTools Core GuiTools Gui WidgetsTools Widgets Xml Network PrintSupport Test Core5Compat)
-  
+
   set(QT_QTCORE_LIBRARY Qt6::Core)
   set(QT_QTCORE5COMPAT_LIBRARY Qt6::Core5Compat)
   set(QT_QTGUI_LIBRARY Qt6::Widgets Qt6::PrintSupport)
   set(QT_QTXML_LIBRARY Qt6::Xml)
   set(QT_QTNETWORK_LIBRARY Qt6::Network)
   set(QT_QTTEST_LIBRARY Qt6::Test)
-  
+
   set(QT_RCC_EXECUTABLE Qt::rcc)
 else()
   # Qt5 is required.
   find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
-  
+
   set(QT_QTCORE_LIBRARY Qt5::Core)
   set(QT_QTGUI_LIBRARY Qt5::Widgets Qt5::PrintSupport)
   set(QT_QTXML_LIBRARY Qt5::Xml)
   set(QT_QTNETWORK_LIBRARY Qt5::Network)
   set(QT_QTTEST_LIBRARY Qt5::Test)
-  
+
   set(QT_RCC_EXECUTABLE ${Qt5Core_RCC_EXECUTABLE})
 endif()
 
@@ -211,6 +211,19 @@ else()
     set(ROSEGARDENPRIVATE_STATIC_BUILD TRUE) # for generating rosegardenprivate-export.h
     message(STATUS "Not building unit tests, using a static library for rosegarden")
 endif()
+
+#########################
+# target for cppcheck
+
+set(CPPCHECK_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cppcheck.out)
+
+# dummy_file will never exist so "make cppcheck" always runs cppcheck
+
+add_custom_command(OUTPUT ${CPPCHECK_OUTPUT} dummy_file
+  COMMAND cppcheck cppcheck --enable=all --inconclusive --std=c++11 --inline-suppr --quiet ${CMAKE_CURRENT_SOURCE_DIR}/src >& ${CPPCHECK_OUTPUT})
+
+add_custom_target(cppcheck DEPENDS ${CPPCHECK_OUTPUT} dummy_file)
+#########################
 
 
 # --------------------------------------------------------
