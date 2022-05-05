@@ -45,12 +45,12 @@ class ControllerSearchValue
  ControllerSearchValue() :
     m_value(0),
         m_when(0)
-            {};    
-    int value() { return m_value; }
-    int time()  { return m_when; }
+            {};
+    int value() const { return m_value; }
+    int time() const { return m_when; }
  private:
     // Type is long so that ControllerEventAdapter can work.
-    long              m_value; 
+    long              m_value;
     timeT             m_when;
 };
 
@@ -62,11 +62,11 @@ class ControllerSearch
  public:
     typedef ControllerSearchValue::Maybe Maybe;
 
-    ControllerSearch(const std::string eventType,
+    ControllerSearch(const std::string& eventType,
                      int controllerId);
-    
+
     // Search Segments A and B for the latest controller value.  B may
-    // be nullptr but A must exist. 
+    // be nullptr but A must exist.
     Maybe
         doubleSearch(Segment *a, Segment *b, timeT noLaterThan) const;
 
@@ -84,7 +84,7 @@ class ControllerSearch
 // @class ControllerContextMap A cache of controller values, one per
 // controller and one for pitchbend.
 // @author Tom Breton (Tehom)
-struct ControllerContextMap 
+struct ControllerContextMap
 {
     typedef ControllerSearchValue::Maybe Maybe;
     typedef std::map< int, ControllerSearchValue>  Cache;
@@ -101,25 +101,25 @@ struct ControllerContextMap
     // A is primary and governs timing and repitition.  Segment
     // B, if non-nullptr, will be searched too.  In any case the latest event
     // takes priority.  Defaults from Instrument will be used if
-    // neccessary. 
+    // neccessary.
     int getControllerValue(Instrument *instrument,
-                           Segment *a, Segment *b, 
-                           timeT searchTime, const std::string eventType,
+                           Segment *a, Segment *b,
+                           timeT searchTime, const std::string& eventType,
                            int controllerId);
 
     void storeLatestValue(Event *e);
     void clear();
 
  private:
-    int makeAbsolute(const ControlParameter * controlParameter,
-                     int value) const;
-    const ControlParameter
+    static int makeAbsolute(const ControlParameter * controlParameter,
+                     int value);
+    static const ControlParameter
     *getControlParameter(Instrument *instrument,
-                         const std::string eventType,
+                         const std::string& eventType,
                          const int controllerId);
     static int
     getStaticValue(Instrument *instrument,
-                   const std::string eventType, int controllerId);
+                   const std::string& eventType, int controllerId);
 
     Cache             m_latestValues;
     Maybe             m_PitchBendLatestValue;

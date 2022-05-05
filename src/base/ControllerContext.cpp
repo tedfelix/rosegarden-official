@@ -39,7 +39,7 @@ namespace Rosegarden
 
     /*** ControllerSearch ***/
 ControllerSearch::
-ControllerSearch(const std::string eventType,
+ControllerSearch(const std::string& eventType,
                  int controllerId) :
     m_eventType(eventType),
     m_controllerId(controllerId),
@@ -121,7 +121,7 @@ matches(Event *e) const
 int
 ControllerContextMap::
 getStaticValue(Instrument *instrument,
-               const std::string eventType,
+               const std::string& eventType,
                int controllerId)
 {
     if (eventType == Controller::EventType)
@@ -136,7 +136,7 @@ getStaticValue(Instrument *instrument,
 int
 ControllerContextMap::
 getControllerValue(Instrument *instrument, Segment *a, Segment *b,
-                   timeT searchTime, const std::string eventType,
+                   timeT searchTime, const std::string& eventType,
                    int controllerId)
 {
     Profiler profiler("ControllerContextMap::getControllerValue", false);
@@ -223,7 +223,7 @@ getControllerValue(Instrument *instrument, Segment *a, Segment *b,
 const ControlParameter *
 ControllerContextMap::
 getControlParameter(Instrument *instrument,
-                    const std::string eventType,
+                    const std::string& eventType,
                     const int controllerId)
 {
     Device * device = instrument->getDevice();
@@ -236,7 +236,7 @@ getControlParameter(Instrument *instrument,
 // @author Tom Breton (Tehom)
 int
 ControllerContextMap::
-makeAbsolute(const ControlParameter * controlParameter, int value) const
+makeAbsolute(const ControlParameter * controlParameter, int value)
 {
     int max = controlParameter->getMax();
     int min = controlParameter->getMin();
