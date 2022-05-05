@@ -146,8 +146,9 @@ Composition::ReferenceSegment::getDuration() const
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::find(Event *e)
 {
-    return std::lower_bound
-        (begin(), end(), e, ReferenceSegmentEventCmp());
+    // Return the Event at or after e's time.
+    // Note that lower_bound() does a binary search.
+    return std::lower_bound(begin(), end(), e, ReferenceSegmentEventCmp());
 }
 
 Composition::ReferenceSegment::iterator
@@ -180,34 +181,40 @@ Composition::ReferenceSegment::eraseEvent(Event *e)
 }
 
 Composition::ReferenceSegment::iterator
-Composition::ReferenceSegment::findTime(timeT t)
+Composition::ReferenceSegment::findNearestTime(timeT t)
 {
-    Event dummy("dummy", t, 0, MIN_SUBORDERING);
-    return find(&dummy);
+    if (m_events.empty())
+        return end();
+
+    // Find the Event at or after t.
+    Event event("dummy", t, 0, MIN_SUBORDERING);
+    // Use std::lower_bound() which does a binary search.
+    iterator i = std::lower_bound(
+            begin(), end(), &event, ReferenceSegmentEventCmp());
+
+    // Found an exact match, return it.
+    if (i != end()  &&  (*i)->getAbsoluteTime() == t)
+        return i;
+
+    // If begin() is after, indicate no Event prior.
+    if (i == begin())
+        return end();
+
+    // i is after, so return the previous which is before t.
+    return i - 1;
 }
 
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::findRealTime(RealTime t)
 {
+    // ??? This is only called by findNearestRealTime().  Move it in there.
+
+    // Create an Event with the target time.
     Event dummy("dummy", 0, 0, MIN_SUBORDERING);
     dummy.set<Bool>(NoAbsoluteTimeProperty, true);
     setTempoTimestamp(&dummy, t);
+
     return find(&dummy);
-}
-
-Composition::ReferenceSegment::iterator
-Composition::ReferenceSegment::findNearestTime(timeT t)
-{
-    // ??? This would simplify things and speed them up.
-    //if (m_events.empty())
-    //    return end();
-
-    iterator i = findTime(t);
-    if (i == end() || (*i)->getAbsoluteTime() > t) {
-        if (i == begin()) return end();
-        else --i;
-    }
-    return i;
 }
 
 Composition::ReferenceSegment::iterator
