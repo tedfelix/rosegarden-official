@@ -16,6 +16,9 @@
 #ifndef RG_COMPOSITION_H
 #define RG_COMPOSITION_H
 
+// Enable fixes for bug #1627.
+//#define BUG1627
+
 #include "RealTime.h"
 #include "base/Segment.h"
 #include "Track.h"
@@ -1016,9 +1019,11 @@ protected:
         void eraseEvent(Event *e);
 
         iterator findTime(timeT t);
+        // ??? rename: findPreviousTime()
         iterator findNearestTime(timeT t);
 
         iterator findRealTime(RealTime t);
+        // ??? rename: findPreviousRealTime()
         iterator findNearestRealTime(RealTime t);
 
         std::string getEventType() const { return m_eventType; }
