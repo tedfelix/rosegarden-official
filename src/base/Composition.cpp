@@ -1356,6 +1356,10 @@ Composition::getElapsedRealTime(timeT t) const
         //     apply to the entire anacrusis.  The new code does not do this.
         //     Can we track down the original and see if that was indeed the
         //     intent?
+
+        // ??? I'm wondering if the original intent of t >= 0 was, "is
+        //     t sensible".  But then anacrusis was added and t >= 0
+        //     inadvertently became, "is t not within the anacrusis".
     }
 
     RealTime elapsed;
