@@ -28,7 +28,7 @@
  *
  * This file contains definitions of several classes to assist in
  * creating and manipulating certain event types.  The classes are:
- * 
+ *
  *   Accidental
  *   Clef
  *   Key
@@ -54,12 +54,12 @@
  * as the Note methods that calculate duration-related values without
  * reference to any specific pitch or other note-event properties; or
  * everything in Pitch).
- * 
+ *
  * This file also defines the event types and standard property names
  * for the basic events.
  */
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 extern ROSEGARDENPRIVATE_EXPORT const int MIN_SUBORDERING;
@@ -92,9 +92,9 @@ namespace Accidentals
 
     typedef std::vector<Accidental> AccidentalList;
 
-	/** 
+	/**
 	 * When no accidental is specified for a pitch, there are several
-	 * strategies to determine what accidental to display for an 
+	 * strategies to determine what accidental to display for an
 	 * out-of-key pitch
 	 */
 	enum NoAccidentalStrategy {
@@ -103,7 +103,7 @@ namespace Accidentals
 		/** always use flats */
 		UseFlats,
 		/** always use sharps or always use flats depending on of what
-		 * type of accidentals the current key is made up */ 
+		 * type of accidentals the current key is made up */
 		UseKeySharpness,
 		/** use the most likely accidental for this key */
 		UseKey
@@ -129,7 +129,7 @@ namespace Accidentals
      * Get the Accidental corresponding to a change in pitch: flat
      * for -1, double-sharp for 2, natural for 0 etc.
      *
-     * Useful for tying to code that represents accidentals by 
+     * Useful for tying to code that represents accidentals by
      * their pitch change.
      */
     extern ROSEGARDENPRIVATE_EXPORT Accidental getAccidental(int pitchChange);
@@ -141,7 +141,7 @@ namespace Accidentals
  */
 
 typedef std::string Mark;
-  
+
 namespace Marks //!!! This would be better as a class, these days
 {
     extern ROSEGARDENPRIVATE_EXPORT const Mark NoMark;         // " "
@@ -335,7 +335,7 @@ public:
      */
     int getOctaveOffset() const { return m_octaveOffset; }
 
-    /** 
+    /**
      * Return the number of semitones a pitch in the treble clef would
      * have to be lowered by in order to be drawn with the same height
      * and accidental in this clef
@@ -478,7 +478,7 @@ public:
     int getTonicPitch() const {
         return m_keyDetailMap[m_name].m_tonicPitch;
     }
-    
+
     /**
      * Return the number of sharps or flats in the key's signature.
      */
@@ -488,7 +488,7 @@ public:
 
     /**
      * Return the key with the same signature but different
-     * major/minor mode.  For example if called on C major, 
+     * major/minor mode.  For example if called on C major,
      * returns A minor.
      */
     Key getEquivalent() const {
@@ -571,7 +571,7 @@ public:
 
     /**
      * Transpose this key by the specified interval given in pitch and steps
-     * 
+     *
      * For example: transposing F major by a major triad (4,2) yields
      *  A major.
      */
@@ -727,7 +727,7 @@ public:
     static const std::string Tiny;        // begin \tiny font section
     static const std::string Small;       // begin \small font section
     static const std::string NormalSize;  // begin \normalsize font section
-    
+
     Text(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
     Text(const std::string &text,
@@ -740,7 +740,7 @@ public:
     std::string getTextType() const { return m_type; }
 
     // Relevant for lyrics, and borrowed for figuration IDs.
-    int getVerse() const { return m_verse; } 
+    int getVerse() const { return m_verse; }
     void setVerse(int verse) { m_verse = verse; }
 
     static bool isTextOfType(Event *, std::string type);
@@ -774,7 +774,7 @@ private:
  *
  * (See docs/discussion/units.txt for explanation of pitch units.)
  *
- * This completely replaces the older NotationDisplayPitch class. 
+ * This completely replaces the older NotationDisplayPitch class.
  */
 
 class ROSEGARDENPRIVATE_EXPORT Pitch
@@ -792,7 +792,7 @@ public:
     /**
      * Construct a Pitch object based on the given performance (MIDI) pitch.
      */
-    Pitch(int performancePitch, 
+    Pitch(int performancePitch,
           const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
     /**
@@ -823,7 +823,7 @@ public:
           int octaveBase = -2);
 
     /**
-     * Construct a Pitch based on (MIDI) octave, note in the C major scale and 
+     * Construct a Pitch based on (MIDI) octave, note in the C major scale and
      * performance pitch. The accidental is calculated based on these
      * properties.
      */
@@ -840,7 +840,7 @@ public:
     Pitch(char noteName, int octave, const Key &key,
           const Accidental &explicitAccidental = Accidentals::NoAccidental,
           int octaveBase = -2);
-    
+
     /**
      * Construct a Pitch corresponding a staff line or space on a
      * classical 5-line staff.  The bottom staff line has height 0,
@@ -937,7 +937,7 @@ public:
     int getOctave(int octaveBase = -2) const;
 
     /**
-     * Return the octave containing this pitch, including the accidentals. 
+     * Return the octave containing this pitch, including the accidentals.
      * The octaveBase argument specifies the octave containing MIDI pitch 0;
      * middle-C is in octave octaveBase + 5.
      */
@@ -952,7 +952,7 @@ public:
      * Return whether this pitch is diatonic in the given key.
      */
     bool isDiatonicInKey(const Key &key) const;
-    
+
     /**
      * Return a reference name for this pitch.  (C 4, Bb 2, etc...)
      * using the key of C major explicitly, which should allow the accidentals
@@ -998,11 +998,11 @@ public:
      */
     Pitch transpose(const Key &key, int pitchDelta, int heightDelta);
 
-    /** 
+    /**
       * checks whether the accidental specified for this pitch (if any)
       * is valid - for example, a Sharp for pitch 11 is invalid, as
       * it's between A# and B#.
-      */  
+      */
     bool validAccidental() const;
 
     /**
@@ -1025,7 +1025,7 @@ private:
     Accidental m_accidental;
 
     static void rawPitchToDisplayPitch
-    (int, const Clef &, const Key &, int &, Accidental &, 
+    (int, const Clef &, const Key &, int &, Accidental &,
     Accidentals::NoAccidentalStrategy);
 
     static void displayPitchToRawPitch
@@ -1119,7 +1119,7 @@ public:
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsRestEvent(timeT absoluteTime) const;
 
-  
+
 private:
     Type m_type;
     int m_dots;
@@ -1150,7 +1150,9 @@ public:
     TimeSignature() :
         m_numerator(DefaultTimeSignature.m_numerator),
         m_denominator(DefaultTimeSignature.m_denominator),
-        m_common(false), m_hidden(false), m_hiddenBars(false) { }
+        m_common(false), m_hidden(false), m_hiddenBars(false),
+        m_barDuration(0), m_beatDuration(0), m_beatDivisionDuration(0),
+        m_dotted(false) { }
 
     /**
      * Construct a TimeSignature object describing a time signature
@@ -1166,13 +1168,17 @@ public:
                   bool hidden = false,
                   bool hiddenBars = false)
         /* throw (BadTimeSignature) */;
-    
+
     TimeSignature(const TimeSignature &ts) :
         m_numerator(ts.m_numerator),
         m_denominator(ts.m_denominator),
         m_common(ts.m_common),
         m_hidden(ts.m_hidden),
-        m_hiddenBars(ts.m_hiddenBars) { }
+        m_hiddenBars(ts.m_hiddenBars),
+        m_barDuration(0),
+        m_beatDuration(0),
+        m_beatDivisionDuration(0),
+        m_dotted(false) { }
 
     ~TimeSignature() { }
 
@@ -1359,7 +1365,7 @@ public:
 
     void newBar();
     void newClef(const Clef &);
-    
+
 private:
     Key m_key;
     Clef m_clef;
@@ -1382,7 +1388,7 @@ private:
     AccidentalMap m_newCanonicalAccidentals;
 };
 
- 
+
 /** Definitions for use in the Symbol event type
  *
  * A Symbol has no duration, and the things it represents will probably always

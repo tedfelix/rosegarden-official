@@ -24,7 +24,7 @@
 
 #include <sstream>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 using std::string;
 using std::ostream;
@@ -95,7 +95,7 @@ Event::EventData::getNotationDuration() const
 }
 
 timeT
-Event::getGreaterDuration()
+Event::getGreaterDuration() const
 {
     if (isa(Note::EventType)) {
         return std::max(getDuration(), getNotationDuration());
@@ -166,7 +166,7 @@ Event::unset(const PropertyName &name)
         map->erase(i);
     }
 }
-    
+
 
 PropertyType
 Event::getPropertyType(const PropertyName &name) const
@@ -180,7 +180,7 @@ Event::getPropertyType(const PropertyName &name) const
         throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
-      
+
 
 string
 Event::getPropertyTypeAsString(const PropertyName &name) const
@@ -194,7 +194,7 @@ Event::getPropertyTypeAsString(const PropertyName &name) const
         throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
-   
+
 
 string
 Event::getAsString(const PropertyName &name) const
@@ -215,7 +215,7 @@ Event::toXmlString(timeT expectedTime) const
     std::stringstream out;
 
     out << "<event";
-    
+
     if (getType().length() != 0) {
         out << " type=\"" << getType() << "\"";
     }
@@ -224,14 +224,14 @@ Event::toXmlString(timeT expectedTime) const
     // constructors is problematic since -1 durations are used in recording
     // and many events are indeed 0 duration events.
     timeT duration = getDuration();
-    
+
     if (isa(Note::EventType) &&
         duration < 1 &&
         !has(BaseProperties::IS_GRACE_NOTE)) {
 
         duration = 1;
     }
-    
+
     if (duration != 0) {
         out << " duration=\"" << duration << "\"";
     }
@@ -288,7 +288,7 @@ Event::toXmlString(timeT expectedTime) const
             << XmlExportable::encode(getAsString(*i))
             << "\"/>";
     }
-  
+
     out << "</event>";
 
     return out.str();
@@ -336,7 +336,7 @@ bool
 Event::maskedInTrigger() const
 {
     using namespace BaseProperties;
-    
+
     if (!has(TRIGGER_EXPAND)) { return false; }
     return !get<Bool>(TRIGGER_EXPAND);
 }

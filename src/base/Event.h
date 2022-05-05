@@ -245,7 +245,7 @@ public:
      *
      * \author Tito Latini
      */
-    timeT getGreaterDuration();
+    timeT getGreaterDuration() const;
 
     short getSubOrdering() const  { return m_data->m_subOrdering; }
 
