@@ -1020,16 +1020,14 @@ protected:
         /// Find the Event at or before the given time (pulses).
         /**
          * Returns end() if there is no Event at or prior to the given time.
-         *
-         * ??? rename: findAtOrBefore()
          */
-        iterator findNearestTime(timeT time);
+        iterator findAtOrBefore(timeT time);
 
         /// Find the Event at or before the given real time (seconds).
         /**
-         * ??? rename: findAtOrBefore()
+         * Returns end() if there is no Event at or prior to the given time.
          */
-        iterator findNearestRealTime(RealTime time);
+        iterator findAtOrBefore(RealTime time);
 
         std::string getEventType() const { return m_eventType; }
 
