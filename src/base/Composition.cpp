@@ -189,6 +189,8 @@ Composition::ReferenceSegment::findNearestTime(timeT t)
     // Find the Event at or after t.
     Event event("dummy", t, 0, MIN_SUBORDERING);
     // Use std::lower_bound() which does a binary search.
+    // These tempo and time signature Segments tend to be really
+    // small, so a binary search probably isn't much faster than linear.
     iterator i = std::lower_bound(
             begin(), end(), &event, ReferenceSegmentEventCmp());
 
@@ -205,27 +207,31 @@ Composition::ReferenceSegment::findNearestTime(timeT t)
 }
 
 Composition::ReferenceSegment::iterator
-Composition::ReferenceSegment::findRealTime(RealTime t)
-{
-    // ??? This is only called by findNearestRealTime().  Move it in there.
-
-    // Create an Event with the target time.
-    Event dummy("dummy", 0, 0, MIN_SUBORDERING);
-    dummy.set<Bool>(NoAbsoluteTimeProperty, true);
-    setTempoTimestamp(&dummy, t);
-
-    return find(&dummy);
-}
-
-Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::findNearestRealTime(RealTime t)
 {
-    iterator i = findRealTime(t);
-    if (i == end() || (getTempoTimestamp(*i) > t)) {
-        if (i == begin()) return end();
-        else --i;
-    }
-    return i;
+    if (m_events.empty())
+        return end();
+
+    // Find the Event at or after t.
+    Event tempEvent("dummy", 0, 0, MIN_SUBORDERING);
+    tempEvent.set<Bool>(NoAbsoluteTimeProperty, true);
+    setTempoTimestamp(&tempEvent, t);
+    // Use std::lower_bound() which does a binary search.
+    // These tempo and time signature Segments tend to be really
+    // small, so a binary search probably isn't much faster than linear.
+    iterator i = std::lower_bound(
+            begin(), end(), &tempEvent, ReferenceSegmentEventCmp());
+
+    // Found an exact match, return it.
+    if (i != end()  &&  getTempoTimestamp(*i) == t)
+        return i;
+
+    // If begin() is after, indicate no Event prior.
+    if (i == begin())
+        return end();
+
+    // i is after, so return the previous which is before t.
+    return i - 1;
 }
 
 namespace

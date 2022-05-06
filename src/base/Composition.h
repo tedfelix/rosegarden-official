@@ -1049,7 +1049,6 @@ protected:
         std::vector<Event*> m_events;
         /// Find the Event at or after e.
         iterator find(Event *e);
-        iterator findRealTime(RealTime time);
     };
 
     /// Contains time signature events
