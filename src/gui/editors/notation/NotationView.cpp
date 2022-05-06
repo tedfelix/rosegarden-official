@@ -4130,11 +4130,11 @@ NotationView::slotSymbolAction()
     setCurrentNotePixmapFrom(dynamic_cast<QAction *>(s));
     QString n = s->objectName();
 
-    Symbol type = Symbol::Segno;
+    Symbol type(Symbol::Segno);
 
-    if (n == "add_segno") type = Symbol::Segno;
-    else if (n == "add_coda") type = Symbol::Coda;
-    else if (n == "add_breath") type = Symbol::Breath;
+    if (n == "add_segno") type = Symbol(Symbol::Segno);
+    else if (n == "add_coda") type = Symbol(Symbol::Coda);
+    else if (n == "add_breath") type = Symbol(Symbol::Breath);
 
     if (!m_notationWidget) return;
     m_notationWidget->slotSetSymbolInserter();

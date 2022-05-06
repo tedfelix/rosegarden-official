@@ -967,7 +967,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
                 // nothing here either
 
-            } else if (m_distributeVerses && 
+            } else if (m_distributeVerses &&
                        elt->event()->has(Text::TextTypePropertyName) &&
                        elt->event()->get<String>(Text::TextTypePropertyName) ==
                        Text::Lyric &&
@@ -1760,7 +1760,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
         if ((*it)->event()->isa(Clef::EventType)) {
 
             // Clef found
-            Clef clef = *(*it)->event();
+            Clef clef = Clef(*(*it)->event());
 
             // Is this clef already in m_clefChanges list ?
             int xClef = int((*it)->getLayoutX());
@@ -1780,7 +1780,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
 
         } else if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
 
-            ::Rosegarden::Key key = *(*it)->event();
+            ::Rosegarden::Key key(*(*it)->event());
 
             // Is this key already in m_keyChanges list ?
             int xKey = int((*it)->getLayoutX());
@@ -1926,7 +1926,7 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 
             try {
                 clef = Clef(**i);
- 
+
                 // Is the clef hide because redundant ?
                 if (m_hideRedundance &&
                     m_notationScene->isEventRedundant(const_cast<Event *>(*i),
@@ -1981,7 +1981,7 @@ bool
 NotationStaff::includesTime(timeT t)
 {
     Composition *composition = getSegment().getComposition();
-    
+
     // In order to find the correct starting and ending bar of the
     // segment, make infinitesimal shifts (+1 and -1) towards its
     // center.
