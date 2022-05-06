@@ -295,7 +295,7 @@ public:
      * returns the default clef (with a warning).  You should normally
      * test Clef::isValid() to catch that before construction.
      */
-    Clef(const Event &e);
+    explicit Clef(const Event &e);
 
     /**
      * Construct a Clef from the given data.  Throws a BadClefName
@@ -406,13 +406,13 @@ public:
      * returns the default key (with a warning).  You should normally
      * test Key::isValid() to catch that before construction.
      */
-    Key(const Event &e);
+    explicit Key(const Event &e);
 
     /**
      * Construct the named key.  Throws a BadKeyName exception if the
      * given string does not match one of the known key names.
      */
-    Key(const std::string &name);
+    explicit Key(const std::string &name);
 
     /**
      * Construct a key from signature and mode.  May throw a
@@ -640,7 +640,7 @@ public:
     static const std::string FigParameterChord;
     static const std::string Figuration;
 
-    Indication(const Event &e)
+    explicit Indication(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
     Indication(const std::string &s, timeT indicationDuration)
         /* throw (BadIndicationName) */;
@@ -728,7 +728,7 @@ public:
     static const std::string Small;       // begin \small font section
     static const std::string NormalSize;  // begin \normalsize font section
 
-    Text(const Event &e)
+    explicit Text(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
     Text(const std::string &text,
          const std::string &textType = UnspecifiedType);
@@ -786,7 +786,7 @@ public:
      * absent, NoData is thrown.  The BaseProperties::ACCIDENTAL
      * property will also be used if present.
      */
-    Pitch(const Event &e)
+    explicit Pitch(const Event &e)
         /* throw Event::NoData */;
 
     /**
@@ -1350,9 +1350,9 @@ public:
         BarResetExplicit    // c# | c -> add natural to c
     };
 
-    AccidentalTable(const Key & = Key(), const Clef & = Clef(),
-                    OctaveType = OctavesCautionary,
-                    BarResetType = BarResetCautionary);
+    explicit AccidentalTable(const Key & = Key(), const Clef & = Clef(),
+                             OctaveType = OctavesCautionary,
+                             BarResetType = BarResetCautionary);
 
     AccidentalTable(const AccidentalTable &);
     AccidentalTable &operator=(const AccidentalTable &);
@@ -1411,9 +1411,9 @@ public:
     static const std::string Coda;
     static const std::string Breath;
 
-    Symbol(const Event &e)
+    explicit Symbol(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
-    Symbol(const std::string &symbolType = UnspecifiedType);
+    explicit Symbol(const std::string &symbolType = UnspecifiedType);
     Symbol(const Symbol &);
     Symbol &operator=(const Symbol &);
     ~Symbol ();
