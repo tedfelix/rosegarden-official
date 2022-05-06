@@ -2,6 +2,7 @@
 Type=Application
 Categories=AudioVideo;Audio;Midi;Sequencer;X-SuSE-Sequencer;X-Red-Hat-Base;
 Exec=rosegarden %f
+StartupWMClass=Rosegarden
 MimeType=audio/x-rosegarden-composition;audio/x-rosegarden-device;audio/x-rosegarden-project;audio/x-rosegarden-template;audio/midi;
 Keywords=midi audio sequencer music notation score
 X-KDE-NativeMimeType=audio/x-rosegarden-composition
@@ -18,3 +19,4 @@ GenericName[de]=Sequencer und Notensatzprogramm
 GenericName[es]=Secuenciador y editor de partitura
 GenericName[fr]=Séquenceur et éditeur de partitions
 GenericName[ru]=секвенсер и нотный редактор
+
