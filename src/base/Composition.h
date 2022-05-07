@@ -941,7 +941,7 @@ protected:
     static const PropertyName BarNumberProperty;
     static const PropertyName TempoTimestampProperty;
 
-
+    // Compares Event times.
     struct ReferenceSegmentEventCmp
     {
         bool operator()(const Event &e1, const Event &e2) const;
@@ -981,19 +981,18 @@ protected:
     TrackId m_selectedTrackId;
 
     /**
-     * This is a bit like a segment, but can only contain one sort of
-     * event, and can only have one event at each absolute time
+     * This is a bit like a segment, but can only contain one type of
+     * event, and can only have one event at each absolute time.
+     *
+     * Composition has two instances of this: m_timeSigSegment and
+     * m_tempoSegment.
      */
     class ReferenceSegment
     {
-
     public:
         explicit ReferenceSegment(const std::string& eventType);
         ~ReferenceSegment();
-    private:
-        ReferenceSegment(const ReferenceSegment &);
-        ReferenceSegment& operator=(const ReferenceSegment &);
-    public:
+
         typedef std::vector<Event*>::size_type size_type;
         typedef std::vector<Event*>::iterator iterator;
         typedef std::vector<Event*>::const_iterator const_iterator;
@@ -1018,21 +1017,36 @@ protected:
 
         void eraseEvent(Event *e);
 
-        iterator findTime(timeT t);
-        // ??? rename: findPreviousTime()
-        iterator findNearestTime(timeT t);
+        /// Find the Event at or before the given time (pulses).
+        /**
+         * Returns end() if there is no Event at or prior to the given time.
+         */
+        iterator findAtOrBefore(timeT t);
 
-        iterator findRealTime(RealTime t);
-        // ??? rename: findPreviousRealTime()
-        iterator findNearestRealTime(RealTime t);
+        /// Find the Event at or before the given real time (seconds).
+        /**
+         * Returns end() if there is no Event at or prior to the given time.
+         */
+        iterator findAtOrBefore(RealTime t);
 
         std::string getEventType() const { return m_eventType; }
 
     private:
-        iterator find(Event *e);
+        // Hide copy ctor and op=.
+        ReferenceSegment(const ReferenceSegment &);
+        ReferenceSegment &operator=(const ReferenceSegment &);
+
+        /// This class can only hold exactly one event type.
+        /**
+         * Tempo and TimeSig are the event types this might hold.
+         */
         std::string m_eventType;
+
+        // The vector of Event objects.
         // not a set: want random access for bars
         std::vector<Event*> m_events;
+        /// Find the Event at or after e.
+        iterator find(Event *e);
     };
 
     /// Contains time signature events

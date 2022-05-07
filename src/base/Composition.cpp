@@ -146,8 +146,9 @@ Composition::ReferenceSegment::getDuration() const
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::find(Event *e)
 {
-    return std::lower_bound
-        (begin(), end(), e, ReferenceSegmentEventCmp());
+    // Return the Event at or after e's time.
+    // Note that lower_bound() does a binary search.
+    return std::lower_bound(begin(), end(), e, ReferenceSegmentEventCmp());
 }
 
 Composition::ReferenceSegment::iterator
@@ -180,45 +181,57 @@ Composition::ReferenceSegment::eraseEvent(Event *e)
 }
 
 Composition::ReferenceSegment::iterator
-Composition::ReferenceSegment::findTime(timeT t)
+Composition::ReferenceSegment::findAtOrBefore(timeT t)
 {
-    Event dummy("dummy", t, 0, MIN_SUBORDERING);
-    return find(&dummy);
+    if (m_events.empty())
+        return end();
+
+    // Find the Event at or after t.
+    Event event("dummy", t, 0, MIN_SUBORDERING);
+    // Use std::lower_bound() which does a binary search.
+    // These tempo and time signature Segments tend to be really
+    // small, so a binary search probably isn't much faster than linear.
+    iterator i = std::lower_bound(
+            begin(), end(), &event, ReferenceSegmentEventCmp());
+
+    // Found an exact match, return it.
+    if (i != end()  &&  (*i)->getAbsoluteTime() == t)
+        return i;
+
+    // If begin() is after, indicate no Event prior.
+    if (i == begin())
+        return end();
+
+    // i is after, so return the previous which is before t.
+    return i - 1;
 }
 
 Composition::ReferenceSegment::iterator
-Composition::ReferenceSegment::findRealTime(RealTime t)
+Composition::ReferenceSegment::findAtOrBefore(RealTime t)
 {
-    Event dummy("dummy", 0, 0, MIN_SUBORDERING);
-    dummy.set<Bool>(NoAbsoluteTimeProperty, true);
-    setTempoTimestamp(&dummy, t);
-    return find(&dummy);
-}
+    if (m_events.empty())
+        return end();
 
-Composition::ReferenceSegment::iterator
-Composition::ReferenceSegment::findNearestTime(timeT t)
-{
-    // ??? This would simplify things and speed them up.
-    //if (m_events.empty())
-    //    return end();
+    // Find the Event at or after t.
+    Event tempEvent("dummy", 0, 0, MIN_SUBORDERING);
+    tempEvent.set<Bool>(NoAbsoluteTimeProperty, true);
+    setTempoTimestamp(&tempEvent, t);
+    // Use std::lower_bound() which does a binary search.
+    // These tempo and time signature Segments tend to be really
+    // small, so a binary search probably isn't much faster than linear.
+    iterator i = std::lower_bound(
+            begin(), end(), &tempEvent, ReferenceSegmentEventCmp());
 
-    iterator i = findTime(t);
-    if (i == end() || (*i)->getAbsoluteTime() > t) {
-        if (i == begin()) return end();
-        else --i;
-    }
-    return i;
-}
+    // Found an exact match, return it.
+    if (i != end()  &&  getTempoTimestamp(*i) == t)
+        return i;
 
-Composition::ReferenceSegment::iterator
-Composition::ReferenceSegment::findNearestRealTime(RealTime t)
-{
-    iterator i = findRealTime(t);
-    if (i == end() || (getTempoTimestamp(*i) > t)) {
-        if (i == begin()) return end();
-        else --i;
-    }
-    return i;
+    // If begin() is after, indicate no Event prior.
+    if (i == begin())
+        return end();
+
+    // i is after, so return the previous which is before t.
+    return i - 1;
 }
 
 namespace
@@ -789,7 +802,7 @@ int
 Composition::getBarNumber(timeT t) const
 {
     calculateBarPositions();
-    ReferenceSegment::iterator i = m_timeSigSegment.findNearestTime(t);
+    ReferenceSegment::iterator i = m_timeSigSegment.findAtOrBefore(t);
     int n;
 
     if (i == m_timeSigSegment.end()) { // precedes any time signatures
@@ -948,7 +961,7 @@ Composition::getTimeSignatureInBar(int barNo, bool &isNew) const
 Composition::ReferenceSegment::iterator
 Composition::getTimeSignatureAtAux(timeT t) const
 {
-    ReferenceSegment::iterator i = m_timeSigSegment.findNearestTime(t);
+    ReferenceSegment::iterator i = m_timeSigSegment.findAtOrBefore(t);
 
     // In negative time, if there's no time signature actually defined
     // prior to the point of interest then we use the next time
@@ -1002,7 +1015,7 @@ Composition::removeTimeSignature(int n)
 tempoT
 Composition::getTempoAtTime(timeT t) const
 {
-    ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
+    ReferenceSegment::iterator i = m_tempoSegment.findAtOrBefore(t);
 
     // In negative time, if there's no tempo event actually defined
     // prior to the point of interest then we use the next one after
@@ -1129,7 +1142,7 @@ Composition::getTempoChangeCount() const
 int
 Composition::getTempoChangeNumberAt(timeT t) const
 {
-    ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
+    ReferenceSegment::iterator i = m_tempoSegment.findAtOrBefore(t);
     if (i == m_tempoSegment.end()) return -1;
     else return std::distance(m_tempoSegment.begin(), i);
 }
@@ -1250,7 +1263,7 @@ Composition::getElapsedRealTime(timeT t) const
 {
     calculateTempoTimestamps();
 
-    ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
+    ReferenceSegment::iterator i = m_tempoSegment.findAtOrBefore(t);
     if (i == m_tempoSegment.end()) {
         i = m_tempoSegment.begin();
         if (t >= 0 ||
@@ -1298,7 +1311,7 @@ Composition::getElapsedRealTime(timeT t) const
     const RealTime realStart = time2RealTime(start, m_defaultTempo);
 
     // Elapsed time is dependent on tempo changes.  Find the previous one.
-    ReferenceSegment::iterator tempoIter = m_tempoSegment.findNearestTime(t);
+    ReferenceSegment::iterator tempoIter = m_tempoSegment.findAtOrBefore(t);
     // None found?  We should probably use the default tempo.
     if (tempoIter == m_tempoSegment.end()) {
         // Try the first, if any.
@@ -1399,7 +1412,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 {
     calculateTempoTimestamps();
 
-    ReferenceSegment::iterator i = m_tempoSegment.findNearestRealTime(t);
+    ReferenceSegment::iterator i = m_tempoSegment.findAtOrBefore(t);
     if (i == m_tempoSegment.end()) {
         i = m_tempoSegment.begin();
         if (t >= RealTime::zeroTime ||
@@ -1456,7 +1469,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
     RealTime realStart = time2RealTime(start, m_defaultTempo);
     t = t + realStart;
 
-    ReferenceSegment::iterator i = m_tempoSegment.findNearestRealTime(t);
+    ReferenceSegment::iterator i = m_tempoSegment.findAtOrBefore(t);
     if (i == m_tempoSegment.end()) {
         i = m_tempoSegment.begin();
         if (t >= realStart ||
