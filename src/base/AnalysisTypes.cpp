@@ -182,7 +182,7 @@ ChordLabel::ChordLabel(Key key, int mask, int /* bass */) :
 std::string
 ChordLabel::getName(Key /* key */) const
 {
-    return Pitch(m_data.m_rootPitch).getAsString() + m_data.m_type;
+    return Pitch(m_data.m_rootPitch).getAsString(false) + m_data.m_type;
         // + (m_data.m_inversion>0 ? " in first inversion" : "");
 }
 
