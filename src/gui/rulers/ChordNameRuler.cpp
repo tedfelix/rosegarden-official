@@ -72,7 +72,8 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
         m_chordSegment(nullptr),
         m_fontMetrics(m_boldFont),
         TEXT_FORMAL_X("TextFormalX"),
-        TEXT_ACTUAL_X("TextActualX")
+        TEXT_ACTUAL_X("TextActualX"),
+        m_firstTime(true)
 {
     m_font.setPointSize(11);
     m_font.setPixelSize(12);
@@ -109,7 +110,8 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
         m_chordSegment(nullptr),
         m_fontMetrics(m_boldFont),
         TEXT_FORMAL_X("TextFormalX"),
-        TEXT_ACTUAL_X("TextActualX")
+        TEXT_ACTUAL_X("TextActualX"),
+        m_firstTime(true)
 {
     m_font.setPointSize(11);
     m_font.setPixelSize(12);
@@ -315,7 +317,13 @@ ChordNameRuler::recalculate(timeT from, timeT to)
             overallStatus.push(status.from(), status.to());
         }
     }
-
+    
+    // Always recalculate everything at least once
+    if (m_firstTime) {
+        m_firstTime = false;
+        level = RecalcWhole;
+    }
+    
     // We now have the overall area affected by these changes, across
     // all segments.  If it's entirely within our displayed area, just
     // recalculate the displayed area; if it overlaps, calculate the
