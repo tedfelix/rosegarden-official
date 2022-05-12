@@ -54,6 +54,17 @@
 
 namespace Rosegarden
 {
+    
+static void
+addRulerToolTip(ChordNameRuler *ruler)
+{
+    ruler->setToolTip(ChordNameRuler::tr(
+        "<qt><p>Chord name ruler.  This ruler analyzes your harmonies and "
+        "attempts to guess what chords your composition contains.  These "
+        "chords cannot be printed or manipulated, and this is only a reference "
+        "for your information.</p><p>Turn it on and off with the <b>View -> "
+        "Rulers</b> menu.</p></qt>"));
+}
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
                                RosegardenDocument *doc,
@@ -89,7 +100,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
             this,
             static_cast<void(ChordNameRuler::*)()>(&ChordNameRuler::update));
 
-    this->setToolTip(tr("<qt><p>Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.</p><p>Turn it on and off with the <b>View -> Rulers</b> menu.</p></qt>"));
+    addRulerToolTip(this);
 }
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
@@ -132,6 +143,8 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
         m_segments.insert(SegmentRefreshMap::value_type
                           (*i, (*i)->getNewRefreshStatusId()));
     }
+    
+    addRulerToolTip(this);
 }
 
 ChordNameRuler::~ChordNameRuler()
