@@ -10,6 +10,8 @@
 #include <QProcess>
 #include <QSettings>
 
+#include <unistd.h>
+
 using namespace Rosegarden;
 
 // Unit test for lilypond export
@@ -139,7 +141,11 @@ void TestLilypondExport::testExamples_data()
     QTest::newRow("bogus-surf-jam") << "examples";
     QTest::newRow("beaming") << "examples";
     QTest::newRow("Brandenburg_No3-BWV_1048") << "examples";
-    QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "examples";
+
+    // ??? This one creates a directory in the user's home directory!?
+    //     The directory's name is simply a space (' ').  Why?
+    //     Otherwise this passes.  Please fix this one day.
+    //QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "examples";
 
     // Those work but are very slow, and they output lots and lots of
     // WARNING: Rosegarden::Exception: "Bad type for Indication model event

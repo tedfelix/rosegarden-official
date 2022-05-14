@@ -1361,14 +1361,16 @@ Composition::getElapsedRealTime(timeT t) const
 
         // ??? Previously to get here we would need:
         //
-        //       - t prior to the first tempo change (easy to do)
-        //       - t within the anacrusis
-        //       - the first tempo change within the anacrusis
+        //       - t < 0 (within an anacrusis or some other reason)
+        //       - At least one tempo change at time 0 or earlier
+        //         (e.g. within an anacrusis).  I don't believe we
+        //         support tempo changes at negative time, so it would
+        //         have to be at time zero.
+        //       - t prior to that first tempo change.
+        //       - So given a negative t and tempo change at zero, we
+        //         have what we need to exercise this.
         //
-        //     Essentially, any tempo change anywhere within the anacrusis will
-        //     apply to the entire anacrusis.  The new code does not do this.
-        //     Can we track down the original and see if that was indeed the
-        //     intent?
+        //     Then what happens below in this case?
 
         // ??? I'm wondering if the original intent of t >= 0 was, "is
         //     t sensible".  But then anacrusis was added and t >= 0
