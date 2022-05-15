@@ -126,6 +126,8 @@ private:
 
     const PropertyName TEXT_FORMAL_X;
     const PropertyName TEXT_ACTUAL_X;
+    
+    bool m_firstTime;  // Used to force a first call to recalculate()
 };
 
 

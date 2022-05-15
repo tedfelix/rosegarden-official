@@ -54,6 +54,17 @@
 
 namespace Rosegarden
 {
+    
+static void
+addRulerToolTip(ChordNameRuler *ruler)
+{
+    ruler->setToolTip(ChordNameRuler::tr(
+        "<qt><p>Chord name ruler.  This ruler analyzes your harmonies and "
+        "attempts to guess what chords your composition contains.  These "
+        "chords cannot be printed or manipulated, and this is only a reference "
+        "for your information.</p><p>Turn it on and off with the <b>View -> "
+        "Rulers</b> menu.</p></qt>"));
+}
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
                                RosegardenDocument *doc,
@@ -72,7 +83,8 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
         m_chordSegment(nullptr),
         m_fontMetrics(m_boldFont),
         TEXT_FORMAL_X("TextFormalX"),
-        TEXT_ACTUAL_X("TextActualX")
+        TEXT_ACTUAL_X("TextActualX"),
+        m_firstTime(true)
 {
     m_font.setPointSize(11);
     m_font.setPixelSize(12);
@@ -88,7 +100,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
             this,
             static_cast<void(ChordNameRuler::*)()>(&ChordNameRuler::update));
 
-    this->setToolTip(tr("<qt><p>Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.</p><p>Turn it on and off with the <b>View -> Rulers</b> menu.</p></qt>"));
+    addRulerToolTip(this);
 }
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
@@ -109,7 +121,8 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
         m_chordSegment(nullptr),
         m_fontMetrics(m_boldFont),
         TEXT_FORMAL_X("TextFormalX"),
-        TEXT_ACTUAL_X("TextActualX")
+        TEXT_ACTUAL_X("TextActualX"),
+        m_firstTime(true)
 {
     m_font.setPointSize(11);
     m_font.setPixelSize(12);
@@ -130,6 +143,8 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
         m_segments.insert(SegmentRefreshMap::value_type
                           (*i, (*i)->getNewRefreshStatusId()));
     }
+    
+    addRulerToolTip(this);
 }
 
 ChordNameRuler::~ChordNameRuler()
@@ -315,7 +330,13 @@ ChordNameRuler::recalculate(timeT from, timeT to)
             overallStatus.push(status.from(), status.to());
         }
     }
-
+    
+    // Always recalculate everything at least once
+    if (m_firstTime) {
+        m_firstTime = false;
+        level = RecalcWhole;
+    }
+    
     // We now have the overall area affected by these changes, across
     // all segments.  If it's entirely within our displayed area, just
     // recalculate the displayed area; if it overlaps, calculate the
