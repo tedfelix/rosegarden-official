@@ -153,7 +153,7 @@ public:
 
     std::string unparse() const override;
 
-    typename PropertyDefn<P>::basic_type getData() { return m_data; }
+    typename PropertyDefn<P>::basic_type getData() const { return m_data; }
     void setData(typename PropertyDefn<P>::basic_type data) { m_data = data; }
 
     size_t getStorageSize() const override;

@@ -1374,7 +1374,7 @@ private:
 
     struct AccidentalRec {
         AccidentalRec() : accidental(Accidentals::NoAccidental), previousBar(false) { }
-        AccidentalRec(Accidental a, bool p) : accidental(a), previousBar(p) { }
+        AccidentalRec(const Accidental& a, bool p) : accidental(a), previousBar(p) { }
         Accidental accidental;
         bool previousBar;
     };

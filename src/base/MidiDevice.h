@@ -72,7 +72,7 @@ public:
     void setMetronome(const MidiMetronome &);
     const MidiMetronome* getMetronome() const { return m_metronome; }
 
-    void addProgram(const MidiProgram &program);
+    void addProgram(const MidiProgram &prog);
     void addBank(const MidiBank &bank);
     void addKeyMapping(const MidiKeyMapping &mapping); // I own the result!
 
@@ -103,13 +103,13 @@ public:
     std::string getBankName(const MidiBank &bank) const;
     std::string getProgramName(const MidiProgram &program) const;
 
-    void replaceBankList(const BankList &bank);
-    void replaceProgramList(const ProgramList &program);
-    void replaceKeyMappingList(const KeyMappingList &mappings);
+    void replaceBankList(const BankList &bankList);
+    void replaceProgramList(const ProgramList &programList);
+    void replaceKeyMappingList(const KeyMappingList &keyMappingList);
 
-    void mergeBankList(const BankList &bank);
-    void mergeProgramList(const ProgramList &program);
-    void mergeKeyMappingList(const KeyMappingList &mappings);
+    void mergeBankList(const BankList &bankList);
+    void mergeProgramList(const ProgramList &programList);
+    void mergeKeyMappingList(const KeyMappingList &keyMappingList);
 
     InstrumentList getAllInstruments() const override;
     InstrumentList getPresentationInstruments() const override;
@@ -160,8 +160,8 @@ public:
     //
     virtual ControlParameter *getControlParameter(int index);
     const ControlParameter *getControlParameter(int index) const override;
-    virtual ControlParameter *getControlParameter(const std::string &type, MidiByte controllerNumber);
-    const ControlParameter *getControlParameter(const std::string &type, MidiByte controllerNumber) const override;
+    virtual ControlParameter *getControlParameter(const std::string &type, MidiByte controllerValue);
+    const ControlParameter *getControlParameter(const std::string &type, MidiByte controllerValue) const override;
 
     // Modify ControlParameters
     //
@@ -181,7 +181,7 @@ public:
     bool isUniqueControlParameter(const ControlParameter &con) const;
 
     const ControlParameter *
-        findControlParameter(std::string type, MidiByte conNumber) const;
+        findControlParameter(std::string type, MidiByte controllerNumber) const;
 
     /// The CC or other controller has a knob on the MIPP.
     /**
@@ -190,7 +190,7 @@ public:
      *     move it to private as it is only called internally (like most
      *     of the routines in this class).
      */
-    bool isVisibleControlParameter(const ControlParameter &con) const;
+    static bool isVisibleControlParameter(const ControlParameter &con);
     /// The CC has a knob on the MIPP.
     bool isVisibleControlParameter(MidiByte controlNumber) const;
 
@@ -225,11 +225,11 @@ protected:
 
     // Add a new control to all of the device's Instruments.
     //
-    void addControlToInstrument(const ControlParameter &con);
+    void addControlToInstrument(const ControlParameter &con) const;
 
     // Remove a control from all of the device's Instruments.
     //
-    void removeControlFromInstrument(const ControlParameter &con);
+    void removeControlFromInstrument(const ControlParameter &controlParameter) const;
 
     /// The connection the user has asked for.
     /**
@@ -274,7 +274,8 @@ protected:
     AllocateChannels  *m_allocator;
 
 private:
-    //MidiDevice &operator=(const MidiDevice &);
+    // not used
+    MidiDevice &operator=(const MidiDevice &);
 };
 
 }
