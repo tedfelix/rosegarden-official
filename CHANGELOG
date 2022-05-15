@@ -21,7 +21,7 @@ Included in this release...
     Segment Parameters.
   * Fix confusing relative values in the "Insert Controller Sequence"
     dialog for volume and expression.  [14ff99a]
-  * When changing the audio file path, the user is prompted whether
+  * When changing the audio file path, the user is asked whether
     they want to move the audio files to the new location.  [71a62e6]
   * Fix stuck green preview note when switching modes.  Bug #1614.
   * Fix modified flag (*) not cleared when saving in notation.
@@ -67,6 +67,7 @@ Included in this release...
 
   * Michael Stockinger (www.stockinger.org) - German Translation
   * Kevin Cole - Yamaha PSR-220/230 device file
+
 
 ====== ROSEGARDEN 21.12 RELEASED ======
 
