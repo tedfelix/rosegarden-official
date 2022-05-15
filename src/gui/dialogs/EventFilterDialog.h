@@ -70,7 +70,7 @@ public:
     filterRange getVelocity();
     filterRange getDuration();
 
-    // returns TRUE if the property value falls with in the filterRange 
+    // returns TRUE if the property value falls with in the filterRange
     bool eventInRange(filterRange foo, long property) {
         if (foo.first > foo.second)
             return (property <= foo.second || property >= foo.first);
@@ -86,7 +86,7 @@ public:
 protected:
 
     //--------[ member functions ]-------------------------
-    
+
     // initialize the dialog
     void initDialog();
 
@@ -95,7 +95,7 @@ protected:
 
     // convert duration from combobox index into actual RG duration
     // between 0 and LONG_MAX
-    long getDurationFromIndex(int index);
+    long getDurationFromIndex(unsigned index);
 
     // simple A B swap used to flip inclusive/exclusive values
     void invert (filterRange &);
@@ -119,7 +119,7 @@ protected slots:
     // update note name text display and ensure From <= To
     void slotPitchFromChanged(int pitch);
     void slotPitchToChanged(int pitch);
-    
+
     // ensure From <= To to guarantee a logical range for these sets
     void slotVelocityFromChanged(int velocity);
     void slotVelocityToChanged(int velocity);
@@ -130,7 +130,7 @@ protected slots:
     void slotPitchFromChooser();
     void slotPitchToChooser();
 
-    
+
 private:
     //---------[ data members ]-----------------------------
 
@@ -141,12 +141,12 @@ private:
     QComboBox*   m_noteDurationToComboBox;
     QComboBox*   m_notePitchIncludeComboBox;
     QComboBox*   m_noteVelocityIncludeComboBox;
-    
+
     QPushButton* m_pitchFromChooserButton;
     QPushButton* m_pitchToChooserButton;
     QPushButton* m_buttonAll;
     QPushButton* m_buttonNone;
-    
+
     QSpinBox*    m_pitchFromSpinBox;
     QSpinBox*    m_pitchToSpinBox;
     QSpinBox*    m_velocityFromSpinBox;
