@@ -17,13 +17,14 @@
 
 namespace Rosegarden {
 
-MidiBank::MidiBank()  : 
+MidiBank::MidiBank()  :
     m_percussion(false), m_msb(0), m_lsb(0), m_name()
 {
     // nothing else
 }
 
-MidiBank::MidiBank(bool percussion, MidiByte msb, MidiByte lsb, std::string name) :
+MidiBank::MidiBank(bool percussion, MidiByte msb, MidiByte lsb,
+                   const std::string& name) :
     m_percussion(percussion), m_msb(msb), m_lsb(lsb), m_name(name)
 {
     // nothing else
@@ -73,9 +74,9 @@ MidiBank::getName() const
 }
 
 void
-MidiBank::setName(std::string name)
+MidiBank::setName(const std::string& name)
 {
-    m_name = name; 
+    m_name = name;
 }
 
 
@@ -85,7 +86,7 @@ MidiProgram::MidiProgram() :
     // nothing else
 }
 
-MidiProgram::MidiProgram(const MidiBank &bank, MidiByte program, std::string name, std::string keyMapping) :
+MidiProgram::MidiProgram(const MidiBank &bank, MidiByte program, const std::string& name, const std::string& keyMapping) :
     m_bank(bank), m_program(program), m_name(name), m_keyMapping(keyMapping)
 {
     // nothing else
@@ -225,7 +226,6 @@ MidiKeyMapping::extend(int minPitch, int maxpitch)
     if (minPitch < minKMPitch) getMap()[minPitch] = std::string("");
     if (maxpitch > maxKMPitch) getMap()[maxpitch] = std::string("");
 }
-	
+
 
 }
-

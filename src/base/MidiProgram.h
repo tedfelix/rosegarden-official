@@ -41,13 +41,14 @@ class MidiBank
 {
 public:
     MidiBank();
-    MidiBank(bool percussion, MidiByte msb, MidiByte lsb, std::string name = "");
+    MidiBank(bool percussion, MidiByte msb, MidiByte lsb,
+             const std::string& name = "");
 
     bool                isPercussion() const;
     MidiByte            getMSB() const;
     MidiByte            getLSB() const;
 
-    void                setName(std::string name);
+    void                setName(const std::string& name);
     std::string         getName() const;
 
     /// A full comparison of all fields.
@@ -76,8 +77,9 @@ class MidiProgram
 {
 public:
     MidiProgram();
-    MidiProgram(const MidiBank &bank, MidiByte program, std::string name = "",
-                std::string keyMapping = "");
+    MidiProgram(const MidiBank &bank, MidiByte program,
+                const std::string& name = "",
+                const std::string& keyMapping = "");
 
     const MidiBank&     getBank() const;
     MidiByte            getProgram() const;
@@ -85,7 +87,7 @@ public:
     const std::string  &getKeyMapping() const;
 
     void                setName(const std::string &name);
-    void                setKeyMapping(const std::string &name);
+    void                setKeyMapping(const std::string &keyMapping);
 
     // Only compares m_bank and m_program.  Does not compare m_name or
     // m_keyMapping.
@@ -161,6 +163,7 @@ public:
      * Add blank pitches to the key mapping to have it extends from at most
      * minpitch to maxpitch.
      */
+    // cppcheck-suppress functionConst
     void                 extend(int minPitch = 0, int maxpitch = 127);
 
 

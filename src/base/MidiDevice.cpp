@@ -961,7 +961,7 @@ MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
 
 const ControlParameter *
 MidiDevice::
-findControlParameter(std::string type, MidiByte controllerNumber) const
+findControlParameter(const std::string& type, MidiByte controllerNumber) const
 {
     ControlList::const_iterator it = m_controlList.begin();
 
