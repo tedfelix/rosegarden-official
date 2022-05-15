@@ -181,7 +181,8 @@ public:
     bool isUniqueControlParameter(const ControlParameter &con) const;
 
     const ControlParameter *
-        findControlParameter(std::string type, MidiByte controllerNumber) const;
+        findControlParameter(const std::string& type,
+                             MidiByte controllerNumber) const;
 
     /// The CC or other controller has a knob on the MIPP.
     /**
