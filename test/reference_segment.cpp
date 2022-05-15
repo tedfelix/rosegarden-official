@@ -18,6 +18,7 @@ private Q_SLOTS:
     void testEventType();
     void testInsert();
     void testErase();
+    void testFind();
 
 private:
     Composition::ReferenceSegment* setup_rs();
@@ -90,7 +91,7 @@ void TestReferenceSegment::testErase()
     rss = toString(*rs);
     QVERIFY(rss == "test:10/50/100/");
 
-    auto it1 = rs->findNearestTime(60);
+    auto it1 = rs->findAtOrBefore(60);
     rs->erase(it1);
     QCOMPARE(rs->size(), 2ul);
     rss = toString(*rs);
@@ -100,12 +101,36 @@ void TestReferenceSegment::testErase()
     QCOMPARE(rs->size(), 0ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:");
+
+    delete rs;
+}
+
+void TestReferenceSegment::testFind()
+{
+    ReferenceSegment::iterator i;
+
+    ReferenceSegment empty("empty");
+    i = empty.findAtOrBefore(10);
+    QCOMPARE(i, empty.end());
+
+    ReferenceSegment *rs = setup_rs();
+
+    i = rs->findAtOrBefore(10);
+    QCOMPARE((*i)->getAbsoluteTime(), 10);
+    i = rs->findAtOrBefore(11);
+    QCOMPARE((*i)->getAbsoluteTime(), 10);
+    i = rs->findAtOrBefore(-1);
+    QCOMPARE(i, rs->end());
+
+    // ??? Need to test the RealTime version as well.
+
+    delete rs;
 }
 
 Composition::ReferenceSegment* TestReferenceSegment::setup_rs()
 {
     // setup a ReferenceSegment with some data
-    ReferenceSegment* rs = new ReferenceSegment("test");
+    ReferenceSegment *rs = new ReferenceSegment("test");
 
     Event* e1 = new Event("test", 0);
     e1->set<Int>("test_property", 10);

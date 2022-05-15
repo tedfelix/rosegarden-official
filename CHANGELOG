@@ -1,3 +1,74 @@
+====== ROSEGARDEN 22.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 22.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Improve Cut/Copy/Delete behavior in both the matrix and the
+    notation editors.  Bug #1601.
+  * "Scroll to Follow Playback" now remembers its last setting.
+    Bug #1606.
+  * Fixed a problem in notation with note selection and the blue
+    indication.  Bug #1496.
+  * Fixed volume and pan issues with older .rg files.  [51647cc]
+  * Changed "For Notation" to "Exclude from Printing" in the
+    Segment Parameters.
+  * Fix confusing relative values in the "Insert Controller Sequence"
+    dialog for volume and expression.  [14ff99a]
+  * When changing the audio file path, the user is asked whether
+    they want to move the audio files to the new location.  [71a62e6]
+  * Fix stuck green preview note when switching modes.  Bug #1614.
+  * Fix modified flag (*) not cleared when saving in notation.
+    Bug #1617.
+  * Fix RG stopping JACK transport when it shouldn't.  Bug #1051.
+  * Fixed toolbar mode buttons not reflecting current state when
+    Esc is pressed.  Bug #1615.  [f651345]
+  * Notation: Fix green preview only available in one staff.
+    Bug #1619.
+  * Fixed issues when building with Qt6.  Feature Request #490.
+  * Fixed bad rendering of note heads at small font sizes.  Bug #1484.
+  * Fixed an endless loop in notation.  [7d734f7]
+  * Improved management of audio file paths.  Bug #1283.  Feature
+    Requests #494 and #495.
+  * Simplify editing of audio instrument label in audio parameters
+    panel.
+  * Fixed display bugs in matrix editor.  Bug #1622.  [b4425d7]
+  * Fix collapse notes in matrix.  Bug #1575.  [521ad4e]
+  * Fix scrollbar issues in main window combo boxes.
+    Feature Request #502.  [abdf22b]
+  * Fix deletes in the tempo/time signature editor.  Bug #1628.
+    [d55eea5]
+  * Fix problems editing multiple segments in matrix.  Bug #1624.
+    [8c1c6bc]
+  * Notation: fix crash when segment is deleted.  Bug #1260.  [cf0a28d]
+  * Notation: fix crash when undoing an Add Layer.  Bug #1260.
+    [7a1b6bf]
+  * Notation: fix note move issue.  Bug #1629.  [ba70dcf]
+  * Fix lilypond export sometimes ignores time signature.  Bug #1620.
+    [b7b16df]
+  * Fix hairpins not always exported to LilyPond.  Bug #1620.
+    [f57cbd9]
+  * Fix missing "StartupWMClass" in .desktop file.  Bug #1635.
+    [d3f5298]
+
+===== New Features =====
+
+  * Stop playback at end of last segment.  (Preference.)
+  * Advanced Looping.  (Experimental preference.)  Bug #1605.
+  * Keyboard shortcut editor.  Feature Request #412.
+
+===== Additional Contributors =====
+
+  * Michael Stockinger (www.stockinger.org) - German Translation
+  * Kevin Cole - Yamaha PSR-220/230 device file
+
+
 ====== ROSEGARDEN 21.12 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 21.12
