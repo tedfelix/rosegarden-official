@@ -45,6 +45,7 @@ public:
 	m_simplicityFactor(13),
 	m_maxTuplet(3),
 	m_articulate(true),
+        m_contrapuntal(false),
 	m_q(q),
 	m_provisionalBase("notationquantizer-provisionalBase"),
 	m_provisionalAbsTime("notationquantizer-provisionalAbsTime"),
@@ -58,6 +59,7 @@ public:
 	m_simplicityFactor(i.m_simplicityFactor),
 	m_maxTuplet(i.m_maxTuplet),
 	m_articulate(i.m_articulate),
+        m_contrapuntal(false),
 	m_q(i.m_q),
 	m_provisionalBase(i.m_provisionalBase),
 	m_provisionalAbsTime(i.m_provisionalAbsTime),
@@ -73,10 +75,10 @@ public:
     public:
 	ProvisionalQuantizer(Impl *i) : Quantizer("blah", "blahblah"), m_impl(i) { }
 	timeT getQuantizedDuration(const Event *e) const override {
-	    return m_impl->getProvisional((Event *)e, DurationValue);
+	    return m_impl->getProvisional(e, DurationValue);
 	}
 	timeT getQuantizedAbsoluteTime(const Event *e) const override {
-	    timeT t = m_impl->getProvisional((Event *)e, AbsoluteTimeValue);
+	    timeT t = m_impl->getProvisional(e, AbsoluteTimeValue);
 #ifdef DEBUG_NOTATION_QUANTIZER
 	    cout << "ProvisionalQuantizer::getQuantizedAbsoluteTime: returning " << t << endl;
 #endif
@@ -97,13 +99,13 @@ public:
 				  timeT t, timeT d, int noteType,
 				  const Segment::iterator &,
 				  const Segment::iterator &,
-				  bool &right) const;
+				  bool &wantRight) const;
     void quantizeDurationProvisional(Segment *, Segment::iterator) const;
     void quantizeDuration(Segment *, Chord &) const;
 
     void scanTupletsInBar(Segment *,
 			  timeT barStart, timeT barDuration,
-			  timeT wholeStart, timeT wholeDuration,
+			  timeT wholeStart, timeT wholeEnd,
 			  const std::vector<int> &divisions) const;
     void scanTupletsAt(Segment *, Segment::iterator, int depth,
 		       timeT base, timeT barStart,
@@ -111,9 +113,9 @@ public:
     bool isValidTupletAt(Segment *, const Segment::iterator &,
 			 int depth, timeT base, timeT sigTime,
 			 timeT tupletBase) const;
-    
-    void setProvisional(Event *, ValueType value, timeT t) const;
-    timeT getProvisional(Event *, ValueType value) const;
+
+    void setProvisional(Event *e, ValueType v, timeT t) const;
+    timeT getProvisional(const Event *, ValueType v) const;
     void unsetProvisionalProperties(Event *) const;
 
     timeT m_unit;
@@ -136,14 +138,14 @@ NotationQuantizer::NotationQuantizer() :
     Quantizer(NotationPrefix),
     m_impl(new Impl(this))
 {
-    // nothing else 
+    // nothing else
 }
 
 NotationQuantizer::NotationQuantizer(std::string source, std::string target) :
     Quantizer(source, target),
     m_impl(new Impl(this))
 {
-    // nothing else 
+    // nothing else
 }
 
 NotationQuantizer::NotationQuantizer(const NotationQuantizer &q) :
@@ -159,61 +161,61 @@ NotationQuantizer::~NotationQuantizer()
 }
 
 void
-NotationQuantizer::setUnit(timeT unit) 
+NotationQuantizer::setUnit(timeT unit)
 {
     m_impl->m_unit = unit;
 }
 
 timeT
-NotationQuantizer::getUnit() const 
+NotationQuantizer::getUnit() const
 {
     return m_impl->m_unit;
 }
 
 void
-NotationQuantizer::setMaxTuplet(int m) 
+NotationQuantizer::setMaxTuplet(int m)
 {
     m_impl->m_maxTuplet = m;
 }
 
 int
-NotationQuantizer::getMaxTuplet() const 
+NotationQuantizer::getMaxTuplet() const
 {
     return m_impl->m_maxTuplet;
 }
 
 void
-NotationQuantizer::setSimplicityFactor(int s) 
+NotationQuantizer::setSimplicityFactor(int s)
 {
     m_impl->m_simplicityFactor = s;
 }
 
 int
-NotationQuantizer::getSimplicityFactor() const 
+NotationQuantizer::getSimplicityFactor() const
 {
     return m_impl->m_simplicityFactor;
 }
 
 void
-NotationQuantizer::setContrapuntal(bool c) 
+NotationQuantizer::setContrapuntal(bool c)
 {
     m_impl->m_contrapuntal = c;
 }
 
 bool
-NotationQuantizer::getContrapuntal() const 
+NotationQuantizer::getContrapuntal() const
 {
     return m_impl->m_contrapuntal;
 }
 
 void
-NotationQuantizer::setArticulate(bool a) 
+NotationQuantizer::setArticulate(bool a)
 {
     m_impl->m_articulate = a;
 }
 
 bool
-NotationQuantizer::getArticulate() const 
+NotationQuantizer::getArticulate() const
 {
     return m_impl->m_articulate;
 }
@@ -229,7 +231,7 @@ NotationQuantizer::Impl::setProvisional(Event *e, ValueType v, timeT t) const
 }
 
 timeT
-NotationQuantizer::Impl::getProvisional(Event *e, ValueType v) const
+NotationQuantizer::Impl::getProvisional(const Event *e, ValueType v) const
 {
     timeT t;
     if (v == AbsoluteTimeValue) {
@@ -258,7 +260,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
     Profiler profiler("NotationQuantizer::Impl::quantizeAbsoluteTime");
 
     Composition *comp = s->getComposition();
-    
+
     TimeSignature timeSig;
     timeT t = m_q->getFromSource(*i, AbsoluteTimeValue);
     timeT sigTime = comp->getTimeSignatureAt(t, timeSig);
@@ -282,7 +284,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
     // except where both are 0.  Also, the effective depth is
     // 2 more than the value of our depth counter, which counts
     // from 0 at a point where the effective depth is already 1.
-    
+
     timeT base = timeSig.getBarDuration();
 
     timeT bestBase = -2;
@@ -299,7 +301,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
     // them once now before the loop.
 
     static timeT shortTime = Note(Note::Shortest).getDuration();
-    
+
     Segment::iterator j(i);
     Segment::iterator n(s->end()), nprime(s->end());
     for (;;) {
@@ -314,7 +316,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 	    }
 	}
     }
-    
+
 #ifdef DEBUG_NOTATION_QUANTIZER
     if (n != s->end() && n != nprime) {
 	cout << "found n (distinct from nprime) at " << (*n)->getAbsoluteTime() << endl;
@@ -366,7 +368,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 */
 
 	t += sigTime;
-	
+
 #ifdef DEBUG_NOTATION_QUANTIZER
 	cout << "snap base is " << bestBase << ", snapped to " << t << endl;
 #endif
@@ -394,7 +396,7 @@ NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *s,
     Profiler profiler("NotationQuantizer::Impl::scoreAbsoluteTimeForBase");
 
     // Lower score is better.
-    
+
     static timeT shortTime = Note(Note::Shortest).getDuration();
 
     double simplicityFactor(m_simplicityFactor);
@@ -416,25 +418,25 @@ NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *s,
 	long distance = (t - sigTime) % base;
 	if (right) distance = base - distance;
 	long score = long((distance + shortTime / 2) * effectiveDepth);
-    
+
 	double penalty1 = 1.0;
-    
+
 	// seriously penalise moving a note beyond its own end time
 	if (d > 0 && right && distance >= d * 0.9) {
 	    penalty1 = double(distance) / d + 0.5;
 	}
-    
+
 	double penalty2 = 1.0;
 
 	// Examine the previous starting note (N), and the previous
 	// starting note that ends before this one starts (N').
-    
+
 	// We should penalise moving this note to before the performed end
 	// of N' and seriously penalise moving it to the same quantized
 	// start time as N' -- but we should encourage moving it to the
 	// same time as the provisional end of N', or to the same start
 	// time as N if N != N'.
-	
+
 	if (!right) {
 	    if (n != s->end()) {
 		if (n != nprime) {
@@ -450,17 +452,17 @@ NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *s,
 		}
 	    }
 	}
-    
+
 #ifdef DEBUG_NOTATION_QUANTIZER
 	cout << "  depth/eff/dist/t/score/pen1/pen2/res: " << depth << "/" << effectiveDepth << "/" << distance << "/" << (right ? t + distance : t - distance) << "/" << score << "/" << penalty1 << "/" << penalty2 << "/" << (score * penalty1 * penalty2);
 	if (right) cout << " -> ";
 	else cout << " <- ";
 	if (ri == 0) cout << endl;
 #endif
-    
+
 	score = long(score * penalty1);
 	score = long(score * penalty2);
-    
+
 	if (ri == 0) {
 	    leftScore = score;
 	} else {
@@ -476,7 +478,7 @@ NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *s,
 
     return leftScore;
 }
-    
+
 void
 NotationQuantizer::Impl::quantizeDurationProvisional(Segment *, Segment::iterator i)
     const
@@ -503,17 +505,17 @@ NotationQuantizer::Impl::quantizeDurationProvisional(Segment *, Segment::iterato
 
 	if ((shortNote.getDots() > 0 ||
 	     shortNote.getNoteType() == Note::Shortest)) { // can't dot that
-	    
+
 	    if (shortNote.getNoteType() < Note::Longest) {
 		longNote = Note(shortNote.getNoteType() + 1, 0);
 	    }
-	
+
 	} else {
 	    longNote = Note(shortNote.getNoteType(), 1);
 	}
-	
+
 	timeT longTime = longNote.getDuration();
-	
+
 	// we should prefer to round up to a note with fewer dots rather
 	// than down to one with more
 
@@ -552,7 +554,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 #endif
 
     Composition *comp = s->getComposition();
-    
+
     TimeSignature timeSig;
 //    timeT t = m_q->getFromSource(*c.getInitialElement(), AbsoluteTimeValue);
 //    timeT sigTime = comp->getTimeSignatureAt(t, timeSig);
@@ -571,7 +573,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	 s->getEndMarkerTime());
 
     timeT nonContrapuntalDuration = 0;
-    
+
     for (Chord::iterator ci = c.begin(); ci != c.end(); ++ci) {
 
 	if (!(**ci)->isa(Note::EventType)) continue;
@@ -583,13 +585,13 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 #endif
 	    continue;
 	}
-	
+
 	timeT ud = 0;
 
 	if (!m_contrapuntal) {
 	    // if not contrapuntal, give all notes in chord equal duration
 	    if (nonContrapuntalDuration > 0) {
-#ifdef DEBUG_NOTATION_QUANTIZER 
+#ifdef DEBUG_NOTATION_QUANTIZER
 		cout << "setting duration trivially to " << nonContrapuntalDuration << endl;
 #endif
 		setProvisional(**ci, DurationValue, nonContrapuntalDuration);
@@ -628,7 +630,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	timeT qd = getProvisional(**ci, DurationValue);
 
 	timeT spaceAvailable = nextNoteTime - qt;
-	
+
 	if (spaceAvailable > 0) {
 	    float frac = float(ud) / float(spaceAvailable);
 	    totalFrac += frac;
@@ -652,11 +654,11 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	    //(Prefer to do that in a separate phase later if requested.)
 	    //Leave it as it is?  (Yes, for now.)
 	    if (bases.first == 0) return;
-	    
+
 	    timeT absTimeBase = bases.first;
 	    (**ci)->get<Int>(m_provisionalBase, absTimeBase);
 
-	    spaceAvailable = std::min(spaceAvailable, 
+	    spaceAvailable = std::min(spaceAvailable,
 				      comp->getBarEndForTime(qt) - qt);
 
 	    // We have a really good possibility of staccato if we have a
@@ -664,10 +666,10 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	    // and there's nothing else until the next boundary and we're
 	    // shorter than about a quaver (i.e. the base is a quaver or
 	    // less)
-	    
+
 	    if (qd*2 <= absTimeBase && (qd*8/3) >= absTimeBase &&
 		bases.second == absTimeBase) {
-		
+
 		if (nextNoteTime >= qt + bases.second) {
 #ifdef DEBUG_NOTATION_QUANTIZER
 		    cout << "We rounded to " << qd
@@ -678,20 +680,20 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 #endif
 		    qd = bases.second;
 		}
-		
+
 	    } else {
-		
+
 		// Alternatively, if we rounded down but there's space to
 		// round up, consider doing so
-		
+
 		//!!! mark staccato if necessary, and take existing marks into account
-		
+
 		Note note(Note::getNearestNote(qd));
-		
+
 		if (qd < ud || (qd == ud && note.getDots() == 2)) {
-		    
+
 		    if (note.getNoteType() < Note::Longest) {
-			
+
 			if (bases.second <= spaceAvailable) {
 #ifdef DEBUG_NOTATION_QUANTIZER
 			    cout << "We rounded down to " << qd
@@ -704,7 +706,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 			    cout << "We rounded down to " << qd
 				 << "; can't fit " << bases.second << endl;
 #endif
-			}			
+			}
 		    }
 		}
 	    }
@@ -794,14 +796,14 @@ NotationQuantizer::Impl::scanTupletsInBar(Segment *s,
 	}
     }
 }
-	
+
 
 void
 NotationQuantizer::Impl::scanTupletsAt(Segment *s,
 				       Segment::iterator i,
 				       int depth,
 				       timeT base,
-				       timeT sigTime,
+				       timeT barStart,
 				       timeT tupletStart,
 				       timeT tupletBase) const
 {
@@ -818,7 +820,7 @@ NotationQuantizer::Impl::scanTupletsAt(Segment *s,
 	   ((*j)->isa(Note::EventRestType) ||
 	    ((*j)->get<Int>(m_provisionalAbsTime, jTime) &&
 	     jTime < tupletEnd))) {
-	
+
 	if (!(*j)->isa(Note::EventType)) { ++j; continue; }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
@@ -848,7 +850,7 @@ NotationQuantizer::Impl::scanTupletsAt(Segment *s,
 	    cout << "accepting note at original base" << endl;
 #endif
 	    candidates.push_back(*j);
-	} else if (((jTime - sigTime) % base) == 0) {
+	} else if (((jTime - barStart) % base) == 0) {
 #ifdef DEBUG_NOTATION_QUANTIZER
 	    cout << "accepting note that happens to lie on original base" << endl;
 #endif
@@ -860,7 +862,7 @@ NotationQuantizer::Impl::scanTupletsAt(Segment *s,
 	    // anything from that).  Reject the entire group if it fails
 	    // any of the likelihood tests for tuplets.
 
-	    if (!isValidTupletAt(s, j, depth, base, sigTime, tupletBase)) {
+	    if (!isValidTupletAt(s, j, depth, base, barStart, tupletBase)) {
 #ifdef DEBUG_NOTATION_QUANTIZER
 		cout << "no good" << endl;
 #endif
@@ -1000,7 +1002,7 @@ NotationQuantizer::Impl::isValidTupletAt(Segment *s,
 #endif
     return (tupletScore < score);
 }
-				 
+
 
 void
 NotationQuantizer::quantizeRange(Segment *s,
@@ -1022,7 +1024,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 */
     int events = 0, notes = 0, passes = 0;
     int setGood = 0, setBad = 0;
-    
+
 #ifdef DEBUG_NOTATION_QUANTIZER
     cout << "NotationQuantizer::Impl::quantizeRange: from time "
 	      << (from == s->end() ? -1 : (*from)->getAbsoluteTime())
@@ -1107,7 +1109,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 	}
 	++passes;
     }
-    
+
     ProvisionalQuantizer provisionalQuantizer((Impl *)this);
 
     for (i = from; i != to; ++i) {
@@ -1151,7 +1153,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 		Marks::addMark(**i, Marks::Staccato, true);
 	    } else if (ud > qd) {
 		Marks::addMark(**i, Marks::Tenuto, true);
-	    }	    
+	    }
 	}
 	++passes;
     }
@@ -1194,8 +1196,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
     delete profiler; // on heap so it updates before the next line:
     Profiles::getInstance()->dump();
 
-}	
-    
-    
 }
 
+
+}
