@@ -22,7 +22,7 @@
 
 #include <rosegardenprivate_export.h>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 /**
@@ -63,7 +63,7 @@ namespace Rosegarden
   and there's no guarantee that a given string will always map to
   the same value (on separate invocations of the program).  This
   is why there's no PropertyName(int) constructor and no mechanism
-  for storing PropertyNames in properties.  (Of course, you can 
+  for storing PropertyNames in properties.  (Of course, you can
   store the string representation of a PropertyName in a property;
   but that's slow.)
 
@@ -73,7 +73,9 @@ class ROSEGARDENPRIVATE_EXPORT PropertyName
 {
 public:
     PropertyName() : m_value(-1) { }
+    // cppcheck-suppress noExplicitConstructor
     PropertyName(const char *cs) { std::string s(cs); m_value = intern(s); }
+    // cppcheck-suppress noExplicitConstructor
     PropertyName(const std::string &s) : m_value(intern(s)) { }
     PropertyName(const PropertyName &p) : m_value(p.m_value) { }
     ~PropertyName() { }
@@ -104,7 +106,7 @@ public:
     int getValue() const { return m_value; }
 
     static const PropertyName EmptyPropertyName;
-    
+
 private:
     typedef std::map<std::string, int> intern_map;
     typedef intern_map::value_type intern_pair;
