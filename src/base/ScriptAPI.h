@@ -52,6 +52,7 @@ public:
         Segment
     };
 
+    // cppcheck-suppress noConstructor
     class ScriptEvent {
         EventId    id;
         int        bar;   // number, 1-based
@@ -60,19 +61,21 @@ public:
         int        pitch; // 0-127 if note, -1 otherwise
     };
 
+    // cppcheck-suppress noConstructor
     class ScriptTimeSignature {
         int        numerator;
         int        denominator;
         ScriptTime duration;
     };
 
+    // cppcheck-suppress noConstructor
     class ScriptKeySignature {
         int accidentals;
         bool sharps;
         bool minor;
     };
 
-    ScriptInterface(Composition *composition);
+    explicit ScriptInterface(Composition *composition);
     virtual ~ScriptInterface();
 
     ScriptId createScript(SegmentId target, Resolution resolution, Scope scope);
@@ -118,5 +121,3 @@ protected:
 
 
 #endif
-
-        

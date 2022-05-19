@@ -24,7 +24,7 @@ class NotationQuantizer : public Quantizer
 {
 public:
     NotationQuantizer();
-    NotationQuantizer(std::string source, std::string target);
+    NotationQuantizer(const std::string& source, const std::string& target);
     NotationQuantizer(const NotationQuantizer &);
     ~NotationQuantizer() override;
 

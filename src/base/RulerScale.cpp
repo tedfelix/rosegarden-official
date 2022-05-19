@@ -28,7 +28,7 @@ namespace Rosegarden {
 
 RulerScale::RulerScale(Composition *c) :
     m_composition(c)
-{ 
+{
     // nothing
 }
 
@@ -79,7 +79,7 @@ RulerScale::getBarForX(double x) const
 
     int minBar = getFirstVisibleBar(),
 	maxBar = getLastVisibleBar();
-    
+
     while (maxBar > minBar) {
 	int middle = minBar + (maxBar - minBar) / 2;
 	if (x > getBarPosition(middle)) minBar = middle + 1;
@@ -269,7 +269,7 @@ SegmentsRulerScale::~SegmentsRulerScale()
 void
 SegmentsRulerScale::segmentDeleted(const Segment *s)
 {
-    m_segments.erase((Segment *)s);
+    m_segments.erase(const_cast<Segment*>(s));
 }
 
 int

@@ -978,15 +978,14 @@ pitchInKey(int pitch, const Key& key)
 {
     int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
 
-    static int pitchInMajor[] =
-        { true, false, true, false, true, true, false, true, false, true, false, true };
-    static int pitchInMinor[] =
-        { true, false, true, true, false, true, false, true, true, false, true, false };
-
     if (key.isMinor()) {
+        static int pitchInMinor[] =
+            { true, false, true, true, false, true, false, true, true, false, true, false };
         return pitchInMinor[pitchOffset];
     }
     else {
+        static int pitchInMajor[] =
+            { true, false, true, false, true, true, false, true, false, true, false, true };
         return pitchInMajor[pitchOffset];
     }
 }
@@ -1399,22 +1398,22 @@ Pitch::getAsKey() const {
     Key cmaj("C major");
 
     // Cycle through the circle of fifths, from 7 flats (Cb) to 7 sharps (C#),
-    // to find the number of accidentals for the key for this tonic 
+    // to find the number of accidentals for the key for this tonic
     Pitch p(-1, 0, Accidentals::Flat);
     int accidentalCount = -7;
-    while ((p.getPitchInOctave() != this->getPitchInOctave() || p.getAccidental(cmaj) != this->getAccidental(cmaj)) 
+    while ((p.getPitchInOctave() != this->getPitchInOctave() || p.getAccidental(cmaj) != this->getAccidental(cmaj))
         && accidentalCount < 8) {
         accidentalCount++;
         p = p.transpose(cmaj, 7, 4);
     }
-    
+
     if (p.getPitchInOctave() == this->getPitchInOctave() && p.getAccidental(cmaj) == this->getAccidental(cmaj)) {
         return Key(abs(accidentalCount), accidentalCount >= 0, false);
     } else {
-        // Not any 'regular' key, so the ambiguous ctor is fine 
+        // Not any 'regular' key, so the ambiguous ctor is fine
         return Key(this->getPitchInOctave(), false);
     }
-    
+
 }
 
 Key
@@ -2237,8 +2236,8 @@ void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
         base /= 2;
         --depth;
     }
-*/
     if (depth <= 0) return;
+*/
 
     divisions.push_back(base / m_beatDuration);
     base = m_beatDuration;

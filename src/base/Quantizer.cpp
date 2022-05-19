@@ -30,15 +30,15 @@
 namespace Rosegarden {
 
 
-Quantizer::Quantizer(std::string source,
-                     std::string target) :
+Quantizer::Quantizer(const std::string& source,
+                     const std::string& target) :
     m_source(source), m_target(target)
 {
     makePropertyNames();
 }
 
 
-Quantizer::Quantizer(std::string target) :
+Quantizer::Quantizer(const std::string& target) :
     m_target(target)
 {
     if (target == RawEventData) {
@@ -157,7 +157,7 @@ Quantizer::fixQuantizedValues(Segment *s,
         s->erase(from);
         m_toInsert.push_back(e);
     }
-    
+
     insertNewEvents(s);
 }
 
@@ -223,7 +223,7 @@ Quantizer::quantizeRange(Segment *s,
         quantizeSingle(s, from);
     }
 }
-    
+
 void
 Quantizer::unquantize(Segment *s,
                       Segment::iterator from,
@@ -243,7 +243,7 @@ Quantizer::unquantize(Segment *s,
             removeTargetProperties(*from);
         }
     }
-    
+
     insertNewEvents(s);
 }
 
@@ -271,7 +271,7 @@ Quantizer::unquantize(EventSelection *selection) const
             removeTargetProperties(*it);
         }
     }
-    
+
     insertNewEvents(&selection->getSegment());
 }
 
@@ -353,7 +353,7 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
         haveSt = (*i)->get<Int>(m_sourceProperties[AbsoluteTimeValue], st);
         haveSd = (*i)->get<Int>(m_sourceProperties[DurationValue],     sd);
     }
-    
+
     Event *e;
     if (m_target == RawEventData) {
         e = new Event(**i, absTime, duration);
@@ -388,10 +388,10 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
         m_normalizeRegion = std::pair<timeT, timeT>
             (normalizeStart, normalizeEnd);
     }
-    
+
     if (haveSt) e->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue],st);
     if (haveSd) e->setMaybe<Int>(m_sourceProperties[DurationValue],    sd);
-    
+
     if (m_target != RawEventData && m_target != NotationPrefix) {
         e->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
         e->setMaybe<Int>(m_targetProperties[DurationValue], duration);

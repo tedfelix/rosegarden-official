@@ -166,14 +166,14 @@ protected:
      *   values will be read from the event's absolute time and
      *   duration, quantized, and written back to these values.
      */
-    Quantizer(std::string source, std::string target);
+    Quantizer(const std::string& source, const std::string& target);
 
     /**
      * If only target is supplied, source is deduced appropriately
      * as GlobalSource if target == RawEventData and RawEventData
      * otherwise.
      */
-    explicit Quantizer(std::string target);
+    explicit Quantizer(const std::string& target);
 
     /**
      * To implement a subclass of Quantizer, you should
