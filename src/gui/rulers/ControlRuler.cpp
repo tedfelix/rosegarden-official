@@ -716,7 +716,9 @@ void ControlRuler::updateSelection()
     if (m_eventSelection) delete m_eventSelection;
     m_eventSelection = new EventSelection(*m_segment);
 
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+    for (ControlItemList::iterator it = m_selectedItems.begin();
+         it != m_selectedItems.end();
+         ++it) {
         m_eventSelection->addEvent((*it)->getEvent());
     }
 

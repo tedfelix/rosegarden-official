@@ -1162,7 +1162,7 @@ LilyPondExporter::write()
         str << indent(col) << "\\time "
             << timeSignature.getNumerator() << "/"
             << timeSignature.getDenominator() << std::endl;
-        //  - place skips upto the end of the composition;
+        //  - place skips up to the end of the composition;
         //    this justifies the printed staffs
         str << indent(col);
         writeSkip(timeSignature, lsc.getFirstSegmentStartTime(),
@@ -3026,10 +3026,35 @@ LilyPondExporter::writeTimeSignature(TimeSignature timeSignature,
     // Maybe some tweak is needed in order to allow the jumping between
     // "C" and "4/4" ? (HJJ)
     //
+    // Currently (2022 and LilyPond 2.20.0) the preceding remark is only true
+    // when there is no note (only rests) between the time signatures. (YG)
+    //
+    // Today (2022) Lilypond offers two ways to switch between common and
+    // numbered time signature.
+    //
+    // -1)  "\\once \\override Staff.TimeSignature #'style = #'default"
+    //      "\\once \\override Staff.TimeSignature #'style = #'numbered"
+    //
+    // -2)  "\\defaultTimeSignature"
+    //      "\\numericTimeSignature"
+    //
+    // The current (>= 2.20) LilyPond documentation is not clear about what is
+    // the prefered way.
+    // The "override Staff.TimeSignature #'style" way is currently used.
+    // Just comment out and decomment out the lines below to select the
+    // other manner.
+    //
     if (timeSignature.isCommon() == false) {
-        // use numberedtime signature: 4/4
+        // use numbered time signature: 4/4
         str << indent (col)
-            << "\\once \\override Staff.TimeSignature #'style = #'() "
+            << "\\once \\override Staff.TimeSignature #'style = #'numbered "
+//             << "\\numericTimeSignature "
+            << std::endl;
+    } else {
+        // use default (common) time signature: C
+        str << indent (col)
+            << "\\once \\override Staff.TimeSignature #'style = #'default "
+//             << "\\defaultTimeSignature "
             << std::endl;
     }
     str << indent (col)

@@ -40,7 +40,7 @@ globalTempo = {
                 % Segment: Cello
                 \override Voice.TextScript #'padding = #2.0
                 \override MultiMeasureRest #'expand-limit = 1
-                \once \override Staff.TimeSignature #'style = #'() 
+                \once \override Staff.TimeSignature #'style = #'numbered 
                 \time 4/4
                 
                 \clef "tenor"
@@ -141,7 +141,7 @@ globalTempo = {
                     % Segment: Piano - Right Hand
                     \override Voice.TextScript #'padding = #2.0
                     \override MultiMeasureRest #'expand-limit = 1
-                    \once \override Staff.TimeSignature #'style = #'() 
+                    \once \override Staff.TimeSignature #'style = #'numbered 
                     \time 4/4
                     
                     \clef "treble"
@@ -242,7 +242,7 @@ globalTempo = {
                     % Segment: Piano - Left Hand
                     \override Voice.TextScript #'padding = #2.0
                     \override MultiMeasureRest #'expand-limit = 1
-                    \once \override Staff.TimeSignature #'style = #'() 
+                    \once \override Staff.TimeSignature #'style = #'numbered 
                     \time 4/4
                     
                     \clef "bass"
