@@ -680,7 +680,7 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
 
     if (kssl.size() > 0) {
         // add the shortcuts to the tooltip
-        toolTipText = toolTipText + "(" + scString + ")";
+        toolTipText = toolTipText + " (" + scString + ")";
     }
 
     action->setToolTip(toolTipText);
