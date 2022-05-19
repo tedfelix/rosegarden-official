@@ -291,6 +291,7 @@ void PropertyControlRuler::setTool(const QString & /* name */)
     // ??? Since there's only exactly one tool, why even select it.
     //     Make it the only one and always selected.
 
+    // Get the PropertyAdjuster tool.
     ControlTool *tool =
             dynamic_cast<ControlTool *>(m_toolBox->getTool("adjuster"));
     if (!tool)
