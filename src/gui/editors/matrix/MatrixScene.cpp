@@ -748,6 +748,10 @@ void
 MatrixScene::slotCommandExecuted()
 {
     checkUpdate();
+
+    // This eventually causes the velocity ruler to update which fixes an
+    // issue with being able to adjust velocities one after another.
+    emit selectionChangedES(m_selection);
 }
 
 void
