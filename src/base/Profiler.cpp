@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -35,7 +35,7 @@ Profiles* Profiles::m_instance = nullptr;
 Profiles* Profiles::getInstance()
 {
     if (!m_instance) m_instance = new Profiles();
-    
+
     return m_instance;
 }
 
@@ -56,7 +56,7 @@ void Profiles::accumulate(
 #endif
 )
 {
-#ifndef NO_TIMING    
+#ifndef NO_TIMING
     ProfilePair &pair(m_profiles[id]);
     ++pair.first;
     pair.second.first += time;
@@ -114,7 +114,7 @@ void Profiles::dump() const
 
         WorstCallMap::const_iterator k = m_worstCalls.find(*i);
         if (k == m_worstCalls.end()) continue;
-        
+
         const TimePair &wc(k->second);
 
         fprintf(stderr, "\tWorst:\t%s ms/call \t[%d ms CPU]\n",
@@ -124,7 +124,7 @@ void Profiles::dump() const
 
     typedef std::multimap<RealTime, const char *> TimeRMap;
     typedef std::multimap<int, const char *> IntRMap;
-    
+
     TimeRMap totmap, avgmap, worstmap;
     IntRMap ncallmap;
 
@@ -173,10 +173,10 @@ void Profiles::dump() const
 #endif
 }
 
-#ifndef NO_TIMING    
+#ifndef NO_TIMING
 
-Profiler::Profiler(const char* c, bool showOnDestruct) :
-    m_c(c),
+Profiler::Profiler(const char* name, bool showOnDestruct) :
+    m_c(name),
     m_showOnDestruct(showOnDestruct),
     m_ended(false)
 {
@@ -199,7 +199,7 @@ Profiler::update() const
     cerr << "Profiler : id = " << m_c
 	 << " - elapsed so far = " << ((elapsedCPU * 1000) / CLOCKS_PER_SEC)
 	 << "ms CPU, " << elapsedTime << " real" << endl;
-}    
+}
 
 Profiler::~Profiler()
 {
@@ -224,8 +224,7 @@ Profiler::end()
 
     m_ended = true;
 }
- 
+
 #endif
 
 }
-

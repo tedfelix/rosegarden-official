@@ -43,7 +43,7 @@ class Composition;
  * the subclass maintains spacing proportional to time within a
  * bar, but which may not be an efficient implementation for any
  * given subclass.
- * 
+ *
  * (Potential to-do: At the moment all our RulerScales are used in
  * contexts where spacing proportional to time within a bar is the
  * only interpretation that makes sense, so this is okay.  In
@@ -116,7 +116,7 @@ public:
     virtual double getTotalWidth() const;
 
 protected:
-    RulerScale(Composition *c);
+    explicit RulerScale(Composition *c);
     Composition *m_composition;
 };
 
@@ -135,7 +135,7 @@ public:
      * 10 means that one pixel equals 10 time units.)
      */
     SimpleRulerScale(Composition *composition,
-                     double origin, double unitsPerPixel);
+                     double origin, double ratio);
     ~SimpleRulerScale() override;
 
     double getOrigin() const { return m_origin; }
@@ -174,7 +174,7 @@ public:
      * in the given composition.
      */
     SegmentsRulerScale(Composition *composition, SegmentSelection segments,
-                       double origin, double unitsPerPixel);
+                       double origin, double ratio);
     ~SegmentsRulerScale() override;
 
     double getOrigin() const { return m_origin; }
@@ -201,7 +201,7 @@ private:
     SegmentsRulerScale(const SimpleRulerScale &ruler);
     SegmentsRulerScale &operator=(const SimpleRulerScale &ruler);
 };
-    
+
 
 /**
  * ZoomableRulerScale uses one RulerScale to provide another one that
@@ -219,7 +219,7 @@ public:
      * does not delete it, and does not get any notification if it is
      * deleted).
      */
-    ZoomableRulerScale(const RulerScale *reference);
+    explicit ZoomableRulerScale(const RulerScale *reference);
     ~ZoomableRulerScale() override;
 
     double getBarPosition(int n) const override;
@@ -245,7 +245,7 @@ protected:
 private:
     ZoomableRulerScale(const ZoomableRulerScale &ruler);
     ZoomableRulerScale &operator=(const ZoomableRulerScale &ruler);
-};    
+};
 
 
 }

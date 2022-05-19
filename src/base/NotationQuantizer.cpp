@@ -40,7 +40,7 @@ using namespace BaseProperties;
 class NotationQuantizer::Impl
 {
 public:
-    Impl(NotationQuantizer *const q) :
+    explicit Impl(NotationQuantizer *const q) :
 	m_unit(Note(Note::Demisemiquaver).getDuration()),
 	m_simplicityFactor(13),
 	m_maxTuplet(3),
@@ -54,7 +54,7 @@ public:
 	m_provisionalScore("notationquantizer-provisionalScore")
     { }
 
-    Impl(const Impl &i) :
+    explicit Impl(const Impl &i) :
 	m_unit(i.m_unit),
 	m_simplicityFactor(i.m_simplicityFactor),
 	m_maxTuplet(i.m_maxTuplet),
@@ -73,7 +73,7 @@ public:
 	// and duration values from half-quantized events, so that we
 	// can treat them using the normal Chord class
     public:
-	ProvisionalQuantizer(Impl *i) : Quantizer("blah", "blahblah"), m_impl(i) { }
+	explicit ProvisionalQuantizer(Impl *i) : Quantizer("blah", "blahblah"), m_impl(i) { }
 	timeT getQuantizedDuration(const Event *e) const override {
 	    return m_impl->getProvisional(e, DurationValue);
 	}
@@ -141,7 +141,8 @@ NotationQuantizer::NotationQuantizer() :
     // nothing else
 }
 
-NotationQuantizer::NotationQuantizer(std::string source, std::string target) :
+NotationQuantizer::NotationQuantizer(const std::string& source,
+                                     const std::string& target) :
     Quantizer(source, target),
     m_impl(new Impl(this))
 {
@@ -717,6 +718,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
     }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
+    // cppcheck-suppress knownConditionTrueFalse
     cout << "totalFrac " << totalFrac << ", totalFracCount " << totalFracCount << ", avg " << (totalFracCount > 0 ? (totalFrac / totalFracCount) : 0) << endl;
 #endif
 }

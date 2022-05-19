@@ -24,7 +24,7 @@
 
 struct timeval;
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 constexpr int nanoSecondsPerSecond = 1000000000;
@@ -64,7 +64,7 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
     static RealTime fromTimeval(const struct timeval &);
 
     // Convenience functions for handling sample frames
-    static long realTime2Frame(const RealTime &r, unsigned int sampleRate);
+    static long realTime2Frame(const RealTime &time, unsigned int sampleRate);
     static RealTime frame2RealTime(long frame, unsigned int sampleRate);
 
     /// Return "HH:MM:SS.mmm" string to the nearest millisecond.
@@ -112,10 +112,10 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
 
     bool operator==(const RealTime &r) const
             { return (sec == r.sec  &&  nsec == r.nsec); }
- 
+
     bool operator!=(const RealTime &r) const
             { return !(r == *this); }
- 
+
     bool operator>=(const RealTime &r) const
     {
         if (sec == r.sec)

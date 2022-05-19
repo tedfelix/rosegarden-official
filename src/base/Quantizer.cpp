@@ -30,15 +30,15 @@
 namespace Rosegarden {
 
 
-Quantizer::Quantizer(std::string source,
-                     std::string target) :
+Quantizer::Quantizer(const std::string& source,
+                     const std::string& target) :
     m_source(source), m_target(target)
 {
     makePropertyNames();
 }
 
 
-Quantizer::Quantizer(std::string target) :
+Quantizer::Quantizer(const std::string& target) :
     m_target(target)
 {
     if (target == RawEventData) {
@@ -157,7 +157,7 @@ Quantizer::fixQuantizedValues(Segment *s,
         s->erase(from);
         m_toInsert.push_back(e);
     }
-    
+
     insertNewEvents(s);
 }
 
@@ -223,7 +223,7 @@ Quantizer::quantizeRange(Segment *s,
         quantizeSingle(s, from);
     }
 }
-    
+
 void
 Quantizer::unquantize(Segment *s,
                       Segment::iterator from,
@@ -247,7 +247,7 @@ Quantizer::unquantize(Segment *s,
             removeTargetProperties(*from);
         }
     }
-    
+
     insertNewEvents(s);
 }
 
@@ -379,6 +379,7 @@ Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
     }
 
     Event *newEvent;
+
     if (m_target == RawEventData) {
         newEvent = new Event(**segmentIter, absTime, duration);
     } else if (m_target == NotationPrefix) {
@@ -412,12 +413,12 @@ Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
         m_normalizeRegion =
                 std::pair<timeT, timeT>(normalizeStart, normalizeEnd);
     }
-    
+
     if (haveSourceTime)
         newEvent->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue], sourceTime);
     if (haveSourceDuration)
         newEvent->setMaybe<Int>(m_sourceProperties[DurationValue], sourceDuration);
-    
+
     if (m_target != RawEventData && m_target != NotationPrefix) {
         newEvent->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
         newEvent->setMaybe<Int>(m_targetProperties[DurationValue], duration);
