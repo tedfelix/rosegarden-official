@@ -103,7 +103,7 @@ public:
      * Return true if there are any events of the given type in
      * this selection.  Slow.
      */
-    bool contains(const std::string &eventType) const;
+    bool contains(const std::string &type) const;
 
     /**
      * Return the time at which the first Event in the selection
@@ -309,7 +309,7 @@ public:
     timesigcontainer::const_iterator begin() const { return m_timeSignatures.begin(); }
     timesigcontainer::const_iterator end() const { return m_timeSignatures.end(); }
     bool empty() const { return begin() == end(); }
-    void RemoveFromComposition(Composition *composition);
+    void RemoveFromComposition(Composition *composition) const;
     void AddToComposition(Composition *composition);
 
 protected:

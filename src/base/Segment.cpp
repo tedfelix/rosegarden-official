@@ -255,7 +255,7 @@ bool
 Segment::isTrulyLinked() const {
     // If there is no SegmentLinker the segment is not linked
     if (!m_segmentLinker) return false;
-    
+
     // If segment is a temporary one or is out of composition return false
     // That's arbitrary, but this method is designed to be used from
     // segments which are inside the composition.
@@ -313,7 +313,7 @@ Segment::setTrack(TrackId id)
         m_trackId = id;
         return;
     }
-    
+
     Composition *c = m_composition;
     if (c) c->weakDetachSegment(this); // sets m_composition to 0
     TrackId oldTrackId = m_trackId;
@@ -404,7 +404,7 @@ Segment::setStartTime(timeT t)
 
     /** This is effectively calling Segment::erase on each event after
         copyMoving it.  Segment::erase did the following:
-        
+
         1. base::erase
 	2. Delete the event
 	3. Kept m_startTime up to date
@@ -433,7 +433,7 @@ Segment::setStartTime(timeT t)
     base::clear();
 
     if (m_clefKeyList) { m_clefKeyList->clear(); }
-    
+
     m_endTime = previousEndTime + dt;
     if (m_endMarkerTime) *m_endMarkerTime += dt;
 
@@ -646,7 +646,7 @@ Segment::erase(iterator pos)
     Event *e = *pos;
 
     Q_CHECK_PTR(e);
-    
+
     timeT t0 = e->getAbsoluteTime();
     timeT t1 = t0 + e->getGreaterDuration();
 
@@ -657,7 +657,7 @@ Segment::erase(iterator pos)
 
     if (t0 == m_startTime && begin() != end()) {
         timeT startTime = (*begin())->getAbsoluteTime();
-        
+
         // Don't send any notification if startTime doesn't change.
         if (startTime != m_startTime) {
             if (m_composition) m_composition->setSegmentStartTime(this, startTime);
@@ -1058,8 +1058,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
                        (lastNoteEnds, endTime - lastNoteEnds));
     }
 
-    timeT duration;
-
     // For each gap, fill it in with rests.
     for (size_t gi = 0; gi < gaps.size(); ++gi) {
 
@@ -1068,7 +1066,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 #endif
 
         startTime = gaps[gi].first;
-        duration = gaps[gi].second;
+        timeT duration = gaps[gi].second;
 
         if (duration >= Note(Note::Shortest).getDuration()) {
             fillWithRests(startTime, startTime + duration);
@@ -1445,12 +1443,12 @@ Segment::getRepeatEndTime() const
 
     if (m_repeating && m_composition) {
         timeT endTime = m_composition->getEndMarker();
-        
+
         for (Composition::iterator i(m_composition->begin());
              i != m_composition->end(); ++i) {
-          
+
             if ((*i)->getTrack() != getTrack()) continue;
-            
+
             timeT t1 = (*i)->getStartTime();
             timeT t2 = (*i)->getEndMarkerTime();
 
@@ -1599,10 +1597,10 @@ Segment::unlockResizeNotifications()
         if (*m_memoEndMarkerTime > *m_endMarkerTime) shorten = true;
         else if (*m_memoEndMarkerTime == *m_endMarkerTime) return;
     }
-    
+
     // What if m_memoEndMarkerTime=0 and m_endMarkerTime!=0 (or the
     // opposite) ?   Is such a case possible ?
-    
+
     if (m_memoEndMarkerTime) delete m_memoEndMarkerTime;
     m_memoEndMarkerTime = nullptr;
     notifyEndMarkerChange(shorten);

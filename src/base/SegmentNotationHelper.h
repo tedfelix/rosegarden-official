@@ -19,13 +19,13 @@
 
 #include "base/Segment.h"
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 class ROSEGARDENPRIVATE_EXPORT SegmentNotationHelper : protected SegmentHelper
 {
 public:
-    SegmentNotationHelper(Segment &t) : SegmentHelper(t) { }
+    explicit SegmentNotationHelper(Segment &t) : SegmentHelper(t) { }
     ~SegmentNotationHelper() override;
 
     using SegmentHelper::segment;
@@ -36,7 +36,7 @@ public:
      * on the whole segment.
      */
     void setNotationProperties(timeT startTime = 0, timeT endTime = 0);
-    
+
     /**
      * Return the notation absolute time plus the notation duration.
      */
@@ -62,13 +62,13 @@ public:
      */
     iterator findNearestNotationAbsoluteTime(timeT t);
 
-    
+
     /**
      * Looks for another note immediately following the one pointed to
      * by the given iterator, and (if matchPitch is true) of the same
      * pitch, and returns an iterator pointing to that note.  Returns
      * end() if there is no such note.
-     * 
+     *
      * The notes are considered "adjacent" if the quantized start
      * time of one matches the quantized end time of the other, unless
      * allowOverlap is true in which case overlapping notes are also
@@ -91,7 +91,7 @@ public:
      * will be considered.  (This method has no other way to know when
      * to stop scanning; potentially the very first note in the segment
      * could turn out to be adjacent to the very last one.)
-     * 
+     *
      * The notes are considered "adjacent" if the quantized start
      * time of one matches the quantized end time of the other, unless
      * allowOverlap is true in which case overlapping notes are also
@@ -118,7 +118,7 @@ public:
      * both in the same chord) or anything else.  "Contiguous" refers
      * only to their locations in the segment's event container,
      * which normally means what you expect for rests but not notes.
-     * 
+     *
      * See also SegmentNotationHelper::getNextAdjacentNote.
      */
     iterator findContiguousNext(iterator);
@@ -137,7 +137,7 @@ public:
      * both in the same chord) or anything else.  "Contiguous" refers
      * only to their locations in the segment's event container,
      * which normally means what you expect for rests but not notes.
-     * 
+     *
      * See also SegmentNotationHelper::getPreviousAdjacentNote.
      */
     iterator findContiguousPrevious(iterator);
@@ -156,7 +156,7 @@ public:
      * Untested and probably marked-for-expiry -- prefer
      * SegmentPerformanceHelper::getTiedNotes
      */
-    iterator getNoteTiedWith(Event *note, bool goForwards);
+    iterator getNoteTiedWith(Event *note, bool forwards);
 
 
     /**
@@ -170,12 +170,12 @@ public:
 
 
     /**
-     * Splits events in the [from, to[ interval into 
+     * Splits events in the [from, to[ interval into
      * tied events of duration baseDuration + events of duration R,
      * with R being equal to the events' initial duration minus baseDuration
      *
      * The events in [from, to[ must all be at the same absolute time
-     * 
+     *
      * Does not check "reasonableness" of expansion first
      *
      * Events may be notes or rests (rests will obviously not be tied)
@@ -254,7 +254,7 @@ public:
 
     /**
      * Inserts a rest, doing all the clever split/merge stuff as
-     * appropriate.  Requires segment to be in a composition.  
+     * appropriate.  Requires segment to be in a composition.
      * Returns iterator pointing to last event inserted (there
      * may be more than one, as rest may have had to be split)
      *
@@ -289,13 +289,13 @@ public:
 
     /**
      * Deletes a note, doing all the clever split/merge stuff as
-     * appropriate.  Requires segment to be in a composition.  
+     * appropriate.  Requires segment to be in a composition.
      */
     void deleteNote(Event *e, bool collapseRest = false);
 
     /**
      * Deletes a rest, doing all the clever split/merge stuff as
-     * appropriate.  Requires segment to be in a composition.  
+     * appropriate.  Requires segment to be in a composition.
      *
      * @return whether the rest could be deleted -- a rest can only
      * be deleted if there's a suitable rest next to it to merge it
@@ -342,11 +342,11 @@ public:
      */
     bool isViable(timeT duration, int dots = -1);
 
-    
+
     /**
      * Given an iterator pointing to a rest, split that rest up
      * according to the durations returned by TimeSignature's
-     * getDurationListForInterval     
+     * getDurationListForInterval
      */
     void makeRestViable(iterator i);
 
@@ -371,7 +371,7 @@ public:
      * optionally splits notes and rests at barlines -- this is
      * actually the most common user-visible use of this function.
      */
-    void makeNotesViable(iterator i, iterator j, bool splitAtBars = true);
+    void makeNotesViable(iterator from, iterator to, bool splitAtBars = true);
 
 
     /**
@@ -421,7 +421,7 @@ public:
     /**
      * Make a beamed group of tuplet type, whose tuplet properties are
      * specified as "(untupled-count) notes of duration (unit) played
-     * in the time of (tupled-count)".  For example, a quaver triplet 
+     * in the time of (tupled-count)".  For example, a quaver triplet
      * group could be specified with untupled = 3, tupled = 2, unit =
      * (the duration of a quaver).
      *
@@ -493,7 +493,7 @@ public:
      * duration and the return value appropriately.
      *
      * (Used for Event pasting.)
-     */ 
+     */
     bool removeRests(timeT time, timeT &duration, bool testOnly = false);
 
 
@@ -520,7 +520,7 @@ public:
     iterator collapseNoteAggressively(Event *, timeT rangeEnd);
 
 
-    
+
     std::pair<Event *, Event *> splitPreservingPerformanceTimes(Event *e,
                                                                 timeT q1);
 
@@ -540,7 +540,7 @@ public:
      */
     void autoSlur(timeT startTime, timeT endTime, bool legatoOnly);
 
-    
+
 protected:
     const Quantizer &basicQuantizer();
     const Quantizer &notationQuantizer();
@@ -560,11 +560,11 @@ protected:
 
 
     /// for use by insertNote and insertRest
-    iterator insertSomething(iterator position, int duration,
+    iterator insertSomething(iterator i, int duration,
                              Event *modelEvent, bool tiedBack);
 
     /// for use by insertSomething
-    iterator insertSingleSomething(iterator position, int duration,
+    iterator insertSingleSomething(iterator i, int duration,
                                    Event *modelEvent, bool tiedBack);
 
     /// for use by insertSingleSomething

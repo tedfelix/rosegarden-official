@@ -32,7 +32,7 @@
 
 //#define DEBUG_DECOUNTERPOINT
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 using std::string;
 using std::list;
@@ -203,13 +203,13 @@ SegmentNotationHelper::getNextAdjacentNote(iterator i,
     }
 }
 
-   
+
 Segment::iterator
 SegmentNotationHelper::getPreviousAdjacentNote(iterator i,
                                                timeT rangeStart,
                                                bool matchPitch,
                                                bool allowOverlap)
-{ 
+{
     iterator j(i);
     if (!isBeforeEndMarker(i)) return i;
     if (!(*i)->isa(Note::EventType)) return end();
@@ -240,11 +240,11 @@ SegmentNotationHelper::getPreviousAdjacentNote(iterator i,
 
 
 Segment::iterator
-SegmentNotationHelper::findContiguousNext(iterator el) 
+SegmentNotationHelper::findContiguousNext(iterator el)
 {
     std::string elType = (*el)->getType(),
         reject, accept;
-     
+
     if (elType == Note::EventType) {
         accept = Note::EventType;
         reject = Note::EventRestType;
@@ -259,7 +259,7 @@ SegmentNotationHelper::findContiguousNext(iterator el)
     bool success = false;
 
     iterator i = ++el;
-    
+
     for(; isBeforeEndMarker(i); ++i) {
         std::string iType = (*i)->getType();
 
@@ -275,7 +275,7 @@ SegmentNotationHelper::findContiguousNext(iterator el)
 
     if (success) return i;
     else return end();
-    
+
 }
 
 Segment::iterator
@@ -285,7 +285,7 @@ SegmentNotationHelper::findContiguousPrevious(iterator el)
 
     std::string elType = (*el)->getType(),
         reject, accept;
-     
+
     if (elType == Note::EventType) {
         accept = Note::EventType;
         reject = Note::EventRestType;
@@ -326,7 +326,7 @@ SegmentNotationHelper::noteIsInChord(Event *note)
 {
     iterator i = segment().findSingle(note);
     timeT t = note->getNotationAbsoluteTime();
-    
+
     for (iterator j = i; j != end(); ++j) { // not isBeforeEndMarker, unnecessary here
         if (j == i) continue;
         if ((*j)->isa(Note::EventType)) {
@@ -364,7 +364,7 @@ SegmentNotationHelper::noteIsInChord(Event *note)
 
 //!!! This doesn't appear to be used any more and may well not work.
 // Ties are calculated in several different places, and it's odd that
-// we don't have a decent API for them 
+// we don't have a decent API for them
 Segment::iterator
 SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
 {
@@ -396,7 +396,7 @@ SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
             (((*i)->getAbsoluteTime() + (*i)->getDuration()) != myTime)) {
             return end();
         }
-        
+
         if (!(*i)->get<Bool>(forwards ?
                              BaseProperties::TIED_BACKWARD :
                              BaseProperties::TIED_FORWARD, tied) || !tied) {
@@ -463,7 +463,7 @@ SegmentNotationHelper::collapseRestsIfValid(Event* e, bool& collapseForward)
         insert(e1);
         return true;
     }
-    
+
     return false;
 }
 
@@ -515,7 +515,7 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
 
     list<Event *> toInsert;
     list<iterator> toErase;
-          
+
     // Split all the note and rest events in range [from, to[
     //
     for (iterator i = from; i != to; ++i) {
@@ -625,7 +625,7 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
         viable = (duration == notationQuantizer().quantizeDuration(duration));
     }
 */
-    
+
     //!!! what to do about this?
 
     timeT nearestDuration =
@@ -641,7 +641,7 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
 void
 SegmentNotationHelper::makeRestViable(iterator i)
 {
-    timeT absTime = (*i)->getAbsoluteTime(); 
+    timeT absTime = (*i)->getAbsoluteTime();
     timeT duration = (*i)->getDuration();
     erase(i);
     segment().fillWithRests(absTime, absTime + duration);
@@ -759,7 +759,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
             // is longer than the event duration.  The following check will
             // make sure the notation duration is truncated to the event
             // duration thus preventing the endless loop.
-            
+
             // Bug #1419
             //
             // The above referenced check obviously didn't work correctly.  The
@@ -783,11 +783,6 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
                     e->getSubOrdering(),
                     e->getAbsoluteTime(), e->getDuration());  // notation
             toInsert.push_back(e1);
-            break;
-
-            // Add in the remaining time.
-            toInsert.push_back(e);
-            e = nullptr;
             break;
         }
 
@@ -888,7 +883,7 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
         if (noteOrRest) {
             break;
         } else {
-            j++;
+            ++j;
         }
     }
     if (j != end() && (*j)->has(BEAMED_GROUP_TUPLET_BASE)) {
@@ -958,7 +953,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
                                        Event *modelEvent, bool tiedBack)
 {
     // Rules:
-    // 
+    //
     // 1. If we hit a bar line in the course of the intended inserted
     // note, we should split the note rather than make the bar the
     // wrong length.  (Not implemented yet)
@@ -970,7 +965,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
     // then we should insert the new note/rest literally and remove
     // rests as appropriate.  Rests should never prevent us from
     // inserting what the user asked for.
-    // 
+    //
     // 3. If there are notes in the way of an inserted note, however,
     // we split whenever "reasonable" and truncate our user's note if
     // not reasonable to split.  We can't always give users the Right
@@ -1353,7 +1348,7 @@ SegmentNotationHelper::deleteEvent(Event *e, bool collapseRest)
         if (i != end()) erase(i);
     }
 
-    return res;    
+    return res;
 }
 
 
@@ -1372,7 +1367,7 @@ SegmentNotationHelper::hasEffectiveDuration(iterator i)
             hasDuration = false;
         }
     }
-    
+
     return hasDuration;
 }
 
@@ -1518,7 +1513,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
         // At the end of a segment we may run out of events before the
         // tuplet is complete. So complete it here
         iterator j = i;
-        j++;
+        ++j;
         if (j == end()) {
             // yes i is the last event
             timeT noteEnd = e->getAbsoluteTime() + e->getDuration();
@@ -1529,7 +1524,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
                 Event *el = new Event(**i, noteEnd, tupletEnd - noteEnd);
                 el->set<Int>(BEAMED_GROUP_ID, groupId);
                 el->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_TUPLED);
-                
+
                 el->set<Int>(BEAMED_GROUP_TUPLET_BASE, unit);
                 el->set<Int>(BEAMED_GROUP_TUPLED_COUNT, tupled);
                 el->set<Int>(BEAMED_GROUP_UNTUPLED_COUNT, untupled);
@@ -1556,7 +1551,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
     }
 }
 
-    
+
 
 
 void
@@ -1589,7 +1584,7 @@ SegmentNotationHelper::unbeamAux(iterator from, iterator to)
 
   Auto-beaming code derived from X11 Rosegarden's ItemListAutoBeam
   and ItemListAutoBeamSub in editor/src/ItemList.c.
-  
+
 */
 
 void
@@ -1679,7 +1674,7 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
   which would be going around in the gunman's head as he trains a laser
   sight into your bedroom through the narrow gap in your curtains and
   dances the little red dot around nervously on your wall."
-  
+
 */
 
 void
@@ -1693,7 +1688,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
     timeT minimum = 0;
 
     // If the denominator is 2 or 4, beam in twos (3/4, 6/2 etc).
-    
+
     if (denom == 2 || denom == 4) {
 
         if (num % 3) {
@@ -1899,7 +1894,7 @@ bool
 SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 {
     Event dummy("dummy", time, 0, MIN_SUBORDERING);
-    
+
     RG_DEBUG << "SegmentNotationHelper::removeRests(" << time
               << ", " << duration << ")";
 
@@ -1910,7 +1905,7 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
            (*from)->getAbsoluteTime() == time &&
            (*from)->getDuration() == 0) ++from;
     if (from == segment().end()) return false;
-    
+
     iterator to = from;
 
     timeT eventTime = time;
@@ -1942,7 +1937,7 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 
     bool checkLastRest = false;
     iterator lastEvent = to;
-    
+
     if (eventTime < finalTime) {
         // shorten last event's duration, if possible
 
@@ -1994,7 +1989,7 @@ SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
 {
     iterator ia = segment().findTime(startTime);
     iterator ib = segment().findTime(endTime);
-    
+
     if (ia == end()) return;
 
     std::vector<iterator> erasable;
@@ -2095,7 +2090,7 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
         (*j)->set<Bool>(TIED_BACKWARD, true);
         return end();
     }
-    
+
     timeT iEnd = (*i)->getNotationAbsoluteTime() + (*i)->getNotationDuration();
     timeT jEnd = (*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
 
@@ -2110,7 +2105,7 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
     // deselecting fro mthe selection set.
     (*i)->unset(TIED_BACKWARD);
     (*i)->unset(TIED_FORWARD);
-    
+
     (*j)->unset(TIED_BACKWARD);
     (*j)->unset(TIED_FORWARD);
 
@@ -2390,4 +2385,3 @@ int SegmentNotationHelper::findBorderTuplet(iterator it, iterator &start, iterat
     return count;
 }
 } // end of namespace
-

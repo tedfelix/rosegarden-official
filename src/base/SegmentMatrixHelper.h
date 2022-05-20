@@ -18,13 +18,13 @@
 
 #include "SegmentNotationHelper.h"
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 class SegmentMatrixHelper : protected SegmentNotationHelper
 {
 public:
-    SegmentMatrixHelper(Segment &t) : SegmentNotationHelper(t) { }
+    explicit SegmentMatrixHelper(Segment &t) : SegmentNotationHelper(t) { }
 
     iterator insertNote(Event *);
 
