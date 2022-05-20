@@ -20,7 +20,7 @@
 #include "Segment.h"
 #include <QObject>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 class Command;
@@ -29,14 +29,14 @@ class Event;
 class SegmentLinker : public QObject
 {
     Q_OBJECT
-    
+
 public:
     typedef unsigned int SegmentLinkerId;
-    
+
     SegmentLinker();
-    SegmentLinker(SegmentLinkerId id);
+    explicit SegmentLinker(SegmentLinkerId id);
     ~SegmentLinker() override;
-    
+
     void addLinkedSegment(Segment *s);
     void removeLinkedSegment(Segment *s);
     int getNumberOfLinkedSegments() const {
@@ -48,7 +48,7 @@ public:
     SegmentLinkerId getSegmentLinkerId() const { return m_id; }
 
     ///re-read one segment from any of the others
-    void refreshSegment(Segment *segment);
+    void refreshSegment(Segment *seg);
 
     //factory functions for dealing with linking/unlinking of segments
     static Segment* createLinkedSegment(Segment *s);
@@ -63,7 +63,7 @@ public:
     Segment * getReference() const {
         return m_reference;
     }
-    
+
     /// Exclude from printing (lilypond) for each linked segment.
     void setExcludeFromPrinting(bool exclude);
 
@@ -73,11 +73,11 @@ protected slots:
 private:
     struct LinkedSegmentParams
     {
-        LinkedSegmentParams(Segment *s);
+        explicit LinkedSegmentParams(Segment *s);
         Segment *m_linkedSegment;
         uint m_refreshStatusId;
     };
-    
+
     typedef std::list<LinkedSegmentParams> LinkedSegmentParamsList;
 
     void linkedSegmentChanged(Segment* s, const timeT from, const timeT to);
@@ -108,7 +108,7 @@ private:
 
     Segment * m_reference;
 };
-    
+
 }
 
 #endif // RG_SEGMENTLINKER_H

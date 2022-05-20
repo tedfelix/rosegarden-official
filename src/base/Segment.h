@@ -423,6 +423,10 @@ public:
     iterator findSingle(Event*);
 
     const_iterator findSingle(Event *e) const {
+        // Cast away const to make sure we don't end up in an endless
+        // recursion loop.
+        // ??? Recommend renaming this routine to findSingleConst() const
+        //     to make this clearer.
         return const_iterator(((Segment *)this)->findSingle(e));
     }
 
@@ -433,6 +437,10 @@ public:
     iterator findTime(timeT time);
 
     const_iterator findTime(timeT time) const {
+        // Cast away const to make sure we don't end up in an endless
+        // recursion loop.
+        // ??? Recommend renaming this routine to findTimeConst() const
+        //     to make this clearer.
         return const_iterator(((Segment *)this)->findTime(time));
     }
 
@@ -444,6 +452,10 @@ public:
     iterator findNearestTime(timeT time);
 
     const_iterator findNearestTime(timeT time) const {
+        // Cast away const to make sure we don't end up in an endless
+        // recursion loop.
+        // ??? Recommend renaming this routine to findNearestTimeConst() const
+        //     to make this clearer.
         return const_iterator(((Segment *)this)->findNearestTime(time));
     }
 
@@ -451,7 +463,7 @@ public:
     //////
     //
     // ADVANCED, ESOTERIC, or PLAIN STUPID MANIPULATION
-    
+
     /**
      * Returns the range [start, end[ of events which are at absoluteTime
      */
@@ -572,7 +584,7 @@ public:
     * default clef and/or key signature as needed.
     */
     void enforceBeginWithClefAndKey();
-    
+
     /**
      * Stop sending move or resize notifications to the observers.
      * (May be useful to avoid sending lot of unnecessary resize notifications
@@ -581,15 +593,15 @@ public:
      * Should be used with caution!
      */
     void lockResizeNotifications();
-    
+
     /**
      * Revert lockResizeNotifications() effect. If segment has been move
      * or resized, send one, and only one, notification to the observers.
      * Should only be called after lockResizeNotifications() has been called.
      * Nested lock/unlock calls are not allowed currently.
-     */ 
-    void unlockResizeNotifications();    
-    
+     */
+    void unlockResizeNotifications();
+
     /**
      * YG: This one is only for debug
      */
@@ -776,7 +788,7 @@ public:
 
     // Get the segments in the current composition.
     static SegmentMultiSet& getCompositionSegments();
-    
+
     void  addObserver(SegmentObserver *obs);
     void removeObserver(SegmentObserver *obs);
 
@@ -802,7 +814,7 @@ public:
 
    /**
     * Return true if the segment is connected to a SegmentLinker.
-    * This doesn't always mean that the segment is really linked : 
+    * This doesn't always mean that the segment is really linked :
     *    - The segment may be the only one referenced by the SegmentLinker.
     *      (Probably this should not be, but nevertheless is not impossible.)
     *    - The segment is a repeating one opened in the notation editor.
@@ -815,7 +827,7 @@ public:
      * Return true if the segment is link to at least one other segment
      * which is not a temporary one nor being outside ofthe composition
      * (i.e. deleted).
-     */ 
+     */
     bool isTrulyLinked() const;
 
     /**
@@ -823,18 +835,18 @@ public:
      * local change (as transpositon...).
      * This method is intended to help exporting linked segments as repeat with
      * volta in LilyPond.
-     */ 
+     */
     bool isPlainlyLinked() const;
 
     /**
      * Return true if the given segment is linked to this.
-     */ 
+     */
     bool isLinkedTo(Segment *) const;
 
     /**
      * Return true if the given segment is a plain link linked to the current
      * object which is equally a plain link
-     */ 
+     */
     bool isPlainlyLinkedTo(Segment *) const;
 
     SegmentLinker * getLinker() const { return m_segmentLinker; }
@@ -875,7 +887,7 @@ public:
      * that it is temporary or read-only.
      **/
     void setGreyOut();
-    
+
     /**
      * Set the current segment as the reference of the linked segment group and
      * return true.
@@ -896,7 +908,7 @@ public:
      * May return 0 if segment is linked but no reference is defined.
      */
     const Segment * getRealSegment() const;
-    
+
     /// Exclude from printing (lilypond).
     /**
      * linkedSegmentsAlso parameter is provided to prevent recursion when
@@ -935,7 +947,7 @@ private:
      * Used by getVerseCount().
      */
     void countVerses();
-    
+
     Composition *m_composition; // owns me, if it exists
 
     timeT  m_startTime;
@@ -995,7 +1007,7 @@ private: // stuff to support SegmentObservers
     void notifyEndMarkerChange(bool shorten);
     void notifyTransposeChange();
     void notifySourceDeletion() const;
-    
+
     bool m_notifyResizeLocked;
     timeT m_memoStart;
     timeT *m_memoEndMarkerTime;
@@ -1005,7 +1017,7 @@ signals:
  public:
     void signalChanged(timeT start, timeT end)
     { emit contentsChanged(start,end); }
-    
+
 private:
 
     // assignment operator not provided
@@ -1106,7 +1118,7 @@ public:
 class ROSEGARDENPRIVATE_EXPORT SegmentHelper
 {
 protected:
-    SegmentHelper(Segment &t) : m_segment(t) { }
+    explicit SegmentHelper(Segment &t) : m_segment(t) { }
     virtual ~SegmentHelper();
 
     typedef Segment::iterator iterator;
