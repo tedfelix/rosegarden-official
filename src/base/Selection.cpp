@@ -490,7 +490,7 @@ EventSelection::dump() const
 template <typename ElementInfo>
 void
 TimewiseSelection<ElementInfo>::
-RemoveFromComposition(Composition *composition)
+RemoveFromComposition(Composition *composition) const
 {
     for (typename Container::const_iterator i = begin(); i != end(); ++i) {
         ElementInfo::RemoveFromComposition(composition, *i);
@@ -499,7 +499,7 @@ RemoveFromComposition(Composition *composition)
 
 template <typename ElementInfo>
 void
-TimewiseSelection<ElementInfo>::AddToComposition(Composition *composition)
+TimewiseSelection<ElementInfo>::AddToComposition(Composition *composition) const
 {
     for (typename Container::const_iterator i = begin(); i != end(); ++i) {
         ElementInfo::AddToComposition(composition, *i);
@@ -558,7 +558,7 @@ TimeSignatureSelection::RemoveFromComposition(Composition *composition) const
     }
 }
 void
-TimeSignatureSelection::AddToComposition(Composition *composition)
+TimeSignatureSelection::AddToComposition(Composition *composition) const
 {
     for (TimeSignatureSelection::timesigcontainer::const_iterator i =
                 begin(); i != end(); ++i) {
@@ -612,7 +612,7 @@ TempoSelection::addTempo(timeT t, tempoT tempo, tempoT targetTempo)
 }
 
 void
-TempoSelection::RemoveFromComposition(Composition *composition)
+TempoSelection::RemoveFromComposition(Composition *composition) const
 {
 
     for (TempoSelection::tempocontainer::const_iterator i = begin();
@@ -626,7 +626,7 @@ TempoSelection::RemoveFromComposition(Composition *composition)
 }
 
 void
-TempoSelection::AddToComposition(Composition *composition)
+TempoSelection::AddToComposition(Composition *composition) const
 {
 
     for (TempoSelection::tempocontainer::const_iterator i = begin();

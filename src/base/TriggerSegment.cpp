@@ -41,7 +41,7 @@ class LinearTimeScale
 {
  public:
     LinearTimeScale(const TriggerSegmentRec *rec,
-                    Segment::iterator        trigger,
+                    Segment::iterator        iTrigger,
                     const Segment           *oversegment,
                     const LinearTimeScale    timeScale);
 
@@ -63,7 +63,7 @@ class LinearTimeScale
     // segment's intrinsic duration.
     bool isSquished() const
     { return m_ratio != 1.0; }
-    
+
     bool isPerformable() const
     { return m_ratio != 0.0; }
     static const LinearTimeScale m_identity;
@@ -71,14 +71,14 @@ class LinearTimeScale
  private:
     LinearTimeScale(double ratio, timeT  offset) :
         m_ratio(ratio), m_offset(offset) {}
-    
+
     // The ratio of performance time to event time.
     double m_ratio;
     // How much performance time is advanced relative to event time,
     // after scaled for performance.
     timeT  m_offset;
 };
-    
+
 // @class TriggerExpansionContext
 // All the data neccessary to expand a trigger segment correctly.
 // This is constant across one expansion; it contains no state data.
@@ -87,8 +87,8 @@ class TriggerExpansionContext
 {
     typedef std::pair<timeT,timeT> TimeInterval;
     typedef std::vector<TimeInterval> TimeIntervalVector;
-    
-public:    
+
+public:
     typedef std::queue<TriggerExpansionContext> Queue;
     typedef std::vector<Segment::iterator> iteratorcontainer;
 
@@ -126,7 +126,7 @@ private:
         m_intervals(intervals)
         { m_retune = (m_pitchDiff != 0); }
 public:
-    
+
     bool isPerformable() const {
         return
             !m_intervals.empty() &&
@@ -138,7 +138,7 @@ public:
 private:
     static TimeIntervalVector
     getSoundingIntervals(Segment::iterator iTrigger,
-                         const Segment *containing,
+                         const Segment *oversegment,
                          const LinearTimeScale timeScale);
 
     static TimeIntervalVector
@@ -148,7 +148,7 @@ private:
     TriggerExpansionContext
     makeNestedContext(Segment::iterator iTrigger,
                       const Segment *containing) const;
-        
+
     // Data members
     int                       m_maxDepth;
     const TriggerSegmentRec  *m_rec;
@@ -158,7 +158,7 @@ private:
     int                       m_velocityDiff;
     // May be nullptr
     ControllerContextParams  *m_controllerContextParams;
-    TimeIntervalVector        m_intervals;   
+    TimeIntervalVector        m_intervals;
 };
 
 /*** TriggerSegmentRec definitions ***/
@@ -172,14 +172,14 @@ TriggerSegmentRec::TriggerSegmentRec(TriggerSegmentId id,
 				     Segment *segment,
 				     int basePitch,
 				     int baseVelocity,
-				     std::string timeAdjust, 
-				     bool retune) :
+				     const std::string& defaultTimeAdjust,
+				     bool defaultRetune) :
     m_id(id),
     m_segment(segment),
     m_basePitch(basePitch),
     m_baseVelocity(baseVelocity),
-    m_defaultTimeAdjust(timeAdjust),
-    m_defaultRetune(retune)
+    m_defaultTimeAdjust(defaultTimeAdjust),
+    m_defaultRetune(defaultRetune)
 {
     if (m_defaultTimeAdjust == "") {
 	m_defaultTimeAdjust = BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH;
@@ -209,6 +209,8 @@ TriggerSegmentRec::operator=(const TriggerSegmentRec &rec)
     m_segment = rec.m_segment;
     m_basePitch = rec.m_basePitch;
     m_baseVelocity = rec.m_baseVelocity;
+    m_defaultTimeAdjust = rec.m_defaultTimeAdjust;
+    m_defaultRetune = rec.m_defaultRetune;
     m_references = rec.m_references;
     return *this;
 }
@@ -272,7 +274,7 @@ getTranspose(const Event *trigger) const
     if(!trigger->has(BaseProperties::PITCH))
         { return 0; }
 
-    bool retune = getDefaultRetune(); 
+    bool retune = getDefaultRetune();
     trigger->get<Bool>(BaseProperties::TRIGGER_SEGMENT_RETUNE,
                        retune);
     if (!retune)
@@ -306,7 +308,7 @@ getVelocityDiff(const Event *trigger) const
 // @author Tom Breton (Tehom)
 Segment *
 TriggerSegmentRec::makeLinkedSegment
-(Event *trigger, Segment *containing) 
+(Event *trigger, Segment *containing)
 {
     LinearTimeScale
         timeScale(this, containing->findSingle(trigger), containing,
@@ -316,7 +318,7 @@ TriggerSegmentRec::makeLinkedSegment
     // so return nullptr;
     if (timeScale.isSquished())
         { return nullptr; }
-    
+
     Segment *link =
         SegmentLinker::createLinkedSegment(getSegment());
 
@@ -362,7 +364,7 @@ TriggerSegmentRec::makeLinkedSegment
 // expansions and a controller cache.
 // @author Tom Breton (Tehom)
 Segment*
-TriggerSegmentRec::makeExpansion(Event *trigger, 
+TriggerSegmentRec::makeExpansion(Event *trigger,
                                  Segment *containing,
                                  Instrument */*instrument*/) const
 {
@@ -384,7 +386,7 @@ TriggerSegmentRec::makeExpansion(Event *trigger,
     return s;
 }
 
-// Expand the ornament into target.  
+// Expand the ornament into target.
 // @return
 // True if anything was inserted
 // @param target
@@ -474,7 +476,7 @@ LinearTimeScale(const TriggerSegmentRec *rec,
     const timeT performanceDuration =
         timeScale.toPerformanceDuration(unscaledPerformanceDuration);
 
-    
+
     const timeT performanceEnd = performanceStart + performanceDuration;
     const timeT trStart = rec->getSegment()->getStartTime();
     const timeT trEnd = rec->getSegment()->getEndMarkerTime();
@@ -482,7 +484,7 @@ LinearTimeScale(const TriggerSegmentRec *rec,
 
     std::string adjustmentMode = BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
     ev->get<String>(BaseProperties::TRIGGER_SEGMENT_ADJUST_TIMES, adjustmentMode);
-    
+
     // To avoid dividing by zero in the squish case, if duration is
     // zero, we use the default case instead.
     if ((adjustmentMode == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) &&
@@ -501,7 +503,7 @@ LinearTimeScale(const TriggerSegmentRec *rec,
         m_ratio = 1.0;
         m_offset = performanceStart - trStart;
     }
-    
+
 }
 
 /*** TriggerExpansionContext definitions ***/
@@ -529,7 +531,7 @@ getSoundingIntervals(Segment::iterator iTrigger,
         SegmentPerformanceHelper(*const_cast<Segment *>(oversegment)).
         getTiedNotes(iTrigger);
 
-    
+
     iteratorcontainer::iterator ci = tiedNotes.begin();
     if (ci == tiedNotes.end()) { return TimeIntervalVector(); }
 
@@ -544,12 +546,12 @@ getSoundingIntervals(Segment::iterator iTrigger,
     TimeIntervalVector  intervals;
 
     /** Do the loop itself **/
-    
+
     while (true) {
         const Event *e = **ci;
         const timeT unscaledT = e->getAbsoluteTime();
         const timeT t = timeScale.toPerformance(unscaledT);
-        
+
         const bool nowMasked = e->maskedInTrigger();
 
         if (nowMasked != wasMasked) {
@@ -597,7 +599,7 @@ getSoundingIntervals(Segment::iterator iTrigger,
             break;
         }
     }
-    
+
     return intervals;
 }
 
@@ -633,7 +635,7 @@ mergeTimeIntervalVectors
 
         // Store it.
         results.push_back(TimeInterval(startT,endT));
-        
+
         // We considered up to the end of at least one and maybe both,
         // so step each if we are at its end.
         if (iA->second <= endT) { ++iA; }
@@ -661,7 +663,7 @@ makeNestedContext(Segment::iterator     iTrigger,
     (*iTrigger)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID, triggerId);
     TriggerSegmentRec *rec =
         comp->getTriggerSegmentRec(triggerId);
-    
+
     const TimeIntervalVector triggerIntervals =
         getSoundingIntervals(iTrigger, containing, m_timeScale);
     const TimeIntervalVector mergedIntervals =
@@ -704,7 +706,7 @@ Expand(Segment *target, Queue& queue) const
     TimeIntervalVector::const_iterator interval = m_intervals.begin();
     timeT startT = interval->first;
     timeT endT = interval->second;
-    
+
     for (Segment::iterator i = source->begin();
          i != source->getEndMarker();
          ++i) {
@@ -723,7 +725,7 @@ Expand(Segment *target, Queue& queue) const
 
             // Add a new one that the loop will explore.
             queue.push(makeNestedContext(i, source));
-                
+
             // Go on to the next event.  Skipping this one doesn't
             // mess up any state.
             continue;
@@ -749,7 +751,7 @@ Expand(Segment *target, Queue& queue) const
             // We can end right now.  Everything past this event would
             // never have been inserted.  Even triggers would never
             // cause any insertions.
-            if (interval == m_intervals.end()) 
+            if (interval == m_intervals.end())
                 { return insertedSomething; }
             startT = interval->first;
             endT = interval->second;
@@ -827,4 +829,3 @@ Expand(Segment *target, Queue& queue) const
 
 
 }
-

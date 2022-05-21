@@ -26,7 +26,7 @@ namespace
     class Deleter
     {
     public:
-        Deleter(char *p) : m_p(p)  { }
+        explicit Deleter(char *p) : m_p(p)  { }
         ~Deleter()
         {
             std::free(m_p);

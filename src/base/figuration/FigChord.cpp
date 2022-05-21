@@ -48,7 +48,7 @@ ChordFromCounterpoint::sample(const Iterator &i, bool goingForwards)
     Event *e = getAsEvent(i);
     timeT onTime    = e->getAbsoluteTime();
     timeT duration  = e->getDuration();
-    
+
     if (onTime + duration <= m_time) { return false; }
     if (onTime > m_time) { return false; }
     return GenericChord<Element, Container, singleStaff>::sample(i, goingForwards);
@@ -60,7 +60,7 @@ ChordFromCounterpoint::sample(const Iterator &i, bool goingForwards)
 // preceding notes to have.
 const timeT
 FigChord::
-m_preDuration = Note(Note::WholeNote).getDuration();
+m_myPreDuration = Note(Note::WholeNote).getDuration();
 
 NotationQuantizer * FigChord::m_nq = nullptr;
 
@@ -90,7 +90,7 @@ operator++()
     for (;m_iter != m_chordSource->end(); ++m_iter) {
         Event *e = *m_iter;
         // Events that are part of a previous chord don't imply a new
-        // chord. 
+        // chord.
         if (e->getAbsoluteTime() <= m_timePreviousChord)
             { continue; }
         // Non-notes don't imply a new chord.
