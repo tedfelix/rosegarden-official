@@ -232,9 +232,13 @@ Quantizer::unquantize(Segment *s,
     Q_ASSERT(m_toInsert.size() == 0);
 
     for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
+        // Similar to "Increment Before Use".  Prevents problems when
+        // setToTarget() deletes Events from the Segment.
         ++nextFrom;
 
         if (m_target == RawEventData || m_target == NotationPrefix) {
+            // Important: This deletes Events from the Segment and invalidates
+            //            the iterator.  Increment Before Use required.
             setToTarget(s, from,
                         getFromSource(*from, AbsoluteTimeValue),
                         getFromSource(*from, DurationValue));
@@ -250,32 +254,47 @@ Quantizer::unquantize(Segment *s,
 void
 Quantizer::unquantize(EventSelection *selection) const
 {
-    Q_ASSERT(m_toInsert.size() == 0);
+    if (!m_toInsert.empty())
+        return;
 
-    Segment *s = &selection->getSegment();
+    Segment *segment = &selection->getSegment();
 
-    Rosegarden::EventContainer::iterator it
-        = selection->getSegmentEvents().begin();
-
-    for (; it != selection->getSegmentEvents().end(); ++it) {
+    for (EventContainer::iterator eventIter =
+             selection->getSegmentEvents().begin();
+         eventIter != selection->getSegmentEvents().end();
+         /* Increment Before Use. */) {
+        EventContainer::iterator eventIterNext = eventIter;
+        // Increment Before Use.
+        ++eventIterNext;
 
         if (m_target == RawEventData || m_target == NotationPrefix) {
 
-            Segment::iterator from = s->findSingle(*it);
-            Segment::iterator to = s->findSingle(*it);
-            setToTarget(s, from,
-                        getFromSource(*from, AbsoluteTimeValue),
-                        getFromSource(*to, DurationValue));
+            // ??? But from and to are exactly the same!!!
+            Segment::iterator from = segment->findSingle(*eventIter);
+            if (from == segment->end())
+                continue;
+            Segment::iterator to = segment->findSingle(*eventIter);
+            if (to == segment->end())
+                continue;
+
+            const timeT absoluteTime = getFromSource(*from, AbsoluteTimeValue);
+            const timeT duration = getFromSource(*to, DurationValue);
+
+            // Important: This can delete an Event from the Segment.  That
+            //            will delete an Event from the selection which will
+            //            invalidate eventIter.  Increment Before Use must be
+            //            used to prevent crashes.
+            setToTarget(segment, from, absoluteTime, duration);
 
         } else {
-            removeTargetProperties(*it);
+            removeTargetProperties(*eventIter);
         }
+
+        eventIter = eventIterNext;
     }
-    
+
     insertNewEvents(&selection->getSegment());
 }
-
-
 
 timeT
 Quantizer::getFromSource(Event *e, ValueType v) const
@@ -340,23 +359,28 @@ Quantizer::getFromTarget(Event *e, ValueType v) const
 }
 
 void
-Quantizer::setToTarget(Segment *s, Segment::iterator i,
+Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
                        timeT absTime, timeT duration) const
 {
     Profiler profiler("Quantizer::setToTarget");
 
     //RG_DEBUG << "setToTarget(): target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")";
 
-    timeT st = 0, sd = 0;
-    bool haveSt = false, haveSd = false;
-    if (m_source != RawEventData && m_target == RawEventData) {
-        haveSt = (*i)->get<Int>(m_sourceProperties[AbsoluteTimeValue], st);
-        haveSd = (*i)->get<Int>(m_sourceProperties[DurationValue],     sd);
+    timeT sourceTime = 0;
+    bool haveSourceTime = false;
+    timeT sourceDuration = 0;
+    bool haveSourceDuration = false;
+
+    if (m_source != RawEventData  &&  m_target == RawEventData) {
+        haveSourceTime = (*segmentIter)->get<Int>(
+                m_sourceProperties[AbsoluteTimeValue], sourceTime);
+        haveSourceDuration = (*segmentIter)->get<Int>(
+                m_sourceProperties[DurationValue], sourceDuration);
     }
-    
-    Event *e;
+
+    Event *newEvent;
     if (m_target == RawEventData) {
-        e = new Event(**i, absTime, duration);
+        newEvent = new Event(**segmentIter, absTime, duration);
     } else if (m_target == NotationPrefix) {
         // Setting the notation absolute time on an event without
         // recreating it would be dodgy, just as setting the absolute
@@ -367,37 +391,39 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 #ifdef DEBUG_NOTATION_QUANTIZER
         RG_DEBUG << "setToTarget(): setting " << absTime << " to notation absolute time and " << duration << " to notation duration";
 #endif
-        e = new Event(**i, (*i)->getAbsoluteTime(), (*i)->getDuration(),
-                      (*i)->getSubOrdering(), absTime, duration);
+        newEvent = new Event(**segmentIter, (*segmentIter)->getAbsoluteTime(), (*segmentIter)->getDuration(),
+                      (*segmentIter)->getSubOrdering(), absTime, duration);
     } else {
-        e = *i;
-        e->clearNonPersistentProperties();
+        newEvent = *segmentIter;
+        newEvent->clearNonPersistentProperties();
     }
 
     if (m_target == NotationPrefix) {
-        timeT normalizeStart = std::min(absTime, (*i)->getAbsoluteTime());
+        timeT normalizeStart = std::min(absTime, (*segmentIter)->getAbsoluteTime());
         timeT normalizeEnd = std::max(absTime + duration,
-                                      (*i)->getAbsoluteTime() +
-                                      (*i)->getDuration()) + 1;
+                                      (*segmentIter)->getAbsoluteTime() +
+                                      (*segmentIter)->getDuration()) + 1;
 
         if (m_normalizeRegion.first != m_normalizeRegion.second) {
             normalizeStart = std::min(normalizeStart, m_normalizeRegion.first);
             normalizeEnd = std::max(normalizeEnd, m_normalizeRegion.second);
         }
 
-        m_normalizeRegion = std::pair<timeT, timeT>
-            (normalizeStart, normalizeEnd);
+        m_normalizeRegion =
+                std::pair<timeT, timeT>(normalizeStart, normalizeEnd);
     }
     
-    if (haveSt) e->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue],st);
-    if (haveSd) e->setMaybe<Int>(m_sourceProperties[DurationValue],    sd);
+    if (haveSourceTime)
+        newEvent->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue], sourceTime);
+    if (haveSourceDuration)
+        newEvent->setMaybe<Int>(m_sourceProperties[DurationValue], sourceDuration);
     
     if (m_target != RawEventData && m_target != NotationPrefix) {
-        e->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
-        e->setMaybe<Int>(m_targetProperties[DurationValue], duration);
+        newEvent->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
+        newEvent->setMaybe<Int>(m_targetProperties[DurationValue], duration);
     } else {
-        s->erase(i);
-        m_toInsert.push_back(e);
+        segment->erase(segmentIter);
+        m_toInsert.push_back(newEvent);
     }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
