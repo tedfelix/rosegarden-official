@@ -51,7 +51,8 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
     BasicCommand(getGlobalName(quantizer), segment, startTime, endTime,
                  true),  // bruteForceRedo
     m_quantizer(quantizer),
-    m_selection(nullptr)
+    m_selection(nullptr),
+    m_progressTotal(0)
 {
     // nothing else
 }
@@ -64,7 +65,8 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
                  selection.getEndTime(),
                  true),  // bruteForceRedo
     m_quantizer(quantizer),
-    m_selection(&selection)
+    m_selection(&selection),
+    m_progressTotal(0)
 {
     // nothing else
 }

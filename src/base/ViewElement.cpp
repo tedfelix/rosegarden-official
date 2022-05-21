@@ -18,7 +18,7 @@
 
 #include <QtGlobal>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 extern const int MIN_SUBORDERING;
@@ -133,7 +133,7 @@ ViewElementList::findSingle(ViewElement *el)
     iterator res = end();
 
     std::pair<iterator, iterator> interval = equal_range(el);
-    
+
     for (iterator i = interval.first; i != interval.second; ++i) {
         if (*i == el) {
             res = i;
@@ -153,15 +153,14 @@ ViewElementList::findTime(timeT time)
 }
 
 ViewElementList::iterator
-ViewElementList::findNearestTime(timeT t)
+ViewElementList::findNearestTime(timeT time)
 {
-    iterator i = findTime(t);
-    if (i == end() || (*i)->getViewAbsoluteTime() > t) {
+    iterator i = findTime(time);
+    if (i == end() || (*i)->getViewAbsoluteTime() > time) {
 	if (i == begin()) return end();
 	else --i;
     }
     return i;
 }
- 
-}
 
+}

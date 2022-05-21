@@ -79,7 +79,8 @@ protected:
     friend class Composition;
     TriggerSegmentRec(TriggerSegmentId id, Segment *segment,
                       int basePitch = -1, int baseVelocity = -1,
-                      std::string defaultTimeAdjust = "", bool defaultRetune = true);
+                      const std::string& defaultTimeAdjust = "",
+                      bool defaultRetune = true);
 
     void setReferences(const SegmentRuntimeIdSet &s) { m_references = s; }
 

@@ -190,7 +190,7 @@ private:
     /**
      * Erases the Event from the selection container and calls the observers.
      */
-    void eraseThisEvent(Event *e);
+    void eraseThisEvent(Event *event);
 
     /**
      * This method encapsulates all of the logic needed to add and remove events
@@ -260,8 +260,8 @@ public:
     typename Container::const_iterator end() const
         { return m_contents.end(); }
     bool empty() const { return m_contents.empty(); }
-    void RemoveFromComposition(Composition *composition);
-    void AddToComposition(Composition *composition);
+    void RemoveFromComposition(Composition *composition) const;
+    void AddToComposition(Composition *composition) const;
 
 protected:
     Container m_contents;
@@ -310,7 +310,7 @@ public:
     timesigcontainer::const_iterator end() const { return m_timeSignatures.end(); }
     bool empty() const { return begin() == end(); }
     void RemoveFromComposition(Composition *composition) const;
-    void AddToComposition(Composition *composition);
+    void AddToComposition(Composition *composition) const;
 
 protected:
     timesigcontainer m_timeSignatures;
@@ -356,8 +356,8 @@ public:
     tempocontainer::const_iterator begin() const { return m_tempos.begin(); }
     tempocontainer::const_iterator end() const { return m_tempos.end(); }
     bool empty() const { return begin() == end(); }
-    void RemoveFromComposition(Composition *composition);
-    void AddToComposition(Composition *composition);
+    void RemoveFromComposition(Composition *composition) const;
+    void AddToComposition(Composition *composition) const;
 
 protected:
     tempocontainer m_tempos;

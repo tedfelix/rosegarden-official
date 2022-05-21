@@ -141,28 +141,35 @@ EventSelection::insertThisEvent(Event *e)
 }
 
 void
-EventSelection::eraseThisEvent(Event *e)
+EventSelection::eraseThisEvent(Event *event)
 {
+    // This is probably not needed?  After all, the code below will do nothing
+    // if the event isn't found.
+//    if (!contains(event))
+//        return;
 
-    if (!contains(e)) return;  // This probably not needed.
+    // There might be multiple Event objects at the same time.  This will
+    // get the range of those.
+    std::pair<EventContainer::iterator, EventContainer::iterator> interval =
+            m_segmentEvents.equal_range(event);
 
-    std::pair<EventContainer::iterator, EventContainer::iterator>
-	interval = m_segmentEvents.equal_range(e);
+    for (EventContainer::iterator eventIter = interval.first;
+         eventIter != interval.second;
+         ++eventIter) {
 
-    for (EventContainer::iterator it = interval.first;
-         it != interval.second; ++it) {
+        // If this is the actual one we want to remove...
+        if (*eventIter == event) {
 
-        if (*it == e) {
+            eventIter = m_segmentEvents.erase(eventIter);
 
-	    m_segmentEvents.erase(it);
-
-            // Notify observers of new deselected event
-            for (ObserverSet::const_iterator i = m_observers.begin();
-                    i != m_observers.end(); ++i) {
-                (*i)->eventDeselected(this, e);
-
+            // Notify observers
+            for (ObserverSet::const_iterator observerIter = m_observers.begin();
+                 observerIter != m_observers.end();
+                 ++observerIter) {
+                (*observerIter)->eventDeselected(this, event);
             }
-            // Exit, since we found one good match.  Don't worry about others.
+
+            // Work is done.
             break;
         }
     }
@@ -483,7 +490,7 @@ EventSelection::dump() const
 template <typename ElementInfo>
 void
 TimewiseSelection<ElementInfo>::
-RemoveFromComposition(Composition *composition)
+RemoveFromComposition(Composition *composition) const
 {
     for (typename Container::const_iterator i = begin(); i != end(); ++i) {
         ElementInfo::RemoveFromComposition(composition, *i);
@@ -492,7 +499,7 @@ RemoveFromComposition(Composition *composition)
 
 template <typename ElementInfo>
 void
-TimewiseSelection<ElementInfo>::AddToComposition(Composition *composition)
+TimewiseSelection<ElementInfo>::AddToComposition(Composition *composition) const
 {
     for (typename Container::const_iterator i = begin(); i != end(); ++i) {
         ElementInfo::AddToComposition(composition, *i);
@@ -551,7 +558,7 @@ TimeSignatureSelection::RemoveFromComposition(Composition *composition) const
     }
 }
 void
-TimeSignatureSelection::AddToComposition(Composition *composition)
+TimeSignatureSelection::AddToComposition(Composition *composition) const
 {
     for (TimeSignatureSelection::timesigcontainer::const_iterator i =
                 begin(); i != end(); ++i) {
@@ -605,7 +612,7 @@ TempoSelection::addTempo(timeT t, tempoT tempo, tempoT targetTempo)
 }
 
 void
-TempoSelection::RemoveFromComposition(Composition *composition)
+TempoSelection::RemoveFromComposition(Composition *composition) const
 {
 
     for (TempoSelection::tempocontainer::const_iterator i = begin();
@@ -619,7 +626,7 @@ TempoSelection::RemoveFromComposition(Composition *composition)
 }
 
 void
-TempoSelection::AddToComposition(Composition *composition)
+TempoSelection::AddToComposition(Composition *composition) const
 {
 
     for (TempoSelection::tempocontainer::const_iterator i = begin();

@@ -79,7 +79,7 @@ public:
      * SnapToBeat or SnapToUnit, in which case we need to know the
      * current time signature.)  Returns zero for NoSnap.
      */
-    timeT getSnapTime(timeT t) const;
+    timeT getSnapTime(timeT time) const;
 
     /**
      * Snap a given x-coordinate to the nearest time on the grid.  Of
@@ -91,7 +91,7 @@ public:
      * respectively of the given coordinate will be returned;
      * otherwise the nearest time on either side will be returned.
      */
-    timeT snapX(double x, SnapDirection d = SnapEither) const;
+    timeT snapX(double x, SnapDirection direction = SnapEither) const;
 
     /**
      * Snap a given time to the nearest time on the grid.  Unlike
@@ -99,11 +99,11 @@ public:
      * greater than the bar duration at this point, the bar duration
      * will be used instead.
      *
-     * If d is SnapLeft or SnapRight, a time to the left or right
+     * If direction is SnapLeft or SnapRight, a time to the left or right
      * respectively of the given coordinate will be returned;
      * otherwise the nearest time on either side will be returned.
      */
-    timeT snapTime(timeT t, SnapDirection d = SnapEither) const;
+    timeT snapTime(timeT time, SnapDirection direction = SnapEither) const;
 
     /**
      * Snap a given y-coordinate to the nearest lower bin coordinate.
@@ -120,9 +120,9 @@ public:
 
     /**
      * Return the y-coordinate of the grid line at the start of the
-     * given bin.
+     * given requestedBin.
      */
-    int getYBinCoordinate(int bin) const;
+    int getYBinCoordinate(int requestedBin) const;
 
     /**
      * Set the default vertical step.  This is used as the height for
@@ -148,7 +148,7 @@ public:
     void setBinHeightMultiple(int bin, int multiple) {
         m_ymultiple[bin] = multiple;
     }
-    
+
     /**
      * Retrieve the height multiple for a bin.
      */

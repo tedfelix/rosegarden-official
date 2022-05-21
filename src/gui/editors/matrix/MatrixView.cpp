@@ -1011,7 +1011,7 @@ MatrixView::slotQuantizeSelection(int q)
             }
         }
     } else {
-        if (selection && selection->getAddedEvents()) {
+        if (selection  &&  !selection->empty()) {
             CommandHistory::getInstance()->addCommand
                 (new EventUnquantizeCommand(*selection, quant));
         } else {

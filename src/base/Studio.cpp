@@ -576,7 +576,6 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                                       int msb, int lsb,
                                       bool percussion)
 {
-    MidiDevice *midiDevice;
     std::vector<Device*>::iterator it;
     Rosegarden::InstrumentList::iterator iit;
     Rosegarden::InstrumentList instList;
@@ -593,12 +592,12 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     }
 
     // Pass one - search through all MIDI instruments looking for
-    // a match that we can re-use.  i.e. if we have a matching 
+    // a match that we can re-use.  i.e. if we have a matching
     // Program Change then we can use this Instrument.
     //
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
-        midiDevice = dynamic_cast<MidiDevice*>(*it);
+        MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice && midiDevice->getDirection() == MidiDevice::Play)
         {
@@ -643,7 +642,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
         }
     }
 
-    
+
     // Okay, if we've got this far and we have a new Instrument to use
     // then use it.
     //
@@ -670,14 +669,13 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
 // assignment in the assignMidiProgramToInstrument() method
 // by invalidating the ProgramChange flag.
 //
-// This method sounds much more dramatic than it actually is - 
+// This method sounds much more dramatic than it actually is -
 // it could probably do with a rename.
 //
 //
 void
 Studio::unassignAllInstruments()
 {
-    MidiDevice *midiDevice;
     AudioDevice *audioDevice;
     std::vector<Device*>::iterator it;
     Rosegarden::InstrumentList::iterator iit;
@@ -686,7 +684,7 @@ Studio::unassignAllInstruments()
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
-        midiDevice = dynamic_cast<MidiDevice*>(*it);
+        MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice)
         {
@@ -732,12 +730,11 @@ Studio::unassignAllInstruments()
 void
 Studio::clearMidiBanksAndPrograms()
 {
-    MidiDevice *midiDevice;
     std::vector<Device*>::iterator it;
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
-        midiDevice = dynamic_cast<MidiDevice*>(*it);
+        MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice)
         {
@@ -771,17 +768,17 @@ Device *
 Studio::getDevice(DeviceId id) const
 {
     //RG_DEBUG << "Studio[" << this << "]::getDevice(" << id << ")... ";
-    
+
     std::vector<Device*>::const_iterator it;
-    
+
     for (it = m_devices.begin(); it != m_devices.end(); ++it) {
-        
+
         // possibly fix a following seg.fault :
-        if( ! (*it) ){ 
+        if( ! (*it) ){
             RG_WARNING << "getDevice(): WARNING: (*it) is nullptr";
             continue;
         }
-        
+
         //RG_DEBUG << (*it)->getId();
 
         if ((*it)->getId() == id) {
@@ -789,9 +786,9 @@ Studio::getDevice(DeviceId id) const
             return (*it);
         }
     }
-    
+
     //RG_DEBUG << "NOT found";
-    
+
     return nullptr;
 }
 
@@ -824,14 +821,13 @@ Studio::getSoftSynthDevice() const
 std::string
 Studio::getSegmentName(InstrumentId id)
 {
-    MidiDevice *midiDevice;
     std::vector<Device*>::iterator it;
     Rosegarden::InstrumentList::iterator iit;
     Rosegarden::InstrumentList instList;
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
-        midiDevice = dynamic_cast<MidiDevice*>(*it);
+        MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice)
         {
@@ -860,12 +856,11 @@ Studio::getSegmentName(InstrumentId id)
 InstrumentId
 Studio::getAudioPreviewInstrument()
 {
-    AudioDevice *audioDevice;
     std::vector<Device*>::iterator it;
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
-        audioDevice = dynamic_cast<AudioDevice*>(*it);
+        AudioDevice* audioDevice = dynamic_cast<AudioDevice*>(*it);
 
         // Just the first one will do - we can make this more
         // subtle if we need to later.
@@ -888,7 +883,6 @@ Studio::haveMidiDevices() const
     }
     return false;
 }
-    
+
 
 }
-
