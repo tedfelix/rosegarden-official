@@ -218,13 +218,18 @@ protected:
     PropertyName m_sourceProperties[2];
     PropertyName m_targetProperties[2];
 
-public: // should be protected, but gcc-2.95 doesn't like allowing NotationQuantizer::m_impl to access them
+protected:
+    /// Get the requested property for the Event from the source.
+    /**
+     * This has the side-effect of copying the property from target
+     * to source if the source doesn't have the property, but the
+     * target does.
+     */
     timeT getFromSource(Event *, ValueType) const;
     timeT getFromTarget(Event *, ValueType) const;
     void setToTarget(Segment *, Segment::iterator, timeT t, timeT d) const;
     mutable std::vector<Event *> m_toInsert;
 
-protected:
     void removeProperties(Event *) const;
     void removeTargetProperties(Event *) const;
     void makePropertyNames();
