@@ -17,7 +17,7 @@
 
 #include <QtGlobal>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 
@@ -55,7 +55,7 @@ ViewSegment::getViewElementList()
 
         m_segment.addObserver(this);
     }
-    
+
     return m_viewElementList;
 }
 
@@ -82,11 +82,11 @@ ViewSegment::findEvent(const Event *e)
 
     // Cast away const since this is a temp we will not modify.
     ViewElement *dummy = makeViewElement(const_cast<Event *>(e));
-    
+
     std::pair<ViewElementList::iterator,
               ViewElementList::iterator>
         r = m_viewElementList->equal_range(dummy);
- 
+
     delete dummy;
 
     for (ViewElementList::iterator i = r.first; i != r.second; ++i) {
@@ -138,6 +138,13 @@ ViewSegment::endMarkerTimeChanged(const Segment *segment, bool shorten)
 
     if (shorten) {
 
+        ViewElementList::iterator oldEndi =
+            m_viewElementList->findTime(s->getEndMarkerTime());
+
+        for(auto i = oldEndi; i != m_viewElementList->end(); ++i){
+            notifyRemove(*i);
+        }
+
         m_viewElementList->erase
             (m_viewElementList->findTime(s->getEndMarkerTime()),
              m_viewElementList->end());
@@ -156,8 +163,11 @@ ViewSegment::endMarkerTimeChanged(const Segment *segment, bool shorten)
 
             ViewElementList::iterator newi = findEvent(*j);
             if (newi == m_viewElementList->end()) {
-                if (wrapEvent(*j))
+                if (wrapEvent(*j)) {
+                    ViewElement* newEl = makeViewElement(*j);
                     m_viewElementList->insert(makeViewElement(*j));
+                    notifyAdd(newEl);
+                }
             }
         }
     }
