@@ -170,6 +170,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
             this, &MatrixView::slotUpdateMenuStates);
     connect(m_matrixWidget, &MatrixWidget::rulerSelectionChanged,
             this, &MatrixView::slotUpdateMenuStates);
+    connect(m_matrixWidget, &MatrixWidget::rulerSelectionUpdate,
+            this, &MatrixView::slotRulerSelectionUpdate);
 
     // Toggle the desired tool off and then trigger it on again, to
     // make sure its signal is called at least once (as would not
@@ -771,6 +773,28 @@ MatrixView::slotUpdateMenuStates()
         enterActionState("have_selection");
     else
         leaveActionState("have_selection");
+}
+
+void
+MatrixView::slotRulerSelectionUpdate()
+{
+    // Special case for the velocity ruler.  At the end of a velocity
+    // adjustment, sync up the ruler's selection with the matrix.
+    // This will allow adjustment of velocity bars one after another
+    // if nothing is selected on the Matrix.
+
+    // Called by ControlRuler::updateSelection() via signal chain.
+    // See ControlRuler::updateSelection() for details.
+
+    ControlRulerWidget *crw = m_matrixWidget->getControlsWidget();
+    if (!crw)
+        return;
+
+    // No ruler visible?  Bail.
+    if (!crw->isAnyRulerVisible())
+        return;
+
+    crw->slotSelectionChanged(getSelection());
 }
 
 void

@@ -162,6 +162,11 @@ signals:
      * Connected to NotationView::slotUpdateMenuStates().
      */
     void rulerSelectionChanged();
+    /// Special case for velocity ruler.
+    /**
+     * See the emitter, ControlRuler::updateSelection(), for details.
+     */
+    void rulerSelectionUpdate();
 
 public slots:
     void slotSetTool(QString name);

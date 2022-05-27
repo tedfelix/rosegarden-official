@@ -140,6 +140,11 @@ signals:
 
     /// See ControlRuler::rulerSelectionChanged() for details.
     void childRulerSelectionChanged();
+    /// Special case for velocity ruler.
+    /**
+     * See the emitter, ControlRuler::updateSelection(), for details.
+     */
+    void rulerSelectionUpdate();
 
     void showContextHelp(const QString &);
 
