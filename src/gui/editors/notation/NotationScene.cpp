@@ -792,7 +792,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
     // clicking on something specific
 
     const QList<QGraphicsItem *> collisions = items(scenePos);
-    RG_DEBUG << "setupMouseEvent collisions:" << collisions.size();
+    //RG_DEBUG << "setupMouseEvent collisions:" << collisions.size();
 
     NotationElement *clickedNote = nullptr;
     NotationElement *clickedVagueNote = nullptr;
@@ -1888,7 +1888,8 @@ void
 NotationScene::setSelection(EventSelection *s,
                             bool preview)
 {
-    NOTATION_DEBUG << "NotationScene::setSelection: " << s;
+    //RG_DEBUG << "setSelection(): " << s;
+
     if (!m_selection && !s) return;
     if (m_selection == s) return;
     if (m_selection && s && *m_selection == *s) {

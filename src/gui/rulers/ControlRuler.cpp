@@ -722,9 +722,19 @@ void ControlRuler::updateSelection()
         m_eventSelection->addEvent((*it)->getEvent());
     }
 
-    RG_DEBUG << "updateSelection(): emitting rulerSelectionChanged()";
-
     emit rulerSelectionChanged(m_eventSelection);
+
+    // Special signal for the velocity ruler to make sure the user can
+    // go from bar to bar and adjust velocities when nothing is selected
+    // in the matrix or notation.  Travels through ControlRulerWidget and
+    // MatrixWidget on its way to MatrixView::slotrulerSelectionUpdate().
+    // There is also a Notation path through the corresponding classes
+    // for Notation.  A more direct connection would be nice if we could
+    // somehow have access to ControlRuler and MatrixView.  MatrixView should
+    // probably have access to the control rulers somehow so it can make
+    // this connection.
+    // Be sure to regression test all callers.
+    emit rulerSelectionUpdate();
 }
 
 void ControlRuler::addToSelection(QSharedPointer<ControlItem> item)

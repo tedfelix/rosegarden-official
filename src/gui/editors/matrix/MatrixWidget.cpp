@@ -451,6 +451,9 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     // Forward for MatrixView
     connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
             this, &MatrixWidget::rulerSelectionChanged);
+    // Forward
+    connect(m_controlsWidget, &ControlRulerWidget::rulerSelectionUpdate,
+            this, &MatrixWidget::rulerSelectionUpdate);
 
     connect(m_scene, &MatrixScene::selectionChanged,
             this, &MatrixWidget::selectionChanged);

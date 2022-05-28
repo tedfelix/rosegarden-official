@@ -143,6 +143,11 @@ signals:
      * Eventually ends up calling MatrixView::slotUpdateMenuStates().
      */
     void rulerSelectionChanged(EventSelection *);
+    /// Special case for velocity ruler.
+    /**
+     * See the emitter, ControlRuler::updateSelection(), for details.
+     */
+    void rulerSelectionUpdate();
 
     void showContextHelp(const QString &);
 

@@ -262,6 +262,8 @@ NotationView::NotationView(RosegardenDocument *doc,
             this, &NotationView::slotUpdateMenuStates);
     connect(m_notationWidget, &NotationWidget::rulerSelectionChanged,
             this, &NotationView::slotUpdateMenuStates);
+    connect(m_notationWidget, &NotationWidget::rulerSelectionUpdate,
+            this, &NotationView::slotRulerSelectionUpdate);
 
     //Initialize NoteRestInserter and DurationToolbar
     initializeNoteRestInserter();
@@ -1371,6 +1373,28 @@ NotationView::slotUpdateMenuStates()
         leaveActionState("have_multiple_staffs");
     }
 
+}
+
+void
+NotationView::slotRulerSelectionUpdate()
+{
+    // Special case for the velocity ruler.  At the end of a velocity
+    // adjustment, sync up the ruler's selection with the matrix.
+    // This will allow adjustment of velocity bars one after another
+    // if nothing is selected on the Matrix.
+
+    // Called by ControlRuler::updateSelection() via signal chain.
+    // See ControlRuler::updateSelection() for details.
+
+    ControlRulerWidget *crw = m_notationWidget->getControlsWidget();
+    if (!crw)
+        return;
+
+    // No ruler visible?  Bail.
+    if (!crw->isAnyRulerVisible())
+        return;
+
+    crw->slotSelectionChanged(getSelection());
 }
 
 void

@@ -479,6 +479,9 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
     //     actually does nothing right now.
     connect(controlRuler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);
+    // Forward.
+    connect(controlRuler, &ControlRuler::rulerSelectionUpdate,
+            this, &ControlRulerWidget::rulerSelectionUpdate);
 
     connect(controlRuler, &ControlRuler::showContextHelp,
             this,  &ControlRulerWidget::showContextHelp);
