@@ -23,7 +23,7 @@
 namespace Rosegarden
 {
   class Text;
-  
+
 /**
  * SegmentID supplies ID information for a segment, used for updating
  * figurations.
@@ -40,9 +40,9 @@ class SegmentID
   static const std::string ChordSource;
   static const std::string FigurationSource;
   static const std::string Target;
-  
-  SegmentID(const Event &e);
-  SegmentID(const std::string type, int ID = -1);
+
+  explicit SegmentID(const Event &e);
+  SegmentID(const std::string& type, int ID = -1);
 
   /// Returned event is on heap; caller takes responsibility for ownership
   Event *getAsEvent(timeT absoluteTime) const;

@@ -34,7 +34,7 @@ const std::string SegmentID::Uninvolved = "uninvolved";
 const std::string SegmentID::ChordSource = "chord source";
 const std::string SegmentID::FigurationSource = "figuration source";
 const std::string SegmentID::Target = "figuration target";
-  
+
 SegmentID::SegmentID(const Event &e) :
     m_ID(-1),
     m_type(Uninvolved)
@@ -48,7 +48,7 @@ SegmentID::SegmentID(const Event &e) :
     e.get<String>(SubtypePropertyName, m_type);
 }
 
-  SegmentID::SegmentID(const std::string type, int ID) :
+  SegmentID::SegmentID(const std::string& type, int ID) :
     m_ID(ID),
     m_type(type)
     {}
@@ -75,5 +75,3 @@ SegmentID::NotationString() const
 }
 
 }
-
-
