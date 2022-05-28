@@ -56,9 +56,9 @@ public:
         RelativeEvent(e, startTime),
         m_index(i)
     {};
-    Event   *getAsEvent(timeT baseTime, const Key key,
+    Event   *getAsEvent(timeT baseTime, const Key& key,
                                 const FigChord *notes) override;
-    virtual pitchT getResultPitch(const Key key, const Pitch & basePitch)=0;
+    virtual pitchT getResultPitch(const Key& key, const Pitch & basePitch)=0;
 private:
     int              m_index;
 };
@@ -81,7 +81,7 @@ public:
         setScore(-penalty);
     };
     static pitchT addChromaticInterval(const Pitch & basePitch, int interval);
-    pitchT getResultPitch(const Key key, const Pitch & basePitch) override;
+    pitchT getResultPitch(const Key& key, const Pitch & basePitch) override;
 private:
     int  m_interval;
 };
@@ -93,11 +93,11 @@ class DiatonicRelativeNote : public RelativeNote
 {
 public:
     DiatonicRelativeNote(int i, Event *e, timeT startTime,
-                         const Key key, const Pitch basePitch);
-    static pitchT addDiatonicInterval(const Key key,
+                         const Key& key, const Pitch basePitch);
+    static pitchT addDiatonicInterval(const Key& key,
                                       const Pitch & basePitch,
                                       int interval);
-    pitchT getResultPitch(const Key key, const Pitch & basePitch) override;
+    pitchT getResultPitch(const Key& key, const Pitch & basePitch) override;
 private:
     int  m_interval;
 };
@@ -126,7 +126,7 @@ class ProximityNote : public RelativeEvent
     public:
         enum Pressure { high, normal, low, numStates, };
 
-        TonePressure(PitchNoOctave pitch) :
+        explicit TonePressure(PitchNoOctave pitch) :
             m_pitch(pitch)
             {}
         void addIndex(int index)
@@ -135,7 +135,7 @@ class ProximityNote : public RelativeEvent
             sort(m_originalTones.begin(), m_originalTones.end());
         }
         // Unused now.
-        PitchNoOctave getPitch() { return m_pitch; }
+        PitchNoOctave getPitch() const { return m_pitch; }
         int getPenalty(PitchNoOctave pitch)
         {
             // Direction of subtraction here isn't important since
@@ -175,7 +175,7 @@ class ProximityNote : public RelativeEvent
             moveIndexBackwards(to.m_originalTones, from.m_originalTones);
         }
 
-        Pressure getState(size_t min, size_t max)
+        Pressure getState(size_t min, size_t max) const
         {
             if (m_originalTones.size() > max) {
                 return high;
@@ -615,7 +615,7 @@ class ProximityNote : public RelativeEvent
             m_pitchDeltas = finalMapping;
         }
 
-        PitchNoOctave getPitchDelta(int index)
+        PitchNoOctave getPitchDelta(int index) const
         {
             const int pitchDelta = m_pitchDeltas[m_indexes[index]];
             return pitchDelta;
@@ -656,7 +656,7 @@ public:
         m_index(index),
         m_sharedData(sharedData)
     { setScore(0); };
-    Event   *getAsEvent(timeT baseTime, const Key key,
+    Event   *getAsEvent(timeT baseTime, const Key& key,
                                 const FigChord *notes) override;
 private:
     int m_index;
@@ -672,7 +672,7 @@ public:
     RelativeNonnote(Event *e, timeT startTime) :
         RelativeEvent(e, startTime)
     {};
-    Event   *getAsEvent(timeT baseTime, const Key key,
+    Event   *getAsEvent(timeT baseTime, const Key& key,
                                 const FigChord *notes) override;
 };
 
@@ -688,7 +688,7 @@ public:
     virtual ~BaseRelativeEventAdder() {};
 
 protected:
-    BaseRelativeEventAdder(timeT startTime) :
+    explicit BaseRelativeEventAdder(timeT startTime) :
         m_startTime(startTime)
     {}
 
@@ -732,7 +732,7 @@ public:
 class UnparamaterizedRelativeEventAdder : public BaseRelativeEventAdder
 {
 public:
-    UnparamaterizedRelativeEventAdder(timeT startTime) :
+    explicit UnparamaterizedRelativeEventAdder(timeT startTime) :
         BaseRelativeEventAdder(startTime),
         m_sharedData(new ProximityNote::SharedData)
         {}
@@ -823,7 +823,7 @@ int higherPitch(Event *a, Event* b)
 DiatonicRelativeNote::DiatonicRelativeNote(int i,
                                            Event *e,
                                            timeT startTime,
-                                           const Key key,
+                                           const Key& key,
                                            const Pitch basePitch) :
     RelativeNote(i, e, startTime)
 {
@@ -871,7 +871,7 @@ DiatonicRelativeNote::DiatonicRelativeNote(int i,
 /// @param interval can be positive or negative
 /// @author Tom Breton (Tehom)
 pitchT
-DiatonicRelativeNote::addDiatonicInterval(const Key key,
+DiatonicRelativeNote::addDiatonicInterval(const Key& key,
                                           const Pitch & basePitch,
                                           int interval)
 {
@@ -912,7 +912,7 @@ DiatonicRelativeNote::addDiatonicInterval(const Key key,
 /// @param e must be a note.
 /// @author Tom Breton (Tehom)
 pitchT
-DiatonicRelativeNote::getResultPitch(const Key key, const Pitch & basePitch)
+DiatonicRelativeNote::getResultPitch(const Key& key, const Pitch & basePitch)
 {
     return addDiatonicInterval(key, basePitch, m_interval);
 }
@@ -934,7 +934,7 @@ ChromaticRelativeNote::addChromaticInterval(const Pitch & basePitch,
 /// @param e must be a note.
 /// @author Tom Breton (Tehom)
 pitchT
-ChromaticRelativeNote::getResultPitch(const Key, const Pitch & basePitch)
+ChromaticRelativeNote::getResultPitch(const Key&, const Pitch & basePitch)
 {
     return addChromaticInterval(basePitch, m_interval);
 }
@@ -947,7 +947,7 @@ ChromaticRelativeNote::getResultPitch(const Key, const Pitch & basePitch)
 /// @param key is the key to govern diatonicity
 /// @author Tom Breton (Tehom)
 Event *
-RelativeNote::getAsEvent(timeT baseTime, const Key key,
+RelativeNote::getAsEvent(timeT baseTime, const Key& key,
                          const FigChord *notes)
 {
     // Figure out time
@@ -980,7 +980,7 @@ RelativeNote::getAsEvent(timeT baseTime, const Key key,
 /***** Methods for ProximityNote *****/
 
 Event *
-ProximityNote::getAsEvent(timeT baseTime, const Key /*key*/,
+ProximityNote::getAsEvent(timeT baseTime, const Key& /*key*/,
                           const FigChord *notes)
 {
     m_sharedData->update(notes);
@@ -1001,7 +1001,7 @@ ProximityNote::getAsEvent(timeT baseTime, const Key /*key*/,
 /***** Methods for RelativeNonnote *****/
 
 Event *
-RelativeNonnote::getAsEvent(timeT baseTime, const Key /*key*/,
+RelativeNonnote::getAsEvent(timeT baseTime, const Key& /*key*/,
                             const FigChord */*notes*/)
 {
     return new Event(*m_bareEvent, getAbsoluteTime(baseTime));
@@ -1014,7 +1014,7 @@ RelativeNonnote::getAsEvent(timeT baseTime, const Key /*key*/,
 FigurationSourceMap::UnsolvedNote
 FigurationSourceMap::getPossibleRelations(Event *e,
 					  const FigChord *parameterChord,
-					  const Key key,
+					  const Key& key,
 					  timeT startTime)
 {
     UnsolvedNote possibleRelations;

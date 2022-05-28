@@ -80,7 +80,7 @@ public:
     friend bool operator<(const ViewElement&, const ViewElement&);
 
 protected:
-    ViewElement(Event *);
+    explicit ViewElement(Event *);
 
     double m_layoutX;
     double m_layoutY;

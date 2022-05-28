@@ -42,9 +42,9 @@ namespace Rosegarden
 class Figuration
 {
 public:
-  timeT        getEndTime(timeT startTime)
+  timeT        getEndTime(timeT startTime) const
   { return startTime + m_duration; }
-  
+
   RelativeEventVec m_events;
   timeT            m_duration;
   // Parameter count
@@ -70,7 +70,7 @@ public:
   static FigurationVector getFigurations(Segment *s);
   static UnsolvedNote getPossibleRelations(Event *e,
 					   const FigChord *parameterChord,
-					   const Key key,
+					   const Key& key,
 					   timeT startTime);
 
   static Figuration *findMatch(FigurationVector& figVector,
@@ -88,7 +88,7 @@ public:
       trivialContainer.insert(e);
       return trivialContainer;
   };
-  
+
 };
 typedef FigurationSourceMap::value_type SourcedFiguration;
 }

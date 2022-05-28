@@ -17,13 +17,16 @@
 
 #include <QtGlobal>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 
 ViewSegment::ViewSegment(Segment &t) :
     m_segment(t),
-    m_viewElementList(nullptr)
+    m_viewElementList(nullptr),
+    m_modified(false),
+    m_modStart(0),
+    m_modEnd(0)
 {
     // empty
 }
@@ -55,7 +58,7 @@ ViewSegment::getViewElementList()
 
         m_segment.addObserver(this);
     }
-    
+
     return m_viewElementList;
 }
 
@@ -82,11 +85,11 @@ ViewSegment::findEvent(const Event *e)
 
     // Cast away const since this is a temp we will not modify.
     ViewElement *dummy = makeViewElement(const_cast<Event *>(e));
-    
+
     std::pair<ViewElementList::iterator,
               ViewElementList::iterator>
         r = m_viewElementList->equal_range(dummy);
- 
+
     delete dummy;
 
     for (ViewElementList::iterator i = r.first; i != r.second; ++i) {
