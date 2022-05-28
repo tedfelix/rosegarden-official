@@ -45,14 +45,14 @@ namespace Rosegarden
 
 /*** Helper class ReplaceRegionCommand ***/
 
-    
+
 class ReplaceRegionCommand : public BasicCommand
 {
 public:
     ReplaceRegionCommand(Segment &segment, Segment *redoEvents) :
         BasicCommand(QObject::tr("Replace segment contents"),
                      segment, redoEvents)
-        
+
         {}
     void modifySegment() override {}
 };
@@ -63,14 +63,14 @@ public:
 class TargetSegment : public std::vector<Event*>
 {
 public:
-    TargetSegment(Segment* s);
+    explicit TargetSegment(Segment* s);
     void update(ChordSegmentMap& chordSources,
                 FigurationSourceMap& figurationSources,
                 MacroCommand* command);
 
 private:
-    static Segment *newEventHolder(Segment *s, Composition *c);
-    static void doneEventHolder(Segment *s, Composition *c,
+    static Segment *newEventHolder(Segment *s, Composition *comp);
+    static void doneEventHolder(Segment *s, Composition *comp,
                                 Segment *target, MacroCommand* command);
 
     Segment* m_s;
@@ -89,7 +89,7 @@ public:
             i->update(chordSources, figurationSources, command);
         }
     }
-        
+
     void addTargets(Segment* s)
     { push_back(TargetSegment(s)); }
 };
@@ -119,7 +119,7 @@ newEventHolder(Segment *s, Composition *comp)
     // Make a fresh segment that we will give to ReplaceRegionCommand.
     Segment* eventHolder = new Segment(Segment::Internal, s->getStartTime());
     eventHolder->setQuantizeLevel(s->getQuantizer()->getUnit());
-        
+
     // Temporarily attach it to composition so that expand can
     // work.
     comp->weakAddSegment(eventHolder);
@@ -162,15 +162,15 @@ update(ChordSegmentMap& chordSources,
     // simple.  The initial value doesn't matter much because the
     // relevant branch does nothing when `target' is nullptr.
     timeT lastEnd = 0;
-    
+
     // Expand for each target
     for (iterator i = begin(); i != end(); ++i) {
         Event* e = (*i);
         Q_ASSERT(e->isa(GeneratedRegion::EventType));
         GeneratedRegion generatedRegion(*e);
-              
+
         /*** Find the respective sources ***/
-          
+
         int figurationSourceIndex =
             generatedRegion.getFigurationSourceID();
         FigurationSourceMap::iterator figurationIter =
@@ -186,7 +186,7 @@ update(ChordSegmentMap& chordSources,
         if (chordSourceIter == chordSources.end())
             { continue; }
         ChordSegment& chordSource = chordSourceIter->second;
-        
+
         // Find it by time.
         timeT startRegion = e->getAbsoluteTime();
         timeT endRegion = startRegion + e->getDuration();
@@ -212,7 +212,7 @@ update(ChordSegmentMap& chordSources,
 
         // Now update lastEnd for the next iteration.
         lastEnd = endRegion;
-        
+
         // Copy selected other contents of that region
         Segment::iterator end = s->findTime(endRegion);
         for (Segment::iterator j = s->findTime(startRegion); j != end; ++j) {
@@ -235,7 +235,7 @@ eventShouldPass(Event *e)
     // Typically volume controllers should pass thru while expression
     // controllers shouldn't.  As yet, we make no provision for
     // setting this more generally.
-    if (e->isa(Controller::EventType) && 
+    if (e->isa(Controller::EventType) &&
         (e->has(Controller::NUMBER) &&
          e->get <Int>(Controller::NUMBER) == 7))
         { return true; }
@@ -252,7 +252,8 @@ class DelimitedChord
 public:
     DelimitedChord(FigChord *chord, timeT m_start)
         : m_chord(chord),
-          m_start(m_start)
+          m_start(m_start),
+          m_end(m_start)
           {}
 
     void        setEndTime(timeT end) { m_end = end; }
@@ -282,7 +283,7 @@ SegmentFigData::SegmentFigData(Segment* s) :
         m_type = Unavailable;
         return;
     }
-          
+
     // Loop thru events until one tells us what this segment is.
     for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
         const std::string &type = (*i)->getType();
@@ -363,7 +364,7 @@ getInvolvedSegments(bool onlyIfNeedTag, MacroCommand* command)
 	 i != ss.end();
 	 ++i) {
         SegmentFigData segmentData(*i);
-      
+
         // Set the relevant ID max, if any, to the maximum of its
         // previous value and this id.
         switch (segmentData.m_type) {
@@ -469,7 +470,7 @@ updateComposition(MacroCommand* command)
         SegmentFigData &data = i->second;
 
         Q_ASSERT(!data.m_needsTag);
-      
+
         // Set the relevant ID max, if any, to the maximum of its
         // previous value and this id.
         switch (data.m_type) {
@@ -575,11 +576,11 @@ SegmentFigData::expand(SourcedFiguration& sourcedFiguration,
 
     /*** Now we have all the source chords. ***/
 
-    
+
     // Get the key, for diatonic relations.
     const Key key =
         chordSource.m_s->getKeyAtTime(startTime);
-            
+
     // Write an indication for the whole thing.
     {
         GeneratedRegion
@@ -612,7 +613,7 @@ SegmentFigData::expand(SourcedFiguration& sourcedFiguration,
         }
         // Here we skip no-source regions
         if (!pBlockChord || pBlockChord->empty()) { continue; }
-                
+
         Event *newNote =
             (*k)->getAsEvent(startTime,
                              key,
@@ -629,7 +630,7 @@ SegmentFigData::expand(SourcedFiguration& sourcedFiguration,
     chordSequence.clear();
 
     /** Now just make it nice **/
-    
+
     // Normalize the rests
     target->normalizeRests(startTime,timePastFiguration);
 
@@ -637,7 +638,7 @@ SegmentFigData::expand(SourcedFiguration& sourcedFiguration,
     target->getQuantizer()->quantize(target,
                                      target->findTime(startTime),
                                      target->findTime(timePastFiguration));
-    
+
     return timePastFiguration;
 }
 
