@@ -23,7 +23,10 @@ namespace Rosegarden
 
 ViewSegment::ViewSegment(Segment &t) :
     m_segment(t),
-    m_viewElementList(nullptr)
+    m_viewElementList(nullptr),
+    m_modified(false),
+    m_modStart(0),
+    m_modEnd(0)
 {
     // empty
 }

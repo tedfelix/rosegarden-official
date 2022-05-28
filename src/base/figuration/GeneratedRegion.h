@@ -33,7 +33,7 @@ public:
   static const int EventSubOrdering;
   static const PropertyName ChordPropertyName;
   static const PropertyName FigurationPropertyName;
-  GeneratedRegion(const Event &e);
+  explicit GeneratedRegion(const Event &e);
   GeneratedRegion(int chordSourceID, int figurationSourceID, timeT duration);
 
   /// Returned event is on heap; caller takes responsibility for ownership
@@ -42,7 +42,7 @@ public:
   { return m_chordSourceID; }
   int    getFigurationSourceID() const
   { return m_figurationSourceID; }
-  const std::string NotationString() const;
+  static const std::string NotationString();
   void setChordSourceID(int id)
   { m_chordSourceID = id; }
   void setFigurationSourceID(int id)

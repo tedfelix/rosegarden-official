@@ -22,7 +22,7 @@ namespace Rosegarden
 {
   class Event;
   class FigChord;
-  
+
 /// @class RelativeEvent
 /// Class to describe a relative event
 /// @author Tom Breton (Tehom)
@@ -36,7 +36,7 @@ public:
   {};
   virtual ~RelativeEvent() {}
 
-  virtual Event   *getAsEvent(timeT baseTime, const Key key,
+  virtual Event   *getAsEvent(timeT baseTime, const Key& key,
 			      const FigChord *notes)=0;
   void setScore(int score) { m_score = score; };
   int getScore() { return m_score; };

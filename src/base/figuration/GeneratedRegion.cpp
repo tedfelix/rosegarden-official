@@ -59,9 +59,8 @@ GeneratedRegion::getAsEvent(timeT absoluteTime) const
 }
 
 const std::string
-GeneratedRegion::NotationString() const
+GeneratedRegion::NotationString()
 {
     return std::string("G");
 }
 }
-
