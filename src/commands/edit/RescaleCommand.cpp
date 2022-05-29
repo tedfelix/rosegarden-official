@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -28,15 +28,15 @@
 namespace Rosegarden
 {
 
-RescaleCommand::RescaleCommand(EventSelection &sel,
+RescaleCommand::RescaleCommand(EventSelection &selection,
                                timeT newDuration,
                                bool closeGap) :
-        BasicCommand(getGlobalName(), sel.getSegment(),
-                     sel.getStartTime(),
-                     getAffectedEndTime(sel, newDuration, closeGap),
+        BasicCommand(getGlobalName(), selection.getSegment(),
+                     selection.getStartTime(),
+                     getAffectedEndTime(selection, newDuration, closeGap),
                      true),
-        m_selection(&sel),
-        m_oldDuration(sel.getTotalDuration()),
+        m_selection(&selection),
+        m_oldDuration(selection.getTotalDuration()),
         m_newDuration(newDuration),
         m_closeGap(closeGap)
 {
@@ -45,19 +45,19 @@ RescaleCommand::RescaleCommand(EventSelection &sel,
 }
 
 timeT
-RescaleCommand::getAffectedEndTime(EventSelection &sel,
+RescaleCommand::getAffectedEndTime(EventSelection &selection,
                                    timeT newDuration,
                                    bool closeGap)
 {
-    timeT preScaleEnd = sel.getEndTime();
+    timeT preScaleEnd = selection.getEndTime();
     if (closeGap)
-        preScaleEnd = sel.getSegment().getEndMarkerTime();
+        preScaleEnd = selection.getSegment().getEndMarkerTime();
 
     // dupe of rescale(), but we can't use that here as the m_
     // variables may not have been set
     double d = preScaleEnd;
     d *= newDuration;
-    d /= sel.getTotalDuration();
+    d /= selection.getTotalDuration();
     d += 0.5;
     timeT postScaleEnd = (timeT)d;
 

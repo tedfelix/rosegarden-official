@@ -35,11 +35,11 @@ namespace Rosegarden
 SelectAddEvenNotesCommand::BeatInterpolator::
 BeatInterpolator(timeT duration,
                  timeT prevBeatDuration,
-                 int numBeats)
+                 int numSkippedBeats)
     : m_baseBeatDuration(prevBeatDuration),
       m_logScalingPerBeat(calculateLogScalingPerBeat(duration,
                                                      prevBeatDuration,
-                                                     numBeats))
+                                                     numSkippedBeats))
 {}
 
 // Given a time interval of N beats, calculate a scaling factor that
@@ -56,7 +56,7 @@ float
 SelectAddEvenNotesCommand::BeatInterpolator::
 calculateLogScalingPerBeat(timeT duration,
                            timeT prevBeatDuration,
-                           int numBeats)
+                           int numSkippedBeats)
 {
     /**
      * For example, say the interval comprises 4 beats (ie we skipped
@@ -85,26 +85,26 @@ calculateLogScalingPerBeat(timeT duration,
      *  * How fast tempo changes, in time units per beat squared.
      *    We'll represent it as the log of the ratio of successive
      *    tempi so we can write "scaling" instead of "ln(scaling)"
-     * 
-     * Then the total time taken across numBeats is:
+     *
+     * Then the total time taken across numSkippedBeats is:
      *
      * integral(beat * firstTempo * e^(scaling * beat) d beat)
-     * from 0 to numBeats,
+     * from 0 to numSkippedBeats,
      *
      * giving:
      *
-     * numBeats * firstTempo * e^(scaling * numBeats) 
+     * numSkippedBeats * firstTempo * e^(scaling * numSkippedBeats)
      *
      * We need to find scaling per beat, which is:
      *
-     * ln (duration / (numBeats * firstTempo)) / numBeats
+     * ln (duration / (numSkippedBeats * firstTempo)) / numSkippedBeats
      *
      * With this we can calculate any beat's time.
      **/
 
     // The time interval we would have predicted it would take.
     const timeT expectedDuration =
-        prevBeatDuration * numBeats;
+        prevBeatDuration * numSkippedBeats;
 
     // The ratio of the interval to its predicted time (can be less
     // than 1)
@@ -113,7 +113,7 @@ calculateLogScalingPerBeat(timeT duration,
 
     // The log of the ratio which each successive beat expands by in
     // time (can be less than 0)
-    return std::log(ratioOfTotalToInterval) / numBeats;
+    return std::log(ratioOfTotalToInterval) / numSkippedBeats;
 }
 
 // @return The absolute time corresponding to beat "beatNumber"
@@ -122,7 +122,7 @@ timeT
 SelectAddEvenNotesCommand::BeatInterpolator::
 getBeatRelativeTime(int beatNumber)
 {
-    return 
+    return
         beatNumber *
         m_baseBeatDuration *
         std::exp(m_logScalingPerBeat * beatNumber);
@@ -131,20 +131,20 @@ getBeatRelativeTime(int beatNumber)
 // @param duration Absolute time duration of the interval
 // @param prevBeatDuration Duration of the beat before the interval,
 // so that we can match it smoothly.
-// @param numBeats Number of beats the interval comprises.
+// @param numSkippedBeats Number of beats the interval comprises.
 // @return The duration of the last beat of the interval.
 // @author Tom Breton (Tehom)
 timeT
 SelectAddEvenNotesCommand::BeatInterpolator::
 getLastBeatRelativeTime(timeT duration,
                         timeT prevBeatDuration,
-                        int numBeats)
+                        int numSkippedBeats)
 {
     return
         BeatInterpolator(duration,
                          prevBeatDuration,
-                         numBeats).
-        getBeatRelativeTime(numBeats - 1);
+                         numSkippedBeats).
+        getBeatRelativeTime(numSkippedBeats - 1);
 }
 
 // Find evenly-spaced notes
@@ -189,7 +189,7 @@ SelectAddEvenNotesCommand::findBeatEvents(Segment &s,
      * just notes that are too far from rhythmic expectations are
      * treated as noteless stretches.
      **/
-    
+
     // Find beat-defining notes in the segment
     while (true) {
 
@@ -214,7 +214,7 @@ SelectAddEvenNotesCommand::findBeatEvents(Segment &s,
        // Scoring variable, how much the best candidate note differs
        // from expectedNoteTime.  Smaller is better.
        timeT nearestMiss = std::numeric_limits<timeT>::max();
-       
+
        for (Segment::const_iterator i = startRangeIter;
             i != endRangeIter;
             ++i) {
@@ -232,7 +232,7 @@ SelectAddEvenNotesCommand::findBeatEvents(Segment &s,
            }
        }
 
-       
+
        if (nextBeat) {
            const timeT nextBeatTime = nextBeat->getAbsoluteTime();
            const timeT stretchDuration = nextBeatTime - prevKnownBeatTime;

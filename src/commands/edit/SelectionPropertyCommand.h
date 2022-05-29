@@ -35,7 +35,7 @@ class SelectionPropertyCommand : public BasicCommand
 
 public:
 
-    SelectionPropertyCommand(ParameterPattern::Result result);
+    explicit SelectionPropertyCommand(ParameterPattern::Result result);
 
     void modifySegment() override;
 

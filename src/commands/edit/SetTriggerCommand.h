@@ -40,7 +40,7 @@ public:
                       TriggerSegmentId triggerSegmentId,
                       bool notesOnly,
                       bool retune,
-                      std::string timeAdjust,
+                      const std::string& timeAdjust,
                       Mark mark,
                       QString name) :
         BasicCommand(name,
