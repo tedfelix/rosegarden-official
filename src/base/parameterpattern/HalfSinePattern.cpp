@@ -24,9 +24,6 @@
 namespace Rosegarden
 {
 
-HalfSinePattern HalfSinePattern::crescendo(false);
-HalfSinePattern HalfSinePattern::diminuendo(true);
-
 QString
 HalfSinePattern::getText(QString propertyName) const
 {
@@ -54,7 +51,7 @@ getValueDelta(double valueChange, double timeRatio) const
 
      value delta = (-cos(pi * ratio)/2 + 0.5) * valueChange
   **/
-  
+
     const double cosArg = pi * timeRatio;
     return (-cos(cosArg)/2 + 0.5) * valueChange;
 }

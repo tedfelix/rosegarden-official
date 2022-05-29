@@ -28,6 +28,7 @@ namespace Rosegarden
 // @author Tom Breton (Tehom)
 class LinearParameterPattern : public ParameterPattern
 {
+ protected:
     QString getText(QString propertyName) const override;
 
     // Make as many sliders as we need.  EventParameterDialog will
@@ -41,12 +42,12 @@ class LinearParameterPattern : public ParameterPattern
                            Result *result) const override;
     virtual double getValueDelta(double valueChange, double timeRatio)
         const;
-    
+
 protected:
     bool m_isDiminuendo;
 
 public:
-    LinearParameterPattern(bool isDiminuendo) :
+    explicit LinearParameterPattern(bool isDiminuendo) :
         m_isDiminuendo(isDiminuendo)
     {};
     static LinearParameterPattern crescendo;
