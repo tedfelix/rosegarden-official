@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -43,7 +43,7 @@ InsertTriggerNoteCommand::InsertTriggerNoteCommand(Segment &segment,
         NoteStyleName noteStyle,
         TriggerSegmentId id,
         bool retune,
-        std::string timeAdjust,
+        const std::string& timeAdjust,
         Mark mark) :
         BasicCommand(tr("Insert Trigger Note"), segment,
                      time, time + duration),
@@ -73,7 +73,7 @@ InsertTriggerNoteCommand::modifySegment()
 
     Event *e = new Event(Note::EventType, m_time, m_duration);
 
-    // Could 
+    // Could
     e->set<Int>(PITCH, m_pitch);
     e->set<Int>(VELOCITY, m_velocity);
     e->set<Bool>(TRIGGER_EXPAND, true);
@@ -97,7 +97,7 @@ InsertTriggerNoteCommand::modifySegment()
         Marks::addMark(*e, m_mark, true);
     }
 
-    
+
     TriggerSegmentRec *rec =
         s.getComposition()->getTriggerSegmentRec(m_id);
 

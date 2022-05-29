@@ -48,7 +48,7 @@ public:
                              NoteStyleName noteStyle,
                              TriggerSegmentId id,
                              bool retune,
-                             std::string timeAdjust,
+                             const std::string& timeAdjust,
                              Mark mark);
     ~InsertTriggerNoteCommand() override;
 

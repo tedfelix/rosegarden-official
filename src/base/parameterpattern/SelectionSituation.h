@@ -40,7 +40,7 @@ namespace Rosegarden
 class SelectionSituation
 {
 public:
-    SelectionSituation(std::string eventType,
+    SelectionSituation(const std::string& eventType,
                        EventSelection *selection,
                        int currentFlatValue = -1);
 
