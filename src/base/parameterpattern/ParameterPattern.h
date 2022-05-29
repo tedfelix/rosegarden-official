@@ -72,7 +72,7 @@ public:
     typedef std::pair<timeT,timeT> StartAndDuration;
     typedef ParameterPatternBareParameters BareParams;
     typedef std::vector<ParameterPattern *> ParameterPatternVec;
-    
+
     /*** Nested class SliderSpec  ***/
 
 protected:
@@ -98,7 +98,7 @@ protected:
     typedef std::vector<SliderSpec>  SliderSpecVector;
 
     /*** Nested class Result  ***/
-    
+
 protected:
     // @class EventParameter::Result The result of an EventParameterDialog
     // or similar, to inform for SelectionPropertyCommand.  It's open
@@ -109,7 +109,7 @@ protected:
     {
     Result(const SelectionSituation *situation,
            const ParameterPattern *pattern,
-           const BareParams        parameters)
+           const BareParams&       parameters)
     : m_situation(situation),
             m_pattern(pattern),
             m_parameters(parameters)
@@ -125,7 +125,7 @@ protected:
 
         EventSelection *getSelection();
         void            modifySegment();
-        
+
         const SelectionSituation *m_situation;
         const ParameterPattern   *m_pattern;
         const BareParams          m_parameters;
@@ -140,12 +140,12 @@ public:
      */
     static void setVelocitiesFlat(EventSelection *selection,
                                   int targetVelocity);
-    
-    // Set some property flat, no dialog. 
+
+    // Set some property flat, no dialog.
     static void setPropertyFlat(EventSelection *selection,
-                                const std::string eventType,
+                                const std::string& eventType,
                                 int targetValue);
-    
+
     /// Set velocities, with a dialog
     /**
      * Matrix/Notation: Adjust > Set Event Velocities...
@@ -157,7 +157,7 @@ public:
     // Set some property, with a dialog
     static void setProperties(QMainWindow *parent,
                               EventSelection *selection,
-                              const std::string eventType,
+                              const std::string& eventType,
                               const ParameterPatternVec *patterns,
                               int normValue = -1);
 
@@ -191,7 +191,7 @@ protected:
     static StartAndDuration getTimes (iterator begin, iterator end);
 
     /*** Static objects of interest  ***/
-    
+
 public:
     // All the ParameterPatterns that are useful with velocity.
     static ParameterPatternVec VelocityPatterns;

@@ -33,12 +33,10 @@ class QuarterSinePattern : public LinearParameterPattern
     double getValueDelta(double valueChange, double timeRatio) const override;
 
 public:
-    QuarterSinePattern(bool isDiminuendo) :
+    explicit QuarterSinePattern(bool isDiminuendo) :
         LinearParameterPattern(isDiminuendo)
     {}
 
-    static QuarterSinePattern crescendo;
-    static QuarterSinePattern diminuendo;
 };
 }
 

@@ -34,12 +34,10 @@ class HalfSinePattern : public LinearParameterPattern
     double getValueDelta(double valueChange, double timeRatio) const override;
 
 public:
-    HalfSinePattern(bool isDiminuendo) :
+    explicit HalfSinePattern(bool isDiminuendo) :
         LinearParameterPattern(isDiminuendo)
     {}
 
-    static HalfSinePattern crescendo;
-    static HalfSinePattern diminuendo;
 };
 
 }

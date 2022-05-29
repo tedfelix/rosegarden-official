@@ -24,10 +24,6 @@
 namespace Rosegarden
 {
 
-
-QuarterSinePattern QuarterSinePattern::crescendo(false);
-QuarterSinePattern QuarterSinePattern::diminuendo(true);
-
 QString
 QuarterSinePattern::getText(QString propertyName) const
 {

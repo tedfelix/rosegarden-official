@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -114,11 +114,11 @@ ParameterPattern * controllerPatternsArray[] = {
 DEFINE_PPVEC_FROM_ARRAY(ControllerPatterns, controllerPatternsArray);
 
 /* ***** Helper functions ***** */
-   
+
 // Get the start and duration in timeT of the interval defined by
 // begin and end.
 ParameterPattern::StartAndDuration
-ParameterPattern::getTimes (iterator begin, iterator end) 
+ParameterPattern::getTimes (iterator begin, iterator end)
 {
     // Start with values such that anything we find will supersede
     // them.
@@ -168,12 +168,12 @@ ParameterPattern::~ParameterPattern()
 {
 
 }
-    
+
 void
 ParameterPattern::
 setProperties(QMainWindow *parent,
               EventSelection *selection,
-              const std::string eventType,
+              const std::string& eventType,
               const ParameterPatternVec *patterns,
               int normValue)
 {
@@ -198,11 +198,11 @@ setVelocities(QMainWindow *parent,
                   &ParameterPattern::VelocityPatterns, normVelocity);
 }
 
-// Set some property to targetValue, no dialog. 
+// Set some property to targetValue, no dialog.
 void
 ParameterPattern::
 setPropertyFlat(EventSelection *selection,
-                const std::string eventType,
+                const std::string& eventType,
                 int targetValue)
 {
     if (!selection) { return; }
@@ -216,7 +216,7 @@ setPropertyFlat(EventSelection *selection,
         (new SelectionPropertyCommand(result));
 }
 
-// Set velocity to targetVelocity, no dialog. 
+// Set velocity to targetVelocity, no dialog.
 void
 ParameterPattern::
 setVelocitiesFlat(EventSelection *selection, int targetVelocity)
@@ -225,4 +225,4 @@ setVelocitiesFlat(EventSelection *selection, int targetVelocity)
                     targetVelocity);
 }
 
-} // End namespace Rosegarden 
+} // End namespace Rosegarden
