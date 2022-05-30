@@ -65,9 +65,17 @@ MatrixElement::MatrixElement(MatrixScene *scene, Event *event,
 MatrixElement::~MatrixElement()
 {
     RG_DEBUG << "deleting item:" << m_item << this;
+
+    // Remove the item from the scene.
+    // ??? Qt documentation indicates that it is faster to remove the
+    //     item and then delete it.  We should do that.
     delete m_item;
+
     if (m_textItem) {
         RG_DEBUG << "deleting text item:" << m_textItem << this;
+        // Remove the item from the scene.
+        // ??? Qt documentation indicates that it is faster to remove the
+        //     item and then delete it.  We should do that.
         delete m_textItem;
     }
 }
@@ -155,6 +163,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         QGraphicsPolygonItem *item = dynamic_cast<QGraphicsPolygonItem *>(m_item);
         if (!item) {
             RG_DEBUG << "reconfigure drum deleting item:" << m_item << this;
+            // Remove the item from the scene.
+            // ??? Qt documentation indicates that it is faster to remove the
+            //     item and then delete it.  We should do that.
             delete m_item;
             item = new QGraphicsPolygonItem;
             RG_DEBUG << "reconfigure drum created item:" << m_item << this;
@@ -175,6 +186,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         QGraphicsRectItem *item = dynamic_cast<QGraphicsRectItem *>(m_item);
         if (!item) {
             RG_DEBUG << "reconfigure deleting item:" << m_item << this;
+            // Remove the item from the scene.
+            // ??? Qt documentation indicates that it is faster to remove the
+            //     item and then delete it.  We should do that.
             delete m_item;
             item = new QGraphicsRectItem;
             m_item = item;
@@ -200,6 +214,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         if (m_textItem) {
             if (! showName) {
                 RG_DEBUG << "reconfigure deleting text item:" << m_textItem << this;
+                // Remove the item from the scene.
+                // ??? Qt documentation indicates that it is faster to remove the
+                //     item and then delete it.  We should do that.
                 delete m_textItem;
                 m_textItem = nullptr;
             }

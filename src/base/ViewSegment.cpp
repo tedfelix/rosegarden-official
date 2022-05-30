@@ -126,7 +126,9 @@ ViewSegment::eventRemoved(const Segment *t, Event *e)
 
     ViewElementList::iterator i = findEvent(e);
     if (i != m_viewElementList->end()) {
+        // Let the velocity ruler know.
         notifyRemove(*i);
+        // Remove from the list.
         m_viewElementList->erase(i);
         return;
     }

@@ -72,7 +72,8 @@ class Thumbwheel;
  *   - The tempo ruler
  *   - The top standard ruler
  *   - The pitch ruler, m_pianoView (to the left of the matrix)
- *   - The matrix itself, m_view and m_scene
+ *   - The matrix itself, m_view (Panned/QGraphicsView) and m_scene
+ *         (MatrixScene)
  *   - The bottom standard ruler, m_bottomStandardRuler
  *   - The controls widget, m_controlsWidget (optional)
  *   - The Segment label, m_segmentLabel

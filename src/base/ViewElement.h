@@ -26,11 +26,14 @@
 namespace Rosegarden
 {
 
+/// An event (note, rest) on an editor (notation, matrix).
 /**
  * The abstract base for classes which represent an Event as an
  * on-screen graphic item (a note, a rectangle on a piano roll).
+ *
+ * "EventView" is probably a better name, but we already have an EventView.
+ * Perhaps "EditorEventView"?
  */
-
 class ViewElement
 {
     friend class ViewElementList;
