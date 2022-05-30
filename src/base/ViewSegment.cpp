@@ -65,10 +65,13 @@ ViewSegment::getViewElementList()
 bool
 ViewSegment::wrapEvent(Event *e)
 {
-    timeT emt = m_segment.getEndMarkerTime();
+    // This is more of an isBeforeSegmentEnd().
+
+    timeT endMarkerTime = m_segment.getEndMarkerTime();
+
     return
-        ((e->getAbsoluteTime() < emt)  ||
-        (e->getAbsoluteTime() == emt  &&  e->getDuration() == 0));
+        ((e->getAbsoluteTime() < endMarkerTime)  ||
+        (e->getAbsoluteTime() == endMarkerTime  &&  e->getDuration() == 0));
 }
 
 ViewElementList::iterator
@@ -133,38 +136,62 @@ ViewSegment::eventRemoved(const Segment *t, Event *e)
 }
 
 void
-ViewSegment::endMarkerTimeChanged(const Segment *segment, bool shorten)
+ViewSegment::endMarkerTimeChanged(const Segment *constSegment, bool shorten)
 {
-    Segment *s = const_cast<Segment *>(segment);
+    // Cast away const since findTime() is unfortunately not const.
+    Segment *segment = const_cast<Segment *>(constSegment);
 
-    Q_ASSERT(s == &m_segment);
+    // If this isn't our Segment, bail.
+    if (segment != &m_segment) {
+        RG_WARNING << "endMarkerTimeChanged(): Unexpected Segment.";
+        return;
+    }
 
     if (shorten) {
 
-        m_viewElementList->erase
-            (m_viewElementList->findTime(s->getEndMarkerTime()),
-             m_viewElementList->end());
+        const ViewElementList::const_iterator newEndIter =
+            m_viewElementList->findTime(segment->getEndMarkerTime());
 
-    } else {
-
-        timeT myLastEltTime = s->getStartTime();
-        if (m_viewElementList->end() != m_viewElementList->begin()) {
-            ViewElementList::iterator i = m_viewElementList->end();
-            myLastEltTime = (*--i)->event()->getAbsoluteTime();
+        // For each ViewElement from the new end to the old end, notify
+        // observers that the ViewElement will be removed.
+        for (ViewElementList::const_iterator i = newEndIter;
+             i != m_viewElementList->end();
+             ++i){
+            notifyRemove(*i);
         }
 
-        for (Segment::iterator j = s->findTime(myLastEltTime);
-             s->isBeforeEndMarker(j);
+        // Remove the ViewElement(s).
+        m_viewElementList->erase(newEndIter, m_viewElementList->end());
+
+    } else {  // Segment size is growing.
+
+        // Compute the time of the last ViewElement.
+        timeT lastElementTime = segment->getStartTime();
+        if (!m_viewElementList->empty()) {
+            ViewElementList::iterator i = m_viewElementList->end();
+            lastElementTime = (*--i)->event()->getAbsoluteTime();
+        }
+
+        // For each Event in the Segment that has been newly uncovered by
+        // the expansion of the Segment end time...
+        for (Segment::iterator j = segment->findTime(lastElementTime);
+             segment->isBeforeEndMarker(j);
              ++j) {
 
-            ViewElementList::iterator newi = findEvent(*j);
-            if (newi == m_viewElementList->end()) {
-                if (wrapEvent(*j))
-                    m_viewElementList->insert(makeViewElement(*j));
+            // If there is no ViewElement for this Event...
+            if (findEvent(*j) == m_viewElementList->end()) {
+                // If this Event is before the end of the Segment...
+                if (wrapEvent(*j)) {
+                    // Create a new ViewElement and add.
+                    ViewElement *newElement = makeViewElement(*j);
+                    m_viewElementList->insert(newElement);
+                    notifyAdd(newElement);
+                }
             }
         }
     }
 }
+
 void
 ViewSegment::segmentDeleted(const Segment *s)
 {
