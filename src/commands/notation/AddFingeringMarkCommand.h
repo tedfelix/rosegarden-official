@@ -40,7 +40,7 @@ class AddFingeringMarkCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddFingeringMarkCommand)
 
 public:
-    AddFingeringMarkCommand(std::string fingering,
+    AddFingeringMarkCommand(const std::string& fingering,
                             EventSelection &selection) :
         BasicCommand(getGlobalName(fingering), selection, true),
         m_selection(&selection),

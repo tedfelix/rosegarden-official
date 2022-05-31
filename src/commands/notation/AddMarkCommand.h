@@ -52,7 +52,7 @@ protected:
     void modifySegment() override;
 
 private:
-    static QString getGlobalName(Mark mark);
+    static QString getGlobalName(Mark markType);
     static QString getActionName(Mark mark);
 
     // only used on 1st execute (cf bruteForceRedo)

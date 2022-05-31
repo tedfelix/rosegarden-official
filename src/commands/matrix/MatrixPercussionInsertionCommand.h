@@ -44,13 +44,13 @@ public:
     ~MatrixPercussionInsertionCommand() override;
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
-    
+
 protected:
     void modifySegment() override;
 
     timeT getEffectiveStartTime(Segment &segment,
-                                            timeT startTime,
-                                            Event &event);
+                                timeT time,
+                                Event &event);
 
     /// Compute the end time for a percussion event.
     /**
@@ -60,11 +60,12 @@ protected:
      * where it would show each note as if it were a 64th?
      */
     timeT getEndTime(const Segment &segment,
-                     timeT endTime,
+                     timeT time,
                      const Event &event);
 
     Event *m_event;
     timeT m_time;
+    // cppcheck-suppress unsafeClassCanLeak
     Event *m_lastInsertedEvent; // an alias for another event
 };
 
