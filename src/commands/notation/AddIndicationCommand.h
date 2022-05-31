@@ -40,7 +40,8 @@ class AddIndicationCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddIndicationCommand)
 
 public:
-    AddIndicationCommand(std::string indicationType,
+
+    AddIndicationCommand(const std::string& indicationType,
                          EventSelection &selection);
     ~AddIndicationCommand() override;
 
@@ -70,7 +71,7 @@ protected:
     timeT m_indicationDuration;
     Event *m_lastInsertedEvent;
 };
-    
+
 
 
 }

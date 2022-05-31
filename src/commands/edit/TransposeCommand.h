@@ -40,6 +40,7 @@ public:
         BasicCommand(getGlobalName(semitones), selection, true),
         m_selection(&selection),
         m_semitones(semitones),
+        m_steps(0),
         m_diatonic(false)
     { }
 

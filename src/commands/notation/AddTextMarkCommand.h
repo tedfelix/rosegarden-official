@@ -40,7 +40,7 @@ class AddTextMarkCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTextMarkCommand)
 
 public:
-    AddTextMarkCommand(std::string text,
+    AddTextMarkCommand(const std::string& text,
                        EventSelection &selection) :
         BasicCommand(getGlobalName(), selection, true),
         m_selection(&selection),

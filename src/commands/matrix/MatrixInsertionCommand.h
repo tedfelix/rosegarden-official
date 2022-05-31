@@ -45,11 +45,12 @@ public:
     ~MatrixInsertionCommand() override;
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
-    
+
 protected:
     void modifySegment() override;
 
     Event *m_event;
+    // cppcheck-suppress unsafeClassCanLeak
     Event *m_lastInsertedEvent; // an alias for another event
 };
 
