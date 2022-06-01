@@ -37,6 +37,11 @@ namespace Rosegarden
 class SqueezedLabelPrivate
 {
 public:
+    SqueezedLabelPrivate() :
+        elideMode(Qt::ElideMiddle),
+        allowToolTip(false)
+    {
+    }
 
     void k_copyFullText()
     {
@@ -58,8 +63,6 @@ SqueezedLabel::SqueezedLabel(const QString &text , QWidget *parent)
     setObjectName("SQUEEZED");
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     d->fullText = text;
-    d->elideMode = Qt::ElideMiddle;
-    d->allowToolTip = false;
     squeezeTextToLabel();
 }
 
@@ -69,7 +72,6 @@ SqueezedLabel::SqueezedLabel(QWidget *parent)
 {
     setObjectName("SQUEEZED");
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    d->elideMode = Qt::ElideMiddle;
 }
 
 SqueezedLabel::~SqueezedLabel()
