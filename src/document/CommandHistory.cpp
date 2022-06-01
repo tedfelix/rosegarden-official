@@ -15,11 +15,14 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[CommandHistory]"
+#define RG_NO_DEBUG_PRINT
 
 #include "CommandHistory.h"
 
 #include "Command.h"
 #include "gui/general/ActionData.h"
+#include "misc/Debug.h"
 
 #include <QRegularExpression>
 #include <QMenu>
@@ -29,8 +32,6 @@
 #include <QAction>
 
 #include <iostream>
-
-//#define DEBUG_COMMAND_HISTORY 1
 
 namespace Rosegarden
 {
@@ -87,9 +88,6 @@ CommandHistory::getInstance()
 void
 CommandHistory::clear()
 {
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::clear()" << std::endl;
-#endif
     m_savedAt = -1;
     clearStack(m_undoStack);
     clearStack(m_redoStack);
@@ -101,15 +99,7 @@ CommandHistory::addCommand(Command *command)
 {
     if (!command) return;
 
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::addCommand: " << command->getName().toLocal8Bit().data() << " at " << command << std::endl;
-#endif
-
-#ifdef DEBUG_COMMAND_HISTORY
-    if (!m_redoStack.empty()) {
-        std::cerr << "CommandHistory::clearing redo stack" << std::endl;
-    }
-#endif
+    RG_DEBUG << "addCommand(): " << command->getName().toLocal8Bit().data() << " at " << command;
 
     // We can't redo after adding a command
     clearStack(m_redoStack);
@@ -143,9 +133,7 @@ CommandHistory::undo()
 {
     if (m_undoStack.empty()) return;
 
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::undo()" << std::endl;
-#endif
+    RG_DEBUG << "undo()";
 
     CommandInfo commInfo = m_undoStack.top();
     commInfo.command->unexecute();
@@ -168,10 +156,6 @@ void
 CommandHistory::redo()
 {
     if (m_redoStack.empty()) return;
-
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::redo()" << std::endl;
-#endif
 
     CommandInfo commInfo = m_redoStack.top();
     commInfo.command->execute();
@@ -242,10 +226,7 @@ CommandHistory::clipStack(CommandStack &stack, int limit)
         CommandStack tempStack;
 
         for (i = 0; i < limit; ++i) {
-#ifdef DEBUG_COMMAND_HISTORY
-            CommandInfo commInfo = stack.top();
-            std::cerr << "CommandHistory::clipStack: Saving recent command: " << commInfo.command->getName().toLocal8Bit().data() << " at " << command << std::endl;
-#endif
+            RG_DEBUG << "clipStack(): Saving recent command: " << stack.top().command->getName().toLocal8Bit().data() << " at " << stack.top().command;
             tempStack.push(stack.top());
             stack.pop();
         }
@@ -265,9 +246,7 @@ CommandHistory::clearStack(CommandStack &stack)
     while (!stack.empty()) {
         CommandInfo commInfo = stack.top();
         // Not safe to call getName() on a command about to be deleted
-#ifdef DEBUG_COMMAND_HISTORY
-        std::cerr << "CommandHistory::clearStack: About to delete command " << command << std::endl;
-#endif
+        RG_DEBUG << "clearStack(): About to delete command " << commInfo.command;
         delete commInfo.command;
         stack.pop();
     }
