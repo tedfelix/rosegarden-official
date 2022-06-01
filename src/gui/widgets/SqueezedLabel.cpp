@@ -10,6 +10,9 @@
     published by the Free Software Foundation; either version 2 of the
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
+
+    This code is adapted from version 4.2 of the DE libraries
+    Copyright (C) 2000 Ronny Standtke <Ronny.Standtke@gmx.de>
 */
 
 #include "SqueezedLabel.h"
@@ -30,10 +33,6 @@ namespace Rosegarden
 {
 
 
-/* This code is adapted from version 4.2 of the DE libraries
-   Copyright (C) 2000 Ronny Standtke <Ronny.Standtke@gmx.de>
-*/
-
 class SqueezedLabelPrivate
 {
 public:
@@ -43,22 +42,25 @@ public:
     {
     }
 
-    void k_copyFullText()
-    {
-        QMimeData* data = new QMimeData;
-        data->setText(fullText);
-        QApplication::clipboard()->setMimeData(data);
-    }
-
     QString fullText;
     Qt::TextElideMode elideMode;
     // Set to true to let the client set the tooltip.
     bool allowToolTip;
+
+public slots:
+
+    void k_copyFullText()
+    {
+        QMimeData *data = new QMimeData;
+        data->setText(fullText);
+        QApplication::clipboard()->setMimeData(data);
+    }
+
 };
 
-SqueezedLabel::SqueezedLabel(const QString &text , QWidget *parent)
-        : QLabel (parent),
-          d(new SqueezedLabelPrivate)
+SqueezedLabel::SqueezedLabel(const QString &text, QWidget *parent) :
+    QLabel(parent),
+    d(new SqueezedLabelPrivate)
 {
     setObjectName("SQUEEZED");
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
@@ -66,9 +68,9 @@ SqueezedLabel::SqueezedLabel(const QString &text , QWidget *parent)
     squeezeTextToLabel();
 }
 
-SqueezedLabel::SqueezedLabel(QWidget *parent)
-        : QLabel (parent),
-          d(new SqueezedLabelPrivate)
+SqueezedLabel::SqueezedLabel(QWidget *parent) :
+    QLabel(parent),
+    d(new SqueezedLabelPrivate)
 {
     setObjectName("SQUEEZED");
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
@@ -187,7 +189,7 @@ void SqueezedLabel::contextMenuEvent(QContextMenuEvent* ev)
     if (showCustomPopup) {
         QMenu menu(this);
 
-        QAction* act = new QAction(tr("&Copy Full Text"), this);
+        QAction *act = new QAction(tr("&Copy Full Text"), this);
         connect(act, SIGNAL(triggered()), this, SLOT(k_copyFullText()));
         menu.addAction(act);
 
