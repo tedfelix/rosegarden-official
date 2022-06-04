@@ -760,7 +760,11 @@ MatrixScene::checkUpdate()
         SegmentRefreshStatus &rs = m_viewSegments[i]->getRefreshStatus();
 
         if (rs.needsRefresh()) {
+            // Refresh the required range.
+            // Note that updateElements() does not handle deleted
+            // ViewElements.  See MatrixViewSegment::eventRemoved().
             m_viewSegments[i]->updateElements(rs.from(), rs.to());
+
             if (!updateSelectionElementStatus && m_selection) {
                 updateSelectionElementStatus =
                     (m_viewSegments[i]->getSegment() == m_selection->getSegment());
@@ -842,11 +846,21 @@ MatrixScene::handleEventAdded(Event *e)
 void
 MatrixScene::handleEventRemoved(Event *e)
 {
-    if (m_selection && m_selection->contains(e)) m_selection->removeEvent(e);
+    if (m_selection && m_selection->contains(e))
+        m_selection->removeEvent(e);
+
     // we can not use e here (already deleted) but if it was a
     // Rosegarden::Key::EventType we must recreatePitchHighlights
+
     recreatePitchHighlights();
-    update();
+
+    // ??? Oddly, this causes refresh failures that leave deleted notes
+    //     up on the display (only when doing toolbar undo!?).  Removing
+    //     it seems to result in solid and correct updates in all cases.
+    //     Why?!  See discussion on mailing list early June 2022.
+    //update();
+
+    // Notify MatrixToolBox.
     emit eventRemoved(e);
 }
 
