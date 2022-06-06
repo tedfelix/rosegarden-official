@@ -156,21 +156,19 @@ void
 Panned::showPositionPointer(float x) // scene coord; full height
 {
     if (m_pointerVisible) {
-        QRect oldRect = QRect(mapFromScene(m_pointerTop),
-                              QSize(4, viewport()->height()));
+        QRectF oldRect(m_pointerTop, QSizeF(4, height()));
         oldRect.moveTop(0);
         oldRect.moveLeft(oldRect.left() - 1);
-        viewport()->update(oldRect);
+        scene()->update(oldRect);
 //        RG_DEBUG << "Panned::slotShowPositionPointer: old rect " << oldRect;
     }
     m_pointerVisible = true;
     m_pointerTop = QPointF(x, 0);
     m_pointerHeight = 0;
-    QRect newRect = QRect(mapFromScene(m_pointerTop),
-                          QSize(4, viewport()->height()));
+    QRectF newRect(m_pointerTop, QSizeF(4, height()));
     newRect.moveTop(0);
     newRect.moveLeft(newRect.left() - 1);
-    viewport()->update(newRect);
+    scene()->update(newRect);
 //    RG_DEBUG << "Panned::slotShowPositionPointer: new rect " << newRect;
 }
 
@@ -180,7 +178,7 @@ Panned::showPositionPointer(QPointF top, float height) // scene coords
     m_pointerVisible = true;
     m_pointerTop = top;
     m_pointerHeight = height;
-    viewport()->update(); //!!! should update old and new pointer areas only, as in the previous function
+    scene()->update(); //!!! should update old and new pointer areas only, as in the previous function
 }
 
 void
@@ -294,7 +292,7 @@ void
 Panned::hidePositionPointer()
 {
     m_pointerVisible = false;
-    viewport()->update(); //!!! should update old pointer area only, really
+    scene()->update(); //!!! should update old pointer area only, really
 }
 
 void
