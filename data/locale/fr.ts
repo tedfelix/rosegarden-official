@@ -1636,7 +1636,7 @@
     <message>
         <location line="+1"/>
         <source>Add T&amp;enuto</source>
-        <translation></translation>
+        <translation>Ajouter T&amp;enuto</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1671,7 +1671,7 @@
     <message>
         <location line="+1"/>
         <source>Add &amp;Turn</source>
-        <translation></translation>
+        <translation>Ajouter Grupe&amp;tto</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1706,7 +1706,7 @@
     <message>
         <location line="+1"/>
         <source>Add &amp;Harmonic</source>
-        <translation></translation>
+        <translation>Ajouter &amp;Harmonique</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2116,7 +2116,7 @@
     <message>
         <location line="+3"/>
         <source>Set Event &amp;Velocities</source>
-        <translation></translation>
+        <translation>Définir &amp;vélocité événement</translation>
     </message>
     <message>
         <location line="+1"/>
