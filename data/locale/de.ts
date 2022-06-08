@@ -517,22 +517,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="-1094"/>
         <source>&amp;Insert Event</source>
-        <translation>Event e&amp;infügen</translation>
+        <translation>Ereignis e&amp;infügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Delete Event</source>
-        <translation>Event &amp;löschen</translation>
+        <translation>Ereignis &amp;löschen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Edit Event</source>
-        <translation>&amp;Event bearbeiten</translation>
+        <translation>&amp;Ereignis bearbeiten</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Advanced Event Editor</source>
-        <translation>Er&amp;weiterter Event-Editor</translation>
+        <translation>Er&amp;weiterter Ereignis-Editor</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -558,7 +558,7 @@ a quarter sine wave contour</source>
         <location line="+2"/>
         <location line="+272"/>
         <source>&amp;Filter Selection</source>
-        <translation>Noten-Events &amp;filtern</translation>
+        <translation>Auswahl &amp;filtern</translation>
     </message>
     <message>
         <location line="-331"/>
@@ -1043,7 +1043,7 @@ a quarter sine wave contour</source>
         <location line="+605"/>
         <location line="+75"/>
         <source>Open in &amp;Event List Editor</source>
-        <translation>Im &amp;Eventlisten-Editor öffnen</translation>
+        <translation>Im &amp;Ereignislisten-Editor öffnen</translation>
     </message>
     <message>
         <location line="-947"/>
@@ -1113,7 +1113,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Set Event &amp;Velocities...</source>
-        <translation>Anschlagstärken der E&amp;vents setzen...</translation>
+        <translation>Anschlagstärken der Ereign&amp;isse setzen...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1406,7 +1406,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="-882"/>
         <source>Select &amp;All Events</source>
-        <translation>&amp;Alle Events auswählen</translation>
+        <translation>&amp;Alle Ereignisse auswählen</translation>
     </message>
     <message>
         <location line="+33"/>
@@ -1424,13 +1424,13 @@ a quarter sine wave contour</source>
         <location line="-270"/>
         <location line="+271"/>
         <source>Show &amp;Velocity Ruler</source>
-        <translation>Lineal für A&amp;nschlagstärke zeigen</translation>
+        <translation>A&amp;nschlagstärke-Lineal zeigen</translation>
     </message>
     <message>
         <location line="-270"/>
         <location line="+271"/>
         <source>Show Pitch &amp;Bend Ruler</source>
-        <translation>Lineal für Tonhöhen&amp;beugung zeigen</translation>
+        <translation>Tonhöhen&amp;beugungs-Lineal zeigen</translation>
     </message>
     <message>
         <location line="-128"/>
@@ -1702,7 +1702,7 @@ a quarter sine wave contour</source>
         <location line="-271"/>
         <location line="+272"/>
         <source>&amp;Reset Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl &amp;rücksetzen</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -2212,7 +2212,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+3"/>
         <source>Set Event &amp;Velocities</source>
-        <translation>Anschlagstärken der E&amp;vents setzen</translation>
+        <translation>Anschlagstärken der Erei&amp;gnisse setzen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2273,7 +2273,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+4"/>
         <source>Insert &amp;Expression Controller Sequence...</source>
-        <translation>S&amp;equenz von Ausdruck-Events einfügen...</translation>
+        <translation>S&amp;equenz von Ausdruck-Ereignissen einfügen...</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -2766,7 +2766,7 @@ a quarter sine wave contour</source>
         <location line="+175"/>
         <location line="+415"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
-        <translation>Sequenz von Tonhöhen&amp;beugung-Events einfügen...</translation>
+        <translation>Sequenz von Tonhöhen&amp;beugung-Ereignissen einfügen...</translation>
     </message>
     <message>
         <source>0</source>
@@ -2812,7 +2812,7 @@ a quarter sine wave contour</source>
         <location line="-463"/>
         <location line="+271"/>
         <source>Add &amp;Control Ruler</source>
-        <translation>Lineal für ausgewählten &amp;Kontroller zeigen</translation>
+        <translation>&amp;Kontroller-Lineal hinzufügen</translation>
     </message>
     <message>
         <source>=</source>
@@ -3728,7 +3728,7 @@ a quarter sine wave contour</source>
         <location line="+77"/>
         <location line="+415"/>
         <source>Insert C&amp;ontroller Sequence...</source>
-        <translation>Sequenz im K&amp;ontroller-Lineal ausgewählter Events einfügen...</translation>
+        <translation>Sequenz im K&amp;ontroller-Lineal einfügen...</translation>
     </message>
     <message>
         <location line="-184"/>
@@ -4307,7 +4307,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Open most recent file</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte Datei öffnen</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -4797,42 +4797,42 @@ a quarter sine wave contour</source>
     <message>
         <location line="-282"/>
         <source>Double Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Doppelte Ganze Pause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Ganze Pause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Half Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Halbe Pause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Quarter Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Viertelpause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Eighth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtelpause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Sixteenth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>16tel Pause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Thirty-Second Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>32tel Pause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Sixty-Fourth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>64tel Pause</translation>
     </message>
     <message>
         <location line="+89"/>
@@ -4907,7 +4907,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+25"/>
         <source>Keyboard S&amp;hortcuts...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastat&amp;urkürzel...</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -7949,12 +7949,12 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>MidnightBlue</source>
-        <translation>mitternachtsblau</translation>
+        <translation>Mitternachtsblau</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>NavyBlue</source>
-        <translation>marineblau</translation>
+        <translation>Marineblau</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7969,7 +7969,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>SlateBlue</source>
-        <translation>schieferblau</translation>
+        <translation>Schieferblau</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7984,7 +7984,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>MediumBlue</source>
-        <translation>mittelblau</translation>
+        <translation>Mittelblau</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7995,7 +7995,7 @@ a quarter sine wave contour</source>
         <location line="+1"/>
         <location line="+414"/>
         <source>blue</source>
-        <translation>blau</translation>
+        <translation>Blau</translation>
     </message>
     <message>
         <location line="-413"/>
@@ -8005,7 +8005,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue</source>
-        <translation>tiefes himmelblau</translation>
+        <translation>Tiefes Himmelblau</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8020,7 +8020,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>SteelBlue</source>
-        <translation>stahlblau</translation>
+        <translation>Stahlblau</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8055,7 +8055,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>turquoise</source>
-        <translation>türkisfarben</translation>
+        <translation>Türkisfarben</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8086,7 +8086,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>DarkGreen</source>
-        <translation>dunkelgrün</translation>
+        <translation>Dunkelgrün</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8121,18 +8121,18 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>SpringGreen</source>
-        <translation>frühlingsgrün</translation>
+        <translation>Frühlingsgrün</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LawnGreen</source>
-        <translation>grasgrün</translation>
+        <translation>Grasgrün</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+389"/>
         <source>green</source>
-        <translation>grün</translation>
+        <translation>Grün</translation>
     </message>
     <message>
         <location line="-388"/>
@@ -8233,7 +8233,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>SaddleBrown</source>
-        <translation>sattelbraun</translation>
+        <translation>Sattelbraun</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8263,7 +8263,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>SandyBrown</source>
-        <translation>sandbraun</translation>
+        <translation>Sandbraun</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8273,7 +8273,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>chocolate</source>
-        <translation>schokoladenfarben</translation>
+        <translation>Schokoladenfarben</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8283,7 +8283,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>brown</source>
-        <translation>braun</translation>
+        <translation>Braun</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8323,18 +8323,18 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>tomato</source>
-        <translation>tomatenrot</translation>
+        <translation>Tomatenrot</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed</source>
-        <translation>orangerot</translation>
+        <translation>Orangerot</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+353"/>
         <source>red</source>
-        <translation>rot</translation>
+        <translation>Rot</translation>
     </message>
     <message>
         <location line="-352"/>
@@ -8364,7 +8364,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>maroon</source>
-        <translation>kastanienbraun</translation>
+        <translation>Kastanienbraun</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8535,22 +8535,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>NavajoWhite1</source>
-        <translation>Navajo-Weiß 1</translation>
+        <translation>Navajo Weiß 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>NavajoWhite2</source>
-        <translation>Navajo-Weiß 2</translation>
+        <translation>Navajo Weiß 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>NavajoWhite3</source>
-        <translation>Navajo-Weiß 3</translation>
+        <translation>Navajo Weiß 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>NavajoWhite4</source>
-        <translation>Navajo-Weiß 4</translation>
+        <translation>Navajo Weiß 4</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8735,22 +8735,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>blue1</source>
-        <translation>blau 1</translation>
+        <translation>Blau 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>blue2</source>
-        <translation>blau 2</translation>
+        <translation>Blau 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>blue3</source>
-        <translation>blau 3</translation>
+        <translation>Blau 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>blue4</source>
-        <translation>blau 4</translation>
+        <translation>Blau 4</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8795,22 +8795,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue1</source>
-        <translation>tiefes himmelblau 1</translation>
+        <translation>Tiefes Himmelblau 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue2</source>
-        <translation>tiefes himmelblau 2</translation>
+        <translation>Tiefes Himmelblau 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue3</source>
-        <translation>tiefes himmelblau 3</translation>
+        <translation>Tiefes Himmelblau 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>DeepSkyBlue4</source>
-        <translation>tiefes himmelblau 4</translation>
+        <translation>Tiefes Himmelblau 4</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9115,42 +9115,42 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>SpringGreen1</source>
-        <translation>frühlingsgrün 1</translation>
+        <translation>Frühlingsgrün 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SpringGreen2</source>
-        <translation>frühlingsgrün 2</translation>
+        <translation>Frühlingsgrün 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SpringGreen3</source>
-        <translation>frühlingsgrün 3</translation>
+        <translation>Frühlingsgrün 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SpringGreen4</source>
-        <translation>frühlingsgrün 4</translation>
+        <translation>Frühlingsgrün 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>green1</source>
-        <translation>grün 1</translation>
+        <translation>Grün 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>green2</source>
-        <translation>grün 2</translation>
+        <translation>Grün 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>green3</source>
-        <translation>grün 3</translation>
+        <translation>Grün 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>green4</source>
-        <translation>grün 4</translation>
+        <translation>Grün 4</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9515,22 +9515,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>brown1</source>
-        <translation>braun 1</translation>
+        <translation>Braun 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>brown2</source>
-        <translation>braun 2</translation>
+        <translation>Braun 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>brown3</source>
-        <translation>braun 3</translation>
+        <translation>Braun 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>brown4</source>
-        <translation>braun 4</translation>
+        <translation>Braun 4</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9635,62 +9635,62 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>tomato1</source>
-        <translation>tomatenrot 1</translation>
+        <translation>Tomatenrot 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tomato2</source>
-        <translation>tomatenrot 2</translation>
+        <translation>Tomatenrot 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tomato3</source>
-        <translation>tomatenrot 3</translation>
+        <translation>Tomatenrot 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tomato4</source>
-        <translation>tomatenrot 4</translation>
+        <translation>Tomatenrot 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed1</source>
-        <translation>orangerot 1</translation>
+        <translation>Orangerot 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed2</source>
-        <translation>orangerot 2</translation>
+        <translation>Orangerot 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed3</source>
-        <translation>orangerot 3</translation>
+        <translation>Orangerot 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>OrangeRed4</source>
-        <translation>orangerot 4</translation>
+        <translation>Orangerot 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>red1</source>
-        <translation>rot 1</translation>
+        <translation>Rot 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>red2</source>
-        <translation>rot 2</translation>
+        <translation>Rot 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>red3</source>
-        <translation>rot 3</translation>
+        <translation>Rot 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>red4</source>
-        <translation>rot 4</translation>
+        <translation>Rot 4</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9795,22 +9795,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>maroon1</source>
-        <translation>kastanienbraun 1</translation>
+        <translation>Kastanienbraun 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>maroon2</source>
-        <translation>kastanienbraun 2</translation>
+        <translation>Kastanienbraun 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>maroon3</source>
-        <translation>kastanienbraun 3</translation>
+        <translation>Kastanienbraun 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>maroon4</source>
-        <translation>kastanienbraun 4</translation>
+        <translation>Kastanienbraun 4</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10041,22 +10041,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="+2"/>
         <source>Red pastel</source>
-        <translation>rot pastell</translation>
+        <translation>Rot Pastell</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Green pastel</source>
-        <translation>grün pastell</translation>
+        <translation>Grün Pastell</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orange pastel</source>
-        <translation>orange pastell</translation>
+        <translation>Orange Pastell</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Yellow pastel</source>
-        <translation>gelb pastell</translation>
+        <translation>Gelb Pastell</translation>
     </message>
     <message>
         <location line="-4"/>
@@ -10066,37 +10066,37 @@ a quarter sine wave contour</source>
     <message>
         <location line="+5"/>
         <source>gray</source>
-        <translation type="unfinished"></translation>
+        <translation>Grau</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellblau</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light green</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellgrün</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Cyan</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light red</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellrot</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light magenta</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Magenta</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellgelb</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -10139,10 +10139,10 @@ a quarter sine wave contour</source>
         <translation type="vanished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1706"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1028"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1098"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+471"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1098"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1028"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1706"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Kontroller %2 %3</translation>
     </message>
@@ -10168,7 +10168,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Willkommen bei Rosegarden!&lt;/h2&gt;&lt;p&gt;Willkommen bei Rosegarden, einem Audio- und MIDI-Sequencer sowie Nozensatzprogramm.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Sofern Sie es noch nicht getan haben, sollten Sie ein DSSI-Synthplugin oder ein separates Synthprogramm wie z.B. QSynth installieren.  Rosegarden selber erzeugt nämlich keine Klänge aus MIDI-Daten, daher hören Sie ohne diese Synthesizer Nichts.&lt;/li&gt;&lt;li&gt;Rosegarden verwendet den JACK-Audioserver für Aufnahme und Wiedergabe von Audio sowie DSSI-Synthplugins.  Diese Möglichkeiten stehen nur zur Verfügung, wenn der JACK-Audioserver läuft.&lt;/li&gt;&lt;li&gt;Rosegarden besitzt eine umfassende Dokumentation: besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden Webseite&lt;/a&gt; für das &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;Handbuch&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;Tutorials&lt;/a&gt;, und weitere Information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden wird dir zur Verfügung gestellt von einem Team Beitragender aus aller Welt.  Um mehr zu erfahren, besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;Willkommen bei Rosegarden!&lt;/h2&gt;&lt;p&gt;Willkommen bei Rosegarden, einem Audio- und MIDI-Sequencer sowie Notensatzprogramm.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Sofern Sie es noch nicht getan haben, sollten Sie ein DSSI-Synthplugin oder ein separates Synthprogramm wie z.B. QSynth installieren.  Rosegarden selber erzeugt nämlich keine Klänge aus MIDI-Daten, daher hören Sie ohne diese Synthesizer Nichts.&lt;/li&gt;&lt;li&gt;Rosegarden verwendet den JACK-Audioserver für Aufnahme und Wiedergabe von Audio sowie DSSI-Synthplugins.  Diese Möglichkeiten stehen nur zur Verfügung, wenn der JACK-Audioserver läuft.&lt;/li&gt;&lt;li&gt;Rosegarden besitzt eine umfassende Dokumentation: besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden Webseite&lt;/a&gt; für das &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;Handbuch&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;Tutorials&lt;/a&gt;, und weitere Information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden wird dir zur Verfügung gestellt von einem Team Beitragender aus aller Welt.  Um mehr zu erfahren, besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may 
@@ -10275,7 +10275,7 @@ und erneut probieren&lt;/p&gt;&lt;/qt&gt;</translation>
     <message>
         <location line="+143"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Konnte Audioaufnahme nicht starten.&lt;/p&gt;&lt;p&gt;Stelle sicher, dass die Komposition gespeichert wurde und prüfe den Audio-Dateipfad in &lt;b&gt;Komposition -&gt; Dokumenteigenschaften bearbeiten... -&gt; Audio-Eigenschaften&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
@@ -10430,7 +10430,7 @@ Kanälen</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+251"/>
         <source>This event is tied to another event.</source>
-        <translation>Dieses Event ist an ein Anderes angebunden.</translation>
+        <translation>Dieses Ereignis ist an ein Anderes angebunden.</translation>
     </message>
     <message>
         <location filename="../../src/sound/PitchDetector.cpp" line="+33"/>
@@ -10584,7 +10584,7 @@ abgeschnitten</translation>
     <message>
         <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+185"/>
         <source>Set Event Velocities</source>
-        <translation>Anschlagstärken der Events setzen</translation>
+        <translation>Anschlagstärken der Ereignisse setzen</translation>
     </message>
     <message>
         <location line="-27"/>
@@ -10664,182 +10664,182 @@ a quarter sine wave contour</source>
     <message>
         <location filename="../../src/gui/general/ActionData.cpp" line="+374"/>
         <source>Audio manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-Dateimanager</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bank editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank-Editor</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clef inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Notenschlüssel einfügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Control editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontroller-Editor</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Event list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignisliste</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guitar chord inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitarrenakkord einfügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Marker editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Markierungs-Editor</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Marker ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Markierungs-Lineal</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix eraser</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrix löschen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix mover</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrix bewegen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix painter</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrix zeichnen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix</source>
-        <translation type="unfinished">Matrix</translation>
+        <translation>MatrixMatrix</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix resizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrix Größe ändern</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrix auswählen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrix Anschlagstärke</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Midi mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-Mischpult</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mischer</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Notation eraser</source>
-        <translation type="unfinished"></translation>
+        <translation>Notensatz löschen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Notation</source>
-        <translation type="unfinished">Notensatz</translation>
+        <translation>Notensatz</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Notation selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Notensatz auswählen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Note/rest inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Note/Pause einfügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rosegarden main window</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden Hauptfenster</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment Werkzeug</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Symbol inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbol einfügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tempo ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo-Lineal</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tempo view</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansicht für Tempo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Text inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Text einfügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Trigger manager</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+269"/>
         <source>Context</source>
-        <translation type="unfinished"></translation>
+        <translation>Inhalt</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktion</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbol</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>User defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Vom Benutzer bestimmt</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kürzel 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kürzel 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Kürzel 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Kürzel 4</translation>
     </message>
 </context>
 <context>
@@ -10923,7 +10923,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location filename="../../src/commands/studio/AddControlParameterCommand.h" line="+56"/>
         <source>&amp;Add Control Parameter</source>
-        <translation>Kontrollp&amp;arameter hinzufügen</translation>
+        <translation>Kontrollerp&amp;arameter hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -11330,42 +11330,42 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="+12"/>
         <source>Show Audio File Location dialog when saving</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Speichern Ort der Audio-Datei anzeigen</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Default audio location</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardort für Audio</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Audio directory (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis für Audio(%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document name directory (./DocumentName)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis für Dokumentnamen (./DocumentName)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document directory (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis für Dokumente (.)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Central repository (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zentraler Speicherort (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Custom audio file location (specify below)</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierter Ort für Audio-Dateien (unten angeben)</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Custom audio file location</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierter Ort für Audio-Dateien</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -11506,48 +11506,49 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location filename="../../src/gui/dialogs/AudioFileLocationDialog.cpp" line="+44"/>
         <source>Audio File Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Ort für Audio-Dateien</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Audio files have been introduced in this session.  Where would you like to save them?</source>
-        <translation type="unfinished"></translation>
+        <translation>In dieser Sitzung wurden Audio-Dateien eingeführt.  Wo sollen sie gespeichert werden?</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>To an &quot;audio&quot; directory where the document is saved.  (%1) (Recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>In ein Verzeichnis &quot;Audio&quot; des Dokumentspeicherortes.  (%1) (Empfohlen)</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>To a directory named after the document where the document is saved.
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>In ein Verzeichnis benannt nach dem Dokument des Dokumentspeicherortes.
+(%1)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To the same directory where the document is saved.  (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>In dasselbe Verzeichnis des Dokumentspeicherortes.  (.)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To a central audio file repository.  (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>In den zentralen Speicherort für Audio-Dateien.  (%1)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To a custom audio file location:</source>
-        <translation type="unfinished"></translation>
+        <translation>In einen benutzerdefinierten Ort für Audio-Dateien:</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Note: You can always move the audio files later by setting the audio location in the document properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinweis: Die Audio-Dateien können nachträglich jederzeit verschoben werden durch Einstellen des Audio-Ortes in den Dokumenteigenschaften.</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Use the above selection for all new files and don&apos;t display this dialog again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die oben getroffene Auswahl für alle neuen Dateien verwenden und diesen Dialog nicht mehr anzeigen.</translation>
     </message>
 </context>
 <context>
@@ -11565,23 +11566,23 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="-251"/>
         <source>&lt;br /&gt;Audio files will remain in their original location.&lt;br /&gt;(%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br /&gt;Audio-Dateien verbleiben am ursprünglichen Ort.&lt;br /&gt;(%1)</translation>
     </message>
     <message>
         <location line="+11"/>
         <location line="+13"/>
         <source>Audio File Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Ort für Audio-Dateien</translation>
     </message>
     <message>
         <location line="-12"/>
         <source>Cannot create audio path.&lt;br /&gt;%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann Audio-Pfad nicht erzeugen.&lt;br /&gt;%1</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Audio path is not writable.&lt;br /&gt;%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-Pfad ist nicht beschreibbar.&lt;br /&gt;%1</translation>
     </message>
     <message>
         <location line="+218"/>
@@ -11635,7 +11636,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+87"/>
         <source>Click to rename this instrument.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anklicken um dieses Instrument umzubenennen.</translation>
     </message>
     <message>
         <location line="+129"/>
@@ -11652,12 +11653,12 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="+141"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished">Namen für das Instrument eingeben:</translation>
+        <translation>Namen für das Instrument eingeben:</translation>
     </message>
 </context>
 <context>
@@ -11745,7 +11746,7 @@ associated segments.  Are you sure?</source>
     <message>
         <location line="-575"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
-        <translation>Die Audiodatei &quot;%1&quot; wird entladen und alle verbundenen Segmente werden entfernt. Bist du sicher?</translation>
+        <translation>Die Audio-Datei &quot;%1&quot; wird entladen und alle verbundenen Segmente werden entfernt. Bist du sicher?</translation>
     </message>
     <message>
         <location line="+89"/>
@@ -12219,43 +12220,43 @@ here.</source>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+63"/>
         <source>Audio file location:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ort für Audio-Dateien:</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Audio directory (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis für Audio (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document name directory (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis für Dokumentnamen (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document directory (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis für Dokumente (.)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Central repository (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zentraler Speicherort (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Custom audio file location (specify below)</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierter Ort für Audio-Dateien (unten angeben)</translation>
     </message>
     <message>
         <location line="+4"/>
         <location line="+22"/>
         <source>Save document first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zuerst Dokument speichern.</translation>
     </message>
     <message>
         <location line="-15"/>
         <source>Custom audio file location:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierter Ort für Audio-Dateien:</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -12280,12 +12281,12 @@ here.</source>
     <message>
         <location line="+44"/>
         <source>Change Audio Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfad für Audio ändern</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document&apos;s audio files will now be moved to the new location.&lt;br /&gt;Please note that this will force a save of the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Audio-Dateien des Dokumentes werden nicht zum neuen Ort verschoben.&lt;br /&gt;Bitte beachten sie, dass dies ein Speichern der Datei erzwingt.</translation>
     </message>
     <message>
         <source>Choose Audio File Path</source>
@@ -13021,7 +13022,7 @@ your harmonies and attempts to guess what chords your composition contains.  The
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+61"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Akkordnamen-Lineal.  Dieses Lineal analysiert die Harmonien und versucht zu ermitteln, welche Akkorde in der Komposition enthalten sind. Diese Akkorde können nicht gedruckt oder verändert werden, dies dient nur zur Information.&lt;/p&gt;&lt;p&gt;Es kann über das &lt;b&gt;Anzeige-&gt;Lineale&lt;/b&gt; Menue ein und ausgeschaltet werden.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Akkordnamen-Lineal.  Dieses Lineal analysiert die Harmonien und versucht zu ermitteln, welche Akkorde in der Komposition enthalten sind. Diese Akkorde können nicht gedruckt oder verändert werden, dies dient nur zur Information.&lt;/p&gt;&lt;p&gt;Es kann über das &lt;b&gt;Anzeige-&gt;Lineale&lt;/b&gt; Menü ein- und ausgeschaltet werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -13608,17 +13609,17 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="-243"/>
         <source>Add a Control Parameter to the Studio</source>
-        <translation>Kontroll-Parameter zum Studio hinzufügen</translation>
+        <translation>Kontroller-Parameter zum Studio hinzufügen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Delete a Control Parameter from the Studio</source>
-        <translation>Kontroll-Parameter aus dem Studio löschen</translation>
+        <translation>Kontroller-Parameter aus dem Studio löschen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Close the Control Parameter editor</source>
-        <translation>Kontroll-Parameter-Editor schließen</translation>
+        <translation>Kontroller-Editor schließen</translation>
     </message>
     <message>
         <location line="+98"/>
@@ -13709,7 +13710,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="+33"/>
         <source>Erase Controller Event(s)</source>
-        <translation>Kontroller-Event(s) entfernen</translation>
+        <translation>Kontroller-Ereignis(se) entfernen</translation>
     </message>
 </context>
 <context>
@@ -13717,7 +13718,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventInsertCommand.cpp" line="+28"/>
         <source>Insert Controller Event</source>
-        <translation>Kontroller-Event einfügen</translation>
+        <translation>Kontroller-Ereignis einfügen</translation>
     </message>
 </context>
 <context>
@@ -13741,7 +13742,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+305"/>
         <source>Unsupported Event Type</source>
-        <translation>Nicht unterstützter Eventtyp</translation>
+        <translation>Nicht unterstützter Ereignistyp</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -13751,7 +13752,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+5"/>
         <source>Controller Events</source>
-        <translation>Kontroller-Events</translation>
+        <translation>Kontroller-Ereignisse</translation>
     </message>
     <message>
         <location line="+125"/>
@@ -13761,7 +13762,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+128"/>
         <source>Controller Event Number</source>
-        <translation>Kontroller-Eventnummer</translation>
+        <translation>Kontroller-Ereignisnummer</translation>
     </message>
 </context>
 <context>
@@ -14149,7 +14150,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+1"/>
         <source>Events</source>
-        <translation>Events</translation>
+        <translation>Ereignisse</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -14320,12 +14321,12 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="+77"/>
         <source>Advanced Event Edit</source>
-        <translation>Erweiterter Event-Editor</translation>
+        <translation>Erweiterter Ereignis-Editor</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Advanced Event Viewer</source>
-        <translation>Erweiterte Eventanzeige</translation>
+        <translation>Erweiterte Ereignisanzeige</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -14335,7 +14336,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+6"/>
         <source>Event type: </source>
-        <translation>Eventtyp: </translation>
+        <translation>Ereignistyp: </translation>
     </message>
     <message>
         <location line="+8"/>
@@ -14380,7 +14381,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+5"/>
         <source>These are cached values, lost if the event is modified.</source>
-        <translation>Diese Werte sind nur zwischengespeichert und gehen verloren, wenn das Event verändert wird.</translation>
+        <translation>Diese Werte sind nur zwischengespeichert und gehen verloren, wenn das Ereignis verändert wird.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -14421,7 +14422,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
         <location line="+143"/>
         <location line="+33"/>
         <source>Edit Event</source>
-        <translation>Event bearbeiten</translation>
+        <translation>Ereignis bearbeiten</translation>
     </message>
     <message>
         <location line="-32"/>
@@ -14466,12 +14467,12 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="+79"/>
         <source>Event Filter</source>
-        <translation>Eventfilter</translation>
+        <translation>Ereignisfilter</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Note Events</source>
-        <translation>Noten-Events</translation>
+        <translation>Noten-Ereignisse</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -14520,7 +14521,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location line="+2"/>
         <source>Use Notation Editor note durations, not actual</source>
-        <translation type="unfinished"></translation>
+        <translation>Notendauern des Notensatz-Editors, nicht die aktuellen, anwenden</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -14530,7 +14531,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location line="+2"/>
         <source>Select rests in addition to notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausen zusätzlich zu den Noten auswählen</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -14592,7 +14593,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/commands/edit/EventInsertionCommand.cpp" line="+30"/>
         <source>Insert Event</source>
-        <translation>Event einfügen</translation>
+        <translation>Ereignis einfügen</translation>
     </message>
 </context>
 <context>
@@ -14604,7 +14605,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="+108"/>
         <source>Set the %1 property of the event selection:</source>
-        <translation>Das %1-Verhalten für die ausgewählten Events setzen:</translation>
+        <translation>Das %1-Verhalten für die ausgewählten Ereignisse setzen:</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -14641,7 +14642,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
         <location filename="../../src/commands/edit/EventUnquantizeCommand.cpp" line="+35"/>
         <location line="+11"/>
         <source>Unquantize Events</source>
-        <translation>Events entquantisieren</translation>
+        <translation>Ereignisse entquantisieren</translation>
     </message>
     <message>
         <location line="+33"/>
@@ -14654,7 +14655,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="+122"/>
         <source>Event filters</source>
-        <translation>Eventfilter</translation>
+        <translation>Ereignisfilter</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -14766,7 +14767,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location line="+1"/>
         <source>Event Type  </source>
-        <translation>Eventtyp  </translation>
+        <translation>Ereignistyp  </translation>
     </message>
     <message>
         <location line="+1"/>
@@ -14803,12 +14804,12 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location line="+71"/>
         <source>&lt;no events at this filter level&gt;</source>
-        <translation>&lt;Keine Events auf diesem Filterlevel&gt;</translation>
+        <translation>&lt;Keine Ereignisse auf diesem Filterlevel&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;no events&gt;</source>
-        <translation>&lt;Keine Events&gt;</translation>
+        <translation>&lt;Keine Ereignisse&gt;</translation>
     </message>
     <message>
         <location line="+175"/>
@@ -14848,12 +14849,12 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location line="+504"/>
         <source>Open in Event Editor</source>
-        <translation>Im Event-Editor öffnen</translation>
+        <translation>Im Ereignis-Editor öffnen</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Open in Expert Event Editor</source>
-        <translation>Im erweiterten Event-Editor öffnen</translation>
+        <translation>Im erweiterten Ereignis-Editor öffnen</translation>
     </message>
     <message>
         <location line="+101"/>
@@ -14863,7 +14864,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location line="+17"/>
         <source>Event List</source>
-        <translation>Eventliste</translation>
+        <translation>Ereignisliste</translation>
     </message>
     <message>
         <source>%1%2 - Segment Track #%3 - Event List</source>
@@ -14938,22 +14939,22 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+10"/>
         <source>&lt;p&gt;Could not find audio file:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%1&lt;/p&gt;&lt;p&gt;at expected audio file location:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%2&lt;/p&gt;&lt;p&gt;You can either cancel the file open and move the files yourself or locate the missing file and adjust the audio file location to match.&lt;/p&gt;&lt;p&gt;Which would you like to do?&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Konnte Audio-Datei nicht finden:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%1&lt;/p&gt;&lt;p&gt;am erwarteten Ort der Audio-Datei:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%2&lt;/p&gt;&lt;p&gt;Sie können entweder das Öffnen abbrechen und die Datei selber verschieben oder die fehlende Datei lokalisieren und den Ort der Audio-Datei dementsprechend anpassen.&lt;/p&gt;&lt;p&gt;Was möchten sie tun?&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>&amp;Locate Missing File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fehlende Audio-Datei finden</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&amp;Skip This Audio File</source>
-        <translation type="unfinished"></translation>
+        <translation>Die&amp;se Audio-Datei überspringen</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&amp;Cancel File Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei öffnen abbre&amp;chen</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -15152,7 +15153,7 @@ für den Schriftnamen %1 (treffendste ist %2)</translation>
     <message>
         <location line="+1"/>
         <source>Event List editor</source>
-        <translation>im Eventlisten-Editor öffnen</translation>
+        <translation>im Ereignislisten-Editor öffnen</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -16694,7 +16695,7 @@ wie Rosegarden Versetzungszeichen im Notensatz-Editor aufhebt.&lt;/qt&gt;</trans
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Wenn ausgewählt druckt LilyPond alle Notenlinien, auch wenn sie leer sind.  Das Ausschalten dieser Option könnte etwas die Unordnung in einer Partitur vermindern, welche lange Ruhephasen für einige Instrumente beinhaltet.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Wenn angewählt druckt LilyPond alle Notenlinien, auch wenn sie leer sind.  Das Ausschalten dieser Option könnte die Unordnung etwas vermindern in einer Partitur, die lange Ruhephasen für einige Instrumente beinhaltet.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -16979,7 +16980,7 @@ feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/inde
     <message>
         <location line="+3"/>
         <source>&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Es wurde ausgewählt, dass Rosegarden die Notenhälse exportiert und LilyPond konnte die Datei nicht verarbeiten. Es ist wahrscheinlich, dass bei der Bearbeitung der Datei versteckte Eigenschaften der Notenhälse mit Events verbunden wurden, die nicht dazu passen und LilyPond zum scheitern veruteilten. Die bevorzugte Lösung wäre es, die Notenhälse LilyPond zu überlassen (dessen automatische Erzeugung von Notenhälsen besser als bei Rosegarden funktioniert) und diese Option zu deaktivieren. Eine weitere Möglichkeit wäre es alle Notenhälse zu entfernen und dann per Hand wieder mit Rosegarden zu erzeugen. Die erste Lösung ist aber wahrscheinlch die beste.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Es wurde ausgewählt, dass Rosegarden die Notenhälse exportiert und LilyPond konnte die Datei nicht verarbeiten. Es ist wahrscheinlich, dass bei der Bearbeitung der Datei versteckte Eigenschaften der Notenhälse mit Ereignissen verbunden wurden, die nicht dazu passen und LilyPond zum scheitern veruteilten. Die bevorzugte Lösung wäre es, die Notenhälse LilyPond zu überlassen (dessen automatische Erzeugung von Notenhälsen besser als bei Rosegarden funktioniert) und diese Option zu deaktivieren. Eine weitere Möglichkeit wäre es alle Notenhälse zu entfernen und dann per Hand wieder mit Rosegarden zu erzeugen. Die erste Lösung ist aber wahrscheinlch die beste.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -17191,7 +17192,7 @@ verursacht.</translation>
     <message>
         <location line="+1"/>
         <source>Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.</source>
-        <translation>Beim Anlegen eines Kanals kann Rosegarden ein Zurücksetzen-Aller-Kontroller-Event (CC 121) senden.</translation>
+        <translation>Beim Anlegen eines Kanals kann Rosegarden ein Zurücksetzen-Aller-Kontroller-Ereignisse (CC 121) senden.</translation>
     </message>
     <message>
         <location line="+48"/>
@@ -17282,12 +17283,12 @@ need CCs in this range for other things.</source>
     <message>
         <location line="+15"/>
         <source>Send control changes when looping</source>
-        <translation>Kontrollwechsel während laufender Loop nicht senden</translation>
+        <translation>Kontrollerwechsel während laufender Loop nicht senden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Some synths have trouble with control changes coming in repeatedly.  Use this to turn them off when looping.</source>
-        <translation>Manche Synthesizer haben Probleme mit wiederholt eingehenden Kontrollwechsel. Verwende die Option, um diese während laufender Loop abzuschalten.</translation>
+        <translation>Manche Synthesizer haben Probleme mit wiederholt eingehenden Kontrollerwechsel. Verwende die Option, um diese während laufender Loop abzuschalten.</translation>
     </message>
     <message>
         <location line="+112"/>
@@ -17938,22 +17939,22 @@ Doppelklicken um den Markierungs-Editor zu öffnen.</translation>
     <message>
         <location line="+114"/>
         <source>Copy and Move Event</source>
-        <translation>Event kopieren und verschieben</translation>
+        <translation>Ereignis kopieren und verschieben</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Copy and Move Events</source>
-        <translation>Mehrere Events kopieren und verschieben</translation>
+        <translation>Mehrere Ereignisse kopieren und verschieben</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Move Event</source>
-        <translation>Event verschieben</translation>
+        <translation>Ereignis verschieben</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Move Events</source>
-        <translation>Events verschieben</translation>
+        <translation>Ereignis verschieben</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -18017,12 +18018,12 @@ grid</source>
     <message>
         <location line="+66"/>
         <source>Resize Event</source>
-        <translation>Eventgröße verändern</translation>
+        <translation>Ereignisgröße verändern</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Resize Events</source>
-        <translation>Eventgrößen verändern</translation>
+        <translation>Ereignisgrößen verändern</translation>
     </message>
     <message>
         <location line="+101"/>
@@ -18388,7 +18389,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location line="+97"/>
         <source>Running status used for first event in track</source>
-        <translation>Running-Status beim ersten Event der Spur benutzt</translation>
+        <translation>Running-Status beim ersten Ereignis der Spur benutzt</translation>
     </message>
 </context>
 <context>
@@ -18401,7 +18402,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location line="+10"/>
         <source>THRU events to ignore</source>
-        <translation>Zu ignorierende THRU-Events</translation>
+        <translation>Zu ignorierende THRU-Ereignisse</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -18448,7 +18449,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location line="-10"/>
         <source>RECORD events to ignore</source>
-        <translation>Zu ignorierende RECORD-Events</translation>
+        <translation>Zu ignorierende RECORD-Ereignisse</translation>
     </message>
     <message>
         <location line="+114"/>
@@ -18594,7 +18595,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location filename="../../src/commands/edit/MoveAcrossSegmentsCommand.cpp" line="+66"/>
         <source>&amp;Move Events to Other Segment</source>
-        <translation>Events zu anderem Seg&amp;ment verschieben</translation>
+        <translation>Ereignisse zu anderem Seg&amp;ment verschieben</translation>
     </message>
 </context>
 <context>
@@ -18602,17 +18603,17 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location filename="../../src/commands/edit/MoveCommand.cpp" line="+54"/>
         <source>&amp;Move Events</source>
-        <translation>Events verschie&amp;ben</translation>
+        <translation>Ereignisse verschie&amp;ben</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Move Events Back</source>
-        <translation>Events rückwärts verschie&amp;ben</translation>
+        <translation>Ereignisse rückwärts verschie&amp;ben</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Move Events Forward</source>
-        <translation>Events vorwärts verschie&amp;ben</translation>
+        <translation>Ereignisse vorwärts verschie&amp;ben</translation>
     </message>
 </context>
 <context>
@@ -18858,7 +18859,7 @@ check transposing instruments carefully in both concert and notated pitch. When 
     <message>
         <location line="+13"/>
         <source>Show non-notation events as question marks</source>
-        <translation>Nichtnotensatz-Events als Fragezeichen zeigen</translation>
+        <translation>Nichtnotensatz-Ereignisse als Fragezeichen zeigen</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -18868,7 +18869,7 @@ check transposing instruments carefully in both concert and notated pitch. When 
     <message>
         <location line="+11"/>
         <source>Show &quot;invisible&quot; events in grey</source>
-        <translation>&quot;Unsichtbare&quot; Events in Grau anzeigen</translation>
+        <translation>&quot;Unsichtbare&quot; Ereignisse in Grau anzeigen</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -19412,8 +19413,8 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location line="-148"/>
         <source>  %n event(s) selected </source>
         <translation>
-            <numerusform>  %n Event ausgewählt </numerusform>
-            <numerusform>  %n Events ausgewählt </numerusform>
+            <numerusform>  %n Ereignis ausgewählt </numerusform>
+            <numerusform>  %n Ereignisse ausgewählt </numerusform>
         </translation>
     </message>
     <message>
@@ -19537,7 +19538,7 @@ eingeschränkten wählen.&lt;/p&gt;&lt;/qt&gt;</translation>
     <message>
         <location line="+2819"/>
         <source>Move Events to Staff Above</source>
-        <translation>Events auf Notensystem oberhalb verschieben</translation>
+        <translation>Ereignisse auf Notensystem oberhalb verschieben</translation>
     </message>
     <message>
         <location line="-2671"/>
@@ -19552,7 +19553,7 @@ eingeschränkten wählen.&lt;/p&gt;&lt;/qt&gt;</translation>
     <message>
         <location line="+2818"/>
         <source>Edit Text Event</source>
-        <translation>Text-Event bearbeiten</translation>
+        <translation>Text-Ereignis bearbeiten</translation>
     </message>
     <message>
         <location line="+48"/>
@@ -19706,7 +19707,7 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
     <message>
         <location line="+101"/>
         <source>Move Events to Staff Below</source>
-        <translation>Events auf Notensystem unterhalb verschieben</translation>
+        <translation>Ereignisse auf Notensystem unterhalb verschieben</translation>
     </message>
     <message>
         <location line="+79"/>
@@ -19918,12 +19919,12 @@ Attribut shape oder das Attribut charname haben</translation>
     <message>
         <location line="+2"/>
         <source>Erase existing events to make room [&quot;simple&quot;]</source>
-        <translation>Vorhandene Events löschen, um Platz zu machen [&quot;einfach&quot;]</translation>
+        <translation>Vorhandene Ereignisse löschen, um Platz zu machen [&quot;einfach&quot;]</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Move existing events out of the way [&quot;open-n-paste&quot;]</source>
-        <translation>Vorhandene Events wegschieben [&quot;öffnen + einfügen&quot;]</translation>
+        <translation>Vorhandene Ereignisse wegschieben [&quot;öffnen + einfügen&quot;]</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -20030,7 +20031,7 @@ Attribut shape oder das Attribut charname haben</translation>
     <message>
         <location line="+5"/>
         <source>Replace old events</source>
-        <translation>Alte Events ersetzen</translation>
+        <translation>Alte Ereignisse ersetzen</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -20040,7 +20041,7 @@ Attribut shape oder das Attribut charname haben</translation>
     <message>
         <location line="+5"/>
         <source>Add new events to old ones</source>
-        <translation>Neue Events zu den Alten hinzufügen</translation>
+        <translation>Neue Ereignisse zu den Alten hinzufügen</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -20051,12 +20052,12 @@ Kontroller hinzu, ohne die vorhandenen zu beeinflussen.&lt;/qt&gt;</translation>
     <message>
         <location line="+5"/>
         <source>Just erase old events</source>
-        <translation>Nur alte Events löschen</translation>
+        <translation>Nur alte Ereignisse löschen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Don&apos;t add any events, just erase existing pitchbends or controllers of this type in this range.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Füge keine Events hinzu, es werden nur die vorhandenen Tonhöhenbeugungen oder Kontroller von diesem Typ und in diesem Bereich gelöscht.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Füge keine Ereignisse hinzu, es werden nur die vorhandenen Tonhöhenbeugungen oder Kontroller von diesem Typ und in diesem Bereich gelöscht.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -21235,7 +21236,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location line="+4"/>
         <source>Adjust times of following events accordingly</source>
-        <translation>Zeiten nachfolgender Events entsprechend anpassen</translation>
+        <translation>Zeiten nachfolgender Ereignisse entsprechend anpassen</translation>
     </message>
 </context>
 <context>
@@ -21380,7 +21381,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
     <message>
         <location line="+875"/>
         <source>Skipping a file will remove its audio segments from the composition.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Überspringen einer Datei entfernt deren Audio-Segmente aus der Komposition.</translation>
     </message>
 </context>
 <context>
@@ -21622,7 +21623,7 @@ die Datei bearbeitet, die Sperrdatei löschen und neu bversuchen.
     <message>
         <location line="-2119"/>
         <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Parsen der Datei &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</translation>
     </message>
     <message>
         <location line="+741"/>
@@ -23930,98 +23931,98 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location filename="../../src/gui/dialogs/ShortcutDialog.cpp" line="+54"/>
         <source>Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastaturkürzel</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Filter pattern:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorlage für Filter:</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>&lt;p&gt;Select an action in the table below then double click one of the four &lt;b&gt;Shortcut&lt;/b&gt; fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the &lt;b&gt;Shortcut&lt;/b&gt; field.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Actions marked with a &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;light blue background&lt;/span&gt; are global and valid for all windows.&lt;/i&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Eine Maßnahme in der Tabelle unten wählen, dann Doppel-Klick auf eines der vier &lt;b&gt;Kürzel&lt;/b&gt; Tabellenfelder.  Drücken sie die Taste des neuen Kürzels.  Ein Kürzel kann entfernt werden durch Drücken der Hochstelltaste im &lt;b&gt;Kürzel&lt;/b&gt; Feld.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Maßnahmen die mit einem &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;hellblauen Hintergrund&lt;/span&gt; gekennzeichnet sind, sind global zugeordnet und gelten in allen Fenstern.&lt;/i&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Reset Selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgewählte rücksetzen</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reset selected actions&apos; shortcuts to defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Kürzel für die ausgewählten Maßnahmen zum Standard rücksetzen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Remove shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Kürzel entfernen</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Remove all shortcuts from selected actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Kürzel für die ausgewählten Maßnahmen entfernen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Reset All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles rücksetzen</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reset all shortcuts for all actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Kürzel für alle Maßnahmen rücksetzen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Warnings when:</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung wenn:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Never</source>
-        <translation type="unfinished">Niemals</translation>
+        <translation>Niemals</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Conflict in same context</source>
-        <translation type="unfinished"></translation>
+        <translation>Konflikt mit dieser Zuordnung</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Conflict in any context</source>
-        <translation type="unfinished"></translation>
+        <translation>Konflikt mit einer beliebigen Zuordnung</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Keyboard:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastatur:</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+2"/>
         <source>Apply changes for your keyboard layout.</source>
-        <translation type="unfinished"></translation>
+        <translation>Änderungen für ihre Tastaturbelegung anwenden.</translation>
     </message>
     <message>
         <location line="+59"/>
         <source>Shortcuts Changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Kürzel geändert</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>You must restart Rosegarden for shortcut changes to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden muss neu gestartet werden, damit die Änderungen der Kürzel wirksam werden.</translation>
     </message>
     <message>
         <location line="+184"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>This will reset all shortcuts for all actions across all contexts. Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies wird alle Kürzel für alle Maßnahmen in allen Zuordnungen rücksetzen. Sind sie sicher?</translation>
     </message>
 </context>
 <context>
@@ -24029,17 +24030,17 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location filename="../../src/gui/dialogs/ShortcutWarnDialog.cpp" line="+38"/>
         <source>Shortcut Conflicts</source>
-        <translation type="unfinished"></translation>
+        <translation>Konflikt in Kürzel</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>set Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Kürzel festlegen</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>remove Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Kürzel entfernen</translation>
     </message>
 </context>
 <context>
@@ -24060,22 +24061,22 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="+72"/>
         <source>Insert Event</source>
-        <translation>Event einfügen</translation>
+        <translation>Ereignis einfügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Edit Event</source>
-        <translation>Event bearbeiten</translation>
+        <translation>Ereignis bearbeiten</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Event Properties</source>
-        <translation>Eventeigenschaften</translation>
+        <translation>Ereigniseigenschaften</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Event type:</source>
-        <translation>Eventtyp:</translation>
+        <translation>Ereignistyp:</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -24247,17 +24248,17 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+53"/>
         <source>Unsupported event type:</source>
-        <translation>Nicht unterstütztes Event:</translation>
+        <translation>Nicht unterstütztes Ereignis:</translation>
     </message>
     <message>
         <location line="+257"/>
         <source>Edit Event Time</source>
-        <translation>Eventzeit bearbeiten</translation>
+        <translation>Ereigniszeit bearbeiten</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Edit Event Notation Time</source>
-        <translation>Eventnotenzeit ändern</translation>
+        <translation>Ereignisnotenzeit ändern</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -24359,7 +24360,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+6"/>
         <source>Duplicate non-note events</source>
-        <translation>Nichtnoten-Events verdoppeln</translation>
+        <translation>Nichtnoten-Ereignisse verdoppeln</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -26857,7 +26858,7 @@ sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger en
     <name>S:</name>
     <message>
         <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
+        <comment>We recommend pointing help URLs to a wiki page in your native language.</comment>
         <translation></translation>
     </message>
 </context>
