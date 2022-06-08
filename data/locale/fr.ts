@@ -1611,7 +1611,7 @@
         <location line="-271"/>
         <location line="+272"/>
         <source>&amp;Reset Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Retour au sélecteur</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -1636,7 +1636,7 @@
     <message>
         <location line="+1"/>
         <source>Add T&amp;enuto</source>
-        <translation></translation>
+        <translation>Ajouter T&amp;enuto</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1671,7 +1671,7 @@
     <message>
         <location line="+1"/>
         <source>Add &amp;Turn</source>
-        <translation></translation>
+        <translation>Ajouter Grupe&amp;tto</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1706,7 +1706,7 @@
     <message>
         <location line="+1"/>
         <source>Add &amp;Harmonic</source>
-        <translation></translation>
+        <translation>Ajouter &amp;Harmonique</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2116,7 +2116,7 @@
     <message>
         <location line="+3"/>
         <source>Set Event &amp;Velocities</source>
-        <translation></translation>
+        <translation>Définir &amp;vélocité événement</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2136,7 +2136,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Push Right</source>
-        <translation></translation>
+        <translation>Pousser à &amp;droite</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2226,7 +2226,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Double Whole Note</source>
-        <translation>&amp;Double Ronde</translation>
+        <translation>C&amp;arrée</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2266,27 +2266,27 @@
     <message>
         <location line="+1"/>
         <source>D&amp;otted Whole Note</source>
-        <translation>D&amp;ouble Ronde Pointée</translation>
+        <translation>R&amp;onde pointée</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Dotted Q&amp;uarter Note</source>
-        <translation>Noire Po&amp;intée</translation>
+        <translation>Noire po&amp;intée</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dotted E&amp;ighth Note</source>
-        <translation>Croch&amp;e Pointée</translation>
+        <translation>Croch&amp;e pointée</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dotted Si&amp;xteenth Note</source>
-        <translation>Double Croc&amp;he Pointée</translation>
+        <translation>Double croc&amp;he pointée</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dotted Thirt&amp;y-Second Note</source>
-        <translation>Triple Croche Point&amp;ée</translation>
+        <translation>Triple croche point&amp;ée</translation>
     </message>
     <message>
         <location line="-32"/>
@@ -2932,42 +2932,42 @@
     <message>
         <location line="+134"/>
         <source>Double Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Bâton de pause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Half Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Demi-pause</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Quarter Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Soupir</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Eighth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Demi-soupir</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Sixteenth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Quart de soupir</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Thirty-Second Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Huitième de soupir</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Sixty-Fourth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Seizième de soupir</translation>
     </message>
     <message>
         <location line="+89"/>
@@ -3253,7 +3253,7 @@
         <location line="+1"/>
         <location line="+201"/>
         <source>Double Whole Note</source>
-        <translation>Double ronde</translation>
+        <translation>Carrée</translation>
     </message>
     <message>
         <location line="-200"/>
@@ -3300,7 +3300,7 @@
     <message>
         <location line="-221"/>
         <source>Double Whole Note (Without Duration Change)</source>
-        <translation>Double ronde (sans changement de durée)</translation>
+        <translation>Carrée (sans changement de durée)</translation>
     </message>
     <message>
         <source>Ctrl+Alt+5</source>
@@ -3429,7 +3429,7 @@
     <message>
         <location line="+48"/>
         <source>Dotted Double Whole Note</source>
-        <translation>Double ronde pointée</translation>
+        <translation>Carrée pointée</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -3681,7 +3681,7 @@
     <message>
         <location line="+1"/>
         <source>Open most recent file</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir le fichier le plus récent</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3751,7 +3751,7 @@
     <message>
         <location line="+2"/>
         <source>Keyboard S&amp;hortcuts...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Raccourcis clavier...</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -8985,37 +8985,37 @@
     <message>
         <location line="+5"/>
         <source>gray</source>
-        <translation type="unfinished"></translation>
+        <translation>gris</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light blue</source>
-        <translation type="unfinished"></translation>
+        <translation>bleu clair</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light green</source>
-        <translation type="unfinished"></translation>
+        <translation>vert clair</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>cyan clair</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light red</source>
-        <translation type="unfinished"></translation>
+        <translation>rouge clair</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light magenta</source>
-        <translation type="unfinished"></translation>
+        <translation>magenta clair</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>jaune clair</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -9181,7 +9181,7 @@
     <message>
         <location line="+143"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Echec de l&apos;enregistrement audio.&lt;/p&gt;&lt;p&gt;Veuillez vérifier que la composition a été sauvegardée et qu&apos;un emplacement valide est défini pour les fichiers audio dans &lt;b&gt;Composition -&gt; Editer les propriétés du document... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
@@ -9561,182 +9561,182 @@ Voulez-vous utiliser
     <message>
         <location filename="../../src/gui/general/ActionData.cpp" line="+374"/>
         <source>Audio manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestionnaire audio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bank editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editeur de banque</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clef inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Insertion clef</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Control editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Edition contrôle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Event list</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste d&apos;événements</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guitar chord inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Insertion accord de guitare</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Marker editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Edition des marqueurs</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Marker ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Règlette des marqueurs</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix eraser</source>
-        <translation type="unfinished"></translation>
+        <translation>Gomme matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix mover</source>
-        <translation type="unfinished"></translation>
+        <translation>Outil déplacement matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix painter</source>
-        <translation type="unfinished"></translation>
+        <translation>Peintre matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix</source>
-        <translation type="unfinished">la matrice</translation>
+        <translation>Matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix resizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Outil redimensionnement matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélecteur matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Vélocité matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Midi mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mélangeur midi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mélangeur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Notation eraser</source>
-        <translation type="unfinished"></translation>
+        <translation>Gomme partition</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>Partition</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Notation selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélecteur partition</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Note/rest inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Insertion note/silence</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rosegarden main window</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenêtre principale Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Outil de segment</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Symbol inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Insertion symbole</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tempo ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Règlette de tempo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tempo view</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualisation tempo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Text inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Insertion texte</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Trigger manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestion déclenchements</translation>
     </message>
     <message>
         <location line="+269"/>
         <source>Context</source>
-        <translation type="unfinished"></translation>
+        <translation>Contexte</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Action</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Icône</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>User defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifié</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourci 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourci 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourci 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourci 4</translation>
     </message>
 </context>
 <context>
@@ -9754,7 +9754,7 @@ Voulez-vous utiliser
     <message>
         <location line="+7"/>
         <source>&lt;p&gt;Copyright 2000-2022 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2020 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version : %2&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt; {2000-2022 ?} {1 ?} {4&quot;?} {3&lt;?} {2&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2022 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version : %2&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2021 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -10205,42 +10205,42 @@ Voulez-vous utiliser
     <message>
         <location line="+12"/>
         <source>Show Audio File Location dialog when saving</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir emplacement fichiers audio à la sauvegarde</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Default audio location</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement par défaut des fichiers audio</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Audio directory (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire audio (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document name directory (./DocumentName)</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire &quot;Nom du document&quot; (./Nom_du_document)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document directory (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire du document (.)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Central repository (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire centralisé (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Custom audio file location (specify below)</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement spécifique (à définir ci-dessous)</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Custom audio file location</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement spécifique pour les fichiers audio</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -10381,48 +10381,49 @@ Voulez-vous utiliser
     <message>
         <location filename="../../src/gui/dialogs/AudioFileLocationDialog.cpp" line="+44"/>
         <source>Audio File Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement des fichiers audio</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Audio files have been introduced in this session.  Where would you like to save them?</source>
-        <translation type="unfinished"></translation>
+        <translation>Des fichiers audio ont été associés à cette session.  Où doivent-ils être sauvegardés ?</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>To an &quot;audio&quot; directory where the document is saved.  (%1) (Recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vers un répertoire &quot;audio&quot; situé là où le document est sauvegardé.  (%1) (Recommandé)</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>To a directory named after the document where the document is saved.
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vers un répertoire nommé comme le document et situé dans le répertoire du document.
+(%1)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To the same directory where the document is saved.  (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vers le répertoire où le document est enregistré.  (.)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To a central audio file repository.  (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vers un répertoire audio centralisé.  (%1)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To a custom audio file location:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vers un emplacement spécifique :</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Note: You can always move the audio files later by setting the audio location in the document properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Note: Il sera toujours possible de déplacer ultérieurement les fichiers audio en redéfinissant leur emplacement dans les propriétés du document.</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Use the above selection for all new files and don&apos;t display this dialog again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser le choix ci-dessus pour tous les nouveaux fichiers et ne plus afficher cette fenêtre de dialogue.</translation>
     </message>
 </context>
 <context>
@@ -10440,23 +10441,23 @@ Voulez-vous utiliser
     <message>
         <location line="-251"/>
         <source>&lt;br /&gt;Audio files will remain in their original location.&lt;br /&gt;(%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br /&gt;Les fichiers audio conserveront leur emplacemnt original.&lt;br /&gt;(%1)</translation>
     </message>
     <message>
         <location line="+11"/>
         <location line="+13"/>
         <source>Audio File Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement des fichiers audio</translation>
     </message>
     <message>
         <location line="-12"/>
         <source>Cannot create audio path.&lt;br /&gt;%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec création fichier audio.&lt;br /&gt;%1</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Audio path is not writable.&lt;br /&gt;%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec écriture fichier audio </translation>
     </message>
     <message>
         <location line="+218"/>
@@ -10510,7 +10511,7 @@ Voulez-vous utiliser
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+87"/>
         <source>Click to rename this instrument.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer pour renommer cet instrument.</translation>
     </message>
     <message>
         <location line="+129"/>
@@ -10527,12 +10528,12 @@ Voulez-vous utiliser
     <message>
         <location line="+141"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished">Surnommer l&apos;instrument :</translation>
+        <translation>Surnommer l&apos;instrument :</translation>
     </message>
 </context>
 <context>
@@ -11064,43 +11065,43 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+63"/>
         <source>Audio file location:</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement du fichier audio:</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Audio directory (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire audio (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document name directory (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire &quot;Nom du document&quot; (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document directory (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire du document (.)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Central repository (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire centralisé (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Custom audio file location (specify below)</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement spécifique pour les fichiers audio (spécifier ci-dessous)</translation>
     </message>
     <message>
         <location line="+4"/>
         <location line="+22"/>
         <source>Save document first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder d&apos;abord le document.</translation>
     </message>
     <message>
         <location line="-15"/>
         <source>Custom audio file location:</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement spécifique des fichiers audio :</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -11110,27 +11111,27 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+7"/>
         <source>Recording time:</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée d&apos;enregistrement :</translation>
     </message>
     <message>
         <location line="+81"/>
         <source>%1 MiB out of %2 MiB (%3% used)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MiB sur %2 MiB (%3% utilisés)</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>%1 minutes at %3Hz 16-bit stereo</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 minutes à %3 Hz, 16-bit stereo</translation>
     </message>
     <message>
         <location line="+44"/>
         <source>Change Audio Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier l&apos;emplacement des fichiers audio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document&apos;s audio files will now be moved to the new location.&lt;br /&gt;Please note that this will force a save of the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les fichiers audio du document vont être déplacés vers leur nouveau répertoire.&lt;br /&gt;Ceci va provoquer l&apos;écriture du fichier.</translation>
     </message>
     <message>
         <source>Equivalent minutes of 16-bit stereo:</source>
@@ -13319,7 +13320,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location line="+2"/>
         <source>Use Notation Editor note durations, not actual</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser les durées de note de la partition et non leurs durées réelles</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -13329,7 +13330,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location line="+2"/>
         <source>Select rests in addition to notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner les silences en plus des notes</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -13737,22 +13738,22 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+10"/>
         <source>&lt;p&gt;Could not find audio file:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%1&lt;/p&gt;&lt;p&gt;at expected audio file location:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%2&lt;/p&gt;&lt;p&gt;You can either cancel the file open and move the files yourself or locate the missing file and adjust the audio file location to match.&lt;/p&gt;&lt;p&gt;Which would you like to do?&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Fichier audio introuvable :&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%1&lt;/p&gt;&lt;p&gt;à l&apos;emplacement attendu :&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%2&lt;/p&gt;&lt;p&gt;Il est possible d&apos;annuler l&apos;ouverture du fichier puis de déplacer manuellement les fichiers ou bien de localiser le fichier manquant puis d&apos;ajuster en conséquence l&apos;emplacement prévu pour les fichiers audio.&lt;/p&gt;&lt;p&gt;Que shouhaitez vous faire ?&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>&amp;Locate Missing File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Trouver fichier manquant</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&amp;Skip This Audio File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ignorer ce fichier audio</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&amp;Cancel File Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Annuler ouverture fichier</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -14009,12 +14010,12 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+22"/>
         <source>Stop playback at end of last segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter la lecture à la fin du dernier segment</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Advanced Looping (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rebouclage avancé (expérimental)</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -14064,7 +14065,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+41"/>
         <source>Okular (KDE)</source>
-        <translation type="unfinished"></translation>
+        <translation>Okular (KDE)</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -15782,7 +15783,7 @@ répartis verticalement sur la page)</translation>
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+78"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to toggle the range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Cliquer et glisser pour déplacer le pointeur de lecture.&lt;/p&gt;&lt;p&gt;Clic droit et glisser pour définir une plage pour lire en boucle ou éditer.&lt;/p&gt;&lt;p&gt;Click droit pour activer ou désactiver la plage.&lt;/p&gt;&lt;p&gt;Ctrl+cliquer et glisser pour déplacer le pointeur de lecture en s&apos;accrochant aux temps.&lt;/p&gt;&lt;p&gt;Double-cliquer pour commecer la lecture.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -17855,7 +17856,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+0"/>
         <source>double whole note</source>
-        <translation>double ronde</translation>
+        <translation>carrée</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -17895,7 +17896,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+0"/>
         <source>double whole notes</source>
-        <translation>doubles rondes</translation>
+        <translation>carrées</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -17947,7 +17948,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+1"/>
         <source>double whole</source>
-        <translation>double ronde</translation>
+        <translation>carrée</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -17987,7 +17988,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+1"/>
         <source>double wholes</source>
-        <translation>double rondes</translation>
+        <translation>carrées</translation>
     </message>
     <message>
         <location line="+127"/>
@@ -19072,7 +19073,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/commands/edit/PlaceControllersCommand.cpp" line="+59"/>
         <source>Place Controllers</source>
-        <translation type="unfinished"></translation>
+        <translation>Positionner les contrôleurs</translation>
     </message>
 </context>
 <context>
@@ -19977,7 +19978,7 @@ Il peut y avoir des incompatibilités avec ce format de fichier.</translation>
     <message>
         <location line="+875"/>
         <source>Skipping a file will remove its audio segments from the composition.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer un fichier supprimera de la composition les segments audio associés.</translation>
     </message>
 </context>
 <context>
@@ -20178,7 +20179,7 @@ Il est peut-être déjà édité par un autre utilisateur ou par une autre insta
     <message>
         <location line="-2119"/>
         <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur à la lecture du fichier &apos;%1&apos; :&lt;br /&gt;&quot;%2&quot;</translation>
     </message>
     <message>
         <location line="+741"/>
@@ -21396,7 +21397,7 @@ Erreur obtenue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentExcludeFromPrintingCommand.cpp" line="+30"/>
         <source>Change Exclude From Printing</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier exclusion d&apos;impression</translation>
     </message>
 </context>
 <context>
@@ -21598,12 +21599,12 @@ Erreur obtenue : %2</translation>
     <message>
         <location line="+10"/>
         <source>Exclude from Printing</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne sera pas imprimé</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Exclude this segment from printing (LilyPond).&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ce segment ne sera pas imprimé (exporté vers LilyPond).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -22296,98 +22297,99 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location filename="../../src/gui/dialogs/ShortcutDialog.cpp" line="+54"/>
         <source>Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourcis clavier</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Filter pattern:</source>
-        <translation type="unfinished"></translation>
+        <translation>Motif de filtrage :</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>&lt;p&gt;Select an action in the table below then double click one of the four &lt;b&gt;Shortcut&lt;/b&gt; fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the &lt;b&gt;Shortcut&lt;/b&gt; field.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Actions marked with a &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;light blue background&lt;/span&gt; are global and valid for all windows.&lt;/i&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Selectionner une action dans la table ci-dessous, puis double-cliquer l&apos;un des quatre champs &lt;b&gt;Raccourci&lt;/b&gt; de la table.  Presser la nouvelle touche de raccourci.  Un raccourci peut être supprimé en pressant la touche Maj. dans le champ &lt;b&gt;Raccourci&lt;/b&gt; .&lt;/p&gt;&lt;p&gt;&lt;i&gt;Les actions dont les lignes ont un fond &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;bleu clair&lt;/span&gt; sont globales et valides dans toutes les fenêtres.&lt;/i&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Reset Selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser sélection</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reset selected actions&apos; shortcuts to defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialise à leurs valeurs par défaut les raccourcis des actions sélectionnées</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Remove shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer raccourcis</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Remove all shortcuts from selected actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprime tous les raccourcis des actions sélectionnées</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Reset All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout réinitialiser</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reset all shortcuts for all actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialise tous les raccourcis de toutes les actions</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Warnings when:</source>
-        <translation type="unfinished"></translation>
+        <translation>Avertissement si : </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Never</source>
-        <translation type="unfinished">Jamais</translation>
+        <translation>Jamais</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Conflict in same context</source>
-        <translation type="unfinished"></translation>
+        <translation>Conflit dans un même contexte</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Conflict in any context</source>
-        <translation type="unfinished"></translation>
+        <translation>Conflit indépendamment du contexte</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Keyboard:</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavier : </translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+2"/>
         <source>Apply changes for your keyboard layout.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prend en compte la disposition du clavier</translation>
     </message>
     <message>
         <location line="+59"/>
         <source>Shortcuts Changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourcis modifiés</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>You must restart Rosegarden for shortcut changes to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>La modification des raccourcis ne sera prise en compte qu&apos;après un redémarrage de Rosegarden.</translation>
     </message>
     <message>
         <location line="+184"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translatorcomment>Rosegarden</translatorcomment>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>This will reset all shortcuts for all actions across all contexts. Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les raccourcis de toutes les actions de tous les contextes vont être réinitialisés. Êtes vous sûrs ?</translation>
     </message>
 </context>
 <context>
@@ -22395,17 +22397,17 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location filename="../../src/gui/dialogs/ShortcutWarnDialog.cpp" line="+38"/>
         <source>Shortcut Conflicts</source>
-        <translation type="unfinished"></translation>
+        <translation>Conflit entre raccourcis</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>set Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir le raccourci</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>remove Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer le raccourci</translation>
     </message>
 </context>
 <context>
