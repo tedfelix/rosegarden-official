@@ -182,7 +182,7 @@ TranzportClient::soloChanged(const Composition * c,
                              bool  solo,
                              TrackId  selectedTrack )
 {
-    RG_DEBUG << "TranzportClient, CompostionObserver::soloChanged";
+    RG_DEBUG << "TranzportClient, CompositionObserver::soloChanged";
 
     if (device_online) {
         if (solo) {
@@ -217,14 +217,14 @@ void
 TranzportClient::trackChanged(const Composition *c,
                               Track* track)
 {
-    RG_DEBUG << "TranzportClient, CompostionObserver::trackChanged";
+    RG_DEBUG << "TranzportClient, CompositionObserver::trackChanged";
     
     if (device_online) {
         const Track* track2 = c->getTrackById(c->getSelectedTrack());
 
         // If the changed track is the selected track
         if (track == track2) {
-            RG_DEBUG << "TranzportClient, CompostionObserver::trackChanged updateing";
+            RG_DEBUG << "TranzportClient, CompositionObserver::trackChanged updating";
             
             if (track->isArmed()) {
                 LightOn(LightTrackrec);
