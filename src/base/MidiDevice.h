@@ -160,8 +160,10 @@ public:
     //
     virtual ControlParameter *getControlParameter(int index);
     const ControlParameter *getControlParameter(int index) const override;
-    virtual ControlParameter *getControlParameter(const std::string &type, MidiByte controllerValue);
-    const ControlParameter *getControlParameter(const std::string &type, MidiByte controllerValue) const override;
+    virtual ControlParameter *getControlParameter(
+            const std::string &type, MidiByte controllerNumber);
+    const ControlParameter *getControlParameter(
+            const std::string &type, MidiByte controllerNumber) const override;
 
     // Modify ControlParameters
     //

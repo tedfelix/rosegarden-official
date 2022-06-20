@@ -1074,7 +1074,8 @@ MidiDevice::getControlParameter(int index) const
 }
 
 ControlParameter *
-MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte controllerValue)
+MidiDevice::getControlParameter(
+        const std::string &type, Rosegarden::MidiByte controllerNumber)
 {
     ControlList::iterator it = m_controlList.begin();
 
@@ -1089,7 +1090,7 @@ MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte co
 
             // Also match controller value for Controller events
             //
-            if (it->getControllerNumber() == controllerValue)
+            if (it->getControllerNumber() == controllerNumber)
                 return  &*it;
         }
     }
@@ -1098,13 +1099,14 @@ MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte co
 }
 
 const ControlParameter *
-MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte controllerValue) const
+MidiDevice::getControlParameter(
+        const std::string &type, Rosegarden::MidiByte controllerNumber) const
 {
     // Cast away const to make sure we don't end up in an endless
     // recursion loop.
     // ??? Recommend renaming this routine to getControlParameterConst() const
     //     to make this clearer.
-    return ((MidiDevice *)this)->getControlParameter(type, controllerValue);
+    return ((MidiDevice *)this)->getControlParameter(type, controllerNumber);
 }
 
 }
