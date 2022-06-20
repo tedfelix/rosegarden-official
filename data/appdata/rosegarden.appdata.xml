@@ -55,6 +55,57 @@
     </mimetypes>
     <releases>
 
+      <release type="stable" version="22.06" date="2022-06-08">
+        <url>https://rosegardenmusic.com/wiki/dev:22.06</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Improve Cut/Copy/Delete behavior in both the matrix and the notation editors.  Bug #1601.</li>
+            <li>"Scroll to Follow Playback" now remembers its last setting.  Bug #1606.</li>
+            <li>Fixed a problem in notation with note selection and the blue indication.  Bug #1496.</li>
+            <li>Fixed volume and pan issues with older .rg files.  [51647cc]</li>
+            <li>Changed "For Notation" to "Exclude from Printing" in the Segment Parameters.</li>
+            <li>Fix confusing relative values in the "Insert Controller Sequence" dialog for volume and expression.  [14ff99a]</li>
+            <li>When changing the audio file path, the user is asked whether they want to move the audio files to the new location.  [71a62e6]</li>
+            <li>Fix stuck green preview note when switching modes.  Bug #1614.</li>
+            <li>Fix modified flag (*) not cleared when saving in notation.  Bug #1617.</li>
+            <li>Fix RG stopping JACK transport when it shouldn't.  Bug #1051.</li>
+            <li>Fixed toolbar mode buttons not reflecting current state when Esc is pressed.  Bug #1615.  [f651345]</li>
+            <li>Notation: Fix green preview only available in one staff.  Bug #1619.</li>
+            <li>Fixed issues when building with Qt6.  Feature Request #490.</li>
+            <li>Fixed bad rendering of note heads at small font sizes.  Bug #1484.</li>
+            <li>Fixed an endless loop in notation.  [7d734f7]</li>
+            <li>Improved management of audio file paths.  Bug #1283.  Feature Requests #494 and #495.</li>
+            <li>Simplify editing of audio instrument label in audio parameters panel.</li>
+            <li>Fixed display bugs in matrix editor.  Bug #1622.  [b4425d7]</li>
+            <li>Fix collapse notes in matrix.  Bug #1575.  [521ad4e]</li>
+            <li>Fix scrollbar issues in main window combo boxes.  Feature Request #502.  [abdf22b]</li>
+            <li>Fix deletes in the tempo/time signature editor.  Bug #1628.  [d55eea5]</li>
+            <li>Fix problems editing multiple segments in matrix.  Bug #1624.  [8c1c6bc]</li>
+            <li>Notation: fix crash when segment is deleted.  Bug #1260.  [cf0a28d]</li>
+            <li>Notation: fix crash when undoing an Add Layer.  Bug #1260.  [7a1b6bf]</li>
+            <li>Notation: fix note move issue.  Bug #1629.  [ba70dcf]</li>
+            <li>Fix lilypond export sometimes ignores time signature.  Bug #1620.  [b7b16df]</li>
+            <li>Fix hairpins not always exported to LilyPond.  Bug #1620.  [f57cbd9]</li>
+            <li>Fix missing "StartupWMClass" in .desktop file.  Bug #1635.  [d3f5298]</li>
+            <li>Fix chord ruler.  Bug #1633.  [2b2fbf7]</li>
+            <li>Fix Event Filter dialog clearing selection on first launch.  [52c2f90]</li>
+            <li>Fix lilypond common/cut time signatures.  Bug #1637.  [1c83f8b]</li>
+            <li>Fix a crash when unquantizing using the quantize combo box on the editors.  [329ab46]</li>
+            <li>Fix a crash when resizing segments.  Bug #1638.  [cdec668]</li>
+            <li>Fix a refresh issue when using the toolbar undo button.  [2a01178]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+
+          <ul>
+            <li>Stop playback at end of last segment.  (Preference.)</li>
+            <li>Advanced Looping.  (Experimental preference.)  Bug #1605.</li>
+            <li>Keyboard shortcut editor.  Feature Request #412.</li>
+          </ul>
+        </description>
+      </release>
+
       <release type="stable" version="21.12" date="2021-12-08">
         <url>https://rosegardenmusic.com/wiki/dev:21.12</url>
         <description>
@@ -76,6 +127,7 @@
           </ul>
 
           <p>This version adds the following new features:</p>
+
           <ul>
             <li>Add "Use native file dialogs" preference.  [b9da2db] [a1dcc44] [6765fa9]</li>
             <li>Add Device and Instrument fields to Add Tracks dialog.  [9dc1183]-[3900ea7]</li>
@@ -118,9 +170,10 @@
             <li>Fixed a crash in the notation lyric editor.  Bug #1598.  [5f52c7c2]</li>
             <li>Fix incorrect position of chord names in lilypond.  Bug #1524.  [04fc5dd6]</li>
             <li>Fix missing chord names in lilypond.  [c35e0fb7]</li>
-
           </ul>
+
           <p>This version adds the following new features:</p>
+
           <ul>
             <li>Clean Recent Files List in the preferences removes files that aren't present on the filesystem from the recent files list.  [b616d42c7]</li>
             <li>Preferences: Add send BS/PC/CCs while looping.  [0d2d3a28c]</li>

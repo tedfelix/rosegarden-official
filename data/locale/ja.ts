@@ -5,7 +5,7 @@
     <name>:</name>
     <message>
         <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
+        <comment>this is a tooltip. It should not contain any keyboard shortcuts. Shortcuts will be added automatically at runtime.</comment>
         <translation></translation>
     </message>
 </context>
@@ -283,22 +283,22 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="+30"/>
-        <location line="+33"/>
-        <location line="+61"/>
-        <location line="+49"/>
-        <location line="+140"/>
-        <location line="+157"/>
-        <location line="+1211"/>
-        <location line="+48"/>
-        <location line="+73"/>
-        <location line="+1951"/>
-        <location line="+891"/>
-        <location line="+115"/>
+        <location line="+17"/>
+        <location line="+11"/>
+        <location line="+7"/>
+        <location line="+34"/>
+        <location line="+27"/>
+        <location line="+204"/>
+        <location line="+16"/>
+        <location line="+41"/>
+        <location line="+566"/>
+        <location line="+209"/>
+        <location line="+25"/>
         <source>&amp;File</source>
         <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
-        <location line="-4728"/>
+        <location line="-1156"/>
         <source>&amp;Add Audio File...</source>
         <translation>オーディオファイルの追加(&amp;A)...</translation>
     </message>
@@ -309,36 +309,36 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+31"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+131"/>
-        <location line="+166"/>
-        <location line="+1211"/>
-        <location line="+48"/>
-        <location line="+75"/>
-        <location line="+2004"/>
-        <location line="+836"/>
-        <location line="+106"/>
+        <location line="+15"/>
+        <location line="+12"/>
+        <location line="+7"/>
+        <location line="+33"/>
+        <location line="+28"/>
+        <location line="+204"/>
+        <location line="+16"/>
+        <location line="+43"/>
+        <location line="+596"/>
+        <location line="+177"/>
+        <location line="+24"/>
         <source>&amp;Close</source>
         <translation>閉じる(&amp;C)</translation>
     </message>
     <message>
-        <location line="-4718"/>
-        <location line="+31"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+131"/>
-        <location line="+166"/>
-        <location line="+1334"/>
-        <location line="+2013"/>
-        <location line="+827"/>
-        <location line="+106"/>
+        <location line="-1154"/>
+        <location line="+15"/>
+        <location line="+12"/>
+        <location line="+7"/>
+        <location line="+33"/>
+        <location line="+28"/>
+        <location line="+263"/>
+        <location line="+597"/>
+        <location line="+176"/>
+        <location line="+24"/>
         <source>&amp;Edit</source>
         <translation>編集(&amp;E)</translation>
     </message>
     <message>
-        <location line="-4726"/>
+        <location line="-1154"/>
         <source>&amp;Unload Audio File</source>
         <translation>オーディオファイルをアンロード(&amp;U)</translation>
     </message>
@@ -364,196 +364,184 @@
     </message>
     <message>
         <location line="+3"/>
-        <location line="+59"/>
+        <location line="+9"/>
         <location line="+1"/>
-        <location line="+51"/>
+        <location line="+9"/>
         <location line="+1"/>
-        <location line="+134"/>
+        <location line="+28"/>
         <location line="+1"/>
-        <location line="+48"/>
+        <location line="+14"/>
         <location line="+1"/>
-        <location line="+1197"/>
-        <location line="+173"/>
+        <location line="+198"/>
+        <location line="+37"/>
         <location line="+1"/>
-        <location line="+69"/>
+        <location line="+37"/>
         <location line="+1"/>
-        <location line="+1702"/>
-        <location line="+911"/>
-        <location line="+342"/>
+        <location line="+385"/>
+        <location line="+349"/>
+        <location line="+64"/>
         <location line="+1"/>
-        <location line="+57"/>
+        <location line="+15"/>
         <location line="+1"/>
         <source>&amp;Help</source>
         <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
-        <location line="-3247"/>
-        <location line="+1946"/>
-        <location line="+911"/>
+        <location line="-888"/>
+        <location line="+461"/>
+        <location line="+349"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation>バグ報告ガイドライン(&amp;B)</translation>
     </message>
     <message>
-        <location line="-4351"/>
-        <location line="+59"/>
-        <location line="+52"/>
-        <location line="+135"/>
-        <location line="+49"/>
-        <location line="+1200"/>
-        <location line="+171"/>
-        <location line="+70"/>
-        <location line="+1705"/>
-        <location line="+911"/>
-        <location line="+340"/>
-        <location line="+58"/>
+        <location line="-1073"/>
+        <location line="+9"/>
+        <location line="+10"/>
+        <location line="+29"/>
+        <location line="+15"/>
+        <location line="+201"/>
+        <location line="+35"/>
+        <location line="+38"/>
+        <location line="+388"/>
+        <location line="+349"/>
+        <location line="+62"/>
+        <location line="+16"/>
         <source>&amp;About Rosegarden</source>
         <translation>Rosegardenについて(&amp;A)</translation>
     </message>
     <message>
-        <location line="-4749"/>
-        <location line="+1497"/>
-        <location line="+1946"/>
+        <location line="-1151"/>
+        <location line="+266"/>
+        <location line="+461"/>
         <source>General Toolbar</source>
         <translation>汎用ツールバー</translation>
     </message>
     <message>
-        <location line="-3431"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+131"/>
-        <location line="+4340"/>
-        <location line="+106"/>
         <source>&amp;Nothing to undo</source>
-        <translation>アンドゥできません(&amp;N)</translation>
+        <translation type="vanished">アンドゥできません(&amp;N)</translation>
     </message>
     <message>
-        <location line="-4687"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+131"/>
-        <location line="+4340"/>
-        <location line="+106"/>
         <source>N&amp;othing to redo</source>
-        <translation>リドゥできません(&amp;o)</translation>
+        <translation type="vanished">リドゥできません(&amp;o)</translation>
     </message>
     <message>
-        <location line="-4687"/>
-        <location line="+156"/>
-        <location line="+269"/>
-        <location line="+1334"/>
-        <location line="+2013"/>
-        <location line="+659"/>
+        <location line="-723"/>
+        <location line="+24"/>
+        <location line="+57"/>
+        <location line="+263"/>
+        <location line="+599"/>
+        <location line="+144"/>
         <source>&amp;Copy</source>
         <translation>コピー(&amp;C)</translation>
     </message>
     <message>
-        <location line="-4422"/>
-        <location line="+156"/>
-        <location line="+269"/>
-        <location line="+1334"/>
-        <location line="+2013"/>
-        <location line="+659"/>
+        <location line="-1086"/>
+        <location line="+24"/>
+        <location line="+57"/>
+        <location line="+263"/>
+        <location line="+599"/>
+        <location line="+144"/>
         <source>&amp;Paste</source>
         <translation>貼り付け(&amp;P)</translation>
     </message>
     <message>
-        <location line="-4411"/>
-        <location line="+189"/>
-        <location line="+52"/>
-        <location line="+36"/>
-        <location line="+36"/>
-        <location line="+1130"/>
-        <location line="+72"/>
-        <location line="+163"/>
-        <location line="+1940"/>
-        <location line="+894"/>
-        <location line="+123"/>
+        <location line="-1083"/>
+        <location line="+41"/>
+        <location line="+18"/>
+        <location line="+4"/>
+        <location line="+4"/>
+        <location line="+195"/>
+        <location line="+8"/>
+        <location line="+59"/>
+        <location line="+555"/>
+        <location line="+212"/>
+        <location line="+33"/>
         <source>Switch to Select Tool</source>
         <translation>選択ツールに切り替え</translation>
     </message>
     <message>
-        <location line="-4634"/>
-        <location line="+189"/>
-        <location line="+4323"/>
-        <location line="+123"/>
+        <location line="-1128"/>
+        <location line="+41"/>
+        <location line="+1055"/>
+        <location line="+33"/>
         <source>Switch to Inserting Notes</source>
         <translation>ノートの挿入に切り替え</translation>
     </message>
     <message>
-        <location line="-4634"/>
-        <location line="+189"/>
-        <location line="+104"/>
-        <location line="+36"/>
-        <location line="+1139"/>
-        <location line="+27"/>
-        <location line="+36"/>
-        <location line="+2074"/>
+        <location line="-1128"/>
+        <location line="+41"/>
+        <location line="+22"/>
+        <location line="+4"/>
+        <location line="+196"/>
+        <location line="+3"/>
+        <location line="+4"/>
+        <location line="+601"/>
         <location line="+12"/>
-        <location line="+895"/>
-        <location line="+123"/>
+        <location line="+213"/>
+        <location line="+33"/>
         <source>Switch to Erase Tool</source>
         <translation>消去ツールに切り替え</translation>
     </message>
     <message>
-        <location line="-4633"/>
-        <location line="+49"/>
-        <location line="+297"/>
-        <location line="+1211"/>
-        <location line="+48"/>
-        <location line="+73"/>
-        <location line="+1991"/>
-        <location line="+851"/>
+        <location line="-1127"/>
+        <location line="+7"/>
+        <location line="+61"/>
+        <location line="+204"/>
+        <location line="+16"/>
+        <location line="+41"/>
+        <location line="+591"/>
+        <location line="+184"/>
         <source>&amp;Save</source>
         <translation>保存(&amp;S)</translation>
     </message>
     <message>
-        <location line="-4434"/>
+        <location line="-1094"/>
         <source>&amp;Insert Event</source>
         <translation>イベントの挿入(&amp;I)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Delete Event</source>
         <translation>イベントの削除(&amp;D)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Edit Event</source>
         <translation>イベントの編集(&amp;E)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Advanced Event Editor</source>
         <translation>高度なイベントエディタ(&amp;A)</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+269"/>
-        <location line="+1334"/>
-        <location line="+2013"/>
-        <location line="+659"/>
+        <location line="+57"/>
+        <location line="+263"/>
+        <location line="+599"/>
+        <location line="+144"/>
         <source>Cu&amp;t</source>
         <translation>カット(&amp;t)</translation>
     </message>
     <message>
-        <location line="-4248"/>
+        <location line="-1060"/>
         <source>&amp;Select All</source>
         <translation>すべてを選択(&amp;S)</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+278"/>
+        <location line="+1"/>
+        <location line="+58"/>
         <source>C&amp;lear Selection</source>
         <translation>選択を解除(&amp;l)</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+1367"/>
+        <location line="+2"/>
+        <location line="+272"/>
         <source>&amp;Filter Selection</source>
         <translation>フィルタの選択(&amp;F)</translation>
     </message>
     <message>
-        <location line="-1645"/>
+        <location line="-331"/>
         <source>Set Se&amp;gment Start Time...</source>
         <translation>セグメント開始時間を設定(&amp;g)...</translation>
     </message>
@@ -564,81 +552,81 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+55"/>
-        <location line="+230"/>
-        <location line="+1368"/>
-        <location line="+2008"/>
-        <location line="+789"/>
-        <location line="+60"/>
+        <location line="+21"/>
+        <location line="+37"/>
+        <location line="+273"/>
+        <location line="+594"/>
+        <location line="+167"/>
+        <location line="+18"/>
         <source>&amp;View</source>
         <translation>表示(&amp;V)</translation>
     </message>
     <message>
-        <location line="-4509"/>
-        <location line="+55"/>
-        <location line="+4395"/>
-        <location line="+60"/>
+        <location line="-1109"/>
+        <location line="+21"/>
+        <location line="+1071"/>
+        <location line="+18"/>
         <source>&amp;Musical Times</source>
         <translation>ミュージカルタイム(&amp;M)</translation>
     </message>
     <message>
-        <location line="-4509"/>
-        <location line="+55"/>
-        <location line="+4395"/>
-        <location line="+60"/>
+        <location line="-1109"/>
+        <location line="+21"/>
+        <location line="+1071"/>
+        <location line="+18"/>
         <source>&amp;Real Times</source>
         <translation>実時間(&amp;R)</translation>
     </message>
     <message>
-        <location line="-4509"/>
-        <location line="+55"/>
-        <location line="+4395"/>
-        <location line="+60"/>
+        <location line="-1109"/>
+        <location line="+21"/>
+        <location line="+1071"/>
+        <location line="+18"/>
         <source>Ra&amp;w Times</source>
         <translation>絶対時間(&amp;w)</translation>
     </message>
     <message>
-        <location line="-4507"/>
-        <location line="+398"/>
-        <location line="+1289"/>
-        <location line="+2078"/>
+        <location line="-1107"/>
+        <location line="+91"/>
+        <location line="+274"/>
+        <location line="+600"/>
         <source>Se&amp;gment</source>
         <translation>セグメント(&amp;g)</translation>
     </message>
     <message>
-        <location line="-3764"/>
-        <location line="+398"/>
-        <location line="+1289"/>
-        <location line="+2087"/>
+        <location line="-964"/>
+        <location line="+91"/>
+        <location line="+274"/>
+        <location line="+601"/>
         <source>Edit &amp;With</source>
         <translation>エディタ(&amp;W)</translation>
     </message>
     <message>
-        <location line="-3773"/>
-        <location line="+400"/>
-        <location line="+1288"/>
-        <location line="+2095"/>
-        <location line="+373"/>
+        <location line="-965"/>
+        <location line="+93"/>
+        <location line="+273"/>
+        <location line="+601"/>
+        <location line="+75"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation>マトリクスエディタで開く(&amp;x)</translation>
     </message>
     <message>
-        <location line="-4155"/>
-        <location line="+398"/>
-        <location line="+3402"/>
-        <location line="+373"/>
+        <location line="-1041"/>
+        <location line="+91"/>
+        <location line="+877"/>
+        <location line="+75"/>
         <source>Open in &amp;Notation Editor</source>
         <translation>譜面エディタで開く(&amp;N)</translation>
     </message>
     <message>
-        <location line="-2912"/>
-        <location line="+1946"/>
-        <location line="+911"/>
+        <location line="-823"/>
+        <location line="+461"/>
+        <location line="+349"/>
         <source>About &amp;Qt</source>
         <translation>Qtについて(&amp;Q)</translation>
     </message>
     <message>
-        <location line="-1560"/>
+        <location line="-438"/>
         <source>Add &amp;Segno</source>
         <translation>セーニョ記号を追加(&amp;S)</translation>
     </message>
@@ -653,7 +641,7 @@
         <translation>ブレス記号の追加(&amp;B)</translation>
     </message>
     <message>
-        <location line="-835"/>
+        <location line="-207"/>
         <source>Add &amp;Open</source>
         <translation>オープン(ハーモニクス)の追加(&amp;O)</translation>
     </message>
@@ -663,12 +651,12 @@
         <translation>ストップ(またはピチカート)の追加(&amp;S)</translation>
     </message>
     <message>
-        <location line="+927"/>
+        <location line="+219"/>
         <source>Dotted Ha&amp;lf Note</source>
         <translation>符点二分音符(&amp;l)</translation>
     </message>
     <message>
-        <location line="+792"/>
+        <location line="+244"/>
         <source>Switch To &amp;Notes</source>
         <translation>音符に切り替え(&amp;N)</translation>
     </message>
@@ -688,88 +676,74 @@
         <translation>符点をOFF(&amp;g)</translation>
     </message>
     <message>
-        <location line="-1788"/>
+        <location line="-516"/>
         <source>Show &amp;Symbols Toolbar</source>
         <translation>シンボルツールバーを表示(&amp;S)</translation>
     </message>
     <message>
-        <location line="+1552"/>
+        <location line="+348"/>
         <source>Duration Toolbar</source>
         <translation>デュレーションツールバー</translation>
     </message>
     <message>
-        <location line="+183"/>
+        <location line="+123"/>
         <source>Symbols Toolbar</source>
         <translation>シンボルツールバー</translation>
     </message>
     <message>
-        <location line="-1764"/>
-        <location line="+2072"/>
         <source>Ctrl+K</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+K</translation>
+        <translation type="vanished">Ctrl+K</translation>
     </message>
     <message>
-        <location line="-1227"/>
-        <location line="+1273"/>
         <source>Ctrl+M</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+M</translation>
+        <translation type="vanished">Ctrl+M</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>Ctrl+Shift+R</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+R</translation>
+        <translation type="vanished">Ctrl+Shift+R</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location line="+373"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
-        <translation>リターン</translation>
+        <translation type="vanished">リターン</translation>
     </message>
     <message>
-        <location line="-306"/>
+        <location line="+166"/>
         <source>Transpos&amp;e by Semitones...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+31"/>
-        <location line="+383"/>
         <source>Ctrl+J</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+J</translation>
+        <translation type="vanished">Ctrl+J</translation>
     </message>
     <message>
-        <location line="-353"/>
         <source>Ctrl+Shift+T</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+T</translation>
+        <translation type="vanished">Ctrl+Shift+T</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Ctrl+D</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+D</translation>
+        <translation type="vanished">Ctrl+D</translation>
     </message>
     <message>
-        <location line="+132"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
-        <translation>Insert, Media Stop</translation>
+        <translation type="vanished">Insert, Media Stop</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>PgUp, Media Previous</source>
         <comment>keyboard shortcut</comment>
-        <translation>PgUp, Media Previous</translation>
+        <translation type="vanished">PgUp, Media Previous</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>PgDown, Media Next</source>
         <comment>keyboard shortcut</comment>
-        <translation>PgDown, Media Next</translation>
+        <translation type="vanished">PgDown, Media Next</translation>
     </message>
     <message>
         <source>Media Record</source>
@@ -777,30 +751,27 @@
         <translation type="vanished">Media Record</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>Space</source>
         <comment>keyboard shortcut</comment>
-        <translation>スペース</translation>
+        <translation type="vanished">スペース</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+52"/>
         <source>&amp;Rosegarden Tutorials</source>
         <translation>Rosegardenチュートリアル(&amp;R)</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Home</source>
         <comment>keyboard shortcut</comment>
-        <translation>Home</translation>
+        <translation type="vanished">Home</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>End</source>
         <comment>keyboard shortcut</comment>
-        <translation>End</translation>
+        <translation type="vanished">End</translation>
     </message>
     <message>
-        <location line="+302"/>
+        <location line="+60"/>
         <source>Show &amp;Toolbar</source>
         <translation>ツールバーを表示(&amp;T)</translation>
     </message>
@@ -810,202 +781,106 @@
         <translation>ステータスバーを隠す(&amp;a)</translation>
     </message>
     <message>
-        <location line="-4702"/>
-        <location line="+31"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+131"/>
-        <location line="+166"/>
-        <location line="+1211"/>
-        <location line="+48"/>
-        <location line="+75"/>
-        <location line="+2004"/>
-        <location line="+836"/>
-        <location line="+106"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+W</translation>
+        <translation type="vanished">Ctrl+W</translation>
     </message>
     <message>
-        <location line="-4708"/>
-        <location line="+59"/>
-        <location line="+52"/>
-        <location line="+135"/>
-        <location line="+49"/>
-        <location line="+1198"/>
-        <location line="+173"/>
-        <location line="+70"/>
-        <location line="+1703"/>
-        <location line="+911"/>
-        <location line="+342"/>
-        <location line="+58"/>
         <source>F1</source>
         <comment>keyboard shortcut</comment>
-        <translation>F1</translation>
+        <translation type="vanished">F1</translation>
     </message>
     <message>
-        <location line="-4728"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+131"/>
-        <location line="+166"/>
-        <location line="+1334"/>
-        <location line="+2013"/>
-        <location line="+659"/>
-        <location line="+168"/>
-        <location line="+106"/>
         <source>Ctrl+Z</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Z</translation>
+        <translation type="vanished">Ctrl+Z</translation>
     </message>
     <message>
-        <location line="-4687"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+131"/>
-        <location line="+166"/>
-        <location line="+1334"/>
-        <location line="+2013"/>
-        <location line="+659"/>
-        <location line="+168"/>
-        <location line="+106"/>
         <source>Ctrl+Shift+Z</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+Z</translation>
+        <translation type="vanished">Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location line="-4687"/>
-        <location line="+156"/>
-        <location line="+269"/>
-        <location line="+1334"/>
-        <location line="+2013"/>
-        <location line="+659"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+C, F16, Ctrl+Ins</translation>
+        <translation type="vanished">Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
-        <location line="-4422"/>
-        <location line="+156"/>
-        <location line="+269"/>
-        <location line="+1334"/>
-        <location line="+2013"/>
-        <location line="+659"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+V, F18, Shift+Ins</translation>
+        <translation type="vanished">Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
-        <location line="-4407"/>
-        <location line="+49"/>
-        <location line="+297"/>
-        <location line="+1211"/>
-        <location line="+48"/>
-        <location line="+73"/>
-        <location line="+1991"/>
-        <location line="+851"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+S</translation>
+        <translation type="vanished">Ctrl+S</translation>
     </message>
     <message>
-        <location line="-4434"/>
-        <location line="+1133"/>
-        <location line="+1918"/>
-        <location line="+852"/>
-        <location line="+373"/>
-        <location line="+195"/>
         <source>I</source>
         <comment>keyboard shortcut</comment>
-        <translation>ド</translation>
+        <translation type="vanished">ド</translation>
     </message>
     <message>
-        <location line="-4462"/>
-        <location line="+1667"/>
-        <location line="+2004"/>
-        <location line="+650"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
-        <translation>削除</translation>
+        <translation type="vanished">削除</translation>
     </message>
     <message>
-        <location line="-4312"/>
-        <location line="+1052"/>
-        <location line="+1918"/>
-        <location line="+906"/>
-        <location line="+373"/>
-        <location line="+231"/>
         <source>E</source>
         <comment>keyboard shortcut</comment>
-        <translation>E</translation>
+        <translation type="vanished">E</translation>
     </message>
     <message>
-        <location line="-4470"/>
-        <location line="+269"/>
-        <location line="+1334"/>
-        <location line="+2013"/>
-        <location line="+659"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+X, F20, Shift+Del</translation>
+        <translation type="vanished">Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
-        <location line="-4248"/>
-        <location line="+278"/>
-        <location line="+1358"/>
-        <location line="+2036"/>
-        <location line="+780"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+A</translation>
+        <translation type="vanished">Ctrl+A</translation>
     </message>
     <message>
-        <location line="-4443"/>
-        <location line="+278"/>
-        <location line="+1358"/>
-        <location line="+2816"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
-        <translation>Escape</translation>
+        <translation type="vanished">Escape</translation>
     </message>
     <message>
-        <location line="-4165"/>
-        <location line="+1367"/>
         <source>Ctrl+F</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+F</translation>
+        <translation type="vanished">Ctrl+F</translation>
     </message>
     <message>
-        <location line="-1628"/>
-        <location line="+1254"/>
-        <location line="+3192"/>
+        <location line="-1084"/>
+        <location line="+221"/>
+        <location line="+867"/>
         <source>Actions Toolbar</source>
         <translation>アクションツールバー</translation>
     </message>
     <message>
-        <location line="-4445"/>
-        <location line="+48"/>
-        <location line="+4398"/>
-        <location line="+57"/>
+        <location line="-1087"/>
+        <location line="+14"/>
+        <location line="+1074"/>
+        <location line="+15"/>
         <source>Time Toolbar</source>
         <translation>時間ツールバー</translation>
     </message>
     <message>
-        <location line="-3251"/>
-        <location line="+167"/>
-        <location line="+70"/>
-        <location line="+1709"/>
-        <location line="+915"/>
+        <location line="-884"/>
+        <location line="+31"/>
+        <location line="+38"/>
+        <location line="+392"/>
+        <location line="+351"/>
         <source>Transport Toolbar</source>
         <translation>トランスポートツールバー</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+3"/>
         <source>Zoom Toolbar</source>
         <translation>ズームツールバー</translation>
     </message>
     <message>
-        <location line="-744"/>
+        <location line="-224"/>
         <source>Interpret Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1020,7 +895,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+3"/>
         <source>Adjust velocity to follow text dynamics (f, p, mf...)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1030,7 +905,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+3"/>
         <source>Adjust velocity to follow hairpin dynamics</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1040,7 +915,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+3"/>
         <source>Articulate slurs, staccato, tenuto, etc.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1050,12 +925,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+3"/>
         <source>Place accents on certain beats according to the time signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3367"/>
+        <location line="-815"/>
         <source>Insert Marker</source>
         <translation>マーカの挿入</translation>
     </message>
@@ -1075,117 +950,72 @@
         <translation>マーカーを編集</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location line="+36"/>
-        <location line="+36"/>
-        <location line="+575"/>
-        <location line="+555"/>
-        <location line="+72"/>
-        <location line="+1176"/>
-        <location line="+1462"/>
-        <location line="+305"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
-        <translation>F2</translation>
+        <translation type="vanished">F2</translation>
     </message>
     <message>
-        <location line="-4215"/>
-        <location line="+72"/>
-        <location line="+1130"/>
-        <location line="+36"/>
-        <location line="+54"/>
+        <location line="+2"/>
+        <location line="+8"/>
+        <location line="+195"/>
+        <location line="+4"/>
+        <location line="+6"/>
         <source>Switch to Move Tool</source>
         <translation>移動ツールに切り替え</translation>
     </message>
     <message>
-        <location line="-1285"/>
-        <location line="+72"/>
-        <location line="+593"/>
-        <location line="+537"/>
-        <location line="+36"/>
-        <location line="+54"/>
-        <location line="+2638"/>
-        <location line="+287"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
-        <translation>F5</translation>
+        <translation type="vanished">F5</translation>
     </message>
     <message>
-        <location line="-4215"/>
-        <location line="+27"/>
-        <location line="+1175"/>
-        <location line="+18"/>
-        <location line="+45"/>
+        <location line="-212"/>
+        <location line="+3"/>
+        <location line="+200"/>
+        <location line="+2"/>
+        <location line="+5"/>
         <source>Switch to Draw Tool</source>
         <translation>ドローツールに切り替え</translation>
     </message>
     <message>
-        <location line="-1258"/>
-        <location line="+27"/>
-        <location line="+611"/>
-        <location line="+564"/>
-        <location line="+18"/>
-        <location line="+45"/>
-        <location line="+1177"/>
-        <location line="+1461"/>
-        <location line="+314"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
-        <translation>F3</translation>
+        <translation type="vanished">F3</translation>
     </message>
     <message>
-        <location line="-4215"/>
-        <location line="+36"/>
-        <location line="+36"/>
-        <location line="+1166"/>
-        <location line="+45"/>
+        <location line="-209"/>
+        <location line="+4"/>
+        <location line="+4"/>
+        <location line="+199"/>
+        <location line="+5"/>
         <source>Switch to Resize Tool</source>
         <translation>リサイズツールに切り替え</translation>
     </message>
     <message>
-        <location line="-1276"/>
-        <location line="+36"/>
-        <location line="+36"/>
-        <location line="+584"/>
-        <location line="+582"/>
-        <location line="+45"/>
-        <location line="+2638"/>
-        <location line="+305"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
-        <translation>F6</translation>
+        <translation type="vanished">F6</translation>
     </message>
     <message>
-        <location line="-4199"/>
-        <location line="+36"/>
-        <location line="+575"/>
-        <location line="+564"/>
-        <location line="+27"/>
-        <location line="+36"/>
-        <location line="+1177"/>
-        <location line="+1461"/>
-        <location line="+314"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
-        <translation>F4</translation>
+        <translation type="vanished">F4</translation>
     </message>
     <message>
-        <location line="-4078"/>
-        <location line="+3356"/>
-        <location line="+650"/>
-        <location line="+159"/>
+        <location line="-196"/>
+        <location line="+863"/>
+        <location line="+143"/>
+        <location line="+29"/>
         <source>&amp;Delete</source>
         <translation>削除(&amp;D)</translation>
     </message>
     <message>
-        <location line="-4158"/>
-        <location line="+4165"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
-        <translation>Delete, Ctrl+D</translation>
+        <translation type="vanished">Delete, Ctrl+D</translation>
     </message>
     <message>
-        <location line="-4130"/>
+        <location line="-1024"/>
         <source>&amp;Grid</source>
         <translation>グリッド(&amp;G)</translation>
     </message>
@@ -1200,14 +1030,12 @@
         <translation>1/64単位にスナップ(&amp;S)</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+2360"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
-        <location line="-2358"/>
+        <location line="+1"/>
         <source>Snap to &amp;1/48</source>
         <translation>&amp;1/48単位にスナップ(&amp;1)</translation>
     </message>
@@ -1217,14 +1045,12 @@
         <translation>1/32単位にスナップ(&amp;a)</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+2341"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
-        <translation>3</translation>
+        <translation type="vanished">3</translation>
     </message>
     <message>
-        <location line="-2339"/>
+        <location line="+1"/>
         <source>Snap to 1/&amp;24</source>
         <translation>1/&amp;24単位にスナップ(&amp;2)</translation>
     </message>
@@ -1234,14 +1060,12 @@
         <translation>1/16単位にスナップ(&amp;p)</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+2322"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
-        <translation>6</translation>
+        <translation type="vanished">6</translation>
     </message>
     <message>
-        <location line="-2320"/>
+        <location line="+1"/>
         <source>Snap t&amp;o 1/12</source>
         <translation>1/12単位にスナップ(&amp;o)</translation>
     </message>
@@ -1251,14 +1075,7 @@
         <translation>1/&amp;8単位にスナップ(&amp;8)</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+2303"/>
-        <source>8</source>
-        <comment>keyboard shortcut</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="-2301"/>
+        <location line="+1"/>
         <source>Snap to &amp;3/16</source>
         <translation>3/16単位にスナップ(&amp;3)</translation>
     </message>
@@ -1268,14 +1085,12 @@
         <translation>1/4単位にスナップ</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+2284"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
-        <translation>4</translation>
+        <translation type="vanished">4</translation>
     </message>
     <message>
-        <location line="-2282"/>
+        <location line="+1"/>
         <source>Snap to 3/8</source>
         <translation>3/8単位にスナップ</translation>
     </message>
@@ -1285,187 +1100,145 @@
         <translation>1/2単位にスナップ</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+2265"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
-        <translation>2</translation>
+        <translation type="vanished">2</translation>
     </message>
     <message>
-        <location line="-2263"/>
+        <location line="+1"/>
         <source>Snap to Bea&amp;t</source>
         <translation>拍にスナップ(&amp;t)</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+2247"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
-        <translation>1</translation>
+        <translation type="vanished">1</translation>
     </message>
     <message>
-        <location line="-2245"/>
+        <location line="+1"/>
         <source>Snap to &amp;Bar</source>
         <translation>小節にスナップ(&amp;b)</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+2229"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
-        <translation>5</translation>
+        <translation type="vanished">5</translation>
     </message>
     <message>
-        <location line="-2195"/>
-        <location line="+1288"/>
-        <location line="+2008"/>
+        <location line="+17"/>
+        <location line="+273"/>
+        <location line="+578"/>
         <source>&amp;Composition</source>
         <translation>コンポジション(&amp;C)</translation>
     </message>
     <message>
-        <location line="-3295"/>
-        <location line="+1288"/>
-        <location line="+2008"/>
-        <location line="+697"/>
+        <location line="-850"/>
+        <location line="+273"/>
+        <location line="+578"/>
+        <location line="+139"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>テンポ変更の追加(&amp;m)...</translation>
     </message>
     <message>
-        <location line="-3992"/>
-        <location line="+1288"/>
-        <location line="+2008"/>
-        <location line="+705"/>
+        <location line="-989"/>
+        <location line="+273"/>
+        <location line="+578"/>
+        <location line="+139"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>拍子変更を追加(&amp;g)...</translation>
     </message>
     <message>
-        <location line="-3998"/>
-        <location line="+1289"/>
-        <location line="+2123"/>
-        <location line="+373"/>
+        <location line="-987"/>
+        <location line="+274"/>
+        <location line="+605"/>
+        <location line="+75"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>イベントリストエディタを開く(&amp;E)</translation>
     </message>
     <message>
-        <location line="-3769"/>
-        <location line="+1765"/>
-        <location line="+1657"/>
-        <location line="+435"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
-        <translation>=</translation>
+        <translation type="vanished">=</translation>
     </message>
     <message>
-        <location line="-3848"/>
-        <location line="+3422"/>
-        <location line="+435"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
-        <translation>+</translation>
+        <translation type="vanished">+</translation>
     </message>
     <message>
-        <location line="-3848"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
-        <translation>-</translation>
+        <translation type="vanished">-</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location line="+1831"/>
-        <location line="+1580"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+Left</translation>
+        <translation type="vanished">Alt+Left</translation>
     </message>
     <message>
-        <location line="-3402"/>
-        <location line="+1831"/>
-        <location line="+1580"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+Right</translation>
+        <translation type="vanished">Alt+Right</translation>
     </message>
     <message>
-        <location line="-3402"/>
-        <location line="+1787"/>
-        <location line="+1681"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+Up</translation>
+        <translation type="vanished">Shift+Up</translation>
     </message>
     <message>
-        <location line="-3459"/>
-        <location line="+1787"/>
-        <location line="+1663"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+Down</translation>
+        <translation type="vanished">Shift+Down</translation>
     </message>
     <message>
-        <location line="-3438"/>
-        <location line="+1703"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+H</translation>
+        <translation type="vanished">Ctrl+H</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+H</translation>
+        <translation type="vanished">Ctrl+Shift+H</translation>
     </message>
     <message>
-        <location line="-1692"/>
-        <location line="+1703"/>
-        <location line="+1742"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
-        <translation>Up</translation>
+        <translation type="vanished">Up</translation>
     </message>
     <message>
-        <location line="-3436"/>
-        <location line="+1703"/>
-        <location line="+1724"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
-        <translation>Down</translation>
+        <translation type="vanished">Down</translation>
     </message>
     <message>
-        <location line="-3418"/>
-        <location line="+1703"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Up</translation>
+        <translation type="vanished">Ctrl+Up</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Down</translation>
+        <translation type="vanished">Ctrl+Down</translation>
     </message>
     <message>
-        <location line="-1691"/>
         <source>Shift+Alt+I</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+Alt+I</translation>
+        <translation type="vanished">Shift+Alt+I</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Shift+Alt+R</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+Alt+R</translation>
+        <translation type="vanished">Shift+Alt+R</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+1733"/>
+        <location line="-918"/>
+        <location line="+414"/>
         <source>Co&amp;ntrollers</source>
         <translation>コントローラ(&amp;n)</translation>
     </message>
     <message>
-        <location line="-1730"/>
-        <location line="+1733"/>
+        <location line="-413"/>
+        <location line="+414"/>
         <source>&amp;Set Controller Values</source>
         <translation>コントローラの値を設定 (&amp;S)</translation>
     </message>
@@ -1474,636 +1247,492 @@
         <translation type="obsolete">コントローラシーケンスを挿入 (&amp;o)</translation>
     </message>
     <message>
-        <location line="-1721"/>
-        <location line="+1734"/>
         <source>Shift+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+Left</translation>
+        <translation type="vanished">Shift+Left</translation>
     </message>
     <message>
-        <location line="-1725"/>
-        <location line="+1734"/>
         <source>Shift+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+Right</translation>
+        <translation type="vanished">Shift+Right</translation>
     </message>
     <message>
-        <location line="-1707"/>
-        <location line="+1734"/>
         <source>Ctrl+;</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+;</translation>
+        <translation type="vanished">Ctrl+;</translation>
     </message>
     <message>
-        <location line="-1725"/>
-        <location line="+1734"/>
         <source>Ctrl+:</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+:</translation>
+        <translation type="vanished">Ctrl+:</translation>
     </message>
     <message>
-        <location line="-1725"/>
-        <location line="+1752"/>
         <source>Alt+PgUp</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+PgUp</translation>
+        <translation type="vanished">Alt+PgUp</translation>
     </message>
     <message>
-        <location line="-1743"/>
-        <location line="+1752"/>
         <source>Alt+PgDown</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+PgDown</translation>
+        <translation type="vanished">Alt+PgDown</translation>
     </message>
     <message>
-        <location line="-1741"/>
-        <location line="+1764"/>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
-        <translation>Left</translation>
+        <translation type="vanished">Left</translation>
     </message>
     <message>
-        <location line="-1749"/>
-        <location line="+1764"/>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
-        <translation>Right</translation>
+        <translation type="vanished">Right</translation>
     </message>
     <message>
-        <location line="-1749"/>
-        <location line="+1764"/>
         <source>Ctrl+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Left</translation>
+        <translation type="vanished">Ctrl+Left</translation>
     </message>
     <message>
-        <location line="-1755"/>
-        <location line="+1764"/>
         <source>Ctrl+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Right</translation>
+        <translation type="vanished">Ctrl+Right</translation>
     </message>
     <message>
-        <location line="-1752"/>
-        <location line="+1791"/>
-        <location line="+1602"/>
         <source>Pause</source>
         <comment>keyboard shortcut</comment>
-        <translation>Pause</translation>
+        <translation type="vanished">Pause</translation>
     </message>
     <message>
-        <location line="-3384"/>
-        <location line="+709"/>
-        <location line="+48"/>
-        <location line="+1040"/>
-        <location line="+1596"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+Ctrl+P</translation>
+        <translation type="vanished">Alt+Ctrl+P</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+9"/>
-        <location line="+3256"/>
-        <location line="+305"/>
         <source>F7</source>
         <comment>keyboard shortcut</comment>
-        <translation>F7</translation>
+        <translation type="vanished">F7</translation>
     </message>
     <message>
-        <location line="-3558"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-381"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>I/do</source>
         <translation>I/ド</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>A</source>
         <comment>keyboard shortcut</comment>
-        <translation>A</translation>
+        <translation type="vanished">A</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>I/do sharp</source>
         <translation>I/ドの♯</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+A</translation>
+        <translation type="vanished">Shift+A</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>II/re flat</source>
         <translation>II/レの♭</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
-        <location line="+794"/>
         <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+S</translation>
+        <translation type="vanished">Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location line="-2710"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>II/re</source>
         <translation>II/レ</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>S</source>
         <comment>keyboard shortcut</comment>
-        <translation>S</translation>
+        <translation type="vanished">S</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>II/re sharp</source>
         <translation>II/レの♯</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>Shift+S</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+S</translation>
+        <translation type="vanished">Shift+S</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>III/mi flat</source>
         <translation>III/ミの♭</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+D</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+D</translation>
+        <translation type="vanished">Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>III/mi</source>
         <translation>III/ミ</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
-        <location line="+1042"/>
-        <location line="+373"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
-        <translation>D</translation>
+        <translation type="vanished">D</translation>
     </message>
     <message>
-        <location line="-3331"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>IV/fa</source>
         <translation>IV/ファ</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>F</source>
         <comment>keyboard shortcut</comment>
-        <translation>F</translation>
+        <translation type="vanished">F</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>IV/fa sharp</source>
         <translation>IV/ファの♯</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>Shift+F</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+F</translation>
+        <translation type="vanished">Shift+F</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>V/sol flat</source>
         <translation>V/ソの♭</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+J</translation>
+        <translation type="vanished">Ctrl+Shift+J</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>V/sol</source>
         <translation>V/ソ</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>J</source>
         <comment>keyboard shortcut</comment>
-        <translation>J</translation>
+        <translation type="vanished">J</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>V/sol sharp</source>
         <translation>V/ソの♯</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>Shift+J</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+J</translation>
+        <translation type="vanished">Shift+J</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>VI/la flat</source>
         <translation>VI/ラの♭</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+K</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+K</translation>
+        <translation type="vanished">Ctrl+Shift+K</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>VI/la</source>
         <translation>VI/ラ</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>K</source>
         <comment>keyboard shortcut</comment>
-        <translation>K</translation>
+        <translation type="vanished">K</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>VI/la sharp</source>
         <translation>VI/ラの♯</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>Shift+K</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+K</translation>
+        <translation type="vanished">Shift+K</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>VII/ti flat</source>
         <translation>VII/シの♭</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+L</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+L</translation>
+        <translation type="vanished">Ctrl+Shift+L</translation>
     </message>
     <message>
-        <location line="-1916"/>
-        <location line="+154"/>
-        <location line="+154"/>
-        <location line="+1610"/>
-        <location line="+154"/>
-        <location line="+154"/>
+        <location line="-492"/>
+        <location line="+18"/>
+        <location line="+18"/>
+        <location line="+421"/>
+        <location line="+18"/>
+        <location line="+18"/>
         <source>VII/ti</source>
         <translation>VII/シ</translation>
     </message>
     <message>
-        <location line="-2219"/>
-        <location line="+1918"/>
         <source>L</source>
         <comment>keyboard shortcut</comment>
-        <translation>L</translation>
+        <translation type="vanished">L</translation>
     </message>
     <message>
-        <location line="-1908"/>
-        <location line="+1918"/>
         <source>Q</source>
         <comment>keyboard shortcut</comment>
-        <translation>Q</translation>
+        <translation type="vanished">Q</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Shift+Q</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+Q</translation>
+        <translation type="vanished">Shift+Q</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+W</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+W</translation>
+        <translation type="vanished">Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>W</source>
         <comment>keyboard shortcut</comment>
-        <translation>W</translation>
+        <translation type="vanished">W</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Shift+W</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+W</translation>
+        <translation type="vanished">Shift+W</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+E</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+E</translation>
+        <translation type="vanished">Ctrl+Shift+E</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1918"/>
-        <location line="+1052"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
-        <translation>R</translation>
+        <translation type="vanished">R</translation>
     </message>
     <message>
-        <location line="-2961"/>
-        <location line="+1918"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+R</translation>
+        <translation type="vanished">Shift+R</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+U</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+U</translation>
+        <translation type="vanished">Ctrl+Shift+U</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
-        <location line="+1016"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
-        <translation>U</translation>
+        <translation type="vanished">U</translation>
     </message>
     <message>
-        <location line="-2925"/>
-        <location line="+1918"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+U</translation>
+        <translation type="vanished">Shift+U</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+I</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+I</translation>
+        <translation type="vanished">Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1918"/>
         <source>Shift+I</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+I</translation>
+        <translation type="vanished">Shift+I</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+O</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+O</translation>
+        <translation type="vanished">Ctrl+Shift+O</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
-        <translation>O</translation>
+        <translation type="vanished">O</translation>
     </message>
     <message>
-        <location line="-1908"/>
-        <location line="+1918"/>
         <source>Z</source>
         <comment>keyboard shortcut</comment>
-        <translation>Z</translation>
+        <translation type="vanished">Z</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Shift+Z</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+Z</translation>
+        <translation type="vanished">Shift+Z</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
-        <location line="+583"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+X</translation>
+        <translation type="vanished">Ctrl+Shift+X</translation>
     </message>
     <message>
-        <location line="-2492"/>
-        <location line="+1918"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
-        <translation>X</translation>
+        <translation type="vanished">X</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Shift+X</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+X</translation>
+        <translation type="vanished">Shift+X</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
-        <location line="+565"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+C</translation>
+        <translation type="vanished">Ctrl+Shift+C</translation>
     </message>
     <message>
-        <location line="-2474"/>
-        <location line="+1918"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
-        <translation>C</translation>
+        <translation type="vanished">C</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>V</source>
         <comment>keyboard shortcut</comment>
-        <translation>ソ</translation>
+        <translation type="vanished">ソ</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+V</translation>
+        <translation type="vanished">Shift+V</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+B</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+B</translation>
+        <translation type="vanished">Ctrl+Shift+B</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>B</source>
         <comment>keyboard shortcut</comment>
-        <translation>B</translation>
+        <translation type="vanished">B</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Shift+B</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+B</translation>
+        <translation type="vanished">Shift+B</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
         <source>Ctrl+Shift+N</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+N</translation>
+        <translation type="vanished">Ctrl+Shift+N</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
-        <location line="+680"/>
-        <location line="+373"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
-        <translation>N</translation>
+        <translation type="vanished">N</translation>
     </message>
     <message>
-        <location line="-2962"/>
-        <location line="+1918"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
-        <translation>Shift+N</translation>
+        <translation type="vanished">Shift+N</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1918"/>
-        <location line="+595"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+M</translation>
+        <translation type="vanished">Ctrl+Shift+M</translation>
     </message>
     <message>
-        <location line="-2504"/>
-        <location line="+1918"/>
-        <location line="+635"/>
-        <location line="+373"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
-        <translation>M</translation>
+        <translation type="vanished">M</translation>
     </message>
     <message>
-        <location line="-2917"/>
-        <location line="+1927"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
-        <translation>H</translation>
+        <translation type="vanished">H</translation>
     </message>
     <message>
-        <location line="-1691"/>
+        <location line="-389"/>
         <source>Panning &amp;Law</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2128,19 +1757,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+95"/>
         <source>Alt+Shift+X</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+Shift+X</translation>
+        <translation type="vanished">Alt+Shift+X</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Alt+Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+Shift+V</translation>
+        <translation type="vanished">Alt+Shift+V</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+26"/>
         <source>&amp;Move to Staff Above...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2150,7 +1777,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+75"/>
+        <location line="+44"/>
         <source>Dump staves (debug)</source>
         <translation>連符をダンプ（デバッグ）</translation>
     </message>
@@ -2161,194 +1788,168 @@
     </message>
     <message>
         <location line="+10"/>
-        <location line="+2129"/>
-        <location line="+373"/>
+        <location line="+603"/>
+        <location line="+75"/>
         <source>Open in &amp;Pitch Tracker</source>
         <translation>ピッチトラッカーで開く(&amp;P)</translation>
     </message>
     <message>
-        <location line="-2483"/>
+        <location line="-667"/>
         <source>New Layer from &amp;Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Ctrl+Shift++</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+43"/>
         <source>Alt+0</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+0</translation>
+        <translation type="vanished">Alt+0</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Alt+1</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+1</translation>
+        <translation type="vanished">Alt+1</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Alt+2</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+2</translation>
+        <translation type="vanished">Alt+2</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Alt+3</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+3</translation>
+        <translation type="vanished">Alt+3</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Alt+4</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+4</translation>
+        <translation type="vanished">Alt+4</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Alt+5</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+5</translation>
+        <translation type="vanished">Alt+5</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Alt+9</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+9</translation>
+        <translation type="vanished">Alt+9</translation>
     </message>
     <message>
-        <location line="+40"/>
         <source>Ctrl+PgUp</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+PgUp</translation>
+        <translation type="vanished">Ctrl+PgUp</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Ctrl+PgDown</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+PgDown</translation>
+        <translation type="vanished">Ctrl+PgDown</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Ctrl+B</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+B</translation>
+        <translation type="vanished">Ctrl+B</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>Ctrl+U</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+U</translation>
+        <translation type="vanished">Ctrl+U</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+1999"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+T</translation>
+        <translation type="vanished">Ctrl+T</translation>
     </message>
     <message>
-        <location line="-1990"/>
         <source>Ctrl+R</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+R</translation>
+        <translation type="vanished">Ctrl+R</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>)</source>
         <comment>keyboard shortcut</comment>
-        <translation>)</translation>
+        <translation type="vanished">)</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Ctrl+)</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+)</translation>
+        <translation type="vanished">Ctrl+)</translation>
     </message>
     <message>
-        <location line="-1547"/>
-        <location line="+1560"/>
         <source>~</source>
         <comment>keyboard shortcut</comment>
-        <translation>~</translation>
+        <translation type="vanished">~</translation>
     </message>
     <message>
-        <location line="+22"/>
         <source>&amp;lt;</source>
         <comment>keyboard shortcut</comment>
-        <translation>&amp;lt;</translation>
+        <translation type="vanished">&amp;lt;</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>&amp;gt;</source>
         <comment>keyboard shortcut</comment>
-        <translation>&amp;gt;</translation>
+        <translation type="vanished">&amp;gt;</translation>
     </message>
     <message>
-        <location line="-1568"/>
-        <location line="+1580"/>
+        <location line="-281"/>
+        <location line="+381"/>
         <source>Ad&amp;just</source>
         <translation>調整(&amp;j)</translation>
     </message>
     <message>
-        <location line="-1579"/>
-        <location line="+1765"/>
+        <location line="-380"/>
+        <location line="+406"/>
         <source>&amp;Quantize</source>
         <translation>クォンタイズ(&amp;Q)</translation>
     </message>
     <message>
-        <location line="-1764"/>
-        <location line="+1765"/>
-        <location line="+1657"/>
-        <location line="+435"/>
+        <location line="-405"/>
+        <location line="+406"/>
+        <location line="+467"/>
+        <location line="+79"/>
         <source>&amp;Quantize...</source>
         <translation>クオンタイズ(&amp;Q)...</translation>
     </message>
     <message>
-        <location line="-3848"/>
+        <location line="-951"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation>直前のクォンタイズを繰り返す(&amp;R)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Legato</source>
         <translation>レガート(&amp;L)</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+1564"/>
+        <location line="+1"/>
+        <location line="+381"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>同じ音程の音符をつなげる (&amp;E)</translation>
     </message>
     <message>
-        <location line="-1555"/>
-        <location line="+1831"/>
-        <location line="+1580"/>
+        <location line="-380"/>
+        <location line="+432"/>
+        <location line="+446"/>
         <source>Jog &amp;Left</source>
         <translation>左にずらす(&amp;L)</translation>
     </message>
     <message>
-        <location line="-3402"/>
+        <location line="-877"/>
         <source>&amp;Jog Right</source>
         <translation>右にずらす(&amp;J)</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+1787"/>
+        <location line="+1"/>
+        <location line="+420"/>
         <source>&amp;Increase Velocity</source>
         <translation>ベロシティの増加(&amp;I)</translation>
     </message>
     <message>
-        <location line="-1778"/>
-        <location line="+1787"/>
+        <location line="-419"/>
+        <location line="+420"/>
         <source>&amp;Reduce Velocity</source>
         <translation>ベロシティの減少(&amp;R)</translation>
     </message>
     <message>
-        <location line="-1778"/>
+        <location line="-419"/>
         <source>&amp;Set to Current Velocity</source>
         <translation>現在のベロシティに設定(&amp;S)</translation>
     </message>
@@ -2364,315 +1965,315 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1703"/>
+        <location line="+400"/>
         <source>&amp;Halve Durations</source>
         <translation>デュレーションを半分にする(&amp;H)</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>&amp;Double Durations</source>
         <translation>デュレーションを倍にする(&amp;D)</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>Stretch or S&amp;quash...</source>
         <translation>ストレッチ/スカッシュ(&amp;q)...</translation>
     </message>
     <message>
-        <location line="-1702"/>
-        <location line="+1703"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>Trans&amp;pose</source>
         <translation>移調(&amp;p)</translation>
     </message>
     <message>
-        <location line="-1702"/>
-        <location line="+1703"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>&amp;Up a Semitone</source>
         <translation>半音上げる(&amp;U)</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>&amp;Down a Semitone</source>
         <translation>半音下げる(&amp;D)</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>Up an &amp;Octave</source>
         <translation>オクターブ上げる(&amp;O)</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>Down an Octa&amp;ve</source>
         <translation>オクターブ下げる(&amp;v)</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation>半音単位で移調(&amp;T)...</translation>
     </message>
     <message>
-        <location line="-1702"/>
-        <location line="+1159"/>
-        <location line="+544"/>
-        <location line="+1605"/>
-        <location line="+436"/>
+        <location line="-399"/>
+        <location line="+256"/>
+        <location line="+144"/>
+        <location line="+455"/>
+        <location line="+80"/>
         <source>Transpose by &amp;Interval...</source>
         <translation>音程を指定して移調(&amp;I)...</translation>
     </message>
     <message>
-        <location line="-3743"/>
+        <location line="-934"/>
         <source>&amp;Convert</source>
         <translation>変換(&amp;C)</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1703"/>
+        <location line="+400"/>
         <source>&amp;Invert</source>
         <translation>反転(&amp;I)</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1695"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>&amp;Retrograde</source>
         <translation>逆行(&amp;R)</translation>
     </message>
     <message>
-        <location line="-1686"/>
-        <location line="+1687"/>
+        <location line="-399"/>
+        <location line="+400"/>
         <source>Re&amp;trograde Invert</source>
         <translation>逆行して反転(&amp;t)</translation>
     </message>
     <message>
-        <location line="-1686"/>
+        <location line="-399"/>
         <source>Trigger Se&amp;gment...</source>
         <translation>セグメントのトリガ(&amp;g)</translation>
     </message>
     <message>
-        <location line="+153"/>
-        <location line="+1803"/>
-        <location line="+1462"/>
+        <location line="+27"/>
+        <location line="+422"/>
+        <location line="+436"/>
         <source>&amp;Tools</source>
         <translation>ツール(&amp;T)</translation>
     </message>
     <message>
-        <location line="-3264"/>
-        <location line="+1803"/>
-        <location line="+1462"/>
-        <location line="+305"/>
+        <location line="-857"/>
+        <location line="+422"/>
+        <location line="+436"/>
+        <location line="+45"/>
         <source>&amp;Select and Edit</source>
         <translation>選択と編集(&amp;S)</translation>
     </message>
     <message>
-        <location line="-3561"/>
-        <location line="+3265"/>
-        <location line="+314"/>
+        <location line="-902"/>
+        <location line="+858"/>
+        <location line="+46"/>
         <source>&amp;Draw</source>
         <translation>描画(&amp;D)</translation>
     </message>
     <message>
-        <location line="-3570"/>
-        <location line="+1804"/>
-        <location line="+1461"/>
-        <location line="+314"/>
+        <location line="-903"/>
+        <location line="+423"/>
+        <location line="+435"/>
+        <location line="+46"/>
         <source>&amp;Erase</source>
         <translation>消去(&amp;E)</translation>
     </message>
     <message>
-        <location line="-3742"/>
-        <location line="+172"/>
-        <location line="+1562"/>
-        <location line="+1703"/>
-        <location line="+287"/>
+        <location line="-927"/>
+        <location line="+24"/>
+        <location line="+391"/>
+        <location line="+467"/>
+        <location line="+43"/>
         <source>&amp;Move</source>
         <translation>移動(&amp;M)</translation>
     </message>
     <message>
-        <location line="-3543"/>
+        <location line="-900"/>
         <source>Resi&amp;ze</source>
         <translation>リサイズ(&amp;z)</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+3265"/>
-        <location line="+305"/>
+        <location line="+1"/>
+        <location line="+858"/>
+        <location line="+45"/>
         <source>S&amp;plit</source>
         <translation>分割(&amp;p)</translation>
     </message>
     <message>
-        <location line="-3561"/>
+        <location line="-902"/>
         <source>&amp;Velocity</source>
         <translation>ベロシティ(&amp;V)</translation>
     </message>
     <message>
-        <location line="+1536"/>
+        <location line="+389"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation>カーソル後進と選択(&amp;l)</translation>
     </message>
     <message>
-        <location line="-1725"/>
-        <location line="+1734"/>
+        <location line="-414"/>
+        <location line="+415"/>
         <source>Cursor Forward and &amp;Select</source>
         <translation>カーソル前進と選択(&amp;S)</translation>
     </message>
     <message>
-        <location line="-1707"/>
-        <location line="+1734"/>
+        <location line="-412"/>
+        <location line="+415"/>
         <source>Set Loop &amp;to Selection</source>
         <translation>セレクションにループをセット(&amp;t)</translation>
     </message>
     <message>
-        <location line="-1725"/>
-        <location line="+1734"/>
+        <location line="-414"/>
+        <location line="+415"/>
         <source>Clear L&amp;oop</source>
         <translation>ループのクリア(&amp;o)</translation>
     </message>
     <message>
-        <location line="-944"/>
-        <location line="+48"/>
-        <location line="+2580"/>
+        <location line="-309"/>
+        <location line="+16"/>
+        <location line="+757"/>
         <source>T&amp;ransport</source>
         <translation>トランスポート(&amp;r)</translation>
     </message>
     <message>
-        <location line="-3391"/>
-        <location line="+764"/>
-        <location line="+48"/>
-        <location line="+940"/>
-        <location line="+1640"/>
+        <location line="-876"/>
+        <location line="+104"/>
+        <location line="+16"/>
+        <location line="+297"/>
+        <location line="+460"/>
         <source>&amp;Play</source>
         <translation>再生(&amp;P)</translation>
     </message>
     <message>
-        <location line="-3391"/>
-        <location line="+764"/>
-        <location line="+48"/>
-        <location line="+946"/>
-        <location line="+1642"/>
+        <location line="-876"/>
+        <location line="+104"/>
+        <location line="+16"/>
+        <location line="+297"/>
+        <location line="+460"/>
         <source>&amp;Stop</source>
         <translation>停止(&amp;S)</translation>
     </message>
     <message>
-        <location line="-3369"/>
-        <location line="+734"/>
-        <location line="+48"/>
-        <location line="+982"/>
-        <location line="+1614"/>
+        <location line="-874"/>
+        <location line="+102"/>
+        <location line="+16"/>
+        <location line="+299"/>
+        <location line="+458"/>
         <source>Re&amp;wind</source>
         <translation>巻き戻し(&amp;w)</translation>
     </message>
     <message>
-        <location line="-3369"/>
-        <location line="+726"/>
-        <location line="+48"/>
-        <location line="+990"/>
-        <location line="+1614"/>
+        <location line="-874"/>
+        <location line="+102"/>
+        <location line="+16"/>
+        <location line="+299"/>
+        <location line="+458"/>
         <source>&amp;Fast Forward</source>
         <translation>早送り(&amp;F)</translation>
     </message>
     <message>
-        <location line="-3369"/>
-        <location line="+718"/>
-        <location line="+48"/>
-        <location line="+998"/>
+        <location line="-874"/>
+        <location line="+102"/>
+        <location line="+16"/>
+        <location line="+299"/>
         <source>Rewind to &amp;Beginning</source>
         <translation>最初に戻す(&amp;B)</translation>
     </message>
     <message>
-        <location line="-1763"/>
-        <location line="+718"/>
-        <location line="+48"/>
-        <location line="+1004"/>
+        <location line="-416"/>
+        <location line="+102"/>
+        <location line="+16"/>
+        <location line="+299"/>
         <source>Fast Forward to &amp;End</source>
         <translation>最後に進む(&amp;E)</translation>
     </message>
     <message>
-        <location line="-1769"/>
-        <location line="+1785"/>
+        <location line="-416"/>
+        <location line="+418"/>
         <source>S&amp;olo</source>
         <translation>ソロ(&amp;o)</translation>
     </message>
     <message>
-        <location line="-1784"/>
-        <location line="+1791"/>
-        <location line="+1602"/>
+        <location line="-417"/>
+        <location line="+422"/>
+        <location line="+452"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation>再生中スクロールする(&amp;l)</translation>
     </message>
     <message>
-        <location line="-3384"/>
-        <location line="+709"/>
-        <location line="+48"/>
-        <location line="+1040"/>
-        <location line="+1596"/>
+        <location line="-873"/>
+        <location line="+101"/>
+        <location line="+16"/>
+        <location line="+305"/>
+        <location line="+452"/>
         <source>P&amp;anic</source>
         <translation>パニック(&amp;a)</translation>
     </message>
     <message>
-        <location line="-3166"/>
-        <location line="+1918"/>
+        <location line="-847"/>
+        <location line="+457"/>
         <source>&amp;Upper Octave</source>
         <translation>1オクターブ上げる(&amp;U)</translation>
     </message>
     <message>
-        <location line="-1610"/>
-        <location line="+1927"/>
+        <location line="-421"/>
+        <location line="+458"/>
         <source>C&amp;hord Insert Mode</source>
         <translation>コード挿入モード(&amp;h)</translation>
     </message>
     <message>
-        <location line="-1918"/>
-        <location line="+1946"/>
+        <location line="-457"/>
+        <location line="+461"/>
         <source>Ste&amp;p Recording</source>
         <translation>ステップ録音(&amp;p)</translation>
     </message>
     <message>
-        <location line="-2833"/>
-        <location line="+1293"/>
-        <location line="+2002"/>
+        <location line="-606"/>
+        <location line="+262"/>
+        <location line="+588"/>
         <source>&amp;Toolbars</source>
         <translation>ツールバー(&amp;T)</translation>
     </message>
     <message>
-        <location line="-3288"/>
-        <location line="+1301"/>
-        <location line="+1994"/>
+        <location line="-843"/>
+        <location line="+270"/>
+        <location line="+580"/>
         <source>&amp;Rulers</source>
         <translation>ルーラ(&amp;R)</translation>
     </message>
     <message>
-        <location line="-3294"/>
-        <location line="+1301"/>
+        <location line="-849"/>
+        <location line="+270"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation>コード名ルーラー表示(&amp;o)</translation>
     </message>
     <message>
-        <location line="-1300"/>
-        <location line="+1302"/>
+        <location line="-269"/>
+        <location line="+271"/>
         <source>Show &amp;Tempo Ruler</source>
         <translation>テンポルーラーの表示(&amp;T)</translation>
     </message>
     <message>
-        <location line="-407"/>
-        <location line="+1946"/>
-        <location line="+913"/>
+        <location line="-126"/>
+        <location line="+461"/>
+        <location line="+349"/>
         <source>Tools Toolbar</source>
         <translation>道具ツールバー</translation>
     </message>
     <message>
-        <location line="-2712"/>
-        <location line="+48"/>
-        <location line="+2610"/>
+        <location line="-783"/>
+        <location line="+16"/>
+        <location line="+755"/>
         <source>&amp;Record</source>
         <translation>録音(&amp;R)</translation>
     </message>
     <message>
-        <location line="-2600"/>
+        <location line="-753"/>
         <source>&amp;Settings</source>
         <translation>設定(&amp;S)</translation>
     </message>
@@ -2757,7 +2358,7 @@
         <translation>割り当てていないフェーダーを表示(&amp;U)</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+6"/>
         <source>Switch to Inserting Tool</source>
         <translation>挿入ツールに切り替え</translation>
     </message>
@@ -2767,33 +2368,33 @@
         <translation>消去の後で休符を分割</translation>
     </message>
     <message>
-        <location line="+12"/>
-        <location line="+2002"/>
+        <location line="+4"/>
+        <location line="+594"/>
         <source>&amp;Print...</source>
         <translation>印刷(&amp;P)...</translation>
     </message>
     <message>
-        <location line="-2003"/>
+        <location line="-595"/>
         <source>P&amp;rint Preview...</source>
         <translation>印刷プレビュー(&amp;r)...</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+7"/>
         <source>C&amp;ut and Close</source>
         <translation>カットとクローズ(&amp;u)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Pa&amp;ste...</source>
         <translation>貼り付け(&amp;s)...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>De&amp;lete</source>
         <translation>削除(&amp;l)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Move to Staff Above</source>
         <translation>上の五線に移動(&amp;M)</translation>
     </message>
@@ -2818,12 +2419,12 @@
         <translation>すべてを選択(&amp;a)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Clear Select&amp;ion</source>
         <translation>選択を解除(&amp;i)</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+7"/>
         <source>Note &amp;Font</source>
         <translation>音符フォント(&amp;F)</translation>
     </message>
@@ -2868,76 +2469,48 @@
         <translation>トラックヘッダの表示(&amp;T)</translation>
     </message>
     <message>
-        <location line="-1275"/>
-        <location line="+1288"/>
-        <location line="+2103"/>
-        <location line="+373"/>
+        <location line="-260"/>
+        <location line="+273"/>
+        <location line="+601"/>
+        <location line="+75"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation>パーカッションマトリクスエディタで開く(&amp;P) </translation>
     </message>
     <message>
-        <location line="-2474"/>
+        <location line="-674"/>
         <source>Add Cle&amp;f Change...</source>
         <translation>音部記号の追加(&amp;f)...</translation>
     </message>
     <message>
-        <location line="-1289"/>
-        <location line="+1291"/>
+        <location line="-274"/>
+        <location line="+276"/>
         <source>Add &amp;Key Change...</source>
         <translation>キーチェンジの追加(&amp;K)...</translation>
     </message>
     <message>
-        <location line="-1498"/>
-        <source>Nothing to &amp;Undo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Nothing to &amp;Redo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+359"/>
-        <location line="+1733"/>
-        <source>Cut Controller Events (&amp;X)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-1732"/>
-        <location line="+1733"/>
-        <source>&amp;Copy Controller Events</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-1731"/>
-        <location line="+1733"/>
+        <location line="-242"/>
+        <location line="+414"/>
         <source>&amp;Place a Controller for Each Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1040"/>
-        <location line="+1946"/>
+        <location line="-325"/>
+        <location line="+461"/>
         <source>&amp;Rosegarden Tutorial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1676"/>
-        <location line="+2013"/>
-        <location line="+580"/>
-        <location line="+79"/>
+        <location line="+222"/>
         <source>&amp;Nothing to Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2663"/>
-        <location line="+2013"/>
-        <location line="+572"/>
-        <location line="+87"/>
+        <location line="+1"/>
         <source>N&amp;othing to Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2567"/>
+        <location line="-581"/>
         <source>&amp;Guess Beats</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2958,22 +2531,28 @@
     </message>
     <message>
         <location line="+4"/>
-        <location line="+2150"/>
+        <location line="+600"/>
         <source>&amp;Convert Notation for...</source>
         <translation>右記に音符を変換(&amp;C)...</translation>
     </message>
     <message>
-        <location line="-2224"/>
+        <location line="-659"/>
         <source>Search and Selec&amp;t</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="-271"/>
+        <location line="+272"/>
+        <source>&amp;Reset Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <source>Show &amp;Interpret Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+35"/>
         <source>Unadopt an Adopted Segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3138,37 +2717,37 @@
         <translation>指&amp;0を追加(Thumb)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Add Fingering &amp;1</source>
         <translation>指&amp;1を追加</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Add Fingering &amp;2</source>
         <translation>指&amp;2を追加</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Add Fingering &amp;3</source>
         <translation>指&amp;3を追加</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Add Fingering &amp;4</source>
         <translation>指&amp;4を追加</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Add Fingering &amp;5</source>
         <translation>指&amp;5を追加</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Add Fingering +</source>
         <translation>+記号(ピチカート)を追加(&amp;A)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Add Other &amp;Fingering...</source>
         <translation>その他の指使い(&amp;F)...</translation>
     </message>
@@ -3208,7 +2787,7 @@
         <translation>&amp;5</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+2"/>
         <source>Note &amp;Style</source>
         <translation>音符の表現形式(&amp;S)</translation>
     </message>
@@ -3230,12 +2809,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+708"/>
+        <location line="+144"/>
         <source>&amp;Accidentals</source>
         <translation>臨時記号(&amp;A)</translation>
     </message>
     <message>
-        <location line="-707"/>
+        <location line="-143"/>
         <source>&amp;Restore Accidentals</source>
         <translation>臨時記号の復帰(&amp;R)</translation>
     </message>
@@ -3280,18 +2859,18 @@
         <translation>符幹を上に(&amp;U)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Stem &amp;Down</source>
         <translation>符幹を下に(&amp;D)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Restore Stems</source>
         <translation>符幹の復帰(&amp;R)</translation>
     </message>
     <message>
-        <location line="-1490"/>
-        <location line="+1491"/>
+        <location line="-363"/>
+        <location line="+364"/>
         <source>&amp;Phrase</source>
         <translation>フレーズ(&amp;P)</translation>
     </message>
@@ -3306,27 +2885,27 @@
         <translation>連桁(&amp;B)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Auto-Beam</source>
         <translation>自動連桁(&amp;A)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Unbeam</source>
         <translation>連桁解除(&amp;U)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Tupl&amp;et...</source>
         <translation>連符(&amp;e)...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Triplet</source>
         <translation>三連符(&amp;T)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>U&amp;ntuplet</source>
         <translation>連符解除(&amp;n)</translation>
     </message>
@@ -3336,12 +2915,12 @@
         <translation>スラー追加(&amp;l)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Add P&amp;hrasing Slur</source>
         <translation>フレージングスラーを追加(&amp;h)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Slur &amp;Position</source>
         <translation>スラー位置(&amp;P)</translation>
     </message>
@@ -3361,19 +2940,19 @@
         <translation>下にスラー(&amp;B)</translation>
     </message>
     <message>
-        <location line="-1559"/>
-        <location line="+1560"/>
+        <location line="-376"/>
+        <location line="+377"/>
         <source>T&amp;ie</source>
         <translation>タイ(&amp;i)</translation>
     </message>
     <message>
-        <location line="-1551"/>
-        <location line="+1560"/>
+        <location line="-376"/>
+        <location line="+377"/>
         <source>&amp;Untie</source>
         <translation>タイを解除(&amp;U)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Tie &amp;Position</source>
         <translation>タイ位置(&amp;P)</translation>
     </message>
@@ -3398,12 +2977,12 @@
         <translation>クレッシェンドの追加(&amp;C)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Add &amp;Decescendo</source>
         <translation>デクレッシェンドの追加(&amp;D)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Add Trill With &amp;Line</source>
         <translation>波線付きのトリルを追加(&amp;L)</translation>
     </message>
@@ -3448,14 +3027,12 @@
         <translation>休符の正規化(&amp;N)</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+1472"/>
         <source>Ctrl+N</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
-        <location line="-1470"/>
+        <location line="+1"/>
         <source>&amp;Collapse Rests</source>
         <translation>休符をつなげる(&amp;C)</translation>
     </message>
@@ -3465,11 +3042,9 @@
         <translation>音符(&amp;N)</translation>
     </message>
     <message>
-        <location line="-1556"/>
-        <location line="+1564"/>
         <source>Ctrl+=</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+=</translation>
+        <translation type="vanished">Ctrl+=</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3482,7 +3057,7 @@
         <translation>和音上の音符を分割してタイでつなぐ(&amp;C)</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+21"/>
         <source>Fi&amp;x Notation Quantization</source>
         <translation>作譜クウォンタイズを固定(&amp;x)</translation>
     </message>
@@ -3502,7 +3077,7 @@
         <translation>スケールの変更</translation>
     </message>
     <message>
-        <location line="+59"/>
+        <location line="+11"/>
         <source>Convert</source>
         <translation>変換</translation>
     </message>
@@ -3512,7 +3087,7 @@
         <translation>ベロシティ(&amp;l)</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+3"/>
         <source>Set Event &amp;Velocities</source>
         <translation>イベントベロシティの設定(&amp;V)</translation>
     </message>
@@ -3552,13 +3127,13 @@
         <translation>音符位置微調整(&amp;m)</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location line="+1580"/>
+        <location line="+2"/>
+        <location line="+446"/>
         <source>Jog &amp;Right</source>
         <translation>右にずらす(&amp;R)</translation>
     </message>
     <message>
-        <location line="-1571"/>
+        <location line="-445"/>
         <source>&amp;Visibility</source>
         <translation>表示方法(&amp;V)</translation>
     </message>
@@ -3573,24 +3148,22 @@
         <translation>可視にする(&amp;V)</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Insert &amp;Expression Controller Sequence...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+65"/>
         <source>Alt+Up</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+Up</translation>
+        <translation type="vanished">Alt+Up</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Alt+Down</source>
         <comment>keyboard shortcut</comment>
-        <translation>Alt+Down</translation>
+        <translation type="vanished">Alt+Down</translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+32"/>
         <source>Select but Don&apos;t Follow Ties</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3600,46 +3173,46 @@
         <translation>音符と休符を描画(&amp;N)</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+15"/>
         <source>S&amp;ymbols</source>
         <translation>シンボル(&amp;y)</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-38"/>
         <source>Next Staff &amp;Up</source>
         <translation>上の五線に移動(&amp;U)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Next Staff &amp;Down</source>
         <translation>下の五線に移動(&amp;D)</translation>
     </message>
     <message>
-        <location line="-1743"/>
-        <location line="+1752"/>
+        <location line="-416"/>
+        <location line="+417"/>
         <source>Pre&amp;vious Segment</source>
         <translation>前のセグメント(&amp;v)</translation>
     </message>
     <message>
-        <location line="-1743"/>
-        <location line="+1752"/>
+        <location line="-416"/>
+        <location line="+417"/>
         <source>Ne&amp;xt Segment</source>
         <translation>次のセグメント(&amp;x)</translation>
     </message>
     <message>
-        <location line="-1741"/>
-        <location line="+1764"/>
+        <location line="-414"/>
+        <location line="+417"/>
         <source>Step &amp;Back</source>
         <translation>ステップ単位で戻す(&amp;B)</translation>
     </message>
     <message>
-        <location line="-1749"/>
-        <location line="+1764"/>
+        <location line="-416"/>
+        <location line="+417"/>
         <source>Step &amp;Forward</source>
         <translation>ステップ単位で前進(&amp;F)</translation>
     </message>
     <message>
-        <location line="+157"/>
+        <location line="+37"/>
         <source>&amp;Durations</source>
         <translation>デュレーション(&amp;D)</translation>
     </message>
@@ -3649,42 +3222,42 @@
         <translation>倍全音符(&amp;D)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Whole Note</source>
         <translation>全音符(&amp;W)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Half Note</source>
         <translation>二分音符(&amp;H)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Quarter Note</source>
         <translation>四分音符(&amp;Q)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Eighth Note</source>
         <translation>八分音符(&amp;E)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Sixteenth note</source>
         <translation>十六分音符(&amp;S)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Thirty-Second Note</source>
         <translation>三十二分音符(&amp;T)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Sixty-&amp;Fourth Note</source>
         <translation>六十四分音符(&amp;F)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>D&amp;otted Whole Note</source>
         <translation>符点全音符(&amp;o)</translation>
     </message>
@@ -3709,7 +3282,7 @@
         <translation>符点三十二分音符(&amp;y)</translation>
     </message>
     <message>
-        <location line="-112"/>
+        <location line="-32"/>
         <source>&amp;No Accidental</source>
         <translation>臨時記号なし(&amp;N)</translation>
     </message>
@@ -3774,45 +3347,45 @@
         <translation>テキスト(&amp;T)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Guitar Chord</source>
         <translation>ギターコード(&amp;G)</translation>
     </message>
     <message>
-        <location line="-1794"/>
-        <location line="+1918"/>
+        <location line="-437"/>
+        <location line="+457"/>
         <source>&amp;Insert Note</source>
         <translation>音符の挿入(&amp;I)</translation>
     </message>
     <message>
-        <location line="-1610"/>
-        <location line="+1918"/>
+        <location line="-421"/>
+        <location line="+457"/>
         <source>&amp;Lower Octave</source>
         <translation>1オクターブ下げる(&amp;L)</translation>
     </message>
     <message>
-        <location line="+154"/>
+        <location line="+18"/>
         <source>Insert Rest</source>
         <translation>休符の挿入</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+2"/>
         <source>Triplet Insert Mo&amp;de</source>
         <translation>三連符入力モード(&amp;d)</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+2"/>
         <source>Grace Insert &amp;Mode</source>
         <translation>装飾音符挿入モード(&amp;M)</translation>
     </message>
     <message>
-        <location line="-1537"/>
-        <location line="+2002"/>
+        <location line="-341"/>
+        <location line="+588"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation>ツールのツールバーを表示(&amp;o)</translation>
     </message>
     <message>
-        <location line="-2001"/>
+        <location line="-587"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation>臨時記号ツールバーを表示(&amp;A)</translation>
     </message>
@@ -3833,47 +3406,42 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+1999"/>
+        <location line="+585"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation>トランスポートツールバーを表示(&amp;p)</translation>
     </message>
     <message>
-        <location line="-1998"/>
+        <location line="-584"/>
         <source>Show &amp;Layout Toolbar</source>
         <translation>レイアウトツールバーを表示(&amp;L)</translation>
     </message>
     <message>
-        <location line="+1831"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
-        <location line="+45"/>
         <source>Ctrl+Q</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Q</translation>
+        <translation type="vanished">Ctrl+Q</translation>
     </message>
     <message>
-        <location line="+91"/>
-        <location line="+870"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+V</translation>
+        <translation type="vanished">Ctrl+Shift+V</translation>
     </message>
     <message>
-        <location line="-861"/>
         <source>Ctrl+Shift+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+Ins</translation>
+        <translation type="vanished">Ctrl+Shift+Ins</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+588"/>
         <source>Show Cho&amp;rd Name Ruler</source>
         <translation>コード名ルーラーの表示(&amp;r)</translation>
     </message>
     <message>
-        <location line="-1988"/>
+        <location line="-574"/>
         <source>Show &amp;Annotations</source>
         <translation>注釈を表示(&amp;A)</translation>
     </message>
@@ -3883,7 +3451,7 @@
         <translation>LilyPondディレクティブの表示(&amp;P)</translation>
     </message>
     <message>
-        <location line="+1716"/>
+        <location line="+452"/>
         <source>Clefs Toolbar</source>
         <translation>音部記号ツールバー</translation>
     </message>
@@ -3903,69 +3471,69 @@
         <translation>マークツールバー</translation>
     </message>
     <message>
-        <location line="-3148"/>
+        <location line="-766"/>
         <source>Select &amp;All Events</source>
         <translation>すべてのイベントを選択(&amp;A)</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+27"/>
         <source>Show To&amp;ols</source>
         <translation>ツールを表示(&amp;o)</translation>
     </message>
     <message>
-        <location line="+198"/>
+        <location line="+54"/>
         <source>Remove &amp;Triggers</source>
         <translation>トリガの削除(&amp;T)</translation>
     </message>
     <message>
-        <location line="-197"/>
+        <location line="-53"/>
         <source>Show T&amp;ransport Toolbar</source>
         <translation>トランスポートツールバーを表示(&amp;r)</translation>
     </message>
     <message>
-        <location line="+886"/>
-        <location line="+1946"/>
-        <location line="+911"/>
+        <location line="+144"/>
+        <location line="+461"/>
+        <location line="+349"/>
         <source>Rosegarden &amp;Manual</source>
         <translation>Rosegardenマニュアル(&amp;M)</translation>
     </message>
     <message>
-        <location line="-4116"/>
-        <location line="+285"/>
+        <location line="-1036"/>
+        <location line="+58"/>
         <source>Preferences...</source>
         <translation>設定...</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location line="+1302"/>
+        <location line="+31"/>
+        <location line="+271"/>
         <source>Show &amp;Velocity Ruler</source>
         <translation>ベロシティルーラの表示(&amp;V)</translation>
     </message>
     <message>
-        <location line="-1301"/>
-        <location line="+1302"/>
+        <location line="-270"/>
+        <location line="+271"/>
         <source>Show Pitch &amp;Bend Ruler</source>
         <translation>ピッチベンドルーラの表示(&amp;B)</translation>
     </message>
     <message>
-        <location line="-1104"/>
+        <location line="-219"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation>カーソルを後進させて、選択(&amp;l)</translation>
     </message>
     <message>
-        <location line="+698"/>
-        <location line="+2133"/>
+        <location line="+94"/>
+        <location line="+588"/>
         <source>Rulers Toolbar</source>
         <translation>ルーラツールバー</translation>
     </message>
     <message>
-        <location line="-1757"/>
-        <location line="+2008"/>
+        <location line="-493"/>
+        <location line="+593"/>
         <source>&amp;Preferences...</source>
         <translation>設定(&amp;P)...</translation>
     </message>
     <message>
-        <location line="-1987"/>
+        <location line="-572"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>ルーラツールバーの表示(&amp;R)</translation>
     </message>
@@ -3975,24 +3543,19 @@
         <translation>生の音符ルーラを表示(&amp;w)</translation>
     </message>
     <message>
-        <location line="-1014"/>
-        <location line="+1764"/>
         <source>Step Back (Left)</source>
-        <translation>ステップ単位で戻る(←)</translation>
+        <translation type="vanished">ステップ単位で戻る(←)</translation>
     </message>
     <message>
-        <location line="-22"/>
         <source>Play</source>
-        <translation>再生</translation>
+        <translation type="vanished">再生</translation>
     </message>
     <message>
-        <location line="-1727"/>
-        <location line="+1764"/>
         <source>Step Forward (Right)</source>
-        <translation>ステップ単位で進む(→)</translation>
+        <translation type="vanished">ステップ単位で進む(→)</translation>
     </message>
     <message>
-        <location line="-2684"/>
+        <location line="-399"/>
         <source>&amp;Action</source>
         <translation>動作(&amp;A)</translation>
     </message>
@@ -4012,45 +3575,41 @@
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location line="+810"/>
-        <location line="+1734"/>
+        <location line="+175"/>
+        <location line="+415"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
         <translation>ピッチベンドシーケンスを挿入(&amp;B)...</translation>
     </message>
     <message>
-        <location line="-1928"/>
-        <location line="+1302"/>
+        <location line="-463"/>
+        <location line="+271"/>
         <source>Add &amp;Control Ruler</source>
         <translation>コントロールルーラを追加(&amp;C)</translation>
     </message>
     <message>
-        <location line="-1087"/>
-        <location line="+1734"/>
+        <location line="-218"/>
+        <location line="+415"/>
         <source>Cursor Back &amp;Bar and Select</source>
         <translation>カーソルを1小節戻し選択(&amp;B)</translation>
     </message>
     <message>
-        <location line="-1727"/>
-        <location line="+1734"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+Left</translation>
+        <translation type="vanished">Ctrl+Shift+Left</translation>
     </message>
     <message>
-        <location line="-1732"/>
-        <location line="+1734"/>
+        <location line="-414"/>
+        <location line="+415"/>
         <source>Cursor For&amp;ward and Select</source>
         <translation>カーソルを1小節進め選択(&amp;w)</translation>
     </message>
     <message>
-        <location line="-1727"/>
-        <location line="+1734"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+Right</translation>
+        <translation type="vanished">Ctrl+Shift+Right</translation>
     </message>
     <message>
-        <location line="-674"/>
+        <location line="-209"/>
         <source>Show La&amp;yer Toolbar</source>
         <translation>レイヤツールバーを表示(&amp;y)</translation>
     </message>
@@ -4060,18 +3619,17 @@
         <translation>レイヤを追加(&amp;L)</translation>
     </message>
     <message>
-        <location line="+415"/>
         <source>Ctrl+Alt+1</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+1</translation>
+        <translation type="vanished">Ctrl+Alt+1</translation>
     </message>
     <message>
-        <location line="-292"/>
+        <location line="+51"/>
         <source>&amp;Cycle Slashes</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1545"/>
+        <location line="-378"/>
         <source>Show note names</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4091,7 +3649,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location line="+20"/>
         <source>Show A&amp;ctions Toolbar</source>
         <translation>動作ツールバーを表示(&amp;c)</translation>
     </message>
@@ -4101,20 +3659,13 @@
         <translation>ルーラツールバーを表示(&amp;u)</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location line="+1560"/>
-        <source>`</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-1383"/>
-        <location line="+1734"/>
+        <location line="+56"/>
+        <location line="+415"/>
         <source>Insert C&amp;ontroller Sequence...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-636"/>
+        <location line="-202"/>
         <source>Show &amp;Duration Toolbar</source>
         <translation>デュレーションツールバーを表示(&amp;D)</translation>
     </message>
@@ -4124,30 +3675,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Ctrl+Alt++</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt++</translation>
+        <translation type="vanished">Ctrl+Alt++</translation>
     </message>
     <message>
-        <location line="+123"/>
         <source>/</source>
         <comment>keyboard shortcut</comment>
-        <translation>/</translation>
+        <translation type="vanished">/</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+71"/>
         <source>Mensural</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+48"/>
         <source>Ctrl+Alt+B</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+B</translation>
+        <translation type="vanished">Ctrl+Alt+B</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+42"/>
         <source>&amp;Figuration</source>
         <translation>装飾 (&amp;F)</translation>
     </message>
@@ -4162,436 +3710,391 @@
         <translation type="unfinished">選択したものを装飾としてマーク (&amp;F)</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+10"/>
         <source>Cycle &amp;Dots</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+1716"/>
         <source>Ctrl+.</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+.</translation>
+        <translation type="vanished">Ctrl+.</translation>
     </message>
     <message>
-        <location line="-1714"/>
+        <location line="+1"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
         <translation>デュレーション変更なしの符点切り替え(&amp;o)</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+Alt+.</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+.</translation>
+        <translation type="vanished">Ctrl+Alt+.</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <location line="+201"/>
         <source>Double Whole Note</source>
         <translation>倍全音符</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+5</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+5</translation>
+        <translation type="vanished">Ctrl+5</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-200"/>
+        <location line="+204"/>
         <source>Whole Note</source>
         <translation>全音符</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+1</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+1</translation>
+        <translation type="vanished">Ctrl+1</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-203"/>
+        <location line="+207"/>
         <source>Half Note</source>
         <translation>二分音符</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+2</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+2</translation>
+        <translation type="vanished">Ctrl+2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-206"/>
+        <location line="+210"/>
         <source>Quarter Note</source>
         <translation>四分音符</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+4</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+4</translation>
+        <translation type="vanished">Ctrl+4</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-209"/>
+        <location line="+213"/>
         <source>Eighth Note</source>
         <translation>八分音符</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+8</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+8</translation>
+        <translation type="vanished">Ctrl+8</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-212"/>
+        <location line="+216"/>
         <source>Sixteenth Note</source>
         <translation>十六分音符</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+6</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+6</translation>
+        <translation type="vanished">Ctrl+6</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-215"/>
+        <location line="+219"/>
         <source>Thirty-Second Note</source>
         <translation>三十二分音符</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+3</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+3</translation>
+        <translation type="vanished">Ctrl+3</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-218"/>
+        <location line="+222"/>
         <source>Sixty-Fourth Note</source>
         <translation>六十四分音符</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+0</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+0</translation>
+        <translation type="vanished">Ctrl+0</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-221"/>
         <source>Double Whole Note (Without Duration Change)</source>
         <translation>倍全音符（デュレーション変更なし）</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+Alt+5</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+5</translation>
+        <translation type="vanished">Ctrl+Alt+5</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Whole Note (Without Duration Change)</source>
         <translation>全音符（デュレーション変更なし）</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Half Note (Without Duration Change)</source>
         <translation>二分音符（デュレーション変更なし）</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+Alt+2</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+2</translation>
+        <translation type="vanished">Ctrl+Alt+2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Quarter Note (Without Duration Change)</source>
         <translation>四分音符（デュレーション変更なし）</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+Alt+4</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+4</translation>
+        <translation type="vanished">Ctrl+Alt+4</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Eighth Note (Without Duration Change)</source>
         <translation>八分音符（デュレーション変更なし）</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+Alt+8</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+8</translation>
+        <translation type="vanished">Ctrl+Alt+8</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Sixteenth Note (Without Duration Change)</source>
         <translation>十六分音符（デュレーション変更なし）</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+Alt+6</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+6</translation>
+        <translation type="vanished">Ctrl+Alt+6</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Thirty-Second Note (Without Duration Change)</source>
         <translation>三十二分音符（デュレーション変更なし）</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+Alt+3</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+3</translation>
+        <translation type="vanished">Ctrl+Alt+3</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Sixty-Fourth Note (Without Duration Change)</source>
         <translation>六十四分音符（デュレーション変更なし）</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+Alt+0</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+0</translation>
+        <translation type="vanished">Ctrl+Alt+0</translation>
     </message>
     <message>
-        <location line="+237"/>
         <source>Stop</source>
-        <translation>停止</translation>
+        <translation type="vanished">停止</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+66"/>
         <source>Solo the Active Track</source>
         <translation>アクティブなトラックだけにする</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Scroll to Follow Playback</source>
-        <translation>再生中スクロールする</translation>
+        <translation type="vanished">再生中スクロールする</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Panic! (Ctrl+Alt+P)</source>
-        <translation>パニック!(Alt+Ctrl+P)</translation>
+        <translation type="vanished">パニック!(Alt+Ctrl+P)</translation>
     </message>
     <message>
-        <location line="+55"/>
         <source>F8</source>
         <comment>keyboard shortcut</comment>
-        <translation>F8</translation>
+        <translation type="vanished">F8</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>F9</source>
         <comment>keyboard shortcut</comment>
-        <translation>F9</translation>
+        <translation type="vanished">F9</translation>
     </message>
     <message>
-        <location line="+81"/>
+        <location line="+43"/>
         <source>Switch to &amp;Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+9"/>
         <source>Y</source>
         <comment>keyboard shortcut</comment>
-        <translation>Y</translation>
+        <translation type="vanished">Y</translation>
     </message>
     <message>
-        <location line="-7"/>
+        <location line="+1"/>
         <source>Switch to &amp;Rests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>To&amp;ggle Dot on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+9"/>
         <source>.</source>
         <comment>keyboard shortcut</comment>
-        <translation>.</translation>
+        <translation type="vanished">.</translation>
     </message>
     <message>
-        <location line="-7"/>
+        <location line="+1"/>
         <source>To&amp;ggle Dot off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+478"/>
-        <location line="+519"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
-        <translation>P</translation>
+        <translation type="vanished">P</translation>
     </message>
     <message>
-        <location line="-501"/>
-        <location line="+1221"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
-        <translation>G</translation>
+        <translation type="vanished">G</translation>
     </message>
     <message>
-        <location line="-1219"/>
+        <location line="+58"/>
         <source>Tuplet Insert Mo&amp;de</source>
         <translation>三連符入力モード(&amp;d)</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>;</source>
-        <comment>keyboard shortcut</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+27"/>
         <source>Double Whole Note (5)</source>
-        <translation>倍全音符(5)</translation>
+        <translation type="vanished">倍全音符(5)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Whole Note (1)</source>
-        <translation>全音符(1)</translation>
+        <translation type="vanished">全音符(1)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Half Note (2)</source>
-        <translation>二分音符(2)</translation>
+        <translation type="vanished">二分音符(2)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Quarter Note (4)</source>
-        <translation>四分音符(4)</translation>
+        <translation type="vanished">四分音符(4)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Eighth Note (8)</source>
-        <translation>八分音符(8)</translation>
+        <translation type="vanished">八分音符(8)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Sixteenth Note (6)</source>
-        <translation>十六分音符(6)</translation>
+        <translation type="vanished">十六分音符(6)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Thirty-Second Note (3)</source>
-        <translation>三十二分音符(3)</translation>
+        <translation type="vanished">三十二分音符(3)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Sixty-Fourth Note (0)</source>
-        <translation>六十四分音符(0)</translation>
+        <translation type="vanished">六十四分音符(0)</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+48"/>
         <source>Dotted Double Whole Note</source>
         <translation>符点倍全音符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Whole Note</source>
         <translation>符点全音符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Half Note</source>
         <translation>符点二分音符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Quarter Note</source>
         <translation>符点四分音符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Eighth Note</source>
         <translation>符点八分音符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Sixteenth Note</source>
         <translation>符点十六分音符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Thirty-Second Note</source>
         <translation>符点三十二分音符</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Double Whole Rest (5)</source>
-        <translation>倍全休符(5)</translation>
+        <translation type="vanished">倍全休符(5)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Whole Rest (1)</source>
-        <translation>全休符(1)</translation>
+        <translation type="vanished">全休符(1)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Half Rest (2)</source>
-        <translation>二分休符(2)</translation>
+        <translation type="vanished">二分休符(2)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Quarter Rest (4)</source>
-        <translation>四分休符(4)</translation>
+        <translation type="vanished">四分休符(4)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Eighth Rest (8)</source>
-        <translation>八分休符(8)</translation>
+        <translation type="vanished">八分休符(8)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Sixteenth Rest (6)</source>
-        <translation>十六分休符(6)</translation>
+        <translation type="vanished">十六分休符(6)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Thirty-Second Rest (3)</source>
-        <translation>三十二分休符(3)</translation>
+        <translation type="vanished">三十二分休符(3)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Sixty-Fourth Rest (0)</source>
-        <translation>六十四分休符(0)</translation>
+        <translation type="vanished">六十四分休符(0)</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+36"/>
         <source>Dotted Double Whole Rest</source>
         <translation>符点倍全休符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Whole Rest</source>
         <translation>符点全休符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Half Rest</source>
         <translation>符点二分休符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Quarter Rest</source>
         <translation>符点四分休符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Eighth Rest</source>
         <translation>符点八分休符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Sixteenth Rest</source>
         <translation>符点十六分休符</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Dotted Thirty-Second Rest</source>
         <translation>符点三十二分休符</translation>
     </message>
@@ -4606,7 +4109,7 @@
         <translation>レイヤツールバー</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+24"/>
         <source>Switch to Insert Tool</source>
         <translation>挿入ツールに切り替え</translation>
     </message>
@@ -4706,7 +4209,7 @@
         <translation>新規(&amp;N)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Import</source>
         <translation>インポート(&amp;I)</translation>
     </message>
@@ -4741,7 +4244,7 @@
         <translation>開く(&amp;O)...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Open Examp&amp;le...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4756,7 +4259,12 @@
         <translation>最近のものを開く(&amp;R)</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+1"/>
+        <source>Open most recent file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Save as &amp;Template...</source>
         <translation>テンプレートとして保存(&amp;T)...</translation>
     </message>
@@ -4781,43 +4289,42 @@
         <translation>プレイリスト(&amp;l)</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+2"/>
         <source>&amp;Quit</source>
         <translation>終了(&amp;Q)</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+7"/>
         <source>Paste as &amp;Links</source>
         <translation>リンクとして貼り付け(&amp;L)</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Ctrl+Alt+V</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+V</translation>
+        <translation type="vanished">Ctrl+Alt+V</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+2"/>
         <source>Cut &amp;Range</source>
         <translation>レンジをカット(&amp;R)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Cop&amp;y Range</source>
         <translation>レンジをコピー(&amp;y)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Pa&amp;ste Range</source>
         <translation>レンジの貼り付け(&amp;s)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Insert Range...</source>
         <translation>レンジの挿入(&amp;I)...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Paste Tempos and Time Signatures</source>
         <translation>テンポ/タイムシグネチャ（拍子）をペースト</translation>
     </message>
@@ -4832,7 +4339,7 @@
         <translation>すべてのセグメントを選択(&amp;A)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+4"/>
         <source>Dump segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4842,7 +4349,7 @@
         <translation>ドキュメントのプロパティ(&amp;r)...</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+21"/>
         <source>&amp;Open Tempo and Time Signature Editor</source>
         <translation>テンポ/拍子エディタを開く(&amp;O)</translation>
     </message>
@@ -4867,7 +4374,7 @@
         <translation>マーカーの編集(&amp;k)...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Edit Document P&amp;roperties...</source>
         <translation>ドキュメントプロパティの編集(&amp;r)...</translation>
     </message>
@@ -4877,40 +4384,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Shift+M</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Jump to &amp;Previous Marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Ctrl+,</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Jump to &amp;Next Marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
         <translation>再生位置にクイックマーカを設定(&amp;S)</translation>
     </message>
     <message>
-        <location line="-1264"/>
-        <location line="+1273"/>
+        <location line="-384"/>
+        <location line="+385"/>
         <source>&amp;Jump to Quick Marker</source>
         <translation>クイックマーカにジャンプ(&amp;J)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Studio</source>
         <translation>スタジオ(&amp;S)</translation>
     </message>
@@ -4969,33 +4464,33 @@
         <translation>リピートをトグル</translation>
     </message>
     <message>
-        <location line="+64"/>
-        <location line="+454"/>
+        <location line="+8"/>
+        <location line="+82"/>
         <source>R&amp;elabel...</source>
         <translation>再ラベル(&amp;e)...</translation>
     </message>
     <message>
-        <location line="-444"/>
-        <location line="+435"/>
+        <location line="-80"/>
+        <location line="+79"/>
         <source>Repe&amp;at Last Quantize</source>
         <translation>最後のクォンタイズを繰り返す(&amp;a)</translation>
     </message>
     <message>
-        <location line="-423"/>
+        <location line="-75"/>
         <source>Stretch &amp;or Squash...</source>
         <translation>ストレッチ/スカッシュ(&amp;o)...</translation>
     </message>
     <message>
-        <location line="-3447"/>
-        <location line="+1293"/>
-        <location line="+2156"/>
+        <location line="-882"/>
+        <location line="+278"/>
+        <location line="+606"/>
         <source>Set Start &amp;Time...</source>
         <translation>開始時間を設定(&amp;T)...</translation>
     </message>
     <message>
-        <location line="-3448"/>
-        <location line="+1293"/>
-        <location line="+2156"/>
+        <location line="-883"/>
+        <location line="+278"/>
+        <location line="+606"/>
         <source>Set &amp;Duration...</source>
         <translation>デュレーションを設定(&amp;D)...</translation>
     </message>
@@ -5005,13 +4500,13 @@
         <translation>弱拍（上拍）を作成(&amp;A)...</translation>
     </message>
     <message>
-        <location line="+21"/>
-        <location line="+383"/>
+        <location line="+5"/>
+        <location line="+67"/>
         <source>Join</source>
         <translation>結合</translation>
     </message>
     <message>
-        <location line="-374"/>
+        <location line="-66"/>
         <source>&amp;Split</source>
         <translation>分割(&amp;S)</translation>
     </message>
@@ -5065,47 +4560,47 @@
         <translation>トラックを追加(&amp;T)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Add Tracks...</source>
         <translation>トラック追加(&amp;A)...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>D&amp;elete Track</source>
         <translation>トラック削除(&amp;e)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Move Track &amp;Down</source>
         <translation>トラックを下に移動(&amp;D)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Mo&amp;ve Track Up</source>
         <translation>トラックを上に移動(&amp;v)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Select &amp;Next Track</source>
         <translation>次のトラックを選択(&amp;N)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Select &amp;Previous Track</source>
         <translation>前のトラックを選択(&amp;P)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Mute or Unmute Tra&amp;ck</source>
         <translation>トラックのミュートをOn/Off(&amp;c)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
         <translation>トラックの録音を用意、又は解除</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Unmute all Tracks</source>
         <translation>すべてのトラックのミュート取消(&amp;U)</translation>
     </message>
@@ -5125,21 +4620,21 @@
         <translation>インストゥルメントの再割り当て(&amp;R)...</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <location line="+305"/>
+        <location line="+6"/>
+        <location line="+45"/>
         <source>&amp;Resize</source>
         <translation>リサイズ(&amp;R)</translation>
     </message>
     <message>
-        <location line="-241"/>
+        <location line="-37"/>
         <source>P&amp;unch in Record</source>
         <translation>パンチイン録音(&amp;u)</translation>
     </message>
     <message>
-        <location line="-4083"/>
-        <location line="+366"/>
-        <location line="+1293"/>
-        <location line="+2002"/>
+        <location line="-1027"/>
+        <location line="+75"/>
+        <location line="+262"/>
+        <location line="+588"/>
         <source>Show Main &amp;Toolbar</source>
         <translation>メインツールバーを表示(&amp;T)</translation>
     </message>
@@ -5159,25 +4654,25 @@
         <translation>ズームツールバーを表示(&amp;Z)</translation>
     </message>
     <message>
-        <location line="-3665"/>
-        <location line="+370"/>
-        <location line="+1301"/>
-        <location line="+2020"/>
+        <location line="-929"/>
+        <location line="+79"/>
+        <location line="+270"/>
+        <location line="+590"/>
         <source>Show St&amp;atusbar</source>
         <translation>ステータスバーを表示(&amp;a)</translation>
     </message>
     <message>
-        <location line="-24"/>
+        <location line="-8"/>
         <source>Show Playback Position R&amp;uler</source>
         <translation>再生位置ルーラーの表示(&amp;u)</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+26"/>
         <source>MIDI Mi&amp;xer</source>
         <translation>MIDIミキサ(&amp;x)</translation>
     </message>
     <message>
-        <location line="-88"/>
+        <location line="-24"/>
         <source>Show Te&amp;mpo Ruler</source>
         <translation>テンポルーラーの表示(&amp;m)</translation>
     </message>
@@ -5187,18 +4682,17 @@
         <translation>トランスポートの表示(&amp;n)</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>T</source>
         <comment>keyboard shortcut</comment>
-        <translation>T</translation>
+        <translation type="vanished">T</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Show Special &amp;Parameters</source>
         <translation>特別パラメータの表示(&amp;P)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Show Segment Pre&amp;views</source>
         <translation>セグメントプレビューの表示(&amp;v)</translation>
     </message>
@@ -5213,12 +4707,12 @@
         <translation>トラックラベルの表示(&amp;L)</translation>
     </message>
     <message>
-        <location line="+434"/>
+        <location line="+98"/>
         <source>Main Toolbar</source>
         <translation>メインツールバー</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+2"/>
         <source>Tracks Toolbar</source>
         <translation>トラックツールバー</translation>
     </message>
@@ -5228,26 +4722,64 @@
         <translation>編集ツールバー</translation>
     </message>
     <message>
-        <location line="-1665"/>
-        <location line="+1667"/>
+        <location line="+2"/>
         <source>Rewind to Beginning</source>
         <translation>最初に巻き戻し</translation>
     </message>
     <message>
-        <location line="-1660"/>
-        <location line="+1669"/>
+        <location line="+1"/>
         <source>Fast Forward to End</source>
         <translation>最後まで早送り</translation>
     </message>
     <message>
-        <location line="-2874"/>
-        <location line="+1946"/>
-        <location line="+911"/>
+        <location line="-817"/>
+        <location line="+461"/>
+        <location line="+349"/>
         <source>&amp;Support Rosegarden</source>
         <translation>Rosegardenのサポート(&amp;S)</translation>
     </message>
     <message>
-        <location line="-651"/>
+        <location line="-282"/>
+        <source>Double Whole Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Whole Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Half Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Quarter Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Eighth Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Sixteenth Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Thirty-Second Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Sixty-Fourth Rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+89"/>
         <source>Import Rosegarden &amp;Project File...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5312,23 +4844,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+7"/>
         <source>Save &amp;as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+187"/>
+        <location line="+25"/>
+        <source>Keyboard S&amp;hortcuts...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
         <source>Fit Existing Beats to Beat Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+79"/>
-        <location line="+373"/>
+        <location line="+23"/>
+        <location line="+75"/>
         <source>Open in &amp;Default Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-262"/>
+        <location line="-52"/>
         <source>Split &amp;at Time...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5343,19 +4880,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+151"/>
         <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished">Ctrl+Enter, Enter, メディア再生, Ctrl+Return, Return</translation>
+        <translation type="obsolete">Ctrl+Enter, Enter, メディア再生, Ctrl+Return, Return</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <source>Ctrl+Space, Media Record</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+264"/>
+        <location line="+71"/>
         <source>Insert Tempo Change</source>
         <translation>テンポチェンジを挿入</translation>
     </message>
@@ -5395,27 +4925,27 @@
         <translation>テンポ/拍子エディタを開く</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+8"/>
         <source>&amp;Edit Item</source>
         <translation>アイテムの編集(&amp;E)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>Select &amp;All</source>
         <translation>すべてを選択(&amp;A)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Clear Selection</source>
         <translation>選択を解除(&amp;C)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+1"/>
         <source>&amp;Preferences</source>
         <translation>設定(&amp;P)</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+18"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation>新しいトリガーセグメントで貼り付け(&amp;s)</translation>
     </message>
@@ -8038,61 +7568,61 @@
     <message>
         <location line="+1"/>
         <location line="+58"/>
-        <location line="+436"/>
+        <location line="+450"/>
         <source>Pan</source>
         <translation>パン</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-507"/>
         <location line="+58"/>
-        <location line="+436"/>
+        <location line="+450"/>
         <source>Chorus</source>
         <translation>コーラス</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-507"/>
         <location line="+58"/>
-        <location line="+436"/>
+        <location line="+450"/>
         <source>Volume</source>
         <translation>音量</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-507"/>
         <location line="+58"/>
-        <location line="+436"/>
+        <location line="+450"/>
         <source>Reverb</source>
         <translation>リバーブ</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-507"/>
         <location line="+58"/>
-        <location line="+436"/>
+        <location line="+450"/>
         <source>Sustain</source>
         <translation>サステイン</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-507"/>
         <location line="+58"/>
-        <location line="+436"/>
+        <location line="+450"/>
         <source>Expression</source>
         <translation>エクスプレッション</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-507"/>
         <location line="+58"/>
-        <location line="+436"/>
+        <location line="+450"/>
         <source>Modulation</source>
         <translation>モジュレーション</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-507"/>
         <location line="+58"/>
-        <location line="+436"/>
+        <location line="+450"/>
         <source>PitchBend</source>
         <translation>ピッチベンド</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-507"/>
         <source>General MIDI Percussion</source>
         <translation>標準MIDIパーカッション</translation>
     </message>
@@ -8391,11 +7921,12 @@
     </message>
     <message>
         <location line="+1"/>
+        <location line="+414"/>
         <source>blue</source>
         <translation>青</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-413"/>
         <source>DodgerBlue</source>
         <translation>ドジャーブルー</translation>
     </message>
@@ -8456,11 +7987,12 @@
     </message>
     <message>
         <location line="+1"/>
+        <location line="+405"/>
         <source>cyan</source>
         <translation>シアン</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-404"/>
         <source>LightCyan</source>
         <translation>ライトシアン</translation>
     </message>
@@ -8526,11 +8058,12 @@
     </message>
     <message>
         <location line="+1"/>
+        <location line="+389"/>
         <source>green</source>
         <translation>グリーン</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-388"/>
         <source>chartreuse</source>
         <translation>シャトルーズ</translation>
     </message>
@@ -8591,11 +8124,12 @@
     </message>
     <message>
         <location line="+1"/>
+        <location line="+384"/>
         <source>yellow</source>
         <translation>イエロー</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-383"/>
         <source>gold</source>
         <translation>ゴールド</translation>
     </message>
@@ -8726,11 +8260,12 @@
     </message>
     <message>
         <location line="+1"/>
+        <location line="+353"/>
         <source>red</source>
         <translation>レッド</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-352"/>
         <source>HotPink</source>
         <translation>ホットピンク</translation>
     </message>
@@ -8771,11 +8306,12 @@
     </message>
     <message>
         <location line="+1"/>
+        <location line="+346"/>
         <source>magenta</source>
         <translation>マゼンタ</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-345"/>
         <source>violet</source>
         <translation>バイオレット</translation>
     </message>
@@ -10421,11 +9957,12 @@
     </message>
     <message>
         <location line="+1"/>
+        <location line="+20"/>
         <source>white</source>
         <translation>ホワイト</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-19"/>
         <source>generalmap</source>
         <translation></translation>
     </message>
@@ -10456,6 +9993,41 @@
     </message>
     <message>
         <location line="+5"/>
+        <source>gray</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>light blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>light green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>light cyan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>light red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>light magenta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>light yellow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
         <translation>Copyright (c) xxxx Copyright Holder</translation>
     </message>
@@ -10475,15 +10047,13 @@
         <translation>不明</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+720"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+722"/>
         <location line="+131"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+445"/>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="+636"/>
-        <location line="+7"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -10493,15 +10063,14 @@
         <translation>この警告を再度表示しない</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="+9"/>
         <source>%1 (%2)</source>
-        <translation>%1 (%2)</translation>
+        <translation type="vanished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1688"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1020"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1088"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+467"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1706"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1028"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1098"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+471"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 コントローラ %2 %3</translation>
     </message>
@@ -10624,8 +10193,12 @@
     </message>
     <message>
         <location line="+143"/>
+        <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;オーディオの録音が開始できません。&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;コンポジション -&gt; ドキュメントプロパティの編集... -&gt; オーディオ&lt;/b&gt;中で有効な録音パスを設定してください。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;オーディオの録音が開始できません。&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;コンポジション -&gt; ドキュメントプロパティの編集... -&gt; オーディオ&lt;/b&gt;中で有効な録音パスを設定してください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/sound/SoundFile.h" line="+49"/>
@@ -10700,7 +10273,7 @@
         <translation>tranzportデバイス /dev/tranzport0 をオープンするのに失敗しました</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AudioFileManager.h" line="+70"/>
+        <location filename="../../src/sound/AudioFileManager.h" line="+288"/>
         <location line="+2"/>
         <source>Bad audio file path </source>
         <translation>不正なオーディオファイルパス</translation>
@@ -10715,7 +10288,7 @@
         <translation type="obsolete">キャンセルしました</translation>
     </message>
     <message>
-        <location filename="../../src/sound/PeakFileManager.h" line="+53"/>
+        <location filename="../../src/sound/PeakFileManager.h" line="+101"/>
         <location line="+2"/>
         <source>Bad peak file </source>
         <translation>不正なピークファイル</translation>
@@ -10760,7 +10333,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+228"/>
+        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+251"/>
         <source>This event is tied to another event.</source>
         <translation>このイベントは他のイベントにタイでつながります。</translation>
     </message>
@@ -10987,6 +10560,186 @@ Would you like to use
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
         <translation type="unfinished">リンギング効果 - %1 を最大から最小値へ、最小値からゼロへの両方を交互に設定</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/general/ActionData.cpp" line="+374"/>
+        <source>Audio manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Bank editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clef inserter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Control editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Event list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Guitar chord inserter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Marker editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Marker ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Matrix eraser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Matrix mover</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Matrix painter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Matrix</source>
+        <translation type="unfinished">マトリクス</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Matrix resizer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Matrix selector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Matrix velocity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Midi mixer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Mixer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Notation eraser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Notation</source>
+        <translation type="unfinished">譜面</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Notation selector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Note/rest inserter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Rosegarden main window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Segment tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Symbol inserter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Tempo ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Tempo view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Text inserter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Trigger manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+269"/>
+        <source>Context</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>User defined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Shortcut 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Shortcut 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Shortcut 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Shortcut 4</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -11002,7 +10755,7 @@ Would you like to use
     </message>
     <message>
         <location line="+7"/>
-        <source>&lt;p&gt;Copyright 2000-2021 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <source>&lt;p&gt;Copyright 2000-2022 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11053,7 +10806,7 @@ Would you like to use
 <context>
     <name>Rosegarden::AddDotCommand</name>
     <message>
-        <location filename="../../src/commands/edit/AddDotCommand.h" line="+47"/>
+        <location filename="../../src/commands/edit/AddDotCommand.h" line="+40"/>
         <source>&amp;Add Dot</source>
         <translation>付点の追加(&amp;A)</translation>
     </message>
@@ -11061,7 +10814,7 @@ Would you like to use
 <context>
     <name>Rosegarden::AddFingeringMarkCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="+54"/>
+        <location filename="../../src/commands/notation/AddFingeringMarkCommand.cpp" line="+52"/>
         <source>Add Other &amp;Fingering...</source>
         <translation>その他の指使い(&amp;F)...</translation>
     </message>
@@ -11170,7 +10923,7 @@ Would you like to use
 <context>
     <name>Rosegarden::AddMarkCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="+41"/>
+        <location filename="../../src/commands/notation/AddMarkCommand.cpp" line="+37"/>
         <source>S&amp;forzando</source>
         <translation>スフォルツァンド(&amp;f)</translation>
     </message>
@@ -11296,12 +11049,12 @@ Would you like to use
 <context>
     <name>Rosegarden::AddSlashesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddSlashesCommand.h" line="+38"/>
+        <location filename="../../src/commands/notation/AddSlashesCommand.h" line="+41"/>
         <source>Slashes</source>
         <translation>スラッシュ</translation>
     </message>
     <message>
-        <location filename="../../src/commands/notation/AddSlashesCommand.cpp" line="+34"/>
+        <location filename="../../src/commands/notation/AddSlashesCommand.cpp" line="+35"/>
         <source>&amp;None</source>
         <translation>無し(&amp;N)</translation>
     </message>
@@ -11317,12 +11070,12 @@ Would you like to use
 <context>
     <name>Rosegarden::AddTextMarkCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddTextMarkCommand.h" line="+46"/>
+        <location filename="../../src/commands/notation/AddTextMarkCommand.h" line="+57"/>
         <source>Add Te&amp;xt Mark...</source>
         <translation>テキストマークの追加(&amp;x)...</translation>
     </message>
     <message>
-        <location filename="../../src/commands/notation/AddTextMarkCommand.cpp" line="+46"/>
+        <location filename="../../src/commands/notation/AddTextMarkCommand.cpp" line="+42"/>
         <source>Text:</source>
         <translation>テキスト:</translation>
     </message>
@@ -11422,7 +11175,7 @@ Would you like to use
         <translation>オーディオの設定</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+85"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+90"/>
         <source>Audio preview scale</source>
         <translation>オーディオプレビューレベル</translation>
     </message>
@@ -11442,7 +11195,7 @@ Would you like to use
         <translation>録音オーディオファイル</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+6"/>
         <source>16-bit PCM WAV format (smaller files)</source>
         <translation>16bit PCM WAV フォーマット (小さいファイル)</translation>
     </message>
@@ -11452,17 +11205,57 @@ Would you like to use
         <translation>32bit 浮動小数点 WAV フォーマット (高品質)</translation>
     </message>
     <message>
+        <location line="+12"/>
+        <source>Show Audio File Location dialog when saving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location line="+11"/>
+        <source>Default audio location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Audio directory (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Document name directory (./DocumentName)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Document directory (.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Central repository (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Custom audio file location (specify below)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Custom audio file location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>External audio editor</source>
         <translation>外部オーディオエディタ</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+22"/>
         <source>Choose...</source>
         <translation>選択...</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+10"/>
         <source>Create JACK outputs</source>
         <translation>JACK出力の生成</translation>
     </message>
@@ -11507,7 +11300,7 @@ Would you like to use
         <translation>外部オーディオエディタのパス</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+50"/>
         <source>External audio editor &quot;%1&quot; not found or not executable</source>
         <translation>外部オーディオエディタ&#x3000;&quot;%1&quot;が見つからないか実行不能</translation>
     </message>
@@ -11586,9 +11379,58 @@ Would you like to use
     </message>
 </context>
 <context>
+    <name>Rosegarden::AudioFileLocationDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/AudioFileLocationDialog.cpp" line="+44"/>
+        <source>Audio File Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Audio files have been introduced in this session.  Where would you like to save them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>To an &quot;audio&quot; directory where the document is saved.  (%1) (Recommended)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>To a directory named after the document where the document is saved.
+(%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>To the same directory where the document is saved.  (.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>To a central audio file repository.  (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>To a custom audio file location:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Note: You can always move the audio files later by setting the audio location in the document properties.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Use the above selection for all new files and don&apos;t display this dialog again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="+619"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="+615"/>
         <source>Cannot download file %1</source>
         <translation>ファイル %1 がダウンロードできない</translation>
     </message>
@@ -11598,12 +11440,33 @@ Would you like to use
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-8"/>
+        <location line="-251"/>
+        <source>&lt;br /&gt;Audio files will remain in their original location.&lt;br /&gt;(%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <location line="+13"/>
+        <source>Audio File Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-12"/>
+        <source>Cannot create audio path.&lt;br /&gt;%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Audio path is not writable.&lt;br /&gt;%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+218"/>
         <source>Adding audio file...</source>
         <translation type="unfinished">オーディオファイルを追加...</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+22"/>
         <source>Importing audio file...</source>
         <translation>オーディオファイルをインポート中...</translation>
     </message>
@@ -11618,12 +11481,12 @@ Would you like to use
         <translation>オーディオファイルを変換/リサンプリングしてのインポートに失敗しました</translation>
     </message>
     <message>
-        <location line="+213"/>
+        <location line="+146"/>
         <source>Generating audio previews...</source>
         <translation type="unfinished">オーディオプレビューを生成中...</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+30"/>
         <source>Generating audio preview...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11639,32 +11502,45 @@ Would you like to use
 <context>
     <name>Rosegarden::AudioInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+83"/>
         <source>Click to rename this instrument</source>
-        <translation>クリックしてこのインストゥルメントを改名</translation>
+        <translation type="vanished">クリックしてこのインストゥルメントを改名</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Click the button above to rename this instrument</source>
-        <translation>このインストゥルメントを改名するために、最下部の上をクリック</translation>
+        <translation type="vanished">このインストゥルメントを改名するために、最下部の上をクリック</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+87"/>
+        <source>Click to rename this instrument.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+129"/>
-        <location line="+177"/>
+        <location line="+176"/>
         <source>&lt;no synth&gt;</source>
         <translation>&lt;シンセサイザー無し&gt;</translation>
     </message>
     <message>
-        <location line="-174"/>
-        <location line="+178"/>
+        <location line="-173"/>
+        <location line="+177"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;プラグイン無し&gt;</translation>
+    </message>
+    <message>
+        <location line="+141"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter instrument alias:</source>
+        <translation type="unfinished">インストゥルメントの別名を入力:</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::AudioManagerDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="+109"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="+108"/>
         <source>Audio File Manager</source>
         <translation>オーディオファイルマネージャ</translation>
     </message>
@@ -11709,7 +11585,7 @@ Would you like to use
         <translation>ファイル</translation>
     </message>
     <message>
-        <location line="+347"/>
+        <location line="+323"/>
         <source>Save File As</source>
         <translation>名前をつけて保存</translation>
     </message>
@@ -11979,7 +11855,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioPluginDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+82"/>
+        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+81"/>
         <source>Audio Plugin</source>
         <translation>オーディオプラグイン</translation>
     </message>
@@ -12005,7 +11881,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
     <message>
         <location line="+9"/>
-        <location line="+303"/>
+        <location line="+301"/>
         <source>&lt;ports&gt;</source>
         <translation>&lt;ポート&gt;</translation>
     </message>
@@ -12015,7 +11891,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>&lt;id&gt;</translation>
     </message>
     <message>
-        <location line="-281"/>
+        <location line="-279"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
@@ -12035,7 +11911,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>プラグインパラメータの貼り付け</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+14"/>
         <source>Editor</source>
         <translation>エディタ</translation>
     </message>
@@ -12060,13 +11936,13 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>&lt;プラグイン無し&gt;</translation>
     </message>
     <message>
-        <location line="-319"/>
-        <location line="+323"/>
+        <location line="-317"/>
+        <location line="+321"/>
         <source>Select a plugin from this list</source>
         <translation>この一覧からプラグインを選択</translation>
     </message>
     <message>
-        <location line="-312"/>
+        <location line="-310"/>
         <source>Bypass this plugin</source>
         <translation>このプラグインをバイパス</translation>
     </message>
@@ -12097,7 +11973,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>工場既定値にプラグインの制御をリセット</translation>
     </message>
     <message>
-        <location line="+303"/>
+        <location line="+301"/>
         <source>&lt;qt&gt;&lt;p&gt;This plugin has too many controls to edit here.&lt;/p&gt;&lt;p&gt;Use the external editor, if available.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;このプラグインにはここで編集できる以上のコントロールがあります。&lt;/p&gt;&lt;p&gt;可能であれば、外部のエディタを使ってください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -12173,7 +12049,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioPropertiesPage</name>
     <message>
-        <location filename="../../src/gui/configuration/AudioPropertiesPage.h" line="+49"/>
+        <location filename="../../src/gui/configuration/AudioPropertiesPage.h" line="+46"/>
         <source>Audio</source>
         <translation>オーディオ</translation>
     </message>
@@ -12183,44 +12059,100 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>オーディオの設定</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+62"/>
         <source>Audio file path:</source>
-        <translation>オーディオファイルパス:</translation>
+        <translation type="vanished">オーディオファイルパス:</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Choose...</source>
-        <translation>選択...</translation>
+        <translation type="vanished">選択...</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+63"/>
+        <source>Audio file location:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Audio directory (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Document name directory (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Document directory (.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Central repository (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Custom audio file location (specify below)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <location line="+22"/>
+        <source>Save document first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-15"/>
+        <source>Custom audio file location:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <source>Disk space remaining:</source>
         <translation>ディスクスペースの残り:</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <source>Equivalent minutes of 16-bit stereo:</source>
-        <translation>16ビットステレオの時分と同一:</translation>
+        <location line="+7"/>
+        <source>Recording time:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+81"/>
+        <source>%1 MiB out of %2 MiB (%3% used)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>%1 minutes at %3Hz 16-bit stereo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Change Audio Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Document&apos;s audio files will now be moved to the new location.&lt;br /&gt;Please note that this will force a save of the file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equivalent minutes of 16-bit stereo:</source>
+        <translation type="vanished">16ビットステレオの時分と同一:</translation>
+    </message>
+    <message>
+        <location line="-136"/>
         <source>Modify audio path</source>
         <translation>パスの変更</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>%1 kB out of %2 kB (%3% kB used)</source>
-        <translation>%1 kB out of %2 kB (%3% kB 使用)</translation>
+        <translation type="vanished">%1 kB out of %2 kB (%3% kB 使用)</translation>
     </message>
     <message>
-        <location line="+22"/>
-        <source>minutes at</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
         <source>Audio Recording Path</source>
-        <translation>オーディオ録音パス</translation>
+        <translation type="vanished">オーディオ録音パス</translation>
     </message>
 </context>
 <context>
@@ -12457,7 +12389,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AutoBeamCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AutoBeamCommand.h" line="+48"/>
+        <location filename="../../src/commands/notation/AutoBeamCommand.h" line="+63"/>
         <source>&amp;Auto-Beam</source>
         <translation>自動連桁(&amp;A)</translation>
     </message>
@@ -12465,7 +12397,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::BankEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+99"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+98"/>
         <source>Manage MIDI Banks and Programs</source>
         <translation>MIDIバンクとプログラムの管理</translation>
     </message>
@@ -12686,7 +12618,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::BeamCommand</name>
     <message>
-        <location filename="../../src/commands/notation/BeamCommand.h" line="+42"/>
+        <location filename="../../src/commands/notation/BeamCommand.h" line="+41"/>
         <source>&amp;Beam Group</source>
         <translation>連桁(&amp;B)</translation>
     </message>
@@ -12717,7 +12649,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::BreakCommand</name>
     <message>
-        <location filename="../../src/commands/notation/BreakCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/BreakCommand.h" line="+41"/>
         <source>&amp;Unbeam</source>
         <translation>連桁解除(&amp;U)</translation>
     </message>
@@ -12733,7 +12665,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ChangeSlurPositionCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ChangeSlurPositionCommand.h" line="+47"/>
+        <location filename="../../src/commands/notation/ChangeSlurPositionCommand.h" line="+49"/>
         <source>Slur &amp;Above</source>
         <translation>上にスラー(&amp;A)</translation>
     </message>
@@ -12746,7 +12678,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ChangeStemsCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ChangeStemsCommand.h" line="+47"/>
+        <location filename="../../src/commands/notation/ChangeStemsCommand.h" line="+55"/>
         <source>Stems &amp;Up</source>
         <translation>符幹を上に(&amp;U)</translation>
     </message>
@@ -12759,15 +12691,14 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ChangeStyleCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ChangeStyleCommand.h" line="+49"/>
         <source>Change &amp;Note Style</source>
-        <translation>音符スタイルの変更(&amp;N)</translation>
+        <translation type="vanished">音符スタイルの変更(&amp;N)</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::ChangeTiePositionCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ChangeTiePositionCommand.h" line="+44"/>
+        <location filename="../../src/commands/notation/ChangeTiePositionCommand.h" line="+56"/>
         <source>Tie &amp;Above</source>
         <translation>上にタイ(&amp;A)</translation>
     </message>
@@ -12780,12 +12711,12 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ChangeVelocityCommand</name>
     <message>
-        <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="+45"/>
+        <location filename="../../src/commands/edit/ChangeVelocityCommand.cpp" line="+78"/>
         <source>&amp;Increase Velocity</source>
         <translation>ベロシティの増加(&amp;I)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>&amp;Reduce Velocity</source>
         <translation>ベロシティの減少(&amp;R)</translation>
     </message>
@@ -12907,7 +12838,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ChordNameRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+90"/>
+        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+61"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;和音名ルーラ。このルーラは、ハーモニクスを解析し、どの和音がコンポジションに含まれるかを推測しようと試みます。これらの和音は印刷も操作もできず、あなたへの情報として参照のみできます。&lt;/p&gt;&lt;p&gt;これをOn/Offするには&lt;b&gt;表示 -&gt; ルーラ&lt;/b&gt;メニューで行ってください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -12915,9 +12846,8 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ClearTriggersCommand</name>
     <message>
-        <location filename="../../src/commands/edit/ClearTriggersCommand.h" line="+46"/>
         <source>&amp;Clear Triggers</source>
-        <translation>トリガをクリア(&amp;C)</translation>
+        <translation type="vanished">トリガをクリア(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -13059,7 +12989,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::CollapseNotesCommand</name>
     <message>
-        <location filename="../../src/commands/edit/CollapseNotesCommand.h" line="+46"/>
+        <location filename="../../src/commands/edit/CollapseNotesCommand.h" line="+40"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>同じ音程の音符をつなげる (&amp;E)</translation>
     </message>
@@ -13075,7 +13005,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ColorCombo</name>
     <message>
-        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+82"/>
+        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+84"/>
         <source>Default</source>
         <translation type="unfinished">既定値</translation>
     </message>
@@ -13159,41 +13089,37 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::CommandHistory</name>
     <message>
-        <location filename="../../src/document/CommandHistory.cpp" line="+47"/>
-        <location line="+7"/>
-        <location line="+4"/>
+        <location filename="../../src/document/CommandHistory.cpp" line="+48"/>
+        <location line="+5"/>
         <source>&amp;Undo</source>
         <translation>元に戻す(&amp;U)</translation>
     </message>
     <message>
-        <location line="-9"/>
         <source>Ctrl+Z</source>
-        <translation>Ctrl+Z</translation>
+        <translation type="vanished">Ctrl+Z</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-3"/>
         <source>Undo the last editing operation</source>
         <translation>最後の編集動作を元に戻す</translation>
     </message>
     <message>
-        <location line="+14"/>
-        <location line="+7"/>
-        <location line="+4"/>
+        <location line="+9"/>
+        <location line="+5"/>
         <source>Re&amp;do</source>
         <translation>リドゥ(&amp;d)</translation>
     </message>
     <message>
-        <location line="-9"/>
         <source>Ctrl+Shift+Z</source>
-        <translation>Ctrl+Shift+Z</translation>
+        <translation type="vanished">Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-3"/>
         <source>Redo the last operation that was undone</source>
         <translation>最後に戻した編集作業をもう一度行う</translation>
     </message>
     <message>
-        <location line="+286"/>
+        <location line="+265"/>
         <source>Nothing to undo</source>
         <translation>アンドゥできません</translation>
     </message>
@@ -13203,14 +13129,14 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>リドゥできません</translation>
     </message>
     <message>
-        <location line="+14"/>
-        <location line="+26"/>
+        <location line="+10"/>
+        <location line="+37"/>
         <source>&amp;Undo %1</source>
         <translation>アンドゥ(&amp;U) %1</translation>
     </message>
     <message>
-        <location line="-26"/>
-        <location line="+27"/>
+        <location line="-37"/>
+        <location line="+38"/>
         <source>Re&amp;do %1</source>
         <translation>%1のリドゥ(&amp;d)</translation>
     </message>
@@ -13485,12 +13411,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
     <message>
         <location line="+2"/>
-        <location line="+243"/>
+        <location line="+245"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location line="-241"/>
+        <location line="-243"/>
         <source>Add a Control Parameter to the Studio</source>
         <translation>スタジオに対するコントロールパラメータの追加</translation>
     </message>
@@ -13505,7 +13431,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>コントロールパラメータエディタを閉じる</translation>
     </message>
     <message>
-        <location line="+96"/>
+        <location line="+98"/>
         <source>&lt;default&gt;</source>
         <translation>&lt;既定値&gt;</translation>
     </message>
@@ -13607,7 +13533,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+494"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+498"/>
         <source>Velocity</source>
         <translation>ベロシティ(Velocity)</translation>
     </message>
@@ -13623,7 +13549,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+301"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+305"/>
         <source>Unsupported Event Type</source>
         <translation>未サポートのイベントタイプ</translation>
     </message>
@@ -13651,12 +13577,13 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::CopyCommand</name>
     <message>
-        <location filename="../../src/commands/edit/CopyCommand.h" line="+63"/>
+        <location filename="../../src/commands/edit/CopyCommand.h" line="+67"/>
         <source>&amp;Copy</source>
         <translation>コピー(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../src/commands/edit/CopyCommand.cpp" line="+41"/>
+        <location filename="../../src/commands/edit/CopyCommand.cpp" line="+44"/>
+        <location line="+29"/>
         <source>(excerpt)</source>
         <translation>(例外)</translation>
     </message>
@@ -13674,7 +13601,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::CountdownDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="+49"/>
+        <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="+48"/>
         <source>Recording...</source>
         <translation>録音...</translation>
     </message>
@@ -13689,7 +13616,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>停止</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+49"/>
         <source>Just how big is your hard disk?</source>
         <translation>ハードディスクの容量はどのくらいですか?</translation>
     </message>
@@ -13731,7 +13658,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::CutCommand</name>
     <message>
-        <location filename="../../src/commands/edit/CutCommand.h" line="+51"/>
+        <location filename="../../src/commands/edit/CutCommand.h" line="+55"/>
         <source>Cu&amp;t</source>
         <translation>カット(&amp;t)</translation>
     </message>
@@ -13747,7 +13674,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::CutToTriggerSegmentCommand</name>
     <message>
-        <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+50"/>
+        <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+52"/>
         <source>Make Ornament</source>
         <translation type="unfinished">オルナメントの作成</translation>
     </message>
@@ -13755,7 +13682,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::CycleSlashesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="+37"/>
+        <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="+39"/>
         <source>Cycle Slashes</source>
         <translation>スラッシュの切り替え</translation>
     </message>
@@ -13763,7 +13690,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::DeCounterpointCommand</name>
     <message>
-        <location filename="../../src/commands/notation/DeCounterpointCommand.h" line="+51"/>
+        <location filename="../../src/commands/notation/DeCounterpointCommand.h" line="+41"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
         <translation>和音上の音符を分割してタイでつなぐ(&amp;C)</translation>
     </message>
@@ -14120,7 +14047,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::EditViewBase</name>
     <message>
-        <location filename="../../src/gui/general/EditViewBase.cpp" line="+206"/>
+        <location filename="../../src/gui/general/EditViewBase.cpp" line="+203"/>
         <source>Toggle the statusbar...</source>
         <translation>ステータスバーをON/OFF...</translation>
     </message>
@@ -14145,7 +14072,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>セグメントのデュレーションを設定</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+49"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt; 無題 &gt;</translation>
     </message>
@@ -14168,7 +14095,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::EraseCommand</name>
     <message>
-        <location filename="../../src/commands/edit/EraseCommand.h" line="+45"/>
+        <location filename="../../src/commands/edit/EraseCommand.cpp" line="+36"/>
         <source>&amp;Erase</source>
         <translation>消去(&amp;E)</translation>
     </message>
@@ -14371,31 +14298,41 @@ This could cause problems if it overrides a different computed value later on.</
         <translation>デュレーション:</translation>
     </message>
     <message>
-        <location line="+12"/>
-        <location line="+11"/>
+        <location line="+21"/>
+        <location line="+8"/>
         <location line="+8"/>
         <source>include</source>
         <translation>含む</translation>
     </message>
     <message>
-        <location line="-18"/>
-        <location line="+11"/>
+        <location line="-15"/>
+        <location line="+8"/>
         <location line="+8"/>
         <source>exclude</source>
         <translation>含まない</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="-32"/>
         <source>Use notation duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+2"/>
+        <source>Use Notation Editor note durations, not actual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Select rests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+2"/>
+        <source>Select rests in addition to notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+37"/>
         <location line="+18"/>
         <source>edit</source>
         <translation>編集</translation>
@@ -14439,7 +14376,7 @@ This could cause problems if it overrides a different computed value later on.</
         <translation>最短</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+114"/>
         <source>Lowest pitch</source>
         <translation>最低音</translation>
     </message>
@@ -14482,7 +14419,7 @@ This could cause problems if it overrides a different computed value later on.</
 <context>
     <name>Rosegarden::EventQuantizeCommand</name>
     <message>
-        <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="+110"/>
+        <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="+112"/>
         <source>Heuristic Notation &amp;Quantize</source>
         <translation>ヒューリスティック作譜クウォンタイズ(&amp;Q)</translation>
     </message>
@@ -14775,34 +14712,50 @@ This could cause problems if it overrides a different computed value later on.</
 <context>
     <name>Rosegarden::FileLocateDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="+50"/>
+        <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="+45"/>
         <source>Locate audio file</source>
         <translation>オーディオファイルの配置</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Can&apos;t find file &quot;%1&quot;.
 Would you like to try and locate this file or skip it?</source>
-        <translation>ファイル &quot;%1&quot; が見つかりません。
+        <translation type="vanished">ファイル &quot;%1&quot; が見つかりません。
 ファイルの場所を探しますか? それともスキップしますか?</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>&amp;Skip</source>
-        <translation>スキップ(&amp;S)</translation>
+        <translation type="vanished">スキップ(&amp;S)</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Skip &amp;All</source>
-        <translation>すべてをスキップ(&amp;A)</translation>
+        <translation type="vanished">すべてをスキップ(&amp;A)</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>&amp;Locate</source>
-        <translation>場所(&amp;L)</translation>
+        <translation type="vanished">場所(&amp;L)</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>&lt;p&gt;Could not find audio file:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%1&lt;/p&gt;&lt;p&gt;at expected audio file location:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%2&lt;/p&gt;&lt;p&gt;You can either cancel the file open and move the files yourself or locate the missing file and adjust the audio file location to match.&lt;/p&gt;&lt;p&gt;Which would you like to do?&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+16"/>
+        <source>&amp;Locate Missing File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>&amp;Skip This Audio File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>&amp;Cancel File Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>Select an Audio File</source>
         <translation>オーディオファイルの選択</translation>
     </message>
@@ -14812,7 +14765,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>要求されたファイル</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>WAV files</source>
         <translation>WAVファイル</translation>
     </message>
@@ -14912,7 +14865,7 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::FixNotationQuantizeCommand</name>
     <message>
-        <location filename="../../src/commands/notation/FixNotationQuantizeCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/FixNotationQuantizeCommand.h" line="+41"/>
         <source>Fi&amp;x Notation Quantization</source>
         <translation>作譜クウォンタイズを固定(&amp;X)</translation>
     </message>
@@ -15077,7 +15030,17 @@ Would you like to try and locate this file or skip it?</source>
         <translation>JACKトランスポートを使用</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+22"/>
+        <source>Stop playback at end of last segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Advanced Looping (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
         <source>Sequencer status</source>
         <translation>シーケンサステータス</translation>
     </message>
@@ -15122,17 +15085,22 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+41"/>
+        <source>Okular (KDE)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
         <source>HPLIP (HP Printers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+137"/>
+        <location line="+144"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-537"/>
+        <location line="-570"/>
         <source>Behavior</source>
         <translation>振る舞い</translation>
     </message>
@@ -15141,7 +15109,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="vanished">Thornスタイルの使用</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+271"/>
         <source>&lt;qt&gt;When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;チェックすると、次回Rosegardenを起動したとき、RosegardenはThornのルックアンドフィールを使い、それ以外は、既定値のシステム設定を使います。&lt;/qt&gt;</translation>
     </message>
@@ -15190,7 +15158,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="vanished">HPLIP (Qt 4)</translation>
     </message>
     <message>
-        <location line="+148"/>
+        <location line="+155"/>
         <location line="+5"/>
         <location line="+5"/>
         <source>Rosegarden</source>
@@ -15206,7 +15174,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>表示形式の変更を反映させるためにはRosegardenを再起動する必要がある。</translation>
     </message>
     <message>
-        <location line="-273"/>
+        <location line="-280"/>
         <source>Note name style</source>
         <translation>音符名スタイル</translation>
     </message>
@@ -15267,12 +15235,11 @@ Would you like to try and locate this file or skip it?</source>
         <translation>PDFビューワ</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Okular (KDE 4.x)</source>
-        <translation>Okular (KDE 4.x)</translation>
+        <translation type="vanished">Okular (KDE 4.x)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+8"/>
         <source>Evince (GNOME)</source>
         <translation>Evince (GNOME)</translation>
     </message>
@@ -15317,7 +15284,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>外部アプリケーション</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+184"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>Rosegardenを再起動するまでメインウィンドウ背景のテクスチャは変更されません。</translation>
     </message>
@@ -15795,7 +15762,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::IncrementDisplacementsCommand</name>
     <message>
-        <location filename="../../src/commands/notation/IncrementDisplacementsCommand.h" line="+54"/>
+        <location filename="../../src/commands/notation/IncrementDisplacementsCommand.h" line="+65"/>
         <source>Fine Reposition</source>
         <translation>高解像度</translation>
     </message>
@@ -15850,14 +15817,12 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::InstrumentAliasButton</name>
     <message>
-        <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="+54"/>
         <source>Rosegarden</source>
-        <translation>Rosegarden</translation>
+        <translation type="vanished">Rosegarden</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Enter instrument alias:</source>
-        <translation>インストゥルメントの別名を入力:</translation>
+        <translation type="vanished">インストゥルメントの別名を入力:</translation>
     </message>
 </context>
 <context>
@@ -15887,7 +15852,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::InterpretCommand</name>
     <message>
-        <location filename="../../src/commands/notation/InterpretCommand.h" line="+65"/>
+        <location filename="../../src/commands/notation/InterpretCommand.h" line="+57"/>
         <source>&amp;Interpret...</source>
         <translation>解析(&amp;I)...</translation>
     </message>
@@ -16139,7 +16104,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::InvertCommand</name>
     <message>
-        <location filename="../../src/commands/edit/InvertCommand.h" line="+46"/>
+        <location filename="../../src/commands/edit/InvertCommand.h" line="+40"/>
         <source>&amp;Invert</source>
         <translation>反転(&amp;I)</translation>
     </message>
@@ -16272,7 +16237,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+702"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+824"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -16314,7 +16279,7 @@ Would you like to use
         <translation type="unfinished">選択されたセグメントのエクスポートに失敗しました。 セグメントが１つも選択されていません。</translation>
     </message>
     <message>
-        <location line="+1915"/>
+        <location line="+1912"/>
         <source>warning: overlong bar truncated here</source>
         <translation type="unfinished">警告:長すぎる小節線はここで打ち切られました</translation>
     </message>
@@ -16845,8 +16810,8 @@ Would you like to use
         <translation type="vanished">&lt;qt&gt;&lt;p&gt;クリックとドラッグで再生ポインタを移動。&lt;/p&gt;&lt;p&gt;シフトしながらクリックとドラッグでループまたは編集領域を設定。&lt;/p&gt;&lt;p&gt;シフトしながらクリックでループまたは編集領域をクリヤ。&lt;/p&gt;&lt;p&gt;コントロールを押しながらクリックとドラッグで拍子に合わせて再生ポインタを移動。&lt;/p&gt;&lt;p&gt;ダブルクリックで再生を開始。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+74"/>
-        <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
+        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+78"/>
+        <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to toggle the range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -17160,7 +17125,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>&lt;qt&gt;スタジオ中で有効ならば、上記のプログラムからバリエーションを設定&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-44"/>
+        <location line="-45"/>
         <source>&lt;qt&gt;Set the MIDI bank from which to select programs&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;選択されたプログラムからMIDIバンクを設定&lt;/qt&gt;</translation>
     </message>
@@ -17175,22 +17140,22 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>&lt;qt&gt;&lt;p&gt;これをチェックすると、Rosegardenに、これはパーカッションインストゥルメントであると通知します。   これは、スタジオ中で定義できる、任意のパーカッションキーマップとドラムキットにアクセスできるようにします&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+81"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, allocate channel automatically; &lt;i&gt;Fixed&lt;/i&gt;, fix channel to instrument number&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;&lt;i&gt;自動&lt;/i&gt;, 自動的にチャンネルを割り当て; &lt;i&gt;固定&lt;/i&gt;, インストゥルメント番号にチャンネルを固定&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-74"/>
+        <location line="-75"/>
         <source>Bank</source>
         <translation>バンク</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+52"/>
         <source>Variation</source>
         <translation>バリエーション</translation>
     </message>
     <message>
-        <location line="-22"/>
+        <location line="-23"/>
         <source>Program</source>
         <translation>プログラム</translation>
     </message>
@@ -17210,7 +17175,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>&lt;qt&gt;Send bank select for variation&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17248,7 +17213,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MakeAccidentalsCautionaryCommand</name>
     <message>
-        <location filename="../../src/commands/notation/MakeAccidentalsCautionaryCommand.cpp" line="+54"/>
+        <location filename="../../src/commands/notation/MakeAccidentalsCautionaryCommand.cpp" line="+52"/>
         <source>Use &amp;Cautionary Accidentals</source>
         <translation>括弧付き臨時符号の使用(&amp;C)</translation>
     </message>
@@ -17269,7 +17234,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MakeNotesViableCommand</name>
     <message>
-        <location filename="../../src/commands/notation/MakeNotesViableCommand.h" line="+51"/>
+        <location filename="../../src/commands/notation/MakeNotesViableCommand.h" line="+42"/>
         <source>Tie Notes at &amp;Barlines</source>
         <translation>小節線前後で音符をタイでつなぐ(&amp;B)</translation>
     </message>
@@ -17466,8 +17431,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MarkParallelCommand</name>
     <message>
-        <location filename="../../src/commands/notation/MarkParallelCommand.cpp" line="+44"/>
-        <location filename="../../src/commands/notation/MarkParallelCommand.h" line="+52"/>
+        <location filename="../../src/commands/notation/MarkParallelCommand.h" line="+45"/>
         <source>Mark Parallel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17475,7 +17439,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MarkerEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+80"/>
+        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+79"/>
         <source>Manage Markers</source>
         <translation>マーカーの管理</translation>
     </message>
@@ -17531,12 +17495,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     </message>
     <message>
         <location line="+2"/>
-        <location line="+270"/>
+        <location line="+268"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location line="-268"/>
+        <location line="-266"/>
         <source>Add a Marker</source>
         <translation>マーカーの追加</translation>
     </message>
@@ -17556,7 +17520,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>マーカーエディタを閉じる</translation>
     </message>
     <message>
-        <location line="+161"/>
+        <location line="+159"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;なし&gt;</translation>
     </message>
@@ -17614,12 +17578,12 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MaskTriggerCommand</name>
     <message>
-        <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="+35"/>
+        <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="+52"/>
         <source>&amp;Unmask Ornament</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>&amp;Mask Ornament</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17678,7 +17642,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixMover</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+201"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+200"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>SHIFTキーを押しながらで拍グリッドにスナップを無効にできます</translation>
     </message>
@@ -17726,12 +17690,12 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixPainter</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+193"/>
+        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+204"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>SHIFTキーを押しながらで拍グリッドにスナップを無効にできます</translation>
     </message>
     <message>
-        <location line="+150"/>
+        <location line="+153"/>
         <source>Click and drag to draw a note; Shift to avoid snapping to grid</source>
         <translation>クリックしてドラッグで音符を置きます; SHIFTを押しながらでグリッドのスナップを無効にできます</translation>
     </message>
@@ -17752,7 +17716,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixResizer</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="+116"/>
+        <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="+124"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>SHIFTキーを押しながらで拍グリッドにスナップを無効にできます</translation>
     </message>
@@ -17780,8 +17744,8 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixSelector</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="+420"/>
-        <location line="+142"/>
+        <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="+444"/>
+        <location line="+143"/>
         <source>Click and drag to select; middle-click and drag to draw new note</source>
         <translation>クリックしてドラッグすると選択; 中ボタンでクリックしてドラッグすると音符を描画</translation>
     </message>
@@ -17831,7 +17795,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">ベロシティ変更: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="+221"/>
+        <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="+228"/>
         <source>Velocity change: %1   Velocity: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17864,7 +17828,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1428"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1496"/>
         <source>Unknown note insert action %1</source>
         <translation>不明な音符の挿入動作 %1</translation>
     </message>
@@ -17887,7 +17851,7 @@ Double-click to open the marker editor.</source>
         </translation>
     </message>
     <message>
-        <location line="-1290"/>
+        <location line="-1359"/>
         <source> Grid: </source>
         <translation>グリッド:</translation>
     </message>
@@ -17912,7 +17876,7 @@ Double-click to open the marker editor.</source>
         <translation>小節</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+23"/>
         <source> Velocity: </source>
         <translation> ベロシティ:</translation>
     </message>
@@ -17927,12 +17891,12 @@ Double-click to open the marker editor.</source>
         <translation>Off</translation>
     </message>
     <message>
-        <location line="+402"/>
+        <location line="+455"/>
         <source>Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+487"/>
+        <location line="+501"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
@@ -17979,7 +17943,7 @@ Double-click to open the marker editor.</source>
         <translation>半音の数で: </translation>
     </message>
     <message>
-        <location line="-325"/>
+        <location line="-339"/>
         <source>Trigger Segment</source>
         <translation>トリガーセグメント</translation>
     </message>
@@ -17989,7 +17953,7 @@ Double-click to open the marker editor.</source>
         <translation>トリガの削除</translation>
     </message>
     <message>
-        <location line="-789"/>
+        <location line="-842"/>
         <source>Matrix</source>
         <translation>マトリクス</translation>
     </message>
@@ -17997,7 +17961,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-874"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-882"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
@@ -18017,7 +17981,7 @@ Double-click to open the marker editor.</source>
         <translation>ズームをリセット</translation>
     </message>
     <message>
-        <location line="+1188"/>
+        <location line="+1218"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt; 無題 &gt;</translation>
     </message>
@@ -18027,7 +17991,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1264"/>
+        <location line="-1294"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;アクティブなセグメントを変更するためにホイールを回転&lt;/qt&gt;</translation>
     </message>
@@ -18211,7 +18175,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MidiMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+131"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+130"/>
         <source>MIDI Mixer</source>
         <translation>MIDIミキサ</translation>
     </message>
@@ -18331,7 +18295,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MoveAcrossSegmentsCommand</name>
     <message>
-        <location filename="../../src/commands/edit/MoveAcrossSegmentsCommand.cpp" line="+65"/>
+        <location filename="../../src/commands/edit/MoveAcrossSegmentsCommand.cpp" line="+66"/>
         <source>&amp;Move Events to Other Segment</source>
         <translation>イベントを他のセグメントに移動(&amp;M)</translation>
     </message>
@@ -18862,7 +18826,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">譜表 %1 をポジショニング...</translation>
     </message>
     <message>
-        <location line="+365"/>
+        <location line="+374"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -19114,7 +19078,7 @@ This is a bug (the program would previously have crashed by now)</source>
         </translation>
     </message>
     <message>
-        <location line="+181"/>
+        <location line="+221"/>
         <source>  Font:  </source>
         <translation>  フォント:  </translation>
     </message>
@@ -19134,12 +19098,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>  間隔:  </translation>
     </message>
     <message>
-        <location line="-111"/>
+        <location line="-145"/>
         <source>  No selection </source>
         <translation> 選択なし </translation>
     </message>
     <message>
-        <location line="+2702"/>
+        <location line="+2754"/>
         <source>Chord</source>
         <translation>コード</translation>
     </message>
@@ -19156,7 +19120,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-2300"/>
+        <location line="-2318"/>
         <source>Unknown spacing action %1</source>
         <translation>不明な間隔操作 %1</translation>
     </message>
@@ -19181,7 +19145,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>Lilypondプレビューオプション</translation>
     </message>
     <message>
-        <location line="+302"/>
+        <location line="+337"/>
         <source>Clipboard is empty</source>
         <translation>クリップボードは空です</translation>
     </message>
@@ -19191,27 +19155,27 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>一か所に複数のセグメントは貼り付けできません</translation>
     </message>
     <message>
-        <location line="-813"/>
+        <location line="-888"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location line="+318"/>
+        <location line="+324"/>
         <source>  %n event(s) selected </source>
         <translation>
             <numerusform>  %n イベントが選択された</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location line="+118"/>
         <location line="+177"/>
         <location line="+52"/>
         <location line="+57"/>
         <location line="+26"/>
         <location line="+25"/>
-        <location line="+105"/>
+        <location line="+140"/>
         <location line="+58"/>
-        <location line="+886"/>
+        <location line="+869"/>
         <location line="+81"/>
         <location line="+730"/>
         <location line="+1054"/>
@@ -19219,7 +19183,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3064"/>
+        <location line="-3082"/>
         <source>Printing with LilyPond...</source>
         <translation>LilyPondで印刷中...</translation>
     </message>
@@ -19234,7 +19198,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>&lt;qt&gt;&lt;p&gt;LilyPondエクスポートのための一時ファイルをオープンするのに失敗しました。&lt;/p&gt;&lt;p&gt;これはおそらく&lt;pre&gt;%1&lt;/pre&gt;上のディスクスペースがないことを意味しています。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+216"/>
+        <location line="+251"/>
         <location line="+58"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
@@ -19251,12 +19215,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>この位置で貼り付けできません。</translation>
     </message>
     <message>
-        <location line="+2836"/>
+        <location line="+2819"/>
         <source>Move Events to Staff Above</source>
         <translation>イベントを上の五線に移動</translation>
     </message>
     <message>
-        <location line="-2691"/>
+        <location line="-2671"/>
         <source>Raising velocities...</source>
         <translation>ベロシティの増加中...</translation>
     </message>
@@ -19266,7 +19230,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>ベロシティの低減中...</translation>
     </message>
     <message>
-        <location line="+1845"/>
+        <location line="+1825"/>
         <source>Notation</source>
         <translation type="unfinished">譜面</translation>
     </message>
@@ -19461,7 +19425,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1455"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1473"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
@@ -19486,7 +19450,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>トラックヘッダのクローズ</translation>
     </message>
     <message>
-        <location line="+1465"/>
+        <location line="+1483"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt; 無題 &gt;</translation>
     </message>
@@ -19718,7 +19682,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchBendSequenceDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+133"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+151"/>
         <source>Preset</source>
         <translation>プリセット</translation>
     </message>
@@ -19729,12 +19693,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     </message>
     <message>
         <location line="-62"/>
-        <location line="+760"/>
+        <location line="+763"/>
         <source>%1 Sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-747"/>
+        <location line="-750"/>
         <source>Replacement mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19945,12 +19909,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+784"/>
+        <location line="+787"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>Pre Bend</source>
         <translation>プリベンド</translation>
     </message>
@@ -20136,6 +20100,14 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+19"/>
         <source>Pitch estimate method</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::PlaceControllersCommand</name>
+    <message>
+        <location filename="../../src/commands/edit/PlaceControllersCommand.cpp" line="+59"/>
+        <source>Place Controllers</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -20812,7 +20784,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RemoveFingeringMarksCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RemoveFingeringMarksCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RemoveFingeringMarksCommand.h" line="+41"/>
         <source>&amp;Remove Fingerings</source>
         <translation>指使い削除(&amp;R)</translation>
     </message>
@@ -20828,7 +20800,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RemoveMarksCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="+41"/>
         <source>&amp;Remove All Marks</source>
         <translation>すべてのマークを削除(&amp;R)</translation>
     </message>
@@ -20836,7 +20808,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RemoveNotationQuantizeCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RemoveNotationQuantizeCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RemoveNotationQuantizeCommand.h" line="+41"/>
         <source>Remo&amp;ve Notation Quantization</source>
         <translation>作譜クウォンタイズを除去(&amp;V)</translation>
     </message>
@@ -20907,7 +20879,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::ResetDisplacementsCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ResetDisplacementsCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/ResetDisplacementsCommand.h" line="+42"/>
         <source>&amp;Restore Positions</source>
         <translation>計算した位置を復帰(&amp;R)</translation>
     </message>
@@ -20915,7 +20887,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RespellCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RespellCommand.cpp" line="+40"/>
+        <location filename="../../src/commands/notation/RespellCommand.cpp" line="+39"/>
         <source>Respell with %1</source>
         <translation>%1 で再描画</translation>
     </message>
@@ -20973,7 +20945,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RestoreSlursCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RestoreSlursCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RestoreSlursCommand.h" line="+41"/>
         <source>&amp;Restore Slur Positions</source>
         <translation>スラー位置の復帰(&amp;R)</translation>
     </message>
@@ -20981,7 +20953,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RestoreStemsCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RestoreStemsCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RestoreStemsCommand.h" line="+41"/>
         <source>&amp;Restore Stems</source>
         <translation>符幹の復帰(&amp;R)</translation>
     </message>
@@ -20989,7 +20961,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RestoreTiesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/RestoreTiesCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/RestoreTiesCommand.h" line="+41"/>
         <source>&amp;Restore Tie Positions</source>
         <translation>タイ位置を復帰(&amp;R)</translation>
     </message>
@@ -20997,7 +20969,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RetrogradeCommand</name>
     <message>
-        <location filename="../../src/commands/edit/RetrogradeCommand.h" line="+46"/>
+        <location filename="../../src/commands/edit/RetrogradeCommand.h" line="+40"/>
         <source>&amp;Retrograde</source>
         <translation>逆行(&amp;R)</translation>
     </message>
@@ -21005,7 +20977,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RetrogradeInvertCommand</name>
     <message>
-        <location filename="../../src/commands/edit/RetrogradeInvertCommand.h" line="+46"/>
+        <location filename="../../src/commands/edit/RetrogradeInvertCommand.h" line="+40"/>
         <source>Re&amp;trograde Invert</source>
         <translation>逆行して反転(&amp;t)</translation>
     </message>
@@ -21013,7 +20985,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+292"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+289"/>
         <source>Reading file...</source>
         <translation type="unfinished">ファイルを読み込み中...</translation>
     </message>
@@ -21033,13 +21005,19 @@ There may be some incompatibilities with the file format.</source>
     </message>
     <message>
         <location line="+0"/>
+        <location line="+2275"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+1430"/>
+        <location line="-874"/>
         <source>Loading plugins...</source>
         <translation>プラグインを読み込み中...</translation>
+    </message>
+    <message>
+        <location line="+875"/>
+        <source>Skipping a file will remove its audio segments from the composition.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -21072,15 +21050,15 @@ There may be some incompatibilities with the file format.</source>
         <location line="+63"/>
         <location line="+32"/>
         <location line="+343"/>
-        <location line="+643"/>
+        <location line="+646"/>
         <location line="+11"/>
         <location line="+22"/>
         <location line="+3"/>
         <location line="+35"/>
         <location line="+8"/>
-        <location line="+27"/>
+        <location line="+25"/>
         <location line="+11"/>
-        <location line="+982"/>
+        <location line="+983"/>
         <location line="+16"/>
         <location line="+223"/>
         <source>Rosegarden</source>
@@ -21091,7 +21069,7 @@ There may be some incompatibilities with the file format.</source>
         <translation type="obsolete">ドキュメントを %1 に保存できません</translation>
     </message>
     <message numerus="yes">
-        <location line="-2537"/>
+        <location line="-2539"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>未保存のセッション中で録音された %n オーディオファイルを削除しますか?</numerusform>
@@ -21146,9 +21124,8 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>Rosegardenファイルを開けません</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Error when parsing file &apos;%1&apos;: &quot;%2&quot;</source>
-        <translation>ファイル &apos;%1&apos;を解釈中にエラー:&quot;%2&quot;</translation>
+        <translation type="vanished">ファイル &apos;%1&apos;を解釈中にエラー:&quot;%2&quot;</translation>
     </message>
     <message>
         <source>Generating audio previews...</source>
@@ -21159,7 +21136,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="vanished">マージ</translation>
     </message>
     <message>
-        <location line="+508"/>
+        <location line="+520"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21179,7 +21156,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>一時出力ファイル &apos;%1&apos; を目的のファイル &apos;%2&apos; に改名するのに失敗しました</translation>
     </message>
     <message>
-        <location line="+1744"/>
+        <location line="+1746"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -21224,23 +21201,28 @@ editing this file, you may press Ignore to open the file.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1660"/>
+        <location line="-1662"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>&apos;%1&apos;に書き込み中にエラー</translation>
     </message>
     <message>
         <location line="-755"/>
-        <location line="+2180"/>
+        <location line="+2182"/>
         <source>Cancel</source>
         <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
-        <location line="-1376"/>
+        <location line="-2119"/>
+        <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+741"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
         <translation>書き込む%1ファイルがオープンできない</translation>
     </message>
     <message>
-        <location line="+280"/>
+        <location line="+283"/>
         <location line="+11"/>
         <source>File load cancelled</source>
         <translation>ロードを中止しました</translation>
@@ -21266,12 +21248,11 @@ editing this file, you may press Ignore to open the file.
         <translation>&lt;h3&gt;不正なオーディオサンプルレート&lt;/h3&gt;&lt;p&gt;このコンポジションは1つ以上のサンプルレートのオーディオファイルを含んでいます。&lt;/p&gt;&lt;p&gt;Rosegardenは正しいスピードでそれを演奏できますが、現在のJACKサーバのサンプルレート(%1 Hz)と異なるレートで録音かインポートされたどのオーディオファイルもひどい音になるでしょう。&lt;/p&gt;&lt;p&gt;より詳細は,オーディオファイルマネージャのダイアログを見てください。そして、間違ったレートのファイルを再サンプリングすることを考えてください。&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Inconsistent sample rates</source>
-        <translation>インストゥルメントサンプルレート</translation>
+        <translation type="vanished">インストゥルメントサンプルレート</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+12"/>
         <source>&lt;h3&gt;Plugins not found&lt;/h3&gt;&lt;p&gt;The following audio plugins could not be loaded:&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;h3&gt;プラグインが見つかりません&lt;/h3&gt;&lt;p&gt;プラグインをロードすることができませんでした:&lt;/p&gt;</translation>
     </message>
@@ -21295,7 +21276,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation>録音したMIDIを挿入</translation>
     </message>
     <message>
-        <location line="+105"/>
+        <location line="+106"/>
         <location line="+83"/>
         <source>(recorded)</source>
         <translation>(録音済)</translation>
@@ -21308,7 +21289,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+284"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+285"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>オーディオまたは非オーディオセグメントのみ選択してください</translation>
     </message>
@@ -21393,7 +21374,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+343"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+348"/>
         <source>Initializing plugin manager...</source>
         <translation>プラグインマネージャの初期化...</translation>
     </message>
@@ -21422,7 +21403,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>起動...</translation>
     </message>
     <message>
-        <location line="+473"/>
+        <location line="+479"/>
         <source>  Zoom:  </source>
         <translation>  ズーム:</translation>
     </message>
@@ -21431,7 +21412,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="obsolete">%1 - %2</translation>
     </message>
     <message>
-        <location line="+499"/>
+        <location line="+498"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>ファイル &quot;%1&quot;がありません</translation>
     </message>
@@ -21454,24 +21435,25 @@ Do you want to open it instead ?</source>
     </message>
     <message>
         <location line="+149"/>
-        <location line="+4623"/>
+        <location line="+4766"/>
+        <location line="+19"/>
         <source>Untitled</source>
         <translation>未タイトル</translation>
     </message>
     <message>
-        <location line="-4610"/>
-        <location line="+341"/>
-        <location line="+157"/>
+        <location line="-4772"/>
+        <location line="+349"/>
+        <location line="+161"/>
         <source>Could not save document at %1
 Error was : %2</source>
         <translation>%1 にドキュメントをセーブできません
 エラーは右記のとおりです : %2</translation>
     </message>
     <message>
-        <location line="-496"/>
-        <location line="+342"/>
-        <location line="+157"/>
-        <location line="+6229"/>
+        <location line="-508"/>
+        <location line="+350"/>
+        <location line="+161"/>
+        <location line="+6362"/>
         <source>Could not save document at %1</source>
         <translation>%1 にドキュメントをセーブできません</translation>
     </message>
@@ -21480,7 +21462,7 @@ Error was : %2</source>
         <translation type="obsolete">新しいアプリケーションウィンドウをオープン...</translation>
     </message>
     <message>
-        <location line="-6660"/>
+        <location line="-6805"/>
         <source>Creating new document...</source>
         <translation>新しいドキュメントを作成...</translation>
     </message>
@@ -21499,29 +21481,29 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-101"/>
-        <location line="+6004"/>
+        <location line="+6148"/>
         <source>All supported files</source>
         <translation>すべてのサポートされているファイル</translation>
     </message>
     <message>
-        <location line="-6003"/>
+        <location line="-6147"/>
         <location line="+71"/>
-        <location line="+192"/>
+        <location line="+203"/>
         <source>Rosegarden files</source>
         <translation>Rosegardenファイル</translation>
     </message>
     <message>
-        <location line="-262"/>
-        <location line="+2037"/>
+        <location line="-273"/>
+        <location line="+2058"/>
         <location line="+23"/>
         <source>MIDI files</source>
         <translation>MIDIファイル</translation>
     </message>
     <message>
-        <location line="-2059"/>
+        <location line="-2080"/>
         <location line="+70"/>
-        <location line="+197"/>
-        <location line="+1730"/>
+        <location line="+208"/>
+        <location line="+1740"/>
         <location line="+40"/>
         <location line="+23"/>
         <location line="+256"/>
@@ -21530,29 +21512,28 @@ Error was : %2</source>
         <location line="+22"/>
         <location line="+76"/>
         <location line="+23"/>
-        <location line="+646"/>
+        <location line="+660"/>
         <location line="+36"/>
         <location line="+46"/>
         <location line="+53"/>
         <location line="+48"/>
         <location line="+122"/>
-        <location line="+2517"/>
+        <location line="+2626"/>
         <source>All files</source>
         <translation>すべてのファイル</translation>
     </message>
     <message>
-        <location line="-6006"/>
+        <location line="-6150"/>
         <location line="+72"/>
         <source>Open File</source>
         <translation>ファイルのオープン</translation>
     </message>
     <message>
-        <location line="-1084"/>
         <source>Ctrl+R</source>
-        <translation>Ctrl+R</translation>
+        <translation type="vanished">Ctrl+R</translation>
     </message>
     <message>
-        <location line="+925"/>
+        <location line="-159"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
@@ -21562,7 +21543,7 @@ Error was : %2</source>
         <translation>%1がオープンできない</translation>
     </message>
     <message>
-        <location line="+157"/>
+        <location line="+158"/>
         <source>Saving file...</source>
         <translation>ファイルにセーブ...</translation>
     </message>
@@ -21571,7 +21552,7 @@ Error was : %2</source>
         <translation type="obsolete">&lt;qt&gt;ごめんなさい&lt;br&gt;&quot;%1&quot; は有効なファイル名ではありません。&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+121"/>
         <source>You have specified a folder/directory.</source>
         <translation>フォルダ/ディレクトリを指定しています。</translation>
     </message>
@@ -21596,7 +21577,7 @@ Error was : %2</source>
         <translation>名前を付けて保存...</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+65"/>
         <source>Closing file...</source>
         <translation>ファイルをクローズ...</translation>
     </message>
@@ -21657,12 +21638,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+57"/>
-        <location line="+2860"/>
+        <location line="+2874"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="-2859"/>
+        <location line="-2873"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21789,12 +21770,12 @@ Would you like to set it now?</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1183"/>
+        <location line="+1197"/>
         <source>Rosegarden Project files</source>
         <translation>Rosegardenプロジェクトファイル</translation>
     </message>
     <message>
-        <location line="+1527"/>
+        <location line="+1636"/>
         <source>Input</source>
         <translation>入力</translation>
     </message>
@@ -21814,8 +21795,8 @@ Would you like to set it now?</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-ja</translation>
     </message>
     <message>
-        <location line="-6627"/>
-        <location line="+335"/>
+        <location line="-6770"/>
+        <location line="+334"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -21824,13 +21805,13 @@ Would you like to set it now?</source>
         <location line="+2"/>
         <location line="+155"/>
         <location line="+9"/>
-        <location line="+175"/>
+        <location line="+183"/>
         <location line="+3"/>
-        <location line="+90"/>
+        <location line="+93"/>
         <location line="+8"/>
-        <location line="+56"/>
+        <location line="+57"/>
         <location line="+3"/>
-        <location line="+280"/>
+        <location line="+289"/>
         <location line="+17"/>
         <location line="+24"/>
         <location line="+25"/>
@@ -21847,7 +21828,7 @@ Would you like to set it now?</source>
         <location line="+19"/>
         <location line="+79"/>
         <location line="+19"/>
-        <location line="+338"/>
+        <location line="+352"/>
         <location line="+244"/>
         <location line="+4"/>
         <location line="+34"/>
@@ -21866,11 +21847,11 @@ Would you like to set it now?</source>
         <location line="+22"/>
         <location line="+21"/>
         <location line="+13"/>
-        <location line="+22"/>
+        <location line="+52"/>
         <location line="+45"/>
         <location line="+2"/>
-        <location line="+34"/>
-        <location line="+596"/>
+        <location line="+40"/>
+        <location line="+669"/>
         <location line="+95"/>
         <location line="+117"/>
         <location line="+13"/>
@@ -21879,18 +21860,18 @@ Would you like to set it now?</source>
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+546"/>
+        <location line="+547"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-722"/>
+        <location line="-723"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
     <message>
-        <location line="+431"/>
+        <location line="+432"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;より新しいバージョンがあります&lt;/h3&gt;</translation>
     </message>
@@ -21900,7 +21881,7 @@ Would you like to set it now?</source>
         <translation>&lt;p&gt;%1.というバージョンを使用しています  バージョン %2 が新たに公開されています。&lt;/p&gt;&lt;p&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden webサイト&lt;/a&gt;により詳細な情報がありますのでそちらを見てください。&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-4196"/>
+        <location line="-4320"/>
         <source>Open MIDI File</source>
         <translation>MIDIファイルのオープン</translation>
     </message>
@@ -21947,7 +21928,7 @@ Would you like to set it now?</source>
         <translation>ファイルが壊れているのでX11 Rosegardenファイルはロードできません。</translation>
     </message>
     <message>
-        <location line="+1030"/>
+        <location line="+1044"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;LilyPondエクスポートのための一時ファイルをオープンするのに失敗しました。&lt;/p&gt;&lt;p&gt;これはおそらく&lt;pre&gt;%1&lt;/pre&gt;上のディスクスペースがないことを意味しています。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -21959,17 +21940,17 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Rosegardenを再起動してサウンド機能を有効にしてください。</translation>
     </message>
     <message>
-        <location line="-4753"/>
+        <location line="-4793"/>
         <source>Starting sequencer...</source>
         <translation>シーケンサを起動中...</translation>
     </message>
     <message>
-        <location line="+1138"/>
+        <location line="+1143"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+712"/>
+        <location line="+723"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>新しいファイル名%1 でファイルを保存...</translation>
@@ -21980,7 +21961,7 @@ Rosegardenを再起動してサウンド機能を有効にしてください。<
         <translation>テンプレートとして</translation>
     </message>
     <message>
-        <location line="+380"/>
+        <location line="+390"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21990,7 +21971,7 @@ Rosegardenを再起動してサウンド機能を有効にしてください。<
         <location line="+191"/>
         <location line="+97"/>
         <location line="+98"/>
-        <location line="+675"/>
+        <location line="+689"/>
         <location line="+50"/>
         <location line="+48"/>
         <location line="+116"/>
@@ -21999,7 +21980,7 @@ Rosegardenを再起動してサウンド機能を有効にしてください。<
         <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
-        <location line="-2409"/>
+        <location line="-2423"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation type="unfinished"></translation>
@@ -22046,7 +22027,7 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+683"/>
+        <location line="+697"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Rosegardenのシーケンサを起動できませんでした。セッションのサウンドや録音したものは使うことができません。
@@ -22150,14 +22131,14 @@ http://rosegardenmusic.com を参照してオーディオとMIDIの設定を修�
         <translation>MusicXMLファイルをエクスポート...</translation>
     </message>
     <message>
-        <location line="-971"/>
+        <location line="-985"/>
         <location line="+23"/>
-        <location line="+951"/>
+        <location line="+965"/>
         <source>XML files</source>
         <translation>XMLファイル</translation>
     </message>
     <message numerus="yes">
-        <location line="-2371"/>
+        <location line="-2385"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -22188,7 +22169,7 @@ http://rosegardenmusic.com を参照してオーディオとMIDIの設定を修�
 </translation>
     </message>
     <message>
-        <location line="+1078"/>
+        <location line="+1092"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -22211,7 +22192,7 @@ Would you like to set it now?</source>
 今すぐ設定しますか?</translation>
     </message>
     <message>
-        <location line="+484"/>
+        <location line="+573"/>
         <source>Move playback pointer to time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22243,7 +22224,7 @@ Would you like to set it now?</source>
         <translation>説明なし</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="+191"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;オーディオを録音する前にこのコンポジション用のファイル名を選択しなければなりません。&lt;/p&gt;&lt;p&gt;オーディオファイルはAudio files will be saved to &lt;b&gt;%1&lt;/b&gt; に &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;という形式でセーブされます。録音する前に、オーディオインストゥルメントを改名してもよいでしょう。さらなる情報は&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;を参照してください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -22329,7 +22310,7 @@ Error was : %2</source>
         <translation>スタジオのインポート</translation>
     </message>
     <message>
-        <location line="+394"/>
+        <location line="+395"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;不正なオーディオパス&lt;/h3&gt;</translation>
     </message>
@@ -22485,15 +22466,10 @@ Error was : %2</source>
     </message>
 </context>
 <context>
-    <name>Rosegarden::SegmentForNotationCommand</name>
+    <name>Rosegarden::SegmentExcludeFromPrintingCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentForNotationCommand.cpp" line="+32"/>
-        <source>Toggle For Notation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/commands/segment/SegmentForNotationCommand.h" line="+44"/>
-        <source>Change Segment Notation flag...</source>
+        <location filename="../../src/commands/segment/SegmentExcludeFromPrintingCommand.cpp" line="+30"/>
+        <source>Change Exclude From Printing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -22546,7 +22522,7 @@ Error was : %2</source>
 <context>
     <name>Rosegarden::SegmentLinkResetTransposeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+68"/>
+        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.cpp" line="+77"/>
         <source>Reset Transpose on Linked Segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22562,7 +22538,7 @@ Error was : %2</source>
 <context>
     <name>Rosegarden::SegmentLinkTransposeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="-20"/>
+        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.cpp" line="-46"/>
         <source>Transpose Linked Segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22618,12 +22594,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-21"/>
-        <location line="+145"/>
+        <location line="+141"/>
         <source>Transpose</source>
         <translation>トランスポーズ</translation>
     </message>
     <message>
-        <location line="-98"/>
+        <location line="-94"/>
         <source>Delay</source>
         <translation>ディレイ</translation>
     </message>
@@ -22672,16 +22648,16 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+10"/>
-        <source>For Notation</source>
+        <source>Exclude from Printing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>&lt;qt&gt;&lt;p&gt;Include this segment when printing (LilyPond).&lt;/p&gt;&lt;/qt&gt;</source>
+        <location line="+3"/>
+        <source>&lt;qt&gt;&lt;p&gt;Exclude this segment from printing (LilyPond).&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+8"/>
         <source>Linked segment parameters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22706,18 +22682,18 @@ Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+702"/>
+        <location line="+700"/>
         <source>Enter new name:</source>
         <translation type="unfinished">新しい名前を入力:</translation>
     </message>
     <message>
-        <location line="-817"/>
+        <location line="-811"/>
         <source>Off</source>
         <translation>Off</translation>
     </message>
     <message>
         <location line="+54"/>
-        <location line="+384"/>
+        <location line="+379"/>
         <source>%1 ms</source>
         <translation>%1ミリ秒</translation>
     </message>
@@ -22730,7 +22706,7 @@ Error was : %2</source>
         <translation type="vanished">新しいカラーの追加</translation>
     </message>
     <message>
-        <location line="+466"/>
+        <location line="+465"/>
         <location line="+46"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -23198,7 +23174,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SelectionPropertyCommand</name>
     <message>
-        <location filename="../../src/commands/edit/SelectionPropertyCommand.h" line="+43"/>
+        <location filename="../../src/commands/edit/SelectionPropertyCommand.cpp" line="+29"/>
         <source>Set &amp;Property</source>
         <translation>プロパティの設定(&amp;P)</translation>
     </message>
@@ -23330,7 +23306,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SetNoteTypeCommand</name>
     <message>
-        <location filename="../../src/commands/edit/SetNoteTypeCommand.h" line="+51"/>
+        <location filename="../../src/commands/edit/SetNoteTypeCommand.h" line="+43"/>
         <source>&amp;Set Note Type</source>
         <translation>音符のタイプの設定(&amp;S)</translation>
     </message>
@@ -23338,9 +23314,8 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SetTriggerCommand</name>
     <message>
-        <location filename="../../src/commands/edit/SetTriggerCommand.h" line="+58"/>
         <source>Tri&amp;gger Segment</source>
-        <translation>セグメントのトリガ(&amp;g)</translation>
+        <translation type="vanished">セグメントのトリガ(&amp;g)</translation>
     </message>
 </context>
 <context>
@@ -23378,9 +23353,126 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SetVisibilityCommand</name>
     <message>
-        <location filename="../../src/commands/notation/SetVisibilityCommand.h" line="+46"/>
+        <location filename="../../src/commands/notation/SetVisibilityCommand.h" line="+42"/>
         <source>Set Visibility</source>
         <translation>表示の設定</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::ShortcutDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/ShortcutDialog.cpp" line="+54"/>
+        <source>Keyboard Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Filter pattern:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>&lt;p&gt;Select an action in the table below then double click one of the four &lt;b&gt;Shortcut&lt;/b&gt; fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the &lt;b&gt;Shortcut&lt;/b&gt; field.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Actions marked with a &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;light blue background&lt;/span&gt; are global and valid for all windows.&lt;/i&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Reset Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset selected actions&apos; shortcuts to defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Remove shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Remove all shortcuts from selected actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Reset All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset all shortcuts for all actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Warnings when:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Never</source>
+        <translation type="unfinished">行わない</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Conflict in same context</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Conflict in any context</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Keyboard:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+2"/>
+        <source>Apply changes for your keyboard layout.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+59"/>
+        <source>Shortcuts Changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>You must restart Rosegarden for shortcut changes to take effect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+184"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This will reset all shortcuts for all actions across all contexts. Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::ShortcutWarnDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/ShortcutWarnDialog.cpp" line="+38"/>
+        <source>Shortcut Conflicts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>set Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>remove Shortcut</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -23655,7 +23747,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SingleSegmentLinkResetTransposeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+34"/>
+        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+78"/>
         <source>Reset Transpose on Linked Segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23760,7 +23852,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SqueezedLabel</name>
     <message>
-        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+178"/>
+        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+188"/>
         <source>&amp;Copy Full Text</source>
         <translation>全部のテキストをコピー(&amp;C)</translation>
     </message>
@@ -24084,7 +24176,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TempoView</name>
     <message>
-        <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="+78"/>
+        <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="+79"/>
         <source>Filter</source>
         <translation>フィルタ</translation>
     </message>
@@ -24159,12 +24251,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;フィルタレベルにはありません&gt;</translation>
     </message>
     <message>
-        <location line="+200"/>
+        <location line="+205"/>
         <source>Delete Tempo or Time Signature</source>
         <translation>テンポ又は拍子の削除</translation>
     </message>
     <message>
-        <location line="+290"/>
+        <location line="+293"/>
         <source>%1 - Tempo and Time Signature Editor</source>
         <translation>%1 - テンポ/拍子エディタ</translation>
     </message>
@@ -24579,7 +24671,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TieNotesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/TieNotesCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/TieNotesCommand.h" line="+41"/>
         <source>&amp;Tie</source>
         <translation>タイ(&amp;T)</translation>
     </message>
@@ -24803,12 +24895,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+367"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+369"/>
         <source>Delete Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+174"/>
+        <location line="+177"/>
         <source>Delete Segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24827,7 +24919,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         </translation>
     </message>
     <message>
-        <location line="+340"/>
+        <location line="+353"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -25382,12 +25474,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+112"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+110"/>
         <source>Rosegarden Transport</source>
         <translation>Rosegardenトランスポート</translation>
     </message>
     <message>
-        <location line="+731"/>
+        <location line="+727"/>
         <location line="+89"/>
         <source>PITCH WHEEL</source>
         <translation>PITCH WHEEL</translation>
@@ -25431,7 +25523,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>間隔でトランスポーズ(&amp;I)...</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+9"/>
         <source>&amp;Up a Semitone</source>
         <translation>半音上げる(&amp;U)</translation>
     </message>
@@ -25502,7 +25594,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TriggerSegmentManager</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="+84"/>
+        <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="+83"/>
         <source>Manage Triggered Segments</source>
         <translation>トリガーセグメントの管理</translation>
     </message>
@@ -25567,7 +25659,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>トリガーセグメントをすべて削除</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+116"/>
         <source>&lt;no label&gt;</source>
         <translation>&lt;ラベル無し&gt;</translation>
     </message>
@@ -25702,15 +25794,14 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::UnGraceCommand</name>
     <message>
-        <location filename="../../src/commands/notation/UnGraceCommand.h" line="+43"/>
         <source>Ung&amp;race</source>
-        <translation>装飾音符解除(&amp;r)</translation>
+        <translation type="vanished">装飾音符解除(&amp;r)</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::UnTupletCommand</name>
     <message>
-        <location filename="../../src/commands/notation/UnTupletCommand.h" line="+46"/>
+        <location filename="../../src/commands/notation/UnTupletCommand.h" line="+41"/>
         <source>&amp;Untuplet</source>
         <translation>連符解除(&amp;U)</translation>
     </message>
@@ -25718,7 +25809,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::UntieNotesCommand</name>
     <message>
-        <location filename="../../src/commands/notation/UntieNotesCommand.h" line="+45"/>
+        <location filename="../../src/commands/notation/UntieNotesCommand.h" line="+41"/>
         <source>&amp;Untie</source>
         <translation>タイを解除(&amp;U)</translation>
     </message>

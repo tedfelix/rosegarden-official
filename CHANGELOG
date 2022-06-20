@@ -56,6 +56,14 @@ Included in this release...
     [f57cbd9]
   * Fix missing "StartupWMClass" in .desktop file.  Bug #1635.
     [d3f5298]
+  * Fix chord ruler.  Bug #1633.  [2b2fbf7]
+  * Fix Event Filter dialog clearing selection on first launch.
+    [52c2f90]
+  * Fix lilypond common/cut time signatures.  Bug #1637.  [1c83f8b]
+  * Fix a crash when unquantizing using the quantize combo box on the
+    editors.  [329ab46]
+  * Fix a crash when resizing segments.  Bug #1638.  [cdec668]
+  * Fix a refresh issue when using the toolbar undo button.  [2a01178]
 
 ===== New Features =====
 
