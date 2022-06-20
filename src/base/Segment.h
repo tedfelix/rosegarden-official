@@ -423,7 +423,11 @@ public:
     iterator findSingle(Event*);
 
     const_iterator findSingle(Event *e) const {
-        return const_iterator(findSingle(e));
+        // Cast away const to make sure we don't end up in an endless
+        // recursion loop.
+        // ??? Recommend renaming this routine to findSingleConst() const
+        //     to make this clearer.
+        return const_iterator(((Segment *)this)->findSingle(e));
     }
 
     /**
@@ -433,7 +437,11 @@ public:
     iterator findTime(timeT time);
 
     const_iterator findTime(timeT time) const {
-        return const_iterator(findTime(time));
+        // Cast away const to make sure we don't end up in an endless
+        // recursion loop.
+        // ??? Recommend renaming this routine to findTimeConst() const
+        //     to make this clearer.
+        return const_iterator(((Segment *)this)->findTime(time));
     }
 
     /**
@@ -444,7 +452,11 @@ public:
     iterator findNearestTime(timeT time);
 
     const_iterator findNearestTime(timeT time) const {
-        return const_iterator(findNearestTime(time));
+        // Cast away const to make sure we don't end up in an endless
+        // recursion loop.
+        // ??? Recommend renaming this routine to findNearestTimeConst() const
+        //     to make this clearer.
+        return const_iterator(((Segment *)this)->findNearestTime(time));
     }
 
 

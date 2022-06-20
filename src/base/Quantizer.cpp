@@ -379,6 +379,7 @@ Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
     }
 
     Event *newEvent;
+
     if (m_target == RawEventData) {
         newEvent = new Event(**segmentIter, absTime, duration);
     } else if (m_target == NotationPrefix) {
