@@ -159,7 +159,6 @@ public:
     // Access ControlParameters (read/write)
     //
     virtual ControlParameter *getControlParameter(int index);
-    const ControlParameter *getControlParameter(int index) const override;
     virtual ControlParameter *getControlParameter(
             const std::string &type, MidiByte controllerNumber);
     const ControlParameter *getControlParameter(
