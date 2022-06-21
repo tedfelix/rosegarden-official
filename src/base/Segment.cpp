@@ -540,7 +540,7 @@ Segment::iterator
 Segment::getEndMarker() const
 {
     if (m_endMarkerTime) {
-        return findTime(*m_endMarkerTime);
+        return findTimeConst(*m_endMarkerTime);
     } else {
         return end();
     }
@@ -740,14 +740,6 @@ Segment::findSingle(Event* e)
         }
     }
     return res;
-}
-
-
-Segment::iterator
-Segment::findTime(timeT t)
-{
-    Event dummy("dummy", t, 0, MIN_SUBORDERING);
-    return lower_bound(&dummy);
 }
 
 

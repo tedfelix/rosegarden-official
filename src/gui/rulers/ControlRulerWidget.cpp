@@ -171,7 +171,7 @@ getControlParameter2(const Segment &segment, int ccNumber)
     if (!controllable)
         return nullptr;
 
-    return controllable->getControlParameter(Controller::EventType, ccNumber);
+    return controllable->getControlParameterConst(Controller::EventType, ccNumber);
 }
 
 void

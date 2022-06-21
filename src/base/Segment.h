@@ -422,26 +422,19 @@ public:
      */
     iterator findSingle(Event*);
 
-    const_iterator findSingle(Event *e) const {
-        // Cast away const to make sure we don't end up in an endless
-        // recursion loop.
-        // ??? Recommend renaming this routine to findSingleConst() const
-        //     to make this clearer.
-        return const_iterator(((Segment *)this)->findSingle(e));
-    }
-
     /**
      * Returns an iterator pointing to the first element starting at
      * or beyond the given absolute time
      */
-    iterator findTime(timeT time);
+    iterator findTime(timeT time)
+    {
+        Event temp("temp", time, 0, MIN_SUBORDERING);
+        return lower_bound(&temp);
+    }
 
-    const_iterator findTime(timeT time) const {
-        // Cast away const to make sure we don't end up in an endless
-        // recursion loop.
-        // ??? Recommend renaming this routine to findTimeConst() const
-        //     to make this clearer.
-        return const_iterator(((Segment *)this)->findTime(time));
+    const_iterator findTimeConst(timeT time) const {
+        Event temp("temp", time, 0, MIN_SUBORDERING);
+        return lower_bound(&temp);
     }
 
     /**
@@ -450,14 +443,6 @@ public:
      * time precedes the first event, not if it follows the last one)
      */
     iterator findNearestTime(timeT time);
-
-    const_iterator findNearestTime(timeT time) const {
-        // Cast away const to make sure we don't end up in an endless
-        // recursion loop.
-        // ??? Recommend renaming this routine to findNearestTimeConst() const
-        //     to make this clearer.
-        return const_iterator(((Segment *)this)->findNearestTime(time));
-    }
 
 
     //////

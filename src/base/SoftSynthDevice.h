@@ -50,7 +50,7 @@ public:
     // implemented from Controllable interface
     //
     const ControlList &getControlParameters() const override { return m_controlList; }
-    const ControlParameter *getControlParameter(const std::string &type,
+    const ControlParameter *getControlParameterConst(const std::string &type,
                                                         MidiByte controllerValue) const override;
     void setMetronome(const MidiMetronome &);
     const MidiMetronome* getMetronome() const { return m_metronome; }
