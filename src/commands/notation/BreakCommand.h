@@ -37,7 +37,7 @@ class BreakCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::BreakCommand)
 
 public:
-    BreakCommand(EventSelection &selection) :
+    explicit BreakCommand(EventSelection &selection) :
         BasicCommand(tr("&Unbeam"), selection, true),
         m_selection(&selection)
     { }

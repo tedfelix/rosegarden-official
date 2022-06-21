@@ -35,7 +35,7 @@ class CycleSlashesCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CycleSlashesCommand)
 
 public:
-    CycleSlashesCommand(EventSelection &selection) :
+    explicit CycleSlashesCommand(EventSelection &selection) :
         BasicCommand(tr("Cycle Slashes"), selection, true),
         m_selection(&selection)
     { }
@@ -46,7 +46,7 @@ protected:
 private:
     // only used on 1st execute (cf bruteForceRedo)
     EventSelection *m_selection;
-};    
+};
 
 
 }

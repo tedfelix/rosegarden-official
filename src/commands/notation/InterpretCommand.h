@@ -86,7 +86,7 @@ private:
     // an iterator pointing to that indication if so
     IndicationMap::iterator findEnclosingIndication(Event *,
                                                     std::string type);
-    int getVelocityForDynamic(std::string dynamic);
+    int getVelocityForDynamic(const std::string& dynamic);
 };
 
 

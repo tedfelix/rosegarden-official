@@ -37,7 +37,7 @@ class DeCounterpointCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::DeCounterpointCommand)
 
 public:
-    DeCounterpointCommand(EventSelection &selection) :
+    explicit DeCounterpointCommand(EventSelection &selection) :
         BasicCommand(tr("Split-and-Tie Overlapping &Chords"), selection, true),
         m_selection(&selection)
     { }
@@ -51,7 +51,7 @@ private:
     // only used on 1st execute (cf bruteForceRedo)
     EventSelection *m_selection;
 };
-  
+
 
 }
 

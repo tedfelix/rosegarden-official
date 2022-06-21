@@ -39,7 +39,7 @@ class AutoBeamCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AutoBeamCommand)
 
 public:
-    AutoBeamCommand(EventSelection &selection) :
+    explicit AutoBeamCommand(EventSelection &selection) :
         BasicCommand(getGlobalName(), selection)
     { }
 

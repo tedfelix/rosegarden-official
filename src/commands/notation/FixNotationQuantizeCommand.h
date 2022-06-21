@@ -37,11 +37,11 @@ class FixNotationQuantizeCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::FixNotationQuantizeCommand)
 
 public:
-    FixNotationQuantizeCommand(EventSelection &selection) :
+    explicit FixNotationQuantizeCommand(EventSelection &selection) :
         BasicCommand(tr("Fi&x Notation Quantization"), selection, true),
         m_selection(&selection)
     { }
-    
+
     static void registerCommand(CommandRegistry *r);
 
 protected:
