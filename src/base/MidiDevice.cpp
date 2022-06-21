@@ -1063,16 +1063,6 @@ MidiDevice::getControlParameter(int index)
     return nullptr;
 }
 
-const ControlParameter *
-MidiDevice::getControlParameter(int index) const
-{
-    // Cast away const to make sure we don't end up in an endless
-    // recursion loop.
-    // ??? Recommend renaming this routine to getControlParameterConst() const
-    //     to make this clearer.
-    return ((MidiDevice *)this)->getControlParameter(index);
-}
-
 ControlParameter *
 MidiDevice::getControlParameter(
         const std::string &type, Rosegarden::MidiByte controllerNumber)
@@ -1099,14 +1089,12 @@ MidiDevice::getControlParameter(
 }
 
 const ControlParameter *
-MidiDevice::getControlParameter(
+MidiDevice::getControlParameterConst(
         const std::string &type, Rosegarden::MidiByte controllerNumber) const
 {
-    // Cast away const to make sure we don't end up in an endless
-    // recursion loop.
-    // ??? Recommend renaming this routine to getControlParameterConst() const
-    //     to make this clearer.
-    return ((MidiDevice *)this)->getControlParameter(type, controllerNumber);
+    // Cast away const to allow reuse of the non-const version.
+    return const_cast<MidiDevice *>(this)->
+            getControlParameter(type, controllerNumber);
 }
 
 }

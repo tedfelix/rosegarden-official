@@ -219,15 +219,15 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
         Segment::const_iterator ito = copyFrom->end();
 
         if (!expandRepeats) {
-            ifrom = copyFrom->findTime(from);
-            ito = copyFrom->findTime(to);
+            ifrom = copyFrom->findTimeConst(from);
+            ito = copyFrom->findTimeConst(to);
         } else {
             if (repeat == firstRepeat) {
-                ifrom = copyFrom->findTime
+                ifrom = copyFrom->findTimeConst
                     (segStart + (from - segStart) % segDuration);
             }
             if (repeat == lastRepeat) {
-                ito = copyFrom->findTime
+                ito = copyFrom->findTimeConst
                     (segStart + (to - segStart) % segDuration);
             }
         }

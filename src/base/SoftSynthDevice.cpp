@@ -123,15 +123,7 @@ SoftSynthDevice::checkControlList()
 }
 
 const ControlParameter *
-SoftSynthDevice::getControlParameter(int index) const
-{
-    if (index >= 0 && ((unsigned int)index) < ((unsigned int)m_controlList.size()))
-        return &m_controlList[index];
-    return nullptr;
-}
-
-const ControlParameter *
-SoftSynthDevice::getControlParameter(const std::string &type,
+SoftSynthDevice::getControlParameterConst(const std::string &type,
 				     Rosegarden::MidiByte controllerValue) const
 {
     ControlList::iterator it = m_controlList.begin();

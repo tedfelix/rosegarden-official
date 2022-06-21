@@ -57,7 +57,7 @@ searchSegment(const Segment *s, timeT noEarlierThan, timeT noLaterThan) const
         { return Maybe(false, ControllerSearchValue(0,0)); }
 
     // Get the latest relevant event before or at noEarlierThan.
-    Segment::reverse_iterator latest(s->findTime(noLaterThan));
+    Segment::reverse_iterator latest(s->findTimeConst(noLaterThan));
 
     // Search backwards for a match.
     for (Segment::reverse_iterator j = latest; j != s->rend(); ++j) {
@@ -229,7 +229,7 @@ getControlParameter(Instrument *instrument,
     Device * device = instrument->getDevice();
     const Controllable *c = device->getControllable();
     Q_CHECK_PTR(c);
-    return c->getControlParameter(eventType, controllerId);
+    return c->getControlParameterConst(eventType, controllerId);
 }
 
 // Clip a controller value to appropriate limits

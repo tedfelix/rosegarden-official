@@ -162,7 +162,7 @@ MatrixPercussionInsertionCommand::getEndTime(
     const int pitch = event.get<Int>(PITCH);
 
     // For each Event in the Segment from time to the end of the Segment
-    for (Segment::iterator i = segment.findTime(time);
+    for (Segment::iterator i = segment.findTimeConst(time);
          segment.isBeforeEndMarker(i);
          ++i) {
 

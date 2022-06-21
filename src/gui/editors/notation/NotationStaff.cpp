@@ -1872,7 +1872,7 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
     ::Rosegarden::Key cancelKey;
     Clef clef;
 
-    for (Segment::const_iterator i = s.findTime(barStart);
+    for (Segment::const_iterator i = s.findTimeConst(barStart);
          s.isBeforeEndMarker(i) && ((*i)->getNotationAbsoluteTime() == barStart);
          ++i) {
 
