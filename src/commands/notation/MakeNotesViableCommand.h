@@ -33,12 +33,13 @@ class CommandRegistry;
 
 
 /// Tie notes at barlines.
+// cppcheck-suppress noConstructor
 class MakeNotesViableCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MakeNotesViableCommand)
 
 public:
-    MakeNotesViableCommand(EventSelection &selection) :
+    explicit MakeNotesViableCommand(EventSelection &selection) :
         BasicCommand(tr("Tie Notes at &Barlines"), selection, true),
         m_selection(&selection)
     { }
@@ -51,7 +52,7 @@ protected:
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
- 
+
 
 }
 

@@ -31,14 +31,14 @@ namespace Rosegarden
 
 class Segment;
 
-
+// cppcheck-suppress noConstructor
 class SegmentJoinCommand : public NamedCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand)
 
 public:
     typedef std::vector<Segment *> SegmentVec;
-    SegmentJoinCommand(SegmentSelection &segments);
+    explicit SegmentJoinCommand(SegmentSelection &segments);
     ~SegmentJoinCommand() override;
 
     void execute() override;
@@ -46,7 +46,7 @@ public:
     static Segment *makeSegment(SegmentVec oldSegments);
 
     static QString getGlobalName() { return tr("&Join"); }
-    
+
 private:
     SegmentVec m_oldSegments;
     Segment *m_newSegment;

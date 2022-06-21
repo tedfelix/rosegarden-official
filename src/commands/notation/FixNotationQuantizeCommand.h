@@ -31,7 +31,7 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
+// cppcheck-suppress noConstructor
 class FixNotationQuantizeCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::FixNotationQuantizeCommand)

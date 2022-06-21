@@ -31,13 +31,13 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
+// cppcheck-suppress noConstructor
 class RestoreTiesCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreTiesCommand)
 
 public:
-    RestoreTiesCommand(EventSelection &selection) :
+    explicit RestoreTiesCommand(EventSelection &selection) :
         BasicCommand(tr("&Restore Tie Positions"), selection, true),
         m_selection(&selection)
     { }

@@ -610,7 +610,7 @@ InterpretCommand::articulate()
 InterpretCommand::IndicationMap::iterator
 
 InterpretCommand::findEnclosingIndication(Event *e,
-        std::string type)
+                                          const std::string& type)
 {
     // a bit slow, but let's wait and see whether it's a bottleneck
     // before we worry about that

@@ -44,14 +44,14 @@ class CutToTriggerSegmentCommand : public BasicCommand
 
 public:
     CutToTriggerSegmentCommand(EventSelection *selection,
-                               Composition   &comp,
-                               QString       name,
-                               int           basePitch,
-                               int           baseVelocity,
-                               NoteStyleName noteStyle,
-                               bool          retune,
-                               std::string   timeAdjust,
-                               Mark          mark);
+                               Composition        &comp,
+                               QString            name,
+                               int                basePitch,
+                               int                baseVelocity,
+                               NoteStyleName      noteStyle,
+                               bool               retune,
+                               const std::string& timeAdjust,
+                               Mark               mark);
     void execute() override;
     void unexecute() override;
 

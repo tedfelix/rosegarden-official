@@ -31,13 +31,13 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
+// cppcheck-suppress noConstructor
 class RestoreSlursCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreSlursCommand)
 
 public:
-    RestoreSlursCommand(EventSelection &selection) :
+    explicit RestoreSlursCommand(EventSelection &selection) :
         BasicCommand(tr("&Restore Slur Positions"), selection, true),
         m_selection(&selection)
     { }

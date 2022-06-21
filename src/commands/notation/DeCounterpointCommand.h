@@ -31,7 +31,7 @@ namespace Rosegarden
 class CommandRegistry;
 class EventSelection;
 
-
+// cppcheck-suppress noConstructor
 class DeCounterpointCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::DeCounterpointCommand)

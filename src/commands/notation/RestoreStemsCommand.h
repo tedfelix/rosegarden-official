@@ -31,13 +31,13 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
+// cppcheck-suppress noConstructor
 class RestoreStemsCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreStemsCommand)
 
 public:
-    RestoreStemsCommand(EventSelection &selection) :
+    explicit RestoreStemsCommand(EventSelection &selection) :
         BasicCommand(tr("&Restore Stems"), selection, true),
         m_selection(&selection)
     { }

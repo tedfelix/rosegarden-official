@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -28,12 +28,12 @@ namespace Rosegarden
 {
 
 CutRangeCommand::CutRangeCommand(Composition *composition,
-                                 timeT t0, timeT t1,
+                                 timeT begin, timeT end,
                                  Clipboard *clipboard) :
         MacroCommand(tr("Cut Range"))
 {
-    addCommand(new CopyCommand(composition, t0, t1, clipboard));
-    addCommand(new DeleteRangeCommand(composition, t0, t1));
+    addCommand(new CopyCommand(composition, begin, end, clipboard));
+    addCommand(new DeleteRangeCommand(composition, begin, end));
 }
 
 }

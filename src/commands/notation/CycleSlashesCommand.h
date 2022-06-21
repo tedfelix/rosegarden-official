@@ -29,7 +29,7 @@ namespace Rosegarden
 
 class EventSelection;
 
-
+// cppcheck-suppress noConstructor
 class CycleSlashesCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CycleSlashesCommand)

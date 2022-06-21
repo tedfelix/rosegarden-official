@@ -31,13 +31,13 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
+// cppcheck-suppress noConstructor
 class RemoveFingeringMarksCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveFingeringMarksCommand)
 
 public:
-    RemoveFingeringMarksCommand(EventSelection &selection) :
+    explicit RemoveFingeringMarksCommand(EventSelection &selection) :
         BasicCommand(tr("&Remove Fingerings"), selection, true),
         m_selection(&selection)
     { }

@@ -36,12 +36,13 @@ namespace Rosegarden
  * segment to the composition as a whole via the tempo map.
  */
 
+// cppcheck-suppress noConstructor
 class CreateTempoMapFromSegmentCommand : public NamedCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CreateTempoMapFromSegmentCommand)
 
 public:
-    CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
+    explicit CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
     ~CreateTempoMapFromSegmentCommand() override;
 
     void execute() override;
@@ -49,14 +50,14 @@ public:
 
 private:
     void initialise(Segment *s);
-    
+
     Composition *m_composition;
 
     typedef std::map<timeT, tempoT> TempoMap;
     TempoMap m_oldTempi;
     TempoMap m_newTempi;
 };
-    
+
 
 
 }

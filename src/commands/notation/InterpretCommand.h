@@ -85,7 +85,7 @@ private:
     // test if the event is within an indication of the given type, return
     // an iterator pointing to that indication if so
     IndicationMap::iterator findEnclosingIndication(Event *,
-                                                    std::string type);
+                                                    const std::string& type);
     int getVelocityForDynamic(const std::string& dynamic);
 };
 

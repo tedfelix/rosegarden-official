@@ -32,13 +32,13 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
+// cppcheck-suppress noConstructor
 class ResetDisplacementsCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ResetDisplacementsCommand)
 
 public:
-    ResetDisplacementsCommand(EventSelection &selection) :
+    explicit ResetDisplacementsCommand(EventSelection &selection) :
         BasicCommand(tr("&Restore Positions"), selection, true),
         m_selection(&selection)
     { }

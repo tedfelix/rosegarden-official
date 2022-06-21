@@ -31,13 +31,13 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
+// cppcheck-suppress noConstructor
 class TieNotesCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::TieNotesCommand)
 
 public:
-    TieNotesCommand(EventSelection &selection) :
+    explicit TieNotesCommand(EventSelection &selection) :
         BasicCommand(tr("&Tie"), selection, true),
         m_selection(&selection)
     { }
@@ -51,7 +51,7 @@ private:
     // only used on 1st execute (cf bruteForceRedo)
     EventSelection *m_selection;
 };
-     
+
 
 }
 

@@ -31,13 +31,13 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
+// cppcheck-suppress noConstructor
 class UnTupletCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::UnTupletCommand)
 
 public:
-    UnTupletCommand(EventSelection &selection) :
+    explicit UnTupletCommand(EventSelection &selection) :
         BasicCommand(tr("&Untuplet"), selection, true),
         m_selection(&selection)
     { }

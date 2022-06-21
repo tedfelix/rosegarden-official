@@ -32,12 +32,13 @@ class EventSelection;
 class CommandRegistry;
 
 
+// cppcheck-suppress noConstructor
 class RemoveNotationQuantizeCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveNotationQuantizeCommand)
 
 public:
-    RemoveNotationQuantizeCommand(EventSelection &selection) :
+    explicit RemoveNotationQuantizeCommand(EventSelection &selection) :
         BasicCommand(tr("Remo&ve Notation Quantization"), selection, true),
         m_selection(&selection)
     { }

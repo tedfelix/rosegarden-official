@@ -31,13 +31,13 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
+// cppcheck-suppress noConstructor
 class RemoveMarksCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveMarksCommand)
 
 public:
-    RemoveMarksCommand(EventSelection &selection) :
+    explicit RemoveMarksCommand(EventSelection &selection) :
         BasicCommand(tr("&Remove All Marks"), selection, true),
         m_selection(&selection) { }
 
