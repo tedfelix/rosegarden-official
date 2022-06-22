@@ -40,7 +40,7 @@ class DeleteTracksCommand : public NamedCommand
 
 public:
     DeleteTracksCommand(Composition *composition,
-                        std::vector<TrackId> tracks);
+                        const std::vector<TrackId>& tracks);
     ~DeleteTracksCommand() override;
 
     static QString getGlobalName() { return tr("Delete Tracks..."); }

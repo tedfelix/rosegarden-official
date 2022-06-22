@@ -55,7 +55,7 @@ public:
        QString label,
        int basePitch = -1,
        int baseVelocity = -1);
-    
+
     ~PasteToTriggerSegmentWorker();
 
     void execute();
@@ -64,15 +64,15 @@ public:
     // Since TriggerSegmentId is unsigned, we can't "x<0" it to check
     // if it's valid.  So we resort to a hack: since m_segment gets a
     // non-null value at the same time, we check for that.
-    bool hasTriggerSegmentId()
+    bool hasTriggerSegmentId() const
     { return m_segment != nullptr; }
-    TriggerSegmentId getTriggerSegmentId()
+    TriggerSegmentId getTriggerSegmentId() const
     { return m_id; }
-    int getBasePitch()
+    int getBasePitch() const
     { return m_basePitch;}
-    int getBaseVelocity()
+    int getBaseVelocity() const
     { return m_baseVelocity;}
-    
+
 protected:
     Composition *m_composition;
     Clipboard *m_clipboard;

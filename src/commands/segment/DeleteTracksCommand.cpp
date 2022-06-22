@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,11 +29,11 @@ namespace Rosegarden
 {
 
 DeleteTracksCommand::DeleteTracksCommand(Composition *composition,
-        std::vector<TrackId> tracks):
-        NamedCommand(getGlobalName()),
-        m_composition(composition),
-        m_tracks(tracks),
-        m_detached(false)
+                                         const std::vector<TrackId>& tracks):
+    NamedCommand(getGlobalName()),
+    m_composition(composition),
+    m_tracks(tracks),
+    m_detached(false)
 {}
 
 DeleteTracksCommand::~DeleteTracksCommand()
@@ -139,9 +139,9 @@ void DeleteTracksCommand::unexecute()
     // Alias for readability.
     Composition::trackcontainer &tracks = m_composition->getTracks();
 
-    // For each track we need to add back in 
-    for (std::vector<Track*>::iterator oldTrackIter = m_oldTracks.begin(); 
-         oldTrackIter != m_oldTracks.end(); 
+    // For each track we need to add back in
+    for (std::vector<Track*>::iterator oldTrackIter = m_oldTracks.begin();
+         oldTrackIter != m_oldTracks.end();
          ++oldTrackIter) {
 
         // From the back we shift the track positions in the composition
@@ -153,7 +153,7 @@ void DeleteTracksCommand::unexecute()
 
             // If the composition track's position is after or the same as
             // the position of the track we are adding
-            if ((*compTrackIter).second->getPosition() >= 
+            if ((*compTrackIter).second->getPosition() >=
                     (*oldTrackIter)->getPosition()) {
                 // Increment the composition track's position to make room
                 int newPosition = (*compTrackIter).second->getPosition() + 1;
@@ -181,4 +181,3 @@ void DeleteTracksCommand::unexecute()
 }
 
 }
-
