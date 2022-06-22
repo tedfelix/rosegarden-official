@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,10 +30,9 @@ namespace Rosegarden
 class CommandRegistry;
 class EventSelection;
 
-// cppcheck-suppress noConstructor
 class DeCounterpointCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::DeCounterpointCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::DeCounterpointCommand);
 
 public:
     explicit DeCounterpointCommand(EventSelection &selection) :

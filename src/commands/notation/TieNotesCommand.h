@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,10 +30,9 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-// cppcheck-suppress noConstructor
 class TieNotesCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::TieNotesCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::TieNotesCommand);
 
 public:
     explicit TieNotesCommand(EventSelection &selection) :

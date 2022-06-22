@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,10 +30,9 @@ namespace Rosegarden
 
 class Segment;
 
-// cppcheck-suppress noConstructor
 class SegmentJoinCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand);
 
 public:
     typedef std::vector<Segment *> SegmentVec;

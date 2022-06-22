@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,10 +30,9 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-// cppcheck-suppress noConstructor
 class BreakCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::BreakCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::BreakCommand);
 
 public:
     explicit BreakCommand(EventSelection &selection) :
