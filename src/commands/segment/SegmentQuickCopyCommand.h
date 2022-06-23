@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -35,10 +34,10 @@ class Composition;
 
 class SegmentQuickCopyCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentQuickCopyCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentQuickCopyCommand);
 
 public:
-    SegmentQuickCopyCommand(Segment *segment);
+    explicit SegmentQuickCopyCommand(Segment *segment);
     ~SegmentQuickCopyCommand() override;
 
     void execute() override;

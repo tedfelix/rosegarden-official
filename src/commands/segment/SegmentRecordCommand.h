@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -40,10 +39,10 @@ class Composition;
  */
 class SegmentRecordCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentRecordCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentRecordCommand);
 
 public:
-    SegmentRecordCommand(Segment *segment);
+    explicit SegmentRecordCommand(Segment *segment);
     ~SegmentRecordCommand() override;
 
     void execute() override;

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -34,15 +33,15 @@ class Composition;
 
 class SegmentRepeatToCopyCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentRepeatToCopyCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentRepeatToCopyCommand);
 
 public:
-    SegmentRepeatToCopyCommand(Segment *segment);
+    explicit SegmentRepeatToCopyCommand(Segment *segment);
     ~SegmentRepeatToCopyCommand() override;
 
     void execute() override;
     void unexecute() override;
-    
+
 private:
 
     Composition           *m_composition;

@@ -34,7 +34,7 @@ class Clipboard;
 class Segment;
 class EventSelection;
 
- class PasteToTriggerSegmentWorker
+class PasteToTriggerSegmentWorker
 {
 public:
     /// If basePitch is -1, the first pitch in the selection will be used
@@ -82,6 +82,10 @@ protected:
     Segment *m_segment;
     TriggerSegmentId m_id;
     bool m_detached;
+
+ private:
+    // copy not allowed
+    PasteToTriggerSegmentWorker(const PasteToTriggerSegmentWorker&);
 };
 
 class PasteToTriggerSegmentCommand : public NamedCommand

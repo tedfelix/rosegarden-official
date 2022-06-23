@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,10 +30,10 @@ class Composition;
 
 class SegmentQuickLinkCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentQuickLinkCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentQuickLinkCommand);
 
 public:
-    SegmentQuickLinkCommand(Segment *segment);
+    explicit SegmentQuickLinkCommand(Segment *segment);
     ~SegmentQuickLinkCommand() override;
 
     void execute() override;
