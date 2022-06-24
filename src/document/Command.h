@@ -37,7 +37,7 @@ public:
     virtual void execute() = 0;
     virtual void unexecute() = 0;
     virtual QString getName() const = 0;
-    
+
     bool getUpdateLinks() const { return m_updateLinks; }
     void setUpdateLinks(bool update) { m_updateLinks = update; }
 
@@ -48,7 +48,7 @@ private:
 class ROSEGARDENPRIVATE_EXPORT NamedCommand : public Command
 {
 public:
-    NamedCommand(QString name) : m_name(name) { }
+    explicit NamedCommand(QString name) : m_name(name) { }
     ~NamedCommand() override { }
 
     QString getName() const override { return m_name; }
@@ -61,7 +61,7 @@ protected:
 class ROSEGARDENPRIVATE_EXPORT MacroCommand : public Command
 {
 public:
-    MacroCommand(QString name);
+    explicit MacroCommand(QString name);
     ~MacroCommand() override;
 
     virtual void addCommand(Command *command);
@@ -73,7 +73,7 @@ public:
 
     QString getName() const override;
     virtual void setName(QString name);
-    
+
     virtual const std::vector<Command *>& getCommands() { return m_commands; }
 
 protected:
@@ -89,7 +89,7 @@ class ROSEGARDENPRIVATE_EXPORT BundleCommand : public MacroCommand
 {
     Q_DECLARE_TR_FUNCTIONS(BundleCommand)
 public:
-    BundleCommand(QString name);
+    explicit BundleCommand(QString name);
     ~BundleCommand() override;
 
     QString getName() const override;

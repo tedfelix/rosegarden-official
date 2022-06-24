@@ -41,7 +41,7 @@ class RenameDeviceCommand : public NamedCommand
 public:
     RenameDeviceCommand(Studio *studio,
                         DeviceId deviceId,
-                        std::string name) :
+                        const std::string& name) :
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_deviceId(deviceId),

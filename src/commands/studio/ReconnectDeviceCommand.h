@@ -41,7 +41,7 @@ class ReconnectDeviceCommand : public NamedCommand
 public:
     ReconnectDeviceCommand(Studio *studio,
                            DeviceId deviceId,
-                           std::string newConnection) :
+                           const std::string& newConnection) :
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_deviceId(deviceId),

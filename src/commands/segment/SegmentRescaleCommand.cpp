@@ -45,15 +45,15 @@ SegmentRescaleCommand::SegmentRescaleCommand(Segment *segment,
     // nothing
 }
 
-SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
+SegmentRescaleCommand::SegmentRescaleCommand(Segment *segment,
                                              int multiplier,
                                              int divisor,
-                                             timeT st) :
+                                             timeT newStartTime) :
     NamedCommand(getGlobalName()),
-    m_segment(s),
+    m_segment(segment),
     m_newSegment(nullptr),
     m_startTimeGiven(true),
-    m_startTime(st),
+    m_startTime(newStartTime),
     m_multiplier(multiplier),
     m_divisor(divisor),
     m_detached(false)

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -28,17 +28,17 @@
 namespace Rosegarden
 {
 
-SegmentResizeFromStartCommand::SegmentResizeFromStartCommand(Segment *s,
-        timeT time) :
-        BasicCommand(getGlobalName(), *s,
-                     std::min(time, s->getStartTime()),
-                     std::max(time, s->getStartTime())),
-        m_segment(s),
-        m_oldStartTime(s->getStartTime()),
-        m_newStartTime(time)
+SegmentResizeFromStartCommand::SegmentResizeFromStartCommand(Segment *segment,
+        timeT newStartTime) :
+        BasicCommand(getGlobalName(), *segment,
+                     std::min(newStartTime, segment->getStartTime()),
+                     std::max(newStartTime, segment->getStartTime())),
+        m_segment(segment),
+        m_oldStartTime(segment->getStartTime()),
+        m_newStartTime(newStartTime)
 {
     RG_DEBUG << "ctor Segment start end" <<
-        s->getStartTime() << s->getEndTime();
+        segment->getStartTime() << segment->getEndTime();
     // nothing else
 }
 

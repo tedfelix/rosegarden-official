@@ -235,13 +235,11 @@ CommandHistory::clipCommands()
 void
 CommandHistory::clipStack(CommandStack &stack, int limit)
 {
-    int i;
-
     if ((int)stack.size() > limit) {
 
         CommandStack tempStack;
 
-        for (i = 0; i < limit; ++i) {
+        for (int i = 0; i < limit; ++i) {
 #ifdef DEBUG_COMMAND_HISTORY
             CommandInfo commInfo = stack.top();
             std::cerr << "CommandHistory::clipStack: Saving recent command: " << commInfo.command->getName().toLocal8Bit().data() << " at " << command << std::endl;
@@ -252,7 +250,7 @@ CommandHistory::clipStack(CommandStack &stack, int limit)
 
         clearStack(stack);
 
-        for (i = 0; i < m_undoLimit; ++i) {
+        for (int i = 0; i < m_undoLimit; ++i) {
             stack.push(tempStack.top());
             tempStack.pop();
         }

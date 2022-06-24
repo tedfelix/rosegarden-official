@@ -72,10 +72,10 @@ public:
 
 class SingleSegmentLinkResetTransposeCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SingleSegmentLinkResetTransposeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SingleSegmentLinkResetTransposeCommand);
 
 public:
-    SingleSegmentLinkResetTransposeCommand(Segment &linkedSeg) :
+    explicit SingleSegmentLinkResetTransposeCommand(Segment &linkedSeg) :
         BasicCommand(tr("Reset Transpose on Linked Segment"),
                      linkedSeg,
                      linkedSeg.getStartTime(),
