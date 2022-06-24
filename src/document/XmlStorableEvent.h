@@ -42,18 +42,18 @@ public:
      * attributes include absoluteTime or timeOffset, update the given
      * absoluteTime reference accordingly.
      */
-    XmlStorableEvent(const QXmlStreamAttributes& atts,
+    XmlStorableEvent(const QXmlStreamAttributes& attributes,
                      timeT &absoluteTime);
 
     /**
      * Construct an XmlStorableEvent from the specified Event.
      */
-    XmlStorableEvent(Event&);
+    explicit XmlStorableEvent(Event&);
 
     /**
      * Set a property from the XML attributes \a atts
      */
-    void setPropertyFromAttributes(const QXmlStreamAttributes& atts,
+    void setPropertyFromAttributes(const QXmlStreamAttributes& attributes,
                                    bool persistent);
 };
 

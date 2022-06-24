@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -109,7 +109,6 @@ XmlStorableEvent::XmlStorableEvent(const QXmlStreamAttributes &attributes,
             // Check if boolean val
             QString valLowerCase(val.toLower());
             bool isNumeric;
-            int numVal;
 
             if (valLowerCase == "true" || valLowerCase == "false") {
 
@@ -119,7 +118,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlStreamAttributes &attributes,
             } else {
 
                 // Not a bool, check if integer val
-                numVal = val.toInt(&isNumeric);
+                int numVal = val.toInt(&isNumeric);
                 if (isNumeric) {
                     set
                         <Int>(qstrtostr(attrName), numVal);

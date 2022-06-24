@@ -96,7 +96,7 @@ public:
                             const QString& localName,
                             const QString& qName) override;
 
-    bool characters(const QString& ch) override;
+    bool characters(const QString& chars) override;
 
     bool endDocument() override; // [rwb] - for tempo element catch
 
@@ -128,13 +128,13 @@ protected:
     void setMIDIDeviceConnection(QString connection);
     void setMIDIDeviceName(QString name);
     void skipToNextPlayDevice();
-    InstrumentId mapToActualInstrument(InstrumentId id);
+    InstrumentId mapToActualInstrument(InstrumentId oldId);
 
     RosegardenDocument    *m_doc;
     Segment *m_currentSegment;
     XmlStorableEvent    *m_currentEvent;
     typedef std::map<int, SegmentLinker *> SegmentLinkerMap;
-    SegmentLinkerMap m_segmentLinkers; 
+    SegmentLinkerMap m_segmentLinkers;
 
     timeT m_currentTime;
     timeT m_chordDuration;
@@ -159,7 +159,7 @@ protected:
     std::set<QString> m_pluginsNotFound;
 
     RosegardenFileSection             m_section;
-    
+
     Device                           *m_device;
     DeviceId                          m_deviceRunningId;
     InstrumentId                      m_deviceInstrumentBase;

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -318,21 +318,21 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
         versionInFile.qstrtoversion(strtoqstr(m_version));
 
         RG_DEBUG << "HydrogenXMLHandler::endElement version " << m_version;
-        RG_DEBUG << "ch_major: " << canHandleVersion.Major() << 
-                    "  ch_minor: " << canHandleVersion.Minor() << 
+        RG_DEBUG << "ch_major: " << canHandleVersion.Major() <<
+                    "  ch_minor: " << canHandleVersion.Minor() <<
                     "  ch_micro: " << canHandleVersion.Micro();
-        RG_DEBUG << "if_major: " << versionInFile.Major() << 
-                    "  if_minor: " << versionInFile.Minor() << 
+        RG_DEBUG << "if_major: " << versionInFile.Major() <<
+                    "  if_minor: " << versionInFile.Minor() <<
                     "  if_micro: " << versionInFile.Micro();
 
         bool bCanHandleFile=(versionInFile<=canHandleVersion);
 
         if (bCanHandleFile==true) {
-          // go on, this is a good version 
+          // go on, this is a good version
           RG_DEBUG << "HydrogenXMLHandler::endElement version: version ok ";
         }
         else {
-          // error 
+          // error
           RG_DEBUG << "HydrogenXMLHandler::endElement version: bad version (file created with hydrogen version " << m_version << " can not be parsed)";
           return false;
         }

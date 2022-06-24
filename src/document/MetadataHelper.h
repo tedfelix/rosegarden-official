@@ -117,7 +117,7 @@ private :
     class CommentsKey
     {
         public:
-            CommentsKey(QString keyString);
+            explicit CommentsKey(QString keyString);
 
             QString key() const { return m_key; }
 
