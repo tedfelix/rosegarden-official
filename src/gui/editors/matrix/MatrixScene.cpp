@@ -429,8 +429,10 @@ MatrixScene::recreateLines()
 
     recreatePitchHighlights();
 
-    // Force update so all vertical lines are drawn correctly
-    update();
+    // Force update so all vertical lines are drawn correctly.
+    // ??? Works fine without.  Seems like update() isn't needed in this
+    //     class.  In fact it might be harmful.
+    //update();
 }
 
 void

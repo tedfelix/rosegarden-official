@@ -85,6 +85,12 @@ public:
      */
     void segmentDeleted(const Segment *) override;
 
+    /// Connect for Add/Remove/Source Deletion notifications.
+    /**
+     * Only the PropertyControlRuler (Velocity Ruler) connects to this.
+     *
+     * "Source Deletion" == ViewSegment destroyed.
+     */
     void addObserver   (ViewSegmentObserver *obs) { m_observers.push_back(obs); }
     void removeObserver(ViewSegmentObserver *obs) { m_observers.remove(obs); }
 

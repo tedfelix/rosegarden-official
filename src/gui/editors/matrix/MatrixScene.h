@@ -42,6 +42,9 @@ class ZoomableRulerScale;
 class SnapGrid;
 
 /**
+ * An instance of this is created and owned by MatrixWidget.  See
+ * MatrixWidget::m_scene.
+ *
  * Specialised graphics scene for matrix elements.  The note blocks and
  * horizontal and vertical grid lines are all represented by graphics items
  * owned by this scene.  This scene also owns the MatrixViewSegment classes

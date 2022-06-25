@@ -116,9 +116,9 @@ void TestReferenceSegment::testFind()
     ReferenceSegment *rs = setup_rs();
 
     i = rs->findAtOrBefore(10);
-    QCOMPARE((*i)->getAbsoluteTime(), 10);
+    QCOMPARE((*i)->getAbsoluteTime(), 10l);
     i = rs->findAtOrBefore(11);
-    QCOMPARE((*i)->getAbsoluteTime(), 10);
+    QCOMPARE((*i)->getAbsoluteTime(), 10l);
     i = rs->findAtOrBefore(-1);
     QCOMPARE(i, rs->end());
 

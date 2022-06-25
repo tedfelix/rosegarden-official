@@ -54,6 +54,8 @@ class ControlParameter;
  * of any functions carried out from menu and toolbar actions.  It
  * does not manage the editing tools (MatrixWidget does this) or the
  * selection state (MatrixScene does that).
+ *
+ * This class creates and owns the MatrixWidget instance (m_matrixWidget).
  */
 class MatrixView : public EditViewBase,
                    public SelectionManager
