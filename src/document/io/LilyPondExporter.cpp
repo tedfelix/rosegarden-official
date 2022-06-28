@@ -4,7 +4,7 @@
   Rosegarden
   A MIDI and audio sequencer and musical notation editor.
   Copyright 2000-2022 the Rosegarden development team.
- 
+
   This file is Copyright 2002
   Hans Kieserman      <hkieserman@mail.com>
   with heavy lifting from csoundio as it was on 13/5/2002.
@@ -19,7 +19,7 @@
 
   Other copyrights also apply to some parts of this work.  Please
   see the AUTHORS file and individual file headers for details.
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -275,12 +275,12 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
 
         try {
             Indication i(**m);
-            
+
             timeT indicationStart = (*m)->getNotationAbsoluteTime();
             timeT indicationEnd = indicationStart + i.getIndicationDuration();
             timeT eventStart = (*j)->getNotationAbsoluteTime();
             timeT eventEnd = eventStart + (*j)->getNotationDuration();
-            
+
             if (i.getIndicationType() == Indication::QuindicesimaUp) {
                 str << "\\ottava #2 ";
             } else if (i.getIndicationType() == Indication::OttavaUp) {
@@ -291,7 +291,7 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
                 str << "\\ottava #-2 ";
             } else if (    i.getIndicationType() == Indication::Crescendo
                         || i.getIndicationType() == Indication::Decrescendo) {
-                if (indicationEnd >= seg->getEndMarkerTime() &&  
+                if (indicationEnd >= seg->getEndMarkerTime() &&
                     eventEnd >= seg->getEndMarkerTime() &&
                     eventStart == indicationStart) {
                         // Crescendo or descrescendo on a note alone.
@@ -314,7 +314,7 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
 }
 
 
-// Return the string LilyPond uses to represent half the duration of the 
+// Return the string LilyPond uses to represent half the duration of the
 // given note type.
 static const char *
 lilyHalfDuration(int noteType)
@@ -352,7 +352,7 @@ lilyHalfDuration(int noteType)
     case Note::DoubleWholeNote:
         return "1";
         break;
-        
+
     default:
         std::cerr << "ERROR: Unexpected note duration"
                     << " value " << noteType << " : Can't"
@@ -371,7 +371,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
     eventstartlist::iterator m = postEventsToStart.begin();
 
     while (m != postEventsToStart.end()) {
-        
+
         // Check for sustainDown or sustainUp events
         if ((*m)->isa(Controller::EventType) &&
             (*m)->has(Controller::NUMBER) &&
@@ -383,7 +383,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                 //
                 // If the pedals have been entered with a midi piano,
                 // the pedal may have continuous values from 0 to 127
-                // and there may appear funny output with plenty of 
+                // and there may appear funny output with plenty of
                 // "Ped." marks indicating the change of pedal pressure.
                 //
                 // One could use the following code to make the pedal
@@ -410,12 +410,12 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                     str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Up " : "Off ");
                 }
             }
-            
+
         } else {
 
             try {
                 Indication i(**m);
-                
+
                 timeT indicationStart = (*m)->getNotationAbsoluteTime();
                 timeT indicationEnd = indicationStart + i.getIndicationDuration();
                 timeT eventStart = (*j)->getNotationAbsoluteTime();
@@ -436,39 +436,39 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                             str << "_\\( ";
                     }
                 } else if (i.getIndicationType() == Indication::Crescendo ||
-                        i.getIndicationType() == Indication::Decrescendo) {    
-                    
+                        i.getIndicationType() == Indication::Decrescendo) {
 
-                    if (indicationEnd >= seg->getEndMarkerTime()  
+
+                    if (indicationEnd >= seg->getEndMarkerTime()
                             && eventEnd >= seg->getEndMarkerTime()
                             && eventStart == indicationStart) {
-                        // The indication is limited to only one note and is 
+                        // The indication is limited to only one note and is
                         // expressed with invisible rests in Lilypond language.
                         // (See LilyPond v2.22.2, Notation Reference §1.3.1)
 
-                        if (!(*j)->isa(Note::EventType)) {  
+                        if (!(*j)->isa(Note::EventType)) {
                             std::cerr << "WARNING: a crescendo/decrescendo "
                                       << "limited to a single event which is"
                                       << " not a note has been found.\n";
                         } else {
                             Note::Type type = (*j)->get<Int>(NOTE_TYPE);
                             Note::Type dots = (*j)->get<Int>(NOTE_DOTS);
-                            
-                            QString restsDuration(lilyHalfDuration(type)); 
-                                                    
+
+                            QString restsDuration(lilyHalfDuration(type));
+
                             // Add possible dots
                             for (int i = dots; i; i--) {
                                 restsDuration += ".";
                             }
-                            
+
                             // Duration
                             const char * d = restsDuration.toStdString().data();
-                                    
+
                             // Indication
                             const char * in =
                                 i.getIndicationType() == Indication::Crescendo
                                     ? "\\< " : "\\> ";
-                                
+
                             // Write the indication using silent rests
                             str << "{ s" << d << " " << in << "s" << d << " \\! } >> ";
                         }
@@ -491,7 +491,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
             } catch (const Event::NoData &e) {
                 RG_WARNING << "Bad indication: " << e.getMessage();
             }
-        
+
         }
 
         eventstartlist::iterator n(m);
@@ -578,7 +578,7 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
             timeT eventEnd = eventStart + (*j)->getNotationDuration();
 
             if (indicationEnd < eventEnd ||
-                
+
                 ((i.getIndicationType() == Indication::Slur ||
                   i.getIndicationType() == Indication::PhrasingSlur) &&
                  indicationEnd == eventEnd) ||
@@ -586,12 +586,12 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
                  // At the end of a segment there will be no more event
                  // where to put the end of a Crescendo/Decrescendo.
                  // So we are going to put it immediately (Fix bug #1620).
-                (indicationEnd >= seg->getEndMarkerTime() &&  
+                (indicationEnd >= seg->getEndMarkerTime() &&
                     eventEnd >= seg->getEndMarkerTime() &&
                         (i.getIndicationType() == Indication::Crescendo ||
                          i.getIndicationType() == Indication::Decrescendo)) ) {
-                
-                
+
+
                 if (i.getIndicationType() == Indication::Slur) {
                     str << ") ";
                 } else if (i.getIndicationType() == Indication::PhrasingSlur) {
@@ -788,7 +788,7 @@ LilyPondExporter::protectIllegalChars(std::string inStr)
 struct MarkerComp {
     // Sort Markers by time
     // Perhaps this should be made generic with a template?
-    bool operator()(Marker *a, Marker *b) { 
+    bool operator()(Marker *a, Marker *b) const {
         return a->getTime() < b->getTime();
     }
 };
@@ -820,7 +820,7 @@ LilyPondExporter::write()
     if (illegalFilename) {
         int reply = QMessageBox::question(
                 dynamic_cast<QWidget*>(qApp),
-                baseName, 
+                baseName,
                 tr("LilyPond does not allow spaces or backslashes in filenames.\n\n"
                    "Would you like to use\n\n %1\n\n instead?").arg(tmpName),
                 QMessageBox::Yes |QMessageBox::Cancel,
@@ -979,7 +979,7 @@ LilyPondExporter::write()
         break; // "do not specify"
     }
     if (paper != "") {
-        str << indent(col) << "#(set-default-paper-size \"" << paper << "\"" 
+        str << indent(col) << "#(set-default-paper-size \"" << paper << "\""
             << (m_paperLandscape ? " 'landscape" : "") << ")"
             << std::endl;
     }
@@ -1007,12 +1007,12 @@ LilyPondExporter::write()
     timeT compositionStartTime = (*i)->getStartTime();
     timeT compositionEndTime = (*i)->getEndMarkerTime();
     for (; i != m_composition->end(); ++i) {
-        
+
         // Allow some oportunities for user to cancel
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             return false;
         }
-        
+
         if (compositionStartTime > (*i)->getStartTime()) {
             compositionStartTime = (*i)->getStartTime();
         }
@@ -1035,35 +1035,35 @@ LilyPondExporter::write()
     // Don't continue if lsc is empty
     if (lsc.containsNoSegment()) {
         switch (m_exportSelection) {
-          
+
             case EXPORT_ALL_TRACKS :
-                // We should have already exited this method if the composition is empty 
+                // We should have already exited this method if the composition is empty
                 m_warningMessage = "No segments found while exporting all the"
                                    " tracks : THIS IS A BUG.";
                 break;
-                
+
             case EXPORT_NONMUTED_TRACKS :
                 m_warningMessage = tr("Export of unmuted tracks failed.  There"
                                       " are no unmuted tracks or no segments on"
                                       " them.");
                 break;
-                
+
             case EXPORT_SELECTED_TRACK :
                 m_warningMessage = tr("Export of selected track failed.  There"
                                       " are no segments on the selected track.");
                 break;
-                
+
             case EXPORT_SELECTED_SEGMENTS :
                 m_warningMessage = tr("Export of selected segments failed.  No"
                                       " segments are selected.");
                 break;
-                
+
             case EXPORT_EDITED_SEGMENTS :
                 // Notation editor can't be open without any segment inside
                 m_warningMessage = "No segments found while exporting the"
                                    " edited segments : THIS IS A BUG.";
                 break;
-                
+
             default :
                 m_warningMessage = "Abnormal m_exportSelection value :"
                                    " THIS IS A BUG.";
@@ -1083,7 +1083,7 @@ LilyPondExporter::write()
 
     // If needed, compute offsets in LilyPond score of segments following
     // a repeat with volta coming from linked segments.
-    //!!! TODO : Use an other switch than m_repeatMode 
+    //!!! TODO : Use an other switch than m_repeatMode
     if (m_repeatMode == REPEAT_VOLTA) {
         lsc.fixVoltaStartTimes();
     }
@@ -1109,7 +1109,7 @@ LilyPondExporter::write()
     if (m_repeatMode != REPEAT_VOLTA) {   ///!!! Quick hack to remove the last blank measure
         /// The old way : look all bars successively to find time signature and
         /// write it in a LilyPond comment except for the very first one.
-        /// The time is computed from the composition start time. This is wrong as 
+        /// The time is computed from the composition start time. This is wrong as
         /// the composition start time may be outside the exported time range.
         /// Nevertheless I have no time to fix it now. So sometimes it may work and
         /// sometimes not work...
@@ -1120,7 +1120,7 @@ LilyPondExporter::write()
             if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
                 return false;
             }
-            
+
             bool isNew = false;
             m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
 
@@ -1270,7 +1270,7 @@ LilyPondExporter::write()
             if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
                 return false;
             }
-        
+
             timeT markerTime = m_composition->getBarStartForTime((*i_marker)->getTime());
             RG_DEBUG << "Marker: " << (*i_marker)->getTime() << " previous: " << prevMarkerTime;
             // how to cope with time signature changes?
@@ -1278,7 +1278,7 @@ LilyPondExporter::write()
                 str << indent(col);
                 writeSkip(m_composition->getTimeSignatureAt(markerTime),
                           markerTime, markerTime - prevMarkerTime, false, str);
-                str << "\\mark "; 
+                str << "\\mark ";
                 switch (m_exportMarkerMode) {
                 case EXPORT_DEFAULT_MARKERS:
                     // Use the marker name for text
@@ -1317,10 +1317,9 @@ LilyPondExporter::write()
     // be relatively small in the greater scheme.
 
     Track *track = nullptr;
-    int trackPos = 0;
 
     for (track = lsc.useFirstTrack(); track; track = lsc.useNextTrack()) {
-        trackPos = lsc.getTrackPos();
+        int trackPos = lsc.getTrackPos();
         // Allow some opportunities for user to cancel
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             return false;
@@ -1397,7 +1396,7 @@ LilyPondExporter::write()
                         // right under staff closures, but at this point in the
                         // loop we are one track too early for closing, so we use
                         // the bracket setting for the previous track for closing
-                        // purposes (I'm not quite sure why this works, but it does)            
+                        // purposes (I'm not quite sure why this works, but it does)
                         if (m_exportStaffGroup) {
                             if (prevBracket == Brackets::SquareOff ||
                                 prevBracket == Brackets::SquareOnOff) {
@@ -1438,10 +1437,10 @@ LilyPondExporter::write()
                         for (int iRepeat = 0; iRepeat < nRepeats; ++iRepeat) {
                             for (Segment::iterator j = seg->begin();
                                  seg->isBeforeEndMarker(j); ++j) {
-                                
+
                                 bool isNote = (*j)->isa(Note::EventType);
                                 bool isChord = false;
-                                
+
                                 if (!isNote) {
                                     if ((*j)->isa(Text::EventType)) {
                                         std::string textType;
@@ -1452,9 +1451,9 @@ LilyPondExporter::write()
                                         }
                                     }
                                 }
-                                
+
                                 if (!isNote && !isChord) continue;
-                                
+
                                 myTime = (*j)->getNotationAbsoluteTime() +
                                     segLength * iRepeat;
                                 RG_DEBUG << "myTime1" << myTime;
@@ -1468,14 +1467,14 @@ LilyPondExporter::write()
                                     lscStart;
                                 myTime -= segStartDelta;
                                 RG_DEBUG << "myTime2" << myTime;
-                                
+
                                 if (isChord) {
                                     std::string schord;
                                     (*j)->get<String>(Text::TextPropertyName, schord);
                                     QString chord(strtoqstr(schord));
                                     chord.replace(QRegularExpression("\\s+"), "");
                                     chord.replace(QRegularExpression("h"), "b");
-                                    
+
                                     // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
                                     QRegularExpression rx("^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$");
                                     if (rx.match(chord).hasMatch()) {
@@ -1488,7 +1487,7 @@ LilyPondExporter::write()
                                         str << (" %{ improper chord: '") << qStrToStrUtf8(chord) << ("' %} ");
                                         continue;
                                     }
-                                    
+
                                     if (numberOfChords == -1) {
                                         str << indent(col++) << "\\new ChordNames " << "\\with {alignAboveContext=\"track " <<
                                             (trackPos + 1) << "\"}" << "\\chordmode {" << std::endl;
@@ -1543,7 +1542,7 @@ LilyPondExporter::write()
                                 str << indent(col++) << "\\context GrandStaff = \""
                                     << ++pianoStaffCounter << "\" <<" << std::endl;
                             }
-                        } 
+                        }
 
                         // avoid problem with <untitled> tracks yielding a
                         // .ly file that jumbles all notes together on a
@@ -1682,7 +1681,7 @@ LilyPondExporter::write()
                         << "\" {"; // indent+
 
                     str << std::endl << indent(col) << "% Segment: " << seg->getLabel();
-                    
+
                     str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
                     str << std::endl << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
 
@@ -1729,7 +1728,7 @@ LilyPondExporter::write()
                             writeDuration(1, str);
                             str << "*" << ((int)(partialDuration / partialNote.getDuration()))
                                 << std::endl;
-        
+
                         } else {
                             if (m_repeatMode == REPEAT_BASIC) {
                                 timeT partialOffset = seg->getStartTime()
@@ -1811,13 +1810,13 @@ LilyPondExporter::write()
                     // open \repeat section if this is the first bar in the
                     // repeat
                     if ( (lsc.isRepeatingSegment()
-                           || (lsc.isSimpleRepeatedLinks() 
+                           || (lsc.isSimpleRepeatedLinks()
                                   && (m_repeatMode == REPEAT_VOLTA)
                               )
                          ) && !haveRepeating) {
 
                         haveRepeating = true;
-                        int numRepeats = 2; 
+                        int numRepeats = 2;
 
                         if (m_repeatMode == REPEAT_BASIC) {
                             // The old unfinished way
@@ -1826,11 +1825,11 @@ LilyPondExporter::write()
                         } else {
                             numRepeats = lsc.getNumberOfRepeats();
                             if ((m_repeatMode == REPEAT_VOLTA) && lsc.isSynchronous()) {
-                                str << std::endl << indent(col++) 
+                                str << std::endl << indent(col++)
                                     << "\\repeat volta " << numRepeats << " {";
                             } else {
                                 // m_repeatMode == REPEAT_UNFOLD
-                                str << std::endl << indent(col++) 
+                                str << std::endl << indent(col++)
                                     << "\\repeat unfold "
                                     << numRepeats << " {";
                             }
@@ -1839,7 +1838,7 @@ LilyPondExporter::write()
                             !haveRepeatingWithVolta &&
                             !haveVolta) {
                         if (!lsc.isVolta()) {
-                            str << std::endl << indent(col++); 
+                            str << std::endl << indent(col++);
                             if (lsc.isAutomaticVoltaUsable()) {
                                 str << "\\repeat volta "
                                     << lsc.getNumberOfRepeats() << " ";
@@ -1866,14 +1865,14 @@ LilyPondExporter::write()
                                 }
                             }
                         } else {
-                            str << std::endl << indent(col) 
+                            str << std::endl << indent(col)
                                 << "{   % Alternative start here";
-                            str << std::endl << indent(col++) 
+                            str << std::endl << indent(col++)
                                 << "    % Segment: " << seg->getLabel();
                             if (!lsc.isAutomaticVoltaUsable()) {
                                 str << std::endl << indent(col)
                                     << "\\set Score.repeatCommands = ";
-                                if (lsc.isFirstVolta()) {   
+                                if (lsc.isFirstVolta()) {
                                     str << "#'((volta \""
                                         << lsc.getVoltaText() << "\"))";
                                 } else {
@@ -1882,7 +1881,7 @@ LilyPondExporter::write()
                                 }
                             }
                             if (m_voltaBar) {
-                                str << std::endl << indent(col) 
+                                str << std::endl << indent(col)
                                     << "\\bar \"|\" ";
                             }
                             haveVolta = true;
@@ -1924,7 +1923,7 @@ LilyPondExporter::write()
                     writeBar(seg, barNo, barStart, barEnd, col, key,
                             lilyText,
                             prevStyle, preEventsInProgress, postEventsInProgress, str,
-                            MultiMeasureRestCount, 
+                            MultiMeasureRestCount,
                             nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble,
                             nextBarIsEnd, nextBarIsDot,
                             noTimeSig);
@@ -2005,8 +2004,8 @@ LilyPondExporter::write()
                 if (m_exportLyrics != EXPORT_NO_LYRICS) {
                     // To force correct ordering of verses must track when first verse is printed.
                     bool isFirstPrintedVerse = true;
-                    for (long currentVerse = 0, lastVerse = 0; 
-                        currentVerse <= lastVerse; 
+                    for (long currentVerse = 0, lastVerse = 0;
+                        currentVerse <= lastVerse;
                         currentVerse++) {
                         bool haveLyric = false;
                         bool firstNote = true;
@@ -2056,7 +2055,7 @@ LilyPondExporter::write()
                                     std::string ssyllable;
                                     (*j)->get<String>(Text::TextPropertyName, ssyllable);
                                     text += " ";
-            
+
                                     QString syllable(strtoqstr(ssyllable));
                                     syllable.replace(QRegularExpression("^\\s+"), "");
                                     syllable.replace(QRegularExpression("\\s+$"), "");
@@ -2077,7 +2076,7 @@ LilyPondExporter::write()
                         // in earlier comment?
                         QRegularExpression rx("\"");
                         if (rx.match(text).hasMatch()) {
-        
+
                             if (m_languageLevel <= LILYPOND_VERSION_2_10) {
                                 str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
                                     << " \\new Lyrics \\lyricmode {" << std::endl;
@@ -2183,7 +2182,7 @@ LilyPondExporter::write()
     return true;
 }
 
-timeT 
+timeT
 LilyPondExporter::calculateDuration(Segment *s,
                                     const Segment::iterator &i,
                                     timeT barEnd,
@@ -2507,7 +2506,7 @@ LilyPondExporter::writeBar(Segment *s,
         // Test whether the next note is grace note or not.
         // The start or end of beamed grouping should be put in proper places.
         if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
-            if (isGrace == 0) { 
+            if (isGrace == 0) {
                 isGrace = 1;
 
                 // LilyPond export hack:  If a grace note has one or more
@@ -2814,7 +2813,7 @@ LilyPondExporter::writeBar(Segment *s,
                             str << " ";
                     }
                 }
-    
+
                 if (duration != prevDuration) {
                     durationRatio = writeDuration(duration, str);
                     if (MultiMeasureRestCount > 0) {
@@ -2836,7 +2835,7 @@ LilyPondExporter::writeBar(Segment *s,
                 }
 
                 str << " ";
-    
+
                 handleEndingPostEvents(postEventsInProgress, s, i, str);
                 handleStartingPostEvents(postEventsToStart, s, i, str);
             } else {
@@ -2971,7 +2970,7 @@ LilyPondExporter::writeBar(Segment *s,
 
     //
     // Pad bars whose notes do not add up to the length of the bar.
-    // This may happen if the note quantization fails somehow. 
+    // This may happen if the note quantization fails somehow.
     //
     if ((barStart + writtenDuration < barEnd) &&
         fractionSmaller(durationRatioSum, barDurationRatio)) {
@@ -2988,7 +2987,7 @@ LilyPondExporter::writeBar(Segment *s,
                       arg(barDurationRatio.first).
                       arg(barDurationRatio.second))
             << std::endl << indent(col);
-    
+
         durationRatio = writeSkip(timeSignature, writtenDuration,
                                   (barEnd - barStart) - writtenDuration, true, str);
         durationRatioSum = fractionSum(durationRatioSum, durationRatio);

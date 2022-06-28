@@ -99,7 +99,7 @@ public:
     /**
      * Create an empty segment context
      */
-    LilyPondSegmentsContext(Composition *composition);
+    explicit LilyPondSegmentsContext(Composition *composition);
 
     ~LilyPondSegmentsContext();
 
@@ -135,13 +135,13 @@ public:
      * Return the smaller start time of the segments being exported.
      * Only valid after precompute() has been executed.
      */
-    timeT getFirstSegmentStartTime() { return m_firstSegmentStartTime; }
+    timeT getFirstSegmentStartTime() const { return m_firstSegmentStartTime; }
 
     /**
      * Return the larger end time of the segments being exported.
      * Only valid after precompute() has been executed.
      */
-    timeT getLastSegmentEndTime() { return m_lastSegmentEndTime; }
+    timeT getLastSegmentEndTime() const { return m_lastSegmentEndTime; }
 
     /**
      * Prepare to get the segments on the first track.
@@ -271,11 +271,11 @@ public:
     /**
      * Return true if LilyPond automatic volta mode is usable.
      * Valid as soon as precompute() has been executed.
-     * 
+     *
      * Currently, this is a global flag: automatic and manual repeat/volta
      * are not mixed in the same score.
      */
-    bool isAutomaticVoltaUsable() { return m_automaticVoltaUsable; } 
+    bool isAutomaticVoltaUsable() const { return m_automaticVoltaUsable; }
 
     /// Only for instrumentation while debugging
     void dump();
@@ -351,6 +351,7 @@ private :
             sortedVoltaChain = nullptr;
             startTime = 0;
             endTime = 0;
+            // cppcheck-suppress useInitializationList
             previousKey = Rosegarden::Key("undefined");
             simpleRepeatId = 0;
             numberOfSimpleRepeats = 0;
@@ -361,6 +362,7 @@ private :
         bool operator()(const SegmentData &s1, const SegmentData &s2) const;
     };
 
+    // cppcheck-suppress noConstructor
     class SegmentSet :
                 public std::multiset<SegmentData,
                                      LilyPondSegmentsContext::SegmentDataCmp>

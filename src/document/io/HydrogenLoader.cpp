@@ -33,7 +33,8 @@ namespace Rosegarden
 {
 
 HydrogenLoader::HydrogenLoader(Studio *studio):
-        m_studio(studio)
+    m_composition(0),
+    m_studio(studio)
 {}
 
 bool
