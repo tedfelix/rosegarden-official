@@ -73,6 +73,7 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
     // nothing else
 }
 
+// cppcheck-suppress uninitMemberVar
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
                                            timeT startTime,
                                            timeT endTime,
@@ -81,7 +82,6 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
     BasicCommand(getGlobalName(makeQuantizer(settingsGroup, scope)),
                  segment, startTime, endTime,
                  true),  // bruteForceRedo
-    m_quantizer(0),
     m_selection(nullptr),
     m_settingsGroup(settingsGroup),
     m_progressTotal(0),
@@ -90,6 +90,7 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
     // nothing else -- m_quantizer set by makeQuantizer
 }
 
+// cppcheck-suppress uninitMemberVar
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
                                            QString settingsGroup,
                                            QuantizeScope scope) :
@@ -98,7 +99,6 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
                  selection.getStartTime(),
                  selection.getEndTime(),
                  true),  // bruteForceRedo
-    m_quantizer(0),
     m_selection(&selection),
     m_settingsGroup(settingsGroup),
     m_progressTotal(0),
