@@ -179,7 +179,7 @@ private:
                                        const Rosegarden::Key &key);
 
     // compose an appropriate LilyPond representation for various Marks
-    std::string composeLilyMark(std::string eventMark, bool stemUp);
+    static std::string composeLilyMark(std::string eventMark, bool stemUp);
 
     // find/protect illegal characters in user-supplied strings
     static std::string protectIllegalChars(std::string inStr);
@@ -188,7 +188,7 @@ private:
     static std::string indent(const int &column);
 
     // write a time signature
-    void writeTimeSignature(TimeSignature timeSignature, int col, std::ofstream &str);
+    static void writeTimeSignature(TimeSignature timeSignature, int col, std::ofstream &str);
 
     std::pair<int,int> writeSkip(const TimeSignature &timeSig,
 				 timeT offset,
@@ -205,7 +205,7 @@ private:
                                 bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                                 bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
 
-    void handleText(const Event *, std::string &lilyText);
+    void handleText(const Event *, std::string &lilyText) const;
     static void handleGuitarChord(Segment::iterator i, std::ofstream &str);
     void writePitch(const Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);

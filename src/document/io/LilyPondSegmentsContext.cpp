@@ -37,6 +37,7 @@ LilyPondSegmentsContext::LilyPondSegmentsContext(Composition *composition) :
     m_firstSegmentStartTime(0),
     m_lastSegmentEndTime(0),
     m_automaticVoltaUsable(true),
+    m_GSSSegment(nullptr),
     m_repeatWithVolta(false),
     m_currentVoltaChain(nullptr),
     m_firstVolta(false),
@@ -83,7 +84,7 @@ LilyPondSegmentsContext::addSegment(Segment *segment)
 
 
 bool
-LilyPondSegmentsContext::containsNoSegment()
+LilyPondSegmentsContext::containsNoSegment() const
 {
     return m_segments.size() == 0;
 }
@@ -97,7 +98,7 @@ LilyPondSegmentsContext::precompute()
 
     // Look for previous key of each segment.
     // Walk through the segments of a voice and set the previousKey of each
-    // segment to the value of the last key found in the previous contiguous 
+    // segment to the value of the last key found in the previous contiguous
     // segment.
     // This works because segments of a same voice can be contiguous but can't
     // overlap.
@@ -635,13 +636,13 @@ LilyPondSegmentsContext::useNextSegment()
 }
 
 timeT
-LilyPondSegmentsContext::getSegmentStartTime()
+LilyPondSegmentsContext::getSegmentStartTime() const
 {
     return m_segIterator->startTime;
 }
 
 int
-LilyPondSegmentsContext::getNumberOfRepeats()
+LilyPondSegmentsContext::getNumberOfRepeats() const
 {
     if (m_repeatWithVolta && (*m_segIterator).repeatId) {
         return (*m_segIterator).numberOfVolta;
@@ -653,28 +654,28 @@ LilyPondSegmentsContext::getNumberOfRepeats()
 }
 
 bool
-LilyPondSegmentsContext::isRepeated()
+LilyPondSegmentsContext::isRepeated() const
 {
     return m_segIterator->numberOfRepeats
           || m_segIterator->numberOfSimpleRepeats;
 }
 
 bool
-LilyPondSegmentsContext::isRepeatingSegment()
+LilyPondSegmentsContext::isRepeatingSegment() const
 {
     return (*m_segIterator).numberOfRepeats
            && !(*m_segIterator).simpleRepeatId;
 }
 
 bool
-LilyPondSegmentsContext::isSimpleRepeatedLinks()
+LilyPondSegmentsContext::isSimpleRepeatedLinks() const
 {
     return (*m_segIterator).numberOfSimpleRepeats
            && (*m_segIterator).simpleRepeatId;
 }
 
 bool
-LilyPondSegmentsContext::isRepeatWithVolta()
+LilyPondSegmentsContext::isRepeatWithVolta() const
 {
     if (m_repeatWithVolta) {
         return (*m_segIterator).numberOfVolta;
@@ -684,25 +685,25 @@ LilyPondSegmentsContext::isRepeatWithVolta()
 }
 
 bool
-LilyPondSegmentsContext::isSynchronous()
+LilyPondSegmentsContext::isSynchronous() const
 {
     return (*m_segIterator).synchronous;
 }
 
 bool
-LilyPondSegmentsContext::isVolta()
+LilyPondSegmentsContext::isVolta() const
 {
     return m_currentVoltaChain;
 }
 
 bool
-LilyPondSegmentsContext::isFirstVolta()
+LilyPondSegmentsContext::isFirstVolta() const
 {
     return m_firstVolta;
 }
 
 bool
-LilyPondSegmentsContext::isLastVolta()
+LilyPondSegmentsContext::isLastVolta() const
 {
     return m_lastVolta;
 }
@@ -759,14 +760,14 @@ LilyPondSegmentsContext::getVoltaRepeatCount()
 }
 
 Rosegarden::Key
-LilyPondSegmentsContext::getPreviousKey()
+LilyPondSegmentsContext::getPreviousKey() const
 {
     if (m_currentVoltaChain) return (*m_voltaIterator)->data->previousKey;
     return m_segIterator->previousKey;
 }
 
 bool
-LilyPondSegmentsContext::wasRepeatingWithoutVolta()
+LilyPondSegmentsContext::wasRepeatingWithoutVolta() const
 {
     return m_wasRepeatingWithoutVolta;
 }
@@ -1030,7 +1031,7 @@ LilyPondSegmentsContext::SegmentSet::isNextSegmentsOfRepeatWithVolta()
 
     // It must be a synchronous segment
     if (!m_it2->synchronous) return false;
-    
+
     // It must have the right number of parallel segments
     if (m_it2->syncCount != m_it0-> syncCount) return false;
 
@@ -1355,7 +1356,7 @@ LilyPondSegmentsContext::dump()
                     }
                 }
                 std::cout << "               ignored=" << (*sit).ignored
-                          << " simpleRepeatId=" 
+                          << " simpleRepeatId="
                           << (*sit).simpleRepeatId << std::endl;
             }
         }
@@ -1407,7 +1408,7 @@ LilyPondSegmentsContext::SegmentDataList::dump()
                 }
             }
         }
-        
+
         if ((*it)->sortedVoltaChain) {
             std::cout << std::endl << "sorted:" << std::endl;
             VoltaChain::iterator ivc;

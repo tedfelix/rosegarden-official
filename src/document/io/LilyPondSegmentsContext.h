@@ -111,7 +111,7 @@ public:
     /**
      * Return true if the segment context is empty
      */
-    bool containsNoSegment();
+    bool containsNoSegment() const;
 
     /**
      * Walk through all segments, find the repeating ones and compute
@@ -195,54 +195,54 @@ public:
     /**
      * Return the start time of the current segment in LilyPond
      */
-    timeT getSegmentStartTime();
+    timeT getSegmentStartTime() const;
 
     /**
      * Return how many time the current segment is repeated in LilyPond
      */
-    int getNumberOfRepeats();
+    int getNumberOfRepeats() const;
 
     /**
      * Return true if the segment is repeated (a repeating segment or
      * simple repeated links) without volta
      */
-    bool isRepeated();
+    bool isRepeated() const;
 
     /**
      * Return true if the segment is a repeating segment (not linked segments)
      */
-    bool isRepeatingSegment();
+    bool isRepeatingSegment() const;
 
     /**
      * Return true if the repetition is made of several linked segments
      * without alternate ends
      */
-    bool isSimpleRepeatedLinks();
+    bool isSimpleRepeatedLinks() const;
 
     /**
      * Return true if the segment is inside a "repeat with volta" chain
      */
-    bool isRepeatWithVolta();
+    bool isRepeatWithVolta() const;
 
     /**
      * Return true if the segment is synchronous
      */
-    bool isSynchronous();
+    bool isSynchronous() const;
 
     /**
      * Return true if the segment is a volta
      */
-    bool isVolta();
+    bool isVolta() const;
 
     /**
      * Return true if the segment is the first volta of a chain
      */
-    bool isFirstVolta();
+    bool isFirstVolta() const;
 
     /**
      * Return true if the segment is the last volta of a chain
      */
-    bool isLastVolta();
+    bool isLastVolta() const;
 
     /**
      * Return the text of the current volta.
@@ -258,7 +258,7 @@ public:
      * Return true if the previous segment (on the same voice) was repeating
      * without volta.
      */
-    bool wasRepeatingWithoutVolta();
+    bool wasRepeatingWithoutVolta() const;
 
     /**
      * Return the last key signature defined on the last contiguous segment
@@ -266,7 +266,7 @@ public:
      * Return an undefined key (or default key) if the previous segment is
      * not contiguous or if there is no previous segment.
      */
-    Rosegarden::Key getPreviousKey();
+    Rosegarden::Key getPreviousKey() const;
 
     /**
      * Return true if LilyPond automatic volta mode is usable.
@@ -332,7 +332,7 @@ private :
         mutable int simpleRepeatId;           // Identify a repeat without volta chain
         mutable int numberOfSimpleRepeats;    // How many segments in the chain
 
-        SegmentData(Segment * seg)
+        explicit SegmentData(Segment * seg)
         {
             segment = seg;
             duration = 0;

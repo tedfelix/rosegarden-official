@@ -3155,7 +3155,7 @@ LilyPondExporter::handleDirective(const Event *textEvent,
 
 void
 LilyPondExporter::handleText(const Event *textEvent,
-                             std::string &lilyText)
+                             std::string &lilyText) const
 {
     try {
 
