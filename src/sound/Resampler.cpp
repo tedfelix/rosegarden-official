@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,14 +29,14 @@ class ResamplerImpl
 {
 public:
     virtual ~ResamplerImpl() { }
-    
-    virtual int resample(const float *const *const in, 
+
+    virtual int resample(const float *const *const in,
                          float *const *const out,
                          int incount,
                          float ratio,
                          bool final) = 0;
-    
-    virtual int resampleInterleaved(const float *const in, 
+
+    virtual int resampleInterleaved(const float *const in,
                                     float *const out,
                                     int incount,
                                     float ratio,
@@ -105,7 +105,7 @@ D_SRC::D_SRC(Resampler::Quality quality, int channels, int maxBufferSize,
                     channels, &err);
 
     if (err) {
-        RG_WARNING << "Resampler::Resampler: failed to create libsamplerate resampler: " 
+        RG_WARNING << "Resampler::Resampler: failed to create libsamplerate resampler: "
                   << src_strerror(err);
         throw Resampler::ImplementationError; //!!! of course, need to catch this!
     }
@@ -143,10 +143,12 @@ D_SRC::resample(const float *const *const in,
         data.data_out = *out;
     } else {
         if (incount * m_channels > m_iinsize) {
+            // cppcheck-suppress memleakOnRealloc
             m_iin = (float *)realloc(m_iin, sizeof(float) * incount * m_channels);
             m_iinsize = incount * m_channels;
         }
         if (outcount * m_channels > m_ioutsize) {
+            // cppcheck-suppress memleakOnRealloc
             m_iout = (float *)realloc(m_iout, sizeof(float) * outcount * m_channels);
             m_ioutsize = outcount * m_channels;
         }
@@ -239,7 +241,7 @@ Resampler::~Resampler()
     delete d;
 }
 
-int 
+int
 Resampler::resample(const float *const *const in,
                     float *const *const out,
                     int incount, float ratio, bool final)
@@ -248,7 +250,7 @@ Resampler::resample(const float *const *const in,
     return d->resample(in, out, incount, ratio, final);
 }
 
-int 
+int
 Resampler::resampleInterleaved(const float *const in,
                                float *const out,
                                int incount, float ratio, bool final)

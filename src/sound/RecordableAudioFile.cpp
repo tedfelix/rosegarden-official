@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -110,7 +110,9 @@ RecordableAudioFile::write()
     size_t bufferReqd = channels * s;
     if (bufferReqd > bufferSize) {
 	if (buffer) {
+            // cppcheck-suppress memleakOnRealloc
 	    buffer = (sample_t *)realloc(buffer, bufferReqd * sizeof(sample_t));
+            // cppcheck-suppress memleakOnRealloc
 	    encodeBuffer = (char *)realloc(encodeBuffer, bufferReqd * 4);
 	} else {
 	    buffer = (sample_t *) malloc(bufferReqd * sizeof(sample_t));
@@ -155,4 +157,3 @@ RecordableAudioFile::write()
 }
 
 }
-

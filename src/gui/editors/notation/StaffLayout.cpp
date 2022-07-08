@@ -630,6 +630,7 @@ StaffLayout::sizeStaff(HorizontalLayoutEngine &layout)
 
         bool showBarNo =
             (showBarNumbersEvery() > 0 &&
+             // cppcheck-suppress zerodiv
              ((barNo + 1) % showBarNumbersEvery()) == 0);
 
         insertBar(x,
