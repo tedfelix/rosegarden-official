@@ -1,0 +1,52 @@
+name: CI Ubuntu
+
+env:
+  QT_VERSION:     "5.15.2"
+  
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - '.github/workflows/**'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:       
+    - name: Dependencies
+      run: |
+           sudo apt-get update
+           sudo apt-get install -y libsamplerate-dev
+           sudo apt-get install -y fftw3-dev
+           sudo apt-get install -y alsa-base
+           sudo apt-get install -y dssi-dev
+           sudo apt-get install -y ladspa-sdk
+           sudo apt-get install -y libjack-dev
+           sudo apt-get install -y liblo-dev
+           sudo apt-get install -y liblrdf-dev
+
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: ${{ env.QT_VERSION }}
+
+    - uses: actions/checkout@v1
+        
+    - name: Configure & Build
+      run: |
+           ls
+           export MAKEFLAGS="-j `nproc`"
+           mkdir build
+           cd build
+           echo "Running cmake"
+           cmake .. -DCMAKE_BUILD_TYPE=Debug
+           echo "Building"
+           make
+           
+           
+           
+
+
