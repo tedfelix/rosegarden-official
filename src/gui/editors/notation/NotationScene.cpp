@@ -1307,6 +1307,10 @@ NotationScene::segmentRemoved(const Composition *c, Segment *s)
         delete staff;
         m_staffs.erase(staffToDelete);
     }
+
+    // Redo the layouts so that there aren't any stray pointers
+    // to the removed staff.
+    layout(nullptr, 0, 0);
 }
 
 void
