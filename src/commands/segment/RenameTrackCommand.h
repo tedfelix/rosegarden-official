@@ -40,7 +40,7 @@ class RenameTrackCommand : public NamedCommand
 
 public:
     RenameTrackCommand(Composition *composition,
-                       TrackId track, 
+                       TrackId trackId,
                        QString longName,
                        QString shortName);
     ~RenameTrackCommand() override;
@@ -54,7 +54,7 @@ protected:
     Composition *m_composition;
     TrackId      m_trackId;
     QString      m_oldLongName;
-    QString      m_oldShortName;             
+    QString      m_oldShortName;
     QString      m_newLongName;
     QString      m_newShortName;
 };

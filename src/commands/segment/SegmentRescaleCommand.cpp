@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -30,14 +30,14 @@
 namespace Rosegarden
 {
 
-SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
+SegmentRescaleCommand::SegmentRescaleCommand(Segment *segment,
                                              int multiplier,
                                              int divisor) :
     NamedCommand(getGlobalName()),
-    m_segment(s),
+    m_segment(segment),
     m_newSegment(nullptr),
     m_startTimeGiven(false),
-    m_startTime(s->getStartTime()),
+    m_startTime(segment->getStartTime()),
     m_multiplier(multiplier),
     m_divisor(divisor),
     m_detached(false)
@@ -45,15 +45,15 @@ SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
     // nothing
 }
 
-SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
+SegmentRescaleCommand::SegmentRescaleCommand(Segment *segment,
                                              int multiplier,
                                              int divisor,
-                                             timeT st) :
+                                             timeT newStartTime) :
     NamedCommand(getGlobalName()),
-    m_segment(s),
+    m_segment(segment),
     m_newSegment(nullptr),
     m_startTimeGiven(true),
-    m_startTime(st),
+    m_startTime(newStartTime),
     m_multiplier(multiplier),
     m_divisor(divisor),
     m_detached(false)
@@ -130,7 +130,7 @@ SegmentRescaleCommand::execute()
                                  m_newSegment->getEndTime());
 
     m_newSegment->setEndMarkerTime
-    (m_startTime + rescale(m_segment->getEndMarkerTime() - 
+    (m_startTime + rescale(m_segment->getEndMarkerTime() -
                          m_segment->getStartTime()));
 
     m_detached = true;

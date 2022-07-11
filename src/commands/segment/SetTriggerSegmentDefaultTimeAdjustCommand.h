@@ -39,7 +39,7 @@ class SetTriggerSegmentDefaultTimeAdjustCommand : public NamedCommand
 public:
     SetTriggerSegmentDefaultTimeAdjustCommand(Composition *composition,
                                               TriggerSegmentId id,
-                                              std::string newDefaultTimeAdjust);
+                                              const std::string& newDefaultTimeAdjust);
     ~SetTriggerSegmentDefaultTimeAdjustCommand() override;
 
     void execute() override;

@@ -38,7 +38,7 @@ class Composition;
 class CsoundExporter
 {
 public:
-    CsoundExporter(QObject *parent, Composition *, std::string fileName);
+    CsoundExporter(QObject *parent, Composition *, const std::string& fileName);
     ~CsoundExporter();
 
     bool write();

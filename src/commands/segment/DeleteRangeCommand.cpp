@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -38,7 +38,7 @@ class SegmentGroupDeleteRangeCommand : public LinkedSegmentsCommand
 {
 public:
     typedef std::vector<Segment *> SegmentVec;
-    SegmentGroupDeleteRangeCommand(SegmentVec originalSegments,
+    SegmentGroupDeleteRangeCommand(const SegmentVec& originalSegments,
                              timeT firstSplitTime, timeT secondSplitTime,
                              Composition *composition) :
         LinkedSegmentsCommand(tr("Delete Range Helper"),
@@ -82,7 +82,7 @@ splitAtFirst(Segment *segment)
         SSSSS
     */
 
-    SegmentVec segmentsAB = 
+    SegmentVec segmentsAB =
         SegmentSplitCommand::getNewSegments(segment, m_firstSplitTime, true);
 
     Segment *segmentA = segmentsAB[0];
@@ -105,7 +105,7 @@ splitAtFirst(Segment *segment)
       EraseSegmentsStartingInRangeCommand.
 
       ---|RANGE|---
-      AAA 
+      AAA
 
     */
 
@@ -123,7 +123,7 @@ splitAtSecond(Segment *segment)
             SSSSSSS
     */
 
-    SegmentVec segmentsBC = 
+    SegmentVec segmentsBC =
         SegmentSplitCommand::getNewSegments(segment, m_secondSplitTime, true);
     Segment *segmentB = segmentsBC[0];
     Segment *segmentC = segmentsBC[1];
@@ -164,12 +164,12 @@ splitTwiceRejoin(Segment *segment)
         SSSSSSSSSSS
     */
 
-    SegmentVec segmentsAX = 
+    SegmentVec segmentsAX =
         SegmentSplitCommand::getNewSegments(segment,
                                             m_firstSplitTime, true);
     Segment *segmentA = segmentsAX[0];
 
-    SegmentVec segmentsBC = 
+    SegmentVec segmentsBC =
         SegmentSplitCommand::getNewSegments(segmentsAX[1],
                                             m_secondSplitTime, true);
     Segment *segmentB = segmentsBC[0];
@@ -199,13 +199,13 @@ splitTwiceRejoin(Segment *segment)
 
     */
 
-    // Join A and C.  
+    // Join A and C.
     SegmentVec toBeJoined;
     toBeJoined.reserve(2);
     toBeJoined.push_back(segmentA);
     toBeJoined.push_back(segmentC);
 
-    Segment * segmentFinal = 
+    Segment * segmentFinal =
         SegmentJoinCommand::makeSegment(toBeJoined);
 
     // A and C themselves will never be seen.
@@ -253,7 +253,7 @@ calculateNewSegments()
             segment = (*i);
         }
     }
-        
+
     bool splitByFirst =  (segment->getStartTime() < m_firstSplitTime);
 
     // There are no new segments, we are just detaching segments
@@ -297,11 +297,11 @@ calculateNewSegments()
 
         newSegment->setEndMarkerTime(endMarkerTime);
         copyAuxProperties(oldSegment, newSegment);
-        
+
         m_newSegments.push_back(newSegment);
     }
 }
-    
+
 void
 SegmentGroupDeleteRangeCommand::
 execute()
@@ -318,7 +318,7 @@ unexecute()
 }
 
 DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
-                                       timeT t0, timeT t1) :
+                                       timeT begin, timeT end) :
         MacroCommand(tr("Delete Range"))
 {
     // First add commands to split the segments up.  Make a note of
@@ -334,9 +334,9 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
         // the original segments, so that we can use the same segment
         // pointer to do the left split as we did for the right
 
-        timeT t = t1;
+        timeT t = end;
         if (e == 1)
-            t = t0;
+            t = begin;
 
         for (Composition::iterator i = composition->begin();
                 i != composition->end(); ++i) {
@@ -362,10 +362,10 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
 
             // How many time to split the segment ?
             int count = 0;
-            if (t0 > (*i)->getStartTime() && t0 < (*i)->getEndMarkerTime()) {
+            if (begin > (*i)->getStartTime() && begin < (*i)->getEndMarkerTime()) {
                 count++;
             }
-            if (t1 > (*i)->getStartTime() && t1 < (*i)->getEndMarkerTime()) {
+            if (end > (*i)->getStartTime() && end < (*i)->getEndMarkerTime()) {
                 count++;
             }
 
@@ -376,7 +376,7 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
                     // because all unlinked Segments would wrongly
                     // look like members of the same link group.
                     addCommand(new SegmentGroupDeleteRangeCommand
-                               (SegmentVec(1, *i), t0, t1, composition));
+                               (SegmentVec(1, *i), begin, end, composition));
                 } else {
                     // Otherwise store it.  It will be extracted as a
                     // part of its linked group.
@@ -393,7 +393,7 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
         LinkedGroups::iterator endOfGroup = linkedGroups.upper_bound(*i);
         SegmentVec segmentVec(i, endOfGroup);
         addCommand(new SegmentGroupDeleteRangeCommand
-                   (segmentVec, t0, t1, composition));
+                   (segmentVec, begin, end, composition));
         // Now step from the end of the group (ie, one past the last
         // element of this group)
         i = endOfGroup;
@@ -403,9 +403,10 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
 
     // !!! Now this does almost nothing, just needed for small
     // segments entirely within the deleted range.
-    addCommand(new EraseSegmentsStartingInRangeCommand(composition, t0, t1));
+    addCommand(new EraseSegmentsStartingInRangeCommand(composition,
+                                                       begin, end));
 
-    addCommand(new OpenOrCloseRangeCommand(composition, t0, t1, false));
+    addCommand(new OpenOrCloseRangeCommand(composition, begin, end, false));
 }
 
 DeleteRangeCommand::~DeleteRangeCommand()

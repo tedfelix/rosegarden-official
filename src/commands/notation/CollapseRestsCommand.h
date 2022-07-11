@@ -45,7 +45,7 @@ public:
                          timeT endTime) :
         BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
-    CollapseRestsCommand(EventSelection &selection);
+    explicit CollapseRestsCommand(EventSelection &selection);
 
     static QString getGlobalName() { return tr("&Collapse Rests"); }
 

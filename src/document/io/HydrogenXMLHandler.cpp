@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -36,9 +36,9 @@ namespace Rosegarden
 {
 
 HydrogenXMLHandler::HydrogenXMLHandler(Composition *composition,
-                                       InstrumentId drumIns):
+                                       InstrumentId drumInstrument):
         m_composition(composition),
-        m_drumInstrument(drumIns),
+        m_drumInstrument(drumInstrument),
         m_inNote(false),
         m_inInstrument(false),
         m_inPattern(false),
@@ -171,19 +171,13 @@ HydrogenXMLHandler::startElement(const QString& /*namespaceURI*/,
                                  const QString& qName,
                                  const QXmlStreamAttributes& /*atts*/)
 {
- bool rc=false;
- QXmlStreamAttributes DummyAttr;
- QString DummyQString;
+    QXmlStreamAttributes DummyAttr;
+    QString DummyQString;
 
- if (m_version=="") {
-   /* no version yet, use 093 */
-   rc=startElement_093(DummyQString, DummyQString, qName, DummyAttr);
- }
- else {
-   /* select version dependant function */
-   rc=startElement_093(DummyQString, DummyQString, qName, DummyAttr);
- }
- return rc;
+    // a test of m_version here can be used to distinguish different versions
+    // at the moment only 093 is supported
+    bool rc = startElement_093(DummyQString, DummyQString, qName, DummyAttr);
+    return rc;
 }
 
 bool
@@ -318,21 +312,21 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
         versionInFile.qstrtoversion(strtoqstr(m_version));
 
         RG_DEBUG << "HydrogenXMLHandler::endElement version " << m_version;
-        RG_DEBUG << "ch_major: " << canHandleVersion.Major() << 
-                    "  ch_minor: " << canHandleVersion.Minor() << 
+        RG_DEBUG << "ch_major: " << canHandleVersion.Major() <<
+                    "  ch_minor: " << canHandleVersion.Minor() <<
                     "  ch_micro: " << canHandleVersion.Micro();
-        RG_DEBUG << "if_major: " << versionInFile.Major() << 
-                    "  if_minor: " << versionInFile.Minor() << 
+        RG_DEBUG << "if_major: " << versionInFile.Major() <<
+                    "  if_minor: " << versionInFile.Minor() <<
                     "  if_micro: " << versionInFile.Micro();
 
         bool bCanHandleFile=(versionInFile<=canHandleVersion);
 
         if (bCanHandleFile==true) {
-          // go on, this is a good version 
+          // go on, this is a good version
           RG_DEBUG << "HydrogenXMLHandler::endElement version: version ok ";
         }
         else {
-          // error 
+          // error
           RG_DEBUG << "HydrogenXMLHandler::endElement version: bad version (file created with hydrogen version " << m_version << " can not be parsed)";
           return false;
         }
@@ -346,18 +340,12 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
                                const QString& /*localName*/,
                                const QString& qName)
 {
- bool rc=false;
- QString DummyQString;
+    QString DummyQString;
 
- if (m_version=="") {
-   /* no version yet, use 093 */
-   rc=endElement_093(DummyQString, DummyQString, qName);
- }
- else {
-   /* select version dependant function */
-   rc=endElement_093(DummyQString, DummyQString, qName);
- }
- return rc;
+    // a test of m_version here can be used to distinguish different versions
+    // at the moment only 093 is supported
+    bool rc = endElement_093(DummyQString, DummyQString, qName);
+    return rc;
 }
 
 bool
@@ -465,17 +453,10 @@ HydrogenXMLHandler::characters_093(const QString& chars)
 bool
 HydrogenXMLHandler::characters(const QString& chars)
 {
- bool rc=false;
-
- if (m_version=="") {
-   /* no version yet, use 093 */
-   rc=characters_093(chars);
- }
- else {
-   /* select version dependant function */
-   rc=characters_093(chars);
- }
- return rc;
+    // a test of m_version here can be used to distinguish different versions
+    // at the moment only 093 is supported
+    bool rc = characters_093(chars);
+    return rc;
 }
 
 bool

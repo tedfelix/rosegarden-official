@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -35,10 +34,10 @@ class CommandRegistry;
 /// Tie notes at barlines.
 class MakeNotesViableCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MakeNotesViableCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MakeNotesViableCommand);
 
 public:
-    MakeNotesViableCommand(EventSelection &selection) :
+    explicit MakeNotesViableCommand(EventSelection &selection) :
         BasicCommand(tr("Tie Notes at &Barlines"), selection, true),
         m_selection(&selection)
     { }
@@ -51,7 +50,7 @@ protected:
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
- 
+
 
 }
 

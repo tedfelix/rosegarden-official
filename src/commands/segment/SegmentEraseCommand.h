@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -37,11 +36,11 @@ class AudioFileManager;
 
 class SegmentEraseCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentEraseCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentEraseCommand);
 
 public:
     /// for removing segment normally
-    SegmentEraseCommand(Segment *segment);
+    explicit SegmentEraseCommand(Segment *segment);
 
     /// for removing audio segment when removing an audio file
     SegmentEraseCommand(Segment *segment,
@@ -50,7 +49,7 @@ public:
 
     void execute() override;
     void unexecute() override;
-    
+
 private:
     Composition *m_composition;
     Segment *m_segment;

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,14 +30,13 @@ namespace Rosegarden
 
 class Segment;
 
-
 class SegmentJoinCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand);
 
 public:
     typedef std::vector<Segment *> SegmentVec;
-    SegmentJoinCommand(SegmentSelection &segments);
+    explicit SegmentJoinCommand(SegmentSelection &segments);
     ~SegmentJoinCommand() override;
 
     void execute() override;
@@ -46,7 +44,7 @@ public:
     static Segment *makeSegment(SegmentVec oldSegments);
 
     static QString getGlobalName() { return tr("&Join"); }
-    
+
 private:
     SegmentVec m_oldSegments;
     Segment *m_newSegment;

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -32,26 +32,26 @@ namespace Rosegarden
 
 PasteRangeCommand::PasteRangeCommand(Composition *composition,
                                      Clipboard *clipboard,
-                                     timeT t0) :
+                                     timeT pasteTime) :
         MacroCommand(tr("Paste Range"))
 {
     timeT clipBeginTime = clipboard->getBaseTime();
 
     // Compute t1, the end of the pasted range in the composition.
-    
-    timeT t1 = t0;
+
+    timeT t1 = pasteTime;
 
     if (clipboard->hasNominalRange()) {
 
         // Use the clipboard's time range to compute t1.
         clipboard->getNominalRange(clipBeginTime, t1);
-        t1 = t0 + (t1 - clipBeginTime);
+        t1 = pasteTime + (t1 - clipBeginTime);
 
     } else {
 
         timeT duration = 0;
 
-        // For each segment in the clipboard, find the longest paste range 
+        // For each segment in the clipboard, find the longest paste range
         // duration required.
         for (Clipboard::iterator i = clipboard->begin();
                 i != clipboard->end(); ++i) {
@@ -64,17 +64,17 @@ PasteRangeCommand::PasteRangeCommand(Composition *composition,
         if (duration <= 0)
             return ;
 
-        t1 = t0 + duration;
+        t1 = pasteTime + duration;
     }
 
     InsertRangeCommand::addInsertionCommands(this, composition,
-                                             t0, t1 - t0);
+                                             pasteTime, t1 - pasteTime);
 
     addCommand(new PasteSegmentsCommand
-               (composition, clipboard, t0,
+               (composition, clipboard, pasteTime,
                 composition->getTrackByPosition(0)->getId(),
                 true));
-    addCommand(new PasteConductorDataCommand(composition, clipboard, t0));
+    addCommand(new PasteConductorDataCommand(composition, clipboard, pasteTime));
 }
 
 }

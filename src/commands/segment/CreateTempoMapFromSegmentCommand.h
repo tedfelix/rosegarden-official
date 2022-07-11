@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -38,10 +37,10 @@ namespace Rosegarden
 
 class CreateTempoMapFromSegmentCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CreateTempoMapFromSegmentCommand)
+  Q_DECLARE_TR_FUNCTIONS(Rosegarden::CreateTempoMapFromSegmentCommand);
 
 public:
-    CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
+    explicit CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
     ~CreateTempoMapFromSegmentCommand() override;
 
     void execute() override;
@@ -49,14 +48,14 @@ public:
 
 private:
     void initialise(Segment *s);
-    
+
     Composition *m_composition;
 
     typedef std::map<timeT, tempoT> TempoMap;
     TempoMap m_oldTempi;
     TempoMap m_newTempi;
 };
-    
+
 
 
 }

@@ -33,10 +33,10 @@ class Segment;
 
 class SegmentChangeQuantizationCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS (Rosegarden::SegmentChangeQuantizationCommand)
+    Q_DECLARE_TR_FUNCTIONS (Rosegarden::SegmentChangeQuantizationCommand);
 public:
     /// Set quantization on segments.  If unit is zero, switch quantization off
-    SegmentChangeQuantizationCommand(timeT);
+    explicit SegmentChangeQuantizationCommand(timeT);
     ~SegmentChangeQuantizationCommand() override;
 
     void addSegment(Segment *s);

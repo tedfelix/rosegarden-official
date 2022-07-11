@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -32,13 +31,12 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
 class ResetDisplacementsCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ResetDisplacementsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ResetDisplacementsCommand);
 
 public:
-    ResetDisplacementsCommand(EventSelection &selection) :
+    explicit ResetDisplacementsCommand(EventSelection &selection) :
         BasicCommand(tr("&Restore Positions"), selection, true),
         m_selection(&selection)
     { }

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -36,15 +35,15 @@ class Composition;
 
 class SegmentAutoSplitCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentAutoSplitCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentAutoSplitCommand);
 
 public:
-    SegmentAutoSplitCommand(Segment *segment);
+    explicit SegmentAutoSplitCommand(Segment *segment);
     ~SegmentAutoSplitCommand() override;
 
     void execute() override;
     void unexecute() override;
-    
+
     static QString getGlobalName() { return tr("&Split on Silence"); }
 
 private:

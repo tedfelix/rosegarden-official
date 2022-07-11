@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,13 +30,12 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
 class UntieNotesCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::UntieNotesCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::UntieNotesCommand);
 
 public:
-    UntieNotesCommand(EventSelection &selection) :
+    explicit UntieNotesCommand(EventSelection &selection) :
         BasicCommand(tr("&Untie"), selection, true),
         m_selection(&selection)
     { }
@@ -51,7 +49,7 @@ private:
     // only used on 1st execute (cf bruteForceRedo)
     EventSelection *m_selection;
 };
-    
+
 
 }
 

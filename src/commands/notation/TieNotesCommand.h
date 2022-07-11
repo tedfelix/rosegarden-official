@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,13 +30,12 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
 class TieNotesCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::TieNotesCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::TieNotesCommand);
 
 public:
-    TieNotesCommand(EventSelection &selection) :
+    explicit TieNotesCommand(EventSelection &selection) :
         BasicCommand(tr("&Tie"), selection, true),
         m_selection(&selection)
     { }
@@ -51,7 +49,7 @@ private:
     // only used on 1st execute (cf bruteForceRedo)
     EventSelection *m_selection;
 };
-     
+
 
 }
 

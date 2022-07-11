@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,13 +30,12 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
 class UnTupletCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::UnTupletCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::UnTupletCommand);
 
 public:
-    UnTupletCommand(EventSelection &selection) :
+    explicit UnTupletCommand(EventSelection &selection) :
         BasicCommand(tr("&Untuplet"), selection, true),
         m_selection(&selection)
     { }

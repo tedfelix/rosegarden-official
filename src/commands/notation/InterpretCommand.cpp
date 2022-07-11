@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -145,89 +145,89 @@ InterpretCommand::applyTextDynamics()
 }
 
 int
-InterpretCommand::getVelocityForDynamic(std::string text)
+InterpretCommand::getVelocityForDynamic(const std::string& dynamic)
 {
     int velocity = 100;
 
     // should do case-insensitive matching with whitespace
     // removed.  can surely be cleverer about this too!
 
-    if (text == "ppppp")
+    if (dynamic == "ppppp")
         velocity = 10;
-    else if (text == "pppp")
+    else if (dynamic == "pppp")
         velocity = 20;
-    else if (text == "ppp")
+    else if (dynamic == "ppp")
         velocity = 30;
-    else if (text == "pp")
+    else if (dynamic == "pp")
         velocity = 40;
-    else if (text == "p")
+    else if (dynamic == "p")
         velocity = 60;
-    else if (text == "mp")
+    else if (dynamic == "mp")
         velocity = 80;
-    else if (text == "mf")
+    else if (dynamic == "mf")
         velocity = 90;
-    else if (text == "f")
+    else if (dynamic == "f")
         velocity = 105;
-    else if (text == "ff")
+    else if (dynamic == "ff")
         velocity = 110;
-    else if (text == "fff")
+    else if (dynamic == "fff")
         velocity = 115;
-    else if (text == "ffff")
+    else if (dynamic == "ffff")
         velocity = 120;
-    else if (text == "fffff")
+    else if (dynamic == "fffff")
         velocity = 125;
-    else if (text == "d5")
+    else if (dynamic == "d5")
         velocity = 5;
-    else if (text == "d10")
+    else if (dynamic == "d10")
         velocity = 10;
-    else if (text == "d15")
+    else if (dynamic == "d15")
         velocity = 15;
-    else if (text == "d20")
+    else if (dynamic == "d20")
         velocity = 20;
-    else if (text == "d25")
+    else if (dynamic == "d25")
         velocity = 25;
-    else if (text == "d30")
+    else if (dynamic == "d30")
         velocity = 30;
-    else if (text == "d35")
+    else if (dynamic == "d35")
         velocity = 35;
-    else if (text == "d40")
+    else if (dynamic == "d40")
         velocity = 40;
-    else if (text == "d45")
+    else if (dynamic == "d45")
         velocity = 45;
-    else if (text == "d50")
+    else if (dynamic == "d50")
         velocity = 50;
-    else if (text == "d55")
+    else if (dynamic == "d55")
         velocity = 55;
-    else if (text == "d60")
+    else if (dynamic == "d60")
         velocity = 60;
-    else if (text == "d65")
+    else if (dynamic == "d65")
         velocity = 65;
-    else if (text == "d70")
+    else if (dynamic == "d70")
         velocity = 70;
-    else if (text == "d75")
+    else if (dynamic == "d75")
         velocity = 75;
-    else if (text == "d80")
+    else if (dynamic == "d80")
         velocity = 80;
-    else if (text == "d85")
+    else if (dynamic == "d85")
         velocity = 85;
-    else if (text == "d90")
+    else if (dynamic == "d90")
         velocity = 90;
-    else if (text == "d95")
+    else if (dynamic == "d95")
         velocity = 95;
-    else if (text == "d100")
+    else if (dynamic == "d100")
         velocity = 100;
-    else if (text == "d105")
+    else if (dynamic == "d105")
         velocity = 105;
-    else if (text == "d110")
+    else if (dynamic == "d110")
         velocity = 110;
-    else if (text == "d115")
+    else if (dynamic == "d115")
         velocity = 115;
-    else if (text == "d120")
+    else if (dynamic == "d120")
         velocity = 120;
-    else if (text == "d125")
+    else if (dynamic == "d125")
         velocity = 125;
-    
-    NOTATION_DEBUG << "InterpretCommand::getVelocityForDynamic: unrecognised dynamic " << text;
+
+    NOTATION_DEBUG << "InterpretCommand::getVelocityForDynamic: unrecognised dynamic " << dynamic;
 
     return velocity;
 }
@@ -490,7 +490,7 @@ InterpretCommand::articulate()
             		(*slurEndItr)->getNotationAbsoluteTime() <=
             		            e->getNotationAbsoluteTime()) {
             		slurred = false;
-            	    } 
+            	    }
             */
         }
 
@@ -610,7 +610,7 @@ InterpretCommand::articulate()
 InterpretCommand::IndicationMap::iterator
 
 InterpretCommand::findEnclosingIndication(Event *e,
-        std::string type)
+                                          const std::string& type)
 {
     // a bit slow, but let's wait and see whether it's a bottleneck
     // before we worry about that

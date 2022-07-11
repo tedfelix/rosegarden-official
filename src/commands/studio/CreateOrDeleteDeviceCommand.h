@@ -41,10 +41,10 @@ class CreateOrDeleteDeviceCommand : public NamedCommand
 public:
     // Creation constructor
     CreateOrDeleteDeviceCommand(Studio *studio,
-                                std::string name,
+                                const std::string& name,
                                 Device::DeviceType type,
                                 MidiDevice::DeviceDirection direction,
-                                std::string connection) :
+                                const std::string& connection) :
         NamedCommand(getGlobalName(false)),
         m_studio(studio),
         m_name(name),
@@ -58,14 +58,14 @@ public:
     // Deletion constructor
     CreateOrDeleteDeviceCommand(Studio *studio,
                                 DeviceId deviceId);
-    
+
     static QString getGlobalName(bool deletion) {
-        return (deletion ? tr("Delete Device") : tr("Create Device")); 
+        return (deletion ? tr("Delete Device") : tr("Create Device"));
     }
-    
+
     void execute() override;
     void unexecute() override  { execute(); }
-    
+
 private:
     Studio *m_studio;
     std::string m_name;

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,13 +30,12 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
 class RemoveNotationQuantizeCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveNotationQuantizeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveNotationQuantizeCommand);
 
 public:
-    RemoveNotationQuantizeCommand(EventSelection &selection) :
+    explicit RemoveNotationQuantizeCommand(EventSelection &selection) :
         BasicCommand(tr("Remo&ve Notation Quantization"), selection, true),
         m_selection(&selection)
     { }

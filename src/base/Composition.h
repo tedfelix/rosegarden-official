@@ -1021,13 +1021,13 @@ protected:
         /**
          * Returns end() if there is no Event at or prior to the given time.
          */
-        iterator findAtOrBefore(timeT time);
+        iterator findAtOrBefore(timeT t);
 
         /// Find the Event at or before the given real time (seconds).
         /**
          * Returns end() if there is no Event at or prior to the given time.
          */
-        iterator findAtOrBefore(RealTime time);
+        iterator findAtOrBefore(RealTime t);
 
         std::string getEventType() const { return m_eventType; }
 

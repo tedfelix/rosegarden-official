@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -37,22 +37,25 @@
 namespace Rosegarden
 {
 
-SegmentSplitByPitchCommand::SegmentSplitByPitchCommand(Segment *segment,
-        int p, SplitStrategy splitStrategy, bool d,
-        ClefHandling c) :
+SegmentSplitByPitchCommand::SegmentSplitByPitchCommand
+(Segment *segment,
+ int splitPitch,
+ SplitStrategy splitStrategy,
+ bool duplicateNonNoteEvents,
+ ClefHandling clefHandling) :
         NamedCommand(tr("Split by Pitch")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_newSegmentA(nullptr),
         m_newSegmentB(nullptr),
-        m_splitPitch(p),
+        m_splitPitch(splitPitch),
         m_splitStrategy(splitStrategy),
         // Ctor initializes m_toneIndex to an invalid value.  If using
         // ChordToneOfInitialPitch, we'll set it correctly the first
         // time thru.
-        m_toneIndex(-1), 
-        m_dupNonNoteEvents(d),
-        m_clefHandling(c),
+        m_toneIndex(-1),
+        m_dupNonNoteEvents(duplicateNonNoteEvents),
+        m_clefHandling(clefHandling),
         m_executed(false)
 {}
 
@@ -83,7 +86,7 @@ SegmentSplitByPitchCommand::execute()
         // This value persists between iterations of the loop, for
         // Ranging strategy.
         int splitPitch(m_splitPitch);
-            
+
         for (Segment::iterator i = m_segment->begin();
                 m_segment->isBeforeEndMarker(i); ++i) {
 
@@ -97,7 +100,7 @@ SegmentSplitByPitchCommand::execute()
 
             if ((*i)->isa(Note::EventType)) {
                 splitPitch = getSplitPitchAt(i);
-                
+
                 if ((*i)->has(BaseProperties::PITCH) &&
                         (*i)->get
                         <Int>(BaseProperties::PITCH) <
@@ -301,13 +304,13 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i)
         // return that.
         return m_splitPitch;
     }
-    
+
     // Order pitches lowest to highest
     sort(c0p.begin(), c0p.end());
 
     switch (m_splitStrategy) {
     case LowestTone:
-        return c0p[0] + 1; 
+        return c0p[0] + 1;
 
         /* NOTREACHED */
     case HighestTone:

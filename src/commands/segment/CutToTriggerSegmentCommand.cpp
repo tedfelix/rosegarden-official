@@ -47,7 +47,7 @@ CutToTriggerSegmentCommand::CutToTriggerSegmentCommand(
         int baseVelocity,
         NoteStyleName noteStyle,
         bool retune,
-        std::string timeAdjust,
+        const std::string& timeAdjust,
         Mark mark) :
     BasicCommand(tr("Make Ornament"), *selection, true),
     m_paster(&comp, selection, name, basePitch, baseVelocity),
@@ -72,7 +72,7 @@ CutToTriggerSegmentCommand::execute()
     // Now take advantage of BasicCommand facilities, so that we only
     // have to define modifySegment.
     BasicCommand::execute();
-}  
+}
 void
 CutToTriggerSegmentCommand::unexecute()
 {
@@ -134,5 +134,5 @@ CutToTriggerSegmentCommand::modifySegment()
     if (rec)
         { rec->updateReferences(); }
 }
-    
+
 }

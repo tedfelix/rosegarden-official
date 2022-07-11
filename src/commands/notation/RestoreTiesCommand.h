@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,13 +30,12 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
 class RestoreTiesCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreTiesCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreTiesCommand);
 
 public:
-    RestoreTiesCommand(EventSelection &selection) :
+    explicit RestoreTiesCommand(EventSelection &selection) :
         BasicCommand(tr("&Restore Tie Positions"), selection, true),
         m_selection(&selection)
     { }

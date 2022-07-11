@@ -219,13 +219,11 @@ CommandHistory::clipCommands()
 void
 CommandHistory::clipStack(CommandStack &stack, int limit)
 {
-    int i;
-
     if ((int)stack.size() > limit) {
 
         CommandStack tempStack;
 
-        for (i = 0; i < limit; ++i) {
+        for (int i = 0; i < limit; ++i) {
             RG_DEBUG << "clipStack(): Saving recent command: " << stack.top().command->getName().toLocal8Bit().data() << " at " << stack.top().command;
             tempStack.push(stack.top());
             stack.pop();
@@ -233,7 +231,7 @@ CommandHistory::clipStack(CommandStack &stack, int limit)
 
         clearStack(stack);
 
-        for (i = 0; i < m_undoLimit; ++i) {
+        for (int i = 0; i < m_undoLimit; ++i) {
             stack.push(tempStack.top());
             tempStack.pop();
         }

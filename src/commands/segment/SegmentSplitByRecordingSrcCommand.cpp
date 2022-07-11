@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -37,6 +37,7 @@ SegmentSplitByRecordingSrcCommand::SegmentSplitByRecordingSrcCommand (
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_newSegmentA(nullptr),
+        m_newSegmentB(nullptr),
         m_channel(channel),
         m_device(device),
         m_executed(false)
@@ -92,7 +93,7 @@ SegmentSplitByRecordingSrcCommand::execute()
                                   <Int>(BaseProperties::RECORDED_PORT) );
             }
 
-            if (selectedC & selectedD) {
+            if (selectedC && selectedD) {
                 if (m_newSegmentB->empty()) {
                     m_newSegmentB->fillWithRests((*i)->getAbsoluteTime());
                 }

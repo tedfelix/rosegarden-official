@@ -50,8 +50,8 @@ class QString;
 
 namespace Rosegarden
 {
-  
-// This is now in the Rosegarden namespace so it can be used 
+
+// This is now in the Rosegarden namespace so it can be used
 // in LilyPondOptionsDialog with the LilyVersionAwareCheckBox.
 enum {
   LILYPOND_VERSION_2_6,
@@ -113,7 +113,7 @@ public:
     * @return an explanatory message on what goes wrong on the last
     * call to write().
     */
-    QString getMessage() { return m_warningMessage; }
+    QString getMessage() const { return m_warningMessage; }
 
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }
@@ -144,7 +144,7 @@ private:
                   bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                   bool &nextBarIsDouble, bool &nextBarIsEnd,
                   bool &nextBarIsDot, bool noTimeSignature);
-    
+
     timeT calculateDuration(Segment *s,
                                         const Segment::iterator &i,
                                         timeT barEnd,
@@ -182,10 +182,10 @@ private:
     std::string composeLilyMark(std::string eventMark, bool stemUp);
 
     // find/protect illegal characters in user-supplied strings
-    std::string protectIllegalChars(std::string inStr);
+    static std::string protectIllegalChars(std::string inStr);
 
     // return a string full of column tabs
-    std::string indent(const int &column);
+    static std::string indent(const int &column);
 
     // write a time signature
     void writeTimeSignature(TimeSignature timeSignature, int col, std::ofstream &str);
@@ -200,13 +200,13 @@ private:
      * Handle LilyPond directive.  Returns true if the event was a directive,
      * so subsequent code does not bother to process the event twice
      */
-    bool handleDirective(const Event *textEvent,
-                         std::string &lilyText,
-                         bool &nextBarIsAlt1, bool &nextBarIsAlt2,
-                         bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
+    static bool handleDirective(const Event *textEvent,
+                                std::string &lilyText,
+                                bool &nextBarIsAlt1, bool &nextBarIsAlt2,
+                                bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
 
     void handleText(const Event *, std::string &lilyText);
-    void handleGuitarChord(Segment::iterator i, std::ofstream &str);
+    static void handleGuitarChord(Segment::iterator i, std::ofstream &str);
     void writePitch(const Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
     std::pair<int,int> writeDuration(timeT duration, std::ofstream &);
@@ -215,7 +215,7 @@ private:
 private:
     static const int MAX_DOTS = 4;
     const PropertyName SKIP_PROPERTY;
-    
+
     unsigned int m_paperSize;
     static const unsigned int PAPER_A3      = 0;
     static const unsigned int PAPER_A4      = 1;
@@ -245,7 +245,7 @@ private:
     static const unsigned int EXPORT_NONE_TEMPO_MARKS = 0;
     static const unsigned int EXPORT_FIRST_TEMPO_MARK = 1;
     static const unsigned int EXPORT_ALL_TEMPO_MARKS = 2;
-    
+
     unsigned int m_exportSelection;
     static const unsigned int EXPORT_ALL_TRACKS = 0;
     static const unsigned int EXPORT_NONMUTED_TRACKS = 1;
@@ -269,7 +269,7 @@ private:
         EXPORT_DEFAULT_MARKERS,
         EXPORT_TEXT_MARKERS,
     };
-        
+
 
     unsigned int m_exportNoteLanguage;
 
@@ -315,18 +315,17 @@ private:
 	    x.second);
 	return fractionSimplify(z);
     }
-    bool fractionSmaller(std::pair<int,int> x,std::pair<int,int> y) {
+    static bool fractionSmaller(std::pair<int,int> x,std::pair<int,int> y) {
 	return (x.first * y.second < x.second * y.first);
     }
     std::pair<int,int> fractionSimplify(std::pair<int,int> x) {
 	return std::pair<int,int>(x.first/gcd(x.first,x.second),
 				  x.second/gcd(x.first,x.second));
     }
-    int gcd(int a, int b) {
+    static int gcd(int a, int b) {
 	// Euclid's algorithm to find the greatest common divisor
-        int t = 0;
 	while ( b != 0) {
-	    t = b;
+	    int t = b;
             b = a % b;
             a = t;
 	}

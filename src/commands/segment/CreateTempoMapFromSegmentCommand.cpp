@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,11 +29,11 @@
 namespace Rosegarden
 {
 
-CreateTempoMapFromSegmentCommand::CreateTempoMapFromSegmentCommand(Segment *groove) :
+CreateTempoMapFromSegmentCommand::CreateTempoMapFromSegmentCommand(Segment *grooveSegment) :
         NamedCommand(tr("Set Tempos from Beat Segment")),
-        m_composition(groove->getComposition())
+        m_composition(grooveSegment->getComposition())
 {
-    initialise(groove);
+    initialise(grooveSegment);
 }
 
 CreateTempoMapFromSegmentCommand::~CreateTempoMapFromSegmentCommand()
@@ -117,7 +117,7 @@ CreateTempoMapFromSegmentCommand::initialise(Segment *s)
 
     timeT firstBeatTimeT = *beatTimeTs.begin();
     timeT lastBeatTimeT = *(beatTimeTs.end() - 1);
-    
+
     for (int i = m_composition->getTempoChangeNumberAt(firstBeatTimeT - 1) + 1;
             i <= m_composition->getTempoChangeNumberAt(lastBeatTimeT - 1); ++i) {
 

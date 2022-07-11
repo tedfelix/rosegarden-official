@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,17 +30,16 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
 class FixNotationQuantizeCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::FixNotationQuantizeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::FixNotationQuantizeCommand);
 
 public:
-    FixNotationQuantizeCommand(EventSelection &selection) :
+    explicit FixNotationQuantizeCommand(EventSelection &selection) :
         BasicCommand(tr("Fi&x Notation Quantization"), selection, true),
         m_selection(&selection)
     { }
-    
+
     static void registerCommand(CommandRegistry *r);
 
 protected:

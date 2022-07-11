@@ -45,10 +45,10 @@ class HydrogenXMLHandler : public XMLHandler
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::HydrogenXMLHandler)
 
 public:
-    HydrogenXMLHandler(Composition *comp,
+    HydrogenXMLHandler(Composition *composition,
             InstrumentId drumInstrument = MidiInstrumentBase + 9);
 
-    /** 
+    /**
       * Overloaded handler functions
       */
     bool startDocument() override;
@@ -61,7 +61,7 @@ public:
                             const QString& localName,
                             const QString& qName) override;
 
-    bool characters(const QString& ch) override;
+    bool characters(const QString& chars) override;
 
     bool endDocument () override;
 
@@ -73,7 +73,7 @@ private:
     virtual bool endElement_093(const QString& namespaceURI,
                                 const QString& localName,
                                 const QString& qName);
-    virtual bool characters_093(const QString& ch);
+    virtual bool characters_093(const QString& chars);
 
 protected:
     Composition *m_composition;
@@ -122,6 +122,7 @@ protected:
     //
     QString                  m_currentProperty;
 
+    // cppcheck-suppress unsafeClassCanLeak
     Segment     *m_segment;
     TrackId      m_currentTrackNb;
     bool                     m_segmentAdded;

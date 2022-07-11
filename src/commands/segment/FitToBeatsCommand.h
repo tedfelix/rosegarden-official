@@ -30,18 +30,18 @@ namespace Rosegarden
 {
 
 // @class FitToBeatsCommand
-// @remarks Implements the command "Fit Existing Beats to Beat Segment".  
+// @remarks Implements the command "Fit Existing Beats to Beat Segment".
 // @author Tom Breton (Tehom)
 class FitToBeatsCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::FitToBeatsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::FitToBeatsCommand);
 
 public:
-    FitToBeatsCommand(Segment *grooveSegment);
+    explicit FitToBeatsCommand(Segment *grooveSegment);
 
     ~FitToBeatsCommand() override;
 
-    static QString getGlobalName() 
+    static QString getGlobalName()
         { return tr("Fit Existing Beats to Beat Segment"); }
 
     void execute() override;
@@ -51,7 +51,7 @@ private:
     typedef std::map<timeT, tempoT> TempoMap;
     typedef std::pair<timeT, tempoT> TempoChange;
     typedef std::vector<RealTime> vecRealTime;
-    
+
     void initialise(Segment *s);
     void changeAllTempi(TempoMap newTempi);
     void changeSegments(SegmentMultiSet oldSegments,

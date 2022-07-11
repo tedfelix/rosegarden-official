@@ -44,7 +44,7 @@ public:
                                         timeT endTime) :
         BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
-    NormalizeRestsCommand(EventSelection &selection);
+    explicit NormalizeRestsCommand(EventSelection &selection);
 
     static QString getGlobalName() { return tr("&Normalize Rests"); }
 

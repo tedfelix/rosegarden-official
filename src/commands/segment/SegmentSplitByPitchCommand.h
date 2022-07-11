@@ -51,7 +51,7 @@ public:
 	HighestTone,
 	ChordToneOfInitialPitch,
     };
-    
+
     SegmentSplitByPitchCommand(Segment *segment,
                                int splitPitch,
                                SplitStrategy splitStrategy,
@@ -68,7 +68,7 @@ public:
 private:
     int getSplitPitchAt(Segment::iterator i);
     int
-      getNewRangingSplitPitch(Segment::iterator i,
+      getNewRangingSplitPitch(Segment::iterator prevNote,
 			      int lastSplitPitch,
 			      std::vector<int>& c0p);
 

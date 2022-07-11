@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,13 +30,12 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
 class BreakCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::BreakCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::BreakCommand);
 
 public:
-    BreakCommand(EventSelection &selection) :
+    explicit BreakCommand(EventSelection &selection) :
         BasicCommand(tr("&Unbeam"), selection, true),
         m_selection(&selection)
     { }

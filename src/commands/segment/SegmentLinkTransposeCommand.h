@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -35,12 +34,13 @@ namespace Rosegarden
 /// Hidden feature of the Segment Parameters box (SegmentParameterBox).
 class SegmentLinkTransposeCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentLinkTransposeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentLinkTransposeCommand);
 
 public:
     /// Set transpose on segments.
-    SegmentLinkTransposeCommand(std::vector<Segment *> linkedSegs,
-        bool changeKey, int steps, int semitones, bool transposeSegmentBack);
+    explicit SegmentLinkTransposeCommand
+      (const std::vector<Segment *>& linkedSegs,
+       bool changeKey, int steps, int semitones, bool transposeSegmentBack);
     ~SegmentLinkTransposeCommand() override;
 
     void execute() override;
@@ -51,7 +51,7 @@ private:
 
     ///new parameters
     Segment::LinkTransposeParams m_linkTransposeParams;
-    
+
     ///old parameters
     std::vector<Segment::LinkTransposeParams> m_oldLinkTransposeParams;
 };
@@ -60,10 +60,11 @@ private:
 
 class SegmentLinkResetTransposeCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentLinkResetTransposeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentLinkResetTransposeCommand);
 
 public:
-    SegmentLinkResetTransposeCommand(std::vector<Segment *> &linkedSegs);
+    explicit SegmentLinkResetTransposeCommand
+      (std::vector<Segment *> &linkedSegs);
 
 };
 
@@ -71,10 +72,10 @@ public:
 
 class SingleSegmentLinkResetTransposeCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SingleSegmentLinkResetTransposeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SingleSegmentLinkResetTransposeCommand);
 
 public:
-    SingleSegmentLinkResetTransposeCommand(Segment &linkedSeg) :
+    explicit SingleSegmentLinkResetTransposeCommand(Segment &linkedSeg) :
         BasicCommand(tr("Reset Transpose on Linked Segment"),
                      linkedSeg,
                      linkedSeg.getStartTime(),

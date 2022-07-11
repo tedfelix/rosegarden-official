@@ -45,7 +45,7 @@ class Composition;
 class HydrogenLoader
 {
 public:
-    HydrogenLoader(Studio *);
+    explicit HydrogenLoader(Studio *);
 
     /**
       * Load and parse the Hydrogen file \a fileName, and write it into the

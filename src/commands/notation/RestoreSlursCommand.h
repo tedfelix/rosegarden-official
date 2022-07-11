@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,13 +30,12 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
-
 class RestoreSlursCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreSlursCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreSlursCommand);
 
 public:
-    RestoreSlursCommand(EventSelection &selection) :
+    explicit RestoreSlursCommand(EventSelection &selection) :
         BasicCommand(tr("&Restore Slur Positions"), selection, true),
         m_selection(&selection)
     { }

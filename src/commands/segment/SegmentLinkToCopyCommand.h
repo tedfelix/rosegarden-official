@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,10 +30,10 @@ class Composition;
 
 class SegmentLinkToCopyCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentLinkToCopyCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentLinkToCopyCommand);
 
 public:
-    SegmentLinkToCopyCommand(Segment *segment);
+    explicit SegmentLinkToCopyCommand(Segment *segment);
     ~SegmentLinkToCopyCommand() override;
 
     void execute() override;
