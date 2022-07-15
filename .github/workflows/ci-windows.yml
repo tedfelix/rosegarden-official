@@ -1,0 +1,99 @@
+name: CI Windows
+
+env:
+  QT_VERSION:     "5.12.7"
+  MINGW_VERSION:  "win64_mingw73"
+  MINGW_PATH:     "mingw73_64"
+  
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - '.github/workflows/**'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: CMake build on Windows
+    timeout-minutes: 15
+
+    steps:
+    - uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: >-
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-ninja
+          mingw-w64-x86_64-msmpi
+    - name: Put MSYS2_MinGW64 on PATH
+      # there is not yet an environment variable for this path from msys2/setup-msys2
+      run: echo "${{ runner.temp }}/msys64/mingw64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+#    steps:
+#    - uses: msys2/setup-msys2@v2
+
+#    - name: Set up MinGW
+#      uses: egor-tensin/setup-mingw@v2
+#      with:
+#        platform: x64
+    
+#    - name: Get CMake
+#      uses: symbitic/install-cmake@master
+
+#    - name: Uninstall choco versions of mingw
+#      run: |
+#       choco uninstall mingw --force
+#        choco uninstall strawberryperl --force
+#        choco install mingw --version=7.3.0
+        
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: ${{ env.QT_VERSION }}
+        arch:    ${{ env.MINGW_VERSION }}
+        extra:   --external 7z
+
+    - uses: actions/checkout@v1
+        
+    - name: Configure & Build
+      run: |
+           set MAKEFLAGS="-j 8"
+           md build
+           cd build
+#           echo "Running Cmake"
+#           cmake .. -DCMAKE_BUILD_TYPE=Debug
+#           echo "Building"
+#           make
+
+#    - name: Show release directory
+#      working-directory: d:/a/RosegardenW/RosegardenW
+#      run: |
+#           ls
+#           ls release
+
+#    - name: Upload EXE artifact
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: rosegarden.exe
+#        path: release/rosegarden.exe
+
+#    - name: Download FontName plugin for NSIS
+#      uses: carlosperate/download-file-action@v1.0.3
+#      with:
+#        file-url: https://nsis.sourceforge.io/mediawiki/images/7/78/FontName-0.7.zip
+#        file-name: FontName-0.7.zip
+#        location: ${{ github.workspace }}
+
+#    - name: Install FontName plugin for NSIS
+#      run: |
+#        7z x "${{ github.workspace }}/FontName-0.7.zip"
+#        ${{ github.workspace }}/FontName-0.7.exe
+
+#    - name: Run installer
+#      uses: joncloud/makensis-action@v3.7
+#      with:
+#        arguments: "/V3"
+#        script-file: "garderobe.nsi"
+#        additional-plugin-paths: ${{ github.workspace }}/NSIS_Plugins/Plugins/
+
+
