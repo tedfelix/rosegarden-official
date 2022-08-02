@@ -32,6 +32,7 @@
 #include "gui/widgets/Rotary.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
 #include "base/Instrument.h"
@@ -80,7 +81,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     // Compute a width for the labels that will prevent them from becoming
     // so large that they make a mess out of the layout.
     const int labelWidth =
-        metrics.boundingRect("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX").width();
+        metrics.boundingRect("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX").width();
 
     // Widgets
 
@@ -125,7 +126,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     // them at a time.
     const int maxVisibleItems = 20;
     // Ensure the comboboxes are all at least this wide (in characters).
-    const int minimumContentsLength = 25;
+    const int minimumContentsLength = 20;
 
     // Bank ComboBox
     m_bankComboBox = new QComboBox;
@@ -201,6 +202,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MIDIInstrumentParameterPanel::slotSelectChannel);
 
+    if (!Preferences::getAutoChannels()) {
+        channelLabel->setVisible(false);
+        m_channelValue->setVisible(false);
+    }
+
     // Receive External Label
     QLabel *receiveExternalLabel = new QLabel(tr("Receive external"), this);
     receiveExternalLabel->setFont(f);
@@ -233,44 +239,47 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     QGridLayout *mainGrid = new QGridLayout(this);
     mainGrid->setContentsMargins(0, 0, 0, 0);
     mainGrid->setSpacing(3);
+    // Stretch the last column so that the controls are compressed horizontally.
     mainGrid->setColumnStretch(2, 1);
 
-    mainGrid->addWidget(m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
+    int iRow = 0;
 
-    mainGrid->addWidget(m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
+    mainGrid->addWidget(m_instrumentLabel, iRow++, 0, 1, 3, Qt::AlignCenter);
 
-    mainGrid->addItem(new QSpacerItem(1, 5), 2, 0, 1, 4);
+    mainGrid->addWidget(m_connectionLabel, iRow++, 0, 1, 3, Qt::AlignCenter);
 
-    mainGrid->addWidget(percussionLabel, 3, 0, 1, 2, Qt::AlignLeft);
-    mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
+    mainGrid->addItem(new QSpacerItem(1, 5), iRow++, 0, 1, 3);
 
-    mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
-    mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
-    mainGrid->addWidget(m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(percussionLabel, iRow, 0);
+    mainGrid->addWidget(m_percussionCheckBox, iRow++, 1);
 
-    mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
-    mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
-    mainGrid->addWidget(m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_bankLabel, iRow, 0);
+    mainGrid->addWidget(m_bankCheckBox, iRow, 1);
+    mainGrid->addWidget(m_bankComboBox, iRow++, 2);
 
-    mainGrid->addWidget(m_variationLabel, 6, 0);
-    mainGrid->addWidget(m_variationCheckBox, 6, 1);
-    mainGrid->addWidget(m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_programLabel, iRow, 0);
+    mainGrid->addWidget(m_programCheckBox, iRow, 1);
+    mainGrid->addWidget(m_programComboBox, iRow++, 2);
 
-    mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
-    mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_variationLabel, iRow, 0);
+    mainGrid->addWidget(m_variationCheckBox, iRow, 1);
+    mainGrid->addWidget(m_variationComboBox, iRow++, 2);
 
-    mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
-    mainGrid->addWidget(receiveExternalLabel, 8, 0, 1, 3, Qt::AlignLeft);
+    mainGrid->addWidget(channelLabel, iRow, 0);
+    mainGrid->addWidget(m_channelValue, iRow++, 2);
 
-    mainGrid->addItem(new QSpacerItem(1, 5), 9, 0, 1, 4);
+    mainGrid->addWidget(receiveExternalLabel, iRow, 0);
+    mainGrid->addWidget(m_receiveExternalCheckBox, iRow++, 1);
+
+    mainGrid->addItem(new QSpacerItem(1, 5), iRow++, 0, 1, 3);
 
     // Add the rotary frame to the main grid layout.
-    mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 4, Qt::AlignHCenter);
+    mainGrid->addWidget(m_rotaryFrame, iRow++, 0, 1, 3, Qt::AlignHCenter);
 
-    mainGrid->addItem(new QSpacerItem(1, 1), 11, 0, 1, 4);
-    // Let the last row take up the rest of the space.  This keeps
+    mainGrid->addItem(new QSpacerItem(1, 1), iRow++, 0, 1, 3);
+    // Let the last spacer row take up the rest of the space.  This keeps
     // the widgets above compact vertically.
-    mainGrid->setRowStretch(11, 1);
+    mainGrid->setRowStretch(iRow-1, 1);
 
     setLayout(mainGrid);
 

@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <QString>
+
 namespace Rosegarden
 {
 
@@ -65,6 +67,9 @@ namespace Preferences
 
     // Experimental
     bool getBug1623();
+
+    void setAutoChannels(bool value);
+    bool getAutoChannels();
 
 }
 

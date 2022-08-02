@@ -37,6 +37,7 @@ namespace
     QString afldCustomLocation;
 
     bool bug1623 = false;
+    bool autoChannels = false;
 }
 
 void Preferences::setSendProgramChangesWhenLooping(bool value)
@@ -244,6 +245,30 @@ bool Preferences::getBug1623()
     return bug1623;
 }
 
+void Preferences::setAutoChannels(bool value)
+{
+    QSettings settings;
+    settings.beginGroup(ExperimentalConfigGroup);
+    settings.setValue("autoChannels", value);
+    autoChannels = value;
+}
+
+bool Preferences::getAutoChannels()
+{
+    static bool firstGet = true;
+
+    if (firstGet) {
+        firstGet = false;
+
+        QSettings settings;
+        settings.beginGroup(ExperimentalConfigGroup);
+        autoChannels = settings.value("autoChannels", "false").toBool();
+        // Write it back out so we can find it if it wasn't there.
+        settings.setValue("autoChannels", autoChannels);
+    }
+
+    return autoChannels;
+}
 
 
 }

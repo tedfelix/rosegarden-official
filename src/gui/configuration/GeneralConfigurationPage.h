@@ -108,6 +108,7 @@ private:
     QCheckBox *m_useJackTransport;
     QCheckBox *m_stopPlaybackAtEnd;
     QCheckBox *m_loopSong;
+    QCheckBox *m_autoChannels;
 
     // Presentation tab
     QCheckBox *m_Thorn;

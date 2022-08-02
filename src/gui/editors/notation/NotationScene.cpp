@@ -1304,9 +1304,17 @@ NotationScene::segmentRemoved(const Composition *c, Segment *s)
     // deleted staff here.
     if (staffToDelete != m_staffs.end()) {
         NotationStaff* staff = *staffToDelete;
+        if (m_previewNoteStaff == staff) {
+            // clear the preview on the staff to be deleted
+            clearPreviewNote();
+        }
         delete staff;
         m_staffs.erase(staffToDelete);
     }
+
+    // Redo the layouts so that there aren't any stray pointers
+    // to the removed staff.
+    layout(nullptr, 0, 0);
 }
 
 void
