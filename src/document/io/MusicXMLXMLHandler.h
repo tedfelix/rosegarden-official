@@ -76,7 +76,7 @@ public:
         Stop
     } TypeStatus;
 
-    MusicXMLXMLHandler(Composition *comp, Studio *studio);
+    MusicXMLXMLHandler(Composition *composition, Studio *studio);
     ~MusicXMLXMLHandler() override;
 
     /**
@@ -95,7 +95,7 @@ public:
                             const QString& localName,
                             const QString& qName) override;
 
-    bool characters(const QString& ch) override;
+    bool characters(const QString& chars) override;
 
     bool endDocument () override;
 private:
@@ -103,11 +103,11 @@ private:
      * startElement() and endElement() call the functions below for
      * processing based on m_currentState
      */
-    
+
     bool startHeader(const QString& qName, const QXmlStreamAttributes& atts);
     bool endHeader(const QString& qName);
     bool startPartList(const QString& qName, const QXmlStreamAttributes& atts);
-    bool endPartList(const QString& qNames);
+    bool endPartList(const QString& qName);
     bool startMusicData(const QString& qName, const QXmlStreamAttributes& atts);
     bool endMusicData(const QString& qName);
     bool startNoteData(const QString& qName, const QXmlStreamAttributes& atts);
@@ -224,8 +224,6 @@ protected:
     int             m_beats;
     int             m_beattype;
     bool            m_common;
-
-    bool            m_isgrace;
 
     // Key
     int             m_fifths;

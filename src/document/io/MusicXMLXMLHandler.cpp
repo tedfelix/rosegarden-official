@@ -46,7 +46,40 @@ using namespace BaseProperties;
 MusicXMLXMLHandler::MusicXMLXMLHandler(Composition *composition, Studio *studio):
         m_composition(composition),
         m_studio(studio),
-        m_errormessage("")
+        m_errormessage(""),
+        m_number(0),
+        m_isGrace(false),
+        m_hasGraceNotes(false),
+        m_chord(false),
+        m_step(0),
+        m_octave(0),
+        m_type(0),
+        m_dots(0),
+        m_tupletcount(0),
+        m_untupletcount(0),
+        m_currentState(NoData),
+        m_inDynamics(false),
+        m_directionStart(NotActive),
+        m_brace(0),
+        m_bracket(0),
+        m_groupId(0),
+        m_tupletGroup(0),
+        m_beamGroup(0),
+        m_event(0),
+        m_duration(0),
+        m_verse(0),
+        m_multiSyllabic(false),
+        m_beats(0),
+        m_beattype(0),
+        m_common(false),
+        m_fifths(0),
+        m_major(false),
+        m_chromatic(0),
+        m_octavechange(0),
+        m_line(0),
+        m_clefoctavechange(0),
+        m_midiChannel(0),
+        m_midiProgram(0)
 {}
 
 MusicXMLXMLHandler::~MusicXMLXMLHandler()
@@ -363,7 +396,7 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
         // production code.
         //Q_ASSERT(0);
     }
-    
+
     return ret;
 }
 
@@ -762,7 +795,7 @@ MusicXMLXMLHandler::endNoteData(const QString& qName)
         // Note: Rosegarden does not currently do anything with the
         //       .5 values other than storing them so the handling logic
         //       here just stops the import failing.
-        
+
         float alter;
         if (!checkFloat(m_currentElement, alter))
             return false;
@@ -817,7 +850,7 @@ MusicXMLXMLHandler::endNoteData(const QString& qName)
             m_errormessage = QString("Bad value \"%1\" for <alter>")
                                 .arg(m_characters);
             return false;
-            
+
         }
     } else if (m_currentElement == "octave") {
         if (!checkInteger(m_currentElement, m_octave))

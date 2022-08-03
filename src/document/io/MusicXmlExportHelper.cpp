@@ -317,8 +317,6 @@ MusicXmlExportHelper::quantizePercussion()
                     if ((*e)->isa(Rosegarden::Note::EventType)) {
                         pp = (*e)->get<Int>(BaseProperties::PITCH);
                         if (pm.getVoice(pp) != tmpvoice) continue;
-                    } else if ((*e)->isa(Rosegarden::Note::EventRestType)) {
-                        continue;
                     } else {
                         continue;
                     }

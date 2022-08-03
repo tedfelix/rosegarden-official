@@ -228,8 +228,8 @@ MusicXMLImportHelper::moveCurTimeBack(timeT time)
 }
 
 bool
-MusicXMLImportHelper::startIndication(const std::string name, int number,
-                                      const std::string endName)
+MusicXMLImportHelper::startIndication(const std::string& name, int number,
+                                      const std::string& endName)
 {
     m_indications.push_back(IndicationStart(m_staff, m_voice, name, m_curTime, number, endName));
     RG_DEBUG << m_curTime << " : startIndication(" << m_staff << ", " << m_voice << ", " << name << ", " << number
@@ -238,7 +238,7 @@ MusicXMLImportHelper::startIndication(const std::string name, int number,
 }
 
 bool
-MusicXMLImportHelper::endIndication(const std::string name, int number, timeT extend)
+MusicXMLImportHelper::endIndication(const std::string& name, int number, timeT extent)
 {
     // Look in m_indications for an entry with a matching staff/voice/name/number.
     // However, it is possible an entry is created before the main voice for staff
@@ -259,9 +259,9 @@ MusicXMLImportHelper::endIndication(const std::string name, int number, timeT ex
         }
     }
     RG_DEBUG << m_curTime << " : endIndication(" << m_staff << ", " << m_voice << ", " << name << ", " << number
-          << ", " << extend << ") -> " << found;
+          << ", " << extent << ") -> " << found;
     if (found) {
-        Indication indication((*i).m_name, m_curTime - (*i).m_time + extend);
+        Indication indication((*i).m_name, m_curTime - (*i).m_time + extent);
         m_segments[m_staff+"/"+m_voice]->insert(indication.getAsEvent((*i).m_time));
         m_indications.erase(i);
     }

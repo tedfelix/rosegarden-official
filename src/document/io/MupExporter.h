@@ -60,7 +60,7 @@ protected:
                                TimeSignature &,
                                TrackId);
     void writeClefAndKey(std::ofstream &, TrackId trackNo);
-    void writeInventedRests(std::ofstream &,
+    static void writeInventedRests(std::ofstream &,
                             TimeSignature &timeSig,
                             timeT offset,
                             timeT duration);

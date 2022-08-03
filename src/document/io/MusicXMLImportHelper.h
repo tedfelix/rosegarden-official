@@ -59,10 +59,10 @@ public:
                 m_staff(staff),
                 m_voice(voice),
                 m_name(name),
+                m_endName((endName == "") ? name : endName),
                 m_time(time),
                 m_number(number)
         {
-            m_endName = (endName == "") ? name : endName;
         };
         QString     m_staff;
         QString     m_voice;
@@ -86,7 +86,7 @@ public:
     typedef std::map<QString, int> PercussionMap;
     typedef std::map<QString, QString> VoiceMap;
 
-    MusicXMLImportHelper(Composition *composition);
+    explicit MusicXMLImportHelper(Composition *composition);
     ~MusicXMLImportHelper();
     bool setStaff(const QString &staff="1");
     bool setVoice(const QString &voice="");
@@ -98,13 +98,13 @@ public:
     bool insertClef(const Clef &clef, int number=0);
     bool insert(Event *event);
     bool moveCurTimeBack(timeT time);
-    bool startIndication(const std::string type, int number,
-                         const std::string endName="");
-    bool endIndication(const std::string type, int number, timeT extent);
-    timeT getCurTime()  {return m_curTime;}
+    bool startIndication(const std::string& name, int number,
+                         const std::string& endName="");
+    bool endIndication(const std::string& name, int number, timeT extent);
+    timeT getCurTime() const {return m_curTime;}
     void addPitch(const QString &instrument, int pitch);
     int getPitch(const QString &instrument);
-    bool isPercussion() {return !m_unpitched.empty();};
+    bool isPercussion() const {return !m_unpitched.empty();};
     void setInstrument(InstrumentId instrument);
     void setBracketType(int bracket);
 

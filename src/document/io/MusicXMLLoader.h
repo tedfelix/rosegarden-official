@@ -46,7 +46,7 @@ class MusicXMLXMLHandler;
 class MusicXMLLoader
 {
 public:
-    MusicXMLLoader(Studio *);
+    explicit MusicXMLLoader(Studio *);
 
     /**
       * Load and parse the Music XML file \a fileName, and write it into the
