@@ -78,7 +78,7 @@ public:
      */
     class StaffInfo {
     public:
-        StaffInfo(TrackId id=0) :
+        explicit StaffInfo(TrackId id=0) :
                 trackId(id)
         {
             voice = 0;
@@ -119,17 +119,17 @@ public:
     /**
      * Returns the part name.
      */
-    std::string getPartName() {return m_partName;}
+    std::string getPartName() const {return m_partName;}
 
     /**
      * Returns true if the part is a multi staff part.
      */
-    bool isMultiStave() {return m_staves.size() > 1;}
+    bool isMultiStave() const {return m_staves.size() > 1;}
 
     /**
      * Returns the number of staves in the part.
      */
-    int getStaffCount() {return m_staves.size();}
+    int getStaffCount() const {return m_staves.size();}
 
     /**
      * Returns the number of active voices at give time.
@@ -258,12 +258,12 @@ protected:
     /**
      * Converts the Rosegarden notetype to MusicXML notenames.
      */
-    std::string getNoteName(int noteType) const;
+    static std::string getNoteName(int noteType);
 
     /**
      * Queue and retrieve delayed events.
      */
-    void queue(bool direction, timeT time, std::string str);
+    void queue(bool direction, timeT time, const std::string& str);
     std::string retrieve(bool direction, timeT time);
 
     /**

@@ -47,8 +47,8 @@ class Composition;
 class RG21Loader
 {
 public:
-    RG21Loader(Studio *);
-    
+    explicit RG21Loader(Studio *);
+
     /**
      * Load and parse the RG2.1 file \a fileName, and write it into the
      * given Composition (clearing the existing segment data first).
@@ -103,9 +103,9 @@ private:
     void setGroupProperties(Event *);
 
     long convertRG21Pitch(long rg21pitch, int noteModifier);
-    timeT convertRG21Duration(QStringList::Iterator&);
+    static timeT convertRG21Duration(QStringList::Iterator&);
     typedef std::vector<std::string> StringVector;
-    StringVector convertRG21ChordMods(int chordMod);
+    static StringVector convertRG21ChordMods(int chordMod);
 
     bool readNextLine();
 

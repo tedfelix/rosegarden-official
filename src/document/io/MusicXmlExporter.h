@@ -125,7 +125,11 @@ public:
      */
     struct MidiInstrument
     {
-      MidiInstrument() {};
+      MidiInstrument() :
+        channel(0),
+        program(0),
+        unpitched(0)
+      {};
       MidiInstrument(Instrument * instrument, int pitch);
       int         channel;
       int         program;
@@ -140,7 +144,9 @@ public:
      * @param doc the Rosegarden document.
      * @param filename name of the outfile MusicXML file.
      */
-    MusicXmlExporter(RosegardenMainWindow *parent, RosegardenDocument *doc, std::string fileName);
+    MusicXmlExporter(RosegardenMainWindow *parent,
+                     RosegardenDocument *doc,
+                     const std::string& fileName);
 
     /**
      * Destroys a MusicXmlExporter object

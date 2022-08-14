@@ -4,13 +4,13 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     This file is Copyright 2005
         Toni Arnold         <toni__arnold@bluewin.ch>
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -75,13 +75,13 @@ LircClient::~LircClient()
 void LircClient::readButton()
 {
     char *code;
-    int ret;
 
     RG_DEBUG << "LircClient::readButton";
 
     if (lirc_nextcode(&code) == 0 && code != nullptr) {   // no error && a string is available
         // handle any command attached to that button
-        while ( (ret = lirc_code2char(m_config, code, &m_command)) == 0 && m_command != nullptr ) 
+        int ret;
+        while ( (ret = lirc_code2char(m_config, code, &m_command)) == 0 && m_command != nullptr )
         {
             emit buttonPressed(m_command);
         }

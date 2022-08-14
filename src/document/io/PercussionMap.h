@@ -41,7 +41,11 @@ public:
      * the mapping could included in Rosegarden self (in the
      * studio/device/keymapping?)
      */
-    PercussionMap() {};
+    PercussionMap() :
+    m_xmlPitchIn(0),
+    m_xmlPitchOut(0),
+    m_xmlStemUp(false)
+    {};
 
     /**
      * Retrieves the MusicXML pitch for given pitch.

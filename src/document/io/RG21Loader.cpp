@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -632,7 +632,7 @@ void RG21Loader::closeSegment()
     }
 }
 
-long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
+long RG21Loader::convertRG21Pitch(long rg21pitch, int noteModifier)
 {
     Accidental accidental =
         (noteModifier & ModSharp) ? Sharp :
@@ -640,7 +640,7 @@ long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
         (noteModifier & ModNatural) ? Natural : NoAccidental;
 
     long rtn = Pitch::getPerformancePitchFromRG21Pitch
-               (pitch, accidental, m_currentClef, m_currentKey);
+               (rg21pitch, accidental, m_currentClef, m_currentKey);
 
     return rtn;
 }
@@ -788,19 +788,19 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
 }
 
 RG21Loader::StringVector
-RG21Loader::convertRG21ChordMods(int chordMods)
+RG21Loader::convertRG21ChordMods(int chordMod)
 {
     StringVector marks;
 
     // bit laborious!
-    if (chordMods & ModDot)    marks.push_back(Staccato);
-    if (chordMods & ModLegato) marks.push_back(Tenuto);
-    if (chordMods & ModAccent) marks.push_back(Accent);
-    if (chordMods & ModSfz)    marks.push_back(Sforzando);
-    if (chordMods & ModRfz)    marks.push_back(Rinforzando);
-    if (chordMods & ModTrill)  marks.push_back(Trill);
-    if (chordMods & ModTurn)   marks.push_back(Turn);
-    if (chordMods & ModPause)  marks.push_back(Pause);
+    if (chordMod & ModDot)    marks.push_back(Staccato);
+    if (chordMod & ModLegato) marks.push_back(Tenuto);
+    if (chordMod & ModAccent) marks.push_back(Accent);
+    if (chordMod & ModSfz)    marks.push_back(Sforzando);
+    if (chordMod & ModRfz)    marks.push_back(Rinforzando);
+    if (chordMod & ModTrill)  marks.push_back(Trill);
+    if (chordMod & ModTurn)   marks.push_back(Turn);
+    if (chordMod & ModPause)  marks.push_back(Pause);
 
     return marks;
 }

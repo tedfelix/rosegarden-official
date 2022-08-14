@@ -56,7 +56,7 @@ MidiInstrument(Instrument * instrument, int pitch) :
 
 MusicXmlExporter::MusicXmlExporter(RosegardenMainWindow *parent,
                                    RosegardenDocument *doc,
-                                   std::string fileName) :
+                                   const std::string& fileName) :
         m_doc(doc),
         m_fileName(fileName)
 {
@@ -234,16 +234,16 @@ MusicXmlExporter::writeHeader(std::ostream &str)
 
 MusicXmlExportHelper*
 MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
-                                   bool &exporting, bool &retValue)
+                                   bool &exporting, bool &inMultiStaffGroup)
 {
     TrackVector tracks;
     std::string name;
     Track *track = nullptr;
     Track *curTrack = nullptr;
-    bool inMultiStaffGroup = false;
+    bool inMultiStaffGroup2 = false;
     InstrumentId instrument = 0;
     bool found = false;
-    retValue = false;
+    inMultiStaffGroup = false;
     exporting = false;
 
     // For each track
@@ -252,17 +252,17 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
         qApp->processEvents();
 
         if (trackPos == curTrackPos) curTrack = track;
-        if (!inMultiStaffGroup) {
+        if (!inMultiStaffGroup2) {
             if (((m_multiStave == MULTI_STAVE_CURLY) &&
                         (track->getStaffBracket() == Brackets::CurlyOn)) ||
                 ((m_multiStave == MULTI_STAVE_CURLY_SQUARE) &&
                         ((track->getStaffBracket() == Brackets::CurlyOn) ||
                          (track->getStaffBracket() == Brackets::CurlySquareOn)))) {
-                inMultiStaffGroup = true;
+                inMultiStaffGroup2 = true;
                 instrument = track->getInstrument();
             }
         }
-        if (inMultiStaffGroup) {
+        if (inMultiStaffGroup2) {
             if (instrument == track->getInstrument()) {
                 if (exportTrack(track)) {
                     tracks.push_back(track->getId());
@@ -272,9 +272,9 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
                             std::stringstream id;
                             id << "P" << curTrack->getId();
                             name = id.str();
-                            retValue = false;
+                           inMultiStaffGroup = false;
                         } else
-                            retValue = true;
+                            inMultiStaffGroup = true;
                     }
                 }
             }
@@ -283,7 +283,7 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
                 ((m_multiStave == MULTI_STAVE_CURLY_SQUARE) &&
                         ((track->getStaffBracket() == Brackets::CurlyOff) ||
                          (track->getStaffBracket() == Brackets::CurlySquareOff)))) {
-                inMultiStaffGroup = false;
+                inMultiStaffGroup2 = false;
                 if (found) {
                     exporting = exportTrack(curTrack);
                     return new MusicXmlExportHelper(name, tracks, isPercussionTrack(track),
@@ -297,13 +297,13 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
             }
         }
     }
-    retValue = true;
+    inMultiStaffGroup = true;
     if ((exporting = exportTrack(curTrack))) {
         std::stringstream id;
         id << "P" << curTrack->getId();
         name = id.str();
         tracks.push_back(curTrack->getId());
-        retValue = false;
+        inMultiStaffGroup = false;
     }
     return new MusicXmlExportHelper(name, tracks, isPercussionTrack(curTrack),
                             m_exportSelection == EXPORT_SELECTED_SEGMENTS,
@@ -525,9 +525,9 @@ MusicXmlExporter::write()
             compositionEndTime = (*i)->getEndMarkerTime();
         }
     }
-    bool pickup = compositionStartTime < 0;
 
     if (m_mxmlDTDType == DTD_PARTWISE) {
+        bool pickup = compositionStartTime < 0;
         // XML header information
         str << "<?xml version=\"1.0\"?>" << std::endl;
         str << "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML " << version
