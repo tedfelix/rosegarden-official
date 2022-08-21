@@ -41,13 +41,13 @@ class RosegardenDocument;
 class Segment;
 class Event;
 
- 
+
 class EditViewBase : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
-    EditViewBase(std::vector<Segment *> segments,
+    EditViewBase(const std::vector<Segment *>& segments,
                  QWidget *parent);
 
     ~EditViewBase() override;
@@ -65,7 +65,7 @@ signals:
      */
     void saveFile();
 
-    /** 
+    /**
      * Reopen the given segments in another sort of editor.
      */
     void openInNotation(std::vector<Segment *>);
@@ -73,7 +73,7 @@ signals:
     void openInPercussionMatrix(std::vector<Segment *>);
     void openInEventList(std::vector<Segment *>);
     void slotOpenInPitchTracker(std::vector<Segment *>);
-    
+
     /**
      * Tell the main view that the track being edited is the
      * current selected track
@@ -118,7 +118,7 @@ public slots:
      */
     virtual void slotToggleStatusBar();
 
-    /** 
+    /**
      * Changes the statusbar contents for the standard label permanently,
      * used to indicate current actions.
      *
@@ -167,14 +167,14 @@ public slots:
      * Global composition updates from the main view (track selection, solo, etc...)
      */
     virtual void slotCompositionStateUpdate();
-    
+
 protected:
 
     /**
      * @see #setInCtor
      */
     void closeEvent(QCloseEvent* e) override;
-    
+
     /**
      * read general Options again and initialize all variables like the recent file list
      */

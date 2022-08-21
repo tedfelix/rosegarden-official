@@ -213,7 +213,7 @@ namespace Rosegarden
 using namespace Accidentals;
 
 NotationView::NotationView(RosegardenDocument *doc,
-                           std::vector<Segment *> segments,
+                           const std::vector<Segment *>& segments,
                            QWidget *parent) :
     EditViewBase(segments, parent),
     m_document(doc),

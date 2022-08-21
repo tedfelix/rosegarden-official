@@ -64,9 +64,9 @@ class MatrixView : public EditViewBase,
 
 public:
     MatrixView(RosegardenDocument *doc,
-		  std::vector<Segment *> segments,
-		  bool drumMode,
-		  QWidget *parent = nullptr);
+               const std::vector<Segment *>& segments,
+               bool drumMode,
+               QWidget *parent = nullptr);
 
     ~MatrixView() override;
 
@@ -105,7 +105,7 @@ signals:
                      tempoT,  // tempo value
                      tempoT,  // target value
                      TempoDialog::TempoDialogAction); // tempo action
-    
+
     void noteInsertedFromKeyboard(Segment * segment, int pitch);
 
 protected slots:
@@ -125,7 +125,7 @@ protected slots:
     void slotSetVelocitiesToCurrent();
     void slotSetControllers();
     void slotPlaceControllers();
-    
+
     void slotTriggerSegment();
     void slotRemoveTriggers();
     void slotSelectAll();
@@ -182,7 +182,7 @@ protected slots:
     void slotToggleVelocityRuler();
     void slotTogglePitchbendRuler();
     void slotAddControlRuler(QAction*);
-    
+
     /**
      * Call the Rosegaden about box.
      */
@@ -198,10 +198,10 @@ protected slots:
     void slotHighlight();
 
     void slotShowContextHelp(const QString &);
-        
+
     void slotAddTempo();
     void slotAddTimeSignature();
-    
+
     // rescale
     void slotHalveDurations();
     void slotDoubleDurations();
@@ -223,7 +223,7 @@ protected slots:
     // jog events
     void slotJogLeft();
     void slotJogRight();
-    
+
     void slotStepBackward();
     void slotStepForward(bool force = false);
 
@@ -248,13 +248,13 @@ protected slots:
 
     void slotPitchBendSequence();
     void slotControllerSequence();
-    
+
     void slotToggleStepByStep();
     void slotStepByStepTargetRequested(QObject *);
 
     /** Update the window title.  If m is true (normally comes from a signal)
      * display a * at the extreme left of the title to indicate modified status
-     */ 
+     */
     void slotUpdateWindowTitle(bool m = false);
 
     void slotToggleChordMode();
@@ -264,7 +264,7 @@ protected slots:
     void slotToggleActionsToolBar();
     void slotToggleRulersToolBar();
     void slotToggleTransportToolBar();
-    
+
 protected:
     const SnapGrid *getSnapGrid() const;
     void readOptions() override;

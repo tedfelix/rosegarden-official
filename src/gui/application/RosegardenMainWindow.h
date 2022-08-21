@@ -294,7 +294,7 @@ protected:
      */
     RosegardenDocument *createDocument(
             QString filePath,
-            ImportType type,
+            ImportType importType,
             bool permanent,
             bool lock,
             bool clearHistory);
@@ -493,7 +493,7 @@ public slots:
      * document is modified. (I thought we already did this ages ago, but
      * apparenty not.)
      */
-    void slotUpdateTitle(bool m = false);
+    void slotUpdateTitle(bool modified = false);
 
     /**
      * open a URL - used for Dn'D

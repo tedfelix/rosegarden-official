@@ -125,9 +125,9 @@ namespace Rosegarden
 
 
 MatrixView::MatrixView(RosegardenDocument *doc,
-                 std::vector<Segment *> segments,
-                 bool drumMode,
-                 QWidget *parent) :
+                       const std::vector<Segment *>& segments,
+                       bool drumMode,
+                       QWidget *parent) :
     EditViewBase(segments, parent),
     m_quantizations(BasicQuantizer::getStandardQuantizations()),
     m_drumMode(drumMode),

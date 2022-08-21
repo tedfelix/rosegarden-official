@@ -4748,16 +4748,16 @@ RosegardenMainWindow::slotUpdateUI()
 void
 RosegardenMainWindow::slotUpdateCPUMeter()
 {
-    static std::ifstream *statstream = nullptr;
     // Set to true when CPU % has been displayed.
     static bool modified = false;
-    static unsigned long lastBusy = 0, lastIdle = 0;
 
     TransportStatus status = RosegardenSequencer::getInstance()->getStatus();
 
     // If we're playing, display the CPU %
     if (status == PLAYING  ||  status == RECORDING) {
 
+        static std::ifstream *statstream = nullptr;
+        static unsigned long lastBusy = 0, lastIdle = 0;
         if (!statstream) {
             statstream = new std::ifstream("/proc/stat", std::ios::in);
         }
@@ -7240,9 +7240,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
         return ;
     }
 
-    PluginContainer *container = nullptr;
-
-    container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotShowPluginDialog - "
         << "no instrument or buss of id " << instrumentId;
@@ -7330,9 +7328,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
     // It's assumed that ports etc will already have been set up on
     // the AudioPluginInstance before this is invoked.
 
-    PluginContainer *container = nullptr;
-
-    container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginSelected - "
         << "no instrument or buss of id " << instrumentId;
@@ -7480,9 +7476,7 @@ RosegardenMainWindow::slotChangePluginPort(InstrumentId instrumentId,
                                        int portIndex,
                                        float value)
 {
-    PluginContainer *container = nullptr;
-
-    container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotChangePluginPort - "
         << "no instrument or buss of id " << instrumentId;
@@ -7527,9 +7521,7 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
                                             int pluginIndex,
                                             int portIndex)
 {
-    PluginContainer *container = nullptr;
-
-    container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginPortChanged - "
                  << "no instrument or buss of id " << instrumentId;
@@ -7573,9 +7565,7 @@ RosegardenMainWindow::slotChangePluginProgram(InstrumentId instrumentId,
         int pluginIndex,
         QString program)
 {
-    PluginContainer *container = nullptr;
-
-    container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotChangePluginProgram - "
         << "no instrument or buss of id " << instrumentId;
@@ -7624,9 +7614,7 @@ void
 RosegardenMainWindow::slotPluginProgramChanged(InstrumentId instrumentId,
         int pluginIndex)
 {
-    PluginContainer *container = nullptr;
-
-    container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginProgramChanged - "
         << "no instrument or buss of id " << instrumentId;
@@ -7676,9 +7664,7 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
         QString key,
         QString value)
 {
-    PluginContainer *container = nullptr;
-
-    container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotChangePluginConfiguration - "
         << "no instrument or buss of id " << instrumentId;
@@ -7774,9 +7760,7 @@ void
 RosegardenMainWindow::slotPluginBypassed(InstrumentId instrumentId,
                                      int pluginIndex, bool bp)
 {
-    PluginContainer *container = nullptr;
-
-    container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginBypassed - "
         << "no instrument or buss of id " << instrumentId;

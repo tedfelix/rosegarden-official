@@ -58,7 +58,7 @@ class EventView : public ListEditView, public SegmentObserver
 
 public:
     EventView(RosegardenDocument *doc,
-              std::vector<Segment *> segments,
+              const std::vector<Segment *>& segments,
               QWidget *parent);
 
     ~EventView() override;
@@ -71,7 +71,7 @@ public:
 
     void setupActions();
     void initStatusBar() override;
-    virtual QSize getViewSize(); 
+    virtual QSize getViewSize();
     virtual void setViewSize(QSize);
 
     // Set the button states to the current filter positions

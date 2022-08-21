@@ -40,7 +40,7 @@
 namespace Rosegarden
 {
 
-EditViewBase::EditViewBase(std::vector<Segment *> segments,
+EditViewBase::EditViewBase(const std::vector<Segment *>& segments,
                            QWidget * /* parent */) :
     // QMainWindow(parent),   // See following comments
     QMainWindow(nullptr),
