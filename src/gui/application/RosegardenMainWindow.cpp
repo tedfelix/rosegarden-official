@@ -6220,9 +6220,9 @@ RosegardenMainWindow::slotEditTimeSignature(QWidget *parent)
 
 void
 RosegardenMainWindow::slotEditTimeSignature(QWidget *parent,
-        timeT time)
+        timeT atTime)
 {
-    m_editTempoController->editTimeSignature(parent, time);
+    m_editTempoController->editTimeSignature(parent, atTime);
 }
 
 void
@@ -6310,14 +6310,14 @@ RosegardenMainWindow::slotDeleteMarker(int id, timeT time, QString name, QString
 }
 
 void
-RosegardenMainWindow::slotDocumentModified(bool m)
+RosegardenMainWindow::slotDocumentModified(bool modified)
 {
-    RG_DEBUG << "slotDocumentModified(" << m << ") - doc path = " << RosegardenDocument::currentDocument->getAbsFilePath();
+    RG_DEBUG << "slotDocumentModified(" << modified << ") - doc path = " << RosegardenDocument::currentDocument->getAbsFilePath();
 
     if (!RosegardenDocument::currentDocument->getAbsFilePath().isEmpty()) {
-        slotStateChanged("saved_file_modified", m);
+        slotStateChanged("saved_file_modified", modified);
     } else {
-        slotStateChanged("new_file_modified", m);
+        slotStateChanged("new_file_modified", modified);
     }
 
     Composition &comp =
@@ -7163,7 +7163,7 @@ RosegardenMainWindow::slotMarkerEditorClosed()
 }
 
 void
-RosegardenMainWindow::slotEditTempos(timeT t)
+RosegardenMainWindow::slotEditTempos(timeT openAtTime)
 {
     if (m_tempoView) {
         m_tempoView->show();
@@ -7172,7 +7172,7 @@ RosegardenMainWindow::slotEditTempos(timeT t)
         return ;
     }
 
-    m_tempoView = new TempoView(getView(), m_editTempoController, t);
+    m_tempoView = new TempoView(getView(), m_editTempoController, openAtTime);
 
     connect(m_tempoView, &TempoView::closing,
             this, &RosegardenMainWindow::slotTempoViewClosed);
@@ -7758,7 +7758,7 @@ RosegardenMainWindow::slotPluginDialogDestroyed(InstrumentId instrumentId,
 
 void
 RosegardenMainWindow::slotPluginBypassed(InstrumentId instrumentId,
-                                     int pluginIndex, bool bp)
+                                         int pluginIndex, bool bypassed)
 {
     PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
@@ -7773,17 +7773,17 @@ RosegardenMainWindow::slotPluginBypassed(InstrumentId instrumentId,
         StudioControl::setStudioObjectProperty
         (inst->getMappedId(),
          MappedPluginSlot::Bypassed,
-         MappedObjectValue(bp));
+         MappedObjectValue(bypassed));
 
         // Set the bypass on the instance
         //
-        inst->setBypass(bp);
+        inst->setBypass(bypassed);
 
         // Set modified
         RosegardenDocument::currentDocument->slotDocumentModified();
     }
 
-    emit pluginBypassed(instrumentId, pluginIndex, bp);
+    emit pluginBypassed(instrumentId, pluginIndex, bypassed);
 }
 
 void
