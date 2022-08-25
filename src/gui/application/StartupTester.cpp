@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -105,12 +105,13 @@ StartupTester::parseStdoutBuffer(QStringList &target)
 #endif
 
 bool
-StartupTester::haveAudioFileImporter(QStringList *missing)
+StartupTester::haveAudioFileImporter(QStringList *missingApplications)
 {
     while (!m_ready)
         usleep(10000);
     QMutexLocker locker(&m_audioFileImporterMutex);
-    if (missing) *missing = m_audioFileImporterMissing;
+    if (missingApplications) *missingApplications =
+                                 m_audioFileImporterMissing;
     return m_haveAudioFileImporter;
 }
 
@@ -174,5 +175,3 @@ StartupTester::slotNetworkFinished(QNetworkReply *reply)
 }
 
 }
-
-

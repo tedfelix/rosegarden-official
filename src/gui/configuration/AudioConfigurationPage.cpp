@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -97,7 +97,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     m_previewStyle->addItem(tr("Linear - easier to see loud peaks"));
     m_previewStyle->addItem(tr("Meter scaling - easier to see quiet activity"));
     m_previewStyle->setCurrentIndex( settings.value("audiopreviewstyle", 1).toUInt() );
-    layout->addWidget(m_previewStyle, row, 1, row- row+1, 2);
+    layout->addWidget(m_previewStyle, row, 1, 1, 2);
     ++row;
 
     settings.endGroup();
@@ -117,7 +117,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     m_audioRecFormat->setCurrentIndex( settings.value("audiorecordfileformat", 1).toUInt() );
     settings.endGroup();
 
-    layout->addWidget(m_audioRecFormat, row, 1, row- row+1, 2);
+    layout->addWidget(m_audioRecFormat, row, 1, 1, 2);
 
     ++row;
 
@@ -193,7 +193,7 @@ AudioConfigurationPage::AudioConfigurationPage(
             this, &AudioConfigurationPage::slotModified);
 //    m_externalAudioEditorPath->setMinimumWidth(150);
     layout->addWidget(m_externalAudioEditorPath, row, 1);
-    
+
     QPushButton *changePathButton =
         new QPushButton(tr("Choose..."), frame);
 
@@ -383,4 +383,3 @@ AudioConfigurationPage::getBestAvailableAudioEditor()
 }
 
 }
-

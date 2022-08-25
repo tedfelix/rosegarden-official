@@ -36,7 +36,7 @@ class TabbedConfigurationPage : public QWidget
 
 public:
 
-    TabbedConfigurationPage(QWidget *parent);
+    explicit TabbedConfigurationPage(QWidget *parent);
     virtual ~TabbedConfigurationPage() override  { }
 
     /// Apply the changes by copying from the widgets to the .conf file.

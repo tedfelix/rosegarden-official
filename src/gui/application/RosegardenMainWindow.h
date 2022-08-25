@@ -1143,7 +1143,7 @@ public slots:
     void slotRewindToBeginning();
     void slotFastForwardToEnd();
     void slotJumpToTime(RealTime);
-    void slotStartAtTime(RealTime);
+    void slotStartAtTime(const RealTime&);
     void slotRefreshTimeDisplay();
     void slotToggleTracking();
 

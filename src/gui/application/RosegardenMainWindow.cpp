@@ -5782,7 +5782,7 @@ RosegardenMainWindow::slotJumpToTime(RealTime rt)
 }
 
 void
-RosegardenMainWindow::slotStartAtTime(RealTime rt)
+RosegardenMainWindow::slotStartAtTime(const RealTime& rt)
 {
     slotJumpToTime(rt);
     slotPlay();
@@ -8373,13 +8373,6 @@ RosegardenMainWindow::slotDisplayWarning(int type,
                                          QString informativeText)
 {
     RG_WARNING << "slotDisplayWarning(): MAIN WINDOW DISPLAY WARNING:  type " << type << " text" << text;
-
-// I'll need a hack way to make it look like my system isn't broken, for
-// screenshots, even though in reality Ubuntu 9.04 is totally hopeless
-//#define PEACHY_HACK
-#ifdef PEACHY_HACK
-    return;
-#endif
 
     // queue up the message, which trips the warning or info icon in so doing
     m_warningWidget->queueMessage(type, text, informativeText);
