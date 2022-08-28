@@ -34,7 +34,7 @@ class AddTracksDialog : public QDialog
     Q_OBJECT
 
 public:
-    AddTracksDialog(QWidget *parent);
+    explicit AddTracksDialog(QWidget *parent);
 
 public slots:
     virtual void accept() override;

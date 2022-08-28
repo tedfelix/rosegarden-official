@@ -42,7 +42,7 @@ class MIDIConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    MIDIConfigurationPage(QWidget *parent);
+    explicit MIDIConfigurationPage(QWidget *parent);
 
     void apply() override;
 

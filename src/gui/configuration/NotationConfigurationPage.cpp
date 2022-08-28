@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -106,7 +106,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     m_showTrackHeaders->addItem(tr("Never"), HeadersGroup::ShowNever);
     m_showTrackHeaders->addItem(tr("When needed"), HeadersGroup::ShowWhenNeeded);
     m_showTrackHeaders->addItem(tr("Always"), HeadersGroup::ShowAlways);
-    int defaultShowTrackHeaders = settings.value("shownotationheader", 
+    int defaultShowTrackHeaders = settings.value("shownotationheader",
                                                  HeadersGroup::DefaultShowMode).toInt() ;
     if (HeadersGroup::isValidShowMode(defaultShowTrackHeaders)) {
         m_showTrackHeaders->setCurrentIndex(defaultShowTrackHeaders);
@@ -381,7 +381,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     frame->setContentsMargins(10, 10, 10, 10);
     layout = new QGridLayout(frame);
     layout->setSpacing(5);
-    
+
     row = 0;
 
     layout->setRowMinimumHeight(row, 15);
@@ -476,7 +476,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     copyrightLabel->setFont(font);
     subLayout->addWidget(copyrightLabel, 1, 0);
 
-    QLabel *mappedLabel = new QLabel(tr("Mapped by:"), subFrame); 
+    QLabel *mappedLabel = new QLabel(tr("Mapped by:"), subFrame);
     mappedLabel->setFont(font);
     subLayout->addWidget(mappedLabel, 2, 0);
 
@@ -554,7 +554,6 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     if (fv.canConvert<QFont>()) sansFont = fv.value<QFont>();
     m_sansFont->setFont(sansFont);
     layout->addWidget(m_sansFont, row, 1, 1, 3);
-    ++row;
 
     frame->setLayout(layout);
 
@@ -757,7 +756,7 @@ NotationConfigurationPage::apply()
     settings.setValue("pastetype", m_pasteType->currentIndex());
     settings.setValue("alwayspreview", m_preview->isChecked());
     settings.setValue("quickedit", m_quickEdit->isChecked());
-    
+
     settings.setValue("accidentaloctavemode", m_accOctavePolicy->currentIndex());
     settings.setValue("accidentalbarmode", m_accBarPolicy->currentIndex());
     settings.setValue("keysigcancelmode", m_keySigCancelMode->currentIndex());

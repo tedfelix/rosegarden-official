@@ -38,7 +38,7 @@ class MatrixConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    MatrixConfigurationPage(QWidget *parent = nullptr);
+    explicit MatrixConfigurationPage(QWidget *parent = nullptr);
 
     void apply() override;
 

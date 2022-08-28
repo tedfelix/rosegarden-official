@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -241,7 +241,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
             settings.value("jacktransport", false).toBool());
     connect(m_useJackTransport, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
-    layout->addWidget(m_useJackTransport, row, 1, row- row+1, 2);
+    layout->addWidget(m_useJackTransport, row, 1, 1, 2);
 
     ++row;
 
@@ -255,7 +255,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     connect(m_stopPlaybackAtEnd, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
 
-    layout->addWidget(m_stopPlaybackAtEnd, row, 1, row- row+1, 2);
+    layout->addWidget(m_stopPlaybackAtEnd, row, 1, 1, 2);
 
     ++row;
 
@@ -266,7 +266,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     connect(m_autoChannels, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
 
-    layout->addWidget(m_autoChannels, row, 1, row- row+1, 2);
+    layout->addWidget(m_autoChannels, row, 1, 1, 2);
 
     ++row;
 
@@ -280,7 +280,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     connect(m_loopSong, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
 
-    layout->addWidget(m_loopSong, row, 1, row- row+1, 2);
+    layout->addWidget(m_loopSong, row, 1, 1, 2);
 
     settings.endGroup();
 

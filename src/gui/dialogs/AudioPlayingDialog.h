@@ -36,7 +36,7 @@ class AudioPlayingDialog : public QDialog
     Q_OBJECT
 
 public:
-    AudioPlayingDialog(QWidget *parent, const QString &label);
+    AudioPlayingDialog(QWidget *parent, const QString &name);
 
 signals:
 

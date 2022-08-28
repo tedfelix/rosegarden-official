@@ -42,7 +42,7 @@ class GeneralConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    GeneralConfigurationPage(QWidget *parent);
+    explicit GeneralConfigurationPage(QWidget *parent);
 
     enum DoubleClickClient
     {
@@ -52,7 +52,7 @@ public:
     };
 
     enum NoteNameStyle
-    { 
+    {
         American,
         Local
     };

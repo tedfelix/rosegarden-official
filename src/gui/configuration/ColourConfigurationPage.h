@@ -44,7 +44,7 @@ class ColourConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    ColourConfigurationPage(QWidget *parent);
+    explicit ColourConfigurationPage(QWidget *parent);
     void apply() override;
 
     void populate_table();

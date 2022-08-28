@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -58,8 +58,8 @@ namespace Rosegarden
 class SegmentDataItem : public QTableWidgetItem
 {
 public:
-    SegmentDataItem(QTableWidget */* t */, QString s) : QTableWidgetItem(s) { }    //### removed t from p-class
-    
+    SegmentDataItem(QTableWidget */* t */, const QString& s) : QTableWidgetItem(s) { }    //### removed t from p-class
+
     virtual int alignment() const { return Qt::AlignCenter; }
 
     virtual QString key() const {
@@ -71,7 +71,7 @@ public:
         // string that starts with a single digit corresponding to the
         // number of digits in the integer, which should ensure that
         // dictionary sorting works correctly.
-        // 
+        //
         // This relies on the assumption that any item whose text
         // starts with a digit will contain nothing other than a
         // single non-negative integer of no more than 9 digits.  That
@@ -94,7 +94,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
     m_headersPage = new HeadersConfigurationPage(this, m_doc,
                             static_cast<ConfigureDialogBase * >(parent));
     addTab(m_headersPage, tr("Headers"));
-    
+
     m_commentsPage = new CommentsConfigurationPage(this, m_doc,
                             static_cast<ConfigureDialogBase * >(parent));
     addTab(m_commentsPage, tr("Notes"));
@@ -159,10 +159,10 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
     //table->setSelectionMode(QTableWidget::NoSelection);
     table->setSelectionBehavior( QAbstractItemView::SelectRows );
     table->setSelectionMode( QAbstractItemView::SingleSelection );
-    
+
     // Sorting must be disabled while filling the table
     table->setSortingEnabled(false);
-    
+
     table->setHorizontalHeaderItem( 0, new QTableWidgetItem( tr("Type")));    // p1=column
     table->setHorizontalHeaderItem( 1, new QTableWidgetItem( tr("Track")));
     table->setHorizontalHeaderItem( 2, new QTableWidgetItem( tr("Label")));
@@ -174,7 +174,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
     table->setHorizontalHeaderItem( 8, new QTableWidgetItem( tr("Quantize")));
     table->setHorizontalHeaderItem( 9, new QTableWidgetItem( tr("Transpose")));
     table->setHorizontalHeaderItem( 10, new QTableWidgetItem( tr("Delay")));
-    
+
     //table->setNumRows(audioSegments + internalSegments);
     table->setRowCount(audioSegments + internalSegments);
 
@@ -228,13 +228,12 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
 
         std::set<long> notesOn;
         std::multimap<timeT, long> noteOffs;
-        int events = 0, notes = 0, poly = 0, maxPoly = 0;
+        int events = 0, poly = 0, maxPoly = 0;
 
         for (Segment::iterator si = s->begin();
                 s->isBeforeEndMarker(si); ++si) {
             ++events;
             if ((*si)->isa(Note::EventType)) {
-                ++notes;
                 timeT startTime = (*si)->getAbsoluteTime();
                 timeT endTime = startTime + (*si)->getDuration();
                 if (endTime == startTime) continue;

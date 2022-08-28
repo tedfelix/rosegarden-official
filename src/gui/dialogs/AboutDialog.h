@@ -29,7 +29,7 @@ class AboutDialog : public QDialog
     Q_OBJECT
 
 public:
-    AboutDialog(QWidget *parent);
+    explicit AboutDialog(QWidget *parent);
 
 };
 
@@ -37,6 +37,3 @@ public:
 }
 
 #endif
-
-
-

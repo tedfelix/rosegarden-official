@@ -57,7 +57,7 @@ public:
     AudioPluginDialog(QWidget *parent,
                       QSharedPointer<AudioPluginManager> aPM,
                       AudioPluginOSCGUIManager *aGM,
-                      PluginContainer *instrument,
+                      PluginContainer *pluginContainer,
                       int index);
     ~AudioPluginDialog() override;
 
@@ -127,7 +127,7 @@ protected:
     QPushButton         *m_defaultButton;
     QPushButton         *m_guiButton;
     QPushButton         *m_editorButton;
-    
+
     QLabel              *m_programLabel;
     QComboBox           *m_programCombo;
     std::vector<PluginControl*> m_pluginWidgets;

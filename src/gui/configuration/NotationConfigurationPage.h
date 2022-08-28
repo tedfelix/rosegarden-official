@@ -45,7 +45,7 @@ class NotationConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    NotationConfigurationPage(QWidget *parent = nullptr);
+    explicit NotationConfigurationPage(QWidget *parent = nullptr);
 
     void apply() override;
 
@@ -96,7 +96,7 @@ protected:
     QCheckBox *m_hideRedundantClefKey;
     QCheckBox *m_distributeVerses;
 
-    void populateSizeCombo(QComboBox *combo, QString font, int dfltSize);
+    void populateSizeCombo(QComboBox *combo, QString font, int defaultSize);
 };
 
 

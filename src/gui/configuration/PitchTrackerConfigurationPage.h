@@ -51,7 +51,7 @@ public:
     static const int defaultGraphHeight;    /**< Max excursion in cents */
     static const bool defaultIgnore8ve;     /**< Ignore octave errors */
 
-    PitchTrackerConfigurationPage(QWidget *parent = nullptr);
+    explicit PitchTrackerConfigurationPage(QWidget *parent = nullptr);
 
     void apply() override;
 
@@ -85,9 +85,9 @@ protected:
     QSpinBox     *m_graphWidth;      /**< Width of graph in milliseconds */
     QSpinBox     *m_graphHeight;     /**< Height of graph in cents */
     std::vector<Accidentals::Tuning *> *m_tunings; /**< Available tunings */
-    
+
     QErrorMessage m_noTuningsAlert;  /**< Alert missing tunings file */
-    
+
 };
 
 

@@ -39,7 +39,7 @@ class AudioPropertiesPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    AudioPropertiesPage(QWidget *parent);
+    explicit AudioPropertiesPage(QWidget *parent);
 
     void apply() override;
 
