@@ -36,12 +36,12 @@ namespace Rosegarden
 class BeatsBarsDialog : public QDialog
 {
     Q_OBJECT
-        
+
 public:
-    BeatsBarsDialog(QWidget *parent);
+    explicit BeatsBarsDialog(QWidget *parent);
 
     int getQuantity() { return m_spinBox->value(); }
-    int getMode()     { return m_comboBox->currentIndex();   } 
+    int getMode()     { return m_comboBox->currentIndex();   }
 
 protected:
     QSpinBox  *m_spinBox;

@@ -30,7 +30,7 @@
 
 namespace Rosegarden
 {
-  
+
 void
 SuppressionTarget::slotSuppressionToggled(bool on)
 {
@@ -51,7 +51,7 @@ bool
 DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
 {
     if (isSuppressed(settingsKey)) return true;
-    
+
     QList<QDialogButtonBox *> bbl = dialog->findChildren<QDialogButtonBox *>();
     if (bbl.empty()) {
         std::cerr << "DialogSuppressor::shouldSuppress: Dialog does not contain a button box, nothing to hook into" << std::endl;
@@ -62,12 +62,12 @@ DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
     if (!p) {
         std::cerr << "DialogSuppressor::shouldSuppress: Dialog's button box has no parent widget!?" << std::endl;
         return false;
-    }        
+    }
     QLayout *layout = p->layout();
-    if (!p) {
+    if (!layout) {
         std::cerr << "DialogSuppressor::shouldSuppress: Dialog's button box's parent widget has no layout!?" << std::endl;
         return false;
-    }        
+    }
     QWidget *impostor = new QWidget;
     QVBoxLayout *il = new QVBoxLayout;
     impostor->setLayout(il);
@@ -100,4 +100,3 @@ DialogSuppressor::isSuppressed(QString settingsKey)
 }
 
 }
-

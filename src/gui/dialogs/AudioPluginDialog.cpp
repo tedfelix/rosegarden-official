@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -90,7 +90,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QVBoxLayout *vboxLayout = new QVBoxLayout(vbox);
     vboxLayout->setContentsMargins(0, 0, 0, 0);
     metagrid->addWidget(vbox, 0, 0);
-  
+
     // Plugin group box
     QGroupBox *pluginSelectionBox = new QGroupBox(tr("Plugin"), vbox);
     QVBoxLayout *pluginSelectionBoxLayout = new QVBoxLayout(pluginSelectionBox);
@@ -113,7 +113,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     pluginCategoryBoxLayout->addWidget(m_pluginCategoryList);
     m_pluginCategoryList->setMaxVisibleItems(20);
 
-    // the Plugin label/combo 
+    // the Plugin label/combo
     QWidget *pluginPluginBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginPluginBoxLayout = new QHBoxLayout(pluginPluginBox);
     pluginPluginBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -191,7 +191,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     connect(m_defaultButton, &QAbstractButton::clicked,
             this, &AudioPluginDialog::slotDefault);
     m_defaultButton->setToolTip(tr("Reset plugin controls to factory defaults"));
-    
+
     m_generating = false;
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
@@ -414,7 +414,7 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
     // no ctor like this at all.  You have to create an empty QGridLayout and
     // let it expand to fit what you stuff into it.  So we have to manage that
     // on the stuffing into it end now.
-    
+
     m_pluginParamsBox = new QGroupBox(parent);
 
     m_pluginParamsBox->setContentsMargins(5, 5, 5, 5);
@@ -430,7 +430,7 @@ AudioPluginDialog::slotCategorySelected(int)
 }
 
 void
-AudioPluginDialog::slotPluginSelected(int i)
+AudioPluginDialog::slotPluginSelected(int index)
 {
     bool guiWasShown = m_guiShown;
 
@@ -439,9 +439,9 @@ AudioPluginDialog::slotPluginSelected(int i)
         m_guiShown = false;
     }
 
-    int number = m_pluginsInList[i];
+    int number = m_pluginsInList[index];
 
-    //RG_DEBUG << "slotPluginSelected(): setting up plugin from position " << number << " at menu item " << i;
+    //RG_DEBUG << "slotPluginSelected(): setting up plugin from position " << number << " at menu item " << index;
 
     QString caption =
         strtoqstr(m_pluginContainer->getName()) +
@@ -573,7 +573,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     }
 
     adjustSize();
-    
+
     // tell the sequencer
     emit pluginSelected(m_containerId, m_index, number - 1);
 
@@ -664,7 +664,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 //                         << " hidden: "
 //                         << (hidden ? "true" : "false")
 //                         << endl;
-                
+
                 if (++col >= wrap) {
                     row++;
                     col = 0;
@@ -694,7 +694,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 //              << " container ID: " << m_containerId
 //              << " index: " << m_index
 //              << std::endl;
-//    m_editorButton->setEnabled(gui);    
+//    m_editorButton->setEnabled(gui);
 
     //!!!  I can't get to the bottom of this in a reasonable amount of time.
     // m_containerId is always 10013, and m_index is either 0 (LADSPA plugin) or

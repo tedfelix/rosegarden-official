@@ -40,7 +40,7 @@ public:
     CountdownDialog(QWidget *parent, int seconds = 300);
 
     void setLabel(const QString &label);
-    void setElapsedTime(int seconds);
+    void setElapsedTime(int elapsedSeconds);
 
     int getTotalTime() const { return m_totalTime; }
     void setTotalTime(int seconds);

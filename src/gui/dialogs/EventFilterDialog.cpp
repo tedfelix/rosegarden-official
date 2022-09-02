@@ -481,7 +481,6 @@ EventFilterDialog::keepEvent(Event* const &e)
                      << " out of range.";
             return false;
         }
-        property = 0;
 
         // duration
         property = m_useNotationDuration->isChecked() ? (*e).getNotationDuration() : (*e).getDuration();
@@ -510,4 +509,3 @@ EventFilterDialog::keepEvent(Event* const &e)
 }
 
 }
-
