@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -52,6 +52,15 @@ namespace Rosegarden
 ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, QUrl url) :
     QDialog(parent),
     m_url(url),
+    m_deviceCombo(nullptr),
+    m_deviceLabel(nullptr),
+    m_importBanks(nullptr),
+    m_importKeyMappings(nullptr),
+    m_importControllers(nullptr),
+    m_rename(nullptr),
+    m_buttonGroup(nullptr),
+    m_mergeBanks(nullptr),
+    m_overwriteBanks(nullptr),
     m_device(nullptr)
 {}
 
@@ -385,17 +394,17 @@ ImportDeviceDialog::importFromRG(QString fileName)
 }
 
 bool
-ImportDeviceDialog::importFromSF2(QString filename)
+ImportDeviceDialog::importFromSF2(QString fileName)
 {
     SF2PatchExtractor::Device sf2device;
     try {
-        sf2device = SF2PatchExtractor::read( qstrtostr(filename) );
+        sf2device = SF2PatchExtractor::read( qstrtostr(fileName) );
 
         // These exceptions shouldn't happen -- the isSF2File call before this
         // one should have weeded them out
-    } catch (SF2PatchExtractor::FileNotFoundException e) {
+    } catch (SF2PatchExtractor::FileNotFoundException& e) {
         return false;
-    } catch (SF2PatchExtractor::WrongFileFormatException e) {
+    } catch (SF2PatchExtractor::WrongFileFormatException& e) {
         return false;
     }
 

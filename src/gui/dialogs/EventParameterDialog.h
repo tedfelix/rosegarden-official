@@ -88,10 +88,12 @@ private:
     /**
      * @author Tom Breton (Tehom)
      */
+
+    // cppcheck-suppress noCopyConstructor
     class ParamWidget
     {
     public:
-        ParamWidget(QLayout *parent);
+        explicit ParamWidget(QLayout *parent);
 
         void showByArgs(const ParameterPattern::SliderSpec *args);
         void hide();
@@ -101,7 +103,9 @@ private:
     private:
         // We only include the widgets that we may want to interact with
         // in other code.
+        // cppcheck-suppress unsafeClassCanLeak
         QSpinBox *m_spinBox;
+        // cppcheck-suppress unsafeClassCanLeak
         QLabel *m_label;
     };
     typedef std::vector<ParamWidget> ParamWidgetVec;

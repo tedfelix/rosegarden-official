@@ -40,7 +40,7 @@ class GeneratedRegionDialog : public QDialog
   GeneratedRegionDialog(QWidget *parent,
 			NotePixmapFactory */*npf*/,
 			GeneratedRegion defaultGeneratedRegion,
-			QString commandName);
+			const QString& commandName);
 
   GeneratedRegion getGeneratedRegion() const
   { return m_generatedRegion; }
@@ -52,7 +52,7 @@ class GeneratedRegionDialog : public QDialog
 private slots:
   void assignChordSource(int itemIndex);
   void assignFigurationSource(int itemIndex);
-    
+
 protected:
   void initializeCombos();
   void initComboToID(QComboBox* comboBox, int id);

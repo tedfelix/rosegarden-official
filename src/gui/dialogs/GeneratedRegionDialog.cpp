@@ -31,7 +31,7 @@ GeneratedRegionDialog::
 GeneratedRegionDialog(QWidget *parent,
 		      NotePixmapFactory */*npf*/,
 		      GeneratedRegion defaultGeneratedRegion,
-                      QString commandName) :
+                      const QString& commandName) :
         QDialog(parent),
         m_generatedRegion(defaultGeneratedRegion),
         m_command(new MacroCommand(commandName))
@@ -105,7 +105,7 @@ initComboToID(QComboBox* comboBox, int id)
   int index = comboBox->findData(id);
   comboBox->setCurrentIndex(index);
 }
-    
+
 void
 GeneratedRegionDialog::
 assignChordSource(int itemIndex)
@@ -116,7 +116,7 @@ assignChordSource(int itemIndex)
   if (!ok) { return; }
   m_generatedRegion.setChordSourceID(id);
 }
-  
+
 void
 GeneratedRegionDialog::
 assignFigurationSource(int itemIndex)
@@ -129,4 +129,3 @@ assignFigurationSource(int itemIndex)
 }
 
 }
-

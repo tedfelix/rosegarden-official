@@ -36,9 +36,9 @@ namespace Rosegarden
 class IdentifyTextCodecDialog : public QDialog
 {
     Q_OBJECT
-    
+
 public:
-    IdentifyTextCodecDialog(QWidget *parent, std::string text);
+    IdentifyTextCodecDialog(QWidget *parent, const std::string& text);
 
     QString getCodec() const { return m_codec; }
 
@@ -47,7 +47,7 @@ protected slots:
 
 protected:
     QString getExampleText();
-    
+
     std::string m_text;
     QString m_codec;
     QStringList m_codecs;
