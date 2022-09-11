@@ -270,19 +270,14 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    settings.beginGroup(SequencerOptionsConfigGroup);
-
     layout->addWidget(new QLabel(tr("Advanced Looping (experimental)"),
                                  frame), row, 0);
-    m_loopSong = new QCheckBox(frame);
-    m_loopSong->setChecked(
-        settings.value("loopentiresong", false).toBool());
-    connect(m_loopSong, &QCheckBox::stateChanged,
+    m_advancedLooping = new QCheckBox(frame);
+    m_advancedLooping->setChecked(Preferences::getAdvancedLooping());
+    connect(m_advancedLooping, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
 
-    layout->addWidget(m_loopSong, row, 1, 1, 2);
-
-    settings.endGroup();
+    layout->addWidget(m_advancedLooping, row, 1, 1, 2);
 
     ++row;
 
@@ -582,10 +577,7 @@ void GeneralConfigurationPage::apply()
 
     Preferences::setStopAtEnd(m_stopPlaybackAtEnd->isChecked());
     Preferences::setAutoChannels(m_autoChannels->isChecked());
-
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    settings.setValue("loopentiresong", m_loopSong->isChecked());
-    settings.endGroup();
+    Preferences::setAdvancedLooping(m_advancedLooping->isChecked());
 
     // Presentation tab
 

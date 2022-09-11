@@ -2918,8 +2918,10 @@ RosegardenMainWindow::createAndSetupTransport()
 
     // Handle set loop start/stop time buttons.
     //
-    connect(m_transport, &TransportDialog::setLoopStartTime, this, &RosegardenMainWindow::slotSetLoopStart);
-    connect(m_transport, &TransportDialog::setLoopStopTime, this, &RosegardenMainWindow::slotSetLoopStop);
+    connect(m_transport, &TransportDialog::setLoopStartTime,
+            this, &RosegardenMainWindow::slotSetLoopStart);
+    connect(m_transport, &TransportDialog::setLoopStopTime,
+            this, &RosegardenMainWindow::slotSetLoopStop);
 }
 
 void
@@ -5678,11 +5680,10 @@ RosegardenMainWindow::slotToggleRecord()
 void
 RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
 {
-    RG_DEBUG << "slotSetLoop" << lhs << rhs;
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool loopSong = settings.value("loopentiresong", false).toBool();
-    settings.endGroup();
+    RG_DEBUG << "slotSetLoop() - lhs: " << lhs << " rhs: " << rhs;
+
+    const bool loopSong = Preferences::getAdvancedLooping();
+
     Composition &comp =
         RosegardenDocument::currentDocument->getComposition();
 
@@ -5691,11 +5692,12 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
 
         // toggle the loop button
         getTransport()->LoopButton()->setChecked(true);
+
         if (lhs != rhs) {
             // special case - if the whole song is looping we defer
             // the loop until we are in the loop range
             if (m_loopingAll) {
-                RG_DEBUG << "defer looping" << lhs << rhs;
+                RG_DEBUG << "  defer looping" << lhs << rhs;
                 m_deferredLoop = true;
                 m_deferredLoopStart = lhs;
                 m_deferredLoopEnd = rhs;
@@ -5842,12 +5844,10 @@ void
 RosegardenMainWindow::slotSetLoop()
 {
     RG_DEBUG << "slotSetLoop";
+
     // if no loop is stored in the composition and option is set -
     // loop the whole song
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool loopSong = settings.value("loopentiresong", false).toBool();
-    settings.endGroup();
+    const bool loopSong = Preferences::getAdvancedLooping();
 
     Composition &comp =
         RosegardenDocument::currentDocument->getComposition();
@@ -5885,10 +5885,7 @@ RosegardenMainWindow::slotUnsetLoop()
     comp.setLooping(false);
     m_seqManager->setLoop(0, 0);
 
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool loopSong = settings.value("loopentiresong", false).toBool();
-    settings.endGroup();
+    const bool loopSong = Preferences::getAdvancedLooping();
 
     if (!loopSong) {
         getView()->getTrackEditor()->hideRange();
@@ -5898,15 +5895,20 @@ RosegardenMainWindow::slotUnsetLoop()
 void
 RosegardenMainWindow::slotSetLoopStart()
 {
-    RG_DEBUG << "slotSetLoopStart" <<
-        RosegardenDocument::currentDocument->getComposition().getPosition() <<
-        RosegardenDocument::currentDocument->getComposition().getLoopEnd();
-    // Check so that start time is before endtime, otherwise move up the
-    // endtime to that same pos.
-    if (RosegardenDocument::currentDocument->getComposition().getPosition() < RosegardenDocument::currentDocument->getComposition().getLoopEnd()) {
-        RosegardenDocument::currentDocument->setLoop(RosegardenDocument::currentDocument->getComposition().getPosition(), RosegardenDocument::currentDocument->getComposition().getLoopEnd());
-    } else {
-        RosegardenDocument::currentDocument->setLoop(RosegardenDocument::currentDocument->getComposition().getPosition(), RosegardenDocument::currentDocument->getComposition().getPosition());
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    const Composition &composition = document->getComposition();
+
+    RG_DEBUG << "slotSetLoopStart() - Pos: " << composition.getPosition() << "  Loop end: " << composition.getLoopEnd();
+
+    // If new loop start will be before the current loop end...
+    if (composition.getPosition() < composition.getLoopEnd()) {
+        // Set the new loop range.
+        document->setLoop(
+                composition.getPosition(), composition.getLoopEnd());
+    } else {  // New loop start is after the current loop end...
+        // Move the end to be the same as the start.
+        document->setLoop(
+                composition.getPosition(), composition.getPosition());
     }
 }
 
