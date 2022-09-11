@@ -39,7 +39,7 @@ class PasteNotationDialog : public QDialog
     Q_OBJECT
 
 public:
-    PasteNotationDialog(QWidget *parent);
+    explicit PasteNotationDialog(QWidget *parent);
 
     PasteEventsCommand::PasteType getPasteType() const;
     static PasteEventsCommand::PasteType getSavedPasteType();

@@ -32,7 +32,7 @@ class ShortcutWarnDialog : public QDialog
     Q_OBJECT
 
  public:
-    ShortcutWarnDialog(ActionData::DuplicateData ddata);
+    explicit ShortcutWarnDialog(ActionData::DuplicateData ddata);
     ~ShortcutWarnDialog();
 
 };

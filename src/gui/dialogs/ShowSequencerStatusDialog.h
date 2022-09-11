@@ -34,7 +34,7 @@ class ShowSequencerStatusDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ShowSequencerStatusDialog(QWidget *parent);
+    explicit ShowSequencerStatusDialog(QWidget *parent);
 };
 
 

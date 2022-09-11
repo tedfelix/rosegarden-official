@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -78,10 +78,6 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
-
-    QWidget *keyBox = nullptr;
-    QWidget *nameBox = nullptr;
-
     QGroupBox *keyFrame = new QGroupBox( tr("Key signature"), vbox );
     QVBoxLayout *keyFrameLayout = new QVBoxLayout;
     vboxLayout->addWidget(keyFrame);
@@ -99,10 +95,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     vboxLayout->addWidget(conversionFrame);
     vbox->setLayout(vboxLayout);
 
-    keyBox = new QWidget(keyFrame);
+    QWidget *keyBox = new QWidget(keyFrame);
     QHBoxLayout *keyBoxLayout = new QHBoxLayout;
     keyFrameLayout->addWidget(keyBox);
-    nameBox = new QWidget(keyFrame);
+    QWidget *nameBox = new QWidget(keyFrame);
     QHBoxLayout *nameBoxLayout = new QHBoxLayout;
     keyFrameLayout->addWidget(nameBox);
 
@@ -323,7 +319,7 @@ KeySignatureDialog::slotKeyDown()
 
 struct KeyNameComparator
 {
-    bool operator()(const Rosegarden::Key &k1, const Rosegarden::Key &k2) {
+    bool operator()(const Rosegarden::Key &k1, const Rosegarden::Key &k2) const {
         return (k1.getName() < k2.getName());
     }
 };

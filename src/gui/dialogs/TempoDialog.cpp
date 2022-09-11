@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -139,7 +139,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         vboxLayout->addWidget(m_timeEditor);
 
     } else {
-    
+
         // group box for scope (area)
         QGroupBox *scopeGroup = new QGroupBox(tr("Scope"), vbox);
         vboxLayout->addWidget(scopeGroup);
@@ -150,7 +150,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
         QVBoxLayout * currentBoxLayout = scopeBoxLayout;
         QWidget * currentBox = scopeGroup;
-        
+
         QLabel *child_15 = new QLabel(tr("The pointer is currently at "), currentBox);
         currentBoxLayout->addWidget(child_15);
         m_tempoTimeLabel = new QLabel(currentBox);
@@ -168,10 +168,10 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
         QWidget * changeWhereBox = scopeGroup;
         QVBoxLayout * changeWhereBoxLayout = scopeBoxLayout;
-        
+
         spare = new QLabel("      ", changeWhereBox);
         changeWhereBoxLayout->addWidget(spare);
-        
+
         QWidget *changeWhereVBox = new QWidget(changeWhereBox);
         QVBoxLayout *changeWhereVBoxLayout = new QVBoxLayout;
         changeWhereBoxLayout->addWidget(changeWhereVBox);
@@ -223,12 +223,12 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox);
-    
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TempoDialog::slotHelpRequested);
 
-    populateTempo();    
+    populateTempo();
 }
 
 TempoDialog::~TempoDialog()
@@ -353,7 +353,7 @@ TempoDialog::populateTempo()
 }
 
 void
-TempoDialog::updateBeatLabels(double qpm)
+TempoDialog::updateBeatLabels(double newTempo)
 {
     Composition &comp = m_doc->getComposition();
 
@@ -379,7 +379,7 @@ TempoDialog::updateBeatLabels(double qpm)
 
         m_tempoBeatsPerMinute->setText
             (QString("= %1 ").arg
-             (int(qpm * Note(Note::Crotchet).getDuration() / beat)));
+             (int(newTempo * Note(Note::Crotchet).getDuration() / beat)));
         m_tempoBeatLabel->show();
         m_tempoBeat->show();
         m_tempoBeatsPerMinute->show();
@@ -517,4 +517,3 @@ TempoDialog::slotHelpRequested()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 }
-

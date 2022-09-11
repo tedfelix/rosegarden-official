@@ -54,7 +54,7 @@ public slots:
     void slotPreviewPitch(int);
     void slotPitchSelectorChanged(int);
     void slotPitchChanged(int);
-    void populate(int dev);
+    void populate(int deviceIndex);
 
 protected:
 

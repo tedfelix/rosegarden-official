@@ -46,7 +46,7 @@ class ShortcutDialog : public QDialog
     Q_OBJECT
 
  public:
-    ShortcutDialog(QWidget *parent);
+    explicit ShortcutDialog(QWidget *parent);
     ~ShortcutDialog();
 
     void setModelData(const QKeySequence ks, const QModelIndex &index);

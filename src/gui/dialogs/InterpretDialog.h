@@ -35,7 +35,7 @@ class InterpretDialog : public QDialog
 {
     Q_OBJECT
 public:
-    InterpretDialog(QWidget *parent);
+    explicit InterpretDialog(QWidget *parent);
 
     // an OR from InterpretCommand's constants
     int getInterpretations();

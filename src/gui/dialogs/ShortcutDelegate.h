@@ -33,7 +33,7 @@ class ShortcutDelegate : public QStyledItemDelegate
     Q_OBJECT
 
  public:
-    ShortcutDelegate(ShortcutDialog *dialog);
+    explicit ShortcutDelegate(ShortcutDialog *dialog);
     ~ShortcutDelegate();
 
     QWidget* createEditor(QWidget *parent,

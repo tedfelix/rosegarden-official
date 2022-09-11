@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -61,12 +61,12 @@ enum PresetStyles {
 PitchBendSequenceDialog::PitchBendSequenceDialog(
         QWidget *parent,
         Segment *segment,
-        const ControlParameter &control,
+        const ControlParameter &controlParameter,
         timeT startTime,
         timeT endTime) :
     QDialog(parent),
     m_segment(segment),
-    m_controlParameter(control),
+    m_controlParameter(controlParameter),
     m_startTime(startTime),
     m_endTime(endTime)
 {
@@ -1078,7 +1078,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
         m_rampDuration->value() * sequenceDuration / 100;
     const timeT rampEndTime = sequenceStartTime + rampDuration;
     const RampMode rampMode = getRampMode();
-    
+
     // Add the first Event to the MacroCommand.
     macro->addCommand(new EventInsertionCommand(
             *m_segment,
@@ -1216,11 +1216,10 @@ PitchBendSequenceDialog::slotHelp()
     // free to create one.  This URL points to a transitional page
     // that relates only to this branch.  If or when this branch is
     // merged, it should replace the main-branch page
-    // "http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en" 
+    // "http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en"
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 
 }
-

@@ -49,7 +49,7 @@ class SelectDialog : public QDialog
     Q_OBJECT
 
 public:
-    SelectDialog(QWidget *parent = nullptr
+    explicit SelectDialog(QWidget *parent = nullptr
                 );
     ~SelectDialog() override;
 
@@ -60,9 +60,9 @@ public slots:
 protected:
 
     // Top Level Layout Widgets  ///////////////////////////////
-    
+
     QTabWidget *m_tabWidget;
-    
+
     QRadioButton *m_replaceExistingSelection;
     QRadioButton *m_addToExistingSelection;
 
@@ -221,7 +221,7 @@ protected:
     // Octave -2 to +8
     //    -2 -1 0 1 2 3 4 5 6 7 8
     // Ab
-    // A 
+    // A
     // A#
     // Bb
     // B
@@ -260,33 +260,33 @@ protected:
     QWidget *m_specialTab;
 
     // row 1
-    CheckButton *m_useAccent;         
-    CheckButton *m_useTenuto;         
-    CheckButton *m_useStaccato;       
-    CheckButton *m_useStaccatissimo;  
-    CheckButton *m_useMarcato;        
-    CheckButton *m_useOpen;           
-    CheckButton *m_useStopped;        
+    CheckButton *m_useAccent;
+    CheckButton *m_useTenuto;
+    CheckButton *m_useStaccato;
+    CheckButton *m_useStaccatissimo;
+    CheckButton *m_useMarcato;
+    CheckButton *m_useOpen;
+    CheckButton *m_useStopped;
     CheckButton *m_useHarmonic;
     CheckButton *m_useRow1;
 
 
     // row 2
-    CheckButton *m_useUpBow;          
-    CheckButton *m_useDownBow;        
+    CheckButton *m_useUpBow;
+    CheckButton *m_useDownBow;
     CheckButton *m_useOneSlash;
     CheckButton *m_useTwoSlash;
     CheckButton *m_useThreeSlash;
     CheckButton *m_useFourSlash;
     CheckButton *m_useFiveSlash;
     CheckButton *m_useRow2;
-    
+
     // row 3
-    CheckButton *m_useSforzando;      
-    CheckButton *m_useRinforzando;    
-    CheckButton *m_useTrill;          
+    CheckButton *m_useSforzando;
+    CheckButton *m_useRinforzando;
+    CheckButton *m_useTrill;
     CheckButton *m_useTrillLineIndication;
-    CheckButton *m_useTurn;           
+    CheckButton *m_useTurn;
     CheckButton *m_useMordent;
     CheckButton *m_useMordentInverted;
     CheckButton *m_useRow3;
@@ -298,7 +298,7 @@ protected:
     CheckButton *m_useDecrescendo;
     CheckButton *m_useSlur;
     CheckButton *m_usePhrasingSlur;
-    CheckButton *m_usePause;          
+    CheckButton *m_usePause;
     CheckButton *m_useRow4;
 
     // row 5
@@ -344,10 +344,10 @@ protected:
     // types, and so forth, that can't realistically be represented by icon
     // buttons, but are worth being able to dial in.  Potential uses consist of
     // an abundance of wild but credible edge cases.
-    
+
     // a widget for the tab page
     QWidget *m_advancedTab;
-    
+
     QCheckBox *m_include_key_signatures;
     QCheckBox *m_include_clefs;
     QCheckBox *m_include_tied_forward;
@@ -393,15 +393,15 @@ protected:
     // Quartertone accidentals?  Meh.
     //
 //    CheckButton *m_useFigParameterChord;
-//    CheckButton *m_useFiguration;            
+//    CheckButton *m_useFiguration;
 //    CheckButton *m_useBarre;  // not implemented yet; future indication, need to plan in layout
-//    CheckButton *m_useTrillLineMark; // the old legacy mark; should we just skip it then? 
+//    CheckButton *m_useTrillLineMark; // the old legacy mark; should we just skip it then?
 //    CheckButton *m_useString; // not implemented yet
 //    CheckButton *m_useChordNotation; // still in branch, not in NotationTypes in branch
 //    CheckButton *m_useGlissando; // indication type never implemented, and likely won't be, but it's in NotationTypes
 //    CheckButton *m_useQuarterFlat; // how do you even use these quarter tone accidentals?
-//    CheckButton *m_useThreeQuarterFlat; 
-//    CheckButton *m_useQuarterSharp; 
+//    CheckButton *m_useThreeQuarterFlat;
+//    CheckButton *m_useQuarterSharp;
 //    CheckButton *m_useThreeQuarterSharp;
 //    CheckButton *m_useLongTrill;  // not in GUI, totally obsolete I think
 //
@@ -468,7 +468,7 @@ protected slots:
     void slotUseRow7(bool);
     void slotUseAllSpecial(bool);
 
-};   
+};
 
 }
 

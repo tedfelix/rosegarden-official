@@ -37,7 +37,7 @@ class SplitByPitchDialog : public QDialog
 {
     Q_OBJECT
 public:
-    SplitByPitchDialog(QWidget *parent);
+    explicit SplitByPitchDialog(QWidget *parent);
 
     int getPitch();
 

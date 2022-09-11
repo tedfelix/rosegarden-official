@@ -30,6 +30,7 @@ namespace Rosegarden
 {
 
 ShortcutDelegate::ShortcutDelegate(ShortcutDialog *dialog) :
+    m_editor(nullptr),
     m_dialog(dialog)
 {
 }
