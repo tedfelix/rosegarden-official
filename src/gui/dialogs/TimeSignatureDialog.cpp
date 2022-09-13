@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -155,38 +155,23 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
             QString scopeText;
 
-            if (barNo != 0 || !atStartOfBar) {
-                if (atStartOfBar) {
-                    scopeText = QString
-                                (tr("Insertion point is at start of measure %1."))
-                                .arg(barNo + 1);
-                } else {
-                    scopeText = QString
-                                (tr("Insertion point is in the middle of measure %1."))
-                                .arg(barNo + 1);
-                }
-            } else {
-                scopeText = QString
-                            (tr("Insertion point is at start of composition."));
-            }
+            scopeText = QString
+                (tr("Insertion point is in the middle of measure %1."))
+                .arg(barNo + 1);
 
             groupBoxLayout->addWidget(new QLabel(scopeText));
             m_asGivenButton = new QRadioButton
-                              (tr("Start measure %1 here").arg(barNo + 2), groupBox);
+                (tr("Start measure %1 here").arg(barNo + 2), groupBox);
             groupBoxLayout->addWidget(m_asGivenButton);
-            if (!atStartOfBar) {
-                m_startOfBarButton = new QRadioButton
-                                     (tr("Change time from start of measure %1")
-                                       .arg(barNo + 1), groupBox);
-                groupBoxLayout->addWidget(m_startOfBarButton);
-                m_startOfBarButton->setChecked(true);
-            } else {
-                m_asGivenButton->setChecked(true);
-            }
+            m_startOfBarButton = new QRadioButton
+                (tr("Change time from start of measure %1")
+                 .arg(barNo + 1), groupBox);
+            groupBoxLayout->addWidget(m_startOfBarButton);
+            m_startOfBarButton->setChecked(true);
         } else {
             groupBoxLayout->addWidget(
                 new QLabel(tr("Time change will take effect at the start of"
-                                " measure %1.").arg(barNo + 1)));
+                              " measure %1.").arg(barNo + 1)));
         }
     }
     groupBox->setLayout(groupBoxLayout);
