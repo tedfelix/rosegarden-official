@@ -407,6 +407,24 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Check Logging
+    QLoggingCategory logcat(0);
+    // See bug #1634.  This should help reduce confusion when a distro
+    // sets up a qtlogging.ini that prevents RG_WARNING from working.
+    if (!logcat.isDebugEnabled()) {
+        std::cout << std::endl;
+        std::cout << "Debug output is disabled via Qt logging categories." << std::endl;
+        std::cout << "Consequently, you will not see output from RG_WARNING and RG_DEBUG." << std::endl;
+        std::cout << "Please check the following to re-enable logging:" << std::endl;
+        std::cout << "  1. qtlogging.ini which may appear in several locations." << std::endl;
+        std::cout << "  2. The QT_LOGGING_CONF environment variable." << std::endl;
+        std::cout << "  3. The QT_LOGGING_RULES environment variable." << std::endl;
+        std::cout << "  4. The documentation for QLoggingCategory." << std::endl;
+        std::cout << "QT_LOGGING_RULES overrides all others.  To enable all logging except qt:" << std::endl;
+        std::cout << "  export QT_LOGGING_RULES=\"qt.*=false\"" << std::endl;
+        std::cout << std::endl;
+    }
+
     QPixmapCache::setCacheLimit(8192); // KB
 
     setsid(); // acquire shiny new process group
