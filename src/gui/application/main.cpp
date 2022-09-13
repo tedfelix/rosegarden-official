@@ -409,10 +409,12 @@ int main(int argc, char *argv[])
 
     // Check Logging
     QLoggingCategory logcat(0);
-    if (!logcat.isWarningEnabled()) {
+    // See bug #1634.  This should help reduce confusion when a distro
+    // sets up a qtlogging.ini that prevents RG_WARNING from working.
+    if (!logcat.isDebugEnabled()) {
         std::cout << std::endl;
-        std::cout << "Warnings are disabled via Qt logging categories." << std::endl;
-        std::cout << "You will not see output from RG_WARNING." << std::endl;
+        std::cout << "Debug output is disabled via Qt logging categories." << std::endl;
+        std::cout << "Consequently, you will not see output from RG_WARNING and RG_DEBUG." << std::endl;
         std::cout << "Please check the following to re-enable logging:" << std::endl;
         std::cout << "  1. qtlogging.ini which may appear in several locations." << std::endl;
         std::cout << "  2. The QT_LOGGING_CONF environment variable." << std::endl;
