@@ -367,11 +367,10 @@ EventView::applyLayout()
         QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
         if( selection.count() ){
-            QTreeWidgetItem *listItem;
 
             for( int i=0; i< selection.count(); i++ ) {
 
-                listItem = selection.at(i);
+                QTreeWidgetItem *listItem = selection.at(i);
                 m_listSelection.push_back( m_eventList->indexOfTopLevelItem(listItem) );
 
             }
@@ -639,10 +638,9 @@ EventView::applyLayout()
     // Set a selection from a range of indexes
     //
     std::vector<int>::iterator sIt = m_listSelection.begin();
-    int index = 0;
 
     for (; sIt != m_listSelection.end(); ++sIt) {
-        index = *sIt;
+        int index = *sIt;
 
         while (index > 0 && !m_eventList->topLevelItem(index))        // was itemAtIndex
             index--;
@@ -903,17 +901,15 @@ EventView::slotEditCut()
     << selection.count() << " items";
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
-    QTreeWidgetItem *listItem;
-    EventViewItem *item;
     EventSelection *cutSelection = nullptr;
     int itemIndex = -1;
 
 //    while ((listItem = it.current()) != 0) {
     for( int i=0; i< selection.size(); i++ ){
-        listItem = selection.at(i);
+        QTreeWidgetItem *listItem = selection.at(i);
 
 //        item = dynamic_cast<EventViewItem*>((*it));
-        item = dynamic_cast<EventViewItem*>(listItem);
+        EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
 
         if (itemIndex == -1)
             itemIndex = m_eventList->indexOfTopLevelItem(listItem);
@@ -952,8 +948,6 @@ EventView::slotEditCopy()
     << selection.count() << " items";
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
-    QTreeWidgetItem *listItem;
-    EventViewItem *item;
     EventSelection *copySelection = nullptr;
 
     // clear the selection for post modification updating
@@ -962,10 +956,10 @@ EventView::slotEditCopy()
 
 //    while ((listItem = it.current()) != 0) {
     for( int i=0; i< selection.size(); i++ ){
-        listItem = selection.at(i);
+        QTreeWidgetItem *listItem = selection.at(i);
 
 //         item = dynamic_cast<EventViewItem*>((*it));
-        item = dynamic_cast<EventViewItem*>(listItem);
+        EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
 
 //         m_listSelection.push_back(m_eventList->itemIndex(*it));
         m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
@@ -1011,11 +1005,10 @@ EventView::slotEditPaste()
         m_listSelection.clear();
 
 //        QPtrListIterator<QTreeWidgetItem> it(selection);
-        QTreeWidgetItem *listItem;
 
 //        while ((listItem = it.current()) != 0) {
         for( int i=0; i< selection.size(); i++ ){
-            listItem = selection.at(i);
+            QTreeWidgetItem *listItem = selection.at(i);
 
             m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
 //             ++it;
@@ -1047,17 +1040,15 @@ EventView::slotEditDelete()
     << selection.count() << " items";
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
-    QTreeWidgetItem *listItem;
-    EventViewItem *item;
     EventSelection *deleteSelection = nullptr;
     int itemIndex = -1;
 
 //    while ((listItem = it.current()) != 0) {
     for( int i=0; i< selection.size(); i++ ){
-        listItem = selection.at(i);
+        QTreeWidgetItem *listItem = selection.at(i);
 
 //         item = dynamic_cast<EventViewItem*>((*it));
-        item = dynamic_cast<EventViewItem*>(listItem);
+        EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
 
         if (itemIndex == -1)
             itemIndex = m_eventList->indexOfTopLevelItem(listItem);
@@ -1529,6 +1520,7 @@ EventView::slotPopupMenu(const QPoint& pos)
 void
 EventView::createMenu()
 {
+    // cppcheck-suppress publicAllocationError
     m_menu = new QMenu(this);
 
     QAction *eventEditorAction =

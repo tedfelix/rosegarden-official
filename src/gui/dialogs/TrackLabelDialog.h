@@ -37,12 +37,12 @@ class TrackLabelDialog : public QDialog
 public:
     TrackLabelDialog(QWidget *parent,
                      const QString &title,
-                     const QString &PrimaryLabel,
-                     const QString &PrimaryContents,
-                     const QString &PrimaryTooltip,
-                     const QString &SecondaryLabel,
-                     const QString &SecondaryContents,
-                     const QString &SecondaryTooltip);
+                     const QString &primaryLabel,
+                     const QString &primaryContents,
+                     const QString &primaryTooltip,
+                     const QString &secondaryLabel,
+                     const QString &secondaryContents,
+                     const QString &secondaryTooltip);
 
     QString getPrimaryText();
     QString getSecondaryText();

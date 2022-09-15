@@ -57,7 +57,7 @@ class TransportDialog : public QDialog
 {
     Q_OBJECT
 public:
-    TransportDialog(QWidget *parent = nullptr);
+    explicit TransportDialog(QWidget *parent = nullptr);
     ~TransportDialog() override;
 
     enum TimeDisplayMode { RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };
@@ -149,8 +149,8 @@ public slots:
 
     // Connected to SequenceManager
     void slotTempoChanged(tempoT);
-    void slotMidiInLabel(const MappedEvent *event); // show incoming MIDI events on the Transport
-    void slotMidiOutLabel(const MappedEvent *event); // show outgoing  MIDI events on the Transport
+    void slotMidiInLabel(const MappedEvent *mE); // show incoming MIDI events on the Transport
+    void slotMidiOutLabel(const MappedEvent *mE); // show outgoing  MIDI events on the Transport
     void slotPlaying(bool checked);
     void slotRecording(bool checked);
     void slotMetronomeActivated(bool checked);
@@ -237,7 +237,7 @@ private:
     std::map<std::string, TimeDisplayMode> m_modeMap;
 };
 
- 
+
 
 
 
