@@ -2089,7 +2089,7 @@ LilyPondExporter::write()
                                     str << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"} ";
                                     isFirstPrintedVerse = false;
                                 }
-                                str << "\\lyricsto \"" << voiceNumber.str() << "\"" << " \\lyricmode {" << std::endl;
+                                str << "\\lyricsto \"" << voiceNumber.str() << "\"" << " { \\lyricmode {" << std::endl;
                             }
                             if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
                                 str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
@@ -2104,7 +2104,11 @@ LilyPondExporter::write()
                             str << indent(col) << qStrToStrUtf8("\\set ignoreMelismata = ##t") << std::endl;
                             str << indent(col) << qStrToStrUtf8(text) << " " << std::endl;
                             str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
-                            str << indent(--col) << qStrToStrUtf8("} % Lyrics ") << (currentVerse+1) << std::endl;
+                            str << indent(--col);
+                            if (m_languageLevel > LILYPOND_VERSION_2_10) {
+                                str << qStrToStrUtf8("}");
+                            }
+                            str << qStrToStrUtf8("} % Lyrics ") << (currentVerse+1) << std::endl;
                             // close the Lyrics context
                         } // if (rx.search(text....
                     } // for (long currentVerse = 0....
