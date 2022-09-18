@@ -31,7 +31,7 @@ namespace Guitar
 
 class ChordMap
 {
-    typedef std::set<Chord, Chord::ChordCmp> chordset; 
+    typedef std::set<Chord, Chord::ChordCmp> chordset;
 
 public:
     typedef std::vector<Chord> chordarray;
@@ -42,20 +42,20 @@ public:
     static int FILE_FORMAT_VERSION_MAJOR;
     static int FILE_FORMAT_VERSION_MINOR;
     static int FILE_FORMAT_VERSION_POINT;
-    
+
 	ChordMap();
-    
+
     void insert(const Chord&);
     void substitute(const Chord& oldChord, const Chord& newChord);
     void remove(const Chord&);
-    
+
     chordarray getChords(const QString& root, const QString& ext) const;
-    
-    QStringList getRootList() const;
+
+    static QStringList getRootList();
     QStringList getExtList(const QString& root) const;
-    
+
     void debugDump() const;
-    
+
     bool needSave() const { return m_needSave; }
     void clearNeedSave() { m_needSave = false; }
 
@@ -65,11 +65,11 @@ public:
     iterator end()   { return m_map.end();   }
     const_iterator begin() const { return m_map.begin(); }
     const_iterator end()   const { return m_map.end(); }
-    
+
 protected:
 
     chordset m_map;
-    
+
     bool m_needSave;
 };
 

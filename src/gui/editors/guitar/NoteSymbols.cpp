@@ -5,7 +5,7 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
 
-    This file contains code from 
+    This file contains code from
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
 
@@ -99,7 +99,7 @@ NoteSymbols::drawOpenSymbol ( bool big,
                               unsigned int position ) const
 {
     RG_DEBUG << "NoteSymbols::drawOpenSymbol()";
-    
+
     QRect v = p->viewport();
     posPair x_pos = getX ( v.width(), position, m_nbOfStrings );
     unsigned int y_pos = (getTopBorder(v.height()) / 2) + 2;
@@ -165,7 +165,7 @@ NoteSymbols::drawNoteSymbol ( bool /* big */,
     }
 
     int x = x_pos.first - ( radius / 2 ),
-        y = y_pos.first + ( (y_pos.second - radius) / 2) - y_pos.second + TOP_GUITAR_CHORD_MARGIN; 
+        y = y_pos.first + ( (y_pos.second - radius) / 2) - y_pos.second + TOP_GUITAR_CHORD_MARGIN;
 
 //        y = y_pos.first - (radius / 2) - y_pos.second + TOP_GUITAR_CHORD_MARGIN;
 
@@ -198,7 +198,7 @@ NoteSymbols::drawBarreSymbol ( QPainter* p,
         double columnWidth = startXPos.second;
         unsigned int thickness = static_cast<unsigned int>( columnWidth * 0.7 );
 
-        QPen pen(Qt::red); // to see if this is ever used 
+        QPen pen(Qt::red); // to see if this is ever used
 
         p->save();
 
@@ -238,7 +238,7 @@ NoteSymbols::drawFretNumber ( QPainter* p,
         // Compute the "true" center.
         int y = y_pos.first + TOP_GUITAR_CHORD_MARGIN;
 
-        // Make a rect around the center.  Don't worry about the size as 
+        // Make a rect around the center.  Don't worry about the size as
         // boundingRect() will give us the required bounding rect.
         QRect rect(getLeftBorder( imgWidth ) / 4, y - 10, 20, 20);
 
@@ -283,9 +283,9 @@ NoteSymbols::drawFrets ( QPainter* p ) const
     p->save();
     p->setPen(pen);
     unsigned int y_pos = (getY ( imgHeight, 0, m_nbOfFrets )).first + TOP_GUITAR_CHORD_MARGIN;
-    
+
 //    NOTATION_DEBUG << "NoteSymbols::drawFrets : " << m_nbOfFrets;
-    
+
     // Horizontal lines
     for ( unsigned int i = 0; i <= m_nbOfFrets; ++i ) {
 
@@ -296,7 +296,7 @@ NoteSymbols::drawFrets ( QPainter* p ) const
                      y_pos);
 //        NOTATION_DEBUG << "NoteSymbols::drawFrets : " << QPoint(getLeftBorder(imgWidth), y_pos)
 //                       << " to " << QPoint(endXPos.first, y_pos) << endl;
-                     
+
 
        y_pos += rowHeight;
     }
@@ -322,7 +322,7 @@ NoteSymbols::drawStrings ( QPainter* p ) const
     unsigned int x_pos = (getX ( imgWidth, 0, m_nbOfStrings )).first;
 
     QPen pen(p->pen());
-    pen.setWidth(imgWidth >= 100 ? STRING_PEN_WIDTH : STRING_PEN_WIDTH / 2);  
+    pen.setWidth(imgWidth >= 100 ? STRING_PEN_WIDTH : STRING_PEN_WIDTH / 2);
     pen.setColor(Qt::black);
     p->save();
     p->setPen(pen);
@@ -334,12 +334,12 @@ NoteSymbols::drawStrings ( QPainter* p ) const
                      startPos,
                      x_pos,
                      endPos );
-                     
+
        x_pos += columnWidth;
     }
 
     p->restore();
-    
+
 }
 
 QRect NoteSymbols::getTransientNoteSymbolRect(QSize guitarChordSize,
@@ -352,25 +352,25 @@ QRect NoteSymbols::getTransientNoteSymbolRect(QSize guitarChordSize,
     unsigned int radius =  static_cast<unsigned int>( columnWidth /* * 0.9 */ );
 
     int x = x_pos.first - ( radius / 2 ),
-        y = y_pos.first + ( (y_pos.second - radius) / 2) - y_pos.second + TOP_GUITAR_CHORD_MARGIN; 
+        y = y_pos.first + ( (y_pos.second - radius) / 2) - y_pos.second + TOP_GUITAR_CHORD_MARGIN;
 
     return QRect(x, y, radius, radius);
 }
 
 unsigned int
-NoteSymbols::getTopBorder ( unsigned int imgHeight ) const
+NoteSymbols::getTopBorder ( unsigned int imgHeight )
 {
     return static_cast<unsigned int>( TOP_BORDER_PERCENTAGE * imgHeight );
 }
 
 unsigned int
-NoteSymbols::getBottomBorder ( unsigned int imgHeight ) const
+NoteSymbols::getBottomBorder ( unsigned int imgHeight )
 {
     return static_cast<unsigned int>( imgHeight * BOTTOM_BORDER_PERCENTAGE );
 }
 
 unsigned int
-NoteSymbols::getLeftBorder ( unsigned int imgWidth ) const
+NoteSymbols::getLeftBorder ( unsigned int imgWidth )
 {
     unsigned int left = static_cast<unsigned int>( imgWidth * LEFT_BORDER_PERCENTAGE );
     if ( left < 15 ) {
@@ -380,25 +380,25 @@ NoteSymbols::getLeftBorder ( unsigned int imgWidth ) const
 }
 
 unsigned int
-NoteSymbols::getRightBorder ( unsigned int imgWidth ) const
+NoteSymbols::getRightBorder ( unsigned int imgWidth )
 {
     return static_cast<unsigned int>( imgWidth * RIGHT_BORDER_PERCENTAGE );
 }
 
 unsigned int
-NoteSymbols::getGuitarChordWidth ( int imgWidth ) const
+NoteSymbols::getGuitarChordWidth ( int imgWidth )
 {
     return static_cast<unsigned int>( imgWidth * GUITAR_CHORD_WIDTH_PERCENTAGE );
 }
 
 unsigned int
-NoteSymbols::getGuitarChordHeight ( int imgHeight ) const
+NoteSymbols::getGuitarChordHeight ( int imgHeight )
 {
     return static_cast<unsigned int>( imgHeight * GUITAR_CHORD_HEIGHT_PERCENTAGE );
 }
 
 unsigned int
-NoteSymbols::getFontPixelSize ( int /* imgWidth */, int imgHeight ) const
+NoteSymbols::getFontPixelSize ( int /* imgWidth */, int imgHeight )
 {
     return std::max(8, imgHeight / 10);
 }
@@ -500,7 +500,7 @@ NoteSymbols::drawFingeringPixmap(const Guitar::Fingering& fingering, const Guita
     for (Fingering::const_iterator pos = fingering.begin();
          pos != fingering.end();
          ++pos, ++stringNb) {
-                
+
         switch (*pos) {
         case Fingering::OPEN:
                 noteSymbols.drawOpenSymbol(false, p, stringNb);
@@ -515,7 +515,7 @@ NoteSymbols::drawFingeringPixmap(const Guitar::Fingering& fingering, const Guita
                 break;
         }
     }
-   
+
     // draw frets last, so the sharp lines don't get broken by the fuzzy
     // outlines of the new antialiased note symbols
     noteSymbols.drawFretNumber(p, startFret);
@@ -537,4 +537,3 @@ int   const NoteSymbols::STRING_PEN_WIDTH = 2;
 } /* namespace Guitar */
 
 }
-

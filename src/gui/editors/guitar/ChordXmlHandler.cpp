@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -20,7 +20,8 @@ namespace Rosegarden
 {
 
 ChordXmlHandler::ChordXmlHandler(Guitar::ChordMap& map)
-    : m_chordMap(map)
+    : m_inFingering(false),
+      m_chordMap(map)
 {
 }
 
@@ -46,9 +47,9 @@ bool ChordXmlHandler::startElement(const QString& /* namespaceURI */,
         m_currentRoot = atts.value("root").toString().trimmed();
 
     } else if (lcName == "chord") {
-        
+
         m_currentChord = Guitar::Chord(m_currentRoot);
-        
+
         if (atts.hasAttribute("ext"))
             m_currentChord.setExt(atts.value("ext").toString().trimmed());
 
@@ -63,7 +64,7 @@ bool ChordXmlHandler::startElement(const QString& /* namespaceURI */,
     } else if (lcName == "fingering") {
         m_inFingering = true;
     }
-    
+
     return true;
 }
 
@@ -77,26 +78,26 @@ bool ChordXmlHandler::endElement(const QString& /* namespaceURI */,
 
         m_inFingering = false;
         m_chordMap.insert(m_currentChord);
-        NOTATION_DEBUG << "ChordXmlHandler::endElement (fingering) : adding chord " << m_currentChord;            
+        NOTATION_DEBUG << "ChordXmlHandler::endElement (fingering) : adding chord " << m_currentChord;
 
     } else if (lcName == "chord") {
-        
+
         // adding is done after each parsing of fingering
         //
 //        m_chordMap.insert(m_currentChord);
 
     }
-    
+
     return true;
 }
 
 bool ChordXmlHandler::characters(const QString& ch)
 {
     QString ch2 = ch.simplified();
-    
+
     if (!ch2.isEmpty() && m_inFingering) {
         if (!parseFingering(ch2))
-            return false;        
+            return false;
     }
 
     return true;
@@ -112,15 +113,15 @@ bool ChordXmlHandler::endDocument()
 }
 
 bool ChordXmlHandler::parseFingering(const QString& ch) {
-    
+
     QString errString;
-    
+
     Guitar::Fingering fingering = Guitar::Fingering::parseFingering(ch, errString);
-    
+
     if (m_errorString.isEmpty()) {
         NOTATION_DEBUG << "ChordXmlHandler::parseFingering : fingering " << ch;
         m_currentChord.setFingering(fingering);
-        return true;    
+        return true;
     } else {
         m_errorString = errString;
         return false;

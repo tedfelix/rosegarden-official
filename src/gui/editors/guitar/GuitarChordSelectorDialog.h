@@ -39,11 +39,11 @@ class FingeringBox;
 class GuitarChordSelectorDialog : public QDialog
 {
      Q_OBJECT
-    
+
     enum { COMPLEXITY_BEGINNER, COMPLEXITY_COMMON, COMPLEXITY_ALL };
-    
+
 public:
-    GuitarChordSelectorDialog(QWidget *parent=nullptr);
+    explicit GuitarChordSelectorDialog(QWidget *parent=nullptr);
 
     void init();
 
@@ -69,7 +69,7 @@ protected slots:
     void slotFingeringHighlighted(QListWidgetItem*);
 
     void slotComplexityChanged(int);
-    
+
     void slotNewFingering();
     void slotDeleteFingering();
     void slotEditFingering();
@@ -84,16 +84,16 @@ protected:
 
     /// set enabled state of edit/delete buttons
     void setEditionEnabled(bool);
-    
+
     void populate();
     void clear();
     void refresh();
-    
+
     bool saveUserChordMap();
     int evaluateChordComplexity(const QString& ext);
-    
+
     QPixmap getFingeringPixmap(const Guitar::Fingering& fingering) const;
-         
+
     /// Unbundle chords.xml then return a path to its location in userspace.
     //
     // User edits will be saved to the user's local, writeable copy of
@@ -109,7 +109,7 @@ protected:
 
     /// current selected chord
     Guitar::Chord m_chord;
-    
+
     // Chord data
     QListWidget* m_rootNotesList;
     QListWidget* m_chordExtList;
@@ -119,13 +119,13 @@ protected:
     QComboBox*   m_chordComplexityCombo;
     QPushButton* m_newFingeringButton;
     QPushButton* m_deleteFingeringButton;
-    QPushButton* m_editFingeringButton;    
+    QPushButton* m_editFingeringButton;
 
     static const unsigned int FINGERING_PIXMAP_HEIGHT = 75;
     static const unsigned int FINGERING_PIXMAP_WIDTH = 75;
     static const unsigned int FINGERING_PIXMAP_H_MARGIN = 5;
     static const unsigned int FINGERING_PIXMAP_W_MARGIN = 5;
-    
+
 };
 
 }

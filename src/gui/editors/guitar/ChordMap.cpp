@@ -31,7 +31,7 @@ namespace Rosegarden
 
 namespace Guitar
 {
-    
+
 int ChordMap::FILE_FORMAT_VERSION_MAJOR = 1;
 int ChordMap::FILE_FORMAT_VERSION_MINOR = 0;
 int ChordMap::FILE_FORMAT_VERSION_POINT = 0;
@@ -55,7 +55,7 @@ ChordMap::getChords(const QString& root, const QString& ext) const
 
     Chord tmp(root, ext);
 
-// RG_DEBUG << "ChordMap::getChords() : chord = " /*<< tmp*/ << 
+// RG_DEBUG << "ChordMap::getChords() : chord = " /*<< tmp*/ <<
 //   " - ext is empty : " << ext.isEmpty();
 
     for (chordset::const_iterator i = m_map.lower_bound(tmp); i != m_map.end(); ++i) {
@@ -77,12 +77,12 @@ ChordMap::getChords(const QString& root, const QString& ext) const
 
     return res;
 }
-    
+
 QStringList
-ChordMap::getRootList() const
+ChordMap::getRootList()
 {
     static QStringList rootNotes;
-    
+
     if (rootNotes.count() == 0) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         rootNotes = QString("A,A#/Bb,B,C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab")
@@ -92,17 +92,17 @@ ChordMap::getRootList() const
             .split(",", QString::SkipEmptyParts);
 #endif
     }
-    
+
     // extract roots from map itself - not a very good idea
     //
 //    QString currentRoot;
-//    
+//
 //    for(chordset::const_iterator i = m_map.begin(); i != m_map.end(); ++i) {
 //        const Chord& chord = *i;
 //        if (chord.getRoot() != currentRoot) {
 //            rootNotes.push_back(chord.getRoot());
 //            currentRoot = chord.getRoot();
-//        } 
+//        }
 //    }
 
     return rootNotes;
@@ -113,26 +113,26 @@ ChordMap::getExtList(const QString& root) const
 {
     QStringList extList;
     QString currentExt = "ZZ";
-    
+
     Chord tmp(root);
-    
-    for (chordset::const_iterator i = m_map.lower_bound(tmp); 
+
+    for (chordset::const_iterator i = m_map.lower_bound(tmp);
          i != m_map.end(); ++i) {
         const Chord& chord = *i;
 
 // RG_DEBUG << "ChordMap::getExtList() : chord = " << chord;
-         
+
         if (chord.getRoot() != root)
             break;
-            
+
         if (chord.getExt() != currentExt) {
 
-// RG_DEBUG << "ChordMap::getExtList() : adding ext " << chord.getExt() << 
+// RG_DEBUG << "ChordMap::getExtList() : adding ext " << chord.getExt() <<
 //   " for root " << root;
 
             extList.push_back(chord.getExt());
             currentExt = chord.getExt();
-        }        
+        }
     }
 
     return extList;
@@ -149,7 +149,7 @@ void
 ChordMap::remove(const Chord& c)
 {
     m_map.erase(c);
-    m_needSave = true;    
+    m_needSave = true;
 }
 
 bool ChordMap::saveDocument(
@@ -157,15 +157,15 @@ bool ChordMap::saveDocument(
 {
     QFile file(filename);
     file.open(QIODevice::WriteOnly);
-   
+
     QTextStream outStream(&file);
-    
+
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     // qt6 default codec is UTF-8
 #else
     outStream.setCodec("UTF-8");
 #endif
-    
+
     outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
     << "<!DOCTYPE rosegarden-chord-data>\n"
     << "<rosegarden-chord-data version=\"" << VERSION
@@ -173,19 +173,19 @@ bool ChordMap::saveDocument(
     << "\" format-version-minor=\"" << FILE_FORMAT_VERSION_MINOR
     << "\" format-version-point=\"" << FILE_FORMAT_VERSION_POINT
     << "\">\n";
-    
+
     outStream << "<chords>\n";
-    
+
     QString currentExt, currentRoot;
     bool inChord = false;
     bool inChordset = false;
 
     for(iterator i = begin(); i != end(); ++i) {
         const Chord& chord = *i;
-    
+
         if (userChordsOnly && !chord.isUserChord())
             continue; // skip non-user chords
-            
+
         if (chord.getRoot() != currentRoot) {
 
             currentRoot = chord.getRoot();
@@ -202,29 +202,28 @@ bool ChordMap::saveDocument(
                 inChordset = false;
             }
 
-            // open new chordset            
+            // open new chordset
             outStream << " <chordset root=\"" << chord.getRoot() << "\">\n";
             inChordset = true;
             currentExt = "NEWEXT"; // make sure we open a new chord
         }
-    
+
         if (chord.getExt() != currentExt) {
-            
+
             currentExt = chord.getExt();
-            
+
             // If we are in a <chord>, close it.
             if (inChord) {
                 outStream << "  </chord>\n";
-                inChord = false;
             }
 
-            // open new chord            
+            // open new chord
             outStream << "  <chord";
             if (!chord.getExt().isEmpty())
                 outStream << " ext=\"" << chord.getExt() << "\"";
             if (chord.isUserChord())
                 outStream << " user=\"true\"";
-                
+
             outStream << ">\n";
             inChord = true;
         }
@@ -236,18 +235,16 @@ bool ChordMap::saveDocument(
     // If we are in a <chord>, close it.
     if (inChord) {
         outStream << "  </chord>\n";
-        inChord = false;
     }
-        
+
     // If we are in a <chordset>, close it.
     if (inChordset) {
         outStream << " </chordset>\n";
-        inChordset = false;
     }
 
-    outStream << "</chords>\n";    
+    outStream << "</chords>\n";
     outStream << "</rosegarden-chord-data>\n";
-  
+
     return outStream.status() == QTextStream::Ok;
 }
 
@@ -256,10 +253,10 @@ ChordMap::debugDump() const
 {
     RG_DEBUG << "ChordMap::debugDump()";
 
-    for (chordset::const_iterator chord = m_map.begin(); 
+    for (chordset::const_iterator chord = m_map.begin();
          chord != m_map.end(); ++chord) {
         RG_DEBUG << "  " << *chord;
-    } 
+    }
 }
 
 }

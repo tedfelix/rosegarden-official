@@ -5,7 +5,7 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
 
-    This file contains code from 
+    This file contains code from
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
 
@@ -93,11 +93,11 @@ private:
     static int   const TOP_GUITAR_CHORD_MARGIN;
     static int   const FRET_PEN_WIDTH;
     static int   const STRING_PEN_WIDTH;
-    
+
 public:
 
     NoteSymbols(unsigned int nbOfStrings, unsigned int nbOfFrets) :
-        m_nbOfStrings(nbOfStrings), 
+        m_nbOfStrings(nbOfStrings),
         m_nbOfFrets(nbOfFrets) {};
 
     //! Display a mute symbol in the QPainter object
@@ -138,24 +138,24 @@ public:
 
     void drawStrings ( QPainter* p ) const;
 
-    unsigned int getTopBorder ( unsigned int imgHeight ) const;
+    static unsigned int getTopBorder ( unsigned int imgHeight );
 
-    unsigned int getBottomBorder ( unsigned int imgHeight ) const;
+    static unsigned int getBottomBorder ( unsigned int imgHeight );
 
-    unsigned int getLeftBorder ( unsigned int imgWidth ) const;
+    static unsigned int getLeftBorder ( unsigned int imgWidth );
 
-    unsigned int getRightBorder ( unsigned int imgWidth ) const;
+    static unsigned int getRightBorder ( unsigned int imgWidth );
 
-    unsigned int getGuitarChordWidth ( int imgWidth ) const;
+    static unsigned int getGuitarChordWidth ( int imgWidth );
 
-    unsigned int getGuitarChordHeight ( int imgHeight ) const;
+    static unsigned int getGuitarChordHeight ( int imgHeight );
 
-    unsigned int getFontPixelSize ( int imgWidth, int imgHeight ) const;
-    
+    static unsigned int getFontPixelSize ( int imgWidth, int imgHeight );
+
     std::pair<bool, unsigned int>
     getStringNumber ( int imgWidth,
                       unsigned int x_pos,
-                      unsigned int string_num ) const;
+                      unsigned int maxStringNum ) const;
 
     std::pair<bool, unsigned int>
     getFretNumber ( int imgHeight,
@@ -165,9 +165,9 @@ public:
     QRect getTransientNoteSymbolRect(QSize guitarChordSize,
                                      unsigned int stringNb,
                                      int fretNb) const;
-    
+
     static void drawFingeringPixmap(const Fingering& fingering, const NoteSymbols& noteSymbols, QPainter *p);
-    
+
 private:
 
     posPair
@@ -187,4 +187,3 @@ private:
 }
 
 #endif /* SYMBOLS_H_ */
-

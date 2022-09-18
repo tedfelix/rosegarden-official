@@ -30,9 +30,9 @@ namespace Rosegarden
 class ChordXmlHandler : public XMLHandler
 {
 public:
-	ChordXmlHandler(Guitar::ChordMap&);
+    explicit ChordXmlHandler(Guitar::ChordMap&);
     ~ChordXmlHandler() override;
-    
+
     /// overloaded handler functions
     bool startDocument() override;
     bool startElement(const QString& namespaceURI,
