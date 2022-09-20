@@ -60,7 +60,7 @@ protected:
     int m_velocityDelta;
     int m_screenPixelsScale; // Amount of screen pixels used for scale +-127 1:1 scale ratio
     double m_velocityScale;
-    MatrixVelocity(MatrixWidget *);
+    explicit MatrixVelocity(MatrixWidget *);
 
     void setBasicContextHelp();
 

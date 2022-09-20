@@ -89,9 +89,9 @@ protected slots:
 signals:
     void gotSelection(); // inform that we've got a new selection
     void editTriggerSegment(int);
-    
+
 protected:
-    MatrixSelector(MatrixWidget *);
+    explicit MatrixSelector(MatrixWidget *);
 
     void setContextHelpFor(const MatrixMouseEvent *, bool ctrlPressed = false);
 
@@ -103,7 +103,7 @@ protected:
      * The returned result is owned by the caller.
      */
     bool getSelection(EventSelection *&selection);
-    
+
     //--------------- Data members ---------------------------------
 
     QGraphicsRectItem *m_selectionRect;
@@ -130,4 +130,3 @@ protected:
 }
 
 #endif
-

@@ -903,23 +903,23 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 }
 
 void
-MatrixScene::setSingleSelectedEvent(MatrixViewSegment *vs,
+MatrixScene::setSingleSelectedEvent(MatrixViewSegment *viewSegment,
                                     MatrixElement *e,
                                     bool preview)
 {
-    if (!vs || !e) return;
-    EventSelection *s = new EventSelection(vs->getSegment());
+    if (!viewSegment || !e) return;
+    EventSelection *s = new EventSelection(viewSegment->getSegment());
     s->addEvent(e->event());
     setSelection(s, preview);
 }
 
 void
-MatrixScene::setSingleSelectedEvent(Segment *seg,
+MatrixScene::setSingleSelectedEvent(Segment *segment,
                                     Event *e,
                                     bool preview)
 {
-    if (!seg || !e) return;
-    EventSelection *s = new EventSelection(*seg);
+    if (!segment || !e) return;
+    EventSelection *s = new EventSelection(*segment);
     s->addEvent(e);
     setSelection(s, preview);
 }

@@ -25,7 +25,7 @@ namespace Rosegarden {
 class MatrixCommandRegistry : public ActionCommandRegistry
 {
 public:
-    MatrixCommandRegistry(ActionFileClient *);
+    explicit MatrixCommandRegistry(ActionFileClient *);
     ~MatrixCommandRegistry() override;
 
 protected:
@@ -34,4 +34,3 @@ protected:
 }
 
 #endif
-

@@ -26,7 +26,7 @@ namespace Rosegarden
 namespace Guitar
 {
 NoteSymbols::posPair
-NoteSymbols::getX ( int imgWidth, unsigned int stringNb, unsigned int nbOfStrings ) const
+NoteSymbols::getX ( int imgWidth, unsigned int stringNb, unsigned int nbOfStrings )
 {
     /*
             std::cout << "NoteSymbols::getX - input values" << std::endl
@@ -41,7 +41,7 @@ NoteSymbols::getX ( int imgWidth, unsigned int stringNb, unsigned int nbOfString
 }
 
 NoteSymbols::posPair
-NoteSymbols::getY ( int imgHeight, unsigned int fretNb, unsigned int nbOfFrets ) const
+NoteSymbols::getY ( int imgHeight, unsigned int fretNb, unsigned int nbOfFrets )
 {
     /*
             std::cout << "NoteSymbols::getY - input values" << std::endl

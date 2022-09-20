@@ -61,7 +61,7 @@ protected slots:
     void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
 
 protected:
-    MatrixPainter(MatrixWidget *);
+    explicit MatrixPainter(MatrixWidget *);
 
     void setBasicContextHelp();
 

@@ -89,7 +89,7 @@ class MatrixWidget : public QWidget,
     Q_OBJECT
 
 public:
-    MatrixWidget(bool drumMode);
+    explicit MatrixWidget(bool drumMode);
     virtual ~MatrixWidget() override;
 
     Device *getCurrentDevice();

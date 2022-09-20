@@ -170,11 +170,11 @@ public:
 
 private:
 
-    posPair
-    getX ( int imgWidth, unsigned int stringNb, unsigned int nbOfStrings ) const;
+    static posPair
+    getX ( int imgWidth, unsigned int stringNb, unsigned int nbOfStrings );
 
-    posPair
-    getY ( int imgHeight, unsigned int fretNb, unsigned int nbOfFrets ) const;
+    static posPair
+    getY ( int imgHeight, unsigned int fretNb, unsigned int nbOfFrets );
 
 
     unsigned int m_nbOfStrings;

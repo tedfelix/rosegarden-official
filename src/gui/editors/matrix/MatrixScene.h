@@ -86,7 +86,8 @@ public:
     void setMatrixWidget(MatrixWidget *w) { m_widget = w; };
     MatrixWidget *getMatrixWidget() { return m_widget; };
 
-    void setSegments(RosegardenDocument *doc, std::vector<Segment *> segments);
+    void setSegments(RosegardenDocument *document,
+                     std::vector<Segment *> segments);
 
     void handleEventAdded(Event *);
     void handleEventRemoved(Event *);

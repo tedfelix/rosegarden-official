@@ -40,7 +40,7 @@ class MatrixToolBox : public BaseToolBox
     Q_OBJECT
 
 public:
-    MatrixToolBox(MatrixWidget *parent);
+    explicit MatrixToolBox(MatrixWidget *parent);
     ~MatrixToolBox() override;
 
     void setScene(MatrixScene *scene);

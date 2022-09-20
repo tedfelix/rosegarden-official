@@ -36,7 +36,7 @@ public:
     void ready() override;
 
 protected:
-    MatrixEraser(MatrixWidget *);
+    explicit MatrixEraser(MatrixWidget *);
 
     void setBasicContextHelp();
 };
