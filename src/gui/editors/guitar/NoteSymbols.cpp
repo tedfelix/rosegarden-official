@@ -406,7 +406,7 @@ NoteSymbols::getFontPixelSize ( int /* imgWidth */, int imgHeight )
 std::pair<bool, unsigned int>
 NoteSymbols::getStringNumber ( int imgWidth,
                                unsigned int x_pos,
-                               unsigned int maxStringNum ) const
+                               unsigned int maxStringNum )
 {
     /*
         std::cout << "NoteSymbols::getNumberOfStrings - input values" << std::endl
@@ -456,7 +456,7 @@ NoteSymbols::getStringNumber ( int imgWidth,
 std::pair<bool, unsigned int>
 NoteSymbols::getFretNumber ( int imgHeight,
                              unsigned int y_pos,
-                             unsigned int maxFretNum ) const
+                             unsigned int maxFretNum )
 {
     /*
         std::cout << "NoteSymbols::getNumberOfFrets - input values" << std::endl

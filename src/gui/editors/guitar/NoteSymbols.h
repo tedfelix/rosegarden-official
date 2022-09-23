@@ -152,15 +152,15 @@ public:
 
     static unsigned int getFontPixelSize ( int imgWidth, int imgHeight );
 
-    std::pair<bool, unsigned int>
+    static std::pair<bool, unsigned int>
     getStringNumber ( int imgWidth,
                       unsigned int x_pos,
-                      unsigned int maxStringNum ) const;
+                      unsigned int maxStringNum );
 
-    std::pair<bool, unsigned int>
+    static std::pair<bool, unsigned int>
     getFretNumber ( int imgHeight,
                     unsigned int y_pos,
-                    unsigned int maxFretNum ) const;
+                    unsigned int maxFretNum );
 
     QRect getTransientNoteSymbolRect(QSize guitarChordSize,
                                      unsigned int stringNb,

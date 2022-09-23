@@ -268,7 +268,7 @@ protected slots:
 protected:
     const SnapGrid *getSnapGrid() const;
     void readOptions() override;
-    void insertControllerSequence(const ControlParameter &cp);
+    void insertControllerSequence(const ControlParameter &controlParameter);
 
 private:
     RosegardenDocument *m_document;

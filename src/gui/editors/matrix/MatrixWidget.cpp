@@ -381,16 +381,13 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     Composition &comp = document->getComposition();
 
-    Track *track;
-    Instrument *instr;
-
     // Look at segments to see if we need piano keyboard or key mapping ruler
     // (cf comment in MatrixScene::setSegments())
     m_onlyKeyMapping = true;
     std::vector<Segment *>::iterator si;
     for (si=segments.begin(); si!=segments.end(); ++si) {
-        track = comp.getTrackById((*si)->getTrack());
-        instr = document->getStudio().getInstrumentById(track->getInstrument());
+        Track *track = comp.getTrackById((*si)->getTrack());
+        Instrument *instr = document->getStudio().getInstrumentById(track->getInstrument());
         if (instr) {
             if (!instr->getKeyMapping()) {
                 m_onlyKeyMapping = false;
@@ -958,10 +955,10 @@ MatrixWidget::showHighlight(bool visible)
 }
 
 void
-MatrixWidget::setCanvasCursor(QCursor c)
+MatrixWidget::setCanvasCursor(QCursor cursor)
 {
     if (m_view)
-        m_view->viewport()->setCursor(c);
+        m_view->viewport()->setCursor(cursor);
 }
 
 void
@@ -1723,4 +1720,3 @@ MatrixWidget::slotZoomOut()
 
 
 }
-
