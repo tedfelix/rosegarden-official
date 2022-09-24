@@ -75,7 +75,7 @@ protected:
     /**
      * Create a new StaffLayout for the given ViewSegment, with a
      * linear layout.
-     * 
+     *
      * \a id is an arbitrary id for the staff in its view,
      *    not used within the StaffLayout implementation but
      *    queryable via getId
@@ -92,7 +92,7 @@ protected:
     /**
      * Create a new StaffLayout for the given ViewSegment, with a
      * page layout.
-     * 
+     *
      * \a id is an arbitrary id for the staff in its view,
      *    not used within the StaffLayout implementation but
      *    queryable via getId
@@ -272,7 +272,7 @@ public:
      * begins.
      */
     virtual void setMargin(double m);
-    
+
     /**
      * Get the scene width of the left and right margins.
      */
@@ -289,7 +289,7 @@ public:
      * Get the scene height of the title area.
      */
     virtual int getTitleHeight() const;
-    
+
     /**
      * Returns the width of the entire staff after layout.  Call
      * this only after you've done the full sizeStaff/positionElements
@@ -326,13 +326,13 @@ public:
      * Returns the total height of a single staff row, including ruler
      */
     virtual int getHeightOfRow() const;
-    
+
     /**
      * Returns true if the given scene coordinates fall within
      * (any of the rows of) this staff.  False if they fall in the
      * gap between two rows.
      */
-    virtual bool containsSceneCoords(double sceneX, int sceneY) const; 
+    virtual bool containsSceneCoords(double sceneX, int sceneY) const;
 
     /**
      * Returns the scene y coordinate of the specified line on the
@@ -372,7 +372,7 @@ public:
     /**
      * Set whether this is the current staff or not.  A staff that is
      * current will differ visually from non-current staffs.
-     * 
+     *
      * The owner of the staffs should normally ensure that one staff
      * is current (the default is non-current, even if there only is
      * one staff) and that only one staff is current at once.
@@ -386,7 +386,7 @@ public:
      * and create the bars and staff lines accordingly.  It may be
      * called either before or after renderElements and/or
      * positionElements.
-     * 
+     *
      * No bars or staff lines will appear unless this method has
      * been called.
      */
@@ -416,13 +416,13 @@ public:
      */
     virtual void positionElements(timeT from,
                                   timeT to) = 0;
- 
+
     /* Some optional methods for the subclass. */
 
     /**
      * Return an iterator pointing to the nearest view element to the
      * given scene coordinates.
-     * 
+     *
      * If notesAndRestsOnly is true, do not return any view element
      * other than a note or rest.
      *
@@ -437,7 +437,7 @@ public:
      */
 /*
     virtual ViewElementList::iterator getClosestElementToSceneCoords
-    (double x, int y, 
+    (double x, int y,
      Event *&clef, Event *&key,
      bool notesAndRestsOnly = false, int proximityThreshold = 10) {
         StaffLayoutCoords layoutCoords = getLayoutCoordsForSceneCoords(x, y);
@@ -449,7 +449,7 @@ public:
     /**
      * Return an iterator pointing to the nearest view element to the
      * given layout x-coordinate.
-     * 
+     *
      * If notesAndRestsOnly is true, do not return any view element
      * other than a note or rest.
      *
@@ -534,7 +534,7 @@ public:
     // it and hasn't been supplied with a proper way to do without.
     // Please try to avoid calling this method.
     //!!! fix NotationView::print etc
-    int getRowSpacing() { return m_rowSpacing; }
+    int getRowSpacing() const { return m_rowSpacing; }
 
 protected:
     // Methods that the subclass may (indeed, should) use to convert
@@ -635,7 +635,7 @@ protected:
     int      m_titleHeight;
     int      m_resolution;
     int      m_lineThickness;
-    
+
     PageMode m_pageMode;
     double   m_pageWidth;
     int      m_rowsPerPage;

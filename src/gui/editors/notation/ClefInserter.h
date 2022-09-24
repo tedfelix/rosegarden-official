@@ -37,7 +37,7 @@ class NotationWidget;
 class ClefInserter : public NotationTool
 {
     Q_OBJECT
-    
+
     friend class NotationToolBox;
 
 public:
@@ -49,7 +49,7 @@ public:
 
     /**
      * Useful to get the tool name from a NotationTool object
-     */ 
+     */
     const QString getToolName() override { return ToolName(); }
 
     bool needsWheelEvents() override { return false; }
@@ -57,7 +57,7 @@ public:
     static QString ToolName();
 
 public slots:
-    void slotSetClef(Clef clefType);
+    void slotSetClef(const Clef& clefType);
 
 protected slots:
     void slotNotesSelected();
@@ -65,7 +65,7 @@ protected slots:
     void slotSelectSelected();
 
 protected:
-    ClefInserter(NotationWidget *);
+    explicit ClefInserter(NotationWidget *);
     Clef m_clef;
 };
 

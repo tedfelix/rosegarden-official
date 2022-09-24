@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -39,7 +39,7 @@ namespace Rosegarden
 
 const unsigned int smallWhiteKeyHeight = 14;
 const unsigned int whiteKeyHeight = 18;
-    
+
 PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
         : PitchRuler(parent),
         m_keySize(48, 18),
@@ -77,11 +77,10 @@ void PianoKeyboard::computeKeyPos()
     //    int y = -9;
     int y = -4;
 
-    unsigned int posInOctave = 0,
-                               keyHeight = smallWhiteKeyHeight;
+    unsigned int keyHeight = smallWhiteKeyHeight;
 
     for (unsigned int i = 0; i < m_nbKeys; ++i) {
-        posInOctave = (i + 5) % 7;
+        unsigned int posInOctave = (i + 5) % 7;
 
         if (y >= 0) {
             m_whiteKeyPos.push_back(y);

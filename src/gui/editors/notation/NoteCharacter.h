@@ -32,7 +32,7 @@ namespace Rosegarden
 class NoteCharacterDrawRep : public QPolygon
 {
 public:
-    NoteCharacterDrawRep(int size = 0) : QPolygon(size) { }
+    explicit NoteCharacterDrawRep(int size = 0) : QPolygon(size) { }
 };
 
 
@@ -58,7 +58,7 @@ public:
 
     int getWidth() const;
     int getHeight() const;
-    
+
     QPixmap getPixmap() const;
     QPoint getHotspot() const;
     QGraphicsPixmapItem *makeItem() const;
@@ -70,10 +70,10 @@ private:
     NoteCharacter(QPixmap pixmap, QPoint hotspot, NoteCharacterDrawRep *rep);
 
     QPoint m_hotspot;
-    QPixmap m_pixmap; 
+    QPixmap m_pixmap;
     NoteCharacterDrawRep *m_rep; // I don't own this, it's a reference to a static in the NoteFont
 };
-    
+
 
 
 }

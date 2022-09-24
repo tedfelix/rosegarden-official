@@ -261,11 +261,11 @@ public:
      */
     QString getOneLine(QString &text, int width);
 
-    QFont getTrackHeaderFont() { return m_trackHeaderFont; }
-    QFontMetrics getTrackHeaderFontMetrics() { return m_trackHeaderFontMetrics; }
+    QFont getTrackHeaderFont() const { return m_trackHeaderFont; }
+    QFontMetrics getTrackHeaderFontMetrics() const { return m_trackHeaderFontMetrics; }
 
-    QFont getTrackHeaderBoldFont() { return m_trackHeaderBoldFont; }
-    QFontMetrics getTrackHeaderBoldFontMetrics() {
+    QFont getTrackHeaderBoldFont() const { return m_trackHeaderBoldFont; }
+    QFontMetrics getTrackHeaderBoldFontMetrics() const {
         return m_trackHeaderBoldFontMetrics;
     }
 
@@ -371,7 +371,7 @@ protected:
     bool m_haveGrace;
 
     int m_graceSize;
-    
+
     NoteItemDimensions m_nd;
 
     QFont m_tupletCountFont;
@@ -406,7 +406,7 @@ protected:
     int m_generatedWidth;
     int m_generatedHeight;
     bool m_inPrinterMethod;
-    
+
     NotePixmapPainter *m_p;
 
     typedef std::map<std::string, QFont> TextFontCache;

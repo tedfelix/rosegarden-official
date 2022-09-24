@@ -25,7 +25,7 @@ namespace Rosegarden {
 class NotationCommandRegistry : public ActionCommandRegistry
 {
 public:
-    NotationCommandRegistry(ActionFileClient *);
+    explicit NotationCommandRegistry(ActionFileClient *);
     ~NotationCommandRegistry() override;
 
 protected:
@@ -34,4 +34,3 @@ protected:
 }
 
 #endif
-

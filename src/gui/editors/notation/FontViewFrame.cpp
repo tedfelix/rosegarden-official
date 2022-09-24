@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -90,10 +90,10 @@ QSize FontViewFrame::sizeHint() const
     right = margins.right();
     top = margins.top();
     bottom = margins.bottom();
-	
+
     return QSize((16 * m_fontSize * 3) / 2 + left + right + 2 * frameWidth(),
                  (16 * m_fontSize * 3) / 2 + top + bottom + 2 * frameWidth());
-	
+
 // 	old: return QSize(16 * m_fontSize * 3 / 2 + margin() + 2 * frameWidth(),
 // 				 16 * m_fontSize * 3 / 2 + margin() + 2 * frameWidth());
 }
@@ -118,7 +118,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
     top = margins.top();
     bottom = margins.bottom();
     p.setClipRect(left, top, right-left, bottom-top);
-	
+
     int ll = 25;
     int lt = m_ascent + 5;
     int ml = frameWidth() + left + ll + 1;
@@ -179,9 +179,9 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
 }
 
 bool
-FontViewFrame::hasRow(int r) const
+FontViewFrame::hasRow(int row) const
 {
-    if (r < 256) return true;
+    if (row < 256) return true;
     return false;
 }
 

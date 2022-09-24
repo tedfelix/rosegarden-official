@@ -46,7 +46,7 @@ public:
 
     /**
      * Useful to get the tool name from a NotationTool object
-     */ 
+     */
     const QString getToolName() override { return ToolName(); }
 
     bool needsWheelEvents() override { return false; }
@@ -62,7 +62,7 @@ protected slots:
 protected:
     GuitarChordSelectorDialog *m_guitarChordSelector;
 
-    GuitarChordInserter(NotationWidget *);
+    explicit GuitarChordInserter(NotationWidget *);
 
 private:
     void handleSelectedGuitarChord(const NotationMouseEvent *e);

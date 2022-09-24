@@ -103,7 +103,7 @@ protected:
     /**
      * Create a new NotationTool without a menu
      */
-    NotationTool(NotationWidget *);
+    explicit NotationTool(NotationWidget *);
 
     void createMenu() override;
     bool hasMenu() override { return m_menuName != ""; }

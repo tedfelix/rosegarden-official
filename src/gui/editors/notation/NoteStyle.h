@@ -127,7 +127,7 @@ protected:
     void checkDescription(Note::Type type);
 
 protected: // for use by NoteStyleFileReader
-    NoteStyle(NoteStyleName name) : m_name(name) { }
+    explicit NoteStyle(NoteStyleName name) : m_name(name) { }
     friend class NoteStyleFileReader;
 };
 

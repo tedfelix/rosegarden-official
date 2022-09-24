@@ -47,13 +47,13 @@ class NotationElement : public ViewElement
 {
 public:
     typedef Exception NoGraphicsItem;
-    
+
     /**
      * Create a new NotationElement encapsulating the Event in
      * parameter.  NotationElement does not take ownership of the
      * event itself.
      */
-    NotationElement(Event *event);
+    explicit NotationElement(Event *event);
 
     /**
      * Only destroy the graphical representation of the Event, not the
@@ -133,7 +133,7 @@ public:
      * Add an extra scene item associated with this element, for
      * example where an element has been split across two or more
      * staff rows.
-     * 
+     *
      * The element will take ownership of these scene items and
      * delete them when it deletes the main scene item.
      */

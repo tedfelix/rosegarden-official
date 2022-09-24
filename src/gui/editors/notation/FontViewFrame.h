@@ -44,7 +44,7 @@ public:
     bool hasRow(int row) const;
 
 public slots:
-    void setFont(QString name);
+    void setFont(QString font);
     void setRow(int);
     void setGlyphs(bool glyphs);
 

@@ -284,7 +284,7 @@ protected:
         } layoutData;
 
         BarData(NotationElementList::iterator i,
-                bool correct, TimeSignature timeSig, bool newTimeSig) {
+                bool correct, const TimeSignature& timeSig, bool newTimeSig) {
             basicData.start = i;
             basicData.correct = correct;
             basicData.timeSignature = timeSig;
@@ -324,7 +324,9 @@ protected:
         TimeSignature timeSignature;
 
         TrackTimeSig(const TrackId & track,
-                     const TimeSignature & timeSig) {
+                     const TimeSignature & timeSig) :
+        timeSignature(timeSig)
+        {
           trackId = track;
           timeSignature = timeSig;
         }

@@ -39,7 +39,7 @@ namespace Rosegarden
 class NotationProperties
 {
 public:
-    NotationProperties(const std::string &prefix);
+    explicit NotationProperties(const std::string &prefix);
 
     // These are only of interest to notation views, but are the
     // same across all notation views.
