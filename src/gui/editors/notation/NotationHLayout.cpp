@@ -376,7 +376,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                     ottavaShift = 0;
                 }
             }
-            
+
             // Clefs and key signatures must always be memorized here (even
             // when they are invisible) as the way other elements are displayed
             // may depend from them.
@@ -439,7 +439,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                 // the only text events of interest are lyrics, which
                 // contribute to a fixed area following the next chord
 
-                if (isLyric && (!m_distributeVerses || (m_distributeVerses && verseOk))) {
+                if (isLyric && (!m_distributeVerses || verseOk)) {
                     lyricWidth = std::max
                         (lyricWidth, float(npf->getTextWidth(Text(*el->event()))));
                     RG_DEBUG << "Setting lyric width to " << lyricWidth

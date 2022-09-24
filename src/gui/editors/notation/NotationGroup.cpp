@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -60,7 +60,7 @@ NotationGroup::NotationGroup(NotationElementList &nel,
 
     /*
     RG_DEBUG << "NotationGroup: id is " << m_groupNo;
-    i = getInitialElement(); 
+    i = getInitialElement();
     while (i != getContainer().end()) {
         long gid = -1;
         (*i)->event()->get<Int>(BEAMED_GROUP_ID, gid);
@@ -73,7 +73,7 @@ NotationGroup::NotationGroup(NotationElementList &nel,
 
 NotationGroup::NotationGroup(NotationElementList &nel,
                              const Quantizer *q,
-                             const NotationProperties &p,
+                             const NotationProperties &properties,
                              const Clef &clef, const Key &key) :
         AbstractSet<NotationElement, NotationElementList>(nel, nel.end(), q),
         m_barRange(0, 0),
@@ -85,7 +85,7 @@ NotationGroup::NotationGroup(NotationElementList &nel,
         m_userSamples(true),
         m_groupNo( -1),
         m_type(Beamed),
-        m_properties(p)
+        m_properties(properties)
 {
     //...
 }
@@ -283,7 +283,7 @@ NotationGroup::applyStemProperties()
         (*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
         aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
         }
-     
+
         if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE) &&
         (*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)) {
         aboveNotes = (*initialNote)->event()->get<Bool>
@@ -358,7 +358,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     beam.gradient = 0;
     beam.necessary = false;
 
-    NELIterator 
+    NELIterator
         initialNote(getInitialNote()),
         finalNote(getFinalNote());
 
@@ -578,7 +578,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
                    << "aboveNotes: " << beam.aboveNotes
                    << "shortestNoteType: " << shortestNoteType
                    << "necessary: " << beam.necessary;
-    */ 
+    */
     return beam;
 }
 
@@ -852,7 +852,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
         finalNote(getFinalNote()),
         initialElement(getInitialElement()),
         finalElement(getFinalElement());
-    
+
     NELIterator initialNoteOrRest(initialElement);
     NotationElement* initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
 
@@ -865,6 +865,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
     if (!initialNoteOrRestEl->isRest()) {
         initialNoteOrRest = initialNote;
+        // cppcheck-suppress unreadVariable
         initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
     }
 

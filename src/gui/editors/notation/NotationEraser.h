@@ -37,10 +37,10 @@ public:
     void ready() override;
 
     void handleLeftButtonPress(const NotationMouseEvent *) override;
-    
+
     /**
      * Useful to get the tool name from a NotationTool object
-     */ 
+     */
     const QString getToolName() override { return ToolName(); }
 
     bool needsWheelEvents() override { return false; }
@@ -49,12 +49,12 @@ public:
 
 public slots:
     void slotToggleRestCollapse();
-    
+
     void slotInsertSelected();
     void slotSelectSelected();
 
 protected:
-    NotationEraser(NotationWidget *);
+    explicit NotationEraser(NotationWidget *);
 
     bool m_collapseRest;
 };

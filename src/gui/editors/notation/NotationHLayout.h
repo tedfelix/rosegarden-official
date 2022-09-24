@@ -325,10 +325,9 @@ protected:
 
         TrackTimeSig(const TrackId & track,
                      const TimeSignature & timeSig) :
+        trackId(track),
         timeSignature(timeSig)
         {
-          trackId = track;
-          timeSignature = timeSig;
         }
 
         bool operator<(const TrackTimeSig &tts) const {
