@@ -809,9 +809,8 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
         // seconds) -- adjust x-coord for shifted note head
 
         double cx = element->getSceneX();
-        int nbw = 10;
 
-        nbw = m_notePixmapFactory->getNoteBodyWidth();
+        int nbw = m_notePixmapFactory->getNoteBodyWidth();
         bool shifted = false;
 
         if (element->event()->get<Bool>

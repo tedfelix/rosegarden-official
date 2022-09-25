@@ -261,7 +261,7 @@ signals:
     void hoveredOverAbsoluteTimeChanged(unsigned int time);
 
 public slots:
-    void slotMouseLeavesView(); 
+    void slotMouseLeavesView();
     void slotCommandExecuted();
 
 protected:
@@ -304,7 +304,7 @@ private:
 
     std::vector<Segment *> m_externalSegments; // I do not own these
     std::vector<Segment *> m_clones; // I own these
-    std::vector<Segment *> m_segments; // The concatenation of m_clones 
+    std::vector<Segment *> m_segments; // The concatenation of m_clones
                                        // and m_externalSegments
     std::vector<NotationStaff *> m_staffs; // I own these
 
@@ -353,7 +353,7 @@ private:
     void checkUpdate();
     void positionStaffs();
     void layoutAll();
-    void layout(NotationStaff *singleStaff, timeT start, timeT end);
+    void layout(NotationStaff *singleStaff, timeT startTime, timeT endTime);
 
     NotationStaff *setSelectionElementStatus(EventSelection *, bool set);
     void previewSelection(EventSelection *, EventSelection *oldSelection);

@@ -303,7 +303,7 @@ protected:
         }
 
         /// YG: Only for debug
-        void dump(std::string indent);
+        void dump(const std::string& indent);
     };
 
     typedef std::map<int, BarData> BarDataList;
@@ -367,7 +367,7 @@ protected:
      * staff has been preparsed since the last reset
      */
     BarDataList& getBarData(ViewSegment &staff);
-    const BarDataList& getBarData(ViewSegment &staff) const;
+    const BarDataList& getBarDataConst(ViewSegment &staff) const;
 
     /// Find the staff in which bar "barNo" is widest
     ViewSegment *getViewSegmentWithWidestBar(int barNo);
