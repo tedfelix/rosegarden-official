@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -57,7 +57,7 @@
 
 namespace Rosegarden
 {
- 
+
 using namespace BaseProperties;
 
 NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
@@ -96,7 +96,7 @@ NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     createAction("make_visible", SLOT(slotMakeVisible()));
 
     createMenu();
-    
+
     m_releaseTimer = new QTimer(this);
     m_releaseTimer->setSingleShot(true);
     connect(m_releaseTimer, &QTimer::timeout,
@@ -113,7 +113,7 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 {
     m_doubleClick = false;
     m_tripleClick = false;
-    
+
     if (m_justSelectedBar) {
         // It's a triple click
         handleMouseTripleClick(e);
@@ -196,7 +196,7 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
     m_releaseTimer->stop();      // Don't move insertion cursor
     m_doubleClick = true;
-    
+
     RG_DEBUG << "NotationSelector::handleMouseDoubleClick";
 
     // Only double click on left mouse button is currently used (fix #1493)
@@ -267,7 +267,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
     RG_DEBUG << "handleMouseMove" << e;
     if (!m_updateRect) return NO_FOLLOW;
 
-//    std::cout << "NotationSelector::handleMouseMove: staff is " 
+//    std::cout << "NotationSelector::handleMouseMove: staff is "
 //              << m_selectedStaff << ", m_updateRect is " << m_updateRect
 //              << std::endl;
 
@@ -281,15 +281,6 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 
     if (m_clickedElement /* && !m_clickedElement->isRest() */) {
 
-// Fine (micro-position) drag is BROKEN, and I'm bypassing its mangled corpse.        
-//        if (m_startedFineDrag) {
-//            dragFine(e->sceneX, e->sceneY, false);
-//        } else if (m_clickedShift) {
-//            if (w > 2 || w < -2 || h > 2 || h < -2) {
-//                dragFine(e->sceneX, e->sceneY, false);
-//           }
-//        } else 
-           
         if ((w > 3 || w < -3 || h > 3 || h < -3) &&
             !m_clickedShift) {
 //            std::cout << "Dragging from Code Point Bravo: w: " << w << " h: " << h << std::endl;
@@ -309,7 +300,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 
     return (FOLLOW_HORIZONTAL | FOLLOW_VERTICAL);
 }
-    
+
 void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 {
     //RG_DEBUG << "NotationSelector::handleMouseRelease.";
@@ -329,12 +320,12 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     //RG_DEBUG << "e->sceneX =" << e->sceneX << "sceneY =" << e->sceneY
     //         << "m_selectionOrigin =" << m_selectionOrigin
     //         << "w =" << w << "h =" << h << "m_startedFineDrag =" << m_startedFineDrag;
-     
+
     if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) ||
         (m_clickedShift)) {
 
         if (m_clickedElement != nullptr && m_selectedStaff) {
-            
+
             // If we didn't drag out a meaningful area, but _did_
             // click on an individual event, then select just that
             // event
@@ -351,7 +342,7 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
                     m_selectionToMerge->addEvent(m_clickedElement->event(),
                                                  m_ties);
                 }
-                
+
                 m_scene->setSelection(m_selectionToMerge, true);
                 m_selectionToMerge = nullptr;
 
@@ -369,17 +360,8 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 
     } else {
 
-// Fine (micro-position) drag is BROKEN, and I'm bypassing its mangled corpse.        
-//        if (m_startedFineDrag) {
-//            dragFine(e->sceneX, e->sceneY, true);
-//        } else
-
-        // in a world without fine drag, we do _not_ want to begin any kind of
-        // drag operation if Shift was pressed, because this modifier can only
-        // be used to make additive selections
         if (m_clickedElement &&
-            !m_clickedShift /* &&
-            !m_clickedElement->isRest() */) {
+            !m_clickedShift) {
             //RG_DEBUG << "Dragging from Code Point Foxtrot: w =" << w << "h =" << h;
             // drag() must be called here from Foxtrot, whether attempting to
             // click to select a note head or to click and drag a note.  It's
@@ -396,14 +378,14 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     m_selectionRect->hide();
     m_selectionOrigin = QPointF();
     m_wholeStaffSelectionComplete = false;
-    
+
     // If we clicked on no event but on a staff, move the insertion cursor
     // to the point where we clicked. In such a case nothing has been selected.
-    
+
     // If double or triple click, something is selected or the click was
     // outside any staff.
     if (m_doubleClick || m_tripleClick) return;
-    
+
     // If simple click, look at clicked staff and current selection
     if (e->staff && !m_scene->getSelection()) {
         m_pointerStaff = e->staff;
@@ -416,7 +398,7 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 void NotationSelector::slotMoveInsertionCursor()
 {
     // Move the insertion cursor to the mouse pointer position.
-    
+
     // We just clicked on a staff in the window, so no scroll is needed
     // and we don't want to see any move of the staves
     m_widget->setScroll(false);
@@ -424,7 +406,7 @@ void NotationSelector::slotMoveInsertionCursor()
     ///! Warning, this short-circuits NotationView::setCurrentStaff...
     m_scene->setCurrentStaff(m_pointerStaff);
     m_widget->setPointerPosition(m_pointerTime);
-    
+
     m_widget->setScroll(true);
 }
 
@@ -633,109 +615,6 @@ void NotationSelector::drag(int x, int y, bool final)
     }
 }
 
-void NotationSelector::dragFine(int x, int y, bool final)
-{
-    //!!! Fine drag is very seriously broken, and its presence is complicating
-    // the matter of sorting out far more serious problems.  I haven't been able
-    // to so much as scratch the surface of sorting it out, so I've bypassed it.
-    // Nobody has complained about how broken this has been since the port, so I
-    // intend to leave it broken, and try to compensate by improving the layout
-    // code instead.
-    RG_DEBUG << "NotationSelector::dragFine: Fine drag is broken and has been bypassed.  Seeing this message is a BUG!";
-    return;
-
-    RG_DEBUG << "NotationSelector::dragFine (micro-position) x:" << x << " y: " << y;
-
-    if (!m_clickedElement || !m_selectedStaff)
-        return ;
-
-    EventSelection *selection = m_scene->getSelection();
-    if (!selection)
-        selection = new EventSelection(m_selectedStaff->getSegment());
-    if (!selection->contains(m_clickedElement->event()))
-        selection->addEvent(m_clickedElement->event(), m_ties);
-    m_scene->setSelection(selection, false);
-
-    // Fine drag modifies the DISPLACED_X and DISPLACED_Y properties on
-    // each event.  The modifications have to be relative to the previous
-    // values of these properties, not to zero, so for each event we need
-    // to store the previous value at the time the drag starts.
-
-    static PropertyName xProperty("temporary-displaced-x");
-    static PropertyName yProperty("temporary-displaced-y");
-
-    if (!m_startedFineDrag) {
-        // back up original properties
-
-        for (EventContainer::iterator i =
-                    selection->getSegmentEvents().begin();
-                i != selection->getSegmentEvents().end(); ++i) {
-            long prevX = 0, prevY = 0;
-            (*i)->get<Int>(DISPLACED_X, prevX);
-            (*i)->get<Int>(DISPLACED_Y, prevY);
-            (*i)->setMaybe<Int>(xProperty, prevX);
-            (*i)->setMaybe<Int>(yProperty, prevY);
-        }
-
-        m_startedFineDrag = true;
-    }
-
-    // We want the displacements in 1/1000ths of a staff space
-
-    double dx = x - m_selectionRect->x();
-    double dy = y - m_selectionRect->y();
-
-    double noteBodyWidth = m_scene->getNotePixmapFactory()->getNoteBodyWidth();
-    double lineSpacing = m_scene->getNotePixmapFactory()->getLineSpacing();
-    dx = (1000.0 * dx) / noteBodyWidth;
-    dy = (1000.0 * dy) / lineSpacing;
-
-    if (final) {
-
-        // reset original values (and remove backup values) before
-        // applying command
-
-        for (EventContainer::iterator i =
-                    selection->getSegmentEvents().begin();
-                i != selection->getSegmentEvents().end(); ++i) {
-            long prevX = 0, prevY = 0;
-            (*i)->get<Int>(xProperty, prevX);
-            (*i)->get<Int>(yProperty, prevY);
-            (*i)->setMaybe<Int>(DISPLACED_X, prevX);
-            (*i)->setMaybe<Int>(DISPLACED_Y, prevY);
-            (*i)->unset(xProperty);
-            (*i)->unset(yProperty);
-        }
-
-        IncrementDisplacementsCommand *command = new IncrementDisplacementsCommand
-                (*selection, long(dx), long(dy));
-        CommandHistory::getInstance()->addCommand(command);
-
-    } else {
-
-        timeT startTime = 0, endTime = 0;
-
-        for (EventContainer::iterator i =
-                    selection->getSegmentEvents().begin();
-                i != selection->getSegmentEvents().end(); ++i) {
-            long prevX = 0, prevY = 0;
-            (*i)->get<Int>(xProperty, prevX);
-            (*i)->get<Int>(yProperty, prevY);
-            (*i)->setMaybe<Int>(DISPLACED_X, prevX + long(dx));
-            (*i)->setMaybe<Int>(DISPLACED_Y, prevY + long(dy));
-            if (i == selection->getSegmentEvents().begin()) {
-                startTime = (*i)->getAbsoluteTime();
-            }
-            endTime = (*i)->getAbsoluteTime() + (*i)->getDuration();
-        }
-
-        if (startTime == endTime)
-            ++endTime;
-        selection->getSegment().updateRefreshStatuses(startTime, endTime);
-        m_scene->update();
-    }
-}
-
 void NotationSelector::ready()
 {
     m_widget->setCanvasCursor(Qt::ArrowCursor);
@@ -884,14 +763,14 @@ NotationSelector::getEventsInSelectionRect()
     // been drawn yet, and so will not appear in the collision list.
     // (We did still need the collision list to determine which staff
     // to use though.)
-    
+
     if (m_wholeStaffSelectionComplete) {
         EventSelection *selection = new EventSelection(segment,
                                                        segment.getStartTime(),
                                                        segment.getEndMarkerTime());
         return selection;
     }
-    
+
     EventSelection *selection = new EventSelection(segment);
     int nbw = m_selectedStaff->getNotePixmapFactory(false).getNoteBodyWidth();
 
@@ -900,7 +779,7 @@ NotationSelector::getEventsInSelectionRect()
         QGraphicsItem *item = l[i];
         NotationElement *element = NotationElement::getNotationElement(item);
         if (!element) continue;
-            
+
         double x = element->getSceneX();
         double y = element->getSceneY();
 
@@ -924,7 +803,7 @@ NotationSelector::getEventsInSelectionRect()
                 continue;
             }
         }
-                
+
         // must be in the same segment as we first started on,
         // we can't select events across multiple segments
         if (selection->getSegment().findSingle(element->event()) !=

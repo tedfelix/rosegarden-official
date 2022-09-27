@@ -85,10 +85,10 @@ public:
      * is remembering as the current event.
      */
     virtual void handleEventRemoved(Event *event);
-    
+
     /**
      * Useful to get the tool name from a NotationTool object
-     */ 
+     */
     const QString getToolName() override { return ToolName(); }
 
     bool needsWheelEvents() override { return false; }
@@ -106,7 +106,7 @@ public slots:
      * performed
      */
     void slotHideSelection();
-    
+
     void slotInsertSelected();
     void slotEraseSelected();
 //    void slotCollapseRests();
@@ -138,7 +138,6 @@ protected:
 //!!!    NotationStaff *getStaffForElement(NotationElement *elt);
 
     void drag(int x, int y, bool final);
-    void dragFine(int x, int y, bool final);
 
     EventSelection *getEventsInSelectionRect();
 
@@ -161,7 +160,7 @@ protected:
     bool m_justSelectedBar;
     bool m_wholeStaffSelectionComplete;
     bool m_ties;
-    
+
 private:
     bool m_doubleClick;
     bool m_tripleClick;
@@ -184,7 +183,7 @@ class NotationSelectorNoTies : public NotationSelector
         {}
 
 };
- 
+
 
 }
 

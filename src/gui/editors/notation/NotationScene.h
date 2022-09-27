@@ -137,7 +137,7 @@ public:
     void setPageMode(StaffLayout::PageMode mode);
 
     QString getFontName() const;
-    void setFontName(QString);
+    void setFontName(const QString&);
 
     int getFontSize() const;
     void setFontSize(int);

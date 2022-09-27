@@ -166,7 +166,7 @@ NotationScene::getFontName() const
 }
 
 void
-NotationScene::setFontName(QString name)
+NotationScene::setFontName(const QString& name)
 {
     if (name == getFontName()) return;
     setNotePixmapFactories(name, getFontSize());
@@ -1984,12 +1984,12 @@ NotationScene::setSingleSelectedEvent(NotationStaff *staff,
 }
 
 void
-NotationScene::setSingleSelectedEvent(Segment *seg,
+NotationScene::setSingleSelectedEvent(Segment *segment,
                                       Event *e,
                                       bool preview)
 {
-    if (!seg || !e) return;
-    EventSelection *s = new EventSelection(*seg);
+    if (!segment || !e) return;
+    EventSelection *s = new EventSelection(*segment);
     s->addEvent(e);
     setSelection(s, preview);
 }
