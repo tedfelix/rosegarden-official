@@ -110,7 +110,8 @@ protected:
             filled(true), stem(true), flags(0), slashes(0),
             hfix(Normal), vfix(Middle) { }
 
-        NoteDescription(NoteHeadShape i_shape, CharName i_charName,
+        NoteDescription(const NoteHeadShape& i_shape,
+                        const CharName& i_charName,
                         bool i_filled, bool i_stem, int i_flags, int i_slashes,
                         HFixPoint i_hfix, VFixPoint i_vfix) :
             shape(i_shape), charName(i_charName),
@@ -127,7 +128,7 @@ protected:
     void checkDescription(Note::Type type);
 
 protected: // for use by NoteStyleFileReader
-    explicit NoteStyle(NoteStyleName name) : m_name(name) { }
+    explicit NoteStyle(const NoteStyleName& name) : m_name(name) { }
     friend class NoteStyleFileReader;
 };
 

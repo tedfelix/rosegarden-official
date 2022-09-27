@@ -178,7 +178,7 @@ class NotationSelectorNoTies : public NotationSelector
     static QString ToolName();
 
  private:
- NotationSelectorNoTies(NotationWidget *widget) :
+ explicit NotationSelectorNoTies(NotationWidget *widget) :
     NotationSelector(widget, false)
         {}
 

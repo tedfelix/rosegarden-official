@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -110,10 +110,9 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
         // Displaced Y will only be used for certain events -- in
         // particular not for notes, whose y-coord is obviously kind
         // of meaningful.
-        double displacedY = 0.0;
         long dyRaw = 0;
         el->event()->get<Int>(DISPLACED_Y, dyRaw);
-        displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
+        double displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
 
         el->setLayoutY(staff.getLayoutYForHeight( -9) + displacedY);
 
@@ -504,8 +503,8 @@ NotationVLayout::positionSlur(NotationStaff &staff,
             long h = 0;
             if (!event->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
 				QMessageBox::warning
-					( dynamic_cast<QWidget *>(parent()), 
-					"", 
+					( dynamic_cast<QWidget *>(parent()),
+					"",
 	 				tr("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime())
 					);
                 RG_WARNING << event;

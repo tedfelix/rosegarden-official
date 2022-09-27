@@ -629,9 +629,9 @@ void NotationSelector::stow()
     m_selectionRect = nullptr;
 }
 
-void NotationSelector::handleEventRemoved(Event *e)
+void NotationSelector::handleEventRemoved(Event *event)
 {
-    if (m_clickedElement && m_clickedElement->event() == e) {
+    if (m_clickedElement && m_clickedElement->event() == event) {
         m_clickedElement = nullptr;
     }
 }

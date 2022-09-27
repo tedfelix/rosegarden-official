@@ -38,7 +38,7 @@ class NotePixmapParameters
 {
 public:
     enum Triggering { triggerNone, triggerYes, triggerSkip, };
-    
+
     NotePixmapParameters(Note::Type noteType,
                          int dots,
                          Accidental accidental =
@@ -47,7 +47,7 @@ public:
 
     void setNoteType(Note::Type type) { m_noteType = type; }
     void setDots(int dots) { m_dots = dots; }
-    void setAccidental(Accidental acc) { m_accidental = acc; }
+    void setAccidental(const Accidental& acc) { m_accidental = acc; }
 
     void setAccidentalCautionary(bool cautionary) { m_cautionary = cautionary; }
     void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;   }
@@ -97,7 +97,7 @@ public:
     void removeMarks();
 
     void setInRange(bool inRange)         { m_inRange          = inRange;    }
-    
+
     void setForcedColor(QColor color) { m_forcedColor = color;
                                         m_forceColor = true; }
     void clearForcedColour() { m_forceColor = false; }
@@ -161,7 +161,7 @@ public:
 		m_marks == p.m_marks &&
 
 		m_memberOfParallel == p.m_memberOfParallel &&
-		
+
 		m_forceColor == p.m_forceColor &&
 		((m_forcedColor == p.m_forcedColor) || !m_forceColor)
 

@@ -98,7 +98,9 @@ protected:
      * \a rcFileName : the name of the XML rc file
      * \a menuName : the name of the menu defined in the rc file
      */
-    NotationTool(QString rcFileName, QString menuName, NotationWidget *);
+    NotationTool(const QString& rcFileName,
+                 const QString& menuName,
+                 NotationWidget *);
 
     /**
      * Create a new NotationTool without a menu

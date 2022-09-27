@@ -41,7 +41,7 @@ class NotationToolBox : public BaseToolBox
     Q_OBJECT
 
 public:
-    NotationToolBox(NotationWidget *parent);
+    explicit NotationToolBox(NotationWidget *parent);
 
     void setScene(NotationScene *scene);
 
@@ -56,4 +56,3 @@ protected:
 }
 
 #endif
-

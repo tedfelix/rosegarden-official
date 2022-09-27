@@ -49,15 +49,15 @@ public:
     ~NoteRestInserter() override;
 
     void handleLeftButtonPress(const NotationMouseEvent *) override;
-    
+
     void handleMidButtonPress(const NotationMouseEvent *) override;
 
     FollowMode handleMouseMove(const NotationMouseEvent *) override;
 
     void handleMouseRelease(const NotationMouseEvent *) override;
-    
+
     void handleWheelTurned(int , const NotationMouseEvent *) override;
-    
+
     bool needsWheelEvents() override { return m_quickEdit; }
 
     void ready() override;
@@ -75,10 +75,10 @@ public:
                     Accidental accidental,
                     int velocity,
                     bool suppressPreview = false);
-    
+
     /**
      * Useful to get the tool name from a NotationTool object
-     */ 
+     */
     const QString getToolName() override { return ToolName(); }
 
     static QString ToolName();
@@ -106,12 +106,12 @@ public slots:
 
     /// Set the number of dots the inserted note will have
     void slotSetDots(unsigned int dots);
- 
+
     /// Set the accidental for the notes which will be inserted
     void slotSetAccidental(Accidental, bool follow);
 
 protected:
-    NoteRestInserter(NotationWidget *);
+    explicit NoteRestInserter(NotationWidget *);
 
     NoteRestInserter(QString rcFileName, QString menuName, NotationWidget *);
 
@@ -132,10 +132,10 @@ protected:
                                            bool play);
     virtual void showPreview(bool play);
     virtual void clearPreview();
-    
+
     void setCursorShape();
     Accidental getAccidentalFromModifierKeys(Qt::KeyboardModifiers modifiers);
-    
+
     void synchronizeWheel();
 
 protected slots:
@@ -178,7 +178,7 @@ protected:
     Accidental m_lastAccidental;
     bool m_followAccidental;
     bool m_isaRestInserter;
-    
+
     int m_wheelIndex;              // Index of current duration
     bool m_processingWheelTurned;  // Use by synchronizeWheel()
 

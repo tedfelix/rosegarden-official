@@ -1656,25 +1656,7 @@ NotationStaff::clearPreviewNote()
 bool
 NotationStaff::wrapEvent(Event *e)
 {
-    bool wrap = true;
-
-    /*!!! always wrap unknowns, just don't necessarily render them?
-
-        if (!m_showUnknowns) {
-        std::string etype = e->getType();
-        if (etype != Note::EventType &&
-            etype != Note::EventRestType &&
-            etype != Clef::EventType &&
-            etype != Key::EventType &&
-            etype != Indication::EventType &&
-            etype != Text::EventType) {
-            wrap = false;
-        }
-        }
-    */
-
-    if (wrap) wrap = ViewSegment::wrapEvent(e);
-
+    bool wrap = ViewSegment::wrapEvent(e);
     return wrap;
 }
 

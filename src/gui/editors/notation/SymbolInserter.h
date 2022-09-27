@@ -37,7 +37,7 @@ class NotationWidget;
 class SymbolInserter : public NotationTool
 {
     Q_OBJECT
-    
+
     friend class NotationToolBox;
 
 public:
@@ -48,7 +48,7 @@ public:
 
     /**
      * Useful to get the tool name from a NotationTool object
-     */ 
+     */
     const QString getToolName() override { return ToolName(); }
 
     bool needsWheelEvents() override { return false; }
@@ -64,7 +64,7 @@ protected slots:
     void slotSelectSelected();
 
 protected:
-    SymbolInserter(NotationWidget *);
+    explicit SymbolInserter(NotationWidget *);
     Symbol m_symbol;
 };
 

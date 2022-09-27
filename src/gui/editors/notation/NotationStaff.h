@@ -102,7 +102,7 @@ public:
      * from and to.  Call this when you've just made a change,
      * specifying the extents of the change in the from and to
      * parameters.
-     * 
+     *
      * This method does not reposition any elements outside the given
      * range -- so after any edit that may change the visible extents
      * of a range, you will then need to call positionElements for the
@@ -113,7 +113,7 @@ public:
 
     void renderElements(timeT from, timeT to);
 
-    
+
     /**
      * Assign suitable coordinates to the elements on the staff,
      * based entirely on the layout X and Y coordinates they were
@@ -159,7 +159,7 @@ public:
      * Delete all time signatures
      */
     void deleteTimeSignatures() override;
-    
+
     /**
      * Insert repeated clef and key at start of new line, at x-coordinate \a x.
      */
@@ -179,7 +179,7 @@ public:
      * Return the clef and key in force at the given canvas
      * coordinates
      */
-    void getClefAndKeyAtSceneCoords(double x, int y,
+    void getClefAndKeyAtSceneCoords(double cx, int cy,
                                     Clef &clef,
                                     ::Rosegarden::Key &key) const;
 
@@ -197,7 +197,7 @@ public:
      *
      * If notesAndRestsOnly is true, will return the closest note
      * or rest but will never return any other kind of element.
-     * 
+     *
      * If the closest event is further than \a proximityThreshold
      * horizontally away from x, in pixels, end() is returned.
      * (If proximityThreshold is negative, there will be no limit
@@ -223,7 +223,7 @@ public:
 
     /**
      * Draw a note on the staff to show an insert position prior to
-     * an insert. 
+     * an insert.
      */
     void showPreviewNote(double layoutX, int heightOnStaff,
                          const Note &note, bool grace,
@@ -258,7 +258,7 @@ public:
     /**
      * Return the time at the given scene coordinates
      */
-    timeT getTimeAtSceneCoords(double x, int y) const;
+    timeT getTimeAtSceneCoords(double cx, int cy) const;
 
     bool includesTime(timeT t);
 
@@ -267,7 +267,7 @@ public:
     timeT getEndTime() const;
 
     QString getMarking() const { return m_segmentMarking; }
-    
+
 protected:
 
     ViewElement* makeViewElement(Event*) override;
@@ -281,7 +281,7 @@ protected:
 
     BarStyle getBarStyle(int barNo) const override;
 
-    /** 
+    /**
      * Assign a suitable item to the given element (the clef is
      * needed in case it's a key event, in which case we need to judge
      * the correct pitch for the key)
@@ -307,7 +307,7 @@ protected:
     /**
      * Returns true if the item at the given iterator appears to have
      * moved horizontally without the spacing around it changing.
-     * 
+     *
      * In practice, calculates the offset between the intended layout
      * and current scene coordinates of the item at the given
      * iterator, and returns true if this offset is equal to those of
