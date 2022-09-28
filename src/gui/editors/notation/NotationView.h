@@ -67,7 +67,7 @@ public:
 
     Segment *getCurrentSegment() override;
     EventSelection *getSelection() const override;
-    void setSelection(EventSelection* s, bool preview = false) override;
+    void setSelection(EventSelection* selection, bool preview = false) override;
 
     virtual void initLayoutToolbar();
     void initRulersToolbar();
@@ -404,7 +404,7 @@ private:
      * export a LilyPond file (used by slotPrintLilyPond and
      * slotPreviewLilyPond)
      */
-    bool exportLilyPondFile(QString url, bool forPreview = false);
+    bool exportLilyPondFile(QString file, bool forPreview = false);
 
     /**
      * Use QTemporaryFile to obtain a tmp filename that is guaranteed to be unique.
@@ -480,7 +480,7 @@ private:
     void setCurrentNotePixmap(QPixmap);
     void setCurrentNotePixmapFrom(QAction *);
 
-    void insertControllerSequence(const ControlParameter &cp);
+    void insertControllerSequence(const ControlParameter &controlParameter);
     bool isShowable(Event *e);
     void setWidgetSegments();
     void EditOrnamentInline(Event *trigger, Segment *containing);

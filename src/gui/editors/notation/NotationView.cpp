@@ -3834,9 +3834,8 @@ NotationView::slotCheckForParallels()
 
     Composition *composition = segment->getComposition();
 
-    CheckForParallelsDialog *dialog = nullptr;
-
-    dialog = new CheckForParallelsDialog(this, m_document, m_notationWidget->getScene(), composition);
+    CheckForParallelsDialog *dialog =
+        new CheckForParallelsDialog(this, m_document, m_notationWidget->getScene(), composition);
 
     dialog->show();
 }
@@ -5463,10 +5462,10 @@ NotationView::slotInterpretActivate()
     // Debug output just to make it possible to observe that all the checkable
     // buttons are working correctly:
     RG_DEBUG << "NotationView::slotInterpretActivate() using flags: "
-             << (flags & InterpretCommand::ApplyTextDynamics ? "[TEXT]" : "[    ]")
-             << (flags & InterpretCommand::ApplyHairpins ? "[HAIR]" : "[    ]")
-             << (flags & InterpretCommand::Articulate ? "[SLUR]" : "[    ]")
-             << (flags & InterpretCommand::StressBeats ? "[BEAT]" : "[    ]");
+             << ((flags & InterpretCommand::ApplyTextDynamics) ? "[TEXT]" : "[    ]")
+             << ((flags & InterpretCommand::ApplyHairpins) ? "[HAIR]" : "[    ]")
+             << ((flags & InterpretCommand::Articulate) ? "[SLUR]" : "[    ]")
+             << ((flags & InterpretCommand::StressBeats) ? "[BEAT]" : "[    ]");
 
     // go straight to the command with the flags pulled from the toolbar as
     // though it were the dialog

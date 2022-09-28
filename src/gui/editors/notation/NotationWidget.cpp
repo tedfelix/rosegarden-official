@@ -136,7 +136,7 @@ NotationWidget::NotationWidget() :
     m_resizeTimer->setSingleShot(true);
     connect(m_resizeTimer, &QTimer::timeout,
             this, &NotationWidget::slotResizeTimerDone);
-    
+
     m_layout = new QGridLayout;
     setLayout(m_layout);
 
@@ -152,10 +152,9 @@ NotationWidget::NotationWidget() :
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform);
 
-    bool texture = false;
     QSettings settings;
     settings.beginGroup(NotationViewConfigGroup);
-    texture = settings.value("backgroundtextures", true).toBool();
+    bool texture = settings.value("backgroundtextures", true).toBool();
     settings.endGroup();
 
     QBrush bg = (texture ?
@@ -450,7 +449,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_hpanner->setScene(m_scene);
     m_hpanner->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
-    
+
     connect(m_view, &Panned::mouseLeaves,
             m_scene, &NotationScene::slotMouseLeavesView);
 
@@ -590,7 +589,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
             this, &NotationWidget::slotUpdateSegmentChangerBackground);
 
     hideOrShowRulers();
-    
+
     // If setSegments() is called on an already existing NotationWidget,
     // NotationScene and Rulers need the same zoom factor and horizontal
     // position.
@@ -638,7 +637,7 @@ void
 NotationWidget::slotGenerateHeaders()
 {
     if (!linearMode()) return;  // Staff headers don't exist out of linear mode
-    
+
     m_headersNeedRegeneration = false;
 
     if (m_headersGroup) disconnect(m_headersGroup, &HeadersGroup::headersResized,
@@ -670,9 +669,9 @@ NotationWidget::slotGenerateHeaders()
 }
 
 void
-NotationWidget::setCanvasCursor(QCursor c)
+NotationWidget::setCanvasCursor(QCursor cursor)
 {
-    if (m_view) m_view->viewport()->setCursor(c);
+    if (m_view) m_view->viewport()->setCursor(cursor);
 }
 
 Segment *
@@ -690,10 +689,10 @@ NotationWidget::segmentsContainNotes() const
 }
 
 void
-NotationWidget::locatePanner(bool tall)
+NotationWidget::locatePanner(bool vertical)
 {
     m_layout->removeWidget(m_panner);
-    if (tall) {
+    if (vertical) {
         m_panner->setMaximumHeight(QWIDGETSIZE_MAX);
         m_hpanner->setMaximumHeight(QWIDGETSIZE_MAX);
         m_panner->setMaximumWidth(80);
@@ -967,7 +966,7 @@ NotationWidget::slotPointerPositionChanged(timeT t)
     updatePointer(t);
 
     if (m_playTracking && !m_noScroll)
-        m_view->ensurePositionPointerInView(true);  // page  
+        m_view->ensurePositionPointerInView(true);  // page
 }
 
 void
@@ -1794,7 +1793,7 @@ NotationWidget::slotUpdateSegmentChangerBackground()
     QString trackLabel = QString::fromStdString(track->getLabel());
     if (trackLabel == "")
         trackLabel = tr("<untitled>");
-    
+
     // set up some tooltips...  I don't like this much, and it wants some kind
     // of dedicated float thing eventually, but let's not go nuts on a
     // last-minute feature
@@ -1810,7 +1809,7 @@ NotationWidget::slotUpdateSegmentChangerBackground()
         arg(track->getPosition() + 1).
         arg(trackLabel).
         arg(QString::fromStdString(segment->getLabel()));
-    
+
     m_segmentLabel->setText(segmentText);
 
     // Segment label colors
@@ -1882,4 +1881,3 @@ NotationWidget::slotZoomOut()
 
 
 }
-

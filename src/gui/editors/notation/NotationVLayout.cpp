@@ -730,15 +730,13 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_Y_DELTA, dy);
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_LENGTH, length);
 
-    double displacedX = 0.0, displacedY = 0.0;
-
     long dxRaw = 0;
     (*i)->event()->get<Int>(DISPLACED_X, dxRaw);
-    displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
+    double displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
     long dyRaw = 0;
     (*i)->event()->get<Int>(DISPLACED_Y, dyRaw);
-    displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
+    double displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
 
     (*i)->setLayoutX(startX + displacedX);
     (*i)->setLayoutY(y0 + displacedY);
