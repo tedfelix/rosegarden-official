@@ -76,7 +76,7 @@ add_definitions(-DUNSTABLE) # this is changed to STABLE by the release script
 
 # Compiler flags
 
-set(CMAKE_CXX_STANDARD 11) # Enable C++11
+set(CMAKE_CXX_STANDARD 14) # Enable C++14
 
 if(CMAKE_COMPILER_IS_GNUCXX)
    if(CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
