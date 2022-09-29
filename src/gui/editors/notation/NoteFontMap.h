@@ -42,7 +42,7 @@ class NoteFontMap : public XMLHandler
 public:
     typedef Exception MappingFileReadFailed;
 
-    NoteFontMap(QString name); // load and parse the XML mapping file
+    explicit NoteFontMap(QString name); // load and parse the XML mapping file
     ~NoteFontMap() override;
 
     /**
@@ -68,7 +68,7 @@ public:
     bool getBeamThickness(int size, unsigned int &thickness) const;
     bool getStemLength(int size, unsigned int &length) const;
     bool getFlagSpacing(int size, unsigned int &spacing) const;
-    
+
     bool hasInversion(int size, CharName charName) const;
 
     bool getSrc(int size, CharName charName, QString &src) const;
@@ -88,7 +88,7 @@ public:
 
     bool startElement
     (const QString& namespaceURI, const QString& localName,
-     const QString& qName, const QXmlStreamAttributes& atts) override;
+     const QString& qName, const QXmlStreamAttributes& attributes) override;
 
     bool characters(const QString &) override;
 
@@ -160,7 +160,7 @@ private:
     public:
         HotspotData() : m_scaled(-1.0, -1.0) { }
         ~HotspotData() { }
-        
+
         void addHotspot(int size, int x, int y) {
             m_data[size] = Point(x, y);
         }
@@ -258,8 +258,8 @@ private:
                 return true;
             }
             return false;
-        }       
-       
+        }
+
     private:
         int m_stemThickness;
         int m_beamThickness;

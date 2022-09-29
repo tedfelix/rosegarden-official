@@ -78,12 +78,12 @@ public:
     bool getCharacter(CharName charName,
                       NoteCharacter &character,
                       CharacterType type = Screen,
-                      bool inverted = false);
+                      bool inverted = false) const;
 
     /// Returns an empty character if not available
     NoteCharacter getCharacter(CharName charName,
                                CharacterType type = Screen,
-                               bool inverted = false);
+                               bool inverted = false) const;
 
     /** Returns false if not available, otherwise returns a coloured note
        character using either a specified hue (H) and minimum value (V), or
@@ -98,13 +98,13 @@ public:
                               NoteCharacter &character,
                               CharacterType type = Screen,
                               bool inverted = false,
-                              int saturation = PixmapFunctions::SaturationNotSpecified);
+                              int saturation = PixmapFunctions::SaturationNotSpecified) const;
 
     /// Returns an empty character if not available
     NoteCharacter getCharacterColoured(CharName charName,
                                        int hue, int minimum,
                                        CharacterType type = Screen,
-                                       bool inverted = false);
+                                       bool inverted = false) const;
 
     /// Returns an empty character if not available
     NoteCharacter getCharacterShaded(CharName charName,
@@ -134,13 +134,13 @@ private:
                    bool inverted = false) const;
 
     /// Returns false + blank pixmap if it can't find the right one
-    bool getColouredPixmap(CharName charName, QPixmap &pixmap,
+    bool getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
                            int hue, int minimum,
                            bool inverted = false,
                            int saturation = PixmapFunctions::SaturationNotSpecified) const;
 
     /// Returns false + blank pixmap if it can't find the right one
-    bool getShadedPixmap(CharName charName, QPixmap &pixmap,
+    bool getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
                          bool inverted = false) const;
 
     friend class NoteFontFactory;
@@ -152,8 +152,8 @@ private:
 
     NoteCharacterDrawRep *lookupDrawRep(QPixmap *pixmap) const;
 
-    CharName getNameWithColour(CharName origName, int hue) const;
-    CharName getNameShaded(CharName origName) const;
+    static CharName getNameWithColour(CharName origName, int hue);
+    static CharName getNameShaded(CharName origName);
 
     typedef std::pair<QPixmap *, QPixmap *>    PixmapPair;
     typedef std::map<CharName, PixmapPair>     PixmapMap;

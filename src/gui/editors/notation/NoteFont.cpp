@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -180,7 +180,7 @@ NoteFont::add
         }
     }
 }
-    
+
 NoteCharacterDrawRep *
 NoteFont::lookupDrawRep(QPixmap *pixmap) const
 {
@@ -291,12 +291,12 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     } else {
 
         int code = -1;
-        if (!inverted) ok = m_fontMap.getCode(m_size, charName, code);
-        else ok = m_fontMap.getInversionCode(m_size, charName, code);
+        if (!inverted) m_fontMap.getCode(m_size, charName, code);
+        else m_fontMap.getInversionCode(m_size, charName, code);
 
         int glyph = -1;
-        if (!inverted) ok = m_fontMap.getGlyph(m_size, charName, glyph);
-        else ok = m_fontMap.getInversionGlyph(m_size, charName, glyph);
+        if (!inverted) m_fontMap.getGlyph(m_size, charName, glyph);
+        else m_fontMap.getInversionGlyph(m_size, charName, glyph);
 
         if (code < 0 && glyph < 0) {
             std::cerr << "NoteFont::getPixmap: Warning: No pixmap, code, or glyph for character \""
@@ -313,7 +313,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 
         if (!systemFont) {
             if (!inverted && m_fontMap.hasInversion(m_size, charName)) {
-                if (!getPixmap(charName, pixmap, !inverted))
+                if (!getPixmap(charName, pixmap, true))
                     return false;
                 found = new QPixmap(PixmapFunctions::flipVertical(pixmap));
                 add(charName, inverted, found);
@@ -424,15 +424,15 @@ NoteFont::getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
 }
 
 CharName
-NoteFont::getNameWithColour(CharName base, int hue) const
+NoteFont::getNameWithColour(CharName origName, int hue)
 {
-    return QString("%1__%2").arg(hue).arg(base);
+    return QString("%1__%2").arg(hue).arg(origName);
 }
 
 CharName
-NoteFont::getNameShaded(CharName base) const
+NoteFont::getNameShaded(CharName origName)
 {
-    return QString("shaded__%1").arg(base);
+    return QString("shaded__%1").arg(origName);
 }
 
 bool
@@ -492,7 +492,7 @@ bool
 NoteFont::getCharacter(CharName charName,
                        NoteCharacter &character,
                        CharacterType type,
-                       bool inverted)
+                       bool inverted) const
 {
     Profiler profiler("NoteFont::getCharacter");
 
@@ -527,7 +527,7 @@ NoteFont::getCharacter(CharName charName,
 NoteCharacter
 NoteFont::getCharacter(CharName charName,
                        CharacterType type,
-                       bool inverted)
+                       bool inverted) const
 {
     NoteCharacter character;
     getCharacter(charName, character, type, inverted);
@@ -540,7 +540,7 @@ NoteFont::getCharacterColoured(CharName charName,
                                NoteCharacter &character,
                                CharacterType type,
                                bool inverted,
-                               int saturation)
+                               int saturation) const
 {
     QPixmap pixmap;
     if (!getColouredPixmap(charName, pixmap, hue, minimum, inverted, saturation)) {
@@ -578,7 +578,7 @@ NoteCharacter
 NoteFont::getCharacterColoured(CharName charName,
                                int hue, int minimum,
                                CharacterType type,
-                               bool inverted)
+                               bool inverted) const
 {
     NoteCharacter character;
     getCharacterColoured(charName, hue, minimum, character, type, inverted);

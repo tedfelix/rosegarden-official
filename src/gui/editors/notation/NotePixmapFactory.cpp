@@ -313,25 +313,25 @@ NotePixmapFactory::dumpStats(std::ostream &s)
 }
 
 QGraphicsItem *
-NotePixmapFactory::makeNote(const NotePixmapParameters &params)
+NotePixmapFactory::makeNote(const NotePixmapParameters &parameters)
 {
     Profiler profiler("NotePixmapFactory::makeNote");
 
     ++makeNotesCount;
 
     if (m_inPrinterMethod) {
-        return makeNotePixmapItem(params);
+        return makeNotePixmapItem(parameters);
     }
 
-    NoteItem *item = new NoteItem(params, m_style, m_selected, m_shaded, this);
+    NoteItem *item = new NoteItem(parameters, m_style, m_selected, m_shaded, this);
     return item;
 }
 
 void
-NotePixmapFactory::getNoteDimensions(const NotePixmapParameters &params,
+NotePixmapFactory::getNoteDimensions(const NotePixmapParameters &parameters,
                                      NoteItemDimensions &dimensions)
 {
-    calculateNoteDimensions(params);
+    calculateNoteDimensions(parameters);
     dimensions = m_nd;
 }
 
@@ -739,13 +739,12 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
         stemLength += getLineSpacing() * (flagCount - 2);
     }
 
-    int width = 0, height = 0;
-
     if (flagCount > 0) {
 
         if (!stemUp)
             stemLength += nbh / 2;
 
+        int width = 0, height = 0;
         if (m_font->getDimensions(m_style->getFlagCharName(flagCount),
                                   width, height)) {
 
@@ -843,10 +842,10 @@ NotePixmapFactory::drawAccidental(const NotePixmapParameters &params)
 
     Accidental a = params.m_accidental;
     bool cautionary = params.m_cautionary;
-        
+
     // use the full font for this unless a grace size was supplied in ctor
     NoteFont *font = (m_haveGrace ? m_graceFont : m_font);
-    
+
     NoteCharacter ac;
     if (params.m_forceColor) {
         ac = getCharacter
@@ -1378,7 +1377,7 @@ NotePixmapFactory::drawFlags(int flagCount,
                                     PlainColour,
                                     !params.m_stemGoesUp);
         }
-        
+
         foundOne = flagCount > 1 ? foundOne : false;
 
 
@@ -1453,7 +1452,7 @@ NotePixmapFactory::drawStem(const NotePixmapParameters &params,
 
     if (params.m_forceColor) {
         m_p->painter().restore();
-    } 
+    }
 }
 
 void
@@ -2192,7 +2191,7 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef,
     QColor lines;
     switch (colourType) {
     case PlainColourLight:
-        lines = Qt::white;    
+        lines = Qt::white;
         break;
     case ConflictColour:
     case HighlightedColour:
@@ -2260,7 +2259,7 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef,
 
     switch (colourType) {
     case PlainColourLight:
-        kuller = Qt::white;    
+        kuller = Qt::white;
         break;
     case ConflictColour:
     case HighlightedColour:
@@ -2394,7 +2393,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 
     switch (colourType) {
     case PlainColourLight:
-        kuller = Qt::white;    
+        kuller = Qt::white;
         break;
     case ConflictColour:
     case HighlightedColour:
@@ -2497,7 +2496,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 
     switch (colourType) {
     case PlainColourLight:
-        kuller = Qt::white;    
+        kuller = Qt::white;
         break;
     case ConflictColour:
     case HighlightedColour:
@@ -3012,8 +3011,8 @@ NotePixmapFactory::drawTrillLineAux(int length, QPainter *painter, int x, int y)
     // increment x so we start drawing after the tr; 3 is an arbitrary figure
     // that seems about right, but I'm only testing with one font at one size
     x += character.getWidth() + gap;
-    
- 
+
+
     // make a character for the /\/\/\/ bit, and keep drawing it at spaced
     // increments until one glyph width just before running out of space, to
     // avoid clipping the last glyph
@@ -3317,7 +3316,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
         serif = false;
         tiny = true;
     }
-    
+
     QSettings settings;
     //@@@ JAS Check here first for errors.  Added .beginGroup()
     settings.beginGroup( NotationViewConfigGroup );
@@ -3353,7 +3352,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
 
     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: requested size " << size
      		   << " for type " << type;
-    
+
     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: returning font '"
                    << textFont.toString() << "' for type " << type.c_str()
                    << " text : " << text.getText().c_str();
@@ -3407,7 +3406,7 @@ NotePixmapFactory::makeGuitarChord(const Guitar::Fingering &fingering,
         m_p->painter().setPen(QColor(Qt::black));
         m_p->painter().setBrush(QColor(Qt::black));
     }
-    
+
     Guitar::NoteSymbols ns(Guitar::Fingering::DEFAULT_NB_STRINGS, FingeringBox::DEFAULT_NB_DISPLAYED_FRETS);
     Guitar::NoteSymbols::drawFingeringPixmap(fingering, ns, &(m_p->painter()));
 
@@ -3686,7 +3685,7 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
             (name,
              h,
              v,
-             ch, charType, inverted, s);  
+             ch, charType, inverted, s);
 
     case ConflictColour:
         red.getHsv(&h, &s, &v);

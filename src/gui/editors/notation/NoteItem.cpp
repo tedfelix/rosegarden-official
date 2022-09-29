@@ -26,6 +26,7 @@
 namespace Rosegarden
 {
 
+// cppcheck-suppress uninitMemberVar
 NoteItem::NoteItem(const NotePixmapParameters &params,
                    QSharedPointer<NoteStyle> style,
                    bool selected,
@@ -141,7 +142,6 @@ NoteItem::makePixmap() const
 
     return pixmap;
 }
-    
+
 
 }
-

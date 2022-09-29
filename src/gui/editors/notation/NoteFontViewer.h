@@ -40,7 +40,7 @@ class NoteFontViewer : public QDialog
 
 public:
     NoteFontViewer(QWidget *parent, QString noteFontName,
-                   QStringList systemFontNames, int pixelSize);
+                   QStringList fontNames, int pixelSize);
 
 protected slots:
     void slotFontChanged(const QString &);
