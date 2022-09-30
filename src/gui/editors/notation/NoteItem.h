@@ -32,6 +32,7 @@ struct NoteItemDimensions
     int left, right, above, below;
     int borderX, borderY;
     QPoint stemStart, stemEnd;
+    NoteItemDimensions();
 };
 
 class NotePixmapFactory;
@@ -73,7 +74,7 @@ protected:
     mutable bool m_haveDimensions;
     mutable QPoint m_offset;
     mutable QSize m_size;
-    
+
     void getDimensions() const;
 };
 

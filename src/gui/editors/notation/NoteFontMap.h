@@ -116,7 +116,7 @@ private:
         void setFontId(int id) { m_fontId = id; }
         int  getFontId() const { return m_fontId; }
 
-        void setSrc(QString src) { m_src = src; }
+        void setSrc(const QString& src) { m_src = src; }
         QString getSrc() const { return m_src; }
 
         void setCode(int code) { m_code = code; }
@@ -125,7 +125,7 @@ private:
         void setGlyph(int glyph) { m_glyph = glyph; }
         int  getGlyph() const { return m_glyph; }
 
-        void setInversionSrc(QString inversion) { m_inversionSrc = inversion; }
+        void setInversionSrc(const QString& inversion) { m_inversionSrc = inversion; }
         QString getInversionSrc() const { return m_inversionSrc; }
 
         void setInversionCode(int code) { m_inversionCode = code; }

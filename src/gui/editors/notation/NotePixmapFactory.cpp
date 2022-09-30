@@ -87,7 +87,7 @@ const char* const NotePixmapFactory::defaultSerifFontFamily = "Bitstream Vera Se
 const char* const NotePixmapFactory::defaultSansSerifFontFamily = "Bitstream Vera Sans";
 const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Bitstream Vera Serif";
 
-NotePixmapFactory::NotePixmapFactory(QString fontName, int size, int graceSize) :
+NotePixmapFactory::NotePixmapFactory(const QString& fontName, int size, int graceSize) :
     m_selected(false),
     m_shaded(false),
     m_haveGrace(graceSize != NO_GRACE_SIZE),
@@ -119,9 +119,11 @@ NotePixmapFactory::NotePixmapFactory(QString fontName, int size, int graceSize) 
     init(fontName, size);
 }
 
+// cppcheck-suppress uninitMemberVar
 NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_selected(false),
     m_shaded(false),
+    m_haveGrace(false),
     m_graceSize(npf.m_graceSize),
     m_tupletCountFont(npf.m_tupletCountFont),
     m_tupletCountFontMetrics(m_tupletCountFont),
@@ -156,6 +158,7 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
     if (&npf != this) {
         m_selected = npf.m_selected;
         m_shaded = npf.m_shaded;
+        m_haveGrace = npf.m_haveGrace;
         m_timeSigFont = npf.m_timeSigFont;
         m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
         m_bigTimeSigFont = npf.m_bigTimeSigFont;
@@ -174,6 +177,11 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
         m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
         m_trackHeaderBoldFont = npf.m_trackHeaderBoldFont;
         m_trackHeaderBoldFontMetrics = QFontMetrics(m_trackHeaderBoldFont);
+        m_generatedPixmap = nullptr;
+        m_generatedWidth = -1;
+        m_generatedHeight = -1;
+        m_inPrinterMethod = false;
+        m_p = nullptr;
         init(npf.m_font->getName(), npf.m_font->getSize());
         m_textFontCache.clear();
     }
@@ -313,25 +321,25 @@ NotePixmapFactory::dumpStats(std::ostream &s)
 }
 
 QGraphicsItem *
-NotePixmapFactory::makeNote(const NotePixmapParameters &parameters)
+NotePixmapFactory::makeNote(const NotePixmapParameters &params)
 {
     Profiler profiler("NotePixmapFactory::makeNote");
 
     ++makeNotesCount;
 
     if (m_inPrinterMethod) {
-        return makeNotePixmapItem(parameters);
+        return makeNotePixmapItem(params);
     }
 
-    NoteItem *item = new NoteItem(parameters, m_style, m_selected, m_shaded, this);
+    NoteItem *item = new NoteItem(params, m_style, m_selected, m_shaded, this);
     return item;
 }
 
 void
-NotePixmapFactory::getNoteDimensions(const NotePixmapParameters &parameters,
+NotePixmapFactory::getNoteDimensions(const NotePixmapParameters &params,
                                      NoteItemDimensions &dimensions)
 {
-    calculateNoteDimensions(parameters);
+    calculateNoteDimensions(params);
     dimensions = m_nd;
 }
 
@@ -3236,17 +3244,17 @@ NotePixmapFactory::makeTimeSig(const TimeSignature& sig)
     }
 }
 
-int NotePixmapFactory::getTimeSigWidth(const TimeSignature &sig) const
+int NotePixmapFactory::getTimeSigWidth(const TimeSignature &timesig) const
 {
-    if (sig.isCommon()) {
+    if (timesig.isCommon()) {
 
         QRect r(m_bigTimeSigFontMetrics.boundingRect("c"));
         return r.width() + 2;
 
     } else {
 
-        int numerator = sig.getNumerator(),
-            denominator = sig.getDenominator();
+        int numerator = timesig.getNumerator(),
+            denominator = timesig.getDenominator();
 
         QString numS, denomS;
 
@@ -3770,7 +3778,8 @@ int NotePixmapFactory::getLineSpacing() const
 }
 
 int NotePixmapFactory::getAccidentalWidth(const Accidental &a,
-                                          int shift, bool extraShift) const
+                                          int shift,
+                                          bool extraShift) const
 {
     if (a == Accidentals::NoAccidental)
         return 0;
