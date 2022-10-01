@@ -72,7 +72,7 @@ public:
     void insertNote(Segment &segment,
                     timeT insertionTime,
                     int pitch,
-                    Accidental accidental,
+                    const Accidental& accidental,
                     int velocity,
                     bool suppressPreview = false);
 
@@ -108,16 +108,18 @@ public slots:
     void slotSetDots(unsigned int dots);
 
     /// Set the accidental for the notes which will be inserted
-    void slotSetAccidental(Accidental, bool follow);
+    void slotSetAccidental(const Accidental& accidental, bool follow);
 
 protected:
     explicit NoteRestInserter(NotationWidget *);
 
-    NoteRestInserter(QString rcFileName, QString menuName, NotationWidget *);
+    NoteRestInserter(const QString& rcFileName,
+                     const QString& menuName,
+                     NotationWidget *);
 
     timeT getOffsetWithinRest(NotationStaff *,
                               const NotationElementList::iterator&,
-                              double &canvasX);
+                              double &sceneX);
 
     int getOttavaShift(Segment &segment, timeT time);
 

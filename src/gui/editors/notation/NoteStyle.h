@@ -73,15 +73,15 @@ public:
     typedef std::pair<CharName, bool> CharNameRec; // bool is "inverted"
     CharNameRec getNoteHeadCharName(Note::Type);
 
-    CharName getRestCharName(Note::Type, bool restOutsideStave);
-    CharName getPartialFlagCharName(bool final);
-    CharName getFlagCharName(int flagCount);
-    CharName getAccidentalCharName(const Accidental &);
-    CharName getMarkCharName(const Mark &);
-    CharName getClefCharName(const Clef &);
-    CharName getSymbolCharName(const Symbol &);
-    CharName getTimeSignatureDigitName(int digit);
-    CharName getSomeCharName(QString thing);
+    static CharName getRestCharName(Note::Type, bool restOutsideStave);
+    static CharName getPartialFlagCharName(bool final);
+    static CharName getFlagCharName(int flagCount);
+    static CharName getAccidentalCharName(const Accidental &);
+    static CharName getMarkCharName(const Mark &);
+    static CharName getClefCharName(const Clef &);
+    static CharName getSymbolCharName(const Symbol &);
+    static CharName getTimeSignatureDigitName(int digit);
+    CharName getSomeCharName(QString qthing);
 
     void setBaseStyle (NoteStyleName name);
     void setShape     (Note::Type, NoteHeadShape);
@@ -125,7 +125,7 @@ protected:
     QSharedPointer<NoteStyle> m_baseStyle;
     NoteStyleName m_name;
 
-    void checkDescription(Note::Type type);
+    void checkDescription(Note::Type noteType);
 
 protected: // for use by NoteStyleFileReader
     explicit NoteStyle(const NoteStyleName& name) : m_name(name) { }

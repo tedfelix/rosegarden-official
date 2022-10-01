@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -466,11 +466,11 @@ NoteStyle::setBaseStyle(NoteStyleName name)
 }
 
 void
-NoteStyle::checkDescription(Note::Type note)
+NoteStyle::checkDescription(Note::Type noteType)
 {
-    if (m_baseStyle && (m_notes.find(note) == m_notes.end())) {
-        m_baseStyle->checkDescription(note);
-        m_notes[note] = m_baseStyle->m_notes[note];
+    if (m_baseStyle && (m_notes.find(noteType) == m_notes.end())) {
+        m_baseStyle->checkDescription(noteType);
+        m_notes[noteType] = m_baseStyle->m_notes[noteType];
     }
 }
 

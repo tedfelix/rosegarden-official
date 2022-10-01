@@ -42,7 +42,7 @@ class Inconsistencies : public Overlaps<T>
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::Inconsistencies)
 public :
 
-    Inconsistencies(std::vector<Segment *> segments) : Overlaps<T>(segments) {}
+    explicit Inconsistencies(std::vector<Segment *> segments) : Overlaps<T>(segments) {}
 
     ~Inconsistencies() {}
 
@@ -71,7 +71,7 @@ public :
                     const std::vector<Segment *> *s = this->getSegments(it);
                     std::vector<Segment *>::const_iterator sit;
                     for (sit = s->begin(); sit != s->end(); ++sit) {
-                        if (sit != s->begin()) str += QString("<br>");                            
+                        if (sit != s->begin()) str += QString("<br>");
                         T pr = Overlaps<T>::getPropertyAtTime(*sit, t1);
                         str+= segLine
                                   .arg(QString::fromStdString((*sit)->getLabel()))
@@ -133,4 +133,3 @@ Inconsistencies<int>::getTranslatedName(int transpose) const
 }
 
 #endif // RG_INCONSISTENCIES_H
-

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -184,8 +184,9 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     synchronizeWheel();
 }
 
-NoteRestInserter::NoteRestInserter(QString rcFileName, QString menuName,
-                           NotationWidget* widget) :
+NoteRestInserter::NoteRestInserter(const QString& rcFileName,
+                                   const QString& menuName,
+                                   NotationWidget* widget) :
     NotationTool(rcFileName, menuName, widget),
     m_noteType(Note::Quaver),  //OverRide value with NotationView::initializeNoteRestInserter.
     m_noteDots(0),
@@ -222,7 +223,7 @@ void NoteRestInserter::ready()
     m_ready = true;
     m_clickHappened = false;
     m_clickStaff = nullptr;
-    
+
     // The pencil tool uses the wheel for selecting note values.
     // Disable Panned's handling of the wheel.
     m_widget->getView()->setWheelZoomPan(false);
@@ -268,7 +269,7 @@ void
 NoteRestInserter::handleMidButtonPress(const NotationMouseEvent *)
 {
     if (!m_quickEdit) return;
-    
+
     if (isaRestInserter()) {
         slotNotesSelected();
     } else {
@@ -279,7 +280,7 @@ NoteRestInserter::handleMidButtonPress(const NotationMouseEvent *)
 FollowMode
 NoteRestInserter::handleMouseMove(const NotationMouseEvent *e)
 {
-    if (m_alwaysPreview) { 
+    if (m_alwaysPreview) {
         computeLocationAndPreview(e, (e->buttons & Qt::LeftButton));
     } else {
         if (m_clickHappened) {
@@ -295,9 +296,9 @@ NoteRestInserter::getAccidentalFromModifierKeys(Qt::KeyboardModifiers modifiers)
     Accidental accidental = Accidentals::NoAccidental;
 
     if (!m_quickEdit) return accidental;
-    
+
     // Use Maj or Ctrl keys to add sharp or flat on the fly
-    // Use Maj + Ctrl to add natural  
+    // Use Maj + Ctrl to add natural
     if (modifiers == Qt::ShiftModifier) {
         accidental = Accidentals::Sharp;
     } else if (modifiers == Qt::ControlModifier) {
@@ -357,7 +358,7 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
         timeT m_clickTimeCopy = m_clickTime;
         // and select the staff
         m_scene->setCurrentStaff(staff);
-        
+
         if (!m_widget->isInChordMode()) {
             // Since a note could have been split and tied, we need to rely on
             // the full duration of the original note calculate the position of
@@ -381,7 +382,7 @@ NoteRestInserter::setCursorShape()
     NotePixmapParameters params(Note::QuarterNote,
                          0,  // dots
                          Accidentals::NoAccidental);
-    
+
     NotePixmapFactory * pixmapFactory = m_scene->getNotePixmapFactory();
     NOTATION_DEBUG << "pixmap factory =" << pixmapFactory;
 
@@ -412,19 +413,19 @@ NoteRestInserter::setCursorShape()
 void
 NoteRestInserter::handleWheelTurned(int delta, const NotationMouseEvent *e)
 {
-    if (!m_scene) return; 
+    if (!m_scene) return;
 
     if (m_quickEdit) {
         // Set tool according to the new wheel position
 
         // Prevent synchronizeWheel() from modifying m_wheelIndex
         m_processingWheelTurned = true;
-    
+
         // Uncheck current tool
         QAction * action =
             findActionInParentView(wheelActions[m_wheelIndex].action);
         action->setChecked(false);
-        
+
         // Select new tool
         if (delta > 0) {
             m_wheelIndex++;
@@ -509,10 +510,12 @@ void NoteRestInserter::showMenu()
 }
 
 void
-NoteRestInserter::insertNote(Segment &segment, timeT insertionTime,
-                         int pitch, Accidental accidental,
-                         int velocity,
-                         bool suppressPreview)
+NoteRestInserter::insertNote(Segment &segment,
+                             timeT insertionTime,
+                             int pitch,
+                             const Accidental& accidental,
+                             int velocity,
+                             bool suppressPreview)
 {
     Note note(m_noteType, m_noteDots);
     timeT endTime = insertionTime + note.getDuration();
@@ -564,7 +567,7 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e,
             std::find(allStaffs->begin(), allStaffs->end(), m_clickStaff);
         if (staffIter == allStaffs->end()) return false;
     }
-    
+
     if (!e->staff || !e->element) {
         NOTATION_DEBUG << "computeLocationAndPreview: staff and/or element not supplied";
         clearPreview();
@@ -731,7 +734,7 @@ void NoteRestInserter::showPreview(bool play)
             (m_accidental == Accidentals::NoAccidental && m_followAccidental)
                 ? m_lastAccidental : m_accidental;
     }
-    
+
 
     // Get the start time of the bar where the insertion time is
     timeT startOfBar = segment.getBarStartForTime(m_clickTime);
@@ -741,7 +744,7 @@ void NoteRestInserter::showPreview(bool play)
     Key currentKey = segment.getKeyAtTime(m_clickTime, currentKeyTime);
     timeT currentClefTime;
     Clef currentClef = segment.getClefAtTime(m_clickTime, currentClefTime);
-    
+
     // Pitch related to the cursor position
     Pitch cursorPitch(pitch, cursorAccidental);
     int cursorHeight = cursorPitch.getHeightOnStaff(currentClef, currentKey);
@@ -755,13 +758,12 @@ void NoteRestInserter::showPreview(bool play)
             cursorAccidental = Accidentals::NoAccidental;
         }
     }
-    
-    
+
+
     // Get an iterator of the current event at m_clickTime
     Segment::iterator it = segment.findNearestTime(m_clickTime);
 
     bool cursorCautious = false;
-    bool lookForNoteOnSameOctave = false;
 
     // If the insertion point is immediately following a key change
     // there is no need to look at accidentals of previous notes
@@ -773,7 +775,7 @@ void NoteRestInserter::showPreview(bool play)
 
         // Get an iterator of the first event of the bar
         Segment::iterator itFirst = segment.findTime(startOfBar);
-        
+
         // Prepare to get the elements of the bar in reverse order
         typedef std::reverse_iterator<Segment::iterator> RevIt;
         RevIt rit(it);
@@ -786,6 +788,7 @@ void NoteRestInserter::showPreview(bool play)
         // Walk through the bar
         for ( ; rit != last; ++rit) {
             Event *ev = *rit;
+            bool lookForNoteOnSameOctave = false;
 
             if (ev->isa(Key::EventType)) {
                 if (lookForNoteOnSameOctave) {
@@ -796,7 +799,7 @@ void NoteRestInserter::showPreview(bool play)
 
                         // Select a default accidental related to the current
                         // key signature
-                        Accidental keyAccidental = 
+                        Accidental keyAccidental =
                             cursorPitch.getDisplayAccidental(currentKey);
                         if (keyAccidental == Accidentals::Natural) {
                             // Don't use natural if not needed
@@ -809,10 +812,10 @@ void NoteRestInserter::showPreview(bool play)
 
                         if (cursorAccidental == keyAccidental) {
                             cursorCautious = false;
-                        } 
+                        }
                     }
                 }
-                
+
                 // Stop looking for notes as soon as a key signature is found
                 done = true;
                 break;
@@ -861,7 +864,7 @@ void NoteRestInserter::showPreview(bool play)
                                 }
                             }
                         }
-                            
+
                         if (!cursorCautious) {
                             if (p == pitch) {
                                 // If they have the same pitch, the accidental is
@@ -881,17 +884,17 @@ void NoteRestInserter::showPreview(bool play)
                     done = true;
                     break;
                 }
-                
+
                 // If a note is found with the same name in another octave (the
                 // octave is different otherwise we should have break in the
                 // preceding if)
                 if (cursorPitch.getNoteName(currentKey) ==
                             notePitch.getNoteName(currentKey)) {
-                    
+
                     if (lookForNoteOnSameOctave) continue;
 
                     if (m_octaveType == AccidentalTable::OctavesCautionary) {
-                        
+
                         if (cursorPitch.getPitchInOctave() ==
                                 notePitch.getPitchInOctave()) {
                             // If they have the same pitch in octave, the
@@ -906,7 +909,7 @@ void NoteRestInserter::showPreview(bool play)
                         } else {
                             // Else use the accidental the key signature
                             // requires
-                            cursorAccidental = 
+                            cursorAccidental =
                                 cursorPitch.getAccidental(currentKey);
 
                             // Display it as cautionary if any accidental
@@ -935,7 +938,7 @@ void NoteRestInserter::showPreview(bool play)
                         // We don't break here because we have to look for
                         // another note with the same height in the same octave
                         lookForNoteOnSameOctave = true;
-                        
+
                         // Nevertheless a preview related to the current bar
                         // is already found : no need to look at the previous
                         // bar in the next step.
@@ -1228,7 +1231,7 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
         Segment::iterator i(segment.findTime(time));
         if (i != segment.end() &&
             !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
-            
+
             MacroCommand *command = new MacroCommand(insertionCommand->getName());
             //## Attempted fix to bug reported on rg-user by SlowPic
             //## <slowpic@web.de> 28/02/2005 22:32:56 UTC: Triplet input error
@@ -1282,8 +1285,8 @@ void NoteRestInserter::slotSetDots(unsigned int dots)
     m_noteDots = dots;
 }
 
-void NoteRestInserter::slotSetAccidental(Accidental accidental,
-                                     bool follow)
+void NoteRestInserter::slotSetAccidental(const Accidental& accidental,
+                                         bool follow)
 {
     NOTATION_DEBUG << "NoteRestInserter::setAccidental: accidental is "
                    << accidental;
@@ -1295,7 +1298,7 @@ void NoteRestInserter::slotToggleDot()
 {
     QObject *s = sender();
     QString actionName = s->objectName();
-    
+
     // Use fact that switch_dots_on/_off is same name
     // in parent view.  If changes, then a check
     // will need to be made.
@@ -1372,4 +1375,3 @@ void NoteRestInserter::slotNotesSelected()
 QString NoteRestInserter::ToolName() { return "noterestinserter"; }
 
 }
-

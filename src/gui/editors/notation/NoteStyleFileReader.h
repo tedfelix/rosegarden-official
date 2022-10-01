@@ -31,18 +31,19 @@ class NoteStyleFileReader : public XMLHandler
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::NoteStyleFileReader)
 
 public:
-    NoteStyleFileReader(NoteStyleName name);
+    explicit NoteStyleFileReader(NoteStyleName name);
 
     typedef Rosegarden::Exception StyleFileReadFailed;
-    
+
     QSharedPointer<NoteStyle> getStyle()  { return m_style; }
 
     // Xml handler methods:
 
-    bool startElement
-    (const QString& namespaceURI, const QString& localName,
-     const QString& qName, const QXmlStreamAttributes& atts) override;
-    
+    bool startElement(const QString& namespaceURI,
+                      const QString& localName,
+                      const QString& qName,
+                      const QXmlStreamAttributes& attributes) override;
+
 private:
     bool setFromAttributes(Note::Type type,
                            const QXmlStreamAttributes &attributes);
