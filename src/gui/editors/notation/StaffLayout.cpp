@@ -170,9 +170,9 @@ StaffLayout::setRowSpacing(int rowSpacing)
 }
 
 void
-StaffLayout::setConnectingLineLength(int connectingLineLength)
+StaffLayout::setConnectingLineLength(int length)
 {
-    m_connectingLineLength = connectingLineLength;
+    m_connectingLineLength = length;
 }
 
 int
@@ -275,10 +275,8 @@ StaffLayout::getHeightOfRow() const
 }
 
 bool
-StaffLayout::containsSceneCoords(double x, int y) const
+StaffLayout::containsSceneCoords(double sceneX, int sceneY) const
 {
-//    std::cerr << "StaffLayout::containsSceneCoords(" << x << "," << y << ")" << std::endl;
-
     switch (m_pageMode) {
 
     case ContinuousPageMode:
@@ -286,8 +284,8 @@ StaffLayout::containsSceneCoords(double x, int y) const
         for (int row = getRowForLayoutX(m_startLayoutX);
              row <= getRowForLayoutX(m_endLayoutX); ++row) {
 
-            if (y >= getSceneYForTopOfStaff(row) &&
-                y  < getSceneYForTopOfStaff(row) + getHeightOfRow()) {
+            if (sceneY >= getSceneYForTopOfStaff(row) &&
+                sceneY  < getSceneYForTopOfStaff(row) + getHeightOfRow()) {
                 return true;
             }
         }
@@ -299,10 +297,10 @@ StaffLayout::containsSceneCoords(double x, int y) const
         for (int row = getRowForLayoutX(m_startLayoutX);
              row <= getRowForLayoutX(m_endLayoutX); ++row) {
 
-            if (y >= getSceneYForTopOfStaff(row) &&
-                y  < getSceneYForTopOfStaff(row) + getHeightOfRow() &&
-                x >= getSceneXForLeftOfRow(row) &&
-                x <= getSceneXForRightOfRow(row)) {
+            if (sceneY >= getSceneYForTopOfStaff(row) &&
+                sceneY  < getSceneYForTopOfStaff(row) + getHeightOfRow() &&
+                sceneX >= getSceneXForLeftOfRow(row) &&
+                sceneX <= getSceneXForRightOfRow(row)) {
                 return true;
             }
         }
@@ -312,17 +310,17 @@ StaffLayout::containsSceneCoords(double x, int y) const
     case LinearMode:
     default:
 
-        return (y >= getSceneYForTopOfStaff() &&
-                y < getSceneYForTopOfStaff() + getHeightOfRow());
+        return (sceneY >= getSceneYForTopOfStaff() &&
+                sceneY < getSceneYForTopOfStaff() + getHeightOfRow());
     }
 }
 
 int
-StaffLayout::getSceneYForHeight(int h, double baseX, int baseY) const
+StaffLayout::getSceneYForHeight(int height, double baseX, int baseY) const
 {
     int y;
 
-    //    RG_DEBUG << "getSceneYForHeight(" << h << "," << baseY
+    //    RG_DEBUG << "getSceneYForHeight(" << height << "," << baseY
     //             << ")" << endl;
 
     if (baseX < 0)
@@ -334,16 +332,16 @@ StaffLayout::getSceneYForHeight(int h, double baseX, int baseY) const
         y = getSceneYForTopLine();
     }
 
-    y += getLayoutYForHeight(h);
+    y += getLayoutYForHeight(height);
 
     return y;
 }
 
 int
-StaffLayout::getLayoutYForHeight(int h) const
+StaffLayout::getLayoutYForHeight(int height) const
 {
-    int y = ((getTopLineHeight() - h) * getLineSpacing()) / getHeightPerLine();
-    if (h < getTopLineHeight() && (h % getHeightPerLine() != 0))
+    int y = ((getTopLineHeight() - height) * getLineSpacing()) / getHeightPerLine();
+    if (height < getTopLineHeight() && (height % getHeightPerLine() != 0))
         ++y;
 
     return y;
@@ -982,12 +980,12 @@ StaffLayout::clearStaffLineRow(int row)
 }
 
 void
-StaffLayout::resizeStaffLineRow(int row, double x, double length)
+StaffLayout::resizeStaffLineRow(int row, double offset, double length)
 {
     //Profiler profiler("StaffLayout::resizeStaffLineRow");
 
     //    RG_DEBUG << "StaffLayout::resizeStaffLineRow: row "
-    //       << row << ", x " << x << ", length "
+    //       << row << ", offset " << offset << ", length "
     //       << length << endl;
 
 
@@ -1034,7 +1032,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
         int barThickness = m_resolution / 12 + 1;
         y = getSceneYForTopLine(row);
         QGraphicsRectItem *line = new QGraphicsRectItem
-            (int(x + length) + .5, y + .5, barThickness, m_connectingLineLength);
+            (int(offset + length) + .5, y + .5, barThickness, m_connectingLineLength);
         m_scene->addItem(line);
         line->setPen(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
         line->setBrush(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
@@ -1056,7 +1054,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
 
         y = getSceneYForHeight
             (getBottomLineHeight() + getHeightPerLine() * h,
-             x, getSceneYForTopLine(row));
+             offset, getSceneYForTopLine(row));
 
         if (elementsInSpaces()) {
             y -= getLineSpacing() / 2 + 1;
@@ -1079,7 +1077,8 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
                 m_scene->addItem(line);
             }
 
-            line->setRect(int(x) + .5, y + .5, int(length), m_lineThickness);
+            line->setRect(int(offset) + .5, y + .5,
+                          int(length), m_lineThickness);
             line->show();
 
         } else {
@@ -1094,7 +1093,8 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
                 m_scene->addItem(line);
             }
 
-            line->setLine(int(x) + .5, y + .5, int(x + length) + .5, y + .5);
+            line->setLine(int(offset) + .5, y + .5,
+                          int(offset + length) + .5, y + .5);
             line->show();
         }
 

@@ -26,6 +26,7 @@
 
 namespace Rosegarden {
 
+// cppcheck-suppress noConstructor
 class NoteStyleFileReader : public XMLHandler
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::NoteStyleFileReader)

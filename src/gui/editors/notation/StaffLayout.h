@@ -271,7 +271,7 @@ public:
      * be called before the sizeStaff/positionElements procedure
      * begins.
      */
-    virtual void setMargin(double m);
+    virtual void setMargin(double margin);
 
     /**
      * Get the scene width of the left and right margins.
@@ -283,7 +283,7 @@ public:
      * reserved for the composition title and composer's name (used
      * only in MultiPageMode).
      */
-    virtual void setTitleHeight(int h);
+    virtual void setTitleHeight(int titleHeight);
 
     /**
      * Get the scene height of the title area.
