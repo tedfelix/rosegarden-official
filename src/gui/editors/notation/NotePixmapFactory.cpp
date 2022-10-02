@@ -3650,7 +3650,7 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
     switch (type) {
 
     case PlainColour:
-        return font->getCharacter(name, ch, charType, inverted);
+        return font->getCharacter(name, ch, inverted);
 
     case QuantizedColour:
         return font->getCharacterColoured
@@ -3712,7 +3712,7 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
              ch, charType, inverted, s);
     }
 
-    return font->getCharacter(name, ch, charType, inverted);
+    return font->getCharacter(name, ch, inverted);
 }
 
 NoteCharacter

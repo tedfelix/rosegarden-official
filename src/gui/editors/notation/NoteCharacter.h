@@ -54,6 +54,8 @@ public:
     NoteCharacter();
     NoteCharacter(const NoteCharacter &);
     NoteCharacter &operator=(const NoteCharacter &);
+    NoteCharacter(QPixmap pixmap, QPoint hotspot);
+
     ~NoteCharacter();
 
     int getWidth() const;
@@ -66,12 +68,8 @@ public:
     void draw(QPainter *painter, int x, int y) const;
 
 private:
-    friend class NoteFont;
-    NoteCharacter(QPixmap pixmap, QPoint hotspot, NoteCharacterDrawRep *rep);
-
     QPoint m_hotspot;
     QPixmap m_pixmap;
-    NoteCharacterDrawRep *m_rep; // I don't own this, it's a reference to a static in the NoteFont
 };
 
 

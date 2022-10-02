@@ -77,12 +77,10 @@ public:
     /// Returns false if not available
     bool getCharacter(CharName charName,
                       NoteCharacter &character,
-                      CharacterType type = Screen,
                       bool inverted = false) const;
 
     /// Returns an empty character if not available
     NoteCharacter getCharacter(CharName charName,
-                               CharacterType type = Screen,
                                bool inverted = false) const;
 
     /** Returns false if not available, otherwise returns a coloured note

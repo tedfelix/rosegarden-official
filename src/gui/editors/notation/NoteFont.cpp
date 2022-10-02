@@ -491,7 +491,6 @@ NoteFont::getHotspot(CharName charName, bool inverted) const
 bool
 NoteFont::getCharacter(CharName charName,
                        NoteCharacter &character,
-                       CharacterType type,
                        bool inverted) const
 {
     Profiler profiler("NoteFont::getCharacter");
@@ -500,37 +499,17 @@ NoteFont::getCharacter(CharName charName,
     if (!getPixmap(charName, pixmap, inverted))
         return false;
 
-    if (type == Screen) {
-        character = NoteCharacter(pixmap,
-                                  getHotspot(charName, inverted),
-                                  nullptr);
-    } else {
-
-        // Get the pointer direct from cache (depends on earlier call
-        // to getPixmap to put it in the cache if available)
-
-        QPixmap *pmapptr = nullptr;
-        bool found = lookup(charName, inverted, pmapptr);
-
-        NoteCharacterDrawRep *rep = nullptr;
-        if (found && pmapptr)
-            rep = lookupDrawRep(pmapptr);
-
-        character = NoteCharacter(pixmap,
-                                  getHotspot(charName, inverted),
-                                  rep);
-    }
-
+    character = NoteCharacter(pixmap,
+                              getHotspot(charName, inverted));
     return true;
 }
 
 NoteCharacter
 NoteFont::getCharacter(CharName charName,
-                       CharacterType type,
                        bool inverted) const
 {
     NoteCharacter character;
-    getCharacter(charName, character, type, inverted);
+    getCharacter(charName, character, inverted);
     return character;
 }
 
@@ -550,25 +529,11 @@ NoteFont::getCharacterColoured(CharName charName,
     if (type == Screen) {
 
         character = NoteCharacter(pixmap,
-                                  getHotspot(charName, inverted),
-                                  nullptr);
-
+                                  getHotspot(charName, inverted));
     } else {
-
-        // Get the pointer direct from cache (depends on earlier call
-        // to getPixmap to put it in the cache if available)
-
-        QPixmap *pmapptr = nullptr;
         CharName cCharName(getNameWithColour(charName, hue));
-        bool found = lookup(cCharName, inverted, pmapptr);
-
-        NoteCharacterDrawRep *rep = nullptr;
-        if (found && pmapptr)
-            rep = lookupDrawRep(pmapptr);
-
         character = NoteCharacter(pixmap,
-                                  getHotspot(charName, inverted),
-                                  rep);
+                                  getHotspot(charName, inverted));
     }
 
     return true;
