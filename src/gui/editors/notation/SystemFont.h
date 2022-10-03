@@ -47,7 +47,7 @@ public:
 
 protected:
     static void unbundleFonts();
-    static void addFont(QString filename);
+    static void addFont(const QString& fileName);
 };
 
 

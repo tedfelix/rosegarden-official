@@ -54,7 +54,7 @@ class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
 
 public:
 
-    MIDIInstrumentParameterPanel(QWidget *parent);
+    explicit MIDIInstrumentParameterPanel(QWidget *parent);
 
 public slots:
 
@@ -114,7 +114,7 @@ private slots:
     void slotSelectChannel(int index);
 
     /// Handle a rotary change (m_rotaryMapper mapped())
-    void slotControllerChanged(int index);
+    void slotControllerChanged(int controllerNumber);
 
 private:
 

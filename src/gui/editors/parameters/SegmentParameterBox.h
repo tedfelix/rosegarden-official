@@ -57,7 +57,7 @@ class SegmentParameterBox : public RosegardenParameterBox
     Q_OBJECT
 
 public:
-    SegmentParameterBox(QWidget *parent);
+    explicit SegmentParameterBox(QWidget *parent);
 
     /// Segment > Toggle Repeat
     void toggleRepeat();

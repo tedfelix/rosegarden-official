@@ -56,7 +56,7 @@ class InstrumentParameterBox : public RosegardenParameterBox
 Q_OBJECT
 
 public:
-    InstrumentParameterBox(QWidget *parent);
+    explicit InstrumentParameterBox(QWidget *parent);
     ~InstrumentParameterBox() override;
 
     /// Set the audio meter levels on the AIPP.

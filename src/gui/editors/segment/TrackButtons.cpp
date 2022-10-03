@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -319,18 +319,18 @@ TrackButtons::populateButtons()
 }
 
 void
-TrackButtons::slotToggleMute(int pos)
+TrackButtons::slotToggleMute(int position)
 {
     //RG_DEBUG << "TrackButtons::slotToggleMute( position =" << pos << ")";
 
     if (!RosegardenDocument::currentDocument)
         return;
 
-    if (pos < 0  ||  pos >= m_tracks)
+    if (position < 0  ||  position >= m_tracks)
         return;
 
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Track *track = comp.getTrackByPosition(pos);
+    Track *track = comp.getTrackByPosition(position);
 
     if (!track)
         return;
@@ -358,18 +358,18 @@ void TrackButtons::toggleSolo()
 }
 
 void
-TrackButtons::slotToggleSolo(int pos)
+TrackButtons::slotToggleSolo(int position)
 {
-    //RG_DEBUG << "slotToggleSolo( position =" << pos << ")";
+    //RG_DEBUG << "slotToggleSolo( position =" << position << ")";
 
     if (!RosegardenDocument::currentDocument)
         return;
 
-    if (pos < 0  ||  pos >= m_tracks)
+    if (position < 0  ||  position >= m_tracks)
         return;
 
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Track *track = comp.getTrackByPosition(pos);
+    Track *track = comp.getTrackByPosition(position);
 
     if (!track)
         return;
@@ -384,7 +384,7 @@ TrackButtons::slotToggleSolo(int pos)
         // For each track
         for (int i = 0; i < m_tracks; ++i) {
             // Except the one that is being toggled.
-            if (i == pos)
+            if (i == position)
                 continue;
 
             Track *track2 = comp.getTrackByPosition(i);
@@ -709,7 +709,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
                    connectedSelectedPixmap, unconnectedSelectedPixmap;
 
     static bool havePixmaps = false;
-        
+
     if (!havePixmaps) {
 
         connectedPixmap = IconLoader::loadPixmap("connected");

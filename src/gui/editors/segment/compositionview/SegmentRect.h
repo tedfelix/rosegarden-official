@@ -49,7 +49,7 @@ public:
         label()
     { }
 
-    SegmentRect(const QRect &r) :
+    explicit SegmentRect(const QRect &r) :
         rect(r),
         selected(false),
         brush(DefaultBrushColor),

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -35,7 +35,7 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QUrl>
-#include <QMimeData> 
+#include <QMimeData>
 
 
 namespace Rosegarden
@@ -84,13 +84,13 @@ PlayList::PlayList(QWidget *parent) : QWidget(parent),
     connect(m_clearButton, &QAbstractButton::clicked, this, &PlayList::slotClear);
     connect(m_moveUpButton, &QAbstractButton::clicked, this, &PlayList::slotMoveUp);
     connect(m_moveDownButton, &QAbstractButton::clicked, this, &PlayList::slotMoveDown);
-    
+
     connect(m_listView, &PlayListView::droppedURIs,
             this, &PlayList::slotDroppedURIs);
-    
+
     connect(m_listView, &QTreeWidget::currentItemChanged,
                 this, &PlayList::slotCurrentItemChanged);
-    
+
 //     connect(m_listView, SIGNAL(currentChanged(QTreeWidgetItem*)),
 //             SLOT(slotCurrentItemChanged(QTreeWidgetItem*)));
 //     connect(m_listView, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
@@ -114,14 +114,14 @@ void PlayList::slotOpenFiles()
                         tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                         tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                         tr("All files") + " (*)", nullptr);
-    
+
     QString fname;
-    
+
     for( int i=0; i < files.size(); i++ ){
         fname = files.at( i );
         new PlayListViewItem(m_listView, QUrl(fname) );
     }
-    
+
     enableButtons( m_listView->currentItem() );
 }
 
@@ -139,22 +139,22 @@ void PlayList::slotDroppedURIs(QDropEvent* /* ev */, QTreeWidget* /* twid */, QS
 void PlayList::slotDropped(QDropEvent *event, QTreeWidgetItem* after)
 {
     // old. funct. - delete me later
-    
+
     QStringList uri;
     QMimeData md;
-    
+
     // see if we can decode a URI.. if not, just ignore it
 //     if (QUriDrag::decode(event, uri)) {
-    
+
 //     if( ! md.formats().isEmpty() ){        //list of formats supported
     if( md.hasUrls() ){
-        
+
         // okay, we have a URI.. process it
         // weed out non-rg files
         //
         QList<QUrl> urls = md.urls();
         QUrl url;
-        
+
         for( int i=0; i< urls.count(); i++ ){
             url = urls.at( i );
             if (url.toString().right(3).toLower() == ".rg")
@@ -162,7 +162,7 @@ void PlayList::slotDropped(QDropEvent *event, QTreeWidgetItem* after)
 
         }
     }
-    
+
     enableButtons( m_listView->currentItem() );
 }
     */
@@ -173,7 +173,7 @@ void PlayList::slotPlay()
     QString fname;
     PlayListViewItem *item;
     item = dynamic_cast<PlayListViewItem*>( m_listView->currentItem() );
-    
+
     RG_DEBUG << "PlayList::slotPlay() - called. ";
     if (item){
         fname = item->text(1); // 1==column1==filename
@@ -188,22 +188,21 @@ void PlayList::slotMoveUp()
 {
 //     QTreeWidgetItem *currentIndex = m_listView->currentItem();
 //     QTreeWidgetItem *previousItem = m_listView->previousSibling( currentIndex );
-    
+
     QTreeWidgetItem *currentItem = m_listView->currentItem();
     QTreeWidgetItem *previousItem = m_listView->itemAbove( currentItem );
-    QTreeWidgetItem *ti;
     int ix = m_listView->indexOfTopLevelItem( currentItem );
-    
+
     if (previousItem){
 //         previousItem->moveItem(currentIndex);
-        ti = m_listView->takeTopLevelItem( ix );
+        QTreeWidgetItem *ti = m_listView->takeTopLevelItem( ix );
         m_listView->insertTopLevelItem( ix -1, ti );
-        
+
         m_listView->clearSelection();   // update selection
         m_listView->setCurrentItem( ti );
 //         ti->setSelected( true );
     }
-    
+
     enableButtons(currentItem);
 }
 
@@ -216,21 +215,20 @@ void PlayList::slotMoveDown()
     if (nextItem)
         currentIndex->moveItem(nextItem);
     */
-    
+
     QTreeWidgetItem *currentItem = m_listView->currentItem();
     QTreeWidgetItem *nextItem = m_listView->itemBelow( currentItem );
-    QTreeWidgetItem *ti;
     int ix = m_listView->indexOfTopLevelItem( currentItem );
-    
+
     if (nextItem){
 //         previousItem->moveItem(currentIndex);
-        ti = m_listView->takeTopLevelItem( ix );
+        QTreeWidgetItem *ti = m_listView->takeTopLevelItem( ix );
         m_listView->insertTopLevelItem( ix +1, ti );
-        
+
         m_listView->clearSelection();   // update selection
         m_listView->setCurrentItem( ti );
 //         ti->setSelected( true );
-        
+
     }
 
     enableButtons(currentItem);
@@ -261,12 +259,12 @@ void PlayList::enableButtons(QTreeWidgetItem* currentIndex)
 
     m_playButton->setEnabled(enable);
     m_deleteButton->setEnabled(enable);
-    
-    
+
+
     int cAll = m_listView->topLevelItemCount();
 //     int cCurr = m_listView->indexOfTopLevelItem( m_listView.currentItem() );
     int cCurr = m_listView->indexOfTopLevelItem( currentIndex );
-    
+
     if (currentIndex) {
 //         m_moveUpButton->setEnabled(currentIndex != m_listView->firstChild());
 //         m_moveDownButton->setEnabled(currentIndex != m_listView->lastItem());
@@ -284,7 +282,7 @@ void PlayList::enableButtons(QTreeWidgetItem* currentIndex)
 void PlayList::save()
 {
     QStringList urlList;
-    
+
     PlayListViewItem* item = dynamic_cast<PlayListViewItem*>( getListView()->topLevelItem(0) );
 
     while (item) {
@@ -294,7 +292,7 @@ void PlayList::save()
     }
 
     QSettings kc ; // was: KGlobal::config()
-    
+
 //     KConfigGroupSaver cs(kc, PlayListConfigGroup);    //&&&
     kc.beginGroup( PlayListConfigGroup );
     kc.setValue("Playlist Files", urlList);
@@ -312,7 +310,7 @@ void PlayList::restore()
     kc.beginGroup(PlayListConfigGroup);
     QStringList urlList = kc.value("Playlist Files").toStringList();
     QString ss;
-    
+
     for( int i=0; i< urlList.count(); i ++ ){
         ss = urlList.at( i );
         new PlayListViewItem( getListView(), QUrl(ss) );

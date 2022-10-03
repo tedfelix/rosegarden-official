@@ -205,8 +205,8 @@ public slots:
      * Connected to TrackParameterBox::instrumentSelected().  This is called
      * when the user changes the instrument via the Track Parameters box.
      */
-    void slotTPBInstrumentSelected(TrackId trackId, int item);
-    
+    void slotTPBInstrumentSelected(TrackId trackId, int instrumentIndex);
+
     /// Ensure track buttons on the UI match the Composition.
     /**
      * @see updateUI()
@@ -272,7 +272,7 @@ protected:
     /**
      * @see QSignalMapper::setMapping()
      */
-    void setButtonMapping(TrackLabel* obj, TrackId trackId);
+    void setButtonMapping(TrackLabel* trackLabel, TrackId trackId);
 
     /// Gets the proper color for an instrument based on its type.
     /**

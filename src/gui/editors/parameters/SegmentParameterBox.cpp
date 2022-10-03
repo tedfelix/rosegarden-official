@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -585,15 +585,15 @@ namespace
 }
 
 void
-SegmentParameterBox::setDelay(long t)
+SegmentParameterBox::setDelay(long delayValue)
 {
     // Note duration delay (timeT/ppq: 1/4, 1/8, etc...)
-    if (t >= 0) {
+    if (delayValue >= 0) {
         timeT error = 0;
 
         QString label =
                 NotationStrings::makeNoteMenuLabel(
-                        t,  // duration
+                        delayValue,  // duration
                         true,  // brief
                         error);  // errorReturn
         m_delay->setCurrentIndex(m_delay->findText(label));
@@ -602,7 +602,7 @@ SegmentParameterBox::setDelay(long t)
     }
 
     // Millisecond delay (10ms, 20ms, etc...)
-    m_delay->setCurrentIndex(m_delay->findText(tr("%1 ms").arg(-t)));
+    m_delay->setCurrentIndex(m_delay->findText(tr("%1 ms").arg(-delayValue)));
 }
 
 void
@@ -1065,20 +1065,20 @@ SegmentParameterBox::slotChangeLinkTranspose()
             }
         }
     }
-    
+
     if (foundTransposedLinks) {
-        QMessageBox::critical(this, tr("Rosegarden"), 
+        QMessageBox::critical(this, tr("Rosegarden"),
                 tr("Existing transpositions on selected linked segments must be removed\nbefore new transposition can be applied."),
                 QMessageBox::Ok);
         return;
     }
-        
+
     if (linkedSegs.empty())
         return;
-    
+
     IntervalDialog intervalDialog(this, true, true);
     int ok = intervalDialog.exec();
-    
+
     if (!ok)
         return;
 
@@ -1113,7 +1113,7 @@ SegmentParameterBox::slotResetLinkTranspose()
     if (linkedSegs.empty())
         return;
 
-    int reset = QMessageBox::question(this, tr("Rosegarden"), 
+    int reset = QMessageBox::question(this, tr("Rosegarden"),
                    tr("Remove transposition on selected linked segments?"));
 
     if (reset == QMessageBox::No)

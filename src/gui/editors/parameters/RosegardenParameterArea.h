@@ -45,7 +45,7 @@ public:
 
     // Create the parameter display area.
 
-    RosegardenParameterArea(QWidget *parent = nullptr);
+    explicit RosegardenParameterArea(QWidget *parent = nullptr);
 
     // Add a rosegarden parameter box to the list that are to be displayed.
 

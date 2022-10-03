@@ -48,7 +48,7 @@ class AudioInstrumentParameterPanel : public InstrumentParameterPanel
     Q_OBJECT
 
 public:
-    AudioInstrumentParameterPanel(QWidget* parent);
+    explicit AudioInstrumentParameterPanel(QWidget* parent);
 
     virtual void setupForInstrument(Instrument*);
 
@@ -64,8 +64,8 @@ public:
 
     // Set the button colour
     //
-    void setButtonColour(int pluginIndex, bool bypassState, 
-                         const QColor &color);
+    void setButtonColour(int pluginIndex, bool bypassState,
+                         const QColor &colour);
 
 public slots:
     // From AudioFaderBox
@@ -79,8 +79,8 @@ public slots:
     void slotSetPan(float pan);
 
     // From RosegardenMainWindow.
-    void slotPluginSelected(InstrumentId id, int index, int plugin);
-    void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bp);
+    void slotPluginSelected(InstrumentId instrumentId, int index, int plugin);
+    void slotPluginBypassed(InstrumentId instrumentId, int pluginIndex, bool bp);
 
     void slotSynthButtonClicked();
     /// Editor button.

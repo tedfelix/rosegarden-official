@@ -27,7 +27,7 @@ namespace Rosegarden {
 class SystemFontQt : public SystemFont
 {
 public:
-    SystemFontQt(QFont &font) : m_font(font) { }
+    explicit SystemFontQt(QFont &font) : m_font(font) { }
     ~SystemFontQt() override { }
 
     QPixmap renderChar(CharName charName, int glyph, int code,

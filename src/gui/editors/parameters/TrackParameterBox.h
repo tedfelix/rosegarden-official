@@ -58,10 +58,10 @@ class TrackParameterBox : public RosegardenParameterBox,
                           public CompositionObserver
 {
     Q_OBJECT
-        
+
 public:
-    TrackParameterBox(QWidget *parent = nullptr);
-    
+    explicit TrackParameterBox(QWidget *parent = nullptr);
+
     void setDocument(RosegardenDocument *doc);
 
     // CompositionObserver overrides.

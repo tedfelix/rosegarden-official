@@ -42,7 +42,7 @@ class PlayList : public QWidget
     Q_OBJECT
 
 public:
-    PlayList(QWidget *parent = nullptr);
+    explicit PlayList(QWidget *parent = nullptr);
     ~PlayList() override;
 
     PlayListView* getListView() { return m_listView; }

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -74,9 +74,10 @@ InstrumentParameterBox::~InstrumentParameterBox()
 }
 
 void
-InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch2r)
+InstrumentParameterBox::setAudioMeter(float dBleft, float dBright,
+                                      float recDBleft, float recDBright)
 {
-    m_aipp->setAudioMeter(ch1, ch2, ch1r, ch2r);
+    m_aipp->setAudioMeter(dBleft, dBright, recDBleft, recDBright);
 }
 
 void InstrumentParameterBox::slotDocumentLoaded(RosegardenDocument *doc)
