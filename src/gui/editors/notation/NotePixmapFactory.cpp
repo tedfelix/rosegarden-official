@@ -2741,6 +2741,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
         noteLengths = 1;
 
     my = int(0 - nbh * sqrt(noteLengths) / 2);
+    // ??? I assume "flat" style means a "tie" without slope?
     if (flat) my = my * 2 / 3;
     else if (phrasing) my = my * 3 / 4;
     if (!above) my = -my;
