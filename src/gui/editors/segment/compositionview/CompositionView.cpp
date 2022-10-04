@@ -420,13 +420,13 @@ void CompositionView::slotRefreshColourCache()
 void CompositionView::slotNewMIDIRecordingSegment(Segment *s)
 {
     m_model->addRecordingItem(ChangingSegmentPtr(
-            new ChangingSegment(*s, QRect())));
+            new ChangingSegment(*s, SegmentRect())));
 }
 
 void CompositionView::slotNewAudioRecordingSegment(Segment *s)
 {
     m_model->addRecordingItem(ChangingSegmentPtr(
-            new ChangingSegment(*s, QRect())));
+            new ChangingSegment(*s, SegmentRect())));
 }
 
 void CompositionView::slotStoppedRecording()
