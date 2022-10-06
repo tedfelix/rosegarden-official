@@ -51,7 +51,7 @@ class SnapGrid;
  */
 class ChangingSegment {
 public:
-    ChangingSegment(Segment &s, const SegmentRect &r);
+    ChangingSegment(Segment &s, const SegmentRect &rect);
 
     // Rect Mutators
 
@@ -89,9 +89,9 @@ public:
     timeT getStartTime(const SnapGrid &);
 
     void setEndTime(timeT, const SnapGrid &);
-    timeT getEndTime(const SnapGrid &);
+    timeT getEndTime(const SnapGrid &) const;
 
-    int getTrackPos(const SnapGrid &);
+    int getTrackPos(const SnapGrid &) const;
 
 private:
 

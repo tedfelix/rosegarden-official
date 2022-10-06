@@ -268,7 +268,7 @@ public:
     };
 
     /// Begin move/resize for a single segment.
-    void startChange(ChangingSegmentPtr, ChangeType change);
+    void startChange(ChangingSegmentPtr, ChangeType changeType);
     /// Begin move for all selected segments.
     void startChangeSelection(ChangeType change);
 

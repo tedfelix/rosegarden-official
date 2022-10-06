@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -71,7 +71,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
         m_doc(doc),
         m_modified(false)
 {
-    
+
     this->setObjectName( "triggereditordialog" );
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -84,7 +84,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
     m_listView = new QTreeWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);
-    
+
     QStringList sl;
     sl         << "Index"
             << tr("ID")
@@ -93,10 +93,10 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
             << tr("Base pitch")
             << tr("Base velocity")
             << tr("Triggers");
-    
+
     m_listView->setColumnCount( 7 );
     m_listView->setHeaderLabels( sl );
-    
+
     // Rewrite all the old gobbityblather with a QDialogButtonBox instead, for
     // consistency and cleanliness
     QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Close);
@@ -116,7 +116,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     // Whether accepted or rejected, we always just want to call slotClose()
     connect(btnBox, &QDialogButtonBox::accepted, this, &TriggerSegmentManager::slotClose);
     connect(btnBox, &QDialogButtonBox::rejected, this, &TriggerSegmentManager::slotClose);
-    
+
     connect(m_addButton, &QAbstractButton::released,
             this, &TriggerSegmentManager::slotAdd);
 
@@ -129,7 +129,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     setupActions();
 
 //     CommandHistory::getInstance()->attachView(actionCollection());    //&&&
-    
+
     connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
             this, &TriggerSegmentManager::slotUpdate);
 
@@ -145,7 +145,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 //     m_listView->setSelectionMode(QTreeWidget::Extended);
     m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 //     m_listView->setSelectionBehavior( QAbstractItemView::SelectRows );
-    
+
 //     m_listView->setItemsRenameable(true);    //&&&
 
     initDialog();
@@ -174,8 +174,6 @@ void
 TriggerSegmentManager::slotUpdate()
 {
     RG_DEBUG << "TriggerSegmentManager::slotUpdate";
-
-    TriggerManagerItem *item;
 
     m_listView->clear();
 
@@ -237,12 +235,13 @@ TriggerSegmentManager::slotUpdate()
 
         QString velocity = QString("%1").arg((*it)->getBaseVelocity());
 
-        item = new TriggerManagerItem(
-                           m_listView, 
-                              QStringList() 
-                            << QString("%1").arg(i + 1)
-                            << QString("%1").arg((*it)->getId())
-                            << label << timeString << pitch << velocity << used );
+        TriggerManagerItem *item =
+            new TriggerManagerItem
+            (m_listView,
+             QStringList()
+             << QString("%1").arg(i + 1)
+             << QString("%1").arg((*it)->getId())
+             << label << timeString << pitch << velocity << used );
 
         item->setRawDuration(duration);
         item->setId((*it)->getId());
@@ -374,7 +373,7 @@ TriggerSegmentManager::setupActions()
     settings.beginGroup( TriggerManagerConfigGroup );
 
     int timeMode = settings.value("timemode", 0).toInt() ;
-    
+
     QAction *a;
     a = createAction("time_musical", SLOT(slotMusicalTime()));
     a->setCheckable(true);
@@ -461,7 +460,7 @@ TriggerSegmentManager::slotItemClicked(QTreeWidgetItem */* item */)
 }
 
 QString
-TriggerSegmentManager::makeDurationString(timeT time,
+TriggerSegmentManager::makeDurationString(timeT startTime,
         timeT duration, int timeMode)
 {
     //!!! duplication with EventView::makeDurationString -- merge somewhere?
@@ -472,7 +471,7 @@ TriggerSegmentManager::makeDurationString(timeT time,
         {
             int bar, beat, fraction, remainder;
             m_doc->getComposition().getMusicalTimeForDuration
-            (time, duration, bar, beat, fraction, remainder);
+                (startTime, duration, bar, beat, fraction, remainder);
             return QString("%1%2%3-%4%5-%6%7-%8%9   ")
                    .arg(bar / 100)
                    .arg((bar % 100) / 10)
@@ -489,7 +488,7 @@ TriggerSegmentManager::makeDurationString(timeT time,
         {
             RealTime rt =
                 m_doc->getComposition().getRealTimeDifference
-                (time, time + duration);
+                (startTime, startTime + duration);
             //    return QString("%1  ").arg(rt.toString().c_str());
             return QString("%1  ").arg(rt.toText().c_str());
         }

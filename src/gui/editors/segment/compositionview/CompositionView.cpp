@@ -4,10 +4,10 @@
   Rosegarden
   A MIDI and audio sequencer and musical notation editor.
   Copyright 2000-2022 the Rosegarden development team.
- 
+
   Other copyrights also apply to some parts of this work.  Please
   see the AUTHORS file and individual file headers for details.
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -1054,29 +1054,29 @@ void CompositionView::drawCompRectLabel(
     painter->restore();
 }
 
-void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
+void CompositionView::drawRect(QPainter *painter, const QRect &clipRect,
         const QRect &r, bool isSelected, int intersectLvl)
 {
     // If the rect isn't in the clip rect, bail.
     if (!r.intersects(clipRect))
         return;
 
-    p->save();
+    painter->save();
 
     // Since we do partial updates when scrolling, make sure we don't
     // obliterate the previews.
-    p->setClipRect(clipRect);
+    painter->setClipRect(clipRect);
 
     // For a selected segment, go with a darker fill.
     if (isSelected) {
-        QColor fillColor = p->brush().color().darker(200);
-        p->setBrush(QBrush(fillColor));
+        QColor fillColor = painter->brush().color().darker(200);
+        painter->setBrush(QBrush(fillColor));
     }
 
     // For intersecting segments, go with a darker fill.
     if (intersectLvl > 0) {
-        QColor fillColor = p->brush().color().darker(intersectLvl * 105);
-        p->setBrush(QBrush(fillColor));
+        QColor fillColor = painter->brush().color().darker(intersectLvl * 105);
+        painter->setBrush(QBrush(fillColor));
     }
 
     QRect rect = r;
@@ -1085,9 +1085,9 @@ void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
     // ??? Why isn't the SegmentRect already adjusted like this?
     rect.adjust(0, 0, -1, -1);
 
-    p->drawRect(rect);
+    painter->drawRect(rect);
 
-    p->restore();
+    painter->restore();
 }
 
 // Functor to just compare the SegmentRect's QRect's.

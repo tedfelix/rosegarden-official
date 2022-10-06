@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -1336,10 +1336,10 @@ int CompositionModelImpl::getCompositionHeight()
 }
 
 CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(
-        const QRect &rect)
+        const QRect &clipRect)
 {
-    int top = m_grid.getYBin(rect.y());
-    int bottom = m_grid.getYBin(rect.y() + rect.height());
+    int top = m_grid.getYBin(clipRect.y());
+    int bottom = m_grid.getYBin(clipRect.y() + clipRect.height());
 
     // Make sure we have the latest track heights.
     updateAllTrackHeights();
