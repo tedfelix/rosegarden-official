@@ -21,7 +21,7 @@
 #include <QString>
 
 namespace Rosegarden {
-	
+
 class AutoSaveFinder
 {
 public:
@@ -40,11 +40,9 @@ public:
     QString checkAutoSaveFile(QString filename);
 
 protected:
-    QString getAutoSaveDir();
+    static QString getAutoSaveDir();
 };
 
 }
 
 #endif
-
-    

@@ -1055,10 +1055,10 @@ void CompositionView::drawCompRectLabel(
 }
 
 void CompositionView::drawRect(QPainter *painter, const QRect &clipRect,
-        const QRect &r, bool isSelected, int intersectLvl)
+        const QRect &rect, bool isSelected, int intersectLvl)
 {
     // If the rect isn't in the clip rect, bail.
-    if (!r.intersects(clipRect))
+    if (!rect.intersects(clipRect))
         return;
 
     painter->save();
@@ -1079,13 +1079,13 @@ void CompositionView::drawRect(QPainter *painter, const QRect &clipRect,
         painter->setBrush(QBrush(fillColor));
     }
 
-    QRect rect = r;
+    QRect rect2 = rect;
     // Shrink height by 1 to accommodate the dividers.
     // Shrink width by 1 so that adjacent segment borders don't overlap.
     // ??? Why isn't the SegmentRect already adjusted like this?
-    rect.adjust(0, 0, -1, -1);
+    rect2.adjust(0, 0, -1, -1);
 
-    painter->drawRect(rect);
+    painter->drawRect(rect2);
 
     painter->restore();
 }
@@ -1094,8 +1094,8 @@ void CompositionView::drawRect(QPainter *painter, const QRect &clipRect,
 class CompareSegmentRects
 {
 public:
-    CompareSegmentRects(const SegmentRect &sr) : r(sr.rect) { }
-    bool operator()(const SegmentRect &sr)
+    explicit CompareSegmentRects(const SegmentRect &sr) : r(sr.rect) { }
+    bool operator()(const SegmentRect &sr) const
             { return (sr.rect == r); }
 private:
     QRect r;
@@ -1234,13 +1234,13 @@ void CompositionView::drawIntersections(
 #endif
 }
 
-void CompositionView::drawTextFloat(QPainter *p)
+void CompositionView::drawTextFloat(QPainter *painter)
 {
     if (!m_model)
         return;
 
     // Find out how big of a rect we need for the text.
-    QRect boundingRect = p->boundingRect(
+    QRect boundingRect = painter->boundingRect(
             QRect(),  // we want the "required" rectangle
             0,        // we want the "required" rectangle
             m_textFloatText);
@@ -1259,14 +1259,14 @@ void CompositionView::drawTextFloat(QPainter *p)
 
     boundingRect.moveTopLeft(pos);
 
-    p->save();
+    painter->save();
 
-    p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
-    p->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
-    p->drawRect(boundingRect);
-    p->drawText(boundingRect, Qt::AlignCenter, m_textFloatText);
+    painter->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
+    painter->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
+    painter->drawRect(boundingRect);
+    painter->drawText(boundingRect, Qt::AlignCenter, m_textFloatText);
 
-    p->restore();
+    painter->restore();
 }
 
 bool CompositionView::event(QEvent *e)
