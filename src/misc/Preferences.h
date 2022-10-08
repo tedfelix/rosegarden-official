@@ -53,6 +53,9 @@ namespace Preferences
     void setStopAtEnd(bool value);
     bool getStopAtEnd();
 
+    void setAdvancedLooping(bool value);
+    bool getAdvancedLooping();
+
     // AudioFileLocationDialog settings
 
     void setAudioFileLocationDlgDontShow(bool dontShow);

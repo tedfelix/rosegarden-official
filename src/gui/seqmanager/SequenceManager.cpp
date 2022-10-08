@@ -1059,6 +1059,8 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     //	return;
     //    }
 
+    //RG_DEBUG << "setLoop(): " << lhs << "-" << rhs;
+
     RealTime loopStart =
         m_doc->getComposition().getElapsedRealTime(lhs);
     RealTime loopEnd =
@@ -1444,9 +1446,7 @@ SequenceManager::segmentModified(Segment* s)
 {
     RG_DEBUG << "segmentModified(" << s << ")";
 
-    bool sizeChanged = m_compositionMapper->segmentModified(s);
-
-    RG_DEBUG << "segmentModified() : size changed = " << sizeChanged;
+    m_compositionMapper->segmentModified(s);
 
     RosegardenSequencer::getInstance()->segmentModified
         (m_compositionMapper->getMappedEventBuffer(s));

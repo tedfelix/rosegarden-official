@@ -2918,8 +2918,10 @@ RosegardenMainWindow::createAndSetupTransport()
 
     // Handle set loop start/stop time buttons.
     //
-    connect(m_transport, &TransportDialog::setLoopStartTime, this, &RosegardenMainWindow::slotSetLoopStart);
-    connect(m_transport, &TransportDialog::setLoopStopTime, this, &RosegardenMainWindow::slotSetLoopStop);
+    connect(m_transport, &TransportDialog::setLoopStartTime,
+            this, &RosegardenMainWindow::slotSetLoopStart);
+    connect(m_transport, &TransportDialog::setLoopStopTime,
+            this, &RosegardenMainWindow::slotSetLoopStop);
 }
 
 void
@@ -5678,51 +5680,43 @@ RosegardenMainWindow::slotToggleRecord()
 void
 RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
 {
-    RG_DEBUG << "slotSetLoop" << lhs << rhs;
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool loopSong = settings.value("loopentiresong", false).toBool();
-    settings.endGroup();
+    RG_DEBUG << "slotSetLoop() - lhs: " << lhs << " rhs: " << rhs;
+
     Composition &comp =
         RosegardenDocument::currentDocument->getComposition();
 
-    try {
-        RosegardenDocument::currentDocument->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 
-        // toggle the loop button
-        getTransport()->LoopButton()->setChecked(true);
-        if (lhs != rhs) {
-            // special case - if the whole song is looping we defer
-            // the loop until we are in the loop range
-            if (m_loopingAll) {
-                RG_DEBUG << "defer looping" << lhs << rhs;
-                m_deferredLoop = true;
-                m_deferredLoopStart = lhs;
-                m_deferredLoopEnd = rhs;
-            } else {
-                comp.setLooping(true);
-                m_seqManager->setLoop(lhs, rhs);
-            }
+    // toggle the loop button
+    getTransport()->LoopButton()->setChecked(true);
 
-            enterActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
+    // If we have a range...
+    if (lhs != rhs) {
+        // special case - if the whole song is looping we defer
+        // the loop until we are in the loop range
+        if (m_loopingAll) {
+            RG_DEBUG << "  defer looping" << lhs << rhs;
+            m_deferredLoop = true;
+            m_deferredLoopStart = lhs;
+            m_deferredLoopEnd = rhs;
         } else {
-            if (loopSong && comp.isLooping()) {
-                // we no longer exit looping if the range is
-                // reset. Instead we go to looping the entire song
-                m_loopAllEndTime = comp.getDuration(true);
-                m_seqManager->setLoop(0, m_loopAllEndTime);
-                m_loopingAll = true;
-            } else {
-                // we have no range and we are not looping the whole
-                // song so exit looping
-                comp.setLooping(false);
-                m_seqManager->setLoop(0, 0);
-                getTransport()->LoopButton()->setChecked(false);
-            }
-            leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+            comp.setLooping(true);
+            m_seqManager->setLoop(lhs, rhs);
         }
-    } catch (const QString &s) {
-        QMessageBox::critical(this, tr("Rosegarden"), s);
+
+        enterActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
+    } else {  // No range
+        // Loop all?  Do it.
+        if (Preferences::getAdvancedLooping()  &&  comp.isLooping()) {
+            m_loopAllEndTime = comp.getDuration(true);
+            m_seqManager->setLoop(0, m_loopAllEndTime);
+            m_loopingAll = true;
+        } else {  // Not looping all, exit looping.
+            comp.setLooping(false);
+            m_seqManager->setLoop(0, 0);
+            getTransport()->LoopButton()->setChecked(false);
+        }
+        leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
     }
 }
 
@@ -5841,33 +5835,29 @@ RosegardenMainWindow::slotFastforward()
 void
 RosegardenMainWindow::slotSetLoop()
 {
-    RG_DEBUG << "slotSetLoop";
-    // if no loop is stored in the composition and option is set -
-    // loop the whole song
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool loopSong = settings.value("loopentiresong", false).toBool();
-    settings.endGroup();
+    //RG_DEBUG << "slotSetLoop()";
 
     Composition &comp =
         RosegardenDocument::currentDocument->getComposition();
 
+    // If we have a range...
     if (comp.getLoopStart() != comp.getLoopEnd()) {
-        // we have a range set - loop it
+        // Loop.
         comp.setLooping(true);
-        RosegardenDocument::currentDocument->setLoop
-            (comp.getLoopStart(), comp.getLoopEnd());
+        RosegardenDocument::currentDocument->setLoop(
+                comp.getLoopStart(), comp.getLoopEnd());
         m_loopingAll = false;
-    } else {
-        // no range. If the option is set loop the whole song
-        if (loopSong) {
+    } else {  // No Range.
+        if (Preferences::getAdvancedLooping()) {
+            // Loop all.
             m_loopAllEndTime = comp.getDuration(true);
             m_seqManager->setLoop(0, m_loopAllEndTime);
             m_loopingAll = true;
-        } else {
+        } else {  // Basic looping.
             // attempt to reinstate a stored loop
-            bool reinstated = getView()->getTrackEditor()->reinstateRange();
-            if (! reinstated) {
+            const bool reinstated =
+                    getView()->getTrackEditor()->reinstateRange();
+            if (!reinstated) {
                 // reset the loop button
                 getTransport()->LoopButton()->setChecked(false);
             }
@@ -5885,45 +5875,52 @@ RosegardenMainWindow::slotUnsetLoop()
     comp.setLooping(false);
     m_seqManager->setLoop(0, 0);
 
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool loopSong = settings.value("loopentiresong", false).toBool();
-    settings.endGroup();
-
-    if (!loopSong) {
+    // For basic looping mode, hide the range to indicate that
+    // looping is off.
+    // ??? In advanced looping mode we need a different indicator.
+    //     I think a toolbar loop off/on/all button was suggested.
+    if (!Preferences::getAdvancedLooping())
         getView()->getTrackEditor()->hideRange();
-    }
 }
 
 void
 RosegardenMainWindow::slotSetLoopStart()
 {
-    RG_DEBUG << "slotSetLoopStart" <<
-        RosegardenDocument::currentDocument->getComposition().getPosition() <<
-        RosegardenDocument::currentDocument->getComposition().getLoopEnd();
-    // Check so that start time is before endtime, otherwise move up the
-    // endtime to that same pos.
-    if (RosegardenDocument::currentDocument->getComposition().getPosition() < RosegardenDocument::currentDocument->getComposition().getLoopEnd()) {
-        RosegardenDocument::currentDocument->setLoop(RosegardenDocument::currentDocument->getComposition().getPosition(), RosegardenDocument::currentDocument->getComposition().getLoopEnd());
-    } else {
-        RosegardenDocument::currentDocument->setLoop(RosegardenDocument::currentDocument->getComposition().getPosition(), RosegardenDocument::currentDocument->getComposition().getPosition());
-    }
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    if (!document)
+        return;
+    const Composition &composition = document->getComposition();
+
+    RG_DEBUG << "slotSetLoopStart() - Pos: " << composition.getPosition() << "  Loop end: " << composition.getLoopEnd();
+
+    const timeT begin = composition.getPosition();
+    timeT end = composition.getLoopEnd();
+
+    // Turn a backwards loop into an empty loop.
+    if (begin > end)
+        end = begin;
+
+    document->setLoop(begin, end);
 }
 
 void
 RosegardenMainWindow::slotSetLoopStop()
 {
-    RG_DEBUG << "slotSetLoopStop" <<
-        RosegardenDocument::currentDocument->getComposition().getPosition() <<
-        RosegardenDocument::currentDocument->getComposition().getLoopStart();
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    if (!document)
+        return;
+    const Composition &composition = document->getComposition();
 
-    // Check so that end time is after start time, otherwise move up the
-    // start time to that same pos.
-    if (RosegardenDocument::currentDocument->getComposition().getLoopStart() < RosegardenDocument::currentDocument->getComposition().getPosition()) {
-        RosegardenDocument::currentDocument->setLoop(RosegardenDocument::currentDocument->getComposition().getLoopStart(), RosegardenDocument::currentDocument->getComposition().getPosition());
-    } else {
-        RosegardenDocument::currentDocument->setLoop(RosegardenDocument::currentDocument->getComposition().getPosition(), RosegardenDocument::currentDocument->getComposition().getPosition());
-    }
+    RG_DEBUG << "slotSetLoopStop()" << composition.getPosition() << composition.getLoopStart();
+
+    timeT begin = composition.getLoopStart();
+    const timeT end = composition.getPosition();
+
+    // Turn a backwards loop into an empty loop.
+    if (end < begin)
+        begin = end;
+
+    document->setLoop(begin, end);
 }
 
 void

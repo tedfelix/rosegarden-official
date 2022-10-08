@@ -94,7 +94,7 @@ public:
     Profiler(const char *name, bool showOnDestruct = false);
     ~Profiler();
 
-    void update() const;
+    //void update() const;
     void end(); // same action as dtor
 
 protected:
@@ -114,7 +114,7 @@ public:
     ~Profiler() { }
 
     // cppcheck-suppress functionStatic
-    void update() const { }
+    //void update() const { }
     // cppcheck-suppress functionStatic
     void end() { }
 };

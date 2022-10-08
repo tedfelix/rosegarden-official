@@ -136,7 +136,7 @@ TransportDialog::TransportDialog(QWidget *parent):
 
 // Disable the loop button if JACK transport enabled, because this
 // causes a nasty race condition, and it just seems our loops are not JACK compatible
-// #1240039 - DMM
+// #787 (was #1240039) - DMM
 //    QSettings settings ; // was: mainWindow->config()
 //    settings.beginGroup(SequencerOptionsConfigGroup);
 //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
@@ -185,15 +185,18 @@ TransportDialog::TransportDialog(QWidget *parent):
     connect(ui->PanelCloseButton, &QAbstractButton::clicked,
             this, &TransportDialog::slotPanelCloseButtonClicked);
 
-    connect(ui->PanicButton, &QAbstractButton::clicked, this, &TransportDialog::panic);
+    connect(ui->PanicButton, &QAbstractButton::clicked,
+            this, &TransportDialog::panic);
 /*
     const QPixmap *p = ui->PanelOpenButton->pixmap();
     if (p) m_panelOpen = *p;
     p = ui->PanelCloseButton->pixmap();
     if (p) m_panelClosed = *p;
 */
-    connect(ui->SetStartLPButton, &QAbstractButton::clicked, this, &TransportDialog::slotSetStartLoopingPointAtMarkerPos);
-    connect(ui->SetStopLPButton, &QAbstractButton::clicked, this, &TransportDialog::slotSetStopLoopingPointAtMarkerPos);
+    connect(ui->SetStartLPButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotSetStartLoopingPointAtMarkerPos);
+    connect(ui->SetStopLPButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotSetStopLoopingPointAtMarkerPos);
 
     // clear labels
     //
