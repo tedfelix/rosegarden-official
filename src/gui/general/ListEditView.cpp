@@ -59,7 +59,7 @@ bool ListEditView::m_inPaintEvent = false;
 const unsigned int ListEditView::NbLayoutRows = 6;
 
 
-ListEditView::ListEditView(std::vector<Segment *> segments,
+ListEditView::ListEditView(const std::vector<Segment *>& segments,
                            unsigned int cols,
                            QWidget *parent) :
     EditViewBase(segments, parent),

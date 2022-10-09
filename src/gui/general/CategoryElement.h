@@ -37,12 +37,12 @@ class CategoryElement
 {
 public:
     /** Create a category of \c name */
-    CategoryElement(QString name);
+    explicit CategoryElement(QString name);
 
     /** Destroy the category */
     ~CategoryElement();
 
-    /** Add a PresetElement to the CategoryElement 
+    /** Add a PresetElement to the CategoryElement
      *
      * \sa { PresetElement, PresetGroup }
      */
@@ -55,16 +55,16 @@ public:
                   int lowPro);
 
     /** Return the category name */
-    QString getName() { return m_name; }
+    QString getName() const { return m_name; }
 
     /** Return all the instrument presets for this category
      *
      * \sa { PresetElement, PresetGroup, ElementContainer }
      */
-    ElementContainer getPresets() { return m_categoryPresets; }
+    ElementContainer getPresets() const { return m_categoryPresets; }
 
     /** Return the instrument preset at index \c index */
-    PresetElement getPresetByIndex(int index) { return m_categoryPresets [index]; }
+    PresetElement getPresetByIndex(int index) const { return m_categoryPresets [index]; }
 
 private:
     QString m_name;

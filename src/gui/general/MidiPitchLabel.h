@@ -35,7 +35,7 @@ class MidiPitchLabel
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MidiPitchLabel)
 
 public:
-    MidiPitchLabel(int pitch);
+    explicit MidiPitchLabel(int pitch);
 
     std::string getString() const;
     QString getQString() const;

@@ -31,13 +31,13 @@ public:
     /**
      * Return the auto-save path for the given filename.
      */
-    QString getAutoSavePath(QString filename);
+    static QString getAutoSavePath(QString filename);
 
     /**
      * Return the auto-save path for the given filename, if and only
      * if there is a non-empty file there which may merit recovery.
      */
-    QString checkAutoSaveFile(QString filename);
+    static QString checkAutoSaveFile(QString filename);
 
 protected:
     static QString getAutoSaveDir();

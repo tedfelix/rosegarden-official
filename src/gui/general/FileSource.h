@@ -73,7 +73,7 @@ public:
     /**
      * Construct a FileSource using the given remote URL.
      */
-    FileSource(QUrl url);
+    explicit FileSource(QUrl url);
 
     FileSource(const FileSource &);
 

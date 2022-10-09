@@ -57,29 +57,29 @@ public:
     ~PresetElement();
 
     /** Return the real world instrument \c name */
-    QString getName()    { return m_name;      }
+    QString getName() const { return m_name; }
 
     /** Return the preferred \c clef for this instrument */
-    int getClef()        { return m_clef;      }
+    int getClef() const { return m_clef; }
 
     /** Return the appropriate \c transpose value for this instrument */
-    int getTranspose()   { return m_transpose; }
+    int getTranspose() const { return m_transpose; }
 
     /** Return the highest note an amateur player can be expected to reach on
-     * this instrument, expressed as a MIDI pitch */ 
-    int getHighAm()      { return m_highAm;    }    
+     * this instrument, expressed as a MIDI pitch */
+    int getHighAm() const { return m_highAm; }
 
     /** Return the lowest note an amateur player can be expected to reach on
      * this instrument, expressed as a MIDI pitch */
-    int getLowAm()       { return m_lowAm;     }
+    int getLowAm() const { return m_lowAm; }
 
     /** Return the highest note a professional player can be expected to reach on
-     * this instrument, expressed as a MIDI pitch */ 
-    int getHighPro()     { return m_highPro;   }
+     * this instrument, expressed as a MIDI pitch */
+    int getHighPro() const { return m_highPro; }
 
     /** Return the lowest note a professional player can be expected to reach on
      * this instrument, expressed as a MIDI pitch */
-    int getLowPro()      { return m_lowPro;    }
+    int getLowPro() const { return m_lowPro; }
 
 private:
     QString m_name;

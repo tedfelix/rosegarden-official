@@ -114,9 +114,9 @@ void EditTempoController::moveTempo(timeT oldTime, timeT newTime)
     CommandHistory::getInstance()->addCommand(macro);
 }
 
-void EditTempoController::deleteTempoChange(timeT t)
+void EditTempoController::deleteTempoChange(timeT time)
 {
-    const int index = m_composition->getTempoChangeNumberAt(t);
+    const int index = m_composition->getTempoChangeNumberAt(time);
     if (index >= 0) {
         CommandHistory::getInstance()->addCommand(new RemoveTempoChangeCommand
                                                   (m_composition, index));
