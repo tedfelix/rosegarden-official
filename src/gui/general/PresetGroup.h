@@ -71,7 +71,7 @@ public:
     bool startElement (const QString& namespaceURI,
                        const QString& localName,
                        const QString& qName,
-                       const QXmlStreamAttributes& atts) override;
+                       const QXmlStreamAttributes& attributes) override;
 
     /** Handle fatal parsing errors */
     bool fatalError(int lineNumber, int columnNumber,

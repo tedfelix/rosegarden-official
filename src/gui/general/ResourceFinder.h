@@ -19,7 +19,7 @@
 #include <rosegardenprivate_export.h>
 
 namespace Rosegarden {
-	
+
 class ROSEGARDENPRIVATE_EXPORT ResourceFinder
 {
 public:
@@ -30,7 +30,7 @@ public:
      * Return the location (as a true file path, or a Qt4 ":"-prefixed
      * resource path) of the file best matching the given resource
      * filename in the given resource category.
-     * 
+     *
      * Category should be a relative directory path without leading or
      * trailing slashes, for example "chords".  The fileName is the
      * remainder of the file name without any path content, for
@@ -46,7 +46,7 @@ public:
     /**
      * Return a list of full file paths for files with the given file
      * extension, found in the given resource category.
-     * 
+     *
      * Category should be a relative directory path without leading or
      * trailing slashes, for example "chords".  File extension should
      * be the extension without the dot, for example "xml".  Returned
@@ -72,7 +72,7 @@ public:
      * Use this when you need a file path, e.g. for use in a file
      * finder dialog.
      */
-    QString getResourceDir(QString resourceCat);
+    static QString getResourceDir(QString resourceCat);
 
     /**
      * Return the true file path for the location in which the named
@@ -84,7 +84,7 @@ public:
      * Return the true file path for the location in which resource
      * files in the given resource category should be saved.
      */
-    QString getResourceSaveDir(QString resourceCat);
+    static QString getResourceSaveDir(QString resourceCat);
 
     /**
      * Return the path of the autoload document.  This is a true file
@@ -120,13 +120,11 @@ public:
     bool unbundleResource(QString resourceCat, QString fileName);
 
 protected:
-    QString getUserResourcePrefix();
-    QStringList getSystemResourcePrefixList();
-    QStringList getResourcePrefixList();
+    static QString getUserResourcePrefix();
+    static QStringList getSystemResourcePrefixList();
+    static QStringList getResourcePrefixList();
 };
 
 }
 
 #endif
-
-    
