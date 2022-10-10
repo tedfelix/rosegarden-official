@@ -50,13 +50,13 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
                      bool isForMainWindow,
                      QWidget *parent) :
     QWidget(parent),
+    m_doc(doc),
     m_height(height),
     m_invert(invert),
     m_isForMainWindow(isForMainWindow),
     m_currentXOffset(0),
     m_width( -1),
     m_activeMousePress(false),
-    m_doc(doc),
     m_rulerScale(rulerScale),
     m_defaultGrid(rulerScale),
     m_loopGrid(new SnapGrid(rulerScale)),
@@ -93,27 +93,7 @@ LoopRuler::setSnapGrid(const SnapGrid *grid)
 
 void LoopRuler::scrollHoriz(int x)
 {
-    // int w = width(); //, h = height();
-    // int dx = x - ( -m_currentXOffset);
-
     m_currentXOffset = -x;
-
-//    if (dx > w*3 / 4 || dx < -w*3 / 4) {
-//        update();
-//        return ;
-//    }
-
-/*### These bitBlts are not working
-    RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt start?";
-    if (dx > 0) { // moving right, so the existing stuff moves left
-        bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
-        repaint(w - dx, 0, dx, h);
-    } else {      // moving left, so the existing stuff moves right
-        bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
-        repaint(0, 0, -dx, h);
-    }
-    RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt end?";
-*/
     update();
 }
 
@@ -124,8 +104,10 @@ bool LoopRuler::reinstateRange()
         m_startLoop = m_storedLoopStart;
         m_endLoop = m_storedLoopEnd;
         m_loopSet = true;
-        emit setLoopRange(m_startLoop, m_endLoop);
-        RG_DEBUG << "reinstateRange OK";
+
+        // Update the document.
+        m_doc->slotSetLoop(m_startLoop, m_endLoop);
+
         return true;
     }
     RG_DEBUG << "reinstateRange no stored range";
@@ -137,7 +119,9 @@ void LoopRuler::hideRange()
     m_startLoop = 0;
     m_endLoop = 0;
     m_loopSet = false;
-    emit setLoopRange(m_startLoop, m_endLoop);
+
+    // Update the document.
+    m_doc->slotSetLoop(m_startLoop, m_endLoop);
 }
 
 QSize LoopRuler::sizeHint() const
@@ -361,8 +345,10 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
                     m_loopSet = true;
                 }
             }
+
             // to clear any other loop rulers
-            emit setLoopRange(m_startLoop, m_endLoop);
+            m_doc->slotSetLoop(m_startLoop, m_endLoop);
+
             update();
         } else {  // There was drag
             // Make sure start < end
@@ -371,7 +357,8 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
             m_storedLoopStart = m_startLoop;
             m_storedLoopEnd = m_endLoop;
             m_loopSet = true;
-            emit setLoopRange(m_startLoop, m_endLoop);
+
+            m_doc->slotSetLoop(m_startLoop, m_endLoop);
         }
 
         emit stopMouseMove();
@@ -431,8 +418,6 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         m_lastMouseXPos = x;
 
     }
-
-    emit mouseMove();
 }
 
 void LoopRuler::slotSetLoopMarker(timeT startLoop,

@@ -75,20 +75,32 @@ public:
     
 signals:
     /// Set the pointer position on mouse single click
+    /**
+     * StandardRuler connects this to
+     * RosegardenDocument::slotSetPointerPosition().
+     *
+     * ??? Call into m_doc directly and get rid of this signal.
+     */
     void setPointerPosition(timeT);
 
     /// Set the pointer position on mouse drag
+    /**
+     * This goes through StandardRuler to the three main windows: Notation,
+     * Matrix, Segment Canvas.
+     */
     void dragPointerToPosition(timeT);
 
     /// Set pointer position and start playing on double click
+    /**
+     * Connected to RosegardenMainWindow::slotSetPlayPosition() by
+     * StandardRuler.
+     */
     void setPlayPosition(timeT);
 
-    /// Set a playing loop
-    void setLoopRange(timeT, timeT);
-
+    // These signals are used by Notation, Matrix, and the Segment Canvas
+    // for auto scroll.
     void startMouseMove(int directionConstraint);
     void stopMouseMove();
-    void mouseMove();
 
 public slots:
     void slotSetLoopMarker(timeT startLoop,
@@ -108,6 +120,8 @@ private:
     void drawBarSections(QPainter*);
     void drawLoopMarker(QPainter*);  // between loop positions
 
+    RosegardenDocument *m_doc;
+
     int  m_height;
     bool m_invert;
     bool m_isForMainWindow;
@@ -119,7 +133,6 @@ private:
     // in other views
     double m_lastMouseXPos;
 
-    RosegardenDocument *m_doc;
     RulerScale *m_rulerScale;
     SnapGrid   m_defaultGrid;
     SnapGrid   *m_loopGrid;
