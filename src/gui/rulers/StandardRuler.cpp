@@ -69,7 +69,7 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
             m_rulerScale,
             15,  // height, 15 is the same height as the MarkerRuler
             m_invert,
-            m_isForMainWindow,
+            m_isForMainWindow,  // displayQuickMarker
             this);  // parent
     layout->addWidget(m_loopRuler);
 

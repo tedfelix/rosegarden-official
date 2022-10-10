@@ -22,46 +22,40 @@
 
 #include "misc/Debug.h"
 #include "base/RulerScale.h"
-#include "base/SnapGrid.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/RosegardenScrollView.h"
+#include "gui/general/AutoScroller.h"
 #include "document/RosegardenDocument.h"
 
 #include <QPainter>
 #include <QRect>
-#include <QSize>
-#include <QWidget>
-#include <QToolTip>
-#include <QAction>
-#include <QPainter>
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QBrush>
 
 #include <utility>  // std::swap()
 
+
 namespace Rosegarden
 {
+
 
 LoopRuler::LoopRuler(RosegardenDocument *doc,
                      RulerScale *rulerScale,
                      int height,
                      bool invert,
-                     bool isForMainWindow,
+                     bool displayQuickMarker,
                      QWidget *parent) :
     QWidget(parent),
     m_doc(doc),
+    m_displayQuickMarker(displayQuickMarker),
+    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4)),
     m_height(height),
     m_invert(invert),
-    m_isForMainWindow(isForMainWindow),
     m_currentXOffset(0),
-    m_width( -1),
-    m_activeMousePress(false),
     m_rulerScale(rulerScale),
     m_defaultGrid(rulerScale),
     m_loopGrid(new SnapGrid(rulerScale)),
-    m_grid(&m_defaultGrid),
-    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4))
+    m_grid(&m_defaultGrid)
 {
     // Always snap loop extents to beats; by default apply no snap to
     // pointer position
@@ -163,7 +157,7 @@ void LoopRuler::paintEvent(QPaintEvent* e)
     drawBarSections(&paint);
     drawLoopMarker(&paint);
     
-    if (m_isForMainWindow) {
+    if (m_displayQuickMarker) {
         timeT tQM = m_doc->getQuickMarkerTime();
         if (tQM >= 0) {
             // draw quick marker
@@ -274,7 +268,6 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
         m_loopDrag = true;
         m_startLoop = m_loopGrid->snapX(x);
         m_endLoop = m_startLoop;
-        m_activeMousePress = true;
 
         emit startMouseMove(FOLLOW_HORIZONTAL);
 
@@ -305,8 +298,6 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
         emit dragPointerToPosition(m_grid->snapX(x));
 
         m_lastMouseXPos = x;
-
-        m_activeMousePress = true;
 
         // ??? This signal is never emitted with any other argument.
         //     Remove the parameter.  This gets a little tricky because
@@ -362,7 +353,6 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
         }
 
         emit stopMouseMove();
-        m_activeMousePress = false;
     }
 
     if (mouseEvent->button() == Qt::LeftButton) {
@@ -373,7 +363,6 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
         emit setPointerPosition(m_grid->snapX(m_lastMouseXPos));
 
         emit stopMouseMove();
-        m_activeMousePress = false;
     }
 }
 

@@ -20,7 +20,7 @@
 #define RG_LOOPRULER_H
 
 #include "base/SnapGrid.h"
-#include "base/Event.h"
+//#include "base/Event.h"
 
 #include <QSize>
 #include <QWidget>
@@ -52,11 +52,10 @@ class LoopRuler : public QWidget
 public:
     LoopRuler(RosegardenDocument *doc,
               RulerScale *rulerScale,
-              int height = 0,
-              bool invert = false,
-              bool isForMainWindow = false,
-              QWidget* parent = nullptr);
-
+              int height,
+              bool invert,
+              bool displayQuickMarker,
+              QWidget *parent);
     ~LoopRuler() override;
 
     void setSnapGrid(const SnapGrid *grid);
@@ -67,8 +66,6 @@ public:
     void scrollHoriz(int x);
 
     void setMinimumWidth(int width) { m_width = width; }
-
-    bool hasActiveMousePress() { return m_activeMousePress; }
 
     bool reinstateRange();
     void hideRange();
@@ -103,8 +100,16 @@ signals:
     void stopMouseMove();
 
 public slots:
-    void slotSetLoopMarker(timeT startLoop,
-                           timeT endLoop);
+    /**
+     * TrackEditor::slotSetLoop() calls this.
+     * StandardRuler connects this to RosegardenDocument::loopChanged().
+     *
+     * ??? This should take no parameters.  It should be used as the general
+     *     loop changed notification via RD::loopChanged().  Subscribers should
+     *     use the loop mode/start/stop in Composition.  Notifiers should
+     *     update Composition first, then call RD::loopChanged().
+     */
+    void slotSetLoopMarker(timeT startLoop, timeT endLoop);
 
 protected:
     // QWidget overrides
@@ -117,27 +122,38 @@ protected:
 private:
     double mouseEventToSceneX(QMouseEvent *mouseEvent);
 
-    void drawBarSections(QPainter*);
-    void drawLoopMarker(QPainter*);  // between loop positions
+    void drawBarSections(QPainter *);
+    /// between loop positions
+    void drawLoopMarker(QPainter *);
 
     RosegardenDocument *m_doc;
 
-    int  m_height;
+    /**
+     * If true, the quick marker (Shift+Ctrl+M) position will be displayed
+     * as a red line.
+     */
+    bool m_displayQuickMarker;
+    QPen m_quickMarkerPen;
+
+    // Used by sizeHint().
+    int m_width = -1;
+    int m_height;
+
+    /// Invert drawing for the bottom ruler.
     bool m_invert;
-    bool m_isForMainWindow;
-    int  m_currentXOffset;
-    int  m_width;
-    bool m_activeMousePress;
-    // Remember the mouse x pos in mousePressEvent and in mouseMoveEvent so
-    // that we can emit it in mouseReleaseEvent to update the pointer position
-    // in other views
+
+    /// Negative scroll position.
+    int m_currentXOffset;
+
+    // Remember the mouse x pos in mousePressEvent() and in mouseMoveEvent() so
+    // that we can emit it in mouseReleaseEvent() to update the pointer position
+    // in other views.
     double m_lastMouseXPos;
 
     RulerScale *m_rulerScale;
-    SnapGrid   m_defaultGrid;
-    SnapGrid   *m_loopGrid;
-    const SnapGrid   *m_grid;
-    QPen        m_quickMarkerPen;
+    SnapGrid m_defaultGrid;
+    SnapGrid *m_loopGrid;
+    const SnapGrid *m_grid;
 
     /// Whether we are dragging and drawing a loop.
     bool m_loopDrag = false;
