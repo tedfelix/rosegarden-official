@@ -41,7 +41,8 @@ public:
      * Use this when you know that a particular resource is required
      * and just need to locate it.
      */
-    QString getResourcePath(QString resourceCat, const QString &fileName);
+    static QString getResourcePath(QString resourceCat,
+                                   const QString &fileName);
 
     /**
      * Return a list of full file paths for files with the given file
@@ -57,7 +58,7 @@ public:
      * use directly in the program (rather than e.g. offering the user
      * a file-open dialog).
      */
-    QStringList getResourceFiles(QString resourceCat, QString fileExt);
+    static QStringList getResourceFiles(QString resourceCat, QString fileExt);
 
     /**
      * Return the true file path for installed resource files in the
@@ -78,7 +79,7 @@ public:
      * Return the true file path for the location in which the named
      * resource file in the given resource category should be saved.
      */
-    QString getResourceSavePath(QString resourceCat, QString fileName);
+    static QString getResourceSavePath(QString resourceCat, QString fileName);
 
     /**
      * Return the true file path for the location in which resource
@@ -101,7 +102,7 @@ public:
      * Return the path (including filename) to which to save autoload
      * documents.
      */
-    QString getAutoloadSavePath();
+    static QString getAutoloadSavePath();
 
     /**
      * If the named resource file in the given resource category is
@@ -117,7 +118,7 @@ public:
      * Return false if a system error occurs during unbundling
      * (e.g. disk full).
      */
-    bool unbundleResource(QString resourceCat, QString fileName);
+    static bool unbundleResource(QString resourceCat, QString fileName);
 
 protected:
     static QString getUserResourcePrefix();

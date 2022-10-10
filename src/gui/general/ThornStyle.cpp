@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -381,7 +381,7 @@ int ThornStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *option, co
         // QGroupBox::title { color: #FFFFFF; }
         // QGroupBox::title:!enabled { color: #000000; }
         // but it was etched; plain black is unreadable, so let's use another color now
-        return option->state & State_Enabled ? qRgb(0xFF, 0xFF, 0xFF) : qRgb(0xAA, 0xAA, 0xAA);
+        return (option->state & State_Enabled) ? qRgb(0xFF, 0xFF, 0xFF) : qRgb(0xAA, 0xAA, 0xAA);
     case SH_DialogButtonBox_ButtonsHaveIcons:
         return 0;
     case SH_DockWidget_ButtonsHaveFrame:
@@ -490,7 +490,7 @@ void ThornStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOpt
     case PE_IndicatorToolBarHandle: {
         // top or bottom: image: url(:/pixmaps/style/htoolbar-separator.png);
         // left or right: image: url(:pixmaps/style/vtoolbar-separator.png);
-        QPixmap pixmap = option->state & State_Horizontal ? m_horizontalToolbarSeparatorPixmap : m_verticalToolbarSeparatorPixmap;
+        QPixmap pixmap = (option->state & State_Horizontal) ? m_horizontalToolbarSeparatorPixmap : m_verticalToolbarSeparatorPixmap;
         const QRect rect = alignedRect(Qt::LayoutDirectionAuto, Qt::AlignCenter, option->rect.size(), option->rect);
         painter->drawPixmap(rect, pixmap);
         return;

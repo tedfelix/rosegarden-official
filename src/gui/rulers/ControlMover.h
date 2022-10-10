@@ -38,7 +38,8 @@ class ControlMover : public ControlTool
     friend class ControlToolBox;
 
 public:
-    ControlMover(ControlRuler *ruler, QString menuName = "ControlMover");
+    ControlMover(ControlRuler *parent,
+                 const QString& menuName = "ControlMover");
     void handleLeftButtonPress(const ControlMouseEvent *) override;
     FollowMode handleMouseMove(const ControlMouseEvent *) override;
     void handleMouseRelease(const ControlMouseEvent *) override;
@@ -47,7 +48,7 @@ public:
     void stow() override;
 
     static QString ToolName();
-    
+
 signals:
 
 protected slots:

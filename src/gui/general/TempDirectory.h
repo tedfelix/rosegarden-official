@@ -76,9 +76,9 @@ public:
 protected:
     TempDirectory();
 
-    QString createTempDirectoryIn(QString inDir);
-    void cleanupDirectory(QString tmpDir);
-    void cleanupAbandonedDirectories(QString svDir);
+    QString createTempDirectoryIn(QString dir);
+    void cleanupDirectory(QString tmpdir);
+    void cleanupAbandonedDirectories(QString rgDir);
 
     QString m_tmpdir;
     QMutex m_mutex;
