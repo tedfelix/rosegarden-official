@@ -20,11 +20,11 @@
 #define RG_LOOPRULER_H
 
 #include "base/SnapGrid.h"
+#include "base/Event.h"
+
 #include <QSize>
 #include <QWidget>
 #include <QPen>
-#include "base/Event.h"
-
 
 class QPaintEvent;
 class QPainter;
@@ -34,10 +34,12 @@ class QMouseEvent;
 namespace Rosegarden
 {
 
+
 class RulerScale;
 class RosegardenDocument;
 
 
+/// The ruler that shows the the beat ticks and the loop range.
 /**
  * LoopRuler is a widget that shows bar and beat durations on a
  * ruler-like scale, and reacts to mouse clicks by sending relevant
@@ -68,8 +70,6 @@ public:
 
     bool hasActiveMousePress() { return m_activeMousePress; }
 
-    bool getLoopingMode() { return m_loopingMode; }
-
     bool reinstateRange();
     void hideRange();
     
@@ -85,9 +85,6 @@ signals:
 
     /// Set a playing loop
     void setLoopRange(timeT, timeT);
-
-    /// Set the loop end position on mouse drag
-    void dragLoopToPosition(timeT);
 
     void startMouseMove(int directionConstraint);
     void stopMouseMove();
@@ -111,7 +108,6 @@ private:
     void drawBarSections(QPainter*);
     void drawLoopMarker(QPainter*);  // between loop positions
 
-    //--------------- Data members ---------------------------------
     int  m_height;
     bool m_invert;
     bool m_isForMainWindow;
@@ -130,18 +126,39 @@ private:
     const SnapGrid   *m_grid;
     QPen        m_quickMarkerPen;
 
-    bool m_loopingMode;
-    timeT m_startLoop;
-    timeT m_endLoop;
+    /// Whether we are dragging and drawing a loop.
+    bool m_loopDrag = false;
 
-    // ??? I suspect that if we upgrade Composition::m_isLooping to be an
-    //     enum with three values: LoopMode_Off, LoopMode_On, LoopMode_All,
-    //     we can use Composition to store the loop and then we can remove
-    //     these three.  This should allow simplification of the code in a
-    //     number of places.
-    timeT m_storedLoopStart;
-    timeT m_storedLoopEnd;
-    bool m_loopSet;
+    /// Whether the loop is currently enabled.
+    /**
+     * ??? Use Composition::m_loopMode instead of this.
+     */
+    bool m_loopSet = false;
+    /// The start of the loop that is currently being displayed.
+    /**
+     * ??? We should use this only while dragging.  When not dragging,
+     *     we should display Composition::m_loopStart.
+     * ??? rename: m_dragStart
+     */
+    timeT m_startLoop = 0;
+    /// The end of the loop that is currently being displayed.
+    /**
+     * ??? We should use this only while dragging.  When not dragging,
+     *     we should display Composition::m_loopEnd.
+     * ??? rename: m_dragEnd
+     */
+    timeT m_endLoop = 0;
+
+    /// Stored loop when looping is off.
+    /**
+     * ??? Use Composition::m_loopStart instead of this.
+     */
+    timeT m_storedLoopStart = 0;
+    /// Stored loop when looping is off.
+    /**
+     * ??? Use Composition::m_loopEnd instead of this.
+     */
+    timeT m_storedLoopEnd = 0;
 };
 
 

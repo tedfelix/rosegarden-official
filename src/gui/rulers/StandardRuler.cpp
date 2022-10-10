@@ -131,10 +131,6 @@ void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
      this, &StandardRuler::dragPointerToPosition);
 
     QObject::connect
-    (m_loopRuler, &LoopRuler::dragLoopToPosition,
-     this, &StandardRuler::dragLoopToPosition);
-
-    QObject::connect
     (m_markerRuler, &MarkerRuler::setLoop,
      doc, &RosegardenDocument::slotSetLoop);
 

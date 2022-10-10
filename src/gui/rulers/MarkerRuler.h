@@ -33,11 +33,12 @@ class QMainWindow;
 namespace Rosegarden
 {
 
+
 class Marker;
 class RulerScale;
 class RosegardenDocument;
 
-
+/// The ruler that shows the bar numbers and the markers.
 class MarkerRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT

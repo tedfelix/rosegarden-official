@@ -61,13 +61,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_defaultGrid(rulerScale),
     m_loopGrid(new SnapGrid(rulerScale)),
     m_grid(&m_defaultGrid),
-    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4)),
-    m_loopingMode(false),
-    m_startLoop(0),
-    m_endLoop(0),
-    m_storedLoopStart(0),
-    m_storedLoopEnd(0),
-    m_loopSet(false)
+    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4))
 {
     // Always snap loop extents to beats; by default apply no snap to
     // pointer position
@@ -293,7 +287,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
     // If loop mode has been requested
     if ((shift  &&  leftButton)  ||  rightButton) {
         // Loop mode
-        m_loopingMode = true;
+        m_loopDrag = true;
         m_startLoop = m_loopGrid->snapX(x);
         m_endLoop = m_startLoop;
         m_activeMousePress = true;
@@ -344,10 +338,10 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
 void
 LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
-    RG_DEBUG << "mouseReleaseEvent loopingMode:" << m_loopingMode;
+    RG_DEBUG << "mouseReleaseEvent loopingMode:" << m_loopDrag;
     // If we were in looping mode
-    if (m_loopingMode) {
-        m_loopingMode = false;
+    if (m_loopDrag) {
+        m_loopDrag = false;
         // If there was no drag, toggle the loop.
         if (m_endLoop == m_startLoop) {
             m_startLoop = 0;
@@ -403,9 +397,9 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
     if (x < 0)
         x = 0;
 
-    RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopingMode;
+    RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopDrag;
 
-	if (mE->button() == Qt::LeftButton  &&  !m_loopingMode)
+	if (mE->button() == Qt::LeftButton  &&  !m_loopDrag)
         emit setPlayPosition(m_grid->snapX(x));
 }
 
@@ -426,10 +420,9 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
     if (x < 0)
         x = 0;
 
-    if (m_loopingMode) {
+    if (m_loopDrag) {
         if (m_loopGrid->snapX(x) != m_endLoop) {
             m_endLoop = m_loopGrid->snapX(x);
-            emit dragLoopToPosition(m_endLoop);
             update();
         }
     } else {
