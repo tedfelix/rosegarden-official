@@ -198,7 +198,7 @@ SequenceManager::play()
     RealTime startPos = comp.getElapsedRealTime(comp.getPosition());
 
     // If we're looping then jump to loop start
-    if (comp.isLooping())
+    if (comp.getLoopMode() == Composition::LoopOn)
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
     int result = RosegardenSequencer::getInstance()->play(startPos);
@@ -514,7 +514,7 @@ punchin:
         // if we're not take off the number of count-in bars and start
         // recording.
         //
-        if (comp.isLooping())
+        if (comp.getLoopMode() == Composition::LoopOn)
             m_doc->slotSetPointerPosition(comp.getLoopStart());
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
@@ -1706,7 +1706,7 @@ void SequenceManager::tempoChanged(const Composition *c)
     m_timeSigSegmentMapper->refresh();
     m_tempoSegmentMapper->refresh();
 
-    if (c->isLooping())
+    if (c->getLoopMode() == Composition::LoopOn)
         setLoop(c->getLoopStart(), c->getLoopEnd());
     else if (m_transportStatus == PLAYING) {
 

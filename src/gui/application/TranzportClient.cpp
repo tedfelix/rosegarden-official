@@ -271,7 +271,7 @@ TranzportClient::stateUpdate()
             LightOff(LightAnysolo);
         //}
 
-        if (m_composition->isLooping()) {
+        if (m_composition->getLoopMode() == Composition::LoopOn) {
             LightOn(LightLoop);
         } else {
             LightOff(LightLoop);

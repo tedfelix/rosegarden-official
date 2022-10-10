@@ -255,9 +255,6 @@ Composition::Composition() :
     m_startMarker(0),
     m_endMarker(getBarRange(defaultNumberOfBars).first),
     m_autoExpand(false),
-    m_loopStart(0),
-    m_loopEnd(0),
-    m_isLooping(false),
     m_playMetronome(false),
     m_recordMetronome(true),
     m_nextTriggerSegmentId(0),
@@ -717,9 +714,9 @@ Composition::clear()
     m_defaultTempo = getTempoForQpm(120.0);
     m_minTempo = 0;
     m_maxTempo = 0;
+    m_loopMode = LoopOff;
     m_loopStart = 0;
     m_loopEnd = 0;
-    m_isLooping = false;
     m_position = 0;
     m_startMarker = 0;
     m_endMarker = getBarRange(defaultNumberOfBars).first;
@@ -1865,13 +1862,6 @@ Composition::setPosition(timeT position)
     m_position = position;
 }
 
-void
-Composition::setLooping(bool loop)
-{
-    RG_DEBUG << "setLooping" << loop;
-    m_isLooping = loop;
-}
-
 void Composition::setPlayMetronome(bool value)
 {
     m_playMetronome = value;
@@ -2197,13 +2187,19 @@ std::string Composition::toXmlString() const
     composition << "\" compositionDefaultTempo=\"";
     composition << m_defaultTempo;
 
+    // Legacy looping
     if (m_loopStart != m_loopEnd)
     {
         composition << "\" loopstart=\"" << m_loopStart;
         composition << "\" loopend=\"" << m_loopEnd;
     }
+    const bool isLooping = (m_loopMode == LoopOn);
+    composition << "\" islooping=\"" << isLooping;
 
-    composition << "\" islooping=\"" << m_isLooping;
+    // New looping
+    composition << "\" loopmode=\"" << m_loopMode;
+    composition << "\" loopstart2=\"" << m_loopStart;
+    composition << "\" loopend2=\"" << m_loopEnd;
 
     composition << "\" startMarker=\"" << m_startMarker;
     composition << "\" endMarker=\"" << m_endMarker;

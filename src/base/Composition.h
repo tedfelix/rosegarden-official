@@ -755,16 +755,14 @@ public:
     //
     // LOOP
 
-    timeT getLoopStart() const { return m_loopStart; }
-    timeT getLoopEnd() const { return m_loopEnd;}
+    timeT getLoopStart() const  { return m_loopStart; }
+    timeT getLoopEnd() const  { return m_loopEnd; }
+    enum LoopMode { LoopOff, LoopOn, LoopAll };
+    LoopMode getLoopMode() const  { return m_loopMode; }
 
-    void setLoopStart(const timeT &lS) { m_loopStart = lS; }
-    void setLoopEnd(const timeT &lE) { m_loopEnd = lE; }
-    void setLooping(bool loop);
-
-    // Determine if we're currently looping
-    //
-    bool isLooping() const { return m_isLooping; }
+    void setLoopStart(const timeT &t)  { m_loopStart = t; }
+    void setLoopEnd(const timeT &t)  { m_loopEnd = t; }
+    void setLoopMode(LoopMode loopMode)  { m_loopMode = loopMode; }
 
 
 
@@ -1119,11 +1117,10 @@ protected:
     timeT                             m_endMarker;
     bool                              m_autoExpand;
 
-    // Loop start and end positions.
-    timeT                             m_loopStart;
-    timeT                             m_loopEnd;
-    // we may have a loop (or range) set but not be in looping mode
-    bool                              m_isLooping;
+    // Loop
+    LoopMode m_loopMode = LoopOff;
+    timeT m_loopStart = 0;
+    timeT m_loopEnd = 0;
 
     Configuration                     m_metadata;
 

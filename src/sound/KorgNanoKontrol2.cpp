@@ -613,7 +613,8 @@ void KorgNanoKontrol2::refreshLEDs()
     }
 
     // Cycle
-    const bool cycle = doc->getComposition().isLooping();
+    const bool cycle =
+            (doc->getComposition().getLoopMode() == Composition::LoopOn);
     // If there was a change...
     if (cycle != m_cycle) {
         ExternalController::send(

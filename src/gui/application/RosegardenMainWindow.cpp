@@ -4835,7 +4835,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
         t <= m_deferredLoopEnd) {
         // now we set the loop
         RG_DEBUG << "Setting deferred loop";
-        comp.setLooping(true);
+        comp.setLoopMode(Composition::LoopOn);
         m_seqManager->setLoop(m_deferredLoopStart, m_deferredLoopEnd);
         m_deferredLoop = false;
         m_loopingAll = false;
@@ -5700,19 +5700,20 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
             m_deferredLoopStart = lhs;
             m_deferredLoopEnd = rhs;
         } else {
-            comp.setLooping(true);
+            comp.setLoopMode(Composition::LoopOn);
             m_seqManager->setLoop(lhs, rhs);
         }
 
         enterActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
     } else {  // No range
         // Loop all?  Do it.
-        if (Preferences::getAdvancedLooping()  &&  comp.isLooping()) {
+        if (Preferences::getAdvancedLooping()  &&
+            comp.getLoopMode() == Composition::LoopOn) {
             m_loopAllEndTime = comp.getDuration(true);
             m_seqManager->setLoop(0, m_loopAllEndTime);
             m_loopingAll = true;
         } else {  // Not looping all, exit looping.
-            comp.setLooping(false);
+            comp.setLoopMode(Composition::LoopOff);
             m_seqManager->setLoop(0, 0);
             getTransport()->LoopButton()->setChecked(false);
         }
@@ -5843,7 +5844,7 @@ RosegardenMainWindow::slotSetLoop()
     // If we have a range...
     if (comp.getLoopStart() != comp.getLoopEnd()) {
         // Loop.
-        comp.setLooping(true);
+        comp.setLoopMode(Composition::LoopOn);
         RosegardenDocument::currentDocument->setLoop(
                 comp.getLoopStart(), comp.getLoopEnd());
         m_loopingAll = false;
@@ -5872,7 +5873,7 @@ RosegardenMainWindow::slotUnsetLoop()
 
     Composition &comp =
         RosegardenDocument::currentDocument->getComposition();
-    comp.setLooping(false);
+    comp.setLoopMode(Composition::LoopOff);
     m_seqManager->setLoop(0, 0);
 
     // For basic looping mode, hide the range to indicate that
@@ -5927,7 +5928,7 @@ void
 RosegardenMainWindow::toggleLoop()
 {
     // if a loop is set
-    if (RosegardenDocument::currentDocument->getComposition().isLooping())
+    if (RosegardenDocument::currentDocument->getComposition().getLoopMode() == Composition::LoopOn)
         slotUnsetLoop();
     else
         slotSetLoop();
