@@ -60,8 +60,6 @@ protected slots:
 
 protected:
     ControlSelector(ControlRuler *);
-    QRectF *m_selectionRect;
-    ControlItemList m_addedItems;
 };
 
 }

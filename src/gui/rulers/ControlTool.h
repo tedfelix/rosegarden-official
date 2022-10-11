@@ -34,7 +34,9 @@ class ControlTool : public BaseTool
     Q_OBJECT
 
 public:
-    ControlTool(QString rcFileName, QString menuName, ControlRuler *ruler);
+    ControlTool(QString rcFileName,
+                const QString& menuName,
+                ControlRuler *ruler);
     ~ControlTool() override {};
 //    virtual int operator()(double x, int val) = 0;
     virtual void handleLeftButtonPress(const ControlMouseEvent *) {}

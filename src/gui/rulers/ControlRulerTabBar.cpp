@@ -36,7 +36,7 @@ ControlRulerTabBar::ControlRulerTabBar():QTabBar()
 void ControlRulerTabBar::paintEvent(QPaintEvent *event)
 {
     QTabBar::paintEvent(event);
-    
+
     QPainter painter(this);
 
     for (std::vector<QRect*>::iterator it = m_closeButtons.begin(); it != m_closeButtons.end(); ++it) {
@@ -56,7 +56,7 @@ void ControlRulerTabBar::mousePressEvent(QMouseEvent *event)
             index++;
         }
     }
-    
+
     QTabBar::mousePressEvent(event);
 }
 
@@ -66,15 +66,16 @@ void ControlRulerTabBar::tabLayoutChange()
         delete(*it);
     }
     m_closeButtons.clear();
-    
-    QRect *newButton, rect;
+
+    QRect rect;
     for (int index = 0; index < count(); ++index) {
         rect = tabRect(index);
         // ??? MEMORY LEAK (confirmed)
-        newButton = new QRect(rect.right()-hMargin-m_closeIcon.width(),
-                rect.top()+(rect.height()-m_closeIcon.height())/2,
-                m_closeIcon.width(),
-                m_closeIcon.height());
+        QRect *newButton =
+            new QRect(rect.right()-hMargin-m_closeIcon.width(),
+                      rect.top()+(rect.height()-m_closeIcon.height())/2,
+                      m_closeIcon.width(),
+                      m_closeIcon.height());
         m_closeButtons.push_back(newButton);
     }
 }
@@ -87,9 +88,8 @@ int ControlRulerTabBar::addTab(const QString &text)
     str.append("        ");
 
     int newindex = QTabBar::addTab(str);
-    
+
     return newindex;
 }
 
 }
-

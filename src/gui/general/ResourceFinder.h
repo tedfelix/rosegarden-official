@@ -96,7 +96,7 @@ public:
      * should not be used for writing.  Call getAutoloadSavePath for
      * that.
      */
-    QString getAutoloadPath();
+    static QString getAutoloadPath();
 
     /**
      * Return the path (including filename) to which to save autoload
