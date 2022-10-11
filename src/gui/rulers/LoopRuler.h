@@ -50,6 +50,7 @@ class LoopRuler : public QWidget
     Q_OBJECT
 
 public:
+
     LoopRuler(RosegardenDocument *doc,
               RulerScale *rulerScale,
               int height,
@@ -71,6 +72,7 @@ public:
     void hideRange();
     
 signals:
+
     /// Set the pointer position on mouse single click
     /**
      * StandardRuler connects this to
@@ -100,9 +102,10 @@ signals:
     void stopMouseMove();
 
 public slots:
+
     /**
      * TrackEditor::slotSetLoop() calls this.
-     * StandardRuler connects this to RosegardenDocument::loopChanged().
+     * This is connected to RosegardenDocument::loopChanged().
      *
      * ??? This should take no parameters.  It should be used as the general
      *     loop changed notification via RD::loopChanged().  Subscribers should
@@ -112,6 +115,7 @@ public slots:
     void slotSetLoopMarker(timeT startLoop, timeT endLoop);
 
 protected:
+
     // QWidget overrides
     void mousePressEvent(QMouseEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
@@ -120,11 +124,6 @@ protected:
     void paintEvent(QPaintEvent *) override;
 
 private:
-    double mouseEventToSceneX(QMouseEvent *mouseEvent);
-
-    void drawBarSections(QPainter *);
-    /// between loop positions
-    void drawLoopMarker(QPainter *);
 
     RosegardenDocument *m_doc;
 
@@ -144,6 +143,7 @@ private:
 
     /// Negative scroll position.
     int m_currentXOffset;
+    double mouseEventToSceneX(QMouseEvent *mouseEvent);
 
     // Remember the mouse x pos in mousePressEvent() and in mouseMoveEvent() so
     // that we can emit it in mouseReleaseEvent() to update the pointer position
@@ -151,6 +151,8 @@ private:
     double m_lastMouseXPos;
 
     RulerScale *m_rulerScale;
+    void drawBarSections(QPainter *);
+
     SnapGrid m_defaultGrid;
     SnapGrid *m_loopGrid;
     const SnapGrid *m_grid;
@@ -177,6 +179,8 @@ private:
      * ??? rename: m_dragEnd
      */
     timeT m_endLoop = 0;
+    /// between loop positions
+    void drawLoopMarker(QPainter *);
 
     /// Stored loop when looping is off.
     /**
