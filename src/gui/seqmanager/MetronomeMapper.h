@@ -41,7 +41,7 @@ class MidiMetronome;
 class MetronomeMapper : public MappedEventBuffer
 {
 public:
-    MetronomeMapper(RosegardenDocument *doc);
+    explicit MetronomeMapper(RosegardenDocument *doc);
     ~MetronomeMapper() override;
 
     InstrumentId getMetronomeInstrument() const;

@@ -41,7 +41,7 @@ struct ControllerAndPBList
         m_pitchbend(0)
     { }
 
-    ControllerAndPBList(const StaticControllers &controllers) :
+    explicit ControllerAndPBList(const StaticControllers &controllers) :
         m_controllers(controllers),
         m_havePitchbend(false),
         m_pitchbend(0)
@@ -96,7 +96,7 @@ class ChannelManager : public QObject
     Q_OBJECT
 
 public:
-    ChannelManager(Instrument *instrument);
+    explicit ChannelManager(Instrument *instrument);
     ~ChannelManager() override  { freeChannelInterval(); }
 
     /// Set the instrument we are playing on, releasing any old one.

@@ -33,7 +33,7 @@ class PropertyControlItem : public ControlItem
 {
 public:
     PropertyControlItem(ControlRuler* controlRuler,
-                PropertyName propertyname,
+                const PropertyName& propertyname,
                 ViewElement* element,
                 QPolygonF polygon);
 

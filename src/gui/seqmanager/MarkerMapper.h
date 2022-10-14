@@ -31,7 +31,7 @@ class RosegardenDocument;
 class MarkerMapper : public SpecialSegmentMapper
 {
 public:
-    MarkerMapper(RosegardenDocument *doc);
+    explicit MarkerMapper(RosegardenDocument *doc);
 
 protected:
     // override from MappedEventBuffer

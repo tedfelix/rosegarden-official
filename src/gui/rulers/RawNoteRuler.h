@@ -63,8 +63,8 @@ public:
     QSize minimumSizeHint() const override;
 
     void setMinimumWidth(int width) { m_width = width; }
-    
-    
+
+
 /** SegmentObserver methods : **/
 
 // Used to update the ruler when notes are moved around or deleted
@@ -79,7 +79,7 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent*) override;
-    
+
 private:
     int  m_height;
     int  m_currentXOffset;
@@ -91,8 +91,8 @@ private:
     struct EventTreeNode
     {
         typedef std::vector<EventTreeNode *> NodeList;
-        
-        EventTreeNode(Segment::iterator n) : node(n) { }
+
+        explicit EventTreeNode(Segment::iterator n) : node(n) { }
         ~EventTreeNode() {
             for (NodeList::iterator i = children.begin();
                  i != children.end(); ++i) {
@@ -101,8 +101,8 @@ private:
         }
 
         int getDepth();
-        int getChildrenAboveOrBelow(bool below = false, int pitch = -1);
-        
+        int getChildrenAboveOrBelow(bool below = false, int p = -1);
+
         Segment::iterator node;
         NodeList children;
     };

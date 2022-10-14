@@ -51,7 +51,7 @@ namespace Rosegarden
 {
 
 
-PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
+PropertyControlRuler::PropertyControlRuler(const PropertyName& propertyName,
                                            ViewSegment *viewSegment,
                                            RulerScale *rulerScale,
                                            QWidget *parent) :
@@ -74,7 +74,7 @@ void PropertyControlRuler::update()
 //    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
 //        tmplist.push_back(*it);
 //    }
-    
+
 //    for (ControlItemList::iterator it = tmplist.begin(); it != tmplist.end(); ++it) {
 //        if (!(*it)->isSelected()) {
 //            (*it)->update();
@@ -83,7 +83,7 @@ void PropertyControlRuler::update()
 //    }
 
 //    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-//        (*it)->update();        
+//        (*it)->update();
 //        RG_DEBUG << "update(): ControlItem updated: " << hex << (long)(*it);
 //    }
 
@@ -216,14 +216,14 @@ void PropertyControlRuler::init()
 
     ViewElementList *viewElementList = m_viewSegment->getViewElementList();
     if (!viewElementList) return;
-    
+
     for (ViewElementList::iterator it = viewElementList->begin(); it != viewElementList->end(); ++it) {
 //        if (MatrixElement *el = dynamic_cast<MatrixElement*>(*it)) {
         if ((*it)->event()->isa(Note::EventType))
             addControlItem2(*it);
 //        }
     }
-    
+
 
     RG_DEBUG << "init() - Segment size: " << m_segment->size();
 
@@ -273,7 +273,7 @@ void PropertyControlRuler::updateSelectedItems()
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
         (*it)->update();
     }
-    
+
     update();
 }
 
