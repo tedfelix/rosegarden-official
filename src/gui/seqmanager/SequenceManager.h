@@ -279,7 +279,7 @@ public slots:
     void rewindToBeginning();
     void fastForwardToEnd();
 
-    void slotLoopChanged(timeT, timeT);
+    void slotLoopChanged();
 
 signals:
     /// A program change was received.

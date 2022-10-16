@@ -2000,7 +2000,7 @@ NotationView::slotPreviewSelection()
     composition.setLoopMode(Composition::LoopOn);
     composition.setLoopStart(getSelection()->getStartTime());
     composition.setLoopEnd(getSelection()->getEndTime());
-    emit m_document->loopChanged(0,0);
+    emit m_document->loopChanged();
 }
 
 void
@@ -2013,7 +2013,7 @@ NotationView::slotClearLoop()
 
     // Less destructive.  Just turn it off.
     composition.setLoopMode(Composition::LoopOff);
-    emit m_document->loopChanged(0,0);
+    emit m_document->loopChanged();
 }
 
 void

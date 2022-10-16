@@ -1014,7 +1014,7 @@ TransportDialog::slotLoopButtonClicked()
     else
         composition.setLoopMode(Composition::LoopOff);
 
-    emit document->loopChanged(0,0);
+    emit document->loopChanged();
 }
 
 void
@@ -1038,7 +1038,7 @@ TransportDialog::slotSetStartLoopingPointAtMarkerPos()
     composition.setLoopStart(loopStart);
     composition.setLoopEnd(loopEnd);
 
-    emit document->loopChanged(0,0);
+    emit document->loopChanged();
 }
 
 void
@@ -1062,11 +1062,11 @@ TransportDialog::slotSetStopLoopingPointAtMarkerPos()
     composition.setLoopStart(loopStart);
     composition.setLoopEnd(loopEnd);
 
-    emit document->loopChanged(0,0);
+    emit document->loopChanged();
 }
 
 void
-TransportDialog::slotLoopChanged(timeT, timeT)
+TransportDialog::slotLoopChanged()
 {
     RosegardenDocument *document = RosegardenDocument::currentDocument;
     Composition &composition = document->getComposition();
@@ -1084,10 +1084,6 @@ TransportDialog::slotDocumentLoaded(RosegardenDocument *doc)
 {
     connect(doc, &RosegardenDocument::loopChanged,
             this, &TransportDialog::slotLoopChanged);
-
-    // For some reason, RMW::setDocument() issues loopChanged() *before*
-    // documentLoaded().  So, we have to sync ourselves.
-    //slotLoopChanged(0,0);
 }
 
 void TransportDialog::slotTempoChanged(tempoT tempo)

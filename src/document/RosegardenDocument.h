@@ -553,7 +553,10 @@ signals:
     void audioFileFinalized(Segment*);
 
     void playPositionChanged(timeT);
-    void loopChanged(timeT, timeT);
+
+    /// Emitted whenever the Composition loop fields change.
+    void loopChanged();
+
     /**
      * We probably want to keep this notification as a special case.
      * The reason being that to detect a change to the color list will

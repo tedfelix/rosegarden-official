@@ -110,7 +110,7 @@ protected:
 private slots:
 
     /// RosegardenDocument::loopChanged() handler.
-    void slotLoopChanged(timeT, timeT);
+    void slotLoopChanged();
 
 private:
 

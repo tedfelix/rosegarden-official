@@ -167,7 +167,7 @@ OpenOrCloseRangeCommand::execute()
             // Shift the loop range right.
             m_composition->setLoopStart(m_loopBegin + offset);
             m_composition->setLoopEnd(m_loopEnd + offset);
-            emit doc->loopChanged(0,0);
+            emit doc->loopChanged();
 
         } else if (m_beginTime < m_loopEnd) {
             // The paste point is within the loop range
@@ -175,7 +175,7 @@ OpenOrCloseRangeCommand::execute()
             // Just shift the end point to expand the loop range
             m_composition->setLoopStart(m_loopBegin);
             m_composition->setLoopEnd(m_loopEnd + offset);
-            emit doc->loopChanged(0,0);
+            emit doc->loopChanged();
         } else {
             // The paste point is after the loop range, so leave it alone.
         }
@@ -211,7 +211,7 @@ OpenOrCloseRangeCommand::unexecute()
     // Put back the loop range
     m_composition->setLoopStart(m_loopBegin);
     m_composition->setLoopEnd(m_loopEnd);
-    emit doc->loopChanged(0,0);
+    emit doc->loopChanged();
 
     m_hasExecuted = false;
 }

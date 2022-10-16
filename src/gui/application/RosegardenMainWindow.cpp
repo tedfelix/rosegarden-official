@@ -1313,7 +1313,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     // Note: This must be done *after* documentLoaded() is emitted.
     //       Otherwise TransportDialog will not be able to sync.
     if (m_seqManager)
-        emit RosegardenDocument::currentDocument->loopChanged(0,0);
+        emit RosegardenDocument::currentDocument->loopChanged();
 
     // Restore the document's original modified status.
     if (modified)
@@ -5647,7 +5647,7 @@ RosegardenMainWindow::slotToggleRecord()
 }
 
 void
-RosegardenMainWindow::slotLoopChanged(timeT, timeT)
+RosegardenMainWindow::slotLoopChanged()
 {
     Composition &composition =
         RosegardenDocument::currentDocument->getComposition();
@@ -5792,7 +5792,7 @@ RosegardenMainWindow::toggleLoop()
     else  // LoopOn or LoopAll -> off
         composition.setLoopMode(Composition::LoopOff);
 
-    emit document->loopChanged(0,0);
+    emit document->loopChanged();
 }
 
 void

@@ -446,7 +446,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
         comp.setLoopMode(Composition::LoopOn);
         comp.setLoopStart(loopStart);
         comp.setLoopEnd(loopEnd);
-        emit m_doc->loopChanged(0,0);
+        emit m_doc->loopChanged();
 
         return;
 

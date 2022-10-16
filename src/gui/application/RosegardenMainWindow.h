@@ -1118,7 +1118,7 @@ public slots:
      */
     void slotSetPlayPosition(timeT time);
 
-    void slotLoopChanged(timeT lhs, timeT rhs);
+    void slotLoopChanged();
 
 
     /**

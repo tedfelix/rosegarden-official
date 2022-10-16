@@ -1041,7 +1041,7 @@ SequenceManager::fastForwardToEnd()
     m_doc->slotSetPointerPosition(comp.getEndMarker());
 }
 
-void SequenceManager::slotLoopChanged(timeT, timeT)
+void SequenceManager::slotLoopChanged()
 {
     Composition &composition = m_doc->getComposition();
 
@@ -1711,7 +1711,7 @@ void SequenceManager::tempoChanged(const Composition *c)
         // position in real time (seconds) and we want to maintain the same
         // position in musical time (bars/beats).
 
-        slotLoopChanged(0,0);
+        slotLoopChanged();
 
     } else if (m_transportStatus == PLAYING) {
 

@@ -244,9 +244,9 @@ TranzportClient::trackChanged(const Composition *c,
 }
     
 void
-TranzportClient::loopChanged(timeT t1,
-                             timeT t2)
+TranzportClient::loopChanged()
 {
+#if 0
     RG_DEBUG << "TranzportClient: loopChanged" << t1 << ", " << t2;
 
     if (device_online) {
@@ -256,6 +256,7 @@ TranzportClient::loopChanged(timeT t1,
             LightOn(LightLoop);
         }
     }
+#endif
 }
 
 void
@@ -576,7 +577,7 @@ TranzportClient::readData()
             } else {
                 if (loop_start_time == loop_end_time) {
                     m_composition->setLoopMode(Composition::LoopOff);
-                    emit m_rgDocument->loopChanged(0,0);
+                    emit m_rgDocument->loopChanged();
                 }
 
                 loop_start_time = 0;
@@ -644,7 +645,7 @@ TranzportClient::readData()
                     m_composition->setLoopMode(Composition::LoopOn);
                     m_composition->setLoopStart(loop_start_time);
                     m_composition->setLoopEnd(loop_end_time);
-                    emit m_rgDocument->loopChanged(0,0);
+                    emit m_rgDocument->loopChanged();
 
                 } else if(current_buttons & Shift) {
                     timeT here = m_composition->getPosition();
@@ -667,7 +668,7 @@ TranzportClient::readData()
                     m_composition->setLoopMode(Composition::LoopOn);
                     m_composition->setLoopStart(loop_start_time);
                     m_composition->setLoopEnd(loop_end_time);
-                    emit m_rgDocument->loopChanged(0,0);
+                    emit m_rgDocument->loopChanged();
                 }
 
                 if (current_buttons & Shift) {

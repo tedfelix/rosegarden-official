@@ -350,7 +350,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
             }
 
             // Refresh everything.
-            emit m_doc->loopChanged(0, 0);
+            emit m_doc->loopChanged();
         }
 
         emit stopMouseMove();
@@ -410,7 +410,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
     }
 }
 
-void LoopRuler::slotLoopChanged(timeT, timeT)
+void LoopRuler::slotLoopChanged()
 {
     update();
 }

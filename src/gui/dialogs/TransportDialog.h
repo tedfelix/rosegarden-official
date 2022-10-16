@@ -169,7 +169,7 @@ private slots:
     void slotSetStartLoopingPointAtMarkerPos();
     void slotSetStopLoopingPointAtMarkerPos();
     /// From RosegardenDocument.
-    void slotLoopChanged(timeT, timeT);
+    void slotLoopChanged();
 
 private:
     void loadPixmaps();
