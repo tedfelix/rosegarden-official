@@ -35,7 +35,7 @@ class AudioPluginInstance;
 
 class AudioPluginOSCGUI
 {
-public:
+ public:
     AudioPluginOSCGUI(AudioPluginInstance *instance,
                       QString serverURL, QString friendlyName);
     virtual ~AudioPluginOSCGUI();
@@ -51,16 +51,19 @@ public:
 
     static QString getGUIFilePath(QString identifier);
 
-protected:
+ protected:
     QProcess *m_gui;
     lo_address m_address;
     QString m_basePath;
     QString m_serverUrl;
+
+ private:
+    // copy constructor not used
+    AudioPluginOSCGUI(const AudioPluginInstance&);
 };
-    
+
 
 }
 
 
 #endif
-

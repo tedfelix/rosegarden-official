@@ -50,18 +50,18 @@ public:
 
     void setStudio(Studio *studio) { m_studio = studio; }
 
-    bool hasGUI(InstrumentId id, int position);
-    void startGUI(InstrumentId id, int position);
-    void showGUI(InstrumentId id, int position);
-    void stopGUI(InstrumentId id, int position);
+    bool hasGUI(InstrumentId instrument, int position);
+    void startGUI(InstrumentId instrument, int position);
+    void showGUI(InstrumentId instrument, int position);
+    void stopGUI(InstrumentId instrument, int position);
     void stopAllGUIs();
 
     void postMessage(OSCMessage *message); // I take over ownership of message
     void dispatch();
 
-    void updateProgram(InstrumentId id, int position);
-    void updatePort(InstrumentId id, int position, int port);
-    void updateConfiguration(InstrumentId id, int position,
+    void updateProgram(InstrumentId instrument, int position);
+    void updatePort(InstrumentId instrument, int position, int port);
+    void updateConfiguration(InstrumentId instrument, int position,
                              QString key);
 
     QString getOSCUrl(InstrumentId instrument, int position,
@@ -96,4 +96,3 @@ protected:
 }
 
 #endif
-

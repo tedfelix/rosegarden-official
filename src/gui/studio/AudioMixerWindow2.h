@@ -42,7 +42,7 @@ class AudioMixerWindow2 : public QMainWindow, public ActionFileClient
     Q_OBJECT
 
 public:
-    AudioMixerWindow2(QWidget *parent);
+    explicit AudioMixerWindow2(QWidget *parent);
     ~AudioMixerWindow2() override;
 
 protected:
