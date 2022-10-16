@@ -67,9 +67,6 @@ public:
     void scrollHoriz(int x);
 
     void setMinimumWidth(int width) { m_width = width; }
-
-    bool reinstateRange();
-    void hideRange();
     
 signals:
 
@@ -101,19 +98,6 @@ signals:
     void startMouseMove(int directionConstraint);
     void stopMouseMove();
 
-public slots:
-
-    /**
-     * TrackEditor::slotSetLoop() calls this.
-     * This is connected to RosegardenDocument::loopChanged().
-     *
-     * ??? This should take no parameters.  It should be used as the general
-     *     loop changed notification via RD::loopChanged().  Subscribers should
-     *     use the loop mode/start/stop in Composition.  Notifiers should
-     *     update Composition first, then call RD::loopChanged().
-     */
-    void slotSetLoopMarker(timeT startLoop, timeT endLoop);
-
 protected:
 
     // QWidget overrides
@@ -122,6 +106,11 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
     void paintEvent(QPaintEvent *) override;
+
+private slots:
+
+    /// RosegardenDocument::loopChanged() handler.
+    void slotLoopChanged(timeT, timeT);
 
 private:
 
@@ -160,38 +149,14 @@ private:
     /// Whether we are dragging and drawing a loop.
     bool m_loopDrag = false;
 
-    /// Whether the loop is currently enabled.
-    /**
-     * ??? Use Composition::m_loopMode instead of this.
-     */
-    bool m_loopSet = false;
-    /// The start of the loop that is currently being displayed.
-    /**
-     * ??? We should use this only while dragging.  When not dragging,
-     *     we should display Composition::m_loopStart.
-     * ??? rename: m_dragStart
-     */
-    timeT m_startLoop = 0;
-    /// The end of the loop that is currently being displayed.
-    /**
-     * ??? We should use this only while dragging.  When not dragging,
-     *     we should display Composition::m_loopEnd.
-     * ??? rename: m_dragEnd
-     */
-    timeT m_endLoop = 0;
+    /// The start of the loop while dragging.
+    timeT m_startDrag = 0;
+    /// The end of the loop while dragging.
+    timeT m_endDrag = 0;
+
     /// between loop positions
     void drawLoopMarker(QPainter *);
 
-    /// Stored loop when looping is off.
-    /**
-     * ??? Use Composition::m_loopStart instead of this.
-     */
-    timeT m_storedLoopStart = 0;
-    /// Stored loop when looping is off.
-    /**
-     * ??? Use Composition::m_loopEnd instead of this.
-     */
-    timeT m_storedLoopEnd = 0;
 };
 
 

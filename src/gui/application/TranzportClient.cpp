@@ -575,7 +575,8 @@ TranzportClient::readData()
             if (current_buttons & Shift) {
             } else {
                 if (loop_start_time == loop_end_time) {
-                    m_rgDocument->setLoop(0,0);
+                    m_composition->setLoopMode(Composition::LoopOff);
+                    emit m_rgDocument->loopChanged(0,0);
                 }
 
                 loop_start_time = 0;
@@ -636,9 +637,15 @@ TranzportClient::readData()
         if (datawheel) {
             if (datawheel < 0x7F) {
                 if (current_buttons & Loop) {
+
                     loop_end_time += datawheel *
                         m_composition->getDurationForMusicalTime(loop_end_time, 0,1,0,0);
-                    m_rgDocument->setLoop(loop_start_time, loop_end_time);
+
+                    m_composition->setLoopMode(Composition::LoopOn);
+                    m_composition->setLoopStart(loop_start_time);
+                    m_composition->setLoopEnd(loop_end_time);
+                    emit m_rgDocument->loopChanged(0,0);
+
                 } else if(current_buttons & Shift) {
                     timeT here = m_composition->getPosition();
                     here += datawheel * m_composition->getDurationForMusicalTime(here,0,0,1,0);
@@ -657,7 +664,10 @@ TranzportClient::readData()
                 if (current_buttons & Loop) {
                     loop_end_time -= (1 + (0xFF - datawheel)) *
                         RosegardenDocument::currentDocument->getComposition().getDurationForMusicalTime(loop_end_time, 0,1,0,0);
-                    m_rgDocument->setLoop(loop_start_time, loop_end_time);
+                    m_composition->setLoopMode(Composition::LoopOn);
+                    m_composition->setLoopStart(loop_start_time);
+                    m_composition->setLoopEnd(loop_end_time);
+                    emit m_rgDocument->loopChanged(0,0);
                 }
 
                 if (current_buttons & Shift) {

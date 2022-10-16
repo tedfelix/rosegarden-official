@@ -106,9 +106,6 @@ public:
     void turnRepeatingSegmentToRealCopies();
     void turnLinkedSegmentsToRealCopies();
 
-    bool reinstateRange();
-    void hideRange();
-
 signals:
     /**
      * init() connects this to RosegardenMainViewWidget::stateChange().
@@ -173,12 +170,6 @@ private slots:
     // TempoRuler mouse press/release for auto-scroll.
     void slotTRMousePress();
     void slotTRMouseRelease();
-
-    /// Show the given loop on the rulers
-    /**
-     * init() connects this to RosegardenDocument::loopChanged().
-     */
-    void slotSetLoop(timeT start, timeT end);
 
     /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);

@@ -70,9 +70,6 @@ signals:
     
     void deleteMarker(int, timeT, QString name, QString description);
 
-    /// Set a loop range
-    void setLoop(timeT, timeT);
-
 protected slots:
     void slotInsertMarkerHere();
     void slotInsertMarkerAtPointer();

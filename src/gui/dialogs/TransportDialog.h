@@ -48,6 +48,8 @@ class QDialog;
 namespace Rosegarden
 {
 
+
+class RosegardenDocument;
 class TimeSignature;
 class RealTime;
 class MappedEvent;
@@ -82,7 +84,6 @@ public:
     // RosegardenTransport member accessors
     QPushButton* MetronomeButton()   { return ui->MetronomeButton; }
     QPushButton* SoloButton()        { return ui->SoloButton; }
-    QPushButton* LoopButton()        { return ui->LoopButton; }
     QPushButton* PlayButton()        { return ui->PlayButton; }
     QPushButton* StopButton()        { return ui->StopButton; }
     QPushButton* FfwdButton()        { return ui->FfwdButton; }
@@ -120,6 +121,7 @@ protected:
     void displayTime();
 
 public slots:
+    void slotDocumentLoaded(RosegardenDocument *doc);
 
     // These two slots are activated by QTimers
     //
@@ -132,8 +134,6 @@ public slots:
     void slotChangeTimeDisplay();
     void slotChangeToEnd();
 
-    void slotLoopButtonClicked();
-
     void slotPanelOpenButtonClicked();
     void slotPanelCloseButtonClicked();
 
@@ -144,8 +144,6 @@ public slots:
     void setBackgroundColor(QColor color);
     void slotResetBackground();
 
-    void slotSetStartLoopingPointAtMarkerPos();
-    void slotSetStopLoopingPointAtMarkerPos();
 
     // Connected to SequenceManager
     void slotTempoChanged(tempoT);
@@ -158,18 +156,20 @@ public slots:
 signals:
     void closed();
 
-    // Set and unset the loop at the RosegardenMainWindow
-    //
-    void setLoop();
-    void unsetLoop();
-    void setLoopStartTime();
-    void setLoopStopTime();
-
     void editTempo(QWidget *);
     void editTimeSignature(QWidget *);
     void editTransportTime(QWidget *);
     //void scrollTempo(int);
     void panic();
+
+private slots:
+
+    // Loop Widgets.
+    void slotLoopButtonClicked();
+    void slotSetStartLoopingPointAtMarkerPos();
+    void slotSetStopLoopingPointAtMarkerPos();
+    /// From RosegardenDocument.
+    void slotLoopChanged(timeT, timeT);
 
 private:
     void loadPixmaps();

@@ -2695,6 +2695,12 @@ void
 Composition::addMarker(Rosegarden::Marker *marker)
 {
     m_markers.push_back(marker);
+
+    // Sort the markers.
+    // ??? A std::set should be a little more efficient.
+    std::sort(m_markers.begin(), m_markers.end(),
+            [](Marker *lhs, Marker *rhs){ return lhs->getTime() < rhs->getTime(); });
+
     updateRefreshStatuses();
 }
 

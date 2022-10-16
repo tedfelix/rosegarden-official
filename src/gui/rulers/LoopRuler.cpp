@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[LoopRuler]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "LoopRuler.h"
 
@@ -25,6 +25,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/AutoScroller.h"
 #include "document/RosegardenDocument.h"
+#include "misc/Preferences.h"
 
 #include <QPainter>
 #include <QRect>
@@ -66,7 +67,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Right-click and drag to set a range for looping or editing.</p><p>Right-click to toggle the range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
 
     connect(m_doc, &RosegardenDocument::loopChanged,
-            this, &LoopRuler::slotSetLoopMarker);
+            this, &LoopRuler::slotLoopChanged);
 }
 
 LoopRuler::~LoopRuler()
@@ -92,33 +93,6 @@ void LoopRuler::scrollHoriz(int x)
 {
     m_currentXOffset = -x;
     update();
-}
-
-bool LoopRuler::reinstateRange()
-{
-    if (m_storedLoopStart != m_storedLoopEnd) {
-        // reinstate the stored loop
-        m_startLoop = m_storedLoopStart;
-        m_endLoop = m_storedLoopEnd;
-        m_loopSet = true;
-
-        // Update the document.
-        m_doc->slotSetLoop(m_startLoop, m_endLoop);
-
-        return true;
-    }
-    RG_DEBUG << "reinstateRange no stored range";
-    return false;
-}
-
-void LoopRuler::hideRange()
-{
-    m_startLoop = 0;
-    m_endLoop = 0;
-    m_loopSet = false;
-
-    // Update the document.
-    m_doc->slotSetLoop(m_startLoop, m_endLoop);
 }
 
 QSize LoopRuler::sizeHint() const
@@ -156,9 +130,10 @@ void LoopRuler::paintEvent(QPaintEvent* e)
     QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
     paint.fillRect(e->rect(), bg);
 
+    drawLoopMarker(&paint);
+
     paint.setBrush(palette().windowText());
     drawBarSections(&paint);
-    drawLoopMarker(&paint);
     
     if (m_displayQuickMarker) {
         timeT tQM = m_doc->getQuickMarkerTime();
@@ -230,21 +205,49 @@ void LoopRuler::drawBarSections(QPainter* paint)
 void
 LoopRuler::drawLoopMarker(QPainter *paint)
 {
-    double x1 = (int)m_rulerScale->getXForTime(m_startLoop);
-    double x2 = (int)m_rulerScale->getXForTime(m_endLoop);
+    int x1 = 0;
+    int x2 = 0;
 
-    if (x1 > x2)
-        std::swap(x1, x2);
+    // If we're dragging out a new loop...
+    if (m_loopDrag) {
+        // Go with the drag range.
+        x1 = lround(m_rulerScale->getXForTime(m_startDrag)) +
+                m_currentXOffset;
+        x2 = lround(m_rulerScale->getXForTime(m_endDrag)) +
+                m_currentXOffset;
+    } else {
+        // Go with the composition loop.
+        const Composition &comp = m_doc->getComposition();
+        const Composition::LoopMode loopMode = comp.getLoopMode();
 
-    x1 += m_currentXOffset;
-    x2 += m_currentXOffset;
+        // In legacy mode, loop off draws nothing.
+        if (!Preferences::getAdvancedLooping()  &&
+            loopMode != Composition::LoopOn)
+            return;
+
+        x1 = lround(m_rulerScale->getXForTime(comp.getLoopStart())) +
+                m_currentXOffset;
+        x2 = lround(m_rulerScale->getXForTime(comp.getLoopEnd())) +
+                m_currentXOffset;
+    }
+
+    // Draw the loop.
 
     paint->save();
-    paint->setBrush(GUIPalette::getColour(GUIPalette::LoopHighlight));
-    paint->setPen(GUIPalette::getColour(GUIPalette::LoopHighlight));
-    paint->drawRect(static_cast<int>(x1), 0, static_cast<int>(x2 - x1), m_height);
-    paint->restore();
 
+    // ??? For advanced LoopOff, we should go with something darker.
+    // ??? For LoopAll, we should draw an indicator across the entire
+    //     ruler.
+
+    // ??? Probably should use GUIPalette instead of hard-coding?
+    //QColor color = GUIPalette::getColour(GUIPalette::LoopHighlight);
+    QColor color(220, 220, 220);
+
+    paint->setBrush(color);
+    paint->setPen(color);
+    paint->drawRect(x1, 0, x2 - x1, m_height);
+
+    paint->restore();
 }
 
 double
@@ -269,8 +272,8 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
     if ((shift  &&  leftButton)  ||  rightButton) {
         // Loop mode
         m_loopDrag = true;
-        m_startLoop = m_loopGrid->snapX(x);
-        m_endLoop = m_startLoop;
+        m_startDrag = m_loopGrid->snapX(x);
+        m_endDrag = m_startDrag;
 
         emit startMouseMove(FOLLOW_HORIZONTAL);
 
@@ -316,43 +319,38 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
 void
 LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
-    RG_DEBUG << "mouseReleaseEvent loopingMode:" << m_loopDrag;
+    //RG_DEBUG << "mouseReleaseEvent()";
+
+    Composition &composition = m_doc->getComposition();
+
     // If we were in looping mode
     if (m_loopDrag) {
+
+        // Drag is complete.
         m_loopDrag = false;
-        // If there was no drag, toggle the loop.
-        if (m_endLoop == m_startLoop) {
-            m_startLoop = 0;
-            m_endLoop = 0;
-            if (m_loopSet) {
-                // unset the loop
-                RG_DEBUG << "mouseReleaseEvent unset loop";
-                m_loopSet = false;
-            } else {
-                if (m_storedLoopStart == m_storedLoopEnd) {
-                    // no stored loop - do nothing
-                } else {
-                    // reinstate the stored loop
-                    RG_DEBUG << "mouseReleaseEvent reinstate stored loop";
-                    m_startLoop = m_storedLoopStart;
-                    m_endLoop = m_storedLoopEnd;
-                    m_loopSet = true;
-                }
+
+        if (Preferences::getAdvancedLooping()) {
+            // ??? Advanced behavior.
+        } else {
+            // No drag
+            if (m_endDrag == m_startDrag) {
+                // Toggle the loop mode.
+                if (composition.getLoopMode() == Composition::LoopOff)
+                    composition.setLoopMode(Composition::LoopOn);
+                else
+                    composition.setLoopMode(Composition::LoopOff);
+            } else {  // Drag
+                // Start must be before end.
+                if (m_startDrag > m_endDrag)
+                    std::swap(m_startDrag, m_endDrag);
+
+                composition.setLoopMode(Composition::LoopOn);
+                composition.setLoopStart(m_startDrag);
+                composition.setLoopEnd(m_endDrag);
             }
 
-            // to clear any other loop rulers
-            m_doc->slotSetLoop(m_startLoop, m_endLoop);
-
-            update();
-        } else {  // There was drag
-            // Make sure start < end
-            if (m_endLoop < m_startLoop)
-                std::swap(m_startLoop, m_endLoop);
-            m_storedLoopStart = m_startLoop;
-            m_storedLoopEnd = m_endLoop;
-            m_loopSet = true;
-
-            m_doc->slotSetLoop(m_startLoop, m_endLoop);
+            // Refresh everything.
+            emit m_doc->loopChanged(0, 0);
         }
 
         emit stopMouseMove();
@@ -400,8 +398,8 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         x = 0;
 
     if (m_loopDrag) {
-        if (m_loopGrid->snapX(x) != m_endLoop) {
-            m_endLoop = m_loopGrid->snapX(x);
+        if (m_loopGrid->snapX(x) != m_endDrag) {
+            m_endDrag = m_loopGrid->snapX(x);
             update();
         }
     } else {
@@ -412,20 +410,10 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
     }
 }
 
-void LoopRuler::slotSetLoopMarker(timeT startLoop,
-                                  timeT endLoop)
+void LoopRuler::slotLoopChanged(timeT, timeT)
 {
-    RG_DEBUG << "slotSetLoopMarker:" << startLoop << endLoop;
-
-    m_startLoop = startLoop;
-    m_endLoop = endLoop;
-    if (m_startLoop != m_endLoop) {
-        m_loopSet = true;
-        m_storedLoopStart = m_startLoop;
-        m_storedLoopEnd = m_endLoop;
-    }
-
     update();
 }
+
 
 }

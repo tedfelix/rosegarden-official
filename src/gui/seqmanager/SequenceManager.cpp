@@ -149,6 +149,10 @@ SequenceManager::setDocument(RosegardenDocument *doc)
     connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
             this, &SequenceManager::update);
 
+    // Connect for loop changes.
+    connect(m_doc, &RosegardenDocument::loopChanged,
+            this, &SequenceManager::slotLoopChanged);
+
     if (doc->isSoundEnabled()) {
         resetCompositionMapper();
         populateCompositionMapper();
@@ -1037,36 +1041,31 @@ SequenceManager::fastForwardToEnd()
     m_doc->slotSetPointerPosition(comp.getEndMarker());
 }
 
-void
-SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
+void SequenceManager::slotLoopChanged(timeT, timeT)
 {
-    // !!!  So who disabled the following, why?  Are loops with JACK transport
-    //      sync no longer hideously broken?
-    //
-    // do not set a loop if JACK transport sync is enabled, because this is
-    // completely broken, and apparently broken due to a limitation of JACK
-    // transport itself.  #1240039 - DMM
-    //    QSettings settings;
-    //    settings.beginGroup( SequencerOptionsConfigGroup );
-    // 
+    Composition &composition = m_doc->getComposition();
 
-    //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
-    //    {
-    //	// !!! message box should go here to inform user of why the loop was
-    //	//     not set, but I can't add it at the moment due to to the pre-release
-    //	//     freeze - DMM
-    //    settings.endGroup();
-    //	return;
-    //    }
+    if (composition.getLoopMode() == Composition::LoopOff) {
+        // Turn off the loop.
+        RosegardenSequencer::getInstance()->setLoop(
+                RealTime::zeroTime, RealTime::zeroTime);
+        return;
+    }
 
-    //RG_DEBUG << "setLoop(): " << lhs << "-" << rhs;
+    if (composition.getLoopMode() == Composition::LoopOn) {
+        const RealTime loopStart = composition.getElapsedRealTime(
+                composition.getLoopStart());
+        const RealTime loopEnd = composition.getElapsedRealTime(
+                composition.getLoopEnd());
+        RosegardenSequencer::getInstance()->setLoop(loopStart, loopEnd);
+        return;
+    }
 
-    RealTime loopStart =
-        m_doc->getComposition().getElapsedRealTime(lhs);
-    RealTime loopEnd =
-        m_doc->getComposition().getElapsedRealTime(rhs);
-
-    RosegardenSequencer::getInstance()->setLoop(loopStart, loopEnd);
+    // ??? How to handle LoopAll?  Do we ask document or composition
+    //     for the last segment end?  Do we monitor changes via docModified()?
+    if (composition.getLoopMode() == Composition::LoopAll) {
+        return;
+    }
 }
 
 bool SequenceManager::inCountIn(const RealTime &time) const
@@ -1706,9 +1705,18 @@ void SequenceManager::tempoChanged(const Composition *c)
     m_timeSigSegmentMapper->refresh();
     m_tempoSegmentMapper->refresh();
 
-    if (c->getLoopMode() == Composition::LoopOn)
-        setLoop(c->getLoopStart(), c->getLoopEnd());
-    else if (m_transportStatus == PLAYING) {
+    if (c->getLoopMode() == Composition::LoopOn) {
+
+        // Adjust the loop position because the sequencer keeps track of
+        // position in real time (seconds) and we want to maintain the same
+        // position in musical time (bars/beats).
+
+        slotLoopChanged(0,0);
+
+    } else if (m_transportStatus == PLAYING) {
+
+        // ??? "else if" seems wrong here.  We probably want to adjust
+        //     the PPP regardless of whether looping is on?
 
         // Tempo has changed during playback.
 

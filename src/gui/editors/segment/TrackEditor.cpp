@@ -320,9 +320,6 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
             this, &TrackEditor::slotPointerDraggedToPosition);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &TrackEditor::slotPointerDraggedToPosition);
-
-    connect(m_doc, &RosegardenDocument::loopChanged,
-            this, &TrackEditor::slotSetLoop);
 }
 
 void TrackEditor::updateCanvasSize()
@@ -518,13 +515,6 @@ TrackEditor::toggleTracking()
 }
 
 void
-TrackEditor::slotSetLoop(timeT start, timeT end)
-{
-    m_topStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
-    m_bottomStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
-}
-
-void
 TrackEditor::addCommandToHistory(Command *command)
 {
     CommandHistory::getInstance()->addCommand(command);
@@ -606,19 +596,6 @@ TrackEditor::turnLinkedSegmentsToRealCopies()
     }
 
     addCommandToHistory(macro);
-}
-
-bool TrackEditor::reinstateRange()
-{
-    bool topr = m_topStandardRuler->getLoopRuler()->reinstateRange();
-    bool bottomr = m_bottomStandardRuler->getLoopRuler()->reinstateRange();
-    return (topr || bottomr);
-}
-
-void TrackEditor::hideRange()
-{
-    m_topStandardRuler->getLoopRuler()->hideRange();
-    m_bottomStandardRuler->getLoopRuler()->hideRange();
 }
 
 void

@@ -755,14 +755,14 @@ public:
     //
     // LOOP
 
-    timeT getLoopStart() const  { return m_loopStart; }
-    timeT getLoopEnd() const  { return m_loopEnd; }
     enum LoopMode { LoopOff, LoopOn, LoopAll };
-    LoopMode getLoopMode() const  { return m_loopMode; }
-
+    void setLoopMode(LoopMode loopMode)  { m_loopMode = loopMode; }
     void setLoopStart(const timeT &t)  { m_loopStart = t; }
     void setLoopEnd(const timeT &t)  { m_loopEnd = t; }
-    void setLoopMode(LoopMode loopMode)  { m_loopMode = loopMode; }
+
+    LoopMode getLoopMode() const  { return m_loopMode; }
+    timeT getLoopStart() const  { return m_loopStart; }
+    timeT getLoopEnd() const  { return m_loopEnd; }
 
 
 

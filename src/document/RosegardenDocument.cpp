@@ -2466,15 +2466,6 @@ RosegardenDocument::slotSetPointerPosition(timeT t)
 }
 
 void
-RosegardenDocument::setLoop(timeT t0, timeT t1)
-{
-    RG_DEBUG << "setLoop(" << t0 << "," << t1 << ")";
-    m_composition.setLoopStart(t0);
-    m_composition.setLoopEnd(t1);
-    emit loopChanged(t0, t1);
-}
-
-void
 RosegardenDocument::addRecordMIDISegment(TrackId tid)
 {
     RG_DEBUG << "RosegardenDocument::addRecordMIDISegment(" << tid << ")";

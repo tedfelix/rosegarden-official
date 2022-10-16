@@ -1217,18 +1217,28 @@ MatrixView::slotCurrentSegmentNext()
 void
 MatrixView::slotPreviewSelection()
 {
-    if (!getSelection()) {
+    if (!getSelection())
         return;
-    }
 
-    m_document->slotSetLoop(getSelection()->getStartTime(),
-                            getSelection()->getEndTime());
+    Composition &composition = m_document->getComposition();
+
+    composition.setLoopMode(Composition::LoopOn);
+    composition.setLoopStart(getSelection()->getStartTime());
+    composition.setLoopEnd(getSelection()->getEndTime());
+    emit m_document->loopChanged(0,0);
 }
 
 void
 MatrixView::slotClearLoop()
 {
-    m_document->slotSetLoop(0, 0);
+    // ??? Not sure why there is a Move > Clear Loop.  The LoopRuler
+    //     is available.  One has full control of looping from there.
+
+    Composition &composition = m_document->getComposition();
+
+    // Less destructive.  Just turn it off.
+    composition.setLoopMode(Composition::LoopOff);
+    emit m_document->loopChanged(0,0);
 }
 
 void
