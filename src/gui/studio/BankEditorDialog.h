@@ -88,7 +88,7 @@ public:
     // Set the listview to select a certain device - used after adding
     // or deleting banks.
     //
-    void selectDeviceItem(MidiDevice *device);
+    void selectDeviceItem(MidiDevice *deviceId);
 
     // Select a device/bank combination
     //
@@ -142,7 +142,7 @@ protected:
 
     bool deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb);
 
-    void clearItemChildren(QTreeWidgetItem* deviceItem);
+    void clearItemChildren(QTreeWidgetItem* item);
 
     MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
     void keepBankListForNextPopulate() { m_keepBankList = true; }

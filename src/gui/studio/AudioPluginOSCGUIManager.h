@@ -45,7 +45,7 @@ class AudioPluginOSCGUIManager
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioPluginOSCGUIManager)
 
 public:
-    AudioPluginOSCGUIManager(RosegardenMainWindow *mainWindow);
+    explicit AudioPluginOSCGUIManager(RosegardenMainWindow *mainWindow);
     virtual ~AudioPluginOSCGUIManager();
 
     void setStudio(Studio *studio) { m_studio = studio; }

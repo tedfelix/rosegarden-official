@@ -32,7 +32,10 @@ namespace Rosegarden
 class OSCMessage
 {
 public:
-    OSCMessage() { }
+    OSCMessage() :
+    m_target(0),
+    m_targetData(0)
+    { }
     ~OSCMessage();
 
     void setTarget(const int &target) { m_target = target; }
