@@ -419,28 +419,6 @@ void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
 }
 #endif
 
-#if 0
-void
-TrackEditor::slotCanvasScrolled(int x, int /*y*/)
-{
-    // update the pointer position if the user is dragging it from the loop ruler
-    if ((m_topStandardRuler && m_topStandardRuler->getLoopRuler() &&
-         m_topStandardRuler->getLoopRuler()->hasActiveMousePress() &&
-         !m_topStandardRuler->getLoopRuler()->getLoopingMode()) ||
-        (m_bottomStandardRuler && m_bottomStandardRuler->getLoopRuler() &&
-         m_bottomStandardRuler->getLoopRuler()->hasActiveMousePress() &&
-         !m_bottomStandardRuler->getLoopRuler()->getLoopingMode())) {
-
-        int mx = m_compositionView->viewport()->mapFromGlobal(QCursor::pos()).x();
-        m_compositionView->setPointerPos(x + mx);
-
-        // bad idea, creates a feedback loop
-        //     timeT t = m_compositionView->grid().getRulerScale()->getTimeForX(x + mx);
-        //     slotSetPointerPosition(t);
-    }
-}
-#endif
-
 void
 TrackEditor::slotSetPointerPosition(timeT pointerTime)
 {
