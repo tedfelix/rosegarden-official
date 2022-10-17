@@ -5661,15 +5661,27 @@ RosegardenMainWindow::slotLoopChanged()
     Composition &composition =
         RosegardenDocument::currentDocument->getComposition();
 
-    // ??? Should RD do this on its own?
+    // ??? Should RD do this on its own in response to loopChanged()?
     RosegardenDocument::currentDocument->slotDocumentModified();
 
-    // If the user can see the loop...
-    if (composition.getLoopMode() == Composition::LoopOn  &&
-        composition.getLoopStart() != composition.getLoopEnd()) {
-        enterActionState("have_range");
-    } else {
-        leaveActionState("have_range");
+    // If the user can see the loop range, let them edit with it.
+
+    // Advanced Looping
+    if (Preferences::getAdvancedLooping()) {
+        // With advanced looping, the range is always visible.
+        if (composition.getLoopStart() != composition.getLoopEnd()) {
+            enterActionState("have_range");
+        } else {
+            leaveActionState("have_range");
+        }
+    } else {  // Classic Looping
+        // With classic looping, the range is only visible with LoopOn
+        if (composition.getLoopMode() == Composition::LoopOn  &&
+            composition.getLoopStart() != composition.getLoopEnd()) {
+            enterActionState("have_range");
+        } else {
+            leaveActionState("have_range");
+        }
     }
 }
 
