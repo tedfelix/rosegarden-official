@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[LoopRuler]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "LoopRuler.h"
 
@@ -117,18 +117,23 @@ QSize LoopRuler::minimumSizeHint() const
 
 void LoopRuler::paintEvent(QPaintEvent* e)
 {
-//    RG_DEBUG << "LoopRuler::paintEvent";
+    const Composition &composition = m_doc->getComposition();
 
     QPainter paint(this);
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalized());
 
-    // In a stylesheet world, we have to draw the ruler backgrounds.  Hopefully
-    // this won't be too flickery.  (Seems OK, and best of all it actually
-    // worked!)
-    QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
-    paint.fillRect(e->rect(), bg);
+    // Draw the background.
+    if (composition.getLoopMode() == Composition::LoopAll) {
+        // Something different to indicate LoopAll.
+        QBrush bg = QBrush(QColor(64,64,128));
+        paint.fillRect(e->rect(), bg);
+    } else {
+        // The usual dark gray.
+        QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
+        paint.fillRect(e->rect(), bg);
+    }
 
     drawLoopMarker(&paint);
 
@@ -205,6 +210,8 @@ void LoopRuler::drawBarSections(QPainter* paint)
 void
 LoopRuler::drawLoopMarker(QPainter *paint)
 {
+    const Composition &composition = m_doc->getComposition();
+
     int x1 = 0;
     int x2 = 0;
 
@@ -217,17 +224,16 @@ LoopRuler::drawLoopMarker(QPainter *paint)
                 m_currentXOffset;
     } else {
         // Go with the composition loop.
-        const Composition &comp = m_doc->getComposition();
-        const Composition::LoopMode loopMode = comp.getLoopMode();
+        const Composition::LoopMode loopMode = composition.getLoopMode();
 
         // In legacy mode, loop off draws nothing.
         if (!Preferences::getAdvancedLooping()  &&
             loopMode != Composition::LoopOn)
             return;
 
-        x1 = lround(m_rulerScale->getXForTime(comp.getLoopStart())) +
+        x1 = lround(m_rulerScale->getXForTime(composition.getLoopStart())) +
                 m_currentXOffset;
-        x2 = lround(m_rulerScale->getXForTime(comp.getLoopEnd())) +
+        x2 = lround(m_rulerScale->getXForTime(composition.getLoopEnd())) +
                 m_currentXOffset;
     }
 
@@ -235,13 +241,18 @@ LoopRuler::drawLoopMarker(QPainter *paint)
 
     paint->save();
 
-    // ??? For advanced LoopOff, we should go with something darker.
-    // ??? For LoopAll, we should draw an indicator across the entire
-    //     ruler.
+    QColor color;
 
     // ??? Probably should use GUIPalette instead of hard-coding?
-    //QColor color = GUIPalette::getColour(GUIPalette::LoopHighlight);
-    QColor color(220, 220, 220);
+    //color.setRgb(GUIPalette::getColour(GUIPalette::LoopHighlight));
+
+    if (composition.getLoopMode() == Composition::LoopAll)
+        color.setRgb(220-64, 220-64, 220);
+    else if (Preferences::getAdvancedLooping()  &&
+             composition.getLoopMode() == Composition::LoopOff)
+        color.setRgb(0,0,0);
+    else
+        color.setRgb(220,220,200);
 
     paint->setBrush(color);
     paint->setPen(color);
@@ -331,7 +342,27 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 
         if (Preferences::getAdvancedLooping()) {
             // ??? Advanced behavior.
-        } else {
+            // No drag
+            if (m_endDrag == m_startDrag) {
+                // Toggle the loop mode.
+                if (composition.getLoopMode() == Composition::LoopOff  ||
+                    composition.getLoopMode() == Composition::LoopAll)
+                    composition.setLoopMode(Composition::LoopOn);
+                else if (composition.getLoopMode() == Composition::LoopOn)
+                    composition.setLoopMode(Composition::LoopAll);
+            } else {  // Drag
+                // Start must be before end.
+                if (m_startDrag > m_endDrag)
+                    std::swap(m_startDrag, m_endDrag);
+
+                composition.setLoopStart(m_startDrag);
+                composition.setLoopEnd(m_endDrag);
+            }
+
+            // Refresh everything.
+            emit m_doc->loopChanged();
+
+        } else {  // Classic Looping
             // No drag
             if (m_endDrag == m_startDrag) {
                 // Toggle the loop mode.

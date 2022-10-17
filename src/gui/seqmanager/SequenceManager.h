@@ -481,9 +481,8 @@ private:
 
     /// Used by setTempo() to detect tempo changes.
     tempoT m_tempo;
+
 };
-
-
 
 
 }

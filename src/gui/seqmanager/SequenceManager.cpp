@@ -1043,6 +1043,11 @@ SequenceManager::fastForwardToEnd()
 
 void SequenceManager::slotLoopChanged()
 {
+    // ??? It's likely that we will be called, but there is no actual
+    //     change to the looping parameters.  Should we cache and
+    //     detect?  I suspect this routine is called rarely, so there's
+    //     no need for optimization.
+
     Composition &composition = m_doc->getComposition();
 
     if (composition.getLoopMode() == Composition::LoopOff) {
@@ -1061,9 +1066,12 @@ void SequenceManager::slotLoopChanged()
         return;
     }
 
-    // ??? How to handle LoopAll?  Do we ask document or composition
-    //     for the last segment end?  Do we monitor changes via docModified()?
     if (composition.getLoopMode() == Composition::LoopAll) {
+        const RealTime loopStart = composition.getElapsedRealTime(
+                composition.getStartMarker());
+        const RealTime loopEnd = composition.getElapsedRealTime(
+                composition.getDuration(true));
+        RosegardenSequencer::getInstance()->setLoop(loopStart, loopEnd);
         return;
     }
 }
@@ -1336,14 +1344,23 @@ bool SequenceManager::event(QEvent *e)
 
 void SequenceManager::update()
 {
+    // This is called on every command.
+
     //RG_DEBUG << "update()";
+
     // schedule a refresh-status check for the next event loop
     QEvent *e = new QEvent(QEvent::User);
+
     // Let the handler know we want a refresh().
     // ??? But we always want a refresh().  When wouldn't we?  Are
     //     we getting QEvent::User events from elsewhere?
     m_refreshRequested = true;
     QApplication::postEvent(this, e);
+
+    // Make sure the range for LoopAll is maintained.
+    Composition &composition = m_doc->getComposition();
+    if (composition.getLoopMode() == Composition::LoopAll)
+        slotLoopChanged();
 }
 
 void SequenceManager::refresh()
