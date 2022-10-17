@@ -305,11 +305,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 //  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(nullptr),
     m_cpuMeterTimer(new QTimer(this)),
-    m_loopingAll(false),
-    m_loopAllEndTime(0),
-    m_deferredLoop(false),
-    m_deferredLoopStart(0),
-    m_deferredLoopEnd(0),
     m_endOfLatestSegment(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -2354,27 +2349,33 @@ RosegardenMainWindow::slotEditPasteAsLinks()
 void
 RosegardenMainWindow::slotCutRange()
 {
-    timeT t0 = RosegardenDocument::currentDocument->getComposition().getLoopStart();
-    timeT t1 = RosegardenDocument::currentDocument->getComposition().getLoopEnd();
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
 
-    if (t0 == t1)
-        return ;
+    const timeT loopStart = composition.getLoopStart();
+    const timeT loopStop = composition.getLoopEnd();
 
-    CommandHistory::getInstance()->addCommand
-    (new CutRangeCommand(&RosegardenDocument::currentDocument->getComposition(), t0, t1, m_clipboard));
+    if (loopStart == loopStop)
+        return;
+
+    CommandHistory::getInstance()->addCommand(new CutRangeCommand(
+            &composition, loopStart, loopStop, m_clipboard));
 }
 
 void
 RosegardenMainWindow::slotCopyRange()
 {
-    timeT t0 = RosegardenDocument::currentDocument->getComposition().getLoopStart();
-    timeT t1 = RosegardenDocument::currentDocument->getComposition().getLoopEnd();
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
 
-    if (t0 == t1)
-        return ;
+    const timeT loopStart = composition.getLoopStart();
+    const timeT loopEnd = composition.getLoopEnd();
 
-    CommandHistory::getInstance()->addCommand
-    (new CopyCommand(&RosegardenDocument::currentDocument->getComposition(), t0, t1, m_clipboard));
+    if (loopStart == loopEnd)
+        return;
+
+    CommandHistory::getInstance()->addCommand(new CopyCommand(
+            &composition, loopStart, loopEnd, m_clipboard));
 }
 
 void
@@ -2392,16 +2393,19 @@ void
 RosegardenMainWindow::slotDeleteRange()
 {
     // ??? Dead Code.  There is no reference to the delete_range action in
-    //   the rc.
+    //     the .rc file.
 
-    timeT t0 = RosegardenDocument::currentDocument->getComposition().getLoopStart();
-    timeT t1 = RosegardenDocument::currentDocument->getComposition().getLoopEnd();
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
 
-    if (t0 == t1)
-        return ;
+    const timeT loopStart = composition.getLoopStart();
+    const timeT loopEnd = composition.getLoopEnd();
 
-    CommandHistory::getInstance()->addCommand
-    (new DeleteRangeCommand(&RosegardenDocument::currentDocument->getComposition(), t0, t1));
+    if (loopStart == loopEnd)
+        return;
+
+    CommandHistory::getInstance()->addCommand(new DeleteRangeCommand(
+            &composition, loopStart, loopEnd));
 }
 
 void
@@ -2431,14 +2435,17 @@ RosegardenMainWindow::slotPasteConductorData()
 void
 RosegardenMainWindow::slotEraseRangeTempos()
 {
-    timeT t0 = RosegardenDocument::currentDocument->getComposition().getLoopStart();
-    timeT t1 = RosegardenDocument::currentDocument->getComposition().getLoopEnd();
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
 
-    if (t0 == t1)
-        { return; }
+    const timeT loopStart = composition.getLoopStart();
+    const timeT loopEnd = composition.getLoopEnd();
 
-    CommandHistory::getInstance()->addCommand
-    (new EraseTempiInRangeCommand(&RosegardenDocument::currentDocument->getComposition(), t0, t1));
+    if (loopStart == loopEnd)
+        return;
+
+    CommandHistory::getInstance()->addCommand(new EraseTempiInRangeCommand(
+            &composition, loopStart, loopEnd));
 }
 
 void
@@ -2888,9 +2895,6 @@ RosegardenMainWindow::createAndSetupTransport()
     // is closed
     connect(m_transport, &TransportDialog::closed,
             this, &RosegardenMainWindow::slotCloseTransport);
-
-    // Handle loop setting and unsetting from the transport loop button
-    //
 
     connect(m_transport, &TransportDialog::panic, this, &RosegardenMainWindow::slotPanic);
 
@@ -5652,7 +5656,7 @@ RosegardenMainWindow::slotLoopChanged()
     Composition &composition =
         RosegardenDocument::currentDocument->getComposition();
 
-    // Should RD do this on its own?
+    // ??? Should RD do this on its own?
     RosegardenDocument::currentDocument->slotDocumentModified();
 
     // If the user can see the loop...
@@ -5749,8 +5753,6 @@ RosegardenMainWindow::doStop(bool autoStop)
     } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
-    // cancel any deferred looping
-    m_deferredLoop = false;
 }
 
 void
@@ -6181,9 +6183,9 @@ RosegardenMainWindow::slotDocumentModified(bool modified)
 
     Composition &comp =
         RosegardenDocument::currentDocument->getComposition();
-    // Maintain m_endOfLatestSegment for LoopAll mode.
-    // ??? Move this to SequenceManager.  "stop at end" still uses this,
-    //     but that should probably also be moved to SequenceManager.
+    // Maintain m_endOfLatestSegment for "stop at end" and LoopAll mode.
+    // ??? Can we move this to SequenceManager and do "stop at end" and
+    //     LoopAll there?  At least maybe move m_endOfLatestSegment to RD?
     m_endOfLatestSegment = comp.getDuration(true);
 
 }
