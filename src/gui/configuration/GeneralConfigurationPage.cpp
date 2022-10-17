@@ -251,7 +251,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     layout->addWidget(new QLabel(tr("Stop playback at end of last segment"),
                                  frame), row, 0);
     m_stopPlaybackAtEnd = new QCheckBox(frame);
-    m_stopPlaybackAtEnd->setChecked(Preferences::getStopAtEnd());
+    m_stopPlaybackAtEnd->setChecked(Preferences::getStopAtSegmentEnd());
     connect(m_stopPlaybackAtEnd, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
 
@@ -575,7 +575,7 @@ void GeneralConfigurationPage::apply()
 #endif // HAVE_LIBJACK
 
 
-    Preferences::setStopAtEnd(m_stopPlaybackAtEnd->isChecked());
+    Preferences::setStopAtSegmentEnd(m_stopPlaybackAtEnd->isChecked());
     Preferences::setAutoChannels(m_autoChannels->isChecked());
     Preferences::setAdvancedLooping(m_advancedLooping->isChecked());
 

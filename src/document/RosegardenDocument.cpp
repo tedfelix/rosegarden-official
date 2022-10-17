@@ -282,6 +282,8 @@ void RosegardenDocument::slotDocumentModified()
     m_modified = true;
     m_autoSaved = false;
 
+    m_composition.invalidateDurationCache();
+
     emit documentModified(true);
 }
 

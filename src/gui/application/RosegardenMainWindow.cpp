@@ -304,8 +304,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_tranzport(nullptr),
 //  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(nullptr),
-    m_cpuMeterTimer(new QTimer(this)),
-    m_endOfLatestSegment(0)
+    m_cpuMeterTimer(new QTimer(this))
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -4812,12 +4811,18 @@ void
 RosegardenMainWindow::slotSetPointerPosition(timeT t)
 {
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    bool stopatEnd = Preferences::getStopAtEnd();
 
     if (m_seqManager) {
-        // If we're playing and we're past the end...
+        // Normally we stop at composition end.
         timeT stopTime = comp.getEndMarker();
-        if (stopatEnd) stopTime = m_endOfLatestSegment;
+
+        // If "stop at end of last Segment" is enabled, use the latest
+        // Segment end time.
+        // ??? rename: getStopAtSegmentEnd()?
+        if (Preferences::getStopAtSegmentEnd())
+            stopTime = comp.getDuration(true);
+
+        // If we're playing and we're past the end...
         if (m_seqManager->getTransportStatus() == PLAYING  &&
             t > stopTime) {
 
@@ -6180,14 +6185,6 @@ RosegardenMainWindow::slotDocumentModified(bool modified)
     } else {
         slotStateChanged("new_file_modified", modified);
     }
-
-    Composition &comp =
-        RosegardenDocument::currentDocument->getComposition();
-    // Maintain m_endOfLatestSegment for "stop at end" and LoopAll mode.
-    // ??? Can we move this to SequenceManager and do "stop at end" and
-    //     LoopAll there?  At least maybe move m_endOfLatestSegment to RD?
-    m_endOfLatestSegment = comp.getDuration(true);
-
 }
 
 void

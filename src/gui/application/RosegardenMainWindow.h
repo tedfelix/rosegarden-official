@@ -1640,9 +1640,6 @@ private:
     /// For the fast-forward button on a keyboard controller.
     Typematic m_fastForwardTypematic;
 
-    // end of last segment in composition
-    timeT m_endOfLatestSegment;
-
     // shortcuts for most recent file
     QList<QKeySequence> m_mostRecentShortcuts;
 

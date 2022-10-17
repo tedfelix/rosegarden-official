@@ -104,6 +104,7 @@ public:
      * Return the absolute end time of the segment that ends last
      */
     timeT getDuration(bool withRepeats = false) const;
+    void invalidateDurationCache();
 
 
     //////
@@ -1116,6 +1117,12 @@ protected:
     timeT                             m_startMarker;
     timeT                             m_endMarker;
     bool                              m_autoExpand;
+
+    // Duration Cache.  See getDuration().
+    mutable timeT m_durationWithRepeats = 0;
+    mutable bool m_durationWithRepeatsDirty = true;
+    mutable timeT m_durationWithoutRepeats = 0;
+    mutable bool m_durationWithoutRepeatsDirty = true;
 
     // Loop
     LoopMode m_loopMode = LoopOff;
