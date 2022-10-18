@@ -165,12 +165,17 @@ OpenOrCloseRangeCommand::execute()
         // If the paste point is prior to the loop range
         if (m_beginTime <= m_loopBegin) {
             // Shift the loop range right.
-            doc->setLoop(m_loopBegin + offset, m_loopEnd + offset);
+            m_composition->setLoopStart(m_loopBegin + offset);
+            m_composition->setLoopEnd(m_loopEnd + offset);
+            emit doc->loopChanged();
+
         } else if (m_beginTime < m_loopEnd) {
             // The paste point is within the loop range
             
             // Just shift the end point to expand the loop range
-            doc->setLoop(m_loopBegin, m_loopEnd + offset);
+            m_composition->setLoopStart(m_loopBegin);
+            m_composition->setLoopEnd(m_loopEnd + offset);
+            emit doc->loopChanged();
         } else {
             // The paste point is after the loop range, so leave it alone.
         }
@@ -204,7 +209,10 @@ OpenOrCloseRangeCommand::unexecute()
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
     // Put back the loop range
-    doc->setLoop(m_loopBegin, m_loopEnd);
+    m_composition->setLoopStart(m_loopBegin);
+    m_composition->setLoopEnd(m_loopEnd);
+    emit doc->loopChanged();
+
     m_hasExecuted = false;
 }
 

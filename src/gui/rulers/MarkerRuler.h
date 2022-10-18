@@ -33,11 +33,12 @@ class QMainWindow;
 namespace Rosegarden
 {
 
+
 class Marker;
 class RulerScale;
 class RosegardenDocument;
 
-
+/// The ruler that shows the bar numbers and the markers.
 class MarkerRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT
@@ -68,9 +69,6 @@ signals:
     void addMarker(timeT);
     
     void deleteMarker(int, timeT, QString name, QString description);
-
-    /// Set a loop range
-    void setLoop(timeT, timeT);
 
 protected slots:
     void slotInsertMarkerHere();

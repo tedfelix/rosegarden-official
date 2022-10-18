@@ -25,6 +25,7 @@
 namespace Rosegarden
 {
 
+
 class RulerScale;
 class RosegardenDocument;
 class LoopRuler;
@@ -32,6 +33,7 @@ class MarkerRuler;
 class SnapGrid;
 
 
+/// The standard ruler is a combination of the MarkerRuler and LoopRuler.
 class StandardRuler : public QWidget
 {
     Q_OBJECT
@@ -70,9 +72,6 @@ public slots:
 signals:
     /// reflected from the loop ruler
     void dragPointerToPosition(timeT);
-
-    /// reflected from the loop ruler
-    void dragLoopToPosition(timeT);
 
 private:
     //--------------- Data members ---------------------------------

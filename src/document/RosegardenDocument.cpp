@@ -282,6 +282,8 @@ void RosegardenDocument::slotDocumentModified()
     m_modified = true;
     m_autoSaved = false;
 
+    m_composition.invalidateDurationCache();
+
     emit documentModified(true);
 }
 
@@ -1115,7 +1117,7 @@ void RosegardenDocument::setSequenceManager(SequenceManager *sm)
 //
 int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
 int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
-int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 8;
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 9;
 
 bool RosegardenDocument::saveDocument(const QString& filename,
                                     QString& errMsg,
@@ -2463,15 +2465,6 @@ RosegardenDocument::slotSetPointerPosition(timeT t)
 {
     m_composition.setPosition(t);
     emit pointerPositionChanged(t);
-}
-
-void
-RosegardenDocument::setLoop(timeT t0, timeT t1)
-{
-    RG_DEBUG << "setLoop" << t0 << t1;
-    m_composition.setLoopStart(t0);
-    m_composition.setLoopEnd(t1);
-    emit loopChanged(t0, t1);
 }
 
 void

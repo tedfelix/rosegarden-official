@@ -50,8 +50,8 @@ namespace Preferences
     void setUseNativeFileDialogs(bool value);
     bool getUseNativeFileDialogs();
 
-    void setStopAtEnd(bool value);
-    bool getStopAtEnd();
+    void setStopAtSegmentEnd(bool value);
+    bool getStopAtSegmentEnd();
 
     void setAdvancedLooping(bool value);
     bool getAdvancedLooping();

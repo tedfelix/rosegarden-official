@@ -97,7 +97,7 @@ MappedBufMetaIterator::reset()
 void
 MappedBufMetaIterator::jumpToTime(const RealTime &time)
 {
-    RG_DEBUG << "jumpToTime(" << time << ")";
+    //RG_DEBUG << "jumpToTime(" << time << ")";
 
     reset();
 

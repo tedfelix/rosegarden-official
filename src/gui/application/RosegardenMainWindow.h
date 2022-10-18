@@ -1118,10 +1118,7 @@ public slots:
      */
     void slotSetPlayPosition(timeT time);
 
-    /**
-     * Set a loop
-     */
-    void slotSetLoop(timeT lhs, timeT rhs);
+    void slotLoopChanged();
 
 
     /**
@@ -1179,20 +1176,6 @@ public slots:
      * Toggle the solo mode
      */
     void slotToggleSolo(bool);
-
-    /**
-     * Set and unset the loop from the transport loop button with
-     * these slots.
-     */
-    void slotSetLoop();
-    void slotUnsetLoop();
-
-    /**
-     * Set and unset the loop start/end time from the transport loop start/stop buttons with
-     * these slots.
-     */
-    void slotSetLoopStart();
-    void slotSetLoopStop();
 
     /**
      * Toggle the track labels on the TrackEditor
@@ -1656,29 +1639,6 @@ private:
     Typematic m_rewindTypematic;
     /// For the fast-forward button on a keyboard controller.
     Typematic m_fastForwardTypematic;
-
-    /// Flag for looping whole song
-    bool m_loopingAll;
-    timeT m_loopAllEndTime;
-
-    // Instead of a deferred loop, perhaps an effective loop
-    // would make more sense.  The loop in the document might not be
-    // the loop that is effective, but it will always be in sync
-    // with what the loop ruler is showing.  Once the end of the
-    // effective loop is reached, the document is checked to see
-    // if the document loop is different and the effective loop
-    // is set equal to the document loop.  This should simplify
-    // the UI code.  Also, this effective loop concept could be
-    // moved into SequenceManager to make it transparent and
-    // improve performance.  Since this is something of a live
-    // performance feature, SequenceManager seems like the right
-    // place.
-    bool m_deferredLoop;
-    timeT m_deferredLoopStart;
-    timeT m_deferredLoopEnd;
-
-    // end of last segment in composition
-    timeT m_endOfLatestSegment;
 
     // shortcuts for most recent file
     QList<QKeySequence> m_mostRecentShortcuts;

@@ -158,6 +158,9 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
     if (event->getType() != MappedEvent::MidiController)
         return;
 
+    // ??? See RosegardenMainWindow::customEvent().  That would be a
+    //     more generic, albeit slower (message queue), way to do this.
+
     const MidiByte controlNumber = event->getData1();
     const MidiByte value = event->getData2();
 
@@ -613,7 +616,8 @@ void KorgNanoKontrol2::refreshLEDs()
     }
 
     // Cycle
-    const bool cycle = doc->getComposition().isLooping();
+    const bool cycle =
+            (doc->getComposition().getLoopMode() == Composition::LoopOn);
     // If there was a change...
     if (cycle != m_cycle) {
         ExternalController::send(

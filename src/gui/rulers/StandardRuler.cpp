@@ -69,7 +69,7 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
             m_rulerScale,
             15,  // height, 15 is the same height as the MarkerRuler
             m_invert,
-            m_isForMainWindow,
+            m_isForMainWindow,  // displayQuickMarker
             this);  // parent
     layout->addWidget(m_loopRuler);
 
@@ -129,23 +129,6 @@ void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
     QObject::connect
     (m_loopRuler, &LoopRuler::dragPointerToPosition,
      this, &StandardRuler::dragPointerToPosition);
-
-    QObject::connect
-    (m_loopRuler, &LoopRuler::dragLoopToPosition,
-     this, &StandardRuler::dragLoopToPosition);
-
-    QObject::connect
-    (m_markerRuler, &MarkerRuler::setLoop,
-     doc, &RosegardenDocument::slotSetLoop);
-
-    QObject::connect
-    (m_loopRuler, &LoopRuler::setLoopRange,
-     doc, &RosegardenDocument::slotSetLoop);
-
-    QObject::connect
-    (doc, &RosegardenDocument::loopChanged,
-     m_loopRuler,
-     &LoopRuler::slotSetLoopMarker);
 
 //    m_loopRuler->setBackgroundColor(GUIPalette::getColour(GUIPalette::PointerRuler));
 }

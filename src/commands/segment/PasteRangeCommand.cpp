@@ -23,7 +23,7 @@
 #include "base/Segment.h"
 #include "commands/edit/PasteSegmentsCommand.h"
 #include "commands/segment/InsertRangeCommand.h"
-#include "OpenOrCloseRangeCommand.h"
+//#include "OpenOrCloseRangeCommand.h"
 #include "PasteConductorDataCommand.h"
 
 

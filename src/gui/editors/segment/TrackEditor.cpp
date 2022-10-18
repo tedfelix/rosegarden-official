@@ -320,9 +320,6 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
             this, &TrackEditor::slotPointerDraggedToPosition);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &TrackEditor::slotPointerDraggedToPosition);
-
-    connect(m_doc, &RosegardenDocument::loopChanged,
-            this, &TrackEditor::slotSetLoop);
 }
 
 void TrackEditor::updateCanvasSize()
@@ -422,28 +419,6 @@ void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
 }
 #endif
 
-#if 0
-void
-TrackEditor::slotCanvasScrolled(int x, int /*y*/)
-{
-    // update the pointer position if the user is dragging it from the loop ruler
-    if ((m_topStandardRuler && m_topStandardRuler->getLoopRuler() &&
-         m_topStandardRuler->getLoopRuler()->hasActiveMousePress() &&
-         !m_topStandardRuler->getLoopRuler()->getLoopingMode()) ||
-        (m_bottomStandardRuler && m_bottomStandardRuler->getLoopRuler() &&
-         m_bottomStandardRuler->getLoopRuler()->hasActiveMousePress() &&
-         !m_bottomStandardRuler->getLoopRuler()->getLoopingMode())) {
-
-        int mx = m_compositionView->viewport()->mapFromGlobal(QCursor::pos()).x();
-        m_compositionView->setPointerPos(x + mx);
-
-        // bad idea, creates a feedback loop
-        //     timeT t = m_compositionView->grid().getRulerScale()->getTimeForX(x + mx);
-        //     slotSetPointerPosition(t);
-    }
-}
-#endif
-
 void
 TrackEditor::slotSetPointerPosition(timeT pointerTime)
 {
@@ -515,13 +490,6 @@ TrackEditor::toggleTracking()
     Composition &comp = m_doc->getComposition();
     comp.setMainFollowPlayback(m_playTracking);
 
-}
-
-void
-TrackEditor::slotSetLoop(timeT start, timeT end)
-{
-    m_topStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
-    m_bottomStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
 }
 
 void
@@ -606,19 +574,6 @@ TrackEditor::turnLinkedSegmentsToRealCopies()
     }
 
     addCommandToHistory(macro);
-}
-
-bool TrackEditor::reinstateRange()
-{
-    bool topr = m_topStandardRuler->getLoopRuler()->reinstateRange();
-    bool bottomr = m_bottomStandardRuler->getLoopRuler()->reinstateRange();
-    return (topr || bottomr);
-}
-
-void TrackEditor::hideRange()
-{
-    m_topStandardRuler->getLoopRuler()->hideRange();
-    m_bottomStandardRuler->getLoopRuler()->hideRange();
 }
 
 void

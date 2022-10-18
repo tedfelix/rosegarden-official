@@ -412,37 +412,50 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
 
     bool shiftPressed = ((e->modifiers() & Qt::ShiftModifier) != 0);
 
-    Composition &comp = m_doc->getComposition();
-    Composition::markercontainer markers = comp.getMarkers();
+    // Shift+Left-Click => set loop.
+    if (shiftPressed) {
 
-    if (shiftPressed) { // set loop
+        Composition &comp = m_doc->getComposition();
 
-        timeT t = m_rulerScale->getTimeForX
+        const Composition::markercontainer &markers = comp.getMarkers();
+        if (markers.empty())
+            return;
+
+        const timeT clickTime = m_rulerScale->getTimeForX
             (e->pos().x() - m_currentXOffset);
 
-        timeT prev = 0;
+        timeT loopStart = 0;
+        timeT loopEnd = 0;
 
-        for (Composition::markerconstiterator i = markers.begin();
-                i != markers.end(); ++i) {
+        // For each marker, find the one that is after the clickTime.
+        for (const Marker *marker : markers) {
 
-            timeT cur = (*i)->getTime();
+            loopEnd = marker->getTime();
 
-            if (cur >= t) {
-                emit setLoop(prev, cur);
-                return ;
-            }
+            // Found it.
+            if (loopEnd >= clickTime)
+                break;
 
-            prev = cur;
+            loopStart = loopEnd;
         }
 
-        if (prev > 0)
-            emit setLoop(prev, comp.getEndMarker());
+        // Not found?  Select to the end.
+        if (loopStart == loopEnd)
+            loopEnd = comp.getEndMarker();
 
-    } else { // set pointer to clicked marker
+        comp.setLoopMode(Composition::LoopOn);
+        comp.setLoopStart(loopStart);
+        comp.setLoopEnd(loopEnd);
+        emit m_doc->loopChanged();
 
-        if (clickedMarker)
-            emit setPointerPosition(clickedMarker->getTime());
+        return;
+
     }
+
+    // Left-click without modifiers, set pointer to clicked marker.
+
+    if (clickedMarker)
+        emit setPointerPosition(clickedMarker->getTime());
 }
 
 void

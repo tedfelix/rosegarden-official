@@ -60,7 +60,7 @@ public slots:
 
     void pointerPositionChanged(timeT time);
 
-    void loopChanged(timeT t1, timeT t2);
+    void loopChanged();
 
 signals:
 

@@ -142,8 +142,6 @@ public:
 
     void jumpTo(const RealTime &time);
 
-    void setLoop(const timeT &lhs, const timeT &rhs);
-
     void setTransportStatus(TransportStatus status)
             { m_transportStatus = status; }
     TransportStatus getTransportStatus() const  { return m_transportStatus; }
@@ -280,6 +278,8 @@ public slots:
     void fastforward();
     void rewindToBeginning();
     void fastForwardToEnd();
+
+    void slotLoopChanged();
 
 signals:
     /// A program change was received.
@@ -481,9 +481,8 @@ private:
 
     /// Used by setTempo() to detect tempo changes.
     tempoT m_tempo;
+
 };
-
-
 
 
 }

@@ -657,30 +657,45 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         m_inComposition = true;
 
 
-        // Set the loop
-        //
-        QString loopStartStr = atts.value("loopstart").toString();
-        QString loopEndStr = atts.value("loopend").toString();
+        QString loopModeStr = atts.value("loopmode").toString();
 
-        int loopStart = 0;
-        int loopEnd = 0;
-        if (!loopStartStr.isEmpty() && !loopEndStr.isEmpty()) {
-            loopStart = loopStartStr.toInt();
-            loopEnd = loopEndStr.toInt();
+        // New looping
+        if (loopModeStr != "") {
 
-            getComposition().setLoopStart(loopStart);
-            getComposition().setLoopEnd(loopEnd);
-        }
+            getComposition().setLoopMode(
+                    static_cast<Composition::LoopMode>(loopModeStr.toInt()));
+            getComposition().setLoopStart(atts.value("loopstart").toInt());
+            getComposition().setLoopEnd(atts.value("loopend").toInt());
 
-        QString isLooping = atts.value("islooping").toString();
-        if (isLooping.isEmpty()) {
-            // old document - use start = end
-            getComposition().setLooping(loopStart != loopEnd);
-        } else {
-            if (isLooping.toInt() == 1)
-                getComposition().setLooping(true);
-            else
-                getComposition().setLooping(false);
+        } else {  // Legacy looping
+
+            QString loopStartStr = atts.value("loopstart").toString();
+            QString loopEndStr = atts.value("loopend").toString();
+
+            int loopStart = 0;
+            int loopEnd = 0;
+            if (!loopStartStr.isEmpty() && !loopEndStr.isEmpty()) {
+                loopStart = loopStartStr.toInt();
+                loopEnd = loopEndStr.toInt();
+
+                getComposition().setLoopStart(loopStart);
+                getComposition().setLoopEnd(loopEnd);
+            }
+
+            QString isLooping = atts.value("islooping").toString();
+            if (isLooping.isEmpty()) {
+                // old document - use (start != end) => loop on
+                Composition::LoopMode loopMode = Composition::LoopOff;
+                if (loopStart != loopEnd)
+                    loopMode = Composition::LoopOn;
+                getComposition().setLoopMode(loopMode);
+            } else {
+                if (isLooping.toInt() == 1)
+                    getComposition().setLoopMode(Composition::LoopOn);
+                else
+                    getComposition().setLoopMode(Composition::LoopOff);
+            }
+
         }
 
         QString selectedTrackStr = atts.value("selected").toString();

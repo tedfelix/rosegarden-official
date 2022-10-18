@@ -5697,6 +5697,9 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
     if (!m_acceptTransportCCs)
         return false;
 
+    // Note that we go through the message queue since we are in a
+    // different thread.
+
     // Play
     if (controlNumber == 117) {
         // Press

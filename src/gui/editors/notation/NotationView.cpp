@@ -1993,10 +1993,27 @@ void
 NotationView::slotPreviewSelection()
 {
     if (!getSelection())
-        return ;
+        return;
 
-    RosegardenDocument::currentDocument->slotSetLoop(getSelection()->getStartTime(),
-                               getSelection()->getEndTime());
+    Composition &composition = m_document->getComposition();
+
+    composition.setLoopMode(Composition::LoopOn);
+    composition.setLoopStart(getSelection()->getStartTime());
+    composition.setLoopEnd(getSelection()->getEndTime());
+    emit m_document->loopChanged();
+}
+
+void
+NotationView::slotClearLoop()
+{
+    // ??? Not sure why there is a Move > Clear Loop.  The LoopRuler
+    //     is available.  One has full control of looping from there.
+
+    Composition &composition = m_document->getComposition();
+
+    // Less destructive.  Just turn it off.
+    composition.setLoopMode(Composition::LoopOff);
+    emit m_document->loopChanged();
 }
 
 void
@@ -2175,12 +2192,6 @@ NotationView::slotPlaceControllers()
                                     instrument,
                                     cp);
     CommandHistory::getInstance()->addCommand(command);
-}
-
-void
-NotationView::slotClearLoop()
-{
-    RosegardenDocument::currentDocument->slotSetLoop(0, 0);
 }
 
 void

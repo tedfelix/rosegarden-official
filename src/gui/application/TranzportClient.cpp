@@ -244,9 +244,9 @@ TranzportClient::trackChanged(const Composition *c,
 }
     
 void
-TranzportClient::loopChanged(timeT t1,
-                             timeT t2)
+TranzportClient::loopChanged()
 {
+#if 0
     RG_DEBUG << "TranzportClient: loopChanged" << t1 << ", " << t2;
 
     if (device_online) {
@@ -256,6 +256,7 @@ TranzportClient::loopChanged(timeT t1,
             LightOn(LightLoop);
         }
     }
+#endif
 }
 
 void
@@ -271,7 +272,7 @@ TranzportClient::stateUpdate()
             LightOff(LightAnysolo);
         //}
 
-        if (m_composition->isLooping()) {
+        if (m_composition->getLoopMode() == Composition::LoopOn) {
             LightOn(LightLoop);
         } else {
             LightOff(LightLoop);
@@ -575,7 +576,8 @@ TranzportClient::readData()
             if (current_buttons & Shift) {
             } else {
                 if (loop_start_time == loop_end_time) {
-                    m_rgDocument->setLoop(0,0);
+                    m_composition->setLoopMode(Composition::LoopOff);
+                    emit m_rgDocument->loopChanged();
                 }
 
                 loop_start_time = 0;
@@ -636,9 +638,15 @@ TranzportClient::readData()
         if (datawheel) {
             if (datawheel < 0x7F) {
                 if (current_buttons & Loop) {
+
                     loop_end_time += datawheel *
                         m_composition->getDurationForMusicalTime(loop_end_time, 0,1,0,0);
-                    m_rgDocument->setLoop(loop_start_time, loop_end_time);
+
+                    m_composition->setLoopMode(Composition::LoopOn);
+                    m_composition->setLoopStart(loop_start_time);
+                    m_composition->setLoopEnd(loop_end_time);
+                    emit m_rgDocument->loopChanged();
+
                 } else if(current_buttons & Shift) {
                     timeT here = m_composition->getPosition();
                     here += datawheel * m_composition->getDurationForMusicalTime(here,0,0,1,0);
@@ -657,7 +665,10 @@ TranzportClient::readData()
                 if (current_buttons & Loop) {
                     loop_end_time -= (1 + (0xFF - datawheel)) *
                         RosegardenDocument::currentDocument->getComposition().getDurationForMusicalTime(loop_end_time, 0,1,0,0);
-                    m_rgDocument->setLoop(loop_start_time, loop_end_time);
+                    m_composition->setLoopMode(Composition::LoopOn);
+                    m_composition->setLoopStart(loop_start_time);
+                    m_composition->setLoopEnd(loop_end_time);
+                    emit m_rgDocument->loopChanged();
                 }
 
                 if (current_buttons & Shift) {
