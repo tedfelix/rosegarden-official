@@ -34,18 +34,18 @@ class MidiDeviceTreeWidgetItem : public QTreeWidgetItem
 
 public:
     // Device
-    MidiDeviceTreeWidgetItem(DeviceId id,
-                           QTreeWidget* parent, QString name);
+    MidiDeviceTreeWidgetItem(DeviceId deviceId,
+                             QTreeWidget* parent, QString name);
 
     // Bank
-    MidiDeviceTreeWidgetItem(DeviceId id,
-                           QTreeWidgetItem* parent, QString name,
-                           bool percussion,
-                           int msb, int lsb);
+    MidiDeviceTreeWidgetItem(DeviceId deviceId,
+                             QTreeWidgetItem* parent, QString name,
+                             bool percussion,
+                             int msb, int lsb);
 
     // Key Mapping
-    MidiDeviceTreeWidgetItem(DeviceId id,
-                           QTreeWidgetItem* parent, QString name);
+    MidiDeviceTreeWidgetItem(DeviceId deviceId,
+                             QTreeWidgetItem* parent, QString name);
 
     DeviceId getDeviceId() const { return m_deviceId; }
 

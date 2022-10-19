@@ -104,7 +104,7 @@ public:
      * Return the absolute end time of the segment that ends last
      */
     timeT getDuration(bool withRepeats = false) const;
-    void invalidateDurationCache();
+    void invalidateDurationCache() const;
 
 
     //////

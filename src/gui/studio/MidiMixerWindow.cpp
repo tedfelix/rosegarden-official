@@ -454,7 +454,7 @@ MidiMixerWindow::updateWidgets(Instrument *instrument)
                 try {
                     volumeValue = (*iIt)->
                             getControllerValue(MIDI_CONTROLLER_VOLUME);
-                } catch (std::string s) {
+                } catch (std::string& s) {
                     // This should never get called.
                     volumeValue = (*iIt)->getVolume();
                 }
@@ -486,7 +486,7 @@ MidiMixerWindow::updateWidgets(Instrument *instrument)
                     try {
                         value = float((*iIt)->getControllerValue
                                       (controls[i].getControllerNumber()));
-                    } catch (std::string s) {
+                    } catch (std::string& s) {
                         //RG_DEBUG << "slotUpdateInstrument - can't match controller " << int(controls[i].getControllerNumber()) << " - \"" << s << "\"";
                         continue;
                     }
@@ -639,7 +639,7 @@ MidiMixerWindow::updateMonitorMeter()
 }
 
 void
-MidiMixerWindow::slotExternalController(const MappedEvent *e)
+MidiMixerWindow::slotExternalController(const MappedEvent *event)
 {
     //RG_DEBUG << "slotExternalController()...";
 
@@ -651,11 +651,11 @@ MidiMixerWindow::slotExternalController(const MappedEvent *e)
     // get channel number n from event
     // get nth instrument on current tab
 
-    if (e->getType() != MappedEvent::MidiController)
+    if (event->getType() != MappedEvent::MidiController)
         return ;
-    unsigned int channel = e->getRecordedChannel();
-    MidiByte controller = e->getData1();
-    MidiByte value = e->getData2();
+    unsigned int channel = event->getRecordedChannel();
+    MidiByte controller = event->getData1();
+    MidiByte value = event->getData2();
 
     int tabIndex = m_tabWidget->currentIndex();
 

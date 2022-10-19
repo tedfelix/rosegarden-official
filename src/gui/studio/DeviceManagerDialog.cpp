@@ -256,8 +256,8 @@ DeviceManagerDialog::slotOutputPortClicked(QTreeWidgetItem *twItem, int /* colum
 
 
 void
-DeviceManagerDialog::slotInputPortClicked(QTreeWidgetItem *
-                                                   twItem, int /* column */)
+DeviceManagerDialog::slotInputPortClicked(QTreeWidgetItem *twItem,
+                                          int /* column */)
 {
     RG_DEBUG << "DeviceManagerDialog::slotInputPortClicked(...)";
 
@@ -501,7 +501,6 @@ MidiDevice
 {
     RG_DEBUG << "DeviceManagerDialog::getDeviceByName(...)";
 
-    Device *dev;
     MidiDevice *mdev;
     int i, cnt;
     DeviceList *devices;
@@ -511,7 +510,7 @@ MidiDevice
 
     // search in the device list for deviceName
     for (i = 0; i < cnt; i++) {
-        dev = devices->at(i);
+        Device *dev = devices->at(i);
 
         if (dev->getType() == Device::Midi) {
             mdev = dynamic_cast < MidiDevice * >(dev);
@@ -906,7 +905,7 @@ DeviceManagerDialog::slotEdit(QTreeWidgetItem * item, int)
 
 void
 DeviceManagerDialog::slotDeviceItemChanged(QTreeWidgetItem * twItem,
-                                         int /* column */)
+                                           int /* column */)
 {
     RG_DEBUG << "DeviceManagerDialog::slotDeviceItemChanged(...)";
 

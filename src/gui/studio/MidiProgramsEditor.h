@@ -81,10 +81,10 @@ protected:
     /// Set the currently loaded programs to new MSB and LSB
     void modifyCurrentPrograms(const MidiBank &oldBank,
                                const MidiBank &newBank);
-    
+
     // Get a program (pointer into program list) for modification
     //
-    MidiProgram* getProgram(const MidiBank &bank, int program);
+    MidiProgram* getProgram(const MidiBank &bank, int programNo);
 
     void setBankName(const QString& s);
 

@@ -88,11 +88,11 @@ public:
     // Set the listview to select a certain device - used after adding
     // or deleting banks.
     //
-    void selectDeviceItem(MidiDevice *deviceId);
+    void selectDeviceItem(MidiDevice *device);
 
     // Select a device/bank combination
     //
-    void selectDeviceBankItem(DeviceId device, int bank);
+    void selectDeviceBankItem(DeviceId deviceId, int bank);
 
 public slots:
     void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
