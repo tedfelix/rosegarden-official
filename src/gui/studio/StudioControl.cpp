@@ -130,15 +130,15 @@ StudioControl::getPluginInformation()
 #endif
 
 QString
-StudioControl::getPluginProgram(MappedObjectId id, int bank, int program)
+StudioControl::getPluginProgram(MappedObjectId pluginId, int bank, int program)
 {
-    return RosegardenSequencer::getInstance()->getPluginProgram(id, bank, program);
+    return RosegardenSequencer::getInstance()->getPluginProgram(pluginId, bank, program);
 }
 
 unsigned long
-StudioControl::getPluginProgram(MappedObjectId id, QString name)
+StudioControl::getPluginProgram(MappedObjectId pluginId, QString name)
 {
-    return RosegardenSequencer::getInstance()->getPluginProgram(id, name);
+    return RosegardenSequencer::getInstance()->getPluginProgram(pluginId, name);
 }
 
 void
@@ -168,14 +168,14 @@ StudioControl::sendMappedEvent(const MappedEvent &mE)
 }
 
 void
-StudioControl::sendMappedEventList(const MappedEventList &mC)
+StudioControl::sendMappedEventList(const MappedEventList &eventList)
 {
-    if (mC.size() == 0)
+    if (eventList.size() == 0)
         return ;
 
-    MappedEventList::const_iterator it = mC.begin();
+    MappedEventList::const_iterator it = eventList.begin();
 
-    for (; it != mC.end(); ++it) {
+    for (; it != eventList.end(); ++it) {
         RosegardenSequencer::getInstance()->processMappedEvent(*it);
     }
 }

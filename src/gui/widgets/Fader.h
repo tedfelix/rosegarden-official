@@ -45,14 +45,14 @@ public:
      * based on the given dimensions.
      */
     Fader(AudioLevel::FaderType,
-                    int width, int height, QWidget *parent);
+                    int w, int h, QWidget *parent);
 
     /**
      * Construct a fader on an integral scale.  The fader calculates
      * its orientation based on the given dimensions.
      */
     Fader(int min, int max, int deflt,
-                    int width, int height, QWidget *parent);
+                    int w, int h, QWidget *parent);
 
     /**
      * Construct a fader on an integral scale, with a 1:1 ratio of

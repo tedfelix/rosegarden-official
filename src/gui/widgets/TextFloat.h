@@ -107,9 +107,9 @@ public :
     ~TextFloat() override;
 
 protected :
-    TextFloat(QWidget *parent);
+    explicit TextFloat(QWidget *parent);
 
-    // Used to remember a parent widget change. 
+    // Used to remember a parent widget change.
     bool m_newlyAttached;
 
 private :

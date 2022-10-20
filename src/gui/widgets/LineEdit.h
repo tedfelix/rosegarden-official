@@ -32,7 +32,7 @@ class LineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
-    LineEdit(QWidget *parent=nullptr);
+    explicit LineEdit(QWidget *parent=nullptr);
     LineEdit(const QString&, QWidget *parent=nullptr);
     ~LineEdit() override;
 };

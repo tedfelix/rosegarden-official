@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -66,16 +66,13 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     // Plugin box
     //
-    PluginPushButton *plugin;
-    QWidget *pluginVbox = nullptr;
-
-    pluginVbox = new QWidget(this);
+    QWidget *pluginVbox = new QWidget(this);
     QVBoxLayout *pluginVboxLayout = new QVBoxLayout;
     pluginVboxLayout->setSpacing(2);
     pluginVboxLayout->setContentsMargins(0, 0, 0, 0);
 
     for (int i = 0; i < 5; i++) {
-        plugin = new PluginPushButton(pluginVbox);
+        PluginPushButton *plugin = new PluginPushButton(pluginVbox);
         pluginVboxLayout->addWidget(plugin);
         plugin->setText(tr("<no plugin>"));
 
@@ -246,11 +243,11 @@ AudioFaderBox::slotSetInstrument(Studio * /*studio*/,
 
         setIsSynth(instrument->getType() == Instrument::SoftSynth);
         if (instrument->getType() == Instrument::SoftSynth) {
-            bool gui = false;
             RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): is soft synth";
 
-            gui = RosegardenMainWindow::self()->getPluginGUIManager()->hasGUI
-                  (instrument->getId(), Instrument::SYNTH_PLUGIN_POSITION);
+            bool gui =
+                RosegardenMainWindow::self()->getPluginGUIManager()->hasGUI
+                (instrument->getId(), Instrument::SYNTH_PLUGIN_POSITION);
             RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): has gui = " << gui;
 
             m_synthGUIButton->setEnabled(gui);

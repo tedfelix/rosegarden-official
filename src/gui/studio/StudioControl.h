@@ -155,7 +155,7 @@ public:
     // *** Send via MIDI
 
     /// Send a MIDI event immediately.
-    static void sendMappedEvent(const MappedEvent &event);
+    static void sendMappedEvent(const MappedEvent &mE);
     /// Send multiple MIDI events immediately.
     static void sendMappedEventList(const MappedEventList &eventList);
 
