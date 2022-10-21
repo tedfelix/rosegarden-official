@@ -35,7 +35,7 @@ public:
     static StartupLogo* getInstance();
 
     static void hideIfStillThere();
-    
+
     void setHideEnabled(bool enabled) { m_readyToHide = enabled; };
     void setShowTip(bool showTip) { m_showTip = showTip; };
 
@@ -45,9 +45,9 @@ public slots:
 
 protected:
 
-    StartupLogo(QWidget *parent=nullptr);
+    explicit StartupLogo(QWidget *parent=nullptr);
     ~StartupLogo() override;
-    
+
     void paintEvent(QPaintEvent*) override;
     void mousePressEvent( QMouseEvent*) override;
 

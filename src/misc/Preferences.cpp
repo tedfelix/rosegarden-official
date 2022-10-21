@@ -179,12 +179,12 @@ namespace
     const QString AudioFileLocationDialogGroup = "AudioFileLocationDialog";
 }
 
-void Preferences::setAudioFileLocationDlgDontShow(bool value)
+void Preferences::setAudioFileLocationDlgDontShow(bool dontShow)
 {
     QSettings settings;
     settings.beginGroup(AudioFileLocationDialogGroup);
-    settings.setValue("dontShow", value);
-    afldDontShow = value;
+    settings.setValue("dontShow", dontShow);
+    afldDontShow = dontShow;
 }
 
 bool Preferences::getAudioFileLocationDlgDontShow()

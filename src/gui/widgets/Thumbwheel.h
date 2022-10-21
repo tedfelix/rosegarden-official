@@ -59,14 +59,14 @@ public slots:
     void setDefaultValue(int deft);
     void setSpeed(float speed);
     void setTracking(bool tracking);
-    void setShowScale(bool show);
+    void setShowScale(bool showScale);
     void setValue(int value);
     void scroll(bool up);
     void resetToDefault();
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
-    void mouseDoubleClickEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *mouseEvent) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;

@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -42,22 +42,22 @@ namespace Rosegarden
         return true;
       }
 
-      int Version::Major()
+      int Version::Major() const
       {
         return m_iMajor;
       }
 
-      int Version::Minor()
+      int Version::Minor() const
       {
         return m_iMinor;
       }
 
-      int Version::Micro()
+      int Version::Micro() const
       {
         return m_iMicro;
       }
 
-      bool Version::operator<=(Version other)
+      bool Version::operator<=(Version other) const
       {
         if (Major()<other.Major()) {
            return true;
@@ -70,4 +70,3 @@ namespace Rosegarden
       }
 
 }
-
