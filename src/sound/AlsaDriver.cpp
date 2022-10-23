@@ -294,7 +294,7 @@ AlsaDriver::getSystemInfo()
 void
 AlsaDriver::showQueueStatus(int queue)
 {
-    int err, idx, min, max;
+    int idx, min, max;
     snd_seq_queue_status_t *status;
 
     snd_seq_queue_status_alloca(&status);
@@ -302,6 +302,7 @@ AlsaDriver::showQueueStatus(int queue)
     max = queue < 0 ? m_maxQueues : queue + 1;
 
     for (idx = min; idx < max; ++idx) {
+        int err;
         if ((err = snd_seq_get_queue_status(m_midiHandle, idx, status)) < 0) {
 
             if (err == -ENOENT)
@@ -339,7 +340,6 @@ AlsaDriver::generateTimerList()
     snd_timer_info_alloca(&timerInfo);
 
     snd_timer_query_t *timerQuery;
-    char timerName[64];
 
     m_timers.clear();
 
@@ -373,6 +373,7 @@ AlsaDriver::generateTimerList()
 
             //RG_DEBUG << "generateTimerList(): got timer: class " << info.clas;
 
+            char timerName[64];
             sprintf(timerName, "hw:CLASS=%i,SCLASS=%i,CARD=%i,DEV=%i,SUBDEV=%i",
                     info.clas, info.sclas, info.card, info.device, info.subdevice);
 
@@ -554,7 +555,6 @@ AlsaDriver::generatePortList()
 
     snd_seq_client_info_t *cinfo;
     snd_seq_port_info_t *pinfo;
-    int client;
     unsigned int writeCap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
     unsigned int readCap = SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_READ;
 
@@ -570,7 +570,7 @@ AlsaDriver::generatePortList()
     // for sorting and then device creation.
     //
     while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0) {
-        client = snd_seq_client_info_get_client(cinfo);
+        int client = snd_seq_client_info_get_client(cinfo);
         snd_seq_port_info_alloca(&pinfo);
         snd_seq_port_info_set_client(pinfo, client);
         snd_seq_port_info_set_port(pinfo, -1);
@@ -1145,12 +1145,12 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 }
 
 void
-AlsaDriver::setConnection(DeviceId id, QString connection)
+AlsaDriver::setConnection(DeviceId deviceId, QString connection)
 {
     ClientPortPair port(getPortByName(qstrtostr(connection)));
 
 #ifdef DEBUG_ALSA
-    RG_DEBUG << "setConnection(" << id << "," << connection << ")";
+    RG_DEBUG << "setConnection(" << deviceId << "," << connection << ")";
 #endif
 
     if ((connection == "") || (port.client != -1 && port.port != -1)) {
@@ -1163,7 +1163,7 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
         }
 #endif
 
-        MappedDevice *device = findDevice(id);
+        MappedDevice *device = findDevice(deviceId);
         if (device)
             setConnectionToDevice(*device, connection, port);
 
@@ -4108,7 +4108,9 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 }
 
 void
-AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev, bool now)
+AlsaDriver::processSoftSynthEventOut(InstrumentId id,
+                                     const snd_seq_event_t *event,
+                                     bool now)
 {
 #ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
     RG_DEBUG << "processSoftSynthEventOut(): instrument " << id << ", now " << now;
@@ -4122,7 +4124,7 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 
     if (synthPlugin) {
 
-        RealTime t(ev->time.time.tv_sec, ev->time.time.tv_nsec);
+        RealTime t(event->time.time.tv_sec, event->time.time.tv_nsec);
 
         if (now)
             t = RealTime::zeroTime;
@@ -4133,7 +4135,7 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
         RG_DEBUG << "processSoftSynthEventOut(): event time " << t;
 #endif
 
-        synthPlugin->sendEvent(t, ev);
+        synthPlugin->sendEvent(t, event);
 
         if (now) {
 #ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
@@ -4246,20 +4248,21 @@ AlsaDriver::startClocksApproved()
     //!!!
     m_needJackStart = NeedNoJackStart;
     startClocks();
-    return ;
+    return;
 
-    int result;
+    // unreachable code
+    //int result;
 
     // Restart the timer
-    if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, nullptr)) < 0) {
-        RG_WARNING << "startClocksApproved(): WARNING: Couldn't start queue - " << snd_strerror(result);
-        reportFailure(MappedEvent::FailureALSACallFailed);
-    }
+    //if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, nullptr)) < 0) {
+    //  RG_WARNING << "startClocksApproved(): WARNING: Couldn't start queue - " << snd_strerror(result);
+    //  reportFailure(MappedEvent::FailureALSACallFailed);
+    //}
 
-    m_queueRunning = true;
+    //m_queueRunning = true;
 
     // process pending MIDI events
-    checkAlsaError(snd_seq_drain_output(m_midiHandle), "startClocksApproved(): draining");
+    //checkAlsaError(snd_seq_drain_output(m_midiHandle), "startClocksApproved(): draining");
 }
 
 void
@@ -5291,7 +5294,7 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
 // Send a system real-time message from the sync output port
 //
 void
-AlsaDriver::sendSystemDirect(MidiByte command, int *args)
+AlsaDriver::sendSystemDirect(MidiByte command, int *arg)
 {
     snd_seq_event_t event;
 
@@ -5305,8 +5308,8 @@ AlsaDriver::sendSystemDirect(MidiByte command, int *args)
     event.type = command;
 
     // set args if we have them
-    if (args) {
-        event.data.control.value = *args;
+    if (arg) {
+        event.data.control.value = *arg;
     }
 
     int error = snd_seq_event_output_direct(m_midiHandle, &event);
@@ -5397,6 +5400,7 @@ void
 AlsaDriver::sleep(const RealTime &rt)
 {
     int npfd = snd_seq_poll_descriptors_count(m_midiHandle, POLLIN);
+    // cppcheck-suppress allocaCalled
     struct pollfd *pfd = (struct pollfd *)alloca(npfd * sizeof(struct pollfd));
     snd_seq_poll_descriptors(m_midiHandle, pfd, npfd, POLLIN);
     poll(pfd, npfd, rt.sec * 1000 + rt.msec());
@@ -5562,41 +5566,41 @@ AlsaDriver::getKernelVersionString()
 }
 
 void
-AlsaDriver::extractVersion(std::string v, int &major, int &minor, int &subminor, std::string &suffix)
+AlsaDriver::extractVersion(std::string vstr, int &major, int &minor, int &subminor, std::string &suffix)
 {
     major = minor = subminor = 0;
     suffix = "";
-    if (v == "(unknown)") return;
+    if (vstr == "(unknown)") return;
 
     std::string::size_type sp, pp;
 
-    sp = v.find('.');
+    sp = vstr.find('.');
     if (sp == std::string::npos) goto done;
-    major = atoi(v.substr(0, sp).c_str());
+    major = atoi(vstr.substr(0, sp).c_str());
     pp = sp + 1;
 
-    sp = v.find('.', pp);
+    sp = vstr.find('.', pp);
     if (sp == std::string::npos) goto done;
-    minor = atoi(v.substr(pp, sp - pp).c_str());
+    minor = atoi(vstr.substr(pp, sp - pp).c_str());
     pp = sp + 1;
 
-    while (++sp < v.length() && (::isdigit(v[sp]) || v[sp] == '-')) { }
-    subminor = atoi(v.substr(pp, sp - pp).c_str());
+    while (++sp < vstr.length() && (::isdigit(vstr[sp]) || vstr[sp] == '-')) { }
+    subminor = atoi(vstr.substr(pp, sp - pp).c_str());
 
-    if (sp >= v.length()) goto done;
-    suffix = v.substr(sp);
+    if (sp >= vstr.length()) goto done;
+    suffix = vstr.substr(sp);
 
 done:
     RG_DEBUG << "extractVersion(): major = " << major << ", minor = " << minor << ", subminor = " << subminor << ", suffix = \"" << suffix << "\"";
 }
 
 bool
-AlsaDriver::versionIsAtLeast(std::string v, int major, int minor, int subminor)
+AlsaDriver::versionIsAtLeast(std::string vstr, int major, int minor, int subminor)
 {
     int actualMajor, actualMinor, actualSubminor;
     std::string actualSuffix;
 
-    extractVersion(v, actualMajor, actualMinor, actualSubminor, actualSuffix);
+    extractVersion(vstr, actualMajor, actualMinor, actualSubminor, actualSuffix);
 
     bool ok = false;
 
@@ -5621,7 +5625,7 @@ AlsaDriver::versionIsAtLeast(std::string v, int major, int minor, int subminor)
         }
     }
 
-    RG_DEBUG << "versionIsAtLeast(): is version " << v << " at least " << major << "." << minor << "." << subminor << "? " << (ok ? "yes" : "no");
+    RG_DEBUG << "versionIsAtLeast(): is version " << vstr << " at least " << major << "." << minor << "." << subminor << "? " << (ok ? "yes" : "no");
     return ok;
 }
 

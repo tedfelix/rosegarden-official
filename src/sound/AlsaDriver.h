@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -74,7 +74,7 @@ public:
      * in the GUI thread.
      */
     bool getMappedEventList(MappedEventList &mappedEventList) override;
-    
+
     bool record(RecordStatus recordStatus,
                 const std::vector<InstrumentId> &armedInstruments,
                 const std::vector<QString> &audioFileNames) override;
@@ -95,7 +95,7 @@ public:
      * RosegardenSequencer::routeEvents() also uses this for async events
      * and recorded MIDI thru.
      */
-    void processEventsOut(const MappedEventList &mC) override;
+    void processEventsOut(const MappedEventList &rgEventList) override;
 
     /// Send both MIDI and audio events out, queued
     /**
@@ -168,7 +168,7 @@ public:
 #endif
         return RealTime::zeroTime;
     }
-        
+
 
     // Plugin instance management
     //
@@ -281,7 +281,7 @@ public:
 #endif
         return 0;
     }
-    
+
     void setPluginInstanceProgram(InstrumentId id,
                                           int position,
                                           QString program) override {
@@ -353,7 +353,7 @@ public:
 
     // Create and send an MMC command
     //
-    void sendMMC(MidiByte deviceId,
+    void sendMMC(MidiByte deviceArg,
                  MidiByte instruction,
                  bool isCommand,
                  const std::string &data);
@@ -405,7 +405,7 @@ public:
     //void unsetRecordDevices();
 
     bool addDevice(Device::DeviceType type,
-                           DeviceId id,
+                           DeviceId deviceId,
                            InstrumentId baseInstrumentId,
                            MidiDevice::DeviceDirection direction) override;
     void removeDevice(DeviceId id) override;
@@ -413,7 +413,7 @@ public:
     void renameDevice(DeviceId id, QString name) override;
 
     // Get available connections per device
-    // 
+    //
     unsigned int getConnections(Device::DeviceType type,
                                         MidiDevice::DeviceDirection direction) override;
     QString getConnection(Device::DeviceType type,
@@ -430,7 +430,7 @@ public:
     QString getTimer(unsigned int) override;
     QString getCurrentTimer() override;
     void setCurrentTimer(QString) override;
- 
+
     void getAudioInstrumentNumbers(InstrumentId &audioInstrumentBase,
                                            int &audioInstrumentCount) override {
         audioInstrumentBase = AudioInstrumentBase;
@@ -440,7 +440,7 @@ public:
         audioInstrumentCount = 0;
 #endif
     }
- 
+
     void getSoftSynthInstrumentNumbers(InstrumentId &ssInstrumentBase,
                                                int &ssInstrumentCount) override {
         ssInstrumentBase = SoftSynthInstrumentBase;
@@ -507,7 +507,7 @@ protected:
      *
      * Used by processEventsOut() to send MIDI out via ALSA.
      */
-    void processMidiOut(const MappedEventList &mC,
+    void processMidiOut(const MappedEventList &rgEventList,
                         const RealTime &sliceStart,
                         const RealTime &sliceEnd);
 
@@ -526,9 +526,9 @@ private:
     // Locally convenient to control our devices
     //
     void sendDeviceController(DeviceId device,
-                              MidiByte byte1,
-                              MidiByte byte2);
-                              
+                              MidiByte controller,
+                              MidiByte value);
+
     int checkAlsaError(int rc, const char *message);
 
     /// The ALSA ports.
@@ -546,7 +546,7 @@ private:
     int m_client;
 
     int                          m_inputPort;
-    
+
     typedef std::map<DeviceId, int /* portNumber */> DeviceIntMap;
     // ??? The ports that are created for each output device in the
     //     Composition/Studio?
@@ -604,12 +604,12 @@ private:
     typedef std::map<unsigned int,
                      std::pair<MappedEvent *, std::string> > DeviceEventMap;
     DeviceEventMap             *m_pendSysExcMap;
-    
+
     /**
      * Clear all accumulated incompete System Exclusive messages.
      */
     void clearPendSysExcMap();
-    
+
 #ifdef HAVE_LIBJACK
     JackDriver *m_jackDriver;
 #endif
@@ -695,7 +695,7 @@ private:
 			    InstrumentId instrument); // on subsequent note on
 
     bool m_queueRunning;
-    
+
     /// An ALSA client or port event was received.
     /**
      * checkForNewClients() will handle.
@@ -703,7 +703,7 @@ private:
     bool m_portCheckNeeded;
 
     enum { NeedNoJackStart, NeedJackReposition, NeedJackStart } m_needJackStart;
-    
+
     bool m_doTimerChecks;
     bool m_firstTimerCheck;
     double m_timerRatio;
