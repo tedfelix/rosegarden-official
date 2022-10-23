@@ -497,6 +497,7 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // look for the first PCM playback timer; that's all we know about
     // for now (until JACK becomes able to tell us which PCM it's on)
 
+    // cppcheck-suppress knownConditionTrueFalse
     if (pcmTimerAccepted) {
 
         for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
@@ -761,7 +762,7 @@ AlsaDriver::generateFixedInstruments()
                                      audioName,
                                      audioDeviceId);
         m_instruments.push_back(instr);
-    
+
         // Create a fader with a matching id - this is the starting
         // point for all audio faders.
         //
@@ -1666,10 +1667,8 @@ AlsaDriver::setCurrentTimer(QString timer)
 bool
 AlsaDriver::initialise()
 {
-    bool result = true;
-
     initialiseAudio();
-    result = initialiseMidi();
+    bool result = initialiseMidi();
 
     return result;
 }
@@ -1749,7 +1748,7 @@ AlsaDriver::initialiseMidi()
     // Set the client name.  Note that we depend on knowing this name
     // elsewhere, e.g. in setPlausibleConnection below.  If it is ever
     // changed, we may have to check for other occurrences
-    // 
+    //
     snd_seq_set_client_name(m_midiHandle, "rosegarden");
 
     if ((m_client = snd_seq_client_id(m_midiHandle)) < 0) {
@@ -2866,12 +2865,12 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 if ((MidiByte)(data[1]) == MIDI_SYSEX_RT) {
                     RG_DEBUG << "getMappedEventList(): REALTIME SYSEX";
                     for (unsigned int ii = 0; ii < event->data.ext.len; ++ii) {
-                        printf("B %d = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
+                        printf("B %u = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
                     }
                 } else {
                     RG_DEBUG << "getMappedEventList(): NON-REALTIME SYSEX";
                     for (unsigned int ii = 0; ii < event->data.ext.len; ++ii) {
-                        printf("B %d = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
+                        printf("B %u = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
                     }
                 }
 #endif
@@ -2880,11 +2879,11 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 // Pedro Lopez-Cabanillas aseqmm code that we need to pool
                 // alsa system exclusive messages since they may be broken
                 // across several ALSA messages.
-            
+
                 // Unfortunately, pooling these messages get very complicated
                 // since it creates many corner cases during this realtime
                 // activity that may involve possible bad data transmissions.
-            
+
                 bool beginNewMessage = false;
                 if (data.length() > 0) {
                     // Check if at start of MIDI message
@@ -2894,7 +2893,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                     }
                 }
 
-                std::string sysExcData; 
+                std::string sysExcData;
                 MappedEvent *sysExcEvent = nullptr;
 
                 // Check to see if there are any pending System Exclusive Messages
@@ -2902,23 +2901,23 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                     // Check our map to see if we have a pending operations for
                     // the current deviceId.
                     DeviceEventMap::iterator pendIt = m_pendSysExcMap->find(deviceId);
-                
+
                     if (pendIt != m_pendSysExcMap->end()) {
                         sysExcEvent = pendIt->second.first;
                         sysExcData = pendIt->second.second;
-                    
+
                         // Be optimistic that we won't have to re-add this afterwards.
                         // Also makes keeping track of this easier.
                         m_pendSysExcMap->erase(pendIt);
                     }
                 }
-            
+
                 bool createNewEvent = false;
                 if (!sysExcEvent) {
                     // Did not find a pending (unfinished) System Exclusive message.
                     // Create a new event.
                     createNewEvent = true;
-                
+
                     if (!beginNewMessage) {
                         RG_WARNING << "getMappedEventList(): WARNING: New ALSA message arrived with incorrect MIDI System Exclusive start byte.";
                         RG_WARNING << "getMappedEventList():          This is probably a bad transmission.";
@@ -2937,7 +2936,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                         // This is the start of a new message but have
                         // pending (incomplete) messages already.
                         createNewEvent = true;
-                    
+
                         // Decide how to handle previous (incomplete) message
                         if (sysExcData.size() > 0) {
                             RG_WARNING << "getMappedEventList(): WARNING: Sending an incomplete ALSA message to the composition.";
@@ -2954,7 +2953,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                         }
                     }
                 }
-                            
+
                 if (createNewEvent) {
                     // Still need a current event to work with.  Create it.
                     sysExcEvent = new MappedEvent();
@@ -2966,14 +2965,14 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
                 // We need to check to see if this event completes the
                 // System Exclusive event.
-            
+
                 bool pushOnMap = false;
                 if (!data.empty()) {
                     int lastChar = data.size() - 1;
-                
+
                     // Check to see if we are at the end of a message.
                     if (MidiByte(data.at(lastChar)) == MIDI_END_OF_EXCLUSIVE) {
-                        // Remove (EOX). RG doesn't use it. 
+                        // Remove (EOX). RG doesn't use it.
                         data.erase(lastChar);
 
                         // Push message to mapped event list
@@ -2993,13 +2992,13 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
                     pushOnMap = true;
                 }
-            
+
                 if (pushOnMap) {
                     // Put the unfinished event back in the pending map.
                     m_pendSysExcMap->insert(std::make_pair(deviceId,
                                                            std::make_pair(sysExcEvent, data)));
 
-                    if (beginNewMessage) { 
+                    if (beginNewMessage) {
                         RG_DEBUG << "getMappedEventList(): Encountered long System Exclusive Message (pooling message until transmission complete)";
                     }
                 }
@@ -3597,6 +3596,7 @@ restarted.  Reset it to a sane default when called with factor of 0
     RG_DEBUG << "tweakSkewForMTC(): RG MTC: skew: " << t_skew;
 #endif
 
+    // cppcheck-suppress redundantAssignment
     t_skew = 0x10000 + factor + bias_factor;
 
 #ifdef MTC_DEBUG
@@ -3716,7 +3716,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 
         snd_seq_event_t alsaEvent;
         snd_seq_ev_clear(&alsaEvent);
-    
+
         const bool isExternalController =
                 (rgEvent->getRecordedDevice() == Device::EXTERNAL_CONTROLLER);
 
@@ -4100,7 +4100,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, nullptr), "processMidiOut(): continue queue");
         }
 
-#ifdef DEBUG_PROCESS_MIDI_OUT 
+#ifdef DEBUG_PROCESS_MIDI_OUT
         //RG_DEBUG << "processMidiOut(): m_queueRunning " << m_queueRunning << ", now " << now;
 #endif
         checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
@@ -4722,6 +4722,7 @@ AlsaDriver::record(RecordStatus recordStatus,
                 }
 #endif
 
+                // cppcheck-suppress knownConditionTrueFalse
                 if (!good) {
                     m_recordStatus = RECORD_OFF;
                     RG_WARNING << "record(): No JACK driver, or JACK driver failed to prepare for recording audio";
@@ -5376,7 +5377,7 @@ AlsaDriver::sendSystemQueued(MidiByte command,
 void
 AlsaDriver::claimUnwantedPlugin(void *plugin)
 {
-    m_pluginScavenger.claim((RunnablePluginInstance *)plugin);
+    m_pluginScavenger.claim(static_cast<RunnablePluginInstance *>(plugin));
 }
 
 
@@ -5622,7 +5623,7 @@ AlsaDriver::versionIsAtLeast(std::string v, int major, int minor, int subminor)
 
     RG_DEBUG << "versionIsAtLeast(): is version " << v << " at least " << major << "." << minor << "." << subminor << "? " << (ok ? "yes" : "no");
     return ok;
-}    
+}
 
 bool
 AlsaDriver::throttledDebug() const
