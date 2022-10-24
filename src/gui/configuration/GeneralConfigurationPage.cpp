@@ -259,14 +259,14 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("Auto Channels (experimental)"),
+    layout->addWidget(new QLabel(tr("Jump to loop"),
                                  frame), row, 0);
-    m_autoChannels = new QCheckBox(frame);
-    m_autoChannels->setChecked(Preferences::getAutoChannels());
-    connect(m_autoChannels, &QCheckBox::stateChanged,
+    m_jumpToLoop = new QCheckBox(frame);
+    m_jumpToLoop->setChecked(Preferences::getJumpToLoop());
+    connect(m_jumpToLoop, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
 
-    layout->addWidget(m_autoChannels, row, 1, 1, 2);
+    layout->addWidget(m_jumpToLoop, row, 1, 1, 2);
 
     ++row;
 
@@ -278,6 +278,17 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_advancedLooping, row, 1, 1, 2);
+
+    ++row;
+
+    layout->addWidget(new QLabel(tr("Auto Channels (experimental)"),
+                                 frame), row, 0);
+    m_autoChannels = new QCheckBox(frame);
+    m_autoChannels->setChecked(Preferences::getAutoChannels());
+    connect(m_autoChannels, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_autoChannels, row, 1, 1, 2);
 
     ++row;
 
@@ -576,8 +587,9 @@ void GeneralConfigurationPage::apply()
 
 
     Preferences::setStopAtSegmentEnd(m_stopPlaybackAtEnd->isChecked());
-    Preferences::setAutoChannels(m_autoChannels->isChecked());
+    Preferences::setJumpToLoop(m_jumpToLoop->isChecked());
     Preferences::setAdvancedLooping(m_advancedLooping->isChecked());
+    Preferences::setAutoChannels(m_autoChannels->isChecked());
 
     // Presentation tab
 

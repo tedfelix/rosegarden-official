@@ -53,6 +53,9 @@ namespace Preferences
     void setStopAtSegmentEnd(bool value);
     bool getStopAtSegmentEnd();
 
+    void setJumpToLoop(bool value);
+    bool getJumpToLoop();
+
     void setAdvancedLooping(bool value);
     bool getAdvancedLooping();
 
