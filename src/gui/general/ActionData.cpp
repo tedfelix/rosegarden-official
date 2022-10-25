@@ -416,8 +416,8 @@ ActionData::ActionData() :
     m_userShortcutsCopy = m_userShortcuts;
 
     readKeyboardShortcuts();
-    settings.beginGroup(UserShortcutsConfigGroup);
-    m_actKb = settings.value("acualkeyboard", 0).toInt();
+    settings.beginGroup(ShortcutKeyboardConfigGroup);
+    m_actKb = settings.value("actualkeyboard", 0).toInt();
     settings.endGroup();
     m_actKbCopy = m_actKb;
     applyKeyboard(m_actKb);

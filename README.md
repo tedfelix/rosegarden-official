@@ -1,7 +1,7 @@
 # Build Status
 
-[![CI Ubuntu](https://github.com/bownie/rosegarden-official/actions/workflows/ci.yml/badge.svg)](https://github.com/bownie/rosegarden-official/actions/workflows/ci.yml)
-[![CI Windows](https://github.com/bownie/rosegarden-official/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/bownie/rosegarden-official/actions/workflows/ci-windows.yml)
+[![CI Ubuntu](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci.yml/badge.svg)](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci.yml)
+[![CI Windows](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci-windows.yml)
 
 # Introduction
 

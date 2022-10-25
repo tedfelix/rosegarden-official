@@ -137,7 +137,7 @@ private:
     // Remember the mouse x pos in mousePressEvent() and in mouseMoveEvent() so
     // that we can emit it in mouseReleaseEvent() to update the pointer position
     // in other views.
-    double m_lastMouseXPos;
+    double m_lastMouseXPos = 0;
 
     RulerScale *m_rulerScale;
     void drawBarSections(QPainter *);

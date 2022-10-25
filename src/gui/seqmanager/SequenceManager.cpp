@@ -54,6 +54,7 @@
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
+#include "misc/Preferences.h"
 
 #include "rosegarden-version.h"  // for VERSION
 
@@ -1053,7 +1054,8 @@ void SequenceManager::slotLoopChanged()
     if (composition.getLoopMode() == Composition::LoopOff) {
         // Turn off the loop.
         RosegardenSequencer::getInstance()->setLoop(
-                RealTime::zeroTime, RealTime::zeroTime);
+                RealTime::zeroTime, RealTime::zeroTime,
+                false);
         return;
     }
 
@@ -1062,7 +1064,9 @@ void SequenceManager::slotLoopChanged()
                 composition.getLoopStart());
         const RealTime loopEnd = composition.getElapsedRealTime(
                 composition.getLoopEnd());
-        RosegardenSequencer::getInstance()->setLoop(loopStart, loopEnd);
+        RosegardenSequencer::getInstance()->setLoop(
+                loopStart, loopEnd,
+                Preferences::getJumpToLoop());
         return;
     }
 
@@ -1071,7 +1075,9 @@ void SequenceManager::slotLoopChanged()
                 composition.getStartMarker());
         const RealTime loopEnd = composition.getElapsedRealTime(
                 composition.getDuration(true));
-        RosegardenSequencer::getInstance()->setLoop(loopStart, loopEnd);
+        RosegardenSequencer::getInstance()->setLoop(
+                loopStart, loopEnd,
+                false);
         return;
     }
 }

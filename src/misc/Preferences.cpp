@@ -31,6 +31,7 @@ namespace
     bool sendControlChangesWhenLooping = true;
     bool useNativeFileDialogs = true;
     bool stopAtSegmentEnd = false;
+    bool jumpToLoop = true;
     bool advancedLooping = false;
 
     bool afldDontShow = false;
@@ -146,6 +147,32 @@ bool Preferences::getStopAtSegmentEnd()
     }
 
     return stopAtSegmentEnd;
+}
+
+void Preferences::setJumpToLoop(bool value)
+{
+    QSettings settings;
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    settings.setValue("jumpToLoop", value);
+    jumpToLoop = value;
+}
+
+bool Preferences::getJumpToLoop()
+{
+    static bool firstGet = true;
+
+    if (firstGet) {
+        firstGet = false;
+
+        QSettings settings;
+        settings.beginGroup(SequencerOptionsConfigGroup);
+        jumpToLoop =
+            settings.value("jumpToLoop", "true").toBool();
+        // Write it back out so we can find it if it wasn't there.
+        settings.setValue("jumpToLoop", jumpToLoop);
+    }
+
+    return jumpToLoop;
 }
 
 void Preferences::setAdvancedLooping(bool value)
