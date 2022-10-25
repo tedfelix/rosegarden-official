@@ -64,7 +64,12 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     m_loopGrid->setSnapTime(SnapGrid::SnapToBeat);
 
-    setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Right-click and drag to set a range for looping or editing.</p><p>Right-click to toggle the range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
+    // ??? This will get out of sync if they change modes.  But loading
+    //     a new file will fix it.
+    if (Preferences::getAdvancedLooping())
+        setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Right-click and drag to set a range for looping or editing.</p><p>Right-click to switch between loop range and loop all.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
+    else
+        setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Right-click and drag to set a range for looping or editing.</p><p>Right-click to toggle the range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
 
     connect(m_doc, &RosegardenDocument::loopChanged,
             this, &LoopRuler::slotLoopChanged);

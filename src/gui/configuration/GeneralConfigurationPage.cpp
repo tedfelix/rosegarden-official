@@ -259,6 +259,28 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
+    layout->addWidget(new QLabel(tr("Jump to loop"),
+                                 frame), row, 0);
+    m_jumpToLoop = new QCheckBox(frame);
+    m_jumpToLoop->setChecked(Preferences::getJumpToLoop());
+    connect(m_jumpToLoop, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_jumpToLoop, row, 1, 1, 2);
+
+    ++row;
+
+    layout->addWidget(new QLabel(tr("Advanced Looping (beta)"),
+                                 frame), row, 0);
+    m_advancedLooping = new QCheckBox(frame);
+    m_advancedLooping->setChecked(Preferences::getAdvancedLooping());
+    connect(m_advancedLooping, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_advancedLooping, row, 1, 1, 2);
+
+    ++row;
+
     layout->addWidget(new QLabel(tr("Auto Channels (experimental)"),
                                  frame), row, 0);
     m_autoChannels = new QCheckBox(frame);
@@ -267,17 +289,6 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_autoChannels, row, 1, 1, 2);
-
-    ++row;
-
-    layout->addWidget(new QLabel(tr("Advanced Looping (experimental)"),
-                                 frame), row, 0);
-    m_advancedLooping = new QCheckBox(frame);
-    m_advancedLooping->setChecked(Preferences::getAdvancedLooping());
-    connect(m_advancedLooping, &QCheckBox::stateChanged,
-            this, &GeneralConfigurationPage::slotModified);
-
-    layout->addWidget(m_advancedLooping, row, 1, 1, 2);
 
     ++row;
 
@@ -576,8 +587,9 @@ void GeneralConfigurationPage::apply()
 
 
     Preferences::setStopAtSegmentEnd(m_stopPlaybackAtEnd->isChecked());
-    Preferences::setAutoChannels(m_autoChannels->isChecked());
+    Preferences::setJumpToLoop(m_jumpToLoop->isChecked());
     Preferences::setAdvancedLooping(m_advancedLooping->isChecked());
+    Preferences::setAutoChannels(m_autoChannels->isChecked());
 
     // Presentation tab
 

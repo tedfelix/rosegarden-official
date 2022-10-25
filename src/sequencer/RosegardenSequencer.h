@@ -81,8 +81,10 @@ public:
     bool punchOut();
 
     /// Set a loop on the sequencer.
-    void setLoop(const RealTime &loopStart,
-                 const RealTime &loopEnd);
+    void setLoop(
+            const RealTime &loopStart,
+            const RealTime &loopEnd,
+            bool jumpToLoop);
 
     /// Set the sequencer to a given time.
     void jumpTo(const RealTime &rt);
@@ -418,7 +420,8 @@ public:
     void routeEvents(MappedEventList *mC, bool recording);
 
     /// Are we looping?
-    bool isLooping() const { return !(m_loopStart == m_loopEnd); }
+    bool isLooping() const
+        { return m_withinLoop  &&  m_loopStart != m_loopEnd; }
 
     /// Check for new external clients (ALSA sequencer or whatever).
     /**
@@ -498,6 +501,7 @@ private:
 
     RealTime m_loopStart;
     RealTime m_loopEnd;
+    bool m_withinLoop = false;
 
     std::vector<MappedInstrument*> m_instruments;
 
