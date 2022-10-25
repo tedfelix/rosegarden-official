@@ -71,6 +71,9 @@ namespace Preferences
     void setCustomAudioLocation(QString location);
     QString getCustomAudioLocation();
 
+    void setJACKLoadCheck(bool value);
+    bool getJACKLoadCheck();
+
     // Experimental
     bool getBug1623();
 

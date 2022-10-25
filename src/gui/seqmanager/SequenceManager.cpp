@@ -798,16 +798,15 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
                     } else if ((*i)->getData1() == MappedEvent::FailureCPUOverload) {
 
-#define REPORT_CPU_OVERLOAD 1
-#ifdef REPORT_CPU_OVERLOAD
-
                         stop();
 
+                        // This can be disabled in the .conf.  See
+                        // Preferences::getJACKLoadCheck().
+                        // ??? Make this a QDialog with a "don't show this
+                        //     again" checkbox.
                         QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
                             tr("Out of processor power for real-time audio processing.  Cannot continue."));
-
-#endif
 
                     } else {
 

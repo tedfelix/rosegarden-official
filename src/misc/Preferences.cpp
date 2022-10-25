@@ -223,6 +223,19 @@ QString Preferences::getCustomAudioLocation()
     return afldCustomLocation;
 }
 
+PreferenceBool jackLoadCheck(
+        SequencerOptionsConfigGroup, "jackLoadCheck", true);
+
+void Preferences::setJACKLoadCheck(bool value)
+{
+    jackLoadCheck.set(value);
+}
+
+bool Preferences::getJACKLoadCheck()
+{
+    return jackLoadCheck.get();
+}
+
 PreferenceBool bug1623(ExperimentalConfigGroup, "bug1623", false);
 
 bool Preferences::getBug1623()

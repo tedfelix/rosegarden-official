@@ -280,6 +280,8 @@ protected:
 
     // initialise() has completed successfully, and there are no other issues
     bool                         m_ok;
+
+    bool m_checkLoad;
 };
 
 
