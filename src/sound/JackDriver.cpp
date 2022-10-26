@@ -858,6 +858,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     if (m_checkLoad)
     {
+        // ??? jack_cpu_load() is not reliable.  It returns different
+        //     values on different systems.  Those values do not
+        //     necessarily reflect CPU usage.
         if (jack_cpu_load(m_client) > 97.0) {
             reportFailure(MappedEvent::FailureCPUOverload);
             return jackProcessEmpty(nframes);

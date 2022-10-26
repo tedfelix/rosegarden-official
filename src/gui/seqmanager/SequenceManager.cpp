@@ -41,6 +41,7 @@
 #include "document/CommandHistory.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
+#include "gui/dialogs/OutOfProcessorPower.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/studio/StudioControl.h"
@@ -796,17 +797,14 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
                             tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
-                    } else if ((*i)->getData1() == MappedEvent::FailureCPUOverload) {
+                    } else if ((*i)->getData1()
+                            == MappedEvent::FailureCPUOverload) {
 
                         stop();
 
-                        // This can be disabled in the .conf.  See
-                        // Preferences::getJACKLoadCheck().
-                        // ??? Make this a QDialog with a "don't show this
-                        //     again" checkbox.
-                        QMessageBox::critical(
-                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
-                            tr("Out of processor power for real-time audio processing.  Cannot continue."));
+                        OutOfProcessorPower outOfProcessorPower(
+                                RosegardenMainWindow::self());
+                        outOfProcessorPower.exec();
 
                     } else {
 
