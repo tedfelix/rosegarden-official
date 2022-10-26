@@ -377,7 +377,7 @@ public:
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;
 
-    MappedObjectValue getBussId() { return m_bussId; }
+    MappedObjectValue getBussId() const { return m_bussId; }
 
     // super-convenience function: retrieve the ids of the instruments
     // connected to this buss
@@ -410,7 +410,7 @@ public:
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;
 
-    MappedObjectValue getInputNumber() { return m_inputNumber; }
+    MappedObjectValue getInputNumber() const { return m_inputNumber; }
 
 protected:
     MappedObjectValue m_inputNumber;
@@ -429,8 +429,6 @@ public:
     static const MappedObjectProperty Ports;
     static const MappedObjectProperty Program;
     static const MappedObjectProperty Programs; // list property
-    static const MappedObjectProperty Instrument;
-    static const MappedObjectProperty Position;
     static const MappedObjectProperty Bypassed;
     static const MappedObjectProperty Configuration; // list property
 

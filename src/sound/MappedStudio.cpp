@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -165,8 +165,6 @@ const MappedObjectProperty MappedPluginSlot::Copyright = "copyright";
 const MappedObjectProperty MappedPluginSlot::Category = "category";
 const MappedObjectProperty MappedPluginSlot::PortCount = "portcount";
 const MappedObjectProperty MappedPluginSlot::Ports = "ports";
-const MappedObjectProperty MappedPluginSlot::Instrument = "instrument";
-const MappedObjectProperty MappedPluginSlot::Position = "position";
 const MappedObjectProperty MappedPluginSlot::Bypassed = "bypassed";
 const MappedObjectProperty MappedPluginSlot::Programs = "programs";
 const MappedObjectProperty MappedPluginSlot::Program = "program";
@@ -1716,6 +1714,3 @@ MappedPluginPort::setStringProperty(const MappedObjectProperty &property,
 
 
 }
-
-
-
