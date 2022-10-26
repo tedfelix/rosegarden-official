@@ -258,6 +258,17 @@ AudioConfigurationPage::AudioConfigurationPage(
     ++row;
 
     settings.endGroup();
+
+    layout->addWidget(
+            new QLabel(tr("Check for \"Out of processor power\""), frame),
+            row, 0);
+    m_outOfProcessorPower = new QCheckBox();
+    connect(m_outOfProcessorPower, &QCheckBox::stateChanged,
+            this, &AudioConfigurationPage::slotModified);
+    m_outOfProcessorPower->setChecked(Preferences::getJACKLoadCheck());
+    layout->addWidget(m_outOfProcessorPower, row, 1);
+    ++row;
+
 #endif
 
     layout->setRowStretch(row, 10);
@@ -289,6 +300,8 @@ AudioConfigurationPage::apply()
     settings.setValue("connect_default_jack_inputs", m_connectDefaultAudioInputs->isChecked());
     settings.setValue("autostartjack", m_autoStartJackServer->isChecked());
     settings.endGroup();
+
+    Preferences::setJACKLoadCheck(m_outOfProcessorPower->isChecked());
 #endif
 
     settings.beginGroup( GeneralOptionsConfigGroup );
