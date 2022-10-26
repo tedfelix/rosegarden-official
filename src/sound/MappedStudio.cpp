@@ -171,7 +171,6 @@ const MappedObjectProperty MappedPluginSlot::Program = "program";
 const MappedObjectProperty MappedPluginSlot::Configuration = "configuration";
 
 const MappedObjectProperty MappedPluginPort::PortNumber = "portnumber";
-const MappedObjectProperty MappedPluginPort::Name = "name";
 const MappedObjectProperty MappedPluginPort::Minimum = "minimum";
 const MappedObjectProperty MappedPluginPort::Maximum = "maximum";
 const MappedObjectProperty MappedPluginPort::Default = "default";
@@ -1290,7 +1289,7 @@ MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
     if (property == Identifier) {
         value = m_identifier;
     } else if (property == PluginName) {
-        value = m_name;
+        value = m_pluginName;
     } else if (property == Label) {
         value = m_label;
     } else if (property == Author) {
@@ -1427,7 +1426,7 @@ MappedPluginSlot::setStringProperty(const MappedObjectProperty &property,
         m_configuration.clear();
 
     } else if (property == PluginName) {
-        m_name = value;
+        m_pluginName = value;
     } else if (property == Label) {
         m_label = value;
     } else if (property == Author) {
@@ -1608,7 +1607,7 @@ MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
                                     QString &value)
 {
     if (property == Name) {
-        value = m_name;
+        value = m_portName;
     } else {
 
 #ifdef DEBUG_MAPPEDSTUDIO
@@ -1701,7 +1700,7 @@ MappedPluginPort::setStringProperty(const MappedObjectProperty &property,
                                     QString value)
 {
     if (property == Name) {
-        m_name = value;
+        m_portName = value;
     } else {
 
 #ifdef DEBUG_MAPPEDSTUDIO

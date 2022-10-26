@@ -465,7 +465,7 @@ public:
 protected:
     QString                   m_identifier;
 
-    QString                   m_name;
+    QString                   m_pluginName;
     QString                   m_label;
     QString                   m_author;
     QString                   m_copyright;
@@ -483,7 +483,6 @@ class MappedPluginPort : public MappedObject
 {
 public:
     static const MappedObjectProperty PortNumber;
-    static const MappedObjectProperty Name;
     static const MappedObjectProperty Minimum;
     static const MappedObjectProperty Maximum;
     static const MappedObjectProperty Default;
@@ -515,7 +514,7 @@ public:
 
 protected:
     int                     m_portNumber;
-    QString                 m_name;
+    QString                 m_portName;
     MappedObjectValue       m_minimum;
     MappedObjectValue       m_maximum;
     MappedObjectValue       m_default;

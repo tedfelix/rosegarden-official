@@ -48,7 +48,7 @@ namespace Rosegarden
 class AlsaDriver : public SoundDriver
 {
 public:
-    AlsaDriver(MappedStudio *studio);
+    explicit AlsaDriver(MappedStudio *studio);
     ~AlsaDriver() override;
 
     // shutdown everything that's currently open

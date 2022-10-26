@@ -223,7 +223,7 @@ public:
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
-    MappedEvent(const Event &e);
+    explicit MappedEvent(const Event &e);
 
     // Another Internal constructor from Events
     MappedEvent(InstrumentId id,
@@ -369,7 +369,7 @@ public:
 
     // Copy from pointer
     // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
-    MappedEvent(MappedEvent *mE):
+    explicit MappedEvent(MappedEvent *mE):
         m_trackId(mE->getTrackId()),
         m_instrument(mE->getInstrument()),
         m_type(mE->getType()),
@@ -387,7 +387,7 @@ public:
         m_recordedDevice(mE->getRecordedDevice()) {}
 
     // Construct perhaps without initialising, for placement new or equivalent
-    MappedEvent(bool initialise) {
+    explicit MappedEvent(bool initialise) {
         if (initialise) *this = MappedEvent();
     }
 
