@@ -27,6 +27,7 @@
 
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 
 #include <QSettings>
 #include <QtGlobal>
@@ -213,6 +214,8 @@ JackDriver::initialise(bool reinitialise)
     RG_DEBUG << "initialise() begin...";
 
     std::string jackClientName = "rosegarden";
+
+    m_checkLoad = Preferences::getJACKLoadCheck();
 
     // set up JackOpenOptions per user config
     QSettings settings;
@@ -853,9 +856,15 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         }
     }
 
-    if (jack_cpu_load(m_client) > 97.0) {
-        reportFailure(MappedEvent::FailureCPUOverload);
-        return jackProcessEmpty(nframes);
+    if (m_checkLoad)
+    {
+        // ??? jack_cpu_load() is not reliable.  It returns different
+        //     values on different systems.  Those values do not
+        //     necessarily reflect CPU usage.
+        if (jack_cpu_load(m_client) > 97.0) {
+            reportFailure(MappedEvent::FailureCPUOverload);
+            return jackProcessEmpty(nframes);
+        }
     }
 
 #ifdef DEBUG_JACK_PROCESS

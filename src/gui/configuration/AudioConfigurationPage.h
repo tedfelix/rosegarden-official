@@ -92,6 +92,7 @@ private:
     QCheckBox *m_connectDefaultAudioInputs;
 
     QCheckBox *m_autoStartJackServer;
+    QCheckBox *m_outOfProcessorPower;
 
     //QCheckBox *m_startJack;
     //LineEdit  *m_jackPath;

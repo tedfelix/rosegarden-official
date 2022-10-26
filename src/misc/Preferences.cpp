@@ -23,182 +23,136 @@ namespace Rosegarden
 {
 
 
+// Was thinking about doing a template, but there are finicky little
+// differences between the types (QVariant conversions).  Bool is the
+// most popular, so I'm trying this one first.  Might take a shot at
+// a template later.
+class PreferenceBool
+{
+public:
+    PreferenceBool(QString group, QString key, bool defaultValue) :
+        m_group(group),
+        m_key(key),
+        m_defaultValue(defaultValue)
+    {
+    }
+
+    void set(bool value)
+    {
+        QSettings settings;
+        settings.beginGroup(m_group);
+        settings.setValue(m_key, value);
+        m_cache = value;
+    }
+
+    bool get() const
+    {
+        if (!m_cacheValid) {
+            m_cacheValid = true;
+
+            QSettings settings;
+            settings.beginGroup(m_group);
+            m_cache = settings.value(
+                    m_key, m_defaultValue ? "true" : "false").toBool();
+            // Write it back out so we can find it if it wasn't there.
+            settings.setValue(m_key, m_cache);
+        }
+
+        return m_cache;
+    }
+
+private:
+    QString m_group;
+    QString m_key;
+
+    bool m_defaultValue;
+
+    mutable bool m_cacheValid = false;
+    mutable bool m_cache{};
+};
+
 namespace
 {
     // Cached values for performance...
 
-    bool sendProgramChangesWhenLooping = true;
-    bool sendControlChangesWhenLooping = true;
-    bool useNativeFileDialogs = true;
-    bool stopAtSegmentEnd = false;
-    bool jumpToLoop = true;
-    bool advancedLooping = false;
-
-    bool afldDontShow = false;
     int afldLocation = 0;
     QString afldCustomLocation;
-
-    bool bug1623 = false;
-    bool autoChannels = false;
 }
+
+PreferenceBool sendProgramChangesWhenLooping(
+        GeneralOptionsConfigGroup, "sendProgramChangesWhenLooping", true);
 
 void Preferences::setSendProgramChangesWhenLooping(bool value)
 {
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    settings.setValue("sendProgramChangesWhenLooping", value);
-    sendProgramChangesWhenLooping = value;
+    sendProgramChangesWhenLooping.set(value);
 }
 
 bool Preferences::getSendProgramChangesWhenLooping()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(GeneralOptionsConfigGroup);
-        sendProgramChangesWhenLooping =
-                settings.value("sendProgramChangesWhenLooping", "true").toBool();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("sendProgramChangesWhenLooping",
-                          sendProgramChangesWhenLooping);
-    }
-
-    return sendProgramChangesWhenLooping;
+    return sendProgramChangesWhenLooping.get();
 }
+
+PreferenceBool sendControlChangesWhenLooping(
+        GeneralOptionsConfigGroup, "sendControlChangesWhenLooping", true);
 
 void Preferences::setSendControlChangesWhenLooping(bool value)
 {
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    settings.setValue("sendControlChangesWhenLooping", value);
-    sendControlChangesWhenLooping = value;
+    sendControlChangesWhenLooping.set(value);
 }
 
 bool Preferences::getSendControlChangesWhenLooping()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(GeneralOptionsConfigGroup);
-        sendControlChangesWhenLooping =
-                settings.value("sendControlChangesWhenLooping", "true").toBool();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("sendControlChangesWhenLooping",
-                          sendControlChangesWhenLooping);
-    }
-
-    return sendControlChangesWhenLooping;
+    return sendControlChangesWhenLooping.get();
 }
+
+PreferenceBool useNativeFileDialogs("FileDialog", "useNativeFileDialogs", true);
 
 void Preferences::setUseNativeFileDialogs(bool value)
 {
-    QSettings settings;
-    settings.beginGroup("FileDialog");
-    settings.setValue("useNativeFileDialogs", value);
-    useNativeFileDialogs = value;
+    useNativeFileDialogs.set(value);
 }
 
 bool Preferences::getUseNativeFileDialogs()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup("FileDialog");
-        useNativeFileDialogs =
-                settings.value("useNativeFileDialogs", "true").toBool();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("useNativeFileDialogs",
-                useNativeFileDialogs);
-    }
-
-    return useNativeFileDialogs;
+    return useNativeFileDialogs.get();
 }
+
+PreferenceBool stopAtSegmentEnd(
+        SequencerOptionsConfigGroup, "stopatend", false);
 
 void Preferences::setStopAtSegmentEnd(bool value)
 {
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    settings.setValue("stopatend", value);
-    stopAtSegmentEnd = value;
+    stopAtSegmentEnd.set(value);
 }
 
 bool Preferences::getStopAtSegmentEnd()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(SequencerOptionsConfigGroup);
-        stopAtSegmentEnd =
-            settings.value("stopatend", "false").toBool();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("stopatend", stopAtSegmentEnd);
-    }
-
-    return stopAtSegmentEnd;
+    return stopAtSegmentEnd.get();
 }
+
+PreferenceBool jumpToLoop(SequencerOptionsConfigGroup, "jumpToLoop", true);
 
 void Preferences::setJumpToLoop(bool value)
 {
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    settings.setValue("jumpToLoop", value);
-    jumpToLoop = value;
+    jumpToLoop.set(value);
 }
 
 bool Preferences::getJumpToLoop()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(SequencerOptionsConfigGroup);
-        jumpToLoop =
-            settings.value("jumpToLoop", "true").toBool();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("jumpToLoop", jumpToLoop);
-    }
-
-    return jumpToLoop;
+    return jumpToLoop.get();
 }
+
+PreferenceBool advancedLooping(
+        SequencerOptionsConfigGroup, "advancedLooping", false);
 
 void Preferences::setAdvancedLooping(bool value)
 {
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    settings.setValue("advancedLooping", value);
-    advancedLooping = value;
+    advancedLooping.set(value);
 }
 
 bool Preferences::getAdvancedLooping()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(SequencerOptionsConfigGroup);
-        advancedLooping =
-            settings.value("advancedLooping", "false").toBool();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("advancedLooping", advancedLooping);
-    }
-
-    return advancedLooping;
+    return advancedLooping.get();
 }
 
 namespace
@@ -206,29 +160,16 @@ namespace
     const QString AudioFileLocationDialogGroup = "AudioFileLocationDialog";
 }
 
-void Preferences::setAudioFileLocationDlgDontShow(bool dontShow)
+PreferenceBool afldDontShow(AudioFileLocationDialogGroup, "dontShow", false);
+
+void Preferences::setAudioFileLocationDlgDontShow(bool value)
 {
-    QSettings settings;
-    settings.beginGroup(AudioFileLocationDialogGroup);
-    settings.setValue("dontShow", dontShow);
-    afldDontShow = dontShow;
+    afldDontShow.set(value);
 }
 
 bool Preferences::getAudioFileLocationDlgDontShow()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(AudioFileLocationDialogGroup);
-        afldDontShow = settings.value("dontShow", "false").toBool();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("dontShow", afldDontShow);
-    }
-
-    return afldDontShow;
+    return afldDontShow.get();
 }
 
 void Preferences::setDefaultAudioLocation(int location)
@@ -282,46 +223,36 @@ QString Preferences::getCustomAudioLocation()
     return afldCustomLocation;
 }
 
+PreferenceBool jackLoadCheck(
+        SequencerOptionsConfigGroup, "jackLoadCheck", true);
+
+void Preferences::setJACKLoadCheck(bool value)
+{
+    jackLoadCheck.set(value);
+}
+
+bool Preferences::getJACKLoadCheck()
+{
+    return jackLoadCheck.get();
+}
+
+PreferenceBool bug1623(ExperimentalConfigGroup, "bug1623", false);
+
 bool Preferences::getBug1623()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(ExperimentalConfigGroup);
-        bug1623 = settings.value("bug1623", "false").toBool();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("bug1623", bug1623);
-    }
-
-    return bug1623;
+    return bug1623.get();
 }
+
+PreferenceBool autoChannels(ExperimentalConfigGroup, "autoChannels", false);
 
 void Preferences::setAutoChannels(bool value)
 {
-    QSettings settings;
-    settings.beginGroup(ExperimentalConfigGroup);
-    settings.setValue("autoChannels", value);
-    autoChannels = value;
+    autoChannels.set(value);
 }
 
 bool Preferences::getAutoChannels()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(ExperimentalConfigGroup);
-        autoChannels = settings.value("autoChannels", "false").toBool();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("autoChannels", autoChannels);
-    }
-
-    return autoChannels;
+    return autoChannels.get();
 }
 
 
