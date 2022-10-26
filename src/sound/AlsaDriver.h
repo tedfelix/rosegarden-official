@@ -128,6 +128,7 @@ public:
 
     // Set up queue, client and port
     bool initialiseMidi();
+    // cppcheck-suppress functionStatic
     void initialiseAudio();
 
     // Some stuff to help us debug this
@@ -361,7 +362,7 @@ public:
     // Check whether the given event is an MMC command we need to act on
     // (and if so act on it)
     //
-    bool testForMMCSysex(const snd_seq_event_t *event);
+    bool testForMMCSysex(const snd_seq_event_t *event) const;
 
     // Create and enqueue a batch of MTC quarter-frame events
     //
@@ -450,6 +451,7 @@ public:
     QString getStatusLog() override;
 
     // To be called regularly from JACK driver when idle
+    // cppcheck-suppress functionConst
     void checkTimerSync(size_t frames);
 
     void runTasks() override;
@@ -529,7 +531,7 @@ private:
                               MidiByte controller,
                               MidiByte value);
 
-    int checkAlsaError(int rc, const char *message);
+    static int checkAlsaError(int rc, const char *message);
 
     /// The ALSA ports.
     AlsaPortVector m_alsaPorts;
@@ -645,7 +647,7 @@ private:
     /// Is the given deviceId within m_devicePortMap connected?
     bool isConnected(DeviceId deviceId) const;
 
-    std::string getPortName(ClientPortPair port);
+    std::string getPortName(ClientPortPair port) const;
     ClientPortPair getPortByName(std::string name);
 
     struct AlsaTimerInfo {
@@ -709,10 +711,10 @@ private:
     double m_timerRatio;
     bool m_timerRatioCalculated;
 
-    std::string getAlsaVersion();
-    std::string getKernelVersionString();
-    void extractVersion(std::string vstr, int &major, int &minor, int &subminor, std::string &suffix);
-    bool versionIsAtLeast(std::string vstr, int major, int minor, int subminor);
+    static std::string getAlsaVersion();
+    static std::string getKernelVersionString();
+    static void extractVersion(std::string vstr, int &major, int &minor, int &subminor, std::string &suffix);
+    static bool versionIsAtLeast(std::string vstr, int major, int minor, int subminor);
 
     QMutex m_mutex;
 
@@ -727,6 +729,7 @@ private:
      *
      * @see m_returnComposition
      */
+    // cppcheck-suppress unusedPrivateFunction
     void insertMappedEventForReturn(MappedEvent *mE);
 
     /// Holds events to be returned by getMappedEventList().
@@ -776,7 +779,7 @@ private:
     /**
      * Returns true if handled and the CC can be discarded.
      */
-    bool handleTransportCCs(unsigned controlNumber, int value);
+    bool handleTransportCCs(unsigned controlNumber, int value) const;
 
     /// Whether we are sending MIDI Clocks (transport master).
     /**
@@ -791,6 +794,7 @@ private:
     /**
      * Either by instrument and audio file id or by audio segment id.
      */
+    // cppcheck-suppress unusedPrivateFunction
     void cancelAudioFile(const MappedEvent *mE);
 
     void clearAudioQueue();

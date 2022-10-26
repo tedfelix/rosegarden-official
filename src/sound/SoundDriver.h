@@ -223,11 +223,11 @@ public:
 
     // Buffer sizes
     //
-    RealTime getAudioMixBufferLength() { return m_audioMixBufferLength; }
-    RealTime getAudioReadBufferLength() { return m_audioReadBufferLength; }
-    RealTime getAudioWriteBufferLength() { return m_audioWriteBufferLength; }
+    RealTime getAudioMixBufferLength() const { return m_audioMixBufferLength; }
+    RealTime getAudioReadBufferLength() const { return m_audioReadBufferLength; }
+    RealTime getAudioWriteBufferLength() const { return m_audioWriteBufferLength; }
 
-    bool getLowLatencyMode() const  { return true; }
+    static bool getLowLatencyMode() { return true; }
 
     virtual void getAudioInstrumentNumbers(InstrumentId &base, int &count)
         { base = 0; count = 0; }
@@ -281,7 +281,7 @@ public:
                                                    int /*position*/,
                                                    QString /*name*/)
         { return 0; }
-    
+
     virtual void setPluginInstanceProgram(InstrumentId /*id*/,
                                           int /*position*/,
                                           QString /*program*/)  { }

@@ -65,16 +65,16 @@ public:
                  MappedObjectType type,
                  MappedObjectId id):
         m_type(type),
-        m_id(id), 
+        m_id(id),
         m_name(name),
         m_parent(parent) {;}
 
     virtual ~MappedObject() {;}
 
-    MappedObjectId getId() { return m_id; }
-    MappedObjectType getType() { return m_type; }
+    MappedObjectId getId() const { return m_id; }
+    MappedObjectType getType() const { return m_type; }
 
-    std::string getName() { return m_name; }
+    std::string getName() const { return m_name; }
     void setName(const std::string &name) { m_name= name; }
 
     // Get and set properties
@@ -86,7 +86,7 @@ public:
                              MappedObjectValue &value) = 0;
 
     // Only relevant to objects that have string properties
-    // 
+    //
     virtual bool getStringProperty(const MappedObjectProperty &/* property */,
                                    QString &/* value */) { return false; }
 
@@ -94,7 +94,7 @@ public:
                              MappedObjectValue value) = 0;
 
     // Only relevant to objects that have string properties
-    // 
+    //
     virtual void setStringProperty(const MappedObjectProperty &/* property */,
                                    QString /* value */) { }
 
@@ -252,7 +252,7 @@ private:
     typedef std::map<MappedObjectId, MappedObject *> MappedObjectCategory;
     typedef std::map<MappedObjectType, MappedObjectCategory> MappedObjectMap;
     MappedObjectMap m_objects;
-    
+
     SoundDriver *m_soundDriver;
 };
 
@@ -525,7 +525,7 @@ protected:
 
 };
 
-    
+
 }
 
 #endif // RG_MAPPEDSTUDIO_H

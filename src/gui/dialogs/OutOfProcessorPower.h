@@ -33,7 +33,7 @@ class OutOfProcessorPower : public QDialog
     Q_OBJECT
 
 public:
-    OutOfProcessorPower(QWidget *parent);
+    explicit OutOfProcessorPower(QWidget *parent);
 
 public slots:
     virtual void accept() override;

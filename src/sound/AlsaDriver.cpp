@@ -146,6 +146,15 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_loopStartTime(0, 0),
     m_loopEndTime(0, 0),
     m_eat_mtc(0),
+    m_mtcFrames(0),
+    m_mtcSeconds(0),
+    m_mtcMinutes(0),
+    m_mtcHours(0),
+    m_mtcSMPTEType(0),
+    m_mtcFirstTime(0),
+    m_mtcSigmaE(0),
+    m_mtcSigmaC(0),
+    m_mtcSkew(0),
     m_looping(false),
     m_haveShutdown(false)
 #ifdef HAVE_LIBJACK
@@ -998,7 +1007,7 @@ AlsaDriver::getPortByName(std::string name)
 }
 
 std::string
-AlsaDriver::getPortName(ClientPortPair port)
+AlsaDriver::getPortName(ClientPortPair port) const
 {
     for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
         if (m_alsaPorts[i]->m_client == port.client &&
@@ -3610,7 +3619,7 @@ restarted.  Reset it to a sane default when called with factor of 0
 }
 
 bool
-AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
+AlsaDriver::testForMMCSysex(const snd_seq_event_t *event) const
 {
     if (m_mmcStatus != TRANSPORT_FOLLOWER)
         return false;
@@ -5696,7 +5705,7 @@ AlsaDriver::isConnected(DeviceId deviceId) const
             deviceIter->second != ClientPortPair(-1,-1));
 }
 
-bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
+bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value) const
 {
     // If transport CCs are not enabled, bail.
     if (!m_acceptTransportCCs)

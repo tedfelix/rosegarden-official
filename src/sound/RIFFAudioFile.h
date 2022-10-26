@@ -14,7 +14,7 @@
 */
 
 
-// Resource Interchange File Formt - a chunk based audio 
+// Resource Interchange File Formt - a chunk based audio
 // file format.  Type of chunk varies with specialisation
 // of this class - WAV files are a specialisation with just
 // a format chunk, BWF has more chunks.
@@ -79,7 +79,7 @@ public:
     // Move file pointer to relative time in data chunk -
     // shouldn't be less than zero.  Returns true if the
     // scan time was valid and successful.
-    // 
+    //
     bool scanTo(const RealTime &time) override;
     bool scanTo(std::ifstream *file, const RealTime &time) override;
 
@@ -118,7 +118,7 @@ public:
     // Accessors
     //
     unsigned int getBytesPerFrame() override { return m_bytesPerFrame; }
-    unsigned int getBytesPerSecond() { return m_bytesPerSecond; }
+    unsigned int getBytesPerSecond() const { return m_bytesPerSecond; }
 
     // Allow easy identification of wav file type
     //
@@ -132,7 +132,7 @@ public:
     // from this file or another with the same format as it.  Place
     // the results in the given float buffer.  Return true for
     // success.  This function does crappy resampling if necessary.
-    // 
+    //
     bool decode(const unsigned char *sourceData,
                         size_t sourceBytes,
                         size_t targetSampleRate,
