@@ -985,7 +985,7 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
 }
 
 ClientPortPair
-AlsaDriver::getPortByName(std::string name)
+AlsaDriver::getPortByName(const std::string& name)
 {
     AUDIT << "AlsaDriver::getPortByName(\"" << name << "\")\n";
     RG_DEBUG << "getPortByName(" << name << ")";
@@ -1922,6 +1922,7 @@ void
 AlsaDriver::initialiseAudio()
 {
 #ifdef HAVE_LIBJACK
+    if (m_jackDriver) delete m_jackDriver;
     m_jackDriver = new JackDriver(this);
 
     if (m_jackDriver->isOK()) {
@@ -3548,7 +3549,7 @@ AlsaDriver::calibrateMTC()
         RealTime diff_c = m_mtcReceiveTime - m_mtcLastReceive;
 
 #ifdef MTC_DEBUG
-        printf("RG MTC: diffs %d %d %d\n", diff_c.nsec, diff_e.nsec, m_mtcSkew);
+        printf("RG MTC: diffs %d %d %u\n", diff_c.nsec, diff_e.nsec, m_mtcSkew);
 #endif
 
         m_mtcSigmaE += ((long long int) diff_e.nsec) * m_mtcSkew;
@@ -5604,7 +5605,7 @@ done:
 }
 
 bool
-AlsaDriver::versionIsAtLeast(std::string vstr, int major, int minor, int subminor)
+AlsaDriver::versionIsAtLeast(const std::string& vstr, int major, int minor, int subminor)
 {
     int actualMajor, actualMinor, actualSubminor;
     std::string actualSuffix;

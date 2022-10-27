@@ -108,7 +108,7 @@ protected:
     size_t getBytes(std::ifstream *file, char *buffer, size_t n);
 
     // write some bytes to an output stream
-    void putBytes(std::ofstream *file, const std::string outputString);
+    void putBytes(std::ofstream *file, const std::string& outputString);
 
     // write some bytes to an output stream
     void putBytes(std::ofstream *file, const char *buffer, size_t n);

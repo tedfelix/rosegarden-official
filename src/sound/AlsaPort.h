@@ -95,7 +95,7 @@ public:
 struct AlsaPortCmp
 {
     bool operator()(QSharedPointer<AlsaPortDescription> a1,
-                    QSharedPointer<AlsaPortDescription> a2);
+                    QSharedPointer<AlsaPortDescription> a2) const;
 };
 
 

@@ -648,7 +648,7 @@ private:
     bool isConnected(DeviceId deviceId) const;
 
     std::string getPortName(ClientPortPair port) const;
-    ClientPortPair getPortByName(std::string name);
+    ClientPortPair getPortByName(const std::string& name);
 
     struct AlsaTimerInfo {
         int clas;
@@ -714,7 +714,7 @@ private:
     static std::string getAlsaVersion();
     static std::string getKernelVersionString();
     static void extractVersion(std::string vstr, int &major, int &minor, int &subminor, std::string &suffix);
-    static bool versionIsAtLeast(std::string vstr, int major, int minor, int subminor);
+    static bool versionIsAtLeast(const std::string& vstr, int major, int minor, int subminor);
 
     QMutex m_mutex;
 
