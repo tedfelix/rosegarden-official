@@ -305,6 +305,9 @@ protected slots:
 
     void slotScrollToFollow();
 
+    void slotLoop();
+    void slotLoopChanged();
+
     /// Note-on received asynchronously -- consider step-by-step editing
     void slotInsertableNoteOnReceived(int pitch, int velocity);
 

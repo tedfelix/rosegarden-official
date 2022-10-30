@@ -1004,33 +1004,8 @@ TransportDialog::closeEvent(QCloseEvent * /*e*/)
 void
 TransportDialog::slotLoopButtonClicked()
 {
-    // This is similar to RosegardenMainWindow::slotLoop().
-    // Should we combine?
-
-    RosegardenDocument *document = RosegardenDocument::currentDocument;
-    Composition &composition = document->getComposition();
-
-    const bool loop = (composition.getLoopStart() != composition.getLoopEnd());
-
-    if (Preferences::getAdvancedLooping()) {
-        // Button pressed?
-        if (ui->LoopButton->isChecked()) {
-            if (loop)
-                composition.setLoopMode(Composition::LoopOn);
-            else
-                composition.setLoopMode(Composition::LoopAll);
-        } else {  // Button unpressed, turn looping off.
-            composition.setLoopMode(Composition::LoopOff);
-        }
-    } else {
-        // If a loop range is set, and the loop button is pressed...
-        if (loop  &&  ui->LoopButton->isChecked())
-            composition.setLoopMode(Composition::LoopOn);
-        else
-            composition.setLoopMode(Composition::LoopOff);
-    }
-
-    emit document->loopChanged();
+    RosegardenDocument::currentDocument->loopButton(
+            ui->LoopButton->isChecked());
 }
 
 void

@@ -272,6 +272,12 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     enableAutoRepeat("Transport Toolbar", "cursor_back");
     enableAutoRepeat("Transport Toolbar", "cursor_forward");
 
+    connect(RosegardenDocument::currentDocument,
+                &RosegardenDocument::loopChanged,
+            this, &MatrixView::slotLoopChanged);
+    // Make sure we are in sync.
+    slotLoopChanged();
+
     // Show the pointer as soon as matrix editor opens (update pointer position,
     // but don't scroll)
     m_matrixWidget->showInitialPointer();
@@ -403,6 +409,7 @@ MatrixView::setupActions()
     createAction("cursor_next_segment", SLOT(slotCurrentSegmentNext()));
     createAction("toggle_solo", SLOT(slotToggleSolo()));
     createAction("scroll_to_follow", SLOT(slotScrollToFollow()));
+    createAction("loop", SLOT(slotLoop()));
     createAction("panic", SIGNAL(panic()));
     createAction("preview_selection", SLOT(slotPreviewSelection()));
     createAction("clear_loop", SLOT(slotClearLoop()));
@@ -1334,6 +1341,23 @@ MatrixView::slotScrollToFollow()
     m_scrollToFollow = !m_scrollToFollow;
     m_matrixWidget->setScrollToFollowPlayback(m_scrollToFollow);
     m_document->getComposition().setEditorFollowPlayback(m_scrollToFollow);
+}
+
+void
+MatrixView::slotLoop()
+{
+    RosegardenDocument::currentDocument->loopButton(
+            findAction("loop")->isChecked());
+}
+
+void
+MatrixView::slotLoopChanged()
+{
+    Composition &composition =
+        RosegardenDocument::currentDocument->getComposition();
+
+    findAction("loop")->setChecked(
+            (composition.getLoopMode() != Composition::LoopOff));
 }
 
 void

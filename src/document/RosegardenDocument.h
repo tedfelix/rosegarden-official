@@ -477,6 +477,9 @@ public:
 
     void stealLockFile(RosegardenDocument *other);
 
+    /// Consistent loop button behavior across all windows.
+    void loopButton(bool checked);
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object

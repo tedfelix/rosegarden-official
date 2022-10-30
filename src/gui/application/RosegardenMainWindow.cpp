@@ -4972,33 +4972,8 @@ RosegardenMainWindow::slotScrollToFollow()
 void
 RosegardenMainWindow::slotLoop()
 {
-    // This is similar to TransportDialog::slotLoopButtonClicked().
-    // Should we combine?
-
-    RosegardenDocument *document = RosegardenDocument::currentDocument;
-    Composition &composition = document->getComposition();
-
-    const bool loop = (composition.getLoopStart() != composition.getLoopEnd());
-
-    if (Preferences::getAdvancedLooping()) {
-        // Menu item checked?
-        if (findAction("loop")->isChecked()) {
-            if (loop)
-                composition.setLoopMode(Composition::LoopOn);
-            else
-                composition.setLoopMode(Composition::LoopAll);
-        } else {  // Button unpressed, turn looping off.
-            composition.setLoopMode(Composition::LoopOff);
-        }
-    } else {
-        // If a loop range is set, and the menu item is checked...
-        if (loop  &&  findAction("loop")->isChecked())
-            composition.setLoopMode(Composition::LoopOn);
-        else
-            composition.setLoopMode(Composition::LoopOff);
-    }
-
-    emit document->loopChanged();
+    RosegardenDocument::currentDocument->loopButton(
+            findAction("loop")->isChecked());
 }
 
 void

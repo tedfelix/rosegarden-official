@@ -166,6 +166,8 @@ protected slots:
     void slotSetCurrentVelocityFromSelection();
 
     void slotScrollToFollow();
+    void slotLoop();
+    void slotLoopChanged();
 
     void slotUpdateMenuStates();
     void slotRulerSelectionUpdate();
