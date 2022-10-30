@@ -484,7 +484,7 @@ TrackEditor::slotTRMouseRelease()
 }
 
 void
-TrackEditor::toggleTracking()
+TrackEditor::scrollToFollow()
 {
     m_playTracking = !m_playTracking;
     Composition &comp = m_doc->getComposition();

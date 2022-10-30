@@ -102,7 +102,7 @@ public:
     unsigned int getUntupledCount() const { return  m_untupledCount;}
     void setGraceMode(bool state = true) { m_graceMode = state; }
 
-    bool getPlayTracking() const { return m_playTracking; }
+    bool getPlayTracking() const { return m_scrollToFollow; }
 
     NotationToolBox *getToolBox() { return m_toolBox; }
     NotationTool *getCurrentTool() const;
@@ -187,8 +187,7 @@ public slots:
     void slotSetMultiPageMode();
     void slotSetFontName(QString);
     void slotSetFontSize(int);
-    void slotSetPlayTracking(bool);
-    void slotTogglePlayTracking();
+    void slotScrollToFollow();
     void slotSetSymbolInserter();
     void slotSetInsertedSymbol(Symbol type);
 
@@ -199,6 +198,7 @@ public slots:
     void slotRegenerateHeaders();
 
 private:
+    void setScrollToFollow(bool);
     void showEvent(QShowEvent * event) override;
     void hideOrShowRulers();
     bool linearMode() const;   // Return true when notation page layout is linear
@@ -276,7 +276,7 @@ private:
     int m_leftGutter;
     NotationToolBox *m_toolBox;
     NotationTool *m_currentTool;
-    bool m_playTracking;
+    bool m_scrollToFollow;
 
     double m_hZoomFactor;
     double m_vZoomFactor;

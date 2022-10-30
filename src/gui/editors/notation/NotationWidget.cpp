@@ -97,7 +97,7 @@ NotationWidget::NotationWidget() :
     m_scene(nullptr),
     m_leftGutter(20),
     m_currentTool(nullptr),
-    m_playTracking(true),
+    m_scrollToFollow(true),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
     m_referenceScale(nullptr),
@@ -610,7 +610,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &NotationScene::currentStaffChanged,
             this, &NotationWidget::slotStaffChanged);
 
-    m_playTracking = m_document->getComposition().getEditorFollowPlayback();
+    m_scrollToFollow = m_document->getComposition().getEditorFollowPlayback();
 }
 
 void
@@ -891,19 +891,19 @@ NotationWidget::slotSetGuitarChordInserter()
 }
 
 void
-NotationWidget::slotSetPlayTracking(bool tracking)
+NotationWidget::setScrollToFollow(bool scrollToFollow)
 {
-    m_document->getComposition().setEditorFollowPlayback(tracking);
-    m_playTracking = tracking;
-    if (m_playTracking) {
+    m_document->getComposition().setEditorFollowPlayback(scrollToFollow);
+    m_scrollToFollow = scrollToFollow;
+    if (m_scrollToFollow) {
         m_view->ensurePositionPointerInView(true);
     }
 }
 
 void
-NotationWidget::slotTogglePlayTracking()
+NotationWidget::slotScrollToFollow()
 {
-    slotSetPlayTracking(!m_playTracking);
+    setScrollToFollow(!m_scrollToFollow);
 }
 
 void
@@ -965,7 +965,7 @@ NotationWidget::slotPointerPositionChanged(timeT t)
 {
     updatePointer(t);
 
-    if (m_playTracking && !m_noScroll)
+    if (m_scrollToFollow && !m_noScroll)
         m_view->ensurePositionPointerInView(true);  // page
 }
 

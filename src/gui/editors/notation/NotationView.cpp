@@ -437,8 +437,8 @@ NotationView::NotationView(RosegardenDocument *doc,
     const bool followPlayback =
             RosegardenDocument::currentDocument->getComposition().
             getEditorFollowPlayback();
-    RG_DEBUG << "set toggle_tracking checked" << followPlayback;
-    findAction("toggle_tracking")->setChecked(followPlayback);
+    RG_DEBUG << "set scroll_to_follow checked" << followPlayback;
+    findAction("scroll_to_follow")->setChecked(followPlayback);
 }
 
 NotationView::~NotationView()
@@ -961,7 +961,7 @@ NotationView::setupActions()
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
     createAction("toggle_solo", SLOT(slotToggleSolo()));
-    createAction("toggle_tracking", SLOT(slotToggleTracking()));
+    createAction("scroll_to_follow", SLOT(slotScrollToFollow()));
     createAction("panic", SIGNAL(panic()));
 
     //"insert_note_actionmenu" coded below.
@@ -3865,9 +3865,9 @@ NotationView::slotToggleRawNoteRuler()
 }
 
 void
-NotationView::slotToggleTracking()
+NotationView::slotScrollToFollow()
 {
-    if (m_notationWidget) m_notationWidget->slotTogglePlayTracking();
+    if (m_notationWidget) m_notationWidget->slotScrollToFollow();
 }
 
 void
