@@ -1142,6 +1142,7 @@ public slots:
     void slotJumpToTime(RealTime);
     void slotStartAtTime(const RealTime&);
     void slotRefreshTimeDisplay();
+    void slotLoop();
     void slotScrollToFollow();
 
     /**

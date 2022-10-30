@@ -838,6 +838,7 @@ RosegardenMainWindow::setupActions()
     createAction("record", SLOT(slotRecord()));
     createAction("rewindtobeginning", SLOT(slotRewindToBeginning()));
     createAction("fastforwardtoend", SLOT(slotFastForwardToEnd()));
+    createAction("loop", SLOT(slotLoop()));
     createAction("scroll_to_follow", SLOT(slotScrollToFollow()));
     createAction("panic", SLOT(slotPanic()));
     createAction("debug_dump_segments", SLOT(slotDebugDump()));
@@ -4969,6 +4970,38 @@ RosegardenMainWindow::slotScrollToFollow()
 }
 
 void
+RosegardenMainWindow::slotLoop()
+{
+    // This is similar to TransportDialog::slotLoopButtonClicked().
+    // Should we combine?
+
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    Composition &composition = document->getComposition();
+
+    const bool loop = (composition.getLoopStart() != composition.getLoopEnd());
+
+    if (Preferences::getAdvancedLooping()) {
+        // Menu item checked?
+        if (findAction("loop")->isChecked()) {
+            if (loop)
+                composition.setLoopMode(Composition::LoopOn);
+            else
+                composition.setLoopMode(Composition::LoopAll);
+        } else {  // Button unpressed, turn looping off.
+            composition.setLoopMode(Composition::LoopOff);
+        }
+    } else {
+        // If a loop range is set, and the menu item is checked...
+        if (loop  &&  findAction("loop")->isChecked())
+            composition.setLoopMode(Composition::LoopOn);
+        else
+            composition.setLoopMode(Composition::LoopOff);
+    }
+
+    emit document->loopChanged();
+}
+
+void
 RosegardenMainWindow::slotTestStartupTester()
 {
     if (!m_startupTester) {
@@ -5683,6 +5716,9 @@ RosegardenMainWindow::slotLoopChanged()
             leaveActionState("have_range");
         }
     }
+
+    findAction("loop")->setChecked(
+            (composition.getLoopMode() != Composition::LoopOff));
 }
 
 bool
