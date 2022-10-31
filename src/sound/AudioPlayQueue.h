@@ -93,7 +93,7 @@ public:
      * Look up the files playing during a given slice and return them
      * in the passed FileSet.  The pointers returned are still owned
      * by me and the caller should not delete them.
-     */ 
+     */
     void getPlayingFiles(const RealTime &sliceStart,
                          const RealTime &sliceDuration,
                          FileSet &) const;
@@ -108,7 +108,7 @@ public:
     void getPlayingFilesForInstrument(const RealTime &sliceStart,
                                       const RealTime &sliceDuration,
                                       InstrumentId instrumentId,
-                                      PlayableAudioFile **files,
+                                      PlayableAudioFile **playing,
                                       size_t &size) const;
 
     /**
@@ -159,4 +159,3 @@ private:
 }
 
 #endif
-
