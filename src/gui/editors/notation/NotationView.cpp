@@ -395,6 +395,12 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     m_notationWidget->resumeLayoutUpdates();
 
+    connect(RosegardenDocument::currentDocument,
+                &RosegardenDocument::loopChanged,
+            this, &NotationView::slotLoopChanged);
+    // Make sure we are in sync.
+    slotLoopChanged();
+
     // Connection to update the "Show staff headers" check box in the menu
     // (Must be done before setting the initial visibility of the headers)
     connect(m_notationWidget, &NotationWidget::headersVisibilityChanged,
@@ -437,8 +443,8 @@ NotationView::NotationView(RosegardenDocument *doc,
     const bool followPlayback =
             RosegardenDocument::currentDocument->getComposition().
             getEditorFollowPlayback();
-    RG_DEBUG << "set toggle_tracking checked" << followPlayback;
-    findAction("toggle_tracking")->setChecked(followPlayback);
+    RG_DEBUG << "set scroll_to_follow checked" << followPlayback;
+    findAction("scroll_to_follow")->setChecked(followPlayback);
 }
 
 NotationView::~NotationView()
@@ -961,7 +967,8 @@ NotationView::setupActions()
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
     createAction("toggle_solo", SLOT(slotToggleSolo()));
-    createAction("toggle_tracking", SLOT(slotToggleTracking()));
+    createAction("scroll_to_follow", SLOT(slotScrollToFollow()));
+    createAction("loop", SLOT(slotLoop()));
     createAction("panic", SIGNAL(panic()));
 
     //"insert_note_actionmenu" coded below.
@@ -3865,9 +3872,26 @@ NotationView::slotToggleRawNoteRuler()
 }
 
 void
-NotationView::slotToggleTracking()
+NotationView::slotScrollToFollow()
 {
-    if (m_notationWidget) m_notationWidget->slotTogglePlayTracking();
+    if (m_notationWidget) m_notationWidget->slotScrollToFollow();
+}
+
+void
+NotationView::slotLoop()
+{
+    RosegardenDocument::currentDocument->loopButton(
+            findAction("loop")->isChecked());
+}
+
+void
+NotationView::slotLoopChanged()
+{
+    Composition &composition =
+        RosegardenDocument::currentDocument->getComposition();
+
+    findAction("loop")->setChecked(
+            (composition.getLoopMode() != Composition::LoopOff));
 }
 
 void

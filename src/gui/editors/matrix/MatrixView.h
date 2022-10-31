@@ -165,7 +165,9 @@ protected slots:
     void slotSetCurrentVelocity(int);
     void slotSetCurrentVelocityFromSelection();
 
-    void slotToggleTracking();
+    void slotScrollToFollow();
+    void slotLoop();
+    void slotLoopChanged();
 
     void slotUpdateMenuStates();
     void slotRulerSelectionUpdate();
@@ -279,7 +281,7 @@ private:
     QComboBox *m_quantizeCombo;
     QComboBox *m_snapGridCombo;
 
-    bool m_tracking;
+    bool m_scrollToFollow;
 
     std::vector<timeT> m_quantizations;
     std::vector<timeT> m_snapValues;

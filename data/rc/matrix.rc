@@ -200,8 +200,9 @@
       <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
       <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
       <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
+      <Action name="loop" text="L&amp;oop" icon="button-loop-3" checked="false" />
       <Action name="toggle_solo" text="S&amp;olo" icon="transport-solo" checked="false" />
-      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
+      <Action name="scroll_to_follow" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
       <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
   </Menu>
 
@@ -359,7 +360,8 @@
   <Action name="playback_pointer_end" />
   <Action name="stop" />
   <Action name="toggle_solo" />
-  <Action name="toggle_tracking" />
+  <Action name="loop" />
+  <Action name="scroll_to_follow" />
   <Action name="panic" />
 </ToolBar>
 

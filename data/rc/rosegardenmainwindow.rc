@@ -263,7 +263,8 @@
       <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Media Next" shortcut-context="application" />
       <Action name="record" text="&amp;Record" icon="transport-record" shortcut="Ctrl+Space, Media Record" shortcut-context="application" />
       <Action name="recordtoggle" text="P&amp;unch in Record" icon="transport-record" shortcut="Space" shortcut-context="application" />
-      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
+      <Action name="loop" text="L&amp;oop" icon="button-loop-3" checked="false" />
+      <Action name="scroll_to_follow" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
       <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
     </Menu>
   </Menu>
@@ -351,8 +352,9 @@
   <Action name="fastforwardtoend" text="Fast Forward to End" icon="transport-ffwd-end" shortcut="End" shortcut-context="application" />
   <Action name="stop" />
   <Action name="record" />
-  <Action name="toggle_tracking"/>
-  <Action name="panic"/>
+  <Action name="loop" />
+  <Action name="scroll_to_follow" />
+  <Action name="panic" />
 </ToolBar>
 
 <ToolBar name="Zoom Toolbar">

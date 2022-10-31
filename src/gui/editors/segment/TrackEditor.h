@@ -95,7 +95,7 @@ public:
     /// Are we scrolling as we play?
     bool isTracking() const { return m_playTracking; }
     /// Toggle playback scrolling.
-    void toggleTracking();
+    void scrollToFollow();
 
     /// Adjust the canvas size to that required for the composition
     void updateCanvasSize();

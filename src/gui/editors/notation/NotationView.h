@@ -303,7 +303,10 @@ protected slots:
     void slotToggleRulersToolBar();
     void slotToggleTransportToolBar();
 
-    void slotToggleTracking();
+    void slotScrollToFollow();
+
+    void slotLoop();
+    void slotLoopChanged();
 
     /// Note-on received asynchronously -- consider step-by-step editing
     void slotInsertableNoteOnReceived(int pitch, int velocity);

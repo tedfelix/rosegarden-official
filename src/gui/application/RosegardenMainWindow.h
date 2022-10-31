@@ -1142,7 +1142,8 @@ public slots:
     void slotJumpToTime(RealTime);
     void slotStartAtTime(const RealTime&);
     void slotRefreshTimeDisplay();
-    void slotToggleTracking();
+    void slotLoop();
+    void slotScrollToFollow();
 
     /**
      * Called when the sequencer auxiliary process exits

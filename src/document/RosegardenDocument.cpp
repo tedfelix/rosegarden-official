@@ -89,6 +89,7 @@
 #include "document/Command.h"
 #include "document/io/XMLReader.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Preferences.h"
 
 #include "rosegarden-version.h"
 
@@ -3002,5 +3003,32 @@ void RosegardenDocument::release()
     delete m_lockFile;
     m_lockFile = nullptr;
 }
+
+void
+RosegardenDocument::loopButton(bool checked)
+{
+    const bool loop = (m_composition.getLoopStart() != m_composition.getLoopEnd());
+
+    if (Preferences::getAdvancedLooping()) {
+        // Menu item checked?
+        if (checked) {
+            if (loop)
+                m_composition.setLoopMode(Composition::LoopOn);
+            else
+                m_composition.setLoopMode(Composition::LoopAll);
+        } else {  // Button unpressed, turn looping off.
+            m_composition.setLoopMode(Composition::LoopOff);
+        }
+    } else {
+        // If a loop range is set, and the menu item is checked...
+        if (loop  &&  checked)
+            m_composition.setLoopMode(Composition::LoopOn);
+        else
+            m_composition.setLoopMode(Composition::LoopOff);
+    }
+
+    emit loopChanged();
+}
+
 
 }

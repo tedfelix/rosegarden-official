@@ -838,7 +838,8 @@ RosegardenMainWindow::setupActions()
     createAction("record", SLOT(slotRecord()));
     createAction("rewindtobeginning", SLOT(slotRewindToBeginning()));
     createAction("fastforwardtoend", SLOT(slotFastForwardToEnd()));
-    createAction("toggle_tracking", SLOT(slotToggleTracking()));
+    createAction("loop", SLOT(slotLoop()));
+    createAction("scroll_to_follow", SLOT(slotScrollToFollow()));
     createAction("panic", SLOT(slotPanic()));
     createAction("debug_dump_segments", SLOT(slotDebugDump()));
 
@@ -1119,7 +1120,7 @@ RosegardenMainWindow::initView()
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
     // play tracking in the track editor is stored in the composition
-    QAction *trackingAction = findAction("toggle_tracking");
+    QAction *trackingAction = findAction("scroll_to_follow");
     if (trackingAction) {
         trackingAction->setChecked(comp.getMainFollowPlayback());
     }
@@ -4963,9 +4964,16 @@ RosegardenMainWindow::slotRefreshTimeDisplay()
 }
 
 void
-RosegardenMainWindow::slotToggleTracking()
+RosegardenMainWindow::slotScrollToFollow()
 {
-    m_view->getTrackEditor()->toggleTracking();
+    m_view->getTrackEditor()->scrollToFollow();
+}
+
+void
+RosegardenMainWindow::slotLoop()
+{
+    RosegardenDocument::currentDocument->loopButton(
+            findAction("loop")->isChecked());
 }
 
 void
@@ -5683,6 +5691,9 @@ RosegardenMainWindow::slotLoopChanged()
             leaveActionState("have_range");
         }
     }
+
+    findAction("loop")->setChecked(
+            (composition.getLoopMode() != Composition::LoopOff));
 }
 
 bool
