@@ -58,7 +58,6 @@ ReconnectDeviceCommand::execute()
 
     // Update the MidiDevice
     midiDevice->setUserConnection(m_newConnection);
-    midiDevice->setCurrentConnection(m_newConnection);
     midiDevice->sendChannelSetups();
 
     //RG_DEBUG << "execute(): reconnected device " << m_deviceId << " to " << m_newConnection;
@@ -84,7 +83,6 @@ ReconnectDeviceCommand::unexecute()
 
     // Update the MidiDevice
     midiDevice->setUserConnection(m_oldUserConnection);
-    midiDevice->setCurrentConnection(m_oldConnection);
     midiDevice->sendChannelSetups();
 
     //RG_DEBUG << "unexecute(): reconnected device " << m_deviceId << " to " << m_oldConnection;

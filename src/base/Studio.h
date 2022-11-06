@@ -143,9 +143,6 @@ public:
     void clearBusses();
     void clearRecordIns();
     
-    // Clear down
-    void clear();
-
     // Get a MIDI metronome from a given device
     //
     const MidiMetronome* getMetronomeFromDevice(DeviceId id);
