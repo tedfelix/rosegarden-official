@@ -283,7 +283,17 @@ protected:
      */
     void customEvent(QEvent *event) override;
 
-    RosegardenDocument *newDocument(bool skipAutoload = false);
+    /// Create a new RosegardenDocument.
+    /**
+     * \param permanent
+     *   - true: This document will become the currently loaded document.
+     *           Therefore it is allowed to make changes to the audio/MIDI
+     *           connections.
+     *   - false: This is a temporary document and is not allowed to make
+     *            changes to ALSA and any audio or MIDI connections.
+     *   - See RosegardenDocument::m_soundEnabled.
+     */
+    RosegardenDocument *newDocument(bool permanent);
 
     /**** File handling code that we don't want the outside world to use ****/
     /**/
@@ -309,7 +319,9 @@ protected:
     /**
      * Create document from MIDI file
      */
-    RosegardenDocument *createDocumentFromMIDIFile(QString file);
+    RosegardenDocument *createDocumentFromMIDIFile(
+            const QString &filePath,
+            bool permanent);
 
     /**
      * Create document from RG21 file

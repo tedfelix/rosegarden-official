@@ -342,7 +342,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     emit startupStatusMessage(tr("Initializing plugin manager..."));
     m_pluginManager.reset(new AudioPluginManager(enableSound));
 
-    RosegardenDocument *doc = newDocument();
+    RosegardenDocument *doc = newDocument(
+            true);  // permanent
 
     m_seqManager = new SequenceManager();
 
@@ -1480,7 +1481,7 @@ RosegardenMainWindow::createDocument(
 
     switch (importType) {
     case ImportMIDI:
-        doc = createDocumentFromMIDIFile(filePath);
+        doc = createDocumentFromMIDIFile(filePath, permanent);
         break;
 
     case ImportRG21:
@@ -1788,7 +1789,8 @@ RosegardenMainWindow::slotFileNew()
     }
 
     if (makeNew) {
-        setDocument(newDocument());
+        setDocument(newDocument(
+                true));  // permanent
         leaveActionState("have_segments");
     }
 }
@@ -2257,7 +2259,8 @@ RosegardenMainWindow::slotFileClose()
     TmpStatusMsg msg(tr("Closing file..."), this);
 
     if (saveIfModified()) {
-        setDocument(newDocument());
+        setDocument(newDocument(
+                true));  // permanent
     }
 
     // Don't close the whole view (i.e. Quit), just close the doc.
@@ -4093,13 +4096,15 @@ RosegardenMainWindow::fixTextEncodings(Composition *c)
 }
 
 RosegardenDocument *
-RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
+RosegardenMainWindow::createDocumentFromMIDIFile(
+        const QString &filePath,
+        bool permanent)
 {
     //if (!merge && !saveIfModified()) return;
 
     // Create new document (autoload is inherent)
     //
-    RosegardenDocument *newDoc = newDocument();
+    RosegardenDocument *newDoc = newDocument(permanent);
 
     MidiFile midiFile;
 
@@ -4126,7 +4131,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
 
     midiFile.setProgressDialog(&progressDialog);
 
-    if (!midiFile.convertToRosegarden(file, newDoc)) {
+    if (!midiFile.convertToRosegarden(filePath, newDoc)) {
         // NOTE: Someone flagged midiFile.getError() with a warning about tr().
         // This stuff either gets translated at the source, if we own it, or it
         // doesn't get translated at all, if we don't (eg. errors from the
@@ -4144,8 +4149,8 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
 
     // Set the caption
     //
-    newDoc->setTitle(QFileInfo(file).fileName());
-    newDoc->setAbsFilePath(QFileInfo(file).absoluteFilePath());
+    newDoc->setTitle(QFileInfo(filePath).fileName());
+    newDoc->setAbsFilePath(QFileInfo(filePath).absoluteFilePath());
 
     // Clean up for notation purposes (after reinitialise, because that
     // sets the composition's end marker time which is needed here)
@@ -4317,7 +4322,8 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
 
     // Inherent autoload
     //
-    RosegardenDocument *newDoc = newDocument();
+    RosegardenDocument *newDoc = newDocument(
+            true);  // permanent
 
     RG21Loader rg21Loader(&newDoc->getStudio());
 
@@ -4512,7 +4518,8 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
 
     // Inherent autoload
     //
-    RosegardenDocument *newDoc = newDocument();
+    RosegardenDocument *newDoc = newDocument(
+            true);  // permanent
 
     MusicXMLLoader musicxmlLoader(&newDoc->getStudio());
 
@@ -8498,11 +8505,14 @@ RosegardenMainWindow::uiUpdateKludge()
                 RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
 }
 
-RosegardenDocument *RosegardenMainWindow::newDocument(bool skipAutoload)
+RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent)
 {
-    return new RosegardenDocument(this, m_pluginManager, skipAutoload,
-                                  true, /*clear command history*/
-                                  m_useSequencer);
+    return new RosegardenDocument(
+            this,  // parent
+            m_pluginManager,  // audioPluginManager
+            false,  // skipAutoload
+            true,  // clearCommandHistory
+            m_useSequencer && permanent);  // enableSound
 }
 
 void
