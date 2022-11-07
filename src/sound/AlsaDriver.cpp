@@ -64,7 +64,8 @@
 #include <unistd.h>
 
 
-// #define DEBUG_ALSA 1
+//#define DEBUG_ALSA 1
+//#define DEBUG_ALSA_TIMER
 // #define DEBUG_PROCESS_MIDI_OUT 1
 //#define DEBUG_PROCESS_SOFT_SYNTH_OUT 1
 //#define MTC_DEBUG 1
@@ -1072,7 +1073,9 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                                   const ClientPortPair &pair)
 {
 #ifdef DEBUG_ALSA
-    RG_DEBUG << "setConnectionToDevice(): connection " << connection;
+    RG_DEBUG << "setConnectionToDevice()";
+    RG_DEBUG << "  name: " << device.getName();
+    RG_DEBUG << "  connection: " << connection;
 #endif
 
     if (device.getDirection() == MidiDevice::Record) {
@@ -1503,7 +1506,7 @@ AlsaDriver::checkTimerSync(size_t frames)
 
     if (alsaDiff > RealTime(10, 0)) {
 
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_ALSA_TIMER
         if (!m_playing) {
             RG_DEBUG << "checkTimerSync(): ALSA:" << startAlsaTime << "\t->" << nowAlsaTime << "\nJACK: " << startJackFrames << "\t\t-> " << nowJackFrames;
             RG_DEBUG << "checkTimerSync(): ALSA diff:  " << alsaDiff << "\nJACK diff:  " << jackDiff;
@@ -1513,7 +1516,7 @@ AlsaDriver::checkTimerSync(size_t frames)
         double ratio = (jackDiff - alsaDiff) / alsaDiff;
 
         if (fabs(ratio) > 0.1) {
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_ALSA_TIMER
             if (!m_playing) {
                 RG_DEBUG << "checkTimerSync(): Ignoring excessive ratio " << ratio << ", hoping for a more likely result next time";
             }
@@ -1521,7 +1524,7 @@ AlsaDriver::checkTimerSync(size_t frames)
 
         } else if (fabs(ratio) > 0.000001) {
 
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_ALSA_TIMER
             if (alsaDiff > RealTime::zeroTime && jackDiff > RealTime::zeroTime) {
                 if (!m_playing) {
                     if (jackDiff < alsaDiff) {
@@ -4916,7 +4919,9 @@ AlsaDriver::isRecording(AlsaPortDescription *port)
 void
 AlsaDriver::checkForNewClients()
 {
-    //RG_DEBUG << "checkForNewClients() begin...";
+    // This is a very noisy message since this routine is called constantly.
+    // Use the next RG_DEBUG instead.
+    //RG_DEBUG << "checkForNewClients()";
 
     // If no ALSA client or port events have come in, bail.
     if (!m_portCheckNeeded)
@@ -5422,7 +5427,7 @@ AlsaDriver::runTasks()
         snd_seq_get_queue_tempo(m_midiHandle, m_queue, q_ptr);
 
         unsigned int t_skew = snd_seq_queue_tempo_get_skew(q_ptr);
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_ALSA_TIMER
 
         unsigned int t_base = snd_seq_queue_tempo_get_skew_base(q_ptr);
         if (!m_playing) {
@@ -5433,7 +5438,7 @@ AlsaDriver::runTasks()
         unsigned int newSkew = t_skew + (unsigned int)(t_skew * ratio);
 
         if (newSkew != t_skew) {
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_ALSA_TIMER
             if (!m_playing) {
                 RG_DEBUG << "runTasks():     changed to " << newSkew;
             }
