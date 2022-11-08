@@ -210,9 +210,6 @@ public:
             { m_userConnection = connection; }
     std::string getUserConnection() const
             { return m_userConnection; }
-    /// See m_currentConnection.
-    void setCurrentConnection(const std::string& connection)
-            { m_currentConnection = connection; }
 
 protected:
     void createInstruments(InstrumentId);
@@ -239,14 +236,6 @@ protected:
      * to make a connection.  It is stored in the .rg file.
      */
     std::string m_userConnection;
-
-    /// The connection that was actually made.
-    /**
-     * Since the necessary ALSA device might not exist (e.g. it isn't
-     * plugged in), this might be very different from m_userConnection.
-     * This is not stored in the .rg file.
-     */
-    std::string m_currentConnection;
 
     ProgramList    m_programList;
     BankList       m_bankList;

@@ -523,11 +523,11 @@ void RosegardenDocument::performAutoload()
         return ;
     }
 
-    bool permanent = true;
-    bool squelchProgressDialog = true;
-    // Don't lock the autoload.rg file.
-    bool enableLock = false;
-    openDocument(autoloadFile, permanent, squelchProgressDialog, enableLock);
+    openDocument(
+            autoloadFile,  // filename
+            m_soundEnabled,  // permanent
+            true,  // squelchProgressDialog
+            false);  // enableLock
 }
 
 bool RosegardenDocument::openDocument(const QString &filename,

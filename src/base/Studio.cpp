@@ -14,6 +14,7 @@
 */
 
 #define RG_MODULE_STRING "[Studio]"
+#define RG_NO_DEBUG_PRINT
 
 #include <iostream>
 
@@ -147,8 +148,6 @@ Studio::resyncDeviceConnections()
         DeviceId deviceId = midiDevice->getId();
         QString connection =
                 RosegardenSequencer::getInstance()->getConnection(deviceId);
-
-        midiDevice->setCurrentConnection(qstrtostr(connection));
 
         // If we are connected to something, but the user didn't ask for
         // anything, we must have been connected up by
@@ -457,21 +456,6 @@ Studio::setRecordInCount(unsigned newRecordInCount)
     }
 
     // The mapped IDs get set by RosegardenDocument::initialiseStudio().
-}
-
-// Clear down the devices  - the devices will clear down their
-// own Instruments.
-//
-void
-Studio::clear()
-{
-    InstrumentList list;
-    std::vector<Device*>::iterator it;
-
-    for (it = m_devices.begin(); it != m_devices.end(); ++it)
-        delete *it;
-
-    m_devices.erase(m_devices.begin(), m_devices.end());
 }
 
 std::string

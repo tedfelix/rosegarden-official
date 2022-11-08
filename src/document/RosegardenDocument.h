@@ -818,7 +818,19 @@ private:
      */
     bool m_clearCommandHistory;
 
-    /// Enable/disable playing sounds
+    /// Enable/disable control over ALSA and JACK.
+    /**
+     * Normally, RosegardenDocument directly makes changes to AlsaDriver
+     * to synchronize the MIDI and audio hardware to the document that is
+     * loaded.  However, there are times when we don't want RosegardenDocument
+     * to change any ALSA/JACK devices and connections.  E.g. when we are
+     * creating a temporary document for merging.  In those cases, set this
+     * to false and ALSA/JACK will not be touched by this RosegardenDocument
+     * instance.
+     *
+     * Some parts of the system refer to this as "permanent".  See
+     * openDocument().
+     */
     bool m_soundEnabled;
 
     /// Allow file lock to be released.
