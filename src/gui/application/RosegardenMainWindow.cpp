@@ -1841,12 +1841,21 @@ RosegardenMainWindow::updateTitle()
 void
 RosegardenMainWindow::slotOpenDroppedURL(QString url)
 {
-     qApp->processEvents(QEventLoop::AllEvents, 100);
+    qApp->processEvents(QEventLoop::AllEvents, 100);
 
+    // ??? This is redundant.  openURL() does this again.
     if (!saveIfModified())
-        return ;
+        return;
 
-    openURL(QUrl(url));
+    const int reply = QMessageBox::question(
+            this,  // parent
+            tr("Rosegarden"),  // title
+            tr("Replace or Merge?"),  // text
+            tr("Replace"),  // button0Text
+            tr("Merge"));  // button1Text
+    const bool replace = (reply == 0);
+
+    openURL(QUrl(url), replace);
 }
 
 void
@@ -1854,11 +1863,11 @@ RosegardenMainWindow::openURL(QString url)
 {
     //RG_DEBUG << "openURL(): url =" << url;
 
-    openURL(QUrl(url));
+    openURL(QUrl(url), true);  // replace
 }
 
 void
-RosegardenMainWindow::openURL(const QUrl& url)
+RosegardenMainWindow::openURL(const QUrl &url, bool replace)
 {
     SetWaitCursor waitCursor;
 
@@ -1890,7 +1899,10 @@ RosegardenMainWindow::openURL(const QUrl& url)
     // the local file.
     source.waitForData();
 
-    openFile(source.getLocalFilename());
+    if (replace)
+        openFile(source.getLocalFilename());
+    else
+        mergeFile(source.getLocalFilename());
 }
 
 void
@@ -1943,7 +1955,7 @@ RosegardenMainWindow::openFileDialogAt(QString target)
     }
 
     // Continue opening the file.
-    openURL(QUrl::fromLocalFile(fname));
+    openURL(QUrl::fromLocalFile(fname), true);  // replace
 }
 
 void
@@ -2023,7 +2035,7 @@ RosegardenMainWindow::slotFileOpenRecent()
         }
     }
 
-    openURL(QUrl::fromUserInput(pathOrUrl));
+    openURL(QUrl::fromUserInput(pathOrUrl), true);  // replace
 }
 
 void

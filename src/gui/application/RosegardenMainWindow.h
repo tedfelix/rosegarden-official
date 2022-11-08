@@ -158,7 +158,7 @@ public:
     };
 
     /// open a Rosegarden file
-    virtual void openFile(QString filePath) { openFile(filePath, ImportCheckType); }
+    void openFile(QString filePath) { openFile(filePath, ImportCheckType); }
 
     /// open a file, explicitly specifying its type
     void openFile(QString filePath, ImportType type);
@@ -167,15 +167,15 @@ public:
     void importProject(QString filePath);
 
     /// open a URL
-    virtual void openURL(QString url);
+    void openURL(QString url);
 
     /// merge a file with the existing document
-    virtual void mergeFile(QString filePath) { mergeFile(filePath, ImportCheckType); }
+    void mergeFile(QString filePath) { mergeFile(filePath, ImportCheckType); }
 
     /// merge a file, explicitly specifying its type
     void mergeFile(QString filePath, ImportType type);
 
-    void openURL(const QUrl &url);
+    void openURL(const QUrl &url, bool replace);
 
     void exportMIDIFile(QString file);
 
@@ -395,7 +395,7 @@ protected:
      *
      * @see KTMainWindow#saveProperties
      */
-    virtual void saveGlobalProperties();
+    void saveGlobalProperties();
 
     /**
      * reads the session config file and restores the application's
@@ -404,7 +404,7 @@ protected:
      *
      * @see KTMainWindow#readProperties
      */
-    //virtual void readGlobalProperties();
+    //void readGlobalProperties();
 ///////////////////////////////////////////////////////////////////////
 
     QString getAudioFilePath();
@@ -512,12 +512,12 @@ public slots:
      *
      * @param url : a string containing a url (protocol://foo/bar/file.rg)
      */
-    virtual void slotOpenDroppedURL(QString url);
+    void slotOpenDroppedURL(QString url);
 
     /**
      * Open the document properties dialog on the Audio page
      */
-    virtual void slotOpenAudioPathSettings();
+    void slotOpenAudioPathSettings();
 
     /**
      * clears the document in the actual view to reuse it as the new
