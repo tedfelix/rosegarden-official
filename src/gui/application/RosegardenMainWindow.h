@@ -1039,6 +1039,8 @@ public slots:
      */
     void slotToggleStatusBar();
 
+    void slotFullScreen();
+
     /**
      * changes the statusbar contents for the standard label
      * permanently, used to indicate current actions.
