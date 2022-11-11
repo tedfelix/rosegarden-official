@@ -129,7 +129,10 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
             "true").toBool()) {
 
-        m_backgroundPixmap = IconLoader::loadPixmap("bg-segmentcanvas");
+        if (Preferences::getDarkerMode())
+            m_backgroundPixmap = IconLoader::loadPixmap("bg-paper-black");
+        else
+            m_backgroundPixmap = IconLoader::loadPixmap("bg-segmentcanvas");
     }
 
     slotUpdateSize();
@@ -613,21 +616,17 @@ void CompositionView::drawSegments(const QRect &clipRect)
 
     // *** Draw the background
 
-    // Since we don't yet have a dark enough background pixmap,
-    // just ignore it in "darker mode".  This will make it easier
-    // to test.  One less step.
-    if (Preferences::getDarkerMode()) {
-        segmentsLayerPainter.fillRect(clipRect, Qt::black);
+    if (!m_backgroundPixmap.isNull()) {
+        QPoint offset(
+                clipRect.x() % m_backgroundPixmap.height(),
+                clipRect.y() % m_backgroundPixmap.width());
+        segmentsLayerPainter.drawTiledPixmap(
+                clipRect, m_backgroundPixmap, offset);
     } else {
-        if (!m_backgroundPixmap.isNull()) {
-            QPoint offset(
-                    clipRect.x() % m_backgroundPixmap.height(),
-                    clipRect.y() % m_backgroundPixmap.width());
-            segmentsLayerPainter.drawTiledPixmap(
-                    clipRect, m_backgroundPixmap, offset);
-        } else {
+        if (Preferences::getDarkerMode())
+            segmentsLayerPainter.fillRect(clipRect, Qt::black);
+        else
             segmentsLayerPainter.eraseRect(clipRect);
-        }
     }
 
     // *** Draw the track dividers
