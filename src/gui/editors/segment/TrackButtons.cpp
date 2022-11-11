@@ -45,6 +45,7 @@
 #include "sound/ControlBlock.h"
 #include "sound/PluginIdentifier.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "misc/Preferences.h"
 
 #include <QApplication>
 #include <QLayout>
@@ -66,12 +67,56 @@
 
 namespace
 {
-// Constants
-constexpr int borderGap = 1;
-constexpr int buttonGap = 8;
-constexpr int vuSpacing = 2;
-constexpr int minWidth = 200;
+    // Constants
+    constexpr int borderGap = 1;
+    constexpr int buttonGap = 8;
+    constexpr int vuSpacing = 2;
+    constexpr int minWidth = 200;
+
+    // Colors
+
+    // Parent background color.  This is the area where there are no
+    // buttons.
+    QColor getBackgroundColor()
+    {
+        if (Rosegarden::Preferences::getDarkerMode())
+            return QColor(32, 32, 32);
+        else
+            return QColor(0xDD, 0xDD, 0xDD);
+    }
+
+    // Normal button background color.
+    // This is the color of a button that is in normal state as opposed to
+    // Archive.
+    QColor getButtonBackgroundColor()
+    {
+        if (Rosegarden::Preferences::getDarkerMode())
+            return QColor(64, 64, 64);
+        else
+            return QColor(0xDD, 0xDD, 0xDD);
+    }
+
+    // Archive button background color.
+    QColor getArchiveButtonBackgroundColor()
+    {
+        if (Rosegarden::Preferences::getDarkerMode())
+            return QColor(Qt::black);
+        else
+            return QColor(0x88, 0x88, 0x88);
+    }
+
+    // Color for the numbers to the left.  The label text color is
+    // handled in TrackLabel::updatePalette().
+    QColor getTextColor()
+    {
+        if (Rosegarden::Preferences::getDarkerMode())
+            return QColor(Qt::white);
+        else
+            return QColor(Qt::black);
+    }
+
 }
+
 
 namespace Rosegarden
 {
@@ -96,8 +141,8 @@ TrackButtons::TrackButtons(int trackCellHeight,
     setFrameStyle(Plain);
 
     QPalette pal = palette();
-    pal.setColor(backgroundRole(), QColor(0xDD, 0xDD, 0xDD));
-    pal.setColor(foregroundRole(), Qt::black);
+    pal.setColor(backgroundRole(), getBackgroundColor());
+    pal.setColor(foregroundRole(), getTextColor());
     setPalette(pal);
 
     // when we create the widget, what are we looking at?
@@ -167,31 +212,32 @@ TrackButtons::updateUI(Track *track)
     if (pos < 0  ||  pos >= m_tracks)
         return;
 
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    if (!document)
+        return;
+
 
     // *** Archive Background
 
     QFrame *hbox = m_trackHBoxes.at(pos);
     if (track->isArchived()) {
-        // Go with the dark gray background.
         QPalette palette = hbox->palette();
-        palette.setColor(hbox->backgroundRole(), QColor(0x88, 0x88, 0x88));
+        palette.setColor(hbox->backgroundRole(),
+                         getArchiveButtonBackgroundColor());
         hbox->setPalette(palette);
     } else {
-        // Go with the parent's background color.
-        QColor parentBackground = palette().color(backgroundRole());
         QPalette palette = hbox->palette();
-        palette.setColor(hbox->backgroundRole(), parentBackground);
+        palette.setColor(hbox->backgroundRole(), getButtonBackgroundColor());
         hbox->setPalette(palette);
     }
 
 
     // *** Mute LED
 
-    if (track->isMuted()) {
+    if (track->isMuted())
         m_muteLeds[pos]->off();
-    } else {
+    else
         m_muteLeds[pos]->on();
-    }
 
     if (track->isArchived())
         m_muteLeds[pos]->hide();
@@ -202,14 +248,14 @@ TrackButtons::updateUI(Track *track)
     // *** Record LED
 
     Instrument *ins =
-            RosegardenDocument::currentDocument->getStudio().getInstrumentById(track->getInstrument());
+            document->getStudio().getInstrumentById(track->getInstrument());
     m_recordLeds[pos]->setColor(getRecordLedColour(ins));
 
     // Note: setRecord() used to be used to do this.  But that would
     //       set the track in the composition to record as well as setting
     //       the button on the UI.  This seems better and works fine.
     bool recording =
-            RosegardenDocument::currentDocument->getComposition().isTrackRecording(track->getId());
+            document->getComposition().isTrackRecording(track->getId());
     setRecordButton(pos, recording);
 
     if (track->isArchived())
@@ -257,7 +303,8 @@ TrackButtons::updateUI(Track *track)
     label->updateLabel();
 
     label->setSelected(
-            track->getId() == RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
+            track->getId() == document->getComposition().getSelectedTrack());
+    label->setArchived(track->isArchived());
 
 }
 
@@ -1126,6 +1173,7 @@ TrackButtons::makeButton(Track *track)
     trackHBox->setAutoFillBackground(true);
 
     // Insert a little gap
+    // ??? Use margins?
     hblayout->addSpacing(vuSpacing);
 
 

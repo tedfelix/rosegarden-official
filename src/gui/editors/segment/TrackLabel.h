@@ -124,6 +124,8 @@ public:
      */
     bool isSelected() const { return m_selected; }
 
+    void setArchived(bool archived);
+
     /// The Track ID from Track::getId().  See getId(), setPosition()
     void setId(TrackId id) { m_id = id; }
     /// See setId(), getPosition()
@@ -184,7 +186,10 @@ private:
     /// Position on the UI.
     int                  m_position;
 
-    bool                 m_selected;
+    bool m_selected;
+    bool m_archived = false;
+    void updatePalette();
+
 
     /// Timer to support the "left-click and hold" behavior.
     /**
