@@ -193,6 +193,11 @@ TrackButtons::updateUI(Track *track)
         m_muteLeds[pos]->on();
     }
 
+    if (track->isArchived())
+        m_muteLeds[pos]->hide();
+    else
+        m_muteLeds[pos]->show();
+
 
     // *** Record LED
 
@@ -207,11 +212,21 @@ TrackButtons::updateUI(Track *track)
             RosegardenDocument::currentDocument->getComposition().isTrackRecording(track->getId());
     setRecordButton(pos, recording);
 
+    if (track->isArchived())
+        m_recordLeds[pos]->hide();
+    else
+        m_recordLeds[pos]->show();
+
 
     // *** Solo LED
 
     // ??? An Led::setState(bool) would be handy.
     m_soloLeds[pos]->setState(track->isSolo() ? Led::On : Led::Off);
+
+    if (track->isArchived())
+        m_soloLeds[pos]->hide();
+    else
+        m_soloLeds[pos]->show();
 
 
     // *** Track Label
@@ -1190,7 +1205,7 @@ TrackButtons::makeButton(Track *track)
             track->getPosition(),
             m_trackCellHeight - buttonGap,
             trackHBox);
-    hblayout->addWidget(trackLabel);
+    hblayout->addWidget(trackLabel, 10);
 
     hblayout->addSpacing(vuSpacing);
 
