@@ -27,7 +27,6 @@
 namespace Rosegarden
 {
   class Composition;
-  typedef long timeT;
 
 
 // @class ExpandFigurationCommand

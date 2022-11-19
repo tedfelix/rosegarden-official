@@ -18,6 +18,8 @@
 #ifndef RG_FIGURATIONSOURCEMAP_H
 #define RG_FIGURATIONSOURCEMAP_H
 
+#include "base/TimeT.h"
+
 #include <vector>
 #include <map>
 #include <set>
@@ -31,7 +33,6 @@ namespace Rosegarden
   class FigChord;
   class NotationQuantizer;
   class RelativeEvent;
-  typedef long timeT;
 
 
   typedef std::vector<RelativeEvent *> RelativeEventVec;

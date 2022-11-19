@@ -31,7 +31,6 @@ namespace Rosegarden
   class ChordSegmentMap;
   class FigurationSourceMap;
   class MacroCommand;
-  typedef long timeT;
 
 // @class SegmentFigData
 // Data about a segment, for figuration purposes.
