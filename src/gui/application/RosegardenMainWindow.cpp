@@ -1899,10 +1899,14 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     // the local file.
     source.waitForData();
 
+    // Needed for mergeFile which expects a list for multiple merge
+    const QStringList fileList = { source.getLocalFilename() };
+
     if (replace)
         openFile(source.getLocalFilename());
     else
-        mergeFile(source.getLocalFilename());
+        // this only mergest the first file for now
+        mergeFile(fileList, ImportCheckType);
 }
 
 void
@@ -1997,6 +2001,16 @@ RosegardenMainWindow::slotMerge()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_file", QDir::homePath()).toString();
 
+    const QStringList fileList = FileDialog::getOpenFileNames(
+            this, tr("Select File(s)"), directory,
+               tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
+               tr("All files") + " (*)", nullptr);
+
+    if (fileList.isEmpty()) {
+        return ;
+    }
+
+    /* Former behaviour for single file remove this block if accepted
     const QString file = FileDialog::getOpenFileName(this, tr("Open File"), directory,
                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                tr("All files") + " (*)", nullptr);
@@ -2006,11 +2020,16 @@ RosegardenMainWindow::slotMerge()
     }
 
     QDir d = QFileInfo(file).dir();
+    */ 
+
+    // Assume same dir also for multiple file merge. Else use the first file's  
+    QDir d = QFileInfo(fileList[0]).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_file", directory);
     settings.endGroup();
 
-    mergeFile(file);
+    // Milti-merge update: note now we pass a fileList to mergeFile function
+    mergeFile(fileList, ImportCheckType);
 }
 
 void
@@ -4012,20 +4031,23 @@ RosegardenMainWindow::slotMergeMIDI()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_midi", QDir::homePath()).toString();
 
-    const QString file = FileDialog::getOpenFileName(this, tr("Merge MIDI File"), directory,
+    const QStringList fileList = FileDialog::getOpenFileNames(
+            this, tr("Select MIDI File(s)"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
+    if (fileList.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(file).dir();
+    // Assume same dir also for multiple file merge. Else use the first file's  
+    QDir d = QFileInfo(fileList[0]).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_midi", directory);
     settings.endGroup();
 
-    mergeFile(file, ImportMIDI);
+    // Milti-merge update: note now we pass a fileList to mergeFile function
+    mergeFile(fileList, ImportMIDI);
 }
 
 QTextCodec *
@@ -4293,20 +4315,23 @@ RosegardenMainWindow::slotMergeRG21()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_relic", QDir::homePath()).toString();
 
-    const QString file = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
+    const QStringList fileList = FileDialog::getOpenFileNames(
+            this, tr("Select X11 Rosegarden File(s)"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
+    if (fileList.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(file).dir();
+    // Assume same dir also for multiple file merge. Else use the first file's  
+    QDir d = QFileInfo(fileList[0]).dir();
     directory = d.canonicalPath();
     settings.setValue("import_relic", directory);
     settings.endGroup();
 
-    mergeFile(file, ImportRG21);
+    // Milti-merge update: note now we pass a fileList to mergeFile function
+    mergeFile(fileList, ImportRG21);
 }
 
 RosegardenDocument *
@@ -4489,20 +4514,22 @@ RosegardenMainWindow::slotMergeMusicXML()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_musicxml", QDir::homePath()).toString();
 
-    const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
+    const QStringList fileList = FileDialog::getOpenFileNames(
+            this, tr("Select File(s)"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
+    if (fileList.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(file).dir();
+    // Assume same dir also for multiple file merge. Else use the first file's  
+    QDir d = QFileInfo(fileList[0]).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_musicxml", directory);
     settings.endGroup();
 
-    mergeFile(file, ImportMusicXML);
+    mergeFile(fileList, ImportMusicXML);
 }
 
 RosegardenDocument *
@@ -4557,34 +4584,47 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
 }
 
 void
-RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
+RosegardenMainWindow::mergeFile(QStringList filePathList, ImportType type)
 {
     if (!RosegardenDocument::currentDocument)
         return;
 
-    RosegardenDocument *srcDoc = createDocument(
-            filePath,
-            type,  // importType
-            false,  // permanent
-            true,  // lock
-            false);  // clearHistory
-    if (!srcDoc)
-        return;
+    for (int i = 0; i < filePathList.size(); ++i) {
+        RosegardenDocument *srcDoc = createDocument(
+                filePathList[i],
+                type,  // importType
+                false,  // permanent
+                true,  // lock
+                false);  // clearHistory
+        if (!srcDoc)
+            return;
 
-    const Composition &srcComp = srcDoc->getComposition();
-    const Composition &destComp =
-            RosegardenDocument::currentDocument->getComposition();
-    const bool timingsDiffer = !srcComp.compareSignaturesAndTempos(destComp);
+        if (filePathList.size() < 2) {
+            // Just one file. Usual merge behaviour
+            const Composition &srcComp = srcDoc->getComposition();
+            const Composition &destComp =
+                    RosegardenDocument::currentDocument->getComposition();
+            const bool timingsDiffer =
+                    !srcComp.compareSignaturesAndTempos(destComp);
 
-    FileMergeDialog dialog(this, timingsDiffer);
-    if (dialog.exec() == QDialog::Accepted) {
-        RosegardenDocument::currentDocument->mergeDocument(
-                srcDoc,
-                dialog.getMergeAtEnd(),
-                dialog.getMergeTimesAndTempos());
+            FileMergeDialog dialog(this, timingsDiffer);
+            if (dialog.exec() == QDialog::Accepted) {
+                RosegardenDocument::currentDocument->mergeDocument(
+                        srcDoc,
+                        dialog.getMergeAtEnd(),
+                        dialog.getMergeTimesAndTempos());
+            }
+
+            delete srcDoc;
+        } else {
+            // more than 1 file, so multiple merge
+            RosegardenDocument::currentDocument->mergeDocument(
+                    srcDoc,
+                    true,       // assume merge at end
+                    false       // assume ignore tempo and time
+                    );
+        }
     }
-
-    delete srcDoc;
 }
 
 void RosegardenMainWindow::processRecordedEvents()
