@@ -1618,7 +1618,7 @@
         <location line="+419"/>
         <location line="+459"/>
         <source>L&amp;oop</source>
-        <translation type="unfinished"></translation>
+        <translation>B&amp;oucler</translation>
     </message>
     <message>
         <location line="-681"/>
@@ -3768,7 +3768,7 @@
     <message>
         <location line="+18"/>
         <source>Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Plein écran</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -10301,7 +10301,7 @@ Voulez-vous utiliser
     <message>
         <location line="+10"/>
         <source>Check for &quot;Out of processor power&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Interrompre en cas de puissance insuffisante du processeur</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -14249,17 +14249,17 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="-210"/>
         <source>Jump to loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauter vers la boucle</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Advanced Looping (beta)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rebouclage avancé (bêta)</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Auto Channels (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Canaux automatiques (expérimental)</translation>
     </message>
     <message>
         <location line="+211"/>
@@ -15804,7 +15804,7 @@ répartis verticalement sur la page)</translation>
     <name>Rosegarden::LoopRuler</name>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Cliquer et glisser pour déplacer le pointeur d&apos;exécution.&lt;/p&gt;&lt;p&gt;Majuscule+cliquer et glisser pour définir une plage à exécuter en boucle ou à éditer.&lt;/p&gt;&lt;p&gt;Majuscule+cliquer pour supprimer la définition d&apos;une plage.&lt;/p&gt;Ctrl+cliquer et glisser pour déplacer le pointeur d&apos;exécution sans rester accroché à la grille des temps.&lt;p&gt;Double-cliquer pour démarrer l&apos;exécution.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Cliquer et glisser pour déplacer le pointeur d&apos;exécution.&lt;/p&gt;&lt;p&gt;Majuscule+cliquer et glisser pour définir une plage à exécuter en boucle ou à éditer.&lt;/p&gt;&lt;p&gt;Majuscule+cliquer pour supprimer la définition d&apos;une plage.&lt;/p&gt;Ctrl+cliquer et glisser pour déplacer le pointeur d&apos;exécution en restant accroché aux temps.&lt;p&gt;Double-cliquer pour démarrer l&apos;exécution.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -15813,7 +15813,7 @@ répartis verticalement sur la page)</translation>
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+70"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to switch between loop range and loop all.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -18575,17 +18575,17 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/dialogs/OutOfProcessorPower.cpp" line="+38"/>
         <source>Out Of Processor Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Puissance du processeur insuffisante</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
-        <translation type="unfinished">La puissance processeur disponible est insuffisante pour permettre le traitement audio en temps-réel.  Impossible de continuer.</translation>
+        <translation>La puissance processeur disponible est insuffisante pour permettre le traitement audio en temps-réel.  Impossible de continuer.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Don&apos;t display this dialog again.  (Restart required.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne plus afficher  (Redémarrage nécessaire)</translation>
     </message>
 </context>
 <context>
@@ -21129,17 +21129,17 @@ Afin de recevoir de l&apos;assistance pour configurer correctement votre audio e
     <message>
         <location line="-3618"/>
         <source>Replace or Merge?</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer ou fusionner ?</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge</source>
-        <translation type="unfinished">Fusionner</translation>
+        <translation>Fusionner</translation>
     </message>
     <message numerus="yes">
         <location line="+1215"/>
