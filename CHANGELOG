@@ -22,7 +22,7 @@ Included in this release...
   * Fix restore of keyboard in the shortcut editor.  Feature request
     #511.  [44ce000]
   * Fix "out of processor power" dialog always coming up on some
-    systems.  Feature requests #496.  [adab9c3]
+    systems.  Feature request #496.  [adab9c3]
   * Fix MIDI file merge disconnects connections.  Bug #1645.
     [fe70e17]
 

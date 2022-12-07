@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2021 Rosegarden development team -->
+<!-- Copyright 2022 Rosegarden development team -->
 <component type="desktop">
     <id>com.rosegardenmusic.rosegarden.desktop</id>
     <name>Rosegarden</name>
@@ -40,20 +40,33 @@
         <category>Midi</category>
         <category>Sequencer</category>
     </categories>
-    <!-- This is not allowed according to appstream-util validate. -->
-    <!-- <icon type="stock">rosegarden</icon> -->
-    <mimetypes>
-        <mimetype>audio/x-rosegarden-composition</mimetype>
-        <mimetype>audio/x-rosegarden-device</mimetype>
-        <mimetype>audio/x-rosegarden-project</mimetype>
-        <mimetype>audio/x-rosegarden-template</mimetype>
-        <mimetype>audio/x-wav</mimetype>
-        <mimetype>audio/midi</mimetype>
-        <mimetype>audio/ogg</mimetype>
-        <mimetype>audio/mp3</mimetype>
-        <mimetype>audio/x-flac</mimetype>
-    </mimetypes>
+
     <releases>
+
+      <release type="stable" version="22.12" date="2022-12-07">
+        <url>https://rosegardenmusic.com/wiki/dev:22.12</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Fix a crash when deleting segments that are visible in notation.  [e67b14a]</li>
+            <li>Hide the experimental Channel Fixed/Auto widgets behind a preference.  To re-enable: Edit > Preferences > General > Auto Channels (experimental).  [eda6701]</li>
+            <li>Fix the Base Velocity dialog in the Event Editor which was missing Ok/Cancel buttons.  [aa3218e]</li>
+            <li>Fix lilypond syntax error when exporting lyrics.  Bug #1639.  [1702b0f]</li>
+            <li>Fix restore of keyboard in the shortcut editor.  Feature request #511.  [44ce000]</li>
+            <li>Fix "out of processor power" dialog always coming up on some systems.  Feature request #496.  [adab9c3]</li>
+            <li>Fix MIDI file merge disconnects connections.  Bug #1645.  [fe70e17]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+
+          <ul>
+            <li>Advanced Looping rewrite including indicators in the Loop Ruler.  Enable via the preferences.  Edit > Preferences > General > Advanced Looping (beta).</li>
+            <li>Jump to loop feature.  Edit > Preferences > General > Jump to loop.  [69350eb]</li>
+            <li>Loop buttons added to the main, matrix, and notation toolbars.  [833ea5f]</li>
+            <li>Ask "Replace or Merge?" on file drop.  Feature request #510.  [071e2a8]</li>
+          </ul>
+        </description>
+      </release>
 
       <release type="stable" version="22.06" date="2022-06-08">
         <url>https://rosegardenmusic.com/wiki/dev:22.06</url>

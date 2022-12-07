@@ -1,9 +1,11 @@
-# Build Status
+Build Status
+============
 
 [![CI Ubuntu](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci.yml/badge.svg)](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci.yml)
 [![CI Windows](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci-windows.yml)
 
-# Introduction
+Introduction
+============
 
 Rosegarden is a MIDI sequencer and musical notation editor for Linux.
 
@@ -22,7 +24,7 @@ Release notes can be found in the CHANGELOG.
 
 
 Build requirements
-------------------
+==================
 
 For a complete list of build requirements, please see:
 
@@ -30,7 +32,7 @@ For a complete list of build requirements, please see:
 
 
 Installation instructions (v15.12 and up)
------------------------------------------
+=========================================
 
 The simplest way to build Rosegarden is to run the following commands from
 within the directory where you found this README file:
@@ -102,7 +104,7 @@ directories under CMAKE_INSTALL_PREFIX ([PREFIX]):
 
 
 Runtime requirements
---------------------
+====================
 
 In order to be fully functional and provide the optimal user experience,
 Rosegarden requires the following external applications.
@@ -120,7 +122,7 @@ Rosegarden requires the following external applications.
 
 
 Running the Unit Tests
-----------------------
+======================
 
 To run the unit tests, build as follows:
 
@@ -137,13 +139,13 @@ Then run the tests with "make test":
 
 
 User documentation
-------------------
+==================
 
 Please see rosegardenmusic.com
 
 
 SPECIAL NOTES FOR PACKAGE MAINTAINERS
--------------------------------------
+=====================================
 
 As of 10.02 all formerly optional dependencies are now mandatory dependencies.
 We've taken this step because it is a real support hassle working through a
@@ -166,8 +168,8 @@ An older version of the appdata file is kept with the current version in
 data/appdata.  It is named rosegarden.appdata-old.xml.
 
 
-Authors and copyright
----------------------
+Authors and Copyright
+=====================
 
 Rosegarden is Copyright 2000-2022 The Rosegarden Development Team
 
