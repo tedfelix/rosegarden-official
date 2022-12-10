@@ -157,7 +157,7 @@ bool Preferences::getAdvancedLooping()
 
 namespace
 {
-    const QString AudioFileLocationDialogGroup = "AudioFileLocationDialog";
+    const char *AudioFileLocationDialogGroup = "AudioFileLocationDialog";
 }
 
 PreferenceBool afldDontShow(AudioFileLocationDialogGroup, "dontShow", false);

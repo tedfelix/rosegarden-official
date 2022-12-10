@@ -1582,7 +1582,7 @@ AlsaDriver::setCurrentTimer(QString timer)
         return;
 
     m_currentTimer = timer;
-    settings.setValue(SequencerOptionsConfigGroup + "/" + "timer",
+    settings.setValue(QString(SequencerOptionsConfigGroup) + "/" + "timer",
                       m_currentTimer);
 
     RG_DEBUG << "setCurrentTimer(" << timer << ")";
@@ -1886,7 +1886,7 @@ AlsaDriver::initialiseMidi()
 
     QSettings settings;
     const QString timer = settings.value(
-            SequencerOptionsConfigGroup + "/" + "timer",
+            QString(SequencerOptionsConfigGroup) + "/" + "timer",
             AUTO_TIMER_NAME).toString();
 
     setCurrentTimer(timer);
