@@ -43,6 +43,16 @@
 
     <releases>
 
+      <release type="stable" version="22.12.1" date="2022-12-21">
+        <url>https://rosegardenmusic.com/wiki/dev:22.12.1</url>
+        <description>
+          <p>This version includes the following bug fix:</p>
+          <ul>
+            <li>Fix a crash caused by static initialization/link order.  Bug #1647.  [fa6eea8]</li>
+          </ul>
+        </description>
+      </release>
+
       <release type="stable" version="22.12" date="2022-12-07">
         <url>https://rosegardenmusic.com/wiki/dev:22.12</url>
         <description>

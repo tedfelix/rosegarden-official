@@ -1,3 +1,19 @@
+====== ROSEGARDEN 22.12.1 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 22.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fix a crash caused by static initialization/link order.  Bug #1647.
+    [fa6eea8]
+
+
 ====== ROSEGARDEN 22.12 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 22.12
