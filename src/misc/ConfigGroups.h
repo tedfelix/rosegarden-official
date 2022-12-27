@@ -27,9 +27,12 @@
 
 namespace Rosegarden
 {
+
+    // Note: Use const char * instead of QString to avoid static
+    //       init order fiasco.
     extern ROSEGARDENPRIVATE_EXPORT const char* const GeneralOptionsConfigGroup;
     extern const char* const LatencyOptionsConfigGroup;
-    extern ROSEGARDENPRIVATE_EXPORT const QString SequencerOptionsConfigGroup;
+    extern ROSEGARDENPRIVATE_EXPORT const char* const SequencerOptionsConfigGroup;
     extern const char* const NotationViewConfigGroup;
     extern const char* const PitchTrackerConfigGroup;
     extern const char* const AudioManagerDialogConfigGroup;
@@ -67,10 +70,10 @@ namespace Rosegarden
     extern const char* const GridQuantizeConfigGroup;
     extern const char* const NotationQuantizeConfigGroup;
     extern const char* const TextEventDialogConfigGroup;
-    extern const QString RecentFilesConfigGroup;
-    extern const QString UserShortcutsConfigGroup;
-    extern const QString ShortcutKeyboardConfigGroup;
-    extern const QString ExperimentalConfigGroup;
+    extern const char* const RecentFilesConfigGroup;
+    extern const char* const UserShortcutsConfigGroup;
+    extern const char* const ShortcutKeyboardConfigGroup;
+    extern const char* const ExperimentalConfigGroup;
 
 }
 

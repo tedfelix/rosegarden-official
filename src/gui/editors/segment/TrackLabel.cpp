@@ -20,6 +20,7 @@
 
 #include "misc/Debug.h"
 #include "gui/dialogs/TrackLabelDialog.h"
+#include "misc/Preferences.h"
 
 #include <QFont>
 #include <QFrame>
@@ -28,8 +29,37 @@
 #include <QWidget>
 #include <QMouseEvent>
 
+
+namespace
+{
+    // Colors
+
+    QColor getNormalTextColor()
+    {
+        return QColor(Qt::white);
+    }
+
+    QColor getSelectedBackgroundColor()
+    {
+        return QColor(128+64, 128+64, 128+64);
+    }
+
+    QColor getSelectedTextColor()
+    {
+        return QColor(Qt::black);
+    }
+
+    QColor getArchiveTextColor()
+    {
+        return QColor(128+32,128+32,128+32);
+    }
+
+}
+
+
 namespace Rosegarden
 {
+
 
 TrackLabel::TrackLabel(TrackId id,
                        int position,
@@ -48,7 +78,7 @@ TrackLabel::TrackLabel(TrackId id,
     setFont(font);
 
     QFontMetrics fontMetrics(font);
-    setFixedWidth(fontMetrics.boundingRect("XXXXXXXXXXXXXXXXXX").width());
+    setMinimumWidth(fontMetrics.boundingRect("XXXXXXXXXXXXXXXXXX").width());
     setFixedHeight(trackHeight);
 
     setFrameShape(QFrame::NoFrame);
@@ -91,6 +121,27 @@ TrackLabel::updateLabel()
 }
 
 void
+TrackLabel::updatePalette()
+{
+    QPalette pal = palette();
+
+    if (m_selected) {
+        setAutoFillBackground(true);
+        pal.setColor(QPalette::Window, getSelectedBackgroundColor());
+        pal.setColor(QPalette::WindowText, getSelectedTextColor());
+    } else {
+        // Let the parent color show through.
+        setAutoFillBackground(false);
+        if (m_archived)
+            pal.setColor(QPalette::WindowText, getArchiveTextColor());
+        else
+            pal.setColor(QPalette::WindowText, getNormalTextColor());
+    }
+
+    setPalette(pal);
+}
+
+void
 TrackLabel::setSelected(bool selected)
 {
     // No change?  Bail.
@@ -99,16 +150,19 @@ TrackLabel::setSelected(bool selected)
 
     m_selected = selected;
 
-    QPalette pal = palette();
-    if (m_selected) {
-        setAutoFillBackground(true);
-        pal.setColor(QPalette::Window, QColor(0xAA, 0xAA, 0xAA));
-        pal.setColor(QPalette::WindowText, Qt::white);
-    } else {
-        setAutoFillBackground(false);
-        pal.setColor(QPalette::WindowText, Qt::black);
-    }
-    setPalette(pal);
+    updatePalette();
+}
+
+void
+TrackLabel::setArchived(bool archived)
+{
+    // No change?  Bail.
+    if (archived == m_archived)
+        return;
+
+    m_archived = archived;
+
+    updatePalette();
 }
 
 void

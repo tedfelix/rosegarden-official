@@ -740,6 +740,8 @@ RosegardenMainWindow::setupActions()
     createAction("show_chord_name_ruler", SLOT(slotToggleChordNameRuler()));
     createAction("show_previews", SLOT(slotTogglePreviews()));
     createAction("show_inst_segment_parameters", SLOT(slotHideShowParameterArea()));
+    createAction("full_screen", SLOT(slotFullScreen()));
+
     createAction("select", SLOT(slotPointerSelected()));
     createAction("draw", SLOT(slotDrawSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
@@ -3661,6 +3663,17 @@ RosegardenMainWindow::slotToggleStatusBar()
         statusBar()->hide();
     else
         statusBar()->show();
+}
+
+void
+RosegardenMainWindow::slotFullScreen()
+{
+    const bool fullScreen = findAction("full_screen")->isChecked();
+
+    if (fullScreen)
+        showFullScreen();
+    else
+        showNormal();
 }
 
 void

@@ -24,6 +24,7 @@
 
 #include "Led.h"
 
+#include "misc/Preferences.h"
 #include "misc/Debug.h"
 
 #include <QPainter>
@@ -152,15 +153,16 @@ Led::draw(QPainter &painter)
     tmpPainter.drawPoint(pos, pos);
 
 
-    // *** Draw the round sunken frame around the LED.
+    // *** Draw the round sunken frame (bezel) around the LED.
 
     // ### shouldn't this value be smaller for smaller LEDs?
     // Given that there's no way to get an LED any size other than 16x16,
     // it makes no difference.
     pen.setWidth(2 * scale);
 
-    // Set the initial color value to white.
-    QColor frameColor = Qt::white;
+    // Set the initial color value.
+    QColor frameColor = Qt::gray;
+
     // Start drawing the shadow border at -45 degrees (-45*16 = -720).
     const int angle = -720;
 

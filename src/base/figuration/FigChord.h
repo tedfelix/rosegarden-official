@@ -25,7 +25,6 @@ namespace Rosegarden
 {
 
   class NotationQuantizer;
-  typedef long timeT;
 
 /// Class to describe a chord whose notes might not start at the same
 /// time

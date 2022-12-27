@@ -45,6 +45,7 @@
 #include "sound/ControlBlock.h"
 #include "sound/PluginIdentifier.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "misc/Preferences.h"
 
 #include <QApplication>
 #include <QLayout>
@@ -66,12 +67,44 @@
 
 namespace
 {
-// Constants
-constexpr int borderGap = 1;
-constexpr int buttonGap = 8;
-constexpr int vuSpacing = 2;
-constexpr int minWidth = 200;
+    // Constants
+    constexpr int borderGap = 1;
+    constexpr int buttonGap = 8;
+    constexpr int vuSpacing = 2;
+    constexpr int minWidth = 200;
+
+    // Colors
+
+    // Parent background color.  This is the area where there are no
+    // buttons.
+    QColor getBackgroundColor()
+    {
+        return QColor(32, 32, 32);
+    }
+
+    // Normal button background color.
+    // This is the color of a button that is in normal state as opposed to
+    // Archive.
+    QColor getButtonBackgroundColor()
+    {
+        return QColor(64, 64, 64);
+    }
+
+    // Archive button background color.
+    QColor getArchiveButtonBackgroundColor()
+    {
+        return QColor(Qt::black);
+    }
+
+    // Color for the numbers to the left.  The label text color is
+    // handled in TrackLabel::updatePalette().
+    QColor getTextColor()
+    {
+        return QColor(Qt::white);
+    }
+
 }
+
 
 namespace Rosegarden
 {
@@ -96,8 +129,8 @@ TrackButtons::TrackButtons(int trackCellHeight,
     setFrameStyle(Plain);
 
     QPalette pal = palette();
-    pal.setColor(backgroundRole(), QColor(0xDD, 0xDD, 0xDD));
-    pal.setColor(foregroundRole(), Qt::black);
+    pal.setColor(backgroundRole(), getBackgroundColor());
+    pal.setColor(foregroundRole(), getTextColor());
     setPalette(pal);
 
     // when we create the widget, what are we looking at?
@@ -167,51 +200,66 @@ TrackButtons::updateUI(Track *track)
     if (pos < 0  ||  pos >= m_tracks)
         return;
 
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    if (!document)
+        return;
 
-    // *** Archive Background
+
+    // *** Button Colors
 
     QFrame *hbox = m_trackHBoxes.at(pos);
+    QPalette palette = hbox->palette();
     if (track->isArchived()) {
-        // Go with the dark gray background.
-        QPalette palette = hbox->palette();
-        palette.setColor(hbox->backgroundRole(), QColor(0x88, 0x88, 0x88));
-        hbox->setPalette(palette);
+        palette.setColor(hbox->backgroundRole(),
+                         getArchiveButtonBackgroundColor());
     } else {
-        // Go with the parent's background color.
-        QColor parentBackground = palette().color(backgroundRole());
-        QPalette palette = hbox->palette();
-        palette.setColor(hbox->backgroundRole(), parentBackground);
-        hbox->setPalette(palette);
+        palette.setColor(hbox->backgroundRole(), getButtonBackgroundColor());
     }
+
+    hbox->setPalette(palette);
 
 
     // *** Mute LED
 
-    if (track->isMuted()) {
+    if (track->isMuted())
         m_muteLeds[pos]->off();
-    } else {
+    else
         m_muteLeds[pos]->on();
-    }
+
+    if (track->isArchived())
+        m_muteLeds[pos]->hide();
+    else
+        m_muteLeds[pos]->show();
 
 
     // *** Record LED
 
     Instrument *ins =
-            RosegardenDocument::currentDocument->getStudio().getInstrumentById(track->getInstrument());
+            document->getStudio().getInstrumentById(track->getInstrument());
     m_recordLeds[pos]->setColor(getRecordLedColour(ins));
 
     // Note: setRecord() used to be used to do this.  But that would
     //       set the track in the composition to record as well as setting
     //       the button on the UI.  This seems better and works fine.
     bool recording =
-            RosegardenDocument::currentDocument->getComposition().isTrackRecording(track->getId());
+            document->getComposition().isTrackRecording(track->getId());
     setRecordButton(pos, recording);
+
+    if (track->isArchived())
+        m_recordLeds[pos]->hide();
+    else
+        m_recordLeds[pos]->show();
 
 
     // *** Solo LED
 
     // ??? An Led::setState(bool) would be handy.
     m_soloLeds[pos]->setState(track->isSolo() ? Led::On : Led::Off);
+
+    if (track->isArchived())
+        m_soloLeds[pos]->hide();
+    else
+        m_soloLeds[pos]->show();
 
 
     // *** Track Label
@@ -242,7 +290,8 @@ TrackButtons::updateUI(Track *track)
     label->updateLabel();
 
     label->setSelected(
-            track->getId() == RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
+            track->getId() == document->getComposition().getSelectedTrack());
+    label->setArchived(track->isArchived());
 
 }
 
@@ -1107,10 +1156,29 @@ TrackButtons::makeButton(Track *track)
     trackHBox->setFrameShape(QFrame::StyledPanel);
     trackHBox->setFrameShadow(QFrame::Raised);
 
+    // Colors
+    QPalette palette = trackHBox->palette();
+    // This sets the inner highlight.
+    // ??? Sometimes the inner and outer highlights get mixed up.
+    //     Not sure why.  But don't expect this to do what you ask.
+    palette.setColor(QPalette::Button, QColor(128,128,128));
+    // This sets the outer highlight.
+    // ??? Sometimes the inner and outer highlights get mixed up.
+    //     Not sure why.  But don't expect this to do what you ask.
+    //     Also an even more outer highlight can appear.  It's bizarre.
+    //     For 128 and 64 it added a 32 highlight.
+    palette.setColor(QPalette::Light, QColor(64,64,64));
+    // This sets the inner lowlight.
+    palette.setColor(QPalette::Dark, QColor(16,16,16));
+    // This sets the outer lowlight.
+    palette.setColor(QPalette::Shadow, Qt::black);
+    trackHBox->setPalette(palette);
+
     // We will be changing the background color, so turn on auto-fill.
     trackHBox->setAutoFillBackground(true);
 
     // Insert a little gap
+    // ??? Use margins?
     hblayout->addSpacing(vuSpacing);
 
 
@@ -1190,7 +1258,7 @@ TrackButtons::makeButton(Track *track)
             track->getPosition(),
             m_trackCellHeight - buttonGap,
             trackHBox);
-    hblayout->addWidget(trackLabel);
+    hblayout->addWidget(trackLabel, 10);
 
     hblayout->addSpacing(vuSpacing);
 

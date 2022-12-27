@@ -463,7 +463,7 @@ private:
 
     /// Draw the track dividers.
     void drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect);
-    const QColor m_trackDividerColor;
+    QColor m_trackDividerColor;
 
     /// Draw a rectangle on the given painter.
     /**

@@ -94,11 +94,13 @@
 
   <Menu name="settings">
     <text>&amp;View</text>
-      <!--
-      <Action name="debug_dump_segments" text="Dump segments" />
-      -->
-      <Action name="view_doc_properties" text="Document P&amp;roperties..." />
-      <Separator/>
+    <!--
+    <Action name="debug_dump_segments" text="Dump segments" />
+    -->
+    <Action name="view_doc_properties" text="Document P&amp;roperties..." />
+
+    <Separator/>
+
     <Menu name="toolbars" append="show_merge">
       <text>&amp;Toolbars</text>
       <!-- JAS "show_stock_toolbar" is "options_show_toolbar" in matrix.rc and notation .rc -->
@@ -117,16 +119,24 @@
       <Action name="show_chord_name_ruler" text="Show Cho&amp;rd Name Ruler" checked="false" append="show_merge" />
       <Action name="show_tempo_ruler" text="Show Te&amp;mpo Ruler" checked="true" append="show_merge" />
     </Menu>
-  <Separator append="show_merge" />
+
+    <Separator append="show_merge" />
+
     <Action name="show_transport" text="Show Tra&amp;nsport" checked="true" append="show_merge" shortcut="T" shortcut-context="application" />
     <!-- JAS "show_inst_segment_parameters" is state dependent but not checkable -->
     <Action name="show_inst_segment_parameters" text="Show Special &amp;Parameters" shortcut="P" checked="true" append="show_merge" />
-  <Separator append="show_merge" />
+
+    <Separator append="show_merge" />
+
     <Action name="show_previews" text="Show Segment Pre&amp;views" checked="true" append="show_merge" />
     <Action name="show_segment_labels" text="Sh&amp;ow Segment Labels" checked="true" append="show_merge" />
     <Action name="show_tracklabels" text="Show Track &amp;Labels" checked="true" append="show_merge" />
     <!-- Action name="toggle_all" append="show_merge" /> -->
     <Action name="show_status_bar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
+
+    <separator />
+
+    <action name="full_screen" text="Full Screen" shortcut="F11" checked="false" />
   </Menu>
 
   <Menu name="document">

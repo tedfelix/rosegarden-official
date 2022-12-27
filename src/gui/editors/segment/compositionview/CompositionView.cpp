@@ -39,6 +39,8 @@
 #include "SegmentSelector.h"
 #include "SegmentToolBox.h"
 #include "sound/Midi.h"
+#include "gui/general/ThornStyle.h"
+#include "misc/Preferences.h"
 
 
 #include <QBrush>
@@ -77,7 +79,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_lastContentsY(0),
     m_segmentsRefresh(0, 0, viewport()->width(), viewport()->height()),
     //m_backgroundPixmap(),
-    m_trackDividerColor(GUIPalette::getColour(GUIPalette::TrackDivider)),
+    //m_trackDividerColor(),
     m_showPreviews(false),
     m_showSegmentLabels(true),
     m_segmentsLayer(viewport()->width(), viewport()->height()),
@@ -127,7 +129,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
             "true").toBool()) {
 
-        m_backgroundPixmap = IconLoader::loadPixmap("bg-segmentcanvas");
+        m_backgroundPixmap = IconLoader::loadPixmap("bg-paper-black");
     }
 
     slotUpdateSize();
@@ -187,6 +189,9 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     // The various tools expect this.
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
+
+    m_trackDividerColor.setRgb(48, 48, 48);
+
 
     // *** Debugging
 
@@ -612,7 +617,7 @@ void CompositionView::drawSegments(const QRect &clipRect)
         segmentsLayerPainter.drawTiledPixmap(
                 clipRect, m_backgroundPixmap, offset);
     } else {
-        segmentsLayerPainter.eraseRect(clipRect);
+        segmentsLayerPainter.fillRect(clipRect, Qt::black);
     }
 
     // *** Draw the track dividers
