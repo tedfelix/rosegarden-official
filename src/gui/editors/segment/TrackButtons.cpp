@@ -79,10 +79,7 @@ namespace
     // buttons.
     QColor getBackgroundColor()
     {
-        if (Rosegarden::Preferences::getDarkerMode())
-            return QColor(32, 32, 32);
-        else
-            return QColor(0xDD, 0xDD, 0xDD);
+        return QColor(32, 32, 32);
     }
 
     // Normal button background color.
@@ -90,29 +87,20 @@ namespace
     // Archive.
     QColor getButtonBackgroundColor()
     {
-        if (Rosegarden::Preferences::getDarkerMode())
-            return QColor(64, 64, 64);
-        else
-            return QColor(0xDD, 0xDD, 0xDD);
+        return QColor(64, 64, 64);
     }
 
     // Archive button background color.
     QColor getArchiveButtonBackgroundColor()
     {
-        if (Rosegarden::Preferences::getDarkerMode())
-            return QColor(Qt::black);
-        else
-            return QColor(0x88, 0x88, 0x88);
+        return QColor(Qt::black);
     }
 
     // Color for the numbers to the left.  The label text color is
     // handled in TrackLabel::updatePalette().
     QColor getTextColor()
     {
-        if (Rosegarden::Preferences::getDarkerMode())
-            return QColor(Qt::white);
-        else
-            return QColor(Qt::black);
+        return QColor(Qt::white);
     }
 
 }
@@ -1169,24 +1157,22 @@ TrackButtons::makeButton(Track *track)
     trackHBox->setFrameShadow(QFrame::Raised);
 
     // Colors
-    if (Rosegarden::Preferences::getDarkerMode()) {
-        QPalette palette = trackHBox->palette();
-        // This sets the inner highlight.
-        // ??? Sometimes the inner and outer highlights get mixed up.
-        //     Not sure why.  But don't expect this to do what you ask.
-        palette.setColor(QPalette::Button, QColor(128,128,128));
-        // This sets the outer highlight.
-        // ??? Sometimes the inner and outer highlights get mixed up.
-        //     Not sure why.  But don't expect this to do what you ask.
-        //     Also an even more outer highlight can appear.  It's bizarre.
-        //     For 128 and 64 it added a 32 highlight.
-        palette.setColor(QPalette::Light, QColor(64,64,64));
-        // This sets the inner lowlight.
-        palette.setColor(QPalette::Dark, QColor(16,16,16));
-        // This sets the outer lowlight.
-        palette.setColor(QPalette::Shadow, Qt::black);
-        trackHBox->setPalette(palette);
-    }
+    QPalette palette = trackHBox->palette();
+    // This sets the inner highlight.
+    // ??? Sometimes the inner and outer highlights get mixed up.
+    //     Not sure why.  But don't expect this to do what you ask.
+    palette.setColor(QPalette::Button, QColor(128,128,128));
+    // This sets the outer highlight.
+    // ??? Sometimes the inner and outer highlights get mixed up.
+    //     Not sure why.  But don't expect this to do what you ask.
+    //     Also an even more outer highlight can appear.  It's bizarre.
+    //     For 128 and 64 it added a 32 highlight.
+    palette.setColor(QPalette::Light, QColor(64,64,64));
+    // This sets the inner lowlight.
+    palette.setColor(QPalette::Dark, QColor(16,16,16));
+    // This sets the outer lowlight.
+    palette.setColor(QPalette::Shadow, Qt::black);
+    trackHBox->setPalette(palette);
 
     // We will be changing the background color, so turn on auto-fill.
     trackHBox->setAutoFillBackground(true);

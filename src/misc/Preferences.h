@@ -76,8 +76,6 @@ namespace Preferences
 
     // Experimental
 
-    bool getDarkerMode();
-
     bool getBug1623();
 
     void setAutoChannels(bool value);
