@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenMainWindow]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenMainWindow.h"
 
@@ -1849,13 +1849,18 @@ RosegardenMainWindow::slotOpenDroppedURL(QString url)
     if (!saveIfModified())
         return;
 
-    const int reply = QMessageBox::question(
-            this,  // parent
-            tr("Rosegarden"),  // title
-            tr("Replace or Merge?"),  // text
-            tr("Replace"),  // button0Text
-            tr("Merge"));  // button1Text
-    const bool replace = (reply == 0);
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Question);
+    msgBox.setWindowTitle(tr("Rosegarden"));
+    msgBox.setText(tr("Replace or Merge?"));
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    QAbstractButton *buttonY = msgBox.button(QMessageBox::Yes);
+    buttonY->setText(tr("Replace"));
+    QAbstractButton *buttonN = msgBox.button(QMessageBox::No);
+    buttonN->setText(tr("Merge"));
+    const int reply = msgBox.exec();
+    const bool replace = (reply == QMessageBox::Yes);
 
     openURL(QUrl(url), replace);
 }
