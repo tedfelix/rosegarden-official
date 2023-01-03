@@ -170,10 +170,12 @@ public:
     void openURL(QString url);
 
     /// merge a file with the existing document
-    void mergeFile(QString filePath) { mergeFile(filePath, ImportCheckType); }
+    /* 
+    void mergeFile(QString QStringList) { mergeFile(filePathList, ImportCheckType); }
+    */ 
 
-    /// merge a file, explicitly specifying its type
-    void mergeFile(QString filePath, ImportType type);
+    /// merge a file, explicitly specifying its type, allow multiple files
+    void mergeFile(QStringList filePathList, ImportType type);
 
     void openURL(const QUrl &url, bool replace);
 
