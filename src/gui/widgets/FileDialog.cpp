@@ -106,6 +106,10 @@ FileDialog::getOpenFileName(QWidget *parent,
 
     FileDialog dialog(parent, caption, dir, filter, options);
 
+    // ??? We probably should do this.  Otherwise the user can
+    //     specify whatever they want.
+    //dialog.setFileMode(QFileDialog::ExistingFile);
+
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     if (selectedFilter)
         dialog.selectNameFilter(*selectedFilter);
@@ -137,6 +141,9 @@ FileDialog::getOpenFileNames(QWidget *parent,
     }
 
     FileDialog dialog(parent, caption, dir, filter, options);
+
+    // Make sure multi-select is enabled.
+    dialog.setFileMode(QFileDialog::ExistingFiles);
 
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     if (selectedFilter)
