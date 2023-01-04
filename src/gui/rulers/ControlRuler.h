@@ -23,6 +23,7 @@
 #include "gui/general/AutoScroller.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+#include "gui/general/ActionFileClient.h"
 
 #include <QColor>
 #include <QPoint>
@@ -52,11 +53,12 @@ class EventSelection;
 class EditViewBase;
 class NotationStaff;
 class ViewSegment;
+class SnapGrid;
 
 /**
  * ControlRuler : base class for Control Rulers
  */
-class ControlRuler : public QWidget //, public ViewSegmentObserver
+class ControlRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT
 
@@ -96,13 +98,13 @@ public:
     Segment* getSegment() { return m_segment; }
 
     void updateSegment();
-    
+
     virtual void notationLayoutUpdated(timeT,timeT);
 
     void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }
-    
-    void setXOffset(int offset) { m_xOffset = offset; } 
+
+    void setXOffset(int offset) { m_xOffset = offset; }
 
     float valueToY(long val);
     long yToValue(float height);
@@ -111,7 +113,7 @@ public:
     double getYScale() const { return m_yScale; }
     float getXMax();
     float getXMin();
-    
+
     void clearSelectedItems();
     void addToSelection(QSharedPointer<ControlItem>);
     void removeFromSelection(QSharedPointer<ControlItem>);
@@ -156,6 +158,8 @@ public slots:
     virtual void slotScrollHorizSmallSteps(int);
     virtual void slotSetPannedRect(QRectF);
 //    virtual void slotSetScale(double);
+
+    void slotSnap();
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
@@ -204,6 +208,7 @@ protected:
 
     void setMenuName(QString menuName) { m_menuName = menuName; }
     void createMenu();
+    void createRulerMenu();
 
     //--------------- Data members ---------------------------------
 
@@ -222,7 +227,7 @@ protected:
     //     This map stores pointers and never deletes them.
     //     Recommend switching to QSharedPointer.
     ControlItemMap m_controlItemMap;
-    
+
     // Iterators to the first visible and the last visible item
     // NB these iterators are only really useful for zero duration items as the
     //   interval is determined by start position and will omit items that start
@@ -231,7 +236,7 @@ protected:
     ControlItemMap::iterator m_firstVisibleItem;
     ControlItemMap::iterator m_lastVisibleItem;
     ControlItemMap::iterator m_nextItemLeft;
-    
+
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 
@@ -249,7 +254,7 @@ protected:
     long m_minItemValue;
 
     double m_viewSegmentOffset;
-    
+
     int m_xOffset;
 
     double m_currentX;
@@ -263,6 +268,9 @@ protected:
 
     QString m_menuName;
     QMenu* 	m_menu;
+
+    QMenu* m_rulerMenu;
+    SnapGrid* m_snapGrid;
 
     //bool m_hposUpdatePending;
 

@@ -42,7 +42,7 @@ ControlPainter::ControlPainter(ControlRuler *parent) :
     // Bug #1452 "Control ruler hand cursor is obnoxious"
     //
     // After attempting to puzzle through the cursor switching logic and work
-    // out better logic or a more suitable alternative than Qt::OpenHandCursor, 
+    // out better logic or a more suitable alternative than Qt::OpenHandCursor,
     // I concluded that using the cross in all cases feels just fine in
     // practice.  I decided to just set them the same and leave the switching
     // logic in place, because it doesn't seem worth the effort to rip it all
@@ -74,7 +74,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
             double xscale = m_ruler->getXScale();
             float xmin = m_ruler->getXMin() * xscale;
             float xmax = (m_ruler->getXMax() - 1) * xscale;
-            float x = e->x;
+            float x = e->snappedXLeft;
 
             if (x < xmin) {
                 x = xmin;
@@ -93,7 +93,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
                 if (m_controlLineOrigin.first != -1 && m_controlLineOrigin.second != -1) {
                     ruler->addControlLine(m_controlLineOrigin.first / xscale,
                                           m_controlLineOrigin.second,
-                                          x / xscale,
+                                          e->snappedXRight / xscale,
                                           e->y,
                                           eraseExistingControllers);
                 }
@@ -113,7 +113,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
             m_controlLineOrigin.second = e->y;
         }
     }
- 
+
 }
 
 FollowMode
@@ -134,7 +134,7 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
             ruler->stopRubberBand();
         }
     }
-    
+
     // not sure what any of this is about; had to match the return type used
     // elsewhere, and have made no investigation into what any of it means
     return NO_FOLLOW;
@@ -142,4 +142,3 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
 
 QString ControlPainter::ToolName() { return "painter"; }
 }
-
