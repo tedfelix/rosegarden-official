@@ -19,11 +19,11 @@
     </Menu>
     <Menu name="merge" append="new_merge">
       <text>&amp;Merge</text>
-      <Action name="file_merge" text="Merge &amp;File..." />
-      <Action name="file_merge_midi" text="Merge &amp;MIDI File..." />
-      <Action name="file_merge_rg21" text="Merge &amp;X11 Rosegarden File..." />
-<!--      <Action name="file_merge_hydrogen" text="Merge &amp;Hydrogen file..." /> -->
-      <Action name="file_merge_musicxml" text="Merge MusicXM&amp;L File..." />
+      <Action name="file_merge" text="Merge &amp;File(s)..." />
+      <Action name="file_merge_midi" text="Merge &amp;MIDI File(s)..." />
+      <Action name="file_merge_rg21" text="Merge &amp;X11 Rosegarden File(s)..." />
+<!--      <Action name="file_merge_hydrogen" text="Merge &amp;Hydrogen file(s)..." /> -->
+      <Action name="file_merge_musicxml" text="Merge MusicXM&amp;L File(s)..." />
     </Menu>
     <!-- this one would like to be save_merge, but that sticks it at
 	 the very bottom in older KDE3 versions: -->
