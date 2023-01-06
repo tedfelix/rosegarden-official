@@ -686,12 +686,9 @@ void ControlRuler::createRulerMenu()
     }
     QSettings settings;
     settings.beginGroup(ControlRulerConfigGroup);
-    QString snapString = settings.value("Snap Grid Size").toString();
+    QString snapString =
+        settings.value("Snap Grid Size", "snap_none").toString();
     QAction* setAction = findAction(snapString);
-    if (! setAction) {
-        snapString = "snap_none";
-        setAction = findAction(snapString);
-    }
     RG_DEBUG << "set checked" << snapString;
     setAction->setChecked(true);
     setSnapTimeFromActionName(snapString);
