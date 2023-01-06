@@ -3,21 +3,21 @@
 <kpartgui name="Rosegarden::ControlRuler" version="1501">
 
 <Menu name="control_ruler_menu">
-  <Action name="snap_none" text="&amp;No Snap" />
-  <Action name="snap_unit" text="&amp;Unit" />
-  <Action name="snap_64" text="&amp;Snap to 1/64" icon="menu-hemidemisemi" />
-  <Action name="snap_48" text="Snap to &amp;1/48" icon="menu-3-demisemi"/>
-  <Action name="snap_32" text="Sn&amp;ap to 1/32" icon="menu-demisemi" />
-  <Action name="snap_24" text="Snap to 1/&amp;24" icon="menu-3-semiquaver" />
-  <Action name="snap_16" text="Sna&amp;p to 1/16" icon="menu-semiquaver" />
-  <Action name="snap_12" text="Snap t&amp;o 1/12" icon="menu-3-quaver" />
-  <Action name="snap_8" text="Snap to 1/&amp;8" icon="menu-quaver" />
-  <Action name="snap_dotted_8" text="Snap to &amp;3/16" icon="menu-dotted-quaver" />
-  <Action name="snap_4" text="Snap to 1/4" icon="menu-crotchet" />
-  <Action name="snap_dotted_4" text="Snap to 3/8" icon="menu-dotted-crotchet" />
-  <Action name="snap_2" text="Snap to 1/2" icon="menu-minim" />
-  <Action name="snap_beat" text="Snap to Bea&amp;t" />
-  <Action name="snap_bar" text="Snap to &amp;Bar" />
+  <Action name="snap_none" text="&amp;No Snap" checked="false" group="ruler_snap" />
+  <Action name="snap_unit" text="&amp;Unit" checked="false" group="ruler_snap" />
+  <Action name="snap_64" text="&amp;Snap to 1/64" checked="false" group="ruler_snap" />
+  <Action name="snap_48" text="Snap to &amp;1/48" checked="false" group="ruler_snap" />
+  <Action name="snap_32" text="Sn&amp;ap to 1/32" checked="false" group="ruler_snap" />
+  <Action name="snap_24" text="Snap to 1/&amp;24" checked="false" group="ruler_snap" />
+  <Action name="snap_16" text="Sna&amp;p to 1/16" checked="false" group="ruler_snap" />
+  <Action name="snap_12" text="Snap t&amp;o 1/12" checked="false" group="ruler_snap" />
+  <Action name="snap_8" text="Snap to 1/&amp;8" checked="false" group="ruler_snap" />
+  <Action name="snap_dotted_8" text="Snap to &amp;3/16" checked="false" group="ruler_snap" />
+  <Action name="snap_4" text="Snap to 1/4" checked="false" group="ruler_snap" />
+  <Action name="snap_dotted_4" text="Snap to 3/8" checked="false" group="ruler_snap" />
+  <Action name="snap_2" text="Snap to 1/2" checked="false" group="ruler_snap" />
+  <Action name="snap_beat" text="Snap to Bea&amp;t" checked="false" group="ruler_snap" />
+  <Action name="snap_bar" text="Snap to &amp;Bar" checked="false" group="ruler_snap" />
 </Menu>
 
 </kpartgui>

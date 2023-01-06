@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlRuler]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "ControlRuler.h"
 
@@ -36,6 +36,7 @@
 #include "DefaultVelocityColour.h"
 #include "document/CommandHistory.h"
 #include "base/ViewSegment.h"
+#include "misc/ConfigGroups.h"
 
 #include <algorithm>
 #include <cfloat>
@@ -53,6 +54,7 @@
 #include <QPainter>
 #include <QBrush>
 #include <QPen>
+#include <QSettings>
 
 namespace Rosegarden
 {
@@ -118,8 +120,6 @@ ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
     createAction("snap_bar", SLOT(slotSnap()));
 
     m_snapGrid = new SnapGrid(m_rulerScale);
-    m_snapGrid->setSnapTime(SnapGrid::NoSnap);
-
 }
 
 ControlRuler::~ControlRuler()
@@ -684,6 +684,17 @@ void ControlRuler::createRulerMenu()
     if (!m_rulerMenu) {
         RG_DEBUG << "ControlRuler::createRulerMenu() failed\n";
     }
+    QSettings settings;
+    settings.beginGroup(ControlRulerConfigGroup);
+    QString snapString = settings.value("Snap Grid Size").toString();
+    QAction* setAction = findAction(snapString);
+    if (! setAction) {
+        snapString = "snap_none";
+        setAction = findAction(snapString);
+    }
+    RG_DEBUG << "set checked" << snapString;
+    setAction->setChecked(true);
+    setSnapTimeFromActionName(snapString);
 }
 
 void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
@@ -722,40 +733,49 @@ void ControlRuler::slotSnap()
     QObject* obj = sender();
     QString oname = obj->objectName();
     RG_DEBUG << "slotSnap" << oname;
+    setSnapTimeFromActionName(oname);
+}
+
+void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
+{
     int stime = SnapGrid::NoSnap;
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
-    if (oname == "snap_none") {
+    if (actionName == "snap_none") {
         stime = SnapGrid::NoSnap;
-    } else if (oname == "snap_unit") {
+    } else if (actionName == "snap_unit") {
         stime = SnapGrid::SnapToUnit;
-    } else if (oname == "snap_64") {
+    } else if (actionName == "snap_64") {
         stime = crotchetDuration / 16;
-    } else if (oname == "snap_48") {
+    } else if (actionName == "snap_48") {
         stime = crotchetDuration / 12;
-    } else if (oname == "snap_32") {
+    } else if (actionName == "snap_32") {
         stime = crotchetDuration / 8;
-    } else if (oname == "snap_24") {
+    } else if (actionName == "snap_24") {
         stime = crotchetDuration / 6;
-    } else if (oname == "snap_16") {
+    } else if (actionName == "snap_16") {
         stime = crotchetDuration / 4;
-    } else if (oname == "snap_12") {
+    } else if (actionName == "snap_12") {
         stime = crotchetDuration / 3;
-    } else if (oname == "snap_8") {
+    } else if (actionName == "snap_8") {
         stime = crotchetDuration / 2;
-    } else if (oname == "snap_dotted_8") {
+    } else if (actionName == "snap_dotted_8") {
         stime = (crotchetDuration * 3) / 4;
-    } else if (oname == "snap_4") {
+    } else if (actionName == "snap_4") {
         stime = crotchetDuration;
-    } else if (oname == "snap_dotted_4") {
+    } else if (actionName == "snap_dotted_4") {
         stime = (crotchetDuration * 3) / 2;
-    } else if (oname == "snap_2") {
+    } else if (actionName == "snap_2") {
         stime = crotchetDuration * 2;
-    } else if (oname == "snap_beat") {
+    } else if (actionName == "snap_beat") {
         stime = SnapGrid::SnapToBeat;
-    } else if (oname == "snap_bar") {
+    } else if (actionName == "snap_bar") {
         stime = SnapGrid::SnapToBar;
     }
     m_snapGrid->setSnapTime(stime);
+    QSettings settings;
+    settings.beginGroup(ControlRulerConfigGroup);
+    settings.setValue("Snap Grid Size", actionName);
+    settings.endGroup();
 }
 
 void ControlRuler::contextMenuEvent(QContextMenuEvent* e)

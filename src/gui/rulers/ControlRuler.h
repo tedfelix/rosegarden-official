@@ -276,6 +276,9 @@ protected:
 
     typedef std::list<Event *> SelectionSet;
     SelectionSet m_selectedEvents;
+
+ private:
+    void setSnapTimeFromActionName(const QString& actionName);
 };
 
 

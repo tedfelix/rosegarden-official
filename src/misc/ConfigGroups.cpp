@@ -66,6 +66,7 @@ namespace Rosegarden
     const char* const RecentFilesConfigGroup = "RecentFiles";
     const char* const UserShortcutsConfigGroup = "UserShortcuts";
     const char* const ShortcutKeyboardConfigGroup = "ShortcutKeyboard";
+    const char* const ControlRulerConfigGroup = "Control_Ruler";
     const char* const ExperimentalConfigGroup = "Experimental";
 
 }
