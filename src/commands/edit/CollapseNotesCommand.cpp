@@ -96,40 +96,39 @@ CollapseNotesCommand::modifySegment()
         helper.makeNotesViable(m_selection->getStartTime(),
                                endTime,
                                true);
+    }
+    if (m_autoBeam && ! beamGroups.empty()) {
         RG_DEBUG << "before adjust" << start << end;
-        if (m_autoBeam && ! beamGroups.empty()) {
-            // we may have destroyed some beaming with the
-            // collapse. Try to repair it.
-            // find start and end including beamed groups
-            for (auto i = segment.begin(); i != segment.end(); ++i) {
-                Event* event = *i;
-                if (event->getAbsoluteTime() >= start) break;
-                if (event->has(BaseProperties::BEAMED_GROUP_ID)) {
-                    int id = event->get<Int>(BaseProperties::BEAMED_GROUP_ID);
-                    if (beamGroups.contains(id)) {
-                        // one of the adjusted beam groups
-                        start = event->getAbsoluteTime();
-                        break;
-                    }
+        // we may have destroyed some beaming with the
+        // collapse. Try to repair it.
+        // find start and end including beamed groups
+        for (auto i = segment.begin(); i != segment.end(); ++i) {
+            Event* event = *i;
+            if (event->getNotationAbsoluteTime() >= start) break;
+            if (event->has(BaseProperties::BEAMED_GROUP_ID)) {
+                int id = event->get<Int>(BaseProperties::BEAMED_GROUP_ID);
+                if (beamGroups.contains(id)) {
+                    // one of the adjusted beam groups
+                    start = event->getNotationAbsoluteTime();
+                    break;
                 }
             }
-            for (auto i = segment.rbegin(); i != segment.rend(); ++i) {
-                Event* event = *i;
-                time_t eventEnd =
-                    event->getAbsoluteTime() + event->getDuration();
-                if (eventEnd <= end) break;
-                if (event->has(BaseProperties::BEAMED_GROUP_ID)) {
-                    int id = event->get<Int>(BaseProperties::BEAMED_GROUP_ID);
-                    if (beamGroups.contains(id)) {
-                        // one of the adjusted beam groups
-                        end = eventEnd;
-                        break;
-                    }
+        }
+        for (auto i = segment.rbegin(); i != segment.rend(); ++i) {
+            Event* event = *i;
+            time_t eventEnd =
+                event->getNotationAbsoluteTime() + event->getNotationDuration();
+            if (eventEnd <= end) break;
+            if (event->has(BaseProperties::BEAMED_GROUP_ID)) {
+                int id = event->get<Int>(BaseProperties::BEAMED_GROUP_ID);
+                if (beamGroups.contains(id)) {
+                    // one of the adjusted beam groups
+                    end = eventEnd;
+                    break;
                 }
             }
         }
         RG_DEBUG << "before adjust" << start << end;
-
         helper.autoBeam(start, end, BaseProperties::GROUP_TYPE_BEAMED);
     }
 }
