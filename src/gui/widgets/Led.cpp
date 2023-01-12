@@ -161,7 +161,9 @@ Led::draw(QPainter &painter)
     pen.setWidth(2 * scale);
 
     // Set the initial color value.
-    QColor frameColor = Qt::gray;
+    QColor frameColor = Qt::white;
+    if (Preferences::getDarkerMode())
+        frameColor = Qt::gray;
 
     // Start drawing the shadow border at -45 degrees (-45*16 = -720).
     const int angle = -720;

@@ -36,22 +36,34 @@ namespace
 
     QColor getNormalTextColor()
     {
-        return QColor(Qt::white);
+        if (Rosegarden::Preferences::getDarkerMode())
+            return QColor(Qt::white);
+        else
+            return QColor(Qt::black);
     }
 
     QColor getSelectedBackgroundColor()
     {
-        return QColor(128+64, 128+64, 128+64);
+        if (Rosegarden::Preferences::getDarkerMode())
+            return QColor(128+64, 128+64, 128+64);
+        else
+            return QColor(0xAA, 0xAA, 0xAA);
     }
 
     QColor getSelectedTextColor()
     {
-        return QColor(Qt::black);
+        if (Rosegarden::Preferences::getDarkerMode())
+            return QColor(Qt::black);
+        else
+            return QColor(Qt::white);
     }
 
     QColor getArchiveTextColor()
     {
-        return QColor(128+32,128+32,128+32);
+        if (Rosegarden::Preferences::getDarkerMode())
+            return QColor(128+32,128+32,128+32);
+        else
+            return QColor(Qt::black);
     }
 
 }
