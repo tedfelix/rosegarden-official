@@ -79,7 +79,7 @@ namespace
     // buttons.
     QColor getBackgroundColor()
     {
-        if (Rosegarden::Preferences::getDarkerMode())
+        if (Rosegarden::Preferences::getThorn())
             return QColor(32, 32, 32);
         else
             return QColor(0xDD, 0xDD, 0xDD);
@@ -90,7 +90,7 @@ namespace
     // Archive.
     QColor getButtonBackgroundColor()
     {
-        if (Rosegarden::Preferences::getDarkerMode())
+        if (Rosegarden::Preferences::getThorn())
             return QColor(64, 64, 64);
         else
             return QColor(0xDD, 0xDD, 0xDD);
@@ -99,7 +99,7 @@ namespace
     // Archive button background color.
     QColor getArchiveButtonBackgroundColor()
     {
-        if (Rosegarden::Preferences::getDarkerMode())
+        if (Rosegarden::Preferences::getThorn())
             return QColor(Qt::black);
         else
             return QColor(0x88, 0x88, 0x88);
@@ -109,7 +109,7 @@ namespace
     // handled in TrackLabel::updatePalette().
     QColor getTextColor()
     {
-        if (Rosegarden::Preferences::getDarkerMode())
+        if (Rosegarden::Preferences::getThorn())
             return QColor(Qt::white);
         else
             return QColor(Qt::black);
@@ -1169,7 +1169,7 @@ TrackButtons::makeButton(Track *track)
     trackHBox->setFrameShadow(QFrame::Raised);
 
     // Colors
-    if (Rosegarden::Preferences::getDarkerMode()) {
+    if (Preferences::getThorn()) {
         QPalette palette = trackHBox->palette();
         // This sets the inner highlight.
         // ??? Sometimes the inner and outer highlights get mixed up.

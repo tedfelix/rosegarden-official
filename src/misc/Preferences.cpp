@@ -249,13 +249,6 @@ bool Preferences::getJACKLoadCheck()
     return jackLoadCheck.get();
 }
 
-PreferenceBool darkerMode(ExperimentalConfigGroup, "darkerMode", false);
-
-bool Preferences::getDarkerMode()
-{
-    return darkerMode.get();
-}
-
 PreferenceBool bug1623(ExperimentalConfigGroup, "bug1623", false);
 
 bool Preferences::getBug1623()

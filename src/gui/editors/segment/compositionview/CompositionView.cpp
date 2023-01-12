@@ -129,7 +129,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
             "true").toBool()) {
 
-        if (Preferences::getDarkerMode())
+        if (Preferences::getThorn())
             m_backgroundPixmap = IconLoader::loadPixmap("bg-paper-black");
         else
             m_backgroundPixmap = IconLoader::loadPixmap("bg-segmentcanvas");
@@ -193,7 +193,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
 
-    if (Preferences::getDarkerMode())
+    if (Preferences::getThorn())
         m_trackDividerColor.setRgb(48, 48, 48);
     else
         m_trackDividerColor = GUIPalette::getColour(GUIPalette::TrackDivider);
@@ -623,7 +623,7 @@ void CompositionView::drawSegments(const QRect &clipRect)
         segmentsLayerPainter.drawTiledPixmap(
                 clipRect, m_backgroundPixmap, offset);
     } else {
-        if (Preferences::getDarkerMode())
+        if (Preferences::getThorn())
             segmentsLayerPainter.fillRect(clipRect, Qt::black);
         else
             segmentsLayerPainter.eraseRect(clipRect);
