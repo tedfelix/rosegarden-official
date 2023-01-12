@@ -17,6 +17,9 @@
 
 #include <QString>
 
+// Need this to be seen within main.cpp.
+#include <rosegardenprivate_export.h>
+
 namespace Rosegarden
 {
 
@@ -39,6 +42,9 @@ namespace Rosegarden
  */
 namespace Preferences
 {
+    ROSEGARDENPRIVATE_EXPORT void setThorn(bool value);
+    ROSEGARDENPRIVATE_EXPORT bool getThorn();
+
     void setSendProgramChangesWhenLooping(bool value);
     bool getSendProgramChangesWhenLooping();
 

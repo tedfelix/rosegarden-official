@@ -79,6 +79,19 @@ namespace
     QString afldCustomLocation;
 }
 
+PreferenceBool thorn(
+        GeneralOptionsConfigGroup, "use_thorn_style", true);
+
+void Preferences::setThorn(bool value)
+{
+    thorn.set(value);
+}
+
+bool Preferences::getThorn()
+{
+    return thorn.get();
+}
+
 PreferenceBool sendProgramChangesWhenLooping(
         GeneralOptionsConfigGroup, "sendProgramChangesWhenLooping", true);
 
