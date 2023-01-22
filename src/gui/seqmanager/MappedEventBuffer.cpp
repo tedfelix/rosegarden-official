@@ -166,8 +166,9 @@ mapAnEvent(MappedEvent *e)
         reserve(newSize);
     }
 
-    MappedEvent mE(e);
-    getBuffer()[size()] = mE;
+    // Copy the event into the buffer.
+    getBuffer()[size()] = *e;
+
     // Some mappers need this to be done now because they may resize
     // the buffer later, which will only copy the filled part.
     resize(size() + 1);

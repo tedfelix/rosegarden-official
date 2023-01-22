@@ -176,8 +176,7 @@ StudioControl::sendMappedEventList(const MappedEventList &eventList)
     MappedEventList::const_iterator it = eventList.begin();
 
     for (; it != eventList.end(); ++it) {
-        MappedEvent mE(*it);
-        RosegardenSequencer::getInstance()->processMappedEvent(mE);
+        RosegardenSequencer::getInstance()->processMappedEvent(**it);
     }
 }
 
