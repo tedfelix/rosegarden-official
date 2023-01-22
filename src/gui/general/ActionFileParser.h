@@ -45,7 +45,7 @@ class ActionFileParser : public QObject, public XMLHandler
     Q_OBJECT
 
 public:
-    ActionFileParser(QObject *actionOwner);
+    explicit ActionFileParser(QObject *actionOwner);
     ~ActionFileParser() override;
 
     bool load(QString actionRcFile);
@@ -65,7 +65,7 @@ private:
     bool setActionIcon(QString actionName, QString icon);
     bool setActionShortcut(QString actionName, QString shortcut, bool isApplicationContext);
     bool setActionToolTip(QString actionName, QString tooltip);
-    bool setActionGroup(QString actionName, QString group);
+    bool setActionGroup(QString actionName, QString groupName);
     bool setActionChecked(QString actionName, bool);
 
     bool setMenuText(QString name, QString text);
@@ -104,11 +104,11 @@ private:
 
     QString findRcFile(QString name);
 
-    QAction *findAction(QString name);
-    QAction *findStandardAction(QString name);
-    QActionGroup *findGroup(QString name);
-    QMenu *findMenu(QString name);
-    QToolBar *findToolbar(QString name, Position position);
+    QAction *findAction(QString actionName);
+    QAction *findStandardAction(QString actionName);
+    QActionGroup *findGroup(QString groupName);
+    QMenu *findMenu(QString menuName);
+    QToolBar *findToolbar(QString toolbarName, Position position);
 
     typedef std::set<QAction *> ActionSet;
     typedef QMap<QString, ActionSet> StateMap;

@@ -43,13 +43,13 @@ public:
     // convenience
     typedef jack_default_audio_sample_t sample_t;
 
-    JackDriver(AlsaDriver *alsaDriver);
+    explicit JackDriver(AlsaDriver *alsaDriver);
     virtual ~JackDriver();
 
     bool isOK() const { return m_ok; }
 
-    bool isTransportEnabled() { return m_jackTransportEnabled; }
-    bool isTransportSource () { return m_jackTransportSource; }
+    bool isTransportEnabled() const { return m_jackTransportEnabled; }
+    bool isTransportSource () const { return m_jackTransportSource; }
 
     void setTransportEnabled(bool e) { m_jackTransportEnabled = e; }
     void setTransportSource (bool m) { m_jackTransportSource  = m; }
@@ -91,26 +91,26 @@ public:
                                          bool value);
 
     virtual QStringList getPluginInstancePrograms(InstrumentId id,
-                                                  int position); 
+                                                  int position);
 
     virtual QString getPluginInstanceProgram(InstrumentId id,
-                                             int position); 
-  
+                                             int position);
+
     virtual QString getPluginInstanceProgram(InstrumentId id,
                                              int position,
                                              int bank,
-                                             int program); 
-  
+                                             int program);
+
     virtual unsigned long getPluginInstanceProgram(InstrumentId id,
                                                    int position,
                                                    QString name);
-  
+
     virtual void setPluginInstanceProgram(InstrumentId id,
                                           int position,
                                           QString program);
 
     virtual QString configurePlugin(InstrumentId id,
-                                    int position, 
+                                    int position,
                                     QString key, QString value);
 
     virtual RunnablePluginInstance *getSynthPlugin(InstrumentId id);
@@ -163,11 +163,11 @@ public:
 
     // Similarly, set data on the buss mixer to avoid the buss mixer
     // having to call back on the mapped studio to discover it
-    // 
+    //
     void setAudioBussLevels(int bussNo, float dB, float pan);
 
     // Likewise for instrument mixer
-    // 
+    //
     void setAudioInstrumentLevels(InstrumentId instrument, float dB, float pan);
 
     // Called from AlsaDriver to indicate that an async MIDI event is
@@ -175,7 +175,7 @@ public:
     // that it needs to start processing soft synths, if it wasn't
     // already.  It will switch this off again itself when things
     // fall silent.
-    // 
+    //
     void setHaveAsyncAudioEvent() { m_haveAsyncAudioEvent = true; }
 
     RealTime getNextSliceStart(const RealTime &now) const;
@@ -184,7 +184,7 @@ public:
     size_t getFramesProcessed() const { return m_framesProcessed; }
 
     // Reinitialise if we've been kicked off JACK -- if we can
-    // 
+    //
     void restoreIfRestorable();
 
     // Report back to GUI via the AlsaDriver
@@ -291,4 +291,3 @@ protected:
 #endif
 
 #endif
-

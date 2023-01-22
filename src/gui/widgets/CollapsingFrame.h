@@ -50,7 +50,7 @@ public:
     void setWidgetFill(bool fill);
 
     /// This frame contains a single other widget.  Set it here.
-    void setWidget(QWidget *w);
+    void setWidget(QWidget *widget);
 
 public slots:
     void toggle();

@@ -60,7 +60,7 @@ RealTime
 InternalSegmentMapper::
 toRealTime(Composition &comp, timeT t)
 {
-    return 
+    return
         comp.getElapsedRealTime(t) + m_segment->getRealTimeDelay();
 }
 
@@ -97,9 +97,9 @@ void InternalSegmentMapper::fillBuffer()
         << "with repeat count"
         << repeatCount;
 #endif
-    
+
     // Clear out stuff from before.
-    m_triggeredEvents->clear(); 
+    m_triggeredEvents->clear();
     m_controllerCache.clear();
     m_noteOffs = NoteoffContainer();
 
@@ -114,7 +114,7 @@ void InternalSegmentMapper::fillBuffer()
         // on.  Eg, on the second time thru we play everything one
         // segment duration later and so forth.
         timeT timeForRepeats = repeatNo * segmentDuration;
-        
+
         for (Segment::iterator j = m_segment->begin();
              m_segment->isBeforeEndMarker(j) ||
                  (implied != m_triggeredEvents->end());
@@ -130,7 +130,7 @@ void InternalSegmentMapper::fillBuffer()
             if (m_segment->isBeforeEndMarker(j)) {
                 bestBaseTime = (*j)->getAbsoluteTime();
             }
-            
+
             // k is a pointer to the note iterator we will actually
             // use.  Initialize it to the default of the segment's
             // own.
@@ -156,7 +156,7 @@ void InternalSegmentMapper::fillBuffer()
 
             // We handle nested ornament expansion elsewhere, so
             // trigger events won't be found in implied.
-            if (!usingImplied) { 
+            if (!usingImplied) {
 
                 long triggerId = -1;
                 (**k)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID, triggerId);
@@ -196,9 +196,9 @@ void InternalSegmentMapper::fillBuffer()
                             reserve(spaceNeeded);
                         }
                     }
-                        
+
                     // whatever happens, we don't want to write this one
-                    ++j; 
+                    ++j;
 
                     // Since we're no longer sure what the next event
                     // is, restart the loop.
@@ -253,7 +253,7 @@ void InternalSegmentMapper::fillBuffer()
                                 (**k)->isa(PitchBend::EventType)) {
                                 m_controllerCache.storeLatestValue((**k));
                             }
-                            
+
                             if ((**k)->isa(Note::EventType)) {
                                 if (m_segment->getTranspose() != 0) {
                                     e.setPitch(e.getPitch() +
@@ -264,9 +264,9 @@ void InternalSegmentMapper::fillBuffer()
                                                    e.getPitch());
                                 }
                             }
-                            mapAnEvent(&e); 
+                            mapAnEvent(&e);
                         } else {}
-                        
+
                     } catch (...) {
 #ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
                         RG_DEBUG << "fillBuffer() - caught exception while trying to create MappedEvent";
@@ -393,7 +393,7 @@ InternalSegmentMapper::calculateSize()
     return addSize(0, m_segment);
 }
 
-// Make the channel ready to be played on.  
+// Make the channel ready to be played on.
 void
 InternalSegmentMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
@@ -433,13 +433,13 @@ InternalSegmentMapper::insertChannelSetup(MappedInserterBase &inserter)
 
 void
 InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                               RealTime start, bool dirtyIter)
+                               RealTime start, bool firstOutput)
 {
     Instrument *instrument = m_doc->getInstrument(m_segment);
     if (!instrument)
         return;
 
-    if (dirtyIter)
+    if (firstOutput)
         m_channelManager.setInstrument(instrument);
 
     m_channelManager.insertEvent(
@@ -447,13 +447,13 @@ InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
             getControllers(instrument, start),
             start,
             evt,
-            dirtyIter,  // firstOutput
+            firstOutput,
             inserter);
 }
 
 int
 InternalSegmentMapper::
-getControllerValue(timeT searchTime, const std::string eventType,
+getControllerValue(timeT searchTime, const std::string& eventType,
                    int controllerId)
 {
     return
@@ -464,7 +464,7 @@ getControllerValue(timeT searchTime, const std::string eventType,
 
 bool
 InternalSegmentMapper::
-shouldPlay(MappedEvent *evt, RealTime sliceStart)
+shouldPlay(MappedEvent *evt, RealTime startTime)
 {
     // #1048388:
     // Ensure sysex heeds mute status, but ensure clocks etc still get
@@ -472,14 +472,14 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
     if (evt->getType() == MappedEvent::MidiSystemMessage &&
         evt->getData1() != MIDI_SYSTEM_EXCLUSIVE)
         { return true; }
-    
+
     // Otherwise if it's muted it doesn't play.
     if (mutedEtc()) { return false; }
 
     // Otherwise it should play if it's not already all done sounding.
     // The timeslice logic will have already excluded events that
     // start too late.
-    return !evt->EndedBefore(sliceStart);
+    return !evt->EndedBefore(startTime);
 }
 
 ControllerAndPBList

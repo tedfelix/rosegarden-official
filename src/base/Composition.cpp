@@ -702,7 +702,7 @@ Composition::getDuration(bool withRepeats) const
 }
 
 void
-Composition::invalidateDurationCache()
+Composition::invalidateDurationCache() const
 {
     m_durationWithRepeatsDirty = true;
     m_durationWithoutRepeatsDirty = true;

@@ -69,7 +69,7 @@ protected:
      * The QAction child objects must be present before calling this function.
      * See createAction().
      */
-    bool createMenusAndToolbars(QString rcname);
+    bool createMenusAndToolbars(QString rcFileName);
 
     /**
      * Find a group of the given name.  If it does not exist,
@@ -108,4 +108,3 @@ private:
 }
 
 #endif
-

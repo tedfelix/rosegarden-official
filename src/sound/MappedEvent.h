@@ -145,7 +145,7 @@ public:
         TimeSignature            = 1 << 22,
         // Tempo event (from tempo composition reference segment)
         Tempo                    = 1 << 23,
-        
+
         // Panic function
         Panic                    = 1 << 24,
 
@@ -165,7 +165,7 @@ public:
         Text                     = 1 << 29,
         // Key signature (for MIDI export, not sound)
         KeySignature             = 1 << 30
-        
+
     } MappedEventType;
 
     typedef enum
@@ -223,7 +223,7 @@ public:
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
-    MappedEvent(const Event &e);
+    explicit MappedEvent(const Event &e);
 
     // Another Internal constructor from Events
     MappedEvent(InstrumentId id,
@@ -369,7 +369,7 @@ public:
 
     // Copy from pointer
     // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
-    MappedEvent(MappedEvent *mE):
+    explicit MappedEvent(MappedEvent *mE):
         m_trackId(mE->getTrackId()),
         m_instrument(mE->getInstrument()),
         m_type(mE->getType()),
@@ -387,7 +387,7 @@ public:
         m_recordedDevice(mE->getRecordedDevice()) {}
 
     // Construct perhaps without initialising, for placement new or equivalent
-    MappedEvent(bool initialise) {
+    explicit MappedEvent(bool initialise) {
         if (initialise) *this = MappedEvent();
     }
 
@@ -456,7 +456,7 @@ public:
      * Zero-duration events at exactly time t are not all done, but
      * non-zeroes that end at exactly time t are.
      */
-    bool EndedBefore(RealTime t)
+    bool EndedBefore(RealTime t) const
     {
         return
             ((getEventTime() + getDuration() <= t) &&
@@ -508,13 +508,13 @@ public:
     RealTime getFadeOutTime() const { return m_fadeOutTime; }
     void setFadeOutTime(const RealTime &time)
             { m_fadeOutTime = time; }
-    
+
     // Original event input channel as it was recorded
     //
     unsigned int getRecordedChannel() const { return m_recordedChannel; }
-    void setRecordedChannel(const unsigned int channel) 
+    void setRecordedChannel(const unsigned int channel)
             { m_recordedChannel = channel; }
-            
+
     // Original event record device as it was recorded
     //
     unsigned int getRecordedDevice() const { return m_recordedDevice; }

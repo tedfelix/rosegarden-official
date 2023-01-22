@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -53,7 +53,8 @@ static void osc_error(int num, const char *msg, const char *path)
 static int osc_message_handler(const char *path, const char *types, lo_arg **argv,
                                int argc, lo_message, void *user_data)
 {
-    AudioPluginOSCGUIManager *manager = (AudioPluginOSCGUIManager *)user_data;
+    AudioPluginOSCGUIManager *manager =
+        static_cast<AudioPluginOSCGUIManager *>(user_data);
 
     InstrumentId instrument;
     int position;
@@ -125,8 +126,7 @@ AudioPluginOSCGUIManager::checkOSCThread()
 bool
 AudioPluginOSCGUIManager::hasGUI(InstrumentId instrument, int position)
 {
-    PluginContainer *container = nullptr;
-    container = m_studio->getContainerById(instrument);
+    PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container) return false;
 
     AudioPluginInstance *pluginInstance = container->getPlugin(position);
@@ -155,8 +155,7 @@ AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
     }
 
     // check the label
-    PluginContainer *container = nullptr;
-    container = m_studio->getContainerById(instrument);
+    PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container) {
         RG_WARNING << "startGUI(): no such instrument or buss as " << instrument;
         return;
@@ -239,8 +238,7 @@ AudioPluginOSCGUIManager::updateProgram(InstrumentId instrument, int position)
         m_guis[instrument].find(position) == m_guis[instrument].end())
         return ;
 
-    PluginContainer *container = nullptr;
-    container = m_studio->getContainerById(instrument);
+    PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container) return;
 
     AudioPluginInstance *pluginInstance = container->getPlugin(position);
@@ -268,8 +266,7 @@ AudioPluginOSCGUIManager::updatePort(InstrumentId instrument, int position,
         m_guis[instrument].find(position) == m_guis[instrument].end())
         return ;
 
-    PluginContainer *container = nullptr;
-    container = m_studio->getContainerById(instrument);
+    PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container) return;
 
     AudioPluginInstance *pluginInstance = container->getPlugin(position);
@@ -427,7 +424,8 @@ AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
 void
 AudioPluginOSCGUIManager::timerCallback(void *data)
 {
-    AudioPluginOSCGUIManager *manager = (AudioPluginOSCGUIManager *)data;
+    AudioPluginOSCGUIManager *manager =
+        static_cast<AudioPluginOSCGUIManager *>(data);
     manager->dispatch();
 }
 
@@ -542,6 +540,7 @@ AudioPluginOSCGUIManager::dispatch()
 #ifdef DSSI_PROJECT_DIRECTORY_KEY
 
                 if (key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
+                    // cppcheck-suppress ConfigurationNotChecked
                     key = DSSI_PROJECT_DIRECTORY_KEY;
                 }
 #endif
@@ -590,6 +589,7 @@ AudioPluginOSCGUIManager::dispatch()
 
 #ifdef DSSI_RESERVED_CONFIGURE_PREFIX
 
+            // cppcheck-suppress ConfigurationNotChecked
             if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX) ||
                     key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
                 RG_WARNING << "dispatch(): illegal reserved configure call from gui: " << key << " -> " << value;
@@ -601,6 +601,7 @@ AudioPluginOSCGUIManager::dispatch()
 
             m_mainWindow->slotChangePluginConfiguration(instrument, position,
 #ifdef DSSI_GLOBAL_CONFIGURE_PREFIX
+// cppcheck-suppress ConfigurationNotChecked
                                                  key.startsWith(DSSI_GLOBAL_CONFIGURE_PREFIX),
 #else
                                                  false,
@@ -665,4 +666,3 @@ done:
 }
 
 }
-

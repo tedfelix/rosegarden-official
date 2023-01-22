@@ -49,10 +49,10 @@ public:
     void setPercussion(bool percussion);
     bool isPercussion() const { return m_percussion; }
     void setMSB(int msb);
-    void setLSB(int msb);
+    void setLSB(int lsb);
 
     int compare(QTreeWidgetItem *i, int col, bool ascending) const override;
-    
+
 protected:
 
     //--------------- Data members ---------------------------------

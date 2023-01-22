@@ -51,24 +51,24 @@ public:
      * work well for some internal reason but that should appear
      * to the user as a nice continuous range.
      */
-    ZoomSlider(const std::vector<T> &sizes, T defaultValue,
+    ZoomSlider(const std::vector<T> &sizes, const T& defaultValue,
                Qt::Orientation, QWidget * parent, const char * name=nullptr);
 
     ~ZoomSlider() override;
-    
-    void reinitialise(const std::vector<T> &sizes, T defaultValue);
+
+    void reinitialise(const std::vector<T> &sizes, const T& size);
 
     const T &getCurrentSize() const;
     const T &getDefault() const;
 
 public slots:
     void setToDefault(); // restore the initial value
-    void setSize(T size);
+    void setSize(const T& size);
     void increment();
     void decrement();
-        
+
 protected:
-    static int getIndex(const std::vector<T> &, T size);
+    static int getIndex(const std::vector<T> &, const T& size);
     std::vector<T> m_sizes;
     T m_defaultValue;
 };
@@ -76,17 +76,17 @@ protected:
 
 template<class T>
 ZoomSlider<T>::ZoomSlider(const std::vector<T> &sizes,
-                          T initialSize, Qt::Orientation o,
+                          const T& defaultValue, Qt::Orientation o,
                           QWidget *parent, const char *name) :
     QSlider(o, parent),
     m_sizes(sizes),
-    m_defaultValue(initialSize)
+    m_defaultValue(defaultValue)
 {
     setObjectName(name);
     setMinimum(0);
     setMaximum(sizes.size() - 1);
     setPageStep(1);
-    setValue(getIndex(sizes, initialSize));
+    setValue(getIndex(sizes, defaultValue));
     setTracking(false);
     setFixedWidth(150);
     setFixedHeight(15);
@@ -99,7 +99,7 @@ ZoomSlider<T>::~ZoomSlider() { }
 
 template<class T>
 int
-ZoomSlider<T>::getIndex(const std::vector<T> &sizes, T size)
+ZoomSlider<T>::getIndex(const std::vector<T> &sizes, const T& size)
 {
     for (unsigned int i = 0; i < sizes.size(); ++i) {
         if (sizes[i] == size) return i;
@@ -109,8 +109,8 @@ ZoomSlider<T>::getIndex(const std::vector<T> &sizes, T size)
 
 template<class T>
 void
-ZoomSlider<T>::reinitialise(const std::vector<T> &sizes, T size)
-{ 
+ZoomSlider<T>::reinitialise(const std::vector<T> &sizes, const T& size)
+{
     m_sizes = sizes;
     setMinimum(0);
     setMaximum(sizes.size()-1);
@@ -135,7 +135,7 @@ ZoomSlider<T>::getCurrentSize() const
 
 template <class T>
 void
-ZoomSlider<T>::setSize(T size)
+ZoomSlider<T>::setSize(const T& size)
 {
     setValue(getIndex(m_sizes, size));
 }

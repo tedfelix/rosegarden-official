@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -246,7 +246,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
                 if (m_device->getKeyMappingForProgram(*it)) {
                     getKeyMapButton(i)->setIcon(QIcon(keyPixmap));
                     getKeyMapButton(i)->setToolTip
-                        (tr("Key Mapping: %1") 
+                        (tr("Key Mapping: %1")
                               .arg(strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
                 }
 
@@ -301,7 +301,7 @@ MidiProgramsEditor::slotNewPercussion()
     modifyCurrentPrograms(*getCurrentBank(), *newBank);
     *getCurrentBank() = *newBank;
     m_bankEditor->slotApply();
-    
+
     // Hack to force the percussion icons to switch state if needed.
     // code stole from populate.
     if (m_device) {
@@ -374,13 +374,13 @@ MidiProgramsEditor::slotNewLSB(int value)
 struct ProgramCmp
 {
     bool operator()(const Rosegarden::MidiProgram &p1,
-                    const Rosegarden::MidiProgram &p2)
+                    const Rosegarden::MidiProgram &p2) const
     {
         if (p1.getProgram() == p2.getProgram()) {
             const Rosegarden::MidiBank &b1(p1.getBank());
             const Rosegarden::MidiBank &b2(p2.getBank());
             if (b1.getMSB() == b2.getMSB())
-                if (b1.getLSB() == b2.getLSB()) 
+                if (b1.getLSB() == b2.getLSB())
                     return ((b1.isPercussion() ? 1 : 0) < (b2.isPercussion() ? 1 : 0));
                 else return (b1.getLSB() < b2.getLSB());
             else return (b1.getMSB() < b2.getMSB());
@@ -401,7 +401,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     const unsigned id = lineEdit->property("index").toUInt();
 
     //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << id;
-    
+
     MidiBank *currBank = getCurrentBank();
 
     if (!currBank) {

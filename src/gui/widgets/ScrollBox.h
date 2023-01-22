@@ -45,7 +45,7 @@ public:
     enum SizeMode { FixWidth, FixHeight };
 
     ScrollBox(QWidget *parent = nullptr,
-              SizeMode mode = FixWidth,
+              SizeMode sizeMode = FixWidth,
               const char *name = nullptr);
 
 public slots:

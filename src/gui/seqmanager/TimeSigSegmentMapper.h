@@ -29,7 +29,7 @@ class RosegardenDocument;
 class TimeSigSegmentMapper : public SpecialSegmentMapper
 {
 public:
-    TimeSigSegmentMapper(RosegardenDocument *doc) :
+    explicit TimeSigSegmentMapper(RosegardenDocument *doc) :
         SpecialSegmentMapper(doc)
     {
         init();

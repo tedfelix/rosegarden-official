@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -50,9 +50,11 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_doc(doc),
     m_displayQuickMarker(displayQuickMarker),
     m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4)),
+    m_width( -1),
     m_height(height),
     m_invert(invert),
     m_currentXOffset(0),
+    m_lastMouseXPos(0.0),
     m_rulerScale(rulerScale),
     m_defaultGrid(rulerScale),
     m_loopGrid(new SnapGrid(rulerScale)),
@@ -144,19 +146,19 @@ void LoopRuler::paintEvent(QPaintEvent* e)
 
     paint.setBrush(palette().windowText());
     drawBarSections(&paint);
-    
+
     if (m_displayQuickMarker) {
         timeT tQM = m_doc->getQuickMarkerTime();
         if (tQM >= 0) {
             // draw quick marker
             double xQM = m_rulerScale->getXForTime(tQM)
                        + m_currentXOffset;
-            
+
             paint.setPen(m_quickMarkerPen);
-            
+
             // looks necessary to compensate for shift in the CompositionView (cursor)
             paint.translate(1, 0);
-            
+
             // draw red segment
             paint.drawLine(int(xQM), 1, int(xQM), m_height-1);
         }
@@ -267,9 +269,9 @@ LoopRuler::drawLoopMarker(QPainter *paint)
 }
 
 double
-LoopRuler::mouseEventToSceneX(QMouseEvent *mE)
+LoopRuler::mouseEventToSceneX(QMouseEvent *mouseEvent)
 {
-    double x = mE->pos().x() - m_currentXOffset;
+    double x = mouseEvent->pos().x() - m_currentXOffset;
     return x;
 }
 

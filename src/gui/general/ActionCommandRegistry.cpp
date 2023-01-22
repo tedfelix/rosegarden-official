@@ -52,14 +52,16 @@ void
 ActionCommandRegistry::addAction(QString actionName)
 {
     m_client->createAction(actionName, this, SLOT(slotInvokeCommand()));
-}    
+}
 
 class ActionCommandArgumentQuerier : public CommandArgumentQuerier
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ActionCommandArgumentQuerier)
 
 public:
-    ActionCommandArgumentQuerier(QWidget *widget) : m_widget(widget) { }
+    explicit ActionCommandArgumentQuerier(QWidget *widget) :
+        m_widget(widget)
+    { }
     QString getText(QString message, bool *ok) override {
         if (!m_widget) return "";
         return InputDialog::getText(m_widget,
@@ -103,7 +105,7 @@ ActionCommandRegistry::invokeCommand(QString actionName)
 
         CommandHistory::getInstance()->addCommand(command);
 
-        EventSelection *subsequentSelection = 
+        EventSelection *subsequentSelection =
             m_builders[actionName]->getSubsequentSelection(command);
 
         if (subsequentSelection && sm) {
@@ -121,4 +123,3 @@ ActionCommandRegistry::invokeCommand(QString actionName)
 }
 
 }
-

@@ -48,10 +48,10 @@ class RulerScale;
 class PropertyControlRuler :  public ControlRuler, public ViewSegmentObserver
 {
 public:
-    PropertyControlRuler(PropertyName propertyName,
-                        ViewSegment *viewSegment,
-                        RulerScale *scale,
-                        QWidget *parent);
+    PropertyControlRuler(const PropertyName& propertyName,
+                         ViewSegment *viewSegment,
+                         RulerScale *rulerScale,
+                         QWidget *parent);
 
     ~PropertyControlRuler() override;
 

@@ -73,7 +73,7 @@ MappedEventBuffer::refresh()
     int newFill = calculateSize();
     int oldSize = capacity();
 
-#ifdef DEBUG_MAPPED_EVENT_BUFFER    
+#ifdef DEBUG_MAPPED_EVENT_BUFFER
     RG_DEBUG << "refresh() - " << this
                  << " - old size = " << oldSize
                  << " - old fill = " << size()
@@ -166,7 +166,9 @@ mapAnEvent(MappedEvent *e)
         reserve(newSize);
     }
 
-    getBuffer()[size()] = e;
+    // Copy the event into the buffer.
+    getBuffer()[size()] = *e;
+
     // Some mappers need this to be done now because they may resize
     // the buffer later, which will only copy the filled part.
     resize(size() + 1);

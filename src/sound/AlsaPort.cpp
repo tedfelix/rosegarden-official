@@ -3,7 +3,7 @@
   Rosegarden
   A sequencer and musical notation editor.
   Copyright 2000-2022 the Rosegarden development team.
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -59,7 +59,7 @@ AlsaPortDescription::AlsaPortDescription(Instrument::InstrumentType type,
 
 bool
 AlsaPortCmp::operator()(QSharedPointer<AlsaPortDescription> a1,
-                        QSharedPointer<AlsaPortDescription> a2)
+                        QSharedPointer<AlsaPortDescription> a2) const
 {
     // Ordering for ALSA ports in the list:
     //

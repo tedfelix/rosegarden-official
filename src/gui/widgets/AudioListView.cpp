@@ -44,24 +44,24 @@ AudioListView::AudioListView(QWidget *parent, const char *name)
     setDragEnabled(false);  // start drag manually in mouseMoveEvent
     setAcceptDrops(true);
     setDropIndicatorShown(true);
-    
+
 }
 
 
 
 
 void AudioListView::mouseMoveEvent(QMouseEvent *event){
-    
-    // 
-    
+
+    //
+
     // if not left button - return
      if (!(event->buttons() & Qt::LeftButton)) return;
-    
+
     // if no item selected, return (else it would crash)
      if (currentItem() == nullptr) return;
-     
+
      QTreeWidgetItem *item = currentItem();
-     
+
      // we use the topLevelItems as drag-source. (they have the full file-path available)
      while( item && item->parent() ){
         item = dynamic_cast<QTreeWidgetItem*>( item->parent() );  // assign parent/topLevelItem
@@ -70,10 +70,10 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
         RG_DEBUG << "AudioListView::mouseMoveEvent() - item is nullptr (cast failed?) ";
         return;
      }
-    
+
     QDrag *drag = new QDrag(this);
     QMimeData *mimeData = new QMimeData;
-    
+
     // construct list of QUrls
     // other widgets accept this mime type, we can drop to them
     QList<QUrl> list;
@@ -81,27 +81,27 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
     line = item->text(6);       // 6 == Column->filename / QTreeWidgetItem
     line = line.replace( "~", getenv( "HOME" ), Qt::CaseSensitive );
     QFileInfo finfo( line  );
-    
+
     //TODO : allow multi-selection drags from AudioListView
-    
+
     line = finfo.absoluteFilePath();
     // should we ?
 //     if( ! line.startsWith( "file://" )){
 //         line = line.insert( 0, "file://" );
 //     }
-    
+
     list.append( QUrl(line) ); // line is the filename.of the audio file
-    
+
     // mime stuff
-    mimeData->setUrls(list); 
+    mimeData->setUrls(list);
     //mimeData->setData( line.toUtf8(), "text/uri-list" );
-    
-    
+
+
     // ----------------------------------------------------------------------
     // provide a plain:text type, for accellerated access, when draging internaly
-    
+
     AudioListItem* AuItem = dynamic_cast<AudioListItem*>(currentItem());
-    
+
     QString audioDatax;
     QTextStream ts(&audioDatax);
     ts << "AudioFileManager\n"
@@ -111,23 +111,23 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
         << AuItem->getDuration().sec << '\n'
         << AuItem->getDuration().nsec << '\n';
     ts.flush();
-    
+
     RG_DEBUG << "AudioListView::dragObject - "
             << "file id = " << AuItem->getId()
             << ", start time = " << AuItem->getStartTime();
-    
-    mimeData->setText( audioDatax ); 
+
+    mimeData->setText( audioDatax );
      // ----------------------------------------------------------------------
-    
-    
+
+
     drag->setMimeData(mimeData);
-    
+
     RG_DEBUG << "Starting drag from AudioListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0];
-    
+
     // start drag
     drag->exec(Qt::CopyAction | Qt::MoveAction);
-    
-    
+
+
 }
 
 
@@ -141,20 +141,20 @@ QStringList AudioListView::mimeTypes() const{
 
 
 
-void AudioListView::dragEnterEvent(QDragEnterEvent *e){
+void AudioListView::dragEnterEvent(QDragEnterEvent *event){
     QStringList uriList;
     QString text;
 
-    if (e->mimeData()->hasUrls() || e->mimeData()->hasText()) {
+    if (event->mimeData()->hasUrls() || event->mimeData()->hasText()) {
 
         if (uriList.empty() && text == "") {
             RG_DEBUG << "AudioListView::dragEnterEvent: Drop Empty ! ";
         }
-        if (e->proposedAction() & Qt::CopyAction) {
-            e->acceptProposedAction();
+        if (event->proposedAction() & Qt::CopyAction) {
+            event->acceptProposedAction();
         } else {
-            e->setDropAction(Qt::CopyAction);
-            e->accept();
+            event->setDropAction(Qt::CopyAction);
+            event->accept();
         }
 
     }
@@ -210,5 +210,3 @@ void AudioListView::dropEvent(QDropEvent* e)
 
 
 }
-
-

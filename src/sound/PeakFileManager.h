@@ -87,7 +87,7 @@ public:
 
     void clear();
 
-    std::vector<SplitPointPair> 
+    std::vector<SplitPointPair>
         getSplitPoints(AudioFile *audioFile,
                        const RealTime &startTime,
                        const RealTime &endTime,
@@ -97,11 +97,11 @@ public:
     class BadPeakFileException : public Exception
     {
     public:
-        BadPeakFileException(QString path) :
+        explicit BadPeakFileException(QString path) :
             Exception(QObject::tr("Bad peak file ") + path), m_path(path) { }
         BadPeakFileException(QString path, QString file, int line) :
             Exception(QObject::tr("Bad peak file ") + path, file, line), m_path(path) { }
-        BadPeakFileException(const SoundFile::BadSoundFileException &e) :
+        explicit BadPeakFileException(const SoundFile::BadSoundFileException &e) :
             Exception(QObject::tr("Bad peak file (malformed audio?) ") + e.getPath()), m_path(e.getPath()) { }
 
         ~BadPeakFileException() throw() override { }

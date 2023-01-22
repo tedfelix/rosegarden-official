@@ -189,7 +189,7 @@ public:
      *     make the connections even more direct.
      */
     void processAsynchronousMidi(const MappedEventList &mC,
-                                 AudioManagerDialog *aMD);
+                                 AudioManagerDialog *audioManagerDialog);
 
     /// Send all note offs and resets to MIDI devices.
     /**
@@ -340,7 +340,7 @@ private slots:
     /// For the (unused) CountdownDialog.  See m_countdownDialog.
     void slotCountdownTimerTimeout();
 
-    // Activated by timer to allow a message to be reported to 
+    // Activated by timer to allow a message to be reported to
     // the user - we use this mechanism so that the user isn't
     // bombarded with dialogs in the event of lots of failures.
     // See m_reportTimer.
@@ -352,7 +352,7 @@ private slots:
      *     Inline into only caller.  It's only two lines of code.
      */
     void slotScheduledCompositionMapperReset();
-    
+
 private:
     /// Cache to avoid lock?
     /**

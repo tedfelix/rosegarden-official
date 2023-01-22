@@ -84,7 +84,7 @@ public:
     static QPixmap flipHorizontal(const QPixmap &map);
 
     /// Return left and right parts of the QPixmap
-    static std::pair<QPixmap, QPixmap> splitPixmap(const QPixmap &original, int x);
+    static std::pair<QPixmap, QPixmap> splitPixmap(const QPixmap &pixmap, int x);
 
     /**
      * Using QPainter::drawPixmap to draw one pixmap on another does
@@ -96,8 +96,8 @@ public:
      * Note that the source pixmap _must_ have a mask.
      */
     static void drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
-                                 int x, int y,
-                                 const QPixmap &source);
+                                 int x0, int y0,
+                                 const QPixmap &src);
 
     static const int SaturationNotSpecified = -1;
 };

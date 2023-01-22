@@ -387,13 +387,12 @@ BankEditorDialog::initDialog()
     QTreeWidgetItem* twItemDevice = nullptr;
     DeviceList *devices = m_studio->getDevices();
     DeviceListIterator it;
-    Device *devx;
 //     unsigned int i = 0;
 
     // iterates over devices and create device-TreeWidgetItems (level: topLevelItem)
     // then calls populateDeviceItem() to create bank-TreeWidgetItems (level: topLevelItem-child)
     for (it = devices->begin(); it != devices->end(); ++it) {
-        devx = *it;
+        Device *devx = *it;
 //     for ( i=0; i < int(devices->size()); i++ ){
 //         devx = devices->at( i );
 
@@ -577,13 +576,11 @@ void
 BankEditorDialog::setCurrentDevice(DeviceId device)
 {
     unsigned int i, cnt;
-    QTreeWidgetItem* twItem;
-    MidiDeviceTreeWidgetItem* deviceItem;
 
     cnt = m_treeWidget->topLevelItemCount();
     for( i = 0; i < cnt; i++ ){
-        twItem = m_treeWidget->topLevelItem( i );
-        deviceItem = dynamic_cast<MidiDeviceTreeWidgetItem *>(twItem);
+        QTreeWidgetItem *twItem = m_treeWidget->topLevelItem( i );
+        MidiDeviceTreeWidgetItem *deviceItem = dynamic_cast<MidiDeviceTreeWidgetItem *>(twItem);
         if (deviceItem && deviceItem->getDeviceId() == device) {
 //             m_treeWidget->setSelected(item, true);
             m_treeWidget->setCurrentItem(twItem);
@@ -1451,15 +1448,14 @@ BankEditorDialog::selectDeviceItem(MidiDevice *device)
     /**
      * sets the device-TreeWidgetItem (visibly) selected
      **/
-    QTreeWidgetItem *child;
-    MidiDeviceTreeWidgetItem *midiDeviceItem;
     MidiDevice *midiDevice;
     unsigned int i, cnt;
 
     cnt = m_treeWidget->topLevelItemCount();
     for( i=0; i<cnt; i++ ){
-        child = m_treeWidget->topLevelItem( i );
-        midiDeviceItem = dynamic_cast<MidiDeviceTreeWidgetItem*>(child);
+        QTreeWidgetItem *child = m_treeWidget->topLevelItem( i );
+        MidiDeviceTreeWidgetItem *midiDeviceItem =
+            dynamic_cast<MidiDeviceTreeWidgetItem*>(child);
 
         if (midiDeviceItem) {
             midiDevice = getMidiDevice(midiDeviceItem);

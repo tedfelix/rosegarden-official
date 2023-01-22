@@ -47,75 +47,75 @@ class Studio;
 class DeviceManagerDialog : public QMainWindow, public Ui::DeviceManagerDialogUi
 {
     Q_OBJECT
-    
+
 public:
-    
-    DeviceManagerDialog (QWidget* parent);
+
+    explicit DeviceManagerDialog (QWidget* parent);
     ~DeviceManagerDialog() override;
-    
+
     /**
     *    Clear all lists
     */
     void clearAllPortsLists();
-    
+
     /**
     *    make Slot connections
     */
     void connectSignalsToSlots();
-    
+
     MidiDevice* getDeviceByName(QString deviceName);
     MidiDevice* getDeviceById(DeviceId devId);
-    
+
     MidiDevice* getMidiDeviceOfItem(QTreeWidgetItem* twItem);
     MidiDevice* getCurrentlySelectedDevice(QTreeWidget* treeWid);
-    
-    void connectMidiDeviceToPort (MidiDevice* mdev, QString portName);
-    
+
+    void connectMidiDeviceToPort (MidiDevice* device, QString newPort);
+
     /**
     *    If the selected device has changed, this
     *    marks (checks) the associated list entry in the ports list (connection)
     */
     void updateCheckStatesOfPortsList(QTreeWidget* treeWid_ports, QTreeWidget* treeWid_devices);
-    
+
     /**
     *    adds/removes list entries in the visible devices-list (treeWid),
     *    if the (invisible) device-list of the sequencer has changed
     */
-    void updateDevicesList(QTreeWidget* treeWid, 
+    void updateDevicesList(QTreeWidget* treeWid,
                             MidiDevice::DeviceDirection in_out_direction);
-    
+
     /**
     *    search treeWid for the item associated with devId
     */
     QTreeWidgetItem* searchItemWithDeviceId(QTreeWidget* treeWid, DeviceId devId);
-    
+
     QTreeWidgetItem* searchItemWithPort(QTreeWidget* treeWid, QString portName);
-    
+
     /**
     *    add/remove list entries in the visible ports-list (connections),
     *    if the (invisible) connections of the sequencer/studio have changed.
     */
     void updatePortsList(QTreeWidget* treeWid, MidiDevice::DeviceDirection PlayRecDir);
-    
-    
+
+
 signals:
     //void deviceNamesChanged();
-    
+
     void editBanks (DeviceId);
     void editControllers (DeviceId);
-    
+
     void deviceNameChanged(DeviceId);
     void deviceNamesChanged();
-    
+
 public slots:
-    void slotOutputPortClicked(QTreeWidgetItem * item, int column);
+    void slotOutputPortClicked(QTreeWidgetItem * twItem, int column);
     void slotPlaybackDeviceSelected();
-    
-    void slotInputPortClicked(QTreeWidgetItem * item, int column);
+
+    void slotInputPortClicked(QTreeWidgetItem * twItem, int column);
     void slotRecordDeviceSelected();
-    
-    void slotDeviceItemChanged (QTreeWidgetItem * item, int column);
-    
+
+    void slotDeviceItemChanged (QTreeWidgetItem * twItem, int column);
+
     /**
        Force all double clicks from playback and record device to edit only
        device column.
@@ -124,30 +124,30 @@ public slots:
 
     void slotRefreshOutputPorts();
     void slotRefreshInputPorts();
-    
+
     void slotAddPlaybackDevice();
     void slotAddRecordDevice();
-    
+
     void slotDeletePlaybackDevice();
     void slotDeleteRecordDevice();
-    
+
     void slotManageBanksOfPlaybackDevice();
     void slotEditControllerDefinitions();
-    
+
     void show();
     void slotHelpRequested();
-    
+
     void slotResyncDevicesReceived();
-    
+
 protected:
     Studio *m_studio;
-    
+
     /**
     *    used to store the device ID in the QTreeWidgetItem
     *    of the visible device list (QTreeWidget)
     */
     int m_UserRole_DeviceId; // = Qt::UserRole + 1;
-    
+
     QString m_noPortName;
 
 private slots:
@@ -158,4 +158,3 @@ private slots:
 } // end namespace Rosegarden
 
 #endif // DEVICESMANAGERNEW_H
-

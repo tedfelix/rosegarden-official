@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -50,7 +50,8 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
       m_segment(segment),
       m_rect(),
       m_defaultCol(CompositionColourCache::getInstance()->SegmentAudioPreview),
-      m_height(model.grid().getYSnap()/2)
+      m_height(model.grid().getYSnap()/2),
+      m_sliceNb(0)
 {
     model.getSegmentRect(*m_segment, m_rect);
 
@@ -87,7 +88,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
     if (values.empty())
         return;
-        
+
     float gain[2] = { 1.0, 1.0 };
     int instrumentChannels = 2;
     TrackId trackId = m_segment->getTrack();
@@ -150,7 +151,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
     if ((finalTempoChangeNumber >= 0) &&
 
-	(finalTempoChangeNumber > 
+	(finalTempoChangeNumber >
 	 m_model.getComposition().getTempoChangeNumberAt
 	 (m_segment->getStartTime()))) {
 
@@ -160,7 +161,7 @@ void AudioPreviewPainter::paintPreviewImage()
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    bool meterLevels = (settings.value("audiopreviewstyle", 1).toUInt() 
+    bool meterLevels = (settings.value("audiopreviewstyle", 1).toUInt()
 			== 1);
 
     for (int i = 0; i < m_rect.baseWidth; ++i) {
@@ -174,13 +175,13 @@ void AudioPreviewPainter::paintPreviewImage()
 	int position = 0;
 
 	if (haveTempoChange) {
-	    
+
 	    // First find the time corresponding to this i.
 	    timeT musicalTime =
 		m_model.grid().getRulerScale()->getTimeForX(m_rect.rect.x() + i);
 	    RealTime realTime =
 		m_model.getComposition().getElapsedRealTime(musicalTime);
-	    
+
 	    double time = double(realTime.sec) +
 		double(realTime.nsec) / 1000000000.0;
 	    double offset = time - startTime;
@@ -189,7 +190,7 @@ void AudioPreviewPainter::paintPreviewImage()
 		position = offset * m_rect.baseWidth / (endTime - startTime);
 		position = int(channels * position);
 	    }
-	    
+
 	} else {
 
 	    position = int(channels * i * sampleScaleFactor);
@@ -218,7 +219,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
             h2 = values[position++];
             if (showMinima) l2 = values[position++];
-            
+
         }
 
 	if (instrumentChannels == 1 && channels == 2) {
@@ -228,7 +229,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
 	h1 *= gain[0];
 	h2 *= gain[1];
-	
+
 	l1 *= gain[0];
 	l2 *= gain[1];
 
@@ -254,7 +255,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	for (int py = 0; py < h; ++py) {
 	    m_image.setPixel(rectX, centre - py, pixel);
 	}
-	
+
         if (h2 >= 1.0) { h2 = 1.0; pixel = 2; }
         else { pixel = 1; }
 
@@ -264,7 +265,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	    h = h2 * m_height;
 	}
         if (h < 0) h = 0;
-	
+
 	for (int py = 0; py < h; ++py) {
 	    m_image.setPixel(rectX, centre + py, pixel);
 	}
@@ -323,7 +324,7 @@ void AudioPreviewPainter::finalizeCurrentSlice()
     ++m_sliceNb;
 }
 
-CompositionModelImpl::QImageVector AudioPreviewPainter::getPreviewImage()
+CompositionModelImpl::QImageVector AudioPreviewPainter::getPreviewImage() const
 {
     return m_previewPixmaps;
 }

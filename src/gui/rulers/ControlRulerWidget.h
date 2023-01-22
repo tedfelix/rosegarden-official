@@ -113,7 +113,7 @@ public slots:
     /// Connected to ControlRulerTabBar::tabCloseRequest().
     void slotRemoveRuler(int);
     /// Connected to the Matrix Panned and Panner.
-    void slotSetPannedRect(QRectF pr);
+    void slotSetPannedRect(QRectF pannedRect);
     /// MatrixScene and NotationScene call this when the current Segment changes.
     void slotSetCurrentViewSegment(ViewSegment *);
     /// Update the velocity ruler selection to match the segment selection.

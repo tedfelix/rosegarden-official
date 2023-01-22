@@ -96,22 +96,22 @@ public:
     Segment* getSegment() { return m_segment; }
 
     void updateSegment();
-    
+
     virtual void notationLayoutUpdated(timeT,timeT);
 
     void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }
-    
-    void setXOffset(int offset) { m_xOffset = offset; } 
+
+    void setXOffset(int offset) { m_xOffset = offset; }
 
     float valueToY(long val);
-    long yToValue(float height);
+    long yToValue(float y);
 
     double getXScale() const { return m_xScale; }
     double getYScale() const { return m_yScale; }
     float getXMax();
     float getXMin();
-    
+
     void clearSelectedItems();
     void addToSelection(QSharedPointer<ControlItem>);
     void removeFromSelection(QSharedPointer<ControlItem>);
@@ -202,7 +202,7 @@ protected:
 
     void updateSelection();
 
-    void setMenuName(QString menuName) { m_menuName = menuName; }
+    void setMenuName(const QString& menuName) { m_menuName = menuName; }
     void createMenu();
 
     //--------------- Data members ---------------------------------
@@ -222,7 +222,7 @@ protected:
     //     This map stores pointers and never deletes them.
     //     Recommend switching to QSharedPointer.
     ControlItemMap m_controlItemMap;
-    
+
     // Iterators to the first visible and the last visible item
     // NB these iterators are only really useful for zero duration items as the
     //   interval is determined by start position and will omit items that start
@@ -231,7 +231,7 @@ protected:
     ControlItemMap::iterator m_firstVisibleItem;
     ControlItemMap::iterator m_lastVisibleItem;
     ControlItemMap::iterator m_nextItemLeft;
-    
+
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 
@@ -249,7 +249,7 @@ protected:
     long m_minItemValue;
 
     double m_viewSegmentOffset;
-    
+
     int m_xOffset;
 
     double m_currentX;

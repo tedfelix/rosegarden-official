@@ -33,7 +33,7 @@ class AudioPeaksReadyEvent : public QEvent
 {
 
 public:
-    AudioPeaksReadyEvent(int data);
+    explicit AudioPeaksReadyEvent(int data);
 
     int data();
     static const QEvent::Type AudioPeaksReady;

@@ -65,9 +65,9 @@ class RosegardenDocument;
  */
 class MappedEventBuffer
 {
-   
+
 public:
-    MappedEventBuffer(RosegardenDocument *);
+    explicit MappedEventBuffer(RosegardenDocument *);
     virtual ~MappedEventBuffer();
 
     /// Two-phase initialization.

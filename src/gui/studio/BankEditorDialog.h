@@ -92,7 +92,7 @@ public:
 
     // Select a device/bank combination
     //
-    void selectDeviceBankItem(DeviceId device, int bank);
+    void selectDeviceBankItem(DeviceId deviceId, int bank);
 
 public slots:
     void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
@@ -142,7 +142,7 @@ protected:
 
     bool deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb);
 
-    void clearItemChildren(QTreeWidgetItem* deviceItem);
+    void clearItemChildren(QTreeWidgetItem* item);
 
     MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
     void keepBankListForNextPopulate() { m_keepBankList = true; }

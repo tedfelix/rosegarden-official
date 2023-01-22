@@ -81,7 +81,7 @@ public:
     void undoChanges();
     // return value is the index of the active keyboard
     int getKeyboards(std::list<QString>& keyboards);
-    void applyKeyboard(int keyboard);
+    void applyKeyboard(int index);
 
  private:
     ActionData();

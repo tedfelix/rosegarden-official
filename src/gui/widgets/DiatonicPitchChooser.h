@@ -39,12 +39,12 @@ class DiatonicPitchChooser : public QGroupBox
 {
     Q_OBJECT
 public:
-    DiatonicPitchChooser(QString title,
-                           QWidget *parent,
-                           int defaultNote = 0,
-                           int defaultPitch = 60,
-                           int defaultOctave = 5);
-    
+    DiatonicPitchChooser(const QString& title,
+                         QWidget *parent,
+                         int defaultNote = 0,
+                         int defaultPitch = 60,
+                         int defaultOctave = 5);
+
     // C0=0, D0=1, C1=12, etc.
     int getPitch() const;
 
@@ -54,7 +54,7 @@ public:
     // pitch 0 is the first C of octave 0.
     int getOctave() const;
 
-    // 0  = none, 
+    // 0  = none,
     // -x = x flats
     // x  = x sharps
     int getAccidental();
@@ -76,20 +76,20 @@ public slots:
 
 protected:
     int m_defaultPitch;
-    
+
     PitchDragLabel *m_pitchDragLabel;
-    
+
     QComboBox *m_step;
     QComboBox *m_accidental;
     QComboBox *m_octave;
-    
+
     QLabel *m_pitchLabel;
 
 private:
     void setLabelsIfNeeded();
 };
 
-    
+
 
 }
 

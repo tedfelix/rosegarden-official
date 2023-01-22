@@ -67,14 +67,14 @@ ResourceFinder::getSystemResourcePrefixList()
 
     QStringList list;
 
-    static const char *prefixes[] = { "/usr/local/share", "/usr/share" };
-    static const char *appname = "rosegarden";
     char *rosegarden = getenv("ROSEGARDEN");
 
     if (rosegarden) {
         list << rosegarden;
     } else {
+        static const char *prefixes[] = { "/usr/local/share", "/usr/share" };
         for (size_t i = 0; i < sizeof(prefixes)/sizeof(prefixes[0]); ++i) {
+            static const char *appname = "rosegarden";
             list << QString("%1/%2").arg(prefixes[i]).arg(appname);
         }
     }
@@ -85,13 +85,13 @@ ResourceFinder::getSystemResourcePrefixList()
 QString
 ResourceFinder::getUserResourcePrefix()
 {
-    static const char *homepath = ".local/share";
-    static const char *appname = "rosegarden";
     const QString home = QDir::homePath();
 
     // Qt5: use QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/rosegarden";
 
     if (!home.isEmpty()) {
+        static const char *homepath = ".local/share";
+        static const char *appname = "rosegarden";
         return home + '/' + QString(homepath) + '/' + QString(appname);
     } else {
         RG_WARNING << "ResourceFinder::getUserResourcePrefix: ERROR: No home directory available?";
@@ -124,7 +124,7 @@ ResourceFinder::getResourcePath(QString resourceCat, const QString &fileName)
     // bundled resources and user-saved files.
 
     const QStringList prefixes = getResourcePrefixList();
-    
+
     if (!resourceCat.isEmpty()) resourceCat.prepend('/');
 
     foreach (const QString &prefix, prefixes) {
@@ -148,7 +148,7 @@ ResourceFinder::getResourceDir(QString resourceCat)
     // Returns only the "installed file" location
 
     const QStringList prefixes = getSystemResourcePrefixList();
-    
+
     if (!resourceCat.isEmpty()) resourceCat.prepend('/');
 
     foreach (const QString &prefix, prefixes) {
@@ -254,7 +254,7 @@ bool
 ResourceFinder::unbundleResource(QString resourceCat, QString fileName)
 {
     QString path = getResourcePath(resourceCat, fileName);
-    
+
     if (!path.startsWith(':')) return true;
 
     // This is the lowest-priority alternative path for this
@@ -290,4 +290,3 @@ ResourceFinder::unbundleResource(QString resourceCat, QString fileName)
 
 
 }
-

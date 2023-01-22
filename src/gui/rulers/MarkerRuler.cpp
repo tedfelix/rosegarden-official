@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -69,7 +69,7 @@ MarkerRuler::MarkerRuler(RosegardenDocument *doc,
     // Otherwise we'll end up adding all actions to the same
     // (document-level) action collection regardless of which window
     // we're in.
-    
+
     this->setObjectName(name);
     QObject *probe = parent;
     while (probe && !dynamic_cast<QMainWindow *>(probe)) probe = probe->parent();
@@ -93,30 +93,30 @@ MarkerRuler::~MarkerRuler()
 
 void
 MarkerRuler::createMenu()
-{             
+{
     createMenusAndToolbars("markerruler.rc");
-    
+
     m_menu = findChild<QMenu *>("marker_ruler_menu");
 
 //    if (!tmp) {
 //        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
 //                 << domDocument().toString(4) << endl;
 //    }
-    
+
     if (!m_menu) {
         RG_DEBUG << "MarkerRuler::createMenu() failed\n";
     }
 }
 
 
-void 
+void
 MarkerRuler::scrollHoriz(int x)
 {
     m_currentXOffset = -x;
     update();
 }
 
-QSize 
+QSize
 MarkerRuler::sizeHint() const
 {
     int lastBar =
@@ -128,7 +128,7 @@ MarkerRuler::sizeHint() const
     return QSize(std::max(int(width), m_width), fontMetrics().height());
 }
 
-QSize 
+QSize
 MarkerRuler::minimumSizeHint() const
 {
     double firstBarWidth = m_rulerScale->getBarWidth(0);
@@ -139,7 +139,7 @@ MarkerRuler::minimumSizeHint() const
 void
 MarkerRuler::slotInsertMarkerHere()
 {
-    emit addMarker(getClickPosition());    
+    emit addMarker(getClickPosition());
 }
 
 void
@@ -152,14 +152,14 @@ void
 MarkerRuler::slotDeleteMarker()
 {
     RG_DEBUG << "MarkerRuler::slotDeleteMarker()\n";
-    
+
     Rosegarden::Marker* marker = getMarkerAtClickPosition();
-    
+
     if (marker)
         emit deleteMarker(marker->getID(),
                           marker->getTime(),
                           strtoqstr(marker->getName()),
-                          strtoqstr(marker->getDescription()));                          
+                          strtoqstr(marker->getDescription()));
 }
 
 void
@@ -262,7 +262,7 @@ MarkerRuler::getMarkerAtClickPosition()
 
     return nullptr;
 }
-    
+
 void
 MarkerRuler::paintEvent(QPaintEvent*)
 {
@@ -386,14 +386,14 @@ MarkerRuler::paintEvent(QPaintEvent*)
 void
 MarkerRuler::mousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "MarkerRuler::mousePressEvent: x = " << e->pos().x();
-
     if (!m_doc || !e)
         return;
 
+    RG_DEBUG << "MarkerRuler::mousePressEvent: x = " << e->pos().x();
+
     m_clickX = e->pos().x();
     Rosegarden::Marker* clickedMarker = getMarkerAtClickPosition();
-    
+
     // if right-click, show popup menu
     //
     if (e->button() == Qt::RightButton) {
@@ -404,12 +404,12 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
 //             actionCollection()->action("edit_marker")->setEnabled(clickedMarker != 0);
             findAction("delete_marker")->setEnabled(clickedMarker != nullptr);
             findAction("edit_marker")->setEnabled(clickedMarker != nullptr);
-            
+
             m_menu->exec(QCursor::pos());
         }
-        return;       
+        return;
     }
-            
+
     bool shiftPressed = ((e->modifiers() & Qt::ShiftModifier) != 0);
 
     // Shift+Left-Click => set loop.

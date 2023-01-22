@@ -32,7 +32,7 @@ class AudioThread
 public:
     typedef float sample_t;
 
-    AudioThread(std::string name, // for diagnostics
+    AudioThread(const std::string& name, // for diagnostics
                 SoundDriver *driver,
                 unsigned int sampleRate);
 
@@ -71,7 +71,7 @@ private:
     static void *staticThreadRun(void *arg);
     static void  staticThreadCleanup(void *arg);
 };
-    
+
 
 class AudioInstrumentMixer;
 
@@ -86,7 +86,7 @@ public:
     ~AudioBussMixer() override;
 
     void kick(bool wantLock = true, bool signalInstrumentMixer = true);
-    
+
     /**
      * Prebuffer.  This should be called only when the transport is
      * not running.  This also calls fillBuffers on the instrument
@@ -99,7 +99,7 @@ public:
      */
     void emptyBuffers();
 
-    int getBussCount() {
+    int getBussCount() const {
         return m_bussCount;
     }
 
@@ -124,7 +124,7 @@ public:
     }
 
     /// For call from MappedStudio.  Pan is in range -100.0 -> 100.0
-    void setBussLevels(int buss, float dB, float pan);
+    void setBussLevels(int bussId, float dB, float pan);
 
     /// For call regularly from anywhere in a non-RT thread
     void updateInstrumentConnections();
@@ -158,7 +158,7 @@ protected:
 
     typedef std::map<int, BufferRec> BufferMap;
     BufferMap m_bufferMap;
-};                 
+};
 
 
 class AudioFileReader;
@@ -223,10 +223,10 @@ public:
 
     /**
      * Prebuffer.  This should be called only when the transport is
-     * not running. 
+     * not running.
      */
     void fillBuffers(const RealTime &currentTime);
-    
+
     /**
      * Ensure plugins etc have enough buffers.  This is also done by
      * fillBuffers and only needs to be called here if the extra work
@@ -273,7 +273,7 @@ public:
     }
 
     /// For call from MappedStudio.  Pan is in range -100.0 -> 100.0
-    void setInstrumentLevels(InstrumentId instrument, float dB, float pan);
+    void setInstrumentLevels(InstrumentId id, float dB, float pan);
 
     /// For call regularly from anywhere in a non-RT thread
     void updateInstrumentMuteStates();
@@ -342,7 +342,7 @@ public:
 
     /**
      * Prebuffer.  This should be called only when the transport is
-     * not running. 
+     * not running.
      */
     void fillBuffers(const RealTime &currentTime);
 
@@ -366,8 +366,11 @@ public:
 
     bool haveRecordFileOpen(InstrumentId id);
     bool haveRecordFilesOpen();
-    
-    void write(InstrumentId id, const sample_t *, int channel, size_t samples);
+
+    void write(InstrumentId id,
+               const sample_t *samples,
+               int channel,
+               size_t sampleCount);
 
 protected:
     void threadRun() override;
@@ -381,4 +384,3 @@ protected:
 }
 
 #endif
-

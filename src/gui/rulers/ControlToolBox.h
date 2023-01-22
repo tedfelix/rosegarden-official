@@ -37,7 +37,7 @@ class ControlToolBox : public BaseToolBox
     Q_OBJECT
 
 public:
-    ControlToolBox(ControlRuler *parent);
+    explicit ControlToolBox(ControlRuler *parent);
 
 protected:
     BaseTool *createTool(QString toolName) override;

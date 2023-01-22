@@ -33,7 +33,7 @@ class ActionCommandRegistry : public CommandRegistry
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ActionCommandRegistry)
 
 public:
-    ActionCommandRegistry(ActionFileClient *c);
+    explicit ActionCommandRegistry(ActionFileClient *c);
     ~ActionCommandRegistry() override;
 
 protected:
@@ -46,4 +46,3 @@ protected:
 }
 
 #endif
-

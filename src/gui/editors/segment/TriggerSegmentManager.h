@@ -52,7 +52,7 @@ public:
 
     void addCommandToHistory(Command *command);
 
-    void setModified(bool value);
+    void setModified(bool modified);
     void checkModified();
 
     // reset the document

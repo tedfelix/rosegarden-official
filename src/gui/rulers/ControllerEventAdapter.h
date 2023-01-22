@@ -25,7 +25,7 @@ namespace Rosegarden {
 class ControllerEventAdapter : public Rosegarden::ElementAdapter
 {
 public:
-    ControllerEventAdapter(Event* e) : m_event(e) {}
+    explicit ControllerEventAdapter(Event* e) : m_event(e) {}
 
     bool getValue(long&) override;
     void setValue(long) override;

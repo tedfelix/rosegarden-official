@@ -36,7 +36,7 @@ class DeferScrollArea : public QScrollArea
 {
     Q_OBJECT
 public:
-    DeferScrollArea(QWidget* parent=nullptr);
+    explicit DeferScrollArea(QWidget* parent=nullptr);
     ~DeferScrollArea() override;
 
     void wheelEvent(QWheelEvent*) override;

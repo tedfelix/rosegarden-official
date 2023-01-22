@@ -89,7 +89,7 @@ private:
     /// Selected entry based on Instrument.
     int getCurrentEntry();
     /// Text for a specific entry.
-    QString getEntryText(int n);
+    QString getEntryText(int entry);
 };
 
 

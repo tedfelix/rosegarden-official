@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -64,7 +64,7 @@ static inline void denormalKill(float *buffer, int size)
     }
 }
 
-AudioThread::AudioThread(std::string name,
+AudioThread::AudioThread(const std::string& name,
                          SoundDriver *driver,
                          unsigned int sampleRate) :
         m_name(name),
@@ -183,7 +183,7 @@ AudioThread::terminate()
 #endif
 
         int rv = pthread_join(m_thread, nullptr);
-        rv = rv; // shut up compiler warning when the code below is not compiled
+        (void)rv;// shut up compiler warning when the code below is not compiled
 
 #ifdef DEBUG_THREAD_CREATE_DESTROY
 
@@ -563,6 +563,7 @@ AudioBussMixer::processBlocks()
     int synthInstruments;
     m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
+    // cppcheck-suppress allocaCalled
     bool *processedInstruments = (bool *)alloca
                                  ((audioInstruments + synthInstruments) * sizeof(bool));
 
@@ -1561,7 +1562,7 @@ AudioInstrumentMixer::updateInstrumentMuteStates()
 
 	InstrumentId id = i->first;
 	BufferRec &rec = i->second;
-	
+
 	if (id >= SoftSynthInstrumentBase) {
 	    rec.muted = cb->isInstrumentMuted(id);
 	} else {
@@ -1696,7 +1697,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     BufferRec &rec = m_bufferMap[id];
     RealTime bufferTime = rec.filledTo;
 
-#ifdef DEBUG_MIXER 
+#ifdef DEBUG_MIXER
     //    if (m_driver->isPlaying()) {
     if ((id % 100) == 0)
         std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): buffer time is " << bufferTime << std::endl;
@@ -1727,7 +1728,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
         if (ch == 0 || thisWriteSpace < minWriteSpace) {
             minWriteSpace = thisWriteSpace;
             if (minWriteSpace < m_blockSize) {
-#ifdef DEBUG_MIXER 
+#ifdef DEBUG_MIXER
                 //		if (m_driver->isPlaying()) {
                 if ((id % 100) == 0)
                     std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): only " << minWriteSpace << " write space on channel " << ch << " for block size " << m_blockSize << std::endl;
@@ -1764,11 +1765,10 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
     for (size_t fileNo = 0; fileNo < playCount; ++fileNo) {
 
-        bool acceptable = false;
         PlayableAudioFile *file = playing[fileNo];
 
         size_t frames = file->getSampleFramesAvailable();
-        acceptable = ((frames >= m_blockSize) || file->isFullyBuffered());
+        bool acceptable = ((frames >= m_blockSize) || file->isFullyBuffered());
 
         if (acceptable &&
                 (minWriteSpace >= m_blockSize * 2) &&
@@ -2458,4 +2458,3 @@ AudioFileWriter::threadRun()
 
 
 }
-

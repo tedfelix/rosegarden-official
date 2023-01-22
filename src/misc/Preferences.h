@@ -67,7 +67,7 @@ namespace Preferences
 
     // AudioFileLocationDialog settings
 
-    void setAudioFileLocationDlgDontShow(bool dontShow);
+    void setAudioFileLocationDlgDontShow(bool value);
     bool getAudioFileLocationDlgDontShow();
 
     // See AudioFileLocationDialog::Location enum.

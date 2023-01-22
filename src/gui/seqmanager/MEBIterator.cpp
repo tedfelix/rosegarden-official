@@ -84,7 +84,7 @@ MEBIterator::moveTo(const RealTime &time)
 }
 
 MappedEvent
-MEBIterator::operator*()
+MEBIterator::operator*() const
 {
     const MappedEvent *e = peek();
 

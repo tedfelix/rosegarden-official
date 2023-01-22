@@ -31,11 +31,14 @@ namespace Rosegarden {
 class TriggerManagerItem : public QTreeWidgetItem
 {
 public:
-    TriggerManagerItem(QTreeWidget * parent, 
-						QStringList labels
-					  ):
-        QTreeWidgetItem(parent, labels ){ ; }
-	
+    TriggerManagerItem(QTreeWidget * parent,
+                       QStringList labels
+                       ) :
+    QTreeWidgetItem(parent, labels),
+        m_usage(0),
+        m_pitch(0)
+        {}
+
 
     virtual int compare(QTreeWidgetItem * i, int col, bool ascending) const;
 

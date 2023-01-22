@@ -46,7 +46,7 @@ class AudioFileManager;
 class AudioPeaksThread : public QThread
 {
 public:
-    AudioPeaksThread(AudioFileManager *manager);
+    explicit AudioPeaksThread(AudioFileManager *manager);
 
     struct Request {
         int audioFileId;
