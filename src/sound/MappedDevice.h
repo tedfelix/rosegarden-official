@@ -43,7 +43,7 @@ public:
 
     MappedDevice(const MappedDevice &mD);
     ~MappedDevice();
- 
+
     // Clear down
     //
     void clear();
@@ -66,11 +66,11 @@ public:
     void setType(Device::DeviceType type) { m_type = type; }
 
     std::string getConnection() const { return m_connection; }
-    void setConnection(std::string connection) { m_connection = connection; }
+    void setConnection(const std::string& connection) { m_connection = connection; }
 
     MidiDevice::DeviceDirection getDirection() const { return m_direction; }
     void setDirection(MidiDevice::DeviceDirection direction) { m_direction = direction; }
-    
+
     bool isRecording() const { return m_recording; }
     void setRecording(bool recording) { m_recording = recording; }
 
@@ -101,4 +101,3 @@ typedef std::vector<MappedInstrument*>::iterator
 }
 
 #endif // RG_MAPPEDDEVICE_H
-

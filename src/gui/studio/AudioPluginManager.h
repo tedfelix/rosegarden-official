@@ -41,7 +41,7 @@ class AudioPlugin;
 class AudioPluginManager
 {
 public:
-    AudioPluginManager(bool enableSound);
+    explicit AudioPluginManager(bool enableSound);
 
     // Get a straight list of names
     //
@@ -91,16 +91,16 @@ protected:
     class Enumerator : public QThread
     {
     public:
-        Enumerator(AudioPluginManager *);
+        explicit Enumerator(AudioPluginManager *);
         void run() override;
         bool isDone() const { return m_done; }
-        
+
     protected:
         AudioPluginManager *m_manager;
         bool m_done;
     };
 
-    void awaitEnumeration();
+    void awaitEnumeration() const;
     void fetchSampleRate();
 
     std::vector<QSharedPointer<AudioPlugin> > m_plugins;

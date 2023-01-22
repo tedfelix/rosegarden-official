@@ -288,10 +288,9 @@ TempoView::applyLayout(int /*staffNo*/)
     // Set a selection from a range of indexes
     //
     std::vector<int>::iterator sIt = m_listSelection.begin();
-    int index = 0;
 
     for (; sIt != m_listSelection.end(); ++sIt) {
-        index = *sIt;
+        int index = *sIt;
 
         while (index > 0 && !m_list->topLevelItem(index))
             index--;

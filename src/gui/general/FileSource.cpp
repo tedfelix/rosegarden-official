@@ -96,7 +96,7 @@ FileSource::FileSource(QString fileOrUrl,
     if (m_url.toString() == "") {
         m_url = QUrl(fileOrUrl, QUrl::TolerantMode);
     }
- 
+
 #ifdef DEBUG_FILE_SOURCE
     std::cerr << "FileSource::FileSource(" << fileOrUrl << "): url <" << m_url.toString() << ">" << std::endl;
     incCount(m_url.toString());
@@ -280,7 +280,7 @@ FileSource::init()
 #endif
         QString resourceFile = m_url.toString();
         resourceFile.replace(QRegularExpression("^qrc:"), ":");
-        
+
         if (!QFileInfo(resourceFile).exists()) {
 #ifdef DEBUG_FILE_SOURCE
             std::cerr << "FileSource::init: Resource file of this name does not exist, switching to non-resource URL" << std::endl;
@@ -333,7 +333,6 @@ FileSource::init()
                 // Again, QUrl may have been mistreating us --
                 // e.g. dropping a part that looks like query data
                 m_localFilename = m_rawFileOrUrl;
-                literal = true;
                 if (!QFileInfo(m_localFilename).exists()) {
                     m_lastStatus = 404;
                 }
@@ -373,7 +372,7 @@ FileSource::init()
         QFile resourceFile(resourceFileName);
         resourceFile.open(QFile::ReadOnly);
         QByteArray ba(resourceFile.readAll());
-        
+
 #ifdef DEBUG_FILE_SOURCE
         std::cerr << "Copying " << ba.size() << " bytes from resource file to cache file" << std::endl;
 #endif
@@ -416,7 +415,7 @@ FileSource::init()
     }
 
     if (m_ok) {
-        
+
         QMutexLocker locker(&m_mapMutex);
 
         if (m_refCountMap[m_url] > 0) {
@@ -458,7 +457,7 @@ FileSource::initRemote()
 
     QNetworkRequest req;
     req.setUrl(m_url);
-    
+
     if (m_preferredContentType != "") {
 #ifdef DEBUG_FILE_SOURCE
         std::cerr << "FileSource: indicating preferred content type of \""
@@ -969,11 +968,9 @@ FileSource::createCacheFile()
               << m_url.toString() << " -> local filename "
               << filepath << std::endl;
 #endif
-    
+
     m_localFilename = filepath;
     return false;
 }
 
 }
-
-

@@ -32,13 +32,16 @@ namespace Rosegarden
 
 class AudioPluginInstance;
 
-
+// cppcheck-suppress noCopyConstructor
 class AudioPluginOSCGUI
 {
-public:
+ public:
     AudioPluginOSCGUI(AudioPluginInstance *instance,
                       QString serverURL, QString friendlyName);
     virtual ~AudioPluginOSCGUI();
+
+    // copy constructor not used
+    AudioPluginOSCGUI(const AudioPluginInstance&) = delete;
 
     void setGUIUrl(QString url);
 
@@ -51,16 +54,15 @@ public:
 
     static QString getGUIFilePath(QString identifier);
 
-protected:
+ protected:
     QProcess *m_gui;
     lo_address m_address;
     QString m_basePath;
     QString m_serverUrl;
 };
-    
+
 
 }
 
 
 #endif
-

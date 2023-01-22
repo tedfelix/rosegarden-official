@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -65,8 +65,6 @@ ROSEGARDENPRIVATE_EXPORT double strtodouble(const std::string &s)
     size_t i = 0;  //@@@
     double result = 0.0;
     size_t len = s.length();
-
-    result = 0.0;
 
     while (i < len && isspace(s[i]))
         ++i;
@@ -143,7 +141,7 @@ ROSEGARDENPRIVATE_EXPORT QStringList splitQuotedString(QString s)
     enum { sep, unq, q1, q2 } mode = sep;
 
     for (int i = 0; i < s.length(); ++i) {
-	
+
 	QChar c = s[i];
 
 	if (c == '\'') {
@@ -229,50 +227,49 @@ void testSplit()
 
 */
 
-/* 
+/*
    Results:
 
 a b c d
-->     
+->
 (a;b;c;d)
 
 a "b c" d
-->       
+->
 (a;b c;d)
 
 a 'b c' d
-->       
+->
 (a;b c;d)
 
 a "b c\" d"
-->         
-(a;b c" d) 
+->
+(a;b c" d)
 
 a 'b c\' d'
-->         
-(a;b c' d) 
+->
+(a;b c' d)
 
 a "b c' d"
-->        
+->
 (a;b c' d)
 
 a 'b c" d'
-->        
+->
 (a;b c" d)
 
 aa 'bb cc" dd'
-->            
+->
 (aa;bb cc" dd)
 
 a'a 'bb' \"cc" dd\"
-->                 
-(a'a;bb;"cc";dd")  
+->
+(a'a;bb;"cc";dd")
 
   a'a \'         'bb'    '      \"cc" ' dd\" '
-->                                            
+->
 (a'a;';bb;      "cc" ;dd";)
 
 */
 
 }
-

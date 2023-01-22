@@ -339,6 +339,9 @@ EditViewBase::getTitle(const QString& view)
         int trackPosition = -1;
         if (track)
             trackPosition = track->getPosition();
+        else {
+            return "";
+        }
 
         QString segLabel = strtoqstr(m_segments[0]->getLabel());
         if (segLabel.isEmpty()) {

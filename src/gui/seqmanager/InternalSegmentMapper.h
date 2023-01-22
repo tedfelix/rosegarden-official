@@ -31,7 +31,7 @@ namespace Rosegarden
 class TriggerSegmentRec;
 class Composition;
 class RealTime;
- 
+
 /// Converts (maps) Event objects into MappedEvent objects for a Segment
 /**
  * @author Tom Breton (Tehom)
@@ -123,7 +123,7 @@ private:
     bool haveEarlierNoteoff(timeT t);
     RealTime toRealTime(Composition &comp, timeT t);
     int getControllerValue(timeT searchTime,
-                           const std::string eventType,
+                           const std::string& eventType,
                            int controllerId);
 
     /** Data members **/
@@ -136,7 +136,7 @@ private:
      * Logic in "fillBuffer" turns it into repeats as needed.
      */
     Segment *m_triggeredEvents;
-    
+
     ControllerContextMap m_controllerCache;
 
     /// Queue of noteoffs.

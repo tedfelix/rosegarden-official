@@ -50,8 +50,8 @@ public:
                      DeviceId device);
 
     // from instrument
-    MappedInstrument(const Instrument &instrument);
-    MappedInstrument(Instrument *instrument);
+    explicit MappedInstrument(const Instrument &instrument);
+    explicit MappedInstrument(Instrument *instrument);
 
     ~MappedInstrument() { ;}
 

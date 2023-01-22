@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -81,7 +81,7 @@ public:
     // can convert relative paths to absolute.
     // RosegardenDocument::currentDocument doesn't always point to the
     // correct document.  E.g. at load time.
-    AudioFileManager(RosegardenDocument *doc);
+    explicit AudioFileManager(RosegardenDocument *doc);
     ~AudioFileManager() override;
 
     /// Create an AudioFile object from an absolute path
@@ -99,7 +99,7 @@ public:
     /**
      * throws BadAudioPathException, BadSoundFileException
      */
-    AudioFileId importURL(const QUrl &filePath,
+    AudioFileId importURL(const QUrl &url,
                           int targetSampleRate);
 
     /// Used by RoseXmlHandler to add an audio file.
@@ -147,7 +147,7 @@ public:
     void clear();
 
     /// Set the relative audio file path.  E.g. "./audio"
-    void setRelativeAudioPath(const QString &newPath, bool moveFiles = false);
+    void setRelativeAudioPath(const QString &newPath, bool doMoveFiles = false);
     QString getRelativeAudioPath() const  { return m_relativeAudioPath; }
     /// Get the absolute audio path.  E.g. "/home/ted/Documents/project1/audio/"
     QString getAbsoluteAudioPath() const;
@@ -222,7 +222,7 @@ public:
      * throws BadPeakFileException, BadAudioPathException
      */
     std::vector<float> getPreview(AudioFileId id,
-                                  const RealTime &startTime, 
+                                  const RealTime &startTime,
                                   const RealTime &endTime,
                                   int width,
                                   bool withMinima);
@@ -232,7 +232,7 @@ public:
      * throws BadPeakFileException, BadAudioPathException
      */
     void drawPreview(AudioFileId id,
-                     const RealTime &startTime, 
+                     const RealTime &startTime,
                      const RealTime &endTime,
                      QPixmap *pixmap);
 
@@ -242,7 +242,7 @@ public:
      *
      * throws BadPeakFileException, BadAudioPathException
      */
-    void drawHighlightedPreview(AudioFileId it,
+    void drawHighlightedPreview(AudioFileId id,
                                 const RealTime &startTime,
                                 const RealTime &endTime,
                                 const RealTime &highlightStart,
@@ -253,7 +253,7 @@ public:
     /**
      * throws BadPeakFileException, BadAudioPathException
      */
-    std::vector<SplitPointPair> 
+    std::vector<SplitPointPair>
         getSplitPoints(AudioFileId id,
                        const RealTime &startTime,
                        const RealTime &endTime,
@@ -284,11 +284,11 @@ public:
     class BadAudioPathException : public Exception
     {
     public:
-        BadAudioPathException(QString path) :
+        explicit BadAudioPathException(QString path) :
             Exception(QObject::tr("Bad audio file path ") + path), m_path(path) { }
         BadAudioPathException(QString path, QString file, int line) :
             Exception(QObject::tr("Bad audio file path ") + path, file, line), m_path(path) { }
-        BadAudioPathException(const SoundFile::BadSoundFileException &e) :
+        explicit BadAudioPathException(const SoundFile::BadSoundFileException &e) :
             Exception(QObject::tr("Bad audio file path (malformed file?) ") + e.getPath()), m_path(e.getPath()) { }
 
         ~BadAudioPathException() throw() override { }
@@ -330,7 +330,7 @@ private:
      *
      * throws BadAudioPathException, BadSoundFileException
      */
-    AudioFileId importFile(const QString &filePath,
+    AudioFileId importFile(const QString &fileName,
                            int targetSampleRate);
 
     /**

@@ -29,7 +29,7 @@ class RosegardenDocument;
 class SpecialSegmentMapper : public MappedEventBuffer
 {
 protected:
-    SpecialSegmentMapper(RosegardenDocument *doc);
+    explicit SpecialSegmentMapper(RosegardenDocument *doc);
 };
 
 }

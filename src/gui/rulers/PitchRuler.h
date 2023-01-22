@@ -33,7 +33,7 @@ class PitchRuler : public QWidget
 {
     Q_OBJECT
 public:
-    PitchRuler(QWidget *parent);
+    explicit PitchRuler(QWidget *parent);
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;

@@ -90,7 +90,7 @@ private:
 
     bool m_modified;
 
-    void setModified(bool value);
+    void setModified(bool modified);
     void addCommandToHistory(Command *command);
 
 };

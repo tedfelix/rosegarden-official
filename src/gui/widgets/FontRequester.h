@@ -36,7 +36,7 @@ class FontRequester : public QWidget
     Q_OBJECT
 
 public:
-    FontRequester(QWidget *parent = nullptr);
+    explicit FontRequester(QWidget *parent = nullptr);
     ~FontRequester() override;
 
     void setFont(QFont);
@@ -47,7 +47,7 @@ signals:
 
 protected slots:
     void slotChoose();
-    
+
 protected:
     QLabel *m_label;
 };

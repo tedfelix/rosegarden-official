@@ -49,7 +49,7 @@ public:
         modifiers(Qt::KeyboardModifiers()),
         buttons(Qt::MouseButtons()) { }
 
-    ControlMouseEvent(const ControlMouseEvent *e) :
+        explicit ControlMouseEvent(const ControlMouseEvent *e) :
         itemList(e->itemList),
         x(e->x), y(e->y),
         snappedXLeft(e->snappedXLeft), snappedXRight(e->snappedXRight),

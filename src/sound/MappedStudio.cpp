@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -165,15 +165,12 @@ const MappedObjectProperty MappedPluginSlot::Copyright = "copyright";
 const MappedObjectProperty MappedPluginSlot::Category = "category";
 const MappedObjectProperty MappedPluginSlot::PortCount = "portcount";
 const MappedObjectProperty MappedPluginSlot::Ports = "ports";
-const MappedObjectProperty MappedPluginSlot::Instrument = "instrument";
-const MappedObjectProperty MappedPluginSlot::Position = "position";
 const MappedObjectProperty MappedPluginSlot::Bypassed = "bypassed";
 const MappedObjectProperty MappedPluginSlot::Programs = "programs";
 const MappedObjectProperty MappedPluginSlot::Program = "program";
 const MappedObjectProperty MappedPluginSlot::Configuration = "configuration";
 
 const MappedObjectProperty MappedPluginPort::PortNumber = "portnumber";
-const MappedObjectProperty MappedPluginPort::Name = "name";
 const MappedObjectProperty MappedPluginPort::Minimum = "minimum";
 const MappedObjectProperty MappedPluginPort::Maximum = "maximum";
 const MappedObjectProperty MappedPluginPort::Default = "default";
@@ -1292,7 +1289,7 @@ MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
     if (property == Identifier) {
         value = m_identifier;
     } else if (property == PluginName) {
-        value = m_name;
+        value = m_pluginName;
     } else if (property == Label) {
         value = m_label;
     } else if (property == Author) {
@@ -1429,7 +1426,7 @@ MappedPluginSlot::setStringProperty(const MappedObjectProperty &property,
         m_configuration.clear();
 
     } else if (property == PluginName) {
-        m_name = value;
+        m_pluginName = value;
     } else if (property == Label) {
         m_label = value;
     } else if (property == Author) {
@@ -1610,7 +1607,7 @@ MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
                                     QString &value)
 {
     if (property == Name) {
-        value = m_name;
+        value = m_portName;
     } else {
 
 #ifdef DEBUG_MAPPEDSTUDIO
@@ -1703,7 +1700,7 @@ MappedPluginPort::setStringProperty(const MappedObjectProperty &property,
                                     QString value)
 {
     if (property == Name) {
-        m_name = value;
+        m_portName = value;
     } else {
 
 #ifdef DEBUG_MAPPEDSTUDIO
@@ -1716,6 +1713,3 @@ MappedPluginPort::setStringProperty(const MappedObjectProperty &property,
 
 
 }
-
-
-

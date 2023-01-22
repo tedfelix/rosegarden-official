@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -34,7 +34,7 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
         m_buttonWidth(0),
         m_backgroundColor(QColor(255,255,255))
 {
-    
+
     // Use a frame widget for the icon panel, it will hold a bunch of buttons
     m_iconPanel = new QFrame;
     m_iconPanel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -48,13 +48,13 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
 
     // Use a VBoxLayout for the icon buttons
     m_iconLayout = new QVBoxLayout;
-    
+
     // Buttons butt up against each other
     m_iconLayout->setSpacing(0);
-    
+
     // No margin between buttons and their frame
     m_iconLayout->setContentsMargins(0,0,0,0);
-    
+
     // Want the widget fixed to the top of the space
     // A stretch item must be at the bottom of the list
     // This approach changes the direction to from Bottom to Top
@@ -63,24 +63,26 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
     m_iconLayout->addStretch(1);
 
     m_iconPanel->setLayout(m_iconLayout);
-    
+
     // Use a stacked widget for the pages so the selected on is displayed
     m_pagePanel = new QStackedWidget;
 
     // Use a QHBoxLayout for icon and page panels
     m_layout = new QHBoxLayout;
     m_layout->setContentsMargins(0, 0, 0, 0);
-    
+
     // Add the icon and page panels to the main layout
     m_layout->addWidget(m_iconPanel);
     m_layout->addWidget(m_pagePanel);
     setLayout(m_layout);
 }
-    
+
 void
-IconStackedWidget::addPage(const QString& name, QWidget *page, const QPixmap& icon)
+IconStackedWidget::addPage(const QString& iconLabel,
+                           QWidget *page,
+                           const QPixmap& icon)
 {
-    IconButton *iconButton = new IconButton(m_iconPanel,icon, name);    
+    IconButton *iconButton = new IconButton(m_iconPanel,icon, iconLabel);
 
     // IconStackedWidget acts like a radio button widget with exclusive buttons
     iconButton->setCheckable(true);
@@ -102,10 +104,10 @@ IconStackedWidget::addPage(const QString& name, QWidget *page, const QPixmap& ic
     if (!m_iconButtons.size()) {
         iconButton->setChecked(true);
     }
-    
+
     // Store the new button in a list for later modification
-    m_iconButtons.push_back((IconButton *) iconButton);
-    
+    m_iconButtons.push_back(iconButton);
+
     // Add the button to the icon layout, insert to the second point in the list
     //   the first hold the stretch item
     m_iconLayout->insertWidget(1,iconButton);
@@ -127,7 +129,7 @@ IconStackedWidget::slotPageSelect()
         ++i;
         index++;
     }
-    
+
     // Select the new page
     m_pagePanel->setCurrentIndex(index);
 }
@@ -154,4 +156,3 @@ IconStackedWidget::setPageByIndex(int index)
 
     slotPageSelect();
 }
-

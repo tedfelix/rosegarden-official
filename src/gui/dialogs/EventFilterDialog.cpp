@@ -3,7 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
+    Modifications and additions Copyright (c) 2023 Mark R. Rubin aka "thanks4opensource" aka "thanks4opensrc"
 
     This file is Copyright 2003-2006
         D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
@@ -286,27 +287,37 @@ EventFilterDialog::populateDurationCombos()
 }
 
 void
+EventFilterDialog::resetValuesToAll()
+{
+    m_pitchFromSpinBox   ->setValue(  0);
+    m_pitchToSpinBox     ->setValue(127);
+    m_velocityFromSpinBox->setValue(  0);
+    m_velocityToSpinBox  ->setValue(127);
+
+    m_noteDurationFromComboBox->setCurrentIndex(    m_noteDurationToComboBox
+                                                  ->count()
+                                                - 1);
+    m_noteDurationToComboBox  ->setCurrentIndex(0);
+}
+
+void
 EventFilterDialog::slotToggleAll()
 {
     RG_DEBUG << "EventFilterDialog::slotToggleAll()";
-    m_pitchFromSpinBox ->setValue(0);
-    m_pitchToSpinBox ->setValue(127);
-    m_velocityFromSpinBox ->setValue(0);
-    m_velocityToSpinBox ->setValue(127);
-    m_noteDurationFromComboBox ->setCurrentIndex(11); // hard coded; should be variable
-    m_noteDurationToComboBox ->setCurrentIndex(0);  // 0 = unlimited; 11 = 0
+    resetValuesToAll();
+    m_notePitchIncludeComboBox   ->setCurrentIndex(0);
+    m_noteVelocityIncludeComboBox->setCurrentIndex(0);
+    m_noteDurationIncludeComboBox->setCurrentIndex(0);
 }
 
 void
 EventFilterDialog::slotToggleNone()
 {
     RG_DEBUG << "EventFilterDialog::slotToggleNone()";
-    m_pitchFromSpinBox ->setValue(0);
-    m_pitchToSpinBox ->setValue(0);
-    m_velocityFromSpinBox ->setValue(0);
-    m_velocityToSpinBox ->setValue(0);
-    m_noteDurationFromComboBox ->setCurrentIndex(11);
-    m_noteDurationToComboBox ->setCurrentIndex(11);
+    resetValuesToAll();
+    m_notePitchIncludeComboBox   ->setCurrentIndex(1);
+    m_noteVelocityIncludeComboBox->setCurrentIndex(1);
+    m_noteDurationIncludeComboBox->setCurrentIndex(1);
 }
 
 void

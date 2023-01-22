@@ -34,7 +34,7 @@ class TempoColour
 
 public:
     TempoColour():m_tempo(0) {;}
-    TempoColour(double tempo):m_tempo(tempo) {;}
+    explicit TempoColour(double tempo):m_tempo(tempo) {;}
 
     // Get the colour for a tempo
     //

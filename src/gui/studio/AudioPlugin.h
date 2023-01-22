@@ -71,7 +71,7 @@ public:
                  PluginPort::PortDisplayHint hint,
                  PortData lowerBound,
                  PortData upperBound,
-                 PortData defaultVale);
+                 PortData defaultValue);
 
     typedef std::vector<QSharedPointer<PluginPort> > PluginPortVector;
 

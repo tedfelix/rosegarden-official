@@ -353,7 +353,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_Thorn = new QCheckBox;
     m_Thorn->setToolTip(tipText);
-    m_Thorn->setChecked(settings.value("use_thorn_style", true).toBool());
+    m_Thorn->setChecked(Preferences::getThorn());
     connect(m_Thorn, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_Thorn, row, 1, 1, 3);
@@ -596,10 +596,8 @@ void GeneralConfigurationPage::apply()
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     const bool thornChanged =
-            (settings.value("use_thorn_style", true).toBool() !=
-             m_Thorn->isChecked());
-    //RG_DEBUG << "apply(): NB. use_thorn_style = " << settings.value("use_thorn_style", true).toBool() << ", m_Thorn->isChecked() = " << m_Thorn->isChecked();
-    settings.setValue("use_thorn_style", m_Thorn->isChecked());
+            (Preferences::getThorn() != m_Thorn->isChecked());
+    Preferences::setThorn(m_Thorn->isChecked());
     settings.setValue("notenamestyle", m_nameStyle->currentIndex());
     const bool mainTextureChanged =
             (settings.value("backgroundtextures", true).toBool() !=

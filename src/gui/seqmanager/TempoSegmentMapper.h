@@ -30,7 +30,7 @@ class RealTime;
 class TempoSegmentMapper : public SpecialSegmentMapper
 {
 public:
-    TempoSegmentMapper(RosegardenDocument *doc) :
+    explicit TempoSegmentMapper(RosegardenDocument *doc) :
         SpecialSegmentMapper(doc)
     {
         init();

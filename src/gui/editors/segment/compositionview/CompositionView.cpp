@@ -4,10 +4,10 @@
   Rosegarden
   A MIDI and audio sequencer and musical notation editor.
   Copyright 2000-2022 the Rosegarden development team.
- 
+
   Other copyrights also apply to some parts of this work.  Please
   see the AUTHORS file and individual file headers for details.
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -129,7 +129,10 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
             "true").toBool()) {
 
-        m_backgroundPixmap = IconLoader::loadPixmap("bg-paper-black");
+        if (Preferences::getThorn())
+            m_backgroundPixmap = IconLoader::loadPixmap("bg-paper-black");
+        else
+            m_backgroundPixmap = IconLoader::loadPixmap("bg-segmentcanvas");
     }
 
     slotUpdateSize();
@@ -190,7 +193,10 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
 
-    m_trackDividerColor.setRgb(48, 48, 48);
+    if (Preferences::getThorn())
+        m_trackDividerColor.setRgb(48, 48, 48);
+    else
+        m_trackDividerColor = GUIPalette::getColour(GUIPalette::TrackDivider);
 
 
     // *** Debugging
@@ -617,7 +623,10 @@ void CompositionView::drawSegments(const QRect &clipRect)
         segmentsLayerPainter.drawTiledPixmap(
                 clipRect, m_backgroundPixmap, offset);
     } else {
-        segmentsLayerPainter.fillRect(clipRect, Qt::black);
+        if (Preferences::getThorn())
+            segmentsLayerPainter.fillRect(clipRect, Qt::black);
+        else
+            segmentsLayerPainter.eraseRect(clipRect);
     }
 
     // *** Draw the track dividers
@@ -1059,48 +1068,48 @@ void CompositionView::drawCompRectLabel(
     painter->restore();
 }
 
-void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
-        const QRect &r, bool isSelected, int intersectLvl)
+void CompositionView::drawRect(QPainter *painter, const QRect &clipRect,
+        const QRect &rect, bool isSelected, int intersectLvl)
 {
     // If the rect isn't in the clip rect, bail.
-    if (!r.intersects(clipRect))
+    if (!rect.intersects(clipRect))
         return;
 
-    p->save();
+    painter->save();
 
     // Since we do partial updates when scrolling, make sure we don't
     // obliterate the previews.
-    p->setClipRect(clipRect);
+    painter->setClipRect(clipRect);
 
     // For a selected segment, go with a darker fill.
     if (isSelected) {
-        QColor fillColor = p->brush().color().darker(200);
-        p->setBrush(QBrush(fillColor));
+        QColor fillColor = painter->brush().color().darker(200);
+        painter->setBrush(QBrush(fillColor));
     }
 
     // For intersecting segments, go with a darker fill.
     if (intersectLvl > 0) {
-        QColor fillColor = p->brush().color().darker(intersectLvl * 105);
-        p->setBrush(QBrush(fillColor));
+        QColor fillColor = painter->brush().color().darker(intersectLvl * 105);
+        painter->setBrush(QBrush(fillColor));
     }
 
-    QRect rect = r;
+    QRect rect2 = rect;
     // Shrink height by 1 to accommodate the dividers.
     // Shrink width by 1 so that adjacent segment borders don't overlap.
     // ??? Why isn't the SegmentRect already adjusted like this?
-    rect.adjust(0, 0, -1, -1);
+    rect2.adjust(0, 0, -1, -1);
 
-    p->drawRect(rect);
+    painter->drawRect(rect2);
 
-    p->restore();
+    painter->restore();
 }
 
 // Functor to just compare the SegmentRect's QRect's.
 class CompareSegmentRects
 {
 public:
-    CompareSegmentRects(const SegmentRect &sr) : r(sr.rect) { }
-    bool operator()(const SegmentRect &sr)
+    explicit CompareSegmentRects(const SegmentRect &sr) : r(sr.rect) { }
+    bool operator()(const SegmentRect &sr) const
             { return (sr.rect == r); }
 private:
     QRect r;
@@ -1239,13 +1248,13 @@ void CompositionView::drawIntersections(
 #endif
 }
 
-void CompositionView::drawTextFloat(QPainter *p)
+void CompositionView::drawTextFloat(QPainter *painter)
 {
     if (!m_model)
         return;
 
     // Find out how big of a rect we need for the text.
-    QRect boundingRect = p->boundingRect(
+    QRect boundingRect = painter->boundingRect(
             QRect(),  // we want the "required" rectangle
             0,        // we want the "required" rectangle
             m_textFloatText);
@@ -1264,14 +1273,14 @@ void CompositionView::drawTextFloat(QPainter *p)
 
     boundingRect.moveTopLeft(pos);
 
-    p->save();
+    painter->save();
 
-    p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
-    p->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
-    p->drawRect(boundingRect);
-    p->drawText(boundingRect, Qt::AlignCenter, m_textFloatText);
+    painter->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
+    painter->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
+    painter->drawRect(boundingRect);
+    painter->drawText(boundingRect, Qt::AlignCenter, m_textFloatText);
 
-    p->restore();
+    painter->restore();
 }
 
 bool CompositionView::event(QEvent *e)

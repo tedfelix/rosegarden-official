@@ -37,7 +37,7 @@ class ProgressBar : public QProgressBar
     Q_OBJECT
 
 public:
-    ProgressBar(QWidget *parent = nullptr);
+    explicit ProgressBar(QWidget *parent = nullptr);
 
     ProgressBar(int totalSteps,
                 QWidget *parent = nullptr);

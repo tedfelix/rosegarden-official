@@ -34,9 +34,9 @@ class AudioFileManager;
 class AudioFileTimeStretcher : public QObject
 {
     Q_OBJECT
-    
+
 public:
-    AudioFileTimeStretcher(AudioFileManager *afm);
+    explicit AudioFileTimeStretcher(AudioFileManager *afm);
     ~AudioFileTimeStretcher() override;
 
     /**

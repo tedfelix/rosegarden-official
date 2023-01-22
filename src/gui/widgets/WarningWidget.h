@@ -57,7 +57,7 @@ public:
      * MIDI, audio, and the system timer are all functioning correctly.  This
      * widget is intended to be displayed on the status bar in the main window.
      */
-    WarningWidget(QWidget *parent = nullptr);
+    explicit WarningWidget(QWidget *parent = nullptr);
     ~WarningWidget() override;
 
     void setMidiWarning(const bool status);

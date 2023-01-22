@@ -36,7 +36,7 @@ class WheelyButton : public QPushButton
     Q_OBJECT
 
 public:
-    WheelyButton(QWidget *w);
+    explicit WheelyButton(QWidget *w);
     ~WheelyButton() override { }
 
 signals:

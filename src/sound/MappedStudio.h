@@ -65,16 +65,16 @@ public:
                  MappedObjectType type,
                  MappedObjectId id):
         m_type(type),
-        m_id(id), 
+        m_id(id),
         m_name(name),
         m_parent(parent) {;}
 
     virtual ~MappedObject() {;}
 
-    MappedObjectId getId() { return m_id; }
-    MappedObjectType getType() { return m_type; }
+    MappedObjectId getId() const { return m_id; }
+    MappedObjectType getType() const { return m_type; }
 
-    std::string getName() { return m_name; }
+    std::string getName() const { return m_name; }
     void setName(const std::string &name) { m_name= name; }
 
     // Get and set properties
@@ -86,7 +86,7 @@ public:
                              MappedObjectValue &value) = 0;
 
     // Only relevant to objects that have string properties
-    // 
+    //
     virtual bool getStringProperty(const MappedObjectProperty &/* property */,
                                    QString &/* value */) { return false; }
 
@@ -94,7 +94,7 @@ public:
                              MappedObjectValue value) = 0;
 
     // Only relevant to objects that have string properties
-    // 
+    //
     virtual void setStringProperty(const MappedObjectProperty &/* property */,
                                    QString /* value */) { }
 
@@ -252,7 +252,7 @@ private:
     typedef std::map<MappedObjectId, MappedObject *> MappedObjectCategory;
     typedef std::map<MappedObjectType, MappedObjectCategory> MappedObjectMap;
     MappedObjectMap m_objects;
-    
+
     SoundDriver *m_soundDriver;
 };
 
@@ -377,7 +377,7 @@ public:
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;
 
-    MappedObjectValue getBussId() { return m_bussId; }
+    MappedObjectValue getBussId() const { return m_bussId; }
 
     // super-convenience function: retrieve the ids of the instruments
     // connected to this buss
@@ -410,7 +410,7 @@ public:
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;
 
-    MappedObjectValue getInputNumber() { return m_inputNumber; }
+    MappedObjectValue getInputNumber() const { return m_inputNumber; }
 
 protected:
     MappedObjectValue m_inputNumber;
@@ -429,8 +429,6 @@ public:
     static const MappedObjectProperty Ports;
     static const MappedObjectProperty Program;
     static const MappedObjectProperty Programs; // list property
-    static const MappedObjectProperty Instrument;
-    static const MappedObjectProperty Position;
     static const MappedObjectProperty Bypassed;
     static const MappedObjectProperty Configuration; // list property
 
@@ -467,7 +465,7 @@ public:
 protected:
     QString                   m_identifier;
 
-    QString                   m_name;
+    QString                   m_pluginName;
     QString                   m_label;
     QString                   m_author;
     QString                   m_copyright;
@@ -485,7 +483,6 @@ class MappedPluginPort : public MappedObject
 {
 public:
     static const MappedObjectProperty PortNumber;
-    static const MappedObjectProperty Name;
     static const MappedObjectProperty Minimum;
     static const MappedObjectProperty Maximum;
     static const MappedObjectProperty Default;
@@ -517,7 +514,7 @@ public:
 
 protected:
     int                     m_portNumber;
-    QString                 m_name;
+    QString                 m_portName;
     MappedObjectValue       m_minimum;
     MappedObjectValue       m_maximum;
     MappedObjectValue       m_default;
@@ -525,7 +522,7 @@ protected:
 
 };
 
-    
+
 }
 
 #endif // RG_MAPPEDSTUDIO_H

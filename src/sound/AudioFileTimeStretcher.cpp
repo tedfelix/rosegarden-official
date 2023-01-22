@@ -74,7 +74,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         RG_WARNING << "getStretchedAudioFile(): WARNING: Creation of ifstream failed for file " << sourceFile->getAbsoluteFilePath();
         return -1;
     }
-    
+
     if (m_progressDialog) {
         m_progressDialog->setLabelText(tr("Rescaling audio file..."));
         m_progressDialog->setRange(0, 100);
@@ -98,7 +98,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         RG_WARNING << "getStretchedAudioFile(): WARNING: write() failed for file " << file->getAbsoluteFilePath();
         return -1;
     }
-    
+
     int obs = 1024;
     int ibs = obs / ratio;
     int ch = sourceFile->getChannels();
@@ -114,30 +114,36 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
     size_t padding = stretcher.getWindowSize()/2;
 
+    // cppcheck-suppress allocaCalled
     char *ebf = (char *)alloca
         (ch * ibs * sourceFile->getBytesPerFrame());
-    
+
     std::vector<float *> dbfs;
     for (int c = 0; c < ch; ++c) {
+        // cppcheck-suppress allocaCalled
         dbfs.push_back((float *)alloca((ibs > int(padding) ? size_t(ibs) : padding)
                                        * sizeof(float)));
     }
-    
+
+    // cppcheck-suppress allocaCalled
     float **ibfs = (float **)alloca(ch * sizeof(float *));
+    // cppcheck-suppress allocaCalled
     float **obfs = (float **)alloca(ch * sizeof(float *));
-            
+
     for (int c = 0; c < ch; ++c) {
         ibfs[c] = dbfs[c];
     }
-        
+
     for (int c = 0; c < ch; ++c) {
+        // cppcheck-suppress allocaCalled
         obfs[c] = (float *)alloca(obs * sizeof(float));
     }
-        
+
+    // cppcheck-suppress allocaCalled
     char *oebf = (char *)alloca(ch * obs * sizeof(float));
-        
+
     int totalIn = 0, totalOut = 0;
-        
+
     for (int c = 0; c < ch; ++c) {
         for (size_t i = 0; i < padding; ++i) {
             ibfs[c][i] = 0.f;
@@ -157,7 +163,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     sourceFile->scanTo(&streamIn, RealTime::zeroTime);
 
     while (1) {
-            
+
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             RG_DEBUG << "getStretchedAudioFile(): cancelled";
             return -1;
@@ -169,7 +175,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             thisRead = sourceFile->getSampleFrames(&streamIn, ebf, ibs);
             if (int(thisRead) < ibs) inputExhausted = true;
         }
-            
+
         if (thisRead == 0) {
             if (totalOut >= expectedOut) break;
             else {
@@ -183,7 +189,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
                 thisRead = ibs;
             }
         }
-            
+
         if (!sourceFile->decode((unsigned char *)ebf,
                                 thisRead * sourceFile->getBytesPerFrame(),
                                 sr, ch,
@@ -191,14 +197,14 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             RG_WARNING << "getStretchedAudioFile(): ERROR: AudioFile failed to decode its own output";
             break;
         }
-            
+
         stretcher.putInput(ibfs, thisRead);
         totalIn += thisRead;
-            
+
         unsigned int available = stretcher.getAvailableOutputSamples();
-            
+
         while (available > 0) {
-                
+
             unsigned int count = available;
             if (count > (unsigned int)obs) count = (unsigned int)obs;
 
@@ -215,18 +221,19 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
                     padding = 0;
                 }
             }
-                
+
             stretcher.getOutput(obfs, count);
-                
+
             char *encodePointer = oebf;
             for (unsigned int i = 0; i < count; ++i) {
                 for (int c = 0; c < ch; ++c) {
                     float sample = obfs[c][i];
+                    // cppcheck-suppress invalidPointerCast
                     *(float *)encodePointer = sample;
                     encodePointer += sizeof(float);
                 }
             }
-                
+
             if (totalOut < expectedOut &&
                 totalOut + int(count) > expectedOut) {
                 count = expectedOut - totalOut;
@@ -238,7 +245,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
             if (totalOut >= expectedOut) break;
         }
-            
+
         if (++progressCount == 100) {
             int progress = static_cast<int>(100.0 * totalIn / fileTotalIn);
             if (m_progressDialog)
@@ -249,14 +256,14 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
         qApp->processEvents();
     }
-        
+
     if (m_progressDialog)
         m_progressDialog->setValue(100);
 
     qApp->processEvents();
 
     writeFile.close();
-    
+
     RG_DEBUG << "getStretchedAudioFile(): success, id is " << file->getId();
 
     return file->getId();
@@ -264,5 +271,3 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
 
 }
-
-

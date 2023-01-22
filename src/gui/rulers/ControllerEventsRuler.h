@@ -80,7 +80,7 @@ public:
     virtual void addControlLine(
             double x1, double y1,
             double x2, double y2,
-            bool eraseExistingContollers);
+            bool eraseExistingControllers);
 
     /** Draw a rubber band indicating the controller line that will be drawn if
      * the user clicks another event into existence while moving the pencil

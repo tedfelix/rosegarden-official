@@ -39,14 +39,14 @@ class ScrollBoxDialog : public QDialog
 
 public:
     ScrollBoxDialog(QWidget *parent = nullptr,
-                    ScrollBox::SizeMode mode = ScrollBox::FixWidth,
+                    ScrollBox::SizeMode sizeMode = ScrollBox::FixWidth,
                     const char *name = nullptr);
 //                    WFlags flags = 0);
     ~ScrollBoxDialog() override;
 
     ScrollBox *scrollbox() { return m_scrollbox; }
     void setPageSize(const QSize&);
-    
+
 protected:
     void closeEvent(QCloseEvent * e) override;
 

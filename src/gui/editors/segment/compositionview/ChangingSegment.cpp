@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -99,14 +99,14 @@ void ChangingSegment::setEndTime(timeT time, const SnapGrid &grid)
     }
 }
 
-timeT ChangingSegment::getEndTime(const SnapGrid &grid)
+timeT ChangingSegment::getEndTime(const SnapGrid &grid) const
 {
     QRect itemRect = rect();
 
     return std::max(grid.snapX(itemRect.x() + itemRect.width()), 0L);
 }
 
-int ChangingSegment::getTrackPos(const SnapGrid &grid)
+int ChangingSegment::getTrackPos(const SnapGrid &grid) const
 {
     return grid.getYBin(rect().y());
 }

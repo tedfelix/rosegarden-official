@@ -47,7 +47,7 @@ public:
      * Call from an RT thread etc., to pass ownership of t to us for
      * later disposal.  Only one thread should be calling this on any
      * given scavenger.
-     * 
+     *
      * This is only lock-free so long as a slot is available in the
      * object list; otherwise it takes a lock and allocates memory.
      * Scavengers should always be used with an object list size
@@ -87,7 +87,7 @@ template <typename T>
 class ScavengerArrayWrapper
 {
 public:
-    ScavengerArrayWrapper(T *array) : m_array(array) { }
+    explicit ScavengerArrayWrapper(T *array) : m_array(array) { }
     ~ScavengerArrayWrapper() { delete[] m_array; }
 
 private:
@@ -153,7 +153,7 @@ void
 Scavenger<T>::scavenge()
 {
     if (m_scavenged >= m_claimed) return;
-    
+
     struct timeval tv;
     (void)gettimeofday(&tv, nullptr);
     int sec = tv.tv_sec;

@@ -67,7 +67,7 @@ public:
     virtual void handleMouseMove(QMouseEvent *e, int deltaX, int deltaY);
     virtual void handleMouseWheel(QWheelEvent *e);
 
-    virtual void setSelected(bool yes);
+    virtual void setSelected(bool s);
     bool isSelected() { return m_selected; }
     //    virtual void setHighlighted(bool yes) { m_highlighted=yes; update(); }
     /// recompute height according to represented value prior to a canvas repaint
@@ -90,7 +90,7 @@ public:
     virtual void reconfigure();
 
 protected:
-    
+
     //--------------- Data members ---------------------------------
 
     QColor m_colour;

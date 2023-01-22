@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -101,7 +101,6 @@ VelocityColour::getColour(int value)
             ( m_hiStartGreen + m_hiStepGreen * mixFactor ) / m_multiplyFactor,
             ( m_hiStartBlue + m_hiStepBlue * mixFactor ) / m_multiplyFactor);
     } else {
-        return m_loudColour;
         return m_loudColour;
     }
 

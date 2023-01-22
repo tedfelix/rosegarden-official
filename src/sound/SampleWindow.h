@@ -22,7 +22,7 @@
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
     This file copyright 2006 Chris Cannam.
-    
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -37,7 +37,7 @@
 #include <cstdlib>
 #include <map>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 template <typename T>
@@ -69,14 +69,14 @@ public:
 	return *this;
     }
     virtual ~SampleWindow() { delete[] m_cache; }
-    
+
     void cut(T *src) const { cut(src, src); }
     void cut(T *src, T *dst) const {
 	for (size_t i = 0; i < m_size; ++i) dst[i] = src[i] * m_cache[i];
     }
 
-    T getArea() { return m_area; }
-    T getValue(size_t i) { return m_cache[i]; }
+    T getArea() const { return m_area; }
+    T getValue(size_t i) const { return m_cache[i]; }
 
     Type getType() const { return m_type; }
     size_t getSize() const { return m_size; }
@@ -86,9 +86,9 @@ protected:
     size_t m_size;
     T *m_cache;
     T m_area;
-    
+
     void encache();
-    void cosinewin(T *, T, T, T, T);
+    void cosinewin(T *, T, T, T, T) const;
 };
 
 template <typename T>
@@ -100,38 +100,38 @@ void SampleWindow<T>::encache()
     for (i = 0; i < n; ++i) mult[i] = 1.0;
 
     switch (m_type) {
-		
+
     case Rectangular:
 	for (i = 0; i < n; ++i) {
 	    mult[i] *= 0.5;
 	}
 	break;
-	    
+
     case Bartlett:
 	for (i = 0; i < n/2; ++i) {
 	    mult[i] *= (i / T(n/2));
 	    mult[i + n/2] *= (1.0 - (i / T(n/2)));
 	}
 	break;
-	    
+
     case Hamming:
         cosinewin(mult, 0.54, 0.46, 0.0, 0.0);
 	break;
-	    
+
     case Hanning:
         cosinewin(mult, 0.50, 0.50, 0.0, 0.0);
 	break;
-	    
+
     case Blackman:
         cosinewin(mult, 0.42, 0.50, 0.08, 0.0);
 	break;
-	    
+
     case Gaussian:
 	for (i = 0; i < n; ++i) {
             mult[i] *= pow(2, - pow((i - (n-1)/2.0) / ((n-1)/2.0 / 3), 2));
 	}
 	break;
-	    
+
     case Parzen:
     {
         int N = n-1;
@@ -145,7 +145,7 @@ void SampleWindow<T>::encache()
             T m = 1.0 - 6 * pow(wn / (T(N)/2), 2) * (1.0 - abs(wn) / (T(N)/2));
             mult[i] *= m;
             mult[N-i] *= m;
-        }            
+        }
         break;
     }
 
@@ -157,7 +157,7 @@ void SampleWindow<T>::encache()
         cosinewin(mult, 0.35875, 0.48829, 0.14128, 0.01168);
         break;
     }
-	
+
     m_cache = mult;
 
     m_area = 0;
@@ -168,7 +168,7 @@ void SampleWindow<T>::encache()
 }
 
 template <typename T>
-void SampleWindow<T>::cosinewin(T *mult, T a0, T a1, T a2, T a3)
+void SampleWindow<T>::cosinewin(T *mult, T a0, T a1, T a2, T a3) const
 {
     int n = int(m_size);
     for (int i = 0; i < n; ++i) {

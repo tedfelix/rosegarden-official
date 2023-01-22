@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -18,7 +18,7 @@
 // SoundFile is an abstract base class defining behaviour for both
 // MidiFiles and AudioFiles.  The getBytes routine is buffered into
 // suitably sized chunks to prevent excessive file reads.
-// 
+//
 //
 
 #include <fstream>
@@ -39,15 +39,15 @@ class SoundFile
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SoundFile)
 
 public:
-    SoundFile(const QString &absoluteFilePath);
+    explicit SoundFile(const QString &absoluteFilePath);
     virtual ~SoundFile();
 
     class BadSoundFileException : public Exception
     {
     public:
-        BadSoundFileException(QString path) :
+        explicit BadSoundFileException(QString path) :
             Exception(QObject::tr("Bad sound file ") + path), m_path(path) { }
-        BadSoundFileException(QString path, std::string message) :
+        BadSoundFileException(QString path, const std::string& message) :
             Exception(QObject::tr("Bad sound file ") + path + ": " + strtoqstr(message)), m_path(path) { }
         BadSoundFileException(QString path, QString file, int line) :
             Exception(QObject::tr("Bad sound file ") + path, file, line), m_path(path) { }
@@ -93,7 +93,7 @@ public:
 
     // check EOF status
     //
-    bool isEof() const 
+    bool isEof() const
         { if (m_inFile) return m_inFile->eof(); else return true; }
 
 protected:
@@ -108,7 +108,7 @@ protected:
     size_t getBytes(std::ifstream *file, char *buffer, size_t n);
 
     // write some bytes to an output stream
-    void putBytes(std::ofstream *file, const std::string outputString);
+    void putBytes(std::ofstream *file, const std::string& outputString);
 
     // write some bytes to an output stream
     void putBytes(std::ofstream *file, const char *buffer, size_t n);
@@ -121,7 +121,7 @@ protected:
 
     std::ifstream *m_inFile;
     std::ofstream *m_outFile;
-    
+
     bool           m_loseBuffer; // do we need to dump the read buffer
                                  // and re-fill it?
 
@@ -133,5 +133,3 @@ protected:
 
 
 #endif // RG_SOUNDFILE_H
-
-

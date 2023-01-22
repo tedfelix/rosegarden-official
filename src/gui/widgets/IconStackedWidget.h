@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -32,20 +32,20 @@ class IconStackedWidget : public QWidget
 {
     Q_OBJECT
 public:
-    IconStackedWidget(QWidget *parent = nullptr);
+    explicit IconStackedWidget(QWidget *parent = nullptr);
     void addPage(const QString& iconLabel, QWidget *page, const QPixmap& icon);
     typedef std::vector<IconButton *> iconbuttons;
     void setPageByIndex(int index);
-    
+
 public slots:
     void slotPageSelect();
-    
+
 protected:
     iconbuttons m_iconButtons;
     int m_buttonHeight;
     int m_buttonWidth;
     QFrame * m_iconPanel;
-    
+
 private:
     QVBoxLayout * m_iconLayout;
     QStackedWidget * m_pagePanel;

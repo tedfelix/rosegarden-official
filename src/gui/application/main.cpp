@@ -26,6 +26,7 @@
 #include "gui/general/ThornStyle.h"
 #include "gui/application/RosegardenApplication.h"
 #include "base/RealTime.h"
+#include "misc/Preferences.h"
 
 #include "sound/MidiFile.h"
 #include "sound/audiostream/WavFileReadStream.h"
@@ -452,22 +453,14 @@ int main(int argc, char *argv[])
     theApp.setOrganizationDomain("rosegardenmusic.com");
     theApp.setApplicationName(QObject::tr("Rosegarden"));
 
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = settings.value("use_thorn_style", true).toBool();
-
-    // If the option was turned on in settings, but the user has specified a
+    // If Thorn was turned on in settings, but the user has specified a
     // style on the command line (obnoxious user!) then we must turn this option
     // _off_ in settings as though the user had un-checked it on the config
-    // page, or else mayhem and chaos will reign.
-    if (Thorn && styleSpecified) {
-        settings.setValue("use_thorn_style", false);
-        Thorn = false;
-    }
+    // page, or else mayhem and chaos will reign (supreme?).
+    if (Preferences::getThorn()  &&  styleSpecified)
+        Preferences::setThorn(false);
 
-    settings.endGroup();
-
-    ThornStyle::setEnabled(Thorn);
+    ThornStyle::setEnabled(Preferences::getThorn());
 
     // This allows icons to appear in the instrument popup menu in
     // TrackButtons.
@@ -547,6 +540,7 @@ int main(int argc, char *argv[])
     }
     theApp.setWindowIcon(icon);
 
+    QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     QString lastVersion = settings.value("lastversion", "").toString();

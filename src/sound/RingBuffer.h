@@ -61,7 +61,7 @@ public:
      * power of two, this means n should ideally be some power of two
      * minus one.
      */
-    RingBuffer(size_t n);
+    explicit RingBuffer(size_t n);
 
     virtual ~RingBuffer();
 

@@ -39,10 +39,10 @@ class PitchChooser : public QGroupBox
 {
     Q_OBJECT
 public:
-    PitchChooser(QString title,
+    PitchChooser(const QString& title,
                  QWidget *parent,
                  int defaultPitch = 60);
-    
+
     int getPitch() const;
 
 signals:
@@ -62,7 +62,7 @@ protected:
     QVBoxLayout *m_layout;
 };
 
-    
+
 
 }
 

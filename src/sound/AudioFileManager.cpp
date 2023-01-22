@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -81,7 +81,7 @@ static pthread_mutex_t audioFileManagerLock;
 class MutexLock
 {
 public:
-    MutexLock(pthread_mutex_t *mutex) : m_mutex(mutex)
+    explicit MutexLock(pthread_mutex_t *mutex) : m_mutex(mutex)
     {
         pthread_mutex_lock(m_mutex);
     }
@@ -107,7 +107,7 @@ AudioFileManager::AudioFileManager(RosegardenDocument *doc) :
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else
 #if defined(PTHREAD_MUTEX_RECURSIVE) || defined(__FreeBSD__)
-
+    // cppcheck-suppress ConfigurationNotChecked
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else
 
@@ -326,10 +326,10 @@ AudioFileManager::insertFile(const std::string &name,
 
 void
 AudioFileManager::setRelativeAudioPath(
-        const QString &i_newRelativePath,
-        bool i_moveFiles)
+        const QString &newPath,
+        bool doMoveFiles)
 {
-    QString newRelativePath = i_newRelativePath;
+    QString newRelativePath = newPath;
 
     if (newRelativePath.isEmpty())
         newRelativePath = ".";
@@ -359,7 +359,7 @@ AudioFileManager::setRelativeAudioPath(
     QString originalLocation;
     // If the files are moving, provide the user with some additional
     // information in case there is a problem.
-    if (i_moveFiles)
+    if (doMoveFiles)
         originalLocation = tr("<br />Audio files will remain in their original location.<br />(%1)").
             arg(getAbsoluteAudioPath());
 
@@ -390,7 +390,7 @@ AudioFileManager::setRelativeAudioPath(
         return;
     }
 
-    if (i_moveFiles) {
+    if (doMoveFiles) {
         // Physically move the files, and adjust their paths to
         // point to the new location.
         moveFiles(newAbsolutePath);
@@ -402,7 +402,7 @@ AudioFileManager::setRelativeAudioPath(
         m_relativeAudioPath = newRelativePath;
     }
 
-    if (i_moveFiles) {
+    if (doMoveFiles) {
         // Force a save.
         RosegardenMainWindow::self()->slotFileSave();
     }
@@ -600,7 +600,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 }
 
 AudioFileId
-AudioFileManager::importURL(const QUrl &url, int sampleRate)
+AudioFileManager::importURL(const QUrl &url, int targetSampleRate)
 {
     if (m_progressDialog) {
         m_progressDialog->setLabelText(tr("Adding audio file..."));
@@ -618,11 +618,11 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
 
     source.waitForData();
 
-    return importFile(source.getLocalFilename(), sampleRate);
+    return importFile(source.getLocalFilename(), targetSampleRate);
 }
 
 AudioFileId
-AudioFileManager::importFile(const QString &fileName, int sampleRate)
+AudioFileManager::importFile(const QString &fileName, int targetSampleRate)
 {
     if (m_progressDialog)
         m_progressDialog->setLabelText(tr("Importing audio file..."));
@@ -675,16 +675,15 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
             ;
 
         // insert file into vector
-        WAVAudioFile *aF = nullptr;
-
-        aF = new WAVAudioFile(newId,
-                              qstrtostr(targetName),
-                              getAbsoluteAudioPath() + targetName);
+        WAVAudioFile *aF =
+            new WAVAudioFile(newId,
+                             qstrtostr(targetName),
+                             getAbsoluteAudioPath() + targetName);
         m_audioFiles.push_back(aF);
         m_derivedAudioFiles.insert(aF);
         // Don't catch SoundFile::BadSoundFileException
 
-        m_expectedSampleRate = sampleRate;
+        m_expectedSampleRate = targetSampleRate;
 
         return aF->getId();
     }

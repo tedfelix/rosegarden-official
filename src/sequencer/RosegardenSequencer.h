@@ -33,7 +33,7 @@
 #include <deque>
 
 
-namespace Rosegarden { 
+namespace Rosegarden {
 
 class MappedInstrument;
 class SoundDriver;
@@ -64,7 +64,7 @@ public:
 
     /// Close the sequencer.
     void quit();
-    
+
     /// Play from a given time with given parameters.
     /**
      *  Based on RealTime timestamps.
@@ -72,7 +72,7 @@ public:
     bool play(const RealTime &time);
 
     /// Record from a given time with given parameters.
-    bool record(const RealTime &position, long recordMode);
+    bool record(const RealTime &time, long recordMode);
 
     /// Punch out from recording to playback
     /**
@@ -87,8 +87,8 @@ public:
             bool jumpToLoop);
 
     /// Set the sequencer to a given time.
-    void jumpTo(const RealTime &rt);
- 
+    void jumpTo(const RealTime &pos);
+
     /// Return the Sound system status (audio/MIDI)
     unsigned getSoundDriverStatus();
 
@@ -150,7 +150,7 @@ public:
     /**
      * Ignored if driver does not permit changing the number of devices
      */
-    void removeDevice(unsigned int id);
+    void removeDevice(unsigned int deviceId);
     /// Remove all of the devices (of types that can be added or removed).
     /**
      * Ignored if driver does not permit changing the number of devices
@@ -160,7 +160,7 @@ public:
     /**
      * Ignored if the driver does not permit this operation.
      */
-    void renameDevice(unsigned int id, QString name);
+    void renameDevice(unsigned int deviceId, QString name);
     /**
      * Return the number of permissible connections for a device of
      * the given type and direction (corresponding to MidiDevice::
@@ -295,7 +295,7 @@ public:
 
     /// Connect two objects
     void connectMappedObjects(int id1, int id2);
-    
+
     /// Disconnect two objects
     void disconnectMappedObjects(int id1, int id2);
 
@@ -361,7 +361,7 @@ public:
     void setStatus(TransportStatus status)
             { m_transportStatus = status; }
     TransportStatus getStatus() { return m_transportStatus; }
-   
+
     /// Process the first chunk of Sequencer events
     /**
      * How does this differ from play() and record()?
@@ -417,7 +417,7 @@ public:
      *
      * Used by processAsynchronousEvents() and processRecordedMidi().
      */
-    void routeEvents(MappedEventList *mC, bool recording);
+    void routeEvents(MappedEventList *mappedEventList, bool recording);
 
     /// Are we looping?
     bool isLooping() const
@@ -514,7 +514,7 @@ private:
     MappedStudio *m_studio;
 
     // mmap segments
-    // 
+    //
     MappedBufMetaIterator m_metaIterator;
     RealTime m_lastStartTime;
 
@@ -540,7 +540,7 @@ private:
      * not have worked as it was commented out everywhere it was used.
      */
     bool m_isEndOfCompReached;
-    
+
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QRecursiveMutex m_mutex;
 #else
@@ -551,5 +551,5 @@ private:
 };
 
 }
- 
+
 #endif // RG_ROSEGARDENSEQUENCER_H

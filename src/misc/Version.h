@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -23,14 +23,14 @@
 namespace Rosegarden
 {
 
-  /* 
+  /*
    * any version looks like a.b.c
    *   a = major part of version number
    *   b = minor part of version number
    *   c = micro part of version number
-   * 
+   *
    * RG only has a and b, hydrogen has a, b and c
-   */ 
+   */
   class Version
   {
     private:
@@ -43,10 +43,10 @@ namespace Rosegarden
       ~Version();
 
       bool qstrtoversion(QString sVersion);
-      int Major();
-      int Minor();
-      int Micro();
-      bool operator<=(Version other);
+      int Major() const;
+      int Minor() const;
+      int Micro() const;
+      bool operator<=(Version other) const;
 
   };
 

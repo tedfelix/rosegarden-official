@@ -41,7 +41,7 @@ class BaseToolBox : public QObject
     Q_OBJECT
 
 public:
-    BaseToolBox(QWidget* parent);
+    explicit BaseToolBox(QWidget* parent);
 
     virtual BaseTool* getTool(QString toolName);
 

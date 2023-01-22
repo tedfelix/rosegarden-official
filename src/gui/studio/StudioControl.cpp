@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -130,15 +130,15 @@ StudioControl::getPluginInformation()
 #endif
 
 QString
-StudioControl::getPluginProgram(MappedObjectId id, int bank, int program)
+StudioControl::getPluginProgram(MappedObjectId pluginId, int bank, int program)
 {
-    return RosegardenSequencer::getInstance()->getPluginProgram(id, bank, program);
+    return RosegardenSequencer::getInstance()->getPluginProgram(pluginId, bank, program);
 }
 
 unsigned long
-StudioControl::getPluginProgram(MappedObjectId id, QString name)
+StudioControl::getPluginProgram(MappedObjectId pluginId, QString name)
 {
-    return RosegardenSequencer::getInstance()->getPluginProgram(id, name);
+    return RosegardenSequencer::getInstance()->getPluginProgram(pluginId, name);
 }
 
 void
@@ -168,15 +168,15 @@ StudioControl::sendMappedEvent(const MappedEvent &mE)
 }
 
 void
-StudioControl::sendMappedEventList(const MappedEventList &mC)
+StudioControl::sendMappedEventList(const MappedEventList &eventList)
 {
-    if (mC.size() == 0)
+    if (eventList.size() == 0)
         return ;
 
-    MappedEventList::const_iterator it = mC.begin();
+    MappedEventList::const_iterator it = eventList.begin();
 
-    for (; it != mC.end(); ++it) {
-        RosegardenSequencer::getInstance()->processMappedEvent(*it);
+    for (; it != eventList.end(); ++it) {
+        RosegardenSequencer::getInstance()->processMappedEvent(**it);
     }
 }
 
@@ -240,9 +240,10 @@ StudioControl::fillWithImmediateNote(
     // Insert the event.
     // Setting firstOutput to true indicates that we want a channel
     // setup.
+    ControllerAndPBList cList(instrument->getStaticControllers());
     m_channelManager.insertEvent(
             NoTrack,  // trackId
-            instrument->getStaticControllers(),
+            cList,
             RealTime::zeroTime,  // refTime
             mappedEvent,
             true,  // firstOutput
@@ -267,13 +268,14 @@ sendChannelSetup(Instrument *instrument, int channel)
     MappedEventInserter inserter(mappedEventList);
 
     // Insert BS, PC, CCs, and pitch bend.
+    ControllerAndPBList cList(instrument->getStaticControllers());
     ChannelManager::insertChannelSetup(
             -1,  // trackId
             instrument,
             channel,
             RealTime::zeroTime,  // insertTime
             true,  // sendBSPC
-            instrument->getStaticControllers(),
+            cList,
             inserter);
 
     // Send it out.

@@ -107,7 +107,7 @@ public:
     void setXOffset(int offset) { m_xOffset = offset; }
 
     float valueToY(long val);
-    long yToValue(float height);
+    long yToValue(float y);
 
     double getXScale() const { return m_xScale; }
     double getYScale() const { return m_yScale; }
@@ -206,7 +206,7 @@ protected:
 
     void updateSelection();
 
-    void setMenuName(QString menuName) { m_menuName = menuName; }
+    void setMenuName(const QString& menuName) { m_menuName = menuName; }
     void createMenu();
     void createRulerMenu();
 

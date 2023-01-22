@@ -33,7 +33,7 @@ namespace Rosegarden {
 class MEBIterator
 {
 public:
-    MEBIterator(QSharedPointer<MappedEventBuffer> mappedEventBuffer);
+    explicit MEBIterator(QSharedPointer<MappedEventBuffer> mappedEventBuffer);
 
     /// Go back to the beginning of the MappedEventBuffer
     void reset()  { m_index = 0; }
@@ -55,7 +55,7 @@ public:
      *
      * @see peek()
      */
-    MappedEvent operator*();
+    MappedEvent operator*() const;
 
     /// Dereference function
     /**
@@ -84,10 +84,10 @@ public:
      *
      * ??? Only one caller.  Inline?
      */
-    void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
+    void doInsert(MappedInserterBase &inserter, MappedEvent &event);
 
     /// Access to the MappedEventBuffer the MEBIterator is connected to.
-    QSharedPointer<MappedEventBuffer> getMappedEventBuffer()
+    QSharedPointer<MappedEventBuffer> getMappedEventBuffer() const
             { return m_mappedEventBuffer; }
 
     /**

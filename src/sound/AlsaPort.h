@@ -83,11 +83,11 @@ public:
     unsigned int               m_capability;
     PortDirection              m_direction; // or can deduce from capability
 
-    bool isReadable()  { return m_direction == ReadOnly ||
-                                m_direction == Duplex; }
+    bool isReadable() const { return m_direction == ReadOnly ||
+                                     m_direction == Duplex; }
 
-    bool isWriteable() { return m_direction == WriteOnly ||
-                                m_direction == Duplex; }
+    bool isWriteable() const { return m_direction == WriteOnly ||
+                                      m_direction == Duplex; }
 
 };
 
@@ -95,7 +95,7 @@ public:
 struct AlsaPortCmp
 {
     bool operator()(QSharedPointer<AlsaPortDescription> a1,
-                    QSharedPointer<AlsaPortDescription> a2);
+                    QSharedPointer<AlsaPortDescription> a2) const;
 };
 
 
@@ -104,4 +104,3 @@ struct AlsaPortCmp
 #endif // HAVE_ALSA
 
 #endif // RG_ALSAPORT_H
-
