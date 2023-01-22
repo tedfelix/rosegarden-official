@@ -196,7 +196,7 @@ JackCaptureClient::setupPorts(const char *portName,
 int
 JackCaptureClient::process(jack_nframes_t nframes, void *arg)
 {
-    JackCaptureClient *jcc = (JackCaptureClient*)arg;
+    JackCaptureClient *jcc = static_cast<JackCaptureClient*>(arg);
     if ( !jcc->m_processing ) {
         return 0;
     }
@@ -290,6 +290,7 @@ JackCaptureClient::getFrame(float *frame, size_t captureSize)
     if (captureSize <= availableSize)
     {
         size_t read = jack_ringbuffer_read(m_jackRingBuffer,
+                                           // cppcheck-suppress invalidPointerCast
                                            (char*)(frame),
                                            (sizeof(float)*captureSize) );
         (void) read; // stops warning about unused variable
@@ -310,4 +311,3 @@ JackCaptureClient::getFrame(float *frame, size_t captureSize)
 
 
 } // end namespace
-

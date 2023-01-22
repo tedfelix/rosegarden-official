@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -333,7 +333,7 @@ JackDriver::initialise(bool reinitialise)
 
     const char **ports = jack_get_ports(m_client, nullptr, nullptr,
             JackPortIsPhysical | JackPortIsInput);
-    
+
     if (connectDefaultOutputs) {
 
         std::string playback_1, playback_2;
@@ -1543,7 +1543,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
                              jack_position_t *position,
                              void *arg)
 {
-    JackDriver *inst = (JackDriver *)arg;
+    JackDriver *inst = static_cast<JackDriver *>(arg);
     if (!inst)
         return true; // or rather, return "huh?"
 
@@ -1994,7 +1994,7 @@ JackDriver::updateAudioData()
     if (!m_ok || !m_client)
         return ;
 
-#ifdef DEBUG_JACK_DRIVER 
+#ifdef DEBUG_JACK_DRIVER
     //RG_DEBUG << "updateAudioData() begin...";
 #endif
 
@@ -2076,9 +2076,9 @@ JackDriver::updateAudioData()
                 RG_WARNING << "updateAudioData(): WARNING: No such object as " << *connections.begin();
                 input = 1000;
             } else if (obj->getType() == MappedObject::AudioBuss) {
-                input = (int)((MappedAudioBuss *)obj)->getBussId();
+                input = (int)(static_cast<MappedAudioBuss *>(obj))->getBussId();
             } else if (obj->getType() == MappedObject::AudioInput) {
-                input = (int)((MappedAudioInput *)obj)->getInputNumber()
+                input = (int)(static_cast<MappedAudioInput *>(obj))->getInputNumber()
                         + 1000;
             } else {
                 RG_WARNING << "updateAudioData(): WARNING: Object " << *connections.begin() << " is not buss or input";
@@ -2128,7 +2128,6 @@ JackDriver::updateAudioData()
     m_maxInstrumentLatency = maxLatency;
     m_directMasterAudioInstruments = directMasterAudioInstruments;
     m_directMasterSynthInstruments = directMasterSynthInstruments;
-    m_maxInstrumentLatency = maxLatency;
 
     int inputs = m_alsaDriver->getMappedStudio()->
                  getObjectCount(MappedObject::AudioInput);
@@ -2161,7 +2160,7 @@ JackDriver::updateAudioData()
         }
     }
 
-#ifdef DEBUG_JACK_DRIVER 
+#ifdef DEBUG_JACK_DRIVER
     //RG_DEBUG << "updateAudioData() end";
 #endif
 }
@@ -2464,9 +2463,10 @@ JackDriver::closeRecordFile(InstrumentId id,
 {
     if (m_fileWriter) {
         return m_fileWriter->closeRecordFile(id, returnedId);
-        if (m_fileWriter->running() && !m_fileWriter->haveRecordFilesOpen()) {
-            m_fileWriter->terminate();
-        }
+        // unreachable
+        //if (m_fileWriter->running() && !m_fileWriter->haveRecordFilesOpen()) {
+        //  m_fileWriter->terminate();
+        //}
     } else
         return false;
 }

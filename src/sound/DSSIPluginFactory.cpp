@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -149,7 +149,7 @@ DSSIPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot
 
 RunnablePluginInstance *
 DSSIPluginFactory::instantiatePlugin(QString identifier,
-                                     int instrument,
+                                     int instrumentId,
                                      int position,
                                      unsigned int sampleRate,
                                      unsigned int blockSize,
@@ -161,7 +161,7 @@ DSSIPluginFactory::instantiatePlugin(QString identifier,
 
         DSSIPluginInstance *instance =
             new DSSIPluginInstance
-            (this, instrument, identifier, position, sampleRate, blockSize, channels,
+            (this, instrumentId, identifier, position, sampleRate, blockSize, channels,
              descriptor);
 
         m_instances.insert(instance);
@@ -273,6 +273,7 @@ DSSIPluginFactory::getLRDFPath(QString &baseUri)
     }
 
 #ifdef DSSI_BASE
+    // cppcheck-suppress ConfigurationNotChecked
     baseUri = DSSI_BASE;
 #else
 
@@ -379,4 +380,3 @@ DSSIPluginFactory::discoverPlugin(const QString &soName)
 
 
 }
-

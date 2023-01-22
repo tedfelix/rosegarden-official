@@ -48,10 +48,10 @@ public:
 
     // getting info
     bool getFrame( float *frame, size_t captureSize );
-    bool isConnected() {
+    bool isConnected() const {
         return m_isConnected;
     }
-    jack_nframes_t getSampleRate() {
+    jack_nframes_t getSampleRate() const {
         return m_jackSampleRate;
     }
 
