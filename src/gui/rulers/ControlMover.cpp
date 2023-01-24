@@ -145,10 +145,12 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
                     qSharedPointerDynamicCast<EventControlItem>(*it);
 
             float x = pIt->x()+deltaX;
-            // snap
-            timeT et = m_rulerScale->getTimeForX(x);
-            timeT etSnap = m_snapGrid->snapTime(et);
-            x =  m_rulerScale->getXForTime(etSnap);
+            // snap only if shift is not pressed
+            if (! (e->modifiers & Qt::ShiftModifier)) {
+                timeT et = m_rulerScale->getTimeForX(x);
+                timeT etSnap = m_snapGrid->snapTime(et);
+                x =  m_rulerScale->getXForTime(etSnap);
+            }
             float xmin = m_ruler->getXMin() * xscale;
             float xmax = (m_ruler->getXMax() - 1) * xscale;
             x = std::max(x,xmin);
