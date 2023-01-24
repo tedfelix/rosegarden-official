@@ -136,6 +136,8 @@ public:
     void flipForwards();
     void flipBackwards();
 
+    SnapGrid* getSnapGrid() const;
+
 signals:
     void mousePress();
     void mouseMove(FollowMode);

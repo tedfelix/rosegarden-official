@@ -50,7 +50,9 @@ ControlMover::ControlMover(ControlRuler *parent, const QString& menuName) :
     m_mouseStartY(0.0),
     m_lastDScreenX(0.0),
     m_lastDScreenY(0.0),
-    m_selectionRect(nullptr)
+    m_selectionRect(nullptr),
+    m_snapGrid(parent->getSnapGrid()),
+    m_rulerScale(parent->getRulerScale())
 {
 }
 
@@ -143,6 +145,10 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
                     qSharedPointerDynamicCast<EventControlItem>(*it);
 
             float x = pIt->x()+deltaX;
+            // snap
+            timeT et = m_rulerScale->getTimeForX(x);
+            timeT etSnap = m_snapGrid->snapTime(et);
+            x =  m_rulerScale->getXForTime(etSnap);
             float xmin = m_ruler->getXMin() * xscale;
             float xmax = (m_ruler->getXMax() - 1) * xscale;
             x = std::max(x,xmin);

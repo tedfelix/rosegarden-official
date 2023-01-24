@@ -120,6 +120,12 @@ ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
     createAction("snap_bar", SLOT(slotSnap()));
 
     m_snapGrid = new SnapGrid(m_rulerScale);
+    QSettings settings;
+    settings.beginGroup(ControlRulerConfigGroup);
+    QString snapString =
+        settings.value("Snap Grid Size", "snap_none").toString();
+    settings.endGroup();
+    setSnapTimeFromActionName(snapString);
 }
 
 ControlRuler::~ControlRuler()
@@ -506,11 +512,13 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
 
     painter.drawRect(0,0,width(),height());
 
-    double xstart = m_rulerScale->getXForTime(m_segment->getStartTime());
-    double xend = m_rulerScale->getXForTime(m_segment->getEndTime());
+    double xstartUnscaled =
+        m_rulerScale->getXForTime(m_segment->getStartTime());
+    double xendUnscaled =
+        m_rulerScale->getXForTime(m_segment->getEndTime());
 
-    xstart = mapXToWidget(xstart*m_xScale);
-    xend = mapXToWidget(xend*m_xScale);
+    double xstart = mapXToWidget(xstartUnscaled * m_xScale);
+    double xend = mapXToWidget(xendUnscaled * m_xScale);
 
     //RG_DEBUG << "paintEvent(): xstart=" << xstart;
 
@@ -522,6 +530,60 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
     painter.setPen(QColor(192, 192, 192));
     painter.drawLine(xstart, mapYToWidget(0.25f), xend, mapYToWidget(0.25f));
     painter.drawLine(xstart, mapYToWidget(0.75f), xend, mapYToWidget(0.75f));
+
+    // vertical lines from snap grid
+    timeT snaps = m_snapGrid->getSnapSetting();
+    if (snaps != SnapGrid::NoSnap) {
+        Composition *comp = m_rulerScale->getComposition();
+        double y0 = mapYToWidget(0.0f);
+        double y1 = mapYToWidget(1.0f);
+
+        timeT startt = m_segment->getStartTime();
+        timeT endt = m_segment->getEndMarkerTime();
+        int firstbar = comp->getBarNumber(startt);
+        int lastbar = comp->getBarNumber(endt);
+
+        for (int bar = firstbar; bar <= lastbar; ++bar) {
+            std::pair<timeT, timeT> range = comp->getBarRange(bar);
+
+            bool newTimeSig = false;
+            TimeSignature timeSig =
+                comp->getTimeSignatureInBar(bar, newTimeSig);
+
+            double x0 = m_rulerScale->getXForTime(range.first);
+            double x1 = m_rulerScale->getXForTime(range.second);
+            double width = x1 - x0;
+
+            double gridLines = double(timeSig.getBarDuration()) /
+                double(m_snapGrid->getSnapTime(x0));
+
+            double dx = width / gridLines;
+            double x = x0;
+
+            for (int index = 0; index < gridLines; ++index) {
+
+                if (x < xstartUnscaled) {
+                    x += dx;
+                    continue;
+                }
+
+                // Exit if we have passed the end of last segment end time.
+                if (x > xendUnscaled) {
+                    break;
+                }
+
+                if (index == 0) {
+                    // index 0 is the bar line
+                    painter.setPen(QColor(127, 127, 127));
+                } else {
+                    painter.setPen(QColor(192, 192, 192));
+                }
+                int xmap = mapXToWidget(x * m_xScale);
+                painter.drawLine(xmap, y0, xmap, y1);
+                x += dx;
+            }
+        }
+    }
 }
 
 void ControlRuler::slotScrollHorizSmallSteps(int /*step*/)
@@ -688,6 +750,7 @@ void ControlRuler::createRulerMenu()
     settings.beginGroup(ControlRulerConfigGroup);
     QString snapString =
         settings.value("Snap Grid Size", "snap_none").toString();
+    settings.endGroup();
     QAction* setAction = findAction(snapString);
     RG_DEBUG << "set checked" << snapString;
     setAction->setChecked(true);
@@ -731,6 +794,7 @@ void ControlRuler::slotSnap()
     QString oname = obj->objectName();
     RG_DEBUG << "slotSnap" << oname;
     setSnapTimeFromActionName(oname);
+    repaint();
 }
 
 void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
@@ -934,6 +998,11 @@ std::pair<int, int> ControlRuler::getZMinMax()
     std::sort(zList.begin(), zList.end());
 
     return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
+}
+
+SnapGrid* ControlRuler::getSnapGrid() const
+{
+    return m_snapGrid;
 }
 
 }

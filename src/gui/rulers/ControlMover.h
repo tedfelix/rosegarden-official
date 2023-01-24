@@ -30,6 +30,8 @@ namespace Rosegarden
 
 class Event;
 class ControlRuler;
+class SnapGrid;
+class RulerScale;
 
 class ControlMover : public ControlTool
 {
@@ -65,6 +67,8 @@ protected:
     QRectF *m_selectionRect;
     ControlItemList m_addedItems;
     std::vector <QPointF> m_startPointList;
+    SnapGrid* m_snapGrid;
+    RulerScale* m_rulerScale;
 };
 
 }
