@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenMainWindow]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenMainWindow.h"
 
@@ -2027,9 +2027,9 @@ RosegardenMainWindow::slotMerge()
     }
 
     QDir d = QFileInfo(file).dir();
-    */ 
+    */
 
-    // Assume same dir also for multiple file merge. Else use the first file's  
+    // Assume same dir also for multiple file merge. Else use the first file's
     QDir d = QFileInfo(fileList[0]).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_file", directory);
@@ -4058,7 +4058,7 @@ RosegardenMainWindow::slotMergeMIDI()
         return ;
     }
 
-    // Assume same dir also for multiple file merge. Else use the first file's  
+    // Assume same dir also for multiple file merge. Else use the first file's
     QDir d = QFileInfo(fileList[0]).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_midi", directory);
@@ -4342,7 +4342,7 @@ RosegardenMainWindow::slotMergeRG21()
         return ;
     }
 
-    // Assume same dir also for multiple file merge. Else use the first file's  
+    // Assume same dir also for multiple file merge. Else use the first file's
     QDir d = QFileInfo(fileList[0]).dir();
     directory = d.canonicalPath();
     settings.setValue("import_relic", directory);
@@ -4541,7 +4541,7 @@ RosegardenMainWindow::slotMergeMusicXML()
         return ;
     }
 
-    // Assume same dir also for multiple file merge. Else use the first file's  
+    // Assume same dir also for multiple file merge. Else use the first file's
     QDir d = QFileInfo(fileList[0]).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_musicxml", directory);
