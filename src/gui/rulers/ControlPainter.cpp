@@ -119,6 +119,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 FollowMode
 ControlPainter::handleMouseMove(const ControlMouseEvent *e)
 {
+    emit showContextHelp(tr("Click to set a value. Right click for grid options"));
     ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
 
     if (ruler) {

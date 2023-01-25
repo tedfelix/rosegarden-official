@@ -82,10 +82,10 @@ ControlRulerWidget::ControlRulerWidget() :
     m_tabBar->setShape(QTabBar::RoundedSouth);
 
     layout->addWidget(m_tabBar);
-    
+
     connect(m_tabBar, &QTabBar::currentChanged,
             this, &ControlRulerWidget::tabChanged);
-    
+
     connect(m_tabBar, &ControlRulerTabBar::tabCloseRequest,
             this, &ControlRulerWidget::slotRemoveRuler);
 }
@@ -449,6 +449,9 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
 
     connect(controlRuler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);
+
+    connect(controlRuler, &ControlRuler::showContextHelp,
+            this,  &ControlRulerWidget::showContextHelp);
 
     addRuler(controlRuler, QString::fromStdString(controlParameter.getName()));
 

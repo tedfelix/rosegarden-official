@@ -93,6 +93,7 @@ ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
     m_menuName(),
     m_menu(nullptr),
     m_rulerMenu(nullptr),
+    m_snapName(""),
     //m_hposUpdatePending(false),
     m_selectedEvents()
 {
@@ -746,15 +747,9 @@ void ControlRuler::createRulerMenu()
     if (!m_rulerMenu) {
         RG_DEBUG << "ControlRuler::createRulerMenu() failed\n";
     }
-    QSettings settings;
-    settings.beginGroup(ControlRulerConfigGroup);
-    QString snapString =
-        settings.value("Snap Grid Size", "snap_none").toString();
-    settings.endGroup();
-    QAction* setAction = findAction(snapString);
-    RG_DEBUG << "set checked" << snapString;
+    QAction* setAction = findAction(m_snapName);
+    RG_DEBUG << "set checked" << m_snapName;
     setAction->setChecked(true);
-    setSnapTimeFromActionName(snapString);
 }
 
 void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
@@ -799,6 +794,7 @@ void ControlRuler::slotSnap()
 
 void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
 {
+    QString snapName = actionName;
     int stime = SnapGrid::NoSnap;
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
     if (actionName == "snap_none") {
@@ -831,11 +827,15 @@ void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
         stime = SnapGrid::SnapToBeat;
     } else if (actionName == "snap_bar") {
         stime = SnapGrid::SnapToBar;
+    } else {
+        // unknown action name - use snap_none
+        snapName = "snap_none";
     }
     m_snapGrid->setSnapTime(stime);
+    m_snapName = snapName;
     QSettings settings;
     settings.beginGroup(ControlRulerConfigGroup);
-    settings.setValue("Snap Grid Size", actionName);
+    settings.setValue("Snap Grid Size", snapName);
     settings.endGroup();
 }
 

@@ -98,6 +98,8 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
 FollowMode
 ControlMover::handleMouseMove(const ControlMouseEvent *e)
 {
+    emit showContextHelp(tr("Click and drag a value. Shift suppresses grid snap."));
+
     if (e->buttons == Qt::NoButton) {
         // No button pressed, set cursor style
         setCursor(e);

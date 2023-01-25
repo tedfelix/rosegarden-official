@@ -77,6 +77,7 @@ ControlEraser::handleLeftButtonPress(const ControlMouseEvent *e)
 FollowMode
 ControlEraser::handleMouseMove(const ControlMouseEvent *e)
 {
+    emit showContextHelp(tr("Click on a value to delete it"));
     if (e->buttons == Qt::NoButton) {
         // No button pressed, set cursor style
         setCursor(e);
@@ -91,7 +92,7 @@ ControlEraser::handleMouseMove(const ControlMouseEvent *e)
 //            (*it)->setValue((*it)->getValue()+delta);
 //        }
     }
-    
+
     return NO_FOLLOW;
 }
 
@@ -164,4 +165,3 @@ void ControlEraser::stow()
 QString ControlEraser::ToolName() { return "eraser"; }
 
 }
-

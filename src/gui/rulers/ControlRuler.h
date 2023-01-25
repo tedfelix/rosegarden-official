@@ -273,6 +273,7 @@ protected:
 
     QMenu* m_rulerMenu;
     SnapGrid* m_snapGrid;
+    QString m_snapName;
 
     //bool m_hposUpdatePending;
 
