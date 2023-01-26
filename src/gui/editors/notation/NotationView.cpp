@@ -5045,9 +5045,13 @@ NotationView::slotTransformsCollapseNotes()
         return ;
     TmpStatusMsg msg(tr("Collapsing notes..."), this);
 
-    // in notation editor split notes at bars
+    // in notation editor split notes at bars and correct beaming if configured
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
+    bool autoBeam = settings.value("autobeam", true).toBool();
+    settings.endGroup();
     CommandHistory::getInstance()->
-        addCommand(new CollapseNotesCommand(*selection, true));
+        addCommand(new CollapseNotesCommand(*selection, true, autoBeam));
 }
 
 void NotationView::extendSelectionHelper(bool forward, EventSelection *es, const std::vector<Event *> &eventVec, bool select)
