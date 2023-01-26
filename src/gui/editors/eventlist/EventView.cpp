@@ -268,11 +268,16 @@ EventView::EventView(RosegardenDocument *doc,
     sl << tr("Type (Data1)  ");
     sl << tr("Type (Data1)  ");
     sl << tr("Value (Data2)  ");
+    m_eventList->setHeaderLabels(sl);
 
-    m_eventList->setHeaderLabels ( sl );
-
-//    for (int col = 0; col < m_eventList->columns(); ++col)
-//        m_eventList->setRenameable(col, true); //&&& use item->setFlags( Qt::ItemIsSelectable |
+    // Make sure time columns have the right amount of space.
+    // ??? We should use the font size of "000-00-00-00" as the default size.
+    //     Then we should save and restore the column widths.  See
+    //     ShortcutDialog's ctor.
+    constexpr int timeWidth = 110;
+    // Plus a little for the tree diagram in the first column.
+    m_eventList->setColumnWidth(0, timeWidth + 23);
+    m_eventList->setColumnWidth(1, timeWidth);
 
     readOptions();
     setButtonsToFilter();
@@ -391,9 +396,11 @@ EventView::applyLayout()
 
     settings.endGroup();
 
+    // For each Segment...
     for (unsigned int i = 0; i < m_segments.size(); i++) {
         SegmentPerformanceHelper helper(*m_segments[i]);
 
+        // For each Event in the Segment...
         for (Segment::iterator it = m_segments[i]->begin();
                 m_segments[i]->isBeforeEndMarker(it); ++it) {
             timeT eventTime =
@@ -615,6 +622,7 @@ EventView::applyLayout()
     }
 
 
+    // No Events?
     if ( m_eventList->topLevelItemCount() == 0 ) {
         if (m_segments.size())
             new QTreeWidgetItem(m_eventList,
@@ -624,7 +632,7 @@ EventView::applyLayout()
 
         m_eventList->setSelectionMode(QTreeWidget::NoSelection);
         leaveActionState("have_selection");
-    } else {
+    } else {  // We have Events.
 
         m_eventList->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
