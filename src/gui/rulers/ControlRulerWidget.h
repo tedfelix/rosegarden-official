@@ -108,6 +108,8 @@ public:
     /// Returns Velocity ruler if currently shown else return 0
     PropertyControlRuler *getActivePropertyRuler();
 
+    void setSnapFromEditor(timeT snapSetting);
+
 public slots:
 
     /// Connected to ControlRulerTabBar::tabCloseRequest().
@@ -198,6 +200,9 @@ private:
 
     /// Selection for the property (velocity) ruler only.
     std::vector<ViewElement *> m_selectedElements;
+
+    /// the snap setting from the editor
+    timeT m_editorSnap;
 
 private slots:
     void tabChanged(int index);

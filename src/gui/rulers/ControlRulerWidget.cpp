@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlRulerWidget]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ControlRulerWidget.h"
 
@@ -41,6 +42,7 @@
 #include "base/SoftSynthDevice.h"
 #include "base/Studio.h"
 #include "base/Track.h"
+#include "base/SnapGrid.h"
 
 #include "misc/Debug.h"
 
@@ -59,7 +61,8 @@ ControlRulerWidget::ControlRulerWidget() :
     m_leftMargin(0),
     m_currentToolName(),
     m_pannedRect(),
-    m_selectedElements()
+    m_selectedElements(),
+    m_editorSnap(SnapGrid::NoSnap)
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
@@ -424,7 +427,6 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
              m_segmentRulerSets) {
         segmentRulerSet->insert(segmentRuler);
     }
-
 }
 
 void
@@ -460,6 +462,9 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     //     Preferably in the ctor call.  PropertyControlRuler appears to do
     //     this successfully.  See if we can follow its example.
     controlRuler->setViewSegment(m_viewSegment);
+
+    // and tell the ruler about the editor snap setting
+    controlRuler->setSnapFromEditor(m_editorSnap);
 }
 
 void
@@ -639,6 +644,16 @@ ControlRulerWidget::getActivePropertyRuler()
 {
     return dynamic_cast <PropertyControlRuler *>(
             m_stackedWidget->currentWidget());
+}
+
+void ControlRulerWidget::setSnapFromEditor(timeT snapSetting)
+{
+    RG_DEBUG << "set snap to" << snapSetting;
+    m_editorSnap = snapSetting;
+    // update rulers
+    for (auto ruler : m_controlRulerList) {
+        ruler->setSnapFromEditor(snapSetting);
+    }
 }
 
 bool

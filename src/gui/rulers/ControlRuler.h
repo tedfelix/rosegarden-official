@@ -138,6 +138,8 @@ public:
 
     SnapGrid* getSnapGrid() const;
 
+    void setSnapFromEditor(timeT snapSetting);
+
 signals:
     void mousePress();
     void mouseMove(FollowMode);
@@ -274,6 +276,7 @@ protected:
     QMenu* m_rulerMenu;
     SnapGrid* m_snapGrid;
     QString m_snapName;
+    timeT m_snapTimeFromEditor;
 
     //bool m_hposUpdatePending;
 

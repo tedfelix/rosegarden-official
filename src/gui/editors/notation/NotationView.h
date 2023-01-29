@@ -547,6 +547,8 @@ private:
 
     timeT m_oldPointerPosition;
     timeT m_cursorPosition;
+
+    timeT m_currentNoteDuration;
 };
 
 }

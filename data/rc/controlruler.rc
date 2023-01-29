@@ -4,6 +4,7 @@
 
 <Menu name="control_ruler_menu">
   <Action name="snap_none" text="&amp;No Snap" checked="false" group="ruler_snap" />
+  <Action name="snap_editor" text="From &amp;Editor" checked="false" group="ruler_snap" />
   <Action name="snap_unit" text="&amp;Unit" checked="false" group="ruler_snap" />
   <Action name="snap_64" text="&amp;Snap to 1/64" checked="false" group="ruler_snap" />
   <Action name="snap_48" text="Snap to &amp;1/48" checked="false" group="ruler_snap" />

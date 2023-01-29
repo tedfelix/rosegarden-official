@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlRuler]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "ControlRuler.h"
 
@@ -94,6 +94,7 @@ ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
     m_menu(nullptr),
     m_rulerMenu(nullptr),
     m_snapName(""),
+    m_snapTimeFromEditor(SnapGrid::NoSnap),
     //m_hposUpdatePending(false),
     m_selectedEvents()
 {
@@ -105,6 +106,7 @@ ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
             this, &ControlRuler::showContextHelp);
 
     createAction("snap_none", SLOT(slotSnap()));
+    createAction("snap_editor", SLOT(slotSnap()));
     createAction("snap_unit", SLOT(slotSnap()));
     createAction("snap_64", SLOT(slotSnap()));
     createAction("snap_48", SLOT(slotSnap()));
@@ -694,17 +696,20 @@ ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
     controlMouseEvent.x = mousePos.x();
     controlMouseEvent.y = mousePos.y();
 
-    int mtime = m_rulerScale->getTimeForX(controlMouseEvent.x);
+    int mtime = m_rulerScale->getTimeForX(controlMouseEvent.x / m_xScale);
 
     int leftTime = m_snapGrid->snapTime(mtime, SnapGrid::SnapLeft);
-    controlMouseEvent.snappedXLeft = m_rulerScale->getXForTime(leftTime);
+    controlMouseEvent.snappedXLeft =
+        m_rulerScale->getXForTime(leftTime) * m_xScale;
     int rightTime = m_snapGrid->snapTime(mtime, SnapGrid::SnapRight);
-    controlMouseEvent.snappedXRight = m_rulerScale->getXForTime(rightTime);
+    controlMouseEvent.snappedXRight =
+        m_rulerScale->getXForTime(rightTime) * m_xScale;
 
     RG_DEBUG << "createControlMouseEvent snap" <<
         controlMouseEvent.x << mtime <<
         controlMouseEvent.snappedXLeft << leftTime <<
-        controlMouseEvent.snappedXRight << rightTime;
+        controlMouseEvent.snappedXRight << rightTime <<
+        m_xScale;
 
     for (ControlItemList::iterator it = m_visibleItems.begin();
             it != m_visibleItems.end(); ++it) {
@@ -799,6 +804,8 @@ void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
     if (actionName == "snap_none") {
         stime = SnapGrid::NoSnap;
+    } else if (actionName == "snap_editor") {
+        stime = m_snapTimeFromEditor;
     } else if (actionName == "snap_unit") {
         stime = SnapGrid::SnapToUnit;
     } else if (actionName == "snap_64") {
@@ -831,6 +838,7 @@ void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
         // unknown action name - use snap_none
         snapName = "snap_none";
     }
+    RG_DEBUG << "setSnapTimeFromActionName" << snapName << stime;
     m_snapGrid->setSnapTime(stime);
     m_snapName = snapName;
     QSettings settings;
@@ -1003,6 +1011,16 @@ std::pair<int, int> ControlRuler::getZMinMax()
 SnapGrid* ControlRuler::getSnapGrid() const
 {
     return m_snapGrid;
+}
+
+void ControlRuler::setSnapFromEditor(timeT snapSetting)
+{
+    RG_DEBUG << "setSnapFromEditor" << m_snapName << snapSetting;
+    m_snapTimeFromEditor = snapSetting;
+    if (m_snapName == "snap_editor") {
+        m_snapGrid->setSnapTime(snapSetting);
+        repaint();
+    }
 }
 
 }
