@@ -36,12 +36,15 @@ class CollapseNotesCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CollapseNotesCommand)
 
 public:
-    CollapseNotesCommand(EventSelection &selection, bool makeViable) :
+    CollapseNotesCommand(EventSelection &selection,
+                         bool makeViable,
+                         bool autoBeam) :
         BasicCommand(tr("Collapse &Equal-Pitch Notes"),
                      selection,
                      true),  // bruteForceRedo
         m_selection(&selection),
-        m_makeViable(makeViable)
+        m_makeViable(makeViable),
+        m_autoBeam(autoBeam)
     { }
 
 protected:
@@ -50,6 +53,7 @@ protected:
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_makeViable;
+    bool m_autoBeam;
 };
 
 

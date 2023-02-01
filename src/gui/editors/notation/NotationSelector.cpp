@@ -606,7 +606,6 @@ void NotationSelector::drag(int x, int y, bool final)
                         m_clickedElement = nullptr;
                     }
 
-                    m_selectionRect->setPos(x, y);
                 }
             }
         } else {
