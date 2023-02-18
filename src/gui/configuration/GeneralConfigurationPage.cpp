@@ -597,7 +597,9 @@ void GeneralConfigurationPage::apply()
 
     const bool thornChanged =
             (Preferences::getThorn() != m_Thorn->isChecked());
-    Preferences::setThorn(m_Thorn->isChecked());
+    Preferences::setTheme(
+            m_Thorn->isChecked() ?
+                    Preferences::DarkTheme : Preferences::NativeTheme);
     settings.setValue("notenamestyle", m_nameStyle->currentIndex());
     const bool mainTextureChanged =
             (settings.value("backgroundtextures", true).toBool() !=

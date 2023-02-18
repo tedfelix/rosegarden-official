@@ -42,7 +42,12 @@ namespace Rosegarden
  */
 namespace Preferences
 {
-    ROSEGARDENPRIVATE_EXPORT void setThorn(bool value);
+    // Theme
+    constexpr int NativeTheme = 0;  // Thorn off.
+    constexpr int ClassicTheme = 1;  // Thorn on.
+    constexpr int DarkTheme = 2;  // Thorn on.
+    ROSEGARDENPRIVATE_EXPORT void setTheme(int value);
+    ROSEGARDENPRIVATE_EXPORT int getTheme();
     ROSEGARDENPRIVATE_EXPORT bool getThorn();
 
     void setSendProgramChangesWhenLooping(bool value);

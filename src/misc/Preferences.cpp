@@ -26,17 +26,21 @@ namespace Rosegarden
 {
 
 
-PreferenceBool thorn(
-        GeneralOptionsConfigGroup, "use_thorn_style", true);
+PreferenceInt theme(GeneralOptionsConfigGroup, "theme", Preferences::DarkTheme);
 
-void Preferences::setThorn(bool value)
+void Preferences::setTheme(int value)
 {
-    thorn.set(value);
+    theme.set(value);
+}
+
+int Preferences::getTheme()
+{
+    return theme.get();
 }
 
 bool Preferences::getThorn()
 {
-    return thorn.get();
+    return (theme.get() != Preferences::NativeTheme);
 }
 
 PreferenceBool sendProgramChangesWhenLooping(
