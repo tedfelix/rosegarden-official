@@ -18,19 +18,13 @@
 #include "ConfigGroups.h"
 #include "PreferenceBool.h"
 #include "PreferenceInt.h"
+#include "PreferenceString.h"
 
 #include <QSettings>
 
 namespace Rosegarden
 {
 
-
-namespace
-{
-    // Cached values for performance...
-
-    QString afldCustomLocation;
-}
 
 PreferenceBool thorn(
         GeneralOptionsConfigGroup, "use_thorn_style", true);
@@ -150,30 +144,17 @@ int Preferences::getDefaultAudioLocation()
     return afldLocation.get();
 }
 
-void Preferences::setCustomAudioLocation(QString location)
+PreferenceString afldCustomLocation(
+        AudioFileLocationDialogGroup, "customLocation", "./sounds");
+
+void Preferences::setCustomAudioLocation(const QString &location)
 {
-    QSettings settings;
-    settings.beginGroup(AudioFileLocationDialogGroup);
-    settings.setValue("customLocation", location);
-    afldCustomLocation = location;
+    afldCustomLocation.set(location);
 }
 
 QString Preferences::getCustomAudioLocation()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(AudioFileLocationDialogGroup);
-        afldCustomLocation =
-                settings.value("customLocation", "./sounds").toString();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("customLocation", afldCustomLocation);
-    }
-
-    return afldCustomLocation;
+    return afldCustomLocation.get();
 }
 
 PreferenceBool jackLoadCheck(

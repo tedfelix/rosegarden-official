@@ -74,7 +74,7 @@ namespace Preferences
     void setDefaultAudioLocation(int location);
     int getDefaultAudioLocation();
 
-    void setCustomAudioLocation(QString location);
+    void setCustomAudioLocation(const QString &location);
     QString getCustomAudioLocation();
 
     void setJACKLoadCheck(bool value);
