@@ -17,6 +17,7 @@
 
 #include "ConfigGroups.h"
 #include "PreferenceBool.h"
+#include "PreferenceInt.h"
 
 #include <QSettings>
 
@@ -28,7 +29,6 @@ namespace
 {
     // Cached values for performance...
 
-    int afldLocation = 0;
     QString afldCustomLocation;
 }
 
@@ -138,29 +138,16 @@ bool Preferences::getAudioFileLocationDlgDontShow()
     return afldDontShow.get();
 }
 
+PreferenceInt afldLocation(AudioFileLocationDialogGroup, "location", 0);
+
 void Preferences::setDefaultAudioLocation(int location)
 {
-    QSettings settings;
-    settings.beginGroup(AudioFileLocationDialogGroup);
-    settings.setValue("location", location);
-    afldLocation = location;
+    afldLocation.set(location);
 }
 
 int Preferences::getDefaultAudioLocation()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(AudioFileLocationDialogGroup);
-        afldLocation = settings.value("location", "0").toInt();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("location", afldLocation);
-    }
-
-    return afldLocation;
+    return afldLocation.get();
 }
 
 void Preferences::setCustomAudioLocation(QString location)

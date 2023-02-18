@@ -22,7 +22,7 @@ namespace Rosegarden
 {
 
 
-/// Boolean Preference
+/// Integer Preference
 /**
  * Fulfills the following requirements:
  *
@@ -39,17 +39,17 @@ namespace Rosegarden
  * Was thinking about doing a template, but there are finicky little
  * differences between the types (QVariant conversions).
  */
-class PreferenceBool
+class PreferenceInt
 {
 public:
-    PreferenceBool(QString group, QString key, bool defaultValue) :
+    PreferenceInt(QString group, QString key, int defaultValue) :
         m_group(group),
         m_key(key),
         m_defaultValue(defaultValue)
     {
     }
 
-    void set(bool value)
+    void set(int value)
     {
         QSettings settings;
         settings.beginGroup(m_group);
@@ -57,15 +57,14 @@ public:
         m_cache = value;
     }
 
-    bool get() const
+    int get() const
     {
         if (!m_cacheValid) {
             m_cacheValid = true;
 
             QSettings settings;
             settings.beginGroup(m_group);
-            m_cache = settings.value(
-                    m_key, m_defaultValue ? "true" : "false").toBool();
+            m_cache = settings.value(m_key, m_defaultValue).toInt();
             // Write it back out so we can find it if it wasn't there.
             settings.setValue(m_key, m_cache);
         }
@@ -77,10 +76,10 @@ private:
     QString m_group;
     QString m_key;
 
-    bool m_defaultValue;
+    int m_defaultValue;
 
     mutable bool m_cacheValid = false;
-    mutable bool m_cache{};
+    mutable int m_cache{};
 };
 
 
