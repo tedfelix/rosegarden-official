@@ -346,17 +346,18 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     row = 0;
 
     // Dark mode (Thorn style)
-    label = new QLabel(tr("Dark mode (Thorn style)"), frame);
-    tipText = tr("<qt>When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.</qt>");
-    label->setToolTip(tipText);
+    label = new QLabel(tr("Theme"), frame);
     layout->addWidget(label, row, 0);
 
-    m_Thorn = new QCheckBox;
-    m_Thorn->setToolTip(tipText);
-    m_Thorn->setChecked(Preferences::getThorn());
-    connect(m_Thorn, &QCheckBox::stateChanged,
+    m_theme = new QComboBox(frame);
+    m_theme->addItem(tr("Native (Light)"));
+    m_theme->addItem(tr("Classic (Medium)"));
+    m_theme->addItem(tr("Dark"));
+    m_theme->setCurrentIndex(Preferences::getTheme());
+    connect(m_theme, static_cast<void(QComboBox::*)(int)>(
+                &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
-    layout->addWidget(m_Thorn, row, 1, 1, 3);
+    layout->addWidget(m_theme, row, 1, 1, 3);
 
     ++row;
 
@@ -370,8 +371,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_nameStyle->setCurrentIndex(
             settings.value("notenamestyle", Local).toUInt());
     connect(m_nameStyle, static_cast<void(QComboBox::*)(int)>(
-            &QComboBox::activated),
-        this, &GeneralConfigurationPage::slotModified);
+                &QComboBox::activated),
+            this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_nameStyle, row, 1, 1, 3);
 
     ++row;
@@ -595,11 +596,9 @@ void GeneralConfigurationPage::apply()
 
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    const bool thornChanged =
-            (Preferences::getThorn() != m_Thorn->isChecked());
-    Preferences::setTheme(
-            m_Thorn->isChecked() ?
-                    Preferences::DarkTheme : Preferences::NativeTheme);
+    const bool themeChanged =
+            (Preferences::getTheme() != m_theme->currentIndex());
+    Preferences::setTheme(m_theme->currentIndex());
     settings.setValue("notenamestyle", m_nameStyle->currentIndex());
     const bool mainTextureChanged =
             (settings.value("backgroundtextures", true).toBool() !=
@@ -638,7 +637,7 @@ void GeneralConfigurationPage::apply()
                 tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
     }
 
-    if (thornChanged) {
+    if (themeChanged) {
         QMessageBox::information(this, tr("Rosegarden"),
                 tr("You must restart Rosegarden for the presentation change to take effect."));
     }
