@@ -32,12 +32,15 @@ using std::endl;
 namespace Rosegarden
 {
 
+
 using namespace BaseProperties;
+
 
 const std::string Quantizer::RawEventData = "";
 const std::string Quantizer::DefaultTarget = "DefaultQ";
 const std::string Quantizer::GlobalSource = "GlobalQ";
 const std::string Quantizer::NotationPrefix = "Notation";
+
 
 BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
                                int swing, int iterate) :
@@ -60,21 +63,6 @@ BasicQuantizer::BasicQuantizer(std::string source, std::string target,
     m_iterate(iterate)
 {
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
-}
-
-BasicQuantizer::BasicQuantizer(const BasicQuantizer &q) :
-    Quantizer(q.m_target),
-    m_unit(q.m_unit),
-    m_durations(q.m_durations),
-    m_swing(q.m_swing),
-    m_iterate(q.m_iterate)
-{
-    // nothing else
-}
-
-BasicQuantizer::~BasicQuantizer()
-{
-    // nothing
 }
 
 void
@@ -161,97 +149,37 @@ BasicQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
 std::vector<timeT>
 BasicQuantizer::getStandardQuantizations()
 {
-    checkStandardQuantizations();
-    return m_standardQuantizations;
-}
+    static std::vector<timeT> standardQuantizations;
 
-void
-BasicQuantizer::checkStandardQuantizations()
-{
-    if (!m_standardQuantizations.empty())
-        return;
+    // If cache is empty, fill it.
+    if (standardQuantizations.empty())
+    {
+        // For each note type from semibreve to hemidemisemiquaver
+        for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
 
-    // For each note type from semibreve to hemidemisemiquaver
-    for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
+            // For quavers and smaller, offer the triplet variation
+            int i1 = (nt <= Note::Quaver ? 1 : 0);
 
-        // For quavers and smaller, offer the triplet variation
-        int i1 = (nt <= Note::Quaver ? 1 : 0);
+            // For the base note (0) and the triplet variation (1)
+            for (int i = 0; i <= i1; ++i) {
 
-        // For the base note (0) and the triplet variation (1)
-        for (int i = 0; i <= i1; ++i) {
+                // Compute divisor, e.g. crotchet is 4, quaver is 8...
+                int divisor = (1 << (Note::Semibreve - nt));
 
-            // Compute divisor, e.g. crotchet is 4, quaver is 8...
-            int divisor = (1 << (Note::Semibreve - nt));
+                // If we're doing the triplet variation, adjust the divisor
+                if (i)
+                    divisor = divisor * 3 / 2;
 
-            // If we're doing the triplet variation, adjust the divisor
-            if (i)
-                divisor = divisor * 3 / 2;
+                // Compute the number of MIDI clocks.
+                timeT unit = Note(Note::Semibreve).getDuration() / divisor;
 
-            // Compute the number of MIDI clocks.
-            timeT unit = Note(Note::Semibreve).getDuration() / divisor;
-
-            m_standardQuantizations.push_back(unit);
-        }
-    }
-}    
-
-timeT
-BasicQuantizer::getStandardQuantization(Segment *s)
-{
-    checkStandardQuantizations();
-    timeT unit = -1;
-
-    for (Segment::iterator i = s->begin(); s->isBeforeEndMarker(i); ++i) {
-
-        if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
-        timeT myUnit = getUnitFor(*i);
-        if (unit < 0 || myUnit < unit) unit = myUnit;
-    }
-
-    return unit;
-}
-
-timeT
-BasicQuantizer::getStandardQuantization(EventSelection *s)
-{
-    checkStandardQuantizations();
-    timeT unit = -1;
-
-    if (!s) return 0;
-
-    for (EventContainer::iterator i =
-             s->getSegmentEvents().begin();
-         i != s->getSegmentEvents().end(); ++i) {
-
-        if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
-        timeT myUnit = getUnitFor(*i);
-        if (unit < 0 || myUnit < unit) unit = myUnit;
-    }
-
-    return unit;
-}
-
-timeT
-BasicQuantizer::getUnitFor(Event *e)
-{
-    timeT absTime = e->getAbsoluteTime();
-    timeT myQuantizeUnit = 0;
-    
-    // m_quantizations is in descending order of duration;
-    // stop when we reach one that divides into the note's time
-    
-    for (size_t i = 0; i < m_standardQuantizations.size(); ++i) {
-        if (absTime % m_standardQuantizations[i] == 0) {
-            myQuantizeUnit = m_standardQuantizations[i];
-            break;
+                standardQuantizations.push_back(unit);
+            }
         }
     }
 
-    return myQuantizeUnit;
+    return standardQuantizations;
 }
-
-std::vector<timeT>
-BasicQuantizer::m_standardQuantizations;
 
 
 }

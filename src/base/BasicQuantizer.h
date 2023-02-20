@@ -31,58 +31,35 @@ public:
     BasicQuantizer(std::string source, std::string target,
                    timeT unit = -1, bool doDurations = false,
                    int swingPercent = 0, int iteratePercent = 100);
-    BasicQuantizer(const BasicQuantizer &);
-    ~BasicQuantizer() override;
+    ~BasicQuantizer() override  { }
 
     void setUnit(timeT unit) { m_unit = unit; }
     timeT getUnit() const { return m_unit; }
 
-    void setDoDurations(bool doDurations) { m_durations = doDurations; }
     bool getDoDurations() const { return m_durations; }
 
-    void setSwing(int percent) { m_swing = percent; }
-    int getSwing() const { return m_swing; }
-
-    void setIterative(int percent) { m_iterate = percent; }
-    int getIterative() const { return m_iterate; }
-    
     /**
      * Return the standard quantization units in descending order of
      * unit duration
      */
     static std::vector<timeT> getStandardQuantizations();
 
-    /**
-     * Study the given segment; if all the events in it have times
-     * that match one or more of the standard quantizations, return
-     * the longest standard quantization unit to match.  Otherwise
-     * return 0.
-     */
-    static timeT getStandardQuantization(Segment *);
-
-    /**
-     * Study the given selection; if all the events in it have times
-     * that match one or more of the standard quantizations, return
-     * the longest standard quantization unit to match.  Otherwise
-     * return 0.
-     */
-    static timeT getStandardQuantization(EventSelection *);
-
 protected:
+    /// Quantize a single Event.
     void quantizeSingle(Segment *,
-                                Segment::iterator) const override;
+                        Segment::iterator) const override;
 
 private:
-    BasicQuantizer &operator=(const BasicQuantizer &); // not provided
+    // Hide copy ctor and op=
+    // ??? Actually these are perfectly copyable.  There is no need to do this.
+    BasicQuantizer(const BasicQuantizer &);
+    BasicQuantizer &operator=(const BasicQuantizer &);
 
     timeT m_unit;
     bool m_durations;
     int m_swing;
     int m_iterate;
 
-    static std::vector<timeT> m_standardQuantizations;
-    static void checkStandardQuantizations();
-    static timeT getUnitFor(Event *);
 };
 
 }

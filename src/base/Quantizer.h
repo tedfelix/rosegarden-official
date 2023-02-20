@@ -175,6 +175,7 @@ protected:
      */
     explicit Quantizer(const std::string& target);
 
+    /// Quantize a single Event.
     /**
      * To implement a subclass of Quantizer, you should
      * override either quantizeSingle (if your quantizer is simple
@@ -236,11 +237,11 @@ protected:
 
     void insertNewEvents(Segment *) const;
 
-private: // not provided
+private:
+    // Hide copy ctor and op=
+    // ??? Actually these are perfectly copyable.  There is no need to do this.
     Quantizer(const Quantizer &);
     Quantizer &operator=(const Quantizer &);
-    bool operator==(const Quantizer &) const;
-    bool operator!=(const Quantizer & c) const;
 };
 
 
