@@ -458,7 +458,7 @@ int main(int argc, char *argv[])
     // _off_ in settings as though the user had un-checked it on the config
     // page, or else mayhem and chaos will reign (supreme?).
     if (Preferences::getThorn()  &&  styleSpecified)
-        Preferences::setThorn(false);
+        Preferences::setTheme(Preferences::NativeTheme);
 
     ThornStyle::setEnabled(Preferences::getThorn());
 
