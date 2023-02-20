@@ -126,7 +126,7 @@ ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
     QSettings settings;
     settings.beginGroup(ControlRulerConfigGroup);
     QString snapString =
-        settings.value("Snap Grid Size", "snap_none").toString();
+        settings.value("Snap Grid Size", "snap_editor").toString();
     settings.endGroup();
     setSnapTimeFromActionName(snapString);
 }

@@ -74,7 +74,11 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
             double xscale = m_ruler->getXScale();
             float xmin = m_ruler->getXMin() * xscale;
             float xmax = (m_ruler->getXMax() - 1) * xscale;
+            // get the closest of snappedXLeft and snappedXRight
             float x = e->snappedXLeft;
+            if ((e->x - e->snappedXLeft) > (e->snappedXRight - e->x)) {
+                x = e->snappedXRight;
+            }
 
             if (x < xmin) {
                 x = xmin;
@@ -93,7 +97,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
                 if (m_controlLineOrigin.first != -1 && m_controlLineOrigin.second != -1) {
                     ruler->addControlLine(m_controlLineOrigin.first / xscale,
                                           m_controlLineOrigin.second,
-                                          e->snappedXRight / xscale,
+                                          x / xscale,
                                           e->y,
                                           eraseExistingControllers);
                 }
@@ -125,10 +129,17 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
     if (ruler) {
         if (e->modifiers & Qt::ShiftModifier) {
 
+            // snap line
+            // get the closest of snappedXLeft and snappedXRight
+            float x = e->snappedXLeft;
+            if ((e->x - e->snappedXLeft) > (e->snappedXRight - e->x)) {
+                x = e->snappedXRight;
+            }
+
             if (m_controlLineOrigin.first != -1 && m_controlLineOrigin.second != -1) {
                 ruler->drawRubberBand(m_controlLineOrigin.first,
                                       m_controlLineOrigin.second,
-                                      e->x,
+                                      x,
                                       e->y);
             }
         } else {
