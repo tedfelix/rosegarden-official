@@ -55,9 +55,13 @@ private:
     BasicQuantizer(const BasicQuantizer &);
     BasicQuantizer &operator=(const BasicQuantizer &);
 
+    // Quantization unit (e.g. 1/8 notes).
     timeT m_unit;
+    // Also quantize durations.
     bool m_durations;
+    // Swing percentage.
     int m_swing;
+    // Iterative (partial) quantization percentage.
     int m_iterate;
 
 };
