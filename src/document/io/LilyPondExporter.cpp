@@ -29,6 +29,7 @@
 
 #define RG_MODULE_STRING "[LilyPondExporter]"
 #define RG_NO_DEBUG_PRINT 1
+#define OLD_LYRICS_MODE 1
 
 #include "LilyPondExporter.h"
 #include "LilyPondSegmentsContext.h"
@@ -1299,9 +1300,6 @@ LilyPondExporter::write()
     }
 
 
-    // open \score section
-    str << "\\score {" << std::endl;
-
     int lastTrackIndex = -1;
     int voiceCounter = 0;
     bool firstTrack = true;
@@ -1310,6 +1308,27 @@ LilyPondExporter::write()
     int bracket = 0;
     int prevBracket = -1;
     bool hasInstrumentNames = false;
+    
+    
+    // open \score section
+    str << "\\score {" << std::endl;
+    str << indent(++col) << "<< % common" << std::endl;
+    
+    
+    // Make chords offset colliding notes by default (only write for
+    // first track)
+    str << indent(++col) << "% Force offset of colliding notes in chords:"
+        << std::endl;
+    str << indent(col)   << "\\override Score.NoteColumn #\'force-hshift = #1.0"
+        << std::endl;
+    if (m_fingeringsInStaff) {
+        str << indent(col) << "% Allow fingerings inside the staff (configured from export options):"
+            << std::endl;
+        str << indent(col)   << "\\override Score.Fingering #\'staff-padding = #\'()"
+            << std::endl;
+    }    
+
+
 
     // Write out all segments for each Track, in track order.
     // This involves a hell of a lot of loops through all tracks
@@ -1317,102 +1336,202 @@ LilyPondExporter::write()
     // be relatively small in the greater scheme.
 
     Track *track = nullptr;
+    
+    std::cout << "YG================================\n";
+    lsc.dump();
+    std::cout << "YG================================\n";
 
     for (track = lsc.useFirstTrack(); track; track = lsc.useNextTrack()) {
         int trackPos = lsc.getTrackPos();
+        std::cerr << "YG track " << trackPos << "\n";
         // Allow some opportunities for user to cancel
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             return false;
         }
+        
+        
+        
+
+        if (m_exportStaffGroup) {
+            prevBracket = bracket;
+            bracket = track->getStaffBracket();
+
+            // handle any bracket start events (unless track staff
+            // brackets are being ignored, as when printing single parts
+            // out of a bigger score one by one)
+
+            if (bracket == Brackets::SquareOn ||
+                bracket == Brackets::SquareOnOff) {
+                str << indent(col++) << "\\context StaffGroup = \""
+                    << ++staffGroupCounter << "\" <<" << std::endl;
+            } else if (bracket == Brackets::CurlyOn) {
+                str << indent(col++) << "\\context GrandStaff = \""
+                    << ++pianoStaffCounter << "\" <<" << std::endl;
+            } else if (bracket == Brackets::CurlySquareOn) {
+                str << indent(col++) << "\\context StaffGroup = \""
+                    << ++staffGroupCounter << "\" <<" << std::endl;
+                str << indent(col++) << "\\context GrandStaff = \""
+                    << ++pianoStaffCounter << "\" <<" << std::endl;
+            }
+        }              
+        
+
+
+        // avoid problem with <untitled> tracks yielding a
+        // .ly file that jumbles all notes together on a
+        // single staff...  every Staff context has to
+        // have a unique name, even if the
+        // Staff.instrument property is the same for
+        // multiple staffs...
+        // Added an option to merge staffs with the same, non-empty
+        // name. This option makes it possible to produce staffs
+        // with polyphonic, and polyrhytmic, music. Polyrhytmic
+        // music in a single staff is typical in piano, or
+        // guitar music. (hjj)
+        // In the case of colliding note heads, user may define
+        //  - DISPLACED_X -- for a note/chord
+        //  - INVISIBLE -- for a rest
+        const std::string staffName = protectIllegalChars(track->getLabel());
+
+        std::string shortStaffName = protectIllegalChars(track->getShortLabel());
+
+        /*
+        * The context name is unique to a single track.
+        */
+        str << std::endl << indent(col)
+            << "\\context Staff = \"track "
+            << (trackPos + 1) << (staffName == "" ? "" : ", ")
+            << staffName << "\" ";
+
+        str << "<< " << std::endl;
+        ++col;
+
+        if (staffName.size()) {
+            hasInstrumentNames = true;
+            // The octavation is omitted in the instrument name.
+            // HJJ: Should it be automatically added to the clef: G^8 ?
+            // What if two segments have different transpose in a track?
+            // YG: Some data needed at track level are owned by segments.
+            // This may lead to inconsistencies which only the user
+            // can fix.
+            // Here we get data from the first segment of the track and
+            // hope the other segments share it.
+            
+            std::ostringstream staffNameWithTranspose;
+            staffNameWithTranspose << "\\markup { \\center-column { \"" << staffName << " \"";
+            Segment * firstSeg = lsc.getArbitrarySegment(trackPos);
+            if ((firstSeg->getTranspose() % 12) != 0) {
+                staffNameWithTranspose << " \\line { ";
+                int t = firstSeg->getTranspose();
+                t %= 12;
+                if (t < 0) t+= 12;
+                switch (t) {
+                case 1 : staffNameWithTranspose << "\"in D\" \\smaller \\flat"; break;
+                case 2 : staffNameWithTranspose << "\"in D\""; break;
+                case 3 : staffNameWithTranspose << "\"in E\" \\smaller \\flat"; break;
+                case 4 : staffNameWithTranspose << "\"in E\""; break;
+                case 5 : staffNameWithTranspose << "\"in F\""; break;
+                case 6 : staffNameWithTranspose << "\"in G\" \\smaller \\flat"; break;
+                case 7 : staffNameWithTranspose << "\"in G\""; break;
+                case 8 : staffNameWithTranspose << "\"in A\" \\smaller \\flat"; break;
+                case 9 : staffNameWithTranspose << "\"in A\""; break;
+                case 10 : staffNameWithTranspose << "\"in B\" \\smaller \\flat"; break;
+                case 11 : staffNameWithTranspose << "\"in B\""; break;
+                }
+                staffNameWithTranspose << " }";
+            }
+            staffNameWithTranspose << " } }";
+            if (m_languageLevel < LILYPOND_VERSION_2_10) {
+                str << indent(col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
+                    << std::endl;
+            } else {
+                // always write long staff name
+                str << indent(col) << "\\set Staff.instrumentName = "
+                    << staffNameWithTranspose.str() << std::endl;
+
+                // write short staff name if user desires, and if
+                // non-empty
+                if (m_useShortNames && shortStaffName.size()) {
+                    str << indent(col) << "\\set Staff.shortInstrumentName = \""
+                        << shortStaffName << "\"" << std::endl;
+                }
+            }
+        }
+
+        // Set midi instrument for the Staff when possible
+        Instrument *instr = m_studio->getInstrumentById(
+            track->getInstrument());
+        if (instr) {
+            str << indent(col)
+                << "\\set Staff.midiInstrument = \""
+                << instr->getProgramName().c_str()
+                << "\"" << std::endl;
+        }
+
+        // multi measure rests are used by default
+        str << indent(col) << "\\set Score.skipBars = ##t" << std::endl;
+
+        // turn off the stupid accidental cancelling business,
+        // because we don't do that ourselves, and because my 11
+        // year old son pointed out to me that it "Looks really
+        // stupid.  Why is it cancelling out four flats and then
+        // adding five flats back?  That's brain damaged."
+        //
+        // New option to turn it back on, per user request.  There
+        // doesn't seem to be any way to get LilyPond's behavior to
+        // quite mimic our own, so we just offer it to them as an
+        // either/or choice.
+        if (m_cancelAccidentals) {
+            str << indent(col) << "\\set Staff.printKeyCancellation = ##t" << std::endl;
+        } else {
+            str << indent(col) << "\\set Staff.printKeyCancellation = ##f" << std::endl;
+        }
+        str << indent(col) << "\\new Voice \\global" << std::endl;
+        if (tempoCount > 0) {
+            str << indent(col) << "\\new Voice \\globalTempo" << std::endl;
+        }
+        if (m_exportMarkerMode != EXPORT_NO_MARKERS) {
+            str << indent(col) << "\\new Voice \\markers" << std::endl;
+        }
+
+        if (m_exportBeams) {
+            str << indent(col) << "\\set Staff.autoBeaming = ##f % turns off all autobeaming" << std::endl;
+        }
+//                     }
+
+    
+        
+        
+        //++++++++++++++++++++++++++++++++++++++++++
+        
 
         int voiceIndex;
         for (voiceIndex = lsc.useFirstVoice();
                           voiceIndex != -1; voiceIndex = lsc.useNextVoice()) {
+            std::cerr << "YG voice " << voiceIndex << "\n";
 
             /* timeT repeatOffset = 0; */
 
             Segment *seg;
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
+                std::cerr << "YG segment " << seg->getLabel() << "\n";
                 RG_DEBUG << "lsc iterate segment" << seg;
                 if (!lsc.isVolta()) {
-                    // handle the bracket(s) for the first track, and if no brackets
-                    // present, open with a <<
-                    prevBracket = bracket;
-                    bracket = track->getStaffBracket();
+
 
                     //!!! how will all these indentions work out?  Probably not well,
                     // but maybe if users always provide sensible input, this will work
                     // out sensibly.  Maybe.  If not, we'll need some tracking gizmos to
                     // figure out the indention, or just skip the indention for these or
                     // something.  TBA.
-                    if (firstTrack) {
-                        // seems to be common to every case now
-                        str << indent(++col) << "<< % common" << std::endl;
-                    }
 
-                    if (firstTrack && m_exportStaffGroup) {
 
-                        if (bracket == Brackets::SquareOn) {
-                            str << indent(++col) << "\\context StaffGroup = \"" << staffGroupCounter++
-                                << "\" << " << std::endl; //indent+
-                        } else if (bracket == Brackets::CurlyOn) {
-                            str << indent(++col) << "\\context GrandStaff = \"" << pianoStaffCounter++
-                                << "\" << " << std::endl; //indent+
-                        } else if (bracket == Brackets::CurlySquareOn) {
-                            str << indent(++col) << "\\context StaffGroup = \"" << staffGroupCounter++
-                                << "\" << " << std::endl; //indent+
-                            str << indent(++col) << "\\context GrandStaff = \"" << pianoStaffCounter++
-                                << "\" << " << std::endl; //indent+
-                        }
-
-                        // Make chords offset colliding notes by default (only write for
-                        // first track)
-                        str << indent(++col) << "% Force offset of colliding notes in chords:"
-                            << std::endl;
-                        str << indent(col)   << "\\override Score.NoteColumn #\'force-hshift = #1.0"
-                            << std::endl;
-                        if (m_fingeringsInStaff) {
-                            str << indent(col) << "% Allow fingerings inside the staff (configured from export options):"
-                                << std::endl;
-                            str << indent(col)   << "\\override Score.Fingering #\'staff-padding = #\'()"
-                                << std::endl;
-                        }
-                    }
 
                     if (m_progressDialog)
                         m_progressDialog->setValue(
                                 trackPos * 100 / m_composition->getNbTracks());
 
                     qApp->processEvents();
-
-                    if ((int) seg->getTrack() != lastTrackIndex) {
-                        if (lastTrackIndex != -1) {
-                            // close the old track (Staff context)
-                            str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
-                        }
-
-                        // handle any necessary bracket closures with a rude
-                        // hack, because bracket closures need to be handled
-                        // right under staff closures, but at this point in the
-                        // loop we are one track too early for closing, so we use
-                        // the bracket setting for the previous track for closing
-                        // purposes (I'm not quite sure why this works, but it does)
-                        if (m_exportStaffGroup) {
-                            if (prevBracket == Brackets::SquareOff ||
-                                prevBracket == Brackets::SquareOnOff) {
-                                str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
-                                    << std::endl; //indent-
-                            } else if (prevBracket == Brackets::CurlyOff) {
-                                str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
-                                    << std::endl; //indent-
-                            } else if (prevBracket == Brackets::CurlySquareOff) {
-                                str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
-                                    << std::endl; //indent-
-                                str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
-                                    << std::endl; //indent-
-                            }
-                        }
-                    }
 
                     //
                     // Write the chord text events into a lead sheet format.
@@ -1522,145 +1641,6 @@ LilyPondExporter::write()
                         }
                     } // if (m_exportChords....
 
-                    if ((int) seg->getTrack() != lastTrackIndex) {
-                        lastTrackIndex = seg->getTrack();
-
-                        // handle any bracket start events (unless track staff
-                        // brackets are being ignored, as when printing single parts
-                        // out of a bigger score one by one)
-                        if (!firstTrack && m_exportStaffGroup) {
-                            if (bracket == Brackets::SquareOn ||
-                                bracket == Brackets::SquareOnOff) {
-                                str << indent(col++) << "\\context StaffGroup = \""
-                                    << ++staffGroupCounter << "\" <<" << std::endl;
-                            } else if (bracket == Brackets::CurlyOn) {
-                                str << indent(col++) << "\\context GrandStaff = \""
-                                    << ++pianoStaffCounter << "\" <<" << std::endl;
-                            } else if (bracket == Brackets::CurlySquareOn) {
-                                str << indent(col++) << "\\context StaffGroup = \""
-                                    << ++staffGroupCounter << "\" <<" << std::endl;
-                                str << indent(col++) << "\\context GrandStaff = \""
-                                    << ++pianoStaffCounter << "\" <<" << std::endl;
-                            }
-                        }
-
-                        // avoid problem with <untitled> tracks yielding a
-                        // .ly file that jumbles all notes together on a
-                        // single staff...  every Staff context has to
-                        // have a unique name, even if the
-                        // Staff.instrument property is the same for
-                        // multiple staffs...
-                        // Added an option to merge staffs with the same, non-empty
-                        // name. This option makes it possible to produce staffs
-                        // with polyphonic, and polyrhytmic, music. Polyrhytmic
-                        // music in a single staff is typical in piano, or
-                        // guitar music. (hjj)
-                        // In the case of colliding note heads, user may define
-                        //  - DISPLACED_X -- for a note/chord
-                        //  - INVISIBLE -- for a rest
-                        const std::string staffName = protectIllegalChars(m_composition->
-                                                        getTrackById(lastTrackIndex)->getLabel());
-
-                        std::string shortStaffName = protectIllegalChars(m_composition->
-                                getTrackById(lastTrackIndex)->getShortLabel());
-
-                        /*
-                        * The context name is unique to a single track.
-                        */
-                        str << std::endl << indent(col)
-                            << "\\context Staff = \"track "
-                            << (trackPos + 1) << (staffName == "" ? "" : ", ")
-                            << staffName << "\" ";
-
-                        str << "<< " << std::endl;
-                        ++col;
-
-                        if (staffName.size()) {
-                            hasInstrumentNames = true;
-                            // The octavation is omitted in the instrument name.
-                            // HJJ: Should it be automatically added to the clef: G^8 ?
-                            // What if two segments have different transpose in a track?
-                            std::ostringstream staffNameWithTranspose;
-                            staffNameWithTranspose << "\\markup { \\center-column { \"" << staffName << " \"";
-                            if ((seg->getTranspose() % 12) != 0) {
-                                staffNameWithTranspose << " \\line { ";
-                                int t = seg->getTranspose();
-                                t %= 12;
-                                if (t < 0) t+= 12;
-                                switch (t) {
-                                case 1 : staffNameWithTranspose << "\"in D\" \\smaller \\flat"; break;
-                                case 2 : staffNameWithTranspose << "\"in D\""; break;
-                                case 3 : staffNameWithTranspose << "\"in E\" \\smaller \\flat"; break;
-                                case 4 : staffNameWithTranspose << "\"in E\""; break;
-                                case 5 : staffNameWithTranspose << "\"in F\""; break;
-                                case 6 : staffNameWithTranspose << "\"in G\" \\smaller \\flat"; break;
-                                case 7 : staffNameWithTranspose << "\"in G\""; break;
-                                case 8 : staffNameWithTranspose << "\"in A\" \\smaller \\flat"; break;
-                                case 9 : staffNameWithTranspose << "\"in A\""; break;
-                                case 10 : staffNameWithTranspose << "\"in B\" \\smaller \\flat"; break;
-                                case 11 : staffNameWithTranspose << "\"in B\""; break;
-                                }
-                                staffNameWithTranspose << " }";
-                            }
-                            staffNameWithTranspose << " } }";
-                            if (m_languageLevel < LILYPOND_VERSION_2_10) {
-                                str << indent(col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
-                                    << std::endl;
-                            } else {
-                                // always write long staff name
-                                str << indent(col) << "\\set Staff.instrumentName = "
-                                    << staffNameWithTranspose.str() << std::endl;
-
-                                // write short staff name if user desires, and if
-                                // non-empty
-                                if (m_useShortNames && shortStaffName.size()) {
-                                    str << indent(col) << "\\set Staff.shortInstrumentName = \""
-                                        << shortStaffName << "\"" << std::endl;
-                                }
-                            }
-                        }
-
-                        // Set midi instrument for the Staff when possible
-                        Instrument *instr = m_studio->getInstrumentById(
-                            m_composition->getTrackById(lastTrackIndex)
-                                                            ->getInstrument());
-                        if (instr) {
-                            str << indent(col)
-                                << "\\set Staff.midiInstrument = \""
-                                << instr->getProgramName().c_str()
-                                << "\"" << std::endl;
-                        }
-
-                        // multi measure rests are used by default
-                        str << indent(col) << "\\set Score.skipBars = ##t" << std::endl;
-
-                        // turn off the stupid accidental cancelling business,
-                        // because we don't do that ourselves, and because my 11
-                        // year old son pointed out to me that it "Looks really
-                        // stupid.  Why is it cancelling out four flats and then
-                        // adding five flats back?  That's brain damaged."
-                        //
-                        // New option to turn it back on, per user request.  There
-                        // doesn't seem to be any way to get LilyPond's behavior to
-                        // quite mimic our own, so we just offer it to them as an
-                        // either/or choice.
-                        if (m_cancelAccidentals) {
-                            str << indent(col) << "\\set Staff.printKeyCancellation = ##t" << std::endl;
-                        } else {
-                            str << indent(col) << "\\set Staff.printKeyCancellation = ##f" << std::endl;
-                        }
-                        str << indent(col) << "\\new Voice \\global" << std::endl;
-                        if (tempoCount > 0) {
-                            str << indent(col) << "\\new Voice \\globalTempo" << std::endl;
-                        }
-                        if (m_exportMarkerMode != EXPORT_NO_MARKERS) {
-                            str << indent(col) << "\\new Voice \\markers" << std::endl;
-                        }
-
-                        if (m_exportBeams) {
-                            str << indent(col) << "\\set Staff.autoBeaming = ##f % turns off all autobeaming" << std::endl;
-                        }
-                    }
                 } /// if (!lsc.isVolta())
 
                 // Temporary storage for non-atomic events (!BOOM)
@@ -1675,7 +1655,11 @@ LilyPondExporter::write()
                 // them unique
                 std::ostringstream voiceNumber;
 
-                voiceNumber << "voice " << ++voiceCounter;
+                if (OLD_LYRICS_MODE) {
+                    voiceNumber << "voice " << ++voiceCounter;
+                } else {
+                    voiceNumber << "voice " << voiceIndex;
+                }
                 if (!lsc.isVolta()) {
                     str << std::endl << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
                         << "\" {"; // indent+
@@ -2001,6 +1985,7 @@ LilyPondExporter::write()
                 //
                 // Sync the code below with LyricEditDialog::unparse() !!
                 //
+                if (OLD_LYRICS_MODE) {
                 if (m_exportLyrics != EXPORT_NO_LYRICS) {
                     // To force correct ordering of verses must track when first verse is printed.
                     bool isFirstPrintedVerse = true;
@@ -2113,15 +2098,70 @@ LilyPondExporter::write()
                         } // if (rx.search(text....
                     } // for (long currentVerse = 0....
                 } // if (m_exportLyrics....
+                } else { // IF OLD_LYRICS_MODE
+                    // !OLD_LYRICS_MODE
+                    
+                    
+                } // IF OLD_LYRICS_MODE
                 firstTrack = false;
             } // for (seg = lsc.useFirstSegment(); seg; seg = ....
+            
+            
+            // YGYGYG
+            for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
+                std::cerr << "YG2 segment " << seg->getLabel();
+                int n = lsc.getNumberOfRepeats();
+                bool repeated = lsc.isRepeated();
+                bool repeatedS = lsc.isRepeatingSegment();
+                bool repeatedL = lsc.isSimpleRepeatedLinks();
+                bool repeatedV = lsc.isRepeatWithVolta();
+                bool volta = lsc.isVolta();
+                int nv = lsc.getVoltaRepeatCount();
+                int cnt = nv ? nv : n ? n : 1;
+                std::cerr << " N=" << n
+                          << " NV=" << nv
+                          << " R=" << repeated 
+                          << " RS=" << repeatedS
+                          << " RL=" << repeatedL
+                          << " RV=" << repeatedV
+                          << " V=" << volta
+                          << "    Count=" << cnt
+                          << "  Verses=" << seg->getVerseCount();
+                if (volta) std::cerr << "  v \"" << lsc.getVoltaText() << "\"";
+                
+                timeT startT = seg->getClippedStartTime();
+                timeT endT = seg->getEndMarkerTime();
+                std::cerr << "   DT=" << (endT - startT);
+                std::cerr << "\n";
+                
+//                 int sbar, sbeat, sfraction, sremainder;
+//                 int ebar, ebeat, efraction, eremainder;
+//                 m_composition->getMusicalTimeForAbsoluteTime
+//                                     (startT, sbar, sbeat, sfraction, sremainder);
+//                 m_composition->getMusicalTimeForAbsoluteTime
+//                                     (endT, ebar, ebeat, efraction, eremainder);
+//                 std::cerr << "\tStart: bar=" <<  sbar << " beat=" << sbeat 
+//                           << " frac=" << sfraction << " rem=" << sremainder << "\n";
+//                 std::cerr << "\tEnd :  bar=" <<  ebar << " beat=" << ebeat 
+//                           << " frac=" << efraction << " rem=" << eremainder << "\n";
+                          
+                std::cerr << "lyrics : " << seg->lyricsPositionsCount();
+                std::cerr << "   verse : " << seg->getVerseCount() << "\n";
+
+                // std::cerr << "\n";
+                
+                // See also Segment::getVerse() and Segment::getVerseWrapped() ...
+            }
+            
+            
+            
+            
         } // for (voiceIndex = lsc.useFirstVoice(); voiceIndex != -1; ....
-    } // for (track = lsc.useFirstTrack(); track; track = ....
-
-    // close the last track (Staff context)
-    if (voiceCounter > 0) {
-        str << indent(--col) << ">> % Staff (final) ends" << std::endl;  // indent-
-
+        
+        // close the track (Staff context)
+        str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
+        
+        
         // handle any necessary final bracket closures (if brackets are being
         // exported)
         if (m_exportStaffGroup) {
@@ -2138,10 +2178,10 @@ LilyPondExporter::write()
                 str << indent(--col) << ">> % StaffGroup (final) " << staffGroupCounter
                     << std::endl; //indent-
             }
-        }
-    } else {
-        str << indent(--col) << "% (All staffs were muted.)" << std::endl;
-    }
+        }        
+        
+        
+    } // for (track = lsc.useFirstTrack(); track; track = ....
 
     // close \notes section
     str << std::endl << indent(--col) << ">> % notes" << std::endl << std::endl; // indent-

@@ -276,6 +276,49 @@ public:
      * are not mixed in the same score.
      */
     bool isAutomaticVoltaUsable() const { return m_automaticVoltaUsable; }
+    
+    // YGYGYG
+    /**
+     * Return some segment (presumably the first one) on the given track.
+     * This method is used when some data related to segments (and supposedly
+     * shared by all segments of the track) is needed at the track level.
+     */
+    Segment * getArbitrarySegment(int trackPos); 
+    
+    // YGYGYG
+    /**
+     * Reset the verse index before reading the lyrics of a voice
+     */
+    void resetVerseIndexes(); 
+    
+    // YGYGYG
+    /**
+     * Prepare to get the lyrics on the current track and for the current
+     * voice.
+     * Return the first segment with maybe lyrics.
+     * Return null if there is no segment on the current track and voice.
+     */
+    Segment * useFirstLyricsSegment();
+
+    // YGYGYG
+    /**
+     * Go to the next segment with maybe lyrics.
+     * Return null if there is no more segment on the current track and voice.
+     */
+    Segment * useNextLyricsSegment();    
+    
+    //YGYGYG
+    /**
+     * Return the verse number which should be used here.
+     * Return -1 if there is no more lyrics here.   TODO : Wrap to the first verse ???
+     */
+    int getCurrentVerse();
+    
+    // YGYGYG
+    /**
+     * Return the current offset if needed...    // ???????
+     */
+    int getCurrentOffset();
 
     /// Only for instrumentation while debugging
     void dump();
@@ -331,6 +374,8 @@ private :
 
         mutable int simpleRepeatId;           // Identify a repeat without volta chain
         mutable int numberOfSimpleRepeats;    // How many segments in the chain
+        
+        mutable int currentVerse;             // Next verse to be read
 
         explicit SegmentData(Segment * seg)
         {
@@ -355,6 +400,7 @@ private :
             previousKey = Rosegarden::Key("undefined");
             simpleRepeatId = 0;
             numberOfSimpleRepeats = 0;
+            currentVerse = 0;
          }
     };
 

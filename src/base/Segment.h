@@ -657,6 +657,11 @@ public:
      * a notation editor)
      */
     void setVerse (int verse) { m_verse = verse; }
+    
+    /**
+     * Return how many syllables of lyrics the segment can carry.
+     */
+    int lyricsPositionsCount();    
 
 
 

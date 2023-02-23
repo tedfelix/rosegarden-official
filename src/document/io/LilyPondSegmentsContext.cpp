@@ -1288,6 +1288,46 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
     }
 }
 
+///////////////////////////////////////////////////YGYGYG
+
+Segment * 
+LilyPondSegmentsContext::getArbitrarySegment(int trackPos)
+{
+    return m_segments[trackPos][0].begin()->segment;
+}
+
+void
+LilyPondSegmentsContext::resetVerseIndexes()
+{
+}
+
+
+Segment *
+LilyPondSegmentsContext::useFirstLyricsSegment()   // IDEM useFirstSegment ==> USELESS
+{
+    return nullptr;
+}
+
+Segment *
+LilyPondSegmentsContext::useNextLyricsSegment()    // IDEM useNextSegment ==> USELESS
+{
+    return nullptr;
+}
+
+int
+LilyPondSegmentsContext::getCurrentVerse()
+{
+    return 0;
+}
+
+int
+LilyPondSegmentsContext::getCurrentOffset()
+{
+    return 0;
+}
+
+///////////////////////////////////////////////////YGYGYG
+
 void
 LilyPondSegmentsContext::dump()
 {
