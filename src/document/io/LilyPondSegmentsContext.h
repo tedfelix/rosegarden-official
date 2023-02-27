@@ -335,6 +335,7 @@ private :
 
         Volta(const SegmentData *sd, int number)
         {
+            voltaNumber.clear();
             data = sd;
             voltaNumber.insert(number);
         }

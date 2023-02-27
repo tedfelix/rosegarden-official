@@ -211,6 +211,12 @@ private:
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
     std::pair<int,int> writeDuration(timeT duration, std::ofstream &);
     void writeSlashes(const Event *note, std::ofstream &);
+    
+    /*
+     * Return the verse with index currentVerse from the givenSegment
+     * or an appropriate LilyPond skip sequence if the verse doesn't exist.
+     */
+    QString getVerseText(Segment *seg, int currentVerse);
 
 private:
     static const int MAX_DOTS = 4;
