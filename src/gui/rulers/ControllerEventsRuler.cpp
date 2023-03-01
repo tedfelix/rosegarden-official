@@ -55,6 +55,7 @@
 #include <QValidator>
 #include <QWidget>
 #include <QPainter>
+#include <QMenu>
 
 #include <utility>  // for std::swap()
 
@@ -84,8 +85,6 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
     else {
         m_controller = nullptr;
     }
-
-    setMenuName("controller_events_ruler_menu");
 
     RG_DEBUG << "ctor";
     if (controller)
@@ -543,6 +542,17 @@ void ControllerEventsRuler::setTool(const QString &name)
 
     m_currentTool = tool;
     m_currentTool->ready();
+}
+
+void ControllerEventsRuler::createRulerMenu()
+{
+    createMenusAndToolbars("controlruler.rc");
+
+    m_rulerMenu = findChild<QMenu *>("control_ruler_menu");
+
+    if (!m_rulerMenu) {
+        RG_DEBUG << "ControlRuler::createRulerMenu() failed\n";
+    }
 }
 
 Event *ControllerEventsRuler::insertEvent(float x, float y)

@@ -464,7 +464,7 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     controlRuler->setViewSegment(m_viewSegment);
 
     // and tell the ruler about the editor snap setting
-    controlRuler->setSnapFromEditor(m_editorSnap);
+    controlRuler->setSnapFromEditor(m_editorSnap, false);
 }
 
 void
@@ -508,7 +508,7 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
     addRuler(controlRuler, name);
 
     // and tell the ruler about the editor snap setting
-    controlRuler->setSnapFromEditor(m_editorSnap);
+    controlRuler->setSnapFromEditor(m_editorSnap, true);
 
     // Update selection drawing in matrix view.
     emit childRulerSelectionChanged();
@@ -655,7 +655,12 @@ void ControlRulerWidget::setSnapFromEditor(timeT snapSetting)
     m_editorSnap = snapSetting;
     // update rulers
     for (auto ruler : m_controlRulerList) {
-        ruler->setSnapFromEditor(snapSetting);
+        PropertyControlRuler *pcr =
+            dynamic_cast <PropertyControlRuler *>(ruler);
+        bool forceFromEditor = false;
+        // propery control ruler always takes the editor setting
+        if (pcr) forceFromEditor = true;
+        ruler->setSnapFromEditor(snapSetting, forceFromEditor);
     }
 }
 

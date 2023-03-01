@@ -90,8 +90,6 @@ ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
     m_selecting(false),
     m_selector(nullptr),
     m_selectionRect(nullptr),
-    m_menuName(),
-    m_menu(nullptr),
     m_rulerMenu(nullptr),
     m_snapName(""),
     m_snapTimeFromEditor(SnapGrid::NoSnap),
@@ -739,6 +737,9 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         if (!m_rulerMenu)
             createRulerMenu();
         if (m_rulerMenu) {
+            QAction* setAction = findAction(m_snapName);
+            RG_DEBUG << "set checked" << m_snapName;
+            setAction->setChecked(true);
             m_rulerMenu->exec(QCursor::pos());
         }
     }
@@ -748,16 +749,6 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
 
 void ControlRuler::createRulerMenu()
 {
-    createMenusAndToolbars("controlruler.rc");
-
-    m_rulerMenu = findChild<QMenu *>("control_ruler_menu");
-
-    if (!m_rulerMenu) {
-        RG_DEBUG << "ControlRuler::createRulerMenu() failed\n";
-    }
-    QAction* setAction = findAction(m_snapName);
-    RG_DEBUG << "set checked" << m_snapName;
-    setAction->setChecked(true);
 }
 
 void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
@@ -850,35 +841,8 @@ void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
     settings.endGroup();
 }
 
-void ControlRuler::contextMenuEvent(QContextMenuEvent* e)
+void ControlRuler::contextMenuEvent(QContextMenuEvent*)
 {
-    if (!m_menu && !m_menuName.isEmpty())
-        createMenu();
-
-    if (m_menu) {
-//        RG_DEBUG << "ControlRuler::showMenu() - show menu with" << m_menu->count() << " items";
-        m_lastEventPos = e->pos(); ///CJ OK ??? - inverseMapPoint(e->pos());
-        m_menu->exec(QCursor::pos());
-    } else {
-        RG_WARNING << "contextMenuEvent(): no menu to show";
-    }
-}
-
-void ControlRuler::createMenu()
-{
-    RG_DEBUG << "createMenu()";
-
-    QMainWindow* parentMainWindow = dynamic_cast<QMainWindow*>(topLevelWidget());
-
-    if (parentMainWindow ) {     // parentMainWindow->factory()) {
-        m_menu = parentMainWindow->findChild<QMenu*>(m_menuName);
-
-        if (!m_menu) {
-            RG_WARNING << "createMenu() failed";
-        }
-    } else {
-        RG_WARNING << "createMenu() failed: no parent factory";
-    }
 }
 
 void
@@ -1016,10 +980,14 @@ SnapGrid* ControlRuler::getSnapGrid() const
     return m_snapGrid;
 }
 
-void ControlRuler::setSnapFromEditor(timeT snapSetting)
+void ControlRuler::setSnapFromEditor(timeT snapSetting, bool forceFromEditor)
 {
-    RG_DEBUG << "setSnapFromEditor" << m_snapName << snapSetting;
+    RG_DEBUG << "setSnapFromEditor" << m_snapName << snapSetting <<
+        forceFromEditor;
     m_snapTimeFromEditor = snapSetting;
+    if (forceFromEditor) {
+        m_snapName = "snap_editor";
+    }
     if (m_snapName == "snap_editor") {
         m_snapGrid->setSnapTime(snapSetting);
         repaint();

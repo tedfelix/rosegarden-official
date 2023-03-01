@@ -101,6 +101,8 @@ public:
 
     void setTool(const QString &name) override;
 
+    virtual void createRulerMenu() override;
+
 protected:
     virtual void init();
     virtual bool isOnThisRuler(Event *);

@@ -138,7 +138,7 @@ public:
 
     SnapGrid* getSnapGrid() const;
 
-    void setSnapFromEditor(timeT snapSetting);
+    void setSnapFromEditor(timeT snapSetting, bool forceFromEditor);
 
 signals:
     void mousePress();
@@ -205,14 +205,9 @@ protected:
     QRect mapRectToWidget(QRectF *);
     QPolygon mapItemToWidget(QSharedPointer<ControlItem>);
     QPointF mapWidgetToItem(QPoint*);
-
     QColor valueToColour(int max, int val);
-
     void updateSelection();
-
-    void setMenuName(const QString& menuName) { m_menuName = menuName; }
-    void createMenu();
-    void createRulerMenu();
+    virtual void createRulerMenu();
 
     //--------------- Data members ---------------------------------
 
@@ -269,9 +264,6 @@ protected:
     bool m_selecting;
     ControlSelector* m_selector;
     QRectF* m_selectionRect;
-
-    QString m_menuName;
-    QMenu* 	m_menu;
 
     QMenu* m_rulerMenu;
     SnapGrid* m_snapGrid;
