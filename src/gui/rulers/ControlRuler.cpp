@@ -424,6 +424,8 @@ void ControlRuler::updateSegment()
     start = getRulerScale()->getTimeForX(xmin);
     end = getRulerScale()->getTimeForX(xmax)+durationAdd;
 
+    RG_DEBUG << "updateSegment added events:" <<
+        m_eventSelection->getAddedEvents();
     if (m_eventSelection->getAddedEvents() == 0) {
         // We do not have a valid set of selected events to update
         if (m_selectedItems.size() == 0) {
@@ -451,6 +453,7 @@ void ControlRuler::updateSegment()
     // Add change command to macro
     // ControlChangeCommand calls each selected items updateSegment method
     // Note that updateSegment deletes and renews the event whether it has moved or not
+    RG_DEBUG << "updateSegment selectedItems:" << m_selectedItems.size();
     macro->addCommand(new ControlChangeCommand(m_selectedItems,
                                     *m_segment,
                                     start,

@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlChangeCommand]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "ControlChangeCommand.h"
 #include "ControlItem.h"

@@ -507,6 +507,9 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
 
     addRuler(controlRuler, name);
 
+    // and tell the ruler about the editor snap setting
+    controlRuler->setSnapFromEditor(m_editorSnap);
+
     // Update selection drawing in matrix view.
     emit childRulerSelectionChanged();
 }
