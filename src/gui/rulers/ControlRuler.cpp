@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlRuler]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "ControlRuler.h"
 
@@ -37,6 +37,7 @@
 #include "document/CommandHistory.h"
 #include "base/ViewSegment.h"
 #include "misc/ConfigGroups.h"
+#include "commands/edit/EraseCommand.h"
 
 #include <algorithm>
 #include <cfloat>
@@ -448,6 +449,31 @@ void ControlRuler::updateSegment()
         }
     }
 
+    // check for events at the same time and delete them
+    EventSelection *selection = new EventSelection(*m_segment);
+    for(auto cItem : m_selectedItems) {
+        double xItem = cItem->xStart();
+        RG_DEBUG << "updateSegment check for event at" << xItem;
+        for(auto miter = m_controlItemMap.lower_bound(xItem);
+            miter != m_controlItemMap.end(); ++miter) {
+            double mx = (*miter).first;
+            if (mx < xItem) {
+                RG_DEBUG << "updateSegment ignoring" << mx <<
+                    "before" << xItem;
+                continue;
+            }
+            if (mx > xItem) break;
+            if (cItem == (*miter).second) {
+                RG_DEBUG << "updateSegment ignoring new item";
+                continue;
+            }
+            RG_DEBUG << "updateSegment erase old event at" << mx;
+
+            Event *eventToDelete = (*miter).second->getEvent();
+            selection->addEvent(eventToDelete, false);
+        }
+    }
+
     // Add change command to macro
     // ControlChangeCommand calls each selected items updateSegment method
     // Note that updateSegment deletes and renews the event whether it has moved or not
@@ -456,6 +482,10 @@ void ControlRuler::updateSegment()
                                     *m_segment,
                                     start,
                                     end));
+
+    if (selection->getAddedEvents() != 0) {
+        macro->addCommand(new EraseCommand(selection));
+    }
 
     CommandHistory::getInstance()->addCommand(macro);
 
