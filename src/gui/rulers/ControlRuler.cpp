@@ -232,7 +232,7 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
 
         // If there is no last visible item or this is further right
         if (m_lastVisibleItem == m_controlItemMap.end() ||
-                item->xStart() > m_lastVisibleItem->second->xStart()) {
+                item->xStart() >= m_lastVisibleItem->second->xStart()) {
             // make it the last visible item
             m_lastVisibleItem = it;
         }
