@@ -36,7 +36,8 @@ namespace
 
     QColor getNormalTextColor()
     {
-        if (Rosegarden::Preferences::getThorn())
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
             return QColor(Qt::white);
         else
             return QColor(Qt::black);
@@ -44,7 +45,8 @@ namespace
 
     QColor getSelectedBackgroundColor()
     {
-        if (Rosegarden::Preferences::getThorn())
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
             return QColor(128+64, 128+64, 128+64);
         else
             return QColor(0xAA, 0xAA, 0xAA);
@@ -52,7 +54,8 @@ namespace
 
     QColor getSelectedTextColor()
     {
-        if (Rosegarden::Preferences::getThorn())
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
             return QColor(Qt::black);
         else
             return QColor(Qt::white);
@@ -60,7 +63,8 @@ namespace
 
     QColor getArchiveTextColor()
     {
-        if (Rosegarden::Preferences::getThorn())
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
             return QColor(128+32,128+32,128+32);
         else
             return QColor(Qt::black);

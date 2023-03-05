@@ -16,6 +16,9 @@
 #include "Preferences.h"
 
 #include "ConfigGroups.h"
+#include "PreferenceBool.h"
+#include "PreferenceInt.h"
+#include "PreferenceString.h"
 
 #include <QSettings>
 
@@ -23,73 +26,21 @@ namespace Rosegarden
 {
 
 
-// Was thinking about doing a template, but there are finicky little
-// differences between the types (QVariant conversions).  Bool is the
-// most popular, so I'm trying this one first.  Might take a shot at
-// a template later.
-class PreferenceBool
+PreferenceInt theme(GeneralOptionsConfigGroup, "theme", Preferences::DarkTheme);
+
+void Preferences::setTheme(int value)
 {
-public:
-    PreferenceBool(QString group, QString key, bool defaultValue) :
-        m_group(group),
-        m_key(key),
-        m_defaultValue(defaultValue)
-    {
-    }
-
-    void set(bool value)
-    {
-        QSettings settings;
-        settings.beginGroup(m_group);
-        settings.setValue(m_key, value);
-        m_cache = value;
-    }
-
-    bool get() const
-    {
-        if (!m_cacheValid) {
-            m_cacheValid = true;
-
-            QSettings settings;
-            settings.beginGroup(m_group);
-            m_cache = settings.value(
-                    m_key, m_defaultValue ? "true" : "false").toBool();
-            // Write it back out so we can find it if it wasn't there.
-            settings.setValue(m_key, m_cache);
-        }
-
-        return m_cache;
-    }
-
-private:
-    QString m_group;
-    QString m_key;
-
-    bool m_defaultValue;
-
-    mutable bool m_cacheValid = false;
-    mutable bool m_cache{};
-};
-
-namespace
-{
-    // Cached values for performance...
-
-    int afldLocation = 0;
-    QString afldCustomLocation;
+    theme.set(value);
 }
 
-PreferenceBool thorn(
-        GeneralOptionsConfigGroup, "use_thorn_style", true);
-
-void Preferences::setThorn(bool value)
+int Preferences::getTheme()
 {
-    thorn.set(value);
+    return theme.get();
 }
 
 bool Preferences::getThorn()
 {
-    return thorn.get();
+    return (theme.get() != Preferences::NativeTheme);
 }
 
 PreferenceBool sendProgramChangesWhenLooping(
@@ -185,55 +136,29 @@ bool Preferences::getAudioFileLocationDlgDontShow()
     return afldDontShow.get();
 }
 
+PreferenceInt afldLocation(AudioFileLocationDialogGroup, "location", 0);
+
 void Preferences::setDefaultAudioLocation(int location)
 {
-    QSettings settings;
-    settings.beginGroup(AudioFileLocationDialogGroup);
-    settings.setValue("location", location);
-    afldLocation = location;
+    afldLocation.set(location);
 }
 
 int Preferences::getDefaultAudioLocation()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(AudioFileLocationDialogGroup);
-        afldLocation = settings.value("location", "0").toInt();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("location", afldLocation);
-    }
-
-    return afldLocation;
+    return afldLocation.get();
 }
 
-void Preferences::setCustomAudioLocation(QString location)
+PreferenceString afldCustomLocation(
+        AudioFileLocationDialogGroup, "customLocation", "./sounds");
+
+void Preferences::setCustomAudioLocation(const QString &location)
 {
-    QSettings settings;
-    settings.beginGroup(AudioFileLocationDialogGroup);
-    settings.setValue("customLocation", location);
-    afldCustomLocation = location;
+    afldCustomLocation.set(location);
 }
 
 QString Preferences::getCustomAudioLocation()
 {
-    static bool firstGet = true;
-
-    if (firstGet) {
-        firstGet = false;
-
-        QSettings settings;
-        settings.beginGroup(AudioFileLocationDialogGroup);
-        afldCustomLocation =
-                settings.value("customLocation", "./sounds").toString();
-        // Write it back out so we can find it if it wasn't there.
-        settings.setValue("customLocation", afldCustomLocation);
-    }
-
-    return afldCustomLocation;
+    return afldCustomLocation.get();
 }
 
 PreferenceBool jackLoadCheck(

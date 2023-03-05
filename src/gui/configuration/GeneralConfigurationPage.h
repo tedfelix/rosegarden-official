@@ -112,7 +112,7 @@ private:
     QCheckBox *m_autoChannels;
 
     // Presentation tab
-    QCheckBox *m_Thorn;
+    QComboBox *m_theme;
     QComboBox *m_nameStyle;
     QCheckBox *m_backgroundTextures;
     QCheckBox *m_notationBackgroundTextures;

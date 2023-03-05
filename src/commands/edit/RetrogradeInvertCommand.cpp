@@ -140,7 +140,7 @@ RetrogradeInvertCommand::modifySegment()
         	    }
         	} else {
         */
-        //Segment::iterator jtr = segment.insert(toInsert[j]);
+        segment.insert(toInsert[j]);
         //	}
 
         // insert new event back into selection
