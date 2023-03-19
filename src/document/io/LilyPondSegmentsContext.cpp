@@ -66,6 +66,8 @@ LilyPondSegmentsContext::~LilyPondSegmentsContext()
                         delete *i;
                     }
                     delete sit->rawVoltaChain;
+                    // sortedVoltaChain elements points to rawVoltaChain ones:
+                    // They already have been deleted. 
                     delete sit->sortedVoltaChain;
                 }
             }
@@ -263,7 +265,7 @@ LilyPondSegmentsContext::precompute()
     }
 
     // Check linked segment repeat consistency between tracks/voices and
-    // mark inconsistent repeats
+    // mark inconsistent repeats with the noRepeat flag.
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
@@ -305,7 +307,7 @@ LilyPondSegmentsContext::precompute()
     }
 
     // Then look again for repeats from linked segments
-    // (without looking at the inconsistent ones)
+    // (but without looking at the inconsistent ones)
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             vit->second.scanForRepeatedLinks();
@@ -708,6 +710,15 @@ LilyPondSegmentsContext::isLastVolta() const
     return m_lastVolta;
 }
 
+const std::set<int> *
+LilyPondSegmentsContext::getVoltaNumbers() const
+{
+    if (!m_currentVoltaChain) return nullptr;  // Seg. is not a volta
+    if (!(*m_segIterator).sortedVoltaChain) return nullptr;
+    if (m_voltaIterator == (*m_segIterator).sortedVoltaChain->end()) return nullptr;
+    return &(*m_voltaIterator)->voltaNumber;
+}
+
 std::string
 LilyPondSegmentsContext::getVoltaText()
 {
@@ -715,6 +726,7 @@ LilyPondSegmentsContext::getVoltaText()
     std::set<int>::iterator it;
     int last, current;
 
+    if (!m_currentVoltaChain) return std::string("?");  // Seg. is not a volta  
     if (!(*m_segIterator).sortedVoltaChain) return std::string("");
     if (m_voltaIterator == (*m_segIterator).sortedVoltaChain->end())
         return std::string("");
@@ -753,9 +765,9 @@ LilyPondSegmentsContext::getVoltaText()
 int
 LilyPondSegmentsContext::getVoltaRepeatCount()
 {
+    if (!m_currentVoltaChain) return -1;  // Current segment is not a volta  
     if (!(*m_segIterator).sortedVoltaChain) return 0;
     if (m_voltaIterator == (*m_segIterator).sortedVoltaChain->end()) return 0;
-
     return (*m_voltaIterator)->voltaNumber.size();
 }
 
@@ -1303,25 +1315,36 @@ LilyPondSegmentsContext::resetVerseIndexes()
 
 
 Segment *
-LilyPondSegmentsContext::useFirstLyricsSegment()   // IDEM useFirstSegment ==> USELESS
+LilyPondSegmentsContext::useFirstLyricsSegment()
 {
-    return nullptr;
+    m_segIterator = m_voiceIterator->second.begin();
+    if (m_segIterator == m_voiceIterator->second.end()) return nullptr;
+    return m_segIterator->segment;
 }
 
 Segment *
-LilyPondSegmentsContext::useNextLyricsSegment()    // IDEM useNextSegment ==> USELESS
+LilyPondSegmentsContext::useNextLyricsSegment()
 {
-    return nullptr;
+    ++m_segIterator;
+    if (m_segIterator == m_voiceIterator->second.end()) return nullptr;
+    return m_segIterator->segment;
+}
+
+
+const void *
+LilyPondSegmentsContext::getCurrentData() const    // YGYGYG DEBUG...
+{
+    return (const void *) m_segIterator->getSDAddress();
 }
 
 int
-LilyPondSegmentsContext::getCurrentVerse()
+LilyPondSegmentsContext::getCurrentVerse()    // IDEM useNextSegment ==> USELESS
 {
     return 0;
 }
 
 int
-LilyPondSegmentsContext::getCurrentOffset()
+LilyPondSegmentsContext::getCurrentOffset()    // IDEM useNextSegment ==> USELESS
 {
     return 0;
 }

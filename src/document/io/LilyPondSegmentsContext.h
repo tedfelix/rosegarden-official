@@ -243,14 +243,24 @@ public:
      * Return true if the segment is the last volta of a chain
      */
     bool isLastVolta() const;
+    
+    /**
+     * Return a set of the existing volta numbers associated to an alternate
+     * ending segment. The alternate segment is played when the volta number is
+     * in the set.
+     * Return nullptr if not a volta.
+     */
+    const std::set<int> * getVoltaNumbers() const;
 
     /**
      * Return the text of the current volta.
+     * Return "?" if not a volta.
      */
     std::string getVoltaText();
 
     /**
      * Return the number of time the current volta is played.
+     * Return -1 if not a volta.
      */
     int getVoltaRepeatCount();
 
@@ -305,7 +315,9 @@ public:
      * Go to the next segment with maybe lyrics.
      * Return null if there is no more segment on the current track and voice.
      */
-    Segment * useNextLyricsSegment();    
+    Segment * useNextLyricsSegment();   
+    
+    const void * getCurrentData() const;  // YGYGYG DEBUG...
     
     //YGYGYG
     /**
@@ -319,6 +331,9 @@ public:
      * Return the current offset if needed...    // ???????
      */
     int getCurrentOffset();
+    
+    //YGYGYG
+    void showVoltaChains() const { m_segIterator->showVoltaChains(); }
 
     /// Only for instrumentation while debugging
     void dump();
@@ -326,18 +341,34 @@ public:
     static int m_nextRepeatId;
 
 private :
+// public:     // YGYGYG
 
     struct SegmentData;
 
     struct Volta {
         const SegmentData * data;
         std::set<int> voltaNumber;
-
+        
+        // YGYGYG
+        Volta()
+        {
+            std::cerr << "Volta Ctor  NoDat this=" << this << "\n";
+        }
+        
         Volta(const SegmentData *sd, int number)
         {
             voltaNumber.clear();
             data = sd;
             voltaNumber.insert(number);
+            
+            // YGYGYG
+            std::cerr << "Volta Ctor  segDat=" << data << "\n";
+        }
+
+        // YGYGYG
+        ~Volta()
+        {
+            std::cerr << "Volta Dtor  segDat=" << data << "\n";
         }
     };
 
@@ -402,6 +433,13 @@ private :
             simpleRepeatId = 0;
             numberOfSimpleRepeats = 0;
             currentVerse = 0;
+         }
+         
+         //YGYGYG
+         const SegmentData * getSDAddress() const { return this; }
+         void showVoltaChains() const {
+             std::cerr << "rawVC=" << rawVoltaChain
+                       << "  sortedVC=" << sortedVoltaChain << "\n";
          }
     };
 

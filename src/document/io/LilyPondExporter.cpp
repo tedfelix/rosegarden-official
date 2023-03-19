@@ -1337,9 +1337,10 @@ LilyPondExporter::write()
 
     Track *track = nullptr;
     
-    std::cout << "YG================================\n";
-    lsc.dump();
-    std::cout << "YG================================\n";
+//     std::cout << "YG================================\n";
+//     std::cout << "lsc.dump:\n";
+//     lsc.dump();
+//     std::cout << "YG================================\n";
 
     for (track = lsc.useFirstTrack(); track; track = lsc.useNextTrack()) {
         int trackPos = lsc.getTrackPos();
@@ -2125,6 +2126,8 @@ LilyPondExporter::write()
             
             
             // YGYGYG
+            int voltaCount = 1;
+            int deltaVoltaCount = 0;
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
                 std::cerr << "YG2 segment " << seg->getLabel();
                 int n = lsc.getNumberOfRepeats();
@@ -2133,8 +2136,14 @@ LilyPondExporter::write()
                 bool repeatedL = lsc.isSimpleRepeatedLinks();
                 bool repeatedV = lsc.isRepeatWithVolta();
                 bool volta = lsc.isVolta();
+                
+                if (!volta) { 
+                    voltaCount += deltaVoltaCount;
+                    deltaVoltaCount = n ? n - 1 : 0;
+                }
+                
                 int nv = lsc.getVoltaRepeatCount();
-                int cnt = nv ? nv : n ? n : 1;
+                int cnt = nv > 0 ? nv : n ? n : 1;
                 std::cerr << " N=" << n
                           << " NV=" << nv
                           << " R=" << repeated 
@@ -2145,6 +2154,62 @@ LilyPondExporter::write()
                           << "    Count=" << cnt
                           << "  Verses=" << seg->getVerseCount();
                 if (volta) std::cerr << "  v \"" << lsc.getVoltaText() << "\"";
+                
+                std::cerr << "  VoltaCount=" << voltaCount << "\n";
+//                 lsc.showVoltaChains();
+                
+//                 timeT startT = seg->getClippedStartTime();
+//                 timeT endT = seg->getEndMarkerTime();
+//                 std::cerr << "   DT=" << (endT - startT);
+//                 std::cerr << "\n";
+                
+//                 int sbar, sbeat, sfraction, sremainder;
+//                 int ebar, ebeat, efraction, eremainder;
+//                 m_composition->getMusicalTimeForAbsoluteTime
+//                                     (startT, sbar, sbeat, sfraction, sremainder);
+//                 m_composition->getMusicalTimeForAbsoluteTime
+//                                     (endT, ebar, ebeat, efraction, eremainder);
+//                 std::cerr << "\tStart: bar=" <<  sbar << " beat=" << sbeat 
+//                           << " frac=" << sfraction << " rem=" << sremainder << "\n";
+//                 std::cerr << "\tEnd :  bar=" <<  ebar << " beat=" << ebeat 
+//                           << " frac=" << efraction << " rem=" << eremainder << "\n";
+                          
+//                 std::cerr << "Addr : " << lsc.getCurrentData();
+//                 std::cerr << "   lyrics : " << seg->lyricsPositionsCount();
+//                 std::cerr << "   verse : " << seg->getVerseCount() << "\n";
+
+                // std::cerr << "\n";
+                
+                // See also Segment::getVerse() and Segment::getVerseWrapped() ...
+            }
+
+            
+        
+        std::cerr << "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n";
+        
+            // YGYGYG
+            for (seg = lsc.useFirstLyricsSegment(); seg;
+                                        seg = lsc.useNextLyricsSegment()) {
+                std::cerr << "YG lyric segment " << seg->getLabel();
+                int n = lsc.getNumberOfRepeats();
+                bool repeated = lsc.isRepeated();
+                bool repeatedS = lsc.isRepeatingSegment();
+                bool repeatedL = lsc.isSimpleRepeatedLinks();
+                bool repeatedV = lsc.isRepeatWithVolta();
+                bool volta = lsc.isVolta();
+                int nv = lsc.getVoltaRepeatCount();
+                int cnt = nv > 0 ? nv : n ? n : 1;
+                std::cerr << " N=" << n
+                          << " NV=" << nv
+                          << " R=" << repeated 
+                          << " RS=" << repeatedS
+                          << " RL=" << repeatedL
+                          << " RV=" << repeatedV
+                          << " V=" << volta
+                          << "    Count=" << cnt
+                          << "  Verses=" << seg->getVerseCount();
+                // if (volta) 
+                          std::cerr << "  v \"" << lsc.getVoltaText() << "\"";
                 
                 timeT startT = seg->getClippedStartTime();
                 timeT endT = seg->getEndMarkerTime();
@@ -2162,29 +2227,30 @@ LilyPondExporter::write()
 //                 std::cerr << "\tEnd :  bar=" <<  ebar << " beat=" << ebeat 
 //                           << " frac=" << efraction << " rem=" << eremainder << "\n";
                           
-                std::cerr << "lyrics : " << seg->lyricsPositionsCount();
+                std::cerr << "Addr : " << lsc.getCurrentData();
+                std::cerr << "   lyrics : " << seg->lyricsPositionsCount();
                 std::cerr << "   verse : " << seg->getVerseCount() << "\n";
 
                 // std::cerr << "\n";
                 
                 // See also Segment::getVerse() and Segment::getVerseWrapped() ...
             }
-            
-            
+
+        std::cerr << "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n";
+        
+
+        
             // YG: CAN'T WORK HERE BECAUSE SEVERAL VOICES OPENED IN EACH TRACK :
             // ONE AT EACH SEGMENT !!!
-            //   ==> TODO : ONLY ONE VOICE OPENED FOR EACH VOICE AND ONLY ONE VOICE CLOSED
+            //   ==> TODO : ONLY ONE VOICE OPENED FOR EACH TRACK AND ONLY ONE VOICE CLOSED
             
 //             str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-
             str << std::endl << indent(col) << "% End voice " << voiceIndex << std::endl; 
             
             
         } // for (voiceIndex = lsc.useFirstVoice(); voiceIndex != -1; ....
-        
-        
-        
-        
-        
+
+
         
         // YGYGYG
         // Currently, if several voices have lyrics, they are only exported
@@ -2222,8 +2288,37 @@ LilyPondExporter::write()
                 if (voiceIndex != lyricsVoice) continue;  // (1)
                 
                 
-                for (int verseIndex = 0; verseIndex < verses[voiceIndex]; verseIndex++) {
                 
+                
+                
+//-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS 
+
+                // Compute the needed number of lines
+                int maxLine = 1;
+                for (Segment * seg = lsc.useFirstSegment();
+                                                seg; seg = lsc.useNextSegment()) {
+                    
+                    std::cerr << "Lyrics segment " << seg->getLabel();
+                    int n = lsc.getNumberOfRepeats();
+                    bool repeated = lsc.isRepeated();
+                    bool repeatedS = lsc.isRepeatingSegment();
+                    bool repeatedL = lsc.isSimpleRepeatedLinks();
+                    bool repeatedV = lsc.isRepeatWithVolta();
+                    if (!lsc.isVolta()) {
+                        int n = lsc.getNumberOfRepeats();
+                        if (n) maxLine += n - 1;
+                        // n is the number of times the volta is played
+                        // So the number of repetitions of the volta is n - 1
+                    }        
+                }
+                
+                
+//-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS                
+                
+                
+                bool isFirstPrintedVerse = true;                
+//                 for (int verseLine = 0; verseLine < verses[voiceIndex]; verseLine++) {
+                for (int verseLine = 0; verseLine < maxLine; verseLine++) {
                 
                     std::ostringstream voiceNumber;
                     voiceNumber << "voice " << trackPos << "." << voiceIndex;
@@ -2234,13 +2329,14 @@ LilyPondExporter::write()
                             << " \\new Lyrics \\lyricmode {" << std::endl;
                     } else {
                         str << indent(col)
-                            << "\\new Lyrics ";
-    //                     // Put special alignment info for first printed verse only.
-    //                     // Otherwise, verses print in reverse order.
-    //                     if (isFirstPrintedVerse) {
-                            str << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"}" << std::endl;
-    //                         isFirstPrintedVerse = false;
-    //                     }
+                            << "\\new Lyrics" << std::endl;
+                        // Put special alignment info for first printed verse only.
+                        // Otherwise, verses print in reverse order.
+                        if (isFirstPrintedVerse) {
+                            str << indent(col)
+                                << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"}" << std::endl;
+                            isFirstPrintedVerse = false;
+                        }
                         str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\"" << " {" << std::endl;
                         str << indent(++col) << "\\lyricmode {" << std::endl;
                     }
@@ -2258,21 +2354,65 @@ LilyPondExporter::write()
                     // END OF HEADER WRITING
                 
                 
-                
+                    int voltaCount = 1;
+                    int deltaVoltaCount = 0;                
                     for (Segment * seg = lsc.useFirstSegment();
                                                     seg; seg = lsc.useNextSegment()) {
                         std::cerr << "Lyrics segment " << seg->getLabel();
-                        int n = lsc.getNumberOfRepeats();
-                        bool repeated = lsc.isRepeated();
-                        bool repeatedS = lsc.isRepeatingSegment();
-                        bool repeatedL = lsc.isSimpleRepeatedLinks();
-                        bool repeatedV = lsc.isRepeatWithVolta();
-                        bool volta = lsc.isVolta();
-                        int nv = lsc.getVoltaRepeatCount();
-                        int cnt = nv ? nv : n ? n : 1;
-                        std::cerr << "  Seg rep Count = " << cnt
-                                  << "  Seg Verses = " << seg->getVerseCount()
-                                  << "  Max verses = " << verses[voiceIndex]
+                                  
+                        int verseIndex;
+                        if (!lsc.isVolta()) { 
+                            voltaCount += deltaVoltaCount;
+                            int n = lsc.getNumberOfRepeats();
+                            deltaVoltaCount = n ? n - 1 : 0;
+                            verseIndex = ((verseLine + 1) + 1 - voltaCount) - 1;
+                            // verseIndex and verseLine start from 0 end not 1
+                        } else {
+                            const std::set<int>* numbers = lsc.getVoltaNumbers();
+                            
+//                             ////////////// YG DEBUG START
+//                             std::set<int>::const_iterator i;
+//                             std::cout << "  Numbers : (";
+//                             for (i = numbers->begin(); i != numbers->end(); ++i) {
+//                                 std::cout << (i == numbers->begin() ? " " : ", ") 
+//                                           << *i;
+//                             }
+//                             std::cout << " )\n";
+//                             ////////////// YG DEBUG END
+                            
+                            int altNumber = (verseLine + 1) + 1 - voltaCount;
+                            
+                            std::cout << "\n   altnumber=" << altNumber;
+                            if (numbers->find(altNumber) != numbers->end()) {
+                                std::cout << " TROUVE !\n";
+                            } else {
+                                std::cout << " bof\n";       
+                            }
+                            
+                            // Get the verseNumber from the altNumber
+                            std::set<int>::const_iterator i;
+                            std::cout << "  Numbers : (";
+                            int verse = 0;
+                            bool found = false;
+                            for (i = numbers->begin(); i != numbers->end(); ++i) {
+                                if (*i == altNumber) {
+                                    found = true;
+                                    break;
+                                }
+                                verse++;
+                            }
+                            std::cout << " )\n";                                
+                                
+                            verseIndex = found ? verse : -1; 
+                            
+                            std::cout << "Alt : verseIndex = " << verseIndex << "\n";
+                        }
+                        
+
+                        
+                        std::cerr << "  verseLine=" << verseLine
+                                  << "  voltaCount=" << voltaCount
+                                  << "  verseIndex=" << verseIndex
                                   << "\n";
                                   
                         // WRITE HERE THE LYRICS OF THE SEGMENT
@@ -3617,7 +3757,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse)
     bool haveLyric = false;
     bool firstNote = true;
     
-    if (currentVerse >= seg->getVerseCount()) {
+    if ((currentVerse < 0) || (currentVerse >= seg->getVerseCount())) {
         return QStringLiteral("\\repeat unfold %1 { \\skip 1 }")
                                             .arg(seg->lyricsPositionsCount());
     }
@@ -3668,14 +3808,18 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse)
                 text += " ";
 
                 QString syllable(strtoqstr(ssyllable));
+//             std::cerr << "* " << syllable.toLocal8Bit().data();
                 syllable.replace(QRegularExpression("^\\s+"), "");
+//             std::cerr << " : " << syllable.toLocal8Bit().data();
                 syllable.replace(QRegularExpression("\\s+$"), "");
+//             std::cerr << " : " << syllable.toLocal8Bit().data();
                 syllable.replace(QRegularExpression("\""), "\\\"");
+//             std::cerr << " : " << syllable.toLocal8Bit().data() << "\n";
                 text += "\"" + syllable + "\"";
                 haveLyric = true;
             }
 //               else if (verse > lastVerse) {
-//                 lastVerse = verse;
+//                 lastVerse = verse;               // YG???????
 //             }
         }
     }
