@@ -55,7 +55,14 @@ namespace Rosegarden
 // in LilyPondOptionsDialog with the LilyVersionAwareCheckBox.
 enum {
   LILYPOND_VERSION_2_12,
-  LILYPOND_VERSION_2_14
+  LILYPOND_VERSION_2_14,
+  LILYPOND_VERSION_2_16,
+  LILYPOND_VERSION_2_18,
+  LILYPOND_VERSION_2_19,
+  LILYPOND_VERSION_2_20,
+  LILYPOND_VERSION_2_21,
+  LILYPOND_VERSION_2_22,
+  LILYPOND_VERSION_2_23
 };
 
 class TimeSignature;

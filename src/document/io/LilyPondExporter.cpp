@@ -851,6 +851,34 @@ LilyPondExporter::write()
         str << "\\version \"2.14.0\"" << std::endl;
         break;
 
+    case LILYPOND_VERSION_2_16:
+        str << "\\version \"2.16.0\"" << std::endl;
+        break;
+
+    case LILYPOND_VERSION_2_18:
+        str << "\\version \"2.18.0\"" << std::endl;
+        break;
+
+    case LILYPOND_VERSION_2_19:
+        str << "\\version \"2.19.0\"" << std::endl;
+        break;
+
+    case LILYPOND_VERSION_2_20:
+        str << "\\version \"2.20.0\"" << std::endl;
+        break;
+
+    case LILYPOND_VERSION_2_21:
+        str << "\\version \"2.21.0\"" << std::endl;
+        break;
+
+    case LILYPOND_VERSION_2_22:
+        str << "\\version \"2.22.0\"" << std::endl;
+        break;
+
+    case LILYPOND_VERSION_2_23:
+        str << "\\version \"2.23.0\"" << std::endl;
+        break;
+
     default:
         // force the default version if there was an error
         RG_WARNING << "ERROR: Unknown language level " << m_languageLevel
@@ -1484,7 +1512,6 @@ LilyPondExporter::write()
 
             Segment *seg;
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
-                std::cerr << "YG segment " << seg->getLabel() << "\n";
                 RG_DEBUG << "lsc iterate segment" << seg;
                 
                 if (seg->getVerseCount() > verses[voiceIndex]) {
@@ -1961,7 +1988,6 @@ LilyPondExporter::write()
             int voltaCount = 1;
             int deltaVoltaCount = 0;
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
-                std::cerr << "YG2 segment " << seg->getLabel();
                 int n = lsc.getNumberOfRepeats();
                 bool volta = lsc.isVolta();
                 
@@ -1991,7 +2017,6 @@ LilyPondExporter::write()
         int maxVers = 0;
         int lyricsVoice = 0;
         for (unsigned int i = 0; i < verses.size(); i++) {
-            std::cerr << "verses[" << i << "] = " << verses[i] << "\n";
             if (verses[i] > maxVers) {
                 maxVers = verses[i];
                 lyricsVoice = i;
@@ -2062,8 +2087,6 @@ LilyPondExporter::write()
                     int deltaVoltaCount = 0;                
                     for (Segment * seg = lsc.useFirstSegment();
                                                     seg; seg = lsc.useNextSegment()) {
-                        std::cerr << "Lyrics segment " << seg->getLabel();
-                                  
                         int verseIndex;
                         if (!lsc.isVolta()) { 
                             voltaCount += deltaVoltaCount;
@@ -2073,19 +2096,10 @@ LilyPondExporter::write()
                             // verseIndex and verseLine start from 0 end not 1
                         } else {
                             const std::set<int>* numbers = lsc.getVoltaNumbers();
-                            
                             int altNumber = (verseLine + 1) + 1 - voltaCount;
-                            
-                            std::cout << "\n   altnumber=" << altNumber;
-                            if (numbers->find(altNumber) != numbers->end()) {
-                                std::cout << " TROUVE !\n";
-                            } else {
-                                std::cout << " bof\n";       
-                            }
                             
                             // Get the verseNumber from the altNumber
                             std::set<int>::const_iterator i;
-                            std::cout << "  Numbers : (";
                             int verse = 0;
                             bool found = false;
                             for (i = numbers->begin(); i != numbers->end(); ++i) {
@@ -2094,12 +2108,9 @@ LilyPondExporter::write()
                                     break;
                                 }
                                 verse++;
-                            }
-                            std::cout << " )\n";                                
+                            }                             
                                 
                             verseIndex = found ? verse : -1; 
-                            
-                            std::cout << "Alt : verseIndex = " << verseIndex << "\n";
                         }
                                   
                         // WRITE HERE THE LYRICS OF THE SEGMENT
