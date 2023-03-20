@@ -1300,49 +1300,11 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
     }
 }
 
-///////////////////////////////////////////////////YGYGYG
-
 Segment * 
 LilyPondSegmentsContext::getArbitrarySegment(int trackPos)
 {
     return m_segments[trackPos][0].begin()->segment;
 }
-
-void
-LilyPondSegmentsContext::resetVerseIndexes()
-{
-}
-
-
-Segment *
-LilyPondSegmentsContext::useFirstLyricsSegment()
-{
-    m_segIterator = m_voiceIterator->second.begin();
-    if (m_segIterator == m_voiceIterator->second.end()) return nullptr;
-    return m_segIterator->segment;
-}
-
-Segment *
-LilyPondSegmentsContext::useNextLyricsSegment()
-{
-    ++m_segIterator;
-    if (m_segIterator == m_voiceIterator->second.end()) return nullptr;
-    return m_segIterator->segment;
-}
-
-int
-LilyPondSegmentsContext::getCurrentVerse()    // IDEM useNextSegment ==> USELESS
-{
-    return 0;
-}
-
-int
-LilyPondSegmentsContext::getCurrentOffset()    // IDEM useNextSegment ==> USELESS
-{
-    return 0;
-}
-
-///////////////////////////////////////////////////YGYGYG
 
 void
 LilyPondSegmentsContext::dump()

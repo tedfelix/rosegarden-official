@@ -294,41 +294,6 @@ public:
      * shared by all segments of the track) is needed at the track level.
      */
     Segment * getArbitrarySegment(int trackPos); 
-    
-    // YGYGYG
-    /**
-     * Reset the verse index before reading the lyrics of a voice
-     */
-    void resetVerseIndexes(); 
-    
-    // YGYGYG
-    /**
-     * Prepare to get the lyrics on the current track and for the current
-     * voice.
-     * Return the first segment with maybe lyrics.
-     * Return null if there is no segment on the current track and voice.
-     */
-    Segment * useFirstLyricsSegment();
-
-    // YGYGYG
-    /**
-     * Go to the next segment with maybe lyrics.
-     * Return null if there is no more segment on the current track and voice.
-     */
-    Segment * useNextLyricsSegment();   
-    
-    //YGYGYG
-    /**
-     * Return the verse number which should be used here.
-     * Return -1 if there is no more lyrics here.   TODO : Wrap to the first verse ???
-     */
-    int getCurrentVerse();
-    
-    // YGYGYG
-    /**
-     * Return the current offset if needed...    // ???????
-     */
-    int getCurrentOffset();
 
     /// Only for instrumentation while debugging
     void dump();
