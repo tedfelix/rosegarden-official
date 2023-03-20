@@ -1330,13 +1330,6 @@ LilyPondSegmentsContext::useNextLyricsSegment()
     return m_segIterator->segment;
 }
 
-
-const void *
-LilyPondSegmentsContext::getCurrentData() const    // YGYGYG DEBUG...
-{
-    return (const void *) m_segIterator->getSDAddress();
-}
-
 int
 LilyPondSegmentsContext::getCurrentVerse()    // IDEM useNextSegment ==> USELESS
 {

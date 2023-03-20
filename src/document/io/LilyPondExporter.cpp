@@ -29,7 +29,6 @@
 
 #define RG_MODULE_STRING "[LilyPondExporter]"
 #define RG_NO_DEBUG_PRINT 1
-#define OLD_LYRICS_MODE 0
 
 #include "LilyPondExporter.h"
 #include "LilyPondSegmentsContext.h"
@@ -403,12 +402,13 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                     *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
                     *}
                     */
-
-                // NOTE: sustain syntax changed in LilyPond 2.12
+                
+                // NOTE: sustain syntax changed in LilyPond 2.12:
+                //          "Up" --> "Off" and "Down" --> "On"
                 if ((*m)->get <Int>(Controller::VALUE) > 0) {
-                    str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Down " : "On ");
+                    str << "\\sustainOn ";
                 } else {
-                    str << "\\sustain" << (m_languageLevel < LILYPOND_VERSION_2_12 ? "Up " : "Off ");
+                    str << "\\sustainOff ";
                 }
             }
 
@@ -842,18 +842,6 @@ LilyPondExporter::write()
     str << m_language->getImportStatement();
 
     switch (m_languageLevel) {
-
-    case LILYPOND_VERSION_2_6:
-        str << "\\version \"2.6.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_8:
-        str << "\\version \"2.8.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_10:
-        str << "\\version \"2.10.0\"" << std::endl;
-        break;
 
     case LILYPOND_VERSION_2_12:
         str << "\\version \"2.12.0\"" << std::endl;
@@ -1300,7 +1288,6 @@ LilyPondExporter::write()
     }
 
 
-    int lastTrackIndex = -1;
     int voiceCounter = 0;
     bool firstTrack = true;
     int staffGroupCounter = 0;
@@ -1336,12 +1323,6 @@ LilyPondExporter::write()
     // be relatively small in the greater scheme.
 
     Track *track = nullptr;
-    
-//     std::cout << "YG================================\n";
-//     std::cout << "lsc.dump:\n";
-//     lsc.dump();
-//     std::cout << "YG================================\n";
-
     for (track = lsc.useFirstTrack(); track; track = lsc.useNextTrack()) {
         int trackPos = lsc.getTrackPos();
         std::cerr << "YG track " << trackPos << "\n";
@@ -1353,9 +1334,6 @@ LilyPondExporter::write()
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             return false;
         }
-        
-        
-        
 
         if (m_exportStaffGroup) {
             prevBracket = bracket;
@@ -1379,8 +1357,6 @@ LilyPondExporter::write()
                     << ++pianoStaffCounter << "\" <<" << std::endl;
             }
         }              
-        
-
 
         // avoid problem with <untitled> tracks yielding a
         // .ly file that jumbles all notes together on a
@@ -1447,21 +1423,18 @@ LilyPondExporter::write()
                 staffNameWithTranspose << " }";
             }
             staffNameWithTranspose << " } }";
-            if (m_languageLevel < LILYPOND_VERSION_2_10) {
-                str << indent(col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
-                    << std::endl;
-            } else {
-                // always write long staff name
-                str << indent(col) << "\\set Staff.instrumentName = "
-                    << staffNameWithTranspose.str() << std::endl;
+                
+            // always write long staff name
+            str << indent(col) << "\\set Staff.instrumentName = "
+                << staffNameWithTranspose.str() << std::endl;
 
-                // write short staff name if user desires, and if
-                // non-empty
-                if (m_useShortNames && shortStaffName.size()) {
-                    str << indent(col) << "\\set Staff.shortInstrumentName = \""
-                        << shortStaffName << "\"" << std::endl;
-                }
+            // write short staff name if user desires, and if
+            // non-empty
+            if (m_useShortNames && shortStaffName.size()) {
+                str << indent(col) << "\\set Staff.shortInstrumentName = \""
+                    << shortStaffName << "\"" << std::endl;
             }
+            
         }
 
         // Set midi instrument for the Staff when possible
@@ -1667,12 +1640,8 @@ LilyPondExporter::write()
                 // voiceCounter is a hack because LilyPond does not by default make
                 // them unique
                 std::ostringstream voiceNumber;
+                voiceNumber << "voice " << trackPos << "." << voiceIndex;
 
-                if (OLD_LYRICS_MODE) {
-                    voiceNumber << "voice " << trackPos << "." << ++voiceCounter;
-                } else {
-                    voiceNumber << "voice " << trackPos << "." << voiceIndex;
-                }
                 if (!lsc.isVolta()) {
                     str << std::endl << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
                         << "\" {"; // indent+
@@ -1993,129 +1962,8 @@ LilyPondExporter::write()
                     }
                 }
 
-                //
-                // Write accumulated lyric events to the Lyric context, if desired.
-                //
-                // Sync the code below with LyricEditDialog::unparse() !!
-                //
-                if (OLD_LYRICS_MODE) {
-                if (m_exportLyrics != EXPORT_NO_LYRICS) {
-                    // To force correct ordering of verses must track when first verse is printed.
-                    bool isFirstPrintedVerse = true;
-                    for (long currentVerse = 0, lastVerse = 0;
-                        currentVerse <= lastVerse;
-                        currentVerse++) {
-                        bool haveLyric = false;
-                        bool firstNote = true;
-                        QString text = "";
 
-                        timeT lastTime = seg->getStartTime();
-                        for (Segment::iterator j = seg->begin();
-                            seg->isBeforeEndMarker(j); ++j) {
 
-                            bool isNote = (*j)->isa(Note::EventType);
-                            bool isLyric = false;
-
-                            if (!isNote) {
-                                if ((*j)->isa(Text::EventType)) {
-                                    std::string textType;
-                                    if ((*j)->get
-                                        <String>(Text::TextTypePropertyName, textType) &&
-                                        textType == Text::Lyric) {
-                                        isLyric = true;
-                                    }
-                                }
-                            }
-
-                            if (!isNote && !isLyric) continue;
-
-                            timeT myTime = (*j)->getNotationAbsoluteTime();
-
-                            if (isNote) {
-                                if ((myTime > lastTime) || firstNote) {
-                                    if (!haveLyric)
-                                        text += " _";
-                                    lastTime = myTime;
-                                    haveLyric = false;
-                                    firstNote = false;
-                                }
-                            }
-
-                            if (isLyric) {
-                                // Very old .rg files may not have the verse property.
-                                // In such a case there is only one verse which
-                                // is numbered 0.
-                                long verse;
-                                if (! (*j)->get<Int>(Text::LyricVersePropertyName,
-                                                     verse)) verse = 0;
-
-                                if (verse == currentVerse) {
-                                    std::string ssyllable;
-                                    (*j)->get<String>(Text::TextPropertyName, ssyllable);
-                                    text += " ";
-
-                                    QString syllable(strtoqstr(ssyllable));
-                                    syllable.replace(QRegularExpression("^\\s+"), "");
-                                    syllable.replace(QRegularExpression("\\s+$"), "");
-                                    syllable.replace(QRegularExpression("\""), "\\\"");
-                                    text += "\"" + syllable + "\"";
-                                    haveLyric = true;
-                                } else if (verse > lastVerse) {
-                                    lastVerse = verse;
-                                }
-                            }
-                        }
-
-                        text.replace(QRegularExpression(" _+([^ ])") , " \\1");
-                        text.replace("\"_\"" , " ");
-
-                        // Do not create empty context for lyrics.
-                        // Does this save some vertical space, as was written
-                        // in earlier comment?
-                        QRegularExpression rx("\"");
-                        if (rx.match(text).hasMatch()) {
-
-                            if (m_languageLevel <= LILYPOND_VERSION_2_10) {
-                                str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
-                                    << " \\new Lyrics \\lyricmode {" << std::endl;
-                            } else {
-                                str << indent(col)
-                                    << "\\new Lyrics ";
-                                // Put special alignment info for first printed verse only.
-                                // Otherwise, verses print in reverse order.
-                                if (isFirstPrintedVerse) {
-                                    str << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"} ";
-                                    isFirstPrintedVerse = false;
-                                }
-                                str << "\\lyricsto \"" << voiceNumber.str() << "\"" << " { \\lyricmode {" << std::endl;
-                            }
-                            if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
-                                str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
-                                    << std::endl;
-                            } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
-                                str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
-                                    << std::endl;
-                            } else {
-                                str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
-                                    << std::endl;
-                            }
-                            str << indent(col) << qStrToStrUtf8("\\set ignoreMelismata = ##t") << std::endl;
-                            str << indent(col) << qStrToStrUtf8(text) << " " << std::endl;
-                            str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
-                            str << indent(--col);
-                            if (m_languageLevel > LILYPOND_VERSION_2_10) {
-                                str << qStrToStrUtf8("}");
-                            }
-                            str << qStrToStrUtf8("} % Lyrics ") << (currentVerse+1) << std::endl;
-                            // close the Lyrics context
-                        } // if (rx.search(text....
-                    } // for (long currentVerse = 0....
-                } // if (m_exportLyrics....
-                } else { // IF OLD_LYRICS_MODE
-                    // !OLD_LYRICS_MODE
-                    
-                    
-                } // IF OLD_LYRICS_MODE
                 firstTrack = false;
                 
                 
@@ -2144,99 +1992,12 @@ LilyPondExporter::write()
                 
                 int nv = lsc.getVoltaRepeatCount();
                 int cnt = nv > 0 ? nv : n ? n : 1;
-                std::cerr << " N=" << n
-                          << " NV=" << nv
-                          << " R=" << repeated 
-                          << " RS=" << repeatedS
-                          << " RL=" << repeatedL
-                          << " RV=" << repeatedV
-                          << " V=" << volta
-                          << "    Count=" << cnt
-                          << "  Verses=" << seg->getVerseCount();
-                if (volta) std::cerr << "  v \"" << lsc.getVoltaText() << "\"";
                 
-                std::cerr << "  VoltaCount=" << voltaCount << "\n";
-//                 lsc.showVoltaChains();
-                
-//                 timeT startT = seg->getClippedStartTime();
-//                 timeT endT = seg->getEndMarkerTime();
-//                 std::cerr << "   DT=" << (endT - startT);
-//                 std::cerr << "\n";
-                
-//                 int sbar, sbeat, sfraction, sremainder;
-//                 int ebar, ebeat, efraction, eremainder;
-//                 m_composition->getMusicalTimeForAbsoluteTime
-//                                     (startT, sbar, sbeat, sfraction, sremainder);
-//                 m_composition->getMusicalTimeForAbsoluteTime
-//                                     (endT, ebar, ebeat, efraction, eremainder);
-//                 std::cerr << "\tStart: bar=" <<  sbar << " beat=" << sbeat 
-//                           << " frac=" << sfraction << " rem=" << sremainder << "\n";
-//                 std::cerr << "\tEnd :  bar=" <<  ebar << " beat=" << ebeat 
-//                           << " frac=" << efraction << " rem=" << eremainder << "\n";
-                          
-//                 std::cerr << "Addr : " << lsc.getCurrentData();
-//                 std::cerr << "   lyrics : " << seg->lyricsPositionsCount();
-//                 std::cerr << "   verse : " << seg->getVerseCount() << "\n";
-
-                // std::cerr << "\n";
-                
+                // YGYGYG
                 // See also Segment::getVerse() and Segment::getVerseWrapped() ...
             }
 
-            
-        
-        std::cerr << "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n";
-        
-            // YGYGYG
-            for (seg = lsc.useFirstLyricsSegment(); seg;
-                                        seg = lsc.useNextLyricsSegment()) {
-                std::cerr << "YG lyric segment " << seg->getLabel();
-                int n = lsc.getNumberOfRepeats();
-                bool repeated = lsc.isRepeated();
-                bool repeatedS = lsc.isRepeatingSegment();
-                bool repeatedL = lsc.isSimpleRepeatedLinks();
-                bool repeatedV = lsc.isRepeatWithVolta();
-                bool volta = lsc.isVolta();
-                int nv = lsc.getVoltaRepeatCount();
-                int cnt = nv > 0 ? nv : n ? n : 1;
-                std::cerr << " N=" << n
-                          << " NV=" << nv
-                          << " R=" << repeated 
-                          << " RS=" << repeatedS
-                          << " RL=" << repeatedL
-                          << " RV=" << repeatedV
-                          << " V=" << volta
-                          << "    Count=" << cnt
-                          << "  Verses=" << seg->getVerseCount();
-                // if (volta) 
-                          std::cerr << "  v \"" << lsc.getVoltaText() << "\"";
-                
-                timeT startT = seg->getClippedStartTime();
-                timeT endT = seg->getEndMarkerTime();
-                std::cerr << "   DT=" << (endT - startT);
-                std::cerr << "\n";
-                
-//                 int sbar, sbeat, sfraction, sremainder;
-//                 int ebar, ebeat, efraction, eremainder;
-//                 m_composition->getMusicalTimeForAbsoluteTime
-//                                     (startT, sbar, sbeat, sfraction, sremainder);
-//                 m_composition->getMusicalTimeForAbsoluteTime
-//                                     (endT, ebar, ebeat, efraction, eremainder);
-//                 std::cerr << "\tStart: bar=" <<  sbar << " beat=" << sbeat 
-//                           << " frac=" << sfraction << " rem=" << sremainder << "\n";
-//                 std::cerr << "\tEnd :  bar=" <<  ebar << " beat=" << ebeat 
-//                           << " frac=" << efraction << " rem=" << eremainder << "\n";
-                          
-                std::cerr << "Addr : " << lsc.getCurrentData();
-                std::cerr << "   lyrics : " << seg->lyricsPositionsCount();
-                std::cerr << "   verse : " << seg->getVerseCount() << "\n";
 
-                // std::cerr << "\n";
-                
-                // See also Segment::getVerse() and Segment::getVerseWrapped() ...
-            }
-
-        std::cerr << "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n";
         
 
         
@@ -2287,12 +2048,6 @@ LilyPondExporter::write()
                 
                 if (voiceIndex != lyricsVoice) continue;  // (1)
                 
-                
-                
-                
-                
-//-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS 
-
                 // Compute the needed number of lines
                 int maxLine = 1;
                 for (Segment * seg = lsc.useFirstSegment();
@@ -2311,11 +2066,7 @@ LilyPondExporter::write()
                         // So the number of repetitions of the volta is n - 1
                     }        
                 }
-                
-                
-//-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS-ENCOURS                
-                
-                
+              
                 bool isFirstPrintedVerse = true;                
 //                 for (int verseLine = 0; verseLine < verses[voiceIndex]; verseLine++) {
                 for (int verseLine = 0; verseLine < maxLine; verseLine++) {
@@ -2324,22 +2075,18 @@ LilyPondExporter::write()
                     voiceNumber << "voice " << trackPos << "." << voiceIndex;
                     
                     // WRITE HERE THE HEADER OF THE LYRICS BLOCK
-                    if (m_languageLevel <= LILYPOND_VERSION_2_10) {
-                        str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
-                            << " \\new Lyrics \\lyricmode {" << std::endl;
-                    } else {
+                    str << indent(col)
+                        << "\\new Lyrics" << std::endl;
+                    // Put special alignment info for first printed verse only.
+                    // Otherwise, verses print in reverse order.
+                    if (isFirstPrintedVerse) {
                         str << indent(col)
-                            << "\\new Lyrics" << std::endl;
-                        // Put special alignment info for first printed verse only.
-                        // Otherwise, verses print in reverse order.
-                        if (isFirstPrintedVerse) {
-                            str << indent(col)
-                                << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"}" << std::endl;
-                            isFirstPrintedVerse = false;
-                        }
-                        str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\"" << " {" << std::endl;
-                        str << indent(++col) << "\\lyricmode {" << std::endl;
+                            << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"}" << std::endl;
+                        isFirstPrintedVerse = false;
                     }
+                    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\"" << " {" << std::endl;
+                    str << indent(++col) << "\\lyricmode {" << std::endl;
+                    
                     if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
                         str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
                             << std::endl;
@@ -2431,11 +2178,9 @@ LilyPondExporter::write()
                 
                     // WRITE HERE THE TAIL OF THE LYRICS BLOCK
                     str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
-                    if (m_languageLevel > LILYPOND_VERSION_2_10) {
-                        str << indent(--col);
-                        str << qStrToStrUtf8("}") << std::endl;
-                    }
-                    
+                    str << indent(--col);
+                    str << qStrToStrUtf8("}") << std::endl;
+
                     // str << qStrToStrUtf8("} % Lyrics ") << (verseIndex+1) << std::endl;
                     str << indent(--col);
                     str << qStrToStrUtf8("} % Lyrics ") << std::endl;
@@ -2512,9 +2257,6 @@ LilyPondExporter::write()
     // signature for this purpose?  we'll see...
     str << "% " << indent(col++) << "uncomment to enable generating midi file from the lilypond source" << std::endl;
     str << "% " << indent(col++) << "\\midi {" << std::endl;
-    if (m_languageLevel < LILYPOND_VERSION_2_10) {
-        str << "% " << indent(col) << "\\tempo 4 = " << tempo << std::endl;
-    }
     str << "% " << indent(--col) << "} " << std::endl;
 
     // close \score section and close out the file
@@ -2960,16 +2702,11 @@ LilyPondExporter::writeBar(Segment *s,
 
                 } else if (event->isa(Note::EventType)) {
 
-                    if (m_languageLevel >= LILYPOND_VERSION_2_8) {
-                        // one \tweak per each chord note
-                        if (chord.size() > 1)
-                            writeStyle(event, prevStyle, col, str, true);
-                        else
-                            writeStyle(event, prevStyle, col, str, false);
-                    } else {
-                        // only one override per chord, and that outside the <>
-                        stylei = i;
-                    }
+                    // one \tweak per each chord note
+                    if (chord.size() > 1)
+                        writeStyle(event, prevStyle, col, str, true);
+                    else
+                        writeStyle(event, prevStyle, col, str, false);
 
                     writePitch(event, key, str);
 
@@ -3002,14 +2739,6 @@ LilyPondExporter::writeBar(Segment *s,
                 durationRatio = writeDuration(duration, str);
                 str << " ";
                 prevDuration = duration;
-            }
-
-            if (m_languageLevel == LILYPOND_VERSION_2_6) {
-                // only one override per chord, and that outside the <>
-                if (stylei != s->end()) {
-                    writeStyle(*stylei, prevStyle, col, str, false);
-                    stylei = s->end();
-                }
             }
 
             if (lilyText != "") {
@@ -3741,14 +3470,12 @@ LilyPondExporter::writeSlashes(const Event *note, std::ofstream &str)
 
 
 
-
-
-//                     // To force correct ordering of verses must track when first verse is printed.
-//                     bool isFirstPrintedVerse = true;
-//                     for (long currentVerse = 0, lastVerse = 0;
-//                         currentVerse <= lastVerse;
-//                         currentVerse++) {
-
+// YGYGYG Comment : ???
+                //
+                // Write accumulated lyric events to the Lyric context, if desired.
+                //
+                // Sync the code below with LyricEditDialog::unparse() !!
+                //
                     
 QString
 LilyPondExporter::getVerseText(Segment *seg, int currentVerse)

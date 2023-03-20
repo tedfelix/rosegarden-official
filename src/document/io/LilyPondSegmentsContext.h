@@ -317,8 +317,6 @@ public:
      */
     Segment * useNextLyricsSegment();   
     
-    const void * getCurrentData() const;  // YGYGYG DEBUG...
-    
     //YGYGYG
     /**
      * Return the verse number which should be used here.
@@ -331,9 +329,6 @@ public:
      * Return the current offset if needed...    // ???????
      */
     int getCurrentOffset();
-    
-    //YGYGYG
-    void showVoltaChains() const { m_segIterator->showVoltaChains(); }
 
     /// Only for instrumentation while debugging
     void dump();
@@ -341,7 +336,6 @@ public:
     static int m_nextRepeatId;
 
 private :
-// public:     // YGYGYG
 
     struct SegmentData;
 
@@ -349,26 +343,11 @@ private :
         const SegmentData * data;
         std::set<int> voltaNumber;
         
-        // YGYGYG
-        Volta()
-        {
-            std::cerr << "Volta Ctor  NoDat this=" << this << "\n";
-        }
-        
         Volta(const SegmentData *sd, int number)
         {
             voltaNumber.clear();
             data = sd;
             voltaNumber.insert(number);
-            
-            // YGYGYG
-            std::cerr << "Volta Ctor  segDat=" << data << "\n";
-        }
-
-        // YGYGYG
-        ~Volta()
-        {
-            std::cerr << "Volta Dtor  segDat=" << data << "\n";
         }
     };
 
@@ -433,13 +412,6 @@ private :
             simpleRepeatId = 0;
             numberOfSimpleRepeats = 0;
             currentVerse = 0;
-         }
-         
-         //YGYGYG
-         const SegmentData * getSDAddress() const { return this; }
-         void showVoltaChains() const {
-             std::cerr << "rawVC=" << rawVoltaChain
-                       << "  sortedVC=" << sortedVoltaChain << "\n";
          }
     };
 
