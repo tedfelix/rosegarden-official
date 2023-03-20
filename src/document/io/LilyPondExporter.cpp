@@ -1288,12 +1288,9 @@ LilyPondExporter::write()
     }
 
 
-    int voiceCounter = 0;
-    bool firstTrack = true;
     int staffGroupCounter = 0;
     int pianoStaffCounter = 0;
     int bracket = 0;
-    int prevBracket = -1;
     bool hasInstrumentNames = false;
     
     
@@ -1325,7 +1322,6 @@ LilyPondExporter::write()
     Track *track = nullptr;
     for (track = lsc.useFirstTrack(); track; track = lsc.useNextTrack()) {
         int trackPos = lsc.getTrackPos();
-        std::cerr << "YG track " << trackPos << "\n";
         
         // Max number of lyrics verses in each voices 
         std::vector<int> verses;
@@ -1336,7 +1332,7 @@ LilyPondExporter::write()
         }
 
         if (m_exportStaffGroup) {
-            prevBracket = bracket;
+
             bracket = track->getStaffBracket();
 
             // handle any bracket start events (unless track staff
@@ -1476,18 +1472,11 @@ LilyPondExporter::write()
         if (m_exportBeams) {
             str << indent(col) << "\\set Staff.autoBeaming = ##f % turns off all autobeaming" << std::endl;
         }
-//                     }
-
-    
-        
-        
-        //YGYGYG++++++++++++++++++++++++++++++++++++++++++
         
 
         int voiceIndex;
         for (voiceIndex = lsc.useFirstVoice();
                           voiceIndex != -1; voiceIndex = lsc.useNextVoice()) {
-            std::cerr << "YG voice " << voiceIndex << "\n";
 
             /* timeT repeatOffset = 0; */
             verses.push_back(0); 
@@ -1656,6 +1645,7 @@ LilyPondExporter::write()
                     if (staffSize == StaffTypes::Small) str << indent(col) << "\\small" << std::endl;
                     else if (staffSize == StaffTypes::Tiny) str << indent(col) << "\\tiny" << std::endl;
                 } /// if (!lsc.isVolta())
+                
                 SegmentNotationHelper helper(*seg);
                 helper.setNotationProperties();
 
@@ -1961,14 +1951,8 @@ LilyPondExporter::write()
                         str << std::endl << indent(--col) << "} % Voice YGA" << std::endl;  // indent-
                     }
                 }
-
-
-
-                firstTrack = false;
-                
                 
                 str << std::endl << indent(col) << "% End of segment " << seg->getLabel() << std::endl; 
-                
                 
             } // for (seg = lsc.useFirstSegment(); seg; seg = ....
             
@@ -1979,10 +1963,6 @@ LilyPondExporter::write()
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
                 std::cerr << "YG2 segment " << seg->getLabel();
                 int n = lsc.getNumberOfRepeats();
-                bool repeated = lsc.isRepeated();
-                bool repeatedS = lsc.isRepeatingSegment();
-                bool repeatedL = lsc.isSimpleRepeatedLinks();
-                bool repeatedV = lsc.isRepeatWithVolta();
                 bool volta = lsc.isVolta();
                 
                 if (!volta) { 
@@ -1990,24 +1970,11 @@ LilyPondExporter::write()
                     deltaVoltaCount = n ? n - 1 : 0;
                 }
                 
-                int nv = lsc.getVoltaRepeatCount();
-                int cnt = nv > 0 ? nv : n ? n : 1;
-                
                 // YGYGYG
                 // See also Segment::getVerse() and Segment::getVerseWrapped() ...
             }
 
-
-        
-
-        
-            // YG: CAN'T WORK HERE BECAUSE SEVERAL VOICES OPENED IN EACH TRACK :
-            // ONE AT EACH SEGMENT !!!
-            //   ==> TODO : ONLY ONE VOICE OPENED FOR EACH TRACK AND ONLY ONE VOICE CLOSED
-            
-//             str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-
             str << std::endl << indent(col) << "% End voice " << voiceIndex << std::endl; 
-            
             
         } // for (voiceIndex = lsc.useFirstVoice(); voiceIndex != -1; ....
 
@@ -2023,7 +1990,7 @@ LilyPondExporter::write()
         // Look for the voice with the larger number of verses
         int maxVers = 0;
         int lyricsVoice = 0;
-        for (int i = 0; i < verses.size(); i++) {
+        for (unsigned int i = 0; i < verses.size(); i++) {
             std::cerr << "verses[" << i << "] = " << verses[i] << "\n";
             if (verses[i] > maxVers) {
                 maxVers = verses[i];
@@ -2031,12 +1998,8 @@ LilyPondExporter::write()
             }
         }
         
-        
-         std::cerr << "Voice of lyrics is " << lyricsVoice << "\n";   
+         std::cerr << "Voice of lyrics is " << lyricsVoice << "\n";       // YGYGYG
          std::cerr << "Max verses on one segment is " << maxVers << "\n";   
-         
-
-//YG~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
          
         // Skip the following if there is no verse or if lyrics not exported
         if ((maxVers != 0) && (m_exportLyrics != EXPORT_NO_LYRICS)) {
@@ -2054,11 +2017,6 @@ LilyPondExporter::write()
                                                 seg; seg = lsc.useNextSegment()) {
                     
                     std::cerr << "Lyrics segment " << seg->getLabel();
-                    int n = lsc.getNumberOfRepeats();
-                    bool repeated = lsc.isRepeated();
-                    bool repeatedS = lsc.isRepeatingSegment();
-                    bool repeatedL = lsc.isSimpleRepeatedLinks();
-                    bool repeatedV = lsc.isRepeatWithVolta();
                     if (!lsc.isVolta()) {
                         int n = lsc.getNumberOfRepeats();
                         if (n) maxLine += n - 1;
@@ -2068,7 +2026,6 @@ LilyPondExporter::write()
                 }
               
                 bool isFirstPrintedVerse = true;                
-//                 for (int verseLine = 0; verseLine < verses[voiceIndex]; verseLine++) {
                 for (int verseLine = 0; verseLine < maxLine; verseLine++) {
                 
                     std::ostringstream voiceNumber;
@@ -2117,16 +2074,6 @@ LilyPondExporter::write()
                         } else {
                             const std::set<int>* numbers = lsc.getVoltaNumbers();
                             
-//                             ////////////// YG DEBUG START
-//                             std::set<int>::const_iterator i;
-//                             std::cout << "  Numbers : (";
-//                             for (i = numbers->begin(); i != numbers->end(); ++i) {
-//                                 std::cout << (i == numbers->begin() ? " " : ", ") 
-//                                           << *i;
-//                             }
-//                             std::cout << " )\n";
-//                             ////////////// YG DEBUG END
-                            
                             int altNumber = (verseLine + 1) + 1 - voltaCount;
                             
                             std::cout << "\n   altnumber=" << altNumber;
@@ -2154,13 +2101,6 @@ LilyPondExporter::write()
                             
                             std::cout << "Alt : verseIndex = " << verseIndex << "\n";
                         }
-                        
-
-                        
-                        std::cerr << "  verseLine=" << verseLine
-                                  << "  voltaCount=" << voltaCount
-                                  << "  verseIndex=" << verseIndex
-                                  << "\n";
                                   
                         // WRITE HERE THE LYRICS OF THE SEGMENT
                         str << "\n% LYRICS FOR seg " << seg->getLabel() << " SHOULD DE HERE\n\n";
@@ -2170,7 +2110,7 @@ LilyPondExporter::write()
                             << " " << std::endl;
                         str << "\n\n\n";
                         
-                        // See also Segment::getVerse() and Segment::getVerseWrapped() ...
+                        // See also Segment::getVerse() and Segment::getVerseWrapped() ...  // YGYGYG
                         
                     }  // for (Segment * seg = lsc.useFirstSegment(); ...
                 
@@ -2195,9 +2135,6 @@ LilyPondExporter::write()
                 break;   // (1)
             }
         }
-
-         
-//YG~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
         
         // close the track (Staff context)
@@ -2249,12 +2186,7 @@ LilyPondExporter::write()
     }
     str << indent(--col) << "}" << std::endl;
 
-    // write initial tempo in Midi block, always, but commented out
-    // makes debugging the .ly file easier because fewer "noisy" errors are
-    // produced during the process of rendering MIDI...)
-    int tempo = int(Composition::getTempoQpm(m_composition->getTempoAtTime(m_composition->getStartMarker())));
-    // Incomplete?  Can I get away without converting tempo relative to the time
-    // signature for this purpose?  we'll see...
+    // Write the commented out generating midi file block
     str << "% " << indent(col++) << "uncomment to enable generating midi file from the lilypond source" << std::endl;
     str << "% " << indent(col++) << "\\midi {" << std::endl;
     str << "% " << indent(--col) << "} " << std::endl;
@@ -2687,8 +2619,6 @@ LilyPondExporter::writeBar(Segment *s,
 
             if (chord.size() > 1)
                 str << "< ";
-
-            Segment::iterator stylei = s->end();
 
             for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
 
