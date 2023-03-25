@@ -43,6 +43,7 @@ public:
     KorgNanoKontrol2();
 
     /// Call this after the device is connected to set it up.
+    // cppcheck-suppress functionStatic
     void init();
 
     /// Call when the document is modified to update the LEDs.
@@ -59,13 +60,13 @@ private:
     // Current 8-channel page.
     unsigned m_page;
 
-    void processFader(MidiByte controlNumber, MidiByte value);
-    void processKnob(MidiByte controlNumber, MidiByte value);
-    void processSolo(MidiByte controlNumber);
-    void processMute(MidiByte controlNumber);
-    void processRecord(MidiByte controlNumber);
+    void processFader(MidiByte controlNumber, MidiByte value) const;
+    void processKnob(MidiByte controlNumber, MidiByte value) const;
+    void processSolo(MidiByte controlNumber) const;
+    void processMute(MidiByte controlNumber) const;
+    void processRecord(MidiByte controlNumber) const;
 
-    void testLEDs(bool on);
+    static void testLEDs(bool on);
     void initLEDs();
     bool m_firstRefresh;
     void refreshLEDs();

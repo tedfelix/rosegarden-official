@@ -44,12 +44,12 @@ public:
      * Clear all block files
      */
     static void clear();
-    bool hasDataBlock(blockid);
+    static bool hasDataBlock(blockid);
 
 protected:
     DataBlockRepository();
 
-    std::string getDataBlock(blockid);
+    static std::string getDataBlock(blockid);
 
     blockid registerDataBlock(const std::string&);
     void unregisterDataBlock(blockid);

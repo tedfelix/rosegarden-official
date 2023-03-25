@@ -107,7 +107,7 @@ MappedEvent::MappedEvent(InstrumentId id,
                     MIDI_LYRIC :
                     MIDI_TEXT_EVENT;
                 setData1(midiTextType);
-                                
+
                 std::string metaMessage = text.getText();
                 addDataString(metaMessage);
             }
@@ -177,10 +177,10 @@ MappedEvent::operator=(const MappedEvent &mE)
 }
 
 void
-MappedEvent::addDataString(const std::string& data)
+MappedEvent::addDataString(const std::string& rawData)
 {
     DataBlockRepository::getInstance()->
-        setDataBlockForEvent(this, data, true);
+        setDataBlockForEvent(this, rawData, true);
 }
 
 QDebug operator<<(QDebug dbg, const MappedEvent &mE)

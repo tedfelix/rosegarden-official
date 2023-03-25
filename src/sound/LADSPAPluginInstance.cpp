@@ -4,7 +4,7 @@
   Rosegarden
   A sequencer and musical notation editor.
   Copyright 2000-2022 the Rosegarden development team.
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -263,13 +263,13 @@ LADSPAPluginInstance::~LADSPAPluginInstance()
 void
 LADSPAPluginInstance::instantiate(unsigned long sampleRate)
 {
+    if (!m_descriptor)
+        return;
+
 #ifdef DEBUG_LADSPA
     RG_DEBUG << "LADSPAPluginInstance::instantiate - plugin unique id = "
     << m_descriptor->UniqueID;
 #endif
-
-    if (!m_descriptor)
-        return ;
 
     if (!m_descriptor->instantiate) {
         RG_WARNING << "Bad plugin: plugin id " << m_descriptor->UniqueID
@@ -425,5 +425,3 @@ LADSPAPluginInstance::cleanup()
 
 
 }
-
-

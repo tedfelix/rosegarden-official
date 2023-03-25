@@ -232,10 +232,10 @@ JackDriver::initialise(bool reinitialise)
     //
     if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, &jackStatus)) == nullptr) {
         RG_WARNING << "initialise() - JACK server not running.  jackStatus:" << qPrintable(QString::number(jackStatus, 16)) << "(hex)";
-        RG_WARNING << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config";
+        RG_WARNING << "  Attempt to start JACK server was " << ((jackOptions & JackNoStartServer) ? "NOT " : "") << "made per user config";
         // Also send to user log.
         AUDIT << "JACK server not running.  jackStatus: 0x" << QString::number(jackStatus, 16) << "\n";
-        AUDIT << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config\n";
+        AUDIT << "  Attempt to start JACK server was " << ((jackOptions & JackNoStartServer) ? "NOT " : "") << "made per user config\n";
         return ;
     }
 
@@ -656,8 +656,11 @@ JackDriver::createRecordInputs(int pairs)
 void
 JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 {
-    if (!m_client)
-        return ;
+    if (!m_client) {
+        RG_WARNING << "setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet";
+        AUDIT << "WARNING: setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet\n";
+        return;
+    }
 
     // Create a log that the user can easily see through the preferences
     // even in a release build.
@@ -668,12 +671,6 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 #ifdef DEBUG_JACK_DRIVER
     RG_DEBUG << "setAudioPorts(" << faderOuts << "," << submasterOuts << ")";
 #endif
-
-    if (!m_client) {
-        RG_WARNING << "setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet";
-        AUDIT << "WARNING: setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet\n";
-        return ;
-    }
 
     if (faderOuts) {
         InstrumentId instrumentBase;
