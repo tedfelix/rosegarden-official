@@ -325,10 +325,10 @@ QDebug operator<<(QDebug dbg, const MappedEvent &mE)
 class DataBlockFile
 {
 public:
-    DataBlockFile(DataBlockRepository::blockid id);
+    explicit DataBlockFile(DataBlockRepository::blockid id);
     ~DataBlockFile();
 
-    QString getFileName()
+    QString getFileName() const
     {
         return m_fileName;
     }

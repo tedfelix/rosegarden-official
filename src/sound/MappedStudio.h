@@ -116,8 +116,8 @@ public:
 
     // Child management
     //
-    void addChild(MappedObject *mO);
-    void removeChild(MappedObject *mO);
+    void addChild(MappedObject *object);
+    void removeChild(MappedObject *object);
 
     // Destruction
     //
