@@ -646,12 +646,13 @@ LilyPondSegmentsContext::getSegmentStartTime() const
 int
 LilyPondSegmentsContext::getNumberOfRepeats() const
 {
-    if (m_repeatWithVolta && (*m_segIterator).repeatId) {
-        return (*m_segIterator).numberOfVolta;
-    } else if ((*m_segIterator).simpleRepeatId) {
-        return (*m_segIterator).numberOfSimpleRepeats;
+    if (m_repeatWithVolta && m_segIterator->repeatId) {
+        return m_segIterator->numberOfVolta;
+    } else if (m_segIterator->simpleRepeatId) {
+        return m_segIterator->numberOfSimpleRepeats;
     } else {
-        return (*m_segIterator).numberOfRepeats;
+        int n = m_segIterator->numberOfRepeats;
+        return n ? n : 1;  // A not repeated segment is seen as played once
     }
 }
 

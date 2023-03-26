@@ -198,7 +198,8 @@ public:
     timeT getSegmentStartTime() const;
 
     /**
-     * Return how many time the current segment is repeated in LilyPond
+     * Return how many time the current segment is "played" in LilyPond
+     * (return 1 if the segment is not repeated)
      */
     int getNumberOfRepeats() const;
 

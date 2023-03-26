@@ -1550,7 +1550,6 @@ LilyPondExporter::write()
 
                         int nRepeats = lsc.getNumberOfRepeats();
                         RG_DEBUG << "chordNamesMode repeats:" << nRepeats;
-                        if (nRepeats <= 0) nRepeats = 1;
                         // with REPEAT_VOLTA the segment is only rendered once
                         if (m_repeatMode == REPEAT_VOLTA) nRepeats = 1;
                         RG_DEBUG << "chordNamesMode repeats adj:" << nRepeats;
@@ -1993,7 +1992,7 @@ LilyPondExporter::write()
                 
                 if (!volta) { 
                     voltaCount += deltaVoltaCount;
-                    deltaVoltaCount = n ? n - 1 : 0;
+                    deltaVoltaCount = n - 1;
                 }
                 
                 // YGYGYG
@@ -2038,18 +2037,31 @@ LilyPondExporter::write()
                 
                 // Compute the needed number of lines
                 int maxLine = 1;
+                int supplementaryVerses = 0;
                 for (Segment * seg = lsc.useFirstSegment();
                                                 seg; seg = lsc.useNextSegment()) {
                     
-                    std::cerr << "Lyrics segment " << seg->getLabel();
+                    std::cerr << "Lyrics segment " << seg->getLabel()
+                              << " isVolta:" <<  lsc.isVolta()
+                              << " isRepeated=" << lsc.isRepeated()
+                              << " numberOfRep.=" << lsc.getNumberOfRepeats()
+                              << "\n";
                     if (!lsc.isVolta()) {
-                        int n = lsc.getNumberOfRepeats();
-                        if (n) maxLine += n - 1;
+                        maxLine += lsc.getNumberOfRepeats() - 1;
                         // n is the number of times the volta is played
                         // So the number of repetitions of the volta is n - 1
-                    }        
+                        
+                        // int sv = (seg->getVerseCount() - 1) / n;
+                        int sv = 1;
+                        supplementaryVerses = supplementaryVerses > sv ? supplementaryVerses : sv;
+                    } else {
+                        // YG TODO : sv should be computed on alternate endings
+                    }
                 }
               
+                // Modify maxline if supplementary verses have been found
+                maxLine *= supplementaryVerses + 1;
+                
                 bool isFirstPrintedVerse = true;                
                 for (int verseLine = 0; verseLine < maxLine; verseLine++) {
                 
@@ -2090,8 +2102,7 @@ LilyPondExporter::write()
                         int verseIndex;
                         if (!lsc.isVolta()) { 
                             voltaCount += deltaVoltaCount;
-                            int n = lsc.getNumberOfRepeats();
-                            deltaVoltaCount = n ? n - 1 : 0;
+                            deltaVoltaCount = lsc.getNumberOfRepeats() - 1;
                             verseIndex = ((verseLine + 1) + 1 - voltaCount) - 1;
                             // verseIndex and verseLine start from 0 end not 1
                         } else {
