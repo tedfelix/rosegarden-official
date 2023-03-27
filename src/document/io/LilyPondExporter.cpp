@@ -1983,21 +1983,21 @@ LilyPondExporter::write()
             } // for (seg = lsc.useFirstSegment(); seg; seg = ....
             
             
-            // YGYGYG
-            int voltaCount = 1;
-            int deltaVoltaCount = 0;
-            for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
-                int n = lsc.getNumberOfRepeats();
-                bool volta = lsc.isVolta();
-                
-                if (!volta) { 
-                    voltaCount += deltaVoltaCount;
-                    deltaVoltaCount = n - 1;
-                }
-                
-                // YGYGYG
-                // See also Segment::getVerse() and Segment::getVerseWrapped() ...
-            }
+//             // YGYGYG
+//             int voltaCount = 1;
+//             int deltaVoltaCount = 0;
+//             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
+//                 int n = lsc.getNumberOfRepeats();
+//                 bool volta = lsc.isVolta();
+//                 
+//                 if (!volta) { 
+//                     voltaCount += deltaVoltaCount;
+//                     deltaVoltaCount = n - 1;
+//                 }
+//                 
+//                 // YGYGYG
+//                 // See also Segment::getVerse() and Segment::getVerseWrapped() ...
+//             }
 
             str << std::endl << indent(col) << "% End voice " << voiceIndex << std::endl; 
             
@@ -2047,20 +2047,27 @@ LilyPondExporter::write()
                               << " numberOfRep.=" << lsc.getNumberOfRepeats()
                               << "\n";
                     if (!lsc.isVolta()) {
-                        maxLine += lsc.getNumberOfRepeats() - 1;
+                        int n = lsc.getNumberOfRepeats();
+                        maxLine += n - 1;
                         // n is the number of times the volta is played
                         // So the number of repetitions of the volta is n - 1
                         
-                        // int sv = (seg->getVerseCount() - 1) / n;
-                        int sv = 1;
+                        int sv = (seg->getVerseCount() - 1) / n;
                         supplementaryVerses = supplementaryVerses > sv ? supplementaryVerses : sv;
                     } else {
-                        // YG TODO : sv should be computed on alternate endings
+                        // YG TODO : sv should also be computed on alternate endings
                     }
                 }
               
+                std::cerr << "maxLine was " << maxLine 
+                          << "  supplementary verses = " << supplementaryVerses
+                          << "\n";    // YGYGYG
+                         
                 // Modify maxline if supplementary verses have been found
                 maxLine *= supplementaryVerses + 1;
+                
+                std::cerr << "maxLine is  " << maxLine 
+                          << "\n";    // YGYGYG
                 
                 bool isFirstPrintedVerse = true;                
                 for (int verseLine = 0; verseLine < maxLine; verseLine++) {

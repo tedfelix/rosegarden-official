@@ -199,9 +199,9 @@ public:
 
     /**
      * Return how many time the current segment is "played" in LilyPond
-     * (return 1 if the segment is not repeated)
+     * (Should never return 0. Returns 1 if the segment is not repeated.)
      */
-    int getNumberOfRepeats() const;
+    int getNumberOfRepeats() const;       // YG TODO rename : getNumberOfVolta()
 
     /**
      * Return true if the segment is repeated (a repeating segment or
