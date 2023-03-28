@@ -2083,25 +2083,27 @@ LilyPondExporter::write()
                     
                     std::cerr << "Lyrics segment " << seg->getLabel()
                               << " isVolta:" <<  lsc.isVolta()
-                              << " isRepeated=" << lsc.isRepeated()
-                              << " numberOfRep.=" << lsc.getNumberOfRepeats()
-                              << "\n";
-                    if (!lsc.isVolta()) {
-                        int n = lsc.getNumberOfRepeats();
-                        bnl += n - 1;
-                        // n is the number of times the volta is played
-                        // So the number of repetitions of the volta is n - 1
+                              << " isRepeated=" << lsc.isRepeated();    // YG
+
+                    // How many times the segment is played
+                    int n = lsc.isVolta()
+                                ? lsc.getVoltaNumbers()->size()
+                                : lsc.getNumberOfRepeats();
+                    std::cerr  <<" numberOfRep.=" << n << "\n";   // YG
+                                
+                    bnl += n - 1;
+                    // n is the number of times the volta is played
+                    // So the number of repetitions of the volta is n - 1
                         
-                        int supplementaryVerses = (seg->getVerseCount() - 1) / n;
-                        sva = sva > supplementaryVerses ? sva : supplementaryVerses;
-                    } else {
-                        // YG TODO : sva should also be computed on alternate endings
-                    }
+                    // Compute the supplementary verses number and keep its
+                    // largest value in sva
+                    int supplementaryVerses = (seg->getVerseCount() - 1) / n;
+                    sva = sva > supplementaryVerses ? sva : supplementaryVerses;
                 }
                 
                 // Multiple verses factor
                 int mvf = sva + 1;     // Without supplementary verse (mva=0)
-                                       // we need a factor equal to one
+                                       // the factor must be one
               
                 std::cerr << "Basic NL is " << bnl 
                           << "  multiple v factor = " << mvf
