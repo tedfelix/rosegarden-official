@@ -2035,9 +2035,49 @@ LilyPondExporter::write()
                 
                 if (voiceIndex != lyricsVoice) continue;  // (1)
                 
-                // Compute the needed number of lines
-                int maxLine = 1;
-                int supplementaryVerses = 0;
+                // Compute the needed number of verse lines
+                //    This number is the product of the "basic number of lines"
+                //    and of the "multiple verses factor".
+                // 
+                // Basic number of lines (bnl):
+                //    It's how many lines are needed to write the verses under
+                //    the score with the correct vertical alignment and with
+                //    one and only one verse for each musical volta.
+                //
+                //    For example:
+                //        the score "aaa ||: bbb x3 :|| ccc" has bnl = 3
+                //        and "aaa ||: bbb x3 :|| ccc ||: ddd x2 :|| eee"
+                //        has bnl = 4
+                //
+                // Multiple verses factor (mvf):
+                //    This is how many verses are written under the score
+                //    although no repetition is indicated in this score.
+                //    ("Himno de Riego", in the RG examples, has no notated
+                //     repetition but has three verses. Which gives mvf = 3)
+                //
+                //    For example the following score has mvf = 2
+                //         aaaaaaaaa
+                //          verse 1
+                //          verse 2
+                //
+                //    and the following one also has mvf = 2
+                //         aaaaaaaaa ||: bbbbb x2 :|| cccccccccc
+                //          verse 1a     verse 1b      
+                //                       verse 2b     verse 1c
+                //          verse 2a     verse 3b
+                //                       verse 4b     verse 2c
+                //
+                // In the last example bnl=2 and mvf=2
+                // what gives the number of verse lines: bnl x mvf = 4
+                //
+                // Note: mvf is always computed as if the set of verses is
+                //       complete. In the last example, if verses 4b and 2c
+                //       are omitted, the value mvf=4 is nevertheless computed.
+                //       The exporter is going to write blank verses, but
+                //       LilyPond will ignore them.
+                //
+                int bnl = 1;
+                int sva = 0;    // Supplementary verses accumulator
                 for (Segment * seg = lsc.useFirstSegment();
                                                 seg; seg = lsc.useNextSegment()) {
                     
@@ -2048,23 +2088,27 @@ LilyPondExporter::write()
                               << "\n";
                     if (!lsc.isVolta()) {
                         int n = lsc.getNumberOfRepeats();
-                        maxLine += n - 1;
+                        bnl += n - 1;
                         // n is the number of times the volta is played
                         // So the number of repetitions of the volta is n - 1
                         
-                        int sv = (seg->getVerseCount() - 1) / n;
-                        supplementaryVerses = supplementaryVerses > sv ? supplementaryVerses : sv;
+                        int supplementaryVerses = (seg->getVerseCount() - 1) / n;
+                        sva = sva > supplementaryVerses ? sva : supplementaryVerses;
                     } else {
-                        // YG TODO : sv should also be computed on alternate endings
+                        // YG TODO : sva should also be computed on alternate endings
                     }
                 }
+                
+                // Multiple verses factor
+                int mvf = sva + 1;     // Without supplementary verse (mva=0)
+                                       // we need a factor equal to one
               
-                std::cerr << "maxLine was " << maxLine 
-                          << "  supplementary verses = " << supplementaryVerses
+                std::cerr << "Basic NL is " << bnl 
+                          << "  multiple v factor = " << mvf
                           << "\n";    // YGYGYG
                          
                 // Modify maxline if supplementary verses have been found
-                maxLine *= supplementaryVerses + 1;
+                int maxLine = bnl * mvf;
                 
                 std::cerr << "maxLine is  " << maxLine 
                           << "\n";    // YGYGYG
