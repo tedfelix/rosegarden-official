@@ -828,7 +828,7 @@ MappedConnectableObject::removeConnection(ConnectionDirection dir,
 }
 
 MappedObjectValueList
-MappedConnectableObject::getConnections(ConnectionDirection dir)
+MappedConnectableObject::getConnections(ConnectionDirection dir) const
 {
     if (dir == In)
         return m_connectionsIn;
