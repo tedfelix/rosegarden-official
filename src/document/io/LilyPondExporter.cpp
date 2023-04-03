@@ -2049,30 +2049,31 @@ LilyPondExporter::write()
                 //        and "aaa ||: bbb x3 :|| ccc ||: ddd x2 :|| eee"
                 //        has bnl = 4
                 //
-                // Multiple verses factor (mvf):
+// Multiple verses factor (mvf):
+                // Number of cycles (nbc):
                 //    This is how many verses are written under the score
                 //    although no repetition is indicated in this score.
                 //    ("Himno de Riego", in the RG examples, has no notated
-                //     repetition but has three verses. Which gives mvf = 3)
+                //     repetition but has three verses. Which gives nbc = 3)
                 //
-                //    For example the following score has mvf = 2
+                //    For example the following score has nbc = 2
                 //         aaaaaaaaa
                 //          verse 1
                 //          verse 2
                 //
-                //    and the following one also has mvf = 2
+                //    and the following one also has nbc = 2
                 //         aaaaaaaaa ||: bbbbb x2 :|| cccccccccc
                 //          verse 1a     verse 1b      
                 //                       verse 2b     verse 1c
                 //          verse 2a     verse 3b
                 //                       verse 4b     verse 2c
                 //
-                // In the last example bnl=2 and mvf=2
-                // what gives the number of verse lines: bnl x mvf = 4
+                // In the last example bnl=2 and nbc=2
+                // what gives the total number of verse lines: bnl x nbc = 4
                 //
-                // Note: mvf is always computed as if the set of verses is
+                // Note: nbc is always computed as if the set of verses is
                 //       complete. In the last example, if verses 4b and 2c
-                //       are omitted, the value mvf=4 is nevertheless computed.
+                //       are omitted, the value nbc=4 is nevertheless computed.
                 //       The exporter is going to write blank verses, but
                 //       LilyPond will ignore them.
                 //
@@ -2101,109 +2102,129 @@ LilyPondExporter::write()
                     sva = sva > supplementaryVerses ? sva : supplementaryVerses;
                 }
                 
-                // Multiple verses factor
-                int mvf = sva + 1;     // Without supplementary verse (mva=0)
-                                       // the factor must be one
+                // Total number of cycles
+                int nbc = sva + 1;     // Without supplementary verse (sva=0)
+                                       // the number of cycles is 1
               
                 std::cerr << "Basic NL is " << bnl 
-                          << "  multiple v factor = " << mvf
+                          << "  number of cycles = " << nbc
                           << "\n";    // YGYGYG
                          
                 // Modify maxline if supplementary verses have been found
-                int maxLine = bnl * mvf;
+                int maxLine = bnl * nbc;
                 
                 std::cerr << "maxLine is  " << maxLine 
                           << "\n";    // YGYGYG
                 
-                bool isFirstPrintedVerse = true;                
-                for (int verseLine = 0; verseLine < maxLine; verseLine++) {
-                
-                    std::ostringstream voiceNumber;
-                    voiceNumber << "voice " << trackPos << "." << voiceIndex;
+                bool isFirstPrintedVerse = true; 
+                for (int cycle = 0; cycle < nbc; cycle++) {
+                    for (int verseLine = 0; verseLine < bnl; verseLine++) {
                     
-                    // WRITE HERE THE HEADER OF THE LYRICS BLOCK
-                    str << indent(col)
-                        << "\\new Lyrics" << std::endl;
-                    // Put special alignment info for first printed verse only.
-                    // Otherwise, verses print in reverse order.
-                    if (isFirstPrintedVerse) {
+                        std::ostringstream voiceNumber;
+                        voiceNumber << "voice " << trackPos << "." << voiceIndex;
+                        
+                        // WRITE HERE THE HEADER OF THE LYRICS BLOCK
                         str << indent(col)
-                            << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"}" << std::endl;
-                        isFirstPrintedVerse = false;
-                    }
-                    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\"" << " {" << std::endl;
-                    str << indent(++col) << "\\lyricmode {" << std::endl;
-                    
-                    if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
-                        str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
-                            << std::endl;
-                    } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
-                        str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
-                            << std::endl;
-                    } else {
-                        str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
-                            << std::endl;
-                    }
-                    str << indent(col) << qStrToStrUtf8("\\set ignoreMelismata = ##t") << std::endl;
-                    // END OF HEADER WRITING
-                
-                
-                    int voltaCount = 1;
-                    int deltaVoltaCount = 0;                
-                    for (Segment * seg = lsc.useFirstSegment();
-                                                    seg; seg = lsc.useNextSegment()) {
-                        int verseIndex;
-                        if (!lsc.isVolta()) { 
-                            voltaCount += deltaVoltaCount;
-                            deltaVoltaCount = lsc.getNumberOfRepeats() - 1;
-                            verseIndex = ((verseLine + 1) + 1 - voltaCount) - 1;
-                            // verseIndex and verseLine start from 0 end not 1
-                        } else {
-                            const std::set<int>* numbers = lsc.getVoltaNumbers();
-                            int altNumber = (verseLine + 1) + 1 - voltaCount;
-                            
-                            // Get the verseNumber from the altNumber
-                            std::set<int>::const_iterator i;
-                            int verse = 0;
-                            bool found = false;
-                            for (i = numbers->begin(); i != numbers->end(); ++i) {
-                                if (*i == altNumber) {
-                                    found = true;
-                                    break;
-                                }
-                                verse++;
-                            }                             
-                                
-                            verseIndex = found ? verse : -1; 
+                            << "\\new Lyrics" << std::endl;
+                        // Put special alignment info for first printed verse only.
+                        // Otherwise, verses print in reverse order.
+                        if (isFirstPrintedVerse) {
+                            str << indent(col)
+                                << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"}" << std::endl;
+                            isFirstPrintedVerse = false;
                         }
-                                  
-                        // WRITE HERE THE LYRICS OF THE SEGMENT
-                        str << "\n% LYRICS FOR seg " << seg->getLabel() << " SHOULD DE HERE\n\n";
+                        str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\"" << " {" << std::endl;
+                        str << indent(++col) << "\\lyricmode {" << std::endl;
                         
-                        str << indent(col)
-                            << qStrToStrUtf8(getVerseText(seg, verseIndex)) 
-                            << " " << std::endl;
-                        str << "\n\n\n";
-                        
-                        // See also Segment::getVerse() and Segment::getVerseWrapped() ...  // YGYGYG
-                        
-                    }  // for (Segment * seg = lsc.useFirstSegment(); ...
-                
-                
-                
-                    // WRITE HERE THE TAIL OF THE LYRICS BLOCK
-                    str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
-                    str << indent(--col);
-                    str << qStrToStrUtf8("}") << std::endl;
-
-                    // str << qStrToStrUtf8("} % Lyrics ") << (verseIndex+1) << std::endl;
-                    str << indent(--col);
-                    str << qStrToStrUtf8("} % Lyrics ") << std::endl;
+                        if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
+                            str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
+                                << std::endl;
+                        } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
+                            str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
+                                << std::endl;
+                        } else {
+                            str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
+                                << std::endl;
+                        }
+                        str << indent(col) << qStrToStrUtf8("\\set ignoreMelismata = ##t") << std::endl;
+                        // END OF HEADER WRITING
                     
-                    // END OF TAIL WRITING
-                
-                
-                }  // for (int verseIndex = 0; verseIndex < verseNumber; ...
+                    
+                        int voltaCount = 1;
+                        int deltaVoltaCount = 0;                
+                        for (Segment * seg = lsc.useFirstSegment();
+                                                        seg; seg = lsc.useNextSegment()) {
+                            std::cout << "Line " << verseLine;  // YG
+                            
+                            int verseIndex;
+                            if (!lsc.isVolta()) { 
+                                voltaCount += deltaVoltaCount;
+                                deltaVoltaCount = lsc.getNumberOfRepeats() - 1;
+                                
+                                verseIndex = ((verseLine + 1) + 1 - voltaCount) - 1;
+                                // verseIndex and verseLine start from 0 end not 1
+                                
+                                verseIndex += cycle * lsc.getNumberOfRepeats();
+                                int vimin = cycle * lsc.getNumberOfRepeats();
+                                int vimax = vimin + lsc.getNumberOfRepeats() - 1;
+                                if ((verseIndex < vimin) || (verseIndex > vimax)) verseIndex = -1;
+                                
+//                             // YG
+//                             verseIndex = ((verseLine + 1) / bnl + (verseLine + 1) % bnl + 1 - voltaCount) - 1;
+//                             int vmin = ((verseLine + 1) / bnl) * (seg->getVerseCount() / lsc.getNumberOfRepeats()) + 1 - 1;
+//                             int vmax = vmin + (lsc.getNumberOfRepeats() - 1);
+//                             if ((verseIndex < vmin) || (verseIndex > vmax)) verseIndex = -1;
+                                
+                                
+                                std::cout << " !alt verse=" << verseIndex << "\n";   // YG
+                            } else {
+                                const std::set<int>* numbers = lsc.getVoltaNumbers();
+                                int altNumber = (verseLine + 1) + 1 - voltaCount;
+                                
+                                // Get the verseNumber from the altNumber
+                                std::set<int>::const_iterator i;
+                                int verse = cycle * lsc.getVoltaRepeatCount();
+                                bool found = false;
+                                for (i = numbers->begin(); i != numbers->end(); ++i) {
+                                    if (*i == altNumber) {
+                                        found = true;
+                                        break;
+                                    }
+                                    verse++;
+                                }                             
+                                    
+                                verseIndex = found ? verse : -1; 
+                                std::cout << "  alt verse=" << verseIndex << "\n";   // YG
+                            }
+                                    
+                            // WRITE HERE THE LYRICS OF THE SEGMENT
+                            str << "\n% LYRICS FOR seg " << seg->getLabel() << " SHOULD DE HERE\n\n";
+                            
+                            str << indent(col)
+                                << qStrToStrUtf8(getVerseText(seg, verseIndex)) 
+                                << " " << std::endl;
+                            str << "\n\n\n";
+                            
+                            // See also Segment::getVerse() and Segment::getVerseWrapped() ...  // YGYGYG
+                            
+                        }  // for (Segment * seg = lsc.useFirstSegment(); ...
+                    
+                    
+                    
+                        // WRITE HERE THE TAIL OF THE LYRICS BLOCK
+                        str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
+                        str << indent(--col);
+                        str << qStrToStrUtf8("}") << std::endl;
+
+                        // str << qStrToStrUtf8("} % Lyrics ") << (verseIndex+1) << std::endl;
+                        str << indent(--col);
+                        str << qStrToStrUtf8("} % Lyrics ") << std::endl;
+                        
+                        // END OF TAIL WRITING
+                    
+                    
+                    }  // for (int verseIndex = 0; verseIndex < verseNumber; ...
+                }  // for (int cycle = 0; cycle < mvf; cycle++)
                 
                 
 
