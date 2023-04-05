@@ -1981,23 +1981,6 @@ LilyPondExporter::write()
                 str << std::endl << indent(col) << "% End of segment " << seg->getLabel() << std::endl; 
                 
             } // for (seg = lsc.useFirstSegment(); seg; seg = ....
-            
-            
-//             // YGYGYG
-//             int voltaCount = 1;
-//             int deltaVoltaCount = 0;
-//             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
-//                 int n = lsc.getNumberOfRepeats();
-//                 bool volta = lsc.isVolta();
-//                 
-//                 if (!volta) { 
-//                     voltaCount += deltaVoltaCount;
-//                     deltaVoltaCount = n - 1;
-//                 }
-//                 
-//                 // YGYGYG
-//                 // See also Segment::getVerse() and Segment::getVerseWrapped() ...
-//             }
 
             str << std::endl << indent(col) << "% End voice " << voiceIndex << std::endl; 
             
@@ -2035,49 +2018,49 @@ LilyPondExporter::write()
                 
                 if (voiceIndex != lyricsVoice) continue;  // (1)
                 
-                // Compute the needed number of verse lines
-                //    This number is the product of the "basic number of lines"
-                //    and of the "multiple verses factor".
+                // Compute the needed number of verse lines and the number of
+                // cycles.
                 // 
-                // Basic number of lines (bnl):
+                // Number of verses:
                 //    It's how many lines are needed to write the verses under
                 //    the score with the correct vertical alignment and with
                 //    one and only one verse for each musical volta.
                 //
                 //    For example:
-                //        the score "aaa ||: bbb x3 :|| ccc" has bnl = 3
+                //        the score "aaa ||: bbb x3 :|| ccc"
+                //        has versesNumber = 3
                 //        and "aaa ||: bbb x3 :|| ccc ||: ddd x2 :|| eee"
-                //        has bnl = 4
+                //        has versesNumber = 4
                 //
-// Multiple verses factor (mvf):
-                // Number of cycles (nbc):
+                // Number of cycles:
                 //    This is how many verses are written under the score
                 //    although no repetition is indicated in this score.
+                //    This can be seen as how many times the musical score has
+                //    to be played to exhaust all the verses.
                 //    ("Himno de Riego", in the RG examples, has no notated
-                //     repetition but has three verses. Which gives nbc = 3)
+                //     repetition but has three verses. Which gives 
+                //     cyclesNumber = 3)
                 //
-                //    For example the following score has nbc = 2
+                //    For example the following score has cyclesNumber = 2
                 //         aaaaaaaaa
                 //          verse 1
                 //          verse 2
                 //
-                //    and the following one also has nbc = 2
+                //    and the following one also has cyclesNumber = 2
                 //         aaaaaaaaa ||: bbbbb x2 :|| cccccccccc
                 //          verse 1a     verse 1b      
                 //                       verse 2b     verse 1c
                 //          verse 2a     verse 3b
                 //                       verse 4b     verse 2c
                 //
-                // In the last example bnl=2 and nbc=2
-                // what gives the total number of verse lines: bnl x nbc = 4
-                //
-                // Note: nbc is always computed as if the set of verses is
-                //       complete. In the last example, if verses 4b and 2c
-                //       are omitted, the value nbc=4 is nevertheless computed.
+                // Note: The number of cycles is always computed as if the set
+                //       of verses is complete. In the last example, if verses
+                //       4b and 2c are omitted, cyclesNumber = 4 is nevertheless
+                //       computed.
                 //       The exporter is going to write blank verses, but
                 //       LilyPond will ignore them.
                 //
-                int bnl = 1;
+                int versesNumber = 1;
                 int sva = 0;    // Supplementary verses accumulator
                 for (Segment * seg = lsc.useFirstSegment();
                                                 seg; seg = lsc.useNextSegment()) {
@@ -2092,7 +2075,7 @@ LilyPondExporter::write()
                                 : lsc.getNumberOfRepeats();
                     std::cerr  <<" numberOfRep.=" << n << "\n";   // YG
                                 
-                    bnl += n - 1;
+                    versesNumber += n - 1;
                     // n is the number of times the volta is played
                     // So the number of repetitions of the volta is n - 1
                         
@@ -2102,28 +2085,22 @@ LilyPondExporter::write()
                     sva = sva > supplementaryVerses ? sva : supplementaryVerses;
                 }
                 
-                // Total number of cycles
-                int nbc = sva + 1;     // Without supplementary verse (sva=0)
-                                       // the number of cycles is 1
+                // Total number of cycles:
+                // Without supplementary verse (sva=0) the number of cycles is 1
+                int cyclesNumber = sva + 1;   
               
-                std::cerr << "Basic NL is " << bnl 
-                          << "  number of cycles = " << nbc
-                          << "\n";    // YGYGYG
-                         
-                // Modify maxline if supplementary verses have been found
-                int maxLine = bnl * nbc;
-                
-                std::cerr << "maxLine is  " << maxLine 
+                std::cerr << "Basic NL is " << versesNumber 
+                          << "  number of cycles = " << cyclesNumber
                           << "\n";    // YGYGYG
                 
                 bool isFirstPrintedVerse = true; 
-                for (int cycle = 0; cycle < nbc; cycle++) {
-                    for (int verseLine = 0; verseLine < bnl; verseLine++) {
+                for (int cycle = 0; cycle < cyclesNumber; cycle++) {
+                    for (int verseLine = 0; verseLine < versesNumber; verseLine++) {
                     
                         std::ostringstream voiceNumber;
                         voiceNumber << "voice " << trackPos << "." << voiceIndex;
                         
-                        // WRITE HERE THE HEADER OF THE LYRICS BLOCK
+                        // Write the header of the lyrics block
                         str << indent(col)
                             << "\\new Lyrics" << std::endl;
                         // Put special alignment info for first printed verse only.
@@ -2133,27 +2110,34 @@ LilyPondExporter::write()
                                 << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"}" << std::endl;
                             isFirstPrintedVerse = false;
                         }
-                        str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\"" << " {" << std::endl;
+                        str << indent(col) 
+                            << "\\lyricsto \"" << voiceNumber.str() << "\"" 
+                            << " {" << std::endl;
                         str << indent(++col) << "\\lyricmode {" << std::endl;
                         
                         if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
-                            str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
+                            str << indent(++col) 
+                                << "\\override LyricText #'self-alignment-X = #RIGHT"
                                 << std::endl;
                         } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
-                            str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
+                            str << indent(++col) 
+                                << "\\override LyricText #'self-alignment-X = #CENTER"
                                 << std::endl;
                         } else {
-                            str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
+                            str << indent(++col)
+                                << "\\override LyricText #'self-alignment-X = #LEFT"
                                 << std::endl;
                         }
-                        str << indent(col) << qStrToStrUtf8("\\set ignoreMelismata = ##t") << std::endl;
-                        // END OF HEADER WRITING
+                        str << indent(col)
+                            << qStrToStrUtf8("\\set ignoreMelismata = ##t")
+                            << std::endl;
+                        // End of the lyrics block header writing
                     
                     
                         int voltaCount = 1;
                         int deltaVoltaCount = 0;                
                         for (Segment * seg = lsc.useFirstSegment();
-                                                        seg; seg = lsc.useNextSegment()) {
+                                        seg; seg = lsc.useNextSegment()) {
                             std::cout << "Line " << verseLine;  // YG
                             
                             int verseIndex;
@@ -2167,14 +2151,8 @@ LilyPondExporter::write()
                                 verseIndex += cycle * lsc.getNumberOfRepeats();
                                 int vimin = cycle * lsc.getNumberOfRepeats();
                                 int vimax = vimin + lsc.getNumberOfRepeats() - 1;
-                                if ((verseIndex < vimin) || (verseIndex > vimax)) verseIndex = -1;
-                                
-//                             // YG
-//                             verseIndex = ((verseLine + 1) / bnl + (verseLine + 1) % bnl + 1 - voltaCount) - 1;
-//                             int vmin = ((verseLine + 1) / bnl) * (seg->getVerseCount() / lsc.getNumberOfRepeats()) + 1 - 1;
-//                             int vmax = vmin + (lsc.getNumberOfRepeats() - 1);
-//                             if ((verseIndex < vmin) || (verseIndex > vmax)) verseIndex = -1;
-                                
+                                if (    (verseIndex < vimin)
+                                     || (verseIndex > vimax) ) verseIndex = -1;
                                 
                                 std::cout << " !alt verse=" << verseIndex << "\n";   // YG
                             } else {
@@ -2185,7 +2163,8 @@ LilyPondExporter::write()
                                 std::set<int>::const_iterator i;
                                 int verse = cycle * lsc.getVoltaRepeatCount();
                                 bool found = false;
-                                for (i = numbers->begin(); i != numbers->end(); ++i) {
+                                for (i = numbers->begin(); 
+                                        i != numbers->end(); ++i) {
                                     if (*i == altNumber) {
                                         found = true;
                                         break;
@@ -2197,36 +2176,33 @@ LilyPondExporter::write()
                                 std::cout << "  alt verse=" << verseIndex << "\n";   // YG
                             }
                                     
-                            // WRITE HERE THE LYRICS OF THE SEGMENT
-                            str << "\n% LYRICS FOR seg " << seg->getLabel() << " SHOULD DE HERE\n\n";
+                            // Write the lyrics of the segment
+                            str << "\n% Lyrics of segment \"" << seg->getLabel() 
+                                << "\"" << std::endl;
                             
                             str << indent(col)
                                 << qStrToStrUtf8(getVerseText(seg, verseIndex)) 
                                 << " " << std::endl;
                             str << "\n\n\n";
-                            
-                            // See also Segment::getVerse() and Segment::getVerseWrapped() ...  // YGYGYG
-                            
                         }  // for (Segment * seg = lsc.useFirstSegment(); ...
                     
                     
                     
-                        // WRITE HERE THE TAIL OF THE LYRICS BLOCK
-                        str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
-                        str << indent(--col);
-                        str << qStrToStrUtf8("}") << std::endl;
+                        // Write the tail of the lyrics block
+                        str << indent(col) 
+                            << qStrToStrUtf8("\\unset ignoreMelismata") 
+                            << std::endl;
+                        str << indent(--col)
+                            << qStrToStrUtf8("}") << std::endl;
 
                         // str << qStrToStrUtf8("} % Lyrics ") << (verseIndex+1) << std::endl;
                         str << indent(--col);
                         str << qStrToStrUtf8("} % Lyrics ") << std::endl;
                         
-                        // END OF TAIL WRITING
+                        // End of the lyrics block tail writing
                     
-                    
-                    }  // for (int verseIndex = 0; verseIndex < verseNumber; ...
-                }  // for (int cycle = 0; cycle < mvf; cycle++)
-                
-                
+                    }  // for (int verseLine = 0; verseLine < versesNumber; ...
+                }  // for (int cycle = 0; cycle < cyclesNumber; cycle++...
 
                 break;   // (1)
             }
