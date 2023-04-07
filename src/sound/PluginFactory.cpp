@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -22,6 +22,9 @@
 
 #include "LADSPAPluginFactory.h"
 #include "DSSIPluginFactory.h"
+#ifdef HAVE_LILV
+#include "LV2PluginFactory.h"
+#endif
 
 #include <locale.h>
 
@@ -32,6 +35,9 @@ int PluginFactory::m_sampleRate = 48000;
 
 static LADSPAPluginFactory *ladspaInstance = nullptr;
 static LADSPAPluginFactory *dssiInstance = nullptr;
+#ifdef HAVE_LILV
+static LV2luginFactory *lv2Instance = nullptr;
+#endif
 
 PluginFactory *
 PluginFactory::instance(QString pluginType)
@@ -50,6 +56,15 @@ PluginFactory::instance(QString pluginType)
             dssiInstance->discoverPlugins();
         }
         return dssiInstance;
+#ifdef HAVE_LILV
+    } else if (pluginType == "lv2") {
+        if (!lv2Instance) {
+            //RG_DEBUG << "instance(" << pluginType << "): creating new LV2PluginFactory";
+            lv2Instance = new LV2PluginFactory();
+            lv2Instance->discoverPlugins();
+        }
+        return lv2Instance;
+#endif
     } else {
         return nullptr;
     }
@@ -99,4 +114,3 @@ PluginFactory::~PluginFactory()
 
 
 }
-

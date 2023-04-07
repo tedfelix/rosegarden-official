@@ -192,6 +192,21 @@ if(NOT DISABLE_LIRC)
 endif()
 add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remote control support")
 
+# lilv for lv2 plugins
+find_path(LILV_INCLUDE_DIR xlilv/lilv.h
+  PATH /usr/include/lilv-0)
+if(NOT LILV_INCLUDE_DIR)
+  message(WARNING "Failed to find Lilv header lilv/lilv.h for lv2 plugins")
+endif()
+find_library(LILV_LIBRARY lilv-0)
+if(NOT LILV_LIBRARY)
+  message(WARNING "Failed to find Lilv library for lv2 plugins")
+endif()
+if(LILV_INCLUDE_DIR AND LILV_LIBRARY)
+  set(LILV_FOUND TRUE)
+endif()
+add_feature_info(LILV LILV_FOUND "The Lilv library, for lv2 plugins")
+
 # --------------------------------------------------------
 
 # Print out a summary of what was found and what is missing

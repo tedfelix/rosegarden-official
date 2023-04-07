@@ -43,6 +43,12 @@ if(LIRCCLIENT_FOUND)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LIRCCLIENT_LIBRARY})
 endif()
 
+if(LILV_FOUND)
+    include_directories(${LILV_INCLUDE_DIR})
+    add_definitions(-DHAVE_LILV)
+    set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LILV_LIBRARY})
+endif()
+
 if(ALSA_FOUND)
     include_directories(${ALSA_INCLUDE_DIR})
     add_definitions(-DHAVE_ALSA)
