@@ -217,10 +217,17 @@ private:
     void writeSlashes(const Event *note, std::ofstream &);
     
     /*
-     * Return the verse with index currentVerse from the givenSegment
-     * or an appropriate LilyPond skip sequence if the verse doesn't exist.
+     * Return the verse with index currentVerse from the givenSegment ready to
+     * be write in LilyPond file with indentCol indentation.
      */
-    QString getVerseText(Segment *seg, int currentVerse);
+    QString getVerseText(Segment *seg, int currentVerse, int indentCol);
+    
+    /*
+     * Write in str the lyrics verse of index verseIndex from the given
+     * segment with the indentation indentCol or an appropriate LilyPond
+     * skip sequence if the verse doesn't exist.
+     */
+    void writeVerse(Segment *seg, int verseIndex, int indentCol, std::ofstream &str);
 
 private:
     static const int MAX_DOTS = 4;
