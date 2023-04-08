@@ -3598,11 +3598,13 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
                 
                 std::cout << "   s2=>" << syllable.toLocal8Bit().data() << "<";
                 
-                
+                // Remove leading and trailing spaces  
                 syllable.replace(QRegularExpression("^\\s+"), "");
 //             std::cerr << " : " << syllable.toLocal8Bit().data();
                 syllable.replace(QRegularExpression("\\s+$"), "");
 //             std::cerr << " : " << syllable.toLocal8Bit().data();
+                
+                // Protect the backslash protecting a double quotation mark
                 syllable.replace(QRegularExpression("\""), "\\\"");
 //             std::cerr << " : " << syllable.toLocal8Bit().data() << "\n";
                 
