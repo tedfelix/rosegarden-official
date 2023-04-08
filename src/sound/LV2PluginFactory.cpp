@@ -115,6 +115,40 @@ LV2PluginFactory::LV2PluginFactory()
             lilv_node_free(min);
             lilv_node_free(max);
 
+            // display hint
+            LilvNode* toggledNode =
+                lilv_new_uri(m_world,
+                             "http://lv2plug.in/ns/lv2core#toggled");
+            bool isToggled =
+                lilv_port_has_property(plugin, port, toggledNode);
+            LilvNode* integerNode =
+                lilv_new_uri(m_world,
+                             "http://lv2plug.in/ns/lv2core#integer");
+            bool isInteger =
+                lilv_port_has_property(plugin, port, integerNode);
+            LilvNode* logarithmicNode =
+                lilv_new_uri(m_world,
+                             "http://lv2plug.in/ns/ext/port-props#logarithmic");
+            bool isLogarithmic =
+                lilv_port_has_property(plugin, port, logarithmicNode);
+
+            lilv_node_free(toggledNode);
+            lilv_node_free(integerNode);
+            lilv_node_free(logarithmicNode);
+
+            RG_DEBUG << "displayHint:" <<
+                isToggled << isInteger << isLogarithmic;
+
+            int hint = PluginPort::NoHint;
+            if (isToggled)
+                hint |= PluginPort::Toggled;
+            if (isInteger)
+                hint |= PluginPort::Integer;
+            if (isLogarithmic)
+                hint |= PluginPort::Logarithmic;
+
+            portData.displayHint = hint;
+
             pluginData.ports.push_back(portData);
         }
         m_pluginData[uri] = pluginData;
@@ -185,8 +219,7 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
             list.push_back(QString("%1").arg(p));
             list.push_back(portData.name);
             list.push_back(QString("%1").arg(type));
-            // display hint is name
-            list.push_back(portData.name);
+            list.push_back(QString("%1").arg(portData.displayHint));
 
             list.push_back(QString("%1").arg(portData.min));
             list.push_back(QString("%1").arg(portData.max));
@@ -245,7 +278,7 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
             port->setProperty(MappedPluginPort::Maximum, portData.max);
             port->setProperty(MappedPluginPort::Minimum, portData.min);
             port->setProperty(MappedPluginPort::Default, portData.def);
-            port->setProperty(MappedPluginPort::DisplayHint, PluginPort::NoHint);
+            port->setProperty(MappedPluginPort::DisplayHint, portData.displayHint);
         }
     }
 }

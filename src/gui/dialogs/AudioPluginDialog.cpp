@@ -395,6 +395,7 @@ AudioPluginDialog::populatePluginList()
         QString id = i->second.second->getIdentifier();
         QString type, soname, label;
         PluginIdentifier::parseIdentifier(id, type, soname, label);
+        if (type == "http") type = "lv2";
 
         QString tname = type + ":" + name;
 

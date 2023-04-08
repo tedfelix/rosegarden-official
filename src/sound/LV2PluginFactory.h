@@ -64,6 +64,7 @@ class LV2PluginFactory : public PluginFactory
         float min;
         float max;
         float def;
+        int displayHint;
     };
 
     struct PluginData
