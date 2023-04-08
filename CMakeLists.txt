@@ -193,7 +193,7 @@ endif()
 add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remote control support")
 
 # lilv for lv2 plugins
-find_path(LILV_INCLUDE_DIR xlilv/lilv.h
+find_path(LILV_INCLUDE_DIR lilv/lilv.h
   PATH /usr/include/lilv-0)
 if(NOT LILV_INCLUDE_DIR)
   message(WARNING "Failed to find Lilv header lilv/lilv.h for lv2 plugins")

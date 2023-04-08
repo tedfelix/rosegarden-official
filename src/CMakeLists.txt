@@ -737,6 +737,14 @@ if (JACK_FOUND)
   )
 endif()
 
+if (LILV_FOUND)
+  set(rg_CPPS ${rg_CPPS}
+    sound/LV2PluginFactory.cpp
+    #sound/LV2PluginInstance.cpp
+  )
+endif()
+
+
 # Reverse the list order to try to find static init fiasco issues...
 #list (REVERSE rg_CPPS)
 

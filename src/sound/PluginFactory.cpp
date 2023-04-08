@@ -36,7 +36,7 @@ int PluginFactory::m_sampleRate = 48000;
 static LADSPAPluginFactory *ladspaInstance = nullptr;
 static LADSPAPluginFactory *dssiInstance = nullptr;
 #ifdef HAVE_LILV
-static LV2luginFactory *lv2Instance = nullptr;
+static LV2PluginFactory *lv2Instance = nullptr;
 #endif
 
 PluginFactory *
@@ -102,6 +102,12 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
     factory = instance("ladspa");
     if (factory)
         factory->enumeratePlugins(list);
+
+#ifdef HAVE_LILV
+    factory = instance("lv2");
+    if (factory)
+        factory->enumeratePlugins(list);
+#endif
 
     setlocale(LC_ALL, loc);
 

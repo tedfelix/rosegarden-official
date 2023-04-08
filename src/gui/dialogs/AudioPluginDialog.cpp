@@ -392,7 +392,13 @@ AudioPluginDialog::populatePluginList()
         if (name.endsWith(" VST"))
             name = name.left(name.length() - 4);
 
-        m_pluginList->addItem(name);
+        QString id = i->second.second->getIdentifier();
+        QString type, soname, label;
+        PluginIdentifier::parseIdentifier(id, type, soname, label);
+
+        QString tname = type + ":" + name;
+
+        m_pluginList->addItem(tname);
         m_pluginsInList.push_back(i->second.first);
 
         // If this is the plugin that is selected, select it in the combobox.
