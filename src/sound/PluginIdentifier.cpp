@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2022 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -36,6 +36,7 @@ PluginIdentifier::parseIdentifier(QString identifier,
     type = identifier.section(':', 0, 0);
     soName = identifier.section(':', 1, 1);
     label = identifier.section(':', 2);
+    if (type == "http") type = "lv2";
 }
 
 bool
@@ -62,4 +63,3 @@ QString
 PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY = "__ROSEGARDEN__:__RESERVED__:ProjectDirectoryKey";
 
 }
-

@@ -291,6 +291,7 @@ LV2PluginFactory::instantiatePlugin(QString identifier,
                                     unsigned int blockSize,
                                     unsigned int channels)
 {
+    RG_DEBUG << "instantiate plugin" << identifier;
     auto it = m_pluginData.find(identifier);
     if (it == m_pluginData.end()) {
         RG_DEBUG << "plugin" << identifier << "not found";

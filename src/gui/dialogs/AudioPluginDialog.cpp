@@ -410,7 +410,6 @@ AudioPluginDialog::populatePluginList()
         QString id = i->second.second->getIdentifier();
         QString type, soname, label;
         PluginIdentifier::parseIdentifier(id, type, soname, label);
-        if (type == "http") type = "lv2";
 
         QString tname = type + ":" + name;
 
@@ -418,12 +417,12 @@ AudioPluginDialog::populatePluginList()
         if (searchText == "" ||
             tname.contains(searchText, Qt::CaseInsensitive)) {
             m_pluginList->addItem(tname);
-        }
-        m_pluginsInList.push_back(i->second.first);
-
-        // If this is the plugin that is selected, select it in the combobox.
-        if (currentId == i->second.second->getIdentifier()) {
-            m_pluginList->setCurrentIndex(m_pluginList->count() - 1);
+            m_pluginsInList.push_back(i->second.first);
+            // If this is the plugin that is selected, select it in
+            // the combobox.
+            if (currentId == i->second.second->getIdentifier()) {
+                m_pluginList->setCurrentIndex(m_pluginList->count() - 1);
+            }
         }
     }
 

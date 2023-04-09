@@ -52,6 +52,7 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_run(false),
         m_bypassed(false)
 {
+    RG_DEBUG << "create plugin" << uri;
     init(idealChannelCount);
 
     m_inputBuffers = new sample_t * [m_instanceCount * m_audioPortsIn.size()];
@@ -64,7 +65,8 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_outputBuffers[i] = new sample_t[blockSize];
     }
 
-    const char* uris = m_uri.toStdString().c_str();
+    QByteArray ba = m_uri.toLocal8Bit();
+    const char *uris = ba.data();
     LilvNode* pluginUri = lilv_new_uri(m_world, uris);
     const LilvPlugins* plugins = lilv_world_get_all_plugins(world);
     m_plugin = lilv_plugins_get_by_uri(plugins, pluginUri);
@@ -205,11 +207,18 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     RG_DEBUG << "LV2PluginInstance::instantiate - plugin uri = "
              << m_uri;
 
+    LilvNodes* feats = lilv_plugin_get_required_features(m_plugin);
+    RG_DEBUG << "instantiate num features" <<  lilv_nodes_size(feats);
+    LILV_FOREACH (nodes, i, feats) {
+        const LilvNode* fnode = lilv_nodes_get(feats, i);
+        RG_DEBUG << "feature:" << lilv_node_as_string(fnode);
+    }
     for (size_t i = 0; i < m_instanceCount; ++i) {
         LilvInstance* instance =
-            lilv_plugin_instantiate(m_plugin, sampleRate, nullptr);
+            lilv_plugin_instantiate(m_plugin, sampleRate, 0);
         m_instances.push_back(instance);
     }
+    lilv_nodes_free(feats);
 }
 
 void
@@ -286,8 +295,9 @@ LV2PluginInstance::getPortValue(unsigned int portNumber)
 }
 
 void
-LV2PluginInstance::run(const RealTime &)
+LV2PluginInstance::run(const RealTime &rt)
 {
+    RG_DEBUG << "run" << rt;
     for (auto i = m_instances.begin();
          i != m_instances.end(); ++i) {
         lilv_instance_run(*i, m_blockSize);
