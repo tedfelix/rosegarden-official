@@ -17,6 +17,7 @@
 #define RG_LV2_PLUGIN_FACTORY_H
 
 #include "PluginFactory.h"
+#include "LV2PluginInstance.h"
 
 #include <vector>
 #include <map>
@@ -55,26 +56,6 @@ class LV2PluginFactory : public PluginFactory
     friend class PluginFactory;
 
  private:
-
-    struct PortData
-    {
-        QString name;
-        bool isControl;
-        bool isInput;
-        float min;
-        float max;
-        float def;
-        int displayHint;
-    };
-
-    struct PluginData
-    {
-        QString name;
-        QString pluginClass;
-        QString author;
-        std::vector<PortData> ports;
-    };
-
     void releasePlugin(RunnablePluginInstance *, QString) override;
     virtual void generateTaxonomy();
 
@@ -82,7 +63,7 @@ class LV2PluginFactory : public PluginFactory
 
     LilvWorld* m_world;
     std::vector<QString> m_identifiers;
-    std::map<QString, PluginData> m_pluginData;
+    std::map<QString, LV2PluginInstance::LV2PluginData> m_pluginData;
     std::map<QString, QString> m_taxonomy;
 
 };

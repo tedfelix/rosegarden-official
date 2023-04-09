@@ -37,7 +37,7 @@ class QGridLayout;
 class QGroupBox;
 class QCheckBox;
 class QComboBox;
-
+class QLineEdit;
 
 namespace Rosegarden
 {
@@ -72,6 +72,7 @@ public:
     void guiExited() { m_guiShown = false; }
 
 public slots:
+    void slotSearchTextChanged(const QString& text);
     void slotCategorySelected(int);
     void slotPluginSelected(int index);
     void slotPluginPortChanged(float value);
@@ -114,6 +115,8 @@ protected:
     InstrumentId         m_containerId;
 
     QGroupBox           *m_pluginParamsBox;
+    QWidget             *m_pluginSearchBox;
+    QLineEdit           *m_pluginSearchText;
     QWidget             *m_pluginCategoryBox;
     QComboBox           *m_pluginCategoryList;
     QLabel              *m_pluginLabel;

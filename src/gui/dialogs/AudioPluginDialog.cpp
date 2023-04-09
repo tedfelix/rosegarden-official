@@ -54,6 +54,7 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QSharedPointer>
+#include <QLineEdit>
 
 #include <set>
 
@@ -100,6 +101,20 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // Plugin parameters group box (m_pluginParamsBox).
     makePluginParamsBox(vbox);
     vboxLayout->addWidget(m_pluginParamsBox);
+
+    // search string
+    m_pluginSearchBox = new QWidget(pluginSelectionBox);
+    QHBoxLayout *pluginSearchBoxLayout = new QHBoxLayout(m_pluginSearchBox);
+    pluginSearchBoxLayout->setContentsMargins(0, 0, 0, 0);
+    pluginSelectionBoxLayout->addWidget(m_pluginSearchBox);
+
+    pluginSearchBoxLayout->addWidget(new QLabel(tr("Search:"), m_pluginSearchBox));
+
+    m_pluginSearchText = new QLineEdit(m_pluginSearchBox);
+    connect(m_pluginSearchText, &QLineEdit::textChanged,
+            this, &AudioPluginDialog::slotSearchTextChanged);
+    m_pluginSearchText->setClearButtonEnabled(true);
+    pluginSearchBoxLayout->addWidget(m_pluginSearchText);
 
     // the Category label/combo
     m_pluginCategoryBox = new QWidget(pluginSelectionBox);
@@ -399,7 +414,11 @@ AudioPluginDialog::populatePluginList()
 
         QString tname = type + ":" + name;
 
-        m_pluginList->addItem(tname);
+        QString searchText = m_pluginSearchText->text();
+        if (searchText == "" ||
+            tname.contains(searchText, Qt::CaseInsensitive)) {
+            m_pluginList->addItem(tname);
+        }
         m_pluginsInList.push_back(i->second.first);
 
         // If this is the plugin that is selected, select it in the combobox.
@@ -427,6 +446,12 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
     m_pluginParamsBox->setContentsMargins(5, 5, 5, 5);
     m_pluginParamsBoxLayout = new QGridLayout(m_pluginParamsBox);
     m_pluginParamsBoxLayout->setVerticalSpacing(0);
+}
+
+void
+AudioPluginDialog::slotSearchTextChanged(const QString&)
+{
+    populatePluginList();
 }
 
 void

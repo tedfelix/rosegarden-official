@@ -46,7 +46,7 @@ LV2PluginFactory::LV2PluginFactory()
         QString uri = lilv_node_as_uri(lilv_plugin_get_uri(plugin));
         RG_DEBUG << "got plugin" << uri;
 
-        PluginData pluginData;
+        LV2PluginInstance::LV2PluginData pluginData;
         LilvNode* nameNode = lilv_plugin_get_name(plugin);
         RG_DEBUG << "Name:" << lilv_node_as_string(nameNode);
         pluginData.name = lilv_node_as_string(nameNode);
@@ -75,7 +75,7 @@ LV2PluginFactory::LV2PluginFactory()
         for (unsigned long p = 0; p < nports; ++p) {
             const LilvPort* port = lilv_plugin_get_port_by_index(plugin, p);
 
-            PortData portData;
+            LV2PluginInstance::LV2PortData portData;
             LilvNode *cpn = lilv_new_uri(m_world, LILV_URI_CONTROL_PORT);
             LilvNode *ipn = lilv_new_uri(m_world, LILV_URI_INPUT_PORT);
             bool cntrl = lilv_port_is_a(plugin, port, cpn);
@@ -179,7 +179,7 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
     for(auto pair : m_pluginData) {
         const QString& uri = pair.first;
         list.push_back(uri);
-        const PluginData& pluginData = pair.second;
+        const LV2PluginInstance::LV2PluginData& pluginData = pair.second;
         list.push_back(pluginData.name);
         // uri is the id
         list.push_back(uri);
@@ -202,7 +202,7 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
         list.push_back(QString("%1").arg(nports));
 
         for (unsigned long p = 0; p < nports; ++p) {
-            const PortData portData = pluginData.ports[p];
+            const LV2PluginInstance::LV2PortData portData = pluginData.ports[p];
             int type = 0;
 
             if (portData.isControl) {
@@ -238,7 +238,7 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
         return;
     }
 
-    const PluginData pluginData = (*it).second;
+    const LV2PluginInstance::LV2PluginData pluginData = (*it).second;
     slot.setStringProperty(MappedPluginSlot::Label, pluginData.pluginClass);
     slot.setStringProperty(MappedPluginSlot::PluginName, pluginData.name);
     slot.setStringProperty(MappedPluginSlot::Author, pluginData.author);
@@ -257,7 +257,7 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
     slot.destroyChildren();
 
     for (unsigned long i = 0; i < pluginData.ports.size(); i++) {
-        const PortData& portData = pluginData.ports[i];
+        const LV2PluginInstance::LV2PortData& portData = pluginData.ports[i];
         if (portData.isControl && portData.isInput) {
             MappedStudio *studio =
                 dynamic_cast<MappedStudio *>(slot.getParent());
@@ -297,20 +297,29 @@ LV2PluginFactory::instantiatePlugin(QString identifier,
         return nullptr;
     }
 
-    LV2PluginInstance *instance = nullptr;
-    /* new LV2PluginInstance
-            (this, instrument, identifier, position, sampleRate, blockSize, channels,
-             descriptor);
+    const QString& uri = (*it).first;
+    const LV2PluginInstance::LV2PluginData& pdata = (*it).second;
+    LV2PluginInstance *instance =
+        new LV2PluginInstance
+        (this, instrument, identifier,
+         position, sampleRate, blockSize, channels,
+         m_world, uri, pdata);
 
-             m_instances.insert(instance); */
+    m_instances.insert(instance);
 
     return instance;
 }
 
 void
 LV2PluginFactory::releasePlugin(RunnablePluginInstance *instance,
-                                   QString identifier)
+                                QString)
 {
+    if (m_instances.find(instance) == m_instances.end()) {
+        RG_WARNING << "WARNING: LV2luginFactory::releasePlugin: Not one of mine!";
+        return ;
+    }
+
+    m_instances.erase(m_instances.find(instance));
 }
 
 void
@@ -326,7 +335,7 @@ LV2PluginFactory::generateTaxonomy()
 {
     for(auto pair : m_pluginData) {
         const QString& uri = pair.first;
-        const PluginData& pluginData = pair.second;
+        const LV2PluginInstance::LV2PluginData& pluginData = pair.second;
 
         m_taxonomy[uri] = pluginData.pluginClass;
         m_identifiers.push_back(uri);

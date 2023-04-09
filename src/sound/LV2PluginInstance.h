@@ -16,6 +16,9 @@
 #include <vector>
 #include <set>
 #include <QString>
+
+#include <lilv/lilv.h>
+
 #include "base/Instrument.h"
 
 #ifndef RG_LV2PLUGININSTANCE_H
@@ -35,7 +38,7 @@ class LV2PluginInstance : public RunnablePluginInstance
 public:
     ~LV2PluginInstance() override;
 
-    bool isOK() const override { return !m_instanceHandles.empty(); }
+    bool isOK() const override { return !m_instances.empty(); }
 
     InstrumentId getInstrument() const { return m_instrument; }
     QString getIdentifier() const override { return m_identifier; }
@@ -60,6 +63,25 @@ public:
     void silence() override;
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
+    struct LV2PortData
+    {
+        QString name;
+        bool isControl;
+        bool isInput;
+        float min;
+        float max;
+        float def;
+        int displayHint;
+    };
+
+    struct LV2PluginData
+    {
+        QString name;
+        QString pluginClass;
+        QString author;
+        std::vector<LV2PortData> ports;
+    };
+
 protected:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;
@@ -73,19 +95,9 @@ protected:
                       unsigned long sampleRate,
                       size_t blockSize,
                       int idealChannelCount,
-                      const QString* descriptor);
-
-    // Constructor that uses shared buffers
-    //
-    LV2PluginInstance(PluginFactory *factory,
-                      InstrumentId instrument,
-                      QString identifier,
-                      int position,
-                      unsigned long sampleRate,
-                      size_t blockSize,
-                      sample_t **inputBuffers,
-                      sample_t **outputBuffers,
-                      const QString* descriptor);
+                      LilvWorld* world,
+                      const QString& uri,
+                      const LV2PluginData& pluginData);
 
     void init(int idealChannelCount = 0);
     void instantiate(unsigned long sampleRate);
@@ -99,12 +111,15 @@ protected:
 
     InstrumentId   m_instrument;
     int                        m_position;
-    std::vector<void*> m_instanceHandles;
+    std::vector<LilvInstance*> m_instances;
     size_t                     m_instanceCount;
-    const QString   *m_descriptor;
+    LilvWorld *m_world;
+    QString m_uri;
+    LV2PluginData m_pluginData;
+    const LilvPlugin *m_plugin;
 
-    std::vector<std::pair<unsigned long, void*> > m_controlPortsIn;
-    std::vector<std::pair<unsigned long, void*> > m_controlPortsOut;
+    std::vector<std::pair<unsigned long, float> > m_controlPortsIn;
+    std::vector<std::pair<unsigned long, float> > m_controlPortsOut;
 
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;
@@ -112,7 +127,6 @@ protected:
     size_t                    m_blockSize;
     sample_t                **m_inputBuffers;
     sample_t                **m_outputBuffers;
-    bool                      m_ownBuffers;
     size_t                    m_sampleRate;
     float                    *m_latencyPort;
     bool                      m_run;
