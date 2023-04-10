@@ -107,8 +107,8 @@ LV2PluginInstance::init(int idealChannelCount)
                 if ((portData.name == "latency") ||
                     (portData.name == "_latency")) {
                     RG_DEBUG << "Wooo! We have a latency port!";
-                    // todo
-                    m_latencyPort = nullptr;
+                    float& value = m_controlPortsOut.back().second;
+                    m_latencyPort = &(value);
                 }
             }
         }
@@ -216,7 +216,11 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     for (size_t i = 0; i < m_instanceCount; ++i) {
         LilvInstance* instance =
             lilv_plugin_instantiate(m_plugin, sampleRate, 0);
-        m_instances.push_back(instance);
+        if (!instance) {
+            RG_WARNING << "Failed to instantiate plugin" << m_uri;
+        } else {
+            m_instances.push_back(instance);
+        }
     }
     lilv_nodes_free(feats);
 }
