@@ -307,7 +307,7 @@ private:
         REPEAT_UNFOLD,
     };
 
-    bool m_voltaBar;
+    bool m_altBar;            // Draw a bar at the beginning of an alternative
     bool m_cancelAccidentals;
     bool m_fingeringsInStaff;
     QString m_warningMessage;

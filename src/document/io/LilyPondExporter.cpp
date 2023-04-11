@@ -139,7 +139,7 @@ LilyPondExporter::readConfigVariables()
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false"));
 //    m_repeatMode = settings.value("lilyrepeatmode", REPEAT_BASIC).toUInt();
     m_repeatMode = settings.value("lilyexportrepeat", "true").toBool() ? REPEAT_VOLTA : REPEAT_UNFOLD;
-    m_voltaBar = settings.value("lilydrawbaratvolta", "true").toBool();
+    m_altBar = settings.value("lilydrawbaratvolta", "true").toBool();
     m_cancelAccidentals = settings.value("lilycancelaccidentals", "false").toBool();
     m_fingeringsInStaff = settings.value("lilyfingeringsinstaff", "true").toBool();
     settings.endGroup();
@@ -1099,10 +1099,10 @@ LilyPondExporter::write()
     }
 
     // If needed, compute offsets in LilyPond score of segments following
-    // a repeat with volta coming from linked segments.
+    // a repeat with alternate endings coming from linked segments.
     //!!! TODO : Use an other switch than m_repeatMode
     if (m_repeatMode == REPEAT_VOLTA) {
-        lsc.fixVoltaStartTimes();
+        lsc.fixAltStartTimes();
     }
 
     // If any segment is not starting at a bar boundary, adapted
@@ -1518,7 +1518,7 @@ LilyPondExporter::write()
                     verses[voiceIndex] = seg->getVerseCount();
                 }
                 
-                if (!lsc.isVolta()) {
+                if (!lsc.isAlt()) {
 
 
                     //!!! how will all these indentions work out?  Probably not well,
@@ -1548,7 +1548,7 @@ LilyPondExporter::write()
                         timeT segLength = seg->getEndTime() -
                             seg->getStartTime();
 
-                        int nRepeats = lsc.getNumberOfRepeats();
+                        int nRepeats = lsc.getNumberOfVolta();
                         RG_DEBUG << "chordNamesMode repeats:" << nRepeats;
                         // with REPEAT_VOLTA the segment is only rendered once
                         if (m_repeatMode == REPEAT_VOLTA) nRepeats = 1;
@@ -1642,7 +1642,7 @@ LilyPondExporter::write()
                         }
                     } // if (m_exportChords....
 
-                } /// if (!lsc.isVolta())
+                } /// if (!lsc.isAlt())
 
                 // Temporary storage for non-atomic events (!BOOM)
                 // ex. LilyPond expects signals when a decrescendo starts
@@ -1657,7 +1657,7 @@ LilyPondExporter::write()
                 std::ostringstream voiceNumber;
                 voiceNumber << "voice " << trackPos << "." << voiceIndex;
 
-                if (!lsc.isVolta()) {
+                if (!lsc.isAlt()) {
                     str << std::endl << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
                         << "\" {"; // indent+
 
@@ -1670,14 +1670,14 @@ LilyPondExporter::write()
                     int staffSize = track->getStaffSize();
                     if (staffSize == StaffTypes::Small) str << indent(col) << "\\small" << std::endl;
                     else if (staffSize == StaffTypes::Tiny) str << indent(col) << "\\tiny" << std::endl;
-                } /// if (!lsc.isVolta())
+                } /// if (!lsc.isAlt())
                 
                 SegmentNotationHelper helper(*seg);
                 helper.setNotationProperties();
 
                 int firstBar = m_composition->getBarNumber(seg->getStartTime());
 
-                if (!lsc.isVolta()) {        // Don't write any skip in a volta
+                if (!lsc.isAlt()) {  // Don't write any skip in an alt. ending
                     if (firstBar > 0) {
                         // Add a skip for the duration until the start of the first
                         // bar in the segment.  If the segment doesn't start on a
@@ -1726,7 +1726,7 @@ LilyPondExporter::write()
                             }
                         }
                     }
-                } /// if (!lsc.isVolta())
+                } /// if (!lsc.isAlt())
 
 
                 std::string lilyText = "";      // text events
@@ -1737,7 +1737,7 @@ LilyPondExporter::write()
                 bool haveRepeating = false;
                 bool haveAlternates = false;
 
-                bool haveRepeatingWithVolta = false;
+                bool haveVoltaWithAltEndings = false;
                 bool haveVolta = false;
 
                 bool nextBarIsAlt1 = false;
@@ -1805,7 +1805,7 @@ LilyPondExporter::write()
                             str << std::endl << indent(col++)
                                 << "\\repeat volta " << numRepeats << " {";
                         } else {
-                            numRepeats = lsc.getNumberOfRepeats();
+                            numRepeats = lsc.getNumberOfVolta();
                             if ((m_repeatMode == REPEAT_VOLTA) && lsc.isSynchronous()) {
                                 str << std::endl << indent(col++)
                                     << "\\repeat volta " << numRepeats << " {";
@@ -1816,22 +1816,22 @@ LilyPondExporter::write()
                                     << numRepeats << " {";
                             }
                         }
-                    } else if (lsc.isRepeatWithVolta() &&
-                            !haveRepeatingWithVolta &&
+                    } else if (lsc.isRepeatWithAlt() &&
+                            !haveVoltaWithAltEndings &&
                             !haveVolta) {
-                        if (!lsc.isVolta()) {
+                        if (!lsc.isAlt()) {
                             str << std::endl << indent(col++);
                             if (lsc.isAutomaticVoltaUsable()) {
                                 str << "\\repeat volta "
-                                    << lsc.getNumberOfRepeats() << " ";
+                                    << lsc.getNumberOfVolta() << " ";
                             }
                             // Opening of main repeating segment
                             str << "{   % Repeating stegment start here";
                             str << std::endl << indent(col)
                                 << "% Segment: " << seg->getLabel();
-                            haveRepeatingWithVolta = true;
+                            haveVoltaWithAltEndings = true;
                             if (!lsc.isAutomaticVoltaUsable()) {
-                                if (lsc.wasRepeatingWithoutVolta()) {
+                                if (lsc.wasRepeatingWithoutAlt()) {
                                     // When automatic volta is not usable, the
                                     // "start-repeat" bar hides the "end-repeat"
                                     // bar issued by the previous automatic
@@ -1854,15 +1854,15 @@ LilyPondExporter::write()
                             if (!lsc.isAutomaticVoltaUsable()) {
                                 str << std::endl << indent(col)
                                     << "\\set Score.repeatCommands = ";
-                                if (lsc.isFirstVolta()) {
+                                if (lsc.isFirstAlt()) {
                                     str << "#'((volta \""
-                                        << lsc.getVoltaText() << "\"))";
+                                        << lsc.getAltText() << "\"))";
                                 } else {
                                     str << "#'((volta #f) (volta \""
-                                        << lsc.getVoltaText() << "\") end-repeat)";
+                                        << lsc.getAltText() << "\") end-repeat)";
                                 }
                             }
-                            if (m_voltaBar) {
+                            if (m_altBar) {
                                 str << std::endl << indent(col)
                                     << "\\bar \"|\" ";
                             }
@@ -1926,8 +1926,8 @@ LilyPondExporter::write()
                 }
 
                 // Open alternate parts if repeat with volta from linked segments
-                if (haveRepeatingWithVolta) {
-                    if (!lsc.isVolta()) {
+                if (haveVoltaWithAltEndings) {
+                    if (!lsc.isAlt()) {
                         str << std::endl << indent(--col) << "} \% close main repeat";
                         if (lsc.isAutomaticVoltaUsable()) {
                             str << std::endl << indent (col++) << "\\alternative  {";
@@ -1944,37 +1944,41 @@ LilyPondExporter::write()
                     str << std::endl << indent(col) << "\\bar \"|.\"";
                 }
 
-                if (!haveRepeatingWithVolta && !haveVolta) {
+                if (!haveVoltaWithAltEndings && !haveVolta) {
                     // close Voice context
-                    str << std::endl << indent(--col) << "} % Voice YGB" << std::endl;  // indent-
+                    str << std::endl
+                        << indent(--col) << "} % Voice" 
+                        << std::endl;                           // indent-
                 }
 
-                if (lsc.isVolta()) {
+                if (lsc.isAlt()) {
                     // close volta
-                    if (!lsc.isAutomaticVoltaUsable() && lsc.isLastVolta()) {
+                    if (!lsc.isAutomaticVoltaUsable() && lsc.isLastAlt()) {
                         str << std::endl << indent (col)
                             << "\\set Score.repeatCommands = ";
-                        if (lsc.getVoltaRepeatCount() > 1) {
+                        if (lsc.getAltRepeatCount() > 1) {
                             str << "#'((volta #f) end-repeat)";
                         } else {
                             str << "#'((volta #f))";
                         }
-                        if (lsc.getVoltaRepeatCount() < 1) {
+                        if (lsc.getAltRepeatCount() < 1) {
                             RG_WARNING << "BUG in LilyPondExporter : "
-                                    << "lsc.getVoltaRepeatCount() = "
-                                    << lsc.getVoltaRepeatCount();
+                                    << "lsc.getAltRepeatCount() = "
+                                    << lsc.getAltRepeatCount();
                         }
                     }
                     str << std::endl << indent(--col) << "}" << std::endl;  // indent-
 
-                    if (lsc.isLastVolta()) {
+                    if (lsc.isLastAlt()) {
                         if (lsc.isAutomaticVoltaUsable()) {
                             // close alternative section
                             str << std::endl << indent(--col) << "}" << std::endl;  // indent-
                         }
 
                     // close Voice context
-                        str << std::endl << indent(--col) << "} % Voice YGA" << std::endl;  // indent-
+                        str << std::endl 
+                            << indent(--col) << "} % Voice" 
+                            << std::endl;                        // indent-
                     }
                 }
                 
@@ -2066,13 +2070,13 @@ LilyPondExporter::write()
                                                 seg; seg = lsc.useNextSegment()) {
                     
                     std::cerr << "Lyrics segment " << seg->getLabel()
-                              << " isVolta:" <<  lsc.isVolta()
+                              << " isAlt:" <<  lsc.isAlt()
                               << " isRepeated=" << lsc.isRepeated();    // YG
 
                     // How many times the segment is played
-                    int n = lsc.isVolta()
-                                ? lsc.getVoltaNumbers()->size()
-                                : lsc.getNumberOfRepeats();
+                    int n = lsc.isAlt()
+                                ? lsc.getAltNumbers()->size()
+                                : lsc.getNumberOfVolta();
                     std::cerr  <<" numberOfRep.=" << n << "\n";   // YG
                                 
                     versesNumber += n - 1;
@@ -2145,27 +2149,27 @@ LilyPondExporter::write()
                             std::cout << "Line " << verseLine;  // YG
                             
                             int verseIndex;
-                            if (!lsc.isVolta()) { 
+                            if (!lsc.isAlt()) { 
                                 voltaCount += deltaVoltaCount;
-                                deltaVoltaCount = lsc.getNumberOfRepeats() - 1;
+                                deltaVoltaCount = lsc.getNumberOfVolta() - 1;
                                 
                                 verseIndex = ((verseLine + 1) + 1 - voltaCount) - 1;
                                 // verseIndex and verseLine start from 0 end not 1
                                 
-                                verseIndex += cycle * lsc.getNumberOfRepeats();
-                                int vimin = cycle * lsc.getNumberOfRepeats();
-                                int vimax = vimin + lsc.getNumberOfRepeats() - 1;
+                                verseIndex += cycle * lsc.getNumberOfVolta();
+                                int vimin = cycle * lsc.getNumberOfVolta();
+                                int vimax = vimin + lsc.getNumberOfVolta() - 1;
                                 if (    (verseIndex < vimin)
                                      || (verseIndex > vimax) ) verseIndex = -1;
                                 
                                 std::cout << " !alt verse=" << verseIndex << "\n";   // YG
                             } else {
-                                const std::set<int>* numbers = lsc.getVoltaNumbers();
+                                const std::set<int>* numbers = lsc.getAltNumbers();
                                 int altNumber = (verseLine + 1) + 1 - voltaCount;
                                 
                                 // Get the verseNumber from the altNumber
                                 std::set<int>::const_iterator i;
-                                int verse = cycle * lsc.getVoltaRepeatCount();
+                                int verse = cycle * lsc.getAltRepeatCount();
                                 bool found = false;
                                 for (i = numbers->begin(); 
                                         i != numbers->end(); ++i) {
