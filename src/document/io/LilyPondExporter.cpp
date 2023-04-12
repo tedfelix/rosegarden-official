@@ -137,8 +137,7 @@ LilyPondExporter::readConfigVariables()
     m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt();
     m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false"));
-//    m_repeatMode = settings.value("lilyrepeatmode", REPEAT_BASIC).toUInt();
-    m_repeatMode = settings.value("lilyexportrepeat", "true").toBool() ? REPEAT_VOLTA : REPEAT_UNFOLD;
+    m_useVolta = settings.value("lilyexportrepeat", "true").toBool();
     m_altBar = settings.value("lilydrawbaratvolta", "true").toBool();
     m_cancelAccidentals = settings.value("lilycancelaccidentals", "false").toBool();
     m_fingeringsInStaff = settings.value("lilyfingeringsinstaff", "true").toBool();
@@ -1094,14 +1093,13 @@ LilyPondExporter::write()
 
     // If needed, compute offsets of segments following a repeating one
     // in LilyPond score
-    if (m_repeatMode == REPEAT_VOLTA) {
+    if (m_useVolta) {
         lsc.fixRepeatStartTimes();
     }
 
     // If needed, compute offsets in LilyPond score of segments following
     // a repeat with alternate endings coming from linked segments.
-    //!!! TODO : Use an other switch than m_repeatMode
-    if (m_repeatMode == REPEAT_VOLTA) {
+    if (m_useVolta) {
         lsc.fixAltStartTimes();
     }
 
@@ -1123,7 +1121,7 @@ LilyPondExporter::write()
 
     int leftBar = 0;
     int rightBar = leftBar;
-    if (m_repeatMode != REPEAT_VOLTA) {   ///!!! Quick hack to remove the last blank measure
+    if (!m_useVolta) {   ///!!! Quick hack to remove the last blank measure
         /// The old way : look all bars successively to find time signature and
         /// write it in a LilyPond comment except for the very first one.
         /// The time is computed from the composition start time. This is wrong as
@@ -1263,7 +1261,7 @@ LilyPondExporter::write()
         if (prevTempoChangeTime < compositionStartTime) {
             prevTempoChangeTime = compositionStartTime;
         }
-        if (m_repeatMode != REPEAT_VOLTA) {   ///!!! Quick hack bis to remove the last blank measure
+        if (!m_useVolta) {   ///!!! Quick hack bis to remove the last blank measure
             /// The writeSkip() is just not called when exporting repeats
             writeSkip(m_composition->getTimeSignatureAt(prevTempoChangeTime),
                       prevTempoChangeTime, compositionEndTime - prevTempoChangeTime, false, str);
@@ -1550,8 +1548,8 @@ LilyPondExporter::write()
 
                         int nRepeats = lsc.getNumberOfVolta();
                         RG_DEBUG << "chordNamesMode repeats:" << nRepeats;
-                        // with REPEAT_VOLTA the segment is only rendered once
-                        if (m_repeatMode == REPEAT_VOLTA) nRepeats = 1;
+                        // when using volta the segment is only rendered once
+                        if (m_useVolta) nRepeats = 1;
                         RG_DEBUG << "chordNamesMode repeats adj:" << nRepeats;
                         timeT myTime;
                         for (int iRepeat = 0; iRepeat < nRepeats; ++iRepeat) {
@@ -1710,20 +1708,6 @@ LilyPondExporter::write()
                             writeDuration(1, str);
                             str << "*" << ((int)(partialDuration / partialNote.getDuration()))
                                 << std::endl;
-
-                        } else {
-                            if (m_repeatMode == REPEAT_BASIC) {
-                                timeT partialOffset = seg->getStartTime()
-                                                    - m_composition->getBarStart(firstBar);
-                                str << indent(col) << "\\skip ";
-                                // Arbitrary partial durations are handled by the following
-                                // way: split the partial duration to 64th notes: instead
-                                // of "4" write "64*16". (hjj)
-                                Note partialNote = Note::getNearestNote(1, MAX_DOTS);
-                                writeDuration(1, str);
-                                str << "*" << ((int)(partialOffset / partialNote.getDuration()))
-                                    << std::endl;
-                            }
                         }
                     }
                 } /// if (!lsc.isAlt())
@@ -1793,28 +1777,22 @@ LilyPondExporter::write()
                     // repeat
                     if ( (lsc.isRepeatingSegment()
                            || (lsc.isSimpleRepeatedLinks()
-                                  && (m_repeatMode == REPEAT_VOLTA)
+                                  && (m_useVolta)
                               )
                          ) && !haveRepeating) {
 
                         haveRepeating = true;
                         int numRepeats = 2;
 
-                        if (m_repeatMode == REPEAT_BASIC) {
-                            // The old unfinished way
+                        numRepeats = lsc.getNumberOfVolta();
+                        if ((m_useVolta) && lsc.isSynchronous()) {
                             str << std::endl << indent(col++)
                                 << "\\repeat volta " << numRepeats << " {";
                         } else {
-                            numRepeats = lsc.getNumberOfVolta();
-                            if ((m_repeatMode == REPEAT_VOLTA) && lsc.isSynchronous()) {
-                                str << std::endl << indent(col++)
-                                    << "\\repeat volta " << numRepeats << " {";
-                            } else {
-                                // m_repeatMode == REPEAT_UNFOLD
-                                str << std::endl << indent(col++)
-                                    << "\\repeat unfold "
-                                    << numRepeats << " {";
-                            }
+                            // (m_useVolta == false)
+                            str << std::endl << indent(col++)
+                                << "\\repeat unfold "
+                                << numRepeats << " {";
                         }
                     } else if (lsc.isRepeatWithAlt() &&
                             !haveVoltaWithAltEndings &&
@@ -2065,16 +2043,20 @@ LilyPondExporter::write()
                 //       LilyPond will ignore them.
                 //
                 int versesNumber = 1;
+                int cyclesNumber;
+                
                 int sva = 0;    // Supplementary verses accumulator
                 for (Segment * seg = lsc.useFirstSegment();
-                                                seg; seg = lsc.useNextSegment()) {
+                                        seg; seg = lsc.useNextSegment()) {
                     
                     std::cerr << "Lyrics segment " << seg->getLabel()
-                              << " isAlt:" <<  lsc.isAlt()
-                              << " isRepeated=" << lsc.isRepeated();    // YG
+                            << " isAlt:" <<  lsc.isAlt()
+                            << " isRepeated=" << lsc.isRepeated();    // YG
 
+                    int n;
+                    if (m_useVolta) {
                     // How many times the segment is played
-                    int n = lsc.isAlt()
+                    n = lsc.isAlt()
                                 ? lsc.getAltNumbers()->size()
                                 : lsc.getNumberOfVolta();
                     std::cerr  <<" numberOfRep.=" << n << "\n";   // YG
@@ -2082,16 +2064,23 @@ LilyPondExporter::write()
                     versesNumber += n - 1;
                     // n is the number of times the volta is played
                     // So the number of repetitions of the volta is n - 1
+                    } else {
+                        versesNumber = 1;
+                        n = 1;
+                    }
                         
                     // Compute the supplementary verses number and keep its
                     // largest value in sva
                     int supplementaryVerses = (seg->getVerseCount() - 1) / n;
-                    sva = sva > supplementaryVerses ? sva : supplementaryVerses;
+                    sva = sva > supplementaryVerses
+                            ? sva 
+                            : supplementaryVerses;
                 }
                 
                 // Total number of cycles:
-                // Without supplementary verse (sva=0) the number of cycles is 1
-                int cyclesNumber = sva + 1;   
+                // Without supplementary verse (sva=0) number of cycles is 1
+                cyclesNumber = sva + 1;   
+                
               
                 std::cerr << "Basic NL is " << versesNumber 
                           << "  number of cycles = " << cyclesNumber

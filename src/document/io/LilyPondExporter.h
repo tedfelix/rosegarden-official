@@ -300,13 +300,7 @@ private:
 //     };
 // These are the values used with m_languageLevel.
 
-    int m_repeatMode;
-    enum {
-        REPEAT_BASIC,
-        REPEAT_VOLTA,
-        REPEAT_UNFOLD,
-    };
-
+    bool m_useVolta;          // If true, use volta whenever possible
     bool m_altBar;            // Draw a bar at the beginning of an alternative
     bool m_cancelAccidentals;
     bool m_fingeringsInStaff;
