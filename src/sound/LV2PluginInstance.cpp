@@ -22,8 +22,41 @@
 #include <QtGlobal>
 #include "misc/Debug.h"
 
+namespace
+{
+    std::map<std::string, int> uridMap;
+    std::map<int, std::string> uridUnmap;
+    int nextId = 1;
 
-//#define DEBUG_LV2 1
+    LV2_URID LV2UridMap(LV2_URID_Map_Handle,
+                        char *uri)
+    {
+        auto it = uridMap.find(uri);
+        if (it == uridMap.end()) {
+            int id = nextId;
+            nextId++;
+            uridMap[uri] = id;
+            uridUnmap[id] = uri;
+        }
+        int ret = uridMap[uri];
+        return ret;
+    }
+    static LV2_Feature uridMapFeature =
+        {LV2_URID__map, reinterpret_cast<void*>(&LV2UridMap)};
+
+    const char* LV2UridUnmap(LV2_URID_Unmap_Handle,
+                             LV2_URID urid)
+    {
+        auto it = uridUnmap.find(urid);
+        if (it == uridUnmap.end()) {
+            return "";
+        }
+        return (*it).second.c_str();
+    }
+    static LV2_Feature uridUnmapFeature =
+        {LV2_URID__unmap, reinterpret_cast<void*>(&LV2UridUnmap)};
+
+}
 
 namespace Rosegarden
 {
@@ -213,9 +246,15 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
         const LilvNode* fnode = lilv_nodes_get(feats, i);
         RG_DEBUG << "feature:" << lilv_node_as_string(fnode);
     }
+
+    LV2_Feature* features[3];
+    features[0] = &uridMapFeature;
+    features[1] = &uridUnmapFeature;
+    features[2] = nullptr;
+
     for (size_t i = 0; i < m_instanceCount; ++i) {
         LilvInstance* instance =
-            lilv_plugin_instantiate(m_plugin, sampleRate, 0);
+            lilv_plugin_instantiate(m_plugin, sampleRate, features);
         if (!instance) {
             RG_WARNING << "Failed to instantiate plugin" << m_uri;
         } else {
