@@ -29,7 +29,7 @@ namespace
     int nextId = 1;
 
     LV2_URID LV2UridMap(LV2_URID_Map_Handle,
-                        char *uri)
+                        const char *uri)
     {
         auto it = uridMap.find(uri);
         if (it == uridMap.end()) {
@@ -41,8 +41,8 @@ namespace
         int ret = uridMap[uri];
         return ret;
     }
-    static LV2_Feature uridMapFeature =
-        {LV2_URID__map, reinterpret_cast<void*>(&LV2UridMap)};
+    static LV2_URID_Map map = {nullptr, &LV2UridMap};
+    static LV2_Feature uridMapFeature = {LV2_URID__map, &map};
 
     const char* LV2UridUnmap(LV2_URID_Unmap_Handle,
                              LV2_URID urid)
@@ -53,8 +53,8 @@ namespace
         }
         return (*it).second.c_str();
     }
-    static LV2_Feature uridUnmapFeature =
-        {LV2_URID__unmap, reinterpret_cast<void*>(&LV2UridUnmap)};
+    static LV2_URID_Unmap unmap = {nullptr, &LV2UridUnmap};
+    static LV2_Feature uridUnmapFeature = {LV2_URID__unmap, &unmap};
 
 }
 

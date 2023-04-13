@@ -69,6 +69,11 @@ LV2PluginFactory::LV2PluginFactory()
         RG_DEBUG << "Author:" << aname;
         pluginData.author = aname;
 
+        const LilvNode* classUri = lilv_plugin_class_get_uri(pclass);
+        QString curis = lilv_node_as_uri(classUri);
+        RG_DEBUG << "class uri is" << curis;
+        pluginData.isInstrument = (curis == LV2_CORE__InstrumentPlugin);
+
         unsigned int nports = lilv_plugin_get_num_ports(plugin);
         RG_DEBUG << "Plugin ports:" << nports;
 
@@ -187,7 +192,12 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
         list.push_back(pluginData.author);
         // no copywrite in lv2
         list.push_back("");
-        list.push_back("false"); // is synth
+
+        if (pluginData.isInstrument) {
+            list.push_back("true"); // is synth
+        } else {
+            list.push_back("false"); // is synth
+        }
         list.push_back("false"); // is grouped
 
         if (m_taxonomy.find(uri) != m_taxonomy.end() &&

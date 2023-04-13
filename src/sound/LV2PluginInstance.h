@@ -79,6 +79,7 @@ public:
         QString name;
         QString pluginClass;
         QString author;
+        bool isInstrument;
         std::vector<LV2PortData> ports;
     };
 
