@@ -61,6 +61,7 @@ namespace
 namespace Rosegarden
 {
 
+#define EVENT_BUFFER_SIZE 1023
 
 LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         InstrumentId instrument,
@@ -79,6 +80,7 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_world(world),
         m_uri(uri),
         m_pluginData(pluginData),
+        m_eventBuffer(EVENT_BUFFER_SIZE),
         m_blockSize(blockSize),
         m_sampleRate(sampleRate),
         m_latencyPort(nullptr),
@@ -335,6 +337,20 @@ LV2PluginInstance::getPortValue(unsigned int portNumber)
     }
 
     return 0.0;
+}
+
+void
+LV2PluginInstance::sendEvent(const RealTime& eventTime,
+                             const void* event)
+{
+    snd_seq_event_t *eventp = (snd_seq_event_t *)event;
+    snd_seq_event_t ev(*eventp);
+
+    ev.time.time.tv_sec = eventTime.sec;
+    ev.time.time.tv_nsec = eventTime.nsec;
+
+    ev.data.note.channel = 1;
+    m_eventBuffer.write(&ev, 1);
 }
 
 void

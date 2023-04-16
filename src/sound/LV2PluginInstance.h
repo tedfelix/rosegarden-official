@@ -18,8 +18,10 @@
 #include <QString>
 
 #include <lilv/lilv.h>
+#include <alsa/seq_event.h>
 
 #include "base/Instrument.h"
+#include "RingBuffer.h"
 
 #ifndef RG_LV2PLUGININSTANCE_H
 #define RG_LV2PLUGININSTANCE_H
@@ -48,6 +50,9 @@ public:
 
     void setPortValue(unsigned int portNumber, float value) override;
     float getPortValue(unsigned int portNumber) override;
+
+    void sendEvent(const RealTime& eventTime,
+                   const void* event) override;
 
     size_t getBufferSize() override { return m_blockSize; }
     size_t getAudioInputCount() override { return m_instanceCount * m_audioPortsIn.size(); }
@@ -124,6 +129,7 @@ protected:
 
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;
+    RingBuffer<snd_seq_event_t> m_eventBuffer;
 
     size_t                    m_blockSize;
     sample_t                **m_inputBuffers;
