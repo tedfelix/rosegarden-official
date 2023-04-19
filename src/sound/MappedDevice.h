@@ -38,8 +38,8 @@ public:
     MappedDevice();
     MappedDevice(DeviceId id,
                  Device::DeviceType type,
-                 std::string name,
-                 std::string connection = "");
+                 const std::string& name,
+                 const std::string& connection = "");
 
     MappedDevice(const MappedDevice &mD);
     ~MappedDevice();

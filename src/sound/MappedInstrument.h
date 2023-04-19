@@ -58,6 +58,7 @@ public:
     void setId(InstrumentId id) { m_id = id; }
     InstrumentId getId() const { return m_id; }
 
+    // cppcheck-suppress functionStatic
     void setType(Instrument::InstrumentType type) { m_type = type; }
     Instrument::InstrumentType getType() const { return m_type; }
 

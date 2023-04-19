@@ -38,18 +38,18 @@ MappedEventList::MappedEventList(const MappedEventList &mC):
 }
 
 MappedEventList &
-MappedEventList::operator=(const MappedEventList &c)
+MappedEventList::operator=(const MappedEventList &mC)
 {
-    if (&c == this) return *this;
+    if (&mC == this) return *this;
 
     clear();
 
-    for (MappedEventList::const_iterator it = c.begin(); it != c.end(); ++it)
+    for (MappedEventList::const_iterator it = mC.begin(); it != mC.end(); ++it)
         insert(new MappedEvent(**it));
 
     return *this;
 }
-    
+
 void
 MappedEventList::merge(const MappedEventList &mC)
 {
@@ -69,5 +69,3 @@ MappedEventList::clear()
 
 
 }
-
-

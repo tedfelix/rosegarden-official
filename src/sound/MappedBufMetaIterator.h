@@ -80,8 +80,8 @@ public:
      *   non-metronome events remaining, but this was never used.
      */
     void fetchEvents(MappedInserterBase &inserter,
-                     const RealTime &start,
-                     const RealTime &end);
+                     const RealTime &startTime,
+                     const RealTime &endTime);
 
     /// Re-seek to current time on the iterator for this segment.
     /**
@@ -120,8 +120,8 @@ private:
      * impossible).
     */
     void fetchEventsNoncompeting(MappedInserterBase &inserter,
-                                 const RealTime &start,
-                                 const RealTime &end);
+                                 const RealTime &startTime,
+                                 const RealTime &endTime);
 
 };
 

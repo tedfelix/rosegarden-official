@@ -44,18 +44,18 @@ public:
      * Clear all block files
      */
     static void clear();
-    bool hasDataBlock(blockid);
+    static bool hasDataBlock(blockid);
 
 protected:
     DataBlockRepository();
 
-    std::string getDataBlock(blockid);
+    static std::string getDataBlock(blockid);
 
-    blockid registerDataBlock(const std::string&);
-    void unregisterDataBlock(blockid);
+    static blockid registerDataBlock(const std::string&);
+    static void unregisterDataBlock(blockid);
 
-    void registerDataBlockForEvent(const std::string&, MappedEvent*);
-    void unregisterDataBlockForEvent(MappedEvent*);
+    static void registerDataBlockForEvent(const std::string&, MappedEvent*);
+    static void unregisterDataBlockForEvent(MappedEvent*);
 
 
     //--------------- Data members ---------------------------------

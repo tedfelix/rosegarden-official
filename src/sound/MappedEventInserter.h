@@ -37,7 +37,7 @@ class MappedEventList;
 class MappedEventInserter : public MappedInserterBase
 {
 public:
-    MappedEventInserter(MappedEventList &list) :
+    explicit MappedEventInserter(MappedEventList &list) :
         m_list(list)
     { }
 
