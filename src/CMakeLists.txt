@@ -468,7 +468,6 @@ set(rg_CPPS
   base/figuration/GeneratedRegion.cpp
   base/figuration/FigurationSourceMap.cpp
   base/figuration/FigChord.cpp
-  base/ScriptAPI.cpp
   base/SnapGrid.cpp
   base/Exception.cpp
   base/PropertyMap.cpp
