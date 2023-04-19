@@ -59,8 +59,8 @@ public:
 
     virtual void draw(QPainter &painter);
 
-    virtual double xStart() { return m_xstart; }
-    virtual double xEnd() { return m_xend; }
+    virtual double xStart() const  { return m_xstart; }
+    virtual double xEnd() const  { return m_xend; }
 
     virtual void handleMouseButtonPress(QMouseEvent *e);
     virtual void handleMouseButtonRelease(QMouseEvent *e);
