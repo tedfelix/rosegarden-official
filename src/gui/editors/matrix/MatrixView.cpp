@@ -308,6 +308,8 @@ MatrixView::launchRulers(std::vector<Segment *> segments)
         return;
 
     controlRulerWidget->launchMatrixRulers(segments);
+    // and tell the rulers the snap setting
+    controlRulerWidget->setSnapFromEditor(getSnapGrid()->getSnapSetting());
 }
 
 void
@@ -935,6 +937,10 @@ MatrixView::slotSetSnap(timeT t)
             break;
         }
     }
+    // and tell the rulers
+    ControlRulerWidget * cr = m_matrixWidget->getControlsWidget();
+    cr->setSnapFromEditor(t);
+
 }
 
 void

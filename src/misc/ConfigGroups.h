@@ -73,6 +73,7 @@ namespace Rosegarden
     extern const char* const RecentFilesConfigGroup;
     extern const char* const UserShortcutsConfigGroup;
     extern const char* const ShortcutKeyboardConfigGroup;
+    extern const char* const ControlRulerConfigGroup;
     extern const char* const ExperimentalConfigGroup;
 
 }

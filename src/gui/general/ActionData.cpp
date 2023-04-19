@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QStandardItemModel>
 #include <QSettings>
+#include <QKeySequence>
 
 namespace Rosegarden
 {

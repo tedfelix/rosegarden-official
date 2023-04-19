@@ -58,7 +58,6 @@ PropertyControlRuler::PropertyControlRuler(const PropertyName& propertyName,
     ControlRuler(viewSegment, rulerScale, parent),
     m_propertyName(propertyName)
 {
-    setMenuName("property_ruler_menu");
     setViewSegment(viewSegment);
 }
 

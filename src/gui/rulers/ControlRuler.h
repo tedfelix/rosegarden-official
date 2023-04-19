@@ -23,6 +23,7 @@
 #include "gui/general/AutoScroller.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+#include "gui/general/ActionFileClient.h"
 
 #include <QColor>
 #include <QPoint>
@@ -52,11 +53,12 @@ class EventSelection;
 class EditViewBase;
 class NotationStaff;
 class ViewSegment;
+class SnapGrid;
 
 /**
  * ControlRuler : base class for Control Rulers
  */
-class ControlRuler : public QWidget //, public ViewSegmentObserver
+class ControlRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT
 
@@ -134,6 +136,10 @@ public:
     void flipForwards();
     void flipBackwards();
 
+    SnapGrid* getSnapGrid() const;
+
+    void setSnapFromEditor(timeT snapSetting, bool forceFromEditor);
+
 signals:
     void mousePress();
     void mouseMove(FollowMode);
@@ -156,6 +162,8 @@ public slots:
     virtual void slotScrollHorizSmallSteps(int);
     virtual void slotSetPannedRect(QRectF);
 //    virtual void slotSetScale(double);
+
+    void slotSnap();
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
@@ -197,13 +205,9 @@ protected:
     QRect mapRectToWidget(QRectF *);
     QPolygon mapItemToWidget(QSharedPointer<ControlItem>);
     QPointF mapWidgetToItem(QPoint*);
-
     QColor valueToColour(int max, int val);
-
     void updateSelection();
-
-    void setMenuName(const QString& menuName) { m_menuName = menuName; }
-    void createMenu();
+    virtual void createRulerMenu();
 
     //--------------- Data members ---------------------------------
 
@@ -261,13 +265,18 @@ protected:
     ControlSelector* m_selector;
     QRectF* m_selectionRect;
 
-    QString m_menuName;
-    QMenu* 	m_menu;
+    QMenu* m_rulerMenu;
+    SnapGrid* m_snapGrid;
+    QString m_snapName;
+    timeT m_snapTimeFromEditor;
 
     //bool m_hposUpdatePending;
 
     typedef std::list<Event *> SelectionSet;
     SelectionSet m_selectedEvents;
+
+ private:
+    void setSnapTimeFromActionName(const QString& actionName);
 };
 
 
