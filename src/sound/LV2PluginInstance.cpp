@@ -12,7 +12,6 @@
   COPYING included with this distribution for more information.
 */
 
-
 #define RG_MODULE_STRING "[LV2PluginInstance]"
 #define RG_NO_DEBUG_PRINT 1
 
@@ -80,7 +79,7 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_world(world),
         m_uri(uri),
         m_pluginData(pluginData),
-        m_eventBuffer(EVENT_BUFFER_SIZE),
+        m_midiPort(0),
         m_blockSize(blockSize),
         m_sampleRate(sampleRate),
         m_latencyPort(nullptr),
@@ -98,6 +97,10 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
     }
     for (size_t i = 0; i < m_instanceCount * m_audioPortsOut.size(); ++i) {
         m_outputBuffers[i] = new sample_t[blockSize];
+    }
+
+    for (unsigned int i=0; i< m_instanceCount; i++) {
+        m_midiIn.push_back(new LV2_Atom_Sequence);
     }
 
     QByteArray ba = m_uri.toLocal8Bit();
@@ -122,7 +125,8 @@ LV2PluginInstance::init(int idealChannelCount)
     //
     for (unsigned long i = 0; i < m_pluginData.ports.size(); ++i) {
         const LV2PortData& portData = m_pluginData.ports[i];
-        if (! portData.isControl) {
+        switch(portData.portType) {
+        case LV2AUDIO:
             if (portData.isInput) {
                 RG_DEBUG << "LV2PluginInstance::init: port " << i << " is audio in";
                 m_audioPortsIn.push_back(i);
@@ -130,7 +134,8 @@ LV2PluginInstance::init(int idealChannelCount)
                 RG_DEBUG << "LV2PluginInstance::init: port " << i << " is audio out";
                 m_audioPortsOut.push_back(i);
             }
-        } else {
+            break;
+        case LV2CONTROL:
             if (portData.isInput) {
                 RG_DEBUG << "LV2PluginInstance::init: port " << i << " is control in";
                 m_controlPortsIn.
@@ -146,6 +151,10 @@ LV2PluginInstance::init(int idealChannelCount)
                     m_latencyPort = &(value);
                 }
             }
+            break;
+        case LV2MIDI:
+            m_midiPort = i;
+            break;
         }
     }
 
@@ -228,13 +237,17 @@ LV2PluginInstance::~LV2PluginInstance()
         delete[] m_outputBuffers[i];
     }
 
+    for (size_t i = 0; i < m_midiIn.size(); ++i) {
+        delete m_midiIn[i];
+    }
+    m_midiIn.clear();
+
     delete[] m_inputBuffers;
     delete[] m_outputBuffers;
 
     m_audioPortsIn.clear();
     m_audioPortsOut.clear();
 }
-
 
 void
 LV2PluginInstance::instantiate(unsigned long sampleRate)
@@ -279,6 +292,7 @@ void
 LV2PluginInstance::connectPorts()
 {
     size_t inbuf = 0, outbuf = 0;
+    size_t midibuf = 0;
 
     for (auto it = m_instances.begin();
          it != m_instances.end(); ++it) {
@@ -309,6 +323,10 @@ LV2PluginInstance::connectPorts()
         for (size_t i = 0; i < m_controlPortsOut.size(); ++i) {
             lilv_instance_connect_port(*it, m_controlPortsOut[i].first,
                                        &(m_controlPortsOut[i].second));
+        }
+        if (m_midiPort != 0) {
+            lilv_instance_connect_port((*it), m_midiPort, m_midiIn[midibuf]);
+            ++midibuf;
         }
     }
 }
@@ -350,7 +368,8 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
     ev.time.time.tv_nsec = eventTime.nsec;
 
     ev.data.note.channel = 1;
-    m_eventBuffer.write(&ev, 1);
+    RG_DEBUG << "sendEvent";
+
 }
 
 void

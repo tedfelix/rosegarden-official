@@ -82,10 +82,13 @@ LV2PluginFactory::LV2PluginFactory()
 
             LV2PluginInstance::LV2PortData portData;
             LilvNode *cpn = lilv_new_uri(m_world, LILV_URI_CONTROL_PORT);
+            LilvNode *mpn = lilv_new_uri(m_world, LILV_URI_ATOM_PORT);
             LilvNode *ipn = lilv_new_uri(m_world, LILV_URI_INPUT_PORT);
             bool cntrl = lilv_port_is_a(plugin, port, cpn);
+            bool midi = lilv_port_is_a(plugin, port, mpn);
             bool inp = lilv_port_is_a(plugin, port, ipn);
             lilv_node_free(cpn);
+            lilv_node_free(mpn);
             lilv_node_free(ipn);
             LilvNode* portNameNode = lilv_port_get_name(plugin, port);
             QString portName;
@@ -95,9 +98,11 @@ LV2PluginFactory::LV2PluginFactory()
             }
 
             RG_DEBUG << "Port" << p << "Name:" << portName <<
-                "Control:" << cntrl << " Input:" << inp;
+                "Control:" << cntrl << "Input:" << inp << "Midi:" << midi;
             portData.name = portName;
-            portData.isControl = cntrl;
+            portData.portType = LV2PluginInstance::LV2AUDIO;
+            if (cntrl) portData.portType = LV2PluginInstance::LV2CONTROL;
+            if (midi) portData.portType = LV2PluginInstance::LV2MIDI;
             portData.isInput = inp;
 
             LilvNode* def;
@@ -215,7 +220,7 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
             const LV2PluginInstance::LV2PortData portData = pluginData.ports[p];
             int type = 0;
 
-            if (portData.isControl) {
+            if (portData.portType == LV2PluginInstance::LV2CONTROL) {
                 type |= PluginPort::Control;
             } else {
                 type |= PluginPort::Audio;
@@ -268,7 +273,8 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
 
     for (unsigned long i = 0; i < pluginData.ports.size(); i++) {
         const LV2PluginInstance::LV2PortData& portData = pluginData.ports[i];
-        if (portData.isControl && portData.isInput) {
+        if (portData.portType == LV2PluginInstance::LV2CONTROL &&
+            portData.isInput) {
             MappedStudio *studio =
                 dynamic_cast<MappedStudio *>(slot.getParent());
             if (!studio) {

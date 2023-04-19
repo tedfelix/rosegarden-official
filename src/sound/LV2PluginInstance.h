@@ -13,18 +13,20 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef RG_LV2PLUGININSTANCE_H
+#define RG_LV2PLUGININSTANCE_H
+
 #include <vector>
 #include <set>
 #include <QString>
 
 #include <lilv/lilv.h>
+#include <lv2/atom/atom.h>
+
 #include <alsa/seq_event.h>
 
 #include "base/Instrument.h"
 #include "RingBuffer.h"
-
-#ifndef RG_LV2PLUGININSTANCE_H
-#define RG_LV2PLUGININSTANCE_H
 
 #include "RunnablePluginInstance.h"
 
@@ -68,10 +70,12 @@ public:
     void silence() override;
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
+    enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
+
     struct LV2PortData
     {
         QString name;
-        bool isControl;
+        LV2PortType portType;
         bool isInput;
         float min;
         float max;
@@ -129,7 +133,9 @@ protected:
 
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;
-    RingBuffer<snd_seq_event_t> m_eventBuffer;
+
+    int m_midiPort;
+    std::vector<LV2_Atom_Sequence*> m_midiIn;
 
     size_t                    m_blockSize;
     sample_t                **m_inputBuffers;
