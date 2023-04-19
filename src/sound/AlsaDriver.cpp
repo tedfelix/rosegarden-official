@@ -1641,7 +1641,7 @@ AlsaDriver::setCurrentTimer(QString timer)
             snd_timer_id_set_subdevice(timerid, m_timers[i].subdevice);
 
             snd_seq_queue_timer_set_id(timer, timerid);
-            snd_seq_set_queue_timer(m_midiHandle, m_queue, timer);
+            checkAlsaError(snd_seq_set_queue_timer(m_midiHandle, m_queue, timer), "snd_seq_set_queue_timer() failed");
 
             if (m_doTimerChecks) {
                 AUDIT << "    Current timer set to \"" << name << "\" with timer checks\n";

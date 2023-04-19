@@ -101,7 +101,7 @@ BasicQuantizer::quantizeSingle(
     const timeT endTime = startTime + m_unit;
 
     // If the note is closer to the start of the cell.
-    // Same as (newTime < startTime + m_unit/2) but faster.
+    // Same as (newTime < startTime + m_unit/2).
     if (endTime - newTime > newTime - startTime) {
         newTime = startTime;
     } else {  // The note is closer to the end of the cell
@@ -110,7 +110,7 @@ BasicQuantizer::quantizeSingle(
         ++cellNumber;
     }
 
-    // "/ 300" is * (1/3) * (1/100)
+    // "/ 300" is "* (1/3) * (1/100)"
     // 1/3 is full swing offset
     // 1/100 since m_swing is percent.
     const timeT swingOffset = (m_unit * m_swing) / 300;
