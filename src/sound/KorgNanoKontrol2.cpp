@@ -35,21 +35,8 @@ namespace Rosegarden
 {
 
 
-KorgNanoKontrol2::KorgNanoKontrol2() :
-    m_page(0),
-    m_firstRefresh(true),
-    m_play(false),
-    m_record(false),
-    m_stop(false),
-    m_rewind(false),
-    m_fastForward(false),
-    m_cycle(false)
+KorgNanoKontrol2::KorgNanoKontrol2()
 {
-    for (int i = 0; i < 8; ++i) {
-        m_solo[i] = false;
-        m_mute[i] = true;
-        m_recordArmed[i] = false;
-    }
 }
 
 void KorgNanoKontrol2::init()

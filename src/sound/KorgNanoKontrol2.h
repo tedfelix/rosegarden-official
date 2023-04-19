@@ -58,7 +58,7 @@ public:
 
 private:
     // Current 8-channel page.
-    unsigned m_page;
+    unsigned m_page{0};
 
     void processFader(MidiByte controlNumber, MidiByte value) const;
     void processKnob(MidiByte controlNumber, MidiByte value) const;
@@ -68,22 +68,23 @@ private:
 
     static void testLEDs(bool on);
     void initLEDs();
-    bool m_firstRefresh;
+    bool m_firstRefresh{true};
     void refreshLEDs();
 
-    bool m_solo[8];
-    bool m_mute[8];
-    bool m_recordArmed[8];
+    bool m_solo[8]{false};
+    // If a track is muted, its LED is off.  Unmuted, its LED is on.
+    bool m_mute[8]{true};
+    bool m_recordArmed[8]{false};
 
-    bool m_play;
-    bool m_record;
-    bool m_stop;
+    bool m_play{false};
+    bool m_record{false};
+    bool m_stop{false};
     void setPlayRecordStopLEDs(bool play, bool record, bool stop);
 
-    bool m_rewind;
-    bool m_fastForward;
+    bool m_rewind{false};
+    bool m_fastForward{false};
 
-    bool m_cycle;
+    bool m_cycle{false};
 
 };
 
