@@ -3431,7 +3431,6 @@ LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
     int deltaVoltaCount = 0;                
     for (Segment * seg = lsc.useFirstSegment();
                     seg; seg = lsc.useNextSegment()) {
-        std::cout << "Line " << verseLine;  // YG
         
         int verseIndex;
         if (!lsc.isAlt()) { 
@@ -3446,8 +3445,7 @@ LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
             int vimax = vimin + lsc.getNumberOfVolta() - 1;
             if (    (verseIndex < vimin)
                     || (verseIndex > vimax) ) verseIndex = -1;
-            
-            std::cout << " !alt verse=" << verseIndex << "\n";   // YG
+    
         } else {
             const std::set<int>* numbers = lsc.getAltNumbers();
             int altNumber = (verseLine + 1) + 1 - voltaCount;
@@ -3466,20 +3464,10 @@ LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
             }                             
                 
             verseIndex = found ? verse : -1; 
-            std::cout << "  alt verse=" << verseIndex << "\n";   // YG
         }
                 
         // Write the current verse
         writeVerse(seg, verseIndex, indentCol, str);
-        
-//                             str << "\n% Lyrics of segment \"" << seg->getLabel() 
-//                                 << "\": verse " << (verseIndex + 1) << std::endl;
-//                             
-//                             str << indent(col)
-//                                 << qStrToStrUtf8(getVerseText(seg, verseIndex)) 
-//                                 << " " << std::endl;
-//                             str << "\n\n\n";
-        
     }  // for (Segment * seg = lsc.useFirstSegment(); ...
 }
 
@@ -3491,10 +3479,8 @@ LilyPondExporter::writeVersesUnfolded(LilyPondSegmentsContext & lsc,
 {
     int repeatsNumber;
     Segment * mainSeg;
-    
-    std::cout << "YG writeVersesUnfolded line=" << verseLine << " cycle=" << cycle << "\n";
-    
-// INITIALISATION - START    
+
+    // Initialisation, when first line and first cycle
     if (verseLine == 0 && cycle == 0) {
         verseIndexes.clear();
         
@@ -3512,40 +3498,15 @@ LilyPondExporter::writeVersesUnfolded(LilyPondSegmentsContext & lsc,
             verseIndexes[seg] = 0;
         }   
     }
-// INITIALISATION - END
 
-
-
+    // Extract the current verse line from the segments involved
     for (Segment * seg = lsc.useFirstSegment();
                     seg; seg = lsc.useNextSegment()) {
-        
-        
-        std::cout << "YG " << seg->getLabel() << "\n";
-        std::cout << "    number of volta : " << lsc.getNumberOfVolta() << "\n";
-        std::cout << "    isRepeatingSeg : " << lsc.isRepeatingSegment() << "\n";
-        std::cout << "    isSimpleRepLink : " << lsc.isSimpleRepeatedLinks() << "\n";
-        std::cout << "    isRepeatWithAlt : " << lsc.isRepeatWithAlt() << "\n";
-        std::cout << "    isAlt : " << lsc.isAlt() << "\n";
-        std::cout << "    isLinked : " << seg->isLinked() << "\n";
-    
+
+        // When segments are linked, printed verses are counted from
+        // the reference segment.
         Segment * s = seg;
         if (seg->isLinked()) s = seg->getLinker()->getReference();
-//         int vi = verseIndexes[s]++;
-//         std::cout << "    verse index = " << vi << "\n";
-//         std::cout << "\n";
-//         
-//         // Write the current verse
-//         if (!lsc.isRepeatingSegment()) {
-//             // Not repeating segment:
-//             // One verse only
-//             writeVerse(seg, vi, indentCol, str);
-//         } else {
-//             // Repeating segment:
-//             // As many verses as times the segment is repeated
-//             for (int i = 0; i < lsc.getNumberOfVolta(); i++) {
-//                 writeVerse(seg, vi, indentCol, str);
-//             }
-//         }
         
         // If lsc.getNumberOfVolta() > 1, the segment is repeating
         // and as many verses as times the segment is repeated must
@@ -3553,85 +3514,10 @@ LilyPondExporter::writeVersesUnfolded(LilyPondSegmentsContext & lsc,
         for (int i = 0; i < lsc.getNumberOfVolta(); i++) {
             int vi = verseIndexes[s]++;
             writeVerse(seg, vi, indentCol, str);
-            std::cout << "    verse index = " << vi << "\n";
         }
-
-        std::cout << "\n";        
-        
-    }  // for (Segment * seg = lsc.useFirstSegment(); ...
-    
-    
-//     for (Segment * seg = lsc.useFirstSegment();
-//                     seg; seg = lsc.useNextSegment()) {
-// 
-//         if (seg->isLinked()) {
-//             Segment * seg1 = alts[seg->getLinker()->getSegmentLinkerId()];
-//             // get verse from seg1 
-//         } else {
-//             // get verse from seg
-//         }
-//         
-//     }  // for (Segment * seg = lsc.useFirstSegment(); ...    
-    
-
-//     for (Segment * seg = lsc.useFirstSegment();
-//                     seg; seg = lsc.useNextSegment()) {
-//         
-//         if (lsc.isRepeatingSegment() 
-//                 || lsc.isSimpleRepeatedLinks()) {
-//         
-//             // Repeated segment without alternate ending
-//         
-//             repeatsNumber = lsc.getNumberOfVolta();
-//             for (int i=1; i<= repeatsNumber; i++) {
-//                 std::cout << "YGa " << seg->getLabel() 
-//                             << " (" << i << ")\n";
-//             }
-//             
-//         } else if (lsc.isRepeatWithAlt()
-//                             && !lsc.isAlt()) {
-//                 // Repeated segment with alternate endings
-//             
-//             mainSeg = seg;
-//             repeatsNumber = lsc.getNumberOfVolta();
-//             alts.clear();
-//             
-// //             std::cout << "YG " << seg->getLabel() 
-// //                             << " (" << repeatsNumber << ")\n";
-//             
-//         } else if (lsc.isAlt()) {
-//             
-//             // For each Alt :
-//             //    --> Use the volta (memorized before)
-//             //    --> Use the alt
-//             const std::set<int> * numbers = lsc.getAltNumbers();
-//             for (std::set<int>::const_iterator i = numbers->begin();
-//                             i != numbers->end(); ++i) {
-//                 alts[*i] = seg;
-//             }
-//             
-//             if (lsc.isLastAlt()) {
-//                 for (int i=1; i<= repeatsNumber; i++) {
-//                     std::cout << "YGb " << mainSeg->getLabel() 
-//                                 << " (" << i << ")\n";
-//                     std::cout << "YGb " << alts[i]->getLabel()
-//                                 << " [" << i << "]\n";
-//                 }
-//             }
-// 
-//         } else {
-//             // Simple unrepeated segment
-//             std::cout << "YGc " << seg->getLabel() << "\n";
-//         }
-//     }  // for (Segment * seg = lsc.useFirstSegment(); ...
+    }  
 }
 
-// YGYGYG Comment : ???
-                //
-                // Write accumulated lyric events to the Lyric context, if desired.
-                //
-                // Sync the code below with LyricEditDialog::unparse() !!
-                //
                 
 void
 LilyPondExporter::writeVerse(Segment *seg, int verseIndex,
