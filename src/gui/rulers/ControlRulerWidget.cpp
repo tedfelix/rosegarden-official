@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlRulerWidget]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ControlRulerWidget.h"
 
@@ -41,6 +42,7 @@
 #include "base/SoftSynthDevice.h"
 #include "base/Studio.h"
 #include "base/Track.h"
+#include "base/SnapGrid.h"
 
 #include "misc/Debug.h"
 
@@ -59,7 +61,8 @@ ControlRulerWidget::ControlRulerWidget() :
     m_leftMargin(0),
     m_currentToolName(),
     m_pannedRect(),
-    m_selectedElements()
+    m_selectedElements(),
+    m_editorSnap(SnapGrid::NoSnap)
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
@@ -82,10 +85,10 @@ ControlRulerWidget::ControlRulerWidget() :
     m_tabBar->setShape(QTabBar::RoundedSouth);
 
     layout->addWidget(m_tabBar);
-    
+
     connect(m_tabBar, &QTabBar::currentChanged,
             this, &ControlRulerWidget::tabChanged);
-    
+
     connect(m_tabBar, &ControlRulerTabBar::tabCloseRequest,
             this, &ControlRulerWidget::slotRemoveRuler);
 }
@@ -424,7 +427,6 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
              m_segmentRulerSets) {
         segmentRulerSet->insert(segmentRuler);
     }
-
 }
 
 void
@@ -450,6 +452,9 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     connect(controlRuler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);
 
+    connect(controlRuler, &ControlRuler::showContextHelp,
+            this,  &ControlRulerWidget::showContextHelp);
+
     addRuler(controlRuler, QString::fromStdString(controlParameter.getName()));
 
     // ??? This is required or else we crash.  But we already passed this in
@@ -457,6 +462,9 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     //     Preferably in the ctor call.  PropertyControlRuler appears to do
     //     this successfully.  See if we can follow its example.
     controlRuler->setViewSegment(m_viewSegment);
+
+    // and tell the ruler about the editor snap setting
+    controlRuler->setSnapFromEditor(m_editorSnap, false);
 }
 
 void
@@ -498,6 +506,9 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
         name = tr("Velocity");
 
     addRuler(controlRuler, name);
+
+    // and tell the ruler about the editor snap setting
+    controlRuler->setSnapFromEditor(m_editorSnap, true);
 
     // Update selection drawing in matrix view.
     emit childRulerSelectionChanged();
@@ -636,6 +647,21 @@ ControlRulerWidget::getActivePropertyRuler()
 {
     return dynamic_cast <PropertyControlRuler *>(
             m_stackedWidget->currentWidget());
+}
+
+void ControlRulerWidget::setSnapFromEditor(timeT snapSetting)
+{
+    RG_DEBUG << "set snap to" << snapSetting;
+    m_editorSnap = snapSetting;
+    // update rulers
+    for (auto ruler : m_controlRulerList) {
+        PropertyControlRuler *pcr =
+            dynamic_cast <PropertyControlRuler *>(ruler);
+        bool forceFromEditor = false;
+        // propery control ruler always takes the editor setting
+        if (pcr) forceFromEditor = true;
+        ruler->setSnapFromEditor(snapSetting, forceFromEditor);
+    }
 }
 
 bool

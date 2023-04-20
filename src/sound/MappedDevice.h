@@ -3,7 +3,7 @@
 /*
   Rosegarden
   A sequencer and musical notation editor.
-  Copyright 2000-2022 the Rosegarden development team.
+  Copyright 2000-2023 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -38,8 +38,8 @@ public:
     MappedDevice();
     MappedDevice(DeviceId id,
                  Device::DeviceType type,
-                 std::string name,
-                 std::string connection = "");
+                 const std::string& name,
+                 const std::string& connection = "");
 
     MappedDevice(const MappedDevice &mD);
     ~MappedDevice();

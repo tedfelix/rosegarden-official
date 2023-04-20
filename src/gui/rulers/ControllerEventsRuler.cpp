@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControllerEventsRuler]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ControllerEventsRuler.h"
 #include "ControlRuler.h"
@@ -54,6 +55,7 @@
 #include <QValidator>
 #include <QWidget>
 #include <QPainter>
+#include <QMenu>
 
 #include <utility>  // for std::swap()
 
@@ -83,8 +85,6 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
     else {
         m_controller = nullptr;
     }
-
-    setMenuName("controller_events_ruler_menu");
 
     RG_DEBUG << "ctor";
     if (controller)
@@ -200,7 +200,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     painter.setPen(pen);
 
     QString str;
-    
+
     ControlItemMap::iterator mapIt;
     float lastX, lastY;
     lastX = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
@@ -210,7 +210,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     } else {
         lastY = valueToY(m_controller->getDefault());
     }
-    
+
     mapIt = m_firstVisibleItem;
     while (mapIt != m_controlItemMap.end()) {
         QSharedPointer<ControlItem> item = mapIt->second;
@@ -227,11 +227,11 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
             ++mapIt;
         }
     }
-    
+
     painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
             mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale),
             mapYToWidget(lastY));
-    
+
     // Use a fast vector list to record selected items that are currently visible so that they
     // can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
     ControlItemVector selectedVector;
@@ -250,7 +250,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     QFontMetrics fontMetrics(painter.font());
     int fontHeight = fontMetrics.height();
     int fontOffset = fontMetrics.boundingRect('+').width();
-    
+
     for (ControlItemVector::iterator it = selectedVector.begin();
          it != selectedVector.end();
          ++it)
@@ -260,7 +260,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
         // For selected items, draw the value in text alongside the marker
         // By preference, this should sit on top of the new line that represents this value change
-        
+
         // Any controller that has a default of 64 is presumed to be or behave
         // like pan, and display a working range of -64 to 64, centered on 0,
         // rather than the usual 0 to 127.  Note, the == 64 is hard coded
@@ -269,7 +269,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         str = QString::number(yToValue((*it)->y()) - offsetFactor);
         int x = mapXToWidget((*it)->xStart())+0.4*fontOffset;
         int y = std::max(mapYToWidget((*it)->y())-0.2f*fontHeight,float(fontHeight));
-        
+
         painter.setPen(QPen(Qt::NoPen));
         painter.setBrush(QBrush(Qt::white));
         painter.drawRect(QRect(x,y+2,fontMetrics.boundingRect(str).width(),
@@ -396,7 +396,7 @@ ControllerEventsRuler::addControlItem2(float x, float y)
     item->setSelected(true);
 
     ControlRuler::addControlItem(item);
-    
+
     return item;
 }
 
@@ -542,6 +542,17 @@ void ControllerEventsRuler::setTool(const QString &name)
 
     m_currentTool = tool;
     m_currentTool->ready();
+}
+
+void ControllerEventsRuler::createRulerMenu()
+{
+    createMenusAndToolbars("controlruler.rc");
+
+    m_rulerMenu = findChild<QMenu *>("control_ruler_menu");
+
+    if (!m_rulerMenu) {
+        RG_DEBUG << "ControlRuler::createRulerMenu() failed\n";
+    }
 }
 
 Event *ControllerEventsRuler::insertEvent(float x, float y)

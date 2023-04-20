@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -290,7 +290,8 @@ MappedStudio::MappedStudio() :
                      "MappedStudio",
                      Studio,
                      0),
-        m_runningObjectId(1)
+        m_runningObjectId(1),
+        m_soundDriver(nullptr)
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
@@ -827,7 +828,7 @@ MappedConnectableObject::removeConnection(ConnectionDirection dir,
 }
 
 MappedObjectValueList
-MappedConnectableObject::getConnections(ConnectionDirection dir)
+MappedConnectableObject::getConnections(ConnectionDirection dir) const
 {
     if (dir == In)
         return m_connectionsIn;
@@ -1188,7 +1189,10 @@ MappedAudioInput::setProperty(const MappedObjectProperty &property,
 
 
 MappedPluginSlot::MappedPluginSlot(MappedObject *parent, MappedObjectId id) :
-        MappedObject(parent, "MappedPluginSlot", PluginSlot, id)
+    MappedObject(parent, "MappedPluginSlot", PluginSlot, id),
+    m_portCount(0),
+    m_position(0),
+    m_bypassed(false)
 {
 #ifdef DEBUG_MAPPEDSTUDIO
     std::cerr << "MappedPluginSlot::MappedPluginSlot: id = " << id << std::endl;
@@ -1548,7 +1552,8 @@ MappedPluginSlot::getPort(unsigned long portNumber)
 
 
 MappedPluginPort::MappedPluginPort(MappedObject *parent, MappedObjectId id) :
-        MappedObject(parent, "MappedPluginPort", PluginPort, id)
+    MappedObject(parent, "MappedPluginPort", PluginPort, id),
+    m_portNumber(0)
 {}
 
 MappedPluginPort::~MappedPluginPort()

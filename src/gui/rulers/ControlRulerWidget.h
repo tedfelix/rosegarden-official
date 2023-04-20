@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -108,6 +108,8 @@ public:
     /// Returns Velocity ruler if currently shown else return 0
     PropertyControlRuler *getActivePropertyRuler();
 
+    void setSnapFromEditor(timeT snapSetting);
+
 public slots:
 
     /// Connected to ControlRulerTabBar::tabCloseRequest().
@@ -198,6 +200,9 @@ private:
 
     /// Selection for the property (velocity) ruler only.
     std::vector<ViewElement *> m_selectedElements;
+
+    /// the snap setting from the editor
+    timeT m_editorSnap;
 
 private slots:
     void tabChanged(int index);

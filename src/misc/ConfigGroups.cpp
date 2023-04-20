@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -66,6 +66,7 @@ namespace Rosegarden
     const char* const RecentFilesConfigGroup = "RecentFiles";
     const char* const UserShortcutsConfigGroup = "UserShortcuts";
     const char* const ShortcutKeyboardConfigGroup = "ShortcutKeyboard";
+    const char* const ControlRulerConfigGroup = "Control_Ruler";
     const char* const ExperimentalConfigGroup = "Experimental";
 
 }

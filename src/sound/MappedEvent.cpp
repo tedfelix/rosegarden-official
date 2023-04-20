@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -107,7 +107,7 @@ MappedEvent::MappedEvent(InstrumentId id,
                     MIDI_LYRIC :
                     MIDI_TEXT_EVENT;
                 setData1(midiTextType);
-                                
+
                 std::string metaMessage = text.getText();
                 addDataString(metaMessage);
             }
@@ -177,10 +177,10 @@ MappedEvent::operator=(const MappedEvent &mE)
 }
 
 void
-MappedEvent::addDataString(const std::string& data)
+MappedEvent::addDataString(const std::string& rawData)
 {
     DataBlockRepository::getInstance()->
-        setDataBlockForEvent(this, data, true);
+        setDataBlockForEvent(this, rawData, true);
 }
 
 QDebug operator<<(QDebug dbg, const MappedEvent &mE)
@@ -325,10 +325,10 @@ QDebug operator<<(QDebug dbg, const MappedEvent &mE)
 class DataBlockFile
 {
 public:
-    DataBlockFile(DataBlockRepository::blockid id);
+    explicit DataBlockFile(DataBlockRepository::blockid id);
     ~DataBlockFile();
 
-    QString getFileName()
+    QString getFileName() const
     {
         return m_fileName;
     }

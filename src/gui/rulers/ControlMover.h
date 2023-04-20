@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -30,6 +30,8 @@ namespace Rosegarden
 
 class Event;
 class ControlRuler;
+class SnapGrid;
+class RulerScale;
 
 class ControlMover : public ControlTool
 {
@@ -65,6 +67,8 @@ protected:
     QRectF *m_selectionRect;
     ControlItemList m_addedItems;
     std::vector <QPointF> m_startPointList;
+    SnapGrid* m_snapGrid;
+    RulerScale* m_rulerScale;
 };
 
 }

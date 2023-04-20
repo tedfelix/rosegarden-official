@@ -3,8 +3,8 @@
 /*
   Rosegarden
   A sequencer and musical notation editor.
-  Copyright 2000-2022 the Rosegarden development team.
- 
+  Copyright 2000-2023 the Rosegarden development team.
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -47,20 +47,20 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
         m_audioChannels(0)
 {}
 
-MappedInstrument::MappedInstrument(const Instrument &instr):
-        m_type(instr.getType()),
-        m_id(instr.getId()),
-        m_name(instr.getName()),
-        m_device((instr.getDevice())->getId()),
-        m_audioChannels(instr.getAudioChannels())
+MappedInstrument::MappedInstrument(const Instrument &instrument):
+        m_type(instrument.getType()),
+        m_id(instrument.getId()),
+        m_name(instrument.getName()),
+        m_device((instrument.getDevice())->getId()),
+        m_audioChannels(instrument.getAudioChannels())
 {}
 
-MappedInstrument::MappedInstrument(Instrument *instr):
-        m_type(instr->getType()),
-        m_id(instr->getId()),
-        m_name(instr->getName()),
-        m_device(instr->getDevice()->getId()),
-        m_audioChannels(instr->getAudioChannels())
+MappedInstrument::MappedInstrument(Instrument *instrument):
+        m_type(instrument->getType()),
+        m_id(instrument->getId()),
+        m_name(instrument->getName()),
+        m_device(instrument->getDevice()->getId()),
+        m_audioChannels(instrument->getAudioChannels())
 {}
 
 QDataStream&
@@ -137,4 +137,3 @@ operator<<(QDataStream &dS, const MappedInstrument &mI)
 }
 
 }
-

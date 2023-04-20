@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -31,58 +31,39 @@ public:
     BasicQuantizer(std::string source, std::string target,
                    timeT unit = -1, bool doDurations = false,
                    int swingPercent = 0, int iteratePercent = 100);
-    BasicQuantizer(const BasicQuantizer &);
-    ~BasicQuantizer() override;
+    ~BasicQuantizer() override  { }
 
     void setUnit(timeT unit) { m_unit = unit; }
     timeT getUnit() const { return m_unit; }
 
-    void setDoDurations(bool doDurations) { m_durations = doDurations; }
     bool getDoDurations() const { return m_durations; }
 
-    void setSwing(int percent) { m_swing = percent; }
-    int getSwing() const { return m_swing; }
-
-    void setIterative(int percent) { m_iterate = percent; }
-    int getIterative() const { return m_iterate; }
-    
     /**
      * Return the standard quantization units in descending order of
      * unit duration
      */
     static std::vector<timeT> getStandardQuantizations();
 
-    /**
-     * Study the given segment; if all the events in it have times
-     * that match one or more of the standard quantizations, return
-     * the longest standard quantization unit to match.  Otherwise
-     * return 0.
-     */
-    static timeT getStandardQuantization(Segment *);
-
-    /**
-     * Study the given selection; if all the events in it have times
-     * that match one or more of the standard quantizations, return
-     * the longest standard quantization unit to match.  Otherwise
-     * return 0.
-     */
-    static timeT getStandardQuantization(EventSelection *);
-
 protected:
+    /// Quantize a single Event.
     void quantizeSingle(Segment *,
-                                Segment::iterator) const override;
+                        Segment::iterator) const override;
 
 private:
-    BasicQuantizer &operator=(const BasicQuantizer &); // not provided
+    // Hide copy ctor and op=
+    // ??? Actually these are perfectly copyable.  There is no need to do this.
+    BasicQuantizer(const BasicQuantizer &);
+    BasicQuantizer &operator=(const BasicQuantizer &);
 
+    // Quantization unit (e.g. 1/8 notes).
     timeT m_unit;
+    // Also quantize durations.
     bool m_durations;
+    // Swing percentage.
     int m_swing;
+    // Iterative (partial) quantization percentage.
     int m_iterate;
 
-    static std::vector<timeT> m_standardQuantizations;
-    static void checkStandardQuantizations();
-    static timeT getUnitFor(Event *);
 };
 
 }

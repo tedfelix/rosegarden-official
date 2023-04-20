@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -400,7 +400,7 @@ LADSPAPluginFactory::getPortDisplayHint(const LADSPA_Descriptor *descriptor, int
 
 RunnablePluginInstance *
 LADSPAPluginFactory::instantiatePlugin(QString identifier,
-                                       int instrument,
+                                       int instrumentId,
                                        int position,
                                        unsigned int sampleRate,
                                        unsigned int blockSize,
@@ -412,8 +412,8 @@ LADSPAPluginFactory::instantiatePlugin(QString identifier,
 
         LADSPAPluginInstance *instance =
             new LADSPAPluginInstance
-            (this, instrument, identifier, position, sampleRate, blockSize, channels,
-             descriptor);
+            (this, instrumentId, identifier, position, sampleRate,
+             blockSize, channels, descriptor);
 
         m_instances.insert(instance);
 

@@ -3,7 +3,7 @@
 /*
   Rosegarden
   A sequencer and musical notation editor.
-  Copyright 2000-2022 the Rosegarden development team.
+  Copyright 2000-2023 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -116,8 +116,8 @@ public:
 
     // Child management
     //
-    void addChild(MappedObject *mO);
-    void removeChild(MappedObject *mO);
+    void addChild(MappedObject *object);
+    void removeChild(MappedObject *object);
 
     // Destruction
     //
@@ -287,10 +287,12 @@ public:
     void setConnections(ConnectionDirection dir,
                         MappedObjectValueList conns);
 
+    // cppcheck-suppress functionConst
     void addConnection(ConnectionDirection dir, MappedObjectId id);
+    // cppcheck-suppress functionConst
     void removeConnection(ConnectionDirection dir, MappedObjectId id);
 
-    MappedObjectValueList getConnections (ConnectionDirection dir);
+    MappedObjectValueList getConnections (ConnectionDirection dir) const;
 
 protected:
 

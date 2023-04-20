@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ LSCPPatchExtractor::isLSCPFile(const QString& fileName)
         QTextStream check(&file);
         while (!check.atEnd()) {
             QString currentLine = check.readLine();
-            if (currentLine.contains("sfArk")) { 
+            if (currentLine.contains("sfArk")) {
 
                 // Crappy, but I have no better ideas.  We know for a FACT if
                 // you try to import programs from a .sfArk file, Rosegarden
@@ -76,24 +76,22 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
 /////// Works for single device midi mappings!
 
     Device device;
-    
+
     QFile lscpFile(fileName);
     QTextStream inStream(&lscpFile);
 
     QStringList splitLine;
 
     // unsigned int bank, program;
-    std::string programName;
-    std::string bankName;
-    std::string tempDeviceName, tempBankName;
-    
+    // std::string tempDeviceName, tempBankName;
+
     if (!lscpFile.open(QFile::ReadOnly)) {
         return device;
     } else {
         while (!inStream.atEnd()) {
             QString currentLine = inStream.readLine();
             currentLine = currentLine.simplified();
-            
+
             Bank_Prog currentDevice;
 
             if (!currentLine.isEmpty() && currentLine.startsWith("add", Qt::CaseInsensitive)) {
@@ -106,7 +104,7 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
 //                //debug
 //                for (int i = 0; i < splitLine.size(); i++) std::cout << splitLine.at(i) << std::endl;
 //                std::cout << "  " << tempDeviceName << std::endl;
-                
+
             } else if (!currentLine.isEmpty() && currentLine.startsWith("map", Qt::CaseInsensitive)) {
 
 //                std::cout << "Usao sam u MAP!";
@@ -148,7 +146,7 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
 
                 device.push_back(currentDevice);
             }
-            
+
         }
         return device;
     }

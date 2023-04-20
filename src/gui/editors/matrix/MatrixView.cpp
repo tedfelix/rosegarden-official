@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical matrix editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -308,6 +308,8 @@ MatrixView::launchRulers(std::vector<Segment *> segments)
         return;
 
     controlRulerWidget->launchMatrixRulers(segments);
+    // and tell the rulers the snap setting
+    controlRulerWidget->setSnapFromEditor(getSnapGrid()->getSnapSetting());
 }
 
 void
@@ -935,6 +937,10 @@ MatrixView::slotSetSnap(timeT t)
             break;
         }
     }
+    // and tell the rulers
+    ControlRulerWidget * cr = m_matrixWidget->getControlsWidget();
+    cr->setSnapFromEditor(t);
+
 }
 
 void

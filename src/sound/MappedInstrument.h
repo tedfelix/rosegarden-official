@@ -3,7 +3,7 @@
 /*
   Rosegarden
   A sequencer and musical notation editor.
-  Copyright 2000-2022 the Rosegarden development team.
+  Copyright 2000-2023 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -58,6 +58,7 @@ public:
     void setId(InstrumentId id) { m_id = id; }
     InstrumentId getId() const { return m_id; }
 
+    // cppcheck-suppress functionStatic
     void setType(Instrument::InstrumentType type) { m_type = type; }
     Instrument::InstrumentType getType() const { return m_type; }
 

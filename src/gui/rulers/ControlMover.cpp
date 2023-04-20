@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -50,7 +50,9 @@ ControlMover::ControlMover(ControlRuler *parent, const QString& menuName) :
     m_mouseStartY(0.0),
     m_lastDScreenX(0.0),
     m_lastDScreenY(0.0),
-    m_selectionRect(nullptr)
+    m_selectionRect(nullptr),
+    m_snapGrid(parent->getSnapGrid()),
+    m_rulerScale(parent->getRulerScale())
 {
 }
 
@@ -96,6 +98,8 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
 FollowMode
 ControlMover::handleMouseMove(const ControlMouseEvent *e)
 {
+    emit showContextHelp(tr("Click and drag a value. Shift suppresses grid snap. Ctrl constrains to horizontal or vertical"));
+
     if (e->buttons == Qt::NoButton) {
         // No button pressed, set cursor style
         setCursor(e);
@@ -143,6 +147,12 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
                     qSharedPointerDynamicCast<EventControlItem>(*it);
 
             float x = pIt->x()+deltaX;
+            // snap only if shift is not pressed
+            if (! (e->modifiers & Qt::ShiftModifier)) {
+                timeT et = m_rulerScale->getTimeForX(x);
+                timeT etSnap = m_snapGrid->snapTime(et);
+                x =  m_rulerScale->getXForTime(etSnap);
+            }
             float xmin = m_ruler->getXMin() * xscale;
             float xmax = (m_ruler->getXMax() - 1) * xscale;
             x = std::max(x,xmin);

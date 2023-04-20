@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -231,7 +231,8 @@ NotationView::NotationView(RosegardenDocument *doc,
     m_fontSizeCombo(nullptr),
     m_spacingCombo(nullptr),
     m_oldPointerPosition(0),
-    m_cursorPosition(0)
+    m_cursorPosition(0),
+    m_currentNoteDuration(0)
 {
     m_notationWidget = new NotationWidget();
     setCentralWidget(m_notationWidget);
@@ -474,6 +475,8 @@ NotationView::launchRulers(std::vector<Segment *> segments)
         return;
 
     controlRulerWidget->launchNotationRulers(segments);
+    // and tell the rulers the snap setting
+    controlRulerWidget->setSnapFromEditor(m_currentNoteDuration);
 }
 
 bool
@@ -3034,6 +3037,14 @@ NotationView::slotToggleDot()
         } else {
             slotSwitchToNotes();
         }
+        // set the current duration
+        Note dnote(noteType, noteDots);
+        m_currentNoteDuration = dnote.getDuration();
+        RG_DEBUG << "slotToggleDot set current duration to" <<
+            m_currentNoteDuration;
+        // and tell the rulers
+        ControlRulerWidget * cr = m_notationWidget->getControlsWidget();
+        cr->setSnapFromEditor(m_currentNoteDuration);
     }
 }
 
@@ -3097,6 +3108,14 @@ NotationView::slotNoteAction()
     }
 
     setCurrentNotePixmapFrom(a);
+    // and remember the current duration
+    Note note(type, dots);
+    m_currentNoteDuration = note.getDuration();
+    RG_DEBUG << "slotNoteAction set current duration to" <<
+        m_currentNoteDuration;
+    // and tell the rulers
+    ControlRulerWidget * cr = m_notationWidget->getControlsWidget();
+    cr->setSnapFromEditor(m_currentNoteDuration);
 }
 
 void

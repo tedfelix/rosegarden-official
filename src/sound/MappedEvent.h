@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2023 the Rosegarden development team.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -44,18 +44,18 @@ public:
      * Clear all block files
      */
     static void clear();
-    bool hasDataBlock(blockid);
+    static bool hasDataBlock(blockid);
 
 protected:
     DataBlockRepository();
 
-    std::string getDataBlock(blockid);
+    static std::string getDataBlock(blockid);
 
-    blockid registerDataBlock(const std::string&);
-    void unregisterDataBlock(blockid);
+    static blockid registerDataBlock(const std::string&);
+    static void unregisterDataBlock(blockid);
 
-    void registerDataBlockForEvent(const std::string&, MappedEvent*);
-    void unregisterDataBlockForEvent(MappedEvent*);
+    static void registerDataBlockForEvent(const std::string&, MappedEvent*);
+    static void unregisterDataBlockForEvent(MappedEvent*);
 
 
     //--------------- Data members ---------------------------------
