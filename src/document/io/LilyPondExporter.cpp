@@ -2160,10 +2160,8 @@ LilyPondExporter::write()
             }
         }
         
-        
         // close the track (Staff context)
         str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
-        
         
         // handle any necessary final bracket closures (if brackets are being
         // exported)
@@ -2182,8 +2180,7 @@ LilyPondExporter::write()
                     << std::endl; //indent-
             }
         }        
-        
-        
+
     } // for (track = lsc.useFirstTrack(); track; track = ....
 
     // close \notes section
@@ -3477,9 +3474,6 @@ LilyPondExporter::writeVersesUnfolded(LilyPondSegmentsContext & lsc,
                                       int verseLine, int cycle,
                                       int indentCol, std::ofstream &str)
 {
-    int repeatsNumber;
-    Segment * mainSeg;
-
     // Initialisation, when first line and first cycle
     if (verseLine == 0 && cycle == 0) {
         verseIndexes.clear();
@@ -3667,7 +3661,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
             if ((myBar != lastBar) || firstBar) {
                 text += "\n";
                 text += indent(indentCol).c_str();
-                text += QStringLiteral("%{ %1 %}   ").arg(myBar, 3);
+                text += QStringLiteral("%{ %1 %}   ").arg(myBar + 1, 3);
                 lastBar = myBar;
                 firstBar = false;
             }
