@@ -1297,11 +1297,36 @@ LilyPondSegmentsContext::sortAndGatherAlt(SegmentDataList & repeatList)
             }
             // Automatic volta in LilyPond is not possible when an alternate
             // ending other than the first one is played several time.
+            // (i.e. A B B : "1", "2-3")
             if (idx2 != 0) m_automaticVoltaUsable = false;
         } else {
             // Add one more alternate ending
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
                 (*it)->sortedAltChain->push_back((*(*it)->rawAltChain)[idx]);
+            }
+        }
+    }
+    
+    // Previous code sets m_automaticVoltaUsable to false when the alternate
+    // endings sequence is "A B B" or "A A B B", but fails when sequence is
+    // "A A B A".
+    // Look again at the alternate endings and set m_automaticVoltaUsable
+    // as needed.
+    for (it = repeatList.begin(); it != repeatList.end(); ++it) {
+        if ((*it)->sortedAltChain) {
+            int altIndex = 0;
+            for (AltChain::iterator ia = (*it)->sortedAltChain->begin();
+                                ia != (*it)->sortedAltChain->end(); ++ia) {
+                altIndex++;
+                // Iterator to first number
+                std::set<int>::iterator is = (*ia)->altNumber.begin();
+                // Iterator to last number
+                std::set<int>::reverse_iterator ie = (*ia)->altNumber.rbegin();
+                int size = (*ia)->altNumber.size();
+                // The first alternate ending should start at number 1
+                if ((altIndex == 1) && (*is != 1)) m_automaticVoltaUsable = false;
+                // The numbers of an alternate ending should de continuous
+                if ((*ie - *is) != (size - 1)) m_automaticVoltaUsable = false;
             }
         }
     }
@@ -1312,6 +1337,57 @@ LilyPondSegmentsContext::getArbitrarySegment(int trackPos)
 {
     return m_segments[trackPos][0].begin()->segment;
 }
+
+
+// //YGYGYG
+// int 
+// LilyPondSegmentsContext::getVerseIndex()
+// {
+//     Segment * s = m_segIterator->segment;
+//     if (s->isLinked()) s = s->getLinker()->getReference();
+//     return // YOOO CA NE MARCHE PAS : Je n'ai pas de lien au data de le ref !!! 
+// }
+
+
+//YGYGYG
+// Segment * 
+// LilyPondSegmentsContext::getFirstAlt()
+// {
+//     if (!isRepeatWithAlt() || isAlt()) return nullptr;
+//     m_altChain
+//     
+// }
+// 
+// Segment * 
+// LilyPondSegmentsContext::getNextAlt()
+// {
+//     
+// //                  if (!m_currentAltChain) {
+// //                     m_firstAlt = true;
+// //                     m_currentAltChain = m_segIterator->sortedAltChain;
+// //                     m_altIterator = m_currentAltChain->begin();
+// //                     if (m_altIterator != m_currentAltChain->end()) {
+// //                         if (m_currentAltChain->size() == 1) m_lastAlt = true;
+// //                         return (*m_altIterator)->data->segment;
+// //                     }
+// //                 } else {
+// //                     m_firstAlt = false;
+// //                     ++m_altIterator;
+// //                     if (m_altIterator != m_currentAltChain->end()) {
+// //                         AltChain::iterator nextIt = m_altIterator;
+// //                         ++nextIt;
+// //                         if (nextIt == m_currentAltChain->end()) {
+// //                             m_lastAlt = true;
+// //                         }
+// //                         return (*m_altIterator)->data->segment;
+// //                     } else {
+// //                         m_lastAlt = false;
+// //                         m_currentAltChain = nullptr;
+// //                     }
+// //                 }   
+//
+// }
+
 
 void
 LilyPondSegmentsContext::dump()

@@ -49,8 +49,11 @@
  *
  *    // Prepare everything inside the LilyPondSegmentsContext
  *    lsc.precompute();
- *    lsc.fixRepeatStartTimes();
- *    lsc.fixAltStartTimes();
+ *    if (print_using_volta) {
+ *        // Never call the two following methods when printing unfolded
+ *        lsc.fixRepeatStartTimes();
+ *        lsc.fixAltStartTimes();
+ *    }
  *
  *    // Then get from it the segments sorted and ready to use
  *    Track *track;
@@ -299,6 +302,32 @@ public:
      * shared by all segments of the track) is needed at the track level.
      */
     Segment * getArbitrarySegment(int trackPos); 
+    
+//     // YGYGYG
+//     /**
+//      * Return the index of the next verse to be printed in the current segment.
+//      * WARNINGS : 
+//      *    - This only works when printing unfolded.
+//      *    - All linked segment must have a reference segment already defined.
+//      * 
+//      */
+//     int getVerseIndex();
+    
+// YGYGYG
+//     /**
+//      * Return the first alternate ending segment if the current segment is
+//      * the main segment of a "repeat with alternate endings" chain.
+//      * Return nullptr otherwise.
+//      */ 
+//     Segment * getFirstAlt();
+//     
+//     /**
+//      * Return the next alternate ending segment (following getFirstAlt()).
+//      * Return nullptr when all the alternate endings have been returned.
+//      */     
+//     Segment * getNextAlt();
+    
+    
 
     /// Only for instrumentation while debugging
     void dump();

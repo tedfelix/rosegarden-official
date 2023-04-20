@@ -73,6 +73,7 @@ class RosegardenDocument;
 class NotationView;
 class Key;
 class Composition;
+class LilyPondSegmentsContext;
 
 const char* headerDedication();
 const char* headerTitle();
@@ -228,6 +229,25 @@ private:
      * skip sequence if the verse doesn't exist.
      */
     void writeVerse(Segment *seg, int verseIndex, int indentCol, std::ofstream &str);
+
+    /*
+     * Write in str all the lyrics verses using volta and alternativete endings
+     * of a given line and cycle with the indentation indentCol.
+     * Repeatedly call writeVerse() for each segment.
+     */
+    void writeVersesWithVolta(LilyPondSegmentsContext & lsc,
+                              int verseLine, int cycle,
+                              int indentCol, std::ofstream &str);
+    /*
+     * Write in str all the lyrics verses of an unfolded score (i.e. without
+     * volta) for a given line and cycle with the indentation indentCol.
+     * Repeatedly call writeVerse() for each segment.
+     */
+    void writeVersesUnfolded(LilyPondSegmentsContext & lsc,
+                             std::map<Segment *, int> & verseIndexes,
+                             int verseLine, int cycle,
+                             int indentCol, std::ofstream &str);
+    
 
 private:
     static const int MAX_DOTS = 4;

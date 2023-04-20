@@ -45,6 +45,7 @@
 #include "base/NotationTypes.h"
 #include "base/PropertyName.h"
 #include "base/Segment.h"
+#include "base/SegmentLinker.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Sets.h"
 #include "base/Studio.h"
@@ -1091,15 +1092,17 @@ LilyPondExporter::write()
     // Look for repeating segments
     lsc.precompute();
 
-    // If needed, compute offsets of segments following a repeating one
-    // in LilyPond score
-    if (m_useVolta) {
-        lsc.fixRepeatStartTimes();
-    }
 
-    // If needed, compute offsets in LilyPond score of segments following
-    // a repeat with alternate endings coming from linked segments.
     if (m_useVolta) {
+        // Don't call the two following methods if the score have to be printed
+        // unfolded. Otherwise the start time of some segments would be erroneous.
+        
+        // If needed, compute offsets of segments following a repeating one
+        // in LilyPond score        
+        lsc.fixRepeatStartTimes();
+
+        // If needed, compute offsets in LilyPond score of segments following
+        // a repeat with alternate endings coming from linked segments.
         lsc.fixAltStartTimes();
     }
 
@@ -2086,6 +2089,7 @@ LilyPondExporter::write()
                           << "  number of cycles = " << cyclesNumber
                           << "\n";    // YGYGYG
                 
+                std::map<Segment *, int> verseIndexes; // Next verse index for each segment
                 bool isFirstPrintedVerse = true; 
                 for (int cycle = 0; cycle < cyclesNumber; cycle++) {
                     for (int verseLine = 0; verseLine < versesNumber; verseLine++) {
@@ -2130,62 +2134,12 @@ LilyPondExporter::write()
                             << std::endl;
                         // End of the lyrics block header writing
                     
-                    
-                        int voltaCount = 1;
-                        int deltaVoltaCount = 0;                
-                        for (Segment * seg = lsc.useFirstSegment();
-                                        seg; seg = lsc.useNextSegment()) {
-                            std::cout << "Line " << verseLine;  // YG
-                            
-                            int verseIndex;
-                            if (!lsc.isAlt()) { 
-                                voltaCount += deltaVoltaCount;
-                                deltaVoltaCount = lsc.getNumberOfVolta() - 1;
-                                
-                                verseIndex = ((verseLine + 1) + 1 - voltaCount) - 1;
-                                // verseIndex and verseLine start from 0 end not 1
-                                
-                                verseIndex += cycle * lsc.getNumberOfVolta();
-                                int vimin = cycle * lsc.getNumberOfVolta();
-                                int vimax = vimin + lsc.getNumberOfVolta() - 1;
-                                if (    (verseIndex < vimin)
-                                     || (verseIndex > vimax) ) verseIndex = -1;
-                                
-                                std::cout << " !alt verse=" << verseIndex << "\n";   // YG
-                            } else {
-                                const std::set<int>* numbers = lsc.getAltNumbers();
-                                int altNumber = (verseLine + 1) + 1 - voltaCount;
-                                
-                                // Get the verseNumber from the altNumber
-                                std::set<int>::const_iterator i;
-                                int verse = cycle * lsc.getAltRepeatCount();
-                                bool found = false;
-                                for (i = numbers->begin(); 
-                                        i != numbers->end(); ++i) {
-                                    if (*i == altNumber) {
-                                        found = true;
-                                        break;
-                                    }
-                                    verse++;
-                                }                             
-                                    
-                                verseIndex = found ? verse : -1; 
-                                std::cout << "  alt verse=" << verseIndex << "\n";   // YG
-                            }
-                                    
-                            // Write the current verse
-                            writeVerse(seg, verseIndex, col, str);
-//                             str << "\n% Lyrics of segment \"" << seg->getLabel() 
-//                                 << "\": verse " << (verseIndex + 1) << std::endl;
-//                             
-//                             str << indent(col)
-//                                 << qStrToStrUtf8(getVerseText(seg, verseIndex)) 
-//                                 << " " << std::endl;
-//                             str << "\n\n\n";
-                        }  // for (Segment * seg = lsc.useFirstSegment(); ...
-                    
-                    
-                    
+                        if (m_useVolta) {
+                            writeVersesWithVolta(lsc, verseLine, cycle, col, str);
+                        } else {
+                            writeVersesUnfolded(lsc, verseIndexes, verseLine, cycle, col, str);
+                        }
+
                         // Write the tail of the lyrics block
                         str << indent(col) 
                             << qStrToStrUtf8("\\unset ignoreMelismata") 
@@ -3468,7 +3422,209 @@ LilyPondExporter::writeSlashes(const Event *note, std::ofstream &str)
     }
 }
 
+void
+LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
+                                       int verseLine, int cycle,
+                                       int indentCol, std::ofstream &str)
+{
+    int voltaCount = 1;
+    int deltaVoltaCount = 0;                
+    for (Segment * seg = lsc.useFirstSegment();
+                    seg; seg = lsc.useNextSegment()) {
+        std::cout << "Line " << verseLine;  // YG
+        
+        int verseIndex;
+        if (!lsc.isAlt()) { 
+            voltaCount += deltaVoltaCount;
+            deltaVoltaCount = lsc.getNumberOfVolta() - 1;
+            
+            verseIndex = ((verseLine + 1) + 1 - voltaCount) - 1;
+            // verseIndex and verseLine start from 0 end not 1
+            
+            verseIndex += cycle * lsc.getNumberOfVolta();
+            int vimin = cycle * lsc.getNumberOfVolta();
+            int vimax = vimin + lsc.getNumberOfVolta() - 1;
+            if (    (verseIndex < vimin)
+                    || (verseIndex > vimax) ) verseIndex = -1;
+            
+            std::cout << " !alt verse=" << verseIndex << "\n";   // YG
+        } else {
+            const std::set<int>* numbers = lsc.getAltNumbers();
+            int altNumber = (verseLine + 1) + 1 - voltaCount;
+            
+            // Get the verseNumber from the altNumber
+            std::set<int>::const_iterator i;
+            int verse = cycle * lsc.getAltRepeatCount();
+            bool found = false;
+            for (i = numbers->begin(); 
+                    i != numbers->end(); ++i) {
+                if (*i == altNumber) {
+                    found = true;
+                    break;
+                }
+                verse++;
+            }                             
+                
+            verseIndex = found ? verse : -1; 
+            std::cout << "  alt verse=" << verseIndex << "\n";   // YG
+        }
+                
+        // Write the current verse
+        writeVerse(seg, verseIndex, indentCol, str);
+        
+//                             str << "\n% Lyrics of segment \"" << seg->getLabel() 
+//                                 << "\": verse " << (verseIndex + 1) << std::endl;
+//                             
+//                             str << indent(col)
+//                                 << qStrToStrUtf8(getVerseText(seg, verseIndex)) 
+//                                 << " " << std::endl;
+//                             str << "\n\n\n";
+        
+    }  // for (Segment * seg = lsc.useFirstSegment(); ...
+}
 
+void
+LilyPondExporter::writeVersesUnfolded(LilyPondSegmentsContext & lsc,
+                                      std::map<Segment *, int> & verseIndexes,
+                                      int verseLine, int cycle,
+                                      int indentCol, std::ofstream &str)
+{
+    int repeatsNumber;
+    Segment * mainSeg;
+    
+    std::cout << "YG writeVersesUnfolded line=" << verseLine << " cycle=" << cycle << "\n";
+    
+// INITIALISATION - START    
+    if (verseLine == 0 && cycle == 0) {
+        verseIndexes.clear();
+        
+        for (Segment * seg = lsc.useFirstSegment();
+                        seg; seg = lsc.useNextSegment()) {
+            
+            // Set a reference for each linked segments group
+            if (seg->isLinked()) {
+                if (!seg->getLinker()->getReference()) {
+                    seg->getLinker()->setReference(seg);
+                }
+            }
+            
+            // Reset the verse index value
+            verseIndexes[seg] = 0;
+        }   
+    }
+// INITIALISATION - END
+
+
+
+    for (Segment * seg = lsc.useFirstSegment();
+                    seg; seg = lsc.useNextSegment()) {
+        
+        
+        std::cout << "YG " << seg->getLabel() << "\n";
+        std::cout << "    number of volta : " << lsc.getNumberOfVolta() << "\n";
+        std::cout << "    isRepeatingSeg : " << lsc.isRepeatingSegment() << "\n";
+        std::cout << "    isSimpleRepLink : " << lsc.isSimpleRepeatedLinks() << "\n";
+        std::cout << "    isRepeatWithAlt : " << lsc.isRepeatWithAlt() << "\n";
+        std::cout << "    isAlt : " << lsc.isAlt() << "\n";
+        std::cout << "    isLinked : " << seg->isLinked() << "\n";
+    
+        Segment * s = seg;
+        if (seg->isLinked()) s = seg->getLinker()->getReference();
+//         int vi = verseIndexes[s]++;
+//         std::cout << "    verse index = " << vi << "\n";
+//         std::cout << "\n";
+//         
+//         // Write the current verse
+//         if (!lsc.isRepeatingSegment()) {
+//             // Not repeating segment:
+//             // One verse only
+//             writeVerse(seg, vi, indentCol, str);
+//         } else {
+//             // Repeating segment:
+//             // As many verses as times the segment is repeated
+//             for (int i = 0; i < lsc.getNumberOfVolta(); i++) {
+//                 writeVerse(seg, vi, indentCol, str);
+//             }
+//         }
+        
+        // If lsc.getNumberOfVolta() > 1, the segment is repeating
+        // and as many verses as times the segment is repeated must
+        // be printed.
+        for (int i = 0; i < lsc.getNumberOfVolta(); i++) {
+            int vi = verseIndexes[s]++;
+            writeVerse(seg, vi, indentCol, str);
+            std::cout << "    verse index = " << vi << "\n";
+        }
+
+        std::cout << "\n";        
+        
+    }  // for (Segment * seg = lsc.useFirstSegment(); ...
+    
+    
+//     for (Segment * seg = lsc.useFirstSegment();
+//                     seg; seg = lsc.useNextSegment()) {
+// 
+//         if (seg->isLinked()) {
+//             Segment * seg1 = alts[seg->getLinker()->getSegmentLinkerId()];
+//             // get verse from seg1 
+//         } else {
+//             // get verse from seg
+//         }
+//         
+//     }  // for (Segment * seg = lsc.useFirstSegment(); ...    
+    
+
+//     for (Segment * seg = lsc.useFirstSegment();
+//                     seg; seg = lsc.useNextSegment()) {
+//         
+//         if (lsc.isRepeatingSegment() 
+//                 || lsc.isSimpleRepeatedLinks()) {
+//         
+//             // Repeated segment without alternate ending
+//         
+//             repeatsNumber = lsc.getNumberOfVolta();
+//             for (int i=1; i<= repeatsNumber; i++) {
+//                 std::cout << "YGa " << seg->getLabel() 
+//                             << " (" << i << ")\n";
+//             }
+//             
+//         } else if (lsc.isRepeatWithAlt()
+//                             && !lsc.isAlt()) {
+//                 // Repeated segment with alternate endings
+//             
+//             mainSeg = seg;
+//             repeatsNumber = lsc.getNumberOfVolta();
+//             alts.clear();
+//             
+// //             std::cout << "YG " << seg->getLabel() 
+// //                             << " (" << repeatsNumber << ")\n";
+//             
+//         } else if (lsc.isAlt()) {
+//             
+//             // For each Alt :
+//             //    --> Use the volta (memorized before)
+//             //    --> Use the alt
+//             const std::set<int> * numbers = lsc.getAltNumbers();
+//             for (std::set<int>::const_iterator i = numbers->begin();
+//                             i != numbers->end(); ++i) {
+//                 alts[*i] = seg;
+//             }
+//             
+//             if (lsc.isLastAlt()) {
+//                 for (int i=1; i<= repeatsNumber; i++) {
+//                     std::cout << "YGb " << mainSeg->getLabel() 
+//                                 << " (" << i << ")\n";
+//                     std::cout << "YGb " << alts[i]->getLabel()
+//                                 << " [" << i << "]\n";
+//                 }
+//             }
+// 
+//         } else {
+//             // Simple unrepeated segment
+//             std::cout << "YGc " << seg->getLabel() << "\n";
+//         }
+//     }  // for (Segment * seg = lsc.useFirstSegment(); ...
+}
 
 // YGYGYG Comment : ???
                 //
