@@ -1339,56 +1339,6 @@ LilyPondSegmentsContext::getArbitrarySegment(int trackPos)
 }
 
 
-// //YGYGYG
-// int 
-// LilyPondSegmentsContext::getVerseIndex()
-// {
-//     Segment * s = m_segIterator->segment;
-//     if (s->isLinked()) s = s->getLinker()->getReference();
-//     return // YOOO CA NE MARCHE PAS : Je n'ai pas de lien au data de le ref !!! 
-// }
-
-
-//YGYGYG
-// Segment * 
-// LilyPondSegmentsContext::getFirstAlt()
-// {
-//     if (!isRepeatWithAlt() || isAlt()) return nullptr;
-//     m_altChain
-//     
-// }
-// 
-// Segment * 
-// LilyPondSegmentsContext::getNextAlt()
-// {
-//     
-// //                  if (!m_currentAltChain) {
-// //                     m_firstAlt = true;
-// //                     m_currentAltChain = m_segIterator->sortedAltChain;
-// //                     m_altIterator = m_currentAltChain->begin();
-// //                     if (m_altIterator != m_currentAltChain->end()) {
-// //                         if (m_currentAltChain->size() == 1) m_lastAlt = true;
-// //                         return (*m_altIterator)->data->segment;
-// //                     }
-// //                 } else {
-// //                     m_firstAlt = false;
-// //                     ++m_altIterator;
-// //                     if (m_altIterator != m_currentAltChain->end()) {
-// //                         AltChain::iterator nextIt = m_altIterator;
-// //                         ++nextIt;
-// //                         if (nextIt == m_currentAltChain->end()) {
-// //                             m_lastAlt = true;
-// //                         }
-// //                         return (*m_altIterator)->data->segment;
-// //                     } else {
-// //                         m_lastAlt = false;
-// //                         m_currentAltChain = nullptr;
-// //                     }
-// //                 }   
-//
-// }
-
-
 void
 LilyPondSegmentsContext::dump()
 {

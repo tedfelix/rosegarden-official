@@ -2017,14 +2017,23 @@ LilyPondExporter::write()
                 //        and "aaa ||: bbb x3 :|| ccc ||: ddd x2 :|| eee"
                 //        has versesNumber = 4
                 //
+                //    It's because the verse under ccc follows the third verse
+                //    of bbb and is on the third line.
+                //    The first verse of ddd follows the verse of ccc and is
+                //    on the fourth line. The verse of eee follows the second
+                //    verse of ddd and is on the fourth and last line.
+                //
+                //    When the voltas are unfolded, the number of verses
+                //    is always 1
+                //
                 // Number of cycles:
                 //    This is how many verses are written under the score
                 //    although no repetition is indicated in this score.
                 //    This can be seen as how many times the musical score has
                 //    to be played to exhaust all the verses.
                 //    ("Himno de Riego", in the RG examples, has no notated
-                //     repetition but has three verses. Which gives 
-                //     cyclesNumber = 3)
+                //     repetition but has three verses. Which gives  
+                //     versesNumber = 1 and cyclesNumber = 3)
                 //
                 //    For example the following score has cyclesNumber = 2
                 //         aaaaaaaaa
