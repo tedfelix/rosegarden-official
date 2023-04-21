@@ -1721,11 +1721,11 @@ LilyPondExporter::write()
 
                 Rosegarden::Key key = lsc.getPreviousKey();
 
-                bool haveRepeating = false;
-                bool haveAlternates = false;
-
-                bool haveVoltaWithAltEndings = false;
-                bool haveVolta = false;
+                // State variables 
+                bool haveRepeating = false;  // Simple volta without alt. endings
+                bool haveAlternates = false; // Alternate ending may follow (?)
+                bool haveVoltaWithAltEndings = false; // Volta with alt. endings
+                bool haveAlt = false;        // Current seg. is an alt. ending
 
                 bool nextBarIsAlt1 = false;
                 bool nextBarIsAlt2 = false;
@@ -1799,7 +1799,7 @@ LilyPondExporter::write()
                         }
                     } else if (lsc.isRepeatWithAlt() &&
                             !haveVoltaWithAltEndings &&
-                            !haveVolta) {
+                            !haveAlt) {
                         if (!lsc.isAlt()) {
                             str << std::endl << indent(col++);
                             if (lsc.isAutomaticVoltaUsable()) {
@@ -1847,7 +1847,7 @@ LilyPondExporter::write()
                                 str << std::endl << indent(col)
                                     << "\\bar \"|\" ";
                             }
-                            haveVolta = true;
+                            haveAlt = true;
                         }
                     }
 
@@ -1925,7 +1925,7 @@ LilyPondExporter::write()
                     str << std::endl << indent(col) << "\\bar \"|.\"";
                 }
 
-                if (!haveVoltaWithAltEndings && !haveVolta) {
+                if (!haveVoltaWithAltEndings && !haveAlt) {
                     // close Voice context
                     str << std::endl
                         << indent(--col) << "} % Voice" 
@@ -2077,6 +2077,7 @@ LilyPondExporter::write()
                     // n is the number of times the volta is played
                     // So the number of repetitions of the volta is n - 1
                     } else {
+                        // If volta are unfolded there is only one verse
                         versesNumber = 1;
                         n = 1;
                     }
