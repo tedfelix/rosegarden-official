@@ -368,3 +368,189 @@ private:
 }
 
 #endif
+
+
+/*
+
+HOW THE VERSES RELATED TO A VOICE SHOULD BE WRITTEN IN LILYPOND FILE
+====================================================================
+
+The verses are written in the Lilypond file after the musical notes of
+a voice. Each verse, or, more exactly, each line, is written in a 
+"\new Lyrics" sequence and connected to the voice using a "\lyricsto"
+command.
+
+PART 1 - The number of verses is exactly what each volta requires
+-----------------------------------------------------------------
+
+Rosegarden unfolded segments (X, X',... are linked segments)
+
+A B B1 B' B1' B" B2 C D D' D" E F F1 F' F2 F" F1' F"' F3 G
+
+
+Musical segments (Lilypond order):
+                       ____________        __        _________________
+Volta sequences:      /            \      /  \      /                 \
+Nb of repeats:   0    2    -    -    0    2    0    3    -    -    -    0
+                 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+Segments:       |A   |B   |B1  |B2  |C   |D   |E   |F   |F1  |F2  |F3  |G   |
+                 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+Alternates #               1,2  3   :         :          1,3  2    4   :
+                                    :         :                        :
+                                    :         :                        :
+Lyrics text (Lilypond order):       :         :                        :
+                                    :         :                        :
+                 A    B    B1       :         :                        :
+Line 1          |xxxx|xxxx|xxxx|....|....|....|....|....|....|....|....|....|
+Verse #          1    1    1        :         :                        :
+                                    :         :                        :
+                      B    B1       :         :                        :
+Line 2          |....|xxxx|xxxx|....|....|....|....|....|....|....|....|....|
+Verse #               2    2        :         :                        :
+                                    :         :                        :
+                      B         B2  :C    D   :                        :
+Line 3          |....|xxxx|xxxx|xxxx|xxxx|xxxx|....|....|....|....|....|....|
+Verse #               3         1   :1    1   :                        :
+                                    :         :                        :
+                                    :     D   :                        :
+Line 4          |....|....|....|....|....|xxxx|....|....|....|....|....|....|
+Verse #                             :     2   :                        :
+                                    :         :                        :
+                                    :     D   :E    F    F1            :
+Line 5          |....|....|....|....|....|xxxx|xxxx|xxxx|xxxx|....|....|....|
+Verse #                             :     3   :1    1    1             :
+                                    :         :                        :
+                                    :         :     F         F2       :
+Line 6          |....|....|....|....|....|....|....|xxxx|....|xxxx|....|....|  
+Verse #                             :         :     2         1        :
+                                    :         :                        :
+                                    :         :     F    F1            :
+Line 7          |....|....|....|....|....|....|....|xxxx|xxxx|....|....|....|  
+Verse #                             :         :     3    2             :
+                                    :         :                        :
+                                    :         :     F              F3  :G
+Line 8          |....|....|....|....|....|....|....|xxxx|....|....|xxxx|xxxx|  
+Verse #                             :         :     4              1   :1
+                                    :         :                        :
+VoltaCount       1                  |3        |5                       |8
+
+ xxx: Lyrics
+ ...: Skipped notes (blank lines)
+
+This sequence of lyrics and skipped notes gives a good vertical alignment
+of the lyrics:
+
+    AAAA AAAA BBBB BBBB BBBB B1B1 B1B1
+              BBBB BBBB BBBB B1B1 B1B1
+              BBBB BBBB BBBB           B2B2 B2B2 CCCC CCCC CCCC etc...
+
+LilyPond automatically removes the unnecessary blank lines.
+
+VoltaCount start from one at the beginning of the composition and is
+incremented by the number of voltas after each repeating sequence (i.e. volta
+and possible alternate endings segments).
+
+Number of lines = 1 + sum(volta_repeats_number)
+
+In the here above example:
+    segment B is repeated 2 times,
+    segment D is repeated 2 times,
+    segment F is repeated 3 times
+    
+So number of lines = 1 + 2 + 2 + 3 = 8
+          
+Note : When a segment is played 3 times (or have 3 voltas), it can be seen as
+       played once and repeated twice.
+       So its number of repeats used above is 2.
+
+
+
+In a given line : 
+
+The printed verse number of a volta segment is:
+    verse = lineNumber + 1 - voltaCount
+If this verse doesn't exist, the lyrics are skipped.
+
+The lyrics of an alternate segment are only printed if 
+    alternate number == lineNumber + 1 - voltaCount
+If this alternate number doesn't exist, the lyrics of the segment are skipped.
+
+The verses of an alternate segment are successively printed, from the first to
+the last, each time the lyrics have to be printed following the previous rule.
+
+(Note: For an easy understanding, lines and verses numbers start from one.
+This may not be the case in the code.)
+
+
+
+PART 2 - There is more verses than required by each volta
+---------------------------------------------------------
+
+This typically happens when there is no indicated volta and several verses
+(for example, "himno_de_riego.rg" in RG examples).
+
+In such a case, all the supplementary verses are written below the first one.
+
+The same policy can be applied in more complex situations involving volta.
+
+The "number of verses" and the "number of cycles" values are used here.
+In "himno_de_riego.rg" example:
+   - there is only one sequence in the musical score: so "number of verse" is 1
+   - there is 3 verses stored as lyrics: so "number of cycles" is 3.
+It means that the musical score have to be played three times (three cycles) to
+consume all ther lyrics. 
+    
+    Number of verses:
+        It's how many lines are needed to write the verses under
+        the score with the correct vertical alignment and with
+        one and only one verse for each musical volta.
+
+        For example:
+            the score "aaa ||: bbb x3 :|| ccc"
+            has versesNumber = 3
+            and "aaa ||: bbb x3 :|| ccc ||: ddd x2 :|| eee"
+            has versesNumber = 4
+
+        It's because the verse under ccc follows the third verse
+        of bbb and is on the third line.
+        The first verse of ddd follows the verse of ccc and is
+        on the fourth line. The verse of eee follows the second
+        verse of ddd and is on the fourth and last line.
+
+        When the voltas are unfolded, the number of verses
+        is always 1
+        
+        Number of cycles:
+            This is how many verses are written under the score
+            although no repetition is indicated in this score.
+            This can be seen as how many times the musical score has
+            to be played to exhaust all the verses.
+            ("Himno de Riego", in the RG examples, has no notated
+            repetition but has three verses. Which gives  
+            versesNumber = 1 and cyclesNumber = 3)
+        
+            For example the following score has cyclesNumber = 2
+                aaaaaaaaa
+                    verse 1
+                    verse 2
+        
+            and the following one also has cyclesNumber = 2
+                aaaaaaaaa ||: bbbbb x2 :|| cccccccccc
+                    verse 1a     verse 1b      
+                                verse 2b     verse 1c
+                    verse 2a     verse 3b
+                                verse 4b     verse 2c
+        
+    Note: The number of cycles is always computed as if the set
+            of verses is complete. In the last example, if verses
+            4b and 2c are omitted, cyclesNumber = 4 is nevertheless
+            computed.
+            The exporter is going to write blank verses, but
+            LilyPond will happily ignore them.
+    
+    Note: When volta are printed unfolded (m_useVolta is false)
+            the "number of verses" as previously described is
+            always 1 and the "number of cycles" is the maximum
+            number of verses found in one segment.
+            
+*/

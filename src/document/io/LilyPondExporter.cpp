@@ -1972,8 +1972,7 @@ LilyPondExporter::write()
         } // for (voiceIndex = lsc.useFirstVoice(); voiceIndex != -1; ....
 
 
-        
-        // YGYGYG
+        // [SOURCE_OF_VERSES]
         // Currently, if several voices have lyrics, they are only exported
         // from one voice. The voice choosen is the one having the greatest
         // number of verses.
@@ -1988,96 +1987,44 @@ LilyPondExporter::write()
                 maxVers = verses[i];
                 lyricsVoice = i;
             }
-        }
-        
-         std::cerr << "Voice of lyrics is " << lyricsVoice << "\n";       // YGYGYG
-         std::cerr << "Max verses on one segment is " << maxVers << "\n";   
+        } 
          
         // Skip the following if there is no verse or if lyrics not exported
         if ((maxVers != 0) && (m_exportLyrics != EXPORT_NO_LYRICS)) {
          
-            // YGYGYG
             for (voiceIndex = lsc.useFirstVoice();
-                            voiceIndex != -1; voiceIndex = lsc.useNextVoice()) {
-                std::cerr << "YG look for lyrics voice " << voiceIndex << "\n";         
+                            voiceIndex != -1; voiceIndex = lsc.useNextVoice()) {      
                 
-                if (voiceIndex != lyricsVoice) continue;  // (1)
+                // Ignore verses not coming from lyricsVoice.
+                // See comment [SOURCE_OF_VERSES] above.
+                if (voiceIndex != lyricsVoice) continue;
                 
                 // Compute the needed number of verse lines and the number of
                 // cycles.
-                // 
-                // Number of verses:
-                //    It's how many lines are needed to write the verses under
-                //    the score with the correct vertical alignment and with
-                //    one and only one verse for each musical volta.
-                //
-                //    For example:
-                //        the score "aaa ||: bbb x3 :|| ccc"
-                //        has versesNumber = 3
-                //        and "aaa ||: bbb x3 :|| ccc ||: ddd x2 :|| eee"
-                //        has versesNumber = 4
-                //
-                //    It's because the verse under ccc follows the third verse
-                //    of bbb and is on the third line.
-                //    The first verse of ddd follows the verse of ccc and is
-                //    on the fourth line. The verse of eee follows the second
-                //    verse of ddd and is on the fourth and last line.
-                //
-                //    When the voltas are unfolded, the number of verses
-                //    is always 1
-                //
-                // Number of cycles:
-                //    This is how many verses are written under the score
-                //    although no repetition is indicated in this score.
-                //    This can be seen as how many times the musical score has
-                //    to be played to exhaust all the verses.
-                //    ("Himno de Riego", in the RG examples, has no notated
-                //     repetition but has three verses. Which gives  
-                //     versesNumber = 1 and cyclesNumber = 3)
-                //
-                //    For example the following score has cyclesNumber = 2
-                //         aaaaaaaaa
-                //          verse 1
-                //          verse 2
-                //
-                //    and the following one also has cyclesNumber = 2
-                //         aaaaaaaaa ||: bbbbb x2 :|| cccccccccc
-                //          verse 1a     verse 1b      
-                //                       verse 2b     verse 1c
-                //          verse 2a     verse 3b
-                //                       verse 4b     verse 2c
-                //
-                // Note: The number of cycles is always computed as if the set
-                //       of verses is complete. In the last example, if verses
-                //       4b and 2c are omitted, cyclesNumber = 4 is nevertheless
-                //       computed.
-                //       The exporter is going to write blank verses, but
-                //       LilyPond will ignore them.
-                //
+                
+                ///////////////////////////////////////////////////////////////
+                // The comment at the end of LilyPondExporter.h explains how //
+                // the following code works.                                 //
+                ///////////////////////////////////////////////////////////////   
+                
                 int versesNumber = 1;
                 int cyclesNumber;
                 
                 int sva = 0;    // Supplementary verses accumulator
                 for (Segment * seg = lsc.useFirstSegment();
                                         seg; seg = lsc.useNextSegment()) {
-                    
-                    std::cerr << "Lyrics segment " << seg->getLabel()
-                            << " isAlt:" <<  lsc.isAlt()
-                            << " isRepeated=" << lsc.isRepeated();    // YG
-
                     int n;
                     if (m_useVolta) {
-                    // How many times the segment is played
-                    n = lsc.isAlt()
+                        // How many times the segment is played
+                        n = lsc.isAlt()
                                 ? lsc.getAltNumbers()->size()
                                 : lsc.getNumberOfVolta();
-                    std::cerr  <<" numberOfRep.=" << n << "\n";   // YG
-                                
-                    versesNumber += n - 1;
-                    // n is the number of times the volta is played
-                    // So the number of repetitions of the volta is n - 1
+                                    
+                        versesNumber += n - 1;
+                        // n is the number of times the volta is played
+                        // So the number of repetitions of the volta is n - 1
                     } else {
-                        // If volta are unfolded there is only one verse
+                        // If voltas are unfolded there is only one verse
                         versesNumber = 1;
                         n = 1;
                     }
@@ -2093,11 +2040,6 @@ LilyPondExporter::write()
                 // Total number of cycles:
                 // Without supplementary verse (sva=0) number of cycles is 1
                 cyclesNumber = sva + 1;   
-                
-              
-                std::cerr << "Basic NL is " << versesNumber 
-                          << "  number of cycles = " << cyclesNumber
-                          << "\n";    // YGYGYG
                 
                 std::map<Segment *, int> verseIndexes; // Next verse index for each segment
                 bool isFirstPrintedVerse = true; 
@@ -2144,6 +2086,7 @@ LilyPondExporter::write()
                             << std::endl;
                         // End of the lyrics block header writing
                     
+                        // Write the lyrics block
                         if (m_useVolta) {
                             writeVersesWithVolta(lsc, verseLine, cycle, col, str);
                         } else {
@@ -2160,13 +2103,14 @@ LilyPondExporter::write()
                         // str << qStrToStrUtf8("} % Lyrics ") << (verseIndex+1) << std::endl;
                         str << indent(--col);
                         str << qStrToStrUtf8("} % Lyrics ") << std::endl;
-                        
                         // End of the lyrics block tail writing
                     
                     }  // for (int verseLine = 0; verseLine < versesNumber; ...
                 }  // for (int cycle = 0; cycle < cyclesNumber; cycle++...
 
-                break;   // (1)
+                break;   // Verses from a voice have been writed 
+                         // Looking to the other voices is useless
+                         // See comment [SOURCE_OF_VERSES] above
             }
         }
         
@@ -3434,6 +3378,11 @@ LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
                                        int verseLine, int cycle,
                                        int indentCol, std::ofstream &str)
 {
+    ////////////////////////////////////////////////////////////////////
+    // The comment at the end of LilyPondExporter.h explains how the  //
+    // following code works.                                          //
+    ////////////////////////////////////////////////////////////////////
+    
     int voltaCount = 1;
     int deltaVoltaCount = 0;                
     for (Segment * seg = lsc.useFirstSegment();
@@ -3473,8 +3422,9 @@ LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
             verseIndex = found ? verse : -1; 
         }
                 
-        // Write the current verse
+        // Write the current verse if it exists or write a skip instruction
         writeVerse(seg, verseIndex, indentCol, str);
+
     }  // for (Segment * seg = lsc.useFirstSegment(); ...
 }
 
