@@ -849,8 +849,6 @@ LilyPondSegmentsContext::getNextSynchronousSegment()
     }
 }
 
-
-
 void
 LilyPondSegmentsContext::SegmentSet::scanForRepeatedLinks()
 {
@@ -1241,8 +1239,6 @@ LilyPondSegmentsContext::SegmentSet::isNextSegmentOfSimpleRepeat()
 
     return true;
 }
-
-
 
 void
 LilyPondSegmentsContext::sortAndGatherAlt(SegmentDataList & repeatList)

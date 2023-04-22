@@ -51,6 +51,7 @@
  *    lsc.precompute();
  *    if (print_using_volta) {
  *        // Never call the two following methods when printing unfolded
+ *        // but calling them is mandatory when printing with volta
  *        lsc.fixRepeatStartTimes();
  *        lsc.fixAltStartTimes();
  *    }
@@ -295,9 +296,8 @@ public:
      */
     bool isAutomaticVoltaUsable() const { return m_automaticVoltaUsable; }
     
-    // YGYGYGYG
     /**
-     * Return some segment (presumably the first one) on the given track.
+     * Return some segment (currently the first one) on the given track.
      * This method is used when some data related to segments (and supposedly
      * shared by all segments of the track) is needed at the track level.
      */
@@ -363,8 +363,6 @@ private :
         mutable int simpleRepeatId;           // Identify a repeat without 
                                               // alternate endings chain
         mutable int numberOfSimpleRepeats;    // How many segments in the chain
-        
-        mutable int currentVerse;             // Next verse to be read
 
         explicit SegmentData(Segment * seg)
         {
@@ -389,7 +387,6 @@ private :
             previousKey = Rosegarden::Key("undefined");
             simpleRepeatId = 0;
             numberOfSimpleRepeats = 0;
-            currentVerse = 0;
          }
     };
 
