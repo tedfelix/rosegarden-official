@@ -2002,10 +2002,10 @@ LilyPondExporter::write()
                 // Compute the needed number of verse lines and the number of
                 // cycles.
                 
-                ///////////////////////////////////////////////////////////////
-                // The comment at the end of LilyPondExporter.h explains how //
-                // the following code works.                                 //
-                ///////////////////////////////////////////////////////////////   
+                ///////////////////////////////////////////////////////////
+                // The comment at the end of LilyPondExporter.h explains //
+                // what the following code does.                         //
+                ///////////////////////////////////////////////////////////   
                 
                 int versesNumber = 1;
                 int cyclesNumber;
@@ -2050,7 +2050,8 @@ LilyPondExporter::write()
                         voiceNumber << "voice " << trackPos << "." << voiceIndex;
                         
                         // Write the header of the lyrics block
-                        str << indent(col)
+                        str << std::endl
+                            << indent(col)
                             << "% cycle " << (cycle + 1) 
                             << "   verse line " << (verseLine + 1) << std::endl;
                         str << indent(col)
@@ -3379,8 +3380,8 @@ LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
                                        int indentCol, std::ofstream &str)
 {
     ////////////////////////////////////////////////////////////////////
-    // The comment at the end of LilyPondExporter.h explains how the  //
-    // following code works.                                          //
+    // The comment at the end of LilyPondExporter.h explains what the //
+    // following code does.                                          //
     ////////////////////////////////////////////////////////////////////
     
     int voltaCount = 1;
@@ -3498,8 +3499,7 @@ LilyPondExporter::writeVerse(Segment *seg, int verseIndex,
     
 }
  
-static int ygcount = 0;
-
+ 
 QString
 LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 {
@@ -3537,35 +3537,18 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 
         timeT myTime = (*j)->getNotationAbsoluteTime();
         int myBar = m_composition->getBarNumber(myTime);
-        std::cout << "YG " << (isNote ? " note" : "")  
-                           << (isLyric ? " lyric" : "")
-                           << " L=" << lastTime
-                           << " T=" << myTime << " B=" << myBar << "\n";
 
         if (isNote) {
             if ((myTime > lastTime) || firstNote) {
-                
-                std::cout << "YG   isNote, haveLyric=" << haveLyric; 
+
                 // This is about the previous note
                 if (!haveLyric) {
-                    // text += " _";
                     syllable = QString("_");
-                    std::cout << "   s=>" << syllable.toLocal8Bit().data() << "<\n";   // YG
-                } else {
-                    std::cout << "\n";
                 }
                 
                 lastTime = myTime;
                 haveLyric = false;
                 firstNote = false;
-                
-//                 if (myBar != lastBar) {
-//                     text += QStringLiteral("     % bar %1").arg(lastBar);
-//                     text += "\n";
-//                     text += indent(indentCol).c_str();
-//                     text += " ";   // Same indentation as the first line
-//                 }                   
-
             }
         }
 
@@ -3580,43 +3563,22 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
             if (verse == currentVerse) {
                 std::string ssyllable;
                 (*j)->get<String>(Text::TextPropertyName, ssyllable);
-                // text += " ";
-                std::cout << "YG   isLyric, haveLyric=1   s=>" << ssyllable << "<";
-
                 syllable = QString(strtoqstr(ssyllable));
-                
-                std::cout << "   s2=>" << syllable.toLocal8Bit().data() << "<";
                 
                 // Remove leading and trailing spaces  
                 syllable.replace(QRegularExpression("^\\s+"), "");
-//             std::cerr << " : " << syllable.toLocal8Bit().data();
                 syllable.replace(QRegularExpression("\\s+$"), "");
-//             std::cerr << " : " << syllable.toLocal8Bit().data();
                 
                 // Protect the backslash protecting a double quotation mark
                 syllable.replace(QRegularExpression("\""), "\\\"");
-//             std::cerr << " : " << syllable.toLocal8Bit().data() << "\n";
-                
-                std::cout << "   s3=>" << ssyllable << "<\n";
-
-                
-//                 if (myBar != lastBar) {
-//                     text += QStringLiteral("     % bar %1").arg(lastBar);
-//                     text += "\n";
-//                     text += indent(indentCol).c_str();
-//                     // text += " ";   // Same indentation as the first line
-//                 }                
+               
                 syllable.prepend("\"");
                 syllable.append("\"");
-                //text += " \"" + syllable + "\"" 
-                                    ;  //YG  + QStringLiteral("(%1, %2)").arg(lastBar).arg(myBar);
+
                 haveLyric = true;
             }
         }
 
-        std::cout << "lastBar=" << lastBar 
-                  << " myBar=" << myBar
-                  << " syllable=\"" << syllable.toLocal8Bit().data() << "\"\n";
         if (syllable != "") {
             if ((myBar != lastBar) || firstBar) {
                 text += "\n";
@@ -3630,25 +3592,13 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
         
     }
 
-    char file[100];
-    sprintf(file, "ygAvant%d.txt", ygcount);
-    FILE * dbg = fopen(file, "w+");
-    fprintf(dbg, "%s", text.toLocal8Bit().data());
-    fclose(dbg);
-    
     // With the following regular expression '_' at end of a line are removed
     // text.replace(QRegularExpression(" _+([^ ])") , " \\1");
     // Try a better one here
     text.replace(QRegularExpression(" _+(\\S)") , " \\1");
-    // But what is the goal of this replacements ???
+    // But what is the goal of this replacement ???
     
     text.replace("\"_\"" , " ");
-    
-    sprintf(file, "ygApres%d.txt", ygcount);
-    dbg = fopen(file, "w+");
-    fprintf(dbg, "%s", text.toLocal8Bit().data());
-    fclose(dbg);  
-    ygcount++;
     
     return text;
 }
