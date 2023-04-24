@@ -72,7 +72,8 @@ LV2PluginFactory::LV2PluginFactory()
         const LilvNode* classUri = lilv_plugin_class_get_uri(pclass);
         QString curis = lilv_node_as_uri(classUri);
         RG_DEBUG << "class uri is" << curis;
-        pluginData.isInstrument = (curis == LV2_CORE__InstrumentPlugin);
+        pluginData.isInstrument = ((curis == LV2_CORE__InstrumentPlugin) ||
+                                   (curis == LV2_CORE__OscillatorPlugin));
 
         unsigned int nports = lilv_plugin_get_num_ports(plugin);
         RG_DEBUG << "Plugin ports:" << nports;
@@ -102,7 +103,7 @@ LV2PluginFactory::LV2PluginFactory()
             portData.name = portName;
             portData.portType = LV2PluginInstance::LV2AUDIO;
             if (cntrl) portData.portType = LV2PluginInstance::LV2CONTROL;
-            if (midi) portData.portType = LV2PluginInstance::LV2MIDI;
+            if (midi && inp) portData.portType = LV2PluginInstance::LV2MIDI;
             portData.isInput = inp;
 
             LilvNode* def;

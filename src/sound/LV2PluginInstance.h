@@ -18,12 +18,14 @@
 
 #include <vector>
 #include <set>
+#include <map>
 #include <QString>
 
 #include <lilv/lilv.h>
 #include <lv2/atom/atom.h>
 
 #include <alsa/seq_event.h>
+#include <alsa/seq_midi_event.h>
 
 #include "base/Instrument.h"
 #include "RingBuffer.h"
@@ -68,6 +70,7 @@ public:
     size_t getLatency() override;
 
     void silence() override;
+    void discardEvents() override;
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
     enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
@@ -135,7 +138,10 @@ protected:
     std::vector<int>          m_audioPortsOut;
 
     int m_midiPort;
+    std::map<RealTime, snd_seq_event_t> m_eventBuffer;
     std::vector<LV2_Atom_Sequence*> m_midiIn;
+    snd_midi_event_t *m_midiParser;
+    LV2_URID m_midiEventUrid;
 
     size_t                    m_blockSize;
     sample_t                **m_inputBuffers;

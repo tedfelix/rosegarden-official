@@ -21,6 +21,9 @@
 #include <QtGlobal>
 #include "misc/Debug.h"
 
+#include <lv2/midi/midi.h>
+#include <lv2/atom/util.h>
+
 namespace
 {
     std::map<std::string, int> uridMap;
@@ -79,7 +82,8 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_world(world),
         m_uri(uri),
         m_pluginData(pluginData),
-        m_midiPort(0),
+        m_midiPort(-1),
+        m_midiParser(nullptr),
         m_blockSize(blockSize),
         m_sampleRate(sampleRate),
         m_latencyPort(nullptr),
@@ -100,7 +104,15 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
     }
 
     for (unsigned int i=0; i< m_instanceCount; i++) {
-        m_midiIn.push_back(new LV2_Atom_Sequence);
+        // create the atom port
+        // use double to get 64 bit alignment
+        double* dbuf = new double[EVENT_BUFFER_SIZE];
+        LV2_Atom_Sequence* aseq =
+            reinterpret_cast<LV2_Atom_Sequence*>(dbuf);
+        lv2_atom_sequence_clear(aseq);
+        LV2_URID type = LV2UridMap(nullptr, LV2_ATOM__Sequence);
+        aseq->atom.type = type;
+        m_midiIn.push_back(aseq);
     }
 
     QByteArray ba = m_uri.toLocal8Bit();
@@ -108,6 +120,9 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
     LilvNode* pluginUri = lilv_new_uri(m_world, uris);
     const LilvPlugins* plugins = lilv_world_get_all_plugins(world);
     m_plugin = lilv_plugins_get_by_uri(plugins, pluginUri);
+
+    snd_midi_event_new(100, &m_midiParser);
+    m_midiEventUrid = LV2UridMap(nullptr, LV2_MIDI__MidiEvent);
 
     instantiate(sampleRate);
     if (isOK()) {
@@ -128,20 +143,20 @@ LV2PluginInstance::init(int idealChannelCount)
         switch(portData.portType) {
         case LV2AUDIO:
             if (portData.isInput) {
-                RG_DEBUG << "LV2PluginInstance::init: port " << i << " is audio in";
+                RG_DEBUG << "LV2PluginInstance::init: port" << i << "is audio in";
                 m_audioPortsIn.push_back(i);
             } else {
-                RG_DEBUG << "LV2PluginInstance::init: port " << i << " is audio out";
+                RG_DEBUG << "LV2PluginInstance::init: port" << i << "is audio out";
                 m_audioPortsOut.push_back(i);
             }
             break;
         case LV2CONTROL:
             if (portData.isInput) {
-                RG_DEBUG << "LV2PluginInstance::init: port " << i << " is control in";
+                RG_DEBUG << "LV2PluginInstance::init: port" << i << "is control in";
                 m_controlPortsIn.
                     push_back(std::pair<unsigned long, float>(i, 0.0));
             } else {
-                RG_DEBUG << "LV2PluginInstance::init: port " << i << " is control out";
+                RG_DEBUG << "LV2PluginInstance::init: port" << i << "is control out";
                 m_controlPortsOut.
                     push_back(std::pair<unsigned long, float>(i, 0.0));
                 if ((portData.name == "latency") ||
@@ -153,6 +168,7 @@ LV2PluginInstance::init(int idealChannelCount)
             }
             break;
         case LV2MIDI:
+            RG_DEBUG << "LV2PluginInstance::init: port" << i << "is midi";
             m_midiPort = i;
             break;
         }
@@ -192,6 +208,12 @@ LV2PluginInstance::silence()
         deactivate();
         activate();
     }
+}
+
+void
+LV2PluginInstance::discardEvents()
+{
+    m_eventBuffer.clear();
 }
 
 void
@@ -238,7 +260,7 @@ LV2PluginInstance::~LV2PluginInstance()
     }
 
     for (size_t i = 0; i < m_midiIn.size(); ++i) {
-        delete m_midiIn[i];
+        delete[](m_midiIn[i]);
     }
     m_midiIn.clear();
 
@@ -247,6 +269,8 @@ LV2PluginInstance::~LV2PluginInstance()
 
     m_audioPortsIn.clear();
     m_audioPortsOut.clear();
+
+    snd_midi_event_free(m_midiParser);
 }
 
 void
@@ -282,6 +306,7 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
 void
 LV2PluginInstance::activate()
 {
+    RG_DEBUG << "activate";
     for (auto i = m_instances.begin();
          i != m_instances.end(); ++i) {
         lilv_instance_activate(*i);
@@ -291,6 +316,7 @@ LV2PluginInstance::activate()
 void
 LV2PluginInstance::connectPorts()
 {
+    RG_DEBUG << "connectPorts";
     size_t inbuf = 0, outbuf = 0;
     size_t midibuf = 0;
 
@@ -298,12 +324,14 @@ LV2PluginInstance::connectPorts()
          it != m_instances.end(); ++it) {
 
         for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+            RG_DEBUG << "connect audio in:" << m_audioPortsIn[i];
             lilv_instance_connect_port((*it), m_audioPortsIn[i],
                                        m_inputBuffers[inbuf]);
             ++inbuf;
         }
 
         for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+            RG_DEBUG << "connect audio out:" << m_audioPortsOut[i];
             lilv_instance_connect_port((*it), m_audioPortsOut[i],
                                        m_outputBuffers[outbuf]);
             ++outbuf;
@@ -316,15 +344,18 @@ LV2PluginInstance::connectPorts()
         // not and will write to them anyway).
 
         for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
+            RG_DEBUG << "connect control in:" << m_controlPortsIn[i].first;
             lilv_instance_connect_port((*it), m_controlPortsIn[i].first,
                                        &(m_controlPortsIn[i].second));
         }
 
         for (size_t i = 0; i < m_controlPortsOut.size(); ++i) {
+            RG_DEBUG << "connect control out:" << m_controlPortsOut[i].first;
             lilv_instance_connect_port(*it, m_controlPortsOut[i].first,
                                        &(m_controlPortsOut[i].second));
         }
-        if (m_midiPort != 0) {
+        if (m_midiPort != -1) {
+            RG_DEBUG << "connect midi port" << m_midiPort;
             lilv_instance_connect_port((*it), m_midiPort, m_midiIn[midibuf]);
             ++midibuf;
         }
@@ -361,27 +392,80 @@ void
 LV2PluginInstance::sendEvent(const RealTime& eventTime,
                              const void* event)
 {
-    snd_seq_event_t *eventp = (snd_seq_event_t *)event;
-    snd_seq_event_t ev(*eventp);
-
-    ev.time.time.tv_sec = eventTime.sec;
-    ev.time.time.tv_nsec = eventTime.nsec;
-
-    ev.data.note.channel = 1;
-    RG_DEBUG << "sendEvent";
-
+    snd_seq_event_t *seqEvent = (snd_seq_event_t *)event;
+    m_eventBuffer[eventTime] = *seqEvent;
 }
 
 void
 LV2PluginInstance::run(const RealTime &rt)
 {
     RG_DEBUG << "run" << rt;
+
+    RealTime bufferStart = rt;
+    auto it = m_eventBuffer.begin();
+    while(it != m_eventBuffer.end()) {
+        RealTime evTime = (*it).first;
+        snd_seq_event_t& qEvent = (*it).second;
+        if (evTime < bufferStart) evTime = bufferStart;
+        size_t frameOffset =
+            (size_t)RealTime::realTime2Frame(evTime - bufferStart,
+                                             m_sampleRate);
+        if (frameOffset > m_blockSize) break;
+        // the event is in this block
+
+        unsigned char buf[100];
+        int bytes = snd_midi_event_decode(m_midiParser, buf, 100, &qEvent);
+        if (bytes <= 0) {
+            RG_DEBUG << "error decoding midi event";
+            return;
+        }
+        QString rawMidi;
+        for(int irm=0; irm<bytes; irm++) {
+            QString byte = QString("%1").arg((int)buf[irm]);
+            rawMidi += byte;
+            if (irm < bytes-1) rawMidi += "/";
+        }
+
+        RG_DEBUG << "send event to plugin" << evTime << frameOffset << rawMidi;
+        auto iterToDelete = it;
+        it++;
+        m_eventBuffer.erase(iterToDelete);
+
+        for (unsigned int i=0; i< m_instanceCount; i++) {
+            char midiBuf[1000];
+            LV2_Atom_Event* event = (LV2_Atom_Event*)midiBuf;
+            event->time.frames = frameOffset;
+            event->body.size = bytes;
+            event->body.type = m_midiEventUrid;
+
+            int ebs = sizeof(LV2_Atom_Event);
+            for(int ib=0; ib<bytes; ib++) {
+                midiBuf[ebs + ib] = buf[ib];
+            }
+            LV2_Atom_Sequence* aseq =m_midiIn[i];
+            LV2_Atom_Event* atom =
+                lv2_atom_sequence_append_event(aseq,
+                                               8*EVENT_BUFFER_SIZE,
+                                               event);
+            if (atom == nullptr) {
+                RG_DEBUG << "midi event overflow";
+                return;
+            }
+        }
+    }
+
     for (auto i = m_instances.begin();
          i != m_instances.end(); ++i) {
         lilv_instance_run(*i, m_blockSize);
     }
 
     m_run = true;
+
+    // reset midi buffers
+    for (unsigned int i=0; i< m_instanceCount; i++) {
+        LV2_Atom_Sequence* aseq =m_midiIn[i];
+        lv2_atom_sequence_clear(aseq);
+    }
 }
 
 void
