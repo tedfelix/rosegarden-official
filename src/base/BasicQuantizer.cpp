@@ -53,12 +53,14 @@ BasicQuantizer::quantizeSingle(
 
     const timeT originalDuration = getFromSource(event, DurationValue);
 
-    // Erase zero duration events.
-    if (originalDuration == 0  &&  event->isa(Note::EventType)) {
+    // Erase events that are zero duration or smaller than m_removeSmaller.
+    if (event->isa(Note::EventType)  &&
+        (originalDuration == 0  ||  originalDuration < m_removeSmaller)) {
         segment->erase(eventIter);
         return;
     }
 
+    // No quantization?  Bail.
     if (m_unit == 0)
         return;
 

@@ -37,6 +37,8 @@ public:
     void setUnit(timeT unit)  { m_unit = unit; }
     timeT getUnit() const  { return m_unit; }
 
+    void setRemoveSmaller(timeT unit)  { m_removeSmaller = unit; }
+
     bool getDoDurations() const  { return m_durations; }
 
     /**
@@ -64,6 +66,8 @@ private:
     int m_swing;
     // Iterative (partial) quantization percentage.
     int m_iterate;
+
+    timeT m_removeSmaller{0};
 
 };
 
