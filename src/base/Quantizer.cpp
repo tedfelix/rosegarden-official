@@ -30,6 +30,12 @@
 namespace Rosegarden {
 
 
+const std::string Quantizer::RawEventData = "";
+const std::string Quantizer::DefaultTarget = "DefaultQ";
+const std::string Quantizer::GlobalSource = "GlobalQ";
+const std::string Quantizer::NotationPrefix = "Notation";
+
+
 Quantizer::Quantizer(const std::string& source,
                      const std::string& target) :
     m_source(source), m_target(target)

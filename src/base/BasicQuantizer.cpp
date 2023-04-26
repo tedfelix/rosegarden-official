@@ -1,6 +1,5 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
-
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -15,31 +14,10 @@
 */
 
 #include "BasicQuantizer.h"
-#include "base/BaseProperties.h"
-#include "base/NotationTypes.h"
-#include "Selection.h"
-#include "Composition.h"
 
-#include <iostream>
-#include <cmath>
-#include <cstdio> // for sprintf
-#include <ctime>
-
-using std::cout;
-using std::cerr;
-using std::endl;
 
 namespace Rosegarden
 {
-
-
-using namespace BaseProperties;
-
-
-const std::string Quantizer::RawEventData = "";
-const std::string Quantizer::DefaultTarget = "DefaultQ";
-const std::string Quantizer::GlobalSource = "GlobalQ";
-const std::string Quantizer::NotationPrefix = "Notation";
 
 
 BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
@@ -50,7 +28,8 @@ BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
     m_swing(swing),
     m_iterate(iterate)
 {
-    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+    if (m_unit < 0)
+        m_unit = Note(Note::Shortest).getDuration();
 }
 
 BasicQuantizer::BasicQuantizer(std::string source, std::string target,
@@ -62,7 +41,8 @@ BasicQuantizer::BasicQuantizer(std::string source, std::string target,
     m_swing(swing),
     m_iterate(iterate)
 {
-    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+    if (m_unit < 0)
+        m_unit = Note(Note::Shortest).getDuration();
 }
 
 void
@@ -73,6 +53,7 @@ BasicQuantizer::quantizeSingle(
 
     const timeT originalDuration = getFromSource(event, DurationValue);
 
+    // Erase zero duration events.
     if (originalDuration == 0  &&  event->isa(Note::EventType)) {
         segment->erase(eventIter);
         return;
@@ -87,10 +68,7 @@ BasicQuantizer::quantizeSingle(
 
     const timeT barStart = segment->getBarStartForTime(newTime);
 
-    // Adjust newTime to start at 0.
-    // ??? Why?  Time is time.
-    // ??? What if the Segment starts on beat 4?  Won't that invert
-    //     the swing?
+    // Adjust newTime to be relative to the bar.
     newTime -= barStart;
 
     // Compute the quantization grid cell number for this note.
@@ -134,16 +112,16 @@ BasicQuantizer::quantizeSingle(
             newDuration = durationHigh;
         }
 
-        int n1 = cellNumber + newDuration / m_unit;
+        const int endCellNumber = cellNumber + newDuration / m_unit;
 
         if (cellNumber % 2 == 0) { // start not swung
-            if (n1 % 2 == 0) { // end not swung
+            if (endCellNumber % 2 == 0) { // end not swung
                 // do nothing
             } else { // end swung
                 newDuration += swingOffset;
             }
         } else { // start swung
-            if (n1 % 2 == 0) { // end not swung
+            if (endCellNumber % 2 == 0) { // end not swung
                 newDuration -= swingOffset;
             } else {
                 // do nothing
@@ -151,7 +129,7 @@ BasicQuantizer::quantizeSingle(
         }
     }
 
-    // Adjust newTime to start at bar start.
+    // Adjust newTime to be relative to the Composition.
     newTime += barStart;
 
     // If we are doing something other than full quantization...
@@ -167,7 +145,7 @@ BasicQuantizer::quantizeSingle(
 
         // if an iterative quantize results in something much closer than
         // the shortest actual note resolution we have, just snap it
-        timeT close = Note(Note::Shortest).getDuration() / 2;
+        const timeT close = Note(Note::Shortest).getDuration() / 2;
         if (newTime >= fullQTime - close  &&  newTime <= fullQTime + close)
             newTime = fullQTime;
         if (newDuration >= fullQDuration - close  &&
@@ -193,10 +171,10 @@ BasicQuantizer::getStandardQuantizations()
         for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
 
             // For quavers and smaller, offer the triplet variation
-            int i1 = (nt <= Note::Quaver ? 1 : 0);
+            const int variations = (nt <= Note::Quaver ? 1 : 0);
 
             // For the base note (0) and the triplet variation (1)
-            for (int i = 0; i <= i1; ++i) {
+            for (int i = 0; i <= variations; ++i) {
 
                 // Compute divisor, e.g. crotchet is 4, quaver is 8...
                 int divisor = (1 << (Note::Semibreve - nt));
@@ -206,7 +184,7 @@ BasicQuantizer::getStandardQuantizations()
                     divisor = divisor * 3 / 2;
 
                 // Compute the number of MIDI clocks.
-                timeT unit = Note(Note::Semibreve).getDuration() / divisor;
+                const timeT unit = Note(Note::Semibreve).getDuration() / divisor;
 
                 standardQuantizations.push_back(unit);
             }
