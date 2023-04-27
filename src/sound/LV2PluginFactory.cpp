@@ -194,7 +194,12 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
         list.push_back(pluginData.name);
         // uri is the id
         list.push_back(uri);
-        list.push_back(pluginData.pluginClass);
+        QString label = pluginData.name;
+        if (label.length() > 20) {
+            label.truncate(18);
+            label += "..";
+        }
+        list.push_back(label);
         list.push_back(pluginData.author);
         // no copywrite in lv2
         list.push_back("");
