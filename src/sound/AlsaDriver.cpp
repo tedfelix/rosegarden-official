@@ -409,7 +409,7 @@ AlsaDriver::generateTimerList()
 }
 
 
-std::string
+QString
 AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 {
     // Look for the apparent best-choice timer.
@@ -1568,17 +1568,17 @@ AlsaDriver::getTimer(unsigned int n)
     if (n == 0)
         return AUTO_TIMER_NAME;
     else
-        return strtoqstr(m_timers[n -1].name);
+        return m_timers[n -1].name;
 }
 
 QString
 AlsaDriver::getCurrentTimer()
 {
-    return m_currentTimer;
+    return m_currentTimerName;
 }
 
 void
-AlsaDriver::setCurrentTimer(QString timer)
+AlsaDriver::setCurrentTimer(QString timerName)
 {
     QSettings settings;
     bool skip = settings.value("ALSA/SkipSetCurrentTimer", false).toBool();
@@ -1588,19 +1588,17 @@ AlsaDriver::setCurrentTimer(QString timer)
         return;
 
     // No change?  Bail.
-    if (timer == m_currentTimer)
+    if (timerName == m_currentTimerName)
         return;
 
-    m_currentTimer = timer;
+    m_currentTimerName = timerName;
     settings.setValue(QString(SequencerOptionsConfigGroup) + "/" + "timer",
-                      m_currentTimer);
+                      m_currentTimerName);
 
-    RG_DEBUG << "setCurrentTimer(" << timer << ")";
+    RG_DEBUG << "setCurrentTimer(" << timerName << ")";
 
-    std::string name(qstrtostr(timer));
-
-    if (name == AUTO_TIMER_NAME) {
-        name = getAutoTimer(m_doTimerChecks);
+    if (timerName == AUTO_TIMER_NAME) {
+        timerName = getAutoTimer(m_doTimerChecks);
     } else {
         m_doTimerChecks = false;
     }
@@ -1625,14 +1623,13 @@ AlsaDriver::setCurrentTimer(QString timer)
     m_alsaPlayStartTime = RealTime::zeroTime;
 
     for (size_t i = 0; i < m_timers.size(); ++i) {
-        if (m_timers[i].name == name) {
+        if (m_timers[i].name == timerName) {
 
-            snd_seq_queue_timer_t *timer;
+            snd_seq_queue_timer_t *queueTimer;
+            snd_seq_queue_timer_alloca(&queueTimer);
+            snd_seq_get_queue_timer(m_midiHandle, m_queue, queueTimer);
+
             snd_timer_id_t *timerid;
-
-            snd_seq_queue_timer_alloca(&timer);
-            snd_seq_get_queue_timer(m_midiHandle, m_queue, timer);
-
             snd_timer_id_alloca(&timerid);
             snd_timer_id_set_class(timerid, m_timers[i].clas);
             snd_timer_id_set_sclass(timerid, m_timers[i].sclas);
@@ -1640,15 +1637,15 @@ AlsaDriver::setCurrentTimer(QString timer)
             snd_timer_id_set_device(timerid, m_timers[i].device);
             snd_timer_id_set_subdevice(timerid, m_timers[i].subdevice);
 
-            snd_seq_queue_timer_set_id(timer, timerid);
-            checkAlsaError(snd_seq_set_queue_timer(m_midiHandle, m_queue, timer), "snd_seq_set_queue_timer() failed");
+            snd_seq_queue_timer_set_id(queueTimer, timerid);
+            checkAlsaError(snd_seq_set_queue_timer(m_midiHandle, m_queue, queueTimer), "snd_seq_set_queue_timer() failed");
 
             if (m_doTimerChecks) {
-                AUDIT << "    Current timer set to \"" << name << "\" with timer checks\n";
-                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << name << "\" with timer checks";
+                AUDIT << "    Current timer set to \"" << timerName << "\" with timer checks\n";
+                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << timerName << "\" with timer checks";
             } else {
-                AUDIT << "    Current timer set to \"" << name << "\"\n";
-                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << name << "\"";
+                AUDIT << "    Current timer set to \"" << timerName << "\"\n";
+                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << timerName << "\"";
             }
 
             if (m_timers[i].clas == SND_TIMER_CLASS_GLOBAL &&
