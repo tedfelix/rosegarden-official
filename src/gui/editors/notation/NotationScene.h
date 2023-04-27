@@ -113,7 +113,8 @@ public:
     NotePixmapFactory *getNotePixmapFactory() { return m_notePixmapFactory; }
 
     EventSelection *getSelection() const override { return m_selection; }
-    void setSelection(EventSelection* s, bool preview) override;
+    /// Takes ownership of the selection.
+    void setSelection(EventSelection *selection, bool preview) override;
 
     timeT getInsertionTime(bool allowEndTime = false) const;
 

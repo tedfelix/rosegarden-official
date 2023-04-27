@@ -247,7 +247,10 @@ PasteEventsCommand::modifySegment()
     RG_DEBUG << "pasteTime" << pasteTime << "origin" << origin;
 
     SegmentNotationHelper helper(*destination);
-    bool possible = helper.removeRests(pasteTime, duration, true);
+    // removeRests() changes the duration destructively but the
+    // variable "duration" is used by normalizeRests()
+    timeT d = duration;
+    bool possible = helper.removeRests(pasteTime, d, true);
     if (! possible) RG_WARNING << "pasting when not possible";
 
     RG_DEBUG << "PasteEventsCommand::modifySegment() : paste type = "

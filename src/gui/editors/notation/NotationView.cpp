@@ -1933,7 +1933,8 @@ NotationView::slotEditPaste()
         delete command;
     } else {
         CommandHistory::getInstance()->addCommand(command);
-        setSelection(command->getSubsequentSelection(), false);
+        setSelection(new EventSelection(*segment, insertionTime, endTime),
+                     false);
 //!!!        slotSetInsertCursorPosition(endTime, true, false);
         m_document->slotSetPointerPosition(endTime);
     }
