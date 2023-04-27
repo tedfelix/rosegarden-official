@@ -38,6 +38,7 @@ public:
     timeT getUnit() const  { return m_unit; }
 
     void setRemoveSmaller(timeT unit)  { m_removeSmaller = unit; }
+    void setRemoveArticulations(bool remove)  { m_removeArticulations = remove; }
 
     bool getDoDurations() const  { return m_durations; }
 
@@ -68,6 +69,7 @@ private:
     int m_iterate;
 
     timeT m_removeSmaller{0};
+    bool m_removeArticulations{false};
 
 };
 

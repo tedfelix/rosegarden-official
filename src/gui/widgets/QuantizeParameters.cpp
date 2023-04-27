@@ -59,7 +59,10 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     setContentsMargins(5, 5, 5, 5);
     setLayout(m_mainLayout);
 
+    // ========================================================
     // Quantizer box
+    // ========================================================
+
     QGroupBox *quantizerBox = new QGroupBox(tr("Quantizer"));
     QGridLayout *qbLayout = new QGridLayout;
     quantizerBox->setLayout(qbLayout);
@@ -91,7 +94,10 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_quantizeNotation->hide();
 
 
+    // ========================================================
     // Notation parameters box
+    // ========================================================
+
     m_notationBox = new QGroupBox( tr("Notation parameters"));
     QGridLayout *nbLayout = new QGridLayout;
     nbLayout->setSpacing(3);
@@ -134,7 +140,10 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     nbLayout->addWidget(m_permitCounterpoint, 3, 0, 1, 1);
 
 
+    // ========================================================
     // Grid parameters box
+    // ========================================================
+
     m_gridBox = new QGroupBox( tr("Grid parameters"));
     QGridLayout *gbLayout = new QGridLayout;
     gbLayout->setSpacing(3);
@@ -219,7 +228,18 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             static_cast<int>(m_standardQuantizations.size()) - 1).toInt());
     gbLayout->addWidget(m_removeNotesSmallerThan, 5, 1);
 
+    // Remove articulations
+    m_removeArticulations = new QCheckBox(
+            tr("Remove articulations (staccato and tenuto)"), m_gridBox);
+    m_removeArticulations->setChecked(qStrToBool(m_settings.value(
+            "quantizeremovearticulations", "false")));
+    gbLayout->addWidget(m_removeArticulations, 6, 0);
+
+
+    // ========================================================
     // After quantization box
+    // ========================================================
+
     QGroupBox *afterQuantizationBox =
             new QGroupBox(tr("After quantization"), this);
     QGridLayout *pbLayout = new QGridLayout;
@@ -228,11 +248,15 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_mainLayout->addWidget(afterQuantizationBox);
 
     // Re-beam
+    // ??? This is used via the "quantizerebeam" .conf setting by
+    //     EventQuantizeCommand.  Make this more direct.
     m_rebeam = new QCheckBox(tr("Re-beam"), afterQuantizationBox);
     m_rebeam->setChecked(qStrToBool(m_settings.value(
             "quantizerebeam", "true")));
 
     // Add articulations
+    // ??? This is used via the "quantizearticulate" .conf setting by
+    //     EventQuantizeCommand.  Make this more direct.
     m_addArticulations = new QCheckBox(
             tr("Add articulations (staccato, tenuto, slurs)"),
             afterQuantizationBox);
@@ -240,12 +264,16 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             "quantizearticulate", "true")));
 
     // Tie notes at barlines
+    // ??? This is used via the "quantizemakeviable" .conf setting by
+    //     EventQuantizeCommand.  Make this more direct.
     m_tieNotesAtBarlines = new QCheckBox(
             tr("Tie notes at barlines etc"), afterQuantizationBox);
     m_tieNotesAtBarlines->setChecked(qStrToBool(m_settings.value(
             "quantizemakeviable", "false")));
 
     // Split-and-tie overlapping chords
+    // ??? This is used via the "quantizedecounterpoint" .conf setting by
+    //     EventQuantizeCommand.  Make this more direct.
     m_splitAndTie = new QCheckBox(
             tr("Split-and-tie overlapping chords"), afterQuantizationBox);
     m_splitAndTie->setChecked(qStrToBool(m_settings.value(
@@ -365,6 +393,8 @@ QuantizeParameters::saveSettings()
                         m_removeNotesCheckBox->isChecked());
     m_settings.setValue("quantizeremovenotessmallerthan",
                         m_removeNotesSmallerThan->currentIndex());
+    m_settings.setValue("quantizeremovearticulations",
+                        m_removeArticulations->isChecked());
 
     m_settings.setValue("quantizesimplicity",
                         m_complexity->currentIndex() + 11);
@@ -434,6 +464,9 @@ QuantizeParameters::getQuantizer()
                         m_removeNotesSmallerThan->currentIndex()]);
             }
 
+            basicQuantizer->setRemoveArticulations(
+                    m_removeArticulations->isChecked());
+
             quantizer = basicQuantizer;
 
             break;
@@ -496,14 +529,10 @@ QuantizeParameters::slotTypeChanged(int index)
 
     QuantizerType quantizerType = static_cast<QuantizerType>(index);
 
-    // Could do it this way too.  Not sure which is easiest on the eyes.
-    //m_gridBox->setVisible(quantizerType != Notation);
-    //m_swingLabel->setVisible(quantizerType == Grid);
-    //m_swing->setVisible(quantizerType == Grid);
-    // ...
-
     switch (quantizerType) {
     case Grid:
+        m_notationBox->hide();
+
         m_gridBox->show();
         m_swingLabel->show();
         m_swing->show();
@@ -512,9 +541,13 @@ QuantizeParameters::slotTypeChanged(int index)
         m_quantizeDurations->show();
         m_removeNotesCheckBox->show();
         m_removeNotesSmallerThan->show();
-        m_notationBox->hide();
+        m_removeArticulations->show();
+
         break;
+
     case Legato:
+        m_notationBox->hide();
+
         m_gridBox->show();
         m_swingLabel->hide();
         m_swing->hide();
@@ -523,11 +556,14 @@ QuantizeParameters::slotTypeChanged(int index)
         m_quantizeDurations->hide();
         m_removeNotesCheckBox->hide();
         m_removeNotesSmallerThan->hide();
-        m_notationBox->hide();
+        m_removeArticulations->hide();
+
         break;
+
     case Notation:
         m_gridBox->hide();
         m_notationBox->show();
+
         break;
     }
 

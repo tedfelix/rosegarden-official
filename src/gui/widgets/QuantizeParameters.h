@@ -96,6 +96,7 @@ private:
     QCheckBox *m_quantizeDurations;
     QCheckBox *m_removeNotesCheckBox{};
     QComboBox *m_removeNotesSmallerThan{};
+    QCheckBox *m_removeArticulations{};
 
     // Notation Parameters
     QGroupBox *m_notationBox;

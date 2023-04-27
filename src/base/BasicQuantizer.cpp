@@ -15,6 +15,7 @@
 
 #include "BasicQuantizer.h"
 
+#include "base/BaseProperties.h"
 
 namespace Rosegarden
 {
@@ -43,6 +44,69 @@ BasicQuantizer::BasicQuantizer(std::string source, std::string target,
 {
     if (m_unit < 0)
         m_unit = Note(Note::Shortest).getDuration();
+}
+
+// ??? Move this to Event.
+static void
+removeMark(Event *event, const Mark &markToRemove)
+{
+    // Marks are stored as properties named "mark1", "mark2", etc....
+    // This makes removing one a bit convoluted.  We'll move them to
+    // a std::set to make it easy to erase() one.  Then put them back
+    // into the Event.
+    //
+    // This begs the question...  Why weren't marks implemented as
+    // individual properties?  E.g.:
+    //
+    //   // Add staccato
+    //   event->set<Int>(BaseProperties::STACCATO, 1);
+    //   // Remove staccato
+    //   event->unset<Int>(BaseProperties::STACCATO);
+    //
+    // That would be so much easier.
+
+    long markCount{};
+    event->get<Int>(BaseProperties::MARK_COUNT, markCount);
+
+    if (markCount == 0)
+        return;
+
+    // Read all the marks into a std::set so we can work with them.
+
+    std::set<Mark> markSet;
+
+    // For each mark, insert it into markSet.
+    for (long i = 0; i < markCount; ++i) {
+        Mark currentMark;
+        event->get<String>(BaseProperties::getMarkPropertyName(i), currentMark);
+        markSet.insert(currentMark);
+    }
+
+    // Erase.  If not found, bail.
+    if (!markSet.erase(markToRemove))
+        return;
+
+    // Write all the marks back to the Event.
+
+    long newMarkCount = markSet.size();
+
+    // unset() the extra marks that will not be needed.
+    for (long i = newMarkCount; i < markCount; ++i) {
+        event->unset(BaseProperties::getMarkPropertyName(i));
+    }
+
+    // Write out the marks to the Event.
+    long index = 0;
+    for (const Mark &currentMark : markSet) {
+        event->set<String>(
+                BaseProperties::getMarkPropertyName(index++), currentMark);
+    }
+
+    // Update the MARK_COUNT
+    if (newMarkCount == 0)
+        event->unset(BaseProperties::MARK_COUNT);
+    else
+        event->set<Int>(BaseProperties::MARK_COUNT, newMarkCount);
 }
 
 void
@@ -155,11 +219,23 @@ BasicQuantizer::quantizeSingle(
             newDuration = fullQDuration;
     }
 
+    // Important: We have to do this prior to the call to setToTarget().
+    //            After setToTarget(), event points to freed memory.
+    if (m_removeArticulations) {
+        // ??? The removeMark() process is pretty convoluted.  It should
+        //     take a list of marks to remove.
+        removeMark(event, Marks::Tenuto);
+        removeMark(event, Marks::Staccato);
+    }
+
     // If there was a change, adjust the event.
     if (originalTime != newTime  ||  originalDuration != newDuration)
+    {
+        // NOTE: The Event object and this eventIter are rendered
+        //       invalid by this routine.
         setToTarget(segment, eventIter, newTime, newDuration);
+    }
 }
-
 
 std::vector<timeT>
 BasicQuantizer::getStandardQuantizations()
