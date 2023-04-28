@@ -228,9 +228,10 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
             continue;
 
         m_sequencerTimingSource->addItem(timer);
-        if (timer == m_originalTimingSource)
-            m_sequencerTimingSource->setCurrentIndex(i);
     }
+
+    m_sequencerTimingSource->setCurrentIndex(
+            m_sequencerTimingSource->findText(m_originalTimingSource));
 
     connect(m_sequencerTimingSource,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),

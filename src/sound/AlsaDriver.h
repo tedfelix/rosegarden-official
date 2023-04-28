@@ -495,7 +495,7 @@ protected:
     void generateFixedInstruments();
 
     virtual void generateTimerList();
-    virtual std::string getAutoTimer(bool &wantTimerChecks);
+    QString getAutoTimer(bool &wantTimerChecks);
 
     void addInstrumentsForDevice(MappedDevice *device, InstrumentId base);
     MappedDevice *createMidiDevice(DeviceId deviceId,
@@ -656,11 +656,11 @@ private:
         int card;
         int device;
         int subdevice;
-        std::string name;
+        QString name;
         long resolution;
     };
     std::vector<AlsaTimerInfo> m_timers;
-    QString m_currentTimer;
+    QString m_currentTimerName;
 
     /// A time ordered set of pending MIDI NoteOffEvent objects.
     /**
