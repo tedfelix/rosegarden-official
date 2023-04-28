@@ -73,6 +73,9 @@ public:
     void discardEvents() override;
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
+    LV2_URID uridMap(const char *uri);
+    const char* uridUnmap(LV2_URID urid);
+
     enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
 
     struct LV2PortData
@@ -89,6 +92,7 @@ public:
     struct LV2PluginData
     {
         QString name;
+        QString label; // abbreviated name
         QString pluginClass;
         QString author;
         bool isInstrument;
@@ -122,6 +126,8 @@ protected:
     //
     void connectPorts();
 
+ private:
+
     InstrumentId   m_instrument;
     int                        m_position;
     std::vector<LilvInstance*> m_instances;
@@ -151,6 +157,18 @@ protected:
     bool                      m_run;
 
     bool                      m_bypassed;
+
+    //urid map
+    std::map<std::string, int> m_uridMap;
+    std::map<int, std::string> m_uridUnmap;
+    int m_nextId;
+
+    LV2_URID_Map m_map;
+    LV2_URID_Unmap m_unmap;
+    LV2_Feature m_uridMapFeature;
+    LV2_Feature m_uridUnmapFeature;
+
+    std::vector<LV2_Feature*> m_features;
 };
 
 }

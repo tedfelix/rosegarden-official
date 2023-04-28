@@ -51,6 +51,14 @@ LV2PluginFactory::LV2PluginFactory()
         RG_DEBUG << "Name:" << lilv_node_as_string(nameNode);
         pluginData.name = lilv_node_as_string(nameNode);
         lilv_free(nameNode);
+
+        QString label = pluginData.name;
+        if (label.length() > 20) {
+            label.truncate(18);
+            label += "..";
+        }
+        pluginData.label = label;
+
         const LilvPluginClass* pclass = lilv_plugin_get_class(plugin);
         const LilvNode* classLabelNode =
             lilv_plugin_class_get_label(pclass);
@@ -194,12 +202,7 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
         list.push_back(pluginData.name);
         // uri is the id
         list.push_back(uri);
-        QString label = pluginData.name;
-        if (label.length() > 20) {
-            label.truncate(18);
-            label += "..";
-        }
-        list.push_back(label);
+        list.push_back(pluginData.label);
         list.push_back(pluginData.author);
         // no copywrite in lv2
         list.push_back("");
@@ -260,7 +263,7 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
     }
 
     const LV2PluginInstance::LV2PluginData pluginData = (*it).second;
-    slot.setStringProperty(MappedPluginSlot::Label, pluginData.pluginClass);
+    slot.setStringProperty(MappedPluginSlot::Label, pluginData.label);
     slot.setStringProperty(MappedPluginSlot::PluginName, pluginData.name);
     slot.setStringProperty(MappedPluginSlot::Author, pluginData.author);
     slot.setStringProperty(MappedPluginSlot::Copyright, "");
