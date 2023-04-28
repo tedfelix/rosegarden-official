@@ -59,7 +59,10 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     setContentsMargins(5, 5, 5, 5);
     setLayout(m_mainLayout);
 
+    // ========================================================
     // Quantizer box
+    // ========================================================
+
     QGroupBox *quantizerBox = new QGroupBox(tr("Quantizer"));
     QGridLayout *qbLayout = new QGridLayout;
     quantizerBox->setLayout(qbLayout);
@@ -78,6 +81,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             this, &QuantizeParameters::slotTypeChanged);
     qbLayout->addWidget(m_quantizerType, 0, 1);
 
+    // ??? This is never visible.  Clean it up.
     m_quantizeNotation = new QCheckBox(
             tr("Quantize for notation only (leave performance unchanged)"),
             quantizerBox);
@@ -90,7 +94,10 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_quantizeNotation->hide();
 
 
+    // ========================================================
     // Notation parameters box
+    // ========================================================
+
     m_notationBox = new QGroupBox( tr("Notation parameters"));
     QGridLayout *nbLayout = new QGridLayout;
     nbLayout->setSpacing(3);
@@ -133,7 +140,10 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     nbLayout->addWidget(m_permitCounterpoint, 3, 0, 1, 1);
 
 
+    // ========================================================
     // Grid parameters box
+    // ========================================================
+
     m_gridBox = new QGroupBox( tr("Grid parameters"));
     QGridLayout *gbLayout = new QGridLayout;
     gbLayout->setSpacing(3);
@@ -201,8 +211,35 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             "quantizedurations", "false")));
     gbLayout->addWidget(m_quantizeDurations, 4, 0, 1, 1);
 
+    // Remove notes smaller than
+    m_removeNotesCheckBox = new QCheckBox(
+            tr("Remove notes smaller than:"), m_gridBox);
+    connect(m_removeNotesCheckBox, &QCheckBox::clicked,
+            this, &QuantizeParameters::removeNotesClicked);
+    const bool removeNotesEnabled = qStrToBool(m_settings.value(
+            "quantizeremovenotes", "false"));
+    m_removeNotesCheckBox->setChecked(removeNotesEnabled);
+    gbLayout->addWidget(m_removeNotesCheckBox, 5, 0);
+    m_removeNotesSmallerThan = new QComboBox(m_gridBox);
+    addQuantizations(m_removeNotesSmallerThan);
+    m_removeNotesSmallerThan->setEnabled(removeNotesEnabled);
+    m_removeNotesSmallerThan->setCurrentIndex(m_settings.value(
+            "quantizeremovenotessmallerthan",
+            static_cast<int>(m_standardQuantizations.size()) - 1).toInt());
+    gbLayout->addWidget(m_removeNotesSmallerThan, 5, 1);
 
+    // Remove articulations
+    m_removeArticulations = new QCheckBox(
+            tr("Remove articulations (staccato and tenuto)"), m_gridBox);
+    m_removeArticulations->setChecked(qStrToBool(m_settings.value(
+            "quantizeremovearticulations", "false")));
+    gbLayout->addWidget(m_removeArticulations, 6, 0);
+
+
+    // ========================================================
     // After quantization box
+    // ========================================================
+
     QGroupBox *afterQuantizationBox =
             new QGroupBox(tr("After quantization"), this);
     QGridLayout *pbLayout = new QGridLayout;
@@ -211,11 +248,15 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_mainLayout->addWidget(afterQuantizationBox);
 
     // Re-beam
+    // ??? This is used via the "quantizerebeam" .conf setting by
+    //     EventQuantizeCommand.  Make this more direct.
     m_rebeam = new QCheckBox(tr("Re-beam"), afterQuantizationBox);
     m_rebeam->setChecked(qStrToBool(m_settings.value(
             "quantizerebeam", "true")));
 
     // Add articulations
+    // ??? This is used via the "quantizearticulate" .conf setting by
+    //     EventQuantizeCommand.  Make this more direct.
     m_addArticulations = new QCheckBox(
             tr("Add articulations (staccato, tenuto, slurs)"),
             afterQuantizationBox);
@@ -223,12 +264,16 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             "quantizearticulate", "true")));
 
     // Tie notes at barlines
+    // ??? This is used via the "quantizemakeviable" .conf setting by
+    //     EventQuantizeCommand.  Make this more direct.
     m_tieNotesAtBarlines = new QCheckBox(
             tr("Tie notes at barlines etc"), afterQuantizationBox);
     m_tieNotesAtBarlines->setChecked(qStrToBool(m_settings.value(
             "quantizemakeviable", "false")));
 
     // Split-and-tie overlapping chords
+    // ??? This is used via the "quantizedecounterpoint" .conf setting by
+    //     EventQuantizeCommand.  Make this more direct.
     m_splitAndTie = new QCheckBox(
             tr("Split-and-tie overlapping chords"), afterQuantizationBox);
     m_splitAndTie->setChecked(qStrToBool(m_settings.value(
@@ -245,6 +290,39 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 }
 
 void
+QuantizeParameters::addQuantizations(QComboBox *comboBox)
+{
+    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
+
+    // For each standard quantization
+    for (size_t i = 0; i < m_standardQuantizations.size(); ++i) {
+
+        const timeT time = m_standardQuantizations[i];
+        timeT error = 0;
+
+        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
+
+        // ??? If we get an error, just add a placeholder item now and continue.
+        //     We should never get an error.
+
+        QString label;
+        // Perfect?  Create the label.
+        if (error == 0)
+            label = NotationStrings::makeNoteMenuLabel(time, false, error);
+
+        // Perfect?  Add the icon and label.
+        if (error == 0) {
+            comboBox->addItem(pmap, label);
+        } else {
+            // ??? We never end up in here since we are iterating through
+            //     the standard quantizations.  We can probably remove this
+            //     and noMap above.
+            comboBox->addItem(noMap, QString("%1").arg(time));
+        }
+    }
+}
+
+void
 QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
 {
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
@@ -255,6 +333,9 @@ QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
                 Note(Note::Demisemiquaver).getDuration())).toInt();
 
     bool found = false;
+
+    // ??? We should use addQuantizations() to prime this instead
+    //     of rolling another for-loop here.
 
     // For each standard quantization
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
@@ -307,6 +388,14 @@ QuantizeParameters::saveSettings()
                         m_quantizeNotation->isChecked());
     m_settings.setValue("quantizedurations",
                         m_quantizeDurations->isChecked());
+
+    m_settings.setValue("quantizeremovenotes",
+                        m_removeNotesCheckBox->isChecked());
+    m_settings.setValue("quantizeremovenotessmallerthan",
+                        m_removeNotesSmallerThan->currentIndex());
+    m_settings.setValue("quantizeremovearticulations",
+                        m_removeArticulations->isChecked());
+
     m_settings.setValue("quantizesimplicity",
                         m_complexity->currentIndex() + 11);
     m_settings.setValue("quantizemaxtuplet",
@@ -354,28 +443,31 @@ QuantizeParameters::getQuantizer()
     switch (type) {
     case Grid:
         {
+            const std::string target =
+                    (m_quantizeNotation->isChecked() ?
+                            Quantizer::NotationPrefix : Quantizer::RawEventData);
             const timeT unit = getGridUnit();
             const int swingPercent = m_swing->currentIndex() * 10 - 100;
             const int iteratePercent =
                     m_iterativeAmount->currentIndex() * 10 + 10;
 
-            if (m_quantizeNotation->isChecked()) {
-                quantizer = new BasicQuantizer(
-                        Quantizer::RawEventData,  // source
-                        Quantizer::NotationPrefix,  // target
-                        unit,
-                        m_quantizeDurations->isChecked(),  // doDurations
-                        swingPercent,
-                        iteratePercent);
-            } else {  // Quantize the events.
-                quantizer = new BasicQuantizer(
-                        Quantizer::RawEventData,  // source
-                        Quantizer::RawEventData,  // target
-                        unit,
-                        m_quantizeDurations->isChecked(),  // doDurations
-                        swingPercent,
-                        iteratePercent);
+            BasicQuantizer *basicQuantizer = new BasicQuantizer(
+                    Quantizer::RawEventData,  // source
+                    target,
+                    unit,
+                    m_quantizeDurations->isChecked(),  // doDurations
+                    swingPercent,
+                    iteratePercent);
+
+            if (m_removeNotesCheckBox->isChecked()) {
+                basicQuantizer->setRemoveSmaller(m_standardQuantizations[
+                        m_removeNotesSmallerThan->currentIndex()]);
             }
+
+            basicQuantizer->setRemoveArticulations(
+                    m_removeArticulations->isChecked());
+
+            quantizer = basicQuantizer;
 
             break;
         }
@@ -437,34 +529,41 @@ QuantizeParameters::slotTypeChanged(int index)
 
     QuantizerType quantizerType = static_cast<QuantizerType>(index);
 
-    // Could do it this way too.  Not sure which is easiest on the eyes.
-    //m_gridBox->setVisible(quantizerType != Notation);
-    //m_swingLabel->setVisible(quantizerType == Grid);
-    //m_swing->setVisible(quantizerType == Grid);
-    // ...
-
     switch (quantizerType) {
     case Grid:
+        m_notationBox->hide();
+
         m_gridBox->show();
         m_swingLabel->show();
         m_swing->show();
         m_iterativeAmountLabel->show();
         m_iterativeAmount->show();
         m_quantizeDurations->show();
-        m_notationBox->hide();
+        m_removeNotesCheckBox->show();
+        m_removeNotesSmallerThan->show();
+        m_removeArticulations->show();
+
         break;
+
     case Legato:
+        m_notationBox->hide();
+
         m_gridBox->show();
         m_swingLabel->hide();
         m_swing->hide();
         m_iterativeAmountLabel->hide();
         m_iterativeAmount->hide();
         m_quantizeDurations->hide();
-        m_notationBox->hide();
+        m_removeNotesCheckBox->hide();
+        m_removeNotesSmallerThan->hide();
+        m_removeArticulations->hide();
+
         break;
+
     case Notation:
         m_gridBox->hide();
         m_notationBox->show();
+
         break;
     }
 
@@ -480,6 +579,12 @@ QuantizeParameters::gridUnitChanged(int index)
     m_arbitraryGridUnitLabel->setEnabled(arbitraryEnabled);
     m_arbitraryGridUnit->setEnabled(arbitraryEnabled);
     m_arbitraryGridUnit->setText(QString::number(getGridUnit()));
+}
+
+void
+QuantizeParameters::removeNotesClicked(bool checked)
+{
+    m_removeNotesSmallerThan->setEnabled(checked);
 }
 
 

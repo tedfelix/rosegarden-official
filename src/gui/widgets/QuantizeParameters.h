@@ -63,10 +63,13 @@ public:
 private slots:
     void slotTypeChanged(int);
     void gridUnitChanged(int index);
+    void removeNotesClicked(bool checked);
 
 private:
     std::vector<timeT> m_standardQuantizations;
-    /// Init a base grid unit combobox from settings.
+    /// Add quantizations to the comboBox.
+    void addQuantizations(QComboBox *comboBox);
+    /// Add quantizations and an extra "arbitrary unit" value to comboBox.
     void initBaseGridUnit(QString settingsKey, QComboBox *comboBox);
 
     QSettings m_settings;
@@ -91,6 +94,9 @@ private:
     QLabel *m_iterativeAmountLabel;
     QComboBox *m_iterativeAmount;
     QCheckBox *m_quantizeDurations;
+    QCheckBox *m_removeNotesCheckBox{};
+    QComboBox *m_removeNotesSmallerThan{};
+    QCheckBox *m_removeArticulations{};
 
     // Notation Parameters
     QGroupBox *m_notationBox;

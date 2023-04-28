@@ -241,6 +241,12 @@ EventQuantizeCommand::makeQuantizer(QString settingsGroup,
 {
     // See QuantizeParameters::getQuantizer() which is quite similar.
 
+    // ??? Communicating via the .conf file is very confusing and could lead
+    //     to bugs down the road.  Make the connection between the dialogs
+    //     and this command more explicit.  Pass a quantization parameters
+    //     struct or something so that this isn't mysterious.  Restrict the
+    //     setting/getting of .conf info to the UI for persistence purposes
+    //     only.
     QSettings settings;
     settings.beginGroup(settingsGroup);
 

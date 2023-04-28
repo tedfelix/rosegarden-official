@@ -1,6 +1,5 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
-
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -15,31 +14,11 @@
 */
 
 #include "BasicQuantizer.h"
+
 #include "base/BaseProperties.h"
-#include "base/NotationTypes.h"
-#include "Selection.h"
-#include "Composition.h"
-
-#include <iostream>
-#include <cmath>
-#include <cstdio> // for sprintf
-#include <ctime>
-
-using std::cout;
-using std::cerr;
-using std::endl;
 
 namespace Rosegarden
 {
-
-
-using namespace BaseProperties;
-
-
-const std::string Quantizer::RawEventData = "";
-const std::string Quantizer::DefaultTarget = "DefaultQ";
-const std::string Quantizer::GlobalSource = "GlobalQ";
-const std::string Quantizer::NotationPrefix = "Notation";
 
 
 BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
@@ -50,7 +29,8 @@ BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
     m_swing(swing),
     m_iterate(iterate)
 {
-    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+    if (m_unit < 0)
+        m_unit = Note(Note::Shortest).getDuration();
 }
 
 BasicQuantizer::BasicQuantizer(std::string source, std::string target,
@@ -62,7 +42,71 @@ BasicQuantizer::BasicQuantizer(std::string source, std::string target,
     m_swing(swing),
     m_iterate(iterate)
 {
-    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+    if (m_unit < 0)
+        m_unit = Note(Note::Shortest).getDuration();
+}
+
+// ??? Move this to Event.
+static void
+removeMark(Event *event, const Mark &markToRemove)
+{
+    // Marks are stored as properties named "mark1", "mark2", etc....
+    // This makes removing one a bit convoluted.  We'll move them to
+    // a std::set to make it easy to erase() one.  Then put them back
+    // into the Event.
+    //
+    // This begs the question...  Why weren't marks implemented as
+    // individual properties?  E.g.:
+    //
+    //   // Add staccato
+    //   event->set<Int>(BaseProperties::STACCATO, 1);
+    //   // Remove staccato
+    //   event->unset<Int>(BaseProperties::STACCATO);
+    //
+    // That would be so much easier.
+
+    long markCount{};
+    event->get<Int>(BaseProperties::MARK_COUNT, markCount);
+
+    if (markCount == 0)
+        return;
+
+    // Read all the marks into a std::set so we can work with them.
+
+    std::set<Mark> markSet;
+
+    // For each mark, insert it into markSet.
+    for (long i = 0; i < markCount; ++i) {
+        Mark currentMark;
+        event->get<String>(BaseProperties::getMarkPropertyName(i), currentMark);
+        markSet.insert(currentMark);
+    }
+
+    // Erase.  If not found, bail.
+    if (!markSet.erase(markToRemove))
+        return;
+
+    // Write all the marks back to the Event.
+
+    long newMarkCount = markSet.size();
+
+    // unset() the extra marks that will not be needed.
+    for (long i = newMarkCount; i < markCount; ++i) {
+        event->unset(BaseProperties::getMarkPropertyName(i));
+    }
+
+    // Write out the marks to the Event.
+    long index = 0;
+    for (const Mark &currentMark : markSet) {
+        event->set<String>(
+                BaseProperties::getMarkPropertyName(index++), currentMark);
+    }
+
+    // Update the MARK_COUNT
+    if (newMarkCount == 0)
+        event->unset(BaseProperties::MARK_COUNT);
+    else
+        event->set<Int>(BaseProperties::MARK_COUNT, newMarkCount);
 }
 
 void
@@ -73,11 +117,14 @@ BasicQuantizer::quantizeSingle(
 
     const timeT originalDuration = getFromSource(event, DurationValue);
 
-    if (originalDuration == 0  &&  event->isa(Note::EventType)) {
+    // Erase events that are zero duration or smaller than m_removeSmaller.
+    if (event->isa(Note::EventType)  &&
+        (originalDuration == 0  ||  originalDuration < m_removeSmaller)) {
         segment->erase(eventIter);
         return;
     }
 
+    // No quantization?  Bail.
     if (m_unit == 0)
         return;
 
@@ -87,10 +134,7 @@ BasicQuantizer::quantizeSingle(
 
     const timeT barStart = segment->getBarStartForTime(newTime);
 
-    // Adjust newTime to start at 0.
-    // ??? Why?  Time is time.
-    // ??? What if the Segment starts on beat 4?  Won't that invert
-    //     the swing?
+    // Adjust newTime to be relative to the bar.
     newTime -= barStart;
 
     // Compute the quantization grid cell number for this note.
@@ -134,16 +178,16 @@ BasicQuantizer::quantizeSingle(
             newDuration = durationHigh;
         }
 
-        int n1 = cellNumber + newDuration / m_unit;
+        const int endCellNumber = cellNumber + newDuration / m_unit;
 
         if (cellNumber % 2 == 0) { // start not swung
-            if (n1 % 2 == 0) { // end not swung
+            if (endCellNumber % 2 == 0) { // end not swung
                 // do nothing
             } else { // end swung
                 newDuration += swingOffset;
             }
         } else { // start swung
-            if (n1 % 2 == 0) { // end not swung
+            if (endCellNumber % 2 == 0) { // end not swung
                 newDuration -= swingOffset;
             } else {
                 // do nothing
@@ -151,7 +195,7 @@ BasicQuantizer::quantizeSingle(
         }
     }
 
-    // Adjust newTime to start at bar start.
+    // Adjust newTime to be relative to the Composition.
     newTime += barStart;
 
     // If we are doing something other than full quantization...
@@ -167,7 +211,7 @@ BasicQuantizer::quantizeSingle(
 
         // if an iterative quantize results in something much closer than
         // the shortest actual note resolution we have, just snap it
-        timeT close = Note(Note::Shortest).getDuration() / 2;
+        const timeT close = Note(Note::Shortest).getDuration() / 2;
         if (newTime >= fullQTime - close  &&  newTime <= fullQTime + close)
             newTime = fullQTime;
         if (newDuration >= fullQDuration - close  &&
@@ -175,11 +219,23 @@ BasicQuantizer::quantizeSingle(
             newDuration = fullQDuration;
     }
 
+    // Important: We have to do this prior to the call to setToTarget().
+    //            After setToTarget(), event points to freed memory.
+    if (m_removeArticulations) {
+        // ??? The removeMark() process is pretty convoluted.  It should
+        //     take a list of marks to remove.
+        removeMark(event, Marks::Tenuto);
+        removeMark(event, Marks::Staccato);
+    }
+
     // If there was a change, adjust the event.
     if (originalTime != newTime  ||  originalDuration != newDuration)
+    {
+        // NOTE: The Event object and this eventIter are rendered
+        //       invalid by this routine.
         setToTarget(segment, eventIter, newTime, newDuration);
+    }
 }
-
 
 std::vector<timeT>
 BasicQuantizer::getStandardQuantizations()
@@ -193,10 +249,10 @@ BasicQuantizer::getStandardQuantizations()
         for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
 
             // For quavers and smaller, offer the triplet variation
-            int i1 = (nt <= Note::Quaver ? 1 : 0);
+            const int variations = (nt <= Note::Quaver ? 1 : 0);
 
             // For the base note (0) and the triplet variation (1)
-            for (int i = 0; i <= i1; ++i) {
+            for (int i = 0; i <= variations; ++i) {
 
                 // Compute divisor, e.g. crotchet is 4, quaver is 8...
                 int divisor = (1 << (Note::Semibreve - nt));
@@ -206,7 +262,7 @@ BasicQuantizer::getStandardQuantizations()
                     divisor = divisor * 3 / 2;
 
                 // Compute the number of MIDI clocks.
-                timeT unit = Note(Note::Semibreve).getDuration() / divisor;
+                const timeT unit = Note(Note::Semibreve).getDuration() / divisor;
 
                 standardQuantizations.push_back(unit);
             }
