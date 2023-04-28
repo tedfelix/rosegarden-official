@@ -147,12 +147,8 @@ void TestLilypondExport::testExamples_data()
     //     Otherwise this passes.  Please fix this one day.
     //QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "examples";
 
-    // Those work but are very slow, and they output lots and lots of
-    // WARNING: Rosegarden::Exception: "Bad type for Indication model event
-    //          (expected indication, found controller)"
-    //QTest::newRow("children") << "examples";
-    //QTest::newRow("Chopin-Prelude-in-E-minor-Aere") << "examples";
-
+    QTest::newRow("children") << "examples";
+    QTest::newRow("Chopin-Prelude-in-E-minor-Aere") << "examples";
     QTest::newRow("Djer-Fire") << "examples";
     QTest::newRow("doodle-q") << "examples";
     QTest::newRow("exercise_notation") << "examples";
@@ -179,9 +175,9 @@ void TestLilypondExport::testExamples_data()
     QTest::newRow("Romanza") << "examples";
 
     // THIS ONE FAILS
-    // sicut-locutus.ly:98:47: error: syntax error, unexpected '}'
-    //                < f g > 2 _\markup { \italic
-    //                                              } _\markup { \italic Masked and substituted }  _~ f _~  |
+    // sicut-locutus.ly:107:47: Erreur : syntax error, unexpected '}'
+    //                 < f g > 2 _\markup { \italic  
+    //                                               } _\markup { \italic Masked and substituted }  _~ f _~  |
     //QTest::newRow("sicut-locutus") << "examples";
 
     QTest::newRow("stormy-riders") << "examples";
@@ -248,7 +244,7 @@ void TestLilypondExport::testExamples()
             qWarning() << "Generated file" << fileName << "does NOT compile!";
         }
 
-        qWarning() << "*********** GENERATING NEW BASELINE FILE (remember to add it to git) ***********";
+        std::cout << "*********** GENERATING NEW BASELINE FILE (remember to add it to git) ***********" << std::endl;
         QFile in(fileName);
         QVERIFY(in.open(QIODevice::ReadOnly));
         QFile out(QFile::decodeName(SRCDIR) + "/baseline/" + baseName + ".ly");
