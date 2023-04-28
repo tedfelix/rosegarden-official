@@ -30,12 +30,6 @@
 namespace Rosegarden {
 
 
-const std::string Quantizer::RawEventData = "";
-const std::string Quantizer::DefaultTarget = "DefaultQ";
-const std::string Quantizer::GlobalSource = "GlobalQ";
-const std::string Quantizer::NotationPrefix = "Notation";
-
-
 Quantizer::Quantizer(const std::string& source,
                      const std::string& target) :
     m_source(source), m_target(target)
@@ -48,7 +42,7 @@ Quantizer::Quantizer(const std::string& target) :
     m_target(target)
 {
     if (target == RawEventData) {
-        m_source = GlobalSource;
+        m_source = "GlobalQ";
     } else {
         m_source = RawEventData;
     }
@@ -318,7 +312,7 @@ Quantizer::getFromSource(Event *e, ValueType v) const
         if (v == AbsoluteTimeValue) return e->getNotationAbsoluteTime();
         else return e->getNotationDuration();
 
-    } else {
+    } else {  // "GlobalQ"
 
         // We need to write the source from the target if the
         // source doesn't exist (and the target does)
@@ -386,6 +380,10 @@ Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
     Event *newEvent;
 
     if (m_target == RawEventData) {
+        // Have to create a new event to make sure the Segment
+        // container is properly sorted.  Simply modifying the
+        // absolute time would wreak havoc.  Unless we had a sort
+        // routine we could call after modification.
         newEvent = new Event(**segmentIter, absTime, duration);
     } else if (m_target == NotationPrefix) {
         // Setting the notation absolute time on an event without
@@ -397,8 +395,13 @@ Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
 #ifdef DEBUG_NOTATION_QUANTIZER
         RG_DEBUG << "setToTarget(): setting " << absTime << " to notation absolute time and " << duration << " to notation duration";
 #endif
-        newEvent = new Event(**segmentIter, (*segmentIter)->getAbsoluteTime(), (*segmentIter)->getDuration(),
-                      (*segmentIter)->getSubOrdering(), absTime, duration);
+        newEvent = new Event(
+                **segmentIter,  // e
+                (*segmentIter)->getAbsoluteTime(),  // absoluteTime
+                (*segmentIter)->getDuration(),  // duration
+                (*segmentIter)->getSubOrdering(),  // subOrdering
+                absTime,  // notationAbsoluteTime
+                duration);  // notationDuration
     } else {
         newEvent = *segmentIter;
         newEvent->clearNonPersistentProperties();

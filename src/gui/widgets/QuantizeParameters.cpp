@@ -81,7 +81,11 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             this, &QuantizeParameters::slotTypeChanged);
     qbLayout->addWidget(m_quantizerType, 0, 1);
 
-    // ??? This is never visible.  Clean it up.
+    // ??? This is never visible.  However, it is communicating to
+    //     EventQuantizeCommand whether we are in notation via the
+    //     quantizenotationonly .conf setting.  Make this more direct.
+    //     Get rid of the invisible control and send the "inNotation"
+    //     value to EventQuantizeCommand via a struct.
     m_quantizeNotation = new QCheckBox(
             tr("Quantize for notation only (leave performance unchanged)"),
             quantizerBox);
@@ -90,6 +94,9 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     qbLayout->addWidget(m_quantizeNotation, 1, 0, 1, 2);
 
     // ??? Always false.  Only caller always sets this to false.
+    //     I suspect this is supposed to be visible only "inNotation".
+    //     That would allow the user to select between notation
+    //     quantizing and MIDI data (performance) quantizing.
     if (!showNotationOption)
         m_quantizeNotation->hide();
 

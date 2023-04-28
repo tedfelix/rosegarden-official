@@ -231,9 +231,11 @@ BasicQuantizer::quantizeSingle(
     // If there was a change, adjust the event.
     if (originalTime != newTime  ||  originalDuration != newDuration)
     {
-        // NOTE: The Event object and this eventIter are rendered
-        //       invalid by this routine.
         setToTarget(segment, eventIter, newTime, newDuration);
+        // The Event object and eventIter are rendered invalid by setToTarget().
+        // Make sure they don't get used inadvertently.
+        event = nullptr;
+        eventIter = segment->end();
     }
 }
 
