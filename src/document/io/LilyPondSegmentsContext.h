@@ -31,7 +31,8 @@
  *      - See when a repeating segment may be printed inside
  *        repeat bars. (i.e. when no other unrepeating segment
  *        coexists at the same time on an other track).
- *      - Find out which linked segments may be printed as repeat with volta.
+ *      - Find out which linked segments may be printed as volta with alternate
+ *        endings.
  *      - Compute the time offset which have to be set in LilyPond for
  *        each segment (with keyword \skip).
  *
@@ -48,8 +49,12 @@
  *
  *    // Prepare everything inside the LilyPondSegmentsContext
  *    lsc.precompute();
- *    lsc.fixRepeatStartTimes();
- *    lsc.fixVoltaStartTimes();
+ *    if (print_using_volta) {
+ *        // Never call the two following methods when printing unfolded
+ *        // but calling them is mandatory when printing with volta
+ *        lsc.fixRepeatStartTimes();
+ *        lsc.fixAltStartTimes();
+ *    }
  *
  *    // Then get from it the segments sorted and ready to use
  *    Track *track;
@@ -127,9 +132,10 @@ public:
 
     /**
      * Walk through all segments and fix their start times when some linked
-     * segments are printed in the LilyPond score as repeat with volta.
+     * segments are printed in the LilyPond score as repeat with alternate
+     * endings.
      */
-    void fixVoltaStartTimes();
+    void fixAltStartTimes();
 
     /**
      * Return the smaller start time of the segments being exported.
@@ -198,13 +204,14 @@ public:
     timeT getSegmentStartTime() const;
 
     /**
-     * Return how many time the current segment is repeated in LilyPond
+     * Return how many time the current segment is "played" in LilyPond
+     * (Should never return 0. Returns 1 if the segment is not repeated.)
      */
-    int getNumberOfRepeats() const;
+    int getNumberOfVolta() const;
 
     /**
      * Return true if the segment is repeated (a repeating segment or
-     * simple repeated links) without volta
+     * simple repeated links) without alternate endings
      */
     bool isRepeated() const;
 
@@ -220,9 +227,10 @@ public:
     bool isSimpleRepeatedLinks() const;
 
     /**
-     * Return true if the segment is inside a "repeat with volta" chain
+     * Return true if the segment is inside a "repeat with alternate
+     * endings" chain
      */
-    bool isRepeatWithVolta() const;
+    bool isRepeatWithAlt() const;
 
     /**
      * Return true if the segment is synchronous
@@ -230,35 +238,46 @@ public:
     bool isSynchronous() const;
 
     /**
-     * Return true if the segment is a volta
+     * Return true if the segment is an alternate ending
      */
-    bool isVolta() const;
+    bool isAlt() const;
 
     /**
-     * Return true if the segment is the first volta of a chain
+     * Return true if the segment is the first alternate ending of a chain
      */
-    bool isFirstVolta() const;
+    bool isFirstAlt() const;
 
     /**
-     * Return true if the segment is the last volta of a chain
+     * Return true if the segment is the last alternate ending of a chain
      */
-    bool isLastVolta() const;
+    bool isLastAlt() const;
+    
+    /**
+     * Return a set of the existing playing numbers associated to an alternate
+     * ending segment. The alternate segment is played when the playing number
+     * is in the set.
+     * Return nullptr if not a alternate ending.
+     */
+    const std::set<int> * getAltNumbers() const;
 
     /**
-     * Return the text of the current volta.
+     * Return the text (the order number(s) written above the staff) of the
+     * current alternate ending.
+     * Return "?" if not an alternate ending.
      */
-    std::string getVoltaText();
+    std::string getAltText();
 
     /**
-     * Return the number of time the current volta is played.
+     * Return the number of time the current alternate ending is played.
+     * Return -1 if not an alternate ending.
      */
-    int getVoltaRepeatCount();
+    int getAltRepeatCount();
 
     /**
      * Return true if the previous segment (on the same voice) was repeating
-     * without volta.
+     * without alternate ending.
      */
-    bool wasRepeatingWithoutVolta() const;
+    bool wasRepeatingWithoutAlt() const;
 
     /**
      * Return the last key signature defined on the last contiguous segment
@@ -272,11 +291,19 @@ public:
      * Return true if LilyPond automatic volta mode is usable.
      * Valid as soon as precompute() has been executed.
      *
-     * Currently, this is a global flag: automatic and manual repeat/volta
+     * Currently, this is a global flag: automatic and manual volta
      * are not mixed in the same score.
      */
     bool isAutomaticVoltaUsable() const { return m_automaticVoltaUsable; }
-
+    
+    /**
+     * Return some segment (currently the first one) on the given track.
+     * This method is used when some data related to segments (and supposedly
+     * shared by all segments of the track) is needed at the track level.
+     */
+    Segment * getArbitrarySegment(int trackPos); 
+    
+    
     /// Only for instrumentation while debugging
     void dump();
 
@@ -286,18 +313,19 @@ private :
 
     struct SegmentData;
 
-    struct Volta {
+    struct AlternateEnding {
         const SegmentData * data;
-        std::set<int> voltaNumber;
-
-        Volta(const SegmentData *sd, int number)
+        std::set<int> altNumber;
+        
+        AlternateEnding(const SegmentData *sd, int number)
         {
+            altNumber.clear();
             data = sd;
-            voltaNumber.insert(number);
+            altNumber.insert(number);
         }
     };
 
-    typedef std::vector<Volta *> VoltaChain;
+    typedef std::vector<AlternateEnding *> AltChain;
 
     struct SegmentData
     {
@@ -315,21 +343,25 @@ private :
         mutable bool noRepeat;                // Repeat is forbidden
         mutable bool ignored;                 // Mark the segments inserted in
                                               // a repeat chain (with or without
-                                              // volta) except the first one.
+                                              // alternate endings) except the
+                                              // first one.
 
-        mutable int repeatId;                 // Identify a repeat with volta chain
-        mutable int numberOfVolta;            // How many repeat in the chain
+        mutable int repeatId;                 // Identify a volta with
+                                              // alternate endings chain
+        mutable int numberOfAlt;              // How many alternate endings
+                                              // in the chain
         mutable bool startOfRepeatChain;
-        mutable bool volta;                   // Mark a volta
-        mutable VoltaChain * rawVoltaChain;
-        mutable VoltaChain * sortedVoltaChain;
+        mutable bool alt;                     // Mark an alternate ending
+        mutable AltChain * rawAltChain;
+        mutable AltChain * sortedAltChain;
 
         mutable timeT startTime;              // In LilyPond output
         mutable timeT endTime;                // In LilyPond output
 
         mutable Rosegarden::Key previousKey;  // Last key in the previous segment
 
-        mutable int simpleRepeatId;           // Identify a repeat without volta chain
+        mutable int simpleRepeatId;           // Identify a repeat without 
+                                              // alternate endings chain
         mutable int numberOfSimpleRepeats;    // How many segments in the chain
 
         explicit SegmentData(Segment * seg)
@@ -344,11 +376,11 @@ private :
             noRepeat = false;
             ignored = false;
             repeatId = 0;
-            numberOfVolta = 0;
+            numberOfAlt = 0;
             startOfRepeatChain = false;
-            volta = false;
-            rawVoltaChain = nullptr;
-            sortedVoltaChain = nullptr;
+            alt = false;
+            rawAltChain = nullptr;
+            sortedAltChain = nullptr;
             startTime = 0;
             endTime = 0;
             // cppcheck-suppress useInitializationList
@@ -376,12 +408,12 @@ private :
         bool isPossibleStartOfSimpleRepeat();
         bool isNextSegmentOfSimpleRepeat();
 
-        bool isPossibleStartOfRepeatWithVolta();
-        bool isNextSegmentsOfRepeatWithVolta();
+        bool isPossibleStartOfRepeatWithAlt();
+        bool isNextSegmentsOfRepeatWithAlt();
 
         bool isValidSimpleRepeatingSegment(iterator base, iterator target);
-        bool isValidRepeatingSegment(iterator base, iterator baseVolta, iterator target);
-        bool isValidVoltaSegment(iterator repeating, iterator target);
+        bool isValidRepeatingSegment(iterator base, iterator baseAlt, iterator target);
+        bool isValidAltSegment(iterator repeating, iterator target);
 
     private:
         iterator m_it0;
@@ -421,28 +453,29 @@ private :
 
     /**
      * Look in the specified voice of the specified track for linked segments
-     * which may be exported as repeat with volta and mark them accordingly.
+     * which may be exported as volta with alternate endings and mark them
+     * accordingly.
      * The concerned segments are gathered in the set passed as argument.
      */
-    void lookForRepeatedLinksWithVolta(SegmentSet &segSet);
+    void lookForRepeatedLinksWithAlt(SegmentSet &segSet);
 
     /**
      * Look in the specified voice of the specified track for linked segments
      * which may be exported as simple repeat and mark them accordingly.
      * The concerned segments are gathered in the set passed as argument.
      *
-     * The previously found repeat with volta sequences are ignored
-     * when pass=1, but not when pass=2.
+     * The previously found repeat with alternate endings sequences are 
+     * ignored when pass=1, but not when pass=2.
      */
     void lookForSimpleRepeatedLinks(SegmentSet &segSet, int pass = 1);
 
     /**
-    * Look for similar segments in the raw volta chain (on all tracks
-    * simultaneously) and fill the sorted volta chain accordingly.
+    * Look for similar segments in the raw alt. chain (on all tracks
+    * simultaneously) and fill the sorted alt. chain accordingly.
     * The argument is the list of the associated synchronous main repeat
     * segment data from all the tracks.
     */
-    void sortAndGatherVolta(SegmentDataList &);
+    void sortAndGatherAlt(SegmentDataList &);
 
 
     TrackMap m_segments;
@@ -457,7 +490,7 @@ private :
     TrackMap::iterator m_trackIterator;
     VoiceMap::iterator m_voiceIterator;
     SegmentSet::iterator m_segIterator;
-    VoltaChain::iterator m_voltaIterator;
+    AltChain::iterator m_altIterator;
 
     // Used by "Get Synchronous Segment" (GSS) methods
     // getFirstSynchronousSegment() and getNextSynchronousSegment() to remember
@@ -467,16 +500,17 @@ private :
     VoiceMap::iterator m_GSSVoiceIterator;
     SegmentSet::iterator m_GSSSegIterator;
 
-    bool m_repeatWithVolta; // Repeat with volta is usable in LilyPondExporter
+    bool m_repeatWithAlt; // Repeat with alternate Ending is usable
+                          // in LilyPondExporter
 
     // Values associated with segment returned by useNextSegment()
-    VoltaChain * m_currentVoltaChain;
-    bool m_firstVolta;
-    bool m_lastVolta;
+    AltChain * m_currentAltChain;
+    bool m_firstAlt;
+    bool m_lastAlt;
 
-    bool m_wasRepeatingWithoutVolta; // Remember the type of the previous
-                                     // segment (which was the current one
-                                     // before the last call of useNextSegment())
+    bool m_wasRepeatingWithoutAlt; // Remember the type of the previous
+                                   // segment (which was the current one
+                                   // before the last call of useNextSegment())
 
     bool m_lastWasOK;  // To deal with recursion in useNextSegment()
 };
