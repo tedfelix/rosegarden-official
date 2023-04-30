@@ -43,6 +43,40 @@ namespace Rosegarden
 {
 
 
+/// Add quantizations to the comboBox.
+static void
+addQuantizations(QComboBox *comboBox)
+{
+    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
+
+    // For each standard quantization
+    for (size_t i = 0; i < Quantizer::getQuantizations().size(); ++i) {
+
+        const timeT time = Quantizer::getQuantizations()[i];
+        timeT error = 0;
+
+        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
+
+        // ??? If we get an error, just add a placeholder item now and continue.
+        //     We should never get an error.
+
+        QString label;
+        // Perfect?  Create the label.
+        if (error == 0)
+            label = NotationStrings::makeNoteMenuLabel(time, false, error);
+
+        // Perfect?  Add the icon and label.
+        if (error == 0) {
+            comboBox->addItem(pmap, label);
+        } else {
+            // ??? We never end up in here since we are iterating through
+            //     the standard quantizations.  We can probably remove this
+            //     and noMap above.
+            comboBox->addItem(noMap, QString("%1").arg(time));
+        }
+    }
+}
+
 QuantizeParameters::QuantizeParameters(QWidget *parent,
                                        QuantizerType defaultQuantizer,
                                        bool showNotationOption) :
@@ -163,7 +197,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     initBaseGridUnit("gridBaseGridUnit", m_gridBaseGridUnit);
     connect(m_gridBaseGridUnit, static_cast<void(QComboBox::*)(int)>(
                 &QComboBox::currentIndexChanged),
-            this, &QuantizeParameters::gridUnitChanged);
+            this, &QuantizeParameters::slotGridUnitChanged);
     gbLayout->addWidget(m_gridBaseGridUnit, 0, 1);
 
     // Arbitrary grid unit
@@ -174,7 +208,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_arbitraryGridUnit->setText(QString::number(arbitraryGridUnit));
     gbLayout->addWidget(m_arbitraryGridUnit, 1, 1);
     // Enable/Disable Arbitrary grid unit controls as appropriate.
-    gridUnitChanged(m_gridBaseGridUnit->currentIndex());
+    slotGridUnitChanged(m_gridBaseGridUnit->currentIndex());
 
     // Swing
     m_swingLabel = new QLabel(tr("Swing:"), m_gridBox);
@@ -222,7 +256,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_removeNotesCheckBox = new QCheckBox(
             tr("Remove notes smaller than:"), m_gridBox);
     connect(m_removeNotesCheckBox, &QCheckBox::clicked,
-            this, &QuantizeParameters::removeNotesClicked);
+            this, &QuantizeParameters::slotRemoveNotesClicked);
     const bool removeNotesEnabled = qStrToBool(m_settings.value(
             "quantizeremovenotes", "false"));
     m_removeNotesCheckBox->setChecked(removeNotesEnabled);
@@ -295,39 +329,6 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     // Show/Hide widgets as appropriate for the quantizer type.
     slotTypeChanged(quantizerType);
 
-}
-
-void
-QuantizeParameters::addQuantizations(QComboBox *comboBox)
-{
-    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
-
-    // For each standard quantization
-    for (size_t i = 0; i < Quantizer::getQuantizations().size(); ++i) {
-
-        const timeT time = Quantizer::getQuantizations()[i];
-        timeT error = 0;
-
-        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
-
-        // ??? If we get an error, just add a placeholder item now and continue.
-        //     We should never get an error.
-
-        QString label;
-        // Perfect?  Create the label.
-        if (error == 0)
-            label = NotationStrings::makeNoteMenuLabel(time, false, error);
-
-        // Perfect?  Add the icon and label.
-        if (error == 0) {
-            comboBox->addItem(pmap, label);
-        } else {
-            // ??? We never end up in here since we are iterating through
-            //     the standard quantizations.  We can probably remove this
-            //     and noMap above.
-            comboBox->addItem(noMap, QString("%1").arg(time));
-        }
-    }
 }
 
 void
@@ -582,7 +583,7 @@ QuantizeParameters::slotTypeChanged(int index)
 }
 
 void
-QuantizeParameters::gridUnitChanged(int index)
+QuantizeParameters::slotGridUnitChanged(int index)
 {
     // Enable/Disable Arbitrary grid unit widgets
     bool arbitraryEnabled = (index == m_arbitraryGridUnitIndex);
@@ -592,7 +593,7 @@ QuantizeParameters::gridUnitChanged(int index)
 }
 
 void
-QuantizeParameters::removeNotesClicked(bool checked)
+QuantizeParameters::slotRemoveNotesClicked(bool checked)
 {
     m_removeNotesSmallerThan->setEnabled(checked);
 }
