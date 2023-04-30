@@ -72,12 +72,6 @@ private slots:
     void slotRemoveNotesClicked(bool checked);
 
 private:
-    /// Add quantizations and an extra "arbitrary unit" value to comboBox.
-    /**
-     * Used to initialize m_gridBaseGridUnit and m_notationBaseGridUnit.
-     */
-    void initBaseGridUnit(QString settingsKey, QComboBox *comboBox);
-
     QSettings m_settings;
 
     QVBoxLayout *m_mainLayout{};
@@ -89,8 +83,6 @@ private:
     // Grid Parameters
     QGroupBox *m_gridBox{};
     QComboBox *m_gridBaseGridUnit{};
-    /// Index into m_gridBaseGridUnit for "Arbitrary gird unit".
-    int m_arbitraryGridUnitIndex = 0;
     QLabel *m_arbitraryGridUnitLabel{};
     LineEdit *m_arbitraryGridUnit{};
     /// Get the selected grid unit from m_gridBaseGridUnit and m_arbitraryGridUnit.

@@ -43,6 +43,9 @@ namespace Rosegarden
 {
 
 
+/// Index into m_gridBaseGridUnit for "Arbitrary grid unit".
+static int arbitraryGridUnitIndex = Quantizer::getQuantizations().size();
+
 /// Add quantizations to the comboBox.
 static void
 addQuantizations(QComboBox *comboBox)
@@ -70,6 +73,22 @@ addQuantizations(QComboBox *comboBox)
 
         comboBox->addItem(notePixmap, label);
     }
+}
+
+/// Add quantizations and an extra "arbitrary unit" value to comboBox.
+/**
+ * Used to initialize m_gridBaseGridUnit and m_notationBaseGridUnit.
+ */
+static void
+initBaseGridUnit(QComboBox *comboBox)
+{
+    // Add the standard quantizations.
+    addQuantizations(comboBox);
+
+    // Add the "Arbitrary grid unit" selection.
+    comboBox->addItem(
+            NotePixmapFactory::makeToolbarPixmap("menu-no-note"),
+            QObject::tr("Arbitrary grid unit"));
 }
 
 QuantizeParameters::QuantizeParameters(QWidget *parent,
@@ -155,8 +174,15 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     // Base grid unit
     nbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_notationBox), 1, 0);
     m_notationBaseGridUnit = new QComboBox(m_notationBox);
-    initBaseGridUnit("notationBaseGridUnit", m_notationBaseGridUnit);
+    initBaseGridUnit(m_notationBaseGridUnit);
+    constexpr int Demisemiquaver = 7;
+    m_notationBaseGridUnit->setCurrentIndex(
+            m_settings.value("notationBaseGridUnit2", Demisemiquaver).toInt());
     nbLayout->addWidget(m_notationBaseGridUnit, 1, 1);
+
+    // Arbitrary grid unit
+    // ??? The base grid unit field includes "arbitrary", but there is no
+    //     arbitrary field!
 
     // Complexity
     nbLayout->addWidget(new QLabel(tr("Complexity:"), m_notationBox), 0, 0);
@@ -201,7 +227,9 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     // Base grid unit
     gbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_gridBox), 0, 0);
     m_gridBaseGridUnit = new QComboBox(m_gridBox);
-    initBaseGridUnit("gridBaseGridUnit", m_gridBaseGridUnit);
+    initBaseGridUnit(m_gridBaseGridUnit);
+    m_gridBaseGridUnit->setCurrentIndex(
+            m_settings.value("gridBaseGridUnit2", Demisemiquaver).toInt());
     connect(m_gridBaseGridUnit, static_cast<void(QComboBox::*)(int)>(
                 &QComboBox::currentIndexChanged),
             this, &QuantizeParameters::slotGridUnitChanged);
@@ -339,64 +367,16 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 }
 
 void
-QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
-{
-    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
-
-    timeT baseGridUnit = m_settings.value(
-            settingsKey,
-            static_cast<int>(
-                Note(Note::Demisemiquaver).getDuration())).toInt();
-
-    bool found = false;
-
-    // ??? We should use addQuantizations() to prime this instead
-    //     of rolling another for-loop here.
-
-    // For each standard quantization
-    for (unsigned int i = 0; i < Quantizer::getQuantizations().size(); ++i) {
-
-        timeT time = Quantizer::getQuantizations()[i];
-        timeT error = 0;
-
-        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
-        QString label;
-        if (error == 0)
-            label = NotationStrings::makeNoteMenuLabel(time, false, error);
-
-        if (error == 0) {
-            comboBox->addItem(pmap, label);
-        } else {
-            // ??? We never end up in here since we are iterating through
-            //     the standard quantizations.  We can probably remove this.
-            comboBox->addItem(noMap, QString("%1").arg(time));
-        }
-
-        // Found it?  Select it.
-        if (Quantizer::getQuantizations()[i] == baseGridUnit) {
-            comboBox->setCurrentIndex(comboBox->count() - 1);
-            found = true;
-        }
-    }
-
-    comboBox->addItem(noMap, tr("Arbitrary grid unit"));
-    // Save the index for future reference.
-    m_arbitraryGridUnitIndex = comboBox->count() - 1;
-
-    // Nothing was found up to this point, go with arbitrary.
-    if (!found)
-        comboBox->setCurrentIndex(m_arbitraryGridUnitIndex);
-}
-
-void
 QuantizeParameters::saveSettings()
 {
     m_settings.setValue("quantizetype", m_quantizerType->currentIndex());
-    m_settings.setValue("gridBaseGridUnit", static_cast<unsigned long long>(
-            Quantizer::getQuantizations()[m_gridBaseGridUnit->currentIndex()]));
+
+    m_settings.setValue("gridBaseGridUnit2", m_gridBaseGridUnit->currentIndex());
     m_settings.setValue("arbitraryGridUnit", m_arbitraryGridUnit->text());
-    m_settings.setValue("notationBaseGridUnit", static_cast<unsigned long long>(
-            Quantizer::getQuantizations()[m_notationBaseGridUnit->currentIndex()]));
+
+    m_settings.setValue(
+            "notationBaseGridUnit2", m_notationBaseGridUnit->currentIndex());
+
     m_settings.setValue("quantizeswing", m_swing->currentIndex() * 10 - 100);
     m_settings.setValue("quantizeiterate",
                         m_iterativeAmount->currentIndex() * 10 + 10);
@@ -430,7 +410,7 @@ QuantizeParameters::getGridUnit() const
     timeT unit = 1;
 
     // Arbitrary grid unit selected?
-    if (m_gridBaseGridUnit->currentIndex() == m_arbitraryGridUnitIndex) {
+    if (m_gridBaseGridUnit->currentIndex() == arbitraryGridUnitIndex) {
         // Use the arbitrary grid unit field.
         unit = m_arbitraryGridUnit->text().toInt();
         if (unit < 1)
@@ -593,7 +573,7 @@ void
 QuantizeParameters::slotGridUnitChanged(int index)
 {
     // Enable/Disable Arbitrary grid unit widgets
-    bool arbitraryEnabled = (index == m_arbitraryGridUnitIndex);
+    bool arbitraryEnabled = (index == arbitraryGridUnitIndex);
     m_arbitraryGridUnitLabel->setEnabled(arbitraryEnabled);
     m_arbitraryGridUnit->setEnabled(arbitraryEnabled);
     m_arbitraryGridUnit->setText(QString::number(getGridUnit()));
