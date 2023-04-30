@@ -1027,10 +1027,9 @@ MatrixView::slotQuantizeSelection(int q)
     timeT unit =
         ((unsigned int)q < m_quantizations.size() ? m_quantizations[q] : 0);
 
-    Quantizer *quant =
-        new BasicQuantizer
-        (unit ? unit :
-         Note(Note::Shortest).getDuration(), false);
+    std::shared_ptr<Quantizer> quant(new BasicQuantizer(
+            unit ? unit : Note(Note::Shortest).getDuration(),  // unit
+            false));  // doDurations
 
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -1101,10 +1100,9 @@ void
 MatrixView::slotLegato()
 {
     if (!getSelection()) return;
-    CommandHistory::getInstance()->addCommand
-        (new EventQuantizeCommand
-         (*getSelection(),
-          new LegatoQuantizer(0))); // no quantization
+    CommandHistory::getInstance()->addCommand(new EventQuantizeCommand(
+            *getSelection(),
+            std::shared_ptr<Quantizer>(new LegatoQuantizer(0)))); // no quantization
 }
 
 void

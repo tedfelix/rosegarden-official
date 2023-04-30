@@ -61,8 +61,8 @@ public:
     /// Call on "accept" to save the values for next time.
     void saveSettings();
 
-    /// Returned quantizer object is on heap -- caller must delete.
-    Quantizer *getQuantizer();
+    /// Returned Quantizer object is on heap -- caller must delete.
+    std::shared_ptr<Quantizer> getQuantizer();
 
 private slots:
     void slotTypeChanged(int);

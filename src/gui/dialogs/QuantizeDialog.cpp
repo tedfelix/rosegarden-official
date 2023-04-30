@@ -54,7 +54,7 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-Quantizer *
+std::shared_ptr<Quantizer>
 QuantizeDialog::getQuantizer() const
 {
     return m_quantizeParameters->getQuantizer();

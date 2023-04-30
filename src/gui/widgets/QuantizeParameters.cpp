@@ -435,7 +435,7 @@ QuantizeParameters::getGridUnit() const
     return unit;
 }
 
-Quantizer *
+std::shared_ptr<Quantizer>
 QuantizeParameters::getQuantizer()
 {
     // ??? Similar to EventQuantizeCommand::makeQuantizer().
@@ -446,7 +446,7 @@ QuantizeParameters::getQuantizer()
     QuantizerType type =
             static_cast<QuantizerType>(m_quantizerType->currentIndex());
 
-    Quantizer *quantizer = nullptr;
+    std::shared_ptr<Quantizer> quantizer;
 
     switch (type) {
     case Grid:
@@ -459,13 +459,13 @@ QuantizeParameters::getQuantizer()
             const int iteratePercent =
                     m_iterativeAmount->currentIndex() * 10 + 10;
 
-            BasicQuantizer *basicQuantizer = new BasicQuantizer(
+            std::shared_ptr<BasicQuantizer> basicQuantizer(new BasicQuantizer(
                     Quantizer::RawEventData,  // source
                     target,
                     unit,
                     m_quantizeDurations->isChecked(),  // doDurations
                     swingPercent,
-                    iteratePercent);
+                    iteratePercent));
 
             if (m_removeNotesCheckBox->isChecked()) {
                 basicQuantizer->setRemoveSmaller(
@@ -485,15 +485,15 @@ QuantizeParameters::getQuantizer()
             const timeT unit = getGridUnit();
 
             if (m_quantizeNotation->isChecked()) {
-                quantizer = new LegatoQuantizer(
+                quantizer = std::shared_ptr<Quantizer>(new LegatoQuantizer(
                         Quantizer::RawEventData,  // source
                         Quantizer::NotationPrefix,  // target
-                        unit);
+                        unit));
             } else {  // Quantize the events.
-                quantizer = new LegatoQuantizer(
+                quantizer = std::shared_ptr<Quantizer>(new LegatoQuantizer(
                         Quantizer::RawEventData,  // source
                         Quantizer::RawEventData,  // target
-                        unit);
+                        unit));
             }
 
             break;
@@ -501,14 +501,16 @@ QuantizeParameters::getQuantizer()
     case Notation:
         {
 
-            NotationQuantizer *notationQuantizer = nullptr;
+            std::shared_ptr<NotationQuantizer> notationQuantizer;
 
             if (m_quantizeNotation->isChecked()) {
-                notationQuantizer = new NotationQuantizer();
+                notationQuantizer = std::shared_ptr<NotationQuantizer>(
+                        new NotationQuantizer());
             } else {
-                notationQuantizer = new NotationQuantizer(
-                        Quantizer::RawEventData,  // source
-                        Quantizer::RawEventData);  // target
+                notationQuantizer = std::shared_ptr<NotationQuantizer>(
+                        new NotationQuantizer(
+                                Quantizer::RawEventData,  // source
+                                Quantizer::RawEventData));  // target
             }
 
             notationQuantizer->setUnit(Quantizer::getQuantizations()[
@@ -520,8 +522,7 @@ QuantizeParameters::getQuantizer()
                     m_permitCounterpoint->isChecked());
             notationQuantizer->setArticulate(m_addArticulations->isChecked());
 
-            // Cast up to baseclass type.
-            quantizer = static_cast<Quantizer *>(notationQuantizer);
+            quantizer = notationQuantizer;
 
             break;
         }

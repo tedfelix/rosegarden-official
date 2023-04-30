@@ -31,6 +31,7 @@ class Quantizer;
 class QuantizeParameters;
 
 
+/// The "Quantize" dialog.
 class QuantizeDialog : public QDialog
 {
     Q_OBJECT
@@ -38,8 +39,8 @@ class QuantizeDialog : public QDialog
 public:
     QuantizeDialog(QWidget *parent, bool inNotation = false);
 
-    /// Returned quantizer object is on heap -- caller must delete
-    Quantizer *getQuantizer() const;
+    /// Returns a Quantizer configured to the user's specifications.
+    std::shared_ptr<Quantizer> getQuantizer() const;
 
 public slots:
     // QDialog override.
