@@ -47,40 +47,35 @@ namespace Rosegarden
 static void
 addQuantizations(QComboBox *comboBox)
 {
-    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
+    // For each quantization...
+    for (const timeT time : Quantizer::getQuantizations()) {
+        timeT pixmapError = 0;
+        QPixmap notePixmap = NotePixmapFactory::makeNoteMenuPixmap(
+                time, pixmapError);
 
-    // For each standard quantization
-    for (size_t i = 0; i < Quantizer::getQuantizations().size(); ++i) {
+        timeT labelError = 0;
+        QString label = NotationStrings::makeNoteMenuLabel(
+                time,  // duration
+                false,  // brief
+                labelError);  // error
 
-        const timeT time = Quantizer::getQuantizations()[i];
-        timeT error = 0;
-
-        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
-
-        // ??? If we get an error, just add a placeholder item now and continue.
-        //     We should never get an error.
-
-        QString label;
-        // Perfect?  Create the label.
-        if (error == 0)
-            label = NotationStrings::makeNoteMenuLabel(time, false, error);
-
-        // Perfect?  Add the icon and label.
-        if (error == 0) {
-            comboBox->addItem(pmap, label);
-        } else {
-            // ??? We never end up in here since we are iterating through
-            //     the standard quantizations.  We can probably remove this
-            //     and noMap above.
-            comboBox->addItem(noMap, QString("%1").arg(time));
+        // If either failed, go with the time number and no pixmap.
+        // This should never happen.
+        if (pixmapError  ||  labelError) {
+            comboBox->addItem(
+                    NotePixmapFactory::makeToolbarPixmap("menu-no-note"),
+                    QString("%1").arg(time));
+            continue;
         }
+
+        comboBox->addItem(notePixmap, label);
     }
 }
 
 QuantizeParameters::QuantizeParameters(QWidget *parent,
                                        QuantizerType defaultQuantizer,
                                        bool showNotationOption) :
-        QFrame(parent)
+    QFrame(parent)
 {
     const bool inNotation = (defaultQuantizer == Notation);
 
@@ -120,6 +115,14 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     //     quantizenotationonly .conf setting.  Make this more direct.
     //     Get rid of the invisible control and send the "inNotation"
     //     value to EventQuantizeCommand via a struct.
+    //
+    //     Quantizer needs a factory function.  That factory function
+    //     needs to take a large number of parameters.  We need something
+    //     like a Builder or create struct that we can set up and then pass
+    //     to the factory, or even pass around from one point to another.
+    //     Relying on the .conf file which can be changed by the UI means
+    //     the user is never sure exactly what a Quantizer might do.  A full
+    //     review of the quantizers is needed.
     m_quantizeNotation = new QCheckBox(
             tr("Quantize for notation only (leave performance unchanged)"),
             quantizerBox);
@@ -131,6 +134,10 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     //     I suspect this is supposed to be visible only "inNotation".
     //     That would allow the user to select between notation
     //     quantizing and MIDI data (performance) quantizing.
+    //     However, the notation quantizer appears to be broken.  We
+    //     need to review all of the quantizers.  For now, the Grid
+    //     quantizer (BasicQuantizer) in the Matrix editor is probably
+    //     the user's best bet.
     if (!showNotationOption)
         m_quantizeNotation->hide();
 

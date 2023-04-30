@@ -39,8 +39,8 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     setLayout(vboxLayout);
 
-    m_quantizeParameters = new QuantizeParameters(this , inNotation ?
-            QuantizeParameters::Notation : QuantizeParameters::Grid,
+    m_quantizeParameters = new QuantizeParameters(this,
+            inNotation ? QuantizeParameters::Notation : QuantizeParameters::Grid,
             false);
     vboxLayout->addWidget(m_quantizeParameters);
 

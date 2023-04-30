@@ -239,6 +239,8 @@ EventQuantizeCommand::makeQuantizer(QString settingsGroup,
                                     QuantizeScope scope)
 {
     // See QuantizeParameters::getQuantizer() which is quite similar.
+    // ??? We should factor them out into a single factory function in
+    //     Quantizer.
 
     // ??? Communicating via the .conf file is very confusing and could lead
     //     to bugs down the road.  Make the connection between the dialogs
@@ -278,6 +280,7 @@ EventQuantizeCommand::makeQuantizer(QString settingsGroup,
 
     m_quantizer = nullptr;
 
+    // BasicQuantizer
     if (type == 0) {
         if (notateOnly) {
             m_quantizer = std::shared_ptr<Quantizer>(new BasicQuantizer(
@@ -290,7 +293,7 @@ EventQuantizeCommand::makeQuantizer(QString settingsGroup,
                     Quantizer::RawEventData,
                     unit, durations, swing, iterate));
         }
-    } else if (type == 1) {
+    } else if (type == 1) {  // LegatoQuantizer
         if (notateOnly) {
             m_quantizer = std::shared_ptr<Quantizer>(new LegatoQuantizer(
                     Quantizer::RawEventData,
@@ -300,7 +303,7 @@ EventQuantizeCommand::makeQuantizer(QString settingsGroup,
                     Quantizer::RawEventData,
                     Quantizer::RawEventData, unit));
         }
-    } else {
+    } else {  // NotationQuantizer
 
         std::shared_ptr<NotationQuantizer> nq;
 
