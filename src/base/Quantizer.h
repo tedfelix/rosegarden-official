@@ -127,6 +127,12 @@ public:
     // Notation time and duration.
     static constexpr const char *NotationPrefix = "Notation";
 
+    /// In descending duration order.
+    /**
+     * ??? Move this up to Quantizer.
+     */
+    static const std::vector<timeT> &getQuantizations();
+
 protected:
     /**
      * \arg source, target : Description of where to find the

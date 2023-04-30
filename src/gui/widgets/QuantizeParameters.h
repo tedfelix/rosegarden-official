@@ -22,13 +22,12 @@
 #include "base/Event.h"  // For timeT
 
 #include <QFrame>
-#include <QGroupBox>
 #include <QSettings>
 
 class QCheckBox;
 class QComboBox;
+class QGroupBox;
 class QLabel;
-class QPushButton;
 class QVBoxLayout;
 class QWidget;
 
@@ -43,6 +42,11 @@ class LineEdit;
 class Quantizer;
 
 
+/// The parameter widgets within the Quantize dialog.
+/**
+ * Gets quantization parameters from the user and returns a properly configured
+ * Quantizer via getQuantizer().
+ */
 class QuantizeParameters : public QFrame
 {
     Q_OBJECT
@@ -66,9 +70,8 @@ private slots:
     void removeNotesClicked(bool checked);
 
 private:
-    std::vector<timeT> m_standardQuantizations;
     /// Add quantizations to the comboBox.
-    void addQuantizations(QComboBox *comboBox);
+    static void addQuantizations(QComboBox *comboBox);
     /// Add quantizations and an extra "arbitrary unit" value to comboBox.
     void initBaseGridUnit(QString settingsKey, QComboBox *comboBox);
 

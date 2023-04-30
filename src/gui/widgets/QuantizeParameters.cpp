@@ -32,6 +32,7 @@
 
 #include <QCheckBox>
 #include <QComboBox>
+#include <QGroupBox>
 #include <QLabel>
 #include <QPixmap>
 #include <QString>
@@ -45,8 +46,7 @@ namespace Rosegarden
 QuantizeParameters::QuantizeParameters(QWidget *parent,
                                        QuantizerType defaultQuantizer,
                                        bool showNotationOption) :
-        QFrame(parent),
-        m_standardQuantizations(BasicQuantizer::getStandardQuantizations())
+        QFrame(parent)
 {
     const bool inNotation = (defaultQuantizer == Notation);
 
@@ -232,7 +232,8 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_removeNotesSmallerThan->setEnabled(removeNotesEnabled);
     m_removeNotesSmallerThan->setCurrentIndex(m_settings.value(
             "quantizeremovenotessmallerthan",
-            static_cast<int>(m_standardQuantizations.size()) - 1).toInt());
+            static_cast<int>(
+                    BasicQuantizer::getQuantizations().size()) - 1).toInt());
     gbLayout->addWidget(m_removeNotesSmallerThan, 5, 1);
 
     // Remove articulations
@@ -302,9 +303,9 @@ QuantizeParameters::addQuantizations(QComboBox *comboBox)
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
     // For each standard quantization
-    for (size_t i = 0; i < m_standardQuantizations.size(); ++i) {
+    for (size_t i = 0; i < Quantizer::getQuantizations().size(); ++i) {
 
-        const timeT time = m_standardQuantizations[i];
+        const timeT time = Quantizer::getQuantizations()[i];
         timeT error = 0;
 
         QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
@@ -345,9 +346,9 @@ QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
     //     of rolling another for-loop here.
 
     // For each standard quantization
-    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
+    for (unsigned int i = 0; i < Quantizer::getQuantizations().size(); ++i) {
 
-        timeT time = m_standardQuantizations[i];
+        timeT time = Quantizer::getQuantizations()[i];
         timeT error = 0;
 
         QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
@@ -364,7 +365,7 @@ QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
         }
 
         // Found it?  Select it.
-        if (m_standardQuantizations[i] == baseGridUnit) {
+        if (Quantizer::getQuantizations()[i] == baseGridUnit) {
             comboBox->setCurrentIndex(comboBox->count() - 1);
             found = true;
         }
@@ -384,10 +385,10 @@ QuantizeParameters::saveSettings()
 {
     m_settings.setValue("quantizetype", m_quantizerType->currentIndex());
     m_settings.setValue("gridBaseGridUnit", static_cast<unsigned long long>(
-            m_standardQuantizations[m_gridBaseGridUnit->currentIndex()]));
+            Quantizer::getQuantizations()[m_gridBaseGridUnit->currentIndex()]));
     m_settings.setValue("arbitraryGridUnit", m_arbitraryGridUnit->text());
     m_settings.setValue("notationBaseGridUnit", static_cast<unsigned long long>(
-            m_standardQuantizations[m_notationBaseGridUnit->currentIndex()]));
+            Quantizer::getQuantizations()[m_notationBaseGridUnit->currentIndex()]));
     m_settings.setValue("quantizeswing", m_swing->currentIndex() * 10 - 100);
     m_settings.setValue("quantizeiterate",
                         m_iterativeAmount->currentIndex() * 10 + 10);
@@ -427,7 +428,7 @@ QuantizeParameters::getGridUnit() const
         if (unit < 1)
             unit = 1;
     } else {
-        unit = m_standardQuantizations[
+        unit = Quantizer::getQuantizations()[
                 m_gridBaseGridUnit->currentIndex()];
     }
 
@@ -467,8 +468,9 @@ QuantizeParameters::getQuantizer()
                     iteratePercent);
 
             if (m_removeNotesCheckBox->isChecked()) {
-                basicQuantizer->setRemoveSmaller(m_standardQuantizations[
-                        m_removeNotesSmallerThan->currentIndex()]);
+                basicQuantizer->setRemoveSmaller(
+                        Quantizer::getQuantizations()[
+                                m_removeNotesSmallerThan->currentIndex()]);
             }
 
             basicQuantizer->setRemoveArticulations(
@@ -509,7 +511,7 @@ QuantizeParameters::getQuantizer()
                         Quantizer::RawEventData);  // target
             }
 
-            notationQuantizer->setUnit(m_standardQuantizations[
+            notationQuantizer->setUnit(Quantizer::getQuantizations()[
                     m_notationBaseGridUnit->currentIndex()]);
             notationQuantizer->setSimplicityFactor(
                     m_complexity->currentIndex() + 11);

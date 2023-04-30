@@ -129,7 +129,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
                        bool drumMode,
                        QWidget *parent) :
     EditViewBase(segments, parent),
-    m_quantizations(BasicQuantizer::getStandardQuantizations()),
+    m_quantizations(Quantizer::getQuantizations()),
     m_drumMode(drumMode),
     m_inChordMode(false)
 {

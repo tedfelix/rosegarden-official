@@ -556,5 +556,40 @@ Quantizer::insertNewEvents(Segment *s) const
     m_toInsert.clear();
 }
 
+const std::vector<timeT> &
+Quantizer::getQuantizations()
+{
+    static std::vector<timeT> standardQuantizations;
+
+    // If cache is empty, fill it.
+    if (standardQuantizations.empty())
+    {
+        // For each note type from semibreve to hemidemisemiquaver
+        for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
+
+            // For quavers and smaller, offer the triplet variation
+            const int variations = (nt <= Note::Quaver ? 1 : 0);
+
+            // For the base note (0) and the triplet variation (1)
+            for (int i = 0; i <= variations; ++i) {
+
+                // Compute divisor, e.g. crotchet is 4, quaver is 8...
+                int divisor = (1 << (Note::Semibreve - nt));
+
+                // If we're doing the triplet variation, adjust the divisor
+                if (i)
+                    divisor = divisor * 3 / 2;
+
+                // Compute the number of MIDI clocks.
+                const timeT unit = Note(Note::Semibreve).getDuration() / divisor;
+
+                standardQuantizations.push_back(unit);
+            }
+        }
+    }
+
+    return standardQuantizations;
+}
+
 
 }

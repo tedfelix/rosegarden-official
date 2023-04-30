@@ -18,6 +18,7 @@
 
 #include "Quantizer.h"
 
+
 namespace Rosegarden {
 
 
@@ -42,16 +43,10 @@ public:
 
     bool getDoDurations() const  { return m_durations; }
 
-    /**
-     * Return the standard quantization units in descending order of
-     * unit duration
-     */
-    static std::vector<timeT> getStandardQuantizations();
-
 protected:
     /// Quantize a single Event.
-    void quantizeSingle(Segment *,
-                        Segment::iterator) const override;
+    void quantizeSingle(Segment *segment,
+                        Segment::iterator eventIter) const override;
 
 private:
     // Hide copy ctor and op=
@@ -75,5 +70,6 @@ private:
 
 
 }
+
 
 #endif
