@@ -75,22 +75,6 @@ addQuantizations(QComboBox *comboBox)
     }
 }
 
-/// Add quantizations and an extra "arbitrary unit" value to comboBox.
-/**
- * Used to initialize m_gridBaseGridUnit and m_notationBaseGridUnit.
- */
-static void
-initBaseGridUnit(QComboBox *comboBox)
-{
-    // Add the standard quantizations.
-    addQuantizations(comboBox);
-
-    // Add the "Arbitrary grid unit" selection.
-    comboBox->addItem(
-            NotePixmapFactory::makeToolbarPixmap("menu-no-note"),
-            QObject::tr("Arbitrary grid unit"));
-}
-
 QuantizeParameters::QuantizeParameters(QWidget *parent,
                                        QuantizerType defaultQuantizer,
                                        bool showNotationOption) :
@@ -174,15 +158,12 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     // Base grid unit
     nbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_notationBox), 1, 0);
     m_notationBaseGridUnit = new QComboBox(m_notationBox);
-    initBaseGridUnit(m_notationBaseGridUnit);
+    // Add the standard quantizations.
+    addQuantizations(m_notationBaseGridUnit);
     constexpr int Demisemiquaver = 7;
     m_notationBaseGridUnit->setCurrentIndex(
             m_settings.value("notationBaseGridUnit2", Demisemiquaver).toInt());
     nbLayout->addWidget(m_notationBaseGridUnit, 1, 1);
-
-    // Arbitrary grid unit
-    // ??? The base grid unit field includes "arbitrary", but there is no
-    //     arbitrary field!
 
     // Complexity
     nbLayout->addWidget(new QLabel(tr("Complexity:"), m_notationBox), 0, 0);
@@ -211,7 +192,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_permitCounterpoint = new QCheckBox(tr("Permit counterpoint"), m_notationBox);
     m_permitCounterpoint->setChecked(qStrToBool(m_settings.value(
             "quantizecounterpoint", "false" )));
-    nbLayout->addWidget(m_permitCounterpoint, 3, 0, 1, 1);
+    nbLayout->addWidget(m_permitCounterpoint, 3, 0, 1, 2);
 
 
     // ========================================================
@@ -227,7 +208,12 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     // Base grid unit
     gbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_gridBox), 0, 0);
     m_gridBaseGridUnit = new QComboBox(m_gridBox);
-    initBaseGridUnit(m_gridBaseGridUnit);
+    // Add the standard quantizations.
+    addQuantizations(m_gridBaseGridUnit);
+    // Add the "Arbitrary grid unit" selection.
+    m_gridBaseGridUnit->addItem(
+            NotePixmapFactory::makeToolbarPixmap("menu-no-note"),
+            QObject::tr("Arbitrary grid unit"));
     m_gridBaseGridUnit->setCurrentIndex(
             m_settings.value("gridBaseGridUnit2", Demisemiquaver).toInt());
     connect(m_gridBaseGridUnit, static_cast<void(QComboBox::*)(int)>(
@@ -285,7 +271,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             tr("Quantize durations as well as start times"), m_gridBox);
     m_quantizeDurations->setChecked(qStrToBool(m_settings.value(
             "quantizedurations", "false")));
-    gbLayout->addWidget(m_quantizeDurations, 4, 0, 1, 1);
+    gbLayout->addWidget(m_quantizeDurations, 4, 0, 1, 2);
 
     // Remove notes smaller than
     m_removeNotesCheckBox = new QCheckBox(
@@ -310,7 +296,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             tr("Remove articulations (staccato and tenuto)"), m_gridBox);
     m_removeArticulations->setChecked(qStrToBool(m_settings.value(
             "quantizeremovearticulations", "false")));
-    gbLayout->addWidget(m_removeArticulations, 6, 0);
+    gbLayout->addWidget(m_removeArticulations, 6, 0, 1, 2);
 
 
     // ========================================================
@@ -360,6 +346,12 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     pbLayout->addWidget(m_addArticulations, 1, 0);
     pbLayout->addWidget(m_tieNotesAtBarlines, 2, 0);
     pbLayout->addWidget(m_splitAndTie, 3, 0);
+
+    // Try to make sure the dialog squashes to smallest size needed.
+    setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum));
+    parentWidget()->setSizePolicy(QSizePolicy(
+            QSizePolicy::Maximum,
+            QSizePolicy::Maximum));
 
     // Show/Hide widgets as appropriate for the quantizer type.
     slotTypeChanged(quantizerType);
@@ -522,10 +514,7 @@ QuantizeParameters::getQuantizer()
 void
 QuantizeParameters::slotTypeChanged(int index)
 {
-    setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum));
-    parentWidget()->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
-
-    QuantizerType quantizerType = static_cast<QuantizerType>(index);
+    const QuantizerType quantizerType = static_cast<QuantizerType>(index);
 
     switch (quantizerType) {
     case Grid:
@@ -573,9 +562,10 @@ void
 QuantizeParameters::slotGridUnitChanged(int index)
 {
     // Enable/Disable Arbitrary grid unit widgets
-    bool arbitraryEnabled = (index == arbitraryGridUnitIndex);
+    const bool arbitraryEnabled = (index == arbitraryGridUnitIndex);
     m_arbitraryGridUnitLabel->setEnabled(arbitraryEnabled);
     m_arbitraryGridUnit->setEnabled(arbitraryEnabled);
+
     m_arbitraryGridUnit->setText(QString::number(getGridUnit()));
 }
 
