@@ -142,7 +142,7 @@ namespace Accidentals
 
 typedef std::string Mark;
 
-namespace Marks //!!! This would be better as a class, these days
+namespace Marks
 {
     extern ROSEGARDENPRIVATE_EXPORT const Mark NoMark;         // " "
 
