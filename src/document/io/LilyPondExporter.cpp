@@ -463,7 +463,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                             }
 
                             // Duration
-                            const char * d = restsDuration.toStdString().data();
+                            std::string d = restsDuration.toStdString();
 
                             // Indication
                             const char * in =
