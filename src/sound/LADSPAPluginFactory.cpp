@@ -32,6 +32,7 @@
 #include "PluginIdentifier.h"
 
 #include <lrdf.h>
+#include <iostream>
 
 
 namespace Rosegarden
@@ -498,10 +499,10 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 void
 LADSPAPluginFactory::loadLibrary(QString soName)
 {
-    // Since we crash when loading misbehaving plugins, logging this at
-    // "info" level to make sure we see it.  Do not remove the RG_INFO
-    // logging in here even though it can be pretty noisy.
-    RG_INFO << "loadLibrary(" << soName << ") begin...";
+    // Dump the name to help with debugging crashing plugins.  This is forced
+    // to std::cerr and flushed (std::endl) to make sure it is the last thing
+    // we see before a plugin crashes or causes ASan to stop the run.
+    std::cerr << "LADSPAPluginFactory::loadLibrary(): " << soName << std::endl;
 
     QByteArray bso = soName.toLocal8Bit();
     // ??? This is one place where we might crash when a plugin misbehaves
@@ -513,7 +514,7 @@ LADSPAPluginFactory::loadLibrary(QString soName)
     }
 
     // If you don't see this, a plugin crashed on load.
-    RG_INFO << "  " << soName << "plugin loaded successfully";
+    std::cerr << "  " << soName << "plugin loaded successfully" << std::endl;
 
     m_libraryHandles[soName] = libraryHandle;
 }
@@ -683,6 +684,11 @@ LADSPAPluginFactory::discoverPlugins()
 void
 LADSPAPluginFactory::discoverPlugin(const QString &soName)
 {
+    // Dump the name to help with debugging crashing plugins.  This is forced
+    // to std::cerr and flushed (std::endl) to make sure it is the last thing
+    // we see before a plugin crashes or causes ASan to stop the run.
+    std::cerr << "LADSPAPluginFactory::discoverPlugin(): " << soName << std::endl;
+
     QByteArray bso = soName.toLocal8Bit();
     void *libraryHandle = dlopen(bso.data(), RTLD_LAZY);
 
