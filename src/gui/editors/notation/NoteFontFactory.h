@@ -66,10 +66,16 @@ public:
 
 private:
     NoteFontFactory() {}
+    ~NoteFontFactory();
     friend class NoteFontFactoryStatic;
 
     std::set<QString> m_fontNames;
-    std::map<std::pair<QString, int>, NoteFont *> m_fonts;
+
+    // The fonts that have been created.
+    typedef std::map<std::pair<QString, int>, NoteFont *> FontMap;
+    FontMap m_fonts;
+
+    // ??? Why do we need a mutex?  The notation UI is not multithreaded.
     QMutex m_mutex;
 };
 
