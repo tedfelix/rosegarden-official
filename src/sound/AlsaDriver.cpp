@@ -2354,18 +2354,21 @@ AlsaDriver::pushRecentNoteOffs()
     m_recentNoteOffs.clear();
 }
 
-// Remove recent noteoffs that are before time t
+// Remove m_recentNoteOffs that are before time t
 void
 AlsaDriver::cropRecentNoteOffs(const RealTime &t)
 {
     while (!m_recentNoteOffs.empty()) {
-        NoteOffEvent *ev = *m_recentNoteOffs.begin();
+        NoteOffQueue::const_iterator noteOffIter = m_recentNoteOffs.begin();
+        const NoteOffEvent *noteOff = *noteOffIter;
 #ifdef DEBUG_PROCESS_MIDI_OUT
-        RG_DEBUG << "cropRecentNoteOffs(): " << ev->getRealTime() << " vs " << t;
+        RG_DEBUG << "cropRecentNoteOffs(): " << noteOff->getRealTime() << " vs " << t;
 #endif
-        if (ev->realTime >= t) break;
-        delete ev;
-        m_recentNoteOffs.erase(m_recentNoteOffs.begin());
+        if (noteOff->realTime >= t)
+            break;
+
+        delete noteOff;
+        m_recentNoteOffs.erase(noteOffIter);
     }
 }
 
@@ -2472,10 +2475,14 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
     RG_DEBUG << "processNotesOff(" << time << "): alsaTime = " << alsaTime << ", now = " << now;
 #endif
 
-    // For each note-off event in the note-off queue
-    while (m_noteOffQueue.begin() != m_noteOffQueue.end()) {
-
-        NoteOffEvent *noteOff = *m_noteOffQueue.begin();
+    // For each note-off event in the note-off queue.
+    while (!m_noteOffQueue.empty()) {
+        // Use the begin() element since we will be deleting from the
+        // container and an iterator will become invalid after erase().
+        // Actually, erase() returns the next element.  We could do it
+        // that way.  Or increment before use.  So many options.
+        NoteOffQueue::iterator noteOffIter = m_noteOffQueue.begin();
+        NoteOffEvent *noteOff = *noteOffIter;
 
         if (noteOff->realTime > time) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
@@ -2513,7 +2520,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
             if (src < 0) {
                 RG_WARNING << "processNotesOff(): WARNING: Note off has no output port (instr = " << noteOff->instrumentId << ")";
                 delete noteOff;
-                m_noteOffQueue.erase(m_noteOffQueue.begin());
+                m_noteOffQueue.erase(noteOffIter);
                 continue;
             }
 
@@ -2541,7 +2548,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
         } else {
             delete noteOff;
         }
-        m_noteOffQueue.erase(m_noteOffQueue.begin());
+        m_noteOffQueue.erase(noteOffIter);
     }
 
     // We don't flush the queue here, as this is called nested from
