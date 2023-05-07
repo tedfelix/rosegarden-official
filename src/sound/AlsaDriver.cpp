@@ -207,8 +207,9 @@ AlsaDriver::~AlsaDriver()
 
     // Flush incomplete system exclusive events and delete the map.
     clearPendSysExcMap();
-
     delete m_pendSysExcMap;
+
+    clearRecentNoteOffs();
 }
 
 int
@@ -2049,9 +2050,8 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
     // Erase recent noteoffs.  There shouldn't be any, but let's be
     // extra careful.
-    m_recentNoteOffs.clear();
+    clearRecentNoteOffs();
 }
-
 
 void
 AlsaDriver::stopPlayback(bool autoStop)
@@ -2344,6 +2344,7 @@ AlsaDriver::pushRecentNoteOffs()
     RG_DEBUG << "pushRecentNoteOffs(): have " << m_recentNoteOffs.size() << " in queue";
 #endif
 
+    // Move all to m_noteOffQueue.
     for (NoteOffQueue::iterator i = m_recentNoteOffs.begin();
          i != m_recentNoteOffs.end(); ++i) {
         (*i)->realTime = RealTime::zeroTime;
@@ -2385,6 +2386,14 @@ AlsaDriver::weedRecentNoteOffs(unsigned int pitch, MidiByte channel,
             break;
         }
     }
+}
+
+void AlsaDriver::clearRecentNoteOffs()
+{
+    for (NoteOffEvent *noteOff : m_recentNoteOffs) {
+        delete noteOff;
+    }
+    m_recentNoteOffs.clear();
 }
 
 void
