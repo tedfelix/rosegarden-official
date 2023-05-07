@@ -2105,22 +2105,33 @@ RosegardenDocument::updateRecordingMIDISegment()
 
 //    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment: have record MIDI segment";
 
+    // The adjusted note on events for copying to m_noteOnEvents.
     NoteOnMap tweakedNoteOnEvents;
-    for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
-         mi != m_noteOnEvents.end(); ++mi)
-        for (ChanMap::iterator cm = mi->second.begin();
-             cm != mi->second.end(); ++cm)
-            for (PitchMap::iterator pm = cm->second.begin();
-                 pm != cm->second.end(); ++pm) {
+
+    for (NoteOnMap::iterator deviceIter = m_noteOnEvents.begin();
+         deviceIter != m_noteOnEvents.end(); ++deviceIter) {
+        for (ChanMap::iterator channelIter = deviceIter->second.begin();
+             channelIter != deviceIter->second.end(); ++channelIter) {
+            for (PitchMap::iterator pitchIter = channelIter->second.begin();
+                 pitchIter != channelIter->second.end(); ++pitchIter) {
 
                 // anything in the note-on map should be tweaked so as to end
                 // at the recording pointer
-                NoteOnRecSet rec_vec = pm->second;
+                NoteOnRecSet rec_vec = pitchIter->second;
                 if (rec_vec.size() > 0) {
-                    tweakedNoteOnEvents[mi->first][cm->first][pm->first] =
-                        *adjustEndTimes(rec_vec, m_composition.getPosition());
+                    NoteOnRecSet *newRecordSet =
+                            adjustEndTimes(rec_vec, m_composition.getPosition());
+                    // Copy to tweakedNoteOnEvents.
+                    tweakedNoteOnEvents
+                        [deviceIter->first]
+                        [channelIter->first]
+                        [pitchIter->first] = *newRecordSet;
+                    delete newRecordSet;
                 }
             }
+        }
+    }
+
     m_noteOnEvents = tweakedNoteOnEvents;
 }
 
@@ -2171,7 +2182,7 @@ RosegardenDocument::transposeRecordedSegment(Segment *s)
 }
 
 RosegardenDocument::NoteOnRecSet *
-RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
+RosegardenDocument::adjustEndTimes(const NoteOnRecSet &rec_vec, timeT endTime)
 {
     // Not too keen on profilers, but I'll give it a shot for fun...
     Profiler profiler("RosegardenDocument::adjustEndTimes()");
@@ -2180,15 +2191,25 @@ RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
     NoteOnRecSet *new_vector = new NoteOnRecSet();
 
     // For each note-on event
-    for (NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
+    for (NoteOnRecSet::const_iterator i = rec_vec.begin();
+         i != rec_vec.end();
+         ++i) {
+
         // ??? All this removing and re-inserting of Events from the Segment
         //     seems like a serious waste.  Can't we just modify the Event
         //     in place?  Otherwise we are doing all of this:
+        //
         //        1. Segment::erase() notifications.
         //        2. Segment::insert() notifications.
         //        3. Event delete and new.
+        //
+        //     That causes a lot of churning throughout the UI.  The
+        //     reason we cannot modify Event objects in place is because
+        //     they live in a sorted list within Segment.  If we modify
+        //     their start time, they are now in the wrong place in the
+        //     sorted list.
 
-        Event *oldEvent = *(i->m_segmentIterator);
+        const Event *oldEvent = *(i->m_segmentIterator);
 
         timeT newDuration = endTime - oldEvent->getAbsoluteTime();
 
@@ -2198,8 +2219,6 @@ RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
 
         // Make a new copy of the event in the segment and modify the
         // duration as needed.
-        // ??? Can't we modify the Event in place in the Segment?
-        //     No.  All setters are protected.  Events are read-only.
         Event *newEvent = new Event(
                 *oldEvent,  // reference Event object
                 oldEvent->getAbsoluteTime(),  // absoluteTime (preserved)
@@ -2362,19 +2381,19 @@ RosegardenDocument::stopRecordingMidi()
         }
     }
 
-    for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
-         mi != m_noteOnEvents.end(); ++mi) {
+    for (NoteOnMap::iterator deviceIter = m_noteOnEvents.begin();
+         deviceIter != m_noteOnEvents.end(); ++deviceIter) {
 
-        for (ChanMap::iterator cm = mi->second.begin();
-             cm != mi->second.end(); ++cm) {
+        for (ChanMap::iterator channelIter = deviceIter->second.begin();
+             channelIter != deviceIter->second.end(); ++channelIter) {
 
-            for (PitchMap::iterator pm = cm->second.begin();
-                 pm != cm->second.end(); ++pm) {
+            for (PitchMap::iterator pitchIter = channelIter->second.begin();
+                 pitchIter != channelIter->second.end(); ++pitchIter) {
 
                 // anything remaining in the note-on map should be
                 // made to end at the end of the segment
 
-                NoteOnRecSet rec_vec = pm->second;
+                NoteOnRecSet rec_vec = pitchIter->second;
 
                 if (rec_vec.size() > 0) {
                     // Adjust the end times of the note-on events for
