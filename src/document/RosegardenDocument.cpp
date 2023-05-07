@@ -2138,47 +2138,50 @@ RosegardenDocument::updateRecordingMIDISegment()
 void
 RosegardenDocument::transposeRecordedSegment(Segment *s)
 {
-        // get a selection of all the events in the segment, since we apparently
-        // can't just iterate through a segment's events without one.  (?)
-        EventSelection *selectedWholeSegment = new EventSelection(
+    // get a selection of all the events in the segment, since we apparently
+    // can't just iterate through a segment's events without one.  (?)
+    std::unique_ptr<EventSelection> selectedWholeSegment(new EventSelection(
             *s,
             s->getStartTime(),
-            s->getEndMarkerTime());
+            s->getEndMarkerTime()));
 
-         // Say we've got a recorded segment destined for a Bb trumpet track.
-         // It will have transpose of -2, and we want to move the notation +2 to
-         // compensate, so the user hears the same thing she just recorded
-         //
-         // (All debate over whether this is the right way to go with this whole
-         // issue is now officially settled, and no longer tentative.)
-         Composition *c = s->getComposition();
-         if (c) {
-             Track *t = c->getTrackById(s->getTrack());
-             if (t) {
-                 // pull transpose from the destination track
-                 int semitones = t->getTranspose();
+    // Say we've got a recorded segment destined for a Bb trumpet track.
+    // It will have transpose of -2, and we want to move the notation +2 to
+    // compensate, so the user hears the same thing she just recorded
+    //
+    // (All debate over whether this is the right way to go with this whole
+    // issue is now officially settled, and no longer tentative.)
+    Composition *c = s->getComposition();
+    if (!c)
+        return;
 
-                 for (EventContainer::iterator i =
-                      selectedWholeSegment->getSegmentEvents().begin();
-                     i != selectedWholeSegment->getSegmentEvents().end(); ++i) {
+    const Track *t = c->getTrackById(s->getTrack());
+    if (!t)
+        return;
 
-                     if ((*i)->isa(Note::EventType)) {
-                         if (semitones != 0) {
-                            if (!(*i)->has(PITCH)) {
-                                std::cerr << "WARNING! RosegardenDocument::transposeRecordedSegment: Note has no pitch!  Andy says \"Oh noes!!!  ZOMFG!!!\"" << std::endl;
-                            } else {
-                                int pitch = (*i)->get<Int>(PITCH) - semitones;
-                                std::cerr << "pitch = " << pitch
-                                          << " after transpose = "
-                                          << semitones << " (for track "
-                                          << s->getTrack() << ")" << std::endl;
-                                (*i)->set<Int>(PITCH, pitch);
-                            }
-                        }
-                    }
-                 }
-             }
+    // pull transpose from the destination track
+    const int semitones = t->getTranspose();
+    if (!semitones)
+        return;
+
+    // For each recorded Event...
+    for (Event *event : selectedWholeSegment->getSegmentEvents()) {
+
+        // Not a note?  Try the next.
+        if (!event->isa(Note::EventType))
+            continue;
+
+        // No pitch?  Warn the user.
+        if (!event->has(PITCH)) {
+            std::cerr << "WARNING! RosegardenDocument::transposeRecordedSegment(): Note has no pitch!" << std::endl;
+            continue;
         }
+
+        const int pitch = event->get<Int>(PITCH) - semitones;
+        //std::cerr << "pitch = " << pitch << " after transpose = " << semitones << " (for track " << s->getTrack() << ")" << std::endl;
+        event->set<Int>(PITCH, pitch);
+
+    }
 }
 
 RosegardenDocument::NoteOnRecSet *
