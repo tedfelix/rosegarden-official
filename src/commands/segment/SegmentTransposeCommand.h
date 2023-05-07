@@ -42,7 +42,7 @@ public:
     SegmentTransposeCommand(SegmentSelection selection,
         bool changeKey, int steps, int semitones, bool transposeSegmentBack);
 
-    ~SegmentTransposeCommand() override;
+    virtual ~SegmentTransposeCommand() override;
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
@@ -50,8 +50,12 @@ public:
         }
     }
 
-protected:
+private:
+
     void processSegment(Segment &segment, bool changeKey, int steps, int semitones, bool transposeSegmentBack);
+
+    std::vector<EventSelection *> m_selections;
+
 };
 
 }

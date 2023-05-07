@@ -28,9 +28,9 @@ private Q_SLOTS:
  */
 void TestSegmentTransposeCommand::testSegmentBbtoF()
 {
-    Segment * segment1 = new Segment();
-    Note * n = new Note(Note::QuarterNote);
-    Event * bes = n->getAsNoteEvent(1, 10);
+    Segment *segment1 = new Segment();
+    Note note(Note::QuarterNote);
+    Event *bes = note.getAsNoteEvent(1, 10);
     segment1->insert(bes);
     segment1->insert(Key("Bb major").getAsEvent(0));
     SegmentTransposeCommand * mockCommand = 
@@ -38,10 +38,14 @@ void TestSegmentTransposeCommand::testSegmentBbtoF()
             true, -3, -5, true);
     mockCommand->execute();
 	
-    EventSelection m_selection(*segment1, segment1->getStartTime(), segment1->getEndMarkerTime());
-    EventContainer::iterator i;
-    for (i = m_selection.getSegmentEvents().begin();
-         i != m_selection.getSegmentEvents().end(); ++i) {
+    EventSelection *selection = new EventSelection(
+            *segment1,
+            segment1->getStartTime(),
+            segment1->getEndMarkerTime());
+
+    for (EventContainer::iterator i = selection->getSegmentEvents().begin();
+         i != selection->getSegmentEvents().end();
+         ++i) {
         if ((*i)->isa(Note::EventType)) {
             Pitch resultPitch(**i);
             std::cout << "Resulting pitch is: " << resultPitch.getPerformancePitch() << std::endl;
@@ -50,6 +54,12 @@ void TestSegmentTransposeCommand::testSegmentBbtoF()
             QCOMPARE(resultPitch.getDisplayAccidental(Key("F major")), Accidentals::NoAccidental);
         }
     }
+
+    // ??? Stack?  Should work fine since they are created in this
+    //     order (reversed, of course).
+    delete mockCommand;
+    delete selection;
+    delete segment1;
 }
 
 /**
@@ -60,9 +70,9 @@ void TestSegmentTransposeCommand::testSegmentBbtoF()
  */
 void TestSegmentTransposeCommand::testGistoAis()
 {
-    Segment * segment1 = new Segment();
-    Note * n = new Note(Note::QuarterNote);
-    Event * gis = n->getAsNoteEvent(1, 8);
+    Segment *segment1 = new Segment();
+    Note note(Note::QuarterNote);
+    Event *gis = note.getAsNoteEvent(1, 8);
     segment1->insert(gis);
     segment1->insert(Key("E major").getAsEvent(0));
     SegmentTransposeCommand * mockCommand = 
@@ -70,10 +80,14 @@ void TestSegmentTransposeCommand::testGistoAis()
             true, 1, 2, true);
     mockCommand->execute();
 	
-    EventSelection m_selection(*segment1, segment1->getStartTime(), segment1->getEndMarkerTime());
-    EventContainer::iterator i;
-    for (i = m_selection.getSegmentEvents().begin();
-         i != m_selection.getSegmentEvents().end(); ++i) {
+    EventSelection *selection = new EventSelection(
+            *segment1,
+            segment1->getStartTime(),
+            segment1->getEndMarkerTime());
+
+    for (EventContainer::iterator i = selection->getSegmentEvents().begin();
+         i != selection->getSegmentEvents().end();
+         ++i) {
         if ((*i)->isa(Note::EventType)) {
             Pitch resultPitch(**i);
             std::cout << "Resulting pitch is: " << resultPitch.getPerformancePitch() << std::endl;
@@ -86,6 +100,11 @@ void TestSegmentTransposeCommand::testGistoAis()
             }
         }
     }
+
+    // ??? Stack?
+    delete mockCommand;
+    delete selection;
+    delete segment1;
 }
 
 /**
@@ -93,9 +112,9 @@ void TestSegmentTransposeCommand::testGistoAis()
  */
 void TestSegmentTransposeCommand::testSegmentCisToC()
 {
-    Segment * segment1 = new Segment();
-    Note * n = new Note(Note::QuarterNote);
-    Event * cis = n->getAsNoteEvent(1, 13);
+    Segment *segment1 = new Segment();
+    Note note(Note::QuarterNote);
+    Event *cis = note.getAsNoteEvent(1, 13);
     segment1->insert(cis);
     segment1->insert(Key("C# major").getAsEvent(0));
     SegmentTransposeCommand * mockCommand = 
@@ -103,10 +122,14 @@ void TestSegmentTransposeCommand::testSegmentCisToC()
             true, 0, -1, true);
     mockCommand->execute();
 	
-    EventSelection m_selection(*segment1, segment1->getStartTime(), segment1->getEndMarkerTime());
-    EventContainer::iterator i;
-    for (i = m_selection.getSegmentEvents().begin();
-            i != m_selection.getSegmentEvents().end(); ++i) {
+    EventSelection *selection = new EventSelection(
+            *segment1,
+            segment1->getStartTime(),
+            segment1->getEndMarkerTime());
+
+    for (EventContainer::iterator i = selection->getSegmentEvents().begin();
+         i != selection->getSegmentEvents().end();
+         ++i) {
         if ((*i)->isa(Note::EventType)) {
             Pitch resultPitch(**i);
             std::cout << "Resulting pitch is: " << resultPitch.getPerformancePitch() << std::endl;
@@ -119,6 +142,11 @@ void TestSegmentTransposeCommand::testSegmentCisToC()
             }
         }
     }
+
+    // ??? Stack?
+    delete mockCommand;
+    delete selection;
+    delete segment1;
 }
 
 void TestSegmentTransposeCommand::testUndo()
@@ -150,6 +178,14 @@ void TestSegmentTransposeCommand::testUndo()
     mockCommand2a->unexecute();
     mockCommand1b->unexecute();
     mockCommand1a->unexecute();
+
+    // ??? Why not create on stack?
+    delete mockCommand2b;
+    delete mockCommand2a;
+    delete mockCommand1b;
+    delete mockCommand1a;
+    delete segment2;
+    delete segment1;
 }
 
 QTEST_MAIN(TestSegmentTransposeCommand)

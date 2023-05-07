@@ -14,6 +14,9 @@ class TestReferenceSegment : public QObject,
 {
     Q_OBJECT
 
+public:
+    virtual ~TestReferenceSegment();
+
 private Q_SLOTS:
     void testEventType();
     void testInsert();
@@ -23,7 +26,19 @@ private Q_SLOTS:
 private:
     Composition::ReferenceSegment* setup_rs();
     std::string toString(const Composition::ReferenceSegment& rs);
+
+    // Manage dynamically created events to avoid memory leaks.
+    std::vector<Event *> m_events;
 };
+
+TestReferenceSegment::~TestReferenceSegment()
+{
+    for (const Event *event : m_events)
+    {
+        delete event;
+    }
+    m_events.clear();
+}
 
 /**
  * test EventType
@@ -69,13 +84,19 @@ void TestReferenceSegment::testInsert()
     tempoEvent3->set<Int>(TempoProperty, tempo3);
     rs.insertEvent(tempoEvent3);
     QCOMPARE(rs.size(), 2ul); // only one event per time
+
+    delete badEvent;
 }
 
 void TestReferenceSegment::testErase()
 {
     ReferenceSegment* rs = setup_rs();
 
-    rs->erase(rs->begin());
+    auto it0 = rs->begin();
+    Event *e = *it0;
+    // !!! THIS DOES NOT DELETE!
+    rs->erase(it0);
+    delete e;
 
     QCOMPARE(rs->size(), 4ul);
     std::string rss = toString(*rs);
@@ -84,24 +105,31 @@ void TestReferenceSegment::testErase()
     // get the second event
     auto it = rs->begin();
     ++it;
-    Event* e = *it;
+    e = *it;
+    // !!! THIS DOES NOT DELETE!
     rs->eraseEvent(e);
+    delete e;
 
     QCOMPARE(rs->size(), 3ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:10/50/100/");
 
     auto it1 = rs->findAtOrBefore(60);
+    e = *it1;
+    // !!! THIS DOES NOT DELETE!
     rs->erase(it1);
+    delete e;
     QCOMPARE(rs->size(), 2ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:10/100/");
 
+    // !!! clear() performs deletes!!!
     rs->clear();
     QCOMPARE(rs->size(), 0ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:");
 
+    // !!! This doesn't delete the events.
     delete rs;
 }
 
@@ -152,6 +180,7 @@ Composition::ReferenceSegment* TestReferenceSegment::setup_rs()
     e5->set<Int>("test_property", 78);
     rs->insertEvent(e5);
 
+    // ??? Note that the caller needs to delete the events in here.
     return rs;
 }
 
