@@ -4,6 +4,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+
 #include <QTest>
 
 using namespace Rosegarden;
@@ -28,23 +29,23 @@ private Q_SLOTS:
  */
 void TestSegmentTransposeCommand::testSegmentBbtoF()
 {
-    Segment *segment1 = new Segment();
+    Segment segment1;
     Note note(Note::QuarterNote);
     Event *bes = note.getAsNoteEvent(1, 10);
-    segment1->insert(bes);
-    segment1->insert(Key("Bb major").getAsEvent(0));
-    SegmentTransposeCommand * mockCommand = 
-        new SegmentTransposeCommand(*segment1,
-            true, -3, -5, true);
-    mockCommand->execute();
-	
-    EventSelection *selection = new EventSelection(
-            *segment1,
-            segment1->getStartTime(),
-            segment1->getEndMarkerTime());
+    segment1.insert(bes);
+    segment1.insert(Key("Bb major").getAsEvent(0));
 
-    for (EventContainer::iterator i = selection->getSegmentEvents().begin();
-         i != selection->getSegmentEvents().end();
+    SegmentTransposeCommand mockCommand(segment1,
+            true, -3, -5, true);
+    mockCommand.execute();
+
+    EventSelection selection(
+            segment1,
+            segment1.getStartTime(),
+            segment1.getEndMarkerTime());
+
+    for (EventContainer::iterator i = selection.getSegmentEvents().begin();
+         i != selection.getSegmentEvents().end();
          ++i) {
         if ((*i)->isa(Note::EventType)) {
             Pitch resultPitch(**i);
@@ -54,12 +55,6 @@ void TestSegmentTransposeCommand::testSegmentBbtoF()
             QCOMPARE(resultPitch.getDisplayAccidental(Key("F major")), Accidentals::NoAccidental);
         }
     }
-
-    // ??? Stack?  Should work fine since they are created in this
-    //     order (reversed, of course).
-    delete mockCommand;
-    delete selection;
-    delete segment1;
 }
 
 /**
@@ -70,23 +65,23 @@ void TestSegmentTransposeCommand::testSegmentBbtoF()
  */
 void TestSegmentTransposeCommand::testGistoAis()
 {
-    Segment *segment1 = new Segment();
+    Segment segment1;
     Note note(Note::QuarterNote);
     Event *gis = note.getAsNoteEvent(1, 8);
-    segment1->insert(gis);
-    segment1->insert(Key("E major").getAsEvent(0));
-    SegmentTransposeCommand * mockCommand = 
-        new SegmentTransposeCommand(*segment1,
-            true, 1, 2, true);
-    mockCommand->execute();
-	
-    EventSelection *selection = new EventSelection(
-            *segment1,
-            segment1->getStartTime(),
-            segment1->getEndMarkerTime());
+    segment1.insert(gis);
+    segment1.insert(Key("E major").getAsEvent(0));
 
-    for (EventContainer::iterator i = selection->getSegmentEvents().begin();
-         i != selection->getSegmentEvents().end();
+    SegmentTransposeCommand mockCommand(segment1,
+            true, 1, 2, true);
+    mockCommand.execute();
+	
+    EventSelection selection(
+            segment1,
+            segment1.getStartTime(),
+            segment1.getEndMarkerTime());
+
+    for (EventContainer::iterator i = selection.getSegmentEvents().begin();
+         i != selection.getSegmentEvents().end();
          ++i) {
         if ((*i)->isa(Note::EventType)) {
             Pitch resultPitch(**i);
@@ -100,11 +95,6 @@ void TestSegmentTransposeCommand::testGistoAis()
             }
         }
     }
-
-    // ??? Stack?
-    delete mockCommand;
-    delete selection;
-    delete segment1;
 }
 
 /**
@@ -112,23 +102,23 @@ void TestSegmentTransposeCommand::testGistoAis()
  */
 void TestSegmentTransposeCommand::testSegmentCisToC()
 {
-    Segment *segment1 = new Segment();
+    Segment segment1;
     Note note(Note::QuarterNote);
     Event *cis = note.getAsNoteEvent(1, 13);
-    segment1->insert(cis);
-    segment1->insert(Key("C# major").getAsEvent(0));
-    SegmentTransposeCommand * mockCommand = 
-        new SegmentTransposeCommand(*segment1,
-            true, 0, -1, true);
-    mockCommand->execute();
-	
-    EventSelection *selection = new EventSelection(
-            *segment1,
-            segment1->getStartTime(),
-            segment1->getEndMarkerTime());
+    segment1.insert(cis);
+    segment1.insert(Key("C# major").getAsEvent(0));
 
-    for (EventContainer::iterator i = selection->getSegmentEvents().begin();
-         i != selection->getSegmentEvents().end();
+    SegmentTransposeCommand mockCommand(segment1,
+            true, 0, -1, true);
+    mockCommand.execute();
+	
+    EventSelection selection(
+            segment1,
+            segment1.getStartTime(),
+            segment1.getEndMarkerTime());
+
+    for (EventContainer::iterator i = selection.getSegmentEvents().begin();
+         i != selection.getSegmentEvents().end();
          ++i) {
         if ((*i)->isa(Note::EventType)) {
             Pitch resultPitch(**i);
@@ -142,50 +132,33 @@ void TestSegmentTransposeCommand::testSegmentCisToC()
             }
         }
     }
-
-    // ??? Stack?
-    delete mockCommand;
-    delete selection;
-    delete segment1;
 }
 
 void TestSegmentTransposeCommand::testUndo()
 {
-    Segment * segment1 = new Segment();
-    Segment * segment2 = new Segment();
+    Segment segment1;
+    Segment segment2;
 
     // transpose once
-    SegmentTransposeCommand * mockCommand1a = 
-        new SegmentTransposeCommand(*segment1,
+    SegmentTransposeCommand mockCommand1a(segment1,
             true, -1, -2, true);
-    mockCommand1a->execute();
-    SegmentTransposeCommand * mockCommand1b = 
-        new SegmentTransposeCommand(*segment2,
+    mockCommand1a.execute();
+    SegmentTransposeCommand mockCommand1b(segment2,
             true, -1, -2, true);
-    mockCommand1b->execute();
+    mockCommand1b.execute();
 
     // transpose twice
-    SegmentTransposeCommand * mockCommand2a = 
-        new SegmentTransposeCommand(*segment1, 
+    SegmentTransposeCommand mockCommand2a(segment1,
             true, -1, -2, true);
-    mockCommand2a->execute();
-    SegmentTransposeCommand * mockCommand2b = 
-        new SegmentTransposeCommand(*segment2, 
+    mockCommand2a.execute();
+    SegmentTransposeCommand mockCommand2b(segment2,
             true, -1, -2, true);
-    mockCommand2b->execute();
+    mockCommand2b.execute();
 
-    mockCommand2b->unexecute();
-    mockCommand2a->unexecute();
-    mockCommand1b->unexecute();
-    mockCommand1a->unexecute();
-
-    // ??? Why not create on stack?
-    delete mockCommand2b;
-    delete mockCommand2a;
-    delete mockCommand1b;
-    delete mockCommand1a;
-    delete segment2;
-    delete segment1;
+    mockCommand2b.unexecute();
+    mockCommand2a.unexecute();
+    mockCommand1b.unexecute();
+    mockCommand1a.unexecute();
 }
 
 QTEST_MAIN(TestSegmentTransposeCommand)
