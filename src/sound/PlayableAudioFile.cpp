@@ -424,6 +424,8 @@ PlayableAudioFile::~PlayableAudioFile()
         m_smallFileCache.decrementReference(m_audioFile);
     }
 
+    clearWorkBuffers();
+
 #ifdef DEBUG_PLAYABLE 
     //    std::cerr << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
 #endif
@@ -903,14 +905,11 @@ PlayableAudioFile::updateBuffers()
 
     if (nframes > m_workBufferSize) {
 
-        for (size_t i = 0; i < m_workBuffers.size(); ++i) {
-            delete[] m_workBuffers[i];
-        }
+        clearWorkBuffers();
 
-        m_workBuffers.clear();
         m_workBufferSize = nframes;
-#ifdef DEBUG_PLAYABLE_READ
 
+#ifdef DEBUG_PLAYABLE_READ
         std::cerr << "Expanding work buffer to " << m_workBufferSize << " frames" << std::endl;
 #endif
 
@@ -1074,6 +1073,15 @@ PlayableAudioFile::getBitsPerSample()
         return m_audioFile->getBitsPerSample();
     }
     return 0;
+}
+
+void
+PlayableAudioFile::clearWorkBuffers()
+{
+    for (size_t i = 0; i < m_workBuffers.size(); ++i) {
+        delete[] m_workBuffers[i];
+    }
+    m_workBuffers.clear();
 }
 
 

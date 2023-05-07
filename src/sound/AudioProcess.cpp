@@ -197,6 +197,11 @@ AudioThread::terminate()
 #endif
 }
 
+// Due to a limitation of ASan, we can't run it on this routine.
+// Remove and recheck periodically.  This is exercised by loading
+// an .rg file with audio, play, stop, close.
+// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101476
+__attribute__((no_sanitize_address))
 void *
 AudioThread::staticThreadRun(void *arg)
 {
