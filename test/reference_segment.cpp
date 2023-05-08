@@ -14,9 +14,6 @@ class TestReferenceSegment : public QObject,
 {
     Q_OBJECT
 
-public:
-    virtual ~TestReferenceSegment();
-
 private Q_SLOTS:
     void testEventType();
     void testInsert();
@@ -26,19 +23,7 @@ private Q_SLOTS:
 private:
     Composition::ReferenceSegment* setup_rs();
     std::string toString(const Composition::ReferenceSegment& rs);
-
-    // Manage dynamically created events to avoid memory leaks.
-    std::vector<Event *> m_events;
 };
-
-TestReferenceSegment::~TestReferenceSegment()
-{
-    for (const Event *event : m_events)
-    {
-        delete event;
-    }
-    m_events.clear();
-}
 
 /**
  * test EventType
@@ -74,6 +59,7 @@ void TestReferenceSegment::testInsert()
         std::string msg = b.getMessage();
         QVERIFY(msg == "Bad type for event in ReferenceSegment (expected tempo, found xxx)");
     }
+    delete badEvent;
 
     Event *tempoEvent2 = new Event(TempoEventType, ttime2);
     tempoEvent2->set<Int>(TempoProperty, tempo2);
@@ -84,8 +70,6 @@ void TestReferenceSegment::testInsert()
     tempoEvent3->set<Int>(TempoProperty, tempo3);
     rs.insertEvent(tempoEvent3);
     QCOMPARE(rs.size(), 2ul); // only one event per time
-
-    delete badEvent;
 }
 
 void TestReferenceSegment::testErase()
