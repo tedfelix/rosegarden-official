@@ -514,7 +514,7 @@ LADSPAPluginFactory::loadLibrary(QString soName)
     }
 
     // If you don't see this, a plugin crashed on load.
-    std::cerr << "  " << soName << "plugin loaded successfully" << std::endl;
+    std::cerr << "  " << soName << " plugin loaded successfully" << std::endl;
 
     m_libraryHandles[soName] = libraryHandle;
 }
