@@ -62,7 +62,7 @@ private:
     Segment *m_newSegmentA;
     Segment *m_newSegmentB;
     timeT m_splitTime;
-    bool m_detached;
+    bool m_newIsDetached;
     bool m_keepLabel;
     bool m_wasSelected;
 };
