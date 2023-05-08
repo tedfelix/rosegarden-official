@@ -336,7 +336,7 @@ public:
 
     /**
      * Update the recording value() -- called regularly from
-     * RosegardenMainWindow::slotUpdatePlaybackPosition() while recording
+     * RosegardenMainWindow::processRecordedEvents() while recording
      */
     void updateRecordingMIDISegment();
 
