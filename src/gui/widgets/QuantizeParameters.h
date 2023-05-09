@@ -22,6 +22,7 @@
 
 #include <QFrame>
 #include <QSettings>
+#include <memory>
 
 class QCheckBox;
 class QComboBox;
@@ -56,7 +57,7 @@ public:
     QuantizeParameters(QWidget *parent,
                        QuantizerType defaultQuantizer,
                        bool showNotationOption);
-    
+
     /// Call on "accept" to save the values for next time.
     void saveSettings();
 

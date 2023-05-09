@@ -20,6 +20,7 @@
 #define RG_QUANTIZEDIALOG_H
 
 #include <QDialog>
+#include <memory>
 
 class QWidget;
 
