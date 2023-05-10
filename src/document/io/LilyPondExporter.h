@@ -248,6 +248,37 @@ private:
                              int verseLine, int cycle,
                              int indentCol, std::ofstream &str);
     
+    struct Syllable {
+        
+        Syllable(QString syllable, int bar) {
+            syllableString = syllable;
+            syllableBar = bar;
+            hasBar = true;
+        }
+        
+        Syllable(const char *syllable, int bar) {
+            syllableString = QString(syllable);
+            syllableBar = bar;
+            hasBar = true;
+        }
+        
+        explicit Syllable(QString syllable) {
+            syllableString = syllable;
+            syllableBar = -999999;
+            hasBar = false;
+        }
+        
+        explicit Syllable(const char *syllable) {
+            syllableString = QString(syllable);
+            syllableBar = -999999;
+            hasBar = false;
+        }
+        
+        QString syllableString;
+        int syllableBar;
+        bool hasBar;
+    };
+    
 
 private:
     static const int MAX_DOTS = 4;

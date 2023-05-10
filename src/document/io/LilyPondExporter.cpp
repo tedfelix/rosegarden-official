@@ -3507,6 +3507,9 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
     bool haveLyric = false;
     bool firstNote = true;
     bool firstBar = true;
+    
+    //YGYGYG
+    QList<Syllable> syllables;
         
     if ((currentVerse < 0) || (currentVerse >= seg->getVerseCount())) {
         return QString("% Looks like there is a bug near the call"
@@ -3518,6 +3521,9 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
     for (Segment::iterator j = seg->begin();
         seg->isBeforeEndMarker(j); ++j) {
 
+        // YGYGYG
+        Syllable rawSyllable("");        
+        
         QString syllable("");
         bool isNote = (*j)->isa(Note::EventType);
         bool isLyric = false;
@@ -3544,6 +3550,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
                 // This is about the previous note
                 if (!haveLyric) {
                     syllable = QString("_");
+                    rawSyllable = Syllable(".", myBar); // YGYGYG: why "." rather than "" ???
                 }
                 
                 lastTime = myTime;
@@ -3564,11 +3571,16 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
                 std::string ssyllable;
                 (*j)->get<String>(Text::TextPropertyName, ssyllable);
                 syllable = QString(strtoqstr(ssyllable));
-                
-                // Remove leading and trailing spaces  
+
+                // Remove leading and trailing spaces
+                // This spaces can't be created with the lyric editor, but may
+                //  exist when the syllable has been entered with the tool text
                 syllable.replace(QRegularExpression("^\\s+"), "");
                 syllable.replace(QRegularExpression("\\s+$"), "");
                 
+                // YGYGYG
+                rawSyllable = Syllable(syllable, myBar);
+                                
                 // Protect the backslash protecting a double quotation mark
                 syllable.replace(QRegularExpression("\""), "\\\"");
                
@@ -3588,6 +3600,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
                 firstBar = false;
             }
             text += " " + syllable;
+            syllables.append(rawSyllable);
         }
         
     }
@@ -3599,7 +3612,131 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
     // But what is the goal of this replacement ???
     
     text.replace("\"_\"" , " ");
+
+    // YGYGYG  Dump for debug
+    std::cerr << "\n{{";
+    for (int i = 0; i < syllables.size(); ++i) {
+        std::cerr << " [" << syllables.at(i).syllableString << "]";
+    }
+    std::cerr << " }}\n";
     
+
+    for (int i = 0; i < syllables.size(); ++i) {
+            
+        Syllable syl = syllables.at(i);
+        bool modified = false;
+        bool needsQuotes = false;
+        
+        // Replace an isolated dot with an underscore
+        if (syl.syllableString == ".") {
+            syl.syllableString = "_";
+            modified = true;
+        }
+        
+        // Protect the double quotation marks
+        if (syl.syllableString.contains(QChar('"'))) {
+            syl.syllableString.replace(QChar('"'), QString("\\\""));
+            needsQuotes = true;
+        }
+        
+        // Look for space inside the syllable
+        if (syl.syllableString.contains(QChar(' '))) {
+            needsQuotes = true;
+        }
+        
+        // Protect the syllable with double quotes if needed 
+        if (needsQuotes) {
+            syl.syllableString.append("\"");
+            syl.syllableString.prepend("\"");
+            modified = true;
+        }
+            
+        if (modified) {
+            syllables.replace(i, syl);
+        }
+    } 
+    
+    
+    
+    
+    // ESSAI PROVISOIRE
+    
+    for (int i = 0; i < syllables.size(); ++i) {
+            
+        Syllable syl = syllables.at(i);
+        
+        // Replace an isolated hyphen with an underscore
+        if (syl.syllableString == "-") {
+            syl.syllableString = "_";
+            syllables.replace(i, syl);
+        }
+    }
+    
+    for (int i = 0; i < syllables.size(); ++i) {
+            
+        Syllable syl = syllables.at(i);      
+        
+        if (syl.syllableString.length() > 1) {
+            QChar last = syl.syllableString.back();
+            if (last == '-' || last == '_') {
+                syl.syllableString.resize(syl.syllableString.length() - 1);
+                syllables.replace(i, syl);
+                
+                QString signal(last);
+                signal += last;
+                Syllable signalSyllable(signal);
+                syllables.insert(++i, signalSyllable);
+            }
+        }
+    }     
+    
+    
+    
+    
+    
+    // YGYGYG   Dump for debug
+    std::cerr << "\nTEXT:\n" << text << "\n:TEXT\n\n";
+    
+    // YGYGYG   Dump for debug    
+    std::cerr << "\n{{";
+    for (int i = 0; i < syllables.size(); ++i) {
+        std::cerr << " [" << syllables.at(i).syllableString << "]";
+    }
+    std::cerr << " }}\n";
+    
+// ATTENTION :
+//     - Prevoir la possibilite de conserver les '-' si le '-' final est absent
+//       Exemple :
+//          Actuellement :   "xxx-" "-" "-" "yyy"  Devient  "xxx" -- _ _ "yyy" [OK]
+//                  Mais :   "xxx" "-" "-" "yyy"  Devient  "xxx" _ _ "yyy" [KO]
+//                 Devrait rester non modifié !
+//         De même :   "."  "."   Devient   _  _     [OK]
+//             Mais on devrait avoir :
+//                "xxx_"  "."  "."  "yyy"  ==>   "xxx" __ _ _ "yyy" [OK]
+//                "xxx"  "."   "."  "yyy"  ==>   "xxx" _ _ "yyy" [OK]
+//                "xxx_" "_"  "_"   "yyy" ==>   "xxx" __ _ _ "yyy" [OK]
+//                "xxx" "_" "_" "yyy" ==>  "xxx" "_" "_"  "yyy"   [KO] [Fonctionnerait ?]
+//                "xxx" "__" "yyy"   ==>  "xxx" "__" "yyy"   [KO ('"')] [Fonctionnerait ?]
+//
+//    PENSER AUX PROTECTIONS :
+//                _ ==> "_"    
+//                __ ==> "__"    
+//                -- ==> "--"    
+
+    text.clear();
+    
+    for (int i = 0; i < syllables.size(); ++i) {
+        if (i == 0 || (syllables.at(i).syllableBar != lastBar && syllables.at(i).hasBar)) {
+            lastBar = syllables.at(i).syllableBar;
+            text += "\n";
+            text += indent(indentCol).c_str();
+            text += QStringLiteral("%{ %1 %}   ").arg(lastBar + 1, 3);
+        }
+        text += " ";
+        text += syllables.at(i).syllableString;
+    }
+    text += "\n";
+ 
     return text;
 }
                     
