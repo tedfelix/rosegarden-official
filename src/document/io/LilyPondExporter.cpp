@@ -3503,10 +3503,8 @@ LilyPondExporter::writeVerse(Segment *seg, int verseIndex,
 QString
 LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 {
-    QString text = QString(indent(indentCol).c_str());
     bool haveLyric = false;
     bool firstNote = true;
-    bool firstBar = true;
     
     //YGYGYG
     QList<Syllable> syllables;
@@ -3523,7 +3521,6 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 
         // YGYGYG
         Syllable rawSyllable("");        
-        
         QString syllable("");
         bool isNote = (*j)->isa(Note::EventType);
         bool isLyric = false;
@@ -3549,7 +3546,6 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 
                 // This is about the previous note
                 if (!haveLyric) {
-                    syllable = QString("_");
                     rawSyllable = Syllable(".", myBar); // YGYGYG: why "." rather than "" ???
                 }
                 
@@ -3574,44 +3570,19 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 
                 // Remove leading and trailing spaces
                 // This spaces can't be created with the lyric editor, but may
-                //  exist when the syllable has been entered with the tool text
+                //  exist when the syllable has been entered with the text tool
                 syllable.replace(QRegularExpression("^\\s+"), "");
                 syllable.replace(QRegularExpression("\\s+$"), "");
                 
                 // YGYGYG
                 rawSyllable = Syllable(syllable, myBar);
-                                
-                // Protect the backslash protecting a double quotation mark
-                syllable.replace(QRegularExpression("\""), "\\\"");
-               
-                syllable.prepend("\"");
-                syllable.append("\"");
 
                 haveLyric = true;
             }
         }
 
-        if (syllable != "") {
-            if ((myBar != lastBar) || firstBar) {
-                text += "\n";
-                text += indent(indentCol).c_str();
-                text += QStringLiteral("%{ %1 %}   ").arg(myBar + 1, 3);
-                lastBar = myBar;
-                firstBar = false;
-            }
-            text += " " + syllable;
-            syllables.append(rawSyllable);
-        }
-        
+        syllables.append(rawSyllable);
     }
-
-    // With the following regular expression '_' at end of a line are removed
-    // text.replace(QRegularExpression(" _+([^ ])") , " \\1");
-    // Try a better one here
-    text.replace(QRegularExpression(" _+(\\S)") , " \\1");
-    // But what is the goal of this replacement ???
-    
-    text.replace("\"_\"" , " ");
 
     // YGYGYG  Dump for debug
     std::cerr << "\n{{";
@@ -3691,11 +3662,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
     }     
     
     
-    
-    
-    
-    // YGYGYG   Dump for debug
-    std::cerr << "\nTEXT:\n" << text << "\n:TEXT\n\n";
+
     
     // YGYGYG   Dump for debug    
     std::cerr << "\n{{";
@@ -3723,7 +3690,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 //                __ ==> "__"    
 //                -- ==> "--"    
 
-    text.clear();
+    QString text("");
     
     for (int i = 0; i < syllables.size(); ++i) {
         if (i == 0 || (syllables.at(i).syllableBar != lastBar && syllables.at(i).hasBar)) {
