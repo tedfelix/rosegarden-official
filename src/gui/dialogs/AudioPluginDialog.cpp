@@ -27,7 +27,7 @@
 #include "gui/studio/AudioPluginClipboard.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
-#include "gui/studio/AudioPluginOSCGUIManager.h"
+#include "gui/studio/AudioPluginGUIManager.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/PluginControl.h"
 #include "sound/MappedStudio.h"
@@ -63,7 +63,7 @@ namespace Rosegarden
 
 AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      QSharedPointer<AudioPluginManager> aPM,
-                                     AudioPluginOSCGUIManager *aGM,
+                                     AudioPluginGUIManager *aGM,
                                      PluginContainer *pluginContainer,
                                      int index):
     QDialog(parent),
@@ -719,13 +719,9 @@ AudioPluginDialog::slotPluginSelected(int index)
     }
 
     // unused
-    //bool gui = false;
-    m_pluginGUIManager->hasGUI(m_containerId, m_index);
-//    std::cout << "gui is: " << gui
-//              << " container ID: " << m_containerId
-//              << " index: " << m_index
-//              << std::endl;
-//    m_editorButton->setEnabled(gui);
+    bool hasGui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
+
+    // original comment is below. The hasGui function seems to work for me
 
     //!!!  I can't get to the bottom of this in a reasonable amount of time.
     // m_containerId is always 10013, and m_index is either 0 (LADSPA plugin) or
@@ -737,7 +733,7 @@ AudioPluginDialog::slotPluginSelected(int index)
     // to a plugin that does have a GUI, in which case its GUI pops up, even
     // though they're five plugins away from the one where the pushed the button
     // originally.  Compared with never making it available, this is tolerable.
-    m_editorButton->setEnabled(true);
+    m_editorButton->setEnabled(hasGui);
 
     adjustSize();
     update(0, 0, width(), height());

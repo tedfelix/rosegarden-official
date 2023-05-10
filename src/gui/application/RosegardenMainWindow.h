@@ -84,7 +84,7 @@ class ControlEditorDialog;
 class Composition;
 class Clipboard;
 class BankEditorDialog;
-class AudioPluginOSCGUIManager;
+class AudioPluginGUIManager;
 class AudioPluginManager;
 class AudioPluginDialog;
 class AudioMixerWindow2;
@@ -170,9 +170,9 @@ public:
     void openURL(QString url);
 
     /// merge a file with the existing document
-    /* 
+    /*
     void mergeFile(QString QStringList) { mergeFile(filePathList, ImportCheckType); }
-    */ 
+    */
 
     /// merge a file, explicitly specifying its type, allow multiple files
     void mergeFile(QStringList filePathList, ImportType type);
@@ -239,7 +239,7 @@ public:
     void awaitDialogClearance() const;
 
     /// Return the plugin native GUI manager, if we have one
-    AudioPluginOSCGUIManager *getPluginGUIManager()  { return m_pluginGUIManager; }
+    AudioPluginGUIManager *getPluginGUIManager()  { return m_pluginGUIManager; }
 
     /** Query the AudioFileManager to see if the audio path exists, is readable,
      * writable, etc., and offer to dump the user in the document properties
@@ -1610,7 +1610,7 @@ private:
     std::set<ControlEditorDialog *> m_controlEditors;
     /// List of plugin dialogs to make sure we don't launch more than one.
     std::map<int, AudioPluginDialog*> m_pluginDialogs;
-    AudioPluginOSCGUIManager *m_pluginGUIManager;
+    AudioPluginGUIManager *m_pluginGUIManager;
 
     static RosegardenMainWindow *m_myself;
 

@@ -44,7 +44,7 @@ namespace Rosegarden
 
 class PluginControl;
 class PluginContainer;
-class AudioPluginOSCGUIManager;
+class AudioPluginGUIManager;
 class AudioPluginManager;
 class AudioPluginInstance;
 
@@ -56,7 +56,7 @@ class AudioPluginDialog : public QDialog
 public:
     AudioPluginDialog(QWidget *parent,
                       QSharedPointer<AudioPluginManager> aPM,
-                      AudioPluginOSCGUIManager *aGM,
+                      AudioPluginGUIManager *aGM,
                       PluginContainer *pluginContainer,
                       int index);
     ~AudioPluginDialog() override;
@@ -110,7 +110,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QSharedPointer<AudioPluginManager> m_pluginManager;
-    AudioPluginOSCGUIManager *m_pluginGUIManager;
+    AudioPluginGUIManager *m_pluginGUIManager;
     PluginContainer     *m_pluginContainer;
     InstrumentId         m_containerId;
 

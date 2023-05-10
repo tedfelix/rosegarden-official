@@ -23,7 +23,7 @@
 #include "misc/Debug.h"
 #include "AudioPlugin.h"
 #include "AudioPluginManager.h"
-#include "AudioPluginOSCGUIManager.h"
+#include "AudioPluginGUIManager.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
@@ -59,7 +59,7 @@ namespace Rosegarden
 
 SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
                                                    RosegardenDocument *doc,
-                                                   AudioPluginOSCGUIManager *guiManager) :
+                                                   AudioPluginGUIManager *guiManager) :
     QMainWindow ( parent ),
     m_document ( doc ),
     m_studio ( &doc->getStudio() ),
@@ -71,10 +71,10 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
     setWindowTitle ( tr ( "Manage Synth Plugins" ) );
     resize ( 760, 520 );
     move ( 100, 80 );
-    
+
     setupGuiMain();
     setupGuiCreatePluginList();
-    
+
 //    createMenusAndToolbars("synthpluginmanager.rc");
 
     setAttribute(Qt::WA_DeleteOnClose);
@@ -113,9 +113,9 @@ SynthPluginManagerDialog:: setupGuiMain()
     m_mainLayout->addWidget ( m_groupBoxPluginList );
 
     setCentralWidget ( m_centralWidget );
-        
-        
-        
+
+
+
     //
     // start dialog button-box setup
     // ------------------------------------------------------------------
@@ -148,8 +148,8 @@ SynthPluginManagerDialog:: setupGuiMain()
     //
     // end dialog button-box setup
     // ------------------------------------------------------------------
-        
-        
+
+
 }// end setupGuiMain()
 
 
@@ -232,8 +232,8 @@ void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
         m_guiButtons.push_back ( guiButton );
 
     }// end for i
-        
-        
+
+
 }// end setupGuiCreatePluginList()
 
 
@@ -423,4 +423,3 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
 }
 
 }
-

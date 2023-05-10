@@ -405,6 +405,7 @@ set(rg_CPPS
   gui/studio/StudioControl.cpp
   gui/studio/ControlEditorDialog.cpp
   gui/studio/MidiKeyMapTreeWidgetItem.cpp
+  gui/studio/AudioPluginGUIManager.cpp
   gui/studio/AudioPluginOSCGUIManager.cpp
   gui/studio/AudioPlugin.cpp
   gui/studio/DeviceManagerDialog.cpp

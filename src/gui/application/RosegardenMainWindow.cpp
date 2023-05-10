@@ -161,7 +161,7 @@
 #include "gui/studio/AudioMixerWindow2.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
-#include "gui/studio/AudioPluginOSCGUIManager.h"
+#include "gui/studio/AudioPluginGUIManager.h"
 #include "gui/studio/BankEditorDialog.h"
 #include "gui/studio/DeviceManagerDialog.h"
 #include "gui/studio/MidiMixerWindow.h"
@@ -289,7 +289,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_triggerSegmentManager(nullptr),
     m_configDlg(nullptr),
     m_docConfigDlg(nullptr),
-    m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
+    m_pluginGUIManager(new AudioPluginGUIManager(this)),
     m_updateUITimer(new QTimer(this)),
     m_inputTimer(new QTimer(this)),
     m_editTempoController(new EditTempoController(this)),

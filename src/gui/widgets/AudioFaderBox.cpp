@@ -29,7 +29,7 @@
 #include "Fader.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/application/RosegardenMainWindow.h"
-#include "gui/studio/AudioPluginOSCGUIManager.h"
+#include "gui/studio/AudioPluginGUIManager.h"
 #include "Rotary.h"
 #include "gui/general/IconLoader.h"
 #include "VUMeter.h"

@@ -44,7 +44,7 @@ namespace Rosegarden
 
 class Studio;
 class RosegardenDocument;
-class AudioPluginOSCGUIManager;
+class AudioPluginGUIManager;
 class AudioPluginManager;
 
 
@@ -55,12 +55,12 @@ class SynthPluginManagerDialog : public QMainWindow, public ActionFileClient
 public:
     SynthPluginManagerDialog(QWidget *parent,
                              RosegardenDocument *doc,
-			     AudioPluginOSCGUIManager *guiManager);
+			     AudioPluginGUIManager *guiManager);
 
     ~SynthPluginManagerDialog() override;
 
     void updatePlugin(InstrumentId id, int plugin);
-    
+
     void setupGuiMain();
     void setupGuiCreatePluginList();
 
@@ -75,7 +75,7 @@ protected slots:
     void slotPluginChanged(int index);
     void slotControlsButtonClicked();
     void slotGUIButtonClicked();
-    
+
     void slotHelpRequested();
 
 protected:
@@ -89,22 +89,22 @@ protected:
     std::vector<QComboBox *> m_synthCombos;
     std::vector<QPushButton *> m_controlsButtons;
     std::vector<QPushButton *> m_guiButtons;
-    
-    
+
+
     QWidget     *m_centralWidget;
     QVBoxLayout *m_mainLayout;
     QGroupBox   *m_groupBoxPluginList;
     QVBoxLayout *m_verticalLayout_2;
     QScrollArea *m_scrollArea;
     QWidget     *m_scrollWidget;
-     
+
     QGridLayout *m_scrollWidgetLayout;
 //     QMenuBar    *m_menubar;
 //     QStatusBar  *m_statusbar;
-    
+
     QDialogButtonBox* m_dialogButtonBox;
-    
-    AudioPluginOSCGUIManager *m_guiManager;
+
+    AudioPluginGUIManager *m_guiManager;
 };
 
 
