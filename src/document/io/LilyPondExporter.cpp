@@ -3520,8 +3520,8 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
         seg->isBeforeEndMarker(j); ++j) {
 
         // YGYGYG
-        Syllable rawSyllable("");        
-        QString syllable("");
+        Syllable syllable("");        
+        QString rawSyllable("");
         bool isNote = (*j)->isa(Note::EventType);
         bool isLyric = false;
 
@@ -3546,7 +3546,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 
                 // This is about the previous note
                 if (!haveLyric) {
-                    rawSyllable = Syllable(".", myBar); // YGYGYG: why "." rather than "" ???
+                    syllable = Syllable(".", myBar); // YGYGYG: why "." rather than "" ???
                 }
                 
                 lastTime = myTime;
@@ -3566,22 +3566,22 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
             if (verse == currentVerse) {
                 std::string ssyllable;
                 (*j)->get<String>(Text::TextPropertyName, ssyllable);
-                syllable = QString(strtoqstr(ssyllable));
+                rawSyllable = QString(strtoqstr(ssyllable));
 
                 // Remove leading and trailing spaces
                 // This spaces can't be created with the lyric editor, but may
                 //  exist when the syllable has been entered with the text tool
-                syllable.replace(QRegularExpression("^\\s+"), "");
-                syllable.replace(QRegularExpression("\\s+$"), "");
+                rawSyllable.replace(QRegularExpression("^\\s+"), "");
+                rawSyllable.replace(QRegularExpression("\\s+$"), "");
                 
                 // YGYGYG
-                rawSyllable = Syllable(syllable, myBar);
+                syllable = Syllable(rawSyllable, myBar);
 
                 haveLyric = true;
             }
         }
 
-        syllables.append(rawSyllable);
+        syllables.append(syllable);
     }
 
     // YGYGYG  Dump for debug
