@@ -47,7 +47,7 @@ using namespace BaseProperties;
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
                                            timeT startTime,
                                            timeT endTime,
-                                           Quantizer *quantizer):
+                                           std::shared_ptr<Quantizer> quantizer):
     BasicCommand(getGlobalName(quantizer), segment, startTime, endTime,
                  true),  // bruteForceRedo
     m_quantizer(quantizer),
@@ -59,7 +59,7 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
-                                           Quantizer *quantizer):
+                                           std::shared_ptr<Quantizer> quantizer):
     BasicCommand(getGlobalName(quantizer),
                  selection.getSegment(),
                  selection.getStartTime(),
@@ -111,14 +111,13 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
 
 EventQuantizeCommand::~EventQuantizeCommand()
 {
-    delete m_quantizer;
 }
 
 QString
-EventQuantizeCommand::getGlobalName(Quantizer *quantizer)
+EventQuantizeCommand::getGlobalName(std::shared_ptr<Quantizer> quantizer)
 {
     if (quantizer) {
-        if (dynamic_cast<NotationQuantizer *>(quantizer)) {
+        if (std::dynamic_pointer_cast<NotationQuantizer>(quantizer)) {
             return tr("Heuristic Notation &Quantize");
         } else {
             return tr("Grid &Quantize");
@@ -235,12 +234,20 @@ EventQuantizeCommand::modifySegment()
         throw CommandCancelled();
 }
 
-Quantizer *
+std::shared_ptr<Quantizer>
 EventQuantizeCommand::makeQuantizer(QString settingsGroup,
                                     QuantizeScope scope)
 {
     // See QuantizeParameters::getQuantizer() which is quite similar.
+    // ??? We should factor them out into a single factory function in
+    //     Quantizer.
 
+    // ??? Communicating via the .conf file is very confusing and could lead
+    //     to bugs down the road.  Make the connection between the dialogs
+    //     and this command more explicit.  Pass a quantization parameters
+    //     struct or something so that this isn't mysterious.  Restrict the
+    //     setting/getting of .conf info to the UI for persistence purposes
+    //     only.
     QSettings settings;
     settings.beginGroup(settingsGroup);
 
@@ -273,38 +280,39 @@ EventQuantizeCommand::makeQuantizer(QString settingsGroup,
 
     m_quantizer = nullptr;
 
+    // BasicQuantizer
     if (type == 0) {
         if (notateOnly) {
-            m_quantizer = new BasicQuantizer
-                          (Quantizer::RawEventData,
-                           Quantizer::NotationPrefix,
-                           unit, durations, swing, iterate);
+            m_quantizer = std::shared_ptr<Quantizer>(new BasicQuantizer(
+                    Quantizer::RawEventData,
+                    Quantizer::NotationPrefix,
+                    unit, durations, swing, iterate));
         } else {
-            m_quantizer = new BasicQuantizer
-                          (Quantizer::RawEventData,
-                           Quantizer::RawEventData,
-                           unit, durations, swing, iterate);
+            m_quantizer = std::shared_ptr<Quantizer>(new BasicQuantizer(
+                    Quantizer::RawEventData,
+                    Quantizer::RawEventData,
+                    unit, durations, swing, iterate));
         }
-    } else if (type == 1) {
+    } else if (type == 1) {  // LegatoQuantizer
         if (notateOnly) {
-            m_quantizer = new LegatoQuantizer
-                          (Quantizer::RawEventData,
-                           Quantizer::NotationPrefix, unit);
+            m_quantizer = std::shared_ptr<Quantizer>(new LegatoQuantizer(
+                    Quantizer::RawEventData,
+                    Quantizer::NotationPrefix, unit));
         } else {
-            m_quantizer = new LegatoQuantizer
-                          (Quantizer::RawEventData,
-                           Quantizer::RawEventData, unit);
+            m_quantizer = std::shared_ptr<Quantizer>(new LegatoQuantizer(
+                    Quantizer::RawEventData,
+                    Quantizer::RawEventData, unit));
         }
-    } else {
+    } else {  // NotationQuantizer
 
-        NotationQuantizer *nq;
+        std::shared_ptr<NotationQuantizer> nq;
 
         if (notateOnly) {
-            nq = new NotationQuantizer();
+            nq = std::shared_ptr<NotationQuantizer>(new NotationQuantizer());
         } else {
-            nq = new NotationQuantizer
-                 (Quantizer::RawEventData,
-                  Quantizer::RawEventData);
+            nq = std::shared_ptr<NotationQuantizer>(new NotationQuantizer(
+                    Quantizer::RawEventData,
+                    Quantizer::RawEventData));
         }
 
         nq->setUnit(unit);

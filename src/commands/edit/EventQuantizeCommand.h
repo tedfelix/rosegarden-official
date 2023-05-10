@@ -31,6 +31,7 @@ class QProgressDialog;
 namespace Rosegarden
 {
 
+
 class Segment;
 class Quantizer;
 class EventSelection;
@@ -47,31 +48,30 @@ public:
         QUANTIZE_NOTATION_ONLY      /// Notation only always
     };
 
-    /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
     EventQuantizeCommand(Segment &segment,
                          timeT startTime,
                          timeT endTime,
-                         Quantizer *);
+                         std::shared_ptr<Quantizer> quantizer);
     
-    /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
     EventQuantizeCommand(EventSelection &selection,
-                         Quantizer *);
+                         std::shared_ptr<Quantizer> quantizer);
 
-    /// Constructs own quantizer based on QSettings data in given group
+    /// Constructs own Quantizer based on QSettings data in given group
     EventQuantizeCommand(Segment &segment,
                          timeT startTime,
                          timeT endTime,
                          QString settingsGroup,
                          QuantizeScope scope);
     
-    /// Constructs own quantizer based on QSettings data in given group
+    /// Constructs own Quantizer based on QSettings data in given group
     EventQuantizeCommand(EventSelection &selection,
                          QString settingsGroup,
                          QuantizeScope scope);
 
     ~EventQuantizeCommand() override;
     
-    static QString getGlobalName(Quantizer *quantizer = nullptr);
+    static QString getGlobalName(
+            std::shared_ptr<Quantizer> quantizer = std::shared_ptr<Quantizer>());
 
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }
@@ -82,7 +82,7 @@ protected:
     void modifySegment() override;
 
 private:
-    Quantizer *m_quantizer; // I own this
+    std::shared_ptr<Quantizer> m_quantizer;
     EventSelection *m_selection;
     QString m_settingsGroup;
 
@@ -91,7 +91,7 @@ private:
     int m_progressPerCall;
 
     /// Sets to m_quantizer as well as returning value
-    Quantizer *makeQuantizer(QString, QuantizeScope);
+    std::shared_ptr<Quantizer> makeQuantizer(QString, QuantizeScope);
 };
 
 // Collapse equal-pitch notes into one event

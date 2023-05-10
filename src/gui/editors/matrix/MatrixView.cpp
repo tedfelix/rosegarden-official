@@ -129,7 +129,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
                        bool drumMode,
                        QWidget *parent) :
     EditViewBase(segments, parent),
-    m_quantizations(BasicQuantizer::getStandardQuantizations()),
+    m_quantizations(Quantizer::getQuantizations()),
     m_drumMode(drumMode),
     m_inChordMode(false)
 {
@@ -139,8 +139,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     m_matrixWidget->setSegments(doc, segments);
 
     // Many actions are created here
-    // ??? MEMORY LEAK (confirmed)
-    m_commandRegistry = new MatrixCommandRegistry(this);
+    // Actually, just tie and untie.
+    m_commandRegistry.reset(new MatrixCommandRegistry(this));
 
     setupActions();
 
@@ -1027,10 +1027,9 @@ MatrixView::slotQuantizeSelection(int q)
     timeT unit =
         ((unsigned int)q < m_quantizations.size() ? m_quantizations[q] : 0);
 
-    Quantizer *quant =
-        new BasicQuantizer
-        (unit ? unit :
-         Note(Note::Shortest).getDuration(), false);
+    std::shared_ptr<Quantizer> quant(new BasicQuantizer(
+            unit ? unit : Note(Note::Shortest).getDuration(),  // unit
+            false));  // doDurations
 
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -1101,10 +1100,9 @@ void
 MatrixView::slotLegato()
 {
     if (!getSelection()) return;
-    CommandHistory::getInstance()->addCommand
-        (new EventQuantizeCommand
-         (*getSelection(),
-          new LegatoQuantizer(0))); // no quantization
+    CommandHistory::getInstance()->addCommand(new EventQuantizeCommand(
+            *getSelection(),
+            std::shared_ptr<Quantizer>(new LegatoQuantizer(0)))); // no quantization
 }
 
 void

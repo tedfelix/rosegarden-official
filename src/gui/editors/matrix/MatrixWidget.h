@@ -144,7 +144,7 @@ public:
 
     // Tools
 
-    MatrixToolBox *getToolBox() { return m_toolBox; }
+    QSharedPointer<MatrixToolBox> getToolBox()  { return m_toolBox; }
 
     /// Used by the tools to set an appropriate mouse cursor.
     void setCanvasCursor(QCursor cursor);
@@ -401,7 +401,7 @@ private:
 
     // Tools
 
-    MatrixToolBox *m_toolBox; // I own this
+    QSharedPointer<MatrixToolBox> m_toolBox;
     MatrixTool *m_currentTool; // Toolbox owns this
     void setTool(QString name);
     /// Used by the MatrixMover and MatrixPainter tools for preview notes.

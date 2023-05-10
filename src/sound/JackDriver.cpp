@@ -195,6 +195,7 @@ JackDriver::~JackDriver()
     delete instrumentMixer;
     delete reader;
     delete writer;
+    delete[] m_tempOutBuffer;
 
 #ifdef DEBUG_JACK_DRIVER
     RG_DEBUG << "dtor: exiting";
@@ -1832,7 +1833,7 @@ JackDriver::jackBufferSize(jack_nframes_t nframes, void *arg)
     // have internal buffers) and the mix manager, with locks acquired
     // appropriately
 
-    delete [] inst->m_tempOutBuffer;
+    delete[] inst->m_tempOutBuffer;
     inst->m_tempOutBuffer = new sample_t[inst->m_bufferSize];
 
     return 0;

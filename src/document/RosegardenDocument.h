@@ -336,7 +336,7 @@ public:
 
     /**
      * Update the recording value() -- called regularly from
-     * RosegardenMainWindow::slotUpdatePlaybackPosition() while recording
+     * RosegardenMainWindow::processRecordedEvents() while recording
      */
     void updateRecordingMIDISegment();
 
@@ -641,6 +641,7 @@ private:
         Segment::iterator m_segmentIterator;
     };
 
+    /// A vector of note-on events that have been recorded.
     /**
      * A vector of NoteOnRec elements, necessary in multitrack MIDI
      * recording for NoteOn calculations
@@ -661,7 +662,7 @@ private:
      * Replace recorded Note events in one or several segments, returning the
      * resulting NoteOnRecSet
      */
-    NoteOnRecSet* adjustEndTimes(NoteOnRecSet &rec_vec, timeT endTime);
+    NoteOnRecSet* adjustEndTimes(const NoteOnRecSet &rec_vec, timeT endTime);
 
     /**
      * Insert a recorded event in one or several segments

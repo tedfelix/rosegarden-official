@@ -110,10 +110,28 @@ public:
      */
     void unquantize(EventSelection *) const;
 
-    static const std::string RawEventData;
-    static const std::string DefaultTarget;
-    static const std::string GlobalSource;
-    static const std::string NotationPrefix;
+    // Data sources and targets (m_source and m_target).
+
+    // ??? At one time these may have been Event property name prefixes, but
+    //     now notation time and duration are actual fields in Event.  These
+    //     are now more like enum values that are used to control the behavior
+    //     of Quantizer:
+    //
+    //       enum DataType {
+    //           RawEventData,  // MIDI/Performance
+    //           Notation,  // Notation
+    //           GlobalQ };  // Used internally as a source.
+
+    // MIDI/Performance time and duration.
+    static constexpr const char *RawEventData = "";
+    // Notation time and duration.
+    static constexpr const char *NotationPrefix = "Notation";
+
+    /// In descending duration order.
+    /**
+     * ??? Move this up to Quantizer.
+     */
+    static const std::vector<timeT> &getQuantizations();
 
 protected:
     /**
@@ -242,6 +260,7 @@ private:
     // ??? Actually these are perfectly copyable.  There is no need to do this.
     Quantizer(const Quantizer &);
     Quantizer &operator=(const Quantizer &);
+
 };
 
 

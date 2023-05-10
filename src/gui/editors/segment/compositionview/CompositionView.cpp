@@ -70,6 +70,15 @@ namespace Rosegarden
 {
 
 
+static QColor getPointerColor()
+{
+    if (Rosegarden::Preferences::getTheme() ==
+            Rosegarden::Preferences::DarkTheme)
+        return QColor(0x87, 0xcd, 0xee);
+    else
+        return QColor(Qt::darkBlue);
+}
+
 CompositionView::CompositionView(RosegardenDocument *doc,
                                  CompositionModelImpl *model,
                                  QWidget *parent) :
@@ -93,7 +102,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     //m_textFloatText(),
     //m_textFloatPos(),
     m_pointerPos(0),
-    m_pointerPen(GUIPalette::getColour(GUIPalette::Pointer), 4),
+    m_pointerPen(getPointerColor(), 4),
     //m_newSegmentRect(),
     //m_newSegmentColor(),
     //m_splitLinePos(),
@@ -753,9 +762,7 @@ void CompositionView::drawArtifacts()
     // Switch to contents coords.
     viewportPainter.translate(-contentsX(), -contentsY());
 
-    //
-    // Playback Pointer
-    //
+    // Draw the Playback Position Pointer.
     viewportPainter.setPen(m_pointerPen);
     viewportPainter.drawLine(m_pointerPos, 0, m_pointerPos, contentsHeight() - 1);
 

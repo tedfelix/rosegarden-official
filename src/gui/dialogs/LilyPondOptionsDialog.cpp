@@ -127,11 +127,15 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyLanguage = new QComboBox(frameBasic);
     m_lilyLanguage->setToolTip(tr("<qt>Set the LilyPond version you have installed. If you have a newer version of LilyPond, choose the highest version Rosegarden supports.</qt>"));
 
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.6")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.8")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.10")));
     m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.12")));
     m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.14")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.16")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.18")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.19")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.20")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.21")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.22")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.23")));
     layoutBasic->addWidget(m_lilyLanguage, 1, 1);
 
     layoutBasic->addWidget(new QLabel(
@@ -227,7 +231,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 1, 2);
     m_lilyExportStaffGroup->setToolTip(tr("<qt>Track staff brackets are found in the <b>Track Parameters</b> box, and may be used to group staffs in various ways</qt>"));
 
-    m_useShortNames = new LilyVersionAwareCheckBox(tr("Print short staff names"), frameNotation, LILYPOND_VERSION_2_10);
+    // Lilypond versions prior 2.12 are no more supported since RG 23.06
+    m_useShortNames = new LilyVersionAwareCheckBox(tr("Print short staff names"), frameNotation, LILYPOND_VERSION_2_12);
     m_useShortNames->setToolTip(tr("<qt>Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher</qt>"));
     layoutNotation->addWidget(m_useShortNames, 4, 0, 1, 2);
 

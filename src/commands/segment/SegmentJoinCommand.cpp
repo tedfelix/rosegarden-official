@@ -36,10 +36,11 @@
 namespace Rosegarden
 {
 
+
 SegmentJoinCommand::SegmentJoinCommand(SegmentSelection &segments) :
         NamedCommand(getGlobalName()),
         m_newSegment(nullptr),
-        m_detached(false) // true if the old segments are detached, not the new
+        m_oldIsDetached(false)
 {
     for (SegmentSelection::iterator i = segments.begin();
             i != segments.end(); ++i)
@@ -54,14 +55,15 @@ SegmentJoinCommand::SegmentJoinCommand(SegmentSelection &segments) :
 
 SegmentJoinCommand::~SegmentJoinCommand()
 {
-    if (m_detached) {
+    if (m_oldIsDetached) {
         for (size_t i = 0; i < m_oldSegments.size(); ++i) {
             delete m_oldSegments[i];
         }
-    } else {
+    } else {  // New is detached.
         delete m_newSegment;
     }
 }
+
 Segment *
 SegmentJoinCommand::makeSegment(SegmentVec oldSegments)
 {
@@ -212,7 +214,7 @@ SegmentJoinCommand::execute()
         composition->detachSegment(m_oldSegments[i]);
     }
 
-    m_detached = true;
+    m_oldIsDetached = true;
 }
 
 void
@@ -227,7 +229,8 @@ SegmentJoinCommand::unexecute()
     }
 
     m_newSegment->getComposition()->detachSegment(m_newSegment);
-    m_detached = false;
+    m_oldIsDetached = false;
 }
+
 
 }

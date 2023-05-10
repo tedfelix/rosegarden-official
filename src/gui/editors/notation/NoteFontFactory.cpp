@@ -51,6 +51,14 @@ public:
 Q_GLOBAL_STATIC(NoteFontFactoryStatic, s_staticInstance)
 static NoteFontFactory &instance() { return s_staticInstance()->m_instance; }
 
+NoteFontFactory::~NoteFontFactory()
+{
+    for (const FontMap::value_type &fontPair : m_fonts) {
+        delete fontPair.second;
+    }
+    m_fonts.clear();
+}
+
 std::set<QString>
 NoteFontFactory::getFontNames(bool forceRescan)
 {

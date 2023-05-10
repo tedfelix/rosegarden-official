@@ -283,10 +283,14 @@ DSSIPluginFactory::getLRDFPath(QString &baseUri)
     return lrdfPaths;
 }
 
-
 void
 DSSIPluginFactory::discoverPlugin(const QString &soName)
 {
+    // Dump the name to help with debugging crashing plugins.  This is forced
+    // to std::cerr and flushed (std::endl) to make sure it is the last thing
+    // we see before a plugin crashes or causes ASan to stop the run.
+    std::cerr << "DSSIPluginFactory::discoverPlugin(): " << soName << std::endl;
+
     void *libraryHandle = dlopen( qstrtostr(soName).c_str(), RTLD_LAZY);
 
     if (!libraryHandle) {

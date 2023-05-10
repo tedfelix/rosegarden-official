@@ -28,7 +28,7 @@
 #include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
-#include "base/BasicQuantizer.h"
+#include "base/Quantizer.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
@@ -61,7 +61,7 @@ namespace Rosegarden
 
 EventFilterDialog::EventFilterDialog(QWidget* parent)
         : QDialog(parent),
-        m_standardQuantizations(BasicQuantizer::getStandardQuantizations())
+        m_standardQuantizations(Quantizer::getQuantizations())
 {
     //###JAS next line not needed.  Commented out.
     //###settings = confq4;

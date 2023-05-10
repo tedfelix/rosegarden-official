@@ -1673,6 +1673,38 @@ Segment::countVerses()
     }
 }
 
+int
+Segment::lyricsPositionsCount()
+{
+    bool firstNote = true;
+    timeT lastTime = getStartTime();
+    
+    // How many lyrics syllables the segment can carry ?
+    // We have to count the notes.
+    
+    int count = 0;
+    for (Segment::iterator i = begin(); isBeforeEndMarker(i); ++i) {
+
+        // Only look at notes
+        if (!(*i)->isa(Note::EventType)) continue;
+    
+//   Don't do this : LilyPond counts tied notes
+//         // When notes are tied, only look at the first one
+//         if ((*i)->has(BaseProperties::TIED_BACKWARD) &&
+//             (*i)->get<Bool>(BaseProperties::TIED_BACKWARD)) continue;
+        
+        // A chord is seen as one note only
+        timeT myTime = (*i)->getNotationAbsoluteTime();
+        if ((myTime > lastTime) || firstNote) {
+            count++;
+            lastTime = myTime;
+            firstNote = false;
+        }    
+    }
+   
+    return count;
+}
+
 SegmentMultiSet&
 Segment::
 getCompositionSegments()

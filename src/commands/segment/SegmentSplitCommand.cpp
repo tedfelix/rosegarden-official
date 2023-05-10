@@ -42,16 +42,18 @@ SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
         m_newSegmentA(nullptr),
         m_newSegmentB(nullptr),
         m_splitTime(splitTime),
-        m_detached(true),
+        m_newIsDetached(true),
         m_keepLabel(keepLabel),
         m_wasSelected(false)
 {}
 
 SegmentSplitCommand::~SegmentSplitCommand()
 {
-    if (m_detached) {
+    if (m_newIsDetached) {
         delete m_newSegmentA;
         delete m_newSegmentB;
+    } else {  // Old is detached.
+        delete m_segment;
     }
 }
 
@@ -195,7 +197,7 @@ SegmentSplitCommand::execute()
     m_segment->getComposition()->addSegment(m_newSegmentB);
     m_segment->getComposition()->detachSegment(m_segment);
 
-    m_detached = false; // i.e. new segments are not detached
+    m_newIsDetached = false; // i.e. new segments are not detached
 
     // If the original segment was selected
     if (m_wasSelected) {
@@ -222,7 +224,7 @@ SegmentSplitCommand::unexecute()
     m_segment->getComposition()->detachSegment(m_newSegmentA);
     m_segment->getComposition()->detachSegment(m_newSegmentB);
 
-    m_detached = true; // i.e. new segments are not detached
+    m_newIsDetached = true; // i.e. new segments are not detached
 }
 
 }

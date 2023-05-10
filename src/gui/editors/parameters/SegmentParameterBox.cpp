@@ -23,6 +23,7 @@
 #include "misc/Strings.h"  // qstrtostr() etc...
 #include "base/ColourMap.h"
 //#include "base/NotationTypes.h"
+#include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
@@ -85,7 +86,7 @@ namespace {
 
 SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     RosegardenParameterBox(tr("Segment Parameters"), parent),
-    m_standardQuantizations(BasicQuantizer::getStandardQuantizations())
+    m_standardQuantizations(Quantizer::getQuantizations())
 {
     setObjectName("Segment Parameter Box");
 

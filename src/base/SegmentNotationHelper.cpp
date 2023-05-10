@@ -613,12 +613,12 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
 {
     bool viable;
 
-/*!!!
+/* !!!
     duration = basicQuantizer().quantizeDuration(duration);
 
     if (dots >= 0) {
         viable = (duration == Quantizer(Quantizer::RawEventData,
-                                        Quantizer::DefaultTarget,
+                                        Quantizer::DefaultTarget,  // "DefaultQ"
                                         Quantizer::NoteQuantize, 1, dots).
                   quantizeDuration(duration));
     } else {
@@ -626,7 +626,7 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
     }
 */
 
-    //!!! what to do about this?
+    // !!! what to do about this?
 
     timeT nearestDuration =
         Note::getNearestNote(duration, dots >= 0 ? dots : 2).getDuration();

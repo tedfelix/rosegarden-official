@@ -18,36 +18,35 @@
 
 #include "Quantizer.h"
 
+
 namespace Rosegarden {
+
 
 /// The "Grid quantizer"
 class BasicQuantizer : public Quantizer
 {
 public:
-    // The default unit is the shortest note type.  A unit of
-    // zero means do no quantization (rather pointlessly).
+    // unit == -1 => Note::Shortest
+    // unit == 0 => No quantization, call setUnit() to change.
     BasicQuantizer(timeT unit = -1, bool doDurations = false,
                    int swingPercent = 0, int iteratePercent = 100);
     BasicQuantizer(std::string source, std::string target,
-                   timeT unit = -1, bool doDurations = false,
-                   int swingPercent = 0, int iteratePercent = 100);
+                   timeT unit, bool doDurations,
+                   int swingPercent, int iteratePercent);
     ~BasicQuantizer() override  { }
 
-    void setUnit(timeT unit) { m_unit = unit; }
-    timeT getUnit() const { return m_unit; }
+    void setUnit(timeT unit)  { m_unit = unit; }
+    timeT getUnit() const  { return m_unit; }
 
-    bool getDoDurations() const { return m_durations; }
+    void setRemoveSmaller(timeT unit)  { m_removeSmaller = unit; }
+    void setRemoveArticulations(bool remove)  { m_removeArticulations = remove; }
 
-    /**
-     * Return the standard quantization units in descending order of
-     * unit duration
-     */
-    static std::vector<timeT> getStandardQuantizations();
+    bool getDoDurations() const  { return m_durations; }
 
 protected:
     /// Quantize a single Event.
-    void quantizeSingle(Segment *,
-                        Segment::iterator) const override;
+    void quantizeSingle(Segment *segment,
+                        Segment::iterator eventIter) const override;
 
 private:
     // Hide copy ctor and op=
@@ -55,7 +54,7 @@ private:
     BasicQuantizer(const BasicQuantizer &);
     BasicQuantizer &operator=(const BasicQuantizer &);
 
-    // Quantization unit (e.g. 1/8 notes).
+    // Quantization unit (e.g. 1/8 notes).  0 => No quantization.
     timeT m_unit;
     // Also quantize durations.
     bool m_durations;
@@ -64,8 +63,13 @@ private:
     // Iterative (partial) quantization percentage.
     int m_iterate;
 
+    timeT m_removeSmaller{0};
+    bool m_removeArticulations{false};
+
 };
 
+
 }
+
 
 #endif
