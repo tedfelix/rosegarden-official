@@ -274,6 +274,12 @@ private:
             hasBar = false;
         }
         
+        /**
+         *  Add double quotes if needed.
+         *  Return true if the syllable is modified
+         */ 
+        bool protect();
+        
         QString syllableString;
         int syllableBar;
         bool hasBar;
