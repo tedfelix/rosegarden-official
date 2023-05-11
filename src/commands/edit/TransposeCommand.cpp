@@ -48,9 +48,10 @@ TransposeCommand::modifySegment()
                 if (newPitch.getPerformancePitch() > 127) newPitch = Pitch(127);
                 if (newPitch.getPerformancePitch() < 0) newPitch = Pitch(0);
 
-                Event * newNoteEvent = newPitch.getAsNoteEvent(0, 0);
+                Event *newNoteEvent = newPitch.getAsNoteEvent(0, 0);
                 Accidental newAccidental;
                 newNoteEvent->get<String>(BaseProperties::ACCIDENTAL, newAccidental);
+                delete newNoteEvent;
 
                 (*i)->set<Int>(BaseProperties::PITCH, newPitch.getPerformancePitch());
                 (*i)->set<String>(BaseProperties::ACCIDENTAL, newAccidental);

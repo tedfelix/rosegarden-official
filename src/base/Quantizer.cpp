@@ -30,12 +30,6 @@
 namespace Rosegarden {
 
 
-const std::string Quantizer::RawEventData = "";
-const std::string Quantizer::DefaultTarget = "DefaultQ";
-const std::string Quantizer::GlobalSource = "GlobalQ";
-const std::string Quantizer::NotationPrefix = "Notation";
-
-
 Quantizer::Quantizer(const std::string& source,
                      const std::string& target) :
     m_source(source), m_target(target)
@@ -48,7 +42,7 @@ Quantizer::Quantizer(const std::string& target) :
     m_target(target)
 {
     if (target == RawEventData) {
-        m_source = GlobalSource;
+        m_source = "GlobalQ";
     } else {
         m_source = RawEventData;
     }
@@ -318,7 +312,7 @@ Quantizer::getFromSource(Event *e, ValueType v) const
         if (v == AbsoluteTimeValue) return e->getNotationAbsoluteTime();
         else return e->getNotationDuration();
 
-    } else {
+    } else {  // "GlobalQ"
 
         // We need to write the source from the target if the
         // source doesn't exist (and the target does)
@@ -386,6 +380,10 @@ Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
     Event *newEvent;
 
     if (m_target == RawEventData) {
+        // Have to create a new event to make sure the Segment
+        // container is properly sorted.  Simply modifying the
+        // absolute time would wreak havoc.  Unless we had a sort
+        // routine we could call after modification.
         newEvent = new Event(**segmentIter, absTime, duration);
     } else if (m_target == NotationPrefix) {
         // Setting the notation absolute time on an event without
@@ -397,8 +395,13 @@ Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
 #ifdef DEBUG_NOTATION_QUANTIZER
         RG_DEBUG << "setToTarget(): setting " << absTime << " to notation absolute time and " << duration << " to notation duration";
 #endif
-        newEvent = new Event(**segmentIter, (*segmentIter)->getAbsoluteTime(), (*segmentIter)->getDuration(),
-                      (*segmentIter)->getSubOrdering(), absTime, duration);
+        newEvent = new Event(
+                **segmentIter,  // e
+                (*segmentIter)->getAbsoluteTime(),  // absoluteTime
+                (*segmentIter)->getDuration(),  // duration
+                (*segmentIter)->getSubOrdering(),  // subOrdering
+                absTime,  // notationAbsoluteTime
+                duration);  // notationDuration
     } else {
         newEvent = *segmentIter;
         newEvent->clearNonPersistentProperties();
@@ -551,6 +554,41 @@ Quantizer::insertNewEvents(Segment *s) const
 #endif
 
     m_toInsert.clear();
+}
+
+const std::vector<timeT> &
+Quantizer::getQuantizations()
+{
+    static std::vector<timeT> standardQuantizations;
+
+    // If cache is empty, fill it.
+    if (standardQuantizations.empty())
+    {
+        // For each note type from semibreve to hemidemisemiquaver
+        for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
+
+            // For quavers and smaller, offer the triplet variation
+            const int variations = (nt <= Note::Quaver ? 1 : 0);
+
+            // For the base note (0) and the triplet variation (1)
+            for (int i = 0; i <= variations; ++i) {
+
+                // Compute divisor, e.g. crotchet is 4, quaver is 8...
+                int divisor = (1 << (Note::Semibreve - nt));
+
+                // If we're doing the triplet variation, adjust the divisor
+                if (i)
+                    divisor = divisor * 3 / 2;
+
+                // Compute the number of MIDI clocks.
+                const timeT unit = Note(Note::Semibreve).getDuration() / divisor;
+
+                standardQuantizations.push_back(unit);
+            }
+        }
+    }
+
+    return standardQuantizations;
 }
 
 

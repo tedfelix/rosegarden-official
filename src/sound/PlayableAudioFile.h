@@ -153,7 +153,10 @@ public:
         { m_fadeOutTime = time; }
 
 
-protected: 
+private:
+    // Hide copy ctor.
+    PlayableAudioFile(const PlayableAudioFile &pAF);
+
     void initialise(size_t bufferSize, size_t smallFileSize);
     void checkSmallFileCache(size_t smallFileSize);
     bool scanTo(const RealTime &time);
@@ -188,8 +191,10 @@ protected:
     static AudioCache     m_smallFileCache;
     bool                  m_isSmallFile;
 
+    // Work Buffers
     static std::vector<sample_t *> m_workBuffers;
-    static size_t         m_workBufferSize;
+    static void clearWorkBuffers();
+    static size_t m_workBufferSize;
     
     static char          *m_rawFileBuffer;
     static size_t         m_rawFileBufferSize;
@@ -203,10 +208,8 @@ protected:
     bool                  m_autoFade;
     RealTime  m_fadeInTime;
     RealTime  m_fadeOutTime;
-
-private:
-    PlayableAudioFile(const PlayableAudioFile &pAF); // not provided
 };
+
 
 }
 

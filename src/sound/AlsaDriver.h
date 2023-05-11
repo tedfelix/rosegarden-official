@@ -695,6 +695,8 @@ private:
     void cropRecentNoteOffs(const RealTime &t); // remove old note offs
     void weedRecentNoteOffs(unsigned int pitch, MidiByte channel,
 			    InstrumentId instrument); // on subsequent note on
+    // Delete and erase all.
+    void clearRecentNoteOffs();
 
     bool m_queueRunning;
 

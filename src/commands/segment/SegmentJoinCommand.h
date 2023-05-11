@@ -20,13 +20,15 @@
 
 #include "document/Command.h"
 #include "base/Selection.h"
+
 #include <QString>
+
 #include <vector>
-#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -35,22 +37,23 @@ class SegmentJoinCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand);
 
 public:
-    typedef std::vector<Segment *> SegmentVec;
     explicit SegmentJoinCommand(SegmentSelection &segments);
     ~SegmentJoinCommand() override;
 
+    static QString getGlobalName() { return tr("&Join"); }
+
     void execute() override;
     void unexecute() override;
-    static Segment *makeSegment(SegmentVec oldSegments);
 
-    static QString getGlobalName() { return tr("&Join"); }
+    typedef std::vector<Segment *> SegmentVec;
+    static Segment *makeSegment(SegmentVec oldSegments);
 
 private:
     SegmentVec m_oldSegments;
     Segment *m_newSegment;
-    bool m_detached;
-};
 
+    bool m_oldIsDetached;
+};
 
 
 }

@@ -124,7 +124,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_firstNote(0),
     m_lastNote(0),
     m_highlightVisible(true),
-    m_toolBox(nullptr),
     m_currentTool(nullptr),
     m_currentVelocity(100),
     m_lastZoomWasHV(true),
@@ -319,10 +318,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_controlsWidget, &ControlRulerWidget::mouseRelease,
             this, &MatrixWidget::slotCRWMouseRelease);
 
-    m_toolBox = new MatrixToolBox(this);
+    m_toolBox.reset(new MatrixToolBox(this));
 
     // Relay context help from matrix tools
-    connect(m_toolBox, &BaseToolBox::showContextHelp,
+    connect(m_toolBox.data(), &BaseToolBox::showContextHelp,
             this, &MatrixWidget::showContextHelp);
 
     // Relay context help from matrix rulers

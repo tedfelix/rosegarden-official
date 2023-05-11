@@ -29,6 +29,7 @@
 namespace Rosegarden
 {
 
+
 class Segment;
 class Quantizer;
 class EventSelection;
@@ -38,25 +39,23 @@ class EventUnquantizeCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::EventUnquantizeCommand)
 public:
-    /// Quantizer must be on heap (EventUnquantizeCommand dtor will delete)
     EventUnquantizeCommand(Segment &segment,
                            timeT startTime,
                            timeT endTime,
-                           Quantizer *);
+                           std::shared_ptr<Quantizer> quantizer);
     
-    /// Quantizer must be on heap (EventUnquantizeCommand dtor will delete)
     EventUnquantizeCommand(EventSelection &selection,
-                           Quantizer *);
+                           std::shared_ptr<Quantizer> quantizer);
 
     ~EventUnquantizeCommand() override;
     
-    static QString getGlobalName(Quantizer *quantizer = nullptr);
+    static QString getGlobalName();
     
 protected:
     void modifySegment() override;
 
 private:
-    Quantizer *m_quantizer;
+    std::shared_ptr<Quantizer> m_quantizer;
     EventSelection *m_selection;
 };
 

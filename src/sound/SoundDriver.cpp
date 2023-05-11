@@ -52,7 +52,9 @@ SoundDriver::SoundDriver(MappedStudio *studio, const QString &name) :
 SoundDriver::~SoundDriver()
 {
     RG_DEBUG << "SoundDriver::~SoundDriver (exiting)";
+
     delete m_audioQueue;
+    clearAudioFiles();
 }
 
 void

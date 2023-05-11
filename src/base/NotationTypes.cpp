@@ -167,6 +167,20 @@ namespace Marks
         return markCount;
     }
 
+    // Marks are stored as properties named "mark1", "mark2", etc....
+    // This makes working with them a bit convoluted.
+    //
+    // This begs the question...  Why weren't marks implemented as
+    // individual properties?  E.g.:
+    //
+    //   // Add staccato
+    //   event->set<Int>(BaseProperties::STACCATO, 1);
+    //   // Remove staccato
+    //   event->unset<Int>(BaseProperties::STACCATO);
+    //
+    // That would be so much easier.  Getting all the marks could be
+    // facilitated by prefixes, e.g. "mark_staccato", "mark_tenuto"...
+
     ROSEGARDENPRIVATE_EXPORT std::vector<Mark> getMarks(const Event &e) {
 
         std::vector<Mark> marks;
@@ -214,25 +228,38 @@ namespace Marks
         e.set<String>(markProperty, mark);
     }
 
-    ROSEGARDENPRIVATE_EXPORT bool removeMark(Event &e, const Mark &mark) {
+    ROSEGARDENPRIVATE_EXPORT bool removeMark(
+            Event &e, const Mark &markToRemove) {
 
         long markCount = 0;
         e.get<Int>(BaseProperties::MARK_COUNT, markCount);
 
+        // For each mark (mark1, mark2, etc...)...
         for (long j = 0; j < markCount; ++j) {
-            PropertyName pn(BaseProperties::getMarkPropertyName(j));
-            std::string m;
-            if (e.get<String>(pn, m) && m == mark) {
-                e.unset(pn);
+            PropertyName propertyName(BaseProperties::getMarkPropertyName(j));
+            std::string mark;
+            // If we found it...
+            if (e.get<String>(propertyName, mark) && mark == markToRemove) {
+                // Move all the following marks down one.
+                // E.g. mark3->mark2, mark4->mark3, etc...
                 while (j < markCount - 1) {
-                    PropertyName npn(BaseProperties::getMarkPropertyName(j+1));
-                    if (e.get<String>(npn, m)) {
-                        e.set<String>( pn, m);
+                    PropertyName nextPropertyName(
+                            BaseProperties::getMarkPropertyName(j+1));
+                    if (e.get<String>(nextPropertyName, mark)) {
+                        e.set<String>(propertyName, mark);
                     }
-                    pn = npn;
+                    propertyName = nextPropertyName;
                     ++j;
                 }
+
+                // Be sure to remove the last one so we don't keep duplicating
+                // it.  MARK_COUNT will prevent us from seeing it, but it
+                // will still be there.
+                e.unset(BaseProperties::getMarkPropertyName(markCount - 1));
+
+                // Update MARK_COUNT.
                 e.set<Int>(BaseProperties::MARK_COUNT, markCount - 1);
+
                 return true;
             }
         }

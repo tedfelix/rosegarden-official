@@ -22,16 +22,18 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
+
 #include <QString>
 
 
 namespace Rosegarden
 {
 
+
 EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
         timeT startTime,
         timeT endTime,
-        Quantizer *quantizer) :
+        std::shared_ptr<Quantizer> quantizer) :
         BasicCommand(tr("Unquantize Events"), segment, startTime, endTime,
                      true),  // bruteForceRedo
         m_quantizer(quantizer),
@@ -42,7 +44,7 @@ EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
 
 EventUnquantizeCommand::EventUnquantizeCommand(
     EventSelection &selection,
-    Quantizer *quantizer) :
+    std::shared_ptr<Quantizer> quantizer) :
         BasicCommand(tr("Unquantize Events"),
                      selection.getSegment(),
                      selection.getStartTime(),
@@ -56,26 +58,11 @@ EventUnquantizeCommand::EventUnquantizeCommand(
 
 EventUnquantizeCommand::~EventUnquantizeCommand()
 {
-    delete m_quantizer;
 }
 
 QString
-EventUnquantizeCommand::getGlobalName(Quantizer *)
+EventUnquantizeCommand::getGlobalName()
 {
-    /*!!!
-        if (quantizer) {
-    	switch (quantizer->getType()) {
-    	case Quantizer::PositionQuantize:
-    	    return tr("Position &Quantize");
-    	case Quantizer::UnitQuantize:
-    	    return tr("Unit &Quantize");
-    	case Quantizer::NoteQuantize:
-    	    return tr("Note &Quantize");
-    	case Quantizer::LegatoQuantize:
-    	    return tr("Smoothing &Quantize");
-    	}
-        }
-    */ 
     return tr("&Quantize...");
 }
 

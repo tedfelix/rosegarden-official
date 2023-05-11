@@ -275,7 +275,7 @@ protected:
 private:
     RosegardenDocument *m_document;
     MatrixWidget *m_matrixWidget;
-    CommandRegistry *m_commandRegistry;
+    QSharedPointer<CommandRegistry> m_commandRegistry;
 
     QComboBox *m_velocityCombo;
     QComboBox *m_quantizeCombo;

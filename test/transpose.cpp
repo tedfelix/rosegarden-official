@@ -59,7 +59,7 @@ void TestTranspose::testAisToBis()
 {
     // Testing transposing A# to B#
     Pitch ais(70, Accidentals::Sharp);
-    Key cmaj ("C major");
+    Key cmaj("C major");
 
     Pitch result = ais.transpose(cmaj, 2, 1);
 
@@ -76,11 +76,11 @@ void TestTranspose::testGToD()
 {
     // Testing transposing G to D
     Pitch g(67, Accidentals::Natural);
-    Key* dmaj = new Key("D major");
+    Key dmaj("D major");
 
-    Pitch result = g.transpose(*dmaj, 7, 4);
+    Pitch result = g.transpose(dmaj, 7, 4);
 
-    Accidental resultAccidental = result.getAccidental(*dmaj);
+    Accidental resultAccidental = result.getAccidental(dmaj);
     int resultPitch = result.getPerformancePitch();
     QCOMPARE(resultAccidental, Accidentals::NoAccidental);
     QCOMPARE(resultPitch, 74);

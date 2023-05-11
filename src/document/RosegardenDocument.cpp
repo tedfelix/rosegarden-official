@@ -2105,73 +2105,87 @@ RosegardenDocument::updateRecordingMIDISegment()
 
 //    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment: have record MIDI segment";
 
+    // The adjusted note on events for copying to m_noteOnEvents.
     NoteOnMap tweakedNoteOnEvents;
-    for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
-         mi != m_noteOnEvents.end(); ++mi)
-        for (ChanMap::iterator cm = mi->second.begin();
-             cm != mi->second.end(); ++cm)
-            for (PitchMap::iterator pm = cm->second.begin();
-                 pm != cm->second.end(); ++pm) {
+
+    for (NoteOnMap::iterator deviceIter = m_noteOnEvents.begin();
+         deviceIter != m_noteOnEvents.end(); ++deviceIter) {
+        for (ChanMap::iterator channelIter = deviceIter->second.begin();
+             channelIter != deviceIter->second.end(); ++channelIter) {
+            for (PitchMap::iterator pitchIter = channelIter->second.begin();
+                 pitchIter != channelIter->second.end(); ++pitchIter) {
 
                 // anything in the note-on map should be tweaked so as to end
                 // at the recording pointer
-                NoteOnRecSet rec_vec = pm->second;
+                NoteOnRecSet rec_vec = pitchIter->second;
                 if (rec_vec.size() > 0) {
-                    tweakedNoteOnEvents[mi->first][cm->first][pm->first] =
-                        *adjustEndTimes(rec_vec, m_composition.getPosition());
+                    NoteOnRecSet *newRecordSet =
+                            adjustEndTimes(rec_vec, m_composition.getPosition());
+                    // Copy to tweakedNoteOnEvents.
+                    tweakedNoteOnEvents
+                        [deviceIter->first]
+                        [channelIter->first]
+                        [pitchIter->first] = *newRecordSet;
+                    delete newRecordSet;
                 }
             }
+        }
+    }
+
     m_noteOnEvents = tweakedNoteOnEvents;
 }
 
 void
 RosegardenDocument::transposeRecordedSegment(Segment *s)
 {
-        // get a selection of all the events in the segment, since we apparently
-        // can't just iterate through a segment's events without one.  (?)
-        EventSelection *selectedWholeSegment = new EventSelection(
+    // get a selection of all the events in the segment, since we apparently
+    // can't just iterate through a segment's events without one.  (?)
+    std::unique_ptr<EventSelection> selectedWholeSegment(new EventSelection(
             *s,
             s->getStartTime(),
-            s->getEndMarkerTime());
+            s->getEndMarkerTime()));
 
-         // Say we've got a recorded segment destined for a Bb trumpet track.
-         // It will have transpose of -2, and we want to move the notation +2 to
-         // compensate, so the user hears the same thing she just recorded
-         //
-         // (All debate over whether this is the right way to go with this whole
-         // issue is now officially settled, and no longer tentative.)
-         Composition *c = s->getComposition();
-         if (c) {
-             Track *t = c->getTrackById(s->getTrack());
-             if (t) {
-                 // pull transpose from the destination track
-                 int semitones = t->getTranspose();
+    // Say we've got a recorded segment destined for a Bb trumpet track.
+    // It will have transpose of -2, and we want to move the notation +2 to
+    // compensate, so the user hears the same thing she just recorded
+    //
+    // (All debate over whether this is the right way to go with this whole
+    // issue is now officially settled, and no longer tentative.)
+    Composition *c = s->getComposition();
+    if (!c)
+        return;
 
-                 for (EventContainer::iterator i =
-                      selectedWholeSegment->getSegmentEvents().begin();
-                     i != selectedWholeSegment->getSegmentEvents().end(); ++i) {
+    const Track *t = c->getTrackById(s->getTrack());
+    if (!t)
+        return;
 
-                     if ((*i)->isa(Note::EventType)) {
-                         if (semitones != 0) {
-                            if (!(*i)->has(PITCH)) {
-                                std::cerr << "WARNING! RosegardenDocument::transposeRecordedSegment: Note has no pitch!  Andy says \"Oh noes!!!  ZOMFG!!!\"" << std::endl;
-                            } else {
-                                int pitch = (*i)->get<Int>(PITCH) - semitones;
-                                std::cerr << "pitch = " << pitch
-                                          << " after transpose = "
-                                          << semitones << " (for track "
-                                          << s->getTrack() << ")" << std::endl;
-                                (*i)->set<Int>(PITCH, pitch);
-                            }
-                        }
-                    }
-                 }
-             }
+    // pull transpose from the destination track
+    const int semitones = t->getTranspose();
+    if (!semitones)
+        return;
+
+    // For each recorded Event...
+    for (Event *event : selectedWholeSegment->getSegmentEvents()) {
+
+        // Not a note?  Try the next.
+        if (!event->isa(Note::EventType))
+            continue;
+
+        // No pitch?  Warn the user.
+        if (!event->has(PITCH)) {
+            std::cerr << "WARNING! RosegardenDocument::transposeRecordedSegment(): Note has no pitch!" << std::endl;
+            continue;
         }
+
+        const int pitch = event->get<Int>(PITCH) - semitones;
+        //std::cerr << "pitch = " << pitch << " after transpose = " << semitones << " (for track " << s->getTrack() << ")" << std::endl;
+        event->set<Int>(PITCH, pitch);
+
+    }
 }
 
 RosegardenDocument::NoteOnRecSet *
-RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
+RosegardenDocument::adjustEndTimes(const NoteOnRecSet &rec_vec, timeT endTime)
 {
     // Not too keen on profilers, but I'll give it a shot for fun...
     Profiler profiler("RosegardenDocument::adjustEndTimes()");
@@ -2180,15 +2194,25 @@ RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
     NoteOnRecSet *new_vector = new NoteOnRecSet();
 
     // For each note-on event
-    for (NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
+    for (NoteOnRecSet::const_iterator i = rec_vec.begin();
+         i != rec_vec.end();
+         ++i) {
+
         // ??? All this removing and re-inserting of Events from the Segment
         //     seems like a serious waste.  Can't we just modify the Event
         //     in place?  Otherwise we are doing all of this:
+        //
         //        1. Segment::erase() notifications.
         //        2. Segment::insert() notifications.
         //        3. Event delete and new.
+        //
+        //     That causes a lot of churning throughout the UI.  The
+        //     reason we cannot modify Event objects in place is because
+        //     they live in a sorted list within Segment.  If we modify
+        //     their start time, they are now in the wrong place in the
+        //     sorted list.
 
-        Event *oldEvent = *(i->m_segmentIterator);
+        const Event *oldEvent = *(i->m_segmentIterator);
 
         timeT newDuration = endTime - oldEvent->getAbsoluteTime();
 
@@ -2198,8 +2222,6 @@ RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
 
         // Make a new copy of the event in the segment and modify the
         // duration as needed.
-        // ??? Can't we modify the Event in place in the Segment?
-        //     No.  All setters are protected.  Events are read-only.
         Event *newEvent = new Event(
                 *oldEvent,  // reference Event object
                 oldEvent->getAbsoluteTime(),  // absoluteTime (preserved)
@@ -2362,19 +2384,19 @@ RosegardenDocument::stopRecordingMidi()
         }
     }
 
-    for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
-         mi != m_noteOnEvents.end(); ++mi) {
+    for (NoteOnMap::iterator deviceIter = m_noteOnEvents.begin();
+         deviceIter != m_noteOnEvents.end(); ++deviceIter) {
 
-        for (ChanMap::iterator cm = mi->second.begin();
-             cm != mi->second.end(); ++cm) {
+        for (ChanMap::iterator channelIter = deviceIter->second.begin();
+             channelIter != deviceIter->second.end(); ++channelIter) {
 
-            for (PitchMap::iterator pm = cm->second.begin();
-                 pm != cm->second.end(); ++pm) {
+            for (PitchMap::iterator pitchIter = channelIter->second.begin();
+                 pitchIter != channelIter->second.end(); ++pitchIter) {
 
                 // anything remaining in the note-on map should be
                 // made to end at the end of the segment
 
-                NoteOnRecSet rec_vec = pm->second;
+                NoteOnRecSet rec_vec = pitchIter->second;
 
                 if (rec_vec.size() > 0) {
                     // Adjust the end times of the note-on events for
