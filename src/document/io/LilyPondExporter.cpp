@@ -3700,6 +3700,20 @@ LilyPondExporter::Syllable::protect()
         syllableString.replace('"', "\\\"");
         needsQuotes = true;
     }    
+    
+    // Sometimes a number among lyrics may give strange errors
+    if (   syllableString.contains('0')
+        || syllableString.contains('1')
+        || syllableString.contains('2')
+        || syllableString.contains('3')
+        || syllableString.contains('4')
+        || syllableString.contains('5')
+        || syllableString.contains('6')
+        || syllableString.contains('7')
+        || syllableString.contains('8')
+        || syllableString.contains('9')) {
+            needsQuotes = true;
+    }
 
     // Protect the syllable with double quotes if needed 
     if (needsQuotes) {
