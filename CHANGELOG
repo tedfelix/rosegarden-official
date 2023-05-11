@@ -1,3 +1,61 @@
+====== ROSEGARDEN 23.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 23.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fix crash related to static initialization order.  Bug #1647.
+    Release as 22.12.1.  [3e34166]
+  * Fix bug #1047, beaming groups erroneous after merging notes.
+    [83f1dca, 2709e76]
+  * Fix offset selection rectangle in Notation.  Bug #1444.  [fc08c3e]
+  * Fix time column widths in the Event Editor so that they don't need
+    resizing on every launch.  [aed705b]
+  * Event filter dialog improvements and fixes.  [c5e3c6a]
+  * Fix broken retrograde commands.  Bug #1648.  [84faef1]
+  * Lilypond: Fix volta/alternatives and lyrics.  Bug #1649.
+    [6e5ba2d]
+  * Lilypond: Fix vertical alignment of verses.  Bug #1650.  [b42cbff]
+  * Lilypond: Fix the printing of supplementary verses.  [46c7d3d]
+  * Lilypond: Fix multiple lyrics verses with repetition.  [50266c5]
+  * Lilypond: Fix the removing of an underscore at the end of a bar of
+    lyrics.  [62feb9b]
+  * Fix timer preference coming up empty for selections after
+    "HR timer".  [08748a6]
+  * Fix paste problems in notation editor.  Bug #1651.  [457f3de]
+  * Fix potential crash in the grid quantizer.  [4bdefd9]
+
+===== New Features =====
+
+  * File > Merge dialogs now allow merging of multiple files.  Feature
+    request #513.  [5f43b70]
+  * View > Full Screen (F11) added to main window.  [a09103c]
+  * Removed LEDs from archived tracks to make archived tracks easier to
+    identify.  [a5f4131]
+  * Edit > Preferences > General > Presentation.  Three UI themes are
+    now offered: Native (Light), Classic (Medium), and Dark.  Feature
+    request #498.  [994c2b1, et al.]
+  * Matrix and Notation now offer snap to grid in the control rulers.
+    Feature request #509 [349fff9, et al.]
+  * Add Ctrl+L shortcut for loop toggle.  Feature request #398.
+    [a5e8414]
+  * Add new LilyPond versions.  [6c7f0ef]
+  * Add "Remove notes smaller than X" field to grid quantizer.
+    Feature request #515.  [87c9a0c]
+  * Add "Remove articulations" to grid quantizer.  Feature request
+    #515.  [a69a4fd]
+
+===== Additional Contributors =====
+
+  * Lorenzo Sutton - Multiple file merge feature.  Feature Req. #513.
+
+
 ====== ROSEGARDEN 22.12 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 22.12
@@ -609,3 +667,64 @@ volume, pan, etc... control change knobs and faders.
   * Karl Marksteiner
   * Lucas
 
+
+====== ROSEGARDEN 17.04, codename "Twice in a Blue Moon" RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 17.04
+of Rosegarden, an audio and MIDI sequencer and musical notation editor
+for Linux.
+
+http://www.rosegardenmusic.com/
+
+The most visible change in 17.04 is that David Faure has generously
+replaced our very brittle and complex style system with a complete
+rewrite using QStyle (r14968).  Ted Felix invested the past ten months
+grinding through bugs, and cleaning Rosegarden's code to make it more
+efficient and maintainable.  Significant areas cleaned up include: the
+Track Parameters box (r14707-r14762), TrackButtons (r14765-r14770),
+progress dialogs (r14793-r14899), and the Audio Mixer window (r14910-
+r15013).  Yves Guillemot and David Faure squashed a few bugs as well.
+
+===== Bug Fixes =====
+
+  * Fix memory leak: delete StartupLogo when closing it (r14737)
+  * Add compilation fix for Ubuntu 16.04.01 LTS (r14738)
+  * TrackParameterBox: Fix initial track label problem (r14761)
+  * Fix #1534: Send channel setup when output is changed (r14743)
+  * TrackParameterBox: Make color combo visible for audio tracks
+    (r14762)
+  * autoload: Fix audio track colors (r14763)
+  * Fix #1532: Crash when trying to edit a triggered segment (r14772)
+  * Fix #1536: Crash on dangling Instrument IDs (r14776)
+  * Fix "Always use default studio" stickiness (r14781)
+  * Fix #1538: No sound when entering notes with keyboard (r14783)
+  * Fix time stamp bug in MIDI file export (r14785)
+  * Improve progress dialogs throughout the application (r14793-r14899)
+  * Repair control rulers in Qt 5 builds
+  * Cleanup incorrect name and filter during audio file export
+  * Fix compilation with -DQT_STRICT_ITERATORS (r14903)
+  * Fix compilation without jack (r14904)
+  * Enable -DQT_NO_URL_CAST_FROM_STRING and fix compilation accordingly
+    (r14905)
+  * Fix "all piano" issue with empty connections (r14906)
+  * Fix MIDI import connection problem (r14907)
+  * Fix a bug in the parallels checker, bug #1544 (r14959)
+  * Fix #1491 Xruns on exit (r14981)
+  * Fix wait cursor (r14985)
+
+===== New Features =====
+
+  * Hide unused frames for audio tracks in track parameters (r14729)
+  * Improve handling of collapsing frames in track parameters and
+    document properties (r14714)
+  * Track 20 recent files, rather than 10 (r14868)
+  * Replace stylesheet with custom QStyle (r14968)
+
+===== People who contributed device files to the Rosegarden Library =====
+
+  * Rainer Hans Liffers
+  * JP Morris
+
+===== People who contributed translations =====
+
+  * Jose Alfredo Murcia Andrés
