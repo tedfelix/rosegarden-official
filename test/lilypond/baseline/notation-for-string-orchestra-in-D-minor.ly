@@ -104,9 +104,9 @@ globalTempo = {
                     \set ignoreMelismata = ##t
 
                     % Segment "Strings": verse 1
-                    
+
                     %{   1 %}    _ _ _ _
-                    %{   2 %}    _ _ ""
+                    %{   2 %}    _ _ _
                     %{   3 %}    _ _ _ _
                     %{   4 %}    _ _ _
                     %{   5 %}    _ _ _ _
@@ -141,6 +141,7 @@ globalTempo = {
                     %{  34 %}    _ _ _ _ _ _ _ _ _ _
                     %{  35 %}    _ _ _ _ _
                     %{  36 %}    _
+
                     \unset ignoreMelismata
                 }
             } % Lyrics 

@@ -83,27 +83,28 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "S": verse 1
-                        
-                        %{   1 %}    "Ay," "lin" "da-a"
-                        %{   2 %}    "mi" "ga" "que"
-                        %{   3 %}    "no" "vuel" "vo-a"
-                        %{   4 %}    "ver" "te,"
-                        %{   5 %}    "cuer" "po" "ga"
-                        %{   6 %}    "rri" "do" "que" "me"
-                        %{   7 %}    "lle" "va-a" "la"
-                        %{   8 %}    "muer" "te."
-                        %{   9 %}    "No" "hay-a" "mor" "sin"
-                        %{  10 %}    "pe" "na,"
-                        %{  11 %}    "pe" "na" "sin" "do"
-                        %{  12 %}    "lor," "ni"
-                        %{  13 %}    "do" "lor" "tan" "a"
-                        %{  14 %}    "gu" "do"
-                        %{  15 %}    "co" "mo-el" "del" "a"
-                        %{  16 %}    "mor," "ni"
-                        %{  17 %}    "do" "lor" "tan" "a"
-                        %{  18 %}    "gu" "do"
-                        %{  19 %}    "co" "mo-el" "del" "a"
-                        %{  20 %}    "mor."
+
+                        %{   1 %}    Ay, lin da-a
+                        %{   2 %}    mi ga que
+                        %{   3 %}    no vuel vo-a
+                        %{   4 %}    ver te,
+                        %{   5 %}    cuer po ga
+                        %{   6 %}    rri do que me
+                        %{   7 %}    lle va-a la
+                        %{   8 %}    muer te.
+                        %{   9 %}    No hay-a mor sin
+                        %{  10 %}    pe na,
+                        %{  11 %}    pe na sin do
+                        %{  12 %}    lor, ni
+                        %{  13 %}    do lor tan a
+                        %{  14 %}    gu do
+                        %{  15 %}    co mo-el del a
+                        %{  16 %}    mor, ni
+                        %{  17 %}    do lor tan a
+                        %{  18 %}    gu do
+                        %{  19 %}    co mo-el del a
+                        %{  20 %}    mor.
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 
@@ -116,7 +117,7 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "S": verse 2
-                        
+
                         %{   1 %}    _ _ _
                         %{   2 %}    _ _ _
                         %{   3 %}    _ _ _
@@ -125,18 +126,19 @@ globalTempo = {
                         %{   6 %}    _ _ _ _
                         %{   7 %}    _ _ _
                         %{   8 %}    _ _
-                        %{   9 %}    "Le" "van" "te" "me"
-                        %{  10 %}    "ma" "dre"
-                        %{  11 %}    "al" "sa" "lir" "el"
-                        %{  12 %}    "sol," "fui"
-                        %{  13 %}    "por" "los" "cam" "pos"
-                        %{  14 %}    "ver" "des"
-                        %{  15 %}    "a" "bus" "car" "mi-a"
-                        %{  16 %}    "mor," "fui"
-                        %{  17 %}    "por" "los" "cam" "pos"
-                        %{  18 %}    "ver" "des"
-                        %{  19 %}    "a" "bus" "car" "mi-a"
-                        %{  20 %}    "mor."
+                        %{   9 %}    Le van te me
+                        %{  10 %}    ma dre
+                        %{  11 %}    al sa lir el
+                        %{  12 %}    sol, fui
+                        %{  13 %}    por los cam pos
+                        %{  14 %}    ver des
+                        %{  15 %}    a bus car mi-a
+                        %{  16 %}    mor, fui
+                        %{  17 %}    por los cam pos
+                        %{  18 %}    ver des
+                        %{  19 %}    a bus car mi-a
+                        %{  20 %}    mor.
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 
