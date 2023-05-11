@@ -3506,21 +3506,23 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
     bool haveLyric = false;
     bool firstNote = true;
     
-    //YGYGYG
-    QList<Syllable> syllables;
+    // All the syllables of the segment along their bar numbers
+    QList<Syllable> syllables;  
         
     if ((currentVerse < 0) || (currentVerse >= seg->getVerseCount())) {
         return QString("% Looks like there is a bug near the call"
                        " of LilyPondExporter::getVerseText()");
     }
     
+    
+    // Extract all the lyrics from the segment and copy them in syllables
+    
     timeT lastTime = seg->getStartTime();
     int lastBar = m_composition->getBarNumber(lastTime);
     for (Segment::iterator j = seg->begin();
-        seg->isBeforeEndMarker(j); ++j) {
+            seg->isBeforeEndMarker(j); ++j) {
 
-        // YGYGYG
-        Syllable syllable("");        
+        Syllable syllable("", 0);        
         QString rawSyllable("");
         bool isNote = (*j)->isa(Note::EventType);
         bool isLyric = false;
@@ -3576,25 +3578,26 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
                 rawSyllable.replace(QRegularExpression("^\\s+"), "");
                 rawSyllable.replace(QRegularExpression("\\s+$"), "");
                 
-                // YGYGYG
                 syllable = Syllable(rawSyllable, myBar);
                 found = true;
-
                 haveLyric = true;
             }
         }
 
         if (found) syllables.append(syllable);
     }
-
-    // YGYGYG  Dump for debug
-    std::cerr << "\nBEFORE {{";
-    for (int i = 0; i < syllables.size(); ++i) {
-        std::cerr << " [" << syllables.at(i).syllableString << "]";
-    }
-    std::cerr << " }}\n";
     
-    // NEW
+    
+    
+    // Modify the content of syllables to eventually get:
+    //    'xxx',   '-', '_', ''        -->  'xxx - "_" _'
+    //    'xxx-',  '-', '-', 'yyy'     -->  'xxx -- _ _ yyy'
+    //    'xxx-',  '',  '',  'yyy'     -->  'xxx -- _ _ yyy'
+    //    'xxx_',  '',  '',  'yyy'     -->  'xxx __ _ _ yyy'
+    //    'xxx_',  '_', '_', 'yyy'     -->  'xxx __ _ _ yyy'
+    //    'xxx_',  '-', '-', 'yyy'     -->  'xxx __ _ _ yyy'
+    //    'xxx yyy'                    -->  '"xxx yyy"'
+    //    'xx"yy'                      -->  '"xx\"yy"'
     
     // True after "xxx-" or "xxx_" while parsing a row of "_"
     bool sequence = false;     
@@ -3620,7 +3623,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
                 signal += last;             // Signal is now "--" or "__"
                 
                 // Insert it after the syllable
-                Syllable signalSyllable(signal);
+                Syllable signalSyllable(signal, syl.syllableBar);
                 syllables.insert(++i, signalSyllable);
                 
                 // and go to the next syllable
@@ -3655,110 +3658,13 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
         }
     }  
     
-    
-    
 
-//     for (int i = 0; i < syllables.size(); ++i) {
-//             
-//         Syllable syl = syllables.at(i);
-//         bool modified = false;
-//         bool needsQuotes = false;
-//         
-//         // Replace an empty syllable with an underscore
-//         if (syl.syllableString == "") {
-//             syl.syllableString = "_";
-//             modified = true;
-//         }
-//         
-//         // Protect the double quotation marks
-//         if (syl.syllableString.contains(QChar('"'))) {
-//             syl.syllableString.replace(QChar('"'), QString("\\\""));
-//             needsQuotes = true;
-//         }
-//         
-//         // Look for space inside the syllable
-//         if (syl.syllableString.contains(QChar(' '))) {
-//             needsQuotes = true;
-//         }
-//         
-//         // Protect the syllable with double quotes if needed 
-//         if (needsQuotes) {
-//             syl.syllableString.append("\"");
-//             syl.syllableString.prepend("\"");
-//             modified = true;
-//         }
-//             
-//         if (modified) {
-//             syllables.replace(i, syl);
-//         }
-//     } 
-    
-    
-    
-
-    
-//     for (int i = 0; i < syllables.size(); ++i) {
-//             
-//         Syllable syl = syllables.at(i);
-//         
-//         // Replace an isolated hyphen with an underscore
-//         if (syl.syllableString == "-") {
-//             syl.syllableString = "_";
-//             syllables.replace(i, syl);
-//         }
-//     }
-//     
-//     for (int i = 0; i < syllables.size(); ++i) {
-//             
-//         Syllable syl = syllables.at(i);      
-//         
-//         if (syl.syllableString.length() > 1) {
-//             QChar last = syl.syllableString.back();
-//             if (last == '-' || last == '_') {
-//                 syl.syllableString.resize(syl.syllableString.length() - 1);
-//                 syllables.replace(i, syl);
-//                 
-//                 QString signal(last);
-//                 signal += last;
-//                 Syllable signalSyllable(signal);
-//                 syllables.insert(++i, signalSyllable);
-//             }
-//         }
-//     }     
-    
-    
-
-    
-    // YGYGYG   Dump for debug    
-    std::cerr << "\nAFTER {{";
-    for (int i = 0; i < syllables.size(); ++i) {
-        std::cerr << " [" << syllables.at(i).syllableString << "]";
-    }
-    std::cerr << " }}\n";
-    
-// ATTENTION :
-//     - Prevoir la possibilite de conserver les '-' si le '-' final est absent
-//       Exemple :
-//          Actuellement :   "xxx-" "-" "-" "yyy"  Devient  "xxx" -- _ _ "yyy" [OK]
-//                  Mais :   "xxx" "-" "-" "yyy"  Devient  "xxx" _ _ "yyy" [KO]
-//                 Devrait rester non modifié !
-//         De même :   "."  "."   Devient   _  _     [OK]
-//             Mais on devrait avoir :
-//                "xxx_"  "."  "."  "yyy"  ==>   "xxx" __ _ _ "yyy" [OK]
-//                "xxx"  "."   "."  "yyy"  ==>   "xxx" _ _ "yyy" [OK]
-//                "xxx_" "_"  "_"   "yyy" ==>   "xxx" __ _ _ "yyy" [OK]
-//                "xxx" "_" "_" "yyy" ==>  "xxx" "_" "_"  "yyy"   [KO] [Fonctionnerait ?]
-//                "xxx" "__" "yyy"   ==>  "xxx" "__" "yyy"   [KO ('"')] [Fonctionnerait ?]
-//
-//    PENSER AUX PROTECTIONS :
-//                _ ==> "_"    
-//                __ ==> "__"    
-//                -- ==> "--"    
-
+    // Copy the syllables in a string
     QString text("");
-    
     for (int i = 0; i < syllables.size(); ++i) {
-        if (i == 0 || (syllables.at(i).syllableBar != lastBar && syllables.at(i).hasBar)) {
+        
+        // At the beginning of a bar, write its number inside a LilyPond comment
+        if (i == 0 || syllables.at(i).syllableBar != lastBar) {
             lastBar = syllables.at(i).syllableBar;
             text += "\n";
             text += indent(indentCol).c_str();
@@ -3780,21 +3686,25 @@ LilyPondExporter::Syllable::protect()
     // A __desired__ isolated underscore (not an empty syllable) needs quotes
     if (syllableString == "_") needsQuotes = true;
     
+    // Unquoted, double underscore or double hyphen may be misinterpreted
+    if (syllableString == "__") needsQuotes = true;
+    if (syllableString == "--") needsQuotes = true;
+    
     // Look for spaces inside the syllable
-    if (syllableString.contains(QChar(' '))) {
+    if (syllableString.contains(' ')) {
         needsQuotes = true;
     }     
     
     // Protect double quotation marks
-    if (syllableString.contains(QChar('"'))) {
-        syllableString.replace(QChar('"'), QString("\\\""));
+    if (syllableString.contains('"')) {
+        syllableString.replace('"', "\\\"");
         needsQuotes = true;
     }    
 
     // Protect the syllable with double quotes if needed 
     if (needsQuotes) {
-        syllableString.append("\"");
-        syllableString.prepend("\"");
+        syllableString.append('"');
+        syllableString.prepend('"');
         
         return true;
     }
