@@ -88,7 +88,7 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
     m_progressTotal(0),
     m_progressPerCall(0)
 {
-    makeQuantizer(settingsGroup, scope);
+    setName(getGlobalName(makeQuantizer(settingsGroup, scope)));
 }
 
 // cppcheck-suppress uninitMemberVar
@@ -106,7 +106,7 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
     m_progressTotal(0),
     m_progressPerCall(0)
 {
-    makeQuantizer(settingsGroup, scope);
+    setName(getGlobalName(makeQuantizer(settingsGroup, scope)));
 }
 
 EventQuantizeCommand::~EventQuantizeCommand()
