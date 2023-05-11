@@ -79,34 +79,34 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
                                            timeT endTime,
                                            QString settingsGroup,
                                            QuantizeScope scope):
-    BasicCommand(getGlobalName(makeQuantizer(settingsGroup, scope)),
+    BasicCommand("Quantize",
                  segment, startTime, endTime,
                  true),  // bruteForceRedo
-    //m_quantizer{},  // Do not init here.  makeQuantizer() call does this.
+    m_quantizer(),
     m_selection(nullptr),
     m_settingsGroup(settingsGroup),
     m_progressTotal(0),
     m_progressPerCall(0)
 {
-    // nothing else -- m_quantizer set by makeQuantizer() call above.
+    makeQuantizer(settingsGroup, scope);
 }
 
 // cppcheck-suppress uninitMemberVar
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
                                            QString settingsGroup,
                                            QuantizeScope scope) :
-    BasicCommand(getGlobalName(makeQuantizer(settingsGroup, scope)),
+    BasicCommand("Quantize",
                  selection.getSegment(),
                  selection.getStartTime(),
                  selection.getEndTime(),
                  true),  // bruteForceRedo
-    //m_quantizer{},  // Do not init here.  makeQuantizer() call does this.
+    m_quantizer(),
     m_selection(&selection),
     m_settingsGroup(settingsGroup),
     m_progressTotal(0),
     m_progressPerCall(0)
 {
-    // nothing else -- m_quantizer set by makeQuantizer() call above.
+    makeQuantizer(settingsGroup, scope);
 }
 
 EventQuantizeCommand::~EventQuantizeCommand()
