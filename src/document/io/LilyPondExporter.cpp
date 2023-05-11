@@ -3701,19 +3701,12 @@ LilyPondExporter::Syllable::protect()
         needsQuotes = true;
     }    
     
-    // Sometimes a number among lyrics may give strange errors
-    if (   syllableString.contains('0')
-        || syllableString.contains('1')
-        || syllableString.contains('2')
-        || syllableString.contains('3')
-        || syllableString.contains('4')
-        || syllableString.contains('5')
-        || syllableString.contains('6')
-        || syllableString.contains('7')
-        || syllableString.contains('8')
-        || syllableString.contains('9')) {
-            needsQuotes = true;
-    }
+    // A syllable with a space inside it needs to be protected.
+    // Sometimes a number among lyrics may give strange errors.
+    // Same thing with '{', '}', '$', and '#' even if there is very little
+    // chance to find such characters inside a lyric.
+    needsQuotes = needsQuotes
+                    || syllableString.contains(QRegularExpression("[ 0-9{}$#]"));
 
     // Protect the syllable with double quotes if needed 
     if (needsQuotes) {
