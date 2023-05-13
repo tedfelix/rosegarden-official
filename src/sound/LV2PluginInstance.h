@@ -73,9 +73,6 @@ public:
     void discardEvents() override;
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
-    LV2_URID uridMap(const char *uri);
-    const char* uridUnmap(LV2_URID urid);
-
     enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
 
     struct LV2PortData
@@ -158,13 +155,6 @@ protected:
 
     bool                      m_bypassed;
 
-    //urid map
-    std::map<std::string, int> m_uridMap;
-    std::map<int, std::string> m_uridUnmap;
-    int m_nextId;
-
-    LV2_URID_Map m_map;
-    LV2_URID_Unmap m_unmap;
     LV2_Feature m_uridMapFeature;
     LV2_Feature m_uridUnmapFeature;
 

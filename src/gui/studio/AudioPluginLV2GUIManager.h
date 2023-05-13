@@ -15,24 +15,26 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_AUDIOPLUGINGUIMANAGER_H
-#define RG_AUDIOPLUGINGUIMANAGER_H
+#ifndef RG_AUDIOPLUGINLV2GUIMANAGER_H
+#define RG_AUDIOPLUGINLV2GUIMANAGER_H
 
 #include "gui/application/RosegardenMainWindow.h"
+
+#include <lilv/lilv.h>
 
 namespace Rosegarden
 {
 
-class AudioPluginOSCGUIManager;
-class AudioPluginLV2GUIManager;
 class Studio;
+class AudioPluginLV2GUI;
 
-class AudioPluginGUIManager
+class AudioPluginLV2GUIManager
 {
- public:
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioPluginLV2GUIManager)
 
-    explicit AudioPluginGUIManager(RosegardenMainWindow *mainWindow);
-    virtual ~AudioPluginGUIManager();
+public:
+    explicit AudioPluginLV2GUIManager(RosegardenMainWindow *mainWindow);
+    ~AudioPluginLV2GUIManager();
 
     void setStudio(Studio *studio);
     bool hasGUI(InstrumentId instrument, int position);
@@ -45,16 +47,15 @@ class AudioPluginGUIManager
                              QString key);
 
  private:
-    enum PluginArchitecture {UNKNOWN, OSC, LV2};
-    PluginArchitecture getArtchitecture(InstrumentId instrument, int position);
+    AudioPluginLV2GUI* getInstance(InstrumentId instrument, int position);
 
     RosegardenMainWindow *m_mainWindow;
     Studio *m_studio;
-    AudioPluginOSCGUIManager *m_oscManager;
-#ifdef HAVE_LILV
-    AudioPluginLV2GUIManager *m_lv2Manager;
-#endif
 
+    LilvWorld* m_world;
+    typedef std::map<int, AudioPluginLV2GUI *> IntGUIMap;
+    typedef std::map<int, IntGUIMap> GUIMap;
+    GUIMap m_guis;
 };
 
 }

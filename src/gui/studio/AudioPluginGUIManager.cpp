@@ -25,12 +25,20 @@
 #include "base/AudioPluginInstance.h"
 #include "sound/PluginIdentifier.h"
 
+#ifdef HAVE_LILV
+#include "gui/studio/AudioPluginLV2GUIManager.h"
+#endif
+
 namespace Rosegarden
 {
 
 AudioPluginGUIManager::AudioPluginGUIManager(RosegardenMainWindow *mainWindow) :
     m_mainWindow(mainWindow),
     m_oscManager(new AudioPluginOSCGUIManager(mainWindow))
+#ifdef HAVE_LILV
+    ,
+    m_lv2Manager(new AudioPluginLV2GUIManager(mainWindow))
+#endif
 {}
 
 AudioPluginGUIManager::~AudioPluginGUIManager()
@@ -41,6 +49,9 @@ void AudioPluginGUIManager::setStudio(Studio *studio)
 {
     m_studio = studio;
     m_oscManager->setStudio(studio);
+#ifdef HAVE_LILV
+    m_lv2Manager->setStudio(studio);
+#endif
 }
 
 bool AudioPluginGUIManager::hasGUI(InstrumentId instrument, int position)
@@ -51,8 +62,11 @@ bool AudioPluginGUIManager::hasGUI(InstrumentId instrument, int position)
     case OSC:
         return m_oscManager->hasGUI(instrument, position);
     case LV2:
-        //todo
+#ifdef HAVE_LILV
+        return m_lv2Manager->hasGUI(instrument, position);
+#else
         return false;
+#endif
     case UNKNOWN:
         return false;
     }
@@ -67,7 +81,9 @@ void AudioPluginGUIManager::showGUI(InstrumentId instrument, int position)
         m_oscManager->showGUI(instrument, position);
         break;
     case LV2:
-        //todo
+#ifdef HAVE_LILV
+        m_lv2Manager->showGUI(instrument, position);
+#endif
         break;
     case UNKNOWN:
         break;
@@ -82,7 +98,9 @@ void AudioPluginGUIManager::stopGUI(InstrumentId instrument, int position)
         m_oscManager->stopGUI(instrument, position);
         break;
     case LV2:
-        //todo
+#ifdef HAVE_LILV
+        m_lv2Manager->stopGUI(instrument, position);
+#endif
         break;
     case UNKNOWN:
         break;
@@ -92,7 +110,9 @@ void AudioPluginGUIManager::stopGUI(InstrumentId instrument, int position)
 void AudioPluginGUIManager::stopAllGUIs()
 {
     m_oscManager->stopAllGUIs();
-    // lv2 todo
+#ifdef HAVE_LILV
+    m_lv2Manager->stopAllGUIs();
+#endif
 }
 
 void AudioPluginGUIManager::updateProgram(InstrumentId instrument, int position)
@@ -103,7 +123,9 @@ void AudioPluginGUIManager::updateProgram(InstrumentId instrument, int position)
         m_oscManager->updateProgram(instrument, position);
         break;
     case LV2:
-        //todo
+#ifdef HAVE_LILV
+        m_lv2Manager->updateProgram(instrument, position);
+#endif
         break;
     case UNKNOWN:
         break;
@@ -119,7 +141,9 @@ void AudioPluginGUIManager::updatePort(InstrumentId instrument, int position,
         m_oscManager->updatePort(instrument, position, port);
         break;
     case LV2:
-        //todo
+#ifdef HAVE_LILV
+        m_lv2Manager->updatePort(instrument, position, port);
+#endif
         break;
     case UNKNOWN:
         break;
@@ -135,7 +159,9 @@ void AudioPluginGUIManager::updateConfiguration(InstrumentId instrument,
         m_oscManager->updateConfiguration(instrument, position, key);
         break;
     case LV2:
-        //todo
+#ifdef HAVE_LILV
+        m_lv2Manager->updateConfiguration(instrument, position, key);
+#endif
         break;
     case UNKNOWN:
         break;

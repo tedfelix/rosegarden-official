@@ -741,6 +741,9 @@ if (LILV_FOUND)
   set(rg_CPPS ${rg_CPPS}
     sound/LV2PluginFactory.cpp
     sound/LV2PluginInstance.cpp
+    sound/LV2Urid.cpp
+    gui/studio/AudioPluginLV2GUIManager.cpp
+    gui/studio/AudioPluginLV2GUI.cpp
   )
 endif()
 

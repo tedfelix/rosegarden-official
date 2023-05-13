@@ -20,29 +20,10 @@
 
 #include <QtGlobal>
 #include "misc/Debug.h"
+#include "sound/LV2Urid.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/atom/util.h>
-
-namespace
-{
-    LV2_URID LV2UridMap(LV2_URID_Map_Handle handle,
-                        const char *uri)
-    {
-        Rosegarden::LV2PluginInstance* lv2i =
-            static_cast<Rosegarden::LV2PluginInstance*>(handle);
-        return lv2i->uridMap(uri);
-    }
-
-    const char* LV2UridUnmap(LV2_URID_Unmap_Handle handle,
-                             LV2_URID urid)
-    {
-        Rosegarden::LV2PluginInstance* lv2i =
-            static_cast<Rosegarden::LV2PluginInstance*>(handle);
-        return lv2i->uridUnmap(urid);
-    }
-
-}
 
 namespace Rosegarden
 {
@@ -72,13 +53,9 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_sampleRate(sampleRate),
         m_latencyPort(nullptr),
         m_run(false),
-        m_bypassed(false),
-        m_nextId(1)
+        m_bypassed(false)
 {
     RG_DEBUG << "create plugin" << uri;
-
-    m_map = {this, &LV2UridMap};
-    m_unmap = {this, &LV2UridUnmap};
 
     init(idealChannelCount);
 
@@ -99,7 +76,8 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         LV2_Atom_Sequence* aseq =
             reinterpret_cast<LV2_Atom_Sequence*>(dbuf);
         lv2_atom_sequence_clear(aseq);
-        LV2_URID type = LV2UridMap(this, LV2_ATOM__Sequence);
+        LV2Urid* lv2urid = LV2Urid::getInstance();
+        LV2_URID type = lv2urid->uridMap(LV2_ATOM__Sequence);
         aseq->atom.type = type;
         m_midiIn.push_back(aseq);
     }
@@ -111,7 +89,8 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
     m_plugin = lilv_plugins_get_by_uri(plugins, pluginUri);
 
     snd_midi_event_new(100, &m_midiParser);
-    m_midiEventUrid = LV2UridMap(this, LV2_MIDI__MidiEvent);
+    LV2Urid* lv2urid = LV2Urid::getInstance();
+    m_midiEventUrid = lv2urid->uridMap(LV2_MIDI__MidiEvent);
 
     instantiate(sampleRate);
     if (isOK()) {
@@ -275,8 +254,9 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
         RG_DEBUG << "feature:" << lilv_node_as_string(fnode);
     }
 
-    LV2_Feature m_uridMapFeature = {LV2_URID__map, &m_map};
-    LV2_Feature m_uridUnmapFeature = {LV2_URID__unmap, &m_unmap};
+    LV2Urid* lv2urid = LV2Urid::getInstance();
+    m_uridMapFeature = {LV2_URID__map, &(lv2urid->m_map)};
+    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2urid->m_unmap)};
     m_features.push_back(&m_uridMapFeature);
     m_features.push_back(&m_uridUnmapFeature);
     m_features.push_back(nullptr);
@@ -478,30 +458,6 @@ LV2PluginInstance::cleanup()
     }
 
     m_instances.clear();
-}
-
-LV2_URID
-LV2PluginInstance::uridMap(const char *uri)
-{
-    auto it = m_uridMap.find(uri);
-    if (it == m_uridMap.end()) {
-        int id = m_nextId;
-        m_nextId++;
-        m_uridMap[uri] = id;
-        m_uridUnmap[id] = uri;
-    }
-    int ret = m_uridMap[uri];
-    return ret;
-}
-
-const char*
-LV2PluginInstance::uridUnmap(LV2_URID urid)
-{
-    auto it = m_uridUnmap.find(urid);
-    if (it == m_uridUnmap.end()) {
-        return "";
-    }
-    return (*it).second.c_str();
 }
 
 }
