@@ -87,10 +87,10 @@ PluginControl::PluginControl(QWidget *parent,
             snapToTicks = true;
         }
         if (port->getDisplayHint() & PluginPort::Toggled) {
-            lowerBound = -0.0001;
-            upperBound = 1.0001;
-            step = 1.0;
-            pageStep = 1.0;
+            lowerBound = 0.0;
+            upperBound = 1.0;
+            step = upperBound - lowerBound;
+            pageStep = upperBound - lowerBound;
             ticks = Rotary::StepTicks;
             snapToTicks = true;
         }
