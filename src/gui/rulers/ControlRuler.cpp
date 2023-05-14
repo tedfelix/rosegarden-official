@@ -449,38 +449,41 @@ void ControlRuler::updateSegment()
         }
     }
 
-    // check for events at the same time and delete them
     EventSelection *eventsToErase = new EventSelection(*m_segment);
-    // For each selected item...
-    for (QSharedPointer<const ControlItem> cItem : m_selectedItems) {
-        const double xItem = cItem->xStart();
-        RG_DEBUG << "updateSegment check for event at" << xItem;
-        // For each control item starting at xItem...
-        for (ControlItemMap::const_iterator otherItemIter =
-                 m_controlItemMap.lower_bound(xItem);
-             otherItemIter != m_controlItemMap.end();
-             ++otherItemIter) {
-            // If this is the same as the item we are checking, try the next.
-            if (cItem == otherItemIter->second) {
-                RG_DEBUG << "updateSegment ignoring new item";
-                continue;
-            }
-            const double xOther = otherItemIter->first;
-            // ??? This should never happen due to lower_bound().
-            //     Can we remove?
-            if (xOther < xItem) {
-                RG_DEBUG << "updateSegment ignoring" << xOther <<
-                    "before" << xItem;
-                continue;
-            }
-            // If we are past the original item position, we're done.
-            if (xOther > xItem)
-                break;
+    if (! allowSimultaneousEvents()) {
+        // check for events at the same time and delete them
+        // For each selected item...
+        for (QSharedPointer<const ControlItem> cItem : m_selectedItems) {
+            const double xItem = cItem->xStart();
+            RG_DEBUG << "updateSegment check for event at" << xItem;
+            // For each control item starting at xItem...
+            for (ControlItemMap::const_iterator otherItemIter =
+                     m_controlItemMap.lower_bound(xItem);
+                 otherItemIter != m_controlItemMap.end();
+                 ++otherItemIter) {
+                // If this is the same as the item we are checking,
+                // try the next.
+                if (cItem == otherItemIter->second) {
+                    RG_DEBUG << "updateSegment ignoring new item";
+                    continue;
+                }
+                const double xOther = otherItemIter->first;
+                // ??? This should never happen due to lower_bound().
+                //     Can we remove?
+                if (xOther < xItem) {
+                    RG_DEBUG << "updateSegment ignoring" << xOther <<
+                        "before" << xItem;
+                    continue;
+                }
+                // If we are past the original item position, we're done.
+                if (xOther > xItem)
+                    break;
 
-            // Found a duplicate, add to eventsToErase.
-            RG_DEBUG << "updateSegment erase old event at" << xOther;
-            Event *eventToDelete = otherItemIter->second->getEvent();
-            eventsToErase->addEvent(eventToDelete, false);
+                // Found a duplicate, add to eventsToErase.
+                RG_DEBUG << "updateSegment erase old event at" << xOther;
+                Event *eventToDelete = otherItemIter->second->getEvent();
+                eventsToErase->addEvent(eventToDelete, false);
+            }
         }
     }
 
@@ -489,9 +492,9 @@ void ControlRuler::updateSegment()
     // Note that updateSegment deletes and renews the event whether it has moved or not
     RG_DEBUG << "updateSegment selectedItems:" << m_selectedItems.size();
     macro->addCommand(new ControlChangeCommand(m_selectedItems,
-                                    *m_segment,
-                                    start,
-                                    end));
+                                               *m_segment,
+                                               start,
+                                               end));
 
     if (eventsToErase->getAddedEvents() != 0) {
         macro->addCommand(new EraseCommand(eventsToErase));

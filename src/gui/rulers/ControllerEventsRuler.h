@@ -103,6 +103,8 @@ public:
 
     virtual void createRulerMenu() override;
 
+    virtual bool allowSimultaneousEvents() override;
+
 protected:
     virtual void init();
     virtual bool isOnThisRuler(Event *);
