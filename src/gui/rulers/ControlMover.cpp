@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControlMover]"
+#define RG_NO_DEBUG_PRINT 1
+
 #include "ControlMover.h"
 
 #include "base/BaseProperties.h"
@@ -146,12 +149,14 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
             QSharedPointer<EventControlItem> item =
                     qSharedPointerDynamicCast<EventControlItem>(*it);
 
-            float x = pIt->x()+deltaX;
+            float x = pIt->x() + deltaX;
+            RG_DEBUG << "handleMouseMove" << x << pIt->x() << deltaX;
             // snap only if shift is not pressed
             if (! (e->modifiers & Qt::ShiftModifier)) {
-                timeT et = m_rulerScale->getTimeForX(x);
+                timeT et = m_rulerScale->getTimeForX(x / xscale);
                 timeT etSnap = m_snapGrid->snapTime(et);
-                x =  m_rulerScale->getXForTime(etSnap);
+                x =  m_rulerScale->getXForTime(etSnap) * xscale;
+                RG_DEBUG << "handleMouseMove snap" << et << etSnap << x;
             }
             float xmin = m_ruler->getXMin() * xscale;
             float xmax = (m_ruler->getXMax() - 1) * xscale;
