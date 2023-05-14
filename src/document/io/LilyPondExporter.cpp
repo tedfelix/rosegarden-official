@@ -3503,24 +3503,30 @@ LilyPondExporter::writeVerse(Segment *seg, int verseIndex,
 QString
 LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 {
-    QString text = QString(indent(indentCol).c_str());
     bool haveLyric = false;
     bool firstNote = true;
-    bool firstBar = true;
+    
+    // All the syllables of the segment along their bar numbers
+    QList<Syllable> syllables;  
         
     if ((currentVerse < 0) || (currentVerse >= seg->getVerseCount())) {
         return QString("% Looks like there is a bug near the call"
                        " of LilyPondExporter::getVerseText()");
     }
     
+    
+    // Extract all the lyrics from the segment and copy them in syllables
+    
     timeT lastTime = seg->getStartTime();
     int lastBar = m_composition->getBarNumber(lastTime);
     for (Segment::iterator j = seg->begin();
-        seg->isBeforeEndMarker(j); ++j) {
+            seg->isBeforeEndMarker(j); ++j) {
 
-        QString syllable("");
+        Syllable syllable("", 0);        
+        QString rawSyllable("");
         bool isNote = (*j)->isa(Note::EventType);
         bool isLyric = false;
+        bool found = false;
 
         if (!isNote) {
             if ((*j)->isa(Text::EventType)) {
@@ -3543,7 +3549,8 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 
                 // This is about the previous note
                 if (!haveLyric) {
-                    syllable = QString("_");
+                    syllable = Syllable("", myBar);
+                    found = true;
                 }
                 
                 lastTime = myTime;
@@ -3563,45 +3570,153 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
             if (verse == currentVerse) {
                 std::string ssyllable;
                 (*j)->get<String>(Text::TextPropertyName, ssyllable);
-                syllable = QString(strtoqstr(ssyllable));
-                
-                // Remove leading and trailing spaces  
-                syllable.replace(QRegularExpression("^\\s+"), "");
-                syllable.replace(QRegularExpression("\\s+$"), "");
-                
-                // Protect the backslash protecting a double quotation mark
-                syllable.replace(QRegularExpression("\""), "\\\"");
-               
-                syllable.prepend("\"");
-                syllable.append("\"");
+                rawSyllable = QString(strtoqstr(ssyllable));
 
+                // Remove leading and trailing spaces
+                // This spaces can't be created with the lyric editor, but may
+                // exist when the syllable has been entered with the text tool
+                rawSyllable.replace(QRegularExpression("^\\s+"), "");
+                rawSyllable.replace(QRegularExpression("\\s+$"), "");
+                
+                syllable = Syllable(rawSyllable, myBar);
+                found = true;
                 haveLyric = true;
             }
         }
 
-        if (syllable != "") {
-            if ((myBar != lastBar) || firstBar) {
-                text += "\n";
-                text += indent(indentCol).c_str();
-                text += QStringLiteral("%{ %1 %}   ").arg(myBar + 1, 3);
-                lastBar = myBar;
-                firstBar = false;
+        if (found) syllables.append(syllable);
+    }
+    
+    
+    
+    // Modify the content of syllables to eventually get:
+    //    'xxx',   '-', '_', ''        -->  'xxx - "_" _'
+    //    'xxx-',  '-', '-', 'yyy'     -->  'xxx -- _ _ yyy'
+    //    'xxx-',  '',  '',  'yyy'     -->  'xxx -- _ _ yyy'
+    //    'xxx_',  '',  '',  'yyy'     -->  'xxx __ _ _ yyy'
+    //    'xxx_',  '_', '_', 'yyy'     -->  'xxx __ _ _ yyy'
+    //    'xxx_',  '-', '-', 'yyy'     -->  'xxx __ _ _ yyy'
+    //    'xxx yyy'                    -->  '"xxx yyy"'
+    //    'xx"yy'                      -->  '"xx\"yy"'
+    
+    // True after "xxx-" or "xxx_" while parsing a row of "_"
+    bool sequence = false;     
+    
+    for (int i = 0; i < syllables.size(); ++i) {
+            
+        Syllable syl = syllables.at(i);      
+        
+        if ((syl.syllableString.length() > 1)
+                && (syl.syllableString != "--" || syl.syllableString != "__")) {
+            QChar last = syl.syllableString.back();
+            if (last == '-' || last == '_') {
+                sequence = true;
+                
+                // Remove the final hyphen or underscore
+                syl.syllableString.resize(syl.syllableString.length() - 1);
+                
+                // Add quotes if needed and put back the syllable in the list
+                syl.protect();
+                syllables.replace(i, syl);
+                
+                QString signal(last);
+                signal += last;             // Signal is now "--" or "__"
+                
+                // Insert it after the syllable
+                Syllable signalSyllable(signal, syl.syllableBar);
+                syllables.insert(++i, signalSyllable);
+                
+                // and go to the next syllable
+                continue;
             }
-            text += " " + syllable;
         }
         
-    }
+        // Process isolated hyphens and underscores of a sequence
+        if (sequence) {
+            if (syl.syllableString == "-" || syl.syllableString == "_") {
+                syl.syllableString = "_";
+                syllables.replace(i, syl);   // Do not protect it
+                    
+                // and go to the next syllable
+                continue;
+            }
+        } 
+        
+        // Always replace an empty syllable with an underscore
+        if (syl.syllableString == "") {
+            syl.syllableString = "_";
+            syllables.replace(i, syl);   // Do not protect it
+                
+            // and go to the next syllable
+            continue;
+        } 
 
-    // With the following regular expression '_' at end of a line are removed
-    // text.replace(QRegularExpression(" _+([^ ])") , " \\1");
-    // Try a better one here
-    text.replace(QRegularExpression(" _+(\\S)") , " \\1");
-    // But what is the goal of this replacement ???
+        // "Ordinary" syllable
+        sequence = false;                // Stop a possible sequence
+        if (syl.protect()) {             // protect the syllable if needed
+            syllables.replace(i, syl);   // and replace it in the list
+        }
+    }  
     
-    text.replace("\"_\"" , " ");
-    
+
+    // Copy the syllables in a string
+    QString text("");
+    for (int i = 0; i < syllables.size(); ++i) {
+        
+        // At the beginning of a bar, write its number inside a LilyPond comment
+        if (i == 0 || syllables.at(i).syllableBar != lastBar) {
+            lastBar = syllables.at(i).syllableBar;
+            text += "\n";
+            text += indent(indentCol).c_str();
+            text += QStringLiteral("%{ %1 %}   ").arg(lastBar + 1, 3);
+        }
+        text += " ";
+        text += syllables.at(i).syllableString;
+    }
+    text += "\n";
+ 
     return text;
 }
-                    
 
+bool
+LilyPondExporter::Syllable::protect()
+{
+    bool needsQuotes = false;
+    
+    // A __desired__ isolated underscore (not an empty syllable) needs quotes
+    if (syllableString == "_") needsQuotes = true;
+    
+    // Unquoted, double underscore or double hyphen may be misinterpreted
+    if (syllableString == "__") needsQuotes = true;
+    if (syllableString == "--") needsQuotes = true;
+    
+    // Look for spaces inside the syllable
+    if (syllableString.contains(' ')) {
+        needsQuotes = true;
+    }     
+    
+    // Protect double quotation marks
+    if (syllableString.contains('"')) {
+        syllableString.replace('"', "\\\"");
+        needsQuotes = true;
+    }    
+    
+    // A syllable with a space inside it needs to be protected.
+    // Sometimes a number among lyrics may give strange errors.
+    // Same thing with '{', '}', '$', and '#' even if there is very little
+    // chance to find such characters inside a lyric.
+    needsQuotes = needsQuotes
+                    || syllableString.contains(QRegularExpression("[ 0-9{}$#]"));
+
+    // Protect the syllable with double quotes if needed 
+    if (needsQuotes) {
+        syllableString.append('"');
+        syllableString.prepend('"');
+        
+        return true;
+    }
+    
+    return false;
+}
+                    
 }

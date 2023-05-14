@@ -69,11 +69,12 @@ globalTempo = {
                     \set ignoreMelismata = ##t
 
                     % Segment "Acoustic Grand Piano": verse 1
-                    
-                    %{   1 %}    "This" "is"
-                    %{   2 %}    "litt-" "le"
-                    %{   3 %}    "song."
+
+                    %{   1 %}    This is
+                    %{   2 %}    litt -- le
+                    %{   3 %}    song.
                     %{   4 %}    _
+
                     \unset ignoreMelismata
                 }
             } % Lyrics 
@@ -86,11 +87,12 @@ globalTempo = {
                     \set ignoreMelismata = ##t
 
                     % Segment "Acoustic Grand Piano": verse 2
-                    
-                    %{   1 %}    "Peut-" "être"
-                    %{   2 %}    "est-" "ce"
+
+                    %{   1 %}    Peut -- être
+                    %{   2 %}    est -- ce
                     %{   3 %}    "错误 !"
                     %{   4 %}    _
+
                     \unset ignoreMelismata
                 }
             } % Lyrics 

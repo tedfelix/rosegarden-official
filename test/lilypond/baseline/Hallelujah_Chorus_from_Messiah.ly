@@ -1374,85 +1374,86 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "flute": verse 1
-                        
-                        %{   4 %}    "Hal" "le" "lu" "ja,"
-                        %{   5 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{   6 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{   7 %}    "le" _ "lu" "ja,"
-                        %{   8 %}    "Hal" "le" "lu" "ja,"
-                        %{   9 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  10 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{  11 %}    "le" _ "lu" "ja,"
-                        %{  12 %}    "denn" "Gott" "der"
-                        %{  13 %}    "Herr" "re" "gie" "ret" "all"
-                        %{  14 %}    "mäch" "tig," "Hal" "le"
-                        %{  15 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  16 %}    "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  19 %}    "Hal" "le"
-                        %{  20 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  21 %}    "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  22 %}    "denn" "Gott" "der"
-                        %{  23 %}    "Herr" "re" "gie" "ret" "all"
-                        %{  24 %}    "mäch" "tig," "Hal" "le"
-                        %{  25 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le" "lu"
-                        %{  26 %}    "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{  27 %}    "le" _ "lu" _ _ "ja," "Hal" "le" "lu" "ja,"
-                        %{  28 %}    "Hal" "le" "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  29 %}    "Hal" "le" "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  30 %}    "Hal" "le" "lu" "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{  31 %}    "le" "lu" "ja," "Hal"
-                        %{  32 %}    "le" "lu" "ja!"
-                        %{  33 %}    "Das"
-                        %{  34 %}    "Kö" "nig" "reich" "der" _
-                        %{  35 %}    "Welt"
-                        %{  36 %}    "ist" "fort" _
-                        %{  37 %}    "an" "das"
-                        %{  38 %}    "Kö" "nig" "reich" "des"
-                        %{  39 %}    "Herrn" "und" "sei" "nes"
-                        %{  40 %}    "Christ," "und" "sei" "nes"
-                        %{  41 %}    "Christ,"
-                        %{  48 %}    "und"
-                        %{  49 %}    "er" "re" "giert" "auf"
-                        %{  50 %}    "im" "mer" "und" "e" _ _
-                        %{  51 %}    "wig," "Herr" "der"
-                        %{  52 %}    "Herrn,"
-                        %{  54 %}    "der" "Wel" "ten"
-                        %{  55 %}    "Gott,"
-                        %{  57 %}    "Herr" "der"
-                        %{  58 %}    "Herrn,"
-                        %{  60 %}    "der" "Wel" "ten"
-                        %{  61 %}    "Gott,"
-                        %{  63 %}    "Herr" "der"
-                        %{  64 %}    "Herrn,"
-                        %{  66 %}    "der" "Wel" "ten"
-                        %{  67 %}    "Gott,"
-                        %{  68 %}    "der" "Wel" _ "ten" _
-                        %{  69 %}    "Gott," "und" "er" "reg"
-                        %{  70 %}    "giert,"
-                        %{  71 %}    "und"
-                        %{  72 %}    "er" "re" "giert" "auf"
-                        %{  73 %}    "im" "mer" "und" "e" _ _
-                        %{  74 %}    "wig,"
-                        %{  75 %}    "auf" "im" "mer" "und"
-                        %{  76 %}    "e" "wig,"
-                        %{  77 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  78 %}    "lu" "ja," "und" "er" "re"
-                        %{  79 %}    "giert" "auf" "e" "wig," "auf"
-                        %{  80 %}    "im" "mer" "und" "e" _
-                        %{  81 %}    "wig," "Herr" "der"
-                        %{  82 %}    "Herrn," "der" "Wel" "ten"
-                        %{  83 %}    "Gott," "Herr" "der"
-                        %{  84 %}    "Herrn," "der" "Wel" "ten"
-                        %{  85 %}    "Gott," "und"
-                        %{  86 %}    "er" "re" "giert" "auf"
-                        %{  87 %}    "im" "mer" "und" "e"
-                        %{  88 %}    "wig," "Herr" "der"
-                        %{  89 %}    "Herrn," "der" "Wel" "ten"
-                        %{  90 %}    "Gott," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  91 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  92 %}    "lu" "ja," "Hal"
-                        %{  93 %}    "le" "lu"
-                        %{  94 %}    "ja!"
+
+                        %{   4 %}    Hal le lu ja,
+                        %{   5 %}    Hal le lu ja, Hal le
+                        %{   6 %}    lu ja, Hal le lu ja, Hal
+                        %{   7 %}    le _ lu ja,
+                        %{   8 %}    Hal le lu ja,
+                        %{   9 %}    Hal le lu ja, Hal le
+                        %{  10 %}    lu ja, Hal le lu ja, Hal
+                        %{  11 %}    le _ lu ja,
+                        %{  12 %}    denn Gott der
+                        %{  13 %}    Herr re gie ret all
+                        %{  14 %}    mäch tig, Hal le
+                        %{  15 %}    lu ja, Hal le lu ja, Hal le
+                        %{  16 %}    lu ja, Hal le lu ja,
+                        %{  19 %}    Hal le
+                        %{  20 %}    lu ja, Hal le lu ja, Hal le
+                        %{  21 %}    lu ja, Hal le lu ja,
+                        %{  22 %}    denn Gott der
+                        %{  23 %}    Herr re gie ret all
+                        %{  24 %}    mäch tig, Hal le
+                        %{  25 %}    lu ja, Hal le lu ja, Hal le lu
+                        %{  26 %}    ja, Hal le lu ja, Hal
+                        %{  27 %}    le _ lu _ _ ja, Hal le lu ja,
+                        %{  28 %}    Hal le lu ja, Hal le lu ja,
+                        %{  29 %}    Hal le lu ja, Hal le lu ja,
+                        %{  30 %}    Hal le lu ja, Hal le lu ja, Hal
+                        %{  31 %}    le lu ja, Hal
+                        %{  32 %}    le lu ja!
+                        %{  33 %}    Das
+                        %{  34 %}    Kö nig reich der _
+                        %{  35 %}    Welt
+                        %{  36 %}    ist fort _
+                        %{  37 %}    an das
+                        %{  38 %}    Kö nig reich des
+                        %{  39 %}    Herrn und sei nes
+                        %{  40 %}    Christ, und sei nes
+                        %{  41 %}    Christ,
+                        %{  48 %}    und
+                        %{  49 %}    er re giert auf
+                        %{  50 %}    im mer und e _ _
+                        %{  51 %}    wig, Herr der
+                        %{  52 %}    Herrn,
+                        %{  54 %}    der Wel ten
+                        %{  55 %}    Gott,
+                        %{  57 %}    Herr der
+                        %{  58 %}    Herrn,
+                        %{  60 %}    der Wel ten
+                        %{  61 %}    Gott,
+                        %{  63 %}    Herr der
+                        %{  64 %}    Herrn,
+                        %{  66 %}    der Wel ten
+                        %{  67 %}    Gott,
+                        %{  68 %}    der Wel _ ten _
+                        %{  69 %}    Gott, und er reg
+                        %{  70 %}    giert,
+                        %{  71 %}    und
+                        %{  72 %}    er re giert auf
+                        %{  73 %}    im mer und e _ _
+                        %{  74 %}    wig,
+                        %{  75 %}    auf im mer und
+                        %{  76 %}    e wig,
+                        %{  77 %}    Hal le lu ja, Hal le
+                        %{  78 %}    lu ja, und er re
+                        %{  79 %}    giert auf e wig, auf
+                        %{  80 %}    im mer und e _
+                        %{  81 %}    wig, Herr der
+                        %{  82 %}    Herrn, der Wel ten
+                        %{  83 %}    Gott, Herr der
+                        %{  84 %}    Herrn, der Wel ten
+                        %{  85 %}    Gott, und
+                        %{  86 %}    er re giert auf
+                        %{  87 %}    im mer und e
+                        %{  88 %}    wig, Herr der
+                        %{  89 %}    Herrn, der Wel ten
+                        %{  90 %}    Gott, Hal le lu ja, Hal le
+                        %{  91 %}    lu ja, Hal le lu ja, Hal le
+                        %{  92 %}    lu ja, Hal
+                        %{  93 %}    le lu
+                        %{  94 %}    ja!
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 
@@ -1606,90 +1607,91 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "oboe": verse 1
-                        
-                        %{   4 %}    "Hal" "le" "lu" "ja,"
-                        %{   5 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{   6 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{   7 %}    "le" _ _ "lu" "ja,"
-                        %{   8 %}    "Hal" "le" "lu" "ja,"
-                        %{   9 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  10 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{  11 %}    "le" "lu" "ja,"
-                        %{  12 %}    "denn" "Gott" "der"
-                        %{  13 %}    "Herr" "re" "gie" "ret" "all"
-                        %{  14 %}    "mäch" "tig," "Hal" "le"
-                        %{  15 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  16 %}    "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  17 %}    "denn" "Gott" "der"
-                        %{  18 %}    "Herr" "re" "gie" "ret" "all"
-                        %{  19 %}    "mäch" "tig," "Hal" "le"
-                        %{  20 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  21 %}    "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  23 %}    "Hal" "le"
-                        %{  24 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  25 %}    "Hal" "le" "lu" "ja," "Hal" _ "le" "lu" "ja,"
-                        %{  26 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  27 %}    "lu" "ja," "Hal" "le"
-                        %{  28 %}    "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  29 %}    "denn" "Gott" "der"
-                        %{  30 %}    "Herr" "re" "gie" "ret" "all"
-                        %{  31 %}    "mäch" "tig," "Hal" "le" "lu" "ja,"
-                        %{  32 %}    "Hal" "le" "lu" "ja,"
-                        %{  33 %}    "Das"
-                        %{  34 %}    "Kö" "nig" "reich" "der"
-                        %{  35 %}    "Welt"
-                        %{  36 %}    "ist" "fort"
-                        %{  37 %}    "an" "das"
-                        %{  38 %}    "Kö" "nig" "reich" "des" _
-                        %{  39 %}    "Herrn" "und" "sei" "nes"
-                        %{  40 %}    "Christ," "und" "sei" "nes"
-                        %{  41 %}    "Christ,"
-                        %{  46 %}    "And" "He" "shall"
-                        %{  47 %}    "reign" "auf" "e" "wig" "und"
-                        %{  48 %}    "e" _ _ "wig," "auf" "e" "wig"
-                        %{  49 %}    "und" "e" "wig," "auf"
-                        %{  50 %}    "e" _ "wig" "und"
-                        %{  51 %}    "e" "wig," "Herr" "der"
-                        %{  52 %}    "Herrn,"
-                        %{  54 %}    "der" "Wel" "ten"
-                        %{  55 %}    "Gott,"
-                        %{  58 %}    "auf" "e" "wig" "und"
-                        %{  59 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  60 %}    "lu" "ja,"
-                        %{  61 %}    "auf" "e" "wig" "und"
-                        %{  62 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  63 %}    "lu" "ja,"
-                        %{  64 %}    "auf" "e" "wig" "und"
-                        %{  65 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  66 %}    "lu" "ja,"
-                        %{  67 %}    "Herr" "der"
-                        %{  68 %}    "Herrn," "der" "Wel" "ten"
-                        %{  69 %}    "Gott,"
-                        %{  70 %}    "und" "er" "re"
-                        %{  71 %}    "giert" _ _ _ _ _ "und" "er" "re"
-                        %{  72 %}    "giert" _ _ "auf"
-                        %{  73 %}    "im" _ "mer" "und" "e" _
-                        %{  74 %}    "wig," "Herr" "der"
-                        %{  75 %}    "Herrn," "auf" "im" "mer" "und"
-                        %{  76 %}    "e" "wig," "der" "Wel" "ten"
-                        %{  77 %}    "Gott," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  78 %}    "lu" "ja," "und"
-                        %{  79 %}    "er" "re" "giert" "auf"
-                        %{  80 %}    "im" "mer" "und" "e"
-                        %{  81 %}    "wig," "Herr" "der" _
-                        %{  82 %}    "Herrn," "der" "Wel" "ten" _
-                        %{  83 %}    "Gott," "Herr" "der"
-                        %{  84 %}    "Herrn," "der" "Wel" "ten" _
-                        %{  85 %}    "Gott," "und"
-                        %{  86 %}    "er" "re" "giert" "auf"
-                        %{  87 %}    "im" "mer" "und" "e"
-                        %{  88 %}    "wig," "auf" "im" "mer" "und"
-                        %{  89 %}    "e" "wig," "auf" "im" "mer" "and"
-                        %{  90 %}    "w" "eig" "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  91 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  92 %}    "lu" "ja," "Hal"
-                        %{  93 %}    "le" "lu"
-                        %{  94 %}    "jah!"
+
+                        %{   4 %}    Hal le lu ja,
+                        %{   5 %}    Hal le lu ja, Hal le
+                        %{   6 %}    lu ja, Hal le lu ja, Hal
+                        %{   7 %}    le _ _ lu ja,
+                        %{   8 %}    Hal le lu ja,
+                        %{   9 %}    Hal le lu ja, Hal le
+                        %{  10 %}    lu ja, Hal le lu ja, Hal
+                        %{  11 %}    le lu ja,
+                        %{  12 %}    denn Gott der
+                        %{  13 %}    Herr re gie ret all
+                        %{  14 %}    mäch tig, Hal le
+                        %{  15 %}    lu ja, Hal le lu ja, Hal le
+                        %{  16 %}    lu ja, Hal le lu ja,
+                        %{  17 %}    denn Gott der
+                        %{  18 %}    Herr re gie ret all
+                        %{  19 %}    mäch tig, Hal le
+                        %{  20 %}    lu ja, Hal le lu ja, Hal le
+                        %{  21 %}    lu ja, Hal le lu ja,
+                        %{  23 %}    Hal le
+                        %{  24 %}    lu ja, Hal le lu ja, Hal le lu ja,
+                        %{  25 %}    Hal le lu ja, Hal _ le lu ja,
+                        %{  26 %}    Hal le lu ja, Hal le
+                        %{  27 %}    lu ja, Hal le
+                        %{  28 %}    lu ja, Hal le lu ja,
+                        %{  29 %}    denn Gott der
+                        %{  30 %}    Herr re gie ret all
+                        %{  31 %}    mäch tig, Hal le lu ja,
+                        %{  32 %}    Hal le lu ja,
+                        %{  33 %}    Das
+                        %{  34 %}    Kö nig reich der
+                        %{  35 %}    Welt
+                        %{  36 %}    ist fort
+                        %{  37 %}    an das
+                        %{  38 %}    Kö nig reich des _
+                        %{  39 %}    Herrn und sei nes
+                        %{  40 %}    Christ, und sei nes
+                        %{  41 %}    Christ,
+                        %{  46 %}    And He shall
+                        %{  47 %}    reign auf e wig und
+                        %{  48 %}    e _ _ wig, auf e wig
+                        %{  49 %}    und e wig, auf
+                        %{  50 %}    e _ wig und
+                        %{  51 %}    e wig, Herr der
+                        %{  52 %}    Herrn,
+                        %{  54 %}    der Wel ten
+                        %{  55 %}    Gott,
+                        %{  58 %}    auf e wig und
+                        %{  59 %}    e wig, Hal le lu ja, Hal le
+                        %{  60 %}    lu ja,
+                        %{  61 %}    auf e wig und
+                        %{  62 %}    e wig, Hal le lu ja, Hal le
+                        %{  63 %}    lu ja,
+                        %{  64 %}    auf e wig und
+                        %{  65 %}    e wig, Hal le lu ja, Hal le
+                        %{  66 %}    lu ja,
+                        %{  67 %}    Herr der
+                        %{  68 %}    Herrn, der Wel ten
+                        %{  69 %}    Gott,
+                        %{  70 %}    und er re
+                        %{  71 %}    giert _ _ _ _ _ und er re
+                        %{  72 %}    giert _ _ auf
+                        %{  73 %}    im _ mer und e _
+                        %{  74 %}    wig, Herr der
+                        %{  75 %}    Herrn, auf im mer und
+                        %{  76 %}    e wig, der Wel ten
+                        %{  77 %}    Gott, Hal le lu ja, Hal le
+                        %{  78 %}    lu ja, und
+                        %{  79 %}    er re giert auf
+                        %{  80 %}    im mer und e
+                        %{  81 %}    wig, Herr der _
+                        %{  82 %}    Herrn, der Wel ten _
+                        %{  83 %}    Gott, Herr der
+                        %{  84 %}    Herrn, der Wel ten _
+                        %{  85 %}    Gott, und
+                        %{  86 %}    er re giert auf
+                        %{  87 %}    im mer und e
+                        %{  88 %}    wig, auf im mer und
+                        %{  89 %}    e wig, auf im mer and
+                        %{  90 %}    w eig Hal le lu ja, Hal le
+                        %{  91 %}    lu ja, Hal le lu ja, Hal le
+                        %{  92 %}    lu ja, Hal
+                        %{  93 %}    le lu
+                        %{  94 %}    jah!
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 
@@ -1842,97 +1844,98 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "clarinet": verse 1
-                        
-                        %{   4 %}    "Hal" "le" "lu" "ja,"
-                        %{   5 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{   6 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{   7 %}    "le" _ "lu" "ja,"
-                        %{   8 %}    "Hal" "le" "lu" "ja,"
-                        %{   9 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  10 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{  11 %}    "le" _ _ "lu" "ja,"
-                        %{  12 %}    "denn" "Gott" "der"
-                        %{  13 %}    "Herr" "reg" "gie" "ret" "all"
-                        %{  14 %}    "mäch" "tig," "Hal" "le"
-                        %{  15 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  16 %}    "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  17 %}    "denn" "Gott" "der"
-                        %{  18 %}    "Herr" "reg" "gie" "ret" "all"
-                        %{  19 %}    "mäch" "tig," "Hal" "le"
-                        %{  20 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  21 %}    "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  22 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  23 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  24 %}    "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  25 %}    "denn" "Gott" "der"
-                        %{  26 %}    "Herr" "reg" "gie" "ret" "all"
-                        %{  27 %}    "mäch" "tig," "Hal" "le" "lu" "ja,"
-                        %{  28 %}    "Hal" "le" "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  29 %}    "denn" "Gott" "der"
-                        %{  30 %}    "Herr" "reg" "gie" "ret" "all"
-                        %{  31 %}    "mäch" "tig," "Hal"
-                        %{  32 %}    "le" "lu" "ja!"
-                        %{  33 %}    "Das"
-                        %{  34 %}    "Kö" "nig" "reich" "der"
-                        %{  35 %}    "Welt"
-                        %{  36 %}    "ist" "fort" _
-                        %{  37 %}    "an" "das"
-                        %{  38 %}    "Kö" "nig" "reich" "des"
-                        %{  39 %}    "Herrn" "und" "sei" "nes"
-                        %{  40 %}    "Christ," "und" "sei" "nes"
-                        %{  41 %}    "Christ,"
-                        %{  43 %}    "und"
-                        %{  44 %}    "er" "re" "giert" "auf"
-                        %{  45 %}    "im" "mer" "und" "e" _ _
-                        %{  46 %}    "wig," "und" "er" "re"
-                        %{  47 %}    "giert" "auf" _ "im" "mer" "und"
-                        %{  48 %}    "e" _ "wig,"
-                        %{  49 %}    "und" "er" "re"
-                        %{  50 %}    "giert" _ "auf" "im" "mer" "und"
-                        %{  51 %}    "e" "wig,"
-                        %{  52 %}    "auf" "im" "mer" "und"
-                        %{  53 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  54 %}    "lu" "ja,"
-                        %{  55 %}    "auf" "im" "mer" "und"
-                        %{  56 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  57 %}    "lu" "ja,"
-                        %{  58 %}    "auf" "im" "mer" "und"
-                        %{  59 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  60 %}    "lu" "ja,"
-                        %{  61 %}    "auf" "im" "mer" "und"
-                        %{  62 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  63 %}    "lu" "ja,"
-                        %{  64 %}    "auf" "im" "mer" "und"
-                        %{  65 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  66 %}    "lu" "ja,"
-                        %{  67 %}    "Herr" "der"
-                        %{  68 %}    "Herrn," "der" "Wel" _ "ten" _
-                        %{  69 %}    "Gott,"
-                        %{  70 %}    "und" "er" "re" "giert," "und" "er"
-                        %{  71 %}    "re" "giert,"
-                        %{  72 %}    "und" "er" "re" "giert," "auf"
-                        %{  73 %}    "im" "mer" "und" "e"
-                        %{  74 %}    "wig," "Herr" "der"
-                        %{  75 %}    "Herrn,"
-                        %{  76 %}    "der" "Wel" "ten"
-                        %{  77 %}    "Gott,"
-                        %{  78 %}    "und" "er" "re"
-                        %{  79 %}    "giert" "auf" "e" "wig," "auf"
-                        %{  80 %}    "im" "mer" "und" "e"
-                        %{  81 %}    "wig," "Herr" "der" _
-                        %{  82 %}    "Herrn," "der" "Wel" "ten" _
-                        %{  83 %}    "Gott," "Herr" "der"
-                        %{  84 %}    "Herrn," "der" "Wel" "ten" _
-                        %{  85 %}    "Gott," "und"
-                        %{  86 %}    "er" "re" "giert" "auf"
-                        %{  87 %}    "im" "mer" "und" "e" _
-                        %{  88 %}    "wig," "auf" "im" "mer" "und"
-                        %{  89 %}    "e" "wif," "auf" "im" "mer" "und"
-                        %{  90 %}    "e" "wif," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  91 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  92 %}    "lu" "ja," "Hal"
-                        %{  93 %}    "le" "lu"
-                        %{  94 %}    "ja!"
+
+                        %{   4 %}    Hal le lu ja,
+                        %{   5 %}    Hal le lu ja, Hal le
+                        %{   6 %}    lu ja, Hal le lu ja, Hal
+                        %{   7 %}    le _ lu ja,
+                        %{   8 %}    Hal le lu ja,
+                        %{   9 %}    Hal le lu ja, Hal le
+                        %{  10 %}    lu ja, Hal le lu ja, Hal
+                        %{  11 %}    le _ _ lu ja,
+                        %{  12 %}    denn Gott der
+                        %{  13 %}    Herr reg gie ret all
+                        %{  14 %}    mäch tig, Hal le
+                        %{  15 %}    lu ja, Hal le lu ja, Hal le
+                        %{  16 %}    lu ja, Hal le lu ja,
+                        %{  17 %}    denn Gott der
+                        %{  18 %}    Herr reg gie ret all
+                        %{  19 %}    mäch tig, Hal le
+                        %{  20 %}    lu ja, Hal le lu ja, Hal le
+                        %{  21 %}    lu ja, Hal le lu ja,
+                        %{  22 %}    Hal le lu ja, Hal le
+                        %{  23 %}    lu ja, Hal le lu ja, Hal le
+                        %{  24 %}    lu ja, Hal le lu ja,
+                        %{  25 %}    denn Gott der
+                        %{  26 %}    Herr reg gie ret all
+                        %{  27 %}    mäch tig, Hal le lu ja,
+                        %{  28 %}    Hal le lu ja, Hal le lu ja,
+                        %{  29 %}    denn Gott der
+                        %{  30 %}    Herr reg gie ret all
+                        %{  31 %}    mäch tig, Hal
+                        %{  32 %}    le lu ja!
+                        %{  33 %}    Das
+                        %{  34 %}    Kö nig reich der
+                        %{  35 %}    Welt
+                        %{  36 %}    ist fort _
+                        %{  37 %}    an das
+                        %{  38 %}    Kö nig reich des
+                        %{  39 %}    Herrn und sei nes
+                        %{  40 %}    Christ, und sei nes
+                        %{  41 %}    Christ,
+                        %{  43 %}    und
+                        %{  44 %}    er re giert auf
+                        %{  45 %}    im mer und e _ _
+                        %{  46 %}    wig, und er re
+                        %{  47 %}    giert auf _ im mer und
+                        %{  48 %}    e _ wig,
+                        %{  49 %}    und er re
+                        %{  50 %}    giert _ auf im mer und
+                        %{  51 %}    e wig,
+                        %{  52 %}    auf im mer und
+                        %{  53 %}    e wig, Hal le lu ja, Hal le
+                        %{  54 %}    lu ja,
+                        %{  55 %}    auf im mer und
+                        %{  56 %}    e wig, Hal le lu ja, Hal le
+                        %{  57 %}    lu ja,
+                        %{  58 %}    auf im mer und
+                        %{  59 %}    e wig, Hal le lu ja, Hal le
+                        %{  60 %}    lu ja,
+                        %{  61 %}    auf im mer und
+                        %{  62 %}    e wig, Hal le lu ja, Hal le
+                        %{  63 %}    lu ja,
+                        %{  64 %}    auf im mer und
+                        %{  65 %}    e wig, Hal le lu ja, Hal le
+                        %{  66 %}    lu ja,
+                        %{  67 %}    Herr der
+                        %{  68 %}    Herrn, der Wel _ ten _
+                        %{  69 %}    Gott,
+                        %{  70 %}    und er re giert, und er
+                        %{  71 %}    re giert,
+                        %{  72 %}    und er re giert, auf
+                        %{  73 %}    im mer und e
+                        %{  74 %}    wig, Herr der
+                        %{  75 %}    Herrn,
+                        %{  76 %}    der Wel ten
+                        %{  77 %}    Gott,
+                        %{  78 %}    und er re
+                        %{  79 %}    giert auf e wig, auf
+                        %{  80 %}    im mer und e
+                        %{  81 %}    wig, Herr der _
+                        %{  82 %}    Herrn, der Wel ten _
+                        %{  83 %}    Gott, Herr der
+                        %{  84 %}    Herrn, der Wel ten _
+                        %{  85 %}    Gott, und
+                        %{  86 %}    er re giert auf
+                        %{  87 %}    im mer und e _
+                        %{  88 %}    wig, auf im mer und
+                        %{  89 %}    e wif, auf im mer und
+                        %{  90 %}    e wif, Hal le lu ja, Hal le
+                        %{  91 %}    lu ja, Hal le lu ja, Hal le
+                        %{  92 %}    lu ja, Hal
+                        %{  93 %}    le lu
+                        %{  94 %}    ja!
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 
@@ -2082,96 +2085,97 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "bassoon": verse 1
-                        
-                        %{   4 %}    "Hal" "le" "lu" "ja,"
-                        %{   5 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{   6 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{   7 %}    "le" _ _ "lu" "ja,"
-                        %{   8 %}    "Hal" "le" "lu" "ja,"
-                        %{   9 %}    "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  10 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal"
-                        %{  11 %}    "le" _ "lu" "ja,"
-                        %{  12 %}    "denn" "Gott" "der"
-                        %{  13 %}    "Herr" "re" "gie" "ret" "all"
-                        %{  14 %}    "mäch" "tig," "Hal" "le"
-                        %{  15 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  16 %}    "lu" "ja," "Hal" "le" "lu" "ja,"
-                        %{  17 %}    "denn" "Gott" "der"
-                        %{  18 %}    "Herr" "re" "gie" "ret" "all"
-                        %{  19 %}    "mäch" "tig," "Hal" "le"
-                        %{  20 %}    "lu" "jah!" "Hal" "le" "lu" "jah!" "Hal" "le"
-                        %{  21 %}    "lu" "jah!" "Hal" "le" "lu" "jah!"
-                        %{  24 %}    "Hal" "le" "lu" "jah!"
-                        %{  25 %}    "denn" "Gott" "der"
-                        %{  26 %}    "Herr" "re" "gie" "ret" "all"
-                        %{  27 %}    "mäch" "tig," "Hal" "le"
-                        %{  28 %}    "lu" "jah," "hal" "le" "lu" "jah!"
-                        %{  29 %}    "Hal" "le" "lu" "jah," "hal" "le"
-                        %{  30 %}    "lu" "jah," "hal" "le" "lu" "jah," "hal" "le"
-                        %{  31 %}    "lu" "jah," "hal" "le" "lu" "jah!" "Hal" "le"
-                        %{  32 %}    "lu" "jah," "hal" "le" "lu" "jah!"
-                        %{  33 %}    "Das"
-                        %{  34 %}    "Kö" "nig" "reich" "der" _
-                        %{  35 %}    "Welt"
-                        %{  36 %}    "ist" "fort"
-                        %{  37 %}    "an" "das"
-                        %{  38 %}    "Kö" "nig" "reich" "des" _
-                        %{  39 %}    "Herrn" "und" "sei" "nes"
-                        %{  40 %}    "Christ," "und" "sei" "nes"
-                        %{  41 %}    "Christ," "und" "er" "re"
-                        %{  42 %}    "giert" "auf" "im" "mer" "und"
-                        %{  43 %}    "e" "wig,"
-                        %{  44 %}    "auf" "im" "mer" "und"
-                        %{  45 %}    "e" _ "wig," "und" "er" "re"
-                        %{  46 %}    "giert," "und" "er" "re" "giert" "auf"
-                        %{  47 %}    "e" "wig," "auf"
-                        %{  48 %}    "im" "mer" "und" "e" "wig," "auf"
-                        %{  49 %}    "im" "mer" "und" "e" "wig," "auf"
-                        %{  50 %}    "e" _ "wig," "auf" "im" "mer" "und"
-                        %{  51 %}    "e" "wig,"
-                        %{  52 %}    "auf" "e" "wig" "und"
-                        %{  53 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  54 %}    "lu" "ja,"
-                        %{  55 %}    "auf" "e" "wig" "und"
-                        %{  56 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  57 %}    "lu" "ja,"
-                        %{  58 %}    "auf" "e" "wig" "und"
-                        %{  59 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  60 %}    "lu" "ja,"
-                        %{  61 %}    "auf" "e" "wig" "und"
-                        %{  62 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  63 %}    "lu" "ja,"
-                        %{  64 %}    "auf" "e" "wig" "und"
-                        %{  65 %}    "e" "wig," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  66 %}    "lu" "ja,"
-                        %{  67 %}    "Herr" "der"
-                        %{  68 %}    "Herrn," "der" "Wel" "ten"
-                        %{  69 %}    "Gott," "und" "er" "re"
-                        %{  70 %}    "giert" "auf" "im" "mer" "und"
-                        %{  71 %}    "e" "wig,"
-                        %{  72 %}    "und" "er" "re"
-                        %{  73 %}    "giert" "auf" _ "im" "mer" "und"
-                        %{  74 %}    "e" "wig," "Herr" "der"
-                        %{  75 %}    "Herrn," "auf" "e" "wig" "und"
-                        %{  76 %}    "e" "wig" "der" "Wel" "ten"
-                        %{  77 %}    "Gott," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  78 %}    "lu" "ja," "und" "er" "re"
-                        %{  79 %}    "giert" "auf" "e" "wig," "auf"
-                        %{  80 %}    "im" "mer" "und" "e"
-                        %{  81 %}    "wig," "Herr" "der"
-                        %{  82 %}    "Herrn," "der" "Wel" "ten"
-                        %{  83 %}    "Gott," "Herr" "der"
-                        %{  84 %}    "Herrn," "der" "Wel" "ten"
-                        %{  85 %}    "Gott," "und" "er" "re"
-                        %{  86 %}    "giert" "auf" "e" "wig," "auf"
-                        %{  87 %}    "im" "mer" "und" "e"
-                        %{  88 %}    "wig," "auf" "e" "wig" "und"
-                        %{  89 %}    "e" "wig" "auf" "e" "wig" "und"
-                        %{  90 %}    "e" "wig" "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  91 %}    "lu" "ja," "Hal" "le" "lu" "ja," "Hal" "le"
-                        %{  92 %}    "lu" "ja," "Hal"
-                        %{  93 %}    "le" "lu"
-                        %{  94 %}    "ja!"
+
+                        %{   4 %}    Hal le lu ja,
+                        %{   5 %}    Hal le lu ja, Hal le
+                        %{   6 %}    lu ja, Hal le lu ja, Hal
+                        %{   7 %}    le _ _ lu ja,
+                        %{   8 %}    Hal le lu ja,
+                        %{   9 %}    Hal le lu ja, Hal le
+                        %{  10 %}    lu ja, Hal le lu ja, Hal
+                        %{  11 %}    le _ lu ja,
+                        %{  12 %}    denn Gott der
+                        %{  13 %}    Herr re gie ret all
+                        %{  14 %}    mäch tig, Hal le
+                        %{  15 %}    lu ja, Hal le lu ja, Hal le
+                        %{  16 %}    lu ja, Hal le lu ja,
+                        %{  17 %}    denn Gott der
+                        %{  18 %}    Herr re gie ret all
+                        %{  19 %}    mäch tig, Hal le
+                        %{  20 %}    lu jah! Hal le lu jah! Hal le
+                        %{  21 %}    lu jah! Hal le lu jah!
+                        %{  24 %}    Hal le lu jah!
+                        %{  25 %}    denn Gott der
+                        %{  26 %}    Herr re gie ret all
+                        %{  27 %}    mäch tig, Hal le
+                        %{  28 %}    lu jah, hal le lu jah!
+                        %{  29 %}    Hal le lu jah, hal le
+                        %{  30 %}    lu jah, hal le lu jah, hal le
+                        %{  31 %}    lu jah, hal le lu jah! Hal le
+                        %{  32 %}    lu jah, hal le lu jah!
+                        %{  33 %}    Das
+                        %{  34 %}    Kö nig reich der _
+                        %{  35 %}    Welt
+                        %{  36 %}    ist fort
+                        %{  37 %}    an das
+                        %{  38 %}    Kö nig reich des _
+                        %{  39 %}    Herrn und sei nes
+                        %{  40 %}    Christ, und sei nes
+                        %{  41 %}    Christ, und er re
+                        %{  42 %}    giert auf im mer und
+                        %{  43 %}    e wig,
+                        %{  44 %}    auf im mer und
+                        %{  45 %}    e _ wig, und er re
+                        %{  46 %}    giert, und er re giert auf
+                        %{  47 %}    e wig, auf
+                        %{  48 %}    im mer und e wig, auf
+                        %{  49 %}    im mer und e wig, auf
+                        %{  50 %}    e _ wig, auf im mer und
+                        %{  51 %}    e wig,
+                        %{  52 %}    auf e wig und
+                        %{  53 %}    e wig, Hal le lu ja, Hal le
+                        %{  54 %}    lu ja,
+                        %{  55 %}    auf e wig und
+                        %{  56 %}    e wig, Hal le lu ja, Hal le
+                        %{  57 %}    lu ja,
+                        %{  58 %}    auf e wig und
+                        %{  59 %}    e wig, Hal le lu ja, Hal le
+                        %{  60 %}    lu ja,
+                        %{  61 %}    auf e wig und
+                        %{  62 %}    e wig, Hal le lu ja, Hal le
+                        %{  63 %}    lu ja,
+                        %{  64 %}    auf e wig und
+                        %{  65 %}    e wig, Hal le lu ja, Hal le
+                        %{  66 %}    lu ja,
+                        %{  67 %}    Herr der
+                        %{  68 %}    Herrn, der Wel ten
+                        %{  69 %}    Gott, und er re
+                        %{  70 %}    giert auf im mer und
+                        %{  71 %}    e wig,
+                        %{  72 %}    und er re
+                        %{  73 %}    giert auf _ im mer und
+                        %{  74 %}    e wig, Herr der
+                        %{  75 %}    Herrn, auf e wig und
+                        %{  76 %}    e wig der Wel ten
+                        %{  77 %}    Gott, Hal le lu ja, Hal le
+                        %{  78 %}    lu ja, und er re
+                        %{  79 %}    giert auf e wig, auf
+                        %{  80 %}    im mer und e
+                        %{  81 %}    wig, Herr der
+                        %{  82 %}    Herrn, der Wel ten
+                        %{  83 %}    Gott, Herr der
+                        %{  84 %}    Herrn, der Wel ten
+                        %{  85 %}    Gott, und er re
+                        %{  86 %}    giert auf e wig, auf
+                        %{  87 %}    im mer und e
+                        %{  88 %}    wig, auf e wig und
+                        %{  89 %}    e wig auf e wig und
+                        %{  90 %}    e wig Hal le lu ja, Hal le
+                        %{  91 %}    lu ja, Hal le lu ja, Hal le
+                        %{  92 %}    lu ja, Hal
+                        %{  93 %}    le lu
+                        %{  94 %}    ja!
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 

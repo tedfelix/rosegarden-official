@@ -248,6 +248,24 @@ private:
                              int verseLine, int cycle,
                              int indentCol, std::ofstream &str);
     
+    /* Used to embed a lyric syllable with a bar number */
+    struct Syllable {
+        
+        Syllable(QString syllable, int bar) {
+            syllableString = syllable;
+            syllableBar = bar;
+        }
+        
+        /**
+         *  Add double quotes if needed.
+         *  Return true if the syllable is modified
+         */ 
+        bool protect();
+        
+        QString syllableString;
+        int syllableBar;
+    };
+    
 
 private:
     static const int MAX_DOTS = 4;

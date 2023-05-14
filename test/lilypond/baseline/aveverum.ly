@@ -433,45 +433,46 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "Choir": verse 1
-                        
-                        %{   3 %}    "A" "ve," _
-                        %{   4 %}    "a" _ "ve"
-                        %{   5 %}    "ve" _ "rum" _
-                        %{   6 %}    "cor" _ "pus,"
-                        %{   7 %}    "na" "tum"
-                        %{   8 %}    "de" "Ma" "ri" "a"
-                        %{   9 %}    "vir" _ "gi"
-                        %{  10 %}    "ne,"
-                        %{  11 %}    "ve" "re"
-                        %{  12 %}    "pas" _ "sum"
-                        %{  13 %}    "im" _ "mo"
-                        %{  14 %}    "la" _ "tum" "in"
-                        %{  15 %}    "cru"
-                        %{  16 %}    _ "ce" "pro"
-                        %{  17 %}    "ho" _ "mi"
-                        %{  18 %}    "ne,"
-                        %{  22 %}    "Cu" "jus"
-                        %{  23 %}    "la" _ "tus"
-                        %{  24 %}    "per" _ "fo" _
-                        %{  25 %}    "ra" _ "tum"
-                        %{  26 %}    "un" "da"
-                        %{  27 %}    "flu" _ "xit" "et"
-                        %{  28 %}    "san" _ _ "gui"
-                        %{  29 %}    "ne,"
-                        %{  30 %}    "es" "to"
-                        %{  31 %}    "no" _ "bis" _
-                        %{  32 %}    "prae" "gus"
-                        %{  33 %}    "ta" _ "tum" "in"
-                        %{  34 %}    "mor"
-                        %{  35 %}    _ "tis" "ex"
-                        %{  36 %}    "a" _ "mi"
-                        %{  37 %}    "ne," "in"
-                        %{  38 %}    "mor"
+
+                        %{   3 %}    A ve, _
+                        %{   4 %}    a _ ve
+                        %{   5 %}    ve _ rum _
+                        %{   6 %}    cor _ pus,
+                        %{   7 %}    na tum
+                        %{   8 %}    de Ma ri a
+                        %{   9 %}    vir _ gi
+                        %{  10 %}    ne,
+                        %{  11 %}    ve re
+                        %{  12 %}    pas _ sum
+                        %{  13 %}    im _ mo
+                        %{  14 %}    la _ tum in
+                        %{  15 %}    cru
+                        %{  16 %}    _ ce pro
+                        %{  17 %}    ho _ mi
+                        %{  18 %}    ne,
+                        %{  22 %}    Cu jus
+                        %{  23 %}    la _ tus
+                        %{  24 %}    per _ fo _
+                        %{  25 %}    ra _ tum
+                        %{  26 %}    un da
+                        %{  27 %}    flu _ xit et
+                        %{  28 %}    san _ _ gui
+                        %{  29 %}    ne,
+                        %{  30 %}    es to
+                        %{  31 %}    no _ bis _
+                        %{  32 %}    prae gus
+                        %{  33 %}    ta _ tum in
+                        %{  34 %}    mor
+                        %{  35 %}    _ tis ex
+                        %{  36 %}    a _ mi
+                        %{  37 %}    ne, in
+                        %{  38 %}    mor
                         %{  39 %}    _ _
                         %{  40 %}    _ _ _ _
-                        %{  41 %}    _ _ _ "tis" "ex"
-                        %{  42 %}    "a" _ "mi"
-                        %{  43 %}    "ne."
+                        %{  41 %}    _ _ _ tis ex
+                        %{  42 %}    a _ mi
+                        %{  43 %}    ne.
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 
@@ -559,45 +560,46 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "Choir": verse 1
-                        
-                        %{   3 %}    "A" "ve,"
-                        %{   4 %}    "a" "ve"
-                        %{   5 %}    "ve" _ "rum" _
-                        %{   6 %}    "cor" _ "pus,"
-                        %{   7 %}    "na" "tum"
-                        %{   8 %}    "de" "Ma" "ri" "a"
-                        %{   9 %}    "vir" _ "gi"
-                        %{  10 %}    "ne,"
-                        %{  11 %}    "ve" "re"
-                        %{  12 %}    "pas" "sum"
-                        %{  13 %}    "im" "mo"
-                        %{  14 %}    "la" _ "tum"
-                        %{  15 %}    "in"
-                        %{  16 %}    "cru" "ce" "pro"
-                        %{  17 %}    "ho" "mi"
-                        %{  18 %}    "ne,"
-                        %{  22 %}    "Cu" "jus"
-                        %{  23 %}    "la" "tus"
-                        %{  24 %}    "per" "fo"
-                        %{  25 %}    "ra" _ "tum"
-                        %{  26 %}    "un" "da"
-                        %{  27 %}    "flu" _ "xit" "et"
-                        %{  28 %}    "san" _ _ "gui"
-                        %{  29 %}    "ne,"
-                        %{  30 %}    "es" "to"
-                        %{  31 %}    "no" _ "bis" _
-                        %{  32 %}    "prae" "gus"
-                        %{  33 %}    "ta" _ "tum" "in"
-                        %{  34 %}    "mor"
-                        %{  35 %}    _ "tis" "ex"
-                        %{  36 %}    "a" _ "mi"
-                        %{  37 %}    "ne,"
-                        %{  38 %}    "in"
-                        %{  39 %}    "mor" _
+
+                        %{   3 %}    A ve,
+                        %{   4 %}    a ve
+                        %{   5 %}    ve _ rum _
+                        %{   6 %}    cor _ pus,
+                        %{   7 %}    na tum
+                        %{   8 %}    de Ma ri a
+                        %{   9 %}    vir _ gi
+                        %{  10 %}    ne,
+                        %{  11 %}    ve re
+                        %{  12 %}    pas sum
+                        %{  13 %}    im mo
+                        %{  14 %}    la _ tum
+                        %{  15 %}    in
+                        %{  16 %}    cru ce pro
+                        %{  17 %}    ho mi
+                        %{  18 %}    ne,
+                        %{  22 %}    Cu jus
+                        %{  23 %}    la tus
+                        %{  24 %}    per fo
+                        %{  25 %}    ra _ tum
+                        %{  26 %}    un da
+                        %{  27 %}    flu _ xit et
+                        %{  28 %}    san _ _ gui
+                        %{  29 %}    ne,
+                        %{  30 %}    es to
+                        %{  31 %}    no _ bis _
+                        %{  32 %}    prae gus
+                        %{  33 %}    ta _ tum in
+                        %{  34 %}    mor
+                        %{  35 %}    _ tis ex
+                        %{  36 %}    a _ mi
+                        %{  37 %}    ne,
+                        %{  38 %}    in
+                        %{  39 %}    mor _
                         %{  40 %}    _
-                        %{  41 %}    _ _ "tis" "ex"
-                        %{  42 %}    "a" _ "mi"
-                        %{  43 %}    "ne."
+                        %{  41 %}    _ _ tis ex
+                        %{  42 %}    a _ mi
+                        %{  43 %}    ne.
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 
@@ -685,44 +687,45 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "Choir": verse 1
-                        
-                        %{   3 %}    "A" "ve,"
-                        %{   4 %}    "a" "ve"
-                        %{   5 %}    "ve" "rum"
-                        %{   6 %}    "cor" "pus,"
-                        %{   7 %}    "na" "tum"
-                        %{   8 %}    "de" "Ma" "ri" "a"
-                        %{   9 %}    "vir" "gi"
-                        %{  10 %}    "ne,"
-                        %{  11 %}    "ve" "re"
-                        %{  12 %}    "pas" _ "sum"
-                        %{  13 %}    "im" "mo"
-                        %{  14 %}    "la" _ "tum"
-                        %{  15 %}    "in"
-                        %{  16 %}    "cru" "ce" "pro"
-                        %{  17 %}    "ho" "mi"
-                        %{  18 %}    "ne,"
-                        %{  22 %}    "Cu" "jus"
-                        %{  23 %}    "la" "tus" _
-                        %{  24 %}    "per" _ _ "fo"
-                        %{  25 %}    "ra" _ "tum"
-                        %{  26 %}    "un" "da"
-                        %{  27 %}    "flu" _ "xit" "et"
-                        %{  28 %}    "san" _ "gui"
-                        %{  29 %}    "ne,"
-                        %{  31 %}    "es" "to"
-                        %{  32 %}    "no" _ "bis" _
-                        %{  33 %}    "prae" "gus"
-                        %{  34 %}    "ta" _ "tum" "in"
-                        %{  35 %}    "mor" "tis" "ex"
-                        %{  36 %}    "a" "mi"
-                        %{  37 %}    "ne,"
-                        %{  38 %}    "in"
-                        %{  39 %}    "mor" _
+
+                        %{   3 %}    A ve,
+                        %{   4 %}    a ve
+                        %{   5 %}    ve rum
+                        %{   6 %}    cor pus,
+                        %{   7 %}    na tum
+                        %{   8 %}    de Ma ri a
+                        %{   9 %}    vir gi
+                        %{  10 %}    ne,
+                        %{  11 %}    ve re
+                        %{  12 %}    pas _ sum
+                        %{  13 %}    im mo
+                        %{  14 %}    la _ tum
+                        %{  15 %}    in
+                        %{  16 %}    cru ce pro
+                        %{  17 %}    ho mi
+                        %{  18 %}    ne,
+                        %{  22 %}    Cu jus
+                        %{  23 %}    la tus _
+                        %{  24 %}    per _ _ fo
+                        %{  25 %}    ra _ tum
+                        %{  26 %}    un da
+                        %{  27 %}    flu _ xit et
+                        %{  28 %}    san _ gui
+                        %{  29 %}    ne,
+                        %{  31 %}    es to
+                        %{  32 %}    no _ bis _
+                        %{  33 %}    prae gus
+                        %{  34 %}    ta _ tum in
+                        %{  35 %}    mor tis ex
+                        %{  36 %}    a mi
+                        %{  37 %}    ne,
+                        %{  38 %}    in
+                        %{  39 %}    mor _
                         %{  40 %}    _ _ _ _
-                        %{  41 %}    _ "tis" "ex"
-                        %{  42 %}    "a" _ "mi"
-                        %{  43 %}    "ne."
+                        %{  41 %}    _ tis ex
+                        %{  42 %}    a _ mi
+                        %{  43 %}    ne.
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 
@@ -810,44 +813,45 @@ globalTempo = {
                         \set ignoreMelismata = ##t
 
                         % Segment "Choir": verse 1
-                        
-                        %{   3 %}    "A" "ve,"
-                        %{   4 %}    "a" "ve"
-                        %{   5 %}    "ve" "rum"
-                        %{   6 %}    "cor" "pus,"
-                        %{   7 %}    "na" "tum"
-                        %{   8 %}    "de" "Ma" "ri" "a"
-                        %{   9 %}    "vir" "gi"
-                        %{  10 %}    "ne,"
-                        %{  11 %}    "ve" "re"
-                        %{  12 %}    "pas" _ "sum"
-                        %{  13 %}    "im" "mo"
-                        %{  14 %}    "la" _ "tum"
-                        %{  15 %}    "in"
-                        %{  16 %}    "cru" "ce" "pro"
-                        %{  17 %}    "ho" "mi"
-                        %{  18 %}    "ne,"
-                        %{  22 %}    "Cu" "jus"
-                        %{  23 %}    "la" _ "tus"
-                        %{  24 %}    "per" "fo"
-                        %{  25 %}    "ra" _ "tum"
-                        %{  26 %}    "un" "da"
-                        %{  27 %}    "flu" _ "xit" "et"
-                        %{  28 %}    "san" _ "gui"
-                        %{  29 %}    "ne,"
-                        %{  31 %}    "es" "to"
-                        %{  32 %}    "no" _ "bis" _
-                        %{  33 %}    "prae" "gus"
-                        %{  34 %}    "ta" _ "tum" "in"
-                        %{  35 %}    "mor" "tis" "ex"
-                        %{  36 %}    "a" "mi"
-                        %{  37 %}    "ne,"
-                        %{  38 %}    "in"
-                        %{  39 %}    "mor" _
+
+                        %{   3 %}    A ve,
+                        %{   4 %}    a ve
+                        %{   5 %}    ve rum
+                        %{   6 %}    cor pus,
+                        %{   7 %}    na tum
+                        %{   8 %}    de Ma ri a
+                        %{   9 %}    vir gi
+                        %{  10 %}    ne,
+                        %{  11 %}    ve re
+                        %{  12 %}    pas _ sum
+                        %{  13 %}    im mo
+                        %{  14 %}    la _ tum
+                        %{  15 %}    in
+                        %{  16 %}    cru ce pro
+                        %{  17 %}    ho mi
+                        %{  18 %}    ne,
+                        %{  22 %}    Cu jus
+                        %{  23 %}    la _ tus
+                        %{  24 %}    per fo
+                        %{  25 %}    ra _ tum
+                        %{  26 %}    un da
+                        %{  27 %}    flu _ xit et
+                        %{  28 %}    san _ gui
+                        %{  29 %}    ne,
+                        %{  31 %}    es to
+                        %{  32 %}    no _ bis _
+                        %{  33 %}    prae gus
+                        %{  34 %}    ta _ tum in
+                        %{  35 %}    mor tis ex
+                        %{  36 %}    a mi
+                        %{  37 %}    ne,
+                        %{  38 %}    in
+                        %{  39 %}    mor _
                         %{  40 %}    _
-                        %{  41 %}    _ "tis" "ex"
-                        %{  42 %}    "a" "mi"
-                        %{  43 %}    "ne."
+                        %{  41 %}    _ tis ex
+                        %{  42 %}    a mi
+                        %{  43 %}    ne.
+
                         \unset ignoreMelismata
                     }
                 } % Lyrics 
