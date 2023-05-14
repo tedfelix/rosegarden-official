@@ -51,6 +51,8 @@ class AudioPluginLV2GUI : public QWidget
                     uint32_t portProtocol,
                     const void *buffer);
 
+    void updatePortValue(int port, float value);
+
  public slots:
     void timeUp();
 

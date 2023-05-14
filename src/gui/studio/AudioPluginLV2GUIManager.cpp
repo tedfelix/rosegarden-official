@@ -37,7 +37,6 @@ AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWin
 
 AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
 {
-    stopAllGUIs();
     for (auto i = m_guis.begin(); i != m_guis.end(); ++i) {
         for (auto j = i->second.begin(); j != i->second.end();
              ++j) {
@@ -85,6 +84,7 @@ AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
 void
 AudioPluginLV2GUIManager::stopAllGUIs()
 {
+    RG_DEBUG << "stopallGUIs()";
     for (auto i = m_guis.begin(); i != m_guis.end(); ++i) {
         for (auto j = i->second.begin(); j != i->second.end();
              ++j) {
@@ -104,7 +104,27 @@ void
 AudioPluginLV2GUIManager::updatePort(InstrumentId instrument, int position,
                                      int port)
 {
-    RG_DEBUG << "updatePort(" << instrument << "," << position << "," << port << ")";
+    RG_DEBUG << "updatePort(" << instrument << "," << position <<
+        "," << port << ")";
+
+    if (m_guis.find(instrument) == m_guis.end() ||
+        m_guis[instrument].find(position) == m_guis[instrument].end())
+        return ;
+
+    PluginContainer *container = m_studio->getContainerById(instrument);
+    if (!container) return;
+
+    AudioPluginInstance *pluginInstance = container->getPlugin(position);
+    if (!pluginInstance)
+        return ;
+
+    PluginPortInstance *porti = pluginInstance->getPort(port);
+    if (!porti)
+        return ;
+
+    RG_DEBUG << "updatePort(" << instrument << "," << position << "," << port << "): value " << porti->value;
+
+    m_guis[instrument][position]->updatePortValue(port, porti->value);
 }
 
 void

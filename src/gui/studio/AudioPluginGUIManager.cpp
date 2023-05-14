@@ -43,6 +43,10 @@ AudioPluginGUIManager::AudioPluginGUIManager(RosegardenMainWindow *mainWindow) :
 
 AudioPluginGUIManager::~AudioPluginGUIManager()
 {
+    delete m_oscManager;
+#ifdef HAVE_LILV
+    delete m_lv2Manager;
+#endif
 }
 
 void AudioPluginGUIManager::setStudio(Studio *studio)
