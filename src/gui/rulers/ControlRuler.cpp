@@ -688,6 +688,7 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
     m_pannedRect = pr;
     m_xScale = (double) m_pannedRect.width() / (double) width();
     m_yScale = 1.0f / (double) height();
+    RG_DEBUG << "slotSetPannedRect" << pr << width() << m_xScale;
 
     // Create the visible items list
     ///TODO Improve efficiency using xstart and xstop ordered lists of control items

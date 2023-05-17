@@ -147,6 +147,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_layout->setContentsMargins(0, 0, 0, 0);
 
     m_view = new Panned;
+    m_view->setContentsMargins(0, 0, 0, 0);
     m_view->setBackgroundBrush(Qt::white);
     m_view->setWheelZoomPan(true);
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
@@ -294,9 +295,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     connect(m_panner, &Panner::pannedRectChanged,
             m_pianoView, &Panned::slotSetViewport);
-
-    connect(m_panner, &Panner::pannedRectChanged,
-            m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
 
     connect(m_view, &Panned::pannedContentsScrolled,
             this, &MatrixWidget::slotScrollRulers);

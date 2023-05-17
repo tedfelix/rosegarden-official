@@ -517,6 +517,7 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
 void
 ControlRulerWidget::slotSetPannedRect(QRectF pannedRect)
 {
+    RG_DEBUG << "slotSetPannedRect" << pannedRect;
     m_pannedRect = pannedRect;
 
     // For each ruler, pass on the panned rect.

@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[Panned]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "Panned.h"
 
@@ -140,6 +141,8 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
 void
 Panned::slotSetViewport(QRectF viewportScene)
 {
+    RG_DEBUG << "slotSetViewport" << viewportScene << viewportScene.center() <<
+        m_viewportScene;
     // ??? We're just centering.  That explains why zoom has to travel by
     //     a different path (zoomIn() and zoomOut() signals).
     centerOn(viewportScene.center());
