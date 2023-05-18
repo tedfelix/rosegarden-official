@@ -3598,16 +3598,28 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
     //    'xxx_',  '-', '-', 'yyy'     -->  'xxx __ _ _ yyy'
     //    'xxx yyy'                    -->  '"xxx yyy"'
     //    'xx"yy'                      -->  '"xx\"yy"'
+    //    '__'                         -->  '"__"'
+    //    '--'                         -->  '"--"'
+    //    '-_'                         -->  '"-_"'
     
     // True after "xxx-" or "xxx_" while parsing a row of "_"
     bool sequence = false;     
     
     for (int i = 0; i < syllables.size(); ++i) {
             
-        Syllable syl = syllables.at(i);      
-        
-        if ((syl.syllableString.length() > 1)
-                && (syl.syllableString != "--" || syl.syllableString != "__")) {
+        Syllable syl = syllables.at(i);     
+
+        if (syl.syllableString.length() > 1) {
+
+            // Kept unchanged strings of more than one hyphens or underscores 
+            if (syl.syllableString.contains(QRegularExpression("^[-_]+$"))) {
+                // But protect it with double quotes
+                syl.addQuotes();
+                syllables.replace(i, syl);
+                continue;
+            }
+
+            // Syllables ending with '-' or '_' need special processing
             QChar last = syl.syllableString.back();
             if (last == '-' || last == '_') {
                 sequence = true;
@@ -3658,7 +3670,6 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
         }
     }  
     
-
     // Copy the syllables in a string
     QString text("");
     for (int i = 0; i < syllables.size(); ++i) {
@@ -3710,13 +3721,18 @@ LilyPondExporter::Syllable::protect()
 
     // Protect the syllable with double quotes if needed 
     if (needsQuotes) {
-        syllableString.append('"');
-        syllableString.prepend('"');
-        
+        addQuotes();
         return true;
     }
     
     return false;
+}
+
+void
+LilyPondExporter::Syllable::addQuotes()
+{
+    syllableString.append('"');
+    syllableString.prepend('"');
 }
                     
 }
