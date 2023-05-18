@@ -257,10 +257,15 @@ private:
         }
         
         /**
-         *  Add double quotes if needed.
-         *  Return true if the syllable is modified
+         *  Protect the syllable with quotes if needed.
+         *  Return true if the string is modified.
          */ 
         bool protect();
+        
+        /**
+         *  Always add double quotes around the string.
+         */
+        void addQuotes();
         
         QString syllableString;
         int syllableBar;
