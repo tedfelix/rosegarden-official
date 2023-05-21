@@ -91,13 +91,17 @@ public:
 
     static MatrixElement *getMatrixElement(QGraphicsItem *);
 
+    bool isPreview();
+
     // Z values for occlusion/layering of object in graph display.
     // Difference between NORMAL_ and ACTIVE_  needed when notes from
     // different segments overlay each other at same pitch and time
     // to ensure that mouse click will get active segment's note
     // regardless if clicked on note or text (latter in case
     // "View -> Show note names" is in effect).
-    static constexpr double ACTIVE_SEGMENT_TEXT_Z =   3.0,
+    static constexpr double PREVIEW_NOTE_TEXT_Z   =   5.0,
+                            PREVIEW_NOTE_Z        =   4.0,
+                            ACTIVE_SEGMENT_TEXT_Z =   3.0,
                             ACTIVE_SEGMENT_NOTE_Z =   2.0,
                             NORMAL_SEGMENT_TEXT_Z =   1.0,
                             NORMAL_SEGMENT_NOTE_Z =   0.0,

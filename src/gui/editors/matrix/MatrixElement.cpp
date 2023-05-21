@@ -236,9 +236,13 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 
         if (m_textItem) {
             // text above note, see constants in .h file
-            m_textItem->setZValue(m_current ? ACTIVE_SEGMENT_TEXT_Z
-                                            : NORMAL_SEGMENT_TEXT_Z);
-            m_textItem->setBrush(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
+            if (m_isPreview) {
+                m_textItem->setZValue(PREVIEW_NOTE_TEXT_Z);
+            } else {
+                m_textItem->setZValue(m_current ? ACTIVE_SEGMENT_TEXT_Z
+                                      : NORMAL_SEGMENT_TEXT_Z);
+                m_textItem->setBrush(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
+            }
             QString noteName = MidiPitchLabel(pitch).getQString();
             m_textItem->setText(noteName);
             QFont font;
@@ -263,8 +267,13 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     double pitchy = (127 - pitch - m_pitchOffset) * (resolution + 1);
     m_item->setPos(x0, pitchy);
     // See constants in .h file
-    m_item->setZValue(m_current ? ACTIVE_SEGMENT_NOTE_Z
-                                : NORMAL_SEGMENT_NOTE_Z);
+
+    if (m_isPreview) {
+        m_item->setZValue(PREVIEW_NOTE_Z);
+    } else {
+        m_item->setZValue(m_current ? ACTIVE_SEGMENT_NOTE_Z
+                          : NORMAL_SEGMENT_NOTE_Z);
+    }
 
     if (m_textItem) {
             m_textItem->setPos(x0 + 1, pitchy - 1);
@@ -302,6 +311,7 @@ MatrixElement::setSelected(bool selected)
 void
 MatrixElement::setCurrent(bool current)
 {
+    if (m_isPreview) return;
     RG_DEBUG << "setCurrent" << event()->getAbsoluteTime() <<
         current << m_current;
     if (m_current == current) return;
@@ -352,5 +362,9 @@ MatrixElement::getMatrixElement(QGraphicsItem *item)
     return static_cast<MatrixElement *>(v.value<void *>());
 }
 
+bool MatrixElement::isPreview()
+{
+    return m_isPreview;
+}
 
 }

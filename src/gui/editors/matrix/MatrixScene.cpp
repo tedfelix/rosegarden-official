@@ -669,7 +669,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
 //   MATRIX_DEBUG << "Found " << l.size() << " items at " << e->scenePos();
     for (int i = 0; i < l.size(); ++i) {
         MatrixElement *element = MatrixElement::getMatrixElement(l[i]);
-        if (element) {
+        if (element && ! element->isPreview()) {
             // items are in z-order from top, so this is most salient
             mme.element = element;
             break;
