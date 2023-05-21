@@ -45,7 +45,8 @@ static const int MatrixElementData = 2;
 
 MatrixElement::MatrixElement(MatrixScene *scene, Event *event,
                              bool drum, long pitchOffset,
-                             const Segment *segment) :
+                             const Segment *segment,
+                             bool isPreview) :
     ViewElement(event),
     m_scene(scene),
     m_drum(drum),
@@ -53,7 +54,8 @@ MatrixElement::MatrixElement(MatrixScene *scene, Event *event,
     m_item(nullptr),
     m_textItem(nullptr),
     m_pitchOffset(pitchOffset),
-    m_segment(segment)
+    m_segment(segment),
+    m_isPreview(isPreview)
 {
     RG_DEBUG << "MatrixElement()";
     if (segment && scene && segment != scene->getCurrentSegment()) {
@@ -149,6 +151,10 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     }
     if (!m_current) {
         colour = QColor(200, 200, 200);
+    }
+
+    if (m_isPreview) {
+        colour = GUIPalette::PreviewColor;
     }
 
     // Turned off because adds little or no information to user (another

@@ -48,7 +48,8 @@ MatrixPainter::MatrixPainter(MatrixWidget *widget) :
     MatrixTool("matrixpainter.rc", "MatrixPainter", widget),
     m_clickTime(0),
     m_currentElement(nullptr),
-    m_currentViewSegment(nullptr)
+    m_currentViewSegment(nullptr),
+    m_previewElement(nullptr)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("resize", SLOT(slotResizeSelected()));
@@ -56,6 +57,15 @@ MatrixPainter::MatrixPainter(MatrixWidget *widget) :
     createAction("move", SLOT(slotMoveSelected()));
 
     createMenu();
+    m_previewEvent = new Event(Note::EventType, 0);
+}
+
+MatrixPainter::~MatrixPainter()
+{
+    if (m_previewElement) {
+        delete(m_previewElement);
+    }
+    delete(m_previewEvent);
 }
 
 void MatrixPainter::handleEventRemoved(Event * /*event*/)
@@ -197,8 +207,11 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 FollowMode
 MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
 {
-    // sanity check
-    if (!m_currentElement) return NO_FOLLOW;
+    if (!m_currentElement) {
+        // show preview
+        showPreview(e);
+        return NO_FOLLOW;
+    }
 
     if (getSnapGrid()->getSnapSetting() != SnapGrid::NoSnap) {
         setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
@@ -325,6 +338,7 @@ void MatrixPainter::stow()
 {
 //    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
 //               this, SLOT(slotMatrixScrolled(int, int)));
+    clearPreview();
 }
 
 void MatrixPainter::slotMatrixScrolled(int /* newX */, int /* newY */)
@@ -362,5 +376,27 @@ void MatrixPainter::setBasicContextHelp()
 
 QString MatrixPainter::ToolName() { return "painter"; }
 
+void MatrixPainter::showPreview(const MatrixMouseEvent *e)
+{
+    if (! m_previewElement) {
+        m_previewElement = new MatrixElement(m_scene,
+                                             m_previewEvent,
+                                             m_widget->isDrumMode(),
+                                             0,
+                                             nullptr,
+                                             true);
+    }
+
+    m_previewEvent->set<Int>(BaseProperties::PITCH, e->pitch);
+    m_previewElement->reconfigure(e->snappedLeftTime, e->snapUnit);
 }
 
+void MatrixPainter::clearPreview()
+{
+    if (m_previewElement) {
+        delete m_previewElement;
+        m_previewElement = nullptr;
+    }
+}
+
+}

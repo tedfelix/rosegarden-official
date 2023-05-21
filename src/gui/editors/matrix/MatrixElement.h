@@ -53,7 +53,8 @@ public:
                   Event *event,
                   bool drum,
                   long pitchOffset,
-                  const Segment *segment);
+                  const Segment *segment,
+                  bool isPreview = false);
     ~MatrixElement() override;
 
     /// Returns true if the wrapped event is a note
@@ -137,6 +138,7 @@ private:
     /// Adjust the item to reflect the given values, not those of our event
     void reconfigure(timeT time, timeT duration, int pitch, int velocity);
 
+    bool m_isPreview;
 };
 
 

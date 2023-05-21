@@ -50,6 +50,9 @@ public:
 
     static QString ToolName();
 
+    void showPreview(const MatrixMouseEvent *e);
+    void clearPreview();
+
 public slots:
     /**
      * Respond to an event being deleted -- it may be the one the tool
@@ -62,14 +65,17 @@ protected slots:
 
 protected:
     explicit MatrixPainter(MatrixWidget *);
+    ~MatrixPainter();
 
     void setBasicContextHelp();
 
     timeT m_clickTime;
     MatrixElement *m_currentElement;
     MatrixViewSegment *m_currentViewSegment;
+private:
+    Event* m_previewEvent;
+    MatrixElement* m_previewElement;
 };
-
 
 }
 

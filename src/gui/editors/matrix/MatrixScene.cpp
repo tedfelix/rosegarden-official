@@ -378,6 +378,9 @@ MatrixScene::recreateLines()
             gridLines = timeSig.getBeatsPerBar();
         }
 
+        double beatLines = timeSig.getBeatsPerBar();
+        double dxbeats = width / beatLines;
+
         double dx = width / gridLines;
         double x = x0;
 
@@ -408,7 +411,15 @@ MatrixScene::recreateLines()
               // index 0 is the bar line
                 line->setPen(QPen(GUIPalette::getColour(GUIPalette::MatrixBarLine), pw));
             } else {
-                line->setPen(QPen(GUIPalette::getColour(GUIPalette::BeatLine), pw));
+                // check if we are on a a beat
+                double br = x / dxbeats;
+                int ibr = br + 0.5;
+                double delta = br - ibr;
+                if (fabs(delta) > 1.0e-6) {
+                    line->setPen(QPen(GUIPalette::getColour(GUIPalette::SubBeatLine), pw));
+                } else {
+                    line->setPen(QPen(GUIPalette::getColour(GUIPalette::BeatLine), pw));
+                }
             }
 
             line->setZValue(index > 0 ? MatrixElement::VERTICAL_BEAT_LINE_Z

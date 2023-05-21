@@ -1505,6 +1505,13 @@ MatrixWidget::slotMouseLeavesView()
     // At high zoom levels, black trailers are left behind.  This makes
     // sure they are removed.  (Retest this.)
     m_pianoView->update();
+
+    // the preview note should be cleared
+    MatrixPainter *matrixPainterTool =
+        dynamic_cast <MatrixPainter *>(m_toolBox->getTool(MatrixPainter::ToolName()));
+    if (matrixPainterTool) {
+        matrixPainterTool->clearPreview();
+    }
 }
 
 
