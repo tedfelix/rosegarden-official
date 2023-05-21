@@ -145,6 +145,9 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
     RG_DEBUG << "handleLeftButtonPress(): pitch = " << e->pitch << ", time : " << e->time;
 
+    // no preview as long as the button is pressed
+    clearPreview();
+
     m_currentViewSegment = e->viewSegment;
     if (!m_currentViewSegment) return;
 
@@ -270,6 +273,7 @@ void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)
     // This can happen in case of screen/window capture -
     // we only get a mouse release, the window snapshot tool
     // got the mouse down
+    showPreview(e);
     if (!m_currentElement) return;
 
     timeT time = m_clickTime;
