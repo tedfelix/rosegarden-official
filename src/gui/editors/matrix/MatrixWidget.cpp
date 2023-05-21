@@ -357,6 +357,13 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
 MatrixWidget::~MatrixWidget()
 {
+    // the preview note should be cleared
+    MatrixPainter *matrixPainterTool =
+        dynamic_cast <MatrixPainter *>(m_toolBox->getTool(MatrixPainter::ToolName()));
+    if (matrixPainterTool) {
+        matrixPainterTool->clearPreview();
+    }
+
     // ??? QSharedPointer would be nice, but it opens up a can of worms
     //     since this is passed to reuse code that is used across the system.
     //     Panned and Panner in this case.  Probably worth doing.  Just a
