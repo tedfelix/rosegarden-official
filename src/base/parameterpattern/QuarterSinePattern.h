@@ -23,11 +23,15 @@
 
 namespace Rosegarden
 {
+
+
 // @class QuarterSinePattern
 // Implement variant Crescendo and Diminuendo parameter patterns.
 // @author Tom Breton (Tehom)
 class QuarterSinePattern : public LinearParameterPattern
 {
+protected:
+
     QString getText(QString propertyName) const override;
 
     double getValueDelta(double valueChange, double timeRatio) const override;
@@ -37,7 +41,12 @@ public:
         LinearParameterPattern(isDiminuendo)
     {}
 
+    static QuarterSinePattern crescendo;
+    static QuarterSinePattern diminuendo;
+
 };
+
+
 }
 
 #endif /* ifndef RG_QUARTERSINEPATTERN_H */

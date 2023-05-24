@@ -29,6 +29,8 @@ namespace Rosegarden
 // @author Tom Breton (Tehom)
 class HalfSinePattern : public LinearParameterPattern
 {
+protected:
+
     QString getText(QString propertyName) const override;
 
     double getValueDelta(double valueChange, double timeRatio) const override;
@@ -37,6 +39,9 @@ public:
     explicit HalfSinePattern(bool isDiminuendo) :
         LinearParameterPattern(isDiminuendo)
     {}
+
+    static HalfSinePattern crescendo;
+    static HalfSinePattern diminuendo;
 
 };
 
