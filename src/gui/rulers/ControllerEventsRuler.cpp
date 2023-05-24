@@ -555,6 +555,11 @@ void ControllerEventsRuler::createRulerMenu()
     }
 }
 
+bool ControllerEventsRuler::allowSimultaneousEvents()
+{
+    return false;
+}
+
 Event *ControllerEventsRuler::insertEvent(float x, float y)
 {
     timeT insertTime = m_rulerScale->getTimeForX(x/m_xScale);

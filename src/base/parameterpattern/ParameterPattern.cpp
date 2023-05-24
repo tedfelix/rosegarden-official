@@ -111,6 +111,8 @@ ParameterPattern * controllerPatternsArray[] = {
     &RelativeRamp::single,
 };
 
+// ??? This is never used.  There is no Set Event Controllers dialog.
+//     Looks like this is unfinished/abandoned.
 DEFINE_PPVEC_FROM_ARRAY(ControllerPatterns, controllerPatternsArray);
 
 /* ***** Helper functions ***** */
@@ -194,8 +196,12 @@ setVelocities(QMainWindow *parent,
               EventSelection *selection,
               int normVelocity)
 {
-    setProperties(parent, selection, Note::EventType,
-                  &ParameterPattern::VelocityPatterns, normVelocity);
+    setProperties(
+            parent,
+            selection,
+            Note::EventType,
+            &ParameterPattern::VelocityPatterns,  // patterns
+            normVelocity);
 }
 
 // Set some property to targetValue, no dialog.

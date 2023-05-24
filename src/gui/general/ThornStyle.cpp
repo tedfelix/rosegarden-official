@@ -442,7 +442,14 @@ int ThornStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *opti
     case PM_ToolBarFrameWidth:
         return 0;
     case PM_DefaultFrameWidth:
-        return 2;
+        {
+            QString name = widget->objectName();
+            if (name == "MatrixPanned") {
+                // the matrix editor wants 0 margin
+                return 0;
+            }
+            return 2;
+        }
     case PM_SpinBoxFrameWidth:
         return 2;
     case PM_DockWidgetTitleBarButtonMargin:

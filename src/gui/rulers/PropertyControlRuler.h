@@ -84,6 +84,8 @@ public:
 
     void setTool(const QString &name) override;
 
+    virtual bool allowSimultaneousEvents() override;
+
 public slots:
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
 

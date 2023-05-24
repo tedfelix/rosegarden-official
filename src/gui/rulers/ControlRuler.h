@@ -140,6 +140,8 @@ public:
 
     void setSnapFromEditor(timeT snapSetting, bool forceFromEditor);
 
+    virtual bool allowSimultaneousEvents() = 0;
+
 signals:
     void mousePress();
     void mouseMove(FollowMode);

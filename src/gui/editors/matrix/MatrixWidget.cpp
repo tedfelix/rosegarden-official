@@ -147,6 +147,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_layout->setContentsMargins(0, 0, 0, 0);
 
     m_view = new Panned;
+    m_view->setObjectName("MatrixPanned");
+    m_view->setContentsMargins(0, 0, 0, 0);
     m_view->setBackgroundBrush(Qt::white);
     m_view->setWheelZoomPan(true);
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
@@ -294,9 +296,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     connect(m_panner, &Panner::pannedRectChanged,
             m_pianoView, &Panned::slotSetViewport);
-
-    connect(m_panner, &Panner::pannedRectChanged,
-            m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
 
     connect(m_view, &Panned::pannedContentsScrolled,
             this, &MatrixWidget::slotScrollRulers);
@@ -764,11 +763,10 @@ MatrixWidget::slotScrollRulers()
     int x = topLeft.x() * m_hZoomFactor;
 
     // Scroll rulers accordingly
-    // ( -2 : to fix a small offset between view and rulers)
-    m_topStandardRuler->slotScrollHoriz(x - 2);
-    m_bottomStandardRuler->slotScrollHoriz(x - 2);
-    m_tempoRuler->slotScrollHoriz(x - 2);
-    m_chordNameRuler->slotScrollHoriz(x - 2);
+    m_topStandardRuler->slotScrollHoriz(x);
+    m_bottomStandardRuler->slotScrollHoriz(x);
+    m_tempoRuler->slotScrollHoriz(x);
+    m_chordNameRuler->slotScrollHoriz(x);
 }
 
 EventSelection *
@@ -1716,6 +1714,5 @@ MatrixWidget::slotZoomOut()
     m_Hzoom->setValue(v);
     slotHorizontalThumbwheelMoved(v);
 }
-
 
 }

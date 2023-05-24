@@ -303,6 +303,11 @@ void PropertyControlRuler::setTool(const QString & /* name */)
     m_currentTool->ready();
 }
 
+bool PropertyControlRuler::allowSimultaneousEvents()
+{
+    return true;
+}
+
 void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
 {
     if (el->event()->isa(Note::EventRestType))
