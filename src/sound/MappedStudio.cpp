@@ -1533,6 +1533,22 @@ MappedPluginSlot::setPort(unsigned long portNumber, float value)
     }
 }
 
+void
+MappedPluginSlot::setPortByteArray(unsigned long portNumber,
+                                   const QByteArray& ba)
+{
+    std::vector<MappedObject*> ports = getChildObjects();
+    std::vector<MappedObject*>::iterator it = ports.begin();
+    MappedPluginPort *port = nullptr;
+
+    for (; it != ports.end(); ++it) {
+        port = dynamic_cast<MappedPluginPort *>(*it);
+        if (port && (unsigned long)port->getPortNumber() == portNumber) {
+            port->setByteArray(ba);
+        }
+    }
+}
+
 float
 MappedPluginSlot::getPort(unsigned long portNumber)
 {
@@ -1643,6 +1659,30 @@ MappedPluginPort::setValue(MappedObjectValue value)
                 drv->setPluginInstancePortValue(slot->getInstrument(),
                                                 slot->getPosition(),
                                                 m_portNumber, value);
+            }
+        }
+    }
+}
+
+void
+MappedPluginPort::setByteArray(const QByteArray& ba)
+{
+    MappedPluginSlot *slot =
+        dynamic_cast<MappedPluginSlot *>(getParent());
+
+    if (slot) {
+
+        MappedStudio *studio =
+            dynamic_cast<MappedStudio *>(slot->getParent());
+
+        if (studio) {
+            SoundDriver *drv = studio->getSoundDriver();
+
+            if (drv) {
+                drv->setPluginInstancePortByteArray(slot->getInstrument(),
+                                                    slot->getPosition(),
+                                                    m_portNumber,
+                                                    ba);
             }
         }
     }

@@ -208,6 +208,20 @@ public:
 #endif
     }
 
+    void setPluginInstancePortByteArray(InstrumentId id,
+                                        int position,
+                                        unsigned long portNumber,
+                                        const QByteArray& ba) override {
+#ifdef HAVE_LIBJACK
+        if (m_jackDriver) m_jackDriver->setPluginInstancePortByteArray(id, position, portNumber, ba);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
+        Q_UNUSED(portNumber);
+        Q_UNUSED(value);
+#endif
+    }
+
     float getPluginInstancePortValue(InstrumentId id,
                                              int position,
                                              unsigned long portNumber) override {

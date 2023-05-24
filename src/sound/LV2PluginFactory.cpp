@@ -229,7 +229,8 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
             const LV2PluginInstance::LV2PortData portData = pluginData.ports[p];
             int type = 0;
 
-            if (portData.portType == LV2PluginInstance::LV2CONTROL) {
+            if (portData.portType == LV2PluginInstance::LV2CONTROL ||
+                portData.portType == LV2PluginInstance::LV2MIDI) {
                 type |= PluginPort::Control;
             } else {
                 type |= PluginPort::Audio;
@@ -282,7 +283,8 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
 
     for (unsigned long i = 0; i < pluginData.ports.size(); i++) {
         const LV2PluginInstance::LV2PortData& portData = pluginData.ports[i];
-        if (portData.portType == LV2PluginInstance::LV2CONTROL &&
+        if ((portData.portType == LV2PluginInstance::LV2CONTROL ||
+             portData.portType == LV2PluginInstance::LV2MIDI) &&
             portData.isInput) {
             MappedStudio *studio =
                 dynamic_cast<MappedStudio *>(slot.getParent());

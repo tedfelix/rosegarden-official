@@ -26,7 +26,7 @@ namespace Rosegarden
 {
 
 class PluginFactory;
-        
+
 /**
  * RunnablePluginInstance is a very trivial interface that an audio
  * process can use to refer to an instance of a plugin without needing
@@ -56,7 +56,7 @@ public:
      * waiting.  Other plugins can ignore it.
      */
     virtual void run(const RealTime &blockStartTime) = 0;
-    
+
     virtual size_t getBufferSize() = 0;
 
     virtual size_t getAudioInputCount() = 0;
@@ -72,6 +72,7 @@ public:
     virtual void selectProgram(QString) { }
 
     virtual void setPortValue(unsigned int port, float value) = 0;
+    virtual void setPortByteArray(unsigned int port, const QByteArray& ba) = 0;
     virtual float getPortValue(unsigned int port) = 0;
 
     virtual QString configure(QString /* key */, QString /* value */) { return QString(); }

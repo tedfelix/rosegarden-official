@@ -29,6 +29,17 @@
 namespace Rosegarden
 {
 
+const QByteArray PluginPortInstance::byteArray() const
+{
+    return m_ba;
+}
+
+void PluginPortInstance::setByteArray(const QByteArray& ba)
+{
+    m_ba = ba;
+}
+
+
 // ------------------ PluginPort ---------------------
 //
 
@@ -68,7 +79,7 @@ AudioPluginInstance::AudioPluginInstance(std::string identifier,
 {
 }
 
-std::string 
+std::string
 AudioPluginInstance::toXmlString() const
 {
 
@@ -78,7 +89,7 @@ AudioPluginInstance::toXmlString() const
     {
         return plugin.str();
     }
-    
+
     if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
 	plugin << "            <synth ";
     } else {
@@ -158,7 +169,7 @@ AudioPluginInstance::removePort(int number)
 }
 
 
-PluginPortInstance* 
+PluginPortInstance*
 AudioPluginInstance::getPort(int number)
 {
     PortInstanceIterator it = m_ports.begin();
@@ -193,13 +204,13 @@ void
 AudioPluginInstance::setProgram(std::string program)
 {
     m_program = program;
-    
+
     PortInstanceIterator it = m_ports.begin();
     for (; it != m_ports.end(); ++it) {
 	(*it)->changedSinceProgramChange = false;
     }
 }
-	
+
 void
 AudioPluginInstance::setConfigurationValue(std::string k, std::string v)
 {
@@ -229,7 +240,7 @@ AudioPluginInstance::getDistinctiveConfigurationText() const
     }
 
     if (base == "") return "";
-    
+
     std::string::size_type s = base.rfind('/');
     if (s < base.length() - 1) base = base.substr(s + 1);
 
@@ -266,4 +277,3 @@ AudioPluginInstance::getDisplayName() const
 
 
 }
-

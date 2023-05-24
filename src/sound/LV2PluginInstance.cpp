@@ -346,6 +346,26 @@ LV2PluginInstance::setPortValue(unsigned int portNumber, float value)
     }
 }
 
+void
+LV2PluginInstance::setPortByteArray(unsigned int port, const QByteArray& ba)
+{
+    RG_DEBUG << "setPortByteArray" << port;
+    // only supported for midi port
+    if (static_cast<int>(port) != m_midiPort) {
+        RG_DEBUG << "setPortByteArray called for non midi port" << port;
+        return;
+    }
+    const LV2_Atom_Event* event =
+        reinterpret_cast<const LV2_Atom_Event*>(ba.data());
+    RG_DEBUG << "setPortByteArray send bytes" << ba.size();
+    for (unsigned int i=0; i< m_instanceCount; i++) {
+        LV2_Atom_Sequence* aseq =m_midiIn[i];
+        lv2_atom_sequence_append_event(aseq,
+                                       ba.size(),
+                                       event);
+    }
+}
+
 float
 LV2PluginInstance::getPortValue(unsigned int portNumber)
 {

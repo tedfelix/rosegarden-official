@@ -207,12 +207,21 @@ AudioPluginLV2GUI::portChange(uint32_t portIndex,
                               const void *buffer)
 {
     RG_DEBUG << portIndex << bufferSize << portProtocol;
-    const float* value = static_cast<const float*>(buffer);
-    m_mainWindow->slotChangePluginPort(m_instrument,
-                                       m_position,
-                                       portIndex,
-                                       *value);
-
+    if (portProtocol == 0) {
+        // normal port with float
+        const float* value = static_cast<const float*>(buffer);
+        m_mainWindow->slotChangePluginPort(m_instrument,
+                                           m_position,
+                                           portIndex,
+                                           *value);
+    } else {
+        // complex data
+        QByteArray ba(static_cast<const char*>(buffer), bufferSize);
+        m_mainWindow->slotChangePluginPortBuf(m_instrument,
+                                              m_position,
+                                              portIndex,
+                                              ba);
+    }
 }
 
 void

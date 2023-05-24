@@ -284,6 +284,10 @@ public:
                        unsigned long portId,
                        float value);
 
+    void setMappedPort(int pluginId,
+                       unsigned long portId,
+                       const QByteArray& ba);
+
     float getMappedPort(int pluginId,
                         unsigned long portId);
 

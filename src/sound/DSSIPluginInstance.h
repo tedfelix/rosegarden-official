@@ -45,6 +45,7 @@ public:
     void run(const RealTime &) override;
 
     void setPortValue(unsigned int portNumber, float value) override;
+    void setPortByteArray(unsigned int, const QByteArray&) override {}
     float getPortValue(unsigned int portNumber) override;
     QString configure(QString key, QString value) override;
     void sendEvent(const RealTime &eventTime,
@@ -79,7 +80,7 @@ protected:
     friend class DSSIPluginFactory;
 
     // Constructor that creates the buffers internally
-    // 
+    //
     DSSIPluginInstance(PluginFactory *factory,
                        InstrumentId instrument,
                        QString identifier,
@@ -88,9 +89,9 @@ protected:
                        size_t blockSize,
                        int idealChannelCount,
                        const DSSI_Descriptor* descriptor);
-    
+
     // Constructor that uses shared buffers
-    // 
+    //
     DSSIPluginInstance(PluginFactory *factory,
                        InstrumentId instrument,
                        QString identifier,
@@ -160,7 +161,7 @@ protected:
 
     bool                      m_run;
     bool                      m_runSinceReset;
-    
+
     bool                      m_bypassed;
     QString                   m_program;
     bool                      m_grouped;
@@ -180,4 +181,3 @@ protected:
 };
 
 #endif // RG_DSSIPLUGININSTANCE_H
-

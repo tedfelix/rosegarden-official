@@ -2355,6 +2355,16 @@ JackDriver::setPluginInstancePortValue(InstrumentId id, int position,
         m_instrumentMixer->setPluginPortValue(id, position, portNumber, value);
 }
 
+void
+JackDriver::setPluginInstancePortByteArray(InstrumentId id,
+                                           int position,
+                                           unsigned long portNumber,
+                                           const QByteArray& ba)
+{
+    if (m_instrumentMixer)
+        m_instrumentMixer->setPluginPortByteArray(id, position, portNumber, ba);
+}
+
 float
 JackDriver::getPluginInstancePortValue(InstrumentId id, int position,
                                        unsigned long portNumber)

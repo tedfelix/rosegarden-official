@@ -45,6 +45,7 @@ public:
     void run(const RealTime &rt) override;
 
     void setPortValue(unsigned int portNumber, float value) override;
+    void setPortByteArray(unsigned int, const QByteArray&) override {}
     float getPortValue(unsigned int portNumber) override;
 
     size_t getBufferSize() override { return m_blockSize; }
@@ -66,7 +67,7 @@ protected:
     friend class LADSPAPluginFactory;
 
     // Constructor that creates the buffers internally
-    // 
+    //
     LADSPAPluginInstance(PluginFactory *factory,
                          InstrumentId instrument,
                          QString identifier,
@@ -77,7 +78,7 @@ protected:
                          const LADSPA_Descriptor* descriptor);
 
     // Constructor that uses shared buffers
-    // 
+    //
     LADSPAPluginInstance(PluginFactory *factory,
                          InstrumentId instrument,
                          QString identifier,
@@ -97,7 +98,7 @@ protected:
     // Connection of data (and behind the scenes control) ports
     //
     void connectPorts();
-    
+
     InstrumentId   m_instrument;
     int                        m_position;
     std::vector<LADSPA_Handle> m_instanceHandles;
@@ -117,11 +118,10 @@ protected:
     size_t                    m_sampleRate;
     float                    *m_latencyPort;
     bool                      m_run;
-    
+
     bool                      m_bypassed;
 };
 
 }
 
 #endif // RG_LADSPAPLUGININSTANCE_H
-

@@ -88,6 +88,10 @@ public:
     bool changedSinceProgramChange;
 
     void setValue(PortData v) { value = v; changedSinceProgramChange = true; }
+    const QByteArray byteArray() const;
+    void setByteArray(const QByteArray& ba);
+ private:
+    QByteArray m_ba;
 };
 
 typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
