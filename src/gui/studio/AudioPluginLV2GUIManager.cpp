@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginLV2GUIManager]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginLV2GUIManager.h"
 
@@ -65,6 +65,7 @@ void
 AudioPluginLV2GUIManager::showGUI(InstrumentId instrument, int position)
 {
     RG_DEBUG << "showGUI(): " << instrument << "," << position;
+    stopGUI(instrument, position);
     AudioPluginLV2GUI* gui = getInstance(instrument, position);
     if (gui->hasGUI()) {
         gui->show();
@@ -75,9 +76,12 @@ void
 AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
 {
     RG_DEBUG << "stopGUI(): " << instrument << "," << position;
-    AudioPluginLV2GUI* gui = getInstance(instrument, position);
-    if (gui->hasGUI()) {
-        gui->hide();
+    if (m_guis.find(instrument) != m_guis.end() &&
+        m_guis[instrument].find(position) != m_guis[instrument].end()) {
+        delete m_guis[instrument][position];
+        m_guis[instrument].erase(position);
+        if (m_guis[instrument].empty())
+            m_guis.erase(instrument);
     }
 }
 
@@ -89,9 +93,10 @@ AudioPluginLV2GUIManager::stopAllGUIs()
         for (auto j = i->second.begin(); j != i->second.end();
              ++j) {
             AudioPluginLV2GUI* gui = j->second;
-            gui->hide();
+            delete gui;
         }
     }
+    m_guis.clear();
 }
 
 void
