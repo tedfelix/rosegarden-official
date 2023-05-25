@@ -64,9 +64,11 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
 
     for (size_t i = 0; i < m_instanceCount * m_audioPortsIn.size(); ++i) {
         m_inputBuffers[i] = new sample_t[blockSize];
+        memset(m_inputBuffers[i], 0, blockSize * sizeof(sample_t));
     }
     for (size_t i = 0; i < m_instanceCount * m_audioPortsOut.size(); ++i) {
         m_outputBuffers[i] = new sample_t[blockSize];
+        memset(m_outputBuffers[i], 0, blockSize * sizeof(sample_t));
     }
 
     for (unsigned int i=0; i< m_instanceCount; i++) {
