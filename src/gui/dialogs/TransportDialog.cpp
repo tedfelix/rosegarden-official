@@ -26,6 +26,7 @@
 #include "misc/Strings.h"
 #include "gui/general/ThornStyle.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "sound/SequencerDataBlock.h"
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/general/MidiPitchLabel.h"
@@ -100,7 +101,6 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_bitsPerFrame(80),
     m_midiInTimer(nullptr),
     m_midiOutTimer(nullptr),
-    m_clearMetronomeTimer(nullptr),
     m_enableMIDILabels(true),
     //m_panelOpen(),
     //m_panelClosed(),
@@ -150,16 +150,12 @@ TransportDialog::TransportDialog(QWidget *parent):
     // Create Midi label timers
     m_midiInTimer = new QTimer(this);
     m_midiOutTimer = new QTimer(this);
-    m_clearMetronomeTimer = new QTimer(this);
 
     connect(m_midiInTimer, &QTimer::timeout,
             this, &TransportDialog::slotClearMidiInLabel);
 
     connect(m_midiOutTimer, &QTimer::timeout,
             this, &TransportDialog::slotClearMidiOutLabel);
-
-    connect(m_clearMetronomeTimer, &QTimer::timeout,
-            this, &TransportDialog::slotResetBackground);
 
     ui->TimeDisplayLabel->hide();
     ui->ToEndLabel->hide();
@@ -289,6 +285,12 @@ TransportDialog::TransportDialog(QWidget *parent):
                 &RosegardenMainWindow::documentLoaded,
             this, &TransportDialog::slotDocumentLoaded);
 
+    // Metronome
+    connect(&m_metronomeTimer, &QTimer::timeout,
+            this, &TransportDialog::slotMetronomeTimer);
+    // No improvement.
+    //m_metronomeTimer.setTimerType(Qt::PreciseTimer);
+
     // Performance Testing
 
     QSettings settings;
@@ -302,6 +304,7 @@ TransportDialog::TransportDialog(QWidget *parent):
                       m_enableMIDILabels ? 1 : 0);
 
     settings.endGroup();
+
 }
 
 TransportDialog::~TransportDialog()
@@ -347,8 +350,13 @@ TransportDialog::loadPixmaps()
     m_lcdList.clear();
     m_lcdListDefault.clear();
 
+    // For each digit 0-9...
     for (int i = 0; i < 10; i++) {
+        // Load the transparent pixmap for that digit into m_lcdList.
         m_lcdList[i] = IconLoader::loadPixmap(QString("led-%1").arg(i));
+
+        // Make the opaque "default" version.  This should be a little
+        // faster to draw since it avoids alpha math.
         QImage im(m_lcdList[i].size(), QImage::Format_RGB32);
         im.fill(0);
         QPainter p(&im);
@@ -445,31 +453,25 @@ TransportDialog::displayTime()
 {
     switch (m_currentMode) {
     case RealMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->hide();
         break;
 
     case SMPTEMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->setText("SMPTE"); // DO NOT i18n
         ui->TimeDisplayLabel->show();
         break;
 
     case BarMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->setText("BAR"); // DO NOT i18n
         ui->TimeDisplayLabel->show();
         break;
 
     case BarMetronomeMode:
-        m_clearMetronomeTimer->setSingleShot(false);
-        m_clearMetronomeTimer->start(1700);
         ui->TimeDisplayLabel->setText("MET"); // DO NOT i18n
         ui->TimeDisplayLabel->show();
         break;
 
     case FrameMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->setText(QString("%1").arg(m_sampleRate));
         ui->TimeDisplayLabel->show();
         break;
@@ -512,6 +514,8 @@ TransportDialog::slotChangeTimeDisplay()
     
     cycleThroughModes();
     
+    updateMetronomeTimer();
+
     displayTime();
 }
 
@@ -536,7 +540,7 @@ TransportDialog::displayRealTime(const RealTime &rt)
 {
     RealTime st = rt;
 
-    slotResetBackground();
+    resetBackground();
 
     if (m_lastMode != RealMode) {
         ui->HourColonPixmap->show();
@@ -584,7 +588,7 @@ TransportDialog::displayFrameTime(const RealTime &rt)
 {
     RealTime st = rt;
 
-    slotResetBackground();
+    resetBackground();
 
     if (m_lastMode != FrameMode) {
         ui->HourColonPixmap->hide();
@@ -641,7 +645,7 @@ TransportDialog::displaySMPTETime(const RealTime &rt)
 {
     RealTime st = rt;
 
-    slotResetBackground();
+    resetBackground();
 
     if (m_lastMode != SMPTEMode) {
         ui->HourColonPixmap->show();
@@ -716,22 +720,6 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
         }
     }
 
-    // If we are doing flashing/blinking metronome mode and we are at or
-    // just after the beat, flash.
-    // ??? This is unreliable because this routine is called at too low
-    //     of a frequency to guarantee a solid flash.  We need to move this
-    //     to a separate higher frequency timer.
-    if (m_currentMode == BarMetronomeMode  &&  unit < 2) {
-        if (beat == 1) {
-            setBackgroundColor(Qt::red);
-        } else {
-            setBackgroundColor(Qt::cyan);
-        }
-    } else {  // Flash is over.
-        // Back to black.
-        slotResetBackground();
-    }
-
     // Break bar/beat/unit into digits.
 
     m_tenThousandths = ( unit ) % 10;
@@ -785,8 +773,10 @@ TransportDialog::updateTimeDisplay()
         if (NEW < 0) {                                             \
             ui->WIDGET->clear();                          \
         } else if (!m_isBackgroundSet) {                           \
+            /* Metronome is *not* flashing, use the opaque versions. */  \
             ui->WIDGET->setPixmap(m_lcdListDefault[NEW]); \
         } else {                                                   \
+            /* Metronome *is* flashing, use the transparent versions. */  \
             ui->WIDGET->setPixmap(m_lcdList[NEW]);        \
         }                                                          \
         OLD = NEW;                                                 \
@@ -910,7 +900,7 @@ TransportDialog::slotClearMidiInLabel()
     ui->InDisplay->setText(tr("NO EVENTS"));
 
     // also, just to be sure:
-    slotResetBackground();
+    resetBackground();
 }
 
 void
@@ -1092,11 +1082,23 @@ void TransportDialog::slotTempoChanged(tempoT tempo)
 void TransportDialog::slotPlaying(bool checked)
 {
     ui->PlayButton->setChecked(checked);
+
+    // If it changed...
+    if (checked != m_playing) {
+        m_playing = checked;
+        updateMetronomeTimer();
+    }
 }
 
 void TransportDialog::slotRecording(bool checked)
 {
     ui->RecordButton->setChecked(checked);
+
+    // If it changed...
+    if (checked != m_recording) {
+        m_recording = checked;
+        updateMetronomeTimer();
+    }
 }
 
 void TransportDialog::slotMetronomeActivated(bool checked)
@@ -1185,7 +1187,7 @@ TransportDialog::setBackgroundColor(QColor color)
 }
 
 void
-TransportDialog::slotResetBackground()
+TransportDialog::resetBackground()
 {
     if (m_isBackgroundSet) {
         setBackgroundColor(Qt::black);
@@ -1205,6 +1207,86 @@ void TransportDialog::loadGeo()
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     restoreGeometry(settings.value("Transport_Geometry").toByteArray());
+}
+
+void TransportDialog::slotMetronomeTimer()
+{
+    // This routine is time-critical.  Keep it short and do as
+    // little work as possible.
+
+    // ??? This is still pretty unreliable.  Either the timer isn't
+    //     very reliable or the display updates aren't.  We could
+    //     collect a list of the arrival times in a circular
+    //     queue and then analyze the deltas.  That would give us an
+    //     idea how good the timer is.
+
+    // If we are flashing
+    if (m_flashing) {
+        // If we have timed out
+        if (QDateTime::currentDateTime() > m_metronomeTimeout) {
+            // Clear the flash.
+            // ??? Inline and make less CPU-intensive?
+            resetBackground();
+
+            // No improvement.
+            //repaint();
+            //qApp->processEvents();
+
+            // Indicate not flashing.
+            m_flashing = false;
+        }
+        return;
+    }
+
+    // Get the playback time.
+    // SequencerDataBlock appears to be the right place for very
+    // precise time.
+    const RealTime position =
+            SequencerDataBlock::getInstance()->getPositionPointer();
+    const Composition &comp =
+            RosegardenDocument::currentDocument->getComposition();
+    // Convert RealTime to timeT (sequencer ticks).
+    timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
+    int bar;
+    int beat;
+    int fraction;
+    int remainder;
+    comp.getMusicalTimeForAbsoluteTime(elapsedTime, bar, beat, fraction, remainder);
+
+    // If we are on the beat.
+    if (fraction == 0) {
+        // Flash
+        if (beat == 1) {
+            // ??? Inline and make less CPU-intensive?
+            setBackgroundColor(Qt::red);
+            //setBackgroundColor(QColor(255,0,0));
+        } else {
+            // ??? Inline and make less CPU-intensive?
+            setBackgroundColor(Qt::cyan);
+            //setBackgroundColor(QColor(0,255,255));
+        }
+
+        // No improvement.
+        //repaint();
+        //qApp->processEvents();
+
+        // Compute the timeout.
+        m_metronomeTimeout = QDateTime::currentDateTime().addMSecs(90);
+
+        // Indicate flashing.
+        m_flashing = true;
+
+        return;
+    }
+}
+
+void TransportDialog::updateMetronomeTimer()
+{
+    // Start/Stop metronome timer as needed.
+    if (m_currentMode == BarMetronomeMode  &&  (m_playing  ||  m_recording))
+        m_metronomeTimer.start(10);
+    else
+        m_metronomeTimer.stop();
 }
 
 
