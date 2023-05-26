@@ -716,15 +716,23 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
         }
     }
 
-    if (m_currentMode == BarMetronomeMode && unit < 2) {
+    // If we are doing flashing/blinking metronome mode and we are at or
+    // just after the beat, flash.
+    // ??? This is unreliable because this routine is called at too low
+    //     of a frequency to guarantee a solid flash.  We need to move this
+    //     to a separate higher frequency timer.
+    if (m_currentMode == BarMetronomeMode  &&  unit < 2) {
         if (beat == 1) {
             setBackgroundColor(Qt::red);
         } else {
             setBackgroundColor(Qt::cyan);
         }
-    } else {
+    } else {  // Flash is over.
+        // Back to black.
         slotResetBackground();
     }
+
+    // Break bar/beat/unit into digits.
 
     m_tenThousandths = ( unit ) % 10;
     m_thousandths = ( unit / 10 ) % 10;
@@ -764,6 +772,7 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
         }
     }
 
+    // Update the digits on the display.
     updateTimeDisplay();
 }
 

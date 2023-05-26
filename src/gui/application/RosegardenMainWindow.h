@@ -1138,13 +1138,6 @@ public slots:
 
 
     /**
-     * Update the transport with the bar, beat and unit times for
-     * a given timeT
-     */
-    void slotDisplayBarTime(timeT t);
-
-
-    /**
      * Transport controls
      */
     void slotPlay();
@@ -1539,6 +1532,12 @@ private:
      * modified
      */
     bool saveIfModified();
+
+    /**
+     * Update the transport with the bar, beat and unit times for
+     * a given timeT
+     */
+    void displayBarTime(timeT t);
 
     //--------------- Data members ---------------------------------
 

@@ -500,7 +500,13 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     if (!installSignalHandlers())
         RG_WARNING << "ctor: Signal handlers not installed!";
 
-    // Update UI time interval
+    // Update UI time interval.
+    // ??? This default of 50msecs breaks TransportDialog's metronome
+    //     flash mode.  The updates do not come in frequently enough.
+    //     Need to consider whether to implement a new higher-freq
+    //     timer for TransportDialog, or just go with a higher number
+    //     here.  20 seems to work.  But how badly does that affect
+    //     CPU usage?
     settings.beginGroup("Performance_Testing");
     int updateUITime = settings.value("Update_UI_Time", 50).toInt();
     // Write it to the file to make it easier to find.
@@ -4960,7 +4966,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     if (mode == TransportDialog::BarMode ||
             mode == TransportDialog::BarMetronomeMode) {
 
-        slotDisplayBarTime(t);
+        displayBarTime(t);
 
     } else {
 
@@ -5003,7 +5009,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
 }
 
 void
-RosegardenMainWindow::slotDisplayBarTime(timeT t)
+RosegardenMainWindow::displayBarTime(timeT t)
 {
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
