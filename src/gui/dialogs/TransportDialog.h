@@ -189,15 +189,12 @@ private:
     // Digits 0-9 in blue vacuum fluorescent display (VFD) format.
     // These are the default non-transparent versions of the digits for
     // normal drawing.  Should draw faster than the transparent counterparts.
-    // ??? Use a C array instead of QHash.
-    // ??? Rename: m_digitsOpaque
-    QHash<int, QPixmap> m_lcdListDefault;
+    QPixmap m_digitsOpaque[10];
     // Same digits, but with transparency (alpha) to use when the
     // metronome is flashing.
-    // ??? Use a C array instead of QHash.
-    // ??? Rename: m_digitsTransparent
-    QHash<int, QPixmap> m_lcdList;
-    QPixmap m_lcdNegative;
+    QPixmap m_digitsTransparent[10];
+
+    QPixmap m_negativeSign;
 
     int m_lastTenHours;
     int m_lastUnitHours;

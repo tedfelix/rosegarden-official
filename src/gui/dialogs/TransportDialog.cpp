@@ -347,26 +347,28 @@ TransportDialog::initModeMap()
 void
 TransportDialog::loadPixmaps()
 {
-    m_lcdList.clear();
-    m_lcdListDefault.clear();
-
     // For each digit 0-9...
-    for (int i = 0; i < 10; i++) {
-        // Load the transparent pixmap for that digit into m_lcdList.
-        m_lcdList[i] = IconLoader::loadPixmap(QString("led-%1").arg(i));
+    for (int i = 0; i <= 9; ++i) {
+        // Load the transparent pixmap.
+        m_digitsTransparent[i] =
+                IconLoader::loadPixmap(QString("led-%1").arg(i));
 
-        // Make the opaque "default" version.  This should be a little
+        // Make the opaque version.  This should be a little
         // faster to draw since it avoids alpha math.
-        QImage im(m_lcdList[i].size(), QImage::Format_RGB32);
-        im.fill(0);
-        QPainter p(&im);
-        p.drawPixmap(0, 0, m_lcdList[i]);
-        m_lcdListDefault[i] = QPixmap::fromImage(im);
+        QImage opaqueImage(m_digitsTransparent[i].size(), QImage::Format_RGB32);
+        // Fill with black.
+        opaqueImage.fill(0);
+        // Create a QPainter so that we can draw the pixmap on the image.
+        QPainter opaquePainter(&opaqueImage);
+        // Draw the digit pixmap onto the image.
+        opaquePainter.drawPixmap(0, 0, m_digitsTransparent[i]);
+        // Copy to the opaque pixmap array.
+        m_digitsOpaque[i] = QPixmap::fromImage(opaqueImage);
     }
 
     // Load the "negative" sign pixmap
     //
-    m_lcdNegative = IconLoader::loadPixmap("led--");
+    m_negativeSign = IconLoader::loadPixmap("led--");
 }
 
 void
@@ -555,7 +557,7 @@ TransportDialog::displayRealTime(const RealTime &rt)
     if (st < RealTime::zeroTime) {
         st = RealTime::zeroTime - st;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -603,7 +605,7 @@ TransportDialog::displayFrameTime(const RealTime &rt)
     if (st < RealTime::zeroTime) {
         st = RealTime::zeroTime - st;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -660,7 +662,7 @@ TransportDialog::displaySMPTETime(const RealTime &rt)
     if (st < RealTime::zeroTime) {
         st = RealTime::zeroTime - st;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -709,7 +711,7 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
     if (bar < 0) {
         bar = -bar;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -770,14 +772,15 @@ TransportDialog::updateTimeDisplay()
 
 #define UPDATE(NEW,OLD,WIDGET)                                     \
     if (NEW != OLD) {                                              \
-        if (NEW < 0) {                                             \
+        if (NEW < 0  ||  NEW > 9) {                                \
             ui->WIDGET->clear();                          \
         } else if (!m_isBackgroundSet) {                           \
             /* Metronome is *not* flashing, use the opaque versions. */  \
-            ui->WIDGET->setPixmap(m_lcdListDefault[NEW]); \
+            /* ??? Seeing the opaque bitmap during flash on occasion.  */  \
+            ui->WIDGET->setPixmap(m_digitsOpaque[NEW]);  \
         } else {                                                   \
             /* Metronome *is* flashing, use the transparent versions. */  \
-            ui->WIDGET->setPixmap(m_lcdList[NEW]);        \
+            ui->WIDGET->setPixmap(m_digitsTransparent[NEW]);  \
         }                                                          \
         OLD = NEW;                                                 \
     }
