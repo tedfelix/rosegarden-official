@@ -209,6 +209,10 @@ bool ControlBlock::isAnyTrackInSolo() const
         if (track.m_deleted)
             continue;
 
+        // Don't include archived tracks.
+        if (track.m_archived)
+            continue;
+
         if (track.m_solo)
             return true;
     }
