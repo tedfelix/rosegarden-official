@@ -26,6 +26,7 @@
 
 #include <alsa/seq_event.h>
 #include <alsa/seq_midi_event.h>
+#include "sound/LV2Utils.h"
 
 #include "base/Instrument.h"
 #include "RingBuffer.h"
@@ -75,29 +76,6 @@ public:
     void discardEvents() override;
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
-    enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
-
-    struct LV2PortData
-    {
-        QString name;
-        LV2PortType portType;
-        bool isInput;
-        float min;
-        float max;
-        float def;
-        int displayHint;
-    };
-
-    struct LV2PluginData
-    {
-        QString name;
-        QString label; // abbreviated name
-        QString pluginClass;
-        QString author;
-        bool isInstrument;
-        std::vector<LV2PortData> ports;
-    };
-
 protected:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;
@@ -111,9 +89,7 @@ protected:
                       unsigned long sampleRate,
                       size_t blockSize,
                       int idealChannelCount,
-                      LilvWorld* world,
-                      const QString& uri,
-                      const LV2PluginData& pluginData);
+                      const QString& uri);
 
     void init(int idealChannelCount = 0);
     void instantiate(unsigned long sampleRate);
@@ -133,8 +109,8 @@ protected:
     size_t                     m_instanceCount;
     LilvWorld *m_world;
     QString m_uri;
-    LV2PluginData m_pluginData;
     const LilvPlugin *m_plugin;
+    LV2Utils::LV2PluginData m_pluginData;
 
     std::vector<std::pair<unsigned long, float> > m_controlPortsIn;
     std::vector<std::pair<unsigned long, float> > m_controlPortsOut;

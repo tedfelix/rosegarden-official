@@ -37,16 +37,13 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         unsigned long sampleRate,
         size_t blockSize,
         int idealChannelCount,
-        LilvWorld* world,
-        const QString& uri,
-        const LV2PluginData& pluginData) :
+        const QString& uri) :
         RunnablePluginInstance(factory, identifier),
         m_instrument(instrument),
         m_position(position),
         m_instanceCount(0),
-        m_world(world),
         m_uri(uri),
-        m_pluginData(pluginData),
+        m_plugin(nullptr),
         m_midiPort(-1),
         m_midiParser(nullptr),
         m_blockSize(blockSize),
@@ -56,6 +53,9 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_bypassed(false)
 {
     RG_DEBUG << "create plugin" << uri;
+
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    m_pluginData = lv2utils->getPluginData(uri);
 
     init(idealChannelCount);
 
@@ -84,11 +84,7 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_midiIn.push_back(aseq);
     }
 
-    QByteArray ba = m_uri.toLocal8Bit();
-    const char *uris = ba.data();
-    LilvNode* pluginUri = lilv_new_uri(m_world, uris);
-    const LilvPlugins* plugins = lilv_world_get_all_plugins(world);
-    m_plugin = lilv_plugins_get_by_uri(plugins, pluginUri);
+    m_plugin = lv2utils->getPluginByUri(m_uri);
 
     snd_midi_event_new(100, &m_midiParser);
     LV2Urid* lv2urid = LV2Urid::getInstance();
@@ -109,9 +105,9 @@ LV2PluginInstance::init(int idealChannelCount)
     // Discover ports numbers and identities
     //
     for (unsigned long i = 0; i < m_pluginData.ports.size(); ++i) {
-        const LV2PortData& portData = m_pluginData.ports[i];
+        const LV2Utils::LV2PortData& portData = m_pluginData.ports[i];
         switch(portData.portType) {
-        case LV2AUDIO:
+        case LV2Utils::LV2AUDIO:
             if (portData.isInput) {
                 RG_DEBUG << "LV2PluginInstance::init: port" << i << "is audio in";
                 m_audioPortsIn.push_back(i);
@@ -120,7 +116,7 @@ LV2PluginInstance::init(int idealChannelCount)
                 m_audioPortsOut.push_back(i);
             }
             break;
-        case LV2CONTROL:
+        case LV2Utils::LV2CONTROL:
             if (portData.isInput) {
                 RG_DEBUG << "LV2PluginInstance::init: port" << i << "is control in";
                 m_controlPortsIn.
@@ -137,7 +133,7 @@ LV2PluginInstance::init(int idealChannelCount)
                 }
             }
             break;
-        case LV2MIDI:
+        case LV2Utils::LV2MIDI:
             RG_DEBUG << "LV2PluginInstance::init: port" << i << "is midi";
             m_midiPort = i;
             break;

@@ -742,6 +742,7 @@ if (LILV_FOUND)
     sound/LV2PluginFactory.cpp
     sound/LV2PluginInstance.cpp
     sound/LV2Urid.cpp
+    sound/LV2Utils.cpp
     gui/studio/AudioPluginLV2GUIManager.cpp
     gui/studio/AudioPluginLV2GUI.cpp
   )

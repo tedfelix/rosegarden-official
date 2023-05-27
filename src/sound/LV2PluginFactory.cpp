@@ -26,8 +26,8 @@
 #include <QDir>
 #include <cmath>
 
-#include "base/AudioPluginInstance.h"
-#include "LV2PluginInstance.h"
+#include "sound/LV2PluginInstance.h"
+#include "sound/LV2Utils.h"
 #include "MappedStudio.h"
 #include "PluginIdentifier.h"
 
@@ -36,142 +36,6 @@ namespace Rosegarden
 
 LV2PluginFactory::LV2PluginFactory()
 {
-    // the LilvWorld knows all plugins
-    m_world = lilv_world_new();
-    lilv_world_load_all(m_world);
-    const LilvPlugins* plugins = lilv_world_get_all_plugins(m_world);
-
-    LILV_FOREACH (plugins, i, plugins) {
-        const LilvPlugin* plugin = lilv_plugins_get(plugins, i);
-        QString uri = lilv_node_as_uri(lilv_plugin_get_uri(plugin));
-        RG_DEBUG << "got plugin" << uri;
-
-        LV2PluginInstance::LV2PluginData pluginData;
-        LilvNode* nameNode = lilv_plugin_get_name(plugin);
-        RG_DEBUG << "Name:" << lilv_node_as_string(nameNode);
-        pluginData.name = lilv_node_as_string(nameNode);
-        lilv_free(nameNode);
-
-        QString label = pluginData.name;
-        if (label.length() > 20) {
-            label.truncate(18);
-            label += "..";
-        }
-        pluginData.label = label;
-
-        const LilvPluginClass* pclass = lilv_plugin_get_class(plugin);
-        const LilvNode* classLabelNode =
-            lilv_plugin_class_get_label(pclass);
-        QString cstr;
-        if (classLabelNode) {
-            cstr = lilv_node_as_string(classLabelNode);
-        }
-        RG_DEBUG << "Class:" << lilv_node_as_string(classLabelNode);
-        pluginData.pluginClass = cstr;
-        QString aname;
-        LilvNode* anameNode = lilv_plugin_get_author_name(plugin);
-        if (anameNode) {
-            aname = lilv_node_as_string(anameNode);
-            lilv_free(anameNode);
-        }
-        RG_DEBUG << "Author:" << aname;
-        pluginData.author = aname;
-
-        const LilvNode* classUri = lilv_plugin_class_get_uri(pclass);
-        QString curis = lilv_node_as_uri(classUri);
-        RG_DEBUG << "class uri is" << curis;
-        pluginData.isInstrument = ((curis == LV2_CORE__InstrumentPlugin) ||
-                                   (curis == LV2_CORE__OscillatorPlugin));
-
-        unsigned int nports = lilv_plugin_get_num_ports(plugin);
-        RG_DEBUG << "Plugin ports:" << nports;
-
-        for (unsigned long p = 0; p < nports; ++p) {
-            const LilvPort* port = lilv_plugin_get_port_by_index(plugin, p);
-
-            LV2PluginInstance::LV2PortData portData;
-            LilvNode *cpn = lilv_new_uri(m_world, LILV_URI_CONTROL_PORT);
-            LilvNode *mpn = lilv_new_uri(m_world, LILV_URI_ATOM_PORT);
-            LilvNode *ipn = lilv_new_uri(m_world, LILV_URI_INPUT_PORT);
-            bool cntrl = lilv_port_is_a(plugin, port, cpn);
-            bool midi = lilv_port_is_a(plugin, port, mpn);
-            bool inp = lilv_port_is_a(plugin, port, ipn);
-            lilv_node_free(cpn);
-            lilv_node_free(mpn);
-            lilv_node_free(ipn);
-            LilvNode* portNameNode = lilv_port_get_name(plugin, port);
-            QString portName;
-            if (portNameNode) {
-                portName = lilv_node_as_string(portNameNode);
-                lilv_free(portNameNode);
-            }
-
-            RG_DEBUG << "Port" << p << "Name:" << portName <<
-                "Control:" << cntrl << "Input:" << inp << "Midi:" << midi;
-            portData.name = portName;
-            portData.portType = LV2PluginInstance::LV2AUDIO;
-            if (cntrl) portData.portType = LV2PluginInstance::LV2CONTROL;
-            if (midi && inp) portData.portType = LV2PluginInstance::LV2MIDI;
-            portData.isInput = inp;
-
-            LilvNode* def;
-            LilvNode* min;
-            LilvNode* max;
-            lilv_port_get_range(plugin, port, &def, &min, &max);
-
-            float defVal = lilv_node_as_float(def);
-            float minVal = lilv_node_as_float(min);
-            float maxVal = lilv_node_as_float(max);
-
-            portData.def = defVal;
-            portData.min = minVal;
-            portData.max = maxVal;
-
-            RG_DEBUG << "range" << minVal << "-" << maxVal <<
-                "default:" << defVal;
-
-            lilv_node_free(def);
-            lilv_node_free(min);
-            lilv_node_free(max);
-
-            // display hint
-            LilvNode* toggledNode =
-                lilv_new_uri(m_world,
-                             "http://lv2plug.in/ns/lv2core#toggled");
-            bool isToggled =
-                lilv_port_has_property(plugin, port, toggledNode);
-            LilvNode* integerNode =
-                lilv_new_uri(m_world,
-                             "http://lv2plug.in/ns/lv2core#integer");
-            bool isInteger =
-                lilv_port_has_property(plugin, port, integerNode);
-            LilvNode* logarithmicNode =
-                lilv_new_uri(m_world,
-                             "http://lv2plug.in/ns/ext/port-props#logarithmic");
-            bool isLogarithmic =
-                lilv_port_has_property(plugin, port, logarithmicNode);
-
-            lilv_node_free(toggledNode);
-            lilv_node_free(integerNode);
-            lilv_node_free(logarithmicNode);
-
-            RG_DEBUG << "displayHint:" <<
-                isToggled << isInteger << isLogarithmic;
-
-            int hint = PluginPort::NoHint;
-            if (isToggled)
-                hint |= PluginPort::Toggled;
-            if (isInteger)
-                hint |= PluginPort::Integer;
-            if (isLogarithmic)
-                hint |= PluginPort::Logarithmic;
-
-            portData.displayHint = hint;
-
-            pluginData.ports.push_back(portData);
-        }
-        m_pluginData[uri] = pluginData;
-    }
 }
 
 LV2PluginFactory::~LV2PluginFactory()
@@ -183,7 +47,6 @@ LV2PluginFactory::~LV2PluginFactory()
             delete *i;
         }
     m_instances.clear();
-    lilv_world_free(m_world);
 }
 
 const std::vector<QString> &
@@ -195,10 +58,12 @@ LV2PluginFactory::getPluginIdentifiers() const
 void
 LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 {
-    for(auto pair : m_pluginData) {
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    auto allPluginData = lv2utils->getAllPluginData();
+    for(auto pair : allPluginData) {
         const QString& uri = pair.first;
         list.push_back(uri);
-        const LV2PluginInstance::LV2PluginData& pluginData = pair.second;
+        const LV2Utils::LV2PluginData& pluginData = pair.second;
         list.push_back(pluginData.name);
         // uri is the id
         list.push_back(uri);
@@ -226,11 +91,11 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
         list.push_back(QString("%1").arg(nports));
 
         for (unsigned long p = 0; p < nports; ++p) {
-            const LV2PluginInstance::LV2PortData portData = pluginData.ports[p];
+            const LV2Utils::LV2PortData portData = pluginData.ports[p];
             int type = 0;
 
-            if (portData.portType == LV2PluginInstance::LV2CONTROL ||
-                portData.portType == LV2PluginInstance::LV2MIDI) {
+            if (portData.portType == LV2Utils::LV2CONTROL ||
+                portData.portType == LV2Utils::LV2MIDI) {
                 type |= PluginPort::Control;
             } else {
                 type |= PluginPort::Audio;
@@ -257,13 +122,9 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 void
 LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
 {
-    auto it = m_pluginData.find(identifier);
-    if (it == m_pluginData.end()) {
-        RG_DEBUG << "plugin" << identifier << "not found";
-        return;
-    }
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    LV2Utils::LV2PluginData pluginData = lv2utils->getPluginData(identifier);
 
-    const LV2PluginInstance::LV2PluginData pluginData = (*it).second;
     slot.setStringProperty(MappedPluginSlot::Label, pluginData.label);
     slot.setStringProperty(MappedPluginSlot::PluginName, pluginData.name);
     slot.setStringProperty(MappedPluginSlot::Author, pluginData.author);
@@ -282,9 +143,9 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
     slot.destroyChildren();
 
     for (unsigned long i = 0; i < pluginData.ports.size(); i++) {
-        const LV2PluginInstance::LV2PortData& portData = pluginData.ports[i];
-        if ((portData.portType == LV2PluginInstance::LV2CONTROL ||
-             portData.portType == LV2PluginInstance::LV2MIDI) &&
+        const LV2Utils::LV2PortData& portData = pluginData.ports[i];
+        if ((portData.portType == LV2Utils::LV2CONTROL ||
+             portData.portType == LV2Utils::LV2MIDI) &&
             portData.isInput) {
             MappedStudio *studio =
                 dynamic_cast<MappedStudio *>(slot.getParent());
@@ -319,19 +180,14 @@ LV2PluginFactory::instantiatePlugin(QString identifier,
                                     unsigned int channels)
 {
     RG_DEBUG << "instantiate plugin" << identifier;
-    auto it = m_pluginData.find(identifier);
-    if (it == m_pluginData.end()) {
-        RG_DEBUG << "plugin" << identifier << "not found";
-        return nullptr;
-    }
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    LV2Utils::LV2PluginData pdata = lv2utils->getPluginData(identifier);
 
-    const QString& uri = (*it).first;
-    const LV2PluginInstance::LV2PluginData& pdata = (*it).second;
+    const QString& uri = identifier;
     LV2PluginInstance *instance =
         new LV2PluginInstance
         (this, instrument, identifier,
-         position, sampleRate, blockSize, channels,
-         m_world, uri, pdata);
+         position, sampleRate, blockSize, channels, uri);
 
     m_instances.insert(instance);
 
@@ -361,9 +217,11 @@ LV2PluginFactory::discoverPlugins()
 void
 LV2PluginFactory::generateTaxonomy()
 {
-    for(auto pair : m_pluginData) {
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    auto allPluginData = lv2utils->getAllPluginData();
+    for(auto pair : allPluginData) {
         const QString& uri = pair.first;
-        const LV2PluginInstance::LV2PluginData& pluginData = pair.second;
+        const LV2Utils::LV2PluginData& pluginData = pair.second;
 
         m_taxonomy[uri] = pluginData.pluginClass;
         m_identifiers.push_back(uri);

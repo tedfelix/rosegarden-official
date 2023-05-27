@@ -24,8 +24,6 @@
 #include <set>
 #include <QString>
 
-#include <lilv/lilv.h>
-
 namespace Rosegarden
 {
 
@@ -61,9 +59,7 @@ class LV2PluginFactory : public PluginFactory
 
     std::set<RunnablePluginInstance *> m_instances;
 
-    LilvWorld* m_world;
     std::vector<QString> m_identifiers;
-    std::map<QString, LV2PluginInstance::LV2PluginData> m_pluginData;
     std::map<QString, QString> m_taxonomy;
 
 };
