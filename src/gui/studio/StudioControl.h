@@ -124,10 +124,6 @@ public:
                                     unsigned long portId,
                                     MappedObjectValue value);
 
-    static void setStudioPluginPort(MappedObjectId pluginId,
-                                    unsigned long portId,
-                                    const QByteArray& ba);
-
     static MappedObjectValue getStudioPluginPort(MappedObjectId pluginId,
                                                  unsigned long portId);
 

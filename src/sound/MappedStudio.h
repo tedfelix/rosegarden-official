@@ -456,7 +456,6 @@ public:
                                  const MappedObjectPropertyList &) override;
 
     void  setPort(unsigned long portNumber, float value);
-    void  setPortByteArray(unsigned long portNumber, const QByteArray& ba);
     float getPort(unsigned long portNumber);
 
     InstrumentId getInstrument() const { return m_instrument; }
@@ -511,7 +510,6 @@ public:
                                    QString value) override;
 
     void setValue(MappedObjectValue value);
-    void setByteArray(const QByteArray& ba);
     MappedObjectValue getValue() const;
 
     int getPortNumber() const { return m_portNumber; }

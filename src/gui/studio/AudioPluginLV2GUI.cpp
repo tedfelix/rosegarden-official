@@ -217,10 +217,10 @@ AudioPluginLV2GUI::portChange(uint32_t portIndex,
     } else {
         // complex data
         QByteArray ba(static_cast<const char*>(buffer), bufferSize);
-        m_mainWindow->slotChangePluginPortBuf(m_instrument,
+        /* !!! m_mainWindow->slotChangePluginPortBuf(m_instrument,
                                               m_position,
                                               portIndex,
-                                              ba);
+                                              ba); */
     }
 }
 

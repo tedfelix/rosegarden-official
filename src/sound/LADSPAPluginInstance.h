@@ -45,7 +45,6 @@ public:
     void run(const RealTime &rt) override;
 
     void setPortValue(unsigned int portNumber, float value) override;
-    void setPortByteArray(unsigned int, const QByteArray&) override {}
     float getPortValue(unsigned int portNumber) override;
 
     size_t getBufferSize() override { return m_blockSize; }

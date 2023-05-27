@@ -1068,20 +1068,6 @@ AudioInstrumentMixer::setPluginPortValue(InstrumentId id, int position,
     }
 }
 
-void
-AudioInstrumentMixer::setPluginPortByteArray(InstrumentId id, int position,
-                                             unsigned int port,
-                                             const QByteArray& ba)
-{
-    // Not RT safe
-
-    RunnablePluginInstance *instance = getPluginInstance(id, position);
-
-    if (instance) {
-        instance->setPortByteArray(port, ba);
-    }
-}
-
 float
 AudioInstrumentMixer::getPluginPortValue(InstrumentId id, int position,
         unsigned int port)

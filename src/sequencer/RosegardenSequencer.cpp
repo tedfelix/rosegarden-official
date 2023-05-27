@@ -864,24 +864,6 @@ RosegardenSequencer::setMappedPort(int pluginId,
     }
 }
 
-void
-RosegardenSequencer::setMappedPort(int pluginId,
-                                   unsigned long portId,
-                                   const QByteArray& ba)
-{
-    LOCKED;
-
-    MappedObject *object =
-        m_studio->getObjectById(pluginId);
-
-    MappedPluginSlot *slot =
-        dynamic_cast<MappedPluginSlot *>(object);
-
-    if (slot) {
-        slot->setPortByteArray(portId, ba);
-    }
-}
-
 float
 RosegardenSequencer::getMappedPort(int pluginId,
                                       unsigned long portId)

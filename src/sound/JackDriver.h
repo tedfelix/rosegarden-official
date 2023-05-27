@@ -82,11 +82,6 @@ public:
                                             unsigned long portNumber,
                                             float value);
 
-    virtual void setPluginInstancePortByteArray(InstrumentId id,
-                                                int position,
-                                                unsigned long portNumber,
-                                                const QByteArray& ba);
-
     virtual float getPluginInstancePortValue(InstrumentId id,
                                              int position,
                                              unsigned long portNumber);

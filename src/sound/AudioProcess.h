@@ -188,8 +188,6 @@ public:
 
     void setPluginPortValue(InstrumentId id, int position,
                             unsigned int port, float value);
-    void setPluginPortByteArray(InstrumentId id, int position,
-                                unsigned int port, const QByteArray& ba);
     float getPluginPortValue(InstrumentId id, int position,
                              unsigned int port);
 

@@ -7467,41 +7467,6 @@ RosegardenMainWindow::slotChangePluginPort(InstrumentId instrumentId,
 }
 
 void
-RosegardenMainWindow::slotChangePluginPortBuf(InstrumentId instrumentId,
-                                              int pluginIndex,
-                                              int portIndex,
-                                              const QByteArray& ba)
-{
-    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
-    if (!container) {
-        RG_DEBUG << "slotChangePluginPortBuf - "
-                 << "no instrument or buss of id " << instrumentId;
-        return ;
-    }
-
-    AudioPluginInstance *inst = container->getPlugin(pluginIndex);
-    if (!inst) {
-        RG_DEBUG << "slotChangePluginPortBuf - " << "no plugin at index " <<
-            pluginIndex << " on " << instrumentId;
-        return ;
-    }
-
-    PluginPortInstance *port = inst->getPort(portIndex);
-    if (!port) {
-        RG_DEBUG << "slotChangePluginPortBuf - no port " << portIndex;
-        return ;
-    }
-
-    RG_DEBUG << "slotPluginPortChangedBuf - "
-             << "setting plugin port (" << inst->getMappedId()
-             << ", " << portIndex << ")";
-
-    port->setByteArray(ba);
-    StudioControl::setStudioPluginPort(inst->getMappedId(),
-                                       portIndex, port->byteArray());
-}
-
-void
 RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
                                             int pluginIndex,
                                             int portIndex)

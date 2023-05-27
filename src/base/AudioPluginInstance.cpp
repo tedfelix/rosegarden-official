@@ -29,17 +29,6 @@
 namespace Rosegarden
 {
 
-const QByteArray PluginPortInstance::byteArray() const
-{
-    return m_ba;
-}
-
-void PluginPortInstance::setByteArray(const QByteArray& ba)
-{
-    m_ba = ba;
-}
-
-
 // ------------------ PluginPort ---------------------
 //
 
@@ -274,6 +263,5 @@ AudioPluginInstance::getDisplayName() const
 
     return qstrtostr(displayName);
 }
-
 
 }

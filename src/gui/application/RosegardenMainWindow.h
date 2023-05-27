@@ -1441,14 +1441,6 @@ public slots:
                               int pluginIndex, int portIndex, float value);
 
     /**
-     * An external GUI has requested a port change with complex data.
-     */
-    void slotChangePluginPortBuf(InstrumentId instrumentId,
-                                 int pluginIndex,
-                                 int portIndex,
-                                 const QByteArray& ba);
-
-    /**
      * Our internal GUI has made a port change -- the
      * PluginPortInstance already contains the new value, but we need
      * to inform the sequencer and update external GUIs.

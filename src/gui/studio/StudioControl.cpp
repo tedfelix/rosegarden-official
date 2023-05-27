@@ -114,15 +114,6 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
     RosegardenSequencer::getInstance()->setMappedPort(pluginId, portId, value);
 }
 
-void
-StudioControl::setStudioPluginPort(MappedObjectId pluginId,
-                                   unsigned long portId,
-                                   const QByteArray& ba)
-{
-    RosegardenSequencer::getInstance()->setMappedPort(pluginId, portId, ba);
-}
-
-
 MappedObjectValue
 StudioControl::getStudioPluginPort(MappedObjectId pluginId,
                                    unsigned long portId)
