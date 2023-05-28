@@ -71,7 +71,6 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     m_position(position),
     m_lv2II(0)
 {
-    RG_DEBUG "constructor";
     m_id = strtoqstr(m_pluginInstance->getIdentifier());
     LV2Utils* lv2utils = LV2Utils::getInstance();
     const LilvPlugin* plugin = lv2utils->getPluginByUri(m_id);
