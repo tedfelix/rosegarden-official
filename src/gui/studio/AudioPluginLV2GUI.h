@@ -34,7 +34,6 @@ class AudioPluginLV2GUI : public QWidget
     Q_OBJECT
  public:
     AudioPluginLV2GUI(AudioPluginInstance *instance,
-                      LilvWorld* world,
                       RosegardenMainWindow *mainWindow,
                       InstrumentId instrument,
                       int position);
@@ -57,7 +56,6 @@ class AudioPluginLV2GUI : public QWidget
     void timeUp();
 
  private:
-    LilvWorld* m_world;
     AudioPluginInstance* m_pluginInstance;
     RosegardenMainWindow* m_mainWindow;
     InstrumentId m_instrument;

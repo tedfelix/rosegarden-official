@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginLV2GUIManager]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginLV2GUIManager.h"
 
@@ -31,8 +31,6 @@ AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWin
         m_mainWindow(mainWindow),
         m_studio(nullptr)
 {
-    m_world = lilv_world_new();
-    lilv_world_load_all(m_world);
 }
 
 AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
@@ -44,7 +42,6 @@ AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
         }
     }
     m_guis.clear();
-    lilv_world_free(m_world);
 }
 
 void
@@ -174,7 +171,6 @@ AudioPluginLV2GUIManager::getInstance(InstrumentId instrument, int position)
     }
     if (makeInstance) {
         AudioPluginLV2GUI* newInstance = new AudioPluginLV2GUI(pluginInstance,
-                                                               m_world,
                                                                m_mainWindow,
                                                                instrument,
                                                                position);

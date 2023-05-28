@@ -28,6 +28,7 @@
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "sound/LV2Urid.h"
+#include "sound/LV2Utils.h"
 
 namespace
 {
@@ -59,23 +60,22 @@ namespace Rosegarden
 {
 
 AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
-                                     LilvWorld* world,
                                      RosegardenMainWindow *mainWindow,
                                      InstrumentId instrument,
                                      int position) :
 
     QWidget(nullptr),
-    m_world(world),
     m_pluginInstance(instance),
     m_mainWindow(mainWindow),
     m_instrument(instrument),
-    m_position(position)
+    m_position(position),
+    m_lv2II(0)
 {
+    RG_DEBUG "constructor";
     m_id = strtoqstr(m_pluginInstance->getIdentifier());
-    const LilvPlugins* plugins = lilv_world_get_all_plugins(m_world);
-    LilvNode* plugin_uri = lilv_new_uri(m_world, qPrintable(m_id));
-    const LilvPlugin* plugin = lilv_plugins_get_by_uri(plugins, plugin_uri);
-    lilv_node_free(plugin_uri);
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    const LilvPlugin* plugin = lv2utils->getPluginByUri(m_id);
+
     if (! plugin) {
         RG_DEBUG << "failed to get plugin " << m_id;
         return;
@@ -93,13 +93,10 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     // http://lv2plug.in/ns/extensions/ui#GtkUI (calf)
     // http://lv2plug.in/ns/extensions/ui#X11UI (guitarix)
 
-    LilvNode* x11UI = lilv_new_uri(m_world, LV2_UI__X11UI);
-
+    LilvNode* x11UI = lv2utils->makeURINode(LV2_UI__X11UI);
     m_uis = lilv_plugin_get_uis(plugin);
     const LilvUI* selectedUI = nullptr;
-    m_uidesc = nullptr;
     LILV_FOREACH(uis, it, m_uis) {
-        RG_DEBUG << "ui found";
         const LilvUI* ui = lilv_uis_get(m_uis, it);
         if (lilv_ui_is_a(ui, x11UI)) {
             selectedUI = ui;
@@ -125,6 +122,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     void* vpdf = dlsym(m_uilib, "lv2ui_descriptor");
     LV2UI_DescriptorFunction pdf = (LV2UI_DescriptorFunction)vpdf;
     int ui_index = 0;
+    m_uidesc = nullptr;
     while(true) {
         const LV2UI_Descriptor* uidesci = (*pdf)(ui_index);
         if (uidesci == nullptr) break;

@@ -40,11 +40,13 @@ class LV2Utils
     void operator=(const LV2Utils &) = delete;
 
     enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
+    enum LV2PortProtocol {LV2FLOAT, LV2ATOM};
 
     struct LV2PortData
     {
         QString name;
         LV2PortType portType;
+        LV2PortProtocol portProtocol;
         bool isInput;
         float min;
         float max;
@@ -62,9 +64,11 @@ class LV2Utils
         std::vector<LV2PortData> ports;
     };
 
-    const std::map<QString, LV2PluginData>& getAllPluginData();
+    const std::map<QString, LV2PluginData>& getAllPluginData() const;
     const LilvPlugin* getPluginByUri(const QString& uri) const;
     LV2PluginData getPluginData(const QString& uri) const;
+    const LilvUIs* getPluginUIs(const QString& uri) const;
+    LilvNode* makeURINode(const QString& uri) const;
 
  private:
     /// Singleton.  See getInstance().
@@ -73,6 +77,7 @@ class LV2Utils
 
     QMutex m_mutex;
     LilvWorld* m_world;
+    const LilvPlugins* m_plugins;
     std::map<QString, LV2PluginData> m_pluginData;
 };
 

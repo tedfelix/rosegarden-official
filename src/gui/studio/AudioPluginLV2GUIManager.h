@@ -52,7 +52,6 @@ public:
     RosegardenMainWindow *m_mainWindow;
     Studio *m_studio;
 
-    LilvWorld* m_world;
     typedef std::map<int, AudioPluginLV2GUI *> IntGUIMap;
     typedef std::map<int, IntGUIMap> GUIMap;
     GUIMap m_guis;

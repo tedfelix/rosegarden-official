@@ -107,7 +107,6 @@ protected:
     int                        m_position;
     std::vector<LilvInstance*> m_instances;
     size_t                     m_instanceCount;
-    LilvWorld *m_world;
     QString m_uri;
     const LilvPlugin *m_plugin;
     LV2Utils::LV2PluginData m_pluginData;

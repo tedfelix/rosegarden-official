@@ -20,6 +20,9 @@
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"
 
+#include <lv2/midi/midi.h>
+#include <lv2/ui/ui.h>
+
 // LV2Utils is used in different threads
 #define LOCKED QMutexLocker rg_utils_locker(&m_mutex)
 
@@ -35,6 +38,7 @@ LV2Utils::getInstance()
 
 LV2Utils::LV2Utils()
 {
+    LOCKED;
     // the LilvWorld knows all plugins
     m_world = lilv_world_new();
     lilv_world_load_all(m_world);
@@ -90,13 +94,13 @@ LV2Utils::LV2Utils()
 
             LV2PortData portData;
             LilvNode *cpn = lilv_new_uri(m_world, LILV_URI_CONTROL_PORT);
-            LilvNode *mpn = lilv_new_uri(m_world, LILV_URI_ATOM_PORT);
+            LilvNode *atn = lilv_new_uri(m_world, LILV_URI_ATOM_PORT);
             LilvNode *ipn = lilv_new_uri(m_world, LILV_URI_INPUT_PORT);
             bool cntrl = lilv_port_is_a(plugin, port, cpn);
-            bool midi = lilv_port_is_a(plugin, port, mpn);
+            bool atom = lilv_port_is_a(plugin, port, atn);
             bool inp = lilv_port_is_a(plugin, port, ipn);
             lilv_node_free(cpn);
-            lilv_node_free(mpn);
+            lilv_node_free(atn);
             lilv_node_free(ipn);
             LilvNode* portNameNode = lilv_port_get_name(plugin, port);
             QString portName;
@@ -106,12 +110,21 @@ LV2Utils::LV2Utils()
             }
 
             RG_DEBUG << "Port" << p << "Name:" << portName <<
-                "Control:" << cntrl << "Input:" << inp << "Midi:" << midi;
+                "Control:" << cntrl << "Input:" << inp << "Atom:" << atom;
             portData.name = portName;
             portData.portType = LV2AUDIO;
             if (cntrl) portData.portType = LV2CONTROL;
-            if (midi && inp) portData.portType = LV2MIDI;
+            if (atom && inp) {
+                LilvNode* midiNode = lilv_new_uri(m_world, LV2_MIDI__MidiEvent);
+                bool isMidi = lilv_port_supports_event(plugin, port, midiNode);
+                lilv_node_free(midiNode);
+                if (isMidi) {
+                    portData.portType = LV2MIDI;
+                }
+            }
             portData.isInput = inp;
+            portData.portProtocol = LV2FLOAT;
+            if (atom) portData.portProtocol = LV2ATOM;
 
             LilvNode* def;
             LilvNode* min;
@@ -171,25 +184,24 @@ LV2Utils::LV2Utils()
         }
         m_pluginData[uri] = pluginData;
     }
+    m_plugins = lilv_world_get_all_plugins(m_world);
 }
 
 LV2Utils::~LV2Utils()
 {
+    LOCKED;
     lilv_world_free(m_world);
 }
 
-const std::map<QString, LV2Utils::LV2PluginData>& LV2Utils::getAllPluginData()
+const std::map<QString, LV2Utils::LV2PluginData>& LV2Utils::getAllPluginData() const
 {
     return m_pluginData;
 }
 
 const LilvPlugin* LV2Utils::getPluginByUri(const QString& uri) const
 {
-    const LilvPlugins* plugins = lilv_world_get_all_plugins(m_world);
-    QByteArray ba = uri.toLocal8Bit();
-    const char *uris = ba.data();
-    LilvNode* pluginUri = lilv_new_uri(m_world, uris);
-    const LilvPlugin* plugin = lilv_plugins_get_by_uri(plugins, pluginUri);
+    LilvNode* pluginUri = makeURINode(uri);
+    const LilvPlugin* plugin = lilv_plugins_get_by_uri(m_plugins, pluginUri);
     lilv_node_free(pluginUri);
     return plugin;
 }
@@ -200,6 +212,19 @@ LV2Utils::LV2PluginData LV2Utils::getPluginData(const QString& uri) const
     auto it = m_pluginData.find(uri);
     if (it == m_pluginData.end()) return emptyData;
     return (*it).second;
+}
+
+const LilvUIs* LV2Utils::getPluginUIs(const QString& uri) const
+{
+    const LilvPlugin* plugin = getPluginByUri(uri);
+    LilvUIs *uis = lilv_plugin_get_uis(plugin);
+    return uis;
+}
+
+LilvNode* LV2Utils::makeURINode(const QString& uri) const
+{
+    LilvNode* node = lilv_new_uri(m_world, qPrintable(uri));
+    return node;
 }
 
 }
