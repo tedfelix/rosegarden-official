@@ -20,6 +20,7 @@
 #include "TransportDialog.h"
 
 #include "base/Composition.h"
+#include "base/Configuration.h"  // DocumentConfiguration
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "misc/Debug.h"
@@ -315,6 +316,32 @@ TransportDialog::~TransportDialog()
         saveGeo();
 }
 
+void TransportDialog::init()
+{
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
+
+    Composition &comp = doc->getComposition();
+
+    setEnabled(true);
+
+    setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
+
+    // bring the transport to the front
+    raise();
+
+    // set the play metronome button
+    MetronomeButton()->setChecked(comp.usePlayMetronome());
+
+    // set the transport mode found in the configuration
+    const std::string transportMode =
+            doc->getConfiguration().get<String>(
+                    DocumentConfiguration::TransportMode);
+    setNewMode(transportMode);
+
+}
+
 std::string
 TransportDialog::getCurrentModeAsString()
 {
@@ -448,6 +475,16 @@ TransportDialog::cycleThroughModes()
         m_currentMode = RealMode;
         break;
     }
+
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
+
+    // Save the new TimeDisplayMode in the DocumentConfiguration.
+    doc->getConfiguration().set<String>(
+            DocumentConfiguration::TransportMode, getCurrentModeAsString());
+    doc->slotDocumentModified();
+
 }
 
 void

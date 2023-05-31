@@ -501,12 +501,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
         RG_WARNING << "ctor: Signal handlers not installed!";
 
     // Update UI time interval.
-    // ??? This default of 50msecs breaks TransportDialog's metronome
-    //     flash mode.  The updates do not come in frequently enough.
-    //     Need to consider whether to implement a new higher-freq
-    //     timer for TransportDialog, or just go with a higher number
-    //     here.  20 seems to work.  But how badly does that affect
-    //     CPU usage?
     settings.beginGroup("Performance_Testing");
     int updateUITime = settings.value("Update_UI_Time", 50).toInt();
     // Write it to the file to make it easier to find.
@@ -1042,35 +1036,19 @@ RosegardenMainWindow::initView()
             &RosegardenMainViewWidget::addAudioFile,
             this, &RosegardenMainWindow::slotAddAudioFile);
 
-    connect(swapView, &RosegardenMainViewWidget::toggleSolo, this, &RosegardenMainWindow::slotToggleSolo);
+    connect(swapView, &RosegardenMainViewWidget::toggleSolo,
+            this, &RosegardenMainWindow::slotToggleSolo);
 
     RosegardenDocument::currentDocument->attachView(swapView);
 
+
     // Transport setup
-    //
-    std::string transportMode = RosegardenDocument::currentDocument->getConfiguration().get<String>
-        (DocumentConfiguration::TransportMode);
+    getTransport()->init();
 
-
-    slotEnableTransport(true);
-
-    // and the time signature
-    //
-    getTransport()->setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
-
-    // set the tempo in the transport
-    //
+    // Update the tempo in the SequenceManager which will in turn update
+    // the tempo in the transport.
     m_seqManager->setTempo(comp.getCurrentTempo());
 
-    // bring the transport to the front
-    //
-    getTransport()->raise();
-
-    // set the play metronome button
-    getTransport()->MetronomeButton()->setChecked(comp.usePlayMetronome());
-
-    // set the transport mode found in the configuration
-    getTransport()->setNewMode(transportMode);
 
     // set the pointer position
     //
@@ -4988,18 +4966,6 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
 
             getTransport()->displayFrameTime(rT);
         }
-    }
-
-    // handle transport mode configuration changes
-    std::string modeAsString = getTransport()->getCurrentModeAsString();
-
-    if (RosegardenDocument::currentDocument->getConfiguration().get<String>
-            (DocumentConfiguration::TransportMode) != modeAsString) {
-
-        RosegardenDocument::currentDocument->getConfiguration().set<String>
-            (DocumentConfiguration::TransportMode, modeAsString);
-
-        //RosegardenDocument::currentDocument->slotDocumentModified(); to avoid being prompted for a file change when merely changing the transport display
     }
 
     // Update position on the marker editor if it's available

@@ -65,13 +65,14 @@ public:
     explicit TransportDialog(QWidget *parent = nullptr);
     ~TransportDialog() override;
 
+    void init();
+
     enum TimeDisplayMode {
         RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };
 
     std::string getCurrentModeAsString();
     TimeDisplayMode getCurrentMode() { return m_currentMode; }
     void setNewMode(const std::string& newModeAsString);
-    void setNewMode(const TimeDisplayMode& newMode);
     bool isShowingTimeToEnd();
     bool isExpanded();
 
@@ -210,6 +211,7 @@ private:
     bool m_lastNegative;
     TimeDisplayMode m_lastMode;
     TimeDisplayMode m_currentMode;
+    void setNewMode(const TimeDisplayMode &newMode);
 
     int m_tenHours;
     int m_unitHours;
