@@ -1715,12 +1715,12 @@ a quarter sine wave contour</source>
     <message>
         <location line="-358"/>
         <source>From &amp;Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Vom &amp;Editor</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein&amp;heit</translation>
     </message>
     <message>
         <location line="+85"/>
@@ -4426,7 +4426,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+18"/>
         <source>Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Vollbild</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -4582,27 +4582,27 @@ a quarter sine wave contour</source>
     <message>
         <location line="-109"/>
         <source>Merge &amp;File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Datei(en) zusammenfügen...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;MIDI File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIDI Datei(en) zusammenfügen...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;X11 Rosegarden File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;X11 Rosegarden Datei(en) zusammenfügen...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;Hydrogen file(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hydrogen Datei(en) zusammenfügen...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge MusicXM&amp;L File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXM&amp;L Datei(en) zusammenfügen...</translation>
     </message>
     <message>
         <location line="+103"/>
@@ -7984,15 +7984,15 @@ a quarter sine wave contour</source>
         <translation>&amp;lt;keine&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/base/Studio.cpp" line="+67"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+732"/>
+        <location filename="../../src/base/Studio.cpp" line="+67"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
         <source>Synth plugin</source>
         <translation>Synthesizer-Plugin</translation>
     </message>
     <message>
-        <location line="-3"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+37"/>
+        <location line="+37"/>
+        <location filename="../../src/base/Studio.cpp" line="-3"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Audio</source>
         <translation>Audio</translation>
@@ -10195,10 +10195,10 @@ a quarter sine wave contour</source>
         <translation type="vanished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1092"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+480"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1705"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1092"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1038"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1705"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Kontroller %2 %3</translation>
     </message>
@@ -10626,14 +10626,14 @@ abgeschnitten</translation>
         <translation>Wechselnd - %1-Werte wechselnd auf Max und Min setzen</translation>
     </message>
     <message>
+        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+38"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation>Maximum</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation>Minimum</translation>
     </message>
@@ -10900,7 +10900,7 @@ a quarter sine wave contour</source>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="+216"/>
         <source>Arbitrary grid unit</source>
-        <translation type="unfinished">Frei wählbare Rastereinheit</translation>
+        <translation>Frei wählbare Rastereinheit</translation>
     </message>
 </context>
 <context>
@@ -10918,8 +10918,8 @@ a quarter sine wave contour</source>
     <message>
         <location line="+7"/>
         <source>&lt;p&gt;Copyright 2000-2023 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2020 Rosegarden Entwicklerteam&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Kompilierschlüssel: %3&lt;br&gt;Qt Version: %2&lt;/p&gt;&lt;p&gt;Rosegarden wurde dir zur Verfügung gestellt von einem Team 
-Freiwilliger aus aller Welt. Für eine Liste der Beitragenden besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Für mehr Information über Rosegarden, besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 oder später&lt;/p&gt; {2000-2023 ?} {1 ?} {4&quot;?} {3&lt;?} {2&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2020 Rosegarden Entwicklerteam&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Kompilierschlüssel: %3&lt;br&gt;Qt Version: %2&lt;/p&gt;&lt;p&gt;Rosegarden wurde dir zur Verfügung gestellt von einem Team 
+Freiwilliger aus aller Welt. Für eine Liste der Beitragenden besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Für mehr Information über Rosegarden, besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 oder später&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2022 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -13717,7 +13717,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/rulers/ControlEraser.cpp" line="+80"/>
         <source>Click on a value to delete it</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf einen Wert klicken um diesen zu löschen</translation>
     </message>
 </context>
 <context>
@@ -13725,7 +13725,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/rulers/ControlMover.cpp" line="+104"/>
         <source>Click and drag a value. Shift suppresses grid snap. Ctrl constrains to horizontal or vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicken und ziehe einen Wert. Hochstelltaste unterdrückt Einrasten am Gitter. Strg beschränkt auf horizontale oder vertikale Bewegung</translation>
     </message>
 </context>
 <context>
@@ -13733,7 +13733,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/rulers/ControlPainter.cpp" line="+126"/>
         <source>Click to set a value. Right click for grid options</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicken um einen Wert einzustellen. Rechtsklicken für Gitteroptionen</translation>
     </message>
 </context>
 <context>
@@ -15577,22 +15577,22 @@ available on your path.  When choosing an application to use, please ensure that
     <message>
         <location line="+65"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Thema</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Native (Light)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nativ (Hell)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Classic (Medium)</source>
-        <translation type="unfinished"></translation>
+        <translation>Klassisch (Mittel)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dark</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkel</translation>
     </message>
     <message>
         <location line="+141"/>
@@ -16710,37 +16710,37 @@ Es gibt keine Segmente auf den ausgewählten Spuren.</translation>
     <message>
         <location line="+1"/>
         <source>2.16</source>
-        <translation type="unfinished">2.16</translation>
+        <translation>2.16</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.18</source>
-        <translation type="unfinished">2.18</translation>
+        <translation>2.18</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.19</source>
-        <translation type="unfinished">2.19</translation>
+        <translation>2.19</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.20</source>
-        <translation type="unfinished">2.20</translation>
+        <translation>2.20</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.21</source>
-        <translation type="unfinished">2.21</translation>
+        <translation>2.21</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.22</source>
-        <translation type="unfinished">2.22</translation>
+        <translation>2.22</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.23</source>
-        <translation type="unfinished">2.23</translation>
+        <translation>2.23</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -21180,12 +21180,12 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location line="+7"/>
         <source>Remove notes smaller than:</source>
-        <translation type="unfinished"></translation>
+        <translation>Noten entfernen, die kürzer sind als:</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Remove articulations (staccato and tenuto)</source>
-        <translation type="unfinished"></translation>
+        <translation>Artikulationen (Staccato und Tenuto) entfernen</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -22320,7 +22320,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
         <location line="+151"/>
         <location line="+2524"/>
         <source>Select File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei(en) auswählen</translation>
     </message>
     <message>
         <location line="-1355"/>
@@ -22675,12 +22675,12 @@ one of the segments in your selection must start at the beginning of the composi
     <message>
         <location line="+286"/>
         <source>Select MIDI File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Datei(en) auswählen</translation>
     </message>
     <message>
         <location line="+284"/>
         <source>Select X11 Rosegarden File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>X11 Rosegarden Datei(en) auswählen</translation>
     </message>
     <message>
         <location line="+78"/>
@@ -27075,7 +27075,7 @@ sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger en
     <name>S:</name>
     <message>
         <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
+        <comment>We recommend pointing help URLs to a wiki page in your native language.</comment>
         <translation></translation>
     </message>
 </context>
