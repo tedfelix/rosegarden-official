@@ -172,10 +172,13 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
                               m_features.data());
 
     RG_DEBUG << "handle:" << m_handle << "widget:" << widget;
+    lv2utils->registerGUI(instrument, position, this);
 }
 
 AudioPluginLV2GUI::~AudioPluginLV2GUI()
 {
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->unRegisterGUI(m_instrument, m_position);
     lilv_uis_free(m_uis);
 }
 

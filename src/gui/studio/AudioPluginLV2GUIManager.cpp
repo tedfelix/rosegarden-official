@@ -164,7 +164,7 @@ AudioPluginLV2GUIManager::getInstance(InstrumentId instrument, int position)
             QString instanceId = instance->getId();
             if (Id != instanceId) {
                 RG_DEBUG << "getInstance" << instanceId << "->" << Id;
-                delete(instance);
+                delete instance;
                 makeInstance = true;
             }
         }

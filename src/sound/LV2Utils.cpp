@@ -227,4 +227,72 @@ LilvNode* LV2Utils::makeURINode(const QString& uri) const
     return node;
 }
 
+void LV2Utils::registerPlugin(InstrumentId instrument,
+                              int position,
+                              LV2PluginInstance* pluginInstance)
+{
+    RG_DEBUG << "register plugin" << instrument << position;
+    m_pluginGuis[instrument][position].pluginInstance = pluginInstance;
+}
+
+void LV2Utils::registerGUI(InstrumentId instrument,
+                           int position,
+                           AudioPluginLV2GUI* gui)
+{
+    RG_DEBUG << "register gui" << instrument << position;
+    m_pluginGuis[instrument][position].gui = gui;
+}
+
+void LV2Utils::unRegisterPlugin(InstrumentId instrument,
+                                int position)
+{
+    RG_DEBUG << "unregister plugin" << instrument << position;
+    auto iit = m_pluginGuis.find(instrument);
+    if (iit == m_pluginGuis.end()) {
+        RG_DEBUG << "instrument not found" << instrument;
+        return;
+    }
+    IntPluginMap& imap = (*iit).second;
+    auto pit = imap.find(position);
+    if (pit == imap.end()) {
+        RG_DEBUG << "position not found" << instrument;
+        return;
+    }
+    LV2UPlugin& pgdata = (*pit).second;
+    pgdata.pluginInstance = nullptr;
+    if (pgdata.gui == nullptr) {
+        // both 0 - delete entry
+        imap.erase(pit);
+    }
+    if (imap.empty()) {
+        m_pluginGuis.erase(iit);
+    }
+}
+
+void LV2Utils::unRegisterGUI(InstrumentId instrument,
+                             int position)
+{
+    RG_DEBUG << "unregister gui" << instrument << position;
+    auto iit = m_pluginGuis.find(instrument);
+    if (iit == m_pluginGuis.end()) {
+        RG_DEBUG << "instrument not found" << instrument;
+        return;
+    }
+    IntPluginMap& imap = (*iit).second;
+    auto pit = imap.find(position);
+    if (pit == imap.end()) {
+        RG_DEBUG << "position not found" << instrument;
+        return;
+    }
+    LV2UPlugin& pgdata = (*pit).second;
+    pgdata.gui = nullptr;
+    if (pgdata.pluginInstance == nullptr) {
+        // both 0 - delete entry
+        imap.erase(pit);
+    }
+    if (imap.empty()) {
+        m_pluginGuis.erase(iit);
+    }
+}
+
 }

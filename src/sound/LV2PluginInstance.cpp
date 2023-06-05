@@ -95,6 +95,8 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         connectPorts();
         activate();
     }
+    RG_DEBUG << "register plugin";
+    lv2utils->registerPlugin(m_instrument, m_position, this);
 }
 
 void
@@ -208,6 +210,8 @@ LV2PluginInstance::setIdealChannelCount(size_t channels)
 LV2PluginInstance::~LV2PluginInstance()
 {
     RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance";
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->unRegisterPlugin(m_instrument, m_position);
 
     if (m_instances.size() != 0) {
         deactivate();

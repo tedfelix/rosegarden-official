@@ -21,8 +21,13 @@
 #include <map>
 #include <lilv/lilv.h>
 
+#include "base/Instrument.h"
+
 namespace Rosegarden
 {
+
+class LV2PluginInstance;
+class AudioPluginLV2GUI;
 
 /// LV2 utils
 /**
@@ -70,6 +75,18 @@ class LV2Utils
     const LilvUIs* getPluginUIs(const QString& uri) const;
     LilvNode* makeURINode(const QString& uri) const;
 
+    void registerPlugin(InstrumentId instrument,
+                        int position,
+                        LV2PluginInstance* pluginInstance);
+    void registerGUI(InstrumentId instrument,
+                     int position,
+                     AudioPluginLV2GUI* gui);
+
+    void unRegisterPlugin(InstrumentId instrument,
+                          int position);
+    void unRegisterGUI(InstrumentId instrument,
+                       int position);
+
  private:
     /// Singleton.  See getInstance().
     LV2Utils();
@@ -79,6 +96,17 @@ class LV2Utils
     LilvWorld* m_world;
     const LilvPlugins* m_plugins;
     std::map<QString, LV2PluginData> m_pluginData;
+
+    struct LV2UPlugin
+    {
+        LV2PluginInstance* pluginInstance;
+        AudioPluginLV2GUI* gui;
+        LV2UPlugin() {pluginInstance = nullptr; gui = nullptr;}
+    };
+    typedef std::map<int, LV2UPlugin> IntPluginMap;
+    typedef std::map<int, IntPluginMap> PluginGuiMap;
+
+    PluginGuiMap m_pluginGuis;
 };
 
 }
