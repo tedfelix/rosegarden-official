@@ -891,73 +891,73 @@
         <location line="-93"/>
         <location line="+94"/>
         <source>&amp;Snap to 1/64</source>
-        <translation>&amp;Accrochage à la quadruple croche</translation>
+        <translation>Accrochage à la &amp;quadruple croche</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Snap to &amp;1/48</source>
-        <translation>Accrochage au tiers &amp;de double croche</translation>
+        <translation>Accrochage au tiers de d&amp;ouble croche</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Sn&amp;ap to 1/32</source>
-        <translation>Accrochage à la &amp;triple croche</translation>
+        <translation>Accrochage à la trip&amp;le croche</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Snap to 1/&amp;24</source>
-        <translation>Accrochage au ti&amp;ers de croche</translation>
+        <translation>Accrochage au tie&amp;rs de croche</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Sna&amp;p to 1/16</source>
-        <translation>Accro&amp;chage à la double croche</translation>
+        <translation>Accrochage à la &amp;double croche</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Snap t&amp;o 1/12</source>
-        <translation>Accrochage au tiers de &amp;noire</translation>
+        <translation>Accrochage au tiers de no&amp;ire</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Snap to 1/&amp;8</source>
-        <translation>Acc&amp;rochage à la croche</translation>
+        <translation>Accrochage à la &amp;croche</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Snap to &amp;3/16</source>
-        <translation>Accrochage à la cro&amp;che pointée</translation>
+        <translation>Accrochage à la croc&amp;he pointée</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Snap to 1/4</source>
-        <translation>Accrochage à la noire</translation>
+        <translation>Accrochage à la &amp;noire</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Snap to 3/8</source>
-        <translation>Accrochage à la noire pointée</translation>
+        <translation>Accrochage à la noire poin&amp;tée</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Snap to 1/2</source>
-        <translation>Accrochage à la blanche</translation>
+        <translation>Accrochage à la &amp;blanche</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+94"/>
         <source>Snap to Bea&amp;t</source>
-        <translation>Accrochage au &amp;temps</translation>
+        <translation>Accrochage au temp&amp;s</translation>
     </message>
     <message>
         <location line="-93"/>
@@ -1624,12 +1624,12 @@
     <message>
         <location line="-358"/>
         <source>From &amp;Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Même accrochage que l&apos;&amp;Editeur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Accrochage à l&apos;&amp;unité de temps</translation>
     </message>
     <message>
         <location line="+85"/>
@@ -3914,27 +3914,27 @@
     <message>
         <location line="-109"/>
         <source>Merge &amp;File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner &amp;fichier(s)...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;MIDI File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner fichier(s) &amp;MIDI...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;X11 Rosegarden File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner fichier(s) Rosegarden &amp;X11...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;Hydrogen file(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner fichier(s) &amp;Hydrogen...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge MusicXM&amp;L File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner fichier(s) MusicXM&amp;L...</translation>
     </message>
     <message>
         <location line="+100"/>
@@ -9797,7 +9797,7 @@ Voulez-vous utiliser
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="+216"/>
         <source>Arbitrary grid unit</source>
-        <translation type="unfinished">Unité de grille arbitraire</translation>
+        <translation>Unité de grille arbitraire</translation>
     </message>
 </context>
 <context>
@@ -9815,7 +9815,7 @@ Voulez-vous utiliser
     <message>
         <location line="+7"/>
         <source>&lt;p&gt;Copyright 2000-2023 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2020 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version : %2&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt; {2000-2023 ?} {1 ?} {4&quot;?} {3&lt;?} {2&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2023 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version : %2&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2022 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -12525,7 +12525,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/rulers/ControlEraser.cpp" line="+80"/>
         <source>Click on a value to delete it</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer sur une valeur pour la supprimer</translation>
     </message>
 </context>
 <context>
@@ -12533,7 +12533,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/rulers/ControlMover.cpp" line="+104"/>
         <source>Click and drag a value. Shift suppresses grid snap. Ctrl constrains to horizontal or vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer et glisser pour déplacer. &quot;Maj&quot; supprime l&apos;accrochage. &quot;Ctrl&quot; contraint à un déplacement horizontal ou vertical.</translation>
     </message>
 </context>
 <context>
@@ -12541,7 +12541,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/rulers/ControlPainter.cpp" line="+126"/>
         <source>Click to set a value. Right click for grid options</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer pour définir une valeur. Un clic droit permet de modifier la grille.</translation>
     </message>
 </context>
 <context>
@@ -14339,22 +14339,22 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+65"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Native (Light)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clair</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Classic (Medium)</source>
-        <translation type="unfinished"></translation>
+        <translation>Classique (moyen)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dark</source>
-        <translation type="unfinished"></translation>
+        <translation>Sombre</translation>
     </message>
     <message>
         <location line="+141"/>
@@ -15453,37 +15453,37 @@ Voulez-vous utiliser
     <message>
         <location line="+1"/>
         <source>2.16</source>
-        <translation type="unfinished">2.16</translation>
+        <translation>2.16</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.18</source>
-        <translation type="unfinished">2.18</translation>
+        <translation>2.18</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.19</source>
-        <translation type="unfinished">2.19</translation>
+        <translation>2.19</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.20</source>
-        <translation type="unfinished">2.20</translation>
+        <translation>2.20</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.21</source>
-        <translation type="unfinished">2.21</translation>
+        <translation>2.21</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.22</source>
-        <translation type="unfinished">2.22</translation>
+        <translation>2.22</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.23</source>
-        <translation type="unfinished">2.23</translation>
+        <translation>2.23</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -19777,12 +19777,12 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+7"/>
         <source>Remove notes smaller than:</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer les notes plus courtes que :</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Remove articulations (staccato and tenuto)</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer les articulations (staccato et tenuto)</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -21282,7 +21282,7 @@ Afin de recevoir de l&apos;assistance pour configurer correctement votre audio e
         <location line="+151"/>
         <location line="+2524"/>
         <source>Select File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner un ou plusieurs fichiers</translation>
     </message>
     <message numerus="yes">
         <location line="-1440"/>
@@ -21301,12 +21301,12 @@ Afin de recevoir de l&apos;assistance pour configurer correctement votre audio e
     <message>
         <location line="+897"/>
         <source>Select MIDI File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner un ou plusieurs fichiers MIDI</translation>
     </message>
     <message>
         <location line="+284"/>
         <source>Select X11 Rosegarden File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner un ou plusieurs fichiers Rosegarden X11</translation>
     </message>
     <message>
         <location line="+175"/>

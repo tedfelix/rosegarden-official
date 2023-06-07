@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2022 Rosegarden development team -->
+<!-- Copyright 2018-2023 Rosegarden development team -->
 <component type="desktop">
     <id>com.rosegardenmusic.rosegarden.desktop</id>
     <name>Rosegarden</name>
@@ -42,6 +42,52 @@
     </categories>
 
     <releases>
+
+      <release type="stable" version="23.06" date="2023-06-07">
+        <url>https://rosegardenmusic.com/wiki/dev:23.06</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Fix crash related to static initialization order.  Bug #1647.  Release as 22.12.1.  [3e34166]</li>
+            <li>Fix bug #1047, beaming groups erroneous after merging notes.  [83f1dca, 2709e76]</li>
+            <li>Fix offset selection rectangle in Notation.  Bug #1444.  [fc08c3e]</li>
+            <li>Fix time column widths in the Event Editor so that they don't need resizing on every launch.  [aed705b]</li>
+            <li>Event filter dialog improvements and fixes.  [c5e3c6a]</li>
+            <li>Fix broken retrograde commands.  Bug #1648.  [84faef1]</li>
+            <li>Lilypond: Fix volta/alternatives and lyrics.  Bug #1649.  [6e5ba2d]</li>
+            <li>Lilypond: Fix vertical alignment of verses.  Bug #1650.  [b42cbff]</li>
+            <li>Lilypond: Fix the printing of supplementary verses.  [46c7d3d]</li>
+            <li>Lilypond: Fix multiple lyrics verses with repetition.  [50266c5]</li>
+            <li>Lilypond: Fix the removing of an underscore at the end of a bar of lyrics.  [62feb9b]</li>
+            <li>Lilypond: Fix printing of verses is now working when voltas are unfolded.  [2eae089]</li>
+            <li>Lilypond: Fix bar number of verses in exported LilyPond files.  [94c0e55]</li>
+            <li>Fix timer preference coming up empty for selections after "HR timer".  [08748a6]</li>
+            <li>Fix paste problems in notation editor.  Bug #1651.  [457f3de]</li>
+            <li>Fix the LilyPond exporter autotest and update the baseline.  [768a657]</li>
+            <li>Fix crash in LilyPond exporter.  Bug #1640.  [a49712d]</li>
+            <li>Fix potential crash in the grid quantizer.  [4bdefd9]</li>
+            <li>Fix quantizer crash.  Bug #1654.  [56ca66c, a8e669d]</li>
+            <li>LilyPond: Fix a small bug related to numbers in the lyrics.  [10fa781]</li>
+            <li>LilyPond: Fix for lyrics containing some special characters.  [e8c6988]</li>
+            <li>LilyPond: Fix the rendering of dash and underscore.  [fc7eecd]</li>
+            <li>Fix missing parameter patterns in the Set Event Velocities dialog.  [b76c392]</li>
+            <li>Matrix: Fix deleting too many notes with ruler present.  Bug #1655.  [993e6f3]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>File > Merge dialogs now allow merging of multiple files.  Feature request #513.  [5f43b70]</li>
+            <li>View > Full Screen (F11) added to main window.  [a09103c]</li>
+            <li>Removed LEDs from archived tracks to make archived tracks easier to identify.  [a5f4131]</li>
+            <li>Edit > Preferences > General > Presentation.  Three UI themes are now offered: Native (Light), Classic (Medium), and Dark.  Feature request #498.  [994c2b1, et al.]</li>
+            <li>Matrix and Notation now offer snap to grid in the control rulers.  Feature request #509 [349fff9, et al.]</li>
+            <li>Add Ctrl+L shortcut for loop toggle.  Feature request #398.  [a5e8414]</li>
+            <li>Add new LilyPond versions.  [6c7f0ef]</li>
+            <li>Add "Remove notes smaller than X" field to grid quantizer.  Feature request #515.  [87c9a0c]</li>
+            <li>Add "Remove articulations" to grid quantizer.  Feature request #515.  [a69a4fd]</li>
+          </ul>
+        </description>
+      </release>
 
       <release type="stable" version="22.12" date="2022-12-07">
         <url>https://rosegardenmusic.com/wiki/dev:22.12</url>

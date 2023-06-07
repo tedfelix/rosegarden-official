@@ -26,10 +26,27 @@ Included in this release...
   * Lilypond: Fix multiple lyrics verses with repetition.  [50266c5]
   * Lilypond: Fix the removing of an underscore at the end of a bar of
     lyrics.  [62feb9b]
+  * Lilypond: Fix printing of verses is now working when voltas are
+    unfolded.  [2eae089]
+  * Lilypond: Fix bar number of verses in exported LilyPond files.
+    [94c0e55]
   * Fix timer preference coming up empty for selections after
     "HR timer".  [08748a6]
   * Fix paste problems in notation editor.  Bug #1651.  [457f3de]
+  * Fix the LilyPond exporter autotest and update the baseline.
+    [768a657]
+  * Fix crash in LilyPond exporter.  Bug #1640.  [a49712d]
   * Fix potential crash in the grid quantizer.  [4bdefd9]
+  * Fix quantizer crash.  Bug #1654.  [56ca66c, a8e669d]
+  * LilyPond: Fix a small bug related to numbers in the lyrics.
+    [10fa781]
+  * LilyPond: Fix for lyrics containing some special characters.
+    [e8c6988]
+  * LilyPond: Fix the rendering of dash and underscore.  [fc7eecd]
+  * Fix missing parameter patterns in the Set Event Velocities dialog.
+    [b76c392]
+  * Matrix: Fix deleting too many notes with ruler present.  Bug #1655.
+    [993e6f3]
 
 ===== New Features =====
 
@@ -53,7 +70,8 @@ Included in this release...
 
 ===== Additional Contributors =====
 
-  * Lorenzo Sutton - Multiple file merge feature.  Feature Req. #513.
+  * Lorenzo Sutton - Multiple file merge feature.  Feature Request
+    #513.
 
 
 ====== ROSEGARDEN 22.12 RELEASED ======

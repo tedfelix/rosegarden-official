@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2000-2021 the Rosegarden development team.
+# Copyright 2000-2023 the Rosegarden development team.
 #
 # Other copyrights also apply to some parts of this work.  Please
 # see the AUTHORS file and individual file headers for details.
@@ -52,7 +52,7 @@ fi
 
 mv "$snapshotdir" "$finalname"
 
-readonly tarballname="$finalname.tar.bz2"
+readonly tarballname="$finalname.tar.xz"
 if [ -f "$tarballname" ]; then
     echo "FATAL: $tarballname already exists."
     # clean up
@@ -62,7 +62,7 @@ fi
 
 echo "Creating tarball $tarballname..."
 
-tar cjf "$tarballname" "$finalname"
+tar --create --xz --file="$tarballname" "$finalname"
 if [ $? != "0" ]; then
     echo "FATAL: tar failed."
     # clean up
