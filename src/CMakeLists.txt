@@ -745,6 +745,7 @@ if (LILV_FOUND)
     sound/LV2Utils.cpp
     gui/studio/AudioPluginLV2GUIManager.cpp
     gui/studio/AudioPluginLV2GUI.cpp
+    gui/studio/AudioPluginLV2GUIX11Window.cpp
   )
 endif()
 

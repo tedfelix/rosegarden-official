@@ -19,6 +19,7 @@
 
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"
+#include "LV2PluginInstance.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/ui/ui.h>
@@ -113,7 +114,7 @@ LV2Utils::LV2Utils()
                 "Control:" << cntrl << "Input:" << inp << "Atom:" << atom;
             portData.name = portName;
             portData.portType = LV2AUDIO;
-            if (cntrl) portData.portType = LV2CONTROL;
+            if (cntrl || atom) portData.portType = LV2CONTROL;
             if (atom && inp) {
                 LilvNode* midiNode = lilv_new_uri(m_world, LV2_MIDI__MidiEvent);
                 bool isMidi = lilv_port_supports_event(plugin, port, midiNode);
@@ -231,6 +232,7 @@ void LV2Utils::registerPlugin(InstrumentId instrument,
                               int position,
                               LV2PluginInstance* pluginInstance)
 {
+    LOCKED;
     RG_DEBUG << "register plugin" << instrument << position;
     m_pluginGuis[instrument][position].pluginInstance = pluginInstance;
 }
@@ -239,6 +241,7 @@ void LV2Utils::registerGUI(InstrumentId instrument,
                            int position,
                            AudioPluginLV2GUI* gui)
 {
+    LOCKED;
     RG_DEBUG << "register gui" << instrument << position;
     m_pluginGuis[instrument][position].gui = gui;
 }
@@ -246,6 +249,7 @@ void LV2Utils::registerGUI(InstrumentId instrument,
 void LV2Utils::unRegisterPlugin(InstrumentId instrument,
                                 int position)
 {
+    LOCKED;
     RG_DEBUG << "unregister plugin" << instrument << position;
     auto iit = m_pluginGuis.find(instrument);
     if (iit == m_pluginGuis.end()) {
@@ -272,6 +276,7 @@ void LV2Utils::unRegisterPlugin(InstrumentId instrument,
 void LV2Utils::unRegisterGUI(InstrumentId instrument,
                              int position)
 {
+    LOCKED;
     RG_DEBUG << "unregister gui" << instrument << position;
     auto iit = m_pluginGuis.find(instrument);
     if (iit == m_pluginGuis.end()) {
@@ -293,6 +298,29 @@ void LV2Utils::unRegisterGUI(InstrumentId instrument,
     if (imap.empty()) {
         m_pluginGuis.erase(iit);
     }
+}
+
+int LV2Utils::numInstances(InstrumentId instrument,
+                           int position) const
+{
+    RG_DEBUG << "numInstances" << instrument << position;
+    auto iit = m_pluginGuis.find(instrument);
+    if (iit == m_pluginGuis.end()) {
+        RG_DEBUG << "instrument not found" << instrument;
+        return 1;
+    }
+    const IntPluginMap& imap = (*iit).second;
+    auto pit = imap.find(position);
+    if (pit == imap.end()) {
+        RG_DEBUG << "position not found" << instrument;
+        return 1;
+    }
+    const LV2UPlugin& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "numInstances no pluginInstance";
+        return 1;
+    }
+    return pgdata.pluginInstance->numInstances();
 }
 
 }

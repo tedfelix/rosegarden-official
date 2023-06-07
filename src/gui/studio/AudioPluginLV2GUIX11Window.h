@@ -15,55 +15,49 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_AUDIOPLUGINLV2GUI_H
-#define RG_AUDIOPLUGINLV2GUI_H
+#ifndef RG_AUDIOPLUGINLV2GUIX11WINDOW_H
+#define RG_AUDIOPLUGINLV2GUIX11WINDOW_H
+
+#include "AudioPluginLV2GUIWindow.h"
 
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
 
-#include <vector>
-#include "gui/application/RosegardenMainWindow.h"
-
 namespace Rosegarden
 {
 
-class AudioPluginInstance;
-class AudioPluginLV2GUIWindow;
-
-class AudioPluginLV2GUI
+class AudioPluginLV2GUIX11Window :
+    public QWidget,
+    public AudioPluginLV2GUIWindow
 {
+    Q_OBJECT
  public:
-    AudioPluginLV2GUI(AudioPluginInstance *instance,
-                      RosegardenMainWindow *mainWindow,
-                      InstrumentId instrument,
-                      int position);
-    ~AudioPluginLV2GUI();
-
-    // copy constructor not used
-    AudioPluginLV2GUI(const AudioPluginInstance&) = delete;
-
-    QString getId() const;
-    bool hasGUI() const;
-
-    void showGui() const;
+    AudioPluginLV2GUIX11Window(const QString& title,
+                               const LilvUI* ui,
+                               const LV2UI_Descriptor* uidesc,
+                               const QString& id);
+    ~AudioPluginLV2GUIX11Window();
 
     void portChange(uint32_t portIndex,
                     uint32_t bufferSize,
                     uint32_t portProtocol,
                     const void *buffer);
 
-    void updatePortValue(int port, float value);
+    virtual void showGui() override;
+ public slots:
+    void timeUp();
 
  private:
-    AudioPluginInstance* m_pluginInstance;
-    RosegardenMainWindow* m_mainWindow;
-    InstrumentId m_instrument;
-    int m_position;
-    QString m_id;
-    LilvUIs* m_uis;
-    void* m_uilib;
-    const LV2UI_Descriptor* m_uidesc;
-    std::vector<AudioPluginLV2GUIWindow*> m_windows;
+    QTimer* m_timer;
+    LV2_Feature m_uridMapFeature;
+    LV2_Feature m_uridUnmapFeature;
+    LV2_Feature m_idleFeature;
+    LV2_Feature m_parentFeature;
+    LV2_Feature m_resizeFeature;
+    LV2UI_Resize m_resizeData;
+    LV2UI_Idle_Interface* m_lv2II;
+    LV2UI_Handle m_handle;
+    std::vector<LV2_Feature*> m_features;
 };
 
 

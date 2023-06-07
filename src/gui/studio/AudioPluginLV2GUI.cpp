@@ -19,6 +19,7 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginLV2GUI.h"
+#include "AudioPluginLV2GUIX11Window.h"
 
 #include <QTimer>
 
@@ -30,32 +31,6 @@
 #include "sound/LV2Urid.h"
 #include "sound/LV2Utils.h"
 
-namespace
-{
-    void writeFn(LV2UI_Controller controller,
-                 uint32_t port_index,
-                 uint32_t buffer_size,
-                 uint32_t port_protocol,
-                 const void *buffer)
-    {
-        Rosegarden::AudioPluginLV2GUI* ap =
-            static_cast<Rosegarden::AudioPluginLV2GUI*>(controller);
-        ap->portChange(port_index, buffer_size, port_protocol, buffer);
-    }
-
-    int LV2Resize (LV2UI_Feature_Handle handle, int width, int height )
-    {
-        RG_DEBUG << "resize" << width << height;
-        QWidget *widget = static_cast<QWidget *>(handle);
-        if (widget) {
-            widget->resize(width, height);
-            return 0;
-        } else {
-            return 1;
-        }
-    }
-}
-
 namespace Rosegarden
 {
 
@@ -64,12 +39,10 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
                                      InstrumentId instrument,
                                      int position) :
 
-    QWidget(nullptr),
     m_pluginInstance(instance),
     m_mainWindow(mainWindow),
     m_instrument(instrument),
-    m_position(position),
-    m_lv2II(0)
+    m_position(position)
 {
     m_id = strtoqstr(m_pluginInstance->getIdentifier());
     LV2Utils* lv2utils = LV2Utils::getInstance();
@@ -81,12 +54,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     }
     LilvNode* name = lilv_plugin_get_name(plugin);
     QString sname = lilv_node_as_string(name);
-    setWindowTitle(sname);
     RG_DEBUG << "got plugin " << sname;
-
-    m_timer = new QTimer;
-    connect(m_timer, &QTimer::timeout, this, &AudioPluginLV2GUI::timeUp);
-    m_timer->start(50);
 
     //ui types:
     // http://lv2plug.in/ns/extensions/ui#GtkUI (calf)
@@ -133,51 +101,30 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
         ui_index++;
     }
     RG_DEBUG << "descriptor: " << m_uidesc;
+    int numInst = lv2utils->numInstances(instrument, position);
+    RG_DEBUG << "num instances: " << numInst;
+    QString title = sname;
 
-    const char *ui_bundle_uri =
-        lilv_node_as_uri(lilv_ui_get_bundle_uri(selectedUI));
-    char *hostname;
-    char* ubp = lilv_file_uri_parse(ui_bundle_uri, &hostname);
-    LV2UI_Controller controller = this;
-    LV2UI_Widget widget = nullptr;
+    for(int i=0; i<numInst; ++i) {
+        if (numInst > 1) {
+            title = sname + " / " + QString::number(i);
+        }
 
-    m_idleFeature = {LV2_UI__idleInterface, nullptr};
-    m_parentFeature = {LV2_UI__parent, (void*)winId()};
+        m_windows.push_back(new AudioPluginLV2GUIX11Window(title,
+                                                           selectedUI,
+                                                           m_uidesc,
+                                                           m_id));
+    }
 
-    m_resizeData.handle = this;
-    m_resizeData.ui_resize = LV2Resize;
-    m_resizeFeature.URI = LV2_UI__resize;
-    m_resizeFeature.data = &m_resizeData;
-
-    LV2Urid* lv2urid = LV2Urid::getInstance();
-    m_uridMapFeature = {LV2_URID__map, &(lv2urid->m_map)};
-    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2urid->m_unmap)};
-    m_features.push_back(&m_uridMapFeature);
-    m_features.push_back(&m_uridUnmapFeature);
-    m_features.push_back(&m_idleFeature);
-    m_features.push_back(&m_parentFeature);
-    m_features.push_back(&m_resizeFeature);
-    m_features.push_back(nullptr);
-
-    const void* ii = m_uidesc->extension_data(LV2_UI__idleInterface);
-    m_lv2II = (LV2UI_Idle_Interface*)ii;
-
-    m_handle =
-        m_uidesc->instantiate(m_uidesc,
-                              m_id.toStdString().c_str(),
-                              ubp,
-                              writeFn,
-                              controller,
-                              &widget,
-                              m_features.data());
-
-    RG_DEBUG << "handle:" << m_handle << "widget:" << widget;
     lv2utils->registerGUI(instrument, position, this);
 }
 
 AudioPluginLV2GUI::~AudioPluginLV2GUI()
 {
     LV2Utils* lv2utils = LV2Utils::getInstance();
+    for(auto win : m_windows) {
+        delete win;
+    }
     lv2utils->unRegisterGUI(m_instrument, m_position);
     lilv_uis_free(m_uis);
 }
@@ -195,9 +142,11 @@ AudioPluginLV2GUI::hasGUI() const
 }
 
 void
-AudioPluginLV2GUI::timeUp()
+AudioPluginLV2GUI::showGui() const
 {
-    if (m_lv2II) m_lv2II->idle(m_handle);
+    for(auto win : m_windows) {
+        win->showGui();
+    }
 }
 
 void
@@ -227,7 +176,7 @@ AudioPluginLV2GUI::portChange(uint32_t portIndex,
 void
 AudioPluginLV2GUI::updatePortValue(int port, float value)
 {
-    m_uidesc->port_event(m_handle, port, sizeof(float), 0, &value);
+    //m_uidesc->port_event(m_handle, port, sizeof(float), 0, &value);
 }
 
 }

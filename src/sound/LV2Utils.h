@@ -87,6 +87,8 @@ class LV2Utils
     void unRegisterGUI(InstrumentId instrument,
                        int position);
 
+    int numInstances(InstrumentId instrument,
+                     int position) const;
  private:
     /// Singleton.  See getInstance().
     LV2Utils();

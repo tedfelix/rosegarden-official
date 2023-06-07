@@ -76,6 +76,7 @@ public:
     void discardEvents() override;
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
+    int numInstances() const;
 protected:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;

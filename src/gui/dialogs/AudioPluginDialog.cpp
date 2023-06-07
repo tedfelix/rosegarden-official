@@ -465,10 +465,9 @@ AudioPluginDialog::slotPluginSelected(int index)
 {
     bool guiWasShown = m_guiShown;
 
-    if (m_guiShown) {
-        emit stopPluginGUI(m_containerId, m_index);
-        m_guiShown = false;
-    }
+    // always stop the gui
+    emit stopPluginGUI(m_containerId, m_index);
+    m_guiShown = false;
 
     int number = m_pluginsInList[index];
 
@@ -718,22 +717,28 @@ AudioPluginDialog::slotPluginSelected(int index)
         m_guiShown = true;
     }
 
-    // unused
-    bool hasGui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
+    if (plugin) {
+        bool hasGui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
 
-    // original comment is below. The hasGui function seems to work for me
+        // original comment is below. The hasGui function seems to work for me
 
-    //!!!  I can't get to the bottom of this in a reasonable amount of time.
-    // m_containerId is always 10013, and m_index is either 0 (LADSPA plugin) or
-    // 999 (DSSI plugin) with no variation, and hasGUI() always tests false.
-    // This means the editor button is never enabled, and this is unacceptable
-    // for plugins that have no controls that can be edited from within
-    // Rosegarden.  I'm hacking the button always enabled, even if no GUI is
-    // available.  This seems to fail silently until the user randomly switches
-    // to a plugin that does have a GUI, in which case its GUI pops up, even
-    // though they're five plugins away from the one where the pushed the button
-    // originally.  Compared with never making it available, this is tolerable.
-    m_editorButton->setEnabled(hasGui);
+        //!!!  I can't get to the bottom of this in a reasonable
+        // amount of time.  m_containerId is always 10013, and m_index
+        // is either 0 (LADSPA plugin) or 999 (DSSI plugin) with no
+        // variation, and hasGUI() always tests false.  This means the
+        // editor button is never enabled, and this is unacceptable
+        // for plugins that have no controls that can be edited from
+        // within Rosegarden.  I'm hacking the button always enabled,
+        // even if no GUI is available.  This seems to fail silently
+        // until the user randomly switches to a plugin that does have
+        // a GUI, in which case its GUI pops up, even though they're
+        // five plugins away from the one where the pushed the button
+        // originally.  Compared with never making it available, this
+        // is tolerable.
+        m_editorButton->setEnabled(hasGui);
+    } else {
+        m_editorButton->setEnabled(false);
+    }
 
     adjustSize();
     update(0, 0, width(), height());

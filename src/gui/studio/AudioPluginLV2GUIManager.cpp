@@ -65,7 +65,7 @@ AudioPluginLV2GUIManager::showGUI(InstrumentId instrument, int position)
     stopGUI(instrument, position);
     AudioPluginLV2GUI* gui = getInstance(instrument, position);
     if (gui->hasGUI()) {
-        gui->show();
+        gui->showGui();
     }
 }
 
@@ -145,9 +145,9 @@ AudioPluginLV2GUIManager::getInstance(InstrumentId instrument, int position)
     AudioPluginInstance *pluginInstance = container->getPlugin(position);
     if (!pluginInstance) return nullptr;
 
-    QString Id = strtoqstr(pluginInstance->getIdentifier());
+    QString id = strtoqstr(pluginInstance->getIdentifier());
 
-    RG_DEBUG << "getInstance" << instrument << position << Id;
+    RG_DEBUG << "getInstance" << instrument << position << id;
 
     bool makeInstance = false;
 
@@ -162,8 +162,8 @@ AudioPluginLV2GUIManager::getInstance(InstrumentId instrument, int position)
         } else {
             AudioPluginLV2GUI* instance = (*it2).second;
             QString instanceId = instance->getId();
-            if (Id != instanceId) {
-                RG_DEBUG << "getInstance" << instanceId << "->" << Id;
+            if (id != instanceId) {
+                RG_DEBUG << "getInstance" << instanceId << "->" << id;
                 delete instance;
                 makeInstance = true;
             }

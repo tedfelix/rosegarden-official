@@ -207,6 +207,12 @@ LV2PluginInstance::setIdealChannelCount(size_t channels)
     }
 }
 
+int LV2PluginInstance::numInstances() const
+{
+    RG_DEBUG << "numInstances" << m_instances.size();
+    return m_instances.size();
+}
+
 LV2PluginInstance::~LV2PluginInstance()
 {
     RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance";
