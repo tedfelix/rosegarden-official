@@ -187,7 +187,7 @@ public:
     void removeAllPlugins();
 
     void setPluginPortValue(InstrumentId id, int position,
-                            unsigned int port, float value);
+                            unsigned int port, int instance, float value);
     float getPluginPortValue(InstrumentId id, int position,
                              unsigned int port);
 

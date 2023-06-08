@@ -122,6 +122,7 @@ public:
 
     static void setStudioPluginPort(MappedObjectId pluginId,
                                     unsigned long portId,
+                                    int instance,
                                     MappedObjectValue value);
 
     static MappedObjectValue getStudioPluginPort(MappedObjectId pluginId,

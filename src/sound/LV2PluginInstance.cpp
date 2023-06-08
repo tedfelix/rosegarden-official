@@ -13,7 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[LV2PluginInstance]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginInstance.h"
 #include "LV2PluginFactory.h"
@@ -104,6 +104,12 @@ LV2PluginInstance::init(int idealChannelCount)
 {
     RG_DEBUG << "LV2PluginInstance::init(" << idealChannelCount <<
         "): plugin has" << m_pluginData.ports.size() << "ports";
+    // use maximum channel count (2). If the instance count is 1 only
+    // the first entry will be used
+    for(unsigned int i=0; i<2; ++i) {
+        InstanceData iData;
+        m_instanceData.push_back(iData);
+    }
     // Discover ports numbers and identities
     //
     for (unsigned long i = 0; i < m_pluginData.ports.size(); ++i) {
@@ -121,16 +127,25 @@ LV2PluginInstance::init(int idealChannelCount)
         case LV2Utils::LV2CONTROL:
             if (portData.isInput) {
                 RG_DEBUG << "LV2PluginInstance::init: port" << i << "is control in";
-                m_controlPortsIn.
-                    push_back(std::pair<unsigned long, float>(i, 0.0));
+                // use maximum channel count (2). If the instance
+                // count is 1 only the first entry will be used
+                for(unsigned int ii=0; ii<2; ++ii) {
+                    InstanceData& iData = m_instanceData[ii];
+                    iData.controlPortsIn.
+                        push_back(std::pair<unsigned long, float>(i, 0.0));
+                }
             } else {
                 RG_DEBUG << "LV2PluginInstance::init: port" << i << "is control out";
-                m_controlPortsOut.
-                    push_back(std::pair<unsigned long, float>(i, 0.0));
+                for(unsigned int ii=0; ii<2; ++ii) {
+                    InstanceData& iData = m_instanceData[ii];
+                    iData.controlPortsOut.
+                        push_back(std::pair<unsigned long, float>(i, 0.0));
+                }
                 if ((portData.name == "latency") ||
                     (portData.name == "_latency")) {
                     RG_DEBUG << "Wooo! We have a latency port!";
-                    float& value = m_controlPortsOut.back().second;
+                    float& value =
+                        m_instanceData[0].controlPortsOut.back().second;
                     m_latencyPort = &(value);
                 }
             }
@@ -141,9 +156,7 @@ LV2PluginInstance::init(int idealChannelCount)
             break;
         }
     }
-
     m_instanceCount = 1;
-
     if (idealChannelCount > 0) {
         if (m_audioPortsIn.size() == 1) {
             // mono plugin: duplicate it if need be
@@ -187,6 +200,7 @@ LV2PluginInstance::discardEvents()
 void
 LV2PluginInstance::setIdealChannelCount(size_t channels)
 {
+    RG_DEBUG << "setIdealChannelCount" << channels;
     if (m_audioPortsIn.size() != 1 || channels == m_instanceCount) {
         silence();
         return ;
@@ -196,9 +210,8 @@ LV2PluginInstance::setIdealChannelCount(size_t channels)
         deactivate();
     }
 
-    //!!! don't we need to reallocate inputBuffers and outputBuffers?
-
     cleanup();
+
     m_instanceCount = channels;
     instantiate(m_sampleRate);
     if (isOK()) {
@@ -225,8 +238,11 @@ LV2PluginInstance::~LV2PluginInstance()
 
     cleanup();
 
-    m_controlPortsIn.clear();
-    m_controlPortsOut.clear();
+    for(unsigned int i=0; i<m_instanceData.size(); ++i) {
+        m_instanceData[i].controlPortsIn.clear();
+        m_instanceData[i].controlPortsOut.clear();
+    }
+    m_instanceData.clear();
 
     for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
         delete[] m_inputBuffers[i];
@@ -297,6 +313,7 @@ LV2PluginInstance::connectPorts()
     RG_DEBUG << "connectPorts";
     size_t inbuf = 0, outbuf = 0;
     size_t midibuf = 0;
+    size_t cbuf = 0;
 
     for (auto it = m_instances.begin();
          it != m_instances.end(); ++it) {
@@ -315,23 +332,29 @@ LV2PluginInstance::connectPorts()
             ++outbuf;
         }
 
-        // If there is more than one instance, they all share the same
-        // control port ins (and outs, for the moment, because we
-        // don't actually do anything with the outs anyway -- but they
-        // do have to be connected as the plugin can't know if they're
-        // not and will write to them anyway).
+        // Control ports are for each instance
 
-        for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
-            RG_DEBUG << "connect control in:" << m_controlPortsIn[i].first;
-            lilv_instance_connect_port((*it), m_controlPortsIn[i].first,
-                                       &(m_controlPortsIn[i].second));
+        InstanceData& iData = m_instanceData[cbuf];
+        for (size_t i = 0;
+             i < iData.controlPortsIn.size();
+             ++i) {
+            RG_DEBUG << "connect control in:" <<
+                iData.controlPortsIn[i].first;
+            lilv_instance_connect_port
+                ((*it),
+                 iData.controlPortsIn[i].first,
+                 &(iData.controlPortsIn[i].second));
         }
 
-        for (size_t i = 0; i < m_controlPortsOut.size(); ++i) {
-            RG_DEBUG << "connect control out:" << m_controlPortsOut[i].first;
-            lilv_instance_connect_port(*it, m_controlPortsOut[i].first,
-                                       &(m_controlPortsOut[i].second));
+        for (size_t i = 0; i < iData.controlPortsOut.size(); ++i) {
+            RG_DEBUG << "connect control out:" <<
+                iData.controlPortsOut[i].first;
+            lilv_instance_connect_port
+                (*it,
+                 iData.controlPortsOut[i].first,
+                 &(iData.controlPortsOut[i].second));
         }
+        ++cbuf;
         if (m_midiPort != -1) {
             RG_DEBUG << "connect midi port" << m_midiPort;
             lilv_instance_connect_port((*it), m_midiPort, m_midiIn[midibuf]);
@@ -341,15 +364,22 @@ LV2PluginInstance::connectPorts()
 }
 
 void
-LV2PluginInstance::setPortValue(unsigned int portNumber, float value)
+LV2PluginInstance::setPortValue
+(unsigned int portNumber, int instance, float value)
 {
-    for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
-        if (m_controlPortsIn[i].first == portNumber) {
-            if (value < m_pluginData.ports[portNumber].min)
-                value = m_pluginData.ports[portNumber].min;
-            if (value > m_pluginData.ports[portNumber].max)
-                value = m_pluginData.ports[portNumber].max;
-            (m_controlPortsIn[i].second) = value;
+    RG_DEBUG << "setPortValue" << portNumber << instance << value;
+    for(unsigned int inst=0; inst<m_instanceData.size(); ++inst) {
+        if (instance == -1 || instance == static_cast<int>(inst)) {
+            InstanceData& iData = m_instanceData[inst];
+            for (size_t i = 0; i < iData.controlPortsIn.size(); ++i) {
+                if (iData.controlPortsIn[i].first == portNumber) {
+                    if (value < m_pluginData.ports[portNumber].min)
+                        value = m_pluginData.ports[portNumber].min;
+                    if (value > m_pluginData.ports[portNumber].max)
+                        value = m_pluginData.ports[portNumber].max;
+                    iData.controlPortsIn[i].second = value;
+                }
+            }
         }
     }
 }
@@ -377,9 +407,11 @@ LV2PluginInstance::setPortByteArray(unsigned int port, const QByteArray& ba)
 float
 LV2PluginInstance::getPortValue(unsigned int portNumber)
 {
-    for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
-        if (m_controlPortsIn[i].first == portNumber) {
-            return (m_controlPortsIn[i].second);
+    // only the first instance
+    InstanceData& iData = m_instanceData[0];
+    for (size_t i = 0; i < iData.controlPortsIn.size(); ++i) {
+        if (iData.controlPortsIn[i].first == portNumber) {
+            return (iData.controlPortsIn[i].second);
         }
     }
 

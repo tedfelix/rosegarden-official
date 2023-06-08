@@ -195,15 +195,17 @@ public:
     }
 
     void setPluginInstancePortValue(InstrumentId id,
-                                            int position,
-                                            unsigned long portNumber,
-                                            float value) override {
+                                    int position,
+                                    unsigned long portNumber,
+                                    int instance,
+                                    float value) override {
 #ifdef HAVE_LIBJACK
-        if (m_jackDriver) m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
+        if (m_jackDriver) m_jackDriver->setPluginInstancePortValue(id, position, portNumber, instance, value);
 #else
         Q_UNUSED(id);
         Q_UNUSED(position);
         Q_UNUSED(portNumber);
+        Q_UNUSED(instance);
         Q_UNUSED(value);
 #endif
     }

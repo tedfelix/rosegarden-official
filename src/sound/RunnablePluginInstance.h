@@ -71,7 +71,7 @@ public:
     virtual unsigned long getProgram(QString /* name */) { return 0; } // bank << 16 + program
     virtual void selectProgram(QString) { }
 
-    virtual void setPortValue(unsigned int port, float value) = 0;
+    virtual void setPortValue(unsigned int port, int instance, float value) = 0;
     virtual float getPortValue(unsigned int port) = 0;
 
     virtual QString configure(QString /* key */, QString /* value */) { return QString(); }

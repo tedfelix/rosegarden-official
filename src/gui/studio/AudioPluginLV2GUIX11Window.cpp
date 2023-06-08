@@ -21,6 +21,7 @@
 #include "AudioPluginLV2GUIX11Window.h"
 
 #include "misc/Debug.h"
+#include "AudioPluginLV2GUI.h"
 
 #include <QTimer>
 
@@ -59,11 +60,15 @@ namespace Rosegarden
 {
 
 AudioPluginLV2GUIX11Window::AudioPluginLV2GUIX11Window
-(const QString& title,
+(AudioPluginLV2GUI* lv2Gui,
+ const QString& title,
+ int channel,
  const LilvUI* ui,
  const LV2UI_Descriptor* uidesc,
  const QString& id) :
-    m_lv2II(0)
+    m_lv2Gui(lv2Gui),
+    m_lv2II(0),
+    m_channel(channel)
 {
     setWindowTitle(title);
     m_timer = new QTimer;
@@ -121,7 +126,10 @@ AudioPluginLV2GUIX11Window::portChange(uint32_t portIndex,
                                        uint32_t portProtocol,
                                        const void *buffer)
 {
-    RG_DEBUG << portIndex << bufferSize << portProtocol;
+    RG_DEBUG << "portChange" << m_channel << portIndex <<
+        bufferSize << portProtocol;
+    m_lv2Gui->portChange(m_channel, portIndex, bufferSize,
+                         portProtocol, buffer);
 }
 
 void AudioPluginLV2GUIX11Window::showGui()

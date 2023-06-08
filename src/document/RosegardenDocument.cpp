@@ -1018,6 +1018,7 @@ void RosegardenDocument::initialiseStudio()
                  ++portIt) {
                 StudioControl::setStudioPluginPort(pluginMappedId,
                                                    (*portIt)->number,
+                                                   -1,
                                                    (*portIt)->value);
             }
 
@@ -1037,6 +1038,7 @@ void RosegardenDocument::initialiseStudio()
                 if ((*portIt)->changedSinceProgramChange) {
                     StudioControl::setStudioPluginPort(pluginMappedId,
                                                        (*portIt)->number,
+                                                       -1,
                                                        (*portIt)->value);
                 }
             }

@@ -2349,10 +2349,12 @@ JackDriver::removePluginInstance(InstrumentId id, int position)
 void
 JackDriver::setPluginInstancePortValue(InstrumentId id, int position,
                                        unsigned long portNumber,
+                                       int instance,
                                        float value)
 {
     if (m_instrumentMixer)
-        m_instrumentMixer->setPluginPortValue(id, position, portNumber, value);
+        m_instrumentMixer->setPluginPortValue
+            (id, position, portNumber, instance, value);
 }
 
 float

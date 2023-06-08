@@ -47,7 +47,8 @@ class AudioPluginLV2GUI
 
     void showGui() const;
 
-    void portChange(uint32_t portIndex,
+    void portChange(int channel,
+                    uint32_t portIndex,
                     uint32_t bufferSize,
                     uint32_t portProtocol,
                     const void *buffer);

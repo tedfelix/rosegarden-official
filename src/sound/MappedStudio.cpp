@@ -1519,7 +1519,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
 }
 
 void
-MappedPluginSlot::setPort(unsigned long portNumber, float value)
+MappedPluginSlot::setPort(unsigned long portNumber, int instance, float value)
 {
     std::vector<MappedObject*> ports = getChildObjects();
     std::vector<MappedObject*>::iterator it = ports.begin();
@@ -1528,7 +1528,7 @@ MappedPluginSlot::setPort(unsigned long portNumber, float value)
     for (; it != ports.end(); ++it) {
         port = dynamic_cast<MappedPluginPort *>(*it);
         if (port && (unsigned long)port->getPortNumber() == portNumber) {
-            port->setValue(value);
+            port->setValue(instance, value);
         }
     }
 }
@@ -1626,7 +1626,7 @@ MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
 }
 
 void
-MappedPluginPort::setValue(MappedObjectValue value)
+MappedPluginPort::setValue(int instance, MappedObjectValue value)
 {
     MappedPluginSlot *slot =
         dynamic_cast<MappedPluginSlot *>(getParent());
@@ -1642,7 +1642,9 @@ MappedPluginPort::setValue(MappedObjectValue value)
             if (drv) {
                 drv->setPluginInstancePortValue(slot->getInstrument(),
                                                 slot->getPosition(),
-                                                m_portNumber, value);
+                                                m_portNumber,
+                                                instance,
+                                                value);
             }
         }
     }
@@ -1689,7 +1691,7 @@ MappedPluginPort::setProperty(const MappedObjectProperty &property,
     } else if (property == DisplayHint) {
         m_displayHint = PluginPort::PortDisplayHint(value);
     } else if (property == Value) {
-        setValue(value);
+        setValue(-1, value);
     } else {
 #ifdef DEBUG_MAPPEDSTUDIO
         std::cerr << "MappedPluginPort::setProperty - "

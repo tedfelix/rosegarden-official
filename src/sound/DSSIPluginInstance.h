@@ -44,7 +44,7 @@ public:
 
     void run(const RealTime &) override;
 
-    void setPortValue(unsigned int portNumber, float value) override;
+    void setPortValue(unsigned int portNumber, int instance, float value) override;
     float getPortValue(unsigned int portNumber) override;
     QString configure(QString key, QString value) override;
     void sendEvent(const RealTime &eventTime,

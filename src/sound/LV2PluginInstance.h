@@ -53,7 +53,7 @@ public:
 
     void run(const RealTime &rt) override;
 
-    void setPortValue(unsigned int portNumber, float value) override;
+    void setPortValue(unsigned int portNumber, int instance, float value) override;
     // !!!!
     void setPortByteArray(unsigned int port, const QByteArray& ba);
     float getPortValue(unsigned int portNumber) override;
@@ -104,16 +104,20 @@ protected:
 
  private:
 
+    struct InstanceData
+    {
+        std::vector<std::pair<unsigned long, float> > controlPortsIn;
+        std::vector<std::pair<unsigned long, float> > controlPortsOut;
+    };
+
     InstrumentId   m_instrument;
     int                        m_position;
     std::vector<LilvInstance*> m_instances;
+    std::vector<InstanceData>  m_instanceData;
     size_t                     m_instanceCount;
     QString m_uri;
     const LilvPlugin *m_plugin;
     LV2Utils::LV2PluginData m_pluginData;
-
-    std::vector<std::pair<unsigned long, float> > m_controlPortsIn;
-    std::vector<std::pair<unsigned long, float> > m_controlPortsOut;
 
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;

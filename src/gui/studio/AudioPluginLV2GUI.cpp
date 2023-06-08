@@ -106,11 +106,17 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     QString title = sname;
 
     for(int i=0; i<numInst; ++i) {
+        QString chanStr = " / ";
         if (numInst > 1) {
-            title = sname + " / " + QString::number(i);
+            if (i == 0) chanStr += "Left";
+            else if (i == 1) chanStr += "Right";
+            else chanStr =  QString::number(i+1);
+            title = sname + chanStr;
         }
 
-        m_windows.push_back(new AudioPluginLV2GUIX11Window(title,
+        m_windows.push_back(new AudioPluginLV2GUIX11Window(this,
+                                                           title,
+                                                           i,
                                                            selectedUI,
                                                            m_uidesc,
                                                            m_id));
@@ -150,7 +156,8 @@ AudioPluginLV2GUI::showGui() const
 }
 
 void
-AudioPluginLV2GUI::portChange(uint32_t portIndex,
+AudioPluginLV2GUI::portChange(int channel,
+                              uint32_t portIndex,
                               uint32_t bufferSize,
                               uint32_t portProtocol,
                               const void *buffer)
@@ -162,6 +169,7 @@ AudioPluginLV2GUI::portChange(uint32_t portIndex,
         m_mainWindow->slotChangePluginPort(m_instrument,
                                            m_position,
                                            portIndex,
+                                           channel,
                                            *value);
     } else {
         // complex data

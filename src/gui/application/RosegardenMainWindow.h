@@ -1438,7 +1438,8 @@ public slots:
      * An external GUI has requested a port change.
      */
     void slotChangePluginPort(InstrumentId instrumentId,
-                              int pluginIndex, int portIndex, float value);
+                              int pluginIndex, int portIndex,
+                              int instance, float value);
 
     /**
      * Our internal GUI has made a port change -- the

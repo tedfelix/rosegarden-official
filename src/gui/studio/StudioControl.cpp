@@ -109,9 +109,11 @@ StudioControl::getStudioObjectByType(MappedObject::MappedObjectType type)
 void
 StudioControl::setStudioPluginPort(MappedObjectId pluginId,
                                    unsigned long portId,
+                                   int instance,
                                    MappedObjectValue value)
 {
-    RosegardenSequencer::getInstance()->setMappedPort(pluginId, portId, value);
+    RosegardenSequencer::getInstance()->setMappedPort
+        (pluginId, portId, instance, value);
 }
 
 MappedObjectValue
