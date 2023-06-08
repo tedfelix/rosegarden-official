@@ -127,7 +127,7 @@ GUIPalette::GUIPalette()
     m_defaultsMap[MatrixBarLine] = QColor(60, 60, 60);
     m_defaultsMap[BarLineIncorrect] = QColor(211, 0, 31);
     m_defaultsMap[BeatLine] = QColor(200, 200, 200);
-    m_defaultsMap[SubBeatLine] = QColor(212, 212, 212);
+    m_defaultsMap[SubBeatLine] = QColor(232, 232, 232);
     m_defaultsMap[StaffConnectingLine] = QColor(192, 192, 192);
     m_defaultsMap[StaffConnectingTerminatingLine] = QColor(128, 128, 128);
 
