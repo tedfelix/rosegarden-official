@@ -378,6 +378,9 @@ MatrixScene::recreateLines()
             gridLines = timeSig.getBeatsPerBar();
         }
 
+        double beatLines = timeSig.getBeatsPerBar();
+        double dxbeats = width / beatLines;
+
         double dx = width / gridLines;
         double x = x0;
 
@@ -408,7 +411,15 @@ MatrixScene::recreateLines()
               // index 0 is the bar line
                 line->setPen(QPen(GUIPalette::getColour(GUIPalette::MatrixBarLine), pw));
             } else {
-                line->setPen(QPen(GUIPalette::getColour(GUIPalette::BeatLine), pw));
+                // check if we are on a a beat
+                double br = x / dxbeats;
+                int ibr = br + 0.5;
+                double delta = br - ibr;
+                if (fabs(delta) > 1.0e-6) {
+                    line->setPen(QPen(GUIPalette::getColour(GUIPalette::SubBeatLine), pw));
+                } else {
+                    line->setPen(QPen(GUIPalette::getColour(GUIPalette::BeatLine), pw));
+                }
             }
 
             line->setZValue(index > 0 ? MatrixElement::VERTICAL_BEAT_LINE_Z
@@ -658,7 +669,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
 //   MATRIX_DEBUG << "Found " << l.size() << " items at " << e->scenePos();
     for (int i = 0; i < l.size(); ++i) {
         MatrixElement *element = MatrixElement::getMatrixElement(l[i]);
-        if (element) {
+        if (element && ! element->isPreview()) {
             // items are in z-order from top, so this is most salient
             mme.element = element;
             break;
