@@ -244,6 +244,7 @@
   <Separator/>
     <Action name="toggle_mute_track" text="Mute or Unmute Tra&amp;ck" shortcut="U" />
     <Action name="toggle_arm_track" text="Arm &amp;or Un-arm Track for Record" shortcut="R" />
+    <Action name="toggle_solo_track" text="&amp;Solo or Un-solo Track" shortcut="S" />
   <Separator/>
     <Action name="unmute_all_tracks" text="&amp;Unmute all Tracks" icon="un-mute-all" />
     <Action name="mute_all_tracks" text="&amp;Mute all Tracks" icon="mute-all" />
@@ -274,6 +275,7 @@
       <Action name="record" text="&amp;Record" icon="transport-record" shortcut="Ctrl+Space, Media Record" shortcut-context="application" />
       <Action name="recordtoggle" text="P&amp;unch in Record" icon="transport-record" shortcut="Space" shortcut-context="application" />
       <Action name="loop" text="L&amp;oop" icon="button-loop-3" checked="false" shortcut="Ctrl+L" />
+      <Action name="toggle_metronome" text="&amp;Toggle Metronome" shortcut="O" />
       <Action name="scroll_to_follow" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
       <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
     </Menu>
