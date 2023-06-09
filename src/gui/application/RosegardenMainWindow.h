@@ -1194,6 +1194,11 @@ public slots:
      */
     void slotToggleSolo(bool);
 
+    /*
+     * Toggle solo mode from the menu
+     */
+    void slotToggleSoloCurrentTrack();
+
     /**
      * Toggle the track labels on the TrackEditor
      */

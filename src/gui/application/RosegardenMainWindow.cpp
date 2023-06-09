@@ -814,6 +814,7 @@ RosegardenMainWindow::setupActions()
     createAction("select_previous_track", SLOT(slotSelectPreviousTrack()));
     createAction("toggle_mute_track", SLOT(slotToggleMute()));
     createAction("toggle_arm_track", SLOT(slotToggleRecordCurrentTrack()));
+    createAction("toggle_solo_track", SLOT(slotToggleSoloCurrentTrack()));
     createAction("mute_all_tracks", SLOT(slotMuteAllTracks()));
     createAction("unmute_all_tracks", SLOT(slotUnmuteAllTracks()));
     createAction("remap_instruments", SLOT(slotRemapInstruments()));
@@ -823,6 +824,7 @@ RosegardenMainWindow::setupActions()
     createAction("manage_synths", SLOT(slotManageSynths()));
     createAction("modify_midi_filters", SLOT(slotModifyMIDIFilters()));
     createAction("manage_metronome", SLOT(slotManageMetronome()));
+    createAction("toggle_metronome", SLOT(slotToggleMetronome()));
     createAction("save_default_studio", SLOT(slotSaveDefaultStudio()));
     createAction("load_default_studio", SLOT(slotImportDefaultStudio()));
     createAction("load_studio", SLOT(slotImportStudio()));
@@ -5904,6 +5906,13 @@ RosegardenMainWindow::toggleLoop()
 
 void
 RosegardenMainWindow::slotToggleSolo(bool)
+{
+    // Delegate to TrackButtons.
+    getView()->getTrackEditor()->getTrackButtons()->toggleSolo();
+}
+
+void
+RosegardenMainWindow::slotToggleSoloCurrentTrack()
 {
     // Delegate to TrackButtons.
     getView()->getTrackEditor()->getTrackButtons()->toggleSolo();
