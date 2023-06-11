@@ -3665,17 +3665,6 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event) const
         RosegardenSequencer::getInstance()->transportChange(
                 RosegardenSequencer::TransportPlay);
     } else if (instruction == MIDI_MMC_RECORD_STROBE) {
-        // ??? This does not meet the MIDI spec requirements for
-        //     RECORD STROBE.  It does not do punch out.  Instead
-        //     the transport stops completely.  See
-        //     RosegardenMainWindow::slotRecord() which is what this ends
-        //     up calling.  RosegardenMainWindow::slotToggleRecord() does
-        //     punch in and out properly, but it does not start recording
-        //     if the transport is stopped.  We could probably make it
-        //     do that without causing problems for existing users.
-        //     Then RosegardenMainWindow::slotHandleInputs() could call
-        //     slotToggleRecord() instead of slotRecord() and this would
-        //     meet the MIDI spec.
         RosegardenSequencer::getInstance()->transportChange(
                 RosegardenSequencer::TransportRecord);
     } else if (instruction == MIDI_MMC_STOP) {

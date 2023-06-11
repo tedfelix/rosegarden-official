@@ -4712,7 +4712,7 @@ RosegardenMainWindow::slotHandleInputs()
             slotPlay();
             break;
         case RosegardenSequencer::TransportRecord:
-            slotRecord();
+            slotToggleRecord();
             break;
         case RosegardenSequencer::TransportJumpToTime:
             slotJumpToTime(rt);
@@ -5669,6 +5669,7 @@ RosegardenMainWindow::slotRecord()
         slotStop();
         return ;
     } else if (m_seqManager->getTransportStatus() == PLAYING) {
+        // Punch-In
         slotToggleRecord();
         return ;
     }
@@ -5725,6 +5726,15 @@ RosegardenMainWindow::slotToggleRecord()
     // If the sequencer thread isn't running, try launching it.
     if (!isSequencerRunning()  &&  !launchSequencer())
         return;
+
+    // If we are stopped, start recording.
+    // This is to satisfy the MIDI spec description of MMC RECORD STROBE.
+    // RECORD STROBE needs to punch-in/out and it needs to start recording
+    // if the transport is stopped.
+    if (m_seqManager->getTransportStatus() == STOPPED) {
+        slotRecord();
+        return;
+    }
 
     try {
 
