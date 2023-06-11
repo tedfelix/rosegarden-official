@@ -436,7 +436,8 @@ SequenceManager::record(bool countIn)
             RG_DEBUG << "record() - stop recording and keep playing";
             if (!RosegardenSequencer::getInstance()->punchOut()) {
 
-                // #1797873 - set new transport status first, so that
+                // Bug #1082 (was #1797873) - set new transport status first,
+                // so that
                 // if we're stopping recording we don't risk the
                 // record segment being restored by a timer while the
                 // document is busy trying to do away with it
@@ -447,7 +448,7 @@ SequenceManager::record(bool countIn)
                 return ;
             }
 
-            // #1797873 - as above
+            // Bug #1082 (was #1797873) - as above
             m_transportStatus = PLAYING;
 
             m_doc->stopRecordingMidi();

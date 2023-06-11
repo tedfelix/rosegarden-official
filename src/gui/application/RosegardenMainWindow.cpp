@@ -5718,11 +5718,18 @@ RosegardenMainWindow::slotRecord()
 void
 RosegardenMainWindow::slotToggleRecord()
 {
-    if (!isUsingSequencer() || (!isSequencerRunning() && !launchSequencer()))
+    // Not using sequencer?  Bail.
+    if (!m_useSequencer)
+        return;
+
+    // If the sequencer thread isn't running, try launching it.
+    if (!isSequencerRunning()  &&  !launchSequencer())
         return;
 
     try {
+
         m_seqManager->record(true);
+
     } catch (const QString &s) {
         QMessageBox::critical(this, tr("Rosegarden"), s);
     } catch (const AudioFileManager::BadAudioPathException &e) {
@@ -8672,6 +8679,15 @@ void
 RosegardenMainWindow::customEvent(QEvent *event)
 {
     // See AlsaDriver::handleTransportCCs().
+
+    // ??? This seems redundant with RosegardenSequencer::transportChange()
+    //     which ends up triggering RosegardenMainWindow::slotHandleInputs().
+    //     Review both approaches and see if we can consolidate down to the
+    //     best one.  Using QEvent is thread-safe, but slow (message queue).
+    //     Is transportChange() thread-safe and faster?  Can transportChange()
+    //     be simplified to make it better than both?
+
+    // ??? switch?
 
     if (event->type() == PreviousTrack) {
         slotSelectPreviousTrack();
