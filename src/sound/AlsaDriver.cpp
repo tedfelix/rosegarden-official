@@ -3664,6 +3664,9 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event) const
         instruction == MIDI_MMC_DEFERRED_PLAY) {
         RosegardenSequencer::getInstance()->transportChange(
                 RosegardenSequencer::TransportPlay);
+    } else if (instruction == MIDI_MMC_RECORD_STROBE) {
+        RosegardenSequencer::getInstance()->transportChange(
+                RosegardenSequencer::TransportRecord);
     } else if (instruction == MIDI_MMC_STOP) {
         RosegardenSequencer::getInstance()->transportChange(
                 RosegardenSequencer::TransportStop);
