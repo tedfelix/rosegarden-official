@@ -1623,5 +1623,15 @@ RosegardenSequencer::slotControlChange(Instrument *instrument, int cc)
     }
 }
 
+bool RosegardenSequencer::isLooping() const
+{
+    // We do not support looped recording as right now this causes
+    // serious data loss.
+    if (getStatus() == RECORDING)
+        return false;
+
+    return m_withinLoop  &&  m_loopStart != m_loopEnd;
+}
+
 
 }
