@@ -148,6 +148,8 @@ public:
     void setTrackRecording(TrackId trackId, bool recording);
     bool isTrackRecording(TrackId track) const;
     bool isInstrumentRecording(InstrumentId instrumentID) const;
+    /// Update the list of tracks in record to match the actual tracks.
+    void refreshRecordTracks();
 
     /**
      * rename: getSelectedTrackId()

@@ -147,5 +147,24 @@ std::string Track::toXmlString() const
 
 }
 
+void Track::setArchived(bool archived, bool refreshComp)
+{
+    m_archived = archived;
+
+    // Make sure the record track list is correct.  Archiving a Track
+    // means that it is no longer armed for record.
+    if (refreshComp  &&  m_owningComposition)
+        m_owningComposition->refreshRecordTracks();
+}
+
+bool Track::isArmed() const
+{
+    // Archived tracks cannot be armed.
+    if (isArchived())
+        return false;
+
+    return m_armed;
+}
+
 
 }

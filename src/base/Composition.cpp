@@ -2101,6 +2101,18 @@ void Composition::checkSelectedAndRecordTracks()
     }
 }
 
+void Composition::refreshRecordTracks()
+{
+    m_recordTracks.clear();
+
+    // For each Track
+    for (const trackcontainer::value_type &trackPair : m_tracks) {
+        // Armed?  Add to m_recordTracks.
+        if (trackPair.second->isArmed())
+            m_recordTracks.insert(trackPair.first);
+    }
+}
+
 TrackId
 Composition::getClosestValidTrackId(TrackId id) const
 {
@@ -2201,6 +2213,9 @@ std::string Composition::toXmlString() const
     std::stringstream composition;
 
     composition << "<composition recordtracks=\"";
+    // Note: Since we are saving the m_recordTracks list, archived tracks
+    //       that were armed for record will not be armed when the .rg is
+    //       loaded.  Probably not a problem.
     for (recordtrackiterator i = m_recordTracks.begin();
          i != m_recordTracks.end(); ) {
         composition << *i;
