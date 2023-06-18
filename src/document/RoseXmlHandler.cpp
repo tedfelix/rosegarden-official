@@ -2368,6 +2368,10 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
         comp.updateTriggerSegmentReferences();
 
+        // Make sure record tracks list is correct.  Otherwise
+        // archived tracks might record.
+        comp.refreshRecordTracks();
+
     } else if (lcName == "event") {
 
         if (m_currentSegment && m_currentEvent) {
