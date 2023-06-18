@@ -2460,26 +2460,25 @@ Composition::enforceArmRule(const Track *track)
     if (!track->isArmed())
         return;
 
-    recordtrackcontainer recordTracks = getRecordTracks();
-
-    // For each track that is armed for record
-    for (recordtrackcontainer::const_iterator i =
-            recordTracks.begin();
-            i != recordTracks.end(); ++i) {
-
-        const TrackId otherTrackId = *i;
-        Track *otherTrack = getTrackById(otherTrackId);
-
-        if (!otherTrack)
+    // For each track...
+    for (trackcontainer::value_type &trackPair: m_tracks) {
+        Track *otherTrack = trackPair.second;
+        // Not armed?  Skip.
+        // Use "isReallyArmed()" to make sure we check archived tracks as well.
+        if (!otherTrack->isReallyArmed())
             continue;
+        // Same Track?  Skip.
         if (otherTrack == track)
             continue;
+        // Not using the same Instrument?  Skip.
+        if (otherTrack->getInstrument() != track->getInstrument())
+            continue;
 
-        // If this track is using the same instrument, unarm it.
-        if (otherTrack->getInstrument() == track->getInstrument()) {
-            setTrackRecording(otherTrackId, false);
-            notifyTrackChanged(otherTrack);
-        }
+        // We have found an armed Track using the same Instrument.
+        // Unarm it.
+
+        setTrackRecording(trackPair.first, false);
+        notifyTrackChanged(otherTrack);
     }
 }
 
