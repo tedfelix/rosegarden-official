@@ -2213,18 +2213,20 @@ std::string Composition::toXmlString() const
     std::stringstream composition;
 
     composition << "<composition recordtracks=\"";
-    // Note: Since we are saving the m_recordTracks list, archived tracks
-    //       that were armed for record will not be armed when the .rg is
-    //       loaded.  Probably not a problem.
     bool first = true;
-    for (TrackId trackId : m_recordTracks) {
-        // See if we need a comma before items after the first.
+    // For each Track...
+    for (const trackcontainer::value_type &trackPair : m_tracks) {
+        // If the Track isn't really armed, try the next.
+        if (!trackPair.second->isReallyArmed())
+            continue;
+
+        // After the first, we need a comma.
         if (!first)
             composition << ",";
         else  // No longer the first
             first = false;
 
-        composition << trackId;
+        composition << trackPair.first;
     }
 
     composition << "\" pointer=\"" << m_position;

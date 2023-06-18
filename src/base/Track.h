@@ -129,8 +129,11 @@ public:
     // Staff bracketing in LilyPond
     int getStaffBracket() const  { return m_staffBracket; }
     void setStaffBracket(int index) { m_staffBracket = index; }
-    
+
+    /// Returns false for archived Track objects.
     bool isArmed() const;
+    /// Without consideration of archived.  Use for writing .rg files.
+    bool isReallyArmed() const  { return m_armed; }
     /// Arm or disarm the Track.
     /**
      * This routine should only be called by Composition::setTrackRecording()
