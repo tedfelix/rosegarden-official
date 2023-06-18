@@ -2216,13 +2216,17 @@ std::string Composition::toXmlString() const
     // Note: Since we are saving the m_recordTracks list, archived tracks
     //       that were armed for record will not be armed when the .rg is
     //       loaded.  Probably not a problem.
-    for (recordtrackiterator i = m_recordTracks.begin();
-         i != m_recordTracks.end(); ) {
-        composition << *i;
-        if (++i != m_recordTracks.end()) {
+    bool first = true;
+    for (TrackId trackId : m_recordTracks) {
+        // See if we need a comma before items after the first.
+        if (!first)
             composition << ",";
-        }
+        else  // No longer the first
+            first = false;
+
+        composition << trackId;
     }
+
     composition << "\" pointer=\"" << m_position;
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)
