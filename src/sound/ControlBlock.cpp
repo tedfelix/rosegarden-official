@@ -368,6 +368,10 @@ getInstAndChanForEvent(bool recording, DeviceId deviceId, char channel)
     for (unsigned i = 0; i <= m_maxTrackId; ++i) {
         TrackInfo &track = m_trackInfo[i];
 
+        // Skip archived Tracks.
+        if (track.m_archived)
+            continue;
+
         bool deviceMatch =
                 (track.m_deviceFilter == Device::ALL_DEVICES  ||
                  track.m_deviceFilter == deviceId);
