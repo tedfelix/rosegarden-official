@@ -305,7 +305,7 @@ AudioManagerDialog::slotPopulateFileList()
         try {
             m_doc->getAudioFileManager().
             drawPreview(audioFile.getId(),
-                        RealTime::zeroTime,
+                        RealTime::zero(),
                         audioFile.getLength(),
                         audioPixmap);
         } catch (const Exception &e) {
@@ -328,7 +328,7 @@ AudioManagerDialog::slotPopulateFileList()
         item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
 
         // set start time and duration
-        item->setStartTime(RealTime::zeroTime);
+        item->setStartTime(RealTime::zero());
         item->setDuration(length);
 
         // Envelope pixmap
@@ -400,7 +400,7 @@ AudioManagerDialog::slotPopulateFileList()
             try {
                 m_doc->getAudioFileManager().
                 drawHighlightedPreview(audioFile.getId(),
-                                       RealTime::zeroTime,
+                                       RealTime::zero(),
                                        audioFile.getLength(),
                                        segment->getAudioStartTime(),
                                        segment->getAudioEndTime(),
@@ -531,7 +531,7 @@ AudioManagerDialog::slotExportAudio()
     // based distros might lock up.  See Bug #1546.
     progressDialog.show();
 
-    RealTime clipStartTime = RealTime::zeroTime;
+    RealTime clipStartTime;
     RealTime clipDuration = sourceFile->getLength();
 
     if (segment) {
@@ -811,7 +811,7 @@ AudioManagerDialog::slotInsert()
     //RG_DEBUG << "slotInsert(): emitting insertAudioSegment()";
 
     emit insertAudioSegment(audioFile->getId(),
-                            RealTime::zeroTime,
+                            RealTime::zero(),
                             audioFile->getLength());
 }
 

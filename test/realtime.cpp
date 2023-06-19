@@ -38,7 +38,7 @@ void TestRealTime::test()
     QCOMPARE(rt.sec, 0);
     QCOMPARE(rt.nsec, 0);
     QCOMPARE(rt.toSeconds(), 0.0);
-    QCOMPARE(rt, RealTime::zeroTime);
+    QCOMPARE(rt, RealTime::zero());
     QCOMPARE(rt.usec(), 0);
     QCOMPARE(rt.msec(), 0);
 

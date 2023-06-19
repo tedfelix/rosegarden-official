@@ -48,7 +48,12 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
     int sec;
     int nsec;
 
-    static const RealTime zeroTime;
+    // Delayed construction to fix static init order fiasco.
+    static const RealTime &zero()
+    {
+        static RealTime zero(0,0);
+        return zero;
+    }
 
     // Conversions
 

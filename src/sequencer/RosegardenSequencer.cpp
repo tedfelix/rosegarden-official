@@ -402,7 +402,8 @@ RosegardenSequencer::jumpTo(const RealTime &pos)
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "RosegardenSequencer::jumpTo(" << pos << ")\n";
 #endif
-    if (pos < RealTime::zeroTime) return;
+    if (pos < RealTime::zero())
+        return;
 
     m_driver->stopClocks();
 
@@ -1186,7 +1187,7 @@ void
 RosegardenSequencer::applyLatencyCompensation(MappedEventList &mappedEventList)
 {
     RealTime maxLatency = m_driver->getMaximumPlayLatency();
-    if (maxLatency == RealTime::zeroTime)
+    if (maxLatency == RealTime::zero())
         return ;
 
     for (MappedEventList::iterator i = mappedEventList.begin();
@@ -1323,7 +1324,7 @@ RosegardenSequencer::updateClocks()
     }
 
     RealTime maxLatency = m_driver->getMaximumPlayLatency();
-    if (maxLatency != RealTime::zeroTime) {
+    if (maxLatency != RealTime::zero()) {
         //	SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks: latency compensation moving " << newPosition << " to " << newPosition - maxLatency;
         newPosition = newPosition - maxLatency;
     }
@@ -1533,7 +1534,7 @@ RosegardenSequencer::transportChange(TransportRequest request)
 {
     QMutexLocker locker(&m_transportRequestMutex);
 
-    TransportPair pair(request, RealTime::zeroTime);
+    TransportPair pair(request, RealTime::zero());
     m_transportRequests.push_back(pair);
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER

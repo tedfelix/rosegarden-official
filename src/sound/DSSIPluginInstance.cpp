@@ -216,7 +216,7 @@ DSSIPluginInstance::getLatency()
                     m_inputBuffers[i][j] = 0.f;
                 }
             }
-            run(RealTime::zeroTime);
+            run(RealTime::zero());
 	}
 #ifdef DEBUG_DSSI
 

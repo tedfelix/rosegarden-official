@@ -144,14 +144,14 @@ public:
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getAudioPlayLatency();
 #endif
-        return RealTime::zeroTime;
+        return RealTime::zero();
     }
 
     RealTime getAudioRecordLatency() override {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getAudioRecordLatency();
 #endif
-        return RealTime::zeroTime;
+        return RealTime::zero();
     }
 
     RealTime getInstrumentPlayLatency(InstrumentId id) override {
@@ -160,14 +160,14 @@ public:
 #else
         Q_UNUSED(id);
 #endif
-        return RealTime::zeroTime;
+        return RealTime::zero();
     }
 
     RealTime getMaximumPlayLatency() override {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getMaximumPlayLatency();
 #endif
-        return RealTime::zeroTime;
+        return RealTime::zero();
     }
 
 
@@ -503,7 +503,7 @@ protected:
 
     /// Send MIDI out via ALSA.
     /**
-     * For unqueued (immediate) send, specify RealTime::zeroTime for
+     * For unqueued (immediate) send, specify RealTime::zero() for
      * sliceStart and sliceEnd.  Otherwise events will be queued for
      * future send at appropriate times.
      *

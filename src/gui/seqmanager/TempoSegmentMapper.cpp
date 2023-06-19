@@ -46,7 +46,7 @@ void TempoSegmentMapper::fillBuffer()
             // check if we have now passed zero.  Since we will write
             // time zero's tempo in any case, our test here excludes
             // time zero.
-            if (eventTime > RealTime::zeroTime) {
+            if (eventTime > RealTime::zero()) {
                 // ...write time zero's tempo....
                 mapTempoAtZero(comp);
                 // ...which we won't do again.
@@ -77,7 +77,7 @@ mapTempoAtZero(Composition& comp)
         ramping = false;
     }
     tempoT initialTempo = comp.getTempoAtTime(0);
-    mapATempo(RealTime::zeroTime, initialTempo, ramping);
+    mapATempo(RealTime::zero(), initialTempo, ramping);
 }
 
 void

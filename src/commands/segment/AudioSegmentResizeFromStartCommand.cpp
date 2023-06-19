@@ -67,8 +67,8 @@ AudioSegmentResizeFromStartCommand::execute()
         //   will crash if the audio start time is negative.  Need to fix the
         //   preview code, then check to see if the playback code works
         //   properly given a negative start time.  Then this can be removed.
-        if (audioStartTime <= RealTime::zeroTime)
-            m_newSegment->setAudioStartTime(RealTime::zeroTime);
+        if (audioStartTime <= RealTime::zero())
+            m_newSegment->setAudioStartTime(RealTime::zero());
         else
             m_newSegment->setAudioStartTime(
                 m_segment->getAudioStartTime() - (oldRT - newRT));

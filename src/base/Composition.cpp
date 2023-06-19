@@ -1443,7 +1443,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
     ReferenceSegment::iterator i = m_tempoSegment.findAtOrBefore(t);
     if (i == m_tempoSegment.end()) {
         i = m_tempoSegment.begin();
-        if (t >= RealTime::zeroTime ||
+        if (t >= RealTime::zero()  ||
             (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
             return realTime2Time(t, m_defaultTempo);
         }

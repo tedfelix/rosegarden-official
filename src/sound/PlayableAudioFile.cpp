@@ -319,11 +319,8 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_firstRead(true),
     m_runtimeSegmentId( -1),
     m_isSmallFile(false),
-    m_currentScanPoint(RealTime::zeroTime),
     m_smallFileScanFrame(0),
-    m_autoFade(false),
-    m_fadeInTime(RealTime::zeroTime),
-    m_fadeOutTime(RealTime::zeroTime)
+    m_autoFade(false)
 {
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << " for instrument " << instrumentId << " with file " << (m_audioFile ? m_audioFile->getShortFilename() : "(none)") << std::endl;
@@ -661,7 +658,7 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
         // configuration subsequently) but with the current sample
         // rate, not their original one.
 
-        m_audioFile->scanTo(&file, RealTime::zeroTime);
+        m_audioFile->scanTo(&file, RealTime::zero());
 
         size_t reqd = m_audioFile->getSize() / m_audioFile->getBytesPerFrame();
         unsigned char *buffer = new unsigned char[m_audioFile->getSize()];
@@ -863,7 +860,7 @@ PlayableAudioFile::updateBuffers()
     RealTime block = RealTime::frame2RealTime(nframes, m_targetSampleRate);
     if (m_currentScanPoint + block >= m_startIndex + m_duration) {
         block = m_startIndex + m_duration - m_currentScanPoint;
-        if (block <= RealTime::zeroTime)
+        if (block <= RealTime::zero())
             nframes = 0;
         else
             nframes = (size_t)RealTime::realTime2Frame(block, m_targetSampleRate);

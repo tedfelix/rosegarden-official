@@ -117,7 +117,7 @@ allocateChannelInterval(RealTime startTime,
             // leastOverflow) and treat it as the most significant
             // bit.
             RealTime thisDuration = cs.m_end - cs.m_start;
-            bool thisOverflow = (thisDuration < RealTime::zeroTime);
+            bool thisOverflow = (thisDuration < RealTime::zero());
 
             RG_DEBUG << "Found a candidate that takes"
                      << (thisOverflow ? "the maximum plus" : "only")
@@ -253,7 +253,7 @@ allocateChannelIntervalFrom(iterator i, RealTime start, RealTime end,
   return ChannelInterval(cs.getChannelId(),
                          start, end,
                          nullptr, nullptr,
-                         RealTime::zeroTime, RealTime::zeroTime);
+                         RealTime::zero(), RealTime::zero());
 }
 
 // Add a channel that may be allocated from.  It is caller's
@@ -268,7 +268,7 @@ addChannel(ChannelId channelNb)
                            ChannelInterval::m_beforeEarliestTime,
                            ChannelInterval::m_afterLatestTime,
                            nullptr, nullptr,
-                           RealTime::zeroTime, RealTime::zeroTime));
+                           RealTime::zero(), RealTime::zero()));
 }
 
 // Remove channel from being allocated.  It is caller's
@@ -400,7 +400,7 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
         // For single channel, this implicitly frees+reallocates
         ci = ChannelInterval(getPercussionChannel(), start, end,
                              nullptr, nullptr,
-                             RealTime::zeroTime, RealTime::zeroTime);
+                             RealTime::zero(), RealTime::zero());
     } else {
         m_freeChannels.reallocateToFit(ci, start, end,
                                        &instrument,

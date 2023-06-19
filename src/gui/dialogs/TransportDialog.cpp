@@ -591,8 +591,8 @@ TransportDialog::displayRealTime(const RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < RealTime::zeroTime) {
-        st = RealTime::zeroTime - st;
+    if (st < RealTime::zero()) {
+        st = RealTime::zero() - st;
         if (!m_lastNegative) {
             ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
@@ -639,8 +639,8 @@ TransportDialog::displayFrameTime(const RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < RealTime::zeroTime) {
-        st = RealTime::zeroTime - st;
+    if (st < RealTime::zero()) {
+        st = RealTime::zero() - st;
         if (!m_lastNegative) {
             ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
@@ -696,8 +696,8 @@ TransportDialog::displaySMPTETime(const RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < RealTime::zeroTime) {
-        st = RealTime::zeroTime - st;
+    if (st < RealTime::zero()) {
+        st = RealTime::zero() - st;
         if (!m_lastNegative) {
             ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;

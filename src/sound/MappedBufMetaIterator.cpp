@@ -84,7 +84,7 @@ MappedBufMetaIterator::clear()
 void
 MappedBufMetaIterator::reset()
 {
-    m_currentTime = RealTime::zeroTime;
+    m_currentTime = RealTime::zero();
 
     // Reset each iterator.
     for (IteratorVector::iterator i = m_iterators.begin();

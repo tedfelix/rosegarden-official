@@ -1401,7 +1401,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         outStream << "\" delay=\"" << segment->getDelay();
     }
 
-    if (segment->getRealTimeDelay() != RealTime::zeroTime) {
+    if (segment->getRealTimeDelay() != RealTime::zero()) {
         outStream << "\" rtdelaysec=\"" << segment->getRealTimeDelay().sec
         << "\" rtdelaynsec=\"" << segment->getRealTimeDelay().nsec;
     }
@@ -1874,7 +1874,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             // If this is a note on event.
             // (In AlsaDriver::getMappedEventList() we set the duration to
             // -1 seconds to indicate a note-on event.)
-            if ((*i)->getDuration() < RealTime::zeroTime) {
+            if ((*i)->getDuration() < RealTime::zero()) {
 
                 //printf("Note On  ch %2d | ptch %3d | vel %3d\n", channel, pitch, (*i)->getVelocity());
                 //RG_DEBUG << "RD::iRM Note On cpv:" << channel << "/" << pitch << "/" << (*i)->getVelocity();
@@ -2583,7 +2583,7 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 
     recordSegment->setTrack(recordTrack->getId());
     recordSegment->setStartTime(m_recordStartTime);
-    recordSegment->setAudioStartTime(RealTime::zeroTime);
+    recordSegment->setAudioStartTime(RealTime::zero());
 
     // Set an appropriate segment label
     //

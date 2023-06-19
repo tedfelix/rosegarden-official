@@ -94,7 +94,6 @@ SequenceManager::SequenceManager() :
     m_countdownTimer(nullptr),
     m_recordTime(new QElapsedTimer()),
     m_lastTransportStartPosition(0),
-    m_realRecordStart(RealTime::zeroTime),
     m_sampleRate(0),
     m_tempo(0)
 {
@@ -366,7 +365,7 @@ SequenceManager::record(bool countIn)
 {
     if (!m_doc) return;
 
-    m_realRecordStart = RealTime::zeroTime;
+    m_realRecordStart = RealTime::zero();
 
     RG_DEBUG << "record(" << countIn << ")";
     Composition &comp = m_doc->getComposition();
@@ -1052,7 +1051,7 @@ void SequenceManager::slotLoopChanged()
     if (composition.getLoopMode() == Composition::LoopOff) {
         // Turn off the loop.
         RosegardenSequencer::getInstance()->setLoop(
-                RealTime::zeroTime, RealTime::zeroTime,
+                RealTime::zero(), RealTime::zero(),
                 false);
         return;
     }

@@ -282,7 +282,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
                         QString("%1").arg(s->getTranspose())));
 
         if (s->getDelay() != 0) {
-            if (s->getRealTimeDelay() != RealTime::zeroTime) {
+            if (s->getRealTimeDelay() != RealTime::zero()) {
                 table->setItem(i, 10, new SegmentDataItem
                                (table,
                                 QString("%1 + %2 ms")
@@ -296,7 +296,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
                                 NotationStrings::makeNoteMenuLabel
                                 (s->getDelay(), true, discard, false)));
             }
-        } else if (s->getRealTimeDelay() != RealTime::zeroTime) {
+        } else if (s->getRealTimeDelay() != RealTime::zero()) {
             table->setItem(i, 10, new SegmentDataItem
                            (table,
                             QString("%2 ms")

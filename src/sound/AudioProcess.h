@@ -237,7 +237,7 @@ public:
     /**
      * Empty and discard buffer contents.
      */
-    void emptyBuffers(RealTime currentTime = RealTime::zeroTime);
+    void emptyBuffers(RealTime currentTime = RealTime::zero());
 
     /**
      * An instrument is "empty" if it has no audio files, synths or
@@ -306,7 +306,7 @@ protected:
     struct BufferRec
     {
         BufferRec() : empty(true), dormant(true), zeroFrames(0),
-                      filledTo(RealTime::zeroTime), channels(2),
+                      filledTo(RealTime::zero()), channels(2),
                       buffers(), gainLeft(0.0), gainRight(0.0), volume(0.0),
                       muted(false) { }
         ~BufferRec();

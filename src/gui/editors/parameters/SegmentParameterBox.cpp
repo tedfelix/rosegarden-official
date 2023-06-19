@@ -913,7 +913,7 @@ SegmentParameterBox::setSegmentDelay(long delayValue)
              it != segmentSelection.end();
              ++it) {
             (*it)->setDelay(delayValue);
-            (*it)->setRealTimeDelay(RealTime::zeroTime);
+            (*it)->setRealTimeDelay(RealTime::zero());
         }
 
     } else {  // Negative msecs

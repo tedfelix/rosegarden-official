@@ -93,7 +93,7 @@ AudioSegmentDistributeCommand::execute()
                         if (m_audioFile) {
                             segment->setAudioFileId(m_audioFile->getId());
                             segment->setAudioStartTime(
-                                RealTime::zeroTime);
+                                RealTime::zero());
                             segment->setAudioEndTime(
                                 m_audioFile->getLength());
                         } else // or an audio Segment
