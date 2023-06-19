@@ -52,31 +52,37 @@ int PropertyName::intern(const string &s)
 string PropertyName::getName() const
 {
     intern_reverse_map::iterator i(m_internsReversed->find(m_value));
-    if (i != m_internsReversed->end()) return i->second;
+    if (i != m_internsReversed->end())
+        return i->second;
 
     // dump some informative data, even if we aren't in debug mode,
     // because this really shouldn't be happening
     std::cerr << "ERROR: PropertyName::getName: value corrupted!\n";
     std::cerr << "PropertyName's internal value is " << m_value << std::endl;
     std::cerr << "Reverse interns are ";
+
     i = m_internsReversed->begin();
-    if (i == m_internsReversed->end()) std::cerr << "(none)";
-    else while (i != m_internsReversed->end()) {
-	if (i != m_internsReversed->begin()) {
-	    std::cerr << ", ";
-	}
-	std::cerr << i->first << "=" << i->second;
-	++i;
+    if (i == m_internsReversed->end()) {
+        std::cerr << "(none)";
+    } else {
+        while (i != m_internsReversed->end()) {
+            if (i != m_internsReversed->begin()) {
+                std::cerr << ", ";
+            }
+            std::cerr << i->first << "=" << i->second;
+            ++i;
+        }
     }
+
     std::cerr << std::endl;
 
     Q_ASSERT(0); // exit if debug is on
-    throw Exception
-	("Serious problem in PropertyName::getName(): property "
-	 "name's internal value is corrupted -- see stderr for details");
+    throw Exception(
+            "Serious problem in PropertyName::getName(): property "
+            "name's internal value is corrupted -- see stderr for details");
 }
 
-const PropertyName PropertyName::EmptyPropertyName = "";
+const PropertyName PropertyName::EmptyPropertyName("");
 
 }
 

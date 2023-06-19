@@ -370,8 +370,8 @@ MusicXmlExportHelper::emptyQuantizeQueue(PercussionMap &pm,
         int pp = (*v)->get<Int>(BaseProperties::PITCH);
         timeT t = (*v)->getNotationAbsoluteTime();
         Event *tmp = new Event(*(*v), t, duration);
-        tmp->set<Int>("MxmlPitch", pm.getPitch(pp));
-        tmp->set<String>("MxmlNoteHead", pm.getNoteHead(pp));
+        tmp->set<Int>(PropertyName("MxmlPitch"), pm.getPitch(pp));
+        tmp->set<String>(PropertyName("MxmlNoteHead"), pm.getNoteHead(pp));
         tmp->set<Bool>(NotationProperties::BEAM_ABOVE, stem);
         segment->insert(tmp);
         empty = false;
@@ -1077,8 +1077,8 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
         }
         if (m_percussionTrack) {
             Pitch pitch(event);
-            if (event.has("MxmlPitch")) {
-                pitch = Pitch(event.get<Int>("MxmlPitch"));
+            if (event.has(PropertyName("MxmlPitch"))) {
+                pitch = Pitch(event.get<Int>(PropertyName("MxmlPitch")));
             }
             tmpNote << "        <unpitched>\n";
             tmpNote << "          <display-step>" << pitch.getNoteName(Key())
@@ -1086,7 +1086,7 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
             tmpNote << "          <display-octave>" << pitch.getOctaveAccidental(-1)
                                                     << "</display-octave>\n";
             tmpNote << "        </unpitched>\n";
-            tmpNotehead << "        <notehead>" << event.get<String>("MxmlNoteHead")
+            tmpNotehead << "        <notehead>" << event.get<String>(PropertyName("MxmlNoteHead"))
                                                 << "</notehead>\n";
 
             if (duration > 0) {

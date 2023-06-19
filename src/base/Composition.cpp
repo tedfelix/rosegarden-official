@@ -47,13 +47,13 @@ namespace Rosegarden
 {
 
 
-const PropertyName Composition::NoAbsoluteTimeProperty = "NoAbsoluteTime";
-const PropertyName Composition::BarNumberProperty = "BarNumber";
+const PropertyName Composition::NoAbsoluteTimeProperty("NoAbsoluteTime");
+const PropertyName Composition::BarNumberProperty("BarNumber");
 
-const std::string Composition::TempoEventType = "tempo";
-const PropertyName Composition::TempoProperty = "Tempo";
-const PropertyName Composition::TargetTempoProperty = "TargetTempo";
-const PropertyName Composition::TempoTimestampProperty = "TimestampSec";
+const std::string Composition::TempoEventType("tempo");
+const PropertyName Composition::TempoProperty("Tempo");
+const PropertyName Composition::TargetTempoProperty("TargetTempo");
+const PropertyName Composition::TempoTimestampProperty("TimestampSec");
 
 
 bool

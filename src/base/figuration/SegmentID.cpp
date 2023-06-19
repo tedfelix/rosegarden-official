@@ -27,8 +27,8 @@ namespace Rosegarden
    //SegmentID event types
 const std::string SegmentID::EventType = "segment ID";
 const int SegmentID::EventSubOrdering = -190;
-const PropertyName SegmentID::IDPropertyName = "ID";
-const PropertyName SegmentID::SubtypePropertyName = "Subtype";
+const PropertyName SegmentID::IDPropertyName("ID");
+const PropertyName SegmentID::SubtypePropertyName("Subtype");
 
 const std::string SegmentID::Uninvolved = "uninvolved";
 const std::string SegmentID::ChordSource = "chord source";

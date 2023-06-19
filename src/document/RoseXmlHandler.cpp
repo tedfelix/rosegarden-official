@@ -117,8 +117,9 @@ bool ConfigurationXmlSubHandler::startElement(const QString&, const QString&,
         QString value = atts.value("value").toString();
         if (!value.isEmpty()) {
             m_propertyType = "String";
-            m_configuration->set<String>(qstrtostr(m_propertyName),
-                                         qstrtostr(value));
+            m_configuration->set<String>(
+                    static_cast<PropertyName>(qstrtostr(m_propertyName)),
+                    qstrtostr(value));
         }
     }
 
@@ -137,7 +138,8 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
     if (m_propertyType == "Int") {
         long i = ch.toInt();
         //RG_DEBUG << "  setting (int) " << m_propertyName << "=" << i;
-        m_configuration->set<Int>(qstrtostr(m_propertyName), i);
+        m_configuration->set<Int>(
+                static_cast<PropertyName>(qstrtostr(m_propertyName)), i);
 
         return true;
     }
@@ -151,7 +153,8 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
 
         //RG_DEBUG << "  setting (RealTimeT) " << m_propertyName << "=" << rt.sec << "(sec) " << rt.nsec << "(nsec)";
 
-        m_configuration->set<Rosegarden::RealTimeT>(qstrtostr(m_propertyName), rt);
+        m_configuration->set<Rosegarden::RealTimeT>(
+                static_cast<PropertyName>(qstrtostr(m_propertyName)), rt);
 
         return true;
     }
@@ -165,7 +168,8 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
 
         //RG_DEBUG << "  setting (Bool) " << m_propertyName << "=" << b;
 
-        m_configuration->set<Rosegarden::Bool>(qstrtostr(m_propertyName), b);
+        m_configuration->set<Rosegarden::Bool>(
+                static_cast<PropertyName>(qstrtostr(m_propertyName)), b);
 
         return true;
     }
@@ -175,8 +179,9 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
 
         //RG_DEBUG << "  setting (String) " << m_propertyName << "=" << ch;
 
-        m_configuration->set<Rosegarden::String>(qstrtostr(m_propertyName),
-                         qstrtostr(ch));
+        m_configuration->set<Rosegarden::String>(
+                static_cast<PropertyName>(qstrtostr(m_propertyName)),
+                qstrtostr(ch));
 
         return true;
     }

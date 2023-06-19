@@ -74,11 +74,9 @@ class ROSEGARDENPRIVATE_EXPORT PropertyName
 public:
     PropertyName() : m_value(-1) { }
     // cppcheck-suppress noExplicitConstructor
-    PropertyName(const char *cs) { std::string s(cs); m_value = intern(s); }
+    explicit PropertyName(const char *cs) { std::string s(cs); m_value = intern(s); }
     // cppcheck-suppress noExplicitConstructor
-    PropertyName(const std::string &s) : m_value(intern(s)) { }
-    PropertyName(const PropertyName &p) : m_value(p.m_value) { }
-    ~PropertyName() { }
+    explicit PropertyName(const std::string &s) : m_value(intern(s)) { }
 
     PropertyName &operator=(const char *cs) {
         std::string s(cs);
@@ -89,10 +87,6 @@ public:
         m_value = intern(s);
         return *this;
     }
-    PropertyName &operator=(const PropertyName &p) {
-        m_value = p.m_value;
-        return *this;
-    }
 
     bool operator==(const PropertyName &p) const {
         return m_value == p.m_value;
@@ -101,25 +95,39 @@ public:
         return m_value <  p.m_value;
     }
 
-    std::string getName() const /* throw (CorruptedValue) */;
+    // Can throw a Rosegarden::Exception (std::Exception).
+    std::string getName() const;
 
     int getValue() const { return m_value; }
 
     static const PropertyName EmptyPropertyName;
 
 private:
+    int m_value;
+
+    // Move the rest of this to the .cpp.
+
+    // ??? Rename: NameToValueMap
     typedef std::map<std::string, int> intern_map;
+    // ??? Get rid of this.  Use value_type directly.
     typedef intern_map::value_type intern_pair;
 
+    // ??? Rename: ValueToNameMap
     typedef std::map<int, std::string> intern_reverse_map;
+    // ??? Get rid of this.  Use value_type directly.
     typedef intern_reverse_map::value_type intern_reverse_pair;
 
+    // Pointer for create on first use to avoid static init order fiasco.
+    // ??? Leak.  Use std::shared_ptr?
+    // ??? rename: m_nameToValueMap
     static intern_map *m_interns;
+    // Pointer for create on first use to avoid static init order fiasco.
+    // ??? Leak.  Use std::shared_ptr?
+    // ??? rename: m_valueToNameMap
     static intern_reverse_map *m_internsReversed;
     static int m_nextValue;
 
-    int m_value;
-
+    // ??? rename: getValue()
     static int intern(const std::string &s);
 };
 

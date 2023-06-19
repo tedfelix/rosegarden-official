@@ -141,27 +141,29 @@ void TestReferenceSegment::testFind()
 
 Composition::ReferenceSegment* TestReferenceSegment::setup_rs()
 {
+    PropertyName testProperty("test_property");
+
     // setup a ReferenceSegment with some data
     ReferenceSegment *rs = new ReferenceSegment("test");
 
     Event* e1 = new Event("test", 0);
-    e1->set<Int>("test_property", 10);
+    e1->set<Int>(testProperty, 10);
     rs->insertEvent(e1);
 
     Event* e2 = new Event("test", 10);
-    e2->set<Int>("test_property", 1);
+    e2->set<Int>(testProperty, 1);
     rs->insertEvent(e2);
 
     Event* e3 = new Event("test", 20);
-    e3->set<Int>("test_property", 11);
+    e3->set<Int>(testProperty, 11);
     rs->insertEvent(e3);
 
     Event* e4 = new Event("test", 50);
-    e4->set<Int>("test_property", 45);
+    e4->set<Int>(testProperty, 45);
     rs->insertEvent(e4);
 
     Event* e5 = new Event("test", 100);
-    e5->set<Int>("test_property", 78);
+    e5->set<Int>(testProperty, 78);
     rs->insertEvent(e5);
 
     // ??? Note that the caller needs to delete the events in here.

@@ -309,8 +309,8 @@ using namespace Marks;
 
 const string Clef::EventType = "clefchange";
 const int Clef::EventSubOrdering = -250;
-const PropertyName Clef::ClefPropertyName = "clef";
-const PropertyName Clef::OctaveOffsetPropertyName = "octaveoffset";
+const PropertyName Clef::ClefPropertyName("clef");
+const PropertyName Clef::OctaveOffsetPropertyName("octaveoffset");
 const string Clef::Treble = "treble";
 const string Clef::French = "french";
 const string Clef::Soprano = "soprano";
@@ -466,7 +466,7 @@ Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
 
 const string Key::EventType = "keychange";
 const int Key::EventSubOrdering = -200;
-const PropertyName Key::KeyPropertyName = "key";
+const PropertyName Key::KeyPropertyName("key");
 const Key Key::DefaultKey = Key("C major");
 const Key Key::UndefinedKey = Key("undefined");
 
@@ -770,9 +770,9 @@ Key::KeyDetails& Key::KeyDetails::operator=(const Key::KeyDetails &d)
 
 const std::string Indication::EventType = "indication";
 const int Indication::EventSubOrdering = -50;
-const PropertyName Indication::IndicationTypePropertyName = "indicationtype";
+const PropertyName Indication::IndicationTypePropertyName("indicationtype");
 //const PropertyName Indication::IndicationDurationPropertyName = "indicationduration";
-static const PropertyName IndicationDurationPropertyName = "indicationduration";//!!!
+static const PropertyName IndicationDurationPropertyName("indicationduration"); // !!!
 
 const std::string Indication::Slur = "slur";
 const std::string Indication::PhrasingSlur = "phrasingslur";
@@ -859,9 +859,9 @@ Indication::isValid(const std::string &s) const
 
 const std::string Text::EventType = "text";
 const int Text::EventSubOrdering = -70;
-const PropertyName Text::TextPropertyName = "text";
-const PropertyName Text::TextTypePropertyName = "type";
-const PropertyName Text::LyricVersePropertyName = "verse";
+const PropertyName Text::TextPropertyName("text");
+const PropertyName Text::TextTypePropertyName("type");
+const PropertyName Text::LyricVersePropertyName("verse");
 
 // text styles
 const std::string Text::UnspecifiedType   = "unspecified";
@@ -1979,11 +1979,11 @@ Event *Note::getAsRestEvent(timeT absoluteTime) const
 
 const string TimeSignature::EventType = "timesignature";
 const int TimeSignature::EventSubOrdering = -150;
-const PropertyName TimeSignature::NumeratorPropertyName = "numerator";
-const PropertyName TimeSignature::DenominatorPropertyName = "denominator";
-const PropertyName TimeSignature::ShowAsCommonTimePropertyName = "common";
-const PropertyName TimeSignature::IsHiddenPropertyName = "hidden";
-const PropertyName TimeSignature::HasHiddenBarsPropertyName = "hiddenbars";
+const PropertyName TimeSignature::NumeratorPropertyName("numerator");
+const PropertyName TimeSignature::DenominatorPropertyName("denominator");
+const PropertyName TimeSignature::ShowAsCommonTimePropertyName("common");
+const PropertyName TimeSignature::IsHiddenPropertyName("hidden");
+const PropertyName TimeSignature::HasHiddenBarsPropertyName("hiddenbars");
 const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
 
 TimeSignature::TimeSignature(int numerator, int denominator,
@@ -2518,7 +2518,7 @@ AccidentalTable::newClef(const Clef &clef)
 
 const std::string Symbol::EventType = "symbol";
 const int Symbol::EventSubOrdering = -70;
-const PropertyName Symbol::SymbolTypePropertyName = "type";
+const PropertyName Symbol::SymbolTypePropertyName("type");
 
 // symbol styles
 const std::string Symbol::UnspecifiedType   = "unspecified";

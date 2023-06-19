@@ -254,7 +254,7 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
                 const double eps = 0.001;
                 Event *eel = el->event();
                 double y = el->getLayoutY();
-                if (eel->has("pitch")) {
+                if (eel->has(BaseProperties::PITCH)) {
                     el->setIsColliding(fabs(y - y0) < eps);
                     y0 = y;
                 }
@@ -465,9 +465,10 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     NotationElementList::iterator scooter = i;
 
     timeT slurDuration = (*i)->event()->getDuration();
-    if (slurDuration == 0 && (*i)->event()->has("indicationduration")) {
+    PropertyName IndicationDurationPropertyName("indicationduration");
+    if (slurDuration == 0 && (*i)->event()->has(IndicationDurationPropertyName)) {
         slurDuration = (*i)->event()->get
-                       <Int>("indicationduration"); // obs property
+                       <Int>(IndicationDurationPropertyName);  // obsolete property
     }
     timeT endTime = (*i)->getViewAbsoluteTime() + slurDuration;
 

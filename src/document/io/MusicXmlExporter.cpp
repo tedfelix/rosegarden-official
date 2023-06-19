@@ -187,34 +187,36 @@ MusicXmlExporter::writeHeader(std::ostream &str)
     Configuration metadata = m_composition->getMetadata();
 
     //! NOTE Is the usage of work/movement/credits correct???
-    if (metadata.has("title")) {
+    if (metadata.has(CompositionMetadataKeys::Title)) {
         str << "  <work>" << std::endl;
-        str << "    <work-title>" << XmlExportable::encode(metadata.get<String>("title"))
+        str << "    <work-title>"
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Title))
             << "</work-title>" << std::endl;
         str << "  </work>" << std::endl;
     }
 
-    if (metadata.has("subtitle")) {
+    if (metadata.has(CompositionMetadataKeys::Subtitle)) {
         str << "  <movement-title>"
-            << "    " << XmlExportable::encode(metadata.get<String>("subtitle"))
+            << "    "
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Subtitle))
             << "  </movement-title>" << std::endl;
     }
 
     str << "  <identification>" << std::endl;
 
-    if (metadata.has("composer")) {
+    if (metadata.has(CompositionMetadataKeys::Composer)) {
         str << "    <creator type=\"composer\">"
-            << XmlExportable::encode(metadata.get<String>("composer"))
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Composer))
             << "</creator>" << std::endl;
     }
-    if (metadata.has("poet")) {
+    if (metadata.has(CompositionMetadataKeys::Poet)) {
         str << "    <creator type=\"lyricist\">"
-            << XmlExportable::encode(metadata.get<String>("poet"))
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Poet))
             << "</creator>" << std::endl;
     }
-    if (metadata.has("arranger")) {
+    if (metadata.has(CompositionMetadataKeys::Arranger)) {
         str << "    <creator type=\"arranger\">"
-            << XmlExportable::encode(metadata.get<String>("arranger"))
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Arranger))
             << "</creator>" << std::endl;
     }
     if (m_composition->getCopyrightNote() != "") {
