@@ -24,11 +24,11 @@ namespace Rosegarden
 {
 
 
-/// PropertyName hashing class.
+/// PropertyName ID class.
 /**
 
   Maps a property name (e.g. "pitch", BaseProperties::PITCH) to a temporary
-  hash value (serial number, PropertyName::m_value) for use *only* at runtime.
+  serial ID (PropertyName::m_id) for use *only* at runtime.
   The actual property names (e.g. "pitch") are stored in the .rg file.
 
   This class is an optimization intended to speed up the code by avoiding
@@ -72,10 +72,10 @@ namespace Rosegarden
   strings, reducing storage sizes if there are many names in use.
 
   A big caveat with this class is that it is _not_ safe to persist
-  the value of a PropertyName and assume that the original string
-  can be recovered; it cannot.  The values are assigned on demand,
+  the ID of a PropertyName and assume that the original string
+  can be recovered; it cannot.  The IDs are assigned on demand,
   and there's no guarantee that a given string will always map to
-  the same value (on separate invocations of the program).  This
+  the same ID (on separate invocations of the program).  This
   is why there's no PropertyName(int) constructor and no mechanism
   for storing PropertyName objects in properties.  (Of course, you can
   store the string representation of a PropertyName in a property;
@@ -86,7 +86,7 @@ namespace Rosegarden
 class ROSEGARDENPRIVATE_EXPORT PropertyName
 {
 public:
-    PropertyName() : m_value(-1)  { }
+    PropertyName() : m_id(-1)  { }
     explicit PropertyName(const char *cs);
     explicit PropertyName(const std::string &s);
 
@@ -94,14 +94,14 @@ public:
     PropertyName &operator=(const std::string &s);
 
     bool operator==(const PropertyName &p) const
-            { return m_value == p.m_value; }
+            { return m_id == p.m_id; }
     bool operator<(const PropertyName &p) const
-            { return m_value < p.m_value; }
+            { return m_id < p.m_id; }
 
     // Can throw a Rosegarden::Exception (std::Exception).
     std::string getName() const;
 
-    int getValue() const  { return m_value; }
+    int getId() const  { return m_id; }
 
     /// Returns the empty string PropertyName ("").
     static const PropertyName &Empty()
@@ -113,8 +113,8 @@ public:
 
 private:
 
-    // The name's hash (serial) value.
-    int m_value;
+    // The name's ID.
+    int m_id;
 
 };
 
@@ -135,10 +135,11 @@ struct PropertyNamesEqual
             { return s1 == s2; }
 };
 
+// We just use the ID for the "hash".
 struct PropertyNameHash
 {
     size_t operator() (const PropertyName &s) const
-            { return static_cast<size_t>(s.getValue()); }
+            { return static_cast<size_t>(s.getId()); }
 };
 
 

@@ -28,38 +28,38 @@ namespace Rosegarden
 
 namespace
 {
-    typedef std::map<std::string, int> NameToValueMap;
+    typedef std::map<std::string, int> NameToIDMap;
     // Pointer for create on first use to avoid static init order fiasco.
     // Note: This is a deliberate memory leak since we cannot be sure
     //       who might access this as we are going down.
-    NameToValueMap *a_nameToValueMap = nullptr;
+    NameToIDMap *a_nameToIDMap = nullptr;
 
-    typedef std::map<int, std::string> ValueToNameMap;
+    typedef std::map<int, std::string> IDToNameMap;
     // Pointer for create on first use to avoid static init order fiasco.
     // Note: This is a deliberate memory leak since we cannot be sure
     //       who might access this as we are going down.
-    ValueToNameMap *a_valueToNameMap = nullptr;
+    IDToNameMap *a_idToNameMap = nullptr;
 
-    int a_nextValue = 0;
+    int a_nextId = 0;
 
-    // Get the existing hash value for a name, or if not found, create
-    // a new hash value and add to the maps.
-    int a_getValue(const std::string &s)
+    // Get the existing ID for a name, or if not found, create
+    // a new ID and add to the maps.
+    int a_getId(const std::string &s)
     {
-        if (!a_nameToValueMap) {
+        if (!a_nameToIDMap) {
             // Create on first use to avoid static init order fiasco.
-            a_nameToValueMap = new NameToValueMap;
-            a_valueToNameMap = new ValueToNameMap;
+            a_nameToIDMap = new NameToIDMap;
+            a_idToNameMap = new IDToNameMap;
         }
     
-        NameToValueMap::iterator i(a_nameToValueMap->find(s));
+        NameToIDMap::iterator i(a_nameToIDMap->find(s));
 
-        if (i != a_nameToValueMap->end()) {
+        if (i != a_nameToIDMap->end()) {
             return i->second;
         } else {
-            int nv = ++a_nextValue;
-            a_nameToValueMap->insert(NameToValueMap::value_type(s, nv));
-            a_valueToNameMap->insert(ValueToNameMap::value_type(nv, s));
+            int nv = ++a_nextId;
+            a_nameToIDMap->insert(NameToIDMap::value_type(s, nv));
+            a_idToNameMap->insert(IDToNameMap::value_type(nv, s));
             return nv;
         }
     }
@@ -69,48 +69,48 @@ namespace
 PropertyName::PropertyName(const char *cs)
 {
     std::string s(cs);
-    m_value = a_getValue(s);
+    m_id = a_getId(s);
 }
 
 PropertyName::PropertyName(const std::string &s) :
-    m_value(a_getValue(s))
+    m_id(a_getId(s))
 {
 }
 
 PropertyName &PropertyName::operator=(const char *cs)
 {
     std::string s(cs);
-    m_value = a_getValue(s);
+    m_id = a_getId(s);
     return *this;
 }
 
 PropertyName &PropertyName::operator=(const std::string &s)
 {
-    m_value = a_getValue(s);
+    m_id = a_getId(s);
     return *this;
 }
 
 std::string PropertyName::getName() const
 {
     // ??? Why not cache the name in a member variable and get rid of
-    //     a_valueToNameMap and this slow search?  And the exception and
+    //     a_idToNameMap and this slow search?  And the exception and
     //     the error logging...  return m_name;
-    ValueToNameMap::iterator i(a_valueToNameMap->find(m_value));
-    if (i != a_valueToNameMap->end())
+    IDToNameMap::iterator i(a_idToNameMap->find(m_id));
+    if (i != a_idToNameMap->end())
         return i->second;
 
     // dump some informative data, even if we aren't in debug mode,
     // because this really shouldn't be happening
-    std::cerr << "ERROR: PropertyName::getName: value corrupted!\n";
-    std::cerr << "PropertyName's internal value is " << m_value << std::endl;
+    std::cerr << "ERROR: PropertyName::getName: ID corrupted!\n";
+    std::cerr << "PropertyName's internal ID is " << m_id << std::endl;
     std::cerr << "Reverse interns are ";
 
-    i = a_valueToNameMap->begin();
-    if (i == a_valueToNameMap->end()) {
+    i = a_idToNameMap->begin();
+    if (i == a_idToNameMap->end()) {
         std::cerr << "(none)";
     } else {
-        while (i != a_valueToNameMap->end()) {
-            if (i != a_valueToNameMap->begin()) {
+        while (i != a_idToNameMap->end()) {
+            if (i != a_idToNameMap->begin()) {
                 std::cerr << ", ";
             }
             std::cerr << i->first << "=" << i->second;
@@ -123,7 +123,7 @@ std::string PropertyName::getName() const
     Q_ASSERT(0); // exit if debug is on
     throw Exception(
             "Serious problem in PropertyName::getName(): property "
-            "name's internal value is corrupted -- see stderr for details");
+            "name's internal ID is corrupted -- see stderr for details");
 }
 
 

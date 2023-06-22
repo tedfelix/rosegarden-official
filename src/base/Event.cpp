@@ -438,7 +438,7 @@ QDebug operator<<(QDebug dbg, const Event &event)
         for (const PropertyMap::value_type &property :
                  *(event.m_data->m_properties)) {
             dbg << "    " << property.first.getName() << "[" <<
-                   property.first.getValue() << "] :" << *(property.second) <<
+                   property.first.getId() << "] :" << *(property.second) <<
                    "\n";
         }
     }
@@ -448,7 +448,7 @@ QDebug operator<<(QDebug dbg, const Event &event)
         for (const PropertyMap::value_type &property :
                  *(event.m_nonPersistentProperties)) {
             dbg << "    " << property.first.getName() << "[" <<
-                   property.first.getValue() << "] :" << *(property.second) <<
+                   property.first.getId() << "] :" << *(property.second) <<
                    "\n";
         }
     }
