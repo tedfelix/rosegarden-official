@@ -1,6 +1,5 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
-
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -14,45 +13,90 @@
     COPYING included with this distribution for more information.
 */
 
-#include <iostream>
-#include <string>
-
 #include "base/PropertyName.h"
 #include "base/Exception.h"
 
-#include <QtGlobal>
+#include <QtGlobal>  // For Q_ASSERT()
+
+#include <iostream>
+#include <map>
+
 
 namespace Rosegarden 
 {
-using std::string;
 
-PropertyName::intern_map *PropertyName::m_interns = nullptr;
-PropertyName::intern_reverse_map *PropertyName::m_internsReversed = nullptr;
-int PropertyName::m_nextValue = 0;
 
-int PropertyName::intern(const string &s)
+namespace
 {
-    if (!m_interns) {
-        m_interns = new intern_map;
-        m_internsReversed = new intern_reverse_map;
-    }
+    typedef std::map<std::string, int> NameToValueMap;
+    // Pointer for create on first use to avoid static init order fiasco.
+    // Note: This is a deliberate memory leak since we cannot be sure
+    //       who might access this as we are going down.
+    NameToValueMap *a_nameToValueMap = nullptr;
 
-    intern_map::iterator i(m_interns->find(s));
+    typedef std::map<int, std::string> ValueToNameMap;
+    // Pointer for create on first use to avoid static init order fiasco.
+    // Note: This is a deliberate memory leak since we cannot be sure
+    //       who might access this as we are going down.
+    ValueToNameMap *a_valueToNameMap = nullptr;
+
+    int a_nextValue = 0;
+
+    // Get the existing hash value for a name, or if not found, create
+    // a new hash value and add to the maps.
+    int a_getValue(const std::string &s)
+    {
+        if (!a_nameToValueMap) {
+            // Create on first use to avoid static init order fiasco.
+            a_nameToValueMap = new NameToValueMap;
+            a_valueToNameMap = new ValueToNameMap;
+        }
     
-    if (i != m_interns->end()) {
-        return i->second;
-    } else {
-        int nv = ++m_nextValue;
-        m_interns->insert(intern_pair(s, nv));
-        m_internsReversed->insert(intern_reverse_pair(nv, s));
-        return nv;
+        NameToValueMap::iterator i(a_nameToValueMap->find(s));
+
+        if (i != a_nameToValueMap->end()) {
+            return i->second;
+        } else {
+            int nv = ++a_nextValue;
+            a_nameToValueMap->insert(NameToValueMap::value_type(s, nv));
+            a_valueToNameMap->insert(ValueToNameMap::value_type(nv, s));
+            return nv;
+        }
     }
 }
 
-string PropertyName::getName() const
+
+PropertyName::PropertyName(const char *cs)
 {
-    intern_reverse_map::iterator i(m_internsReversed->find(m_value));
-    if (i != m_internsReversed->end())
+    std::string s(cs);
+    m_value = a_getValue(s);
+}
+
+PropertyName::PropertyName(const std::string &s) :
+    m_value(a_getValue(s))
+{
+}
+
+PropertyName &PropertyName::operator=(const char *cs)
+{
+    std::string s(cs);
+    m_value = a_getValue(s);
+    return *this;
+}
+
+PropertyName &PropertyName::operator=(const std::string &s)
+{
+    m_value = a_getValue(s);
+    return *this;
+}
+
+std::string PropertyName::getName() const
+{
+    // ??? Why not cache the name in a member variable and get rid of
+    //     a_valueToNameMap and this slow search?  And the exception and
+    //     the error logging...  return m_name;
+    ValueToNameMap::iterator i(a_valueToNameMap->find(m_value));
+    if (i != a_valueToNameMap->end())
         return i->second;
 
     // dump some informative data, even if we aren't in debug mode,
@@ -61,12 +105,12 @@ string PropertyName::getName() const
     std::cerr << "PropertyName's internal value is " << m_value << std::endl;
     std::cerr << "Reverse interns are ";
 
-    i = m_internsReversed->begin();
-    if (i == m_internsReversed->end()) {
+    i = a_valueToNameMap->begin();
+    if (i == a_valueToNameMap->end()) {
         std::cerr << "(none)";
     } else {
-        while (i != m_internsReversed->end()) {
-            if (i != m_internsReversed->begin()) {
+        while (i != a_valueToNameMap->end()) {
+            if (i != a_valueToNameMap->begin()) {
                 std::cerr << ", ";
             }
             std::cerr << i->first << "=" << i->second;
@@ -82,7 +126,6 @@ string PropertyName::getName() const
             "name's internal value is corrupted -- see stderr for details");
 }
 
-const PropertyName PropertyName::EmptyPropertyName("");
 
 }
 
