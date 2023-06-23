@@ -1274,6 +1274,12 @@ void TransportDialog::slotMetronomeTimer()
 
             // Indicate not flashing.
             m_flashing = false;
+
+            // If we are neither playing nor recording, stop the timer.
+            // Otherwise the flash will be stuck if we stop when it is
+            // flashing.
+            if (!(m_playing  ||  m_recording))
+                m_metronomeTimer.stop();
         }
         return;
     }
@@ -1323,10 +1329,20 @@ void TransportDialog::slotMetronomeTimer()
 void TransportDialog::updateMetronomeTimer()
 {
     // Start/Stop metronome timer as needed.
-    if (m_currentMode == BarMetronomeMode  &&  (m_playing  ||  m_recording))
+    if (m_currentMode == BarMetronomeMode  &&  (m_playing  ||  m_recording)) {
         m_metronomeTimer.start(10);
-    else
+        return;
+    }
+
+    // We need to stop the timer.
+
+    // If we aren't flashing, we can just go ahead and stop the timer.
+    if (!m_flashing) {
         m_metronomeTimer.stop();
+    }
+
+    // If we are flashing, we need to let slotMetronomeTimer() clear the flash
+    // for us and stop the timer.
 }
 
 
