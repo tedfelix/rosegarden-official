@@ -24,7 +24,7 @@ namespace Rosegarden
 {
 
 
-/// PropertyName ID class.
+/// PropertyName ID class optimized for speed and space.
 /**
 
   Maps a property name (e.g. "pitch", BaseProperties::PITCH) to a temporary
@@ -32,8 +32,8 @@ namespace Rosegarden
   The actual property names (e.g. "pitch") are stored in the .rg file.
 
   This class is an optimization intended to speed up the code by avoiding
-  string compares in favor of int compares.  It should probably be benchmarked
-  as it's likely the speed improvement is negligible nowadays.
+  string compares in favor of int compares.  It also saves space by storing
+  only an int instead of an entire string for each property.
 
   @see PropertyMap which holds PropertyName / value pairs.
 
@@ -98,7 +98,6 @@ public:
     bool operator<(const PropertyName &p) const
             { return m_id < p.m_id; }
 
-    // Can throw a Rosegarden::Exception (std::Exception).
     std::string getName() const;
 
     int getId() const  { return m_id; }

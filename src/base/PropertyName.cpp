@@ -35,6 +35,8 @@ namespace
     NameToIDMap *a_nameToIDMap = nullptr;
 
     typedef std::map<int, std::string> IDToNameMap;
+    // This map allows us to save space by not storing the name in every
+    // copy of a PropertyName.  Used by getName().
     // Pointer for create on first use to avoid static init order fiasco.
     // Note: This is a deliberate memory leak since we cannot be sure
     //       who might access this as we are going down.
@@ -43,62 +45,64 @@ namespace
     int a_nextId = 0;
 
     // Get the existing ID for a name, or if not found, create
-    // a new ID and add to the maps.
-    int a_getId(const std::string &s)
+    // a new ID and add to the map.
+    int a_getId(const std::string &name)
     {
         if (!a_nameToIDMap) {
             // Create on first use to avoid static init order fiasco.
             a_nameToIDMap = new NameToIDMap;
             a_idToNameMap = new IDToNameMap;
         }
-    
-        NameToIDMap::iterator i(a_nameToIDMap->find(s));
 
-        if (i != a_nameToIDMap->end()) {
-            return i->second;
-        } else {
-            int nv = ++a_nextId;
-            a_nameToIDMap->insert(NameToIDMap::value_type(s, nv));
-            a_idToNameMap->insert(IDToNameMap::value_type(nv, s));
-            return nv;
-        }
+        NameToIDMap::iterator idIter(a_nameToIDMap->find(name));
+        // Found it?  Return it.
+        if (idIter != a_nameToIDMap->end())
+            return idIter->second;
+
+        // Not found.  Create a new ID.
+
+        const int newId = ++a_nextId;
+        a_nameToIDMap->insert(NameToIDMap::value_type(name, newId));
+        a_idToNameMap->insert(IDToNameMap::value_type(newId, name));
+        return newId;
     }
 }
 
 
-PropertyName::PropertyName(const char *cs)
+PropertyName::PropertyName(const char *name)
 {
-    std::string s(cs);
-    m_id = a_getId(s);
+    m_id = a_getId(name);
 }
 
-PropertyName::PropertyName(const std::string &s) :
-    m_id(a_getId(s))
+PropertyName::PropertyName(const std::string &name)
 {
+    m_id = a_getId(name);
 }
 
-PropertyName &PropertyName::operator=(const char *cs)
+PropertyName &PropertyName::operator=(const char *name)
 {
-    std::string s(cs);
-    m_id = a_getId(s);
+    m_id = a_getId(name);
+
     return *this;
 }
 
-PropertyName &PropertyName::operator=(const std::string &s)
+PropertyName &PropertyName::operator=(const std::string &name)
 {
-    m_id = a_getId(s);
+    m_id = a_getId(name);
+
     return *this;
 }
 
 std::string PropertyName::getName() const
 {
-    // ??? Why not cache the name in a member variable and get rid of
-    //     a_idToNameMap and this slow search?  And the exception and
-    //     the error logging...  return m_name;
     IDToNameMap::iterator i(a_idToNameMap->find(m_id));
-    if (i != a_idToNameMap->end())
-        return i->second;
+    // Not found?  Return the empty string.
+    if (i == a_idToNameMap->end())
+        return "";
 
+    return i->second;
+
+#if 0
     // dump some informative data, even if we aren't in debug mode,
     // because this really shouldn't be happening
     std::cerr << "ERROR: PropertyName::getName: ID corrupted!\n";
@@ -124,8 +128,8 @@ std::string PropertyName::getName() const
     throw Exception(
             "Serious problem in PropertyName::getName(): property "
             "name's internal ID is corrupted -- see stderr for details");
+#endif
 }
 
 
 }
-

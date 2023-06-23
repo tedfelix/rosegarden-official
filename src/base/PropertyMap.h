@@ -23,6 +23,14 @@
 
 namespace Rosegarden {
 
+/// Holds name/value pairs in an effort to reduce memory usage.
+/**
+ * Event has a PropertyMap (Event::EventData::m_properties) which allows Event
+ * objects to be flexible about the fields that they contain.  All Event objects
+ * need a time (Event::m_absoluteTime) and (usually) a duration
+ * (Event::m_duration) but not all Event objects need a pitch
+ * (BaseProperties::PITCH).  E.g a control change Event does not need a pitch.
+ */
 class ROSEGARDENPRIVATE_EXPORT PropertyMap : public std::map<PropertyName, PropertyStoreBase *>
 {
 public:
