@@ -17,19 +17,29 @@
 #define RG_PLAYABLE_AUDIO_FILE_H
 
 #include "base/Instrument.h"
+#include "base/RealTime.h"
 #include "RingBuffer.h"
 #include "AudioFile.h"
 #include "AudioCache.h"
 
-#include <string>
-#include <map>
+#include <vector>
+#include <fstream>
 
 namespace Rosegarden
 {
 
+
 class RingBufferPool;
 
 
+/// Copies data from an AudioFile to a buffer.
+/**
+ * SoundDriver has an AudioPlayQueue of these.  See SoundDriver::m_audioQueue.
+ *
+ * AlsaDriver has an AudioPlayQueue of these.  See AlsaDriver::m_audioQueue.
+ *
+ * AudioInstrumentMixer gets audio data from PlayableAudioFile objects.
+ */
 class PlayableAudioFile
 {
 public:
@@ -48,15 +58,15 @@ public:
 
     static void setRingBufferPoolSizes(size_t n, size_t nframes);
 
-    void setStartTime(const RealTime &time) { m_startTime = time; }
+    //void setStartTime(const RealTime &time) { m_startTime = time; }
     RealTime getStartTime() const { return m_startTime; }
 
-    void setDuration(const RealTime &time) { m_duration = time; }
+    //void setDuration(const RealTime &time) { m_duration = time; }
     RealTime getDuration() const { return m_duration; }
     RealTime getEndTime() const { return m_startTime + m_duration; }
 
-    void setStartIndex(const RealTime &time) { m_startIndex = time; }
-    RealTime getStartIndex() const { return m_startIndex; }
+    //void setStartIndex(const RealTime &time) { m_startIndex = time; }
+    //RealTime getStartIndex() const { return m_startIndex; }
 
     bool isSmallFile() const { return m_isSmallFile; }
 
@@ -69,38 +79,42 @@ public:
     //
     InstrumentId getInstrument() const { return m_instrumentId; }
 
-    // Return the number of frames currently buffered.  The next call
-    // to getSamples on any channel is guaranteed to return at least
-    // this many samples.
-    //
+    /**
+     * Return the number of frames currently buffered.  The next call
+     * to getSamples on any channel is guaranteed to return at least
+     * this many samples.
+     *
+     * Used by AudioInstrumentMixer.
+     */
     size_t getSampleFramesAvailable();
 
-    // Read samples from the given channel on the file and add them
-    // into the destination.
-    //
-    // If insufficient frames are available, this will leave the
-    // excess samples unchanged.
-    //
-    // Returns the actual number of samples written.
-    //
-    // If offset is non-zero, the samples will be written starting at
-    // offset frames from the start of the target block.
-    //
+    /**
+     * Read samples from the given channel on the file and add them
+     * into the destination.
+     *
+     * If insufficient frames are available, this will leave the
+     * excess samples unchanged.
+     *
+     * Returns the actual number of samples written.
+     *
+     * If offset is non-zero, the samples will be written starting at
+     * offset frames from the start of the target block.
+     *
+     * Used by AudioInstrumentMixer.
+     */
     size_t addSamples(std::vector<sample_t *> &target,
                       size_t channels, size_t nframes, size_t offset = 0);
 
-    unsigned int getSourceChannels();
     unsigned int getTargetChannels();
-    unsigned int getSourceSampleRate();
-    unsigned int getTargetSampleRate();
 
-    unsigned int getBitsPerSample();
-    unsigned int getBytesPerFrame();
+    //unsigned int getTargetSampleRate();
+    //unsigned int getBitsPerSample();
+
 
     // Clear out and refill the ring buffer for immediate
     // (asynchronous) play.
     //
-    void fillBuffers();
+    //void fillBuffers();
 
     // Clear out and refill the ring buffer (in preparation for
     // playback) according to the proposed play time.
@@ -141,21 +155,22 @@ public:
 
     // Auto fading of a playable audio file
     //
-    bool isAutoFading() const { return m_autoFade; }
+    //bool isAutoFading() const { return m_autoFade; }
     void setAutoFade(bool value) { m_autoFade = value; }
 
-    RealTime getFadeInTime() const { return m_fadeInTime; }
+    //RealTime getFadeInTime() const { return m_fadeInTime; }
     void setFadeInTime(const RealTime &time) 
         { m_fadeInTime = time; }
 
-    RealTime getFadeOutTime() const { return m_fadeOutTime; }
+    //RealTime getFadeOutTime() const { return m_fadeOutTime; }
     void setFadeOutTime(const RealTime &time) 
         { m_fadeOutTime = time; }
 
 
 private:
-    // Hide copy ctor.
-    PlayableAudioFile(const PlayableAudioFile &pAF);
+    // Hide copy ctor and op=.
+    PlayableAudioFile(const PlayableAudioFile &);
+    PlayableAudioFile &operator=(const PlayableAudioFile &);
 
     void initialise(size_t bufferSize, size_t smallFileSize);
     void checkSmallFileCache(size_t smallFileSize);
@@ -175,6 +190,9 @@ private:
     // AudioFile handle
     //
     AudioFile            *m_audioFile;
+    unsigned int getSourceChannels();
+    unsigned int getSourceSampleRate();
+    unsigned int getBytesPerFrame();
 
     // Originating Instrument Id
     //
@@ -185,13 +203,22 @@ private:
 
     bool                  m_fileEnded;
     bool                  m_firstRead;
-    static size_t         m_xfadeFrames;
-    int                   m_runtimeSegmentId;
+    int                   m_runtimeSegmentId = -1;
+
 
     static AudioCache     m_smallFileCache;
     bool                  m_isSmallFile;
 
-    // Work Buffers
+    /// Work Buffers
+    /**
+     * ??? RACE CONDITION
+     * ??? This is used by updateBuffers() which is called from the
+     *     AudioThread.  It is also used by clearWorkBuffers() which
+     *     is called from the SequencerThread.  This means there is a
+     *     possibility of a race condition and thread synchronization
+     *     is needed.  updateBuffers() calls clearWorkBuffers() which
+     *     might complicate things.  Also the UI thread is involved.
+     */
     static std::vector<sample_t *> m_workBuffers;
     static void clearWorkBuffers();
     static size_t m_workBufferSize;
@@ -205,9 +232,9 @@ private:
     RealTime              m_currentScanPoint;
     size_t                m_smallFileScanFrame;
 
-    bool                  m_autoFade;
-    RealTime  m_fadeInTime;
-    RealTime  m_fadeOutTime;
+    bool m_autoFade = false;
+    RealTime m_fadeInTime;
+    RealTime m_fadeOutTime;
 };
 
 

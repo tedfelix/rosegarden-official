@@ -15,8 +15,14 @@
 
 #include "PlayableAudioFile.h"
 
+#include <utility>
+
+#include <pthread.h>
+
+
 namespace Rosegarden
 {
+
 
 //#define DEBUG_RING_BUFFER_POOL 1
 //#define DEBUG_PLAYABLE 1
@@ -296,7 +302,7 @@ size_t PlayableAudioFile::m_rawFileBufferSize = 0;
 
 RingBufferPool *PlayableAudioFile::m_ringBufferPool = nullptr;
 
-size_t PlayableAudioFile::m_xfadeFrames = 30;
+static constexpr size_t a_xfadeFrames = 30;
 
 PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
                                      AudioFile *audioFile,
@@ -317,17 +323,15 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_targetSampleRate(targetSampleRate),
     m_fileEnded(false),
     m_firstRead(true),
-    m_runtimeSegmentId( -1),
     m_isSmallFile(false),
-    m_smallFileScanFrame(0),
-    m_autoFade(false)
+    m_smallFileScanFrame(0)
 {
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << " for instrument " << instrumentId << " with file " << (m_audioFile ? m_audioFile->getShortFilename() : "(none)") << std::endl;
 #endif
 
     if (!m_ringBufferPool) {
-        //!!! Problematic -- how do we deal with different playable audio
+        // !!! Problematic -- how do we deal with different playable audio
         // files requiring different buffer sizes?  That shouldn't be the
         // usual case, but it's not unthinkable.
         m_ringBufferPool = new RingBufferPool(bufferSize);
@@ -517,6 +521,7 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
     std::cerr << "PlayableAudioFile::addSamples(" << nframes << "): channels " << channels << ", my target channels " << m_targetChannels << std::endl;
 #endif
 
+    // Not a small file?  Use m_ringBuffers.
     if (!m_isSmallFile) {
 
         size_t qty = 0;
@@ -524,7 +529,7 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 
         for (int ch = 0; ch < int(channels) && ch < m_targetChannels; ++ch) {
             if (!m_ringBuffers[ch])
-                return 0; //!!! fatal
+                return 0; // !!! fatal
             size_t here = m_ringBuffers[ch]->readAdding(destination[ch] + offset, nframes);
             if (ch == 0 || here < qty)
                 qty = here;
@@ -550,7 +555,7 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 
         return qty;
 
-    } else {
+    } else {  // Small file.  Use m_smallFileCache.
 
         size_t cchannels;
         size_t cframes;
@@ -711,7 +716,7 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
     }
 }
 
-
+#if 0
 void
 PlayableAudioFile::fillBuffers()
 {
@@ -737,6 +742,7 @@ PlayableAudioFile::fillBuffers()
     scanTo(m_startIndex);
     updateBuffers();
 }
+#endif
 
 void
 PlayableAudioFile::clearBuffers()
@@ -877,7 +883,7 @@ PlayableAudioFile::updateBuffers()
     std::cerr << "Want " << fileFrames << " (" << block << ") from file (" << (m_duration + m_startIndex - m_currentScanPoint - block) << " to go)" << std::endl;
 #endif
 
-    //!!! need to be doing this in initialise, want to avoid allocations here
+    // !!! need to be doing this in initialise, want to avoid allocations here
     if ((getBytesPerFrame() * fileFrames) > m_rawFileBufferSize) {
         delete[] m_rawFileBuffer;
         m_rawFileBufferSize = getBytesPerFrame() * fileFrames;
@@ -929,7 +935,7 @@ PlayableAudioFile::updateBuffers()
                             m_workBuffers,
                             false)) {
 
-        /*!!! No -- GUI and notification side of things isn't up to this yet,
+        /* !!! No -- GUI and notification side of things isn't up to this yet,
           so comment it out just in case
 
         if (m_autoFade) {
@@ -985,7 +991,7 @@ PlayableAudioFile::updateBuffers()
         for (int ch = 0; ch < m_targetChannels; ++ch) {
 
             if (m_firstRead || m_fileEnded) {
-                float xfade = std::min(m_xfadeFrames, nframes);
+                float xfade = std::min(a_xfadeFrames, nframes);
                 if (m_firstRead) {
                     for (size_t i = 0; i < xfade; ++i) {
                         m_workBuffers[ch][i] *= float(i + 1) / xfade;
@@ -1054,13 +1060,15 @@ PlayableAudioFile::getSourceSampleRate()
     return 0;
 }
 
+#if 0
 unsigned int
 PlayableAudioFile::getTargetSampleRate()
 {
     return m_targetSampleRate;
 }
+#endif
 
-
+#if 0
 // How many bits per sample in the base AudioFile?
 //
 unsigned int
@@ -1071,6 +1079,7 @@ PlayableAudioFile::getBitsPerSample()
     }
     return 0;
 }
+#endif
 
 void
 PlayableAudioFile::clearWorkBuffers()
@@ -1083,4 +1092,3 @@ PlayableAudioFile::clearWorkBuffers()
 
 
 }
-
