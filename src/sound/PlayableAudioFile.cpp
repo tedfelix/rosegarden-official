@@ -296,6 +296,7 @@ AudioCache PlayableAudioFile::m_smallFileCache;
 
 std::vector<PlayableAudioFile::sample_t *> PlayableAudioFile::m_workBuffers;
 size_t PlayableAudioFile::m_workBufferSize = 0;
+QMutex PlayableAudioFile::m_workBuffersMutex;
 
 char *PlayableAudioFile::m_rawFileBuffer;
 size_t PlayableAudioFile::m_rawFileBufferSize = 0;
@@ -425,7 +426,9 @@ PlayableAudioFile::~PlayableAudioFile()
         m_smallFileCache.decrementReference(m_audioFile);
     }
 
+    m_workBuffersMutex.lock();
     clearWorkBuffers();
+    m_workBuffersMutex.unlock();
 
 #ifdef DEBUG_PLAYABLE 
     //    std::cerr << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
@@ -902,6 +905,9 @@ PlayableAudioFile::updateBuffers()
         m_fileEnded = true;
     }
 
+    // We're about to hit the work buffers.
+    m_workBuffersMutex.lock();
+
 #ifdef DEBUG_PLAYABLE
     std::cerr << "requested " << fileFrames << " frames from file for " << nframes << " frames, got " << obtained << " frames" << std::endl;
 #endif
@@ -1010,6 +1016,9 @@ PlayableAudioFile::updateBuffers()
             }
         }
     }
+
+    // Done.
+    m_workBuffersMutex.unlock();
 
     m_firstRead = false;
 
