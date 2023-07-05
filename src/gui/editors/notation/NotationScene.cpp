@@ -1892,25 +1892,25 @@ NotationScene::handleEventRemoved(Event *e)
 }
 
 void
-NotationScene::setSelection(EventSelection *s,
+NotationScene::setSelection(EventSelection *selection,
                             bool preview)
 {
-    //RG_DEBUG << "setSelection(): " << s;
+    //RG_DEBUG << "setSelection(): " << sselection;
 
-    if (!m_selection && !s) return;
-    if (m_selection == s) return;
-    if (m_selection && s && *m_selection == *s) {
+    if (!m_selection && !selection) return;
+    if (m_selection == selection) return;
+    if (m_selection && selection && *m_selection == *selection) {
         // selections are identical, no need to update elements, but
         // still need to replace the old selection to avoid a leak
         // (can't just delete s in case caller still refers to it)
         EventSelection *oldSelection = m_selection;
-        m_selection = s;
+        m_selection = selection;
         delete oldSelection;
         return;
     }
 
     EventSelection *oldSelection = m_selection;
-    m_selection = s;
+    m_selection = selection;
 
     NotationStaff *oldStaff = nullptr, *newStaff = nullptr;
 

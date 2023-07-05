@@ -301,6 +301,7 @@ MappedStudio::MappedStudio() :
 #else
 #if defined(PTHREAD_MUTEX_RECURSIVE) || defined(__FreeBSD__)
 
+    // cppcheck-suppress ConfigurationNotChecked
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else
 
@@ -1473,6 +1474,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
             dynamic_cast<MappedStudio*>(getParent());
 
         for (MappedObjectPropertyList::const_iterator i = values.begin();
+             // cppcheck-suppress StlMissingComparison
                 i != values.end(); ++i) {
 
             QString key = *i;
@@ -1501,6 +1503,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
         m_configuration.clear();
 
         for (MappedObjectPropertyList::const_iterator i = values.begin();
+             // cppcheck-suppress StlMissingComparison
              i != values.end(); ++i) {
 
             QString key = *i;

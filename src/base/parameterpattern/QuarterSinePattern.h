@@ -41,9 +41,6 @@ public:
         LinearParameterPattern(isDiminuendo)
     {}
 
-    static QuarterSinePattern crescendo;
-    static QuarterSinePattern diminuendo;
-
 };
 
 

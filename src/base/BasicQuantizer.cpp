@@ -26,25 +26,26 @@ namespace Rosegarden
 
 
 BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
-                               int swing, int iterate) :
+                               int swingPercent, int iteratePercent) :
     Quantizer(RawEventData),
     m_unit(unit),
     m_durations(doDurations),
-    m_swing(swing),
-    m_iterate(iterate)
+    m_swing(swingPercent),
+    m_iterate(iteratePercent)
 {
     if (m_unit < 0)
         m_unit = Note(Note::Shortest).getDuration();
 }
 
-BasicQuantizer::BasicQuantizer(std::string source, std::string target,
+BasicQuantizer::BasicQuantizer(const std::string& source,
+                               const std::string& target,
                                timeT unit, bool doDurations,
-                               int swing, int iterate) :
+                               int swingPercent, int iteratePercent) :
     Quantizer(source, target),
     m_unit(unit),
     m_durations(doDurations),
-    m_swing(swing),
-    m_iterate(iterate)
+    m_swing(swingPercent),
+    m_iterate(iteratePercent)
 {
     if (m_unit < 0)
         m_unit = Note(Note::Shortest).getDuration();
@@ -103,7 +104,7 @@ BasicQuantizer::quantizeSingle(
     // Swing every other cell.
     if (cellNumber % 2 == 1)
         newTime += swingOffset;
-    
+
     timeT newDuration(originalDuration);
 
     // If we are quantizing durations
