@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -171,7 +171,6 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 
         // check we've got data chunk start
 	std::string chunkName;
-	int chunkLength = 0;
 
         while ((chunkName = getBytes(file, 4)) != "data") {
 	    if (file->eof()) {
@@ -181,7 +180,7 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 //#ifdef DEBUG_RIFF
 	    RG_WARNING << "RIFFAudioFile::scanTo(): skipping chunk: " << chunkName;
 //#endif
-	    chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
+	    int chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 	    if (chunkLength < 0) {
 		RG_WARNING << "RIFFAudioFile::scanTo(): negative chunk length "
 			  << chunkLength << " for chunk " << chunkName;
@@ -191,8 +190,8 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
         }
 
         // get the length of the data chunk, and scan past it as a side-effect
-	chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 #ifdef DEBUG_RIFF
+	chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
         RG_DEBUG << "RIFFAudioFile::scanTo() - data chunk size =" << chunkLength;
 #endif
 
@@ -594,20 +593,20 @@ RIFFAudioFile::identifySubType(const QString &filename)
 }
 
 float
-RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
+RIFFAudioFile::convertBytesToSample(const unsigned char *bytes) const
 {
     switch (getBitsPerSample()) {
 
     case 8: {
             // WAV stores 8-bit samples unsigned, other sizes signed.
-            return (float)(ubuf[0] - 128.0) / 128.0;
+            return (float)(bytes[0] - 128.0) / 128.0;
         }
 
     case 16: {
             // Two's complement little-endian 16-bit integer.
             // We convert endianness (if necessary) but assume 16-bit short.
-            unsigned char b2 = ubuf[0];
-            unsigned char b1 = ubuf[1];
+            unsigned char b2 = bytes[0];
+            unsigned char b1 = bytes[1];
             unsigned int bits = (b1 << 8) + b2;
             return (float)(short(bits)) / 32768.0;
         }
@@ -615,9 +614,9 @@ RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
     case 24: {
             // Two's complement little-endian 24-bit integer.
             // Again, convert endianness but assume 32-bit int.
-            unsigned char b3 = ubuf[0];
-            unsigned char b2 = ubuf[1];
-            unsigned char b1 = ubuf[2];
+            unsigned char b3 = bytes[0];
+            unsigned char b2 = bytes[1];
+            unsigned char b1 = bytes[2];
             // Rotate 8 bits too far in order to get the sign bit
             // in the right place; this gives us a 32-bit value,
             // hence the larger float divisor
@@ -627,7 +626,8 @@ RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
 
     case 32: {
             // IEEE floating point
-            return *(float *)ubuf;
+            // cppcheck-suppress invalidPointerCast
+            return *(float *)bytes;
         }
 
     default:
@@ -636,4 +636,3 @@ RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
 }
 
 }
-
