@@ -156,7 +156,7 @@ WAVAudioFile::decode(const unsigned char *sourceData,
                      size_t targetChannels,
                      size_t targetFrames,
                      std::vector<float *> &targetData,
-                     bool addToResultsBuffer)
+                     bool addToResultBuffers)
 {
     size_t sourceChannels = getChannels();
     size_t sourceSampleRate = getSampleRate();
@@ -187,7 +187,7 @@ WAVAudioFile::decode(const unsigned char *sourceData,
         if (!reduceToMono || ch == 0) {
             if (ch >= targetChannels)
                 break;
-            if (!addToResultsBuffer)
+            if (!addToResultBuffers)
                 memset(targetData[ch], 0, targetFrames * sizeof(float));
         }
 
@@ -222,7 +222,7 @@ WAVAudioFile::decode(const unsigned char *sourceData,
     for (size_t ch = sourceChannels; ch < targetChannels; ++ch) {
         if (ch == 1 && targetChannels == 2) {
             // copy mono to stereo
-            if (!addToResultsBuffer) {
+            if (!addToResultBuffers) {
                 memcpy(targetData[ch],
                        targetData[ch - 1],
                        targetFrames * sizeof(float));
@@ -232,7 +232,7 @@ WAVAudioFile::decode(const unsigned char *sourceData,
                 }
             }
         } else {
-            if (!addToResultsBuffer) {
+            if (!addToResultBuffers) {
                 memset(targetData[ch], 0, targetFrames * sizeof(float));
             }
         }

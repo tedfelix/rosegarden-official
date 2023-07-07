@@ -662,7 +662,7 @@ protected:
     typedef std::vector<LineRec> LineRecList;
     typedef std::multiset<BarLineItem *, BarLineComparator> BarLineList;
     static bool compareBars(const BarLineItem *, const BarLineItem *);
-    static bool compareBarToLayoutX(const BarLineItem *, int);
+    // unused static bool compareBarToLayoutX(const BarLineItem *, int);
     BarLineList m_barLines;
     LineRecList m_beatLines;
     LineRecList m_barConnectingLines;

@@ -37,7 +37,6 @@ NoteItemDimensions::NoteItemDimensions() :
     borderY(0)
 {}
 
-// cppcheck-suppress uninitMemberVar
 NoteItem::NoteItem(const NotePixmapParameters &params,
                    QSharedPointer<NoteStyle> style,
                    bool selected,

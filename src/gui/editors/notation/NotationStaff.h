@@ -350,7 +350,7 @@ protected:
      * in m_clefChange or m_keyChange.
      * If not, do the insertion.
      */
-    void checkAndCompleteClefsAndKeys(int bar);
+    // unused void checkAndCompleteClefsAndKeys(int bar);
 
     NotePixmapFactory *m_notePixmapFactory; // I do not own this
     NotePixmapFactory *m_graceNotePixmapFactory; // I do not own this

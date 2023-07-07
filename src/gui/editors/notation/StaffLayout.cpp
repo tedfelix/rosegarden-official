@@ -877,11 +877,13 @@ StaffLayout::compareBars(const BarLineItem *barLine1, const BarLineItem *barLine
     return (barLine1->getLayoutX() < barLine2->getLayoutX());
 }
 
+/* unused
 bool
 StaffLayout::compareBarToLayoutX(const BarLineItem *barLine1, int x)
 {
     return (barLine1->getLayoutX() < x);
 }
+*/
 
 void
 StaffLayout::deleteTimeSignatures()

@@ -27,7 +27,7 @@ class AudioWriteStream;
 class AudioWriteStreamFactory
 {
 public:
-    static AudioWriteStream *createWriteStream(QString AuidoFileName,
+    static AudioWriteStream *createWriteStream(QString audioFileName,
                                                size_t channelCount,
                                                size_t sampleRate);
 };

@@ -49,7 +49,7 @@ public slots:
     void setGlyphs(bool glyphs);
 
 protected:
-    QSize cellSize() const;
+    // unused QSize cellSize() const;
     void paintEvent( QPaintEvent* ) override;
     void loadFont();
 

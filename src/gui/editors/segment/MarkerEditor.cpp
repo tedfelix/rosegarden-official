@@ -433,11 +433,13 @@ MarkerEditor::setModified(bool modified)
     m_modified = modified;
 }
 
+/* unused
 void
 MarkerEditor::checkModified()
 {
     RG_DEBUG << "MarkerEditor::checkModified(" << m_modified << ")";
 }
+*/
 
 void
 MarkerEditor::slotEdit(QTreeWidgetItem *i, int)

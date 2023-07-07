@@ -2720,7 +2720,7 @@ Composition::notifySourceDeletion() const
     }
 }
 
-
+// cppcheck-suppress unusedFunction
 void breakpoint()
 {
     //RG_DEBUG << "breakpoint()";
