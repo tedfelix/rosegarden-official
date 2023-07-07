@@ -73,13 +73,13 @@ public:
 
     // Useful methods that operate on our file data
     //
-    int getIntegerFromLittleEndian(const std::string &s);
-    std::string getLittleEndianFromInteger(unsigned int value,
-                                           unsigned int length);
+    static int getIntegerFromLittleEndian(const std::string &s);
+    static std::string getLittleEndianFromInteger(unsigned int value,
+                                                  unsigned int length);
 
-    int getIntegerFromBigEndian(const std::string &s);
-    std::string getBigEndianFromInteger(unsigned int value,
-                                        unsigned int length);
+    static int getIntegerFromBigEndian(const std::string &s);
+    static std::string getBigEndianFromInteger(unsigned int value,
+                                               unsigned int length);
 
     // Buffered read - allow this to be public
     //
@@ -105,13 +105,13 @@ protected:
 
     // Get n bytes from an input stream and write them into buffer.
     // Return the actual number of bytes read.
-    size_t getBytes(std::ifstream *file, char *buffer, size_t n);
+    static size_t getBytes(std::ifstream *file, char *buffer, size_t n);
 
     // write some bytes to an output stream
-    void putBytes(std::ofstream *file, const std::string& outputString);
+    static void putBytes(std::ofstream *file, const std::string& outputString);
 
     // write some bytes to an output stream
-    void putBytes(std::ofstream *file, const char *buffer, size_t n);
+    static void putBytes(std::ofstream *file, const char *buffer, size_t n);
 
     // Read buffering - define chunk size and buffer file reading
     //

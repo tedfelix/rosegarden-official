@@ -94,7 +94,7 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
 // Read a specified number of bytes into a buffer.
 //
 size_t
-SoundFile::getBytes(std::ifstream *file, char *buf, size_t n)
+SoundFile::getBytes(std::ifstream *file, char *buffer, size_t n)
 {
     if (!(*file)) {
         RG_WARNING << "SoundFile::getBytes() -  stream is not well";
@@ -106,7 +106,7 @@ SoundFile::getBytes(std::ifstream *file, char *buf, size_t n)
         return 0;
     }
 
-    file->read(buf, n);
+    file->read(buffer, n);
     return file->gcount();
 }
 
@@ -213,10 +213,10 @@ SoundFile::getBytes(unsigned int numberOfBytes)
 //
 void
 SoundFile::putBytes(std::ofstream *file,
-                    const std::string& oS)
+                    const std::string& outputString)
 {
-    for (size_t i = 0; i < oS.length(); i++) {
-        *file << (FileByte) oS[i];
+    for (size_t i = 0; i < outputString.length(); i++) {
+        *file << (FileByte) outputString[i];
 
         // Every 1024 bytes, kick the event loop.
         if (i % 1024 == 0)

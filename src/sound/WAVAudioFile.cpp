@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -150,13 +150,13 @@ WAVAudioFile::getDataOffset()
 }
 
 bool
-WAVAudioFile::decode(const unsigned char *ubuf,
+WAVAudioFile::decode(const unsigned char *sourceData,
                      size_t sourceBytes,
                      size_t targetSampleRate,
                      size_t targetChannels,
-                     size_t nframes,
-                     std::vector<float *> &target,
-                     bool adding)
+                     size_t targetFrames,
+                     std::vector<float *> &targetData,
+                     bool addToResultsBuffer)
 {
     size_t sourceChannels = getChannels();
     size_t sourceSampleRate = getSampleRate();
@@ -172,7 +172,7 @@ WAVAudioFile::decode(const unsigned char *ubuf,
     }
 
 #ifdef DEBUG_DECODE
-    RG_DEBUG << "WAVAudioFile::decode: " << sourceBytes << " bytes -> " << nframes << " frames, SSR " << getSampleRate() << ", TSR " << targetSampleRate << ", sch " << getChannels() << ", tch " << targetChannels;
+    RG_DEBUG << "WAVAudioFile::decode: " << sourceBytes << " bytes -> " << targetFrames << " frames, SSR " << getSampleRate() << ", TSR " << targetSampleRate << ", sch " << getChannels() << ", tch " << targetChannels;
 #endif
 
     // If we're reading a stereo file onto a mono target, we mix the
@@ -187,8 +187,8 @@ WAVAudioFile::decode(const unsigned char *ubuf,
         if (!reduceToMono || ch == 0) {
             if (ch >= targetChannels)
                 break;
-            if (!adding)
-                memset(target[ch], 0, nframes * sizeof(float));
+            if (!addToResultsBuffer)
+                memset(targetData[ch], 0, targetFrames * sizeof(float));
         }
 
         int tch = ch; // target channel for this data
@@ -201,7 +201,7 @@ WAVAudioFile::decode(const unsigned char *ubuf,
             ratio = float(sourceSampleRate) / float(targetSampleRate);
         }
 
-        for (size_t i = 0; i < nframes; ++i) {
+        for (size_t i = 0; i < targetFrames; ++i) {
 
             size_t j = i;
             if (sourceSampleRate != targetSampleRate) {
@@ -211,9 +211,9 @@ WAVAudioFile::decode(const unsigned char *ubuf,
                 j = fileFrames - 1;
 
 	    float sample = convertBytesToSample
-		(&ubuf[(bitsPerSample / 8) * (ch + j * sourceChannels)]);
+		(&sourceData[(bitsPerSample / 8) * (ch + j * sourceChannels)]);
 
-            target[tch][i] += sample;
+            targetData[tch][i] += sample;
         }
     }
 
@@ -222,16 +222,18 @@ WAVAudioFile::decode(const unsigned char *ubuf,
     for (size_t ch = sourceChannels; ch < targetChannels; ++ch) {
         if (ch == 1 && targetChannels == 2) {
             // copy mono to stereo
-            if (!adding) {
-                memcpy(target[ch], target[ch - 1], nframes * sizeof(float));
+            if (!addToResultsBuffer) {
+                memcpy(targetData[ch],
+                       targetData[ch - 1],
+                       targetFrames * sizeof(float));
             } else {
-                for (size_t i = 0; i < nframes; ++i) {
-                    target[ch][i] += target[ch - 1][i];
+                for (size_t i = 0; i < targetFrames; ++i) {
+                    targetData[ch][i] += targetData[ch - 1][i];
                 }
             }
         } else {
-            if (!adding) {
-                memset(target[ch], 0, nframes * sizeof(float));
+            if (!addToResultsBuffer) {
+                memset(targetData[ch], 0, targetFrames * sizeof(float));
             }
         }
     }

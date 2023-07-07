@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -32,6 +32,7 @@ SequencerDataBlock::getInstance()
     return instance;
 }
 
+// cppcheck-suppress uninitMemberVar
 SequencerDataBlock::SequencerDataBlock()
 {
     clearTemporaries();
@@ -92,7 +93,7 @@ SequencerDataBlock::getRecordedEvents(MappedEventList &mC)
     // changes it while we are working.
     int stopIndex = m_recordEventIndex;
 
-    MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
+    MappedEvent *recordBuffer = reinterpret_cast<MappedEvent *>(m_recordBuffer);
 
     // While there are events in the record buffer, copy each event to
     // the user's list.
@@ -114,7 +115,7 @@ SequencerDataBlock::addRecordedEvents(MappedEventList *mC)
     // while the other thread is using it.
     int index = m_recordEventIndex;
 
-    MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
+    MappedEvent *recordBuffer = reinterpret_cast<MappedEvent *>(m_recordBuffer);
 
     // Copy each incoming event into the ring buffer.
     for (MappedEventList::iterator i = mC->begin(); i != mC->end(); ++i) {
@@ -293,21 +294,19 @@ SequencerDataBlock::setInstrumentRecordLevel(InstrumentId id, const LevelInfo &i
 }
 
 void
-SequencerDataBlock::setTrackLevel(TrackId id, const LevelInfo &info)
+SequencerDataBlock::setTrackLevel(TrackId track, const LevelInfo &info)
 {
     setInstrumentLevel
-	(ControlBlock::getInstance()->getInstrumentForTrack(id), info);
+	(ControlBlock::getInstance()->getInstrumentForTrack(track), info);
 }
 
 bool
-SequencerDataBlock::getTrackLevel(TrackId id, LevelInfo &info) const
+SequencerDataBlock::getTrackLevel(TrackId track, LevelInfo &info) const
 {
     info.level = info.levelRight = 0;
 
     return getInstrumentLevel
-	(ControlBlock::getInstance()->getInstrumentForTrack(id), info);
-
-    return false;
+	(ControlBlock::getInstance()->getInstrumentForTrack(track), info);
 }
 
 bool

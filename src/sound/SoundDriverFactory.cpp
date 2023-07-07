@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,8 +29,7 @@ static bool s_soundEnabled = true;
 SoundDriver *
 SoundDriverFactory::createDriver(MappedStudio *studio)
 {
-    SoundDriver *driver = nullptr;
-    bool initialised = false;
+    SoundDriver *driver;
 
 #ifdef HAVE_ALSA
     if (s_soundEnabled) {
@@ -42,7 +41,7 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
     driver = new DummyDriver(studio);
 #endif
 
-    initialised = driver->initialise();
+    bool initialised = driver->initialise();
 
     if ( ! initialised ) {
 
@@ -67,5 +66,3 @@ void SoundDriverFactory::setSoundEnabled(bool b)
 }
 
 }
-
-

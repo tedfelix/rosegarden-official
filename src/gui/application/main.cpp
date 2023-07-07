@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -64,11 +64,11 @@ using namespace Rosegarden;
 
 
 /*! \mainpage Rosegarden global design
- 
+
 Rosegarden is split into 3 main parts:
- 
+
 \section base Base
- 
+
 The base library holds all of the fundamental "music handling"
 structures, of which the primary ones are Event, Segment, Track,
 Instrument and Composition.  It also contains a selection of utility
@@ -82,16 +82,16 @@ around it simply and easily, and so the base library is built around the STL,
 and Qt and KDE classes were not allowed here.  In practice, we and Qt share the
 same fate now, and we have been allowing Qt classes in the base library whenever
 that represented the most pragmatic and expedient solution to a problem.
- 
+
 The keyword for the basic structures in use is "flexibility".  Our
 Event objects can be extended arbitrarily for the convenience of GUI
 or performance code without having to change their declaration or
 modify anything in the base library.  And most of our assumptions
 about the use of the container classes can be violated without
 disastrous side-effects.
- 
+
 \subsection musicstructs Music Structures
- 
+
  - \link Event Event\endlink is the basic musical element.  It's more or less a
     generalization of the MIDI event.  Each note or rest, each key
     change or tempo change, is an event: there's no "note class" or
@@ -108,7 +108,7 @@ disastrous side-effects.
     and there's no definition of what exactly a note is: client code
     is simply expected to ignore any unrecognised events or properties
     and to cope if properties that should be there are not.
- 
+
  - \link Segment Segment\endlink is a series of consecutive Events found on the same Track,
     automatically ordered by their absolute time.  It's the usual
     container for Events.  A Segment has a starting time that can be
@@ -119,7 +119,7 @@ disastrous side-effects.
     between its Events.  (This isn't checked anywhere and nothing will
     break very badly if there are gaps, but notation won't quite work
     correctly.)
- 
+
  - \link Track Track \endlink is much the same thing as on a mixing table, usually
     assigned to an instrument, a voice, etc.  Although a Track is not
     a container of Events and is not strictly a container of Segments
@@ -128,13 +128,13 @@ disastrous side-effects.
     GUI terms, the Track is a horizontal row on the main Rosegarden
     window, whereas a Segment is a single blue box within that row, of
     which there may be any number.
- 
+
  - \link Instrument Instrument \endlink corresponds broadly to a MIDI or Audio channel, and is
     the destination for a performed Event.  Each Track is mapped to a
     single Instrument (although many Tracks may have the same
     Instrument), and the Instrument is indicated in the header at the
     left of the Track's row in the GUI.
- 
+
  - \link Composition Composition\endlink is the container for the entire piece of music.  It
     consists of a set of Segments, together with a set of Tracks that
     the Segments may or may not be associated with, a set of
@@ -145,15 +145,15 @@ disastrous side-effects.
     wants to know about the locations of bar lines, or request
     real-time calculations based on tempo changes, talks to the
     Composition.
- 
- 
+
+
 See also http://rosegardenmusic.com/wiki/dev:units.txt for an explanation of the
 units we use for time and pitch values.  See
 http://rosegardenmusic.com/wiki/dev:creating_events.txt for an explanation of
 how to create new Events and add properties to them.
- 
+
 The base directory also contains various music-related helper classes:
- 
+
  - The NotationTypes.[c|h] files contain classes that help with
     creating and manipulating events.  It's very important to realise
     that these classes are not the events themselves: although there
@@ -164,7 +164,7 @@ The base directory also contains various music-related helper classes:
     contain getAsEvent() methods that may be used when an event for
     storage is required.  But the class of a stored event is always
     simply Event.
- 
+
     The NotationTypes classes also define important constants for the
     names of common properties in Events.  For example, the Note class
     contains Note::EventType, which is the type of a note Event, and
@@ -172,10 +172,10 @@ The base directory also contains various music-related helper classes:
     Key::EventType, the type of a key change Event, KeyPropertyName,
     the name of the property that defines the key change, and a set
     of the valid strings for key changes.
- 
+
  - BaseProperties.[c|h] contains a set of "standard"-ish Event
     property names that are not basic enough to go in NotationTypes.
- 
+
  - \link SegmentNotationHelper SegmentNotationHelper\endlink
     and \link SegmentPerformanceHelper SegmentPerformanceHelper\endlink
     do tasks that
@@ -188,21 +188,21 @@ The base directory also contains various music-related helper classes:
     These two lightweight helper classes are also usually constructed
     on-the-fly for use on the events in a given Segment and then
     discarded after use.
- 
+
  - \link Quantizer Quantizer\endlink is used to quantize event timings and set quantized
     timing properties on those events.  Note that quantization is
     non-destructive, as it takes advantage of the ability to set new
     Event properties to simply assign the quantized values as separate
     properties from the original absolute time and duration.
- 
- 
+
+
 \section gui GUI
- 
+
 The GUI directory builds into a Qt application that follows a document/view model. The document (class
 RosegardenDocument, which wraps a Composition (along with several other related classes)) can have several views
 (class RosegardenMainViewWidget), although at the moment only a single one is
 used.
- 
+
 This view is the TrackEditor, which shows all the Composition's Segments
 organized in Tracks. Each Segment can be edited in several ways, as notation, on
 a piano roll matrix, or via the raw event list.
@@ -214,53 +214,53 @@ components:
 \remarks LayoutEngine no longer seems to be relevant.  The following
 documentation needs to be updated by someone who really understands how
 everything works on the far side of the Thorn restructuring.  Readers
-should understand this documentation might not reflect reality very well. 
- 
+should understand this documentation might not reflect reality very well.
+
  - Layout classes, horizontal and vertical: these are the classes
     which determine the x and y coordinates of the graphic items
     representing the events (notes or piano-roll rectangles).  They
     are derived from the LayoutEngine base-class in the base library.
- 
+
  - Tools, which implement each editing function at the GUI (such as
     insert, erase, cut and paste). These are the tools which appear on
     the EditView's toolbar.
- 
+
  - Toolbox, which is a simple string => tool map.
- 
+
  - Commands, which are the fundamental implementations of editing
-    operations (both menu functions and tool operations).  Originally a 
+    operations (both menu functions and tool operations).  Originally a
     KDE subclass, these are our own implementation now, likely
     borrowed from Sonic Visualiser.
- 
+
  - a QGraphicsScene and QGraphicsView, no longer actually from a shared base
    class, I don't think
- 
+
  - LinedStaff, a staff with lines.  Like the canvas view, this isn't
     part of the EditView definition, but both views use one. (Probably
     different implementations now, and no longer shared.  Author not sure.)
- 
- 
+
+
 There are currently two editor views:
 
 \remarks some of this is still true, some of it isn't
- 
+
  - NotationView, with accompanying classes NotationHLayout,
     NotationVLayout, NotationStaff, and all the classes in the
     notationtool and notationcommands files.  These are also closely
     associated with the NotePixmapFactory and NoteFont classes, which
     are used to generate notes from component pixmap files.
- 
+
  - MatrixView, with accompanying classes MatrixHLayout,
     MatrixVLayout, and other classes in the matrixview
     files.
- 
+
 The editing process works as follows:
- 
+
 [NOTE : in the following, we're talking both about events as UI events
 or user events (mouse button clicks, mouse move, keystrokes, etc...)
 and Events (our basic music element).  To help lift the ambiguity,
 "events" is for UI events, Events is for Event.]
- 
+
  -# The canvas view gets the user events (see
     NotationCanvasView::contentsMousePressEvent(QMouseEvent*) for an
     example).  It locates where the event occured in terms of musical
@@ -274,24 +274,24 @@ and Events (our basic music element).  To help lift the ambiguity,
  -# The EditView delegates action to the current tool.\n
  -# The tool performs the actual job (inserting or deleting a note,
     etc...).
- 
+
 Since this action is usually complex (merely inserting a note requires
 dealing with the surrounding Events, rests or notes), it does it
 through a SegmentHelper (for instance, base/SegmentNotationHelper)
 which "wraps" the complexity into simple calls and performs all the
 hidden tasks.
- 
+
 The EditView also maintains (obviously) its visual appearance with the
 layout classes, applying them when appropriate.
- 
+
 \section sequencer Sequencer
- 
+
 The Sequencer interfaces directly with \link AlsaDriver ALSA\endlink
 and provides MIDI "play" and "record" ports which can be connected to
 other MIDI clients (MIDI IN and OUT hardware ports or ALSA synth devices)
-using any ALSA MIDI Connection Manager.  The Sequencer also supports 
-playing and recording of Audio sample files using \link JackDriver Jack\endlink 
- 
+using any ALSA MIDI Connection Manager.  The Sequencer also supports
+playing and recording of Audio sample files using \link JackDriver Jack\endlink
+
 The GUI and Sequencer were originally implemented as separate processes
 communicating using the KDE DCOP communication framework, but they have
 now been restructured into separate threads of a single process.  The
@@ -308,19 +308,19 @@ stopping the Sequencer, playing and recording, fast forwarding and
 rewinding.  Once a play or record cycle is enabled it's the Sequencer
 that does most of the hard work.  Events are read from (or written to,
 when recording) a set of mmapped files shared between the threads.
- 
+
 The Sequencer makes use of two libraries libRosegardenSequencer
 and libRosegardenSound:
- 
+
  - libRosegardenSequencer holds everything pertinent to sequencing
    for Rosegarden including the Sequencer class itself.
- 
+
  - libRosegardenSound holds the MidiFile class (writing and reading
    MIDI files) and the MappedEvent and MappedEventList classes (the
    communication class for transferring events back and forth between
    sequencer and GUI).  This library is needed by the GUI as well as
    the Sequencer.
- 
+
 The main Sequencer state machine is a good starting point and clearly
 visible at the bottom of rosegarden/sequencer/main.cpp.
 */
@@ -328,6 +328,7 @@ visible at the bottom of rosegarden/sequencer/main.cpp.
 // -----------------------------------------------------------------
 
 // ASAN_OPTIONS.
+// cppcheck-suppress unusedFunction
 extern "C" ROSEGARDENPRIVATE_EXPORT const char *__asan_default_options() {
     // Turn on static init order fiasco detection for ASan.
     return "check_initialization_order=true:strict_init_order=true";
@@ -490,11 +491,11 @@ int main(int argc, char *argv[])
 
     QTranslator qtTranslator;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    bool qtTranslationsLoaded = 
+    bool qtTranslationsLoaded =
       qtTranslator.load("qt_" + QLocale::system().name(),
             QLibraryInfo::path(QLibraryInfo::TranslationsPath));
 #else
-    bool qtTranslationsLoaded = 
+    bool qtTranslationsLoaded =
       qtTranslator.load("qt_" + QLocale::system().name(),
             QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 #endif
@@ -507,7 +508,7 @@ int main(int argc, char *argv[])
 
     QTranslator rgTranslator;
     RG_DEBUG << "RG Translation: trying to load :locale/" << QLocale::system().name();
-    bool rgTranslationsLoaded = 
+    bool rgTranslationsLoaded =
       rgTranslator.load(QLocale::system().name(), ":locale/");
     if (rgTranslationsLoaded) {
         RG_DEBUG << "RG Translations loaded successfully.";
@@ -558,7 +559,7 @@ int main(int argc, char *argv[])
     }
 
     RG_INFO << "Unbundling examples...";
-    
+
     // unbundle examples
     const QStringList exampleFiles = ResourceFinder().getResourceFiles("examples", "rg");
     for (QStringList::const_iterator i = exampleFiles.constBegin(); i != exampleFiles.constEnd(); ++i) {
@@ -826,4 +827,3 @@ int main(int argc, char *argv[])
 
     return returnCode;
 }
-

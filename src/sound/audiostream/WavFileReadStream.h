@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     This file is Copyright 2005-2011 Chris Cannam.
 
     This program is free software; you can redistribute it and/or
@@ -28,20 +28,20 @@
 
 namespace Rosegarden
 {
-    
+
 class ROSEGARDENPRIVATE_EXPORT WavFileReadStream : public AudioReadStream
 {
 public:
-    WavFileReadStream(QString path);
+    explicit WavFileReadStream(QString path);
     ~WavFileReadStream() override;
-    
+
     static void initStaticObjects();
 
     QString getError() const override { return m_error; }
 
 protected:
     size_t getFrames(size_t count, float *frames) override;
-    
+
     SF_INFO m_fileInfo;
     SNDFILE *m_file;
 
