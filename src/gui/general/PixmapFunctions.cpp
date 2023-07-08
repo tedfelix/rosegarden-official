@@ -29,6 +29,7 @@
 namespace Rosegarden
 {
 
+/* unused
 QBitmap
 PixmapFunctions::generateMask(const QPixmap &map, const QRgb &rgb)
 {
@@ -49,6 +50,7 @@ PixmapFunctions::generateMask(const QPixmap &map, const QRgb &rgb)
     QBitmap m = QBitmap::fromImage(im);
     return m;
 }
+*/
 
 QBitmap
 PixmapFunctions::generateMask(const QPixmap &map)
@@ -204,6 +206,7 @@ PixmapFunctions::flipVertical(const QPixmap &map)
     return rmap;
 }
 
+/* unused
 QPixmap
 PixmapFunctions::flipHorizontal(const QPixmap &map)
 {
@@ -218,6 +221,7 @@ PixmapFunctions::flipHorizontal(const QPixmap &map)
 
     return rmap;
 }
+*/
 
 std::pair<QPixmap, QPixmap>
 PixmapFunctions::splitPixmap(const QPixmap &pixmap, int x)
@@ -242,6 +246,7 @@ PixmapFunctions::splitPixmap(const QPixmap &pixmap, int x)
     return std::pair<QPixmap, QPixmap>(left, right);
 }
 
+/* unused
 void
 PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
                                   int x0, int y0,
@@ -280,5 +285,6 @@ PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
     dest = QPixmap::fromImage(idp);
     destMask = QBitmap::fromImage(idm);
 }
+*/
 
 }

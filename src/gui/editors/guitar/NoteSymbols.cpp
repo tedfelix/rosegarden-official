@@ -179,6 +179,7 @@ NoteSymbols::drawNoteSymbol ( bool /* big */,
     p->restore();
 }
 
+/* unused
 void
 NoteSymbols::drawBarreSymbol ( QPainter* p,
                                int fretNb,
@@ -214,6 +215,7 @@ NoteSymbols::drawBarreSymbol ( QPainter* p,
 
     drawNoteSymbol (false, p, end, fretNb );
 }
+*/
 
 void
 NoteSymbols::drawFretNumber ( QPainter* p,

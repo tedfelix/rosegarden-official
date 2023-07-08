@@ -126,10 +126,12 @@ public:
      * The code from the KGuitar project was modified to display a bar. This feature was not
      * available in that project
      */
+    /* unused
     void drawBarreSymbol ( QPainter* p,
                            int fretNb,
                            unsigned int start,
                            unsigned int end ) const;
+    */
 
     void drawFretNumber ( QPainter* p,
                           unsigned int fret_num ) const;

@@ -43,7 +43,7 @@ public:
      *
      * This function is slow.
      */
-    static QBitmap generateMask(const QPixmap &map, const QRgb &rgb);
+    // unused static QBitmap generateMask(const QPixmap &map, const QRgb &rgb);
 
     /**
      * Generate a heuristic mask for the given pixmap.  Unlike
@@ -81,7 +81,7 @@ public:
     static QPixmap flipVertical(const QPixmap &map);
 
     /// Return a QPixmap that is a mirror image of map (including mask)
-    static QPixmap flipHorizontal(const QPixmap &map);
+    // unused static QPixmap flipHorizontal(const QPixmap &map);
 
     /// Return left and right parts of the QPixmap
     static std::pair<QPixmap, QPixmap> splitPixmap(const QPixmap &pixmap, int x);
@@ -95,10 +95,11 @@ public:
      *
      * Note that the source pixmap _must_ have a mask.
      */
+    /* unused
     static void drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
                                  int x0, int y0,
                                  const QPixmap &src);
-
+    */
     static const int SaturationNotSpecified = -1;
 };
 

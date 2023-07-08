@@ -65,9 +65,11 @@ public:
      * quantize.  In this case, but no other, unquantize will
      * still work afterwards.)
      */
+    /* unused
     void fixQuantizedValues(Segment *,
                             Segment::iterator from,
                             Segment::iterator to) const;
+    */
 
     /**
      * Return the quantized duration of the event if it has been

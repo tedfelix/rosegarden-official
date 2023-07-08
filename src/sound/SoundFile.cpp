@@ -280,13 +280,14 @@ SoundFile::getIntegerFromBigEndian(const std::string &/*s*/)
     return 0;
 }
 
-std::string
-SoundFile::getBigEndianFromInteger(unsigned int /*value*/, unsigned int /*length*/)
-{
-    std::string r;
-
-    return r;
-}
+// unused
+//std::string
+//SoundFile::getBigEndianFromInteger(unsigned int /*value*/, unsigned int /*length*/)
+//{
+//    std::string r;
+//
+//    return r;
+//}
 
 
 }

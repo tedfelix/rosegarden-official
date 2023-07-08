@@ -1910,6 +1910,7 @@ void Composition::setRecordMetronome(bool value)
 #ifdef TRACK_DEBUG
 // track debug convenience function
 //
+// cppcheck-suppress unusedFunction
 static void dumpTracks(Composition::trackcontainer& tracks)
 {
     Composition::trackiterator it = tracks.begin();

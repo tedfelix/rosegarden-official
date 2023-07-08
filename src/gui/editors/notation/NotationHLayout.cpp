@@ -113,6 +113,7 @@ NotationHLayout::getAvailableSpacings()
     return m_availableSpacings;
 }
 
+/* unused
 std::vector<int>
 NotationHLayout::getAvailableProportions()
 {
@@ -126,6 +127,7 @@ NotationHLayout::getAvailableProportions()
     }
     return m_availableProportions;
 }
+*/
 
 NotationHLayout::BarDataList &
 NotationHLayout::getBarData(ViewSegment &staff)

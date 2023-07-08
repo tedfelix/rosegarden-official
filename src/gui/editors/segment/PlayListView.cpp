@@ -146,8 +146,7 @@ QStringList PlayListView::mimeTypes() const{
     return types;
 }
 
-
-
+// cppcheck-suppress unusedFunction
 void PlayListView::dropEvent(QDropEvent* e)
 {
     QList<QUrl> uList;

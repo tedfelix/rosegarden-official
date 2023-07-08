@@ -65,7 +65,7 @@ public:
      * that are added to quantized notes.
      */
     void setArticulate(bool);
-    bool getArticulate() const;
+    // unused bool getArticulate() const;
 
 protected:
     void quantizeRange(Segment *,

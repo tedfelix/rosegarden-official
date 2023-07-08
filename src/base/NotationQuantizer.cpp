@@ -215,11 +215,13 @@ NotationQuantizer::setArticulate(bool a)
     m_impl->m_articulate = a;
 }
 
+/* unused
 bool
 NotationQuantizer::getArticulate() const
 {
     return m_impl->m_articulate;
 }
+*/
 
 void
 NotationQuantizer::Impl::setProvisional(Event *e, ValueType v, timeT t) const

@@ -630,11 +630,13 @@ FileSource::getLocalFilename() const
     return m_localFilename;
 }
 
+/* unused
 QString
 FileSource::getBasename() const
 {
     return QFileInfo(m_localFilename).fileName();
 }
+*/
 
 QString
 FileSource::getContentType() const

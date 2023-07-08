@@ -196,7 +196,7 @@ private:
     // QWidget overrides.
     void dragEnterEvent(QDragEnterEvent *) override;
     void dropEvent(QDropEvent *) override;
-    void dragMoveEvent(QDragMoveEvent *) override;
+    // unused void dragMoveEvent(QDragMoveEvent *) override;
 
     /// Wrapper around CommandHistory::addCommand().
     void addCommandToHistory(Command *command);

@@ -78,8 +78,10 @@ public:
                                                   unsigned int length);
 
     static int getIntegerFromBigEndian(const std::string &s);
+    /* unused
     static std::string getBigEndianFromInteger(unsigned int value,
                                                unsigned int length);
+    */
 
     // Buffered read - allow this to be public
     //

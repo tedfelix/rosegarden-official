@@ -1001,6 +1001,7 @@ RosegardenSequencer::setQuarterNoteLength(RealTime rt)
     m_driver->setMIDIClockInterval(rt / 24);
 }
 
+// cppcheck-suppress unusedFunction
 void RosegardenSequencer::dumpFirstSegment()
 {
     LOCKED;

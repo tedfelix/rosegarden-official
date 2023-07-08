@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -137,7 +137,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     grid->setSpacing(0);
 
     // Top Rulers
-    
+
     m_chordNameRuler = new ChordNameRuler(m_rulerScale,
                                           m_doc,
                                           20,
@@ -254,7 +254,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     // used to grab for some purpose.  Q(Abstract)ScrollArea has no usable
     // signals whatsoever.  I think this is why autoscrolling is still slightly
     // wonky in Thorn, but I don't reckon there's much to do about this one
-    // unless we write a custom widget or something.  
+    // unless we write a custom widget or something.
     //
     //connect(m_compositionView, SIGNAL(contentsMoving(int, int)),
     //        this, SLOT(slotCanvasScrolled(int, int)));
@@ -434,7 +434,7 @@ TrackEditor::slotSetPointerPosition(timeT pointerTime)
 
         if (m_doc  &&  m_doc->getSequenceManager()  &&
             m_doc->getSequenceManager()->getTransportStatus() != STOPPED) {
-            
+
             if (m_playTracking) {
                 m_compositionView->scrollHoriz(newPosition);
             }
@@ -694,13 +694,13 @@ void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
     }
 }
 
-
+/* unused
 void TrackEditor::dragMoveEvent(QDragMoveEvent *)
 {
     // Prevent QWidget from handling this.
     // QWidget::dragMoveEvent() does nothing, so this isn't really necessary.
 }
-
+*/
 
 void TrackEditor::dropEvent(QDropEvent *e)
 {
@@ -774,7 +774,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
         // We have a URI, and it didn't come from within RG
 
         RG_DEBUG << "dropEvent() first URI: " << uriList.first();
-        
+
         QStringList::const_iterator ci;
         for (ci = uriList.constBegin(); ci != uriList.constEnd(); ++ci) {
 
@@ -797,7 +797,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
                 //
 
             } else {
-            
+
                 if (!track) return;
 
                 RG_DEBUG << "dropEvent() : dropping at track pos = " << trackPos
@@ -829,7 +829,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
         // file manager
 
         RG_DEBUG << "dropEvent(): got text info";
-        
+
         QString tester = text.toLower();
 
         if (tester.endsWith(".rg") || tester.endsWith(".rgp") ||
@@ -871,11 +871,11 @@ void TrackEditor::dropEvent(QDropEvent *e)
             // setting internal, but no harm in leaving this check in
             QString sourceName = "nullptr";
             if (e->source()) sourceName = e->source()->objectName();
-            
+
             RG_DEBUG << "dropEvent() event source: " << sourceName;
-            
+
             if (sourceName == "AudioListView") { // only create something if this is data from the right client
-                
+
                 RG_DEBUG << "dropEvent() : dropping at track pos = " << trackPos
                          << ", time = " << time
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
@@ -893,7 +893,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
                 t << startTime.nsec << "\n";
                 t << endTime.sec << "\n";
                 t << endTime.nsec << "\n";
-                
+
                 emit droppedAudio(audioText);
 
             } else {
@@ -909,4 +909,3 @@ void TrackEditor::dropEvent(QDropEvent *e)
 
 
 } // end namespace Rosegarden
-

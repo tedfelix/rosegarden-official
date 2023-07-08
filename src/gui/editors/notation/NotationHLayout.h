@@ -149,7 +149,7 @@ public:
      * property of the returned list is that 0, 100, and whatever the
      * default proportion is will be in it.
      */
-    static std::vector<int> getAvailableProportions();
+    // unused static std::vector<int> getAvailableProportions();
 
     /**
      * Returns the total length of all elements once layout is done
