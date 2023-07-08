@@ -377,7 +377,7 @@ public:
     /**
      * Delete a trigger Segment.
      */
-    void deleteTriggerSegment(TriggerSegmentId);
+    // unused void deleteTriggerSegment(TriggerSegmentId);
 
     /**
      * Detach a trigger Segment from the Composition.

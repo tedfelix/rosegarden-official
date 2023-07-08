@@ -39,6 +39,7 @@ ShortcutDelegate::~ShortcutDelegate()
 {
 }
 
+// cppcheck-suppress unusedFunction
 QWidget* ShortcutDelegate::createEditor(QWidget *parent,
                                         const QStyleOptionViewItem&,
                                         const QModelIndex&) const

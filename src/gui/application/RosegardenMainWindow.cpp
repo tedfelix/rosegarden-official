@@ -8658,6 +8658,7 @@ RosegardenMainWindow::openWindow(ExternalController::Window window)
 }
 
 void
+// cppcheck-suppress unusedFunction
 RosegardenMainWindow::customEvent(QEvent *event)
 {
     // See AlsaDriver::handleTransportCCs().

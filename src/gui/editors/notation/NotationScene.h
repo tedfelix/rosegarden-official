@@ -175,7 +175,7 @@ public:
 
     void playNote(Segment &segment, int pitch, int velocity = -1);
 
-    bool constrainToSegmentArea(QPointF &scenePos);
+    // unused bool constrainToSegmentArea(QPointF &scenePos);
 
     // more dubious:
     void handleEventRemoved(Event *);

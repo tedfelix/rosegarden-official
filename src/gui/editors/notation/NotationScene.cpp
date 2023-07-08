@@ -2101,6 +2101,7 @@ NotationScene::playNote(Segment &segment, int pitch, int velocity)
                                    RealTime(0, 250000000));
 }
 
+/* unused
 bool
 NotationScene::constrainToSegmentArea(QPointF &scenePos)
 {
@@ -2131,6 +2132,7 @@ NotationScene::constrainToSegmentArea(QPointF &scenePos)
 
     return ok;
 }
+*/
 
 bool
 NotationScene::isEventRedundant(Event *ev, Segment &seg) const

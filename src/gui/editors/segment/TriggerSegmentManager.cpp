@@ -410,12 +410,14 @@ TriggerSegmentManager::setModified(bool modified)
     m_modified = modified;
 }
 
+/* unused
 void
 TriggerSegmentManager::checkModified()
 {
     RG_DEBUG << "TriggerSegmentManager::checkModified(" << m_modified << ")";
 
 }
+*/
 
 void
 TriggerSegmentManager::slotEdit(QTreeWidgetItem *i)

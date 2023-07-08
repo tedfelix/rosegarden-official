@@ -191,7 +191,7 @@ protected:
         double& operator[](int i);
         const double& operator[](int i) const;
         double distance(const PitchProfile &other);
-        double dotProduct(const PitchProfile &other) const;
+        // unused double dotProduct(const PitchProfile &other) const;
         double productScorer(const PitchProfile &other) const;
         PitchProfile normalized();
         PitchProfile& operator*=(double d);

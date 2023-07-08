@@ -551,6 +551,7 @@ Composition::addTriggerSegment(Segment *s, TriggerSegmentId id, int pitch, int v
     return rec;
 }
 
+/* unused
 void
 Composition::deleteTriggerSegment(TriggerSegmentId id)
 {
@@ -562,6 +563,7 @@ Composition::deleteTriggerSegment(TriggerSegmentId id)
     delete *i;
     m_triggerSegments.erase(i);
 }
+*/
 
 void
 Composition::detachTriggerSegment(TriggerSegmentId id)

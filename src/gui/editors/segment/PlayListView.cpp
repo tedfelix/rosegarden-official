@@ -89,6 +89,8 @@ void PlayListView::mousePressEvent ( QMouseEvent * event ){
     //
 }
 */
+
+// cppcheck-suppress unusedFunction
 void PlayListView::dragEnterEvent ( QDragEnterEvent * event ){
 
     if (event->mimeData()->hasUrls() || event->mimeData()->hasText()) {
