@@ -638,11 +638,13 @@ FileSource::getBasename() const
 }
 */
 
+ /* unused
 QString
 FileSource::getContentType() const
 {
     return m_contentType;
 }
+ */
 
 QString
 FileSource::getExtension() const

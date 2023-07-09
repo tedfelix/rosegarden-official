@@ -147,7 +147,7 @@ public:
     /**
      * Return the MIME content type of this file, if known.
      */
-    QString getContentType() const;
+    // unused QString getContentType() const;
 
     /**
      * Return the file extension for this file, if any.

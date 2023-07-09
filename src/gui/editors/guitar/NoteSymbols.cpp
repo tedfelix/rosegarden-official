@@ -365,11 +365,13 @@ NoteSymbols::getTopBorder ( unsigned int imgHeight )
     return static_cast<unsigned int>( TOP_BORDER_PERCENTAGE * imgHeight );
 }
 
+/* unused
 unsigned int
 NoteSymbols::getBottomBorder ( unsigned int imgHeight )
 {
     return static_cast<unsigned int>( imgHeight * BOTTOM_BORDER_PERCENTAGE );
 }
+*/
 
 unsigned int
 NoteSymbols::getLeftBorder ( unsigned int imgWidth )

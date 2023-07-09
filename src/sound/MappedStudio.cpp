@@ -205,6 +205,7 @@ MappedObject::removeChild(MappedObject *object)
 
 // Return all child ids
 //
+/* unused
 MappedObjectPropertyList
 MappedObject::getChildren()
 {
@@ -215,7 +216,7 @@ MappedObject::getChildren()
 
     return list;
 }
-
+*/
 
 // Return all child ids of a certain type
 //

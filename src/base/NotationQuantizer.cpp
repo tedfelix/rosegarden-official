@@ -203,11 +203,13 @@ NotationQuantizer::setContrapuntal(bool c)
     m_impl->m_contrapuntal = c;
 }
 
+/* unused
 bool
 NotationQuantizer::getContrapuntal() const
 {
     return m_impl->m_contrapuntal;
 }
+*/
 
 void
 NotationQuantizer::setArticulate(bool a)

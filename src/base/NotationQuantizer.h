@@ -57,7 +57,7 @@ public:
      * individual notes and chords.
      */
     void setContrapuntal(bool);
-    bool getContrapuntal() const;
+    // unused bool getContrapuntal() const;
 
     /**
      * Set whether to add articulations (staccato, tenuto, slurs).

@@ -52,6 +52,7 @@ PixmapFunctions::generateMask(const QPixmap &map, const QRgb &rgb)
 }
 */
 
+ /* unused
 QBitmap
 PixmapFunctions::generateMask(const QPixmap &map)
 {
@@ -80,6 +81,7 @@ PixmapFunctions::generateMask(const QPixmap &map)
     QBitmap m = QBitmap::fromImage(im);
     return m;
 }
+*/
 
 QPixmap
 PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int saturation)

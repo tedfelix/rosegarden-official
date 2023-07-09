@@ -111,7 +111,7 @@ public:
 
     // Get a list of child ids - get a list of a certain type
     //
-    MappedObjectPropertyList getChildren();
+    // unused MappedObjectPropertyList getChildren();
     MappedObjectPropertyList getChildren(MappedObjectType type);
 
     // Child management

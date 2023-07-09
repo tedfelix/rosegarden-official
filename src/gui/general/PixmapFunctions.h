@@ -57,7 +57,7 @@ public:
      *
      * This function is slow.
      */
-    static QBitmap generateMask(const QPixmap &map);
+    // unused static QBitmap generateMask(const QPixmap &map);
 
     /**
      * Colour a greyscale pixmap with the given hue.

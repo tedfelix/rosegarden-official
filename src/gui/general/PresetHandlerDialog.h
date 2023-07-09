@@ -124,12 +124,12 @@ public:
     /** Return whether the user intended to apply the new parameters to selected
      * segments only
      */
-    bool getConvertOnlySelectedSegments();
+    // unused bool getConvertOnlySelectedSegments();
 
 protected:
 
     //--------[ member functions ]-------------------------
-    
+
     // initialize the dialog
     void initDialog();
 

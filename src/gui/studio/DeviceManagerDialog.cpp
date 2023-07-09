@@ -497,6 +497,7 @@ MidiDevice
     return mdev;
 }
 
+/* unused
 MidiDevice
 *DeviceManagerDialog::getDeviceByName(QString deviceName)
 {
@@ -525,6 +526,7 @@ MidiDevice
 
     return nullptr;
 }
+*/
 
 MidiDevice
 *DeviceManagerDialog::getCurrentlySelectedDevice(QTreeWidget *treeWid)

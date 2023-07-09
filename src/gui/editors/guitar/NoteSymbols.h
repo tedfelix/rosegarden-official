@@ -142,7 +142,7 @@ public:
 
     static unsigned int getTopBorder ( unsigned int imgHeight );
 
-    static unsigned int getBottomBorder ( unsigned int imgHeight );
+    // unused static unsigned int getBottomBorder ( unsigned int imgHeight );
 
     static unsigned int getLeftBorder ( unsigned int imgWidth );
 
