@@ -576,7 +576,7 @@ JackDriver::createSubmasterOutputs(int pairs)
         QString name;
         jack_port_t *port;
 
-        name = QString("submaster %d out L").arg(i + 1);
+        name = QString("submaster %1 out L").arg(i + 1);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
@@ -586,7 +586,7 @@ JackDriver::createSubmasterOutputs(int pairs)
             return false;
         m_outputSubmasters.push_back(port);
 
-        name = QString("submaster %d out R").arg(i + 1);
+        name = QString("submaster %1 out R").arg(i + 1);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
