@@ -77,7 +77,7 @@ public:
     static std::string getLittleEndianFromInteger(unsigned int value,
                                                   unsigned int length);
 
-    static int getIntegerFromBigEndian(const std::string &s);
+    // unused static int getIntegerFromBigEndian(const std::string &s);
     /* unused
     static std::string getBigEndianFromInteger(unsigned int value,
                                                unsigned int length);

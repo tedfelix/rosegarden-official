@@ -112,7 +112,7 @@ public:
     // Get a list of child ids - get a list of a certain type
     //
     // unused MappedObjectPropertyList getChildren();
-    MappedObjectPropertyList getChildren(MappedObjectType type);
+    // unused MappedObjectPropertyList getChildren(MappedObjectType type);
 
     // Child management
     //
@@ -191,8 +191,10 @@ public:
     // Get an object by ID and type.  (Returns 0 if the ID does not
     // exist or exists but is not of the correct type.)  This is
     // faster than getObjectById if you know the type already.
+    /* unused
     MappedObject *getObjectByIdAndType(MappedObjectId id,
                                        MappedObjectType type);
+    */
 
     // Get an arbitrary object of a given type - to see if any exist
     MappedObject *getObjectOfType(MappedObjectType type);

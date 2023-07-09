@@ -624,11 +624,13 @@ Composition::getTriggerSegmentRec(Event* e)
     return getTriggerSegmentRec(id);
 }
 
+/* unused
 TriggerSegmentId
 Composition::getNextTriggerSegmentId() const
 {
     return m_nextTriggerSegmentId;
 }
+*/
 
 void
 Composition::setNextTriggerSegmentId(TriggerSegmentId id)
@@ -2434,6 +2436,7 @@ Composition::hasTrack(InstrumentId instrumentId) const
 // Get all the segments that the same instrument plays that plays
 // segment s.
 // @return a SegmentMultiSet that includes s itself.
+/* unused
 SegmentMultiSet
 Composition::getInstrumentSegments(Segment *s, timeT t) const
 {
@@ -2454,6 +2457,7 @@ Composition::getInstrumentSegments(Segment *s, timeT t) const
 
     return segments;
 }
+*/
 
 void
 Composition::enforceArmRule(const Track *track)

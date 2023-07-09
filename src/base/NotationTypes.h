@@ -216,7 +216,7 @@ namespace Marks
     /**
      * Extract the number of marks from an event.
      */
-    extern ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e);
+    // unused extern ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e);
 
     /**
      * Extract the marks from an event.

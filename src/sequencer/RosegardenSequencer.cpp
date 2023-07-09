@@ -755,6 +755,7 @@ RosegardenSequencer::setMappedPropertyList(int id, const QString &property,
 }
 
 int
+// cppcheck-suppress unusedFunction
 RosegardenSequencer::getMappedObjectId(int type)
 {
     LOCKED;

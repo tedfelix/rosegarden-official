@@ -220,6 +220,7 @@ MappedObject::getChildren()
 
 // Return all child ids of a certain type
 //
+ /* unused
 MappedObjectPropertyList
 MappedObject::getChildren(MappedObjectType type)
 {
@@ -232,6 +233,7 @@ MappedObject::getChildren(MappedObjectType type)
 
     return list;
 }
+*/
 
 void
 MappedObject::destroyChildren()
@@ -654,6 +656,7 @@ MappedStudio::getObjectById(MappedObjectId id)
     return rv;
 }
 
+/* unused
 MappedObject*
 MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
 {
@@ -669,6 +672,7 @@ MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
     RELEASE_LOCK;
     return rv;
 }
+*/
 
 MappedObject*
 MappedStudio::getFirst(MappedObjectType type)

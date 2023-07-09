@@ -49,7 +49,7 @@ public:
      * tuplets altogether.
      */
     void setMaxTuplet(int);
-    int  getMaxTuplet() const;
+    // unused int  getMaxTuplet() const;
 
     /**
      * Set whether we assume the music may be contrapuntal -- that is,

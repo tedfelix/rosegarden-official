@@ -210,11 +210,13 @@ NotationScene::setHSpacing(int spacing)
     }
 }
 
+/* unused
 int
 NotationScene::getLeftGutter() const
 {
     return m_leftGutter;
 }
+*/
 
 void
 NotationScene::setLeftGutter(int gutter)

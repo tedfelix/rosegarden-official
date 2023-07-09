@@ -105,7 +105,7 @@ public:
     float *getInBuffer();                 /**< Get audio data buffer ref */
     double getPitch();                    /**< Get pitch; use current method */
 
-    int getFrameSize() const;             /**< Get current audio buf size */
+    // unused int getFrameSize() const;             /**< Get current audio buf size */
     void setFrameSize( int nextFrameSize );  /**< Set current audio buf size */
     int getStepSize() const;              /**< Get no. samples between anals */
     void setStepSize( int nextStepSize ); /**< Set no, samples between anals */

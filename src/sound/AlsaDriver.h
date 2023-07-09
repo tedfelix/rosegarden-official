@@ -463,7 +463,7 @@ public:
 protected:
     void clearDevices();
 
-    ClientPortPair getFirstDestination(bool duplex);
+    // unused ClientPortPair getFirstDestination(bool duplex);
     ClientPortPair getPairForMappedInstrument(InstrumentId id);
     int getOutputPortForMappedInstrument(InstrumentId id);
 

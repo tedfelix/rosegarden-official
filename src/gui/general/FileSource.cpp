@@ -618,11 +618,13 @@ FileSource::isRemote() const
     return m_remote;
 }
 
+/* unused
 QString
 FileSource::getLocation() const
 {
     return m_url.toString();
 }
+*/
 
 QString
 FileSource::getLocalFilename() const
@@ -638,14 +640,15 @@ FileSource::getBasename() const
 }
 */
 
- /* unused
+/* unused
 QString
 FileSource::getContentType() const
 {
     return m_contentType;
 }
- */
+*/
 
+/* unused
 QString
 FileSource::getExtension() const
 {
@@ -655,12 +658,15 @@ FileSource::getExtension() const
         return QFileInfo(m_url.toLocalFile()).suffix().toLower();
     }
 }
+*/
 
+/* unused
 QString
 FileSource::getErrorString() const
 {
     return m_errorString;
 }
+*/
 
 void
 FileSource::readyRead()

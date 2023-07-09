@@ -146,7 +146,7 @@ public:
     int getHSpacing() const;
     void setHSpacing(int);
 
-    int getLeftGutter() const;
+    // unused int getLeftGutter() const;
     void setLeftGutter(int);
 
     const RulerScale *getRulerScale() const;

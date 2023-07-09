@@ -88,11 +88,13 @@ Thumbwheel::setMinimumValue(int min)
     update();
 }
 
+/* unused
 int
 Thumbwheel::getMinimumValue() const
 {
     return m_min;
 }
+*/
 
 void
 Thumbwheel::setMaximumValue(int max)
@@ -108,11 +110,13 @@ Thumbwheel::setMaximumValue(int max)
     update();
 }
 
+/* unused
 int
 Thumbwheel::getMaximumValue() const
 {
     return m_max;
 }
+*/
 
 void
 Thumbwheel::setDefaultValue(int deft)
@@ -181,7 +185,7 @@ Thumbwheel::scroll(bool up)
     } else {
         setValue(m_value - step);
     }
-    
+
     emit valueChanged(getValue());
 }
 
@@ -268,7 +272,7 @@ Thumbwheel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
          tr("Enter a new value from %1 to %2:")
          .arg(m_min).arg(m_max),
          getValue(), m_min, m_max, 1, &ok);
-    
+
     if (ok) {
         setValue(newValue);
         // Let everyone know.
@@ -326,7 +330,7 @@ Thumbwheel::wheelEvent(QWheelEvent *e)
         setValue(m_value + step);
     else if (e->angleDelta().y() < 0)
         setValue(m_value - step);
-    
+
     emit valueChanged(getValue());
 }
 
@@ -406,7 +410,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     // total number of notches on the entire wheel
     int notches = 25;
-    
+
     // radius of the wheel including invisible part
     int radius = int(w / 2 + 2);
 
@@ -451,7 +455,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
             } else {
                 prop = 0.f;
             }
-            
+
             if (m_orientation == Qt::Horizontal) {
                 paint.drawRect(QRectF(x1, height() - (height() - bw*2) * prop - bw,
                                       x2 - x1, height() * prop));
@@ -494,5 +498,3 @@ Thumbwheel::setBright(const bool v)
 
 
 }
-
-

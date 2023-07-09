@@ -387,9 +387,11 @@ double PitchDetector::partial() {
 
 }
 
+/* unused
 int PitchDetector::getFrameSize() const {
     return m_frameSize;
 }
+*/
 
 void PitchDetector::setFrameSize(int nextFrameSize) {
     m_frameSize = nextFrameSize;

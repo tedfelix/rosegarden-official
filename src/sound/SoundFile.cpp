@@ -274,11 +274,12 @@ SoundFile::getLittleEndianFromInteger(unsigned int value, unsigned int length)
     return r;
 }
 
-int
-SoundFile::getIntegerFromBigEndian(const std::string &/*s*/)
-{
-    return 0;
-}
+// unused
+//int
+//SoundFile::getIntegerFromBigEndian(const std::string &/*s*/)
+//{
+//    return 0;
+//}
 
 // unused
 //std::string

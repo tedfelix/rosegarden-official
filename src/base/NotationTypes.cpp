@@ -161,11 +161,13 @@ namespace Marks
         else return string(mark).substr(7);
     }
 
+    /* unused
     ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e) {
         long markCount = 0;
         e.get<Int>(BaseProperties::MARK_COUNT, markCount);
         return markCount;
     }
+    */
 
     // Marks are stored as properties named "mark1", "mark2", etc....
     // This makes working with them a bit convoluted.

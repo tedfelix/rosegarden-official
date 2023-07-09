@@ -219,7 +219,7 @@ public:
      * Get all segments that play on the same instrument segment s
      * plays on and start before t.
      */
-    SegmentMultiSet getInstrumentSegments(Segment *s, timeT t) const;
+    // unused SegmentMultiSet getInstrumentSegments(Segment *s, timeT t) const;
 
     //////
     //
@@ -421,7 +421,7 @@ public:
     /**
      * Get the ID of the next trigger segment that will be inserted.
      */
-    TriggerSegmentId getNextTriggerSegmentId() const;
+    // unused TriggerSegmentId getNextTriggerSegmentId() const;
 
     /**
      * Specify the next trigger ID.  This is intended for use from file

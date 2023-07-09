@@ -179,11 +179,13 @@ NotationQuantizer::setMaxTuplet(int m)
     m_impl->m_maxTuplet = m;
 }
 
+/* unused
 int
 NotationQuantizer::getMaxTuplet() const
 {
     return m_impl->m_maxTuplet;
 }
+*/
 
 void
 NotationQuantizer::setSimplicityFactor(int s)

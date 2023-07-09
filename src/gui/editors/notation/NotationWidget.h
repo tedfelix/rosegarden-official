@@ -123,7 +123,7 @@ public:
     double getViewLeftX();
     double getViewRightX();
     int getNotationViewWidth();
-    double getNotationSceneHeight();
+    // unused double getNotationSceneHeight();
 
     void suspendLayoutUpdates();
     void resumeLayoutUpdates();
