@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -167,7 +167,7 @@ PlayableAudioFile::~PlayableAudioFile()
     clearWorkBuffers();
     m_workBuffersMutex.unlock();
 
-#ifdef DEBUG_PLAYABLE 
+#ifdef DEBUG_PLAYABLE
     //    std::cerr << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
 #endif
 }
@@ -774,7 +774,7 @@ PlayableAudioFile::updateBuffers()
 // How many channels in the base AudioFile?
 //
 unsigned int
-PlayableAudioFile::getSourceChannels()
+PlayableAudioFile::getSourceChannels() const
 {
     if (m_audioFile) {
         return m_audioFile->getChannels();
@@ -783,13 +783,13 @@ PlayableAudioFile::getSourceChannels()
 }
 
 unsigned int
-PlayableAudioFile::getTargetChannels()
+PlayableAudioFile::getTargetChannels() const
 {
     return m_targetChannels;
 }
 
 unsigned int
-PlayableAudioFile::getBytesPerFrame()
+PlayableAudioFile::getBytesPerFrame() const
 {
     if (m_audioFile) {
         return m_audioFile->getBytesPerFrame();
@@ -798,7 +798,7 @@ PlayableAudioFile::getBytesPerFrame()
 }
 
 unsigned int
-PlayableAudioFile::getSourceSampleRate()
+PlayableAudioFile::getSourceSampleRate() const
 {
     if (m_audioFile) {
         return m_audioFile->getSampleRate();
