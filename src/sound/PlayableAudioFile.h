@@ -22,6 +22,8 @@
 #include "AudioFile.h"
 #include "AudioCache.h"
 
+#include <QMutex>
+
 #include <vector>
 #include <fstream>
 
@@ -209,19 +211,15 @@ private:
     static AudioCache     m_smallFileCache;
     bool                  m_isSmallFile;
 
-    /// Work Buffers
-    /**
-     * ??? RACE CONDITION
-     * ??? This is used by updateBuffers() which is called from the
-     *     AudioThread.  It is also used by clearWorkBuffers() which
-     *     is called from the SequencerThread.  This means there is a
-     *     possibility of a race condition and thread synchronization
-     *     is needed.  updateBuffers() calls clearWorkBuffers() which
-     *     might complicate things.  Also the UI thread is involved.
-     */
     static std::vector<sample_t *> m_workBuffers;
-    static void clearWorkBuffers();
     static size_t m_workBufferSize;
+
+    /**
+     * m_workBuffers is used by the AudioThread and the SequencerThread,
+     * so it needs synchronization.
+     */
+    static QMutex m_workBuffersMutex;
+    static void clearWorkBuffers();
 
     static char          *m_rawFileBuffer;
     static size_t         m_rawFileBufferSize;

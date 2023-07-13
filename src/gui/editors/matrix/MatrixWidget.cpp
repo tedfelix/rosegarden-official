@@ -151,11 +151,13 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_view->setContentsMargins(0, 0, 0, 0);
     m_view->setBackgroundBrush(Qt::white);
     m_view->setWheelZoomPan(true);
+    m_view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
 
     m_pianoView = new Panned;
     m_pianoView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_pianoView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_pianoView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     m_layout->addWidget(m_pianoView, PANNED_ROW, HEADER_COL, 1, 1);
 
     m_controlsWidget = new ControlRulerWidget;
