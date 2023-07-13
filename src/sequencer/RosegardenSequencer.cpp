@@ -796,6 +796,7 @@ RosegardenSequencer::getPropertyList(int id,
     return list;
 }
 
+/* unused
 std::vector<QString>
 RosegardenSequencer::getPluginInformation()
 {
@@ -807,6 +808,7 @@ RosegardenSequencer::getPluginInformation()
 
     return list;
 }
+*/
 
 QString
 RosegardenSequencer::getPluginProgram(int id, int bank, int program)

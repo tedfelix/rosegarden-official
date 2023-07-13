@@ -63,6 +63,7 @@ Buss::getName() const
 }
 
 std::string
+// cppcheck-suppress unusedFunction
 Buss::getPresentationName() const
 {
     return getName();

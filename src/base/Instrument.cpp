@@ -72,8 +72,8 @@ Instrument::Instrument(InstrumentId id,
         m_channel = 2;
 
         m_pan = 100; // audio pan ranges from -100 to 100 but
-                     // we store within an unsigned char as 
-                     // 0 to 200. 
+                     // we store within an unsigned char as
+                     // 0 to 200.
     }
 
     if (it == SoftSynth) {
@@ -120,7 +120,7 @@ Instrument::Instrument(InstrumentId id,
         m_channel = 2;
 
         m_pan = 100; // audio pan ranges from -100 to 100 but
-                     // we store within an unsigned char as 
+                     // we store within an unsigned char as
 
     } else {
 /*
@@ -185,7 +185,7 @@ Instrument::Instrument(const Instrument &ins):
     if (ins.getType() == SoftSynth) {
         addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
     }
-    
+
     // ??? How is this different from std::vector's copy ctor?
     //     Remove this and do the copy above.
     StaticControllers::const_iterator cIt = ins.m_staticControllers.begin();
@@ -262,6 +262,7 @@ Instrument::getLocalizedPresentationName() const
     return QString("%1 %2").arg(QObject::tr(inameL.toLocal8Bit())).arg(inameR);
 }
 
+/* unused
 unsigned int
 Instrument::getPresentationNumber() const
 {
@@ -275,6 +276,7 @@ Instrument::getPresentationNumber() const
     if (number.length() > 2) number = number.left(2);
     return number.toUInt();
 }
+*/
 
 std::string
 Instrument::getAlias() const
@@ -505,7 +507,7 @@ Instrument::toXmlString() const
     if (m_id < AudioInstrumentBase)
     {
         return instrument.str();
-    } 
+    }
 
     instrument << "        <instrument id=\"" << m_id;
     instrument << "\" channel=\"" << (int)m_channel;
@@ -526,7 +528,7 @@ Instrument::toXmlString() const
                    << (int)getProgramChange() << "\" send=\""
                    << (m_sendProgramChange ? "true" : "false") << "\"/>"
                    << std::endl;
-    
+
         for (StaticControllers::const_iterator it = m_staticControllers.begin();
              it != m_staticControllers.end(); ++it)
         {
@@ -575,7 +577,7 @@ Instrument::toXmlString() const
             instrument << (*it)->toXmlString();
         }
     }
-        
+
     instrument << "        </instrument>" << std::endl
                << std::endl;
 
@@ -693,10 +695,10 @@ Instrument::getKeyMapping() const
     }
 
     return nullptr;
-}    
+}
 
 // Set a fixed channel.  For MIDI instruments, conform allocator
-// accordingly. 
+// accordingly.
 void
 Instrument::
 setFixedChannel()
@@ -713,13 +715,13 @@ setFixedChannel()
 }
 
 // Release this instrument's fixed channel, if any.
-// @author Tom Breton (Tehom) 
+// @author Tom Breton (Tehom)
 void
 Instrument::
 releaseFixedChannel()
 {
     if (!m_fixed) { return; }
-    
+
     AllocateChannels *allocator = getDevice()->getAllocator();
     if (allocator) {
         allocator->releaseFixedChannel(m_channel);
@@ -779,4 +781,3 @@ MidiByte Instrument::getPanCC() const
 
 
 }
-

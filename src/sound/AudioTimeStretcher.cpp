@@ -303,12 +303,15 @@ AudioTimeStretcher::setRatio(float ratio)
     pthread_mutex_unlock(&m_mutex);
 }
 
+/* unused
 size_t
 AudioTimeStretcher::getProcessingLatency() const
 {
     return getWindowSize() - getInputIncrement();
 }
+*/
 
+/* unused
 size_t
 AudioTimeStretcher::getRequiredInputSamples() const
 {
@@ -321,6 +324,7 @@ AudioTimeStretcher::getRequiredInputSamples() const
     pthread_mutex_unlock(&m_mutex);
     return rv;
 }
+*/
 
 void
 AudioTimeStretcher::putInput(float **input, size_t samples)

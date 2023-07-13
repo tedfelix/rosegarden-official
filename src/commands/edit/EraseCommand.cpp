@@ -174,6 +174,7 @@ EraseCommand::eraseInSegment(EventSelection *selection)
 }
 
 timeT
+// cppcheck-suppress unusedFunction
 EraseCommand::getRelayoutEndTime()
 {
     return m_relayoutEndTime;

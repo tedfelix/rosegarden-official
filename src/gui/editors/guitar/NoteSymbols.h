@@ -146,7 +146,7 @@ public:
 
     static unsigned int getLeftBorder ( unsigned int imgWidth );
 
-    static unsigned int getRightBorder ( unsigned int imgWidth );
+    // unused static unsigned int getRightBorder ( unsigned int imgWidth );
 
     static unsigned int getGuitarChordWidth ( int imgWidth );
 
