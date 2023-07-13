@@ -171,6 +171,7 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 
         // check we've got data chunk start
 	std::string chunkName;
+        int chunkLength;
 
         while ((chunkName = getBytes(file, 4)) != "data") {
 	    if (file->eof()) {
@@ -180,7 +181,7 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 //#ifdef DEBUG_RIFF
 	    RG_WARNING << "RIFFAudioFile::scanTo(): skipping chunk: " << chunkName;
 //#endif
-	    int chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
+	    chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 	    if (chunkLength < 0) {
 		RG_WARNING << "RIFFAudioFile::scanTo(): negative chunk length "
 			  << chunkLength << " for chunk " << chunkName;
@@ -190,8 +191,9 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
         }
 
         // get the length of the data chunk, and scan past it as a side-effect
-#ifdef DEBUG_RIFF
+        // cppcheck-suppress unreadVariable
 	chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
+#ifdef DEBUG_RIFF
         RG_DEBUG << "RIFFAudioFile::scanTo() - data chunk size =" << chunkLength;
 #endif
 
