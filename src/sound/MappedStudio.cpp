@@ -1292,6 +1292,7 @@ MappedPluginSlot::getProperty(const MappedObjectProperty &property,
     return true;
 }
 
+/* unused
 bool
 MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
                                     QString &value)
@@ -1327,6 +1328,7 @@ MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
     }
     return true;
 }
+*/
 
 QString
 MappedPluginSlot::getProgram(int bank, int program)

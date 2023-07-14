@@ -1124,6 +1124,7 @@ StaffLayout::renderElements(ViewElementList::iterator,
     // of positionElements
 }
 
+/* unused
 QRectF
 StaffLayout::getSceneArea()
 {
@@ -1200,5 +1201,5 @@ StaffLayout::getSceneArea()
 
     return QRectF(left, top, right - left, bottom - top);
 }
-
+*/
 }

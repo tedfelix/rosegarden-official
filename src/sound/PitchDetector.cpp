@@ -397,9 +397,12 @@ void PitchDetector::setFrameSize(int nextFrameSize) {
     m_frameSize = nextFrameSize;
 }
 
+/* unused
 int PitchDetector::getStepSize() const {
     return m_stepSize;
 }
+*/
+
 void PitchDetector::setStepSize(int nextStepSize) {
     m_stepSize = nextStepSize;
 }

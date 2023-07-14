@@ -193,11 +193,13 @@ NotationQuantizer::setSimplicityFactor(int s)
     m_impl->m_simplicityFactor = s;
 }
 
+/* unused
 int
 NotationQuantizer::getSimplicityFactor() const
 {
     return m_impl->m_simplicityFactor;
 }
+*/
 
 void
 NotationQuantizer::setContrapuntal(bool c)

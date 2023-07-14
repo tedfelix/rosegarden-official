@@ -390,6 +390,7 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     return ok;
 }
 
+/* unused
 bool
 NoteFont::getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
                           bool inverted) const
@@ -422,6 +423,7 @@ NoteFont::getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
     pixmap = *found;
     return ok;
 }
+*/
 
 CharName
 NoteFont::getNameWithColour(CharName origName, int hue)

@@ -445,8 +445,8 @@ public:
     bool getProperty(const MappedObjectProperty &property,
                              MappedObjectValue &value) override;
 
-    bool getStringProperty(const MappedObjectProperty &property,
-                                   QString &value) override;
+    // unused bool getStringProperty(const MappedObjectProperty &property,
+    //                          QString &value) override;
 
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;

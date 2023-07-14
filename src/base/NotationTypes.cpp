@@ -63,6 +63,7 @@ namespace Accidentals
     const Accidental QuarterSharp = "demisharp";
     const Accidental ThreeQuarterSharp = "sesquisharp";
 
+    /* unused
     ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals() {
 
         static Accidental a[] = {
@@ -76,6 +77,7 @@ namespace Accidentals
         }
         return v;
     }
+    */
 
     ROSEGARDENPRIVATE_EXPORT int getPitchOffset(const Accidental &acc) {
         if (acc == DoubleSharp) return 2;

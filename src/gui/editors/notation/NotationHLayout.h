@@ -416,12 +416,12 @@ protected:
      const ::Rosegarden::Key &key, const NotationElementList::iterator &);
 
     /// Difference between absolute time of next event and of this
-    timeT getSpacingDuration
-    (ViewSegment &staff, const NotationElementList::iterator &);
+    // unused timeT getSpacingDuration
+    //(ViewSegment &staff, const NotationElementList::iterator &);
 
     /// Difference between absolute time of chord and of first event not in it
-    timeT getSpacingDuration
-    (ViewSegment &staff, const NotationChord &);
+    // unused timeT getSpacingDuration
+    //(ViewSegment &staff, const NotationChord &);
 
     float getLayoutWidth(ViewElement &,
                          NotePixmapFactory *,

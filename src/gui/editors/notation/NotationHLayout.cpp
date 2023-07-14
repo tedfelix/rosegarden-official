@@ -1718,6 +1718,7 @@ NotationHLayout::sampleGroupElement(ViewSegment &staff,
     }
 }
 
+/* unused
 timeT
 NotationHLayout::getSpacingDuration(ViewSegment &staff,
                                     const NotationElementList::iterator &i)
@@ -1739,7 +1740,9 @@ NotationHLayout::getSpacingDuration(ViewSegment &staff,
         return (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
     }
 }
+*/
 
+/* unused
 timeT
 NotationHLayout::getSpacingDuration(ViewSegment &staff,
                                     const NotationChord &chord)
@@ -1761,6 +1764,7 @@ NotationHLayout::getSpacingDuration(ViewSegment &staff,
 
     return d;
 }
+*/
 
 void
 NotationHLayout::positionChord(ViewSegment &staff,

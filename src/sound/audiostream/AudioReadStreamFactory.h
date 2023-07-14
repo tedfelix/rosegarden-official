@@ -32,7 +32,7 @@ public:
     // or simply return nullptr, for failure
     static AudioReadStream *createReadStream(QString audioFileName);
 
-    static QStringList getSupportedFileExtensions();
+    // unused static QStringList getSupportedFileExtensions();
 };
 
 }

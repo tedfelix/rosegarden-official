@@ -41,7 +41,7 @@ public:
      * an active pull away from them.  Default is 13.
      */
     void setSimplicityFactor(int);
-    int  getSimplicityFactor() const;
+    // unused int  getSimplicityFactor() const;
 
     /**
      * Set the maximum size of tuplet group.  2 = two-in-the-time-of-three

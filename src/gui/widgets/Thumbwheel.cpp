@@ -195,11 +195,13 @@ Thumbwheel::setSpeed(float speed)
     m_speed = speed;
 }
 
+/* unused
 float
 Thumbwheel::getSpeed() const
 {
     return m_speed;
 }
+*/
 
 void
 Thumbwheel::setTracking(bool tracking)
@@ -219,11 +221,13 @@ Thumbwheel::setShowScale(bool showScale)
     m_showScale = showScale;
 }
 
+/* unused
 bool
 Thumbwheel::getShowScale() const
 {
     return m_showScale;
 }
+*/
 
 void
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))

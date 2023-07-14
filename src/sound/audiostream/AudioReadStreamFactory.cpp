@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     This file is Copyright 2005-2011 Chris Cannam.
 
     This program is free software; you can redistribute it and/or
@@ -84,11 +84,12 @@ AudioReadStreamFactory::createReadStream(QString audioFileName)
     return nullptr;
 }
 
+/* unused
 QStringList
 AudioReadStreamFactory::getSupportedFileExtensions()
 {
     return AudioReadStreamFactoryImpl::getInstance()->getTags();
 }
+*/
 
 }
-

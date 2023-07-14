@@ -113,7 +113,7 @@ namespace Accidentals
      * Get the predefined accidentals (i.e. the ones listed above)
      * in their defined order.
      */
-    extern ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals();
+     // unused extern ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals();
 
     /**
      * Get the change in pitch resulting from an accidental: -1 for
