@@ -155,7 +155,7 @@ public:
      * Returns a guess at the appropriate key for segment s at time t.
      */
     static Key
-        guessKeyForSegment(timeT t, const Segment *s);
+        guessKeyForSegment(timeT t, const Segment *segment);
 
     /**
      * Like labelChords, but the algorithm is more complicated. This tries

@@ -1617,6 +1617,7 @@ MappedPluginPort::getProperty(const MappedObjectProperty &property,
     return true;
 }
 
+/* unused
 bool
 MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
                                     QString &value)
@@ -1634,6 +1635,7 @@ MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
     }
     return true;
 }
+*/
 
 void
 MappedPluginPort::setValue(MappedObjectValue value)

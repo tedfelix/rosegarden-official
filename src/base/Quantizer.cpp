@@ -190,11 +190,13 @@ Quantizer::getQuantizedAbsoluteTime(const Event *e) const
     }
 }
 
+/* unused
 timeT
 Quantizer::getUnquantizedAbsoluteTime(Event *e) const
 {
     return getFromSource(e, AbsoluteTimeValue);
 }
+*/
 
 timeT
 Quantizer::getUnquantizedDuration(Event *e) const

@@ -516,7 +516,7 @@ public:
      * resulting index of the time signature (suitable for passing
      * to removeTimeSignature, for example)
      */
-    int addTimeSignature(timeT t, TimeSignature timeSig);
+    int addTimeSignature(timeT t, const TimeSignature& timeSig);
 
     /**
      * Return the time signature in effect at time t

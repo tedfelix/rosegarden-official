@@ -30,8 +30,8 @@ public:
     explicit Exception(const char *message);
     Exception(const char *message, const char *file, int line);
 
-    explicit Exception(std::string message);
-    Exception(std::string message, std::string file, int line);
+    explicit Exception(const std::string& message);
+    Exception(const std::string& message, const std::string& file, int line);
 
     explicit Exception(QString message);
     Exception(QString message, QString file, int line);

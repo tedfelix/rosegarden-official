@@ -300,6 +300,7 @@ SequencerDataBlock::setTrackLevel(TrackId track, const LevelInfo &info)
 	(ControlBlock::getInstance()->getInstrumentForTrack(track), info);
 }
 
+/* unused
 bool
 SequencerDataBlock::getTrackLevel(TrackId track, LevelInfo &info) const
 {
@@ -308,6 +309,7 @@ SequencerDataBlock::getTrackLevel(TrackId track, LevelInfo &info) const
     return getInstrumentLevel
 	(ControlBlock::getInstance()->getInstrumentForTrack(track), info);
 }
+*/
 
 bool
 SequencerDataBlock::getSubmasterLevel(int submaster, LevelInfo &info) const

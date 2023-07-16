@@ -38,7 +38,7 @@ public:
     // unused int getMaximumValue() const;
     int getDefaultValue() const;
     // unused float getSpeed() const;
-    bool getTracking() const;
+    // unused bool getTracking() const;
     // unused bool getShowScale() const;
     int getValue() const;
     void setBright(const bool v);

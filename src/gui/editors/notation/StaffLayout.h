@@ -288,7 +288,7 @@ public:
     /**
      * Get the scene height of the title area.
      */
-    virtual int getTitleHeight() const;
+    // unused virtual int getTitleHeight() const;
 
     /**
      * Returns the width of the entire staff after layout.  Call

@@ -151,7 +151,7 @@ private:
     NoteCharacterDrawRep *lookupDrawRep(QPixmap *pixmap) const;
 
     static CharName getNameWithColour(CharName origName, int hue);
-    static CharName getNameShaded(CharName origName);
+    // unused static CharName getNameShaded(CharName origName);
 
     typedef std::pair<QPixmap *, QPixmap *>    PixmapPair;
     typedef std::map<CharName, PixmapPair>     PixmapMap;

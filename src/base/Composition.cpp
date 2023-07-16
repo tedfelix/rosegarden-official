@@ -936,7 +936,7 @@ Composition::getBarRange(int n) const
 }
 
 int
-Composition::addTimeSignature(timeT t, TimeSignature timeSig)
+Composition::addTimeSignature(timeT t, const TimeSignature& timeSig)
 {
 #ifdef DEBUG_BAR_STUFF
     RG_DEBUG << "addTimeSignature(" << t << ", " << timeSig.getNumerator() << "/" << timeSig.getDenominator() << ")";

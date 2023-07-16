@@ -209,11 +209,13 @@ Thumbwheel::setTracking(bool tracking)
     m_tracking = tracking;
 }
 
+/* unused
 bool
 Thumbwheel::getTracking() const
 {
     return m_tracking;
 }
+*/
 
 void
 Thumbwheel::setShowScale(bool showScale)

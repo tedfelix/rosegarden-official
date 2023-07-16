@@ -431,11 +431,13 @@ NoteFont::getNameWithColour(CharName origName, int hue)
     return QString("%1__%2").arg(hue).arg(origName);
 }
 
+/* unused
 CharName
 NoteFont::getNameShaded(CharName origName)
 {
     return QString("shaded__%1").arg(origName);
 }
+*/
 
 bool
 NoteFont::getDimensions(CharName charName, int &x, int &y, bool inverted) const

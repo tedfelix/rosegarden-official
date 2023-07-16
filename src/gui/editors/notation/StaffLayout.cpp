@@ -225,11 +225,13 @@ StaffLayout::setTitleHeight(int titleHeight)
     m_titleHeight = titleHeight;
 }
 
+/* unused
 int
 StaffLayout::getTitleHeight() const
 {
     return m_titleHeight;
 }
+*/
 
 double
 StaffLayout::getTotalWidth() const
