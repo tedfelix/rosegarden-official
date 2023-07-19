@@ -79,11 +79,11 @@ namespace Accidentals
     }
     */
 
-    ROSEGARDENPRIVATE_EXPORT int getPitchOffset(const Accidental &acc) {
-        if (acc == DoubleSharp) return 2;
-        else if (acc == Sharp) return 1;
-        else if (acc == Flat) return -1;
-        else if (acc == DoubleFlat) return -2;
+    ROSEGARDENPRIVATE_EXPORT int getPitchOffset(const Accidental &accidental) {
+        if (accidental == DoubleSharp) return 2;
+        else if (accidental == Sharp) return 1;
+        else if (accidental == Flat) return -1;
+        else if (accidental == DoubleFlat) return -2;
         else return 0;
     }
 
@@ -617,10 +617,10 @@ Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
     return NoAccidental;
 }
 
-Accidental Key::getAccidentalForStep(int step) const
+Accidental Key::getAccidentalForStep(int steps) const
 {
     if (isMinor()) {
-        step = (step + 5) % 7;
+        steps = (steps + 5) % 7;
     }
 
     int accidentalCount = getAccidentalCount();
@@ -634,7 +634,7 @@ Accidental Key::getAccidentalForStep(int step) const
     int currentAccidentalPosition = sharp ? 6 : 3;
 
     for (int i = 1; i <= accidentalCount; i++) {
-        if (step == currentAccidentalPosition) {
+        if (steps == currentAccidentalPosition) {
             return sharp ? Sharp : Flat;
         }
 
@@ -745,7 +745,8 @@ Key::KeyDetails::KeyDetails()
 }
 
 Key::KeyDetails::KeyDetails(bool sharps, bool minor, int sharpCount,
-                            std::string equivalence, std::string rg2name,
+                            const std::string& equivalence,
+                            const std::string& rg2name,
                             int tonicPitch)
     : m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
       m_equivalence(equivalence), m_rg2name(rg2name), m_tonicPitch(tonicPitch)
@@ -842,7 +843,7 @@ Indication::getAsEvent(timeT absoluteTime) const
 }
 
 bool
-Indication::isValid(const std::string &s) const
+Indication::isValid(const std::string &s)
 {
     return
         (s == Slur || s == PhrasingSlur ||
@@ -913,9 +914,9 @@ Text::Text(const Event &e) :
     e.get<Int>(LyricVersePropertyName, m_verse);
 }
 
-Text::Text(const std::string &s, const std::string &type) :
-    m_text(s),
-    m_type(type),
+Text::Text(const std::string &text, const std::string &textType) :
+    m_text(text),
+    m_type(textType),
     m_verse(0)
 {
     // nothing else
@@ -946,7 +947,7 @@ Text::~Text()
 }
 
 bool
-Text::isTextOfType(Event *e, std::string type)
+Text::isTextOfType(Event *e, const std::string& type)
 {
     return (e->isa(EventType) &&
             e->has(TextTypePropertyName) &&
@@ -1636,6 +1637,7 @@ Pitch::Pitch(int noteInCMajor, int octave, int pitch,
     m_pitch(pitch)
 {
     int natural = (octave - octaveBase) * 12 + scale_Cmajor[noteInCMajor];
+    // cppcheck-suppress useInitializationList
     m_accidental = Accidentals::getAccidental(pitch - natural);
 }
 
@@ -1772,7 +1774,7 @@ Pitch::getOctave(int octaveBase) const
 }
 
 int
-Pitch::getOctaveAccidental(int octaveBase, Accidental acc) const
+Pitch::getOctaveAccidental(int octaveBase, const Accidental& acc) const
 {
     int t_pitch = m_pitch;
     if (acc == Accidentals::DoubleFlat) {
@@ -1867,7 +1869,7 @@ Pitch::getPerformancePitchFromRG21Pitch(int heightOnStaff,
     return p;
 }
 
-Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta)
+Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta) const
 {
     // get old accidental
     Accidental oldAccidental = getAccidental(key);
@@ -1998,7 +2000,11 @@ TimeSignature::TimeSignature(int numerator, int denominator,
                (m_denominator == m_numerator &&
                 (m_numerator == 2 || m_numerator == 4))),
       m_hidden(hidden),
-      m_hiddenBars(hiddenBars)
+      m_hiddenBars(hiddenBars),
+      m_barDuration(0),
+      m_beatDuration(0),
+      m_beatDivisionDuration(0),
+      m_dotted(false)
 {
     if (numerator < 1 || denominator < 1) {
         throw BadTimeSignature("Numerator and denominator must be positive");
@@ -2044,6 +2050,10 @@ TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
     m_common = ts.m_common;
     m_hidden = ts.m_hidden;
     m_hiddenBars = ts.m_hiddenBars;
+    m_barDuration = ts.m_barDuration;
+    m_beatDuration = ts.m_beatDuration;
+    m_beatDivisionDuration = ts.m_beatDivisionDuration;
+    m_dotted = ts.m_dotted;
     return *this;
 }
 
@@ -2237,7 +2247,7 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
 
 }
 
-int TimeSignature::getEmphasisForTime(timeT offset)
+int TimeSignature::getEmphasisForTime(timeT offset) const
 {
     setInternalDurations();
 
@@ -2271,7 +2281,6 @@ void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
 */
 
     divisions.push_back(base / m_beatDuration);
-    base = m_beatDuration;
     --depth;
 
     if (depth <= 0) return;
@@ -2362,12 +2371,13 @@ AccidentalTable::operator=(const AccidentalTable &t)
 }
 
 Accidental
-AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
+AccidentalTable::processDisplayAccidental(const Accidental &displayAcc,
+                                          int heightOnStaff,
                                           bool &cautionary)
 {
-    Accidental acc = acc0;
+    Accidental acc = displayAcc;
 
-    int canonicalHeight = Key::canonicalHeight(height);
+    int canonicalHeight = Key::canonicalHeight(heightOnStaff);
     Accidental keyAcc = m_key.getAccidentalAtHeight(canonicalHeight, m_clef);
 
     Accidental normalAcc = NoAccidental;
@@ -2386,14 +2396,14 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
     if (m_octaves == OctavesEquivalent) {
         normalAcc = canonicalAcc;
     } else {
-        AccidentalMap::iterator i = m_accidentals.find(height);
+        AccidentalMap::iterator i = m_accidentals.find(heightOnStaff);
         if (i != m_accidentals.end() && !i->second.previousBar) {
             normalAcc = i->second.accidental;
         }
     }
 
     if (m_barReset != BarResetNone) {
-        AccidentalMap::iterator i = m_accidentals.find(height);
+        AccidentalMap::iterator i = m_accidentals.find(heightOnStaff);
         if (i != m_accidentals.end() && i->second.previousBar) {
             prevBarAcc = i->second.accidental;
         }
@@ -2472,7 +2482,7 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
     }
 
     if (acc != NoAccidental) {
-        m_newAccidentals[height] = AccidentalRec(acc, false);
+        m_newAccidentals[heightOnStaff] = AccidentalRec(acc, false);
         m_newCanonicalAccidentals[canonicalHeight] = AccidentalRec(acc, false);
     }
 
@@ -2542,8 +2552,8 @@ Symbol::Symbol(const Event &e)
     e.get<String>(SymbolTypePropertyName, m_type);
 }
 
-Symbol::Symbol(const std::string &type) :
-    m_type(type)
+Symbol::Symbol(const std::string &symbolType) :
+    m_type(symbolType)
 {
     // nothing else
 }
@@ -2569,7 +2579,7 @@ Symbol::~Symbol()
 }
 
 bool
-Symbol::isSymbolOfType(Event *e, std::string type)
+Symbol::isSymbolOfType(Event *e, const std::string& type)
 {
     return (e->isa(EventType) &&
             e->has(SymbolTypePropertyName) &&

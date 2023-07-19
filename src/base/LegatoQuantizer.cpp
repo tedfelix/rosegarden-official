@@ -42,7 +42,9 @@ LegatoQuantizer::LegatoQuantizer(timeT unit) :
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
 }
 
-LegatoQuantizer::LegatoQuantizer(std::string source, std::string target, timeT unit) :
+LegatoQuantizer::LegatoQuantizer(const std::string& source,
+                                 const std::string& target,
+                                 timeT unit) :
     Quantizer(source, target),
     m_unit(unit)
 {
@@ -100,7 +102,7 @@ LegatoQuantizer::quantizeLegatoSingle(Segment *s, Segment::iterator i,
 
     for (Segment::iterator j = i; s->isBeforeEndMarker(j); ++j) {
 	if (!(*j)->isa(Note::EventType)) continue;
-	
+
 	timeT qt = (*j)->getAbsoluteTime();
 	qt -= barStart;
 	qt = quantizeTime(qt);
@@ -113,7 +115,7 @@ LegatoQuantizer::quantizeLegatoSingle(Segment *s, Segment::iterator i,
 	    break;
 	}
     }
-    
+
     if (t0 != t || d0 != d) {
 	setToTarget(s, i, t, d);
 	nexti = s->findTime(t + d);

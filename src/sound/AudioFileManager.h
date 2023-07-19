@@ -284,9 +284,9 @@ public:
     class BadAudioPathException : public Exception
     {
     public:
-        explicit BadAudioPathException(QString path) :
+        explicit BadAudioPathException(const QString& path) :
             Exception(QObject::tr("Bad audio file path ") + path), m_path(path) { }
-        BadAudioPathException(QString path, QString file, int line) :
+        BadAudioPathException(const QString& path, const QString& file, int line) :
             Exception(QObject::tr("Bad audio file path ") + path, file, line), m_path(path) { }
         explicit BadAudioPathException(const SoundFile::BadSoundFileException &e) :
             Exception(QObject::tr("Bad audio file path (malformed file?) ") + e.getPath()), m_path(e.getPath()) { }

@@ -45,11 +45,11 @@ public:
     class BadSoundFileException : public Exception
     {
     public:
-        explicit BadSoundFileException(QString path) :
+        explicit BadSoundFileException(const QString& path) :
             Exception(QObject::tr("Bad sound file ") + path), m_path(path) { }
-        BadSoundFileException(QString path, const std::string& message) :
+        BadSoundFileException(const QString& path, const std::string& message) :
             Exception(QObject::tr("Bad sound file ") + path + ": " + strtoqstr(message)), m_path(path) { }
-        BadSoundFileException(QString path, QString file, int line) :
+        BadSoundFileException(const QString& path, const QString& file, int line) :
             Exception(QObject::tr("Bad sound file ") + path, file, line), m_path(path) { }
 
         ~BadSoundFileException() throw() override { }

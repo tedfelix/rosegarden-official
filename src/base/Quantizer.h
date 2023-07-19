@@ -248,7 +248,8 @@ protected:
      */
     timeT getFromSource(Event *, ValueType) const;
     timeT getFromTarget(Event *, ValueType) const;
-    void setToTarget(Segment *, Segment::iterator, timeT t, timeT d) const;
+    void setToTarget(Segment *segment, Segment::iterator segmentIter,
+                     timeT absTime, timeT duration) const;
     mutable std::vector<Event *> m_toInsert;
 
     void removeProperties(Event *) const;

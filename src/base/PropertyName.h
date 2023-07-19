@@ -87,11 +87,11 @@ class ROSEGARDENPRIVATE_EXPORT PropertyName
 {
 public:
     PropertyName() : m_id(-1)  { }
-    explicit PropertyName(const char *cs);
-    explicit PropertyName(const std::string &s);
+    explicit PropertyName(const char *name);
+    explicit PropertyName(const std::string &name);
 
-    PropertyName &operator=(const char *cs);
-    PropertyName &operator=(const std::string &s);
+    PropertyName &operator=(const char *name);
+    PropertyName &operator=(const std::string &name);
 
     bool operator==(const PropertyName &p) const
             { return m_id == p.m_id; }

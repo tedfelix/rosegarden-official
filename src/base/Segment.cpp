@@ -305,22 +305,22 @@ Segment::isPlainlyLinkedTo(Segment * seg) const {
 }
 
 void
-Segment::setTrack(TrackId id)
+Segment::setTrack(TrackId trackId)
 {
     if (m_participation != normal) {
-        m_trackId = id;
+        m_trackId = trackId;
         return;
     }
 
     Composition *c = m_composition;
     if (c) c->weakDetachSegment(this); // sets m_composition to 0
     TrackId oldTrackId = m_trackId;
-    m_trackId = id;
+    m_trackId = trackId;
     if (c) {
         c->weakAddSegment(this);
         c->updateRefreshStatuses();
         c->distributeVerses();
-        c->notifySegmentTrackChanged(this, oldTrackId, id);
+        c->notifySegmentTrackChanged(this, oldTrackId, trackId);
     }
 }
 
@@ -742,10 +742,10 @@ Segment::findSingle(Event* e)
 
 
 Segment::iterator
-Segment::findNearestTime(timeT t)
+Segment::findNearestTime(timeT time)
 {
-    iterator i = findTime(t);
-    if (i == end() || (*i)->getAbsoluteTime() > t) {
+    iterator i = findTime(time);
+    if (i == end() || (*i)->getAbsoluteTime() > time) {
         if (i == begin()) return end();
         else --i;
     }
@@ -1677,30 +1677,30 @@ Segment::lyricsPositionsCount()
 {
     bool firstNote = true;
     timeT lastTime = getStartTime();
-    
+
     // How many lyrics syllables the segment can carry ?
     // We have to count the notes.
-    
+
     int count = 0;
     for (Segment::iterator i = begin(); isBeforeEndMarker(i); ++i) {
 
         // Only look at notes
         if (!(*i)->isa(Note::EventType)) continue;
-    
+
 //   Don't do this : LilyPond counts tied notes
 //         // When notes are tied, only look at the first one
 //         if ((*i)->has(BaseProperties::TIED_BACKWARD) &&
 //             (*i)->get<Bool>(BaseProperties::TIED_BACKWARD)) continue;
-        
+
         // A chord is seen as one note only
         timeT myTime = (*i)->getNotationAbsoluteTime();
         if ((myTime > lastTime) || firstNote) {
             count++;
             lastTime = myTime;
             firstNote = false;
-        }    
+        }
     }
-   
+
     return count;
 }
 
