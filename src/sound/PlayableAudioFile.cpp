@@ -163,9 +163,10 @@ PlayableAudioFile::~PlayableAudioFile()
         m_smallFileCache.decrementReference(m_audioFile);
     }
 
-    m_workBuffersMutex.lock();
-    clearWorkBuffers();
-    m_workBuffersMutex.unlock();
+    {
+        QMutexLocker lock(&m_workBuffersMutex);
+        clearWorkBuffers();
+    }
 
 #ifdef DEBUG_PLAYABLE 
     //    std::cerr << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
@@ -642,120 +643,122 @@ PlayableAudioFile::updateBuffers()
         m_fileEnded = true;
     }
 
-    // We're about to hit the work buffers.
-    m_workBuffersMutex.lock();
+    {
+        // We're about to hit the work buffers.
+        QMutexLocker lock(&m_workBuffersMutex);
 
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "requested " << fileFrames << " frames from file for " << nframes << " frames, got " << obtained << " frames" << std::endl;
+        std::cerr << "requested " << fileFrames << " frames from file for " << nframes << " frames, got " << obtained << " frames" << std::endl;
 #endif
 
-    if (nframes > m_workBufferSize) {
+        if (nframes > m_workBufferSize) {
 
-        clearWorkBuffers();
+            clearWorkBuffers();
 
-        m_workBufferSize = nframes;
+            m_workBufferSize = nframes;
 
 #ifdef DEBUG_PLAYABLE_READ
-        std::cerr << "Expanding work buffer to " << m_workBufferSize << " frames" << std::endl;
+            std::cerr << "Expanding work buffer to " << m_workBufferSize << " frames" << std::endl;
 #endif
 
-        for (int i = 0; i < m_targetChannels; ++i) {
-            m_workBuffers.push_back(new sample_t[m_workBufferSize]);
-        }
-
-    } else {
-
-        while (m_targetChannels > (int)m_workBuffers.size()) {
-            m_workBuffers.push_back(new sample_t[m_workBufferSize]);
-        }
-    }
-
-    if (m_audioFile->decode((const unsigned char *)m_rawFileBuffer,
-                            obtained * getBytesPerFrame(),
-                            m_targetSampleRate,
-                            m_targetChannels,
-                            nframes,
-                            m_workBuffers,
-                            false)) {
-
-        /* !!! No -- GUI and notification side of things isn't up to this yet,
-          so comment it out just in case
-
-        if (m_autoFade) {
-
-            if (m_currentScanPoint < m_startIndex + m_fadeInTime) {
-
-                size_t fadeSamples =
-                        (size_t)RealTime::realTime2Frame(m_fadeInTime, getTargetSampleRate());
-                size_t originSamples =
-                        (size_t)RealTime::realTime2Frame(m_currentScanPoint - m_startIndex, // is x - y strictly non-negative?
-                                                         getTargetSampleRate());
-
-                for (size_t i = 0; i < nframes; ++i) {
-                    if (i + originSamples > fadeSamples) {
-                        break;
-                    }
-                    float gain = float(i + originSamples) / float(fadeSamples);
-                    for (int ch = 0; ch < m_targetChannels; ++ch) {
-                        m_workBuffers[ch][i] *= gain;
-                    }
-                }
+            for (int i = 0; i < m_targetChannels; ++i) {
+                m_workBuffers.push_back(new sample_t[m_workBufferSize]);
             }
 
-            if (m_currentScanPoint + block >
-                m_startIndex + m_duration - m_fadeOutTime) {
+        } else {
 
-                size_t fadeSamples =
-                        (size_t)RealTime::realTime2Frame(m_fadeOutTime, getTargetSampleRate());
-                size_t originSamples = // counting from end
-                        (size_t)RealTime::realTime2Frame
-                                (m_startIndex + m_duration - m_currentScanPoint, // is x - y strictly non-negative?
-                                 getTargetSampleRate());
+            while (m_targetChannels > (int)m_workBuffers.size()) {
+                m_workBuffers.push_back(new sample_t[m_workBufferSize]);
+            }
+        }
 
-                for (size_t i = 0; i < nframes; ++i) {
-                    float gain = 1.0;
-                    if (originSamples < i) gain = 0.0;
-                    else {
-                        size_t fromEnd = originSamples - i;
-                        if (fromEnd < fadeSamples) {
-                            gain = float(fromEnd) / float(fadeSamples);
+        if (m_audioFile->decode((const unsigned char *)m_rawFileBuffer,
+                                obtained * getBytesPerFrame(),
+                                m_targetSampleRate,
+                                m_targetChannels,
+                                nframes,
+                                m_workBuffers,
+                                false)) {
+
+            /* !!! No -- GUI and notification side of things isn't up to this yet,
+              so comment it out just in case
+
+            if (m_autoFade) {
+
+                if (m_currentScanPoint < m_startIndex + m_fadeInTime) {
+
+                    size_t fadeSamples =
+                            (size_t)RealTime::realTime2Frame(m_fadeInTime, getTargetSampleRate());
+                    size_t originSamples =
+                            (size_t)RealTime::realTime2Frame(m_currentScanPoint - m_startIndex, // is x - y strictly non-negative?
+                                                             getTargetSampleRate());
+
+                    for (size_t i = 0; i < nframes; ++i) {
+                        if (i + originSamples > fadeSamples) {
+                            break;
+                        }
+                        float gain = float(i + originSamples) / float(fadeSamples);
+                        for (int ch = 0; ch < m_targetChannels; ++ch) {
+                            m_workBuffers[ch][i] *= gain;
                         }
                     }
-                    for (int ch = 0; ch < m_targetChannels; ++ch) {
-                        m_workBuffers[ch][i] *= gain;
+                }
+
+                if (m_currentScanPoint + block >
+                    m_startIndex + m_duration - m_fadeOutTime) {
+
+                    size_t fadeSamples =
+                            (size_t)RealTime::realTime2Frame(m_fadeOutTime, getTargetSampleRate());
+                    size_t originSamples = // counting from end
+                            (size_t)RealTime::realTime2Frame
+                                    (m_startIndex + m_duration - m_currentScanPoint, // is x - y strictly non-negative?
+                                     getTargetSampleRate());
+
+                    for (size_t i = 0; i < nframes; ++i) {
+                        float gain = 1.0;
+                        if (originSamples < i) gain = 0.0;
+                        else {
+                            size_t fromEnd = originSamples - i;
+                            if (fromEnd < fadeSamples) {
+                                gain = float(fromEnd) / float(fadeSamples);
+                            }
+                        }
+                        for (int ch = 0; ch < m_targetChannels; ++ch) {
+                            m_workBuffers[ch][i] *= gain;
+                        }
                     }
+                }
+            }
+            */
+
+            m_currentScanPoint = m_currentScanPoint + block;
+
+            for (int ch = 0; ch < m_targetChannels; ++ch) {
+
+                if (m_firstRead || m_fileEnded) {
+                    float xfade = std::min(a_xfadeFrames, nframes);
+                    if (m_firstRead) {
+                        for (size_t i = 0; i < xfade; ++i) {
+                            m_workBuffers[ch][i] *= float(i + 1) / xfade;
+                        }
+                    }
+                    if (m_fileEnded) {
+                        for (size_t i = 0; i < xfade; ++i) {
+                            m_workBuffers[ch][nframes - i - 1] *=
+                                float(i + 1) / xfade;
+                        }
+                    }
+                }
+
+                if (m_ringBuffers[ch]) {
+                    m_ringBuffers[ch]->write(m_workBuffers[ch], nframes);
                 }
             }
         }
-        */
 
-        m_currentScanPoint = m_currentScanPoint + block;
-
-        for (int ch = 0; ch < m_targetChannels; ++ch) {
-
-            if (m_firstRead || m_fileEnded) {
-                float xfade = std::min(a_xfadeFrames, nframes);
-                if (m_firstRead) {
-                    for (size_t i = 0; i < xfade; ++i) {
-                        m_workBuffers[ch][i] *= float(i + 1) / xfade;
-                    }
-                }
-                if (m_fileEnded) {
-                    for (size_t i = 0; i < xfade; ++i) {
-                        m_workBuffers[ch][nframes - i - 1] *=
-                            float(i + 1) / xfade;
-                    }
-                }
-            }
-
-            if (m_ringBuffers[ch]) {
-                m_ringBuffers[ch]->write(m_workBuffers[ch], nframes);
-            }
-        }
+        // Done.
+        //m_workBuffersMutex.unlock();
     }
-
-    // Done.
-    m_workBuffersMutex.unlock();
 
     m_firstRead = false;
 
