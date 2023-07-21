@@ -34,7 +34,7 @@ class SelectionPropertyCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SelectionPropertyCommand)
 
 public:
-
+    // cppcheck-suppress noConstructor
     explicit SelectionPropertyCommand(ParameterPattern::Result result);
 
     void modifySegment() override;

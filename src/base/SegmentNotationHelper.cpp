@@ -928,21 +928,21 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
 // iterator (which will have been replaced)
 
 Segment::iterator
-SegmentNotationHelper::collapseRestsForInsert(iterator i,
+SegmentNotationHelper::collapseRestsForInsert(iterator firstRest,
                                               timeT desiredDuration)
 {
     // collapse at most once, then recurse
 
-    if (!segment().isBeforeEndMarker(i) ||
-        !(*i)->isa(Note::EventRestType)) return i;
+    if (!segment().isBeforeEndMarker(firstRest) ||
+        !(*firstRest)->isa(Note::EventRestType)) return firstRest;
 
-    timeT d = (*i)->getDuration();
-    iterator j = findContiguousNext(i); // won't return itr after end marker
-    if (d >= desiredDuration || j == end()) return i;
+    timeT d = (*firstRest)->getDuration();
+    iterator j = findContiguousNext(firstRest); // won't return itr after end marker
+    if (d >= desiredDuration || j == end()) return firstRest;
 
-    Event *e(new Event(**i, (*i)->getAbsoluteTime(), d + (*j)->getDuration()));
+    Event *e(new Event(**firstRest, (*firstRest)->getAbsoluteTime(), d + (*j)->getDuration()));
     iterator ii(insert(e));
-    erase(i);
+    erase(firstRest);
     erase(j);
 
     return collapseRestsForInsert(ii, desiredDuration);
@@ -1185,28 +1185,28 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 
 
 Segment::iterator
-SegmentNotationHelper::insertClef(timeT absoluteTime, Clef clef)
+SegmentNotationHelper::insertClef(timeT absoluteTime, const Clef& clef)
 {
     return insert(clef.getAsEvent(absoluteTime));
 }
 
 
 Segment::iterator
-SegmentNotationHelper::insertSymbol(timeT absoluteTime, Symbol symbol)
+SegmentNotationHelper::insertSymbol(timeT absoluteTime, const Symbol& symbol)
 {
     return insert(symbol.getAsEvent(absoluteTime));
 }
 
 
 Segment::iterator
-SegmentNotationHelper::insertKey(timeT absoluteTime, Key key)
+SegmentNotationHelper::insertKey(timeT absoluteTime, const Key& key)
 {
     return insert(key.getAsEvent(absoluteTime));
 }
 
 
 Segment::iterator
-SegmentNotationHelper::insertText(timeT absoluteTime, Text text)
+SegmentNotationHelper::insertText(timeT absoluteTime, const Text& text)
 {
     Segment::iterator i = insert(text.getAsEvent(absoluteTime));
 

@@ -20,13 +20,13 @@
 #include "base/Segment.h"
 #include "Composition.h" // for RealTime
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 class ROSEGARDENPRIVATE_EXPORT SegmentPerformanceHelper : protected SegmentHelper
 {
 public:
-    SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }
+    explicit SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }
     ~SegmentPerformanceHelper() override;
 
     typedef std::vector<iterator> iteratorcontainer;
@@ -48,7 +48,7 @@ public:
      * returned in the graceNotes sequence, and the host note
      * iterators in hostNotes.  isHostNote is set to true if the
      * given event is a host note, false otherwise.
-     * 
+     *
      * If the given event is not a grace note, is a grace note with no
      * host note, or is a potential host note without any grace notes,
      * the sequences will both be empty and the function will return
@@ -67,16 +67,16 @@ public:
     /**
      * Returns the duration of the note event pointed to by i, taking
      * into account any ties the note may have etc.
-     * 
+     *
      * If the note is the first of two or more tied notes, this will
      * return the accumulated duration of the whole series of notes
      * it's tied to.
-     * 
+     *
      * If the note is in a tied series but is not the first, this will
      * return zero, because the note's duration is presumed to have
      * been accounted for by a previous call to this method when
      * examining the first note in the tied series.
-     * 
+     *
      * If the note is not tied, or if i does not point to a note
      * event, this will just return the duration of the event at i.
      *

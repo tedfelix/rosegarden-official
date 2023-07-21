@@ -93,7 +93,7 @@ class DiatonicRelativeNote : public RelativeNote
 {
 public:
     DiatonicRelativeNote(int i, Event *e, timeT startTime,
-                         const Key& key, const Pitch basePitch);
+                         const Key& key, const Pitch& basePitch);
     static pitchT addDiatonicInterval(const Key& key,
                                       const Pitch & basePitch,
                                       int interval);
@@ -824,7 +824,7 @@ DiatonicRelativeNote::DiatonicRelativeNote(int i,
                                            Event *e,
                                            timeT startTime,
                                            const Key& key,
-                                           const Pitch basePitch) :
+                                           const Pitch& basePitch) :
     RelativeNote(i, e, startTime)
 {
     const int octaveBase = 0;
