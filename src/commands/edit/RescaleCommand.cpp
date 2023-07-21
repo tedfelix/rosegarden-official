@@ -65,7 +65,7 @@ RescaleCommand::getAffectedEndTime(EventSelection &selection,
 }
 
 timeT
-RescaleCommand::rescale(timeT t)
+RescaleCommand::rescale(timeT t) const
 {
     // avoid overflows by using doubles
     double d = t;

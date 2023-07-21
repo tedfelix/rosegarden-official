@@ -1314,7 +1314,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
 }
 
 void
-RosegardenMainWindow::openFile(QString filePath, ImportType type)
+RosegardenMainWindow::openFile(const QString& filePath, ImportType type)
 {
     //RG_DEBUG << "openFile(): " << filePath;
 
@@ -1852,7 +1852,7 @@ RosegardenMainWindow::slotOpenDroppedURL(QString url)
 }
 
 void
-RosegardenMainWindow::openURL(QString url)
+RosegardenMainWindow::openURL(const QString& url)
 {
     //RG_DEBUG << "openURL(): url =" << url;
 
@@ -3989,7 +3989,7 @@ RosegardenMainWindow::slotImportProject()
 }
 
 void
-RosegardenMainWindow::importProject(QString filePath)
+RosegardenMainWindow::importProject(const QString& filePath)
 {
     // Launch the project packager script-in-a-dialog in Unpack mode:
     ProjectPackager *dialog = new ProjectPackager(this, RosegardenDocument::currentDocument, ProjectPackager::Unpack, filePath);

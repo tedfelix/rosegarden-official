@@ -158,16 +158,16 @@ public:
     };
 
     /// open a Rosegarden file
-    void openFile(QString filePath) { openFile(filePath, ImportCheckType); }
+    void openFile(const QString& filePath) { openFile(filePath, ImportCheckType); }
 
     /// open a file, explicitly specifying its type
-    void openFile(QString filePath, ImportType type);
+    void openFile(const QString& filePath, ImportType type);
 
     /// decode and open a project file
-    void importProject(QString filePath);
+    void importProject(const QString& filePath);
 
     /// open a URL
-    void openURL(QString url);
+    void openURL(const QString& url);
 
     /// merge a file with the existing document
     /*

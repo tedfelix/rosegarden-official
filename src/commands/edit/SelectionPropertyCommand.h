@@ -29,6 +29,7 @@ namespace Rosegarden
 {
 
 
+// cppcheck-suppress noConstructor
 class SelectionPropertyCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SelectionPropertyCommand)

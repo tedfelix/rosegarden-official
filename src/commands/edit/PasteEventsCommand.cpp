@@ -133,7 +133,7 @@ PasteEventsCommand::getPasteTypes()
 timeT
 PasteEventsCommand::getEffectiveEndTime(Segment &segment,
                                         Clipboard *clipboard,
-                                        timeT pasteTime)
+                                        timeT pasteTime) const
 {
     if (!clipboard->isSingleSegment()) {
         RG_DEBUG << "PasteEventsCommand::getEffectiveEndTime: not single segment";
