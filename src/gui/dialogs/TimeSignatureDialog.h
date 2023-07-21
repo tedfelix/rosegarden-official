@@ -47,7 +47,7 @@ public:
                         Composition *composition,
                         timeT insertionTime,
                         TimeSignature defaultSig =
-                            TimeSignature::DefaultTimeSignature,
+                            TimeSignature(4,4),
                         bool timeEditable = false,
                         QString explanatoryText = "");
 

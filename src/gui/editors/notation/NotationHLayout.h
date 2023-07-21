@@ -320,24 +320,25 @@ protected:
      */
     struct TrackTimeSig
     {
-        TrackId trackId;
-        TimeSignature timeSignature;
-
         TrackTimeSig(const TrackId & track,
                      const TimeSignature & timeSig) :
-        trackId(track),
-        timeSignature(timeSig)
+            trackId(track),
+            timeSignature(timeSig)
         {
         }
 
         bool operator<(const TrackTimeSig &tts) const {
-            // We need this operator to use TrackTimeSig as key of a map.
+            // We need this operator to use TrackTimeSig as key of a std::map.
             if (trackId == tts.trackId) {
                 return timeSignature < tts.timeSignature;
             } else {
                 return trackId < tts.trackId;
             }
         }
+
+        TrackId trackId;
+        TimeSignature timeSignature;
+
     };
 
 

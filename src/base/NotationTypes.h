@@ -1140,19 +1140,25 @@ private:
  * signature Event type, these Events don't appear in regular Segments
  * but only in the Composition's reference segment.
  */
-
 class ROSEGARDENPRIVATE_EXPORT TimeSignature
 {
 public:
-    static const TimeSignature DefaultTimeSignature;
+    // ??? Seems unnecessary.  Typing TimeSignature(4,4) isn't that
+    //     difficult to do.  And it is universally accepted as the
+    //     standard.  And it is only used in three places.  Two
+    //     of them here.
+    //static const TimeSignature DefaultTimeSignature;
+
     typedef Exception BadTimeSignature;
 
+    // Default 4/4
     TimeSignature() :
-        m_numerator(DefaultTimeSignature.m_numerator),
-        m_denominator(DefaultTimeSignature.m_denominator),
-        m_common(false), m_hidden(false), m_hiddenBars(false),
-        m_barDuration(0), m_beatDuration(0), m_beatDivisionDuration(0),
-        m_dotted(false) { }
+        m_numerator(4),
+        m_denominator(4),
+        m_common(false),
+        m_hidden(false),
+        m_hiddenBars(false)
+    { }
 
     /**
      * Construct a TimeSignature object describing a time signature
@@ -1166,23 +1172,47 @@ public:
     TimeSignature(int numerator, int denominator,
                   bool preferCommon = false,
                   bool hidden = false,
-                  bool hiddenBars = false)
-        /* throw (BadTimeSignature) */;
+                  bool hiddenBars = false);
 
+    // Called by Composition.
+    explicit TimeSignature(const Event &e);
+
+    //~TimeSignature() { }
+
+    // This copy ctor deliberately does not copy the cached
+    // values.  Why not?
     TimeSignature(const TimeSignature &ts) :
         m_numerator(ts.m_numerator),
         m_denominator(ts.m_denominator),
         m_common(ts.m_common),
         m_hidden(ts.m_hidden),
-        m_hiddenBars(ts.m_hiddenBars),
-        m_barDuration(0),
-        m_beatDuration(0),
-        m_beatDivisionDuration(0),
-        m_dotted(false) { }
+        m_hiddenBars(ts.m_hiddenBars)
+    { }
 
-    ~TimeSignature() { }
+    // This op=() deliberately does not copy the cached
+    // values.  Why not?
+    TimeSignature &operator=(const TimeSignature &ts)
+    {
+        if (&ts == this)
+            return *this;
 
-    TimeSignature &operator=(const TimeSignature &ts);
+        m_numerator = ts.m_numerator;
+        m_denominator = ts.m_denominator;
+        m_common = ts.m_common;
+        m_hidden = ts.m_hidden;
+        m_hiddenBars = ts.m_hiddenBars;
+
+#if 0
+        // Copy the cache?
+        // Added, missing from original.
+        m_barDuration = ts.m_barDuration;
+        m_beatDuration = ts.m_beatDuration;
+        m_beatDivisionDuration = ts.m_beatDivisionDuration;
+        m_dotted = ts.m_dotted;
+#endif
+
+        return *this;
+    }
 
     bool operator==(const TimeSignature &ts) const {
         return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
@@ -1191,7 +1221,7 @@ public:
         return !operator==(ts);
     }
     bool operator<(const TimeSignature &ts) const {
-        // We don't really need to ordered time signatures, but to be able to
+        // We don't really need ordered time signatures, but to be able to
         // create a map keyed with time signatures. We want to distinguish
         // 4/4 from 2/4 as well as 4/4 from 2/2.
         double ratio1 = (double) m_numerator / (double) m_denominator;
@@ -1200,14 +1230,28 @@ public:
         else return ratio1 < ratio2;
     }
 
-    int getNumerator()     const { return m_numerator; }
-    int getDenominator()   const { return m_denominator; }
+    int getNumerator() const  { return m_numerator; }
+    int getDenominator() const  { return m_denominator; }
 
-    bool isCommon()        const { return m_common; }
+    /// Show as "C", common/cut time?  If false, displays as 4/4 or 2/2.
+    /**
+     * @see NotePixmapFactory::makeTimeSig()
+     */
+    bool isCommon() const  { return m_common; }
+
+    /// Whether the TimeSignature is displayed in notation.
+    /**
+     * @see NotationStaff::insertTimeSignature()
+     */
     bool isHidden()        const { return m_hidden; }
+
+    /// Hide the bar line for this TimeSignature.
+    /**
+     * @see StaffLayout::insertBar()
+     */
     bool hasHiddenBars()   const { return m_hiddenBars; }
 
-    void setHidden(bool hidden) { m_hidden = hidden; }
+    //void setHidden(bool hidden) { m_hidden = hidden; }
 
     timeT getBarDuration() const;
 
@@ -1229,7 +1273,7 @@ public:
     /**
      * Return true if this time signature indicates dotted time.
      */
-    bool isDotted() const;
+    //bool isDotted() const;
 
     /**
      * Return the duration of the beat of the time signature.  For
@@ -1243,15 +1287,8 @@ public:
     /**
      * Return the number of beats in a complete bar.
      */
-    int getBeatsPerBar()  const {
-        return getBarDuration() / getBeatDuration();
-    }
-
-    /**
-     * Get the "optimal" list of rest durations to make up a bar in
-     * this time signature.
-     */
-    void getDurationListForBar(DurationList &dlist) const;
+    int getBeatsPerBar() const
+            { return getBarDuration() / getBeatDuration(); }
 
     /**
      * Get the "optimal" list of rest durations to make up a time
@@ -1279,41 +1316,54 @@ public:
      */
     void getDivisions(int depth, std::vector<int> &divisions) const;
 
-private:
-    friend class Composition;
-    friend class TimeTempoSelection;
-
-    explicit TimeSignature(const Event &e)
-        /* throw (Event::NoData, Event::BadType, BadTimeSignature) */;
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
 
     static const std::string EventType;
-    static const int EventSubOrdering;
     static const PropertyName NumeratorPropertyName;
     static const PropertyName DenominatorPropertyName;
     static const PropertyName ShowAsCommonTimePropertyName;
     static const PropertyName IsHiddenPropertyName;
     static const PropertyName HasHiddenBarsPropertyName;
 
-    /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsEvent(timeT absoluteTime) const;
-
 private:
+    // For .rg file write.
+    friend class Composition;
+    friend class TimeTempoSelection;
+
     int m_numerator;
     int m_denominator;
-
     bool m_common;
+
     bool m_hidden;
     bool m_hiddenBars;
 
-    mutable int  m_barDuration;
-    mutable int  m_beatDuration;
-    mutable int  m_beatDivisionDuration;
-    mutable bool m_dotted;
+    // Cached values.
+    // ??? These are recomputed every time they are set or used.  That's
+    //     not what a cache is for.  Generally a cache is an optimization
+    //     that avoids work.  This just creates more.  Recommend analyzing
+    //     the usage of these and removing these cached values.
+    // ??? These are not copied by the copy ctor or op=().  Consequently,
+    //     some routines may have unpredictable behavior after a copy
+    //     is made.  Most routines call setInternalDurations() before
+    //     doing anything, so the values are up to date.  Of course, this
+    //     defeats the main purpose of a cache: avoiding redundant computations.
+    //
+    //     We need to examine each of the routines that uses the cache and
+    //     see if any of them do not call setInternalDurations().  Turns out
+    //     it is none of them.  So this cache is unnecessary.
+    mutable int m_barDuration = 0;
+    mutable int m_beatDuration = 0;
+    mutable int m_beatDivisionDuration = 0;
+    mutable bool m_dotted = false;
     void setInternalDurations() const;
 
-    // a time & effort saving device
-    static const timeT m_crotchetTime;
-    static const timeT m_dottedCrotchetTime;
+    /**
+     * Get the "optimal" list of rest durations to make up a bar in
+     * this time signature.
+     */
+    void getDurationListForBar(DurationList &dlist) const;
+
 };
 
 

@@ -1984,13 +1984,14 @@ Event *Note::getAsRestEvent(timeT absoluteTime) const
 //////////////////////////////////////////////////////////////////////
 
 const string TimeSignature::EventType = "timesignature";
-const int TimeSignature::EventSubOrdering = -150;
 const PropertyName TimeSignature::NumeratorPropertyName("numerator");
 const PropertyName TimeSignature::DenominatorPropertyName("denominator");
 const PropertyName TimeSignature::ShowAsCommonTimePropertyName("common");
 const PropertyName TimeSignature::IsHiddenPropertyName("hidden");
 const PropertyName TimeSignature::HasHiddenBarsPropertyName("hiddenbars");
-const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
+
+constexpr timeT crotchetTime = basePPQ;
+constexpr timeT dottedCrotchetTime = basePPQ + basePPQ/2;
 
 TimeSignature::TimeSignature(int numerator, int denominator,
                              bool preferCommon, bool hidden, bool hiddenBars)
@@ -2000,11 +2001,7 @@ TimeSignature::TimeSignature(int numerator, int denominator,
                (m_denominator == m_numerator &&
                 (m_numerator == 2 || m_numerator == 4))),
       m_hidden(hidden),
-      m_hiddenBars(hiddenBars),
-      m_barDuration(0),
-      m_beatDuration(0),
-      m_beatDivisionDuration(0),
-      m_dotted(false)
+      m_hiddenBars(hiddenBars)
 {
     if (numerator < 1 || denominator < 1) {
         throw BadTimeSignature("Numerator and denominator must be positive");
@@ -2042,24 +2039,11 @@ TimeSignature::TimeSignature(const Event &e)
     }
 }
 
-TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
-{
-    if (&ts == this) return *this;
-    m_numerator = ts.m_numerator;
-    m_denominator = ts.m_denominator;
-    m_common = ts.m_common;
-    m_hidden = ts.m_hidden;
-    m_hiddenBars = ts.m_hiddenBars;
-    m_barDuration = ts.m_barDuration;
-    m_beatDuration = ts.m_beatDuration;
-    m_beatDivisionDuration = ts.m_beatDivisionDuration;
-    m_dotted = ts.m_dotted;
-    return *this;
-}
-
 timeT TimeSignature::getBarDuration() const
 {
+    // Update the cache.
     setInternalDurations();
+
     return m_barDuration;
 }
 
@@ -2071,7 +2055,7 @@ timeT TimeSignature::getBeatDuration() const
 
 timeT TimeSignature::getUnitDuration() const
 {
-    return m_crotchetTime * 4 / m_denominator;
+    return crotchetTime * 4 / m_denominator;
 }
 
 Note::Type TimeSignature::getUnit() const
@@ -2081,14 +2065,18 @@ Note::Type TimeSignature::getUnit() const
     return Note::Semibreve - c;
 }
 
+#if 0
 bool TimeSignature::isDotted() const
 {
     setInternalDurations();
     return m_dotted;
 }
+#endif
 
 Event *TimeSignature::getAsEvent(timeT absoluteTime) const
 {
+    constexpr int EventSubOrdering = -150;
+
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     e->set<Int>(NumeratorPropertyName, m_numerator);
     e->set<Int>(DenominatorPropertyName, m_denominator);
@@ -2106,6 +2094,7 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
                                                timeT duration,
                                                timeT startOffset) const
 {
+    // Update the cache.
     setInternalDurations();
 
     timeT offset = startOffset;
@@ -2222,18 +2211,21 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
 void TimeSignature::getDurationListForBar(DurationList &dlist) const
 {
+    // Note: Although this does not call setInternalDurations() to update
+    //       the cache, this routine's caller does.  So the cache will
+    //       be correct for this routine.
 
     // If the bar's length can be represented with one long symbol, do it.
     // Otherwise, represent it as individual beats.
 
-    if (m_barDuration == m_crotchetTime ||
-        m_barDuration == m_crotchetTime * 2 ||
-        m_barDuration == m_crotchetTime * 4 ||
-        m_barDuration == m_crotchetTime * 8 ||
-        m_barDuration == m_dottedCrotchetTime ||
-        m_barDuration == m_dottedCrotchetTime * 2 ||
-        m_barDuration == m_dottedCrotchetTime * 4 ||
-        m_barDuration == m_dottedCrotchetTime * 8) {
+    if (m_barDuration == crotchetTime ||
+        m_barDuration == crotchetTime * 2 ||
+        m_barDuration == crotchetTime * 4 ||
+        m_barDuration == crotchetTime * 8 ||
+        m_barDuration == dottedCrotchetTime ||
+        m_barDuration == dottedCrotchetTime * 2 ||
+        m_barDuration == dottedCrotchetTime * 4 ||
+        m_barDuration == dottedCrotchetTime * 8) {
 
         dlist.push_back(getBarDuration());
 
@@ -2269,8 +2261,12 @@ void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
 {
     divisions.clear();
 
-    if (depth <= 0) return;
-    timeT base = getBarDuration(); // calls setInternalDurations
+    if (depth <= 0)
+        return;
+
+    // !!! Calls setInternalDurations().
+    timeT base = getBarDuration();
+
 /*
     if (m_numerator == 4 && m_denominator == 4) {
         divisions.push_back(2);
@@ -2300,7 +2296,7 @@ void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
 
 void TimeSignature::setInternalDurations() const
 {
-    int unitLength = m_crotchetTime * 4 / m_denominator;
+    int unitLength = crotchetTime * 4 / m_denominator;
 
     m_barDuration = m_numerator * unitLength;
 
@@ -2313,7 +2309,7 @@ void TimeSignature::setInternalDurations() const
 
     m_dotted = (m_numerator % 3 == 0 &&
                 m_numerator > 3 &&
-                m_barDuration >= m_dottedCrotchetTime);
+                m_barDuration >= dottedCrotchetTime);
 
     if (m_dotted) {
         m_beatDuration = unitLength * 3;
@@ -2325,9 +2321,6 @@ void TimeSignature::setInternalDurations() const
     }
 
 }
-
-const timeT TimeSignature::m_crotchetTime       = basePPQ;
-const timeT TimeSignature::m_dottedCrotchetTime = basePPQ + basePPQ/2;
 
 
 
