@@ -750,10 +750,6 @@ if (LILV_FOUND)
   )
 endif()
 
-
-# Reverse the list order to try to find static init fiasco issues...
-#list (REVERSE rg_CPPS)
-
 set(rg_UIS
   gui/dialogs/RosegardenTransportUi.ui
   gui/studio/DeviceManagerDialogUi.ui
