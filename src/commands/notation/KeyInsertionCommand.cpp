@@ -38,7 +38,7 @@ using namespace BaseProperties;
 
 
 KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
-                                         Key key,
+                                         const Key& key,
                                          bool shouldConvert,
                                          bool shouldTranspose,
                                          bool shouldTransposeKey,

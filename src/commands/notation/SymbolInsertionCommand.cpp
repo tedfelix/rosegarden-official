@@ -35,7 +35,7 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 SymbolInsertionCommand::SymbolInsertionCommand(Segment &segment, timeT time,
-        Symbol symbol) :
+        const Symbol& symbol) :
         BasicCommand(getGlobalName(&symbol), segment, time, time + 1),
         m_symbol(symbol),
         m_lastInsertedEvent(nullptr)
@@ -57,7 +57,7 @@ SymbolInsertionCommand::getSubsequentSelection()
 }
 
 QString
-SymbolInsertionCommand::getGlobalName(Symbol *)
+SymbolInsertionCommand::getGlobalName(const Symbol *)
 {
     return tr("Insert &Symbol...");
     /*

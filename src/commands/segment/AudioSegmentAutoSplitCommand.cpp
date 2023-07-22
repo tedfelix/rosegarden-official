@@ -41,7 +41,8 @@ struct AutoSplitPoint
     timeT lastSoundTime;
     Clef clef;
     Rosegarden::Key key;
-    AutoSplitPoint(timeT t, timeT lst, Clef c, Rosegarden::Key k) :
+    AutoSplitPoint(timeT t, timeT lst,
+                   const Clef& c, const Rosegarden::Key& k) :
 	time(t), lastSoundTime(lst), clef(c), key(k) { }
 };
 
@@ -97,7 +98,6 @@ AudioSegmentAutoSplitCommand::execute()
         }
 
         std::vector<SplitPointPair>::iterator it;
-        timeT absStartTime, absEndTime;
 
         int splitCount = 0;
 
@@ -113,11 +113,11 @@ AudioSegmentAutoSplitCommand::execute()
 
             RG_DEBUG << "AudioSegmentAutoSplitCommand::execute: range " << it->first << " -> " << it->second;
 
-            absStartTime = m_composition->getElapsedTimeForRealTime
-                           (origStartRT - audioStart + it->first);
+            timeT absStartTime = m_composition->getElapsedTimeForRealTime
+                (origStartRT - audioStart + it->first);
 
-            absEndTime = m_composition->getElapsedTimeForRealTime
-                         (origStartRT - audioStart + it->second);
+            timeT absEndTime = m_composition->getElapsedTimeForRealTime
+                (origStartRT - audioStart + it->second);
 
             //	    absStartTime = m_segment->getStartTime() +
             //		m_composition->getElapsedTimeForRealTime(it->first - audioStart);

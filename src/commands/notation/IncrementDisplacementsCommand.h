@@ -56,7 +56,7 @@ public:
     { }
 
     static void registerCommand(CommandRegistry *r);
-    static QPoint getArgument(QString actionName, CommandArgumentQuerier &);
+    static QPoint getArgument(const QString& actionName, CommandArgumentQuerier &);
 
 protected:
     void modifySegment() override;

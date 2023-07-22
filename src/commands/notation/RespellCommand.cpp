@@ -68,7 +68,8 @@ RespellCommand::getGlobalName(RespellType type)
 }
 
 RespellCommand::RespellType
-RespellCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+RespellCommand::getArgument(const QString& actionName,
+                            CommandArgumentQuerier &)
 {
     RespellType type;
     type.type = RespellType::Set;

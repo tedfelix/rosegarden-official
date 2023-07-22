@@ -53,14 +53,14 @@ class KeyInsertionCommand : public BasicCommand
 public:
     KeyInsertionCommand(Segment &segment,
                         timeT time,
-                        Key key,
+                        const Key& key,
                         bool shouldConvert,
                         bool shouldTranspose,
                         bool shouldTransposeKey,
 			bool shouldIgnorePercussion);
     ~KeyInsertionCommand() override;
 
-    static QString getGlobalName(Key *key = nullptr) {
+    static QString getGlobalName(const Key *key = nullptr) {
         if (key) {
             return tr("Change to &Key %1...").arg(strtoqstr(key->getName()));
         } else {
