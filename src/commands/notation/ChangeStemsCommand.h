@@ -43,7 +43,7 @@ public:
         BasicCommand(getGlobalName(up), selection, true),
         m_selection(&selection), m_up(up) { }
 
-    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static bool getArgument(const QString& actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:

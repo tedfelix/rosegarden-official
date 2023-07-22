@@ -49,7 +49,7 @@ public:
         return above ? tr("Slur &Above") : tr("Slur &Below");
     }
 
-    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static bool getArgument(const QString& actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:

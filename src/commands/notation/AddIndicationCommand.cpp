@@ -81,7 +81,7 @@ AddIndicationCommand::registerCommand(CommandRegistry *r)
 }
 
 std::string
-AddIndicationCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+AddIndicationCommand::getArgument(const QString& actionName, CommandArgumentQuerier &)
 {
     std::vector<std::string> standardIndications = getStandardIndications();
 

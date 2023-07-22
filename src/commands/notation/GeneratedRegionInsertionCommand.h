@@ -39,7 +39,7 @@ class GeneratedRegionInsertionCommand : public BasicCommand
 public:
     GeneratedRegionInsertionCommand(Segment &segment,
 				    timeT time,
-				    GeneratedRegion generatedRegion);
+				    const GeneratedRegion& generatedRegion);
     ~GeneratedRegionInsertionCommand() override;
 
     EventSelection *getSubsequentSelection() override;
