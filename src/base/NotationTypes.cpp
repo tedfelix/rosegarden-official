@@ -2065,14 +2065,6 @@ Note::Type TimeSignature::getUnit() const
     return Note::Semibreve - c;
 }
 
-#if 0
-bool TimeSignature::isDotted() const
-{
-    setInternalDurations();
-    return m_dotted;
-}
-#endif
-
 Event *TimeSignature::getAsEvent(timeT absoluteTime) const
 {
     constexpr int EventSubOrdering = -150;
@@ -2296,7 +2288,7 @@ void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
 
 void TimeSignature::setInternalDurations() const
 {
-    int unitLength = crotchetTime * 4 / m_denominator;
+    const int unitLength = crotchetTime * 4 / m_denominator;
 
     m_barDuration = m_numerator * unitLength;
 

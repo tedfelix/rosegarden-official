@@ -1143,12 +1143,8 @@ private:
 class ROSEGARDENPRIVATE_EXPORT TimeSignature
 {
 public:
-    // ??? Seems unnecessary.  Typing TimeSignature(4,4) isn't that
-    //     difficult to do.  And it is universally accepted as the
-    //     standard.  And it is only used in three places.  Two
-    //     of them here.
-    //static const TimeSignature DefaultTimeSignature;
 
+    // Ctors throw this if numerator or denominator are less than 1.
     typedef Exception BadTimeSignature;
 
     // Default 4/4
@@ -1177,59 +1173,6 @@ public:
     // Called by Composition.
     explicit TimeSignature(const Event &e);
 
-    //~TimeSignature() { }
-
-    // This copy ctor deliberately does not copy the cached
-    // values.  Why not?
-    TimeSignature(const TimeSignature &ts) :
-        m_numerator(ts.m_numerator),
-        m_denominator(ts.m_denominator),
-        m_common(ts.m_common),
-        m_hidden(ts.m_hidden),
-        m_hiddenBars(ts.m_hiddenBars)
-    { }
-
-    // This op=() deliberately does not copy the cached
-    // values.  Why not?
-    TimeSignature &operator=(const TimeSignature &ts)
-    {
-        if (&ts == this)
-            return *this;
-
-        m_numerator = ts.m_numerator;
-        m_denominator = ts.m_denominator;
-        m_common = ts.m_common;
-        m_hidden = ts.m_hidden;
-        m_hiddenBars = ts.m_hiddenBars;
-
-#if 0
-        // Copy the cache?
-        // Added, missing from original.
-        m_barDuration = ts.m_barDuration;
-        m_beatDuration = ts.m_beatDuration;
-        m_beatDivisionDuration = ts.m_beatDivisionDuration;
-        m_dotted = ts.m_dotted;
-#endif
-
-        return *this;
-    }
-
-    bool operator==(const TimeSignature &ts) const {
-        return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
-    }
-    bool operator!=(const TimeSignature &ts) const {
-        return !operator==(ts);
-    }
-    bool operator<(const TimeSignature &ts) const {
-        // We don't really need ordered time signatures, but to be able to
-        // create a map keyed with time signatures. We want to distinguish
-        // 4/4 from 2/4 as well as 4/4 from 2/2.
-        double ratio1 = (double) m_numerator / (double) m_denominator;
-        double ratio2 = (double) ts.m_numerator / (double) ts.m_denominator;
-        if (ratio1 == ratio2) return m_denominator > ts.m_denominator;
-        else return ratio1 < ratio2;
-    }
-
     int getNumerator() const  { return m_numerator; }
     int getDenominator() const  { return m_denominator; }
 
@@ -1243,15 +1186,13 @@ public:
     /**
      * @see NotationStaff::insertTimeSignature()
      */
-    bool isHidden()        const { return m_hidden; }
+    bool isHidden() const  { return m_hidden; }
 
     /// Hide the bar line for this TimeSignature.
     /**
      * @see StaffLayout::insertBar()
      */
-    bool hasHiddenBars()   const { return m_hiddenBars; }
-
-    //void setHidden(bool hidden) { m_hidden = hidden; }
+    bool hasHiddenBars() const  { return m_hiddenBars; }
 
     timeT getBarDuration() const;
 
@@ -1261,7 +1202,7 @@ public:
      * is the crotchet, and that of 6/8 is the quaver.  (The numerator
      * of the time signature gives the number of units per bar.)
      */
-    Note::Type getUnit()  const;
+    Note::Type getUnit() const;
 
     /**
      * Return the duration of the unit of the time signature.
@@ -1269,11 +1210,6 @@ public:
      * a more meaningful value.
      */
     timeT getUnitDuration() const;
-
-    /**
-     * Return true if this time signature indicates dotted time.
-     */
-    //bool isDotted() const;
 
     /**
      * Return the duration of the beat of the time signature.  For
@@ -1326,10 +1262,30 @@ public:
     static const PropertyName IsHiddenPropertyName;
     static const PropertyName HasHiddenBarsPropertyName;
 
+    // Operators
+
+    bool operator==(const TimeSignature &ts) const
+    {
+        return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
+    }
+    bool operator!=(const TimeSignature &ts) const  { return !operator==(ts); }
+    bool operator<(const TimeSignature &rhs) const
+    {
+        // We don't really need ordered time signatures, but to be able to
+        // create a map keyed with time signatures. We want to distinguish
+        // 4/4 from 2/4 as well as 4/4 from 2/2.
+
+        const double ratioLHS = (double)m_numerator / (double)m_denominator;
+        const double ratioRHS =
+                (double)rhs.m_numerator / (double)rhs.m_denominator;
+
+        if (ratioLHS == ratioRHS)
+            return m_denominator > rhs.m_denominator;
+        else
+            return ratioLHS < ratioRHS;
+    }
+
 private:
-    // For .rg file write.
-    friend class Composition;
-    friend class TimeTempoSelection;
 
     int m_numerator;
     int m_denominator;
@@ -1339,19 +1295,13 @@ private:
     bool m_hiddenBars;
 
     // Cached values.
+    //
     // ??? These are recomputed every time they are set or used.  That's
     //     not what a cache is for.  Generally a cache is an optimization
-    //     that avoids work.  This just creates more.  Recommend analyzing
-    //     the usage of these and removing these cached values.
-    // ??? These are not copied by the copy ctor or op=().  Consequently,
-    //     some routines may have unpredictable behavior after a copy
-    //     is made.  Most routines call setInternalDurations() before
-    //     doing anything, so the values are up to date.  Of course, this
-    //     defeats the main purpose of a cache: avoiding redundant computations.
+    //     that avoids work.  This just creates more.  Recommend moving toward
+    //     a more sensible approach.  First, remove mutable.  Then make sure
+    //     these are always updated by the setters only.
     //
-    //     We need to examine each of the routines that uses the cache and
-    //     see if any of them do not call setInternalDurations().  Turns out
-    //     it is none of them.  So this cache is unnecessary.
     mutable int m_barDuration = 0;
     mutable int m_beatDuration = 0;
     mutable int m_beatDivisionDuration = 0;
