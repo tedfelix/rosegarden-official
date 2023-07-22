@@ -206,7 +206,7 @@ ControlRulerWidget::launchRulers()
             addControlRuler(ControlParameter::getPitchBend());
         } else if (ruler.type == BaseProperties::VELOCITY.getName()) {
             RG_DEBUG << "launchInitialRulers(): Launching velocity ruler";
-            addPropertyRuler(ruler.type);
+            addPropertyRuler(static_cast<PropertyName>(ruler.type));
         } else {
             RG_WARNING << "launchInitialRulers(): WARNING: Unexpected ruler in Segment.";
         }

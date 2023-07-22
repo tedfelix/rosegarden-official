@@ -41,8 +41,8 @@ ChannelInterval::
 assertSane() const
 {
     Q_ASSERT(m_end > m_start);
-    Q_ASSERT(m_marginBefore >= RealTime::zeroTime);
-    Q_ASSERT(m_marginAfter >= RealTime::zeroTime);
+    Q_ASSERT(m_marginBefore >= RealTime::zero());
+    Q_ASSERT(m_marginAfter >= RealTime::zero());
 }
 #endif
 

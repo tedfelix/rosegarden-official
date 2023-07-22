@@ -266,7 +266,7 @@ HeadersConfigurationPage::slotAddNewProperty()
         QList<QTableWidgetItem*> foundItems = m_metadata->findItems(
                     propertyName, Qt::MatchContains | Qt::MatchCaseSensitive);
 
-        if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)) &&
+        if (!m_doc->getComposition().getMetadata().has(static_cast<PropertyName>(qstrtostr(propertyName))) &&
                      foundItems.isEmpty()){
             break;
         }

@@ -752,7 +752,7 @@ AudioBussMixer::processBlocks()
                     // at the moment that only means DSSI effects
                     // plugins using run_multiple_synths, which would
                     // be an unusual although plausible combination
-                    plugin->run(RealTime::zeroTime);
+                    plugin->run(RealTime::zero());
 
                     ch = 0;
 

@@ -1138,20 +1138,15 @@ public slots:
 
 
     /**
-     * Update the transport with the bar, beat and unit times for
-     * a given timeT
-     */
-    void slotDisplayBarTime(timeT t);
-
-
-    /**
      * Transport controls
      */
     void slotPlay();
     void slotStop();
     void slotRewind();
     void slotFastforward();
+    /// Record
     void slotRecord();
+    /// Punch-In Record
     void slotToggleRecord();
     void slotRewindToBeginning();
     void slotFastForwardToEnd();
@@ -1538,6 +1533,12 @@ private:
      * modified
      */
     bool saveIfModified();
+
+    /**
+     * Update the transport with the bar, beat and unit times for
+     * a given timeT
+     */
+    void displayBarTime(timeT t);
 
     //--------------- Data members ---------------------------------
 

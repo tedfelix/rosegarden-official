@@ -382,7 +382,7 @@ bool RG21Loader::parseIndicationStart()
 
         Indication indication(indicationType, 0);
         Event *e = indication.getAsEvent(indicationTime);
-        e->setMaybe<Int>("indicationId", indicationId);
+        e->setMaybe<Int>(PropertyName("indicationId"), indicationId);
         setGroupProperties(e);
         m_indicationsExtant[indicationId] = e;
 
@@ -421,7 +421,7 @@ void RG21Loader::closeIndication()
     indicationEvent->set
     <Int>
     //!!!	(Indication::IndicationDurationPropertyName,
-    ("indicationduration",
+    (PropertyName("indicationduration"),
      m_currentSegmentTime - indicationEvent->getAbsoluteTime());
 }
 
@@ -485,7 +485,7 @@ void RG21Loader::closeGroup()
                 if ((*i)->isa(Indication::EventType)) {
                     long indicationId = 0;
                     if ((*i)->get
-                            <Int>("indicationId", indicationId)) {
+                            <Int>(PropertyName("indicationId"), indicationId)) {
                         EventIdMap::iterator ei =
                             m_indicationsExtant.find(indicationId);
                         if (ei != m_indicationsExtant.end()) {

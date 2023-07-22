@@ -228,7 +228,7 @@ void MetronomeMapper::fillBuffer()
                             velocity,
                             eventTime,
                             tickDuration,
-                            RealTime::zeroTime);  // audioStartMarker
+                            RealTime::zero());  // audioStartMarker
         }
 
         // Add the event to the buffer.

@@ -452,7 +452,7 @@ EventEditDialog::slotIntPropertyChanged(int value)
 
     m_modified = true;
     QString propertyName = spinBox->objectName();
-    m_event.set<Int>(qstrtostr(propertyName), value);
+    m_event.set<Int>(static_cast<PropertyName>(qstrtostr(propertyName)), value);
 }
 
 void
@@ -476,7 +476,7 @@ EventEditDialog::slotRealTimePropertyChanged(int value)
     // else
     //     realTime.nsec = value;
 
-    m_event.set<Int>(qstrtostr(propertyName), value);
+    m_event.set<Int>(static_cast<PropertyName>(qstrtostr(propertyName)), value);
 }
 
 void
@@ -491,7 +491,7 @@ EventEditDialog::slotBoolPropertyChanged(bool)
     QString propertyName = checkBox->objectName();
     bool checked = checkBox->isChecked();
 
-    m_event.set<Bool>(qstrtostr(propertyName), checked);
+    m_event.set<Bool>(static_cast<PropertyName>(qstrtostr(propertyName)), checked);
 }
 
 void
@@ -504,7 +504,7 @@ EventEditDialog::slotStringPropertyChanged(const QString &value)
 
     m_modified = true;
     QString propertyName = lineEdit->objectName();
-    m_event.set<String>(qstrtostr(propertyName), qstrtostr(value));
+    m_event.set<String>(static_cast<PropertyName>(qstrtostr(propertyName)), qstrtostr(value));
 }
 
 void
@@ -538,7 +538,7 @@ EventEditDialog::slotPropertyDeleted()
     for (i=list.begin(); i!=list.end(); ++i)
         delete *i;
 
-    m_event.unset(qstrtostr(propertyName));
+    m_event.unset(static_cast<PropertyName>(qstrtostr(propertyName)));
 }
 
 void
@@ -570,39 +570,39 @@ EventEditDialog::slotPropertyMadePersistent()
         delete *i;
 
     m_modified = true;
-    addPersistentProperty(qstrtostr(propertyName));
+    addPersistentProperty(static_cast<PropertyName>(qstrtostr(propertyName)));
 
     PropertyType type =
-        m_originalEvent.getPropertyType(qstrtostr(propertyName));
+        m_originalEvent.getPropertyType(static_cast<PropertyName>(qstrtostr(propertyName)));
 
     switch (type) {
 
     case Int:
         m_event.set<Int>
-        (qstrtostr(propertyName),
+        (static_cast<PropertyName>(qstrtostr(propertyName)),
          m_originalEvent.get<Int>
-         (qstrtostr(propertyName)));
+         (static_cast<PropertyName>(qstrtostr(propertyName))));
         break;
 
     case RealTimeT:
         m_event.set<RealTimeT>
-        (qstrtostr(propertyName),
+        (static_cast<PropertyName>(qstrtostr(propertyName)),
          m_originalEvent.get<RealTimeT>
-         (qstrtostr(propertyName)));
+         (static_cast<PropertyName>(qstrtostr(propertyName))));
         break;
 
     case Bool:
         m_event.set<Bool>
-        (qstrtostr(propertyName),
+        (static_cast<PropertyName>(qstrtostr(propertyName)),
          m_originalEvent.get<Bool>
-         (qstrtostr(propertyName)));
+         (static_cast<PropertyName>(qstrtostr(propertyName))));
         break;
 
     case String:
         m_event.set<String>
-        (qstrtostr(propertyName),
+        (static_cast<PropertyName>(qstrtostr(propertyName)),
          m_originalEvent.get<String>
-         (qstrtostr(propertyName)));
+         (static_cast<PropertyName>(qstrtostr(propertyName))));
         break;
     }
 }

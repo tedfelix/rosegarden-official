@@ -160,7 +160,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
     bool inputExhausted = false;
 
-    sourceFile->scanTo(&streamIn, RealTime::zeroTime);
+    sourceFile->scanTo(&streamIn, RealTime::zero());
 
     while (1) {
 

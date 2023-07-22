@@ -47,13 +47,13 @@ namespace Rosegarden
 {
 
 
-const PropertyName Composition::NoAbsoluteTimeProperty = "NoAbsoluteTime";
-const PropertyName Composition::BarNumberProperty = "BarNumber";
+const PropertyName Composition::NoAbsoluteTimeProperty("NoAbsoluteTime");
+const PropertyName Composition::BarNumberProperty("BarNumber");
 
-const std::string Composition::TempoEventType = "tempo";
-const PropertyName Composition::TempoProperty = "Tempo";
-const PropertyName Composition::TargetTempoProperty = "TargetTempo";
-const PropertyName Composition::TempoTimestampProperty = "TimestampSec";
+const std::string Composition::TempoEventType("tempo");
+const PropertyName Composition::TempoProperty("Tempo");
+const PropertyName Composition::TargetTempoProperty("TargetTempo");
+const PropertyName Composition::TempoTimestampProperty("TimestampSec");
 
 
 bool
@@ -1443,7 +1443,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
     ReferenceSegment::iterator i = m_tempoSegment.findAtOrBefore(t);
     if (i == m_tempoSegment.end()) {
         i = m_tempoSegment.begin();
-        if (t >= RealTime::zeroTime ||
+        if (t >= RealTime::zero()  ||
             (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
             return realTime2Time(t, m_defaultTempo);
         }
@@ -2101,6 +2101,18 @@ void Composition::checkSelectedAndRecordTracks()
     }
 }
 
+void Composition::refreshRecordTracks()
+{
+    m_recordTracks.clear();
+
+    // For each Track
+    for (const trackcontainer::value_type &trackPair : m_tracks) {
+        // Armed?  Add to m_recordTracks.
+        if (trackPair.second->isArmed())
+            m_recordTracks.insert(trackPair.first);
+    }
+}
+
 TrackId
 Composition::getClosestValidTrackId(TrackId id) const
 {
@@ -2201,13 +2213,22 @@ std::string Composition::toXmlString() const
     std::stringstream composition;
 
     composition << "<composition recordtracks=\"";
-    for (recordtrackiterator i = m_recordTracks.begin();
-         i != m_recordTracks.end(); ) {
-        composition << *i;
-        if (++i != m_recordTracks.end()) {
+    bool first = true;
+    // For each Track...
+    for (const trackcontainer::value_type &trackPair : m_tracks) {
+        // If the Track isn't really armed, try the next.
+        if (!trackPair.second->isReallyArmed())
+            continue;
+
+        // After the first, we need a comma.
+        if (!first)
             composition << ",";
-        }
+        else  // No longer the first
+            first = false;
+
+        composition << trackPair.first;
     }
+
     composition << "\" pointer=\"" << m_position;
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)
@@ -2439,26 +2460,25 @@ Composition::enforceArmRule(const Track *track)
     if (!track->isArmed())
         return;
 
-    recordtrackcontainer recordTracks = getRecordTracks();
-
-    // For each track that is armed for record
-    for (recordtrackcontainer::const_iterator i =
-            recordTracks.begin();
-            i != recordTracks.end(); ++i) {
-
-        const TrackId otherTrackId = *i;
-        Track *otherTrack = getTrackById(otherTrackId);
-
-        if (!otherTrack)
+    // For each track...
+    for (trackcontainer::value_type &trackPair: m_tracks) {
+        Track *otherTrack = trackPair.second;
+        // Not armed?  Skip.
+        // Use "isReallyArmed()" to make sure we check archived tracks as well.
+        if (!otherTrack->isReallyArmed())
             continue;
+        // Same Track?  Skip.
         if (otherTrack == track)
             continue;
+        // Not using the same Instrument?  Skip.
+        if (otherTrack->getInstrument() != track->getInstrument())
+            continue;
 
-        // If this track is using the same instrument, unarm it.
-        if (otherTrack->getInstrument() == track->getInstrument()) {
-            setTrackRecording(otherTrackId, false);
-            notifyTrackChanged(otherTrack);
-        }
+        // We have found an armed Track using the same Instrument.
+        // Unarm it.
+
+        setTrackRecording(trackPair.first, false);
+        notifyTrackChanged(otherTrack);
     }
 }
 

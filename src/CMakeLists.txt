@@ -555,6 +555,7 @@ set(rg_CPPS
   sound/DSSIPluginFactory.cpp
   sound/MappedInstrument.cpp
   sound/PlayableAudioFile.cpp
+  sound/RingBufferPool.cpp
   sound/SoundDriver.cpp
   sound/AudioCache.cpp
   sound/Tuning.cpp

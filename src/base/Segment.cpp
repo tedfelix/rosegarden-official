@@ -84,8 +84,6 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_snapGridSize(-1),
     m_viewFeatures(0),
     m_autoFade(false),
-    m_fadeInTime(Rosegarden::RealTime::zeroTime),
-    m_fadeOutTime(Rosegarden::RealTime::zeroTime),
     m_segmentLinker(nullptr),
     m_isTmp(0),
     m_participation(normal),
@@ -1146,7 +1144,8 @@ Segment::setDelay(timeT delay)
     m_delay = delay;
     if (m_composition) {
         // don't updateRefreshStatuses() - affects playback only
-        m_composition->notifySegmentEventsTimingChanged(this, delay, RealTime::zeroTime);
+        m_composition->notifySegmentEventsTimingChanged(
+                this, delay, RealTime::zero());
     }
 }
 

@@ -61,7 +61,15 @@ public:
     void setMuted(bool muted)  { m_muted = muted; }
     bool isMuted() const { return m_muted; }
 
-    void setArchived(bool archived)  { m_archived = archived; }
+    /// Set the Track to be archived.
+    /**
+     * @param[in] refreshComp Whether to refresh Composition::m_recordTracks.
+     *   Refreshing m_recordTracks would wreak havoc on .rg file read, so
+     *   RoseXmlHandler should set it to false.  The UI (TrackParameterBox)
+     *   should set it to true so that the list will always be in sync if the
+     *   user archives or unarchives a track.
+     */
+    void setArchived(bool archived, bool refreshComp);
     bool isArchived() const { return m_archived; }
 
     void setSolo(bool solo)  { m_solo = solo; }
@@ -121,10 +129,16 @@ public:
     // Staff bracketing in LilyPond
     int getStaffBracket() const  { return m_staffBracket; }
     void setStaffBracket(int index) { m_staffBracket = index; }
-    
-    bool isArmed() const { return m_armed; }
-    /// This routine should only be called by Composition::setTrackRecording().
+
+    /// Returns false for archived Track objects.
+    bool isArmed() const;
+    /// Without consideration of archived.  Use for writing .rg files.
+    bool isReallyArmed() const  { return m_armed; }
+    /// Arm or disarm the Track.
     /**
+     * This routine should only be called by Composition::setTrackRecording()
+     * and RoseXmlHandler::startElement().
+     *
      * Composition maintains a list of tracks that are recording.  Calling
      * this routine directly will bypass that.
      */

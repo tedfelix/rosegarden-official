@@ -47,8 +47,6 @@ MappedEvent::MappedEvent(InstrumentId id,
         m_dataBlockId(0),
         m_runtimeSegmentId( -1),
         m_autoFade(false),
-        m_fadeInTime(RealTime::zeroTime),
-        m_fadeOutTime(RealTime::zeroTime),
         m_recordedChannel(0),
         m_recordedDevice(0)
 

@@ -361,7 +361,7 @@ public:
 
     void setStatus(TransportStatus status)
             { m_transportStatus = status; }
-    TransportStatus getStatus() { return m_transportStatus; }
+    TransportStatus getStatus() const  { return m_transportStatus; }
 
     /// Process the first chunk of Sequencer events
     /**
@@ -421,8 +421,7 @@ public:
     void routeEvents(MappedEventList *mappedEventList, bool recording);
 
     /// Are we looping?
-    bool isLooping() const
-        { return m_withinLoop  &&  m_loopStart != m_loopEnd; }
+    bool isLooping() const;
 
     /// Check for new external clients (ALSA sequencer or whatever).
     /**

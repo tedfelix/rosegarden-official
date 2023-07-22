@@ -324,7 +324,8 @@ RIFFAudioFile::getLength()
         headerLength += (16 + 8);
     }
 
-    if (!m_bytesPerFrame || !m_sampleRate) return RealTime::zeroTime;
+    if (!m_bytesPerFrame || !m_sampleRate)
+        return RealTime::zero();
 
     double frames = (m_fileSize - headerLength) / m_bytesPerFrame;
     double seconds = frames / ((double)m_sampleRate);

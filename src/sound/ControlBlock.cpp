@@ -209,6 +209,10 @@ bool ControlBlock::isAnyTrackInSolo() const
         if (track.m_deleted)
             continue;
 
+        // Don't include archived tracks.
+        if (track.m_archived)
+            continue;
+
         if (track.m_solo)
             return true;
     }
@@ -363,6 +367,10 @@ getInstAndChanForEvent(bool recording, DeviceId deviceId, char channel)
     // For each track
     for (unsigned i = 0; i <= m_maxTrackId; ++i) {
         TrackInfo &track = m_trackInfo[i];
+
+        // Skip archived Tracks.
+        if (track.m_archived)
+            continue;
 
         bool deviceMatch =
                 (track.m_deviceFilter == Device::ALL_DEVICES  ||

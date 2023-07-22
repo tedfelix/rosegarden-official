@@ -500,7 +500,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     if (!installSignalHandlers())
         RG_WARNING << "ctor: Signal handlers not installed!";
 
-    // Update UI time interval
+    // Update UI time interval.
     settings.beginGroup("Performance_Testing");
     int updateUITime = settings.value("Update_UI_Time", 50).toInt();
     // Write it to the file to make it easier to find.
@@ -1036,35 +1036,19 @@ RosegardenMainWindow::initView()
             &RosegardenMainViewWidget::addAudioFile,
             this, &RosegardenMainWindow::slotAddAudioFile);
 
-    connect(swapView, &RosegardenMainViewWidget::toggleSolo, this, &RosegardenMainWindow::slotToggleSolo);
+    connect(swapView, &RosegardenMainViewWidget::toggleSolo,
+            this, &RosegardenMainWindow::slotToggleSolo);
 
     RosegardenDocument::currentDocument->attachView(swapView);
 
+
     // Transport setup
-    //
-    std::string transportMode = RosegardenDocument::currentDocument->getConfiguration().get<String>
-        (DocumentConfiguration::TransportMode);
+    getTransport()->init();
 
-
-    slotEnableTransport(true);
-
-    // and the time signature
-    //
-    getTransport()->setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
-
-    // set the tempo in the transport
-    //
+    // Update the tempo in the SequenceManager which will in turn update
+    // the tempo in the transport.
     m_seqManager->setTempo(comp.getCurrentTempo());
 
-    // bring the transport to the front
-    //
-    getTransport()->raise();
-
-    // set the play metronome button
-    getTransport()->MetronomeButton()->setChecked(comp.usePlayMetronome());
-
-    // set the transport mode found in the configuration
-    getTransport()->setNewMode(transportMode);
 
     // set the pointer position
     //
@@ -4712,7 +4696,7 @@ RosegardenMainWindow::slotHandleInputs()
             slotPlay();
             break;
         case RosegardenSequencer::TransportRecord:
-            slotRecord();
+            slotToggleRecord();
             break;
         case RosegardenSequencer::TransportJumpToTime:
             slotJumpToTime(rt);
@@ -4960,7 +4944,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     if (mode == TransportDialog::BarMode ||
             mode == TransportDialog::BarMetronomeMode) {
 
-        slotDisplayBarTime(t);
+        displayBarTime(t);
 
     } else {
 
@@ -4984,18 +4968,6 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
         }
     }
 
-    // handle transport mode configuration changes
-    std::string modeAsString = getTransport()->getCurrentModeAsString();
-
-    if (RosegardenDocument::currentDocument->getConfiguration().get<String>
-            (DocumentConfiguration::TransportMode) != modeAsString) {
-
-        RosegardenDocument::currentDocument->getConfiguration().set<String>
-            (DocumentConfiguration::TransportMode, modeAsString);
-
-        //RosegardenDocument::currentDocument->slotDocumentModified(); to avoid being prompted for a file change when merely changing the transport display
-    }
-
     // Update position on the marker editor if it's available
     //
     if (m_markerEditor)
@@ -5003,7 +4975,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
 }
 
 void
-RosegardenMainWindow::slotDisplayBarTime(timeT t)
+RosegardenMainWindow::displayBarTime(timeT t)
 {
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
@@ -5669,6 +5641,7 @@ RosegardenMainWindow::slotRecord()
         slotStop();
         return ;
     } else if (m_seqManager->getTransportStatus() == PLAYING) {
+        // Punch-In
         slotToggleRecord();
         return ;
     }
@@ -5718,11 +5691,27 @@ RosegardenMainWindow::slotRecord()
 void
 RosegardenMainWindow::slotToggleRecord()
 {
-    if (!isUsingSequencer() || (!isSequencerRunning() && !launchSequencer()))
+    // Not using sequencer?  Bail.
+    if (!m_useSequencer)
         return;
 
+    // If the sequencer thread isn't running, try launching it.
+    if (!isSequencerRunning()  &&  !launchSequencer())
+        return;
+
+    // If we are stopped, start recording.
+    // This is to satisfy the MIDI spec description of MMC RECORD STROBE.
+    // RECORD STROBE needs to punch-in/out and it needs to start recording
+    // if the transport is stopped.
+    if (m_seqManager->getTransportStatus() == STOPPED) {
+        slotRecord();
+        return;
+    }
+
     try {
+
         m_seqManager->record(true);
+
     } catch (const QString &s) {
         QMessageBox::critical(this, tr("Rosegarden"), s);
     } catch (const AudioFileManager::BadAudioPathException &e) {
@@ -8674,6 +8663,15 @@ void
 RosegardenMainWindow::customEvent(QEvent *event)
 {
     // See AlsaDriver::handleTransportCCs().
+
+    // ??? This seems redundant with RosegardenSequencer::transportChange()
+    //     which ends up triggering RosegardenMainWindow::slotHandleInputs().
+    //     Review both approaches and see if we can consolidate down to the
+    //     best one.  Using QEvent is thread-safe, but slow (message queue).
+    //     Is transportChange() thread-safe and faster?  Can transportChange()
+    //     be simplified to make it better than both?
+
+    // ??? switch?
 
     if (event->type() == PreviousTrack) {
         slotSelectPreviousTrack();

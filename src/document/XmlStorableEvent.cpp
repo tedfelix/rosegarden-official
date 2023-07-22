@@ -112,20 +112,20 @@ XmlStorableEvent::XmlStorableEvent(const QXmlStreamAttributes &attributes,
 
             if (valLowerCase == "true" || valLowerCase == "false") {
 
-                set
-                    <Bool>(qstrtostr(attrName), valLowerCase == "true");
+                set<Bool>(static_cast<PropertyName>(qstrtostr(attrName)),
+                          valLowerCase == "true");
 
             } else {
 
                 // Not a bool, check if integer val
                 int numVal = val.toInt(&isNumeric);
                 if (isNumeric) {
-                    set
-                        <Int>(qstrtostr(attrName), numVal);
+                    set<Int>(static_cast<PropertyName>(qstrtostr(attrName)),
+                             numVal);
                 } else {
                     // not an int either, default to string
-                    set
-                        <String>(qstrtostr(attrName), qstrtostr(attrVal));
+                    set<String>(static_cast<PropertyName>(qstrtostr(attrName)),
+                                qstrtostr(attrVal));
                 }
             }
         }
@@ -167,13 +167,16 @@ XmlStorableEvent::setPropertyFromAttributes
             RG_DEBUG << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first";
             continue;
         } else if (attrName == "bool") {
-            set<Bool>(qstrtostr(name), attrVal.toLower() == "true", persistent);
+            set<Bool>(static_cast<PropertyName>(qstrtostr(name)),
+                      attrVal.toLower() == "true", persistent);
             have = true;
         } else if (attrName == "int") {
-            set<Int>(qstrtostr(name), attrVal.toInt(), persistent);
+            set<Int>(static_cast<PropertyName>(qstrtostr(name)),
+                     attrVal.toInt(), persistent);
             have = true;
         } else if (attrName == "string") {
-            set<String>(qstrtostr(name), qstrtostr(attrVal), persistent);
+            set<String>(static_cast<PropertyName>(qstrtostr(name)),
+                        qstrtostr(attrVal), persistent);
             have = true;
         } else {
             RG_DEBUG << "XmlStorableEvent::setProperty: unknown attribute name \"" << name << "\", ignoring";

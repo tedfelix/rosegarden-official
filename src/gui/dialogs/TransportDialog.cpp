@@ -20,12 +20,14 @@
 #include "TransportDialog.h"
 
 #include "base/Composition.h"
+#include "base/Configuration.h"  // DocumentConfiguration
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/general/ThornStyle.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "sound/SequencerDataBlock.h"
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/general/MidiPitchLabel.h"
@@ -100,7 +102,6 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_bitsPerFrame(80),
     m_midiInTimer(nullptr),
     m_midiOutTimer(nullptr),
-    m_clearMetronomeTimer(nullptr),
     m_enableMIDILabels(true),
     //m_panelOpen(),
     //m_panelClosed(),
@@ -150,16 +151,12 @@ TransportDialog::TransportDialog(QWidget *parent):
     // Create Midi label timers
     m_midiInTimer = new QTimer(this);
     m_midiOutTimer = new QTimer(this);
-    m_clearMetronomeTimer = new QTimer(this);
 
     connect(m_midiInTimer, &QTimer::timeout,
             this, &TransportDialog::slotClearMidiInLabel);
 
     connect(m_midiOutTimer, &QTimer::timeout,
             this, &TransportDialog::slotClearMidiOutLabel);
-
-    connect(m_clearMetronomeTimer, &QTimer::timeout,
-            this, &TransportDialog::slotResetBackground);
 
     ui->TimeDisplayLabel->hide();
     ui->ToEndLabel->hide();
@@ -289,6 +286,12 @@ TransportDialog::TransportDialog(QWidget *parent):
                 &RosegardenMainWindow::documentLoaded,
             this, &TransportDialog::slotDocumentLoaded);
 
+    // Metronome
+    connect(&m_metronomeTimer, &QTimer::timeout,
+            this, &TransportDialog::slotMetronomeTimer);
+    // No improvement.
+    //m_metronomeTimer.setTimerType(Qt::PreciseTimer);
+
     // Performance Testing
 
     QSettings settings;
@@ -302,6 +305,7 @@ TransportDialog::TransportDialog(QWidget *parent):
                       m_enableMIDILabels ? 1 : 0);
 
     settings.endGroup();
+
 }
 
 TransportDialog::~TransportDialog()
@@ -310,6 +314,32 @@ TransportDialog::~TransportDialog()
     // saved if we are hidden.
     if (isVisible())
         saveGeo();
+}
+
+void TransportDialog::init()
+{
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
+
+    Composition &comp = doc->getComposition();
+
+    setEnabled(true);
+
+    setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
+
+    // bring the transport to the front
+    raise();
+
+    // set the play metronome button
+    MetronomeButton()->setChecked(comp.usePlayMetronome());
+
+    // set the transport mode found in the configuration
+    const std::string transportMode =
+            doc->getConfiguration().get<String>(
+                    DocumentConfiguration::TransportMode);
+    setNewMode(transportMode);
+
 }
 
 std::string
@@ -344,21 +374,28 @@ TransportDialog::initModeMap()
 void
 TransportDialog::loadPixmaps()
 {
-    m_lcdList.clear();
-    m_lcdListDefault.clear();
+    // For each digit 0-9...
+    for (int i = 0; i <= 9; ++i) {
+        // Load the transparent pixmap.
+        m_digitsTransparent[i] =
+                IconLoader::loadPixmap(QString("led-%1").arg(i));
 
-    for (int i = 0; i < 10; i++) {
-        m_lcdList[i] = IconLoader::loadPixmap(QString("led-%1").arg(i));
-        QImage im(m_lcdList[i].size(), QImage::Format_RGB32);
-        im.fill(0);
-        QPainter p(&im);
-        p.drawPixmap(0, 0, m_lcdList[i]);
-        m_lcdListDefault[i] = QPixmap::fromImage(im);
+        // Make the opaque version.  This should be a little
+        // faster to draw since it avoids alpha math.
+        QImage opaqueImage(m_digitsTransparent[i].size(), QImage::Format_RGB32);
+        // Fill with black.
+        opaqueImage.fill(0);
+        // Create a QPainter so that we can draw the pixmap on the image.
+        QPainter opaquePainter(&opaqueImage);
+        // Draw the digit pixmap onto the image.
+        opaquePainter.drawPixmap(0, 0, m_digitsTransparent[i]);
+        // Copy to the opaque pixmap array.
+        m_digitsOpaque[i] = QPixmap::fromImage(opaqueImage);
     }
 
     // Load the "negative" sign pixmap
     //
-    m_lcdNegative = IconLoader::loadPixmap("led--");
+    m_negativeSign = IconLoader::loadPixmap("led--");
 }
 
 void
@@ -438,6 +475,16 @@ TransportDialog::cycleThroughModes()
         m_currentMode = RealMode;
         break;
     }
+
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
+
+    // Save the new TimeDisplayMode in the DocumentConfiguration.
+    doc->getConfiguration().set<String>(
+            DocumentConfiguration::TransportMode, getCurrentModeAsString());
+    doc->slotDocumentModified();
+
 }
 
 void
@@ -445,31 +492,25 @@ TransportDialog::displayTime()
 {
     switch (m_currentMode) {
     case RealMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->hide();
         break;
 
     case SMPTEMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->setText("SMPTE"); // DO NOT i18n
         ui->TimeDisplayLabel->show();
         break;
 
     case BarMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->setText("BAR"); // DO NOT i18n
         ui->TimeDisplayLabel->show();
         break;
 
     case BarMetronomeMode:
-        m_clearMetronomeTimer->setSingleShot(false);
-        m_clearMetronomeTimer->start(1700);
         ui->TimeDisplayLabel->setText("MET"); // DO NOT i18n
         ui->TimeDisplayLabel->show();
         break;
 
     case FrameMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->setText(QString("%1").arg(m_sampleRate));
         ui->TimeDisplayLabel->show();
         break;
@@ -512,6 +553,8 @@ TransportDialog::slotChangeTimeDisplay()
     
     cycleThroughModes();
     
+    updateMetronomeTimer();
+
     displayTime();
 }
 
@@ -536,7 +579,7 @@ TransportDialog::displayRealTime(const RealTime &rt)
 {
     RealTime st = rt;
 
-    slotResetBackground();
+    resetBackground();
 
     if (m_lastMode != RealMode) {
         ui->HourColonPixmap->show();
@@ -548,10 +591,10 @@ TransportDialog::displayRealTime(const RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < RealTime::zeroTime) {
-        st = RealTime::zeroTime - st;
+    if (st < RealTime::zero()) {
+        st = RealTime::zero() - st;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -584,7 +627,7 @@ TransportDialog::displayFrameTime(const RealTime &rt)
 {
     RealTime st = rt;
 
-    slotResetBackground();
+    resetBackground();
 
     if (m_lastMode != FrameMode) {
         ui->HourColonPixmap->hide();
@@ -596,10 +639,10 @@ TransportDialog::displayFrameTime(const RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < RealTime::zeroTime) {
-        st = RealTime::zeroTime - st;
+    if (st < RealTime::zero()) {
+        st = RealTime::zero() - st;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -641,7 +684,7 @@ TransportDialog::displaySMPTETime(const RealTime &rt)
 {
     RealTime st = rt;
 
-    slotResetBackground();
+    resetBackground();
 
     if (m_lastMode != SMPTEMode) {
         ui->HourColonPixmap->show();
@@ -653,10 +696,10 @@ TransportDialog::displaySMPTETime(const RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < RealTime::zeroTime) {
-        st = RealTime::zeroTime - st;
+    if (st < RealTime::zero()) {
+        st = RealTime::zero() - st;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -705,7 +748,7 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
     if (bar < 0) {
         bar = -bar;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -716,15 +759,7 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
         }
     }
 
-    if (m_currentMode == BarMetronomeMode && unit < 2) {
-        if (beat == 1) {
-            setBackgroundColor(Qt::red);
-        } else {
-            setBackgroundColor(Qt::cyan);
-        }
-    } else {
-        slotResetBackground();
-    }
+    // Break bar/beat/unit into digits.
 
     m_tenThousandths = ( unit ) % 10;
     m_thousandths = ( unit / 10 ) % 10;
@@ -764,6 +799,7 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
         }
     }
 
+    // Update the digits on the display.
     updateTimeDisplay();
 }
 
@@ -773,12 +809,15 @@ TransportDialog::updateTimeDisplay()
 
 #define UPDATE(NEW,OLD,WIDGET)                                     \
     if (NEW != OLD) {                                              \
-        if (NEW < 0) {                                             \
+        if (NEW < 0  ||  NEW > 9) {                                \
             ui->WIDGET->clear();                          \
         } else if (!m_isBackgroundSet) {                           \
-            ui->WIDGET->setPixmap(m_lcdListDefault[NEW]); \
+            /* Metronome is *not* flashing, use the opaque versions. */  \
+            /* ??? Seeing the opaque bitmap during flash on occasion.  */  \
+            ui->WIDGET->setPixmap(m_digitsOpaque[NEW]);  \
         } else {                                                   \
-            ui->WIDGET->setPixmap(m_lcdList[NEW]);        \
+            /* Metronome *is* flashing, use the transparent versions. */  \
+            ui->WIDGET->setPixmap(m_digitsTransparent[NEW]);  \
         }                                                          \
         OLD = NEW;                                                 \
     }
@@ -901,7 +940,7 @@ TransportDialog::slotClearMidiInLabel()
     ui->InDisplay->setText(tr("NO EVENTS"));
 
     // also, just to be sure:
-    slotResetBackground();
+    resetBackground();
 }
 
 void
@@ -1083,11 +1122,23 @@ void TransportDialog::slotTempoChanged(tempoT tempo)
 void TransportDialog::slotPlaying(bool checked)
 {
     ui->PlayButton->setChecked(checked);
+
+    // If it changed...
+    if (checked != m_playing) {
+        m_playing = checked;
+        updateMetronomeTimer();
+    }
 }
 
 void TransportDialog::slotRecording(bool checked)
 {
     ui->RecordButton->setChecked(checked);
+
+    // If it changed...
+    if (checked != m_recording) {
+        m_recording = checked;
+        updateMetronomeTimer();
+    }
 }
 
 void TransportDialog::slotMetronomeActivated(bool checked)
@@ -1176,7 +1227,7 @@ TransportDialog::setBackgroundColor(QColor color)
 }
 
 void
-TransportDialog::slotResetBackground()
+TransportDialog::resetBackground()
 {
     if (m_isBackgroundSet) {
         setBackgroundColor(Qt::black);
@@ -1196,6 +1247,102 @@ void TransportDialog::loadGeo()
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     restoreGeometry(settings.value("Transport_Geometry").toByteArray());
+}
+
+void TransportDialog::slotMetronomeTimer()
+{
+    // This routine is time-critical.  Keep it short and do as
+    // little work as possible.
+
+    // ??? This is still pretty unreliable.  Either the timer isn't
+    //     very reliable or the display updates aren't.  We could
+    //     collect a list of the arrival times in a circular
+    //     queue and then analyze the deltas.  That would give us an
+    //     idea how good the timer is.
+
+    // If we are flashing
+    if (m_flashing) {
+        // If we have timed out
+        if (QDateTime::currentDateTime() > m_metronomeTimeout) {
+            // Clear the flash.
+            // ??? Inline and make less CPU-intensive?
+            resetBackground();
+
+            // No improvement.
+            //repaint();
+            //qApp->processEvents();
+
+            // Indicate not flashing.
+            m_flashing = false;
+
+            // If we are neither playing nor recording, stop the timer.
+            // Otherwise the flash will be stuck if we stop when it is
+            // flashing.
+            if (!(m_playing  ||  m_recording))
+                m_metronomeTimer.stop();
+        }
+        return;
+    }
+
+    // Get the playback time.
+    // SequencerDataBlock appears to be the right place for very
+    // precise time.
+    const RealTime position =
+            SequencerDataBlock::getInstance()->getPositionPointer();
+    const Composition &comp =
+            RosegardenDocument::currentDocument->getComposition();
+    // Convert RealTime to timeT (sequencer ticks).
+    timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
+    int bar;
+    int beat;
+    int fraction;
+    int remainder;
+    comp.getMusicalTimeForAbsoluteTime(elapsedTime, bar, beat, fraction, remainder);
+
+    // If we are on the beat.
+    if (fraction == 0) {
+        // Flash
+        if (beat == 1) {
+            // ??? Inline and make less CPU-intensive?
+            setBackgroundColor(Qt::red);
+            //setBackgroundColor(QColor(255,0,0));
+        } else {
+            // ??? Inline and make less CPU-intensive?
+            setBackgroundColor(Qt::cyan);
+            //setBackgroundColor(QColor(0,255,255));
+        }
+
+        // No improvement.
+        //repaint();
+        //qApp->processEvents();
+
+        // Compute the timeout.
+        m_metronomeTimeout = QDateTime::currentDateTime().addMSecs(90);
+
+        // Indicate flashing.
+        m_flashing = true;
+
+        return;
+    }
+}
+
+void TransportDialog::updateMetronomeTimer()
+{
+    // Start/Stop metronome timer as needed.
+    if (m_currentMode == BarMetronomeMode  &&  (m_playing  ||  m_recording)) {
+        m_metronomeTimer.start(10);
+        return;
+    }
+
+    // We need to stop the timer.
+
+    // If we aren't flashing, we can just go ahead and stop the timer.
+    if (!m_flashing) {
+        m_metronomeTimer.stop();
+    }
+
+    // If we are flashing, we need to let slotMetronomeTimer() clear the flash
+    // for us and stop the timer.
 }
 
 

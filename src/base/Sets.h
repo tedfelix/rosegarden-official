@@ -168,7 +168,7 @@ public:
     GenericChord(Container &c,
                  Iterator elementInChord,
                  const Quantizer *quantizer,
-                 PropertyName stemUpProperty = PropertyName::EmptyPropertyName);
+                 PropertyName stemUpProperty = PropertyName::Empty());
 
     ~GenericChord() override;
 
@@ -237,7 +237,7 @@ class Chord : public GenericChord<Event, Segment, true>
           Iterator elementInChord,
           const Quantizer *quantizer,
           PropertyName stemUpProperty =
-          PropertyName::EmptyPropertyName)
+          PropertyName::Empty())
         : GenericChord<Element, Container, singleStaff>
               (c, elementInChord, quantizer, stemUpProperty)
         { initialise(); }
@@ -254,7 +254,7 @@ class GlobalChord : public GenericChord<Event, CompositionTimeSliceAdapter, fals
           Iterator elementInChord,
           const Quantizer *quantizer,
           PropertyName stemUpProperty =
-          PropertyName::EmptyPropertyName)
+          PropertyName::Empty())
         : GenericChord<Element, Container, singleStaff>
               (c, elementInChord, quantizer, stemUpProperty)
         { initialise(); }
@@ -503,7 +503,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 
             Event *e0 = GenericChord::getAsEvent(AbstractSet<Element, Container>::m_baseIterator);
 
-            if (!(m_stemUpProperty == PropertyName::EmptyPropertyName)) {
+            if (!(m_stemUpProperty == PropertyName::Empty())) {
 
                 if (e0->has(m_stemUpProperty) &&
                     e1->has(m_stemUpProperty) &&

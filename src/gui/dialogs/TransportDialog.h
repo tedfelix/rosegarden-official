@@ -24,6 +24,8 @@
 #include <QtCore>
 #include <QDialog>
 #include <QSharedPointer>
+#include <QTimer>
+#include <QDateTime>
 
 #include "base/Composition.h" // for tempoT
 
@@ -45,6 +47,7 @@ class QPushButton;
 class QCloseEvent;
 class QDialog;
 
+
 namespace Rosegarden
 {
 
@@ -62,12 +65,14 @@ public:
     explicit TransportDialog(QWidget *parent = nullptr);
     ~TransportDialog() override;
 
-    enum TimeDisplayMode { RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };
+    void init();
+
+    enum TimeDisplayMode {
+        RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };
 
     std::string getCurrentModeAsString();
     TimeDisplayMode getCurrentMode() { return m_currentMode; }
     void setNewMode(const std::string& newModeAsString);
-    void setNewMode(const TimeDisplayMode& newMode);
     bool isShowingTimeToEnd();
     bool isExpanded();
 
@@ -141,10 +146,6 @@ public slots:
     void slotEditTimeSignature();
     void slotEditTime();
 
-    void setBackgroundColor(QColor color);
-    void slotResetBackground();
-
-
     // Connected to SequenceManager
     void slotTempoChanged(tempoT);
     void slotMidiInLabel(const MappedEvent *mE); // show incoming MIDI events on the Transport
@@ -171,19 +172,30 @@ private slots:
     /// From RosegardenDocument.
     void slotLoopChanged();
 
+    void slotMetronomeTimer();
+
 private:
     void loadPixmaps();
     void resetFonts();
     void resetFont(QWidget *);
     void initModeMap();
 
+    void setBackgroundColor(QColor color);
+    void resetBackground();
+
     //--------------- Data members ---------------------------------
 
     QSharedPointer<Ui_RosegardenTransport> ui;
 
-    QHash<int, QPixmap> m_lcdList;
-    QHash<int, QPixmap> m_lcdListDefault;
-    QPixmap m_lcdNegative;
+    // Digits 0-9 in blue vacuum fluorescent display (VFD) format.
+    // These are the default non-transparent versions of the digits for
+    // normal drawing.  Should draw faster than the transparent counterparts.
+    QPixmap m_digitsOpaque[10];
+    // Same digits, but with transparency (alpha) to use when the
+    // metronome is flashing.
+    QPixmap m_digitsTransparent[10];
+
+    QPixmap m_negativeSign;
 
     int m_lastTenHours;
     int m_lastUnitHours;
@@ -199,6 +211,7 @@ private:
     bool m_lastNegative;
     TimeDisplayMode m_lastMode;
     TimeDisplayMode m_currentMode;
+    void setNewMode(const TimeDisplayMode &newMode);
 
     int m_tenHours;
     int m_unitHours;
@@ -219,7 +232,6 @@ private:
 
     QTimer *m_midiInTimer;
     QTimer *m_midiOutTimer;
-    QTimer *m_clearMetronomeTimer;
 
     bool m_enableMIDILabels;
 
@@ -235,10 +247,17 @@ private:
     int m_sampleRate;
 
     std::map<std::string, TimeDisplayMode> m_modeMap;
+
+    bool m_playing{};
+    bool m_recording{};
+
+    // High frequency timer used to flash the display
+    // on the beat.
+    QTimer m_metronomeTimer;
+    bool m_flashing{};
+    QDateTime m_metronomeTimeout;
+    void updateMetronomeTimer();
 };
-
-
-
 
 
 }

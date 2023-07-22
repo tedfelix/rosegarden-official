@@ -26,8 +26,8 @@ namespace Rosegarden
 
 const std::string GeneratedRegion::EventType = "generated region";
 const int GeneratedRegion::EventSubOrdering = -180;
-const PropertyName GeneratedRegion::ChordPropertyName = "chord source ID";
-const PropertyName GeneratedRegion::FigurationPropertyName = "figuration source ID";
+const PropertyName GeneratedRegion::ChordPropertyName("chord source ID");
+const PropertyName GeneratedRegion::FigurationPropertyName("figuration source ID");
 
 GeneratedRegion::GeneratedRegion(const Event &e) :
     m_chordSourceID(-1),

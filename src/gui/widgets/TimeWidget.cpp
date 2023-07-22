@@ -660,7 +660,7 @@ TimeWidget::slotSetRealTime(RealTime rt)
 {
     if (m_isDuration) {
         RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
-        if (rt >= RealTime::zeroTime) {
+        if (rt >= RealTime::zero()) {
             slotSetTime(m_composition->getElapsedTimeForRealTime(startRT + rt) -
                         m_startTime);
         } else {

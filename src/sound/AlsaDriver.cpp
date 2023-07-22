@@ -1536,7 +1536,7 @@ AlsaDriver::checkTimerSync(size_t frames)
         } else if (fabs(ratio) > 0.000001) {
 
 #ifdef DEBUG_ALSA_TIMER
-            if (alsaDiff > RealTime::zeroTime && jackDiff > RealTime::zeroTime) {
+            if (alsaDiff > RealTime::zero() && jackDiff > RealTime::zero()) {
                 if (!m_playing) {
                     if (jackDiff < alsaDiff) {
                         RG_DEBUG << "checkTimerSync(): <<<< ALSA timer is faster by " << 100.0 * ((alsaDiff - jackDiff) / alsaDiff) << "% (1/" << int(1.0 / ratio) << ")";
@@ -1621,7 +1621,7 @@ AlsaDriver::setCurrentTimer(QString timerName)
     checkAlsaError(snd_seq_control_queue(m_midiHandle, m_queue, SND_SEQ_EVENT_SETPOS_TIME,
                                          0, &event), "setCurrentTimer(): control queue");
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "setCurrentTimer(): draining output to control queue");
-    m_alsaPlayStartTime = RealTime::zeroTime;
+    m_alsaPlayStartTime = RealTime::zero();
 
     for (size_t i = 0; i < m_timers.size(); ++i) {
         if (m_timers[i].name == timerName) {
@@ -1962,7 +1962,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 #endif
 
     // now that we restart the queue at each play, the origin is always zero
-    m_alsaPlayStartTime = RealTime::zeroTime;
+    m_alsaPlayStartTime = RealTime::zero();
     m_playStartPosition = position;
 
     m_startPlayback = true;
@@ -2017,7 +2017,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
         //     beat.  Hold down Ctrl while positioning the playback
         //     position pointer.
 
-        if (m_playStartPosition == RealTime::zeroTime)
+        if (m_playStartPosition == RealTime::zero())
             sendSystemDirect(SND_SEQ_EVENT_START, nullptr);
         else
             sendSystemDirect(SND_SEQ_EVENT_CONTINUE, nullptr);
@@ -2235,7 +2235,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
          i != m_noteOffQueue.end(); ++i) {
 
         // if we're fast forwarding then we bring the note off closer
-        if (jump >= RealTime::zeroTime) {
+        if (jump >= RealTime::zero()) {
 
             RealTime endTime = formerStartPosition + (*i)->realTime;
 
@@ -2253,7 +2253,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 #ifdef DEBUG_PROCESS_MIDI_OUT
                 RG_DEBUG << "resetPlayback(): Rewind by " << jump << ": setting note off to zero";
 #endif
-                (*i)->realTime = RealTime::zeroTime;
+                (*i)->realTime = RealTime::zero();
             }
     }
 
@@ -2347,7 +2347,7 @@ AlsaDriver::pushRecentNoteOffs()
     // Move all to m_noteOffQueue.
     for (NoteOffQueue::iterator i = m_recentNoteOffs.begin();
          i != m_recentNoteOffs.end(); ++i) {
-        (*i)->realTime = RealTime::zeroTime;
+        (*i)->realTime = RealTime::zero();
         m_noteOffQueue.insert(*i);
     }
 
@@ -2496,9 +2496,11 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 #endif
 
         RealTime offTime = noteOff->realTime;
-        if (offTime < RealTime::zeroTime) offTime = RealTime::zeroTime;
+        if (offTime < RealTime::zero())
+            offTime = RealTime::zero();
         bool scheduled = (offTime > alsaTime) && !now;
-        if (!scheduled) offTime = RealTime::zeroTime;
+        if (!scheduled)
+            offTime = RealTime::zero();
 
         snd_seq_real_time_t alsaOffTime = { (unsigned int)offTime.sec,
                                             (unsigned int)offTime.nsec };
@@ -2750,7 +2752,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 #endif
 
                 // Fix zero duration record bug.
-                if (duration <= RealTime::zeroTime) {
+                if (duration <= RealTime::zero()) {
                     duration = RealTime::fromMilliseconds(1);
 
                     // ??? It seems odd that we only set the event time for
@@ -3053,7 +3055,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             if (m_midiSyncStatus == TRANSPORT_FOLLOWER  &&  !isPlaying()) {
                 RosegardenSequencer::getInstance()->transportJump(
                         RosegardenSequencer::TransportStopAtTime,
-                        RealTime::zeroTime);
+                        RealTime::zero());
                 RosegardenSequencer::getInstance()->transportChange(
                         RosegardenSequencer::TransportStart);
             }
@@ -3353,7 +3355,7 @@ AlsaDriver::insertMTCFullFrame(RealTime time)
 void
 AlsaDriver::insertMTCQFrames(RealTime sliceStart, RealTime sliceEnd)
 {
-    if (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime) {
+    if (sliceStart == RealTime::zero() && sliceEnd == RealTime::zero()) {
         // not a real slice
         return ;
     }
@@ -3664,6 +3666,9 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event) const
         instruction == MIDI_MMC_DEFERRED_PLAY) {
         RosegardenSequencer::getInstance()->transportChange(
                 RosegardenSequencer::TransportPlay);
+    } else if (instruction == MIDI_MMC_RECORD_STROBE) {
+        RosegardenSequencer::getInstance()->transportChange(
+                RosegardenSequencer::TransportRecord);
     } else if (instruction == MIDI_MMC_STOP) {
         RosegardenSequencer::getInstance()->transportChange(
                 RosegardenSequencer::TransportStop);
@@ -3680,7 +3685,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
     LOCKED;
 
     // special case for unqueued events
-    bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
+    bool now = (sliceStart == RealTime::zero() && sliceEnd == RealTime::zero());
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
     RG_DEBUG << "processMidiOut(" << sliceStart << "," << sliceEnd << "), " << rgEventList.size() << " events, now is " << now;
@@ -3716,7 +3721,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             continue;
 
         if (rgEvent->getType() == MappedEvent::MidiNote &&
-            rgEvent->getDuration() == RealTime::zeroTime &&
+            rgEvent->getDuration() == RealTime::zero() &&
             rgEvent->getVelocity() == 0) {
             // NOTE OFF with duration zero is scheduled from the
             // internal segment mapper and we don't use that message
@@ -3782,7 +3787,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 
         if (!m_queueRunning && outputTime < alsaTimeNow) {
             RealTime adjust = alsaTimeNow - outputTime;
-            if (rgEvent->getDuration() > RealTime::zeroTime) {
+            if (rgEvent->getDuration() > RealTime::zero()) {
                 if (rgEvent->getDuration() <= adjust) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
                     RG_DEBUG << "processMidiOut[" << now << "]: too late for this event, abandoning it";
@@ -4153,7 +4158,7 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id,
         RealTime t(event->time.time.tv_sec, event->time.time.tv_nsec);
 
         if (now)
-            t = RealTime::zeroTime;
+            t = RealTime::zero();
         else
             t = t + m_playStartPosition - m_alsaPlayStartTime;
 
@@ -4324,14 +4329,14 @@ AlsaDriver::stopClocks()
     RG_DEBUG << "stopClocks(): ALSA time now is " << getAlsaTime();
 #endif
 
-    m_alsaPlayStartTime = RealTime::zeroTime;
+    m_alsaPlayStartTime = RealTime::zero();
 }
 
 
 void
 AlsaDriver::processEventsOut(const MappedEventList &rgEventList)
 {
-    processEventsOut(rgEventList, RealTime::zeroTime, RealTime::zeroTime);
+    processEventsOut(rgEventList, RealTime::zero(), RealTime::zero());
 }
 
 void
@@ -4341,7 +4346,7 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 {
     // special case for unqueued events
 #ifdef HAVE_LIBJACK
-    const bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
+    const bool now = (sliceStart == RealTime::zero() && sliceEnd == RealTime::zero());
 #endif
 
     if (m_startPlayback) {
@@ -4721,7 +4726,7 @@ AlsaDriver::record(RecordStatus recordStatus,
     if (recordStatus == RECORD_ON) {
         // start recording
         m_recordStatus = RECORD_ON;
-        m_alsaRecordStartTime = RealTime::zeroTime;
+        m_alsaRecordStartTime = RealTime::zero();
 
         unsigned int audioCount = 0;
 

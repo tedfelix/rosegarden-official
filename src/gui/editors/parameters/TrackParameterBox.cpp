@@ -609,7 +609,9 @@ TrackParameterBox::slotArchiveChanged(bool checked)
     if (!track)
         return;
 
-    track->setArchived(checked);
+    track->setArchived(
+            checked,
+            true);  // refreshComp - Refresh m_recordTracks.
     m_doc->slotDocumentModified();
 
     // Notify observers

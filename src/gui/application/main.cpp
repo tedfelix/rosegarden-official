@@ -327,6 +327,12 @@ visible at the bottom of rosegarden/sequencer/main.cpp.
 
 // -----------------------------------------------------------------
 
+// ASAN_OPTIONS.
+extern "C" ROSEGARDENPRIVATE_EXPORT const char *__asan_default_options() {
+    // Turn on static init order fiasco detection for ASan.
+    return "check_initialization_order=true:strict_init_order=true";
+}
+
 static void usage()
 {
     std::cerr << "Rosegarden: A sequencer and musical notation editor\n";

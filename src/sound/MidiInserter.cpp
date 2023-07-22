@@ -100,7 +100,6 @@ MidiInserter(Composition &composition, int timingDivision, RealTime trueEnd) :
     m_timingDivision(timingDivision),
     m_finished(false),
     m_trueEnd(trueEnd),
-    m_previousRealTime(RealTime::zeroTime),
     m_previousTime(0),
     m_ramping(false)
 { setup(); }

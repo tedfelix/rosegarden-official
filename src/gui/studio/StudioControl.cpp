@@ -223,9 +223,9 @@ StudioControl::fillWithImmediateNote(
             type,
             pitch,
             velocity,
-            RealTime::zeroTime,  // absTime
+            RealTime::zero(),  // absTime
             duration,
-            RealTime::zeroTime);  // audioStartMarker
+            RealTime::zero());  // audioStartMarker
 
     // Since we're not going thru MappedBufMetaIterator::acceptEvent()
     // which checks tracks for muting, we needn't set a track.
@@ -246,7 +246,7 @@ StudioControl::fillWithImmediateNote(
     m_channelManager.insertEvent(
             NoTrack,  // trackId
             cList,
-            RealTime::zeroTime,  // refTime
+            RealTime::zero(),  // refTime
             mappedEvent,
             true,  // firstOutput
             inserter);
@@ -275,7 +275,7 @@ sendChannelSetup(Instrument *instrument, int channel)
             -1,  // trackId
             instrument,
             channel,
-            RealTime::zeroTime,  // insertTime
+            RealTime::zero(),  // insertTime
             true,  // sendBSPC
             cList,
             inserter);
@@ -299,7 +299,7 @@ sendController(const Instrument *instrument, int channel,
             -1,  // trackId
             instrument,
             channel,
-            RealTime::zeroTime,  // insertTime
+            RealTime::zero(),  // insertTime
             controller,
             value,
             inserter);

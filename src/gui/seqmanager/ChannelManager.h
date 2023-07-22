@@ -124,8 +124,8 @@ public:
     {
         m_start = ChannelInterval::m_earliestTime;
         m_end = ChannelInterval::m_latestTime;
-        m_startMargin = RealTime::zeroTime;
-        m_endMargin = RealTime::zeroTime;
+        m_startMargin = RealTime::zero();
+        m_endMargin = RealTime::zero();
     }
 
     // *** Channel Interval Allocation

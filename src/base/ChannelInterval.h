@@ -64,12 +64,8 @@ public:
     // Construct an invalid channelinterval
     ChannelInterval() :
         m_channel(-1),
-        m_start(RealTime::zeroTime),
-        m_end(RealTime::zeroTime),
         m_instrumentBefore(nullptr),
-        m_instrumentAfter(nullptr),
-        m_marginBefore(RealTime::zeroTime),
-        m_marginAfter(RealTime::zeroTime)
+        m_instrumentAfter(nullptr)
         { }
 
     // Construct a dummy channelinterval used in searching.
@@ -78,9 +74,7 @@ public:
         m_start(t),
         m_end(m_latestTime),
         m_instrumentBefore(nullptr),
-        m_instrumentAfter(nullptr),
-        m_marginBefore(RealTime::zeroTime),
-        m_marginAfter(RealTime::zeroTime)
+        m_instrumentAfter(nullptr)
         { }
 
     ChannelInterval(ChannelId channel, RealTime start, RealTime end,

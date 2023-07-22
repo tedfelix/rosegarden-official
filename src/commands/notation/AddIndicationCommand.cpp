@@ -219,7 +219,7 @@ AddIndicationCommand::modifySegment()
     e = new Event(Indication::EventType, m_indicationStart, m_indicationDuration,
                   actualSubordering);
     e->set<String>(Indication::IndicationTypePropertyName, m_indicationType);
-    e->set<Int>("indicationduration", m_indicationDuration);
+    e->set<Int>(PropertyName("indicationduration"), m_indicationDuration);
     helper.segment().insert(e);
     m_lastInsertedEvent = e;
 

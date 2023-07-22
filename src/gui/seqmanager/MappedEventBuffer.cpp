@@ -33,7 +33,6 @@ namespace Rosegarden
 
 MappedEventBuffer::MappedEventBuffer(RosegardenDocument *doc) :
     m_doc(doc),
-    m_start(RealTime::zeroTime),
     m_end(std::numeric_limits<int>::max(), 0),  // 68 years
     m_buffer(nullptr),
     m_capacity(0),

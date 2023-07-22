@@ -28,8 +28,8 @@ namespace Rosegarden
 
 const std::string PitchBend::EventType = "pitchbend";
 
-const PropertyName PitchBend::MSB = "msb";
-const PropertyName PitchBend::LSB = "lsb";
+const PropertyName PitchBend::MSB("msb");
+const PropertyName PitchBend::LSB("lsb");
 
 Event *PitchBend::makeEvent(timeT absoluteTime, MidiByte msb, MidiByte lsb)
 {
@@ -47,8 +47,8 @@ Event *PitchBend::makeEvent(timeT absoluteTime, MidiByte msb, MidiByte lsb)
 
 const std::string Controller::EventType = "controller";
 
-const PropertyName Controller::NUMBER = "number";
-const PropertyName Controller::VALUE  = "value";
+const PropertyName Controller::NUMBER("number");
+const PropertyName Controller::VALUE("value");
 
 Event *
 Controller::makeEvent(timeT absoluteTime, MidiByte number, MidiByte value)
@@ -67,8 +67,8 @@ Controller::makeEvent(timeT absoluteTime, MidiByte number, MidiByte value)
 
 const std::string KeyPressure::EventType = "keypressure";
 
-const PropertyName KeyPressure::PITCH = "pitch";
-const PropertyName KeyPressure::PRESSURE = "pressure";
+const PropertyName KeyPressure::PITCH("pitch");
+const PropertyName KeyPressure::PRESSURE("pressure");
 
 Event *
 KeyPressure::makeEvent(timeT absoluteTime, MidiByte pitch, MidiByte pressure)
@@ -87,7 +87,7 @@ KeyPressure::makeEvent(timeT absoluteTime, MidiByte pitch, MidiByte pressure)
 
 const std::string ChannelPressure::EventType = "channelpressure";
 
-const PropertyName ChannelPressure::PRESSURE = "pressure";
+const PropertyName ChannelPressure::PRESSURE("pressure");
 
 Event *
 ChannelPressure::makeEvent(timeT absoluteTime, MidiByte pressure)
@@ -105,7 +105,7 @@ ChannelPressure::makeEvent(timeT absoluteTime, MidiByte pressure)
 
 const std::string ProgramChange::EventType = "programchange";
 
-const PropertyName ProgramChange::PROGRAM = "program";
+const PropertyName ProgramChange::PROGRAM("program");
 
 Event *
 ProgramChange::makeEvent(timeT absoluteTime, MidiByte program)
@@ -144,7 +144,7 @@ namespace
 
 const std::string SystemExclusive::EventType = "systemexclusive";
 
-const PropertyName SystemExclusive::DATABLOCK = "datablock";
+const PropertyName SystemExclusive::DATABLOCK("datablock");
 
 Event *
 SystemExclusive::makeEvent(timeT absoluteTime, const std::string &rawData)

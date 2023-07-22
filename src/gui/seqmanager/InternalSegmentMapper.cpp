@@ -295,16 +295,16 @@ void InternalSegmentMapper::fillBuffer()
 
         // Fix for bug #1378.  Start slightly before the first note so
         // that program etc is sent then.  We'll allow it to be before
-        // zeroTime, since MappedBufMetaIterator can handle early
+        // zeroTimeF(), since MappedBufMetaIterator can handle early
         // start-times.
         static const RealTime preparationTime = RealTime::fromSeconds(0.5);
         minRealTime = minRealTime - preparationTime;
     } else {
-        minRealTime = maxRealTime = RealTime::zeroTime;
+        minRealTime = maxRealTime = RealTime::zero();
     }
 
     m_channelManager.setRequiredInterval(minRealTime, maxRealTime,
-                                         RealTime::zeroTime, RealTime(1,0));
+                                         RealTime::zero(), RealTime(1,0));
 
     // If the track is making sound
     if (!ControlBlock::getInstance()->isTrackMuted(track->getId())  &&
@@ -425,9 +425,9 @@ InternalSegmentMapper::insertChannelSetup(MappedInserterBase &inserter)
     m_channelManager.setInstrument(instrument);
     m_channelManager.insertChannelSetup(
             m_segment->getTrack(),
-            RealTime::zeroTime,
+            RealTime::zero(),
             true,  // sendBSPC
-            getControllers(instrument, RealTime::zeroTime),
+            getControllers(instrument, RealTime::zero()),
             inserter);
 }
 

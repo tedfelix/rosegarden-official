@@ -914,7 +914,7 @@ LilyPondExporter::write()
                 property == headerArranger() || property == headerInstrument() ||
                 property == headerPiece() || property == headerCopyright() ||
                 property == headerTagline()) {
-                std::string header = protectIllegalChars(metadata.get<String>(property));
+                std::string header = protectIllegalChars(metadata.get<String>(static_cast<PropertyName>(property)));
                 if (property == headerCopyright()) {
                     // replace a (c) or (C) with a real Copyright symbol
                     size_t posCpy = header.find("(c)");

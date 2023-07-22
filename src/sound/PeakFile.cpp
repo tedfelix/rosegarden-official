@@ -963,7 +963,7 @@ PeakFile::getSplitPoints(const RealTime &startTime,
     float value;
     float fThreshold = float(threshold) / 100.0;
     bool belowThreshold = true;
-    RealTime startSplit = RealTime::zeroTime;
+    RealTime startSplit;
     bool inSplit = false;
 
     for (int i = startPeak; i < endPeak; i++) {

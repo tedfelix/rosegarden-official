@@ -576,7 +576,7 @@ JackDriver::createSubmasterOutputs(int pairs)
         QString name;
         jack_port_t *port;
 
-        name = QString("submaster %d out L").arg(i + 1);
+        name = QString("submaster %1 out L").arg(i + 1);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
@@ -586,7 +586,7 @@ JackDriver::createSubmasterOutputs(int pairs)
             return false;
         m_outputSubmasters.push_back(port);
 
-        name = QString("submaster %d out R").arg(i + 1);
+        name = QString("submaster %1 out R").arg(i + 1);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
@@ -716,7 +716,7 @@ RealTime
 JackDriver::getAudioPlayLatency() const
 {
     if (!m_client)
-        return RealTime::zeroTime;
+        return RealTime::zero();
 
 #if 0
     // ??? DEPRECATED
@@ -742,7 +742,7 @@ RealTime
 JackDriver::getAudioRecordLatency() const
 {
     if (!m_client)
-        return RealTime::zeroTime;
+        return RealTime::zero();
 
 #if 0
     // ??? DEPRECATED
@@ -768,7 +768,7 @@ RealTime
 JackDriver::getInstrumentPlayLatency(InstrumentId id) const
 {
     if (m_instrumentLatencies.find(id) == m_instrumentLatencies.end()) {
-        return RealTime::zeroTime;
+        return RealTime::zero();
     } else {
         return m_instrumentLatencies.find(id)->second;
     }
@@ -1101,7 +1101,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 
     bool allInstrumentsDormant = true;
-    static RealTime dormantTime = RealTime::zeroTime;
+    static RealTime dormantTime;
 
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 
@@ -1217,7 +1217,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     if (asyncAudio) {
         if (!allInstrumentsDormant) {
-            dormantTime = RealTime::zeroTime;
+            dormantTime = RealTime::zero();
         } else {
             dormantTime = dormantTime +
                           RealTime::frame2RealTime(m_bufferSize, m_sampleRate);
@@ -2017,7 +2017,7 @@ JackDriver::updateAudioData()
     m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
     RealTime jackLatency = getAudioPlayLatency();
-    RealTime maxLatency = RealTime::zeroTime;
+    RealTime maxLatency;
 
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 
@@ -2113,7 +2113,7 @@ JackDriver::updateAudioData()
         }
 
         if (empty) {
-            m_instrumentLatencies[id] = RealTime::zeroTime;
+            m_instrumentLatencies[id] = RealTime::zero();
         } else {
             m_instrumentLatencies[id] = jackLatency +
                                         RealTime::frame2RealTime(pluginLatency, m_sampleRate);
@@ -2185,9 +2185,9 @@ JackDriver::getNextSliceStart(const RealTime &now) const
     jack_nframes_t frame;
     bool neg = false;
 
-    if (now < RealTime::zeroTime) {
+    if (now < RealTime::zero()) {
         neg = true;
-        frame = RealTime::realTime2Frame(RealTime::zeroTime - now, m_sampleRate);
+        frame = RealTime::realTime2Frame(RealTime::zero() - now, m_sampleRate);
     } else {
         frame = RealTime::realTime2Frame(now, m_sampleRate);
     }
@@ -2206,7 +2206,7 @@ JackDriver::getNextSliceStart(const RealTime &now) const
         roundrt = RealTime::frame2RealTime(rounded + m_bufferSize, m_sampleRate);
 
     if (neg)
-        roundrt = RealTime::zeroTime - roundrt;
+        roundrt = RealTime::zero() - roundrt;  // ??? unary minus?
 
     return roundrt;
 }

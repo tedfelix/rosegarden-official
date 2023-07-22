@@ -767,14 +767,14 @@ CheckForParallelsDialog::hasParallels(std::vector<Transition> &tSet, std::vector
         for (unsigned int j=i+1; j<tSet.size(); ++j) {
             // interval at end of transition
 
-            int pitch1End = QString::fromUtf8((*(tSet[i].note))->getAsString("pitch").c_str()).toInt();
-            int pitch2End = QString::fromUtf8((*(tSet[j].note))->getAsString("pitch").c_str()).toInt();
+            int pitch1End = QString::fromUtf8((*(tSet[i].note))->getAsString(BaseProperties::PITCH).c_str()).toInt();
+            int pitch2End = QString::fromUtf8((*(tSet[j].note))->getAsString(BaseProperties::PITCH).c_str()).toInt();
 
             // pitch2End shall be the upper voice
             // we need this later when testing for hidden parallels
 
-            int pitch1Begin = QString::fromUtf8((*(tSet[i].predecessor))->getAsString("pitch").c_str()).toInt();
-            int pitch2Begin = QString::fromUtf8((*(tSet[j].predecessor))->getAsString("pitch").c_str()).toInt();
+            int pitch1Begin = QString::fromUtf8((*(tSet[i].predecessor))->getAsString(BaseProperties::PITCH).c_str()).toInt();
+            int pitch2Begin = QString::fromUtf8((*(tSet[j].predecessor))->getAsString(BaseProperties::PITCH).c_str()).toInt();
 
             if (pitch1End>pitch2End) {
 

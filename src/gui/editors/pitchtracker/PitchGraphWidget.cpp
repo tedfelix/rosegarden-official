@@ -156,7 +156,7 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
     painter.drawText(100, 90, labelStg);
     painter.setPen(defaultColor);
     
-    RealTime nextBoundary = RealTime::zeroTime;
+    RealTime nextBoundary;
     QList<RealTime> note_stack = m_history.m_targetChangeTimes;
     if (!note_stack.isEmpty()) {
         // We're going to draw backwards from now, so the first
@@ -169,7 +169,7 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
     painter.drawLine(0, midY, width(), midY);
 
     const RealTime lastPointTime = m_history.m_detectRealTimes.isEmpty() ?
-                                   RealTime::zeroTime :
+                                   RealTime::zero() :
                                    m_history.m_detectRealTimes.last();
     // Record the state for drawing. If the ErrorsValid QVector is empty,
     // or the first pitch error is invalid (e.g. there was no signal),
@@ -195,8 +195,8 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
         lastPoint = (timeToLastPoint_msec > m_graphWidth);
         // draw note boundaries
         painter.setPen(noteBoundaryColor);
-        // nextBoundary < zeroTime implies all boundarys have been delt with
-        if (nextBoundary >= RealTime::zeroTime && pointTime <= nextBoundary) {
+        // nextBoundary < zeroTimeF() implies all boundarys have been dealt with
+        if (nextBoundary >= RealTime::zero() && pointTime <= nextBoundary) {
             painter.drawLine(x, 0, x, height());
             if (!note_stack.isEmpty()) {
                 nextBoundary = note_stack.takeLast();

@@ -29,7 +29,7 @@ insertSorted(MappedInserterBase &exporter)
     // order we inserted them, important for NoteOffs.
     m_list.sort(merc);
     std::list<MappedEvent>::const_iterator i = m_list.begin();
-    if (i != m_list.end() && i->getEventTime() < RealTime::zeroTime) {
+    if (i != m_list.end() && i->getEventTime() < RealTime::zero()) {
         // Negative time if the composition starts before the bar 1
         RealTime timeOffset = - i->getEventTime();
         for(; i != m_list.end(); ++i) {
