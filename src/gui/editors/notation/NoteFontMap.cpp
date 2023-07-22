@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -50,7 +50,7 @@ NoteFontMap::NoteFontMap(QString name) :
     QString mapFileName;
 
     ResourceFinder rf;
-    
+
     QString mapFileMixedName =
         rf.getResourcePath("fonts/mappings", QString("%1.xml").arg(name));
 
@@ -70,7 +70,7 @@ NoteFontMap::NoteFontMap(QString name) :
         if (!mapFileLowerInfo.isReadable()) {
             if (mapFileLowerName != mapFileMixedName) {
                 throw MappingFileReadFailed
-                (QObject::tr("Can't open font mapping file %1 or %2") 
+                (QObject::tr("Can't open font mapping file %1 or %2")
                  .arg(mapFileMixedName).arg(mapFileLowerName));
             } else {
                 throw MappingFileReadFailed
@@ -661,12 +661,12 @@ std::set<int>
 NoteFontMap::getSizes() const
 {
     std::set<int> sizes;
-    
+
     for (SizeDataMap::const_iterator i = m_sizes.begin();
          i != m_sizes.end(); ++i) {
         sizes.insert(i->first);
     }
-    
+
     return sizes;
 }
 
@@ -679,7 +679,7 @@ NoteFontMap::getCharNames() const
          i != m_data.end(); ++i) {
         names.insert(i->first);
     }
-    
+
     return names;
 }
 
@@ -974,6 +974,7 @@ NoteFontMap::HotspotData::getHotspot(int size, int width, int height,
 }
 
 QStringList
+// cppcheck-suppress unusedFunction
 NoteFontMap::getSystemFontNames() const
 {
     QStringList names;

@@ -107,7 +107,7 @@ public:
     size_t addSamples(std::vector<sample_t *> &target,
                       size_t channels, size_t nframes, size_t offset = 0);
 
-    unsigned int getTargetChannels();
+    unsigned int getTargetChannels() const;
 
     //unsigned int getTargetSampleRate();
     //unsigned int getBitsPerSample();
@@ -146,7 +146,7 @@ public:
     bool isFullyBuffered() const { return m_isSmallFile || m_fileEnded; }
 
     // Stop playing this file.
-    // 
+    //
     void cancel() { m_fileEnded = true; }
 
     // Segment id that allows us to crosscheck against playing audio
@@ -161,11 +161,11 @@ public:
     void setAutoFade(bool value) { m_autoFade = value; }
 
     //RealTime getFadeInTime() const { return m_fadeInTime; }
-    void setFadeInTime(const RealTime &time) 
+    void setFadeInTime(const RealTime &time)
         { m_fadeInTime = time; }
 
     //RealTime getFadeOutTime() const { return m_fadeOutTime; }
-    void setFadeOutTime(const RealTime &time) 
+    void setFadeOutTime(const RealTime &time)
         { m_fadeOutTime = time; }
 
 
@@ -192,9 +192,9 @@ private:
     // AudioFile handle
     //
     AudioFile            *m_audioFile;
-    unsigned int getSourceChannels();
-    unsigned int getSourceSampleRate();
-    unsigned int getBytesPerFrame();
+    unsigned int getSourceChannels() const;
+    unsigned int getSourceSampleRate() const;
+    unsigned int getBytesPerFrame() const;
 
     // Originating Instrument Id
     //
@@ -213,13 +213,14 @@ private:
 
     static std::vector<sample_t *> m_workBuffers;
     static size_t m_workBufferSize;
+
     /**
      * m_workBuffers is used by the AudioThread and the SequencerThread,
      * so it needs synchronization.
      */
     static QMutex m_workBuffersMutex;
     static void clearWorkBuffers();
-    
+
     static char          *m_rawFileBuffer;
     static size_t         m_rawFileBufferSize;
 

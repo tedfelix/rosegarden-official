@@ -219,7 +219,7 @@ public:
      * Get all segments that play on the same instrument segment s
      * plays on and start before t.
      */
-    SegmentMultiSet getInstrumentSegments(Segment *s, timeT t) const;
+    // unused SegmentMultiSet getInstrumentSegments(Segment *s, timeT t) const;
 
     //////
     //
@@ -377,7 +377,7 @@ public:
     /**
      * Delete a trigger Segment.
      */
-    void deleteTriggerSegment(TriggerSegmentId);
+    // unused void deleteTriggerSegment(TriggerSegmentId);
 
     /**
      * Detach a trigger Segment from the Composition.
@@ -421,7 +421,7 @@ public:
     /**
      * Get the ID of the next trigger segment that will be inserted.
      */
-    TriggerSegmentId getNextTriggerSegmentId() const;
+    // unused TriggerSegmentId getNextTriggerSegmentId() const;
 
     /**
      * Specify the next trigger ID.  This is intended for use from file
@@ -516,7 +516,7 @@ public:
      * resulting index of the time signature (suitable for passing
      * to removeTimeSignature, for example)
      */
-    int addTimeSignature(timeT t, TimeSignature timeSig);
+    int addTimeSignature(timeT t, const TimeSignature& timeSig);
 
     /**
      * Return the time signature in effect at time t

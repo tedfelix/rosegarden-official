@@ -996,19 +996,23 @@ QColor ControlRuler::valueToColour(int max, int val)
     return DefaultVelocityColour::getInstance()->getColour(value);
 }
 
+/* unused
 void ControlRuler::flipForwards()
 {
     ///CJ Expect to drop tghis with a better way of ordering bars
     // std::pair<int, int> minMax = getZMinMax();
 
 }
+*/
 
+/* unused
 void ControlRuler::flipBackwards()
 {
     ///CJ Expect to drop tghis with a better way of ordering bars
     // std::pair<int, int> minMax = getZMinMax();
 
 }
+*/
 
 std::pair<int, int> ControlRuler::getZMinMax()
 {

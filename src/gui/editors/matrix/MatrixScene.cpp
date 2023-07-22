@@ -1049,6 +1049,7 @@ MatrixScene::setSnap(timeT t)
     recreateLines();
 }
 
+/* unused
 bool
 MatrixScene::constrainToSegmentArea(QPointF &scenePos)
 {
@@ -1081,6 +1082,7 @@ MatrixScene::constrainToSegmentArea(QPointF &scenePos)
 
     return ok;
 }
+*/
 
 void
 MatrixScene::playNote(Segment &segment, int pitch, int velocity)

@@ -63,8 +63,6 @@ public:
     void saveUserShortcuts();
     void setUserShortcuts(const QString& key,
                           const std::set<QKeySequence>& ksSet);
-    void addUserShortcut(const QString& key,
-                         const QKeySequence& ks);
     void removeUserShortcut(const QString& key,
                             const QKeySequence& ks);
     void removeUserShortcuts(const QString& key);

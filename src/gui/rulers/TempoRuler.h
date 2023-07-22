@@ -133,7 +133,7 @@ private:
     tempoT m_dragOriginalTarget;
 
     int getYForTempo(tempoT tempo);
-    tempoT getTempoForY(int y);
+    // unused tempoT getTempoForY(int y);
     void showTextFloat(tempoT tempo,
                        tempoT target = -1,
                        timeT time = -1,

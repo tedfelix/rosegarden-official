@@ -126,7 +126,7 @@ public:
      * Return the location filename or URL as passed to the
      * constructor.
      */
-    QString getLocation() const;
+    // unused QString getLocation() const;
 
     /**
      * Return the name of the local file this FileSource refers to.
@@ -142,22 +142,22 @@ public:
      * Return the base name, i.e. the final path element (including
      * extension, if any) of the location.
      */
-    QString getBasename() const;
+    // unused QString getBasename() const;
 
     /**
      * Return the MIME content type of this file, if known.
      */
-    QString getContentType() const;
+    // unused QString getContentType() const;
 
     /**
      * Return the file extension for this file, if any.
      */
-    QString getExtension() const;
+    // unused QString getExtension() const;
 
     /**
      * Return an error message, if isOK() is false.
      */
-    QString getErrorString() const;
+    // unused QString getErrorString() const;
 
     /**
      * Specify whether any local, cached file should remain on disc

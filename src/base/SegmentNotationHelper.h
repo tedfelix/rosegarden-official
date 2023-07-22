@@ -156,7 +156,7 @@ public:
      * Untested and probably marked-for-expiry -- prefer
      * SegmentPerformanceHelper::getTiedNotes
      */
-    iterator getNoteTiedWith(Event *note, bool forwards);
+    // unused iterator getNoteTiedWith(Event *note, bool forwards);
 
 
     /**

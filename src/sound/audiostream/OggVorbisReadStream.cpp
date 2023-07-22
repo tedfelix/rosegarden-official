@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     This file is Copyright 2005-2011 Chris Cannam.
 
     This program is free software; you can redistribute it and/or
@@ -51,15 +51,13 @@ OggVorbisReadStream::initStaticObjects()
     );
 }
 
-
-
 class OggVorbisReadStream::D
 {
 public:
-    D(OggVorbisReadStream *rs) :
+    explicit D(OggVorbisReadStream *rs) :
         m_rs(rs),
-        m_oggz(0),
         m_fishSound(0),
+        m_oggz(0),
         m_buffer(0),
         m_finished(false) { }
     ~D() {
@@ -120,6 +118,7 @@ public:
 #ifdef __GNUC__
         float interleaved[n * channels];
 #else
+        // cppcheck-suppress allocaCalled
         float *interleaved = (float *)alloca(n * channels * sizeof(float));
 #endif
 	for (long i = 0; i < n; ++i) {
@@ -162,7 +161,7 @@ OggVorbisReadStream::OggVorbisReadStream(QString path) :
 
     // initialise m_channelCount
     while (m_channelCount == 0 && !m_d->m_finished) {
-        m_d->readNextBlock(); 
+        m_d->readNextBlock();
     }
 }
 

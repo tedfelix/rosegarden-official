@@ -90,7 +90,6 @@ RecordableAudioFile::write()
     }
 
     unsigned int channels = m_audioFile->getChannels();
-    unsigned char b1, b2;
 
     // We need the same amount of available data on every channel
     size_t s = 0;
@@ -132,8 +131,10 @@ RecordableAudioFile::write()
 	for (size_t i = 0; i < s; ++i) {
 	    for (unsigned int ch = 0; ch < channels; ++ch) {
 		float sample = buffer[i + ch * s];
-		b2 = (unsigned char)((long)(sample * 32767.0) & 0xff);
-		b1 = (unsigned char)((long)(sample * 32767.0) >> 8);
+		unsigned char b2 =
+                    (unsigned char)((long)(sample * 32767.0) & 0xff);
+		unsigned char b1 =
+                    (unsigned char)((long)(sample * 32767.0) >> 8);
 		encodeBuffer[index++] = b2;
 		encodeBuffer[index++] = b1;
 	    }
@@ -143,6 +144,7 @@ RecordableAudioFile::write()
 	for (size_t i = 0; i < s; ++i) {
 	    for (unsigned int ch = 0; ch < channels; ++ch) {
 		float sample = buffer[i + ch * s];
+                // cppcheck-suppress invalidPointerCast
 		*(float *)encodePointer = sample;
 		encodePointer += sizeof(float);
 	    }

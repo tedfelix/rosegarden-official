@@ -68,7 +68,7 @@ public:
      * (Used to give to the headers group exactly the same height as the
      * canvas. Necessary to get synchronous vertical scroll.)
      */
-    void completeToHeight(int height);
+    // unused void completeToHeight(int height);
 
     NotationWidget * getNotationWidget()
     { return m_widget;

@@ -63,7 +63,7 @@ public:
     */
     void connectSignalsToSlots();
 
-    MidiDevice* getDeviceByName(QString deviceName);
+    // unused MidiDevice* getDeviceByName(QString deviceName);
     MidiDevice* getDeviceById(DeviceId devId);
 
     MidiDevice* getMidiDeviceOfItem(QTreeWidgetItem* twItem);

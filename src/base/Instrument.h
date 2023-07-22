@@ -98,7 +98,7 @@ public:
      * eg. "General MIDI #15" returns 15, which corresponds with the MIDI
      * channel this Instrument uses if this instrument is a MIDI instrument.
      */
-    virtual unsigned int getPresentationNumber() const;
+    // unused virtual unsigned int getPresentationNumber() const;
 
     std::string getAlias() const override;
 

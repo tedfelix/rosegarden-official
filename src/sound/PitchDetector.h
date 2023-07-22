@@ -69,12 +69,13 @@ namespace Rosegarden
  * \date 2004, rewrite 2009, 2010
  *
  */
+// cppcheck-suppress noCopyConstructor
 class PitchDetector {
 
 public:
 
     typedef QString Method;               // was std::string.
-    
+
     static const double NOSIGNAL;         /**< No input signal available */
     static const double NONE;             /**< No pitch (e.g. in a rest ) */
     static const Method PARTIAL;          /**< Use lowest freq max */
@@ -83,8 +84,8 @@ public:
     // The following not yet implemented
     //static const Method AMDF;
     //static const Method CEPSTRUM;
-    
-    /** 
+
+    /**
      * Analysis frame size
      * A sensible default size of analysis buffer for all methods
      */
@@ -97,25 +98,25 @@ public:
      * default size for the overlap for all methods
      */
     static const int defaultStepSize;
-    
+
     PitchDetector( int frameSize, int stepSize, int sampleRate );
     virtual ~PitchDetector();
 
     float *getInBuffer();                 /**< Get audio data buffer ref */
     double getPitch();                    /**< Get pitch; use current method */
 
-    int getFrameSize() const;             /**< Get current audio buf size */
-    void setFrameSize( int frameSize );   /**< Set current audio buf size */
-    int getStepSize() const;              /**< Get no. samples between anals */
-    void setStepSize( int stepSize );     /**< Set no, samples between anals */
+    // unused int getFrameSize() const;             /**< Get current audio buf size */
+    void setFrameSize( int nextFrameSize );  /**< Set current audio buf size */
+    // unused int getStepSize() const;              /**< Get no. samples between anals */
+    void setStepSize( int nextStepSize ); /**< Set no, samples between anals */
     int getBufferSize() const;            /**< Get size of audio buffer */
 
     void setMethod( Method method );
-    Method getCurrentMethod() {
+    Method getCurrentMethod() const {
         return m_method;
     }
     static const QVector<Method> *getMethods(); // was std::vector
-    
+
 private:
 
     float *m_frame;
@@ -129,9 +130,9 @@ private:
     public:
         MethodVector();
     };
-    
+
     static const MethodVector m_methods;   // was std::vector
-    
+
     float *m_cepstralIn, *m_in1, *m_in2;
     int m_frameSize;
     int m_stepSize;

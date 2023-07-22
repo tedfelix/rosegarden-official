@@ -755,6 +755,7 @@ RosegardenSequencer::setMappedPropertyList(int id, const QString &property,
 }
 
 int
+// cppcheck-suppress unusedFunction
 RosegardenSequencer::getMappedObjectId(int type)
 {
     LOCKED;
@@ -795,6 +796,7 @@ RosegardenSequencer::getPropertyList(int id,
     return list;
 }
 
+/* unused
 std::vector<QString>
 RosegardenSequencer::getPluginInformation()
 {
@@ -806,6 +808,7 @@ RosegardenSequencer::getPluginInformation()
 
     return list;
 }
+*/
 
 QString
 RosegardenSequencer::getPluginProgram(int id, int bank, int program)
@@ -1001,6 +1004,7 @@ RosegardenSequencer::setQuarterNoteLength(RealTime rt)
     m_driver->setMIDIClockInterval(rt / 24);
 }
 
+// cppcheck-suppress unusedFunction
 void RosegardenSequencer::dumpFirstSegment()
 {
     LOCKED;

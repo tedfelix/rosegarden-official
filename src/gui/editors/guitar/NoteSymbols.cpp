@@ -179,6 +179,7 @@ NoteSymbols::drawNoteSymbol ( bool /* big */,
     p->restore();
 }
 
+/* unused
 void
 NoteSymbols::drawBarreSymbol ( QPainter* p,
                                int fretNb,
@@ -214,6 +215,7 @@ NoteSymbols::drawBarreSymbol ( QPainter* p,
 
     drawNoteSymbol (false, p, end, fretNb );
 }
+*/
 
 void
 NoteSymbols::drawFretNumber ( QPainter* p,
@@ -363,11 +365,13 @@ NoteSymbols::getTopBorder ( unsigned int imgHeight )
     return static_cast<unsigned int>( TOP_BORDER_PERCENTAGE * imgHeight );
 }
 
+/* unused
 unsigned int
 NoteSymbols::getBottomBorder ( unsigned int imgHeight )
 {
     return static_cast<unsigned int>( imgHeight * BOTTOM_BORDER_PERCENTAGE );
 }
+*/
 
 unsigned int
 NoteSymbols::getLeftBorder ( unsigned int imgWidth )
@@ -379,11 +383,13 @@ NoteSymbols::getLeftBorder ( unsigned int imgWidth )
     return left;
 }
 
+/* unused
 unsigned int
 NoteSymbols::getRightBorder ( unsigned int imgWidth )
 {
     return static_cast<unsigned int>( imgWidth * RIGHT_BORDER_PERCENTAGE );
 }
+*/
 
 unsigned int
 NoteSymbols::getGuitarChordWidth ( int imgWidth )

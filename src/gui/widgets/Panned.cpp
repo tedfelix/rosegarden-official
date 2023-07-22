@@ -96,6 +96,7 @@ Panned::scrollContentsBy(int dx, int dy)
 #endif
 
 void
+// cppcheck-suppress unusedFunction
 Panned::drawForeground(QPainter *paint, const QRectF &)
 {
     Profiler profiler("Panned::drawForeground");

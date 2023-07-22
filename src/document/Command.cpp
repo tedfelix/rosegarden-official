@@ -38,6 +38,7 @@ MacroCommand::addCommand(Command *command)
     m_commands.push_back(command);
 }
 
+/* unused
 void
 MacroCommand::deleteCommand(Command *command)
 {
@@ -51,6 +52,7 @@ MacroCommand::deleteCommand(Command *command)
         }
     }
 }
+*/
 
 bool
 MacroCommand::haveCommands() const

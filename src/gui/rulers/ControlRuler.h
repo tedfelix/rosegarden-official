@@ -133,8 +133,8 @@ public:
     // SegmentObserver interface
 //    virtual void viewSegmentDeleted(const ViewSegment *);
 
-    void flipForwards();
-    void flipBackwards();
+    // unused void flipForwards();
+    // unused void flipBackwards();
 
     SnapGrid* getSnapGrid() const;
 

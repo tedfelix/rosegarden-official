@@ -81,7 +81,7 @@ public:
     static CharName getClefCharName(const Clef &);
     static CharName getSymbolCharName(const Symbol &);
     static CharName getTimeSignatureDigitName(int digit);
-    static CharName getSomeCharName(QString qthing);
+    // unused static CharName getSomeCharName(QString qthing);
 
     void setBaseStyle (NoteStyleName name);
     void setShape     (Note::Type, NoteHeadShape);

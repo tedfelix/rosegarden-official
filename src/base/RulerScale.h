@@ -102,7 +102,7 @@ public:
      * Return the duration corresponding to the given delta-x
      * starting at the given x-coord.
      */
-    virtual timeT getDurationForWidth(double x, double width) const;
+    // unused virtual timeT getDurationForWidth(double x, double width) const;
 
     /**
      * Return the width corresponding to the given duration

@@ -33,16 +33,16 @@ namespace Rosegarden
 //
 
 PluginPort::PluginPort(int number,
-                       std::string name,
+                       const std::string& name,
                        PluginPort::PortType type,
-                       PluginPort::PortDisplayHint hint,
+                       PluginPort::PortDisplayHint displayHint,
                        PortData lowerBound,
                        PortData upperBound,
 		       PortData defaultValue):
     m_number(number),
     m_name(name),
     m_type(type),
-    m_displayHint(hint),
+    m_displayHint(displayHint),
     m_lowerBound(lowerBound),
     m_upperBound(upperBound),
     m_default(defaultValue)
@@ -59,16 +59,17 @@ AudioPluginInstance::AudioPluginInstance(unsigned int position):
 {
 }
 
-AudioPluginInstance::AudioPluginInstance(std::string identifier,
+AudioPluginInstance::AudioPluginInstance(const std::string& identifier,
                                          unsigned int position):
                 m_mappedId(-1),
                 m_identifier(identifier),
                 m_position(position),
-                m_assigned(true)
+                m_assigned(true),
+                m_bypass(false)
 {
 }
 
-std::string 
+std::string
 AudioPluginInstance::toXmlString() const
 {
 
@@ -78,7 +79,7 @@ AudioPluginInstance::toXmlString() const
     {
         return plugin.str();
     }
-    
+
     if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
 	plugin << "            <synth ";
     } else {
@@ -158,7 +159,7 @@ AudioPluginInstance::removePort(int number)
 }
 
 
-PluginPortInstance* 
+PluginPortInstance*
 AudioPluginInstance::getPort(int number)
 {
     PortInstanceIterator it = m_ports.begin();
@@ -190,18 +191,19 @@ AudioPluginInstance::getConfigurationValue(std::string k) const
 }
 
 void
-AudioPluginInstance::setProgram(std::string program)
+AudioPluginInstance::setProgram(const std::string& program)
 {
     m_program = program;
-    
+
     PortInstanceIterator it = m_ports.begin();
     for (; it != m_ports.end(); ++it) {
 	(*it)->changedSinceProgramChange = false;
     }
 }
-	
+
 void
-AudioPluginInstance::setConfigurationValue(std::string k, std::string v)
+AudioPluginInstance::setConfigurationValue(const std::string& k,
+                                           const std::string& v)
 {
     m_config[k] = v;
 }
@@ -229,7 +231,7 @@ AudioPluginInstance::getDistinctiveConfigurationText() const
     }
 
     if (base == "") return "";
-    
+
     std::string::size_type s = base.rfind('/');
     if (s < base.length() - 1) base = base.substr(s + 1);
 
@@ -266,4 +268,3 @@ AudioPluginInstance::getDisplayName() const
 
 
 }
-

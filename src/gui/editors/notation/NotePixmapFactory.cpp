@@ -390,6 +390,7 @@ NotePixmapFactory::makeNotePixmapItem(const NotePixmapParameters &params)
     return makeItem(hotspot);
 }
 
+/* unused
 void
 NotePixmapFactory::drawNote(const NotePixmapParameters &params,
                             QPainter &painter, int x, int y)
@@ -400,6 +401,7 @@ NotePixmapFactory::drawNote(const NotePixmapParameters &params,
     drawNoteAux(params, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::calculateNoteDimensions(const NotePixmapParameters &params)
@@ -1800,6 +1802,7 @@ NotePixmapFactory::makeRest(const NotePixmapParameters &params)
     return canvasMap;
 }
 
+/* unused
 void
 NotePixmapFactory::drawRest(const NotePixmapParameters &params,
                             QPainter &painter, int x, int y)
@@ -1810,6 +1813,7 @@ NotePixmapFactory::drawRest(const NotePixmapParameters &params,
     drawRestAux(params, hotspot, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
@@ -2591,6 +2595,7 @@ NotePixmapFactory::makeHairpin(int length, bool isCrescendo)
     return makeItem(QPoint(0, m_generatedHeight / 2));
 }
 
+/* unused
 void
 NotePixmapFactory::drawHairpin(int length, bool isCrescendo,
                                QPainter &painter, int x, int y)
@@ -2600,6 +2605,7 @@ NotePixmapFactory::drawHairpin(int length, bool isCrescendo,
     drawHairpinAux(length, isCrescendo, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
@@ -2694,6 +2700,7 @@ NotePixmapFactory::makeSlur(int length, int dy, bool above, bool phrasing)
     }
 }
 
+/* unused
 void
 NotePixmapFactory::drawSlur(int length, int dy, bool above, bool phrasing,
                             QPainter &painter, int x, int y)
@@ -2706,6 +2713,7 @@ NotePixmapFactory::drawSlur(int length, int dy, bool above, bool phrasing,
     drawSlurAux(length, dy, above, false, false, phrasing, hotspot, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
@@ -2894,6 +2902,7 @@ NotePixmapFactory::makeOttava(int length, int octavesUp)
     return makeItem(QPoint(0, m_generatedHeight - 1));
 }
 
+/* not used
 void
 NotePixmapFactory::drawOttava(int length, int octavesUp,
                               QPainter &painter, int x, int y)
@@ -2903,6 +2912,7 @@ NotePixmapFactory::drawOttava(int length, int octavesUp,
     drawOttavaAux(length, octavesUp, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
@@ -3799,10 +3809,12 @@ int NotePixmapFactory::getAccidentalWidth(const Accidental &a,
     return w;
 }
 
+/* unused
 int NotePixmapFactory::getAccidentalHeight(const Accidental &a) const
 {
     return m_font->getHeight(m_style->getAccidentalCharName(a));
 }
+*/
 
 int NotePixmapFactory::getStemLength() const
 {

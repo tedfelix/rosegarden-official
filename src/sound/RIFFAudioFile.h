@@ -126,7 +126,7 @@ public:
 
     // Convert a single sample from byte format, given the right
     // number of bytes for the sample width
-    float convertBytesToSample(const unsigned char *bytes);
+    float convertBytesToSample(const unsigned char *bytes) const;
 
     // Decode and de-interleave the given samples that were retrieved
     // from this file or another with the same format as it.  Place

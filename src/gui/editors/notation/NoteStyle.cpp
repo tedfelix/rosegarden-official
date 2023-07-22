@@ -417,6 +417,7 @@ NoteStyle::getTimeSignatureDigitName(int digit)
     }
 }
 
+/* unused
 CharName
 NoteStyle::getSomeCharName(QString qthing)
 {
@@ -441,6 +442,7 @@ NoteStyle::getSomeCharName(QString qthing)
 
     return NoteCharacterNames::UNKNOWN;
 }
+*/
 
 void
 NoteStyle::setBaseStyle(NoteStyleName name)

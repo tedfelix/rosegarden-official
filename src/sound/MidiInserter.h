@@ -59,14 +59,14 @@ class MidiInserter : public MappedInserterBase
     void insertCopy(const MappedEvent &evt) override;
 
     void assignToMidiFile(MidiFile &midifile);
-        
+
  private:
 
     // Get the absolute time of evt
-    timeT getAbsoluteTime(RealTime time);
+    timeT getAbsoluteTime(RealTime realtime);
 
     // Initialize a normal track, ie not a conductor track.
-    void initNormalTrack(TrackData &track, TrackId RGTrackPos);
+    void initNormalTrack(TrackData &trackData, TrackId RGTrackPos);
 
     // Get the relevant MIDI track data for a rosegarden track
     // position, including the track itself.
@@ -79,7 +79,7 @@ class MidiInserter : public MappedInserterBase
     // Done receiving events.  Tracks will be complete when this
     // returns.
     void finish();
- 
+
     Composition   &m_comp;
     // From RG track pos -> MIDI TrackData, the opposite direction
     // from m_trackChannelMap.
@@ -95,11 +95,11 @@ class MidiInserter : public MappedInserterBase
     RealTime       m_previousRealTime;
     timeT          m_previousTime;
     bool           m_ramping;
-    
+
     /* Static constants */
 
     static const timeT crotchetDuration;
-    
+
 };
 }
 

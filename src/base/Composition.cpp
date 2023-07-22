@@ -551,6 +551,7 @@ Composition::addTriggerSegment(Segment *s, TriggerSegmentId id, int pitch, int v
     return rec;
 }
 
+/* unused
 void
 Composition::deleteTriggerSegment(TriggerSegmentId id)
 {
@@ -562,6 +563,7 @@ Composition::deleteTriggerSegment(TriggerSegmentId id)
     delete *i;
     m_triggerSegments.erase(i);
 }
+*/
 
 void
 Composition::detachTriggerSegment(TriggerSegmentId id)
@@ -622,11 +624,13 @@ Composition::getTriggerSegmentRec(Event* e)
     return getTriggerSegmentRec(id);
 }
 
+/* unused
 TriggerSegmentId
 Composition::getNextTriggerSegmentId() const
 {
     return m_nextTriggerSegmentId;
 }
+*/
 
 void
 Composition::setNextTriggerSegmentId(TriggerSegmentId id)
@@ -932,7 +936,7 @@ Composition::getBarRange(int n) const
 }
 
 int
-Composition::addTimeSignature(timeT t, TimeSignature timeSig)
+Composition::addTimeSignature(timeT t, const TimeSignature& timeSig)
 {
 #ifdef DEBUG_BAR_STUFF
     RG_DEBUG << "addTimeSignature(" << t << ", " << timeSig.getNumerator() << "/" << timeSig.getDenominator() << ")";
@@ -1908,6 +1912,7 @@ void Composition::setRecordMetronome(bool value)
 #ifdef TRACK_DEBUG
 // track debug convenience function
 //
+// cppcheck-suppress unusedFunction
 static void dumpTracks(Composition::trackcontainer& tracks)
 {
     Composition::trackiterator it = tracks.begin();
@@ -2431,6 +2436,7 @@ Composition::hasTrack(InstrumentId instrumentId) const
 // Get all the segments that the same instrument plays that plays
 // segment s.
 // @return a SegmentMultiSet that includes s itself.
+/* unused
 SegmentMultiSet
 Composition::getInstrumentSegments(Segment *s, timeT t) const
 {
@@ -2451,6 +2457,7 @@ Composition::getInstrumentSegments(Segment *s, timeT t) const
 
     return segments;
 }
+*/
 
 void
 Composition::enforceArmRule(const Track *track)
@@ -2720,7 +2727,7 @@ Composition::notifySourceDeletion() const
     }
 }
 
-
+// cppcheck-suppress unusedFunction
 void breakpoint()
 {
     //RG_DEBUG << "breakpoint()";

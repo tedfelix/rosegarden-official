@@ -143,7 +143,7 @@ AudioLevel::fader_to_dB(int level, int maxLevel, FaderType type)
 
 
 int
-AudioLevel::dB_to_fader(float dB, int maxLevel, FaderType type)
+AudioLevel::dB_to_fader(float dB, int maxFaderLevel, FaderType type)
 {
     if (dB == DB_FLOOR) return 0;
 
@@ -156,23 +156,24 @@ AudioLevel::dB_to_fader(float dB, int maxLevel, FaderType type)
 
         float maxPercent = iec_dB_to_fader(faderTypes[type].maxDb);
         float percent = iec_dB_to_fader(dB);
-        int faderLevel = int((maxLevel * percent) / maxPercent + 0.01);
+        int faderLevel = int((maxFaderLevel * percent) / maxPercent + 0.01);
 
         if (faderLevel < 0) faderLevel = 0;
-        if (faderLevel > maxLevel) faderLevel = maxLevel;
+        if (faderLevel > maxFaderLevel) faderLevel = maxFaderLevel;
         return faderLevel;
 
     } else {
 
-        int zeroLevel = int(maxLevel * faderTypes[type].zeroPoint);
+        int zeroLevel = int(maxFaderLevel * faderTypes[type].zeroPoint);
 
         if (dB >= 0.0) {
 
             float value = sqrtf(dB);
-            float scale = (maxLevel - zeroLevel) / sqrtf(faderTypes[type].maxDb);
+            float scale = (maxFaderLevel - zeroLevel) /
+                sqrtf(faderTypes[type].maxDb);
             value *= scale;
             int level = int(value + 0.01) + zeroLevel;
-            if (level > maxLevel) level = maxLevel;
+            if (level > maxFaderLevel) level = maxFaderLevel;
             return level;
 
         } else {
@@ -197,11 +198,13 @@ AudioLevel::fader_to_multiplier(int level, int maxLevel, FaderType type)
 }
 
 int
-AudioLevel::multiplier_to_fader(float multiplier, int maxLevel, FaderType type)
+AudioLevel::multiplier_to_fader(float multiplier,
+                                int maxFaderLevel,
+                                FaderType type)
 {
     if (multiplier == 0.0) return 0;
     float dB = multiplier_to_dB(multiplier);
-    int fader = dB_to_fader(dB, maxLevel, type);
+    int fader = dB_to_fader(dB, maxFaderLevel, type);
     return fader;
 }
 
@@ -222,7 +225,7 @@ getPreviewLevelCache(int levels)
 }
 
 int
-AudioLevel::multiplier_to_preview(float m, int levels)
+AudioLevel::multiplier_to_preview(float multiplier, int levels)
 {
     const LevelList &ll = getPreviewLevelCache(levels);
     int result = -1;
@@ -240,9 +243,9 @@ AudioLevel::multiplier_to_preview(float m, int levels)
             break;
         }
         level = newlevel;
-        if (ll[level] >= m) {
+        if (ll[level] >= multiplier) {
             hi = level;
-        } else if (ll[level+1] >= m) {
+        } else if (ll[level+1] >= multiplier) {
             result = level;
         } else {
             lo = level;

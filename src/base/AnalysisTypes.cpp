@@ -764,6 +764,7 @@ AnalysisHelper::PitchProfile::distance(const PitchProfile &other)
     return distance;
 }
 
+/* unused
 double
 AnalysisHelper::PitchProfile::dotProduct(const PitchProfile &other) const
 {
@@ -776,6 +777,7 @@ AnalysisHelper::PitchProfile::dotProduct(const PitchProfile &other) const
 
     return product;
 }
+*/
 
 double
 AnalysisHelper::PitchProfile::productScorer(const PitchProfile &other) const

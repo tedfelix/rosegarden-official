@@ -98,11 +98,13 @@ QSize FontViewFrame::sizeHint() const
 // 				 16 * m_fontSize * 3 / 2 + margin() + 2 * frameWidth());
 }
 
+/* unused
 QSize FontViewFrame::cellSize() const
 {
     QFontMetrics fm = fontMetrics();
     return QSize( fm.maxWidth(), fm.lineSpacing() + 1 );
 }
+*/
 
 void FontViewFrame::paintEvent( QPaintEvent* e )
 {

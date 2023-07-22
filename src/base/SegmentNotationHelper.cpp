@@ -365,6 +365,7 @@ SegmentNotationHelper::noteIsInChord(Event *note)
 //!!! This doesn't appear to be used any more and may well not work.
 // Ties are calculated in several different places, and it's odd that
 // we don't have a decent API for them
+/* unused
 Segment::iterator
 SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
 {
@@ -408,7 +409,7 @@ SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
 
     return end();
 }
-
+*/
 
 bool
 SegmentNotationHelper::collapseRestsIfValid(Event* e, bool& collapseForward)

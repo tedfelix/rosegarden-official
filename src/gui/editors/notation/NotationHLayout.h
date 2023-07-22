@@ -149,7 +149,7 @@ public:
      * property of the returned list is that 0, 100, and whatever the
      * default proportion is will be in it.
      */
-    static std::vector<int> getAvailableProportions();
+    // unused static std::vector<int> getAvailableProportions();
 
     /**
      * Returns the total length of all elements once layout is done
@@ -416,12 +416,12 @@ protected:
      const ::Rosegarden::Key &key, const NotationElementList::iterator &);
 
     /// Difference between absolute time of next event and of this
-    timeT getSpacingDuration
-    (ViewSegment &staff, const NotationElementList::iterator &);
+    // unused timeT getSpacingDuration
+    //(ViewSegment &staff, const NotationElementList::iterator &);
 
     /// Difference between absolute time of chord and of first event not in it
-    timeT getSpacingDuration
-    (ViewSegment &staff, const NotationChord &);
+    // unused timeT getSpacingDuration
+    //(ViewSegment &staff, const NotationChord &);
 
     float getLayoutWidth(ViewElement &,
                          NotePixmapFactory *,

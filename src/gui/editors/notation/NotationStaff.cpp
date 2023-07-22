@@ -1725,6 +1725,7 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
 
 }
 
+/* unused
 void
 NotationStaff::checkAndCompleteClefsAndKeys(int bar)
 {
@@ -1782,6 +1783,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
         }
     }
 }
+*/
 
 StaffLayout::BarStyle
 NotationStaff::getBarStyle(int barNo) const

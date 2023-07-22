@@ -7,7 +7,7 @@
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -119,16 +119,16 @@ PresetHandlerDialog::initDialog()
         QRadioButton *onlySelectedSegments = new
             QRadioButton(tr("Only selected segments"));
         scopeBoxLayout->addWidget(onlySelectedSegments);
-        m_convertAllSegments = new 
+        m_convertAllSegments = new
             QRadioButton(tr("All segments in this track"));
         scopeBoxLayout->addWidget(m_convertAllSegments);
         onlySelectedSegments->setChecked(true);
     }
     else {
-        QRadioButton *onlyNewSegments = new 
+        QRadioButton *onlyNewSegments = new
             QRadioButton(tr("Only for new segments"));
         scopeBoxLayout->addWidget(onlyNewSegments);
-        m_convertSegments = new 
+        m_convertSegments = new
             QRadioButton(tr("Convert existing segments"));
         scopeBoxLayout->addWidget(m_convertSegments);
         onlyNewSegments->setChecked(true);
@@ -159,7 +159,7 @@ PresetHandlerDialog::initDialog()
     else {
         m_convertSegments->setChecked(qStrToBool(settings.value("convert_segments", "0")));
     }
-    
+
     connect(m_categoryCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &PresetHandlerDialog::slotCategoryIndexChanged);
@@ -250,6 +250,7 @@ PresetHandlerDialog::getConvertAllSegments()
     }
 }
 
+/* unused
 bool
 PresetHandlerDialog::getConvertOnlySelectedSegments()
 {
@@ -260,6 +261,7 @@ PresetHandlerDialog::getConvertOnlySelectedSegments()
         return false;
     }
 }
+*/
 
 void
 PresetHandlerDialog::populateCategoryCombo()
@@ -319,7 +321,7 @@ PresetHandlerDialog::accept()
     }
 
     settings.endGroup();
-    
+
     QDialog::accept();
 }
 

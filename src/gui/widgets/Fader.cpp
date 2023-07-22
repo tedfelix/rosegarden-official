@@ -182,11 +182,13 @@ Fader::buttonPixmap()
         return QSharedPointer<QPixmap>();
 }
 
+/* unused
 float
 Fader::getFaderLevel() const
 {
     return m_value;
 }
+*/
 
 void
 Fader::setFader(float value)

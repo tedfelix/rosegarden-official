@@ -269,12 +269,11 @@ double Tuning::scalaIntervalToCents(const QString & interval,
         qDebug() << "Interval is a ratio";
 #       endif
         int slashPos = intervalString.indexOf(QChar('/'));
-        double ratio = 1.0;
         if (slashPos == -1) { // interval is integer ratio
 #           if (TUNING_DEBUG > 1)
             qDebug() << "Ratio is an integer";
 #           endif
-            ratio = intervalString.toInt(&ok);
+            double ratio = intervalString.toInt(&ok);
             if (!ok) {
                 RG_WARNING << "Syntax Error in tunings file, line " << lineNumber;
                 return -1.0;
@@ -349,7 +348,7 @@ void Tuning::saveTuning(const QString &tuningName,
 }
 
 
-Tuning::Tuning(const std::string name,
+Tuning::Tuning(const std::string& name,
                const IntervalList *intervals,
                SpellingList *spellings) :
     m_name(name),
@@ -447,7 +446,7 @@ void Tuning::setRootPitch(Rosegarden::Pitch pitch){
 }
 
 
-std::string Tuning::getSpelling(Rosegarden::Pitch &pitch) const {
+std::string Tuning::getSpelling(Rosegarden::Pitch &pitch) {
 
 
     const Rosegarden::Key key;
@@ -531,12 +530,12 @@ void Tuning::setRefNote(Rosegarden::Pitch pitch, double freq) {
 /**
 * Returns the frequency of the given pitch in the current tuning.
 */
-double Tuning::getFrequency(Rosegarden::Pitch p) const {
+double Tuning::getFrequency(Rosegarden::Pitch pitch) const {
 
     // make note spelling
-    std::string spelling = getSpelling(p);
+    std::string spelling = getSpelling(pitch);
 
-    int octave = p.getOctave();
+    int octave = pitch.getOctave();
 
     // position in chromatic scale
     const SpellingListIterator it = m_spellings->find(spelling);

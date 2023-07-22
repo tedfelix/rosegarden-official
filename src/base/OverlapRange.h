@@ -59,9 +59,9 @@ public :
     // usage of pushSegment() is mandatory to keep m_inconsistancy up to date.
     const std::vector<Segment *> *getSegments() const { return &m_segments; }
 
-    T getRangeProperty(Segment *segment, timeT t);
+    static T getRangeProperty(Segment *segment, timeT t);
 
-    bool isInconsistent() { return m_inconsistancy; }
+    bool isInconsistent() const { return m_inconsistancy; }
 
     void pushSegment(Segment *segment, timeT t) {
         int previousSize = m_segments.size();
@@ -113,4 +113,3 @@ OverlapRange<int>::getRangeProperty(Segment *segment, timeT)
 }
 
 #endif // RG_OVERLAP_RANGE_H
-

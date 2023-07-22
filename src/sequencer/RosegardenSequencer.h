@@ -264,7 +264,7 @@ public:
                                          const QString &property);
 
     /// Get a list of available plugins
-    std::vector<QString> getPluginInformation();
+    // unused std::vector<QString> getPluginInformation();
 
     /**
      * Nasty hack: program name/number mappings are one thing that

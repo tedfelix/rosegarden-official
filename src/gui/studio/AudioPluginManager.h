@@ -45,7 +45,7 @@ public:
 
     // Get a straight list of names
     //
-    std::vector<QString> getPluginNames();
+    // unused std::vector<QString> getPluginNames();
 
     // Some useful members
     //

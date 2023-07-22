@@ -138,8 +138,8 @@ private:
                            int saturation = PixmapFunctions::SaturationNotSpecified) const;
 
     /// Returns false + blank pixmap if it can't find the right one
-    bool getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
-                         bool inverted = false) const;
+    // unused bool getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
+    //                     bool inverted = false) const;
 
     friend class NoteFontFactory;
     NoteFont(QString fontName, int size = 0);
@@ -151,7 +151,7 @@ private:
     NoteCharacterDrawRep *lookupDrawRep(QPixmap *pixmap) const;
 
     static CharName getNameWithColour(CharName origName, int hue);
-    static CharName getNameShaded(CharName origName);
+    // unused static CharName getNameShaded(CharName origName);
 
     typedef std::pair<QPixmap *, QPixmap *>    PixmapPair;
     typedef std::map<CharName, PixmapPair>     PixmapMap;

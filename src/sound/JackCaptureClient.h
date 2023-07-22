@@ -59,7 +59,7 @@ protected:
     // basic setup + init
     void setFrameSize(int nextFrameSize);
     const char **getPorts();
-    const char* getCapturePortName();
+    // unused const char* getCapturePortName();
     void setupPorts(const char *portName, const char *captureClientName);
 
     // control processing

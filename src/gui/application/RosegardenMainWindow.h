@@ -170,9 +170,9 @@ public:
     void openURL(QString url);
 
     /// merge a file with the existing document
-    /* 
+    /*
     void mergeFile(QString QStringList) { mergeFile(filePathList, ImportCheckType); }
-    */ 
+    */
 
     /// merge a file, explicitly specifying its type, allow multiple files
     void mergeFile(QStringList filePathList, ImportType type);
@@ -409,7 +409,7 @@ protected:
     //void readGlobalProperties();
 ///////////////////////////////////////////////////////////////////////
 
-    QString getAudioFilePath();
+    // unused QString getAudioFilePath();
 
     /**
      * Show a sequencer error to the user.  This is for errors from

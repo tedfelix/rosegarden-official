@@ -113,7 +113,7 @@ namespace Accidentals
      * Get the predefined accidentals (i.e. the ones listed above)
      * in their defined order.
      */
-    extern ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals();
+     // unused extern ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals();
 
     /**
      * Get the change in pitch resulting from an accidental: -1 for
@@ -216,7 +216,7 @@ namespace Marks
     /**
      * Extract the number of marks from an event.
      */
-    extern ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e);
+    // unused extern ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e);
 
     /**
      * Extract the marks from an event.
@@ -536,7 +536,7 @@ public:
      * same status in terms of accidentals as it had when
      * found in the given previous key.
      */
-    int convertFrom(int pitch, const Key &previousKey,
+    int convertFrom(int p, const Key &previousKey,
                     const Accidental &explicitAccidental =
                     Accidentals::NoAccidental) const;
 
@@ -592,8 +592,8 @@ private:
         KeyDetails(); // ctor needed in order to live in a map
 
         KeyDetails(bool sharps, bool minor, int sharpCount,
-                   std::string equivalence, std::string rg2name,
-                                   int m_tonicPitch);
+                   const std::string& equivalence, const std::string& rg2name,
+                   int tonicPitch);
 
         KeyDetails(const KeyDetails &d);
 
@@ -674,7 +674,7 @@ public:
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
-    bool isValid(const std::string &s) const;
+    static bool isValid(const std::string &s);
 
     std::string m_indicationType;
     timeT m_duration;
@@ -743,7 +743,7 @@ public:
     int getVerse() const { return m_verse; }
     void setVerse(int verse) { m_verse = verse; }
 
-    static bool isTextOfType(Event *, std::string type);
+    static bool isTextOfType(Event *, const std::string& type);
 
     /**
      * Return those text types that the user should be allowed to
@@ -941,7 +941,7 @@ public:
      * The octaveBase argument specifies the octave containing MIDI pitch 0;
      * middle-C is in octave octaveBase + 5.
      */
-    int getOctaveAccidental(int octaveBase = -2, Accidental acc = Accidentals::NoAccidental) const;
+    int getOctaveAccidental(int octaveBase = -2, const Accidental& acc = Accidentals::NoAccidental) const;
 
     /**
      * Return the pitch within the octave, in the range 0 to 11.
@@ -996,7 +996,7 @@ public:
      * specified interval in the given key. The key is left unchanged,
      * only the pitch is transposed.
      */
-    Pitch transpose(const Key &key, int pitchDelta, int heightDelta);
+    Pitch transpose(const Key &key, int pitchDelta, int heightDelta) const;
 
     /**
       * checks whether the accidental specified for this pitch (if any)
@@ -1260,14 +1260,14 @@ public:
      * is entirely in this time signature.
      */
     void getDurationListForInterval(DurationList &dlist,
-                                    timeT intervalDuration,
+                                    timeT duration,
                                     timeT startOffset = 0) const;
 
     /**
      * Get the level of emphasis for a position in a bar. 4 is lots
      * of emphasis, 0 is none.
      */
-    int getEmphasisForTime(timeT offset);
+    int getEmphasisForTime(timeT offset) const;
 
     /**
      * Return a list of divisions, subdivisions, subsubdivisions
@@ -1283,7 +1283,7 @@ private:
     friend class Composition;
     friend class TimeTempoSelection;
 
-    TimeSignature(const Event &e)
+    explicit TimeSignature(const Event &e)
         /* throw (Event::NoData, Event::BadType, BadTimeSignature) */;
 
     static const std::string EventType;
@@ -1420,7 +1420,7 @@ public:
 
     std::string getSymbolType() const { return m_type; }
 
-    static bool isSymbolOfType(Event *, std::string type);
+    static bool isSymbolOfType(Event *, const std::string& type);
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;

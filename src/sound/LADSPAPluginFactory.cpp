@@ -54,6 +54,7 @@ LADSPAPluginFactory::~LADSPAPluginFactory()
 }
 
 const std::vector<QString> &
+// cppcheck-suppress unusedFunction
 LADSPAPluginFactory::getPluginIdentifiers() const
 {
     return m_identifiers;

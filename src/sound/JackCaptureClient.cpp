@@ -126,11 +126,13 @@ const char
     return jack_get_ports( client, nullptr, nullptr, JackPortIsOutput );
 }
 
+/* unused
 const char*
 JackCaptureClient::getCapturePortName()
 {
     return jack_port_name( m_capturePort);
 }
+*/
 
 void
 JackCaptureClient::setupPorts(const char *portName,

@@ -288,7 +288,7 @@ public:
     /**
      * Get the scene height of the title area.
      */
-    virtual int getTitleHeight() const;
+    // unused virtual int getTitleHeight() const;
 
     /**
      * Returns the width of the entire staff after layout.  Call
@@ -504,7 +504,7 @@ public:
      * Return the smaller rectangle (in scene coords) enclosing the
      * whole segment area.
      */
-    virtual QRectF getSceneArea();
+    // unused virtual QRectF getSceneArea();
 
 public:
     // This should not really be public -- it should be one of the
@@ -662,7 +662,7 @@ protected:
     typedef std::vector<LineRec> LineRecList;
     typedef std::multiset<BarLineItem *, BarLineComparator> BarLineList;
     static bool compareBars(const BarLineItem *, const BarLineItem *);
-    static bool compareBarToLayoutX(const BarLineItem *, int);
+    // unused static bool compareBarToLayoutX(const BarLineItem *, int);
     BarLineList m_barLines;
     LineRecList m_beatLines;
     LineRecList m_barConnectingLines;

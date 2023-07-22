@@ -135,7 +135,7 @@ Quantizer::quantize(EventSelection *selection)
     insertNewEvents(&segment);
 }
 
-
+/* unused
 void
 Quantizer::fixQuantizedValues(Segment *s,
                               Segment::iterator from,
@@ -160,7 +160,7 @@ Quantizer::fixQuantizedValues(Segment *s,
 
     insertNewEvents(s);
 }
-
+*/
 
 timeT
 Quantizer::getQuantizedDuration(const Event *e) const
@@ -190,11 +190,13 @@ Quantizer::getQuantizedAbsoluteTime(const Event *e) const
     }
 }
 
+/* unused
 timeT
 Quantizer::getUnquantizedAbsoluteTime(Event *e) const
 {
     return getFromSource(e, AbsoluteTimeValue);
 }
+*/
 
 timeT
 Quantizer::getUnquantizedDuration(Event *e) const

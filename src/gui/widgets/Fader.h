@@ -65,7 +65,7 @@ public:
 
     void setOutlineColour(QColor);
 
-    float getFaderLevel() const;
+    // unused float getFaderLevel() const;
 
 public slots:
     void setFader(float value);

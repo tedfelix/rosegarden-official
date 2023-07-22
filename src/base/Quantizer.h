@@ -65,9 +65,11 @@ public:
      * quantize.  In this case, but no other, unquantize will
      * still work afterwards.)
      */
+    /* unused
     void fixQuantizedValues(Segment *,
                             Segment::iterator from,
                             Segment::iterator to) const;
+    */
 
     /**
      * Return the quantized duration of the event if it has been
@@ -88,7 +90,7 @@ public:
      * the absolute time that would be restored by a call to
      * unquantize.
      */
-    virtual timeT getUnquantizedAbsoluteTime(Event *e) const;
+    // unused virtual timeT getUnquantizedAbsoluteTime(Event *e) const;
 
     /**
      * Return the unquantized absolute time of the event --
@@ -246,7 +248,8 @@ protected:
      */
     timeT getFromSource(Event *, ValueType) const;
     timeT getFromTarget(Event *, ValueType) const;
-    void setToTarget(Segment *, Segment::iterator, timeT t, timeT d) const;
+    void setToTarget(Segment *segment, Segment::iterator segmentIter,
+                     timeT absTime, timeT duration) const;
     mutable std::vector<Event *> m_toInsert;
 
     void removeProperties(Event *) const;

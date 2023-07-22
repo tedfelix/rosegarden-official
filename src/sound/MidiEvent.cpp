@@ -3,7 +3,7 @@
   Rosegarden
   A sequencer and musical notation editor.
   Copyright 2000-2023 the Rosegarden development team.
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -88,7 +88,6 @@ MidiEvent::MidiEvent(timeT time,
 QDebug operator<<(QDebug dbg, const MidiEvent &midiEvent)
 {
     timeT tempo;
-    int tonality;
     std::string sharpflat;
 
     if (midiEvent.m_metaEventCode) {
@@ -172,18 +171,19 @@ QDebug operator<<(QDebug dbg, const MidiEvent &midiEvent)
             break;
 
         case MIDI_KEY_SIGNATURE:
-            tonality = (int)midiEvent.m_metaMessage[0];
+            {
+                int tonality = (int)midiEvent.m_metaMessage[0];
 
-            if (tonality < 0) {
-                sharpflat = std::to_string(-tonality) + " flat";
-            } else {
-                sharpflat = std::to_string(tonality);
-                sharpflat += " sharp";
+                if (tonality < 0) {
+                    sharpflat = std::to_string(-tonality) + " flat";
+                } else {
+                    sharpflat = std::to_string(tonality);
+                    sharpflat += " sharp";
+                }
+
+                dbg << "KEY SIGNATURE:\t" << sharpflat << " "
+                    << (((int)midiEvent.m_metaMessage[1]) == 0 ? "major" : "minor");
             }
-
-            dbg << "KEY SIGNATURE:\t" << sharpflat << " "
-                << (((int)midiEvent.m_metaMessage[1]) == 0 ? "major" : "minor");
-
             break;
 
         case MIDI_SEQUENCER_SPECIFIC:

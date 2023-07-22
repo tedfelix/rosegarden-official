@@ -65,7 +65,7 @@ public:
     ~MacroCommand() override;
 
     virtual void addCommand(Command *command);
-    virtual void deleteCommand(Command *command);
+    // unused virtual void deleteCommand(Command *command);
     virtual bool haveCommands() const;
 
     void execute() override;

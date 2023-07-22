@@ -73,7 +73,7 @@ public:
      * This will be an estimate, if transient sharpening is on; the
      * caller may need to do the put/get/test cycle more than once.
      */
-    size_t getRequiredInputSamples() const;
+    // unused size_t getRequiredInputSamples() const;
 
     /**
      * Put (and possibly process) a given number of input samples.
@@ -134,7 +134,7 @@ public:
      * This will be exact if transient sharpening is off, or approximate
      * if it is on.
      */
-    size_t getProcessingLatency() const;
+    // unused size_t getProcessingLatency() const;
 
 protected:
     /**

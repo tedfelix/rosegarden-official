@@ -45,11 +45,11 @@ public:
     class BadSoundFileException : public Exception
     {
     public:
-        explicit BadSoundFileException(QString path) :
+        explicit BadSoundFileException(const QString& path) :
             Exception(QObject::tr("Bad sound file ") + path), m_path(path) { }
-        BadSoundFileException(QString path, const std::string& message) :
+        BadSoundFileException(const QString& path, const std::string& message) :
             Exception(QObject::tr("Bad sound file ") + path + ": " + strtoqstr(message)), m_path(path) { }
-        BadSoundFileException(QString path, QString file, int line) :
+        BadSoundFileException(const QString& path, const QString& file, int line) :
             Exception(QObject::tr("Bad sound file ") + path, file, line), m_path(path) { }
 
         ~BadSoundFileException() throw() override { }
@@ -73,13 +73,15 @@ public:
 
     // Useful methods that operate on our file data
     //
-    int getIntegerFromLittleEndian(const std::string &s);
-    std::string getLittleEndianFromInteger(unsigned int value,
-                                           unsigned int length);
+    static int getIntegerFromLittleEndian(const std::string &s);
+    static std::string getLittleEndianFromInteger(unsigned int value,
+                                                  unsigned int length);
 
-    int getIntegerFromBigEndian(const std::string &s);
-    std::string getBigEndianFromInteger(unsigned int value,
-                                        unsigned int length);
+    // unused static int getIntegerFromBigEndian(const std::string &s);
+    /* unused
+    static std::string getBigEndianFromInteger(unsigned int value,
+                                               unsigned int length);
+    */
 
     // Buffered read - allow this to be public
     //
@@ -105,13 +107,13 @@ protected:
 
     // Get n bytes from an input stream and write them into buffer.
     // Return the actual number of bytes read.
-    size_t getBytes(std::ifstream *file, char *buffer, size_t n);
+    static size_t getBytes(std::ifstream *file, char *buffer, size_t n);
 
     // write some bytes to an output stream
-    void putBytes(std::ofstream *file, const std::string& outputString);
+    static void putBytes(std::ofstream *file, const std::string& outputString);
 
     // write some bytes to an output stream
-    void putBytes(std::ofstream *file, const char *buffer, size_t n);
+    static void putBytes(std::ofstream *file, const char *buffer, size_t n);
 
     // Read buffering - define chunk size and buffer file reading
     //
