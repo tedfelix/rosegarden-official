@@ -26,7 +26,7 @@
 #include "XmlExportable.h"
 #include "ColourMap.h"
 #include "TriggerSegment.h"
-
+#include "TimeSignature.h"
 #include "Marker.h"
 
 // Qt

@@ -19,17 +19,17 @@
 #ifndef RG_ADDTIMESIGNATURECOMMAND_H
 #define RG_ADDTIMESIGNATURECOMMAND_H
 
-#include "base/NotationTypes.h"
+#include "base/TimeSignature.h"
 #include "document/Command.h"
-#include <QString>
 #include "base/Event.h"
+
+#include <QString>
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
+
 
 class Composition;
 

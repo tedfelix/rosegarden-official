@@ -24,7 +24,7 @@
 #include <set>
 #include <vector>
 
-#include "base/NotationTypes.h"
+#include "base/TimeSignature.h"
 
 namespace Rosegarden
 {
