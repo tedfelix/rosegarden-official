@@ -56,7 +56,7 @@ protected:
     Segment * splitRejoin(Segment *segment);
 
 private:
-    timeT getRangeDuration()
+    timeT getRangeDuration() const
     { return m_duration; }
 
     timeT m_splitTime;

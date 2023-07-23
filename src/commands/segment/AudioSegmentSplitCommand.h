@@ -42,7 +42,7 @@ public:
     ~AudioSegmentSplitCommand() override;
 
     // Call after ctor and before execute() to see if execute() will succeed.
-    bool isValid();
+    bool isValid() const;
 
     void execute() override;
     void unexecute() override;

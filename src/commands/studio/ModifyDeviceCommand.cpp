@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -39,9 +39,11 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_device(device),
-        m_name(name),
+        m_deviceName(name),
         m_librarianName(librarianName),
         m_librarianEmail(librarianEmail),
+        m_variationType(MidiDevice::NoVariations),
+        m_oldVariationType(MidiDevice::NoVariations),
         m_overwrite(true),
         m_rename(true),
         m_changeVariation(false),
@@ -151,7 +153,7 @@ ModifyDeviceCommand::execute()
         }
 
         if (m_rename)
-            midiDevice->setName(m_name);
+            midiDevice->setName(m_deviceName);
         midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
     } else {
         if (m_clearBankAndProgramList) {
@@ -170,7 +172,7 @@ ModifyDeviceCommand::execute()
 
         if (m_rename) {
             std::string mergeName = midiDevice->getName() +
-                                    std::string("/") + m_name;
+                                    std::string("/") + m_deviceName;
             midiDevice->setName(mergeName);
         }
     }

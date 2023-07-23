@@ -49,7 +49,7 @@ public:
 
     void execute() override;
     void unexecute() override;
-    
+
     static QString getGlobalName() { return tr("Stretch or S&quash..."); }
 
 private:
@@ -61,7 +61,7 @@ private:
     int m_divisor;
     bool m_detached;
 
-    timeT rescale(timeT);
+    timeT rescale(timeT) const;
 };
 
 

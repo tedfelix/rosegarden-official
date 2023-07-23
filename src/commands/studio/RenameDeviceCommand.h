@@ -45,7 +45,7 @@ public:
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_deviceId(deviceId),
-        m_name(name) { }
+        m_deviceName(name) { }
 
     static QString getGlobalName() { return tr("Rename Device"); }
 
@@ -55,8 +55,8 @@ public:
 protected:
     Studio *m_studio;
     DeviceId m_deviceId;
-    std::string m_name;
-    std::string m_oldName;
+    std::string m_deviceName;
+    std::string m_oldDeviceName;
 };
 
 

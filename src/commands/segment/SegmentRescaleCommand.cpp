@@ -71,7 +71,7 @@ SegmentRescaleCommand::~SegmentRescaleCommand()
 }
 
 timeT
-SegmentRescaleCommand::rescale(timeT t)
+SegmentRescaleCommand::rescale(timeT t) const
 {
     // avoid overflows by using doubles
     double d = t;
