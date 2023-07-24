@@ -112,6 +112,7 @@ CommandHistory::addCommand(Command *command)
     CommandInfo commInfo;
     commInfo.command = command;
     commInfo.pointerPositionBefore = m_pointerPosition;
+    commInfo.pointerPositionAfter = m_pointerPosition;
     m_undoStack.push(commInfo);
     clipCommands();
 

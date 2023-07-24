@@ -1176,7 +1176,7 @@ public slots:
     /**
      * Put the GUI into a given Tool edit mode
      */
-    void slotActivateTool(QString toolName);
+    void slotActivateTool(const QString& toolName);
 
     /**
      * Toggles either the play or record metronome according

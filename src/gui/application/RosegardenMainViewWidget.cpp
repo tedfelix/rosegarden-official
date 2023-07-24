@@ -1561,6 +1561,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 }
 
 void
+// cppcheck-suppress passedByValue
 RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 {
     // If audio is not OK
@@ -1666,6 +1667,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 }
 
 void
+// cppcheck-suppress passedByValue
 RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
 {
     QTextStream s(&audioDesc, QIODevice::ReadOnly);

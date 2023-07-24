@@ -36,7 +36,7 @@ class SuppressionTarget : public QObject
 {
     Q_OBJECT
 public:
-    explicit SuppressionTarget(QString key) : m_key(key) { }
+    explicit SuppressionTarget(const QString& key) : m_key(key) { }
 
 public slots:
     void slotSuppressionToggled(bool);

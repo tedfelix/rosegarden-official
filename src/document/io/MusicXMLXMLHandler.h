@@ -130,10 +130,10 @@ private:
     void ignoreElement();
     bool checkInteger(const QString &element, int &value);
     bool checkFloat(const QString &element, float &value);
-    void cerrInfo(const QString &message);
-    void cerrWarning(const QString &message);
-    void cerrError(const QString &message);
-    void cerrElementNotSupported(const QString &element);
+    static void cerrInfo(const QString &message);
+    static void cerrWarning(const QString &message);
+    static void cerrError(const QString &message);
+    static void cerrElementNotSupported(const QString &element);
     bool getAttributeString(const QXmlStreamAttributes& atts, const QString &name,
                             QString &value, bool required=true, const QString &defValue="");
     bool getAttributeInteger(const QXmlStreamAttributes& atts, const QString &name,

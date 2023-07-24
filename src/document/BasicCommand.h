@@ -162,9 +162,9 @@ private:
     timeT m_startTime;
     timeT m_endTime;
     /// Calculate start time for m_startTime.  [DEPRECATED]
-    timeT calculateStartTime(timeT given, Segment &segment);
+    static timeT calculateStartTime(timeT given, Segment &segment);
     /// Calculate end time for m_endTime.  [DEPRECATED]
-    timeT calculateEndTime(timeT given, Segment &segment);
+    static timeT calculateEndTime(timeT given, Segment &segment);
 
     /// Start time of Events which were modified by modifySegment().
     /**

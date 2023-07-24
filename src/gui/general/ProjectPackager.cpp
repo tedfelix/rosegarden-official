@@ -274,7 +274,8 @@ ProjectPackager::getAudioFiles()
 }
 
 QStringList
-ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const QString newPath)
+ProjectPackager::getPluginFilesAndRewriteXML(const QString& fileToModify,
+                                             const QString& newPath)
 {
     // yet another miserable wrinkle in this whole wretched thing: we
     // automatically ignore audio files not actually used by segments, but

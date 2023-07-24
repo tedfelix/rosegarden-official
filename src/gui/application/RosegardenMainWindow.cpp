@@ -5556,7 +5556,7 @@ RosegardenMainWindow::slotDeleteTransport()
 }
 
 void
-RosegardenMainWindow::slotActivateTool(QString toolName)
+RosegardenMainWindow::slotActivateTool(const QString& toolName)
 {
     if (toolName == SegmentSelector::ToolName()) {
         findAction("select")->trigger();

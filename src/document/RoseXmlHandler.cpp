@@ -2537,7 +2537,9 @@ RoseXmlHandler::setSubHandler(XmlSubHandler* sh)
 }
 
 void
-RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer, QString dir)
+RoseXmlHandler::addMIDIDevice(const QString& name,
+                              bool createAtSequencer,
+                              const QString& dir)
 {
     /**
     *   params:
@@ -2720,7 +2722,9 @@ RoseXmlHandler::setMIDIDeviceName(QString name)
 }
 
 bool
-RoseXmlHandler::locateAudioFile(QString id, QString file, QString label)
+RoseXmlHandler::locateAudioFile(const QString& id,
+                                const QString& file,
+                                const QString& label)
 {
     StartupLogo::hideIfStillThere();
 

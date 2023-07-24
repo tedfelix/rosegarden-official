@@ -53,6 +53,7 @@ public:
     /**
      * Set a property from the XML attributes \a atts
      */
+    // cppcheck-suppress functionStatic
     void setPropertyFromAttributes(const QXmlStreamAttributes& attributes,
                                    bool persistent);
 };

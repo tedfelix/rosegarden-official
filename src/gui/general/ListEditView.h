@@ -119,7 +119,7 @@ protected:
 
     void paintEvent(QPaintEvent* e) override;
 
-    void setRCFileName(QString s) { m_rcFileName = s; }
+    void setRCFileName(const QString& s) { m_rcFileName = s; }
     QString getRCFileName()       { return m_rcFileName; }
 
     QString m_rcFileName;
