@@ -15,23 +15,10 @@
 
 #include "TimeSignature.h"
 
-//#include "NotationRules.h"
-//#include "base/BaseProperties.h"
-
 
 namespace Rosegarden
 {
 
-
-// This is the fundamental definition of the resolution used throughout.
-// It must be a multiple of 16, and should ideally be a multiple of 96.
-// ??? See "timebase" in TimeT.h.  Probably should switch to that everywhere.
-constexpr timeT basePPQ = 960;
-
-
-//////////////////////////////////////////////////////////////////////
-// TimeSignature
-//////////////////////////////////////////////////////////////////////
 
 const std::string TimeSignature::EventType = "timesignature";
 
@@ -41,40 +28,44 @@ const PropertyName TimeSignature::ShowAsCommonTimePropertyName("common");
 const PropertyName TimeSignature::IsHiddenPropertyName("hidden");
 const PropertyName TimeSignature::HasHiddenBarsPropertyName("hiddenbars");
 
-constexpr timeT crotchetTime = basePPQ;
-constexpr timeT dottedCrotchetTime = basePPQ + basePPQ/2;
+constexpr timeT crotchetTime = timebase;
+constexpr timeT dottedCrotchetTime = timebase + timebase/2;
 
 TimeSignature::TimeSignature(int numerator, int denominator,
-                             bool preferCommon, bool hidden, bool hiddenBars)
-    // throw (BadTimeSignature)
-    : m_numerator(numerator), m_denominator(denominator),
-      m_common(preferCommon &&
-               (m_denominator == m_numerator &&
-                (m_numerator == 2 || m_numerator == 4))),
+                             bool preferCommon, bool hidden, bool hiddenBars) :
+      m_numerator(numerator),
+      m_denominator(denominator),
       m_hidden(hidden),
       m_hiddenBars(hiddenBars)
 {
-    if (numerator < 1 || denominator < 1) {
-        throw BadTimeSignature("Numerator and denominator must be positive");
-    }
+    if (numerator < 1)
+        throw BadTimeSignature("Numerator must be positive");
+    if (denominator < 1)
+        throw BadTimeSignature("Denominator must be positive");
+
+    // Cut time?
+    if (numerator == 2  &&  denominator == 2)
+        m_common = preferCommon;
+    // Common time?
+    if (numerator == 4  &&  denominator == 4)
+        m_common = preferCommon;
+
+    updateCache();
 }
 
 TimeSignature::TimeSignature(const Event &e)
-    // throw (Event::NoData, Event::BadType, BadTimeSignature)
 {
-    if (e.getType() != EventType) {
+    if (e.getType() != EventType)
         throw Event::BadType("TimeSignature model event", EventType, e.getType());
-    }
+
     m_numerator = 4;
     m_denominator = 4;
 
-    if (e.has(NumeratorPropertyName)) {
+    if (e.has(NumeratorPropertyName))
         m_numerator = e.get<Int>(NumeratorPropertyName);
-    }
 
-    if (e.has(DenominatorPropertyName)) {
+    if (e.has(DenominatorPropertyName))
         m_denominator = e.get<Int>(DenominatorPropertyName);
-    }
 
     m_common = false;
     e.get<Bool>(ShowAsCommonTimePropertyName, m_common);
@@ -85,23 +76,12 @@ TimeSignature::TimeSignature(const Event &e)
     m_hiddenBars = false;
     e.get<Bool>(HasHiddenBarsPropertyName, m_hiddenBars);
 
-    if (m_numerator < 1 || m_denominator < 1) {
-        throw BadTimeSignature("Numerator and denominator must be positive");
-    }
-}
+    if (m_numerator < 1)
+        throw BadTimeSignature("Numerator must be positive");
+    if (m_denominator < 1)
+        throw BadTimeSignature("Denominator must be positive");
 
-timeT TimeSignature::getBarDuration() const
-{
-    // Update the cache.
-    setInternalDurations();
-
-    return m_barDuration;
-}
-
-timeT TimeSignature::getBeatDuration() const
-{
-    setInternalDurations();
-    return m_beatDuration;
+    updateCache();
 }
 
 timeT TimeSignature::getUnitDuration() const
@@ -111,8 +91,13 @@ timeT TimeSignature::getUnitDuration() const
 
 Note::Type TimeSignature::getUnit() const
 {
-    int c, d;
-    for (c = 0, d = m_denominator; d > 1; d /= 2) ++c;
+    int c = 0;
+
+    // Compute log base 2 of the denominator.
+    for (int d = m_denominator; d > 1; d /= 2) {
+        ++c;
+    }
+
     return Note::Semibreve - c;
 }
 
@@ -129,17 +114,10 @@ Event *TimeSignature::getAsEvent(timeT absoluteTime) const
     return e;
 }
 
-// This doesn't consider subdivisions of the bar larger than a beat in
-// any time other than 4/4, but it should handle the usual time signatures
-// correctly (compound time included).
-
 void TimeSignature::getDurationListForInterval(DurationList &dlist,
                                                timeT duration,
                                                timeT startOffset) const
 {
-    // Update the cache.
-    setInternalDurations();
-
     timeT offset = startOffset;
     timeT durationRemaining = duration;
 
@@ -254,9 +232,6 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
 void TimeSignature::getDurationListForBar(DurationList &dlist) const
 {
-    // Note: Although this does not call setInternalDurations() to update
-    //       the cache, this routine's caller does.  So the cache will
-    //       be correct for this routine.
 
     // If the bar's length can be represented with one long symbol, do it.
     // Otherwise, represent it as individual beats.
@@ -284,9 +259,7 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
 
 int TimeSignature::getEmphasisForTime(timeT offset) const
 {
-    setInternalDurations();
-
-    if      (offset % m_barDuration == 0)
+    if (offset % m_barDuration == 0)
         return 4;
     else if (m_numerator == 4 && m_denominator == 4 &&
              offset % (m_barDuration/2) == 0)
@@ -299,7 +272,6 @@ int TimeSignature::getEmphasisForTime(timeT offset) const
         return 0;
 }
 
-
 void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
 {
     divisions.clear();
@@ -307,7 +279,6 @@ void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
     if (depth <= 0)
         return;
 
-    // !!! Calls setInternalDurations().
     timeT base = getBarDuration();
 
 /*
@@ -337,7 +308,7 @@ void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
 }
 
 
-void TimeSignature::setInternalDurations() const
+void TimeSignature::updateCache()
 {
     const int unitLength = crotchetTime * 4 / m_denominator;
 
@@ -363,6 +334,27 @@ void TimeSignature::setInternalDurations() const
         m_beatDivisionDuration = unitLength / 2;
     }
 
+}
+
+bool TimeSignature::operator==(const TimeSignature &ts) const
+{
+    return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
+}
+
+bool TimeSignature::operator<(const TimeSignature &rhs) const
+{
+    // We don't really need ordered time signatures, but to be able to
+    // create a map keyed with time signatures. We want to distinguish
+    // 4/4 from 2/4 as well as 4/4 from 2/2.
+
+    const double ratioLHS = (double)m_numerator / (double)m_denominator;
+    const double ratioRHS =
+            (double)rhs.m_numerator / (double)rhs.m_denominator;
+
+    if (ratioLHS == ratioRHS)
+        return m_denominator > rhs.m_denominator;
+    else
+        return ratioLHS < ratioRHS;
 }
 
 

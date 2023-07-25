@@ -16,12 +16,15 @@
 #ifndef RG_TIMESIGNATURE_H
 #define RG_TIMESIGNATURE_H
 
-#include <list>
-
 #include <rosegardenprivate_export.h>
 
 #include "Event.h"
 #include "NotationTypes.h"
+#include "PropertyName.h"
+#include "TimeT.h"
+
+#include <list>
+
 
 namespace Rosegarden
 {
@@ -29,12 +32,13 @@ namespace Rosegarden
 
 typedef std::list<int> DurationList;
 
+/// A time signature represented as a numerator and a denominator.
 /**
  * TimeSignature contains arithmetic methods relevant to time
  * signatures and bar durations, including code for splitting long
- * rest intervals into bite-sized chunks.  Although there is a time
- * signature Event type, these Events don't appear in regular Segments
- * but only in the Composition's reference segment.
+ * rest intervals into bite-sized chunks.  Although there is a
+ * TimeSignature::EventType, time signature Events don't appear in
+ * regular Segments but only in the Composition's reference Segment.
  */
 class ROSEGARDENPRIVATE_EXPORT TimeSignature
 {
@@ -43,23 +47,15 @@ public:
     // Ctors throw this if numerator or denominator are less than 1.
     typedef Exception BadTimeSignature;
 
-    // Default 4/4
-    TimeSignature() :
-        m_numerator(4),
-        m_denominator(4),
-        m_common(false),
-        m_hidden(false),
-        m_hiddenBars(false)
-    { }
+    /// Default 4/4 time signature.
+    TimeSignature()  { updateCache(); }
 
+    /// Time signature for a given numerator and denominator.
     /**
-     * Construct a TimeSignature object describing a time signature
-     * with the given numerator and denominator.  If preferCommon is
-     * true and the time signature is a common or cut-common time, the
-     * constructed object will return true for isCommon; if hidden is
-     * true, the time signature is intended not to be displayed and
-     * isHidden will return true; if hiddenBars is true, the bar lines
-     * between this time signature and the next will not be shown.
+     * @param[in] preferCommon Display the time signature as common or cut time.
+     * @param[in] hidden Do not display the time signature.
+     * @param[in] hiddenBars The bar lines between this time signature and the
+     *            next will not be shown.
      */
     TimeSignature(int numerator, int denominator,
                   bool preferCommon = false,
@@ -72,7 +68,7 @@ public:
     int getNumerator() const  { return m_numerator; }
     int getDenominator() const  { return m_denominator; }
 
-    /// Show as "C", common/cut time?  If false, displays as 4/4 or 2/2.
+    /// Show as common or cut time.  If false, displays as 4/4 or 2/2.
     /**
      * @see NotePixmapFactory::makeTimeSig()
      */
@@ -84,13 +80,13 @@ public:
      */
     bool isHidden() const  { return m_hidden; }
 
-    /// Hide the bar line for this TimeSignature.
+    /// Whether to hide the bar lines between this time signature and the next.
     /**
      * @see StaffLayout::insertBar()
      */
     bool hasHiddenBars() const  { return m_hiddenBars; }
 
-    timeT getBarDuration() const;
+    // Computation Functions
 
     /**
      * Return the unit of the time signature.  This is the note
@@ -114,7 +110,9 @@ public:
      * two beats in a 6/8 bar).  The beat therefore depends on whether
      * the signature indicates dotted or undotted time.
      */
-    timeT getBeatDuration() const;
+    timeT getBeatDuration() const  { return m_beatDuration; }
+
+    timeT getBarDuration() const  { return m_barDuration; }
 
     /**
      * Return the number of beats in a complete bar.
@@ -127,6 +125,12 @@ public:
      * interval of the given total duration, starting at the given
      * offset after the start of a bar, assuming that the interval
      * is entirely in this time signature.
+     *
+     * This doesn't consider subdivisions of the bar larger than a beat in
+     * any time other than 4/4, but it should handle the usual time signatures
+     * correctly (compound time included).
+     *
+     * @see Segment::fillWithRests()
      */
     void getDurationListForInterval(DurationList &dlist,
                                     timeT duration,
@@ -152,6 +156,7 @@ public:
     Event *getAsEvent(timeT absoluteTime) const;
 
     static const std::string EventType;
+
     static const PropertyName NumeratorPropertyName;
     static const PropertyName DenominatorPropertyName;
     static const PropertyName ShowAsCommonTimePropertyName;
@@ -160,49 +165,25 @@ public:
 
     // Operators
 
-    bool operator==(const TimeSignature &ts) const
-    {
-        return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
-    }
+    bool operator==(const TimeSignature &ts) const;
     bool operator!=(const TimeSignature &ts) const  { return !operator==(ts); }
-    bool operator<(const TimeSignature &rhs) const
-    {
-        // We don't really need ordered time signatures, but to be able to
-        // create a map keyed with time signatures. We want to distinguish
-        // 4/4 from 2/4 as well as 4/4 from 2/2.
-
-        const double ratioLHS = (double)m_numerator / (double)m_denominator;
-        const double ratioRHS =
-                (double)rhs.m_numerator / (double)rhs.m_denominator;
-
-        if (ratioLHS == ratioRHS)
-            return m_denominator > rhs.m_denominator;
-        else
-            return ratioLHS < ratioRHS;
-    }
+    bool operator<(const TimeSignature &rhs) const;
 
 private:
 
-    int m_numerator;
-    int m_denominator;
-    bool m_common;
+    int m_numerator = 4;
+    int m_denominator = 4;
+    bool m_common = false;
 
-    bool m_hidden;
-    bool m_hiddenBars;
+    bool m_hidden = false;
+    bool m_hiddenBars = false;
 
-    // Cached values.
-    //
-    // ??? These are recomputed every time they are set or used.  That's
-    //     not what a cache is for.  Generally a cache is an optimization
-    //     that avoids work.  This just creates more.  Recommend moving toward
-    //     a more sensible approach.  First, remove mutable.  Then make sure
-    //     these are always updated by the setters only.
-    //
-    mutable int m_barDuration = 0;
-    mutable int m_beatDuration = 0;
-    mutable int m_beatDivisionDuration = 0;
-    mutable bool m_dotted = false;
-    void setInternalDurations() const;
+    // Cached computed values.
+    int m_barDuration = 0;
+    int m_beatDuration = 0;
+    int m_beatDivisionDuration = 0;
+    bool m_dotted = false;
+    void updateCache();
 
     /**
      * Get the "optimal" list of rest durations to make up a bar in
