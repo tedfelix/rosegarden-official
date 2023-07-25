@@ -102,7 +102,7 @@ public:
 
 
     void loadData(const QString& name);
-    QString translate(QString text, QString disambiguation = "") const;
+    static QString translate(QString text, QString disambiguation = "") ;
     void fillModel();
     void updateModel(const QString& changedKey);
     void readKeyboardShortcuts();

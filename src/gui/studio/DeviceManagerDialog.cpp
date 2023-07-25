@@ -334,13 +334,12 @@ QTreeWidgetItem
     // searches Items of treeWid
     int i, cnt;
     QTreeWidgetItem *twItem;
-    DeviceId devIdx;
 
     cnt = treeWid->topLevelItemCount();
     for (i = 0; i < cnt; i++) {
         twItem = treeWid->topLevelItem(i);
 
-        devIdx = twItem->data(0, m_UserRole_DeviceId).toInt();
+        DeviceId devIdx = twItem->data(0, m_UserRole_DeviceId).toInt();
         if (devIdx == devId) {
             return twItem;
         }

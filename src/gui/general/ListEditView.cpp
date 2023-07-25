@@ -123,7 +123,7 @@ ListEditView::makeViewLocalPropertyPrefix()
 }
 
 void
-ListEditView::setupActions(QString rcFileName, bool haveClipboard)
+ListEditView::setupActions(const QString& rcFileName, bool haveClipboard)
 {
     setRCFileName(rcFileName);
     setupBaseActions(haveClipboard);

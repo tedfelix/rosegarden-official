@@ -55,7 +55,7 @@ namespace Rosegarden
 {
 
 AudioFaderBox::AudioFaderBox(QWidget *parent,
-                             QString id,
+                             const QString& id,
                              bool haveInOut,
                              const char *name):
         QFrame(parent),

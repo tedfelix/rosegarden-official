@@ -84,6 +84,7 @@ public:
     Key getKeyFromContext(TrackId track, timeT time);
 
     /// Only for debug
+    // cppcheck-suppress functionStatic
     void dumpClefContext() const;
     void dumpKeyContext() const;
 

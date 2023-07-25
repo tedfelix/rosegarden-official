@@ -45,9 +45,9 @@ protected:
 
     Segment *m_segment;
 
-    int getSegmentRepeatCount();
+    int getSegmentRepeatCount() const;
 
-    bool mutedEtc();
+    bool mutedEtc() const;
 };
 
 

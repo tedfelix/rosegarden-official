@@ -96,7 +96,8 @@ void EditViewBase::readOptions()
 //    if (a) a->setChecked( ! m_toolBar->isHidden());
 }
 
-void EditViewBase::setCheckBoxState(QString actionName, QString toolbarName)
+void EditViewBase::setCheckBoxState(const QString& actionName,
+                                    const QString& toolbarName)
 {
   // Use !isHidden() for visibility since ancestors may not be visible
   // since this is called during the Matrixview constructor.

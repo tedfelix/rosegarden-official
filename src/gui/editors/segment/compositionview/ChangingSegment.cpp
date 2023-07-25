@@ -48,7 +48,7 @@ QRect ChangingSegment::rect() const
     return res;
 }
 
-timeT ChangingSegment::getRepeatTimeAt(const SnapGrid &grid, const QPoint &pos)
+timeT ChangingSegment::getRepeatTimeAt(const SnapGrid &grid, const QPoint &pos) const
 {
     timeT startTime = m_segment.getStartTime();
     timeT repeatInterval = m_segment.getEndMarkerTime() - startTime;

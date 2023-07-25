@@ -109,7 +109,7 @@ protected:
     /**
      * create menus and toolbars
      */
-    void setupActions(QString rcFileName, bool haveClipboard = true);
+    void setupActions(const QString& rcFileName, bool haveClipboard = true);
 
     /**
      * Make a widget visible depending on the state of a

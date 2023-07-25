@@ -183,7 +183,8 @@ protected:
     /**
      * Helper to set checkboxes for visibility of toolbars
      */
-    void setCheckBoxState(QString actionName, QString toolbarName);
+    void setCheckBoxState(const QString& actionName,
+                          const QString& toolbarName);
 
     /**
      * create menus and toolbars

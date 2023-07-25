@@ -1197,6 +1197,7 @@ MappedAudioInput::setProperty(const MappedObjectProperty &property,
 MappedPluginSlot::MappedPluginSlot(MappedObject *parent, MappedObjectId id) :
     MappedObject(parent, "MappedPluginSlot", PluginSlot, id),
     m_portCount(0),
+    m_instrument(0),
     m_position(0),
     m_bypassed(false)
 {
@@ -1563,7 +1564,8 @@ MappedPluginSlot::getPort(unsigned long portNumber)
 
 MappedPluginPort::MappedPluginPort(MappedObject *parent, MappedObjectId id) :
     MappedObject(parent, "MappedPluginPort", PluginPort, id),
-    m_portNumber(0)
+    m_portNumber(0),
+    m_displayHint(PluginPort::NoHint)
 {}
 
 MappedPluginPort::~MappedPluginPort()

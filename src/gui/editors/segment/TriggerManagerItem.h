@@ -35,6 +35,8 @@ public:
                        QStringList labels
                        ) :
     QTreeWidgetItem(parent, labels),
+        m_rawDuration(0),
+        m_id(0),
         m_usage(0),
         m_pitch(0)
         {}

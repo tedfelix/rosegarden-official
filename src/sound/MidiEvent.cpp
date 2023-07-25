@@ -87,7 +87,6 @@ MidiEvent::MidiEvent(timeT time,
 
 QDebug operator<<(QDebug dbg, const MidiEvent &midiEvent)
 {
-    timeT tempo;
     std::string sharpflat;
 
     if (midiEvent.m_metaEventCode) {
@@ -144,13 +143,15 @@ QDebug operator<<(QDebug dbg, const MidiEvent &midiEvent)
             break;
 
         case MIDI_SET_TEMPO:
-            tempo =
-                ((timeT)(((MidiByte)midiEvent.m_metaMessage[0]) << 16)) +
-                ((timeT)(((MidiByte)midiEvent.m_metaMessage[1]) << 8)) +
-                (short)(MidiByte)midiEvent.m_metaMessage[2];
+            {
+                timeT tempo =
+                    ((timeT)(((MidiByte)midiEvent.m_metaMessage[0]) << 16)) +
+                    ((timeT)(((MidiByte)midiEvent.m_metaMessage[1]) << 8)) +
+                    (short)(MidiByte)midiEvent.m_metaMessage[2];
 
-            tempo = 60000000 / tempo;
-            dbg << "SET TEMPO:\t" << tempo;
+                tempo = 60000000 / tempo;
+                dbg << "SET TEMPO:\t" << tempo;
+            }
             break;
 
         case MIDI_SMPTE_OFFSET:

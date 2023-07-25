@@ -23,6 +23,7 @@ MappedInstrument::MappedInstrument():
         m_type(Instrument::Midi),
         m_id(0),
         m_name(std::string("")),
+        m_device(0),
         m_audioChannels(0)
 {}
 
@@ -32,6 +33,7 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
         m_type(type),
         m_id(id),
         m_name(std::string("")),
+        m_device(0),
         m_audioChannels(0)
 {}
 

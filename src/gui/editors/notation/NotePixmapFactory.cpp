@@ -120,7 +120,6 @@ NotePixmapFactory::NotePixmapFactory(const QString& fontName, int size, int grac
     init(fontName, size);
 }
 
-// cppcheck-suppress uninitMemberVar
 NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_selected(false),
     m_shaded(false),
