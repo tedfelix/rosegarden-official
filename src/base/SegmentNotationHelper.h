@@ -18,6 +18,7 @@
 #define RG_SEGMENT_NOTATION_HELPER_H
 
 #include "base/Segment.h"
+#include "base/TimeSignature.h"
 
 namespace Rosegarden
 {
