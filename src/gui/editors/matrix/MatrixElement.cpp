@@ -362,7 +362,7 @@ MatrixElement::getMatrixElement(QGraphicsItem *item)
     return static_cast<MatrixElement *>(v.value<void *>());
 }
 
-bool MatrixElement::isPreview()
+bool MatrixElement::isPreview() const
 {
     return m_isPreview;
 }

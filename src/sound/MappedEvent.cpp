@@ -12,6 +12,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MappedEvent]"
+
 #include "MappedEvent.h"
 #include "base/BaseProperties.h"
 #include "Midi.h"

@@ -46,7 +46,7 @@ public:
     TimeSignatureDialog(QWidget *parent,
                         Composition *composition,
                         timeT insertionTime,
-                        TimeSignature defaultSig =
+                        const TimeSignature& defaultSig =
                             TimeSignature::DefaultTimeSignature,
                         bool timeEditable = false,
                         QString explanatoryText = "");

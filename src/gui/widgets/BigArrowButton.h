@@ -27,9 +27,9 @@ namespace Rosegarden {
 class BigArrowButton : public QPushButton
 {
 public:
-    BigArrowButton(Qt::ArrowType arrow = Qt::RightArrow) :
-                       QPushButton()
-    { 
+    explicit BigArrowButton(Qt::ArrowType arrow = Qt::RightArrow) :
+    QPushButton()
+    {
         QIcon icon;
         const char *fileName;
 
@@ -60,14 +60,14 @@ public:
         }
     }
 
-    ~BigArrowButton() override { } 
+    ~BigArrowButton() override { }
 
     QSize sizeHint() const override {
         return QSize(20, 20);
     }
 };
 
-	
+
 }
 
 #endif /*BIGARROWBUTTON_H_*/

@@ -54,8 +54,8 @@ public :
         typename std::map<timeT, OverlapRange<T> >::iterator it;
         if (this->getFirst(start, end, it)) {
             for (;;) {
-                timeT t1, t2;
                 if (!this->isConsistent(it)) {
+                    timeT t1, t2;
                     this->getTimeRange(it, t1, t2);
                     int bar1 = comp->getBarNumber(t1) + 1;
                     int bar2 = comp->getBarNumber(t2) + 1;

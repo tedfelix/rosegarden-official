@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-
+#define RG_MODULE_STRING "[ClefKeyContext]"
 
 #include "ClefKeyContext.h"
 #include "NotationScene.h"
@@ -184,18 +184,15 @@ ClefKeyContext::getKeyFromContext(TrackId track, timeT time)
 // Only for debug
 void
 // cppcheck-suppress unusedFunction
-ClefKeyContext::dumpClefContext()
+ClefKeyContext::dumpClefContext() const
 {
-    ClefMaps::iterator i;
-    ClefMap::iterator j;
-
     RG_DEBUG << "Begin of clef context dump =================";
 
-    for (i = m_clefMaps.begin(); i != m_clefMaps.end(); ++i) {
+    for (auto i = m_clefMaps.begin(); i != m_clefMaps.end(); ++i) {
         RG_DEBUG << "    Track = " << (*i).first;
         ClefMap *m = (*i).second;
 
-        for (j = m->begin(); j != m->end(); ++j) {
+        for (auto j = m->begin(); j != m->end(); ++j) {
             RG_DEBUG << "        Time = " << (*j).first
                       << " Clef = " << (*j).second.getClefType();
         }
@@ -207,18 +204,15 @@ ClefKeyContext::dumpClefContext()
 // Only for debug
 void
 // cppcheck-suppress unusedFunction
-ClefKeyContext::dumpKeyContext()
+ClefKeyContext::dumpKeyContext() const
 {
-    KeyMaps::iterator i;
-    KeyMap::iterator j;
-
     RG_DEBUG << "Begin of key context dump =================";
 
-    for (i = m_keyMaps.begin(); i != m_keyMaps.end(); ++i) {
+    for (auto i = m_keyMaps.begin(); i != m_keyMaps.end(); ++i) {
         RG_DEBUG << "    Track = " << (*i).first;
         KeyMap *m = (*i).second;
 
-        for (j = m->begin(); j != m->end(); ++j) {
+        for (auto j = m->begin(); j != m->end(); ++j) {
             RG_DEBUG << "        Time = " << (*j).first
                       << " Key = " << (*j).second.getName();
         }

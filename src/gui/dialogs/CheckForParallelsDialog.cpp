@@ -407,7 +407,6 @@ CheckForParallelsDialog::startCheck()
     Segment::iterator currentNote;
     Segment::iterator currentPredecessor;
 
-    TrackId tId;
     Track *currentTrack;
     QString currentTrackLabel;
 
@@ -451,7 +450,7 @@ CheckForParallelsDialog::startCheck()
 
         ia = segment[i]->begin();
 
-        tId = segment[i]->getTrack();
+        TrackId tId = segment[i]->getTrack();
 
         currentTrack = composition->getTrackById(tId);
         int currentTrackPosition = currentTrack->getPosition();

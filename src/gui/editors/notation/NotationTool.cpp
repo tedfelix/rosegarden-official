@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationTool]"
+
 #include "NotationTool.h"
 #include "misc/Debug.h"
 

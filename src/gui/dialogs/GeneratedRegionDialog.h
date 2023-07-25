@@ -39,7 +39,7 @@ class GeneratedRegionDialog : public QDialog
 
   GeneratedRegionDialog(QWidget *parent,
 			NotePixmapFactory */*npf*/,
-			GeneratedRegion defaultGeneratedRegion,
+			const GeneratedRegion& defaultGeneratedRegion,
 			const QString& commandName);
 
   GeneratedRegion getGeneratedRegion() const

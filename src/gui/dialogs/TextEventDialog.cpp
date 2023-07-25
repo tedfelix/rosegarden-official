@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TextEventDialog]"
 
 #include "TextEventDialog.h"
 #include "misc/Strings.h"
@@ -50,7 +51,7 @@ namespace Rosegarden
 
 TextEventDialog::TextEventDialog(QWidget *parent,
                                  NotePixmapFactory *npf,
-                                 Text defaultText,
+                                 const Text& defaultText,
                                  int maxLength) :
         QDialog(parent),
         m_notePixmapFactory(npf),
@@ -79,7 +80,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     innerFrame->setAutoFillBackground(true);
     QVBoxLayout *innerFrameLayout = new QVBoxLayout;
     innerFrame->setLayout(innerFrameLayout);
-    exampleBoxLayout->addWidget(innerFrame); 
+    exampleBoxLayout->addWidget(innerFrame);
     vboxLayout->addWidget(exampleBox);
 
     QGridLayout *entryGridLay = new QGridLayout;
@@ -292,7 +293,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 // support them on the business end for all eternity and beyond
 //    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Segno));
 //    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Coda));
-    
+
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Alternate1));
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Alternate2));
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::BarDouble));
@@ -375,7 +376,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
     QObject::connect(m_optionLabel, &QStackedWidget::currentChanged, this, &TextEventDialog::slotUpdateSize);
     QObject::connect(m_optionWidget, &QStackedWidget::currentChanged, this, &TextEventDialog::slotUpdateSize);
-        
+
     m_text->setFocus();
     slotTypeChanged(strtoqstr(getTextType()));
 
@@ -385,11 +386,11 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     // extreme, but it works, and it costs little, and other solutions I can
     // imagine would cost so much more.
     m_text->setText(strtoqstr(defaultText.getText()));
-    
+
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox, 1);
     //vboxLayout->setRowStretch(0, 10);
-    
+
     connect(buttonBox, &QDialogButtonBox::accepted, this, &TextEventDialog::slotOK);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TextEventDialog::slotHelpRequested);

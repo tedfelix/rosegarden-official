@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixResizer]"
+
 #include "MatrixResizer.h"
 
 #include "base/Event.h"
@@ -298,5 +300,3 @@ void MatrixResizer::setBasicContextHelp()
 QString MatrixResizer::ToolName() { return "resizer"; }
 
 }
-
-

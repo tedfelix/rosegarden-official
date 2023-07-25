@@ -351,7 +351,7 @@ protected:
      */
     void setBarBasicData(ViewSegment &staff, int barNo,
                          NotationElementList::iterator start, bool correct,
-                         TimeSignature timeSig, bool newTimeSig,
+                         const TimeSignature& timeSig, bool newTimeSig,
                          timeT segDelay, TrackId trackId);
 
     /**
@@ -390,8 +390,8 @@ protected:
                 bool full);
 
     /// Find earliest element with quantized time of t or greater
-    NotationElementList::iterator getStartOfQuantizedSlice
-    (NotationElementList *, timeT t) const;
+    static NotationElementList::iterator getStartOfQuantizedSlice
+        (NotationElementList *, timeT t);
 
     void scanChord
     (NotationElementList *notes, NotationElementList::iterator &i,

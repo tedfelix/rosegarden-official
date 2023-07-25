@@ -1276,8 +1276,8 @@ public slots:
      */
     void slotDeleteMarker(int id,
                           timeT time,
-                          QString name,
-                          QString description);
+                          const QString& name,
+                          const QString& description);
 
     /**
      * Document modified
@@ -1289,7 +1289,7 @@ public slots:
      * This slot is here to be connected to RosegardenMainViewWidget's
      * stateChange signal.
      */
-    void slotStateChanged(QString, bool noReverse);
+    void slotStateChanged(const QString& s, bool noReverse);
 
     /**
      * A command has happened; check the clipboard in case we
@@ -1308,7 +1308,7 @@ public slots:
      * Stop current playback, close current document,
      * open specified document and play it.
      */
-    void slotPlayListPlay(QString url);
+    void slotPlayListPlay(const QString& url);
 
     void slotHelp();
 
@@ -1468,8 +1468,11 @@ public slots:
      * happen from an external GUI, we have no way to manage these
      * internally.)
      */
-    void slotChangePluginConfiguration(InstrumentId, int index,
-                                       bool global, QString key, QString value);
+    void slotChangePluginConfiguration(InstrumentId,
+                                       int index,
+                                       bool global,
+                                       const QString& key,
+                                       const QString& value);
     void slotPluginDialogDestroyed(InstrumentId instrumentId,
                                    int index);
     void slotPluginBypassed(InstrumentId,

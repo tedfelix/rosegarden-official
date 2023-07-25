@@ -84,8 +84,8 @@ public:
     Key getKeyFromContext(TrackId track, timeT time);
 
     /// Only for debug
-    void dumpClefContext();
-    void dumpKeyContext();
+    void dumpClefContext() const;
+    void dumpKeyContext() const;
 
 /** SegmentObserver methods **/
     void eventAdded(const Segment *, Event *) override;

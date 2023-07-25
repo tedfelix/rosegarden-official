@@ -2066,7 +2066,7 @@ RosegardenMainWindow::slotFileSave()
         return;
     }
 
-    const QString docFilePath =
+    const QString& docFilePath =
             RosegardenDocument::currentDocument->getAbsFilePath();
 
     QString errMsg;
@@ -6261,7 +6261,10 @@ RosegardenMainWindow::slotAddMarker(timeT time)
 }
 
 void
-RosegardenMainWindow::slotDeleteMarker(int id, timeT time, QString name, QString description)
+RosegardenMainWindow::slotDeleteMarker(int id,
+                                       timeT time,
+                                       const QString& name,
+                                       const QString& description)
 {
     RemoveMarkerCommand *command =
         new RemoveMarkerCommand(&RosegardenDocument::currentDocument->getComposition(),
@@ -6286,7 +6289,7 @@ RosegardenMainWindow::slotDocumentModified(bool modified)
 }
 
 void
-RosegardenMainWindow::slotStateChanged(QString s,
+RosegardenMainWindow::slotStateChanged(const QString& s,
                                        bool noReverse)
 {
     if (noReverse) {
@@ -7609,10 +7612,10 @@ RosegardenMainWindow::slotPluginProgramChanged(InstrumentId instrumentId,
 
 void
 RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
-        int index,
-        bool global,
-        QString key,
-        QString value)
+                                                    int index,
+                                                    bool global,
+                                                    const QString& key,
+                                                    const QString& value)
 {
     PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
@@ -7775,7 +7778,7 @@ RosegardenMainWindow::slotPlayList()
 }
 
 void
-RosegardenMainWindow::slotPlayListPlay(QString url)
+RosegardenMainWindow::slotPlayListPlay(const QString& url)
 {
 //     RG_DEBUG << "slotPlayListPlay() - called with: " << url;
     slotStop();
