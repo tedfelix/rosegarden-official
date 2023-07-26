@@ -90,8 +90,9 @@ SegmentAutoSplitCommand::execute()
                 continue;
 
             bool newTimeSig = false;
-            TimeSignature tsig =
-                m_composition->getTimeSignatureInBar(barNo, newTimeSig);
+
+            /*TimeSignature tsig =*/
+            m_composition->getTimeSignatureInBar(barNo, newTimeSig);
 
             if (newTimeSig) {
 

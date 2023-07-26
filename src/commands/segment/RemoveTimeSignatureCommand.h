@@ -19,18 +19,21 @@
 #ifndef RG_REMOVETIMESIGNATURECOMMAND_H
 #define RG_REMOVETIMESIGNATURECOMMAND_H
 
-#include "base/NotationTypes.h"
+#include "base/TimeSignature.h"
 #include "document/Command.h"
-#include <QString>
 #include "base/Event.h"
+
+
 #include <QCoreApplication>
+#include <QString>
 
 
-class Remove;
+//class Remove;
 
 
 namespace Rosegarden
 {
+
 
 class Composition;
 

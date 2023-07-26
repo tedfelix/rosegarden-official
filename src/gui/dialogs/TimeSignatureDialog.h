@@ -19,11 +19,11 @@
 #ifndef RG_TIMESIGNATUREDIALOG_H
 #define RG_TIMESIGNATUREDIALOG_H
 
-#include "base/NotationTypes.h"
+#include "base/Event.h"
+#include "base/TimeSignature.h"
+
 #include <QDialog>
 #include <QString>
-#include "base/Event.h"
-
 
 class QWidget;
 class QRadioButton;
@@ -33,6 +33,7 @@ class QCheckBox;
 
 namespace Rosegarden
 {
+
 
 class TimeWidget;
 class Composition;
@@ -46,8 +47,8 @@ public:
     TimeSignatureDialog(QWidget *parent,
                         Composition *composition,
                         timeT insertionTime,
-                        const TimeSignature& defaultSig =
-                            TimeSignature::DefaultTimeSignature,
+                        TimeSignature defaultSig =
+                            TimeSignature(4,4),
                         bool timeEditable = false,
                         QString explanatoryText = "");
 
