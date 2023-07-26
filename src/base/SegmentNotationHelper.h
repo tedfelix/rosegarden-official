@@ -61,7 +61,7 @@ public:
      * completeness, but in most cases if you're about to call them
      * you should ask yourself why.)
      */
-    iterator findNearestNotationAbsoluteTime(timeT t);
+    // unused iterator findNearestNotationAbsoluteTime(timeT t);
 
 
     /**

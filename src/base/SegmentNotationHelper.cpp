@@ -80,6 +80,7 @@ SegmentNotationHelper::findNotationAbsoluteTime(timeT t)
     return i;
 }
 
+/* unused
 Segment::iterator
 SegmentNotationHelper::findNearestNotationAbsoluteTime(timeT t)
 {
@@ -98,6 +99,7 @@ SegmentNotationHelper::findNearestNotationAbsoluteTime(timeT t)
 
     return i;
 }
+*/
 
 void
 SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)

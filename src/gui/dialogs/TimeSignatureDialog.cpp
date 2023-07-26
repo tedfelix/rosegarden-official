@@ -49,7 +49,7 @@ namespace Rosegarden
 TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
                                          Composition *composition,
                                          timeT insertionTime,
-                                         const TimeSignature& defaultSig,
+                                         TimeSignature defaultSig,
                                          bool timeEditable,
                                          QString explanatoryText) :
         QDialog(parent),
