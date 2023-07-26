@@ -2030,7 +2030,7 @@ SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
         segment().insert(insertable[ii]);
 }
 
-
+/* unused
 void
 SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
                                                 timeT duration,
@@ -2056,7 +2056,7 @@ SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
         acc += *i;
     }
 }
-
+*/
 
 void
 SegmentNotationHelper::mergeContiguousRests(timeT startTime,

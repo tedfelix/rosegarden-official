@@ -1231,7 +1231,7 @@ public:
 
     std::string getSymbolType() const { return m_type; }
 
-    static bool isSymbolOfType(Event *, const std::string& type);
+    // unused static bool isSymbolOfType(Event *, const std::string& type);
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;

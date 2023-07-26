@@ -2228,6 +2228,7 @@ Symbol::~Symbol()
     // nothing
 }
 
+/* unused
 bool
 Symbol::isSymbolOfType(Event *e, const std::string& type)
 {
@@ -2235,6 +2236,7 @@ Symbol::isSymbolOfType(Event *e, const std::string& type)
             e->has(SymbolTypePropertyName) &&
             e->get<String>(SymbolTypePropertyName) == type);
 }
+*/
 
 Event *
 Symbol::getAsEvent(timeT absoluteTime) const

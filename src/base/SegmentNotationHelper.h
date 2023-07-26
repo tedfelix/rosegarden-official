@@ -595,7 +595,7 @@ protected:
     void reorganizeRests(timeT, timeT, Reorganizer);
 
     /// for use by normalizeRests
-    void normalizeContiguousRests(timeT, timeT, std::vector<Event *>&);
+    // unused void normalizeContiguousRests(timeT, timeT, std::vector<Event *>&);
 
     /// for use by collapseRestsAggressively
     // cppcheck-suppress functionStatic

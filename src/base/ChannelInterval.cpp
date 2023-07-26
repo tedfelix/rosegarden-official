@@ -46,6 +46,7 @@ assertSane() const
 }
 #endif
 
+/* unused
 QDebug operator<<(QDebug dbg, const ChannelInterval &channelInterval) {
     dbg
         << "interval" << channelInterval.m_start.toString()
@@ -55,7 +56,6 @@ QDebug operator<<(QDebug dbg, const ChannelInterval &channelInterval) {
     dbg.space();
     return dbg;
 }
-
+*/
 
 }
-

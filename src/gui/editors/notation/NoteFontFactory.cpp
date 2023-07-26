@@ -131,6 +131,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
     return that.m_fontNames;
 }
 
+/* unused
 std::vector<int>
 NoteFontFactory::getAllSizes(const QString &fontName)
 {
@@ -146,6 +147,7 @@ NoteFontFactory::getAllSizes(const QString &fontName)
     std::sort(v.begin(), v.end());
     return v;
 }
+*/
 
 std::vector<int>
 NoteFontFactory::getScreenSizes(const QString &fontName)

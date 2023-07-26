@@ -132,12 +132,12 @@ int levenshtein_distance ( int m, string s, int n, string t )
       {
         substitution_cost = 1;
       }
-      d[i+j*(m+1)] = i4_min ( d[i-1+j*(m+1)] + 1, 
-                     i4_min ( d[i+(j-1)*(m+1)] + 1, 
+      d[i+j*(m+1)] = i4_min ( d[i-1+j*(m+1)] + 1,
+                     i4_min ( d[i+(j-1)*(m+1)] + 1,
                               d[i-1+(j-1)*(m+1)] + substitution_cost ) );
     }
   }
- 
+
   distance = d[m+n*(m+1)];
 
   delete [] d;
@@ -146,6 +146,7 @@ int levenshtein_distance ( int m, string s, int n, string t )
 }
 //****************************************************************************80
 
+// cppcheck-suppress unusedFunction
 int *levenshtein_matrix ( int m, string s, int n, string t )
 
 //****************************************************************************80
@@ -228,16 +229,17 @@ int *levenshtein_matrix ( int m, string s, int n, string t )
       {
         substitution_cost = 1;
       }
-      d[i+j*(m+1)] = i4_min ( d[i-1+j*(m+1)] + 1, 
-                     i4_min ( d[i+(j-1)*(m+1)] + 1, 
+      d[i+j*(m+1)] = i4_min ( d[i-1+j*(m+1)] + 1,
+                     i4_min ( d[i+(j-1)*(m+1)] + 1,
                               d[i-1+(j-1)*(m+1)] + substitution_cost ) );
     }
   }
- 
+
   return d;
 }
 //****************************************************************************80
 
+// cppcheck-suppress unusedFunction
 void timestamp ( )
 
 //****************************************************************************80
