@@ -196,7 +196,7 @@ protected:
 
     // Stacking of the SegmentItems on the canvas
     //
-    std::pair<int, int> getZMinMax();
+    // unused std::pair<int, int> getZMinMax();
 
 //    virtual void init();
 //virtual void drawBackground() = 0;

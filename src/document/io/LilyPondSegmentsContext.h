@@ -183,7 +183,7 @@ public:
     /**
      * Return the current voice index or -1
      */
-    int getVoiceIndex();
+    // unused int getVoiceIndex();
 
     /**
      * Prepare to get the segments on the current track and for the current
@@ -251,7 +251,7 @@ public:
      * Return true if the segment is the last alternate ending of a chain
      */
     bool isLastAlt() const;
-    
+
     /**
      * Return a set of the existing playing numbers associated to an alternate
      * ending segment. The alternate segment is played when the playing number
@@ -295,15 +295,15 @@ public:
      * are not mixed in the same score.
      */
     bool isAutomaticVoltaUsable() const { return m_automaticVoltaUsable; }
-    
+
     /**
      * Return some segment (currently the first one) on the given track.
      * This method is used when some data related to segments (and supposedly
      * shared by all segments of the track) is needed at the track level.
      */
-    Segment * getArbitrarySegment(int trackPos); 
-    
-    
+    Segment * getArbitrarySegment(int trackPos);
+
+
     /// Only for instrumentation while debugging
     void dump();
 
@@ -316,7 +316,7 @@ private :
     struct AlternateEnding {
         const SegmentData * data;
         std::set<int> altNumber;
-        
+
         AlternateEnding(const SegmentData *sd, int number)
         {
             altNumber.clear();
@@ -360,7 +360,7 @@ private :
 
         mutable Rosegarden::Key previousKey;  // Last key in the previous segment
 
-        mutable int simpleRepeatId;           // Identify a repeat without 
+        mutable int simpleRepeatId;           // Identify a repeat without
                                               // alternate endings chain
         mutable int numberOfSimpleRepeats;    // How many segments in the chain
 
@@ -464,7 +464,7 @@ private :
      * which may be exported as simple repeat and mark them accordingly.
      * The concerned segments are gathered in the set passed as argument.
      *
-     * The previously found repeat with alternate endings sequences are 
+     * The previously found repeat with alternate endings sequences are
      * ignored when pass=1, but not when pass=2.
      */
     void lookForSimpleRepeatedLinks(SegmentSet &segSet, int pass = 1);

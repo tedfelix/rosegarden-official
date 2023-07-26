@@ -2370,6 +2370,7 @@ AudioFileWriter::haveRecordFileOpen(InstrumentId id)
             (m_files[id].second->getStatus() != RecordableAudioFile::DEFUNCT));
 }
 
+/* unused
 bool
 AudioFileWriter::haveRecordFilesOpen()
 {
@@ -2394,6 +2395,7 @@ AudioFileWriter::haveRecordFilesOpen()
 
     return false;
 }
+*/
 
 void
 AudioFileWriter::kick(bool wantLock)

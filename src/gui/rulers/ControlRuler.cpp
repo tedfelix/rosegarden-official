@@ -1014,6 +1014,7 @@ void ControlRuler::flipBackwards()
 }
 */
 
+/* unused
 std::pair<int, int> ControlRuler::getZMinMax()
 {
     std::vector<int> zList;
@@ -1022,6 +1023,7 @@ std::pair<int, int> ControlRuler::getZMinMax()
 
     return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
 }
+*/
 
 SnapGrid* ControlRuler::getSnapGrid() const
 {

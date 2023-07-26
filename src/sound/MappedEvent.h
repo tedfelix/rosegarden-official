@@ -44,7 +44,7 @@ public:
      * Clear all block files
      */
     static void clear();
-    static bool hasDataBlock(blockid);
+    // unused static bool hasDataBlock(blockid);
 
 protected:
     DataBlockRepository();

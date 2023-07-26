@@ -67,7 +67,7 @@ LilyPondSegmentsContext::~LilyPondSegmentsContext()
                     }
                     delete sit->rawAltChain;
                     // sortedAltChain elements points to rawAltChain ones:
-                    // They already have been deleted. 
+                    // They already have been deleted.
                     delete sit->sortedAltChain;
                 }
             }
@@ -572,6 +572,7 @@ LilyPondSegmentsContext::useNextVoice()
     return m_voiceIterator->first;
 }
 
+/* unused
 int
 LilyPondSegmentsContext::getVoiceIndex()
 {
@@ -579,6 +580,7 @@ LilyPondSegmentsContext::getVoiceIndex()
     if (m_voiceIterator == m_trackIterator->second.end()) return -1;
     return m_voiceIterator->first;
 }
+*/
 
 Segment *
 LilyPondSegmentsContext::useFirstSegment()
@@ -729,7 +731,7 @@ LilyPondSegmentsContext::getAltText()
     std::set<int>::iterator it;
     int last, current;
 
-    if (!m_currentAltChain) return std::string("?");  // Seg. is not an alt. end.  
+    if (!m_currentAltChain) return std::string("?");  // Seg. is not an alt. end.
     if (!(*m_segIterator).sortedAltChain) return std::string("");
     if (m_altIterator == (*m_segIterator).sortedAltChain->end())
         return std::string("");
@@ -768,7 +770,7 @@ LilyPondSegmentsContext::getAltText()
 int
 LilyPondSegmentsContext::getAltRepeatCount()
 {
-    if (!m_currentAltChain) return -1;  // Current segment is not an alt. ending  
+    if (!m_currentAltChain) return -1;  // Current segment is not an alt. ending
     if (!(*m_segIterator).sortedAltChain) return 0;
     if (m_altIterator == (*m_segIterator).sortedAltChain->end()) return 0;
     return (*m_altIterator)->altNumber.size();
@@ -1302,7 +1304,7 @@ LilyPondSegmentsContext::sortAndGatherAlt(SegmentDataList & repeatList)
             }
         }
     }
-    
+
     // Previous code sets m_automaticVoltaUsable to false when the alternate
     // endings sequence is "A B B" or "A A B B", but fails when sequence is
     // "A A B A".
@@ -1328,7 +1330,7 @@ LilyPondSegmentsContext::sortAndGatherAlt(SegmentDataList & repeatList)
     }
 }
 
-Segment * 
+Segment *
 LilyPondSegmentsContext::getArbitrarySegment(int trackPos)
 {
     return m_segments[trackPos][0].begin()->segment;

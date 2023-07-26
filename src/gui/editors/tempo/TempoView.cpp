@@ -620,11 +620,13 @@ TempoView::initStatusBar()
     sb->showMessage(QString());
 }
 
+/* unused
 QSize
 TempoView::getViewSize()
 {
     return m_list->size();
 }
+*/
 
 void
 TempoView::setViewSize(QSize s)

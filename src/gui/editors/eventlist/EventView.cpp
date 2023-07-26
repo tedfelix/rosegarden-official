@@ -1303,11 +1303,13 @@ EventView::initStatusBar()
     sb->showMessage(QString());
 }
 
+/* unused
 QSize
 EventView::getViewSize()
 {
     return m_eventList->size();
 }
+*/
 
 void
 EventView::setViewSize(QSize s)

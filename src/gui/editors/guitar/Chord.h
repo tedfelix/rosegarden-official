@@ -60,7 +60,7 @@ public:
     QString getExt() const { return m_ext; }
     void setExt(QString r) { m_ext = r.isEmpty() ? QString() : r; }
 
-    bool hasAltBass() const;
+    // unused bool hasAltBass() const;
 
     Fingering getFingering() const { return m_fingering; }
     void setFingering(const Fingering& f) { m_fingering = f; }

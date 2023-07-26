@@ -97,7 +97,7 @@ public:
      * the absolute time that would be restored by a call to
      * unquantize.
      */
-    virtual timeT getUnquantizedDuration(Event *e) const;
+    // unused virtual timeT getUnquantizedDuration(Event *e) const;
 
     /**
      * Unquantize all events in the given range, for this

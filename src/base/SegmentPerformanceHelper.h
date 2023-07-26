@@ -93,7 +93,7 @@ public:
      * method to take into account any tempo changes that appear
      * in the section of the composition preceding i.
      */
-    RealTime getRealAbsoluteTime(iterator i);
+    // unused RealTime getRealAbsoluteTime(iterator i);
 
     /**
      * Returns the duration of the note event pointed to by i,
@@ -101,7 +101,7 @@ public:
      * force at i's position within the composition, as well as
      * any tempo changes occurring during the event at i.
      */
-    RealTime getRealSoundingDuration(iterator i);
+    // unused RealTime getRealSoundingDuration(iterator i);
 
     /**
      * Return a sounding duration (estimated) and start time for the

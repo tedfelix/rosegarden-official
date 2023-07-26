@@ -62,10 +62,10 @@ public:
     virtual double xStart() const  { return m_xstart; }
     virtual double xEnd() const  { return m_xend; }
 
-    virtual void handleMouseButtonPress(QMouseEvent *e);
-    virtual void handleMouseButtonRelease(QMouseEvent *e);
+    // unused virtual void handleMouseButtonPress(QMouseEvent *e);
+    // unused virtual void handleMouseButtonRelease(QMouseEvent *e);
     virtual void handleMouseMove(QMouseEvent *e, int deltaX, int deltaY);
-    virtual void handleMouseWheel(QWheelEvent *e);
+    // unused virtual void handleMouseWheel(QWheelEvent *e);
 
     virtual void setSelected(bool s);
     bool isSelected() { return m_selected; }

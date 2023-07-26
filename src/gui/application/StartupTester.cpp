@@ -104,6 +104,7 @@ StartupTester::parseStdoutBuffer(QStringList &target)
 }
 #endif
 
+/* unused
 bool
 StartupTester::haveAudioFileImporter(QStringList *missingApplications)
 {
@@ -114,6 +115,7 @@ StartupTester::haveAudioFileImporter(QStringList *missingApplications)
                                  m_audioFileImporterMissing;
     return m_haveAudioFileImporter;
 }
+*/
 
 bool
 StartupTester::isVersionNewerThan(QString a, QString b)

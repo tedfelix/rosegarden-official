@@ -198,11 +198,13 @@ Quantizer::getUnquantizedAbsoluteTime(Event *e) const
 }
 */
 
+/* unused
 timeT
 Quantizer::getUnquantizedDuration(Event *e) const
 {
     return getFromSource(e, DurationValue);
 }
+*/
 
 void
 Quantizer::quantizeRange(Segment *s,

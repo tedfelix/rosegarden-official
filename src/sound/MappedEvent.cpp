@@ -484,10 +484,12 @@ void DataBlockRepository::setDataBlockForEvent(MappedEvent* e,
     }
 }
 
+/* unused
 bool DataBlockRepository::hasDataBlock(DataBlockRepository::blockid id)
 {
     return DataBlockFile(id).exists();
 }
+*/
 
 DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::string& s)
 {

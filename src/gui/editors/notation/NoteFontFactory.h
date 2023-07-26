@@ -62,7 +62,7 @@ public:
     /// Return the default multi-staff size (prefers 6)
     static int getDefaultMultiSize(const QString &fontName);
 
-    static bool isAvailableInSize(const QString &fontName, int size);
+    // unused static bool isAvailableInSize(const QString &fontName, int size);
 
 private:
     NoteFontFactory() {}

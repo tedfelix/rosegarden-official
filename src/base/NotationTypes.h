@@ -1113,7 +1113,7 @@ public:
     Event *getAsNoteEvent(timeT absoluteTime, int pitch) const;
 
     /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsRestEvent(timeT absoluteTime) const;
+    // unused Event *getAsRestEvent(timeT absoluteTime) const;
 
 
 private:
