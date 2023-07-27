@@ -184,6 +184,7 @@ CommandHistory::setUndoLimit(int limit)
     }
 }
 
+/* unused
 void
 CommandHistory::setRedoLimit(int limit)
 {
@@ -192,6 +193,7 @@ CommandHistory::setRedoLimit(int limit)
         clipCommands();
     }
 }
+*/
 
 /* unused
 void

@@ -403,9 +403,11 @@ int PitchDetector::getStepSize() const {
 }
 */
 
+/* unused
 void PitchDetector::setStepSize(int nextStepSize) {
     m_stepSize = nextStepSize;
 }
+*/
 
 int PitchDetector::getBufferSize() const {
     return m_frameSize + m_stepSize;

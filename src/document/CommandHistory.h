@@ -85,7 +85,7 @@ public:
     int getRedoLimit() const { return m_redoLimit; }
 
     /// Set the maximum number of items in the redo history.
-    void setRedoLimit(int limit);
+    // unused void setRedoLimit(int limit);
 
     /// Return the maximum number of items visible in undo and redo menus.
     int getMenuLimit() const { return m_menuLimit; }

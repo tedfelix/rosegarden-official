@@ -43,7 +43,8 @@ class SqueezedLabelPrivate;
 class SqueezedLabel : public QLabel
 {
     Q_OBJECT
-    Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode)
+    //Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode)
+    Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode)
 
 public:
     /**
@@ -70,7 +71,7 @@ public:
     * Sets the text elide mode.
     * @param mode The text elide mode.
     */
-    void setTextElideMode(Qt::TextElideMode mode);
+    // unused void setTextElideMode(Qt::TextElideMode mode);
 
     /// Do not hijack the tool tip.  Let the client have control.
     void allowToolTip();

@@ -97,7 +97,7 @@ public:
     /**
      * Change the time stretch ratio.
      */
-    void setRatio(float ratio);
+    // unused void setRatio(float ratio);
 
     /**
      * Get the hop size for input.

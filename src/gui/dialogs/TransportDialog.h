@@ -83,7 +83,7 @@ public:
 
     void setTimeSignature(const TimeSignature &timeSig);
 
-    void setSMPTEResolution(int framesPerSecond, int bitsPerFrame);
+    // unused void setSMPTEResolution(int framesPerSecond, int bitsPerFrame);
     // unused void getSMPTEResolution(int &framesPerSecond, int &bitsPerFrame);
 
     // RosegardenTransport member accessors

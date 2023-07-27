@@ -423,13 +423,15 @@ TransportDialog::resetFont(QWidget *w)
     w->setFont(font);
 }
 
+/* unused
 void
-TransportDialog::setSMPTEResolution(int framesPerSecond,
+ransportDialog::setSMPTEResolution(int framesPerSecond,
                                     int bitsPerFrame)
 {
     m_framesPerSecond = framesPerSecond;
     m_bitsPerFrame = bitsPerFrame;
 }
+*/
 
 /* unused
 void

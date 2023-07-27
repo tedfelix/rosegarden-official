@@ -68,11 +68,13 @@ Thumbwheel::~Thumbwheel()
 {
 }
 
+/* unused
 void
 Thumbwheel::setShowToolTip(bool show)
 {
     m_showTooltip = show;
 }
+*/
 
 void
 Thumbwheel::setMinimumValue(int min)

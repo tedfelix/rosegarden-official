@@ -119,7 +119,7 @@ public:
     /// Send SysEx from hex string.  DO NOT include F0/F7.
     // unused static void sendSysExHex(const QString &hexString);
     /// Send SysEx from raw string.  DO NOT include F0/F7.
-    static void sendSysExRaw(const std::string &rawString);
+    // unused static void sendSysExRaw(const std::string &rawString);
     /// Blocking with timeout.  Returns false if timed out.
     bool getSysEx(std::string &rawString);
 

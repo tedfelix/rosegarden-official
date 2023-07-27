@@ -64,7 +64,7 @@ public:
     void setMaximum(float max);
     float getMaxValue() const { return m_maximum; }
 
-    void setStep(float step);
+    // unused void setStep(float step);
     float getStep() const { return m_step; }
 
     void setPageStep(float step);
@@ -81,7 +81,7 @@ public:
     //
     void setKnobColour(const QColor &colour);
     QColor getKnobColour() const { return m_knobColour; }
-    
+
     /// Set "distance from center" mode.
     /**
      * In centered mode, the rotary shows the distance from the
