@@ -39,7 +39,7 @@ public:
     void endMarkerTimeChanged(const Segment *segment, bool shorten) override;
 
     SegmentRefreshStatus &getRefreshStatus() const;
-    void resetRefreshStatus();
+    // unused void resetRefreshStatus();
 
     void updateElements(timeT from, timeT to);
 

@@ -51,9 +51,9 @@ public:
     MappedDevice& operator+(const MappedDevice &mD);
     MappedDevice& operator=(const MappedDevice &mD);
 
-    friend QDataStream& operator>>(QDataStream &dS, MappedDevice *mD);
+    // unused friend QDataStream& operator>>(QDataStream &dS, MappedDevice *mD);
     friend QDataStream& operator<<(QDataStream &dS, MappedDevice *mD);
-    friend QDataStream& operator>>(QDataStream &dS, MappedDevice &mD);
+    // unused friend QDataStream& operator>>(QDataStream &dS, MappedDevice &mD);
     friend QDataStream& operator<<(QDataStream &dS, const MappedDevice &mD);
 
     std::string getName() const { return m_name; }

@@ -54,7 +54,7 @@ public:
 
     // fast if "levels" doesn't change often -- for audio segment previews
     static int   multiplier_to_preview(float multiplier, int levels);
-    static float preview_to_multiplier(int level, int levels);
+    // unused static float preview_to_multiplier(int level, int levels);
 
     // Set or retrieve the number of the pan law.
     static void setPanLaw(int panLaw) { m_panLaw = panLaw; }
@@ -85,5 +85,3 @@ private:
 }
 
 #endif
-
-    

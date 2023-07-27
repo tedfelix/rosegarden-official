@@ -244,6 +244,7 @@ void ExternalController::sendAllCCs(
     }
 }
 
+/* unused
 void ExternalController::sendSysExHex(const QString &hexString)
 {
     // Not enabled?  Bail.
@@ -263,6 +264,7 @@ void ExternalController::sendSysExHex(const QString &hexString)
 
     sendSysExRaw(rawString);
 }
+*/
 
 void
 ExternalController::sendSysExRaw(const std::string &rawString)

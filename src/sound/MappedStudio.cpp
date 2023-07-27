@@ -792,6 +792,7 @@ MappedConnectableObject::MappedConnectableObject(MappedObject *parent,
 MappedConnectableObject::~MappedConnectableObject()
 {}
 
+/* unused
 void
 MappedConnectableObject::setConnections(ConnectionDirection dir,
                                         MappedObjectValueList conns)
@@ -801,6 +802,7 @@ MappedConnectableObject::setConnections(ConnectionDirection dir,
     else
         m_connectionsOut = conns;
 }
+*/
 
 void
 MappedConnectableObject::addConnection(ConnectionDirection dir,

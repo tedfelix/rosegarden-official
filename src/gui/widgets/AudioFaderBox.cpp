@@ -256,6 +256,7 @@ AudioFaderBox::slotSetInstrument(Studio * /*studio*/,
     }
 }
 
+/* unused
 bool
 AudioFaderBox::owns(const QObject *object)
 {
@@ -263,6 +264,7 @@ AudioFaderBox::owns(const QObject *object)
             ((object->parent() == this) ||
              (object->parent() && (object->parent()->parent() == this))));
 }
+*/
 
 void
 AudioFaderBox::setAudioChannels(int channels)

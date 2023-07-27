@@ -252,7 +252,7 @@ protected:
                      timeT absTime, timeT duration) const;
     mutable std::vector<Event *> m_toInsert;
 
-    void removeProperties(Event *) const;
+    // unused void removeProperties(Event *) const;
     void removeTargetProperties(Event *) const;
     void makePropertyNames();
 

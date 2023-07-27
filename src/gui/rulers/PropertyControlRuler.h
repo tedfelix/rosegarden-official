@@ -73,7 +73,7 @@ public:
     void elementRemoved(const ViewSegment *, ViewElement*) override;
     void viewSegmentDeleted(const ViewSegment *) override;
 
-    virtual void selectAllProperties();
+    // unused virtual void selectAllProperties();
 
     /// SegmentObserver interface
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);

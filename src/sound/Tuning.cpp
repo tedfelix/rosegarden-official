@@ -608,6 +608,7 @@ double Tuning::getFrequency(Rosegarden::Pitch pitch) const {
 /**
 * Prints to std out for debugging
 */
+// cppcheck-suppress unusedFunction
 void Tuning::printTuning() const {
 
     RG_DEBUG << "Tuning::printTuning()";

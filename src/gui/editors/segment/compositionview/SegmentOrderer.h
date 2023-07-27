@@ -34,11 +34,11 @@ class Segment;
 class SegmentOrderer : public CompositionObserver {
 public:
     SegmentOrderer() : m_currentMaxZ(0) {};
-    
+
         unsigned int getZForSegment(const Segment*);
 
-        void segmentClicked(const Segment *);
-        
+        // unused void segmentClicked(const Segment *);
+
 protected:
 
     //--------------- Data members ---------------------------------

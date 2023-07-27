@@ -444,6 +444,7 @@ Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
 #endif
 }
 
+/* unused
 void
 Quantizer::removeProperties(Event *e) const
 {
@@ -457,6 +458,7 @@ Quantizer::removeProperties(Event *e) const
         e->unset(m_targetProperties[DurationValue]);
     }
 }
+*/
 
 void
 Quantizer::removeTargetProperties(Event *e) const

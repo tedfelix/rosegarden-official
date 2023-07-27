@@ -114,7 +114,7 @@ public:
     // Port management
     //
     void addPort(int number, PortData value);
-    bool removePort(int number);
+    // unused bool removePort(int number);
     PluginPortInstance* getPort(int number);
     void clearPorts();
 

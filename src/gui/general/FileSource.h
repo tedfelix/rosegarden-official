@@ -164,7 +164,7 @@ public:
      * after this FileSource has been destroyed.  The default is false
      * (cached files share their FileSource owners' lifespans).
      */
-    void setLeaveLocalFile(bool leave);
+    // unused void setLeaveLocalFile(bool leave);
 
     /**
      * Return true if the given filename or URL refers to a remote

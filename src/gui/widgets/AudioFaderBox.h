@@ -60,7 +60,7 @@ public:
 
     void setIsSynth(bool);
 
-    bool owns(const QObject *object);
+    // unused bool owns(const QObject *object);
 
     void setFont(QFont);
 

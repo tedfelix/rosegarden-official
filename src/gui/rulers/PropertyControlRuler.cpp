@@ -451,9 +451,11 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
     ControlRuler::contextMenuEvent(e);
 }
 
+/* unused
 void
 PropertyControlRuler::selectAllProperties()
 {
 }
+*/
 
 }

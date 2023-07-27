@@ -29,7 +29,7 @@ class PlayListView : public QTreeWidget
 public:
     PlayListView(QWidget *parent=nullptr, const char *name=nullptr);
 
-    QTreeWidgetItem* previousSibling(QTreeWidgetItem*);
+    // unused QTreeWidgetItem* previousSibling(QTreeWidgetItem*);
 
 protected: signals:
     void droppedURIs(QDropEvent*, QTreeWidget*, QStringList);

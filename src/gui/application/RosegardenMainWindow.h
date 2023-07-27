@@ -397,7 +397,7 @@ protected:
      *
      * @see KTMainWindow#saveProperties
      */
-    void saveGlobalProperties();
+    // unused void saveGlobalProperties();
 
     /**
      * reads the session config file and restores the application's

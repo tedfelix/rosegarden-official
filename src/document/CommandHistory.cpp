@@ -193,12 +193,14 @@ CommandHistory::setRedoLimit(int limit)
     }
 }
 
+/* unused
 void
 CommandHistory::setMenuLimit(int limit)
 {
     m_menuLimit = limit;
     updateActions();
 }
+*/
 
 void
 CommandHistory::documentSaved()

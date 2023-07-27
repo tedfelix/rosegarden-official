@@ -145,7 +145,7 @@ public:
     //
     // unused int getAudioQueueLocks();
     int tryAudioQueueLocks();
-    int releaseAudioQueueLocks();
+    // unused int releaseAudioQueueLocks();
 
     void prepareAudio(); // when repositioning etc
     void prebufferAudio(); // when starting playback (incorporates prepareAudio)

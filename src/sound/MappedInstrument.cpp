@@ -65,6 +65,7 @@ MappedInstrument::MappedInstrument(Instrument *instrument):
         m_audioChannels(instrument->getAudioChannels())
 {}
 
+/* unused
 QDataStream&
 operator>>(QDataStream &dS, MappedInstrument *mI)
 {
@@ -86,6 +87,7 @@ operator>>(QDataStream &dS, MappedInstrument *mI)
 
     return dS;
 }
+*/
 
 QDataStream&
 operator>>(QDataStream &dS, MappedInstrument &mI)

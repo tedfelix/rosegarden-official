@@ -1676,6 +1676,7 @@ RosegardenMainWindow::readOptions()
     m_actionsSetup = true;
 }
 
+/* unused
 void
 RosegardenMainWindow::saveGlobalProperties()
 {
@@ -1703,6 +1704,7 @@ RosegardenMainWindow::saveGlobalProperties()
         }
     }
 }
+*/
 
 #if 0
 void

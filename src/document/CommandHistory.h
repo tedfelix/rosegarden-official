@@ -91,7 +91,7 @@ public:
     int getMenuLimit() const { return m_menuLimit; }
 
     /// Set the maximum number of items in the menus.
-    void setMenuLimit(int limit);
+    // unused void setMenuLimit(int limit);
 
     /// Enable/Disable undo (during playback).
     void enableUndo(bool enable);

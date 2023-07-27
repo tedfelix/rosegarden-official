@@ -1046,6 +1046,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
 
 
 void
+// cppcheck-suppress unusedFunction
 AudioFileManager::print()
 {
     MutexLock lock (&audioFileManagerLock)
