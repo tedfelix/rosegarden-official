@@ -161,7 +161,7 @@ signals:
 
 public slots:
 //    virtual void slotUpdateElementsHPos();
-    virtual void slotScrollHorizSmallSteps(int);
+    // unused virtual void slotScrollHorizSmallSteps(int);
     virtual void slotSetPannedRect(QRectF);
 //    virtual void slotSetScale(double);
 

@@ -136,11 +136,13 @@ void ScrollBox::setPageSize(const QSize& s)
     repaint();
 }
 
+/* unused
 void ScrollBox::setViewSize(const QSize& s)
 {
     m_viewsize = s;
     repaint();
 }
+*/
 
 void ScrollBox::setViewPos(const QPoint& pos)
 {

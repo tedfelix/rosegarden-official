@@ -633,9 +633,11 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
     }
 }
 
-void ControlRuler::slotScrollHorizSmallSteps(int /*step*/)
+/* unused
+void ControlRuler::slotScrollHorizSmallSteps(int)
 {
 }
+*/
 
 int ControlRuler::mapXToWidget(float x)
 {

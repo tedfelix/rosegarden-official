@@ -50,7 +50,7 @@ public:
 
 public slots:
     void setPageSize(const QSize&);
-    void setViewSize(const QSize&);
+    // unused void setViewSize(const QSize&);
     void setViewPos(const QPoint&);
     void setViewPos(int x, int y) { setViewPos(QPoint(x, y)); }
     // unused void setViewX(int x);

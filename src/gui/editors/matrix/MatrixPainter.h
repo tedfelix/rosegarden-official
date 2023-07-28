@@ -61,7 +61,7 @@ public slots:
     void handleEventRemoved(Event *event) override;
 
 protected slots:
-    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
+    // unused void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
 
 protected:
     explicit MatrixPainter(MatrixWidget *);

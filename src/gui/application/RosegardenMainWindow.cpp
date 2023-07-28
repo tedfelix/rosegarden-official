@@ -2356,7 +2356,7 @@ RosegardenMainWindow::slotEditPasteAsLinks()
     //this contains a copy of slotEditPaste() - as and when the time comes to
     //implement this properly, the code below needs uncommenting and adapting
 
-    /* */ /*
+    */ /*
     if (m_clipboard->isEmpty()) {
         TmpStatusMsg msg(tr("Clipboard is empty"), this);
         return ;
@@ -3658,6 +3658,7 @@ RosegardenMainWindow::slotHideShowParameterArea()
     m_parameterArea->setVisible(findAction("show_inst_segment_parameters")->isChecked());
 }
 
+/* unused
 void
 RosegardenMainWindow::slotParameterAreaHidden()
 {
@@ -3667,6 +3668,7 @@ RosegardenMainWindow::slotParameterAreaHidden()
     // menu to keep things in sync.
     findAction("show_inst_segment_parameters")->setChecked(false);
 }
+*/
 
 void
 RosegardenMainWindow::slotToggleStatusBar()

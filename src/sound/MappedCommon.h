@@ -53,7 +53,7 @@ QDataStream& operator<<(QDataStream&, const MappedObjectIdList&);
 // unused QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectPropertyList&);
 
-QDataStream& operator>>(QDataStream& s, MappedObjectValueList&);
+// unused QDataStream& operator>>(QDataStream& s, MappedObjectValueList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectValueList&);
 
 }

@@ -1228,7 +1228,7 @@ public slots:
     /**
      * The parameters box was hidden
      */
-    void slotParameterAreaHidden();
+    // unused void slotParameterAreaHidden();
 
     /**
      * Display tip-of-day dialog on demand

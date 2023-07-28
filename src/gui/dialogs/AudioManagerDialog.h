@@ -92,7 +92,7 @@ public:
 public slots:
     void slotAdd();
     void slotPlayPreview();
-    void slotRename();
+    // unused void slotRename();
     void slotInsert();
     void slotRemove();
     void slotRemoveAll();

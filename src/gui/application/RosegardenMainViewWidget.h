@@ -138,7 +138,7 @@ public slots:
     void slotEditSegmentsPitchTracker(const std::vector<Segment*>&);
     void slotEditTriggerSegment(int);
     void slotEditSegmentAudio(Segment*);
-    void slotSegmentAutoSplit(Segment*);
+    // unused void slotSegmentAutoSplit(Segment*);
     void slotEditRepeat(Segment*, timeT);
 
     /**

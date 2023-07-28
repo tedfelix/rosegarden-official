@@ -966,6 +966,7 @@ AudioManagerDialog::slotDeleteUnused()
     delete dialog;
 }
 
+/* unused
 void
 AudioManagerDialog::slotRename()
 {
@@ -988,7 +989,7 @@ AudioManagerDialog::slotRename()
 
     slotPopulateFileList();
 }
-
+*/
 
 /*
 void AudioManagerDialog::slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)

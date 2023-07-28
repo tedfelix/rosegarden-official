@@ -870,6 +870,7 @@ void RosegardenMainViewWidget::slotEditTriggerSegment(int id)
     slotEditSegmentsEventList(segmentsToEdit);
 }
 
+/* unused
 void RosegardenMainViewWidget::slotSegmentAutoSplit(Segment *segment)
 {
     AudioSplitDialog aSD(this, segment, RosegardenDocument::currentDocument);
@@ -881,6 +882,7 @@ void RosegardenMainViewWidget::slotSegmentAutoSplit(Segment *segment)
         slotAddCommandToHistory(command);
     }
 }
+*/
 
 void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
 {
