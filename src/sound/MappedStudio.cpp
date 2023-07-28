@@ -89,6 +89,7 @@ QDataStream& operator<<(QDataStream& s, const MappedObjectIdList& v)
     return s;
 }
 
+/* unused
 QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList& v)
 {
     v.clear();
@@ -102,6 +103,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList& v)
     }
     return s;
 }
+*/
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectPropertyList& v)
 {

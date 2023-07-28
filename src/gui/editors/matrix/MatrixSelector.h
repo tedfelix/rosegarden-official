@@ -73,7 +73,7 @@ public slots:
      * Should be called after a cut or a copy has been
      * performed
      */
-    void slotHideSelection();
+    // unused void slotHideSelection();
 
     void slotClickTimeout();
 

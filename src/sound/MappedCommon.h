@@ -50,7 +50,7 @@ typedef enum
 // unused QDataStream& operator>>(QDataStream& s, MappedObjectIdList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectIdList&);
 
-QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList&);
+// unused QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectPropertyList&);
 
 QDataStream& operator>>(QDataStream& s, MappedObjectValueList&);

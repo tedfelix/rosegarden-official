@@ -628,11 +628,13 @@ TempoView::getViewSize()
 }
 */
 
+/* unused
 void
 TempoView::setViewSize(QSize s)
 {
     m_list->setFixedSize(s);
 }
+*/
 
 void
 TempoView::readOptions()

@@ -91,6 +91,7 @@ DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
 }
 */
 
+/* unused
 bool
 DialogSuppressor::isSuppressed(QString settingsKey)
 {
@@ -100,5 +101,6 @@ DialogSuppressor::isSuppressed(QString settingsKey)
     settings.endGroup();
     return suppress;
 }
+*/
 
 }

@@ -29,7 +29,7 @@ class DialogSuppressor
 {
 public:
     // unused static bool shouldSuppress(QDialog *, QString settingsKey);
-    static bool isSuppressed(QString settingsKey);
+    // unused static bool isSuppressed(QString settingsKey);
 };
 
 class SuppressionTarget : public QObject

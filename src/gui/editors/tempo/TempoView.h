@@ -78,7 +78,7 @@ public:
     virtual void setupActions();
     void initStatusBar() override;
     // unused virtual QSize getViewSize();
-    virtual void setViewSize(QSize);
+    // unused virtual void setViewSize(QSize);
 
     /// Set the button states to the current filter positions
     void setButtonsToFilter();

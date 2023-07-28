@@ -2349,13 +2349,14 @@ RosegardenMainWindow::slotEditPaste()
     RosegardenDocument::currentDocument->slotSetPointerPosition(RosegardenDocument::currentDocument->getComposition().getPosition());
 }
 
+/* unused
 void
 RosegardenMainWindow::slotEditPasteAsLinks()
 {
     //this contains a copy of slotEditPaste() - as and when the time comes to
     //implement this properly, the code below needs uncommenting and adapting
 
-    /*
+    /* */ /*
     if (m_clipboard->isEmpty()) {
         TmpStatusMsg msg(tr("Clipboard is empty"), this);
         return ;
@@ -2372,8 +2373,9 @@ RosegardenMainWindow::slotEditPasteAsLinks()
                                      false));
     // User preference? Update song pointer position on paste
     RosegardenDocument::currentDocument->slotSetPointerPosition(RosegardenDocument::currentDocument->getComposition().getPosition());
-    */
+    */ /*
 }
+*/
 
 void
 RosegardenMainWindow::slotCutRange()

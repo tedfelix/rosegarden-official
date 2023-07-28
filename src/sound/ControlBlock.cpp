@@ -146,6 +146,7 @@ ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
     track.conform(m_doc->getStudio());
 }
 
+/* unused
 InstrumentId
 ControlBlock::getInstrumentForTrack(TrackId trackId) const
 {
@@ -153,6 +154,7 @@ ControlBlock::getInstrumentForTrack(TrackId trackId) const
         return m_trackInfo[trackId].m_instrumentId;
     return 0;
 }
+*/
 
 void
 ControlBlock::setTrackMuted(TrackId trackId, bool muted)

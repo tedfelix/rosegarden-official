@@ -459,6 +459,7 @@ MatrixSelector::stow()
 
 }
 
+/* unused
 void
 MatrixSelector::slotHideSelection()
 {
@@ -467,6 +468,7 @@ MatrixSelector::slotHideSelection()
 //!!!    m_selectionRect->setSize(0, 0);
 //!!!    m_widget->canvas()->update();
 }
+*/
 
 void
 MatrixSelector::slotMatrixScrolled(int /* newX */, int /* newY */)
@@ -626,5 +628,3 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
 QString MatrixSelector::ToolName() { return "selector"; }
 
 }
-
-
