@@ -4,14 +4,14 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     This file is based on code from KGhostView, Copyright 1997-2002
         Markkhu Hihnala     <mah@ee.oulu.fi>
         and the KGhostView authors.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -148,18 +148,23 @@ void ScrollBox::setViewPos(const QPoint& pos)
     repaint();
 }
 
+/* unused
 void ScrollBox::setViewX(int x)
 {
     m_viewpos = QPoint(x, m_viewpos.y());
     repaint();
 }
+*/
 
+/* unused
 void ScrollBox::setViewY(int y)
 {
     m_viewpos = QPoint(m_viewpos.x(), y);
     repaint();
 }
+*/
 
+/* unused
 void ScrollBox::setThumbnail(QPixmap img)
 {
     QPixmap bkPixmap  = img.fromImage(img.toImage().scaled(size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -170,5 +175,6 @@ void ScrollBox::setThumbnail(QPixmap img)
     // Qt3
     //setPaletteBackgroundPixmap(img.fromImage(img.toImage().scaled(size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
 }
+*/
 
 }

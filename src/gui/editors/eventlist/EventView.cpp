@@ -1311,11 +1311,13 @@ EventView::getViewSize()
 }
 */
 
+/* unused
 void
 EventView::setViewSize(QSize s)
 {
     m_eventList->setFixedSize(s);
 }
+*/
 
 void
 EventView::readOptions()

@@ -2666,6 +2666,7 @@ RoseXmlHandler::mapToActualInstrument(InstrumentId oldId)
     return id;
 }
 
+/* unused
 void
 RoseXmlHandler::skipToNextPlayDevice()
 {
@@ -2693,6 +2694,7 @@ RoseXmlHandler::skipToNextPlayDevice()
 
     m_device = nullptr;
 }
+*/
 
 void
 RoseXmlHandler::setMIDIDeviceConnection(QString connection)

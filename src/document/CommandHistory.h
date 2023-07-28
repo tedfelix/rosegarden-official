@@ -79,7 +79,7 @@ public:
     int getUndoLimit() const { return m_undoLimit; }
 
     /// Set the maximum number of items in the undo history.
-    void setUndoLimit(int limit);
+    // unused void setUndoLimit(int limit);
 
     /// Return the maximum number of items in the redo history.
     int getRedoLimit() const { return m_redoLimit; }

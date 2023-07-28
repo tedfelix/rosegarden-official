@@ -47,6 +47,7 @@ SuppressionTarget::slotSuppressionToggled(bool on)
     settings.endGroup();
 }
 
+/* unused
 bool
 DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
 {
@@ -88,6 +89,7 @@ DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
     }
     return false;
 }
+*/
 
 bool
 DialogSuppressor::isSuppressed(QString settingsKey)

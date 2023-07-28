@@ -175,6 +175,7 @@ CommandHistory::redo()
     if ((int)m_undoStack.size() == m_savedAt) emit documentRestored();
 }
 
+/* unused
 void
 CommandHistory::setUndoLimit(int limit)
 {
@@ -183,6 +184,7 @@ CommandHistory::setUndoLimit(int limit)
         clipCommands();
     }
 }
+*/
 
 /* unused
 void

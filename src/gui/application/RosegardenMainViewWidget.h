@@ -175,9 +175,9 @@ public slots:
 
     void slotDeleteTracks(std::vector<TrackId> tracks);
 
-    void slotAddAudioSegmentCurrentPosition(AudioFileId,
-                                            const RealTime &startTime,
-                                            const RealTime &endTime);
+    // unused void slotAddAudioSegmentCurrentPosition(AudioFileId,
+    //                                        const RealTime &startTime,
+    //                                        const RealTime &endTime);
 
     void slotAddAudioSegmentDefaultPosition(AudioFileId,
                                             const RealTime &startTime,

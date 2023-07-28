@@ -129,7 +129,7 @@ protected:
                        const QString& dir);  // dir = play|record
     void setMIDIDeviceConnection(QString connection);
     void setMIDIDeviceName(QString name);
-    void skipToNextPlayDevice();
+    // unused void skipToNextPlayDevice();
     InstrumentId mapToActualInstrument(InstrumentId oldId);
 
     RosegardenDocument    *m_doc;

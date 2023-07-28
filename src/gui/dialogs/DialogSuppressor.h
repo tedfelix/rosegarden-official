@@ -28,7 +28,7 @@ namespace Rosegarden
 class DialogSuppressor
 {
 public:
-    static bool shouldSuppress(QDialog *, QString settingsKey);
+    // unused static bool shouldSuppress(QDialog *, QString settingsKey);
     static bool isSuppressed(QString settingsKey);
 };
 

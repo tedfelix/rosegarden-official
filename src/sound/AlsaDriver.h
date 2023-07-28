@@ -134,7 +134,7 @@ public:
     // Some stuff to help us debug this
     //
     void getSystemInfo();
-    void showQueueStatus(int queue);
+    // unused void showQueueStatus(int queue);
 
     // Process pending
     //

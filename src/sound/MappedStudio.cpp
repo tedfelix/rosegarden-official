@@ -64,6 +64,7 @@ static inline void releaseLock(const char *file, int line)
 //
 // ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 //
+/* unused
 QDataStream& operator>>(QDataStream& s, MappedObjectIdList& v)
 {
     v.clear();
@@ -77,6 +78,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectIdList& v)
     }
     return s;
 }
+*/
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectIdList& v)
 {

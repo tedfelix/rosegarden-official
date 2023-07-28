@@ -1460,6 +1460,7 @@ RosegardenMainViewWidget::slotAddAudioSegment(AudioFileId audioId,
     }
 }
 
+/* unused
 void
 RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFileId,
         const RealTime &startTime,
@@ -1486,6 +1487,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFi
         emit segmentsSelected(selection);
     }
 }
+*/
 
 void
 RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFileId,

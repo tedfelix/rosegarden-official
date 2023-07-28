@@ -302,6 +302,7 @@ AlsaDriver::getSystemInfo()
     m_maxPorts = snd_seq_system_info_get_ports(sysinfo);
 }
 
+/* unused
 void
 AlsaDriver::showQueueStatus(int queue)
 {
@@ -335,7 +336,7 @@ AlsaDriver::showQueueStatus(int queue)
     }
 
 }
-
+*/
 
 void
 AlsaDriver::generateTimerList()
