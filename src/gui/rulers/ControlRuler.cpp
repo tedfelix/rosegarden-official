@@ -984,6 +984,7 @@ long ControlRuler::yToValue(float y)
     return value;
 }
 
+/* unused
 QColor ControlRuler::valueToColour(int max, int val)
 {
     int maxDefault = DefaultVelocityColour::getInstance()->getMaxValue();
@@ -997,6 +998,7 @@ QColor ControlRuler::valueToColour(int max, int val)
 
     return DefaultVelocityColour::getInstance()->getColour(value);
 }
+*/
 
 /* unused
 void ControlRuler::flipForwards()

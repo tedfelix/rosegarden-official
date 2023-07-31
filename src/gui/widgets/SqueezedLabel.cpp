@@ -155,10 +155,12 @@ void SqueezedLabel::setAlignment(Qt::Alignment alignment)
     d->fullText = tmpFull;
 }
 
+/* unused
 Qt::TextElideMode SqueezedLabel::textElideMode() const
 {
     return d->elideMode;
 }
+*/
 
 /* unused
 void SqueezedLabel::setTextElideMode(Qt::TextElideMode mode)

@@ -80,7 +80,7 @@ public:
 
     /// Keep selection in sync with the matrix and notation editors.
     void updateSelection(const std::vector<ViewElement *> &elementList);
-    void updateSelectedItems();
+    // unused void updateSelectedItems();
 
     void setTool(const QString &name) override;
 

@@ -1703,16 +1703,17 @@ RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
     slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);
 }
 
+/* unused
 void
 RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
 {
     RG_DEBUG << "slotSetRecord() - id = " << id << ",value = " << value;
-    /*
+*//*
         // IPB
         //
         m_instrumentParameterBox->setRecord(value);
     */
-#ifdef NOT_DEFINED
+    /* #ifdef NOT_DEFINED
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
     Composition::trackcontainer &tracks = comp.getTracks();
     Composition::trackiterator it;
@@ -1727,7 +1728,9 @@ RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
     // Studio &studio = RosegardenDocument::currentDocument->getStudio();
     // Instrument *instr = studio.getInstrumentById(id);
 }
+*/
 
+/* unused
 void
 RosegardenMainViewWidget::slotSetSolo(InstrumentId id, bool value)
 {
@@ -1735,7 +1738,9 @@ RosegardenMainViewWidget::slotSetSolo(InstrumentId id, bool value)
 
     emit toggleSolo(value);
 }
+*/
 
+/* unused
 void
 RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
         timeT )
@@ -1764,6 +1769,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
 
     createNotationView(segments);
 }
+*/
 
 void
 RosegardenMainViewWidget::slotSynchroniseWithComposition()

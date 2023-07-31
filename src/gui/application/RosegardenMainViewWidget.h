@@ -204,17 +204,17 @@ public slots:
 //    void slotChangeTrackLabel(TrackId id, QString label);
 
     /// Set the record state for an instrument.
-    void slotSetRecord(InstrumentId, bool);
+    // unused void slotSetRecord(InstrumentId, bool);
 
     /// Set the solo state for an instrument.
-    void slotSetSolo(InstrumentId, bool);
+    // unused void slotSetSolo(InstrumentId, bool);
 
     /**
      * To indicate that we should track the recording segment (despite
      * no commands being issued on it)
      */
-    void slotUpdateRecordingSegment(Segment *segment,
-                                    timeT updatedFrom);
+    // unused void slotUpdateRecordingSegment(Segment *segment,
+    //                      timeT updatedFrom);
 
     /**
      * A manual fudgy way of creating a view update for certain

@@ -470,9 +470,11 @@ MatrixSelector::slotHideSelection()
 }
 */
 
+/* unused
 void
-MatrixSelector::slotMatrixScrolled(int /* newX */, int /* newY */)
+MatrixSelector::slotMatrixScrolled(int , int)
 {
+*/
 /*!!!
     if (m_updateRect) {
 
@@ -497,7 +499,7 @@ MatrixSelector::slotMatrixScrolled(int /* newX */, int /* newY */)
         m_widget->canvas()->update();
     }
 */
-}
+//}
 
 void
 MatrixSelector::setViewCurrentSelection(bool always)

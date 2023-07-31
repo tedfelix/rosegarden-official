@@ -505,23 +505,26 @@ DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::s
     return id;
 }
 
+/* unused
 void DataBlockRepository::unregisterDataBlock(DataBlockRepository::blockid id)
 {
     DataBlockFile dataBlockFile(id);
 
     dataBlockFile.clear();
 }
+*/
 
 void DataBlockRepository::registerDataBlockForEvent(const std::string& s, MappedEvent* e)
 {
     e->setDataBlockId(registerDataBlock(s));
 }
 
+/* unused
 void DataBlockRepository::unregisterDataBlockForEvent(MappedEvent* e)
 {
     unregisterDataBlock(e->getDataBlockId());
 }
-
+*/
 
 DataBlockRepository::DataBlockRepository()
 {}

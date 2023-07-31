@@ -115,7 +115,7 @@ protected:
      * Make a widget visible depending on the state of a
      * (toggle) QAction
      */
-    virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
+    // unused virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
 
     void paintEvent(QPaintEvent* e) override;
 

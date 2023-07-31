@@ -6139,11 +6139,13 @@ RosegardenMainWindow::slotResetDocConfigDlg()
     m_docConfigDlg = nullptr;
 }
 
+/* unused
 void
 RosegardenMainWindow::slotUpdateToolbars()
 {
     findAction("show_stock_toolbar")->setChecked(!(findToolbar("Main Toolbar")->isHidden()));
 }
+*/
 
 void
 RosegardenMainWindow::slotEditTempo()
@@ -8196,12 +8198,14 @@ RosegardenMainWindow::slotUpdateAutoSaveInterval(unsigned int interval)
     m_autoSaveTimer->setInterval(int(interval) * 1000);
 }
 
+/* unused
 void
 RosegardenMainWindow::slotShowTip()
 {
     RG_DEBUG << "slotShowTip";
 //    KTipDialog::showTip(this, locate("data", "rosegarden/tips"), true); //&&& showTip dialog deactivated.
 }
+*/
 
 void RosegardenMainWindow::slotShowToolHelp(const QString &s)
 {

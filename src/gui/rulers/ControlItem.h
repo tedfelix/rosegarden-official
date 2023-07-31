@@ -71,7 +71,7 @@ public:
     bool isSelected() { return m_selected; }
     //    virtual void setHighlighted(bool yes) { m_highlighted=yes; update(); }
     /// recompute height according to represented value prior to a canvas repaint
-    virtual void updateFromValue();
+    // unused virtual void updateFromValue();
 
     /// update value according to height after a user edit
     virtual void updateSegment();

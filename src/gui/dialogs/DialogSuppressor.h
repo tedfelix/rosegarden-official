@@ -39,7 +39,7 @@ public:
     explicit SuppressionTarget(const QString& key) : m_key(key) { }
 
 public slots:
-    void slotSuppressionToggled(bool);
+    // unused void slotSuppressionToggled(bool);
 
 private:
     QString m_key;

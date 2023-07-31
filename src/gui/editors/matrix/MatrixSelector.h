@@ -84,7 +84,7 @@ public slots:
     void handleEventRemoved(Event *event) override;
 
 protected slots:
-    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
+    // unused void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
 
 signals:
     void gotSelection(); // inform that we've got a new selection

@@ -60,9 +60,11 @@ void ControlItem::updateSegment()
 {
 }
 
+/* unused
 void ControlItem::updateFromValue()
 {
 }
+*/
 
 void ControlItem::draw(QPainter &/* painter */)
 {

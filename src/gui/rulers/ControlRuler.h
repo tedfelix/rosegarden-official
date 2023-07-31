@@ -207,7 +207,7 @@ protected:
     QRect mapRectToWidget(QRectF *);
     QPolygon mapItemToWidget(QSharedPointer<ControlItem>);
     QPointF mapWidgetToItem(QPoint*);
-    QColor valueToColour(int max, int val);
+    // unused QColor valueToColour(int max, int val);
     void updateSelection();
     virtual void createRulerMenu();
 

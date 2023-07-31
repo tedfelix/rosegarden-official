@@ -44,7 +44,6 @@ class SqueezedLabel : public QLabel
 {
     Q_OBJECT
     //Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode)
-    Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode)
 
 public:
     /**
@@ -65,7 +64,7 @@ public:
     /**
     *  Returns the text elide mode.
     */
-    Qt::TextElideMode textElideMode() const;
+    // unused Qt::TextElideMode textElideMode() const;
 
     /**
     * Sets the text elide mode.

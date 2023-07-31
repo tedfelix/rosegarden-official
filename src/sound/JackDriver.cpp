@@ -2263,6 +2263,7 @@ JackDriver::getAudioQueueLocks()
 }
 */
 
+/* unused
 int
 JackDriver::tryAudioQueueLocks()
 {
@@ -2307,6 +2308,7 @@ JackDriver::tryAudioQueueLocks()
     }
     return rv;
 }
+*/
 
 /* unused
 int

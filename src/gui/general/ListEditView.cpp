@@ -293,6 +293,7 @@ void ListEditView::setCompositionModified(bool c)
     (m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 
+/* unused
 void ListEditView::toggleWidget(QWidget* widget,
                                 const QString& toggleActionName)
 {
@@ -305,5 +306,6 @@ void ListEditView::toggleWidget(QWidget* widget,
 
     widget->setVisible(toggleAction->isChecked());
 }
+*/
 
 }

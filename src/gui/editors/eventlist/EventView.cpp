@@ -852,6 +852,7 @@ EventView::slotEditTriggerVelocity()
     }
 }
 
+/* unused
 void
 EventView::slotTriggerTimeAdjustChanged(int option)
 {
@@ -884,7 +885,9 @@ EventView::slotTriggerTimeAdjustChanged(int option)
     addCommandToHistory(new SetTriggerSegmentDefaultTimeAdjustCommand
                         (&RosegardenDocument::currentDocument->getComposition(), id, adjust));
 }
+*/
 
+/* unused
 void
 EventView::slotTriggerRetuneChanged()
 {
@@ -896,6 +899,7 @@ EventView::slotTriggerRetuneChanged()
     addCommandToHistory(new SetTriggerSegmentDefaultRetuneCommand
                         (&RosegardenDocument::currentDocument->getComposition(), id, !rec->getDefaultRetune()));
 }
+*/
 
 void
 EventView::slotEditCut()

@@ -1233,7 +1233,7 @@ public slots:
     /**
      * Display tip-of-day dialog on demand
      */
-    void slotShowTip();
+    // unused void slotShowTip();
 
     void slotSelectPreviousTrack();
     void slotSelectNextTrack();
@@ -1256,7 +1256,7 @@ public slots:
     /**
      * Update the toolbars after edition
      */
-    void slotUpdateToolbars();
+    // unused void slotUpdateToolbars();
 
     /**
      * Zoom slider moved

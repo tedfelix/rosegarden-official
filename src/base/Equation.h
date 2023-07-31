@@ -36,8 +36,8 @@ public:
     static void solve(Unknown u, double &y, double &m, double &x, double &c);
     static void solve(Unknown u, int &y, double &m, int &x, int &c);
 
-    static void solveForYByEndPoints(Point a, Point b, double x, double &y);
-    static void solveForYByEndPoints(Point a, Point b, int x, int &y);
+    // unused static void solveForYByEndPoints(Point a, Point b, double x, double &y);
+    // unused static void solveForYByEndPoints(Point a, Point b, int x, int &y);
 };
 
 }

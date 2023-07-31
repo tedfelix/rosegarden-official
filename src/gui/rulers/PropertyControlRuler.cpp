@@ -267,6 +267,7 @@ void PropertyControlRuler::updateSelection(
     update();
 }
 
+/* unused
 void PropertyControlRuler::updateSelectedItems()
 {
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
@@ -275,6 +276,7 @@ void PropertyControlRuler::updateSelectedItems()
 
     update();
 }
+*/
 
 //void PropertyControlRuler::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
 //{

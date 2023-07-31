@@ -31,6 +31,7 @@
 namespace Rosegarden
 {
 
+/* unused
 void
 SuppressionTarget::slotSuppressionToggled(bool on)
 {
@@ -46,6 +47,7 @@ SuppressionTarget::slotSuppressionToggled(bool on)
     settings.setValue(m_key, on);
     settings.endGroup();
 }
+*/
 
 /* unused
 bool

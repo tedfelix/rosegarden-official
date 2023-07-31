@@ -31,8 +31,8 @@ class MatrixViewSegment;
 class MatrixElement;
 class Event;
 
-
-class MatrixPainter : public MatrixTool
+// cppcheck-suppress noConstructor
+ class MatrixPainter : public MatrixTool
 {
     Q_OBJECT
 
