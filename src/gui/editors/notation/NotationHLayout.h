@@ -149,7 +149,7 @@ public:
      * property of the returned list is that 0, 100, and whatever the
      * default proportion is will be in it.
      */
-    static std::vector<int> getAvailableProportions();
+    // unused static std::vector<int> getAvailableProportions();
 
     /**
      * Returns the total length of all elements once layout is done
@@ -320,24 +320,25 @@ protected:
      */
     struct TrackTimeSig
     {
-        TrackId trackId;
-        TimeSignature timeSignature;
-
         TrackTimeSig(const TrackId & track,
                      const TimeSignature & timeSig) :
-        trackId(track),
-        timeSignature(timeSig)
+            trackId(track),
+            timeSignature(timeSig)
         {
         }
 
         bool operator<(const TrackTimeSig &tts) const {
-            // We need this operator to use TrackTimeSig as key of a map.
+            // We need this operator to use TrackTimeSig as key of a std::map.
             if (trackId == tts.trackId) {
                 return timeSignature < tts.timeSignature;
             } else {
                 return trackId < tts.trackId;
             }
         }
+
+        TrackId trackId;
+        TimeSignature timeSignature;
+
     };
 
 
@@ -416,12 +417,12 @@ protected:
      const ::Rosegarden::Key &key, const NotationElementList::iterator &);
 
     /// Difference between absolute time of next event and of this
-    timeT getSpacingDuration
-    (ViewSegment &staff, const NotationElementList::iterator &);
+    // unused timeT getSpacingDuration
+    //(ViewSegment &staff, const NotationElementList::iterator &);
 
     /// Difference between absolute time of chord and of first event not in it
-    timeT getSpacingDuration
-    (ViewSegment &staff, const NotationChord &);
+    // unused timeT getSpacingDuration
+    //(ViewSegment &staff, const NotationChord &);
 
     float getLayoutWidth(ViewElement &,
                          NotePixmapFactory *,

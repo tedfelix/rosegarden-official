@@ -221,6 +221,7 @@ public:
     std::string getType() const
     {
         if (!m_data) {
+            // cppcheck-suppress ConfigurationNotChecked
             RG_DEBUG << "Event::getType(): FATAL: m_data == nullptr.  Crash likely.";
             return "";
         }
@@ -553,6 +554,7 @@ Event::get(const PropertyName &name,
         return true;
     } else {
 #ifndef NDEBUG
+        // cppcheck-suppress ConfigurationNotChecked
         RG_DEBUG << "get() Error: Attempt to get property \"" << name.getName() << "\" as" << PropertyDefn<P>::typeName() <<", actual type is" << sb->getTypeName();
 #endif
         return false;
@@ -585,7 +587,9 @@ Event::get(const PropertyName &name) const
     } else {
 
 #ifndef NDEBUG
+        // cppcheck-suppress ConfigurationNotChecked
         RG_DEBUG << "Event::get(): Property" << name.getName().c_str() << "not found for Event:";
+        // cppcheck-suppress ConfigurationNotChecked
         RG_DEBUG << *this;
 #endif
         throw NoData(name.getName(), __FILE__, __LINE__);

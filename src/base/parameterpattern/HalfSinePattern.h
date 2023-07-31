@@ -40,9 +40,6 @@ public:
         LinearParameterPattern(isDiminuendo)
     {}
 
-    static HalfSinePattern crescendo;
-    static HalfSinePattern diminuendo;
-
 };
 
 }

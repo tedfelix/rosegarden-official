@@ -249,6 +249,7 @@ bool ChordMap::saveDocument(
 }
 
 void
+// cppcheck-suppress unusedFunction
 ChordMap::debugDump() const
 {
     RG_DEBUG << "ChordMap::debugDump()";

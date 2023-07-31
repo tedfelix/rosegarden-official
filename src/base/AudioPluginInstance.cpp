@@ -33,16 +33,16 @@ namespace Rosegarden
 //
 
 PluginPort::PluginPort(int number,
-                       std::string name,
+                       const std::string& name,
                        PluginPort::PortType type,
-                       PluginPort::PortDisplayHint hint,
+                       PluginPort::PortDisplayHint displayHint,
                        PortData lowerBound,
                        PortData upperBound,
 		       PortData defaultValue):
     m_number(number),
     m_name(name),
     m_type(type),
-    m_displayHint(hint),
+    m_displayHint(displayHint),
     m_lowerBound(lowerBound),
     m_upperBound(upperBound),
     m_default(defaultValue)
@@ -59,12 +59,13 @@ AudioPluginInstance::AudioPluginInstance(unsigned int position):
 {
 }
 
-AudioPluginInstance::AudioPluginInstance(std::string identifier,
+AudioPluginInstance::AudioPluginInstance(const std::string& identifier,
                                          unsigned int position):
                 m_mappedId(-1),
                 m_identifier(identifier),
                 m_position(position),
-                m_assigned(true)
+                m_assigned(true),
+                m_bypass(false)
 {
 }
 
@@ -190,7 +191,7 @@ AudioPluginInstance::getConfigurationValue(std::string k) const
 }
 
 void
-AudioPluginInstance::setProgram(std::string program)
+AudioPluginInstance::setProgram(const std::string& program)
 {
     m_program = program;
 
@@ -201,7 +202,8 @@ AudioPluginInstance::setProgram(std::string program)
 }
 
 void
-AudioPluginInstance::setConfigurationValue(std::string k, std::string v)
+AudioPluginInstance::setConfigurationValue(const std::string& k,
+                                           const std::string& v)
 {
     m_config[k] = v;
 }

@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -58,12 +58,12 @@ SoundDriver::~SoundDriver()
 }
 
 void
-SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
+SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
 {
     AudioPlayQueue *newQueue = new AudioPlayQueue();
 
-    for (std::vector<MappedEvent>::const_iterator i = events.begin();
-            i != events.end(); ++i) {
+    for (std::vector<MappedEvent>::const_iterator i = audioEvents.begin();
+            i != audioEvents.end(); ++i) {
 
         // Check for existence of file - if the sequencer has died
         // and been restarted then we're not always loaded up with
@@ -304,4 +304,3 @@ SoundDriver::sleep(const RealTime &rt)
 
 
 }
-

@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -145,6 +145,7 @@ BWFAudioFile::parseHeader()
 }
 
 std::streampos
+// cppcheck-suppress unusedFunction
 BWFAudioFile::getDataOffset()
 {
     return 0;

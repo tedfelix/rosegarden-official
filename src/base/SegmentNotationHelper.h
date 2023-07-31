@@ -18,6 +18,7 @@
 #define RG_SEGMENT_NOTATION_HELPER_H
 
 #include "base/Segment.h"
+#include "base/TimeSignature.h"
 
 namespace Rosegarden
 {
@@ -156,7 +157,7 @@ public:
      * Untested and probably marked-for-expiry -- prefer
      * SegmentPerformanceHelper::getTiedNotes
      */
-    iterator getNoteTiedWith(Event *note, bool forwards);
+    // unused iterator getNoteTiedWith(Event *note, bool forwards);
 
 
     /**

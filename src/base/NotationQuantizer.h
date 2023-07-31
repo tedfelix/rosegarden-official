@@ -41,7 +41,7 @@ public:
      * an active pull away from them.  Default is 13.
      */
     void setSimplicityFactor(int);
-    int  getSimplicityFactor() const;
+    // unused int  getSimplicityFactor() const;
 
     /**
      * Set the maximum size of tuplet group.  2 = two-in-the-time-of-three
@@ -49,7 +49,7 @@ public:
      * tuplets altogether.
      */
     void setMaxTuplet(int);
-    int  getMaxTuplet() const;
+    // unused int  getMaxTuplet() const;
 
     /**
      * Set whether we assume the music may be contrapuntal -- that is,
@@ -57,7 +57,7 @@ public:
      * individual notes and chords.
      */
     void setContrapuntal(bool);
-    bool getContrapuntal() const;
+    // unused bool getContrapuntal() const;
 
     /**
      * Set whether to add articulations (staccato, tenuto, slurs).
@@ -65,7 +65,7 @@ public:
      * that are added to quantized notes.
      */
     void setArticulate(bool);
-    bool getArticulate() const;
+    // unused bool getArticulate() const;
 
 protected:
     void quantizeRange(Segment *,

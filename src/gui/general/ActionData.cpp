@@ -120,15 +120,6 @@ void ActionData::setUserShortcuts(const QString& key,
     updateModel(key);
 }
 
-void ActionData::addUserShortcut(const QString& key,
-                                 const QKeySequence& ks)
-{
-    RG_DEBUG << "add shortcut" << ks << "to" << key;
-    std::set<QKeySequence> ksSet = getShortcuts(key);
-    ksSet.insert(ks);
-    setUserShortcuts(key, ksSet);
-}
-
 void ActionData::removeUserShortcut(const QString& key,
                                     const QKeySequence& ks)
 {

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -20,7 +20,8 @@ namespace Rosegarden {
 
 class ResamplerImpl;
 
-class Resampler
+// cppcheck-suppress noCopyConstructor
+ class Resampler
 {
 public:
     enum Quality { Best, FastestTolerable, Fastest };

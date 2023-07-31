@@ -4,7 +4,7 @@
   Rosegarden
   A sequencer and musical notation editor.
   Copyright 2000-2023 the Rosegarden development team.
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -592,6 +592,7 @@ PeakFile::writePeaks(std::ofstream *file)
                 } else if (bytes == 4)  // IEEE float (enforced by RIFFAudioFile)
                 {
                     // write out as 16-bit (m_format == 2)
+                    // cppcheck-suppress invalidPointerCast
                     float val = *(float *)samplePtr;
                     sampleValue = (int)(32767.0 * val);
                     samplePtr += 4;
@@ -922,9 +923,9 @@ PeakFile::getPeak(const RealTime &time)
 }
 
 RealTime
-PeakFile::getTime(int peak)
+PeakFile::getTime(int block)
 {
-    int usecs = int((double)peak * (double)m_blockSize *
+    int usecs = int((double)block * (double)m_blockSize *
                     double(1000000.0) / double(m_audioFile->getSampleRate()));
     return RealTime(usecs / 1000000, (usecs % 1000000) * 1000);
 }
@@ -960,14 +961,13 @@ PeakFile::getSplitPoints(const RealTime &startTime,
         return points;
     }
 
-    float value;
     float fThreshold = float(threshold) / 100.0;
     bool belowThreshold = true;
     RealTime startSplit;
     bool inSplit = false;
 
     for (int i = startPeak; i < endPeak; i++) {
-        value = 0.0;
+        float value = 0.0;
 
         for (int ch = 0; ch < m_channels; ch++) {
             try {
@@ -1017,5 +1017,3 @@ PeakFile::getSplitPoints(const RealTime &startTime,
 
 
 }
-
-

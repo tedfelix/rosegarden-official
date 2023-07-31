@@ -409,7 +409,7 @@ protected:
     //void readGlobalProperties();
 ///////////////////////////////////////////////////////////////////////
 
-    QString getAudioFilePath();
+    // unused QString getAudioFilePath();
 
     /**
      * Show a sequencer error to the user.  This is for errors from

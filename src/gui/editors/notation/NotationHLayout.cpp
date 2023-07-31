@@ -113,6 +113,7 @@ NotationHLayout::getAvailableSpacings()
     return m_availableSpacings;
 }
 
+/* unused
 std::vector<int>
 NotationHLayout::getAvailableProportions()
 {
@@ -126,6 +127,7 @@ NotationHLayout::getAvailableProportions()
     }
     return m_availableProportions;
 }
+*/
 
 NotationHLayout::BarDataList &
 NotationHLayout::getBarData(ViewSegment &staff)
@@ -1716,6 +1718,7 @@ NotationHLayout::sampleGroupElement(ViewSegment &staff,
     }
 }
 
+/* unused
 timeT
 NotationHLayout::getSpacingDuration(ViewSegment &staff,
                                     const NotationElementList::iterator &i)
@@ -1737,7 +1740,9 @@ NotationHLayout::getSpacingDuration(ViewSegment &staff,
         return (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
     }
 }
+*/
 
+/* unused
 timeT
 NotationHLayout::getSpacingDuration(ViewSegment &staff,
                                     const NotationChord &chord)
@@ -1759,6 +1764,7 @@ NotationHLayout::getSpacingDuration(ViewSegment &staff,
 
     return d;
 }
+*/
 
 void
 NotationHLayout::positionChord(ViewSegment &staff,

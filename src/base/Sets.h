@@ -47,7 +47,7 @@ class Quantizer;
  * an iterator into that container.  Derived classes must call
  * initialise().  It has to be done this way otherwise the expected
  * virtual functions wouldn't get called.
- * 
+ *
  * The initialise() method scans the surrounding area of the list for
  * the maximal set of contiguous or within-the-same-bar elements
  * before and after the passed-in iterator such that all elements are
@@ -373,7 +373,7 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
     const Quantizer &q(getQuantizer());
     Event *e = AbstractSet::getAsEvent(i);
     timeT d(q.getQuantizedDuration(e));
-    
+
     if (e->isa(Note::EventType) || d > 0) {
         if (m_longest == getContainer().end() ||
             d > q.getQuantizedDuration(AbstractSet::getAsEvent(m_longest))) {
@@ -407,7 +407,7 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
 
 
 //////////////////////////////////////////////////////////////////////
- 
+
 template <class Element, class Container, bool singleStaff>
 GenericChord<Element, Container, singleStaff>::GenericChord(Container &c,
                                                             Iterator i,
@@ -493,7 +493,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
         // explicitly in different groups, or have stems pointing in
         // different directions by design, or have substantially
         // different x displacements, count as separate chords.
-        
+
         // Per #930473 ("Inserting notes into beamed chords is
         // broken"), if one note is in a group and the other isn't,
         // that's no problem.  In fact we should actually modify the
@@ -639,7 +639,7 @@ GenericChord<Element, Container, singleStaff>::getPitches() const
         if (GenericChord::getAsEvent(*i)->has(BaseProperties::PITCH)) {
             int pitch = get__Int
                 (GenericChord::getAsEvent(*i), BaseProperties::PITCH);
-            if (pitches.size() > 0 && pitches[pitches.size()-1] == pitch) 
+            if (pitches.size() > 0 && pitches[pitches.size()-1] == pitch)
                 continue;
             pitches.push_back(pitch);
         }
@@ -699,8 +699,8 @@ GenericChord<Element, Container, singleStaff>::getFirstElementNotInChord()
     return m_firstReject;
 }
 
-        
-template <class Element, class Container, bool singleStaff>     
+
+template <class Element, class Container, bool singleStaff>
 bool
 GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const Iterator &a,
                                                            const Iterator &b)
@@ -710,6 +710,7 @@ GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const It
         long bp = get__Int(GenericChord::getAsEvent(b), BaseProperties::PITCH);
         return (ap < bp);
     } catch (const Event::NoData &) {
+        // cppcheck-suppress ConfigurationNotChecked
         RG_WARNING << "Bad karma: PitchGreater failed to find one or both pitches";
         return false;
     }
@@ -720,4 +721,3 @@ GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const It
 
 
 #endif
-

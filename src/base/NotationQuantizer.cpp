@@ -179,11 +179,13 @@ NotationQuantizer::setMaxTuplet(int m)
     m_impl->m_maxTuplet = m;
 }
 
+/* unused
 int
 NotationQuantizer::getMaxTuplet() const
 {
     return m_impl->m_maxTuplet;
 }
+*/
 
 void
 NotationQuantizer::setSimplicityFactor(int s)
@@ -191,11 +193,13 @@ NotationQuantizer::setSimplicityFactor(int s)
     m_impl->m_simplicityFactor = s;
 }
 
+/* unused
 int
 NotationQuantizer::getSimplicityFactor() const
 {
     return m_impl->m_simplicityFactor;
 }
+*/
 
 void
 NotationQuantizer::setContrapuntal(bool c)
@@ -203,11 +207,13 @@ NotationQuantizer::setContrapuntal(bool c)
     m_impl->m_contrapuntal = c;
 }
 
+/* unused
 bool
 NotationQuantizer::getContrapuntal() const
 {
     return m_impl->m_contrapuntal;
 }
+*/
 
 void
 NotationQuantizer::setArticulate(bool a)
@@ -215,11 +221,13 @@ NotationQuantizer::setArticulate(bool a)
     m_impl->m_articulate = a;
 }
 
+/* unused
 bool
 NotationQuantizer::getArticulate() const
 {
     return m_impl->m_articulate;
 }
+*/
 
 void
 NotationQuantizer::Impl::setProvisional(Event *e, ValueType v, timeT t) const

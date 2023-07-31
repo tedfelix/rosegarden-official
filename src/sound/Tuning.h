@@ -58,7 +58,7 @@ namespace Accidentals {
  */
 class Tuning {
 
- public: 
+ public:
 
   /**
    * \brief Construct a tuning from its name, and interval and spellings.
@@ -68,10 +68,10 @@ class Tuning {
    * \param spellings List of spellings (enharmonic equivalents) for each pitch
    *        Spellings which do not have associated intervals will be deleted.
    */
-  Tuning(const std::string name,
-         const IntervalList *intervals, 
+  Tuning(const std::string& name,
+         const IntervalList *intervals,
 	 SpellingList *spellings);
-  Tuning(const Tuning *tuning);
+  explicit Tuning(const Tuning *tuning);
 
   /**
    * \brief Access the vector of tunings known to the system
@@ -112,7 +112,7 @@ class Tuning {
  protected:
 
   /** Converts pitch to string */
-  std::string getSpelling(Rosegarden::Pitch &pitch) const;
+  static std::string getSpelling(Rosegarden::Pitch &pitch);
   /** An interval in Scala can be represented as a ratio <int>/<int>
       or as a number of cents (must contain a "."). Convert such a
       represntation to a (double)number of cents */
@@ -144,7 +144,7 @@ class Tuning {
   static const unsigned int accMapSize;
   static const AccMap::value_type accMapData[];
   static std::vector<Tuning*> m_tunings;
-  
+
 };
 
 } // end of namespace Accidentals

@@ -123,7 +123,7 @@ public:
 
     void setSnap(timeT);
 
-    bool constrainToSegmentArea(QPointF &scenePos);
+    // unused bool constrainToSegmentArea(QPointF &scenePos);
 
     void playNote(Segment &segment, int pitch, int velocity = -1);
 

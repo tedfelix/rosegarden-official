@@ -126,10 +126,12 @@ public:
      * The code from the KGuitar project was modified to display a bar. This feature was not
      * available in that project
      */
+    /* unused
     void drawBarreSymbol ( QPainter* p,
                            int fretNb,
                            unsigned int start,
                            unsigned int end ) const;
+    */
 
     void drawFretNumber ( QPainter* p,
                           unsigned int fret_num ) const;
@@ -140,11 +142,11 @@ public:
 
     static unsigned int getTopBorder ( unsigned int imgHeight );
 
-    static unsigned int getBottomBorder ( unsigned int imgHeight );
+    // unused static unsigned int getBottomBorder ( unsigned int imgHeight );
 
     static unsigned int getLeftBorder ( unsigned int imgWidth );
 
-    static unsigned int getRightBorder ( unsigned int imgWidth );
+    // unused static unsigned int getRightBorder ( unsigned int imgWidth );
 
     static unsigned int getGuitarChordWidth ( int imgWidth );
 

@@ -2211,7 +2211,7 @@ JackDriver::getNextSliceStart(const RealTime &now) const
     return roundrt;
 }
 
-
+/* unused
 int
 JackDriver::getAudioQueueLocks()
 {
@@ -2261,6 +2261,7 @@ JackDriver::getAudioQueueLocks()
 
     return rv;
 }
+*/
 
 int
 JackDriver::tryAudioQueueLocks()

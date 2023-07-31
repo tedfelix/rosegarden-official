@@ -63,6 +63,7 @@ namespace Accidentals
     const Accidental QuarterSharp = "demisharp";
     const Accidental ThreeQuarterSharp = "sesquisharp";
 
+    /* unused
     ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals() {
 
         static Accidental a[] = {
@@ -76,12 +77,13 @@ namespace Accidentals
         }
         return v;
     }
+    */
 
-    ROSEGARDENPRIVATE_EXPORT int getPitchOffset(const Accidental &acc) {
-        if (acc == DoubleSharp) return 2;
-        else if (acc == Sharp) return 1;
-        else if (acc == Flat) return -1;
-        else if (acc == DoubleFlat) return -2;
+    ROSEGARDENPRIVATE_EXPORT int getPitchOffset(const Accidental &accidental) {
+        if (accidental == DoubleSharp) return 2;
+        else if (accidental == Sharp) return 1;
+        else if (accidental == Flat) return -1;
+        else if (accidental == DoubleFlat) return -2;
         else return 0;
     }
 
@@ -161,11 +163,13 @@ namespace Marks
         else return string(mark).substr(7);
     }
 
+    /* unused
     ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e) {
         long markCount = 0;
         e.get<Int>(BaseProperties::MARK_COUNT, markCount);
         return markCount;
     }
+    */
 
     // Marks are stored as properties named "mark1", "mark2", etc....
     // This makes working with them a bit convoluted.
@@ -613,10 +617,10 @@ Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
     return NoAccidental;
 }
 
-Accidental Key::getAccidentalForStep(int step) const
+Accidental Key::getAccidentalForStep(int steps) const
 {
     if (isMinor()) {
-        step = (step + 5) % 7;
+        steps = (steps + 5) % 7;
     }
 
     int accidentalCount = getAccidentalCount();
@@ -630,7 +634,7 @@ Accidental Key::getAccidentalForStep(int step) const
     int currentAccidentalPosition = sharp ? 6 : 3;
 
     for (int i = 1; i <= accidentalCount; i++) {
-        if (step == currentAccidentalPosition) {
+        if (steps == currentAccidentalPosition) {
             return sharp ? Sharp : Flat;
         }
 
@@ -741,7 +745,8 @@ Key::KeyDetails::KeyDetails()
 }
 
 Key::KeyDetails::KeyDetails(bool sharps, bool minor, int sharpCount,
-                            std::string equivalence, std::string rg2name,
+                            const std::string& equivalence,
+                            const std::string& rg2name,
                             int tonicPitch)
     : m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
       m_equivalence(equivalence), m_rg2name(rg2name), m_tonicPitch(tonicPitch)
@@ -838,7 +843,7 @@ Indication::getAsEvent(timeT absoluteTime) const
 }
 
 bool
-Indication::isValid(const std::string &s) const
+Indication::isValid(const std::string &s)
 {
     return
         (s == Slur || s == PhrasingSlur ||
@@ -909,9 +914,9 @@ Text::Text(const Event &e) :
     e.get<Int>(LyricVersePropertyName, m_verse);
 }
 
-Text::Text(const std::string &s, const std::string &type) :
-    m_text(s),
-    m_type(type),
+Text::Text(const std::string &text, const std::string &textType) :
+    m_text(text),
+    m_type(textType),
     m_verse(0)
 {
     // nothing else
@@ -942,7 +947,7 @@ Text::~Text()
 }
 
 bool
-Text::isTextOfType(Event *e, std::string type)
+Text::isTextOfType(Event *e, const std::string& type)
 {
     return (e->isa(EventType) &&
             e->has(TextTypePropertyName) &&
@@ -1632,6 +1637,7 @@ Pitch::Pitch(int noteInCMajor, int octave, int pitch,
     m_pitch(pitch)
 {
     int natural = (octave - octaveBase) * 12 + scale_Cmajor[noteInCMajor];
+    // cppcheck-suppress useInitializationList
     m_accidental = Accidentals::getAccidental(pitch - natural);
 }
 
@@ -1768,7 +1774,7 @@ Pitch::getOctave(int octaveBase) const
 }
 
 int
-Pitch::getOctaveAccidental(int octaveBase, Accidental acc) const
+Pitch::getOctaveAccidental(int octaveBase, const Accidental& acc) const
 {
     int t_pitch = m_pitch;
     if (acc == Accidentals::DoubleFlat) {
@@ -1863,7 +1869,7 @@ Pitch::getPerformancePitchFromRG21Pitch(int heightOnStaff,
     return p;
 }
 
-Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta)
+Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta) const
 {
     // get old accidental
     Accidental oldAccidental = getAccidental(key);
@@ -1974,351 +1980,6 @@ Event *Note::getAsRestEvent(timeT absoluteTime) const
 
 
 //////////////////////////////////////////////////////////////////////
-// TimeSignature
-//////////////////////////////////////////////////////////////////////
-
-const string TimeSignature::EventType = "timesignature";
-const int TimeSignature::EventSubOrdering = -150;
-const PropertyName TimeSignature::NumeratorPropertyName("numerator");
-const PropertyName TimeSignature::DenominatorPropertyName("denominator");
-const PropertyName TimeSignature::ShowAsCommonTimePropertyName("common");
-const PropertyName TimeSignature::IsHiddenPropertyName("hidden");
-const PropertyName TimeSignature::HasHiddenBarsPropertyName("hiddenbars");
-const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
-
-TimeSignature::TimeSignature(int numerator, int denominator,
-                             bool preferCommon, bool hidden, bool hiddenBars)
-    // throw (BadTimeSignature)
-    : m_numerator(numerator), m_denominator(denominator),
-      m_common(preferCommon &&
-               (m_denominator == m_numerator &&
-                (m_numerator == 2 || m_numerator == 4))),
-      m_hidden(hidden),
-      m_hiddenBars(hiddenBars)
-{
-    if (numerator < 1 || denominator < 1) {
-        throw BadTimeSignature("Numerator and denominator must be positive");
-    }
-}
-
-TimeSignature::TimeSignature(const Event &e)
-    // throw (Event::NoData, Event::BadType, BadTimeSignature)
-{
-    if (e.getType() != EventType) {
-        throw Event::BadType("TimeSignature model event", EventType, e.getType());
-    }
-    m_numerator = 4;
-    m_denominator = 4;
-
-    if (e.has(NumeratorPropertyName)) {
-        m_numerator = e.get<Int>(NumeratorPropertyName);
-    }
-
-    if (e.has(DenominatorPropertyName)) {
-        m_denominator = e.get<Int>(DenominatorPropertyName);
-    }
-
-    m_common = false;
-    e.get<Bool>(ShowAsCommonTimePropertyName, m_common);
-
-    m_hidden = false;
-    e.get<Bool>(IsHiddenPropertyName, m_hidden);
-
-    m_hiddenBars = false;
-    e.get<Bool>(HasHiddenBarsPropertyName, m_hiddenBars);
-
-    if (m_numerator < 1 || m_denominator < 1) {
-        throw BadTimeSignature("Numerator and denominator must be positive");
-    }
-}
-
-TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
-{
-    if (&ts == this) return *this;
-    m_numerator = ts.m_numerator;
-    m_denominator = ts.m_denominator;
-    m_common = ts.m_common;
-    m_hidden = ts.m_hidden;
-    m_hiddenBars = ts.m_hiddenBars;
-    return *this;
-}
-
-timeT TimeSignature::getBarDuration() const
-{
-    setInternalDurations();
-    return m_barDuration;
-}
-
-timeT TimeSignature::getBeatDuration() const
-{
-    setInternalDurations();
-    return m_beatDuration;
-}
-
-timeT TimeSignature::getUnitDuration() const
-{
-    return m_crotchetTime * 4 / m_denominator;
-}
-
-Note::Type TimeSignature::getUnit() const
-{
-    int c, d;
-    for (c = 0, d = m_denominator; d > 1; d /= 2) ++c;
-    return Note::Semibreve - c;
-}
-
-bool TimeSignature::isDotted() const
-{
-    setInternalDurations();
-    return m_dotted;
-}
-
-Event *TimeSignature::getAsEvent(timeT absoluteTime) const
-{
-    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<Int>(NumeratorPropertyName, m_numerator);
-    e->set<Int>(DenominatorPropertyName, m_denominator);
-    e->set<Bool>(ShowAsCommonTimePropertyName, m_common);
-    e->set<Bool>(IsHiddenPropertyName, m_hidden);
-    e->set<Bool>(HasHiddenBarsPropertyName, m_hiddenBars);
-    return e;
-}
-
-// This doesn't consider subdivisions of the bar larger than a beat in
-// any time other than 4/4, but it should handle the usual time signatures
-// correctly (compound time included).
-
-void TimeSignature::getDurationListForInterval(DurationList &dlist,
-                                               timeT duration,
-                                               timeT startOffset) const
-{
-    setInternalDurations();
-
-    timeT offset = startOffset;
-    timeT durationRemaining = duration;
-
-    while (durationRemaining > 0) {
-
-        // Everything in this loop is of the form, "if we're on a
-        // [unit] boundary and there's a [unit] of space left to fill,
-        // insert a [unit] of time."
-
-        // See if we can insert a bar of time.
-
-        if (offset % m_barDuration == 0
-            && durationRemaining >= m_barDuration) {
-
-            getDurationListForBar(dlist);
-            durationRemaining -= m_barDuration,
-                offset += m_barDuration;
-
-        }
-
-        // If that fails and we're in 4/4 time, see if we can insert a
-        // half-bar of time.
-
-        //_else_ if!
-        else if (m_numerator == 4 && m_denominator == 4
-                 && offset % (m_barDuration/2) == 0
-                 && durationRemaining >= m_barDuration/2) {
-
-            dlist.push_back(m_barDuration/2);
-            durationRemaining -= m_barDuration/2;
-            offset += m_barDuration/2;
-
-        }
-
-        // If that fails, see if we can insert a beat of time.
-
-        else if (offset % m_beatDuration == 0
-                 && durationRemaining >= m_beatDuration) {
-
-            dlist.push_back(m_beatDuration);
-            durationRemaining -= m_beatDuration;
-            offset += m_beatDuration;
-
-        }
-
-        // If that fails, see if we can insert a beat-division of time
-        // (half the beat in simple time, a third of the beat in compound
-        // time)
-
-        else if (offset % m_beatDivisionDuration == 0
-                 && durationRemaining >= m_beatDivisionDuration) {
-
-            dlist.push_back(m_beatDivisionDuration);
-            durationRemaining -= m_beatDivisionDuration;
-            offset += m_beatDivisionDuration;
-
-        }
-
-        // cc: In practice, if the time we have remaining is shorter
-        // than our shortest note then we should just insert a single
-        // unit of the correct time; we won't be able to do anything
-        // useful with any shorter units anyway.
-
-        else if (durationRemaining <= Note(Note::Shortest).getDuration()) {
-
-            dlist.push_back(durationRemaining);
-            offset += durationRemaining;
-            durationRemaining = 0;
-
-        }
-
-        // If that fails, keep halving the beat division until we
-        // find something to insert. (This could be part of the beat-division
-        // case; it's only in its own place for clarity.)
-
-        else {
-
-            timeT currentDuration = m_beatDivisionDuration;
-
-            while ( !(offset % currentDuration == 0
-                      && durationRemaining >= currentDuration) ) {
-
-                if (currentDuration <= Note(Note::Shortest).getDuration()) {
-
-                    // okay, this isn't working.  If our duration takes
-                    // us past the next beat boundary, fill with an exact
-                    // rest duration to there and then continue  --cc
-
-                    timeT toNextBeat =
-                        m_beatDuration - (offset % m_beatDuration);
-
-                    if (durationRemaining > toNextBeat) {
-                        currentDuration = toNextBeat;
-                    } else {
-                        currentDuration  = durationRemaining;
-                    }
-                    break;
-                }
-
-                currentDuration /= 2;
-            }
-
-            dlist.push_back(currentDuration);
-            durationRemaining -= currentDuration;
-            offset += currentDuration;
-
-        }
-
-    }
-
-}
-
-void TimeSignature::getDurationListForBar(DurationList &dlist) const
-{
-
-    // If the bar's length can be represented with one long symbol, do it.
-    // Otherwise, represent it as individual beats.
-
-    if (m_barDuration == m_crotchetTime ||
-        m_barDuration == m_crotchetTime * 2 ||
-        m_barDuration == m_crotchetTime * 4 ||
-        m_barDuration == m_crotchetTime * 8 ||
-        m_barDuration == m_dottedCrotchetTime ||
-        m_barDuration == m_dottedCrotchetTime * 2 ||
-        m_barDuration == m_dottedCrotchetTime * 4 ||
-        m_barDuration == m_dottedCrotchetTime * 8) {
-
-        dlist.push_back(getBarDuration());
-
-    } else {
-
-        for (int i = 0; i < getBeatsPerBar(); ++i) {
-            dlist.push_back(getBeatDuration());
-        }
-
-    }
-
-}
-
-int TimeSignature::getEmphasisForTime(timeT offset)
-{
-    setInternalDurations();
-
-    if      (offset % m_barDuration == 0)
-        return 4;
-    else if (m_numerator == 4 && m_denominator == 4 &&
-             offset % (m_barDuration/2) == 0)
-        return 3;
-    else if (offset % m_beatDuration == 0)
-        return 2;
-    else if (offset % m_beatDivisionDuration == 0)
-        return 1;
-    else
-        return 0;
-}
-
-
-void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
-{
-    divisions.clear();
-
-    if (depth <= 0) return;
-    timeT base = getBarDuration(); // calls setInternalDurations
-/*
-    if (m_numerator == 4 && m_denominator == 4) {
-        divisions.push_back(2);
-        base /= 2;
-        --depth;
-    }
-    if (depth <= 0) return;
-*/
-
-    divisions.push_back(base / m_beatDuration);
-    base = m_beatDuration;
-    --depth;
-
-    if (depth <= 0) return;
-
-    if (m_dotted) divisions.push_back(3);
-    else divisions.push_back(2);
-    --depth;
-
-    while (depth > 0) {
-        divisions.push_back(2);
-        --depth;
-    }
-
-    return;
-}
-
-
-void TimeSignature::setInternalDurations() const
-{
-    int unitLength = m_crotchetTime * 4 / m_denominator;
-
-    m_barDuration = m_numerator * unitLength;
-
-    // Is 3/8 dotted time?  This will report that it isn't, because of
-    // the check for m_numerator > 3 -- but otherwise we'd get a false
-    // positive with 3/4
-
-    // [rf] That's an acceptable answer, according to my theory book. In
-    // practice, you can say it's dotted time iff it has 6, 9, or 12 on top.
-
-    m_dotted = (m_numerator % 3 == 0 &&
-                m_numerator > 3 &&
-                m_barDuration >= m_dottedCrotchetTime);
-
-    if (m_dotted) {
-        m_beatDuration = unitLength * 3;
-        m_beatDivisionDuration = unitLength;
-    }
-    else {
-        m_beatDuration = unitLength;
-        m_beatDivisionDuration = unitLength / 2;
-    }
-
-}
-
-const timeT TimeSignature::m_crotchetTime       = basePPQ;
-const timeT TimeSignature::m_dottedCrotchetTime = basePPQ + basePPQ/2;
-
-
-
-//////////////////////////////////////////////////////////////////////
 // AccidentalTable
 //////////////////////////////////////////////////////////////////////
 
@@ -2358,12 +2019,13 @@ AccidentalTable::operator=(const AccidentalTable &t)
 }
 
 Accidental
-AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
+AccidentalTable::processDisplayAccidental(const Accidental &displayAcc,
+                                          int heightOnStaff,
                                           bool &cautionary)
 {
-    Accidental acc = acc0;
+    Accidental acc = displayAcc;
 
-    int canonicalHeight = Key::canonicalHeight(height);
+    int canonicalHeight = Key::canonicalHeight(heightOnStaff);
     Accidental keyAcc = m_key.getAccidentalAtHeight(canonicalHeight, m_clef);
 
     Accidental normalAcc = NoAccidental;
@@ -2382,14 +2044,14 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
     if (m_octaves == OctavesEquivalent) {
         normalAcc = canonicalAcc;
     } else {
-        AccidentalMap::iterator i = m_accidentals.find(height);
+        AccidentalMap::iterator i = m_accidentals.find(heightOnStaff);
         if (i != m_accidentals.end() && !i->second.previousBar) {
             normalAcc = i->second.accidental;
         }
     }
 
     if (m_barReset != BarResetNone) {
-        AccidentalMap::iterator i = m_accidentals.find(height);
+        AccidentalMap::iterator i = m_accidentals.find(heightOnStaff);
         if (i != m_accidentals.end() && i->second.previousBar) {
             prevBarAcc = i->second.accidental;
         }
@@ -2468,7 +2130,7 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
     }
 
     if (acc != NoAccidental) {
-        m_newAccidentals[height] = AccidentalRec(acc, false);
+        m_newAccidentals[heightOnStaff] = AccidentalRec(acc, false);
         m_newCanonicalAccidentals[canonicalHeight] = AccidentalRec(acc, false);
     }
 
@@ -2538,8 +2200,8 @@ Symbol::Symbol(const Event &e)
     e.get<String>(SymbolTypePropertyName, m_type);
 }
 
-Symbol::Symbol(const std::string &type) :
-    m_type(type)
+Symbol::Symbol(const std::string &symbolType) :
+    m_type(symbolType)
 {
     // nothing else
 }
@@ -2565,7 +2227,7 @@ Symbol::~Symbol()
 }
 
 bool
-Symbol::isSymbolOfType(Event *e, std::string type)
+Symbol::isSymbolOfType(Event *e, const std::string& type)
 {
     return (e->isa(EventType) &&
             e->has(SymbolTypePropertyName) &&

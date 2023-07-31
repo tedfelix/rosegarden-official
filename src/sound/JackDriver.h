@@ -144,7 +144,7 @@ public:
     // resetting status; it doesn't need to hold the locks when
     // incrementing their statuses or simply reading them.
     //
-    int getAudioQueueLocks();
+    // unused int getAudioQueueLocks();
     int tryAudioQueueLocks();
     int releaseAudioQueueLocks();
 

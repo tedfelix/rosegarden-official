@@ -40,7 +40,7 @@ Exception::Exception(const char *message, const char *file, int line) :
 #endif
 }
 
-Exception::Exception(std::string message) :
+Exception::Exception(const std::string& message) :
     m_message(message)
 {
 #ifndef NDEBUG
@@ -49,7 +49,9 @@ Exception::Exception(std::string message) :
 #endif
 }
 
-Exception::Exception(std::string message, std::string file, int line) :
+Exception::Exception(const std::string& message,
+                     const std::string& file,
+                     int line) :
     m_message(message)
 {
     // Fix compiler warning.

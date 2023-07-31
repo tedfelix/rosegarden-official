@@ -6473,11 +6473,13 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
     return qv;
 }
 
+/* unused
 QString
 RosegardenMainWindow::getAudioFilePath()
 {
     return RosegardenDocument::currentDocument->getAudioFileManager().getAbsoluteAudioPath();
 }
+*/
 
 QVector<InstrumentId>
 RosegardenMainWindow::getArmedInstruments()
@@ -8660,6 +8662,7 @@ RosegardenMainWindow::openWindow(ExternalController::Window window)
 }
 
 void
+// cppcheck-suppress unusedFunction
 RosegardenMainWindow::customEvent(QEvent *event)
 {
     // See AlsaDriver::handleTransportCCs().

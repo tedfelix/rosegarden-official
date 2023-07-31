@@ -35,7 +35,6 @@
  *   Indication
  *   Pitch
  *   Note
- *   TimeSignature
  *   AccidentalTable
  *   Symbol
  *   GeneratedRegion
@@ -113,7 +112,7 @@ namespace Accidentals
      * Get the predefined accidentals (i.e. the ones listed above)
      * in their defined order.
      */
-    extern ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals();
+     // unused extern ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals();
 
     /**
      * Get the change in pitch resulting from an accidental: -1 for
@@ -216,7 +215,7 @@ namespace Marks
     /**
      * Extract the number of marks from an event.
      */
-    extern ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e);
+    // unused extern ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e);
 
     /**
      * Extract the marks from an event.
@@ -536,7 +535,7 @@ public:
      * same status in terms of accidentals as it had when
      * found in the given previous key.
      */
-    int convertFrom(int pitch, const Key &previousKey,
+    int convertFrom(int p, const Key &previousKey,
                     const Accidental &explicitAccidental =
                     Accidentals::NoAccidental) const;
 
@@ -592,8 +591,8 @@ private:
         KeyDetails(); // ctor needed in order to live in a map
 
         KeyDetails(bool sharps, bool minor, int sharpCount,
-                   std::string equivalence, std::string rg2name,
-                                   int m_tonicPitch);
+                   const std::string& equivalence, const std::string& rg2name,
+                   int tonicPitch);
 
         KeyDetails(const KeyDetails &d);
 
@@ -674,7 +673,7 @@ public:
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
-    bool isValid(const std::string &s) const;
+    static bool isValid(const std::string &s);
 
     std::string m_indicationType;
     timeT m_duration;
@@ -743,7 +742,7 @@ public:
     int getVerse() const { return m_verse; }
     void setVerse(int verse) { m_verse = verse; }
 
-    static bool isTextOfType(Event *, std::string type);
+    static bool isTextOfType(Event *, const std::string& type);
 
     /**
      * Return those text types that the user should be allowed to
@@ -941,7 +940,7 @@ public:
      * The octaveBase argument specifies the octave containing MIDI pitch 0;
      * middle-C is in octave octaveBase + 5.
      */
-    int getOctaveAccidental(int octaveBase = -2, Accidental acc = Accidentals::NoAccidental) const;
+    int getOctaveAccidental(int octaveBase = -2, const Accidental& acc = Accidentals::NoAccidental) const;
 
     /**
      * Return the pitch within the octave, in the range 0 to 11.
@@ -996,7 +995,7 @@ public:
      * specified interval in the given key. The key is left unchanged,
      * only the pitch is transposed.
      */
-    Pitch transpose(const Key &key, int pitchDelta, int heightDelta);
+    Pitch transpose(const Key &key, int pitchDelta, int heightDelta) const;
 
     /**
       * checks whether the accidental specified for this pitch (if any)
@@ -1033,9 +1032,6 @@ private:
      int &, bool ignoreOffset = false);
 };
 
-
-
-class TimeSignature;
 
 
 /**
@@ -1129,191 +1125,6 @@ private:
     // a time & effort saving device; if changing this, change
     // TimeSignature::m_crotchetTime etc too
     static const timeT m_shortestTime;
-};
-
-
-
-/**
- * TimeSignature contains arithmetic methods relevant to time
- * signatures and bar durations, including code for splitting long
- * rest intervals into bite-sized chunks.  Although there is a time
- * signature Event type, these Events don't appear in regular Segments
- * but only in the Composition's reference segment.
- */
-
-class ROSEGARDENPRIVATE_EXPORT TimeSignature
-{
-public:
-    static const TimeSignature DefaultTimeSignature;
-    typedef Exception BadTimeSignature;
-
-    TimeSignature() :
-        m_numerator(DefaultTimeSignature.m_numerator),
-        m_denominator(DefaultTimeSignature.m_denominator),
-        m_common(false), m_hidden(false), m_hiddenBars(false),
-        m_barDuration(0), m_beatDuration(0), m_beatDivisionDuration(0),
-        m_dotted(false) { }
-
-    /**
-     * Construct a TimeSignature object describing a time signature
-     * with the given numerator and denominator.  If preferCommon is
-     * true and the time signature is a common or cut-common time, the
-     * constructed object will return true for isCommon; if hidden is
-     * true, the time signature is intended not to be displayed and
-     * isHidden will return true; if hiddenBars is true, the bar lines
-     * between this time signature and the next will not be shown.
-     */
-    TimeSignature(int numerator, int denominator,
-                  bool preferCommon = false,
-                  bool hidden = false,
-                  bool hiddenBars = false)
-        /* throw (BadTimeSignature) */;
-
-    TimeSignature(const TimeSignature &ts) :
-        m_numerator(ts.m_numerator),
-        m_denominator(ts.m_denominator),
-        m_common(ts.m_common),
-        m_hidden(ts.m_hidden),
-        m_hiddenBars(ts.m_hiddenBars),
-        m_barDuration(0),
-        m_beatDuration(0),
-        m_beatDivisionDuration(0),
-        m_dotted(false) { }
-
-    ~TimeSignature() { }
-
-    TimeSignature &operator=(const TimeSignature &ts);
-
-    bool operator==(const TimeSignature &ts) const {
-        return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
-    }
-    bool operator!=(const TimeSignature &ts) const {
-        return !operator==(ts);
-    }
-    bool operator<(const TimeSignature &ts) const {
-        // We don't really need to ordered time signatures, but to be able to
-        // create a map keyed with time signatures. We want to distinguish
-        // 4/4 from 2/4 as well as 4/4 from 2/2.
-        double ratio1 = (double) m_numerator / (double) m_denominator;
-        double ratio2 = (double) ts.m_numerator / (double) ts.m_denominator;
-        if (ratio1 == ratio2) return m_denominator > ts.m_denominator;
-        else return ratio1 < ratio2;
-    }
-
-    int getNumerator()     const { return m_numerator; }
-    int getDenominator()   const { return m_denominator; }
-
-    bool isCommon()        const { return m_common; }
-    bool isHidden()        const { return m_hidden; }
-    bool hasHiddenBars()   const { return m_hiddenBars; }
-
-    void setHidden(bool hidden) { m_hidden = hidden; }
-
-    timeT getBarDuration() const;
-
-    /**
-     * Return the unit of the time signature.  This is the note
-     * implied by the denominator.  For example, the unit of 4/4 time
-     * is the crotchet, and that of 6/8 is the quaver.  (The numerator
-     * of the time signature gives the number of units per bar.)
-     */
-    Note::Type getUnit()  const;
-
-    /**
-     * Return the duration of the unit of the time signature.
-     * See also getUnit().  In most cases getBeatDuration() gives
-     * a more meaningful value.
-     */
-    timeT getUnitDuration() const;
-
-    /**
-     * Return true if this time signature indicates dotted time.
-     */
-    bool isDotted() const;
-
-    /**
-     * Return the duration of the beat of the time signature.  For
-     * example, the beat of 4/4 time is the crotchet, the same as its
-     * unit, but that of 6/8 is the dotted crotchet (there are only
-     * two beats in a 6/8 bar).  The beat therefore depends on whether
-     * the signature indicates dotted or undotted time.
-     */
-    timeT getBeatDuration() const;
-
-    /**
-     * Return the number of beats in a complete bar.
-     */
-    int getBeatsPerBar()  const {
-        return getBarDuration() / getBeatDuration();
-    }
-
-    /**
-     * Get the "optimal" list of rest durations to make up a bar in
-     * this time signature.
-     */
-    void getDurationListForBar(DurationList &dlist) const;
-
-    /**
-     * Get the "optimal" list of rest durations to make up a time
-     * interval of the given total duration, starting at the given
-     * offset after the start of a bar, assuming that the interval
-     * is entirely in this time signature.
-     */
-    void getDurationListForInterval(DurationList &dlist,
-                                    timeT intervalDuration,
-                                    timeT startOffset = 0) const;
-
-    /**
-     * Get the level of emphasis for a position in a bar. 4 is lots
-     * of emphasis, 0 is none.
-     */
-    int getEmphasisForTime(timeT offset);
-
-    /**
-     * Return a list of divisions, subdivisions, subsubdivisions
-     * etc of a bar in this time, up to the given depth.  For example,
-     * if the time signature is 6/8 and the depth is 3, return a list
-     * containing 2, 3, and 2 (there are 2 beats to the bar, each of
-     * which is best subdivided into 3 subdivisions, each of which
-     * divides most neatly into 2).
-     */
-    void getDivisions(int depth, std::vector<int> &divisions) const;
-
-private:
-    friend class Composition;
-    friend class TimeTempoSelection;
-
-    TimeSignature(const Event &e)
-        /* throw (Event::NoData, Event::BadType, BadTimeSignature) */;
-
-    static const std::string EventType;
-    static const int EventSubOrdering;
-    static const PropertyName NumeratorPropertyName;
-    static const PropertyName DenominatorPropertyName;
-    static const PropertyName ShowAsCommonTimePropertyName;
-    static const PropertyName IsHiddenPropertyName;
-    static const PropertyName HasHiddenBarsPropertyName;
-
-    /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsEvent(timeT absoluteTime) const;
-
-private:
-    int m_numerator;
-    int m_denominator;
-
-    bool m_common;
-    bool m_hidden;
-    bool m_hiddenBars;
-
-    mutable int  m_barDuration;
-    mutable int  m_beatDuration;
-    mutable int  m_beatDivisionDuration;
-    mutable bool m_dotted;
-    void setInternalDurations() const;
-
-    // a time & effort saving device
-    static const timeT m_crotchetTime;
-    static const timeT m_dottedCrotchetTime;
 };
 
 
@@ -1420,7 +1231,7 @@ public:
 
     std::string getSymbolType() const { return m_type; }
 
-    static bool isSymbolOfType(Event *, std::string type);
+    static bool isSymbolOfType(Event *, const std::string& type);
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;

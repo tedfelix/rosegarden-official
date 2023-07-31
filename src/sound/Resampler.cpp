@@ -53,7 +53,7 @@ class D_SRC : public ResamplerImpl
 {
 public:
     D_SRC(Resampler::Quality quality, int channels, int maxBufferSize,
-          int m_debugLevel);
+          int debugLevel);
     ~D_SRC() override;
 
     int resample(const float *const *const in,
@@ -231,7 +231,8 @@ D_SRC::reset()
 } /* end namespace Resamplers */
 
 Resampler::Resampler(Resampler::Quality quality, int channels,
-                     int maxBufferSize, int debugLevel)
+                     int maxBufferSize, int debugLevel) :
+    m_method(0)
 {
     d = new Resamplers::D_SRC(quality, channels, maxBufferSize, debugLevel);
 }

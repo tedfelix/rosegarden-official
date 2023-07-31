@@ -37,7 +37,7 @@ class MidiPitchLabel
 public:
     explicit MidiPitchLabel(int pitch);
 
-    std::string getString() const;
+    // unused std::string getString() const;
     QString getQString() const;
 
 private:

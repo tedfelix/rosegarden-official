@@ -32,12 +32,12 @@ namespace Rosegarden
 /**
  * BaseTool : base tool class, just handles RMB menu creation and
  * handling by a BaseToolBox
- * 
+ *
  */
 class BaseTool : public QObject
 {
     Q_OBJECT
-    
+
     friend class BaseToolBox;
 
 public:
@@ -66,7 +66,7 @@ public:
     /**
      * Retrieve current status-line type help for the tool, if any
      */
-    virtual QString getCurrentContextHelp() const;
+    // unused virtual QString getCurrentContextHelp() const;
 
 signals:
     void showContextHelp(QString);

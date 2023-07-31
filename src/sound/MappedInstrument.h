@@ -60,6 +60,7 @@ public:
 
     // cppcheck-suppress functionStatic
     void setType(Instrument::InstrumentType type) { m_type = type; }
+    // cppcheck-suppress functionStatic
     Instrument::InstrumentType getType() const { return m_type; }
 
     void setName(const std::string &name) { m_name = name; }

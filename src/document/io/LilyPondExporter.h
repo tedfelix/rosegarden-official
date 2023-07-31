@@ -216,13 +216,13 @@ private:
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
     std::pair<int,int> writeDuration(timeT duration, std::ofstream &);
     void writeSlashes(const Event *note, std::ofstream &);
-    
+
     /*
      * Return the verse with index currentVerse from the givenSegment ready to
      * be write in LilyPond file with indentCol indentation.
      */
     QString getVerseText(Segment *seg, int currentVerse, int indentCol);
-    
+
     /*
      * Write in str the lyrics verse of index verseIndex from the given
      * segment with the indentation indentCol or an appropriate LilyPond
@@ -247,30 +247,31 @@ private:
                              std::map<Segment *, int> & verseIndexes,
                              int verseLine, int cycle,
                              int indentCol, std::ofstream &str);
-    
+
     /* Used to embed a lyric syllable with a bar number */
     struct Syllable {
-        
-        Syllable(QString syllable, int bar) {
-            syllableString = syllable;
-            syllableBar = bar;
+
+    Syllable(const QString& syllable, int bar) :
+        syllableString(syllable),
+        syllableBar(bar)
+        {
         }
-        
+
         /**
          *  Protect the syllable with quotes if needed.
          *  Return true if the string is modified.
-         */ 
+         */
         bool protect();
-        
+
         /**
          *  Always add double quotes around the string.
          */
         void addQuotes();
-        
+
         QString syllableString;
         int syllableBar;
     };
-    
+
 
 private:
     static const int MAX_DOTS = 4;
@@ -399,7 +400,7 @@ HOW THE VERSES RELATED TO A VOICE SHOULD BE WRITTEN IN LILYPOND FILE
 ====================================================================
 
 The verses are written in the Lilypond file after the musical notes of
-a voice. Each verse, or, more exactly, each line, is written in a 
+a voice. Each verse, or, more exactly, each line, is written in a
 "\new Lyrics" sequence and connected to the voice using a "\lyricsto"
 command.
 
@@ -417,7 +418,7 @@ Volta sequences:      /            \      /  \      /                 \
 Nb of repeats:   0    2    -    -    0    2    0    3    -    -    -    0
                  ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 Segments:       |A   |B   |B1  |B2  |C   |D   |E   |F   |F1  |F2  |F3  |G   |
-                 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+                 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 Alternates #               1,2  3   :         :          1,3  2    4   :
                                     :         :                        :
                                     :         :                        :
@@ -444,15 +445,15 @@ Line 5          |....|....|....|....|....|xxxx|xxxx|xxxx|xxxx|....|....|....|
 Verse #                             :     3   :1    1    1             :
                                     :         :                        :
                                     :         :     F         F2       :
-Line 6          |....|....|....|....|....|....|....|xxxx|....|xxxx|....|....|  
+Line 6          |....|....|....|....|....|....|....|xxxx|....|xxxx|....|....|
 Verse #                             :         :     2         1        :
                                     :         :                        :
                                     :         :     F    F1            :
-Line 7          |....|....|....|....|....|....|....|xxxx|xxxx|....|....|....|  
+Line 7          |....|....|....|....|....|....|....|xxxx|xxxx|....|....|....|
 Verse #                             :         :     3    2             :
                                     :         :                        :
                                     :         :     F              F3  :G
-Line 8          |....|....|....|....|....|....|....|xxxx|....|....|xxxx|xxxx|  
+Line 8          |....|....|....|....|....|....|....|xxxx|....|....|xxxx|xxxx|
 Verse #                             :         :     4              1   :1
                                     :         :                        :
 VoltaCount       1                  |3        |5                       |8
@@ -479,22 +480,22 @@ In the here above example:
     segment B is repeated 2 times,
     segment D is repeated 2 times,
     segment F is repeated 3 times
-    
+
 So number of lines = 1 + 2 + 2 + 3 = 8
-          
+
 Note : When a segment is played 3 times (or have 3 voltas), it can be seen as
        played once and repeated twice.
        So its number of repeats used above is 2.
 
 
 
-In a given line : 
+In a given line :
 
 The printed verse number of a volta segment is:
     verse = lineNumber + 1 - voltaCount
 If this verse doesn't exist, the lyrics are skipped.
 
-The lyrics of an alternate segment are only printed if 
+The lyrics of an alternate segment are only printed if
     alternate number == lineNumber + 1 - voltaCount
 If this alternate number doesn't exist, the lyrics of the segment are skipped.
 
@@ -521,8 +522,8 @@ In "himno_de_riego.rg" example:
    - there is only one sequence in the musical score: so "number of verse" is 1
    - there is 3 verses stored as lyrics: so "number of cycles" is 3.
 It means that the musical score have to be played three times (three cycles) to
-consume all ther lyrics. 
-    
+consume all ther lyrics.
+
     Number of verses:
         It's how many lines are needed to write the verses under
         the score with the correct vertical alignment and with
@@ -542,38 +543,38 @@ consume all ther lyrics.
 
         When the voltas are unfolded, the number of verses
         is always 1
-        
+
         Number of cycles:
             This is how many verses are written under the score
             although no repetition is indicated in this score.
             This can be seen as how many times the musical score has
             to be played to exhaust all the verses.
             ("Himno de Riego", in the RG examples, has no notated
-            repetition but has three verses. Which gives  
+            repetition but has three verses. Which gives
             versesNumber = 1 and cyclesNumber = 3)
-        
+
             For example the following score has cyclesNumber = 2
                 aaaaaaaaa
                     verse 1
                     verse 2
-        
+
             and the following one also has cyclesNumber = 2
                 aaaaaaaaa ||: bbbbb x2 :|| cccccccccc
-                    verse 1a     verse 1b      
+                    verse 1a     verse 1b
                                 verse 2b     verse 1c
                     verse 2a     verse 3b
                                 verse 4b     verse 2c
-        
+
     Note: The number of cycles is always computed as if the set
             of verses is complete. In the last example, if verses
             4b and 2c are omitted, cyclesNumber = 4 is nevertheless
             computed.
             The exporter is going to write blank verses, but
             LilyPond will happily ignore them.
-    
+
     Note: When volta are printed unfolded (m_useVolta is false)
             the "number of verses" as previously described is
             always 1 and the "number of cycles" is the maximum
             number of verses found in one segment.
-            
+
 */

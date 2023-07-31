@@ -48,7 +48,7 @@ class Overlaps : public std::map<timeT, OverlapRange<T> >
 
 public :
 
-    Overlaps(
+    explicit Overlaps(
              std::vector<Segment *> segments
 )
 {
@@ -116,7 +116,7 @@ public :
         if (!getFirst(t1, t2, i)) return true;
         if (! isConsistent(i)) return false;
         while (getNext(t2, i)) {
-            if (! isConsistent(i)) return false; 
+            if (! isConsistent(i)) return false;
         }
         return true;
     }
@@ -163,7 +163,7 @@ public :
         if (it == this->end()) return false;
 
         typename std::map<timeT, OverlapRange<T> >::iterator next = it;
-        next++;
+        ++next;
         if (next == this->end()) return false;
 
         if (it->first > t2) return false;
@@ -175,7 +175,7 @@ public :
                       timeT &t1, timeT &t2)
     {
         t1 = it->first;
-        it++;
+        ++it;
         t2 = it->first;
     }
 
@@ -209,9 +209,9 @@ private :
 
 template <>
 inline Clef
-Overlaps<Clef>::getPropertyAtTime(Segment *seg, timeT time) const
+Overlaps<Clef>::getPropertyAtTime(Segment *segment, timeT time) const
 {
-    return  seg->getClefAtTime(time);
+    return  segment->getClefAtTime(time);
 }
 
 template <>
@@ -257,4 +257,3 @@ Overlaps<int>::getNextPropertyTime(Segment *, timeT time, timeT &nextTime) const
 
 
 #endif // RG_OVERLAPS_H
-

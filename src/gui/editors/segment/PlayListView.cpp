@@ -89,6 +89,8 @@ void PlayListView::mousePressEvent ( QMouseEvent * event ){
     //
 }
 */
+
+// cppcheck-suppress unusedFunction
 void PlayListView::dragEnterEvent ( QDragEnterEvent * event ){
 
     if (event->mimeData()->hasUrls() || event->mimeData()->hasText()) {
@@ -144,8 +146,7 @@ QStringList PlayListView::mimeTypes() const{
     return types;
 }
 
-
-
+// cppcheck-suppress unusedFunction
 void PlayListView::dropEvent(QDropEvent* e)
 {
     QList<QUrl> uList;

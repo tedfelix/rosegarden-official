@@ -72,6 +72,8 @@ class MappedStudio;
  * of a sub class of this class and directing it as required
  * by RosegardenSequencer itself.
  */
+
+// cppcheck-suppress noCopyConstructor
 class SoundDriver
 {
 public:

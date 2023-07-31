@@ -57,7 +57,7 @@ public:
     void addCommandToHistory(Command *command);
 
     void setModified(bool modified);
-    void checkModified();
+    // unused void checkModified();
 
     // reset the document
     void setDocument(RosegardenDocument *doc);

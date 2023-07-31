@@ -146,7 +146,7 @@ public:
     /**
      * removes a view from the list of currently connected views
      */
-    void detachView(RosegardenMainViewWidget *view);
+    // unused void detachView(RosegardenMainViewWidget *view);
 
     /**
      * adds an Edit View (notation, matrix, event list)

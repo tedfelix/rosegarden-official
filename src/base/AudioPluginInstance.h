@@ -50,7 +50,7 @@ public:
     } PortDisplayHint;
 
     PluginPort(int number,
-               std::string m_name,
+               const std::string& name,
                PortType type,
                PortDisplayHint displayHint,
                PortData lowerBound,
@@ -97,7 +97,7 @@ class AudioPluginInstance : public XmlExportable
 public:
     explicit AudioPluginInstance(unsigned int position);
 
-    AudioPluginInstance(std::string identifier,
+    AudioPluginInstance(const std::string& identifier,
                         unsigned int position);
 
     /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
@@ -131,7 +131,7 @@ public:
     void setBypass(bool bypass) { m_bypass = bypass; }
     bool isBypassed() const { return m_bypass; }
 
-    void setProgram(std::string program);
+    void setProgram(const std::string& program);
     std::string getProgram() const { return m_program; }
 
     int getMappedId() const { return m_mappedId; }
@@ -141,7 +141,7 @@ public:
     void clearConfiguration() { m_config.clear(); }
     const ConfigMap &getConfiguration() const { return m_config; }
     std::string getConfigurationValue(std::string k) const;
-    void setConfigurationValue(std::string k, std::string v);
+    void setConfigurationValue(const std::string& k, const std::string& v);
 
     std::string getDistinctiveConfigurationText() const;
 

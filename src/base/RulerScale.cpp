@@ -134,11 +134,13 @@ RulerScale::getXForTime(timeT time) const
     }
 }
 
+/* unused
 timeT
 RulerScale::getDurationForWidth(double x, double width) const
 {
     return getTimeForX(x + width) - getTimeForX(x);
 }
+*/
 
 double
 RulerScale::getWidthForDuration(timeT startTime, timeT duration) const

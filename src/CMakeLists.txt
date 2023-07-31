@@ -509,6 +509,7 @@ set(rg_CPPS
   base/Buss.cpp
   base/levenshtein.cpp
   base/Typematic.cpp
+  base/TimeSignature.cpp
   sound/LADSPAPluginFactory.cpp
   sound/ControlBlock.cpp
   sound/WAVAudioFile.cpp

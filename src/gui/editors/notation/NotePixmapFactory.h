@@ -170,16 +170,26 @@ public:
 
     // Printing methods -- draw direct to a paint device:
 
+    /* unused
     void drawNote(const NotePixmapParameters &params,
                   QPainter &painter, int x, int y);
+    */
+    /* unused
     void drawRest(const NotePixmapParameters &params,
                   QPainter &painter, int x, int y);
+    */
+    /* unused
     void drawHairpin(int length, bool isCrescendo,
                      QPainter &painter, int x, int y);
+    */
+    /* unused
     void drawSlur(int length, int dy, bool above, bool phrasing,
                   QPainter &painter, int x, int y);
+    */
+    /* unused
     void drawOttava(int length, int octavesUp,
                     QPainter &painter, int x, int y);
+    */
     void drawText(const Text &text,
                   QPainter &painter, int x, int y);
 
@@ -215,7 +225,7 @@ public:
     int getAccidentalWidth (const Accidental &,
                             int shift = 0,
                             bool extraShift = false) const;
-    int getAccidentalHeight(const Accidental &) const;
+    // unused int getAccidentalHeight(const Accidental &) const;
 
     int getLineSpacing()        const;
     int getStemLength()         const;

@@ -450,7 +450,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
             m_composition->getMusicalTimeForAbsoluteTime
             (time, bar, beat, fraction, remainder);
             RealTime rt = m_composition->getElapsedRealTime(time);
-           
+
             // bars in user space start at 1, not 0
             bar++;
 
@@ -560,6 +560,7 @@ TempoRuler::getYForTempo(tempoT tempo)
     return y;
 }
 
+/* unused
 tempoT
 TempoRuler::getTempoForY(int y)
 {
@@ -577,6 +578,7 @@ TempoRuler::getTempoForY(int y)
 
     return tempo;
 }
+*/
 
 void
 TempoRuler::paintEvent(QPaintEvent* e)
@@ -846,9 +848,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
             prevBpm = bpm;
 
             QRect bounds = m_fontMetrics.boundingRect(tempoString);
-            
+
             x += 3; // bmp text aligns better in temporuler now - is this font dependent?
-            
+
             paint.setFont(m_font);
             if (time > 0)
                 x -= bounds.width() / 2;

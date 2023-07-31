@@ -176,6 +176,7 @@ AudioPluginManager::removePlugin(const QString &identifier)
     return false;
 }
 
+/* unused
 std::vector<QString>
 AudioPluginManager::getPluginNames()
 {
@@ -190,6 +191,7 @@ AudioPluginManager::getPluginNames()
 
     return names;
 }
+*/
 
 QSharedPointer<AudioPlugin>
 AudioPluginManager::getPlugin(int number)

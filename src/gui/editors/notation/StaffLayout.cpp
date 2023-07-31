@@ -225,11 +225,13 @@ StaffLayout::setTitleHeight(int titleHeight)
     m_titleHeight = titleHeight;
 }
 
+/* unused
 int
 StaffLayout::getTitleHeight() const
 {
     return m_titleHeight;
 }
+*/
 
 double
 StaffLayout::getTotalWidth() const
@@ -877,11 +879,13 @@ StaffLayout::compareBars(const BarLineItem *barLine1, const BarLineItem *barLine
     return (barLine1->getLayoutX() < barLine2->getLayoutX());
 }
 
+/* unused
 bool
 StaffLayout::compareBarToLayoutX(const BarLineItem *barLine1, int x)
 {
     return (barLine1->getLayoutX() < x);
 }
+*/
 
 void
 StaffLayout::deleteTimeSignatures()
@@ -1122,6 +1126,7 @@ StaffLayout::renderElements(ViewElementList::iterator,
     // of positionElements
 }
 
+/* unused
 QRectF
 StaffLayout::getSceneArea()
 {
@@ -1198,5 +1203,5 @@ StaffLayout::getSceneArea()
 
     return QRectF(left, top, right - left, bottom - top);
 }
-
+*/
 }

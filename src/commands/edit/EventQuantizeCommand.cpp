@@ -47,6 +47,7 @@ using namespace BaseProperties;
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
                                            timeT startTime,
                                            timeT endTime,
+                                           // cppcheck-suppress passedByValue
                                            std::shared_ptr<Quantizer> quantizer):
     BasicCommand(getGlobalName(quantizer), segment, startTime, endTime,
                  true),  // bruteForceRedo
@@ -59,6 +60,7 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
+                                           // cppcheck-suppress passedByValue
                                            std::shared_ptr<Quantizer> quantizer):
     BasicCommand(getGlobalName(quantizer),
                  selection.getSegment(),
@@ -73,7 +75,6 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
     // nothing else
 }
 
-// cppcheck-suppress uninitMemberVar
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
                                            timeT startTime,
                                            timeT endTime,
@@ -91,7 +92,6 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
     setName(getGlobalName(makeQuantizer(settingsGroup, scope)));
 }
 
-// cppcheck-suppress uninitMemberVar
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
                                            QString settingsGroup,
                                            QuantizeScope scope) :

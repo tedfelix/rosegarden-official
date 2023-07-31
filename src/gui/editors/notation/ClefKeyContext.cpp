@@ -183,6 +183,7 @@ ClefKeyContext::getKeyFromContext(TrackId track, timeT time)
 
 // Only for debug
 void
+// cppcheck-suppress unusedFunction
 ClefKeyContext::dumpClefContext()
 {
     ClefMaps::iterator i;
@@ -205,6 +206,7 @@ ClefKeyContext::dumpClefContext()
 
 // Only for debug
 void
+// cppcheck-suppress unusedFunction
 ClefKeyContext::dumpKeyContext()
 {
     KeyMaps::iterator i;
@@ -275,5 +277,3 @@ ClefKeyContext::endMarkerTimeChanged(const Segment *, bool /*shorten*/)
 }
 
 }
-
-

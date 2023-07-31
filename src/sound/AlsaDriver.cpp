@@ -4779,6 +4779,7 @@ AlsaDriver::record(RecordStatus recordStatus,
     return true;
 }
 
+/* unused
 ClientPortPair
 AlsaDriver::getFirstDestination(bool duplex)
 {
@@ -4805,7 +4806,7 @@ AlsaDriver::getFirstDestination(bool duplex)
 
     return destPair;
 }
-
+*/
 
 // Sort through the ALSA client/port pairs for the range that
 // matches the one we're querying.  If none matches then send

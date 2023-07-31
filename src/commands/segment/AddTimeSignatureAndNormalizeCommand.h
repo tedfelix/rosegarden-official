@@ -19,7 +19,7 @@
 #ifndef RG_ADDTIMESIGNATUREANDNORMALIZECOMMAND_H
 #define RG_ADDTIMESIGNATUREANDNORMALIZECOMMAND_H
 
-#include "base/NotationTypes.h"
+#include "base/TimeSignature.h"
 #include "base/Event.h"
 #include "document/Command.h"
 

@@ -24,7 +24,7 @@
 
 namespace Rosegarden
 {
-        
+
 /**
  * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
  * (and this struct mustn't have a constructor)
@@ -100,7 +100,7 @@ public:
         m_positionSec = rt.sec;
         m_positionNsec = rt.nsec;
     }
-    
+
     /// Get the MIDI OUT event to show on the transport during playback.
     bool getVisual(MappedEvent &ev);
     /// Set the MIDI OUT event to show on the transport during playback.
@@ -117,11 +117,11 @@ public:
      */
     int getRecordedEvents(MappedEventList &);
 
-    bool getTrackLevel(TrackId track, LevelInfo &) const;
+    // unused bool getTrackLevel(TrackId track, LevelInfo &) const;
     void setTrackLevel(TrackId track, const LevelInfo &);
 
     // Two of these to rather hamfistedly get around the fact
-    // we need to fetch this value twice - once from IPB, 
+    // we need to fetch this value twice - once from IPB,
     // and again for the Mixer.
     //
     bool getInstrumentLevel(InstrumentId id, LevelInfo &) const;
@@ -143,7 +143,7 @@ public:
     // Reset this class on (for example) GUI restart
     // rename: reset()
     void clearTemporaries();
-    
+
 protected:
     SequencerDataBlock();
 
@@ -160,7 +160,7 @@ protected:
     bool m_haveVisualEvent;
     /// MIDI OUT event for display on the transport during playback.
     char m_visualEvent[sizeof(MappedEvent)];
-    
+
     /// Index of the next available position in m_recordBuffer.
     /**
      * volatile is needed here (and probably other places) since this is used

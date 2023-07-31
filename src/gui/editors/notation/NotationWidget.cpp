@@ -1277,11 +1277,13 @@ NotationWidget::getNotationViewWidth()
     return m_view->width();
 }
 
+/* unused
 double
 NotationWidget::getNotationSceneHeight()
 {
     return m_scene->height();
 }
+*/
 
 void
 NotationWidget::slotHScroll()

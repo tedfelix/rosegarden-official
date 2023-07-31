@@ -402,7 +402,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                     *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
                     *}
                     */
-                
+
                 // NOTE: sustain syntax changed in LilyPond 2.12:
                 //          "Up" --> "Off" and "Down" --> "On"
                 if ((*m)->get <Int>(Controller::VALUE) > 0) {
@@ -1096,9 +1096,9 @@ LilyPondExporter::write()
     if (m_useVolta) {
         // Don't call the two following methods if the score have to be printed
         // unfolded. Otherwise the start time of some segments would be erroneous.
-        
+
         // If needed, compute offsets of segments following a repeating one
-        // in LilyPond score        
+        // in LilyPond score
         lsc.fixRepeatStartTimes();
 
         // If needed, compute offsets in LilyPond score of segments following
@@ -1321,13 +1321,13 @@ LilyPondExporter::write()
     int pianoStaffCounter = 0;
     int bracket = 0;
     bool hasInstrumentNames = false;
-    
-    
+
+
     // open \score section
     str << "\\score {" << std::endl;
     str << indent(++col) << "<< % common" << std::endl;
-    
-    
+
+
     // Make chords offset colliding notes by default (only write for
     // first track)
     str << indent(++col) << "% Force offset of colliding notes in chords:"
@@ -1339,7 +1339,7 @@ LilyPondExporter::write()
             << std::endl;
         str << indent(col)   << "\\override Score.Fingering #\'staff-padding = #\'()"
             << std::endl;
-    }    
+    }
 
 
 
@@ -1351,10 +1351,10 @@ LilyPondExporter::write()
     Track *track = nullptr;
     for (track = lsc.useFirstTrack(); track; track = lsc.useNextTrack()) {
         int trackPos = lsc.getTrackPos();
-        
-        // Max number of lyrics verses in each voices 
+
+        // Max number of lyrics verses in each voices
         std::vector<int> verses;
-        
+
         // Allow some opportunities for user to cancel
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             return false;
@@ -1381,7 +1381,7 @@ LilyPondExporter::write()
                 str << indent(col++) << "\\context GrandStaff = \""
                     << ++pianoStaffCounter << "\" <<" << std::endl;
             }
-        }              
+        }
 
         // avoid problem with <untitled> tracks yielding a
         // .ly file that jumbles all notes together on a
@@ -1422,8 +1422,8 @@ LilyPondExporter::write()
             // can fix.
             // Here we get data from the first segment of the track and
             // hope the other segments share it.
-            // TODO: Test the consistency and display an error if needeed.   
-            
+            // TODO: Test the consistency and display an error if needeed.
+
             std::ostringstream staffNameWithTranspose;
             staffNameWithTranspose << "\\markup { \\center-column { \"" << staffName << " \"";
             Segment * firstSeg = lsc.getArbitrarySegment(trackPos);
@@ -1448,7 +1448,7 @@ LilyPondExporter::write()
                 staffNameWithTranspose << " }";
             }
             staffNameWithTranspose << " } }";
-                
+
             // always write long staff name
             str << indent(col) << "\\set Staff.instrumentName = "
                 << staffNameWithTranspose.str() << std::endl;
@@ -1459,7 +1459,7 @@ LilyPondExporter::write()
                 str << indent(col) << "\\set Staff.shortInstrumentName = \""
                     << shortStaffName << "\"" << std::endl;
             }
-            
+
         }
 
         // Set midi instrument for the Staff when possible
@@ -1501,24 +1501,24 @@ LilyPondExporter::write()
         if (m_exportBeams) {
             str << indent(col) << "\\set Staff.autoBeaming = ##f % turns off all autobeaming" << std::endl;
         }
-        
+
 
         int voiceIndex;
         for (voiceIndex = lsc.useFirstVoice();
                           voiceIndex != -1; voiceIndex = lsc.useNextVoice()) {
 
             /* timeT repeatOffset = 0; */
-            verses.push_back(0); 
-        
+            verses.push_back(0);
+
 
             Segment *seg;
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
                 RG_DEBUG << "lsc iterate segment" << seg;
-                
+
                 if (seg->getVerseCount() > verses[voiceIndex]) {
                     verses[voiceIndex] = seg->getVerseCount();
                 }
-                
+
                 if (!lsc.isAlt()) {
 
 
@@ -1672,7 +1672,7 @@ LilyPondExporter::write()
                     if (staffSize == StaffTypes::Small) str << indent(col) << "\\small" << std::endl;
                     else if (staffSize == StaffTypes::Tiny) str << indent(col) << "\\tiny" << std::endl;
                 } /// if (!lsc.isAlt())
-                
+
                 SegmentNotationHelper helper(*seg);
                 helper.setNotationProperties();
 
@@ -1721,7 +1721,7 @@ LilyPondExporter::write()
 
                 Rosegarden::Key key = lsc.getPreviousKey();
 
-                // State variables 
+                // State variables
                 bool haveRepeating = false;  // Simple volta without alt. endings
                 bool haveAlternates = false; // Alternate ending may follow (?)
                 bool haveVoltaWithAltEndings = false; // Volta with alt. endings
@@ -1785,9 +1785,8 @@ LilyPondExporter::write()
                          ) && !haveRepeating) {
 
                         haveRepeating = true;
-                        int numRepeats = 2;
 
-                        numRepeats = lsc.getNumberOfVolta();
+                        int numRepeats = lsc.getNumberOfVolta();
                         if ((m_useVolta) && lsc.isSynchronous()) {
                             str << std::endl << indent(col++)
                                 << "\\repeat volta " << numRepeats << " {";
@@ -1928,7 +1927,7 @@ LilyPondExporter::write()
                 if (!haveVoltaWithAltEndings && !haveAlt) {
                     // close Voice context
                     str << std::endl
-                        << indent(--col) << "} % Voice" 
+                        << indent(--col) << "} % Voice"
                         << std::endl;                           // indent-
                 }
 
@@ -1957,18 +1956,18 @@ LilyPondExporter::write()
                         }
 
                     // close Voice context
-                        str << std::endl 
-                            << indent(--col) << "} % Voice" 
+                        str << std::endl
+                            << indent(--col) << "} % Voice"
                             << std::endl;                        // indent-
                     }
                 }
-                
-                str << std::endl << indent(col) << "% End of segment " << seg->getLabel() << std::endl; 
-                
+
+                str << std::endl << indent(col) << "% End of segment " << seg->getLabel() << std::endl;
+
             } // for (seg = lsc.useFirstSegment(); seg; seg = ....
 
-            str << std::endl << indent(col) << "% End voice " << voiceIndex << std::endl; 
-            
+            str << std::endl << indent(col) << "% End voice " << voiceIndex << std::endl;
+
         } // for (voiceIndex = lsc.useFirstVoice(); voiceIndex != -1; ....
 
 
@@ -1978,7 +1977,7 @@ LilyPondExporter::write()
         // number of verses.
         // TODO (1): Display a warning if several voices have lyrics
         // TODO (2): Export lyrics from two voices (above and under staff)
-        
+
         // Look for the voice with the larger number of verses
         int maxVers = 0;
         int lyricsVoice = 0;
@@ -1987,29 +1986,29 @@ LilyPondExporter::write()
                 maxVers = verses[i];
                 lyricsVoice = i;
             }
-        } 
-         
+        }
+
         // Skip the following if there is no verse or if lyrics not exported
         if ((maxVers != 0) && (m_exportLyrics != EXPORT_NO_LYRICS)) {
-         
+
             for (voiceIndex = lsc.useFirstVoice();
-                            voiceIndex != -1; voiceIndex = lsc.useNextVoice()) {      
-                
+                            voiceIndex != -1; voiceIndex = lsc.useNextVoice()) {
+
                 // Ignore verses not coming from lyricsVoice.
                 // See comment [SOURCE_OF_VERSES] above.
                 if (voiceIndex != lyricsVoice) continue;
-                
+
                 // Compute the needed number of verse lines and the number of
                 // cycles.
-                
+
                 ///////////////////////////////////////////////////////////
                 // The comment at the end of LilyPondExporter.h explains //
                 // what the following code does.                         //
-                ///////////////////////////////////////////////////////////   
-                
+                ///////////////////////////////////////////////////////////
+
                 int versesNumber = 1;
                 int cyclesNumber;
-                
+
                 int sva = 0;    // Supplementary verses accumulator
                 for (Segment * seg = lsc.useFirstSegment();
                                         seg; seg = lsc.useNextSegment()) {
@@ -2019,7 +2018,7 @@ LilyPondExporter::write()
                         n = lsc.isAlt()
                                 ? lsc.getAltNumbers()->size()
                                 : lsc.getNumberOfVolta();
-                                    
+
                         versesNumber += n - 1;
                         // n is the number of times the volta is played
                         // So the number of repetitions of the volta is n - 1
@@ -2028,31 +2027,31 @@ LilyPondExporter::write()
                         versesNumber = 1;
                         n = 1;
                     }
-                        
+
                     // Compute the supplementary verses number and keep its
                     // largest value in sva
                     int supplementaryVerses = (seg->getVerseCount() - 1) / n;
                     sva = sva > supplementaryVerses
-                            ? sva 
+                            ? sva
                             : supplementaryVerses;
                 }
-                
+
                 // Total number of cycles:
                 // Without supplementary verse (sva=0) number of cycles is 1
-                cyclesNumber = sva + 1;   
-                
+                cyclesNumber = sva + 1;
+
                 std::map<Segment *, int> verseIndexes; // Next verse index for each segment
-                bool isFirstPrintedVerse = true; 
+                bool isFirstPrintedVerse = true;
                 for (int cycle = 0; cycle < cyclesNumber; cycle++) {
                     for (int verseLine = 0; verseLine < versesNumber; verseLine++) {
-                    
+
                         std::ostringstream voiceNumber;
                         voiceNumber << "voice " << trackPos << "." << voiceIndex;
-                        
+
                         // Write the header of the lyrics block
                         str << std::endl
                             << indent(col)
-                            << "% cycle " << (cycle + 1) 
+                            << "% cycle " << (cycle + 1)
                             << "   verse line " << (verseLine + 1) << std::endl;
                         str << indent(col)
                             << "\\new Lyrics" << std::endl;
@@ -2064,17 +2063,17 @@ LilyPondExporter::write()
                                 << (trackPos + 1) << "\"}" << std::endl;
                             isFirstPrintedVerse = false;
                         }
-                        str << indent(col) 
-                            << "\\lyricsto \"" << voiceNumber.str() << "\"" 
+                        str << indent(col)
+                            << "\\lyricsto \"" << voiceNumber.str() << "\""
                             << " {" << std::endl;
                         str << indent(++col) << "\\lyricmode {" << std::endl;
-                        
+
                         if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
-                            str << indent(++col) 
+                            str << indent(++col)
                                 << "\\override LyricText #'self-alignment-X = #RIGHT"
                                 << std::endl;
                         } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
-                            str << indent(++col) 
+                            str << indent(++col)
                                 << "\\override LyricText #'self-alignment-X = #CENTER"
                                 << std::endl;
                         } else {
@@ -2086,7 +2085,7 @@ LilyPondExporter::write()
                             << qStrToStrUtf8("\\set ignoreMelismata = ##t")
                             << std::endl;
                         // End of the lyrics block header writing
-                    
+
                         // Write the lyrics block
                         if (m_useVolta) {
                             writeVersesWithVolta(lsc, verseLine, cycle, col, str);
@@ -2095,8 +2094,8 @@ LilyPondExporter::write()
                         }
 
                         // Write the tail of the lyrics block
-                        str << indent(col) 
-                            << qStrToStrUtf8("\\unset ignoreMelismata") 
+                        str << indent(col)
+                            << qStrToStrUtf8("\\unset ignoreMelismata")
                             << std::endl;
                         str << indent(--col)
                             << qStrToStrUtf8("}") << std::endl;
@@ -2105,19 +2104,19 @@ LilyPondExporter::write()
                         str << indent(--col);
                         str << qStrToStrUtf8("} % Lyrics ") << std::endl;
                         // End of the lyrics block tail writing
-                    
+
                     }  // for (int verseLine = 0; verseLine < versesNumber; ...
                 }  // for (int cycle = 0; cycle < cyclesNumber; cycle++...
 
-                break;   // Verses from a voice have been writed 
+                break;   // Verses from a voice have been writed
                          // Looking to the other voices is useless
                          // See comment [SOURCE_OF_VERSES] above
             }
         }
-        
+
         // close the track (Staff context)
         str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
-        
+
         // handle any necessary final bracket closures (if brackets are being
         // exported)
         if (m_exportStaffGroup) {
@@ -2134,7 +2133,7 @@ LilyPondExporter::write()
                 str << indent(--col) << ">> % StaffGroup (final) " << staffGroupCounter
                     << std::endl; //indent-
             }
-        }        
+        }
 
     } // for (track = lsc.useFirstTrack(); track; track = ....
 
@@ -3383,46 +3382,46 @@ LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
     // The comment at the end of LilyPondExporter.h explains what the //
     // following code does.                                          //
     ////////////////////////////////////////////////////////////////////
-    
+
     int voltaCount = 1;
-    int deltaVoltaCount = 0;                
+    int deltaVoltaCount = 0;
     for (Segment * seg = lsc.useFirstSegment();
                     seg; seg = lsc.useNextSegment()) {
-        
+
         int verseIndex;
-        if (!lsc.isAlt()) { 
+        if (!lsc.isAlt()) {
             voltaCount += deltaVoltaCount;
             deltaVoltaCount = lsc.getNumberOfVolta() - 1;
-            
+
             verseIndex = ((verseLine + 1) + 1 - voltaCount) - 1;
             // verseIndex and verseLine start from 0 end not 1
-            
+
             verseIndex += cycle * lsc.getNumberOfVolta();
             int vimin = cycle * lsc.getNumberOfVolta();
             int vimax = vimin + lsc.getNumberOfVolta() - 1;
             if (    (verseIndex < vimin)
                     || (verseIndex > vimax) ) verseIndex = -1;
-    
+
         } else {
             const std::set<int>* numbers = lsc.getAltNumbers();
             int altNumber = (verseLine + 1) + 1 - voltaCount;
-            
+
             // Get the verseNumber from the altNumber
             std::set<int>::const_iterator i;
             int verse = cycle * lsc.getAltRepeatCount();
             bool found = false;
-            for (i = numbers->begin(); 
+            for (i = numbers->begin();
                     i != numbers->end(); ++i) {
                 if (*i == altNumber) {
                     found = true;
                     break;
                 }
                 verse++;
-            }                             
-                
-            verseIndex = found ? verse : -1; 
+            }
+
+            verseIndex = found ? verse : -1;
         }
-                
+
         // Write the current verse if it exists or write a skip instruction
         writeVerse(seg, verseIndex, indentCol, str);
 
@@ -3438,20 +3437,20 @@ LilyPondExporter::writeVersesUnfolded(LilyPondSegmentsContext & lsc,
     // Initialisation, when first line and first cycle
     if (verseLine == 0 && cycle == 0) {
         verseIndexes.clear();
-        
+
         for (Segment * seg = lsc.useFirstSegment();
                         seg; seg = lsc.useNextSegment()) {
-            
+
             // Set a reference for each linked segments group
             if (seg->isLinked()) {
                 if (!seg->getLinker()->getReference()) {
                     seg->getLinker()->setReference(seg);
                 }
             }
-            
+
             // Reset the verse index value
             verseIndexes[seg] = 0;
-        }   
+        }
     }
 
     // Extract the current verse line from the segments involved
@@ -3462,7 +3461,7 @@ LilyPondExporter::writeVersesUnfolded(LilyPondSegmentsContext & lsc,
         // the reference segment.
         Segment * s = seg;
         if (seg->isLinked()) s = seg->getLinker()->getReference();
-        
+
         // If lsc.getNumberOfVolta() > 1, the segment is repeating
         // and as many verses as times the segment is repeated must
         // be printed.
@@ -3470,59 +3469,59 @@ LilyPondExporter::writeVersesUnfolded(LilyPondSegmentsContext & lsc,
             int vi = verseIndexes[s]++;
             writeVerse(seg, vi, indentCol, str);
         }
-    }  
+    }
 }
 
-                
+
 void
 LilyPondExporter::writeVerse(Segment *seg, int verseIndex,
                              int indentCol, std::ofstream &str)
 {
-    
-    str << std::endl;    
+
+    str << std::endl;
     if ((verseIndex < 0) || (verseIndex >= seg->getVerseCount())) {
         // No verse here: skip the segment
         str << indent(indentCol)
             << "% Skip segment \"" << seg->getLabel() << "\"" << std::endl;
         str << indent(indentCol) << "\\repeat unfold "
-                                 << seg->lyricsPositionsCount() 
+                                 << seg->lyricsPositionsCount()
                                  << " { \\skip 1 }" << std::endl;
     } else {
         // Verse exists: write it
         str << indent(indentCol)
-            << "% Segment \"" << seg->getLabel() 
+            << "% Segment \"" << seg->getLabel()
             << "\": verse " << (verseIndex + 1) << std::endl;
-        str << qStrToStrUtf8(getVerseText(seg, verseIndex, indentCol)) 
+        str << qStrToStrUtf8(getVerseText(seg, verseIndex, indentCol))
             << std::endl;
     }
-    
-    
+
+
 }
- 
- 
+
+
 QString
 LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 {
     bool haveLyric = false;
     bool firstNote = true;
-    
+
     // All the syllables of the segment along their bar numbers
-    QList<Syllable> syllables;  
-        
+    QList<Syllable> syllables;
+
     if ((currentVerse < 0) || (currentVerse >= seg->getVerseCount())) {
         return QString("% Looks like there is a bug near the call"
                        " of LilyPondExporter::getVerseText()");
     }
-    
-    
+
+
     // Extract all the lyrics from the segment and copy them in syllables
-    
+
     timeT lastTime = seg->getStartTime();
     int lastBar = m_composition->getBarNumber(lastTime);
     for (Segment::iterator j = seg->begin();
             seg->isBeforeEndMarker(j); ++j) {
 
-        Syllable syllable("", 0);        
+        Syllable syllable("", 0);
         QString rawSyllable("");
         bool isNote = (*j)->isa(Note::EventType);
         bool isLyric = false;
@@ -3552,7 +3551,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
                     syllable = Syllable("", myBar);
                     found = true;
                 }
-                
+
                 lastTime = myTime;
                 haveLyric = false;
                 firstNote = false;
@@ -3577,7 +3576,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
                 // exist when the syllable has been entered with the text tool
                 rawSyllable.replace(QRegularExpression("^\\s+"), "");
                 rawSyllable.replace(QRegularExpression("\\s+$"), "");
-                
+
                 syllable = Syllable(rawSyllable, myBar);
                 found = true;
                 haveLyric = true;
@@ -3586,9 +3585,9 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
 
         if (found) syllables.append(syllable);
     }
-    
-    
-    
+
+
+
     // Modify the content of syllables to eventually get:
     //    'xxx',   '-', '_', ''        -->  'xxx - "_" _'
     //    'xxx-',  '-', '-', 'yyy'     -->  'xxx -- _ _ yyy'
@@ -3601,17 +3600,17 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
     //    '__'                         -->  '"__"'
     //    '--'                         -->  '"--"'
     //    '-_'                         -->  '"-_"'
-    
+
     // True after "xxx-" or "xxx_" while parsing a row of "_"
-    bool sequence = false;     
-    
+    bool sequence = false;
+
     for (int i = 0; i < syllables.size(); ++i) {
-            
-        Syllable syl = syllables.at(i);     
+
+        Syllable syl = syllables.at(i);
 
         if (syl.syllableString.length() > 1) {
 
-            // Kept unchanged strings of more than one hyphens or underscores 
+            // Kept unchanged strings of more than one hyphens or underscores
             if (syl.syllableString.contains(QRegularExpression("^[-_]+$"))) {
                 // But protect it with double quotes
                 syl.addQuotes();
@@ -3623,57 +3622,57 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
             QChar last = syl.syllableString.back();
             if (last == '-' || last == '_') {
                 sequence = true;
-                
+
                 // Remove the final hyphen or underscore
                 syl.syllableString.resize(syl.syllableString.length() - 1);
-                
+
                 // Add quotes if needed and put back the syllable in the list
                 syl.protect();
                 syllables.replace(i, syl);
-                
+
                 QString signal(last);
                 signal += last;             // Signal is now "--" or "__"
-                
+
                 // Insert it after the syllable
                 Syllable signalSyllable(signal, syl.syllableBar);
                 syllables.insert(++i, signalSyllable);
-                
+
                 // and go to the next syllable
                 continue;
             }
         }
-        
+
         // Process isolated hyphens and underscores of a sequence
         if (sequence) {
             if (syl.syllableString == "-" || syl.syllableString == "_") {
                 syl.syllableString = "_";
                 syllables.replace(i, syl);   // Do not protect it
-                    
+
                 // and go to the next syllable
                 continue;
             }
-        } 
-        
+        }
+
         // Always replace an empty syllable with an underscore
         if (syl.syllableString == "") {
             syl.syllableString = "_";
             syllables.replace(i, syl);   // Do not protect it
-                
+
             // and go to the next syllable
             continue;
-        } 
+        }
 
         // "Ordinary" syllable
         sequence = false;                // Stop a possible sequence
         if (syl.protect()) {             // protect the syllable if needed
             syllables.replace(i, syl);   // and replace it in the list
         }
-    }  
-    
+    }
+
     // Copy the syllables in a string
     QString text("");
     for (int i = 0; i < syllables.size(); ++i) {
-        
+
         // At the beginning of a bar, write its number inside a LilyPond comment
         if (i == 0 || syllables.at(i).syllableBar != lastBar) {
             lastBar = syllables.at(i).syllableBar;
@@ -3685,7 +3684,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
         text += syllables.at(i).syllableString;
     }
     text += "\n";
- 
+
     return text;
 }
 
@@ -3693,25 +3692,25 @@ bool
 LilyPondExporter::Syllable::protect()
 {
     bool needsQuotes = false;
-    
+
     // A __desired__ isolated underscore (not an empty syllable) needs quotes
     if (syllableString == "_") needsQuotes = true;
-    
+
     // Unquoted, double underscore or double hyphen may be misinterpreted
     if (syllableString == "__") needsQuotes = true;
     if (syllableString == "--") needsQuotes = true;
-    
+
     // Look for spaces inside the syllable
     if (syllableString.contains(' ')) {
         needsQuotes = true;
-    }     
-    
+    }
+
     // Protect double quotation marks
     if (syllableString.contains('"')) {
         syllableString.replace('"', "\\\"");
         needsQuotes = true;
-    }    
-    
+    }
+
     // A syllable with a space inside it needs to be protected.
     // Sometimes a number among lyrics may give strange errors.
     // Same thing with '{', '}', '$', and '#' even if there is very little
@@ -3719,12 +3718,12 @@ LilyPondExporter::Syllable::protect()
     needsQuotes = needsQuotes
                     || syllableString.contains(QRegularExpression("[ 0-9{}$#]"));
 
-    // Protect the syllable with double quotes if needed 
+    // Protect the syllable with double quotes if needed
     if (needsQuotes) {
         addQuotes();
         return true;
     }
-    
+
     return false;
 }
 
@@ -3734,5 +3733,5 @@ LilyPondExporter::Syllable::addQuotes()
     syllableString.append('"');
     syllableString.prepend('"');
 }
-                    
+
 }

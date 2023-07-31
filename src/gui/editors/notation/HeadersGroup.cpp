@@ -151,7 +151,7 @@ HeadersGroup::setTracks(NotationWidget *widget, NotationScene *scene)
 
 }
 
-
+/* unused
 void
 HeadersGroup::completeToHeight(int height)
 {
@@ -163,6 +163,7 @@ HeadersGroup::completeToHeight(int height)
         m_filler->setFixedHeight(height - m_usedHeight);
     }
 }
+*/
 
 void
 HeadersGroup::slotUpdateAllHeaders(int x, bool force)

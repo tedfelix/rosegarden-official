@@ -194,10 +194,12 @@ void RosegardenDocument::attachView(RosegardenMainViewWidget *view)
     m_viewList.append(view);
 }
 
+/* unused
 void RosegardenDocument::detachView(RosegardenMainViewWidget *view)
 {
     m_viewList.removeOne(view);
 }
+*/
 
 void RosegardenDocument::attachEditView(EditViewBase *view)
 {

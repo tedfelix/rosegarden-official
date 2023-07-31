@@ -205,6 +205,7 @@ MappedObject::removeChild(MappedObject *object)
 
 // Return all child ids
 //
+/* unused
 MappedObjectPropertyList
 MappedObject::getChildren()
 {
@@ -215,10 +216,11 @@ MappedObject::getChildren()
 
     return list;
 }
-
+*/
 
 // Return all child ids of a certain type
 //
+ /* unused
 MappedObjectPropertyList
 MappedObject::getChildren(MappedObjectType type)
 {
@@ -231,6 +233,7 @@ MappedObject::getChildren(MappedObjectType type)
 
     return list;
 }
+*/
 
 void
 MappedObject::destroyChildren()
@@ -301,6 +304,7 @@ MappedStudio::MappedStudio() :
 #else
 #if defined(PTHREAD_MUTEX_RECURSIVE) || defined(__FreeBSD__)
 
+    // cppcheck-suppress ConfigurationNotChecked
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else
 
@@ -652,6 +656,7 @@ MappedStudio::getObjectById(MappedObjectId id)
     return rv;
 }
 
+/* unused
 MappedObject*
 MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
 {
@@ -667,6 +672,7 @@ MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
     RELEASE_LOCK;
     return rv;
 }
+*/
 
 MappedObject*
 MappedStudio::getFirst(MappedObjectType type)
@@ -1286,6 +1292,7 @@ MappedPluginSlot::getProperty(const MappedObjectProperty &property,
     return true;
 }
 
+/* unused
 bool
 MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
                                     QString &value)
@@ -1321,6 +1328,7 @@ MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
     }
     return true;
 }
+*/
 
 QString
 MappedPluginSlot::getProgram(int bank, int program)
@@ -1473,6 +1481,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
             dynamic_cast<MappedStudio*>(getParent());
 
         for (MappedObjectPropertyList::const_iterator i = values.begin();
+             // cppcheck-suppress StlMissingComparison
                 i != values.end(); ++i) {
 
             QString key = *i;
@@ -1501,6 +1510,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
         m_configuration.clear();
 
         for (MappedObjectPropertyList::const_iterator i = values.begin();
+             // cppcheck-suppress StlMissingComparison
              i != values.end(); ++i) {
 
             QString key = *i;
@@ -1607,6 +1617,7 @@ MappedPluginPort::getProperty(const MappedObjectProperty &property,
     return true;
 }
 
+/* unused
 bool
 MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
                                     QString &value)
@@ -1624,6 +1635,7 @@ MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
     }
     return true;
 }
+*/
 
 void
 MappedPluginPort::setValue(int instance, MappedObjectValue value)

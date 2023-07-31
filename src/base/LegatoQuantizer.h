@@ -30,7 +30,9 @@ public:
     // zero means do no quantization -- unlike for BasicQuantizer
     // this does have a purpose, as it still does the legato step
     explicit LegatoQuantizer(timeT unit = -1);
-    LegatoQuantizer(std::string source, std::string target, timeT unit = -1);
+    LegatoQuantizer(const std::string& source,
+                    const std::string& target,
+                    timeT unit = -1);
     LegatoQuantizer(const LegatoQuantizer &);
     ~LegatoQuantizer() override;
 
