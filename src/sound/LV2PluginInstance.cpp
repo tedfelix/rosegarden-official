@@ -175,7 +175,7 @@ LV2PluginInstance::getLatency()
                     m_inputBuffers[i][j] = 0.f;
                 }
             }
-            run(RealTime::zeroTime);
+            run(RealTime::zero());
 	}
         return *m_latencyPort;
     }
