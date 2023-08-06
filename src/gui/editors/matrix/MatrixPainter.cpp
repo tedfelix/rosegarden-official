@@ -62,10 +62,8 @@ MatrixPainter::MatrixPainter(MatrixWidget *widget) :
 
 MatrixPainter::~MatrixPainter()
 {
-    if (m_previewElement) {
-        delete(m_previewElement);
-    }
-    delete(m_previewEvent);
+    delete m_previewElement;
+    delete m_previewEvent;
 }
 
 void MatrixPainter::handleEventRemoved(Event * /*event*/)
@@ -270,11 +268,13 @@ MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
 
 void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)
 {
+    showPreview(e);
+
     // This can happen in case of screen/window capture -
     // we only get a mouse release, the window snapshot tool
     // got the mouse down
-    showPreview(e);
-    if (!m_currentElement) return;
+    if (!m_currentElement)
+        return;
 
     timeT time = m_clickTime;
     timeT endTime = e->snappedRightTime;

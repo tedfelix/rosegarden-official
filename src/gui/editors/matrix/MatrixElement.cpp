@@ -154,7 +154,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     }
 
     if (m_isPreview) {
-        colour = GUIPalette::PreviewColor;
+        //colour = GUIPalette::PreviewColor;
+        // Lorenzo prefers a lighter green.
+        colour = QColor(0xc8, 0xff, 0xc8);
     }
 
     // Turned off because adds little or no information to user (another
