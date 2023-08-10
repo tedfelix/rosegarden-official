@@ -6731,7 +6731,7 @@ RosegardenMainWindow::slotRelabelSegments()
 
     bool ok = false;
 
-    QString newLabel = InputDialog::getText(dynamic_cast<QWidget*>(this), tr("Input"), tr("Enter new label"), LineEdit::Normal, QString(), &ok);
+    QString newLabel = InputDialog::getText(dynamic_cast<QWidget*>(this), tr("Input"), editLabel, LineEdit::Normal, label, &ok);
 
     if (ok) {
         CommandHistory::getInstance()->addCommand
