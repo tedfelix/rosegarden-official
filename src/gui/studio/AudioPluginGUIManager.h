@@ -45,8 +45,8 @@ class AudioPluginGUIManager
                              QString key);
 
  private:
-    enum PluginArchitecture {UNKNOWN, OSC, LV2};
-    PluginArchitecture getArtchitecture(InstrumentId instrument, int position);
+    enum PluginGUIArchitecture {UNKNOWN, OSC, LV2};
+    PluginGUIArchitecture getArchitecture(InstrumentId instrument, int position);
 
     RosegardenMainWindow *m_mainWindow;
     Studio *m_studio;

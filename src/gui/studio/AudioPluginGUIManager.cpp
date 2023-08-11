@@ -60,7 +60,7 @@ void AudioPluginGUIManager::setStudio(Studio *studio)
 
 bool AudioPluginGUIManager::hasGUI(InstrumentId instrument, int position)
 {
-    PluginArchitecture arch = getArtchitecture(instrument, position);
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
     RG_DEBUG << "hasGui" << instrument << position << arch;
     switch(arch) {
     case OSC:
@@ -79,7 +79,7 @@ bool AudioPluginGUIManager::hasGUI(InstrumentId instrument, int position)
 
 void AudioPluginGUIManager::showGUI(InstrumentId instrument, int position)
 {
-    PluginArchitecture arch = getArtchitecture(instrument, position);
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
     switch(arch) {
     case OSC:
         m_oscManager->showGUI(instrument, position);
@@ -96,7 +96,7 @@ void AudioPluginGUIManager::showGUI(InstrumentId instrument, int position)
 
 void AudioPluginGUIManager::stopGUI(InstrumentId instrument, int position)
 {
-    PluginArchitecture arch = getArtchitecture(instrument, position);
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
     switch(arch) {
     case OSC:
         m_oscManager->stopGUI(instrument, position);
@@ -121,7 +121,7 @@ void AudioPluginGUIManager::stopAllGUIs()
 
 void AudioPluginGUIManager::updateProgram(InstrumentId instrument, int position)
 {
-    PluginArchitecture arch = getArtchitecture(instrument, position);
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
     switch(arch) {
     case OSC:
         m_oscManager->updateProgram(instrument, position);
@@ -139,7 +139,7 @@ void AudioPluginGUIManager::updateProgram(InstrumentId instrument, int position)
 void AudioPluginGUIManager::updatePort(InstrumentId instrument, int position,
                                        int port)
 {
-    PluginArchitecture arch = getArtchitecture(instrument, position);
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
     switch(arch) {
     case OSC:
         m_oscManager->updatePort(instrument, position, port);
@@ -157,7 +157,7 @@ void AudioPluginGUIManager::updatePort(InstrumentId instrument, int position,
 void AudioPluginGUIManager::updateConfiguration(InstrumentId instrument,
                                                 int position, QString key)
 {
-    PluginArchitecture arch = getArtchitecture(instrument, position);
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
     switch(arch) {
     case OSC:
         m_oscManager->updateConfiguration(instrument, position, key);
@@ -172,8 +172,8 @@ void AudioPluginGUIManager::updateConfiguration(InstrumentId instrument,
     }
 }
 
-AudioPluginGUIManager::PluginArchitecture
-AudioPluginGUIManager::getArtchitecture(InstrumentId instrument, int position)
+AudioPluginGUIManager::PluginGUIArchitecture
+AudioPluginGUIManager::getArchitecture(InstrumentId instrument, int position)
 {
     if (!m_studio) return UNKNOWN;
     PluginContainer *container = m_studio->getContainerById(instrument);
