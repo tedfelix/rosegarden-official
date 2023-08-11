@@ -467,14 +467,19 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     }
 #endif
 
-    // look for a high frequency system timer
+    // Look for a high frequency (>=750Hz) system timer.
+    // If we find one, return it.
 
+    // For each timer...
     for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
          i != m_timers.end(); ++i) {
+        // Skip any with a slave class.
         if (i->sclas != SND_TIMER_SCLASS_NONE)
             continue;
         if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+            // System timer?
             if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
+                // Check the frequency.
                 long hz = 1000000000 / i->resolution;
                 if (hz >= 750) {
                     return i->name;
@@ -482,6 +487,9 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
             }
         }
     }
+
+    // At this point we know the system timer has a freq less than
+    // 750Hz and is therefore unacceptable.
 
     // Look for the system RTC timer if available.  This has been
     // known to hang some real-time kernels, but reports suggest that
@@ -497,8 +505,11 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 
         for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
              i != m_timers.end(); ++i) {
-            if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
+            // Skip any that have a slave class.
+            if (i->sclas != SND_TIMER_SCLASS_NONE)
+                continue;
             if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+                // Found the RTC timer?  Return it.
                 if (i->device == SND_TIMER_GLOBAL_RTC) {
                     return i->name;
                 }
@@ -533,11 +544,14 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 
     // next look for slow, unpopular 100Hz (2.4) or 250Hz (2.6) system timer
 
+    // For each timer...
     for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
          i != m_timers.end(); ++i) {
+        // If this has a slave class, skip it.
         if (i->sclas != SND_TIMER_SCLASS_NONE)
             continue;
         if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+            // System timer?
             if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
                 AUDIT << "Using low-resolution system timer, sending a warning" << '\n';
                 RG_DEBUG << "getAutoTimer(): Using low-resolution system timer, sending a warning";
