@@ -345,10 +345,11 @@ void MatrixPainter::stow()
     clearPreview();
 }
 
-void MatrixPainter::slotMatrixScrolled(int /* newX */, int /* newY */)
+//void MatrixPainter::slotMatrixScrolled(int /* newX */, int /* newY */)
+/* unused
 {
     // newX = newY = 42;
-/*!!!
+    */ /*!!! */ /*
     if (!m_currentElement)
         return ;
 
@@ -366,8 +367,9 @@ void MatrixPainter::slotMatrixScrolled(int /* newX */, int /* newY */)
     int newPitch = m_currentViewSegment->getHeightAtCanvasCoords(p.x(), p.y());
 
     handleMouseMove(newTime, newPitch, 0);
-*/
+*/ /*
 }
+*/
 
 void MatrixPainter::setBasicContextHelp()
 {

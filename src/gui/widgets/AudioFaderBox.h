@@ -52,7 +52,7 @@ class AudioFaderBox : public QFrame
 
 public:
     AudioFaderBox(QWidget *parent,
-                  QString id = "",
+                  const QString& id = "",
                   bool haveInOut = true,
                   const char *name = nullptr);
 
@@ -60,7 +60,7 @@ public:
 
     void setIsSynth(bool);
 
-    bool owns(const QObject *object);
+    // unused bool owns(const QObject *object);
 
     void setFont(QFont);
 
@@ -81,8 +81,8 @@ public:
     QLabel                  *m_inputLabel;
     QLabel                  *m_outputLabel;
 
-    AudioRouteMenu          *m_audioInput; 
-    AudioRouteMenu          *m_audioOutput; 
+    AudioRouteMenu          *m_audioInput;
+    AudioRouteMenu          *m_audioOutput;
 
     QPushButton             *m_synthGUIButton;
 

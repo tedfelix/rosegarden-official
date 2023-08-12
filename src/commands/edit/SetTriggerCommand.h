@@ -41,8 +41,8 @@ public:
                       bool notesOnly,
                       bool retune,
                       const std::string& timeAdjust,
-                      Mark mark,
-                      QString name) :
+                      const Mark& mark,
+                      const QString& name) :
         BasicCommand(name,
                      selection,
                      true),  // bruteForceRedo

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -85,8 +85,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     m_headersPage = new HeadersConfigurationPage(this, m_doc);
     tabWidget->addTab(m_headersPage, tr("Headers"));
-    
-    
+
+
     //
     // LilyPond export: Basic options
     //
@@ -337,7 +337,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     connect(buttonBox, &QDialogButtonBox::helpRequested, this, &LilyPondOptionsDialog::help);
 
     populateDefaultValues();
-    
+
     // Initally enable or disable m_useShortNames according to inital setting of m_lilyLanguage
     m_useShortNames->checkVersion(m_lilyLanguage->currentIndex());
 
@@ -355,7 +355,7 @@ LilyPondOptionsDialog::help()
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
-    
+
 
 void
 LilyPondOptionsDialog::populateDefaultValues()
@@ -452,7 +452,7 @@ LilyPondOptionsDialog::slotApply()
 
     m_headersPage->apply();
 }
- 
+
 void
 LilyPondOptionsDialog::accept()
 {
@@ -460,6 +460,7 @@ LilyPondOptionsDialog::accept()
     QDialog::accept();
 }
 
+/* unused
 void
 LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
 {
@@ -495,5 +496,6 @@ LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
 
     settings.endGroup();
 }
+*/
 
 }

@@ -76,7 +76,7 @@ private:
                      Indication *> IndicationMap;
     IndicationMap m_indications;
 
-    void guessDirections();
+    static void guessDirections();
     void applyTextDynamics();
     void applyHairpins();
     void stressBeats();
@@ -86,7 +86,7 @@ private:
     // an iterator pointing to that indication if so
     IndicationMap::iterator findEnclosingIndication(Event *,
                                                     const std::string& type);
-    int getVelocityForDynamic(const std::string& dynamic);
+    static int getVelocityForDynamic(const std::string& dynamic);
 };
 
 

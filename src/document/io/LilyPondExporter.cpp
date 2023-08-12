@@ -623,7 +623,7 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
 
 std::string
 LilyPondExporter::convertPitchToLilyNoteName(int pitch, Accidental accidental,
-                                             const Rosegarden::Key &key)
+                                             const Rosegarden::Key &key) const
 {
     Pitch p(pitch, accidental);
     char noteName = (char)tolower(p.getNoteName(key));
@@ -634,7 +634,7 @@ LilyPondExporter::convertPitchToLilyNoteName(int pitch, Accidental accidental,
 
 std::string
 LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
-                                         const Rosegarden::Key &key)
+                                         const Rosegarden::Key &key) const
 {
     // calculate note name and write note
     std::string lilyNote = convertPitchToLilyNoteName(pitch, accidental, key);
@@ -764,7 +764,7 @@ LilyPondExporter::indent(const int &column)
 }
 
 std::string
-LilyPondExporter::protectIllegalChars(std::string inStr)
+LilyPondExporter::protectIllegalChars(const std::string& inStr)
 {
 
     QString tmpStr = strtoqstr(inStr);
@@ -2985,7 +2985,7 @@ LilyPondExporter::writeBar(Segment *s,
 }
 
 void
-LilyPondExporter::writeTimeSignature(TimeSignature timeSignature,
+LilyPondExporter::writeTimeSignature(const TimeSignature& timeSignature,
                                      int col, std::ofstream &str)
 {
     if (timeSignature.isHidden()) {

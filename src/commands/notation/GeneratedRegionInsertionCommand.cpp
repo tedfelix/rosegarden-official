@@ -28,7 +28,7 @@ namespace Rosegarden
 {
 
 GeneratedRegionInsertionCommand::GeneratedRegionInsertionCommand(Segment &segment, timeT time,
-        GeneratedRegion generatedRegion) :
+        const GeneratedRegion& generatedRegion) :
         BasicCommand(tr("Insert Generated Region"), segment, time, time + 1),
         m_generatedRegion(generatedRegion),
         m_lastInsertedEvent(nullptr)

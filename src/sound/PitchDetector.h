@@ -108,7 +108,7 @@ public:
     // unused int getFrameSize() const;             /**< Get current audio buf size */
     void setFrameSize( int nextFrameSize );  /**< Set current audio buf size */
     // unused int getStepSize() const;              /**< Get no. samples between anals */
-    void setStepSize( int nextStepSize ); /**< Set no, samples between anals */
+    // unused void setStepSize( int nextStepSize ); /**< Set no, samples between anals */
     int getBufferSize() const;            /**< Get size of audio buffer */
 
     void setMethod( Method method );

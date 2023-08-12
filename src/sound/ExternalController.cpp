@@ -244,6 +244,7 @@ void ExternalController::sendAllCCs(
     }
 }
 
+/* unused
 void ExternalController::sendSysExHex(const QString &hexString)
 {
     // Not enabled?  Bail.
@@ -263,7 +264,9 @@ void ExternalController::sendSysExHex(const QString &hexString)
 
     sendSysExRaw(rawString);
 }
+*/
 
+/* unused
 void
 ExternalController::sendSysExRaw(const std::string &rawString)
 {
@@ -283,6 +286,7 @@ ExternalController::sendSysExRaw(const std::string &rawString)
 
     RosegardenSequencer::getInstance()->processMappedEvent(event);
 }
+*/
 
 // cppcheck-suppress unusedFunction
 bool ExternalController::getSysEx(std::string & /*rawString*/)

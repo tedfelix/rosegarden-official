@@ -45,7 +45,7 @@ public:
 
     // If you call one of these methods before the startup test has
     // completed in the background, then it will block.
-    bool haveAudioFileImporter(QStringList *missingApplications);
+    // unused bool haveAudioFileImporter(QStringList *missingApplications);
 
 signals:
     void newerVersionAvailable(QString);

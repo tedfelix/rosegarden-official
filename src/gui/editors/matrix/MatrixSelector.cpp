@@ -459,6 +459,7 @@ MatrixSelector::stow()
 
 }
 
+/* unused
 void
 MatrixSelector::slotHideSelection()
 {
@@ -467,10 +468,13 @@ MatrixSelector::slotHideSelection()
 //!!!    m_selectionRect->setSize(0, 0);
 //!!!    m_widget->canvas()->update();
 }
+*/
 
+/* unused
 void
-MatrixSelector::slotMatrixScrolled(int /* newX */, int /* newY */)
+MatrixSelector::slotMatrixScrolled(int , int)
 {
+*/
 /*!!!
     if (m_updateRect) {
 
@@ -495,7 +499,7 @@ MatrixSelector::slotMatrixScrolled(int /* newX */, int /* newY */)
         m_widget->canvas()->update();
     }
 */
-}
+//}
 
 void
 MatrixSelector::setViewCurrentSelection(bool always)
@@ -626,5 +630,3 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
 QString MatrixSelector::ToolName() { return "selector"; }
 
 }
-
-

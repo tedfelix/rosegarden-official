@@ -38,7 +38,7 @@ class AddMarkCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddMarkCommand)
 
 public:
-    AddMarkCommand(Mark mark,
+    AddMarkCommand(const Mark& mark,
                    EventSelection &selection) :
         BasicCommand(getGlobalName(mark), selection, true),
         m_selection(&selection),
@@ -52,8 +52,8 @@ protected:
     void modifySegment() override;
 
 private:
-    static QString getGlobalName(Mark markType);
-    static QString getActionName(Mark mark);
+    static QString getGlobalName(const Mark& markType);
+    static QString getActionName(const Mark& mark);
 
     // only used on 1st execute (cf bruteForceRedo)
     EventSelection *m_selection;

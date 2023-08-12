@@ -643,7 +643,7 @@ void ActionData::loadData(const QString& name)
     reader.parse(f);
 }
 
-QString ActionData::translate(QString text, QString disambiguation) const
+QString ActionData::translate(QString text, QString disambiguation)
 {
     // These translations are extracted from data/ui/*.rc files via
     // scripts/extract*.pl and pulled into the QObject translation context in

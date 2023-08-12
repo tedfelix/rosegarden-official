@@ -41,7 +41,7 @@ class AddTimeSignatureCommand : public NamedCommand
 public:
     AddTimeSignatureCommand(Composition *composition,
                             timeT time,
-                            TimeSignature timeSig);
+                            const TimeSignature& timeSig);
     ~AddTimeSignatureCommand() override;
 
     static QString getGlobalName() { return tr("Add Time Si&gnature Change..."); }
@@ -56,7 +56,7 @@ protected:
 
     TimeSignature *m_oldTimeSignature; // for undo
     int m_timeSigIndex; // for undo
-};    
+};
 
 
 

@@ -57,7 +57,7 @@ public:
     bool shouldImportBanks() const;
     bool shouldImportKeyMappings() const;
     bool shouldImportControllers() const;
-    bool shouldOverwriteBanks() const; 
+    bool shouldOverwriteBanks() const;
     bool shouldRename() const;
 
     bool haveDevice() const;
@@ -75,9 +75,9 @@ public slots:
     void slotCancel();
 
 protected:
-    bool importFromRG(QString fileName);
-    bool importFromSF2(QString fileName);
-    bool importFromLSCP(QString filename);
+    bool importFromRG(const QString& fileName);
+    bool importFromSF2(const QString& fileName);
+    bool importFromLSCP(const QString& filename);
 
     QUrl               m_url;
 

@@ -37,6 +37,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
     NamedCommand(getGlobalName(true)),
     m_studio(studio),
     m_deviceId(deviceId),
+    m_baseInstrumentId(0),
     m_deviceCreated(true)  // We are doing delete.
 {
     Device *device = m_studio->getDevice(m_deviceId);
@@ -48,7 +49,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
 
     // Save for undo.
 
-    m_name = device->getName();
+    m_deviceName = device->getName();
     m_type = device->getType();
     m_direction = MidiDevice::Play;
 
@@ -93,7 +94,8 @@ CreateOrDeleteDeviceCommand::execute()
         //RG_DEBUG << "execute() - reconnected device " << m_deviceId << " to " << m_connection;
 
         // Add to Studio.
-        m_studio->addDevice(m_name, m_deviceId, m_baseInstrumentId, m_type);
+        m_studio->addDevice(m_deviceName, m_deviceId,
+                            m_baseInstrumentId, m_type);
 
         Device *device = m_studio->getDevice(m_deviceId);
         if (device) {

@@ -78,7 +78,7 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
                                            timeT startTime,
                                            timeT endTime,
-                                           QString settingsGroup,
+                                           const QString& settingsGroup,
                                            QuantizeScope scope):
     BasicCommand("Quantize",
                  segment, startTime, endTime,
@@ -93,7 +93,7 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
-                                           QString settingsGroup,
+                                           const QString& settingsGroup,
                                            QuantizeScope scope) :
     BasicCommand("Quantize",
                  selection.getSegment(),

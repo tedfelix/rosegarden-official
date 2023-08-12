@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MidiFilterDialog]"
 
 #include "MidiFilterDialog.h"
 
@@ -58,7 +59,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     metagrid->addWidget(hBox, 0, 0);
 
 
-    m_thruBox = new QGroupBox( 
+    m_thruBox = new QGroupBox(
                          tr("THRU events to ignore"), hBox );
     QVBoxLayout *thruBoxLayout = new QVBoxLayout;
     hBoxLayout->addWidget(m_thruBox);
@@ -180,7 +181,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     m_applyButton = m_buttonBox->button(QDialogButtonBox::Apply);
     connect(m_applyButton, &QAbstractButton::clicked, this, &MidiFilterDialog::slotApply);
 
-    
+
     // changing the state of any checkbox sets modified true
     connect(noteThru, &QCheckBox::stateChanged,
             this, &MidiFilterDialog::slotSetModified);
@@ -308,7 +309,7 @@ MidiFilterDialog::setModified(bool value)
 {
     if (m_modified == value)
         return ;
-    
+
     if (! m_applyButton) return;
 
     if (value) {

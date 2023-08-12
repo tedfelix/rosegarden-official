@@ -161,7 +161,7 @@ signals:
 
 public slots:
 //    virtual void slotUpdateElementsHPos();
-    virtual void slotScrollHorizSmallSteps(int);
+    // unused virtual void slotScrollHorizSmallSteps(int);
     virtual void slotSetPannedRect(QRectF);
 //    virtual void slotSetScale(double);
 
@@ -196,7 +196,7 @@ protected:
 
     // Stacking of the SegmentItems on the canvas
     //
-    std::pair<int, int> getZMinMax();
+    // unused std::pair<int, int> getZMinMax();
 
 //    virtual void init();
 //virtual void drawBackground() = 0;
@@ -207,7 +207,7 @@ protected:
     QRect mapRectToWidget(QRectF *);
     QPolygon mapItemToWidget(QSharedPointer<ControlItem>);
     QPointF mapWidgetToItem(QPoint*);
-    QColor valueToColour(int max, int val);
+    // unused QColor valueToColour(int max, int val);
     void updateSelection();
     virtual void createRulerMenu();
 

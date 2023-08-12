@@ -50,7 +50,7 @@ protected:
 
     Event *m_event; // only used on 1st execute (cf bruteForceRedo)
     timeT m_relayoutEndTime;
-    std::string makeName(std::string);
+    static std::string makeName(std::string);
 };
 
 

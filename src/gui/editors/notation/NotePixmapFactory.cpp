@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotePixmapFactory]"
 #define RG_NO_DEBUG_PRINT 1
 
 #ifdef __GNUG__
@@ -119,7 +120,6 @@ NotePixmapFactory::NotePixmapFactory(const QString& fontName, int size, int grac
     init(fontName, size);
 }
 
-// cppcheck-suppress uninitMemberVar
 NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_selected(false),
     m_shaded(false),

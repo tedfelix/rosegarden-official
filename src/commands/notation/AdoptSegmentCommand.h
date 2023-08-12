@@ -39,14 +39,14 @@ class AdoptSegmentCommand : public QObject, public NamedCommand
     Q_OBJECT;
 
  public:
-    AdoptSegmentCommand(QString name,
+    AdoptSegmentCommand(const QString& name,
                         NotationView &view,
                         Segment *segment,
                         bool into = true,
                         bool inComposition = false);
 
     // Alternative constructor if segment does not exist at creation time
-    AdoptSegmentCommand(QString name,
+    AdoptSegmentCommand(const QString& name,
                         NotationView &view,
                         const QString& segmentMarking,
                         Composition* comp,
@@ -62,7 +62,7 @@ protected:
 
 protected slots:
     void slotViewdestroyed();
-    
+
  private:
 
     void requireSegment();
@@ -78,7 +78,7 @@ protected slots:
     /// the composition
     Composition *m_comp;
 };
- 
+
 }
 
 #endif /* ifndef RG_ADOPTSEGMENTCOMMAND_H */

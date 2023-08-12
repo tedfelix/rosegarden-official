@@ -34,7 +34,7 @@ class ClearTriggersCommand : public BasicCommand
 {
 public:
     ClearTriggersCommand(EventSelection &selection,
-                         QString name) :
+                         const QString& name) :
         BasicCommand(name,
                      selection,
                      true),  // bruteForceRedo

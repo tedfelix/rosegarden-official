@@ -52,7 +52,7 @@ public:
                          timeT startTime,
                          timeT endTime,
                          std::shared_ptr<Quantizer> quantizer);
-    
+
     EventQuantizeCommand(EventSelection &selection,
                          std::shared_ptr<Quantizer> quantizer);
 
@@ -60,16 +60,16 @@ public:
     EventQuantizeCommand(Segment &segment,
                          timeT startTime,
                          timeT endTime,
-                         QString settingsGroup,
+                         const QString& settingsGroup,
                          QuantizeScope scope);
-    
+
     /// Constructs own Quantizer based on QSettings data in given group
     EventQuantizeCommand(EventSelection &selection,
-                         QString settingsGroup,
+                         const QString& settingsGroup,
                          QuantizeScope scope);
 
     ~EventQuantizeCommand() override;
-    
+
     static QString getGlobalName(
             std::shared_ptr<Quantizer> quantizer = std::shared_ptr<Quantizer>());
 

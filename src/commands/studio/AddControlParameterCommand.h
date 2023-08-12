@@ -41,7 +41,7 @@ class AddControlParameterCommand : public NamedCommand
 public:
     AddControlParameterCommand(Studio *studio,
                                DeviceId device,
-                               ControlParameter control):
+                               const ControlParameter& control):
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_device(device),
@@ -60,7 +60,7 @@ protected:
     DeviceId             m_device;
     ControlParameter     m_control;
     int                              m_id;
-    
+
 };
 
 

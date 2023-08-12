@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MusicXMLImportHelper]"
+
 #include "MusicXMLImportHelper.h"
 #include "base/Event.h"
 #include "base/BaseProperties.h"

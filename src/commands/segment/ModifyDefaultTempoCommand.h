@@ -39,7 +39,8 @@ public:
                               tempoT tempo):
         NamedCommand(getGlobalName()),
         m_composition(composition),
-        m_tempo(tempo) {}
+        m_tempo(tempo),
+        m_oldTempo(tempo) {}
 
     ~ModifyDefaultTempoCommand() override {}
 

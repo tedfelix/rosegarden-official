@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -131,6 +131,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
     return that.m_fontNames;
 }
 
+/* unused
 std::vector<int>
 NoteFontFactory::getAllSizes(const QString &fontName)
 {
@@ -146,6 +147,7 @@ NoteFontFactory::getAllSizes(const QString &fontName)
     std::sort(v.begin(), v.end());
     return v;
 }
+*/
 
 std::vector<int>
 NoteFontFactory::getScreenSizes(const QString &fontName)
@@ -235,6 +237,7 @@ NoteFontFactory::getDefaultMultiSize(const QString &fontName)
     return sizes[sizes.size() / 2];
 }
 
+/* unused
 bool
 NoteFontFactory::isAvailableInSize(const QString &fontName, int size)
 {
@@ -244,5 +247,6 @@ NoteFontFactory::isAvailableInSize(const QString &fontName, int size)
     }
     return false;
 }
+*/
 
 }

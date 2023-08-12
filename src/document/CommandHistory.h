@@ -79,19 +79,19 @@ public:
     int getUndoLimit() const { return m_undoLimit; }
 
     /// Set the maximum number of items in the undo history.
-    void setUndoLimit(int limit);
+    // unused void setUndoLimit(int limit);
 
     /// Return the maximum number of items in the redo history.
     int getRedoLimit() const { return m_redoLimit; }
 
     /// Set the maximum number of items in the redo history.
-    void setRedoLimit(int limit);
+    // unused void setRedoLimit(int limit);
 
     /// Return the maximum number of items visible in undo and redo menus.
     int getMenuLimit() const { return m_menuLimit; }
 
     /// Set the maximum number of items in the menus.
-    void setMenuLimit(int limit);
+    // unused void setMenuLimit(int limit);
 
     /// Enable/Disable undo (during playback).
     void enableUndo(bool enable);

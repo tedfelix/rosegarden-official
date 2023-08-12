@@ -146,6 +146,7 @@ Rotary::setMaximum(float max)
     update();
 }
 
+/* unused
 void
 Rotary::setStep(float step)
 {
@@ -155,6 +156,7 @@ Rotary::setStep(float step)
     m_step = step;
     update();
 }
+*/
 
 void
 Rotary::setPageStep(float step)

@@ -379,7 +379,7 @@ popInsertNoteoff(int trackid, Composition &comp)
 }
 
 int
-InternalSegmentMapper::addSize(int size, Segment *s)
+InternalSegmentMapper::addSize(int size, Segment *s) const
 {
     int repeatCount = getSegmentRepeatCount();
     // Double the size because we may get a noteoff for every noteon

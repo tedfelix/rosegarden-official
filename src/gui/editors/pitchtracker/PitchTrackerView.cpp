@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PitchTrackerView]"
+
 #include "PitchTrackerView.h"
 #include "PitchGraphWidget.h"
 #include "PitchHistory.h"

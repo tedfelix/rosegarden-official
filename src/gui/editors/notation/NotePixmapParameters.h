@@ -41,7 +41,7 @@ public:
 
     NotePixmapParameters(Note::Type noteType,
                          int dots,
-                         Accidental accidental =
+                         const Accidental& accidental =
                          Accidentals::NoAccidental);
     ~NotePixmapParameters();
 
@@ -98,8 +98,8 @@ public:
 
     void setInRange(bool inRange)         { m_inRange          = inRange;    }
 
-    void setForcedColor(QColor color) { m_forcedColor = color;
-                                        m_forceColor = true; }
+    void setForcedColor(const QColor& color) { m_forcedColor = color;
+                                               m_forceColor = true; }
     void clearForcedColour() { m_forceColor = false; }
 
     /** Return a list of normal marks that draw either above or below the note

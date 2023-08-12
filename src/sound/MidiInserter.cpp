@@ -110,7 +110,7 @@ MidiInserter(Composition &composition, int timingDivision, RealTime trueEnd) :
 // @author Tom Breton (Tehom)
 timeT
 MidiInserter::
-getAbsoluteTime(RealTime realtime)
+getAbsoluteTime(RealTime realtime) const
 {
     timeT time = m_comp.getElapsedTimeForRealTime(realtime);
     RG_DEBUG << "getAbsoluteTime" << realtime << time;
@@ -129,7 +129,7 @@ getAbsoluteTime(RealTime realtime)
 // Adapted from MidiFile.cpp
 void
 MidiInserter::
-initNormalTrack(TrackData &trackData, TrackId RGTrackPos)
+initNormalTrack(TrackData &trackData, TrackId RGTrackPos) const
 {
     Track *track = m_comp.getTrackById(RGTrackPos);
     trackData.m_previousTime = 0;

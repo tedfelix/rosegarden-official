@@ -58,7 +58,6 @@ protected:
     Marker          *m_marker;
     int              m_id;
     timeT            m_time;
-    std::string                  m_name;
     std::string                  m_descr;
     bool                         m_detached;
 

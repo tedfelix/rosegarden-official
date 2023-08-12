@@ -633,9 +633,11 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
     }
 }
 
-void ControlRuler::slotScrollHorizSmallSteps(int /*step*/)
+/* unused
+void ControlRuler::slotScrollHorizSmallSteps(int)
 {
 }
+*/
 
 int ControlRuler::mapXToWidget(float x)
 {
@@ -982,6 +984,7 @@ long ControlRuler::yToValue(float y)
     return value;
 }
 
+/* unused
 QColor ControlRuler::valueToColour(int max, int val)
 {
     int maxDefault = DefaultVelocityColour::getInstance()->getMaxValue();
@@ -995,6 +998,7 @@ QColor ControlRuler::valueToColour(int max, int val)
 
     return DefaultVelocityColour::getInstance()->getColour(value);
 }
+*/
 
 /* unused
 void ControlRuler::flipForwards()
@@ -1014,6 +1018,7 @@ void ControlRuler::flipBackwards()
 }
 */
 
+/* unused
 std::pair<int, int> ControlRuler::getZMinMax()
 {
     std::vector<int> zList;
@@ -1022,6 +1027,7 @@ std::pair<int, int> ControlRuler::getZMinMax()
 
     return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
 }
+*/
 
 SnapGrid* ControlRuler::getSnapGrid() const
 {

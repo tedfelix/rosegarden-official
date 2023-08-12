@@ -22,7 +22,7 @@
 
 
 namespace Rosegarden {
-        
+
 class AudioListView : public QTreeWidget
 {
     Q_OBJECT
@@ -31,21 +31,21 @@ public:
 
 protected:
 signals:
-    
+
     void dropped(QDropEvent*, QTreeWidget*, const QList<QUrl>&);
-    
+
 protected:
 //     bool acceptDrag(QDropEvent* e) const;
 
-    
+
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent*) override;
-    
+
     void mouseMoveEvent(QMouseEvent *event) override;
-    
+
 //     virtual QMimeData *mimeData(const QList<QTreeWidgetItem*> items) const;
-    QStringList mimeTypes() const override;
-    
+    // unused QStringList mimeTypes() const override;
+
 };
 
 

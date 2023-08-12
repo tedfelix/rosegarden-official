@@ -47,13 +47,13 @@ typedef enum
     Duplex
 } PortDirection;
 
-QDataStream& operator>>(QDataStream& s, MappedObjectIdList&);
+// unused QDataStream& operator>>(QDataStream& s, MappedObjectIdList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectIdList&);
 
-QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList&);
+// unused QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectPropertyList&);
 
-QDataStream& operator>>(QDataStream& s, MappedObjectValueList&);
+// unused QDataStream& operator>>(QDataStream& s, MappedObjectValueList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectValueList&);
 
 }

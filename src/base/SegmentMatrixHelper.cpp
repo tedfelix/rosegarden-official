@@ -27,6 +27,7 @@ Segment::iterator SegmentMatrixHelper::insertNote(Event* e)
     return i;
 }
 
+/* unused
 bool
 SegmentMatrixHelper::isDrumColliding(Event* e)
 {
@@ -46,5 +47,6 @@ SegmentMatrixHelper::isDrumColliding(Event* e)
     }
     return false;
 }
+*/
 
 }

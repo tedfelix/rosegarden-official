@@ -206,7 +206,7 @@ public:
      * Return true if another staff inside the scene than the given one
      * exists near the given time.
      */
-    bool isAnotherStaffNearTime(NotationStaff *currentStaff, timeT t);
+    // unused bool isAnotherStaffNearTime(NotationStaff *currentStaff, timeT t);
 
    /**
     * Update the refresh status off all segments on the given track and

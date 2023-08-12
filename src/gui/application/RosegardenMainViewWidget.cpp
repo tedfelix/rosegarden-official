@@ -870,6 +870,7 @@ void RosegardenMainViewWidget::slotEditTriggerSegment(int id)
     slotEditSegmentsEventList(segmentsToEdit);
 }
 
+/* unused
 void RosegardenMainViewWidget::slotSegmentAutoSplit(Segment *segment)
 {
     AudioSplitDialog aSD(this, segment, RosegardenDocument::currentDocument);
@@ -881,6 +882,7 @@ void RosegardenMainViewWidget::slotSegmentAutoSplit(Segment *segment)
         slotAddCommandToHistory(command);
     }
 }
+*/
 
 void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
 {
@@ -1460,6 +1462,7 @@ RosegardenMainViewWidget::slotAddAudioSegment(AudioFileId audioId,
     }
 }
 
+/* unused
 void
 RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFileId,
         const RealTime &startTime,
@@ -1486,6 +1489,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFi
         emit segmentsSelected(selection);
     }
 }
+*/
 
 void
 RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFileId,
@@ -1561,6 +1565,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 }
 
 void
+// cppcheck-suppress passedByValue
 RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 {
     // If audio is not OK
@@ -1666,6 +1671,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 }
 
 void
+// cppcheck-suppress passedByValue
 RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
 {
     QTextStream s(&audioDesc, QIODevice::ReadOnly);
@@ -1697,16 +1703,17 @@ RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
     slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);
 }
 
+/* unused
 void
 RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
 {
     RG_DEBUG << "slotSetRecord() - id = " << id << ",value = " << value;
-    /*
+*//*
         // IPB
         //
         m_instrumentParameterBox->setRecord(value);
     */
-#ifdef NOT_DEFINED
+    /* #ifdef NOT_DEFINED
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
     Composition::trackcontainer &tracks = comp.getTracks();
     Composition::trackiterator it;
@@ -1721,7 +1728,9 @@ RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
     // Studio &studio = RosegardenDocument::currentDocument->getStudio();
     // Instrument *instr = studio.getInstrumentById(id);
 }
+*/
 
+/* unused
 void
 RosegardenMainViewWidget::slotSetSolo(InstrumentId id, bool value)
 {
@@ -1729,7 +1738,9 @@ RosegardenMainViewWidget::slotSetSolo(InstrumentId id, bool value)
 
     emit toggleSolo(value);
 }
+*/
 
+/* unused
 void
 RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
         timeT )
@@ -1758,6 +1769,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
 
     createNotationView(segments);
 }
+*/
 
 void
 RosegardenMainViewWidget::slotSynchroniseWithComposition()

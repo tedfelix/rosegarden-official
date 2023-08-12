@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,14 +29,13 @@ namespace Rosegarden
 RemoveMarkerCommand::RemoveMarkerCommand(Composition *comp,
         int id,
         timeT time,
-        const std::string &name,
+        const std::string &,
         const std::string &description):
         NamedCommand(getGlobalName()),
         m_composition(comp),
         m_marker(nullptr),
         m_id(id),
         m_time(time),
-        m_name(name),
         m_descr(description),
         m_detached(false)
 {}

@@ -81,7 +81,7 @@ protected:
     // @author Tom Breton (Tehom)
     struct SliderSpec
     {
-    SliderSpec(QString label, int defaultValue,
+    SliderSpec(const QString& label, int defaultValue,
                const SelectionSituation *situation,
                int minValue = 0)
     : m_label(label),
@@ -124,6 +124,7 @@ protected:
         {}
 
         EventSelection *getSelection();
+        //cppcheck-suppress functionConst
         void            modifySegment();
 
         const SelectionSituation *m_situation;

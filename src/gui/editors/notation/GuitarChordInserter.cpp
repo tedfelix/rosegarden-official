@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -52,12 +52,14 @@ GuitarChordInserter::slotNotesSelected()
     invokeInParentView("draw");
 }
 
+/* unused
 void
 GuitarChordInserter::slotGuitarChordSelected()
 {
     // Switch to last selected Guitar Chord
     // m_nParentView->slotLastGuitarChordAction();
 }
+*/
 
 void
 GuitarChordInserter::slotEraseSelected()
@@ -125,7 +127,7 @@ GuitarChordInserter::handleSelectedGuitarChord(const NotationMouseEvent *e)
         Guitar::Chord chord(*(e->element->event()));
 
         m_guitarChordSelector->setChord(chord);
-        
+
         if (processDialog(e->staff, insertionTime)) {
             // Erase old guitar chord
             EraseEventCommand *command =
@@ -147,4 +149,3 @@ void GuitarChordInserter::createNewGuitarChord(const NotationMouseEvent *e)
 QString GuitarChordInserter::ToolName() { return "guitarchordinserter"; }
 
 }
-

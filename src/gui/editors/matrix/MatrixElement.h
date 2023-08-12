@@ -66,7 +66,7 @@ public:
     // short as 0, and durations less than about 60 generate too narrow a width
     // for human manipulation)
     double getWidth() const { return (m_width >= 6.0f ? m_width : 6.0f); }
-    double getElementVelocity() { return m_velocity; }
+    double getElementVelocity() const { return m_velocity; }
 
     void setSelected(bool selected);
 
@@ -91,7 +91,7 @@ public:
 
     static MatrixElement *getMatrixElement(QGraphicsItem *);
 
-    bool isPreview();
+    bool isPreview() const;
 
     // Z values for occlusion/layering of object in graph display.
     // Difference between NORMAL_ and ACTIVE_  needed when notes from

@@ -124,10 +124,12 @@ protected:
     void setSubHandler(XmlSubHandler* sh);
     XmlSubHandler* getSubHandler() { return m_subHandler; }
 
-    void addMIDIDevice(QString name, bool createAtSequencer, QString dir);  // dir = play|record
+    void addMIDIDevice(const QString& name,
+                       bool createAtSequencer,
+                       const QString& dir);  // dir = play|record
     void setMIDIDeviceConnection(QString connection);
     void setMIDIDeviceName(QString name);
-    void skipToNextPlayDevice();
+    // unused void skipToNextPlayDevice();
     InstrumentId mapToActualInstrument(InstrumentId oldId);
 
     RosegardenDocument    *m_doc;
@@ -193,7 +195,9 @@ protected:
 
     bool m_hasActiveAudio;
 
-    bool locateAudioFile(QString id, QString file, QString label);
+    bool locateAudioFile(const QString& id,
+                         const QString& file,
+                         const QString& label);
     /// Whether the audio skip warning has been issued.
     bool m_audioSkipWarning;
 

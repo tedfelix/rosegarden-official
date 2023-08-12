@@ -60,29 +60,37 @@ void ControlItem::updateSegment()
 {
 }
 
+/* unused
 void ControlItem::updateFromValue()
 {
 }
+*/
 
 void ControlItem::draw(QPainter &/* painter */)
 {
 }
 
+/* unused
 void ControlItem::handleMouseButtonPress(QMouseEvent*)
 {
 }
+*/
 
+/* unused
 void ControlItem::handleMouseButtonRelease(QMouseEvent*)
 {
 }
+*/
 
 void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int /* deltaY */)
 {
 }
 
+/* unused
 void ControlItem::handleMouseWheel(QWheelEvent *)
 {
 }
+*/
 
 void ControlItem::setSelected(bool s)
 {
@@ -98,7 +106,7 @@ void ControlItem::reconfigure()
     if (m_xstart != m_lastxstart) {
         m_controlRuler->moveItem(this);
     }
-    
+
     m_lastxstart = m_xstart;
 }
 

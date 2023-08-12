@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SequencerDataBlock]"
+
 #include "SequencerDataBlock.h"
 #include "MappedEventList.h"
 
@@ -293,12 +295,14 @@ SequencerDataBlock::setInstrumentRecordLevel(InstrumentId id, const LevelInfo &i
     ++m_recordLevelUpdateIndices[index];
 }
 
+/* unused
 void
 SequencerDataBlock::setTrackLevel(TrackId track, const LevelInfo &info)
 {
     setInstrumentLevel
 	(ControlBlock::getInstance()->getInstrumentForTrack(track), info);
 }
+*/
 
 /* unused
 bool

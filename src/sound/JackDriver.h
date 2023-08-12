@@ -144,8 +144,8 @@ public:
     // incrementing their statuses or simply reading them.
     //
     // unused int getAudioQueueLocks();
-    int tryAudioQueueLocks();
-    int releaseAudioQueueLocks();
+    // unused int tryAudioQueueLocks();
+    // unused int releaseAudioQueueLocks();
 
     void prepareAudio(); // when repositioning etc
     void prebufferAudio(); // when starting playback (incorporates prepareAudio)

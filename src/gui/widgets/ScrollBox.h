@@ -50,12 +50,12 @@ public:
 
 public slots:
     void setPageSize(const QSize&);
-    void setViewSize(const QSize&);
+    // unused void setViewSize(const QSize&);
     void setViewPos(const QPoint&);
     void setViewPos(int x, int y) { setViewPos(QPoint(x, y)); }
-    void setViewX(int x);
-    void setViewY(int y);
-    void setThumbnail(QPixmap img);
+    // unused void setViewX(int x);
+    // unused void setViewY(int y);
+    // unused void setThumbnail(QPixmap img);
 
 signals:
     void valueChanged(const QPoint&);

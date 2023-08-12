@@ -109,17 +109,17 @@ protected:
     /**
      * create menus and toolbars
      */
-    void setupActions(QString rcFileName, bool haveClipboard = true);
+    void setupActions(const QString& rcFileName, bool haveClipboard = true);
 
     /**
      * Make a widget visible depending on the state of a
      * (toggle) QAction
      */
-    virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
+    // unused virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
 
     void paintEvent(QPaintEvent* e) override;
 
-    void setRCFileName(QString s) { m_rcFileName = s; }
+    void setRCFileName(const QString& s) { m_rcFileName = s; }
     QString getRCFileName()       { return m_rcFileName; }
 
     QString m_rcFileName;

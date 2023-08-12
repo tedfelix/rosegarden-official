@@ -12,6 +12,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MappedEvent]"
+
 #include "MappedEvent.h"
 #include "base/BaseProperties.h"
 #include "Midi.h"
@@ -482,10 +484,12 @@ void DataBlockRepository::setDataBlockForEvent(MappedEvent* e,
     }
 }
 
+/* unused
 bool DataBlockRepository::hasDataBlock(DataBlockRepository::blockid id)
 {
     return DataBlockFile(id).exists();
 }
+*/
 
 DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::string& s)
 {
@@ -501,23 +505,26 @@ DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::s
     return id;
 }
 
+/* unused
 void DataBlockRepository::unregisterDataBlock(DataBlockRepository::blockid id)
 {
     DataBlockFile dataBlockFile(id);
 
     dataBlockFile.clear();
 }
+*/
 
 void DataBlockRepository::registerDataBlockForEvent(const std::string& s, MappedEvent* e)
 {
     e->setDataBlockId(registerDataBlock(s));
 }
 
+/* unused
 void DataBlockRepository::unregisterDataBlockForEvent(MappedEvent* e)
 {
     unregisterDataBlock(e->getDataBlockId());
 }
-
+*/
 
 DataBlockRepository::DataBlockRepository()
 {}

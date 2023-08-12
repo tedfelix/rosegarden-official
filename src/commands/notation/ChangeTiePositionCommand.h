@@ -44,7 +44,7 @@ public:
         m_above(above)
     { }
 
-    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static bool getArgument(const QString& actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:

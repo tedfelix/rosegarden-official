@@ -972,6 +972,7 @@ Text::getUserStyles()
     return v;
 }
 
+/* unused
 std::vector<std::string>
 Text::getLilyPondDirectives()
 {
@@ -994,6 +995,7 @@ Text::getLilyPondDirectives()
 
     return v;
 }
+*/
 
 Event *
 Text::getAsEvent(timeT absoluteTime) const
@@ -1971,13 +1973,13 @@ Event *Note::getAsNoteEvent(timeT absoluteTime, int pitch) const
     return e;
 }
 
+/* unused
 Event *Note::getAsRestEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventRestType, absoluteTime, getDuration());
     return e;
 }
-
-
+*/
 
 //////////////////////////////////////////////////////////////////////
 // AccidentalTable
@@ -2226,6 +2228,7 @@ Symbol::~Symbol()
     // nothing
 }
 
+/* unused
 bool
 Symbol::isSymbolOfType(Event *e, const std::string& type)
 {
@@ -2233,6 +2236,7 @@ Symbol::isSymbolOfType(Event *e, const std::string& type)
             e->has(SymbolTypePropertyName) &&
             e->get<String>(SymbolTypePropertyName) == type);
 }
+*/
 
 Event *
 Symbol::getAsEvent(timeT absoluteTime) const

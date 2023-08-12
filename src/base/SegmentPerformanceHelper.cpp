@@ -17,7 +17,7 @@
 #include "base/BaseProperties.h"
 #include <iostream>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 using std::endl;
 using std::string;
@@ -52,7 +52,7 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
     if (tiedBack) {
 	// #1171463: If we can find no preceding TIED_FORWARD event,
 	// then we remove this property
-	
+
 	while (j != begin()) {
 
 	    --j;
@@ -91,7 +91,7 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
         e = *j;
 
         timeT t2 = e->getNotationAbsoluteTime();
-        
+
         if (t2 > t + d) break;
         else if (t2 < t + d || !e->has(PITCH) ||
                  e->get<Int>(PITCH) != pitch) continue;
@@ -159,7 +159,7 @@ SegmentPerformanceHelper::getGraceAndHostNotes(iterator i,
 	    --j;
 	    if ((*j)->getNotationAbsoluteTime() <
 		(*i)->getNotationAbsoluteTime()) break;
-	    if ((*j)->getSubOrdering() < 
+	    if ((*j)->getSubOrdering() <
 		(*i)->getSubOrdering()) break;
 	    if ((*j)->isa(Note::EventType)) {
 		firstHostNote = j;
@@ -192,7 +192,7 @@ SegmentPerformanceHelper::getGraceAndHostNotes(iterator i,
 	}
 	firstGraceNote = j;
     }
-    
+
     if (firstGraceNote == firstHostNote) {
 	std::cerr << "SegmentPerformanceHelper::getGraceAndHostNotes: REMARK: Note at " << (*firstHostNote)->getAbsoluteTime() << " has no grace notes" << std::endl;
 	return false;
@@ -265,7 +265,7 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
     }
 
     if ((*i)->has(TIED_BACKWARD)) {
-	
+
 	// Formerly we just returned d in this case, but now we check
 	// with getTiedNotes so as to remove any bogus backward ties
 	// that have no corresponding forward tie.  Unfortunately this
@@ -276,7 +276,7 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 	//around.
 
 	iteratorcontainer c(getTiedNotes(i));
-	
+
 	if (c.empty()) { // the tie back is valid
 	    return 0;
 	}
@@ -291,7 +291,7 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 	// tied forward but not back
 
 	iteratorcontainer c(getTiedNotes(i));
-	    
+
 	for (iteratorcontainer::iterator ci = c.begin();
 	     ci != c.end(); ++ci) {
 	    d += (**ci)->getDuration();
@@ -306,21 +306,23 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 // finer precision than timeT time.  With a timeT resolution of 960ppq
 // however the difference is probably not audible
 
+/* unused
 RealTime
-SegmentPerformanceHelper::getRealAbsoluteTime(iterator i) 
+SegmentPerformanceHelper::getRealAbsoluteTime(iterator i)
 {
     return segment().getComposition()->getElapsedRealTime
 	(getSoundingAbsoluteTime(i));
 }
-
+*/
 
 // In theory we can do better with tuplets, because real time has
 // finer precision than timeT time.  With a timeT resolution of 960ppq
 // however the difference is probably not audible
-// 
+//
 // (If we did want to do this, it'd help to have abstime->realtime
 // conversion methods that accept double args in Composition)
 
+/* unused
 RealTime
 SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 {
@@ -333,7 +335,7 @@ SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 
     return segment().getComposition()->getRealTimeDifference(t0, t1);
 }
-
+*/
 
 bool
 SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, iterator i,

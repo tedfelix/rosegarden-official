@@ -43,15 +43,15 @@ public:
                    bool closeGap);
 
     static QString getGlobalName() { return tr("Stretch or S&quash..."); }
-    
+
 protected:
     void modifySegment() override;
 
 private:
-    timeT rescale(timeT);
-    timeT getAffectedEndTime(EventSelection &selection,
-                                         timeT newDuration,
-                                         bool closeGap);
+    timeT rescale(timeT) const;
+    static timeT getAffectedEndTime(EventSelection &selection,
+                                    timeT newDuration,
+                                    bool closeGap);
 
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     timeT m_oldDuration;

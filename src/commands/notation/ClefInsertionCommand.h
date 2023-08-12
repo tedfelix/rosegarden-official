@@ -41,13 +41,13 @@ class ClefInsertionCommand : public BasicCommand
 public:
     ClefInsertionCommand(Segment &segment,
                          timeT time,
-                         Clef clef,
+                         const Clef& clef,
                          bool shouldChangeOctave = false,
                          bool shouldTranspose = false);
     ~ClefInsertionCommand() override;
 
-    virtual QString getThisGlobalName(Clef *clef = nullptr);
-    static QString getGlobalName(Clef *clef = nullptr);
+    virtual QString getThisGlobalName(const Clef *clef = nullptr);
+    static QString getGlobalName(const Clef *clef = nullptr);
     timeT getRelayoutEndTime() override;
 
     EventSelection *getSubsequentSelection() override;
@@ -70,13 +70,13 @@ class ClefLinkInsertionCommand : public ClefInsertionCommand
 public:
     ClefLinkInsertionCommand(Segment &segment,
                             timeT time,
-                            Clef clef,
+                            const Clef& clef,
                             bool shouldChangeOctave = false,
                             bool shouldTranspose = false);
     ~ClefLinkInsertionCommand() override;
 
-    QString getThisGlobalName(Clef *clef = nullptr) override;
-    static QString getGlobalName(Clef *clef = nullptr);
+    QString getThisGlobalName(const Clef *clef = nullptr) override;
+    static QString getGlobalName(const Clef *clef = nullptr);
 
 protected:
     void modifySegment() override;

@@ -54,7 +54,7 @@ public:
     static QString ToolName();
 
 protected slots:
-    void slotGuitarChordSelected();
+    // unused void slotGuitarChordSelected();
     void slotEraseSelected();
     void slotSelectSelected();
     void slotNotesSelected();

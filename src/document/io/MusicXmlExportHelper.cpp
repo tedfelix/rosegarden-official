@@ -556,6 +556,7 @@ MusicXmlExportHelper::handleEvent(Segment *segment, Event &event)
 }
 
 void
+// cppcheck-suppress unusedFunction
 MusicXmlExportHelper::printSummary()
 {
     RG_DEBUG << "Part " << m_partName << " : m_staves = " << m_staves.size();

@@ -166,6 +166,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
     return rmap;
 }
 
+/* unused
 QPixmap
 PixmapFunctions::shadePixmap(const QPixmap &map)
 {
@@ -192,6 +193,7 @@ PixmapFunctions::shadePixmap(const QPixmap &map)
     if (!map.mask().isNull()) rmap.setMask(map.mask());
     return rmap;
 }
+*/
 
 QPixmap
 PixmapFunctions::flipVertical(const QPixmap &map)

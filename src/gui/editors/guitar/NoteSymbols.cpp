@@ -16,6 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NoteSymbols]"
+
 #include "NoteSymbols.h"
 #include "Fingering.h"
 #include "misc/Debug.h"

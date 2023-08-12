@@ -59,7 +59,7 @@ public:
     }
 
     static QString getGlobalName(std::string indicationType);
-    static std::string getArgument(QString actionName, CommandArgumentQuerier &);
+    static std::string getArgument(const QString& actionName, CommandArgumentQuerier &);
 
     static void registerCommand(CommandRegistry *r);
 

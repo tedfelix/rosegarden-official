@@ -28,18 +28,18 @@ namespace Rosegarden
 class DialogSuppressor
 {
 public:
-    static bool shouldSuppress(QDialog *, QString settingsKey);
-    static bool isSuppressed(QString settingsKey);
+    // unused static bool shouldSuppress(QDialog *, QString settingsKey);
+    // unused static bool isSuppressed(QString settingsKey);
 };
 
 class SuppressionTarget : public QObject
 {
     Q_OBJECT
 public:
-    explicit SuppressionTarget(QString key) : m_key(key) { }
+    explicit SuppressionTarget(const QString& key) : m_key(key) { }
 
 public slots:
-    void slotSuppressionToggled(bool);
+    // unused void slotSuppressionToggled(bool);
 
 private:
     QString m_key;

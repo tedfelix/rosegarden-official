@@ -84,7 +84,7 @@ public:
      * by NotationHLayout and set to this class using
      * setLayoutAirspace
      */
-    void getLayoutAirspace(double &x, double &width) {
+    void getLayoutAirspace(double &x, double &width) const {
         x = m_airX;
         width = m_airWidth;
     }
@@ -156,7 +156,7 @@ public:
      * element will probably not need to regenerate its item as
      * well, even if other indications suggest otherwise.
      */
-    bool isRecentlyRegenerated() { return m_recentlyRegenerated; }
+    bool isRecentlyRegenerated() const { return m_recentlyRegenerated; }
 
     bool isSelected();
     void setSelected(bool selected);
@@ -168,7 +168,7 @@ public:
      * Only a returned true is meaningful (when 2 notes are colliding, the
      * first element returns false and the second one returns true).
      */
-    bool isColliding() { return m_isColliding; }
+    bool isColliding() const { return m_isColliding; }
 
     void setIsColliding(bool value) { m_isColliding = value; }
 

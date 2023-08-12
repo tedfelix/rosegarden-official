@@ -32,7 +32,7 @@ class AudioWriteStream
 public:
     class Target {
     public:
-        Target(QString path, size_t channelCount, size_t sampleRate) :
+        Target(const QString& path, size_t channelCount, size_t sampleRate) :
             m_path(path), m_channelCount(channelCount), m_sampleRate(sampleRate)
         { }
 
@@ -76,7 +76,7 @@ class AudioWriteStreamBuilder :
 public ConcreteThingBuilder<T, AudioWriteStream, AudioWriteStream::Target>
 {
 public:
-    AudioWriteStreamBuilder(QUrl uri, QStringList extensions) :
+    AudioWriteStreamBuilder(const QUrl& uri, QStringList extensions) :
         ConcreteThingBuilder<T, AudioWriteStream, AudioWriteStream::Target>
         (uri, extensions) {
     }

@@ -55,7 +55,7 @@ namespace Rosegarden
 {
 
 AudioFaderBox::AudioFaderBox(QWidget *parent,
-                             QString id,
+                             const QString& id,
                              bool haveInOut,
                              const char *name):
         QFrame(parent),
@@ -256,6 +256,7 @@ AudioFaderBox::slotSetInstrument(Studio * /*studio*/,
     }
 }
 
+/* unused
 bool
 AudioFaderBox::owns(const QObject *object)
 {
@@ -263,6 +264,7 @@ AudioFaderBox::owns(const QObject *object)
             ((object->parent() == this) ||
              (object->parent() && (object->parent()->parent() == this))));
 }
+*/
 
 void
 AudioFaderBox::setAudioChannels(int channels)

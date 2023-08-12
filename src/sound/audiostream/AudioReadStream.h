@@ -80,7 +80,7 @@ class AudioReadStreamBuilder :
     public ConcreteThingBuilder<T, AudioReadStream, QString>
 {
 public:
-    AudioReadStreamBuilder(QUrl uri, QStringList extensions) :
+    AudioReadStreamBuilder(const QUrl& uri, QStringList extensions) :
         ConcreteThingBuilder<T, AudioReadStream, QString>(uri, extensions) {
     }
 };

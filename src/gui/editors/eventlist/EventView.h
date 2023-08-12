@@ -71,8 +71,8 @@ public:
 
     void setupActions();
     void initStatusBar() override;
-    virtual QSize getViewSize();
-    virtual void setViewSize(QSize);
+    // unused virtual QSize getViewSize();
+    // unused virtual void setViewSize(QSize);
 
     // Set the button states to the current filter positions
     //
@@ -143,8 +143,8 @@ private slots:
     void slotEditTriggerName();
     void slotEditTriggerPitch();
     void slotEditTriggerVelocity();
-    void slotTriggerTimeAdjustChanged(int);
-    void slotTriggerRetuneChanged();
+    // unused void slotTriggerTimeAdjustChanged(int);
+    // unused void slotTriggerRetuneChanged();
 
     /// slot connected to signal RosegardenDocument::setModified(bool)
     void updateWindowTitle(bool m = false);

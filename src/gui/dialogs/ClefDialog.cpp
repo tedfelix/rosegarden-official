@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -44,7 +44,7 @@ namespace Rosegarden
 
 ClefDialog::ClefDialog(QWidget *parent,
                        NotePixmapFactory *npf,
-                       Clef defaultClef,
+                       const Clef& defaultClef,
                        bool showConversionOptions) :
         QDialog(parent),
         m_notePixmapFactory(npf),
@@ -136,9 +136,9 @@ ClefDialog::ClefDialog(QWidget *parent,
         // happen to want to ressurect it, although this seems unlikely.)
         //
         //m_transposeButton = new QRadioButton(tr("Maintain current positions on the staff"));
-        
+
         QSettings settings;
-        settings.beginGroup("Clef_Dialog");        	
+        settings.beginGroup("Clef_Dialog");
         m_changeOctaveButton->setChecked(settings.value("change_octave", true).toBool());
         m_noConversionButton->setChecked(settings.value("transpose", false).toBool());
         settings.endGroup();
@@ -279,7 +279,7 @@ ClefDialog::redrawClefPixmap()
 }
 
 QString
-ClefDialog::translatedClefName(Clef clef)
+ClefDialog::translatedClefName(const Clef& clef)
 {
     QString name;
     int octave = clef.getOctaveOffset();
@@ -334,8 +334,8 @@ ClefDialog::accept()
 {
     QSettings settings;
     settings.beginGroup("Clef_Dialog");
-    settings.setValue("change_octave", m_changeOctaveButton->isChecked());    
-    settings.setValue("transpose", m_noConversionButton->isChecked());    
+    settings.setValue("change_octave", m_changeOctaveButton->isChecked());
+    settings.setValue("transpose", m_noConversionButton->isChecked());
     settings.endGroup();
     QDialog::accept();
 }

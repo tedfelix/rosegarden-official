@@ -112,7 +112,7 @@ private:
     // filter noteoffs so it can't be.
     typedef std::multiset<Noteoff, NoteoffCmp> NoteoffContainer;
 
-    int addSize(int size, Segment *);
+    int addSize(int size, Segment *) const;
 
     Instrument *getInstrument() const
         { return m_channelManager.getInstrument(); }

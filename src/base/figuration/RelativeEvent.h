@@ -39,8 +39,8 @@ public:
   virtual Event   *getAsEvent(timeT baseTime, const Key& key,
 			      const FigChord *notes)=0;
   void setScore(int score) { m_score = score; };
-  int getScore() { return m_score; };
-  timeT            getAbsoluteTime(timeT baseTime)
+  int getScore() const { return m_score; };
+  timeT            getAbsoluteTime(timeT baseTime) const
   { return m_relativeTime + baseTime; };
 protected:
   int              m_score;

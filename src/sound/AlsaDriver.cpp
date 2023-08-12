@@ -302,6 +302,7 @@ AlsaDriver::getSystemInfo()
     m_maxPorts = snd_seq_system_info_get_ports(sysinfo);
 }
 
+/* unused
 void
 AlsaDriver::showQueueStatus(int queue)
 {
@@ -335,7 +336,7 @@ AlsaDriver::showQueueStatus(int queue)
     }
 
 }
-
+*/
 
 void
 AlsaDriver::generateTimerList()
@@ -967,7 +968,7 @@ AlsaDriver::removeAllDevices()
 }
 
 void
-AlsaDriver::renameDevice(DeviceId id, QString name)
+AlsaDriver::renameDevice(DeviceId id, const QString& name)
 {
     DeviceIntMap::iterator i = m_outputPorts.find(id);
     if (i == m_outputPorts.end()) {
@@ -1084,7 +1085,8 @@ AlsaDriver::getConnection(DeviceId id)
 }
 
 void
-AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection)
+AlsaDriver::setConnectionToDevice(MappedDevice &device,
+                                  const QString& connection)
 {
     ClientPortPair pair( -1, -1);
     if (connection != "") {
@@ -1094,7 +1096,8 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection)
 }
 
 void
-AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
+AlsaDriver::setConnectionToDevice(MappedDevice &device,
+                                  const QString& connection,
                                   const ClientPortPair &pair)
 {
 #ifdef DEBUG_ALSA
@@ -1172,7 +1175,7 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 }
 
 void
-AlsaDriver::setConnection(DeviceId deviceId, QString connection)
+AlsaDriver::setConnection(DeviceId deviceId, const QString& connection)
 {
     ClientPortPair port(getPortByName(qstrtostr(connection)));
 
@@ -1317,7 +1320,9 @@ AlsaDriver::setFirstConnection(DeviceId deviceId, bool recordDevice)
 
 void
 AlsaDriver::setPlausibleConnection(
-        DeviceId deviceId, QString idealConnection, bool recordDevice)
+        DeviceId deviceId,
+        const QString& idealConnection,
+        bool recordDevice)
 {
     // ??? Proposed simplified version that searches for the best fit and
     //     connects to it.

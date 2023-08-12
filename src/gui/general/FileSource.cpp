@@ -588,11 +588,13 @@ FileSource::waitForData()
     }
 }
 
+/* unused
 void
 FileSource::setLeaveLocalFile(bool leave)
 {
     m_leaveLocalFile = leave;
 }
+*/
 
 bool
 FileSource::isOK() const

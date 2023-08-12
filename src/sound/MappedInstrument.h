@@ -74,9 +74,9 @@ public:
     unsigned int getAudioChannels() const { return m_audioChannels; }
     void setAudioChannels(unsigned int channels) { m_audioChannels = channels; }
 
-    friend QDataStream& operator>>(QDataStream &dS, MappedInstrument *mI);
+    // unused friend QDataStream& operator>>(QDataStream &dS, MappedInstrument *mI);
     friend QDataStream& operator<<(QDataStream &dS, MappedInstrument *mI);
-    friend QDataStream& operator>>(QDataStream &dS, MappedInstrument &mI);
+    // unused friend QDataStream& operator>>(QDataStream &dS, MappedInstrument &mI);
     friend QDataStream& operator<<(QDataStream &dS, const MappedInstrument &mI);
 
 private:

@@ -365,7 +365,7 @@ public:
     bool closeRecordFile(InstrumentId id, AudioFileId &returnedId);
 
     bool haveRecordFileOpen(InstrumentId id);
-    bool haveRecordFilesOpen();
+    // unused bool haveRecordFilesOpen();
 
     void write(InstrumentId id,
                const sample_t *samples,

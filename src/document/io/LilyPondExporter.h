@@ -176,24 +176,26 @@ private:
     // convert note pitch into LilyPond format note name string
     std::string convertPitchToLilyNoteName(int pitch,
                                            Accidental accidental,
-                                           const Rosegarden::Key &key);
+                                           const Rosegarden::Key &key) const;
 
     // convert note pitch into LilyPond format note name string with octavation
     std::string convertPitchToLilyNote(int pitch,
                                        Accidental accidental,
-                                       const Rosegarden::Key &key);
+                                       const Rosegarden::Key &key) const;
 
     // compose an appropriate LilyPond representation for various Marks
     static std::string composeLilyMark(std::string eventMark, bool stemUp);
 
     // find/protect illegal characters in user-supplied strings
-    static std::string protectIllegalChars(std::string inStr);
+    static std::string protectIllegalChars(const std::string& inStr);
 
     // return a string full of column tabs
     static std::string indent(const int &column);
 
     // write a time signature
-    static void writeTimeSignature(TimeSignature timeSignature, int col, std::ofstream &str);
+    static void writeTimeSignature(const TimeSignature& timeSignature,
+                                   int col,
+                                   std::ofstream &str);
 
     std::pair<int,int> writeSkip(const TimeSignature &timeSig,
 				 timeT offset,

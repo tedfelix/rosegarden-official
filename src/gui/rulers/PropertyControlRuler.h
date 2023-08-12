@@ -73,14 +73,14 @@ public:
     void elementRemoved(const ViewSegment *, ViewElement*) override;
     void viewSegmentDeleted(const ViewSegment *) override;
 
-    virtual void selectAllProperties();
+    // unused virtual void selectAllProperties();
 
     /// SegmentObserver interface
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
     /// Keep selection in sync with the matrix and notation editors.
     void updateSelection(const std::vector<ViewElement *> &elementList);
-    void updateSelectedItems();
+    // unused void updateSelectedItems();
 
     void setTool(const QString &name) override;
 

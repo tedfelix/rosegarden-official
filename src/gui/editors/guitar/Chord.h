@@ -55,12 +55,12 @@ public:
     void setUserChord(bool c) { m_isUserChord = c; }
 
     QString getRoot() const { return m_root; }
-    void setRoot(QString r) { m_root = r; }
+    void setRoot(const QString& r) { m_root = r; }
 
     QString getExt() const { return m_ext; }
     void setExt(QString r) { m_ext = r.isEmpty() ? QString() : r; }
 
-    bool hasAltBass() const;
+    // unused bool hasAltBass() const;
 
     Fingering getFingering() const { return m_fingering; }
     void setFingering(const Fingering& f) { m_fingering = f; }

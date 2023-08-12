@@ -112,6 +112,7 @@ CommandHistory::addCommand(Command *command)
     CommandInfo commInfo;
     commInfo.command = command;
     commInfo.pointerPositionBefore = m_pointerPosition;
+    commInfo.pointerPositionAfter = m_pointerPosition;
     m_undoStack.push(commInfo);
     clipCommands();
 
@@ -174,6 +175,7 @@ CommandHistory::redo()
     if ((int)m_undoStack.size() == m_savedAt) emit documentRestored();
 }
 
+/* unused
 void
 CommandHistory::setUndoLimit(int limit)
 {
@@ -182,7 +184,9 @@ CommandHistory::setUndoLimit(int limit)
         clipCommands();
     }
 }
+*/
 
+/* unused
 void
 CommandHistory::setRedoLimit(int limit)
 {
@@ -191,13 +195,16 @@ CommandHistory::setRedoLimit(int limit)
         clipCommands();
     }
 }
+*/
 
+/* unused
 void
 CommandHistory::setMenuLimit(int limit)
 {
     m_menuLimit = limit;
     updateActions();
 }
+*/
 
 void
 CommandHistory::documentSaved()
