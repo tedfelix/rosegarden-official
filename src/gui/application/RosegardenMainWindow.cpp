@@ -6717,36 +6717,35 @@ void
 RosegardenMainWindow::slotRelabelSegments()
 {
     if (!m_view->haveSelection())
-        return ;
+        return;
 
     SegmentSelection selection(m_view->getSelection());
-    QString editLabel;
 
-    if (selection.size() == 0)
-        return ;
-    else if (selection.size() == 1)
-        editLabel = tr("Modify Segment label");
-    else
-        editLabel = tr("Modify Segments label");
+    // Generate default label based on the first selected Segment.
+    QString oldLabel = strtoqstr((*selection.begin())->getLabel());
 
-    TmpStatusMsg msg(tr("Relabelling selection..."), this);
-
-    // Generate label
-    QString label = strtoqstr((*selection.begin())->getLabel());
-
-    for (SegmentSelection::iterator i = selection.begin();
-            i != selection.end(); ++i) {
-        if (strtoqstr((*i)->getLabel()) != label)
-            label = "";
+    // For each Segment in the SegmentSelection...
+    for (Segment *segment : selection) {
+        // If they don't all have the same name, go with blank.
+        if (strtoqstr(segment->getLabel()) != oldLabel) {
+            oldLabel = "";
+            break;
+        }
     }
 
     bool ok = false;
 
-    QString newLabel = InputDialog::getText(dynamic_cast<QWidget*>(this), tr("Input"), editLabel, LineEdit::Normal, label, &ok);
+    QString newLabel = InputDialog::getText(
+            dynamic_cast<QWidget*>(this),  // parent
+            tr("Relabel Segment"),  // title
+            tr("New segment label"),  // label
+            LineEdit::Normal,  // mode
+            oldLabel,  // text
+            &ok);
 
     if (ok) {
-        CommandHistory::getInstance()->addCommand
-        (new SegmentLabelCommand(selection, newLabel));
+        CommandHistory::getInstance()->addCommand(
+                new SegmentLabelCommand(selection, newLabel));
         m_view->getTrackEditor()->getCompositionView()->slotUpdateAll();
     }
 }
