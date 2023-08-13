@@ -130,14 +130,12 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
 
 }
 
-/* unused
 QStringList AudioListView::mimeTypes() const{
     QStringList types;
     types << "text/uri-list";
     types << "text/plain";
     return types;
 }
-*/
 
 void AudioListView::dragEnterEvent(QDragEnterEvent *event){
     QStringList uriList;

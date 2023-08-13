@@ -45,7 +45,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
 
 //     virtual QMimeData *mimeData(const QList<QTreeWidgetItem*> items) const;
-    // unused QStringList mimeTypes() const override;
+    QStringList mimeTypes() const override;
 };
 
 }
