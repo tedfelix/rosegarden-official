@@ -193,5 +193,17 @@ bool Preferences::getAutoChannels()
     return autoChannels.get();
 }
 
+PreferenceBool includeAlsaPortNumbersWhenMatching(
+        GeneralOptionsConfigGroup, "includeAlsaPortNumbersWhenMatching", false );
+
+void Preferences::setIncludeAlsaPortNumbersWhenMatching( bool value )
+{
+    includeAlsaPortNumbersWhenMatching.set( value );
+}
+
+bool Preferences::getIncludeAlsaPortNumbersWhenMatching()
+{
+    return includeAlsaPortNumbersWhenMatching.get();
+}
 
 }

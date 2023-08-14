@@ -53,6 +53,7 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/QEvents.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "misc/Preferences.h"
 
 #include <QCoreApplication>
 #include <QMutex>
@@ -1346,6 +1347,8 @@ AlsaDriver::setPlausibleConnection(
     QString name;
     parsePortName(idealConnection, clientNumber, portNumber, name);
 
+    bool includeAlsaPortNumbers = Preferences::getIncludeAlsaPortNumbersWhenMatching();
+
     // For each ALSA port...
     for (QSharedPointer<AlsaPortDescription> currentPort : m_alsaPorts) {
         AUDIT << "AlsaDriver::setPlausibleConnection(): Checking \"" << currentPort->m_name << "\"\n";
@@ -1370,8 +1373,16 @@ AlsaDriver::setPlausibleConnection(
             portInUse(currentPort->m_client, currentPort->m_port))
             continue;
 
+        // If the matching should include the full ALSA port, then we will
+        // select the first exact match that is encountered.
+        QString currentConnectionFull = strtoqstr(currentPort->m_name);
+        if (includeAlsaPortNumbers && currentConnectionFull == idealConnection) {
+            bestPort = currentPort;
+            break;
+        }
+
         // Strip client:port from the front of the name.
-        QString currentName = removeClientPort(strtoqstr(currentPort->m_name));
+        QString currentName = removeClientPort(currentConnectionFull);
 
         int score = 25 - levenshtein_distance(
                 qstrtostr(currentName).size(),

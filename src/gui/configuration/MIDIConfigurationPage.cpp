@@ -102,9 +102,28 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     ++row;
 
+    QLabel *label;
+    QString toolTip;
+
+    label = new QLabel(tr("Match ALSA port numbers"));
+    toolTip = tr("Include ALSA port numbers when trying to match and restore MIDI connections when loading a file." );
+    label->setToolTip( toolTip );
+    layout->addWidget( label, row, 0, 1, 2 );
+
+    m_includeAlsaPortNumbersWhenMatching = new QCheckBox;
+    m_includeAlsaPortNumbersWhenMatching->setToolTip(toolTip);
+    m_includeAlsaPortNumbersWhenMatching->setChecked(
+            Preferences::getIncludeAlsaPortNumbersWhenMatching());
+    connect(m_includeAlsaPortNumbersWhenMatching, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_includeAlsaPortNumbersWhenMatching, row, 2);
+
+    ++row;
+
+
     // External controller port
-    QLabel *label = new QLabel(tr("External controller port"));
-    QString toolTip = tr("Enable the external controller port for control surfaces.");
+    label = new QLabel(tr("External controller port"));
+    toolTip = tr("Enable the external controller port for control surfaces.");
     label->setToolTip(toolTip);
     layout->addWidget(label, row, 0, 1, 2);
 
@@ -461,6 +480,12 @@ MIDIConfigurationPage::apply()
     settings.setValue("midipitchoctave", m_baseOctaveNumber->value());
     settings.setValue("alwaysusedefaultstudio",
                       m_useDefaultStudio->isChecked());
+
+    settings.setValue("includeAlsaPortNumbersWhenMatching",
+                        m_includeAlsaPortNumbersWhenMatching->isChecked());
+    Preferences::setIncludeAlsaPortNumbersWhenMatching(
+            m_includeAlsaPortNumbersWhenMatching->isChecked());
+
     settings.setValue("external_controller",
                       m_externalControllerPort->isChecked());
 
