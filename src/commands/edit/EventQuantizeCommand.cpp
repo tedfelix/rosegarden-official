@@ -42,7 +42,6 @@
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
                                            timeT startTime,
@@ -191,7 +190,8 @@ EventQuantizeCommand::modifySegment()
             qApp->processEvents();
 
             if (rebeam) {
-                helper.autoBeam(startTime, endTime, GROUP_TYPE_BEAMED);
+                helper.autoBeam(
+                        startTime, endTime, BaseProperties::GROUP_TYPE_BEAMED);
                 helper.autoSlur(startTime, endTime, true);
             }
 
@@ -212,7 +212,10 @@ EventQuantizeCommand::modifySegment()
         qApp->processEvents();
 
         if (rebeam) {
-            helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
+            helper.autoBeam(
+                    getStartTime(),
+                    getEndTime(),
+                    BaseProperties::GROUP_TYPE_BEAMED);
             helper.autoSlur(getStartTime(), getEndTime(), true);
         }
 
