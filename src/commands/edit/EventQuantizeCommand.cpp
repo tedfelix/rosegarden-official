@@ -121,11 +121,8 @@ EventQuantizeCommand::modifySegment()
     // Kick the event loop.
     qApp->processEvents();
 
-    Segment &segment = getSegment();
-    SegmentNotationHelper helper(segment);
-
     bool rebeam = false;
-    bool makeviable = false;
+    bool makeViable = false;
     bool decounterpoint = false;
 
     if (!m_settingsGroup.isEmpty()) {
@@ -135,12 +132,12 @@ EventQuantizeCommand::modifySegment()
         settings.beginGroup( m_settingsGroup );
 
         rebeam = qStrToBool( settings.value("quantizerebeam", "true" ) ) ;
-        makeviable = qStrToBool( settings.value("quantizemakeviable", "false" ) ) ;
+        makeViable = qStrToBool( settings.value("quantizemakeviable", "false" ) ) ;
         decounterpoint = qStrToBool( settings.value("quantizedecounterpoint", "false" ) ) ;
         settings.endGroup();
     }
 
-    timeT endTime = segment.getEndTime();
+    Segment &segment = getSegment();
 
     if (m_selection) {
         m_quantizer->quantize(m_selection);
@@ -154,12 +151,13 @@ EventQuantizeCommand::modifySegment()
     // Kick the event loop.
     qApp->processEvents();
 
-    if (segment.getEndTime() < endTime) {
+    const timeT endTime = segment.getEndTime();
+
+    if (segment.getEndTime() < endTime)
         segment.setEndTime(endTime);
-    }
 
     if (m_progressTotal > 0) {
-        if (rebeam || makeviable || decounterpoint) {
+        if (rebeam || makeViable || decounterpoint) {
             if (m_progressDialog)
                 m_progressDialog->setValue(
                         m_progressTotal + m_progressPerCall / 2);
@@ -169,51 +167,65 @@ EventQuantizeCommand::modifySegment()
         }
     }
 
+    SegmentNotationHelper helper(segment);
+
     if (m_selection) {
         EventSelection::RangeTimeList ranges(m_selection->getRangeTimes());
-        for (EventSelection::RangeTimeList::iterator i = ranges.begin();
-                i != ranges.end(); ++i) {
-            if (makeviable) {
-                helper.makeNotesViable(i->first, i->second, true);
-            }
+
+        // For each time range in the selection
+        for (const EventSelection::RangeTimeList::value_type &rRange : ranges) {
+
+            const timeT startTime = rRange.first;
+            const timeT endTime = rRange.second;
+
+            if (makeViable)
+                helper.makeNotesViable(startTime, endTime, true);
+
             // Kick the event loop.
             qApp->processEvents();
-            if (decounterpoint) {
-                helper.deCounterpoint(i->first, i->second);
-            }
+
+            if (decounterpoint)
+                helper.deCounterpoint(startTime, endTime);
+
             // Kick the event loop.
             qApp->processEvents();
+
             if (rebeam) {
-                helper.autoBeam(i->first, i->second, GROUP_TYPE_BEAMED);
-                helper.autoSlur(i->first, i->second, true);
+                helper.autoBeam(startTime, endTime, GROUP_TYPE_BEAMED);
+                helper.autoSlur(startTime, endTime, true);
             }
+
             // Kick the event loop.
             qApp->processEvents();
         }
     } else {
-        if (makeviable) {
+        if (makeViable)
             helper.makeNotesViable(getStartTime(), getEndTime(), true);
-        }
+
         // Kick the event loop.
         qApp->processEvents();
-        if (decounterpoint) {
+
+        if (decounterpoint)
             helper.deCounterpoint(getStartTime(), getEndTime());
-        }
+
         // Kick the event loop.
         qApp->processEvents();
+
         if (rebeam) {
             helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
             helper.autoSlur(getStartTime(), getEndTime(), true);
         }
+
         // Kick the event loop.
         qApp->processEvents();
     }
 
     if (m_progressTotal > 0) {
-        if (rebeam || makeviable || decounterpoint) {
-            if (m_progressDialog)
+        if (rebeam || makeViable || decounterpoint) {
+            if (m_progressDialog) {
                 m_progressDialog->setValue(
-                        m_progressTotal  + m_progressPerCall / 2);
+                        m_progressTotal + m_progressPerCall / 2);
+            }
         }
     }
 
@@ -238,30 +250,36 @@ EventQuantizeCommand::makeQuantizer(const QString &settingsGroup,
     QSettings settings;
     settings.beginGroup(settingsGroup);
 
-    timeT defaultUnit =
-        Note(Note::Demisemiquaver).getDuration();
-
-    bool notationDefault =
-        (scope == QUANTIZE_NOTATION_ONLY ||
+    const bool notationDefault =
+        (scope == QUANTIZE_NOTATION_ONLY  ||
          scope == QUANTIZE_NOTATION_DEFAULT);
+    const int type =
+            settings.value("quantizetype", notationDefault ? 2 : 0).toInt();
 
-    int type = settings.value("quantizetype", notationDefault ? 2 : 0).toInt();
-    timeT unit = settings.value("quantizeunit", (int)defaultUnit).toInt();
+    const timeT defaultUnit =
+        Note(Note::Demisemiquaver).getDuration();
+    const timeT unit = settings.value("quantizeunit", (int)defaultUnit).toInt();
 
-    bool notateOnly;
+    bool notationOnly;
     if (scope == QUANTIZE_NOTATION_ONLY) {
-        notateOnly = true;
+        notationOnly = true;
     } else {
-        notateOnly = qStrToBool(settings.value("quantizenotationonly", notationDefault));
+        notationOnly = qStrToBool(
+                settings.value("quantizenotationonly", notationDefault));
     }
 
-    bool durations = qStrToBool(settings.value("quantizedurations", false));
-    int simplicity = settings.value("quantizesimplicity", 13).toInt();
-    int maxTuplet = settings.value("quantizemaxtuplet", 3).toInt();
-    bool counterpoint = qStrToBool(settings.value("quantizecounterpoint", false));
-    bool articulate = qStrToBool(settings.value("quantizearticulate", true));
-    int swing = settings.value("quantizeswing", 0).toInt();
-    int iterate = settings.value("quantizeiterate", 100).toInt();
+    const bool durations =
+            qStrToBool(settings.value("quantizedurations", false));
+    const int simplicity =
+            settings.value("quantizesimplicity", 13).toInt();
+    const int maxTuplet =
+            settings.value("quantizemaxtuplet", 3).toInt();
+    const bool counterpoint =
+            qStrToBool(settings.value("quantizecounterpoint", false));
+    const bool articulate =
+            qStrToBool(settings.value("quantizearticulate", true));
+    const int swing = settings.value("quantizeswing", 0).toInt();
+    const int iterate = settings.value("quantizeiterate", 100).toInt();
 
     settings.endGroup();
 
@@ -269,7 +287,7 @@ EventQuantizeCommand::makeQuantizer(const QString &settingsGroup,
 
     // BasicQuantizer
     if (type == 0) {
-        if (notateOnly) {
+        if (notationOnly) {
             m_quantizer = std::shared_ptr<Quantizer>(new BasicQuantizer(
                     Quantizer::RawEventData,
                     Quantizer::NotationPrefix,
@@ -281,7 +299,7 @@ EventQuantizeCommand::makeQuantizer(const QString &settingsGroup,
                     unit, durations, swing, iterate));
         }
     } else if (type == 1) {  // LegatoQuantizer
-        if (notateOnly) {
+        if (notationOnly) {
             m_quantizer = std::shared_ptr<Quantizer>(new LegatoQuantizer(
                     Quantizer::RawEventData,
                     Quantizer::NotationPrefix, unit));
@@ -292,23 +310,25 @@ EventQuantizeCommand::makeQuantizer(const QString &settingsGroup,
         }
     } else {  // NotationQuantizer
 
-        std::shared_ptr<NotationQuantizer> nq;
+        std::shared_ptr<NotationQuantizer> notationQuantizer;
 
-        if (notateOnly) {
-            nq = std::shared_ptr<NotationQuantizer>(new NotationQuantizer());
+        if (notationOnly) {
+            notationQuantizer = std::shared_ptr<NotationQuantizer>(
+                    new NotationQuantizer());
         } else {
-            nq = std::shared_ptr<NotationQuantizer>(new NotationQuantizer(
-                    Quantizer::RawEventData,
-                    Quantizer::RawEventData));
+            notationQuantizer = std::shared_ptr<NotationQuantizer>(
+                    new NotationQuantizer(
+                            Quantizer::RawEventData,
+                            Quantizer::RawEventData));
         }
 
-        nq->setUnit(unit);
-        nq->setSimplicityFactor(simplicity);
-        nq->setMaxTuplet(maxTuplet);
-        nq->setContrapuntal(counterpoint);
-        nq->setArticulate(articulate);
+        notationQuantizer->setUnit(unit);
+        notationQuantizer->setSimplicityFactor(simplicity);
+        notationQuantizer->setMaxTuplet(maxTuplet);
+        notationQuantizer->setContrapuntal(counterpoint);
+        notationQuantizer->setArticulate(articulate);
 
-        m_quantizer = nq;
+        m_quantizer = notationQuantizer;
     }
 
     setName(getGlobalName(m_quantizer));
