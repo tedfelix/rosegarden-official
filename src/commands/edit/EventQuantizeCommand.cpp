@@ -51,12 +51,8 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
                                            std::shared_ptr<Quantizer> quantizer):
     BasicCommand(getGlobalName(quantizer), segment, startTime, endTime,
                  true),  // bruteForceRedo
-    m_quantizer(quantizer),
-    m_selection(nullptr),
-    m_progressTotal(0),
-    m_progressPerCall(0)
+    m_quantizer(quantizer)
 {
-    // nothing else
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
@@ -67,12 +63,9 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
                  selection.getStartTime(),
                  selection.getEndTime(),
                  true),  // bruteForceRedo
-    m_quantizer(quantizer),
     m_selection(&selection),
-    m_progressTotal(0),
-    m_progressPerCall(0)
+    m_quantizer(quantizer)
 {
-    // nothing else
 }
 
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
@@ -83,13 +76,9 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
     BasicCommand("Quantize",
                  segment, startTime, endTime,
                  true),  // bruteForceRedo
-    m_quantizer(),
-    m_selection(nullptr),
-    m_settingsGroup(settingsGroup),
-    m_progressTotal(0),
-    m_progressPerCall(0)
+    m_settingsGroup(settingsGroup)
 {
-    setName(getGlobalName(makeQuantizer(settingsGroup, scope)));
+    makeQuantizer(settingsGroup, scope);
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
@@ -100,13 +89,10 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
                  selection.getStartTime(),
                  selection.getEndTime(),
                  true),  // bruteForceRedo
-    m_quantizer(),
     m_selection(&selection),
-    m_settingsGroup(settingsGroup),
-    m_progressTotal(0),
-    m_progressPerCall(0)
+    m_settingsGroup(settingsGroup)
 {
-    setName(getGlobalName(makeQuantizer(settingsGroup, scope)));
+    makeQuantizer(settingsGroup, scope);
 }
 
 EventQuantizeCommand::~EventQuantizeCommand()
@@ -143,7 +129,8 @@ EventQuantizeCommand::modifySegment()
     bool decounterpoint = false;
 
     if (!m_settingsGroup.isEmpty()) {
-        //!!! need way to decide whether to do these even if no settings group (i.e. through args to the command)
+        // !!! need way to decide whether to do these even if no settings
+        //     group (i.e. through args to the command)
         QSettings settings;
         settings.beginGroup( m_settingsGroup );
 
@@ -234,8 +221,8 @@ EventQuantizeCommand::modifySegment()
         throw CommandCancelled();
 }
 
-std::shared_ptr<Quantizer>
-EventQuantizeCommand::makeQuantizer(QString settingsGroup,
+void
+EventQuantizeCommand::makeQuantizer(const QString &settingsGroup,
                                     QuantizeScope scope)
 {
     // See QuantizeParameters::getQuantizer() which is quite similar.
@@ -324,7 +311,8 @@ EventQuantizeCommand::makeQuantizer(QString settingsGroup,
         m_quantizer = nq;
     }
 
-    return m_quantizer;
+    setName(getGlobalName(m_quantizer));
 }
+
 
 }
