@@ -20,7 +20,6 @@
 #define RG_EVENTUNQUANTIZECOMMAND_H
 
 #include "document/BasicCommand.h"
-#include <QString>
 #include "base/Event.h"
 
 #include <QCoreApplication>
@@ -34,11 +33,21 @@ class Segment;
 class Quantizer;
 class EventSelection;
 
-
+/// Unquantize the selection or segment.
+/**
+ * This is used by the "Off" setting in the Matrix editor "Quantize"
+ * ComboBox.
+ *
+ * @see MatrixView::slotQuantizeSelection()
+ * @see Quantizer::unquantize()
+ */
 class EventUnquantizeCommand : public BasicCommand
 {
+
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::EventUnquantizeCommand)
+
 public:
+
     EventUnquantizeCommand(Segment &segment,
                            timeT startTime,
                            timeT endTime,
@@ -48,17 +57,17 @@ public:
                            std::shared_ptr<Quantizer> quantizer);
 
     ~EventUnquantizeCommand() override;
-    
-    static QString getGlobalName();
-    
+
 protected:
+
     void modifySegment() override;
 
 private:
-    std::shared_ptr<Quantizer> m_quantizer;
-    EventSelection *m_selection;
-};
 
+    EventSelection *m_selection{nullptr};
+    std::shared_ptr<Quantizer> m_quantizer;
+
+};
 
 
 }
