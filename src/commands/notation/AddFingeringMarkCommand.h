@@ -55,8 +55,8 @@ protected:
     void modifySegment() override;
 
 private:
-    static QString getGlobalName(std::string fingering = "");
-    static QString getActionName(std::string fingering = "");
+    static QString getGlobalName(const std::string& fingering = "");
+    static QString getActionName(const std::string& fingering = "");
     static std::vector<std::string> getStandardFingerings();
 
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)

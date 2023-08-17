@@ -52,8 +52,8 @@ namespace Rosegarden
 
 KeySignatureDialog::KeySignatureDialog(QWidget *parent,
                                        NotePixmapFactory *npf,
-                                       Clef clef,
-                                       Rosegarden::Key defaultKey,
+                                       const Clef& clef,
+                                       const Rosegarden::Key& defaultKey,
                                        bool showApplyToAll,
                                        bool showConversionOptions,
                                        QString explanatoryText) :

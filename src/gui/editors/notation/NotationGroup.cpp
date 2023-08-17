@@ -865,7 +865,6 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
     if (!initialNoteOrRestEl->isRest()) {
         initialNoteOrRest = initialNote;
-        // cppcheck-suppress unreadVariable
         initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
     }
 

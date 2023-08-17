@@ -347,7 +347,7 @@ ImportDeviceDialog::shouldRename() const
 }
 
 bool
-ImportDeviceDialog::importFromRG(QString fileName)
+ImportDeviceDialog::importFromRG(const QString& fileName)
 {
     bool skipAutoload = true, clearCommandHistory = false;
     RosegardenDocument fileDoc(RosegardenMainWindow::self(), {},
@@ -394,7 +394,7 @@ ImportDeviceDialog::importFromRG(QString fileName)
 }
 
 bool
-ImportDeviceDialog::importFromSF2(QString fileName)
+ImportDeviceDialog::importFromSF2(const QString& fileName)
 {
     SF2PatchExtractor::Device sf2device;
     try {
@@ -447,7 +447,7 @@ ImportDeviceDialog::importFromSF2(QString fileName)
 }
 
 bool
-ImportDeviceDialog::importFromLSCP(QString filename)
+ImportDeviceDialog::importFromLSCP(const QString& filename)
 {
     LSCPPatchExtractor::Device lscpDevice;
 

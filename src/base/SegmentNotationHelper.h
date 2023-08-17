@@ -41,7 +41,7 @@ public:
     /**
      * Return the notation absolute time plus the notation duration.
      */
-    timeT getNotationEndTime(Event *e);
+    static timeT getNotationEndTime(Event *e);
 
     /**
      * Return an iterator pointing at the first event in the segment
@@ -61,7 +61,7 @@ public:
      * completeness, but in most cases if you're about to call them
      * you should ask yourself why.)
      */
-    iterator findNearestNotationAbsoluteTime(timeT t);
+    // unused iterator findNearestNotationAbsoluteTime(timeT t);
 
 
     /**
@@ -167,7 +167,7 @@ public:
      *
      * You should pass note-quantized durations into this method
      */
-    bool isSplitValid(timeT a, timeT b);
+    static bool isSplitValid(timeT a, timeT b);
 
 
     /**
@@ -212,7 +212,7 @@ public:
      *
      * You should pass note-quantized durations into this method
      */
-    bool isCollapseValid(timeT a, timeT b);
+    static bool isCollapseValid(timeT a, timeT b);
 
     /**
      * If possible, collapses the rest event with the following or
@@ -268,25 +268,25 @@ public:
      * Insert a clef.
      * Returns iterator pointing to clef.
      */
-    iterator insertClef(timeT absoluteTime, Clef clef);
+    iterator insertClef(timeT absoluteTime, const Clef& clef);
 
     /**
      * Insert a symbol.
      * Returns iterator pointing to symbol.
      */
-    iterator insertSymbol(timeT absoluteTime, Symbol symbol);
+    iterator insertSymbol(timeT absoluteTime, const Symbol& symbol);
 
     /**
      * Insert a key.
      * Returns iterator pointing to key.
      */
-    iterator insertKey(timeT absoluteTime, Key key);
+    iterator insertKey(timeT absoluteTime, const Key& key);
 
     /**
      * Insert a text event.
      * Returns iterator pointing to text event.
      */
-    iterator insertText(timeT absoluteTime, Text text);
+    iterator insertText(timeT absoluteTime, const Text& text);
 
     /**
      * Deletes a note, doing all the clever split/merge stuff as
@@ -326,7 +326,7 @@ public:
      * will be acceptable.  The default is whatever the segment's
      * quantizer considers acceptable (probably either 1 or 2 dots).
      */
-    bool isViable(Event *e, int dots = -1) {
+    static bool isViable(Event *e, int dots = -1) {
         return isViable(e->getDuration(), dots);
     }
 
@@ -341,7 +341,7 @@ public:
      * will be acceptable.  The default is whatever the segment's
      * quantizer considers acceptable (probably either 1 or 2 dots).
      */
-    bool isViable(timeT duration, int dots = -1);
+    static bool isViable(timeT duration, int dots = -1);
 
 
     /**
@@ -471,7 +471,7 @@ public:
      * Guess which clef a section of music is supposed to be in,
      * ignoring any clef events actually found in the section.
      */
-    Clef guessClef(iterator from, iterator to);
+    static Clef guessClef(iterator from, iterator to);
 
 
     /**
@@ -576,7 +576,7 @@ protected:
 			    bool groupGraces);
 
     /// for use by unbeam
-    void unbeamAux(iterator from, iterator to);
+    static void unbeamAux(iterator from, iterator to);
 
     /// for use by autoBeam
 
@@ -595,9 +595,10 @@ protected:
     void reorganizeRests(timeT, timeT, Reorganizer);
 
     /// for use by normalizeRests
-    void normalizeContiguousRests(timeT, timeT, std::vector<Event *>&);
+    // unused void normalizeContiguousRests(timeT, timeT, std::vector<Event *>&);
 
     /// for use by collapseRestsAggressively
+    // cppcheck-suppress functionStatic
     void mergeContiguousRests(timeT, timeT, std::vector<Event *>&);
 
     /// find border of tupled

@@ -79,7 +79,8 @@ public:
     class StaffInfo {
     public:
         explicit StaffInfo(TrackId id=0) :
-                trackId(id)
+             trackId(id),
+             accTable()
         {
             voice = 0;
             time = 0;

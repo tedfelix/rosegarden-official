@@ -38,11 +38,11 @@ class SymbolInsertionCommand : public BasicCommand
 
 public:
     SymbolInsertionCommand(Segment &segment,
-                         timeT time,
-                         Symbol symbol);
+                           timeT time,
+                           const Symbol& symbol);
     ~SymbolInsertionCommand() override;
 
-    static QString getGlobalName(Symbol *symbol = nullptr);
+    static QString getGlobalName(const Symbol *symbol = nullptr);
 
     EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }

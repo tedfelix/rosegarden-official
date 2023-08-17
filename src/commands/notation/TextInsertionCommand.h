@@ -40,7 +40,7 @@ class TextInsertionCommand : public BasicCommand
 public:
     TextInsertionCommand(Segment &segment,
                          timeT time,
-                         Text text);
+                         const Text& text);
     ~TextInsertionCommand() override;
 
     EventSelection *getSubsequentSelection() override;

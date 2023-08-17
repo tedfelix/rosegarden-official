@@ -47,7 +47,7 @@ class ExpandFigurationCommand : public MacroCommand
  private:
 
     void initialise(SegmentSelection selection);
-    timeT rawStartTimeToExact(timeT raw);
+    timeT rawStartTimeToExact(timeT raw) const;
 
     Composition                   *m_composition;
     // The new segments we make.

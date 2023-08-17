@@ -54,10 +54,10 @@ class LinearTimeScale
 
     // Convert outside times to the triggered segment's intrinsic
     // times (Unused)
-    timeT  toInternal(timeT t) const
-    { return timeT((t/m_ratio) - m_offset); }
-    timeT  toInternalDuration(timeT t) const
-    { return timeT(t/m_ratio); }
+    // unused timeT  toInternal(timeT t) const
+    // { return timeT((t/m_ratio) - m_offset); }
+    // unused timeT  toInternalDuration(timeT t) const
+    // { return timeT(t/m_ratio); }
 
     // Whether the performance duration is different than the
     // segment's intrinsic duration.

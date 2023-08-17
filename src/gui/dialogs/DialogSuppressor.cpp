@@ -31,6 +31,7 @@
 namespace Rosegarden
 {
 
+/* unused
 void
 SuppressionTarget::slotSuppressionToggled(bool on)
 {
@@ -46,7 +47,9 @@ SuppressionTarget::slotSuppressionToggled(bool on)
     settings.setValue(m_key, on);
     settings.endGroup();
 }
+*/
 
+/* unused
 bool
 DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
 {
@@ -88,7 +91,9 @@ DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
     }
     return false;
 }
+*/
 
+/* unused
 bool
 DialogSuppressor::isSuppressed(QString settingsKey)
 {
@@ -98,5 +103,6 @@ DialogSuppressor::isSuppressed(QString settingsKey)
     settings.endGroup();
     return suppress;
 }
+*/
 
 }

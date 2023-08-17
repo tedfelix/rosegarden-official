@@ -100,7 +100,7 @@ MappedDevice::operator=(const MappedDevice &mD)
     return *this;
 }
 
-
+/* unused
 QDataStream&
 operator>>(QDataStream &dS, MappedDevice *mD)
 {
@@ -142,8 +142,9 @@ operator>>(QDataStream &dS, MappedDevice *mD)
 
     return dS;
 }
+*/
 
-
+/* unused
 QDataStream&
 operator>>(QDataStream &dS, MappedDevice &mD)
 {
@@ -186,6 +187,7 @@ operator>>(QDataStream &dS, MappedDevice &mD)
 
     return dS;
 }
+*/
 
 QDataStream&
 operator<<(QDataStream &dS, MappedDevice *mD)

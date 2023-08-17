@@ -138,8 +138,6 @@ void PlayListView::mouseMoveEvent(QMouseEvent *event){
 
 }
 
-
-
 QStringList PlayListView::mimeTypes() const{
     QStringList types;
     types << "text/uri-list";
@@ -201,10 +199,7 @@ void PlayListView::dropEvent(QDropEvent* e)
     // send to AudioManagerDialog::slotDropped()
 }
 
-
-
-
-
+#if 0
 QTreeWidgetItem* PlayListView::previousSibling(QTreeWidgetItem* item)
 {
 	return this->itemAbove( item );
@@ -217,6 +212,6 @@ QTreeWidgetItem* PlayListView::previousSibling(QTreeWidgetItem* item)
     return prevSib;
 	*/
 }
-
+#endif
 
 }

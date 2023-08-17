@@ -171,6 +171,7 @@ PeakFile::parseHeader()
 }
 
 void
+// cppcheck-suppress unusedFunction
 PeakFile::printStats()
 {
     RG_DEBUG << "printStats()";

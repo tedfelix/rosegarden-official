@@ -47,7 +47,7 @@ public:
                                 const std::string& connection) :
         NamedCommand(getGlobalName(false)),
         m_studio(studio),
-        m_name(name),
+        m_deviceName(name),
         m_type(type),
         m_direction(direction),
         m_connection(connection),
@@ -68,7 +68,7 @@ public:
 
 private:
     Studio *m_studio;
-    std::string m_name;
+    std::string m_deviceName;
     Device::DeviceType m_type;
     MidiDevice::DeviceDirection m_direction;
     std::string m_connection;

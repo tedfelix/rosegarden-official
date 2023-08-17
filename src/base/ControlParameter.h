@@ -51,7 +51,7 @@ public:
     bool operator==(const ControlParameter &control) const;
 
     // ??? Appears to be unused.  Confirm and remove.
-    friend bool operator<(const ControlParameter &a, const ControlParameter &b);
+    // unused friend bool operator<(const ControlParameter &a, const ControlParameter &b);
 
     // ControlParameter comparison on IPB position
     //

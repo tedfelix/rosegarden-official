@@ -97,7 +97,7 @@ public:
      * the absolute time that would be restored by a call to
      * unquantize.
      */
-    virtual timeT getUnquantizedDuration(Event *e) const;
+    // unused virtual timeT getUnquantizedDuration(Event *e) const;
 
     /**
      * Unquantize all events in the given range, for this
@@ -252,7 +252,7 @@ protected:
                      timeT absTime, timeT duration) const;
     mutable std::vector<Event *> m_toInsert;
 
-    void removeProperties(Event *) const;
+    // unused void removeProperties(Event *) const;
     void removeTargetProperties(Event *) const;
     void makePropertyNames();
 

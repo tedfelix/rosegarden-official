@@ -47,7 +47,7 @@ public:
                           bool createdFromNotationEditor = false
                          );
 
-    static void setDefaultLilyPondVersion(QString version);
+    // unused static void setDefaultLilyPondVersion(QString version);
 
 public slots:
     void slotApply();

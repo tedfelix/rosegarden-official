@@ -33,7 +33,7 @@ public:
      * matrix (ie event is a note and has the same start time and the
      * same pitch as another note).
      */
-    bool isDrumColliding(Event *);
+    // unused bool isDrumColliding(Event *);
 
     using SegmentHelper::segment;
     using SegmentNotationHelper::deleteEvent;

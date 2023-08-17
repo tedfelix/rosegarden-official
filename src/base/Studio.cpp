@@ -48,6 +48,7 @@ Studio::Studio() :
     amwShowSynthFaders(true),
     amwShowAudioSubmasters(true),
     amwShowUnassignedFaders(false),
+    m_audioInputs(0),
     m_midiThruFilter(0),
     m_midiRecordFilter(0),
     m_metronomeDevice(0)

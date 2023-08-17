@@ -92,7 +92,7 @@ public:
 public slots:
     void slotAdd();
     void slotPlayPreview();
-    void slotRename();
+    // unused void slotRename();
     void slotInsert();
     void slotRemove();
     void slotRemoveAll();
@@ -101,9 +101,9 @@ public slots:
     void slotExportAudio();
     void slotHelpRequested();
     void slotHelpAbout();
-	
+
 	//void slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
-	
+
     // get selection
 	void slotSelectionChanged();
 //	void slotSelectionChanged(QTreeWidgetItem *);
@@ -131,7 +131,7 @@ public slots:
     /**
      * Cancel the currently playing audio file
      */
-    void slotCancelPlayingAudioFile();
+    // unused void slotCancelPlayingAudioFile();
 
     void slotClose();
 

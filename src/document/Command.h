@@ -48,7 +48,7 @@ private:
 class ROSEGARDENPRIVATE_EXPORT NamedCommand : public Command
 {
 public:
-    explicit NamedCommand(QString name) : m_name(name) { }
+    explicit NamedCommand(const QString& name) : m_name(name) { }
     ~NamedCommand() override { }
 
     QString getName() const override { return m_name; }

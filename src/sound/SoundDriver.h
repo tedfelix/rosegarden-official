@@ -98,7 +98,7 @@ public:
         { return false; }
     virtual void removeDevice(DeviceId) { }
     virtual void removeAllDevices() { }
-    virtual void renameDevice(DeviceId, QString) { }
+    virtual void renameDevice(DeviceId, const QString&) { }
 
     /// Poll for new clients (for new Devices/Instruments)
     virtual void checkForNewClients()  { }
@@ -111,10 +111,10 @@ public:
     virtual QString getConnection(DeviceId) { return ""; }
     virtual void setConnection(
             DeviceId /* deviceId */,
-            QString /* idealConnection */) { }
+            const QString& /* idealConnection */) { }
     virtual void setPlausibleConnection(
             DeviceId deviceId,
-            QString idealConnection,
+            const QString& idealConnection,
             bool /* recordDevice */)
                     { setConnection(deviceId, idealConnection); }
     virtual void connectSomething() { }

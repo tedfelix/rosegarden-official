@@ -148,7 +148,7 @@ private:
     bool lookup(CharName charName, bool inverted, QPixmap *&pixmap) const;
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
 
-    NoteCharacterDrawRep *lookupDrawRep(QPixmap *pixmap) const;
+    // unused NoteCharacterDrawRep *lookupDrawRep(QPixmap *pixmap) const;
 
     static CharName getNameWithColour(CharName origName, int hue);
     // unused static CharName getNameShaded(CharName origName);

@@ -635,11 +635,13 @@ void NotationSelector::handleEventRemoved(Event *event)
     }
 }
 
+/* unused
 void NotationSelector::slotHideSelection()
 {
     if (!m_selectionRect) return;
     m_selectionRect->hide();
 }
+*/
 
 void NotationSelector::slotInsertSelected()
 {

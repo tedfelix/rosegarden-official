@@ -47,7 +47,7 @@ class TextEventDialog : public QDialog
 public:
     TextEventDialog(QWidget *parent,
                     NotePixmapFactory *npf,
-                    Text defaultText,
+                    const Text& defaultText,
                     int maxLength = -1); // for Qt default
 
     Text getText() const;

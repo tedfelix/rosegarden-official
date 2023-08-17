@@ -64,6 +64,7 @@ static inline void releaseLock(const char *file, int line)
 //
 // ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 //
+/* unused
 QDataStream& operator>>(QDataStream& s, MappedObjectIdList& v)
 {
     v.clear();
@@ -77,6 +78,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectIdList& v)
     }
     return s;
 }
+*/
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectIdList& v)
 {
@@ -87,6 +89,7 @@ QDataStream& operator<<(QDataStream& s, const MappedObjectIdList& v)
     return s;
 }
 
+/* unused
 QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList& v)
 {
     v.clear();
@@ -100,6 +103,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList& v)
     }
     return s;
 }
+*/
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectPropertyList& v)
 {
@@ -110,6 +114,7 @@ QDataStream& operator<<(QDataStream& s, const MappedObjectPropertyList& v)
     return s;
 }
 
+/* unused
 QDataStream& operator>>(QDataStream& s, MappedObjectValueList& v)
 {
     v.clear();
@@ -123,6 +128,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectValueList& v)
     }
     return s;
 }
+*/
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectValueList& v)
 {
@@ -792,6 +798,7 @@ MappedConnectableObject::MappedConnectableObject(MappedObject *parent,
 MappedConnectableObject::~MappedConnectableObject()
 {}
 
+/* unused
 void
 MappedConnectableObject::setConnections(ConnectionDirection dir,
                                         MappedObjectValueList conns)
@@ -801,6 +808,7 @@ MappedConnectableObject::setConnections(ConnectionDirection dir,
     else
         m_connectionsOut = conns;
 }
+*/
 
 void
 MappedConnectableObject::addConnection(ConnectionDirection dir,
@@ -1197,6 +1205,7 @@ MappedAudioInput::setProperty(const MappedObjectProperty &property,
 MappedPluginSlot::MappedPluginSlot(MappedObject *parent, MappedObjectId id) :
     MappedObject(parent, "MappedPluginSlot", PluginSlot, id),
     m_portCount(0),
+    m_instrument(0),
     m_position(0),
     m_bypassed(false)
 {
@@ -1563,7 +1572,8 @@ MappedPluginSlot::getPort(unsigned long portNumber)
 
 MappedPluginPort::MappedPluginPort(MappedObject *parent, MappedObjectId id) :
     MappedObject(parent, "MappedPluginPort", PluginPort, id),
-    m_portNumber(0)
+    m_portNumber(0),
+    m_displayHint(PluginPort::NoHint)
 {}
 
 MappedPluginPort::~MappedPluginPort()

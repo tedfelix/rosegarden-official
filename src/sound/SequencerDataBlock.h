@@ -118,7 +118,7 @@ public:
     int getRecordedEvents(MappedEventList &);
 
     // unused bool getTrackLevel(TrackId track, LevelInfo &) const;
-    void setTrackLevel(TrackId track, const LevelInfo &);
+    // unused void setTrackLevel(TrackId track, const LevelInfo &);
 
     // Two of these to rather hamfistedly get around the fact
     // we need to fetch this value twice - once from IPB,

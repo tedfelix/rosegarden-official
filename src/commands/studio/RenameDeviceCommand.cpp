@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -34,10 +34,10 @@ RenameDeviceCommand::execute()
 {
     Device *device = m_studio->getDevice(m_deviceId);
     if (!device) return;
-    if (m_oldName == "") m_oldName = device->getName();
+    if (m_oldDeviceName == "") m_oldDeviceName = device->getName();
     RosegardenSequencer::getInstance()->renameDevice
-        (m_deviceId, strtoqstr(m_name));
-    device->setName(m_name);
+        (m_deviceId, strtoqstr(m_deviceName));
+    device->setName(m_deviceName);
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,
     //     would update themselves.
@@ -49,9 +49,9 @@ RenameDeviceCommand::unexecute()
 {
     Device *device = m_studio->getDevice(m_deviceId);
     if (!device) return;
-    device->setName(m_oldName);
+    device->setName(m_oldDeviceName);
     RosegardenSequencer::getInstance()->renameDevice
-        (m_deviceId, strtoqstr(m_oldName));
+        (m_deviceId, strtoqstr(m_oldDeviceName));
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,
     //     would update themselves.

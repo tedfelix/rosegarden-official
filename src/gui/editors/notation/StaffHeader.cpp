@@ -6,17 +6,19 @@
     Copyright 2000-2023 the Rosegarden development team.
 
     This file is Copyright 2007-2009
-        Yves Guillemot      <yc.guillemot@wanadoo.fr> 
+        Yves Guillemot      <yc.guillemot@wanadoo.fr>
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+#define RG_MODULE_STRING "[StaffHeader]"
 
 #include "StaffHeader.h"
 #include "HeadersGroup.h"
@@ -300,7 +302,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     connect(m_headersGroup, &HeadersGroup::currentSegmentChanged,
             this, &StaffHeader::slotSetCurrent);
 
-            
+
     // Create three objects where to find possible inconsistencies
     // when segments overlap
 
@@ -333,7 +335,7 @@ StaffHeader::~StaffHeader()
     delete m_clefOverlaps;
     delete m_keyOverlaps;
     delete m_transposeOverlaps;
-    
+
     for (SortedSegments::iterator i=m_segments.begin();
                                       i!=m_segments.end(); ++i) {
         (*i)->removeObserver(this);
@@ -352,7 +354,7 @@ StaffHeader::paintEvent(QPaintEvent *)
                    << "  This is a BUG which should no longer occur. (rev 11137)";
         return;
     }
-        
+
     QPainter paint(this);
     paint.fillRect(0, 0, width(), height(), m_background);  /// ???
 
@@ -761,7 +763,7 @@ StaffHeader::updateHeader(int width)
         m_lastUpperText = m_upperText;
         m_clefOrKeyWasInconsistent = m_clefOrKeyIsInconsistent;
         m_transposeWasInconsistent = m_transposeIsInconsistent;
-        
+
 
         NotePixmapFactory * npf = m_scene->getNotePixmapFactory();
 
@@ -780,7 +782,7 @@ StaffHeader::updateHeader(int width)
             m_foreground = Qt::white;
             m_foregroundType = NotePixmapFactory::PlainColourLight;
         }
-        
+
         // Fix staff header variant of bug #2997311 (Part 1)
         bool selectedMode = npf->isSelected();
         npf->setSelected(false);
@@ -811,7 +813,7 @@ StaffHeader::updateHeader(int width)
         // Show or hide the warning icons
         if (m_clefOrKeyIsInconsistent || m_transposeIsInconsistent) {
             m_clefOrKeyInconsistency->show();
-        } else { 
+        } else {
             m_clefOrKeyInconsistency->hide();
         }
     }
@@ -826,7 +828,7 @@ StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
     // Sort segments by start time, then by end time, then by address.
     // The last comparison garantees two segments will never be equals and
     // allows to remove easily one of them from the m_segments multiset.
-    // (Now, a set may replace the multiset.) 
+    // (Now, a set may replace the multiset.)
     if (s1->getStartTime() < s2->getStartTime()) return true;
     if (s1->getStartTime() > s2->getStartTime()) return false;
     if (s1->getEndMarkerTime() < s2->getEndMarkerTime()) return true;
@@ -843,7 +845,7 @@ StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
 //         emit showToolTip(m_toolTipText);
 //         return true;
 //     }
-// 
+//
 //     return QWidget::event(event);
 // }
 //
@@ -914,7 +916,7 @@ StaffHeader::slotToolTip()
 //     int h = height();
 //     int offset = (h - 10 * m_lineSpacing -1) / 2;
 //     if (event->y() > (h - offset)) {
-/// Here is a place to call a popup menu to select what segment is the current 
+/// Here is a place to call a popup menu to select what segment is the current
 /// one when segments are overlapping.
 //         std::cerr << "START MENU\n";
 //     }
@@ -929,7 +931,7 @@ StaffHeader::slotShowInconsistencies()
     int trackPos = comp->getTrackPositionById(m_track);
 
     QString str = tr("<h2>Notation Inconsistencies</h2>");
-       
+
     str += tr("<h3>Filename: %1 </h3>")
              .arg(RosegardenDocument::currentDocument->getTitle());
 
@@ -1030,5 +1032,3 @@ StaffHeader::segmentDeleted(const Segment *seg)
 
 
 }
-
-

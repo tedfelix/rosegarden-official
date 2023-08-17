@@ -166,7 +166,7 @@ public:
     typedef std::vector<QImage> QImageVector;
 
     struct AudioPreview {
-        AudioPreview(const QImageVector &i, QRect r) :
+        AudioPreview(const QImageVector &i, const QRect& r) :
             image(i),  // ??? COPY
             rect(r),
             resizeOffset(0)

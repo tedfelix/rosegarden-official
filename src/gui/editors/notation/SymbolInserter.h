@@ -56,7 +56,7 @@ public:
     static QString ToolName();
 
 public slots:
-    void slotSetSymbol(Symbol symbolType);
+    void slotSetSymbol(const Symbol& symbolType);
 
 protected slots:
     void slotNotesSelected();

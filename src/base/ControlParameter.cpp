@@ -73,7 +73,7 @@ ControlParameter::ControlParameter(const ControlParameter &control):
 {
 }
 
-ControlParameter& 
+ControlParameter&
 ControlParameter::operator=(const ControlParameter &control)
 {
     m_name = control.getName();
@@ -97,6 +97,7 @@ bool ControlParameter::operator==(const ControlParameter &control) const
         m_max == control.getMax();
 }
 
+/* unused
 bool operator<(const ControlParameter &a, const ControlParameter &b)
 {
     if (a.m_type != b.m_type)
@@ -106,11 +107,11 @@ bool operator<(const ControlParameter &a, const ControlParameter &b)
     else
 	return false;
 }
-
+*/
 
 std::string
 ControlParameter::toXmlString() const
-{ 
+{
     std::stringstream control;
 
     control << "            <control name=\"" << encode(m_name)
@@ -136,7 +137,7 @@ newEvent(timeT time, int value) const
 {
     Event *event = new Event (getType(), time);
     ControllerEventAdapter(event).setValue(value);
-    
+
     if (getType() == Controller::EventType) {
         event->set<Int>(Controller::NUMBER, m_controllerNumber);
     }
@@ -149,14 +150,14 @@ bool
 ControlParameter::
 matches(Event *e) const
 {
-    return 
+    return
         e->isa(m_type) &&
         ((m_type != Controller::EventType) ||
          (e->has(Controller::NUMBER) &&
           e->get <Int>(Controller::NUMBER) == m_controllerNumber));
 }
 
-    
+
 // These exists to support calling PitchBendSequenceDialog because
 // some calls to PitchBendSequenceDialog always pitchbend or
 // expression rather than getting a ControlParameter from a ruler or
@@ -168,7 +169,7 @@ getPitchBend()
 {
     static const ControlParameter
         pitchBend(
-                  "PitchBend", Rosegarden::PitchBend::EventType, "<none>", 
+                  "PitchBend", Rosegarden::PitchBend::EventType, "<none>",
                   0, 16383, 8192, MidiByte(1), 4, -1);
     return pitchBend;
 }
@@ -183,5 +184,5 @@ getExpression()
                   "<none>", 0, 127, 100, MidiByte(11), 2, -1);
     return expression;
 }
-    
+
 }

@@ -2263,6 +2263,7 @@ JackDriver::getAudioQueueLocks()
 }
 */
 
+/* unused
 int
 JackDriver::tryAudioQueueLocks()
 {
@@ -2307,7 +2308,9 @@ JackDriver::tryAudioQueueLocks()
     }
     return rv;
 }
+*/
 
+/* unused
 int
 JackDriver::releaseAudioQueueLocks()
 {
@@ -2326,7 +2329,7 @@ JackDriver::releaseAudioQueueLocks()
         rv = m_bussMixer->releaseLock();
     return rv;
 }
-
+*/
 
 void
 JackDriver::setPluginInstance(InstrumentId id, QString identifier,

@@ -255,12 +255,14 @@ AudioLevel::multiplier_to_preview(float multiplier, int levels)
     return result;
 }
 
+/* unused
 float
 AudioLevel::preview_to_multiplier(int level, int levels)
 {
     const LevelList &ll = getPreviewLevelCache(levels);
     return ll[level];
 }
+*/
 
 int AudioLevel::m_panLaw = 0;
 

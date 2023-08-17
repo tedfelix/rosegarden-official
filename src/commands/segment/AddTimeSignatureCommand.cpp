@@ -28,7 +28,7 @@ namespace Rosegarden
 
 AddTimeSignatureCommand::AddTimeSignatureCommand(Composition *composition,
         timeT time,
-        TimeSignature timeSig) :
+        const TimeSignature& timeSig) :
         NamedCommand(getGlobalName()),
         m_composition(composition),
         m_time(time),

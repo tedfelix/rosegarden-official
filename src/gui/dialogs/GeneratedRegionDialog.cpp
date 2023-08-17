@@ -30,7 +30,7 @@ namespace Rosegarden
 GeneratedRegionDialog::
 GeneratedRegionDialog(QWidget *parent,
 		      NotePixmapFactory */*npf*/,
-		      GeneratedRegion defaultGeneratedRegion,
+		      const GeneratedRegion& defaultGeneratedRegion,
                       const QString& commandName) :
         QDialog(parent),
         m_generatedRegion(defaultGeneratedRegion),

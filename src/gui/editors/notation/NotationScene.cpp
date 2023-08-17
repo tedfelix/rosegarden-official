@@ -2188,6 +2188,7 @@ NotationScene::isEventRedundant(Key &key, timeT time, Segment &seg) const
     return key == previousKey;
 }
 
+/* unused
 bool
 NotationScene::isAnotherStaffNearTime(NotationStaff *currentStaff, timeT t)
 {
@@ -2213,6 +2214,7 @@ NotationScene::isAnotherStaffNearTime(NotationStaff *currentStaff, timeT t)
 
     return false;
 }
+*/
 
 void
 NotationScene::updateRefreshStatuses(TrackId track, timeT time)

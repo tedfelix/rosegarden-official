@@ -41,7 +41,7 @@ class ModifyControlParameterCommand : public NamedCommand
 public:
     ModifyControlParameterCommand(Studio *studio,
                                   DeviceId device,
-                                  ControlParameter control,
+                                  const ControlParameter& control,
                                   int id):
         NamedCommand(getGlobalName()),
         m_studio(studio),

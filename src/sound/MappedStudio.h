@@ -286,8 +286,8 @@ public:
 
     ~MappedConnectableObject() override;
 
-    void setConnections(ConnectionDirection dir,
-                        MappedObjectValueList conns);
+    // unused void setConnections(ConnectionDirection dir,
+    //                            MappedObjectValueList conns);
 
     // cppcheck-suppress functionConst
     void addConnection(ConnectionDirection dir, MappedObjectId id);

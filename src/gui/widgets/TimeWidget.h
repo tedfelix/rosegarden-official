@@ -48,7 +48,7 @@ public:
     /**
      * Constructor for absolute time widget
      */
-    TimeWidget(QString title,
+    TimeWidget(const QString& title,
                QWidget *parent,
                Composition *composition, // for bar/beat/msec
                timeT initialTime,
@@ -60,7 +60,7 @@ public:
      * at which this duration begins, necessary so that we can show the
      * correct real-time (based on tempo at startTime) etc.
      */
-    TimeWidget(QString title,
+    TimeWidget(const QString& title,
                QWidget *parent,
                Composition *composition, // for bar/beat/msec
                timeT startTime,

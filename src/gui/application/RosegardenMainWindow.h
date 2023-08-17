@@ -158,16 +158,16 @@ public:
     };
 
     /// open a Rosegarden file
-    void openFile(QString filePath) { openFile(filePath, ImportCheckType); }
+    void openFile(const QString& filePath) { openFile(filePath, ImportCheckType); }
 
     /// open a file, explicitly specifying its type
-    void openFile(QString filePath, ImportType type);
+    void openFile(const QString& filePath, ImportType type);
 
     /// decode and open a project file
-    void importProject(QString filePath);
+    void importProject(const QString& filePath);
 
     /// open a URL
-    void openURL(QString url);
+    void openURL(const QString& url);
 
     /// merge a file with the existing document
     /*
@@ -397,7 +397,7 @@ protected:
      *
      * @see KTMainWindow#saveProperties
      */
-    void saveGlobalProperties();
+    // unused void saveGlobalProperties();
 
     /**
      * reads the session config file and restores the application's
@@ -684,7 +684,7 @@ public slots:
     /**
      * paste the clipboard into the document, as linked segments
      */
-    void slotEditPasteAsLinks();
+    // unused void slotEditPasteAsLinks();
 
     /**
      * Cut a time range (sections of segments, tempo, and time
@@ -1176,7 +1176,7 @@ public slots:
     /**
      * Put the GUI into a given Tool edit mode
      */
-    void slotActivateTool(QString toolName);
+    void slotActivateTool(const QString& toolName);
 
     /**
      * Toggles either the play or record metronome according
@@ -1228,12 +1228,12 @@ public slots:
     /**
      * The parameters box was hidden
      */
-    void slotParameterAreaHidden();
+    // unused void slotParameterAreaHidden();
 
     /**
      * Display tip-of-day dialog on demand
      */
-    void slotShowTip();
+    // unused void slotShowTip();
 
     void slotSelectPreviousTrack();
     void slotSelectNextTrack();
@@ -1256,7 +1256,7 @@ public slots:
     /**
      * Update the toolbars after edition
      */
-    void slotUpdateToolbars();
+    // unused void slotUpdateToolbars();
 
     /**
      * Zoom slider moved
@@ -1276,8 +1276,8 @@ public slots:
      */
     void slotDeleteMarker(int id,
                           timeT time,
-                          QString name,
-                          QString description);
+                          const QString& name,
+                          const QString& description);
 
     /**
      * Document modified
@@ -1289,7 +1289,7 @@ public slots:
      * This slot is here to be connected to RosegardenMainViewWidget's
      * stateChange signal.
      */
-    void slotStateChanged(QString, bool noReverse);
+    void slotStateChanged(const QString& s, bool noReverse);
 
     /**
      * A command has happened; check the clipboard in case we
@@ -1308,7 +1308,7 @@ public slots:
      * Stop current playback, close current document,
      * open specified document and play it.
      */
-    void slotPlayListPlay(QString url);
+    void slotPlayListPlay(const QString& url);
 
     void slotHelp();
 
@@ -1469,8 +1469,11 @@ public slots:
      * happen from an external GUI, we have no way to manage these
      * internally.)
      */
-    void slotChangePluginConfiguration(InstrumentId, int index,
-                                       bool global, QString key, QString value);
+    void slotChangePluginConfiguration(InstrumentId,
+                                       int index,
+                                       bool global,
+                                       const QString& key,
+                                       const QString& value);
     void slotPluginDialogDestroyed(InstrumentId instrumentId,
                                    int index);
     void slotPluginBypassed(InstrumentId,

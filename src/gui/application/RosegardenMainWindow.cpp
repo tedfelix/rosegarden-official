@@ -1314,7 +1314,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
 }
 
 void
-RosegardenMainWindow::openFile(QString filePath, ImportType type)
+RosegardenMainWindow::openFile(const QString& filePath, ImportType type)
 {
     //RG_DEBUG << "openFile(): " << filePath;
 
@@ -1676,6 +1676,7 @@ RosegardenMainWindow::readOptions()
     m_actionsSetup = true;
 }
 
+/* unused
 void
 RosegardenMainWindow::saveGlobalProperties()
 {
@@ -1703,6 +1704,7 @@ RosegardenMainWindow::saveGlobalProperties()
         }
     }
 }
+*/
 
 #if 0
 void
@@ -1852,7 +1854,7 @@ RosegardenMainWindow::slotOpenDroppedURL(QString url)
 }
 
 void
-RosegardenMainWindow::openURL(QString url)
+RosegardenMainWindow::openURL(const QString& url)
 {
     //RG_DEBUG << "openURL(): url =" << url;
 
@@ -2066,7 +2068,7 @@ RosegardenMainWindow::slotFileSave()
         return;
     }
 
-    const QString docFilePath =
+    const QString& docFilePath =
             RosegardenDocument::currentDocument->getAbsFilePath();
 
     QString errMsg;
@@ -2347,13 +2349,14 @@ RosegardenMainWindow::slotEditPaste()
     RosegardenDocument::currentDocument->slotSetPointerPosition(RosegardenDocument::currentDocument->getComposition().getPosition());
 }
 
+/* unused
 void
 RosegardenMainWindow::slotEditPasteAsLinks()
 {
     //this contains a copy of slotEditPaste() - as and when the time comes to
     //implement this properly, the code below needs uncommenting and adapting
 
-    /*
+    */ /*
     if (m_clipboard->isEmpty()) {
         TmpStatusMsg msg(tr("Clipboard is empty"), this);
         return ;
@@ -2370,8 +2373,9 @@ RosegardenMainWindow::slotEditPasteAsLinks()
                                      false));
     // User preference? Update song pointer position on paste
     RosegardenDocument::currentDocument->slotSetPointerPosition(RosegardenDocument::currentDocument->getComposition().getPosition());
-    */
+    */ /*
 }
+*/
 
 void
 RosegardenMainWindow::slotCutRange()
@@ -3654,6 +3658,7 @@ RosegardenMainWindow::slotHideShowParameterArea()
     m_parameterArea->setVisible(findAction("show_inst_segment_parameters")->isChecked());
 }
 
+/* unused
 void
 RosegardenMainWindow::slotParameterAreaHidden()
 {
@@ -3663,6 +3668,7 @@ RosegardenMainWindow::slotParameterAreaHidden()
     // menu to keep things in sync.
     findAction("show_inst_segment_parameters")->setChecked(false);
 }
+*/
 
 void
 RosegardenMainWindow::slotToggleStatusBar()
@@ -3989,7 +3995,7 @@ RosegardenMainWindow::slotImportProject()
 }
 
 void
-RosegardenMainWindow::importProject(QString filePath)
+RosegardenMainWindow::importProject(const QString& filePath)
 {
     // Launch the project packager script-in-a-dialog in Unpack mode:
     ProjectPackager *dialog = new ProjectPackager(this, RosegardenDocument::currentDocument, ProjectPackager::Unpack, filePath);
@@ -5556,7 +5562,7 @@ RosegardenMainWindow::slotDeleteTransport()
 }
 
 void
-RosegardenMainWindow::slotActivateTool(QString toolName)
+RosegardenMainWindow::slotActivateTool(const QString& toolName)
 {
     if (toolName == SegmentSelector::ToolName()) {
         findAction("select")->trigger();
@@ -6133,11 +6139,13 @@ RosegardenMainWindow::slotResetDocConfigDlg()
     m_docConfigDlg = nullptr;
 }
 
+/* unused
 void
 RosegardenMainWindow::slotUpdateToolbars()
 {
     findAction("show_stock_toolbar")->setChecked(!(findToolbar("Main Toolbar")->isHidden()));
 }
+*/
 
 void
 RosegardenMainWindow::slotEditTempo()
@@ -6261,7 +6269,10 @@ RosegardenMainWindow::slotAddMarker(timeT time)
 }
 
 void
-RosegardenMainWindow::slotDeleteMarker(int id, timeT time, QString name, QString description)
+RosegardenMainWindow::slotDeleteMarker(int id,
+                                       timeT time,
+                                       const QString& name,
+                                       const QString& description)
 {
     RemoveMarkerCommand *command =
         new RemoveMarkerCommand(&RosegardenDocument::currentDocument->getComposition(),
@@ -6286,7 +6297,7 @@ RosegardenMainWindow::slotDocumentModified(bool modified)
 }
 
 void
-RosegardenMainWindow::slotStateChanged(QString s,
+RosegardenMainWindow::slotStateChanged(const QString& s,
                                        bool noReverse)
 {
     if (noReverse) {
@@ -6706,36 +6717,35 @@ void
 RosegardenMainWindow::slotRelabelSegments()
 {
     if (!m_view->haveSelection())
-        return ;
+        return;
 
     SegmentSelection selection(m_view->getSelection());
-    QString editLabel;
 
-    if (selection.size() == 0)
-        return ;
-    else if (selection.size() == 1)
-        editLabel = tr("Modify Segment label");
-    else
-        editLabel = tr("Modify Segments label");
+    // Generate default label based on the first selected Segment.
+    QString oldLabel = strtoqstr((*selection.begin())->getLabel());
 
-    TmpStatusMsg msg(tr("Relabelling selection..."), this);
-
-    // Generate label
-    QString label = strtoqstr((*selection.begin())->getLabel());
-
-    for (SegmentSelection::iterator i = selection.begin();
-            i != selection.end(); ++i) {
-        if (strtoqstr((*i)->getLabel()) != label)
-            label = "";
+    // For each Segment in the SegmentSelection...
+    for (Segment *segment : selection) {
+        // If they don't all have the same name, go with blank.
+        if (strtoqstr(segment->getLabel()) != oldLabel) {
+            oldLabel = "";
+            break;
+        }
     }
 
     bool ok = false;
 
-    QString newLabel = InputDialog::getText(dynamic_cast<QWidget*>(this), tr("Input"), tr("Enter new label"), LineEdit::Normal, QString(), &ok);
+    QString newLabel = InputDialog::getText(
+            dynamic_cast<QWidget*>(this),  // parent
+            tr("Relabel Segment"),  // title
+            tr("New segment label"),  // label
+            LineEdit::Normal,  // mode
+            oldLabel,  // text
+            &ok);
 
     if (ok) {
-        CommandHistory::getInstance()->addCommand
-        (new SegmentLabelCommand(selection, newLabel));
+        CommandHistory::getInstance()->addCommand(
+                new SegmentLabelCommand(selection, newLabel));
         m_view->getTrackEditor()->getCompositionView()->slotUpdateAll();
     }
 }
@@ -7611,10 +7621,10 @@ RosegardenMainWindow::slotPluginProgramChanged(InstrumentId instrumentId,
 
 void
 RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
-        int index,
-        bool global,
-        QString key,
-        QString value)
+                                                    int index,
+                                                    bool global,
+                                                    const QString& key,
+                                                    const QString& value)
 {
     PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
@@ -7777,7 +7787,7 @@ RosegardenMainWindow::slotPlayList()
 }
 
 void
-RosegardenMainWindow::slotPlayListPlay(QString url)
+RosegardenMainWindow::slotPlayListPlay(const QString& url)
 {
 //     RG_DEBUG << "slotPlayListPlay() - called with: " << url;
     slotStop();
@@ -8189,12 +8199,14 @@ RosegardenMainWindow::slotUpdateAutoSaveInterval(unsigned int interval)
     m_autoSaveTimer->setInterval(int(interval) * 1000);
 }
 
+/* unused
 void
 RosegardenMainWindow::slotShowTip()
 {
     RG_DEBUG << "slotShowTip";
 //    KTipDialog::showTip(this, locate("data", "rosegarden/tips"), true); //&&& showTip dialog deactivated.
 }
+*/
 
 void RosegardenMainWindow::slotShowToolHelp(const QString &s)
 {

@@ -59,7 +59,7 @@ protected:
     timeT            m_newTime;
 
     int                          m_id;
-    std::string                  m_name;
+    std::string                  m_markerName;
     std::string                  m_description;
     std::string                  m_oldName;
     std::string                  m_oldDescription;

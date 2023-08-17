@@ -234,7 +234,7 @@ class Chord : public GenericChord<Event, Segment, true>
 
  public:
     Chord(Container &c,
-          Iterator elementInChord,
+          const Iterator& elementInChord,
           const Quantizer *quantizer,
           PropertyName stemUpProperty =
           PropertyName::Empty())
@@ -251,7 +251,7 @@ class GlobalChord : public GenericChord<Event, CompositionTimeSliceAdapter, fals
 
  public:
     GlobalChord(Container &c,
-          Iterator elementInChord,
+          const Iterator& elementInChord,
           const Quantizer *quantizer,
           PropertyName stemUpProperty =
           PropertyName::Empty())

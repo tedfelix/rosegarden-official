@@ -68,7 +68,7 @@ public:
      * queue.  These will be displayed via displayMessageQueue() when the user
      * clicks the warning icon
      */
-    void queueMessage(const int type, const QString text, const QString informativeText);
+    void queueMessage(const int type, const QString& text, const QString& informativeText);
 
     /** We'll build the message queue out of these for convenience, so both the
      * text and informative text can be tossed about as one unit, along with a

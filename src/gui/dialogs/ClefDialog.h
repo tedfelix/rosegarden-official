@@ -48,7 +48,7 @@ public:
 
     ClefDialog(QWidget *parent,
                NotePixmapFactory *npf,
-               Clef defaultClef,
+               const Clef& defaultClef,
                bool showConversionOptions = true);
 
     Clef getClef() const;
@@ -58,7 +58,7 @@ public:
     // reuse it from notation/Inconsistencies.h
     // TODO : Should be move in a better place (may be something
     //        like gui/general/Translation.cpp)
-    static QString translatedClefName(Clef clef);
+    static QString translatedClefName(const Clef& clef);
 
 public slots:
     void slotClefUp();
@@ -74,7 +74,7 @@ protected:
 
     NotePixmapFactory *m_notePixmapFactory;
     Clef m_clef;
-    
+
     QLabel *m_clefPixmap;
     QLabel *m_clefNameLabel;
 
@@ -83,7 +83,7 @@ protected:
 
     QRadioButton *m_noConversionButton;
     QRadioButton *m_changeOctaveButton;
-    QRadioButton *m_transposeButton;   
+    QRadioButton *m_transposeButton;
 };
 
 

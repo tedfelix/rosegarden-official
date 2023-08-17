@@ -65,13 +65,13 @@ Chord::Chord(const Event& e)
         else
             m_ext = strtoqstr(f);
     }
-    
+
     ok = e.get<String>(FingeringPropertyName, f);
     if (ok) {
         QString qf(strtoqstr(f));
         QString errString;
-    
-        Fingering fingering = Fingering::parseFingering(qf, errString);    
+
+        Fingering fingering = Fingering::parseFingering(qf, errString);
         setFingering(fingering);
     }
 }
@@ -85,11 +85,13 @@ Event* Chord::getAsEvent(timeT absoluteTime) const
     return e;
 }
 
+/* unused
 bool Chord::hasAltBass() const
 {
     static const QRegularExpression ALT_BASS_REGEXP("/[A-G]");
     return m_ext.contains(ALT_BASS_REGEXP);
 }
+*/
 
 bool operator<(const Chord& a, const Chord& b)
 {

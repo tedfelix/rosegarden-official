@@ -92,6 +92,8 @@ namespace Preferences
     void setAutoChannels(bool value);
     bool getAutoChannels();
 
+    void setIncludeAlsaPortNumbersWhenMatching( bool value );
+    bool getIncludeAlsaPortNumbersWhenMatching();
 }
 
 

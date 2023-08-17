@@ -52,7 +52,9 @@ public:
 
     MatrixMouseEvent() :
         viewSegment(nullptr), element(nullptr),
-        time(0), pitch(0),
+        time(0), snappedLeftTime(0),
+        snappedRightTime(0), snapUnit(0),
+        pitch(0),
         sceneX(0), sceneY(0),
         modifiers(), buttons() { }
 };

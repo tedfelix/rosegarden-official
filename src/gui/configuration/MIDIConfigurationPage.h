@@ -66,6 +66,7 @@ private:
 
     QCheckBox *m_useDefaultStudio;
     QCheckBox *m_externalControllerPort;
+    QCheckBox *m_includeAlsaPortNumbersWhenMatching;
     QComboBox *m_controllerType;
     QCheckBox *m_allowResetAllControllers;
     QCheckBox *m_sendProgramChangesWhenLooping;

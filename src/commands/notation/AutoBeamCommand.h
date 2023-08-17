@@ -60,6 +60,7 @@ protected:
     void modifySegment() override;
 
 private:
+    // cppcheck-suppress unusedPrivateFunction
     static QString getGlobalName() { return tr("&Auto-Beam"); }
 };
 

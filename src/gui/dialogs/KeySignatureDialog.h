@@ -52,8 +52,8 @@ public:
 
     KeySignatureDialog(QWidget *parent,
                        NotePixmapFactory *npf,
-                       Clef clef,
-                       Rosegarden::Key defaultKey =
+                       const Clef& clef,
+                       const Rosegarden::Key& defaultKey =
                        Rosegarden::Key::DefaultKey,
                        bool showApplyToAll = true,
                        bool showConversionOptions = true,
@@ -63,7 +63,7 @@ public:
     ::Rosegarden::Key getKey() const;
 
     bool shouldApplyToAll() const;
-    bool shouldBeTransposed() const; 
+    bool shouldBeTransposed() const;
     ConversionType getConversionType() const;
     bool shouldIgnorePercussion() const;
 

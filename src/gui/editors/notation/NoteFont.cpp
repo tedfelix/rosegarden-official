@@ -181,6 +181,7 @@ NoteFont::add
     }
 }
 
+/* unused
 NoteCharacterDrawRep *
 NoteFont::lookupDrawRep(QPixmap *pixmap) const
 {
@@ -244,6 +245,7 @@ NoteFont::lookupDrawRep(QPixmap *pixmap) const
         return a;
     }
 }
+*/
 
 bool
 NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const

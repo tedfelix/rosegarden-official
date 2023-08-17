@@ -239,6 +239,7 @@ AudioTimeStretcher::cleanup()
     delete m_synthesisWindow;
 }
 
+/* unused
 void
 AudioTimeStretcher::setRatio(float ratio)
 {
@@ -302,6 +303,7 @@ AudioTimeStretcher::setRatio(float ratio)
 
     pthread_mutex_unlock(&m_mutex);
 }
+*/
 
 /* unused
 size_t

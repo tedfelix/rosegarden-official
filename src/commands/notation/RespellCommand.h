@@ -46,14 +46,15 @@ public:
         Accidental accidental;
     };
 
-    RespellCommand(RespellType type,
+    RespellCommand(const RespellType& type,
                    EventSelection &selection) :
         BasicCommand(getGlobalName(type), selection, true),
         m_selection(&selection),
         m_type(type)
     { }
 
-    static RespellType getArgument(QString actionName, CommandArgumentQuerier &);
+    static RespellType getArgument(const QString& actionName,
+                                   CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:

@@ -75,7 +75,7 @@ public:
     /**
      * Make a pixmap grey, or otherwise reduce its intensity.
      */
-    static QPixmap shadePixmap(const QPixmap &map);
+    // unused static QPixmap shadePixmap(const QPixmap &map);
 
     /// Return a QPixmap that is a mirror image of map (including mask)
     static QPixmap flipVertical(const QPixmap &map);

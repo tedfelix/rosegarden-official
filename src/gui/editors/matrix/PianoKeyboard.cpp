@@ -46,6 +46,7 @@ PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
         m_blackKeySize(24, 8),
         m_nbKeys(keys),
         m_mouseDown(false),
+        m_selecting(false),
         m_highlight(new QWidget(this)),
         m_lastHighlightPitch(-1),
         m_lastKeyPressed(0)

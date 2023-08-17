@@ -59,7 +59,7 @@ protected:
     void     calculateNewSegments();
 
 private:
-    timeT getRangeDuration()
+    timeT getRangeDuration() const
     { return m_secondSplitTime - m_firstSplitTime; }
 
     timeT m_firstSplitTime;

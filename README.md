@@ -84,10 +84,10 @@ A debug build results in the use of shared libs and the building of unit
 tests.  Use -DBUILD_TESTING=OFF to disable the shared library and unit
 tests in a Debug build.
 
-If you are a developer, it is recommended that you build with Address
-Sanitizer (ASan) turned on:
+If you are a developer, it is recommended that you build with warnings as
+errors and Address Sanitizer (ASan) turned on:
 
-    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-fsanitize=address -fno-omit-frame-pointer"
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror -fsanitize=address -fno-omit-frame-pointer"
 
 This will catch many potential C++ issues.
 

@@ -93,7 +93,7 @@ class DiatonicRelativeNote : public RelativeNote
 {
 public:
     DiatonicRelativeNote(int i, Event *e, timeT startTime,
-                         const Key& key, const Pitch basePitch);
+                         const Key& key, const Pitch& basePitch);
     static pitchT addDiatonicInterval(const Key& key,
                                       const Pitch & basePitch,
                                       int interval);
@@ -800,6 +800,7 @@ typedef std::vector<RelativeEvent *> RelativeEventVec;
 /// True if Event a has higher pitch than Event b.
 /// @param a and b both must be notes.
 /// @author Tom Breton (Tehom)
+/* unused
 int higherPitch(Event *a, Event* b)
 {
     if (!a->has(BaseProperties::PITCH) ||
@@ -811,6 +812,7 @@ int higherPitch(Event *a, Event* b)
         a->get<Int>(BaseProperties::PITCH) >
         b->get<Int>(BaseProperties::PITCH);
 }
+*/
 
 /***** Methods for DiatonicRelativeNote *****/
 
@@ -824,7 +826,7 @@ DiatonicRelativeNote::DiatonicRelativeNote(int i,
                                            Event *e,
                                            timeT startTime,
                                            const Key& key,
-                                           const Pitch basePitch) :
+                                           const Pitch& basePitch) :
     RelativeNote(i, e, startTime)
 {
     const int octaveBase = 0;

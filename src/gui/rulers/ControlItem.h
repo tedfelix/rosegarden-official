@@ -62,16 +62,16 @@ public:
     virtual double xStart() const  { return m_xstart; }
     virtual double xEnd() const  { return m_xend; }
 
-    virtual void handleMouseButtonPress(QMouseEvent *e);
-    virtual void handleMouseButtonRelease(QMouseEvent *e);
+    // unused virtual void handleMouseButtonPress(QMouseEvent *e);
+    // unused virtual void handleMouseButtonRelease(QMouseEvent *e);
     virtual void handleMouseMove(QMouseEvent *e, int deltaX, int deltaY);
-    virtual void handleMouseWheel(QWheelEvent *e);
+    // unused virtual void handleMouseWheel(QWheelEvent *e);
 
     virtual void setSelected(bool s);
     bool isSelected() { return m_selected; }
     //    virtual void setHighlighted(bool yes) { m_highlighted=yes; update(); }
     /// recompute height according to represented value prior to a canvas repaint
-    virtual void updateFromValue();
+    // unused virtual void updateFromValue();
 
     /// update value according to height after a user edit
     virtual void updateSegment();

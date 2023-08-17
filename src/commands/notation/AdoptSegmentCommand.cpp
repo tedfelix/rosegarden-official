@@ -31,7 +31,7 @@ namespace Rosegarden
 
 
 AdoptSegmentCommand::
-AdoptSegmentCommand(QString name, // 
+AdoptSegmentCommand(const QString& name, //
 		    NotationView &view,
 		    Segment *segment,
 		    bool into,
@@ -51,7 +51,7 @@ AdoptSegmentCommand(QString name, //
 }
 
 AdoptSegmentCommand::
-AdoptSegmentCommand(QString name,
+AdoptSegmentCommand(const QString& name,
                     NotationView &view,
                     const QString& segmentMarking,
                     Composition* comp,
@@ -95,7 +95,7 @@ AdoptSegmentCommand::execute()
     if (m_into) { adopt(); }
     else { unadopt(); }
 }
-  
+
 void
 AdoptSegmentCommand::unexecute()
 {
@@ -103,7 +103,7 @@ AdoptSegmentCommand::unexecute()
     if (m_into) { unadopt(); }
     else { adopt(); }
 }
-  
+
 void
 AdoptSegmentCommand::adopt()
 {

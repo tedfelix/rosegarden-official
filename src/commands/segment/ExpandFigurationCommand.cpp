@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -54,7 +54,7 @@ ExpandFigurationCommand::~ExpandFigurationCommand()
 /// @author Tom Breton (Tehom)
 timeT
 ExpandFigurationCommand::
-rawStartTimeToExact(timeT raw)
+rawStartTimeToExact(timeT raw) const
 {
     // If raw was exactly on a bar line, we'd get the next bar line,
     // so step it back by one.  This will never result in a time
@@ -76,14 +76,14 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
 
     // Update, because if we need new IDs they mustn't duplicate old
     // IDs, so we must be up to date on what IDs are there.
-    SegmentFigData::SegmentFigDataMap segMap = 
+    SegmentFigData::SegmentFigDataMap segMap =
         SegmentFigData::getInvolvedSegments(true, this);
     for (SegmentSelection::iterator i = selection.begin();
          i != selection.end();
          ++i) {
         SegmentFigData& segmentData =
             SegmentFigData::findOrAdd(segMap, *i);
-        
+
         // If it's used here, it's not uninvolved, so unless it's a
         // figuration, it's a chord source.
         if (segmentData.isa(SegmentFigData::Uninvolved)) {
@@ -103,7 +103,7 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
     if (!gotFigSource) { return; }
 
     SourcedFiguration sourcedfigs(figSourceID, figs);
-    
+
     // Expand figuration in each segment in selection except the
     // figuration segment itself.
     for (SegmentSelection::iterator i = selection.begin();
@@ -115,7 +115,7 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
                    "ExpandFigurationCommand::initialise",
                    "didn't find the segment");
         SegmentFigData& segmentData = it->second;
-        
+
         if (!segmentData.isa(SegmentFigData::ChordSource))
             { continue; }
 
@@ -174,7 +174,7 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
         // the actual placing
         m_composition->weakDetachSegment(target);
 
-        
+
         Command *c =
             new SegmentInsertCommand(m_composition, target, s->getTrack());
         addCommand(c);

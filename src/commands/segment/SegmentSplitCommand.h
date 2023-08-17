@@ -47,7 +47,7 @@ public:
     ~SegmentSplitCommand() override;
 
     bool isValid() { return isValid(m_segment, m_splitTime); }
-    bool isValid(Segment * segment, timeT splitTime);
+    static bool isValid(Segment * segment, timeT splitTime);
 
     void execute() override;
     void unexecute() override;

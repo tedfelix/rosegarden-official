@@ -31,7 +31,7 @@ namespace Rosegarden
  * introduced as preparation for QT6 in which the SAX classes are no
  * longer available.
  */
-    
+
 class ROSEGARDENPRIVATE_EXPORT XMLHandler
 {
  public:
@@ -43,7 +43,7 @@ class ROSEGARDENPRIVATE_EXPORT XMLHandler
                             const QString &localName,
                             const QString &qName);
     virtual QString errorString() const;
-    virtual void setDocumentLocator(void *locator); // tbd
+    // unused virtual void setDocumentLocator(void *locator); // tbd
     virtual bool startDocument();
     virtual bool startElement(const QString &namespaceURI,
                               const QString &localName,
@@ -52,7 +52,7 @@ class ROSEGARDENPRIVATE_EXPORT XMLHandler
     virtual bool fatalError(int lineNumber, int columnNumber,
                             const QString& msg);
 };
- 
+
 }
 
 #endif

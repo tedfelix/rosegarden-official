@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NoteInsertionCommand]"
 
 #include "NoteInsertionCommand.h"
 
@@ -118,7 +119,7 @@ NoteInsertionCommand::modifySegment()
 
     // this is true if the subordering is "more or less" an integer,
     // as opposed to something like -0.5
-    bool suborderingExact = (actualSubordering != 
+    bool suborderingExact = (actualSubordering !=
                              (lrintf(floorf(m_targetSubordering - 0.01))));
 
     RG_DEBUG << "actualSubordering =" << actualSubordering
@@ -185,7 +186,7 @@ NoteInsertionCommand::modifySegment()
                     break;
                 }
             }
-            
+
             if (collision) {
                 std::vector<Event *> toInsert, toErase;
                 for (Segment::iterator k = i; k != j; ++k) {
@@ -253,7 +254,7 @@ NoteInsertionCommand::modifySegment()
                 helper.makeBeamedGroupExact(bg0, bg1, GROUP_TYPE_BEAMED);
             }
         }
-            
+
     } else {
 
         // If we're attempting to insert at the same time and pitch as
@@ -274,7 +275,7 @@ NoteInsertionCommand::modifySegment()
             }
             ++i;
         }
-        
+
         if (m_matrixType) {
             i = SegmentMatrixHelper(segment).insertNote(e);
         } else {
@@ -321,7 +322,7 @@ NoteInsertionCommand::modifySegment()
 
             // Do the split
             Segment::iterator eventItr = segment.findSingle(m_lastInsertedEvent);
-            
+
             if (eventItr != segment.end()) {
                 m_lastInsertedEvent = helper.makeThisNoteViable(eventItr);
             }

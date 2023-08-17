@@ -134,7 +134,7 @@ public:
     // Some stuff to help us debug this
     //
     void getSystemInfo();
-    void showQueueStatus(int queue);
+    // unused void showQueueStatus(int queue);
 
     // Process pending
     //
@@ -413,7 +413,7 @@ public:
                            MidiDevice::DeviceDirection direction) override;
     void removeDevice(DeviceId id) override;
     void removeAllDevices() override;
-    void renameDevice(DeviceId id, QString name) override;
+    void renameDevice(DeviceId id, const QString& name) override;
 
     // Get available connections per device
     //
@@ -423,9 +423,10 @@ public:
                                   MidiDevice::DeviceDirection direction,
                                   unsigned int connectionNo) override;
     QString getConnection(DeviceId id) override;
-    void setConnection(DeviceId deviceId, QString connection) override;
+    void setConnection(DeviceId deviceId,
+                       const QString& connection) override;
     void setPlausibleConnection(DeviceId deviceId,
-                                QString idealConnection,
+                                const QString& idealConnection,
                                 bool recordDevice = false) override;
     void connectSomething() override;
 
@@ -641,8 +642,10 @@ private:
      * ??? rename: m_connectionMap
      */
     DevicePortMap m_devicePortMap;
-    void setConnectionToDevice(MappedDevice &device, QString connection);
-    void setConnectionToDevice(MappedDevice &device, QString connection,
+    void setConnectionToDevice(MappedDevice &device,
+                               const QString& connection);
+    void setConnectionToDevice(MappedDevice &device,
+                               const QString& connection,
                                const ClientPortPair &pair);
     /// Return whether the client/port is in m_devicePortMap.
     bool portInUse(int client, int port) const;

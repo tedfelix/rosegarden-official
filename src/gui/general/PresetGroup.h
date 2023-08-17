@@ -63,7 +63,7 @@ public:
 
     /** Return a \c CategoriesContainer that comprises a list of the categories
      * discovered in the XML file */
-    CategoriesContainer  getCategories() { return m_categories; }
+    CategoriesContainer  getCategories() const { return m_categories; }
     //CategoryElement getCategoryByIndex(int index) { return m_categories [index]; }
 
     // Xml handler methods:

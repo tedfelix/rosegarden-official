@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioSegmentMapper]"
+
 #include "AudioSegmentMapper.h"
 
 #include "base/Event.h"

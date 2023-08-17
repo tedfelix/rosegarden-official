@@ -149,7 +149,7 @@ NotationHLayout::getBarDataConst(ViewSegment &staff) const
 
 NotationElementList::iterator
 NotationHLayout::getStartOfQuantizedSlice(NotationElementList *notes,
-                                          timeT t) const
+                                          timeT t)
 {
     NotationElementList::iterator i = notes->findTime(t);
     NotationElementList::iterator j(i);
@@ -534,7 +534,7 @@ NotationHLayout::setBarBasicData(ViewSegment &staff,
                                  int barNo,
                                  NotationElementList::iterator start,
                                  bool correct,
-                                 TimeSignature timeSig,
+                                 const TimeSignature& timeSig,
                                  bool newTimeSig,
                                  timeT segDelay,
                                  TrackId trackId

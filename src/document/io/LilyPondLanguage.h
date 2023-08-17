@@ -58,13 +58,13 @@ public:
      * based on the chosen language
      */
     virtual const std::string getLilyNote(
-            const char noteName, const Accidental accidental
+            const char noteName, const Accidental& accidental
             ) const;
     virtual ~LilyPondLanguage() {}
 protected:
     virtual const std::string getLilyNoteName(const char noteName) const = 0;
     virtual const std::string applyAccidental(
-            const std::string lilyNoteName, const Accidental accidental
+            const std::string& lilyNoteName, const Accidental& accidental
             ) const = 0;
 };
 
@@ -89,7 +89,7 @@ public:
     ~LilyPondArabic() override {}
 protected:
     const std::string applyAccidental(
-            const std::string lilyNoteName, const Accidental accidental
+            const std::string& lilyNoteName, const Accidental& accidental
             ) const override;
 };
 
@@ -113,7 +113,7 @@ public:
     ~LilyPondVlaams() override {}
 protected:
     const std::string applyAccidental(
-            const std::string lilyNoteName, const Accidental accidental
+            const std::string& lilyNoteName, const Accidental& accidental
             ) const override;
 };
 
@@ -127,7 +127,7 @@ public:
     ~LilyPondEspanol() override {}
 protected:
     const std::string applyAccidental(
-            const std::string lilyNoteName, const Accidental accidental
+            const std::string& lilyNoteName, const Accidental& accidental
             ) const override;
 };
 
@@ -162,7 +162,7 @@ public:
 protected:
     const std::string getLilyNoteName(const char noteName) const override;
     const std::string applyAccidental(
-            const std::string lilyNoteName, const Accidental accidental
+            const std::string& lilyNoteName, const Accidental& accidental
             ) const override;
 };
 
@@ -177,7 +177,7 @@ public:
 protected:
     const std::string getLilyNoteName(const char noteName) const override;
     const std::string applyAccidental(
-            const std::string lilyNoteName, const Accidental accidental
+            const std::string& lilyNoteName, const Accidental& accidental
             ) const override;
 };
 
@@ -211,7 +211,7 @@ public:
     ~LilyPondSvenska() override {}
 protected:
     const std::string applyAccidental(
-            const std::string lilyNoteName, const Accidental accidental
+            const std::string& lilyNoteName, const Accidental& accidental
             ) const override;
 };
 
@@ -226,7 +226,7 @@ public:
 protected:
     const std::string getLilyNoteName(const char noteName) const override;
     const std::string applyAccidental(
-            const std::string lilyNoteName, const Accidental accidental
+            const std::string& lilyNoteName, const Accidental& accidental
             ) const override;
 };
 

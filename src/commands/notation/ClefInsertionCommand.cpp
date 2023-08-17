@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -35,7 +35,7 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 ClefInsertionCommand::ClefInsertionCommand(Segment &segment, timeT time,
-        Clef clef,
+        const Clef& clef,
         bool shouldChangeOctave,
         bool shouldTranspose) :
         BasicCommand(getThisGlobalName(&clef), segment, time,
@@ -62,14 +62,14 @@ ClefInsertionCommand::getSubsequentSelection()
     return selection;
 }
 
-QString 
-ClefInsertionCommand::getThisGlobalName(Clef *clef)
+QString
+ClefInsertionCommand::getThisGlobalName(const Clef *clef)
 {
     return getGlobalName(clef);
 }
 
 QString
-ClefInsertionCommand::getGlobalName(Clef *)
+ClefInsertionCommand::getGlobalName(const Clef *)
 {
     /* doesn't handle octave offset -- leave it for now
         if (clef) {
@@ -77,7 +77,7 @@ ClefInsertionCommand::getGlobalName(Clef *)
     	name = name.left(1).toUpper() + name.right(name.length()-1);
     	return tr("Change to %1 Cle&f...").arg(name);
         } else {
-    */ 
+    */
     return tr("Add Cle&f Change...");
     /*
         }
@@ -146,9 +146,9 @@ ClefInsertionCommand::modifySegment()
 
 ClefLinkInsertionCommand::ClefLinkInsertionCommand(Segment &segment,
                                                    timeT time,
-                                                   Clef clef,
+                                                   const Clef& clef,
                                                    bool shouldChangeOctave,
-                                                   bool shouldTranspose) : 
+                                                   bool shouldTranspose) :
     ClefInsertionCommand(segment,time,clef,shouldChangeOctave,shouldTranspose)
 {
     setUpdateLinks(false);
@@ -159,16 +159,16 @@ ClefLinkInsertionCommand::~ClefLinkInsertionCommand()
     // nothing
 }
 
-QString 
-ClefLinkInsertionCommand::getThisGlobalName(Clef *clef)
+QString
+ClefLinkInsertionCommand::getThisGlobalName(const Clef *clef)
 {
     return getGlobalName(clef);
 }
 
 QString
-ClefLinkInsertionCommand::getGlobalName(Clef */* clef */) 
-{ 
-    return tr("Add Cl&ef Change for linked segment..."); 
+ClefLinkInsertionCommand::getGlobalName(const Clef */* clef */)
+{
+    return tr("Add Cl&ef Change for linked segment...");
 }
 
 void

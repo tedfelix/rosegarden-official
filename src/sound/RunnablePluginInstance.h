@@ -92,7 +92,7 @@ public:
     void setFactory(PluginFactory *f) { m_factory = f; } // ew
 
 protected:
-    RunnablePluginInstance(PluginFactory *factory, QString identifier) :
+    RunnablePluginInstance(PluginFactory *factory, const QString& identifier) :
         m_factory(factory), m_identifier(identifier) { }
 
     PluginFactory *m_factory;

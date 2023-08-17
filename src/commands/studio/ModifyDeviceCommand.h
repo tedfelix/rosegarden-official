@@ -48,7 +48,7 @@ public:
                         const std::string &name,
                         const std::string &librarianName,
                         const std::string &librarianEmail);
-    
+
     void setVariation  (MidiDevice::VariationType variationType);
     void setBankList   (const BankList    &bankList);
     void setProgramList(const ProgramList &programList);
@@ -70,7 +70,7 @@ protected:
     Studio                    *m_studio;
     int                        m_device;
 
-    std::string                m_name;
+    std::string                m_deviceName;
     std::string                m_librarianName;
     std::string                m_librarianEmail;
     MidiDevice::VariationType  m_variationType;

@@ -75,7 +75,7 @@ public:
     /**
      * Used by CompositionView to determine the time at which to edit a repeat.
      */
-    timeT getRepeatTimeAt(const SnapGrid &, const QPoint &);
+    timeT getRepeatTimeAt(const SnapGrid &, const QPoint &) const;
 
     // Access to the contained segment
     Segment *getSegment()              { return &m_segment; }

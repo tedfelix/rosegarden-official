@@ -102,7 +102,7 @@ namespace
         {
         }
 
-        bool operator()(const Segment *lhs, const Segment *rhs)
+        bool operator()(const Segment *lhs, const Segment *rhs) const
         {
             // ??? Could also sort by Segment name and Segment start time.
             const int lPos =

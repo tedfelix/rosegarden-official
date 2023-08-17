@@ -43,7 +43,7 @@
 namespace Rosegarden
 {
 
-TimeWidget::TimeWidget(QString title,
+TimeWidget::TimeWidget(const QString& title,
                        QWidget *parent,
                        Composition *composition,
                        timeT initialTime,
@@ -61,7 +61,7 @@ TimeWidget::TimeWidget(QString title,
     init(editable);
 }
 
-TimeWidget::TimeWidget(QString title,
+TimeWidget::TimeWidget(const QString& title,
                        QWidget *parent,
                        Composition *composition,
                        timeT startTime,

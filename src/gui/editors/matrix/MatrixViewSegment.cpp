@@ -54,11 +54,13 @@ MatrixViewSegment::getRefreshStatus() const
     return m_segment.getRefreshStatus(m_refreshStatusId);
 }
 
+/* unused
 void
 MatrixViewSegment::resetRefreshStatus()
 {
     m_segment.getRefreshStatus(m_refreshStatusId).setNeedsRefresh(false);
 }
+*/
 
 bool
 MatrixViewSegment::wrapEvent(Event* e)

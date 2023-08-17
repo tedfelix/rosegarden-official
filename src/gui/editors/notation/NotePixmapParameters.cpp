@@ -26,7 +26,7 @@ namespace Rosegarden
 
 NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
         int dots,
-        Accidental accidental) :
+        const Accidental& accidental) :
         m_noteType(noteType),
         m_dots(dots),
         m_accidental(accidental),

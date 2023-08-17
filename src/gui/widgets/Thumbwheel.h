@@ -43,7 +43,7 @@ public:
     int getValue() const;
     void setBright(const bool v);
 
-    void setShowToolTip(bool show);
+    // unused void setShowToolTip(bool show);
 
     QSize sizeHint() const override;
 

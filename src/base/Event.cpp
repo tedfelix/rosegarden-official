@@ -418,6 +418,7 @@ Event::isCopyOf(const Event &e) const
 }
 
 bool
+// cppcheck-suppress unusedFunction
 operator<(const Event &a, const Event &b)
 {
     timeT at = a.getAbsoluteTime();
@@ -426,6 +427,7 @@ operator<(const Event &a, const Event &b)
     else return a.getSubOrdering() < b.getSubOrdering();
 }
 
+// cppcheck-suppress unusedFunction
 QDebug operator<<(QDebug dbg, const Event &event)
 {
     dbg << "Event type :" << event.m_data->m_type << "\n";

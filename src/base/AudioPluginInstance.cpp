@@ -139,7 +139,7 @@ AudioPluginInstance::addPort(int number, PortData value)
     m_ports.push_back(new PluginPortInstance(number, value));
 }
 
-
+/* unused
 bool
 AudioPluginInstance::removePort(int number)
 {
@@ -157,7 +157,7 @@ AudioPluginInstance::removePort(int number)
 
     return false;
 }
-
+*/
 
 PluginPortInstance*
 AudioPluginInstance::getPort(int number)

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -38,7 +38,8 @@ struct AutoSplitPoint
     timeT lastSoundTime;
     Clef clef;
     Rosegarden::Key key;
-    AutoSplitPoint(timeT t, timeT lst, Clef c, Rosegarden::Key k) :
+    AutoSplitPoint(timeT t, timeT lst,
+                   const Clef& c, const Rosegarden::Key& k) :
 	time(t), lastSoundTime(lst), clef(c), key(k) { }
 };
 

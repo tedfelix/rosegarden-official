@@ -63,10 +63,10 @@ class MidiInserter : public MappedInserterBase
  private:
 
     // Get the absolute time of evt
-    timeT getAbsoluteTime(RealTime realtime);
+    timeT getAbsoluteTime(RealTime realtime) const;
 
     // Initialize a normal track, ie not a conductor track.
-    void initNormalTrack(TrackData &trackData, TrackId RGTrackPos);
+    void initNormalTrack(TrackData &trackData, TrackId RGTrackPos) const;
 
     // Get the relevant MIDI track data for a rosegarden track
     // position, including the track itself.

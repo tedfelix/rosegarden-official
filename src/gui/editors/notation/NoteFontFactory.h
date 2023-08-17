@@ -51,7 +51,7 @@ public:
     // This is called with forceRescan from the startup tester thread;
     // at all other times, the cached results are used
     static std::set<QString> getFontNames(bool forceRescan = false);
-    static std::vector<int> getAllSizes(const QString &fontName); // sorted
+    // unused static std::vector<int> getAllSizes(const QString &fontName); // sorted
     static std::vector<int> getScreenSizes(const QString &fontName); // sorted
 
     static QString getDefaultFontName();
@@ -62,7 +62,7 @@ public:
     /// Return the default multi-staff size (prefers 6)
     static int getDefaultMultiSize(const QString &fontName);
 
-    static bool isAvailableInSize(const QString &fontName, int size);
+    // unused static bool isAvailableInSize(const QString &fontName, int size);
 
 private:
     NoteFontFactory() {}
