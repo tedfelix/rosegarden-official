@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -71,7 +71,7 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
     PluginFactory *factory;
 
     // Plugins can change the locale, store it for reverting afterwards
-    char *loc = setlocale(LC_ALL, nullptr);
+    std::string loc = setlocale(LC_ALL, nullptr);
 
     // Query DSSI plugins before LADSPA ones.
     // This is to provide for the interesting possibility of plugins
@@ -88,7 +88,7 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
     if (factory)
         factory->enumeratePlugins(list);
 
-    setlocale(LC_ALL, loc);
+    setlocale(LC_ALL, loc.c_str());
 
     RG_INFO << "enumerateAllPlugins() end.";
 }
@@ -99,4 +99,3 @@ PluginFactory::~PluginFactory()
 
 
 }
-

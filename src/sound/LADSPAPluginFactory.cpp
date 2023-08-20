@@ -665,13 +665,23 @@ LADSPAPluginFactory::discoverPlugins()
 
     generateFallbackCategories();
 
+    char *bl = getenv("ROSEGARDEN_PLUGIN_BLACKLIST");
+    QStringList blList;
+    if (bl) {
+        QString blacklist(bl);
+        blList = blacklist.split(":", QString::SkipEmptyParts);
+
+    }
+
     for (std::vector<QString>::iterator i = pathList.begin();
             i != pathList.end(); ++i) {
 
         QDir pluginDir(*i, "*.so");
 
         for (unsigned int j = 0; j < pluginDir.count(); ++j) {
-            discoverPlugin(QString("%1/%2").arg(*i).arg(pluginDir[j]));
+            QString pluginName = QString("%1/%2").arg(*i).arg(pluginDir[j]);
+            if (blList.contains(pluginName)) continue;
+            discoverPlugin(pluginName);
         }
     }
 
