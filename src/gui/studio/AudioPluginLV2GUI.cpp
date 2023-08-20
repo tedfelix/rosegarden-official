@@ -182,7 +182,7 @@ AudioPluginLV2GUI::portChange(int channel,
 }
 
 void
-AudioPluginLV2GUI::updatePortValue(int port, float value)
+AudioPluginLV2GUI::updatePortValue(int, float)
 {
     //m_uidesc->port_event(m_handle, port, sizeof(float), 0, &value);
 }
