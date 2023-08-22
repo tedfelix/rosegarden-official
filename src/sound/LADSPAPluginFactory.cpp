@@ -24,6 +24,7 @@
 
 #include <dlfcn.h>
 #include <QDir>
+#include <QRegularExpression>
 #include <cmath>
 
 #include "base/AudioPluginInstance.h"
@@ -666,11 +667,14 @@ LADSPAPluginFactory::discoverPlugins()
     generateFallbackCategories();
 
     char *bl = getenv("ROSEGARDEN_PLUGIN_BLACKLIST");
-    QStringList blList;
+    QList<QRegularExpression> blREList;
     if (bl) {
         QString blacklist(bl);
-        blList = blacklist.split(":", QString::SkipEmptyParts);
-
+        QStringList blList = blacklist.split(":", QString::SkipEmptyParts);
+        for (auto lbitem : blList) {
+            QRegularExpression re(lbitem);
+            blREList.append(re);
+        }
     }
 
     for (std::vector<QString>::iterator i = pathList.begin();
@@ -680,7 +684,16 @@ LADSPAPluginFactory::discoverPlugins()
 
         for (unsigned int j = 0; j < pluginDir.count(); ++j) {
             QString pluginName = QString("%1/%2").arg(*i).arg(pluginDir[j]);
-            if (blList.contains(pluginName)) continue;
+            bool isBlack = false;
+            for (auto blRE : blREList) {
+                QRegularExpressionMatch match = blRE.match(pluginName);
+                if (match.hasMatch()) isBlack = true;
+            }
+            if (isBlack) {
+                RG_WARNING << "discoverPlugins() WARNING:" << pluginName <<
+                    "ignored due to blacklist";
+                continue;
+            }
             discoverPlugin(pluginName);
         }
     }
