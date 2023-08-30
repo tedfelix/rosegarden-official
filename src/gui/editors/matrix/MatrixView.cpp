@@ -1064,54 +1064,66 @@ MatrixView::slotQuantizeSelection(int q)
 void
 MatrixView::slotQuantize()
 {
-    if (!getSelection()) return;
+    if (!getSelection())
+        return;
 
     QuantizeDialog dialog(this);
 
     if (dialog.exec() == QDialog::Accepted) {
-        CommandHistory::getInstance()->addCommand
-            (new EventQuantizeCommand
-             (*getSelection(),
-              dialog.getQuantizer()));
+        CommandHistory::getInstance()->addCommand(new EventQuantizeCommand(
+                *getSelection(),
+                dialog.getQuantizer()));
     }
 }
 
 void
 MatrixView::slotRepeatQuantize()
 {
-    if (!getSelection()) return;
-    CommandHistory::getInstance()->addCommand
-        (new EventQuantizeCommand
-         (*getSelection(),
-          "Quantize Dialog Grid", // no tr (config group name)
-          EventQuantizeCommand::QUANTIZE_NORMAL));
+    if (!getSelection())
+        return;
+
+    CommandHistory::getInstance()->addCommand(new EventQuantizeCommand(
+            *getSelection(),  // selection
+            "Quantize Dialog Grid",  // settingsGroup
+            EventQuantizeCommand::QUANTIZE_NORMAL));  // scope
 }
 
 void
 MatrixView::slotCollapseNotes()
 {
-    if (!getSelection()) return;
+    if (!getSelection())
+        return;
+
     // in matrix editor do not split notes at bars
-    CommandHistory::getInstance()->addCommand
-        (new CollapseNotesCommand(*getSelection(), false, false));
+    CommandHistory::getInstance()->addCommand(new CollapseNotesCommand(
+            *getSelection(),  // selection
+            false,  // makeViable
+            false));  // autoBeam
 }
 
 void
 MatrixView::slotLegato()
 {
-    if (!getSelection()) return;
+    if (!getSelection())
+        return;
+
+    // No quantization.
+    std::shared_ptr<Quantizer> quantizer(new LegatoQuantizer(0));
+
     CommandHistory::getInstance()->addCommand(new EventQuantizeCommand(
-            *getSelection(),
-            std::shared_ptr<Quantizer>(new LegatoQuantizer(0)))); // no quantization
+            *getSelection(),  // selection
+            quantizer));
 }
 
 void
 MatrixView::slotVelocityUp()
 {
-    if (!getSelection()) return;
+    if (!getSelection())
+        return;
 
-    CommandHistory::getInstance()->addCommand
-        (new ChangeVelocityCommand(10, *getSelection()));
+    CommandHistory::getInstance()->addCommand(new ChangeVelocityCommand(
+            10,  // delta
+            *getSelection()));  // selection
 
     slotSetCurrentVelocityFromSelection();
 }
@@ -1119,10 +1131,12 @@ MatrixView::slotVelocityUp()
 void
 MatrixView::slotVelocityDown()
 {
-    if (!getSelection()) return;
+    if (!getSelection())
+        return;
 
-    CommandHistory::getInstance()->addCommand
-        (new ChangeVelocityCommand(-10, *getSelection()));
+    CommandHistory::getInstance()->addCommand(new ChangeVelocityCommand(
+            -10,  // delta
+            *getSelection()));  //selection
 
     slotSetCurrentVelocityFromSelection();
 }

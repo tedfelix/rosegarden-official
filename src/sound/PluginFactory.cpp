@@ -86,7 +86,7 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
     PluginFactory *factory;
 
     // Plugins can change the locale, store it for reverting afterwards
-    char *loc = setlocale(LC_ALL, nullptr);
+    std::string loc = setlocale(LC_ALL, nullptr);
 
     // Query DSSI plugins before LADSPA ones.
     // This is to provide for the interesting possibility of plugins
@@ -109,7 +109,7 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
         factory->enumeratePlugins(list);
 #endif
 
-    setlocale(LC_ALL, loc);
+    setlocale(LC_ALL, loc.c_str());
 
     RG_INFO << "enumerateAllPlugins() end.";
 }
@@ -117,6 +117,5 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
 PluginFactory::~PluginFactory()
 {
 }
-
 
 }

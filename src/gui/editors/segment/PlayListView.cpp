@@ -138,6 +138,7 @@ void PlayListView::mouseMoveEvent(QMouseEvent *event){
 
 }
 
+// cppcheck-suppress unusedFunction
 QStringList PlayListView::mimeTypes() const{
     QStringList types;
     types << "text/uri-list";

@@ -27,10 +27,10 @@
 
 #include <vector>
 
+#include "base/ColourMap.h"
 
 class QSize;
 class QPoint;
-
 
 namespace Rosegarden
 {
@@ -42,8 +42,8 @@ public:
     SegmentRect() :
         rect(),
         selected(false),
-        brush(DefaultBrushColor),
-        pen(DefaultPenColor),
+        brush(defaultBrushColor()),
+        pen(defaultPenColor()),
         repeatMarks(),
         baseWidth(0),
         label()
@@ -52,8 +52,8 @@ public:
     explicit SegmentRect(const QRect &r) :
         rect(r),
         selected(false),
-        brush(DefaultBrushColor),
-        pen(DefaultPenColor),
+        brush(defaultBrushColor()),
+        pen(defaultPenColor()),
         repeatMarks(),
         baseWidth(0),
         label()
@@ -62,22 +62,29 @@ public:
     SegmentRect(const QPoint &topLeft, const QSize &size) :
         rect(topLeft, size),
         selected(false),
-        brush(DefaultBrushColor),
-        pen(DefaultPenColor),
+        brush(defaultBrushColor()),
+        pen(defaultPenColor()),
         repeatMarks(),
         baseWidth(0),
         label()
     { }
+
+    static QColor defaultBrushColor()
+    {
+      return QColor(Qt::black);
+    }
+
+    static QColor defaultPenColor()
+    {
+      return QColor(ColourMap::defaultSegmentColour);
+    }
 
     QRect rect;
 
     bool selected;
 
     QBrush brush;
-    static const QColor DefaultBrushColor;
-
     QPen pen;
-    static const QColor DefaultPenColor;
 
     typedef std::vector<int> RepeatMarks;
     RepeatMarks repeatMarks;

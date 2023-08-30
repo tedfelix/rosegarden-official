@@ -374,8 +374,8 @@ void CompositionModelImpl::getSegmentRect(
 
     // Reset remaining fields.
     segmentRect.selected = false;
-    segmentRect.brush = SegmentRect::DefaultBrushColor;
-    segmentRect.pen = SegmentRect::DefaultPenColor;
+    segmentRect.brush = SegmentRect::defaultBrushColor();
+    segmentRect.pen = SegmentRect::defaultPenColor();
 }
 
 void CompositionModelImpl::updateAllTrackHeights()

@@ -57,15 +57,27 @@ public:
                          std::shared_ptr<Quantizer> quantizer);
 
     /// Constructs own Quantizer based on QSettings data in given group
+    /**
+     * ??? Quantization parameters should not be passed from the UI to this
+     *     command via QSettings/.conf file.  We need a more direct approach
+     *     like a parameters struct.  QSettings should be used for UI
+     *     persistence only.
+     */
     EventQuantizeCommand(Segment &segment,
                          timeT startTime,
                          timeT endTime,
-                         const QString& settingsGroup,
+                         const QString &settingsGroup,
                          QuantizeScope scope);
 
     /// Constructs own Quantizer based on QSettings data in given group
+    /**
+     * ??? Quantization parameters should not be passed from the UI to this
+     *     command via QSettings/.conf file.  We need a more direct approach
+     *     like a parameters struct.  QSettings should be used for UI
+     *     persistence only.
+     */
     EventQuantizeCommand(EventSelection &selection,
-                         const QString& settingsGroup,
+                         const QString &settingsGroup,
                          QuantizeScope scope);
 
     ~EventQuantizeCommand() override;
@@ -75,27 +87,29 @@ public:
 
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }
-    void setProgressTotal(int total, int perCall) { m_progressTotal = total;
-                                                    m_progressPerCall = perCall; };
+    void setProgressTotal(int total, int perCall)
+    {
+        m_progressTotal = total;
+        m_progressPerCall = perCall;
+    }
 
 protected:
+
     void modifySegment() override;
 
 private:
-    std::shared_ptr<Quantizer> m_quantizer;
-    EventSelection *m_selection;
+
+    EventSelection *m_selection{nullptr};
     QString m_settingsGroup;
+    std::shared_ptr<Quantizer> m_quantizer;
+    void makeQuantizer(const QString &settingsGroup, QuantizeScope);
 
     QPointer<QProgressDialog> m_progressDialog;
-    int m_progressTotal;
-    int m_progressPerCall;
+    int m_progressTotal{0};
+    int m_progressPerCall{0};
 
-    /// Sets to m_quantizer as well as returning value
-    std::shared_ptr<Quantizer> makeQuantizer(QString, QuantizeScope);
 };
 
-// Collapse equal-pitch notes into one event
-//
 
 }
 

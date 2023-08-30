@@ -23,8 +23,6 @@
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
 
-#include <QString>
-
 
 namespace Rosegarden
 {
@@ -35,37 +33,29 @@ EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
         timeT endTime,
         // cppcheck-suppress passedByValue
         std::shared_ptr<Quantizer> quantizer) :
-        BasicCommand(tr("Unquantize Events"), segment, startTime, endTime,
-                     true),  // bruteForceRedo
-        m_quantizer(quantizer),
-        m_selection(nullptr)
+    BasicCommand(tr("Unquantize Events"), segment, startTime, endTime,
+                 true),  // bruteForceRedo
+    m_selection(nullptr),
+    m_quantizer(quantizer)
 {
-    // nothing else
 }
 
 EventUnquantizeCommand::EventUnquantizeCommand(
-    EventSelection &selection,
-    // cppcheck-suppress passedByValue
-    std::shared_ptr<Quantizer> quantizer) :
-        BasicCommand(tr("Unquantize Events"),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime(),
-                     true),  // bruteForceRedo
-        m_quantizer(quantizer),
-        m_selection(&selection)
+        EventSelection &selection,
+        // cppcheck-suppress passedByValue
+        std::shared_ptr<Quantizer> quantizer) :
+    BasicCommand(tr("Unquantize Events"),
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime(),
+                 true),  // bruteForceRedo
+    m_selection(&selection),
+    m_quantizer(quantizer)
 {
-    // nothing else
 }
 
 EventUnquantizeCommand::~EventUnquantizeCommand()
 {
-}
-
-QString
-EventUnquantizeCommand::getGlobalName()
-{
-    return tr("&Quantize...");
 }
 
 void
