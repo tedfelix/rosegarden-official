@@ -668,8 +668,8 @@ LADSPAPluginFactory::discoverPlugins()
 
     // Plugin Blacklist.  To avoid loading all plugins:
     //   $ ROSEGARDEN_PLUGIN_BLACKLIST=".*" ./rosegarden
-    // To avoid loading just some (e.g. ones with matrix and pitch in their
-    // names:
+    // To avoid loading just some (e.g. ones with matrix or pitch in their
+    // names):
     //   $ ROSEGARDEN_PLUGIN_BLACKLIST="matrix|pitch" ./rosegarden
     // default "^$" matches nothing
     QString blacklist =
