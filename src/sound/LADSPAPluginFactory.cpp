@@ -670,25 +670,11 @@ LADSPAPluginFactory::discoverPlugins()
     //   $ ROSEGARDEN_PLUGIN_BLACKLIST=".*" ./rosegarden
     // To avoid loading just some (e.g. ones with matrix and pitch in their
     // names:
-    //   $ ROSEGARDEN_PLUGIN_BLACKLIST="matrix:pitch" ./rosegarden
-    //   $ ROSEGARDEN_PLUGIN_BLACKLIST="(matrix|pitch)" ./rosegarden
-    QString blacklist = qEnvironmentVariable("ROSEGARDEN_PLUGIN_BLACKLIST");
-    QList<QRegularExpression> blREList;
-    if (!blacklist.isEmpty()) {
-        RG_WARNING << "discoverPlugins() WARNING: Using plugin blacklist:" << blacklist;
-        // Split at the colons.
-        // ??? QRegularExpression already offers "(a|b)".  This isn't needed.
-#if (QT_VERSION >= QT_VERSION_CHECK(5,15,0))
-        QStringList blList = blacklist.split(":", Qt::SkipEmptyParts);
-#else
-        QStringList blList = blacklist.split(":", QString::SkipEmptyParts);
-#endif
-        for (const QString &blItem : blList) {
-            QRegularExpression re(blItem);
-            blREList.append(re);
-        }
-    }
-
+    //   $ ROSEGARDEN_PLUGIN_BLACKLIST="matrix|pitch" ./rosegarden
+    // default "^$" matches nothing
+    QString blacklist =
+        qEnvironmentVariable("ROSEGARDEN_PLUGIN_BLACKLIST", "^$");
+    QRegularExpression blRE(blacklist);
     // For each plugin path
     for (std::vector<QString>::iterator i = pathList.begin();
             i != pathList.end(); ++i) {
@@ -698,12 +684,8 @@ LADSPAPluginFactory::discoverPlugins()
         // For each *.so file in the directory
         for (unsigned int j = 0; j < pluginDir.count(); ++j) {
             QString pluginName = QString("%1/%2").arg(*i).arg(pluginDir[j]);
-            bool isBlack = false;
-            for (const QRegularExpression &blRE : blREList) {
-                QRegularExpressionMatch match = blRE.match(pluginName);
-                if (match.hasMatch()) isBlack = true;
-            }
-            if (isBlack) {
+            QRegularExpressionMatch match = blRE.match(pluginName);
+            if (match.hasMatch()) {
                 RG_WARNING << "discoverPlugins() WARNING:" << pluginName <<
                     "ignored due to plugin blacklist";
                 continue;
