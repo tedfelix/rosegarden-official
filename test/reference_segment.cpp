@@ -74,13 +74,12 @@ void TestReferenceSegment::testInsert()
 
 void TestReferenceSegment::testErase()
 {
+    // the events belong to the ReferenceSegment and are deleted on erase
     ReferenceSegment* rs = setup_rs();
 
     auto it0 = rs->begin();
     Event *e = *it0;
-    // !!! THIS DOES NOT DELETE!
     rs->erase(it0);
-    delete e;
 
     QCOMPARE(rs->size(), 4ul);
     std::string rss = toString(*rs);
@@ -90,9 +89,7 @@ void TestReferenceSegment::testErase()
     auto it = rs->begin();
     ++it;
     e = *it;
-    // !!! THIS DOES NOT DELETE!
     rs->eraseEvent(e);
-    delete e;
 
     QCOMPARE(rs->size(), 3ul);
     rss = toString(*rs);
@@ -100,9 +97,7 @@ void TestReferenceSegment::testErase()
 
     auto it1 = rs->findAtOrBefore(60);
     e = *it1;
-    // !!! THIS DOES NOT DELETE!
     rs->erase(it1);
-    delete e;
     QCOMPARE(rs->size(), 2ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:10/100/");
@@ -113,7 +108,7 @@ void TestReferenceSegment::testErase()
     rss = toString(*rs);
     QVERIFY(rss == "test:");
 
-    // !!! This doesn't delete the events.
+    // !!! This deletes the events.
     delete rs;
 }
 
