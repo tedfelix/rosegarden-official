@@ -1057,15 +1057,14 @@ AudioInstrumentMixer::getPluginInstance(InstrumentId id, int position)
 
 void
 AudioInstrumentMixer::setPluginPortValue(InstrumentId id, int position,
-                                         unsigned int port, int instance,
-                                         float value)
+                                         unsigned int port, float value)
 {
     // Not RT safe
 
-    RunnablePluginInstance *rInstance = getPluginInstance(id, position);
+    RunnablePluginInstance *instance = getPluginInstance(id, position);
 
-    if (rInstance) {
-        rInstance->setPortValue(port, instance, value);
+    if (instance) {
+        instance->setPortValue(port, value);
     }
 }
 

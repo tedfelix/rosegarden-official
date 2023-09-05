@@ -282,7 +282,6 @@ public:
      */
     void setMappedPort(int pluginId,
                        unsigned long portId,
-                       int instance,
                        float value);
 
     float getMappedPort(int pluginId,

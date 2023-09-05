@@ -345,8 +345,7 @@ LADSPAPluginInstance::connectPorts()
 }
 
 void
-LADSPAPluginInstance::setPortValue
-(unsigned int portNumber, int /*instance*/, float value)
+LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
 {
     for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
         if (m_controlPortsIn[i].first == portNumber) {

@@ -36,7 +36,6 @@ class AudioPluginLV2GUIX11Window :
  public:
     AudioPluginLV2GUIX11Window(AudioPluginLV2GUI* lv2Gui,
                                const QString& title,
-                               int channel,
                                const LilvUI* ui,
                                const LV2UI_Descriptor* uidesc,
                                const QString& id);
@@ -63,7 +62,6 @@ class AudioPluginLV2GUIX11Window :
     LV2UI_Idle_Interface* m_lv2II;
     LV2UI_Handle m_handle;
     std::vector<LV2_Feature*> m_features;
-    int m_channel;
 };
 
 

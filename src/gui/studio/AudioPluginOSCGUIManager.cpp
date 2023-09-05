@@ -487,8 +487,7 @@ AudioPluginOSCGUIManager::dispatch()
 
             RG_DEBUG << "dispatch(): setting port " << port << " to value " << value;
 
-            m_mainWindow->slotChangePluginPort
-                (instrument, position, port, -1, value);
+            m_mainWindow->slotChangePluginPort(instrument, position, port, value);
 
         } else if (method == "program") {
 

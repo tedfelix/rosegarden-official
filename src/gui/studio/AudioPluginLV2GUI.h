@@ -47,8 +47,7 @@ class AudioPluginLV2GUI
 
     void showGui() const;
 
-    void portChange(int channel,
-                    uint32_t portIndex,
+    void portChange(uint32_t portIndex,
                     uint32_t bufferSize,
                     uint32_t portProtocol,
                     const void *buffer);
@@ -64,7 +63,7 @@ class AudioPluginLV2GUI
     LilvUIs* m_uis;
     void* m_uilib;
     const LV2UI_Descriptor* m_uidesc;
-    std::vector<AudioPluginLV2GUIWindow*> m_windows;
+    AudioPluginLV2GUIWindow* m_window;
 };
 
 

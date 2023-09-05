@@ -62,13 +62,11 @@ namespace Rosegarden
 AudioPluginLV2GUIX11Window::AudioPluginLV2GUIX11Window
 (AudioPluginLV2GUI* lv2Gui,
  const QString& title,
- int channel,
  const LilvUI* ui,
  const LV2UI_Descriptor* uidesc,
  const QString& id) :
     m_lv2Gui(lv2Gui),
-    m_lv2II(0),
-    m_channel(channel)
+    m_lv2II(0)
 {
     setWindowTitle(title);
     m_timer = new QTimer;
@@ -126,10 +124,9 @@ AudioPluginLV2GUIX11Window::portChange(uint32_t portIndex,
                                        uint32_t portProtocol,
                                        const void *buffer)
 {
-    RG_DEBUG << "portChange" << m_channel << portIndex <<
+    RG_DEBUG << "portChange" << portIndex <<
         bufferSize << portProtocol;
-    m_lv2Gui->portChange(m_channel, portIndex, bufferSize,
-                         portProtocol, buffer);
+    m_lv2Gui->portChange(portIndex, bufferSize, portProtocol, buffer);
 }
 
 void AudioPluginLV2GUIX11Window::showGui()

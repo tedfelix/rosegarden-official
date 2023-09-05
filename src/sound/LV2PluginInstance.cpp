@@ -365,20 +365,18 @@ LV2PluginInstance::connectPorts()
 
 void
 LV2PluginInstance::setPortValue
-(unsigned int portNumber, int instance, float value)
+(unsigned int portNumber, float value)
 {
-    RG_DEBUG << "setPortValue" << portNumber << instance << value;
+    RG_DEBUG << "setPortValue" << portNumber << value;
     for(unsigned int inst=0; inst<m_instanceData.size(); ++inst) {
-        if (instance == -1 || instance == static_cast<int>(inst)) {
-            InstanceData& iData = m_instanceData[inst];
-            for (size_t i = 0; i < iData.controlPortsIn.size(); ++i) {
-                if (iData.controlPortsIn[i].first == portNumber) {
-                    if (value < m_pluginData.ports[portNumber].min)
-                        value = m_pluginData.ports[portNumber].min;
-                    if (value > m_pluginData.ports[portNumber].max)
-                        value = m_pluginData.ports[portNumber].max;
-                    iData.controlPortsIn[i].second = value;
-                }
+        InstanceData& iData = m_instanceData[inst];
+        for (size_t i = 0; i < iData.controlPortsIn.size(); ++i) {
+            if (iData.controlPortsIn[i].first == portNumber) {
+                if (value < m_pluginData.ports[portNumber].min)
+                    value = m_pluginData.ports[portNumber].min;
+                if (value > m_pluginData.ports[portNumber].max)
+                    value = m_pluginData.ports[portNumber].max;
+                iData.controlPortsIn[i].second = value;
             }
         }
     }

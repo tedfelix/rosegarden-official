@@ -691,8 +691,7 @@ DSSIPluginInstance::connectPorts()
 }
 
 void
-DSSIPluginInstance::setPortValue
-(unsigned int portNumber, int /*instance*/, float value)
+DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
 {
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance[" << this << "]::setPortValue(" << portNumber << ") to " << value << std::endl;
@@ -749,7 +748,7 @@ DSSIPluginInstance::setPortValueFromController(unsigned int portNumber,
         }
     }
 
-    setPortValue(portNumber, -1, value);
+    setPortValue(portNumber, value);
 }
 
 float

@@ -254,7 +254,6 @@ public:
     virtual void setPluginInstancePortValue(InstrumentId /*id*/,
                                             int /*position*/,
                                             unsigned long /*portNumber*/,
-                                            int /*instance*/,
                                             float /*value*/)  { }
 
     virtual float getPluginInstancePortValue(InstrumentId /*id*/,

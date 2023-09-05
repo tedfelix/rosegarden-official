@@ -7412,7 +7412,6 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
         StudioControl::setStudioPluginPort
         (pluginMappedId,
          (*portIt)->number,
-         -1,
          (*portIt)->value);
     }
 
@@ -7435,7 +7434,6 @@ void
 RosegardenMainWindow::slotChangePluginPort(InstrumentId instrumentId,
                                            int pluginIndex,
                                            int portIndex,
-                                           int instance,
                                            float value)
 {
     PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
@@ -7467,7 +7465,7 @@ RosegardenMainWindow::slotChangePluginPort(InstrumentId instrumentId,
     port->setValue(value);
 
     StudioControl::setStudioPluginPort(inst->getMappedId(),
-                                       portIndex, instance, port->value);
+                                       portIndex, port->value);
 
     RosegardenDocument::currentDocument->slotDocumentModified();
 
@@ -7509,7 +7507,7 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
              << ", " << portIndex << ") to " << port->value;
 
     StudioControl::setStudioPluginPort(inst->getMappedId(),
-                                       portIndex, -1, port->value);
+                                       portIndex, port->value);
 
     RosegardenDocument::currentDocument->slotDocumentModified();
 

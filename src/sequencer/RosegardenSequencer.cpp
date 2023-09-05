@@ -849,7 +849,6 @@ RosegardenSequencer::getPluginProgram(int id, const QString &name)
 void
 RosegardenSequencer::setMappedPort(int pluginId,
                                    unsigned long portId,
-                                   int instance,
                                    float value)
 {
     LOCKED;
@@ -861,7 +860,7 @@ RosegardenSequencer::setMappedPort(int pluginId,
         dynamic_cast<MappedPluginSlot *>(object);
 
     if (slot) {
-        slot->setPort(portId, instance, value);
+        slot->setPort(portId, value);
     } else {
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
         SEQUENCER_DEBUG << "no such slot";

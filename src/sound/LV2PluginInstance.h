@@ -53,7 +53,7 @@ public:
 
     void run(const RealTime &rt) override;
 
-    void setPortValue(unsigned int portNumber, int instance, float value) override;
+    void setPortValue(unsigned int portNumber, float value) override;
     // !!!!
     void setPortByteArray(unsigned int port, const QByteArray& ba);
     float getPortValue(unsigned int portNumber) override;

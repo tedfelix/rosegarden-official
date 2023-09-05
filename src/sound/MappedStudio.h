@@ -457,7 +457,7 @@ public:
     void setPropertyList(const MappedObjectProperty &,
                                  const MappedObjectPropertyList &) override;
 
-    void  setPort(unsigned long portNumber, int instance, float value);
+    void  setPort(unsigned long portNumber, float value);
     float getPort(unsigned long portNumber);
 
     InstrumentId getInstrument() const { return m_instrument; }
@@ -511,7 +511,7 @@ public:
     void setStringProperty(const MappedObjectProperty &property,
                                    QString value) override;
 
-    void setValue(int instance, MappedObjectValue value);
+    void setValue(MappedObjectValue value);
     MappedObjectValue getValue() const;
 
     int getPortNumber() const { return m_portNumber; }
