@@ -69,7 +69,7 @@ AudioPluginLV2GUIX11Window::AudioPluginLV2GUIX11Window
     m_lv2II(0)
 {
     setWindowTitle(title);
-    m_timer = new QTimer;
+    m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout,
             this, &AudioPluginLV2GUIX11Window::timeUp);
     m_timer->start(50);

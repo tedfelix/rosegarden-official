@@ -45,7 +45,7 @@ class LV2PluginInstance : public RunnablePluginInstance
 public:
     ~LV2PluginInstance() override;
 
-    bool isOK() const override { return !m_instances.empty(); }
+    bool isOK() const override { return m_instance != nullptr; }
 
     InstrumentId getInstrument() const { return m_instrument; }
     QString getIdentifier() const override { return m_identifier; }
@@ -62,8 +62,8 @@ public:
                    const void* event) override;
 
     size_t getBufferSize() override { return m_blockSize; }
-    size_t getAudioInputCount() override { return m_instanceCount * m_audioPortsIn.size(); }
-    size_t getAudioOutputCount() override { return m_instanceCount * m_audioPortsOut.size(); }
+    size_t getAudioInputCount() override { return m_audioPortsIn.size(); }
+    size_t getAudioOutputCount() override { return m_audioPortsOut.size(); }
     sample_t **getAudioInputBuffers() override { return m_inputBuffers; }
     sample_t **getAudioOutputBuffers() override { return m_outputBuffers; }
 
@@ -104,27 +104,23 @@ protected:
 
  private:
 
-    struct InstanceData
-    {
-        std::vector<std::pair<unsigned long, float> > controlPortsIn;
-        std::vector<std::pair<unsigned long, float> > controlPortsOut;
-    };
+    std::vector<std::pair<unsigned long, float> > controlPortsIn;
+    std::vector<std::pair<unsigned long, float> > controlPortsOut;
 
-    InstrumentId   m_instrument;
-    int                        m_position;
-    std::vector<LilvInstance*> m_instances;
-    std::vector<InstanceData>  m_instanceData;
-    size_t                     m_instanceCount;
+    InstrumentId m_instrument;
+    int m_position;
+    LilvInstance* m_instance;
     QString m_uri;
     const LilvPlugin *m_plugin;
     LV2Utils::LV2PluginData m_pluginData;
 
-    std::vector<int>          m_audioPortsIn;
-    std::vector<int>          m_audioPortsOut;
+    std::vector<int> m_audioPortsIn;
+    std::vector<int> m_audioPortsOut;
+    size_t m_channelCount;
 
     int m_midiPort;
     std::map<RealTime, snd_seq_event_t> m_eventBuffer;
-    std::vector<LV2_Atom_Sequence*> m_midiIn;
+    LV2_Atom_Sequence* m_midiIn;
     snd_midi_event_t *m_midiParser;
     LV2_URID m_midiEventUrid;
 

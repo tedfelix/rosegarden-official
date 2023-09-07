@@ -41,9 +41,10 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         RunnablePluginInstance(factory, identifier),
         m_instrument(instrument),
         m_position(position),
-        m_instanceCount(0),
+        m_instance(nullptr),
         m_uri(uri),
         m_plugin(nullptr),
+        m_channelCount(0),
         m_midiPort(-1),
         m_midiParser(nullptr),
         m_blockSize(blockSize),
@@ -59,35 +60,30 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
 
     init(idealChannelCount);
 
-    m_inputBuffers = new sample_t * [m_instanceCount * m_audioPortsIn.size()];
-    m_outputBuffers = new sample_t * [m_instanceCount * m_audioPortsOut.size()];
+    m_inputBuffers = new sample_t * [m_audioPortsIn.size()];
+    m_outputBuffers = new sample_t * [m_audioPortsOut.size()];
 
-    for (size_t i = 0; i < m_instanceCount * m_audioPortsIn.size(); ++i) {
+    for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
         m_inputBuffers[i] = new sample_t[blockSize];
         memset(m_inputBuffers[i], 0, blockSize * sizeof(sample_t));
     }
-    for (size_t i = 0; i < m_instanceCount * m_audioPortsOut.size(); ++i) {
+    for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
         m_outputBuffers[i] = new sample_t[blockSize];
         memset(m_outputBuffers[i], 0, blockSize * sizeof(sample_t));
     }
 
-    for (unsigned int i=0; i< m_instanceCount; i++) {
-        // create the atom port
-        // use double to get 64 bit alignment
-        double* dbuf = new double[EVENT_BUFFER_SIZE];
-        LV2_Atom_Sequence* aseq =
-            reinterpret_cast<LV2_Atom_Sequence*>(dbuf);
-        lv2_atom_sequence_clear(aseq);
-        LV2Urid* lv2urid = LV2Urid::getInstance();
-        LV2_URID type = lv2urid->uridMap(LV2_ATOM__Sequence);
-        aseq->atom.type = type;
-        m_midiIn.push_back(aseq);
-    }
+    // create the atom port
+    // use double to get 64 bit alignment
+    double* dbuf = new double[EVENT_BUFFER_SIZE];
+    m_midiIn = reinterpret_cast<LV2_Atom_Sequence*>(dbuf);
+    lv2_atom_sequence_clear(m_midiIn);
+    LV2Urid* lv2urid = LV2Urid::getInstance();
+    LV2_URID type = lv2urid->uridMap(LV2_ATOM__Sequence);
+    m_midiIn->atom.type = type;
 
     m_plugin = lv2utils->getPluginByUri(m_uri);
 
     snd_midi_event_new(100, &m_midiParser);
-    LV2Urid* lv2urid = LV2Urid::getInstance();
     m_midiEventUrid = lv2urid->uridMap(LV2_MIDI__MidiEvent);
 
     instantiate(sampleRate);
@@ -104,12 +100,9 @@ LV2PluginInstance::init(int idealChannelCount)
 {
     RG_DEBUG << "LV2PluginInstance::init(" << idealChannelCount <<
         "): plugin has" << m_pluginData.ports.size() << "ports";
-    // use maximum channel count (2). If the instance count is 1 only
-    // the first entry will be used
-    for(unsigned int i=0; i<2; ++i) {
-        InstanceData iData;
-        m_instanceData.push_back(iData);
-    }
+
+    m_channelCount = idealChannelCount;
+
     // Discover ports numbers and identities
     //
     for (unsigned long i = 0; i < m_pluginData.ports.size(); ++i) {
@@ -127,25 +120,17 @@ LV2PluginInstance::init(int idealChannelCount)
         case LV2Utils::LV2CONTROL:
             if (portData.isInput) {
                 RG_DEBUG << "LV2PluginInstance::init: port" << i << "is control in";
-                // use maximum channel count (2). If the instance
-                // count is 1 only the first entry will be used
-                for(unsigned int ii=0; ii<2; ++ii) {
-                    InstanceData& iData = m_instanceData[ii];
-                    iData.controlPortsIn.
-                        push_back(std::pair<unsigned long, float>(i, 0.0));
-                }
+                controlPortsIn.
+                    push_back(std::pair<unsigned long, float>(i, 0.0));
             } else {
                 RG_DEBUG << "LV2PluginInstance::init: port" << i << "is control out";
-                for(unsigned int ii=0; ii<2; ++ii) {
-                    InstanceData& iData = m_instanceData[ii];
-                    iData.controlPortsOut.
-                        push_back(std::pair<unsigned long, float>(i, 0.0));
-                }
+                controlPortsOut.
+                    push_back(std::pair<unsigned long, float>(i, 0.0));
                 if ((portData.name == "latency") ||
                     (portData.name == "_latency")) {
                     RG_DEBUG << "Wooo! We have a latency port!";
                     float& value =
-                        m_instanceData[0].controlPortsOut.back().second;
+                        controlPortsOut.back().second;
                     m_latencyPort = &(value);
                 }
             }
@@ -154,13 +139,6 @@ LV2PluginInstance::init(int idealChannelCount)
             RG_DEBUG << "LV2PluginInstance::init: port" << i << "is midi";
             m_midiPort = i;
             break;
-        }
-    }
-    m_instanceCount = 1;
-    if (idealChannelCount > 0) {
-        if (m_audioPortsIn.size() == 1) {
-            // mono plugin: duplicate it if need be
-            m_instanceCount = idealChannelCount;
         }
     }
 }
@@ -201,10 +179,8 @@ void
 LV2PluginInstance::setIdealChannelCount(size_t channels)
 {
     RG_DEBUG << "setIdealChannelCount" << channels;
-    if (m_audioPortsIn.size() != 1 || channels == m_instanceCount) {
-        silence();
-        return ;
-    }
+
+    if (channels == m_channelCount) return;
 
     if (isOK()) {
         deactivate();
@@ -212,7 +188,6 @@ LV2PluginInstance::setIdealChannelCount(size_t channels)
 
     cleanup();
 
-    m_instanceCount = channels;
     instantiate(m_sampleRate);
     if (isOK()) {
         connectPorts();
@@ -222,8 +197,10 @@ LV2PluginInstance::setIdealChannelCount(size_t channels)
 
 int LV2PluginInstance::numInstances() const
 {
-    RG_DEBUG << "numInstances" << m_instances.size();
-    return m_instances.size();
+    RG_DEBUG << "numInstances";
+    if (m_instance == nullptr) return 0;
+    // always 1
+    return 1;
 }
 
 LV2PluginInstance::~LV2PluginInstance()
@@ -232,17 +209,14 @@ LV2PluginInstance::~LV2PluginInstance()
     LV2Utils* lv2utils = LV2Utils::getInstance();
     lv2utils->unRegisterPlugin(m_instrument, m_position);
 
-    if (m_instances.size() != 0) {
+    if (m_instance != nullptr) {
         deactivate();
     }
 
     cleanup();
 
-    for(unsigned int i=0; i<m_instanceData.size(); ++i) {
-        m_instanceData[i].controlPortsIn.clear();
-        m_instanceData[i].controlPortsOut.clear();
-    }
-    m_instanceData.clear();
+    controlPortsIn.clear();
+    controlPortsOut.clear();
 
     for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
         delete[] m_inputBuffers[i];
@@ -251,10 +225,7 @@ LV2PluginInstance::~LV2PluginInstance()
         delete[] m_outputBuffers[i];
     }
 
-    for (size_t i = 0; i < m_midiIn.size(); ++i) {
-        delete[](m_midiIn[i]);
-    }
-    m_midiIn.clear();
+    delete[](m_midiIn);
 
     delete[] m_inputBuffers;
     delete[] m_outputBuffers;
@@ -285,14 +256,10 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     m_features.push_back(&m_uridUnmapFeature);
     m_features.push_back(nullptr);
 
-    for (size_t i = 0; i < m_instanceCount; ++i) {
-        LilvInstance* instance =
-            lilv_plugin_instantiate(m_plugin, sampleRate, m_features.data());
-        if (!instance) {
-            RG_WARNING << "Failed to instantiate plugin" << m_uri;
-        } else {
-            m_instances.push_back(instance);
-        }
+    m_instance =
+        lilv_plugin_instantiate(m_plugin, sampleRate, m_features.data());
+    if (!m_instance) {
+        RG_WARNING << "Failed to instantiate plugin" << m_uri;
     }
     lilv_nodes_free(feats);
 }
@@ -301,10 +268,7 @@ void
 LV2PluginInstance::activate()
 {
     RG_DEBUG << "activate";
-    for (auto i = m_instances.begin();
-         i != m_instances.end(); ++i) {
-        lilv_instance_activate(*i);
-    }
+    lilv_instance_activate(m_instance);
 }
 
 void
@@ -312,54 +276,44 @@ LV2PluginInstance::connectPorts()
 {
     RG_DEBUG << "connectPorts";
     size_t inbuf = 0, outbuf = 0;
-    size_t midibuf = 0;
-    size_t cbuf = 0;
 
-    for (auto it = m_instances.begin();
-         it != m_instances.end(); ++it) {
+    for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+        RG_DEBUG << "connect audio in:" << m_audioPortsIn[i];
+        lilv_instance_connect_port(m_instance, m_audioPortsIn[i],
+                                   m_inputBuffers[inbuf]);
+        ++inbuf;
+    }
 
-        for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
-            RG_DEBUG << "connect audio in:" << m_audioPortsIn[i];
-            lilv_instance_connect_port((*it), m_audioPortsIn[i],
-                                       m_inputBuffers[inbuf]);
-            ++inbuf;
-        }
+    for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+        RG_DEBUG << "connect audio out:" << m_audioPortsOut[i];
+        lilv_instance_connect_port(m_instance, m_audioPortsOut[i],
+                                   m_outputBuffers[outbuf]);
+        ++outbuf;
+    }
 
-        for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
-            RG_DEBUG << "connect audio out:" << m_audioPortsOut[i];
-            lilv_instance_connect_port((*it), m_audioPortsOut[i],
-                                       m_outputBuffers[outbuf]);
-            ++outbuf;
-        }
+    for (size_t i = 0;
+         i < controlPortsIn.size();
+         ++i) {
+        RG_DEBUG << "connect control in:" <<
+            controlPortsIn[i].first;
+        lilv_instance_connect_port
+            (m_instance,
+             controlPortsIn[i].first,
+             &(controlPortsIn[i].second));
+    }
 
-        // Control ports are for each instance
+    for (size_t i = 0; i < controlPortsOut.size(); ++i) {
+        RG_DEBUG << "connect control out:" <<
+            controlPortsOut[i].first;
+        lilv_instance_connect_port
+            (m_instance,
+             controlPortsOut[i].first,
+             &(controlPortsOut[i].second));
+    }
 
-        InstanceData& iData = m_instanceData[cbuf];
-        for (size_t i = 0;
-             i < iData.controlPortsIn.size();
-             ++i) {
-            RG_DEBUG << "connect control in:" <<
-                iData.controlPortsIn[i].first;
-            lilv_instance_connect_port
-                ((*it),
-                 iData.controlPortsIn[i].first,
-                 &(iData.controlPortsIn[i].second));
-        }
-
-        for (size_t i = 0; i < iData.controlPortsOut.size(); ++i) {
-            RG_DEBUG << "connect control out:" <<
-                iData.controlPortsOut[i].first;
-            lilv_instance_connect_port
-                (*it,
-                 iData.controlPortsOut[i].first,
-                 &(iData.controlPortsOut[i].second));
-        }
-        ++cbuf;
-        if (m_midiPort != -1) {
-            RG_DEBUG << "connect midi port" << m_midiPort;
-            lilv_instance_connect_port((*it), m_midiPort, m_midiIn[midibuf]);
-            ++midibuf;
-        }
+    if (m_midiPort != -1) {
+        RG_DEBUG << "connect midi port" << m_midiPort;
+        lilv_instance_connect_port(m_instance, m_midiPort, m_midiIn);
     }
 }
 
@@ -368,16 +322,13 @@ LV2PluginInstance::setPortValue
 (unsigned int portNumber, float value)
 {
     RG_DEBUG << "setPortValue" << portNumber << value;
-    for(unsigned int inst=0; inst<m_instanceData.size(); ++inst) {
-        InstanceData& iData = m_instanceData[inst];
-        for (size_t i = 0; i < iData.controlPortsIn.size(); ++i) {
-            if (iData.controlPortsIn[i].first == portNumber) {
-                if (value < m_pluginData.ports[portNumber].min)
-                    value = m_pluginData.ports[portNumber].min;
-                if (value > m_pluginData.ports[portNumber].max)
-                    value = m_pluginData.ports[portNumber].max;
-                iData.controlPortsIn[i].second = value;
-            }
+    for (size_t i = 0; i < controlPortsIn.size(); ++i) {
+        if (controlPortsIn[i].first == portNumber) {
+            if (value < m_pluginData.ports[portNumber].min)
+                value = m_pluginData.ports[portNumber].min;
+            if (value > m_pluginData.ports[portNumber].max)
+                value = m_pluginData.ports[portNumber].max;
+            controlPortsIn[i].second = value;
         }
     }
 }
@@ -394,22 +345,17 @@ LV2PluginInstance::setPortByteArray(unsigned int port, const QByteArray& ba)
     const LV2_Atom_Event* event =
         reinterpret_cast<const LV2_Atom_Event*>(ba.data());
     RG_DEBUG << "setPortByteArray send bytes" << ba.size();
-    for (unsigned int i=0; i< m_instanceCount; i++) {
-        LV2_Atom_Sequence* aseq =m_midiIn[i];
-        lv2_atom_sequence_append_event(aseq,
-                                       ba.size(),
-                                       event);
-    }
+    lv2_atom_sequence_append_event(m_midiIn,
+                                   ba.size(),
+                                   event);
 }
 
 float
 LV2PluginInstance::getPortValue(unsigned int portNumber)
 {
-    // only the first instance
-    InstanceData& iData = m_instanceData[0];
-    for (size_t i = 0; i < iData.controlPortsIn.size(); ++i) {
-        if (iData.controlPortsIn[i].first == portNumber) {
-            return (iData.controlPortsIn[i].second);
+    for (size_t i = 0; i < controlPortsIn.size(); ++i) {
+        if (controlPortsIn[i].first == portNumber) {
+            return (controlPortsIn[i].second);
         }
     }
 
@@ -461,61 +407,43 @@ LV2PluginInstance::run(const RealTime &rt)
         it++;
         m_eventBuffer.erase(iterToDelete);
 
-        for (unsigned int i=0; i< m_instanceCount; i++) {
-            char midiBuf[1000];
-            LV2_Atom_Event* event = (LV2_Atom_Event*)midiBuf;
-            event->time.frames = frameOffset;
-            event->body.size = bytes;
-            event->body.type = m_midiEventUrid;
+        char midiBuf[1000];
+        LV2_Atom_Event* event = (LV2_Atom_Event*)midiBuf;
+        event->time.frames = frameOffset;
+        event->body.size = bytes;
+        event->body.type = m_midiEventUrid;
 
-            int ebs = sizeof(LV2_Atom_Event);
-            for(int ib=0; ib<bytes; ib++) {
-                midiBuf[ebs + ib] = buf[ib];
-            }
-            LV2_Atom_Sequence* aseq =m_midiIn[i];
-            LV2_Atom_Event* atom =
-                lv2_atom_sequence_append_event(aseq,
-                                               8*EVENT_BUFFER_SIZE,
-                                               event);
-            if (atom == nullptr) {
-                RG_DEBUG << "midi event overflow";
-                return;
-            }
+        int ebs = sizeof(LV2_Atom_Event);
+        for(int ib=0; ib<bytes; ib++) {
+            midiBuf[ebs + ib] = buf[ib];
+        }
+        LV2_Atom_Event* atom =
+            lv2_atom_sequence_append_event(m_midiIn,
+                                           8*EVENT_BUFFER_SIZE,
+                                           event);
+        if (atom == nullptr) {
+            RG_DEBUG << "midi event overflow";
+            return;
         }
     }
 
-    for (auto i = m_instances.begin();
-         i != m_instances.end(); ++i) {
-        lilv_instance_run(*i, m_blockSize);
-    }
+    lilv_instance_run(m_instance, m_blockSize);
 
     m_run = true;
 
-    // reset midi buffers
-    for (unsigned int i=0; i< m_instanceCount; i++) {
-        LV2_Atom_Sequence* aseq =m_midiIn[i];
-        lv2_atom_sequence_clear(aseq);
-    }
+    lv2_atom_sequence_clear(m_midiIn);
 }
 
 void
 LV2PluginInstance::deactivate()
 {
-    for (auto i = m_instances.begin();
-         i != m_instances.end(); ++i) {
-        lilv_instance_deactivate(*i);
-    }
+    lilv_instance_deactivate(m_instance);
 }
 
 void
 LV2PluginInstance::cleanup()
 {
-    for (auto i = m_instances.begin();
-         i != m_instances.end(); ++i) {
-        lilv_instance_free(*i);
-    }
-
-    m_instances.clear();
+    lilv_instance_free(m_instance);
 }
 
 }

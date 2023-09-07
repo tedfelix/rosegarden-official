@@ -136,7 +136,7 @@ AudioPluginLV2GUI::hasGUI() const
 void
 AudioPluginLV2GUI::showGui() const
 {
-    m_window->showGui();
+    if (m_window) m_window->showGui();
 }
 
 void
