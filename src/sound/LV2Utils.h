@@ -20,6 +20,7 @@
 
 #include <map>
 #include <lilv/lilv.h>
+#include <lv2/urid/urid.h>
 
 #include "base/Instrument.h"
 
@@ -43,6 +44,12 @@ class LV2Utils
 
     LV2Utils(LV2Utils &other) = delete;
     void operator=(const LV2Utils &) = delete;
+
+    LV2_URID uridMap(const char *uri);
+    const char* uridUnmap(LV2_URID urid);
+
+    LV2_URID_Map m_map;
+    LV2_URID_Unmap m_unmap;
 
     enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
     enum LV2PortProtocol {LV2FLOAT, LV2ATOM};
@@ -93,6 +100,11 @@ class LV2Utils
     /// Singleton.  See getInstance().
     LV2Utils();
     ~LV2Utils();
+
+    //urid map
+    std::map<std::string, int> m_uridMap;
+    std::map<int, std::string> m_uridUnmap;
+    int m_nextId;
 
     QMutex m_mutex;
     LilvWorld* m_world;

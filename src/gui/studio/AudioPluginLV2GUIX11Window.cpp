@@ -28,7 +28,7 @@
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
 
-#include "sound/LV2Urid.h"
+#include "sound/LV2Utils.h"
 
 namespace
 {
@@ -89,9 +89,9 @@ AudioPluginLV2GUIX11Window::AudioPluginLV2GUIX11Window
     m_resizeFeature.URI = LV2_UI__resize;
     m_resizeFeature.data = &m_resizeData;
 
-    LV2Urid* lv2urid = LV2Urid::getInstance();
-    m_uridMapFeature = {LV2_URID__map, &(lv2urid->m_map)};
-    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2urid->m_unmap)};
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_map)};
+    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_unmap)};
     m_features.push_back(&m_uridMapFeature);
     m_features.push_back(&m_uridUnmapFeature);
     m_features.push_back(&m_idleFeature);

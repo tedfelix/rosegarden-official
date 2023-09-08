@@ -28,7 +28,6 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
-#include "sound/LV2Urid.h"
 #include "sound/LV2Utils.h"
 
 namespace Rosegarden

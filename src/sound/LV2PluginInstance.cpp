@@ -20,7 +20,7 @@
 
 #include <QtGlobal>
 #include "misc/Debug.h"
-#include "sound/LV2Urid.h"
+#include "sound/LV2Utils.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/atom/util.h>
@@ -77,14 +77,13 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
     double* dbuf = new double[EVENT_BUFFER_SIZE];
     m_midiIn = reinterpret_cast<LV2_Atom_Sequence*>(dbuf);
     lv2_atom_sequence_clear(m_midiIn);
-    LV2Urid* lv2urid = LV2Urid::getInstance();
-    LV2_URID type = lv2urid->uridMap(LV2_ATOM__Sequence);
+    LV2_URID type = lv2utils->uridMap(LV2_ATOM__Sequence);
     m_midiIn->atom.type = type;
 
     m_plugin = lv2utils->getPluginByUri(m_uri);
 
     snd_midi_event_new(100, &m_midiParser);
-    m_midiEventUrid = lv2urid->uridMap(LV2_MIDI__MidiEvent);
+    m_midiEventUrid = lv2utils->uridMap(LV2_MIDI__MidiEvent);
 
     instantiate(sampleRate);
     if (isOK()) {
@@ -249,9 +248,9 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
         RG_DEBUG << "feature:" << lilv_node_as_string(fnode);
     }
 
-    LV2Urid* lv2urid = LV2Urid::getInstance();
-    m_uridMapFeature = {LV2_URID__map, &(lv2urid->m_map)};
-    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2urid->m_unmap)};
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_map)};
+    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_unmap)};
     m_features.push_back(&m_uridMapFeature);
     m_features.push_back(&m_uridUnmapFeature);
     m_features.push_back(nullptr);
