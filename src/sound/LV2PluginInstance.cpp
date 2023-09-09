@@ -51,7 +51,8 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_sampleRate(sampleRate),
         m_latencyPort(nullptr),
         m_run(false),
-        m_bypassed(false)
+        m_bypassed(false),
+        m_distributeChannels(false)
 {
     RG_DEBUG << "create plugin" << uri;
 
@@ -140,6 +141,18 @@ LV2PluginInstance::init(int idealChannelCount)
             break;
         }
     }
+    // if we have a stereo channel and a mono plugin we combine the
+    // stereo input to the mono plugin and distribute the plugin
+    // output to the stereo channels !
+    m_distributeChannels = false;
+    if (m_audioPortsIn.size() == 1 &&
+        m_audioPortsOut.size() == 1 &&
+        m_channelCount == 2)
+        {
+            m_audioPortsIn.push_back(-1);
+            m_audioPortsOut.push_back(-1);
+            m_distributeChannels = true;
+        }
 }
 
 size_t
@@ -277,6 +290,7 @@ LV2PluginInstance::connectPorts()
     size_t inbuf = 0, outbuf = 0;
 
     for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+        if (m_audioPortsIn[i] == -1) continue;
         RG_DEBUG << "connect audio in:" << m_audioPortsIn[i];
         lilv_instance_connect_port(m_instance, m_audioPortsIn[i],
                                    m_inputBuffers[inbuf]);
@@ -284,6 +298,7 @@ LV2PluginInstance::connectPorts()
     }
 
     for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+        if (m_audioPortsOut[i] == -1) continue;
         RG_DEBUG << "connect audio out:" << m_audioPortsOut[i];
         lilv_instance_connect_port(m_instance, m_audioPortsOut[i],
                                    m_outputBuffers[outbuf]);
@@ -426,7 +441,26 @@ LV2PluginInstance::run(const RealTime &rt)
         }
     }
 
+    if (m_distributeChannels) {
+        // the input buffers contain stereo channels - combine for a
+        // mono plugin. If this is the case there are exactly 2 input
+        // and output buffers. The first ones are connected to the
+        // plugin
+        RG_DEBUG << "distribute stereo -> mono";
+        for (size_t i = 0; i < m_blockSize; ++i) {
+                    m_inputBuffers[0][i] =
+                        (m_inputBuffers[0][i] + m_inputBuffers[1][i]) / 2.0;
+        }
+    }
+
     lilv_instance_run(m_instance, m_blockSize);
+
+    if (m_distributeChannels) {
+        // after running distribute the output to the two channels
+        for (size_t i = 0; i < m_blockSize; ++i) {
+            m_outputBuffers[1][i] = m_outputBuffers[0][i];
+        }
+    }
 
     m_run = true;
 

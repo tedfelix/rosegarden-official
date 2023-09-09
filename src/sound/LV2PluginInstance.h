@@ -137,6 +137,7 @@ protected:
     LV2_Feature m_uridUnmapFeature;
 
     std::vector<LV2_Feature*> m_features;
+    bool m_distributeChannels;
 };
 
 }
