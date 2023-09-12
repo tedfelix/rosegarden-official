@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginDialog]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginDialog.h"
 
@@ -712,7 +713,7 @@ AudioPluginDialog::slotPluginSelected(int index)
         m_pluginParamsBox->show();
     }
 
-    if (guiWasShown) {
+    if (guiWasShown && plugin) {
         emit showPluginGUI(m_containerId, m_index);
         m_guiShown = true;
     }

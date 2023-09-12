@@ -114,8 +114,10 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
 
 AudioPluginLV2GUI::~AudioPluginLV2GUI()
 {
+    RG_DEBUG << "~AudioPluginLV2GUI";
     LV2Utils* lv2utils = LV2Utils::getInstance();
     delete m_window;
+    m_window = nullptr;
     lv2utils->unRegisterGUI(m_instrument, m_position);
     lilv_uis_free(m_uis);
 }

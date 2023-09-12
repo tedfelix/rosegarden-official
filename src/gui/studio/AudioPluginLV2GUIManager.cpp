@@ -62,7 +62,6 @@ void
 AudioPluginLV2GUIManager::showGUI(InstrumentId instrument, int position)
 {
     RG_DEBUG << "showGUI(): " << instrument << "," << position;
-    stopGUI(instrument, position);
     AudioPluginLV2GUI* gui = getInstance(instrument, position);
     if (gui->hasGUI()) {
         gui->showGui();

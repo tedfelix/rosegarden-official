@@ -66,7 +66,7 @@ AudioPluginLV2GUIX11Window::AudioPluginLV2GUIX11Window
  const LV2UI_Descriptor* uidesc,
  const QString& id) :
     m_lv2Gui(lv2Gui),
-    m_lv2II(0)
+    m_lv2II(nullptr)
 {
     setWindowTitle(title);
     m_timer = new QTimer(this);
@@ -116,6 +116,8 @@ AudioPluginLV2GUIX11Window::AudioPluginLV2GUIX11Window
 
 AudioPluginLV2GUIX11Window::~AudioPluginLV2GUIX11Window()
 {
+    RG_DEBUG << "~AudioPluginLV2GUIX11Window";
+    m_lv2II = nullptr;
 }
 
 void
