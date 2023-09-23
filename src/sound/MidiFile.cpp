@@ -1455,7 +1455,13 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
         //     use the config option.  If someone complains that 121's
         //     aren't appearing in MIDI files, that's probably the route
         //     we'll have to go.
-        if (midiEvent.getData1() == MIDI_CONTROLLER_RESET) {
+
+        // 2023-09 Lorenzo: added a check that this is a control change
+        // otherwise any midi event with data1 == 121 would get caught
+        if (
+                midiEvent.getEventCode() == MIDI_CTRL_CHANGE &&
+                midiEvent.getData1() == MIDI_CONTROLLER_RESET 
+            ) {
             RG_WARNING << "writeTrack(): Found controller 121.  Skipping.  This is a HACK to address BUG #1404.";
 
             // Keep track of the timestamps from skipped events so we can
