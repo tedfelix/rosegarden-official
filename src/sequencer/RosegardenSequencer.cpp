@@ -1023,16 +1023,21 @@ void RosegardenSequencer::dumpFirstSegment()
 
     MEBIterator it(firstMappedEventBuffer);
 
+    QReadLocker locker(it.getLock());
+
     for (; !it.atEnd(); ++it) {
 
-        MappedEvent evt = (*it);
-        SEQUENCER_DEBUG << i << " : inst = " << evt.getInstrument()
-                        << " - type = " << evt.getType()
-                        << " - data1 = " << (unsigned int)evt.getData1()
-                        << " - data2 = " << (unsigned int)evt.getData2()
-                        << " - time = " << evt.getEventTime()
-                        << " - duration = " << evt.getDuration()
-                        << " - audio mark = " << evt.getAudioStartMarker();
+        MappedEvent *evt = it.peek();
+        if (!evt)
+            continue;
+
+        SEQUENCER_DEBUG << i << " : inst = " << evt->getInstrument()
+                        << " - type = " << evt->getType()
+                        << " - data1 = " << (unsigned int)evt->getData1()
+                        << " - data2 = " << (unsigned int)evt->getData2()
+                        << " - time = " << evt->getEventTime()
+                        << " - duration = " << evt->getDuration()
+                        << " - audio mark = " << evt->getAudioStartMarker();
 
         ++i;
     }

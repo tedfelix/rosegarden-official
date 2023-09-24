@@ -225,7 +225,8 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
 
     m_currentTime = endTime;
     
-    // For each segment, activate segments that have anything playing.
+    // For each segment (MEBIterator), activate segments that have anything
+    // playing.
     for (IteratorVector::iterator i = m_iterators.begin();
          i != m_iterators.end();
          ++i) { 
@@ -233,9 +234,17 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
         RealTime end;
         (*i)->getMappedEventBuffer()->getStartEnd(start, end);
 
-        // Activate segments that have anything playing during this
-        // slice.  We include segments that end exactly when we start, but
-        // not segments that start exactly when we end.
+        // Activate MEBIterators for Segments that have something playing during
+        // this time slice.  We include Segments that end exactly when we start,
+        // but not Segments that start exactly when we end.
+        //
+        // Activation makes it easier to focus on relevant Segments later in
+        // this routine.
+        // Might want to consider assembling a vector of relevant MEBIterators
+        // and iterating through that instead of storing a flag in MEBIterator.
+        // We'll still need to set the current time.  Alternatively, we could
+        // do this check further down while we are going through the
+        // MEBIterators.  That would eliminate the need for a flag or a vector.
         bool active = (start < endTime  &&  end >= startTime);
         (*i)->setActive(active, startTime);
     }
@@ -419,16 +428,21 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
         //     MappedEventBuffer::getBuffer() (or just make m_buffer public).
         MEBIterator iter(*i);
 
+        QReadLocker locker(iter.getLock());
+
         // For each event
         while (!iter.atEnd()) {
-            const MappedEvent &event = *iter;
+            const MappedEvent *event = iter.peek();
             ++iter;
 
-            // Skip any non-Audio events.
-            if (event.getType() != MappedEvent::Audio)
+            if (!event)
                 continue;
 
-            TrackId trackId = event.getTrackId();
+            // Skip any non-Audio events.
+            if (event->getType() != MappedEvent::Audio)
+                continue;
+
+            TrackId trackId = event->getTrackId();
 
             // If the track for this event is muted or archived, try
             // the next event.
@@ -453,7 +467,7 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
             // ??? Why does this need to contain copies?  Can we simplify
             //     to pointers to the originals?  Maybe switch to
             //     QSharedPointer?
-            audioEvents.push_back(event);
+            audioEvents.push_back(*event);
         }
     }
 }
