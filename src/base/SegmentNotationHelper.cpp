@@ -2341,6 +2341,96 @@ SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
     }
 }
 
+void SegmentNotationHelper::updateIndications(timeT startTime, timeT endTime)
+{
+    RG_DEBUG << "updateIndications" << startTime << endTime;
+    // find indications in range
+    Segment::iterator from = begin();
+    Segment::iterator to = end();
+
+    typedef std::list<Event*> NoteList;
+    std::map<Event*, NoteList> slurMap;
+    for (Segment::iterator i = from;
+         i != to && segment().isBeforeEndMarker(i); ++i) {
+        if ((*i)->getNotationAbsoluteTime() > endTime) break;
+        if ((*i)->isa(Indication::EventType)) {
+            RG_DEBUG << "updateIndications found indication";
+            Indication ind(**i);
+
+            timeT indicationStart = (*i)->getNotationAbsoluteTime();
+            timeT indicationEnd = indicationStart + ind.getIndicationDuration();
+            if (indicationEnd < startTime) {
+                RG_DEBUG << "updateIndications ignore out of range indication";
+                continue;
+            }
+            if (indicationEnd > endTime) endTime = indicationEnd;
+            std::string indType = ind.getIndicationType();
+            RG_DEBUG << "updateIndications found indication" << indType <<
+                indicationStart << indicationEnd;
+            if (indType != Indication::Slur &&
+                indType != Indication::PhrasingSlur) continue;
+            RG_DEBUG << "updateIndications checking (phrasing) slur";
+            slurMap[*i];
+        }
+        if ((*i)->isa(Note::EventType)) {
+            for(auto& pair : slurMap) {
+                const Event* slurEvent = pair.first;
+                NoteList& nlist = pair.second;
+                timeT slurStart = slurEvent->getNotationAbsoluteTime();
+                timeT slurEnd = slurStart + slurEvent->getNotationDuration();
+                timeT noteStart = (*i)->getNotationAbsoluteTime();
+                timeT noteEnd = noteStart + (*i)->getNotationDuration();
+                RG_DEBUG << "updateIndications check note for slur" <<
+                    noteStart << noteEnd << slurStart << slurEnd;
+                // is the note contained in the slur ?
+                if (noteStart >= slurStart && noteEnd <= slurEnd) {
+                    nlist.push_back(*i);
+                    RG_DEBUG << "updateIndications add note to note list" <<
+                        nlist.size() << &nlist;
+                }
+            }
+        }
+    }
+    // The slurMap now contailns all (phrasing) slurs each with a list of notes
+    for(auto& pair : slurMap) {
+        Event* slurEvent = pair.first;
+        NoteList& nlist = pair.second;
+        timeT slurStart = slurEvent->getNotationAbsoluteTime();
+        timeT slurEnd = slurStart + slurEvent->getNotationDuration();
+        RG_DEBUG << "updateIndications checking slur at" <<
+            slurStart << nlist.size() << &nlist;
+        if (nlist.size() <= 1) {
+            // A slur with 1 or 0 notes cannot exist - remove it
+            RG_DEBUG << "updateIndications remove unnecessary slur";
+            segment().eraseSingle(slurEvent);
+        } else {
+            // check start and end times of the slur
+            timeT notesStart = segment().getEndTime();
+            timeT notesEnd = 0;
+            for(auto note : nlist) {
+                timeT noteStart = (note)->getNotationAbsoluteTime();
+                timeT noteEnd = noteStart + (note)->getNotationDuration();
+                if (noteStart < notesStart) notesStart = noteStart;
+                if (noteEnd > notesEnd) notesEnd = noteEnd;
+            }
+            RG_DEBUG << "updateIndications check slur length" <<
+                slurStart << slurEnd <<
+                notesStart << notesEnd;
+            if (slurStart != notesStart || slurEnd != notesEnd) {
+                // slur does not match notes - replace it
+                RG_DEBUG << "updateIndications adjust slur" <<
+                    slurStart << slurEnd << "->" <<
+                    notesStart << notesEnd;
+                timeT duration = notesEnd - notesStart;
+                Event* newSlur = new Event(*slurEvent, notesStart, duration);
+
+                segment().insert(newSlur);
+                segment().eraseSingle(slurEvent);
+            }
+        }
+    }
+}
+
 int SegmentNotationHelper::findBorderTuplet(iterator it, iterator &start, iterator &end){
     iterator beginB = segment().findTime(segment().getBarStartForTime((*it)->getAbsoluteTime()));
     iterator endB = segment().findTime(segment().getBarEndForTime((*it)->getAbsoluteTime()));
