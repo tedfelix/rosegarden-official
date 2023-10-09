@@ -541,8 +541,11 @@ public:
      */
     void autoSlur(timeT startTime, timeT endTime, bool legatoOnly);
 
+    /// Remove and adjust slurs as needed for a time range.
     /**
-     * update indications - eg. move slur from rests
+     * ??? This routine really just deals in slurs.  Would a better name be
+     *     updateSlurs()?
+     *
      */
     void updateIndications(timeT startTime, timeT endTime);
 
