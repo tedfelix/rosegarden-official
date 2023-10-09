@@ -541,6 +541,10 @@ public:
      */
     void autoSlur(timeT startTime, timeT endTime, bool legatoOnly);
 
+    /**
+     * update indications - eg. move slur from rests
+     */
+    void updateIndications(timeT startTime, timeT endTime);
 
 protected:
     const Quantizer &basicQuantizer();

@@ -148,6 +148,7 @@ MoveCommand::modifySegment()
 
     segment.normalizeRests(a0, a1);
     segment.normalizeRests(b0, b1);
+    SegmentNotationHelper(segment).updateIndications(a0, a1);
 }
 
 }
