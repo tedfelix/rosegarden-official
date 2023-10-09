@@ -1334,6 +1334,12 @@ MidiFile::convertToMidi(RosegardenDocument *doc, const QString &filename)
     SortingInserter sorter;
 
     // Fetch the channel setup for all MIDI tracks in Fixed channel mode.
+    // This inserts BS/PC/CC info at the beginning of the Track based on
+    // the MIPP.
+    // ??? But there are more BS/PC/CCs being added by fetchEvents() if
+    //     the Segment starts at time 0.  This leads to double BS/PC/CC
+    //     info.  Who is doing this and can we fix it without breaking
+    //     anything else?
     metaIterator->fetchFixedChannelSetup(sorter);
 
     metaIterator->jumpToTime(start);
