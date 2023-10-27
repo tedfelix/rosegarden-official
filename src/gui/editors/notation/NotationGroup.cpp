@@ -378,11 +378,11 @@ NotationGroup::calculateBeam(NotationStaff &staff)
                           (NotationProperties::BEAM_ABOVE);
     }
 
-    timeT quaver = Note(Note::Quaver).getDuration();
+    timeT doubleDottedQuaver = Note(Note::Quaver, 2).getDuration();
 
     beam.necessary =
-        (*initialNote)->getViewDuration() <= quaver &&
-        (*finalNote)->getViewDuration() <= quaver;
+        (*initialNote)->getViewDuration() <= doubleDottedQuaver &&
+        (*finalNote)->getViewDuration() <= doubleDottedQuaver;
 
     beam.necessary = beam.necessary &&
         (((*finalNote)->getViewAbsoluteTime() >
