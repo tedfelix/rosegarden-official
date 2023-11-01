@@ -2341,6 +2341,128 @@ SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
     }
 }
 
+void SegmentNotationHelper::updateIndications(timeT startTime, timeT endTime)
+{
+    RG_DEBUG << "updateIndications" << startTime << endTime;
+
+    // Find slurs in range and add to slurMap.
+
+    typedef std::list<Event*> NoteList;
+    // Map of slurs to a list of notes covered by that slur.
+    typedef std::map<Event* /* slur */, NoteList /* notes */> SlurMap;
+    SlurMap slurMap;
+
+    // For each Event in the Segment, find the slurs and the notes that go
+    // with them.
+    for (Segment::iterator i = begin();
+         i != end() && segment().isBeforeEndMarker(i); ++i) {
+
+        if ((*i)->getNotationAbsoluteTime() > endTime) break;
+
+        // Indication Event
+        if ((*i)->isa(Indication::EventType)) {
+            RG_DEBUG << "updateIndications found indication";
+            const Indication ind(**i);
+
+            const timeT indicationStart = (*i)->getNotationAbsoluteTime();
+            const timeT indicationEnd = indicationStart + ind.getIndicationDuration();
+            if (indicationEnd < startTime) {
+                RG_DEBUG << "updateIndications ignore out of range indication";
+                continue;
+            }
+
+            // Make sure we get all the Notes in this Indication.
+            // ??? What if it isn't a slur?  We check that afterwards.  E.g.
+            //     what if it is a Crescendo?  That would trigger this extension.
+            //     It doesn't break anything.  It just might do a little more
+            //     work than necessary.  Recommend moving the slur type check
+            //     above this.  More for clarity than performance.
+            if (indicationEnd > endTime) endTime = indicationEnd;
+
+            std::string indType = ind.getIndicationType();
+            RG_DEBUG << "updateIndications found indication" << indType << indicationStart << indicationEnd;
+
+            // Not a slur?  Try the next Event.
+            if (indType != Indication::Slur &&
+                indType != Indication::PhrasingSlur) continue;
+
+            RG_DEBUG << "updateIndications checking (phrasing) slur";
+
+            // Add an entry to the slurMap without any notes.
+            slurMap[*i];
+        }
+
+        // Note Event.
+        if ((*i)->isa(Note::EventType)) {
+            // For each slur in the slurMap...
+            for (SlurMap::value_type& pair : slurMap) {
+                const Event* slurEvent = pair.first;
+                NoteList& noteList = pair.second;
+
+                const timeT slurStart = slurEvent->getNotationAbsoluteTime();
+                const timeT slurEnd = slurStart + slurEvent->getNotationDuration();
+                const timeT noteStart = (*i)->getNotationAbsoluteTime();
+                const timeT noteEnd = noteStart + (*i)->getNotationDuration();
+
+                RG_DEBUG << "updateIndications check note for slur" << noteStart << noteEnd << slurStart << slurEnd;
+
+                // If this note is contained in the slur...
+                if (noteStart >= slurStart && noteEnd <= slurEnd) {
+                    // Add the Note to this slurMap entry.
+                    noteList.push_back(*i);
+
+                    RG_DEBUG << "updateIndications add note to note list" << noteList.size() << &noteList;
+                }
+            }
+        }
+    }
+
+    // The slurMap now contains all (phrasing) slurs each with a list of notes.
+
+    // For each slur in the slurMap, remove or adjust as appropriate.
+    for (SlurMap::value_type& pair : slurMap) {
+        Event* slurEvent = pair.first;
+        const NoteList& noteList = pair.second;
+
+        const timeT slurStart = slurEvent->getNotationAbsoluteTime();
+        const timeT slurEnd = slurStart + slurEvent->getNotationDuration();
+
+        RG_DEBUG << "updateIndications checking slur at" << slurStart << noteList.size() << &noteList;
+
+        if (noteList.size() <= 1) {
+            RG_DEBUG << "updateIndications remove unnecessary slur";
+            // A slur with 1 or 0 notes cannot exist - remove it
+            segment().eraseSingle(slurEvent);
+        } else {
+            // Compute the start and end times of the slur.
+            timeT notesStart = segment().getEndTime();
+            timeT notesEnd = 0;
+
+            // For each note within the slur, adjust the time range.
+            for (const Event *note : noteList) {
+                const timeT noteStart = (note)->getNotationAbsoluteTime();
+                const timeT noteEnd = noteStart + (note)->getNotationDuration();
+
+                if (noteStart < notesStart) notesStart = noteStart;
+                if (noteEnd > notesEnd) notesEnd = noteEnd;
+            }
+
+            RG_DEBUG << "updateIndications check slur length" << slurStart << slurEnd << notesStart << notesEnd;
+
+            // If slur does not match notes, replace it with one that does.
+            if (slurStart != notesStart || slurEnd != notesEnd) {
+                RG_DEBUG << "updateIndications adjust slur" << slurStart << slurEnd << "->" << notesStart << notesEnd;
+
+                const timeT duration = notesEnd - notesStart;
+                Event* newSlur = new Event(*slurEvent, notesStart, duration);
+
+                segment().insert(newSlur);
+                segment().eraseSingle(slurEvent);
+            }
+        }
+    }
+}
+
 int SegmentNotationHelper::findBorderTuplet(iterator it, iterator &start, iterator &end){
     iterator beginB = segment().findTime(segment().getBarStartForTime((*it)->getAbsoluteTime()));
     iterator endB = segment().findTime(segment().getBarEndForTime((*it)->getAbsoluteTime()));

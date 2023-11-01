@@ -114,6 +114,7 @@ bool Composition::ReferenceSegment::empty() const
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::erase(Composition::ReferenceSegment::iterator position)
 {
+    delete *position;
     return m_events.erase(position);
 }
 
@@ -177,7 +178,7 @@ void
 Composition::ReferenceSegment::eraseEvent(Event *e)
 {
     iterator i = find(e);
-    if (i != end()) m_events.erase(i);
+    if (i != end()) erase(i);
 }
 
 Composition::ReferenceSegment::iterator

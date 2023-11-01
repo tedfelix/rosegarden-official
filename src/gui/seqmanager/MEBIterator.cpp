@@ -83,17 +83,6 @@ MEBIterator::moveTo(const RealTime &time)
     m_ready = false;
 }
 
-MappedEvent
-MEBIterator::operator*() const
-{
-    const MappedEvent *e = peek();
-
-    if (e)
-        return *e;
-    else
-        return MappedEvent();
-}
-
 MappedEvent *
 MEBIterator::peek() const
 {

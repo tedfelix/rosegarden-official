@@ -46,17 +46,6 @@ public:
 
     void moveTo(const RealTime &time);
 
-    /// Dereference operator
-    /**
-     * Allows an expression like (*i) to give access to the element an
-     * iterator points to.
-     *
-     * Returns a default constructed MappedEvent if atEnd().
-     *
-     * @see peek()
-     */
-    MappedEvent operator*() const;
-
     /// Dereference function
     /**
      * Returns a pointer to the MappedEvent the iterator is currently
@@ -64,10 +53,12 @@ public:
      *
      * Returns 0 if atEnd().
      *
-     * Callers should lock getLock() with QReadLocker for as long
-     * as they are holding the pointer.
+     * Callers should lock the iterator by using QReadLocker on the return
+     * from getLock() for as long as they are using the pointer.
      *
-     * @see operator*()
+     *   QReadLocker locker(iter->getLock());
+     *
+     * @see getLock()
      */
     MappedEvent *peek() const;
 
@@ -191,7 +182,7 @@ private:
     /**
      * Either the current event's time or the time the loop starts,
      * whichever is greater.  Used for calculating the correct
-     * controllers
+     * control changes.
      */
     RealTime m_currentTime;
 };

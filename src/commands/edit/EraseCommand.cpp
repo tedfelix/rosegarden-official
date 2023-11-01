@@ -23,6 +23,7 @@
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
+#include "base/SegmentNotationHelper.h"
 #include "gui/editors/notation/NotationProperties.h"
 
 
@@ -169,6 +170,8 @@ EraseCommand::eraseInSegment(EventSelection *selection)
     }
 
     segment.normalizeRests(selection->getStartTime(), selection->getEndTime());
+    SegmentNotationHelper(segment).updateIndications
+        (selection->getStartTime(), selection->getEndTime());
 
     return erasedLongEffectEvent;
 }

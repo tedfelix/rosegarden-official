@@ -27,6 +27,9 @@
 
 #include "base/NotationTypes.h"
 
+// ??? This file's line endings are CRLF.  Need to convert to LF
+//     along with bringing the formatting up to standards.
+
 //!!! Q: Should this class be using QString and QVector also?
 //!!! A: A definite "probably". We use the Qt classes in the
 //!!!    PitchDetector, but that is RG specific. This code is

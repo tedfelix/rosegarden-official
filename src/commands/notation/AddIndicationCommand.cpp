@@ -233,6 +233,9 @@ AddIndicationCommand::modifySegment()
             }
         }
     }
+    // check that the new indication is OK
+    helper.updateIndications(m_indicationStart,
+                             m_indicationStart + m_indicationDuration);
 }
 
 QString

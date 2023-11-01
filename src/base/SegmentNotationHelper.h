@@ -541,6 +541,13 @@ public:
      */
     void autoSlur(timeT startTime, timeT endTime, bool legatoOnly);
 
+    /// Remove and adjust slurs as needed for a time range.
+    /**
+     * ??? This routine really just deals in slurs.  Would a better name be
+     *     updateSlurs()?
+     *
+     */
+    void updateIndications(timeT startTime, timeT endTime);
 
 protected:
     const Quantizer &basicQuantizer();
