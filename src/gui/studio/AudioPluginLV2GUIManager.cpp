@@ -130,7 +130,7 @@ AudioPluginLV2GUIManager::updatePort(InstrumentId instrument, int position,
 
 void
 AudioPluginLV2GUIManager::updateConfiguration(InstrumentId instrument, int position,
-        QString key)
+        const QString& key)
 {
     RG_DEBUG << "updateConfiguration(" << instrument << "," << position << "," << key << ")";
 }

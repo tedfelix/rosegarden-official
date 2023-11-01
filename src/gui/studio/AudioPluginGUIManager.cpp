@@ -34,6 +34,7 @@ namespace Rosegarden
 
 AudioPluginGUIManager::AudioPluginGUIManager(RosegardenMainWindow *mainWindow) :
     m_mainWindow(mainWindow),
+    m_studio(nullptr),
     m_oscManager(new AudioPluginOSCGUIManager(mainWindow))
 #ifdef HAVE_LILV
     ,

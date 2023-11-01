@@ -28,6 +28,7 @@ namespace Rosegarden
 class Studio;
 class AudioPluginLV2GUI;
 
+// cppcheck-suppress noConstructor
 class AudioPluginLV2GUIManager
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioPluginLV2GUIManager)
@@ -44,7 +45,7 @@ public:
     void updateProgram(InstrumentId instrument, int position);
     void updatePort(InstrumentId instrument, int position, int port);
     void updateConfiguration(InstrumentId instrument, int position,
-                             QString key);
+                             const QString& key);
 
  private:
     AudioPluginLV2GUI* getInstance(InstrumentId instrument, int position);

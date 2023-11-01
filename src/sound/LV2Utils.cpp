@@ -260,6 +260,7 @@ const LilvPlugin* LV2Utils::getPluginByUri(const QString& uri) const
 LV2Utils::LV2PluginData LV2Utils::getPluginData(const QString& uri) const
 {
     LV2PluginData emptyData;
+    emptyData.isInstrument = false;
     auto it = m_pluginData.find(uri);
     if (it == m_pluginData.end()) return emptyData;
     return (*it).second;

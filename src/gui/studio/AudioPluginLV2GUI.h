@@ -30,6 +30,7 @@ namespace Rosegarden
 class AudioPluginInstance;
 class AudioPluginLV2GUIWindow;
 
+// cppcheck-suppress noCopyConstructor
 class AudioPluginLV2GUI
 {
  public:

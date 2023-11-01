@@ -173,20 +173,18 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
 
 RunnablePluginInstance *
 LV2PluginFactory::instantiatePlugin(QString identifier,
-                                    int instrument,
+                                    int instrumentId,
                                     int position,
                                     unsigned int sampleRate,
                                     unsigned int blockSize,
                                     unsigned int channels)
 {
     RG_DEBUG << "instantiate plugin" << identifier;
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    LV2Utils::LV2PluginData pdata = lv2utils->getPluginData(identifier);
 
     const QString& uri = identifier;
     LV2PluginInstance *instance =
         new LV2PluginInstance
-        (this, instrument, identifier,
+        (this, instrumentId, identifier,
          position, sampleRate, blockSize, channels, uri);
 
     m_instances.insert(instance);

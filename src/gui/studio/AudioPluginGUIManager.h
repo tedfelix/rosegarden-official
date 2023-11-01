@@ -27,6 +27,7 @@ class AudioPluginOSCGUIManager;
 class AudioPluginLV2GUIManager;
 class Studio;
 
+// cppcheck-suppress noCopyConstructor
 class AudioPluginGUIManager
 {
  public:
