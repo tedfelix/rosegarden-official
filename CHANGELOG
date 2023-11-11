@@ -1,3 +1,58 @@
+====== ROSEGARDEN 23.12 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 23.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Make punch-in also start recording.  [f7b3aa72]
+  * Fix broken metronome flash in the transport.  [975ffe9d]
+  * Fix solo affects archived tracks.  [bad41f2f]
+  * Fix data loss when recording with loop on.  [79889151]
+  * Prevent archived tracks from recording.  [82a43608]
+  * Fix arm status lost on save when archived.  [5d85e8bd]
+  * Fix armed+archive recording after load.  [ab8eba6d]
+  * Unarm archived Tracks when enforcing the arm rule: only one Track
+    can be armed per Instrument.  [7bcc351c]
+  * Skip archived tracks when routing.  [21e45666]
+  * Fix refresh artifacts on the Matrix piano keyboard.  Bug #1656.
+    [5cf37ed5]
+  * Fix error when rosegarden creates submaster outs.  Bug #1658.
+    [c89ab3b0]
+  * Fixed potential race conditions with audio files.  [1e8d4064]
+  * Fix segment relabel dialog not showing original label.  Bug #1660.
+    [3fbc6975]
+  * Fixed events with data1 == 121 being dropped.  Bug #1663.
+    [df93bd90]
+  * Fixed potential race conditions in the sequencer.  [6c7a6a0e]
+  * Fix removing the first note of a slurred group creates an
+    unreachable rest.  Bug #1662.  [fb214928]
+  * Fix cannot beam a group beginning or ending with a dotted eighth
+    note.  Bug #1666.  [eb0e6d75]
+
+===== New Features =====
+
+  * Improved sub-beat highlighting in the Matrix editor.
+    Feature request #516. [d83b5715]
+  * Matrix editor preview note when hovering.
+    Feature request #516. [d83b5715]
+  * Add metronome and solo toggles to main menu.  [acf3c266]
+  * Add MMC RECORD STROBE support.  [9953f1f2]
+  * Add a preference to include ALSA port numbers when making
+    connections.  [06b0c44a]
+  * Use regexp for plugin blacklist.  [ec230e46] [028930e5]
+  * Updated yoshimi.rgd.  [b8a99b83]
+
+===== Additional Contributors =====
+
+  * Hugo van Galen
+
+
 ====== ROSEGARDEN 23.06 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 23.06
