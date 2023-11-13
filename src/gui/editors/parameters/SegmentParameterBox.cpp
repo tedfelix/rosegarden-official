@@ -363,7 +363,7 @@ SegmentParameterBox::updateLabel()
     m_label->setEnabled(true);
 
     SegmentSelection::const_iterator i = segmentSelection.begin();
-    QString labelText = QObject::tr((*i)->getLabel().c_str());
+    QString labelText = (*i)->getLabel().c_str();
 
     // Just one?  Set and bail.
     if (segmentSelection.size() == 1) {
