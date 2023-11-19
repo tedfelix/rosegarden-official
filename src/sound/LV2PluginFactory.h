@@ -28,6 +28,7 @@ namespace Rosegarden
 {
 
 class LV2PluginInstance;
+class LV2Worker;
 
 class LV2PluginFactory : public PluginFactory
 {
@@ -62,6 +63,7 @@ class LV2PluginFactory : public PluginFactory
     std::vector<QString> m_identifiers;
     std::map<QString, QString> m_taxonomy;
 
+    LV2Worker* m_worker;
 };
 
 }

@@ -36,10 +36,12 @@ namespace Rosegarden
 
 LV2PluginFactory::LV2PluginFactory()
 {
+    RG_DEBUG << "constructor";
 }
 
 LV2PluginFactory::~LV2PluginFactory()
 {
+    RG_DEBUG << "destructor";
     for (std::set
                 <RunnablePluginInstance *>::iterator i = m_instances.begin();
                 i != m_instances.end(); ++i) {

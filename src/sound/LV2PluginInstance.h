@@ -23,6 +23,7 @@
 
 #include <lilv/lilv.h>
 #include <lv2/atom/atom.h>
+#include <lv2/options/options.h>
 
 #include <alsa/seq_event.h>
 #include <alsa/seq_midi_event.h>
@@ -77,6 +78,11 @@ public:
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
     int numInstances() const;
+
+    void runWork(uint32_t size,
+                 const void* data,
+                 LV2_Worker_Respond_Function resp);
+
 protected:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;
@@ -135,8 +141,14 @@ protected:
 
     LV2_Feature m_uridMapFeature;
     LV2_Feature m_uridUnmapFeature;
-
+    LV2_Feature m_workerFeature;
+    LV2_Feature m_optionsFeature;
+    std::vector<LV2_Options_Option> m_options;
+    LV2_Worker_Schedule m_workerSchedule;
+    LV2_Worker_Interface* m_workerInterface;
+    LV2Utils::PluginPosition m_workerHandle;
     std::vector<LV2_Feature*> m_features;
+
     bool m_distributeChannels;
 };
 

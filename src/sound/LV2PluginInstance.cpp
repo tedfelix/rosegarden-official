@@ -13,7 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[LV2PluginInstance]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginInstance.h"
 #include "LV2PluginFactory.h"
@@ -24,6 +24,7 @@
 
 #include <lv2/midi/midi.h>
 #include <lv2/atom/util.h>
+#include <lv2/buf-size/buf-size.h>
 
 namespace Rosegarden
 {
@@ -57,6 +58,10 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
     RG_DEBUG << "create plugin" << uri;
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
+
+    m_workerHandle.instrument = instrument;
+    m_workerHandle.position = position;
+
     m_pluginData = lv2utils->getPluginData(uri);
 
     init(idealChannelCount);
@@ -91,6 +96,13 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         connectPorts();
         activate();
     }
+    m_workerInterface = (LV2_Worker_Interface*)
+        lilv_instance_get_extension_data(m_instance, LV2_WORKER__interface);
+    RG_DEBUG << "worker interface" << m_workerInterface;
+    if (m_workerInterface) RG_DEBUG << (void*)m_workerInterface->work <<
+                               (void*)m_workerInterface->work_response <<
+                               (void*)m_workerInterface->end_run;
+
     RG_DEBUG << "register plugin";
     lv2utils->registerPlugin(m_instrument, m_position, this);
 }
@@ -215,6 +227,24 @@ int LV2PluginInstance::numInstances() const
     return 1;
 }
 
+void LV2PluginInstance::runWork(uint32_t size,
+                                const void* data,
+                                LV2_Worker_Respond_Function resp)
+{
+    if (! m_workerInterface) return;
+    LV2_Handle handle = lilv_instance_get_handle(m_instance);
+    LV2Utils::PluginPosition pp;
+    pp.instrument = m_instrument;
+    pp.position = m_position;
+    LV2_Worker_Status status =
+        m_workerInterface->work(handle,
+                                resp,
+                                &pp,
+                                size,
+                                data);
+    RG_DEBUG << "work return:" << status;
+}
+
 LV2PluginInstance::~LV2PluginInstance()
 {
     RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance";
@@ -262,10 +292,39 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     }
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
+
     m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_map)};
     m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_unmap)};
+
+    m_workerSchedule.handle = &m_workerHandle;
+    m_workerSchedule.schedule_work = lv2utils->getWorker()->getScheduler();
+    RG_DEBUG << "schedule_work" << (void*)m_workerSchedule.schedule_work;
+    m_workerFeature = {LV2_WORKER__schedule, &m_workerSchedule};
+
+    LV2_URID nbl_urid = lv2utils->uridMap(LV2_BUF_SIZE__nominalBlockLength);
+    LV2_URID mbl_urid = lv2utils->uridMap(LV2_BUF_SIZE__maxBlockLength);
+    LV2_URID ai_urid = lv2utils->uridMap(LV2_ATOM__Int);
+    LV2_Options_Option opt;
+    opt.context = LV2_OPTIONS_INSTANCE;
+    opt.subject = 0;
+    opt.key = nbl_urid;
+    opt.size = 4;
+    opt.type = ai_urid;
+    opt.value = &m_blockSize;
+    m_options.push_back(opt);
+    opt.key = mbl_urid;
+    opt.value = &m_blockSize;
+    m_options.push_back(opt);
+    opt.key = 0;
+    opt.type = 0;
+    opt.value = 0;
+    m_options.push_back(opt);
+    m_optionsFeature = {LV2_OPTIONS__options, m_options.data()};
+
     m_features.push_back(&m_uridMapFeature);
     m_features.push_back(&m_uridUnmapFeature);
+    m_features.push_back(&m_workerFeature);
+    m_features.push_back(&m_optionsFeature);
     m_features.push_back(nullptr);
 
     m_instance =
@@ -453,7 +512,23 @@ LV2PluginInstance::run(const RealTime &rt)
         }
     }
 
-    lilv_instance_run(m_instance, m_blockSize);
+    // get any worker responses
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    LV2Utils::Worker* worker = lv2utils->getWorker();
+
+    LV2Utils::PluginPosition pp;
+    pp.instrument = m_instrument;
+    pp.position = m_position;
+    if (m_workerInterface) {
+        while(LV2Utils::WorkerJob* job = worker->getResponse(pp)) {
+            m_workerInterface->work_response(m_instance, job->size, job->data);
+            delete job;
+        }
+
+        if (m_workerInterface->end_run) m_workerInterface->end_run(m_instance);
+    }
+
+  lilv_instance_run(m_instance, m_blockSize);
 
     if (m_distributeChannels) {
         // after running distribute the output to the two channels

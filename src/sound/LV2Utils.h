@@ -21,6 +21,7 @@
 #include <map>
 #include <lilv/lilv.h>
 #include <lv2/urid/urid.h>
+#include <lv2/worker/worker.h>
 
 #include "base/Instrument.h"
 
@@ -76,11 +77,51 @@ class LV2Utils
         std::vector<LV2PortData> ports;
     };
 
+    // key type for maps
+    struct PluginPosition
+    {
+        InstrumentId instrument;
+        int position;
+        bool operator<(const PluginPosition &p) const
+        {
+            if (instrument < p.instrument) return true;
+            if (instrument > p.instrument) return false;
+            if (position < p.position) return true;
+            return false;
+        }
+    };
+
+    // interface for a worker class
+    typedef LV2_Worker_Status (*ScheduleWork)(LV2_Worker_Schedule_Handle handle,
+                                              uint32_t size,
+                                              const void* data);
+
+    typedef LV2_Worker_Status (*RespondWork)(LV2_Worker_Respond_Handle handle,
+                                             uint32_t size,
+                                             const void *data);
+
+    struct WorkerJob
+    {
+        uint32_t size;
+        const void* data;
+    };
+
+    class Worker
+    {
+    public:
+        virtual ~Worker() {};
+        virtual ScheduleWork getScheduler() = 0;
+        virtual WorkerJob* getResponse(const LV2Utils::PluginPosition& pp) = 0;
+    };
+
     const std::map<QString, LV2PluginData>& getAllPluginData() const;
     const LilvPlugin* getPluginByUri(const QString& uri) const;
     LV2PluginData getPluginData(const QString& uri) const;
     const LilvUIs* getPluginUIs(const QString& uri) const;
     LilvNode* makeURINode(const QString& uri) const;
+
+    void lock();
+    void unlock();
 
     void registerPlugin(InstrumentId instrument,
                         int position,
@@ -89,13 +130,25 @@ class LV2Utils
                      int position,
                      AudioPluginLV2GUI* gui);
 
+    void registerWorker(Worker* worker);
+
     void unRegisterPlugin(InstrumentId instrument,
                           int position);
     void unRegisterGUI(InstrumentId instrument,
                        int position);
 
+    void unRegisterWorker();
+
     int numInstances(InstrumentId instrument,
                      int position) const;
+
+    Worker* getWorker() const;
+
+    void runWork(const PluginPosition& pp,
+                 uint32_t size,
+                 const void* data,
+                 LV2_Worker_Respond_Function resp);
+
  private:
     /// Singleton.  See getInstance().
     LV2Utils();
@@ -117,10 +170,11 @@ class LV2Utils
         AudioPluginLV2GUI* gui;
         LV2UPlugin() {pluginInstance = nullptr; gui = nullptr;}
     };
-    typedef std::map<int, LV2UPlugin> IntPluginMap;
-    typedef std::map<int, IntPluginMap> PluginGuiMap;
 
+    typedef std::map<PluginPosition, LV2UPlugin> PluginGuiMap;
     PluginGuiMap m_pluginGuis;
+
+    Worker* m_worker;
 };
 
 }
