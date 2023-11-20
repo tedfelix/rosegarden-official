@@ -45,7 +45,8 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     m_mainWindow(mainWindow),
     m_instrument(instrument),
     m_position(position),
-    m_window(nullptr)
+    m_window(nullptr),
+    m_firstUpdate(true)
 {
     m_id = strtoqstr(m_pluginInstance->getIdentifier());
     LV2Utils* lv2utils = LV2Utils::getInstance();
@@ -204,10 +205,30 @@ AudioPluginLV2GUI::updatePortValue(int port, float value)
 
 void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
 {
+    RG_DEBUG << "updatePortValue" << port;
     if (! m_window) return;
     LV2UI_Handle handle = m_window->getHandle();
     int size = atom->size + 8;
     m_uidesc->port_event(handle, port, size, m_atomTransferUrid, atom);
+}
+
+void AudioPluginLV2GUI::checkControlOutValues()
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    std::map<int, float> newControlOutValues;
+    lv2utils->getControlOutValues(m_instrument,
+                                  m_position,
+                                  newControlOutValues);
+    for(auto pair : newControlOutValues) {
+        int portIndex = pair.first;
+        float value = pair.second;
+        if (m_firstUpdate || m_controlOutValues[portIndex] != value) {
+            m_controlOutValues[portIndex] = value;
+            updatePortValue(portIndex, value);
+        }
+    }
+    m_firstUpdate = false;
+
 }
 
 }

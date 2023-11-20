@@ -21,6 +21,8 @@
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
 
+#include <vector>
+
 #include "AudioPluginLV2GUI.h"
 
 namespace Rosegarden

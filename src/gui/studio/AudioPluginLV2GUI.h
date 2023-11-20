@@ -22,7 +22,7 @@
 #include <lv2/ui/ui.h>
 #include <lv2/atom/atom.h>
 
-#include <vector>
+#include <map>
 #include "gui/application/RosegardenMainWindow.h"
 
 namespace Rosegarden
@@ -59,6 +59,8 @@ class AudioPluginLV2GUI
     void updatePortValue(int port, float value);
     void updatePortValue(int port, const LV2_Atom* atom);
 
+    void checkControlOutValues();
+
  private:
     AudioPluginInstance* m_pluginInstance;
     RosegardenMainWindow* m_mainWindow;
@@ -70,6 +72,8 @@ class AudioPluginLV2GUI
     const LV2UI_Descriptor* m_uidesc;
     AudioPluginLV2GUIWindow* m_window;
     LV2_URID m_atomTransferUrid;
+    std::map<int, float> m_controlOutValues;
+    bool m_firstUpdate;
 };
 
 

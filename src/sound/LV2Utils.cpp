@@ -458,4 +458,26 @@ void LV2Utils::runWork(const PluginPosition& pp,
     pgdata.pluginInstance->runWork(size, data, resp);
 }
 
+void LV2Utils::getControlOutValues(InstrumentId instrument,
+                                   int position,
+                                   std::map<int, float>& controlValues)
+{
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    auto pit = m_pluginGuis.find(pp);
+    if (pit == m_pluginGuis.end()) {
+        RG_DEBUG << "getControlOutValues plugin not found" <<
+            instrument << position;
+        return;
+    }
+    const LV2UPlugin& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "getControlOutValues no pluginInstance";
+        return;
+    }
+    LOCKED;
+    pgdata.pluginInstance->getControlOutValues(controlValues);
+}
+
 }

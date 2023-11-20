@@ -163,6 +163,10 @@ class LV2Utils
                  const void* data,
                  LV2_Worker_Respond_Function resp);
 
+    void getControlOutValues(InstrumentId instrument,
+                             int position,
+                             std::map<int, float>& controlValues);
+
  private:
     /// Singleton.  See getInstance().
     LV2Utils();

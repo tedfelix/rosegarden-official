@@ -86,6 +86,8 @@ public:
                  const void* data,
                  LV2_Worker_Respond_Function resp);
 
+    void getControlOutValues(std::map<int, float>& controlValues);
+
 protected:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;

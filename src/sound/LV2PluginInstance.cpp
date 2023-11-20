@@ -277,6 +277,17 @@ void LV2PluginInstance::runWork(uint32_t size,
     RG_DEBUG << "work return:" << status;
 }
 
+void LV2PluginInstance::getControlOutValues
+(std::map<int, float>& controlValues)
+{
+    controlValues.clear();
+    for (auto& pair : m_controlPortsOut) {
+        int portIndex = pair.first;
+        float value = pair.second;
+        controlValues[portIndex] = value;
+    }
+}
+
 LV2PluginInstance::~LV2PluginInstance()
 {
     RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance";
@@ -423,12 +434,12 @@ LV2PluginInstance::connectPorts()
     }
 
     for (auto& aip : m_atomInputPorts) {
-        RG_DEBUG << "connect atom port" << aip.index;
+        RG_DEBUG << "connect atom in port" << aip.index;
         lilv_instance_connect_port(m_instance, aip.index, aip.atomSeq);
     }
 
     for (auto& aop : m_atomOutputPorts) {
-        RG_DEBUG << "connect atom port" << aop.index;
+        RG_DEBUG << "connect atom out port" << aop.index;
         lilv_instance_connect_port(m_instance, aop.index, aop.atomSeq);
     }
 }
@@ -608,6 +619,7 @@ LV2PluginInstance::run(const RealTime &rt)
 
     // get atom out data
     for(auto& ap : m_atomOutputPorts) {
+        RG_DEBUG << "check atom out" << ap.index;
         LV2_Atom_Sequence* aseq = ap.atomSeq;
         LV2_ATOM_SEQUENCE_FOREACH(aseq, ev) {
             if (ev->body.type == m_midiEventUrid) {

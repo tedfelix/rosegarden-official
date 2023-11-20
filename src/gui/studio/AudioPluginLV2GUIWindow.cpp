@@ -146,6 +146,9 @@ LV2UI_Handle AudioPluginLV2GUIWindow::getHandle() const
 void AudioPluginLV2GUIWindow::timeUp()
 {
     if (m_lv2II) m_lv2II->idle(m_handle);
+
+    // check control outs
+    m_lv2Gui->checkControlOutValues();
 }
 
 }
