@@ -17,6 +17,7 @@
 #define RG_LV2PLUGININSTANCE_H
 
 #include <vector>
+#include <list>
 #include <set>
 #include <map>
 #include <QString>
@@ -56,7 +57,9 @@ public:
 
     void setPortValue(unsigned int portNumber, float value) override;
     // !!!!
-    void setPortByteArray(unsigned int port, const QByteArray& ba);
+    void setPortByteArray(unsigned int port,
+                          unsigned int protocol,
+                          const QByteArray& ba);
     float getPortValue(unsigned int portNumber) override;
 
     void sendEvent(const RealTime& eventTime,
@@ -110,8 +113,18 @@ protected:
 
  private:
 
-    std::vector<std::pair<unsigned long, float> > controlPortsIn;
-    std::vector<std::pair<unsigned long, float> > controlPortsOut;
+    std::map<int, float> m_controlPortsIn;
+    std::map<int, float> m_controlPortsOut;
+
+    struct AtomPort
+    {
+        unsigned int index;
+        LV2_Atom_Sequence* atomSeq;
+        bool isMidi;
+    };
+
+    std::list<AtomPort> m_atomInputPorts;
+    std::list<AtomPort> m_atomOutputPorts;
 
     InstrumentId m_instrument;
     int m_position;
@@ -124,9 +137,7 @@ protected:
     std::vector<int> m_audioPortsOut;
     size_t m_channelCount;
 
-    int m_midiPort;
     std::map<RealTime, snd_seq_event_t> m_eventBuffer;
-    LV2_Atom_Sequence* m_midiIn;
     snd_midi_event_t *m_midiParser;
     LV2_URID m_midiEventUrid;
 
@@ -150,6 +161,7 @@ protected:
     std::vector<LV2_Feature*> m_features;
 
     bool m_distributeChannels;
+    LV2_URID m_atomTransferUrid;
 };
 
 }

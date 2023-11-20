@@ -19,7 +19,7 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginLV2GUI.h"
-#include "AudioPluginLV2GUIX11Window.h"
+#include "AudioPluginLV2GUIWindow.h"
 
 #include <QTimer>
 
@@ -29,6 +29,9 @@
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "sound/LV2Utils.h"
+
+// the kx.studio extension
+#include "gui/studio/lv2_external_ui.h"
 
 namespace Rosegarden
 {
@@ -57,20 +60,37 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     RG_DEBUG << "got plugin " << sname;
 
     //ui types:
-    // http://lv2plug.in/ns/extensions/ui#GtkUI (calf)
-    // http://lv2plug.in/ns/extensions/ui#X11UI (guitarix)
-
+    // http://lv2plug.in/ns/extensions/ui#GtkUI (eg. calf)
+    // http://lv2plug.in/ns/extensions/ui#X11UI (eg. guitarix)
+    // kx studio external widget extension
+    UIType uiType = NONE;
     LilvNode* x11UI = lv2utils->makeURINode(LV2_UI__X11UI);
+    LilvNode* gtkUI = lv2utils->makeURINode(LV2_UI__GtkUI);
+    LilvNode* kxUI = lv2utils->makeURINode(LV2_EXTERNAL_UI__Widget);
+
     m_uis = lilv_plugin_get_uis(plugin);
     const LilvUI* selectedUI = nullptr;
     LILV_FOREACH(uis, it, m_uis) {
         const LilvUI* ui = lilv_uis_get(m_uis, it);
         if (lilv_ui_is_a(ui, x11UI)) {
             selectedUI = ui;
+            uiType = X11;
+            break;
+        }
+        if (lilv_ui_is_a(ui, gtkUI)) {
+            selectedUI = ui;
+            uiType = GTK;
+            break;
+        }
+        if (lilv_ui_is_a(ui, kxUI)) {
+            selectedUI = ui;
+            uiType = KX;
             break;
         }
     }
     lilv_node_free(x11UI);
+    lilv_node_free(gtkUI);
+    lilv_node_free(kxUI);
     if (! selectedUI)
         {
             RG_DEBUG << "no usable ui found";
@@ -78,7 +98,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
         }
     const LilvNode *uiUri = lilv_ui_get_uri(selectedUI);
     QString uiUris = lilv_node_as_string(uiUri);
-    RG_DEBUG << "ui uri:" << uiUris;
+    RG_DEBUG << "ui uri:" << uiUris << uiType;
     const LilvNode* uib = lilv_ui_get_binary_uri(selectedUI);
     QString binary_uri = lilv_node_as_uri(uib);
     QString bpath =
@@ -103,11 +123,12 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     RG_DEBUG << "descriptor: " << m_uidesc;
     QString title = sname;
 
-    m_window = new AudioPluginLV2GUIX11Window(this,
-                                              title,
-                                              selectedUI,
-                                              m_uidesc,
-                                              m_id);
+    m_window = new AudioPluginLV2GUIWindow(this,
+                                           title,
+                                           selectedUI,
+                                           m_uidesc,
+                                           m_id,
+                                           uiType);
 
     lv2utils->registerGUI(instrument, position, this);
 }
@@ -115,9 +136,15 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
 AudioPluginLV2GUI::~AudioPluginLV2GUI()
 {
     RG_DEBUG << "~AudioPluginLV2GUI";
+    if (m_window) {
+        LV2UI_Handle handle = m_window->getHandle();
+        if (m_uidesc) {
+            m_uidesc->cleanup(handle);
+        }
+        delete m_window;
+        m_window = nullptr;
+    }
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    delete m_window;
-    m_window = nullptr;
     lv2utils->unRegisterGUI(m_instrument, m_position);
     lilv_uis_free(m_uis);
 }
@@ -156,11 +183,13 @@ AudioPluginLV2GUI::portChange(uint32_t portIndex,
                                            *value);
     } else {
         // complex data
+        LV2Utils* lv2utils = LV2Utils::getInstance();
+        RG_DEBUG << "complex data" << portProtocol <<
+            "urid:" << lv2utils->uridUnmap(portProtocol);
         QByteArray ba(static_cast<const char*>(buffer), bufferSize);
-        /* !!! m_mainWindow->slotChangePluginPortBuf(m_instrument,
-                                              m_position,
-                                              portIndex,
-                                              ba); */
+
+        lv2utils->setPortValue(m_instrument, m_position,
+                               portIndex, portProtocol, ba);
     }
 }
 

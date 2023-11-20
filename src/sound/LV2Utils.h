@@ -139,6 +139,13 @@ class LV2Utils
 
     void unRegisterWorker();
 
+    // set the value for the plugin
+    void setPortValue(InstrumentId instrument,
+                      int position,
+                      int index,
+                      unsigned int protocol,
+                      const QByteArray& data);
+
     int numInstances(InstrumentId instrument,
                      int position) const;
 

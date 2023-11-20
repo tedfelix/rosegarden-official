@@ -367,6 +367,27 @@ void LV2Utils::unRegisterWorker()
     m_worker = nullptr;
 }
 
+void LV2Utils::setPortValue(InstrumentId instrument,
+                            int position,
+                            int index,
+                            unsigned int protocol,
+                            const QByteArray& data)
+{
+    RG_DEBUG << "setPortValue" << instrument << position;
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    LOCKED;
+    auto pit = m_pluginGuis.find(pp);
+    if (pit == m_pluginGuis.end()) {
+        RG_DEBUG << "plugin not found" << instrument << position;
+        return;
+    }
+    LV2UPlugin& pgdata = (*pit).second;
+    LV2PluginInstance* instance = pgdata.pluginInstance;
+    instance->setPortByteArray(index, protocol, data);
+}
+
 int LV2Utils::numInstances(InstrumentId instrument,
                            int position) const
 {

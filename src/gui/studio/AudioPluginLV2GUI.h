@@ -40,6 +40,8 @@ class AudioPluginLV2GUI
                       int position);
     ~AudioPluginLV2GUI();
 
+    enum UIType {X11, GTK, KX, NONE};
+
     // copy constructor not used
     AudioPluginLV2GUI(const AudioPluginInstance&) = delete;
 

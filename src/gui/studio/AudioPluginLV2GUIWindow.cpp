@@ -15,10 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[AudioPluginLV2GUIX11Window]"
+#define RG_MODULE_STRING "[AudioPluginLV2GUIWindow]"
 #define RG_NO_DEBUG_PRINT 1
 
-#include "AudioPluginLV2GUIX11Window.h"
+#include "AudioPluginLV2GUIWindow.h"
 
 #include "misc/Debug.h"
 #include "AudioPluginLV2GUI.h"
@@ -38,8 +38,8 @@ namespace
                  uint32_t port_protocol,
                  const void *buffer)
     {
-        Rosegarden::AudioPluginLV2GUIX11Window* ap =
-            static_cast<Rosegarden::AudioPluginLV2GUIX11Window*>(controller);
+        Rosegarden::AudioPluginLV2GUIWindow* ap =
+            static_cast<Rosegarden::AudioPluginLV2GUIWindow*>(controller);
         ap->portChange(port_index, buffer_size, port_protocol, buffer);
     }
 
@@ -59,19 +59,21 @@ namespace
 namespace Rosegarden
 {
 
-AudioPluginLV2GUIX11Window::AudioPluginLV2GUIX11Window
+AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
 (AudioPluginLV2GUI* lv2Gui,
  const QString& title,
  const LilvUI* ui,
  const LV2UI_Descriptor* uidesc,
- const QString& id) :
+ const QString& id,
+ AudioPluginLV2GUI::UIType uiType) :
     m_lv2Gui(lv2Gui),
     m_lv2II(nullptr)
 {
+    RG_DEBUG << "create window" << id << uiType;
     setWindowTitle(title);
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout,
-            this, &AudioPluginLV2GUIX11Window::timeUp);
+            this, &AudioPluginLV2GUIWindow::timeUp);
     m_timer->start(50);
 
     const char *ui_bundle_uri =
@@ -114,14 +116,14 @@ AudioPluginLV2GUIX11Window::AudioPluginLV2GUIX11Window
     RG_DEBUG << "handle:" << m_handle << "widget:" << widget;
 }
 
-AudioPluginLV2GUIX11Window::~AudioPluginLV2GUIX11Window()
+AudioPluginLV2GUIWindow::~AudioPluginLV2GUIWindow()
 {
-    RG_DEBUG << "~AudioPluginLV2GUIX11Window";
+    RG_DEBUG << "~AudioPluginLV2GUIWindow";
     m_lv2II = nullptr;
 }
 
 void
-AudioPluginLV2GUIX11Window::portChange(uint32_t portIndex,
+AudioPluginLV2GUIWindow::portChange(uint32_t portIndex,
                                        uint32_t bufferSize,
                                        uint32_t portProtocol,
                                        const void *buffer)
@@ -131,12 +133,17 @@ AudioPluginLV2GUIX11Window::portChange(uint32_t portIndex,
     m_lv2Gui->portChange(portIndex, bufferSize, portProtocol, buffer);
 }
 
-void AudioPluginLV2GUIX11Window::showGui()
+void AudioPluginLV2GUIWindow::showGui()
 {
     show();
 }
 
-void AudioPluginLV2GUIX11Window::timeUp()
+LV2UI_Handle AudioPluginLV2GUIWindow::getHandle() const
+{
+    return m_handle;
+}
+
+void AudioPluginLV2GUIWindow::timeUp()
 {
     if (m_lv2II) m_lv2II->idle(m_handle);
 }
