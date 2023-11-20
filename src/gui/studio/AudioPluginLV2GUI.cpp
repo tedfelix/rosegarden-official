@@ -49,6 +49,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
 {
     m_id = strtoqstr(m_pluginInstance->getIdentifier());
     LV2Utils* lv2utils = LV2Utils::getInstance();
+    m_atomTransferUrid = lv2utils->uridMap(LV2_ATOM__eventTransfer);
     const LilvPlugin* plugin = lv2utils->getPluginByUri(m_id);
 
     if (! plugin) {
@@ -194,9 +195,19 @@ AudioPluginLV2GUI::portChange(uint32_t portIndex,
 }
 
 void
-AudioPluginLV2GUI::updatePortValue(int, float)
+AudioPluginLV2GUI::updatePortValue(int port, float value)
 {
-    //m_uidesc->port_event(m_handle, port, sizeof(float), 0, &value);
+    if (! m_window) return;
+    LV2UI_Handle handle = m_window->getHandle();
+    m_uidesc->port_event(handle, port, sizeof(float), 0, &value);
+}
+
+void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
+{
+    if (! m_window) return;
+    LV2UI_Handle handle = m_window->getHandle();
+    int size = atom->size + 8;
+    m_uidesc->port_event(handle, port, size, m_atomTransferUrid, atom);
 }
 
 }

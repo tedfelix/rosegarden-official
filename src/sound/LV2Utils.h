@@ -21,6 +21,7 @@
 #include <map>
 #include <lilv/lilv.h>
 #include <lv2/urid/urid.h>
+#include <lv2/atom/atom.h>
 #include <lv2/worker/worker.h>
 
 #include "base/Instrument.h"
@@ -145,6 +146,12 @@ class LV2Utils
                       int index,
                       unsigned int protocol,
                       const QByteArray& data);
+
+    // called by the plugin to update the ui
+    void updatePortValue(InstrumentId instrument,
+                         int position,
+                         int index,
+                         const LV2_Atom* atom);
 
     int numInstances(InstrumentId instrument,
                      int position) const;

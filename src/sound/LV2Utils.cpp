@@ -19,7 +19,8 @@
 
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"
-#include "LV2PluginInstance.h"
+#include "sound/LV2PluginInstance.h"
+#include "gui/studio/AudioPluginLV2GUI.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/ui/ui.h>
@@ -386,6 +387,30 @@ void LV2Utils::setPortValue(InstrumentId instrument,
     LV2UPlugin& pgdata = (*pit).second;
     LV2PluginInstance* instance = pgdata.pluginInstance;
     instance->setPortByteArray(index, protocol, data);
+}
+
+void LV2Utils::updatePortValue(InstrumentId instrument,
+                               int position,
+                               int index,
+                               const LV2_Atom* atom)
+{
+    // no lock here as this is called from the run method which is
+    // already locked
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    auto pit = m_pluginGuis.find(pp);
+    if (pit == m_pluginGuis.end()) {
+        RG_DEBUG << "plugin not found" << instrument << position;
+        return;
+    }
+    const LV2UPlugin& pgdata = (*pit).second;
+    if (pgdata.gui == nullptr) {
+        RG_DEBUG << "no gui at" << instrument << position;
+        return;
+    }
+
+    pgdata.gui->updatePortValue(index, atom);
 }
 
 int LV2Utils::numInstances(InstrumentId instrument,

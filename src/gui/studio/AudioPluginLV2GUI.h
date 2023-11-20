@@ -20,6 +20,7 @@
 
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
+#include <lv2/atom/atom.h>
 
 #include <vector>
 #include "gui/application/RosegardenMainWindow.h"
@@ -56,6 +57,7 @@ class AudioPluginLV2GUI
                     const void *buffer);
 
     void updatePortValue(int port, float value);
+    void updatePortValue(int port, const LV2_Atom* atom);
 
  private:
     AudioPluginInstance* m_pluginInstance;
@@ -67,6 +69,7 @@ class AudioPluginLV2GUI
     void* m_uilib;
     const LV2UI_Descriptor* m_uidesc;
     AudioPluginLV2GUIWindow* m_window;
+    LV2_URID m_atomTransferUrid;
 };
 
 

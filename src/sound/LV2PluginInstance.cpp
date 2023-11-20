@@ -506,6 +506,8 @@ void
 LV2PluginInstance::run(const RealTime &rt)
 {
     RG_DEBUG << "run" << rt;
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->lock();
 
     RealTime bufferStart = rt;
     auto it = m_eventBuffer.begin();
@@ -523,6 +525,7 @@ LV2PluginInstance::run(const RealTime &rt)
         int bytes = snd_midi_event_decode(m_midiParser, buf, 100, &qEvent);
         if (bytes <= 0) {
             RG_DEBUG << "error decoding midi event";
+            lv2utils->unlock();
             return;
         }
 
@@ -583,7 +586,6 @@ LV2PluginInstance::run(const RealTime &rt)
     lilv_instance_run(m_instance, m_blockSize);
 
     // get any worker responses
-    LV2Utils* lv2utils = LV2Utils::getInstance();
     LV2Utils::Worker* worker = lv2utils->getWorker();
 
     LV2Utils::PluginPosition pp;
@@ -611,8 +613,11 @@ LV2PluginInstance::run(const RealTime &rt)
             if (ev->body.type == m_midiEventUrid) {
                 // midi out not used
             } else {
-                //DEBUG << "updatePortValue";
-                //lv2utils->updatePortValue(ap.index, &(ev->body));
+                //RG_DEBUG << "updatePortValue";
+                lv2utils->updatePortValue(m_instrument,
+                                          m_position,
+                                          ap.index,
+                                          &(ev->body));
             }
         }
         // and clear the buffer
@@ -627,6 +632,7 @@ LV2PluginInstance::run(const RealTime &rt)
     }
 
     m_run = true;
+    lv2utils->unlock();
 }
 
 void
