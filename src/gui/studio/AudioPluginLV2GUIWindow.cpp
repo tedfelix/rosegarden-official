@@ -23,8 +23,10 @@
 #include "misc/Debug.h"
 #include "AudioPluginLV2GUI.h"
 #include "sound/LV2PluginInstance.h"
+#include "LV2Gtk.h"
 
 #include <QTimer>
+#include <QWindow>
 #include <QCloseEvent>
 
 #include <lilv/lilv.h>
@@ -79,7 +81,9 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
  const QString& id,
  AudioPluginLV2GUI::UIType uiType) :
     m_lv2Gui(lv2Gui),
-    m_lv2II(nullptr)
+    m_uiType(uiType),
+    m_lv2II(nullptr),
+    m_widget(nullptr)
 {
     RG_DEBUG << "create window" << id << uiType;
     setWindowTitle(title);
@@ -93,7 +97,6 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     char *hostname;
     char* ubp = lilv_file_uri_parse(ui_bundle_uri, &hostname);
     LV2UI_Controller controller = this;
-    LV2UI_Widget widget = nullptr;
 
     m_idleFeature = {LV2_UI__idleInterface, nullptr};
     m_parentFeature = {LV2_UI__parent, (void*)winId()};
@@ -160,10 +163,40 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
                             ubp,
                             writeFn,
                             controller,
-                            &widget,
+                            &m_widget,
                             m_features.data());
 
-    RG_DEBUG << "handle:" << m_handle << "widget:" << widget;
+    RG_DEBUG << "handle:" << m_handle << "widget:" << m_widget;
+    switch(m_uiType) {
+    case AudioPluginLV2GUI::NONE:
+        // should not be
+        RG_DEBUG << "uiType NONE";
+        break;
+    case AudioPluginLV2GUI::X11:
+        // nothing to do
+        break;
+    case AudioPluginLV2GUI::GTK:
+        // gtk - embed the widget
+        {
+            LV2Gtk* lv2gtk = lv2utils->getLV2Gtk();
+            m_gwidget = lv2gtk->getWidget(m_widget, this);
+            int width;
+            int height;
+            lv2gtk->getSize(m_gwidget, width, height);
+            resize(width, height);
+
+            const WId wid = (WId)(lv2gtk->getWinId(m_gwidget));
+            m_pWindow = QWindow::fromWinId(wid);
+            m_pWindow->setFlags(Qt::FramelessWindowHint);
+            m_cWidget = QWidget::createWindowContainer(m_pWindow);
+            m_cWidget->setMinimumSize(QSize(width, height));
+            m_cWidget->setParent(this);
+        }
+        break;
+    case AudioPluginLV2GUI::KX:
+        // nothing to do
+        break;
+    }
 }
 
 AudioPluginLV2GUIWindow::~AudioPluginLV2GUIWindow()
@@ -199,6 +232,13 @@ void AudioPluginLV2GUIWindow::uiClosed()
     m_lv2Gui->closeUI();
 }
 
+void AudioPluginLV2GUIWindow::setSize(int width, int height, bool isRequest)
+{
+    RG_DEBUG << "setSize" << width << height << isRequest;
+    if (this->width() >= width && this->height() >= height) return;
+    resize(width, height);
+}
+
 void AudioPluginLV2GUIWindow::timeUp()
 {
     if (m_lv2II) m_lv2II->idle(m_handle);
@@ -212,11 +252,12 @@ void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
     RG_DEBUG << "closeEvent";
     event->accept();
     // tell the ui to tidy up
+    if (m_pWindow) m_pWindow->setParent(nullptr);
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    LV2Gtk* lv2gtk = lv2utils->getLV2Gtk();
+    lv2gtk->deleteWidget(m_gwidget);
+    // this will cuase this object to be deleted
     m_lv2Gui->closeUI();
-    //if (m_pWindow) m_pWindow->setParent(nullptr);
-    //LV2Utils* lv2utils = LV2Utils::getInstance();
-    //LV2gtk* lv2gtk = lv2utils->getLV2gtk();
-    //lv2gtk->deleteWidget(m_gwidget);
 }
 
 }

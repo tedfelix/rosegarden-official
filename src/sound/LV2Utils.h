@@ -31,6 +31,7 @@ namespace Rosegarden
 
 class LV2PluginInstance;
 class AudioPluginLV2GUI;
+class LV2Gtk;
 
 /// LV2 utils
 /**
@@ -170,6 +171,8 @@ class LV2Utils
     const LV2PluginInstance* getPluginInstance(InstrumentId instrument,
                                                int position);
 
+    LV2Gtk* getLV2Gtk() const;
+
  private:
     /// Singleton.  See getInstance().
     LV2Utils();
@@ -196,6 +199,7 @@ class LV2Utils
     PluginGuiMap m_pluginGuis;
 
     Worker* m_worker;
+    LV2Gtk* m_lv2gtk;
 };
 
 }

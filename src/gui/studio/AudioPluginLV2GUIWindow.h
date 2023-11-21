@@ -28,12 +28,14 @@
 #include <vector>
 
 #include "AudioPluginLV2GUI.h"
+#include "LV2Gtk.h"
 
 namespace Rosegarden
 {
 
 class AudioPluginLV2GUIWindow :
-    public QWidget
+    public QWidget,
+    public LV2Gtk::SizeCallback
 {
     Q_OBJECT
  public:
@@ -54,6 +56,9 @@ class AudioPluginLV2GUIWindow :
     LV2UI_Handle getHandle() const;
     void uiClosed();
 
+    // gtk callback
+    virtual void setSize(int width, int height, bool isRequest) override;
+
  public slots:
     void timeUp();
 
@@ -61,6 +66,7 @@ class AudioPluginLV2GUIWindow :
     void closeEvent(QCloseEvent* event) override;
 
     AudioPluginLV2GUI* m_lv2Gui;
+    AudioPluginLV2GUI::UIType m_uiType;
     QTimer* m_timer;
     LV2_Extension_Data_Feature m_dataAccess;
     LV2_Feature m_uridMapFeature;
@@ -78,6 +84,10 @@ class AudioPluginLV2GUIWindow :
     std::vector<LV2_Feature*> m_features;
     std::vector<LV2_Options_Option> m_options;
     LV2_External_UI_Host m_extUiHost;
+    LV2Gtk::LV2GtkWidget m_gwidget;
+    QWidget* m_cWidget;
+    QWindow* m_pWindow;
+    LV2UI_Widget m_widget;
 };
 
 }

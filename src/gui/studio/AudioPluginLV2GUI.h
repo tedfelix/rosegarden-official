@@ -84,7 +84,6 @@ class AudioPluginLV2GUI
     bool m_firstUpdate;
 };
 
-
 }
 
 #endif
