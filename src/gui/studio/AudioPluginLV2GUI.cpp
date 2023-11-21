@@ -20,6 +20,7 @@
 
 #include "AudioPluginLV2GUI.h"
 #include "AudioPluginLV2GUIWindow.h"
+#include "AudioPluginLV2GUIManager.h"
 
 #include <QTimer>
 
@@ -39,8 +40,9 @@ namespace Rosegarden
 AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
                                      RosegardenMainWindow *mainWindow,
                                      InstrumentId instrument,
-                                     int position) :
-
+                                     int position,
+                                     AudioPluginLV2GUIManager* manager) :
+    m_manager(manager),
     m_pluginInstance(instance),
     m_mainWindow(mainWindow),
     m_instrument(instrument),
@@ -229,6 +231,21 @@ void AudioPluginLV2GUI::checkControlOutValues()
     }
     m_firstUpdate = false;
 
+}
+
+const LV2PluginInstance* AudioPluginLV2GUI::getPluginInstance() const
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    const LV2PluginInstance* pi = lv2utils->getPluginInstance(m_instrument,
+                                                              m_position);
+    return pi;
+}
+
+void AudioPluginLV2GUI::closeUI()
+{
+    // this will cause this object to be deleted
+    m_manager->stopGUI(m_instrument,
+                       m_position);
 }
 
 }

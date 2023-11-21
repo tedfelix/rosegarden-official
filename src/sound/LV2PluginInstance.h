@@ -88,6 +88,12 @@ public:
 
     void getControlOutValues(std::map<int, float>& controlValues);
 
+    const LV2_Descriptor* getLV2Descriptor() const;
+
+    LV2_Handle getHandle() const;
+
+    int getSampleRate() const;
+
 protected:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;

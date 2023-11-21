@@ -27,6 +27,7 @@ namespace Rosegarden
 
 class Studio;
 class AudioPluginLV2GUI;
+class LV2Worker;
 
 // cppcheck-suppress noConstructor
 class AudioPluginLV2GUIManager
@@ -52,6 +53,7 @@ public:
 
     RosegardenMainWindow *m_mainWindow;
     Studio *m_studio;
+    LV2Worker* m_worker;
 
     typedef std::map<int, AudioPluginLV2GUI *> IntGUIMap;
     typedef std::map<int, IntGUIMap> GUIMap;

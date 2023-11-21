@@ -193,11 +193,6 @@
 #include "gui/widgets/InputDialog.h"
 #include "TranzportClient.h"
 
-#ifdef HAVE_LILV
-#include "sound/LV2Utils.h"
-#include "sound/LV2Worker.h"
-#endif
-
 #include "rosegarden-version.h"
 
 #include <QApplication>
@@ -312,12 +307,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_cpuMeterTimer(new QTimer(this))
 {
     setAttribute(Qt::WA_DeleteOnClose);
-
-#ifdef HAVE_LILV
-    m_worker = new LV2Worker(this);
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->registerWorker(m_worker);
-#endif
 
     setObjectName("App");
     m_myself = this;

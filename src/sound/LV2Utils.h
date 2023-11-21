@@ -167,6 +167,9 @@ class LV2Utils
                              int position,
                              std::map<int, float>& controlValues);
 
+    const LV2PluginInstance* getPluginInstance(InstrumentId instrument,
+                                               int position);
+
  private:
     /// Singleton.  See getInstance().
     LV2Utils();

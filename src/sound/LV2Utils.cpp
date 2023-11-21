@@ -480,4 +480,24 @@ void LV2Utils::getControlOutValues(InstrumentId instrument,
     pgdata.pluginInstance->getControlOutValues(controlValues);
 }
 
+const LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
+                                                     int position)
+{
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    auto pit = m_pluginGuis.find(pp);
+    if (pit == m_pluginGuis.end()) {
+        RG_DEBUG << "getPluginInstance plugin not found" <<
+            instrument << position;
+        return nullptr;
+    }
+    const LV2UPlugin& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "getPluginInstance no pluginInstance";
+        return nullptr;
+    }
+    return pgdata.pluginInstance;
+}
+
 }

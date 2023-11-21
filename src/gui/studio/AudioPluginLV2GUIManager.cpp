@@ -23,6 +23,8 @@
 #include "base/Studio.h"
 #include "base/AudioPluginInstance.h"
 #include "gui/studio/AudioPluginLV2GUI.h"
+#include "sound/LV2Utils.h"
+#include "sound/LV2Worker.h"
 
 namespace Rosegarden
 {
@@ -31,6 +33,9 @@ AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWin
         m_mainWindow(mainWindow),
         m_studio(nullptr)
 {
+    m_worker = new LV2Worker;
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->registerWorker(m_worker);
 }
 
 AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
@@ -42,6 +47,7 @@ AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
         }
     }
     m_guis.clear();
+    delete m_worker;
 }
 
 void
@@ -172,7 +178,8 @@ AudioPluginLV2GUIManager::getInstance(InstrumentId instrument, int position)
         AudioPluginLV2GUI* newInstance = new AudioPluginLV2GUI(pluginInstance,
                                                                m_mainWindow,
                                                                instrument,
-                                                               position);
+                                                               position,
+                                                               this);
         m_guis[instrument][position] = newInstance;
         RG_DEBUG << "create LV2GUI" << newInstance->getId();
     }

@@ -35,7 +35,7 @@ class LV2Worker : public QObject, public LV2Utils::Worker
 {
     Q_OBJECT
  public:
-    LV2Worker(QObject* parent);
+    LV2Worker();
     ~LV2Worker();
 
     virtual LV2Utils::ScheduleWork getScheduler() override;

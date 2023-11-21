@@ -30,6 +30,8 @@ namespace Rosegarden
 
 class AudioPluginInstance;
 class AudioPluginLV2GUIWindow;
+class LV2PluginInstance;
+class AudioPluginLV2GUIManager;
 
 // cppcheck-suppress noCopyConstructor
 class AudioPluginLV2GUI
@@ -38,7 +40,8 @@ class AudioPluginLV2GUI
     AudioPluginLV2GUI(AudioPluginInstance *instance,
                       RosegardenMainWindow *mainWindow,
                       InstrumentId instrument,
-                      int position);
+                      int position,
+                      AudioPluginLV2GUIManager* manager);
     ~AudioPluginLV2GUI();
 
     enum UIType {X11, GTK, KX, NONE};
@@ -61,7 +64,12 @@ class AudioPluginLV2GUI
 
     void checkControlOutValues();
 
+    const LV2PluginInstance* getPluginInstance() const;
+
+    void closeUI();
+
  private:
+    AudioPluginLV2GUIManager* m_manager;
     AudioPluginInstance* m_pluginInstance;
     RosegardenMainWindow* m_mainWindow;
     InstrumentId m_instrument;

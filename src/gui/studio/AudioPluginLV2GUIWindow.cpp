@@ -22,11 +22,15 @@
 
 #include "misc/Debug.h"
 #include "AudioPluginLV2GUI.h"
+#include "sound/LV2PluginInstance.h"
 
 #include <QTimer>
+#include <QCloseEvent>
 
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
+#include <lv2/instance-access/instance-access.h>
+#include <lv2/parameters/parameters.h>
 
 #include "sound/LV2Utils.h"
 
@@ -54,6 +58,14 @@ namespace
             return 1;
         }
     }
+
+    void ui_closed(LV2UI_Controller controller)
+    {
+        Rosegarden::AudioPluginLV2GUIWindow* ap =
+            static_cast<Rosegarden::AudioPluginLV2GUIWindow*>(controller);
+        ap->uiClosed();
+    }
+
 }
 
 namespace Rosegarden
@@ -86,19 +98,57 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_idleFeature = {LV2_UI__idleInterface, nullptr};
     m_parentFeature = {LV2_UI__parent, (void*)winId()};
 
+    const LV2PluginInstance* pluginInstance = m_lv2Gui->getPluginInstance();
+    LV2_Handle handle = pluginInstance->getHandle();
+    m_instanceFeature = {LV2_INSTANCE_ACCESS_URI, handle};
+
+    const LV2_Descriptor* lv2d = pluginInstance->getLV2Descriptor();
+    m_dataAccess.data_access = lv2d->extension_data;
+    m_dataFeature = {LV2_DATA_ACCESS_URI, (void*)&m_dataAccess};
+
     m_resizeData.handle = this;
     m_resizeData.ui_resize = LV2Resize;
     m_resizeFeature.URI = LV2_UI__resize;
     m_resizeFeature.data = &m_resizeData;
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
+    LV2_URID sampleRateUrid = lv2utils->uridMap(LV2_PARAMETERS__sampleRate);
+    LV2_URID af_urid = lv2utils->uridMap(LV2_ATOM__Float);
+    float sampleRate = pluginInstance->getSampleRate();
+    LV2_Options_Option opt;
+    opt.context = LV2_OPTIONS_INSTANCE;
+    opt.subject = 0;
+    opt.key = sampleRateUrid;
+    opt.size = 4;
+    opt.type = af_urid;
+    opt.value = &sampleRate;
+    m_options.push_back(opt);
+    opt.subject = 0;
+    opt.key = 0;
+    opt.size = 0;
+    opt.type = 0;
+    opt.value = 0;
+    m_options.push_back(opt);
+    m_optionsFeature = {LV2_OPTIONS__options, m_options.data()};
+
+    m_extUiHost.ui_closed = &ui_closed;
+    m_extUiHost.plugin_human_id = nullptr;
+    m_extHostFeature = {LV2_EXTERNAL_UI__Host, &m_extUiHost};
+
     m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_map)};
     m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_unmap)};
+
+    // note the instance and data access features are
+    // deprecated. However some plugins require them
     m_features.push_back(&m_uridMapFeature);
     m_features.push_back(&m_uridUnmapFeature);
     m_features.push_back(&m_idleFeature);
     m_features.push_back(&m_parentFeature);
     m_features.push_back(&m_resizeFeature);
+    m_features.push_back(&m_instanceFeature);
+    m_features.push_back(&m_dataFeature);
+    m_features.push_back(&m_optionsFeature);
+    m_features.push_back(&m_extHostFeature);
     m_features.push_back(nullptr);
 
     const void* ii = uidesc->extension_data(LV2_UI__idleInterface);
@@ -143,12 +193,30 @@ LV2UI_Handle AudioPluginLV2GUIWindow::getHandle() const
     return m_handle;
 }
 
+void AudioPluginLV2GUIWindow::uiClosed()
+{
+    RG_DEBUG << "ui closed";
+    m_lv2Gui->closeUI();
+}
+
 void AudioPluginLV2GUIWindow::timeUp()
 {
     if (m_lv2II) m_lv2II->idle(m_handle);
 
     // check control outs
     m_lv2Gui->checkControlOutValues();
+}
+
+void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
+{
+    RG_DEBUG << "closeEvent";
+    event->accept();
+    // tell the ui to tidy up
+    m_lv2Gui->closeUI();
+    //if (m_pWindow) m_pWindow->setParent(nullptr);
+    //LV2Utils* lv2utils = LV2Utils::getInstance();
+    //LV2gtk* lv2gtk = lv2utils->getLV2gtk();
+    //lv2gtk->deleteWidget(m_gwidget);
 }
 
 }

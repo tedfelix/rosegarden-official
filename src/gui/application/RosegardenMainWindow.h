@@ -95,7 +95,6 @@ class TranzportClient;
 class WarningWidget;
 class DocumentConfigureDialog;
 class ConfigureDialog;
-class LV2Worker;
 
 /// The main Rosegarden application window.
 /**
@@ -1671,8 +1670,6 @@ private:
     QList<QKeySequence> m_mostRecentShortcuts;
 
     void doStop(bool autoStop);
-
-    LV2Worker* m_worker;
 
 private slots:
     void signalAction(int);

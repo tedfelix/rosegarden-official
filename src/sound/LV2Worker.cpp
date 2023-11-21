@@ -54,8 +54,7 @@ namespace {
 namespace Rosegarden
 {
 
-LV2Worker::LV2Worker(QObject* parent) :
-    QObject(parent)
+LV2Worker::LV2Worker()
 {
     RG_DEBUG << "create LV2Worker";
     m_workTimer = new QTimer(this);

@@ -20,6 +20,10 @@
 
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
+#include <lv2/data-access/data-access.h>
+#include <lv2/options/options.h>
+// the kx.studio extension
+#include "lv2_external_ui.h"
 
 #include <vector>
 
@@ -48,21 +52,32 @@ class AudioPluginLV2GUIWindow :
 
     void showGui();
     LV2UI_Handle getHandle() const;
+    void uiClosed();
+
  public slots:
     void timeUp();
 
  private:
+    void closeEvent(QCloseEvent* event) override;
+
     AudioPluginLV2GUI* m_lv2Gui;
     QTimer* m_timer;
+    LV2_Extension_Data_Feature m_dataAccess;
     LV2_Feature m_uridMapFeature;
     LV2_Feature m_uridUnmapFeature;
     LV2_Feature m_idleFeature;
     LV2_Feature m_parentFeature;
     LV2_Feature m_resizeFeature;
+    LV2_Feature m_instanceFeature;
+    LV2_Feature m_dataFeature;
+    LV2_Feature m_optionsFeature;
+    LV2_Feature m_extHostFeature;
     LV2UI_Resize m_resizeData;
     LV2UI_Idle_Interface* m_lv2II;
     LV2UI_Handle m_handle;
     std::vector<LV2_Feature*> m_features;
+    std::vector<LV2_Options_Option> m_options;
+    LV2_External_UI_Host m_extUiHost;
 };
 
 }

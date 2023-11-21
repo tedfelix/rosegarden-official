@@ -288,6 +288,23 @@ void LV2PluginInstance::getControlOutValues
     }
 }
 
+const LV2_Descriptor* LV2PluginInstance::getLV2Descriptor() const
+{
+    const LV2_Descriptor* desc = lilv_instance_get_descriptor(m_instance);
+    return desc;
+}
+
+LV2_Handle LV2PluginInstance::getHandle() const
+{
+    LV2_Handle handle = lilv_instance_get_handle(m_instance);
+    return handle;
+}
+
+int LV2PluginInstance::getSampleRate() const
+{
+    return m_sampleRate;
+}
+
 LV2PluginInstance::~LV2PluginInstance()
 {
     RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance";
