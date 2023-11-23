@@ -124,6 +124,7 @@ LV2PluginInstance::init(int idealChannelCount)
             }
             break;
         case LV2Utils::LV2CONTROL:
+        case LV2Utils::LV2MIDI:
             if (portData.portProtocol == LV2Utils::LV2ATOM) {
                 if (portData.isInput) {
                     RG_DEBUG << "Atom in port" << i << portData.name;
@@ -179,9 +180,6 @@ LV2PluginInstance::init(int idealChannelCount)
                     }
                 }
             }
-            break;
-        case LV2Utils::LV2MIDI:
-            RG_DEBUG << "LV2PluginInstance::init: port" << i << "is midi";
             break;
         }
     }
