@@ -98,6 +98,19 @@ LV2Utils::LV2Utils()
     // the LilvWorld knows all plugins
     m_world = lilv_world_new();
     lilv_world_load_all(m_world);
+
+    m_plugins = lilv_world_get_all_plugins(m_world);
+}
+
+LV2Utils::~LV2Utils()
+{
+    LOCKED;
+    lilv_world_free(m_world);
+    delete m_lv2gtk;
+}
+
+void LV2Utils::initPluginData()
+{
     const LilvPlugins* plugins = lilv_world_get_all_plugins(m_world);
 
     LILV_FOREACH (plugins, i, plugins) {
@@ -240,18 +253,15 @@ LV2Utils::LV2Utils()
         }
         m_pluginData[uri] = pluginData;
     }
-    m_plugins = lilv_world_get_all_plugins(m_world);
 }
 
-LV2Utils::~LV2Utils()
+const std::map<QString, LV2Utils::LV2PluginData>& LV2Utils::getAllPluginData()
 {
-    LOCKED;
-    lilv_world_free(m_world);
-    delete m_lv2gtk;
-}
-
-const std::map<QString, LV2Utils::LV2PluginData>& LV2Utils::getAllPluginData() const
-{
+    if (m_pluginData.size() == 0)
+        {
+            // plugin data has not yet been set (or maybe there are no plugins)
+            initPluginData();
+        }
     return m_pluginData;
 }
 

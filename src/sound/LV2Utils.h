@@ -116,7 +116,9 @@ class LV2Utils
         virtual WorkerJob* getResponse(const LV2Utils::PluginPosition& pp) = 0;
     };
 
-    const std::map<QString, LV2PluginData>& getAllPluginData() const;
+    void initPluginData();
+
+    const std::map<QString, LV2PluginData>& getAllPluginData();
     const LilvPlugin* getPluginByUri(const QString& uri) const;
     LV2PluginData getPluginData(const QString& uri) const;
     const LilvUIs* getPluginUIs(const QString& uri) const;
