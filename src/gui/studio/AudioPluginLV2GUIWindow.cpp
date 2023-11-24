@@ -218,7 +218,12 @@ AudioPluginLV2GUIWindow::portChange(uint32_t portIndex,
 
 void AudioPluginLV2GUIWindow::showGui()
 {
-    show();
+    if (m_uiType == AudioPluginLV2GUI::KX) {
+        LV2_External_UI_Widget* euw = (LV2_External_UI_Widget*)m_widget;
+        euw->show(euw);
+    } else {
+        show();
+    }
 }
 
 LV2UI_Handle AudioPluginLV2GUIWindow::getHandle() const
@@ -245,6 +250,10 @@ void AudioPluginLV2GUIWindow::timeUp()
 
     // check control outs
     m_lv2Gui->checkControlOutValues();
+    if (m_uiType == AudioPluginLV2GUI::KX) {
+        LV2_External_UI_Widget* euw = (LV2_External_UI_Widget*)m_widget;
+        euw->run(euw);
+    }
 }
 
 void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
