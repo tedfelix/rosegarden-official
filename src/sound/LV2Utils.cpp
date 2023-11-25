@@ -398,8 +398,11 @@ void LV2Utils::setPortValue(InstrumentId instrument,
         return;
     }
     LV2UPlugin& pgdata = (*pit).second;
-    LV2PluginInstance* instance = pgdata.pluginInstance;
-    instance->setPortByteArray(index, protocol, data);
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "setPortValue no pluginInstance";
+        return;
+    }
+    pgdata.pluginInstance->setPortByteArray(index, protocol, data);
 }
 
 void LV2Utils::updatePortValue(InstrumentId instrument,
@@ -469,6 +472,28 @@ void LV2Utils::runWork(const PluginPosition& pp,
         return;
     }
     pgdata.pluginInstance->runWork(size, data, resp);
+}
+
+void LV2Utils::getControlInValues(InstrumentId instrument,
+                                  int position,
+                                  std::map<int, float>& controlValues)
+{
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    auto pit = m_pluginGuis.find(pp);
+    if (pit == m_pluginGuis.end()) {
+        RG_DEBUG << "getControlInValues plugin not found" <<
+            instrument << position;
+        return;
+    }
+    const LV2UPlugin& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "getControlInValues no pluginInstance";
+        return;
+    }
+    LOCKED;
+    pgdata.pluginInstance->getControlInValues(controlValues);
 }
 
 void LV2Utils::getControlOutValues(InstrumentId instrument,

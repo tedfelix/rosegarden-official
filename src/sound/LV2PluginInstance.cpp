@@ -275,6 +275,17 @@ void LV2PluginInstance::runWork(uint32_t size,
     RG_DEBUG << "work return:" << status;
 }
 
+void LV2PluginInstance::getControlInValues
+(std::map<int, float>& controlValues)
+{
+    controlValues.clear();
+    for (auto& pair : m_controlPortsIn) {
+        int portIndex = pair.first;
+        float value = pair.second;
+        controlValues[portIndex] = value;
+    }
+}
+
 void LV2PluginInstance::getControlOutValues
 (std::map<int, float>& controlValues)
 {

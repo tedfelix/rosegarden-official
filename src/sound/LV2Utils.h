@@ -166,6 +166,10 @@ class LV2Utils
                  const void* data,
                  LV2_Worker_Respond_Function resp);
 
+    void getControlInValues(InstrumentId instrument,
+                            int position,
+                            std::map<int, float>& controlValues);
+
     void getControlOutValues(InstrumentId instrument,
                              int position,
                              std::map<int, float>& controlValues);

@@ -135,6 +135,17 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
                                            uiType);
 
     lv2utils->registerGUI(instrument, position, this);
+    // set the control in values correctly
+    std::map<int, float> controlInValues;
+    lv2utils->getControlInValues(m_instrument,
+                                 m_position,
+                                 controlInValues);
+    for(auto pair : controlInValues) {
+        int portIndex = pair.first;
+        float value = pair.second;
+        updatePortValue(portIndex, value);
+    }
+
 }
 
 AudioPluginLV2GUI::~AudioPluginLV2GUI()

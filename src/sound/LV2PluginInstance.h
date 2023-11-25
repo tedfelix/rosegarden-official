@@ -86,6 +86,7 @@ public:
                  const void* data,
                  LV2_Worker_Respond_Function resp);
 
+    void getControlInValues(std::map<int, float>& controlValues);
     void getControlOutValues(std::map<int, float>& controlValues);
 
     const LV2_Descriptor* getLV2Descriptor() const;

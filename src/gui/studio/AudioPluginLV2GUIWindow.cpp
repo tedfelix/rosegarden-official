@@ -83,6 +83,8 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_lv2Gui(lv2Gui),
     m_uiType(uiType),
     m_lv2II(nullptr),
+    m_cWidget(nullptr),
+    m_pWindow(nullptr),
     m_widget(nullptr)
 {
     RG_DEBUG << "create window" << id << uiType;
