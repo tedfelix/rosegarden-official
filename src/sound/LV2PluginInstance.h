@@ -56,11 +56,18 @@ public:
     void run(const RealTime &rt) override;
 
     void setPortValue(unsigned int portNumber, float value) override;
-    // !!!!
+    void setPortValue(const char *port_symbol,
+                      const void *value,
+                      uint32_t size,
+                      uint32_t type);
+
     void setPortByteArray(unsigned int port,
                           unsigned int protocol,
                           const QByteArray& ba);
     float getPortValue(unsigned int portNumber) override;
+    void* getPortValue(const char *port_symbol,
+                       uint32_t *size,
+                       uint32_t *type);
 
     void sendEvent(const RealTime& eventTime,
                    const void* event) override;

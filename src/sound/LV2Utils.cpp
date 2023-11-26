@@ -273,6 +273,16 @@ const LilvPlugin* LV2Utils::getPluginByUri(const QString& uri) const
     return plugin;
 }
 
+LilvState* LV2Utils::getDefaultStateByUri(const QString& uri)
+{
+    LilvNode* pluginUri = makeURINode(uri);
+    LilvState *state = lilv_state_new_from_world
+        (m_world,
+         &m_map,
+         pluginUri);
+    return state;
+}
+
 LV2Utils::LV2PluginData LV2Utils::getPluginData(const QString& uri) const
 {
     LV2PluginData emptyData;
@@ -292,6 +302,12 @@ const LilvUIs* LV2Utils::getPluginUIs(const QString& uri) const
 LilvNode* LV2Utils::makeURINode(const QString& uri) const
 {
     LilvNode* node = lilv_new_uri(m_world, qPrintable(uri));
+    return node;
+}
+
+LilvNode* LV2Utils::makeStringNode(const QString& string) const
+{
+    LilvNode* node = lilv_new_string(m_world, qPrintable(string));
     return node;
 }
 

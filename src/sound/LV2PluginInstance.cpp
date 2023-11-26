@@ -26,6 +26,30 @@
 #include <lv2/atom/util.h>
 #include <lv2/buf-size/buf-size.h>
 
+namespace
+{
+    /*const void* getPortValueFunc(const char *port_symbol,
+                                 void *user_data,
+                                 uint32_t *size,
+                                 uint32_t *type)
+    {
+        Rosegarden::LV2PluginInstance* pi =
+            (Rosegarden::LV2PluginInstance*)user_data;
+        return pi->getPortValue(port_symbol, size, type);
+        }*/
+
+    void setPortValueFunc(const char *port_symbol,
+                          void *user_data,
+                          const void *value,
+                          uint32_t size,
+                          uint32_t type)
+    {
+        Rosegarden::LV2PluginInstance* pi =
+            (Rosegarden::LV2PluginInstance*)user_data;
+        pi->setPortValue(port_symbol, value, size, type);
+    }
+}
+
 namespace Rosegarden
 {
 
@@ -367,6 +391,7 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
         const LilvNode* fnode = lilv_nodes_get(feats, i);
         RG_DEBUG << "feature:" << lilv_node_as_string(fnode);
     }
+    lilv_nodes_free(feats);
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
 
@@ -408,8 +433,8 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
         lilv_plugin_instantiate(m_plugin, sampleRate, m_features.data());
     if (!m_instance) {
         RG_WARNING << "Failed to instantiate plugin" << m_uri;
+        return;
     }
-    lilv_nodes_free(feats);
 }
 
 void
@@ -468,6 +493,19 @@ LV2PluginInstance::connectPorts()
         RG_DEBUG << "connect atom out port" << aop.index;
         lilv_instance_connect_port(m_instance, aop.index, aop.atomSeq);
     }
+
+    // initialze the plugin state
+    RG_DEBUG << "setting default state";
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    LilvState* defaultState = lv2utils->getDefaultStateByUri(m_uri);
+    lilv_state_restore(defaultState,
+                       m_instance,
+                       setPortValueFunc,
+                       this,
+                       0,
+                       m_features.data());
+    lilv_state_free(defaultState);
+    RG_DEBUG << "setting default state done";
 }
 
 void
@@ -485,6 +523,40 @@ LV2PluginInstance::setPortValue
     if (value > m_pluginData.ports[portNumber].max)
         value = m_pluginData.ports[portNumber].max;
     m_controlPortsIn[portNumber] = value;
+}
+
+void LV2PluginInstance::setPortValue(const char *port_symbol,
+                                     const void *value,
+                                     uint32_t size,
+                                     uint32_t type)
+{
+    RG_DEBUG << "setPortValue" << port_symbol;
+
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    LilvNode* symNode = lv2utils->makeStringNode(port_symbol);
+    const LilvPort* port = lilv_plugin_get_port_by_symbol(m_plugin,
+                                                          symNode);
+
+    lilv_free(symNode);
+    int index =  lilv_port_get_index(m_plugin, port);
+
+    uint32_t floatType = lv2utils->uridMap(LV2_ATOM__Float);
+    uint32_t intType = lv2utils->uridMap(LV2_ATOM__Int);
+    if (size != 4) {
+        RG_DEBUG << "bad size" << size;
+        return;
+    }
+    if (type == floatType) {
+        float fval = *((float*)value);
+        RG_DEBUG << "setting float value" << fval;
+        setPortValue(index, fval);
+    } else if (type == intType) {
+        int ival = *((int*)value);
+        RG_DEBUG << "setting int value" << ival;
+        setPortValue(index, (float)ival);
+    } else {
+        RG_DEBUG << "unknown type" << type <<lv2utils->uridUnmap(type);
+    }
 }
 
 void

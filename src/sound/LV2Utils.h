@@ -120,9 +120,11 @@ class LV2Utils
 
     const std::map<QString, LV2PluginData>& getAllPluginData();
     const LilvPlugin* getPluginByUri(const QString& uri) const;
+    LilvState* getDefaultStateByUri(const QString& uri);
     LV2PluginData getPluginData(const QString& uri) const;
     const LilvUIs* getPluginUIs(const QString& uri) const;
     LilvNode* makeURINode(const QString& uri) const;
+    LilvNode* makeStringNode(const QString& string) const;
 
     void lock();
     void unlock();

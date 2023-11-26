@@ -14,6 +14,7 @@
 */
 
 #define RG_MODULE_STRING "[JackDriver]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "JackDriver.h"
 #include "AlsaDriver.h"
@@ -2339,12 +2340,9 @@ JackDriver::setPluginInstance(InstrumentId id, QString identifier,
     if (m_instrumentMixer) {
         m_instrumentMixer->setPlugin(id, position, identifier);
     }
-    // prebufferAudio can not be called here as it runs the plugin and
-    // the control inputs have not yet been set. This can cause
-    // problems for some plugins.
-    //if (!m_alsaDriver->isPlaying()) {
-    //    prebufferAudio(); // to ensure the plugin's ringbuffers are generated
-    //}
+    if (!m_alsaDriver->isPlaying()) {
+        prebufferAudio(); // to ensure the plugin's ringbuffers are generated
+    }
 }
 
 void

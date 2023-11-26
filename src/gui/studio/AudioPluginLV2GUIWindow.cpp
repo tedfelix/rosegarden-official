@@ -104,6 +104,10 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_parentFeature = {LV2_UI__parent, (void*)winId()};
 
     const LV2PluginInstance* pluginInstance = m_lv2Gui->getPluginInstance();
+    if (! pluginInstance) {
+        RG_DEBUG << "no instance";
+        return;
+    }
     LV2_Handle handle = pluginInstance->getHandle();
     m_instanceFeature = {LV2_INSTANCE_ACCESS_URI, handle};
 
