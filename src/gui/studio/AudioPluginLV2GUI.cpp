@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginLV2GUI]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginLV2GUI.h"
 #include "AudioPluginLV2GUIWindow.h"
@@ -81,11 +81,13 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
             m_uiType = X11;
             break;
         }
+#ifdef HAVE_GTK2
         if (lilv_ui_is_a(ui, gtkUI)) {
             m_selectedUI = ui;
             m_uiType = GTK;
             break;
         }
+#endif
         if (lilv_ui_is_a(ui, kxUI)) {
             m_selectedUI = ui;
             m_uiType = KX;
@@ -95,6 +97,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     lilv_node_free(x11UI);
     lilv_node_free(gtkUI);
     lilv_node_free(kxUI);
+    m_uidesc = nullptr;
     if (! m_selectedUI)
         {
             RG_DEBUG << "no usable ui found";
@@ -113,7 +116,6 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     void* vpdf = dlsym(m_uilib, "lv2ui_descriptor");
     LV2UI_DescriptorFunction pdf = (LV2UI_DescriptorFunction)vpdf;
     int ui_index = 0;
-    m_uidesc = nullptr;
     while(true) {
         const LV2UI_Descriptor* uidesci = (*pdf)(ui_index);
         if (uidesci == nullptr) break;
@@ -123,9 +125,9 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
                 break;
             }
         ui_index++;
+        RG_DEBUG << "descriptor: " << m_uidesc;
+        m_title = sname;
     }
-    RG_DEBUG << "descriptor: " << m_uidesc;
-    m_title = sname;
 }
 
 AudioPluginLV2GUI::~AudioPluginLV2GUI()
@@ -153,12 +155,14 @@ AudioPluginLV2GUI::getId() const
 bool
 AudioPluginLV2GUI::hasGUI() const
 {
+    RG_DEBUG << "hasGui" << m_uidesc;
     return (m_uidesc != nullptr);
 }
 
 void
 AudioPluginLV2GUI::showGui()
 {
+    if (! m_uidesc) return;
     if (! m_window) {
         // create the window now
         LV2Utils* lv2utils = LV2Utils::getInstance();

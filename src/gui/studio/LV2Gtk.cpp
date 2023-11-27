@@ -17,6 +17,8 @@
 
 #include "LV2Gtk.h"
 
+#ifdef HAVE_GTK2
+
 // gtk can give wanings
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -24,8 +26,6 @@
 #pragma GCC diagnostic pop
 
 #include <gdk/gdkx.h>
-
-#ifdef HAVE_GTK2
 
 namespace {
     void size_request(GtkWidget*, GtkRequisition *req, gpointer user_data)
@@ -135,6 +135,7 @@ void LV2Gtk::startUp()
     gtk_init (&argc, &argv);
 }
 
+}
 #else
 
 // no gtk2 - dummy versions
@@ -149,23 +150,23 @@ void LV2Gtk::tick()
 {
 }
 
-LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget lv2Widget,
-                                       SizeCallback* sizecb)
+LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget,
+                                       SizeCallback*)
 {
     LV2GtkWidget ret;
     return ret;
 }
 
-void LV2Gtk::getSize(const LV2GtkWidget& widget, int& width, int& height)
+void LV2Gtk::getSize(const LV2GtkWidget&, int&, int&)
 {
 }
 
-long int LV2Gtk::getWinId(const LV2GtkWidget& widget)
+long int LV2Gtk::getWinId(const LV2GtkWidget&)
 {
     return 0;
 }
 
-void LV2Gtk::deleteWidget(const LV2GtkWidget& widget)
+void LV2Gtk::deleteWidget(const LV2GtkWidget&)
 {
 }
 
@@ -175,5 +176,3 @@ void LV2Gtk::startUp()
 
 }
 #endif
-
-}
