@@ -67,43 +67,43 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     // http://lv2plug.in/ns/extensions/ui#GtkUI (eg. calf)
     // http://lv2plug.in/ns/extensions/ui#X11UI (eg. guitarix)
     // kx studio external widget extension
-    UIType uiType = NONE;
+    m_uiType = NONE;
     LilvNode* x11UI = lv2utils->makeURINode(LV2_UI__X11UI);
     LilvNode* gtkUI = lv2utils->makeURINode(LV2_UI__GtkUI);
     LilvNode* kxUI = lv2utils->makeURINode(LV2_EXTERNAL_UI__Widget);
 
     m_uis = lilv_plugin_get_uis(plugin);
-    const LilvUI* selectedUI = nullptr;
+    m_selectedUI = nullptr;
     LILV_FOREACH(uis, it, m_uis) {
         const LilvUI* ui = lilv_uis_get(m_uis, it);
         if (lilv_ui_is_a(ui, x11UI)) {
-            selectedUI = ui;
-            uiType = X11;
+            m_selectedUI = ui;
+            m_uiType = X11;
             break;
         }
         if (lilv_ui_is_a(ui, gtkUI)) {
-            selectedUI = ui;
-            uiType = GTK;
+            m_selectedUI = ui;
+            m_uiType = GTK;
             break;
         }
         if (lilv_ui_is_a(ui, kxUI)) {
-            selectedUI = ui;
-            uiType = KX;
+            m_selectedUI = ui;
+            m_uiType = KX;
             break;
         }
     }
     lilv_node_free(x11UI);
     lilv_node_free(gtkUI);
     lilv_node_free(kxUI);
-    if (! selectedUI)
+    if (! m_selectedUI)
         {
             RG_DEBUG << "no usable ui found";
             return;
         }
-    const LilvNode *uiUri = lilv_ui_get_uri(selectedUI);
+    const LilvNode *uiUri = lilv_ui_get_uri(m_selectedUI);
     QString uiUris = lilv_node_as_string(uiUri);
-    RG_DEBUG << "ui uri:" << uiUris << uiType;
-    const LilvNode* uib = lilv_ui_get_binary_uri(selectedUI);
+    RG_DEBUG << "ui uri:" << uiUris << m_uiType;
+    const LilvNode* uib = lilv_ui_get_binary_uri(m_selectedUI);
     QString binary_uri = lilv_node_as_uri(uib);
     QString bpath =
         lilv_file_uri_parse(binary_uri.toStdString().c_str(), nullptr);
@@ -125,27 +125,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
         ui_index++;
     }
     RG_DEBUG << "descriptor: " << m_uidesc;
-    QString title = sname;
-
-    m_window = new AudioPluginLV2GUIWindow(this,
-                                           title,
-                                           selectedUI,
-                                           m_uidesc,
-                                           m_id,
-                                           uiType);
-
-    lv2utils->registerGUI(instrument, position, this);
-    // set the control in values correctly
-    std::map<int, float> controlInValues;
-    lv2utils->getControlInValues(m_instrument,
-                                 m_position,
-                                 controlInValues);
-    for(auto pair : controlInValues) {
-        int portIndex = pair.first;
-        float value = pair.second;
-        updatePortValue(portIndex, value);
-    }
-
+    m_title = sname;
 }
 
 AudioPluginLV2GUI::~AudioPluginLV2GUI()
@@ -177,8 +157,30 @@ AudioPluginLV2GUI::hasGUI() const
 }
 
 void
-AudioPluginLV2GUI::showGui() const
+AudioPluginLV2GUI::showGui()
 {
+    if (! m_window) {
+        // create the window now
+        LV2Utils* lv2utils = LV2Utils::getInstance();
+        m_window = new AudioPluginLV2GUIWindow(this,
+                                               m_title,
+                                               m_selectedUI,
+                                               m_uidesc,
+                                               m_id,
+                                               m_uiType);
+
+        lv2utils->registerGUI(m_instrument, m_position, this);
+        // set the control in values correctly
+        std::map<int, float> controlInValues;
+        lv2utils->getControlInValues(m_instrument,
+                                     m_position,
+                                     controlInValues);
+        for(auto pair : controlInValues) {
+            int portIndex = pair.first;
+            float value = pair.second;
+            updatePortValue(portIndex, value);
+        }
+    }
     if (m_window) m_window->showGui();
 }
 

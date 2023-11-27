@@ -52,7 +52,7 @@ class AudioPluginLV2GUI
     QString getId() const;
     bool hasGUI() const;
 
-    void showGui() const;
+    void showGui();
 
     void portChange(uint32_t portIndex,
                     uint32_t bufferSize,
@@ -82,6 +82,9 @@ class AudioPluginLV2GUI
     LV2_URID m_atomTransferUrid;
     std::map<int, float> m_controlOutValues;
     bool m_firstUpdate;
+    QString m_title;
+    const LilvUI* m_selectedUI;
+    UIType m_uiType;
 };
 
 }

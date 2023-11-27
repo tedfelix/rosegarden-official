@@ -79,7 +79,7 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_bypassed(false),
         m_distributeChannels(false)
 {
-    RG_DEBUG << "create plugin" << uri;
+    RG_DEBUG << "create plugin" << uri << m_instrument << m_position;
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
     m_atomTransferUrid = lv2utils->uridMap(LV2_ATOM__eventTransfer);
