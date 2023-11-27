@@ -89,6 +89,9 @@ public:
     virtual void discardEvents() { }
     virtual void setIdealChannelCount(size_t channels) = 0; // must also silence(); may also re-instantiate
 
+    // default implementation does nothing
+    virtual void audioProcessingDone() {}
+
     void setFactory(PluginFactory *f) { m_factory = f; } // ew
 
 protected:

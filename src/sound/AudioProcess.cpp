@@ -1576,6 +1576,37 @@ AudioInstrumentMixer::updateInstrumentMuteStates()
     }
 }
 
+void AudioInstrumentMixer::audioProcessingDone()
+{
+    for (SynthPluginMap::iterator i = m_synths.begin();
+         i != m_synths.end(); ++i) {
+        if (i->second) {
+            RunnablePluginInstance *instance = i->second;
+            if (instance) instance->audioProcessingDone();
+        }
+    }
+
+    for (PluginMap::iterator j = m_plugins.begin();
+         j != m_plugins.end(); ++j) {
+
+        PluginList &list = j->second;
+
+        for (PluginList::iterator i = list.begin(); i != list.end(); ++i) {
+            RunnablePluginInstance *instance = *i;
+            if (instance) instance->audioProcessingDone();
+        }
+    }
+
+
+
+
+
+
+
+
+
+}
+
 void
 AudioInstrumentMixer::processBlocks(bool &readSomething)
 {

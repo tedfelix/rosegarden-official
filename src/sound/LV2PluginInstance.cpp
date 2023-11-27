@@ -77,7 +77,8 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_latencyPort(nullptr),
         m_run(false),
         m_bypassed(false),
-        m_distributeChannels(false)
+        m_distributeChannels(false),
+        m_pluginHasRun(false)
 {
     RG_DEBUG << "create plugin" << uri << m_instrument << m_position;
 
@@ -336,6 +337,18 @@ LV2_Handle LV2PluginInstance::getHandle() const
 int LV2PluginInstance::getSampleRate() const
 {
     return m_sampleRate;
+}
+
+void LV2PluginInstance::audioProcessingDone()
+{
+    // the plugin should always be run to handle ui - plugin
+    // communication. So if rosegarden is not playing or recording we
+    // must run the plugin here.
+    if (! m_pluginHasRun) {
+        run(RealTime::zero());
+    }
+    // reset the status
+    m_pluginHasRun = false;
 }
 
 LV2PluginInstance::~LV2PluginInstance()
@@ -614,7 +627,7 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
 void
 LV2PluginInstance::run(const RealTime &rt)
 {
-    RG_DEBUG << "run" << rt;
+    m_pluginHasRun = true;
     LV2Utils* lv2utils = LV2Utils::getInstance();
     lv2utils->lock();
 
@@ -679,7 +692,7 @@ LV2PluginInstance::run(const RealTime &rt)
         // mono plugin. If this is the case there are exactly 2 input
         // and output buffers. The first ones are connected to the
         // plugin
-        RG_DEBUG << "distribute stereo -> mono";
+        //RG_DEBUG << "distribute stereo -> mono";
         for (size_t i = 0; i < m_blockSize; ++i) {
                     m_inputBuffers[0][i] =
                         (m_inputBuffers[0][i] + m_inputBuffers[1][i]) / 2.0;

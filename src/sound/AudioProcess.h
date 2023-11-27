@@ -278,6 +278,9 @@ public:
     /// For call regularly from anywhere in a non-RT thread
     void updateInstrumentMuteStates();
 
+    /// called when audio processing is done
+    void audioProcessingDone();
+
 protected:
     void threadRun() override;
 

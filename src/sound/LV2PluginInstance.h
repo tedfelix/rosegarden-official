@@ -102,6 +102,8 @@ public:
 
     int getSampleRate() const;
 
+    virtual void audioProcessingDone() override;
+
 protected:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;
@@ -178,6 +180,7 @@ protected:
 
     bool m_distributeChannels;
     LV2_URID m_atomTransferUrid;
+    bool m_pluginHasRun;
 };
 
 }

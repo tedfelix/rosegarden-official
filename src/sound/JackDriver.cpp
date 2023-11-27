@@ -785,10 +785,13 @@ int
 JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 {
     JackDriver *inst = static_cast<JackDriver*>(arg);
-    if (inst)
-        return inst->jackProcess(nframes);
-    else
+    if (inst) {
+        int ret = inst->jackProcess(nframes);
+        inst->jackProcessDone();
+        return ret;
+    } else {
         return 0;
+    }
 }
 
 int
@@ -1282,6 +1285,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 
     return 0;
+}
+
+void JackDriver::jackProcessDone()
+{
+    if (m_instrumentMixer)
+        m_instrumentMixer->audioProcessingDone();
+
 }
 
 int

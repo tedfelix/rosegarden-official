@@ -211,6 +211,10 @@ protected:
 
     // jackProcessStatic delegates to this
     int          jackProcess(jack_nframes_t nframes);
+
+    // jackProcessDone is called at the end of the audio processing
+    void jackProcessDone();
+
     int          jackProcessRecord(InstrumentId id,
                                    jack_nframes_t nframes,
                                    sample_t *, sample_t *, bool);
