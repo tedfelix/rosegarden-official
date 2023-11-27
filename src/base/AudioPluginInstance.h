@@ -38,7 +38,8 @@ public:
         Input    = 0x01,
         Output   = 0x02,
         Control  = 0x04,
-        Audio    = 0x08
+        Audio    = 0x08,
+        Event    = 0x10
     } PortType;
 
     typedef enum

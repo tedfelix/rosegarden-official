@@ -677,6 +677,7 @@ AudioPluginDialog::slotPluginSelected(int index)
              ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
                 ((*it)->getType() & PluginPort::Input) &&
+                ! ((*it)->getType() & PluginPort::Event) &&
                 !hidden) {
                 PluginControl *control =
                     new PluginControl(m_pluginParamsBox,

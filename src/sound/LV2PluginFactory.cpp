@@ -102,6 +102,9 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
             } else {
                 type |= PluginPort::Audio;
             }
+            if (portData.portProtocol == LV2Utils::LV2ATOM) {
+                type |= PluginPort::Event;
+            }
             if (portData.isInput) {
                 type |= PluginPort::Input;
             } else {
