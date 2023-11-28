@@ -13,7 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[LV2PluginInstance]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginInstance.h"
 #include "LV2PluginFactory.h"
@@ -345,7 +345,7 @@ void LV2PluginInstance::audioProcessingDone()
     // communication. So if rosegarden is not playing or recording we
     // must run the plugin here.
     if (! m_pluginHasRun) {
-        run(RealTime::zero());
+        run(RealTime::fromSeconds(-100.0));
     }
     // reset the status
     m_pluginHasRun = false;
@@ -527,7 +527,7 @@ LV2PluginInstance::setPortValue
 {
     RG_DEBUG << "setPortValue" << portNumber << value;
     auto it = m_controlPortsIn.find(portNumber);
-    if (it == m_controlPortsIn.end()) {
+   if (it == m_controlPortsIn.end()) {
         RG_DEBUG << "port not found";
         return;
     }
@@ -621,7 +621,17 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
                              const void* event)
 {
     snd_seq_event_t *seqEvent = (snd_seq_event_t *)event;
-    m_eventBuffer[eventTime] = *seqEvent;
+    unsigned char buf[100];
+    int bytes = snd_midi_event_decode(m_midiParser, buf, 100, seqEvent);
+    if (bytes <= 0) {
+        RG_DEBUG << "error decoding midi event";
+    }
+    QByteArray rawMidi;
+    for(int irm=0; irm<bytes; irm++) {
+        rawMidi.append(buf[irm]);
+    }
+    m_eventBuffer[eventTime] = rawMidi;
+    RG_DEBUG << "sendEvent" << eventTime << rawMidi.toHex();
 }
 
 void
@@ -635,31 +645,15 @@ LV2PluginInstance::run(const RealTime &rt)
     auto it = m_eventBuffer.begin();
     while(it != m_eventBuffer.end()) {
         RealTime evTime = (*it).first;
-        snd_seq_event_t& qEvent = (*it).second;
+        QByteArray rawMidi = (*it).second;
         if (evTime < bufferStart) evTime = bufferStart;
         size_t frameOffset =
             (size_t)RealTime::realTime2Frame(evTime - bufferStart,
                                              m_sampleRate);
         if (frameOffset > m_blockSize) break;
         // the event is in this block
-
-        unsigned char buf[100];
-        int bytes = snd_midi_event_decode(m_midiParser, buf, 100, &qEvent);
-        if (bytes <= 0) {
-            RG_DEBUG << "error decoding midi event";
-            lv2utils->unlock();
-            return;
-        }
-
-#ifndef NDEBUG
-        QString rawMidi;
-        for(int irm=0; irm<bytes; irm++) {
-            QString byte = QString("%1").arg((int)buf[irm]);
-            rawMidi += byte;
-            if (irm < bytes-1) rawMidi += "/";
-        }
-        RG_DEBUG << "send event to plugin" << evTime << frameOffset << rawMidi;
-#endif
+        RG_DEBUG << "send event to plugin" <<
+            evTime << frameOffset << rawMidi.toHex();
         auto iterToDelete = it;
         it++;
         m_eventBuffer.erase(iterToDelete);
@@ -667,12 +661,12 @@ LV2PluginInstance::run(const RealTime &rt)
         char midiBuf[1000];
         LV2_Atom_Event* event = (LV2_Atom_Event*)midiBuf;
         event->time.frames = frameOffset;
-        event->body.size = bytes;
+        event->body.size = rawMidi.size();
         event->body.type = m_midiEventUrid;
 
         int ebs = sizeof(LV2_Atom_Event);
-        for(int ib=0; ib<bytes; ib++) {
-            midiBuf[ebs + ib] = buf[ib];
+        for(int ib=0; ib<rawMidi.size(); ib++) {
+            midiBuf[ebs + ib] = rawMidi[ib];
         }
         for (auto& aip : m_atomInputPorts) {
             if (aip.isMidi) {
@@ -730,7 +724,7 @@ LV2PluginInstance::run(const RealTime &rt)
 
     // get atom out data
     for(auto& ap : m_atomOutputPorts) {
-        RG_DEBUG << "check atom out" << ap.index;
+        //RG_DEBUG << "check atom out" << ap.index;
         LV2_Atom_Sequence* aseq = ap.atomSeq;
         LV2_ATOM_SEQUENCE_FOREACH(aseq, ev) {
             if (ev->body.type == m_midiEventUrid) {

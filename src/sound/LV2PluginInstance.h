@@ -155,7 +155,7 @@ protected:
     std::vector<int> m_audioPortsOut;
     size_t m_channelCount;
 
-    std::map<RealTime, snd_seq_event_t> m_eventBuffer;
+    std::map<RealTime, QByteArray> m_eventBuffer;
     snd_midi_event_t *m_midiParser;
     LV2_URID m_midiEventUrid;
 
