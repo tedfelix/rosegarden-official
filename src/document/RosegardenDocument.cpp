@@ -1745,8 +1745,9 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 for (std::set<QString>::iterator i = handler.pluginsNotFound().begin();
                      i != handler.pluginsNotFound().end(); ++i) {
                     QString ident = *i;
-                    QString type, soName, label;
-                    PluginIdentifier::parseIdentifier(ident, type, soName, label);
+                    QString type, soName, label, arch;
+                    PluginIdentifier::parseIdentifier
+                        (ident, type, soName, label, arch);
                     QString pluginFileName = QFileInfo(soName).fileName();
                     msg += tr("<li>%1 (from %2)</li>").arg(label).arg(pluginFileName);
                 }

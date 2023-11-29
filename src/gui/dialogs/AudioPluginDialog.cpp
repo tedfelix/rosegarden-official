@@ -374,9 +374,10 @@ AudioPluginDialog::populatePluginList()
                 // LADSPA plugin, replace it (this one might be
                 // something better); otherwise leave it alone.
                 QString id = pluginsSorted[name].second->getIdentifier();
-                QString type, soname, label;
-                PluginIdentifier::parseIdentifier(id, type, soname, label);
-                if (type != "ladspa") {
+                QString type, soname, label, arch;
+                PluginIdentifier::parseIdentifier
+                    (id, type, soname, label, arch);
+                if (arch != "ladspa") {
                     store = false;
                 }
             }
@@ -409,8 +410,8 @@ AudioPluginDialog::populatePluginList()
             name = name.left(name.length() - 4);
 
         QString id = i->second.second->getIdentifier();
-        QString type, soname, label;
-        PluginIdentifier::parseIdentifier(id, type, soname, label);
+        QString type, soname, label, arch;
+        PluginIdentifier::parseIdentifier(id, type, soname, label, arch);
 
         QString tname = type + ":" + name;
 

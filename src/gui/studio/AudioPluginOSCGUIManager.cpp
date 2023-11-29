@@ -313,8 +313,8 @@ AudioPluginOSCGUIManager::getOSCUrl(InstrumentId instrument, int position,
     //   osc.udp://localhost:54343/plugin/dssi/<instrument>/<position>/<label>
     // where <position> will be "synth" for synth plugins
 
-    QString type, soName, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+    QString type, soName, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soName, label, arch);
 
     QString baseUrl = lo_server_thread_get_url(m_serverThread);
     if (!baseUrl.endsWith("/"))
@@ -392,8 +392,8 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     }
 
     QString identifier = strtoqstr(pluginInstance->getIdentifier());
-    QString iType, iSoName, iLabel;
-    PluginIdentifier::parseIdentifier(identifier, iType, iSoName, iLabel);
+    QString iType, iSoName, iLabel, arch;
+    PluginIdentifier::parseIdentifier(identifier, iType, iSoName, iLabel, arch);
     if (iLabel != label) {
         RG_WARNING << "parseOSCPath(): wrong label for plugin at position " << position << " for instrument " << instrument << " in path " << path << " (actual label is " << iLabel << ")";
         return false;

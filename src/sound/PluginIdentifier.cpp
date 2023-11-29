@@ -31,21 +31,25 @@ void
 PluginIdentifier::parseIdentifier(QString identifier,
                                   QString &type,
                                   QString &soName,
-                                  QString &label)
+                                  QString &label,
+                                  QString &architecture)
 {
     type = identifier.section(':', 0, 0);
     soName = identifier.section(':', 1, 1);
     label = identifier.section(':', 2);
-    if (type == "http") type = "lv2";
+    architecture = type;
+    // lv2 does not have a fixed type. Assume anything that is not
+    // ladspa or dssi andi is not empty is lv2
+    if (type != "ladspa" && type != "dssi" && type != "") architecture = "lv2";
 }
 
 bool
 PluginIdentifier::areIdentifiersSimilar(QString id1, QString id2)
 {
-    QString type1, type2, soName1, soName2, label1, label2;
+    QString type1, type2, soName1, soName2, label1, label2, arch1, arch2;
 
-    parseIdentifier(id1, type1, soName1, label1);
-    parseIdentifier(id2, type2, soName2, label2);
+    parseIdentifier(id1, type1, soName1, label1, arch1);
+    parseIdentifier(id2, type2, soName2, label2, arch2);
 
     if (type1 != type2 || label1 != label2)
         return false;

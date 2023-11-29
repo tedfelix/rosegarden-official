@@ -27,11 +27,14 @@ namespace Rosegarden {
 class PluginIdentifier {
 
 public:
- 
+
     static QString createIdentifier(QString type, QString soName, QString label);
 
     static void parseIdentifier(QString identifier,
-                                QString &type, QString &soName, QString &label);
+                                QString &type,
+                                QString &soName,
+                                QString &label,
+                                QString &architecture);
 
     static bool areIdentifiersSimilar(QString id1, QString id2);
 

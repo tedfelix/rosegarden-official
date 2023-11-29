@@ -184,11 +184,11 @@ AudioPluginGUIManager::getArchitecture(InstrumentId instrument, int position)
     if (!pluginInstance) return UNKNOWN;
 
     QString id = strtoqstr(pluginInstance->getIdentifier());
-    QString iType, iSoName, iLabel;
-    PluginIdentifier::parseIdentifier(id, iType, iSoName, iLabel);
-    RG_DEBUG << "iType:" << iType;
-    if (iType == "ladspa" || iType == "dssi") return OSC;
-    if (iType == "lv2") return LV2;
+    QString iType, iSoName, iLabel, arch;
+    PluginIdentifier::parseIdentifier(id, iType, iSoName, iLabel, arch);
+    RG_DEBUG << "arch:" << arch;
+    if (arch == "ladspa" || arch == "dssi") return OSC;
+    if (arch == "lv2") return LV2;
     return UNKNOWN;
 }
 

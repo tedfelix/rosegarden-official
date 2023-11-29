@@ -176,8 +176,8 @@ DSSIPluginFactory::instantiatePlugin(QString identifier,
 const DSSI_Descriptor *
 DSSIPluginFactory::getDSSIDescriptor(QString identifier)
 {
-    QString type, soname, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
+    QString type, soname, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label, arch);
 
     if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
         loadLibrary(soname);

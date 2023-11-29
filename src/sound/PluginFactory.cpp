@@ -73,9 +73,9 @@ PluginFactory::instance(QString pluginType)
 PluginFactory *
 PluginFactory::instanceFor(QString identifier)
 {
-    QString type, soName, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
-    return instance(type);
+    QString type, soName, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soName, label, arch);
+    return instance(arch);
 }
 
 void

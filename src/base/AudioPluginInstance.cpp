@@ -251,8 +251,9 @@ AudioPluginInstance::getDisplayName() const
     QString identifier = strtoqstr(getIdentifier());
 
     if (identifier != "") {
-        QString type, soName, label;
-        PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+        QString type, soName, label, arch;
+        PluginIdentifier::parseIdentifier
+            (identifier, type, soName, label, arch);
 
         if (displayName == "")
             displayName = strtoqstr(getDistinctiveConfigurationText());

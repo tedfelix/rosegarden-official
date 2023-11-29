@@ -435,8 +435,8 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
         return ;
     }
 
-    QString type, soname, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
+    QString type, soname, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label, arch);
 
     m_instances.erase(m_instances.find(instance));
 
@@ -445,8 +445,8 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
     for (std::set
                 <RunnablePluginInstance *>::iterator ii = m_instances.begin();
                 ii != m_instances.end(); ++ii) {
-            QString itype, isoname, ilabel;
-            PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+        QString itype, isoname, ilabel, iarch;
+        PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel, iarch);
             if (isoname == soname) {
                 //std::cerr << "LADSPAPluginFactory::releasePlugin: dll " << soname << " is still in use for plugin " << ilabel << std::endl;
                 stillInUse = true;
@@ -463,8 +463,8 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
 const LADSPA_Descriptor *
 LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 {
-    QString type, soname, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
+    QString type, soname, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label, arch);
 
     if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
         loadLibrary(soname);
@@ -546,8 +546,8 @@ LADSPAPluginFactory::unloadUnusedLibraries()
                     <RunnablePluginInstance *>::iterator ii = m_instances.begin();
                     ii != m_instances.end(); ++ii) {
 
-                QString itype, isoname, ilabel;
-                PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+            QString itype, isoname, ilabel, iarch;
+            PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel, iarch);
                 if (isoname == i->first) {
                     stillInUse = true;
                     break;
