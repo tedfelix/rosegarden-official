@@ -105,7 +105,13 @@ SegmentInsertCommand::execute()
                 label = track->getLabel();
             } else {
                 // Try to get a reasonable Segment name by Instrument.
-                label = m_studio->getSegmentName(track->getInstrument());
+                std::string name =
+                    m_studio->getSegmentName(track->getInstrument());
+
+                // If possible, translate it
+                QString qname = QString::fromLocal8Bit(name.c_str());
+                QString translatedName = QObject::tr(qname.toLocal8Bit());
+                label = translatedName.toLocal8Bit().toStdString();
 
                 // If that failed, use the track name.
                 if (label == "")
