@@ -13,6 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginInstance]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "base/AudioPluginInstance.h"
 
@@ -246,25 +247,29 @@ AudioPluginInstance::getDisplayName() const
 {
     QString displayName = strtoqstr(getProgram());
 
+    // the comment below applies to dssi plugins but not to LV2
+    // plugins. The label is now set externally. For dssi plugins this
+    // is exactly the string from the identifier so no change - but it
+    // now works for LV2!
+
     // The identifier contains the name of the soft synth in the "label"
     // part.
-    QString identifier = strtoqstr(getIdentifier());
+    //QString identifier = strtoqstr(getIdentifier());
 
-    if (identifier != "") {
-        QString type, soName, label, arch;
-        PluginIdentifier::parseIdentifier
-            (identifier, type, soName, label, arch);
+    if (displayName == "")
+        displayName = strtoqstr(getDistinctiveConfigurationText());
 
-        if (displayName == "")
-            displayName = strtoqstr(getDistinctiveConfigurationText());
-
-        if (displayName != "")
-            displayName = label + ": " + displayName;
-        else
-            displayName = label;
-    }
+    if (displayName != "")
+        displayName = strtoqstr(m_label) + ": " + displayName;
+    else
+        displayName = strtoqstr(m_label);
 
     return qstrtostr(displayName);
+}
+
+void AudioPluginInstance::setLabel(const std::string& label)
+{
+    m_label = label;
 }
 
 }

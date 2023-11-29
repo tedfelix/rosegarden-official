@@ -148,6 +148,8 @@ public:
 
     std::string getDisplayName() const;
 
+    void setLabel(const std::string& label);
+
 protected:
 
     int                                m_mappedId;
@@ -165,6 +167,8 @@ protected:
     std::string                        m_program;
 
     ConfigMap                          m_config;
+ private:
+    std::string m_label;
 };
 
 }

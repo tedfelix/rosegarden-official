@@ -1942,6 +1942,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     m_plugin->setAssigned(true);
                     m_plugin->setBypass(bypassed);
                     m_plugin->setIdentifier( qstrtostr( plugin->getIdentifier() ) );
+                    m_plugin->setLabel(qstrtostr(plugin->getLabel()));
                     RG_DEBUG << "set identifier to plugin at position " << position << " of container " << container->getId();
                     if (program != "") {
                         m_plugin->setProgram(program);

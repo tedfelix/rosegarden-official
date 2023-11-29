@@ -556,6 +556,7 @@ AudioPluginDialog::slotPluginSelected(int index)
             if (inst->getIdentifier() != identifier) {
                 inst->clearConfiguration();
             }
+            inst->setLabel(qstrtostr(plugin->getLabel()));
         }
 
         inst->setIdentifier(identifier);
