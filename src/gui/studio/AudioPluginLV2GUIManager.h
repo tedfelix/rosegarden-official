@@ -22,6 +22,10 @@
 
 #include <lilv/lilv.h>
 
+#include <QObject>
+
+class QTimer;
+
 namespace Rosegarden
 {
 
@@ -30,7 +34,7 @@ class AudioPluginLV2GUI;
 class LV2Worker;
 
 // cppcheck-suppress noConstructor
-class AudioPluginLV2GUIManager
+ class AudioPluginLV2GUIManager : public QObject
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioPluginLV2GUIManager)
 
@@ -48,6 +52,9 @@ public:
     void updateConfiguration(InstrumentId instrument, int position,
                              const QString& key);
 
+ public slots:
+    void slotStopGUIDelayed();
+
  private:
     AudioPluginLV2GUI* getInstance(InstrumentId instrument, int position);
 
@@ -58,6 +65,10 @@ public:
     typedef std::map<int, AudioPluginLV2GUI *> IntGUIMap;
     typedef std::map<int, IntGUIMap> GUIMap;
     GUIMap m_guis;
+    QTimer* m_timer;
+    // values for delayed stopGUI
+    InstrumentId m_instrument;
+    int m_position;
 };
 
 }

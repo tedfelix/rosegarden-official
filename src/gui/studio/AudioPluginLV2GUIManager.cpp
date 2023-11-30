@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginLV2GUIManager]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginLV2GUIManager.h"
 
@@ -31,11 +31,17 @@ namespace Rosegarden
 
 AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWindow) :
         m_mainWindow(mainWindow),
-        m_studio(nullptr)
+        m_studio(nullptr),
+        m_instrument(0),
+        m_position(0)
 {
     m_worker = new LV2Worker;
     LV2Utils* lv2utils = LV2Utils::getInstance();
     lv2utils->registerWorker(m_worker);
+    m_timer = new QTimer(this);
+    m_timer->setSingleShot(true);
+    connect(m_timer, &QTimer::timeout,
+            this, &AudioPluginLV2GUIManager::slotStopGUIDelayed);
 }
 
 AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
@@ -77,13 +83,22 @@ AudioPluginLV2GUIManager::showGUI(InstrumentId instrument, int position)
 void
 AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
 {
-    RG_DEBUG << "stopGUI(): " << instrument << "," << position;
-    if (m_guis.find(instrument) != m_guis.end() &&
-        m_guis[instrument].find(position) != m_guis[instrument].end()) {
-        delete m_guis[instrument][position];
-        m_guis[instrument].erase(position);
-        if (m_guis[instrument].empty())
-            m_guis.erase(instrument);
+    RG_DEBUG << "stopGUI: " << instrument << "," << position;
+    m_instrument = instrument;
+    m_position = position;
+    m_timer->start(0);
+}
+
+void
+AudioPluginLV2GUIManager::slotStopGUIDelayed()
+{
+    RG_DEBUG << "stopGUIDelayed: " << m_instrument << "," << m_position;
+    if (m_guis.find(m_instrument) != m_guis.end() &&
+        m_guis[m_instrument].find(m_position) != m_guis[m_instrument].end()) {
+        delete m_guis[m_instrument][m_position];
+        m_guis[m_instrument].erase(m_position);
+        if (m_guis[m_instrument].empty())
+            m_guis.erase(m_instrument);
     }
 }
 
