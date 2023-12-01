@@ -24,8 +24,6 @@
 
 #include <QObject>
 
-class QTimer;
-
 namespace Rosegarden
 {
 
@@ -36,7 +34,7 @@ class LV2Worker;
 // cppcheck-suppress noConstructor
  class AudioPluginLV2GUIManager : public QObject
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioPluginLV2GUIManager)
+    Q_OBJECT
 
 public:
     explicit AudioPluginLV2GUIManager(RosegardenMainWindow *mainWindow);
@@ -65,7 +63,6 @@ public:
     typedef std::map<int, AudioPluginLV2GUI *> IntGUIMap;
     typedef std::map<int, IntGUIMap> GUIMap;
     GUIMap m_guis;
-    QTimer* m_timer;
     // values for delayed stopGUI
     InstrumentId m_instrument;
     int m_position;

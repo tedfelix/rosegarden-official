@@ -38,10 +38,6 @@ AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWin
     m_worker = new LV2Worker;
     LV2Utils* lv2utils = LV2Utils::getInstance();
     lv2utils->registerWorker(m_worker);
-    m_timer = new QTimer(this);
-    m_timer->setSingleShot(true);
-    connect(m_timer, &QTimer::timeout,
-            this, &AudioPluginLV2GUIManager::slotStopGUIDelayed);
 }
 
 AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
@@ -86,7 +82,8 @@ AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
     RG_DEBUG << "stopGUI: " << instrument << "," << position;
     m_instrument = instrument;
     m_position = position;
-    m_timer->start(0);
+    // wait for the window to close
+    QTimer::singleShot(0, this, &AudioPluginLV2GUIManager::slotStopGUIDelayed);
 }
 
 void
