@@ -21,6 +21,7 @@
 #include <QtGlobal>
 #include "misc/Debug.h"
 #include "sound/LV2Utils.h"
+#include "sound/Midi.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/atom/util.h>
@@ -257,7 +258,7 @@ LV2PluginInstance::discardEvents()
     // playing they should be stopped with stustain off and all notes
     // off
     unsigned char status = 0xb0;
-    unsigned char data1 = 0x7b;
+    unsigned char data1 = MIDI_CONTROLLER_ALL_NOTES_OFF;
     unsigned char data2 = 0;
     // all channels
     for(int i=0; i<16; i++) {
