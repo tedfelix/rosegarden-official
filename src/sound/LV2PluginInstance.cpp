@@ -251,7 +251,22 @@ LV2PluginInstance::silence()
 void
 LV2PluginInstance::discardEvents()
 {
+    RG_DEBUG << "discardEvents";
     m_eventBuffer.clear();
+    // it is not always enough just to clear the buffer. If notes are
+    // playing they should be stopped with stustain off and all notes
+    // off
+    unsigned char status = 0xb0;
+    unsigned char data1 = 0x7b;
+    unsigned char data2 = 0;
+    // all channels
+    for(int i=0; i<16; i++) {
+        QByteArray rawMidi;
+        rawMidi.append(status + i);
+        rawMidi.append(data1);
+        rawMidi.append(data2);
+        sendMidiData(rawMidi, 0);
+    }
 }
 
 void
@@ -630,8 +645,12 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
     for(int irm=0; irm<bytes; irm++) {
         rawMidi.append(buf[irm]);
     }
-    m_eventBuffer[eventTime] = rawMidi;
-    RG_DEBUG << "sendEvent" << eventTime << rawMidi.toHex();
+    MidiEvent me;
+    me.time = eventTime;
+    me.data = rawMidi;
+    m_eventBuffer.push_back(me);
+    RG_DEBUG << "sendEvent" <<
+        eventTime << rawMidi.toHex() << m_eventBuffer.size();
 }
 
 void
@@ -644,41 +663,23 @@ LV2PluginInstance::run(const RealTime &rt)
     RealTime bufferStart = rt;
     auto it = m_eventBuffer.begin();
     while(it != m_eventBuffer.end()) {
-        RealTime evTime = (*it).first;
-        QByteArray rawMidi = (*it).second;
+        RealTime evTime = (*it).time;
+        QByteArray rawMidi = (*it).data;
         if (evTime < bufferStart) evTime = bufferStart;
         size_t frameOffset =
             (size_t)RealTime::realTime2Frame(evTime - bufferStart,
                                              m_sampleRate);
-        if (frameOffset > m_blockSize) break;
+        if (frameOffset > m_blockSize) {
+            it++;
+            continue;
+        }
         // the event is in this block
-        RG_DEBUG << "send event to plugin" <<
-            evTime << frameOffset << rawMidi.toHex();
+        RG_DEBUG << "send event to plugin" << evTime;
         auto iterToDelete = it;
         it++;
         m_eventBuffer.erase(iterToDelete);
 
-        char midiBuf[1000];
-        LV2_Atom_Event* event = (LV2_Atom_Event*)midiBuf;
-        event->time.frames = frameOffset;
-        event->body.size = rawMidi.size();
-        event->body.type = m_midiEventUrid;
-
-        int ebs = sizeof(LV2_Atom_Event);
-        for(int ib=0; ib<rawMidi.size(); ib++) {
-            midiBuf[ebs + ib] = rawMidi[ib];
-        }
-        for (auto& aip : m_atomInputPorts) {
-            if (aip.isMidi) {
-                LV2_Atom_Event* atom =
-                    lv2_atom_sequence_append_event(aip.atomSeq,
-                                                   8 * ABUFSIZED,
-                                                   event);
-                if (atom == nullptr) {
-                    RG_DEBUG << "midi event overflow";
-                }
-            }
-        }
+        sendMidiData(rawMidi, frameOffset);
     }
 
     if (m_distributeChannels) {
@@ -762,6 +763,33 @@ void
 LV2PluginInstance::cleanup()
 {
     lilv_instance_free(m_instance);
+}
+
+void LV2PluginInstance::sendMidiData(const QByteArray& rawMidi,
+                                     size_t frameOffset)
+{
+    RG_DEBUG << "sendMidiData" << frameOffset << rawMidi.toHex();
+    char midiBuf[1000];
+    LV2_Atom_Event* event = (LV2_Atom_Event*)midiBuf;
+    event->time.frames = frameOffset;
+    event->body.size = rawMidi.size();
+    event->body.type = m_midiEventUrid;
+
+    int ebs = sizeof(LV2_Atom_Event);
+    for(int ib=0; ib<rawMidi.size(); ib++) {
+        midiBuf[ebs + ib] = rawMidi[ib];
+    }
+    for (auto& aip : m_atomInputPorts) {
+        if (aip.isMidi) {
+            LV2_Atom_Event* atom =
+                lv2_atom_sequence_append_event(aip.atomSeq,
+                                               8 * ABUFSIZED,
+                                               event);
+            if (atom == nullptr) {
+                RG_DEBUG << "midi event overflow";
+            }
+        }
+    }
 }
 
 }

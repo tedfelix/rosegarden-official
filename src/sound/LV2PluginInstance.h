@@ -131,6 +131,9 @@ protected:
 
  private:
 
+    void sendMidiData(const QByteArray& rawMidi,
+                      size_t frameOffset);
+
     std::map<int, float> m_controlPortsIn;
     std::map<int, float> m_controlPortsOut;
 
@@ -155,7 +158,13 @@ protected:
     std::vector<int> m_audioPortsOut;
     size_t m_channelCount;
 
-    std::map<RealTime, QByteArray> m_eventBuffer;
+    struct MidiEvent
+    {
+        RealTime time;
+        QByteArray data;
+    };
+
+    std::list<MidiEvent> m_eventBuffer;
     snd_midi_event_t *m_midiParser;
     LV2_URID m_midiEventUrid;
 
