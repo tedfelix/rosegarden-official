@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginLV2GUIManager]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginLV2GUIManager.h"
 
@@ -70,6 +70,14 @@ void
 AudioPluginLV2GUIManager::showGUI(InstrumentId instrument, int position)
 {
     RG_DEBUG << "showGUI(): " << instrument << "," << position;
+    // check that the plugin is still there
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    const LV2PluginInstance* inst =
+        lv2utils->getPluginInstance(instrument, position);
+    if (inst == nullptr) {
+        RG_DEBUG << "showGui - no instance";
+        return;
+    }
     AudioPluginLV2GUI* gui = getInstance(instrument, position);
     if (gui->hasGUI()) {
         gui->showGui();

@@ -47,8 +47,13 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     m_mainWindow(mainWindow),
     m_instrument(instrument),
     m_position(position),
+    m_uis(nullptr),
+    m_uilib(nullptr),
+    m_uidesc(nullptr),
     m_window(nullptr),
-    m_firstUpdate(true)
+    m_firstUpdate(true),
+    m_selectedUI(nullptr),
+    m_uiType(NONE)
 {
     m_id = strtoqstr(m_pluginInstance->getIdentifier());
     LV2Utils* lv2utils = LV2Utils::getInstance();
@@ -67,13 +72,11 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     // http://lv2plug.in/ns/extensions/ui#GtkUI (eg. calf)
     // http://lv2plug.in/ns/extensions/ui#X11UI (eg. guitarix)
     // kx studio external widget extension
-    m_uiType = NONE;
     LilvNode* x11UI = lv2utils->makeURINode(LV2_UI__X11UI);
     LilvNode* gtkUI = lv2utils->makeURINode(LV2_UI__GtkUI);
     LilvNode* kxUI = lv2utils->makeURINode(LV2_EXTERNAL_UI__Widget);
 
     m_uis = lilv_plugin_get_uis(plugin);
-    m_selectedUI = nullptr;
     LILV_FOREACH(uis, it, m_uis) {
         const LilvUI* ui = lilv_uis_get(m_uis, it);
         if (lilv_ui_is_a(ui, x11UI)) {
@@ -97,7 +100,6 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     lilv_node_free(x11UI);
     lilv_node_free(gtkUI);
     lilv_node_free(kxUI);
-    m_uidesc = nullptr;
     if (! m_selectedUI)
         {
             RG_DEBUG << "no usable ui found";
@@ -219,7 +221,7 @@ AudioPluginLV2GUI::updatePortValue(int port, float value)
 {
     if (! m_window) return;
     LV2UI_Handle handle = m_window->getHandle();
-    m_uidesc->port_event(handle, port, sizeof(float), 0, &value);
+    if (m_uidesc) m_uidesc->port_event(handle, port, sizeof(float), 0, &value);
 }
 
 void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
@@ -228,7 +230,8 @@ void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
     if (! m_window) return;
     LV2UI_Handle handle = m_window->getHandle();
     int size = atom->size + 8;
-    m_uidesc->port_event(handle, port, size, m_atomTransferUrid, atom);
+    if (m_uidesc)
+        m_uidesc->port_event(handle, port, size, m_atomTransferUrid, atom);
 }
 
 void AudioPluginLV2GUI::checkControlOutValues()
