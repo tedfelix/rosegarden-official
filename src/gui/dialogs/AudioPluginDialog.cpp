@@ -123,7 +123,17 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     pluginCategoryBoxLayout->setContentsMargins(0, 0, 0, 0);
     pluginSelectionBoxLayout->addWidget(m_pluginCategoryBox);
 
+    pluginCategoryBoxLayout->addWidget(new QLabel(tr("Architecture:"),
+                                                  m_pluginCategoryBox));
+    m_pluginArchList = new QComboBox(m_pluginCategoryBox);
+    pluginCategoryBoxLayout->addWidget(m_pluginArchList);
+
     pluginCategoryBoxLayout->addWidget(new QLabel(tr("Category:"), m_pluginCategoryBox));
+    // fixed order
+    m_pluginArchList->addItem(tr("all"));
+    m_pluginArchList->addItem(tr("ladspa"));
+    m_pluginArchList->addItem(tr("dssi"));
+    m_pluginArchList->addItem(tr("lv2"));
 
     m_pluginCategoryList = new QComboBox(m_pluginCategoryBox);
     pluginCategoryBoxLayout->addWidget(m_pluginCategoryList);
@@ -176,6 +186,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     connect(m_pluginList,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &AudioPluginDialog::slotPluginSelected);
+
+    connect(m_pluginArchList,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &AudioPluginDialog::slotArchSelected);
 
     connect(m_pluginCategoryList,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
@@ -325,6 +339,12 @@ AudioPluginDialog::populatePluginList()
     m_pluginList->addItem(tr("(none)"));
     m_pluginsInList.push_back(0);
 
+    QString archFilter;
+    int aindex = m_pluginArchList->currentIndex();
+    if (aindex == 1) archFilter = "ladspa";
+    if (aindex == 2) archFilter = "dssi";
+    if (aindex == 3) archFilter = "lv2";
+
     QString category;
     bool needCategory = false;
 
@@ -365,6 +385,13 @@ AudioPluginDialog::populatePluginList()
                 if (cat != category)
                     continue;
             }
+
+            // check architecture
+            QString aid = plugin->getIdentifier();
+            QString atype, asoname, alabel, aarch;
+            PluginIdentifier::parseIdentifier
+                (aid, atype, asoname, alabel, aarch);
+            if (archFilter != "" && archFilter != aarch) continue;
 
             QString name = plugin->getName();
             bool store = true;
@@ -452,6 +479,13 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 void
 AudioPluginDialog::slotSearchTextChanged(const QString&)
 {
+    populatePluginList();
+}
+
+void
+AudioPluginDialog::slotArchSelected(int)
+{
+    //RG_DEBUG << "slotArchSelected()";
     populatePluginList();
 }
 

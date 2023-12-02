@@ -160,7 +160,9 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_features.push_back(&m_extHostFeature);
     m_features.push_back(nullptr);
 
-    const void* ii = uidesc->extension_data(LV2_UI__idleInterface);
+    const void* ii = nullptr;
+    if (uidesc->extension_data)
+        ii = uidesc->extension_data(LV2_UI__idleInterface);
     m_lv2II = (LV2UI_Idle_Interface*)ii;
 
     m_handle =

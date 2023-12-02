@@ -73,6 +73,7 @@ public:
 
 public slots:
     void slotSearchTextChanged(const QString& text);
+    void slotArchSelected(int);
     void slotCategorySelected(int);
     void slotPluginSelected(int index);
     void slotPluginPortChanged(float value);
@@ -118,6 +119,7 @@ protected:
     QWidget             *m_pluginSearchBox;
     QLineEdit           *m_pluginSearchText;
     QWidget             *m_pluginCategoryBox;
+    QComboBox           *m_pluginArchList;
     QComboBox           *m_pluginCategoryList;
     QLabel              *m_pluginLabel;
     QComboBox           *m_pluginList;
