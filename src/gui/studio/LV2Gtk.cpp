@@ -27,10 +27,15 @@
 
 #include <gdk/gdkx.h>
 
+//#define GTK_DEBUG true
+#define GTK_DEBUG false
+#define debug_print(...) \
+            do { if (GTK_DEBUG) fprintf(stderr, __VA_ARGS__); } while (0)
+
 namespace {
     void size_request(GtkWidget*, GtkRequisition *req, gpointer user_data)
     {
-        //printf("size_request %d %d\n", req->width, req->height);
+        debug_print("size_request %d %d\n", req->width, req->height);
         Rosegarden::LV2Gtk::SizeCallback* sizecb =
             (Rosegarden::LV2Gtk::SizeCallback*)user_data;
         sizecb->setSize(req->width, req->height, true);
@@ -38,7 +43,7 @@ namespace {
 
     void size_allocate(GtkWidget*, GdkRectangle *rect, gpointer user_data)
     {
-        //printf("size_allocate %d %d\n", rect->width, rect->height);
+        debug_print("size_allocate %d %d\n", rect->width, rect->height);
         Rosegarden::LV2Gtk::SizeCallback* sizecb =
             (Rosegarden::LV2Gtk::SizeCallback*)user_data;
         sizecb->setSize(rect->width, rect->height, false);
@@ -48,7 +53,7 @@ namespace {
                           GdkEvent  *,
                           gpointer   )
     {
-        g_print("delete event occurred\n");
+        debug_print("gtk delete event occurred\n");
 
         return FALSE;
     }
@@ -56,7 +61,7 @@ namespace {
     static void destroy(GtkWidget *,
                         gpointer   )
     {
-        g_print("destroy\n");
+        debug_print("gtk destroy\n");
     }
 
 }
@@ -66,6 +71,7 @@ namespace Rosegarden
 
 LV2Gtk::LV2Gtk()
 {
+    debug_print("gtk constructor\n");
     m_active = false;
 }
 
@@ -79,6 +85,7 @@ void LV2Gtk::tick()
 LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget lv2Widget,
                                        SizeCallback* sizecb)
 {
+    debug_print("gtk getWidget\n");
     if (!m_active) {
         // gtk start up on demand
         //printf("starting gtk\n");
@@ -105,6 +112,7 @@ LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget lv2Widget,
 
 void LV2Gtk::getSize(const LV2GtkWidget& widget, int& width, int& height)
 {
+    debug_print("gtk getSize\n");
     GtkAllocation alloc;
     gtk_widget_get_allocation((GtkWidget*)(widget.window), &alloc);
     width = alloc.width;
@@ -114,12 +122,14 @@ void LV2Gtk::getSize(const LV2GtkWidget& widget, int& width, int& height)
 
 long int LV2Gtk::getWinId(const LV2GtkWidget& widget)
 {
+    debug_print("gtk getWinId\n");
     unsigned long id = GDK_WINDOW_XWINDOW(((GtkWidget*)(widget.window))->window);
     return id;
 }
 
 void LV2Gtk::deleteWidget(const LV2GtkWidget& widget)
 {
+    debug_print("gtk deleteWidget\n");
     if (widget.window) {
         gtk_widget_destroy((GtkWidget*)(widget.window));
     }
@@ -127,6 +137,7 @@ void LV2Gtk::deleteWidget(const LV2GtkWidget& widget)
 
 void LV2Gtk::startUp()
 {
+    debug_print("gtk startUp\n");
     int argc = 1;
     char** argv;
     argv = new char*[2];

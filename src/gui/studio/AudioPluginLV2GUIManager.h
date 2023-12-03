@@ -66,6 +66,7 @@ public:
     // values for delayed stopGUI
     InstrumentId m_instrument;
     int m_position;
+    bool m_closePending;
 };
 
 }

@@ -33,7 +33,8 @@ AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWin
         m_mainWindow(mainWindow),
         m_studio(nullptr),
         m_instrument(0),
-        m_position(0)
+        m_position(0),
+        m_closePending(false)
 {
     m_worker = new LV2Worker;
     LV2Utils* lv2utils = LV2Utils::getInstance();
@@ -91,7 +92,11 @@ AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
     m_instrument = instrument;
     m_position = position;
     // wait for the window to close
+    m_closePending = true;
     QTimer::singleShot(0, this, &AudioPluginLV2GUIManager::slotStopGUIDelayed);
+    while (m_closePending) {
+        qApp->processEvents(QEventLoop::AllEvents);
+    }
 }
 
 void
@@ -105,6 +110,7 @@ AudioPluginLV2GUIManager::slotStopGUIDelayed()
         if (m_guis[m_instrument].empty())
             m_guis.erase(m_instrument);
     }
+    m_closePending = false;
 }
 
 void
