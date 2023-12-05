@@ -200,6 +200,7 @@ public:
     void setPluginProgram(InstrumentId, int, QString);
 
     QString configurePlugin(InstrumentId, int, QString, QString);
+    void savePluginState();
 
     void resetAllPlugins(bool discardEvents = false);
     void discardPluginEvents();

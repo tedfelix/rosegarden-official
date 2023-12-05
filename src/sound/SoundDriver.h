@@ -293,6 +293,8 @@ public:
                                     QString /*key*/,
                                     QString /*value*/)  { return QString(); }
 
+    virtual void savePluginState() { }
+
     // Plugin management -- SoundDrivers should maintain a plugin
     // scavenger which the audio process code can use for defunct
     // plugins.  Ownership of plugin is passed to the SoundDriver.

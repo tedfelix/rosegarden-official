@@ -113,6 +113,8 @@ public:
                                     int position,
                                     QString key, QString value);
 
+    virtual void savePluginState();
+
     virtual RunnablePluginInstance *getSynthPlugin(InstrumentId id);
 
     virtual void clearSynthPluginEvents(); // when stopping

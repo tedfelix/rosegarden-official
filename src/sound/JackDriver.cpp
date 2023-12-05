@@ -2435,6 +2435,12 @@ JackDriver::configurePlugin(InstrumentId id, int position, QString key, QString 
     return QString();
 }
 
+void JackDriver::savePluginState()
+{
+    if (m_instrumentMixer)
+        m_instrumentMixer->savePluginState();
+}
+
 RunnablePluginInstance *
 JackDriver::getSynthPlugin(InstrumentId id)
 {

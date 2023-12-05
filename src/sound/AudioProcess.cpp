@@ -1163,6 +1163,29 @@ AudioInstrumentMixer::configurePlugin(InstrumentId id, int position, QString key
     return QString();
 }
 
+void AudioInstrumentMixer::savePluginState()
+{
+    for (SynthPluginMap::iterator j = m_synths.begin();
+         j != m_synths.end(); ++j) {
+
+        RunnablePluginInstance *instance = j->second;
+        if (instance) instance->savePluginState();
+    }
+
+    for (PluginMap::iterator j = m_plugins.begin();
+         j != m_plugins.end(); ++j) {
+
+        InstrumentId id = j->first;
+
+        for (PluginList::iterator i = m_plugins[id].begin();
+	     i != m_plugins[id].end(); ++i) {
+
+            RunnablePluginInstance *instance = *i;
+	    if (instance) instance->savePluginState();
+        }
+    }
+}
+
 void
 AudioInstrumentMixer::discardPluginEvents()
 {

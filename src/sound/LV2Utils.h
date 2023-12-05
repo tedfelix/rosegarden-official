@@ -120,7 +120,20 @@ class LV2Utils
 
     const std::map<QString, LV2PluginData>& getAllPluginData();
     const LilvPlugin* getPluginByUri(const QString& uri) const;
+    int getPortIndexFromSymbol(const QString& portSymbol,
+                               const LilvPlugin* plugin);
     LilvState* getDefaultStateByUri(const QString& uri);
+    QString getStateFromInstance(const LilvPlugin* plugin,
+                                 const QString& uri,
+                                 LilvInstance* instance,
+                                 LilvGetPortValueFunc getPortValueFunc,
+                                 LV2PluginInstance* lv2Instance,
+                                 const LV2_Feature*const* features);
+    void setInstanceStateFromString(const QString& stateString,
+                                    LilvInstance* instance,
+                                    LilvSetPortValueFunc setPortValueFunc,
+                                    LV2PluginInstance* lv2Instance,
+                                    const LV2_Feature*const* features);
     LV2PluginData getPluginData(const QString& uri) const;
     const LilvUIs* getPluginUIs(const QString& uri) const;
     LilvNode* makeURINode(const QString& uri) const;

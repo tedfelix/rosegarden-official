@@ -310,6 +310,10 @@ public:
         return QString();
     }
 
+    void savePluginState() override {
+        m_jackDriver->savePluginState();
+    }
+
     void setAudioBussLevels(int bussId,
                                     float dB,
                                     float pan) override {

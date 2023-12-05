@@ -27,6 +27,7 @@ class LV2Gtk
 {
  public:
     LV2Gtk();
+    ~LV2Gtk();
 
     class SizeCallback
     {
@@ -51,6 +52,7 @@ class LV2Gtk
     void startUp();
 
     bool m_active;
+    char* m_progName;
 };
 
 }

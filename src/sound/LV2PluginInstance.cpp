@@ -22,6 +22,7 @@
 #include "misc/Debug.h"
 #include "sound/LV2Utils.h"
 #include "sound/Midi.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/atom/util.h>
@@ -29,7 +30,7 @@
 
 namespace
 {
-    /*const void* getPortValueFunc(const char *port_symbol,
+    const void* getPortValueFunc(const char *port_symbol,
                                  void *user_data,
                                  uint32_t *size,
                                  uint32_t *type)
@@ -37,7 +38,7 @@ namespace
         Rosegarden::LV2PluginInstance* pi =
             (Rosegarden::LV2PluginInstance*)user_data;
         return pi->getPortValue(port_symbol, size, type);
-        }*/
+    }
 
     void setPortValueFunc(const char *port_symbol,
                           void *user_data,
@@ -255,8 +256,7 @@ LV2PluginInstance::discardEvents()
     RG_DEBUG << "discardEvents";
     m_eventBuffer.clear();
     // it is not always enough just to clear the buffer. If notes are
-    // playing they should be stopped with stustain off and all notes
-    // off
+    // playing they should be stopped with all notes off
     unsigned char status = 0xb0;
     unsigned char data1 = MIDI_CONTROLLER_ALL_NOTES_OFF;
     unsigned char data2 = 0;
@@ -630,6 +630,62 @@ LV2PluginInstance::getPortValue(unsigned int portNumber)
         return 0.0;
     }
     return (m_controlPortsIn[portNumber]);
+}
+
+void* LV2PluginInstance::getPortValue(const char *port_symbol,
+                                      uint32_t *size,
+                                      uint32_t *type)
+{
+    RG_DEBUG << "getPortValue from symbol:" << port_symbol;
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    int portIndex = lv2utils->getPortIndexFromSymbol(port_symbol, m_plugin);
+
+    auto it = m_controlPortsIn.find(portIndex);
+    if (it == m_controlPortsIn.end()) {
+        RG_DEBUG << "control in not found" << portIndex;
+        return nullptr;
+    }
+    static uint32_t portValueSize = 4;
+    static uint32_t portValueType = lv2utils->uridMap(LV2_ATOM__Float);
+    *size = portValueSize;
+    *type = portValueType;
+    return &((*it).second);
+}
+
+QString LV2PluginInstance::configure(QString key, QString value)
+{
+    RG_DEBUG << "configure" << key << value;
+    if (key == "LV2State") {
+        // set the state
+        LV2Utils* lv2utils = LV2Utils::getInstance();
+        lv2utils->setInstanceStateFromString(value,
+                                             m_instance,
+                                             setPortValueFunc,
+                                             this,
+                                             m_features.data());
+    }
+    return "";
+}
+
+void LV2PluginInstance::savePluginState()
+{
+    // called in the gui thread
+    RG_DEBUG << "savePluginState";
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    QString stateString = lv2utils->getStateFromInstance
+        (m_plugin,
+         m_uri,
+         m_instance,
+         getPortValueFunc,
+         this,
+         m_features.data());
+    RG_DEBUG << "state string" << stateString;
+    RosegardenMainWindow* mw = RosegardenMainWindow::self();
+    mw->slotChangePluginConfiguration(m_instrument,
+                                      m_position,
+                                      false,
+                                      "LV2State",
+                                      stateString);
 }
 
 void

@@ -7279,7 +7279,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
 
 void
 RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
-                                     int index, int plugin)
+                                         int index, int plugin)
 {
     const QObject *s = sender();
 

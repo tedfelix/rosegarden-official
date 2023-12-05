@@ -69,10 +69,16 @@ namespace {
 namespace Rosegarden
 {
 
-LV2Gtk::LV2Gtk()
+LV2Gtk::LV2Gtk() :
+    m_active(false),
+    m_progName(nullptr)
 {
     debug_print("gtk constructor\n");
-    m_active = false;
+}
+
+LV2Gtk::~LV2Gtk()
+{
+    if (m_progName) free(m_progName);
 }
 
 void LV2Gtk::tick()
@@ -140,8 +146,9 @@ void LV2Gtk::startUp()
     debug_print("gtk startUp\n");
     int argc = 1;
     char** argv;
+    m_progName = strdup("lv2gtk");
     argv = new char*[2];
-    argv[0] = strdup("lv2gtk");
+    argv[0] = m_progName;
     argv[1] = nullptr;
     gtk_init (&argc, &argv);
 }
@@ -154,6 +161,10 @@ namespace Rosegarden
 {
 
 LV2Gtk::LV2Gtk()
+{
+}
+
+LV2Gtk::~LV2Gtk()
 {
 }
 

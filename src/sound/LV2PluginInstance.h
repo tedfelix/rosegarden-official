@@ -69,6 +69,9 @@ public:
                        uint32_t *size,
                        uint32_t *type);
 
+    QString configure(QString key, QString value) override;
+    void savePluginState() override;
+
     void sendEvent(const RealTime& eventTime,
                    const void* event) override;
 

@@ -287,6 +287,8 @@ public:
     float getMappedPort(int pluginId,
                         unsigned long portId);
 
+    void savePluginState();
+
     /// Create a (transient, writeable) MappedObject
     int createMappedObject(int type);
 

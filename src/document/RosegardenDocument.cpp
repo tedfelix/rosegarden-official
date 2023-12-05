@@ -1213,6 +1213,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     m_studio.resyncDeviceConnections();
 
+    // tell plugins to save state
+    RosegardenSequencer::getInstance()->savePluginState();
+
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //

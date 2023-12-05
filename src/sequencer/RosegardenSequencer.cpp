@@ -891,6 +891,11 @@ RosegardenSequencer::getMappedPort(int pluginId,
     return 0;
 }
 
+void RosegardenSequencer::savePluginState()
+{
+    m_driver->savePluginState();
+}
+
 // Creates an object of a type
 //
 int

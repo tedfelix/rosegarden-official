@@ -76,6 +76,9 @@ public:
 
     virtual QString configure(QString /* key */, QString /* value */) { return QString(); }
 
+    // default implementation does nothing
+    virtual void savePluginState() { }
+
     virtual void sendEvent(const RealTime & /* eventTime */,
                            const void * /* event */) { }
 
@@ -90,7 +93,7 @@ public:
     virtual void setIdealChannelCount(size_t channels) = 0; // must also silence(); may also re-instantiate
 
     // default implementation does nothing
-    virtual void audioProcessingDone() {}
+    virtual void audioProcessingDone() { }
 
     void setFactory(PluginFactory *f) { m_factory = f; } // ew
 

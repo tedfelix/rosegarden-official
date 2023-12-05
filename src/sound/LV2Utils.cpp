@@ -84,7 +84,8 @@ LV2Utils::uridUnmap(LV2_URID urid)
     return (*it).second.c_str();
 }
 
-LV2Utils::LV2Utils()
+LV2Utils::LV2Utils():
+    m_mutex(QMutex::Recursive) // recursive
 {
     LOCKED;
 
@@ -280,7 +281,65 @@ LilvState* LV2Utils::getDefaultStateByUri(const QString& uri)
         (m_world,
          &m_map,
          pluginUri);
+    lilv_node_free(pluginUri);
     return state;
+}
+
+QString LV2Utils::getStateFromInstance(const LilvPlugin* plugin,
+                                       const QString& uri,
+                                       LilvInstance* instance,
+                                       LilvGetPortValueFunc getPortValueFunc,
+                                       LV2PluginInstance* lv2Instance,
+                                       const LV2_Feature*const* features)
+{
+    // this is called from the gui thread
+    uint32_t flags = 0;
+    lock();
+    LilvState* state = lilv_state_new_from_instance
+        (plugin,
+         instance,
+         &m_map,
+         nullptr,
+         nullptr,
+         nullptr,
+         "./savedir",
+         getPortValueFunc,
+         lv2Instance,
+         flags,
+         features);
+    unlock();
+    std::string uris = uri.toStdString();
+    char* s = lilv_state_to_string(m_world,
+                                   &m_map,
+                                   &m_unmap,
+                                   state,
+                                   uris.c_str(),
+                                   nullptr);
+    lilv_state_free(state);
+    return QString(s);
+}
+
+    void LV2Utils::setInstanceStateFromString
+    (const QString& stateString,
+     LilvInstance* instance,
+     LilvSetPortValueFunc setPortValueFunc,
+     LV2PluginInstance* lv2Instance,
+     const LV2_Feature*const* features)
+{
+    RG_DEBUG << "setInstanceStateFromString" << stateString;
+    std::string str = stateString.toStdString();
+    LilvState* state = lilv_state_new_from_string
+        (m_world,
+         &m_map,
+         str.c_str());
+    uint32_t flags = 0;
+    lilv_state_restore(state,
+                       instance,
+                       setPortValueFunc,
+                       lv2Instance,
+                       flags,
+                       features);
+    lilv_state_free(state);
 }
 
 LV2Utils::LV2PluginData LV2Utils::getPluginData(const QString& uri) const
@@ -297,6 +356,20 @@ const LilvUIs* LV2Utils::getPluginUIs(const QString& uri) const
     const LilvPlugin* plugin = getPluginByUri(uri);
     LilvUIs *uis = lilv_plugin_get_uis(plugin);
     return uis;
+}
+
+int LV2Utils::getPortIndexFromSymbol(const QString& portSymbol,
+                                     const LilvPlugin* plugin)
+{
+    std::string portSymbolStr = portSymbol.toStdString();
+
+    LilvNode* symNode = lilv_new_string(m_world, portSymbolStr.c_str());
+    const LilvPort* port = lilv_plugin_get_port_by_symbol(plugin,
+                                                          symNode);
+
+    lilv_free(symNode);
+    int index =  lilv_port_get_index(plugin, port);
+    return index;
 }
 
 LilvNode* LV2Utils::makeURINode(const QString& uri) const
