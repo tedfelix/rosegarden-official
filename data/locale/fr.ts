@@ -3884,7 +3884,7 @@
         <location line="+10"/>
         <location line="+85"/>
         <source>R&amp;elabel...</source>
-        <translation>Ré-é&amp;tiqueter...</translation>
+        <translation>Re&amp;nommer...</translation>
     </message>
     <message>
         <location line="-83"/>
@@ -4035,7 +4035,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Solo or Un-solo Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Rendre la piste s&amp;olo ou non</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4179,7 +4179,7 @@
     <message>
         <location line="-9"/>
         <source>&amp;Toggle Metronome</source>
-        <translation type="unfinished"></translation>
+        <translation>Marche/Arrêt &amp;Métronome</translation>
     </message>
     <message>
         <location line="+42"/>
@@ -16018,7 +16018,7 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="+28"/>
         <source>http://rosegardenmusic.com/wiki/doc:lyricEditDialog-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:lyriceditdialog-fr</translation>
     </message>
 </context>
 <context>
@@ -16046,12 +16046,12 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="+15"/>
         <source>Match ALSA port numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Prise en compte des numéros de port ALSA</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Include ALSA port numbers when trying to match and restore MIDI connections when loading a file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quand un fichier est chargé, les numéros de port ALSA pourront être utilisés pour essayer de restaurer les connexions MIDI.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -21006,12 +21006,12 @@ Souhaitez vous le faire maintenant ?</translation>
     <message>
         <location line="-1799"/>
         <source>Relabel Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer Segment</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>New segment label</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau nom de segment</translation>
     </message>
     <message>
         <location line="+1080"/>
@@ -23223,7 +23223,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+25"/>
         <source>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-fr</translation>
     </message>
 </context>
 <context>
