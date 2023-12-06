@@ -34,6 +34,8 @@ Included in this release...
     unreachable rest.  Bug #1662.  [fb214928]
   * Fix cannot beam a group beginning or ending with a dotted eighth
     note.  Bug #1666.  [eb0e6d75]
+  * Fix segment parameter box displaying translation of the label.
+    Bug #1667.  [89a4f18f]
 
 ===== New Features =====
 
