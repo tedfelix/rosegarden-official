@@ -765,7 +765,7 @@ LV2PluginInstance::run(const RealTime &rt)
     LV2Utils::PluginPosition pp;
     pp.instrument = m_instrument;
     pp.position = m_position;
-    if (m_workerInterface) {
+    if (m_workerInterface && worker) {
         while(LV2Utils::WorkerJob* job = worker->getResponse(pp)) {
             m_workerInterface->work_response(m_instance, job->size, job->data);
             delete job;

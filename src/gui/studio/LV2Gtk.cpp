@@ -71,14 +71,19 @@ namespace Rosegarden
 
 LV2Gtk::LV2Gtk() :
     m_active(false),
-    m_progName(nullptr)
+    m_argv(nullptr)
 {
     debug_print("gtk constructor\n");
 }
 
 LV2Gtk::~LV2Gtk()
 {
-    if (m_progName) free(m_progName);
+    int i = 0;
+        while (m_argv[i]) {
+            free(m_argv[i]);
+            i++;
+        }
+    delete[] m_argv;
 }
 
 void LV2Gtk::tick()
@@ -145,12 +150,10 @@ void LV2Gtk::startUp()
 {
     debug_print("gtk startUp\n");
     int argc = 1;
-    char** argv;
-    m_progName = strdup("lv2gtk");
-    argv = new char*[2];
-    argv[0] = m_progName;
-    argv[1] = nullptr;
-    gtk_init (&argc, &argv);
+    m_argv = new char*[2];
+    m_argv[0] = strdup("lv2gtk");
+    m_argv[1] = nullptr;
+    gtk_init (&argc, &m_argv);
 }
 
 }

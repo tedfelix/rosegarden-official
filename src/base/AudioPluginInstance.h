@@ -97,6 +97,7 @@ class AudioPluginInstance : public XmlExportable
 {
 public:
     explicit AudioPluginInstance(unsigned int position);
+    ~AudioPluginInstance();
 
     AudioPluginInstance(const std::string& identifier,
                         unsigned int position);

@@ -34,6 +34,7 @@ namespace {
         Rosegarden::LV2Utils* lv2utils = Rosegarden::LV2Utils::getInstance();
         Rosegarden::LV2Worker* lw =
             (Rosegarden::LV2Worker*)lv2utils->getWorker();
+        if (!lw) return LV2_WORKER_SUCCESS;
         return lw->scheduleWork(size, data, *pp);
     }
 
@@ -46,6 +47,7 @@ namespace {
         Rosegarden::LV2Utils* lv2utils = Rosegarden::LV2Utils::getInstance();
         Rosegarden::LV2Worker* lw =
             (Rosegarden::LV2Worker*)lv2utils->getWorker();
+        if (!lw) return LV2_WORKER_SUCCESS;
         return lw->respondWork(size, data, *pp);
     }
 

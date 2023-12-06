@@ -70,6 +70,11 @@ AudioPluginInstance::AudioPluginInstance(const std::string& identifier,
 {
 }
 
+AudioPluginInstance::~AudioPluginInstance()
+{
+    clearPorts();
+}
+
 std::string
 AudioPluginInstance::toXmlString() const
 {

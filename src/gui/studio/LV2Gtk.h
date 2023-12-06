@@ -52,7 +52,7 @@ class LV2Gtk
     void startUp();
 
     bool m_active;
-    char* m_progName;
+    char** m_argv;
 };
 
 }

@@ -50,6 +50,8 @@ AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
         }
     }
     m_guis.clear();
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->unRegisterWorker();
     delete m_worker;
 }
 
