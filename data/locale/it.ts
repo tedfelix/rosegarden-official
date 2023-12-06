@@ -14,8 +14,8 @@
     <message numerus="yes">
         <location filename="../../src/document/Command.cpp" line="+104"/>
         <source>%1 (%n change(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 (%n modifiche)</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -257,13 +257,13 @@
     <message>
         <location filename="../../src/document/io/MusicXmlExporter.cpp" line="+321"/>
         <source>Writing score part...</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvataggio parte spartito</translation>
     </message>
     <message>
         <location line="+227"/>
         <location line="+45"/>
         <source>Exporting MusicXML file...</source>
-        <translation type="unfinished">Esportazione in corso del file MusicXML...</translation>
+        <translation>Esportazione del file MusicXML...</translation>
     </message>
 </context>
 <context>
@@ -730,42 +730,42 @@
     <message>
         <location line="+63"/>
         <source>Double Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Doppia pausa d&apos;intero</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa intera</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Half Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa di breve</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Quarter Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa di quarto</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Eighth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa d&apos;ottavo</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Sixteenth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa di sedicesimo</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Thirty-Second Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa di 32mo</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Sixty-Fourth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa di 64mo</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -775,103 +775,103 @@
     <message>
         <location line="+57"/>
         <source>Import Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa file di &amp;progetto Rosegarden...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Import &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa file &amp;MIDI...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Import &amp;X11 Rosegarden File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa file Rosegarden &amp;X11...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Import MusicXM&amp;L File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa file MusicXM&amp;L...</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Export Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta come file di &amp;Progetto Rosegarden...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;LilyPond File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta file &amp;LilyPond...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta come file &amp;MIDI...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;Csound Score File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta come file &amp;Csound</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export M&amp;up File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta come file M&amp;up...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export Music&amp;XML File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta come file Music&amp;XML...</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Save &amp;as...</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;alva con nome...</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>Keyboard S&amp;hortcuts...</source>
-        <translation type="unfinished"></translation>
+        <translation>Scorciatoie &amp;tastiera...</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>A tutto schermo</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Fit Existing Beats to Beat Segment</source>
-        <translation type="unfinished">Adatta Ritmi esistenti al ritmo del Segmento</translation>
+        <translation>Adatta Ritmi esistenti al ritmo del Segmento</translation>
     </message>
     <message>
         <location line="+23"/>
         <location line="+78"/>
         <source>Open in &amp;Default Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri nell&apos;editor di &amp;default</translation>
     </message>
     <message>
         <location line="-55"/>
         <source>Split &amp;at Time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividi &amp;a un certo tempo...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split by &amp;Drum (EXPERIMENTAL!)</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dividi per elemento di batteria (SPERIMENTALE)</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&amp;Update all Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna t&amp;utte le figurazioni</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>&amp;Solo or Un-solo Track</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Solo o togli solo alla traccia</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>&amp;Toggle Metronome</source>
-        <translation type="unfinished"></translation>
+        <translation>Attiva/disattiva me&amp;tronomo</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -920,52 +920,52 @@
     <message>
         <location line="-228"/>
         <source>Interpret Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Toolbar interpretazione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Interpret Active Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Interpreta il segmento attivo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Interpret &amp;Text Dynamics</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpreta segni di dinamia &amp;testuali</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Adjust velocity to follow text dynamics (f, p, mf...)</source>
-        <translation type="unfinished"></translation>
+        <translation>Regola le velocity per seguire le indicazioni di dinamica (f, p, mf...)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Interpret &amp;Hairpins</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpreta forcina</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Adjust velocity to follow hairpin dynamics</source>
-        <translation type="unfinished"></translation>
+        <translation>Setta le velocity per seguire le forcelle di dinamica</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Interpret &amp;Slurs and Marks</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpreta legatore e &amp;segni</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Articulate slurs, staccato, tenuto, etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>Articola legatore, staccato, tenuto, ecc.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Interpret &amp;Beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpreta &amp;battute</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Place accents on certain beats according to the time signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci accenti su certe note n base all&apos;indicazione di tempo</translation>
     </message>
     <message>
         <location line="-817"/>
@@ -1055,22 +1055,22 @@
     <message>
         <location line="-1034"/>
         <source>Show note names</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra i nomi delle note</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Highlight</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Evidenzia</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Highlight black notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Evidenzia note nere</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Highlight triads</source>
-        <translation type="unfinished"></translation>
+        <translation>Evidenzia triadi</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1272,13 +1272,13 @@
         <location line="-922"/>
         <location line="+415"/>
         <source>&amp;Place a Controller for Each Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci un controller &amp;per ogni nota</translation>
     </message>
     <message>
         <location line="-413"/>
         <location line="+416"/>
         <source>Insert C&amp;ontroller Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci sequenza di c&amp;ontroller...</translation>
     </message>
     <message>
         <location line="-412"/>
@@ -1586,27 +1586,27 @@
         <location line="-453"/>
         <location line="+462"/>
         <source>&amp;Rosegarden Tutorial</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutorial su &amp;Rosegarden</translation>
     </message>
     <message>
         <location line="+222"/>
         <source>&amp;Nothing to Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Niente da annullare</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>N&amp;othing to Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>N&amp;iente da ripetere</translation>
     </message>
     <message>
         <location line="-585"/>
         <source>Search and Selec&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca e sele&amp;ziona</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Guess Beats</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Indovina beat</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -1616,17 +1616,17 @@
     <message>
         <location line="+3"/>
         <source>Show &amp;Interpret Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra la barra &amp;interpretazione</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Check for Parallels...</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlla parallele</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Add Clef Change in This Link Only...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi cambi di chiave solo nei link...</translation>
     </message>
     <message>
         <source>Ctrl+Alt++</source>
@@ -1636,32 +1636,33 @@
     <message>
         <location line="+9"/>
         <source>New Layer from &amp;Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuovo Livello da &amp;selezione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Unadopt an Adopted Segment</source>
+        <translatorcomment>che fa??</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+28"/>
         <source>&amp;Edit Ornament as Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Edita abbellimenti come notazione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Show Expansion of Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>Mo&amp;stra l&apos;abbellimento espanso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Skip This Part of Ornament (&amp;Mask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation>Salta questa parte dell&apos;abbellimento (&amp;maschera nota legata)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Don&apos;t Skip This Part (&amp;Unmask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation>Non saltare q&amp;uesta parte (svela nota legata)</translation>
     </message>
     <message>
         <source>Ctrl+R</source>
@@ -2312,18 +2313,18 @@
     <message>
         <location line="-113"/>
         <source>From &amp;Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Editor del Form</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Unit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Unità</translation>
     </message>
     <message>
         <location line="+85"/>
         <location line="+273"/>
         <source>&amp;Reset Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Resetta la selezione</translation>
     </message>
     <message>
         <location line="-245"/>
@@ -2334,55 +2335,57 @@
         <location line="+52"/>
         <location line="+415"/>
         <source>Co&amp;ntrollers</source>
-        <translation type="unfinished"></translation>
+        <translation>Co&amp;ntroller</translation>
     </message>
     <message>
         <location line="-414"/>
         <location line="+415"/>
         <source>&amp;Set Controller Values</source>
-        <translation type="unfinished"></translation>
+        <translation>%Setta valori dei controller</translation>
     </message>
     <message>
         <location line="-394"/>
         <location line="+419"/>
         <location line="+460"/>
         <source>L&amp;oop</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>loop in inglese è ormai termine acquisito in ambito audio/musicale quindi lasciamo l&apos;inglese</translatorcomment>
+        <translation>L&amp;oop</translation>
     </message>
     <message>
         <location line="-746"/>
         <source>Panning &amp;Law</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Difficile da tradurre sarebbe come viene calcolato il pan stereo (destra sinistra)</translatorcomment>
+        <translation type="unfinished">Moda&amp;lità per il Pan</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;0dB Law (Basic Balance Control)</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;0dB Law (Controllo bilanciamento di base)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>-&amp;3dB Law (Constant Power)</source>
-        <translation type="unfinished"></translation>
+        <translation>-&amp;3dB (Potenza costante)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>-&amp;6dB Law (Reduced Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>-&amp;6dB Law (Centro ridotto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Alternate -3dB Law (Constant Power, 0dB Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Alternate -3dB Law (Constant Power; 0dB Centro)</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>&amp;Move to Staff Above...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta al pentagra&amp;mma sopra...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Move to Staff &amp;Below...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta al pentagramma &amp;sotto...</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -3545,7 +3548,7 @@
     <message>
         <location line="+540"/>
         <source>Mark Selection as Auto-Generated</source>
-        <translation type="unfinished"></translation>
+        <translation>Marca sezione come auto-generata</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3570,7 +3573,7 @@
     <message>
         <location line="+56"/>
         <source>Insert &amp;Expression Controller Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci sequenza di controller d&apos;&amp;esprezzione...</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -3592,27 +3595,27 @@
     <message>
         <location line="+6"/>
         <source>Select but Don&apos;t Follow Ties</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona ma non seguire legature di valore</translation>
     </message>
     <message>
         <location line="+37"/>
         <source>Switch to &amp;Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Passa alle &amp;Note</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Switch to &amp;Rests</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambia a &amp;pause</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>To&amp;ggle Dot on</source>
-        <translation type="unfinished"></translation>
+        <translation>Metti %punto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>To&amp;ggle Dot off</source>
-        <translation type="unfinished"></translation>
+        <translation>metti/togli punt&amp;o</translation>
     </message>
     <message>
         <location line="+58"/>
@@ -3904,12 +3907,13 @@
     <message>
         <location line="+1"/>
         <source>Open Examp&amp;le...</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri esempio...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Tem&amp;plate...</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Usiamo template direttamente in inglese (invece di modello) in quanto termine comune in ambito digitale</translatorcomment>
+        <translation>Apri Tem&amp;plate...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3919,7 +3923,7 @@
     <message>
         <location line="+1"/>
         <source>Open most recent file</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri file più recente</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3999,7 +4003,8 @@
     <message>
         <location line="+4"/>
         <source>Dump segments</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>non sono sicuro cosa faccia, quindi uso l&apos;inglese sperando che si capisca</translatorcomment>
+        <translation type="unfinished">Dump dei segmenti</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4039,17 +4044,18 @@
     <message>
         <location line="+1"/>
         <source>&amp;Add Marker at Playback Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi marcatore alla posizione di Riproduzione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Jump to &amp;Previous Marker</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>marker in inglese consideriamo che in questo contesto sia chiaro (come in qualsiasi sequencer e DAW)</translatorcomment>
+        <translation>Salta al marker &amp;prcedente</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Jump to &amp;Next Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>Salta al marker &amp;successivo</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4394,32 +4400,32 @@
     <message>
         <location line="-163"/>
         <source>Merge &amp;File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Unisci &amp;File...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;MIDI File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Unisci file &amp;MIDI...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;X11 Rosegarden File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Unisci file di tipo Rosegarden &amp;X11...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;Hydrogen file(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Unisci file di &amp;Hydrogen...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge MusicXM&amp;L File(s)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Unisci file Music&amp;XML...</translation>
     </message>
     <message>
         <location line="+100"/>
         <source>Transpos&amp;e by Semitones...</source>
-        <translation type="unfinished"></translation>
+        <translation>Trasponi s&amp;emitoni...</translation>
     </message>
     <message>
         <location line="+92"/>
@@ -4587,7 +4593,7 @@
     <message>
         <location line="+1"/>
         <source>Classical Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra classica</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6033,7 +6039,8 @@
     <message>
         <location line="-28"/>
         <source>Cu�ca</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>what is it? In linguist there is an unknown char (unicode problem?)</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location line="+29"/>
@@ -6295,7 +6302,7 @@
     <message>
         <location line="+1"/>
         <source>D. Michael McIntyre</source>
-        <translation type="unfinished"></translation>
+        <translation>D. Michael McIntyre</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6641,7 +6648,8 @@
     <message>
         <location line="+1"/>
         <source>Lead 1 (square)</source>
-        <translation>Solo 1 (onda quadra)</translation>
+        <translatorcomment>Non tradurrei gli strumenti General Midi in Italiano, sono generalmente noti</translatorcomment>
+        <translation type="unfinished">Lead 1 (square)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9510,37 +9518,37 @@
     <message>
         <location line="+5"/>
         <source>gray</source>
-        <translation type="unfinished"></translation>
+        <translation>grigio</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light blue</source>
-        <translation type="unfinished"></translation>
+        <translation>blu chiaro</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light green</source>
-        <translation type="unfinished"></translation>
+        <translation>verde chiaro</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>ciano chiaro</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light red</source>
-        <translation type="unfinished"></translation>
+        <translation>rosso chiaro</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light magenta</source>
-        <translation type="unfinished"></translation>
+        <translation>magenta chiaro</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>light yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>giallo chiaro</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -9687,7 +9695,7 @@
         <location filename="../InstrumentStrings.cpp" line="-1"/>
         <source>A#</source>
         <comment>note name</comment>
-        <translation></translation>
+        <translation>LA#</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -9709,7 +9717,7 @@
     <message>
         <location line="+143"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Impossibile avviare la registrazione audio.&lt;/p&gt;&lt;p&gt;Assicurarsi che la composizione sia stata salvata e controllare il percorso per i file audio  &lt;b&gt;Composizione -&gt; Modifica Proprietà Documento... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
@@ -9720,7 +9728,7 @@
         <location line="+2"/>
         <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="unfinished">Cattivo file sound </translation>
+        <translation>File audio invalido</translation>
     </message>
     <message>
         <source>Wrong length for long data in MIDI stream</source>
@@ -9806,12 +9814,12 @@
         <location filename="../../src/sound/PeakFileManager.h" line="+101"/>
         <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="unfinished">Cattivo picco di file</translation>
+        <translation>File picco invalido</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished">Cattivo picco di file (file malfatto?)</translation>
+        <translation>File picco invalido (file malfatto?)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -9875,57 +9883,59 @@
         <source>No sound driver available: Sound driver startup failed, log follows: 
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun driver audio disponibile: problema con l&apos;inizializzazione del driver audio; segue log:
+
+%1</translation>
     </message>
     <message>
         <location line="-2"/>
         <source>No sound driver available: Application compiled without sound support?</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun driver audio disponibile: l&apos;applicazione è stata compilata senza supporto per l&apos;audio?</translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+53"/>
         <source>Replace segment contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituisci contenuto del segmento</translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="+69"/>
         <source>Chord Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmento sorgente di accordo</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Figuration Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorgente figurazione del segmento</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Generated Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmento generato</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment of unknown type</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmento di tipo ignoto</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="+29"/>
         <source>Relative Ramp - modify existing %1 values linearly</source>
-        <translation type="unfinished"></translation>
+        <translation>Rampa relativa - modifica %1 valori esistenti in maniera lineare</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Increase first value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation>Incrementa il primo valore di:</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Increase last value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation>Incrementa l&apos;ultimo valore di: </translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
         <source>Update Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna figurazioni</translation>
     </message>
     <message>
         <source>LilyPond does not allow spaces or backslashes in filenames.
@@ -9958,289 +9968,292 @@ Vuoi usare
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+33"/>
         <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Decrescendo a quarto di onda - setta %1 e decresci da max a min con un contorno a quarto di onda seno</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Crescendo a quarto di onda - setta %1 e cresci da min a max con un contorno a quarto di onda seno</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+33"/>
         <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Diminuendo di metà onda - setta %1 e decresci da max a min con un contorno di mezza onda seno</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Half-wave crescendo - set %1 rising from min to max in a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Crescendo di metà onda - setta %1 e cresci da min a max con un contorno di mezza onda seno</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/FlatParameterPattern.cpp" line="+29"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">Appiattisci - imposta %1 al valore</translation>
+        <translation>Appiattisci - imposta %1 come valore</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Value</source>
-        <translation type="unfinished">Valore</translation>
+        <translation>Valore</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/IncreaseParameterPattern.cpp" line="+32"/>
         <source>Increase - raise each %1 by value</source>
-        <translation type="unfinished">Incrementa -aumenta ogni %1 in valore</translation>
+        <translation>Incrementa -aumenta ogni %1 del valore</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Decrease - lower each %1 by value</source>
-        <translation type="unfinished">Diminuisci - ongni %1 del valore</translation>
+        <translation>Diminuisci - ongni %1 del valore</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Increase by</source>
-        <translation type="unfinished">Aumenta di</translation>
+        <translation>Aumenta di</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Decrease by</source>
-        <translation type="unfinished">Diminuire di</translation>
+        <translation>Diminuisci di</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+160"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished">Imposta Velocities...</translation>
+        <translation>Imposta Velocities...</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">Imposta Evento Velocities</translation>
+        <translation>Imposta velocity degli eventi</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+29"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="unfinished">Alternato - imposta %1 su max e min a eventi alternati</translation>
+        <translation>Alternato - imposta %1 al max o min a eventi alternati</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+38"/>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
-        <translation type="unfinished">Primo valore</translation>
+        <translation>Primo valore</translation>
     </message>
     <message>
         <location line="+2"/>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
-        <translation type="unfinished">Secondo valore</translation>
+        <translation>Secondo valore</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/LinearParameterPattern.cpp" line="+33"/>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="unfinished">Diminuendo - imposta %1% calando da max a min</translation>
+        <translation>Diminuendo - imposta %1 diminuendo da max a min</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="unfinished">Crescendo - imposta %1 passando da min a max</translation>
+        <translation>Crescendo - imposta %1 crescendo da min a max</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Low Value</source>
-        <translation type="unfinished">Valore inferiore</translation>
+        <translation>Valore inferiore</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>High Value</source>
-        <translation type="unfinished">Valore superiore</translation>
+        <translation>Valore superiore</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-11"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="unfinished">Rintocco - imposta %1 alternando da max a min e sfumando a zero</translation>
+        <translation>Squillo - imposta %1 a eventi alternati: una serie da max a min e l&apos;altra sfuma a zero</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ActionData.cpp" line="+366"/>
         <source>Audio manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestione audio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bank editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Editor dei banchi(bank)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clef inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci chiave</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Control editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor dei controller</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Event list</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista Eventi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guitar chord inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci accodri di chitarra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Marker editor</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>usiamo marker in inglese qui e altrove in quanto terminologia specifica acquisita in seqencer e DAW. segno o marchio non avrebbero senso in questo contesto</translatorcomment>
+        <translation>Editor dei marker</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Marker ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>righello dei marker</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix eraser</source>
-        <translation type="unfinished"></translation>
+        <translation>Gomma Matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix mover</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta Matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix painter</source>
-        <translation type="unfinished"></translation>
+        <translation>Disegna matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix</source>
-        <translation type="unfinished">Matrice</translation>
+        <translation>Matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix resizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ridimensiona matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Selettore matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Matrix velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocity matrice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Midi mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixer MIDI</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixer</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Notation eraser</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella notazione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Notation</source>
-        <translation type="unfinished">Notazione</translation>
+        <translation>Notazione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Notation selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona notazione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Note/rest inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci note/pause</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rosegarden main window</source>
-        <translation type="unfinished"></translation>
+        <translation>Finestra principale di Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Strumento segmenti</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Symbol inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci simboli</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tempo ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Righello del tempo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tempo view</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza tempo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Text inserter</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci testo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Trigger manager</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>trigger in inglese, dovrebbe essere chiaro in questo contesto</translatorcomment>
+        <translation type="unfinished">Gestione trigger</translation>
     </message>
     <message>
         <location line="+269"/>
         <source>Context</source>
-        <translation type="unfinished"></translation>
+        <translation>Contesto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Azione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Icona</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>User defined</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>non chiaro se singolare o plurale...</translatorcomment>
+        <translation type="unfinished">Definito dall&apos;utente</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Scorciatoia 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Scorciatoia 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Scorciatoia 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shortcut 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Scorciatoia 4</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="+216"/>
         <source>Arbitrary grid unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Unità di griglia arbitraria</translation>
     </message>
 </context>
 <context>
@@ -10889,48 +10902,49 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/dialogs/AudioFileLocationDialog.cpp" line="+44"/>
         <source>Audio File Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Posizione del file audio</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Audio files have been introduced in this session.  Where would you like to save them?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sono stati aggiunti dei file audio in questa session. Dove vorresti salvarli?</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>To an &quot;audio&quot; directory where the document is saved.  (%1) (Recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>In una cartella chiamata &quot;audio&quot; dove è salvato il documento.  (%1) (Raccomandato)</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>To a directory named after the document where the document is saved.
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>In una cartella con lo stesso nome del documento,dove viene salvato il documento 
+(%1)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To the same directory where the document is saved.  (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nella stessa directory dove viene salvato il documento.  (.)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To a central audio file repository.  (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>In uno specifico repository audio.  (%1)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To a custom audio file location:</source>
-        <translation type="unfinished"></translation>
+        <translation>In una posizione custom per i file audio:</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Note: You can always move the audio files later by setting the audio location in the document properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nota: è sempre possibile spostare i file audio in un secondo momento cambiando la posizione dei file audio nelle proprietà del documento.</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Use the above selection for all new files and don&apos;t display this dialog again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa la selezione qui sopra per tutti i nuovi file e non mostrare più questa finestra.</translation>
     </message>
 </context>
 <context>
@@ -11002,7 +11016,7 @@ Vuoi usare
     <message>
         <location filename="../../src/sound/AudioFileTimeStretcher.cpp" line="+79"/>
         <source>Rescaling audio file...</source>
-        <translation type="unfinished">RIscalando il file audio...</translation>
+        <translation>Riscalando il file audio...</translation>
     </message>
 </context>
 <context>
@@ -11018,7 +11032,7 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+87"/>
         <source>Click to rename this instrument.</source>
-        <translation type="unfinished"></translation>
+        <translation>Clicca per rinominare questo strumento</translation>
     </message>
     <message>
         <location line="+129"/>
@@ -11040,7 +11054,7 @@ Vuoi usare
     <message>
         <location line="+1"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished">Inserisci un alias per lo strumento:</translation>
+        <translation>Inserisci un alias per lo strumento:</translation>
     </message>
 </context>
 <context>
@@ -11224,12 +11238,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
         <location line="-638"/>
         <location line="+654"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>Adding audio file...</source>
-        <translation type="unfinished">Aggiunta file audio...</translation>
+        <translation>Aggiunta file audio...</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -11340,7 +11354,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow2.cpp" line="+52"/>
         <source>Audio Mixer</source>
-        <translation type="unfinished">Mixer Audio</translation>
+        <translation>Mixer Audio</translation>
     </message>
     <message>
         <location line="+452"/>
@@ -11834,69 +11848,70 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/studio/AudioStrip.cpp" line="+161"/>
         <source>Record input source</source>
-        <translation type="unfinished">Registra la sorgente in entrata</translation>
+        <translation>Registra la sorgente in entrata</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Output destination</source>
-        <translation type="unfinished">Destinazione in uscita</translation>
+        <translation>Destinazione in uscita</translation>
     </message>
     <message>
         <location line="+8"/>
         <location line="+14"/>
         <source>Audio level</source>
-        <translation type="unfinished">Livello audio</translation>
+        <translation>Livello audio</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Pan</source>
-        <translation type="unfinished">Pan</translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>Mono or stereo</source>
-        <translation type="unfinished">Mono o stereo</translation>
+        <translation>Mono o stereo</translation>
     </message>
     <message>
         <location line="+17"/>
         <location line="+164"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;nessuno&gt;</translation>
+        <translation>&lt;nessuno&gt;</translation>
     </message>
     <message>
         <location line="-161"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished">Clicca per caricare un modulo audio</translation>
+        <translatorcomment>il termine plugin è riconosciuto nel mondo audio</translatorcomment>
+        <translation>Clicca per caricare un plugin audio</translation>
     </message>
     <message>
         <location line="+77"/>
         <source>Click to rename this instrument</source>
-        <translation type="unfinished">Clicca per rinominare questo strumento</translation>
+        <translation>Clicca per rinominare questo strumento</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Sub %1</source>
-        <translation type="unfinished">Sub %1</translation>
+        <translation>Sub %1</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Master</source>
-        <translation type="unfinished">Master</translation>
+        <translation>Master</translation>
     </message>
     <message>
         <location line="+81"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;nessun modulo&gt;</translation>
+        <translation>&lt;nessun plugin&gt;</translation>
     </message>
     <message>
         <location line="+72"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished">Inserisci un alias per lo strumento:</translation>
+        <translation>Inserisci un alias per lo strumento:</translation>
     </message>
 </context>
 <context>
@@ -12239,113 +12254,113 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="+64"/>
         <source>Check for Parallels</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlla movimenti paralleli</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Check for Unisons</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlla gli unisoni</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Check for Hidden Parallels</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlla Quinte e Ottave Nascoste</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clear</source>
-        <translation type="unfinished">Azzera</translation>
+        <translation>Azzera</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location line="+208"/>
         <location line="+186"/>
         <source>bar</source>
-        <translation type="unfinished"></translation>
+        <translation>battuta</translation>
     </message>
     <message>
         <location line="-186"/>
         <location line="+186"/>
         <source> </source>
-        <translation type="unfinished">,</translation>
+        <translation>.</translation>
     </message>
     <message>
         <location line="-186"/>
         <location line="+186"/>
         <location line="+132"/>
         <source>beat</source>
-        <translation type="unfinished"></translation>
+        <translation>tempo</translation>
     </message>
     <message>
         <location line="-318"/>
         <location line="+186"/>
         <location line="+132"/>
         <source>fraction</source>
-        <translation type="unfinished"></translation>
+        <translation>frazione</translation>
     </message>
     <message>
         <location line="-284"/>
         <source>Restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Riavvia</translation>
     </message>
     <message>
         <location line="+150"/>
         <source>found multiple notes for</source>
-        <translation type="unfinished"></translation>
+        <translation>trovate note multiple per</translation>
     </message>
     <message>
         <location line="+129"/>
         <source>parallel at bar</source>
-        <translation type="unfinished"></translation>
+        <translation>parallele nella battuta</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>parallels at bar</source>
-        <translation type="unfinished"></translation>
+        <translation>parallele alla battuta</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>unisons</source>
-        <translation type="unfinished"></translation>
+        <translation>unisoni</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>fifths</source>
-        <translation type="unfinished"></translation>
+        <translation>quinte</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>octaves</source>
-        <translation type="unfinished"></translation>
+        <translation>ottave</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>hidden fifths</source>
-        <translation type="unfinished"></translation>
+        <translation>quinte nascoste</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>hidden octaves</source>
-        <translation type="unfinished"></translation>
+        <translation>ottave nascoste</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>for</source>
-        <translation type="unfinished"></translation>
+        <translation>per</translation>
     </message>
 </context>
 <context>
@@ -12385,12 +12400,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location line="-12"/>
         <source>Up an Octave</source>
-        <translation>Su di un&apos;ottava</translation>
+        <translation>Ottava sopra</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>Down an Octave</source>
-        <translation>Giù di un&apos;ottava</translation>
+        <translation>Una ottava sotto</translation>
     </message>
     <message>
         <location line="-11"/>
@@ -12410,27 +12425,27 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location line="+161"/>
         <source>%1 down an octave</source>
-        <translation>%1 giù di un&apos;ottava</translation>
+        <translation>%1 una ottava sotto</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>%1 down two octaves</source>
-        <translation>%1 giù di due ottave</translation>
+        <translation>%1 due ottave sotto</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>%1 up an octave</source>
-        <translation>%1 su di un&apos;ottava</translation>
+        <translation>%1 una ottava su</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>%1 up two octaves</source>
-        <translation>%1 su di due ottave</translation>
+        <translation>%1 due ottave su</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Treble</source>
-        <translation>Alti</translation>
+        <translation>Violino</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -12475,12 +12490,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location line="+2"/>
         <source>Sub-bass</source>
-        <translation>sotto-basso</translation>
+        <translation>sub-basso</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Two-bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Doppia barra</translation>
     </message>
 </context>
 <context>
@@ -12520,12 +12535,12 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+84"/>
         <source>Default</source>
-        <translation type="unfinished">Predefinito</translation>
+        <translation>Predefinito</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Add New Color</source>
-        <translation type="unfinished">Aggiungi nuovo colore</translation>
+        <translation>Aggiungi nuovo colore</translation>
     </message>
 </context>
 <context>
@@ -12773,22 +12788,22 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="+48"/>
         <source>Notes about %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Note su %1</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>&lt;qt&gt;This is a short description of the current composition&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Questa è una breve descrizione della composizione corrente&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Show next time</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra la prossima volta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked, these notes will pop up the nexttime the document is loaded&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Se selezionata, questa opzione farà sì che le note si vedano quando la composizione viene caricata la prossima volta&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -12969,7 +12984,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/rulers/ControlEraser.cpp" line="+80"/>
         <source>Click on a value to delete it</source>
-        <translation type="unfinished"></translation>
+        <translation>Clicca su un valore per cancellarlo</translation>
     </message>
 </context>
 <context>
@@ -12977,7 +12992,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/rulers/ControlMover.cpp" line="+104"/>
         <source>Click and drag a value. Shift suppresses grid snap. Ctrl constrains to horizontal or vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Clicca e sposta un valore. Tasto Shift ignora la griglia. tasto Ctrl blocca orizzontalmente o verticalmente.</translation>
     </message>
 </context>
 <context>
@@ -12985,7 +13000,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/rulers/ControlPainter.cpp" line="+126"/>
         <source>Click to set a value. Right click for grid options</source>
-        <translation type="unfinished"></translation>
+        <translation>Clicca per settare un valore. Tasto destro per le opzioni griglia</translation>
     </message>
 </context>
 <context>
@@ -13213,7 +13228,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+52"/>
         <source>Make Ornament</source>
-        <translation type="unfinished">Fai ornamento</translation>
+        <translation>Genera abbellimento</translation>
     </message>
 </context>
 <context>
@@ -13425,7 +13440,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location line="+4"/>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Note</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -13563,22 +13578,22 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/general/EditTempoController.cpp" line="+105"/>
         <source>Move Tempo Change</source>
-        <translation type="unfinished">Muovi il Cambio di Tempo</translation>
+        <translation>Sposta il Cambio di Tempo</translation>
     </message>
     <message>
         <location line="+49"/>
         <source>Replace Tempo Change at %1</source>
-        <translation type="unfinished">Sostituisci il cambio di ritmo in %1</translation>
+        <translation>Sostituisci il cambio di tempo in %1</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Set Global Tempo</source>
-        <translation type="unfinished">Imposta il ritmo globale</translation>
+        <translation>Imposta il tempo globale</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Set Global and Default Tempo</source>
-        <translation type="unfinished">Imposta il ritmo globale e predefinito</translation>
+        <translation>Imposta il tempo globale e predefinito</translation>
     </message>
 </context>
 <context>
@@ -14045,12 +14060,12 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location line="+1"/>
         <source>Generated regions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Regioni generate</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID Segmento</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -14199,7 +14214,7 @@ Questo può causare problemi se si sovrappone a un valore differente più avanti
     <message>
         <location line="+17"/>
         <source>Event List</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista Eventi</translation>
     </message>
     <message>
         <source>%1%2 - Segment Track #%3 - Event List</source>
@@ -14326,7 +14341,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location line="+9"/>
         <source>Merge new file</source>
-        <translation type="unfinished"></translation>
+        <translation>Unisci nuovo file</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -14484,22 +14499,23 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location line="+13"/>
         <source>Enable metronome during</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>non chiaro quale sia il contesto originale in inglese</translatorcomment>
+        <translation type="unfinished">Abilita il metronomo durante</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Count-in</source>
-        <translation type="unfinished"></translation>
+        <translation>Conta prima di partire</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Recording</source>
-        <translation type="unfinished">In registrazione</translation>
+        <translation>Registrazione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Count-in and Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Conta prima di partire e registra</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -14539,32 +14555,32 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location line="+14"/>
         <source>Use track name for new segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa il nome della traccia per i nuovi segmenti</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;If checked, the label for new segments will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Se selezionata, l&apos;opzione fa sì che l&apos;etichetta dei nuovi segmenti sia sempre la stessa del nome della traccia relativa .&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Enable editing during playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Permetti l&apos;editing durante il play del pezzo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;WARNING: Editing during playback can lead to instability, crashes, and data loss.  Save frequently.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;ATTENZIONE: l&apos;editing durante il play del pezzo potrebbe generare instbilità o  crash e quindi potenziale perdita di dati. Salvare frequentemente.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Clean recent files list</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulisci la lista dei file recenti</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Remove entries from the recent files list that no longer exist.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Elimina i file che non esistono più dalla lista dei file recenti.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -14574,7 +14590,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location line="+20"/>
         <source>Stop playback at end of last segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Termina la riproduzione alla fine dell&apos;ultimo segmento</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -14614,22 +14630,23 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location line="+111"/>
         <source>Use native file dialogs</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Non so come rendere questa in italiano... Per me dialog è chiara ma forse non tutti.</translatorcomment>
+        <translation type="unfinished">Usa le finestre native per i file</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Okular (KDE)</source>
-        <translation type="unfinished"></translation>
+        <translation>Okular (KDE)</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>HPLIP (HP Printers)</source>
-        <translation type="unfinished"></translation>
+        <translation>HPLIP (stampanti HP)</translation>
     </message>
     <message>
         <location line="+141"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Devi riavviare Rosegarden or aprire un file affinché la dimensione delle tracce abbia effetto.</translation>
     </message>
     <message>
         <location line="-586"/>
@@ -14652,37 +14669,38 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location line="+13"/>
         <source>Track size</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione tracce</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Small</source>
-        <translation type="unfinished">Piccolo</translation>
+        <translation>Piccola</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Media</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Large</source>
-        <translation type="unfinished"></translation>
+        <translation>Grande</translation>
     </message>
     <message>
         <location line="+56"/>
         <source>MuPDF</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>nome di un programma</translatorcomment>
+        <translation>MuPDF</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ePDFView</source>
-        <translation type="unfinished"></translation>
+        <translation>ePDFView</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>xdg-open (recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>xdg-open (raccomandato)</translation>
     </message>
     <message>
         <source>HPLIP (Qt 4)</source>
@@ -14783,37 +14801,38 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location line="-211"/>
         <source>Jump to loop</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>traduco loop usando l&apos;inglese perché è riconosciuto in campo musica / audio</translatorcomment>
+        <translation type="unfinished">salta al loop</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Advanced Looping (beta)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loop avanzato (beta)</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Auto Channels (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Canali automatici (sperimentale)</translation>
     </message>
     <message>
         <location line="+65"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Tema</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Native (Light)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nativo (Chiaro)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Classic (Medium)</source>
-        <translation type="unfinished"></translation>
+        <translation>Classico (Medio)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dark</source>
-        <translation type="unfinished"></translation>
+        <translation>Scuro</translation>
     </message>
     <message>
         <location line="+141"/>
@@ -14874,7 +14893,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
     <message>
         <location filename="../../src/commands/notation/GeneratedRegionInsertionCommand.cpp" line="+32"/>
         <source>Insert Generated Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci regione generata</translation>
     </message>
 </context>
 <context>
@@ -15799,12 +15818,12 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Il Korg nanoKONTROL2 non è configurato in maniera ottimale per Rosegarden. La riconfigurazione eliminerà qualsiasi settaggio custom fatto con l&apos;editor nonoKONTROL2. Riconfigurare?</translation>
     </message>
 </context>
 <context>
@@ -15818,7 +15837,7 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation type="unfinished">Lilypond non ammette spazi o barre rovesciate nei nomi dei file.
+        <translation>Lilypond non ammette spazi o barre rovesciate nei nomi dei file.
 
 Vuoi usare
 
@@ -15829,37 +15848,37 @@ Vuoi usare
     <message>
         <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished">Esportazione fallita. Il file non può essere aperto per la scrittura.</translation>
+        <translation>Esportazione fallita. Il file non può essere aperto per la scrittura.</translation>
     </message>
     <message>
         <location line="+185"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esportazione avvenuta con successo, ma la composizione era vuota.</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esportazione  delle tracce non mutate fallito. Non ci sono tracce non mutate o non ci sono segmenti su di esse.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esportazione delle tracce selezionate fallita. Non ci sono segmenti sulle tracce selezionate.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esportazione dei segmenti fallita. Nessun segmento selezionato.</translation>
     </message>
     <message>
         <location line="+1869"/>
         <source>warning: overlong bar truncated here</source>
-        <translation type="unfinished">attenzione: battuta troppo lunga troncata qui</translation>
+        <translation>attenzione: battuta troppo lunga troncata qui</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation type="unfinished">attenzione: battuta troppo breve, riempita con silenzio</translation>
+        <translation>attenzione: battuta troppo breve, riempita con silenzio</translation>
     </message>
 </context>
 <context>
@@ -15927,42 +15946,42 @@ Vuoi usare
     <message>
         <location line="+1"/>
         <source>2.14</source>
-        <translation type="unfinished">2.14</translation>
+        <translation>2.14</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.16</source>
-        <translation type="unfinished">2.16</translation>
+        <translation>2.16</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.18</source>
-        <translation type="unfinished">2.18</translation>
+        <translation>2.18</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.19</source>
-        <translation type="unfinished">2.19</translation>
+        <translation>2.19</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.20</source>
-        <translation type="unfinished">2.20</translation>
+        <translation>2.20</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.21</source>
-        <translation type="unfinished">2.21</translation>
+        <translation>2.21</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.22</source>
-        <translation type="unfinished">2.22</translation>
+        <translation>2.22</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>2.23</source>
-        <translation type="unfinished">2.23</translation>
+        <translation>2.23</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -16022,7 +16041,7 @@ Vuoi usare
     <message>
         <location line="+3"/>
         <source>Print short staff names</source>
-        <translation type="unfinished"></translation>
+        <translation>Stampa nomi corti per i pentagrammi</translation>
     </message>
     <message>
         <location line="+42"/>
@@ -16057,7 +16076,7 @@ Vuoi usare
     <message>
         <location line="+5"/>
         <source>Cancel accidentals</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella le alterazioni</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -16067,22 +16086,22 @@ Vuoi usare
     <message>
         <location line="+2"/>
         <source>Export empty staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta i pentagrammi vuoti</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Quando selezionata questa opzione fa sì che LilyPond stampi tutti i pentagrammi anche se vuoti. De-selezionare questa opzione potrebbe rendere lo spartito più pulito se ci sono lunghe pause per alcuni strumenti.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Allow fingerings inside staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Permetti diteggiature all&apos;interno del pentagramma</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;When checked, LilyPond is allowed print fingerings inside the staff.  This can improve rendering in polyphonic scores with fingerings in different voices, and is on by default.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Se selezionata questa opzione permette a LiliPond di stampare le diteggiature all&apos;interno del pentagramma. Può migliorare la resa per spartiti plifonici con diteggiature in diverse voci ed è attivata di default.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+42"/>
@@ -16107,7 +16126,7 @@ Vuoi usare
     <message>
         <location line="+1"/>
         <source>Selected track</source>
-        <translation type="unfinished">Traccia selezionata</translation>
+        <translation>Traccia selezionata</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -16117,7 +16136,7 @@ Vuoi usare
     <message>
         <location line="+4"/>
         <source>Edited segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmenti editati</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -16178,12 +16197,12 @@ Vuoi usare
     <message>
         <location line="+3"/>
         <source>Export tempo marks </source>
-        <translation>Esporta i marcatori del tempo</translation>
+        <translation>Esporta le indicazioni di tempo </translation>
     </message>
     <message>
         <location line="+29"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Utile per spartiti grandi e complessi; questa funzionalità stampa il nome cotro ogni volta che c&apos;è un a capo nello spartito, rendendolo più facile capire quale rigo musicale appartiene a quele strumento su varie pagine; per funzionare ha bisogno di LiliPond 2.10 o superiore&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -16429,12 +16448,12 @@ Vuoi usare
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+72"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to switch between loop range and loop all.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Clicca e sposta per spostare il punto di riproduzione.&lt;/p&gt;&lt;p&gt;Click destro (secondario) e sposta per impostare l&apos;intervallo di loop o di editing.&lt;/p&gt;&lt;p&gt;Click destro per selezionare loop dell&apos;intervallo o loop di tutto il pezzo.&lt;/p&gt;&lt;p&gt;Tasto Ctrl+click e sposta per spostare il punto di produzione di beat interi.&lt;/p&gt;&lt;p&gt;Doppio click per avviare il play.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to toggle the range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Clicca e sposta per spostare il punto di riproduzione.&lt;/p&gt;&lt;p&gt;Click destro (secondario) e sposta per impostare l&apos;intervallo di loop o di editing.&lt;/p&gt;&lt;p&gt;Click destro per selezionare loop dell&apos;intervallo o loop di tutto il pezzo.&lt;/p&gt;&lt;p&gt;Tasto Ctrl+click e sposta per spostare il punto di produzione di beat interi.&lt;/p&gt;&lt;p&gt;Doppio click per avviare il play.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -16797,12 +16816,13 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+18"/>
         <source>&lt;qt&gt;Send bank select&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>intraducibile bank select: è un messaggio specifico del MIDI</translatorcomment>
+        <translation type="unfinished">&lt;qt&gt;Invia messaggio bank select&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>&lt;qt&gt;Send program change&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;Invia messaggi program change&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -16817,12 +16837,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+11"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fixed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prefissati</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -17063,7 +17083,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location filename="../../src/commands/notation/MarkParallelCommand.h" line="+45"/>
         <source>Mark Parallel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Marca parallelo</translation>
     </message>
 </context>
 <context>
@@ -17526,7 +17546,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location line="+471"/>
         <source>Set Controller Values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Imposta i valori del controller</translation>
     </message>
     <message>
         <location line="+528"/>
@@ -17553,7 +17573,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location line="-63"/>
         <source>Please select a control ruler first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona prima un righello per i controlli.</translation>
     </message>
     <message>
         <location line="+448"/>
@@ -17621,7 +17641,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location line="+2"/>
         <source>Track %1 (%2) | %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Traccia %1 (%2) %3</translation>
     </message>
     <message>
         <location line="-1294"/>
@@ -17638,7 +17658,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/segment/MergeFileCommand.cpp" line="+44"/>
         <source>Merge File</source>
-        <translation type="unfinished">Inserisci File</translation>
+        <translation>Unisci File</translation>
     </message>
 </context>
 <context>
@@ -17677,49 +17697,50 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+81"/>
         <source>Wrong length for long data in MIDI stream</source>
-        <translation type="unfinished">Lunghezza sbagliata per dati lunghi nello stream del Midi</translation>
+        <translatorcomment>che vor dì????</translatorcomment>
+        <translation>Lunghezza errata per dati lunghi nello stream del MIDI</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Wrong length for int data in MIDI stream</source>
-        <translation type="unfinished">Lunghezza sbagliata per dati di int nello stream del Midi</translation>
+        <translation type="unfinished">Lunghezza sbagliata per dati di int nello stream MIDI</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>End of MIDI file encountered while reading</source>
-        <translation type="unfinished">Incontrata in lettura la fine del file MIDI</translation>
+        <translation type="unfinished">Raggiunta la fine del file MIDI in fase di lettura</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Attempt to get more bytes than expected on Track</source>
-        <translation type="unfinished">Stai tentando di avere più bytes di quelli previsti sulla traccia</translation>
+        <translation type="unfinished">Tentativo di recuperare più byte di quelli previsti per la traccia</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Attempt to read past MIDI file end</source>
-        <translation type="unfinished">Stai tentando di leggere oltre la fine del file MIDI</translation>
+        <translation>Stai tentando di leggere oltre la fine del file MIDI</translation>
     </message>
     <message>
         <location line="+15"/>
         <location line="+535"/>
         <source>Cancelled by user</source>
-        <translation type="unfinished"></translation>
+        <translation>Annullato dall&apos;utente</translation>
     </message>
     <message>
         <location line="-459"/>
         <source>File corrupted or in non-standard format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">File corrotto o non in formato standard</translation>
     </message>
     <message>
         <location line="+68"/>
         <location line="+5"/>
         <source>Not a MIDI file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Non è un file MIDI</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Unexpected MIDI file format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formato file MIDI non riconosciuto</translation>
     </message>
     <message>
         <location line="+97"/>
@@ -18257,22 +18278,22 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location line="+29"/>
         <source>Always show note preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra sempre l&apos;anteprima delle note</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>&lt;p&gt;If checked, a preview of the note or rest is always displayed when inserting notes or rests with the mouse&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Se selezionata, questa opzione fa sì che un&apos;anteprima della nota sia sempre visualizzata quando si inseriscono le note o pause con il mouse&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Quick mouse entry mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserimento veloce con mouse</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Se selezionata questa opzione, le seguenti opzioni sono usabili quando si inseiscono le note con il mouse:&lt;ul&gt;&lt;li&gt;La rotella del mouse seleziona la durata delle note&lt;/li&gt;&lt;li&gt;Il tasto Shift aggiunge un diesis&lt;/li&gt;&lt;li&gt;Il tasto Ctrl aggiunge un bemolle&lt;/li&gt;&lt;li&gt;I tasti Shift + Ctrl insieme aggiungono un bequadro&lt;/li&gt;&lt;li&gt;Un click col tasto centrale commuta tra note e pause&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -18416,7 +18437,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location line="+13"/>
         <source>Distribute verses among repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Distribuisci i versi sui segmenti ripetuti</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -19216,17 +19237,17 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/dialogs/OutOfProcessorPower.cpp" line="+38"/>
         <source>Out Of Processor Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Superata la potenza del processore</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
-        <translation type="unfinished">Superata la potenza del processore per l&apos;elaborazione in tempo reale.  Non posso continuare.</translation>
+        <translation>Superata la potenza del processore per l&apos;elaborazione in tempo reale.  Non posso continuare.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Don&apos;t display this dialog again.  (Restart required.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Non mostrare più questa finestra (necessario il riavvio)</translation>
     </message>
 </context>
 <context>
@@ -19353,47 +19374,47 @@ Accertati che il dispositivo sia correttamente configurato alla voce
         <location line="-62"/>
         <location line="+763"/>
         <source>%1 Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Sequenza %1</translation>
     </message>
     <message>
         <location line="-750"/>
         <source>Replacement mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità sostituisci</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Replace old events</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituisci eventi esistenti</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Erase existing pitchbends or controllers of this type in this range before adding new ones&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Elimina i pitch bend o controller di questo tipo prima di inserire i nuovi&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Add new events to old ones</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi i nuovi eventi a quelli esistenti</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Add new pitchbends or controllers without affecting existing ones.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Aggiungi nuovi pitch bend o controller senza modificare quelli esistenti.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Just erase old events</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella solamente gli eventi</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Don&apos;t add any events, just erase existing pitchbends or controllers of this type in this range.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Non aggiungere alcun evento. Cancella solamente gli eventi pitch bend o controller di questo tipo già esistenti.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Usa questo settaggio editabile dall&apos;utente.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -19414,87 +19435,87 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="-123"/>
         <source>Saved setting %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvato settaggio %1</translation>
     </message>
     <message>
         <location line="+38"/>
         <source>Pre Ramp</source>
-        <translation type="unfinished"></translation>
+        <translation>Pre rampa</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Start at value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia al valore:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start at value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia al valore (%):</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Wait (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspetta (%):</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;How long to wait before starting the bend or ramp, as a percentage of the total time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Quanto aspettare prima di iniziare il bend o la rampa, come percentuale del tempo totale&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Ramp Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Rampa in sequenza</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Bend duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Durata del bend (%)</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>Tremolo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tremolo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LFO</source>
-        <translation type="unfinished"></translation>
+        <translation>LFO (oscillazione)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;LFO (oscillazione a bassa frequenza) per il controller. Questa opzione è possibile solo se la modalità rampa è lineare e &lt;i&gt;Usa questo numero di intervalli&lt;/i&gt; è selezionato.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+38"/>
         <source>Hertz (Hz):</source>
-        <translation type="unfinished"></translation>
+        <translation>Hertz (Hz):</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;La rampa ha un andamento lineare: è possibile inserire un vibrato se &lt;i&gt;Usa questo numero di intervalli&lt;/i&gt; è anche selezionato&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-48"/>
         <source>Start amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitudine iniziale:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitudine iniziale (%):</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>End amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitudine finale:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>End amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitudine finale (%):</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -19504,17 +19525,17 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+14"/>
         <source>Ramp mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità rampa</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineare</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Logarithmic</source>
-        <translation type="unfinished"></translation>
+        <translation>Logaritmica</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19524,7 +19545,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+5"/>
         <source>Half sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Mezza onda seno</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19534,7 +19555,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+5"/>
         <source>Quarter sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Quarto di onda seno</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19544,12 +19565,12 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+14"/>
         <source>How many steps</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero di intervalli</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Use step size (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa una dimensione di intervallo (%):</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19559,7 +19580,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+14"/>
         <source>Use this many steps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa questo numero di intervalli</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19569,7 +19590,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+787"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
-        <translation type="unfinished"></translation>
+        <translation>https://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en (inglese)</translation>
     </message>
     <message>
         <location line="-996"/>
@@ -19589,7 +19610,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+13"/>
         <source>End value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valore finale:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -19766,7 +19787,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/commands/edit/PlaceControllersCommand.cpp" line="+59"/>
         <source>Place Controllers</source>
-        <translation type="unfinished"></translation>
+        <translation>Piazza controller</translation>
     </message>
 </context>
 <context>
@@ -19819,7 +19840,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+1"/>
         <source>X11 Rosegarden files</source>
-        <translation type="unfinished">File di Rosegrden X11</translation>
+        <translation>File di Rosegrden X11</translation>
     </message>
     <message>
         <source>X11 Rosegaden files</source>
@@ -20142,12 +20163,12 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/gui/rulers/PropertyAdjuster.cpp" line="+103"/>
         <source>Velocity: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>jkjjVelocity: %1</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Velocity: %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocity: da %1 a %2</translation>
     </message>
 </context>
 <context>
@@ -20270,7 +20291,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+23"/>
         <source>Arbitrary grid unit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Unità arbitraria per la griglia:</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -20290,12 +20311,12 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+7"/>
         <source>Remove notes smaller than:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rimuovi le note più piccole di:</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Remove articulations (staccato and tenuto)</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina le articolazioni (staccato e tenuto)</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -20333,42 +20354,43 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="+63"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation type="unfinished">Rosegarden per ora supporta solo 16 o 32 bit PCM o IEEE virgola mobile RIFF files per la scrittura</translation>
+        <translation>Rosegarden per ora supporta solo 16 o 32 bit PCM o IEEE virgola mobile RIFF files per la scrittura</translation>
     </message>
     <message>
         <location line="+312"/>
         <source>Can&apos;t find RIFF identifier</source>
-        <translation type="unfinished">Non posso trovare l&apos;identificatore RIFF</translation>
+        <translation>Impossibile trovare l&apos;identificatore RIFF</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Can&apos;t find WAV identifier</source>
-        <translation type="unfinished">Non posso trovare l&apos;identificatore WAV</translation>
+        <translation>Impossibile trovare l&apos;identificatore WAV</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Can&apos;t find FORMAT identifier</source>
-        <translation type="unfinished">Non posso trovare l&apos;identificatore FORMATO</translation>
+        <translatorcomment>lasciamo FORMAT in inglese visto che fa parte della specifica del file</translatorcomment>
+        <translation>Impossibile trovare l&apos;identificatore FORMAT</translation>
     </message>
     <message>
         <location line="+50"/>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation type="unfinished">Rosegarden arrualmente supporta solo PCM o IEEE virgola mobile RIFF files</translation>
+        <translation>Rosegarden arrualmente supporta solo PCM o IEEE a virgola mobile per i file RIFF</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Unsupported number of channels</source>
-        <translation type="unfinished">Numero di canali non supportato</translation>
+        <translation>Numero di canali non supportato</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation type="unfinished">Rosegarden attualmente supporta solo 8-, 16- o 24 bit PCM nei files RIFF</translation>
+        <translation>Rosegarden attualmente supporta solo 8-, 16- o 24 bit PCM nei files RIFF</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation type="unfinished">Rosegarden attualmente supporta solo 32 bit virgola mobile nei  files RIFF </translation>
+        <translation>Rosegarden attualmente supporta solo il formato 32 bit a virgola mobile nei  file RIFF</translation>
     </message>
 </context>
 <context>
@@ -20786,7 +20808,7 @@ Scegli quelli che vuoi cancellare definitivamente dal disco fisso.
     <message>
         <location line="+10"/>
         <source>Reading file...</source>
-        <translation type="unfinished">Lettura file...</translation>
+        <translation>Lettura file...</translation>
     </message>
     <message>
         <location line="+52"/>
@@ -20808,7 +20830,7 @@ Scegli quelli che vuoi cancellare definitivamente dal disco fisso.
     <message>
         <location line="+520"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1 è un file di sola lettura.  Per favore salva su un altro file.</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -20848,27 +20870,33 @@ editing this file.  If you are sure no one else is
 editing this file, you may press Ignore to open the file.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Impossibile bloccare il file.
+
+Altri utenti o istanze di Rosegarden potrebbero
+avere il file aperto. Se avete la sicurezza che nessuno
+stia editando il file potete selezionare Ignora e aprire il file.
+
+</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Process ID: </source>
-        <translation type="unfinished"></translation>
+        <translation>ID processo: </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Application: </source>
-        <translation type="unfinished"></translation>
+        <translation>Applicazione: </translation>
     </message>
     <message>
         <location line="-3"/>
         <source>Lock Filename: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">File di lock: </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Host: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Host: </translation>
     </message>
     <message>
         <location line="-1671"/>
@@ -20879,12 +20907,12 @@ editing this file, you may press Ignore to open the file.
         <location line="-755"/>
         <location line="+2191"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location line="-2128"/>
         <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore nella lettura del file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</translation>
     </message>
     <message>
         <location line="+741"/>
@@ -21329,10 +21357,8 @@ Vuoi impostarla adesso?</translation>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
         <translation>
-            <numerusform>Separa %n Segmenti al tempo
-        </numerusform>
-            <numerusform>Spezza %n Segmenti al tempo
-        </numerusform>
+            <numerusform>Dividi %n Segmento al tempo</numerusform>
+            <numerusform>Dividi %n Segmenti al tempo</numerusform>
         </translation>
     </message>
     <message>
@@ -21457,12 +21483,12 @@ Vuoi impostarla adesso?</translation>
     <message>
         <location line="+342"/>
         <source>Transpose</source>
-        <translation type="unfinished">Trasporto</translation>
+        <translation>Trasponi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Per numero di semitoni: </translation>
+        <translation>Per numero di semitoni: </translation>
     </message>
     <message>
         <location line="+1027"/>
@@ -21540,12 +21566,12 @@ Vuoi impostarla adesso?</translation>
     <message>
         <location line="-1799"/>
         <source>Relabel Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ri-etichetta Segmento</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>New segment label</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuova etichetta segmento</translation>
     </message>
     <message>
         <location line="+1080"/>
@@ -21628,28 +21654,28 @@ Prova a chiudere e riavviare Rosegarden per ripristinare il suono.</translation>
     <message>
         <location line="+1122"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
-        <translation type="unfinished"></translation>
+        <translation>File &quot;%1&quot; è un file Rosegarden di device: deve essere importato usando il device manager MIDI.</translation>
     </message>
     <message>
         <location line="+391"/>
         <source>Replace or Merge?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituisci o Unisci?</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituisci</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Merge</source>
-        <translation type="unfinished">Inserisci</translation>
+        <translation>Unisci</translation>
     </message>
     <message>
         <location line="+151"/>
         <location line="+2528"/>
         <source>Select File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona il/i file</translation>
     </message>
     <message>
         <location line="-2314"/>
@@ -21660,7 +21686,7 @@ Prova a chiudere e riavviare Rosegarden per ripristinare il suono.</translation>
     <message>
         <location line="+2"/>
         <source> as a template </source>
-        <translation>come modello</translation>
+        <translation> come modello </translation>
     </message>
     <message>
         <location line="+405"/>
@@ -21679,7 +21705,7 @@ Prova a chiudere e riavviare Rosegarden per ripristinare il suono.</translation>
         <location line="+116"/>
         <location line="+61"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location line="-2450"/>
@@ -21716,28 +21742,28 @@ Nessun segmento sarà spezzato.</translation>
     <message>
         <location line="+809"/>
         <source>Select MIDI File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona il/i file MIDI</translation>
     </message>
     <message>
         <location line="+284"/>
         <source>Select X11 Rosegarden File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona il/i file Rosegarden X11</translation>
     </message>
     <message>
         <location line="+78"/>
         <location line="+22"/>
         <source>Open Hydrogen File</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri file di Hydrogen</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Importing Hydrogen file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importo file Hydrogen...</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile caricare file Hydrogen. Sembra essere corrotto.</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -21753,7 +21779,8 @@ Nessun segmento sarà spezzato.</translation>
         <location line="+25"/>
         <source>Can&apos;t load MusicXML file:
 </source>
-        <translation>Impossibile caricare file MuxicXML:</translation>
+        <translation>Impossibile caricare file MuxicXML:
+</translation>
     </message>
     <message>
         <location line="+601"/>
@@ -21870,15 +21897,15 @@ Per assistenza sulla corretta configurazione audio e MIDI vai su http://rosegard
         <location line="-2412"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Dividi %n segmento per elemento di batteria</numerusform>
+            <numerusform>Dividi %n segmenti per elemento di batteria</numerusform>
         </translation>
     </message>
     <message>
         <location line="+6"/>
         <source>No segment was split.</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è stato diviso nessun segmento.</translation>
     </message>
     <message>
         <location line="+2526"/>
@@ -22047,18 +22074,18 @@ L&apos;errore è: %2</translation>
     <message>
         <location line="+44"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished">Rosegarden - Attenzione</translation>
+        <translation>Rosegarden - Attenzione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Il file corrente è stato modificato.&lt;/p&gt;&lt;p&gt;Volete salvarlo?&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Il file corrente è stato modificato.&lt;/p&gt;&lt;p&gt;Vuoi salvarlo?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Could not save document at %1
 (%2)</source>
-        <translation type="unfinished">Non riesco a salvare il documento in %1
+        <translation>Impossibile salvare il documento in %1
 (%2)</translation>
     </message>
 </context>
@@ -22175,7 +22202,7 @@ L&apos;errore è: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentExcludeFromPrintingCommand.cpp" line="+30"/>
         <source>Change Exclude From Printing</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica escludi da stampa</translation>
     </message>
 </context>
 <context>
@@ -22183,7 +22210,8 @@ L&apos;errore è: %2</translation>
     <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="-278"/>
         <source>Delete Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>che cos&apos;è?</translatorcomment>
+        <translation type="unfinished">Elimina aiuto range</translation>
     </message>
 </context>
 <context>
@@ -22191,7 +22219,8 @@ L&apos;errore è: %2</translation>
     <message>
         <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="-167"/>
         <source>Insert Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Non ho idea cosa faccia e dove sia</translatorcomment>
+        <translation type="unfinished">Inserisci aiuto range</translation>
     </message>
 </context>
 <context>
@@ -22208,7 +22237,7 @@ L&apos;errore è: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+43"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Unisci</translation>
+        <translation>&amp;Unisci</translation>
     </message>
 </context>
 <context>
@@ -22627,9 +22656,9 @@ Vuoi impostarlo adesso?</translation>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+312"/>
         <source>Move %n Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Sposta %n segmento</numerusform>
+            <numerusform>Sposta %n segmenti</numerusform>
         </translation>
     </message>
     <message>
@@ -22670,17 +22699,17 @@ Vuoi impostarlo adesso?</translation>
     <message numerus="yes">
         <location line="-382"/>
         <source>Copy %n Segment(s) as link(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Copia %n segmento come link</numerusform>
+            <numerusform>Copia %n segmenti come link</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>Copy %n Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Copia %n segmento</numerusform>
+            <numerusform>Copia %n segmenti</numerusform>
         </translation>
     </message>
     <message>
@@ -22702,17 +22731,17 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.h" line="+47"/>
         <source>Split by &amp;Drum...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dividi per elemento di batteria</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.cpp" line="+44"/>
         <source>Split by Drum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dividi per elemento di batteria</translation>
     </message>
     <message>
         <location line="+128"/>
         <source>Pitch %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Altezza %1</translation>
     </message>
 </context>
 <context>
@@ -22825,7 +22854,7 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <location filename="../../src/commands/edit/SelectAddEvenNotesCommand.h" line="+91"/>
         <source>Select Beats</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seleziona beat</translation>
     </message>
 </context>
 <context>
@@ -22833,37 +22862,37 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <location filename="../../src/gui/dialogs/SelectDialog.cpp" line="+47"/>
         <source>Search and Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca e seleziona</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Duration</source>
-        <translation type="unfinished">Durata</translation>
+        <translation>Durata</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Pitch</source>
-        <translation type="unfinished">Altezza</translation>
+        <translation>Altezza</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Special</source>
-        <translation type="unfinished"></translation>
+        <translation>Speciale</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Advanced</source>
-        <translation type="unfinished">Avanzato</translation>
+        <translation>Avanzato</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Replace existing selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituisci la selezione esistente</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Extend existing selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Estendi la selezione esistente</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -22873,12 +22902,12 @@ Vuoi impostarlo adesso?</translation>
     <message>
         <location line="+275"/>
         <source>Include notes with shorter performance durations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Includi note con durate performance più corte</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Include notes with longer performance durations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Includi note con durate della performance più lunghe</translation>
     </message>
 </context>
 <context>
@@ -22959,7 +22988,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosound&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Impossibile inizializzare sia il sistema MIDI sia quello Audio.&lt;/p&gt;&lt;p&gt;Se vuoi usare Rosegarden esplicitamente senza sequenceer puoi lanciarlo con il comando &quot;rosegarden --nosound&quot; per evitare di visualizzare questo errore in futuro. Altrimenti ti consigliamo di correggere la tua configurazione di sistema e riavviare Rosegarden.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
@@ -22973,7 +23002,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosound&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Impossibile avviare il sistema MIDI.&lt;/p&gt;&lt;p&gt;Puoi continuare senza il sequencer, ma consigliamo di chiudere Rosegarden e in un terminale lanciare il comando &quot;modprobe snd-seq-midi&quot; come utente root, poi riavviare Rosegarden. Se vuoi usare Rosegarden esplicitamente senza sequenceer puoi lanciarlo con il comando &quot;rosegarden --nosound&quot; per evitare di visualizzare questo errore in futuro.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -23073,98 +23102,98 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location filename="../../src/gui/dialogs/ShortcutDialog.cpp" line="+54"/>
         <source>Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Scorciatoie tastiera</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Filter pattern:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtra:</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>&lt;p&gt;Select an action in the table below then double click one of the four &lt;b&gt;Shortcut&lt;/b&gt; fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the &lt;b&gt;Shortcut&lt;/b&gt; field.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Actions marked with a &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;light blue background&lt;/span&gt; are global and valid for all windows.&lt;/i&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Seleziona un&apos;azione nella tabella qui sotto poi fai click su uno dei quattro campi &lt;b&gt;Scorciatoia&lt;/b&gt; nella tabella. Premi il tasto per la nuova scorciatoia. Una scorciatoia può essere rimossa premendo il tasto Shift nel campo &lt;b&gt;Scorciatoia&lt;/b&gt;&lt;/p&gt;&lt;/p&gt;&lt;i&gt;Le azioni segnate con uno &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;sfondo blu chiaro&lt;/span&gt; sono globali e si applicano in tutte le finestre&lt;/i&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Reset Selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Reimposta selezione</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reset selected actions&apos; shortcuts to defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Reimposta le scorciatoie selezionate a quelle di default</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Remove shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina scorciatoiej</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Remove all shortcuts from selected actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina tutte le scorciatoie per le azioni selezionate</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Reset All</source>
-        <translation type="unfinished"></translation>
+        <translation>Reimposta tutte</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reset all shortcuts for all actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Reimposta tutte le scorciatoie per tutte le azioni</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Warnings when:</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvisa quando:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Never</source>
-        <translation type="unfinished">Mai</translation>
+        <translation>Mai</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Conflict in same context</source>
-        <translation type="unfinished"></translation>
+        <translation>Conflitto nello stesso contesto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Conflict in any context</source>
-        <translation type="unfinished"></translation>
+        <translation>Conflitto in qualsiasi contesto</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Keyboard:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastiera:</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+2"/>
         <source>Apply changes for your keyboard layout.</source>
-        <translation type="unfinished"></translation>
+        <translation>Applica i cambiamenti per il tuo layout tastiera.</translation>
     </message>
     <message>
         <location line="+59"/>
         <source>Shortcuts Changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Scorciatoie modificate</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>You must restart Rosegarden for shortcut changes to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>È necessario riavviare Rosegarden affinché le scorciatoie abbiano effetto.</translation>
     </message>
     <message>
         <location line="+184"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>This will reset all shortcuts for all actions across all contexts. Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo resetterà tutte le scorciatoie per tutte le azioni in tutti i contesti. Confermi?</translation>
     </message>
 </context>
 <context>
@@ -23172,17 +23201,17 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location filename="../../src/gui/dialogs/ShortcutWarnDialog.cpp" line="+38"/>
         <source>Shortcut Conflicts</source>
-        <translation type="unfinished"></translation>
+        <translation>kkConflitti scorciatoie tastierajj</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>set Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>setta scorciatoiajj</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>remove Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>elimina scorciatoia</translation>
     </message>
 </context>
 <context>
@@ -23437,12 +23466,12 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="-25"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not load SysEx file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile caricare file SysEx.</translation>
     </message>
     <message>
         <source>*.syx|System exclusive files (*.syx)</source>
@@ -24625,7 +24654,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+366"/>
         <source>Delete Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina tracce</translation>
     </message>
     <message>
         <location line="+148"/>
@@ -24733,12 +24762,13 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+8"/>
         <source>Archive</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>in inglese è sostantivo o verbo??</translatorcomment>
+        <translation type="unfinished">Archivio</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Check this to archive a track.  Archived tracks will not make sound.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Seleziona per artchiviare la traccia.  Le tracce archiviate non producono suono.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -24763,7 +24793,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+6"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auto</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -25151,7 +25181,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="-819"/>
         <source>Reset to Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Reimposta ai default</translation>
     </message>
     <message>
         <source>Default</source>
