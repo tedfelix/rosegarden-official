@@ -33,12 +33,14 @@ public:
 
     void populatePluginSlot(QString identifier, MappedPluginSlot &slot) override;
 
-    RunnablePluginInstance *instantiatePlugin(QString identifier,
-                                                      int instrumentId,
-                                                      int position,
-                                                      unsigned int sampleRate,
-                                                      unsigned int blockSize,
-                                                      unsigned int channels) override;
+    RunnablePluginInstance *instantiatePlugin
+        (QString identifier,
+         int instrumentId,
+         int position,
+         unsigned int sampleRate,
+         unsigned int blockSize,
+         unsigned int channels,
+         AudioInstrumentMixer* amixer) override;
 
 protected:
     DSSIPluginFactory();
@@ -57,4 +59,3 @@ protected:
 }
 
 #endif
-

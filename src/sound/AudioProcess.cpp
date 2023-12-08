@@ -938,7 +938,8 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
                                               position,
                                               m_sampleRate,
                                               m_blockSize,
-                                              channels);
+                                              channels,
+                                              this);
         if (instance && !instance->isOK()) {
             std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position
                       << ": instance is not OK" << std::endl;

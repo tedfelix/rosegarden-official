@@ -85,6 +85,7 @@ public slots:
     void slotShowGUI();
     void slotHelpRequested();
 
+    virtual void slotEditConnections();
     virtual void slotEditor();
 
 signals:
@@ -131,6 +132,7 @@ protected:
     QPushButton         *m_pasteButton;
     QPushButton         *m_defaultButton;
     QPushButton         *m_guiButton;
+    QPushButton         *m_editConnectionsButton;
     QPushButton         *m_editorButton;
 
     QLabel              *m_programLabel;

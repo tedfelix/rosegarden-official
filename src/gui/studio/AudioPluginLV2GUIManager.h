@@ -19,6 +19,7 @@
 #define RG_AUDIOPLUGINLV2GUIMANAGER_H
 
 #include "gui/application/RosegardenMainWindow.h"
+#include "sound/PluginPortConnection.h"
 
 #include <lilv/lilv.h>
 
@@ -49,7 +50,9 @@ public:
     void updatePort(InstrumentId instrument, int position, int port);
     void updateConfiguration(InstrumentId instrument, int position,
                              const QString& key);
-
+    void getConnections(InstrumentId instrument,
+                        int position,
+                        PluginPortConnection::ConnectionList& clist) const;
  public slots:
     void slotStopGUIDelayed();
 

@@ -102,6 +102,17 @@ AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
 }
 
 void
+AudioPluginLV2GUIManager::getConnections
+(InstrumentId instrument,
+ int position,
+ PluginPortConnection::ConnectionList& clist) const
+{
+    // this routine must work even if we have no gui
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->getConnections(instrument, position, clist);
+}
+
+void
 AudioPluginLV2GUIManager::slotStopGUIDelayed()
 {
     RG_DEBUG << "stopGUIDelayed: " << m_instrument << "," << m_position;

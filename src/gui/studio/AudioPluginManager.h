@@ -29,9 +29,6 @@
 
 #include "AudioPlugin.h"
 
-
-
-
 namespace Rosegarden
 {
 

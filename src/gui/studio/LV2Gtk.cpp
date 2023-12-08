@@ -79,11 +79,13 @@ LV2Gtk::LV2Gtk() :
 LV2Gtk::~LV2Gtk()
 {
     int i = 0;
+    if (m_argv) {
         while (m_argv[i]) {
             free(m_argv[i]);
             i++;
         }
-    delete[] m_argv;
+        delete[] m_argv;
+    }
 }
 
 void LV2Gtk::tick()

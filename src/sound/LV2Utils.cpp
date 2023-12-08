@@ -608,7 +608,7 @@ void LV2Utils::getControlOutValues(InstrumentId instrument,
 }
 
 const LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
-                                                     int position)
+                                                     int position) const
 {
     PluginPosition pp;
     pp.instrument = instrument;
@@ -630,6 +630,24 @@ const LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
 LV2Gtk* LV2Utils::getLV2Gtk() const
 {
   return m_lv2gtk;
+}
+
+void LV2Utils::getConnections(InstrumentId instrument,
+                              int position,
+                              PluginPortConnection::ConnectionList& clist) const
+{
+    clist.clear();
+    const LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
+    if (!lv2inst) return;
+    lv2inst->getConnections(clist);
+}
+
+QString LV2Utils::getPortName(const QString& uri, int portIndex) const
+{
+    auto it = m_pluginData.find(uri);
+    if (it == m_pluginData.end()) return "";
+    const LV2PluginData& pdat = (*it).second;
+    return pdat.ports[portIndex].name;
 }
 
 }

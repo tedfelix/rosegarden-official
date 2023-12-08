@@ -18,7 +18,10 @@
 #ifndef RG_AUDIOPLUGINGUIMANAGER_H
 #define RG_AUDIOPLUGINGUIMANAGER_H
 
+#include <map>
+
 #include "gui/application/RosegardenMainWindow.h"
+#include "sound/PluginPortConnection.h"
 
 namespace Rosegarden
 {
@@ -40,6 +43,10 @@ class AudioPluginGUIManager
     void showGUI(InstrumentId instrument, int position);
     void stopGUI(InstrumentId instrument, int position);
     void stopAllGUIs();
+    bool canEditConnections(InstrumentId instrument, int position);
+    void getConnections(InstrumentId instrument,
+                        int position,
+                        PluginPortConnection::ConnectionList& clist) const;
     void updateProgram(InstrumentId instrument, int position);
     void updatePort(InstrumentId instrument, int position, int port);
     void updateConfiguration(InstrumentId instrument, int position,
@@ -47,7 +54,8 @@ class AudioPluginGUIManager
 
  private:
     enum PluginGUIArchitecture {UNKNOWN, OSC, LV2};
-    PluginGUIArchitecture getArchitecture(InstrumentId instrument, int position);
+    PluginGUIArchitecture getArchitecture
+        (InstrumentId instrument, int position) const;
 
     RosegardenMainWindow *m_mainWindow;
     Studio *m_studio;

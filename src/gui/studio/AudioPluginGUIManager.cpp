@@ -120,6 +120,27 @@ void AudioPluginGUIManager::stopAllGUIs()
 #endif
 }
 
+bool AudioPluginGUIManager::canEditConnections(InstrumentId instrument,
+                                               int position)
+{
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // only lv2
+    if (arch == LV2) return true;
+    return false;
+}
+
+void AudioPluginGUIManager::getConnections
+(InstrumentId instrument,
+ int position,
+ PluginPortConnection::ConnectionList& clist) const
+{
+    clist.clear();
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // only lv2
+    if (arch != LV2) return;
+    m_lv2Manager->getConnections(instrument, position, clist);
+}
+
 void AudioPluginGUIManager::updateProgram(InstrumentId instrument, int position)
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
@@ -174,7 +195,8 @@ void AudioPluginGUIManager::updateConfiguration(InstrumentId instrument,
 }
 
 AudioPluginGUIManager::PluginGUIArchitecture
-AudioPluginGUIManager::getArchitecture(InstrumentId instrument, int position)
+AudioPluginGUIManager::getArchitecture
+(InstrumentId instrument, int position) const
 {
     if (!m_studio) return UNKNOWN;
     PluginContainer *container = m_studio->getContainerById(instrument);

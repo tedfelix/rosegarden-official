@@ -33,6 +33,7 @@
 #include "gui/widgets/PluginControl.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
+#include "sound/PluginPortConnection.h"
 
 #include <QLayout>
 #include <QCloseEvent>
@@ -227,10 +228,16 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
 
+    m_editConnectionsButton = new QPushButton(tr("Edit connections"));
+    buttonBox->addButton(m_editConnectionsButton, QDialogButtonBox::ActionRole);
+    connect(m_editConnectionsButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotEditConnections);
+    m_editConnectionsButton->setEnabled(false);
     m_editorButton = new QPushButton(tr("Editor"));
     //RG_DEBUG << "ctor - created Editor button";
     buttonBox->addButton(m_editorButton, QDialogButtonBox::ActionRole);
-    connect(m_editorButton, &QAbstractButton::clicked, this, &AudioPluginDialog::slotEditor);
+    connect(m_editorButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotEditor);
     m_editorButton->setEnabled(false);
 
     metagrid->addWidget(buttonBox, 1, 0);
@@ -256,6 +263,15 @@ AudioPluginDialog::~AudioPluginDialog()
     emit destroyed(m_containerId, m_index);
 }
 
+void AudioPluginDialog::slotEditConnections()
+{
+    PluginPortConnection::ConnectionList clist;
+    m_pluginGUIManager->getConnections(m_containerId, m_index, clist);
+    RG_DEBUG << "slotEditConnections";
+    for(auto c : clist) {
+        RG_DEBUG << c.isOutput << c.isAudio << c.pluginPort << c.portConnection;
+    }
+}
 
 void
 AudioPluginDialog::slotEditor()
@@ -773,6 +789,9 @@ AudioPluginDialog::slotPluginSelected(int index)
         // originally.  Compared with never making it available, this
         // is tolerable.
         m_editorButton->setEnabled(hasGui);
+        bool canEditConnections =
+            m_pluginGUIManager->canEditConnections(m_containerId, m_index);
+        m_editConnectionsButton->setEnabled(canEditConnections);
     } else {
         m_editorButton->setEnabled(false);
     }

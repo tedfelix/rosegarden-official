@@ -182,7 +182,8 @@ LV2PluginFactory::instantiatePlugin(QString identifier,
                                     int position,
                                     unsigned int sampleRate,
                                     unsigned int blockSize,
-                                    unsigned int channels)
+                                    unsigned int channels,
+                                    AudioInstrumentMixer* amixer)
 {
     RG_DEBUG << "instantiate plugin" << identifier;
 
@@ -190,7 +191,7 @@ LV2PluginFactory::instantiatePlugin(QString identifier,
     LV2PluginInstance *instance =
         new LV2PluginInstance
         (this, instrumentId, identifier,
-         position, sampleRate, blockSize, channels, uri);
+         position, sampleRate, blockSize, channels, uri, amixer);
 
     m_instances.insert(instance);
 

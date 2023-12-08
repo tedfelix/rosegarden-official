@@ -26,6 +26,7 @@ namespace Rosegarden
 
 class RunnablePluginInstance;
 class MappedPluginSlot;
+class AudioInstrumentMixer;
 
 class PluginFactory
 {
@@ -37,7 +38,7 @@ public:
     static void setSampleRate(int sampleRate) { m_sampleRate = sampleRate; }
 
     /**
-     * Look up the plugin path and find the plugins in it.  Called 
+     * Look up the plugin path and find the plugins in it.  Called
      * automatically after construction of a factory.
      */
     virtual void discoverPlugins() = 0;
@@ -68,12 +69,14 @@ public:
     /**
      * Instantiate a plugin.
      */
-    virtual RunnablePluginInstance *instantiatePlugin(QString identifier,
-                                                      int instrumentId,
-                                                      int position,
-                                                      unsigned int sampleRate,
-                                                      unsigned int blockSize,
-                                                      unsigned int channels) = 0;
+    virtual RunnablePluginInstance *instantiatePlugin
+        (QString identifier,
+         int instrumentId,
+         int position,
+         unsigned int sampleRate,
+         unsigned int blockSize,
+         unsigned int channels,
+         AudioInstrumentMixer* amixer) = 0;
 
 protected:
     PluginFactory() { }

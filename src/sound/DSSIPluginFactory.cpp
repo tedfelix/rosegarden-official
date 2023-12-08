@@ -148,12 +148,14 @@ DSSIPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot
 }
 
 RunnablePluginInstance *
-DSSIPluginFactory::instantiatePlugin(QString identifier,
-                                     int instrumentId,
-                                     int position,
-                                     unsigned int sampleRate,
-                                     unsigned int blockSize,
-                                     unsigned int channels)
+DSSIPluginFactory::instantiatePlugin
+(QString identifier,
+ int instrumentId,
+ int position,
+ unsigned int sampleRate,
+ unsigned int blockSize,
+ unsigned int channels,
+ AudioInstrumentMixer*)
 {
     const DSSI_Descriptor *descriptor = getDSSIDescriptor(identifier);
 

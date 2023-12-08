@@ -23,6 +23,7 @@
 #include "sound/LV2Utils.h"
 #include "sound/Midi.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "document/RosegardenDocument.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/atom/util.h>
@@ -58,14 +59,16 @@ namespace Rosegarden
 #define EVENT_BUFFER_SIZE 1023
 #define ABUFSIZED 100000
 
-LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
-        InstrumentId instrument,
-        QString identifier,
-        int position,
-        unsigned long sampleRate,
-        size_t blockSize,
-        int idealChannelCount,
-        const QString& uri) :
+LV2PluginInstance::LV2PluginInstance
+(PluginFactory *factory,
+ InstrumentId instrument,
+ QString identifier,
+ int position,
+ unsigned long sampleRate,
+ size_t blockSize,
+ int idealChannelCount,
+ const QString& uri,
+ AudioInstrumentMixer* amixer) :
         RunnablePluginInstance(factory, identifier),
         m_instrument(instrument),
         m_position(position),
@@ -80,7 +83,8 @@ LV2PluginInstance::LV2PluginInstance(PluginFactory *factory,
         m_run(false),
         m_bypassed(false),
         m_distributeChannels(false),
-        m_pluginHasRun(false)
+        m_pluginHasRun(false),
+        m_amixer(amixer)
 {
     RG_DEBUG << "create plugin" << uri << m_instrument << m_position;
 
@@ -365,6 +369,30 @@ void LV2PluginInstance::audioProcessingDone()
     }
     // reset the status
     m_pluginHasRun = false;
+}
+
+void LV2PluginInstance::getConnections
+(PluginPortConnection::ConnectionList& clist) const
+{
+    // called from the gui thread
+    RG_DEBUG << "getConnections";
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    Studio &studio = doc->getStudio();
+    Instrument* inst = studio.getInstrumentById(m_instrument);
+    std::string iname = inst->getName();
+
+    clist.clear();
+    // audio
+    for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+        if (m_audioPortsIn[i] == -1) continue;
+        PluginPortConnection::Connection c;
+        c.isOutput = false;
+        c.isAudio = true;
+        c.pluginPort = lv2utils->getPortName(m_uri, m_audioPortsIn[i]);
+        if (i < m_channelCount) c.portConnection = iname.c_str();
+        clist.push_back(c);
+    }
 }
 
 LV2PluginInstance::~LV2PluginInstance()
@@ -785,7 +813,7 @@ LV2PluginInstance::run(const RealTime &rt)
         //RG_DEBUG << "check atom out" << ap.index;
         LV2_Atom_Sequence* aseq = ap.atomSeq;
         LV2_ATOM_SEQUENCE_FOREACH(aseq, ev) {
-            if (ev->body.type == m_midiEventUrid) {
+           if (ev->body.type == m_midiEventUrid) {
                 // midi out not used
             } else {
                 //RG_DEBUG << "updatePortValue";

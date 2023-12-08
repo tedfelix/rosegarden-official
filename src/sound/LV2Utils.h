@@ -25,6 +25,7 @@
 #include <lv2/worker/worker.h>
 
 #include "base/Instrument.h"
+#include "sound/PluginPortConnection.h"
 
 namespace Rosegarden
 {
@@ -190,9 +191,15 @@ class LV2Utils
                              std::map<int, float>& controlValues);
 
     const LV2PluginInstance* getPluginInstance(InstrumentId instrument,
-                                               int position);
+                                               int position) const;
 
     LV2Gtk* getLV2Gtk() const;
+
+    void getConnections(InstrumentId instrument,
+                        int position,
+                        PluginPortConnection::ConnectionList& clist) const;
+
+    QString getPortName(const QString& uri, int portIndex) const;
 
  private:
     /// Singleton.  See getInstance().

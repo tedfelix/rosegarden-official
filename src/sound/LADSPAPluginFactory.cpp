@@ -407,7 +407,8 @@ LADSPAPluginFactory::instantiatePlugin(QString identifier,
                                        int position,
                                        unsigned int sampleRate,
                                        unsigned int blockSize,
-                                       unsigned int channels)
+                                       unsigned int channels,
+                                       AudioInstrumentMixer*)
 {
     const LADSPA_Descriptor *descriptor = getLADSPADescriptor(identifier);
 

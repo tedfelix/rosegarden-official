@@ -29,6 +29,7 @@
 #include <alsa/seq_event.h>
 #include <alsa/seq_midi_event.h>
 #include "sound/LV2Utils.h"
+#include "sound/PluginPortConnection.h"
 
 #include "base/Instrument.h"
 #include "RingBuffer.h"
@@ -37,6 +38,8 @@
 
 namespace Rosegarden
 {
+
+class AudioInstrumentMixer;
 
 // LV2 plugin instance.  LV2 is a variable block size API, but
 // for one reason and another it's more convenient to use a fixed
@@ -107,6 +110,8 @@ public:
 
     virtual void audioProcessingDone() override;
 
+    void getConnections(PluginPortConnection::ConnectionList& clist) const;
+
 protected:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;
@@ -120,7 +125,8 @@ protected:
                       unsigned long sampleRate,
                       size_t blockSize,
                       int idealChannelCount,
-                      const QString& uri);
+                      const QString& uri,
+                      AudioInstrumentMixer* amixer);
 
     void init(int idealChannelCount = 0);
     void instantiate(unsigned long sampleRate);
@@ -193,6 +199,7 @@ protected:
     bool m_distributeChannels;
     LV2_URID m_atomTransferUrid;
     bool m_pluginHasRun;
+    AudioInstrumentMixer* m_amixer;
 };
 
 }
