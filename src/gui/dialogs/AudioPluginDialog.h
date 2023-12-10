@@ -142,6 +142,7 @@ protected:
 
     bool                 m_generating;
     bool                 m_guiShown;
+    int                  m_selectdPluginNumber;
 
     void                 populatePluginCategoryList();
     void                 populatePluginList();
