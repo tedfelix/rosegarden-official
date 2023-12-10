@@ -67,6 +67,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     LilvNode* name = lilv_plugin_get_name(plugin);
     QString sname = lilv_node_as_string(name);
     RG_DEBUG << "got plugin " << sname;
+    m_title = sname;
 
     //ui types:
     // http://lv2plug.in/ns/extensions/ui#GtkUI (eg. calf)
@@ -128,7 +129,6 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
             }
         ui_index++;
         RG_DEBUG << "descriptor: " << m_uidesc;
-        m_title = sname;
     }
 }
 

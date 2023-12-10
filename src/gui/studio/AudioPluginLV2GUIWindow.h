@@ -88,6 +88,8 @@ class AudioPluginLV2GUIWindow :
     QWidget* m_cWidget;
     QWindow* m_pWindow;
     LV2UI_Widget m_widget;
+    QString m_title;
+    std::string m_titles;
 };
 
 }
