@@ -67,6 +67,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     LilvNode* name = lilv_plugin_get_name(plugin);
     QString sname = lilv_node_as_string(name);
     RG_DEBUG << "got plugin " << sname;
+    m_title = sname;
 
     //ui types:
     // http://lv2plug.in/ns/extensions/ui#GtkUI (eg. calf)
@@ -128,24 +129,26 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
             }
         ui_index++;
         RG_DEBUG << "descriptor: " << m_uidesc;
-        m_title = sname;
     }
 }
 
 AudioPluginLV2GUI::~AudioPluginLV2GUI()
 {
     RG_DEBUG << "~AudioPluginLV2GUI";
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->lock();
+    lv2utils->unRegisterGUI(m_instrument, m_position);
     if (m_window) {
         LV2UI_Handle handle = m_window->getHandle();
         if (m_uidesc) {
             m_uidesc->cleanup(handle);
         }
+        RG_DEBUG << "~AudioPluginLV2GUI delete window";
         delete m_window;
         m_window = nullptr;
     }
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->unRegisterGUI(m_instrument, m_position);
     lilv_uis_free(m_uis);
+    lv2utils->unlock();
 }
 
 QString
@@ -226,7 +229,7 @@ AudioPluginLV2GUI::updatePortValue(int port, float value)
 
 void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
 {
-    RG_DEBUG << "updatePortValue" << port;
+    //RG_DEBUG << "updatePortValue" << port;
     if (! m_window) return;
     LV2UI_Handle handle = m_window->getHandle();
     int size = atom->size + 8;

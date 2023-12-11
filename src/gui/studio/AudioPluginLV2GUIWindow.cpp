@@ -85,10 +85,11 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_lv2II(nullptr),
     m_cWidget(nullptr),
     m_pWindow(nullptr),
-    m_widget(nullptr)
+    m_widget(nullptr),
+    m_title(title)
 {
-    RG_DEBUG << "create window" << id << uiType;
-    setWindowTitle(title);
+    RG_DEBUG << "create window" << id << m_uiType << m_title;
+    setWindowTitle(m_title);
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout,
             this, &AudioPluginLV2GUIWindow::timeUp);
@@ -124,6 +125,9 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     LV2_URID sampleRateUrid = lv2utils->uridMap(LV2_PARAMETERS__sampleRate);
     LV2_URID af_urid = lv2utils->uridMap(LV2_ATOM__Float);
     float sampleRate = pluginInstance->getSampleRate();
+    m_titles = m_title.toStdString();
+    LV2_URID titleUrid = lv2utils->uridMap(LV2_UI__windowTitle);
+    LV2_URID as_urid = lv2utils->uridMap(LV2_ATOM__String);
     LV2_Options_Option opt;
     opt.context = LV2_OPTIONS_INSTANCE;
     opt.subject = 0;
@@ -131,6 +135,11 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     opt.size = 4;
     opt.type = af_urid;
     opt.value = &sampleRate;
+    m_options.push_back(opt);
+    opt.key = titleUrid;
+    opt.size = m_titles.size();
+    opt.type = as_urid;
+    opt.value = m_titles.c_str();
     m_options.push_back(opt);
     opt.subject = 0;
     opt.key = 0;

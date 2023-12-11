@@ -76,7 +76,8 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_programLabel(nullptr),
     m_index(index),
     m_generating(true),
-    m_guiShown(false)
+    m_guiShown(false),
+    m_selectdPluginNumber(0)
 {
     setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
@@ -515,13 +516,21 @@ AudioPluginDialog::slotCategorySelected(int)
 void
 AudioPluginDialog::slotPluginSelected(int index)
 {
+    int number = m_pluginsInList[index];
+    if (number == m_selectdPluginNumber) {
+        // no change - return here to avoid unnecessary stop and start of ui
+        RG_DEBUG << "slotPluginSelected no change";
+        return;
+    }
+    RG_DEBUG << "slotPluginSelected" << m_selectdPluginNumber << "->" <<
+        number;
+    m_selectdPluginNumber = number;
+
     bool guiWasShown = m_guiShown;
 
     // always stop the gui
     emit stopPluginGUI(m_containerId, m_index);
     m_guiShown = false;
-
-    int number = m_pluginsInList[index];
 
     //RG_DEBUG << "slotPluginSelected(): setting up plugin from position " << number << " at menu item " << index;
 
