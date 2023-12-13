@@ -34,6 +34,7 @@
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
 #include "sound/PluginPortConnection.h"
+#include "gui/dialogs/AudioPluginConnectionDialog.h"
 
 #include <QLayout>
 #include <QCloseEvent>
@@ -270,7 +271,18 @@ void AudioPluginDialog::slotEditConnections()
     m_pluginGUIManager->getConnections(m_containerId, m_index, clist);
     RG_DEBUG << "slotEditConnections";
     for(auto c : clist) {
-        RG_DEBUG << c.isOutput << c.isAudio << c.pluginPort << c.portConnection;
+        RG_DEBUG << c.isOutput << c.isAudio << c.pluginPort <<
+            c.instrumentId << c.channel;
+    }
+    AudioPluginConnectionDialog dlg(this, clist);
+    if (dlg.exec() == QDialog::Accepted) {
+        PluginPortConnection::ConnectionList newList;
+        dlg.getConnections(newList);
+        RG_DEBUG << "slotEditConnections new list";
+        for(auto c : newList) {
+            RG_DEBUG << c.isOutput << c.isAudio <<
+                c.pluginPort << c.instrumentId << c.channel;
+        }
     }
 }
 

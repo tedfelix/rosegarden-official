@@ -139,7 +139,7 @@ protected:
     size_t                  m_blockSize;
     int                     m_bussCount;
 
-    std::vector<sample_t *> m_processBuffers;
+    std::vector<sample_t *> m_processBuffersBuss;
 
     struct BufferRec
     {
@@ -282,6 +282,8 @@ public:
     /// called when audio processing is done
     void audioProcessingDone();
 
+    sample_t* getAudioBuffer(InstrumentId id, unsigned int channel) const;
+
 protected:
     void threadRun() override;
 
@@ -304,8 +306,9 @@ protected:
     SynthPluginMap m_synths;
 
     // maintain the same number of these as the maximum number of
-    // channels on any audio instrument
-    std::vector<sample_t *> m_processBuffers;
+    // channels on any audio instrument for each instrument
+    typedef std::vector<sample_t *> ProcessBufferType;
+    std::map<InstrumentId, ProcessBufferType> m_processBuffers;
 
     struct BufferRec
     {

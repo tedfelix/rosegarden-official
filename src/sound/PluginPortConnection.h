@@ -17,6 +17,8 @@
 #include <QString>
 #include <list>
 
+#include "base/Instrument.h"
+
 namespace Rosegarden
 {
 
@@ -29,10 +31,11 @@ class PluginPortConnection
         bool isOutput;
         bool isAudio;
         QString pluginPort;
-        QString portConnection;
+        InstrumentId instrumentId;
+        int channel;
     };
-
     typedef std::list<Connection> ConnectionList;
+
 };
 
 }

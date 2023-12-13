@@ -45,6 +45,8 @@
 //#define DEBUG_READER 1
 //#define DEBUG_WRITER 1
 
+typedef float sample_t;
+
 namespace Rosegarden
 {
 
@@ -327,8 +329,8 @@ AudioBussMixer::AudioBussMixer(SoundDriver *driver,
 
 AudioBussMixer::~AudioBussMixer()
 {
-    for (size_t i = 0; i < m_processBuffers.size(); ++i) {
-        delete[] m_processBuffers[i];
+    for (size_t i = 0; i < m_processBuffersBuss.size(); ++i) {
+        delete[] m_processBuffersBuss[i];
     }
 }
 
@@ -394,9 +396,9 @@ AudioBussMixer::generateBuffers()
         }
     }
 
-    if (m_processBuffers.empty()) {
-        m_processBuffers.push_back(new sample_t[m_blockSize]);
-        m_processBuffers.push_back(new sample_t[m_blockSize]);
+    if (m_processBuffersBuss.empty()) {
+        m_processBuffersBuss.push_back(new sample_t[m_blockSize]);
+        m_processBuffersBuss.push_back(new sample_t[m_blockSize]);
     }
 }
 
@@ -658,8 +660,8 @@ AudioBussMixer::processBlocks()
 
         for (size_t block = 0; block < blocks; ++block) {
 
-            memset(m_processBuffers[0], 0, m_blockSize * sizeof(sample_t));
-            memset(m_processBuffers[1], 0, m_blockSize * sizeof(sample_t));
+            memset(m_processBuffersBuss[0], 0, m_blockSize * sizeof(sample_t));
+            memset(m_processBuffersBuss[1], 0, m_blockSize * sizeof(sample_t));
 
             bool dormant = true;
 
@@ -705,7 +707,7 @@ AudioBussMixer::processBlocks()
                             m_instrumentMixer->getRingBuffer(id, ch);
 
                         if (rb)
-                            rb->readAdding(m_processBuffers[ch],
+                            rb->readAdding(m_processBuffersBuss[ch],
                                            m_blockSize,
                                            1);
                     }
@@ -732,7 +734,7 @@ AudioBussMixer::processBlocks()
                     while (ch < plugin->getAudioInputCount()) {
                         if (ch < 2) {
                             memcpy(plugin->getAudioInputBuffers()[ch],
-                                   m_processBuffers[ch],
+                                   m_processBuffersBuss[ch],
                                    m_blockSize * sizeof(sample_t));
                         } else {
                             memset(plugin->getAudioInputBuffers()[ch], 0,
@@ -761,7 +763,7 @@ AudioBussMixer::processBlocks()
                         denormalKill(plugin->getAudioOutputBuffers()[ch],
                                      m_blockSize);
 
-                        memcpy(m_processBuffers[ch],
+                        memcpy(m_processBuffersBuss[ch],
                                plugin->getAudioOutputBuffers()[ch],
                                m_blockSize * sizeof(sample_t));
 
@@ -775,9 +777,9 @@ AudioBussMixer::processBlocks()
                     rec.buffers[ch]->zero(m_blockSize);
                 } else {
                     for (size_t j = 0; j < m_blockSize; ++j) {
-                        m_processBuffers[ch][j] *= gain[ch];
+                        m_processBuffersBuss[ch][j] *= gain[ch];
                     }
-                    rec.buffers[ch]->write(m_processBuffers[ch], m_blockSize);
+                    rec.buffers[ch]->write(m_processBuffersBuss[ch], m_blockSize);
                 }
             }
 
@@ -902,9 +904,12 @@ AudioInstrumentMixer::~AudioInstrumentMixer()
 
     removeAllPlugins();
 
-    for (std::vector<sample_t *>::iterator i = m_processBuffers.begin();
-            i != m_processBuffers.end(); ++i) {
-        delete[] *i;
+    for (auto& pair : m_processBuffers) {
+        auto& pBuf = pair.second;
+        for (std::vector<sample_t *>::iterator i = pBuf.begin();
+             i != pBuf.end(); ++i) {
+            delete[] *i;
+        }
     }
 
     //std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer exiting" << std::endl;
@@ -1459,6 +1464,18 @@ AudioInstrumentMixer::generateBuffers()
         (void)fader->getProperty(MappedAudioFader::Pan, pan);
 
         setInstrumentLevels(id, level, pan);
+
+        auto& pBuf = m_processBuffers[id];
+        while ((unsigned int)pBuf.size() > channels) {
+            std::vector<sample_t *>::iterator bi = pBuf.end();
+            --bi;
+            delete[] *bi;
+            pBuf.erase(bi);
+        }
+        while ((unsigned int)pBuf.size() < channels) {
+            pBuf.push_back(new sample_t[m_blockSize]);
+        }
+
     }
 
     // Make room for up to 16 busses here, to avoid reshuffling later
@@ -1472,15 +1489,6 @@ AudioInstrumentMixer::generateBuffers()
         }
     }
 
-    while ((unsigned int)m_processBuffers.size() > maxChannels) {
-        std::vector<sample_t *>::iterator bi = m_processBuffers.end();
-        --bi;
-        delete[] *bi;
-        m_processBuffers.erase(bi);
-    }
-    while ((unsigned int)m_processBuffers.size() < maxChannels) {
-        m_processBuffers.push_back(new sample_t[m_blockSize]);
-    }
 }
 
 void
@@ -1620,15 +1628,16 @@ void AudioInstrumentMixer::audioProcessingDone()
             if (instance) instance->audioProcessingDone();
         }
     }
+}
 
-
-
-
-
-
-
-
-
+sample_t* AudioInstrumentMixer::getAudioBuffer
+(InstrumentId id, unsigned int channel) const
+{
+    auto it = m_processBuffers.find(id);
+    if (it == m_processBuffers.end()) return nullptr;
+    auto& pBuf = (*it).second;
+    if (channel >= pBuf.size()) return nullptr;
+    return pBuf[channel];
 }
 
 void
@@ -1745,7 +1754,6 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
     }
 }
 
-
 bool
 AudioInstrumentMixer::processBlock(InstrumentId id,
                                    PlayableAudioFile **playing,
@@ -1755,6 +1763,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     // Needs to be RT safe
 
     BufferRec &rec = m_bufferMap[id];
+    auto& pBuf = m_processBuffers[id];
     RealTime bufferTime = rec.filledTo;
 
 #ifdef DEBUG_MIXER
@@ -1767,12 +1776,12 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     unsigned int channels = rec.channels;
     if (channels > (unsigned int)rec.buffers.size())
         channels = (unsigned int)rec.buffers.size();
-    if (channels > (unsigned int)m_processBuffers.size())
-        channels = (unsigned int)m_processBuffers.size();
+    if (channels > (unsigned int)pBuf.size())
+        channels = (unsigned int)pBuf.size();
     if (channels == 0) {
 #ifdef DEBUG_MIXER
         if ((id % 100) == 0)
-            std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): nominal channels " << rec.channels << ", ring buffers " << rec.buffers.size() << ", process buffers " << m_processBuffers.size() << std::endl;
+            std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): nominal channels " << rec.channels << ", ring buffers " << rec.buffers.size() << ", process buffers " << pBuf.size() << std::endl;
 #endif
 
         return false; // buffers just haven't been set up yet
@@ -1887,7 +1896,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 #endif
 
     for (unsigned int ch = 0; ch < targetChannels; ++ch) {
-        memset(m_processBuffers[ch], 0, sizeof(sample_t) * m_blockSize);
+        memset(pBuf[ch], 0, sizeof(sample_t) * m_blockSize);
     }
 
     RunnablePluginInstance *synth = m_synths[id];
@@ -1901,7 +1910,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
         while (ch < synth->getAudioOutputCount() && ch < channels) {
             denormalKill(synth->getAudioOutputBuffers()[ch],
                          m_blockSize);
-            memcpy(m_processBuffers[ch],
+            memcpy(pBuf[ch],
                    synth->getAudioOutputBuffers()[ch],
                    m_blockSize * sizeof(sample_t));
             ++ch;
@@ -1944,7 +1953,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
             // pooled buffers.
 
             if (blockSize > 0) {
-                file->addSamples(m_processBuffers, channels, blockSize, offset);
+                file->addSamples(pBuf, channels, blockSize, offset);
                 readSomething = true;
             }
         }
@@ -1974,7 +1983,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
             if (ch < channels || ch < 2) {
                 memcpy(plugin->getAudioInputBuffers()[ch],
-                       m_processBuffers[ch % channels],
+                       pBuf[ch % channels],
                        m_blockSize * sizeof(sample_t));
             } else {
                 memset(plugin->getAudioInputBuffers()[ch], 0,
@@ -1998,15 +2007,15 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
                          m_blockSize);
 
             if (ch < channels) {
-                memcpy(m_processBuffers[ch],
+                memcpy(pBuf[ch],
                        plugin->getAudioOutputBuffers()[ch],
                        m_blockSize * sizeof(sample_t));
             } else if (ch == 1) {
                 // stereo output from plugin on a mono track
                 for (size_t i = 0; i < m_blockSize; ++i) {
-                    m_processBuffers[0][i] +=
+                    pBuf[0][i] +=
                         plugin->getAudioOutputBuffers()[ch][i];
-                    m_processBuffers[0][i] /= 2;
+                    pBuf[0][i] /= 2;
                 }
             } else {
                 break;
@@ -2024,17 +2033,17 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
         for (size_t i = 0; i < m_blockSize; ++i) {
 
-            sample_t sample = m_processBuffers[0][i];
+            sample_t sample = pBuf[0][i];
 
-            m_processBuffers[0][i] = sample * rec.gainLeft;
-            m_processBuffers[1][i] = sample * rec.gainRight;
+            pBuf[0][i] = sample * rec.gainLeft;
+            pBuf[1][i] = sample * rec.gainRight;
 
             if (allZeros && sample != 0.0)
                 allZeros = false;
         }
 
-        rec.buffers[0]->write(m_processBuffers[0], m_blockSize);
-        rec.buffers[1]->write(m_processBuffers[1], m_blockSize);
+        rec.buffers[0]->write(pBuf[0], m_blockSize);
+        rec.buffers[1]->write(pBuf[1], m_blockSize);
 
     } else {
 
@@ -2046,13 +2055,13 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
             for (size_t i = 0; i < m_blockSize; ++i) {
 
                 // handle volume and pan
-                m_processBuffers[ch][i] *= gain;
+                pBuf[ch][i] *= gain;
 
-                if (allZeros && m_processBuffers[ch][i] != 0.0)
+                if (allZeros && pBuf[ch][i] != 0.0)
                     allZeros = false;
             }
 
-            rec.buffers[ch]->write(m_processBuffers[ch], m_blockSize);
+            rec.buffers[ch]->write(pBuf[ch], m_blockSize);
         }
     }
 

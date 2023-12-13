@@ -22,8 +22,8 @@
 #include "misc/Debug.h"
 #include "sound/LV2Utils.h"
 #include "sound/Midi.h"
+#include "sound/AudioProcess.h"
 #include "gui/application/RosegardenMainWindow.h"
-#include "document/RosegardenDocument.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/atom/util.h>
@@ -377,10 +377,6 @@ void LV2PluginInstance::getConnections
     // called from the gui thread
     RG_DEBUG << "getConnections";
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    Studio &studio = doc->getStudio();
-    Instrument* inst = studio.getInstrumentById(m_instrument);
-    std::string iname = inst->getName();
 
     clist.clear();
     // audio
@@ -390,7 +386,16 @@ void LV2PluginInstance::getConnections
         c.isOutput = false;
         c.isAudio = true;
         c.pluginPort = lv2utils->getPortName(m_uri, m_audioPortsIn[i]);
-        if (i < m_channelCount) c.portConnection = iname.c_str();
+        c.instrumentId = 0;
+        c.channel = 0;
+        if (i == 0) {
+            c.instrumentId = m_instrument;
+            c.channel = 0;
+        }
+        if (i == 1 && m_channelCount == 2) {
+            c.instrumentId = m_instrument;
+            c.channel = 1;
+        }
         clist.push_back(c);
     }
 }
@@ -741,6 +746,22 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
 void
 LV2PluginInstance::run(const RealTime &rt)
 {
+    // sc test hack
+#if 0
+    auto ib = m_amixer->getAudioBuffer(1002, 0);
+    RG_DEBUG << "got audio buf" << ib;
+    if (ib) {
+        if (m_audioPortsIn.size() == 4) {
+            memcpy(m_inputBuffers[2],
+                   ib,
+                   m_blockSize * sizeof(sample_t));
+            memcpy(m_inputBuffers[3],
+                   ib,
+                   m_blockSize * sizeof(sample_t));
+        }
+    }
+#endif
+    // sc test hack
     m_pluginHasRun = true;
     LV2Utils* lv2utils = LV2Utils::getInstance();
     lv2utils->lock();
