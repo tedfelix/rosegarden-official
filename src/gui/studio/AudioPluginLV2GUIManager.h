@@ -50,9 +50,14 @@ public:
     void updatePort(InstrumentId instrument, int position, int port);
     void updateConfiguration(InstrumentId instrument, int position,
                              const QString& key);
-    void getConnections(InstrumentId instrument,
-                        int position,
-                        PluginPortConnection::ConnectionList& clist) const;
+    void getConnections
+        (InstrumentId instrument,
+         int position,
+         PluginPortConnection::ConnectionList& clist) const;
+    void setConnections
+        (InstrumentId instrument,
+         int position,
+         const PluginPortConnection::ConnectionList& clist);
  public slots:
     void slotStopGUIDelayed();
 

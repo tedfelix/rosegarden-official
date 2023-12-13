@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginConnectionDialog]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginConnectionDialog.h"
 #include "document/RosegardenDocument.h"
@@ -44,6 +44,10 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
     Composition::trackcontainer& tracks = comp.getTracks();
     for (auto& pair : tracks) {
         Instrument* instr = studio.getInstrumentFor(pair.second);
+        Instrument::InstrumentType itype = instr->getType();
+        if (itype != Instrument::Audio && itype != Instrument::SoftSynth)
+            continue;
+        RG_DEBUG << "track" << pair.first << "instrument" << instr->getId();
         m_iList.push_back(instr);
     }
 
@@ -67,9 +71,6 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
         for(auto inst : m_iList) {
             InstrumentId iid = inst->getId();
             if (connection.instrumentId == iid) selInstIndex = count;
-            Instrument::InstrumentType itype = inst->getType();
-            if (itype != Instrument::Audio && itype != Instrument::SoftSynth)
-                continue;
             QString iname = inst->getLocalizedPresentationName();
             icb->addItem(iname);
             count++;

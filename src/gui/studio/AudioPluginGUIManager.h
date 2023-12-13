@@ -44,9 +44,14 @@ class AudioPluginGUIManager
     void stopGUI(InstrumentId instrument, int position);
     void stopAllGUIs();
     bool canEditConnections(InstrumentId instrument, int position);
-    void getConnections(InstrumentId instrument,
-                        int position,
-                        PluginPortConnection::ConnectionList& clist) const;
+    void getConnections
+        (InstrumentId instrument,
+         int position,
+         PluginPortConnection::ConnectionList& clist) const;
+    void setConnections
+        (InstrumentId instrument,
+         int position,
+         const PluginPortConnection::ConnectionList& clist);
     void updateProgram(InstrumentId instrument, int position);
     void updatePort(InstrumentId instrument, int position, int port);
     void updateConfiguration(InstrumentId instrument, int position,

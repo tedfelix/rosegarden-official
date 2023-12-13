@@ -111,6 +111,7 @@ public:
     virtual void audioProcessingDone() override;
 
     void getConnections(PluginPortConnection::ConnectionList& clist) const;
+    void setConnections(const PluginPortConnection::ConnectionList& clist);
 
 protected:
     // To be constructed only by LV2PluginFactory
@@ -200,6 +201,7 @@ protected:
     LV2_URID m_atomTransferUrid;
     bool m_pluginHasRun;
     AudioInstrumentMixer* m_amixer;
+    PluginPortConnection::ConnectionList m_connections;
 };
 
 }

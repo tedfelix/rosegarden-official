@@ -112,6 +112,16 @@ AudioPluginLV2GUIManager::getConnections
     lv2utils->getConnections(instrument, position, clist);
 }
 
+void AudioPluginLV2GUIManager::setConnections
+(InstrumentId instrument,
+ int position,
+ const PluginPortConnection::ConnectionList& clist)
+{
+    // this routine must work even if we have no gui
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->setConnections(instrument, position, clist);
+}
+
 void
 AudioPluginLV2GUIManager::slotStopGUIDelayed()
 {

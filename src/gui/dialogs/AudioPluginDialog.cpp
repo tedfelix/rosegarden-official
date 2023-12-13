@@ -283,6 +283,7 @@ void AudioPluginDialog::slotEditConnections()
             RG_DEBUG << c.isOutput << c.isAudio <<
                 c.pluginPort << c.instrumentId << c.channel;
         }
+        m_pluginGUIManager->setConnections(m_containerId, m_index, newList);
     }
 }
 

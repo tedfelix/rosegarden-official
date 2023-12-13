@@ -141,6 +141,17 @@ void AudioPluginGUIManager::getConnections
     m_lv2Manager->getConnections(instrument, position, clist);
 }
 
+void AudioPluginGUIManager::setConnections
+(InstrumentId instrument,
+ int position,
+ const PluginPortConnection::ConnectionList& clist)
+{
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // only lv2
+    if (arch != LV2) return;
+    m_lv2Manager->setConnections(instrument, position, clist);
+}
+
 void AudioPluginGUIManager::updateProgram(InstrumentId instrument, int position)
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);

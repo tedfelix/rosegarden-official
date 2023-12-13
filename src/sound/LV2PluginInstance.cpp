@@ -13,7 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[LV2PluginInstance]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginInstance.h"
 #include "LV2PluginFactory.h"
@@ -226,6 +226,27 @@ LV2PluginInstance::init(int idealChannelCount)
             m_audioPortsOut.push_back(-1);
             m_distributeChannels = true;
         }
+
+    // set up the default connections
+    m_connections.clear();
+    for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+        if (m_audioPortsIn[i] == -1) continue; // for distributeChannels
+        PluginPortConnection::Connection c;
+        c.isOutput = false;
+        c.isAudio = true;
+        c.pluginPort = lv2utils->getPortName(m_uri, m_audioPortsIn[i]);
+        c.instrumentId = 0;
+        c.channel = 0;
+        if (i == 0) {
+            c.instrumentId = m_instrument;
+            c.channel = 0;
+        }
+        if (i == 1 && m_channelCount == 2) {
+            c.instrumentId = m_instrument;
+            c.channel = 1;
+        }
+        m_connections.push_back(c);
+    }
 }
 
 size_t
@@ -376,28 +397,18 @@ void LV2PluginInstance::getConnections
 {
     // called from the gui thread
     RG_DEBUG << "getConnections";
-    LV2Utils* lv2utils = LV2Utils::getInstance();
+    clist = m_connections;
+}
 
-    clist.clear();
-    // audio
-    for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
-        if (m_audioPortsIn[i] == -1) continue;
-        PluginPortConnection::Connection c;
-        c.isOutput = false;
-        c.isAudio = true;
-        c.pluginPort = lv2utils->getPortName(m_uri, m_audioPortsIn[i]);
-        c.instrumentId = 0;
-        c.channel = 0;
-        if (i == 0) {
-            c.instrumentId = m_instrument;
-            c.channel = 0;
-        }
-        if (i == 1 && m_channelCount == 2) {
-            c.instrumentId = m_instrument;
-            c.channel = 1;
-        }
-        clist.push_back(c);
+void LV2PluginInstance::setConnections
+(const PluginPortConnection::ConnectionList& clist)
+{
+    RG_DEBUG << "setConnections";
+    for(auto& c : clist) {
+        RG_DEBUG << c.isOutput << c.isAudio << c.pluginPort <<
+            c.instrumentId << c.channel;
     }
+    m_connections = clist;
 }
 
 LV2PluginInstance::~LV2PluginInstance()
@@ -746,6 +757,28 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
 void
 LV2PluginInstance::run(const RealTime &rt)
 {
+    m_pluginHasRun = true;
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    // get connected buffers
+    int bufIndex = 0;
+    for(auto& c : m_connections) {
+        RG_DEBUG << "connections" << c.instrumentId << m_instrument;
+        if (c.instrumentId != 0 && c.instrumentId != m_instrument) {
+            auto ib = m_amixer->getAudioBuffer(c.instrumentId, c.channel);
+            //RG_DEBUG << "got audio buf" << ib;
+            if (ib) {
+                RG_DEBUG << "copy" << c.instrumentId << c.channel <<
+                    "to port" <<
+                    lv2utils->getPortName(m_uri, m_audioPortsIn[bufIndex]);
+
+                memcpy(m_inputBuffers[bufIndex],
+                       ib,
+                       m_blockSize * sizeof(sample_t));
+            }
+        }
+        bufIndex++;
+    }
+
     // sc test hack
 #if 0
     auto ib = m_amixer->getAudioBuffer(1002, 0);
@@ -762,8 +795,6 @@ LV2PluginInstance::run(const RealTime &rt)
     }
 #endif
     // sc test hack
-    m_pluginHasRun = true;
-    LV2Utils* lv2utils = LV2Utils::getInstance();
     lv2utils->lock();
 
     RealTime bufferStart = rt;

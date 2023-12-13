@@ -190,14 +190,19 @@ class LV2Utils
                              int position,
                              std::map<int, float>& controlValues);
 
-    const LV2PluginInstance* getPluginInstance(InstrumentId instrument,
-                                               int position) const;
+    LV2PluginInstance* getPluginInstance(InstrumentId instrument,
+                                         int position) const;
 
     LV2Gtk* getLV2Gtk() const;
 
-    void getConnections(InstrumentId instrument,
-                        int position,
-                        PluginPortConnection::ConnectionList& clist) const;
+    void getConnections
+        (InstrumentId instrument,
+         int position,
+         PluginPortConnection::ConnectionList& clist) const;
+    void setConnections
+        (InstrumentId instrument,
+         int position,
+         const PluginPortConnection::ConnectionList& clist);
 
     QString getPortName(const QString& uri, int portIndex) const;
 

@@ -607,8 +607,8 @@ void LV2Utils::getControlOutValues(InstrumentId instrument,
     pgdata.pluginInstance->getControlOutValues(controlValues);
 }
 
-const LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
-                                                     int position) const
+LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
+                                               int position) const
 {
     PluginPosition pp;
     pp.instrument = instrument;
@@ -640,6 +640,16 @@ void LV2Utils::getConnections(InstrumentId instrument,
     const LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
     if (!lv2inst) return;
     lv2inst->getConnections(clist);
+}
+
+void LV2Utils::setConnections
+(InstrumentId instrument,
+ int position,
+ const PluginPortConnection::ConnectionList& clist)
+{
+    LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
+    if (!lv2inst) return;
+    lv2inst->setConnections(clist);
 }
 
 QString LV2Utils::getPortName(const QString& uri, int portIndex) const
