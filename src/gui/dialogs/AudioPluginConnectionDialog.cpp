@@ -20,6 +20,7 @@
 
 #include "AudioPluginConnectionDialog.h"
 #include "document/RosegardenDocument.h"
+#include "base/Composition.h"
 
 #include "misc/Debug.h"
 
@@ -38,8 +39,13 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
 {
     setWindowTitle(tr("Audio Plugin Connections"));
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    Studio &studio = doc->getStudio();
-    m_iList = studio.getAllInstruments();
+    Composition& comp = doc->getComposition();
+    Studio& studio = doc->getStudio();
+    Composition::trackcontainer& tracks = comp.getTracks();
+    for (auto& pair : tracks) {
+        Instrument* instr = studio.getInstrumentFor(pair.second);
+        m_iList.push_back(instr);
+    }
 
     QGridLayout *mainLayout = new QGridLayout(this);
     setLayout(mainLayout);
