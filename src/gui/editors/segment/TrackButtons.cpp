@@ -166,21 +166,30 @@ TrackButtons::TrackButtons(int trackCellHeight,
 
     m_layout->addStretch(20);
 
+    // connect signal mappers
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    connect(m_recordSigMapper, SIGNAL(mappedInt(int)),
+            this, SLOT(slotToggleRecord(int)));
+    connect(m_muteSigMapper, SIGNAL(mappedInt(int)),
+            this, SLOT(slotToggleMute(int)));
+    connect(m_soloSigMapper, SIGNAL(mappedInt(int)),
+            this, SLOT(slotToggleSolo(int)));
+    connect(m_instListSigMapper, SIGNAL(mappedInt(int)),
+            this, SLOT(slotInstrumentMenu(int)));
+    connect(m_clickedSigMapper, SIGNAL(mappedInt(int)),
+            this, SLOT(slotTrackSelected(int)));
+#else
     connect(m_recordSigMapper, SIGNAL(mapped(int)),
             this, SLOT(slotToggleRecord(int)));
-
     connect(m_muteSigMapper, SIGNAL(mapped(int)),
             this, SLOT(slotToggleMute(int)));
-
     connect(m_soloSigMapper, SIGNAL(mapped(int)),
             this, SLOT(slotToggleSolo(int)));
-
-    // connect signal mappers
     connect(m_instListSigMapper, SIGNAL(mapped(int)),
             this, SLOT(slotInstrumentMenu(int)));
-
     connect(m_clickedSigMapper, SIGNAL(mapped(int)),
             this, SLOT(slotTrackSelected(int)));
+#endif
 
     // We have to force the height for the moment
     //

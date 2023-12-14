@@ -231,9 +231,13 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
 
     // Rotary Mapper
     m_rotaryMapper = new QSignalMapper(this);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    connect(m_rotaryMapper, SIGNAL(mappedInt(int)),
+            SLOT(slotControllerChanged(int)));
+#else
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             SLOT(slotControllerChanged(int)));
-
+#endif
     // Layout
 
     QGridLayout *mainGrid = new QGridLayout(this);
