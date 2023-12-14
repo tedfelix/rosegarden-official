@@ -72,7 +72,7 @@ public:
                        uint32_t *size,
                        uint32_t *type);
 
-    QString configure(QString key, QString value) override;
+    QString configure(const QString& key, const QString& value) override;
     void savePluginState() override;
 
     void sendEvent(const RealTime& eventTime,
@@ -121,7 +121,7 @@ protected:
     //
     LV2PluginInstance(PluginFactory *factory,
                       InstrumentId instrument,
-                      QString identifier,
+                      const QString& identifier,
                       int position,
                       unsigned long sampleRate,
                       size_t blockSize,

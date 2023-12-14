@@ -351,13 +351,6 @@ LV2Utils::LV2PluginData LV2Utils::getPluginData(const QString& uri) const
     return (*it).second;
 }
 
-const LilvUIs* LV2Utils::getPluginUIs(const QString& uri) const
-{
-    const LilvPlugin* plugin = getPluginByUri(uri);
-    LilvUIs *uis = lilv_plugin_get_uis(plugin);
-    return uis;
-}
-
 int LV2Utils::getPortIndexFromSymbol(const QString& portSymbol,
                                      const LilvPlugin* plugin)
 {
@@ -645,7 +638,7 @@ void LV2Utils::getConnections(InstrumentId instrument,
 void LV2Utils::setConnections
 (InstrumentId instrument,
  int position,
- const PluginPortConnection::ConnectionList& clist)
+ const PluginPortConnection::ConnectionList& clist) const
 {
     LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
     if (!lv2inst) return;

@@ -62,7 +62,7 @@ namespace Rosegarden
 LV2PluginInstance::LV2PluginInstance
 (PluginFactory *factory,
  InstrumentId instrument,
- QString identifier,
+ const QString& identifier,
  int position,
  unsigned long sampleRate,
  size_t blockSize,
@@ -696,7 +696,7 @@ void* LV2PluginInstance::getPortValue(const char *port_symbol,
     return &((*it).second);
 }
 
-QString LV2PluginInstance::configure(QString key, QString value)
+QString LV2PluginInstance::configure(const QString& key, const QString& value)
 {
     RG_DEBUG << "configure" << key << value;
     if (key == "LV2State") {

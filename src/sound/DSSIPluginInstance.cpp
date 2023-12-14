@@ -768,16 +768,18 @@ DSSIPluginInstance::getPortValue(unsigned int portNumber)
 }
 
 QString
-DSSIPluginInstance::configure(QString key,
-                              QString value)
+DSSIPluginInstance::configure(const QString& key,
+                              const QString& value)
 {
     if (!m_descriptor || !m_descriptor->configure)
         return QString();
 
-    if (key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
+    QString myKey = key;
+
+    if (myKey == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
 #ifdef DSSI_PROJECT_DIRECTORY_KEY
         // cppcheck-suppress ConfigurationNotChecked
-        key = DSSI_PROJECT_DIRECTORY_KEY;
+        myKey = DSSI_PROJECT_DIRECTORY_KEY;
 #else
 
         return QString();
@@ -787,11 +789,11 @@ DSSIPluginInstance::configure(QString key,
 
 
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
+    std::cerr << "DSSIPluginInstance::configure(" << myKey << "," << value << ")" << std::endl;
 #endif
 
     char *message = m_descriptor->configure
-	(m_instanceHandle, key.toLocal8Bit().data(), value.toLocal8Bit().data());
+	(m_instanceHandle, myKey.toLocal8Bit().data(), value.toLocal8Bit().data());
 
     m_programCacheValid = false;
 
@@ -802,7 +804,7 @@ DSSIPluginInstance::configure(QString key,
 #ifdef DSSI_RESERVED_CONFIGURE_PREFIX
 
     // cppcheck-suppress ConfigurationNotChecked
-    if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX)) {
+    if (myKey.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX)) {
         return qm;
     }
 #endif

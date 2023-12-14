@@ -42,13 +42,17 @@ class LV2Gtk
         LV2GtkWidget() {window = nullptr;}
     };
 
-    void tick();
+    // cppcheck-suppress functionStatic
+    void tick() const;
+    // cppcheck-suppress functionStatic
     LV2GtkWidget getWidget(LV2UI_Widget lv2Widget, SizeCallback* sizecb);
-    void getSize(const LV2GtkWidget& widget, int& width, int& height);
-    long int getWinId(const LV2GtkWidget& widget);
-    void deleteWidget(const LV2GtkWidget& widget);
+    // cppcheck-suppress functionStatic
+    void getSize(const LV2GtkWidget& widget, int& width, int& height) const;
+    static long int getWinId(const LV2GtkWidget& widget);
+    static void deleteWidget(const LV2GtkWidget& widget);
 
  private:
+    // cppcheck-suppress functionStatic
     void startUp();
 
     bool m_active;

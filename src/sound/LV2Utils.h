@@ -136,7 +136,6 @@ class LV2Utils
                                     LV2PluginInstance* lv2Instance,
                                     const LV2_Feature*const* features);
     LV2PluginData getPluginData(const QString& uri) const;
-    const LilvUIs* getPluginUIs(const QString& uri) const;
     LilvNode* makeURINode(const QString& uri) const;
     LilvNode* makeStringNode(const QString& string) const;
 
@@ -202,7 +201,7 @@ class LV2Utils
     void setConnections
         (InstrumentId instrument,
          int position,
-         const PluginPortConnection::ConnectionList& clist);
+         const PluginPortConnection::ConnectionList& clist) const;
 
     QString getPortName(const QString& uri, int portIndex) const;
 

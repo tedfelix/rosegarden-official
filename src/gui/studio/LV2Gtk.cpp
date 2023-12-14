@@ -88,7 +88,7 @@ LV2Gtk::~LV2Gtk()
     }
 }
 
-void LV2Gtk::tick()
+void LV2Gtk::tick() const
 {
     if (m_active) {
         while (gtk_events_pending()) gtk_main_iteration();
@@ -123,7 +123,7 @@ LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget lv2Widget,
     return ret;
 }
 
-void LV2Gtk::getSize(const LV2GtkWidget& widget, int& width, int& height)
+void LV2Gtk::getSize(const LV2GtkWidget& widget, int& width, int& height) const
 {
     debug_print("gtk getSize\n");
     GtkAllocation alloc;
@@ -165,7 +165,9 @@ void LV2Gtk::startUp()
 namespace Rosegarden
 {
 
-LV2Gtk::LV2Gtk()
+LV2Gtk::LV2Gtk() :
+    m_active(false),
+    m_argv(nullptr)
 {
 }
 
@@ -173,7 +175,8 @@ LV2Gtk::~LV2Gtk()
 {
 }
 
-void LV2Gtk::tick()
+// cppcheck-suppress unusedFunction
+void LV2Gtk::tick() const
 {
 }
 
@@ -184,7 +187,7 @@ LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget,
     return ret;
 }
 
-void LV2Gtk::getSize(const LV2GtkWidget&, int&, int&)
+void LV2Gtk::getSize(const LV2GtkWidget&, int&, int&) const
 {
 }
 

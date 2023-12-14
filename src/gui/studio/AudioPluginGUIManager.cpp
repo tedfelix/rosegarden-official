@@ -121,7 +121,7 @@ void AudioPluginGUIManager::stopAllGUIs()
 }
 
 bool AudioPluginGUIManager::canEditConnections(InstrumentId instrument,
-                                               int position)
+                                               int position) const
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // only lv2
@@ -144,7 +144,7 @@ void AudioPluginGUIManager::getConnections
 void AudioPluginGUIManager::setConnections
 (InstrumentId instrument,
  int position,
- const PluginPortConnection::ConnectionList& clist)
+ const PluginPortConnection::ConnectionList& clist) const
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // only lv2
