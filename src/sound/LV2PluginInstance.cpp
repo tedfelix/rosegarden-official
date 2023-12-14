@@ -13,7 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[LV2PluginInstance]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginInstance.h"
 #include "LV2PluginFactory.h"
@@ -701,8 +701,10 @@ QString LV2PluginInstance::configure(QString key, QString value)
     RG_DEBUG << "configure" << key << value;
     if (key == "LV2State") {
         // set the state
+        QString stateString = QByteArray::fromBase64(value.toUtf8());
+        RG_DEBUG << "state string" << stateString;
         LV2Utils* lv2utils = LV2Utils::getInstance();
-        lv2utils->setInstanceStateFromString(value,
+        lv2utils->setInstanceStateFromString(stateString,
                                              m_instance,
                                              setPortValueFunc,
                                              this,
@@ -724,12 +726,14 @@ void LV2PluginInstance::savePluginState()
          this,
          m_features.data());
     RG_DEBUG << "state string" << stateString;
+    QString stateString64 = stateString.toUtf8().toBase64();
+    RG_DEBUG << "state string base64" << stateString64;
     RosegardenMainWindow* mw = RosegardenMainWindow::self();
     mw->slotChangePluginConfiguration(m_instrument,
                                       m_position,
                                       false,
                                       "LV2State",
-                                      stateString);
+                                      stateString64);
 }
 
 void
@@ -762,14 +766,12 @@ LV2PluginInstance::run(const RealTime &rt)
     // get connected buffers
     int bufIndex = 0;
     for(auto& c : m_connections) {
-        RG_DEBUG << "connections" << c.instrumentId << m_instrument;
         if (c.instrumentId != 0 && c.instrumentId != m_instrument) {
             auto ib = m_amixer->getAudioBuffer(c.instrumentId, c.channel);
-            //RG_DEBUG << "got audio buf" << ib;
             if (ib) {
-                RG_DEBUG << "copy" << c.instrumentId << c.channel <<
-                    "to port" <<
-                    lv2utils->getPortName(m_uri, m_audioPortsIn[bufIndex]);
+                //RG_DEBUG << "copy" << c.instrumentId << c.channel <<
+                //    "to port" <<
+                //    lv2utils->getPortName(m_uri, m_audioPortsIn[bufIndex]);
 
                 memcpy(m_inputBuffers[bufIndex],
                        ib,
@@ -779,22 +781,6 @@ LV2PluginInstance::run(const RealTime &rt)
         bufIndex++;
     }
 
-    // sc test hack
-#if 0
-    auto ib = m_amixer->getAudioBuffer(1002, 0);
-    RG_DEBUG << "got audio buf" << ib;
-    if (ib) {
-        if (m_audioPortsIn.size() == 4) {
-            memcpy(m_inputBuffers[2],
-                   ib,
-                   m_blockSize * sizeof(sample_t));
-            memcpy(m_inputBuffers[3],
-                   ib,
-                   m_blockSize * sizeof(sample_t));
-        }
-    }
-#endif
-    // sc test hack
     lv2utils->lock();
 
     RealTime bufferStart = rt;

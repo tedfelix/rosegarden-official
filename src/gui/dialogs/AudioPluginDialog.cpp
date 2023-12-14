@@ -577,7 +577,8 @@ AudioPluginDialog::slotPluginSelected(int index)
              it != plugin->end();
              ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
-                ((*it)->getType() & PluginPort::Input))
+                ((*it)->getType() & PluginPort::Input) &&
+                ! ((*it)->getType() & PluginPort::Event))
                 ++portCount;
         }
     }
@@ -640,7 +641,8 @@ AudioPluginDialog::slotPluginSelected(int index)
              it != plugin->end();
              ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
-                ((*it)->getType() & PluginPort::Input)) {
+                ((*it)->getType() & PluginPort::Input) &&
+                ! ((*it)->getType() & PluginPort::Event)) {
                 // Check for port existence and create with default value
                 // if it doesn't exist.  Modification occurs through the
                 // slotPluginPortChanged signal.
