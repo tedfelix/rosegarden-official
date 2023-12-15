@@ -19,6 +19,9 @@
 #include "LV2PluginFactory.h"
 
 #include <QtGlobal>
+#include <QJsonDocument>
+#include <QJsonArray>
+
 #include "misc/Debug.h"
 #include "sound/LV2Utils.h"
 #include "sound/Midi.h"
@@ -710,6 +713,28 @@ QString LV2PluginInstance::configure(const QString& key, const QString& value)
                                              this,
                                              m_features.data());
     }
+    if (key == "LV2Connections") {
+        RG_DEBUG << "set connections" << value;
+        QJsonDocument doc = QJsonDocument::fromJson(value.toUtf8());
+        QJsonArray arr = doc.array();
+        m_connections.clear();
+        for (auto jct : arr)
+            {
+                QJsonArray arr1 = jct.toArray();
+                QJsonValue oval = arr1[0];
+                QJsonValue aval = arr1[1];
+                QJsonValue pval = arr1[2];
+                QJsonValue ival = arr1[3];
+                QJsonValue cval = arr1[4];
+                PluginPortConnection::Connection c;
+                c.isOutput = oval.toBool();
+                c.isAudio = aval.toBool();
+                c.pluginPort = pval.toString();
+                c.instrumentId = ival.toInt();
+                c.channel = cval.toInt();
+                m_connections.push_back(c);
+            }
+    }
     return "";
 }
 
@@ -734,6 +759,32 @@ void LV2PluginInstance::savePluginState()
                                       false,
                                       "LV2State",
                                       stateString64);
+
+    // also save the connections to a json string
+    QJsonArray conns;
+    for(auto& c : m_connections) {
+        int ii = c.instrumentId;
+        QJsonValue val1(c.isOutput);
+        QJsonValue val2(c.isAudio);
+        QJsonValue val3(c.pluginPort);
+        QJsonValue val4(ii);
+        QJsonValue val5(c.channel);
+        QJsonArray arr;
+        arr.append(val1);
+        arr.append(val2);
+        arr.append(val3);
+        arr.append(val4);
+        arr.append(val5);
+        conns.append(arr);
+    }
+    QJsonDocument doc(conns);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+    RG_DEBUG << "connections:" << strJson;
+    mw->slotChangePluginConfiguration(m_instrument,
+                                      m_position,
+                                      false,
+                                      "LV2Connections",
+                                      strJson);
 }
 
 void
