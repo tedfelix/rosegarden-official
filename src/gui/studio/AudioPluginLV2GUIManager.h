@@ -50,6 +50,7 @@ public:
     void updatePort(InstrumentId instrument, int position, int port);
     void updateConfiguration(InstrumentId instrument, int position,
                              const QString& key);
+    bool canEditConnections(InstrumentId instrument, int position) const;
     void getConnections
         (InstrumentId instrument,
          int position,

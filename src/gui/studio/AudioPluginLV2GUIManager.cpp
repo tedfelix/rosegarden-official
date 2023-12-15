@@ -101,6 +101,16 @@ AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
     }
 }
 
+bool AudioPluginLV2GUIManager::canEditConnections(InstrumentId instrument,
+                                                  int position) const
+{
+    // we can edit the connections if there are 2 or more
+    PluginPortConnection::ConnectionList clist;
+    getConnections(instrument, position, clist);
+    if (clist.size() > 1) return true;
+    return false;
+}
+
 void
 AudioPluginLV2GUIManager::getConnections
 (InstrumentId instrument,

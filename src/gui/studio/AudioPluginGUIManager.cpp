@@ -125,7 +125,10 @@ bool AudioPluginGUIManager::canEditConnections(InstrumentId instrument,
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // only lv2
-    if (arch == LV2) return true;
+    if (arch != LV2) return false;
+#ifdef HAVE_LILV
+    return m_lv2Manager->canEditConnections(instrument, position);
+#endif
     return false;
 }
 
@@ -138,7 +141,9 @@ void AudioPluginGUIManager::getConnections
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // only lv2
     if (arch != LV2) return;
+#ifdef HAVE_LILV
     m_lv2Manager->getConnections(instrument, position, clist);
+#endif
 }
 
 void AudioPluginGUIManager::setConnections
