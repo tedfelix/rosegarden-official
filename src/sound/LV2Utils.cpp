@@ -63,6 +63,7 @@ LV2Utils::uridMap(const char *uri)
 {
     LOCKED;
     auto it = m_uridMap.find(uri);
+    // Not found?  Create a new URID and entry in the map.
     if (it == m_uridMap.end()) {
         int id = m_nextId;
         m_nextId++;
@@ -85,6 +86,8 @@ LV2Utils::uridUnmap(LV2_URID urid)
 }
 
 LV2Utils::LV2Utils():
+    m_map{this, &LV2UridMap},
+    m_unmap{this, &LV2UridUnmap},
     m_mutex(QMutex::Recursive) // recursive
 {
     LOCKED;
@@ -93,8 +96,6 @@ LV2Utils::LV2Utils():
     m_worker = nullptr;
 
     m_nextId = 1;
-    m_map = {this, &LV2UridMap};
-    m_unmap = {this, &LV2UridUnmap};
 
     // the LilvWorld knows all plugins
     m_world = lilv_world_new();
@@ -518,6 +519,7 @@ void LV2Utils::updatePortValue(InstrumentId instrument,
     pgdata.gui->updatePortValue(index, atom);
 }
 
+#if 0
 int LV2Utils::numInstances(InstrumentId instrument,
                            int position) const
 {
@@ -537,6 +539,7 @@ int LV2Utils::numInstances(InstrumentId instrument,
     }
     return pgdata.pluginInstance->numInstances();
 }
+#endif
 
 LV2Utils::Worker* LV2Utils::getWorker() const
 {

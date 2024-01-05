@@ -28,9 +28,11 @@ class QTimer;
 namespace Rosegarden
 {
 
-// the LV2Worker class provides the LV2 worker feature which
-// enables the plugin to delegeate non real time tasks.
 
+/**
+ * The LV2Worker class provides the LV2 Worker feature which
+ * allows plugins to schedule non-real-time tasks in another thread.
+ */
 class LV2Worker : public QObject, public LV2Utils::Worker
 {
     Q_OBJECT
@@ -60,6 +62,7 @@ class LV2Worker : public QObject, public LV2Utils::Worker
     JobQueues m_workerJobs;
     JobQueues m_workerResponses;
 };
+
 
 }
 

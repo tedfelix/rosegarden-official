@@ -16,30 +16,33 @@
 #ifndef RG_LV2UTILS_H
 #define RG_LV2UTILS_H
 
-#include <QMutex>
+#include "base/Instrument.h"
+#include "sound/PluginPortConnection.h"
 
-#include <map>
 #include <lilv/lilv.h>
 #include <lv2/urid/urid.h>
 #include <lv2/atom/atom.h>
 #include <lv2/worker/worker.h>
 
-#include "base/Instrument.h"
-#include "sound/PluginPortConnection.h"
+#include <QMutex>
+#include <QString>
+
+#include <map>
 
 namespace Rosegarden
 {
+
 
 class LV2PluginInstance;
 class AudioPluginLV2GUI;
 class LV2Gtk;
 
+
 /// LV2 utils
 /**
- * LV2Utils encapsulate the lv2 world and supports communcation
- * between LV2 plugins and LV2 uis (different threads),
+ * LV2Utils encapsulates the lv2 world (LilvWorld?) and supports communication
+ * between LV2 plugins and LV2 UIs (different threads).
  */
-
 class LV2Utils
 {
  public:
@@ -49,11 +52,29 @@ class LV2Utils
     LV2Utils(LV2Utils &other) = delete;
     void operator=(const LV2Utils &) = delete;
 
-    LV2_URID uridMap(const char *uri);
-    const char* uridUnmap(LV2_URID urid);
 
+    // URI/URID mapping.
+
+    // ??? Split this out into its own LV2URID class.
+
+    /// Gets the URID for a URI.
+    /**
+     * If the URI hasn't been seen yet, a new URID is assigned.
+     *
+     * @see m_uridMap
+     */
+    LV2_URID uridMap(const char *uri);
+    /// Member function pointer to uridMap().
     LV2_URID_Map m_map;
+
+    /// Gets the URI for a URID.
+    /**
+     * @see m_uridUnmap
+     */
+    const char *uridUnmap(LV2_URID urid);
+    /// Member function pointer to uridUnmap().
     LV2_URID_Unmap m_unmap;
+
 
     enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
     enum LV2PortProtocol {LV2FLOAT, LV2ATOM};
@@ -80,11 +101,12 @@ class LV2Utils
         std::vector<LV2PortData> ports;
     };
 
-    // key type for maps
+    // Key type for GUI and worker maps.
     struct PluginPosition
     {
         InstrumentId instrument;
         int position;
+
         bool operator<(const PluginPosition &p) const
         {
             if (instrument < p.instrument) return true;
@@ -94,35 +116,53 @@ class LV2Utils
         }
     };
 
+
+    // Worker
+
+    // ??? Move these to LV2Worker as statics.
+
     // interface for a worker class
+    // ??? Only used by LV2Worker.  Move there.
     typedef LV2_Worker_Status (*ScheduleWork)(LV2_Worker_Schedule_Handle handle,
                                               uint32_t size,
                                               const void* data);
 
-    typedef LV2_Worker_Status (*RespondWork)(LV2_Worker_Respond_Handle handle,
-                                             uint32_t size,
-                                             const void *data);
+    //typedef LV2_Worker_Status (*RespondWork)(LV2_Worker_Respond_Handle handle,
+    //                                         uint32_t size,
+    //                                         const void *data);
 
     struct WorkerJob
     {
         uint32_t size;
-        const void* data;
+        const void *data;
     };
 
+    /// LV2Worker derives from this.
     class Worker
     {
     public:
         virtual ~Worker() {};
         virtual ScheduleWork getScheduler() = 0;
-        virtual WorkerJob* getResponse(const LV2Utils::PluginPosition& pp) = 0;
+        virtual WorkerJob *getResponse(const LV2Utils::PluginPosition &pp) = 0;
     };
 
-    void initPluginData();
+    void registerWorker(Worker *worker);
+    Worker *getWorker() const;
+    void unRegisterWorker();
 
-    const std::map<QString, LV2PluginData>& getAllPluginData();
-    const LilvPlugin* getPluginByUri(const QString& uri) const;
+
+    // Plugins
+
+    const std::map<QString, LV2PluginData> &getAllPluginData();
+    LV2PluginData getPluginData(const QString& uri) const;
+
+    const LilvPlugin *getPluginByUri(const QString& uri) const;
+
+    // Port
     int getPortIndexFromSymbol(const QString& portSymbol,
                                const LilvPlugin* plugin);
+
+    // State
     LilvState* getDefaultStateByUri(const QString& uri);
     QString getStateFromInstance(const LilvPlugin* plugin,
                                  const QString& uri,
@@ -135,29 +175,36 @@ class LV2Utils
                                     LilvSetPortValueFunc setPortValueFunc,
                                     LV2PluginInstance* lv2Instance,
                                     const LV2_Feature*const* features);
-    LV2PluginData getPluginData(const QString& uri) const;
+
+    /// lilv_new_uri() wrapper.
     LilvNode* makeURINode(const QString& uri) const;
+    /// lilv_new_string() wrapper.
     LilvNode* makeStringNode(const QString& string) const;
 
+
+    /// Lock m_mutex.
+    /**
+     * ??? This is used to lock m_workerResponses, and what else?
+     */
     void lock();
+    /// Unlock m_mutex.
     void unlock();
 
+
+    /// Adds plugin instance to m_pluginGuis.
     void registerPlugin(InstrumentId instrument,
                         int position,
                         LV2PluginInstance* pluginInstance);
-    void registerGUI(InstrumentId instrument,
-                     int position,
-                     AudioPluginLV2GUI* gui);
-
-    void registerWorker(Worker* worker);
-
     void unRegisterPlugin(InstrumentId instrument,
                           int position,
                           LV2PluginInstance* pluginInstance);
+
+    /// Adds plugin GUI to m_pluginGuis.
+    void registerGUI(InstrumentId instrument,
+                     int position,
+                     AudioPluginLV2GUI* gui);
     void unRegisterGUI(InstrumentId instrument,
                        int position);
-
-    void unRegisterWorker();
 
     // set the value for the plugin
     void setPortValue(InstrumentId instrument,
@@ -172,10 +219,8 @@ class LV2Utils
                          int index,
                          const LV2_Atom* atom);
 
-    int numInstances(InstrumentId instrument,
-                     int position) const;
-
-    Worker* getWorker() const;
+//    int numInstances(InstrumentId instrument,
+//                     int position) const;
 
     void runWork(const PluginPosition& pp,
                  uint32_t size,
@@ -211,29 +256,48 @@ class LV2Utils
     LV2Utils();
     ~LV2Utils();
 
-    //urid map
-    std::map<std::string, int> m_uridMap;
-    std::map<int, std::string> m_uridUnmap;
-    int m_nextId;
+
+    // URID <-> URI maps
+
+    // URI (string) to URID (uint)
+    std::map<std::string /* URI */, LV2_URID> m_uridMap;
+    // URID (uint) to URI (string)
+    std::map<LV2_URID, std::string /* URI */> m_uridUnmap;
+    // Next URID.
+    LV2_URID m_nextId;
+
 
     QMutex m_mutex;
-    LilvWorld* m_world;
-    const LilvPlugins* m_plugins;
+
+    LilvWorld *m_world;
+
+    /// Result of lilv_world_get_all_plugins().
+    /**
+     * Used by getPluginByUri().
+     */
+    const LilvPlugins *m_plugins;
+
     std::map<QString, LV2PluginData> m_pluginData;
+    /// Assembles plugin data for each plugin and adds to m_pluginData.
+    void initPluginData();
 
     struct LV2UPlugin
     {
-        LV2PluginInstance* pluginInstance;
-        AudioPluginLV2GUI* gui;
-        LV2UPlugin() {pluginInstance = nullptr; gui = nullptr;}
+        LV2PluginInstance *pluginInstance{nullptr};
+        AudioPluginLV2GUI *gui{nullptr};
     };
-
     typedef std::map<PluginPosition, LV2UPlugin> PluginGuiMap;
     PluginGuiMap m_pluginGuis;
 
-    Worker* m_worker;
-    LV2Gtk* m_lv2gtk;
+    /// The LV2Worker instance.
+    /**
+     * Would a Singleton be simpler?
+     */
+    Worker *m_worker;
+
+    LV2Gtk *m_lv2gtk;
 };
+
 
 }
 
