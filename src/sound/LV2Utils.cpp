@@ -18,13 +18,13 @@
 #include "LV2Utils.h"
 
 #include "misc/Debug.h"
-#include "base/AudioPluginInstance.h"
+#include "base/AudioPluginInstance.h"  // For PluginPort
 #include "sound/LV2PluginInstance.h"
 #include "gui/studio/AudioPluginLV2GUI.h"
 #include "gui/studio/LV2Gtk.h"
 
 #include <lv2/midi/midi.h>
-#include <lv2/ui/ui.h>
+//#include <lv2/ui/ui.h>
 
 // LV2Utils is used in different threads
 #define LOCKED QMutexLocker rg_utils_locker(&m_mutex)
@@ -48,8 +48,10 @@ namespace
     }
 }
 
+
 namespace Rosegarden
 {
+
 
 LV2Utils *
 LV2Utils::getInstance()
@@ -257,13 +259,13 @@ void LV2Utils::initPluginData()
     }
 }
 
-const std::map<QString, LV2Utils::LV2PluginData>& LV2Utils::getAllPluginData()
+const std::map<QString /* URI */, LV2Utils::LV2PluginData> &
+LV2Utils::getAllPluginData()
 {
-    if (m_pluginData.size() == 0)
-        {
-            // plugin data has not yet been set (or maybe there are no plugins)
-            initPluginData();
-        }
+    if (m_pluginData.size() == 0) {
+        // plugin data has not yet been set (or maybe there are no plugins)
+        initPluginData();
+    }
     return m_pluginData;
 }
 
@@ -320,7 +322,7 @@ QString LV2Utils::getStateFromInstance(const LilvPlugin* plugin,
     return QString(s);
 }
 
-    void LV2Utils::setInstanceStateFromString
+void LV2Utils::setInstanceStateFromString
     (const QString& stateString,
      LilvInstance* instance,
      LilvSetPortValueFunc setPortValueFunc,
@@ -500,8 +502,10 @@ void LV2Utils::updatePortValue(InstrumentId instrument,
                                int index,
                                const LV2_Atom* atom)
 {
-    // no lock here as this is called from the run method which is
-    // already locked
+
+    // !!! No lock here as this is called from the run method which is
+    //     already locked.
+
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
@@ -551,13 +555,13 @@ void LV2Utils::runWork(const PluginPosition& pp,
                        const void* data,
                        LV2_Worker_Respond_Function resp)
 {
-    auto pit = m_pluginGuis.find(pp);
+    PluginGuiMap::const_iterator pit = m_pluginGuis.find(pp);
     if (pit == m_pluginGuis.end()) {
         RG_DEBUG << "runWork: plugin not found" <<
             pp.instrument << pp.position;
         return;
     }
-    const LV2UPlugin& pgdata = (*pit).second;
+    const LV2UPlugin& pgdata = pit->second;
     if (pgdata.pluginInstance == nullptr) {
         RG_DEBUG << "runWork no pluginInstance" <<
             pp.instrument << pp.position;
@@ -573,7 +577,7 @@ void LV2Utils::getControlInValues(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginGuis.find(pp);
+    PluginGuiMap::const_iterator pit = m_pluginGuis.find(pp);
     if (pit == m_pluginGuis.end()) {
         RG_DEBUG << "getControlInValues plugin not found" <<
             instrument << position;
@@ -595,7 +599,7 @@ void LV2Utils::getControlOutValues(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginGuis.find(pp);
+    PluginGuiMap::const_iterator pit = m_pluginGuis.find(pp);
     if (pit == m_pluginGuis.end()) {
         RG_DEBUG << "getControlOutValues plugin not found" <<
             instrument << position;
@@ -616,7 +620,7 @@ LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginGuis.find(pp);
+    PluginGuiMap::const_iterator pit = m_pluginGuis.find(pp);
     if (pit == m_pluginGuis.end()) {
         RG_DEBUG << "getPluginInstance plugin not found" <<
             instrument << position;

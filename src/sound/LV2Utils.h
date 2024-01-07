@@ -55,7 +55,7 @@ class LV2Utils
 
     // URI/URID mapping.
 
-    // ??? Split this out into its own LV2URID class.
+    // ??? Split this out into its own LV2URIMapper class.
 
     /// Gets the URID for a URI.
     /**
@@ -76,31 +76,6 @@ class LV2Utils
     LV2_URID_Unmap m_unmap;
 
 
-    enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
-    enum LV2PortProtocol {LV2FLOAT, LV2ATOM};
-
-    struct LV2PortData
-    {
-        QString name;
-        LV2PortType portType;
-        LV2PortProtocol portProtocol;
-        bool isInput;
-        float min;
-        float max;
-        float def;
-        int displayHint;
-    };
-
-    struct LV2PluginData
-    {
-        QString name;
-        QString label; // abbreviated name
-        QString pluginClass;
-        QString author;
-        bool isInstrument;
-        std::vector<LV2PortData> ports;
-    };
-
     // Key type for GUI and worker maps.
     struct PluginPosition
     {
@@ -117,9 +92,9 @@ class LV2Utils
     };
 
 
-    // Worker
+    // LV2 Worker Feature
 
-    // ??? Move these to LV2Worker as statics.
+    // ??? Move these to LV2Worker as statics?
 
     // interface for a worker class
     // ??? Only used by LV2Worker.  Move there.
@@ -150,10 +125,43 @@ class LV2Utils
     Worker *getWorker() const;
     void unRegisterWorker();
 
+    void runWork(const PluginPosition &pp,
+                 uint32_t size,
+                 const void *data,
+                 LV2_Worker_Respond_Function resp);
 
-    // Plugins
 
-    const std::map<QString, LV2PluginData> &getAllPluginData();
+    // Plugin Management
+
+    // ??? These functions feel more like an LV2PluginManager class.
+    //     Consider breaking them out into a new class or namespace.
+
+    enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
+    enum LV2PortProtocol {LV2FLOAT, LV2ATOM};
+
+    struct LV2PortData
+    {
+        QString name;
+        LV2PortType portType;
+        LV2PortProtocol portProtocol;
+        bool isInput;
+        float min;
+        float max;
+        float def;
+        int displayHint;
+    };
+
+    struct LV2PluginData
+    {
+        QString name;
+        QString label; // abbreviated name
+        QString pluginClass;
+        QString author;
+        bool isInstrument;
+        std::vector<LV2PortData> ports;
+    };
+
+    const std::map<QString /* URI */, LV2PluginData> &getAllPluginData();
     LV2PluginData getPluginData(const QString& uri) const;
 
     const LilvPlugin *getPluginByUri(const QString& uri) const;
@@ -222,28 +230,26 @@ class LV2Utils
 //    int numInstances(InstrumentId instrument,
 //                     int position) const;
 
-    void runWork(const PluginPosition& pp,
-                 uint32_t size,
-                 const void* data,
-                 LV2_Worker_Respond_Function resp);
-
     void getControlInValues(InstrumentId instrument,
                             int position,
-                            std::map<int, float>& controlValues);
+                            std::map<int, float> &controlValues);
 
     void getControlOutValues(InstrumentId instrument,
                              int position,
-                             std::map<int, float>& controlValues);
+                             std::map<int, float> &controlValues);
 
     LV2PluginInstance* getPluginInstance(InstrumentId instrument,
                                          int position) const;
 
-    LV2Gtk* getLV2Gtk() const;
+    /// Singleton.
+    // ??? Move to LV2Gtk::getInstance().
+    LV2Gtk *getLV2Gtk() const;
 
     void getConnections
         (InstrumentId instrument,
          int position,
          PluginPortConnection::ConnectionList& clist) const;
+    // ??? Might be unused.  Caller appears to be unused.
     void setConnections
         (InstrumentId instrument,
          int position,
@@ -252,6 +258,7 @@ class LV2Utils
     QString getPortName(const QString& uri, int portIndex) const;
 
  private:
+
     /// Singleton.  See getInstance().
     LV2Utils();
     ~LV2Utils();
@@ -267,8 +274,15 @@ class LV2Utils
     LV2_URID m_nextId;
 
 
+    // ??? What data is this synchronizing?  It appears to be used
+    //     for a number of different things but not everything.  Why?
+    // ??? What threads are involved?  Plugin instance threads?
+    //     Plugin GUI threads?  Plugin worker threads?
+    //     RG GUI thread?  RG sequencer thread?
     QMutex m_mutex;
 
+
+    /// Instance pointer used by the lilv_*() functions.
     LilvWorld *m_world;
 
     /// Result of lilv_world_get_all_plugins().
@@ -277,15 +291,19 @@ class LV2Utils
      */
     const LilvPlugins *m_plugins;
 
-    std::map<QString, LV2PluginData> m_pluginData;
-    /// Assembles plugin data for each plugin and adds to m_pluginData.
+    /// Additional data we keep for each plugin organized by URI.
+    std::map<QString /* URI */, LV2PluginData> m_pluginData;
+    /// Assemble plugin data for each plugin and add to m_pluginData.
     void initPluginData();
 
+    // Plugin instance data organized by instrument/position.
+    // ??? rename: PluginInstanceData
     struct LV2UPlugin
     {
         LV2PluginInstance *pluginInstance{nullptr};
         AudioPluginLV2GUI *gui{nullptr};
     };
+    // ??? rename: PluginInstanceMap
     typedef std::map<PluginPosition, LV2UPlugin> PluginGuiMap;
     PluginGuiMap m_pluginGuis;
 
@@ -295,6 +313,7 @@ class LV2Utils
      */
     Worker *m_worker;
 
+    // ??? Move to LV2Gtk.
     LV2Gtk *m_lv2gtk;
 };
 
