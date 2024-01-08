@@ -217,15 +217,15 @@ LV2PluginInstance::init(int idealChannelCount)
             break;
         }
     }
-    // if we have a stereo channel and a mono plugin we combine the
-    // stereo input to the mono plugin and distribute the plugin
-    // output to the stereo channels !
+    // if we have a stereo channel and a mono plugin or a mono
+    // instrument we combine the stereo input to the mono plugin and
+    // distribute the plugin output to the stereo channels !
     m_distributeChannels = false;
-    if (m_audioPortsIn.size() == 1 &&
+    if (m_audioPortsIn.size() <= 1 &&
         m_audioPortsOut.size() == 1 &&
         m_channelCount == 2)
         {
-            m_audioPortsIn.push_back(-1);
+            if (m_audioPortsIn.size() == 1) m_audioPortsIn.push_back(-1);
             m_audioPortsOut.push_back(-1);
             m_distributeChannels = true;
         }
@@ -856,7 +856,7 @@ LV2PluginInstance::run(const RealTime &rt)
         sendMidiData(rawMidi, frameOffset);
     }
 
-    if (m_distributeChannels) {
+    if (m_distributeChannels && m_audioPortsIn.size() > 1) {
         // the input buffers contain stereo channels - combine for a
         // mono plugin. If this is the case there are exactly 2 input
         // and output buffers. The first ones are connected to the
@@ -916,6 +916,7 @@ LV2PluginInstance::run(const RealTime &rt)
         lv2_atom_sequence_clear(aseq);
     }
 
+    // check for mono plugin on stereo channel or mono synth instrument
     if (m_distributeChannels) {
         // after running distribute the output to the two channels
         for (size_t i = 0; i < m_blockSize; ++i) {
