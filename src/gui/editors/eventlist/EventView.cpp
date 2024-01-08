@@ -74,7 +74,6 @@
 #include <QPoint>
 #include <QPushButton>
 #include <QSettings>
-#include <QSignalMapper>
 #include <QSize>
 #include <QStatusBar>
 #include <QString>

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -55,8 +55,6 @@
 #include <QSignalMapper>
 #include <QApplication>
 
-
-
 namespace Rosegarden
 {
 
@@ -95,8 +93,13 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     m_audioFader->setFont(font);
     connect(m_audioFader, &AudioFaderBox::audioChannelsChanged,
             this, &AudioInstrumentParameterPanel::slotAudioChannels);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    connect(m_audioFader->m_signalMapper, SIGNAL(mappedInt(int)),
+            this, SLOT(slotSelectPlugin(int)));
+#else
     connect(m_audioFader->m_signalMapper, SIGNAL(mapped(int)),
             this, SLOT(slotSelectPlugin(int)));
+#endif
     connect(m_audioFader->m_fader, &Fader::faderChanged,
             this, &AudioInstrumentParameterPanel::slotSelectAudioLevel);
     connect(m_audioFader->m_recordFader, &Fader::faderChanged,
