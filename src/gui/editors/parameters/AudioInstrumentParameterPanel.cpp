@@ -94,8 +94,8 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     connect(m_audioFader, &AudioFaderBox::audioChannelsChanged,
             this, &AudioInstrumentParameterPanel::slotAudioChannels);
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    connect(m_audioFader->m_signalMapper, SIGNAL(mappedInt(int)),
-            this, SLOT(slotSelectPlugin(int)));
+    connect(m_audioFader->m_signalMapper, &QSignalMapper::mappedInt,
+            this, &AudioInstrumentParameterPanel::slotSelectPlugin);
 #else
     connect(m_audioFader->m_signalMapper, SIGNAL(mapped(int)),
             this, SLOT(slotSelectPlugin(int)));
