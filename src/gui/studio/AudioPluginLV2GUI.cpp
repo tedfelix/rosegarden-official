@@ -224,7 +224,9 @@ AudioPluginLV2GUI::updatePortValue(int port, float value)
 {
     if (! m_window) return;
     LV2UI_Handle handle = m_window->getHandle();
-    if (m_uidesc) m_uidesc->port_event(handle, port, sizeof(float), 0, &value);
+    if (m_uidesc && m_uidesc->port_event) {
+        m_uidesc->port_event(handle, port, sizeof(float), 0, &value);
+    }
 }
 
 void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
