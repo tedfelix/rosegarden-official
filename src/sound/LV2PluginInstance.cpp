@@ -883,8 +883,10 @@ LV2PluginInstance::run(const RealTime &rt)
     pp.instrument = m_instrument;
     pp.position = m_position;
     if (m_workerInterface && worker) {
+        LV2_Handle handle = lilv_instance_get_handle(m_instance);
         while(LV2Utils::WorkerJob* job = worker->getResponse(pp)) {
-            m_workerInterface->work_response(m_instance, job->size, job->data);
+            m_workerInterface->work_response(handle, job->size, job->data);
+            delete[] (char*)job->data;
             delete job;
         }
 

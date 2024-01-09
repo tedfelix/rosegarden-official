@@ -79,13 +79,15 @@ LV2Utils::ScheduleWork LV2Worker::getScheduler()
 LV2Utils::WorkerJob* LV2Worker::getResponse(const LV2Utils::PluginPosition& pp)
 {
     // called in the audio thread
-    RG_DEBUG << "getResponse called" << m_workerResponses.size();
+    //RG_DEBUG << "getResponse called" << pp.instrument << pp.position <<
+    //  m_workerResponses.size();
     auto it = m_workerResponses.find(pp);
     if (it == m_workerResponses.end()) return nullptr;
     JobQueue& jq = (*it).second;
     if (jq.empty()) return nullptr;
+    RG_DEBUG << "getResponse" << pp.instrument << pp.position;
     LV2Utils::WorkerJob* jobcopy =
-        new LV2Utils::WorkerJob(jq.front());
+        new LV2Utils::WorkerJob(jq.front()); // copy pointer
     jq.pop();
     return jobcopy;
 }
@@ -95,7 +97,7 @@ LV2_Worker_Status LV2Worker::scheduleWork(uint32_t size,
                                           const LV2Utils::PluginPosition& pp)
 {
     // this is called by the plugin in the audio thread
-    RG_DEBUG << "scheduleWork called" << size;
+    RG_DEBUG << "scheduleWork called" << pp.instrument << pp.position << size;
 
     // if we were doing direct rendering we could call work here. In
     // real time processing the work must be queued
@@ -107,9 +109,10 @@ LV2_Worker_Status LV2Worker::scheduleWork(uint32_t size,
     jq.push(job);
 
     for(auto& pair : m_workerJobs) {
-        //const LV2Utils::PluginPosition& pp = pair.first;
-        JobQueue& jq = pair.second;
-        RG_DEBUG << "sched job queue" << jq.size();
+        const LV2Utils::PluginPosition& ppd = pair.first;
+        JobQueue& jqd = pair.second;
+        RG_DEBUG << "sched job queue" << ppd.instrument << ppd.position <<
+            jqd.size();
     }
 
     return LV2_WORKER_SUCCESS;
@@ -120,14 +123,15 @@ LV2_Worker_Status LV2Worker::respondWork(uint32_t size,
                                          const LV2Utils::PluginPosition& pp)
 {
     // this is called by the plugin in the non audio thread
-    RG_DEBUG << "respondWork called" << m_workerResponses.size();
+    RG_DEBUG << "respondWork called" << pp.instrument << pp.position <<
+        m_workerResponses.size();
     LV2Utils::WorkerJob job;
     job.size = size;
     job.data = new char[size];
     memcpy((void*)job.data, data, size);
-    JobQueue& jq = m_workerResponses[pp];
     LV2Utils* lv2utils = LV2Utils::getInstance();
     lv2utils->lock();
+    JobQueue& jq = m_workerResponses[pp];
     jq.push(job);
     lv2utils->unlock();
 
@@ -142,9 +146,9 @@ void LV2Worker::workTimeUp()
     for(auto& pair : m_workerJobs) {
         const LV2Utils::PluginPosition& pp = pair.first;
         JobQueue& jq = pair.second;
-        RG_DEBUG << "job queue" << jq.size();
+        //RG_DEBUG << "job queue" << jq.size();
         while(! jq.empty()) {
-            RG_DEBUG << "work to do";
+            RG_DEBUG << "work to do" << pp.instrument << pp.position;
             LV2Utils::WorkerJob& job = jq.front();
             // call work
             lv2utils->runWork(pp, job.size, job.data, respondWorkC);
