@@ -116,6 +116,8 @@ LV2PluginInstance::LV2PluginInstance
     m_plugin = lv2utils->getPluginByUri(m_uri);
 
     snd_midi_event_new(100, &m_midiParser);
+    snd_midi_event_no_status(m_midiParser, 1); // disable merging
+
     m_midiEventUrid = lv2utils->uridMap(LV2_MIDI__MidiEvent);
 
     instantiate(sampleRate);
