@@ -219,6 +219,7 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
 AudioPluginLV2GUIWindow::~AudioPluginLV2GUIWindow()
 {
     RG_DEBUG << "~AudioPluginLV2GUIWindow";
+    m_timer->stop();
     m_lv2II = nullptr;
 }
 
@@ -251,6 +252,7 @@ LV2UI_Handle AudioPluginLV2GUIWindow::getHandle() const
 void AudioPluginLV2GUIWindow::uiClosed()
 {
     RG_DEBUG << "ui closed";
+    m_timer->stop();
     m_lv2Gui->closeUI();
 }
 
@@ -277,6 +279,7 @@ void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
 {
     RG_DEBUG << "closeEvent";
     event->accept();
+    m_timer->stop();
     // tell the ui to tidy up
     if (m_pWindow) m_pWindow->setParent(nullptr);
     LV2Utils* lv2utils = LV2Utils::getInstance();
