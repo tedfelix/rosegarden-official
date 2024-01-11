@@ -86,7 +86,8 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_cWidget(nullptr),
     m_pWindow(nullptr),
     m_widget(nullptr),
-    m_title(title)
+    m_title(title),
+    m_shutdownRequested(false)
 {
     RG_DEBUG << "create window" << id << m_uiType << m_title;
     setWindowTitle(m_title);
@@ -252,8 +253,8 @@ LV2UI_Handle AudioPluginLV2GUIWindow::getHandle() const
 void AudioPluginLV2GUIWindow::uiClosed()
 {
     RG_DEBUG << "ui closed";
-    m_timer->stop();
-    m_lv2Gui->closeUI();
+    // can't do much here as this may be called from a different thread
+    m_shutdownRequested = true;
 }
 
 void AudioPluginLV2GUIWindow::setSize(int width, int height, bool isRequest)
@@ -265,6 +266,14 @@ void AudioPluginLV2GUIWindow::setSize(int width, int height, bool isRequest)
 
 void AudioPluginLV2GUIWindow::timeUp()
 {
+    if (m_shutdownRequested) {
+        RG_DEBUG << "timeUp shutdown requested";
+        m_timer->stop();
+        // this will cuase this object to be deleted
+        m_lv2Gui->closeUI();
+        return;
+    }
+
     if (m_lv2II) m_lv2II->idle(m_handle);
 
     // check control outs

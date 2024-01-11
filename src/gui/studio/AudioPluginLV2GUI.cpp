@@ -268,6 +268,7 @@ const LV2PluginInstance* AudioPluginLV2GUI::getPluginInstance() const
 
 void AudioPluginLV2GUI::closeUI()
 {
+    RG_DEBUG << "closeUI";
     // this will cause this object to be deleted
     m_manager->stopGUI(m_instrument,
                        m_position);

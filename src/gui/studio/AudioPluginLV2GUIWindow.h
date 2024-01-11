@@ -90,6 +90,7 @@ class AudioPluginLV2GUIWindow :
     LV2UI_Widget m_widget;
     QString m_title;
     std::string m_titles;
+    bool m_shutdownRequested;
 };
 
 }
