@@ -418,9 +418,9 @@ void LV2PluginInstance::setConnections
 
 LV2PluginInstance::~LV2PluginInstance()
 {
-    RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance";
+    RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance" << m_uri;
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->unRegisterPlugin(m_instrument, m_position);
+    lv2utils->unRegisterPlugin(m_instrument, m_position, this);
 
     if (m_instance != nullptr) {
         deactivate();

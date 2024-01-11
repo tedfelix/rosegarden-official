@@ -417,7 +417,8 @@ void LV2Utils::registerWorker(Worker* worker)
 }
 
 void LV2Utils::unRegisterPlugin(InstrumentId instrument,
-                                int position)
+                                int position,
+                                LV2PluginInstance* pluginInstance)
 {
     LOCKED;
     RG_DEBUG << "unregister plugin" << instrument << position;
@@ -430,6 +431,12 @@ void LV2Utils::unRegisterPlugin(InstrumentId instrument,
         return;
     }
     LV2UPlugin& pgdata = (*pit).second;
+    if (pgdata.pluginInstance != pluginInstance) {
+        // this can happen if a plugin is replaced - the old plugin is
+        // deleted later (scavenged) after the new plugin is registered
+        RG_DEBUG << "unRegisterPlugin plugin already replaced";
+        return;
+    }
     pgdata.pluginInstance = nullptr;
     if (pgdata.gui == nullptr) {
         // both 0 - delete entry

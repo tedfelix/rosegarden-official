@@ -152,7 +152,8 @@ class LV2Utils
     void registerWorker(Worker* worker);
 
     void unRegisterPlugin(InstrumentId instrument,
-                          int position);
+                          int position,
+                          LV2PluginInstance* pluginInstance);
     void unRegisterGUI(InstrumentId instrument,
                        int position);
 
