@@ -296,7 +296,7 @@ with gzip.open(out_file, "wb") as OUT_FH:
             if MSB in bank_names and LSB in bank_names[MSB]:
                 name = bank_names[MSB][LSB]
             else:
-                name = f"{MSB:03u}-{LSB:03u}"
+                name = f"{MSB:03d}-{LSB:03d}"
             OUT_FH.write(f"""  <bank name="{name}" msb="{MSB}" lsb="{LSB}">\n"""
                          .encode())
 
