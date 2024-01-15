@@ -18,21 +18,17 @@
 
 #include "LV2PluginFactory.h"
 
-#include <cstdlib>
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-
-#include <dlfcn.h>
-#include <QDir>
-#include <cmath>
 
 #include "sound/LV2PluginInstance.h"
 #include "sound/LV2Utils.h"
 #include "MappedStudio.h"
-#include "PluginIdentifier.h"
+
 
 namespace Rosegarden
 {
+
 
 LV2PluginFactory::LV2PluginFactory()
 {
@@ -61,26 +57,53 @@ void
 LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 {
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    auto allPluginData = lv2utils->getAllPluginData();
-    for(auto pair : allPluginData) {
+    const auto &allPluginData = lv2utils->getAllPluginData();
+
+    // For each plugin...
+    for (const auto &pair : allPluginData) {
+
+        // ??? This is misleading.  A MappedObjectPropertyList is nothing
+        //     more than a vector<QString>.  It's not being used as a
+        //     property list here.  It is simply being used as a vector<QString>
+        //     where specific positions in the vector have specific meaning.
+        //     See PluginFactory::enumeratePlugins() for more.
+
+        // This is in a standard format, see the LADSPA implementation
+        // for details.
+
+        // URI
         const QString& uri = pair.first;
         list.push_back(uri);
+
+        // Name
         const LV2Utils::LV2PluginData& pluginData = pair.second;
         list.push_back(pluginData.name);
+
+        // ID
         // uri is the id
         list.push_back(uri);
+
+        // Label???
         list.push_back(pluginData.label);
+
+        // Author
         list.push_back(pluginData.author);
+
+        // Copyright
         // no copywrite in lv2
         list.push_back("");
 
+        // Synth
         if (pluginData.isInstrument) {
             list.push_back("true"); // is synth
         } else {
             list.push_back("false"); // is synth
         }
+
+        // Grouped
         list.push_back("false"); // is grouped
 
+        // Class
         if (m_taxonomy.find(uri) != m_taxonomy.end() &&
                 m_taxonomy[uri] != "") {
             list.push_back(m_taxonomy[uri]);
@@ -89,9 +112,11 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
             list.push_back("");
         }
 
+        // Number Of Ports
         unsigned int nports = pluginData.ports.size();
         list.push_back(QString("%1").arg(nports));
 
+        // For each port...
         for (unsigned long p = 0; p < nports; ++p) {
             const LV2Utils::LV2PortData portData = pluginData.ports[p];
             int type = 0;
@@ -123,7 +148,6 @@ LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
     }
 }
 
-
 void
 LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
 {
@@ -147,6 +171,7 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
 
     slot.destroyChildren();
 
+    // For each port...
     for (unsigned long i = 0; i < pluginData.ports.size(); i++) {
         const LV2Utils::LV2PortData& portData = pluginData.ports[i];
         if ((portData.portType == LV2Utils::LV2CONTROL ||
@@ -231,5 +256,6 @@ LV2PluginFactory::generateTaxonomy()
         m_identifiers.push_back(uri);
     }
 }
+
 
 }

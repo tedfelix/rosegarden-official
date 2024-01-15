@@ -22,17 +22,22 @@
 #include <vector>
 #include <map>
 #include <set>
+
 #include <QString>
+
 
 namespace Rosegarden
 {
 
-class LV2PluginInstance;
-class LV2Worker;
 
+class LV2PluginInstance;
+//class LV2Worker;
+
+
+/// Creates LV2PluginInstance objects.
 class LV2PluginFactory : public PluginFactory
 {
- public:
+public:
     ~LV2PluginFactory() override;
 
     void discoverPlugins() override;
@@ -52,21 +57,27 @@ class LV2PluginFactory : public PluginFactory
          unsigned int channels,
          AudioInstrumentMixer* amixer) override;
 
- protected:
+protected:
+
+    void releasePlugin(RunnablePluginInstance *, QString) override;
+
+private:
+
+    // Created only by PluginFactory.  See PluginFactory::instance().
     LV2PluginFactory();
     friend class PluginFactory;
 
- private:
-    void releasePlugin(RunnablePluginInstance *, QString) override;
-    virtual void generateTaxonomy();
+    void generateTaxonomy();
 
     std::set<RunnablePluginInstance *> m_instances;
 
     std::vector<QString> m_identifiers;
-    std::map<QString, QString> m_taxonomy;
+    // Plugin Class Map
+    std::map<QString /*uri*/, QString /*class*/> m_taxonomy;
 
-    LV2Worker* m_worker;
+    //LV2Worker* m_worker;
 };
+
 
 }
 

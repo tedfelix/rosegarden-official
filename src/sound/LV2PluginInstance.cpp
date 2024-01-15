@@ -16,7 +16,7 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginInstance.h"
-#include "LV2PluginFactory.h"
+//#include "LV2PluginFactory.h"
 
 #include <QtGlobal>
 #include <QJsonDocument>

@@ -53,6 +53,12 @@ public:
      * Append to the given list descriptions of all the available
      * plugins and their ports.  This is in a standard format, see
      * the LADSPA implementation for details.
+     *
+     * ??? MappedObjectPropertyList is being abused here.  This is
+     *     simply a vector<QString>.  Is it NOT a MappedObjectPropertyList.
+     *     This should use vector<QString> or its own type.  e.g.
+     *     typedef std::vector<QString> PluginData;
+     *
      */
     virtual void enumeratePlugins(MappedObjectPropertyList &list) = 0;
 

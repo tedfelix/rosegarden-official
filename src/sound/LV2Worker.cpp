@@ -54,8 +54,10 @@ namespace {
 
 }
 
+
 namespace Rosegarden
 {
+
 
 LV2Worker::LV2Worker()
 {
@@ -129,7 +131,9 @@ LV2_Worker_Status LV2Worker::respondWork(uint32_t size,
     job.size = size;
     job.data = new char[size];
     memcpy((void*)job.data, data, size);
+
     LV2Utils* lv2utils = LV2Utils::getInstance();
+
     lv2utils->lock();
     JobQueue& jq = m_workerResponses[pp];
     jq.push(job);
@@ -142,11 +146,16 @@ void LV2Worker::workTimeUp()
 {
     //RG_DEBUG << "workTimeUp" << m_workerJobs.size();
     LV2Utils* lv2utils = LV2Utils::getInstance();
+
     lv2utils->lock();
+
+    // For each job queue...
     for(auto& pair : m_workerJobs) {
         const LV2Utils::PluginPosition& pp = pair.first;
         JobQueue& jq = pair.second;
         //RG_DEBUG << "job queue" << jq.size();
+
+        // For each entry in the job queue...
         while(! jq.empty()) {
             RG_DEBUG << "work to do" << pp.instrument << pp.position;
             LV2Utils::WorkerJob& job = jq.front();
@@ -157,7 +166,9 @@ void LV2Worker::workTimeUp()
             jq.pop();
         }
     }
+
     lv2utils->unlock();
 }
+
 
 }
