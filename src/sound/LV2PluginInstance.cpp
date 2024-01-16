@@ -482,7 +482,8 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     m_workerFeature = {LV2_WORKER__schedule, &m_workerSchedule};
 
     LV2_URID nbl_urid = lv2utils->uridMap(LV2_BUF_SIZE__nominalBlockLength);
-    LV2_URID mbl_urid = lv2utils->uridMap(LV2_BUF_SIZE__maxBlockLength);
+    LV2_URID minbl_urid = lv2utils->uridMap(LV2_BUF_SIZE__minBlockLength);
+    LV2_URID maxbl_urid = lv2utils->uridMap(LV2_BUF_SIZE__maxBlockLength);
     LV2_URID ai_urid = lv2utils->uridMap(LV2_ATOM__Int);
     LV2_Options_Option opt;
     opt.context = LV2_OPTIONS_INSTANCE;
@@ -492,7 +493,10 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     opt.type = ai_urid;
     opt.value = &m_blockSize;
     m_options.push_back(opt);
-    opt.key = mbl_urid;
+    opt.key = minbl_urid;
+    opt.value = &m_blockSize;
+    m_options.push_back(opt);
+    opt.key = maxbl_urid;
     opt.value = &m_blockSize;
     m_options.push_back(opt);
     opt.key = 0;
@@ -501,10 +505,13 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     m_options.push_back(opt);
     m_optionsFeature = {LV2_OPTIONS__options, m_options.data()};
 
+    m_boundedBlockLengthFeature = {LV2_BUF_SIZE__boundedBlockLength, nullptr };
+
     m_features.push_back(&m_uridMapFeature);
     m_features.push_back(&m_uridUnmapFeature);
     m_features.push_back(&m_workerFeature);
     m_features.push_back(&m_optionsFeature);
+    m_features.push_back(&m_boundedBlockLengthFeature);
     m_features.push_back(nullptr);
 
     m_instance =

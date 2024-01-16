@@ -191,6 +191,7 @@ protected:
     LV2_Feature m_uridUnmapFeature;
     LV2_Feature m_workerFeature;
     LV2_Feature m_optionsFeature;
+    LV2_Feature m_boundedBlockLengthFeature;
     std::vector<LV2_Options_Option> m_options;
     LV2_Worker_Schedule m_workerSchedule;
     LV2_Worker_Interface* m_workerInterface;
