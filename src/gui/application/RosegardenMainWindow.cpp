@@ -1481,7 +1481,7 @@ RosegardenMainWindow::createDocument(
     //    break;
 
     case ImportMusicXML:
-        doc = createDocumentFromMusicXMLFile(filePath);
+        doc = createDocumentFromMusicXMLFile(filePath, permanent);
         break;
 
     case ImportRG4:
@@ -4543,7 +4543,8 @@ RosegardenMainWindow::slotMergeMusicXML()
 }
 
 RosegardenDocument *
-RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
+RosegardenMainWindow::createDocumentFromMusicXMLFile(const QString& file,
+                                                     bool permanent)
 {
     StartupLogo::hideIfStillThere();
 
@@ -4567,8 +4568,7 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
 
     // Inherent autoload
     //
-    RosegardenDocument *newDoc = newDocument(
-            true);  // permanent
+    RosegardenDocument *newDoc = newDocument(permanent);
 
     MusicXMLLoader musicxmlLoader(&newDoc->getStudio());
 

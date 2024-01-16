@@ -338,7 +338,8 @@ protected:
     /**
      * Create document from MusicXML file
      */
-    RosegardenDocument *createDocumentFromMusicXMLFile(QString file);
+    RosegardenDocument *createDocumentFromMusicXMLFile(const QString& file,
+                                                       bool permanent);
 
     /**/
     /**/
