@@ -151,7 +151,8 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_optionsFeature = {LV2_OPTIONS__options, m_options.data()};
 
     m_extUiHost.ui_closed = &ui_closed;
-    m_extUiHost.plugin_human_id = "Rosegarden";
+    std::string titles = m_title.toStdString();
+    m_extUiHost.plugin_human_id = titles.c_str();
     m_extHostFeature = {LV2_EXTERNAL_UI__Host, &m_extUiHost};
 
     m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_map)};

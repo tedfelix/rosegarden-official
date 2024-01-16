@@ -29,6 +29,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
+#include "document/RosegardenDocument.h"
 #include "sound/LV2Utils.h"
 
 // the kx.studio extension
@@ -67,7 +68,12 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     LilvNode* name = lilv_plugin_get_name(plugin);
     QString sname = lilv_node_as_string(name);
     RG_DEBUG << "got plugin " << sname;
-    m_title = sname;
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    Studio &studio = doc->getStudio();
+
+    // Get the appropriate instrument based on the ID.
+    Instrument *inst = studio.getInstrumentById(m_instrument);
+    m_title = strtoqstr(inst->getPresentationName()) + " " + sname;
 
     //ui types:
     // http://lv2plug.in/ns/extensions/ui#GtkUI (eg. calf)
