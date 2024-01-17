@@ -16,35 +16,38 @@
 #ifndef RG_LV2PLUGININSTANCE_H
 #define RG_LV2PLUGININSTANCE_H
 
-#include <vector>
-#include <list>
-#include <set>
-#include <map>
-#include <QString>
-
-#include <lilv/lilv.h>
-#include <lv2/atom/atom.h>
-#include <lv2/options/options.h>
-
-#include <alsa/seq_event.h>
-#include <alsa/seq_midi_event.h>
 #include "sound/LV2Utils.h"
 #include "sound/PluginPortConnection.h"
 
 #include "base/Instrument.h"
-#include "RingBuffer.h"
 
 #include "RunnablePluginInstance.h"
+
+#include <lv2/options/options.h>
+
+#include <alsa/seq_event.h>
+#include <alsa/seq_midi_event.h>  // for snd_midi_event_t
+
+#include <QString>
+
+#include <vector>
+#include <list>
+#include <map>
+
 
 namespace Rosegarden
 {
 
+
 class AudioInstrumentMixer;
 
-// LV2 plugin instance.  LV2 is a variable block size API, but
-// for one reason and another it's more convenient to use a fixed
-// block size in this wrapper.
-//
+
+/**
+ * LV2 plugin instance.
+ *
+ * LV2 is a variable block size API, but for one reason or another it's more
+ * convenient to use a fixed block size in this wrapper.
+ */
 class LV2PluginInstance : public RunnablePluginInstance
 {
 public:
@@ -52,13 +55,14 @@ public:
 
     bool isOK() const override { return m_instance != nullptr; }
 
-    InstrumentId getInstrument() const { return m_instrument; }
+    //InstrumentId getInstrument() const { return m_instrument; }
     QString getIdentifier() const override { return m_identifier; }
-    int getPosition() const { return m_position; }
+    //int getPosition() const { return m_position; }
 
     void run(const RealTime &rt) override;
 
     void setPortValue(unsigned int portNumber, float value) override;
+    /// Used privately in .cpp so has to be public.
     void setPortValue(const char *port_symbol,
                       const void *value,
                       uint32_t size,
@@ -68,6 +72,7 @@ public:
                           unsigned int protocol,
                           const QByteArray& ba);
     float getPortValue(unsigned int portNumber) override;
+    /// Used privately in .cpp so has to be public.
     void* getPortValue(const char *port_symbol,
                        uint32_t *size,
                        uint32_t *type);
@@ -93,13 +98,17 @@ public:
     void discardEvents() override;
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
-    int numInstances() const;
+    //int numInstances() const;
 
     void runWork(uint32_t size,
                  const void* data,
                  LV2_Worker_Respond_Function resp);
 
+    // ??? What is the int and the float?  portIndex and value?
+    //     typedef std::map<int /*portIndex*/, float /*value*/> PortValues;
+    /// Get m_controlPortsIn.
     void getControlInValues(std::map<int, float>& controlValues);
+    /// Get m_controlPortsOut.
     void getControlOutValues(std::map<int, float>& controlValues);
 
     const LV2_Descriptor* getLV2Descriptor() const;
@@ -113,12 +122,11 @@ public:
     void getConnections(PluginPortConnection::ConnectionList& clist) const;
     void setConnections(const PluginPortConnection::ConnectionList& clist);
 
-protected:
+private:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;
 
     // Constructor that creates the buffers internally
-    //
     LV2PluginInstance(PluginFactory *factory,
                       InstrumentId instrument,
                       const QString& identifier,
@@ -139,11 +147,11 @@ protected:
     //
     void connectPorts();
 
- private:
-
     void sendMidiData(const QByteArray& rawMidi,
                       size_t frameOffset);
 
+    // ??? What is the int and the float?  portIndex and value?
+    //     See proposed PortValues typedef above.
     std::map<int, float> m_controlPortsIn;
     std::map<int, float> m_controlPortsOut;
 
@@ -204,6 +212,7 @@ protected:
     AudioInstrumentMixer* m_amixer;
     PluginPortConnection::ConnectionList m_connections;
 };
+
 
 }
 

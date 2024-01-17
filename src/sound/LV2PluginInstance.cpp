@@ -16,21 +16,21 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginInstance.h"
-//#include "LV2PluginFactory.h"
-
-#include <QtGlobal>
-#include <QJsonDocument>
-#include <QJsonArray>
 
 #include "misc/Debug.h"
 #include "sound/LV2Utils.h"
 #include "sound/Midi.h"
-#include "sound/AudioProcess.h"
+#include "sound/AudioProcess.h"  // For AudioInstrumentMixer
 #include "gui/application/RosegardenMainWindow.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/atom/util.h>
 #include <lv2/buf-size/buf-size.h>
+
+//#include <QtGlobal>
+#include <QJsonDocument>
+#include <QJsonArray>
+
 
 namespace
 {
@@ -56,11 +56,14 @@ namespace
     }
 }
 
+
 namespace Rosegarden
 {
 
+
 #define EVENT_BUFFER_SIZE 1023
 #define ABUFSIZED 100000
+
 
 LV2PluginInstance::LV2PluginInstance
 (PluginFactory *factory,
@@ -265,7 +268,7 @@ LV2PluginInstance::getLatency()
                 }
             }
             run(RealTime::zero());
-	}
+        }
         return *m_latencyPort;
     }
     return 0;
@@ -319,6 +322,7 @@ LV2PluginInstance::setIdealChannelCount(size_t channels)
     }
 }
 
+#if 0
 int LV2PluginInstance::numInstances() const
 {
     RG_DEBUG << "numInstances";
@@ -326,6 +330,7 @@ int LV2PluginInstance::numInstances() const
     // always 1
     return 1;
 }
+#endif
 
 void LV2PluginInstance::runWork(uint32_t size,
                                 const void* data,
@@ -349,7 +354,7 @@ void LV2PluginInstance::getControlInValues
 (std::map<int, float>& controlValues)
 {
     controlValues.clear();
-    for (auto& pair : m_controlPortsIn) {
+    for (const auto& pair : m_controlPortsIn) {
         int portIndex = pair.first;
         float value = pair.second;
         controlValues[portIndex] = value;
@@ -360,7 +365,7 @@ void LV2PluginInstance::getControlOutValues
 (std::map<int, float>& controlValues)
 {
     controlValues.clear();
-    for (auto& pair : m_controlPortsOut) {
+    for (const auto& pair : m_controlPortsOut) {
         int portIndex = pair.first;
         float value = pair.second;
         controlValues[portIndex] = value;
@@ -411,11 +416,14 @@ void LV2PluginInstance::getConnections
 void LV2PluginInstance::setConnections
 (const PluginPortConnection::ConnectionList& clist)
 {
+#ifndef NDEBUG
     RG_DEBUG << "setConnections";
-    for(auto& c : clist) {
+    for(const auto& c : clist) {
         RG_DEBUG << c.isOutput << c.isAudio << c.pluginPort <<
             c.instrumentId << c.channel;
     }
+#endif
+
     m_connections = clist;
 }
 
@@ -447,12 +455,12 @@ LV2PluginInstance::~LV2PluginInstance()
     m_audioPortsIn.clear();
     m_audioPortsOut.clear();
 
-    for (auto& aip : m_atomInputPorts) {
+    for (const auto& aip : m_atomInputPorts) {
         delete[] aip.atomSeq;
     }
     m_atomInputPorts.clear();
 
-    for (auto& aop : m_atomOutputPorts) {
+    for (const auto& aop : m_atomOutputPorts) {
         delete[] aop.atomSeq;
     }
     m_atomOutputPorts.clear();
@@ -538,6 +546,7 @@ LV2PluginInstance::connectPorts()
     RG_DEBUG << "connectPorts";
     size_t inbuf = 0, outbuf = 0;
 
+    // For each audio in port...
     for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
         if (m_audioPortsIn[i] == -1) continue;
         RG_DEBUG << "connect audio in:" << m_audioPortsIn[i];
@@ -546,6 +555,7 @@ LV2PluginInstance::connectPorts()
         ++inbuf;
     }
 
+    // For each audio out port...
     for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
         if (m_audioPortsOut[i] == -1) continue;
         RG_DEBUG << "connect audio out:" << m_audioPortsOut[i];
@@ -554,6 +564,7 @@ LV2PluginInstance::connectPorts()
         ++outbuf;
     }
 
+    // For each control in port...
     for (auto& pair : m_controlPortsIn) {
         RG_DEBUG << "connect control in:" <<
             pair.first;
@@ -563,6 +574,7 @@ LV2PluginInstance::connectPorts()
              &pair.second);
     }
 
+    // For each control out port...
     for (auto& pair : m_controlPortsOut) {
         RG_DEBUG << "connect control out:" <<
             pair.first;
@@ -572,12 +584,14 @@ LV2PluginInstance::connectPorts()
              &pair.second);
     }
 
-    for (auto& aip : m_atomInputPorts) {
+    // For each atom in port...
+    for (const auto& aip : m_atomInputPorts) {
         RG_DEBUG << "connect atom in port" << aip.index;
         lilv_instance_connect_port(m_instance, aip.index, aip.atomSeq);
     }
 
-    for (auto& aop : m_atomOutputPorts) {
+    // For each atom out port...
+    for (const auto& aop : m_atomOutputPorts) {
         RG_DEBUG << "connect atom out port" << aop.index;
         lilv_instance_connect_port(m_instance, aop.index, aop.atomSeq);
     }
@@ -601,8 +615,8 @@ LV2PluginInstance::setPortValue
 (unsigned int portNumber, float value)
 {
     RG_DEBUG << "setPortValue" << portNumber << value;
-    auto it = m_controlPortsIn.find(portNumber);
-   if (it == m_controlPortsIn.end()) {
+    const auto it = m_controlPortsIn.find(portNumber);
+    if (it == m_controlPortsIn.end()) {
         RG_DEBUG << "port not found";
         return;
     }
@@ -654,8 +668,9 @@ LV2PluginInstance::setPortByteArray(unsigned int port,
 {
     RG_DEBUG << "setPortByteArray" << port << protocol;
     if (protocol == m_atomTransferUrid) {
-        for(auto& input : m_atomInputPorts) {
-            AtomPort& ap = input;
+        for (const AtomPort& input : m_atomInputPorts) {
+            // ??? Redundant.  Rename input to inputAtomPort and remove this.
+            const AtomPort& ap = input;
             if (ap.index == port) {
                 RG_DEBUG << "setPortByteArray send bytes" << ba.size() <<
                     ba.toHex() << protocol << ap.atomSeq;
@@ -683,7 +698,7 @@ LV2PluginInstance::setPortByteArray(unsigned int port,
 float
 LV2PluginInstance::getPortValue(unsigned int portNumber)
 {
-    auto it = m_controlPortsIn.find(portNumber);
+    const auto it = m_controlPortsIn.find(portNumber);
     if (it == m_controlPortsIn.end()) {
         RG_DEBUG << "getPortValue port not found";
         return 0.0;
@@ -699,7 +714,7 @@ void* LV2PluginInstance::getPortValue(const char *port_symbol,
     LV2Utils* lv2utils = LV2Utils::getInstance();
     int portIndex = lv2utils->getPortIndexFromSymbol(port_symbol, m_plugin);
 
-    auto it = m_controlPortsIn.find(portIndex);
+    const auto it = m_controlPortsIn.find(portIndex);
     if (it == m_controlPortsIn.end()) {
         RG_DEBUG << "control in not found" << portIndex;
         return nullptr;
@@ -708,7 +723,7 @@ void* LV2PluginInstance::getPortValue(const char *port_symbol,
     static uint32_t portValueType = lv2utils->uridMap(LV2_ATOM__Float);
     *size = portValueSize;
     *type = portValueType;
-    return &((*it).second);
+    return &(it->second);
 }
 
 QString LV2PluginInstance::configure(const QString& key, const QString& value)
@@ -730,7 +745,7 @@ QString LV2PluginInstance::configure(const QString& key, const QString& value)
         QJsonDocument doc = QJsonDocument::fromJson(value.toUtf8());
         QJsonArray arr = doc.array();
         m_connections.clear();
-        for (auto jct : arr)
+        for (const QJsonValue &jct : arr)
             {
                 QJsonArray arr1 = jct.toArray();
                 QJsonValue oval = arr1[0];
@@ -774,7 +789,7 @@ void LV2PluginInstance::savePluginState()
 
     // also save the connections to a json string
     QJsonArray conns;
-    for(auto& c : m_connections) {
+    for (const PluginPortConnection::Connection &c : m_connections) {
         int ii = c.instrumentId;
         QJsonValue val1(c.isOutput);
         QJsonValue val2(c.isAudio);
@@ -828,9 +843,10 @@ LV2PluginInstance::run(const RealTime &rt)
     //RG_DEBUG << "run" << rt;
     m_pluginHasRun = true;
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    // get connected buffers
+
+    // Get connected buffers.
     int bufIndex = 0;
-    for(auto& c : m_connections) {
+    for (const PluginPortConnection::Connection &c : m_connections) {
         if (c.instrumentId != 0 && c.instrumentId != m_instrument) {
             auto ib = m_amixer->getAudioBuffer(c.instrumentId, c.channel);
             if (ib) {
@@ -850,6 +866,7 @@ LV2PluginInstance::run(const RealTime &rt)
 
     RealTime bufferStart = rt;
     auto it = m_eventBuffer.begin();
+    // Send each event.
     while(it != m_eventBuffer.end()) {
         RealTime evTime = (*it).time;
         QByteArray rawMidi = (*it).data;
@@ -864,7 +881,7 @@ LV2PluginInstance::run(const RealTime &rt)
         // the event is in this block
         RG_DEBUG << "send event to plugin" << evTime;
         auto iterToDelete = it;
-        it++;
+        ++it;
         m_eventBuffer.erase(iterToDelete);
 
         sendMidiData(rawMidi, frameOffset);
@@ -883,7 +900,7 @@ LV2PluginInstance::run(const RealTime &rt)
     }
 
     // init atom out
-    for(auto& ap : m_atomOutputPorts) {
+    for (const AtomPort &ap : m_atomOutputPorts) {
         LV2_Atom_Sequence* aseq = ap.atomSeq;
         aseq->atom.size = 8 * ABUFSIZED - 8;
     }
@@ -924,13 +941,14 @@ LV2PluginInstance::run(const RealTime &rt)
     }
 
     // clear atom in buffers
-    for(auto& input : m_atomInputPorts) {
-        AtomPort& ap = input;
+    for (const AtomPort &input : m_atomInputPorts) {
+        // ??? Redundant.
+        const AtomPort &ap = input;
         lv2_atom_sequence_clear(ap.atomSeq);
     }
 
     // get atom out data
-    for(auto& ap : m_atomOutputPorts) {
+    for (const AtomPort &ap : m_atomOutputPorts) {
         //RG_DEBUG << "check atom out" << ap.index;
         LV2_Atom_Sequence* aseq = ap.atomSeq;
         LV2_ATOM_SEQUENCE_FOREACH(aseq, ev) {
@@ -981,12 +999,13 @@ void LV2PluginInstance::sendMidiData(const QByteArray& rawMidi,
     event->time.frames = frameOffset;
     event->body.size = rawMidi.size();
     event->body.type = m_midiEventUrid;
-
     int ebs = sizeof(LV2_Atom_Event);
+    // memcpy() rawMidi to event via midiBuf.
     for(int ib=0; ib<rawMidi.size(); ib++) {
         midiBuf[ebs + ib] = rawMidi[ib];
     }
-    for (auto& aip : m_atomInputPorts) {
+
+    for (const AtomPort &aip : m_atomInputPorts) {
         if (aip.isMidi) {
             LV2_Atom_Event* atom =
                 lv2_atom_sequence_append_event(aip.atomSeq,
@@ -998,5 +1017,6 @@ void LV2PluginInstance::sendMidiData(const QByteArray& rawMidi,
         }
     }
 }
+
 
 }
