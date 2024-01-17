@@ -813,6 +813,19 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         return jackProcessEmpty(nframes);
     }
 
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase,
+                                                synthInstruments);
+    int synthCount = 0;
+    for (int i = 0; i < synthInstruments; ++i) {
+        InstrumentId id;
+        id = synthInstrumentBase + i;
+        if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
+        synthCount++;
+    }
+    //RG_DEBUG << "process got" << synthCount << "synths";
+
     // synchronize MIDI and audio by adjusting MIDI playback rate
     if (m_alsaDriver->areClocksRunning()) {
         m_alsaDriver->checkTimerSync(m_framesProcessed);
@@ -823,7 +836,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     bool lowLatencyMode = m_alsaDriver->getLowLatencyMode();
     bool clocksRunning = m_alsaDriver->areClocksRunning();
     bool playing = m_alsaDriver->isPlaying();
-    bool asyncAudio = m_haveAsyncAudioEvent;
+    // if we have a synth plugin it may generate sound without
+    // receiving midi input so always process async audio
+    bool asyncAudio = m_haveAsyncAudioEvent || (synthCount > 0);
 
 #ifdef DEBUG_JACK_PROCESS
     Profiler profiler("jackProcess", true);
@@ -1006,10 +1021,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     Profiler profiler3("jackProcess post transport", false);
   #endif
 #endif
-
-    InstrumentId synthInstrumentBase;
-    int synthInstruments;
-    m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
     // We always have the master out
 
