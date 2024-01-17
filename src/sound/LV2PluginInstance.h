@@ -162,7 +162,11 @@ private:
         bool isMidi;
     };
 
+    // ??? Use std::vector instead of std::list.  We never delete from
+    //     the middle.  We only push_back(), iterate and clear.
     std::list<AtomPort> m_atomInputPorts;
+    // ??? Use std::vector instead of std::list.  We never delete from
+    //     the middle.  We only push_back(), iterate and clear.
     std::list<AtomPort> m_atomOutputPorts;
 
     InstrumentId m_instrument;
@@ -182,6 +186,9 @@ private:
         QByteArray data;
     };
 
+    // ??? Look into using std::vector instead of std::list.  The only loop
+    //     calling erase() (in run()) can likely be simplified to go through
+    //     all events then clear() when done.  That would use less CPU.
     std::list<MidiEvent> m_eventBuffer;
     snd_midi_event_t *m_midiParser;
     LV2_URID m_midiEventUrid;
