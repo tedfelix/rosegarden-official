@@ -18,31 +18,44 @@
 #ifndef RG_AUDIOPLUGINGUIMANAGER_H
 #define RG_AUDIOPLUGINGUIMANAGER_H
 
-#include <map>
-
-#include "gui/application/RosegardenMainWindow.h"
 #include "sound/PluginPortConnection.h"
+
 
 namespace Rosegarden
 {
 
+
 class AudioPluginOSCGUIManager;
 class AudioPluginLV2GUIManager;
+class RosegardenMainWindow;
 class Studio;
 
+
+/// Polymorphic interface to the various AudioPlugin*GUIManager classes.
+/**
+ * RosegardenMainWindow::m_pluginGUIManager is the only instance.
+ *
+ * ??? If AudioPluginOSCGUIManager and AudioPluginLV2GUIManager derived
+ *     from a common base class, this class would not be necessary.  It is
+ *     implementing a switch on type for a number of functions.  I'm
+ *     not usually a fan of polymorphism, but it probably makes sense in this
+ *     case.
+ */
 // cppcheck-suppress noCopyConstructor
 class AudioPluginGUIManager
 {
- public:
+public:
 
     explicit AudioPluginGUIManager(RosegardenMainWindow *mainWindow);
     virtual ~AudioPluginGUIManager();
 
     void setStudio(Studio *studio);
+
     bool hasGUI(InstrumentId instrument, int position);
     void showGUI(InstrumentId instrument, int position);
     void stopGUI(InstrumentId instrument, int position);
     void stopAllGUIs();
+
     bool canEditConnections(InstrumentId instrument, int position) const;
     void getConnections
         (InstrumentId instrument,
@@ -52,18 +65,22 @@ class AudioPluginGUIManager
         (InstrumentId instrument,
          int position,
          const PluginPortConnection::ConnectionList& clist) const;
+
     void updateProgram(InstrumentId instrument, int position);
     void updatePort(InstrumentId instrument, int position, int port);
     void updateConfiguration(InstrumentId instrument, int position,
                              QString key);
 
- private:
+private:
     enum PluginGUIArchitecture {UNKNOWN, OSC, LV2};
     PluginGUIArchitecture getArchitecture
         (InstrumentId instrument, int position) const;
 
+    // ??? This is never used.
     RosegardenMainWindow *m_mainWindow;
+
     Studio *m_studio;
+
     AudioPluginOSCGUIManager *m_oscManager;
 #ifdef HAVE_LILV
     AudioPluginLV2GUIManager *m_lv2Manager;

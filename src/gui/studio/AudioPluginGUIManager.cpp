@@ -29,8 +29,10 @@
 #include "gui/studio/AudioPluginLV2GUIManager.h"
 #endif
 
+
 namespace Rosegarden
 {
+
 
 AudioPluginGUIManager::AudioPluginGUIManager(RosegardenMainWindow *mainWindow) :
     m_mainWindow(mainWindow),
@@ -40,7 +42,8 @@ AudioPluginGUIManager::AudioPluginGUIManager(RosegardenMainWindow *mainWindow) :
     ,
     m_lv2Manager(new AudioPluginLV2GUIManager(mainWindow))
 #endif
-{}
+{
+}
 
 AudioPluginGUIManager::~AudioPluginGUIManager()
 {
@@ -63,6 +66,8 @@ bool AudioPluginGUIManager::hasGUI(InstrumentId instrument, int position)
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     RG_DEBUG << "hasGui" << instrument << position << arch;
+    // ??? Switch on type.  Most of these functions are switch on type
+    //     delegation functions.  Would polymorphism make more sense?
     switch(arch) {
     case OSC:
         return m_oscManager->hasGUI(instrument, position);
@@ -229,5 +234,6 @@ AudioPluginGUIManager::getArchitecture
     if (arch == "lv2") return LV2;
     return UNKNOWN;
 }
+
 
 }
