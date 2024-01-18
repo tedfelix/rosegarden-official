@@ -19,7 +19,7 @@
 
 #ifdef HAVE_GTK2
 
-// gtk can give wanings
+// gtk can give warnings
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <gtk/gtk.h>
@@ -66,8 +66,10 @@ namespace {
 
 }
 
+
 namespace Rosegarden
 {
+
 
 LV2Gtk::LV2Gtk() :
     m_active(false),
@@ -158,7 +160,9 @@ void LV2Gtk::startUp()
     gtk_init (&argc, &m_argv);
 }
 
+
 }
+
 #else
 
 // no gtk2 - dummy versions

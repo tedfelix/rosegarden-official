@@ -20,9 +20,15 @@
 
 #include <lv2/ui/ui.h>
 
+
 namespace Rosegarden
 {
 
+
+/// Wrapper around GTK that can be used for LV2 plugins that use GTK.
+/**
+ * Singleton.  See LV2Utils::getLV2Gtk().
+ */
 class LV2Gtk
 {
  public:
@@ -42,10 +48,17 @@ class LV2Gtk
         LV2GtkWidget() {window = nullptr;}
     };
 
+    // ??? This doesn't appear to be called by anyone.
     // cppcheck-suppress functionStatic
     void tick() const;
+
+    /// Get a widget for a GTK-based LV2 plugin to use for its main widget.
+    /**
+     * Wrapper around gtk_window_new().
+     */
     // cppcheck-suppress functionStatic
     LV2GtkWidget getWidget(LV2UI_Widget lv2Widget, SizeCallback* sizecb);
+
     // cppcheck-suppress functionStatic
     void getSize(const LV2GtkWidget& widget, int& width, int& height) const;
     static long int getWinId(const LV2GtkWidget& widget);
@@ -58,6 +71,7 @@ class LV2Gtk
     bool m_active;
     char** m_argv;
 };
+
 
 }
 

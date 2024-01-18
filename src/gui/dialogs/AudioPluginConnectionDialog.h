@@ -22,13 +22,16 @@
 #include "base/Studio.h"
 
 #include <QDialog>
+class QComboBox;
+
 #include <vector>
 
-class QComboBox;
 
 namespace Rosegarden
 {
 
+
+/// The "Audio Plugin Connections" dialog.
 class AudioPluginConnectionDialog : public QDialog
 {
     Q_OBJECT
