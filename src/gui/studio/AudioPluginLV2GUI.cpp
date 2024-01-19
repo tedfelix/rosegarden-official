@@ -19,12 +19,9 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginLV2GUI.h"
+
 #include "AudioPluginLV2GUIWindow.h"
 #include "AudioPluginLV2GUIManager.h"
-
-#include <QTimer>
-
-#include <dlfcn.h>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -35,17 +32,21 @@
 // the kx.studio extension
 #include "gui/studio/lv2_external_ui.h"
 
+#include <dlfcn.h>
+
+
 namespace Rosegarden
 {
+
 
 AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
                                      RosegardenMainWindow *mainWindow,
                                      InstrumentId instrument,
                                      int position,
                                      AudioPluginLV2GUIManager* manager) :
+    m_mainWindow(mainWindow),
     m_manager(manager),
     m_pluginInstance(instance),
-    m_mainWindow(mainWindow),
     m_instrument(instrument),
     m_position(position),
     m_uis(nullptr),
@@ -126,6 +127,8 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
         lilv_file_uri_parse(binary_uri.toStdString().c_str(), nullptr);
     RG_DEBUG << "ui binary:" << bpath;
 
+    // Find the UI descriptor for uiUris.
+
     m_uilib = dlopen(bpath.toStdString().c_str(), RTLD_LOCAL | RTLD_LAZY);
     void* vpdf = dlsym(m_uilib, "lv2ui_descriptor");
     LV2UI_DescriptorFunction pdf = (LV2UI_DescriptorFunction)vpdf;
@@ -191,11 +194,14 @@ AudioPluginLV2GUI::showGui()
 
         lv2utils->registerGUI(m_instrument, m_position, this);
         // set the control in values correctly
+        // ??? portIndex, value?  See proposed PortValues typedef for this in
+        //     LV2PluginInstance.h.
         std::map<int, float> controlInValues;
         lv2utils->getControlInValues(m_instrument,
                                      m_position,
                                      controlInValues);
-        for(auto pair : controlInValues) {
+        // For each control in value, update the UI.
+        for (const auto &pair : controlInValues) {
             int portIndex = pair.first;
             float value = pair.second;
             updatePortValue(portIndex, value);
@@ -253,11 +259,14 @@ void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
 void AudioPluginLV2GUI::checkControlOutValues()
 {
     LV2Utils* lv2utils = LV2Utils::getInstance();
+    // ??? portIndex, value?  See proposed PortValues typedef for this in
+    //     LV2PluginInstance.h.
     std::map<int, float> newControlOutValues;
     lv2utils->getControlOutValues(m_instrument,
                                   m_position,
                                   newControlOutValues);
-    for(auto pair : newControlOutValues) {
+    // For each control out value, update any that have changed.
+    for (const auto &pair : newControlOutValues) {
         int portIndex = pair.first;
         float value = pair.second;
         if (m_firstUpdate || m_controlOutValues[portIndex] != value) {
@@ -284,5 +293,6 @@ void AudioPluginLV2GUI::closeUI()
     m_manager->stopGUI(m_instrument,
                        m_position);
 }
+
 
 }

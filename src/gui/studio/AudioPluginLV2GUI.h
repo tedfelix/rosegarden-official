@@ -18,25 +18,30 @@
 #ifndef RG_AUDIOPLUGINLV2GUI_H
 #define RG_AUDIOPLUGINLV2GUI_H
 
+#include "base/Instrument.h"
+
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
 #include <lv2/atom/atom.h>
 
 #include <map>
-#include "gui/application/RosegardenMainWindow.h"
+
 
 namespace Rosegarden
 {
 
+
+class RosegardenMainWindow;
 class AudioPluginInstance;
 class AudioPluginLV2GUIWindow;
 class LV2PluginInstance;
 class AudioPluginLV2GUIManager;
 
+
 // cppcheck-suppress noCopyConstructor
  class AudioPluginLV2GUI : public QObject
 {
- public:
+public:
     AudioPluginLV2GUI(AudioPluginInstance *instance,
                       RosegardenMainWindow *mainWindow,
                       InstrumentId instrument,
@@ -50,8 +55,8 @@ class AudioPluginLV2GUIManager;
     AudioPluginLV2GUI(const AudioPluginInstance&) = delete;
 
     QString getId() const;
-    bool hasGUI() const;
 
+    bool hasGUI() const;
     void showGui();
 
     void portChange(uint32_t portIndex,
@@ -62,30 +67,51 @@ class AudioPluginLV2GUIManager;
     void updatePortValue(int port, float value);
     void updatePortValue(int port, const LV2_Atom* atom);
 
+    /// Calls updatePortValue() for any that have changed.
+    /**
+     * ??? rename: updateControlOutValues()?
+     */
     void checkControlOutValues();
 
     const LV2PluginInstance* getPluginInstance() const;
 
     void closeUI();
 
- private:
+private:
+
+    RosegardenMainWindow* m_mainWindow;
+
     AudioPluginLV2GUIManager* m_manager;
     AudioPluginInstance* m_pluginInstance;
-    RosegardenMainWindow* m_mainWindow;
+
     InstrumentId m_instrument;
     int m_position;
     QString m_id;
+
+    // From lilv_plugin_get_uis().
     LilvUIs* m_uis;
+
+    // From dlopen().
     void* m_uilib;
+
     const LV2UI_Descriptor* m_uidesc;
     AudioPluginLV2GUIWindow* m_window;
     LV2_URID m_atomTransferUrid;
+
+    /// Cache for detecting changes in checkControlOutValues().
+    // ??? portIndex, value?  See proposed PortValues typedef for this in
+    //     LV2PluginInstance.h.
     std::map<int, float> m_controlOutValues;
+
     bool m_firstUpdate;
+
+    // ??? Set but never used.
     QString m_title;
+
     const LilvUI* m_selectedUI;
     UIType m_uiType;
 };
+
 
 }
 
