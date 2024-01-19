@@ -18,22 +18,28 @@
 #ifndef RG_AUDIOPLUGINLV2GUIMANAGER_H
 #define RG_AUDIOPLUGINLV2GUIMANAGER_H
 
-#include "gui/application/RosegardenMainWindow.h"
 #include "sound/PluginPortConnection.h"
 
-#include <lilv/lilv.h>
-
 #include <QObject>
+
+#include <map>
+
 
 namespace Rosegarden
 {
 
+
+class RosegardenMainWindow;
 class Studio;
 class AudioPluginLV2GUI;
 class LV2Worker;
 
+
+/**
+ * AudioPluginGUIManager::m_lv2Manager is the one instance of this class.
+ */
 // cppcheck-suppress noConstructor
- class AudioPluginLV2GUIManager : public QObject
+class AudioPluginLV2GUIManager : public QObject
 {
     Q_OBJECT
 
@@ -42,12 +48,16 @@ public:
     ~AudioPluginLV2GUIManager();
 
     void setStudio(Studio *studio);
+
     bool hasGUI(InstrumentId instrument, int position);
     void showGUI(InstrumentId instrument, int position);
     void stopGUI(InstrumentId instrument, int position);
     void stopAllGUIs();
+
+    // ??? Does nothing.
     void updateProgram(InstrumentId instrument, int position);
     void updatePort(InstrumentId instrument, int position, int port);
+    // ??? Does nothing.
     void updateConfiguration(InstrumentId instrument, int position,
                              const QString& key);
     bool canEditConnections(InstrumentId instrument, int position) const;
@@ -59,24 +69,28 @@ public:
         (InstrumentId instrument,
          int position,
          const PluginPortConnection::ConnectionList& clist);
- public slots:
+
+public slots:
     void slotStopGUIDelayed();
 
- private:
+private:
     AudioPluginLV2GUI* getInstance(InstrumentId instrument, int position);
 
     RosegardenMainWindow *m_mainWindow;
     Studio *m_studio;
     LV2Worker* m_worker;
 
-    typedef std::map<int, AudioPluginLV2GUI *> IntGUIMap;
-    typedef std::map<int, IntGUIMap> GUIMap;
+    typedef std::map<int /* position */, AudioPluginLV2GUI *> IntGUIMap;
+    typedef std::map<InstrumentId, IntGUIMap> GUIMap;
     GUIMap m_guis;
-    // values for delayed stopGUI
+
+    // Values for delayed stopGUI.
+    // Set by stopGUI() and used by slotStopGUIDelayed().
     InstrumentId m_instrument;
     int m_position;
     bool m_closePending;
 };
+
 
 }
 

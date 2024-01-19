@@ -25,9 +25,14 @@
 #include "gui/studio/AudioPluginLV2GUI.h"
 #include "sound/LV2Utils.h"
 #include "sound/LV2Worker.h"
+#include "misc/Strings.h"
+
+#include <QTimer>
+
 
 namespace Rosegarden
 {
+
 
 AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWindow) :
         m_mainWindow(mainWindow),
@@ -43,13 +48,16 @@ AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWin
 
 AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
 {
-    for (auto i = m_guis.begin(); i != m_guis.end(); ++i) {
-        for (auto j = i->second.begin(); j != i->second.end();
+    // Delete all the AudioPluginLV2GUI instances.
+    // ??? stopAllGUIs() does the same thing.  Call it?
+    for (GUIMap::const_iterator i = m_guis.begin(); i != m_guis.end(); ++i) {
+        for (IntGUIMap::const_iterator j = i->second.begin(); j != i->second.end();
              ++j) {
             delete j->second;
         }
     }
     m_guis.clear();
+
     LV2Utils* lv2utils = LV2Utils::getInstance();
     lv2utils->unRegisterWorker();
     delete m_worker;
@@ -91,11 +99,16 @@ void
 AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
 {
     RG_DEBUG << "stopGUI: " << instrument << "," << position;
+
+    // Let slotStopGUIDelayed() know what we are closing.
     m_instrument = instrument;
     m_position = position;
+
     // wait for the window to close
     m_closePending = true;
+
     QTimer::singleShot(0, this, &AudioPluginLV2GUIManager::slotStopGUIDelayed);
+
     while (m_closePending) {
         qApp->processEvents(QEventLoop::AllEvents);
     }
@@ -150,8 +163,9 @@ void
 AudioPluginLV2GUIManager::stopAllGUIs()
 {
     RG_DEBUG << "stopallGUIs()";
-    for (auto i = m_guis.begin(); i != m_guis.end(); ++i) {
-        for (auto j = i->second.begin(); j != i->second.end();
+
+    for (GUIMap::const_iterator i = m_guis.begin(); i != m_guis.end(); ++i) {
+        for (IntGUIMap::const_iterator j = i->second.begin(); j != i->second.end();
              ++j) {
             AudioPluginLV2GUI* gui = j->second;
             delete gui;
@@ -215,16 +229,18 @@ AudioPluginLV2GUIManager::getInstance(InstrumentId instrument, int position)
 
     bool makeInstance = false;
 
-    auto it1 = m_guis.find(instrument);
+    // See if we can find the instance.
+
+    GUIMap::const_iterator it1 = m_guis.find(instrument);
     if (it1 == m_guis.end()) {
         makeInstance = true;
     } else {
-        IntGUIMap& pmap = (*it1).second;
-        auto it2 = pmap.find(position);
+        const IntGUIMap &pmap = (*it1).second;
+        IntGUIMap::const_iterator it2 = pmap.find(position);
         if (it2 == pmap.end()) {
             makeInstance = true;
         } else {
-            AudioPluginLV2GUI* instance = (*it2).second;
+            const AudioPluginLV2GUI* instance = (*it2).second;
             QString instanceId = instance->getId();
             if (id != instanceId) {
                 RG_DEBUG << "getInstance" << instanceId << "->" << id;
@@ -233,6 +249,8 @@ AudioPluginLV2GUIManager::getInstance(InstrumentId instrument, int position)
             }
         }
     }
+
+    // Not found?  Make it.
     if (makeInstance) {
         AudioPluginLV2GUI* newInstance = new AudioPluginLV2GUI(pluginInstance,
                                                                m_mainWindow,
@@ -245,5 +263,6 @@ AudioPluginLV2GUIManager::getInstance(InstrumentId instrument, int position)
 
     return m_guis[instrument][position];
 }
+
 
 }

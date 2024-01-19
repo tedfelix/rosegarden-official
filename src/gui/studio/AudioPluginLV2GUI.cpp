@@ -26,6 +26,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
 #include "sound/LV2Utils.h"
 
