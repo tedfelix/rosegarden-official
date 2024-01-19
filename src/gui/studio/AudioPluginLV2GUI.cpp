@@ -241,7 +241,7 @@ void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
     if (! m_window) return;
     LV2UI_Handle handle = m_window->getHandle();
     int size = atom->size + 8;
-    if (m_uidesc)
+    if (m_uidesc && m_uidesc->port_event)
         m_uidesc->port_event(handle, port, size, m_atomTransferUrid, atom);
 }
 

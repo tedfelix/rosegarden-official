@@ -1230,7 +1230,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         SequencerDataBlock::getInstance()->setInstrumentLevel(id, info);
     }
 
-    if (asyncAudio) {
+    if (asyncAudio && synthCount == 0) {
         if (!allInstrumentsDormant) {
             dormantTime = RealTime::zero();
         } else {
