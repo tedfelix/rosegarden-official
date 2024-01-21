@@ -290,14 +290,12 @@ LV2PluginInstance::discardEvents()
     unsigned char status = 0xb0;
     unsigned char data1 = MIDI_CONTROLLER_ALL_NOTES_OFF;
     unsigned char data2 = 0;
-    // all channels
-    for(int i=0; i<16; i++) {
-        QByteArray rawMidi;
-        rawMidi.append(status + i);
-        rawMidi.append(data1);
-        rawMidi.append(data2);
-        sendMidiData(rawMidi, 0);
-    }
+    // channel 0
+    QByteArray rawMidi;
+    rawMidi.append(status + 0);
+    rawMidi.append(data1);
+    rawMidi.append(data2);
+    sendMidiData(rawMidi, 0);
 }
 
 void
@@ -801,8 +799,27 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
                              const void* event)
 {
     snd_seq_event_t *seqEvent = (snd_seq_event_t *)event;
+    snd_seq_event_t ev(*seqEvent);
+    snd_seq_event_type_t type = ev.type;
+    // all the messages with a channel
+    if (type == SND_SEQ_EVENT_NOTE ||
+        type == SND_SEQ_EVENT_NOTEON ||
+        type == SND_SEQ_EVENT_NOTEOFF ||
+        type == SND_SEQ_EVENT_KEYPRESS ||
+        type == SND_SEQ_EVENT_CONTROLLER ||
+        type == SND_SEQ_EVENT_PGMCHANGE ||
+        type == SND_SEQ_EVENT_CHANPRESS ||
+        type == SND_SEQ_EVENT_PITCHBEND ||
+        type == SND_SEQ_EVENT_CONTROL14 ||
+        type == SND_SEQ_EVENT_NONREGPARAM ||
+        type == SND_SEQ_EVENT_REGPARAM ||
+        type == SND_SEQ_EVENT_SONGPOS ||
+        type == SND_SEQ_EVENT_SONGSEL ||
+        type == SND_SEQ_EVENT_QFRAME ||
+        type == SND_SEQ_EVENT_TIMESIGN ||
+        type == SND_SEQ_EVENT_KEYSIGN) ev.data.note.channel = 0;
     unsigned char buf[100];
-    int bytes = snd_midi_event_decode(m_midiParser, buf, 100, seqEvent);
+    int bytes = snd_midi_event_decode(m_midiParser, buf, 100, &ev);
     if (bytes <= 0) {
         RG_DEBUG << "error decoding midi event";
     }
@@ -815,7 +832,7 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
     me.data = rawMidi;
     m_eventBuffer.push_back(me);
     RG_DEBUG << "sendEvent" <<
-        eventTime << rawMidi.toHex() << m_eventBuffer.size();
+        ev.type << eventTime << rawMidi.toHex() << m_eventBuffer.size();
 }
 
 void
