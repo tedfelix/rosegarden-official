@@ -333,10 +333,10 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                         }
                         RG_DEBUG << "slotFaderLevelChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId();
                         if (instrument->getDevice()->getId() == (*dit)->getId()) {
-                            RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalChannel();
+                            RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
 
                             ExternalController::send(
-                                    instrument->getNaturalChannel(),
+                                    instrument->getNaturalMidiChannel(),
                                     MIDI_CONTROLLER_VOLUME, MidiByte(value));
                         }
                         break;
@@ -411,11 +411,11 @@ MidiMixerWindow::slotControllerChanged(float value)
                 }
                 RG_DEBUG << "slotControllerChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId();
                 if (instrument->getDevice()->getId() == (*dit)->getId()) {
-                    RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalChannel();
+                    RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
                     // send out to external controller port as well.
                     // !!! really want some notification of whether we have any!
                     ExternalController::send(
-                            instrument->getNaturalChannel(),
+                            instrument->getNaturalMidiChannel(),
                             m_faders[i]->m_controllerRotaries[j].first,
                             MidiByte(value));
                 }
@@ -681,7 +681,7 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
 
             Instrument *instrument = *iIt;
 
-            if (instrument->getNaturalChannel() != channel)
+            if (instrument->getNaturalMidiChannel() != channel)
                 continue;
 
             ControlList cl = dev->getControlParameters();

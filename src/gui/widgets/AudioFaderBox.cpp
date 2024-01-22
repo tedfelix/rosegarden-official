@@ -237,7 +237,7 @@ AudioFaderBox::slotSetInstrument(Studio * /*studio*/,
     if (m_audioOutput)
         m_audioOutput->setInstrument(instrumentId);
     if (instrument)
-        setAudioChannels(instrument->getAudioChannels());
+        setAudioChannels(instrument->getNumAudioChannels());
     if (instrument) {
 
         RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << ")";

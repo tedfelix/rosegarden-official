@@ -45,7 +45,7 @@ Instrument::Instrument(InstrumentId id,
     m_name(name),
     m_alias(""),
     m_type(it),
-    m_channel(0),
+    m_midiChannel(0),
     //m_input_channel(-1),
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
@@ -63,84 +63,21 @@ Instrument::Instrument(InstrumentId id,
 {
     Q_ASSERT(m_id >= AudioInstrumentBase);//!DEVPUSH
 
+    if (it == Audio) {
+        m_numAudioChannels = 2; // default stereo
+    }
+    if (it == Midi) {
+        m_numAudioChannels = 0; // unused
+    }
+    if (it == SoftSynth) {
+        m_numAudioChannels = 2; // default stereo
+    }
+
     if (it == Audio || it == SoftSynth)
     {
-        // In an audio instrument we use the m_channel attribute to
-        // hold the number of audio channels this Instrument uses -
-        // not the MIDI channel number.  Default is 2 (stereo).
-        //
-        m_channel = 2;
-
         m_pan = 100; // audio pan ranges from -100 to 100 but
                      // we store within an unsigned char as
                      // 0 to 200.
-    }
-
-    if (it == SoftSynth) {
-        addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
-    }
-}
-
-Instrument::Instrument(InstrumentId id,
-                       InstrumentType it,
-                       const std::string &name,
-                       MidiByte channel,
-                       Device *device):
-    PluginContainer(it == Audio || it == SoftSynth),
-    m_id(id),
-    m_name(name),
-    m_alias(""),
-    m_type(it),
-    m_channel(channel),
-    //m_input_channel(-1),
-    m_transpose(MidiMidValue),
-    m_pan(MidiMidValue),
-    m_volume(100),
-    m_fixed(true),  // Always fixed channel for audio/softsynth.
-    m_level(0.0),
-    m_recordLevel(0.0),
-    m_device(device),
-    m_sendBankSelect(false),
-    m_sendProgramChange(false),
-    m_mappedId(0),
-    m_audioInput(1000),
-    m_audioInputChannel(0),
-    m_audioOutput(0)
-{
-    Q_ASSERT(m_id >= AudioInstrumentBase);//!DEVPUSH
-
-    // Add a number of plugin place holders (unassigned)
-    //
-    if (it == Audio || it == SoftSynth)
-    {
-        // In an audio instrument we use the m_channel attribute to
-        // hold the number of audio channels this Instrument uses -
-        // not the MIDI channel number.  Default is 2 (stereo).
-        //
-        m_channel = 2;
-
-        m_pan = 100; // audio pan ranges from -100 to 100 but
-                     // we store within an unsigned char as
-
-    } else {
-/*
- *
- * Let's try getting rid of this default behavior, and replacing it with a
- * change to the factory autoload instead, because this just doesn't work out
- * very well, and it's fiddly trying to sort the overall behavior into something
- * less quirky (dmm)
- *
-        // Also defined in Midi.h but we don't use that - not here
-        // in the clean inner sanctum.
-        //
-        const MidiByte MIDI_PERCUSSION_CHANNEL = 9;
-        const MidiByte MIDI_EXTENDED_PERCUSSION_CHANNEL = 10;
-
-        if (m_channel == MIDI_PERCUSSION_CHANNEL ||
-            m_channel == MIDI_EXTENDED_PERCUSSION_CHANNEL) {
-            setPercussion(true);
-        }
-*/
     }
 
     if (it == SoftSynth) {
@@ -156,7 +93,7 @@ Instrument::Instrument(const Instrument &ins):
     m_name(ins.getName()),
     m_alias(ins.getAlias()),
     m_type(ins.getType()),
-    m_channel(ins.getNaturalChannel()),
+    m_midiChannel(ins.getNaturalMidiChannel()),
     //m_input_channel(ins.getMidiInputChannel()),
     m_program(ins.getProgram()),
     m_transpose(ins.getMidiTranspose()),
@@ -173,13 +110,14 @@ Instrument::Instrument(const Instrument &ins):
     m_audioInputChannel(ins.m_audioInputChannel),
     m_audioOutput(ins.m_audioOutput)
 {
-    if (ins.getType() == Audio || ins.getType() == SoftSynth)
-    {
-        // In an audio instrument we use the m_channel attribute to
-        // hold the number of audio channels this Instrument uses -
-        // not the MIDI channel number.  Default is 2 (stereo).
-        //
-        m_channel = 2;
+    if (m_type == Audio) {
+        m_numAudioChannels = 2; // default stereo
+    }
+    if (m_type == Midi) {
+        m_numAudioChannels = 0; // unused
+    }
+    if (m_type == SoftSynth) {
+        m_numAudioChannels = 2; // default stereo
     }
 
     if (ins.getType() == SoftSynth) {
@@ -298,7 +236,7 @@ Instrument::sendChannelSetup()
     //RG_DEBUG << "sendChannelSetup(): channel" << m_channel;
 
     if (hasFixedChannel()) {
-        StudioControl::sendChannelSetup(this, m_channel);
+        StudioControl::sendChannelSetup(this, m_midiChannel);
     }
 }
 
@@ -510,7 +448,14 @@ Instrument::toXmlString() const
     }
 
     instrument << "        <instrument id=\"" << m_id;
-    instrument << "\" channel=\"" << (int)m_channel;
+    // the channel attribute is the midi channel for midi instruments
+    // and the number of audio channels for audio instruments. For
+    // SoftSynth the attribute is not used. See also RoseXmlHandler
+    if (m_type == Audio) {
+        instrument << "\" channel=\"" << (int)m_numAudioChannels;
+    } else {
+        instrument << "\" channel=\"" << (int)m_midiChannel;
+    }
     instrument << "\" fixed=\""   << (m_fixed ? "true" : "false");
     instrument << "\" type=\"";
 
@@ -607,7 +552,7 @@ void
 Instrument::sendController(MidiByte controller, MidiByte value)
 {
     if (hasFixedChannel())
-        StudioControl::sendController(this, m_channel, controller, value);
+        StudioControl::sendController(this, m_midiChannel, controller, value);
 }
 
 void
@@ -707,7 +652,7 @@ setFixedChannel()
 
     AllocateChannels *allocator = getDevice()->getAllocator();
     if (allocator) {
-        allocator->reserveFixedChannel(m_channel);
+        allocator->reserveFixedChannel(m_midiChannel);
         m_fixed = true;
         emit channelBecomesFixed();
         ControlBlock::getInstance()->instrumentChangedFixity(getId());
@@ -724,7 +669,7 @@ releaseFixedChannel()
 
     AllocateChannels *allocator = getDevice()->getAllocator();
     if (allocator) {
-        allocator->releaseFixedChannel(m_channel);
+        allocator->releaseFixedChannel(m_midiChannel);
     }
 
     m_fixed = false;

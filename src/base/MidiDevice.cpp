@@ -216,7 +216,8 @@ MidiDevice::createInstruments(InstrumentId base)
 {
     for (int i = 0; i < 16; ++i) {
         Instrument *instrument = new Instrument
-            (base + i, Instrument::Midi, "", i, this);
+            (base + i, Instrument::Midi, "", this);
+        instrument->setNaturalMidiChannel(i);
         instrument->setFixedChannel();
         // ??? Since we don't have a connection yet, this makes
         //     little sense.

@@ -868,7 +868,7 @@ void RosegardenDocument::initialiseStudio()
             // Channels
             ids.push_back(mappedId);
             properties.push_back(MappedAudioFader::Channels);
-            values.push_back(static_cast<MappedObjectValue>(instrument.getAudioChannels()));
+            values.push_back(static_cast<MappedObjectValue>(instrument.getNumAudioChannels()));
 
             // Pan
             ids.push_back(mappedId);

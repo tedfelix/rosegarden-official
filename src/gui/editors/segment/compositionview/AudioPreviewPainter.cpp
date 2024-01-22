@@ -100,7 +100,7 @@ void AudioPreviewPainter::paintPreviewImage()
             float pan = instrument->getPan() - 100.0;
             gain[0] = level * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
             gain[1] = level * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
-	    instrumentChannels = instrument->getAudioChannels();
+	    instrumentChannels = instrument->getNumAudioChannels();
         }
     }
 

@@ -206,7 +206,7 @@ void ExternalController::sendAllCCs(
         const Instrument *instrument, MidiByte channel)
 {
     if (channel == MidiMaxValue)
-        channel = instrument->getNaturalChannel();
+        channel = instrument->getNaturalMidiChannel();
 
     send(channel,
          MIDI_CONTROLLER_VOLUME,
