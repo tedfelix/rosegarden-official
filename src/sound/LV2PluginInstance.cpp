@@ -387,8 +387,12 @@ void LV2PluginInstance::audioProcessingDone()
 {
     // the plugin should always be run to handle ui - plugin
     // communication. So if rosegarden is not playing or recording we
-    // must run the plugin here.
-    if (! m_pluginHasRun) {
+    // must run the plugin here. A soft synth always runs anyway
+
+    bool isSoftSynth = (m_instrument >= SoftSynthInstrumentBase);
+
+    RG_DEBUG << "audioProcessingDone" << isSoftSynth << m_pluginHasRun;
+    if (! m_pluginHasRun && ! isSoftSynth) {
         run(RealTime::fromSeconds(-100.0));
     }
     // reset the status
@@ -838,6 +842,7 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
 void
 LV2PluginInstance::run(const RealTime &rt)
 {
+    //RG_DEBUG << "run" << rt;
     m_pluginHasRun = true;
     LV2Utils* lv2utils = LV2Utils::getInstance();
     // get connected buffers
@@ -901,6 +906,22 @@ LV2PluginInstance::run(const RealTime &rt)
     }
 
     lilv_instance_run(m_instance, m_blockSize);
+
+    /*
+    // debug
+    if (m_audioPortsOut.size() > 0) {
+        double vmin = 1.0e10;
+        double vmax = -1.0e10;
+        double vms = 0.0;
+        for (size_t i = 0; i < m_blockSize; ++i) {
+            float val = m_outputBuffers[0][i];
+            if (val < vmin) vmin = val;
+            if (val > vmax) vmax = val;
+            vms += val * val;
+        }
+        RG_DEBUG << "run - output:" << vmin << vmax << sqrt(vms);
+    }
+    */
 
     // get any worker responses
     LV2Utils::Worker* worker = lv2utils->getWorker();
