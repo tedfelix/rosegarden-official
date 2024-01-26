@@ -20,6 +20,7 @@
 #include "MusicXMLImportHelper.h"
 #include "base/Event.h"
 #include "base/BaseProperties.h"
+#include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
@@ -31,7 +32,9 @@
 #include "base/StaffExportTypes.h"
 #include "base/Segment.h"
 #include "base/Track.h"
+
 #include <QString>
+#include <QSettings>
 
 namespace Rosegarden
 
@@ -111,7 +114,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
         if (s != m_segments.end()) {
             m_segments[m_staff+"/"+m_mainVoice[m_staff]] = (*s).second;
             QString label = "MusicXML, id="+m_staff+"/"+m_mainVoice[m_staff];
-            (*s).second->setLabel(label.toStdString());
+            setSegmentLabel((*s).second, label);
             m_segments.erase(s);
         }
         m_voice = m_mainVoice[m_staff];
@@ -129,7 +132,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
         if (createSegment) {
             Segment *segment = new Segment(Segment::Internal, m_curTime);
             QString label = "MusicXML, id="+m_staff+"/"+tmpVoice;
-            segment->setLabel(label.toStdString());
+            setSegmentLabel(segment, label);
             m_composition->addSegment(segment);
             segment->setTrack(m_tracks[m_staff]->getId());
             m_segments[m_staff+"/"+tmpVoice] = segment;
@@ -142,6 +145,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
 bool
 MusicXMLImportHelper::setLabel(const QString &label)
 {
+    m_label = label;
     for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
         ((*i).second)->setLabel(label.toStdString());
     }
@@ -334,6 +338,19 @@ MusicXMLImportHelper::setBracketType(int bracket)
                 track->setStaffBracket(Brackets::SquareOn);
             }
         }
+    }
+}
+
+void MusicXMLImportHelper::setSegmentLabel(Segment* segment, const QString& label)
+{
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool useTrackName = settings.value("usetrackname", false).toBool();
+    settings.endGroup();
+    if (useTrackName) {
+        segment->setLabel(m_label.toStdString());
+    } else {
+        segment->setLabel(label.toStdString());
     }
 }
 

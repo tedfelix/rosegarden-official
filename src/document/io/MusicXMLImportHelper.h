@@ -108,6 +108,9 @@ public:
     void setInstrument(InstrumentId instrument);
     void setBracketType(int bracket);
 
+ private:
+    void setSegmentLabel(Segment* segment, const QString& label);
+
 protected:
     Composition         *m_composition;
     VoiceMap            m_mainVoice;
@@ -120,7 +123,7 @@ protected:
     int                 m_divisions;
     IndicationVector    m_indications;
     PercussionMap       m_unpitched;
-
+    QString             m_label;
 };
 
 }
