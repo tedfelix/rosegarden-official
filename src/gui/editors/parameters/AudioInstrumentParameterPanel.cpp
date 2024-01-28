@@ -426,7 +426,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
     // Set the number of channels on the fader widget
     //
-    m_audioFader->setAudioChannels(instrument->getAudioChannels());
+    m_audioFader->setAudioChannels(instrument->getNumAudioChannels());
 
     // Pan - adjusted backwards
     //
@@ -444,7 +444,7 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
 {
     //RG_DEBUG << "slotAudioChannels() " << "channels = " << channels;
 
-    getSelectedInstrument()->setAudioChannels(channels);
+    getSelectedInstrument()->setNumAudioChannels(channels);
     RosegardenDocument::currentDocument->slotDocumentModified();
 
     StudioControl::setStudioObjectProperty

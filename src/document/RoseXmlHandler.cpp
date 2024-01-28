@@ -2108,11 +2108,21 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (instrument && instrument->getType() == type) {
             m_instrument = instrument;
 
-            // Synth and Audio instruments always have the channel set to 2.
-            // Preserve this.
+            // Synth instruments always have 2 autio channels.
+            // Soft Synth always has midi channel 0
             MidiByte channel = (MidiByte)atts.value("channel").toInt();
-
-            m_instrument->setNaturalChannel(channel);
+            if (type == Instrument::Midi) {
+                m_instrument->setNaturalMidiChannel(channel);
+                m_instrument->setNumAudioChannels(0);
+            }
+            if (type == Instrument::Audio) {
+                m_instrument->setNaturalMidiChannel(0);
+                m_instrument->setNumAudioChannels(channel);
+            }
+            if (type == Instrument::SoftSynth) {
+                m_instrument->setNaturalMidiChannel(0);
+                m_instrument->setNumAudioChannels(2);
+            }
 
             if (type == Instrument::Midi) {
                 if (atts.value("fixed").toString() == "false")

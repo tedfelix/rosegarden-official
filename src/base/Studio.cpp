@@ -683,7 +683,7 @@ Studio::unassignAllInstruments()
                 {
                     (*iit)->setSendBankSelect(false);
                     (*iit)->setSendProgramChange(false);
-                    (*iit)->setNaturalChannel(channel);
+                    (*iit)->setNaturalMidiChannel(channel);
                     channel = ( channel + 1 ) % 16;
                     (*iit)->setFixedChannel();
                     // ??? This is a "reset" of the instrument.  It doesn't

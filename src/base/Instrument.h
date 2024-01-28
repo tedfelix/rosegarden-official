@@ -76,12 +76,6 @@ public:
                const std::string &name,
                Device *device);
 
-    Instrument(InstrumentId id,
-               InstrumentType it,
-               const std::string &name,
-               MidiByte channel,
-               Device *device);
-
     // Copy constructor
     //
     Instrument(const Instrument &);
@@ -123,12 +117,19 @@ public:
     // ---------------- MIDI Controllers -----------------
     //
 
-    void setNaturalChannel(MidiByte channelId)
-    { m_channel = channelId; }
+    void setNaturalMidiChannel(MidiByte channelId)
+    {
+        Q_ASSERT(m_type == Midi ||
+                 (channelId == 0));
+        m_midiChannel = channelId;
+    }
 
     // Get the "natural" channel with regard to its device.  May not
     // be the same channel instrument is playing on.
-    MidiByte getNaturalChannel() const { return m_channel; }
+    MidiByte getNaturalMidiChannel() const
+    {
+        return m_midiChannel;
+    }
 
     void setMidiTranspose(MidiByte mT) { m_transpose = mT; }
     MidiByte getMidiTranspose() const { return m_transpose; }
@@ -212,8 +213,8 @@ public:
     void setRecordLevel(float dB) { m_recordLevel = dB; }
     float getRecordLevel() const { return m_recordLevel; }
 
-    void setAudioChannels(unsigned int ch) { m_channel = MidiByte(ch); }
-    unsigned int getAudioChannels() const { return (unsigned int)(m_channel); }
+    void setNumAudioChannels(unsigned int ch) { m_numAudioChannels = ch; }
+    unsigned int getNumAudioChannels() const { return m_numAudioChannels; }
 
     // An audio input can be a buss or a record input. The channel number
     // is required for mono instruments, ignored for stereo ones.
@@ -309,7 +310,7 @@ private:
     InstrumentType  m_type;
 
     // Standard MIDI controllers and parameters
-    MidiByte        m_channel;
+    MidiByte        m_midiChannel;
     MidiProgram     m_program;
     MidiByte        m_transpose;
     MidiByte        m_pan;  // required by audio
@@ -346,6 +347,8 @@ private:
     //
     int              m_audioInput;
     int              m_audioInputChannel;
+
+    unsigned int     m_numAudioChannels;
 
     // Which buss we output to.  Zero is always the master.
     //

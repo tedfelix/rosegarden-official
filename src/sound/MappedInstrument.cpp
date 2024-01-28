@@ -54,7 +54,7 @@ MappedInstrument::MappedInstrument(const Instrument &instrument):
         m_id(instrument.getId()),
         m_name(instrument.getName()),
         m_device((instrument.getDevice())->getId()),
-        m_audioChannels(instrument.getAudioChannels())
+        m_audioChannels(instrument.getNumAudioChannels())
 {}
 
 MappedInstrument::MappedInstrument(Instrument *instrument):
@@ -62,7 +62,7 @@ MappedInstrument::MappedInstrument(Instrument *instrument):
         m_id(instrument->getId()),
         m_name(instrument->getName()),
         m_device(instrument->getDevice()->getId()),
-        m_audioChannels(instrument->getAudioChannels())
+        m_audioChannels(instrument->getNumAudioChannels())
 {}
 
 /* unused

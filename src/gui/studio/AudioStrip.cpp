@@ -370,7 +370,7 @@ void AudioStrip::updateWidgets()
     // Stereo
 
     if (isInput()) {
-        m_stereo = (instrument->getAudioChannels() > 1);
+        m_stereo = (instrument->getNumAudioChannels() > 1);
         m_stereoButton->setIcon(m_stereo ? m_stereoPixmap : m_monoPixmap);
     }
 
@@ -659,8 +659,8 @@ AudioStrip::slotChannelsChanged()
         return;
 
     // Toggle number of channels
-    instrument->setAudioChannels(
-            (instrument->getAudioChannels() > 1) ? 1 : 2);
+    instrument->setNumAudioChannels(
+            (instrument->getNumAudioChannels() > 1) ? 1 : 2);
 
     doc->slotDocumentModified();
 }

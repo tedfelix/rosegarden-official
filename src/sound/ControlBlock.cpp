@@ -575,7 +575,7 @@ TrackInfo::allocateThruChannel(Studio &studio)
     m_useFixedChannel = instrument->hasFixedChannel();
 
     if (m_useFixedChannel) {
-        m_thruChannel = instrument->getNaturalChannel();
+        m_thruChannel = instrument->getNaturalMidiChannel();
         m_hasThruChannel = true;
         m_isThruChannelReady = true;
         return;
@@ -596,7 +596,7 @@ TrackInfo::allocateThruChannel(Studio &studio)
     // natural channel is correct and requires no further setup.
     if (!allocator)
         {
-            m_thruChannel = instrument->getNaturalChannel();
+            m_thruChannel = instrument->getNaturalMidiChannel();
             m_isThruChannelReady = true;
             m_hasThruChannel = true;
             return;

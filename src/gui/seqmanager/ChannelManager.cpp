@@ -339,10 +339,10 @@ bool ChannelManager::makeReady(
         // We already tried to get one and failed; don't keep trying.
         if (m_triedToGetChannel)
             return false;
-        
+
         // Try to get a channel.  This sets m_triedToGetChannel.
         allocateChannelInterval(false);
-        
+
         // If we still don't have one, give up.
         if (!m_channelInterval.validChannel())
             return false;
@@ -426,14 +426,14 @@ ChannelManager::setChannelIdDirectly()
 {
     Q_ASSERT(!m_usingAllocator);
 
-    ChannelId channel = m_instrument->getNaturalChannel();
+    ChannelId channel = m_instrument->getNaturalMidiChannel();
 
     if (m_instrument->getType() == Instrument::Midi) {
         // !!! Stopgap measure.  If we ever share allocators between
         // MIDI devices, this will have to become smarter.
         if (m_instrument->isPercussion()) {
             channel = (m_instrument->hasFixedChannel() ?
-                       m_instrument->getNaturalChannel() : 9);
+                       m_instrument->getNaturalMidiChannel() : 9);
         }
     }
 
@@ -500,7 +500,7 @@ ChannelManager::setAllocationMode(Instrument *instrument)
         if (m_usingAllocator != wasUsingAllocator)
             m_channelInterval.clearChannelId();
     }
-}    
+}
 
 void
 ChannelManager::allocateChannelInterval(bool changedInstrument)
@@ -598,7 +598,7 @@ ChannelManager::slotChannelBecomesFixed()
 {
     //RG_DEBUG << "slotChannelBecomesFixed()" << (m_usingAllocator ? "using allocator" : "not using allocator") << "for" << (void *)m_instrument;
 
-    ChannelId channel = m_instrument->getNaturalChannel();
+    ChannelId channel = m_instrument->getNaturalMidiChannel();
 
     // If we're already fixed and set to our natural channel, there's nothing
     // to do.

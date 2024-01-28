@@ -48,7 +48,7 @@ using namespace BaseProperties;
 MusicXmlExporter::MidiInstrument::
 MidiInstrument(Instrument * instrument, int pitch) :
     channel(instrument->hasFixedChannel() ?
-            (int(instrument->getNaturalChannel()) + 1) :
+            (int(instrument->getNaturalMidiChannel()) + 1) :
             -1),
     program(int(instrument->getProgramChange()) + 1),
     unpitched(pitch)

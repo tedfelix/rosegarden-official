@@ -58,7 +58,7 @@ AudioDevice::createInstruments()
 {
     for (uint i = 0; i < AudioInstrumentCount; ++i) {
 	Instrument *instrument = new Instrument
-	    (AudioInstrumentBase + i, Instrument::Audio, "", i, this);
+	    (AudioInstrumentBase + i, Instrument::Audio, "", this);
         addInstrument(instrument);
     }
     renameInstruments();
