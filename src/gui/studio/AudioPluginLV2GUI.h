@@ -34,7 +34,7 @@ class LV2PluginInstance;
 class AudioPluginLV2GUIManager;
 
 // cppcheck-suppress noCopyConstructor
-class AudioPluginLV2GUI
+ class AudioPluginLV2GUI : public QObject
 {
  public:
     AudioPluginLV2GUI(AudioPluginInstance *instance,

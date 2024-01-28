@@ -72,8 +72,13 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     Studio &studio = doc->getStudio();
 
     // Get the appropriate instrument based on the ID.
-    Instrument *inst = studio.getInstrumentById(m_instrument);
-    m_title = strtoqstr(inst->getPresentationName()) + " " + sname;
+    if (m_instrument < AudioInstrumentBase) {
+        // submaster
+        m_title = tr("Sub %1").arg(m_instrument) + " " + sname;
+    } else {
+        Instrument *inst = studio.getInstrumentById(m_instrument);
+        m_title = strtoqstr(inst->getPresentationName()) + " " + sname;
+    }
 
     //ui types:
     // http://lv2plug.in/ns/extensions/ui#GtkUI (eg. calf)
