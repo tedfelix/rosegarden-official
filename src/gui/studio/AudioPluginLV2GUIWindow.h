@@ -18,27 +18,32 @@
 #ifndef RG_AUDIOPLUGINLV2GUIWINDOW_H
 #define RG_AUDIOPLUGINLV2GUIWINDOW_H
 
+#include "AudioPluginLV2GUI.h"
+#include "LV2Gtk.h"
+
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
 #include <lv2/data-access/data-access.h>
 #include <lv2/options/options.h>
+
 // the kx.studio extension
 #include "lv2_external_ui.h"
 
+#include <string>
 #include <vector>
 
-#include "AudioPluginLV2GUI.h"
-#include "LV2Gtk.h"
 
 namespace Rosegarden
 {
 
+
+/// The widget that holds the LV2 GUI.
 class AudioPluginLV2GUIWindow :
     public QWidget,
     public LV2Gtk::SizeCallback
 {
     Q_OBJECT
- public:
+public:
     AudioPluginLV2GUIWindow(AudioPluginLV2GUI* lv2Gui,
                             const QString& title,
                             const LilvUI* ui,
@@ -59,40 +64,57 @@ class AudioPluginLV2GUIWindow :
     // gtk callback
     virtual void setSize(int width, int height, bool isRequest) override;
 
- public slots:
+public slots:
+    // ??? rename: slotTimeUp()
     void timeUp();
 
- private:
+private:
     void closeEvent(QCloseEvent* event) override;
 
     AudioPluginLV2GUI* m_lv2Gui;
     AudioPluginLV2GUI::UIType m_uiType;
+
+    /// 50msec idle timer.  See timeUp() for details.
     QTimer* m_timer;
+
+    // Features
     LV2_Extension_Data_Feature m_dataAccess;
+    LV2_Feature m_dataFeature;
     LV2_Feature m_uridMapFeature;
     LV2_Feature m_uridUnmapFeature;
     LV2_Feature m_idleFeature;
     LV2_Feature m_parentFeature;
+    LV2UI_Resize m_resizeData;
     LV2_Feature m_resizeFeature;
     LV2_Feature m_instanceFeature;
-    LV2_Feature m_dataFeature;
+    std::vector<LV2_Options_Option> m_options;
     LV2_Feature m_optionsFeature;
+    LV2_External_UI_Host m_extUiHost;
     LV2_Feature m_extHostFeature;
-    LV2UI_Resize m_resizeData;
+    std::vector<LV2_Feature*> m_features;
+
     LV2UI_Idle_Interface* m_lv2II;
     LV2UI_Handle m_handle;
-    std::vector<LV2_Feature*> m_features;
-    std::vector<LV2_Options_Option> m_options;
-    LV2_External_UI_Host m_extUiHost;
+
     LV2Gtk::LV2GtkWidget m_gwidget;
+    // ??? c == Container?
     QWidget* m_cWidget;
+    // ??? p == Parent?
     QWindow* m_pWindow;
     LV2UI_Widget m_widget;
+
     QString m_title;
+    /// std::string version of m_title.
+    // ??? rename: m_titleStdString
+    // ??? This is only used locally in the ctor.  Move it there.
     std::string m_titles;
+
+    /// Shutdown flag for the timer.  See timeUp().
     bool m_shutdownRequested;
 };
 
+
 }
+
 
 #endif
