@@ -14,30 +14,36 @@
 #ifndef RG_PLUGINPORTCONNECTION_H
 #define RG_PLUGINPORTCONNECTION_H
 
+#include "base/Instrument.h"
+
 #include <QString>
+
 #include <list>
 
-#include "base/Instrument.h"
 
 namespace Rosegarden
 {
 
-class PluginPortConnection
-{
- public:
 
+// ??? Move these types into PluginPort which is in AudioPluginInstance.h.
+//     then the names become PluginPort::Connection and
+//     PluginPort::ConnectionList.
+namespace PluginPortConnection
+{
     struct Connection
     {
-        bool isOutput;
-        bool isAudio;
+        bool isOutput{false};
+        bool isAudio{false};
         QString pluginPort;
-        InstrumentId instrumentId;
-        int channel;
+        InstrumentId instrumentId{NoInstrument};
+        int channel{0};
     };
-    typedef std::list<Connection> ConnectionList;
 
-};
+    typedef std::list<Connection> ConnectionList;
+}
+
 
 }
+
 
 #endif // RG_PLUGINPORTCONNECTION_H

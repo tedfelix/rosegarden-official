@@ -31,7 +31,7 @@ namespace Rosegarden
  */
 class LV2Gtk
 {
- public:
+public:
     LV2Gtk();
     ~LV2Gtk();
 
@@ -64,7 +64,7 @@ class LV2Gtk
     static long int getWinId(const LV2GtkWidget& widget);
     static void deleteWidget(const LV2GtkWidget& widget);
 
- private:
+private:
     // cppcheck-suppress functionStatic
     void startUp();
 

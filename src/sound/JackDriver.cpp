@@ -813,6 +813,10 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         return jackProcessEmpty(nframes);
     }
 
+    // Compute number of synths.
+    // ??? Performance: AudioInstrumentMixer should maintain this number as
+    //     a member variable so we don't have to recompute over and over in
+    //     real-time.
     InstrumentId synthInstrumentBase;
     int synthInstruments;
     m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase,
