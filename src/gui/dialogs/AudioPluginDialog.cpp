@@ -269,20 +269,28 @@ void AudioPluginDialog::slotEditConnections()
 {
     PluginPortConnection::ConnectionList clist;
     m_pluginGUIManager->getConnections(m_containerId, m_index, clist);
+
+#ifndef NDEBUG
     RG_DEBUG << "slotEditConnections";
-    for(auto c : clist) {
+    for (const auto &c : clist) {
         RG_DEBUG << c.isOutput << c.isAudio << c.pluginPort <<
             c.instrumentId << c.channel;
     }
+#endif
+
     AudioPluginConnectionDialog dlg(this, clist);
     if (dlg.exec() == QDialog::Accepted) {
         PluginPortConnection::ConnectionList newList;
         dlg.getConnections(newList);
+
+#ifndef NDEBUG
         RG_DEBUG << "slotEditConnections new list";
-        for(auto c : newList) {
+        for (const auto &c : newList) {
             RG_DEBUG << c.isOutput << c.isAudio <<
                 c.pluginPort << c.instrumentId << c.channel;
         }
+#endif
+
         m_pluginGUIManager->setConnections(m_containerId, m_index, newList);
     }
 }
