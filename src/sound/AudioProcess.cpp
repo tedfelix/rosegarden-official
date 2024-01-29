@@ -1465,7 +1465,7 @@ AudioInstrumentMixer::generateBuffers()
 
         setInstrumentLevels(id, level, pan);
 
-        auto& pBuf = m_processBuffers[id];
+        ProcessBufferType &pBuf = m_processBuffers[id];
         while ((unsigned int)pBuf.size() > channels) {
             std::vector<sample_t *>::iterator bi = pBuf.end();
             --bi;
@@ -1635,8 +1635,10 @@ sample_t* AudioInstrumentMixer::getAudioBuffer
 {
     auto it = m_processBuffers.find(id);
     if (it == m_processBuffers.end()) return nullptr;
+
     auto& pBuf = (*it).second;
     if (channel >= pBuf.size()) return nullptr;
+
     return pBuf[channel];
 }
 
@@ -1763,7 +1765,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     // Needs to be RT safe
 
     BufferRec &rec = m_bufferMap[id];
-    auto& pBuf = m_processBuffers[id];
+    ProcessBufferType &pBuf = m_processBuffers[id];
     RealTime bufferTime = rec.filledTo;
 
 #ifdef DEBUG_MIXER
