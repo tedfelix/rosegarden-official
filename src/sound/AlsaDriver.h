@@ -311,7 +311,9 @@ public:
     }
 
     void savePluginState() override {
-        m_jackDriver->savePluginState();
+#ifdef HAVE_LIBJACK
+        if (m_jackDriver) m_jackDriver->savePluginState();
+#endif
     }
 
     void setAudioBussLevels(int bussId,
