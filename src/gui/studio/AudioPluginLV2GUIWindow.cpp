@@ -23,6 +23,7 @@
 #include "misc/Debug.h"
 #include "AudioPluginLV2GUI.h"
 #include "sound/LV2PluginInstance.h"
+#include "sound/LV2Utils.h"
 #include "LV2Gtk.h"
 
 #include <QTimer>
@@ -34,10 +35,10 @@
 #include <lv2/instance-access/instance-access.h>
 #include <lv2/parameters/parameters.h>
 
-#include "sound/LV2Utils.h"
 
 namespace
 {
+    /// For LV2UI_Descriptor::instantiate().
     void writeFn(LV2UI_Controller controller,
                  uint32_t port_index,
                  uint32_t buffer_size,
@@ -49,6 +50,7 @@ namespace
         ap->portChange(port_index, buffer_size, port_protocol, buffer);
     }
 
+    /// For m_resizeFeature.
     int LV2Resize (LV2UI_Feature_Handle handle, int width, int height )
     {
         RG_DEBUG << "resize" << width << height;
@@ -61,6 +63,7 @@ namespace
         }
     }
 
+    /// For LV2_External_UI_Host.
     void ui_closed(LV2UI_Controller controller)
     {
         Rosegarden::AudioPluginLV2GUIWindow* ap =
@@ -70,8 +73,10 @@ namespace
 
 }
 
+
 namespace Rosegarden
 {
+
 
 AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
 (AudioPluginLV2GUI* lv2Gui,
@@ -91,16 +96,20 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
 {
     RG_DEBUG << "create window" << id << m_uiType << m_title;
     setWindowTitle(m_title);
+
+    // Create the idle timer for this window.
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout,
             this, &AudioPluginLV2GUIWindow::timeUp);
+    // ??? Does this need to be 50msecs?  That's a lot of CPU.
     m_timer->start(50);
 
     const char *ui_bundle_uri =
         lilv_node_as_uri(lilv_ui_get_bundle_uri(ui));
-    char *hostname;
-    char* ubp = lilv_file_uri_parse(ui_bundle_uri, &hostname);
-    LV2UI_Controller controller = this;
+    // Parsed Bundle URI
+    char* ubp = lilv_file_uri_parse(ui_bundle_uri, nullptr);
+
+    // Assemble the features.
 
     m_idleFeature = {LV2_UI__idleInterface, nullptr};
     m_parentFeature = {LV2_UI__parent, (void*)winId()};
@@ -171,21 +180,25 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_features.push_back(&m_extHostFeature);
     m_features.push_back(nullptr);
 
+    // Get the Idle Interface if any.
     const void* ii = nullptr;
     if (uidesc->extension_data)
         ii = uidesc->extension_data(LV2_UI__idleInterface);
     m_lv2II = (LV2UI_Idle_Interface*)ii;
 
+    // Instantiate the UI.
     m_handle =
-        uidesc->instantiate(uidesc,
-                            id.toStdString().c_str(),
-                            ubp,
-                            writeFn,
-                            controller,
-                            &m_widget,
-                            m_features.data());
+        uidesc->instantiate(uidesc,  // descriptor
+                            id.toStdString().c_str(),  // plugin_uri
+                            ubp,  // bundle_path
+                            writeFn,  // write_function
+                            this,  // controller
+                            &m_widget,  // widget
+                            m_features.data());  // features
 
     RG_DEBUG << "handle:" << m_handle << "widget:" << m_widget;
+
+    // ??? switch/case is overkill.  Just do an "if AudioPluginLV2GUI::GTK".
     switch(m_uiType) {
     case AudioPluginLV2GUI::NONE:
         // should not be
@@ -254,19 +267,25 @@ LV2UI_Handle AudioPluginLV2GUIWindow::getHandle() const
 void AudioPluginLV2GUIWindow::uiClosed()
 {
     RG_DEBUG << "ui closed";
-    // can't do much here as this may be called from a different thread
+
+    // Signal timeUp() that we need a close.
+    // Can't do much here as this may be called from a different thread.
     m_shutdownRequested = true;
 }
 
 void AudioPluginLV2GUIWindow::setSize(int width, int height, bool isRequest)
 {
     RG_DEBUG << "setSize" << width << height << isRequest;
+
+    // Disallow shrinking of both dimensions.
     if (this->width() >= width && this->height() >= height) return;
+
     resize(width, height);
 }
 
 void AudioPluginLV2GUIWindow::timeUp()
 {
+    // Handle shutdown.
     if (m_shutdownRequested) {
         RG_DEBUG << "timeUp shutdown requested";
         m_timer->stop();
@@ -275,10 +294,13 @@ void AudioPluginLV2GUIWindow::timeUp()
         return;
     }
 
+    // Call idle handler.
     if (m_lv2II) m_lv2II->idle(m_handle);
 
-    // check control outs
+    // Update control outs.
     m_lv2Gui->checkControlOutValues();
+
+    // For kx, call run().
     if (m_uiType == AudioPluginLV2GUI::KX) {
         LV2_External_UI_Widget* euw = (LV2_External_UI_Widget*)m_widget;
         euw->run(euw);
@@ -288,15 +310,21 @@ void AudioPluginLV2GUIWindow::timeUp()
 void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
 {
     RG_DEBUG << "closeEvent";
+
     event->accept();
+
     m_timer->stop();
+
     // tell the ui to tidy up
     if (m_pWindow) m_pWindow->setParent(nullptr);
+
     LV2Utils* lv2utils = LV2Utils::getInstance();
     LV2Gtk* lv2gtk = lv2utils->getLV2Gtk();
     lv2gtk->deleteWidget(m_gwidget);
-    // this will cuase this object to be deleted
+
+    // this will cause this object to be deleted
     m_lv2Gui->closeUI();
 }
+
 
 }

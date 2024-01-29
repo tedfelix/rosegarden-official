@@ -78,6 +78,9 @@ private:
     QTimer* m_timer;
 
     // Features
+    // ??? These are for the instantiate() call.  Do we really need to keep
+    //     them around at instance scope?  Or can they be discarded after
+    //     instantiate() is called (ctor local scope)?
     LV2_Extension_Data_Feature m_dataAccess;
     LV2_Feature m_dataFeature;
     LV2_Feature m_uridMapFeature;
