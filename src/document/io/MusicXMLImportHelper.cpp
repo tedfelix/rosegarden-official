@@ -113,8 +113,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
         SegmentMap::iterator s = m_segments.find(m_staff+"/");
         if (s != m_segments.end()) {
             m_segments[m_staff+"/"+m_mainVoice[m_staff]] = (*s).second;
-            QString label = "MusicXML, id="+m_staff+"/"+m_mainVoice[m_staff];
-            setSegmentLabel((*s).second, label);
+            (*s).second->setLabel(m_label.toStdString());
             m_segments.erase(s);
         }
         m_voice = m_mainVoice[m_staff];
@@ -131,8 +130,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
         }
         if (createSegment) {
             Segment *segment = new Segment(Segment::Internal, m_curTime);
-            QString label = "MusicXML, id="+m_staff+"/"+tmpVoice;
-            setSegmentLabel(segment, label);
+            segment->setLabel(m_label.toStdString());
             m_composition->addSegment(segment);
             segment->setTrack(m_tracks[m_staff]->getId());
             m_segments[m_staff+"/"+tmpVoice] = segment;
@@ -338,19 +336,6 @@ MusicXMLImportHelper::setBracketType(int bracket)
                 track->setStaffBracket(Brackets::SquareOn);
             }
         }
-    }
-}
-
-void MusicXMLImportHelper::setSegmentLabel(Segment* segment, const QString& label)
-{
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool useTrackName = settings.value("usetrackname", false).toBool();
-    settings.endGroup();
-    if (useTrackName) {
-        segment->setLabel(m_label.toStdString());
-    } else {
-        segment->setLabel(label.toStdString());
     }
 }
 
