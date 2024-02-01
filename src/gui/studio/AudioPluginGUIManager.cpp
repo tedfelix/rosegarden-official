@@ -155,10 +155,17 @@ void AudioPluginGUIManager::setConnections
  int position,
  const PluginPort::ConnectionList& clist) const
 {
+#ifdef HAVE_LILV
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // only lv2
     if (arch != LV2) return;
     m_lv2Manager->setConnections(instrument, position, clist);
+#else
+    // Address compiler warnings.
+    (void)instrument;
+    (void)position;
+    (void)clist;
+#endif
 }
 
 void AudioPluginGUIManager::updateProgram(InstrumentId instrument, int position)
