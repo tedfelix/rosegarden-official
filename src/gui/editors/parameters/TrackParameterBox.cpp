@@ -4,14 +4,14 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
- 
+
     This file is Copyright 2006
         Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
         D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -257,7 +257,7 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
 
     // Bracket type
     // Staff bracketing (export only at the moment, but using this for GUI
-    // rendering would be nice in the future!) //!!! 
+    // rendering would be nice in the future!) //!!!
     QLabel *bracketTypeLabel = new QLabel(tr("Bracket type:"), staffExportOptions);
     bracketTypeLabel->setFont(m_font);
     m_bracketType = new QComboBox(staffExportOptions);
@@ -760,17 +760,17 @@ TrackParameterBox::slotColorChanged(int index)
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
-        
+
         QString newName = InputDialog::getText(this,
                                                tr("New Color Name"),
                                                tr("Enter new name:"),
                                                LineEdit::Normal,
                                                tr("New"), &ok);
-        
+
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
 //             int result = box.getColor(newColour);
-            
+
             //QRgb QColorDialog::getRgba(0xffffffff, &ok, this);
             QColor newColor = QColorDialog::getColor(Qt::white, this);
 
@@ -1070,7 +1070,7 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
             programName = "";
 
             AudioPluginInstance *plugin =
-                    instrument->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
+                loopInstrument.getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin)
                 programName = strtoqstr(plugin->getDisplayName());
         }

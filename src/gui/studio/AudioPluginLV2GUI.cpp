@@ -258,8 +258,6 @@ void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
 void AudioPluginLV2GUI::checkControlOutValues()
 {
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    // ??? portIndex, value?  See proposed PortValues typedef for this in
-    //     LV2PluginInstance.h.
     LV2Utils::PortValues newControlOutValues;
     lv2utils->getControlOutValues(m_instrument,
                                   m_position,
