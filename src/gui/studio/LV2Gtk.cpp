@@ -90,12 +90,14 @@ LV2Gtk::~LV2Gtk()
     }
 }
 
+#if 0
 void LV2Gtk::tick() const
 {
     if (m_active) {
         while (gtk_events_pending()) gtk_main_iteration();
     }
 }
+#endif
 
 LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget lv2Widget,
                                        SizeCallback* sizecb)
@@ -179,10 +181,12 @@ LV2Gtk::~LV2Gtk()
 {
 }
 
+#if 0
 // cppcheck-suppress unusedFunction
 void LV2Gtk::tick() const
 {
 }
+#endif
 
 LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget,
                                        SizeCallback*)

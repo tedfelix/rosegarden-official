@@ -49,8 +49,11 @@ public:
     };
 
     // ??? This doesn't appear to be called by anyone.
+    // should it be called ?
     // cppcheck-suppress functionStatic
+#if 0
     void tick() const;
+#endif
 
     /// Get a widget for a GTK-based LV2 plugin to use for its main widget.
     /**

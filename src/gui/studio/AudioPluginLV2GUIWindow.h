@@ -65,8 +65,7 @@ public:
     virtual void setSize(int width, int height, bool isRequest) override;
 
 public slots:
-    // ??? rename: slotTimeUp()
-    void timeUp();
+    void slotTimeUp();
 
 private:
     void closeEvent(QCloseEvent* event) override;
@@ -81,6 +80,13 @@ private:
     // ??? These are for the instantiate() call.  Do we really need to keep
     //     them around at instance scope?  Or can they be discarded after
     //     instantiate() is called (ctor local scope)?
+
+    // good question. Quick answer - I don'know. There is no
+    // requirement in the lv2 documentation that these parameters
+    // should only be used in instantiate. I am sure most plugins will
+    // do just that but it is possible that a plugin may keep a
+    // pointer to a feature. Having these as data members is on the
+    // safe side.
     LV2_Extension_Data_Feature m_dataAccess;
     LV2_Feature m_dataFeature;
     LV2_Feature m_uridMapFeature;
@@ -100,17 +106,11 @@ private:
     LV2UI_Handle m_handle;
 
     LV2Gtk::LV2GtkWidget m_gwidget;
-    // ??? c == Container?
-    QWidget* m_cWidget;
-    // ??? p == Parent?
-    QWindow* m_pWindow;
+    QWidget* m_containerWidget;
+    QWindow* m_parentWindow;
     LV2UI_Widget m_widget;
 
     QString m_title;
-    /// std::string version of m_title.
-    // ??? rename: m_titleStdString
-    // ??? This is only used locally in the ctor.  Move it there.
-    std::string m_titles;
 
     /// Shutdown flag for the timer.  See timeUp().
     bool m_shutdownRequested;

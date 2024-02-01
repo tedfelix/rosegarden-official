@@ -104,12 +104,10 @@ public:
                  const void* data,
                  LV2_Worker_Respond_Function resp);
 
-    // ??? What is the int and the float?  portIndex and value?
-    //     typedef std::map<int /*portIndex*/, float /*value*/> PortValues;
     /// Get m_controlPortsIn.
-    void getControlInValues(std::map<int, float>& controlValues);
+    void getControlInValues(LV2Utils::PortValues &controlValues);
     /// Get m_controlPortsOut.
-    void getControlOutValues(std::map<int, float>& controlValues);
+    void getControlOutValues(LV2Utils::PortValues &controlValues);
 
     const LV2_Descriptor* getLV2Descriptor() const;
 
@@ -152,8 +150,8 @@ private:
 
     // ??? What is the int and the float?  portIndex and value?
     //     See proposed PortValues typedef above.
-    std::map<int, float> m_controlPortsIn;
-    std::map<int, float> m_controlPortsOut;
+    LV2Utils::PortValues m_controlPortsIn;
+    LV2Utils::PortValues m_controlPortsOut;
 
     struct AtomPort
     {

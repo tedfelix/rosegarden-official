@@ -230,13 +230,15 @@ class LV2Utils
 //    int numInstances(InstrumentId instrument,
 //                     int position) const;
 
+    typedef std::map<int /*portIndex*/, float /*value*/> PortValues;
+
     void getControlInValues(InstrumentId instrument,
                             int position,
-                            std::map<int, float> &controlValues);
+                            PortValues &controlValues);
 
     void getControlOutValues(InstrumentId instrument,
                              int position,
-                             std::map<int, float> &controlValues);
+                             PortValues &controlValues);
 
     LV2PluginInstance* getPluginInstance(InstrumentId instrument,
                                          int position) const;

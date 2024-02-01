@@ -88,8 +88,8 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_lv2Gui(lv2Gui),
     m_uiType(uiType),
     m_lv2II(nullptr),
-    m_cWidget(nullptr),
-    m_pWindow(nullptr),
+    m_containerWidget(nullptr),
+    m_parentWindow(nullptr),
     m_widget(nullptr),
     m_title(title),
     m_shutdownRequested(false)
@@ -100,7 +100,7 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     // Create the idle timer for this window.
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout,
-            this, &AudioPluginLV2GUIWindow::timeUp);
+            this, &AudioPluginLV2GUIWindow::slotTimeUp);
     // ??? Does this need to be 50msecs?  That's a lot of CPU.
     m_timer->start(50);
 
@@ -135,7 +135,7 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     LV2_URID sampleRateUrid = lv2utils->uridMap(LV2_PARAMETERS__sampleRate);
     LV2_URID af_urid = lv2utils->uridMap(LV2_ATOM__Float);
     float sampleRate = pluginInstance->getSampleRate();
-    m_titles = m_title.toStdString();
+    std::string titleStdString = m_title.toStdString();
     LV2_URID titleUrid = lv2utils->uridMap(LV2_UI__windowTitle);
     LV2_URID as_urid = lv2utils->uridMap(LV2_ATOM__String);
     LV2_Options_Option opt;
@@ -147,9 +147,9 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     opt.value = &sampleRate;
     m_options.push_back(opt);
     opt.key = titleUrid;
-    opt.size = m_titles.size();
+    opt.size = titleStdString.size();
     opt.type = as_urid;
-    opt.value = m_titles.c_str();
+    opt.value = titleStdString.c_str();
     m_options.push_back(opt);
     opt.subject = 0;
     opt.key = 0;
@@ -160,8 +160,7 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_optionsFeature = {LV2_OPTIONS__options, m_options.data()};
 
     m_extUiHost.ui_closed = &ui_closed;
-    std::string titles = m_title.toStdString();
-    m_extUiHost.plugin_human_id = titles.c_str();
+    m_extUiHost.plugin_human_id = titleStdString.c_str();
     m_extHostFeature = {LV2_EXTERNAL_UI__Host, &m_extUiHost};
 
     m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_map)};
@@ -218,11 +217,11 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
             resize(width, height);
 
             const WId wid = (WId)(lv2gtk->getWinId(m_gwidget));
-            m_pWindow = QWindow::fromWinId(wid);
-            m_pWindow->setFlags(Qt::FramelessWindowHint);
-            m_cWidget = QWidget::createWindowContainer(m_pWindow);
-            m_cWidget->setMinimumSize(QSize(width, height));
-            m_cWidget->setParent(this);
+            m_parentWindow = QWindow::fromWinId(wid);
+            m_parentWindow->setFlags(Qt::FramelessWindowHint);
+            m_containerWidget = QWidget::createWindowContainer(m_parentWindow);
+            m_containerWidget->setMinimumSize(QSize(width, height));
+            m_containerWidget->setParent(this);
         }
         break;
     case AudioPluginLV2GUI::KX:
@@ -268,7 +267,7 @@ void AudioPluginLV2GUIWindow::uiClosed()
 {
     RG_DEBUG << "ui closed";
 
-    // Signal timeUp() that we need a close.
+    // Signal slotTimeUp() that we need a close.
     // Can't do much here as this may be called from a different thread.
     m_shutdownRequested = true;
 }
@@ -283,11 +282,11 @@ void AudioPluginLV2GUIWindow::setSize(int width, int height, bool isRequest)
     resize(width, height);
 }
 
-void AudioPluginLV2GUIWindow::timeUp()
+void AudioPluginLV2GUIWindow::slotTimeUp()
 {
     // Handle shutdown.
     if (m_shutdownRequested) {
-        RG_DEBUG << "timeUp shutdown requested";
+        RG_DEBUG << "slotTimeUp shutdown requested";
         m_timer->stop();
         // this will cuase this object to be deleted
         m_lv2Gui->closeUI();
@@ -316,7 +315,7 @@ void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
     m_timer->stop();
 
     // tell the ui to tidy up
-    if (m_pWindow) m_pWindow->setParent(nullptr);
+    if (m_parentWindow) m_parentWindow->setParent(nullptr);
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
     LV2Gtk* lv2gtk = lv2utils->getLV2Gtk();

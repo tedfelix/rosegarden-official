@@ -195,9 +195,7 @@ AudioPluginLV2GUI::showGui()
 
         lv2utils->registerGUI(m_instrument, m_position, this);
         // set the control in values correctly
-        // ??? portIndex, value?  See proposed PortValues typedef for this in
-        //     LV2PluginInstance.h.
-        std::map<int, float> controlInValues;
+        LV2Utils::PortValues controlInValues;
         lv2utils->getControlInValues(m_instrument,
                                      m_position,
                                      controlInValues);
@@ -262,7 +260,7 @@ void AudioPluginLV2GUI::checkControlOutValues()
     LV2Utils* lv2utils = LV2Utils::getInstance();
     // ??? portIndex, value?  See proposed PortValues typedef for this in
     //     LV2PluginInstance.h.
-    std::map<int, float> newControlOutValues;
+    LV2Utils::PortValues newControlOutValues;
     lv2utils->getControlOutValues(m_instrument,
                                   m_position,
                                   newControlOutValues);
