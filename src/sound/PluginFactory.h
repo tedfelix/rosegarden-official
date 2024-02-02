@@ -33,7 +33,7 @@ class PluginFactory
 public:
     static PluginFactory *instance(QString pluginType);
     static PluginFactory *instanceFor(QString identifier);
-    static void enumerateAllPlugins(MappedObjectPropertyList &);
+    static void enumerateAllPlugins(std::vector<QString>&);
 
     static void setSampleRate(int sampleRate) { m_sampleRate = sampleRate; }
 

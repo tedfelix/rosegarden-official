@@ -18,7 +18,7 @@
 #ifndef RG_AUDIOPLUGINLV2GUIMANAGER_H
 #define RG_AUDIOPLUGINLV2GUIMANAGER_H
 
-#include "sound/PluginPortConnection.h"
+#include "base/AudioPluginInstance.h"
 
 #include <QObject>
 
@@ -59,11 +59,11 @@ public:
     void getConnections
         (InstrumentId instrument,
          int position,
-         PluginPortConnection::ConnectionList& clist) const;
+         PluginPort::ConnectionList& clist) const;
     void setConnections
         (InstrumentId instrument,
          int position,
-         const PluginPortConnection::ConnectionList& clist);
+         const PluginPort::ConnectionList& clist);
 
 public slots:
     void slotStopGUIDelayed();

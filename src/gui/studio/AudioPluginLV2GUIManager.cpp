@@ -110,7 +110,7 @@ bool AudioPluginLV2GUIManager::canEditConnections(InstrumentId instrument,
                                                   int position) const
 {
     // we can edit the connections if there are 2 or more
-    PluginPortConnection::ConnectionList clist;
+    PluginPort::ConnectionList clist;
     getConnections(instrument, position, clist);
     if (clist.size() > 1) return true;
     return false;
@@ -120,7 +120,7 @@ void
 AudioPluginLV2GUIManager::getConnections
 (InstrumentId instrument,
  int position,
- PluginPortConnection::ConnectionList& clist) const
+ PluginPort::ConnectionList& clist) const
 {
     // this routine must work even if we have no gui
     LV2Utils* lv2utils = LV2Utils::getInstance();
@@ -130,7 +130,7 @@ AudioPluginLV2GUIManager::getConnections
 void AudioPluginLV2GUIManager::setConnections
 (InstrumentId instrument,
  int position,
- const PluginPortConnection::ConnectionList& clist)
+ const PluginPort::ConnectionList& clist)
 {
     // this routine must work even if we have no gui
     LV2Utils* lv2utils = LV2Utils::getInstance();

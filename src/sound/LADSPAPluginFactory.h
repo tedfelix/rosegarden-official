@@ -38,7 +38,7 @@ public:
 
     const std::vector<QString> &getPluginIdentifiers() const override;
 
-    void enumeratePlugins(MappedObjectPropertyList &list) override;
+    void enumeratePlugins(std::vector<QString> &list) override;
 
     void populatePluginSlot(QString identifier, MappedPluginSlot &slot) override;
 

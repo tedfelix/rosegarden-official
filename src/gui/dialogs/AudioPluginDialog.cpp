@@ -33,7 +33,6 @@
 #include "gui/widgets/PluginControl.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
-#include "sound/PluginPortConnection.h"
 #include "gui/dialogs/AudioPluginConnectionDialog.h"
 
 #include <QLayout>
@@ -267,7 +266,7 @@ AudioPluginDialog::~AudioPluginDialog()
 
 void AudioPluginDialog::slotEditConnections()
 {
-    PluginPortConnection::ConnectionList clist;
+    PluginPort::ConnectionList clist;
     m_pluginGUIManager->getConnections(m_containerId, m_index, clist);
 
 #ifndef NDEBUG
@@ -280,7 +279,7 @@ void AudioPluginDialog::slotEditConnections()
 
     AudioPluginConnectionDialog dlg(this, clist);
     if (dlg.exec() == QDialog::Accepted) {
-        PluginPortConnection::ConnectionList newList;
+        PluginPort::ConnectionList newList;
         dlg.getConnections(newList);
 
 #ifndef NDEBUG

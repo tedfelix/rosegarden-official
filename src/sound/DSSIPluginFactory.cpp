@@ -39,7 +39,7 @@ DSSIPluginFactory::~DSSIPluginFactory()
 }
 
 void
-DSSIPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
+DSSIPluginFactory::enumeratePlugins(std::vector<QString> &list)
 {
     for (std::vector<QString>::iterator i = m_identifiers.begin();
             i != m_identifiers.end(); ++i) {

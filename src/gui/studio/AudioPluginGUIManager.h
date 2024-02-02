@@ -18,7 +18,7 @@
 #ifndef RG_AUDIOPLUGINGUIMANAGER_H
 #define RG_AUDIOPLUGINGUIMANAGER_H
 
-#include "sound/PluginPortConnection.h"
+#include "base/AudioPluginInstance.h"
 
 
 namespace Rosegarden
@@ -67,11 +67,11 @@ public:
     void getConnections
         (InstrumentId instrument,
          int position,
-         PluginPortConnection::ConnectionList& clist) const;
+         PluginPort::ConnectionList& clist) const;
     void setConnections
         (InstrumentId instrument,
          int position,
-         const PluginPortConnection::ConnectionList& clist) const;
+         const PluginPort::ConnectionList& clist) const;
 
     void updateProgram(InstrumentId instrument, int position);
     void updatePort(InstrumentId instrument, int position, int port);

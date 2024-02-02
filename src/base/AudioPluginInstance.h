@@ -17,6 +17,7 @@
 #include <map>
 
 #include "XmlExportable.h"
+#include "base/Instrument.h"
 
 // An Instrument on needs to implement these to render an instance
 // of the plugin at the sequencer.
@@ -49,6 +50,17 @@ public:
         Integer     = 0x02,
         Logarithmic = 0x04
     } PortDisplayHint;
+
+    struct Connection
+    {
+        bool isOutput{false};
+        bool isAudio{false};
+        QString pluginPort;
+        InstrumentId instrumentId{NoInstrument};
+        int channel{0};
+    };
+
+    typedef std::list<Connection> ConnectionList;
 
     PluginPort(int number,
                const std::string& name,

@@ -17,7 +17,7 @@
 #define RG_LV2PLUGININSTANCE_H
 
 #include "sound/LV2Utils.h"
-#include "sound/PluginPortConnection.h"
+#include "base/AudioPluginInstance.h"
 
 #include "base/Instrument.h"
 
@@ -31,8 +31,8 @@
 #include <QString>
 
 #include <vector>
-#include <list>
 #include <map>
+#include <list>
 
 
 namespace Rosegarden
@@ -117,8 +117,8 @@ public:
 
     virtual void audioProcessingDone() override;
 
-    void getConnections(PluginPortConnection::ConnectionList& clist) const;
-    void setConnections(const PluginPortConnection::ConnectionList& clist);
+    void getConnections(PluginPort::ConnectionList& clist) const;
+    void setConnections(const PluginPort::ConnectionList& clist);
 
 private:
     // To be constructed only by LV2PluginFactory
@@ -148,8 +148,6 @@ private:
     void sendMidiData(const QByteArray& rawMidi,
                       size_t frameOffset);
 
-    // ??? What is the int and the float?  portIndex and value?
-    //     See proposed PortValues typedef above.
     LV2Utils::PortValues m_controlPortsIn;
     LV2Utils::PortValues m_controlPortsOut;
 
@@ -160,12 +158,8 @@ private:
         bool isMidi;
     };
 
-    // ??? Use std::vector instead of std::list.  We never delete from
-    //     the middle.  We only push_back(), iterate and clear.
-    std::list<AtomPort> m_atomInputPorts;
-    // ??? Use std::vector instead of std::list.  We never delete from
-    //     the middle.  We only push_back(), iterate and clear.
-    std::list<AtomPort> m_atomOutputPorts;
+    std::vector<AtomPort> m_atomInputPorts;
+    std::vector<AtomPort> m_atomOutputPorts;
 
     InstrumentId m_instrument;
     int m_position;
@@ -184,9 +178,6 @@ private:
         QByteArray data;
     };
 
-    // ??? Look into using std::vector instead of std::list.  The only loop
-    //     calling erase() (in run()) can likely be simplified to go through
-    //     all events then clear() when done.  That would use less CPU.
     std::list<MidiEvent> m_eventBuffer;
     snd_midi_event_t *m_midiParser;
     LV2_URID m_midiEventUrid;
@@ -215,7 +206,7 @@ private:
     LV2_URID m_atomTransferUrid;
     bool m_pluginHasRun;
     AudioInstrumentMixer* m_amixer;
-    PluginPortConnection::ConnectionList m_connections;
+    PluginPort::ConnectionList m_connections;
 };
 
 

@@ -18,8 +18,9 @@
 #ifndef RG_AUDIOPLUGINCONNECTIONDIALOG_H
 #define RG_AUDIOPLUGINCONNECTIONDIALOG_H
 
-#include "sound/PluginPortConnection.h"
+#include "base/AudioPluginInstance.h"
 #include "base/Studio.h"
+
 
 #include <QDialog>
 class QComboBox;
@@ -39,10 +40,10 @@ class AudioPluginConnectionDialog : public QDialog
 public:
     AudioPluginConnectionDialog
         (QWidget *parent,
-         const PluginPortConnection::ConnectionList& connections);
+         const PluginPort::ConnectionList& connections);
 
     void getConnections
-        (PluginPortConnection::ConnectionList& connections) const;
+        (PluginPort::ConnectionList& connections) const;
 
  private:
     InstrumentList m_iList;

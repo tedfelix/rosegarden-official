@@ -62,7 +62,7 @@ LADSPAPluginFactory::getPluginIdentifiers() const
 }
 
 void
-LADSPAPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
+LADSPAPluginFactory::enumeratePlugins(std::vector<QString> &list)
 {
     for (std::vector<QString>::iterator i = m_identifiers.begin();
             i != m_identifiers.end(); ++i) {

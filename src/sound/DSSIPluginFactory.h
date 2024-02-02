@@ -29,7 +29,7 @@ class DSSIPluginFactory : public LADSPAPluginFactory
 public:
     ~DSSIPluginFactory() override;
 
-    void enumeratePlugins(MappedObjectPropertyList &list) override;
+    void enumeratePlugins(std::vector<QString> &list) override;
 
     void populatePluginSlot(QString identifier, MappedPluginSlot &slot) override;
 

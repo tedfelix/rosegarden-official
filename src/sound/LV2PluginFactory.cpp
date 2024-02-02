@@ -54,19 +54,13 @@ LV2PluginFactory::getPluginIdentifiers() const
 }
 
 void
-LV2PluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
+LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
 {
     LV2Utils* lv2utils = LV2Utils::getInstance();
     const auto &allPluginData = lv2utils->getAllPluginData();
 
     // For each plugin...
     for (const auto &pair : allPluginData) {
-
-        // ??? This is misleading.  A MappedObjectPropertyList is nothing
-        //     more than a vector<QString>.  It's not being used as a
-        //     property list here.  It is simply being used as a vector<QString>
-        //     where specific positions in the vector have specific meaning.
-        //     See PluginFactory::enumeratePlugins() for more.
 
         // This is in a standard format, see the LADSPA implementation
         // for details.

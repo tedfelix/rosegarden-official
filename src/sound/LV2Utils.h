@@ -17,7 +17,7 @@
 #define RG_LV2UTILS_H
 
 #include "base/Instrument.h"
-#include "sound/PluginPortConnection.h"
+#include "base/AudioPluginInstance.h"
 
 #include <lilv/lilv.h>
 #include <lv2/urid/urid.h>
@@ -247,12 +247,12 @@ class LV2Utils
     void getConnections
         (InstrumentId instrument,
          int position,
-         PluginPortConnection::ConnectionList& clist) const;
-    // ??? Might be unused.  Caller appears to be unused.
+         PluginPort::ConnectionList& clist) const;
+    // used in AudioPluginLV2GUIManager
     void setConnections
         (InstrumentId instrument,
          int position,
-         const PluginPortConnection::ConnectionList& clist) const;
+         const PluginPort::ConnectionList& clist) const;
 
     QString getPortName(const QString& uri, int portIndex) const;
 
@@ -273,11 +273,10 @@ class LV2Utils
     LV2_URID m_nextId;
 
 
-    // ??? What data is this synchronizing?  It appears to be used
-    //     for a number of different things but not everything.  Why?
-    // ??? What threads are involved?  Plugin instance threads?
-    //     Plugin GUI threads?  Plugin worker threads?
-    //     RG GUI thread?  RG sequencer thread?
+    // This mutex is used for the synchronization of the lv2
+    // threads. Some calls are made in the audio thread others in the
+    // gui thread. Data used by the calls are protected with this
+    // mutex
     QMutex m_mutex;
 
 
@@ -296,15 +295,13 @@ class LV2Utils
     void initPluginData();
 
     // Plugin instance data organized by instrument/position.
-    // ??? rename: PluginInstanceData
-    struct LV2UPlugin
+    struct PluginInstanceData
     {
         LV2PluginInstance *pluginInstance{nullptr};
         AudioPluginLV2GUI *gui{nullptr};
     };
-    // ??? rename: PluginInstanceMap
-    typedef std::map<PluginPosition, LV2UPlugin> PluginGuiMap;
-    PluginGuiMap m_pluginGuis;
+    typedef std::map<PluginPosition, PluginInstanceData> PluginInstanceDataMap;
+    PluginInstanceDataMap m_pluginInstanceData;
 
     /// The LV2Worker instance.
     /**

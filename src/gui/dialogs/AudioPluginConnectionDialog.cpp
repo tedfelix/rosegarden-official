@@ -36,7 +36,7 @@ namespace Rosegarden
 
 AudioPluginConnectionDialog::AudioPluginConnectionDialog
 (QWidget *parent,
- const PluginPortConnection::ConnectionList& connections) :
+ const PluginPort::ConnectionList& connections) :
     QDialog(parent)
 {
     setWindowTitle(tr("Audio Plugin Connections"));
@@ -67,7 +67,7 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
 
     int row = 1;
     // For each connection...
-    for (const PluginPortConnection::Connection &connection : connections) {
+    for (const PluginPort::Connection &connection : connections) {
         m_pluginPorts.push_back(connection.pluginPort);
 
         QLabel* pl = new QLabel(connection.pluginPort, this);
@@ -114,7 +114,7 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
 }
 
 void AudioPluginConnectionDialog::getConnections
-(PluginPortConnection::ConnectionList& connections) const
+(PluginPort::ConnectionList& connections) const
 {
     connections.clear();
 
@@ -123,7 +123,7 @@ void AudioPluginConnectionDialog::getConnections
 
     // For each port, add to connections.
     for (const QString &port : m_pluginPorts) {
-        PluginPortConnection::Connection c;
+        PluginPort::Connection c;
         c.isOutput = false;
         c.isAudio = true;
         c.pluginPort = port;

@@ -239,7 +239,7 @@ LV2PluginInstance::init(int idealChannelCount)
     m_connections.clear();
     for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
         if (m_audioPortsIn[i] == -1) continue; // for distributeChannels
-        PluginPortConnection::Connection c;
+        PluginPort::Connection c;
         c.isOutput = false;
         c.isAudio = true;
         c.pluginPort = lv2utils->getPortName(m_uri, m_audioPortsIn[i]);
@@ -406,7 +406,7 @@ void LV2PluginInstance::audioProcessingDone()
 }
 
 void LV2PluginInstance::getConnections
-(PluginPortConnection::ConnectionList& clist) const
+(PluginPort::ConnectionList& clist) const
 {
     // called from the gui thread
     RG_DEBUG << "getConnections";
@@ -414,7 +414,7 @@ void LV2PluginInstance::getConnections
 }
 
 void LV2PluginInstance::setConnections
-(const PluginPortConnection::ConnectionList& clist)
+(const PluginPort::ConnectionList& clist)
 {
 #ifndef NDEBUG
     RG_DEBUG << "setConnections";
@@ -668,9 +668,7 @@ LV2PluginInstance::setPortByteArray(unsigned int port,
 {
     RG_DEBUG << "setPortByteArray" << port << protocol;
     if (protocol == m_atomTransferUrid) {
-        for (const AtomPort& input : m_atomInputPorts) {
-            // ??? Redundant.  Rename input to inputAtomPort and remove this.
-            const AtomPort& ap = input;
+        for (const AtomPort& ap : m_atomInputPorts) {
             if (ap.index == port) {
                 RG_DEBUG << "setPortByteArray send bytes" << ba.size() <<
                     ba.toHex() << protocol << ap.atomSeq;
@@ -753,7 +751,7 @@ QString LV2PluginInstance::configure(const QString& key, const QString& value)
                 QJsonValue pval = arr1[2];
                 QJsonValue ival = arr1[3];
                 QJsonValue cval = arr1[4];
-                PluginPortConnection::Connection c;
+                PluginPort::Connection c;
                 c.isOutput = oval.toBool();
                 c.isAudio = aval.toBool();
                 c.pluginPort = pval.toString();
@@ -789,7 +787,7 @@ void LV2PluginInstance::savePluginState()
 
     // also save the connections to a json string
     QJsonArray conns;
-    for (const PluginPortConnection::Connection &c : m_connections) {
+    for (const PluginPort::Connection &c : m_connections) {
         int ii = c.instrumentId;
         QJsonValue val1(c.isOutput);
         QJsonValue val2(c.isAudio);
@@ -846,7 +844,7 @@ LV2PluginInstance::run(const RealTime &rt)
 
     // Get connected buffers.
     int bufIndex = 0;
-    for (const PluginPortConnection::Connection &c : m_connections) {
+    for (const PluginPort::Connection &c : m_connections) {
         if (c.instrumentId != 0 && c.instrumentId != m_instrument) {
             auto ib = m_amixer->getAudioBuffer(c.instrumentId, c.channel);
             if (ib) {
@@ -941,9 +939,7 @@ LV2PluginInstance::run(const RealTime &rt)
     }
 
     // clear atom in buffers
-    for (const AtomPort &input : m_atomInputPorts) {
-        // ??? Redundant.
-        const AtomPort &ap = input;
+    for (const AtomPort &ap : m_atomInputPorts) {
         lv2_atom_sequence_clear(ap.atomSeq);
     }
 

@@ -396,7 +396,7 @@ void LV2Utils::registerPlugin(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    m_pluginGuis[pp].pluginInstance = pluginInstance;
+    m_pluginInstanceData[pp].pluginInstance = pluginInstance;
 }
 
 void LV2Utils::registerGUI(InstrumentId instrument,
@@ -408,7 +408,7 @@ void LV2Utils::registerGUI(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    m_pluginGuis[pp].gui = gui;
+    m_pluginInstanceData[pp].gui = gui;
 }
 
 void LV2Utils::registerWorker(Worker* worker)
@@ -425,12 +425,12 @@ void LV2Utils::unRegisterPlugin(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginGuis.find(pp);
-    if (pit == m_pluginGuis.end()) {
+    auto pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
         return;
     }
-    LV2UPlugin& pgdata = (*pit).second;
+    PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.pluginInstance != pluginInstance) {
         // this can happen if a plugin is replaced - the old plugin is
         // deleted later (scavenged) after the new plugin is registered
@@ -440,7 +440,7 @@ void LV2Utils::unRegisterPlugin(InstrumentId instrument,
     pgdata.pluginInstance = nullptr;
     if (pgdata.gui == nullptr) {
         // both 0 - delete entry
-        m_pluginGuis.erase(pit);
+        m_pluginInstanceData.erase(pit);
     }
 }
 
@@ -452,16 +452,16 @@ void LV2Utils::unRegisterGUI(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginGuis.find(pp);
-    if (pit == m_pluginGuis.end()) {
+    auto pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "gui not found" << instrument << position;
         return;
     }
-    LV2UPlugin& pgdata = (*pit).second;
+    PluginInstanceData& pgdata = (*pit).second;
     pgdata.gui = nullptr;
     if (pgdata.pluginInstance == nullptr) {
         // both 0 - delete entry
-        m_pluginGuis.erase(pit);
+        m_pluginInstanceData.erase(pit);
     }
 }
 
@@ -481,12 +481,12 @@ void LV2Utils::setPortValue(InstrumentId instrument,
     pp.instrument = instrument;
     pp.position = position;
     LOCKED;
-    auto pit = m_pluginGuis.find(pp);
-    if (pit == m_pluginGuis.end()) {
+    auto pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
         return;
     }
-    LV2UPlugin& pgdata = (*pit).second;
+    PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.pluginInstance == nullptr) {
         RG_DEBUG << "setPortValue no pluginInstance";
         return;
@@ -506,12 +506,12 @@ void LV2Utils::updatePortValue(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginGuis.find(pp);
-    if (pit == m_pluginGuis.end()) {
+    auto pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
         return;
     }
-    const LV2UPlugin& pgdata = (*pit).second;
+    const PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.gui == nullptr) {
         RG_DEBUG << "no gui at" << instrument << position;
         return;
@@ -528,12 +528,12 @@ int LV2Utils::numInstances(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginGuis.find(pp);
-    if (pit == m_pluginGuis.end()) {
+    auto pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
         return 1;
     }
-    const LV2UPlugin& pgdata = (*pit).second;
+    const PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.pluginInstance == nullptr) {
         RG_DEBUG << "numInstances no pluginInstance";
         return 1;
@@ -552,13 +552,13 @@ void LV2Utils::runWork(const PluginPosition& pp,
                        const void* data,
                        LV2_Worker_Respond_Function resp)
 {
-    PluginGuiMap::const_iterator pit = m_pluginGuis.find(pp);
-    if (pit == m_pluginGuis.end()) {
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "runWork: plugin not found" <<
             pp.instrument << pp.position;
         return;
     }
-    const LV2UPlugin& pgdata = pit->second;
+    const PluginInstanceData& pgdata = pit->second;
     if (pgdata.pluginInstance == nullptr) {
         RG_DEBUG << "runWork no pluginInstance" <<
             pp.instrument << pp.position;
@@ -574,13 +574,13 @@ void LV2Utils::getControlInValues(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    PluginGuiMap::const_iterator pit = m_pluginGuis.find(pp);
-    if (pit == m_pluginGuis.end()) {
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "getControlInValues plugin not found" <<
             instrument << position;
         return;
     }
-    const LV2UPlugin& pgdata = (*pit).second;
+    const PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.pluginInstance == nullptr) {
         RG_DEBUG << "getControlInValues no pluginInstance";
         return;
@@ -596,13 +596,13 @@ void LV2Utils::getControlOutValues(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    PluginGuiMap::const_iterator pit = m_pluginGuis.find(pp);
-    if (pit == m_pluginGuis.end()) {
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "getControlOutValues plugin not found" <<
             instrument << position;
         return;
     }
-    const LV2UPlugin& pgdata = (*pit).second;
+    const PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.pluginInstance == nullptr) {
         RG_DEBUG << "getControlOutValues no pluginInstance";
         return;
@@ -617,13 +617,13 @@ LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    PluginGuiMap::const_iterator pit = m_pluginGuis.find(pp);
-    if (pit == m_pluginGuis.end()) {
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "getPluginInstance plugin not found" <<
             instrument << position;
         return nullptr;
     }
-    const LV2UPlugin& pgdata = (*pit).second;
+    const PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.pluginInstance == nullptr) {
         RG_DEBUG << "getPluginInstance no pluginInstance";
         return nullptr;
@@ -633,7 +633,7 @@ LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
 
 void LV2Utils::getConnections(InstrumentId instrument,
                               int position,
-                              PluginPortConnection::ConnectionList& clist) const
+                              PluginPort::ConnectionList& clist) const
 {
     clist.clear();
     const LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
@@ -644,7 +644,7 @@ void LV2Utils::getConnections(InstrumentId instrument,
 void LV2Utils::setConnections
 (InstrumentId instrument,
  int position,
- const PluginPortConnection::ConnectionList& clist) const
+ const PluginPort::ConnectionList& clist) const
 {
     LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
     if (!lv2inst) return;

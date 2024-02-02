@@ -79,7 +79,7 @@ PluginFactory::instanceFor(QString identifier)
 }
 
 void
-PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
+PluginFactory::enumerateAllPlugins(std::vector<QString> &list)
 {
     RG_INFO << "enumerateAllPlugins() begin...  Enumerating and loading all plugins...";
 

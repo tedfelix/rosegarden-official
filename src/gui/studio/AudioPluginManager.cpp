@@ -67,7 +67,7 @@ void
 AudioPluginManager::Enumerator::run()
 {
     QMutexLocker locker(&(m_manager->m_mutex));
-    MappedObjectPropertyList rawPlugins;
+    std::vector<QString> rawPlugins;
 
     //RG_DEBUG << "Enumerator::run()...";
 
