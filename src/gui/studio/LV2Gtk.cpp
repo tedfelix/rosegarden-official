@@ -66,10 +66,14 @@ namespace {
 
 }
 
-
 namespace Rosegarden
 {
 
+LV2Gtk* LV2Gtk::getInstance()
+{
+    static LV2Gtk instance;
+    return &instance;
+}
 
 LV2Gtk::LV2Gtk() :
     m_active(false),
@@ -91,6 +95,7 @@ LV2Gtk::~LV2Gtk()
 }
 
 #if 0
+// this is never used but gtk seems to work ok anyway !
 void LV2Gtk::tick() const
 {
     if (m_active) {

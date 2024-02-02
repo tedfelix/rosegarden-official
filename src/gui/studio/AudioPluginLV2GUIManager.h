@@ -54,12 +54,7 @@ public:
     void stopGUI(InstrumentId instrument, int position);
     void stopAllGUIs();
 
-    // ??? Does nothing.
-    void updateProgram(InstrumentId instrument, int position);
     void updatePort(InstrumentId instrument, int position, int port);
-    // ??? Does nothing.
-    void updateConfiguration(InstrumentId instrument, int position,
-                             const QString& key);
     bool canEditConnections(InstrumentId instrument, int position) const;
     void getConnections
         (InstrumentId instrument,

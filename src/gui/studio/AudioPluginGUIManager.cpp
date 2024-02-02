@@ -35,7 +35,6 @@ namespace Rosegarden
 
 
 AudioPluginGUIManager::AudioPluginGUIManager(RosegardenMainWindow *mainWindow) :
-    m_mainWindow(mainWindow),
     m_studio(nullptr),
     m_oscManager(new AudioPluginOSCGUIManager(mainWindow))
 #ifdef HAVE_LILV
@@ -165,18 +164,9 @@ void AudioPluginGUIManager::setConnections
 void AudioPluginGUIManager::updateProgram(InstrumentId instrument, int position)
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
-    switch(arch) {
-    case OSC:
-        m_oscManager->updateProgram(instrument, position);
-        break;
-    case LV2:
-#ifdef HAVE_LILV
-        m_lv2Manager->updateProgram(instrument, position);
-#endif
-        break;
-    case UNKNOWN:
-        break;
-    }
+    // only osc
+    if (arch != OSC) return;
+    m_oscManager->updateProgram(instrument, position);
 }
 
 void AudioPluginGUIManager::updatePort(InstrumentId instrument, int position,
@@ -201,18 +191,9 @@ void AudioPluginGUIManager::updateConfiguration(InstrumentId instrument,
                                                 int position, QString key)
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
-    switch(arch) {
-    case OSC:
-        m_oscManager->updateConfiguration(instrument, position, key);
-        break;
-    case LV2:
-#ifdef HAVE_LILV
-        m_lv2Manager->updateConfiguration(instrument, position, key);
-#endif
-        break;
-    case UNKNOWN:
-        break;
-    }
+    // only osc
+    if (arch != OSC) return;
+    m_oscManager->updateConfiguration(instrument, position, key);
 }
 
 AudioPluginGUIManager::PluginGUIArchitecture

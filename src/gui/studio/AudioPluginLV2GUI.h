@@ -19,6 +19,7 @@
 #define RG_AUDIOPLUGINLV2GUI_H
 
 #include "base/Instrument.h"
+#include "sound/LV2Utils.h"
 
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
@@ -68,10 +69,7 @@ public:
     void updatePortValue(int port, const LV2_Atom* atom);
 
     /// Calls updatePortValue() for any that have changed.
-    /**
-     * ??? rename: updateControlOutValues()?
-     */
-    void checkControlOutValues();
+    void updateControlOutValues();
 
     const LV2PluginInstance* getPluginInstance() const;
 
@@ -99,13 +97,10 @@ private:
     LV2_URID m_atomTransferUrid;
 
     /// Cache for detecting changes in checkControlOutValues().
-    // ??? portIndex, value?  See proposed PortValues typedef for this in
-    //     LV2PluginInstance.h.
-    std::map<int, float> m_controlOutValues;
+    LV2Utils::PortValues m_controlOutValues;
 
     bool m_firstUpdate;
 
-    // ??? Set but never used.
     QString m_title;
 
     const LilvUI* m_selectedUI;

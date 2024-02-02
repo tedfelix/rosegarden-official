@@ -49,15 +49,7 @@ AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWin
 AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
 {
     // Delete all the AudioPluginLV2GUI instances.
-    // ??? stopAllGUIs() does the same thing.  Call it?
-    for (GUIMap::const_iterator i = m_guis.begin(); i != m_guis.end(); ++i) {
-        for (IntGUIMap::const_iterator j = i->second.begin(); j != i->second.end();
-             ++j) {
-            delete j->second;
-        }
-    }
-    m_guis.clear();
-
+    stopAllGUIs();
     LV2Utils* lv2utils = LV2Utils::getInstance();
     lv2utils->unRegisterWorker();
     delete m_worker;
@@ -175,12 +167,6 @@ AudioPluginLV2GUIManager::stopAllGUIs()
 }
 
 void
-AudioPluginLV2GUIManager::updateProgram(InstrumentId instrument, int position)
-{
-    RG_DEBUG << "updateProgram(" << instrument << "," << position << ")";
-}
-
-void
 AudioPluginLV2GUIManager::updatePort(InstrumentId instrument, int position,
                                      int port)
 {
@@ -205,13 +191,6 @@ AudioPluginLV2GUIManager::updatePort(InstrumentId instrument, int position,
     RG_DEBUG << "updatePort(" << instrument << "," << position << "," << port << "): value " << porti->value;
 
     m_guis[instrument][position]->updatePortValue(port, porti->value);
-}
-
-void
-AudioPluginLV2GUIManager::updateConfiguration(InstrumentId instrument, int position,
-        const QString& key)
-{
-    RG_DEBUG << "updateConfiguration(" << instrument << "," << position << "," << key << ")";
 }
 
 AudioPluginLV2GUI*

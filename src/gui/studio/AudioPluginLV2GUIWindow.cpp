@@ -101,8 +101,7 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout,
             this, &AudioPluginLV2GUIWindow::slotTimeUp);
-    // ??? Does this need to be 50msecs?  That's a lot of CPU.
-    m_timer->start(50);
+    m_timer->start(100);
 
     const char *ui_bundle_uri =
         lilv_node_as_uri(lilv_ui_get_bundle_uri(ui));
@@ -197,36 +196,20 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
 
     RG_DEBUG << "handle:" << m_handle << "widget:" << m_widget;
 
-    // ??? switch/case is overkill.  Just do an "if AudioPluginLV2GUI::GTK".
-    switch(m_uiType) {
-    case AudioPluginLV2GUI::NONE:
-        // should not be
-        RG_DEBUG << "uiType NONE";
-        break;
-    case AudioPluginLV2GUI::X11:
-        // nothing to do
-        break;
-    case AudioPluginLV2GUI::GTK:
-        // gtk - embed the widget
-        {
-            LV2Gtk* lv2gtk = lv2utils->getLV2Gtk();
-            m_gwidget = lv2gtk->getWidget(m_widget, this);
-            int width;
-            int height;
-            lv2gtk->getSize(m_gwidget, width, height);
-            resize(width, height);
+    if (m_uiType == AudioPluginLV2GUI::GTK) {
+        LV2Gtk* lv2gtk = LV2Gtk::getInstance();
+        m_gwidget = lv2gtk->getWidget(m_widget, this);
+        int width;
+        int height;
+        lv2gtk->getSize(m_gwidget, width, height);
+        resize(width, height);
 
-            const WId wid = (WId)(lv2gtk->getWinId(m_gwidget));
-            m_parentWindow = QWindow::fromWinId(wid);
-            m_parentWindow->setFlags(Qt::FramelessWindowHint);
-            m_containerWidget = QWidget::createWindowContainer(m_parentWindow);
-            m_containerWidget->setMinimumSize(QSize(width, height));
-            m_containerWidget->setParent(this);
-        }
-        break;
-    case AudioPluginLV2GUI::KX:
-        // nothing to do
-        break;
+        const WId wid = (WId)(lv2gtk->getWinId(m_gwidget));
+        m_parentWindow = QWindow::fromWinId(wid);
+        m_parentWindow->setFlags(Qt::FramelessWindowHint);
+        m_containerWidget = QWidget::createWindowContainer(m_parentWindow);
+        m_containerWidget->setMinimumSize(QSize(width, height));
+        m_containerWidget->setParent(this);
     }
 }
 
@@ -297,7 +280,7 @@ void AudioPluginLV2GUIWindow::slotTimeUp()
     if (m_lv2II) m_lv2II->idle(m_handle);
 
     // Update control outs.
-    m_lv2Gui->checkControlOutValues();
+    m_lv2Gui->updateControlOutValues();
 
     // For kx, call run().
     if (m_uiType == AudioPluginLV2GUI::KX) {
@@ -317,8 +300,7 @@ void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
     // tell the ui to tidy up
     if (m_parentWindow) m_parentWindow->setParent(nullptr);
 
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    LV2Gtk* lv2gtk = lv2utils->getLV2Gtk();
+    LV2Gtk* lv2gtk = LV2Gtk::getInstance();
     lv2gtk->deleteWidget(m_gwidget);
 
     // this will cause this object to be deleted

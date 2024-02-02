@@ -40,6 +40,13 @@ class Studio;
  *     implementing a switch on type for a number of functions.  I'm
  *     not usually a fan of polymorphism, but it probably makes sense in this
  *     case.
+ *
+ *     I think we would still need this class as a single instance that will
+ *     pass on to either DSSI or LV2. If AudioPluginOSCGUIManager and
+ *     AudioPluginLV2GUIManager derive from a bas class
+ *     (AudioPluginGUIManagerBase ?) this class could hold a map <gui type,
+ *     AudioPluginGUIManagerBase> but it is still basically a class for
+ *     distributing to the correct architecture.
  */
 // cppcheck-suppress noCopyConstructor
 class AudioPluginGUIManager
@@ -75,9 +82,6 @@ private:
     enum PluginGUIArchitecture {UNKNOWN, OSC, LV2};
     PluginGUIArchitecture getArchitecture
         (InstrumentId instrument, int position) const;
-
-    // ??? This is never used.
-    RosegardenMainWindow *m_mainWindow;
 
     Studio *m_studio;
 

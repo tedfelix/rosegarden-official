@@ -32,11 +32,8 @@
 namespace Rosegarden
 {
 
-
 class LV2PluginInstance;
 class AudioPluginLV2GUI;
-class LV2Gtk;
-
 
 /// LV2 utils
 /**
@@ -52,10 +49,10 @@ class LV2Utils
     LV2Utils(LV2Utils &other) = delete;
     void operator=(const LV2Utils &) = delete;
 
-
     // URI/URID mapping.
 
     // ??? Split this out into its own LV2URIMapper class.
+    // I prefer to keep all the lv2 utitlity functions here
 
     /// Gets the URID for a URI.
     /**
@@ -98,13 +95,10 @@ class LV2Utils
 
     // interface for a worker class
     // ??? Only used by LV2Worker.  Move there.
+    // it is used below for the worker interface class. I think it should stay
     typedef LV2_Worker_Status (*ScheduleWork)(LV2_Worker_Schedule_Handle handle,
                                               uint32_t size,
                                               const void* data);
-
-    //typedef LV2_Worker_Status (*RespondWork)(LV2_Worker_Respond_Handle handle,
-    //                                         uint32_t size,
-    //                                         const void *data);
 
     struct WorkerJob
     {
@@ -135,6 +129,8 @@ class LV2Utils
 
     // ??? These functions feel more like an LV2PluginManager class.
     //     Consider breaking them out into a new class or namespace.
+    // yes these are for the factory class - I would like to keep all the
+    // lv2 utility things here
 
     enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
     enum LV2PortProtocol {LV2FLOAT, LV2ATOM};
@@ -193,6 +189,11 @@ class LV2Utils
     /// Lock m_mutex.
     /**
      * ??? This is used to lock m_workerResponses, and what else?
+     *
+     * This is the central mutex lock for all the lv2 thread communication
+     * Used in run() in LV2PluginInstance - see also the LOCKED macro.
+     * I find it difficult to know when to use the mutex and when not - so
+     * there may be some mistakes here
      */
     void lock();
     /// Unlock m_mutex.
@@ -242,10 +243,6 @@ class LV2Utils
 
     LV2PluginInstance* getPluginInstance(InstrumentId instrument,
                                          int position) const;
-
-    /// Singleton.
-    // ??? Move to LV2Gtk::getInstance().
-    LV2Gtk *getLV2Gtk() const;
 
     void getConnections
         (InstrumentId instrument,
@@ -314,9 +311,6 @@ class LV2Utils
      * Would a Singleton be simpler?
      */
     Worker *m_worker;
-
-    // ??? Move to LV2Gtk.
-    LV2Gtk *m_lv2gtk;
 };
 
 

@@ -32,9 +32,16 @@ namespace Rosegarden
 class LV2Gtk
 {
 public:
+    static LV2Gtk *getInstance();
+
+    LV2Gtk(LV2Gtk &other) = delete;
+    void operator=(const LV2Gtk &) = delete;
+
+ private:
     LV2Gtk();
     ~LV2Gtk();
 
+ public:
     class SizeCallback
     {
     public:
@@ -48,10 +55,8 @@ public:
         LV2GtkWidget() {window = nullptr;}
     };
 
-    // ??? This doesn't appear to be called by anyone.
-    // should it be called ?
-    // cppcheck-suppress functionStatic
 #if 0
+    // cppcheck-suppress functionStatic
     void tick() const;
 #endif
 

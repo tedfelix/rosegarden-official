@@ -28,7 +28,6 @@
 #include "base/AudioPluginInstance.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
-#include "sound/LV2Utils.h"
 
 // the kx.studio extension
 #include "gui/studio/lv2_external_ui.h"
@@ -255,7 +254,7 @@ void AudioPluginLV2GUI::updatePortValue(int port, const LV2_Atom* atom)
         m_uidesc->port_event(handle, port, size, m_atomTransferUrid, atom);
 }
 
-void AudioPluginLV2GUI::checkControlOutValues()
+void AudioPluginLV2GUI::updateControlOutValues()
 {
     LV2Utils* lv2utils = LV2Utils::getInstance();
     LV2Utils::PortValues newControlOutValues;

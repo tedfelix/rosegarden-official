@@ -21,7 +21,6 @@
 #include "base/AudioPluginInstance.h"  // For PluginPort
 #include "sound/LV2PluginInstance.h"
 #include "gui/studio/AudioPluginLV2GUI.h"
-#include "gui/studio/LV2Gtk.h"
 
 #include <lv2/midi/midi.h>
 //#include <lv2/ui/ui.h>
@@ -94,7 +93,6 @@ LV2Utils::LV2Utils():
 {
     LOCKED;
 
-    m_lv2gtk = new LV2Gtk;
     m_worker = nullptr;
 
     m_nextId = 1;
@@ -110,7 +108,6 @@ LV2Utils::~LV2Utils()
 {
     LOCKED;
     lilv_world_free(m_world);
-    delete m_lv2gtk;
 }
 
 void LV2Utils::initPluginData()
@@ -632,11 +629,6 @@ LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
         return nullptr;
     }
     return pgdata.pluginInstance;
-}
-
-LV2Gtk* LV2Utils::getLV2Gtk() const
-{
-  return m_lv2gtk;
 }
 
 void LV2Utils::getConnections(InstrumentId instrument,
