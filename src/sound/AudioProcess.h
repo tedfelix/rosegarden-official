@@ -284,6 +284,8 @@ public:
 
     sample_t* getAudioBuffer(InstrumentId id, unsigned int channel) const;
 
+    unsigned int getNumSoftSynths() const {return m_numSoftSynths;};
+
 protected:
     void threadRun() override;
 
@@ -334,6 +336,8 @@ protected:
 
     typedef std::map<InstrumentId, BufferRec> BufferMap;
     BufferMap m_bufferMap;
+ private:
+    unsigned int m_numSoftSynths;
 };
 
 

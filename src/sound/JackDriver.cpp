@@ -821,13 +821,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     int synthInstruments;
     m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase,
                                                 synthInstruments);
-    int synthCount = 0;
-    for (int i = 0; i < synthInstruments; ++i) {
-        InstrumentId id;
-        id = synthInstrumentBase + i;
-        if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
-        synthCount++;
-    }
+    int synthCount = m_instrumentMixer->getNumSoftSynths();
     //RG_DEBUG << "process got" << synthCount << "synths";
 
     // synchronize MIDI and audio by adjusting MIDI playback rate

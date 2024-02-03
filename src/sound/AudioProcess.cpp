@@ -861,7 +861,8 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
         AudioThread("AudioInstrumentMixer", driver, sampleRate),
         m_fileReader(fileReader),
         m_bussMixer(nullptr),
-        m_blockSize(blockSize)
+        m_blockSize(blockSize),
+        m_numSoftSynths(0)
 {
     // Pregenerate empty plugin slots
 
@@ -962,6 +963,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
         oldInstance = m_synths[id];
         m_synths[id] = instance;
+        if (! oldInstance) m_numSoftSynths++;
 
     } else {
 
@@ -999,6 +1001,7 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
         if (m_synths[id]) {
             oldInstance = m_synths[id];
             m_synths[id] = nullptr;
+            m_numSoftSynths--;
         }
 
     } else {
@@ -1030,6 +1033,7 @@ AudioInstrumentMixer::removeAllPlugins()
             m_driver->claimUnwantedPlugin(instance);
         }
     }
+    m_numSoftSynths = 0;
 
     for (PluginMap::iterator j = m_plugins.begin();
             j != m_plugins.end(); ++j) {
@@ -1314,6 +1318,7 @@ AudioInstrumentMixer::destroyAllPlugins()
         j->second = nullptr;
         delete instance;
     }
+    m_numSoftSynths = 0;
 
     for (PluginMap::iterator j = m_plugins.begin();
             j != m_plugins.end(); ++j) {
