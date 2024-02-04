@@ -397,7 +397,7 @@ void LV2PluginInstance::audioProcessingDone()
 
     bool isSoftSynth = (m_instrument >= SoftSynthInstrumentBase);
 
-    RG_DEBUG << "audioProcessingDone" << isSoftSynth << m_pluginHasRun;
+    //RG_DEBUG << "audioProcessingDone" << isSoftSynth << m_pluginHasRun;
     if (! m_pluginHasRun && ! isSoftSynth) {
         run(RealTime::fromSeconds(-100.0));
     }
@@ -872,7 +872,8 @@ LV2PluginInstance::run(const RealTime &rt)
         size_t frameOffset =
             (size_t)RealTime::realTime2Frame(evTime - bufferStart,
                                              m_sampleRate);
-        if (frameOffset > m_blockSize) {
+        if (frameOffset >= m_blockSize) {
+            //RG_DEBUG << "event not in frame" << frameOffset;
             it++;
             continue;
         }
