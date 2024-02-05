@@ -13,19 +13,26 @@
     COPYING included with this distribution for more information.
 */
 
-#include "DSSIPluginFactory.h"
-#include <cstdlib>
-#include "misc/Strings.h"
+#define RG_MODULE_STRING "[DSSIPluginFactory]"
+#define RG_NO_DEBUG_PRINT 1
 
-#include <dlfcn.h>
+#include "DSSIPluginFactory.h"
+
+#include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "DSSIPluginInstance.h"
 #include "MappedStudio.h"
 #include "PluginIdentifier.h"
+#include "misc/Debug.h"
+
+#include <cstdlib>
+#include <dlfcn.h>
 #include <lrdf.h>
+
 
 namespace Rosegarden
 {
+
 
 DSSIPluginFactory::DSSIPluginFactory() :
         LADSPAPluginFactory()
@@ -64,6 +71,12 @@ DSSIPluginFactory::enumeratePlugins(std::vector<QString> &list)
         list.push_back(ddesc->run_multiple_synths ? "true" : "false");
         list.push_back(m_taxonomy[descriptor->UniqueID]);
         list.push_back(QString("%1").arg(descriptor->PortCount));
+
+        RG_DEBUG << "enumeratePlugins()";
+        RG_DEBUG << "  identifier: " << *i;
+        RG_DEBUG << "  name: " << descriptor->Name;
+        RG_DEBUG << "  label: " << descriptor->Label;
+        RG_DEBUG << "  taxonomy: " << m_taxonomy[descriptor->UniqueID];
 
         for (unsigned long p = 0; p < descriptor->PortCount; ++p) {
 

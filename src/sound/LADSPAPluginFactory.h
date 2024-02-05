@@ -76,6 +76,7 @@ protected:
     void unloadLibrary(QString soName);
     void unloadUnusedLibraries();
 
+    // E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     std::vector<QString> m_identifiers;
 
     std::map<unsigned long, QString> m_taxonomy;
