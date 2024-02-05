@@ -448,17 +448,26 @@ Instrument::toXmlString() const
     }
 
     instrument << "        <instrument id=\"" << m_id;
-    // the channel attribute is the midi channel for midi instruments
-    // and the number of audio channels for audio instruments. For
-    // SoftSynth the attribute is not used. See also RoseXmlHandler
-    if (m_type == Audio) {
-        instrument << "\" channel=\"" << (int)m_numAudioChannels;
-    } else {
-        instrument << "\" channel=\"" << (int)m_midiChannel;
-    }
-    instrument << "\" fixed=\""   << (m_fixed ? "true" : "false");
-    instrument << "\" type=\"";
 
+    // channel
+    instrument << "\" channel=\"";
+    // The channel attribute is the midi channel for midi instruments.
+    // See also RoseXmlHandler
+    if (m_type == Midi) {
+        instrument << static_cast<int>(m_midiChannel);
+    } else {  // audio and softsynth
+        // Historically, this is the number of channels for audio
+        // and softsynth.  Keep this for compatibility with 23.12 and prior.
+        // ??? If we need the MIDI channel for softsynths, then we need a
+        //     new attribute, "midichannel".
+        instrument << static_cast<int>(m_numAudioChannels);
+    }
+
+    // fixed
+    instrument << "\" fixed=\""   << (m_fixed ? "true" : "false");
+
+    // type
+    instrument << "\" type=\"";
     if (m_type == Midi)
     {
         instrument << "midi\">" << std::endl;
