@@ -50,7 +50,6 @@ Instrument::Instrument(InstrumentId id,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
-    m_fixed(false),
     m_level(0.0),
     m_recordLevel(0.0),
     m_device(device),
@@ -94,7 +93,6 @@ Instrument::Instrument(const Instrument &ins):
     m_alias(ins.getAlias()),
     m_type(ins.getType()),
     m_midiChannel(ins.getNaturalMidiChannel()),
-    //m_input_channel(ins.getMidiInputChannel()),
     m_program(ins.getProgram()),
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
@@ -110,6 +108,11 @@ Instrument::Instrument(const Instrument &ins):
     m_audioInputChannel(ins.m_audioInputChannel),
     m_audioOutput(ins.m_audioOutput)
 {
+    // ??? Remove this unnecessary copy ctor.  Confirm bitwise is ok (it
+    //     appears to be) and use the compiler-provided bitwise copy ctor
+    //     instead.
+
+    // ??? Just copy m_numAudioChannels.  It should already be set properly.
     if (m_type == Audio) {
         m_numAudioChannels = 2; // default stereo
     }
@@ -131,43 +134,6 @@ Instrument::Instrument(const Instrument &ins):
         m_staticControllers.push_back(*cIt);
     }
 }
-
-#if 0
-// ??? Never used.  See comments in header for more.
-Instrument &
-Instrument::operator=(const Instrument &ins)
-{
-    if (&ins == this) return *this;
-
-    m_id = ins.getId();
-    m_name = ins.getName();
-    m_alias = ins.getAlias();
-    m_type = ins.getType();
-    m_channel = ins.getNaturalChannel();
-    //m_input_channel = ins.getMidiInputChannel();
-    m_program = ins.getProgram();
-    m_transpose = ins.getMidiTranspose();
-    m_pan = ins.getPan();
-    m_volume = ins.getVolume();
-    m_fixed  = false;  // ??? This is not an assignment operator.  It's a partialCopy().
-    m_level = ins.getLevel();
-    m_recordLevel = ins.getRecordLevel();
-    m_device = ins.getDevice();
-    m_sendBankSelect = ins.sendsBankSelect();
-    m_sendProgramChange = ins.sendsProgramChange();
-    m_mappedId = ins.getMappedId();
-    m_audioInput = ins.m_audioInput;
-    m_audioInputChannel = ins.m_audioInputChannel;
-    m_audioOutput = ins.m_audioOutput;
-
-    StaticControllers::const_iterator cIt = ins.m_staticControllers.begin();
-    for (; cIt != ins.m_staticControllers.end(); ++cIt) {
-        m_staticControllers.push_back(*cIt);
-    }
-
-    return *this;
-}
-#endif
 
 Instrument::~Instrument()
 {

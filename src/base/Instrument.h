@@ -296,13 +296,9 @@ public:
 
 private:
     // ??? Hiding because, fortunately, this is never used.
-    //     As it was implemented, it is not an assignment operator.  It
-    //     does not copy the m_fixed field.  As such, it should be given
-    //     a name other than "=" to differentiate its effect from that
-    //     of a proper operator=.  E.g. partialCopy().  It should then
-    //     be implemented using the default operator=() which should be
-    //     made private.  However, that can't be done until C++11.
-    Instrument &operator=(const Instrument &);
+    //     First, get rid of the copy ctor and go with the compiler-provided
+    //     one.  Then go with the compiler-provided op=() and get rid of this.
+    Instrument &operator=(const Instrument &) = delete;
 
     InstrumentId    m_id;
     std::string     m_name;
@@ -317,7 +313,8 @@ private:
     MidiByte        m_volume;
 
     // Whether this instrument uses a fixed channel.
-    bool            m_fixed;
+    // "fixed==false" mode is experimental and usually disabled.
+    bool m_fixed{true};
 
     // Used for Audio volume (dB value)
     //
