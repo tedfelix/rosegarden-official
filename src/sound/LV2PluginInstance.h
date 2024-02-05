@@ -207,6 +207,7 @@ private:
     bool m_pluginHasRun;
     AudioInstrumentMixer* m_amixer;
     PluginPort::ConnectionList m_connections;
+    std::string m_profilerName;
 };
 
 

@@ -15,8 +15,11 @@
 #define RG_MODULE_STRING "[LV2PluginInstance]"
 #define RG_NO_DEBUG_PRINT 1
 
+//#define LV2RUN_PROFILE 1
+
 #include "LV2PluginInstance.h"
 
+#include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "sound/LV2Utils.h"
 #include "sound/Midi.h"
@@ -90,7 +93,8 @@ LV2PluginInstance::LV2PluginInstance
         m_bypassed(false),
         m_distributeChannels(false),
         m_pluginHasRun(false),
-        m_amixer(amixer)
+        m_amixer(amixer),
+        m_profilerName("LV2: " + m_uri.toStdString())
 {
     RG_DEBUG << "create plugin" << uri << m_instrument << m_position;
 
@@ -466,6 +470,9 @@ LV2PluginInstance::~LV2PluginInstance()
     m_atomOutputPorts.clear();
 
     snd_midi_event_free(m_midiParser);
+#ifdef LV2RUN_PROFILE
+    Profiles::getInstance()->dump();
+#endif
 }
 
 void
@@ -838,6 +845,9 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
 void
 LV2PluginInstance::run(const RealTime &rt)
 {
+#ifdef LV2RUN_PROFILE
+    Profiler profiler(m_profilerName.c_str(), true);
+#endif
     //RG_DEBUG << "run" << rt;
     m_pluginHasRun = true;
     LV2Utils* lv2utils = LV2Utils::getInstance();
