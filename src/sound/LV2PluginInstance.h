@@ -208,6 +208,7 @@ private:
     AudioInstrumentMixer* m_amixer;
     PluginPort::ConnectionList m_connections;
     std::string m_profilerName;
+    bool m_eventsDiscarded;
 };
 
 

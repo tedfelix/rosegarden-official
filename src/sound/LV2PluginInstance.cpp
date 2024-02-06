@@ -94,7 +94,8 @@ LV2PluginInstance::LV2PluginInstance
         m_distributeChannels(false),
         m_pluginHasRun(false),
         m_amixer(amixer),
-        m_profilerName("LV2: " + m_uri.toStdString())
+        m_profilerName("LV2: " + m_uri.toStdString()),
+        m_eventsDiscarded(false)
 {
     RG_DEBUG << "create plugin" << uri << m_instrument << m_position;
 
@@ -291,6 +292,8 @@ void
 LV2PluginInstance::discardEvents()
 {
     RG_DEBUG << "discardEvents";
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->lock();
     m_eventBuffer.clear();
     // it is not always enough just to clear the buffer. If notes are
     // playing they should be stopped with all notes off
@@ -304,6 +307,8 @@ LV2PluginInstance::discardEvents()
     rawMidi.append(data1);
     rawMidi.append(data2);
     sendMidiData(rawMidi, 0);
+    m_eventsDiscarded = true;
+    lv2utils->unlock();
 }
 
 void
@@ -848,7 +853,7 @@ LV2PluginInstance::run(const RealTime &rt)
 #ifdef LV2RUN_PROFILE
     Profiler profiler(m_profilerName.c_str(), true);
 #endif
-    //RG_DEBUG << "run" << rt;
+    //RG_DEBUG << "run" << rt << m_eventsDiscarded;
     m_pluginHasRun = true;
     LV2Utils* lv2utils = LV2Utils::getInstance();
 
@@ -893,6 +898,12 @@ LV2PluginInstance::run(const RealTime &rt)
         ++it;
         m_eventBuffer.erase(iterToDelete);
 
+        // if we have just been reset with discardEvents make sure we
+        // send this data after the "stop all notes"
+        if (m_eventsDiscarded && frameOffset == 0) {
+            RG_DEBUG << "adjusting frameOffset to be after all notes off";
+            frameOffset = 1;
+        }
         sendMidiData(rawMidi, frameOffset);
     }
 
@@ -982,7 +993,9 @@ LV2PluginInstance::run(const RealTime &rt)
     }
 
     m_run = true;
+    m_eventsDiscarded = false;
     lv2utils->unlock();
+    //RG_DEBUG << "run done";
 }
 
 void
