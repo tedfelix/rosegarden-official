@@ -292,6 +292,17 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
+    layout->addWidget(new QLabel(tr("LV2 Plugin Support (experimental)"),
+                                 frame), row, 0);
+    m_lv2 = new QCheckBox(frame);
+    m_lv2->setChecked(Preferences::getLV2());
+    connect(m_lv2, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_lv2, row, 1, 1, 2);
+
+    ++row;
+
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     // Skip a row.  Leave some space for the next field.
@@ -591,6 +602,7 @@ void GeneralConfigurationPage::apply()
     Preferences::setJumpToLoop(m_jumpToLoop->isChecked());
     Preferences::setAdvancedLooping(m_advancedLooping->isChecked());
     Preferences::setAutoChannels(m_autoChannels->isChecked());
+    Preferences::setLV2(m_lv2->isChecked());
 
     // Presentation tab
 

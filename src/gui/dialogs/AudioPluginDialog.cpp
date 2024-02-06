@@ -34,6 +34,7 @@
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
 #include "gui/dialogs/AudioPluginConnectionDialog.h"
+#include "misc/Preferences.h"
 
 #include <QLayout>
 #include <QCloseEvent>
@@ -135,7 +136,8 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_pluginArchList->addItem(tr("all"));
     m_pluginArchList->addItem(tr("ladspa"));
     m_pluginArchList->addItem(tr("dssi"));
-    m_pluginArchList->addItem(tr("lv2"));
+    if (Preferences::getLV2())
+        m_pluginArchList->addItem(tr("lv2"));
 
     m_pluginCategoryList = new QComboBox(m_pluginCategoryBox);
     pluginCategoryBoxLayout->addWidget(m_pluginCategoryList);
@@ -377,6 +379,7 @@ AudioPluginDialog::populatePluginList()
     m_pluginsInList.push_back(0);
 
     QString archFilter;
+    // ??? Isn't there a way to get the string?
     int aindex = m_pluginArchList->currentIndex();
     if (aindex == 1) archFilter = "ladspa";
     if (aindex == 2) archFilter = "dssi";

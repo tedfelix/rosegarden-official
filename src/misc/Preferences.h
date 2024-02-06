@@ -89,10 +89,14 @@ namespace Preferences
 
     bool getBug1623();
 
+    // Enable/disable LV2 plugin discovery.
+    void setLV2(bool value);
+    bool getLV2();
+
     void setAutoChannels(bool value);
     bool getAutoChannels();
 
-    void setIncludeAlsaPortNumbersWhenMatching( bool value );
+    void setIncludeAlsaPortNumbersWhenMatching(bool value);
     bool getIncludeAlsaPortNumbersWhenMatching();
 }
 

@@ -110,6 +110,7 @@ private:
     QCheckBox *m_jumpToLoop;
     QCheckBox *m_advancedLooping;
     QCheckBox *m_autoChannels;
+    QCheckBox *m_lv2;
 
     // Presentation tab
     QComboBox *m_theme;

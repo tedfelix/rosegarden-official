@@ -19,6 +19,7 @@
 #include "PluginIdentifier.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 
 #include "LADSPAPluginFactory.h"
 #include "DSSIPluginFactory.h"
@@ -104,9 +105,12 @@ PluginFactory::enumerateAllPlugins(std::vector<QString> &list)
         factory->enumeratePlugins(list);
 
 #ifdef HAVE_LILV
-    factory = instance("lv2");
-    if (factory)
-        factory->enumeratePlugins(list);
+    if (Preferences::getLV2())
+    {
+        factory = instance("lv2");
+        if (factory)
+            factory->enumeratePlugins(list);
+    }
 #endif
 
     setlocale(LC_ALL, loc.c_str());

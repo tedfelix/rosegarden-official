@@ -181,6 +181,18 @@ bool Preferences::getBug1623()
     return bug1623.get();
 }
 
+PreferenceBool lv2(ExperimentalConfigGroup, "lv2", false);
+
+void Preferences::setLV2(bool value)
+{
+    lv2.set(value);
+}
+
+bool Preferences::getLV2()
+{
+    return lv2.get();
+}
+
 PreferenceBool autoChannels(ExperimentalConfigGroup, "autoChannels", false);
 
 void Preferences::setAutoChannels(bool value)
