@@ -106,33 +106,17 @@ Instrument::Instrument(const Instrument &ins):
     m_mappedId(ins.getMappedId()),
     m_audioInput(ins.m_audioInput),
     m_audioInputChannel(ins.m_audioInputChannel),
-    m_audioOutput(ins.m_audioOutput)
+    m_numAudioChannels(ins.m_numAudioChannels),
+    m_audioOutput(ins.m_audioOutput),
+    m_staticControllers(ins.m_staticControllers)
 {
     // ??? Remove this unnecessary copy ctor.  Confirm bitwise is ok (it
     //     appears to be) and use the compiler-provided bitwise copy ctor
     //     instead.
 
-    // ??? Just copy m_numAudioChannels.  It should already be set properly.
-    if (m_type == Audio) {
-        m_numAudioChannels = 2; // default stereo
-    }
-    if (m_type == Midi) {
-        m_numAudioChannels = 0; // unused
-    }
-    if (m_type == SoftSynth) {
-        m_numAudioChannels = 2; // default stereo
-    }
-
-    if (ins.getType() == SoftSynth) {
-        addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
-    }
-
-    // ??? How is this different from std::vector's copy ctor?
-    //     Remove this and do the copy above.
-    StaticControllers::const_iterator cIt = ins.m_staticControllers.begin();
-    for (; cIt != ins.m_staticControllers.end(); ++cIt) {
-        m_staticControllers.push_back(*cIt);
-    }
+    // I have simplified here. It seems that classes derived from
+    // QObject can not use the default copy constructor so we need to
+    // define it here. If you agree please delete these comments
 }
 
 Instrument::~Instrument()

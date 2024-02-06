@@ -82,6 +82,11 @@ LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
         //     code assumes this is the URI?  The URI is in the "ID" field
         //     below.  That field should be used for the URI, not this one.
         //list.push_back(uri + ":" + pluginData.label);
+
+        // I got the "Plugins not found" error using lorenzo's rg file
+        // - I noticed that the plugin name was not being shown. I
+        // have modified RosegardenDocument to fix that. When do you
+        // get a crash ? - is it reproducible ?
         list.push_back(uri);
 
         // Name

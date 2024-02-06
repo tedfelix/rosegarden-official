@@ -1751,6 +1751,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                     QString type, soName, label, arch;
                     PluginIdentifier::parseIdentifier
                         (ident, type, soName, label, arch);
+                    if (label == "") label = ident;
                     QString pluginFileName = QFileInfo(soName).fileName();
                     msg += tr("<li>%1 (from %2)</li>").arg(label).arg(pluginFileName);
                 }
