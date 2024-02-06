@@ -300,10 +300,15 @@ protected:
     AudioBussMixer   *m_bussMixer;
     size_t            m_blockSize;
 
+    RunnablePluginInstance *getPluginInstance(InstrumentId, int);
     // The plugin data structures will all be pre-sized and so of
     // fixed size during normal run time; this will allow us to add
     // and edit plugins without locking.
-    RunnablePluginInstance *getPluginInstance(InstrumentId, int);
+    // ??? I've seen a sigsegv (probably a race condition) due to garbage
+    //     pointer values in this data structure at startup.  I'm guessing we
+    //     need to use std::atomic<RunnablePluginInstance *> for the data
+    //     stored in these two to be safe.  But there may be more that is
+    //     wrong.
     PluginMap m_plugins;
     SynthPluginMap m_synths;
 
