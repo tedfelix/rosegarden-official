@@ -36,7 +36,7 @@ public:
 
     void discoverPlugins() override;
 
-    const std::vector<QString> &getPluginIdentifiers() const override;
+    //const std::vector<QString> &getPluginIdentifiers() const override;
 
     void enumeratePlugins(std::vector<QString> &list) override;
 

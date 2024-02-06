@@ -47,7 +47,7 @@ public:
      * Return a reference to a list of all plugin identifiers that can
      * be created by this factory.
      */
-    virtual const std::vector<QString> &getPluginIdentifiers() const = 0;
+    //virtual const std::vector<QString> &getPluginIdentifiers() const = 0;
 
     /**
      * Append to the given list descriptions of all the available

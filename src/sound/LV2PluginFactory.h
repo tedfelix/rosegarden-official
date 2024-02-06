@@ -42,7 +42,7 @@ public:
 
     void discoverPlugins() override;
 
-    const std::vector<QString> &getPluginIdentifiers() const override;
+    //const std::vector<QString> &getPluginIdentifiers() const override;
 
     void enumeratePlugins(std::vector<QString> &list) override;
 
@@ -71,7 +71,7 @@ private:
 
     std::set<RunnablePluginInstance *> m_instances;
 
-    std::vector<QString> m_identifiers;
+    //std::vector<QString> m_identifiers;
     // Plugin Class Map
     std::map<QString /*uri*/, QString /*class*/> m_taxonomy;
 

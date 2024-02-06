@@ -54,12 +54,14 @@ LADSPAPluginFactory::~LADSPAPluginFactory()
     unloadUnusedLibraries();
 }
 
+#if 0
 const std::vector<QString> &
 // cppcheck-suppress unusedFunction
 LADSPAPluginFactory::getPluginIdentifiers() const
 {
     return m_identifiers;
 }
+#endif
 
 void
 LADSPAPluginFactory::enumeratePlugins(std::vector<QString> &list)

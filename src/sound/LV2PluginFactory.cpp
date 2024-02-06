@@ -47,11 +47,13 @@ LV2PluginFactory::~LV2PluginFactory()
     m_instances.clear();
 }
 
+#if 0
 const std::vector<QString> &
 LV2PluginFactory::getPluginIdentifiers() const
 {
     return m_identifiers;
 }
+#endif
 
 void
 LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
@@ -62,23 +64,41 @@ LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
     // For each plugin...
     for (const auto &pair : allPluginData) {
 
-        // This is in a standard format, see the LADSPA implementation
-        // for details.
-
-        // URI
         const QString& uri = pair.first;
+        const LV2Utils::LV2PluginData& pluginData = pair.second;
+
+        // This is in a standard format, see
+        // LADSPAPluginFactory::enumeratePlugins() for details.
+
+        // Identifier
+        // ??? 23.12 expects this to have the "label" tacked on to the end
+        //     after a colon.  E.g.:
+        //       "dssi:/usr/lib/dssi/hexter.so:hexter"
+        //     That is used to format the "plugin not found" error message.
+        //     This is not in that format which causes 23.12 to issue
+        //     cryptic messages.
+        // ??? Should use PluginIdentifier::createIdentifier().
+        // ??? This causes a crash.  I'm assuming because the rest of the
+        //     code assumes this is the URI?  The URI is in the "ID" field
+        //     below.  That field should be used for the URI, not this one.
+        //list.push_back(uri + ":" + pluginData.label);
         list.push_back(uri);
 
         // Name
-        const LV2Utils::LV2PluginData& pluginData = pair.second;
         list.push_back(pluginData.name);
 
         // ID
-        // uri is the id
+        // For LV2, the URI is the ID.
         list.push_back(uri);
 
-        // Label???
+        // Label
         list.push_back(pluginData.label);
+
+        RG_DEBUG << "enumeratePlugins():";
+        RG_DEBUG << "  identifier: " << uri + ":" + pluginData.label;
+        RG_DEBUG << "  name: " << pluginData.name;
+        RG_DEBUG << "  ID: " << uri;
+        RG_DEBUG << "  label: " << pluginData.label;
 
         // Author
         list.push_back(pluginData.author);
@@ -247,7 +267,7 @@ LV2PluginFactory::generateTaxonomy()
         const LV2Utils::LV2PluginData& pluginData = pair.second;
 
         m_taxonomy[uri] = pluginData.pluginClass;
-        m_identifiers.push_back(uri);
+        //m_identifiers.push_back(uri);
     }
 }
 
