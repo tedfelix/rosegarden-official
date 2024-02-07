@@ -272,6 +272,8 @@ void AudioPluginLV2GUI::updateControlOutValues()
     }
     m_firstUpdate = false;
 
+    // and trigger port updates
+    lv2utils->triggerPortUpdates(m_instrument, m_position);
 }
 
 const LV2PluginInstance* AudioPluginLV2GUI::getPluginInstance() const
