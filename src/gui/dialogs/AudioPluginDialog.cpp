@@ -379,7 +379,7 @@ AudioPluginDialog::populatePluginList()
     m_pluginsInList.push_back(0);
 
     QString archFilter;
-    // ??? Isn't there a way to get the string?
+    // We cannot use currentText here because it returns the translated strings
     int aindex = m_pluginArchList->currentIndex();
     if (aindex == 1) archFilter = "ladspa";
     if (aindex == 2) archFilter = "dssi";
