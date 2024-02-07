@@ -28,6 +28,7 @@
 #include <QString>
 
 #include <map>
+#include <queue>
 
 namespace Rosegarden
 {
@@ -228,8 +229,8 @@ class LV2Utils
                          int index,
                          const LV2_Atom* atom);
 
-//    int numInstances(InstrumentId instrument,
-//                     int position) const;
+    void triggerPortUpdates(InstrumentId instrument,
+                            int position);
 
     typedef std::map<int /*portIndex*/, float /*value*/> PortValues;
 
@@ -295,10 +296,20 @@ class LV2Utils
     void initPluginData();
 
     // Plugin instance data organized by instrument/position.
+    struct AtomQueueItem
+    {
+        int portIndex;
+        const LV2_Atom* atomBuffer;
+        AtomQueueItem();
+        ~AtomQueueItem();
+    };
+    typedef std::queue<AtomQueueItem*> AtomQueue;
+
     struct PluginInstanceData
     {
         LV2PluginInstance *pluginInstance{nullptr};
         AudioPluginLV2GUI *gui{nullptr};
+        AtomQueue atomQueue;
     };
     typedef std::map<PluginPosition, PluginInstanceData> PluginInstanceDataMap;
     PluginInstanceDataMap m_pluginInstanceData;

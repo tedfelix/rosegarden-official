@@ -511,36 +511,57 @@ void LV2Utils::updatePortValue(InstrumentId instrument,
         RG_DEBUG << "plugin not found" << instrument << position;
         return;
     }
-    const PluginInstanceData& pgdata = (*pit).second;
+    PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.gui == nullptr) {
         RG_DEBUG << "no gui at" << instrument << position;
+        while (! pgdata.atomQueue.empty()) {
+            AtomQueueItem* item = pgdata.atomQueue.front();
+            delete item;
+            pgdata.atomQueue.pop();
+        }
         return;
     }
 
-    pgdata.gui->updatePortValue(index, atom);
+    // We want to call the ui updatePortValue from the gui thread so
+    // queue the events
+    int asize = sizeof(LV2_Atom) + atom->size;
+    AtomQueueItem* item = new AtomQueueItem;
+    item->portIndex= index;
+    char* buf = new char[asize];
+    memcpy(buf, atom, asize);
+    item->atomBuffer = reinterpret_cast<const LV2_Atom*>(buf);
+    pgdata.atomQueue.push(item);
 }
 
-#if 0
-int LV2Utils::numInstances(InstrumentId instrument,
-                           int position) const
+void LV2Utils::triggerPortUpdates(InstrumentId instrument,
+                                  int position)
 {
-    RG_DEBUG << "numInstances" << instrument << position;
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
     auto pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
-        return 1;
+        return;
     }
-    const PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "numInstances no pluginInstance";
-        return 1;
+    PluginInstanceData& pgdata = (*pit).second;
+    if (pgdata.gui == nullptr) {
+        RG_DEBUG << "no gui at" << instrument << position;
+        while (! pgdata.atomQueue.empty()) {
+            AtomQueueItem* item = pgdata.atomQueue.front();
+            delete item;
+            pgdata.atomQueue.pop();
+        }
+        return;
     }
-    return pgdata.pluginInstance->numInstances();
+    RG_DEBUG << "triggerPortUpdates" << pgdata.atomQueue.size();
+    while (! pgdata.atomQueue.empty()) {
+        AtomQueueItem* item = pgdata.atomQueue.front();
+        pgdata.gui->updatePortValue(item->portIndex, item->atomBuffer);
+        delete item;
+        pgdata.atomQueue.pop();
+    }
 }
-#endif
 
 LV2Utils::Worker* LV2Utils::getWorker() const
 {
@@ -657,6 +678,17 @@ QString LV2Utils::getPortName(const QString& uri, int portIndex) const
     if (it == m_pluginData.end()) return "";
     const LV2PluginData& pdat = (*it).second;
     return pdat.ports[portIndex].name;
+}
+
+LV2Utils::AtomQueueItem::AtomQueueItem() :
+    portIndex(0),
+    atomBuffer(nullptr)
+{
+}
+
+LV2Utils::AtomQueueItem::~AtomQueueItem()
+{
+    if (atomBuffer) delete[] atomBuffer;
 }
 
 }

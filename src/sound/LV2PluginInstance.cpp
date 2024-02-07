@@ -182,9 +182,6 @@ LV2PluginInstance::init(int idealChannelCount)
                     LV2_Atom_Sequence* atomIn =
                         reinterpret_cast<LV2_Atom_Sequence*>(dbuf);
                     lv2_atom_sequence_clear(atomIn);
-                    LV2_URID type = lv2utils->uridMap(LV2_ATOM__Sequence);
-                    atomIn->atom.type = type;
-                    atomIn->atom.size = 8 * ABUFSIZED - 8;
                     ap.atomSeq = atomIn;
                     RG_DEBUG << "created atom sequence" << atomIn;
                     m_atomInputPorts.push_back(ap);
@@ -200,6 +197,7 @@ LV2PluginInstance::init(int idealChannelCount)
                     LV2_Atom_Sequence* atomOut =
                         reinterpret_cast<LV2_Atom_Sequence*>(dbuf);
                     lv2_atom_sequence_clear(atomOut);
+                    // to tell the plugin the capacity
                     LV2_URID type = lv2utils->uridMap(LV2_ATOM__Sequence);
                     atomOut->atom.type = type;
                     atomOut->atom.size = 8 * ABUFSIZED - 8;
@@ -970,14 +968,16 @@ LV2PluginInstance::run(const RealTime &rt)
         //RG_DEBUG << "check atom out" << ap.index;
         LV2_Atom_Sequence* aseq = ap.atomSeq;
         LV2_ATOM_SEQUENCE_FOREACH(aseq, ev) {
-           if (ev->body.type == m_midiEventUrid) {
+            if (ev->body.type == m_midiEventUrid) {
                 // midi out not used
             } else {
                 //RG_DEBUG << "updatePortValue";
-                lv2utils->updatePortValue(m_instrument,
-                                          m_position,
-                                          ap.index,
-                                          &(ev->body));
+                if (ev->body.type != 0) {
+                    lv2utils->updatePortValue(m_instrument,
+                                              m_position,
+                                              ap.index,
+                                              &(ev->body));
+                }
             }
         }
         // and clear the buffer
