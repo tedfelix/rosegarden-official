@@ -77,7 +77,9 @@ public:
                Device *device);
 
     // Copy constructor
-    //
+    // ??? This is not a copy ctor.  It is a partialCopy() routine.
+    //     Get rid of this and replace with a partialCopy() to make
+    //     this clear.  QObject instances cannot be copied.
     Instrument(const Instrument &);
 
     ~Instrument() override;
@@ -295,9 +297,7 @@ public:
     void channelBecomesUnfixed();
 
 private:
-    // ??? Hiding because, fortunately, this is never used.
-    //     First, get rid of the copy ctor and go with the compiler-provided
-    //     one.  Then go with the compiler-provided op=() and get rid of this.
+    // ??? Hiding to keep this simple.
     Instrument &operator=(const Instrument &) = delete;
 
     InstrumentId    m_id;

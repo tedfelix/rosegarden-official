@@ -110,13 +110,18 @@ Instrument::Instrument(const Instrument &ins):
     m_audioOutput(ins.m_audioOutput),
     m_staticControllers(ins.m_staticControllers)
 {
-    // ??? Remove this unnecessary copy ctor.  Confirm bitwise is ok (it
-    //     appears to be) and use the compiler-provided bitwise copy ctor
-    //     instead.
+    // Classes derived from QObject can not use the default copy constructor
+    // so we need to define it here if we want to make copies.
+    // ??? Ugh.  I'm not surprised.  QObjects can't safely copy themselves.
+    //     Of course that means a copy ctor in a QObject-derived class is
+    //     rather dubious.  This leads me to recommend that we get rid
+    //     of this copy ctor (since it can't actually be one) and implement
+    //     a "partialCopy()" routine that does the same thing.  That would
+    //     be safer and easier to understand.
 
-    // I have simplified here. It seems that classes derived from
-    // QObject can not use the default copy constructor so we need to
-    // define it here. If you agree please delete these comments
+    // ??? Another issue is the PluginContainer baseclass.  It has a non-trivial
+    //     dtor that deletes pointers.  This forces a copy ctor implementation
+    //     (rule of three/five/zero).
 }
 
 Instrument::~Instrument()
