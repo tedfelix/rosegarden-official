@@ -39,7 +39,7 @@ PluginPort::PluginPort(int number,
                        PluginPort::PortDisplayHint displayHint,
                        PortData lowerBound,
                        PortData upperBound,
-		       PortData defaultValue):
+                       PortData defaultValue):
     m_number(number),
     m_name(name),
     m_type(type),
@@ -87,16 +87,16 @@ AudioPluginInstance::toXmlString() const
     }
 
     if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
-	plugin << "            <synth ";
+        plugin << "            <synth ";
     } else {
-	plugin << "            <plugin"
-	       << " position=\""
-	       << m_position
-	       << "\" ";
+        plugin << "            <plugin"
+               << " position=\""
+               << m_position
+               << "\" ";
     }
 
     plugin << "identifier=\""
-	   << encode(m_identifier)
+           << encode(m_identifier)
            << "\" bypassed=\"";
 
     if (m_bypass)
@@ -105,7 +105,7 @@ AudioPluginInstance::toXmlString() const
         plugin << "false\" ";
 
     if (m_program != "") {
-	plugin << "program=\"" << encode(m_program) << "\"";
+        plugin << "program=\"" << encode(m_program) << "\"";
     }
 
     plugin << ">" << std::endl;
@@ -122,15 +122,15 @@ AudioPluginInstance::toXmlString() const
     }
 
     for (ConfigMap::const_iterator i = m_config.begin(); i != m_config.end(); ++i) {
-	plugin << "                <configure key=\""
-	       << encode(i->first) << "\" value=\""
-	       << encode(i->second) << "\"/>" << std::endl;
+        plugin << "                <configure key=\""
+               << encode(i->first) << "\" value=\""
+               << encode(i->second) << "\"/>" << std::endl;
     }
 
     if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
-	plugin << "            </synth>";
+        plugin << "            </synth>";
     } else {
-	plugin << "            </plugin>";
+        plugin << "            </plugin>";
     }
 
     plugin << std::endl;
@@ -203,7 +203,7 @@ AudioPluginInstance::setProgram(const std::string& program)
 
     PortInstanceIterator it = m_ports.begin();
     for (; it != m_ports.end(); ++it) {
-	(*it)->changedSinceProgramChange = false;
+        (*it)->changedSinceProgramChange = false;
     }
 }
 
@@ -220,20 +220,20 @@ AudioPluginInstance::getDistinctiveConfigurationText() const
     std::string base = getConfigurationValue("load");
 
     if (base == "") {
-	for (ConfigMap::const_iterator i = m_config.begin();
-	     i != m_config.end(); ++i) {
+        for (ConfigMap::const_iterator i = m_config.begin();
+             i != m_config.end(); ++i) {
 
-	    if (!strncmp(i->first.c_str(),
-			 "__ROSEGARDEN__",
-			 strlen("__ROSEGARDEN__"))) continue;
+            if (!strncmp(i->first.c_str(),
+                         "__ROSEGARDEN__",
+                         strlen("__ROSEGARDEN__"))) continue;
 
-	    if (i->second != "" && i->second[0] == '/') {
-		base = i->second;
-		break;
-	    } else if (base != "") {
-		base = i->second;
-	    }
-	}
+            if (i->second != "" && i->second[0] == '/') {
+                base = i->second;
+                break;
+            } else if (base != "") {
+                base = i->second;
+            }
+        }
     }
 
     if (base == "") return "";
