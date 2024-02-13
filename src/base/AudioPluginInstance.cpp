@@ -60,6 +60,7 @@ AudioPluginInstance::AudioPluginInstance(unsigned int position):
 {
 }
 
+#if 0
 AudioPluginInstance::AudioPluginInstance(const std::string& identifier,
                                          unsigned int position):
                 m_mappedId(-1),
@@ -69,6 +70,7 @@ AudioPluginInstance::AudioPluginInstance(const std::string& identifier,
                 m_bypass(false)
 {
 }
+#endif
 
 AudioPluginInstance::~AudioPluginInstance()
 {

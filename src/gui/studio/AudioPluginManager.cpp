@@ -66,6 +66,9 @@ AudioPluginManager::Enumerator::Enumerator(AudioPluginManager *manager) :
 void
 AudioPluginManager::Enumerator::run()
 {
+    // ??? Why is this in its own thread?  Was this an attempt to speed
+    //     up launch?  Protect rg from crashing plugins?  What?
+
     QMutexLocker locker(&(m_manager->m_mutex));
     std::vector<QString> rawPlugins;
 
@@ -82,6 +85,13 @@ AudioPluginManager::Enumerator::run()
     size_t i = 0;
 
     while (i < rawPlugins.size()) {
+
+        // This routine expects the list of strings to be ordered
+        // this way.
+        // See LADSPAPluginFactory::enumeratePlugins(),
+        // DSSIPluginFactory::enumeratePlugins(), and
+        // LV2PluginFactory::enumeratePlugins().
+        // ??? I think we should replace this mess with a struct.
 
         QString identifier = rawPlugins[i++];
         QString name = rawPlugins[i++];

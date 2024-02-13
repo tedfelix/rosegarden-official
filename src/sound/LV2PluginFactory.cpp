@@ -67,8 +67,11 @@ LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
         const QString& uri = pair.first;
         const LV2Utils::LV2PluginData& pluginData = pair.second;
 
-        // This is in a standard format, see
-        // LADSPAPluginFactory::enumeratePlugins() for details.
+        // This list of strings is ordered in such a way that
+        // AudioPluginManager::Enumerator::run() can consume it.
+        // See LADSPAPluginFactory::enumeratePlugins()
+        // and DSSIPluginFactory::enumeratePlugins().
+        // ??? I think we should replace this mess with a struct.
 
         // Identifier
         // ??? 23.12 expects this to have the "label" tacked on to the end

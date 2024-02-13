@@ -29,6 +29,8 @@
 namespace Rosegarden
 {
 
+// *******************************************************************
+
 typedef float PortData;
 
 class PluginPort
@@ -89,6 +91,8 @@ protected:
     PortData        m_default;
 };
 
+// *******************************************************************
+
 class PluginPortInstance
 {
 public:
@@ -105,14 +109,16 @@ public:
 
 typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
 
+// *******************************************************************
+
 class AudioPluginInstance : public XmlExportable
 {
 public:
     explicit AudioPluginInstance(unsigned int position);
     ~AudioPluginInstance();
 
-    AudioPluginInstance(const std::string& identifier,
-                        unsigned int position);
+    //AudioPluginInstance(const std::string& identifier,
+    //                    unsigned int position);
 
     /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     void setIdentifier(const std::string& identifier) { m_identifier = identifier; }

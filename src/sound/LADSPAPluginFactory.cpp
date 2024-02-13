@@ -78,6 +78,12 @@ LADSPAPluginFactory::enumeratePlugins(std::vector<QString> &list)
 
 //        std::cerr << "Enumerating plugin identifier " << *i << std::endl;
 
+        // This list of strings is ordered in such a way that
+        // AudioPluginManager::Enumerator::run() can consume it.
+        // See LV2PluginFactory::enumeratePlugins()
+        // and DSSIPluginFactory::enumeratePlugins().
+        // ??? I think we should replace this mess with a struct.
+
         list.push_back(*i);
         list.push_back(descriptor->Name);
         list.push_back(QString("%1").arg(descriptor->UniqueID));
