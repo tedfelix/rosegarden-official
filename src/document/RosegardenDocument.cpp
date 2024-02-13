@@ -1745,15 +1745,9 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
                 QString msg(tr("<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:</p><ul>"));
 
-                for (std::set<QString>::iterator i = handler.pluginsNotFound().begin();
-                     i != handler.pluginsNotFound().end(); ++i) {
-                    QString ident = *i;
-                    QString type, soName, label, arch;
-                    PluginIdentifier::parseIdentifier
-                        (ident, type, soName, label, arch);
-                    if (label == "") label = ident;
-                    QString pluginFileName = QFileInfo(soName).fileName();
-                    msg += tr("<li>%1 (from %2)</li>").arg(label).arg(pluginFileName);
+                // For each plugin that wasn't found...
+                for (const QString &ident : handler.pluginsNotFound()) {
+                    msg += QString("<li>%1</li>").arg(ident);
                 }
                 msg += "</ul>";
 

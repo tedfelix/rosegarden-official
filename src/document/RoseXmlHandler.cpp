@@ -54,6 +54,7 @@
 #include "sound/AudioFileManager.h"
 #include "XmlStorableEvent.h"
 #include "XmlSubHandler.h"
+#include "sound/PluginIdentifier.h"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -1949,14 +1950,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     }
                 }
             } else {
-                // we shouldn't be halting import of the RG file just because
-                // we can't match a plugin
-                //
+                // What is this?  An older file format?
                 QString q = atts.value("id").toString();
 
                 if (!identifier.isEmpty()) {
-                    RG_DEBUG << "WARNING: RoseXmlHandler: plugin " << identifier << " not found";
-                    m_pluginsNotFound.insert(identifier);
+                    // If present, go with label as it is the most human-readable.
+                    // ??? Similar code below.  Factor out?
+                    QString label = atts.value("label").toString();
+                    if (!label.isEmpty()) {
+                        m_pluginsNotFound.push_back(label);
+                    } else {
+                        // Try to parse a label and .so filename from identifier.
+                        QString type, soName, label, arch;
+                        PluginIdentifier::parseIdentifier(
+                                identifier, type, soName, label, arch);
+                        if (label == "") label = identifier;
+                        QString pluginFileName = QFileInfo(soName).fileName();
+
+                        m_pluginsNotFound.push_back(tr("%1 (from %2)").arg(label).arg(pluginFileName));
+                    }
                 } else if (!q.isEmpty()) {
                     RG_DEBUG << "WARNING: RoseXmlHandler: plugin uid " << atts.value("id") << " not found";
                 } else {
@@ -1964,13 +1976,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     return false;
                 }
             }
-        } else { // no instrument
-
+        } else {  // no instrument
             if (lcName == "synth") {
-                QString identifier = atts.value("identifier").toString();
-                if (!identifier.isEmpty()) {
-                    RG_DEBUG << "WARNING: RoseXmlHandler: no instrument for plugin " << identifier;
-                    m_pluginsNotFound.insert(identifier);
+                // If present, go with label as it is the most human-readable.
+                // ??? Similar code above.  Factor out?
+                QString label = atts.value("label").toString();
+                if (!label.isEmpty()) {
+                    m_pluginsNotFound.push_back(label);
+                } else {
+                    // Try to parse a label and .so filename from identifier.
+                    QString identifier = atts.value("identifier").toString();
+                    if (!identifier.isEmpty()) {
+                        QString type, soName, label, arch;
+                        PluginIdentifier::parseIdentifier(
+                                identifier, type, soName, label, arch);
+                        if (label == "") label = identifier;
+                        QString pluginFileName = QFileInfo(soName).fileName();
+
+                        m_pluginsNotFound.push_back(tr("%1 (from %2)").arg(label).arg(pluginFileName));
+                    }
                 }
             }
         }

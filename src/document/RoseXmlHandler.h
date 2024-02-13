@@ -30,7 +30,7 @@
 #include <QSharedPointer>
 
 #include <map>
-#include <set>
+#include <vector>
 #include <string>
 
 
@@ -106,7 +106,7 @@ public:
     QString errorString() const override;
 
     bool hasActiveAudio() const { return m_hasActiveAudio; }
-    std::set<QString> &pluginsNotFound() { return m_pluginsNotFound; }
+    std::vector<QString> &pluginsNotFound()  { return m_pluginsNotFound; }
 
     bool fatalError(int lineNumber, int columnNumber,
                     const QString& msg) override;
@@ -158,7 +158,7 @@ protected:
     bool m_foundTempo;
 
     QString m_errorString;
-    std::set<QString> m_pluginsNotFound;
+    std::vector<QString> m_pluginsNotFound;
 
     RosegardenFileSection             m_section;
 

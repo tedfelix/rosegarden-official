@@ -78,27 +78,29 @@ AudioPluginInstance::~AudioPluginInstance()
 std::string
 AudioPluginInstance::toXmlString() const
 {
-
+    // ??? rename: stream
     std::stringstream plugin;
 
     if (m_assigned == false)
     {
+        // ??? Isn't this just ""?
         return plugin.str();
     }
 
     if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
-        plugin << "            <synth ";
+        plugin << "            <synth";
     } else {
         plugin << "            <plugin"
                << " position=\""
                << m_position
-               << "\" ";
+               << "\"";
     }
 
-    plugin << "identifier=\""
-           << encode(m_identifier)
-           << "\" bypassed=\"";
+    plugin << " identifier=\"" << encode(m_identifier) << "\"";
 
+    plugin << " label=\"" << encode(m_label) << "\"";
+
+    plugin << " bypassed=\"";
     if (m_bypass)
         plugin << "true\" ";
     else
