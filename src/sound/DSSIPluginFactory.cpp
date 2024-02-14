@@ -68,6 +68,8 @@ DSSIPluginFactory::enumeratePlugins(std::vector<QString> &list)
         // ??? I think we should replace this mess with a struct.
 
         list.push_back(*i);  // Identifier
+        // arch
+        list.push_back(QString("%1").arg(static_cast<int>(PluginArch::DSSI)));
         list.push_back(descriptor->Name);
         list.push_back(QString("%1").arg(descriptor->UniqueID));
         list.push_back(descriptor->Label);

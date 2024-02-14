@@ -1911,7 +1911,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             // string, but we will accept a LADSPA UniqueId if there's
             // no identifier, for backward compatibility
 
-            QString identifier = atts.value("identifier").toString();
+            QString lv2uri = atts.value("lv2uri").toString();
+            QString identifier;
+            // If present, prefer lv2uri.
+            if (!lv2uri.isEmpty())
+                identifier = lv2uri;
+            else
+                identifier = atts.value("identifier").toString();
 
             QSharedPointer<AudioPlugin> plugin;
             QSharedPointer<AudioPluginManager> apm = getAudioPluginManager();
@@ -1943,13 +1949,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     m_plugin->setAssigned(true);
                     m_plugin->setBypass(bypassed);
                     m_plugin->setIdentifier( qstrtostr( plugin->getIdentifier() ) );
+                    m_plugin->setArch(plugin->getArch());
                     m_plugin->setLabel(qstrtostr(plugin->getLabel()));
                     RG_DEBUG << "set identifier to plugin at position " << position << " of container " << container->getId();
                     if (program != "") {
                         m_plugin->setProgram(program);
                     }
                 }
-            } else {
+            } else {  // Audio plugin not found.
                 // What is this?  An older file format?
                 QString q = atts.value("id").toString();
 
@@ -1964,6 +1971,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                         QString type, soName, label, arch;
                         PluginIdentifier::parseIdentifier(
                                 identifier, type, soName, label, arch);
+                        // ??? Probably not necessary now.
                         if (label == "") label = identifier;
                         QString pluginFileName = QFileInfo(soName).fileName();
 
@@ -1976,7 +1984,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     return false;
                 }
             }
-        } else {  // no instrument
+        } else {  // Synth plugin not found.
+            // ??? Isn't it always "synth" in this case?
             if (lcName == "synth") {
                 // If present, go with label as it is the most human-readable.
                 // ??? Similar code above.  Factor out?

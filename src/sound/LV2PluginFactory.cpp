@@ -92,6 +92,9 @@ LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
         // get a crash ? - is it reproducible ?
         list.push_back(uri);
 
+        // arch
+        list.push_back(QString("%1").arg(static_cast<int>(PluginArch::LV2)));
+
         // Name
         list.push_back(pluginData.name);
 

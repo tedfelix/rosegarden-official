@@ -643,6 +643,7 @@ AudioPluginDialog::slotPluginSelected(int index)
         }
 
         inst->setIdentifier(identifier);
+        inst->setArch(plugin->getArch());
 
         int count = 0;
         int ins = 0, outs = 0;

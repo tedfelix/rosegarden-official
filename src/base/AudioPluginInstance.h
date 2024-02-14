@@ -111,6 +111,11 @@ typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
 
 // *******************************************************************
 
+enum class PluginArch
+{
+    DSSI, LADSPA, LV2
+};
+
 class AudioPluginInstance : public XmlExportable
 {
 public:
@@ -124,6 +129,9 @@ public:
     void setIdentifier(const std::string& identifier) { m_identifier = identifier; }
     /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     std::string getIdentifier() const { return m_identifier; }
+
+    void setArch(PluginArch arch)  { m_arch = arch; }
+    PluginArch getArch() const  { return m_arch; }
 
     void setPosition(unsigned int position) { m_position = position; }
     unsigned int getPosition() const { return m_position; }
@@ -174,6 +182,8 @@ protected:
     int                                m_mappedId;
     /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     std::string                        m_identifier;
+    PluginArch m_arch;
+
     std::vector<PluginPortInstance*>   m_ports;
     unsigned int                       m_position;
 

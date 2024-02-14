@@ -39,7 +39,7 @@ PluginIdentifier::parseIdentifier(QString identifier,
     label = identifier.section(':', 2);
     architecture = type;
     // lv2 does not have a fixed type. Assume anything that is not
-    // ladspa or dssi andi is not empty is lv2
+    // ladspa or dssi and is not empty is lv2
     if (type != "ladspa" && type != "dssi" && type != "") architecture = "lv2";
 }
 

@@ -28,6 +28,7 @@ namespace Rosegarden
 {
 
 AudioPlugin::AudioPlugin(const QString &identifier,
+                         const PluginArch arch,
                          const QString &name,
                          unsigned long uniqueId,
                          const QString &label,
@@ -37,6 +38,7 @@ AudioPlugin::AudioPlugin(const QString &identifier,
                          bool isGrouped,
                          const QString &category):
         m_identifier(identifier),
+        m_arch(arch),
         m_name(name),
         m_uniqueId(uniqueId),
         m_label(label),

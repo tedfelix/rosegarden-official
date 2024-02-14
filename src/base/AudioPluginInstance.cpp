@@ -83,8 +83,7 @@ AudioPluginInstance::toXmlString() const
     // ??? rename: stream
     std::stringstream plugin;
 
-    if (m_assigned == false)
-    {
+    if (!m_assigned) {
         // ??? Isn't this just ""?
         return plugin.str();
     }
@@ -98,7 +97,16 @@ AudioPluginInstance::toXmlString() const
                << "\"";
     }
 
-    plugin << " identifier=\"" << encode(m_identifier) << "\"";
+    if (m_arch == PluginArch::LV2) {
+        // Format something 23.12 will interpret into a helpful error message.
+        plugin << " identifier=\"" << "lv2:lv2_not_supported:" << encode(m_label) << "\"";
+    } else {
+        plugin << " identifier=\"" << encode(m_identifier) << "\"";
+    }
+
+    // New for 24.06+
+    if (m_arch == PluginArch::LV2)
+        plugin << " lv2uri=\"" << encode(m_identifier) << "\"";
 
     plugin << " label=\"" << encode(m_label) << "\"";
 

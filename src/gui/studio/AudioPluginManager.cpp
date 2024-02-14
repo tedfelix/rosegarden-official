@@ -94,6 +94,7 @@ AudioPluginManager::Enumerator::run()
         // ??? I think we should replace this mess with a struct.
 
         QString identifier = rawPlugins[i++];
+        PluginArch arch = static_cast<PluginArch>(rawPlugins[i++].toInt());
         QString name = rawPlugins[i++];
         unsigned long uniqueId = rawPlugins[i++].toLong();
         QString label = rawPlugins[i++];
@@ -109,6 +110,7 @@ AudioPluginManager::Enumerator::run()
 
         QSharedPointer<AudioPlugin> aP = m_manager->addPlugin(
                                                identifier,
+                                               arch,
                                                name,
                                                uniqueId,
                                                label,
@@ -147,6 +149,7 @@ AudioPluginManager::Enumerator::run()
 
 QSharedPointer<AudioPlugin>
 AudioPluginManager::addPlugin(const QString &identifier,
+                              const PluginArch arch,
                               const QString &name,
                               unsigned long uniqueId,
                               const QString &label,
@@ -158,6 +161,7 @@ AudioPluginManager::addPlugin(const QString &identifier,
 {
     QSharedPointer<AudioPlugin> newPlugin(
              new AudioPlugin(identifier,
+                             arch,
                              name,
                              uniqueId,
                              label,

@@ -379,7 +379,9 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
 
             if ( plugin ){
                 RG_DEBUG << "plugin is " << plugin->getIdentifier();
-                pluginInstance->setIdentifier ( qstrtostr ( plugin->getIdentifier() ) );
+                pluginInstance->setIdentifier(
+                        qstrtostr(plugin->getIdentifier()));
+                pluginInstance->setArch(plugin->getArch());
                 pluginInstance->setLabel(qstrtostr(plugin->getLabel()));
 
                 // set ports to defaults

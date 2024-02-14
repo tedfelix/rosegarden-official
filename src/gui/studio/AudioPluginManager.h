@@ -74,6 +74,7 @@ public:
 protected:
     QSharedPointer<AudioPlugin> addPlugin(
                            const QString &identifier,
+                           PluginArch arch,
                            const QString &name,
                            unsigned long uniqueId,
                            const QString &label,
