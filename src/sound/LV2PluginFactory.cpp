@@ -73,6 +73,9 @@ LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
         // and DSSIPluginFactory::enumeratePlugins().
         // ??? I think we should replace this mess with a struct.
 
+        // maybe move the LV2Utils::LV2PluginData to
+        // AudioPluginInstance and use it for all plugins ?
+
         // Identifier
         // ??? 23.12 expects this to have the "label" tacked on to the end
         //     after a colon.  E.g.:
