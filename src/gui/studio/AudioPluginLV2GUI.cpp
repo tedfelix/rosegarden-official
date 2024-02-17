@@ -150,7 +150,6 @@ AudioPluginLV2GUI::~AudioPluginLV2GUI()
 {
     RG_DEBUG << "~AudioPluginLV2GUI";
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->lock();
     lv2utils->unRegisterGUI(m_instrument, m_position);
     if (m_window) {
         LV2UI_Handle handle = m_window->getHandle();
@@ -162,7 +161,6 @@ AudioPluginLV2GUI::~AudioPluginLV2GUI()
         m_window = nullptr;
     }
     lilv_uis_free(m_uis);
-    lv2utils->unlock();
 }
 
 QString
