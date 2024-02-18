@@ -83,7 +83,6 @@ private:
     // Set by stopGUI() and used by slotStopGUIDelayed().
     InstrumentId m_instrument;
     int m_position;
-    bool m_closePending;
 };
 
 

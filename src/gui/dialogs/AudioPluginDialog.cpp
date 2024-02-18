@@ -553,6 +553,9 @@ AudioPluginDialog::slotPluginSelected(int index)
 
     // always stop the gui
     emit stopPluginGUI(m_containerId, m_index);
+    // allow time for the gui to stop properly
+    qApp->processEvents(QEventLoop::AllEvents, 1);
+
     m_guiShown = false;
 
     //RG_DEBUG << "slotPluginSelected(): setting up plugin from position " << number << " at menu item " << index;

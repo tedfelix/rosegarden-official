@@ -293,7 +293,7 @@ void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
 {
     RG_DEBUG << "closeEvent";
 
-    event->accept();
+    event->ignore();
 
     m_timer->stop();
 
