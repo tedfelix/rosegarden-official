@@ -111,7 +111,7 @@ typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
 
 // *******************************************************************
 
-enum class PluginArch
+enum PluginArch
 {
     DSSI, LADSPA, LV2
 };

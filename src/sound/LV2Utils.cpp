@@ -88,8 +88,12 @@ LV2Utils::uridUnmap(LV2_URID urid)
 
 LV2Utils::LV2Utils():
     m_map{this, &LV2UridMap},
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    m_unmap{this, &LV2UridUnmap}
+#else
     m_unmap{this, &LV2UridUnmap},
     m_mutex(QMutex::Recursive) // recursive
+#endif
 {
     LOCKED;
 

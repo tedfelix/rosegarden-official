@@ -25,6 +25,9 @@
 #include <lv2/worker/worker.h>
 
 #include <QMutex>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <QRecursiveMutex>
+#endif
 #include <QString>
 
 #include <map>
@@ -278,8 +281,11 @@ class LV2Utils
     // threads. Some calls are made in the audio thread others in the
     // gui thread. Data used by the calls are protected with this
     // mutex
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QRecursiveMutex m_mutex;
+#else
     QMutex m_mutex;
-
+#endif
 
     /// Instance pointer used by the lilv_*() functions.
     LilvWorld *m_world;

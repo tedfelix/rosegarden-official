@@ -132,8 +132,9 @@ bool AudioPluginGUIManager::canEditConnections(InstrumentId instrument,
     if (arch != LV2) return false;
 #ifdef HAVE_LILV
     return m_lv2Manager->canEditConnections(instrument, position);
-#endif
+#else
     return false;
+#endif
 }
 
 void AudioPluginGUIManager::getConnections

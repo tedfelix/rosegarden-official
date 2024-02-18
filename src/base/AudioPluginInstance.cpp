@@ -53,6 +53,7 @@ PluginPort::PluginPort(int number,
 AudioPluginInstance::AudioPluginInstance(unsigned int position):
     m_mappedId(-1),
     m_identifier(""),
+    m_arch(DSSI),
     m_position(position),
     m_assigned(false),
     m_bypass(false),

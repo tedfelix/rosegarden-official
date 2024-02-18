@@ -70,7 +70,7 @@ public:
 
     void setPortByteArray(unsigned int port,
                           unsigned int protocol,
-                          const QByteArray& ba);
+                          const QByteArray& ba) const;
     float getPortValue(unsigned int portNumber) override;
     /// Used privately in .cpp so has to be public.
     void* getPortValue(const char *port_symbol,
@@ -146,7 +146,7 @@ private:
     void connectPorts();
 
     void sendMidiData(const QByteArray& rawMidi,
-                      size_t frameOffset);
+                      size_t frameOffset) const;
 
     LV2Utils::PortValues m_controlPortsIn;
     LV2Utils::PortValues m_controlPortsOut;

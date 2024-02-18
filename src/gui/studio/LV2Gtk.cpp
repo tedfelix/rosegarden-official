@@ -187,7 +187,6 @@ LV2Gtk::~LV2Gtk()
 }
 
 #if 0
-// cppcheck-suppress unusedFunction
 void LV2Gtk::tick() const
 {
 }

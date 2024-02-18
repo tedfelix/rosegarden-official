@@ -68,6 +68,7 @@ public:
         (InstrumentId instrument,
          int position,
          PluginPort::ConnectionList& clist) const;
+    // cppcheck-suppress functionStatic
     void setConnections
         (InstrumentId instrument,
          int position,

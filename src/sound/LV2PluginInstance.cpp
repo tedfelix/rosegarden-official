@@ -674,7 +674,7 @@ void LV2PluginInstance::setPortValue(const char *port_symbol,
 void
 LV2PluginInstance::setPortByteArray(unsigned int port,
                                     unsigned int protocol,
-                                    const QByteArray& ba)
+                                    const QByteArray& ba) const
 {
     RG_DEBUG << "setPortByteArray" << port << protocol;
     if (protocol == m_atomTransferUrid) {
@@ -1011,7 +1011,7 @@ LV2PluginInstance::cleanup()
 }
 
 void LV2PluginInstance::sendMidiData(const QByteArray& rawMidi,
-                                     size_t frameOffset)
+                                     size_t frameOffset) const
 {
     RG_DEBUG << "sendMidiData" << frameOffset << rawMidi.toHex();
     char midiBuf[1000];
