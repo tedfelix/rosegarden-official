@@ -205,11 +205,14 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
         resize(width, height);
 
         const WId wid = (WId)(lv2gtk->getWinId(m_gwidget));
+        RG_DEBUG << "create gtk window from" << hex << wid;
         m_parentWindow = QWindow::fromWinId(wid);
         m_parentWindow->setFlags(Qt::FramelessWindowHint);
         m_containerWidget = QWidget::createWindowContainer(m_parentWindow);
         m_containerWidget->setMinimumSize(QSize(width, height));
         m_containerWidget->setParent(this);
+        RG_DEBUG << "got gtk window" << m_parentWindow <<
+            m_parentWindow->parent();
     }
 }
 

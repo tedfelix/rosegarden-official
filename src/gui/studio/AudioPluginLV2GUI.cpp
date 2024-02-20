@@ -180,9 +180,9 @@ void
 AudioPluginLV2GUI::showGui()
 {
     if (! m_uidesc) return;
+    LV2Utils* lv2utils = LV2Utils::getInstance();
     if (! m_window) {
         // create the window now
-        LV2Utils* lv2utils = LV2Utils::getInstance();
         m_window = new AudioPluginLV2GUIWindow(this,
                                                m_title,
                                                m_selectedUI,
@@ -191,19 +191,20 @@ AudioPluginLV2GUI::showGui()
                                                m_uiType);
 
         lv2utils->registerGUI(m_instrument, m_position, this);
-        // set the control in values correctly
-        LV2Utils::PortValues controlInValues;
-        lv2utils->getControlInValues(m_instrument,
-                                     m_position,
-                                     controlInValues);
-        // For each control in value, update the UI.
-        for (const auto &pair : controlInValues) {
-            int portIndex = pair.first;
-            float value = pair.second;
-            updatePortValue(portIndex, value);
-        }
     }
-    if (m_window) m_window->showGui();
+    m_window->showGui();
+    // set the control in values correctly
+    // this must be done after showGui to avoid problems with the gtk embedding
+    LV2Utils::PortValues controlInValues;
+    lv2utils->getControlInValues(m_instrument,
+                                 m_position,
+                                 controlInValues);
+    // For each control in value, update the UI.
+    for (const auto &pair : controlInValues) {
+        int portIndex = pair.first;
+        float value = pair.second;
+        updatePortValue(portIndex, value);
+    }
 }
 
 void
@@ -235,6 +236,7 @@ AudioPluginLV2GUI::portChange(uint32_t portIndex,
 void
 AudioPluginLV2GUI::updatePortValue(int port, float value)
 {
+    //RG_DEBUG << "updatePortValue" << port;
     if (! m_window) return;
     LV2UI_Handle handle = m_window->getHandle();
     if (m_uidesc && m_uidesc->port_event) {
