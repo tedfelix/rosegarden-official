@@ -130,8 +130,6 @@ SequencerDataBlock::addRecordedEvents(MappedEventList *mC)
 
     // Once the buffer is in a consistent state, move the record index
     // so that the other thread will read the new events.
-    // ??? Is this guaranteed to be atomic and therefore thread safe?
-    //     I believe so, and that's why this has always worked.
     m_recordEventIndex = index;
 }
 
