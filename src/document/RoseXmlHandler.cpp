@@ -246,7 +246,6 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_pluginInBuss(false),
     m_colourMap(nullptr),
     m_keyMapping(),
-    m_pluginId(0),
     m_totalElements(elementCount),
     m_elementsSoFar(0),
     m_subHandler(nullptr),
@@ -1956,7 +1955,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                         m_plugin->setProgram(program);
                     }
                 }
-            } else {  // Audio plugin not found.
+            } else {  // Plugin not found.
                 // What is this?  An older file format?
                 QString q = atts.value("id").toString();
 
@@ -1965,7 +1964,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     // ??? Similar code below.  Factor out?
                     QString label = atts.value("label").toString();
                     if (!label.isEmpty()) {
-                        m_pluginsNotFound.push_back(label);
+                        m_pluginsNotFound.insert(label);
                     } else {
                         // Try to parse a label and .so filename from identifier.
                         QString type, soName, label, arch;
@@ -1975,7 +1974,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                         if (label == "") label = identifier;
                         QString pluginFileName = QFileInfo(soName).fileName();
 
-                        m_pluginsNotFound.push_back(tr("%1 (from %2)").arg(label).arg(pluginFileName));
+                        m_pluginsNotFound.insert(tr("%1 (from %2)").arg(label).arg(pluginFileName));
                     }
                 } else if (!q.isEmpty()) {
                     RG_DEBUG << "WARNING: RoseXmlHandler: plugin uid " << atts.value("id") << " not found";
@@ -1985,13 +1984,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 }
             }
         } else {  // Synth plugin not found.
+
+            // ??? Actually, I don't think this code can ever run.
+#if 0
             // ??? Isn't it always "synth" in this case?
             if (lcName == "synth") {
                 // If present, go with label as it is the most human-readable.
                 // ??? Similar code above.  Factor out?
                 QString label = atts.value("label").toString();
                 if (!label.isEmpty()) {
-                    m_pluginsNotFound.push_back(label);
+                    m_pluginsNotFound.insert(label);
                 } else {
                     // Try to parse a label and .so filename from identifier.
                     QString identifier = atts.value("identifier").toString();
@@ -2002,10 +2004,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                         if (label == "") label = identifier;
                         QString pluginFileName = QFileInfo(soName).fileName();
 
-                        m_pluginsNotFound.push_back(tr("%1 (from %2)").arg(label).arg(pluginFileName));
+                        m_pluginsNotFound.insert(tr("%1 (from %2)").arg(label).arg(pluginFileName));
                     }
                 }
             }
+#endif
         }
 
         m_section = InPlugin;
@@ -2492,12 +2495,17 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         } else {
             m_section = InInstrument;
         }
+
+        // Clear this since we are done.
+        // Otherwise a previous plugin might start picking up the
+        // elements for a plugin that doesn't load.
         m_plugin = nullptr;
-        m_pluginId = 0;
 
     } else if (lcName == "synth") {
 
         // Clear this since we are done.
+        // Otherwise a previous plugin might start picking up the
+        // elements for a plugin that doesn't load.
         m_plugin = nullptr;
 
     } else if (lcName == "device") {
