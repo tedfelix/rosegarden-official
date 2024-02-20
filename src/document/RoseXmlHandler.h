@@ -158,6 +158,8 @@ protected:
     bool m_foundTempo;
 
     QString m_errorString;
+    // ??? This was a std::set originally to avoid lots of duplicate
+    //     entries in the error message.  Probably should put it back.
     std::vector<QString> m_pluginsNotFound;
 
     RosegardenFileSection             m_section;
@@ -184,7 +186,8 @@ protected:
     ColourMap                        *m_colourMap;
     QSharedPointer<MidiKeyMapping> m_keyMapping;
     MidiKeyMapping::KeyNameMap        m_keyNameMap;
-    unsigned int                      m_pluginId;
+    // ??? This appears unused.
+    unsigned int m_pluginId;
     unsigned int                      m_totalElements;
     unsigned int                      m_elementsSoFar;
 

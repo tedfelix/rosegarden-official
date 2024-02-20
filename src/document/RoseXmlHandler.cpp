@@ -2495,6 +2495,11 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         m_plugin = nullptr;
         m_pluginId = 0;
 
+    } else if (lcName == "synth") {
+
+        // Clear this since we are done.
+        m_plugin = nullptr;
+
     } else if (lcName == "device") {
 
         m_device = nullptr;
