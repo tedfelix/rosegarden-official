@@ -162,6 +162,8 @@ protected:
 
     QString m_errorString;
 
+    // Using a std::set to avoid a potentially very long list
+    // of duplicate missing plugins across tracks.
     std::set<QString> m_pluginsNotFound;
 
     RosegardenFileSection             m_section;
