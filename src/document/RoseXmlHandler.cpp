@@ -350,31 +350,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 return false;
             }
 
-            long storedId = m_currentEvent->get
-                            <Int>(BEAMED_GROUP_ID);
+            long storedId = m_currentEvent->get<Int>(BEAMED_GROUP_ID);
 
             if (m_groupIdMap.find(storedId) == m_groupIdMap.end()) {
                 m_groupIdMap[storedId] = m_currentSegment->getNextId();
             }
 
-            m_currentEvent->set
-            <Int>(BEAMED_GROUP_ID, m_groupIdMap[storedId]);
+            m_currentEvent->set<Int>(
+                    BEAMED_GROUP_ID, m_groupIdMap[storedId]);
 
         } else if (m_inGroup) {
-            m_currentEvent->set
-            <Int>(BEAMED_GROUP_ID, m_groupId);
-            m_currentEvent->set
-            <String>(BEAMED_GROUP_TYPE, m_groupType);
+            m_currentEvent->set<Int>(BEAMED_GROUP_ID, m_groupId);
+            m_currentEvent->set<String>(BEAMED_GROUP_TYPE, m_groupType);
             if (m_groupType == GROUP_TYPE_TUPLED) {
-                m_currentEvent->set
-                <Int>
-                (BEAMED_GROUP_TUPLET_BASE, m_groupTupletBase);
-                m_currentEvent->set
-                <Int>
-                (BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
-                m_currentEvent->set
-                <Int>
-                (BEAMED_GROUP_UNTUPLED_COUNT, m_groupUntupledCount);
+                m_currentEvent->set<Int>(
+                        BEAMED_GROUP_TUPLET_BASE, m_groupTupletBase);
+                m_currentEvent->set<Int>(
+                        BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
+                m_currentEvent->set<Int>(
+                        BEAMED_GROUP_UNTUPLED_COUNT, m_groupUntupledCount);
             }
         }
 
@@ -958,17 +952,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         // set Segment
-        if(lcName == "segment") {
-            m_section = InSegment;
+        m_section = InSegment;
+
+        TrackId trackId{NoTrack};
+        QString trackIdStr = atts.value("track").toString();
+        if (!trackIdStr.isEmpty()) {
+            trackId = trackIdStr.toUInt();
         }
 
-        int track = -1, startTime = 0;
-        unsigned int colourindex = 0;
-        QString trackNbStr = atts.value("track").toString();
-        if (!trackNbStr.isEmpty()) {
-            track = trackNbStr.toInt();
-        }
-
+        int startTime{0};
         QString startIdxStr = atts.value("start").toString();
         if (!startIdxStr.isEmpty()) {
             startTime = startIdxStr.toInt();
@@ -1042,9 +1034,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (!labelStr.isEmpty())
             m_currentSegment->setLabel(qstrtostr(labelStr));
 
-        m_currentSegment->setTrack(track);
+        m_currentSegment->setTrack(trackId);
         //m_currentSegment->setStartTime(startTime);
 
+        unsigned int colourindex{0};
         QString colourIndStr = atts.value("colourindex").toString();
         if (!colourIndStr.isEmpty()) {
             colourindex = colourIndStr.toInt();
@@ -1961,20 +1954,21 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                 if (!identifier.isEmpty()) {
                     // If present, go with label as it is the most human-readable.
-                    // ??? Similar code below.  Factor out?
                     QString label = atts.value("label").toString();
                     if (!label.isEmpty()) {
                         m_pluginsNotFound.insert(label);
                     } else {
                         // Try to parse a label and .so filename from identifier.
-                        QString type, soName, label, arch;
+                        QString type, soName, arch;
                         PluginIdentifier::parseIdentifier(
                                 identifier, type, soName, label, arch);
-                        // ??? Probably not necessary now.
-                        if (label == "") label = identifier;
+                        // In case the label is bogus, use the identifier.
+                        if (label == "")
+                            label = identifier;
                         QString pluginFileName = QFileInfo(soName).fileName();
 
-                        m_pluginsNotFound.insert(tr("%1 (from %2)").arg(label).arg(pluginFileName));
+                        m_pluginsNotFound.insert(tr("%1 (from %2)").
+                                arg(label).arg(pluginFileName));
                     }
                 } else if (!q.isEmpty()) {
                     RG_DEBUG << "WARNING: RoseXmlHandler: plugin uid " << atts.value("id") << " not found";
@@ -1983,32 +1977,18 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     return false;
                 }
             }
-        } else {  // Synth plugin not found.
+        } else {  // container is null
 
-            // ??? Actually, I don't think this code can ever run.
-#if 0
-            // ??? Isn't it always "synth" in this case?
-            if (lcName == "synth") {
-                // If present, go with label as it is the most human-readable.
-                // ??? Similar code above.  Factor out?
-                QString label = atts.value("label").toString();
-                if (!label.isEmpty()) {
-                    m_pluginsNotFound.insert(label);
-                } else {
-                    // Try to parse a label and .so filename from identifier.
-                    QString identifier = atts.value("identifier").toString();
-                    if (!identifier.isEmpty()) {
-                        QString type, soName, label, arch;
-                        PluginIdentifier::parseIdentifier(
-                                identifier, type, soName, label, arch);
-                        if (label == "") label = identifier;
-                        QString pluginFileName = QFileInfo(soName).fileName();
+            // We do not have a valid Instrument or Buss.
+            // It appears as if an invalid Buss is most likely impossible.
+            // An invalid Instrument might occur with an invalid .rg file.
 
-                        m_pluginsNotFound.insert(tr("%1 (from %2)").arg(label).arg(pluginFileName));
-                    }
-                }
-            }
-#endif
+            // If we want to alert the user, we should do that
+            // the moment we discover that there is no matching
+            // Instrument in the Studio.  Right now we do nothing.
+            // See the "instrument" start element handler.  Search
+            // on getInstrumentById.
+
         }
 
         m_section = InPlugin;
@@ -2754,7 +2734,7 @@ RoseXmlHandler::skipToNextPlayDevice()
 */
 
 void
-RoseXmlHandler::setMIDIDeviceConnection(QString connection)
+RoseXmlHandler::setMIDIDeviceConnection(const QString &connection)
 {
     RG_DEBUG << "setMIDIDeviceConnection(" << connection << ")";
 
@@ -2769,15 +2749,15 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 }
 
 void
-RoseXmlHandler::setMIDIDeviceName(QString name)
+RoseXmlHandler::setMIDIDeviceName(const QString &name)
 {
     RG_DEBUG << "setMIDIDeviceName(" << name << ")";
 
     MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md) return;
 
-    RosegardenSequencer::getInstance()->renameDevice
-        (md->getId(), name);
+    RosegardenSequencer::getInstance()->renameDevice(
+            md->getId(), name);
 }
 
 bool

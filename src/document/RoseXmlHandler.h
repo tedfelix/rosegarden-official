@@ -130,8 +130,8 @@ protected:
     void addMIDIDevice(const QString& name,
                        bool createAtSequencer,
                        const QString& dir);  // dir = play|record
-    void setMIDIDeviceConnection(QString connection);
-    void setMIDIDeviceName(QString name);
+    void setMIDIDeviceConnection(const QString &connection);
+    void setMIDIDeviceName(const QString &name);
     // unused void skipToNextPlayDevice();
     InstrumentId mapToActualInstrument(InstrumentId oldId);
 
