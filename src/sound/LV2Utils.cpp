@@ -25,6 +25,8 @@
 #include <lv2/midi/midi.h>
 //#include <lv2/ui/ui.h>
 
+#include <QThread>
+
 // LV2Utils is used in different threads
 #define LOCKED QMutexLocker rg_utils_locker(&m_mutex)
 
@@ -62,6 +64,12 @@ LV2Utils::getInstance()
 LV2_URID
 LV2Utils::uridMap(const char *uri)
 {
+    // ??? I only see exactly one thread.  Mutex might not be needed.
+    //     We'll need to do some more extensive testing.  E.g. identify
+    //     exactly which thread is calling this.  Then test with many
+    //     more plugins to be safe.
+    RG_DEBUG << "uridMap(): Thread ID: " << QThread::currentThreadId();
+
     LOCKED;
     auto it = m_uridMap.find(uri);
     // Not found?  Create a new URID and entry in the map.
@@ -78,6 +86,9 @@ LV2Utils::uridMap(const char *uri)
 const char*
 LV2Utils::uridUnmap(LV2_URID urid)
 {
+    // ??? I never see this called.  Ever.
+    RG_DEBUG << "uridUnmap(): Thread ID: " << QThread::currentThreadId();
+
     LOCKED;
     auto it = m_uridUnmap.find(urid);
     if (it == m_uridUnmap.end()) {

@@ -54,11 +54,12 @@ class LV2Utils
     void operator=(const LV2Utils &) = delete;
 
     // URI/URID mapping.
+    // https://lv2plug.in/c/html/group__urid.html
 
-    // ??? Split this out into its own LV2URIMapper class.
-    // I prefer to keep all the lv2 utitlity functions here
+    // ??? Split this out into its own LV2URIDMapper class to make
+    //     it easier to understand.
 
-    /// Gets the URID for a URI.
+    /// URID Map Feature.  Gets the URID for a URI.
     /**
      * If the URI hasn't been seen yet, a new URID is assigned.
      *
@@ -66,14 +67,20 @@ class LV2Utils
      */
     LV2_URID uridMap(const char *uri);
     /// Member function pointer to uridMap().
+    /**
+     * ??? rename: m_uridMapFeature
+     */
     LV2_URID_Map m_map;
 
-    /// Gets the URI for a URID.
+    /// URID Unmap Feature.  Gets the URI for a URID.
     /**
      * @see m_uridUnmap
      */
     const char *uridUnmap(LV2_URID urid);
     /// Member function pointer to uridUnmap().
+    /**
+     * ??? rename: m_uridUnmapFeature
+     */
     LV2_URID_Unmap m_unmap;
 
 
