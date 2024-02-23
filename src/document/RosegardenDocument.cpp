@@ -70,6 +70,7 @@
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/general/AutoSaveFinder.h"
+#include "gui/studio/AudioPluginGUIManager.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
@@ -774,6 +775,9 @@ void RosegardenDocument::initialiseStudio()
     //Profiler profiler("initialiseStudio", true);
 
     RG_DEBUG << "initialiseStudio() begin...";
+
+    // stop any running guis
+    RosegardenMainWindow::self()->getPluginGUIManager()->stopAllGUIs();
 
     // Destroy all the mapped objects in the studio.
     RosegardenSequencer::getInstance()->clearStudio();
