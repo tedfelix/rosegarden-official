@@ -205,7 +205,11 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
         resize(width, height);
 
         const WId wid = (WId)(lv2gtk->getWinId(m_gwidget));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+        RG_DEBUG << "create gtk window from" << Qt::hex << wid;
+#else
         RG_DEBUG << "create gtk window from" << hex << wid;
+#endif
         m_parentWindow = QWindow::fromWinId(wid);
         m_parentWindow->setFlags(Qt::FramelessWindowHint);
         m_containerWidget = QWidget::createWindowContainer(m_parentWindow);
