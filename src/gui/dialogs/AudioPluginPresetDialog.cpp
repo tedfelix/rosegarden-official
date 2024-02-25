@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginPresetDialog]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginPresetDialog.h"
 #include "gui/application/RosegardenMainWindow.h"
