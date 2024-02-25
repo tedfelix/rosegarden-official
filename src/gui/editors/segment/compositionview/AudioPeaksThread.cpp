@@ -28,7 +28,6 @@
 #include <QEvent>
 #include <QMutex>
 #include <QObject>
-#include <QThread>
 
 #define DEBUG_AUDIO_PEAKS_THREAD 0
 

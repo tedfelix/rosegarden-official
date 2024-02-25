@@ -31,7 +31,6 @@
 #include <QDataStream>
 #include <QMutex>
 #include <QString>
-#include <QThread>
 
 #include <unistd.h>
 

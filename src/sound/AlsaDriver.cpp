@@ -60,7 +60,7 @@
 #include <QSettings>
 #include <QTime>
 
-#include <pthread.h>
+//#include <pthread.h>
 #include <math.h>
 #include <unistd.h>
 

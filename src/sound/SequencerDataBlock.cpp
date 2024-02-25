@@ -20,7 +20,6 @@
 
 #include "misc/Debug.h"
 
-//#include <QThread>
 #include <QMutexLocker>
 
 namespace Rosegarden

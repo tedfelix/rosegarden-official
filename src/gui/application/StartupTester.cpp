@@ -31,7 +31,6 @@
 #include <QNetworkReply>
 #include <QProcess>
 #include <QMutex>
-#include <QThread>
 #include <QRegularExpression>
 
 

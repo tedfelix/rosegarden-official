@@ -55,6 +55,7 @@
 #include <QtGui>
 #include <QPixmapCache>
 #include <QStringList>
+#include <QThread>
 
 #include <sound/SoundDriverFactory.h>
 #include <sys/time.h>
