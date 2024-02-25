@@ -13,7 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[LV2PluginInstance]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 //#define LV2RUN_PROFILE 1
 
@@ -144,6 +144,9 @@ LV2PluginInstance::LV2PluginInstance
     if (m_workerInterface) RG_DEBUG << (void*)m_workerInterface->work <<
                                (void*)m_workerInterface->work_response <<
                                (void*)m_workerInterface->end_run;
+
+    // presets
+    lv2utils->setupPluginPresets(m_uri, m_presets);
 
     RG_DEBUG << "register plugin";
     lv2utils->registerPlugin(m_instrument, m_position, this);
@@ -439,6 +442,81 @@ void LV2PluginInstance::setConnections
     m_connections = clist;
 }
 
+void LV2PluginInstance::getPresets
+(AudioPluginInstance::PluginPresetList& presets) const
+{
+    presets = m_presets;
+}
+
+void LV2PluginInstance::setPreset(const QString& uri)
+{
+    RG_DEBUG << "setPreset" << uri;
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    LilvNode* presetUri = lv2utils->makeURINode(uri);
+    char* filename = lilv_file_uri_parse(qPrintable(uri), nullptr);
+    LilvState* presetState;
+    if (filename) {
+        // check if it is really a file
+        const QFileInfo fileInfo(filename);
+        bool isFile = (fileInfo.exists() && fileInfo.isFile());
+        if (! isFile) filename = nullptr;
+    }
+
+    if (filename) {
+        RG_DEBUG << "got filename" << filename;
+        presetState = lv2utils->getStateFromFile(presetUri, filename);
+        lilv_free(filename);
+    } else {
+        presetState = lv2utils->getStateByUri(uri);
+    }
+    lv2utils->lock();
+    lilv_state_restore(presetState,
+                       m_instance,
+                       setPortValueFunc,
+                       this,
+                       0,
+                       m_features.data());
+    lv2utils->unlock();
+    lilv_state_free(presetState);
+    lilv_free(presetUri);
+}
+
+void LV2PluginInstance::loadPreset(const QString& file)
+{
+    RG_DEBUG << "loadPreset" << file;
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    LilvState* state = lv2utils->getStateFromFile(nullptr, file);
+    if (state == nullptr) {
+        RG_DEBUG << "load failed";
+        return;
+    }
+    lv2utils->lock();
+    lilv_state_restore(state,
+                       m_instance,
+                       setPortValueFunc,
+                       this,
+                       0,
+                       m_features.data());
+    lv2utils->unlock();
+    lilv_state_free(state);
+}
+
+void LV2PluginInstance::savePreset(const QString& file)
+{
+    RG_DEBUG << "savePreset" << file;
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->lock();
+    LilvState* state = lv2utils->getStateFromInstance
+        (m_plugin,
+         m_instance,
+         getPortValueFunc,
+         this,
+         m_features.data());
+    lv2utils->unlock();
+    lv2utils->saveStateToFile(state, file);
+    lilv_state_free(state);
+}
+
 LV2PluginInstance::~LV2PluginInstance()
 {
     RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance" << m_uri;
@@ -499,8 +577,8 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
 
-    m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_map)};
-    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_unmap)};
+    m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_uridMapStruct)};
+    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_uridUnmapStruct)};
 
     m_workerSchedule.handle = &m_workerHandle;
     m_workerSchedule.schedule_work = lv2utils->getWorker()->getScheduler();
@@ -614,7 +692,7 @@ LV2PluginInstance::connectPorts()
     // initialze the plugin state
     RG_DEBUG << "setting default state";
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    LilvState* defaultState = lv2utils->getDefaultStateByUri(m_uri);
+    LilvState* defaultState = lv2utils->getStateByUri(m_uri);
     lilv_state_restore(defaultState,
                        m_instance,
                        setPortValueFunc,
@@ -653,8 +731,9 @@ void LV2PluginInstance::setPortValue(const char *port_symbol,
     LilvNode* symNode = lv2utils->makeStringNode(port_symbol);
     const LilvPort* port = lilv_plugin_get_port_by_symbol(m_plugin,
                                                           symNode);
-
     lilv_free(symNode);
+    if (!port) return;
+
     int index =  lilv_port_get_index(m_plugin, port);
 
     uint32_t floatType = lv2utils->uridMap(LV2_ATOM__Float);
@@ -783,7 +862,7 @@ void LV2PluginInstance::savePluginState()
     // called in the gui thread
     RG_DEBUG << "savePluginState";
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    QString stateString = lv2utils->getStateFromInstance
+    QString stateString = lv2utils->getStateStringFromInstance
         (m_plugin,
          m_uri,
          m_instance,

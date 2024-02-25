@@ -33,6 +33,7 @@
 #include "gui/widgets/PluginControl.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
+#include "gui/dialogs/AudioPluginPresetDialog.h"
 #include "gui/dialogs/AudioPluginConnectionDialog.h"
 #include "misc/Preferences.h"
 
@@ -231,6 +232,11 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
 
+    m_presetButton = new QPushButton(tr("Presets"));
+    buttonBox->addButton(m_presetButton, QDialogButtonBox::ActionRole);
+    connect(m_presetButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotPresets);
+    m_presetButton->setEnabled(false);
     m_editConnectionsButton = new QPushButton(tr("Edit connections"));
     buttonBox->addButton(m_editConnectionsButton, QDialogButtonBox::ActionRole);
     connect(m_editConnectionsButton, &QAbstractButton::clicked,
@@ -264,6 +270,13 @@ AudioPluginDialog::~AudioPluginDialog()
 {
     //RG_DEBUG << "dtor...";
     emit destroyed(m_containerId, m_index);
+}
+
+void AudioPluginDialog::slotPresets()
+{
+    RG_DEBUG << "slotPresets";
+    AudioPluginPresetDialog dlg(this, m_containerId, m_index);
+    dlg.exec();
 }
 
 void AudioPluginDialog::slotEditConnections()
@@ -830,6 +843,9 @@ AudioPluginDialog::slotPluginSelected(int index)
         bool canEditConnections =
             m_pluginGUIManager->canEditConnections(m_containerId, m_index);
         m_editConnectionsButton->setEnabled(canEditConnections);
+        bool canUsePresets =
+            m_pluginGUIManager->canUsePresets(m_containerId, m_index);
+        m_presetButton->setEnabled(canUsePresets);
     } else {
         m_editorButton->setEnabled(false);
     }

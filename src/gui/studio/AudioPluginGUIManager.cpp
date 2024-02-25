@@ -124,6 +124,62 @@ void AudioPluginGUIManager::stopAllGUIs()
 #endif
 }
 
+bool AudioPluginGUIManager::canUsePresets(InstrumentId instrument,
+                                          int position) const
+{
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // lv2 plugins can handle presets
+    if (arch == LV2) return true;
+    return false;
+}
+
+void AudioPluginGUIManager::getPresets
+(InstrumentId instrument,
+ int position,
+ AudioPluginInstance::PluginPresetList& presets)
+{
+    presets.clear();
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // lv2 plugins can handle presets
+    if (arch != LV2) return;
+#ifdef HAVE_LILV
+    m_lv2Manager->getPresets(instrument, position, presets);
+#endif
+}
+
+void AudioPluginGUIManager::setPreset
+(InstrumentId instrument, int position, const QString& uri)
+{
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // lv2 plugins can handle presets
+    if (arch != LV2) return;
+#ifdef HAVE_LILV
+    m_lv2Manager->setPreset(instrument, position, uri);
+#endif
+}
+
+void AudioPluginGUIManager::loadPreset
+(InstrumentId instrument, int position, const QString& file)
+{
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // lv2 plugins can handle presets
+    if (arch != LV2) return;
+#ifdef HAVE_LILV
+    m_lv2Manager->loadPreset(instrument, position, file);
+#endif
+}
+
+void AudioPluginGUIManager::savePreset
+(InstrumentId instrument, int position, const QString& file)
+{
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // lv2 plugins can handle presets
+    if (arch != LV2) return;
+#ifdef HAVE_LILV
+    m_lv2Manager->savePreset(instrument, position, file);
+#endif
+}
+
 bool AudioPluginGUIManager::canEditConnections(InstrumentId instrument,
                                                int position) const
 {

@@ -55,6 +55,14 @@ public:
     void stopAllGUIs();
 
     void updatePort(InstrumentId instrument, int position, int port);
+
+    void getPresets(InstrumentId instrument,
+                    int position,
+                    AudioPluginInstance::PluginPresetList& presets);
+    void setPreset(InstrumentId instrument, int position, const QString& uri);
+    void loadPreset(InstrumentId instrument, int position, const QString& file);
+    void savePreset(InstrumentId instrument, int position, const QString& file);
+
     bool canEditConnections(InstrumentId instrument, int position) const;
     void getConnections
         (InstrumentId instrument,
@@ -70,6 +78,8 @@ public slots:
 
 private:
     AudioPluginLV2GUI* getInstance(InstrumentId instrument, int position);
+
+    void updateControls(InstrumentId instrument, int position);
 
     RosegardenMainWindow *m_mainWindow;
     Studio *m_studio;

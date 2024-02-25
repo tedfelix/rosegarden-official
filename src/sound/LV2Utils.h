@@ -59,30 +59,27 @@ class LV2Utils
     // ??? Split this out into its own LV2URIDMapper class to make
     //     it easier to understand.
 
-    /// URID Map Feature.  Gets the URID for a URI.
+    /// URID Map. Gets the URID for a URI.
     /**
      * If the URI hasn't been seen yet, a new URID is assigned.
      *
      * @see m_uridMap
      */
     LV2_URID uridMap(const char *uri);
-    /// Member function pointer to uridMap().
     /**
-     * ??? rename: m_uridMapFeature
+     * Member function pointer to uridMap().
      */
-    LV2_URID_Map m_map;
+    LV2_URID_Map m_uridMapStruct;
 
-    /// URID Unmap Feature.  Gets the URI for a URID.
+    /// URID Unmap. Gets the URI for a URID.
     /**
      * @see m_uridUnmap
      */
     const char *uridUnmap(LV2_URID urid);
-    /// Member function pointer to uridUnmap().
     /**
-     * ??? rename: m_uridUnmapFeature
+     * Member function pointer to uridUnmap().
      */
-    LV2_URID_Unmap m_unmap;
-
+    LV2_URID_Unmap m_uridUnmapStruct;
 
     // Key type for GUI and worker maps.
     struct PluginPosition
@@ -178,18 +175,26 @@ class LV2Utils
                                const LilvPlugin* plugin);
 
     // State
-    LilvState* getDefaultStateByUri(const QString& uri);
-    QString getStateFromInstance(const LilvPlugin* plugin,
-                                 const QString& uri,
-                                 LilvInstance* instance,
-                                 LilvGetPortValueFunc getPortValueFunc,
-                                 LV2PluginInstance* lv2Instance,
-                                 const LV2_Feature*const* features);
+    LilvState* getStateByUri(const QString& uri);
+    LilvState* getStateFromInstance(const LilvPlugin* plugin,
+                                    LilvInstance* instance,
+                                    LilvGetPortValueFunc getPortValueFunc,
+                                    LV2PluginInstance* lv2Instance,
+                                    const LV2_Feature*const* features);
+    QString getStateStringFromInstance(const LilvPlugin* plugin,
+                                       const QString& uri,
+                                       LilvInstance* instance,
+                                       LilvGetPortValueFunc getPortValueFunc,
+                                       LV2PluginInstance* lv2Instance,
+                                       const LV2_Feature*const* features);
     void setInstanceStateFromString(const QString& stateString,
                                     LilvInstance* instance,
                                     LilvSetPortValueFunc setPortValueFunc,
                                     LV2PluginInstance* lv2Instance,
                                     const LV2_Feature*const* features);
+    LilvState* getStateFromFile(const LilvNode* uriNode,
+                                const QString& filename);
+    void saveStateToFile(const LilvState* state, const QString& filename);
 
     /// lilv_new_uri() wrapper.
     LilvNode* makeURINode(const QString& uri) const;
@@ -266,6 +271,21 @@ class LV2Utils
          const PluginPort::ConnectionList& clist) const;
 
     QString getPortName(const QString& uri, int portIndex) const;
+
+    void setupPluginPresets(const QString& uri,
+                            AudioPluginInstance::PluginPresetList& presets);
+    void getPresets(InstrumentId instrument,
+                    int position,
+                    AudioPluginInstance::PluginPresetList& presets) const;
+    void setPreset(InstrumentId instrument,
+                   int position,
+                   const QString& uri);
+    void loadPreset(InstrumentId instrument,
+                    int position,
+                    const QString& file);
+    void savePreset(InstrumentId instrument,
+                    int position,
+                    const QString& file);
 
  private:
 

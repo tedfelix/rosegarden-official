@@ -112,6 +112,7 @@ set(rg_CPPS
   gui/dialogs/MakeOrnamentDialog.cpp
   gui/dialogs/ClefDialog.cpp
   gui/dialogs/AudioPluginDialog.cpp
+  gui/dialogs/AudioPluginPresetDialog.cpp
   gui/dialogs/AudioPluginConnectionDialog.cpp
   gui/dialogs/ExportDeviceDialog.cpp
   gui/dialogs/DialogSuppressor.cpp

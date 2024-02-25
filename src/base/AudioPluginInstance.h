@@ -105,6 +105,7 @@ public:
     bool changedSinceProgramChange;
 
     void setValue(PortData v) { value = v; changedSinceProgramChange = true; }
+
 };
 
 typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
@@ -176,6 +177,14 @@ public:
     std::string getDisplayName() const;
 
     void setLabel(const std::string& label);
+
+    // plugin presets
+    struct PluginPreset
+    {
+        QString uri;
+        QString label;
+    };
+    typedef std::vector<PluginPreset> PluginPresetList;
 
 protected:
 

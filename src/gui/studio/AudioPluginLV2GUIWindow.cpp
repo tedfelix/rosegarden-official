@@ -162,8 +162,8 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_extUiHost.plugin_human_id = titleStdString.c_str();
     m_extHostFeature = {LV2_EXTERNAL_UI__Host, &m_extUiHost};
 
-    m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_map)};
-    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_unmap)};
+    m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_uridMapStruct)};
+    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_uridUnmapStruct)};
 
     // note the instance and data access features are
     // deprecated. However some plugins require them

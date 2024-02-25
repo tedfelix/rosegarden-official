@@ -63,6 +63,14 @@ public:
     void stopGUI(InstrumentId instrument, int position);
     void stopAllGUIs();
 
+    bool canUsePresets(InstrumentId instrument, int position) const;
+    void getPresets(InstrumentId instrument,
+                          int position,
+                          AudioPluginInstance::PluginPresetList& presets);
+    void setPreset(InstrumentId instrument, int position, const QString& uri);
+    void loadPreset(InstrumentId instrument, int position, const QString& file);
+    void savePreset(InstrumentId instrument, int position, const QString& file);
+
     bool canEditConnections(InstrumentId instrument, int position) const;
     void getConnections
         (InstrumentId instrument,

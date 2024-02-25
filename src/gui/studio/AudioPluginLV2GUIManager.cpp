@@ -26,6 +26,7 @@
 #include "sound/LV2Utils.h"
 #include "sound/LV2Worker.h"
 #include "misc/Strings.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QTimer>
 
@@ -96,6 +97,38 @@ AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
     m_position = position;
 
     QTimer::singleShot(0, this, &AudioPluginLV2GUIManager::slotStopGUIDelayed);
+}
+
+void AudioPluginLV2GUIManager::getPresets
+(InstrumentId instrument,
+ int position,
+ AudioPluginInstance::PluginPresetList& presets)
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->getPresets(instrument, position, presets);
+}
+
+void AudioPluginLV2GUIManager::setPreset
+(InstrumentId instrument, int position, const QString& uri)
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->setPreset(instrument, position, uri);
+    updateControls(instrument, position);
+}
+
+void AudioPluginLV2GUIManager::loadPreset
+(InstrumentId instrument, int position, const QString& file)
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->loadPreset(instrument, position, file);
+    updateControls(instrument, position);
+}
+
+void AudioPluginLV2GUIManager::savePreset
+(InstrumentId instrument, int position, const QString& file)
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->savePreset(instrument, position, file);
 }
 
 bool AudioPluginLV2GUIManager::canEditConnections(InstrumentId instrument,
@@ -234,5 +267,24 @@ AudioPluginLV2GUIManager::getInstance(InstrumentId instrument, int position)
     return m_guis[instrument][position];
 }
 
+void AudioPluginLV2GUIManager::updateControls(InstrumentId instrument,
+                                              int position)
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    LV2Utils::PortValues controlInValues;
+    lv2utils->getControlInValues(instrument,
+                                 position,
+                                 controlInValues);
+    // Update for each control in value
+    for (const auto &pair : controlInValues) {
+        int portIndex = pair.first;
+        float value = pair.second;
+        m_mainWindow->slotChangePluginPort(instrument,
+                                           position,
+                                           portIndex,
+                                           value);
+    }
+
+}
 
 }

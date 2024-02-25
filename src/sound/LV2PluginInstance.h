@@ -120,6 +120,11 @@ public:
     void getConnections(PluginPort::ConnectionList& clist) const;
     void setConnections(const PluginPort::ConnectionList& clist);
 
+    void getPresets(AudioPluginInstance::PluginPresetList& presets) const;
+    void setPreset(const QString& uri);
+    void loadPreset(const QString& file);
+    void savePreset(const QString& file);
+
 private:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;
@@ -209,6 +214,7 @@ private:
     PluginPort::ConnectionList m_connections;
     std::string m_profilerName;
     bool m_eventsDiscarded;
+    AudioPluginInstance::PluginPresetList m_presets;
 };
 
 

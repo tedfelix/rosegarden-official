@@ -23,9 +23,11 @@
 #include "gui/studio/AudioPluginLV2GUI.h"
 
 #include <lv2/midi/midi.h>
-//#include <lv2/ui/ui.h>
+#include <lv2/presets/presets.h>
 
 #include <QThread>
+#include <QFileInfo>
+#include <QDir>
 
 // LV2Utils is used in different threads
 #define LOCKED QMutexLocker rg_utils_locker(&m_mutex)
@@ -95,10 +97,11 @@ LV2Utils::uridMap(const char *uri)
     return ret;
 }
 
+// the uridUnmap function is called for debug output and is passed to
+// the plugins which may call it
 const char*
 LV2Utils::uridUnmap(LV2_URID urid)
 {
-    // ??? I never see this called.  Ever.
 #ifdef THREAD_DEBUG
     RG_WARNING << "uridUnmap(): currentThreadId(): " << QThread::currentThreadId();
 #endif
@@ -114,11 +117,11 @@ LV2Utils::uridUnmap(LV2_URID urid)
 }
 
 LV2Utils::LV2Utils():
-    m_map{this, &LV2UridMap},
+    m_uridMapStruct{this, &LV2UridMap},
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    m_unmap{this, &LV2UridUnmap}
+    m_uridUnmapStruct{this, &LV2UridUnmap}
 #else
-    m_unmap{this, &LV2UridUnmap},
+    m_uridUnmapStruct{this, &LV2UridUnmap},
     m_mutex(QMutex::Recursive) // recursive
 #endif
 {
@@ -305,23 +308,23 @@ const LilvPlugin* LV2Utils::getPluginByUri(const QString& uri) const
     return plugin;
 }
 
-LilvState* LV2Utils::getDefaultStateByUri(const QString& uri)
+LilvState* LV2Utils::getStateByUri(const QString& uri)
 {
-    LilvNode* pluginUri = makeURINode(uri);
+    LilvNode* uriNode = makeURINode(uri);
     LilvState *state = lilv_state_new_from_world
         (m_world,
-         &m_map,
-         pluginUri);
-    lilv_node_free(pluginUri);
+         &m_uridMapStruct,
+         uriNode);
+    lilv_node_free(uriNode);
     return state;
 }
 
-QString LV2Utils::getStateFromInstance(const LilvPlugin* plugin,
-                                       const QString& uri,
-                                       LilvInstance* instance,
-                                       LilvGetPortValueFunc getPortValueFunc,
-                                       LV2PluginInstance* lv2Instance,
-                                       const LV2_Feature*const* features)
+LilvState* LV2Utils::getStateFromInstance
+(const LilvPlugin* plugin,
+ LilvInstance* instance,
+ LilvGetPortValueFunc getPortValueFunc,
+ LV2PluginInstance* lv2Instance,
+ const LV2_Feature*const* features)
 {
     // this is called from the gui thread
     uint32_t flags = 0;
@@ -329,7 +332,7 @@ QString LV2Utils::getStateFromInstance(const LilvPlugin* plugin,
     LilvState* state = lilv_state_new_from_instance
         (plugin,
          instance,
-         &m_map,
+         &m_uridMapStruct,
          nullptr,
          nullptr,
          nullptr,
@@ -339,10 +342,27 @@ QString LV2Utils::getStateFromInstance(const LilvPlugin* plugin,
          flags,
          features);
     unlock();
+    return state;
+}
+
+QString LV2Utils::getStateStringFromInstance
+(const LilvPlugin* plugin,
+ const QString& uri,
+ LilvInstance* instance,
+ LilvGetPortValueFunc getPortValueFunc,
+ LV2PluginInstance* lv2Instance,
+ const LV2_Feature*const* features)
+{
+    // this is called from the gui thread
+    LilvState* state = getStateFromInstance(plugin,
+                                            instance,
+                                            getPortValueFunc,
+                                            lv2Instance,
+                                            features);
     std::string uris = uri.toStdString();
     char* s = lilv_state_to_string(m_world,
-                                   &m_map,
-                                   &m_unmap,
+                                   &m_uridMapStruct,
+                                   &m_uridUnmapStruct,
                                    state,
                                    uris.c_str(),
                                    nullptr);
@@ -361,7 +381,7 @@ void LV2Utils::setInstanceStateFromString
     std::string str = stateString.toStdString();
     LilvState* state = lilv_state_new_from_string
         (m_world,
-         &m_map,
+         &m_uridMapStruct,
          str.c_str());
     uint32_t flags = 0;
     lilv_state_restore(state,
@@ -371,6 +391,30 @@ void LV2Utils::setInstanceStateFromString
                        flags,
                        features);
     lilv_state_free(state);
+}
+
+LilvState* LV2Utils::getStateFromFile(const LilvNode* uriNode,
+                                      const QString& filename)
+{
+    LilvState* state = lilv_state_new_from_file(m_world,
+                                                &m_uridMapStruct,
+                                                uriNode,
+                                                qPrintable(filename));
+    return state;
+}
+
+void LV2Utils::saveStateToFile(const LilvState* state, const QString& filename)
+{
+    QFileInfo info(filename);
+    QDir dir = info.dir();
+    QString basename = info.fileName();
+    lilv_state_save(m_world,
+                    &m_uridMapStruct,
+                    &m_uridUnmapStruct,
+                    state,
+                    nullptr,
+                    qPrintable(dir.absolutePath()),
+                    qPrintable(basename));
 }
 
 LV2Utils::LV2PluginData LV2Utils::getPluginData(const QString& uri) const
@@ -709,6 +753,126 @@ QString LV2Utils::getPortName(const QString& uri, int portIndex) const
     if (it == m_pluginData.end()) return "";
     const LV2PluginData& pdat = (*it).second;
     return pdat.ports[portIndex].name;
+}
+
+void LV2Utils::setupPluginPresets
+(const QString& uri,
+ AudioPluginInstance::PluginPresetList& presets)
+{
+    RG_DEBUG << "setupPluginPresets" << uri;
+    presets.clear();
+    LilvNode* presetUri = makeURINode(LV2_PRESETS__Preset);
+    LilvNode* labelUri =
+        makeURINode("http://www.w3.org/2000/01/rdf-schema#label");
+    const LilvPlugin* plugin = getPluginByUri(uri);
+    LilvNodes* presetNodes = lilv_plugin_get_related(plugin, presetUri);
+    LILV_FOREACH(nodes, it, presetNodes)
+        {
+            const LilvNode* n = lilv_nodes_get(presetNodes, it);
+            lilv_world_load_resource(m_world, n);
+            QString presetLabel;
+            LilvNodes *presetLabels =
+                lilv_world_find_nodes(m_world, n, labelUri, nullptr);
+            if (presetLabels) {
+                const LilvNode *labelNode = lilv_nodes_get_first(presetLabels);
+                presetLabel = lilv_node_as_string(labelNode);
+            }
+            lilv_nodes_free(presetLabels);
+
+            const char* pstr = lilv_node_as_string(n);
+            RG_DEBUG << "found preset: " << pstr;
+            AudioPluginInstance::PluginPreset pp;
+            pp.uri = pstr;
+            pp.label = presetLabel;
+            presets.push_back(pp);
+        }
+    lilv_node_free(presetUri);
+    lilv_node_free(labelUri);
+    RG_DEBUG << "setupPluginPresets found" << presets.size();
+}
+
+void LV2Utils::getPresets(InstrumentId instrument,
+                          int position,
+                          AudioPluginInstance::PluginPresetList& presets) const
+{
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
+        RG_DEBUG << "getPresets plugin not found" <<
+            instrument << position;
+        return;
+    }
+    const PluginInstanceData& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "getPresets no pluginInstance";
+        return;
+    }
+    pgdata.pluginInstance->getPresets(presets);
+}
+
+void LV2Utils::setPreset(InstrumentId instrument,
+                         int position,
+                         const QString& uri)
+{
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
+        RG_DEBUG << "setPreset plugin not found" <<
+            instrument << position;
+        return;
+    }
+    const PluginInstanceData& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "setPreset no pluginInstance";
+        return;
+    }
+    pgdata.pluginInstance->setPreset(uri);
+}
+
+void LV2Utils::loadPreset(InstrumentId instrument,
+                          int position,
+                          const QString& file)
+{
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
+        RG_DEBUG << "loadPreset plugin not found" <<
+            instrument << position;
+        return;
+    }
+    const PluginInstanceData& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "loadPreset no pluginInstance";
+        return;
+    }
+    pgdata.pluginInstance->loadPreset(file);
+}
+
+void LV2Utils::savePreset(InstrumentId instrument,
+                          int position,
+                          const QString& file)
+{
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
+        RG_DEBUG << "savePreset plugin not found" <<
+            instrument << position;
+        return;
+    }
+    const PluginInstanceData& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "savePreset no pluginInstance";
+        return;
+    }
+    pgdata.pluginInstance->savePreset(file);
 }
 
 LV2Utils::AtomQueueItem::AtomQueueItem() :

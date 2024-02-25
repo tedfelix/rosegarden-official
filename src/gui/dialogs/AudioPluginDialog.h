@@ -85,6 +85,7 @@ public slots:
     void slotShowGUI();
     void slotHelpRequested();
 
+    void slotPresets();
     virtual void slotEditConnections();
     virtual void slotEditor();
 
@@ -132,6 +133,7 @@ protected:
     QPushButton         *m_pasteButton;
     QPushButton         *m_defaultButton;
     QPushButton         *m_guiButton;
+    QPushButton         *m_presetButton;
     QPushButton         *m_editConnectionsButton;
     QPushButton         *m_editorButton;
 
