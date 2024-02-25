@@ -33,6 +33,7 @@
 //#include <QtGlobal>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QThread>
 
 
 namespace
@@ -97,6 +98,10 @@ LV2PluginInstance::LV2PluginInstance
         m_profilerName("LV2: " + m_uri.toStdString()),
         m_eventsDiscarded(false)
 {
+#ifdef THREAD_DEBUG
+    RG_WARNING << "LV2PluginInstance: currentThreadId(): " << QThread::currentThreadId();
+#endif
+
     RG_DEBUG << "create plugin" << uri << m_instrument << m_position;
 
     LV2Utils* lv2utils = LV2Utils::getInstance();

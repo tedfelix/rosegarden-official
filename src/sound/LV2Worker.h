@@ -35,6 +35,8 @@ namespace Rosegarden
  * The LV2Worker class provides the LV2 Worker feature which
  * allows plugins to schedule non-real-time tasks in another thread.
  *
+ * Work is done on a QTimer, so this runs in the UI thread.
+ *
  * AudioPluginLV2GUIManager creates and holds instances of this class.
  * See AudioPluginLV2GUIManager::m_worker.
  */

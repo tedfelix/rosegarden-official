@@ -64,13 +64,25 @@ LV2Utils::getInstance()
 LV2_URID
 LV2Utils::uridMap(const char *uri)
 {
-    // ??? I only see exactly one thread.  Mutex might not be needed.
-    //     We'll need to do some more extensive testing.  E.g. identify
-    //     exactly which thread is calling this.  Then test with many
-    //     more plugins to be safe.
-    RG_DEBUG << "uridMap(): Thread ID: " << QThread::currentThreadId();
+    // The UI thread is the main user of this.  However, since we send
+    // this to each plugin as a feature, it's possible that a plugin might
+    // call this either in its worker thread or its real-time processing
+    // thread (seems dangerous).  The worker thread is really our UI
+    // thread, so not an issue.  The real-time processing thread is likely
+    // the JACK process callback thread (jack_set_process_callback()).  If
+    // there is even the slightest chance this might be called from that,
+    // then we need a mutex.  Unfortunately the LV2 docs are silent on this.
+    // Might want to check Carla.
+    //
+    // In (limited) testing, I've only seen the UI thread calling into
+    // this routine.
+#ifdef THREAD_DEBUG
+    RG_WARNING << "uridMap(): currentThreadId(): " << QThread::currentThreadId();
+#endif
 
+    // In case we are called by the real-time processing thread.
     LOCKED;
+
     auto it = m_uridMap.find(uri);
     // Not found?  Create a new URID and entry in the map.
     if (it == m_uridMap.end()) {
@@ -87,9 +99,13 @@ const char*
 LV2Utils::uridUnmap(LV2_URID urid)
 {
     // ??? I never see this called.  Ever.
-    RG_DEBUG << "uridUnmap(): Thread ID: " << QThread::currentThreadId();
+#ifdef THREAD_DEBUG
+    RG_WARNING << "uridUnmap(): currentThreadId(): " << QThread::currentThreadId();
+#endif
 
+    // In case we are called by the real-time processing thread.
     LOCKED;
+
     auto it = m_uridUnmap.find(urid);
     if (it == m_uridUnmap.end()) {
         return "";

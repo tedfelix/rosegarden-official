@@ -240,6 +240,7 @@
 #include <QPageSetupDialog>
 #include <QSharedPointer>
 #include <QInputDialog>
+#include <QThread>
 
 // Ladish lv1 support
 #include <cerrno>   // for errno
@@ -306,6 +307,10 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_warningWidget(nullptr),
     m_cpuMeterTimer(new QTimer(this))
 {
+#ifdef THREAD_DEBUG
+    RG_WARNING << "UI Thread currentThreadId(): " << QThread::currentThreadId();
+#endif
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     setObjectName("App");

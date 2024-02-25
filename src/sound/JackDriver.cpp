@@ -32,6 +32,7 @@
 
 #include <QSettings>
 #include <QtGlobal>
+#include <QThread>
 
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
@@ -812,6 +813,15 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
         return jackProcessEmpty(nframes);
     }
+
+#ifdef THREAD_DEBUG
+    static Qt::HANDLE threadId{0};
+    if (threadId != QThread::currentThreadId())
+    {
+        threadId = QThread::currentThreadId();
+        RG_WARNING << "jackProcess(): currentThreadId(): " << threadId;
+    }
+#endif
 
     // Compute number of synths.
     // ??? Performance: AudioInstrumentMixer should maintain this number as
