@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CommandHistory]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "CommandHistory.h"
 
@@ -95,11 +95,11 @@ CommandHistory::clear()
 }
 
 void
-CommandHistory::addCommand(Command *command)
+CommandHistory::addCommand(Command *command, timeT startPointerPosition)
 {
     if (!command) return;
 
-    RG_DEBUG << "addCommand(): " << command->getName().toLocal8Bit().data() << " at " << command;
+    RG_DEBUG << "addCommand(): " << command->getName().toLocal8Bit().data() << " at " << command << startPointerPosition;
 
     // We can't redo after adding a command
     clearStack(m_redoStack);
@@ -109,6 +109,8 @@ CommandHistory::addCommand(Command *command)
 
     emit aboutToExecuteCommand();
 
+    // override from caller
+    if (startPointerPosition > -1.0e9) m_pointerPosition = startPointerPosition;
     CommandInfo commInfo;
     commInfo.command = command;
     commInfo.pointerPositionBefore = m_pointerPosition;

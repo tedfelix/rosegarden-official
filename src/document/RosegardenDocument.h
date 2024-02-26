@@ -367,6 +367,12 @@ public:
      */
     void setRecordStartTime(timeT t) { m_recordStartTime = t; }
 
+    /**
+     * Cause the document to use the given time as the pointer
+     * position before recording
+     */
+    void setPointerPositionBeforeRecord(timeT t) { m_pointerBeforeRecord = t; }
+
     /*
      * Get a MappedDevice from the sequencer and add the
      * results to our Studio
@@ -791,7 +797,7 @@ private:
     RealTime m_audioRecordLatency;
 
     timeT m_recordStartTime;
-
+    timeT m_pointerBeforeRecord;
     timeT m_quickMarkerTime;
 
     std::vector<QString> m_orphanedRecordedAudioFiles;
