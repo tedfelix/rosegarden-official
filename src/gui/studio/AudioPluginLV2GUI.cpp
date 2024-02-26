@@ -28,6 +28,7 @@
 #include "base/AudioPluginInstance.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
+#include "sound/LV2URIDMapper.h"
 
 // the kx.studio extension
 #include "gui/studio/lv2_external_ui.h"
@@ -59,7 +60,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
 {
     m_id = strtoqstr(m_pluginInstance->getIdentifier());
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    m_atomTransferUrid = lv2utils->uridMap(LV2_ATOM__eventTransfer);
+    m_atomTransferUrid = LV2URIDMapper::uridMap(LV2_ATOM__eventTransfer);
     const LilvPlugin* plugin = lv2utils->getPluginByUri(m_id);
 
     if (! plugin) {
@@ -225,7 +226,7 @@ AudioPluginLV2GUI::portChange(uint32_t portIndex,
         // complex data
         LV2Utils* lv2utils = LV2Utils::getInstance();
         RG_DEBUG << "complex data" << portProtocol <<
-            "urid:" << lv2utils->uridUnmap(portProtocol);
+            "urid:" << LV2URIDMapper::uridUnmap(portProtocol);
         QByteArray ba(static_cast<const char*>(buffer), bufferSize);
 
         lv2utils->setPortValue(m_instrument, m_position,

@@ -22,6 +22,7 @@
 #include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "sound/LV2Utils.h"
+#include "sound/LV2URIDMapper.h"
 #include "sound/Midi.h"
 #include "sound/AudioProcess.h"  // For AudioInstrumentMixer
 #include "gui/application/RosegardenMainWindow.h"
@@ -105,7 +106,7 @@ LV2PluginInstance::LV2PluginInstance
     RG_DEBUG << "create plugin" << uri << m_instrument << m_position;
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    m_atomTransferUrid = lv2utils->uridMap(LV2_ATOM__eventTransfer);
+    m_atomTransferUrid = LV2URIDMapper::uridMap(LV2_ATOM__eventTransfer);
 
     m_workerHandle.instrument = instrument;
     m_workerHandle.position = position;
@@ -131,7 +132,7 @@ LV2PluginInstance::LV2PluginInstance
     snd_midi_event_new(100, &m_midiParser);
     snd_midi_event_no_status(m_midiParser, 1); // disable merging
 
-    m_midiEventUrid = lv2utils->uridMap(LV2_MIDI__MidiEvent);
+    m_midiEventUrid = LV2URIDMapper::uridMap(LV2_MIDI__MidiEvent);
 
     instantiate(sampleRate);
     if (isOK()) {
@@ -206,7 +207,7 @@ LV2PluginInstance::init(int idealChannelCount)
                         reinterpret_cast<LV2_Atom_Sequence*>(dbuf);
                     lv2_atom_sequence_clear(atomOut);
                     // to tell the plugin the capacity
-                    LV2_URID type = lv2utils->uridMap(LV2_ATOM__Sequence);
+                    LV2_URID type = LV2URIDMapper::uridMap(LV2_ATOM__Sequence);
                     atomOut->atom.type = type;
                     atomOut->atom.size = 8 * ABUFSIZED - 8;
                     ap.atomSeq = atomOut;
@@ -577,18 +578,18 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
 
-    m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_uridMapStruct)};
-    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_uridUnmapStruct)};
+    m_uridMapFeature = {LV2_URID__map, LV2URIDMapper::getURIDMapFeature()};
+    m_uridUnmapFeature = {LV2_URID__unmap, LV2URIDMapper::getURIDUnmapFeature()};
 
     m_workerSchedule.handle = &m_workerHandle;
     m_workerSchedule.schedule_work = lv2utils->getWorker()->getScheduler();
     RG_DEBUG << "schedule_work" << (void*)m_workerSchedule.schedule_work;
     m_workerFeature = {LV2_WORKER__schedule, &m_workerSchedule};
 
-    LV2_URID nbl_urid = lv2utils->uridMap(LV2_BUF_SIZE__nominalBlockLength);
-    LV2_URID minbl_urid = lv2utils->uridMap(LV2_BUF_SIZE__minBlockLength);
-    LV2_URID maxbl_urid = lv2utils->uridMap(LV2_BUF_SIZE__maxBlockLength);
-    LV2_URID ai_urid = lv2utils->uridMap(LV2_ATOM__Int);
+    LV2_URID nbl_urid = LV2URIDMapper::uridMap(LV2_BUF_SIZE__nominalBlockLength);
+    LV2_URID minbl_urid = LV2URIDMapper::uridMap(LV2_BUF_SIZE__minBlockLength);
+    LV2_URID maxbl_urid = LV2URIDMapper::uridMap(LV2_BUF_SIZE__maxBlockLength);
+    LV2_URID ai_urid = LV2URIDMapper::uridMap(LV2_ATOM__Int);
     LV2_Options_Option opt;
     opt.context = LV2_OPTIONS_INSTANCE;
     opt.subject = 0;
@@ -736,8 +737,8 @@ void LV2PluginInstance::setPortValue(const char *port_symbol,
 
     int index =  lilv_port_get_index(m_plugin, port);
 
-    uint32_t floatType = lv2utils->uridMap(LV2_ATOM__Float);
-    uint32_t intType = lv2utils->uridMap(LV2_ATOM__Int);
+    uint32_t floatType = LV2URIDMapper::uridMap(LV2_ATOM__Float);
+    uint32_t intType = LV2URIDMapper::uridMap(LV2_ATOM__Int);
     if (size != 4) {
         RG_DEBUG << "bad size" << size;
         return;
@@ -751,7 +752,7 @@ void LV2PluginInstance::setPortValue(const char *port_symbol,
         RG_DEBUG << "setting int value" << ival;
         setPortValue(index, (float)ival);
     } else {
-        RG_DEBUG << "unknown type" << type <<lv2utils->uridUnmap(type);
+        RG_DEBUG << "unknown type" << type << LV2URIDMapper::uridUnmap(type);
     }
 }
 
@@ -812,7 +813,7 @@ void* LV2PluginInstance::getPortValue(const char *port_symbol,
         return nullptr;
     }
     static uint32_t portValueSize = 4;
-    static uint32_t portValueType = lv2utils->uridMap(LV2_ATOM__Float);
+    static uint32_t portValueType = LV2URIDMapper::uridMap(LV2_ATOM__Float);
     *size = portValueSize;
     *type = portValueType;
     return &(it->second);

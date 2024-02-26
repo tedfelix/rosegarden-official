@@ -17,6 +17,8 @@
 
 #include "LV2Utils.h"
 
+#include "LV2URIDMapper.h"
+
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"  // For PluginPort
 #include "sound/LV2PluginInstance.h"
@@ -32,25 +34,6 @@
 // LV2Utils is used in different threads
 #define LOCKED QMutexLocker rg_utils_locker(&m_mutex)
 
-namespace
-{
-    LV2_URID LV2UridMap(LV2_URID_Map_Handle handle,
-                        const char *uri)
-    {
-        Rosegarden::LV2Utils* lv2i =
-            static_cast<Rosegarden::LV2Utils*>(handle);
-        return lv2i->uridMap(uri);
-    }
-
-    const char* LV2UridUnmap(LV2_URID_Unmap_Handle handle,
-                             LV2_URID urid)
-    {
-        Rosegarden::LV2Utils* lv2i =
-            static_cast<Rosegarden::LV2Utils*>(handle);
-        return lv2i->uridUnmap(urid);
-    }
-}
-
 
 namespace Rosegarden
 {
@@ -63,73 +46,15 @@ LV2Utils::getInstance()
     return &instance;
 }
 
-LV2_URID
-LV2Utils::uridMap(const char *uri)
-{
-    // The UI thread is the main user of this.  However, since we send
-    // this to each plugin as a feature, it's possible that a plugin might
-    // call this either in its worker thread or its real-time processing
-    // thread (seems dangerous).  The worker thread is really our UI
-    // thread, so not an issue.  The real-time processing thread is likely
-    // the JACK process callback thread (jack_set_process_callback()).  If
-    // there is even the slightest chance this might be called from that,
-    // then we need a mutex.  Unfortunately the LV2 docs are silent on this.
-    // Might want to check Carla.
-    //
-    // In (limited) testing, I've only seen the UI thread calling into
-    // this routine.
-#ifdef THREAD_DEBUG
-    RG_WARNING << "uridMap(): currentThreadId(): " << QThread::currentThreadId();
-#endif
-
-    // In case we are called by the real-time processing thread.
-    LOCKED;
-
-    auto it = m_uridMap.find(uri);
-    // Not found?  Create a new URID and entry in the map.
-    if (it == m_uridMap.end()) {
-        int id = m_nextId;
-        m_nextId++;
-        m_uridMap[uri] = id;
-        m_uridUnmap[id] = uri;
-    }
-    int ret = m_uridMap[uri];
-    return ret;
-}
-
-// the uridUnmap function is called for debug output and is passed to
-// the plugins which may call it
-const char*
-LV2Utils::uridUnmap(LV2_URID urid)
-{
-#ifdef THREAD_DEBUG
-    RG_WARNING << "uridUnmap(): currentThreadId(): " << QThread::currentThreadId();
-#endif
-
-    // In case we are called by the real-time processing thread.
-    LOCKED;
-
-    auto it = m_uridUnmap.find(urid);
-    if (it == m_uridUnmap.end()) {
-        return "";
-    }
-    return (*it).second.c_str();
-}
-
 LV2Utils::LV2Utils():
-    m_uridMapStruct{this, &LV2UridMap},
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    m_uridUnmapStruct{this, &LV2UridUnmap}
-#else
-    m_uridUnmapStruct{this, &LV2UridUnmap},
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    // Qt5 offers QMutexRecursive, but only for 5.14 and later.
     m_mutex(QMutex::Recursive) // recursive
 #endif
 {
     LOCKED;
 
     m_worker = nullptr;
-
-    m_nextId = 1;
 
     // the LilvWorld knows all plugins
     m_world = lilv_world_new();
@@ -313,7 +238,7 @@ LilvState* LV2Utils::getStateByUri(const QString& uri)
     LilvNode* uriNode = makeURINode(uri);
     LilvState *state = lilv_state_new_from_world
         (m_world,
-         &m_uridMapStruct,
+         LV2URIDMapper::getURIDMapFeature(),
          uriNode);
     lilv_node_free(uriNode);
     return state;
@@ -332,7 +257,7 @@ LilvState* LV2Utils::getStateFromInstance
     LilvState* state = lilv_state_new_from_instance
         (plugin,
          instance,
-         &m_uridMapStruct,
+         LV2URIDMapper::getURIDMapFeature(),
          nullptr,
          nullptr,
          nullptr,
@@ -361,8 +286,8 @@ QString LV2Utils::getStateStringFromInstance
                                             features);
     std::string uris = uri.toStdString();
     char* s = lilv_state_to_string(m_world,
-                                   &m_uridMapStruct,
-                                   &m_uridUnmapStruct,
+                                   LV2URIDMapper::getURIDMapFeature(),
+                                   LV2URIDMapper::getURIDUnmapFeature(),
                                    state,
                                    uris.c_str(),
                                    nullptr);
@@ -381,7 +306,7 @@ void LV2Utils::setInstanceStateFromString
     std::string str = stateString.toStdString();
     LilvState* state = lilv_state_new_from_string
         (m_world,
-         &m_uridMapStruct,
+         LV2URIDMapper::getURIDMapFeature(),
          str.c_str());
     uint32_t flags = 0;
     lilv_state_restore(state,
@@ -397,7 +322,7 @@ LilvState* LV2Utils::getStateFromFile(const LilvNode* uriNode,
                                       const QString& filename)
 {
     LilvState* state = lilv_state_new_from_file(m_world,
-                                                &m_uridMapStruct,
+                                                LV2URIDMapper::getURIDMapFeature(),
                                                 uriNode,
                                                 qPrintable(filename));
     return state;
@@ -409,8 +334,8 @@ void LV2Utils::saveStateToFile(const LilvState* state, const QString& filename)
     QDir dir = info.dir();
     QString basename = info.fileName();
     lilv_state_save(m_world,
-                    &m_uridMapStruct,
-                    &m_uridUnmapStruct,
+                    LV2URIDMapper::getURIDMapFeature(),
+                    LV2URIDMapper::getURIDUnmapFeature(),
                     state,
                     nullptr,
                     qPrintable(dir.absolutePath()),

@@ -23,7 +23,7 @@
 #include "misc/Debug.h"
 #include "AudioPluginLV2GUI.h"
 #include "sound/LV2PluginInstance.h"
-#include "sound/LV2Utils.h"
+#include "sound/LV2URIDMapper.h"
 #include "LV2Gtk.h"
 
 #include <QTimer>
@@ -130,13 +130,12 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_resizeFeature.URI = LV2_UI__resize;
     m_resizeFeature.data = &m_resizeData;
 
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    LV2_URID sampleRateUrid = lv2utils->uridMap(LV2_PARAMETERS__sampleRate);
-    LV2_URID af_urid = lv2utils->uridMap(LV2_ATOM__Float);
+    LV2_URID sampleRateUrid = LV2URIDMapper::uridMap(LV2_PARAMETERS__sampleRate);
+    LV2_URID af_urid = LV2URIDMapper::uridMap(LV2_ATOM__Float);
     float sampleRate = pluginInstance->getSampleRate();
     std::string titleStdString = m_title.toStdString();
-    LV2_URID titleUrid = lv2utils->uridMap(LV2_UI__windowTitle);
-    LV2_URID as_urid = lv2utils->uridMap(LV2_ATOM__String);
+    LV2_URID titleUrid = LV2URIDMapper::uridMap(LV2_UI__windowTitle);
+    LV2_URID as_urid = LV2URIDMapper::uridMap(LV2_ATOM__String);
     LV2_Options_Option opt;
     opt.context = LV2_OPTIONS_INSTANCE;
     opt.subject = 0;
@@ -162,8 +161,8 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_extUiHost.plugin_human_id = titleStdString.c_str();
     m_extHostFeature = {LV2_EXTERNAL_UI__Host, &m_extUiHost};
 
-    m_uridMapFeature = {LV2_URID__map, &(lv2utils->m_uridMapStruct)};
-    m_uridUnmapFeature = {LV2_URID__unmap, &(lv2utils->m_uridUnmapStruct)};
+    m_uridMapFeature = {LV2_URID__map, LV2URIDMapper::getURIDMapFeature()};
+    m_uridUnmapFeature = {LV2_URID__unmap, LV2URIDMapper::getURIDUnmapFeature()};
 
     // note the instance and data access features are
     // deprecated. However some plugins require them

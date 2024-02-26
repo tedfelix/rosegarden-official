@@ -53,34 +53,6 @@ class LV2Utils
     LV2Utils(LV2Utils &other) = delete;
     void operator=(const LV2Utils &) = delete;
 
-    // URI/URID mapping.
-    // https://lv2plug.in/c/html/group__urid.html
-
-    // ??? Split this out into its own LV2URIDMapper class to make
-    //     it easier to understand.
-
-    /// URID Map. Gets the URID for a URI.
-    /**
-     * If the URI hasn't been seen yet, a new URID is assigned.
-     *
-     * @see m_uridMap
-     */
-    LV2_URID uridMap(const char *uri);
-    /**
-     * Member function pointer to uridMap().
-     */
-    LV2_URID_Map m_uridMapStruct;
-
-    /// URID Unmap. Gets the URI for a URID.
-    /**
-     * @see m_uridUnmap
-     */
-    const char *uridUnmap(LV2_URID urid);
-    /**
-     * Member function pointer to uridUnmap().
-     */
-    LV2_URID_Unmap m_uridUnmapStruct;
-
     // Key type for GUI and worker maps.
     struct PluginPosition
     {
@@ -292,17 +264,6 @@ class LV2Utils
     /// Singleton.  See getInstance().
     LV2Utils();
     ~LV2Utils();
-
-
-    // URID <-> URI maps
-
-    // URI (string) to URID (uint)
-    std::map<std::string /* URI */, LV2_URID> m_uridMap;
-    // URID (uint) to URI (string)
-    std::map<LV2_URID, std::string /* URI */> m_uridUnmap;
-    // Next URID.
-    LV2_URID m_nextId;
-
 
     // This mutex is used for the synchronization of the lv2
     // threads. Some calls are made in the audio thread others in the
