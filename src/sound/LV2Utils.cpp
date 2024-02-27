@@ -46,10 +46,10 @@ LV2Utils::getInstance()
     return &instance;
 }
 
-LV2Utils::LV2Utils():
+LV2Utils::LV2Utils()
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     // Qt5 offers QMutexRecursive, but only for 5.14 and later.
-    m_mutex(QMutex::Recursive) // recursive
+    : m_mutex(QMutex::Recursive) // recursive
 #endif
 {
     LOCKED;
