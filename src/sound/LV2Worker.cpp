@@ -73,7 +73,7 @@ LV2Worker::~LV2Worker()
     RG_DEBUG << "~LV2Worker";
 }
 
-LV2Utils::ScheduleWork LV2Worker::getScheduler()
+decltype(LV2_Worker_Schedule::schedule_work) LV2Worker::getScheduler()
 {
     return scheduleWorkC;
 }

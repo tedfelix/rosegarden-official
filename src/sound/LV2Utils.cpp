@@ -18,6 +18,7 @@
 #include "LV2Utils.h"
 
 #include "LV2URIDMapper.h"
+#include "LV2Worker.h"
 
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"  // For PluginPort
@@ -429,7 +430,7 @@ void LV2Utils::registerGUI(InstrumentId instrument,
     m_pluginInstanceData[pp].gui = gui;
 }
 
-void LV2Utils::registerWorker(Worker* worker)
+void LV2Utils::registerWorker(LV2Worker* worker)
 {
     m_worker = worker;
 }
@@ -586,7 +587,7 @@ void LV2Utils::triggerPortUpdates(InstrumentId instrument,
     }
 }
 
-LV2Utils::Worker* LV2Utils::getWorker() const
+LV2Worker* LV2Utils::getWorker() const
 {
     return m_worker;
 }

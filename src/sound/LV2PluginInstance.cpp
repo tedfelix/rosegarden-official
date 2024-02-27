@@ -19,6 +19,8 @@
 
 #include "LV2PluginInstance.h"
 
+#include "LV2Worker.h"
+
 #include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "sound/LV2Utils.h"
@@ -1030,7 +1032,7 @@ LV2PluginInstance::run(const RealTime &rt)
     */
 
     // get any worker responses
-    LV2Utils::Worker* worker = lv2utils->getWorker();
+    LV2Worker* worker = lv2utils->getWorker();
 
     LV2Utils::PluginPosition pp;
     pp.instrument = m_instrument;

@@ -40,16 +40,17 @@ namespace Rosegarden
  * AudioPluginLV2GUIManager creates and holds instances of this class.
  * See AudioPluginLV2GUIManager::m_worker.
  */
-class LV2Worker : public QObject, public LV2Utils::Worker
+class LV2Worker : public QObject
 {
     Q_OBJECT
  public:
     LV2Worker();
     ~LV2Worker();
 
-    virtual LV2Utils::ScheduleWork getScheduler() override;
-    virtual LV2Utils::WorkerJob*
-        getResponse(const LV2Utils::PluginPosition& pp) override;
+    decltype(LV2_Worker_Schedule::schedule_work) getScheduler();
+
+    LV2Utils::WorkerJob*
+        getResponse(const LV2Utils::PluginPosition& pp);
 
     LV2_Worker_Status scheduleWork(uint32_t size,
                                    const void* data,

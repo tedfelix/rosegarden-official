@@ -38,6 +38,7 @@ namespace Rosegarden
 
 class LV2PluginInstance;
 class AudioPluginLV2GUI;
+class LV2Worker;
 
 /// LV2 utils
 /**
@@ -73,36 +74,15 @@ class LV2Utils
 
     // ??? Move these to LV2Worker as statics?
 
-    // interface for a worker class
-    // ??? Only used by LV2Worker.  Move there.
-    // it is used below for the worker interface class. I think it should stay
-    typedef LV2_Worker_Status (*ScheduleWork)(LV2_Worker_Schedule_Handle handle,
-                                              uint32_t size,
-                                              const void* data);
-
     struct WorkerJob
     {
         uint32_t size;
         const void *data;
     };
 
-    /// LV2Worker derives from this.
-    class Worker
-    {
-    public:
-        virtual ~Worker() {};
-        virtual ScheduleWork getScheduler() = 0;
-        virtual WorkerJob *getResponse(const LV2Utils::PluginPosition &pp) = 0;
-    };
-
-    void registerWorker(Worker *worker);
-    Worker *getWorker() const;
+    void registerWorker(LV2Worker *worker);
+    LV2Worker *getWorker() const;
     void unRegisterWorker();
-
-    void runWork(const PluginPosition &pp,
-                 uint32_t size,
-                 const void *data,
-                 LV2_Worker_Respond_Function resp);
 
 
     // Plugin Management
@@ -235,6 +215,12 @@ class LV2Utils
                              int position,
                              PortValues &controlValues);
 
+    /// Calls the plugin instance's runWork().
+    void runWork(const PluginPosition &pp,
+                 uint32_t size,
+                 const void *data,
+                 LV2_Worker_Respond_Function resp);
+
     LV2PluginInstance* getPluginInstance(InstrumentId instrument,
                                          int position) const;
 
@@ -249,6 +235,7 @@ class LV2Utils
          const PluginPort::ConnectionList& clist) const;
 
     QString getPortName(const QString& uri, int portIndex) const;
+
 
     void setupPluginPresets(const QString& uri,
                             AudioPluginInstance::PluginPresetList& presets);
@@ -332,7 +319,7 @@ class LV2Utils
      *     - Called by LV2PluginFactory.
      *     - Called by the AudioPluginManager::Enumerator thread.
      *       ??? This one is odd.  It may be that the UI waits for this anyway.
-     *         So there really isn't an issue.  Look closely at this.
+     *           So there really isn't an issue.  Look closely at this.
      *     - Called by the UI thread.
      *   getPluginData() - Returns a copy of data in m_pluginData.
      *     - Safe to return a copy so long as initPluginData() has completed.
@@ -396,9 +383,23 @@ class LV2Utils
 
     /// The LV2Worker instance.
     /**
+     * Global, easily accessible location for the Worker pointer.
+     *
      * ??? Would a Singleton be simpler?
+     *
+     * Thread-Safe?  Pointer value?
+     *
+     * Thread-Safe?  Worker contents?
+     *
+     * Users:
+     *   registerWorker() - Sets m_worker.
+     *     - AudioPluginLV2GUIManager holds the Worker instance and its
+     *       ctor calls this.
+     *   unRegisterWorker() - Sets m_worker to nullptr.
+     *     - AudioPluginLV2GUIManager's dtor calls this.
+     *   getWorker() - Returns m_worker non-const.
      */
-    Worker *m_worker{nullptr};
+    LV2Worker *m_worker{nullptr};
 };
 
 
