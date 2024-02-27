@@ -815,12 +815,12 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
 #ifdef THREAD_DEBUG
-    static Qt::HANDLE threadId{0};
+    static pid_t threadId{0};
     // Note: This is not reliable since it is not thread safe.
-    if (threadId != QThread::currentThreadId())
+    if (threadId != gettid())
     {
-        threadId = QThread::currentThreadId();
-        RG_WARNING << "jackProcess(): currentThreadId(): " << threadId;
+        threadId = gettid();
+        RG_WARNING << "jackProcess(): gettid(): " << gettid();
     }
 #endif
 

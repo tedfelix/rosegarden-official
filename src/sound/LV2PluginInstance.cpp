@@ -36,6 +36,8 @@
 #include <QJsonArray>
 #include <QThread>
 
+#include <unistd.h>  // gettid()
+
 
 namespace
 {
@@ -100,7 +102,7 @@ LV2PluginInstance::LV2PluginInstance
         m_eventsDiscarded(false)
 {
 #ifdef THREAD_DEBUG
-    RG_WARNING << "LV2PluginInstance: currentThreadId(): " << QThread::currentThreadId();
+    RG_WARNING << "LV2PluginInstance: gettid(): " << gettid();
 #endif
 
     RG_DEBUG << "create plugin" << uri << m_instrument << m_position;

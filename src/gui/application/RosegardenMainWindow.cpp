@@ -308,7 +308,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_cpuMeterTimer(new QTimer(this))
 {
 #ifdef THREAD_DEBUG
-    RG_WARNING << "UI Thread currentThreadId(): " << QThread::currentThreadId();
+    RG_WARNING << "UI Thread gettid(): " << gettid();
 #endif
 
     setAttribute(Qt::WA_DeleteOnClose);

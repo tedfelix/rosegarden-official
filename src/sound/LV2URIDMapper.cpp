@@ -26,6 +26,8 @@
 #include <map>
 #include <string>
 
+#include <unistd.h>  // gettid()
+
 #define LOCKED QMutexLocker rgMapperLocker(&mutex)
 
 namespace
@@ -95,7 +97,7 @@ LV2URIDMapper::uridMap(const char *uri)
     // this routine.
 
 #ifdef THREAD_DEBUG
-    RG_WARNING << "uridMap(): currentThreadId(): " << QThread::currentThreadId();
+    RG_WARNING << "uridMap(): gettid(): " << gettid();
 #endif
 
     // In case we are called by the real-time processing thread?
@@ -118,7 +120,7 @@ LV2URIDMapper::uridUnmap(const LV2_URID urid)
 {
     // ??? I never see this called.  Ever.
 #ifdef THREAD_DEBUG
-    RG_WARNING << "uridUnmap(): currentThreadId(): " << QThread::currentThreadId();
+    RG_WARNING << "uridUnmap(): gettid(): " << gettid();
 #endif
 
     // In case we are called by the real-time processing thread?
