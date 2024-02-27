@@ -176,6 +176,8 @@ class LV2Utils
 
     /// Lock m_mutex.
     /**
+     * Called from both the UI thread and the JACK process thread.
+     *
      * ??? This is used to lock m_workerResponses, and what else?
      *
      * This is the central mutex lock for all the lv2 thread communication
@@ -211,6 +213,10 @@ class LV2Utils
                       const QByteArray& data);
 
     // called by the plugin to update the ui
+    // IMPORTANT: Must call lock() before calling this!
+    // ??? Move the logic from the caller into here so that lock()
+    //     need not be public for this.  Then we can use LOCKED which
+    //     is safer.
     void updatePortValue(InstrumentId instrument,
                          int position,
                          int index,
@@ -265,10 +271,14 @@ class LV2Utils
     LV2Utils();
     ~LV2Utils();
 
+    // Used by both the UI thread and the JACK process thread.
+    //
+    // This is primarily used to guard m_pluginInstanceData.
+    //
     // This mutex is used for the synchronization of the lv2
     // threads. Some calls are made in the audio thread others in the
     // gui thread. Data used by the calls are protected with this
-    // mutex
+    // mutex.
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QRecursiveMutex m_mutex;
 #else

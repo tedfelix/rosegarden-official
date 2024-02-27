@@ -253,7 +253,10 @@ LilvState* LV2Utils::getStateFromInstance
 {
     // this is called from the gui thread
     uint32_t flags = 0;
-    lock();
+
+    //lock();
+    // ??? Was this just for the URID map feature?  Remove if so.
+    LOCKED;
     LilvState* state = lilv_state_new_from_instance
         (plugin,
          instance,
@@ -266,7 +269,7 @@ LilvState* LV2Utils::getStateFromInstance
          lv2Instance,
          flags,
          features);
-    unlock();
+    //unlock();
     return state;
 }
 
@@ -379,6 +382,12 @@ LilvNode* LV2Utils::makeStringNode(const QString& string) const
 
 void LV2Utils::lock()
 {
+#ifdef THREAD_DEBUG
+    // Very noisy, but interesting.  We definitely see both the UI
+    // thread and the JACK process thread hitting this.
+    //RG_WARNING << "lock(): gettid(): " << gettid();
+#endif
+
     m_mutex.lock();
 }
 
@@ -391,11 +400,12 @@ void LV2Utils::registerPlugin(InstrumentId instrument,
                               int position,
                               LV2PluginInstance* pluginInstance)
 {
-    LOCKED;
     RG_DEBUG << "register plugin" << instrument << position;
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
+
+    LOCKED;
     m_pluginInstanceData[pp].pluginInstance = pluginInstance;
 }
 
@@ -403,11 +413,12 @@ void LV2Utils::registerGUI(InstrumentId instrument,
                            int position,
                            AudioPluginLV2GUI* gui)
 {
-    LOCKED;
     RG_DEBUG << "register gui" << instrument << position;
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
+
+    LOCKED;
     m_pluginInstanceData[pp].gui = gui;
 }
 
@@ -420,17 +431,18 @@ void LV2Utils::unRegisterPlugin(InstrumentId instrument,
                                 int position,
                                 LV2PluginInstance* pluginInstance)
 {
-    LOCKED;
     RG_DEBUG << "unregister plugin" << instrument << position;
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginInstanceData.find(pp);
+
+    LOCKED;
+    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
         return;
     }
-    PluginInstanceData& pgdata = (*pit).second;
+    PluginInstanceData &pgdata = pit->second;
     if (pgdata.pluginInstance != pluginInstance) {
         // this can happen if a plugin is replaced - the old plugin is
         // deleted later (scavenged) after the new plugin is registered
@@ -447,17 +459,18 @@ void LV2Utils::unRegisterPlugin(InstrumentId instrument,
 void LV2Utils::unRegisterGUI(InstrumentId instrument,
                              int position)
 {
-    LOCKED;
     RG_DEBUG << "unregister gui" << instrument << position;
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginInstanceData.find(pp);
+
+    LOCKED;
+    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "gui not found" << instrument << position;
         return;
     }
-    PluginInstanceData& pgdata = (*pit).second;
+    PluginInstanceData &pgdata = pit->second;
     pgdata.gui = nullptr;
     if (pgdata.pluginInstance == nullptr) {
         // both 0 - delete entry
@@ -480,13 +493,14 @@ void LV2Utils::setPortValue(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
+
     LOCKED;
-    auto pit = m_pluginInstanceData.find(pp);
+    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
         return;
     }
-    PluginInstanceData& pgdata = (*pit).second;
+    PluginInstanceData &pgdata = pit->second;
     if (pgdata.pluginInstance == nullptr) {
         RG_DEBUG << "setPortValue no pluginInstance";
         return;
@@ -502,16 +516,18 @@ void LV2Utils::updatePortValue(InstrumentId instrument,
 
     // !!! No lock here as this is called from the run method which is
     //     already locked.
+    //LOCKED;
 
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginInstanceData.find(pp);
+
+    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
         return;
     }
-    PluginInstanceData& pgdata = (*pit).second;
+    PluginInstanceData &pgdata = pit->second;
     if (pgdata.gui == nullptr) {
         RG_DEBUG << "no gui at" << instrument << position;
         while (! pgdata.atomQueue.empty()) {
@@ -595,18 +611,19 @@ void LV2Utils::getControlInValues(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
+
+    LOCKED;
     PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "getControlInValues plugin not found" <<
             instrument << position;
         return;
     }
-    const PluginInstanceData& pgdata = (*pit).second;
+    const PluginInstanceData &pgdata = pit->second;
     if (pgdata.pluginInstance == nullptr) {
         RG_DEBUG << "getControlInValues no pluginInstance";
         return;
     }
-    LOCKED;
     pgdata.pluginInstance->getControlInValues(controlValues);
 }
 
@@ -617,6 +634,8 @@ void LV2Utils::getControlOutValues(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
+
+    LOCKED;
     PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "getControlOutValues plugin not found" <<
@@ -628,7 +647,6 @@ void LV2Utils::getControlOutValues(InstrumentId instrument,
         RG_DEBUG << "getControlOutValues no pluginInstance";
         return;
     }
-    LOCKED;
     pgdata.pluginInstance->getControlOutValues(controlValues);
 }
 

@@ -960,6 +960,7 @@ LV2PluginInstance::run(const RealTime &rt)
         bufIndex++;
     }
 
+    // LOCK
     lv2utils->lock();
 
     RealTime bufferStart = rt;
@@ -1081,7 +1082,10 @@ LV2PluginInstance::run(const RealTime &rt)
 
     m_run = true;
     m_eventsDiscarded = false;
+
+    // UNLOCK
     lv2utils->unlock();
+
     //RG_DEBUG << "run done";
 }
 
