@@ -848,6 +848,8 @@ AudioPluginDialog::slotPluginSelected(int index)
         m_presetButton->setEnabled(canUsePresets);
     } else {
         m_editorButton->setEnabled(false);
+        m_presetButton->setEnabled(false);
+        m_editConnectionsButton->setEnabled(false);
     }
 
     adjustSize();
