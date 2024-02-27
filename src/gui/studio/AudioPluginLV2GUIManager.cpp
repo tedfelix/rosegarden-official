@@ -41,18 +41,19 @@ AudioPluginLV2GUIManager::AudioPluginLV2GUIManager(RosegardenMainWindow *mainWin
         m_instrument(0),
         m_position(0)
 {
-    m_worker = new LV2Worker;
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->registerWorker(m_worker);
+    // Make sure these are created by now.
+    // Not sure we need them at this point, but we used to do the
+    // equivalent here.
+    LV2Utils::getInstance();
+    LV2Worker::getInstance();
 }
 
 AudioPluginLV2GUIManager::~AudioPluginLV2GUIManager()
 {
     // Delete all the AudioPluginLV2GUI instances.
     stopAllGUIs();
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->unRegisterWorker();
-    delete m_worker;
+
+    LV2Worker::getInstance()->stop();
 }
 
 void

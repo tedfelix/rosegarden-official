@@ -430,11 +430,6 @@ void LV2Utils::registerGUI(InstrumentId instrument,
     m_pluginInstanceData[pp].gui = gui;
 }
 
-void LV2Utils::registerWorker(LV2Worker* worker)
-{
-    m_worker = worker;
-}
-
 void LV2Utils::unRegisterPlugin(InstrumentId instrument,
                                 int position,
                                 LV2PluginInstance* pluginInstance)
@@ -484,11 +479,6 @@ void LV2Utils::unRegisterGUI(InstrumentId instrument,
         // both 0 - delete entry
         m_pluginInstanceData.erase(pit);
     }
-}
-
-void LV2Utils::unRegisterWorker()
-{
-    m_worker = nullptr;
 }
 
 void LV2Utils::setPortValue(InstrumentId instrument,
@@ -585,11 +575,6 @@ void LV2Utils::triggerPortUpdates(InstrumentId instrument,
         delete item;
         pgdata.atomQueue.pop();
     }
-}
-
-LV2Worker* LV2Utils::getWorker() const
-{
-    return m_worker;
 }
 
 void LV2Utils::runWork(const PluginPosition& pp,

@@ -32,11 +32,10 @@ namespace {
     {
         Rosegarden::LV2Utils::PluginPosition* pp =
             (Rosegarden::LV2Utils::PluginPosition*)handle;
-        Rosegarden::LV2Utils* lv2utils = Rosegarden::LV2Utils::getInstance();
-        Rosegarden::LV2Worker* lw =
-            (Rosegarden::LV2Worker*)lv2utils->getWorker();
-        if (!lw) return LV2_WORKER_SUCCESS;
-        return lw->scheduleWork(size, data, *pp);
+        // ??? Will this be a problem when we are going down?
+        //     The old code checked for a null LV2Worker pointer in
+        //     LV2Utils.
+        return Rosegarden::LV2Worker::getInstance()->scheduleWork(size, data, *pp);
     }
 
     LV2_Worker_Status respondWorkC(LV2_Worker_Respond_Handle handle,
@@ -45,11 +44,10 @@ namespace {
     {
         Rosegarden::LV2Utils::PluginPosition* pp =
             (Rosegarden::LV2Utils::PluginPosition*)handle;
-        Rosegarden::LV2Utils* lv2utils = Rosegarden::LV2Utils::getInstance();
-        Rosegarden::LV2Worker* lw =
-            (Rosegarden::LV2Worker*)lv2utils->getWorker();
-        if (!lw) return LV2_WORKER_SUCCESS;
-        return lw->respondWork(size, data, *pp);
+        // ??? Will this be a problem when we are going down?
+        //     The old code checked for a null LV2Worker pointer in
+        //     LV2Utils.
+        return Rosegarden::LV2Worker::getInstance()->respondWork(size, data, *pp);
     }
 
 }
@@ -68,6 +66,12 @@ LV2Worker::LV2Worker()
     m_workTimer->start(50);
 }
 
+LV2Worker *LV2Worker::getInstance()
+{
+    static LV2Worker instance;
+    return &instance;
+}
+
 LV2Worker::~LV2Worker()
 {
     RG_DEBUG << "~LV2Worker";
@@ -78,7 +82,7 @@ decltype(LV2_Worker_Schedule::schedule_work) LV2Worker::getScheduler()
     return scheduleWorkC;
 }
 
-LV2Utils::WorkerJob* LV2Worker::getResponse(const LV2Utils::PluginPosition& pp)
+LV2Worker::WorkerJob* LV2Worker::getResponse(const LV2Utils::PluginPosition& pp)
 {
     // called in the audio thread
     //RG_DEBUG << "getResponse called" << pp.instrument << pp.position <<
@@ -88,8 +92,7 @@ LV2Utils::WorkerJob* LV2Worker::getResponse(const LV2Utils::PluginPosition& pp)
     JobQueue& jq = (*it).second;
     if (jq.empty()) return nullptr;
     RG_DEBUG << "getResponse" << pp.instrument << pp.position;
-    LV2Utils::WorkerJob* jobcopy =
-        new LV2Utils::WorkerJob(jq.front()); // copy pointer
+    WorkerJob* jobcopy = new WorkerJob(jq.front()); // copy pointer
     jq.pop();
     return jobcopy;
 }
@@ -103,7 +106,7 @@ LV2_Worker_Status LV2Worker::scheduleWork(uint32_t size,
 
     // if we were doing direct rendering we could call work here. In
     // real time processing the work must be queued
-    LV2Utils::WorkerJob job;
+    WorkerJob job;
     job.size = size;
     job.data = new char[size];
     memcpy((void*)job.data, data, size);
@@ -127,7 +130,7 @@ LV2_Worker_Status LV2Worker::respondWork(uint32_t size,
     // this is called by the plugin in the non audio thread
     RG_DEBUG << "respondWork called" << pp.instrument << pp.position <<
         m_workerResponses.size();
-    LV2Utils::WorkerJob job;
+    WorkerJob job;
     job.size = size;
     job.data = new char[size];
     memcpy((void*)job.data, data, size);
@@ -158,7 +161,7 @@ void LV2Worker::workTimeUp()
         // For each entry in the job queue...
         while(! jq.empty()) {
             RG_DEBUG << "work to do" << pp.instrument << pp.position;
-            LV2Utils::WorkerJob& job = jq.front();
+            WorkerJob& job = jq.front();
             // call work
             lv2utils->runWork(pp, job.size, job.data, respondWorkC);
 
@@ -168,6 +171,11 @@ void LV2Worker::workTimeUp()
     }
 
     lv2utils->unlock();
+}
+
+void LV2Worker::stop()
+{
+    m_workTimer->stop();
 }
 
 

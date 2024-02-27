@@ -580,13 +580,11 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     }
     lilv_nodes_free(feats);
 
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-
     m_uridMapFeature = {LV2_URID__map, LV2URIDMapper::getURIDMapFeature()};
     m_uridUnmapFeature = {LV2_URID__unmap, LV2URIDMapper::getURIDUnmapFeature()};
 
     m_workerSchedule.handle = &m_workerHandle;
-    m_workerSchedule.schedule_work = lv2utils->getWorker()->getScheduler();
+    m_workerSchedule.schedule_work = LV2Worker::getInstance()->getScheduler();
     RG_DEBUG << "schedule_work" << (void*)m_workerSchedule.schedule_work;
     m_workerFeature = {LV2_WORKER__schedule, &m_workerSchedule};
 
@@ -1032,14 +1030,12 @@ LV2PluginInstance::run(const RealTime &rt)
     */
 
     // get any worker responses
-    LV2Worker* worker = lv2utils->getWorker();
-
     LV2Utils::PluginPosition pp;
     pp.instrument = m_instrument;
     pp.position = m_position;
-    if (m_workerInterface && worker) {
+    if (m_workerInterface) {
         LV2_Handle handle = lilv_instance_get_handle(m_instance);
-        while(LV2Utils::WorkerJob* job = worker->getResponse(pp)) {
+        while(LV2Worker::WorkerJob* job = LV2Worker::getInstance()->getResponse(pp)) {
             m_workerInterface->work_response(handle, job->size, job->data);
             delete[] (char*)job->data;
             delete job;

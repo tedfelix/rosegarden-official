@@ -70,21 +70,6 @@ class LV2Utils
     };
 
 
-    // LV2 Worker Feature
-
-    // ??? Move these to LV2Worker as statics?
-
-    struct WorkerJob
-    {
-        uint32_t size;
-        const void *data;
-    };
-
-    void registerWorker(LV2Worker *worker);
-    LV2Worker *getWorker() const;
-    void unRegisterWorker();
-
-
     // Plugin Management
 
     // ??? These functions feel more like an LV2PluginManager class.
@@ -381,25 +366,6 @@ class LV2Utils
      */
     PluginInstanceDataMap m_pluginInstanceData;
 
-    /// The LV2Worker instance.
-    /**
-     * Global, easily accessible location for the Worker pointer.
-     *
-     * ??? Would a Singleton be simpler?
-     *
-     * Thread-Safe?  Pointer value?
-     *
-     * Thread-Safe?  Worker contents?
-     *
-     * Users:
-     *   registerWorker() - Sets m_worker.
-     *     - AudioPluginLV2GUIManager holds the Worker instance and its
-     *       ctor calls this.
-     *   unRegisterWorker() - Sets m_worker to nullptr.
-     *     - AudioPluginLV2GUIManager's dtor calls this.
-     *   getWorker() - Returns m_worker non-const.
-     */
-    LV2Worker *m_worker{nullptr};
 };
 
 

@@ -36,21 +36,25 @@ namespace Rosegarden
  * allows plugins to schedule non-real-time tasks in another thread.
  *
  * Work is done on a QTimer, so this runs in the UI thread.
- *
- * AudioPluginLV2GUIManager creates and holds instances of this class.
- * See AudioPluginLV2GUIManager::m_worker.
  */
 class LV2Worker : public QObject
 {
     Q_OBJECT
- public:
-    LV2Worker();
+
+public:
+    // Singleton.
+    static LV2Worker *getInstance();
+
     ~LV2Worker();
 
     decltype(LV2_Worker_Schedule::schedule_work) getScheduler();
 
-    LV2Utils::WorkerJob*
-        getResponse(const LV2Utils::PluginPosition& pp);
+    struct WorkerJob
+    {
+        uint32_t size;
+        const void *data;
+    };
+    WorkerJob *getResponse(const LV2Utils::PluginPosition& pp);
 
     LV2_Worker_Status scheduleWork(uint32_t size,
                                    const void* data,
@@ -58,14 +62,21 @@ class LV2Worker : public QObject
     LV2_Worker_Status respondWork(uint32_t size,
                                   const void* data,
                                   const LV2Utils::PluginPosition& pp);
- public slots:
 
-     void workTimeUp();
+    /// Stop the timer which was started on first call to getInstance().
+    void stop();
 
- private:
+public slots:
+
+    void workTimeUp();
+
+private:
+    // Singleton.  Use getInstance().
+    LV2Worker();
+
     QTimer* m_workTimer;
 
-    typedef std::queue<LV2Utils::WorkerJob> JobQueue;
+    typedef std::queue<WorkerJob> JobQueue;
     typedef std::map<LV2Utils::PluginPosition, JobQueue> JobQueues;
     JobQueues m_workerJobs;
     JobQueues m_workerResponses;

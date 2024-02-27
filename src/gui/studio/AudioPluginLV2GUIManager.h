@@ -83,7 +83,6 @@ private:
 
     RosegardenMainWindow *m_mainWindow;
     Studio *m_studio;
-    LV2Worker* m_worker;
 
     typedef std::map<int /* position */, AudioPluginLV2GUI *> IntGUIMap;
     typedef std::map<InstrumentId, IntGUIMap> GUIMap;
