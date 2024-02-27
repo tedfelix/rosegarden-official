@@ -286,13 +286,13 @@ class LV2Utils
 #endif
 
     /// Instance pointer used by the lilv_*() functions.
-    LilvWorld *m_world;
+    LilvWorld *m_world{nullptr};
 
     /// Result of lilv_world_get_all_plugins().
     /**
      * Used by getPluginByUri().
      */
-    const LilvPlugins *m_plugins;
+    const LilvPlugins *m_plugins{nullptr};
 
     /// Additional data we keep for each plugin organized by URI.
     std::map<QString /* URI */, LV2PluginData> m_pluginData;
@@ -320,9 +320,10 @@ class LV2Utils
 
     /// The LV2Worker instance.
     /**
-     * Would a Singleton be simpler?
+     * Would a Singleton be simpler?  It would be thread-safe (see
+     * getInstance()).
      */
-    Worker *m_worker;
+    Worker *m_worker{nullptr};
 };
 
 

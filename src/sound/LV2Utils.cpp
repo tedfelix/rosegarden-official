@@ -42,6 +42,7 @@ namespace Rosegarden
 LV2Utils *
 LV2Utils::getInstance()
 {
+    // C++11 and up guarantee that static construction is thread-safe.
     static LV2Utils instance;
     return &instance;
 }
@@ -52,9 +53,9 @@ LV2Utils::LV2Utils()
     : m_mutex(QMutex::Recursive) // recursive
 #endif
 {
-    LOCKED;
-
-    m_worker = nullptr;
+    // It is not necessary to lock here.  C++11 and up guarantee that static
+    // construction is thread-safe.  This object is static constructed in
+    // its getInstance() function.
 
     // the LilvWorld knows all plugins
     m_world = lilv_world_new();
@@ -65,16 +66,20 @@ LV2Utils::LV2Utils()
 
 LV2Utils::~LV2Utils()
 {
-    LOCKED;
+    // No need to lock here.  We are going down at static destruction
+    // time.  See getInstance().  Everyone who ever talked to us should
+    // be gone by now.  If there is thread contention at this point in
+    // time, we've got Static Destruction Order Fiasco (some other dtor
+    // is trying to talk to us at static destruction time) and that won't
+    // be solved with a lock.
+
     lilv_world_free(m_world);
 }
 
 void LV2Utils::initPluginData()
 {
-    const LilvPlugins* plugins = lilv_world_get_all_plugins(m_world);
-
-    LILV_FOREACH (plugins, i, plugins) {
-        const LilvPlugin* plugin = lilv_plugins_get(plugins, i);
+    LILV_FOREACH (plugins, i, m_plugins) {
+        const LilvPlugin* plugin = lilv_plugins_get(m_plugins, i);
         QString uri = lilv_node_as_uri(lilv_plugin_get_uri(plugin));
         RG_DEBUG << "got plugin" << uri;
 
