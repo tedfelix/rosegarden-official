@@ -286,15 +286,60 @@ class LV2Utils
 #endif
 
     /// Instance pointer used by the lilv_*() functions.
-    LilvWorld *m_world{nullptr};
+    /**
+     * The LilvWorld knows all plugins.
+     *
+     * Thread-Safe?  Pointer value, yes.  This is only written by the ctor at
+     * static construction time.  It is read-only from that point on.
+     *
+     * Thread-Safe?  LilvWorld object?  Not sure.  It looks like we don't
+     * usually lock and we've had no issues.  We are probably mostly using
+     * lilv and *m_world via the UI thread.  ??? Needs further investigation.
+     */
+    LilvWorld * const m_world;
 
     /// Result of lilv_world_get_all_plugins().
     /**
      * Used by getPluginByUri().
+     *
+     * Thread-Safe?  Pointer value, yes.  This is only written by the ctor at
+     * static construction time.  It is read-only from that point on.
+     *
+     * Thread-Safe?  LilvPlugins object, probably.  Since we only access it via
+     * a const pointer, we are always reading.  The only problematic scenario
+     * that comes to mind is if someone installs a new plugin at the moment
+     * that we are coming up.  But that feels more like an lv2 bug than an rg
+     * bug.
      */
-    const LilvPlugins *m_plugins{nullptr};
+    const LilvPlugins *m_plugins;
 
     /// Additional data we keep for each plugin organized by URI.
+    /**
+     * ??? This can be pulled out into an LV2PluginData namespace.
+     *     initPluginData() alone is massive and justifies a separate
+     *     namespace.
+     *
+     * Thread-Safe?  No.  GetAllPluginData() is problematic.
+     * This should be written at startup (LV2Utils ctor?  once_flag/call_once?
+     * static construction?  lots of options...) and then never
+     * changed.  We should be able to get away with lock free if we are
+     * careful here.  Since this is likely a UI-only thing, we are probably
+     * safe anyway as only the UI thread will see this.
+     *
+     * Users:
+     *   initPluginData() - Called by first call to getAllPluginData()
+     *   getAllPluginData() - Returns a const reference to m_pluginData.
+     *     - Called by LV2PluginFactory.
+     *     - Called by the AudioPluginManager::Enumerator thread.
+     *       ??? This one is odd.  It may be that the UI waits for this anyway.
+     *         So there really isn't an issue.  Look closely at this.
+     *     - Called by the UI thread.
+     *   getPluginData() - Returns a copy of data in m_pluginData.
+     *     - Safe to return a copy so long as initPluginData() has completed.
+     *     - Might be able ot return a const reference for speed.
+     *   getPortName() - Returns a copy of the name in m_pluginData.
+     *     - Safe to return a copy so long as initPluginData() has completed.
+     */
     std::map<QString /* URI */, LV2PluginData> m_pluginData;
     /// Assemble plugin data for each plugin and add to m_pluginData.
     void initPluginData();
@@ -316,12 +361,42 @@ class LV2Utils
         AtomQueue atomQueue;
     };
     typedef std::map<PluginPosition, PluginInstanceData> PluginInstanceDataMap;
+    /**
+     * Users:
+     *   registerPlugin() - writes
+     *   registerGUI() - writes
+     *   unRegisterPlugin() - writes
+     *   unRegisterGUI() - writes
+     *   setPortValue() - writes (calls lv2_atom_sequence_append_event())
+     *   updatePortValue() - writes, JACK audio thread!!!
+     *   triggerPortUpdate() - writes
+     *   runWork() - reads? (sends work off to the worker)
+     *   getControlInValues() - reads
+     *   getControlOutValues() - reads
+     *   getPluginInstance() - Returns a non-const pointer into this.
+     *                         Callers are responsible for locking.
+     *   getPresets() - Returns a non-const reference into this.  Callers
+     *                  are responsible for locking.
+     *   setPreset() - Reads, then calls lilv_state_restore().
+     *   loadPreset()
+     *   savePreset()
+     *
+     * Thread-Safe?  Maybe.  Locks are inconsistent around this.  The JACK audio
+     * process thread definitely touches this (updatePortValue()) along with
+     * the UI thread.  Anything the JACK audio thread reads or writes has to
+     * be locked by both the JACK audio thread and the UI thread.  Everything
+     * else is likely used by the UI thread only and need not be locked.
+     *
+     * I think the way to go here is to split off the portion of the data that
+     * is hit by the JACK audio thread.  Then we can lock it and keep it
+     * in sync appropriately while all the rest is UI thread stuff and can be
+     * lock free.
+     */
     PluginInstanceDataMap m_pluginInstanceData;
 
     /// The LV2Worker instance.
     /**
-     * Would a Singleton be simpler?  It would be thread-safe (see
-     * getInstance()).
+     * ??? Would a Singleton be simpler?
      */
     Worker *m_worker{nullptr};
 };

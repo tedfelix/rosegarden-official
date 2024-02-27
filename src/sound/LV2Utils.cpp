@@ -47,18 +47,18 @@ LV2Utils::getInstance()
     return &instance;
 }
 
-LV2Utils::LV2Utils()
+LV2Utils::LV2Utils() :
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     // Qt5 offers QMutexRecursive, but only for 5.14 and later.
-    : m_mutex(QMutex::Recursive) // recursive
+    // This works for all Qt5.x.
+    m_mutex(QMutex::Recursive), // recursive
 #endif
+    m_world(lilv_world_new())
 {
     // It is not necessary to lock here.  C++11 and up guarantee that static
     // construction is thread-safe.  This object is static constructed in
     // its getInstance() function.
 
-    // the LilvWorld knows all plugins
-    m_world = lilv_world_new();
     lilv_world_load_all(m_world);
 
     m_plugins = lilv_world_get_all_plugins(m_world);
@@ -356,7 +356,9 @@ LV2Utils::LV2PluginData LV2Utils::getPluginData(const QString& uri) const
     emptyData.isInstrument = false;
     auto it = m_pluginData.find(uri);
     if (it == m_pluginData.end()) return emptyData;
-    return (*it).second;
+
+    // COPY.  Can we do a const & for speed?
+    return it->second;
 }
 
 int LV2Utils::getPortIndexFromSymbol(const QString& portSymbol,
@@ -519,8 +521,8 @@ void LV2Utils::updatePortValue(InstrumentId instrument,
                                const LV2_Atom* atom)
 {
 
-    // !!! No lock here as this is called from the run method which is
-    //     already locked.
+    // !!! No lock here as this is called from LV2PluginInstance::run() which
+    //     calls lock().
     //LOCKED;
 
     PluginPosition pp;
@@ -594,6 +596,8 @@ void LV2Utils::runWork(const PluginPosition& pp,
                        const void* data,
                        LV2_Worker_Respond_Function resp)
 {
+    // ??? LOCK?
+
     PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "runWork: plugin not found" <<
@@ -658,6 +662,8 @@ void LV2Utils::getControlOutValues(InstrumentId instrument,
 LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
                                                int position) const
 {
+    // ??? LOCK?
+
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
@@ -699,7 +705,7 @@ QString LV2Utils::getPortName(const QString& uri, int portIndex) const
 {
     auto it = m_pluginData.find(uri);
     if (it == m_pluginData.end()) return "";
-    const LV2PluginData& pdat = (*it).second;
+    const LV2PluginData& pdat = it->second;
     return pdat.ports[portIndex].name;
 }
 
@@ -743,6 +749,8 @@ void LV2Utils::getPresets(InstrumentId instrument,
                           int position,
                           AudioPluginInstance::PluginPresetList& presets) const
 {
+    // ??? LOCK?
+
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
@@ -764,6 +772,8 @@ void LV2Utils::setPreset(InstrumentId instrument,
                          int position,
                          const QString& uri)
 {
+    // ??? LOCK?  There is locking inside of LV2PluginInstance::setPreset().
+
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
@@ -785,6 +795,8 @@ void LV2Utils::loadPreset(InstrumentId instrument,
                           int position,
                           const QString& file)
 {
+    // ??? LOCK?
+
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
@@ -806,6 +818,8 @@ void LV2Utils::savePreset(InstrumentId instrument,
                           int position,
                           const QString& file)
 {
+    // ??? LOCK?
+
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
