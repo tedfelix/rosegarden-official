@@ -92,6 +92,7 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_parentWindow(nullptr),
     m_widget(nullptr),
     m_title(title),
+    m_titleStdString(title.toStdString()),
     m_shutdownRequested(false)
 {
     RG_DEBUG << "create window" << id << m_uiType << m_title;
@@ -133,7 +134,6 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     LV2_URID sampleRateUrid = LV2URIDMapper::uridMap(LV2_PARAMETERS__sampleRate);
     LV2_URID af_urid = LV2URIDMapper::uridMap(LV2_ATOM__Float);
     float sampleRate = pluginInstance->getSampleRate();
-    std::string titleStdString = m_title.toStdString();
     LV2_URID titleUrid = LV2URIDMapper::uridMap(LV2_UI__windowTitle);
     LV2_URID as_urid = LV2URIDMapper::uridMap(LV2_ATOM__String);
     LV2_Options_Option opt;
@@ -145,9 +145,9 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     opt.value = &sampleRate;
     m_options.push_back(opt);
     opt.key = titleUrid;
-    opt.size = titleStdString.size();
+    opt.size = m_titleStdString.size();
     opt.type = as_urid;
-    opt.value = titleStdString.c_str();
+    opt.value = m_titleStdString.c_str();
     m_options.push_back(opt);
     opt.subject = 0;
     opt.key = 0;
@@ -158,7 +158,7 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_optionsFeature = {LV2_OPTIONS__options, m_options.data()};
 
     m_extUiHost.ui_closed = &ui_closed;
-    m_extUiHost.plugin_human_id = titleStdString.c_str();
+    m_extUiHost.plugin_human_id = m_titleStdString.c_str();
     m_extHostFeature = {LV2_EXTERNAL_UI__Host, &m_extUiHost};
 
     m_uridMapFeature = {LV2_URID__map, LV2URIDMapper::getURIDMapFeature()};

@@ -111,6 +111,7 @@ private:
     LV2UI_Widget m_widget;
 
     QString m_title;
+    std::string m_titleStdString;
 
     /// Shutdown flag for the timer.  See timeUp().
     bool m_shutdownRequested;
