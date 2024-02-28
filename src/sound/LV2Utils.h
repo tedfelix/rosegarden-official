@@ -257,25 +257,6 @@ private:
     QMutex m_mutex;
 #endif
 
-    /// Instance pointer used by the lilv_*() functions.
-    /**
-     * The LilvWorld knows all plugins.
-     *
-     * This is a chunk of memory allocated when we call lilv_world_new().
-     * You cannot call lilv_world_new() twice.  The memory is freed when
-     * we call lilv_world_free() in the dtor.
-     *
-     * Thread-Safe?  Pointer value, yes.  This is only written by the ctor at
-     * static construction time.  It is read-only from that point on.
-     *
-     * Thread-Safe?  LilvWorld object?  Not sure.  It looks like we don't
-     * usually lock and we've had no issues.  We are probably mostly using
-     * lilv and *m_world via the UI thread.  ??? Needs further investigation.
-     *
-     * ??? Wrap this in an LV2World::get().
-     */
-    LilvWorld * const m_world;
-
     /// Additional data we keep for each plugin organized by URI.
     /**
      * ??? Pull this out into an LV2PluginDatabase namespace.  This leaves the

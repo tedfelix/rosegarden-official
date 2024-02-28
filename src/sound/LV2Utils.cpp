@@ -17,6 +17,7 @@
 
 #include "LV2Utils.h"
 
+#include "LV2World.h"
 #include "LV2URIDMapper.h"
 #include "LV2Worker.h"
 
@@ -48,19 +49,16 @@ LV2Utils::getInstance()
     return &instance;
 }
 
-LV2Utils::LV2Utils() :
+LV2Utils::LV2Utils()
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     // Qt5 offers QMutexRecursive, but only for 5.14 and later.
     // This works for all Qt5.x.
-    m_mutex(QMutex::Recursive), // recursive
+    : m_mutex(QMutex::Recursive)
 #endif
-    m_world(lilv_world_new())
 {
     // It is not necessary to lock here.  C++11 and up guarantee that static
     // construction is thread-safe.  This object is static constructed in
     // its getInstance() function.
-
-    lilv_world_load_all(m_world);
 
     // Init m_pluginData.
     initPluginData();
@@ -68,19 +66,13 @@ LV2Utils::LV2Utils() :
 
 LV2Utils::~LV2Utils()
 {
-    // No need to lock here.  We are going down at static destruction
-    // time.  See getInstance().  Everyone who ever talked to us should
-    // be gone by now.  If there is thread contention at this point in
-    // time, we've got Static Destruction Order Fiasco (some other dtor
-    // is trying to talk to us at static destruction time) and that won't
-    // be solved with a lock.
-
-    lilv_world_free(m_world);
 }
 
 void LV2Utils::initPluginData()
 {
-    const LilvPlugins *allPlugins = lilv_world_get_all_plugins(m_world);
+    LilvWorld * const world = LV2World::get();
+
+    const LilvPlugins *allPlugins = lilv_world_get_all_plugins(world);
 
     LILV_FOREACH (plugins, i, allPlugins) {
         const LilvPlugin* plugin = lilv_plugins_get(allPlugins, i);
@@ -131,9 +123,9 @@ void LV2Utils::initPluginData()
             const LilvPort* port = lilv_plugin_get_port_by_index(plugin, p);
 
             LV2PortData portData;
-            LilvNode *cpn = lilv_new_uri(m_world, LILV_URI_CONTROL_PORT);
-            LilvNode *atn = lilv_new_uri(m_world, LILV_URI_ATOM_PORT);
-            LilvNode *ipn = lilv_new_uri(m_world, LILV_URI_INPUT_PORT);
+            LilvNode *cpn = lilv_new_uri(world, LILV_URI_CONTROL_PORT);
+            LilvNode *atn = lilv_new_uri(world, LILV_URI_ATOM_PORT);
+            LilvNode *ipn = lilv_new_uri(world, LILV_URI_INPUT_PORT);
             bool cntrl = lilv_port_is_a(plugin, port, cpn);
             bool atom = lilv_port_is_a(plugin, port, atn);
             bool inp = lilv_port_is_a(plugin, port, ipn);
@@ -153,7 +145,7 @@ void LV2Utils::initPluginData()
             portData.portType = LV2AUDIO;
             if (cntrl || atom) portData.portType = LV2CONTROL;
             if (atom && inp) {
-                LilvNode* midiNode = lilv_new_uri(m_world, LV2_MIDI__MidiEvent);
+                LilvNode* midiNode = lilv_new_uri(world, LV2_MIDI__MidiEvent);
                 bool isMidi = lilv_port_supports_event(plugin, port, midiNode);
                 lilv_node_free(midiNode);
                 if (isMidi) {
@@ -186,17 +178,17 @@ void LV2Utils::initPluginData()
 
             // display hint
             LilvNode* toggledNode =
-                lilv_new_uri(m_world,
+                lilv_new_uri(world,
                              "http://lv2plug.in/ns/lv2core#toggled");
             bool isToggled =
                 lilv_port_has_property(plugin, port, toggledNode);
             LilvNode* integerNode =
-                lilv_new_uri(m_world,
+                lilv_new_uri(world,
                              "http://lv2plug.in/ns/lv2core#integer");
             bool isInteger =
                 lilv_port_has_property(plugin, port, integerNode);
             LilvNode* logarithmicNode =
-                lilv_new_uri(m_world,
+                lilv_new_uri(world,
                              "http://lv2plug.in/ns/ext/port-props#logarithmic");
             bool isLogarithmic =
                 lilv_port_has_property(plugin, port, logarithmicNode);
@@ -234,7 +226,7 @@ const LilvPlugin* LV2Utils::getPluginByUri(const QString& uri) const
 {
     LilvNode* pluginUri = makeURINode(uri);
     const LilvPlugin* plugin = lilv_plugins_get_by_uri(
-            lilv_world_get_all_plugins(m_world), pluginUri);
+            lilv_world_get_all_plugins(LV2World::get()), pluginUri);
     lilv_node_free(pluginUri);
     return plugin;
 }
@@ -243,7 +235,7 @@ LilvState* LV2Utils::getStateByUri(const QString& uri)
 {
     LilvNode* uriNode = makeURINode(uri);
     LilvState *state = lilv_state_new_from_world
-        (m_world,
+        (LV2World::get(),
          LV2URIDMapper::getURIDMapFeature(),
          uriNode);
     lilv_node_free(uriNode);
@@ -294,7 +286,7 @@ QString LV2Utils::getStateStringFromInstance
                                             lv2Instance,
                                             features);
     std::string uris = uri.toStdString();
-    char* s = lilv_state_to_string(m_world,
+    char* s = lilv_state_to_string(LV2World::get(),
                                    LV2URIDMapper::getURIDMapFeature(),
                                    LV2URIDMapper::getURIDUnmapFeature(),
                                    state,
@@ -314,7 +306,7 @@ void LV2Utils::setInstanceStateFromString
     RG_DEBUG << "setInstanceStateFromString" << stateString;
     std::string str = stateString.toStdString();
     LilvState* state = lilv_state_new_from_string
-        (m_world,
+        (LV2World::get(),
          LV2URIDMapper::getURIDMapFeature(),
          str.c_str());
     uint32_t flags = 0;
@@ -330,7 +322,7 @@ void LV2Utils::setInstanceStateFromString
 LilvState* LV2Utils::getStateFromFile(const LilvNode* uriNode,
                                       const QString& filename)
 {
-    LilvState* state = lilv_state_new_from_file(m_world,
+    LilvState* state = lilv_state_new_from_file(LV2World::get(),
                                                 LV2URIDMapper::getURIDMapFeature(),
                                                 uriNode,
                                                 qPrintable(filename));
@@ -342,7 +334,7 @@ void LV2Utils::saveStateToFile(const LilvState* state, const QString& filename)
     QFileInfo info(filename);
     QDir dir = info.dir();
     QString basename = info.fileName();
-    lilv_state_save(m_world,
+    lilv_state_save(LV2World::get(),
                     LV2URIDMapper::getURIDMapFeature(),
                     LV2URIDMapper::getURIDUnmapFeature(),
                     state,
@@ -367,7 +359,7 @@ int LV2Utils::getPortIndexFromSymbol(const QString& portSymbol,
 {
     std::string portSymbolStr = portSymbol.toStdString();
 
-    LilvNode* symNode = lilv_new_string(m_world, portSymbolStr.c_str());
+    LilvNode* symNode = lilv_new_string(LV2World::get(), portSymbolStr.c_str());
     const LilvPort* port = lilv_plugin_get_port_by_symbol(plugin,
                                                           symNode);
 
@@ -378,13 +370,13 @@ int LV2Utils::getPortIndexFromSymbol(const QString& portSymbol,
 
 LilvNode* LV2Utils::makeURINode(const QString& uri) const
 {
-    LilvNode* node = lilv_new_uri(m_world, qPrintable(uri));
+    LilvNode* node = lilv_new_uri(LV2World::get(), qPrintable(uri));
     return node;
 }
 
 LilvNode* LV2Utils::makeStringNode(const QString& string) const
 {
-    LilvNode* node = lilv_new_string(m_world, qPrintable(string));
+    LilvNode* node = lilv_new_string(LV2World::get(), qPrintable(string));
     return node;
 }
 
@@ -709,10 +701,10 @@ void LV2Utils::setupPluginPresets
     LILV_FOREACH(nodes, it, presetNodes)
         {
             const LilvNode* n = lilv_nodes_get(presetNodes, it);
-            lilv_world_load_resource(m_world, n);
+            lilv_world_load_resource(LV2World::get(), n);
             QString presetLabel;
             LilvNodes *presetLabels =
-                lilv_world_find_nodes(m_world, n, labelUri, nullptr);
+                lilv_world_find_nodes(LV2World::get(), n, labelUri, nullptr);
             if (presetLabels) {
                 const LilvNode *labelNode = lilv_nodes_get_first(presetLabels);
                 presetLabel = lilv_node_as_string(labelNode);
