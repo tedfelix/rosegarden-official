@@ -47,7 +47,7 @@ class LV2Worker;
  */
 class LV2Utils
 {
- public:
+public:
     /// Singleton
     static LV2Utils *getInstance();
 
@@ -237,7 +237,7 @@ class LV2Utils
                     int position,
                     const QString& file);
 
- private:
+private:
 
     /// Singleton.  See getInstance().
     LV2Utils();
@@ -261,35 +261,25 @@ class LV2Utils
     /**
      * The LilvWorld knows all plugins.
      *
+     * This is a chunk of memory allocated when we call lilv_world_new().
+     * You cannot call lilv_world_new() twice.  The memory is freed when
+     * we call lilv_world_free() in the dtor.
+     *
      * Thread-Safe?  Pointer value, yes.  This is only written by the ctor at
      * static construction time.  It is read-only from that point on.
      *
      * Thread-Safe?  LilvWorld object?  Not sure.  It looks like we don't
      * usually lock and we've had no issues.  We are probably mostly using
      * lilv and *m_world via the UI thread.  ??? Needs further investigation.
+     *
+     * ??? Wrap this in an LV2World::get().
      */
     LilvWorld * const m_world;
 
-    /// Result of lilv_world_get_all_plugins().
-    /**
-     * Used by getPluginByUri().
-     *
-     * Thread-Safe?  Pointer value, yes.  This is only written by the ctor at
-     * static construction time.  It is read-only from that point on.
-     *
-     * Thread-Safe?  LilvPlugins object, probably.  Since we only access it via
-     * a const pointer, we are always reading.  The only problematic scenario
-     * that comes to mind is if someone installs a new plugin at the moment
-     * that we are coming up.  But that feels more like an lv2 bug than an rg
-     * bug.
-     */
-    const LilvPlugins *m_plugins;
-
     /// Additional data we keep for each plugin organized by URI.
     /**
-     * ??? This can be pulled out into an LV2PluginData namespace.
-     *     initPluginData() alone is massive and justifies a separate
-     *     namespace.
+     * ??? Pull this out into an LV2PluginDatabase namespace.  This leaves the
+     *     mutex with what it protects.
      *
      * Thread-Safe?  No.  GetAllPluginData() is problematic.
      * This should be written at startup (LV2Utils ctor?  once_flag/call_once?
@@ -299,7 +289,7 @@ class LV2Utils
      * safe anyway as only the UI thread will see this.
      *
      * Users:
-     *   initPluginData() - Called by first call to getAllPluginData()
+     *   initPluginData() - Called by ctor
      *   getAllPluginData() - Returns a const reference to m_pluginData.
      *     - Called by LV2PluginFactory.
      *     - Called by the AudioPluginManager::Enumerator thread.
@@ -308,15 +298,18 @@ class LV2Utils
      *     - Called by the UI thread.
      *   getPluginData() - Returns a copy of data in m_pluginData.
      *     - Safe to return a copy so long as initPluginData() has completed.
-     *     - Might be able ot return a const reference for speed.
+     *     - Might be able to return a const reference for speed.
      *   getPortName() - Returns a copy of the name in m_pluginData.
      *     - Safe to return a copy so long as initPluginData() has completed.
+     *
      */
     std::map<QString /* URI */, LV2PluginData> m_pluginData;
     /// Assemble plugin data for each plugin and add to m_pluginData.
     void initPluginData();
 
+
     // Plugin instance data organized by instrument/position.
+
     struct AtomQueueItem
     {
         int portIndex;

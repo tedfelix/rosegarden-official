@@ -62,7 +62,8 @@ LV2Utils::LV2Utils() :
 
     lilv_world_load_all(m_world);
 
-    m_plugins = lilv_world_get_all_plugins(m_world);
+    // Init m_pluginData.
+    initPluginData();
 }
 
 LV2Utils::~LV2Utils()
@@ -79,8 +80,10 @@ LV2Utils::~LV2Utils()
 
 void LV2Utils::initPluginData()
 {
-    LILV_FOREACH (plugins, i, m_plugins) {
-        const LilvPlugin* plugin = lilv_plugins_get(m_plugins, i);
+    const LilvPlugins *allPlugins = lilv_world_get_all_plugins(m_world);
+
+    LILV_FOREACH (plugins, i, allPlugins) {
+        const LilvPlugin* plugin = lilv_plugins_get(allPlugins, i);
         QString uri = lilv_node_as_uri(lilv_plugin_get_uri(plugin));
         RG_DEBUG << "got plugin" << uri;
 
@@ -224,17 +227,14 @@ void LV2Utils::initPluginData()
 const std::map<QString /* URI */, LV2Utils::LV2PluginData> &
 LV2Utils::getAllPluginData()
 {
-    if (m_pluginData.size() == 0) {
-        // plugin data has not yet been set (or maybe there are no plugins)
-        initPluginData();
-    }
     return m_pluginData;
 }
 
 const LilvPlugin* LV2Utils::getPluginByUri(const QString& uri) const
 {
     LilvNode* pluginUri = makeURINode(uri);
-    const LilvPlugin* plugin = lilv_plugins_get_by_uri(m_plugins, pluginUri);
+    const LilvPlugin* plugin = lilv_plugins_get_by_uri(
+            lilv_world_get_all_plugins(m_world), pluginUri);
     lilv_node_free(pluginUri);
     return plugin;
 }
