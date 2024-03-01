@@ -53,15 +53,10 @@ LV2Utils::LV2Utils()
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     // Qt5 offers QMutexRecursive, but only for 5.14 and later.
     // This works for all Qt5.x.
-    : m_mutex(QMutex::Recursive)
+    : m_mutex(QMutex::Recursive),
+      m_pluginDataInitialized(false)
 #endif
 {
-    // It is not necessary to lock here.  C++11 and up guarantee that static
-    // construction is thread-safe.  This object is static constructed in
-    // its getInstance() function.
-
-    // Init m_pluginData.
-    initPluginData();
 }
 
 LV2Utils::~LV2Utils()
@@ -70,6 +65,7 @@ LV2Utils::~LV2Utils()
 
 void LV2Utils::initPluginData()
 {
+    RG_DEBUG << "initPluginData";
     LilvWorld * const world = LV2World::get();
 
     const LilvPlugins *allPlugins = lilv_world_get_all_plugins(world);
@@ -214,11 +210,17 @@ void LV2Utils::initPluginData()
         }
         m_pluginData[uri] = pluginData;
     }
+    RG_DEBUG << "initPluginData done";
 }
 
 const std::map<QString /* URI */, LV2Utils::LV2PluginData> &
 LV2Utils::getAllPluginData()
 {
+    // this should be the first call using m_pluginData
+    if (! m_pluginDataInitialized) {
+        m_pluginDataInitialized = true;
+        initPluginData();
+    }
     return m_pluginData;
 }
 
@@ -345,6 +347,7 @@ void LV2Utils::saveStateToFile(const LilvState* state, const QString& filename)
 
 LV2Utils::LV2PluginData LV2Utils::getPluginData(const QString& uri) const
 {
+    Q_ASSERT(m_pluginDataInitialized);
     LV2PluginData emptyData;
     emptyData.isInstrument = false;
     auto it = m_pluginData.find(uri);
@@ -681,6 +684,7 @@ void LV2Utils::setConnections
 
 QString LV2Utils::getPortName(const QString& uri, int portIndex) const
 {
+    Q_ASSERT(m_pluginDataInitialized);
     auto it = m_pluginData.find(uri);
     if (it == m_pluginData.end()) return "";
     const LV2PluginData& pdat = it->second;
