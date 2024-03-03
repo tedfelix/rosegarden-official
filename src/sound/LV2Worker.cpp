@@ -85,21 +85,39 @@ decltype(LV2_Worker_Schedule::schedule_work) LV2Worker::getScheduler()
 LV2Worker::WorkerData *
 LV2Worker::getResponse(const LV2Utils::PluginPosition& pp)
 {
-    // ??? LOCK m_workerResponses
-    //QMutexLocker responsesLock(&m_responsesMutex);
-    // ??? But are we inside a lock for m_workerJobs at this point?
+    // Called in the audio thread to get worker responses.
 
-    // called in the audio thread
+    // ??? LOCK m_responses
+    // Note: We are inside LV2PluginInstance::run()'s LV2Utils lock().
+    //       Need to be careful to avoid deadlock.
+    //       ??? Can we get out of that lock?
+    // ??? Are we inside a lock for m_workerJobs at this point?  I don't
+    //     think we are.  Not sure why I was thinking that.
+    //QMutexLocker responsesLock(&m_responsesMutex);
+
     //RG_DEBUG << "getResponse called" << pp.instrument << pp.position <<
     //  m_workerResponses.size();
-    auto it = m_responses.find(pp);
-    if (it == m_responses.end()) return nullptr;
-    WorkerQueue& jq = (*it).second;
-    if (jq.empty()) return nullptr;
+    WorkerQueues::iterator it = m_responses.find(pp);
+    if (it == m_responses.end())
+        return nullptr;
+
+    WorkerQueue &responseQueue = it->second;
+    if (responseQueue.empty())
+        return nullptr;
+
     RG_DEBUG << "getResponse" << pp.instrument << pp.position;
-    WorkerData *jobcopy = new WorkerData(jq.front()); // copy pointer
-    jq.pop();
-    return jobcopy;
+
+    // COPY response
+    // Caller is responsible for delete.
+    // ??? If we stored all this in a shared pointer, we could avoid the
+    //     copy and the user wouldn't need to delete.  Can that be done?
+    //     This is a time-critical routine so avoiding a copy is helpful.
+    WorkerData *response = new WorkerData(responseQueue.front());
+    responseQueue.pop();
+
+    // ??? unlock
+
+    return response;
 }
 
 LV2_Worker_Status LV2Worker::scheduleWork(uint32_t size,
@@ -112,51 +130,61 @@ LV2_Worker_Status LV2Worker::scheduleWork(uint32_t size,
 
     // if we were doing direct rendering we could call work here. In
     // real time processing the work must be queued
+
     WorkerData job;
     job.size = size;
     job.data = new char[size];
+    // COPY.  Probably unavoidable.
     memcpy((void*)job.data, data, size);
 
     // ??? LOCK m_workerJobs
     //QMutexLocker jobsLock(&m_jobsMutex);
     // ??? There is no lock in here right now.  So there is a data race on
-    //     m_workerJobs.
+    //     m_jobs.
 
-    WorkerQueue& jq = m_jobs[pp];
-    jq.push(job);
+    WorkerQueue &jobQueue = m_jobs[pp];
+    jobQueue.push(job);
 
-    for(auto& pair : m_jobs) {
+#ifndef NDEBUG
+    for (const WorkerQueues::value_type &pair : m_jobs) {
         const LV2Utils::PluginPosition& ppd = pair.first;
-        WorkerQueue& jqd = pair.second;
+        const WorkerQueue &jqd = pair.second;
         RG_DEBUG << "sched job queue" << ppd.instrument << ppd.position <<
             jqd.size();
     }
+#endif
 
     return LV2_WORKER_SUCCESS;
 }
 
-LV2_Worker_Status LV2Worker::respondWork(uint32_t size,
-                                         const void* data,
-                                         const LV2Utils::PluginPosition& pp)
+LV2_Worker_Status
+LV2Worker::respondWork(uint32_t size,
+                       const void* data,
+                       const LV2Utils::PluginPosition& pp)
 {
-    // this is called by the plugin in the non audio thread
+    // This is called by the plugin in the worker thread to queue
+    // up a response.
 
-    WorkerData job;
-    job.size = size;
-    job.data = new char[size];
-    memcpy((void*)job.data, data, size);
+    WorkerData response;
+    response.size = size;
+    response.data = new char[size];
+    memcpy((void*)response.data, data, size);
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
 
-    // ??? LOCK m_workerResponses
+    // ??? LOCK m_responses
     //QMutexLocker responsesLock(&m_responsesMutex);
 
     RG_DEBUG << "respondWork called" << pp.instrument << pp.position <<
         m_responses.size();
 
+    // ??? Don't use this.
     lv2utils->lock();
-    WorkerQueue& jq = m_responses[pp];
-    jq.push(job);
+
+    WorkerQueue &responseQueue = m_responses[pp];
+    responseQueue.push(response);
+
+    // ??? Don't use this.
     lv2utils->unlock();
 
     return LV2_WORKER_SUCCESS;
@@ -171,29 +199,31 @@ void LV2Worker::workTimeUp()
     //     use LV2Utils's.
     lv2utils->lock();
 
-    // ??? LOCK m_workerJobs
+    // ??? LOCK m_jobs
     //QMutexLocker jobsLock(&m_jobsMutex);
 
     // For each job queue...
-    for(WorkerQueues::value_type &pair : m_jobs) {
+    for (WorkerQueues::value_type &pair : m_jobs) {
         const LV2Utils::PluginPosition& pp = pair.first;
-        WorkerQueue& jq = pair.second;
+        WorkerQueue &jobQueue = pair.second;
         //RG_DEBUG << "job queue" << jq.size();
 
         // For each entry in the job queue...
-        while(! jq.empty()) {
+        while (!jobQueue.empty()) {
             RG_DEBUG << "work to do" << pp.instrument << pp.position;
-            WorkerData &job = jq.front();
+            WorkerData &job = jobQueue.front();
             // call work
             // ??? This reads m_pluginInstanceData, so we might need to
             //     lock within.  But that's it.
             lv2utils->runWork(pp, job.size, job.data, respondWorkC);
 
             delete[] (char*)job.data;
-            jq.pop();
+            jobQueue.pop();
         }
     }
 
+    // ??? LV2Worker should have its own mutexes.  It shouldn't
+    //     use LV2Utils's.
     lv2utils->unlock();
 }
 

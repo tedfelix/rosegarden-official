@@ -1038,13 +1038,14 @@ LV2PluginInstance::run(const RealTime &rt)
         const LV2_Handle handle = lilv_instance_get_handle(m_instance);
 
         // For each available response...
-        while (const LV2Worker::WorkerData *job =
+        while (const LV2Worker::WorkerData *response =
                        LV2Worker::getInstance()->getResponse(pp)) {
             // Pass it to the plugin via the worker interface.
-            m_workerInterface->work_response(handle, job->size, job->data);
+            m_workerInterface->work_response(
+                    handle, response->size, response->data);
 
-            delete[] static_cast<const char *>(job->data);
-            delete job;
+            delete[] static_cast<const char *>(response->data);
+            delete response;
         }
 
         if (m_workerInterface->end_run) m_workerInterface->end_run(m_instance);
