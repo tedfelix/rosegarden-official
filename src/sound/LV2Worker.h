@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -16,12 +16,13 @@
 #ifndef RG_LV2_WORKER_H
 #define RG_LV2_WORKER_H
 
+#include "sound/LV2Utils.h"
+
 #include <QObject>
+#include <QMutex>
 
 #include <queue>
 #include <map>
-
-#include "sound/LV2Utils.h"
 
 class QTimer;
 
@@ -32,6 +33,8 @@ namespace Rosegarden
 
 /// LV2 Worker Feature
 /**
+ * https://lv2plug.in/ns/ext/worker
+ *
  * The LV2Worker class provides the LV2 Worker feature which
  * allows plugins to schedule non-real-time tasks in another thread.
  *
@@ -49,37 +52,74 @@ public:
 
     decltype(LV2_Worker_Schedule::schedule_work) getScheduler();
 
-    struct WorkerJob
+    /// Called by the plugin to schedule non-real-time work to be done.
+    /**
+     * Called from the audio thread.
+     *
+     * See workTimeUp() which sends the scheduled work to the plugin from
+     * the UI (work) thread.
+     */
+    LV2_Worker_Status scheduleWork(uint32_t size,
+                                   const void* data,
+                                   const LV2Utils::PluginPosition& pp);
+
+    /// Called by the plugin from the UI (work) thread to provide responses.
+    LV2_Worker_Status respondWork(uint32_t size,
+                                  const void* data,
+                                  const LV2Utils::PluginPosition& pp);
+
+    /// Job and Response data.
+    struct WorkerData
     {
         uint32_t size;
         const void *data;
     };
-    WorkerJob *getResponse(const LV2Utils::PluginPosition& pp);
-
-    LV2_Worker_Status scheduleWork(uint32_t size,
-                                   const void* data,
-                                   const LV2Utils::PluginPosition& pp);
-    LV2_Worker_Status respondWork(uint32_t size,
-                                  const void* data,
-                                  const LV2Utils::PluginPosition& pp);
+    /// Called to get responses to send to the plugin on the audio thread.
+    WorkerData *getResponse(const LV2Utils::PluginPosition& pp);
 
     /// Stop the timer which was started on first call to getInstance().
     void stop();
 
 public slots:
 
+    /// Timer handler.
+    /**
+     * Gets work that was scheduled via scheduleWork() and sends it to
+     * the plugin from the UI (work) thread.
+     *
+     * @see m_workTimer
+     */
     void workTimeUp();
 
 private:
     // Singleton.  Use getInstance().
     LV2Worker();
 
+    /// Worker "thread".  Really the UI thread.
+    // ??? If we used a new thread, we would avoid blocking the UI
+    //     thread.  That should be relatively easy to do once we move
+    //     this off the LV2Utils mutex.
     QTimer* m_workTimer;
 
-    typedef std::queue<WorkerJob> JobQueue;
-    typedef std::map<LV2Utils::PluginPosition, JobQueue> JobQueues;
-    JobQueues m_workerJobs;
-    JobQueues m_workerResponses;
+    typedef std::queue<WorkerData> WorkerQueue;
+    typedef std::map<LV2Utils::PluginPosition, WorkerQueue> WorkerQueues;
+
+    /// Jobs waiting to be run by the plugin in the worker thread.
+    /**
+     * Jobs are created by the audio thread and consumed by the worker thread.
+     */
+    WorkerQueues m_jobs;
+    // ??? Proposed.  Finer grain than LV2Utils::lock().  Should be better.
+    //QMutex m_jobsMutex;
+
+    /// Jobs waiting to be consumed by the plugin in the audio thread.
+    /**
+     * Responses are created by the worker thread and consumed by the audio
+     * thread.
+     */
+    WorkerQueues m_responses;
+    // ??? Proposed.  Finer grain than LV2Utils::lock().  Should be better.
+    //QMutex m_responsesMutex;
 };
 
 

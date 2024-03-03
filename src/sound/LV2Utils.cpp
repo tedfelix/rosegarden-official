@@ -579,7 +579,7 @@ void LV2Utils::runWork(const PluginPosition& pp,
                        const void* data,
                        LV2_Worker_Respond_Function resp)
 {
-    // ??? LOCK?
+    // No lock here since the only caller has already locked via lock().
 
     PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {

@@ -67,6 +67,7 @@ AudioPluginManager::Enumerator::run()
 {
     // ??? Why is this in its own thread?  Was this an attempt to speed
     //     up launch?  Protect rg from crashing plugins?  What?
+    //     It appears to have been intended to speed up rg launch.
 
     QMutexLocker locker(&(m_manager->m_mutex));
     std::vector<QString> rawPlugins;

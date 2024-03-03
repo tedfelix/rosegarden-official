@@ -1029,15 +1029,21 @@ LV2PluginInstance::run(const RealTime &rt)
     }
     */
 
-    // get any worker responses
-    LV2Utils::PluginPosition pp;
-    pp.instrument = m_instrument;
-    pp.position = m_position;
+    // If the plugin provides a worker interface, process any responses.
     if (m_workerInterface) {
-        LV2_Handle handle = lilv_instance_get_handle(m_instance);
-        while(LV2Worker::WorkerJob* job = LV2Worker::getInstance()->getResponse(pp)) {
+        LV2Utils::PluginPosition pp;
+        pp.instrument = m_instrument;
+        pp.position = m_position;
+
+        const LV2_Handle handle = lilv_instance_get_handle(m_instance);
+
+        // For each available response...
+        while (const LV2Worker::WorkerData *job =
+                       LV2Worker::getInstance()->getResponse(pp)) {
+            // Pass it to the plugin via the worker interface.
             m_workerInterface->work_response(handle, job->size, job->data);
-            delete[] (char*)job->data;
+
+            delete[] static_cast<const char *>(job->data);
             delete job;
         }
 

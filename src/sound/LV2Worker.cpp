@@ -3,7 +3,7 @@
 /*
   Rosegarden
   A sequencer and musical notation editor.
-  Copyright 2000-2022 the Rosegarden development team.
+  Copyright 2000-2024 the Rosegarden development team.
   See the AUTHORS file for more details.
 
   This program is free software; you can redistribute it and/or
@@ -82,17 +82,22 @@ decltype(LV2_Worker_Schedule::schedule_work) LV2Worker::getScheduler()
     return scheduleWorkC;
 }
 
-LV2Worker::WorkerJob* LV2Worker::getResponse(const LV2Utils::PluginPosition& pp)
+LV2Worker::WorkerData *
+LV2Worker::getResponse(const LV2Utils::PluginPosition& pp)
 {
+    // ??? LOCK m_workerResponses
+    //QMutexLocker responsesLock(&m_responsesMutex);
+    // ??? But are we inside a lock for m_workerJobs at this point?
+
     // called in the audio thread
     //RG_DEBUG << "getResponse called" << pp.instrument << pp.position <<
     //  m_workerResponses.size();
-    auto it = m_workerResponses.find(pp);
-    if (it == m_workerResponses.end()) return nullptr;
-    JobQueue& jq = (*it).second;
+    auto it = m_responses.find(pp);
+    if (it == m_responses.end()) return nullptr;
+    WorkerQueue& jq = (*it).second;
     if (jq.empty()) return nullptr;
     RG_DEBUG << "getResponse" << pp.instrument << pp.position;
-    WorkerJob* jobcopy = new WorkerJob(jq.front()); // copy pointer
+    WorkerData *jobcopy = new WorkerData(jq.front()); // copy pointer
     jq.pop();
     return jobcopy;
 }
@@ -102,20 +107,27 @@ LV2_Worker_Status LV2Worker::scheduleWork(uint32_t size,
                                           const LV2Utils::PluginPosition& pp)
 {
     // this is called by the plugin in the audio thread
+
     RG_DEBUG << "scheduleWork called" << pp.instrument << pp.position << size;
 
     // if we were doing direct rendering we could call work here. In
     // real time processing the work must be queued
-    WorkerJob job;
+    WorkerData job;
     job.size = size;
     job.data = new char[size];
     memcpy((void*)job.data, data, size);
-    JobQueue& jq = m_workerJobs[pp];
+
+    // ??? LOCK m_workerJobs
+    //QMutexLocker jobsLock(&m_jobsMutex);
+    // ??? There is no lock in here right now.  So there is a data race on
+    //     m_workerJobs.
+
+    WorkerQueue& jq = m_jobs[pp];
     jq.push(job);
 
-    for(auto& pair : m_workerJobs) {
+    for(auto& pair : m_jobs) {
         const LV2Utils::PluginPosition& ppd = pair.first;
-        JobQueue& jqd = pair.second;
+        WorkerQueue& jqd = pair.second;
         RG_DEBUG << "sched job queue" << ppd.instrument << ppd.position <<
             jqd.size();
     }
@@ -128,17 +140,22 @@ LV2_Worker_Status LV2Worker::respondWork(uint32_t size,
                                          const LV2Utils::PluginPosition& pp)
 {
     // this is called by the plugin in the non audio thread
-    RG_DEBUG << "respondWork called" << pp.instrument << pp.position <<
-        m_workerResponses.size();
-    WorkerJob job;
+
+    WorkerData job;
     job.size = size;
     job.data = new char[size];
     memcpy((void*)job.data, data, size);
 
     LV2Utils* lv2utils = LV2Utils::getInstance();
 
+    // ??? LOCK m_workerResponses
+    //QMutexLocker responsesLock(&m_responsesMutex);
+
+    RG_DEBUG << "respondWork called" << pp.instrument << pp.position <<
+        m_responses.size();
+
     lv2utils->lock();
-    JobQueue& jq = m_workerResponses[pp];
+    WorkerQueue& jq = m_responses[pp];
     jq.push(job);
     lv2utils->unlock();
 
@@ -150,19 +167,26 @@ void LV2Worker::workTimeUp()
     //RG_DEBUG << "workTimeUp" << m_workerJobs.size();
     LV2Utils* lv2utils = LV2Utils::getInstance();
 
+    // ??? LV2Worker should have its own mutexes.  It shouldn't
+    //     use LV2Utils's.
     lv2utils->lock();
 
+    // ??? LOCK m_workerJobs
+    //QMutexLocker jobsLock(&m_jobsMutex);
+
     // For each job queue...
-    for(auto& pair : m_workerJobs) {
+    for(WorkerQueues::value_type &pair : m_jobs) {
         const LV2Utils::PluginPosition& pp = pair.first;
-        JobQueue& jq = pair.second;
+        WorkerQueue& jq = pair.second;
         //RG_DEBUG << "job queue" << jq.size();
 
         // For each entry in the job queue...
         while(! jq.empty()) {
             RG_DEBUG << "work to do" << pp.instrument << pp.position;
-            WorkerJob& job = jq.front();
+            WorkerData &job = jq.front();
             // call work
+            // ??? This reads m_pluginInstanceData, so we might need to
+            //     lock within.  But that's it.
             lv2utils->runWork(pp, job.size, job.data, respondWorkC);
 
             delete[] (char*)job.data;
