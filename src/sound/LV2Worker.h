@@ -101,6 +101,20 @@ private:
     //     this off the LV2Utils mutex.
     QTimer* m_workTimer;
 
+    // ??? Because all the plugins share these work queues, there will be
+    //     unnecessary contention.  We could
+    //     move toward finer grain.  A set of mutexes for each plugin
+    //     instance.  Move toward LV2PluginInstance having an instance of
+    //     LV2Worker.  This should reduce mutex contention with only a small
+    //     memory cost.
+    //
+    //     There is only one audio thread and only one worker thread, so we
+    //     should probably analyze the potential contention to see how much
+    //     gain there would actually be before moving forward on this.  E.g.
+    //     plugins won't be contending with each other on the audio thread.
+    //     However, finer grain locking means the worker thread and the audio
+    //     thread will be less likely to contend with each other.
+
     typedef std::queue<WorkerData> WorkerQueue;
     typedef std::map<LV2Utils::PluginPosition, WorkerQueue> WorkerQueues;
 

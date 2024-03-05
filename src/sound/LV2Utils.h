@@ -243,7 +243,7 @@ private:
     LV2Utils();
     ~LV2Utils();
 
-    // Used by both the UI thread and the JACK process thread.
+    // Used by both the UI thread and the audio (JACK process) thread.
     //
     // This is primarily used to guard m_pluginInstanceData.
     //
@@ -251,6 +251,20 @@ private:
     // threads. Some calls are made in the audio thread others in the
     // gui thread. Data used by the calls are protected with this
     // mutex.
+    //
+    // ??? Because all the plugins share this mutex, there will be
+    //     unnecessary contention.  We could
+    //     move toward finer grain.  A mutex for each plugin
+    //     instance.  Move toward LV2PluginInstance having an instance of
+    //     PluginInstanceData.  This should reduce mutex contention with only
+    //     a small memory cost.
+    //
+    //     There is only one audio thread and only one worker thread, so we
+    //     should probably analyze the potential contention to see how much
+    //     gain there would actually be before moving forward on this.  E.g.
+    //     plugins won't be contending with each other on the audio thread.
+    //     However, finer grain locking means the UI thread and the audio
+    //     thread will be less likely to contend with each other.
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QRecursiveMutex m_mutex;
 #else
