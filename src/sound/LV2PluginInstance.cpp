@@ -1103,7 +1103,11 @@ LV2PluginInstance::deactivate()
 void
 LV2PluginInstance::cleanup()
 {
+    if (!m_instance)
+        return;
+
     lilv_instance_free(m_instance);
+    m_instance = nullptr;
 }
 
 void LV2PluginInstance::sendMidiData(const QByteArray& rawMidi,
