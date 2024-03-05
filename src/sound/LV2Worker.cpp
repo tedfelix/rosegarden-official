@@ -91,12 +91,11 @@ LV2Worker::getResponse(const LV2Utils::PluginPosition& pp)
     // Note: We are inside LV2PluginInstance::run()'s LV2Utils lock().
     //       Need to be careful to avoid deadlock.
     //       ??? Can we get out of that lock?
-    // ??? Are we inside a lock for m_workerJobs at this point?  I don't
-    //     think we are.  Not sure why I was thinking that.
     //QMutexLocker responsesLock(&m_responsesMutex);
 
     //RG_DEBUG << "getResponse called" << pp.instrument << pp.position <<
     //  m_workerResponses.size();
+
     WorkerQueues::iterator it = m_responses.find(pp);
     if (it == m_responses.end())
         return nullptr;
@@ -109,8 +108,7 @@ LV2Worker::getResponse(const LV2Utils::PluginPosition& pp)
 
     // COPY response
     // Caller is responsible for delete.
-    // ??? If we stored all this in a shared pointer, we could avoid the
-    //     copy and the user wouldn't need to delete.  Can that be done?
+    // ??? Can we avoid the copy with a shared_ptr?
     //     This is a time-critical routine so avoiding a copy is helpful.
     WorkerData *response = new WorkerData(responseQueue.front());
     responseQueue.pop();
@@ -213,8 +211,8 @@ void LV2Worker::workTimeUp()
             RG_DEBUG << "work to do" << pp.instrument << pp.position;
             WorkerData &job = jobQueue.front();
             // call work
-            // ??? This reads m_pluginInstanceData, so we might need to
-            //     lock within.  But that's it.
+            // ??? runWork() reads m_pluginInstanceData, so it should
+            //     lock.
             lv2utils->runWork(pp, job.size, job.data, respondWorkC);
 
             delete[] (char*)job.data;
