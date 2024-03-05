@@ -123,8 +123,7 @@ private:
      * Jobs are created by the audio thread and consumed by the worker thread.
      */
     WorkerQueues m_jobs;
-    // ??? Proposed.  Finer grain than LV2Utils::lock().  Should be better.
-    //QMutex m_jobsMutex;
+    QMutex m_jobsMutex;
 
     /// Jobs waiting to be consumed by the plugin in the audio thread.
     /**
@@ -132,8 +131,7 @@ private:
      * thread.
      */
     WorkerQueues m_responses;
-    // ??? Proposed.  Finer grain than LV2Utils::lock().  Should be better.
-    //QMutex m_responsesMutex;
+    QMutex m_responsesMutex;
 };
 
 
