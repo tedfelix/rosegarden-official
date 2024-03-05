@@ -53,9 +53,13 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     m_outputBuffers = new sample_t * [m_instanceCount * m_audioPortsOut.size()];
 
     for (size_t i = 0; i < m_instanceCount * m_audioPortsIn.size(); ++i) {
+        // ??? LEAK.
+        // ??? dtor does delete, but apparently not all of them.
         m_inputBuffers[i] = new sample_t[blockSize];
     }
     for (size_t i = 0; i < m_instanceCount * m_audioPortsOut.size(); ++i) {
+        // ??? LEAK.
+        // ??? dtor does delete, but apparently not all of them.
         m_outputBuffers[i] = new sample_t[blockSize];
     }
 
@@ -244,9 +248,11 @@ LADSPAPluginInstance::~LADSPAPluginInstance()
     m_controlPortsOut.clear();
 
     if (m_ownBuffers) {
+        // ??? LEAK.  Need to multiply by m_instanceCount.
         for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
             delete[] m_inputBuffers[i];
         }
+        // ??? LEAK.  Need to multiply by m_instanceCount.
         for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
             delete[] m_outputBuffers[i];
         }
