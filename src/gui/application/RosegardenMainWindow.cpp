@@ -179,6 +179,12 @@
 #include "sequencer/SequencerThread.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
+#ifdef HAVE_LILV
+#include "sound/LV2World.h"
+#include "sound/LV2Utils.h"
+#include "sound/LV2Worker.h"
+#include "gui/studio//LV2Gtk.h"
+#endif
 #include "sound/MappedCommon.h"
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
@@ -569,6 +575,19 @@ RosegardenMainWindow::~RosegardenMainWindow()
     RosegardenDocument::currentDocument = nullptr;
 
     Profiles::getInstance()->dump();
+}
+
+void RosegardenMainWindow::initStaticObjects()
+{
+    // This will declare the static variables for the singletons in
+    // the correct order. They are destroyed in the reverse order.
+#ifdef HAVE_LILV
+    LV2World::get();
+    LV2Utils::getInstance();
+    LV2Worker::getInstance();
+    LV2Gtk::getInstance();
+#endif
+    RosegardenSequencer::getInstance();
 }
 
 int RosegardenMainWindow::sigpipe[2];

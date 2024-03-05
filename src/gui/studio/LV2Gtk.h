@@ -27,7 +27,7 @@ namespace Rosegarden
 
 /// Wrapper around GTK that can be used for LV2 plugins that use GTK.
 /**
- * Singleton.  See LV2Utils::getLV2Gtk().
+ * Singleton.
  */
 class LV2Gtk
 {

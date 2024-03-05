@@ -385,6 +385,8 @@ static void convert(const QStringList &args)
 int main(int argc, char *argv[])
 {
 
+    RosegardenMainWindow::initStaticObjects();
+
     // Initialization of static objects related to read and write of audio
     // files.
     // This fixes bug #1503 (Audio files can't be read when RG is built in

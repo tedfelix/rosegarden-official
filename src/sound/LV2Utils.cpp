@@ -55,6 +55,8 @@ LV2Utils::LV2Utils()
     // This works for all Qt5.x.
     : m_mutex(QMutex::Recursive),
       m_pluginDataInitialized(false)
+#else
+    : m_pluginDataInitialized(false)
 #endif
 {
 }

@@ -140,6 +140,8 @@ public:
 
     ~RosegardenMainWindow() override;
 
+    static void initStaticObjects();
+
     /// Global access to the single instance of this class.
     static RosegardenMainWindow *self() { return m_myself; }
 
