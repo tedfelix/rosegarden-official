@@ -17,6 +17,7 @@
 #define RG_LV2PLUGININSTANCE_H
 
 #include "sound/LV2Utils.h"
+#include "sound/LV2PluginDatabase.h"
 #include "base/AudioPluginInstance.h"
 
 #include "base/Instrument.h"
@@ -171,7 +172,7 @@ private:
     LilvInstance* m_instance;
     QString m_uri;
     const LilvPlugin *m_plugin;
-    LV2Utils::LV2PluginData m_pluginData;
+    LV2PluginDatabase::LV2PluginData m_pluginData;
 
     std::vector<int> m_audioPortsIn;
     std::vector<int> m_audioPortsOut;

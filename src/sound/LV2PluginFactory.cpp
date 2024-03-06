@@ -17,12 +17,11 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginFactory.h"
+#include "LV2PluginDatabase.h"
+#include "LV2PluginInstance.h"
 
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-
-#include "sound/LV2PluginInstance.h"
-#include "sound/LV2Utils.h"
 #include "MappedStudio.h"
 
 
@@ -58,14 +57,14 @@ LV2PluginFactory::getPluginIdentifiers() const
 void
 LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
 {
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    const auto &allPluginData = lv2utils->getAllPluginData();
+    const LV2PluginDatabase::PluginDatabase &allPluginData =
+            LV2PluginDatabase::getAllPluginData();
 
     // For each plugin...
-    for (const auto &pair : allPluginData) {
+    for (const LV2PluginDatabase::PluginDatabase::value_type &pair : allPluginData) {
 
         const QString& uri = pair.first;
-        const LV2Utils::LV2PluginData& pluginData = pair.second;
+        const LV2PluginDatabase::LV2PluginData& pluginData = pair.second;
 
         // This list of strings is ordered in such a way that
         // AudioPluginManager::Enumerator::run() can consume it.
@@ -146,16 +145,16 @@ LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
 
         // For each port...
         for (unsigned long p = 0; p < nports; ++p) {
-            const LV2Utils::LV2PortData portData = pluginData.ports[p];
+            const LV2PluginDatabase::LV2PortData portData = pluginData.ports[p];
             int type = 0;
 
-            if (portData.portType == LV2Utils::LV2CONTROL ||
-                portData.portType == LV2Utils::LV2MIDI) {
+            if (portData.portType == LV2PluginDatabase::LV2CONTROL ||
+                portData.portType == LV2PluginDatabase::LV2MIDI) {
                 type |= PluginPort::Control;
             } else {
                 type |= PluginPort::Audio;
             }
-            if (portData.portProtocol == LV2Utils::LV2ATOM) {
+            if (portData.portProtocol == LV2PluginDatabase::LV2ATOM) {
                 type |= PluginPort::Event;
             }
             if (portData.isInput) {
@@ -179,8 +178,7 @@ LV2PluginFactory::enumeratePlugins(std::vector<QString> &list)
 void
 LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
 {
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    LV2Utils::LV2PluginData pluginData = lv2utils->getPluginData(identifier);
+    LV2PluginDatabase::LV2PluginData pluginData = LV2PluginDatabase::getPluginData(identifier);
 
     slot.setStringProperty(MappedPluginSlot::Label, pluginData.label);
     slot.setStringProperty(MappedPluginSlot::PluginName, pluginData.name);
@@ -201,9 +199,9 @@ LV2PluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
 
     // For each port...
     for (unsigned long i = 0; i < pluginData.ports.size(); i++) {
-        const LV2Utils::LV2PortData& portData = pluginData.ports[i];
-        if ((portData.portType == LV2Utils::LV2CONTROL ||
-             portData.portType == LV2Utils::LV2MIDI) &&
+        const LV2PluginDatabase::LV2PortData& portData = pluginData.ports[i];
+        if ((portData.portType == LV2PluginDatabase::LV2CONTROL ||
+             portData.portType == LV2PluginDatabase::LV2MIDI) &&
             portData.isInput) {
             MappedStudio *studio =
                 dynamic_cast<MappedStudio *>(slot.getParent());
@@ -274,11 +272,11 @@ LV2PluginFactory::discoverPlugins()
 void
 LV2PluginFactory::generateTaxonomy()
 {
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    auto allPluginData = lv2utils->getAllPluginData();
-    for(auto pair : allPluginData) {
+    const LV2PluginDatabase::PluginDatabase &allPluginData =
+            LV2PluginDatabase::getAllPluginData();
+    for (const LV2PluginDatabase::PluginDatabase::value_type &pair : allPluginData) {
         const QString& uri = pair.first;
-        const LV2Utils::LV2PluginData& pluginData = pair.second;
+        const LV2PluginDatabase::LV2PluginData& pluginData = pair.second;
 
         m_taxonomy[uri] = pluginData.pluginClass;
         //m_identifiers.push_back(uri);

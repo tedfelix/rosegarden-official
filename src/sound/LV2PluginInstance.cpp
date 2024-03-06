@@ -20,11 +20,11 @@
 #include "LV2PluginInstance.h"
 
 #include "LV2Worker.h"
+#include "LV2Utils.h"
+#include "LV2URIDMapper.h"
 
 #include "base/Profiler.h"
 #include "misc/Debug.h"
-#include "sound/LV2Utils.h"
-#include "sound/LV2URIDMapper.h"
 #include "sound/Midi.h"
 #include "sound/AudioProcess.h"  // For AudioInstrumentMixer
 #include "gui/application/RosegardenMainWindow.h"
@@ -115,7 +115,7 @@ LV2PluginInstance::LV2PluginInstance
     m_workerHandle.instrument = instrument;
     m_workerHandle.position = position;
 
-    m_pluginData = lv2utils->getPluginData(uri);
+    m_pluginData = LV2PluginDatabase::getPluginData(uri);
 
     init(idealChannelCount);
 
@@ -167,11 +167,10 @@ LV2PluginInstance::init(int idealChannelCount)
 
     // Discover ports numbers and identities
     //
-    LV2Utils* lv2utils = LV2Utils::getInstance();
     for (unsigned long i = 0; i < m_pluginData.ports.size(); ++i) {
-        const LV2Utils::LV2PortData& portData = m_pluginData.ports[i];
+        const LV2PluginDatabase::LV2PortData& portData = m_pluginData.ports[i];
         switch(portData.portType) {
-        case LV2Utils::LV2AUDIO:
+        case LV2PluginDatabase::LV2AUDIO:
             if (portData.isInput) {
                 RG_DEBUG << "LV2PluginInstance::init: port" << i << "is audio in";
                 m_audioPortsIn.push_back(i);
@@ -180,14 +179,14 @@ LV2PluginInstance::init(int idealChannelCount)
                 m_audioPortsOut.push_back(i);
             }
             break;
-        case LV2Utils::LV2CONTROL:
-        case LV2Utils::LV2MIDI:
-            if (portData.portProtocol == LV2Utils::LV2ATOM) {
+        case LV2PluginDatabase::LV2CONTROL:
+        case LV2PluginDatabase::LV2MIDI:
+            if (portData.portProtocol == LV2PluginDatabase::LV2ATOM) {
                 if (portData.isInput) {
                     RG_DEBUG << "Atom in port" << i << portData.name;
                     AtomPort ap;
                     ap.index = i;
-                    ap.isMidi = (portData.portType == LV2Utils::LV2MIDI);
+                    ap.isMidi = (portData.portType == LV2PluginDatabase::LV2MIDI);
                     // create the atom port
                     // use double to get 64 bit alignment
                     double* dbuf = new double[ABUFSIZED];
@@ -202,7 +201,7 @@ LV2PluginInstance::init(int idealChannelCount)
                     RG_DEBUG << "Atom out port" << i << portData.name;
                     AtomPort ap;
                     ap.index = i;
-                    ap.isMidi = (portData.portType == LV2Utils::LV2MIDI);
+                    ap.isMidi = (portData.portType == LV2PluginDatabase::LV2MIDI);
                     // create the atom port
                     // use double to get 64 bit alignment
                     double* dbuf = new double[ABUFSIZED];
@@ -258,7 +257,7 @@ LV2PluginInstance::init(int idealChannelCount)
         PluginPort::Connection c;
         c.isOutput = false;
         c.isAudio = true;
-        c.pluginPort = lv2utils->getPortName(m_uri, m_audioPortsIn[i]);
+        c.pluginPort = LV2PluginDatabase::getPortName(m_uri, m_audioPortsIn[i]);
         c.instrumentId = 0;
         c.channel = 0;
         if (i == 0) {

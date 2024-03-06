@@ -69,42 +69,6 @@ public:
         }
     };
 
-
-    // Plugin Management
-
-    // ??? These functions feel more like an LV2PluginManager class.
-    //     Consider breaking them out into a new class or namespace.
-    // yes these are for the factory class - I would like to keep all the
-    // lv2 utility things here
-
-    enum LV2PortType {LV2CONTROL, LV2AUDIO, LV2MIDI};
-    enum LV2PortProtocol {LV2FLOAT, LV2ATOM};
-
-    struct LV2PortData
-    {
-        QString name;
-        LV2PortType portType;
-        LV2PortProtocol portProtocol;
-        bool isInput;
-        float min;
-        float max;
-        float def;
-        int displayHint;
-    };
-
-    struct LV2PluginData
-    {
-        QString name;
-        QString label; // abbreviated name
-        QString pluginClass;
-        QString author;
-        bool isInstrument;
-        std::vector<LV2PortData> ports;
-    };
-
-    const std::map<QString /* URI */, LV2PluginData> &getAllPluginData();
-    LV2PluginData getPluginData(const QString& uri) const;
-
     const LilvPlugin *getPluginByUri(const QString& uri) const;
 
     // Port
@@ -219,8 +183,6 @@ public:
          int position,
          const PluginPort::ConnectionList& clist) const;
 
-    QString getPortName(const QString& uri, int portIndex) const;
-
 
     void setupPluginPresets(const QString& uri,
                             AudioPluginInstance::PluginPresetList& presets);
@@ -270,38 +232,6 @@ private:
 #else
     QMutex m_mutex;
 #endif
-
-    /// Additional data we keep for each plugin organized by URI.
-    /**
-     * ??? Pull this out into an LV2PluginDatabase namespace.  This leaves the
-     *     mutex with what it protects.
-     *
-     * Thread-Safe?  No.  GetAllPluginData() is problematic.
-     * This should be written at startup (LV2Utils ctor?  once_flag/call_once?
-     * static construction?  lots of options...) and then never
-     * changed.  We should be able to get away with lock free if we are
-     * careful here.  Since this is likely a UI-only thing, we are probably
-     * safe anyway as only the UI thread will see this.
-     *
-     * Users:
-     *   initPluginData() - Called by ctor
-     *   getAllPluginData() - Returns a const reference to m_pluginData.
-     *     - Called by LV2PluginFactory.
-     *     - Called by the AudioPluginManager::Enumerator thread.
-     *       ??? This one is odd.  It may be that the UI waits for this anyway.
-     *           So there really isn't an issue.  Look closely at this.
-     *     - Called by the UI thread.
-     *   getPluginData() - Returns a copy of data in m_pluginData.
-     *     - Safe to return a copy so long as initPluginData() has completed.
-     *     - Might be able to return a const reference for speed.
-     *   getPortName() - Returns a copy of the name in m_pluginData.
-     *     - Safe to return a copy so long as initPluginData() has completed.
-     *
-     */
-    std::map<QString /* URI */, LV2PluginData> m_pluginData;
-    bool m_pluginDataInitialized{false};
-    /// Assemble plugin data for each plugin and add to m_pluginData.
-    void initPluginData();
 
 
     // Plugin instance data organized by instrument/position.
