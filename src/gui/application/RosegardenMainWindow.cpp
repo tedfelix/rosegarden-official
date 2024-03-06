@@ -181,9 +181,9 @@
 #include "sound/AudioFileManager.h"
 #ifdef HAVE_LILV
 #include "sound/LV2World.h"
-//#include "sound/LV2Utils.h"
-//#include "sound/LV2Worker.h"
-//#include "gui/studio/LV2Gtk.h"
+#include "sound/LV2Utils.h"
+#include "sound/LV2Worker.h"
+#include "gui/studio/LV2Gtk.h"
 #endif
 #include "sound/MappedCommon.h"
 #include "sound/MappedEventList.h"
@@ -296,7 +296,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_triggerSegmentManager(nullptr),
     m_configDlg(nullptr),
     m_docConfigDlg(nullptr),
-    m_pluginGUIManager(new AudioPluginGUIManager(this)),
+    m_pluginGUIManager(nullptr),
     m_updateUITimer(new QTimer(this)),
     m_inputTimer(new QTimer(this)),
     m_editTempoController(new EditTempoController(this)),
@@ -316,6 +316,11 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 #ifdef THREAD_DEBUG
     RG_WARNING << "UI Thread gettid(): " << gettid();
 #endif
+
+    initStaticObjects();
+
+    // the AudioPluginGUIManager must be created after initStaticObjects
+    m_pluginGUIManager = new AudioPluginGUIManager(this);
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -581,19 +586,14 @@ void RosegardenMainWindow::initStaticObjects()
 {
     // This will declare the static variables for the singletons in
     // the correct order. They are destroyed in the reverse order.
+    RG_DEBUG << "initStaticObjects";
 #ifdef HAVE_LILV
-    // This is the key one.  We need to be able to talk to lilv from
-    // the very start, and Scavenger needs to talk to it as we are
-    // going down.
-    // ??? Just move this to main.cpp if we can.
     LV2World::get();
-    // ??? Initializing all of these results in crashes and breaks
-    //     LV2Worker.
-    //LV2Utils::getInstance();
-    //LV2Worker::getInstance();
-    //LV2Gtk::getInstance();
+    LV2Utils::getInstance();
+    LV2Worker::getInstance();
+    LV2Gtk::getInstance();
 #endif
-    //RosegardenSequencer::getInstance();
+    RosegardenSequencer::getInstance();
 }
 
 int RosegardenMainWindow::sigpipe[2];

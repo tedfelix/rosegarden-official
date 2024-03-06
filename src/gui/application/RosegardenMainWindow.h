@@ -140,8 +140,6 @@ public:
 
     ~RosegardenMainWindow() override;
 
-    static void initStaticObjects();
-
     /// Global access to the single instance of this class.
     static RosegardenMainWindow *self() { return m_myself; }
 
@@ -1544,6 +1542,11 @@ private:
      * a given timeT
      */
     void displayBarTime(timeT t);
+
+    /**
+     * Initialise singletons in the correct order
+     */
+    void initStaticObjects();
 
     //--------------- Data members ---------------------------------
 

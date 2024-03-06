@@ -17,6 +17,8 @@
 
 #include "LV2World.h"
 
+#include "misc/Debug.h"
+
 namespace
 {
 
@@ -30,6 +32,7 @@ namespace
             // C++11 and up guarantee that static construction is thread-safe.
             // This object is static constructed in LV2World::get() below.
 
+            RG_DEBUG << "LV2WorldAuto create world";
             m_world = lilv_world_new();
             lilv_world_load_all(m_world);
         }

@@ -71,6 +71,7 @@ namespace Rosegarden
 
 LV2Gtk* LV2Gtk::getInstance()
 {
+    debug_print("LV2Gtk create instance\n");
     static LV2Gtk instance;
     return &instance;
 }

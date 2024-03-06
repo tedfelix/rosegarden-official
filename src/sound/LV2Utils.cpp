@@ -45,6 +45,7 @@ LV2Utils *
 LV2Utils::getInstance()
 {
     // C++11 and up guarantee that static construction is thread-safe.
+    RG_DEBUG << "create instance";
     static LV2Utils instance;
     return &instance;
 }

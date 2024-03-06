@@ -68,6 +68,7 @@ LV2Worker::LV2Worker()
 
 LV2Worker *LV2Worker::getInstance()
 {
+    RG_DEBUG << "create worker instance";
     static LV2Worker instance;
     return &instance;
 }

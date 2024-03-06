@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenSequencer]"
+#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenSequencer.h"
 
@@ -129,6 +130,7 @@ RosegardenSequencer::getInstance()
 {
     // Guaranteed in C++11 to be lazy initialized and thread-safe.
     // See ISO/IEC 14882:2011 6.7(4).
+    RG_DEBUG << "create instance";
     static RosegardenSequencer instance;
 
     // ??? To avoid the static destruction order fiasco, we might want to
