@@ -32,9 +32,12 @@ namespace
 
 /**
  * Thread Safe.
+ *
  * Since we are using std::call_once(), initPluginData(), the only writer,
- * will only be called once across all threads.  The rest of the routines
+ * will be called exactly once across all threads.  The rest of the routines
  * are readers, so there will be no data races.
+ *
+ * The Enumerator thread and the UI thread use this.
  */
 Rosegarden::LV2PluginDatabase::PluginDatabase pluginDatabase;
 
