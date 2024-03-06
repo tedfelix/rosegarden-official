@@ -299,7 +299,7 @@ private:
      *
      */
     std::map<QString /* URI */, LV2PluginData> m_pluginData;
-    bool m_pluginDataInitialized;
+    bool m_pluginDataInitialized{false};
     /// Assemble plugin data for each plugin and add to m_pluginData.
     void initPluginData();
 

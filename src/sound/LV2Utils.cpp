@@ -56,10 +56,7 @@ LV2Utils::LV2Utils()
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     // Qt5 offers QMutexRecursive, but only for 5.14 and later.
     // This works for all Qt5.x.
-    : m_mutex(QMutex::Recursive),
-      m_pluginDataInitialized(false)
-#else
-    : m_pluginDataInitialized(false)
+    : m_mutex(QMutex::Recursive)
 #endif
 {
 }
