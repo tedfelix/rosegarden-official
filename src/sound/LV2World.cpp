@@ -29,7 +29,8 @@ namespace
         LV2WorldAuto()
         {
             // Thread-Safe
-            // C++11 and up guarantee that static construction is thread-safe.
+            // Guaranteed in C++11 to be lazy initialized and thread-safe.
+            // See ISO/IEC 14882:2011 6.7(4).
             // This object is static constructed in LV2World::get() below.
 
             RG_DEBUG << "LV2WorldAuto create world";
@@ -64,7 +65,8 @@ namespace Rosegarden
 
         LilvWorld *get()
         {
-            // C++11 and above guarantee this to be thread-safe.
+            // Guaranteed in C++11 to be lazy initialized and thread-safe.
+            // See ISO/IEC 14882:2011 6.7(4).
             static LV2WorldAuto lv2WorldAuto;
             return lv2WorldAuto.get();
         }

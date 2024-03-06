@@ -44,8 +44,10 @@ namespace Rosegarden
 LV2Utils *
 LV2Utils::getInstance()
 {
-    // C++11 and up guarantee that static construction is thread-safe.
     RG_DEBUG << "create instance";
+
+    // Guaranteed in C++11 to be lazy initialized and thread-safe.
+    // See ISO/IEC 14882:2011 6.7(4).
     static LV2Utils instance;
     return &instance;
 }

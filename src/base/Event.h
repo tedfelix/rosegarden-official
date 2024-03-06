@@ -443,7 +443,6 @@ private:
     //     On Write.  We probably can't replace it with a QSharedPointer.
     //     It would be more interesting to make Copy On Write disable-able
     //     and see if it makes any sort of performance or memory difference.
-    //     Might also be a good idea to see if C++11 move semantics would help.
     EventData *m_data;
     // ??? This doesn't seem to participate in Copy On Write, so a
     //     QSharedPointer should simplify managing this.

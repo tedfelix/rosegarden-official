@@ -56,8 +56,8 @@ public:
     /**
      * Called from the audio thread.
      *
-     * See workTimeUp() which sends the scheduled work to the plugin from
-     * the UI (work) thread.
+     * See slotWorkTimeUp() which sends the scheduled work back to the
+     * plugin from the UI (work) thread.
      */
     LV2_Worker_Status scheduleWork(uint32_t size,
                                    const void* data,
@@ -72,7 +72,7 @@ public:
     struct WorkerData
     {
         uint32_t size;
-        const void *data;
+        void *data;
     };
     /// Called to get responses to send to the plugin on the audio thread.
     WorkerData *getResponse(const LV2Utils::PluginPosition& pp);
@@ -80,7 +80,7 @@ public:
     /// Stop the timer which was started on first call to getInstance().
     void stop();
 
-public slots:
+private slots:
 
     /// Timer handler.
     /**
@@ -89,31 +89,23 @@ public slots:
      *
      * @see m_workTimer
      */
-    void workTimeUp();
+    void slotWorkTimeUp();
 
 private:
     // Singleton.  Use getInstance().
     LV2Worker();
 
     /// Worker "thread".  Really the UI thread.
-    // ??? If we used a new thread, we would avoid blocking the UI
-    //     thread.  That should be relatively easy to do once we move
-    //     this off the LV2Utils mutex.
+    // ??? Consider using a new thread instead of a timer and the UI
+    //     thread.  This will avoid blocking the UI.
     QTimer* m_workTimer;
 
-    // ??? Because all the plugins share these work queues, there will be
-    //     unnecessary contention.  We could
-    //     move toward finer grain.  A set of mutexes for each plugin
-    //     instance.  Move toward LV2PluginInstance having an instance of
-    //     LV2Worker.  This should reduce mutex contention with only a small
-    //     memory cost.
-    //
-    //     There is only one audio thread and only one worker thread, so we
-    //     should probably analyze the potential contention to see how much
-    //     gain there would actually be before moving forward on this.  E.g.
-    //     plugins won't be contending with each other on the audio thread.
-    //     However, finer grain locking means the worker thread and the audio
-    //     thread will be less likely to contend with each other.
+    // ??? Consider giving each LV2PluginInstance its own LV2Worker
+    //     instance.  This should reduce contention since each plugin
+    //     will have its own queues and mutexes.
+
+    // ??? Consider using a lock-free queue to avoid locking the
+    //     audio thread.
 
     typedef std::queue<WorkerData> WorkerQueue;
     typedef std::map<LV2Utils::PluginPosition, WorkerQueue> WorkerQueues;
@@ -125,7 +117,7 @@ private:
     WorkerQueues m_jobs;
     QMutex m_jobsMutex;
 
-    /// Jobs waiting to be consumed by the plugin in the audio thread.
+    /// Responses waiting to be consumed by the plugin in the audio thread.
     /**
      * Responses are created by the worker thread and consumed by the audio
      * thread.

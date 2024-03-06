@@ -19,31 +19,33 @@
 #include "LV2Worker.h"
 
 #include "sound/LV2Utils.h"
+#include "misc/Debug.h"
 
 #include <QTimer>
 
-#include "misc/Debug.h"
 
 namespace {
+    // C version of scheduleWork() for callback.
     // cppcheck-suppress unusedFunction
     LV2_Worker_Status scheduleWorkC(LV2_Worker_Schedule_Handle handle,
                                     uint32_t                   size,
                                     const void*                data)
     {
-        Rosegarden::LV2Utils::PluginPosition* pp =
-            (Rosegarden::LV2Utils::PluginPosition*)handle;
+        Rosegarden::LV2Utils::PluginPosition *pp =
+            reinterpret_cast<Rosegarden::LV2Utils::PluginPosition *>(handle);
         // ??? Will this be a problem when we are going down?
         //     The old code checked for a null LV2Worker pointer in
         //     LV2Utils.
         return Rosegarden::LV2Worker::getInstance()->scheduleWork(size, data, *pp);
     }
 
+    // C version of respondWork() for callback.
     LV2_Worker_Status respondWorkC(LV2_Worker_Respond_Handle handle,
                                    uint32_t size,
                                    const void *data)
     {
-        Rosegarden::LV2Utils::PluginPosition* pp =
-            (Rosegarden::LV2Utils::PluginPosition*)handle;
+        Rosegarden::LV2Utils::PluginPosition *pp =
+            reinterpret_cast<Rosegarden::LV2Utils::PluginPosition *>(handle);
         // ??? Will this be a problem when we are going down?
         //     The old code checked for a null LV2Worker pointer in
         //     LV2Utils.
@@ -60,15 +62,20 @@ namespace Rosegarden
 LV2Worker::LV2Worker()
 {
     RG_DEBUG << "create LV2Worker";
+
+    // Start the timer.
     m_workTimer = new QTimer(this);
     connect(m_workTimer, &QTimer::timeout,
-            this, &LV2Worker::workTimeUp);
+            this, &LV2Worker::slotWorkTimeUp);
     m_workTimer->start(50);
 }
 
 LV2Worker *LV2Worker::getInstance()
 {
     RG_DEBUG << "create worker instance";
+
+    // Guaranteed in C++11 to be lazy initialized and thread-safe.
+    // See ISO/IEC 14882:2011 6.7(4).
     static LV2Worker instance;
     return &instance;
 }
@@ -132,7 +139,7 @@ LV2_Worker_Status LV2Worker::scheduleWork(uint32_t size,
     job.size = size;
     job.data = new char[size];
     // COPY.  Probably unavoidable.
-    memcpy((void*)job.data, data, size);
+    memcpy(job.data, data, size);
 
     // LOCK m_jobs
     QMutexLocker jobsLock(&m_jobsMutex);
@@ -163,7 +170,7 @@ LV2Worker::respondWork(uint32_t size,
     WorkerData response;
     response.size = size;
     response.data = new char[size];
-    memcpy((void*)response.data, data, size);
+    memcpy(response.data, data, size);
 
     // LOCK m_responses
     QMutexLocker responsesLock(&m_responsesMutex);
@@ -177,11 +184,12 @@ LV2Worker::respondWork(uint32_t size,
     return LV2_WORKER_SUCCESS;
 }
 
-void LV2Worker::workTimeUp()
+void LV2Worker::slotWorkTimeUp()
 {
     // Worker (UI) thread.
 
-    //RG_DEBUG << "workTimeUp" << m_workerJobs.size();
+    //RG_DEBUG << "slotWorkTimeUp()" << m_workerJobs.size();
+
     LV2Utils* lv2utils = LV2Utils::getInstance();
 
     // LOCK m_jobs
@@ -198,9 +206,10 @@ void LV2Worker::workTimeUp()
             RG_DEBUG << "work to do" << pp.instrument << pp.position;
             WorkerData &job = jobQueue.front();
             // Send the work back to the plugin on the worker (UI) thread.
+            // ??? Deadlock?  runWork() locks m_pluginInstanceData.
             lv2utils->runWork(pp, job.size, job.data, respondWorkC);
 
-            delete[] (char*)job.data;
+            delete[] reinterpret_cast<char *>(job.data);
             jobQueue.pop();
         }
     }
