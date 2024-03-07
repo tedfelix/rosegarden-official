@@ -40,24 +40,82 @@ class LV2PluginInstance;
 class AudioPluginLV2GUI;
 class LV2Worker;
 
-/// LV2 utils
-/**
- * LV2Utils encapsulates the lv2 world (LilvWorld?) and supports communication
- * between LV2 plugins and LV2 UIs (different threads).
- */
 class LV2Utils
 {
 public:
     /// Singleton
     static LV2Utils *getInstance();
 
-    LV2Utils(LV2Utils &other) = delete;
-    void operator=(const LV2Utils &) = delete;
 
-    // Key type for GUI and worker maps.
+    // *** lilv wrappers ***
+
+    // Most of these wrappers are used only by LV2PluginInstance.
+
+    // lilv_plugins_get_by_uri() wrapper
+    const LilvPlugin *getPluginByUri(const QString& uri) const;
+
+    // lilv_port_get_index() wrapper
+    int getPortIndexFromSymbol(const QString& portSymbol,
+                               const LilvPlugin* plugin);
+
+    // lilv_state_new_from_world() wrapper
+    LilvState* getStateByUri(const QString& uri);
+
+    // lilv_state_new_from_instance() wrapper
+    LilvState* getStateFromInstance(const LilvPlugin* plugin,
+                                    LilvInstance* instance,
+                                    LilvGetPortValueFunc getPortValueFunc,
+                                    LV2PluginInstance* lv2Instance,
+                                    const LV2_Feature*const* features);
+
+    // lilv_state_new_from_instance() wrapper
+    QString getStateStringFromInstance(const LilvPlugin* plugin,
+                                       const QString& uri,
+                                       LilvInstance* instance,
+                                       LilvGetPortValueFunc getPortValueFunc,
+                                       LV2PluginInstance* lv2Instance,
+                                       const LV2_Feature*const* features);
+
+    // lilv_state_new_from_string() wrapper
+    void setInstanceStateFromString(const QString& stateString,
+                                    LilvInstance* instance,
+                                    LilvSetPortValueFunc setPortValueFunc,
+                                    LV2PluginInstance* lv2Instance,
+                                    const LV2_Feature*const* features);
+
+    // lilv_state_new_from_file() wrapper
+    LilvState* getStateFromFile(const LilvNode* uriNode,
+                                const QString& filename);
+
+    // lilv_state_save() wrapper
+    void saveStateToFile(const LilvState* state, const QString& filename);
+
+    /// lilv_new_uri() wrapper
+    LilvNode* makeURINode(const QString& uri) const;
+
+    /// lilv_new_string() wrapper
+    LilvNode* makeStringNode(const QString& string) const;
+
+
+    // *** LV2 Plugin Instance Database ***
+
+    /// Unique ID for a specific plugin instance.
+    /**
+     * Combines the InstrumentId and the position of the plugin within
+     * that instrument.
+     *
+     * Used as a key type for plugin instance data and LV2Worker maps.
+     *
+     * See LV2PluginInstance::m_instrument and m_position.
+     *
+     * ??? Rename: PluginID, then see if it is needed elsewhere.  Promote
+     *             to Instrument.
+     */
     struct PluginPosition
     {
         InstrumentId instrument;
+        // Position in the effects stack for effect plugins,
+        // 999 (Instrument::SYNTH_PLUGIN_POSITION) for synths.
         int position;
 
         bool operator<(const PluginPosition &p) const
@@ -68,40 +126,6 @@ public:
             return false;
         }
     };
-
-    const LilvPlugin *getPluginByUri(const QString& uri) const;
-
-    // Port
-    int getPortIndexFromSymbol(const QString& portSymbol,
-                               const LilvPlugin* plugin);
-
-    // State
-    LilvState* getStateByUri(const QString& uri);
-    LilvState* getStateFromInstance(const LilvPlugin* plugin,
-                                    LilvInstance* instance,
-                                    LilvGetPortValueFunc getPortValueFunc,
-                                    LV2PluginInstance* lv2Instance,
-                                    const LV2_Feature*const* features);
-    QString getStateStringFromInstance(const LilvPlugin* plugin,
-                                       const QString& uri,
-                                       LilvInstance* instance,
-                                       LilvGetPortValueFunc getPortValueFunc,
-                                       LV2PluginInstance* lv2Instance,
-                                       const LV2_Feature*const* features);
-    void setInstanceStateFromString(const QString& stateString,
-                                    LilvInstance* instance,
-                                    LilvSetPortValueFunc setPortValueFunc,
-                                    LV2PluginInstance* lv2Instance,
-                                    const LV2_Feature*const* features);
-    LilvState* getStateFromFile(const LilvNode* uriNode,
-                                const QString& filename);
-    void saveStateToFile(const LilvState* state, const QString& filename);
-
-    /// lilv_new_uri() wrapper.
-    LilvNode* makeURINode(const QString& uri) const;
-    /// lilv_new_string() wrapper.
-    LilvNode* makeStringNode(const QString& string) const;
-
 
     /// Lock m_mutex.
     /**
@@ -119,18 +143,20 @@ public:
     void unlock();
 
 
-    /// Adds plugin instance to m_pluginGuis.
+    /// Adds a plugin instance to m_pluginInstanceData.
     void registerPlugin(InstrumentId instrument,
                         int position,
                         LV2PluginInstance* pluginInstance);
+    /// Removes a plugin instance from m_pluginInstanceData.
     void unRegisterPlugin(InstrumentId instrument,
                           int position,
                           LV2PluginInstance* pluginInstance);
 
-    /// Adds plugin GUI to m_pluginGuis.
+    /// Adds a plugin GUI to m_pluginInstanceData.
     void registerGUI(InstrumentId instrument,
                      int position,
                      AudioPluginLV2GUI* gui);
+    /// Removes a plugin GUI from m_pluginInstanceData.
     void unRegisterGUI(InstrumentId instrument,
                        int position);
 
@@ -183,6 +209,7 @@ public:
          int position,
          const PluginPort::ConnectionList& clist) const;
 
+    // Presets
 
     void setupPluginPresets(const QString& uri,
                             AudioPluginInstance::PluginPresetList& presets);
@@ -204,6 +231,8 @@ private:
     /// Singleton.  See getInstance().
     LV2Utils();
     ~LV2Utils();
+    LV2Utils(LV2Utils &other) = delete;
+    void operator=(const LV2Utils &) = delete;
 
     // Used by both the UI thread and the audio (JACK process) thread.
     //
@@ -247,6 +276,8 @@ private:
 
     struct PluginInstanceData
     {
+        // ??? This pointer is also kept in AudioInstrumentMixer::m_synths
+        //     or m_plugins as appropriate.  They are indexed by InstrumentId.
         LV2PluginInstance *pluginInstance{nullptr};
         AudioPluginLV2GUI *gui{nullptr};
         AtomQueue atomQueue;

@@ -168,6 +168,7 @@ private:
     std::vector<AtomPort> m_atomOutputPorts;
 
     InstrumentId m_instrument;
+    // Position in the effects stack for effect plugins, 999 for synths.
     int m_position;
     LilvInstance* m_instance;
     QString m_uri;
