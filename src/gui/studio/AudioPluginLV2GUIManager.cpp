@@ -100,6 +100,32 @@ AudioPluginLV2GUIManager::stopGUI(InstrumentId instrument, int position)
     QTimer::singleShot(0, this, &AudioPluginLV2GUIManager::slotStopGUIDelayed);
 }
 
+bool AudioPluginLV2GUIManager::hasParameters(InstrumentId instrument,
+                                             int position) const
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    return lv2utils->hasParameters(instrument, position);
+}
+
+void AudioPluginLV2GUIManager::getParameters
+(InstrumentId instrument,
+ int position,
+ AudioPluginInstance::PluginParameters& params)
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->getParameters(instrument, position, params);
+}
+
+void AudioPluginLV2GUIManager::updatePluginParameter
+(InstrumentId instrument,
+ int position,
+ const QString& paramId,
+ const AudioPluginInstance::PluginParameter& param)
+{
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    lv2utils->updatePluginParameter(instrument, position, paramId, param);
+}
+
 void AudioPluginLV2GUIManager::getPresets
 (InstrumentId instrument,
  int position,

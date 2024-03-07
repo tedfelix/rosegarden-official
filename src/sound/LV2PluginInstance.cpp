@@ -13,7 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[LV2PluginInstance]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 //#define LV2RUN_PROFILE 1
 
@@ -32,6 +32,9 @@
 #include <lv2/midi/midi.h>
 #include <lv2/atom/util.h>
 #include <lv2/buf-size/buf-size.h>
+#include <lv2/atom/forge.h>
+#include <lv2/urid/urid.h>
+#include <lv2/patch/patch.h>
 
 //#include <QtGlobal>
 #include <QJsonDocument>
@@ -149,6 +152,14 @@ LV2PluginInstance::LV2PluginInstance
     if (m_workerInterface) RG_DEBUG << (void*)m_workerInterface->work <<
                                (void*)m_workerInterface->work_response <<
                                (void*)m_workerInterface->end_run;
+
+    // parameters
+    lv2utils->setupPluginParameters(m_uri, m_params);
+    for(auto& param : m_params) {
+        const LV2PluginParameter& pd = param.second;
+        RG_DEBUG << "param" << param.first << pd.isReadable() <<
+            pd.isWritable() << pd.getLabel() << (int)pd.getType();
+    }
 
     // presets
     lv2utils->setupPluginPresets(m_uri, m_presets);
@@ -444,6 +455,129 @@ void LV2PluginInstance::setConnections
 #endif
 
     m_connections = clist;
+}
+
+bool LV2PluginInstance::hasParameters() const
+{
+    return (m_params.size() > 0);
+}
+
+void LV2PluginInstance::getParameters
+(AudioPluginInstance::PluginParameters& params)
+{
+    params.clear();
+    for (const auto& pair : m_params) {
+        const QString& paramUri = pair.first;
+        const LV2PluginParameter& lparam = pair.second;
+        AudioPluginInstance::PluginParameter param;
+        // fill the params struct
+        param.type = lparam.getType();
+        param.readable = lparam.isReadable();
+        param.writable = lparam.isWritable();
+        param.label = lparam.getLabel();
+        if (lparam.isValueSet()) {
+            switch(param.type) {
+            case AudioPluginInstance::ParameterType::BOOL:
+                param.value = lparam.getBool();
+                break;
+            case AudioPluginInstance::ParameterType::INT:
+                param.value = lparam.getInt();
+                break;
+            case AudioPluginInstance::ParameterType::LONG:
+                param.value = (int)lparam.getLong();
+                break;
+            case AudioPluginInstance::ParameterType::FLOAT:
+                param.value = lparam.getFloat();
+                break;
+            case AudioPluginInstance::ParameterType::DOUBLE:
+                param.value = lparam.getDouble();
+                break;
+            case AudioPluginInstance::ParameterType::STRING:
+                param.value = lparam.getString();
+                break;
+            case AudioPluginInstance::ParameterType::PATH:
+                param.value = lparam.getPath();
+                break;
+            case AudioPluginInstance::ParameterType::UNKNOWN:
+            default:
+                break;
+            }
+        }
+        params[paramUri] = param;
+    }
+}
+
+void LV2PluginInstance::updatePluginParameter
+(const QString& paramId,
+ const AudioPluginInstance::PluginParameter& param)
+{
+    RG_DEBUG << "updatePluginParameter" << paramId << param.label;
+    // save the parameter
+    LV2PluginParameter& lparam = m_params[paramId];
+    // only the value can change
+    if (param.value.type() != QVariant::Invalid) {
+        switch(param.type) {
+        case AudioPluginInstance::ParameterType::BOOL:
+            lparam.setBool(param.value.toBool());
+            break;
+        case AudioPluginInstance::ParameterType::INT:
+            lparam.setInt(param.value.toInt());
+            break;
+        case AudioPluginInstance::ParameterType::LONG:
+            lparam.setLong(param.value.toInt());
+            break;
+        case AudioPluginInstance::ParameterType::FLOAT:
+            lparam.setFloat(param.value.toFloat());
+            break;
+        case AudioPluginInstance::ParameterType::DOUBLE:
+            lparam.setDouble(param.value.toDouble());
+            break;
+        case AudioPluginInstance::ParameterType::STRING:
+            lparam.setString(param.value.toString());
+            break;
+        case AudioPluginInstance::ParameterType::PATH:
+            lparam.setPath(param.value.toString());
+            break;
+        case AudioPluginInstance::ParameterType::UNKNOWN:
+        default:
+            break;
+        }
+    }
+
+    // and send to the plugin
+    LV2_Atom_Forge forge;
+    lv2_atom_forge_init(&forge, LV2URIDMapper::getURIDMapFeature());
+    uint8_t buffer[2000];
+    lv2_atom_forge_set_buffer(&forge, buffer, sizeof(buffer));
+    LV2_Atom_Forge_Frame frame;
+
+    LV2_URID setUrid = LV2URIDMapper::uridMap(LV2_PATCH__Set);
+    LV2_URID patchPropertyUrid = LV2URIDMapper::uridMap(LV2_PATCH__property);
+    LV2_URID patchValueUrid = LV2URIDMapper::uridMap(LV2_PATCH__value);
+    LV2_URID paramUrid = lparam.getParameterUrid();
+
+    lv2_atom_forge_object(&forge, &frame, 0, setUrid);
+    lv2_atom_forge_key(&forge, patchPropertyUrid);
+    lv2_atom_forge_urid(&forge, paramUrid);
+    lv2_atom_forge_key(&forge, patchValueUrid);
+    // the value atom
+    const LV2_Atom* valueAtom = lparam.getValue();
+    int valueSize = lv2_atom_total_size(valueAtom);
+    lv2_atom_forge_raw(&forge, valueAtom, valueSize);
+
+    const LV2_Atom *atom = lv2_atom_forge_deref(&forge, frame.ref);
+
+    lv2_atom_forge_pop(&forge, &frame);
+    QByteArray ba((char*)atom, lv2_atom_total_size(atom));
+    RG_DEBUG << "updatePluginParameter" << ba.toHex();
+
+    for(auto& input : m_atomInputPorts) {
+        AtomPort& ap = input;
+        if (ap.isPatch) {
+            RG_DEBUG << "sending set patch to port" << ap.index;
+            setPortByteArray(ap.index, m_atomTransferUrid, ba);
+        }
+    }
 }
 
 void LV2PluginInstance::getPresets

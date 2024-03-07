@@ -56,6 +56,16 @@ public:
 
     void updatePort(InstrumentId instrument, int position, int port);
 
+    bool hasParameters(InstrumentId instrument, int position) const;
+    void getParameters(InstrumentId instrument,
+                       int position,
+                       AudioPluginInstance::PluginParameters& params);
+    void updatePluginParameter
+        (InstrumentId instrument,
+         int position,
+         const QString& paramId,
+         const AudioPluginInstance::PluginParameter& param);
+
     void getPresets(InstrumentId instrument,
                     int position,
                     AudioPluginInstance::PluginPresetList& presets);

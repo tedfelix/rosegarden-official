@@ -18,6 +18,7 @@
 
 #include "base/Instrument.h"
 #include "base/AudioPluginInstance.h"
+#include "sound/LV2PluginParameter.h"
 
 #include <lilv/lilv.h>
 #include <lv2/atom/atom.h>
@@ -214,8 +215,21 @@ public:
          int position,
          const PluginPort::ConnectionList& clist) const;
 
-    // Presets
+    // Parameters
+    void setupPluginParameters
+        (const QString& uri, LV2PluginParameter::Parameters& params);
+    bool hasParameters(InstrumentId instrument,
+                       int position) const;
+    void getParameters(InstrumentId instrument,
+                       int position,
+                       AudioPluginInstance::PluginParameters& params);
+    void updatePluginParameter
+        (InstrumentId instrument,
+         int position,
+         const QString& paramId,
+         const AudioPluginInstance::PluginParameter& param);
 
+    // Presets
     void getPresets(InstrumentId instrument,
                     int position,
                     AudioPluginInstance::PluginPresetList& presets) const;
@@ -245,6 +259,9 @@ private:
     QMutex m_mutex;
 #endif
 
+    void fillParametersFromProperties(LV2PluginParameter::Parameters& params,
+                                      const LilvNodes* properties,
+                                      bool write);
 
     // Plugin instance data organized by instrument/position.
 

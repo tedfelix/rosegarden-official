@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginDialog]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginDialog.h"
 
@@ -33,6 +33,7 @@
 #include "gui/widgets/PluginControl.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
+#include "gui/dialogs/AudioPluginParameterDialog.h"
 #include "gui/dialogs/AudioPluginPresetDialog.h"
 #include "gui/dialogs/AudioPluginConnectionDialog.h"
 #include "misc/Preferences.h"
@@ -232,6 +233,11 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
 
+    m_paramsButton = new QPushButton(tr("Parameters"));
+    buttonBox->addButton(m_paramsButton, QDialogButtonBox::ActionRole);
+    connect(m_paramsButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotParameters);
+    m_paramsButton->setEnabled(false);
     m_presetButton = new QPushButton(tr("Presets"));
     buttonBox->addButton(m_presetButton, QDialogButtonBox::ActionRole);
     connect(m_presetButton, &QAbstractButton::clicked,
@@ -270,6 +276,13 @@ AudioPluginDialog::~AudioPluginDialog()
 {
     //RG_DEBUG << "dtor...";
     emit destroyed(m_containerId, m_index);
+}
+
+void AudioPluginDialog::slotParameters()
+{
+    RG_DEBUG << "slotParameters";
+    AudioPluginParameterDialog dlg(this, m_containerId, m_index);
+    dlg.exec();
 }
 
 void AudioPluginDialog::slotPresets()
@@ -843,6 +856,9 @@ AudioPluginDialog::slotPluginSelected(int index)
         bool canEditConnections =
             m_pluginGUIManager->canEditConnections(m_containerId, m_index);
         m_editConnectionsButton->setEnabled(canEditConnections);
+        bool hasParameters =
+            m_pluginGUIManager->hasParameters(m_containerId, m_index);
+        m_paramsButton->setEnabled(hasParameters);
         bool canUsePresets =
             m_pluginGUIManager->canUsePresets(m_containerId, m_index);
         m_presetButton->setEnabled(canUsePresets);

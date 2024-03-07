@@ -178,6 +178,22 @@ public:
 
     void setLabel(const std::string& label);
 
+    // plugin parameters
+    enum class ParameterType
+    {UNKNOWN, INT, LONG, FLOAT, DOUBLE, BOOL, STRING, PATH};
+
+    struct PluginParameter
+    {
+        ParameterType type;
+        QVariant value;
+        bool readable;
+        bool writable;
+        QString label;
+    };
+
+    // map key -> parameter
+    typedef std::map<QString, PluginParameter> PluginParameters;
+
     // plugin presets
     struct PluginPreset
     {

@@ -36,6 +36,7 @@ namespace LV2PluginDatabase
         QString name;
         LV2PortType portType;
         LV2PortProtocol portProtocol;
+        bool isPatch;
         bool isInput;
         float min;
         float max;

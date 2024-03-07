@@ -112,6 +112,7 @@ set(rg_CPPS
   gui/dialogs/MakeOrnamentDialog.cpp
   gui/dialogs/ClefDialog.cpp
   gui/dialogs/AudioPluginDialog.cpp
+  gui/dialogs/AudioPluginParameterDialog.cpp
   gui/dialogs/AudioPluginPresetDialog.cpp
   gui/dialogs/AudioPluginConnectionDialog.cpp
   gui/dialogs/ExportDeviceDialog.cpp
@@ -758,6 +759,7 @@ if (LILV_FOUND)
     sound/LV2URIDMapper.cpp
     sound/LV2Worker.cpp
     sound/LV2World.cpp
+    sound/LV2PluginParameter.cpp
     gui/studio/AudioPluginLV2GUIManager.cpp
     gui/studio/AudioPluginLV2GUI.cpp
     gui/studio/AudioPluginLV2GUIWindow.cpp

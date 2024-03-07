@@ -23,6 +23,7 @@
 #include "base/AudioPluginInstance.h"  // For PluginPort
 
 #include <lv2/midi/midi.h>
+#include <lv2/patch/patch.h>
 #include <lilv/lilv.h>
 
 #include <mutex>
@@ -125,10 +126,18 @@ initPluginData()
             if (cntrl || atom) portData.portType = Rosegarden::LV2PluginDatabase::LV2CONTROL;
             if (atom && inp) {
                 LilvNode* midiNode = lilv_new_uri(world, LV2_MIDI__MidiEvent);
-                bool isMidi = lilv_port_supports_event(plugin, port, midiNode);
+                bool isMidi =
+                    lilv_port_supports_event(plugin, port, midiNode);
                 lilv_node_free(midiNode);
+                LilvNode* patchNode = lilv_new_uri(world, LV2_PATCH__Message);
+                bool isPatch =
+                    lilv_port_supports_event(plugin, port, patchNode);
+                lilv_node_free(patchNode);
                 if (isMidi) {
                     portData.portType = Rosegarden::LV2PluginDatabase::LV2MIDI;
+                }
+                if (isPatch) {
+                    portData.isPatch = true;
                 }
             }
             portData.isInput = inp;
@@ -238,4 +247,3 @@ LV2PluginDatabase::getPortName(const QString &uri, int portIndex)
 
 
 }
-

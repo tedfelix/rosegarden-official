@@ -124,6 +124,50 @@ void AudioPluginGUIManager::stopAllGUIs()
 #endif
 }
 
+    bool AudioPluginGUIManager::hasParameters(InstrumentId instrument,
+                                        int position) const
+{
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // only lv2
+    if (arch != LV2) return false;
+#ifdef HAVE_LILV
+    return m_lv2Manager->hasParameters(instrument, position);
+#else
+    return false;
+#endif
+}
+
+void AudioPluginGUIManager::getParameters
+(InstrumentId instrument,
+ int position,
+ AudioPluginInstance::PluginParameters& params)
+{
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // only lv2
+    if (arch != LV2) return;
+#ifdef HAVE_LILV
+    m_lv2Manager->getParameters(instrument, position, params);
+#else
+    return;
+#endif
+}
+
+void AudioPluginGUIManager::updatePluginParameter
+(InstrumentId instrument,
+ int position,
+ const QString& paramId,
+ const AudioPluginInstance::PluginParameter& param)
+{
+    PluginGUIArchitecture arch = getArchitecture(instrument, position);
+    // only lv2
+    if (arch != LV2) return;
+#ifdef HAVE_LILV
+    m_lv2Manager->updatePluginParameter(instrument, position, paramId, param);
+#else
+    return;
+#endif
+}
+
 bool AudioPluginGUIManager::canUsePresets(InstrumentId instrument,
                                           int position) const
 {

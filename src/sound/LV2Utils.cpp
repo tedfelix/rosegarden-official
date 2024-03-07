@@ -27,6 +27,7 @@
 
 #include <lv2/midi/midi.h>
 #include <lv2/presets/presets.h>
+#include <lv2/patch/patch.h>
 
 #include <QFileInfo>
 #include <QDir>
@@ -514,6 +515,79 @@ void LV2Utils::setConnections
     lv2inst->setConnections(clist);
 }
 
+void LV2Utils::setupPluginParameters
+(const QString& uri, LV2PluginParameter::Parameters& params)
+{
+    RG_DEBUG << "setupPluginParameters";
+    params.clear();
+    LilvNode* pluginUri = makeURINode(uri);
+    LilvNode* pwn = lilv_new_uri(LV2World::get(), LV2_PATCH__writable);
+    LilvNodes* properties =
+        lilv_world_find_nodes(LV2World::get(), pluginUri, pwn, nullptr);
+    lilv_node_free(pwn);
+    fillParametersFromProperties(params, properties, true);
+    lilv_nodes_free(properties);
+    LilvNode* pwr = lilv_new_uri(LV2World::get(), LV2_PATCH__readable);
+    properties =
+        lilv_world_find_nodes(LV2World::get(), pluginUri, pwr, nullptr);
+    lilv_node_free(pwr);
+    lilv_node_free(pluginUri);
+    fillParametersFromProperties(params, properties, false);
+    lilv_nodes_free(properties);
+}
+
+bool LV2Utils::hasParameters(InstrumentId instrument,
+                             int position) const
+{
+    LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
+    if (!lv2inst) return false;
+    return lv2inst->hasParameters();
+}
+
+void LV2Utils::getParameters(InstrumentId instrument,
+                             int position,
+                             AudioPluginInstance::PluginParameters& params)
+{
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
+        RG_DEBUG << "getParameters plugin not found" <<
+            instrument << position;
+        return;
+    }
+    const PluginInstanceData& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "getPrameters no pluginInstance";
+        return;
+    }
+    pgdata.pluginInstance->getParameters(params);
+}
+
+void LV2Utils::updatePluginParameter
+(InstrumentId instrument,
+ int position,
+ const QString& paramId,
+ const AudioPluginInstance::PluginParameter& param)
+{
+    PluginPosition pp;
+    pp.instrument = instrument;
+    pp.position = position;
+    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
+    if (pit == m_pluginInstanceData.end()) {
+        RG_DEBUG << "updatePluginParameter plugin not found" <<
+            instrument << position;
+        return;
+    }
+    const PluginInstanceData& pgdata = (*pit).second;
+    if (pgdata.pluginInstance == nullptr) {
+        RG_DEBUG << "updatePluginParameter no pluginInstance";
+        return;
+    }
+    pgdata.pluginInstance->updatePluginParameter(paramId, param);
+}
+
 void LV2Utils::setupPluginPresets
 (const QString& uri,
  AudioPluginInstance::PluginPresetList& presets)
@@ -640,6 +714,71 @@ void LV2Utils::savePreset(InstrumentId instrument,
         return;
     }
     pgdata.pluginInstance->savePreset(file);
+}
+
+void LV2Utils::fillParametersFromProperties
+(LV2PluginParameter::Parameters& params,
+ const LilvNodes* properties,
+ bool write)
+{
+    LILV_FOREACH (nodes, p, properties) {
+        const LilvNode* property =
+            lilv_nodes_get(properties, p);
+        const char* propertyUri =
+            lilv_node_as_uri(property);
+        auto iter = params.find(propertyUri);
+        if (iter != params.end()) {
+            // the parameter is already there. Just set the flag
+            LV2PluginParameter& pd = (*iter).second;
+            if (write) {
+                pd.setWritable(true);
+            } else {
+                pd.setReadable(true);
+            }
+            continue;
+        }
+        LilvNode* ln = lilv_new_uri(LV2World::get(), LILV_NS_RDFS "label");
+        LilvNode* labelNode =
+            lilv_world_get(LV2World::get(), property, ln, nullptr);
+        LilvNode* rn = lilv_new_uri(LV2World::get(), LILV_NS_RDFS "range");
+        LilvNode* rangeNode =
+            lilv_world_get(LV2World::get(), property, rn, nullptr);
+        lilv_node_free(ln);
+        lilv_node_free(rn);
+        QString labelStr = "";
+        if (labelNode)
+            {
+                labelStr = lilv_node_as_string(labelNode);
+            }
+        lilv_node_free(labelNode);
+        AudioPluginInstance::ParameterType pType =
+            AudioPluginInstance::ParameterType::UNKNOWN;
+        if (rangeNode)
+            {
+                QString rangeStr = lilv_node_as_string(rangeNode);
+                //RG_DEBUG << "rangeStr:" << rangeStr;
+                if (rangeStr == LV2_ATOM__Bool)
+                    pType = AudioPluginInstance::ParameterType::BOOL;
+                if (rangeStr == LV2_ATOM__Double)
+                    pType = AudioPluginInstance::ParameterType::DOUBLE;
+                if (rangeStr == LV2_ATOM__Float)
+                    pType = AudioPluginInstance::ParameterType::FLOAT;
+                if (rangeStr == LV2_ATOM__Int)
+                    pType = AudioPluginInstance::ParameterType::INT;
+                if (rangeStr == LV2_ATOM__Long)
+                    pType = AudioPluginInstance::ParameterType::LONG;
+                if (rangeStr == LV2_ATOM__Path)
+                    pType = AudioPluginInstance::ParameterType::PATH;
+                if (rangeStr == LV2_ATOM__String)
+                    pType = AudioPluginInstance::ParameterType::STRING;
+            }
+        lilv_node_free(rangeNode);
+        LV2PluginParameter pd(propertyUri, pType);
+        pd.setWritable(write);
+        pd.setReadable(! write);
+        pd.setLabel(labelStr);
+        params[propertyUri] = pd;
+    }
 }
 
 LV2Utils::AtomQueueItem::AtomQueueItem() :

@@ -18,6 +18,7 @@
 
 #include "sound/LV2Utils.h"
 #include "sound/LV2PluginDatabase.h"
+#include "sound/LV2PluginParameter.h"
 #include "base/AudioPluginInstance.h"
 
 #include "base/Instrument.h"
@@ -121,6 +122,12 @@ public:
     void getConnections(PluginPort::ConnectionList& clist) const;
     void setConnections(const PluginPort::ConnectionList& clist);
 
+    bool hasParameters() const;
+    void getParameters(AudioPluginInstance::PluginParameters& params);
+    void updatePluginParameter
+        (const QString& paramId,
+         const AudioPluginInstance::PluginParameter& param);
+
     void getPresets(AudioPluginInstance::PluginPresetList& presets) const;
     void setPreset(const QString& uri);
     void loadPreset(const QString& file);
@@ -162,6 +169,7 @@ private:
         unsigned int index;
         LV2_Atom_Sequence* atomSeq;
         bool isMidi;
+        bool isPatch;
     };
 
     std::vector<AtomPort> m_atomInputPorts;
@@ -214,6 +222,7 @@ private:
     bool m_pluginHasRun;
     AudioInstrumentMixer* m_amixer;
     PluginPort::ConnectionList m_connections;
+    LV2PluginParameter::Parameters m_params;
     std::string m_profilerName;
     bool m_eventsDiscarded;
     AudioPluginInstance::PluginPresetList m_presets;

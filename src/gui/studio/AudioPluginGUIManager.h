@@ -63,6 +63,16 @@ public:
     void stopGUI(InstrumentId instrument, int position);
     void stopAllGUIs();
 
+    bool hasParameters(InstrumentId instrument, int position) const;
+    void getParameters(InstrumentId instrument,
+                       int position,
+                       AudioPluginInstance::PluginParameters& params);
+    void updatePluginParameter
+        (InstrumentId instrument,
+         int position,
+         const QString& paramId,
+         const AudioPluginInstance::PluginParameter& param);
+
     bool canUsePresets(InstrumentId instrument, int position) const;
     void getPresets(InstrumentId instrument,
                           int position,
