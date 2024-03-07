@@ -3,7 +3,7 @@
 /*
   Rosegarden
   A sequencer and musical notation editor.
-  Copyright 2000-2022 the Rosegarden development team.
+  Copyright 2000-2024 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -19,17 +19,15 @@
 
 #include "LV2World.h"
 #include "LV2URIDMapper.h"
-#include "LV2Worker.h"
+#include "LV2PluginInstance.h"
 
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"  // For PluginPort
-#include "sound/LV2PluginInstance.h"
 #include "gui/studio/AudioPluginLV2GUI.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/presets/presets.h>
 
-#include <QThread>
 #include <QFileInfo>
 #include <QDir>
 
@@ -406,7 +404,12 @@ void LV2Utils::runWork(const PluginPosition& pp,
                        const void* data,
                        LV2_Worker_Respond_Function resp)
 {
-    LOCKED;
+    // Locking is not necessary here.  We are called by LV2Worker in the
+    // worker thread which right now is the UI thread.  This routine
+    // only reads m_pluginInstanceData.  The only functionality
+    // that can modify m_pluginInstanceData and cause a data race would be
+    // adding or removing a plugin.  But that is only done in the UI thread.
+    //LOCKED;
 
     PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {

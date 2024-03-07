@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -20,7 +20,6 @@
 #include "base/AudioPluginInstance.h"
 
 #include <lilv/lilv.h>
-#include <lv2/urid/urid.h>
 #include <lv2/atom/atom.h>
 #include <lv2/worker/worker.h>
 
@@ -33,12 +32,14 @@
 #include <map>
 #include <queue>
 
+
 namespace Rosegarden
 {
 
+
 class LV2PluginInstance;
 class AudioPluginLV2GUI;
-class LV2Worker;
+
 
 class LV2Utils
 {
@@ -47,7 +48,7 @@ public:
     static LV2Utils *getInstance();
 
 
-    // *** lilv wrappers ***
+    // *** lilv wrappers and helpers ***
 
     // Most of these wrappers are used only by LV2PluginInstance.
 
@@ -96,6 +97,10 @@ public:
     /// lilv_new_string() wrapper
     LilvNode* makeStringNode(const QString& string) const;
 
+    /// Helper.  Gathers uri/label data into a vector.
+    void setupPluginPresets(const QString& uri,
+                            AudioPluginInstance::PluginPresetList& presets);
+
 
     // *** LV2 Plugin Instance Database ***
 
@@ -129,14 +134,9 @@ public:
 
     /// Lock m_mutex.
     /**
-     * Called from both the UI thread and the JACK process thread.
+     * Called by LV2PluginInstance.
      *
-     * ??? This is used to lock m_workerResponses, and what else?
-     *
-     * This is the central mutex lock for all the lv2 thread communication
-     * Used in run() in LV2PluginInstance - see also the LOCKED macro.
-     * I find it difficult to know when to use the mutex and when not - so
-     * there may be some mistakes here
+     * Which threads call this now?  UI and audio?
      */
     void lock();
     /// Unlock m_mutex.
@@ -191,6 +191,11 @@ public:
                              PortValues &controlValues);
 
     /// Calls the plugin instance's runWork().
+    /**
+     * Called regularly by LV2Worker to send work back to a plugin.
+     * Called by LV2Worker's worker thread which is the UI thread as of this
+     * writing, so locking is not needed.
+     */
     void runWork(const PluginPosition &pp,
                  uint32_t size,
                  const void *data,
@@ -211,8 +216,6 @@ public:
 
     // Presets
 
-    void setupPluginPresets(const QString& uri,
-                            AudioPluginInstance::PluginPresetList& presets);
     void getPresets(InstrumentId instrument,
                     int position,
                     AudioPluginInstance::PluginPresetList& presets) const;
@@ -234,28 +237,8 @@ private:
     LV2Utils(LV2Utils &other) = delete;
     void operator=(const LV2Utils &) = delete;
 
-    // Used by both the UI thread and the audio (JACK process) thread.
-    //
-    // This is primarily used to guard m_pluginInstanceData.
-    //
-    // This mutex is used for the synchronization of the lv2
-    // threads. Some calls are made in the audio thread others in the
-    // gui thread. Data used by the calls are protected with this
-    // mutex.
-    //
-    // ??? Because all the plugins share this mutex, there will be
-    //     unnecessary contention.  We could
-    //     move toward finer grain.  A mutex for each plugin
-    //     instance.  Move toward LV2PluginInstance having an instance of
-    //     PluginInstanceData.  This should reduce mutex contention with only
-    //     a small memory cost.
-    //
-    //     There is only one audio thread and only one worker thread, so we
-    //     should probably analyze the potential contention to see how much
-    //     gain there would actually be before moving forward on this.  E.g.
-    //     plugins won't be contending with each other on the audio thread.
-    //     However, finer grain locking means the UI thread and the audio
-    //     thread will be less likely to contend with each other.
+    // This appears to be used to guard m_pluginInstanceData.  Though
+    // it is also guarding things in LV2PluginInstance via lock().
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QRecursiveMutex m_mutex;
 #else
