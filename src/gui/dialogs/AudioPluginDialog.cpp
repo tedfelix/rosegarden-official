@@ -31,6 +31,7 @@
 #include "gui/studio/AudioPluginGUIManager.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/PluginControl.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
 #include "gui/dialogs/AudioPluginParameterDialog.h"
@@ -1062,6 +1063,9 @@ AudioPluginDialog::slotBypassChanged(bool bp)
 void
 AudioPluginDialog::slotCopy()
 {
+    // tell plugins to save state
+    RosegardenSequencer::getInstance()->savePluginState();
+
     int item = m_pluginList->currentIndex();
     int number = m_pluginsInList[item] - 1;
 
