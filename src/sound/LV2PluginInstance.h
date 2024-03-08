@@ -127,6 +127,8 @@ public:
     void updatePluginParameter
         (const QString& paramId,
          const AudioPluginInstance::PluginParameter& param);
+    void sendPluginParameter
+        (const LV2PluginParameter& lparam);
 
     void getPresets(AudioPluginInstance::PluginPresetList& presets) const;
     void setPreset(const QString& uri);

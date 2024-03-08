@@ -13,7 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[LV2PluginInstance]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 //#define LV2RUN_PROFILE 1
 
@@ -543,8 +543,13 @@ void LV2PluginInstance::updatePluginParameter
             break;
         }
     }
+    // send to plugin
+    sendPluginParameter(lparam);
+}
 
-    // and send to the plugin
+void LV2PluginInstance::sendPluginParameter(const LV2PluginParameter& lparam)
+{
+    // send to the plugin
     LV2_Atom_Forge forge;
     lv2_atom_forge_init(&forge, LV2URIDMapper::getURIDMapFeature());
     uint8_t buffer[2000];
@@ -973,23 +978,39 @@ QString LV2PluginInstance::configure(const QString& key, const QString& value)
         QJsonDocument doc = QJsonDocument::fromJson(value.toUtf8());
         QJsonArray arr = doc.array();
         m_connections.clear();
-        for (const QJsonValue &jct : arr)
-            {
-                QJsonArray arr1 = jct.toArray();
-                QJsonValue oval = arr1[0];
-                QJsonValue aval = arr1[1];
-                QJsonValue pval = arr1[2];
-                QJsonValue ival = arr1[3];
-                QJsonValue cval = arr1[4];
-                PluginPort::Connection c;
-                c.isOutput = oval.toBool();
-                c.isAudio = aval.toBool();
-                c.pluginPort = pval.toString();
-                c.instrumentId = ival.toInt();
-                c.channel = cval.toInt();
-                m_connections.push_back(c);
-            }
+        for (const QJsonValue &jct : arr) {
+            QJsonArray arr1 = jct.toArray();
+            QJsonValue oval = arr1[0];
+            QJsonValue aval = arr1[1];
+            QJsonValue pval = arr1[2];
+            QJsonValue ival = arr1[3];
+            QJsonValue cval = arr1[4];
+            PluginPort::Connection c;
+            c.isOutput = oval.toBool();
+            c.isAudio = aval.toBool();
+            c.pluginPort = pval.toString();
+            c.instrumentId = ival.toInt();
+            c.channel = cval.toInt();
+            m_connections.push_back(c);
+        }
     }
+
+    if (key == "LV2Parameters") {
+        RG_DEBUG << "set parameters" << value;
+        QJsonDocument doc = QJsonDocument::fromJson(value.toUtf8());
+        QJsonArray arr = doc.array();
+        for (const QJsonValue &jct : arr) {
+            QJsonArray arr1 = jct.toArray();
+            QJsonValue uriVal = arr1[0];
+            QJsonValue valVal = arr1[1];
+            QString paramUri = uriVal.toString();
+            QString valueString = valVal.toString();
+            LV2PluginParameter& param = m_params[paramUri];
+            param.setValueFromString(valueString);
+            sendPluginParameter(param);
+        }
+    }
+
     return "";
 }
 
@@ -1040,6 +1061,32 @@ void LV2PluginInstance::savePluginState()
                                       false,
                                       "LV2Connections",
                                       strJson);
+
+    // now save the parameters
+    QJsonArray params;
+    for (const auto& pair : m_params) {
+        const QString& paramUri = pair.first;
+        const LV2PluginParameter& param = pair.second;
+
+        if (param.isValueSet()) {
+            QString valStr = param.getValueAsString();
+
+            QJsonValue val1(paramUri);
+            QJsonValue val2(valStr);
+            QJsonArray arr;
+            arr.append(val1);
+            arr.append(val2);
+            params.append(arr);
+        }
+    }
+    QJsonDocument docp(params);
+    QString strJsonp(docp.toJson(QJsonDocument::Compact));
+    RG_DEBUG << "params:" << strJsonp;
+    mw->slotChangePluginConfiguration(m_instrument,
+                                      m_position,
+                                      false,
+                                      "LV2Parameters",
+                                      strJsonp);
 }
 
 void
