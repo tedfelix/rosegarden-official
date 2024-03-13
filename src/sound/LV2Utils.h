@@ -161,23 +161,32 @@ public:
     void unRegisterGUI(InstrumentId instrument,
                        int position);
 
-    // set the value for the plugin
+    /// Set a plugin port value.
+    /**
+     * Called by the plugin UI.
+     */
     void setPortValue(InstrumentId instrument,
                       int position,
                       int index,
                       unsigned int protocol,
                       const QByteArray& data);
 
-    // called by the plugin to update the ui
-    // IMPORTANT: Must call lock() before calling this!
-    // ??? Move the logic from the caller into here so that lock()
-    //     need not be public for this.  Then we can use LOCKED which
-    //     is safer.
+    /// Add a plugin port update to the queue for the UI.
+    /**
+     * Called by the plugin (from the audio thread) to update the UI.
+     *
+     * IMPORTANT: Must call lock() before calling this!
+     *
+     * ??? Move the logic from the caller into here so that lock()
+     *     need not be public for this.  Then we can use LOCKED which
+     *     is safer.
+     */
     void updatePortValue(InstrumentId instrument,
                          int position,
                          int index,
                          const LV2_Atom* atom);
 
+    /// Get plugin port updates from the queue and send to the UI.
     void triggerPortUpdates(InstrumentId instrument,
                             int position);
 
@@ -290,9 +299,14 @@ private:
         AudioPluginLV2GUI *gui{nullptr};
 
         /// Port index/value pairs sent from the plugin to the GUI.
-        // ??? This begs the question: Why isn't there a queue in the other
-        //     direction?  That seems like the more common direction and
-        //     the most problematic from a threading standpoint.
+        /**
+         * updatePortValue() adds items to this.
+         * triggerPortUpdates() takes items off of this.
+         *
+         * Note that in the other, more common direction, LV2 offers
+         * lv2_atom_sequence_append_event() which I assume is already
+         * thread safe.
+         */
         PortValueQueue portValueQueue;
     };
     typedef std::map<PluginPosition, PluginInstanceData> PluginInstanceDataMap;

@@ -311,11 +311,19 @@ void LV2Utils::setPortValue(InstrumentId instrument,
                             const QByteArray& data)
 {
     RG_DEBUG << "setPortValue" << instrument << position;
+
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
 
+    // We are only locking m_pluginInstanceData here which might change
+    // if a plugin is added or removed (which likely can't happen while
+    // a port value change is happening anyway).
+    // I assume lv2_atom_sequence_append_event() which does the actual
+    // work of getting the port value update to the plugin's audio thread
+    // processing is thread-safe.
     LOCKED;
+
     PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
@@ -326,6 +334,7 @@ void LV2Utils::setPortValue(InstrumentId instrument,
         RG_DEBUG << "setPortValue no pluginInstance";
         return;
     }
+    // Use lv2_atom_sequence_append_event() to send the update.
     pgdata.pluginInstance->setPortByteArray(index, protocol, data);
 }
 
@@ -334,9 +343,11 @@ void LV2Utils::updatePortValue(InstrumentId instrument,
                                int index,
                                const LV2_Atom* atom)
 {
-
     // !!! No lock here as this is called from LV2PluginInstance::run() which
     //     calls lock().
+    // This needs to be locked since it is called by the audio thread and
+    // it uses m_pluginInstanceData and modifies the portValueQueue which
+    // is also modified by triggerPortUpdates() on the UI thread.
     //LOCKED;
 
     PluginPosition pp;
@@ -376,7 +387,14 @@ void LV2Utils::triggerPortUpdates(InstrumentId instrument,
     PluginPosition pp;
     pp.instrument = instrument;
     pp.position = position;
-    auto pit = m_pluginInstanceData.find(pp);
+
+    // This needs to be locked since it is called by the UI thread
+    // (AudioPluginLV2GUIWindow's timer) and it uses m_pluginInstanceData
+    // and modifies the portValueQueue which is also modified by
+    // updatePortValue() on the audio thread.
+    LOCKED;
+
+    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
         RG_DEBUG << "plugin not found" << instrument << position;
         return;
@@ -384,6 +402,7 @@ void LV2Utils::triggerPortUpdates(InstrumentId instrument,
     PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.gui == nullptr) {
         RG_DEBUG << "no gui at" << instrument << position;
+        // No GUI, clear the portValueQueue.
         while (! pgdata.portValueQueue.empty()) {
             PortValueItem* item = pgdata.portValueQueue.front();
             delete item;
@@ -391,7 +410,12 @@ void LV2Utils::triggerPortUpdates(InstrumentId instrument,
         }
         return;
     }
-    RG_DEBUG << "triggerPortUpdates" << pgdata.portValueQueue.size();
+
+#ifndef NDEBUG
+    if (!pgdata.portValueQueue.empty())
+        RG_DEBUG << "triggerPortUpdates()" << pgdata.portValueQueue.size();
+#endif
+
     while (! pgdata.portValueQueue.empty()) {
         PortValueItem* item = pgdata.portValueQueue.front();
         pgdata.gui->updatePortValue(item->portIndex, item->valueAtom);
