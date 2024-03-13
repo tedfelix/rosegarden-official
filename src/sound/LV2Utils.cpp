@@ -351,10 +351,10 @@ void LV2Utils::updatePortValue(InstrumentId instrument,
     PluginInstanceData &pgdata = pit->second;
     if (pgdata.gui == nullptr) {
         RG_DEBUG << "no gui at" << instrument << position;
-        while (! pgdata.atomQueue.empty()) {
-            AtomQueueItem* item = pgdata.atomQueue.front();
+        while (! pgdata.portValueQueue.empty()) {
+            PortValueItem* item = pgdata.portValueQueue.front();
             delete item;
-            pgdata.atomQueue.pop();
+            pgdata.portValueQueue.pop();
         }
         return;
     }
@@ -362,12 +362,12 @@ void LV2Utils::updatePortValue(InstrumentId instrument,
     // We want to call the ui updatePortValue from the gui thread so
     // queue the events
     int asize = sizeof(LV2_Atom) + atom->size;
-    AtomQueueItem* item = new AtomQueueItem;
+    PortValueItem* item = new PortValueItem;
     item->portIndex= index;
     char* buf = new char[asize];
     memcpy(buf, atom, asize);
-    item->atomBuffer = reinterpret_cast<const LV2_Atom*>(buf);
-    pgdata.atomQueue.push(item);
+    item->valueAtom = reinterpret_cast<const LV2_Atom*>(buf);
+    pgdata.portValueQueue.push(item);
 }
 
 void LV2Utils::triggerPortUpdates(InstrumentId instrument,
@@ -384,19 +384,19 @@ void LV2Utils::triggerPortUpdates(InstrumentId instrument,
     PluginInstanceData& pgdata = (*pit).second;
     if (pgdata.gui == nullptr) {
         RG_DEBUG << "no gui at" << instrument << position;
-        while (! pgdata.atomQueue.empty()) {
-            AtomQueueItem* item = pgdata.atomQueue.front();
+        while (! pgdata.portValueQueue.empty()) {
+            PortValueItem* item = pgdata.portValueQueue.front();
             delete item;
-            pgdata.atomQueue.pop();
+            pgdata.portValueQueue.pop();
         }
         return;
     }
-    RG_DEBUG << "triggerPortUpdates" << pgdata.atomQueue.size();
-    while (! pgdata.atomQueue.empty()) {
-        AtomQueueItem* item = pgdata.atomQueue.front();
-        pgdata.gui->updatePortValue(item->portIndex, item->atomBuffer);
+    RG_DEBUG << "triggerPortUpdates" << pgdata.portValueQueue.size();
+    while (! pgdata.portValueQueue.empty()) {
+        PortValueItem* item = pgdata.portValueQueue.front();
+        pgdata.gui->updatePortValue(item->portIndex, item->valueAtom);
         delete item;
-        pgdata.atomQueue.pop();
+        pgdata.portValueQueue.pop();
     }
 }
 
@@ -781,15 +781,11 @@ void LV2Utils::fillParametersFromProperties
     }
 }
 
-LV2Utils::AtomQueueItem::AtomQueueItem() :
-    portIndex(0),
-    atomBuffer(nullptr)
+LV2Utils::PortValueItem::~PortValueItem()
 {
-}
-
-LV2Utils::AtomQueueItem::~AtomQueueItem()
-{
-    if (atomBuffer) delete[] atomBuffer;
+    // This was originally allocated as an array of char.
+    // Cast back to that and use delete[] as is customary.
+    delete[] reinterpret_cast<const char *>(valueAtom);
 }
 
 }

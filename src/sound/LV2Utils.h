@@ -119,10 +119,10 @@ public:
      */
     struct PluginPosition
     {
-        InstrumentId instrument;
+        InstrumentId instrument{NoInstrument};
         // Position in the effects stack for effect plugins,
         // 999 (Instrument::SYNTH_PLUGIN_POSITION) for synths.
-        int position;
+        int position{0};
 
         bool operator<(const PluginPosition &p) const
         {
@@ -265,24 +265,38 @@ private:
 
     // Plugin instance data organized by instrument/position.
 
-    struct AtomQueueItem
+    /// A port index/value pair.
+    struct PortValueItem
     {
-        int portIndex;
-        const LV2_Atom* atomBuffer;
-        AtomQueueItem();
-        ~AtomQueueItem();
+        PortValueItem()  { }
+        ~PortValueItem();
+        // Avoid double-delete.  If we need to pass these around,
+        // consider making valueAtom a shared_ptr.
+        PortValueItem(const PortValueItem &) = delete;
+        PortValueItem &operator=(const PortValueItem &) = delete;
+
+        int portIndex{0};
+
+        const LV2_Atom* valueAtom{nullptr};
     };
-    typedef std::queue<AtomQueueItem*> AtomQueue;
+    typedef std::queue<PortValueItem*> PortValueQueue;
 
     struct PluginInstanceData
     {
         // ??? This pointer is also kept in AudioInstrumentMixer::m_synths
         //     or m_plugins as appropriate.  They are indexed by InstrumentId.
         LV2PluginInstance *pluginInstance{nullptr};
+
         AudioPluginLV2GUI *gui{nullptr};
-        AtomQueue atomQueue;
+
+        /// Port index/value pairs sent from the plugin to the GUI.
+        // ??? This begs the question: Why isn't there a queue in the other
+        //     direction?  That seems like the more common direction and
+        //     the most problematic from a threading standpoint.
+        PortValueQueue portValueQueue;
     };
     typedef std::map<PluginPosition, PluginInstanceData> PluginInstanceDataMap;
+
     /**
      * Users:
      *   registerPlugin() - writes
@@ -309,10 +323,13 @@ private:
      * be locked by both the JACK audio thread and the UI thread.  Everything
      * else is likely used by the UI thread only and need not be locked.
      *
-     * I think the way to go here is to split off the portion of the data that
+     * One way to go here is to split off the portion of the data that
      * is hit by the JACK audio thread.  Then we can lock it and keep it
      * in sync appropriately while all the rest is UI thread stuff and can be
      * lock free.
+     *
+     * Another approach would be to move all this to LV2PluginInstance.  That
+     * would then make locking less of an issue.
      */
     PluginInstanceDataMap m_pluginInstanceData;
 

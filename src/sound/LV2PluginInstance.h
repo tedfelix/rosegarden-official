@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -43,9 +43,11 @@ namespace Rosegarden
 
 class AudioInstrumentMixer;
 
-
+/// LV2 Plugin Instance
 /**
- * LV2 plugin instance.
+ * ??? This is pretty big.  Consider pulling out broad sets of functionality
+ *     into classes and using containment to bring them back in.
+ *     E.g. "LV2Ports ports;".
  *
  * LV2 is a variable block size API, but for one reason or another it's more
  * convenient to use a fixed block size in this wrapper.
