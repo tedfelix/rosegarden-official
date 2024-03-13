@@ -171,25 +171,6 @@ public:
                       unsigned int protocol,
                       const QByteArray& data);
 
-    /// Add a plugin port update to the queue for the UI.
-    /**
-     * Called by the plugin (from the audio thread) to update the UI.
-     *
-     * IMPORTANT: Must call lock() before calling this!
-     *
-     * ??? Move the logic from the caller into here so that lock()
-     *     need not be public for this.  Then we can use LOCKED which
-     *     is safer.
-     */
-    void updatePortValue(InstrumentId instrument,
-                         int position,
-                         int index,
-                         const LV2_Atom* atom);
-
-    /// Get plugin port updates from the queue and send to the UI.
-    void triggerPortUpdates(InstrumentId instrument,
-                            int position);
-
     typedef std::map<int /*portIndex*/, float /*value*/> PortValues;
 
     void getControlInValues(InstrumentId instrument,
@@ -251,6 +232,28 @@ public:
     void savePreset(InstrumentId instrument,
                     int position,
                     const QString& file);
+
+
+    // *** Port Value Queue
+
+    /// Add a plugin port update to the queue for the UI.
+    /**
+     * Called by the plugin (from the audio thread) to update the UI.
+     *
+     * IMPORTANT: Must call lock() before calling this!
+     *
+     * ??? Move the logic from the caller into here so that lock()
+     *     need not be public for this.  Then we can use LOCKED which
+     *     is safer.
+     */
+    void updatePortValue(InstrumentId instrument,
+                         int position,
+                         int index,
+                         const LV2_Atom* atom);
+
+    /// Get plugin port updates from the queue and send to the UI.
+    void triggerPortUpdates(InstrumentId instrument,
+                            int position);
 
 private:
 
