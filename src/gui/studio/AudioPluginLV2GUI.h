@@ -71,7 +71,7 @@ public:
     /// Calls updatePortValue() for any that have changed.
     void updateControlOutValues();
 
-    const LV2PluginInstance* getPluginInstance() const;
+    LV2PluginInstance *getPluginInstance() const;
 
     void closeUI();
 

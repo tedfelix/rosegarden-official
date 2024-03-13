@@ -22,13 +22,14 @@
 
 #include "AudioPluginLV2GUIWindow.h"
 #include "AudioPluginLV2GUIManager.h"
+#include "sound/LV2PluginInstance.h"
+#include "sound/LV2URIDMapper.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
-#include "sound/LV2URIDMapper.h"
 
 // the kx.studio extension
 #include "gui/studio/lv2_external_ui.h"
@@ -274,14 +275,18 @@ void AudioPluginLV2GUI::updateControlOutValues()
     m_firstUpdate = false;
 
     // and trigger port updates
-    lv2utils->triggerPortUpdates(m_instrument, m_position);
+
+    LV2PluginInstance *pi = LV2Utils::getInstance()->getPluginInstance(
+            m_instrument, m_position);
+    if (pi)
+        pi->triggerPortUpdates();
 }
 
-const LV2PluginInstance* AudioPluginLV2GUI::getPluginInstance() const
+LV2PluginInstance *AudioPluginLV2GUI::getPluginInstance() const
 {
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    const LV2PluginInstance* pi = lv2utils->getPluginInstance(m_instrument,
-                                                              m_position);
+    LV2PluginInstance* pi = lv2utils->getPluginInstance(m_instrument,
+                                                        m_position);
     return pi;
 }
 

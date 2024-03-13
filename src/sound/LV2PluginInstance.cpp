@@ -22,6 +22,7 @@
 #include "LV2Worker.h"
 #include "LV2Utils.h"
 #include "LV2URIDMapper.h"
+#include "gui/studio/AudioPluginLV2GUI.h"
 
 #include "base/Profiler.h"
 #include "misc/Debug.h"
@@ -1246,10 +1247,7 @@ LV2PluginInstance::run(const RealTime &rt)
             } else {
                 //RG_DEBUG << "updatePortValue";
                 if (ev->body.type != 0) {
-                    lv2utils->updatePortValue(m_instrument,
-                                              m_position,
-                                              ap.index,
-                                              &(ev->body));
+                    updatePortValue(ap.index, &(ev->body));
                 }
             }
         }
@@ -1315,6 +1313,76 @@ void LV2PluginInstance::sendMidiData(const QByteArray& rawMidi,
                 RG_DEBUG << "midi event overflow";
             }
         }
+    }
+}
+
+LV2PluginInstance::PortValueItem::~PortValueItem()
+{
+    // This was originally allocated as an array of char.
+    // Cast back to that and use delete[] as is customary.
+    delete[] reinterpret_cast<const char *>(valueAtom);
+}
+
+void LV2PluginInstance::updatePortValue(int index, const LV2_Atom *value)
+{
+    // If we have no GUI, bail.
+    if (!m_gui)
+    {
+        // Note: The GUI thread will clear the queue if the GUI is missing.
+        //       See triggerPortUpdates().  We do not want to clear the
+        //       queue here as this is called by the audio thread.
+        return;
+    }
+
+    // We want to call the ui updatePortValue from the gui thread so
+    // queue the events
+    int asize = sizeof(LV2_Atom) + value->size;
+    PortValueItem* item = new PortValueItem;
+    item->portIndex= index;
+    char* buf = new char[asize];
+    memcpy(buf, value, asize);
+    item->valueAtom = reinterpret_cast<const LV2_Atom*>(buf);
+
+    // This needs to be locked since it is called by the audio thread and
+    // it modifies the m_portValueQueue which is also modified by
+    // triggerPortUpdates() on the UI thread.
+    QMutexLocker lock(&m_portValueQueueMutex);
+    m_portValueQueue.push(item);
+}
+
+void LV2PluginInstance::triggerPortUpdates()
+{
+    // No GUI?  Clear and bail.
+    if (!m_gui)
+    {
+        // Clear the m_portValueQueue.
+        while (!m_portValueQueue.empty()) {
+            PortValueItem* item = m_portValueQueue.front();
+            delete item;
+            m_portValueQueue.pop();
+        }
+        return;
+    }
+
+#ifndef NDEBUG
+    if (!m_portValueQueue.empty())
+        RG_DEBUG << "triggerPortUpdates()" << m_portValueQueue.size();
+#endif
+
+    // This needs to be locked since it is called by the UI thread
+    // (AudioPluginLV2GUIWindow's timer) and it modifies the portValueQueue
+    // which is also modified by updatePortValue() on the audio thread.
+    QMutexLocker lock(&m_portValueQueueMutex);
+
+    // For each port/value pair, send it to the plugin.
+    while (!m_portValueQueue.empty()) {
+        PortValueItem* item = m_portValueQueue.front();
+        // ??? We can reduce the locking time by copying the updates
+        //     to a temporary local queue, unlocking, then sending them off
+        //     to m_gui.  Or use a lock-free queue.
+        m_gui->updatePortValue(item->portIndex, item->valueAtom);
+        delete item;
+        m_portValueQueue.pop();
     }
 }
 

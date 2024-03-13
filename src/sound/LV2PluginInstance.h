@@ -137,6 +137,10 @@ public:
     void loadPreset(const QString& file);
     void savePreset(const QString& file);
 
+
+    /// Get plugin port updates from the queue and send to the UI.
+    void triggerPortUpdates();
+
 private:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;
@@ -182,10 +186,14 @@ private:
     InstrumentId m_instrument;
     // Position in the effects stack for effect plugins, 999 for synths.
     int m_position;
+
     LilvInstance* m_instance;
     QString m_uri;
     const LilvPlugin *m_plugin;
     LV2PluginDatabase::LV2PluginData m_pluginData;
+public:  // public during the transition from LV2Utils.  Hoping to hide this.
+    AudioPluginLV2GUI *m_gui{nullptr};
+private:
 
     std::vector<int> m_audioPortsIn;
     std::vector<int> m_audioPortsOut;
@@ -230,6 +238,44 @@ private:
     std::string m_profilerName;
     bool m_eventsDiscarded;
     AudioPluginInstance::PluginPresetList m_presets;
+
+
+    // *** Port Value Queue
+
+    /// A port index/value pair.
+    struct PortValueItem
+    {
+        PortValueItem()  { }
+        ~PortValueItem();
+        // Avoid double-delete.  If we need to pass these around,
+        // consider making valueAtom a shared_ptr.
+        PortValueItem(const PortValueItem &) = delete;
+        PortValueItem &operator=(const PortValueItem &) = delete;
+
+        int portIndex{0};
+
+        const LV2_Atom* valueAtom{nullptr};
+    };
+    typedef std::queue<PortValueItem *> PortValueQueue;
+
+    /// Port index/value pairs sent from the plugin to the GUI.
+    /**
+     * updatePortValue() adds items to this.
+     * triggerPortUpdates() takes items off of this.
+     *
+     * Note that in the other, more common direction, LV2 offers
+     * lv2_atom_sequence_append_event() which I assume is already
+     * thread safe.
+     */
+    PortValueQueue m_portValueQueue;
+    QMutex m_portValueQueueMutex;
+
+    /// Add a plugin port update to the queue for the UI.
+    /**
+     * Called by the plugin (from the audio thread) to update the UI.
+     */
+    void updatePortValue(int index, const LV2_Atom *value);
+
 };
 
 

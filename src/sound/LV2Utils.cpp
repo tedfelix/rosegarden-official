@@ -250,7 +250,12 @@ void LV2Utils::registerGUI(InstrumentId instrument,
     pp.position = position;
 
     LOCKED;
-    m_pluginInstanceData[pp].gui = gui;
+    PluginInstanceData &pid = m_pluginInstanceData[pp];
+    if (!pid.pluginInstance) {
+        RG_WARNING << "registerGUI(): no plugin instance" << instrument << position;
+        return;
+    }
+    pid.pluginInstance->m_gui = gui;
 }
 
 void LV2Utils::unRegisterPlugin(InstrumentId instrument,
@@ -275,11 +280,8 @@ void LV2Utils::unRegisterPlugin(InstrumentId instrument,
         RG_DEBUG << "unRegisterPlugin plugin already replaced";
         return;
     }
-    pgdata.pluginInstance = nullptr;
-    if (pgdata.gui == nullptr) {
-        // both 0 - delete entry
-        m_pluginInstanceData.erase(pit);
-    }
+
+    m_pluginInstanceData.erase(pit);
 }
 
 void LV2Utils::unRegisterGUI(InstrumentId instrument,
@@ -293,15 +295,17 @@ void LV2Utils::unRegisterGUI(InstrumentId instrument,
     LOCKED;
     PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
     if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "gui not found" << instrument << position;
+        RG_DEBUG << "plugin not found" << instrument << position;
         return;
     }
+
     PluginInstanceData &pgdata = pit->second;
-    pgdata.gui = nullptr;
-    if (pgdata.pluginInstance == nullptr) {
-        // both 0 - delete entry
-        m_pluginInstanceData.erase(pit);
+    if (!pgdata.pluginInstance) {
+        RG_WARNING << "unRegisterGUI(): no plugin instance" << instrument << position;
+        return;
     }
+
+    pgdata.pluginInstance->m_gui = nullptr;
 }
 
 void LV2Utils::setPortValue(InstrumentId instrument,
@@ -336,92 +340,6 @@ void LV2Utils::setPortValue(InstrumentId instrument,
     }
     // Use lv2_atom_sequence_append_event() to send the update.
     pgdata.pluginInstance->setPortByteArray(index, protocol, data);
-}
-
-void LV2Utils::updatePortValue(InstrumentId instrument,
-                               int position,
-                               int index,
-                               const LV2_Atom* atom)
-{
-    // !!! No lock here as this is called from LV2PluginInstance::run() which
-    //     calls lock().
-    // This needs to be locked since it is called by the audio thread and
-    // it uses m_pluginInstanceData and modifies the portValueQueue which
-    // is also modified by triggerPortUpdates() on the UI thread.
-    //LOCKED;
-
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-
-    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "plugin not found" << instrument << position;
-        return;
-    }
-    PluginInstanceData &pgdata = pit->second;
-    if (pgdata.gui == nullptr) {
-        RG_DEBUG << "no gui at" << instrument << position;
-        while (! pgdata.portValueQueue.empty()) {
-            PortValueItem* item = pgdata.portValueQueue.front();
-            delete item;
-            pgdata.portValueQueue.pop();
-        }
-        return;
-    }
-
-    // We want to call the ui updatePortValue from the gui thread so
-    // queue the events
-    int asize = sizeof(LV2_Atom) + atom->size;
-    PortValueItem* item = new PortValueItem;
-    item->portIndex= index;
-    char* buf = new char[asize];
-    memcpy(buf, atom, asize);
-    item->valueAtom = reinterpret_cast<const LV2_Atom*>(buf);
-    pgdata.portValueQueue.push(item);
-}
-
-void LV2Utils::triggerPortUpdates(InstrumentId instrument,
-                                  int position)
-{
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-
-    // This needs to be locked since it is called by the UI thread
-    // (AudioPluginLV2GUIWindow's timer) and it uses m_pluginInstanceData
-    // and modifies the portValueQueue which is also modified by
-    // updatePortValue() on the audio thread.
-    LOCKED;
-
-    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "plugin not found" << instrument << position;
-        return;
-    }
-    PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.gui == nullptr) {
-        RG_DEBUG << "no gui at" << instrument << position;
-        // No GUI, clear the portValueQueue.
-        while (! pgdata.portValueQueue.empty()) {
-            PortValueItem* item = pgdata.portValueQueue.front();
-            delete item;
-            pgdata.portValueQueue.pop();
-        }
-        return;
-    }
-
-#ifndef NDEBUG
-    if (!pgdata.portValueQueue.empty())
-        RG_DEBUG << "triggerPortUpdates()" << pgdata.portValueQueue.size();
-#endif
-
-    while (! pgdata.portValueQueue.empty()) {
-        PortValueItem* item = pgdata.portValueQueue.front();
-        pgdata.gui->updatePortValue(item->portIndex, item->valueAtom);
-        delete item;
-        pgdata.portValueQueue.pop();
-    }
 }
 
 void LV2Utils::runWork(const PluginPosition& pp,
@@ -805,11 +723,5 @@ void LV2Utils::fillParametersFromProperties
     }
 }
 
-LV2Utils::PortValueItem::~PortValueItem()
-{
-    // This was originally allocated as an array of char.
-    // Cast back to that and use delete[] as is customary.
-    delete[] reinterpret_cast<const char *>(valueAtom);
-}
 
 }
