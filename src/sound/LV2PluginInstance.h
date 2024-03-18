@@ -138,6 +138,8 @@ public:
     void savePreset(const QString& file);
 
 
+    void setGUI(AudioPluginLV2GUI *gui)  { m_gui = gui; }
+
     /// Get plugin port updates from the queue and send to the UI.
     void triggerPortUpdates();
 
@@ -191,9 +193,12 @@ private:
     QString m_uri;
     const LilvPlugin *m_plugin;
     LV2PluginDatabase::LV2PluginData m_pluginData;
-public:  // public during the transition from LV2Utils.  Hoping to hide this.
+
+    /**
+     * We only keep the GUI pointer to support port updates from the plugin
+     * to the GUI.  See triggerPortUpdates().
+     */
     AudioPluginLV2GUI *m_gui{nullptr};
-private:
 
     std::vector<int> m_audioPortsIn;
     std::vector<int> m_audioPortsOut;

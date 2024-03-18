@@ -854,6 +854,8 @@ AudioBussMixer::threadRun()
 }
 
 
+static AudioInstrumentMixer *aimInstance{nullptr};
+
 AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
         AudioFileReader *fileReader,
         unsigned int sampleRate,
@@ -864,6 +866,9 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
         m_blockSize(blockSize),
         m_numSoftSynths(0)
 {
+    // Keep track of the instance globally.  See getInstance().
+    aimInstance = this;
+
     // Pregenerate empty plugin slots
 
     InstrumentId audioInstrumentBase;
@@ -898,8 +903,16 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
     // regenerate from scratch if necessary.  Don't like it though.
 }
 
+AudioInstrumentMixer *
+AudioInstrumentMixer::getInstance()
+{
+    return aimInstance;
+}
+
 AudioInstrumentMixer::~AudioInstrumentMixer()
 {
+    aimInstance = nullptr;
+
     //std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer" << std::endl;
     // BufferRec dtor will handle the BufferMap
 
@@ -2150,7 +2163,6 @@ AudioInstrumentMixer::threadRun()
         pthread_testcancel();
     }
 }
-
 
 
 AudioFileReader::AudioFileReader(SoundDriver *driver,

@@ -154,14 +154,6 @@ public:
                           int position,
                           LV2PluginInstance* pluginInstance);
 
-    /// Adds a plugin GUI to m_pluginInstanceData.
-    void registerGUI(InstrumentId instrument,
-                     int position,
-                     AudioPluginLV2GUI* gui);
-    /// Removes a plugin GUI from m_pluginInstanceData.
-    void unRegisterGUI(InstrumentId instrument,
-                       int position);
-
     /// Set a plugin port value.
     /**
      * Called by the plugin UI.

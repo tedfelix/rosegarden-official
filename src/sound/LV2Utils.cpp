@@ -240,24 +240,6 @@ void LV2Utils::registerPlugin(InstrumentId instrument,
     m_pluginInstanceData[pp].pluginInstance = pluginInstance;
 }
 
-void LV2Utils::registerGUI(InstrumentId instrument,
-                           int position,
-                           AudioPluginLV2GUI* gui)
-{
-    RG_DEBUG << "register gui" << instrument << position;
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-
-    LOCKED;
-    PluginInstanceData &pid = m_pluginInstanceData[pp];
-    if (!pid.pluginInstance) {
-        RG_WARNING << "registerGUI(): no plugin instance" << instrument << position;
-        return;
-    }
-    pid.pluginInstance->m_gui = gui;
-}
-
 void LV2Utils::unRegisterPlugin(InstrumentId instrument,
                                 int position,
                                 LV2PluginInstance* pluginInstance)
@@ -282,30 +264,6 @@ void LV2Utils::unRegisterPlugin(InstrumentId instrument,
     }
 
     m_pluginInstanceData.erase(pit);
-}
-
-void LV2Utils::unRegisterGUI(InstrumentId instrument,
-                             int position)
-{
-    RG_DEBUG << "unregister gui" << instrument << position;
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-
-    LOCKED;
-    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "plugin not found" << instrument << position;
-        return;
-    }
-
-    PluginInstanceData &pgdata = pit->second;
-    if (!pgdata.pluginInstance) {
-        RG_WARNING << "unRegisterGUI(): no plugin instance" << instrument << position;
-        return;
-    }
-
-    pgdata.pluginInstance->m_gui = nullptr;
 }
 
 void LV2Utils::setPortValue(InstrumentId instrument,

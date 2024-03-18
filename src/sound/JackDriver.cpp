@@ -2383,6 +2383,9 @@ JackDriver::setPluginInstance(InstrumentId id, QString identifier,
 void
 JackDriver::removePluginInstance(InstrumentId id, int position)
 {
+    // ??? This and all the other pure delegation functions can be removed.
+    //     AudioInstrumentMixer is now a Singleton and can be accessed
+    //     globally through its getInstance().
     if (m_instrumentMixer)
         m_instrumentMixer->removePlugin(id, position);
 }
@@ -2469,6 +2472,9 @@ void JackDriver::savePluginState()
 RunnablePluginInstance *
 JackDriver::getSynthPlugin(InstrumentId id)
 {
+    // ??? This and all the other pure delegation functions can be removed.
+    //     AudioInstrumentMixer is now a Singleton and can be accessed
+    //     globally through its getInstance().
     if (m_instrumentMixer)
         return m_instrumentMixer->getSynthPlugin(id);
     else

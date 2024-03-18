@@ -20,11 +20,13 @@
 
 #include "AudioPluginLV2GUIManager.h"
 
-#include "base/Studio.h"
-#include "base/AudioPluginInstance.h"
-#include "gui/studio/AudioPluginLV2GUI.h"
+#include "sound/LV2PluginInstance.h"
 #include "sound/LV2Utils.h"
 #include "sound/LV2Worker.h"
+#include "gui/studio/AudioPluginLV2GUI.h"
+
+#include "base/Studio.h"
+#include "base/AudioPluginInstance.h"
 #include "misc/Strings.h"
 #include "gui/application/RosegardenMainWindow.h"
 
@@ -74,18 +76,25 @@ void
 AudioPluginLV2GUIManager::showGUI(InstrumentId instrument, int position)
 {
     RG_DEBUG << "showGUI(): " << instrument << "," << position;
+
     // check that the plugin is still there
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    const LV2PluginInstance* inst =
+    LV2PluginInstance* lpi =
         lv2utils->getPluginInstance(instrument, position);
-    if (inst == nullptr) {
+    if (!lpi) {
         RG_DEBUG << "showGui - no instance";
         return;
     }
-    AudioPluginLV2GUI* gui = getInstance(instrument, position);
-    if (gui->hasGUI()) {
-        gui->showGui();
+
+    AudioPluginLV2GUI *gui = getInstance(instrument, position);
+    if (!gui) {
+        RG_DEBUG << "showGui(): No GUI";
+        return;
     }
+
+    lpi->setGUI(gui);
+    if (gui->hasGUI())
+        gui->showGui();
 }
 
 void
