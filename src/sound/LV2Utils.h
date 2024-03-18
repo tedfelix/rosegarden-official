@@ -250,10 +250,12 @@ private:
 
     // Plugin instance pointers organized by instrument/position.
 
+    // ??? This is now just the LV2PluginInstance pointers.  That can be
+    //     had more directly from AudioInstrumentMixer.  See AudioPluginLV2GUI's
+    //     dtor for how to do this.  Switch to using that and remove this.
+
     struct PluginInstanceData
     {
-        // ??? This pointer is also kept in AudioInstrumentMixer::m_synths
-        //     or m_plugins as appropriate.  They are indexed by InstrumentId.
         LV2PluginInstance *pluginInstance{nullptr};
     };
     typedef std::map<PluginPosition, PluginInstanceData> PluginInstanceDataMap;
