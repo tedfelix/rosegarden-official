@@ -161,10 +161,19 @@ void AudioPluginLV2GUIManager::savePreset
 bool AudioPluginLV2GUIManager::canEditConnections(InstrumentId instrument,
                                                   int position) const
 {
-    // we can edit the connections if there are 2 or more
+    // we can edit the connections if there is more than one audio
+    // input or more than one audio output
     PluginPort::ConnectionList clist;
     getConnections(instrument, position, clist);
-    if (clist.size() > 1) return true;
+    int numInput = 0;
+    int numOutput = 0;
+    for (const PluginPort::Connection &connection : clist) {
+        if (connection.isAudio) {
+            if (connection.isOutput) ++numOutput;
+            else ++numInput;
+        }
+    }
+    if (numInput > 1 || numOutput > 1) return true;
     return false;
 }
 

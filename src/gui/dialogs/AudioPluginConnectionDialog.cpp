@@ -67,6 +67,8 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
     mainLayout->addWidget(cLabel, 0, 2);
 
     int row = 1;
+    bool firstInput = true;
+    bool firstOutput = true;
     // For each connection...
     for (const PluginPort::Connection &connection : connections) {
         m_pluginPorts.push_back(connection.pluginPort);
@@ -88,7 +90,6 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
             ++count;
         }
         icb->setCurrentIndex(selInstIndex);
-        if (row == 1) icb->setEnabled(false);
         m_instrumentCB.push_back(icb);
         mainLayout->addWidget(icb, row, 1);
 
@@ -97,7 +98,16 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
         ccb->addItem(tr("Left"));
         ccb->addItem(tr("Right"));
         ccb->setCurrentIndex(connection.channel);
-        if (row == 1) ccb->setEnabled(false);
+        if (firstInput && ! connection.isOutput) {
+            firstInput = false;
+            icb->setEnabled(false);
+            ccb->setEnabled(false);
+        }
+        if (firstOutput && connection.isOutput) {
+            firstOutput = false;
+            icb->setEnabled(false);
+            ccb->setEnabled(false);
+        }
         m_channelCB.push_back(ccb);
         mainLayout->addWidget(ccb, row, 2);
 
