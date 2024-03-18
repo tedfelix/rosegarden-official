@@ -13,7 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[LV2PluginInstance]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 //#define LV2RUN_PROFILE 1
 
@@ -22,6 +22,7 @@
 #include "LV2Worker.h"
 #include "LV2Utils.h"
 #include "LV2URIDMapper.h"
+#include "PluginAudioSource.h"
 
 #include "base/Profiler.h"
 #include "misc/Debug.h"
@@ -268,7 +269,9 @@ LV2PluginInstance::init(int idealChannelCount)
         PluginPort::Connection c;
         c.isOutput = false;
         c.isAudio = true;
-        c.pluginPort = LV2PluginDatabase::getPortName(m_uri, m_audioPortsIn[i]);
+        c.pluginIndex = m_audioPortsIn[i];
+        c.pluginPort =
+            LV2PluginDatabase::getPortName(m_uri, m_audioPortsIn[i]);
         c.instrumentId = 0;
         c.channel = 0;
         if (i == 0) {
@@ -281,6 +284,27 @@ LV2PluginInstance::init(int idealChannelCount)
         }
         m_connections.push_back(c);
     }
+    for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+        if (m_audioPortsOut[i] == -1) continue; // for distributeChannels
+        PluginPort::Connection c;
+        c.isOutput = true;
+        c.isAudio = true;
+        c.pluginIndex = m_audioPortsOut[i];
+        c.pluginPort =
+            LV2PluginDatabase::getPortName(m_uri, m_audioPortsOut[i]);
+        c.instrumentId = 0;
+        c.channel = 0;
+        if (i == 0) {
+            c.instrumentId = m_instrument;
+            c.channel = 0;
+        }
+        if (i == 1 && m_channelCount == 2) {
+            c.instrumentId = m_instrument;
+            c.channel = 1;
+        }
+        m_connections.push_back(c);
+    }
+    RG_DEBUG << "connections:" << m_connections.size();
 }
 
 size_t
@@ -1089,6 +1113,32 @@ void LV2PluginInstance::savePluginState()
                                       strJsonp);
 }
 
+void LV2PluginInstance::getPluginPlayableAudio
+(std::vector<PlayableData*>& playable)
+{
+    RG_DEBUG << "getPluginPlayableAudio";
+    // test
+    for (const PluginPort::Connection &c : m_connections) {
+        if (c.instrumentId != 0 &&
+            c.instrumentId != m_instrument &&
+            c.isOutput == true) {
+            PluginAudioSource *pas = new PluginAudioSource(this,
+                                                           c.instrumentId,
+                                                           c.pluginIndex,
+                                                           m_blockSize);
+            playable.push_back(pas);
+            m_audioSources[c.pluginIndex] = pas;
+        }
+    }
+}
+
+void LV2PluginInstance::removeAudioSource(int portIndex)
+{
+    RG_DEBUG << "removeAudioSource" << portIndex;
+    // the PluginAudioSource is deleted elsewhere
+    m_audioSources.erase(portIndex);
+}
+
 void
 LV2PluginInstance::sendEvent(const RealTime& eventTime,
                              const void* event)
@@ -1125,7 +1175,9 @@ LV2PluginInstance::run(const RealTime &rt)
     // Get connected buffers.
     int bufIndex = 0;
     for (const PluginPort::Connection &c : m_connections) {
-        if (c.instrumentId != 0 && c.instrumentId != m_instrument) {
+        if (c.instrumentId != 0 &&
+            c.instrumentId != m_instrument &&
+            c.isOutput == false) {
             auto ib = m_amixer->getAudioBuffer(c.instrumentId, c.channel);
             if (ib) {
                 //RG_DEBUG << "copy" << c.instrumentId << c.channel <<
@@ -1263,6 +1315,25 @@ LV2PluginInstance::run(const RealTime &rt)
         for (size_t i = 0; i < m_blockSize; ++i) {
             m_outputBuffers[1][i] = m_outputBuffers[0][i];
         }
+    }
+
+    // pass any required audio output to the virtual audio sources
+    // For each audio out port...
+    int outbuf = 0;
+    for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+        if (m_audioPortsOut[i] == -1) continue;
+        int portIndex = m_audioPortsOut[i];
+        auto iter = m_audioSources.find(portIndex);
+        if (iter != m_audioSources.end()) {
+            double ms = 0.0;
+            for (unsigned int si=0; si<m_blockSize; si++)
+                ms += m_outputBuffers[outbuf][si] * m_outputBuffers[outbuf][si];
+            RG_DEBUG << "send data to audio source for port" << portIndex <<
+                outbuf << ms;
+            PluginAudioSource* pas = (*iter).second;
+            pas->setAudioData(m_outputBuffers[outbuf]);
+        }
+        ++outbuf;
     }
 
     m_run = true;

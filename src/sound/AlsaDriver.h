@@ -316,6 +316,13 @@ public:
 #endif
     }
 
+    void getPluginPlayableAudio(std::vector<PlayableData*>& playable) override
+    {
+#ifdef HAVE_LIBJACK
+        if (m_jackDriver) m_jackDriver->getPluginPlayableAudio(playable);
+#endif
+    }
+
     void setAudioBussLevels(int bussId,
                                     float dB,
                                     float pan) override {

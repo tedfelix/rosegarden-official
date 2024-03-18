@@ -115,6 +115,8 @@ public:
 
     virtual void savePluginState();
 
+    virtual void getPluginPlayableAudio(std::vector<PlayableData*>& playable);
+
     virtual RunnablePluginInstance *getSynthPlugin(InstrumentId id);
 
     virtual void clearSynthPluginEvents(); // when stopping

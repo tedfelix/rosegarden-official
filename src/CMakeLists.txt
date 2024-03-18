@@ -560,6 +560,7 @@ set(rg_CPPS
   sound/PluginFactory.cpp
   sound/BWFAudioFile.cpp
   sound/PeakFile.cpp
+  sound/PluginAudioSource.cpp
   sound/RIFFAudioFile.cpp
   sound/AudioFileTimeStretcher.cpp
   sound/SequencerDataBlock.cpp

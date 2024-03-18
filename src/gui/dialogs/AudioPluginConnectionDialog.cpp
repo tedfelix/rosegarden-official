@@ -37,7 +37,8 @@ namespace Rosegarden
 AudioPluginConnectionDialog::AudioPluginConnectionDialog
 (QWidget *parent,
  const PluginPort::ConnectionList& connections) :
-    QDialog(parent)
+    QDialog(parent),
+    m_connections(connections)
 {
     setWindowTitle(tr("Audio Plugin Connections"));
 
@@ -116,17 +117,12 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
 void AudioPluginConnectionDialog::getConnections
 (PluginPort::ConnectionList& connections) const
 {
-    connections.clear();
-
+    connections = m_connections;
     // widgetIndex
     int index = 0;
 
-    // For each port, add to connections.
-    for (const QString &port : m_pluginPorts) {
-        PluginPort::Connection c;
-        c.isOutput = false;
-        c.isAudio = true;
-        c.pluginPort = port;
+    // For each connection...
+    for (PluginPort::Connection &c : connections) {
         c.instrumentId = 0;
 
         // Get the Instrument from the Instrument ComboBox
@@ -143,7 +139,6 @@ void AudioPluginConnectionDialog::getConnections
 
         ++index;
 
-        connections.push_back(c);
     }
 }
 

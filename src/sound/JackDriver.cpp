@@ -2461,6 +2461,12 @@ void JackDriver::savePluginState()
         m_instrumentMixer->savePluginState();
 }
 
+void JackDriver::getPluginPlayableAudio(std::vector<PlayableData*>& playable)
+{
+    if (m_instrumentMixer)
+        m_instrumentMixer->getPluginPlayableAudio(playable);
+}
+
 RunnablePluginInstance *
 JackDriver::getSynthPlugin(InstrumentId id)
 {

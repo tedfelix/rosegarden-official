@@ -42,7 +42,7 @@ namespace Rosegarden
 
 
 class AudioInstrumentMixer;
-
+class PluginAudioSource;
 
 /**
  * LV2 plugin instance.
@@ -81,6 +81,8 @@ public:
 
     QString configure(const QString& key, const QString& value) override;
     void savePluginState() override;
+    void getPluginPlayableAudio(std::vector<PlayableData*>& playable) override;
+    void removeAudioSource(int portIndex) override;
 
     void sendEvent(const RealTime& eventTime,
                    const void* event) override;
@@ -228,6 +230,7 @@ private:
     std::string m_profilerName;
     bool m_eventsDiscarded;
     AudioPluginInstance::PluginPresetList m_presets;
+    std::map<int, PluginAudioSource*> m_audioSources;
 };
 
 

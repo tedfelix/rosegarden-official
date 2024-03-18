@@ -145,6 +145,13 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
         }
     }
 
+    // any plugin audio sources
+    std::vector<PlayableData*> pluginPlayable;
+    getPluginPlayableAudio(pluginPlayable);
+    for (PlayableData* pd : pluginPlayable) {
+        newQueue->addScheduled(pd);
+    }
+
     RG_DEBUG << "SoundDriver::initialiseAudioQueue -- new queue has "
     << newQueue->size() << " files";
 

@@ -19,6 +19,8 @@
 #include "base/RealTime.h"
 #include "base/Instrument.h"
 
+#include "PlayableData.h"
+
 #include <set>
 #include <vector>
 #include <map>
@@ -27,6 +29,7 @@
 namespace Rosegarden
 {
 
+class PlayableData;
 class PlayableAudioFile;
 
 /**
@@ -46,17 +49,17 @@ public:
     virtual ~AudioPlayQueue();
 
     struct FileTimeCmp {
-        bool operator()(const PlayableAudioFile &, const PlayableAudioFile &) const;
-        bool operator()(const PlayableAudioFile *, const PlayableAudioFile *) const;
+        bool operator()(const PlayableData &, const PlayableData &) const;
+        bool operator()(const PlayableData *, const PlayableData *) const;
     };
-    typedef std::set<PlayableAudioFile *, FileTimeCmp> FileSet;
-    typedef std::list<PlayableAudioFile *> FileList;
+    typedef std::set<PlayableData *, FileTimeCmp> FileSet;
+    typedef std::list<PlayableData *> FileList;
 
     /**
      * Add a file to the queue.  AudioPlayQueue takes ownership of the
      * file and will delete it when removed.
      */
-    void addScheduled(PlayableAudioFile *file);
+    void addScheduled(PlayableData *file);
 
     /**
      * Add a file to the unscheduled list.  AudioPlayQueue takes
@@ -108,7 +111,7 @@ public:
     void getPlayingFilesForInstrument(const RealTime &sliceStart,
                                       const RealTime &sliceDuration,
                                       InstrumentId instrumentId,
-                                      PlayableAudioFile **playing,
+                                      PlayableData **playing,
                                       size_t &size) const;
 
     /**
@@ -140,7 +143,7 @@ public:
 private:
     FileSet m_files;
 
-    typedef std::vector<PlayableAudioFile *> FileVector;
+    typedef std::vector<PlayableData *> FileVector;
     typedef std::map<int, FileVector> ReverseFileMap;
     ReverseFileMap m_index;
 

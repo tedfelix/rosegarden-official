@@ -5,7 +5,7 @@
     A sequencer and musical notation editor.
     Copyright 2000-2023 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -37,15 +37,15 @@ static inline unsigned int instrumentId2Index(InstrumentId id)
 }
 
 bool
-AudioPlayQueue::FileTimeCmp::operator()(const PlayableAudioFile &f1,
-                                        const PlayableAudioFile &f2) const
+AudioPlayQueue::FileTimeCmp::operator()(const PlayableData &f1,
+                                        const PlayableData &f2) const
 {
     return operator()(&f1, &f2);
 }
 
 bool
-AudioPlayQueue::FileTimeCmp::operator()(const PlayableAudioFile *f1,
-                                        const PlayableAudioFile *f2) const
+AudioPlayQueue::FileTimeCmp::operator()(const PlayableData *f1,
+                                        const PlayableData *f2) const
 {
     RealTime t1 = f1->getStartTime(), t2 = f2->getStartTime();
     if (t1 < t2)
@@ -72,7 +72,7 @@ AudioPlayQueue::~AudioPlayQueue()
 }
 
 void
-AudioPlayQueue::addScheduled(PlayableAudioFile *file)
+AudioPlayQueue::addScheduled(PlayableData *file)
 {
     if (m_files.find(file) != m_files.end()) {
         RG_WARNING << "WARNING: addScheduled(" << file << "): already in queue";
@@ -244,7 +244,7 @@ AudioPlayQueue::getPlayingFiles(const RealTime &sliceStart,
         for (FileVector::const_iterator fi = mi->second.begin();
                 fi != mi->second.end(); ++fi) {
 
-            PlayableAudioFile *f = *fi;
+            PlayableData *f = *fi;
 
             if (f->getStartTime() > sliceEnd ||
                     f->getStartTime() + f->getDuration() <= sliceStart)
@@ -260,7 +260,7 @@ AudioPlayQueue::getPlayingFiles(const RealTime &sliceStart,
 
     for (FileList::const_iterator fli = m_unscheduled.begin();
             fli != m_unscheduled.end(); ++fli) {
-        PlayableAudioFile *file = *fli;
+        PlayableData *file = *fli;
         if (file->getStartTime() <= sliceEnd &&
                 file->getStartTime() + file->getDuration() > sliceStart) {
             playing.insert(file);
@@ -278,7 +278,7 @@ void
 AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
         const RealTime &sliceDuration,
         InstrumentId instrumentId,
-        PlayableAudioFile **playing,
+        PlayableData **playing,
         size_t &size) const
 {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
@@ -308,7 +308,7 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
         for (FileVector::const_iterator fi = mi->second.begin();
                 fi != mi->second.end(); ++fi) {
 
-            PlayableAudioFile *f = *fi;
+            PlayableData *f = *fi;
 
             if (f->getInstrument() != instrumentId)
                 continue;
@@ -364,7 +364,7 @@ unscheduled:
     for (FileList::const_iterator fli = m_unscheduled.begin();
             fli != m_unscheduled.end(); ++fli) {
 
-        PlayableAudioFile *f = *fli;
+        PlayableData *f = *fli;
 
         if (f->getInstrument() != instrumentId) {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
@@ -436,7 +436,7 @@ AudioPlayQueue::haveFilesForInstrument(InstrumentId instrumentId) const
 
     for (FileList::const_iterator fli = m_unscheduled.begin();
             fli != m_unscheduled.end(); ++fli) {
-        PlayableAudioFile *file = *fli;
+        PlayableData *file = *fli;
         if (file->getInstrument() == instrumentId) {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
             RG_DEBUG << "  yes (unscheduled)";
@@ -475,4 +475,3 @@ AudioPlayQueue::getAllUnscheduledFiles() const
 
 
 }
-

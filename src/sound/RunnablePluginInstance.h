@@ -26,6 +26,7 @@ namespace Rosegarden
 {
 
 class PluginFactory;
+class PlayableData;
 
 /**
  * RunnablePluginInstance is a very trivial interface that an audio
@@ -79,6 +80,11 @@ public:
 
     // default implementation does nothing
     virtual void savePluginState() { }
+
+    virtual void getPluginPlayableAudio
+        (std::vector<PlayableData*>& /* playable */) { }
+
+    virtual void removeAudioSource(int /* portIndex */) { }
 
     virtual void sendEvent(const RealTime & /* eventTime */,
                            const void * /* event */) { }

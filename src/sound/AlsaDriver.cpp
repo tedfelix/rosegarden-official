@@ -5916,7 +5916,8 @@ AlsaDriver::cancelAudioFile(const MappedEvent *mE)
     const AudioPlayQueue::FileList &files = m_audioQueue->getAllUnscheduledFiles();
     for (AudioPlayQueue::FileList::const_iterator fi = files.begin();
             fi != files.end(); ++fi) {
-        PlayableAudioFile *file = *fi;
+        PlayableData *file = *fi;
+        if (! file) continue;
         if (mE->getRuntimeSegmentId() == -1) {
 
             // ERROR? The comparison between file->getAudioFile()->getId() of type unsigned int
