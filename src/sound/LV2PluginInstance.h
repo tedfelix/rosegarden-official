@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2022 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -44,8 +44,11 @@ namespace Rosegarden
 class AudioInstrumentMixer;
 class PluginAudioSource;
 
+/// LV2 Plugin Instance
 /**
- * LV2 plugin instance.
+ * ??? This is pretty big.  Consider pulling out broad sets of functionality
+ *     into classes and using containment to bring them back in.
+ *     E.g. "LV2Ports ports;".
  *
  * LV2 is a variable block size API, but for one reason or another it's more
  * convenient to use a fixed block size in this wrapper.
@@ -137,6 +140,12 @@ public:
     void loadPreset(const QString& file);
     void savePreset(const QString& file);
 
+
+    void setGUI(AudioPluginLV2GUI *gui)  { m_gui = gui; }
+
+    /// Get plugin port updates from the queue and send to the UI.
+    void triggerPortUpdates();
+
 private:
     // To be constructed only by LV2PluginFactory
     friend class LV2PluginFactory;
@@ -182,10 +191,17 @@ private:
     InstrumentId m_instrument;
     // Position in the effects stack for effect plugins, 999 for synths.
     int m_position;
+
     LilvInstance* m_instance;
     QString m_uri;
     const LilvPlugin *m_plugin;
     LV2PluginDatabase::LV2PluginData m_pluginData;
+
+    /**
+     * We only keep the GUI pointer to support port updates from the plugin
+     * to the GUI.  See triggerPortUpdates().
+     */
+    AudioPluginLV2GUI *m_gui{nullptr};
 
     std::vector<int> m_audioPortsIn;
     std::vector<int> m_audioPortsOut;
@@ -231,6 +247,43 @@ private:
     bool m_eventsDiscarded;
     AudioPluginInstance::PluginPresetList m_presets;
     std::map<int, PluginAudioSource*> m_audioSources;
+
+    // *** Port Value Queue
+
+    /// A port index/value pair.
+    struct PortValueItem
+    {
+        PortValueItem()  { }
+        ~PortValueItem();
+        // Avoid double-delete.  If we need to pass these around,
+        // consider making valueAtom a shared_ptr.
+        PortValueItem(const PortValueItem &) = delete;
+        PortValueItem &operator=(const PortValueItem &) = delete;
+
+        int portIndex{0};
+
+        const LV2_Atom* valueAtom{nullptr};
+    };
+    typedef std::queue<PortValueItem *> PortValueQueue;
+
+    /// Port index/value pairs sent from the plugin to the GUI.
+    /**
+     * updatePortValue() adds items to this.
+     * triggerPortUpdates() takes items off of this.
+     *
+     * Note that in the other, more common direction, LV2 offers
+     * lv2_atom_sequence_append_event() which I assume is already
+     * thread safe.
+     */
+    PortValueQueue m_portValueQueue;
+    QMutex m_portValueQueueMutex;
+
+    /// Add a plugin port update to the queue for the UI.
+    /**
+     * Called by the plugin (from the audio thread) to update the UI.
+     */
+    void updatePortValue(int index, const LV2_Atom *value);
+
 };
 
 

@@ -361,31 +361,30 @@ JackDriver::initialise(bool reinitialise)
             AUDIT << "WARNING: no JACK physical outputs found\n";
         }
 
+        // Connect LEFT
         if (playback_1 != "") {
             RG_DEBUG << "initialise() - connecting from " << "\"" << jack_port_name(m_outputMasters[0]) << "\" to \"" << playback_1.c_str() << "\"";
             AUDIT << "connecting from " << "\"" << jack_port_name(m_outputMasters[0]) << "\" to \"" << playback_1.c_str() << "\"\n";
 
-            // connect our client up to the ALSA ports - first left output
-            //
             if (jack_connect(m_client, jack_port_name(m_outputMasters[0]),
                              playback_1.c_str())) {
                 RG_WARNING << "initialise() - cannot connect to JACK output port";
                 AUDIT << "WARNING: cannot connect to JACK output port\n";
-                return ;
             }
 
             /*
-                    // ??? monitors?
-                    if (jack_connect(m_client, jack_port_name(m_outputMonitors[0]),
-                                     playback_1.c_str()))
-                    {
-                        RG_WARNING << "initialise() - cannot connect to JACK output port";
-                        audit << "WARNING: cannot connect to JACK output port\n";
-                        return;
-                    }
+            // ??? monitors?
+            if (jack_connect(m_client, jack_port_name(m_outputMonitors[0]),
+                             playback_1.c_str()))
+            {
+                RG_WARNING << "initialise() - cannot connect to JACK output port";
+                audit << "WARNING: cannot connect to JACK output port\n";
+                return;
+            }
             */
         }
 
+        // Connect RIGHT
         if (playback_2 != "") {
             RG_DEBUG << "initialise() - connecting from " << "\"" << jack_port_name(m_outputMasters[1]) << "\" to \"" << playback_2.c_str() << "\"";
             AUDIT << "WARNING: connecting from " << "\"" << jack_port_name(m_outputMasters[1]) << "\" to \"" << playback_2.c_str() << "\"\n";
@@ -397,16 +396,19 @@ JackDriver::initialise(bool reinitialise)
             }
 
             /*
-                    // ??? monitors?
-                    if (jack_connect(m_client, jack_port_name(m_outputMonitors[1]),
-                                     playback_2.c_str()))
-                    {
-                        RG_WARNING << "initialise() - cannot connect to JACK output port";
-                        audit << "WARNING: cannot connect to JACK output port\n";
-                    }
+            // ??? monitors?
+            if (jack_connect(m_client, jack_port_name(m_outputMonitors[1]),
+                             playback_2.c_str()))
+            {
+                RG_WARNING << "initialise() - cannot connect to JACK output port";
+                audit << "WARNING: cannot connect to JACK output port\n";
+            }
             */
         }
 
+    } else {
+        AUDIT << "Skipping default output connections due to preferences.\n";
+        AUDIT << "  Go to Edit > Preferences > Audio > Make default JACK connections.\n";
     }
 
     if (connectDefaultInputs) {
@@ -460,6 +462,9 @@ JackDriver::initialise(bool reinitialise)
                 AUDIT << "WARNING: cannot connect to JACK input port\n";
             }
         }
+    } else {
+        AUDIT << "Skipping default input connections due to preferences.\n";
+        AUDIT << "  Go to Edit > Preferences > Audio > Make default JACK connections.\n";
     }
 
     RG_DEBUG << "initialise() - initialised JACK audio subsystem";
@@ -2378,6 +2383,9 @@ JackDriver::setPluginInstance(InstrumentId id, QString identifier,
 void
 JackDriver::removePluginInstance(InstrumentId id, int position)
 {
+    // ??? This and all the other pure delegation functions can be removed.
+    //     AudioInstrumentMixer is now a Singleton and can be accessed
+    //     globally through its getInstance().
     if (m_instrumentMixer)
         m_instrumentMixer->removePlugin(id, position);
 }
@@ -2470,6 +2478,9 @@ void JackDriver::getPluginPlayableAudio(std::vector<PlayableData*>& playable)
 RunnablePluginInstance *
 JackDriver::getSynthPlugin(InstrumentId id)
 {
+    // ??? This and all the other pure delegation functions can be removed.
+    //     AudioInstrumentMixer is now a Singleton and can be accessed
+    //     globally through its getInstance().
     if (m_instrumentMixer)
         return m_instrumentMixer->getSynthPlugin(id);
     else

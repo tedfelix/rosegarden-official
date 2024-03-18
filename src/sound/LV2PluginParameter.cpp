@@ -17,7 +17,6 @@
 
 #include "LV2PluginParameter.h"
 
-#include "sound/LV2Utils.h"
 #include "sound/LV2URIDMapper.h"
 
 #include <lv2/atom/forge.h>

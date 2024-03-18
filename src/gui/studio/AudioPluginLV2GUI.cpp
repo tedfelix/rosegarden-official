@@ -22,13 +22,16 @@
 
 #include "AudioPluginLV2GUIWindow.h"
 #include "AudioPluginLV2GUIManager.h"
+#include "sound/LV2PluginInstance.h"
+#include "sound/LV2URIDMapper.h"
+
+#include "sound/AudioProcess.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
-#include "sound/LV2URIDMapper.h"
 
 // the kx.studio extension
 #include "gui/studio/lv2_external_ui.h"
@@ -150,8 +153,19 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
 AudioPluginLV2GUI::~AudioPluginLV2GUI()
 {
     RG_DEBUG << "~AudioPluginLV2GUI";
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->unRegisterGUI(m_instrument, m_position);
+
+    // Clear the LV2PluginInstance gui pointer.
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (aim) {
+        RunnablePluginInstance *rpi =
+                aim->getPluginInstance(m_instrument, m_position);
+        if (rpi) {
+            LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+            if (lpi)
+                lpi->setGUI(nullptr);
+        }
+    }
+
     if (m_window) {
         LV2UI_Handle handle = m_window->getHandle();
         if (m_uidesc) {
@@ -190,8 +204,6 @@ AudioPluginLV2GUI::showGui()
                                                m_uidesc,
                                                m_id,
                                                m_uiType);
-
-        lv2utils->registerGUI(m_instrument, m_position, this);
     }
     m_window->showGui();
     // set the control in values correctly
@@ -274,14 +286,18 @@ void AudioPluginLV2GUI::updateControlOutValues()
     m_firstUpdate = false;
 
     // and trigger port updates
-    lv2utils->triggerPortUpdates(m_instrument, m_position);
+
+    LV2PluginInstance *pi = LV2Utils::getInstance()->getPluginInstance(
+            m_instrument, m_position);
+    if (pi)
+        pi->triggerPortUpdates();
 }
 
-const LV2PluginInstance* AudioPluginLV2GUI::getPluginInstance() const
+LV2PluginInstance *AudioPluginLV2GUI::getPluginInstance() const
 {
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    const LV2PluginInstance* pi = lv2utils->getPluginInstance(m_instrument,
-                                                              m_position);
+    LV2PluginInstance* pi = lv2utils->getPluginInstance(m_instrument,
+                                                        m_position);
     return pi;
 }
 

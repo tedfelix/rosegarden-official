@@ -119,10 +119,10 @@ public:
      */
     struct PluginPosition
     {
-        InstrumentId instrument;
+        InstrumentId instrument{NoInstrument};
         // Position in the effects stack for effect plugins,
         // 999 (Instrument::SYNTH_PLUGIN_POSITION) for synths.
-        int position;
+        int position{0};
 
         bool operator<(const PluginPosition &p) const
         {
@@ -137,7 +137,8 @@ public:
     /**
      * Called by LV2PluginInstance.
      *
-     * Which threads call this now?  UI and audio?
+     * ??? Which threads call this now?  UI and audio?  Re-analyze and
+     *     simplify.
      */
     void lock();
     /// Unlock m_mutex.
@@ -153,33 +154,15 @@ public:
                           int position,
                           LV2PluginInstance* pluginInstance);
 
-    /// Adds a plugin GUI to m_pluginInstanceData.
-    void registerGUI(InstrumentId instrument,
-                     int position,
-                     AudioPluginLV2GUI* gui);
-    /// Removes a plugin GUI from m_pluginInstanceData.
-    void unRegisterGUI(InstrumentId instrument,
-                       int position);
-
-    // set the value for the plugin
+    /// Set a plugin port value.
+    /**
+     * Called by the plugin UI.
+     */
     void setPortValue(InstrumentId instrument,
                       int position,
                       int index,
                       unsigned int protocol,
                       const QByteArray& data);
-
-    // called by the plugin to update the ui
-    // IMPORTANT: Must call lock() before calling this!
-    // ??? Move the logic from the caller into here so that lock()
-    //     need not be public for this.  Then we can use LOCKED which
-    //     is safer.
-    void updatePortValue(InstrumentId instrument,
-                         int position,
-                         int index,
-                         const LV2_Atom* atom);
-
-    void triggerPortUpdates(InstrumentId instrument,
-                            int position);
 
     typedef std::map<int /*portIndex*/, float /*value*/> PortValues;
 
@@ -243,6 +226,7 @@ public:
                     int position,
                     const QString& file);
 
+
 private:
 
     /// Singleton.  See getInstance().
@@ -253,6 +237,7 @@ private:
 
     // This appears to be used to guard m_pluginInstanceData.  Though
     // it is also guarding things in LV2PluginInstance via lock().
+    // ??? Re-analyze this and see if we can simplify.
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QRecursiveMutex m_mutex;
 #else
@@ -263,56 +248,21 @@ private:
                                       const LilvNodes* properties,
                                       bool write);
 
-    // Plugin instance data organized by instrument/position.
-
-    struct AtomQueueItem
-    {
-        int portIndex;
-        const LV2_Atom* atomBuffer;
-        AtomQueueItem();
-        ~AtomQueueItem();
-    };
-    typedef std::queue<AtomQueueItem*> AtomQueue;
+    // Plugin instance pointers organized by instrument/position.
 
     struct PluginInstanceData
     {
         // ??? This pointer is also kept in AudioInstrumentMixer::m_synths
         //     or m_plugins as appropriate.  They are indexed by InstrumentId.
         LV2PluginInstance *pluginInstance{nullptr};
-        AudioPluginLV2GUI *gui{nullptr};
-        AtomQueue atomQueue;
     };
     typedef std::map<PluginPosition, PluginInstanceData> PluginInstanceDataMap;
+
     /**
-     * Users:
-     *   registerPlugin() - writes
-     *   registerGUI() - writes
-     *   unRegisterPlugin() - writes
-     *   unRegisterGUI() - writes
-     *   setPortValue() - writes (calls lv2_atom_sequence_append_event())
-     *   updatePortValue() - writes, JACK audio thread!!!
-     *   triggerPortUpdate() - writes
-     *   runWork() - reads? (sends work off to the worker)
-     *   getControlInValues() - reads
-     *   getControlOutValues() - reads
-     *   getPluginInstance() - Returns a non-const pointer into this.
-     *                         Callers are responsible for locking.
-     *   getPresets() - Returns a non-const reference into this.  Callers
-     *                  are responsible for locking.
-     *   setPreset() - Reads, then calls lilv_state_restore().
-     *   loadPreset()
-     *   savePreset()
-     *
-     * Thread-Safe?  Maybe.  Locks are inconsistent around this.  The JACK audio
-     * process thread definitely touches this (updatePortValue()) along with
-     * the UI thread.  Anything the JACK audio thread reads or writes has to
-     * be locked by both the JACK audio thread and the UI thread.  Everything
-     * else is likely used by the UI thread only and need not be locked.
-     *
-     * I think the way to go here is to split off the portion of the data that
-     * is hit by the JACK audio thread.  Then we can lock it and keep it
-     * in sync appropriately while all the rest is UI thread stuff and can be
-     * lock free.
+     * ??? Thread-Safe?  Probably not.  Need to re-analyze this and decide
+     *     whether it needs to be thread-safe (probably) and whether there is
+     *     a way we can reduce its usage so that thread-safety becomes less of
+     *     an issue.
      */
     PluginInstanceDataMap m_pluginInstanceData;
 

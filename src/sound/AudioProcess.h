@@ -170,8 +170,6 @@ class AudioInstrumentMixer : public AudioThread
 {
 public:
     typedef std::vector<RunnablePluginInstance *> PluginList;
-    typedef std::map<InstrumentId, PluginList> PluginMap;
-    typedef std::map<InstrumentId, RunnablePluginInstance *> SynthPluginMap;
 
     AudioInstrumentMixer(SoundDriver *driver,
                          AudioFileReader *fileReader,
@@ -179,6 +177,12 @@ public:
                          unsigned int blockSize);
 
     ~AudioInstrumentMixer() override;
+
+    /**
+     * Indirect Singleton.  Instance is actually kept in JackDriver.
+     * But you can get to it quickly through here.
+     */
+    static AudioInstrumentMixer *getInstance();
 
     void kick(bool wantLock = true);
 
@@ -209,7 +213,10 @@ public:
     void discardPluginEvents();
     void destroyAllPlugins();
 
-    RunnablePluginInstance *getSynthPlugin(InstrumentId id) { return m_synths[id]; }
+    // Avoid these.  Use the above routines if possible.
+    RunnablePluginInstance *getSynthPlugin(InstrumentId id)
+            { return m_synths[id]; }
+    RunnablePluginInstance *getPluginInstance(InstrumentId, int position);
 
     /**
      * Return the plugins intended for a particular buss.  (By coincidence,
@@ -303,7 +310,9 @@ protected:
     AudioBussMixer   *m_bussMixer;
     size_t            m_blockSize;
 
-    RunnablePluginInstance *getPluginInstance(InstrumentId, int);
+    typedef std::map<InstrumentId, PluginList> PluginMap;
+    typedef std::map<InstrumentId, RunnablePluginInstance *> SynthPluginMap;
+
     // The plugin data structures will all be pre-sized and so of
     // fixed size during normal run time; this will allow us to add
     // and edit plugins without locking.

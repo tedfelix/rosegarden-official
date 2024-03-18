@@ -18,7 +18,7 @@
 #include "gui/application/TransportStatus.h"
 
 #include "sound/MappedEventList.h"
-#include "sound/MappedStudio.h"
+#include "sound/MappedStudio.h"  // MappedObjectIdList, etc...
 #include "sound/MappedBufMetaIterator.h"
 
 #include "base/MidiDevice.h"
@@ -35,8 +35,10 @@
 
 namespace Rosegarden {
 
+
 class MappedInstrument;
 class SoundDriver;
+
 
 /// MIDI and Audio recording and playback
 /**
