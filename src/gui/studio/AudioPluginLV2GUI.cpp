@@ -25,7 +25,7 @@
 #include "sound/LV2PluginInstance.h"
 #include "sound/LV2URIDMapper.h"
 
-#include "sound/AudioProcess.h"
+#include "sound/AudioInstrumentMixer.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"

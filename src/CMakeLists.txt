@@ -543,6 +543,7 @@ set(rg_CPPS
   sound/MappedDevice.cpp
   sound/SF2PatchExtractor.cpp
   sound/AudioProcess.cpp
+  sound/AudioInstrumentMixer.cpp
   sound/LADSPAPluginInstance.cpp
   sound/DSSIPluginInstance.cpp
   sound/MidiEvent.cpp

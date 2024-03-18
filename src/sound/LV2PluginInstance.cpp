@@ -27,7 +27,7 @@
 #include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "sound/Midi.h"
-#include "sound/AudioProcess.h"  // For AudioInstrumentMixer
+#include "sound/AudioInstrumentMixer.h"  // For AudioInstrumentMixer
 #include "gui/application/RosegardenMainWindow.h"
 
 #include <lv2/midi/midi.h>
