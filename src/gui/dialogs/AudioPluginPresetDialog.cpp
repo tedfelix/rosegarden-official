@@ -86,9 +86,13 @@ AudioPluginPresetDialog::AudioPluginPresetDialog
 
 void AudioPluginPresetDialog::slotSetPreset()
 {
-    int index = m_presetCombo->currentIndex();
-    AudioPluginInstance::PluginPreset& pp = m_presets[index];
-    RG_DEBUG << "slotSetPreset" << index << pp.uri;
+    const int index = m_presetCombo->currentIndex();
+    RG_DEBUG << "slotSetPreset(): index:" << index;
+    if (index < 0)
+        return;
+
+    const AudioPluginInstance::PluginPreset& pp = m_presets[index];
+    RG_DEBUG << "slotSetPreset(): uri:" << pp.uri;
     m_pluginGUIManager->setPreset(m_instrument, m_position, pp.uri);
 }
 
