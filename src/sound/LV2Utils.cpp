@@ -23,6 +23,7 @@
 
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"  // For PluginPort
+#include "sound/AudioInstrumentMixer.h"
 #include "gui/studio/AudioPluginLV2GUI.h"
 
 #include <lv2/midi/midi.h>
@@ -43,8 +44,6 @@ namespace Rosegarden
 LV2Utils *
 LV2Utils::getInstance()
 {
-    RG_DEBUG << "create instance";
-
     // Guaranteed in C++11 to be lazy initialized and thread-safe.
     // See ISO/IEC 14882:2011 6.7(4).
     static LV2Utils instance;
@@ -92,25 +91,21 @@ LilvState* LV2Utils::getStateFromInstance
  const LV2_Feature*const* features)
 {
     // this is called from the gui thread
-    uint32_t flags = 0;
 
-    //lock();
-    // ??? Was this just for the URID map feature?  Remove if so.
-    LOCKED;
-    LilvState* state = lilv_state_new_from_instance
-        (plugin,
-         instance,
-         LV2URIDMapper::getURIDMapFeature(),
-         nullptr,
-         nullptr,
-         nullptr,
-         "./savedir",
-         getPortValueFunc,
-         lv2Instance,
-         flags,
-         features);
-    //unlock();
-    return state;
+    constexpr uint32_t flags = 0;
+
+    return lilv_state_new_from_instance(
+            plugin,
+            instance,
+            LV2URIDMapper::getURIDMapFeature(),
+            nullptr,  // scratch_dir
+            nullptr,  // copy_dir
+            nullptr,  // link_dir
+            "./savedir",  // save_dir
+            getPortValueFunc,  // get_value
+            lv2Instance,  // user_data
+            flags,
+            features);
 }
 
 QString LV2Utils::getStateStringFromInstance
@@ -244,6 +239,9 @@ void LV2Utils::unRegisterPlugin(InstrumentId instrument,
                                 int position,
                                 LV2PluginInstance* pluginInstance)
 {
+    // Called by the Scavenger which can be triggered from almost
+    // any thread.  Lock required.
+
     RG_DEBUG << "unregister plugin" << instrument << position;
     PluginPosition pp;
     pp.instrument = instrument;
@@ -272,32 +270,22 @@ void LV2Utils::setPortValue(InstrumentId instrument,
                             unsigned int protocol,
                             const QByteArray& data)
 {
-    RG_DEBUG << "setPortValue" << instrument << position;
+    RG_DEBUG << "setPortValue()" << instrument << position;
 
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-
-    // We are only locking m_pluginInstanceData here which might change
-    // if a plugin is added or removed (which likely can't happen while
-    // a port value change is happening anyway).
-    // I assume lv2_atom_sequence_append_event() which does the actual
-    // work of getting the port value update to the plugin's audio thread
-    // processing is thread-safe.
-    LOCKED;
-
-    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "plugin not found" << instrument << position;
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
         return;
-    }
-    PluginInstanceData &pgdata = pit->second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "setPortValue no pluginInstance";
+
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
         return;
-    }
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
+        return;
+
     // Use lv2_atom_sequence_append_event() to send the update.
-    pgdata.pluginInstance->setPortByteArray(index, protocol, data);
+    lpi->setPortByteArray(index, protocol, data);
 }
 
 void LV2Utils::runWork(const PluginPosition& pp,
@@ -312,19 +300,20 @@ void LV2Utils::runWork(const PluginPosition& pp,
     // adding or removing a plugin.  But that is only done in the UI thread.
     //LOCKED;
 
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "runWork: plugin not found" <<
-            pp.instrument << pp.position;
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
         return;
-    }
-    const PluginInstanceData& pgdata = pit->second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "runWork no pluginInstance" <<
-            pp.instrument << pp.position;
+
+    RunnablePluginInstance *rpi = aim->getPluginInstance(
+            pp.instrument, pp.position);
+    if (!rpi)
         return;
-    }
-    pgdata.pluginInstance->runWork(size, data, resp);
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
+        return;
+
+    lpi->runWork(size, data, resp);
 }
 
 void LV2Utils::getControlInValues(InstrumentId instrument,

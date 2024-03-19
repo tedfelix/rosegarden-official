@@ -47,6 +47,7 @@
 
 namespace
 {
+    // ??? Why does this expect a size and type when it's always float?
     const void* getPortValueFunc(const char *port_symbol,
                                  void *user_data,
                                  uint32_t *size,
@@ -57,6 +58,7 @@ namespace
         return pi->getPortValue(port_symbol, size, type);
     }
 
+    // ??? Why does this expect a size and type when it's always float?
     void setPortValueFunc(const char *port_symbol,
                           void *user_data,
                           const void *value,
@@ -649,14 +651,12 @@ void LV2PluginInstance::savePreset(const QString& file)
 {
     RG_DEBUG << "savePreset" << file;
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->lock();
     LilvState* state = lv2utils->getStateFromInstance
         (m_plugin,
          m_instance,
          getPortValueFunc,
          this,
          m_features.data());
-    lv2utils->unlock();
     lv2utils->saveStateToFile(state, file);
     lilv_state_free(state);
 }
@@ -1116,6 +1116,8 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
 void
 LV2PluginInstance::run(const RealTime &rt)
 {
+    // Audio Thread.
+
 #ifdef LV2RUN_PROFILE
     Profiler profiler(m_profilerName.c_str(), true);
 #endif

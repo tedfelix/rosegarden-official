@@ -176,11 +176,22 @@ protected:
     typedef std::map<InstrumentId, PluginList> PluginMap;
     typedef std::map<InstrumentId, RunnablePluginInstance *> SynthPluginMap;
 
-    // The plugin data structures will all be pre-sized and so of
+    // Thread Safe?  Probably not.
+    // The plugin maps will all be pre-sized in the ctor and so of
     // fixed size during normal run time; this will allow us to add
     // and edit plugins without locking.
+    // ??? But we can end up with a race condition if some thread happens
+    //     to get a pointer from here and then it is destroyed by another
+    //     thread before the first thread tries to use it.  What guarantee
+    //     do we have that this will never happen?
+    //
+    //     One possible guarantee is that the code is disciplined enough
+    //     to stop using a plugin before it is destroyed.  That seems
+    //     likely to be true.  And that might be why this works ok without
+    //     any locking.
     // ??? I've seen a sigsegv (probably a race condition) due to garbage
-    //     pointer values in this data structure at startup.
+    //     pointer values in this data structure at startup.  It only happened
+    //     once and I've not seen it since.
     PluginMap m_plugins;
     SynthPluginMap m_synths;
 

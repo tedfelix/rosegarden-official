@@ -97,7 +97,7 @@ LV2URIDMapper::uridMap(const char *uri)
     // this routine.
 
 #ifdef THREAD_DEBUG
-    RG_WARNING << "uridMap(): gettid(): " << gettid();
+    //RG_WARNING << "uridMap(): gettid(): " << gettid();
 #endif
 
     // In case we are called by the real-time processing thread?
@@ -118,9 +118,8 @@ LV2URIDMapper::uridMap(const char *uri)
 const char *
 LV2URIDMapper::uridUnmap(const LV2_URID urid)
 {
-    // ??? I never see this called.  Ever.
 #ifdef THREAD_DEBUG
-    RG_WARNING << "uridUnmap(): gettid(): " << gettid();
+    //RG_WARNING << "uridUnmap(): gettid(): " << gettid();
 #endif
 
     // In case we are called by the real-time processing thread?
