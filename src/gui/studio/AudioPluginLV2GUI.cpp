@@ -287,18 +287,25 @@ void AudioPluginLV2GUI::updateControlOutValues()
 
     // and trigger port updates
 
-    LV2PluginInstance *pi = LV2Utils::getInstance()->getPluginInstance(
-            m_instrument, m_position);
+    LV2PluginInstance *pi = getPluginInstance();
     if (pi)
         pi->triggerPortUpdates();
 }
 
 LV2PluginInstance *AudioPluginLV2GUI::getPluginInstance() const
 {
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    LV2PluginInstance* pi = lv2utils->getPluginInstance(m_instrument,
-                                                        m_position);
-    return pi;
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
+        return nullptr;
+
+    RunnablePluginInstance *rpi =
+            aim->getPluginInstance(m_instrument, m_position);
+    if (!rpi)
+        return nullptr;
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+
+    return lpi;
 }
 
 void AudioPluginLV2GUI::closeUI()

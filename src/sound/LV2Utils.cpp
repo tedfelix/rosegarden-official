@@ -293,13 +293,6 @@ void LV2Utils::runWork(const PluginPosition& pp,
                        const void* data,
                        LV2_Worker_Respond_Function resp)
 {
-    // Locking is not necessary here.  We are called by LV2Worker in the
-    // worker thread which right now is the UI thread.  This routine
-    // only reads m_pluginInstanceData.  The only functionality
-    // that can modify m_pluginInstanceData and cause a data race would be
-    // adding or removing a plugin.  But that is only done in the UI thread.
-    //LOCKED;
-
     AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
     if (!aim)
         return;
@@ -320,68 +313,38 @@ void LV2Utils::getControlInValues(InstrumentId instrument,
                                   int position,
                                   std::map<int, float>& controlValues)
 {
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
+        return;
 
-    LOCKED;
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "getControlInValues plugin not found" <<
-            instrument << position;
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
         return;
-    }
-    const PluginInstanceData &pgdata = pit->second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "getControlInValues no pluginInstance";
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
         return;
-    }
-    pgdata.pluginInstance->getControlInValues(controlValues);
+
+    lpi->getControlInValues(controlValues);
 }
 
 void LV2Utils::getControlOutValues(InstrumentId instrument,
                                    int position,
                                    std::map<int, float>& controlValues)
 {
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-
-    LOCKED;
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "getControlOutValues plugin not found" <<
-            instrument << position;
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
         return;
-    }
-    const PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "getControlOutValues no pluginInstance";
+
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
         return;
-    }
-    pgdata.pluginInstance->getControlOutValues(controlValues);
-}
 
-LV2PluginInstance* LV2Utils::getPluginInstance(InstrumentId instrument,
-                                               int position) const
-{
-    // ??? LOCK?
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
+        return;
 
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "getPluginInstance plugin not found" <<
-            instrument << position;
-        return nullptr;
-    }
-    const PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "getPluginInstance no pluginInstance";
-        return nullptr;
-    }
-    return pgdata.pluginInstance;
+    lpi->getControlOutValues(controlValues);
 }
 
 void LV2Utils::getConnections(InstrumentId instrument,
@@ -389,9 +352,20 @@ void LV2Utils::getConnections(InstrumentId instrument,
                               PluginPort::ConnectionList& clist) const
 {
     clist.clear();
-    const LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
-    if (!lv2inst) return;
-    lv2inst->getConnections(clist);
+
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
+        return;
+
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
+        return;
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
+        return;
+
+    lpi->getConnections(clist);
 }
 
 void LV2Utils::setConnections
@@ -399,9 +373,19 @@ void LV2Utils::setConnections
  int position,
  const PluginPort::ConnectionList& clist) const
 {
-    LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
-    if (!lv2inst) return;
-    lv2inst->setConnections(clist);
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
+        return;
+
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
+        return;
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
+        return;
+
+    lpi->setConnections(clist);
 }
 
 void LV2Utils::setupPluginParameters
@@ -428,9 +412,19 @@ void LV2Utils::setupPluginParameters
 bool LV2Utils::hasParameters(InstrumentId instrument,
                              int position) const
 {
-    LV2PluginInstance* lv2inst = getPluginInstance(instrument, position);
-    if (!lv2inst) return false;
-    return lv2inst->hasParameters();
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
+        return false;
+
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
+        return false;
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
+        return false;
+
+    return lpi->hasParameters();
 }
 
 void LV2Utils::getParameters(InstrumentId instrument,

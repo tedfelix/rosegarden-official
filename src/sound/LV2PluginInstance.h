@@ -182,6 +182,13 @@ private:
     LV2Utils::PortValues m_controlPortsIn;
 
     /// plugin -> GUI control values.
+    /**
+     * Thread Safe.  These are created by init() and the map is not touched
+     * after that.  Only the elements are touched.  Since reading/writing
+     * floats is thread safe and the map never changes, this is thread safe.
+     *
+     * Pointers to the elements are passed to the plugin in connectPorts().
+     */
     LV2Utils::PortValues m_controlPortsOut;
 
     struct AtomPort

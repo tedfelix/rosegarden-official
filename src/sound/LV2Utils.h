@@ -185,9 +185,6 @@ public:
                  const void *data,
                  LV2_Worker_Respond_Function resp);
 
-    LV2PluginInstance* getPluginInstance(InstrumentId instrument,
-                                         int position) const;
-
     void getConnections
         (InstrumentId instrument,
          int position,

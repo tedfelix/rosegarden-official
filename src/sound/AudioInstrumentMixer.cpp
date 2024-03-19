@@ -273,6 +273,12 @@ RunnablePluginInstance *
 AudioInstrumentMixer::getPluginInstance(InstrumentId id, int position)
 {
     // Not RT safe
+    // ??? What does that mean?  This is a reasonably fast routine.
+    //     It only does a single map search and a single array fetch.
+    //     It is also likely thread safe.  m_synths and m_plugins
+    //     stay the same size.  The pointers they contain might get
+    //     destroyed, but it is likely that they stop being used prior
+    //     to destruction.
 
     if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
         return m_synths[id];
