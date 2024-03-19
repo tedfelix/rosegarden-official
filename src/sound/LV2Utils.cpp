@@ -431,21 +431,19 @@ void LV2Utils::getParameters(InstrumentId instrument,
                              int position,
                              AudioPluginInstance::PluginParameters& params)
 {
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "getParameters plugin not found" <<
-            instrument << position;
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
         return;
-    }
-    const PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "getPrameters no pluginInstance";
+
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
         return;
-    }
-    pgdata.pluginInstance->getParameters(params);
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
+        return;
+
+    lpi->getParameters(params);
 }
 
 void LV2Utils::updatePluginParameter
@@ -454,21 +452,19 @@ void LV2Utils::updatePluginParameter
  const QString& paramId,
  const AudioPluginInstance::PluginParameter& param)
 {
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "updatePluginParameter plugin not found" <<
-            instrument << position;
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
         return;
-    }
-    const PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "updatePluginParameter no pluginInstance";
+
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
         return;
-    }
-    pgdata.pluginInstance->updatePluginParameter(paramId, param);
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
+        return;
+
+   lpi->updatePluginParameter(paramId, param);
 }
 
 void LV2Utils::setupPluginPresets
@@ -511,92 +507,76 @@ void LV2Utils::getPresets(InstrumentId instrument,
                           int position,
                           AudioPluginInstance::PluginPresetList& presets) const
 {
-    // ??? LOCK?
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
+        return;
 
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "getPresets plugin not found" <<
-            instrument << position;
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
         return;
-    }
-    const PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "getPresets no pluginInstance";
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
         return;
-    }
-    pgdata.pluginInstance->getPresets(presets);
+
+    lpi->getPresets(presets);
 }
 
 void LV2Utils::setPreset(InstrumentId instrument,
                          int position,
                          const QString& uri)
 {
-    // ??? LOCK?  There is locking inside of LV2PluginInstance::setPreset().
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
+        return;
 
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "setPreset plugin not found" <<
-            instrument << position;
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
         return;
-    }
-    const PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "setPreset no pluginInstance";
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
         return;
-    }
-    pgdata.pluginInstance->setPreset(uri);
+
+    lpi->setPreset(uri);
 }
 
 void LV2Utils::loadPreset(InstrumentId instrument,
                           int position,
                           const QString& file)
 {
-    // ??? LOCK?
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
+        return;
 
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "loadPreset plugin not found" <<
-            instrument << position;
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
         return;
-    }
-    const PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "loadPreset no pluginInstance";
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
         return;
-    }
-    pgdata.pluginInstance->loadPreset(file);
+
+    lpi->loadPreset(file);
 }
 
 void LV2Utils::savePreset(InstrumentId instrument,
                           int position,
                           const QString& file)
 {
-    // ??? LOCK?
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
+        return;
 
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-    PluginInstanceDataMap::const_iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "savePreset plugin not found" <<
-            instrument << position;
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
         return;
-    }
-    const PluginInstanceData& pgdata = (*pit).second;
-    if (pgdata.pluginInstance == nullptr) {
-        RG_DEBUG << "savePreset no pluginInstance";
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
         return;
-    }
-    pgdata.pluginInstance->savePreset(file);
+
+    lpi->savePreset(file);
 }
 
 void LV2Utils::fillParametersFromProperties
