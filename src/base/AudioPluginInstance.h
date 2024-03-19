@@ -57,7 +57,7 @@ public:
     {
         bool isOutput{false};
         bool isAudio{false};
-        int pluginIndex;
+        int portIndex;
         QString pluginPort;
         InstrumentId instrumentId{NoInstrument};
         int channel{0};

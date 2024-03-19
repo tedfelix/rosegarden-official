@@ -270,7 +270,7 @@ LV2PluginInstance::init(int idealChannelCount)
         PluginPort::Connection c;
         c.isOutput = false;
         c.isAudio = true;
-        c.pluginIndex = m_audioPortsIn[i];
+        c.portIndex = m_audioPortsIn[i];
         c.pluginPort =
             LV2PluginDatabase::getPortName(m_uri, m_audioPortsIn[i]);
         c.instrumentId = 0;
@@ -290,7 +290,7 @@ LV2PluginInstance::init(int idealChannelCount)
         PluginPort::Connection c;
         c.isOutput = true;
         c.isAudio = true;
-        c.pluginIndex = m_audioPortsOut[i];
+        c.portIndex = m_audioPortsOut[i];
         c.pluginPort =
             LV2PluginDatabase::getPortName(m_uri, m_audioPortsOut[i]);
         c.instrumentId = 0;
@@ -1005,17 +1005,19 @@ QString LV2PluginInstance::configure(const QString& key, const QString& value)
         m_connections.clear();
         for (const QJsonValue &jct : arr) {
             QJsonArray arr1 = jct.toArray();
-            QJsonValue oval = arr1[0];
-            QJsonValue aval = arr1[1];
-            QJsonValue pval = arr1[2];
-            QJsonValue ival = arr1[3];
-            QJsonValue cval = arr1[4];
+            QJsonValue val1 = arr1[0];
+            QJsonValue val2 = arr1[1];
+            QJsonValue val3 = arr1[2];
+            QJsonValue val4 = arr1[3];
+            QJsonValue val5 = arr1[4];
+            QJsonValue val6 = arr1[5];
             PluginPort::Connection c;
-            c.isOutput = oval.toBool();
-            c.isAudio = aval.toBool();
-            c.pluginPort = pval.toString();
-            c.instrumentId = ival.toInt();
-            c.channel = cval.toInt();
+            c.isOutput = val1.toBool();
+            c.isAudio = val2.toBool();
+            c.portIndex = val3.toInt();
+            c.pluginPort = val4.toString();
+            c.instrumentId = val5.toInt();
+            c.channel = val6.toInt();
             m_connections.push_back(c);
         }
     }
@@ -1067,15 +1069,17 @@ void LV2PluginInstance::savePluginState()
         int ii = c.instrumentId;
         QJsonValue val1(c.isOutput);
         QJsonValue val2(c.isAudio);
-        QJsonValue val3(c.pluginPort);
-        QJsonValue val4(ii);
-        QJsonValue val5(c.channel);
+        QJsonValue val3(c.portIndex);
+        QJsonValue val4(c.pluginPort);
+        QJsonValue val5(ii);
+        QJsonValue val6(c.channel);
         QJsonArray arr;
         arr.append(val1);
         arr.append(val2);
         arr.append(val3);
         arr.append(val4);
         arr.append(val5);
+        arr.append(val6);
         conns.append(arr);
     }
     QJsonDocument doc(conns);
@@ -1118,19 +1122,22 @@ void LV2PluginInstance::getPluginPlayableAudio
 (std::vector<PlayableData*>& playable)
 {
     RG_DEBUG << "getPluginPlayableAudio";
-    // test
     for (const PluginPort::Connection &c : m_connections) {
+        RG_DEBUG << "getPluginPlayableAudio" << c.isOutput << c.isAudio <<
+            c.portIndex << c.pluginPort << c.instrumentId <<
+            c.channel;
         if (c.instrumentId != 0 &&
             c.instrumentId != m_instrument &&
             c.isOutput == true) {
             PluginAudioSource *pas = new PluginAudioSource(this,
                                                            c.instrumentId,
-                                                           c.pluginIndex,
+                                                           c.portIndex,
                                                            m_blockSize);
             playable.push_back(pas);
-            m_audioSources[c.pluginIndex] = pas;
+            m_audioSources[c.portIndex] = pas;
         }
     }
+    RG_DEBUG << "getPluginPlayableAudio sources:" << m_audioSources.size();
 }
 
 void LV2PluginInstance::removeAudioSource(int portIndex)
