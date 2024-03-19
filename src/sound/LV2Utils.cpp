@@ -33,9 +33,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-// LV2Utils is used in different threads
-#define LOCKED QMutexLocker rg_utils_locker(&m_mutex)
-
 
 namespace Rosegarden
 {
@@ -220,48 +217,6 @@ void LV2Utils::lock()
 void LV2Utils::unlock()
 {
     m_mutex.unlock();
-}
-
-void LV2Utils::registerPlugin(InstrumentId instrument,
-                              int position,
-                              LV2PluginInstance* pluginInstance)
-{
-    RG_DEBUG << "register plugin" << instrument << position;
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-
-    LOCKED;
-    m_pluginInstanceData[pp].pluginInstance = pluginInstance;
-}
-
-void LV2Utils::unRegisterPlugin(InstrumentId instrument,
-                                int position,
-                                LV2PluginInstance* pluginInstance)
-{
-    // Called by the Scavenger which can be triggered from almost
-    // any thread.  Lock required.
-
-    RG_DEBUG << "unregister plugin" << instrument << position;
-    PluginPosition pp;
-    pp.instrument = instrument;
-    pp.position = position;
-
-    LOCKED;
-    PluginInstanceDataMap::iterator pit = m_pluginInstanceData.find(pp);
-    if (pit == m_pluginInstanceData.end()) {
-        RG_DEBUG << "plugin not found" << instrument << position;
-        return;
-    }
-    PluginInstanceData &pgdata = pit->second;
-    if (pgdata.pluginInstance != pluginInstance) {
-        // this can happen if a plugin is replaced - the old plugin is
-        // deleted later (scavenged) after the new plugin is registered
-        RG_DEBUG << "unRegisterPlugin plugin already replaced";
-        return;
-    }
-
-    m_pluginInstanceData.erase(pit);
 }
 
 void LV2Utils::setPortValue(InstrumentId instrument,

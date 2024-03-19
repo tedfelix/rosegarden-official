@@ -115,7 +115,6 @@ LV2PluginInstance::LV2PluginInstance
 
     RG_DEBUG << "create plugin" << uri << m_instrument << m_position;
 
-    LV2Utils* lv2utils = LV2Utils::getInstance();
     m_atomTransferUrid = LV2URIDMapper::uridMap(LV2_ATOM__eventTransfer);
 
     m_workerHandle.instrument = instrument;
@@ -137,6 +136,7 @@ LV2PluginInstance::LV2PluginInstance
         memset(m_outputBuffers[i], 0, blockSize * sizeof(sample_t));
     }
 
+    LV2Utils* lv2utils = LV2Utils::getInstance();
     m_plugin = lv2utils->getPluginByUri(m_uri);
 
     snd_midi_event_new(100, &m_midiParser);
@@ -166,9 +166,6 @@ LV2PluginInstance::LV2PluginInstance
 
     // presets
     lv2utils->setupPluginPresets(m_uri, m_presets);
-
-    RG_DEBUG << "register plugin";
-    lv2utils->registerPlugin(m_instrument, m_position, this);
 }
 
 void
@@ -664,8 +661,6 @@ void LV2PluginInstance::savePreset(const QString& file)
 LV2PluginInstance::~LV2PluginInstance()
 {
     RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance" << m_uri;
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->unRegisterPlugin(m_instrument, m_position, this);
 
     if (m_instance != nullptr) {
         deactivate();
@@ -1123,7 +1118,6 @@ LV2PluginInstance::run(const RealTime &rt)
 #endif
     //RG_DEBUG << "run" << rt << m_eventsDiscarded;
     m_pluginHasRun = true;
-    LV2Utils* lv2utils = LV2Utils::getInstance();
 
     // Get connected buffers.
     int bufIndex = 0;
@@ -1142,6 +1136,8 @@ LV2PluginInstance::run(const RealTime &rt)
         }
         bufIndex++;
     }
+
+    LV2Utils* lv2utils = LV2Utils::getInstance();
 
     // LOCK
     lv2utils->lock();

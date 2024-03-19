@@ -145,15 +145,6 @@ public:
     void unlock();
 
 
-    /// Adds a plugin instance to m_pluginInstanceData.
-    void registerPlugin(InstrumentId instrument,
-                        int position,
-                        LV2PluginInstance* pluginInstance);
-    /// Removes a plugin instance from m_pluginInstanceData.
-    void unRegisterPlugin(InstrumentId instrument,
-                          int position,
-                          LV2PluginInstance* pluginInstance);
-
     /// Set a plugin port value.
     /**
      * Called by the plugin UI.
@@ -232,9 +223,8 @@ private:
     LV2Utils(LV2Utils &other) = delete;
     void operator=(const LV2Utils &) = delete;
 
-    // This appears to be used to guard m_pluginInstanceData.  Though
-    // it is also guarding things in LV2PluginInstance via lock().
-    // ??? Re-analyze this and see if we can simplify.
+    // This is now only guarding things in LV2PluginInstance via lock().
+    // ??? Move to LV2PluginInstance and re-analyze.
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QRecursiveMutex m_mutex;
 #else
@@ -244,26 +234,6 @@ private:
     void fillParametersFromProperties(LV2PluginParameter::Parameters& params,
                                       const LilvNodes* properties,
                                       bool write);
-
-    // Plugin instance pointers organized by instrument/position.
-
-    // ??? This is now just the LV2PluginInstance pointers.  That can be
-    //     had more directly from AudioInstrumentMixer.  See AudioPluginLV2GUI's
-    //     dtor for how to do this.  Switch to using that and remove this.
-
-    struct PluginInstanceData
-    {
-        LV2PluginInstance *pluginInstance{nullptr};
-    };
-    typedef std::map<PluginPosition, PluginInstanceData> PluginInstanceDataMap;
-
-    /**
-     * ??? Thread-Safe?  Probably not.  Need to re-analyze this and decide
-     *     whether it needs to be thread-safe (probably) and whether there is
-     *     a way we can reduce its usage so that thread-safety becomes less of
-     *     an issue.
-     */
-    PluginInstanceDataMap m_pluginInstanceData;
 
 };
 
