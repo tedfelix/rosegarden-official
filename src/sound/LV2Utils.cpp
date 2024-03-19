@@ -48,11 +48,6 @@ LV2Utils::getInstance()
 }
 
 LV2Utils::LV2Utils()
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    // Qt5 offers QMutexRecursive, but only for 5.14 and later.
-    // This works for all Qt5.x.
-    : m_mutex(QMutex::Recursive)
-#endif
 {
 }
 
@@ -201,22 +196,6 @@ LilvNode* LV2Utils::makeStringNode(const QString& string) const
 {
     LilvNode* node = lilv_new_string(LV2World::get(), qPrintable(string));
     return node;
-}
-
-void LV2Utils::lock()
-{
-#ifdef THREAD_DEBUG
-    // Very noisy, but interesting.  We definitely see both the UI
-    // thread and the JACK process thread hitting this.
-    //RG_WARNING << "lock(): gettid(): " << gettid();
-#endif
-
-    m_mutex.lock();
-}
-
-void LV2Utils::unlock()
-{
-    m_mutex.unlock();
 }
 
 void LV2Utils::setPortValue(InstrumentId instrument,

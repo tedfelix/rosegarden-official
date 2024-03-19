@@ -31,6 +31,7 @@
 #include <alsa/seq_midi_event.h>  // for snd_midi_event_t
 
 #include <QString>
+#include <QMutex>
 
 #include <vector>
 #include <map>
@@ -199,7 +200,22 @@ private:
         bool isPatch;
     };
 
+    /**
+     * init() creates these and then the vector is never changed.
+     * connect() hooks these up to the plugin so it can read from them.
+     * run() just clears these.
+     *
+     * The GUI and the sequencer write to atomSeq using
+     * lv2_atom_sequence_append_event().  I assume that does the appropriate
+     * locking (given the name "atom") and therefore this is thread safe.
+     */
     std::vector<AtomPort> m_atomInputPorts;
+    /// Port updates come through here on their way to m_portValueQueue.
+    /**
+     * Thread Safe.  This is only touched by the audio thread.  Plugin
+     * writes directly through the pointers it gets in connect().  Then
+     * run() reads from it and transfers contents to m_portValueQueue.
+     */
     std::vector<AtomPort> m_atomOutputPorts;
 
     InstrumentId m_instrument;
@@ -228,6 +244,8 @@ private:
     };
 
     std::list<MidiEvent> m_eventBuffer;
+    QMutex m_eventBufferMutex;
+
     snd_midi_event_t *m_midiParser;
     LV2_URID m_midiEventUrid;
 
@@ -258,7 +276,21 @@ private:
     PluginPort::ConnectionList m_connections;
     LV2PluginParameter::Parameters m_params;
     std::string m_profilerName;
+
+    /// Shift the next event 1 clock into the future.
+    /**
+     * This was a fix for missing notes at the beginning of a loop from
+     * 2/6/2024.  [427db5e0]  Yoshimi and Dexed were the plugins that
+     * had this problem.  They appear to sort the events such that the
+     * "all notes off" is always last even if it arrives first.
+     *
+     * ??? This one is interesting and might need some more analysis.
+     *     it appeared to be protected by a mutex, but some analysis
+     *     and experimentation led to removing the mutex.  Seems to
+     *     loop ok without the mutex.
+     */
     bool m_eventsDiscarded;
+
     AudioPluginInstance::PluginPresetList m_presets;
 
 

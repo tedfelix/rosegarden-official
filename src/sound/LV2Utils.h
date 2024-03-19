@@ -24,10 +24,6 @@
 #include <lv2/atom/atom.h>
 #include <lv2/worker/worker.h>
 
-#include <QMutex>
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-#include <QRecursiveMutex>
-#endif
 #include <QString>
 
 #include <map>
@@ -133,17 +129,6 @@ public:
         }
     };
 
-    /// Lock m_mutex.
-    /**
-     * Called by LV2PluginInstance.
-     *
-     * ??? Which threads call this now?  UI and audio?  Re-analyze and
-     *     simplify.
-     */
-    void lock();
-    /// Unlock m_mutex.
-    void unlock();
-
 
     /// Set a plugin port value.
     /**
@@ -222,14 +207,6 @@ private:
     ~LV2Utils();
     LV2Utils(LV2Utils &other) = delete;
     void operator=(const LV2Utils &) = delete;
-
-    // This is now only guarding things in LV2PluginInstance via lock().
-    // ??? Move to LV2PluginInstance and re-analyze.
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    QRecursiveMutex m_mutex;
-#else
-    QMutex m_mutex;
-#endif
 
     void fillParametersFromProperties(LV2PluginParameter::Parameters& params,
                                       const LilvNodes* properties,
