@@ -325,7 +325,7 @@
       <range class="professional" low="55" high="80"/>
     </instrument>
     <instrument name="Garklein recorder">
-      <clef type="crotale" />
+      <clef type="crotales" />
       <transpose value="0" />
       <range class="amateur" low="84" high="105"/>
       <range class="professional" low="84" high="108"/>
@@ -1151,13 +1151,13 @@
       <range class="professional" low="40" high="59"/>
     </instrument>
     <instrument name="Glockenspiel">
-      <clef type="crotale" />
+      <clef type="crotales" />
       <transpose value="0" />
       <range class="amateur" low="79" high="108"/>
       <range class="professional" low="79" high="108"/>
     </instrument>
     <instrument name="Orff soprano glockenspiel">
-      <clef type="crotale" />
+      <clef type="crotales" />
       <transpose value="0" />
       <range class="amateur" low="84" high="105"/>
       <range class="professional" low="84" high="105"/>
@@ -1169,19 +1169,19 @@
       <range class="professional" low="72" high="93"/>
     </instrument>
     <instrument name="Crotales">
-      <clef type="crotale" />
+      <clef type="crotales" />
       <transpose value="0" />
       <range class="amateur" low="84" high="108"/>
       <range class="professional" low="84" high="108"/>
     </instrument>
     <instrument name="Tubaphone">
-      <clef type="crotale" />
+      <clef type="crotales" />
       <transpose value="0" />
       <range class="amateur" low="84" high="108"/>
       <range class="professional" low="84" high="108"/>
     </instrument>
     <instrument name="Almglocken (treble)">
-      <clef type="crotale" />
+      <clef type="crotales" />
       <transpose value="0" />
       <range class="amateur" low="60" high="105"/>
       <range class="professional" low="60" high="105"/>
@@ -1351,14 +1351,14 @@
     <instrument name="Mallet synthesizer (treble)">
       <clef type="treble" />
       <transpose value="0" />
-      <range class="amateur" low="0   " high="127 "/>
-      <range class="professional" low="0   " high="127 "/>
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
     </instrument>
     <instrument name="Mallet synthesizer (bass)">
       <clef type="bass" />
       <transpose value="0" />
-      <range class="amateur" low="0   " high="127 "/>
-      <range class="professional" low="0   " high="127 "/>
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
     </instrument>
   </category>
   <category name="Unpitched Percussion">
@@ -1725,8 +1725,8 @@
     <instrument name="Percussion synthesizer">
       <clef type="two-bar" />
       <transpose value="0" />
-      <range class="amateur" low="0   " high="127 "/>
-      <range class="professional" low="0   " high="127 "/>
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
     </instrument>
   </category>
   <category name="Keyboards">
@@ -1767,7 +1767,7 @@
       <range class="professional" low="29" high="89"/>
     </instrument>
     <instrument name="Celesta (treble)">
-      <clef type="crotale" />
+      <clef type="crotales" />
       <transpose value="0" />
       <range class="amateur" low="60" high="108"/>
       <range class="professional" low="60" high="108"/>
@@ -1799,14 +1799,14 @@
     <instrument name="Keyboard synthesizer (treble)">
       <clef type="treble" />
       <transpose value="0" />
-      <range class="amateur" low="0   " high="127 "/>
-      <range class="professional" low="0   " high="127 "/>
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
     </instrument>
     <instrument name="Keyboard synthesizer (bass)">
       <clef type="bass" />
       <transpose value="0" />
-      <range class="amateur" low="0   " high="127 "/>
-      <range class="professional" low="0   " high="127 "/>
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
     </instrument>
     <instrument name="Organ (manual) (treble)">
       <clef type="treble" />
