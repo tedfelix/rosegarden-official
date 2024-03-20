@@ -13,6 +13,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioInstrumentMixer]"
+#define RG_NO_DEBUG_PRINT 1
+
 #include "AudioInstrumentMixer.h"
 
 #include "RunnablePluginInstance.h"
@@ -22,6 +25,7 @@
 #include "AudioPlayQueue.h"
 #include "PluginFactory.h"
 #include "ControlBlock.h"
+#include "misc/Debug.h"
 
 #include <sys/time.h>
 #include <pthread.h>
@@ -101,6 +105,13 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
         }
     }
 
+#ifndef NDEBUG
+    RG_DEBUG << "ctor: m_plugins size:" << m_plugins.size();
+    for (const auto &pair : m_plugins) {
+        RG_DEBUG << "      [" << pair.first << "].size():" << pair.second.size();
+    }
+#endif
+
     // Leave the buffer map and process buffer list empty for now.
     // The buffer length can change between plays, so we always
     // examine the buffers in fillBuffers and are prepared to
@@ -122,6 +133,13 @@ AudioInstrumentMixer::getInstance()
 
 AudioInstrumentMixer::~AudioInstrumentMixer()
 {
+#ifndef NDEBUG
+    RG_DEBUG << "dtor: m_plugins size:" << m_plugins.size();
+    for (const auto &pair : m_plugins) {
+        RG_DEBUG << "      [" << pair.first << "].size():" << pair.second.size();
+    }
+#endif
+
     aimInstance = nullptr;
 
     //std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer" << std::endl;
@@ -148,15 +166,18 @@ AudioInstrumentMixer::BufferRec::~BufferRec()
 
 
 void
-AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifier)
+AudioInstrumentMixer::setPlugin(
+        const InstrumentId instrumentID,
+        const int pluginPosition,
+        const QString &identifier)
 {
     // Not RT safe
 
     //std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position << ", " << identifier << ")" << std::endl;
 
     int channels = 2;
-    if (m_bufferMap.find(id) != m_bufferMap.end()) {
-        channels = m_bufferMap[id].channels;
+    if (m_bufferMap.find(instrumentID) != m_bufferMap.end()) {
+        channels = m_bufferMap[instrumentID].channels;
     }
 
     RunnablePluginInstance *instance = nullptr;
@@ -164,14 +185,14 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
     PluginFactory *factory = PluginFactory::instanceFor(identifier);
     if (factory) {
         instance = factory->instantiatePlugin(identifier,
-                                              id,
-                                              position,
+                                              instrumentID,
+                                              pluginPosition,
                                               m_sampleRate,
                                               m_blockSize,
                                               channels,
                                               this);
         if (instance && !instance->isOK()) {
-            std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position
+            std::cerr << "AudioInstrumentMixer::setPlugin(" << instrumentID << ", " << pluginPosition
                       << ": instance is not OK" << std::endl;
             delete instance;
             instance = nullptr;
@@ -183,25 +204,34 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
     RunnablePluginInstance *oldInstance = nullptr;
 
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+    if (pluginPosition == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 
-        oldInstance = m_synths[id];
-        m_synths[id] = instance;
+        oldInstance = m_synths[instrumentID];
+        m_synths[instrumentID] = instance;
         if (! oldInstance) m_numSoftSynths++;
 
     } else {
 
-        PluginList &list = m_plugins[id];
+        PluginList &pluginVector = m_plugins[instrumentID];
 
-        if (position < int(Instrument::PLUGIN_COUNT)) {
-            while (position >= (int)list.size()) {
-                list.push_back(nullptr);
+        if (pluginPosition < int(Instrument::PLUGIN_COUNT)) {
+            if (pluginPosition >= (int)pluginVector.size()) {
+                // This should never happen given that we pre-sized
+                // the plugin vector to PLUGIN_COUNT.  Previously this
+                // code added the necessary entries.  Problem with that
+                // is that it modifies a vector that is supposed to be
+                // fixed size so it is thread safe.
+                std::cerr << "AudioInstrumentMixer::setPlugin(): pluginPosition" << pluginPosition << "beyond plugin vector size" << pluginVector.size() << "for instrument ID" << instrumentID << '\n';
+
+                delete instance;
+            } else {
+                // We're good.  Hook it in...
+                oldInstance = pluginVector[pluginPosition];
+                pluginVector[pluginPosition] = instance;
             }
-            oldInstance = list[position];
-            list[position] = instance;
         } else {
-            std::cerr << "AudioInstrumentMixer::setPlugin: No position "
-            << position << " for instrument " << id << std::endl;
+            std::cerr << "AudioInstrumentMixer::setPlugin(): No pluginPosition " << pluginPosition << " for instrument " << instrumentID << '\n';
+
             delete instance;
         }
     }
@@ -720,6 +750,12 @@ AudioInstrumentMixer::generateBuffers()
     for (int i = 0; i < busses; ++i) {
         PluginList &list = m_plugins[i + 1];
         while ((unsigned int)list.size() < Instrument::PLUGIN_COUNT) {
+            // ??? NO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //     Well, here's the problem.  These were supposed
+            //     to be set up in advance so that we would never
+            //     do this and therefore keep things thread safe.
+            //     This throws that right out the window and explains
+            //     the rare crashes I am seeing.
             list.push_back(nullptr);
         }
     }

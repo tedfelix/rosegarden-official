@@ -60,7 +60,7 @@ public:
 
     void setBussMixer(AudioBussMixer *mixer) { m_bussMixer = mixer; }
 
-    void setPlugin(InstrumentId id, int position, QString identifier);
+    void setPlugin(InstrumentId id, int position, const QString &identifier);
     void removePlugin(InstrumentId id, int position);
     void removeAllPlugins();
 
