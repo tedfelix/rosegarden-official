@@ -80,29 +80,29 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
     // Pregenerate empty plugin slots
 
     InstrumentId audioInstrumentBase;
-    int audioInstruments;
-    m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+    int audioInstrumentCount;
+    m_driver->getAudioInstrumentNumbers(
+            audioInstrumentBase, audioInstrumentCount);
+
+    // For each audio instrument...
+    for (int i = 0; i < audioInstrumentCount; ++i) {
+        const InstrumentId instrumentID = audioInstrumentBase + i;
+        PluginList &pluginVector = m_plugins[instrumentID];
+        pluginVector.resize(Instrument::PLUGIN_COUNT, nullptr);
+    }
 
     InstrumentId synthInstrumentBase;
-    int synthInstruments;
-    m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
+    int synthInstrumentCount;
+    m_driver->getSoftSynthInstrumentNumbers(
+            synthInstrumentBase, synthInstrumentCount);
 
-    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
-
-        InstrumentId id;
-        if (i < audioInstruments)
-            id = audioInstrumentBase + i;
-        else
-            id = synthInstrumentBase + (i - audioInstruments);
-
-        PluginList &list = m_plugins[id];
-        for (int j = 0; j < int(Instrument::PLUGIN_COUNT); ++j) {
-            list.push_back(nullptr);
-        }
-
-        if (i >= audioInstruments) {
-            m_synths[id] = nullptr;
-        }
+    // For each synth instrument...
+    for (int i = 0; i < synthInstrumentCount; ++i) {
+        const InstrumentId instrumentID = synthInstrumentBase + i;
+        m_synths[instrumentID] = nullptr;
+        // Synths can also have effect plugins.
+        PluginList &pluginVector = m_plugins[instrumentID];
+        pluginVector.resize(Instrument::PLUGIN_COUNT, nullptr);
     }
 
 #ifndef NDEBUG
