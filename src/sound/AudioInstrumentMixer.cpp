@@ -73,9 +73,6 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
         m_blockSize(blockSize),
         m_numSoftSynths(0)
 {
-    // Keep track of the instance globally.  See getInstance().
-    aimInstance = this;
-
     // Pregenerate empty plugin slots
 
     InstrumentId audioInstrumentBase;
@@ -108,6 +105,13 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
     // The buffer length can change between plays, so we always
     // examine the buffers in fillBuffers and are prepared to
     // regenerate from scratch if necessary.  Don't like it though.
+
+    // Keep track of the instance globally.  See getInstance().
+    // We do this last to ensure that the object is completely
+    // initialized before other threads call getInstance().
+    // This is likely pretty questionable since the ctor hasn't
+    // exited yet.
+    aimInstance = this;
 }
 
 AudioInstrumentMixer *
