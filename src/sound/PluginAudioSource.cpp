@@ -45,24 +45,30 @@ PluginAudioSource::~PluginAudioSource()
 {
     RG_DEBUG << "PluginAudioSource dtor";
     // tell the plugin we no longer exist
-    m_plugin->removeAudioSource(m_portIndex);
+    if (m_plugin) m_plugin->removeAudioSource(m_portIndex);
+    // clean up any remaining audio data
+    while (! m_dataQueue.empty()) {
+        sample_t* block = m_dataQueue.front();
+        m_dataQueue.pop();
+        delete[] block;
+    }
 }
 
 size_t PluginAudioSource::getSampleFramesAvailable()
 {
-    RG_DEBUG << "PluginAudioSource";
-    return 0;
+    RG_DEBUG << "getSampleFramesAvailable";
+    return ! m_dataQueue.empty();
 }
 
 bool PluginAudioSource::isFullyBuffered() const
 {
-    RG_DEBUG << "isFullyBuffered";
+    //RG_DEBUG << "isFullyBuffered";
     return true;
 }
 
 bool PluginAudioSource::isBuffered() const
 {
-    RG_DEBUG << "isBuffered";
+    //RG_DEBUG << "isBuffered";
     return false;
 }
 
@@ -117,9 +123,9 @@ void PluginAudioSource::clearBuffers()
     RG_DEBUG << "clearBuffers";
 }
 
-bool PluginAudioSource::fillBuffers(const RealTime &currentTime)
+    bool PluginAudioSource::fillBuffers(const RealTime & /* currentTime */)
 {
-    RG_DEBUG << "fillBuffers" << currentTime;
+    //RG_DEBUG << "fillBuffers" << currentTime;
     return true;
 }
 
@@ -131,7 +137,7 @@ bool PluginAudioSource::updateBuffers()
 
 InstrumentId PluginAudioSource::getInstrument() const
 {
-    RG_DEBUG << "getInstrument";
+    //RG_DEBUG << "getInstrument";
     return m_instrument;
 }
 
@@ -154,7 +160,7 @@ int PluginAudioSource::getRuntimeSegmentId() const
 
 bool PluginAudioSource::isSmallFile() const
 {
-    RG_DEBUG << "isSmallFile";
+    //RG_DEBUG << "isSmallFile";
     return true;
 }
 
@@ -171,6 +177,13 @@ void PluginAudioSource::setAudioData(sample_t* data)
     sample_t* block = new sample_t[m_blockSize];
     memcpy(block, data, m_blockSize * sizeof(sample_t));
     m_dataQueue.push(block);
+}
+
+void PluginAudioSource::pluginFinished()
+{
+    RG_DEBUG << "pluginFinished";
+    // the plugin is gone
+    m_plugin = nullptr;
 }
 
 }

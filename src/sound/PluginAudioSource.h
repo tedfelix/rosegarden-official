@@ -75,6 +75,8 @@ class RunnablePluginInstance;
 
     void setAudioData(sample_t* data);
 
+    void pluginFinished();
+
  private:
     RunnablePluginInstance* m_plugin;
     InstrumentId m_instrument;

@@ -694,6 +694,11 @@ LV2PluginInstance::~LV2PluginInstance()
 
     cleanup();
 
+    for (auto& pair : m_audioSources) {
+        pair.second->pluginFinished();
+    }
+    m_audioSources.clear();
+
     m_controlPortsIn.clear();
     m_controlPortsOut.clear();
 
