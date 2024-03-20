@@ -14,7 +14,7 @@
 */
 
 #define RG_MODULE_STRING "[PluginAudioSource]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "PluginAudioSource.h"
 

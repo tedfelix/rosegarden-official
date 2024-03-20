@@ -71,6 +71,7 @@ public:
 
     QString configurePlugin(InstrumentId, int, QString, QString);
     void savePluginState();
+    void getPluginPlayableAudio(std::vector<PlayableData*>& playable);
 
     void resetAllPlugins(bool discardEvents = false);
     void discardPluginEvents();
@@ -166,7 +167,7 @@ protected:
 
     void processBlocks(bool &readSomething);
     void processEmptyBlocks(InstrumentId id);
-    bool processBlock(InstrumentId id, PlayableAudioFile **, size_t, bool &readSomething);
+    bool processBlock(InstrumentId id, PlayableData **, size_t, bool &readSomething);
     void generateBuffers();
 
     AudioFileReader  *m_fileReader;
