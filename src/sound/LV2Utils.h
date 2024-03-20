@@ -24,10 +24,6 @@
 #include <lv2/atom/atom.h>
 #include <lv2/worker/worker.h>
 
-#include <QMutex>
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-#include <QRecursiveMutex>
-#endif
 #include <QString>
 
 #include <map>
@@ -133,26 +129,6 @@ public:
         }
     };
 
-    /// Lock m_mutex.
-    /**
-     * Called by LV2PluginInstance.
-     *
-     * ??? Which threads call this now?  UI and audio?  Re-analyze and
-     *     simplify.
-     */
-    void lock();
-    /// Unlock m_mutex.
-    void unlock();
-
-
-    /// Adds a plugin instance to m_pluginInstanceData.
-    void registerPlugin(InstrumentId instrument,
-                        int position,
-                        LV2PluginInstance* pluginInstance);
-    /// Removes a plugin instance from m_pluginInstanceData.
-    void unRegisterPlugin(InstrumentId instrument,
-                          int position,
-                          LV2PluginInstance* pluginInstance);
 
     /// Set a plugin port value.
     /**
@@ -184,9 +160,6 @@ public:
                  uint32_t size,
                  const void *data,
                  LV2_Worker_Respond_Function resp);
-
-    LV2PluginInstance* getPluginInstance(InstrumentId instrument,
-                                         int position) const;
 
     void getConnections
         (InstrumentId instrument,
@@ -235,36 +208,9 @@ private:
     LV2Utils(LV2Utils &other) = delete;
     void operator=(const LV2Utils &) = delete;
 
-    // This appears to be used to guard m_pluginInstanceData.  Though
-    // it is also guarding things in LV2PluginInstance via lock().
-    // ??? Re-analyze this and see if we can simplify.
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    QRecursiveMutex m_mutex;
-#else
-    QMutex m_mutex;
-#endif
-
     void fillParametersFromProperties(LV2PluginParameter::Parameters& params,
                                       const LilvNodes* properties,
                                       bool write);
-
-    // Plugin instance pointers organized by instrument/position.
-
-    struct PluginInstanceData
-    {
-        // ??? This pointer is also kept in AudioInstrumentMixer::m_synths
-        //     or m_plugins as appropriate.  They are indexed by InstrumentId.
-        LV2PluginInstance *pluginInstance{nullptr};
-    };
-    typedef std::map<PluginPosition, PluginInstanceData> PluginInstanceDataMap;
-
-    /**
-     * ??? Thread-Safe?  Probably not.  Need to re-analyze this and decide
-     *     whether it needs to be thread-safe (probably) and whether there is
-     *     a way we can reduce its usage so that thread-safety becomes less of
-     *     an issue.
-     */
-    PluginInstanceDataMap m_pluginInstanceData;
 
 };
 

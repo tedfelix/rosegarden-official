@@ -28,7 +28,7 @@
 #include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "sound/Midi.h"
-#include "sound/AudioProcess.h"  // For AudioInstrumentMixer
+#include "sound/AudioInstrumentMixer.h"  // For AudioInstrumentMixer
 #include "gui/application/RosegardenMainWindow.h"
 
 #include <lv2/midi/midi.h>
@@ -48,6 +48,7 @@
 
 namespace
 {
+    // ??? Why does this expect a size and type when it's always float?
     const void* getPortValueFunc(const char *port_symbol,
                                  void *user_data,
                                  uint32_t *size,
@@ -58,6 +59,7 @@ namespace
         return pi->getPortValue(port_symbol, size, type);
     }
 
+    // ??? Why does this expect a size and type when it's always float?
     void setPortValueFunc(const char *port_symbol,
                           void *user_data,
                           const void *value,
@@ -79,34 +81,34 @@ namespace Rosegarden
 #define ABUFSIZED 100000
 
 
-LV2PluginInstance::LV2PluginInstance
-(PluginFactory *factory,
- InstrumentId instrument,
- const QString& identifier,
- int position,
- unsigned long sampleRate,
- size_t blockSize,
- int idealChannelCount,
- const QString& uri,
- AudioInstrumentMixer* amixer) :
-        RunnablePluginInstance(factory, identifier),
-        m_instrument(instrument),
-        m_position(position),
-        m_instance(nullptr),
-        m_uri(uri),
-        m_plugin(nullptr),
-        m_channelCount(0),
-        m_midiParser(nullptr),
-        m_blockSize(blockSize),
-        m_sampleRate(sampleRate),
-        m_latencyPort(nullptr),
-        m_run(false),
-        m_bypassed(false),
-        m_distributeChannels(false),
-        m_pluginHasRun(false),
-        m_amixer(amixer),
-        m_profilerName("LV2: " + m_uri.toStdString()),
-        m_eventsDiscarded(false)
+LV2PluginInstance::LV2PluginInstance(
+        PluginFactory *factory,
+        InstrumentId instrument,
+        const QString& identifier,
+        int position,
+        unsigned long sampleRate,
+        size_t blockSize,
+        int idealChannelCount,
+        const QString& uri,
+        AudioInstrumentMixer* amixer) :
+    RunnablePluginInstance(factory, identifier),
+    m_instrument(instrument),
+    m_position(position),
+    m_instance(nullptr),
+    m_uri(uri),
+    m_plugin(nullptr),
+    m_channelCount(0),
+    m_midiParser(nullptr),
+    m_blockSize(blockSize),
+    m_sampleRate(sampleRate),
+    m_latencyPort(nullptr),
+    m_run(false),
+    m_bypassed(false),
+    m_distributeChannels(false),
+    m_pluginHasRun(false),
+    m_amixer(amixer),
+    m_profilerName("LV2: " + m_uri.toStdString()),
+    m_eventsDiscarded(false)
 {
 #ifdef THREAD_DEBUG
     RG_WARNING << "LV2PluginInstance: gettid(): " << gettid();
@@ -114,7 +116,6 @@ LV2PluginInstance::LV2PluginInstance
 
     RG_DEBUG << "create plugin" << uri << m_instrument << m_position;
 
-    LV2Utils* lv2utils = LV2Utils::getInstance();
     m_atomTransferUrid = LV2URIDMapper::uridMap(LV2_ATOM__eventTransfer);
 
     m_workerHandle.instrument = instrument;
@@ -136,6 +137,7 @@ LV2PluginInstance::LV2PluginInstance
         memset(m_outputBuffers[i], 0, blockSize * sizeof(sample_t));
     }
 
+    LV2Utils* lv2utils = LV2Utils::getInstance();
     m_plugin = lv2utils->getPluginByUri(m_uri);
 
     snd_midi_event_new(100, &m_midiParser);
@@ -165,9 +167,6 @@ LV2PluginInstance::LV2PluginInstance
 
     // presets
     lv2utils->setupPluginPresets(m_uri, m_presets);
-
-    RG_DEBUG << "register plugin";
-    lv2utils->registerPlugin(m_instrument, m_position, this);
 }
 
 void
@@ -337,10 +336,13 @@ LV2PluginInstance::silence()
 void
 LV2PluginInstance::discardEvents()
 {
-    RG_DEBUG << "discardEvents";
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->lock();
-    m_eventBuffer.clear();
+    RG_DEBUG << "discardEvents()";
+
+    {
+        QMutexLocker lock(&m_eventBufferMutex);
+        m_eventBuffer.clear();
+    }
+
     // it is not always enough just to clear the buffer. If notes are
     // playing they should be stopped with all notes off
     unsigned char status = 0xb0;
@@ -354,7 +356,6 @@ LV2PluginInstance::discardEvents()
     rawMidi.append(data2);
     sendMidiData(rawMidi, 0);
     m_eventsDiscarded = true;
-    lv2utils->unlock();
 }
 
 void
@@ -637,14 +638,14 @@ void LV2PluginInstance::setPreset(const QString& uri)
     } else {
         presetState = lv2utils->getStateByUri(uri);
     }
-    lv2utils->lock();
+
     lilv_state_restore(presetState,
                        m_instance,
                        setPortValueFunc,
                        this,
                        0,
                        m_features.data());
-    lv2utils->unlock();
+
     lilv_state_free(presetState);
     lilv_free(presetUri);
 }
@@ -658,14 +659,14 @@ void LV2PluginInstance::loadPreset(const QString& file)
         RG_DEBUG << "load failed";
         return;
     }
-    lv2utils->lock();
+
     lilv_state_restore(state,
                        m_instance,
                        setPortValueFunc,
                        this,
                        0,
                        m_features.data());
-    lv2utils->unlock();
+
     lilv_state_free(state);
 }
 
@@ -673,14 +674,12 @@ void LV2PluginInstance::savePreset(const QString& file)
 {
     RG_DEBUG << "savePreset" << file;
     LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->lock();
     LilvState* state = lv2utils->getStateFromInstance
         (m_plugin,
          m_instance,
          getPortValueFunc,
          this,
          m_features.data());
-    lv2utils->unlock();
     lv2utils->saveStateToFile(state, file);
     lilv_state_free(state);
 }
@@ -688,8 +687,6 @@ void LV2PluginInstance::savePreset(const QString& file)
 LV2PluginInstance::~LV2PluginInstance()
 {
     RG_DEBUG << "LV2PluginInstance::~LV2PluginInstance" << m_uri;
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    lv2utils->unRegisterPlugin(m_instrument, m_position, this);
 
     if (m_instance != nullptr) {
         deactivate();
@@ -1165,20 +1162,28 @@ LV2PluginInstance::sendEvent(const RealTime& eventTime,
     MidiEvent me;
     me.time = eventTime;
     me.data = rawMidi;
-    m_eventBuffer.push_back(me);
-    RG_DEBUG << "sendEvent" <<
-        ev.type << eventTime << rawMidi.toHex() << m_eventBuffer.size();
+    {
+        QMutexLocker lock(&m_eventBufferMutex);
+        m_eventBuffer.push_back(me);
+
+#ifndef NDEBUG
+        RG_DEBUG << "sendEvent" <<
+            ev.type << eventTime << rawMidi.toHex() << m_eventBuffer.size();
+#endif
+    }
+
 }
 
 void
 LV2PluginInstance::run(const RealTime &rt)
 {
+    // Audio Thread.
+
 #ifdef LV2RUN_PROFILE
     Profiler profiler(m_profilerName.c_str(), true);
 #endif
     //RG_DEBUG << "run" << rt << m_eventsDiscarded;
     m_pluginHasRun = true;
-    LV2Utils* lv2utils = LV2Utils::getInstance();
 
     // Get connected buffers.
     int bufIndex = 0;
@@ -1200,37 +1205,39 @@ LV2PluginInstance::run(const RealTime &rt)
         bufIndex++;
     }
 
-    // LOCK
-    lv2utils->lock();
-
     RealTime bufferStart = rt;
-    auto it = m_eventBuffer.begin();
-    // Send each event.
-    while(it != m_eventBuffer.end()) {
-        RealTime evTime = (*it).time;
-        QByteArray rawMidi = (*it).data;
-        if (evTime < bufferStart) evTime = bufferStart;
-        size_t frameOffset =
-            (size_t)RealTime::realTime2Frame(evTime - bufferStart,
-                                             m_sampleRate);
-        if (frameOffset >= m_blockSize) {
-            //RG_DEBUG << "event not in frame" << frameOffset;
-            it++;
-            continue;
-        }
-        // the event is in this block
-        RG_DEBUG << "send event to plugin" << evTime;
-        auto iterToDelete = it;
-        ++it;
-        m_eventBuffer.erase(iterToDelete);
 
-        // if we have just been reset with discardEvents make sure we
-        // send this data after the "stop all notes"
-        if (m_eventsDiscarded && frameOffset == 0) {
-            RG_DEBUG << "adjusting frameOffset to be after all notes off";
-            frameOffset = 1;
+    {
+        QMutexLocker lock(&m_eventBufferMutex);
+
+        auto it = m_eventBuffer.begin();
+        // Send each event.
+        while(it != m_eventBuffer.end()) {
+            RealTime evTime = (*it).time;
+            QByteArray rawMidi = (*it).data;
+            if (evTime < bufferStart) evTime = bufferStart;
+            size_t frameOffset =
+                (size_t)RealTime::realTime2Frame(evTime - bufferStart,
+                                                 m_sampleRate);
+            if (frameOffset >= m_blockSize) {
+                //RG_DEBUG << "event not in frame" << frameOffset;
+                it++;
+                continue;
+            }
+            // the event is in this block
+            RG_DEBUG << "send event to plugin" << evTime;
+            auto iterToDelete = it;
+            ++it;
+            m_eventBuffer.erase(iterToDelete);
+
+            // if we have just been reset with discardEvents make sure we
+            // send this data after the "stop all notes"
+            if (m_eventsDiscarded && frameOffset == 0) {
+                RG_DEBUG << "adjusting frameOffset to be after all notes off";
+                frameOffset = 1;
+            }
+            sendMidiData(rawMidi, frameOffset);
         }
-        sendMidiData(rawMidi, frameOffset);
     }
 
     if (m_distributeChannels && m_audioPortsIn.size() > 1) {
@@ -1343,9 +1350,6 @@ LV2PluginInstance::run(const RealTime &rt)
 
     m_run = true;
     m_eventsDiscarded = false;
-
-    // UNLOCK
-    lv2utils->unlock();
 
     //RG_DEBUG << "run done";
 }

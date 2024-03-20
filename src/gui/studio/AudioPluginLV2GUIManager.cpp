@@ -24,6 +24,7 @@
 #include "sound/LV2Utils.h"
 #include "sound/LV2Worker.h"
 #include "gui/studio/AudioPluginLV2GUI.h"
+#include "sound/AudioInstrumentMixer.h"
 
 #include "base/Studio.h"
 #include "base/AudioPluginInstance.h"
@@ -77,14 +78,17 @@ AudioPluginLV2GUIManager::showGUI(InstrumentId instrument, int position)
 {
     RG_DEBUG << "showGUI(): " << instrument << "," << position;
 
-    // check that the plugin is still there
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    LV2PluginInstance* lpi =
-        lv2utils->getPluginInstance(instrument, position);
-    if (!lpi) {
-        RG_DEBUG << "showGui - no instance";
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    if (!aim)
         return;
-    }
+
+    RunnablePluginInstance *rpi = aim->getPluginInstance(instrument, position);
+    if (!rpi)
+        return;
+
+    LV2PluginInstance *lpi = dynamic_cast<LV2PluginInstance *>(rpi);
+    if (!lpi)
+        return;
 
     AudioPluginLV2GUI *gui = getInstance(instrument, position);
     if (!gui) {

@@ -49,6 +49,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
 {
     init(idealChannelCount);
 
+    // ??? CRASH: Seeing a crash in connectPorts() due to this being too small.
     m_inputBuffers = new sample_t * [m_instanceCount * m_audioPortsIn.size()];
     m_outputBuffers = new sample_t * [m_instanceCount * m_audioPortsOut.size()];
 
@@ -317,6 +318,8 @@ LADSPAPluginInstance::connectPorts()
             hi != m_instanceHandles.end(); ++hi) {
 
         for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+            // ??? CRASH: Seeing a crash here due to m_audioPortsIn
+            //            being bigger than m_inputBuffers.  See the ctor.
             m_descriptor->connect_port(*hi,
                                        m_audioPortsIn[i],
                                        (LADSPA_Data *)m_inputBuffers[inbuf]);

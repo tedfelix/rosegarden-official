@@ -20,6 +20,7 @@
 #include "AlsaDriver.h"
 #include "MappedStudio.h"
 #include "AudioProcess.h"
+#include "AudioInstrumentMixer.h"
 #include "base/Profiler.h"
 #include "base/AudioLevel.h"
 #include "Audit.h"
