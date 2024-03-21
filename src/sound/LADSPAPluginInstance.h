@@ -100,8 +100,19 @@ protected:
 
     InstrumentId   m_instrument;
     int                        m_position;
+
     std::vector<LADSPA_Handle> m_instanceHandles;
-    size_t                     m_instanceCount;
+    /// Two for a mono plugin on a stereo track.  One otherwise.
+    /**
+     * For a stereo plugin on a stereo track, or a mono plugin on a mono track
+     * this will be 1 indicating that only one instance of the plugin is
+     * needed.  This also goes for a stereo plugin on a mono track.
+     *
+     * For a mono plugin on a stereo track, this will be 2 indicating that we
+     * need two instances, one for each channel (left and right).
+     */
+    size_t m_instanceCount;
+
     const LADSPA_Descriptor   *m_descriptor;
 
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsIn;

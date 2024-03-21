@@ -14,12 +14,14 @@
 
 
 #define RG_MODULE_STRING "[LADSPAPluginInstance]"
+#define RG_NO_DEBUG_PRINT
 
 #include "LADSPAPluginInstance.h"
+
 #include "LADSPAPluginFactory.h"
+#include "misc/Debug.h"
 
 #include <QtGlobal>
-#include "misc/Debug.h"
 
 
 //#define DEBUG_LADSPA 1
@@ -28,7 +30,8 @@ namespace Rosegarden
 {
 
 
-LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
+LADSPAPluginInstance::LADSPAPluginInstance(
+        PluginFactory *factory,
         InstrumentId instrument,
         QString identifier,
         int position,
@@ -36,18 +39,20 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
         size_t blockSize,
         int idealChannelCount,
         const LADSPA_Descriptor* descriptor) :
-        RunnablePluginInstance(factory, identifier),
-        m_instrument(instrument),
-        m_position(position),
-        m_instanceCount(0),
-        m_descriptor(descriptor),
-        m_blockSize(blockSize),
-        m_sampleRate(sampleRate),
-        m_latencyPort(nullptr),
-        m_run(false),
-        m_bypassed(false)
+    RunnablePluginInstance(factory, identifier),
+    m_instrument(instrument),
+    m_position(position),
+    m_instanceCount(0),
+    m_descriptor(descriptor),
+    m_blockSize(blockSize),
+    m_sampleRate(sampleRate),
+    m_latencyPort(nullptr),
+    m_run(false),
+    m_bypassed(false)
 {
     init(idealChannelCount);
+
+    RG_DEBUG << "ctor: instance count:" << m_instanceCount;
 
     // ??? CRASH: Seeing a crash in connectPorts() due to this being too small.
     m_inputBuffers = new sample_t * [m_instanceCount * m_audioPortsIn.size()];
@@ -73,7 +78,8 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     }
 }
 
-LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
+LADSPAPluginInstance::LADSPAPluginInstance(
+        PluginFactory *factory,
         InstrumentId instrument,
         QString identifier,
         int position,
@@ -82,19 +88,19 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
         sample_t **inputBuffers,
         sample_t **outputBuffers,
         const LADSPA_Descriptor* descriptor) :
-        RunnablePluginInstance(factory, identifier),
-        m_instrument(instrument),
-        m_position(position),
-        m_instanceCount(0),
-        m_descriptor(descriptor),
-        m_blockSize(blockSize),
-        m_inputBuffers(inputBuffers),
-        m_outputBuffers(outputBuffers),
-        m_ownBuffers(false),
-        m_sampleRate(sampleRate),
-        m_latencyPort(nullptr),
-        m_run(false),
-        m_bypassed(false)
+    RunnablePluginInstance(factory, identifier),
+    m_instrument(instrument),
+    m_position(position),
+    m_instanceCount(0),
+    m_descriptor(descriptor),
+    m_blockSize(blockSize),
+    m_inputBuffers(inputBuffers),
+    m_outputBuffers(outputBuffers),
+    m_ownBuffers(false),
+    m_sampleRate(sampleRate),
+    m_latencyPort(nullptr),
+    m_run(false),
+    m_bypassed(false)
 {
     init();
 

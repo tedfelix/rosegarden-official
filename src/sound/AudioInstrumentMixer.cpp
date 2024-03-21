@@ -13,6 +13,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioInstrumentMixer]"
+#define RG_NO_DEBUG_PRINT
+
 #include "AudioInstrumentMixer.h"
 
 #include "RunnablePluginInstance.h"
@@ -22,6 +25,7 @@
 #include "AudioPlayQueue.h"
 #include "PluginFactory.h"
 #include "ControlBlock.h"
+#include "misc/Debug.h"
 
 #include <sys/time.h>
 #include <pthread.h>
@@ -73,41 +77,62 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
         m_blockSize(blockSize),
         m_numSoftSynths(0)
 {
-    // Keep track of the instance globally.  See getInstance().
-    aimInstance = this;
-
     // Pregenerate empty plugin slots
 
     InstrumentId audioInstrumentBase;
-    int audioInstruments;
-    m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+    int audioInstrumentCount;
+    m_driver->getAudioInstrumentNumbers(
+            audioInstrumentBase, audioInstrumentCount);
+
+    // For each audio instrument...
+    for (int i = 0; i < audioInstrumentCount; ++i) {
+        const InstrumentId instrumentID = audioInstrumentBase + i;
+        PluginList &pluginVector = m_plugins[instrumentID];
+        pluginVector.resize(Instrument::PLUGIN_COUNT, nullptr);
+    }
 
     InstrumentId synthInstrumentBase;
-    int synthInstruments;
-    m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
+    int synthInstrumentCount;
+    m_driver->getSoftSynthInstrumentNumbers(
+            synthInstrumentBase, synthInstrumentCount);
 
-    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
-
-        InstrumentId id;
-        if (i < audioInstruments)
-            id = audioInstrumentBase + i;
-        else
-            id = synthInstrumentBase + (i - audioInstruments);
-
-        PluginList &list = m_plugins[id];
-        for (int j = 0; j < int(Instrument::PLUGIN_COUNT); ++j) {
-            list.push_back(nullptr);
-        }
-
-        if (i >= audioInstruments) {
-            m_synths[id] = nullptr;
-        }
+    // For each synth instrument...
+    for (int i = 0; i < synthInstrumentCount; ++i) {
+        const InstrumentId instrumentID = synthInstrumentBase + i;
+        m_synths[instrumentID] = nullptr;
+        // Synths can also have effect plugins.
+        PluginList &pluginVector = m_plugins[instrumentID];
+        pluginVector.resize(Instrument::PLUGIN_COUNT, nullptr);
     }
+
+    // Make room for the busses here.
+    const int bussCount = AudioBussMixer::getMaxBussCount();
+
+    // Submaster busses start at 1.  Buss 0 is the master out and it cannot
+    // have effects plugins.
+    for (int i = 1; i < bussCount + 1; ++i) {
+        PluginList &pluginVector = m_plugins[i];
+        pluginVector.resize(Instrument::PLUGIN_COUNT, nullptr);
+    }
+
+#if 0
+    RG_DEBUG << "ctor: m_plugins size:" << m_plugins.size();
+    for (const auto &pair : m_plugins) {
+        RG_DEBUG << "      [" << pair.first << "].size():" << pair.second.size();
+    }
+#endif
 
     // Leave the buffer map and process buffer list empty for now.
     // The buffer length can change between plays, so we always
     // examine the buffers in fillBuffers and are prepared to
     // regenerate from scratch if necessary.  Don't like it though.
+
+    // Keep track of the instance globally.  See getInstance().
+    // We do this last to ensure that the object is completely
+    // initialized before other threads call getInstance().
+    // This is likely pretty questionable since the ctor hasn't
+    // exited yet.
+    aimInstance = this;
 }
 
 AudioInstrumentMixer *
@@ -118,6 +143,13 @@ AudioInstrumentMixer::getInstance()
 
 AudioInstrumentMixer::~AudioInstrumentMixer()
 {
+#if 0
+    RG_DEBUG << "dtor: m_plugins size:" << m_plugins.size();
+    for (const auto &pair : m_plugins) {
+        RG_DEBUG << "      [" << pair.first << "].size():" << pair.second.size();
+    }
+#endif
+
     aimInstance = nullptr;
 
     //std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer" << std::endl;
@@ -144,15 +176,18 @@ AudioInstrumentMixer::BufferRec::~BufferRec()
 
 
 void
-AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifier)
+AudioInstrumentMixer::setPlugin(
+        const InstrumentId instrumentID,
+        const int pluginPosition,
+        const QString &identifier)
 {
     // Not RT safe
 
     //std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position << ", " << identifier << ")" << std::endl;
 
     int channels = 2;
-    if (m_bufferMap.find(id) != m_bufferMap.end()) {
-        channels = m_bufferMap[id].channels;
+    if (m_bufferMap.find(instrumentID) != m_bufferMap.end()) {
+        channels = m_bufferMap[instrumentID].channels;
     }
 
     RunnablePluginInstance *instance = nullptr;
@@ -160,14 +195,14 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
     PluginFactory *factory = PluginFactory::instanceFor(identifier);
     if (factory) {
         instance = factory->instantiatePlugin(identifier,
-                                              id,
-                                              position,
+                                              instrumentID,
+                                              pluginPosition,
                                               m_sampleRate,
                                               m_blockSize,
                                               channels,
                                               this);
         if (instance && !instance->isOK()) {
-            std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position
+            std::cerr << "AudioInstrumentMixer::setPlugin(" << instrumentID << ", " << pluginPosition
                       << ": instance is not OK" << std::endl;
             delete instance;
             instance = nullptr;
@@ -179,25 +214,34 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
     RunnablePluginInstance *oldInstance = nullptr;
 
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+    if (pluginPosition == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 
-        oldInstance = m_synths[id];
-        m_synths[id] = instance;
+        oldInstance = m_synths[instrumentID];
+        m_synths[instrumentID] = instance;
         if (! oldInstance) m_numSoftSynths++;
 
     } else {
 
-        PluginList &list = m_plugins[id];
+        PluginList &pluginVector = m_plugins[instrumentID];
 
-        if (position < int(Instrument::PLUGIN_COUNT)) {
-            while (position >= (int)list.size()) {
-                list.push_back(nullptr);
+        if (pluginPosition < int(Instrument::PLUGIN_COUNT)) {
+            if (pluginPosition >= (int)pluginVector.size()) {
+                // This should never happen given that we pre-sized
+                // the plugin vector to PLUGIN_COUNT.  Previously this
+                // code added the necessary entries.  Problem with that
+                // is that it modifies a vector that is supposed to be
+                // fixed size so it is thread safe.
+                std::cerr << "AudioInstrumentMixer::setPlugin(): pluginPosition" << pluginPosition << "beyond plugin vector size" << pluginVector.size() << "for instrument ID" << instrumentID << '\n';
+
+                delete instance;
+            } else {
+                // We're good.  Hook it in...
+                oldInstance = pluginVector[pluginPosition];
+                pluginVector[pluginPosition] = instance;
             }
-            oldInstance = list[position];
-            list[position] = instance;
         } else {
-            std::cerr << "AudioInstrumentMixer::setPlugin: No position "
-            << position << " for instrument " << id << std::endl;
+            std::cerr << "AudioInstrumentMixer::setPlugin(): No pluginPosition " << pluginPosition << " for instrument " << instrumentID << '\n';
+
             delete instance;
         }
     }
@@ -733,17 +777,6 @@ AudioInstrumentMixer::generateBuffers()
             pBuf.push_back(new sample_t[m_blockSize]);
         }
 
-    }
-
-    // Make room for up to 16 busses here, to avoid reshuffling later
-    int busses = 16;
-    if (m_bussMixer)
-        busses = std::max(busses, m_bussMixer->getBussCount());
-    for (int i = 0; i < busses; ++i) {
-        PluginList &list = m_plugins[i + 1];
-        while ((unsigned int)list.size() < Instrument::PLUGIN_COUNT) {
-            list.push_back(nullptr);
-        }
     }
 
 }

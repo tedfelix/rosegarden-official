@@ -100,6 +100,14 @@ public:
      */
     void emptyBuffers();
 
+    /**
+     * Not sure this is the best place, but we really need this so that
+     * we can make the system easily expandable.
+     *
+     * I think we can only actually have 8, so 16 should be ok.
+     * Audio Mixer > Settings > Number of Submasters.
+     */
+    static int getMaxBussCount()  { return 16; }
     int getBussCount() const {
         return m_bussCount;
     }

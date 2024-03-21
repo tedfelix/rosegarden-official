@@ -599,7 +599,7 @@ AudioPluginDialog::slotPluginSelected(int index)
         m_pluginList->setToolTip( tr("Select a plugin from this list") );
     }
 
-    QSharedPointer<AudioPlugin> plugin = m_pluginManager->getPlugin(number - 1);
+    QSharedPointer<AudioPlugin> audioPlugin = m_pluginManager->getPlugin(number - 1);
 
     // Destroy old param widgets
     //
@@ -612,9 +612,9 @@ AudioPluginDialog::slotPluginSelected(int index)
 
     // count up how many controller inputs the plugin has
     int portCount = 0;
-    if (plugin) {
-        for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
-             it != plugin->end();
+    if (audioPlugin) {
+        for (AudioPlugin::PluginPortVector::iterator it = audioPlugin->begin();
+             it != audioPlugin->end();
              ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
                 ((*it)->getType() & PluginPort::Input) &&
@@ -639,47 +639,47 @@ AudioPluginDialog::slotPluginSelected(int index)
             new QLabel(tr("<qt><p>This plugin has too many controls to edit here.</p><p>Use the external editor, if available.</p></qt>"),
                             m_pluginParamsBox), insRow, 0, 1, 2, Qt::AlignCenter);
             hidden = true;
-    } else if (portCount == 0 && plugin) {
+    } else if (portCount == 0 && audioPlugin) {
         m_pluginParamsBoxLayout->addWidget(
             new QLabel(tr("This plugin does not have any controls that can be edited here."),
                            m_pluginParamsBox), insRow, 0, 1, 2, Qt::AlignCenter);
     }
 
-    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
-    if (!inst)
+    AudioPluginInstance *audioPluginInstance = m_pluginContainer->getPlugin(m_index);
+    if (!audioPluginInstance)
         return ;
 
-    if (plugin) {
-        setWindowTitle(caption + plugin->getName());
-        m_pluginId->setText(tr("Id: %1").arg(plugin->getUniqueId()));
+    if (audioPlugin) {
+        setWindowTitle(caption + audioPlugin->getName());
+        m_pluginId->setText(tr("Id: %1").arg(audioPlugin->getUniqueId()));
 
-        QString pluginInfo = plugin->getAuthor() + QString("\n") +
-            plugin->getCopyright();
+        QString pluginInfo = audioPlugin->getAuthor() + QString("\n") +
+            audioPlugin->getCopyright();
 
         m_pluginList->setToolTip(pluginInfo);
 
-        std::string identifier = qstrtostr(plugin->getIdentifier());
+        std::string identifier = qstrtostr(audioPlugin->getIdentifier());
 
         // Only clear ports &c if this method is accessed by user
         // action (after the constructor)
         //
         if (m_generating == false) {
-            // this was commented out but I think it is correct !
-            inst->clearPorts();
-            if (inst->getIdentifier() != identifier) {
-                inst->clearConfiguration();
+            // If the plugin has changed, clear everything for the new one.
+            if (audioPluginInstance->getIdentifier() != identifier) {
+                audioPluginInstance->clearPorts();
+                audioPluginInstance->clearConfiguration();
             }
-            inst->setLabel(qstrtostr(plugin->getLabel()));
+            audioPluginInstance->setLabel(qstrtostr(audioPlugin->getLabel()));
         }
 
-        inst->setIdentifier(identifier);
-        inst->setArch(plugin->getArch());
+        audioPluginInstance->setIdentifier(identifier);
+        audioPluginInstance->setArch(audioPlugin->getArch());
 
         int count = 0;
         int ins = 0, outs = 0;
 
-        for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
-             it != plugin->end();
+        for (AudioPlugin::PluginPortVector::iterator it = audioPlugin->begin();
+             it != audioPlugin->end();
              ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
                 ((*it)->getType() & PluginPort::Input) &&
@@ -688,8 +688,8 @@ AudioPluginDialog::slotPluginSelected(int index)
                 // if it doesn't exist.  Modification occurs through the
                 // slotPluginPortChanged signal.
                 //
-                if (inst->getPort(count) == nullptr) {
-                    inst->addPort(count, (float)(*it)->getDefaultValue());
+                if (audioPluginInstance->getPort(count) == nullptr) {
+                    audioPluginInstance->addPort(count, (float)(*it)->getDefaultValue());
 //                    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
                 }
 
@@ -710,7 +710,7 @@ AudioPluginDialog::slotPluginSelected(int index)
         else
             m_insOuts->setText(tr("%1 in, %2 out").arg(ins).arg(outs));
 
-        QString shortName(plugin->getName());
+        QString shortName(audioPlugin->getName());
         int parenIdx = shortName.indexOf(" (");
         if (parenIdx > 0) {
             shortName = shortName.left(parenIdx);
@@ -724,10 +724,10 @@ AudioPluginDialog::slotPluginSelected(int index)
     // tell the sequencer
     emit pluginSelected(m_containerId, m_index, number - 1);
 
-    if (plugin) {
+    if (audioPlugin) {
 
         int current = -1;
-        QStringList programs = getProgramsForInstance(inst, current);
+        QStringList programs = getProgramsForInstance(audioPluginInstance, current);
 
         if (programs.count() > 0) {
 
@@ -789,8 +789,8 @@ AudioPluginDialog::slotPluginSelected(int index)
 
         // Create the plugin controls, but only if they're going to be visible.
         // (Else what's the point of creating them at all?)
-        for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
-             it != plugin->end();
+        for (AudioPlugin::PluginPortVector::iterator it = audioPlugin->begin();
+             it != audioPlugin->end();
              ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
                 ((*it)->getType() & PluginPort::Input) &&
@@ -802,7 +802,7 @@ AudioPluginDialog::slotPluginSelected(int index)
                                       *it,
                                       m_pluginManager,
                                       count,
-                                      inst->getPort(count)->value,
+                                      audioPluginInstance->getPort(count)->value,
                                       showBounds);
                 m_pluginParamsBoxLayout->addWidget(control, row, col);
 //                m_pluginParamsBoxLayout->setColumnStretch(col, 20);
@@ -830,12 +830,12 @@ AudioPluginDialog::slotPluginSelected(int index)
         m_pluginParamsBox->show();
     }
 
-    if (guiWasShown && plugin) {
+    if (guiWasShown && audioPlugin) {
         emit showPluginGUI(m_containerId, m_index);
         m_guiShown = true;
     }
 
-    if (plugin) {
+    if (audioPlugin) {
         bool hasGui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
 
         // original comment is below. The hasGui function seems to work for me

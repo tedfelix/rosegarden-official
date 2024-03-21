@@ -42,9 +42,17 @@ public:
 
     ~AudioInstrumentMixer() override;
 
+    /// Indirect Singleton.  Use carefully.
     /**
-     * Indirect Singleton.  Instance is actually kept in JackDriver.
-     * But you can get to it quickly through here.
+     * Instance is actually created in JackDriver.  But you can get to
+     * it quickly through here.
+     *
+     * Please note that this CAN return nullptr.  It does not create
+     * the instance.  That is done in JackDriver.  ALWAYS check what
+     * you get from this function before using it.
+     *
+     * The issue is that AIM does not have a default ctor.  So the usual
+     * "static instance in getInstance()" doesn't work.
      */
     static AudioInstrumentMixer *getInstance();
 
@@ -52,7 +60,7 @@ public:
 
     void setBussMixer(AudioBussMixer *mixer) { m_bussMixer = mixer; }
 
-    void setPlugin(InstrumentId id, int position, QString identifier);
+    void setPlugin(InstrumentId id, int position, const QString &identifier);
     void removePlugin(InstrumentId id, int position);
     void removeAllPlugins();
 
