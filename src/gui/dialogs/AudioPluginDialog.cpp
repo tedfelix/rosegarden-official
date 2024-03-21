@@ -664,9 +664,9 @@ AudioPluginDialog::slotPluginSelected(int index)
         // action (after the constructor)
         //
         if (m_generating == false) {
-            // this was commented out but I think it is correct !
-            inst->clearPorts();
+            // If the plugin has changed, clear everything for the new one.
             if (inst->getIdentifier() != identifier) {
+                inst->clearPorts();
                 inst->clearConfiguration();
             }
             inst->setLabel(qstrtostr(plugin->getLabel()));
