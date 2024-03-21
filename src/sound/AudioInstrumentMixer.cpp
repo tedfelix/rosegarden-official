@@ -14,7 +14,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioInstrumentMixer]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioInstrumentMixer.h"
 
@@ -105,7 +105,17 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
         pluginVector.resize(Instrument::PLUGIN_COUNT, nullptr);
     }
 
-#ifndef NDEBUG
+    // Make room for the busses here.
+    const int bussCount = AudioBussMixer::getMaxBussCount();
+
+    // Submaster busses start at 1.  Buss 0 is the master out and it cannot
+    // have effects plugins.
+    for (int i = 1; i < bussCount + 1; ++i) {
+        PluginList &pluginVector = m_plugins[i];
+        pluginVector.resize(Instrument::PLUGIN_COUNT, nullptr);
+    }
+
+#if 0
     RG_DEBUG << "ctor: m_plugins size:" << m_plugins.size();
     for (const auto &pair : m_plugins) {
         RG_DEBUG << "      [" << pair.first << "].size():" << pair.second.size();
@@ -133,7 +143,7 @@ AudioInstrumentMixer::getInstance()
 
 AudioInstrumentMixer::~AudioInstrumentMixer()
 {
-#ifndef NDEBUG
+#if 0
     RG_DEBUG << "dtor: m_plugins size:" << m_plugins.size();
     for (const auto &pair : m_plugins) {
         RG_DEBUG << "      [" << pair.first << "].size():" << pair.second.size();
@@ -741,23 +751,6 @@ AudioInstrumentMixer::generateBuffers()
             pBuf.push_back(new sample_t[m_blockSize]);
         }
 
-    }
-
-    // Make room for up to 16 busses here, to avoid reshuffling later
-    int busses = 16;
-    if (m_bussMixer)
-        busses = std::max(busses, m_bussMixer->getBussCount());
-    for (int i = 0; i < busses; ++i) {
-        PluginList &list = m_plugins[i + 1];
-        while ((unsigned int)list.size() < Instrument::PLUGIN_COUNT) {
-            // ??? NO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //     Well, here's the problem.  These were supposed
-            //     to be set up in advance so that we would never
-            //     do this and therefore keep things thread safe.
-            //     This throws that right out the window and explains
-            //     the rare crashes I am seeing.
-            list.push_back(nullptr);
-        }
     }
 
 }
