@@ -77,6 +77,8 @@ class RunnablePluginInstance;
 
     void pluginFinished();
 
+    void deactivate() override;
+
  private:
     RunnablePluginInstance* m_plugin;
     InstrumentId m_instrument;

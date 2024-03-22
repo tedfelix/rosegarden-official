@@ -187,6 +187,13 @@ AudioPlayQueue::erase(PlayableAudioFile *file)
     delete file;
 }
 
+void AudioPlayQueue::deactivate()
+{
+    for (auto playable : m_files) {
+        playable->deactivate();
+    }
+}
+
 void
 AudioPlayQueue::clear()
 {

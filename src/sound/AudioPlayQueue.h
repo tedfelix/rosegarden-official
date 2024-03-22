@@ -78,6 +78,11 @@ public:
     void erase(PlayableAudioFile *file);
 
     /**
+     * deactivate the queue.
+     */
+    void deactivate();
+
+    /**
      * Remove all files and delete them.
      */
     void clear();

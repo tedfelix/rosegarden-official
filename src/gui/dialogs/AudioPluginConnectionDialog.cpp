@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginConnectionDialog]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginConnectionDialog.h"
 
@@ -53,7 +53,9 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
         Instrument::InstrumentType itype = instr->getType();
         if (itype != Instrument::Audio && itype != Instrument::SoftSynth)
             continue;
-        RG_DEBUG << "track" << pair.first << "instrument" << instr->getId();
+        unsigned int nch = instr->getNumAudioChannels();
+        RG_DEBUG << "track" << pair.first << "instrument" << instr->getId() <<
+            nch;
         m_iList.push_back(instr);
     }
 

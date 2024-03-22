@@ -5947,7 +5947,7 @@ AlsaDriver::clearAudioQueue()
     AudioPlayQueue *oldQueue = m_audioQueue;
     m_audioQueue = newQueue;
     if (oldQueue) {
-        oldQueue->clear();
+        oldQueue->deactivate();
         m_audioQueueScavenger.claim(oldQueue);
     }
 }

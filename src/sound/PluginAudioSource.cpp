@@ -44,8 +44,6 @@ namespace Rosegarden
 PluginAudioSource::~PluginAudioSource()
 {
     RG_DEBUG << "PluginAudioSource dtor";
-    // tell the plugin we no longer exist
-    if (m_plugin) m_plugin->removeAudioSource(m_portIndex);
     // clean up any remaining audio data
     while (! m_dataQueue.empty()) {
         sample_t* block = m_dataQueue.front();
@@ -184,6 +182,12 @@ void PluginAudioSource::pluginFinished()
     RG_DEBUG << "pluginFinished";
     // the plugin is gone
     m_plugin = nullptr;
+}
+
+void PluginAudioSource::deactivate()
+{
+    // tell the plugin we are inactive
+    if (m_plugin) m_plugin->removeAudioSource(m_portIndex);
 }
 
 }

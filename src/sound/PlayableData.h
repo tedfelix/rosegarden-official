@@ -66,6 +66,8 @@ class PlayableData
     virtual bool isSmallFile() const = 0;
 
     virtual unsigned int getTargetChannels() const = 0;
+
+    virtual void deactivate() { } /* default implementation do nothing */
 };
 
 }
