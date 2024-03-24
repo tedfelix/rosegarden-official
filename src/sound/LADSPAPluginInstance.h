@@ -13,24 +13,30 @@
     COPYING included with this distribution for more information.
 */
 
-#include <vector>
-#include <set>
-#include <QString>
-#include "base/Instrument.h"
 
 #ifndef RG_LADSPAPLUGININSTANCE_H
 #define RG_LADSPAPLUGININSTANCE_H
 
-#include <ladspa.h>
+#include "base/Instrument.h"
 #include "RunnablePluginInstance.h"
+
+#include <ladspa.h>
+
+#include <QString>
+
+#include <vector>
+#include <set>
+
 
 namespace Rosegarden
 {
 
-// LADSPA plugin instance.  LADSPA is a variable block size API, but
-// for one reason and another it's more convenient to use a fixed
-// block size in this wrapper.
-//
+
+/// LADSPA plugin instance.
+/**
+ * LADSPA is a variable block size API, but for one reason and another it's
+ * more convenient to use a fixed block size in this wrapper.
+ */
 class LADSPAPluginInstance : public RunnablePluginInstance
 {
 public:
@@ -111,7 +117,7 @@ protected:
      * For a mono plugin on a stereo track, this will be 2 indicating that we
      * need two instances, one for each channel (left and right).
      */
-    size_t m_instanceCount;
+    size_t m_instanceCount{0};
 
     const LADSPA_Descriptor   *m_descriptor;
 
@@ -126,12 +132,14 @@ protected:
     sample_t                **m_outputBuffers;
     bool                      m_ownBuffers;
     size_t                    m_sampleRate;
-    float                    *m_latencyPort;
-    bool                      m_run;
+    float                    *m_latencyPort{nullptr};
+    bool                      m_run{false};
 
-    bool                      m_bypassed;
+    bool                      m_bypassed{false};
 };
 
+
 }
+
 
 #endif // RG_LADSPAPLUGININSTANCE_H
