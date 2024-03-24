@@ -46,17 +46,21 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
     Composition& comp = doc->getComposition();
     Studio& studio = doc->getStudio();
 
-    Composition::trackcontainer& tracks = comp.getTracks();
-    // For each track, add audio and softsynth tracks to the instrument list.
-    for (const Composition::trackcontainer::value_type &pair : tracks) {
-        Instrument* instr = studio.getInstrumentFor(pair.second);
+    int position = 0;
+    while(Track* track = comp.getTrackByPosition(position)) {
+        Instrument* instr = studio.getInstrumentFor(track);
         Instrument::InstrumentType itype = instr->getType();
-        if (itype != Instrument::Audio && itype != Instrument::SoftSynth)
-            continue;
+        if (itype == Instrument::Audio) {
+            m_iListAudio.push_back(instr);
+            m_iListAudioSynth.push_back(instr);
+        }
+        if (itype == Instrument::SoftSynth) {
+            m_iListAudioSynth.push_back(instr);
+        }
         unsigned int nch = instr->getNumAudioChannels();
-        RG_DEBUG << "track" << pair.first << "instrument" << instr->getId() <<
+        RG_DEBUG << "track" << position << "instrument" << instr->getId() <<
             nch;
-        m_iList.push_back(instr);
+        position++;
     }
 
     QGridLayout *mainLayout = new QGridLayout(this);
@@ -84,12 +88,23 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
         int selInstIndex = 0;
         int count = 1;
         // For each Instrument, add the Instrument to the instrument ComboBox.
-        for (const Instrument *inst : m_iList) {
-            InstrumentId iid = inst->getId();
-            if (connection.instrumentId == iid) selInstIndex = count;
-            QString iname = inst->getLocalizedPresentationName();
-            icb->addItem(iname);
-            ++count;
+        if (connection.isOutput) {
+            for (const Instrument *inst : m_iListAudio) {
+                InstrumentId iid = inst->getId();
+                if (connection.instrumentId == iid) selInstIndex = count;
+                QString iname = inst->getLocalizedPresentationName();
+                icb->addItem(iname);
+                ++count;
+            }
+        } else {
+            for (const Instrument *inst : m_iListAudioSynth) {
+                InstrumentId iid = inst->getId();
+                if (connection.instrumentId == iid) selInstIndex = count;
+                QString iname = inst->getLocalizedPresentationName();
+                icb->addItem(iname);
+                ++count;
+
+            }
         }
         icb->setCurrentIndex(selInstIndex);
         m_instrumentCB.push_back(icb);
@@ -141,7 +156,12 @@ void AudioPluginConnectionDialog::getConnections
         QComboBox* icb = m_instrumentCB[index];
         int isel = icb->currentIndex();
         if (isel != 0) {
-            Instrument* inst = m_iList[isel - 1];
+            Instrument* inst;
+            if (c.isOutput) {
+                inst = m_iListAudio[isel - 1];
+            } else {
+                inst = m_iListAudioSynth[isel - 1];
+            }
             c.instrumentId = inst->getId();
         }
 

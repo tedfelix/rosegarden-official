@@ -46,7 +46,8 @@ public:
         (PluginPort::ConnectionList& connections) const;
 
  private:
-    InstrumentList m_iList;
+    InstrumentList m_iListAudio;
+    InstrumentList m_iListAudioSynth;
     std::vector<QString> m_pluginPorts;
     std::vector<QComboBox*> m_instrumentCB;
     std::vector<QComboBox*> m_channelCB;
