@@ -30,12 +30,11 @@ namespace Rosegarden
 {
 
 
-// Allocate enough for a mono plugin on a stereo track in case we switch
-// from mono to stereo.
+// Allocate enough for two instances of a mono to stereo plugin.  That
+// would have 2 ins and 4 outs.
 // See setIdealChannelCount().
-// ??? Can this be larger than 2?  If so we'll need to check
-//     m_audioPortsIn.size() and m_audioPortsOut.size().
-static constexpr size_t maxBuffers = 2ul;
+// ??? Is there a situation where we would need more than 4?
+static constexpr size_t maxBuffers = 4ul;
 
 LADSPAPluginInstance::LADSPAPluginInstance(
         PluginFactory *factory,
@@ -322,18 +321,29 @@ LADSPAPluginInstance::connectPorts()
 
     size_t inbuf = 0, outbuf = 0;
 
+    // For each instance...
     for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
          hi != m_instanceHandles.end();
          ++hi) {
 
+        // For each audio in...
         for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+            if (inbuf > maxBuffers - 1) {
+                RG_WARNING << "connectPorts(): Not enough in buffers." << m_instrument << m_position;
+                break;
+            }
             m_descriptor->connect_port(*hi,
                                        m_audioPortsIn[i],
                                        m_inputBuffers[inbuf]);
             ++inbuf;
         }
 
+        // For each audio out...
         for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+            if (outbuf > maxBuffers - 1) {
+                RG_WARNING << "connectPorts(): Not enough out buffers." << m_instrument << m_position;
+                break;
+            }
             m_descriptor->connect_port(*hi,
                                        m_audioPortsOut[i],
                                        m_outputBuffers[outbuf]);
