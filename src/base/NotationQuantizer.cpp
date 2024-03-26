@@ -1204,7 +1204,8 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
     }
 
     delete profiler; // on heap so it updates before the next line:
-    Profiles::getInstance()->dump();
+    // ??? Removing.  Really noisy with huge files.
+    //Profiles::getInstance()->dump();
 
 }
 
