@@ -20,7 +20,7 @@ for x in presets-editable*.conf; do
     ../../scripts/preset-xmlify < "$x" > "$xmlfile" && \
     ../../scripts/dehumanize "$xmlfile" || \
     echo "Something went wrong.  $xmlfile is probably mangled."
-    chmod -w "$xmlfile"
+    # chmod commented out
+    #chmod -w "$xmlfile"
     echo $xmlfile updated successfully
 done
-

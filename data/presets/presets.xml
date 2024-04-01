@@ -355,13 +355,13 @@
       <range class="professional" low="60" high="86"/>
     </instrument>
     <instrument name="Bass recorder">
-      <clef type="old celesta" />
+      <clef type="oldCelesta" />
       <transpose value="0" />
       <range class="amateur" low="53" high="74"/>
       <range class="professional" low="53" high="77"/>
     </instrument>
     <instrument name="Greatbass recorder">
-      <clef type="old celesta" />
+      <clef type="oldCelesta" />
       <transpose value="0" />
       <range class="amateur" low="48" high="69"/>
       <range class="professional" low="57" high="98"/>
@@ -373,7 +373,7 @@
       <range class="professional" low="41" high="77"/>
     </instrument>
     <instrument name="G soprano ocarina">
-      <clef type="xylphone" />
+      <clef type="xylophone" />
       <transpose value="0" />
       <range class="amateur" low="79" high="93"/>
       <range class="professional" low="79" high="95"/>
@@ -1187,7 +1187,7 @@
       <range class="professional" low="60" high="105"/>
     </instrument>
     <instrument name="Almglocken (bass)">
-      <clef type="modern celesta" />
+      <clef type="celesta" />
       <transpose value="0" />
       <range class="amateur" low="60" high="105"/>
       <range class="professional" low="60" high="105"/>
@@ -1773,7 +1773,7 @@
       <range class="professional" low="60" high="108"/>
     </instrument>
     <instrument name="Celesta (bass)">
-      <clef type="modern celesta" />
+      <clef type="celesta" />
       <transpose value="0" />
       <range class="amateur" low="60" high="108"/>
       <range class="professional" low="60" high="108"/>
