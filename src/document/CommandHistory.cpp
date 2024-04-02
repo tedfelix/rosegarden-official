@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CommandHistory]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "CommandHistory.h"
 
@@ -109,8 +109,13 @@ CommandHistory::addCommand(Command *command, timeT startPointerPosition)
 
     emit aboutToExecuteCommand();
 
-    // override from caller
-    if (startPointerPosition > -1.0e9) m_pointerPosition = startPointerPosition;
+    // If the caller of addCommand() provided a start pointer position,
+    // use it instead of the usual one.
+    // See the default argument value for startPointerPosition.
+    // See the comments on addCommand() in the header for details.
+    if (startPointerPosition > -1.0e9)
+        m_pointerPosition = startPointerPosition;
+
     CommandInfo commInfo;
     commInfo.command = command;
     commInfo.pointerPositionBefore = m_pointerPosition;
