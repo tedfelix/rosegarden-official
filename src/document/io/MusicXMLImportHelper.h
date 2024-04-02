@@ -19,66 +19,31 @@
 #ifndef RG_MUSICXMLIMPORTHELPER_H
 #define RG_MUSICXMLIMPORTHELPER_H
 
-#include "base/BaseProperties.h"
-#include "base/Composition.h"
 #include "base/Instrument.h"
-#include "base/NotationTypes.h"
-#include "base/StaffExportTypes.h"
-#include "base/Segment.h"
-#include "base/MidiProgram.h"
-#include "base/Studio.h"
-#include "base/Event.h"
-#include "base/Track.h"
-#include "base/NotationTypes.h"
-#include "gui/editors/notation/NotationProperties.h"
+#include "base/TimeT.h"
+
+#include <QString>
 
 #include <string>
 #include <vector>
-#include <queue>
-
-#include <QString>
+#include <map>
 
 
 namespace Rosegarden
 {
 
-// class Segment;
-// class Composition;
 
-//     typedef std::map<QString, timeT> IndicationMap;
-//     typedef std::map<QString, int> UnpitchedMap;
+class Composition;
+class Track;
+class Segment;
+class Event;
+class Key;
+class TimeSignature;
+class Clef;
+
 
 class MusicXMLImportHelper {
 public:
-
-    class IndicationStart {
-    public:
-        IndicationStart(const QString &staff="", const QString &voice="",
-                        const std::string &name="", timeT time=0, int number=1,
-                        const std::string &endName="") :
-                m_staff(staff),
-                m_voice(voice),
-                m_name(name),
-                m_endName((endName == "") ? name : endName),
-                m_time(time),
-                m_number(number)
-        {
-        };
-        QString     m_staff;
-        QString     m_voice;
-        std::string m_name;
-        std::string m_endName;
-        timeT       m_time;
-        int         m_number;
-    };
-
-//     struct IndicationCMP {
-//         bool operator()(const IndicationStart &a, const IndicationStart &b) {
-//             return true;
-//         };
-//     };
-
-    typedef std::vector<IndicationStart> IndicationVector;
 
     typedef std::map<QString, Track*> TrackMap;
     typedef std::map<QString, Segment *> SegmentMap;
@@ -108,7 +73,34 @@ public:
     void setInstrument(InstrumentId instrument);
     void setBracketType(int bracket);
 
-protected:
+private:
+
+    class IndicationStart {
+    public:
+        IndicationStart(const QString &staff="", const QString &voice="",
+                        const std::string &name="", timeT time=0, int number=1,
+                        const std::string &endName="") :
+                m_staff(staff),
+                m_voice(voice),
+                m_name(name),
+                m_endName((endName == "") ? name : endName),
+                m_time(time),
+                m_number(number)
+        {
+        };
+        QString     m_staff;
+        QString     m_voice;
+        std::string m_name;
+        std::string m_endName;
+        timeT       m_time{};
+        int         m_number{1};
+    };
+    //struct IndicationCMP {
+    //    bool operator()(const IndicationStart &a, const IndicationStart &b) {
+    //        return true;
+    //    };
+    //};
+
     Composition         *m_composition;
     VoiceMap            m_mainVoice;
     QString             m_staff;
@@ -118,11 +110,14 @@ protected:
 
     timeT               m_curTime;
     int                 m_divisions;
+    typedef std::vector<IndicationStart> IndicationVector;
     IndicationVector    m_indications;
     PercussionMap       m_unpitched;
     QString             m_label;
 };
 
+
 }
+
 
 #endif

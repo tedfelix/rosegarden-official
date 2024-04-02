@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,29 +18,23 @@
 #define RG_MODULE_STRING "[MusicXMLImportHelper]"
 
 #include "MusicXMLImportHelper.h"
+
 #include "base/Event.h"
 #include "base/BaseProperties.h"
-#include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
-#include "misc/Strings.h"
 #include "base/Composition.h"
-#include "base/Studio.h"
 #include "base/Instrument.h"
-#include "base/MidiProgram.h"
-#include "base/NotationTypes.h"
-#include "gui/editors/notation/NotationProperties.h"
-#include "base/StaffExportTypes.h"
+#include "base/NotationTypes.h"  // for Clef
+#include "base/StaffExportTypes.h"  // for Brackets
 #include "base/Segment.h"
 #include "base/Track.h"
 
 #include <QString>
-#include <QSettings>
+
 
 namespace Rosegarden
-
 {
 
-using namespace BaseProperties;
 
 MusicXMLImportHelper::MusicXMLImportHelper(Composition *composition) :
     m_composition(composition)
@@ -196,7 +190,8 @@ MusicXMLImportHelper::insertClef(const Clef &clef, int number)
 bool
 MusicXMLImportHelper::insert(Event *event)
 {
-    if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
+    if (event->has(BaseProperties::IS_GRACE_NOTE)  &&
+        event->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
         Segment *segment = m_segments[m_staff+"/"+m_voice];
         Segment::iterator start, end;
         segment->getTimeSlice(m_curTime, start, end);
@@ -338,5 +333,6 @@ MusicXMLImportHelper::setBracketType(int bracket)
         }
     }
 }
+
 
 }
