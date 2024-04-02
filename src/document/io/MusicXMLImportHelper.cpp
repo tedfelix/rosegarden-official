@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,26 +18,23 @@
 #define RG_MODULE_STRING "[MusicXMLImportHelper]"
 
 #include "MusicXMLImportHelper.h"
+
 #include "base/Event.h"
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
-#include "misc/Strings.h"
 #include "base/Composition.h"
-#include "base/Studio.h"
 #include "base/Instrument.h"
-#include "base/MidiProgram.h"
-#include "base/NotationTypes.h"
-#include "gui/editors/notation/NotationProperties.h"
-#include "base/StaffExportTypes.h"
+#include "base/NotationTypes.h"  // for Clef
+#include "base/StaffExportTypes.h"  // for Brackets
 #include "base/Segment.h"
 #include "base/Track.h"
+
 #include <QString>
 
-namespace Rosegarden
 
+namespace Rosegarden
 {
 
-using namespace BaseProperties;
 
 MusicXMLImportHelper::MusicXMLImportHelper(Composition *composition) :
     m_composition(composition)
@@ -110,8 +107,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
         SegmentMap::iterator s = m_segments.find(m_staff+"/");
         if (s != m_segments.end()) {
             m_segments[m_staff+"/"+m_mainVoice[m_staff]] = (*s).second;
-            QString label = "MusicXML, id="+m_staff+"/"+m_mainVoice[m_staff];
-            (*s).second->setLabel(label.toStdString());
+            (*s).second->setLabel(m_label.toStdString());
             m_segments.erase(s);
         }
         m_voice = m_mainVoice[m_staff];
@@ -128,8 +124,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
         }
         if (createSegment) {
             Segment *segment = new Segment(Segment::Internal, m_curTime);
-            QString label = "MusicXML, id="+m_staff+"/"+tmpVoice;
-            segment->setLabel(label.toStdString());
+            segment->setLabel(m_label.toStdString());
             m_composition->addSegment(segment);
             segment->setTrack(m_tracks[m_staff]->getId());
             m_segments[m_staff+"/"+tmpVoice] = segment;
@@ -142,6 +137,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
 bool
 MusicXMLImportHelper::setLabel(const QString &label)
 {
+    m_label = label;
     for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
         ((*i).second)->setLabel(label.toStdString());
     }
@@ -194,7 +190,8 @@ MusicXMLImportHelper::insertClef(const Clef &clef, int number)
 bool
 MusicXMLImportHelper::insert(Event *event)
 {
-    if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
+    if (event->has(BaseProperties::IS_GRACE_NOTE)  &&
+        event->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
         Segment *segment = m_segments[m_staff+"/"+m_voice];
         Segment::iterator start, end;
         segment->getTimeSlice(m_curTime, start, end);
@@ -336,5 +333,6 @@ MusicXMLImportHelper::setBracketType(int bracket)
         }
     }
 }
+
 
 }
