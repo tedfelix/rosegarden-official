@@ -535,6 +535,7 @@ punchin:
         settings.endGroup();
 
         m_doc->setRecordStartTime(m_doc->getComposition().getPosition());
+        m_doc->setPointerPositionBeforeRecord(m_lastTransportStartPosition);
 
         if (haveAudioInstrument) {
             // Ask the document to update its record latencies so as to

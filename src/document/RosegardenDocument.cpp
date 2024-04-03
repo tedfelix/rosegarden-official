@@ -2456,7 +2456,8 @@ RosegardenDocument::stopRecordingMidi()
         // different over in the new Qt4 branch; to facilitate porting.
         transposeRecordedSegment(s);
 
-        CommandHistory::getInstance()->addCommand(command);
+        CommandHistory::getInstance()->addCommand(command,
+                                                  m_pointerBeforeRecord);
     }
 
     emit stoppedMIDIRecording();
@@ -2781,8 +2782,8 @@ RosegardenDocument::finalizeAudioFile(InstrumentId instrument)
     if (!recordSegment->getComposition())
         getComposition().addSegment(recordSegment);
 
-    CommandHistory::getInstance()->addCommand(
-            new SegmentRecordCommand(recordSegment));
+    CommandHistory::getInstance()->addCommand
+        (new SegmentRecordCommand(recordSegment), m_pointerBeforeRecord);
 
     // update views
     slotUpdateAllViews(nullptr);
