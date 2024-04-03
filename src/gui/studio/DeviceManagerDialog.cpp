@@ -31,6 +31,7 @@
 #include "base/MidiDevice.h"
 #include "base/MidiTypes.h"
 #include "base/Studio.h"
+#include "base/Composition.h"
 #include "commands/studio/CreateOrDeleteDeviceCommand.h"
 #include "commands/studio/ReconnectDeviceCommand.h"
 #include "commands/studio/RenameDeviceCommand.h"
@@ -810,21 +811,71 @@ DeviceManagerDialog::slotAddRecordDevice()
 void
 DeviceManagerDialog::slotDeletePlaybackDevice()
 {
-    RG_DEBUG << "DeviceManagerDialog::slotDeletePlaybackDevice()";
+    //RG_DEBUG << "slotDeletePlaybackDevice()";
 
-    MidiDevice *mdev;
-    mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
+    const MidiDevice *mdev =
+            getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
     if (!mdev)
         return;
-    DeviceId id = mdev->getId();
 
-    if (id == Device::NO_DEVICE)
+    const DeviceId deviceID = mdev->getId();
+    if (deviceID == Device::NO_DEVICE)
         return;
+
+    // Make sure the Device is not being used by a Track.
+
+    // Track positions using the Device.
+    std::vector<int> trackPositions;
+
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
+    const Composition::trackcontainer &tracks = composition.getTracks();
+
+    // For each Track in the Composition...
+    for (const Composition::trackcontainer::value_type &pair : tracks) {
+        const Track *track = pair.second;
+        if (!track)
+            continue;
+
+        const InstrumentId instrumentID = track->getInstrument();
+        const Instrument *instrument = m_studio->getInstrumentById(instrumentID);
+        if (!instrument)
+            continue;
+        if (instrument->getType() != Instrument::Midi)
+            continue;
+
+        const Device *device = instrument->getDevice();
+        if (!device)
+            continue;
+
+        // Found a Track using this device?
+        if (deviceID == device->getId())
+            trackPositions.push_back(track->getPosition());
+    }
+
+    // If there are Tracks using this Device, issue a message and abort.
+    if (!trackPositions.empty()) {
+        QString msg{tr("The following tracks are using this device:")};
+        msg += '\n';
+        for (const int &trackPos : trackPositions) {
+            msg += QString::number(trackPos + 1) + " ";
+        }
+        msg += '\n';
+        msg += tr("The device cannot be deleted.");
+        QMessageBox::warning(
+                this,
+                tr("Rosegarden"),
+                msg);
+        return;
+    }
+
+    // Delete the Device.
+
     CreateOrDeleteDeviceCommand *command =
-            new CreateOrDeleteDeviceCommand(m_studio, id);
+            new CreateOrDeleteDeviceCommand(m_studio, deviceID);
     CommandHistory::getInstance()->addCommand(command);
 
-    RosegardenSequencer::getInstance()->removeDevice(id);
+    RosegardenSequencer::getInstance()->removeDevice(deviceID);
 
     slotRefreshOutputPorts();
 }
