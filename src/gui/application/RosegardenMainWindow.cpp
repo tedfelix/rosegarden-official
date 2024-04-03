@@ -3804,29 +3804,45 @@ void
 RosegardenMainWindow::slotAddTrack()
 {
     if (!m_view)
-        return ;
+        return;
 
     // default to the base number - might not actually exist though
-    //
-    InstrumentId id = MidiInstrumentBase;
+    InstrumentId foundInstrumentID = MidiInstrumentBase;
 
     // Get the first Internal/MIDI instrument
-    //
-    DeviceList *devices = RosegardenDocument::currentDocument->getStudio().getDevices();
-    bool have = false;
 
-    for (DeviceList::iterator it = devices->begin();
-            it != devices->end() && !have; ++it) {
+    DeviceList *devices =
+            RosegardenDocument::currentDocument->getStudio().getDevices();
+    if (!devices)
+        return;
 
-        if ((*it)->getType() != Device::Midi)
+    bool have{false};
+
+    // For each Device...
+    for (DeviceList::const_iterator deviceIter = devices->begin();
+         deviceIter != devices->end()  &&  !have;
+         ++deviceIter) {
+        const Device *device = *deviceIter;
+        if (!device)
             continue;
 
-        InstrumentList instruments = (*it)->getAllInstruments();
-        for (InstrumentList::iterator iit = instruments.begin();
-                iit != instruments.end(); ++iit) {
+        // MIDI Devices only.
+        if (device->getType() != Device::Midi)
+            continue;
+        // Output only.
+        if (!device->isOutput())
+            continue;
 
-            if ((*iit)->getId() >= MidiInstrumentBase) {
-                id = (*iit)->getId();
+        InstrumentList instruments = device->getAllInstruments();
+        // For each Instrument in this Device...
+        for (InstrumentList::iterator instrumentIter = instruments.begin();
+             instrumentIter != instruments.end();
+             ++instrumentIter) {
+            const InstrumentId instrumentID = (*instrumentIter)->getId();
+
+            // Just go with the first one we find.
+            if (instrumentID >= MidiInstrumentBase) {
+                foundInstrumentID = instrumentID;
                 have = true;
                 break;
             }
@@ -3838,9 +3854,10 @@ RosegardenMainWindow::slotAddTrack()
     Track *track = comp.getTrackById(trackId);
 
     int pos = -1;
-    if (track) pos = track->getPosition() + 1;
+    if (track)
+        pos = track->getPosition() + 1;
 
-    m_view->addTrack(id, pos);
+    m_view->addTrack(foundInstrumentID, pos);
 }
 
 void
