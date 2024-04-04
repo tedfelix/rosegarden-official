@@ -444,6 +444,7 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
             std::string name = mdev->getName();
             QString nameStr = QObject::tr("%1").arg(strtoqstr(name));
             nameStr = QObject::tr(nameStr.toStdString().c_str());
+            // ??? LEAK
             QTreeWidgetItem *twItem = new QTreeWidgetItem(treeWid, QStringList() << nameStr);
             // set port text
             twItem->setText(1, outPort);
@@ -740,6 +741,7 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
         if (!portNamesListed.contains(portName)) {
             // item is not in list
             // create new entry
+            // ??? LEAK
             twItem =
                     new QTreeWidgetItem(treeWid,
                                         QStringList() << portName);

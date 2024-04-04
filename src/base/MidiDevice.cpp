@@ -665,8 +665,6 @@ MidiDevice::getAllInstruments() const
     return m_instruments;
 }
 
-// Omitting special system Instruments
-//
 InstrumentList
 MidiDevice::getPresentationInstruments() const
 {

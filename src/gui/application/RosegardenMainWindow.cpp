@@ -3816,13 +3816,8 @@ RosegardenMainWindow::slotAddTrack()
     if (!devices)
         return;
 
-    bool have{false};
-
     // For each Device...
-    for (DeviceList::const_iterator deviceIter = devices->begin();
-         deviceIter != devices->end()  &&  !have;
-         ++deviceIter) {
-        const Device *device = *deviceIter;
+    for (const Device *device : *devices) {
         if (!device)
             continue;
 
@@ -3833,20 +3828,27 @@ RosegardenMainWindow::slotAddTrack()
         if (!device->isOutput())
             continue;
 
-        InstrumentList instruments = device->getAllInstruments();
+        // Find an Instrument we can use.
+
+        bool have{false};
+
+        // ??? It would be nice if we could ask the Device for an
+        //     available Instrument and fall back on the first if
+        //     all Instruments are already assigned to Tracks.
+
+        InstrumentList instruments = device->getPresentationInstruments();
         // For each Instrument in this Device...
-        for (InstrumentList::iterator instrumentIter = instruments.begin();
-             instrumentIter != instruments.end();
-             ++instrumentIter) {
-            const InstrumentId instrumentID = (*instrumentIter)->getId();
+        for (const Instrument *instrument : instruments) {
+            const InstrumentId instrumentID = instrument->getId();
 
             // Just go with the first one we find.
-            if (instrumentID >= MidiInstrumentBase) {
-                foundInstrumentID = instrumentID;
-                have = true;
-                break;
-            }
+            foundInstrumentID = instrumentID;
+            have = true;
+            break;
         }
+
+        if (have)
+            break;
     }
 
     Composition &comp = RosegardenDocument::currentDocument->getComposition();

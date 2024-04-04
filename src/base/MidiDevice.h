@@ -111,7 +111,12 @@ public:
     void mergeProgramList(const ProgramList &programList);
     void mergeKeyMappingList(const KeyMappingList &keyMappingList);
 
+    /// Includes special Instrument below MidiInstrumentBase.
     InstrumentList getAllInstruments() const override;
+    /// Omit special system Instruments below MidiInstrumentBase.
+    /**
+     * See generatePresentationList().
+     */
     InstrumentList getPresentationInstruments() const override;
 
     // Retrieve Librarian details
