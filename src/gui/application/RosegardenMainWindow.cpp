@@ -3800,40 +3800,6 @@ RosegardenMainWindow::slotSplitSelected()
     m_view->selectTool(SegmentSplitter::ToolName());
 }
 
-// ??? Device member?
-static InstrumentId getAvailableInstrument(const Device *device)
-{
-    InstrumentList instruments = device->getPresentationInstruments();
-    if (instruments.empty())
-        return NoInstrument;
-
-    const Composition &comp =
-            RosegardenDocument::currentDocument->getComposition();
-
-    // Assume not found.
-    InstrumentId firstInstrumentID{NoInstrument};
-
-    // For each instrument on the device
-    for (const Instrument *instrument : instruments) {
-        if (!instrument)
-            continue;
-
-        const InstrumentId instrumentID = instrument->getId();
-
-        // If we've not found the first one yet, save it in case we don't
-        // find anything available.
-        if (firstInstrumentID == NoInstrument)
-            firstInstrumentID = instrumentID;
-
-        // If this instrumentID is not in use, return it.
-        if (!comp.hasTrack(instrumentID))
-            return instrumentID;
-    }
-
-    // Return the first instrumentID for this device.
-    return firstInstrumentID;
-}
-
 void
 RosegardenMainWindow::slotAddTrack()
 {
@@ -3863,8 +3829,7 @@ RosegardenMainWindow::slotAddTrack()
             continue;
 
         // Find an Instrument we can use.
-
-        foundInstrumentID = getAvailableInstrument(device);
+        foundInstrumentID = device->getAvailableInstrument();
 
         if (foundInstrumentID != NoInstrument)
             break;

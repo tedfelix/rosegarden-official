@@ -84,7 +84,7 @@ public:
     virtual InstrumentList getAllInstruments() const = 0;
     /// All Instruments that a user is allowed to select.
     /**
-     * For SoftSynthDevice and AudioDevide, this is the same as
+     * For SoftSynthDevice and AudioDevice, this is the same as
      * getAllInstruments().
      *
      * For MidiDevice, this is different.  It omits the "special" Instruments.
@@ -92,6 +92,8 @@ public:
      * this list.  See MidiDevice::generatePresentationList().
      */
     virtual InstrumentList getPresentationInstruments() const = 0;
+    /// Returns an InstrumentId that is not currently on a Track.
+    InstrumentId getAvailableInstrument() const;
 
     /// Send channel setups to each instrument in the device.
     /**
