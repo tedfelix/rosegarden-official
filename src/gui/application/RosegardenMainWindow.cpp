@@ -3800,6 +3800,54 @@ RosegardenMainWindow::slotSplitSelected()
     m_view->selectTool(SegmentSplitter::ToolName());
 }
 
+// ??? Composition member?
+static bool isInstrumentInUse(InstrumentId instrumentID)
+{
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
+    const Composition::trackcontainer &tracks = comp.getTracks();
+
+    // For each track...
+    for (const Composition::trackcontainer::value_type &pair : tracks) {
+        const Track *track = pair.second;
+        // if this track is using the instrumentID, return true
+        if (track->getInstrument() == instrumentID)
+            return true;
+    }
+
+    return false;
+}
+
+// ??? Device member?
+static InstrumentId getAvailableInstrument(const Device *device)
+{
+    InstrumentList instruments = device->getPresentationInstruments();
+    if (instruments.empty())
+        return NoInstrument;
+
+    // Assume not found.
+    InstrumentId firstInstrumentID{NoInstrument};
+
+    // For each instrument on the device
+    for (const Instrument *instrument : instruments) {
+        if (!instrument)
+            continue;
+
+        const InstrumentId instrumentID = instrument->getId();
+
+        // If we've not found the first one yet, save it in case we don't
+        // find anything available.
+        if (firstInstrumentID == NoInstrument)
+            firstInstrumentID = instrumentID;
+
+        // If this instrumentID is not in use, return it.
+        if (!isInstrumentInUse(instrumentID))
+            return instrumentID;
+    }
+
+    // Return the first instrumentID for this device.
+    return firstInstrumentID;
+}
+
 void
 RosegardenMainWindow::slotAddTrack()
 {
@@ -3830,24 +3878,9 @@ RosegardenMainWindow::slotAddTrack()
 
         // Find an Instrument we can use.
 
-        bool have{false};
+        foundInstrumentID = getAvailableInstrument(device);
 
-        // ??? It would be nice if we could ask the Device for an
-        //     available Instrument and fall back on the first if
-        //     all Instruments are already assigned to Tracks.
-
-        InstrumentList instruments = device->getPresentationInstruments();
-        // For each Instrument in this Device...
-        for (const Instrument *instrument : instruments) {
-            const InstrumentId instrumentID = instrument->getId();
-
-            // Just go with the first one we find.
-            foundInstrumentID = instrumentID;
-            have = true;
-            break;
-        }
-
-        if (have)
+        if (foundInstrumentID != NoInstrument)
             break;
     }
 
