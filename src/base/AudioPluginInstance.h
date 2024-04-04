@@ -60,7 +60,7 @@ public:
         int portIndex;
         QString pluginPort;
         InstrumentId instrumentId{NoInstrument};
-        int channel{0};
+        int channel{0}; // 0 - left, 1 - right. -1 - both
     };
 
     typedef std::list<Connection> ConnectionList;

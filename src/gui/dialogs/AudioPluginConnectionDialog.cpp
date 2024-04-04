@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginConnectionDialog]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginConnectionDialog.h"
 
@@ -114,6 +114,7 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
         QComboBox* ccb = new QComboBox(this);
         ccb->addItem(tr("Left"));
         ccb->addItem(tr("Right"));
+        ccb->addItem(tr("Both"));
         ccb->setCurrentIndex(connection.channel);
         if (firstInput && ! connection.isOutput) {
             firstInput = false;
@@ -168,6 +169,7 @@ void AudioPluginConnectionDialog::getConnections
         // Get the channel from the channel ComboBox
         QComboBox* ccb = m_channelCB[index];
         c.channel = ccb->currentIndex();
+        if (c.channel == 2) c.channel = -1; // both channels
 
         ++index;
 
