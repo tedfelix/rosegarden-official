@@ -3879,6 +3879,19 @@ RosegardenMainWindow::slotAddTrack()
         pos = track->getPosition() + 1;
 
     m_view->addTrack(foundInstrumentID, pos);
+
+    // Move the selected Track to the new Track so that repeated pressings
+    // of Ctrl+T yields a series of new Tracks in correct Instrument order.
+    TrackId newTrackID = comp.getTrackByPosition(pos)->getId();
+    comp.setSelectedTrack(newTrackID);
+    comp.notifyTrackSelectionChanged(newTrackID);
+    // Note that we don't call m_view->slotSelectTrackSegments(newTrackId)
+    // because there are no segments on this new track, so there is no point.
+    // Track selection and Segment selection might get out of sync.  Not
+    // sure if that is a problem.
+    //m_view->slotSelectTrackSegments(newTrackId);
+    RosegardenDocument::currentDocument->emitDocumentModified();
+
 }
 
 void
