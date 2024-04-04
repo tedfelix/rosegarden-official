@@ -80,15 +80,20 @@ public:
     virtual bool isInput() const = 0;
     virtual bool isOutput() const = 0;
 
-    // Accessing instrument lists - Devices should only
-    // show the world what they want it to see
-    //
-    // Two functions - one to return all Instruments on a
-    // Device - one to return all Instruments that a user
-    // is allowed to select (Presentation Instruments).
-    //
+    /// All Instruments on a Device.
     virtual InstrumentList getAllInstruments() const = 0;
+    /// All Instruments that a user is allowed to select.
+    /**
+     * For SoftSynthDevice and AudioDevice, this is the same as
+     * getAllInstruments().
+     *
+     * For MidiDevice, this is different.  It omits the "special" Instruments.
+     * Any Instrument with an ID less than MidiInstrumentBase is dropped from
+     * this list.  See MidiDevice::generatePresentationList().
+     */
     virtual InstrumentList getPresentationInstruments() const = 0;
+    /// Returns an InstrumentId that is not currently on a Track.
+    InstrumentId getAvailableInstrument() const;
 
     /// Send channel setups to each instrument in the device.
     /**

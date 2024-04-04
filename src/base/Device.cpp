@@ -14,18 +14,24 @@
 */
 
 #include "Device.h"
+
 #include "base/Controllable.h"
 #include "base/MidiDevice.h"
 #include "base/SoftSynthDevice.h"
 #include "misc/Debug.h"
+#include "document/RosegardenDocument.h"
+#include "base/Composition.h"
+
 
 namespace Rosegarden
 {
+
 
 const DeviceId Device::NO_DEVICE = 10000;
 const DeviceId Device::ALL_DEVICES = 10001;
 // "external controller" port.
 const DeviceId Device::EXTERNAL_CONTROLLER = 10002;
+
 
 Device::~Device()
 {
@@ -67,6 +73,40 @@ Device::sendChannelSetups()
          ++it) {
         (*it)->sendChannelSetup();
     }
+}
+
+InstrumentId
+Device::getAvailableInstrument() const
+{
+    InstrumentList instruments = getPresentationInstruments();
+    if (instruments.empty())
+        return NoInstrument;
+
+    const Composition &comp =
+            RosegardenDocument::currentDocument->getComposition();
+
+    // Assume not found.
+    InstrumentId firstInstrumentID{NoInstrument};
+
+    // For each instrument on the device
+    for (const Instrument *instrument : instruments) {
+        if (!instrument)
+            continue;
+
+        const InstrumentId instrumentID = instrument->getId();
+
+        // If we've not found the first one yet, save it in case we don't
+        // find anything available.
+        if (firstInstrumentID == NoInstrument)
+            firstInstrumentID = instrumentID;
+
+        // If this instrumentID is not in use, return it.
+        if (!comp.hasTrack(instrumentID))
+            return instrumentID;
+    }
+
+    // Return the first instrumentID for this device.
+    return firstInstrumentID;
 }
 
 

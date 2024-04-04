@@ -3804,33 +3804,35 @@ void
 RosegardenMainWindow::slotAddTrack()
 {
     if (!m_view)
-        return ;
+        return;
 
     // default to the base number - might not actually exist though
-    //
-    InstrumentId id = MidiInstrumentBase;
+    InstrumentId foundInstrumentID = MidiInstrumentBase;
 
     // Get the first Internal/MIDI instrument
-    //
-    DeviceList *devices = RosegardenDocument::currentDocument->getStudio().getDevices();
-    bool have = false;
 
-    for (DeviceList::iterator it = devices->begin();
-            it != devices->end() && !have; ++it) {
+    DeviceList *devices =
+            RosegardenDocument::currentDocument->getStudio().getDevices();
+    if (!devices)
+        return;
 
-        if ((*it)->getType() != Device::Midi)
+    // For each Device...
+    for (const Device *device : *devices) {
+        if (!device)
             continue;
 
-        InstrumentList instruments = (*it)->getAllInstruments();
-        for (InstrumentList::iterator iit = instruments.begin();
-                iit != instruments.end(); ++iit) {
+        // MIDI Devices only.
+        if (device->getType() != Device::Midi)
+            continue;
+        // Output only.
+        if (!device->isOutput())
+            continue;
 
-            if ((*iit)->getId() >= MidiInstrumentBase) {
-                id = (*iit)->getId();
-                have = true;
-                break;
-            }
-        }
+        // Find an Instrument we can use.
+        foundInstrumentID = device->getAvailableInstrument();
+
+        if (foundInstrumentID != NoInstrument)
+            break;
     }
 
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
@@ -3838,9 +3840,23 @@ RosegardenMainWindow::slotAddTrack()
     Track *track = comp.getTrackById(trackId);
 
     int pos = -1;
-    if (track) pos = track->getPosition() + 1;
+    if (track)
+        pos = track->getPosition() + 1;
 
-    m_view->addTrack(id, pos);
+    m_view->addTrack(foundInstrumentID, pos);
+
+    // Move the selected Track to the new Track so that repeated pressings
+    // of Ctrl+T yields a series of new Tracks in correct Instrument order.
+    TrackId newTrackID = comp.getTrackByPosition(pos)->getId();
+    comp.setSelectedTrack(newTrackID);
+    comp.notifyTrackSelectionChanged(newTrackID);
+    // Note that we don't call m_view->slotSelectTrackSegments(newTrackId)
+    // because there are no segments on this new track, so there is no point.
+    // Track selection and Segment selection might get out of sync.  Not
+    // sure if that is a problem.
+    //m_view->slotSelectTrackSegments(newTrackId);
+    RosegardenDocument::currentDocument->emitDocumentModified();
+
 }
 
 void
