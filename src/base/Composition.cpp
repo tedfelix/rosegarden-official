@@ -2419,16 +2419,13 @@ Composition::hasTrack(InstrumentId instrumentId) const
     // We don't return the TrackId since an Instrument can be on more than
     // one Track.  That would require a std::vector<TrackId>.
 
-    // For each Track
-    for (trackcontainer::const_iterator trackIter =
-                 m_tracks.begin();
-         trackIter != m_tracks.end();
-         ++trackIter) {
 
-        // If this Track is using the Instrument
-        if (trackIter->second->getInstrument() == instrumentId)
+    // For each track...
+    for (const Composition::trackcontainer::value_type &pair : m_tracks) {
+        const Track *track = pair.second;
+        // if this track is using the instrumentId, return true
+        if (track->getInstrument() == instrumentId)
             return true;
-
     }
 
     return false;

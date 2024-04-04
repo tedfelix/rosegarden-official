@@ -3800,29 +3800,15 @@ RosegardenMainWindow::slotSplitSelected()
     m_view->selectTool(SegmentSplitter::ToolName());
 }
 
-// ??? Composition member?
-static bool isInstrumentInUse(InstrumentId instrumentID)
-{
-    Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    const Composition::trackcontainer &tracks = comp.getTracks();
-
-    // For each track...
-    for (const Composition::trackcontainer::value_type &pair : tracks) {
-        const Track *track = pair.second;
-        // if this track is using the instrumentID, return true
-        if (track->getInstrument() == instrumentID)
-            return true;
-    }
-
-    return false;
-}
-
 // ??? Device member?
 static InstrumentId getAvailableInstrument(const Device *device)
 {
     InstrumentList instruments = device->getPresentationInstruments();
     if (instruments.empty())
         return NoInstrument;
+
+    const Composition &comp =
+            RosegardenDocument::currentDocument->getComposition();
 
     // Assume not found.
     InstrumentId firstInstrumentID{NoInstrument};
@@ -3840,7 +3826,7 @@ static InstrumentId getAvailableInstrument(const Device *device)
             firstInstrumentID = instrumentID;
 
         // If this instrumentID is not in use, return it.
-        if (!isInstrumentInUse(instrumentID))
+        if (!comp.hasTrack(instrumentID))
             return instrumentID;
     }
 
