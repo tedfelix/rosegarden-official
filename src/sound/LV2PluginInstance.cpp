@@ -1338,18 +1338,48 @@ LV2PluginInstance::run(const RealTime &rt)
     // pass any required audio output to the virtual audio sources
     // For each audio out port...
     int outbuf = 0;
+    int portIndex0 = 0;
     for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
         if (m_audioPortsOut[i] == -1) continue;
         int portIndex = m_audioPortsOut[i];
+        if (i == 0) portIndex0 = portIndex;
         auto iter = m_audioSources.find(portIndex);
         if (iter != m_audioSources.end()) {
-            double ms = 0.0;
-            for (unsigned int si=0; si<m_blockSize; si++)
-                ms += m_outputBuffers[outbuf][si] * m_outputBuffers[outbuf][si];
-            RG_DEBUG << "send data to audio source for port" << portIndex <<
-                outbuf << ms;
+            //double ms = 0.0;
+            //for (unsigned int si=0; si<m_blockSize; si++)
+            //  ms += m_outputBuffers[outbuf][si] * m_outputBuffers[outbuf][si];
+            //RG_DEBUG << "send data to audio source for port" << portIndex <<
+            //    outbuf << ms;
             PluginAudioSource* pas = (*iter).second;
-            pas->setAudioData(m_outputBuffers[outbuf]);
+            if (pas) pas->setAudioData(m_outputBuffers[outbuf]);
+            if (i == 1) {
+                // The right channel is sent to another instrument so
+                // it should not be played here. Check the connection
+                // to decide what to do with the left channel
+                for (const PluginPort::Connection &c : m_connections) {
+                    if (c.portIndex != portIndex0) continue;
+                    if (c.channel == 0) {
+                        // only play the left channel - mute right
+                        bzero(m_outputBuffers[1],
+                              m_blockSize * sizeof(sample_t));
+                    }
+                    if (c.channel == 1) {
+                        // play the left channel on the right !
+                        memcpy(m_outputBuffers[1],
+                               m_outputBuffers[0],
+                               m_blockSize * sizeof(sample_t));
+                        // mute left
+                        bzero(m_outputBuffers[0],
+                              m_blockSize * sizeof(sample_t));
+                    }
+                    if (c.channel == -1) {
+                        // play the left channel on both
+                        memcpy(m_outputBuffers[1],
+                               m_outputBuffers[0],
+                               m_blockSize * sizeof(sample_t));
+                    }
+                }
+            }
         }
         ++outbuf;
     }
