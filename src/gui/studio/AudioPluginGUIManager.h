@@ -66,20 +66,26 @@ public:
     bool hasParameters(InstrumentId instrument, int position) const;
     void getParameters(InstrumentId instrument,
                        int position,
-                       AudioPluginInstance::PluginParameters& params);
+                       AudioPluginInstance::PluginParameters& params) const;
     void updatePluginParameter
         (InstrumentId instrument,
          int position,
          const QString& paramId,
-         const AudioPluginInstance::PluginParameter& param);
+         const AudioPluginInstance::PluginParameter& param) const;
 
     bool canUsePresets(InstrumentId instrument, int position) const;
     void getPresets(InstrumentId instrument,
                           int position,
-                          AudioPluginInstance::PluginPresetList& presets);
-    void setPreset(InstrumentId instrument, int position, const QString& uri);
-    void loadPreset(InstrumentId instrument, int position, const QString& file);
-    void savePreset(InstrumentId instrument, int position, const QString& file);
+                          AudioPluginInstance::PluginPresetList& presets) const;
+    void setPreset(InstrumentId instrument,
+                   int position,
+                   const QString& uri) const;
+    void loadPreset(InstrumentId instrument,
+                    int position,
+                    const QString& file) const;
+    void savePreset(InstrumentId instrument,
+                    int position,
+                    const QString& file) const;
 
     bool canEditConnections(InstrumentId instrument, int position) const;
     void getConnections

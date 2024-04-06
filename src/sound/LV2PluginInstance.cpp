@@ -198,7 +198,9 @@ LV2PluginInstance::init(int idealChannelCount)
                     RG_DEBUG << "Atom in port" << i << portData.name;
                     AtomPort ap;
                     ap.index = i;
-                    ap.isMidi = (portData.portType == LV2PluginDatabase::LV2MIDI);
+                    ap.isMidi =
+                        (portData.portType == LV2PluginDatabase::LV2MIDI);
+                    ap.isPatch = portData.isPatch;
                     // create the atom port
                     // use double to get 64 bit alignment
                     double* dbuf = new double[ABUFSIZED];
@@ -213,7 +215,9 @@ LV2PluginInstance::init(int idealChannelCount)
                     RG_DEBUG << "Atom out port" << i << portData.name;
                     AtomPort ap;
                     ap.index = i;
-                    ap.isMidi = (portData.portType == LV2PluginDatabase::LV2MIDI);
+                    ap.isMidi =
+                        (portData.portType == LV2PluginDatabase::LV2MIDI);
+                    ap.isPatch = portData.isPatch;
                     // create the atom port
                     // use double to get 64 bit alignment
                     double* dbuf = new double[ABUFSIZED];
@@ -407,7 +411,7 @@ void LV2PluginInstance::runWork(uint32_t size,
 }
 
 void LV2PluginInstance::getControlInValues
-(std::map<int, float>& controlValues)
+(std::map<int, float>& controlValues) const
 {
     controlValues.clear();
     for (const auto& pair : m_controlPortsIn) {
@@ -418,7 +422,7 @@ void LV2PluginInstance::getControlInValues
 }
 
 void LV2PluginInstance::getControlOutValues
-(std::map<int, float>& controlValues)
+(std::map<int, float>& controlValues) const
 {
     controlValues.clear();
     for (const auto& pair : m_controlPortsOut) {
@@ -489,7 +493,7 @@ bool LV2PluginInstance::hasParameters() const
 }
 
 void LV2PluginInstance::getParameters
-(AudioPluginInstance::PluginParameters& params)
+(AudioPluginInstance::PluginParameters& params) const
 {
     params.clear();
     for (const auto& pair : m_params) {

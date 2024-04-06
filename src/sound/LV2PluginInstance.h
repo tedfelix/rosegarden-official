@@ -113,9 +113,9 @@ public:
                  LV2_Worker_Respond_Function resp);
 
     /// Get m_controlPortsIn.
-    void getControlInValues(LV2Utils::PortValues &controlValues);
+    void getControlInValues(LV2Utils::PortValues &controlValues) const;
     /// Get m_controlPortsOut.
-    void getControlOutValues(LV2Utils::PortValues &controlValues);
+    void getControlOutValues(LV2Utils::PortValues &controlValues) const;
 
     const LV2_Descriptor* getLV2Descriptor() const;
 
@@ -129,7 +129,7 @@ public:
     void setConnections(const PluginPort::ConnectionList& clist);
 
     bool hasParameters() const;
-    void getParameters(AudioPluginInstance::PluginParameters& params);
+    void getParameters(AudioPluginInstance::PluginParameters& params) const;
     void updatePluginParameter
         (const QString& paramId,
          const AudioPluginInstance::PluginParameter& param);
