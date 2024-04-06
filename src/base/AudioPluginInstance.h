@@ -63,7 +63,7 @@ public:
         int channel{0}; // 0 - left, 1 - right. -1 - both
     };
 
-    typedef std::list<Connection> ConnectionList;
+    typedef std::vector<Connection> ConnectionList;
 
     PluginPort(int number,
                const std::string& name,

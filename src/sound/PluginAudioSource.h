@@ -34,6 +34,7 @@ class RunnablePluginInstance;
     PluginAudioSource(RunnablePluginInstance* plugin,
                       InstrumentId instrument,
                       int portIndex,
+                      int channel,
                       size_t blockSize);
     ~PluginAudioSource();
 
@@ -83,6 +84,7 @@ class RunnablePluginInstance;
     RunnablePluginInstance* m_plugin;
     InstrumentId m_instrument;
     int m_portIndex;
+    int m_channel;
     size_t m_blockSize;
     std::queue<sample_t*> m_dataQueue;
     RealTime m_duration;

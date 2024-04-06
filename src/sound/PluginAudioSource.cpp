@@ -29,10 +29,12 @@ namespace Rosegarden
     PluginAudioSource::PluginAudioSource(RunnablePluginInstance* plugin,
                                          InstrumentId instrument,
                                          int portIndex,
+                                         int channel,
                                          size_t blockSize) :
         m_plugin(plugin),
         m_instrument(instrument),
         m_portIndex(portIndex),
+        m_channel(channel),
         m_blockSize(blockSize)
 {
     RG_DEBUG << "PluginAudioSource ctor";
@@ -103,12 +105,14 @@ size_t PluginAudioSource::addSamples
     if (m_dataQueue.empty()) return 0;
     sample_t* block = m_dataQueue.front();
     for (unsigned int ch = 0; ch < channels; ++ch) {
-        double ms = 0;
-        for (unsigned int it=0; it < m_blockSize; it++) {
-            ms += block[it] * block[it];
-            target[ch][it] += block[it];
+        if ((int)ch == m_channel || m_channel == -1) {
+            double ms = 0;
+            for (unsigned int it=0; it < m_blockSize; it++) {
+                ms += block[it] * block[it];
+                target[ch][it] += block[it];
+            }
+            RG_DEBUG << "ms: " << ms;
         }
-        RG_DEBUG << "ms: " << ms;
     }
     m_dataQueue.pop();
     delete[] block;

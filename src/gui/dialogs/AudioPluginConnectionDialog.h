@@ -37,7 +37,7 @@ class AudioPluginConnectionDialog : public QDialog
 {
     Q_OBJECT
 
-public:
+ public:
     AudioPluginConnectionDialog
         (QWidget *parent,
          const PluginPort::ConnectionList& connections);
@@ -45,13 +45,20 @@ public:
     void getConnections
         (PluginPort::ConnectionList& connections) const;
 
+ public slots:
+    void slotInstrumentChanged(int index);
+
  private:
+    void setupChannelCB(int connectionIndex,
+                        int instrumentIndex);
+
     InstrumentList m_iListAudio;
     InstrumentList m_iListAudioSynth;
     std::vector<QString> m_pluginPorts;
     std::vector<QComboBox*> m_instrumentCB;
     std::vector<QComboBox*> m_channelCB;
     PluginPort::ConnectionList m_connections;
+    std::vector<bool> m_fixedInstrument;
 };
 
 

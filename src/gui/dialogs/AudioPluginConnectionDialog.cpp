@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginConnectionDialog]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginConnectionDialog.h"
 
@@ -63,6 +63,13 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
         position++;
     }
 
+    // the first connection is fixed to the plugin instrument
+    InstrumentId pluginInstrumentId = m_connections[0].instrumentId;
+    Instrument* pluginInstrument = studio.getInstrumentById(pluginInstrumentId);
+    QString pluginInstrumentName;
+    if (pluginInstrument) pluginInstrumentName =
+                              pluginInstrument->getLocalizedPresentationName();
+
     QGridLayout *mainLayout = new QGridLayout(this);
     setLayout(mainLayout);
     QLabel* pLabel = new QLabel(tr("Plugin port"), this);
@@ -77,56 +84,62 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
     bool firstOutput = true;
     // For each connection...
     for (const PluginPort::Connection &connection : connections) {
+        RG_DEBUG << "process connection" << connection.isOutput <<
+            connection.isAudio << connection.portIndex <<
+            connection.pluginPort << connection.instrumentId <<
+            connection.channel;
         m_pluginPorts.push_back(connection.pluginPort);
 
         QLabel* pl = new QLabel(connection.pluginPort, this);
         mainLayout->addWidget(pl, row, 0);
 
-        // Instrument ComboBox
+        // Instrument and channel ComboBox
         QComboBox* icb = new QComboBox(this);
-        icb->addItem("<none>");
+        QComboBox* ccb = new QComboBox(this);
+        m_instrumentCB.push_back(icb);
+        m_channelCB.push_back(ccb);
+        icb->setObjectName(QString::number(row));
         int selInstIndex = 0;
-        int count = 1;
-        // For each Instrument, add the Instrument to the instrument ComboBox.
-        if (connection.isOutput) {
-            for (const Instrument *inst : m_iListAudio) {
-                InstrumentId iid = inst->getId();
-                if (connection.instrumentId == iid) selInstIndex = count;
-                QString iname = inst->getLocalizedPresentationName();
-                icb->addItem(iname);
-                ++count;
-            }
+        m_fixedInstrument.push_back(false);
+        if (firstInput && ! connection.isOutput) {
+            firstInput = false;
+            icb->addItem(pluginInstrumentName);
+            m_fixedInstrument[row - 1] = true;
+            icb->setEnabled(false);
+        } else if (firstOutput && connection.isOutput) {
+            firstOutput = false;
+            icb->addItem(pluginInstrumentName);
+            m_fixedInstrument[row - 1] = true;
+            icb->setEnabled(false);
         } else {
-            for (const Instrument *inst : m_iListAudioSynth) {
-                InstrumentId iid = inst->getId();
-                if (connection.instrumentId == iid) selInstIndex = count;
-                QString iname = inst->getLocalizedPresentationName();
-                icb->addItem(iname);
-                ++count;
-
+            icb->addItem("<none>");
+            int count = 1;
+            // For each Instrument, add the Instrument to the
+            // instrument ComboBox.
+            if (connection.isOutput) {
+                for (const Instrument *inst : m_iListAudio) {
+                    InstrumentId iid = inst->getId();
+                    if (connection.instrumentId == iid) selInstIndex = count;
+                    QString iname = inst->getLocalizedPresentationName();
+                    icb->addItem(iname);
+                    ++count;
+                }
+            } else {
+                for (const Instrument *inst : m_iListAudioSynth) {
+                    InstrumentId iid = inst->getId();
+                    if (connection.instrumentId == iid) selInstIndex = count;
+                    QString iname = inst->getLocalizedPresentationName();
+                    icb->addItem(iname);
+                    ++count;
+                }
             }
         }
         icb->setCurrentIndex(selInstIndex);
-        m_instrumentCB.push_back(icb);
+        setupChannelCB(row - 1, selInstIndex);
+        connect(icb, static_cast<void(QComboBox::*)(int)>
+                (&QComboBox::currentIndexChanged),
+                this, &AudioPluginConnectionDialog::slotInstrumentChanged);
         mainLayout->addWidget(icb, row, 1);
-
-        // Channel ComboBox
-        QComboBox* ccb = new QComboBox(this);
-        ccb->addItem(tr("Left"));
-        ccb->addItem(tr("Right"));
-        ccb->addItem(tr("Both"));
-        ccb->setCurrentIndex(connection.channel);
-        if (firstInput && ! connection.isOutput) {
-            firstInput = false;
-            icb->setEnabled(false);
-            ccb->setEnabled(false);
-        }
-        if (firstOutput && connection.isOutput) {
-            firstOutput = false;
-            icb->setEnabled(false);
-            ccb->setEnabled(false);
-        }
-        m_channelCB.push_back(ccb);
         mainLayout->addWidget(ccb, row, 2);
 
         ++row;
@@ -151,19 +164,21 @@ void AudioPluginConnectionDialog::getConnections
 
     // For each connection...
     for (PluginPort::Connection &c : connections) {
-        c.instrumentId = 0;
+        if (! m_fixedInstrument[index]) {
+            c.instrumentId = 0;
 
-        // Get the Instrument from the Instrument ComboBox
-        QComboBox* icb = m_instrumentCB[index];
-        int isel = icb->currentIndex();
-        if (isel != 0) {
-            Instrument* inst;
-            if (c.isOutput) {
-                inst = m_iListAudio[isel - 1];
-            } else {
-                inst = m_iListAudioSynth[isel - 1];
+            // Get the Instrument from the Instrument ComboBox
+            QComboBox* icb = m_instrumentCB[index];
+            int isel = icb->currentIndex();
+            if (isel != 0) {
+                Instrument* inst;
+                if (c.isOutput) {
+                    inst = m_iListAudio[isel - 1];
+                } else {
+                    inst = m_iListAudioSynth[isel - 1];
+                }
+                c.instrumentId = inst->getId();
             }
-            c.instrumentId = inst->getId();
         }
 
         // Get the channel from the channel ComboBox
@@ -176,5 +191,51 @@ void AudioPluginConnectionDialog::getConnections
     }
 }
 
+void AudioPluginConnectionDialog::slotInstrumentChanged(int index)
+{
+    QString oName = sender()->objectName();
+    int connectionIndex = oName.toInt() - 1;
+    RG_DEBUG << "slotInstrumentChanged" << connectionIndex << index;
+    setupChannelCB(connectionIndex, index);
+}
+
+void AudioPluginConnectionDialog::setupChannelCB(int connectionIndex,
+                                                 int instrumentIndex)
+{
+    RG_DEBUG << "setupChannelCB" << connectionIndex << instrumentIndex;
+    // setup the channel QComboBox
+    QComboBox* channelComboBox = m_channelCB[connectionIndex];
+    channelComboBox->clear();
+    PluginPort::Connection connection = m_connections[connectionIndex];
+    Instrument* inst = nullptr;
+    if (instrumentIndex > 0) {
+        if (connection.isOutput) {
+            inst = m_iListAudio[instrumentIndex - 1];
+        } else {
+            inst = m_iListAudioSynth[instrumentIndex - 1];
+        }
+    }
+    if (! inst && ! m_fixedInstrument[connectionIndex]) {
+        channelComboBox->setEnabled(false);
+        return;
+    }
+    unsigned int nch = 2; // synth
+    if (inst) nch = inst->getNumAudioChannels();
+    if (nch == 1) { // mono
+        channelComboBox->addItem(tr("Mono"));
+        channelComboBox->setEnabled(false);
+        return;
+    }
+    // stereo channel
+    channelComboBox->addItem(tr("Left"));
+    channelComboBox->addItem(tr("Right"));
+    channelComboBox->addItem(tr("Both"));
+    channelComboBox->setEnabled(true);
+    if (connection.channel == -1) { // both
+        channelComboBox->setCurrentIndex(2);
+    } else {
+        channelComboBox->setCurrentIndex(connection.channel);
+    }
+}
 
 }

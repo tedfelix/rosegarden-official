@@ -1134,6 +1134,7 @@ void LV2PluginInstance::getPluginPlayableAudio
             PluginAudioSource *pas = new PluginAudioSource(this,
                                                            c.instrumentId,
                                                            c.portIndex,
+                                                           c.channel,
                                                            m_blockSize);
             playable.push_back(pas);
             m_audioSources[c.portIndex] = pas;
