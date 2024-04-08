@@ -1387,6 +1387,30 @@ LV2PluginInstance::run(const RealTime &rt)
                     }
                 }
             }
+        } else {
+            // there is no audio source - that may be because no
+            // instrument is set - then we do nothing here or the
+            // instrument is set to the base instrument of the plugin
+            // - then we must add in the data
+            for (const PluginPort::Connection &c :
+                     m_connections.connections) {
+                // find the connection for this port index
+                if (c.portIndex != portIndex) continue;
+                if (c.instrumentId != m_instrument) continue;
+                // so the plugin output goes to this instrument
+                if (c.channel == 0 || c.channel == -1) {
+                    for (size_t is = 0; is < m_blockSize; ++is) {
+                        m_outputBuffers[0][is] += m_outputBuffers[outbuf][is];
+                    }
+                }
+                if (m_channelCount == 2 &&
+                    (c.channel == 1 || c.channel == -1)) {
+                    for (size_t is = 0; is < m_blockSize; ++is) {
+                        m_outputBuffers[1][is] += m_outputBuffers[outbuf][is];
+                    }
+                }
+
+            }
         }
         ++outbuf;
     }
