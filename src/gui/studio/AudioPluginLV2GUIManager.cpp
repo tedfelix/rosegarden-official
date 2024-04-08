@@ -180,7 +180,7 @@ bool AudioPluginLV2GUIManager::canEditConnections(InstrumentId instrument,
     getConnections(instrument, position, clist);
     int numInput = 0;
     int numOutput = 0;
-    for (const PluginPort::Connection &connection : clist) {
+    for (const PluginPort::Connection &connection : clist.connections) {
         if (connection.isAudio) {
             if (connection.isOutput) ++numOutput;
             else ++numInput;

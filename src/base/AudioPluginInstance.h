@@ -63,7 +63,12 @@ public:
         int channel{0}; // 0 - left, 1 - right. -1 - both
     };
 
-    typedef std::vector<Connection> ConnectionList;
+    struct ConnectionList
+    {
+        InstrumentId baseInstrument;
+        int numChannels;
+        std::vector<Connection> connections;
+    };
 
     PluginPort(int number,
                const std::string& name,

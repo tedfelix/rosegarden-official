@@ -267,7 +267,9 @@ LV2PluginInstance::init(int idealChannelCount)
         }
 
     // set up the default connections
-    m_connections.clear();
+    m_connections.baseInstrument = m_instrument;
+    m_connections.numChannels = m_channelCount;
+    m_connections.connections.clear();
     for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
         if (m_audioPortsIn[i] == -1) continue; // for distributeChannels
         PluginPort::Connection c;
@@ -286,7 +288,7 @@ LV2PluginInstance::init(int idealChannelCount)
             c.instrumentId = m_instrument;
             c.channel = 1;
         }
-        m_connections.push_back(c);
+        m_connections.connections.push_back(c);
     }
     for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
         if (m_audioPortsOut[i] == -1) continue; // for distributeChannels
@@ -306,9 +308,9 @@ LV2PluginInstance::init(int idealChannelCount)
             c.instrumentId = m_instrument;
             c.channel = 1;
         }
-        m_connections.push_back(c);
+        m_connections.connections.push_back(c);
     }
-    RG_DEBUG << "connections:" << m_connections.size();
+    RG_DEBUG << "connections:" << m_connections.connections.size();
 }
 
 size_t
@@ -478,7 +480,7 @@ void LV2PluginInstance::setConnections
 {
 #ifndef NDEBUG
     RG_DEBUG << "setConnections";
-    for(const auto& c : clist) {
+    for(const auto& c : clist.connections) {
         RG_DEBUG << c.isOutput << c.isAudio << c.pluginPort <<
             c.instrumentId << c.channel;
     }
@@ -1008,7 +1010,7 @@ QString LV2PluginInstance::configure(const QString& key, const QString& value)
         RG_DEBUG << "set connections" << value;
         QJsonDocument doc = QJsonDocument::fromJson(value.toUtf8());
         QJsonArray arr = doc.array();
-        m_connections.clear();
+        m_connections.connections.clear();
         for (const QJsonValue &jct : arr) {
             QJsonArray arr1 = jct.toArray();
             QJsonValue val1 = arr1[0];
@@ -1024,7 +1026,7 @@ QString LV2PluginInstance::configure(const QString& key, const QString& value)
             c.pluginPort = val4.toString();
             c.instrumentId = val5.toInt();
             c.channel = val6.toInt();
-            m_connections.push_back(c);
+            m_connections.connections.push_back(c);
         }
     }
 
@@ -1071,7 +1073,7 @@ void LV2PluginInstance::savePluginState()
 
     // also save the connections to a json string
     QJsonArray conns;
-    for (const PluginPort::Connection &c : m_connections) {
+    for (const PluginPort::Connection &c : m_connections.connections) {
         int ii = c.instrumentId;
         QJsonValue val1(c.isOutput);
         QJsonValue val2(c.isAudio);
@@ -1128,7 +1130,7 @@ void LV2PluginInstance::getPluginPlayableAudio
 (std::vector<PlayableData*>& playable)
 {
     RG_DEBUG << "getPluginPlayableAudio";
-    for (const PluginPort::Connection &c : m_connections) {
+    for (const PluginPort::Connection &c : m_connections.connections) {
         RG_DEBUG << "getPluginPlayableAudio" << c.isOutput << c.isAudio <<
             c.portIndex << c.pluginPort << c.instrumentId <<
             c.channel;
@@ -1197,7 +1199,7 @@ LV2PluginInstance::run(const RealTime &rt)
 
     // Get connected buffers.
     int bufIndex = 0;
-    for (const PluginPort::Connection &c : m_connections) {
+    for (const PluginPort::Connection &c : m_connections.connections) {
         if (c.instrumentId != 0 &&
             c.instrumentId != m_instrument &&
             c.isOutput == false) {
@@ -1360,7 +1362,8 @@ LV2PluginInstance::run(const RealTime &rt)
                 // The right channel is sent to another instrument so
                 // it should not be played here. Check the connection
                 // to decide what to do with the left channel
-                for (const PluginPort::Connection &c : m_connections) {
+                for (const PluginPort::Connection &c :
+                         m_connections.connections) {
                     if (c.portIndex != portIndex0) continue;
                     if (c.channel == 0) {
                         // only play the left channel - mute right

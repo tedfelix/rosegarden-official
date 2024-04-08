@@ -242,7 +242,7 @@ void AudioPluginGUIManager::getConnections
  int position,
  PluginPort::ConnectionList& clist) const
 {
-    clist.clear();
+    clist.connections.clear();
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // only lv2
     if (arch != LV2) return;

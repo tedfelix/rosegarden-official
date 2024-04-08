@@ -285,7 +285,7 @@ void LV2Utils::getConnections(InstrumentId instrument,
                               int position,
                               PluginPort::ConnectionList& clist)
 {
-    clist.clear();
+    clist.connections.clear();
 
     AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
     if (!aim)

@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginConnectionDialog]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginConnectionDialog.h"
 
@@ -59,16 +59,24 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
         }
         unsigned int nch = instr->getNumAudioChannels();
         RG_DEBUG << "track" << position << "instrument" << instr->getId() <<
-            nch;
+            nch << itype;
         position++;
     }
 
     // the first connection is fixed to the plugin instrument
-    InstrumentId pluginInstrumentId = m_connections[0].instrumentId;
-    Instrument* pluginInstrument = studio.getInstrumentById(pluginInstrumentId);
+    InstrumentId pluginInstrumentId = m_connections.baseInstrument;
     QString pluginInstrumentName;
-    if (pluginInstrument) pluginInstrumentName =
-                              pluginInstrument->getLocalizedPresentationName();
+    if (pluginInstrumentId >= AudioInstrumentBase) {
+        Instrument* pluginInstrument =
+            studio.getInstrumentById(pluginInstrumentId);
+        pluginInstrumentName =
+            pluginInstrument->getLocalizedPresentationName();
+    } else {
+        // ist not an instrument its a buss
+        Buss* pluginBuss = studio.getBussById(pluginInstrumentId);
+        pluginInstrumentName =
+            strtoqstr(pluginBuss->getPresentationName());
+    }
 
     QGridLayout *mainLayout = new QGridLayout(this);
     setLayout(mainLayout);
@@ -83,7 +91,7 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
     bool firstInput = true;
     bool firstOutput = true;
     // For each connection...
-    for (const PluginPort::Connection &connection : connections) {
+    for (const PluginPort::Connection &connection : connections.connections) {
         RG_DEBUG << "process connection" << connection.isOutput <<
             connection.isAudio << connection.portIndex <<
             connection.pluginPort << connection.instrumentId <<
@@ -112,8 +120,10 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
             m_fixedInstrument[row - 1] = true;
             icb->setEnabled(false);
         } else {
-            icb->addItem("<none>");
-            int count = 1;
+            icb->addItem(tr("<none>"));
+            icb->addItem(pluginInstrumentName);
+            if (connection.instrumentId == pluginInstrumentId) selInstIndex = 1;
+            int count = 2;
             // For each Instrument, add the Instrument to the
             // instrument ComboBox.
             if (connection.isOutput) {
@@ -163,14 +173,17 @@ void AudioPluginConnectionDialog::getConnections
     int index = 0;
 
     // For each connection...
-    for (PluginPort::Connection &c : connections) {
+    for (PluginPort::Connection &c : connections.connections) {
         if (! m_fixedInstrument[index]) {
             c.instrumentId = 0;
 
             // Get the Instrument from the Instrument ComboBox
             QComboBox* icb = m_instrumentCB[index];
             int isel = icb->currentIndex();
-            if (isel != 0) {
+            if (isel == 1) {
+                c.instrumentId = connections.baseInstrument;
+            }
+            if (isel > 1) {
                 Instrument* inst;
                 if (c.isOutput) {
                     inst = m_iListAudio[isel - 1];
@@ -189,6 +202,14 @@ void AudioPluginConnectionDialog::getConnections
         ++index;
 
     }
+    RG_DEBUG << "returning connection" << connections.baseInstrument <<
+        connections.numChannels;
+    for (const PluginPort::Connection &connection : connections.connections) {
+        RG_DEBUG << "returning connection" << connection.isOutput <<
+            connection.isAudio << connection.portIndex <<
+            connection.pluginPort << connection.instrumentId <<
+            connection.channel;
+    }
 }
 
 void AudioPluginConnectionDialog::slotInstrumentChanged(int index)
@@ -206,7 +227,8 @@ void AudioPluginConnectionDialog::setupChannelCB(int connectionIndex,
     // setup the channel QComboBox
     QComboBox* channelComboBox = m_channelCB[connectionIndex];
     channelComboBox->clear();
-    PluginPort::Connection connection = m_connections[connectionIndex];
+    PluginPort::Connection connection =
+        m_connections.connections[connectionIndex];
     Instrument* inst = nullptr;
     if (instrumentIndex > 0) {
         if (connection.isOutput) {
