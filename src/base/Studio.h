@@ -152,6 +152,14 @@ public:
     DeviceList *getDevices()  { return &m_devices; }
     const DeviceList *getDevices() const  { return &m_devices; }
 
+    /// Get an available Instrument on the first MIDI Device.
+    /**
+     * If none are available, go with the first MIDI Instrument on the first
+     * Device.  If there are no MIDI Devices, go with the first SoftSynth
+     * Instrument.
+     */
+    InstrumentId getAvailableMIDIInstrument() const;
+
     // Const iterators
     //
     DeviceListConstIterator begin() const { return m_devices.begin(); }
