@@ -3806,12 +3806,12 @@ RosegardenMainWindow::slotAddTrack()
     if (!m_view)
         return;
 
-    // default to the base number - might not actually exist though
-    InstrumentId foundInstrumentID = MidiInstrumentBase;
+    // Default to first softsynth.  This always exists.
+    InstrumentId foundInstrumentID = SoftSynthInstrumentBase; //MidiInstrumentBase;
 
-    // Get the first Internal/MIDI instrument
+    // Get the first Internal/MIDI instrument.
 
-    DeviceList *devices =
+    const DeviceList *devices =
             RosegardenDocument::currentDocument->getStudio().getDevices();
     if (!devices)
         return;
@@ -3849,12 +3849,14 @@ RosegardenMainWindow::slotAddTrack()
     // of Ctrl+T yields a series of new Tracks in correct Instrument order.
     TrackId newTrackID = comp.getTrackByPosition(pos)->getId();
     comp.setSelectedTrack(newTrackID);
+    // Make sure everything updates appropriately.
     comp.notifyTrackSelectionChanged(newTrackID);
     // Note that we don't call m_view->slotSelectTrackSegments(newTrackId)
     // because there are no segments on this new track, so there is no point.
     // Track selection and Segment selection might get out of sync.  Not
     // sure if that is a problem.
     //m_view->slotSelectTrackSegments(newTrackId);
+    // Make sure the Instrument Parameter Panel is updated.
     RosegardenDocument::currentDocument->emitDocumentModified();
 
 }
