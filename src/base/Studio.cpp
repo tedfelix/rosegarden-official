@@ -870,7 +870,7 @@ Studio::haveMidiDevices() const
 }
 
 InstrumentId
-Studio::getAvailableMIDIInstrument() const
+Studio::getAvailableMIDIInstrument(const Composition *composition) const
 {
     // For each Device...
     for (const Device *device : m_devices) {
@@ -886,7 +886,7 @@ Studio::getAvailableMIDIInstrument() const
 
         // Find an Instrument we can use.
         const InstrumentId foundInstrumentID =
-                device->getAvailableInstrument();
+                device->getAvailableInstrument(composition);
 
         if (foundInstrumentID != NoInstrument)
             return foundInstrumentID;

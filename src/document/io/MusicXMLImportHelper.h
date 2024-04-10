@@ -33,6 +33,7 @@ namespace Rosegarden
 {
 
 
+class Studio;
 class Composition;
 class Track;
 class Segment;
@@ -51,8 +52,9 @@ public:
     typedef std::map<QString, int> PercussionMap;
     typedef std::map<QString, QString> VoiceMap;
 
-    explicit MusicXMLImportHelper(Composition *composition);
+    MusicXMLImportHelper(Studio *studio, Composition *composition);
     ~MusicXMLImportHelper();
+
     bool setStaff(const QString &staff="1");
     bool setVoice(const QString &voice="");
     bool setLabel(const QString &label);
@@ -101,6 +103,7 @@ private:
     //    };
     //};
 
+    Studio *m_studio;
     Composition         *m_composition;
     VoiceMap            m_mainVoice;
     QString             m_staff;
@@ -108,8 +111,8 @@ private:
     TrackMap            m_tracks;
     SegmentMap          m_segments;
 
-    timeT               m_curTime;
-    int                 m_divisions;
+    timeT               m_curTime{0};
+    int                 m_divisions{960};
     typedef std::vector<IndicationStart> IndicationVector;
     IndicationVector    m_indications;
     PercussionMap       m_unpitched;

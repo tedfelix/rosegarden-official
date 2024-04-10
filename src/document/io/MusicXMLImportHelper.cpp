@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MusicXMLImportHelper]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MusicXMLImportHelper.h"
 
@@ -27,6 +28,7 @@
 #include "base/NotationTypes.h"  // for Clef
 #include "base/StaffExportTypes.h"  // for Brackets
 #include "base/Segment.h"
+#include "base/Studio.h"
 #include "base/Track.h"
 
 #include <QString>
@@ -36,16 +38,13 @@ namespace Rosegarden
 {
 
 
-MusicXMLImportHelper::MusicXMLImportHelper(Composition *composition) :
+MusicXMLImportHelper::MusicXMLImportHelper(
+        Studio *studio,
+        Composition *composition) :
+    m_studio(studio),
     m_composition(composition)
 {
-    m_tracks.clear();
-    m_segments.clear();
-    m_mainVoice.clear();
-    m_curTime = 0;
     setStaff("1");
-
-    m_divisions = 960;
 }
 
 MusicXMLImportHelper::~MusicXMLImportHelper()
@@ -70,11 +69,15 @@ MusicXMLImportHelper::setStaff(const QString &staff)
                 }
             }
         }
-        Track *track = new Track(id, MidiInstrumentBase, pos);
+
+        // Note that we have to specify the Composition in progress.  Otherwise
+        // getAvailableMIDIInstrument() will use the current document which
+        // at this point is still the previous document.
+        const InstrumentId instrumentID =
+                m_studio->getAvailableMIDIInstrument(m_composition);
+        Track *track = new Track(id, instrumentID, pos);
         m_composition->addTrack(track);
-        if (m_tracks.find("1") != m_tracks.end()) {
-            track->setInstrument(m_tracks["1"]->getInstrument());
-        }
+
         m_tracks[staff] = track;
     }
     m_staff = staff;
