@@ -3806,38 +3806,16 @@ RosegardenMainWindow::slotAddTrack()
     if (!m_view)
         return;
 
-    // default to the base number - might not actually exist though
-    InstrumentId foundInstrumentID = MidiInstrumentBase;
-
-    // Get the first Internal/MIDI instrument
-
-    DeviceList *devices =
-            RosegardenDocument::currentDocument->getStudio().getDevices();
-    if (!devices)
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    if (!document)
         return;
 
-    // For each Device...
-    for (const Device *device : *devices) {
-        if (!device)
-            continue;
+    const InstrumentId foundInstrumentID =
+            document->getStudio().getAvailableMIDIInstrument();
 
-        // MIDI Devices only.
-        if (device->getType() != Device::Midi)
-            continue;
-        // Output only.
-        if (!device->isOutput())
-            continue;
-
-        // Find an Instrument we can use.
-        foundInstrumentID = device->getAvailableInstrument();
-
-        if (foundInstrumentID != NoInstrument)
-            break;
-    }
-
-    Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    TrackId trackId = comp.getSelectedTrack();
-    Track *track = comp.getTrackById(trackId);
+    Composition &comp = document->getComposition();
+    const TrackId trackId = comp.getSelectedTrack();
+    const Track *track = comp.getTrackById(trackId);
 
     int pos = -1;
     if (track)
@@ -3849,13 +3827,15 @@ RosegardenMainWindow::slotAddTrack()
     // of Ctrl+T yields a series of new Tracks in correct Instrument order.
     TrackId newTrackID = comp.getTrackByPosition(pos)->getId();
     comp.setSelectedTrack(newTrackID);
+    // Make sure everything updates appropriately.
     comp.notifyTrackSelectionChanged(newTrackID);
     // Note that we don't call m_view->slotSelectTrackSegments(newTrackId)
     // because there are no segments on this new track, so there is no point.
     // Track selection and Segment selection might get out of sync.  Not
     // sure if that is a problem.
     //m_view->slotSelectTrackSegments(newTrackId);
-    RosegardenDocument::currentDocument->emitDocumentModified();
+    // Make sure the Instrument Parameter Panel is updated.
+    document->emitDocumentModified();
 
 }
 

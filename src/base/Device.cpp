@@ -76,14 +76,14 @@ Device::sendChannelSetups()
 }
 
 InstrumentId
-Device::getAvailableInstrument() const
+Device::getAvailableInstrument(const Composition *composition) const
 {
     InstrumentList instruments = getPresentationInstruments();
     if (instruments.empty())
         return NoInstrument;
 
-    const Composition &comp =
-            RosegardenDocument::currentDocument->getComposition();
+    if (!composition)
+        composition = &RosegardenDocument::currentDocument->getComposition();
 
     // Assume not found.
     InstrumentId firstInstrumentID{NoInstrument};
@@ -101,7 +101,7 @@ Device::getAvailableInstrument() const
             firstInstrumentID = instrumentID;
 
         // If this instrumentID is not in use, return it.
-        if (!comp.hasTrack(instrumentID))
+        if (!composition->hasTrack(instrumentID))
             return instrumentID;
     }
 

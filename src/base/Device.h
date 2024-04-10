@@ -28,12 +28,14 @@
 namespace Rosegarden
 {
 
-typedef unsigned int DeviceId;
 
+class Composition;
 class Instrument;
-typedef std::vector<Instrument *> InstrumentList;
 class Controllable;
 class AllocateChannels;
+
+typedef unsigned int DeviceId;
+typedef std::vector<Instrument *> InstrumentList;
     
 class Device : public XmlExportable
 {
@@ -93,7 +95,13 @@ public:
      */
     virtual InstrumentList getPresentationInstruments() const = 0;
     /// Returns an InstrumentId that is not currently on a Track.
-    InstrumentId getAvailableInstrument() const;
+    /**
+     * composition can be specified when working with a new Composition
+     * that isn't "current" yet (e.g. during import).  Specify nullptr to
+     * use the current Composition.
+     */
+    InstrumentId getAvailableInstrument(
+            const Composition *composition = nullptr) const;
 
     /// Send channel setups to each instrument in the device.
     /**

@@ -32,6 +32,7 @@ namespace Rosegarden
 {
 
 
+class Composition;
 class RecordIn;
 class MidiDevice;
 class Segment;
@@ -151,6 +152,19 @@ public:
     //
     DeviceList *getDevices()  { return &m_devices; }
     const DeviceList *getDevices() const  { return &m_devices; }
+
+    /// Get an available Instrument on the first MIDI Device.
+    /**
+     * If none are available, go with the first MIDI Instrument on the first
+     * Device.  If there are no MIDI Devices, go with the first SoftSynth
+     * Instrument.
+     *
+     * composition can be specified when working with a new Composition
+     * that isn't "current" yet (e.g. during import).  Specify nullptr to
+     * use the current Composition.
+     */
+    InstrumentId getAvailableMIDIInstrument(
+            const Composition *composition = nullptr) const;
 
     // Const iterators
     //

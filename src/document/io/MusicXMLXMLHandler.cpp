@@ -359,7 +359,7 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
         // no action required here
     } else if (m_currentElement == "score-part") {
         ret = getAttributeString(atts, "id", m_partId);
-        m_parts[m_partId] = new MusicXMLImportHelper(m_composition);
+        m_parts[m_partId] = new MusicXMLImportHelper(m_studio, m_composition);
         if (m_brace > 0) {
             m_parts[m_partId]->setBracketType(Brackets::CurlyOn);
             m_brace = -m_brace;

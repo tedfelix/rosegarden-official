@@ -869,5 +869,31 @@ Studio::haveMidiDevices() const
     return false;
 }
 
+InstrumentId
+Studio::getAvailableMIDIInstrument(const Composition *composition) const
+{
+    // For each Device...
+    for (const Device *device : m_devices) {
+        if (!device)
+            continue;
+
+        // MIDI Devices only.
+        if (device->getType() != Device::Midi)
+            continue;
+        // Output only.
+        if (!device->isOutput())
+            continue;
+
+        // Find an Instrument we can use.
+        const InstrumentId foundInstrumentID =
+                device->getAvailableInstrument(composition);
+
+        if (foundInstrumentID != NoInstrument)
+            return foundInstrumentID;
+    }
+
+    return SoftSynthInstrumentBase;
+}
+
 
 }
