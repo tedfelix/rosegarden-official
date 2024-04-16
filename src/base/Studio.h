@@ -165,6 +165,8 @@ public:
      */
     InstrumentId getAvailableMIDIInstrument(
             const Composition *composition = nullptr) const;
+    InstrumentId getFirstMIDIInstrument() const;
+
 
     // Const iterators
     //
@@ -218,6 +220,8 @@ public:
 private:
 
     DeviceList        m_devices;
+    /// Returns nullptr if there are no MIDI out devices.
+    Device *getFirstMIDIOutDevice() const;
 
     BussList          m_busses;
     RecordInList      m_recordIns;

@@ -19,7 +19,7 @@
  */
 
 #define RG_MODULE_STRING "[DeviceManagerDialog]"
-#define NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "DeviceManagerDialog.h"
 

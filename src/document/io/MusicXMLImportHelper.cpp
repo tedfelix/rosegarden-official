@@ -70,11 +70,10 @@ MusicXMLImportHelper::setStaff(const QString &staff)
             }
         }
 
-        // Note that we have to specify the Composition in progress.  Otherwise
-        // getAvailableMIDIInstrument() will use the current document which
-        // at this point is still the previous document.
-        const InstrumentId instrumentID =
-                m_studio->getAvailableMIDIInstrument(m_composition);
+        // Go with the first MIDI instrument we can find.  Otherwise we
+        // might return channel 10 (drums) on a GM device.  Leave it up to
+        // the user to reassign instruments as needed.
+        const InstrumentId instrumentID = m_studio->getFirstMIDIInstrument();
         Track *track = new Track(id, instrumentID, pos);
         m_composition->addTrack(track);
 

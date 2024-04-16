@@ -869,11 +869,11 @@ Studio::haveMidiDevices() const
     return false;
 }
 
-InstrumentId
-Studio::getAvailableMIDIInstrument(const Composition *composition) const
+Device *
+Studio::getFirstMIDIOutDevice() const
 {
     // For each Device...
-    for (const Device *device : m_devices) {
+    for (Device *device : m_devices) {
         if (!device)
             continue;
 
@@ -884,13 +884,44 @@ Studio::getAvailableMIDIInstrument(const Composition *composition) const
         if (!device->isOutput())
             continue;
 
-        // Find an Instrument we can use.
-        const InstrumentId foundInstrumentID =
-                device->getAvailableInstrument(composition);
-
-        if (foundInstrumentID != NoInstrument)
-            return foundInstrumentID;
+        return device;
     }
+
+    // Not found.
+    return nullptr;
+}
+
+InstrumentId
+Studio::getFirstMIDIInstrument() const
+{
+    const Device *device = getFirstMIDIOutDevice();
+    if (!device)
+        return SoftSynthInstrumentBase;
+
+    InstrumentList instruments = device->getPresentationInstruments();
+
+    if (!instruments.empty()) {
+        Instrument *instrument = instruments[0];
+        if (instrument)
+            return instrument->getId();
+    }
+
+    return SoftSynthInstrumentBase;
+}
+
+InstrumentId
+Studio::getAvailableMIDIInstrument(const Composition *composition) const
+{
+    const Device *device = getFirstMIDIOutDevice();
+    if (!device)
+        return SoftSynthInstrumentBase;
+
+    // Find an Instrument we can use.
+    const InstrumentId foundInstrumentID =
+            device->getAvailableInstrument(composition);
+
+    if (foundInstrumentID != NoInstrument)
+        return foundInstrumentID;
 
     return SoftSynthInstrumentBase;
 }

@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MusicXMLXMLHandler]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MusicXMLImportHelper.h"
 #include "MusicXMLXMLHandler.h"
