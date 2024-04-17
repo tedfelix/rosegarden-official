@@ -4570,7 +4570,7 @@ RosegardenMainWindow::slotMergeMusicXML()
 
 RosegardenDocument *
 RosegardenMainWindow::createDocumentFromMusicXMLFile(const QString& file,
-                                                     bool permanent)
+                                                     const bool permanent)
 {
     StartupLogo::hideIfStillThere();
 
@@ -4596,9 +4596,9 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(const QString& file,
     //
     RosegardenDocument *newDoc = newDocument(permanent);
 
-    MusicXMLLoader musicxmlLoader(&newDoc->getStudio());
+    MusicXMLLoader musicxmlLoader;
 
-    if (!musicxmlLoader.load(file, newDoc->getComposition(), newDoc->getStudio())) {
+    if (!musicxmlLoader.load(file, newDoc)) {
         QMessageBox::critical(this, tr("Rosegarden"),
                            tr("Can't load MusicXML file:\n")+
                               musicxmlLoader.errorMessage());

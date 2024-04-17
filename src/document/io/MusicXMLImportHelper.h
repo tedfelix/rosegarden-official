@@ -33,8 +33,7 @@ namespace Rosegarden
 {
 
 
-class Studio;
-class Composition;
+class RosegardenDocument;
 class Track;
 class Segment;
 class Event;
@@ -52,7 +51,7 @@ public:
     typedef std::map<QString, int> PercussionMap;
     typedef std::map<QString, QString> VoiceMap;
 
-    MusicXMLImportHelper(Studio *studio, Composition *composition);
+    MusicXMLImportHelper(RosegardenDocument *doc);
     ~MusicXMLImportHelper();
 
     bool setStaff(const QString &staff="1");
@@ -103,8 +102,8 @@ private:
     //    };
     //};
 
-    Studio *m_studio;
-    Composition         *m_composition;
+    RosegardenDocument *m_document;
+
     VoiceMap            m_mainVoice;
     QString             m_staff;
     QString             m_voice;

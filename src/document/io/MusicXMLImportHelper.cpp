@@ -30,6 +30,7 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "base/Track.h"
+#include "document/RosegardenDocument.h"
 
 #include <QString>
 
@@ -38,11 +39,8 @@ namespace Rosegarden
 {
 
 
-MusicXMLImportHelper::MusicXMLImportHelper(
-        Studio *studio,
-        Composition *composition) :
-    m_studio(studio),
-    m_composition(composition)
+MusicXMLImportHelper::MusicXMLImportHelper(RosegardenDocument *doc) :
+    m_document(doc)
 {
     setStaff("1");
 }
@@ -56,13 +54,16 @@ bool
 MusicXMLImportHelper::setStaff(const QString &staff)
 {
     RG_DEBUG << "setStaff(" << staff << ")";
+
+    Composition &composition = m_document->getComposition();
+
     if (m_tracks.find(staff) == m_tracks.end()) {
         // No such track, create a new one.
-        TrackId id = m_composition->getNewTrackId();
+        TrackId id = composition.getNewTrackId();
         int pos = id;
         if (!m_tracks.empty()) {
             pos = m_tracks["1"]->getPosition() + m_tracks.size();
-            Composition::trackcontainer tracks = m_composition->getTracks();
+            Composition::trackcontainer tracks = composition.getTracks();
             for (Composition::trackiterator t = tracks.begin(); t != tracks.end(); t++) {
                 if (((*t).second)->getPosition() >= pos) {
                     ((*t).second)->setPosition(((*t).second)->getPosition()+1);
@@ -70,12 +71,20 @@ MusicXMLImportHelper::setStaff(const QString &staff)
             }
         }
 
+        // ??? I think this is the right approach.  In all cases, this will
+        //     just find the first MIDI instrument in the autoload.  The
+        //     problem occurs during merge.  If there are no MIDI devices
+        //     in the target (current) document, the merge process doesn't
+        //     fall back on the first soft synth.  We end up with garbage
+        //     which is easy for the user to fix.
+        const Studio *studio = &m_document->getStudio();
+
         // Go with the first MIDI instrument we can find.  Otherwise we
         // might return channel 10 (drums) on a GM device.  Leave it up to
         // the user to reassign instruments as needed.
-        const InstrumentId instrumentID = m_studio->getFirstMIDIInstrument();
+        const InstrumentId instrumentID = studio->getFirstMIDIInstrument();
         Track *track = new Track(id, instrumentID, pos);
-        m_composition->addTrack(track);
+        composition.addTrack(track);
 
         m_tracks[staff] = track;
     }
@@ -127,7 +136,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
         if (createSegment) {
             Segment *segment = new Segment(Segment::Internal, m_curTime);
             segment->setLabel(m_label.toStdString());
-            m_composition->addSegment(segment);
+            m_document->getComposition().addSegment(segment);
             segment->setTrack(m_tracks[m_staff]->getId());
             m_segments[m_staff+"/"+tmpVoice] = segment;
         }
@@ -169,7 +178,7 @@ MusicXMLImportHelper::insertKey(const Key &key, int number)
 bool
 MusicXMLImportHelper::insertTimeSignature(const TimeSignature &ts)
 {
-    m_composition->addTimeSignature(m_curTime, ts);
+    m_document->getComposition().addTimeSignature(m_curTime, ts);
     return true;
 }
 

@@ -24,8 +24,6 @@
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "base/Composition.h"
-#include "base/Studio.h"
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
@@ -33,20 +31,21 @@
 #include "base/StaffExportTypes.h"
 #include "base/Segment.h"
 #include "base/Track.h"
+#include "base/TimeSignature.h"
 
 #include <QString>
 #include <QtGlobal>
 
-namespace Rosegarden
 
+namespace Rosegarden
 {
+
 
 using namespace BaseProperties;
 
 
-MusicXMLXMLHandler::MusicXMLXMLHandler(Composition *composition, Studio *studio):
-        m_composition(composition),
-        m_studio(studio),
+MusicXMLXMLHandler::MusicXMLXMLHandler(RosegardenDocument *doc) :
+        m_document(doc),
         m_errormessage(""),
         m_number(0),
         m_isGrace(false),
@@ -360,7 +359,7 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
         // no action required here
     } else if (m_currentElement == "score-part") {
         ret = getAttributeString(atts, "id", m_partId);
-        m_parts[m_partId] = new MusicXMLImportHelper(m_studio, m_composition);
+        m_parts[m_partId] = new MusicXMLImportHelper(m_document);
         if (m_brace > 0) {
             m_parts[m_partId]->setBracketType(Brackets::CurlyOn);
             m_brace = -m_brace;

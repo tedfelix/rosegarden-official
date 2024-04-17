@@ -21,7 +21,6 @@
 #include "MusicXMLImportHelper.h"
 #include "MusicXMLLoader.h"
 #include "base/MidiProgram.h"
-#include "base/Studio.h"
 #include "base/Event.h"
 #include "base/Track.h"
 #include "base/NotationTypes.h"
@@ -39,8 +38,9 @@
 namespace Rosegarden
 {
 
+
+class RosegardenDocument;
 class Segment;
-class Composition;
 
 
 class MusicXMLXMLHandler : public XMLHandler
@@ -76,7 +76,7 @@ public:
         Stop
     } TypeStatus;
 
-    MusicXMLXMLHandler(Composition *composition, Studio *studio);
+    MusicXMLXMLHandler(RosegardenDocument *doc);
     ~MusicXMLXMLHandler() override;
 
     /**
@@ -155,8 +155,7 @@ protected:
     typedef std::map<QString, int> IntegerMap;
     typedef std::map<QString, QueuedEvent> EventMap2;
 
-    Composition     *m_composition;
-    Studio          *m_studio;
+    RosegardenDocument *m_document;
 
     QString         m_errormessage;
 
