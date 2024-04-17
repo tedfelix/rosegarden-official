@@ -7893,6 +7893,7 @@ RosegardenMainWindow::slotBankEditorClosed()
     }
 
     m_bankEditor = nullptr;
+    slotManageMIDIDevices(); // this will raise the device manager
 }
 
 void
