@@ -651,11 +651,11 @@ JackDriver::createRecordInputs(int pairs)
         m_inputPorts.push_back(port);
     }
 
-    while ((int)m_outputSubmasters.size() > pairs * 2) {
-        std::vector<jack_port_t *>::iterator itr = m_outputSubmasters.end();
+    while ((int)m_inputPorts.size() > pairs * 2) {
+        std::vector<jack_port_t *>::iterator itr = m_inputPorts.end();
         --itr;
         jack_port_unregister(m_client, *itr);
-        m_outputSubmasters.erase(itr);
+        m_inputPorts.erase(itr);
     }
 
     return true;
