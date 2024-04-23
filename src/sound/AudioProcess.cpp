@@ -17,7 +17,6 @@
 
 #include "AudioInstrumentMixer.h"
 #include "RunnablePluginInstance.h"
-#include "PlayableData.h"
 #include "PlayableAudioFile.h"
 #include "RecordableAudioFile.h"
 #include "WAVAudioFile.h"
@@ -43,10 +42,6 @@
 //#define DEBUG_LOCKS 1
 //#define DEBUG_READER 1
 //#define DEBUG_WRITER 1
-
-
-// ??? Promote out?  It's defined in at least two places.
-typedef float sample_t;
 
 
 namespace Rosegarden

@@ -46,8 +46,6 @@ class RingBufferPool;
  class PlayableAudioFile : public PlayableData
 {
 public:
-    typedef float sample_t;
-
     PlayableAudioFile(InstrumentId instrumentId,
                       AudioFile *audioFile,
                       const RealTime &startTime,

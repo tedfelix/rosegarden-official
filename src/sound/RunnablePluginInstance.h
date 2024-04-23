@@ -28,6 +28,8 @@ namespace Rosegarden
 class PluginFactory;
 class PlayableData;
 
+typedef float sample_t;
+
 /**
  * RunnablePluginInstance is a very trivial interface that an audio
  * process can use to refer to an instance of a plugin without needing
@@ -43,8 +45,6 @@ class PlayableData;
 class RunnablePluginInstance
 {
 public:
-    typedef float sample_t;
-
     virtual ~RunnablePluginInstance();
 
     virtual bool isOK() const = 0;

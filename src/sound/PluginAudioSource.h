@@ -29,8 +29,6 @@ class RunnablePluginInstance;
  class PluginAudioSource : public PlayableData
 {
  public:
-    typedef float sample_t;
-
     PluginAudioSource(RunnablePluginInstance* plugin,
                       InstrumentId instrument,
                       int portIndex,

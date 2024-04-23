@@ -19,16 +19,24 @@
 #include "base/RealTime.h"
 #include "base/Instrument.h"
 
+
 namespace Rosegarden
 {
 
+
 class AudioFile;
 
+// ??? Promote out?  It's defined in four places.  JackDriver uses it the most.
+//     Feels like we need a new SampleT.h header like base/TimeT.h.
+typedef float sample_t;
+
+/// ABC to allow audio files and plugin connections to be treated the same.
+/**
+ * See PlayableAudioFile and PluginAudioSource.
+ */
 class PlayableData
 {
- public:
-    typedef float sample_t;
-
+public:
     virtual ~PlayableData() { }
 
     virtual size_t getSampleFramesAvailable() = 0;

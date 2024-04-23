@@ -41,8 +41,6 @@
 //#define DEBUG_MIXER 1
 //#define DEBUG_MIXER_LIGHTWEIGHT 1
 
-typedef float sample_t;
-
 
 namespace Rosegarden
 {
