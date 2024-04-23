@@ -203,6 +203,8 @@ void AudioPluginConnectionDialog::getConnections
         ++index;
 
     }
+
+#ifndef NDEBUG
     RG_DEBUG << "returning connection" << connections.baseInstrument <<
         connections.numChannels;
     for (const PluginPort::Connection &connection : connections.connections) {
@@ -211,6 +213,7 @@ void AudioPluginConnectionDialog::getConnections
             connection.pluginPort << connection.instrumentId <<
             connection.channel;
     }
+#endif
 }
 
 void AudioPluginConnectionDialog::slotInstrumentChanged(int index)
