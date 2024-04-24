@@ -15,9 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ModifyDeviceCommand]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ModifyDeviceCommand.h"
 
+#include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
@@ -141,9 +145,25 @@ ModifyDeviceCommand::execute()
             if (m_changeBanks || m_changePrograms) {
                 // Make sure the instruments make sense.
                 for (size_t i = 0; i < instruments.size(); ++i) {
-                    instruments[i]->pickFirstProgram(
-                            midiDevice->isPercussionNumber(i));
-                    instruments[i]->sendChannelSetup();
+                    bool programOK = false;
+                    const MidiProgram& program = instruments[i]->getProgram();
+                    if (program.getBank().isPercussion()) continue;
+                    for(const MidiProgram& lprogram : m_programList) {
+                        RG_DEBUG << "compare program" <<
+                            strtoqstr(lprogram.getName());
+                        if (program.partialCompare(lprogram)) {
+                            RG_DEBUG << "found program" <<
+                                strtoqstr(lprogram.getName());
+                            programOK = true;
+                            break;
+                        }
+                    }
+                    if (! programOK) {
+                        RG_DEBUG << "resetting instrument" << i;
+                        instruments[i]->
+                            pickFirstProgram(midiDevice->isPercussionNumber(i));
+                        instruments[i]->sendChannelSetup();
+                    }
                 }
             }
         }
