@@ -1194,6 +1194,15 @@ LV2PluginInstance::run(const RealTime &rt)
 #ifdef LV2RUN_PROFILE
     Profiler profiler(m_profilerName.c_str(), true);
 #endif
+
+    if (!m_instance)
+        return;
+    // ??? @lman
+    // ??? Seeing some crashes in the lilv_instance_run() call below.
+    //     This usually catches it, but not always.
+    if (!m_instance->lv2_descriptor)
+        return;
+
     //RG_DEBUG << "run" << rt << m_eventsDiscarded;
     m_pluginHasRun = true;
 
@@ -1270,6 +1279,17 @@ LV2PluginInstance::run(const RealTime &rt)
         aseq->atom.size = 8 * ABUFSIZED - 8;
     }
 
+    // ??? @lman
+    //     I'm seeing sigsegv's here.  m_instance->lv2_descriptor appears to
+    //     be the culprit.  Usually the address is zero, but sometimes it is
+    //     very low like 0x20.  I'm using the sidechain on the ACE compressor
+    //     and this seems to happen 100% on first load of an .rg file.  Or
+    //     when loading after File > New.  Reloading over top of itself seems
+    //     to fix the problem.  This appears to only happen with connections.
+    //     My normal test case with several effects and synths works fine.
+    //
+    //     See the "if" above for m_instance->lv2_descriptor.  Remove it
+    //     to see the crashes.
     lilv_instance_run(m_instance, m_blockSize);
 
     /*
