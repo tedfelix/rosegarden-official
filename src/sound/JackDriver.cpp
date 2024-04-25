@@ -1088,7 +1088,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
         for (int ch = 0; ch < 2; ++ch) {
 
-            RingBuffer<AudioBussMixer::sample_t> *rb =
+            RingBuffer<sample_t> *rb =
                 m_bussMixer->getRingBuffer(buss, ch);
 
             if (!rb || m_bussMixer->isBussDormant(buss)) {
@@ -1181,7 +1181,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
             }
 #endif
 
-            RingBuffer<AudioInstrumentMixer::sample_t, 2> *rb =
+            RingBuffer<sample_t, 2> *rb =
                 m_instrumentMixer->getRingBuffer(id, ch);
 
             if (!rb || m_instrumentMixer->isInstrumentDormant(id)) {
@@ -2468,6 +2468,12 @@ void JackDriver::savePluginState()
 {
     if (m_instrumentMixer)
         m_instrumentMixer->savePluginState();
+}
+
+void JackDriver::getPluginPlayableAudio(std::vector<PlayableData*>& playable)
+{
+    if (m_instrumentMixer)
+        m_instrumentMixer->getPluginPlayableAudio(playable);
 }
 
 RunnablePluginInstance *

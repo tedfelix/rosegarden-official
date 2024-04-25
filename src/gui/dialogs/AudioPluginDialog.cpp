@@ -300,7 +300,7 @@ void AudioPluginDialog::slotEditConnections()
 
 #ifndef NDEBUG
     RG_DEBUG << "slotEditConnections";
-    for (const auto &c : clist) {
+    for (const auto &c : clist.connections) {
         RG_DEBUG << c.isOutput << c.isAudio << c.pluginPort <<
             c.instrumentId << c.channel;
     }
@@ -313,7 +313,7 @@ void AudioPluginDialog::slotEditConnections()
 
 #ifndef NDEBUG
         RG_DEBUG << "slotEditConnections new list";
-        for (const auto &c : newList) {
+        for (const auto &c : newList.connections) {
             RG_DEBUG << c.isOutput << c.isAudio <<
                 c.pluginPort << c.instrumentId << c.channel;
         }

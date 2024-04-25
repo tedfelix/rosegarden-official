@@ -88,7 +88,7 @@ class LV2PluginParameter
     void setFloat(float value);
     void setDouble(double value);
     void setBool(bool value);
-    void setString(const QString& value);
+    void setString(const QString& stringValue);
     void setPath(const QString& value);
 
     /// get and set from string

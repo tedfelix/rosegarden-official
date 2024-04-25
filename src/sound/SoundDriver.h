@@ -38,6 +38,7 @@
 namespace Rosegarden
 {
 
+class PlayableData;
 
 // Current recording status - whether we're monitoring anything
 // or recording.
@@ -294,6 +295,8 @@ public:
                                     QString /*value*/)  { return QString(); }
 
     virtual void savePluginState() { }
+
+    virtual void getPluginPlayableAudio(std::vector<PlayableData*>& ) { }
 
     // Plugin management -- SoundDrivers should maintain a plugin
     // scavenger which the audio process code can use for defunct

@@ -283,9 +283,9 @@ void LV2Utils::getControlOutValues(InstrumentId instrument,
 
 void LV2Utils::getConnections(InstrumentId instrument,
                               int position,
-                              PluginPort::ConnectionList& clist) const
+                              PluginPort::ConnectionList& clist)
 {
-    clist.clear();
+    clist.connections.clear();
 
     AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
     if (!aim)
@@ -305,7 +305,7 @@ void LV2Utils::getConnections(InstrumentId instrument,
 void LV2Utils::setConnections
 (InstrumentId instrument,
  int position,
- const PluginPort::ConnectionList& clist) const
+ const PluginPort::ConnectionList& clist)
 {
     AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
     if (!aim)
@@ -323,7 +323,7 @@ void LV2Utils::setConnections
 }
 
 void LV2Utils::setupPluginParameters
-(const QString& uri, LV2PluginParameter::Parameters& params)
+(const QString& uri, LV2PluginParameter::Parameters& params) const
 {
     RG_DEBUG << "setupPluginParameters";
     params.clear();
@@ -344,7 +344,7 @@ void LV2Utils::setupPluginParameters
 }
 
 bool LV2Utils::hasParameters(InstrumentId instrument,
-                             int position) const
+                             int position)
 {
     AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
     if (!aim)
@@ -403,7 +403,7 @@ void LV2Utils::updatePluginParameter
 
 void LV2Utils::setupPluginPresets
 (const QString& uri,
- AudioPluginInstance::PluginPresetList& presets)
+ AudioPluginInstance::PluginPresetList& presets) const
 {
     RG_DEBUG << "setupPluginPresets" << uri;
     presets.clear();
@@ -439,7 +439,7 @@ void LV2Utils::setupPluginPresets
 
 void LV2Utils::getPresets(InstrumentId instrument,
                           int position,
-                          AudioPluginInstance::PluginPresetList& presets) const
+                          AudioPluginInstance::PluginPresetList& presets)
 {
     AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
     if (!aim)

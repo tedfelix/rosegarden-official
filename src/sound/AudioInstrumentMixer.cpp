@@ -41,8 +41,6 @@
 //#define DEBUG_MIXER 1
 //#define DEBUG_MIXER_LIGHTWEIGHT 1
 
-typedef float sample_t;
-
 
 namespace Rosegarden
 {
@@ -177,7 +175,7 @@ AudioInstrumentMixer::BufferRec::~BufferRec()
 
 void
 AudioInstrumentMixer::setPlugin(
-        const InstrumentId instrumentID,
+        const InstrumentId instrumentId,
         const int pluginPosition,
         const QString &identifier)
 {
@@ -186,8 +184,8 @@ AudioInstrumentMixer::setPlugin(
     //std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position << ", " << identifier << ")" << std::endl;
 
     int channels = 2;
-    if (m_bufferMap.find(instrumentID) != m_bufferMap.end()) {
-        channels = m_bufferMap[instrumentID].channels;
+    if (m_bufferMap.find(instrumentId) != m_bufferMap.end()) {
+        channels = m_bufferMap[instrumentId].channels;
     }
 
     RunnablePluginInstance *instance = nullptr;
@@ -195,14 +193,14 @@ AudioInstrumentMixer::setPlugin(
     PluginFactory *factory = PluginFactory::instanceFor(identifier);
     if (factory) {
         instance = factory->instantiatePlugin(identifier,
-                                              instrumentID,
+                                              instrumentId,
                                               pluginPosition,
                                               m_sampleRate,
                                               m_blockSize,
                                               channels,
                                               this);
         if (instance && !instance->isOK()) {
-            std::cerr << "AudioInstrumentMixer::setPlugin(" << instrumentID << ", " << pluginPosition
+            std::cerr << "AudioInstrumentMixer::setPlugin(" << instrumentId << ", " << pluginPosition
                       << ": instance is not OK" << std::endl;
             delete instance;
             instance = nullptr;
@@ -216,13 +214,13 @@ AudioInstrumentMixer::setPlugin(
 
     if (pluginPosition == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 
-        oldInstance = m_synths[instrumentID];
-        m_synths[instrumentID] = instance;
+        oldInstance = m_synths[instrumentId];
+        m_synths[instrumentId] = instance;
         if (! oldInstance) m_numSoftSynths++;
 
     } else {
 
-        PluginList &pluginVector = m_plugins[instrumentID];
+        PluginList &pluginVector = m_plugins[instrumentId];
 
         if (pluginPosition < int(Instrument::PLUGIN_COUNT)) {
             if (pluginPosition >= (int)pluginVector.size()) {
@@ -231,7 +229,7 @@ AudioInstrumentMixer::setPlugin(
                 // code added the necessary entries.  Problem with that
                 // is that it modifies a vector that is supposed to be
                 // fixed size so it is thread safe.
-                std::cerr << "AudioInstrumentMixer::setPlugin(): pluginPosition" << pluginPosition << "beyond plugin vector size" << pluginVector.size() << "for instrument ID" << instrumentID << '\n';
+                std::cerr << "AudioInstrumentMixer::setPlugin(): pluginPosition" << pluginPosition << "beyond plugin vector size" << pluginVector.size() << "for instrument ID" << instrumentId << '\n';
 
                 delete instance;
             } else {
@@ -240,7 +238,7 @@ AudioInstrumentMixer::setPlugin(
                 pluginVector[pluginPosition] = instance;
             }
         } else {
-            std::cerr << "AudioInstrumentMixer::setPlugin(): No pluginPosition " << pluginPosition << " for instrument " << instrumentID << '\n';
+            std::cerr << "AudioInstrumentMixer::setPlugin(): No pluginPosition " << pluginPosition << " for instrument " << instrumentId << '\n';
 
             delete instance;
         }
@@ -465,6 +463,32 @@ void AudioInstrumentMixer::savePluginState()
         }
     }
 }
+
+void AudioInstrumentMixer::getPluginPlayableAudio
+(std::vector<PlayableData*>& playable)
+{
+    playable.clear();
+    for (SynthPluginMap::iterator j = m_synths.begin();
+         j != m_synths.end(); ++j) {
+
+        RunnablePluginInstance *instance = j->second;
+        if (instance) instance->getPluginPlayableAudio(playable);
+    }
+
+    for (PluginMap::iterator j = m_plugins.begin();
+         j != m_plugins.end(); ++j) {
+
+        InstrumentId id = j->first;
+
+        for (PluginList::iterator i = m_plugins[id].begin();
+             i != m_plugins[id].end(); ++i) {
+
+            RunnablePluginInstance *instance = *i;
+            if (instance) instance->getPluginPlayableAudio(playable);
+        }
+    }
+}
+
 
 void
 AudioInstrumentMixer::discardPluginEvents()
@@ -984,7 +1008,7 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
     bool more = true;
 
     static const int MAX_FILES_PER_INSTRUMENT = 500;
-    static PlayableAudioFile *playing[MAX_FILES_PER_INSTRUMENT];
+    static PlayableData *playing[MAX_FILES_PER_INSTRUMENT];
 
     RealTime blockDuration = RealTime::frame2RealTime(m_blockSize, m_sampleRate);
 
@@ -1022,7 +1046,7 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 
 bool
 AudioInstrumentMixer::processBlock(InstrumentId id,
-                                   PlayableAudioFile **playing,
+                                   PlayableData **playing,
                                    size_t playCount,
                                    bool &readSomething)
 {
@@ -1100,7 +1124,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
     for (size_t fileNo = 0; fileNo < playCount; ++fileNo) {
 
-        PlayableAudioFile *file = playing[fileNo];
+        PlayableData *file = playing[fileNo];
 
         size_t frames = file->getSampleFramesAvailable();
         bool acceptable = ((frames >= m_blockSize) || file->isFullyBuffered());
@@ -1189,7 +1213,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
         for (size_t fileNo = 0; fileNo < playCount; ++fileNo) {
 
-            PlayableAudioFile *file = playing[fileNo];
+            PlayableData *file = playing[fileNo];
 
             int offset = 0;
             int blockSize = (int)m_blockSize;

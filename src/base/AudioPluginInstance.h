@@ -12,6 +12,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef RG_AUDIOPLUGININSTANCE_H
+#define RG_AUDIOPLUGININSTANCE_H
+
 #include <vector>
 #include <string>
 #include <map>
@@ -19,15 +22,10 @@
 #include "XmlExportable.h"
 #include "base/Instrument.h"
 
-// An Instrument on needs to implement these to render an instance
-// of the plugin at the sequencer.
-//
-
-#ifndef RG_AUDIOPLUGININSTANCE_H
-#define RG_AUDIOPLUGININSTANCE_H
 
 namespace Rosegarden
 {
+
 
 // *******************************************************************
 
@@ -55,14 +53,22 @@ public:
 
     struct Connection
     {
-        bool isOutput{false};
-        bool isAudio{false};
+        // Name for the UI.
+        // ??? rename: portName?
         QString pluginPort;
         InstrumentId instrumentId{NoInstrument};
-        int channel{0};
+        int portIndex{0};
+        int channel{0}; // 0 - left, 1 - right. -1 - both
+        bool isOutput{false};
+        bool isAudio{false};
     };
 
-    typedef std::list<Connection> ConnectionList;
+    struct ConnectionList
+    {
+        InstrumentId baseInstrument{NoInstrument};
+        int numChannels{0};
+        std::vector<Connection> connections;
+    };
 
     PluginPort(int number,
                const std::string& name,

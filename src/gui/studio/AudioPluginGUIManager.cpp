@@ -140,7 +140,7 @@ void AudioPluginGUIManager::stopAllGUIs()
 void AudioPluginGUIManager::getParameters
 (InstrumentId instrument,
  int position,
- AudioPluginInstance::PluginParameters& params)
+ AudioPluginInstance::PluginParameters& params) const
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // only lv2
@@ -156,7 +156,7 @@ void AudioPluginGUIManager::updatePluginParameter
 (InstrumentId instrument,
  int position,
  const QString& paramId,
- const AudioPluginInstance::PluginParameter& param)
+ const AudioPluginInstance::PluginParameter& param) const
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // only lv2
@@ -180,7 +180,7 @@ bool AudioPluginGUIManager::canUsePresets(InstrumentId instrument,
 void AudioPluginGUIManager::getPresets
 (InstrumentId instrument,
  int position,
- AudioPluginInstance::PluginPresetList& presets)
+ AudioPluginInstance::PluginPresetList& presets) const
 {
     presets.clear();
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
@@ -192,7 +192,7 @@ void AudioPluginGUIManager::getPresets
 }
 
 void AudioPluginGUIManager::setPreset
-(InstrumentId instrument, int position, const QString& uri)
+(InstrumentId instrument, int position, const QString& uri) const
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // lv2 plugins can handle presets
@@ -203,7 +203,7 @@ void AudioPluginGUIManager::setPreset
 }
 
 void AudioPluginGUIManager::loadPreset
-(InstrumentId instrument, int position, const QString& file)
+(InstrumentId instrument, int position, const QString& file) const
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // lv2 plugins can handle presets
@@ -214,7 +214,7 @@ void AudioPluginGUIManager::loadPreset
 }
 
 void AudioPluginGUIManager::savePreset
-(InstrumentId instrument, int position, const QString& file)
+(InstrumentId instrument, int position, const QString& file) const
 {
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // lv2 plugins can handle presets
@@ -242,7 +242,7 @@ void AudioPluginGUIManager::getConnections
  int position,
  PluginPort::ConnectionList& clist) const
 {
-    clist.clear();
+    clist.connections.clear();
     PluginGUIArchitecture arch = getArchitecture(instrument, position);
     // only lv2
     if (arch != LV2) return;

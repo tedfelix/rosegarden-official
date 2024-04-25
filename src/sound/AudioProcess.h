@@ -21,19 +21,18 @@
 #include "RingBuffer.h"
 #include "RecordableAudioFile.h"
 
+
 namespace Rosegarden
 {
 
 
 class RealTime;
-class RecordableAudioFile;
 
+typedef float sample_t;
 
 class AudioThread
 {
 public:
-    typedef float sample_t;
-
     AudioThread(const std::string& name, // for diagnostics
                 SoundDriver *driver,
                 unsigned int sampleRate);
@@ -169,7 +168,6 @@ protected:
     typedef std::map<int, BufferRec> BufferMap;
     BufferMap m_bufferMap;
 };
-
 
 class AudioFileReader : public AudioThread
 {

@@ -53,8 +53,8 @@ public:
     const LilvPlugin *getPluginByUri(const QString& uri) const;
 
     // lilv_port_get_index() wrapper
-    int getPortIndexFromSymbol(const QString& portSymbol,
-                               const LilvPlugin* plugin);
+    static int getPortIndexFromSymbol(const QString& portSymbol,
+                                      const LilvPlugin* plugin);
 
     // lilv_state_new_from_world() wrapper
     LilvState* getStateByUri(const QString& uri);
@@ -75,18 +75,20 @@ public:
                                        const LV2_Feature*const* features);
 
     // lilv_state_new_from_string() wrapper
-    void setInstanceStateFromString(const QString& stateString,
-                                    LilvInstance* instance,
-                                    LilvSetPortValueFunc setPortValueFunc,
-                                    LV2PluginInstance* lv2Instance,
-                                    const LV2_Feature*const* features);
+    static void setInstanceStateFromString
+        (const QString& stateString,
+         LilvInstance* instance,
+         LilvSetPortValueFunc setPortValueFunc,
+         LV2PluginInstance* lv2Instance,
+         const LV2_Feature*const* features);
 
     // lilv_state_new_from_file() wrapper
     LilvState* getStateFromFile(const LilvNode* uriNode,
                                 const QString& filename);
 
     // lilv_state_save() wrapper
-    void saveStateToFile(const LilvState* state, const QString& filename);
+    static void saveStateToFile
+        (const LilvState* state, const QString& filename);
 
     /// lilv_new_uri() wrapper
     LilvNode* makeURINode(const QString& uri) const;
@@ -95,8 +97,9 @@ public:
     LilvNode* makeStringNode(const QString& string) const;
 
     /// Helper.  Gathers uri/label data into a vector.
-    void setupPluginPresets(const QString& uri,
-                            AudioPluginInstance::PluginPresetList& presets);
+    void setupPluginPresets
+        (const QString& uri,
+         AudioPluginInstance::PluginPresetList& presets) const;
 
 
     // *** LV2 Plugin Instance Database ***
@@ -134,21 +137,21 @@ public:
     /**
      * Called by the plugin UI.
      */
-    void setPortValue(InstrumentId instrument,
-                      int position,
-                      int index,
-                      unsigned int protocol,
-                      const QByteArray& data);
+    static void setPortValue(InstrumentId instrument,
+                             int position,
+                             int index,
+                             unsigned int protocol,
+                             const QByteArray& data);
 
     typedef std::map<int /*portIndex*/, float /*value*/> PortValues;
 
-    void getControlInValues(InstrumentId instrument,
-                            int position,
-                            PortValues &controlValues);
+    static void getControlInValues(InstrumentId instrument,
+                                   int position,
+                                   PortValues &controlValues);
 
-    void getControlOutValues(InstrumentId instrument,
-                             int position,
-                             PortValues &controlValues);
+    static void getControlOutValues(InstrumentId instrument,
+                                    int position,
+                                    PortValues &controlValues);
 
     /// Calls the plugin instance's runWork().
     /**
@@ -156,48 +159,48 @@ public:
      * Called by LV2Worker's worker thread which is the UI thread as of this
      * writing, so locking is not needed.
      */
-    void runWork(const PluginPosition &pp,
-                 uint32_t size,
-                 const void *data,
-                 LV2_Worker_Respond_Function resp);
+    static void runWork(const PluginPosition &pp,
+                        uint32_t size,
+                        const void *data,
+                        LV2_Worker_Respond_Function resp);
 
-    void getConnections
+    static void getConnections
         (InstrumentId instrument,
          int position,
-         PluginPort::ConnectionList& clist) const;
+         PluginPort::ConnectionList& clist);
     // used in AudioPluginLV2GUIManager
-    void setConnections
+    static void setConnections
         (InstrumentId instrument,
          int position,
-         const PluginPort::ConnectionList& clist) const;
+         const PluginPort::ConnectionList& clist);
 
     // Parameters
     void setupPluginParameters
-        (const QString& uri, LV2PluginParameter::Parameters& params);
-    bool hasParameters(InstrumentId instrument,
-                       int position) const;
-    void getParameters(InstrumentId instrument,
-                       int position,
-                       AudioPluginInstance::PluginParameters& params);
-    void updatePluginParameter
+        (const QString& uri, LV2PluginParameter::Parameters& params) const;
+    static bool hasParameters(InstrumentId instrument,
+                              int position);
+    static void getParameters(InstrumentId instrument,
+                              int position,
+                              AudioPluginInstance::PluginParameters& params);
+    static void updatePluginParameter
         (InstrumentId instrument,
          int position,
          const QString& paramId,
          const AudioPluginInstance::PluginParameter& param);
 
     // Presets
-    void getPresets(InstrumentId instrument,
-                    int position,
-                    AudioPluginInstance::PluginPresetList& presets) const;
-    void setPreset(InstrumentId instrument,
-                   int position,
-                   const QString& uri);
-    void loadPreset(InstrumentId instrument,
-                    int position,
-                    const QString& file);
-    void savePreset(InstrumentId instrument,
-                    int position,
-                    const QString& file);
+    static void getPresets(InstrumentId instrument,
+                           int position,
+                           AudioPluginInstance::PluginPresetList& presets);
+    static void setPreset(InstrumentId instrument,
+                          int position,
+                          const QString& uri);
+    static void loadPreset(InstrumentId instrument,
+                           int position,
+                           const QString& file);
+    static void savePreset(InstrumentId instrument,
+                           int position,
+                           const QString& file);
 
 
 private:
@@ -208,9 +211,10 @@ private:
     LV2Utils(LV2Utils &other) = delete;
     void operator=(const LV2Utils &) = delete;
 
-    void fillParametersFromProperties(LV2PluginParameter::Parameters& params,
-                                      const LilvNodes* properties,
-                                      bool write);
+    static void fillParametersFromProperties
+        (LV2PluginParameter::Parameters& params,
+         const LilvNodes* properties,
+         bool write);
 
 };
 

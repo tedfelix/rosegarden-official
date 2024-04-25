@@ -60,7 +60,9 @@ public:
 
     void setBussMixer(AudioBussMixer *mixer) { m_bussMixer = mixer; }
 
-    void setPlugin(InstrumentId id, int position, const QString &identifier);
+    void setPlugin(InstrumentId instrumentId,
+                   int pluginPosition,
+                   const QString &identifier);
     void removePlugin(InstrumentId id, int position);
     void removeAllPlugins();
 
@@ -79,6 +81,7 @@ public:
 
     QString configurePlugin(InstrumentId, int, QString, QString);
     void savePluginState();
+    void getPluginPlayableAudio(std::vector<PlayableData*>& playable);
 
     void resetAllPlugins(bool discardEvents = false);
     void discardPluginEvents();
@@ -174,7 +177,7 @@ protected:
 
     void processBlocks(bool &readSomething);
     void processEmptyBlocks(InstrumentId id);
-    bool processBlock(InstrumentId id, PlayableAudioFile **, size_t, bool &readSomething);
+    bool processBlock(InstrumentId id, PlayableData **, size_t, bool &readSomething);
     void generateBuffers();
 
     AudioFileReader  *m_fileReader;

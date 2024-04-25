@@ -31,7 +31,7 @@ namespace Rosegarden
 
 AudioCache PlayableAudioFile::m_smallFileCache;
 
-std::vector<PlayableAudioFile::sample_t *> PlayableAudioFile::m_workBuffers;
+std::vector<sample_t *> PlayableAudioFile::m_workBuffers;
 size_t PlayableAudioFile::m_workBufferSize = 0;
 QMutex PlayableAudioFile::m_workBuffersMutex;
 

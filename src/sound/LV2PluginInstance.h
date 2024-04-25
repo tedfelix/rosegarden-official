@@ -43,6 +43,7 @@ namespace Rosegarden
 
 
 class AudioInstrumentMixer;
+class PluginAudioSource;
 
 /// LV2 Plugin Instance
 /**
@@ -84,6 +85,8 @@ public:
 
     QString configure(const QString& key, const QString& value) override;
     void savePluginState() override;
+    void getPluginPlayableAudio(std::vector<PlayableData*>& playable) override;
+    void removeAudioSource(int portIndex) override;
 
     void sendEvent(const RealTime& eventTime,
                    const void* event) override;
@@ -110,9 +113,9 @@ public:
                  LV2_Worker_Respond_Function resp);
 
     /// Get m_controlPortsIn.
-    void getControlInValues(LV2Utils::PortValues &controlValues);
+    void getControlInValues(LV2Utils::PortValues &controlValues) const;
     /// Get m_controlPortsOut.
-    void getControlOutValues(LV2Utils::PortValues &controlValues);
+    void getControlOutValues(LV2Utils::PortValues &controlValues) const;
 
     const LV2_Descriptor* getLV2Descriptor() const;
 
@@ -126,7 +129,7 @@ public:
     void setConnections(const PluginPort::ConnectionList& clist);
 
     bool hasParameters() const;
-    void getParameters(AudioPluginInstance::PluginParameters& params);
+    void getParameters(AudioPluginInstance::PluginParameters& params) const;
     void updatePluginParameter
         (const QString& paramId,
          const AudioPluginInstance::PluginParameter& param);
@@ -292,7 +295,7 @@ private:
     bool m_eventsDiscarded;
 
     AudioPluginInstance::PluginPresetList m_presets;
-
+    std::map<int, PluginAudioSource*> m_audioSources;
 
     // *** Port Value Queue
 

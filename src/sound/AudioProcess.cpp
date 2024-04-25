@@ -44,10 +44,6 @@
 //#define DEBUG_WRITER 1
 
 
-// ??? Promote out?  It's defined in at least two places.
-typedef float sample_t;
-
-
 namespace Rosegarden
 {
 
