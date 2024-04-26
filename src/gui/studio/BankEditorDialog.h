@@ -194,6 +194,9 @@ protected:
     bool                     m_updateDeviceList;
 
     QFrame                  *m_rightSide;
+
+ private:
+    bool tracksUsingBank(const MidiBank& bank);
 };
 
 // ----------------------- RemapInstrumentDialog ------------------------

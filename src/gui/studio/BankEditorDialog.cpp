@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[BankEditorDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "BankEditorDialog.h"
 #include "MidiBankTreeWidgetItem.h"
@@ -1149,6 +1150,10 @@ BankEditorDialog::slotDelete()
 
     if (device && bankItem) {
         int currentBank = bankItem->getBank();
+        MidiBank bank = m_bankList[currentBank];
+
+        bool used = tracksUsingBank(bank);
+        if (used) return;
 
         int reply =
             QMessageBox::warning(
@@ -1159,7 +1164,6 @@ BankEditorDialog::slotDelete()
               QMessageBox::No);
 
         if (reply == QMessageBox::Yes) {
-            MidiBank bank = m_bankList[currentBank];
 
             // Copy across all programs that aren't in the doomed bank
             //
@@ -1175,6 +1179,16 @@ BankEditorDialog::slotDelete()
                     newProgramList.push_back(*it);
             }
 
+            // Don't allow pasting from this defunct device
+            // do this check before bankItem is deleted
+            //
+            if (m_copyBank.first == bankItem->getDeviceId() &&
+                    m_copyBank.second == bankItem->getBank()) {
+                m_pastePrograms->setEnabled(false);
+                m_copyBank = std::pair<DeviceId, int>
+                             (Device::NO_DEVICE, -1);
+            }
+
             // Erase the bank and repopulate
             //
             BankList::iterator er =
@@ -1188,15 +1202,6 @@ BankEditorDialog::slotDelete()
             m_treeWidget->blockSignals(true);
             delete currentIndex;
             m_treeWidget->blockSignals(false);
-
-            // Don't allow pasting from this defunct device
-            //
-            if (m_copyBank.first == bankItem->getDeviceId() &&
-                    m_copyBank.second == bankItem->getBank()) {
-                m_pastePrograms->setEnabled(false);
-                m_copyBank = std::pair<DeviceId, int>
-                             (Device::NO_DEVICE, -1);
-            }
 
             slotApply();
             selectDeviceItem(device);
@@ -1264,6 +1269,12 @@ BankEditorDialog::slotDeleteAll()
     QTreeWidgetItem* currentIndex = m_treeWidget->currentItem();
     MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(deviceItem);
+
+    // check for used banks
+    for (const MidiBank& bank : m_bankList) {
+        bool used = tracksUsingBank(bank);
+        if (used) return;
+    }
 
     QString question = tr("Really delete all banks for ") +
                        strtoqstr(device->getName()) + QString(" ?");
@@ -1853,4 +1864,56 @@ BankEditorDialog::slotHelpAbout()
 {
     new AboutDialog(this);
 }
+
+bool BankEditorDialog::tracksUsingBank(const MidiBank& bank)
+{
+    QString bankName = strtoqstr(bank.getName());
+    RG_DEBUG << "tracksUsingBank" << bankName;
+    std::vector<int> trackPositions;
+
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
+    const Composition::trackcontainer &tracks = composition.getTracks();
+
+    // For each Track in the Composition...
+    for (const Composition::trackcontainer::value_type &pair : tracks) {
+        const Track *track = pair.second;
+        if (!track)
+            continue;
+
+        const InstrumentId instrumentID = track->getInstrument();
+        const Instrument *instrument = m_studio->getInstrumentById(instrumentID);
+        if (!instrument)
+            continue;
+        if (instrument->getType() != Instrument::Midi)
+            continue;
+
+        const MidiProgram& program = instrument->getProgram();
+        const MidiBank& ibank = program.getBank();
+        if (bank.partialCompare(ibank)) {
+            // Found a Track using this bank
+            trackPositions.push_back(track->getPosition());
+        }
+    }
+
+    // If there are Tracks using this Bank, issue a message and return true
+    if (!trackPositions.empty()) {
+        QString msg =
+            QString(tr("The following tracks are using bank %1:")).
+            arg(bankName);
+        msg += '\n';
+        for (const int &trackPos : trackPositions) {
+            msg += QString::number(trackPos + 1) + " ";
+        }
+        msg += '\n';
+        msg += tr("The bank cannot be deleted.");
+        QMessageBox::warning(
+                this,
+                tr("Rosegarden"),
+                msg);
+        return true;
+    }
+    return false;
+}
+
 }
