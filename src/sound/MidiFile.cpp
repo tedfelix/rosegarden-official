@@ -729,7 +729,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // a duration.
         consolidateNoteEvents(trackId);
 
-        InstrumentId instrumentId = MidiInstrumentBase;
+        InstrumentId instrumentId = studio.getFirstMIDIInstrument();
 
         // If this track has a channel, use that channel's instrument.
         if (m_trackChannelMap.find(trackId) != m_trackChannelMap.end()) {
