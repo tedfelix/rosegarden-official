@@ -104,7 +104,7 @@ public:
      * Used by AudioInstrumentMixer.
      */
     size_t addSamples
-        (std::vector<sample_t *> &target,
+        (std::vector<sample_t *> &destination,
          size_t channels, size_t nframes, size_t offset = 0) override;
 
     unsigned int getTargetChannels() const override;

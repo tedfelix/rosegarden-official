@@ -76,7 +76,7 @@ public:
         Stop
     } TypeStatus;
 
-    MusicXMLXMLHandler(RosegardenDocument *doc);
+    explicit MusicXMLXMLHandler(RosegardenDocument *doc);
     ~MusicXMLXMLHandler() override;
 
     /**

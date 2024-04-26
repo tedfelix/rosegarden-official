@@ -655,7 +655,6 @@ DSSIPluginInstance::connectPorts()
 #endif
 
     Q_ASSERT(sizeof(LADSPA_Data) == sizeof(float));
-    Q_ASSERT(sizeof(sample_t) == sizeof(float));
 
     size_t inbuf = 0, outbuf = 0;
 
