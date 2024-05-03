@@ -371,9 +371,9 @@ void
 LV2PluginInstance::setIdealChannelCount(size_t channels)
 {
     RG_DEBUG << "setIdealChannelCount" << channels << m_channelCount;
-    m_channelCount = channels;
 
     if (channels == m_channelCount) return;
+    m_channelCount = channels;
 
     if (isOK()) {
         deactivate();
