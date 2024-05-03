@@ -175,6 +175,8 @@ private:
     void sendMidiData(const QByteArray& rawMidi,
                       size_t frameOffset) const;
 
+    void setupFeatures();
+
     /// GUI -> plugin control values.
     /**
      * Thread Safe.  These are created by init() and the map is not touched
@@ -332,6 +334,8 @@ private:
      * Called by the plugin (from the audio thread) to update the UI.
      */
     void updatePortValue(int index, const LV2_Atom *value);
+
+    LilvState* m_pluginState;
 
 };
 

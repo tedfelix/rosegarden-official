@@ -108,7 +108,8 @@ LV2PluginInstance::LV2PluginInstance(
     m_pluginHasRun(false),
     m_amixer(amixer),
     m_profilerName("LV2: " + m_uri.toStdString()),
-    m_eventsDiscarded(false)
+    m_eventsDiscarded(false),
+    m_pluginState(nullptr)
 {
 #ifdef THREAD_DEBUG
     RG_WARNING << "LV2PluginInstance: gettid(): " << gettid();
@@ -156,6 +157,8 @@ LV2PluginInstance::LV2PluginInstance(
     if (m_workerInterface) RG_DEBUG << (void*)m_workerInterface->work <<
                                (void*)m_workerInterface->work_response <<
                                (void*)m_workerInterface->end_run;
+
+    setupFeatures();
 
     // parameters
     lv2utils->setupPluginParameters(m_uri, m_params);
@@ -367,7 +370,8 @@ LV2PluginInstance::discardEvents()
 void
 LV2PluginInstance::setIdealChannelCount(size_t channels)
 {
-    RG_DEBUG << "setIdealChannelCount" << channels;
+    RG_DEBUG << "setIdealChannelCount" << channels << m_channelCount;
+    m_channelCount = channels;
 
     if (channels == m_channelCount) return;
 
@@ -699,6 +703,7 @@ LV2PluginInstance::~LV2PluginInstance()
     }
 
     cleanup();
+    if (m_pluginState) lilv_state_free(m_pluginState);
 
     for (auto& pair : m_audioSources) {
         pair.second->pluginFinished();
@@ -743,54 +748,13 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     RG_DEBUG << "LV2PluginInstance::instantiate - plugin uri = "
              << m_uri;
 
-    LilvNodes* feats = lilv_plugin_get_required_features(m_plugin);
-    RG_DEBUG << "instantiate num features" <<  lilv_nodes_size(feats);
-    LILV_FOREACH (nodes, i, feats) {
-        const LilvNode* fnode = lilv_nodes_get(feats, i);
-        RG_DEBUG << "feature:" << lilv_node_as_string(fnode);
+    // initialize the plugin state
+    if (! m_pluginState) {
+        // the first time - set the default state
+        RG_DEBUG << "setting default state";
+        LV2Utils* lv2utils = LV2Utils::getInstance();
+        m_pluginState = lv2utils->getStateByUri(m_uri);
     }
-    lilv_nodes_free(feats);
-
-    m_uridMapFeature = {LV2_URID__map, LV2URIDMapper::getURIDMapFeature()};
-    m_uridUnmapFeature = {LV2_URID__unmap, LV2URIDMapper::getURIDUnmapFeature()};
-
-    m_workerSchedule.handle = &m_workerHandle;
-    m_workerSchedule.schedule_work = LV2Worker::getInstance()->getScheduler();
-    RG_DEBUG << "schedule_work" << (void*)m_workerSchedule.schedule_work;
-    m_workerFeature = {LV2_WORKER__schedule, &m_workerSchedule};
-
-    LV2_URID nbl_urid = LV2URIDMapper::uridMap(LV2_BUF_SIZE__nominalBlockLength);
-    LV2_URID minbl_urid = LV2URIDMapper::uridMap(LV2_BUF_SIZE__minBlockLength);
-    LV2_URID maxbl_urid = LV2URIDMapper::uridMap(LV2_BUF_SIZE__maxBlockLength);
-    LV2_URID ai_urid = LV2URIDMapper::uridMap(LV2_ATOM__Int);
-    LV2_Options_Option opt;
-    opt.context = LV2_OPTIONS_INSTANCE;
-    opt.subject = 0;
-    opt.key = nbl_urid;
-    opt.size = 4;
-    opt.type = ai_urid;
-    opt.value = &m_blockSize;
-    m_options.push_back(opt);
-    opt.key = minbl_urid;
-    opt.value = &m_blockSize;
-    m_options.push_back(opt);
-    opt.key = maxbl_urid;
-    opt.value = &m_blockSize;
-    m_options.push_back(opt);
-    opt.key = 0;
-    opt.type = 0;
-    opt.value = 0;
-    m_options.push_back(opt);
-    m_optionsFeature = {LV2_OPTIONS__options, m_options.data()};
-
-    m_boundedBlockLengthFeature = {LV2_BUF_SIZE__boundedBlockLength, nullptr };
-
-    m_features.push_back(&m_uridMapFeature);
-    m_features.push_back(&m_uridUnmapFeature);
-    m_features.push_back(&m_workerFeature);
-    m_features.push_back(&m_optionsFeature);
-    m_features.push_back(&m_boundedBlockLengthFeature);
-    m_features.push_back(nullptr);
 
     m_instance =
         lilv_plugin_instantiate(m_plugin, sampleRate, m_features.data());
@@ -798,6 +762,15 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
         RG_WARNING << "Failed to instantiate plugin" << m_uri;
         return;
     }
+
+    RG_DEBUG << "restoring state";
+    lilv_state_restore(m_pluginState,
+                       m_instance,
+                       setPortValueFunc,
+                       this,
+                       0,
+                       m_features.data());
+
 }
 
 void
@@ -863,18 +836,6 @@ LV2PluginInstance::connectPorts()
         lilv_instance_connect_port(m_instance, aop.index, aop.atomSeq);
     }
 
-    // initialze the plugin state
-    RG_DEBUG << "setting default state";
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    LilvState* defaultState = lv2utils->getStateByUri(m_uri);
-    lilv_state_restore(defaultState,
-                       m_instance,
-                       setPortValueFunc,
-                       this,
-                       0,
-                       m_features.data());
-    lilv_state_free(defaultState);
-    RG_DEBUG << "setting default state done";
 }
 
 void
@@ -1214,9 +1175,7 @@ LV2PluginInstance::run(const RealTime &rt)
             c.isOutput == false) {
             auto ib = m_amixer->getAudioBuffer(c.instrumentId, c.channel);
             if (ib) {
-                //RG_DEBUG << "copy" << c.instrumentId << c.channel <<
-                //    "to port" <<
-                //    lv2utils->getPortName(m_uri, m_audioPortsIn[bufIndex]);
+                //RG_DEBUG << "copy" << c.instrumentId << c.channel;
 
                 memcpy(m_inputBuffers[bufIndex],
                        ib,
@@ -1453,6 +1412,17 @@ LV2PluginInstance::cleanup()
     if (!m_instance)
         return;
 
+    // save the current state
+    if (m_pluginState) lilv_state_free(m_pluginState);
+    LV2Utils* lv2utils = LV2Utils::getInstance();
+    RG_DEBUG << "saving plugin state";
+    m_pluginState = lv2utils->getStateFromInstance
+        (m_plugin,
+         m_instance,
+         getPortValueFunc,
+         this,
+         m_features.data());
+
     lilv_instance_free(m_instance);
     m_instance = nullptr;
 }
@@ -1483,6 +1453,59 @@ void LV2PluginInstance::sendMidiData(const QByteArray& rawMidi,
             }
         }
     }
+}
+
+void LV2PluginInstance::setupFeatures()
+{
+    LilvNodes* feats = lilv_plugin_get_required_features(m_plugin);
+    RG_DEBUG << "instantiate num required features" <<  lilv_nodes_size(feats);
+    LILV_FOREACH (nodes, i, feats) {
+        const LilvNode* fnode = lilv_nodes_get(feats, i);
+        RG_DEBUG << "required feature:" << lilv_node_as_string(fnode);
+    }
+    lilv_nodes_free(feats);
+
+    m_uridMapFeature = {LV2_URID__map, LV2URIDMapper::getURIDMapFeature()};
+    m_uridUnmapFeature = {LV2_URID__unmap, LV2URIDMapper::getURIDUnmapFeature()};
+
+    m_workerSchedule.handle = &m_workerHandle;
+    m_workerSchedule.schedule_work = LV2Worker::getInstance()->getScheduler();
+    RG_DEBUG << "schedule_work" << (void*)m_workerSchedule.schedule_work;
+    m_workerFeature = {LV2_WORKER__schedule, &m_workerSchedule};
+
+    LV2_URID nbl_urid = LV2URIDMapper::uridMap(LV2_BUF_SIZE__nominalBlockLength);
+    LV2_URID minbl_urid = LV2URIDMapper::uridMap(LV2_BUF_SIZE__minBlockLength);
+    LV2_URID maxbl_urid = LV2URIDMapper::uridMap(LV2_BUF_SIZE__maxBlockLength);
+    LV2_URID ai_urid = LV2URIDMapper::uridMap(LV2_ATOM__Int);
+    LV2_Options_Option opt;
+    opt.context = LV2_OPTIONS_INSTANCE;
+    opt.subject = 0;
+    opt.key = nbl_urid;
+    opt.size = 4;
+    opt.type = ai_urid;
+    opt.value = &m_blockSize;
+    m_options.push_back(opt);
+    opt.key = minbl_urid;
+    opt.value = &m_blockSize;
+    m_options.push_back(opt);
+    opt.key = maxbl_urid;
+    opt.value = &m_blockSize;
+    m_options.push_back(opt);
+    opt.key = 0;
+    opt.type = 0;
+    opt.value = 0;
+    m_options.push_back(opt);
+    m_optionsFeature = {LV2_OPTIONS__options, m_options.data()};
+
+    m_boundedBlockLengthFeature = {LV2_BUF_SIZE__boundedBlockLength, nullptr };
+
+    m_features.push_back(&m_uridMapFeature);
+    m_features.push_back(&m_uridUnmapFeature);
+    m_features.push_back(&m_workerFeature);
+    m_features.push_back(&m_optionsFeature);
+    m_features.push_back(&m_boundedBlockLengthFeature);
+    m_features.push_back(nullptr);
+
 }
 
 LV2PluginInstance::PortValueItem::~PortValueItem()
