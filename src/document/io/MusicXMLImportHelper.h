@@ -51,7 +51,7 @@ public:
     typedef std::map<QString, int> PercussionMap;
     typedef std::map<QString, QString> VoiceMap;
 
-    MusicXMLImportHelper(RosegardenDocument *doc);
+    explicit MusicXMLImportHelper(RosegardenDocument *doc);
     ~MusicXMLImportHelper();
 
     bool setStaff(const QString &staff="1");
