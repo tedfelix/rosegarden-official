@@ -1152,7 +1152,7 @@ BankEditorDialog::slotDelete()
         int currentBank = bankItem->getBank();
         MidiBank bank = m_bankList[currentBank];
 
-        bool used = tracksUsingBank(bank);
+        bool used = tracksUsingBank(bank, *device);
         if (used) return;
 
         int reply =
@@ -1272,7 +1272,7 @@ BankEditorDialog::slotDeleteAll()
 
     // check for used banks
     for (const MidiBank& bank : m_bankList) {
-        bool used = tracksUsingBank(bank);
+        bool used = tracksUsingBank(bank, *device);
         if (used) return;
     }
 
@@ -1865,10 +1865,11 @@ BankEditorDialog::slotHelpAbout()
     new AboutDialog(this);
 }
 
-bool BankEditorDialog::tracksUsingBank(const MidiBank& bank)
+bool BankEditorDialog::tracksUsingBank(const MidiBank& bank,
+                                       const MidiDevice& device)
 {
     QString bankName = strtoqstr(bank.getName());
-    RG_DEBUG << "tracksUsingBank" << bankName;
+    RG_DEBUG << "tracksUsingBank" << bankName << device.getId();
     std::vector<int> trackPositions;
 
     Composition &composition =
@@ -1887,6 +1888,10 @@ bool BankEditorDialog::tracksUsingBank(const MidiBank& bank)
             continue;
         if (instrument->getType() != Instrument::Midi)
             continue;
+
+        Device *idevice = instrument->getDevice();
+        // if the bank is on a different device ignore it
+        if (idevice->getId() != device.getId()) continue;
 
         const MidiProgram& program = instrument->getProgram();
         const MidiBank& ibank = program.getBank();

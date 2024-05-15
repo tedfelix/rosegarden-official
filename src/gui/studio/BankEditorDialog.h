@@ -196,7 +196,7 @@ protected:
     QFrame                  *m_rightSide;
 
  private:
-    bool tracksUsingBank(const MidiBank& bank);
+    bool tracksUsingBank(const MidiBank& bank, const MidiDevice& device);
 };
 
 // ----------------------- RemapInstrumentDialog ------------------------
