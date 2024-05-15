@@ -106,8 +106,6 @@ public:
     void discardEvents() override;
     void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
-    //int numInstances() const;
-
     void runWork(uint32_t size,
                  const void* data,
                  LV2_Worker_Respond_Function resp);

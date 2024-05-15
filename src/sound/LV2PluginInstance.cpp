@@ -374,29 +374,9 @@ LV2PluginInstance::setIdealChannelCount(size_t channels)
 
     if (channels == m_channelCount) return;
     m_channelCount = channels;
+    m_connections.numChannels = m_channelCount;
 
-    if (isOK()) {
-        deactivate();
-    }
-
-    cleanup();
-
-    instantiate(m_sampleRate);
-    if (isOK()) {
-        connectPorts();
-        activate();
-    }
 }
-
-#if 0
-int LV2PluginInstance::numInstances() const
-{
-    RG_DEBUG << "numInstances";
-    if (m_instance == nullptr) return 0;
-    // always 1
-    return 1;
-}
-#endif
 
 void LV2PluginInstance::runWork(uint32_t size,
                                 const void* data,
@@ -748,29 +728,12 @@ LV2PluginInstance::instantiate(unsigned long sampleRate)
     RG_DEBUG << "LV2PluginInstance::instantiate - plugin uri = "
              << m_uri;
 
-    // initialize the plugin state
-    if (! m_pluginState) {
-        // the first time - set the default state
-        RG_DEBUG << "setting default state";
-        LV2Utils* lv2utils = LV2Utils::getInstance();
-        m_pluginState = lv2utils->getStateByUri(m_uri);
-    }
-
     m_instance =
         lilv_plugin_instantiate(m_plugin, sampleRate, m_features.data());
     if (!m_instance) {
         RG_WARNING << "Failed to instantiate plugin" << m_uri;
         return;
     }
-
-    RG_DEBUG << "restoring state";
-    lilv_state_restore(m_pluginState,
-                       m_instance,
-                       setPortValueFunc,
-                       this,
-                       0,
-                       m_features.data());
-
 }
 
 void
@@ -1411,17 +1374,6 @@ LV2PluginInstance::cleanup()
 {
     if (!m_instance)
         return;
-
-    // save the current state
-    if (m_pluginState) lilv_state_free(m_pluginState);
-    LV2Utils* lv2utils = LV2Utils::getInstance();
-    RG_DEBUG << "saving plugin state";
-    m_pluginState = lv2utils->getStateFromInstance
-        (m_plugin,
-         m_instance,
-         getPortValueFunc,
-         this,
-         m_features.data());
 
     lilv_instance_free(m_instance);
     m_instance = nullptr;
