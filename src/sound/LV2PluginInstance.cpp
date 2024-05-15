@@ -146,6 +146,8 @@ LV2PluginInstance::LV2PluginInstance(
 
     m_midiEventUrid = LV2URIDMapper::uridMap(LV2_MIDI__MidiEvent);
 
+    setupFeatures();
+
     instantiate(sampleRate);
     if (isOK()) {
         connectPorts();
@@ -157,8 +159,6 @@ LV2PluginInstance::LV2PluginInstance(
     if (m_workerInterface) RG_DEBUG << (void*)m_workerInterface->work <<
                                (void*)m_workerInterface->work_response <<
                                (void*)m_workerInterface->end_run;
-
-    setupFeatures();
 
     // parameters
     lv2utils->setupPluginParameters(m_uri, m_params);
