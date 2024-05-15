@@ -1667,6 +1667,8 @@ Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
 {
     displayPitchToRawPitch
         (heightOnStaff, explicitAccidental, clef, key, m_pitch);
+    if (m_pitch < 0) m_pitch = 0;
+    if (m_pitch > 127) m_pitch = 127;
 }
 
 Pitch::Pitch(const Pitch &p) :

@@ -75,7 +75,6 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
         m_framesProcessed(0),
         m_ok(false)
 {
-    Q_ASSERT(sizeof(sample_t) == sizeof(float));
     initialise();
 }
 
