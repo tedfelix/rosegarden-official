@@ -75,7 +75,11 @@ AudioPluginParameterDialog::AudioPluginParameterDialog
         gridLayout->addWidget(lLabel, row, 0);
         QLabel* vLabel = new QLabel;
         m_valueLabels[propertyId] = vLabel;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        if (pd.value.typeId() != QVariant::Invalid) {
+#else
         if (pd.value.type() != QVariant::Invalid) {
+#endif
             RG_DEBUG << "got value" << pd.value.toString();
             vLabel->setText(pd.value.toString());
         } else {
@@ -158,7 +162,11 @@ void AudioPluginParameterDialog::slotUpdate()
         const QString& id = pair.first;
         AudioPluginInstance::PluginParameter& pd = pair.second;
         QLabel* vLabel = m_valueLabels[id];
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        if (pd.value.typeId() != QVariant::Invalid) {
+#else
         if (pd.value.type() != QVariant::Invalid) {
+#endif
             RG_DEBUG << "got value" << pd.value.toString();
             vLabel->setText(pd.value.toString());
         } else {
@@ -226,7 +234,11 @@ void AudioPluginParameterDialog::showEditor(const QString& paramId)
     AudioPluginInstance::PluginParameter param = m_params[paramId];
     AudioPluginInstance::ParameterType ptype = param.type;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    if (param.value.typeId() != QVariant::Invalid) {
+#else
     if (param.value.type() != QVariant::Invalid) {
+#endif
         if (ptype == AudioPluginInstance::ParameterType::BOOL) {
             bool bval = param.value.toBool();
             m_boolComboBox->setCurrentIndex(bval);

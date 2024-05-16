@@ -531,7 +531,11 @@ void LV2PluginInstance::updatePluginParameter
     // save the parameter
     LV2PluginParameter& lparam = m_params[paramId];
     // only the value can change
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    if (param.value.typeId() != QVariant::Invalid) {
+#else
     if (param.value.type() != QVariant::Invalid) {
+#endif
         switch(param.type) {
         case AudioPluginInstance::ParameterType::BOOL:
             lparam.setBool(param.value.toBool());

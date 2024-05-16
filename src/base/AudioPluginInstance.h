@@ -22,6 +22,7 @@
 #include "XmlExportable.h"
 #include "base/Instrument.h"
 
+#include <QVariant>
 
 namespace Rosegarden
 {
