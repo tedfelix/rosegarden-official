@@ -446,6 +446,15 @@ NotationView::NotationView(RosegardenDocument *doc,
             getEditorFollowPlayback();
     RG_DEBUG << "set scroll_to_follow checked" << followPlayback;
     findAction("scroll_to_follow")->setChecked(followPlayback);
+
+    // More than one Segment?  Select the current Segment's notes to
+    // help make it clear which Segment is current.
+    // Note that for large compositions, this can take a very long time.
+    // But this is the only indicator we have of the current Segment.
+    // ??? Kludge.  We really need to gray the non-current Segment notes.
+    //     See slotCurrentSegmentPrior() and slotCurrentSegmentNext().
+    if (m_segments.size() > 1)
+        slotEditSelectWholeStaff();
 }
 
 NotationView::~NotationView()
