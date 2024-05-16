@@ -19,27 +19,27 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixElement.h"
-#include "MatrixScene.h"
 
+#include "MatrixScene.h"
 #include "misc/Debug.h"
 #include "base/RulerScale.h"
-#include "misc/ConfigGroups.h"
-
-#include <QGraphicsRectItem>
-#include <QGraphicsPolygonItem>
-#include <QBrush>
-#include <QColor>
-#include <QSettings>
-
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/BaseProperties.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/DefaultVelocityColour.h"
 #include "gui/general/MidiPitchLabel.h"
+#include "misc/Preferences.h"
+
+#include <QGraphicsRectItem>
+#include <QGraphicsPolygonItem>
+#include <QBrush>
+#include <QColor>
+
 
 namespace Rosegarden
 {
+
 
 static const int MatrixElementData = 2;
 
@@ -214,13 +214,10 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
         item->setBrush(QBrush(colour, brushPattern));
 
-        QSettings settings;
-        settings.beginGroup(MatrixViewConfigGroup);
-        bool showName = settings.value("show_note_names", false).toBool();
-        settings.endGroup();
+        const bool showName = Preferences::getShowNoteNames();
 
         if (m_textItem) {
-            if (! showName) {
+            if (!showName) {
                 RG_DEBUG << "reconfigure deleting text item:" << m_textItem << this;
                 // Remove the item from the scene.
                 // ??? Qt documentation indicates that it is faster to remove the

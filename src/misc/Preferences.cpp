@@ -218,4 +218,17 @@ bool Preferences::getIncludeAlsaPortNumbersWhenMatching()
     return includeAlsaPortNumbersWhenMatching.get();
 }
 
+PreferenceBool showNoteNames(MatrixViewConfigGroup, "show_note_names", false);
+
+void Preferences::setShowNoteNames(bool value)
+{
+    showNoteNames.set(value);
+}
+
+bool Preferences::getShowNoteNames()
+{
+    return showNoteNames.get();
+}
+
+
 }

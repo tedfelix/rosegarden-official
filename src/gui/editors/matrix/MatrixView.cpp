@@ -31,6 +31,7 @@
 #include "misc/Strings.h"
 
 #include "misc/ConfigGroups.h"
+#include "misc/Preferences.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 
@@ -219,7 +220,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     m_matrixWidget->setTempoRulerVisible(view);
 
     findAction("show_note_names")->
-        setChecked(qStrToBool(settings.value("show_note_names")));
+        setChecked(Preferences::getShowNoteNames());
     MatrixScene::HighlightType chosenHighlightType =
         static_cast<MatrixScene::HighlightType>(
             settings.value("highlight_type",
@@ -1729,12 +1730,9 @@ MatrixView::slotDonate()
 void
 MatrixView::slotShowNames()
 {
-    bool show = findAction("show_note_names")->isChecked();
-    RG_DEBUG << "show names:" << show;
-    QSettings settings;
-    settings.beginGroup(MatrixViewConfigGroup);
-    settings.setValue("show_note_names", show);
-    settings.endGroup();
+    const bool show = findAction("show_note_names")->isChecked();
+    //RG_DEBUG << "show names:" << show;
+    Preferences::setShowNoteNames(show);
     m_matrixWidget->getScene()->updateAll();
 }
 

@@ -85,6 +85,9 @@ namespace Preferences
     void setJACKLoadCheck(bool value);
     bool getJACKLoadCheck();
 
+    void setShowNoteNames(bool value);
+    bool getShowNoteNames();
+
     // Experimental
 
     bool getBug1623();
