@@ -84,7 +84,7 @@ protected:
     QCheckBox    *m_ignore8ve;       /**< Ignore 8ve in pitch comparison? */
     QSpinBox     *m_graphWidth;      /**< Width of graph in milliseconds */
     QSpinBox     *m_graphHeight;     /**< Height of graph in cents */
-    std::vector<Accidentals::Tuning *> *m_tunings; /**< Available tunings */
+    std::vector<std::shared_ptr<Accidentals::Tuning>> *m_tunings; /**< Available tunings */
 
     QErrorMessage m_noTuningsAlert;  /**< Alert missing tunings file */
 

@@ -69,7 +69,7 @@ PitchGraphWidget::~PitchGraphWidget()
 }
 
 void
-PitchGraphWidget::setTuning(Accidentals::Tuning* tuning)
+PitchGraphWidget::setTuning(std::shared_ptr<Accidentals::Tuning> tuning)
 {
     m_tuning = tuning;
     // If the tuning gets changed via a settings update,

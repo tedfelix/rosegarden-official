@@ -51,7 +51,7 @@ public:
     PitchGraphWidget(PitchHistory &history, QWidget *parent = nullptr);
     ~PitchGraphWidget() override;
 
-    void setTuning(Accidentals::Tuning* tuning);
+    void setTuning(std::shared_ptr<Accidentals::Tuning> tuning);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -60,7 +60,7 @@ protected:
     unsigned int    m_graphWidth;   // Width of graph (in milliseconds)
     bool            m_ignoreOctave; // Whether to ignore octave errors
     
-    Accidentals::Tuning* m_tuning;  // Tuning in use in this widget
+    std::shared_ptr<Accidentals::Tuning> m_tuning;  // Tuning in use in this widget
     PitchHistory&   m_history;      // structure of data to plot
 };
 
