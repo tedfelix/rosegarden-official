@@ -39,7 +39,8 @@ public:
     UnusedAudioSelectionDialog(QWidget *,
                                QString introductoryText,
                                std::vector<QString> fileNames);
-    
+
+    ~UnusedAudioSelectionDialog();
     std::vector<QString> getSelectedAudioFileNames() const;
 
 protected:
