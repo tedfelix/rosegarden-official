@@ -34,7 +34,7 @@ namespace Rosegarden
 
 class ExportDeviceDialog : public QDialog
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
     enum ExportType { ExportOne, ExportAll };
     

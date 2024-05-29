@@ -34,7 +34,7 @@ namespace Rosegarden
 
 class UnusedAudioSelectionDialog : public QDialog
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
     UnusedAudioSelectionDialog(QWidget *,
                                QString introductoryText,

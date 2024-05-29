@@ -47,10 +47,10 @@ class Composition;
 /**
  * computes the Y coordinate of notation elements
  */
-class NotationVLayout : public VerticalLayoutEngine,
-                        public QObject  // For tr().  Can probably be cleaned up.
+class NotationVLayout : public QObject,  // For tr().  Can probably be cleaned up.
+                        public VerticalLayoutEngine
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
     NotationVLayout(Composition *c, NotePixmapFactory *npf,
                     const NotationProperties &properties,

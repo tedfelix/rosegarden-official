@@ -59,7 +59,7 @@ class AudioFileManager;
  */
 class RoseXmlHandler : public QObject, public XMLHandler
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
 
     typedef enum

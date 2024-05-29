@@ -51,11 +51,11 @@ class Event;
 class Clef;
 
 
-class NotationStaff : public ViewSegment,
-                      public StaffLayout,
-                      public QObject  // Just for tr().  Could be cleaned up.
+class NotationStaff : public QObject,  // Just for tr().  Could be cleaned up.
+                      public ViewSegment,
+                      public StaffLayout
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
     NotationStaff(NotationScene *, Segment *, SnapGrid *,
                   int id,

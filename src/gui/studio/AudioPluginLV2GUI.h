@@ -42,6 +42,7 @@ class AudioPluginLV2GUIManager;
 // cppcheck-suppress noCopyConstructor
  class AudioPluginLV2GUI : public QObject
 {
+    Q_OBJECT
 public:
     AudioPluginLV2GUI(AudioPluginInstance *instance,
                       RosegardenMainWindow *mainWindow,

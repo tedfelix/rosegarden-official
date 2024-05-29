@@ -82,8 +82,8 @@ void KorgNanoKontrol2::init()
         // Ask user if it is ok to reconfigure the device.
         QMessageBox::StandardButton reply = QMessageBox::warning(
                 0,
-                tr("Rosegarden"),
-                tr("The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you've made with the nanoKONTROL2 editor.  Reconfigure?"),
+                QObject::tr("Rosegarden"),
+                QObject::tr("The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you've made with the nanoKONTROL2 editor.  Reconfigure?"),
                 QMessageBox::Yes | QMessageBox::No,
                 QMessageBox::Yes);
 
