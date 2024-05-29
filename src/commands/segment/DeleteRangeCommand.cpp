@@ -36,6 +36,7 @@ namespace Rosegarden
 
 class SegmentGroupDeleteRangeCommand : public LinkedSegmentsCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentGroupDeleteRangeCommand)
 public:
     typedef std::vector<Segment *> SegmentVec;
     SegmentGroupDeleteRangeCommand(const SegmentVec& originalSegments,

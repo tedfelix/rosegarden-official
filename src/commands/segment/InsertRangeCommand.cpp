@@ -35,6 +35,7 @@ namespace Rosegarden
 {
 class SegmentGroupInsertRangeCommand : public LinkedSegmentsCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentGroupInsertRangeCommand)
 public:
     typedef std::vector<Segment *> SegmentVec;
     SegmentGroupInsertRangeCommand(const SegmentVec& originalSegments,
