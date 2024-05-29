@@ -5433,7 +5433,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <source>Cuíca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Finger cymbals</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5708,12 +5713,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-28"/>
-        <source>Cu�ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+29"/>
+        <location line="+1"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Cabasa</source>
         <translation type="unfinished"></translation>
@@ -9027,13 +9027,13 @@
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+731"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+735"/>
         <location line="+131"/>
         <source>%1. %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+444"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+445"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -9043,9 +9043,9 @@
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1101"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+480"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+481"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1707"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1038"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1047"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Controller %2 %3</translation>
     </message>
@@ -9054,7 +9054,8 @@
         <translation type="obsolete">Rosegarden - Een sequencer en muzieknotatie-editor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+461"/>
+        <location filename="../../src/gui/application/main.cpp" line="+462"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -9167,7 +9168,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+143"/>
+        <location line="+144"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9222,7 +9223,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+285"/>
+        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+282"/>
         <source>This event is tied to another event.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9622,6 +9623,16 @@ Would you like to use
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="+216"/>
         <source>Arbitrary grid unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/document/io/MusicXMLLoader.cpp" line="+45"/>
+        <source>Can&apos;t open file &apos;%1&apos;</source>
+        <translation type="unfinished">Kan bestand &apos;%1&apos; niet openen</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+1"/>
+        <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10370,12 +10381,12 @@ Would you like to use
 <context>
     <name>Rosegarden::AudioInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+87"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+85"/>
         <source>Click to rename this instrument.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+129"/>
+        <location line="+134"/>
         <location line="+176"/>
         <source>&lt;no synth&gt;</source>
         <translation>&lt;geen synth&gt;</translation>
@@ -10692,9 +10703,57 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     </message>
 </context>
 <context>
+    <name>Rosegarden::AudioPluginConnectionDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/AudioPluginConnectionDialog.cpp" line="+43"/>
+        <source>Audio Plugin Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Plugin port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Instrument</source>
+        <translation type="unfinished">Instrument</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Channel</source>
+        <translation type="unfinished">Kanaal</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>&lt;none&gt;</source>
+        <translation type="unfinished">&lt;geen&gt;</translation>
+    </message>
+    <message>
+        <location line="+129"/>
+        <source>Mono</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Left</source>
+        <translation type="unfinished">Links</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Right</source>
+        <translation type="unfinished">Rechts</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Both</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::AudioPluginDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+81"/>
+        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+89"/>
         <source>Audio Plugin</source>
         <translation>Audio Plugin</translation>
     </message>
@@ -10704,12 +10763,12 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>Plugin</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+34"/>
         <source>Category:</source>
         <translation>Categorie:</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+19"/>
         <source>Plugin:</source>
         <translation>Plugin:</translation>
     </message>
@@ -10720,7 +10779,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     </message>
     <message>
         <location line="+9"/>
-        <location line="+301"/>
+        <location line="+412"/>
         <source>&lt;ports&gt;</source>
         <translation>&lt;poorten&gt;</translation>
     </message>
@@ -10730,7 +10789,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>&lt;id&gt;</translation>
     </message>
     <message>
-        <location line="-279"/>
+        <location line="-386"/>
         <source>Copy</source>
         <translation>Kopieer</translation>
     </message>
@@ -10750,12 +10809,12 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>Plak plugin-parameters</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+29"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
     <message>
-        <location line="+85"/>
+        <location line="+129"/>
         <source>(any)</source>
         <translation>(alles)</translation>
     </message>
@@ -10770,18 +10829,48 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>(geen)</translation>
     </message>
     <message>
-        <location line="+142"/>
+        <location line="+190"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;geen plugin&gt;</translation>
     </message>
     <message>
-        <location line="-317"/>
-        <location line="+321"/>
+        <location line="-428"/>
+        <location line="+432"/>
         <source>Select a plugin from this list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-310"/>
+        <location line="-481"/>
+        <source>Search:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Architecture:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>all</source>
+        <translation type="unfinished">Alle</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ladspa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>dssi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>lv2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>Bypass this plugin</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10802,7 +10891,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+34"/>
         <source>Reset</source>
         <translation>Reset</translation>
     </message>
@@ -10812,7 +10901,22 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+7"/>
+        <source>Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Edit connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+392"/>
         <source>&lt;qt&gt;&lt;p&gt;This plugin has too many controls to edit here.&lt;/p&gt;&lt;p&gt;Use the external editor, if available.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10827,7 +10931,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>Id: %1</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+53"/>
         <source>mono</source>
         <translation>mono</translation>
     </message>
@@ -10843,23 +10947,31 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
     </message>
     <message>
         <location line="+23"/>
-        <location line="+255"/>
+        <location line="+269"/>
         <source>Program:  </source>
         <translation>Programma:</translation>
     </message>
     <message>
-        <location line="-251"/>
+        <location line="-265"/>
         <location line="+7"/>
-        <location line="+248"/>
+        <location line="+262"/>
         <location line="+5"/>
         <location line="+29"/>
         <source>&lt;none selected&gt;</source>
         <translation>&lt;geen geselecteerd&gt;</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+161"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::AudioPluginLV2GUI</name>
+    <message>
+        <location filename="../../src/gui/studio/AudioPluginLV2GUI.cpp" line="+82"/>
+        <source>Sub %1</source>
+        <translation type="unfinished">Sub %1</translation>
     </message>
 </context>
 <context>
@@ -10883,6 +10995,125 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <location line="+1"/>
         <source>Plugin slot %1</source>
         <translation>Plugin slot %1</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::AudioPluginParameterDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/AudioPluginParameterDialog.cpp" line="+57"/>
+        <source>Plugin Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>&lt;b&gt;Parameter&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;b&gt;Value&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;b&gt;Set value&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <location line="+87"/>
+        <source>&lt;not set&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-83"/>
+        <source>Set value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Edit Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>false</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>true</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Select Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+139"/>
+        <source>&lt;b&gt;Editing parameter %1&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Select File</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::AudioPluginPresetDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/AudioPluginPresetDialog.cpp" line="+45"/>
+        <location line="+3"/>
+        <source>Plugin Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Predefined presets:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Set Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Load/Save state from/to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Load</source>
+        <translation type="unfinished">Laden</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+28"/>
+        <source>Load preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location line="+14"/>
+        <source>Preset files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-13"/>
+        <source>All files</source>
+        <translation type="unfinished">Alle bestanden</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Save preset</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11154,7 +11385,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
 <context>
     <name>Rosegarden::AudioStrip</name>
     <message>
-        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+161"/>
+        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+165"/>
         <source>Record input source</source>
         <translation type="unfinished">Opname-invooerbron</translation>
     </message>
@@ -11232,7 +11463,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
 <context>
     <name>Rosegarden::BankEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+98"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+99"/>
         <source>Manage MIDI Banks and Programs</source>
         <translation>Beheer MIDI-banken en -programma&apos;s</translation>
     </message>
@@ -11354,23 +11585,34 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>&lt;nieuwe bank %1&gt;</translation>
     </message>
     <message>
-        <location line="+513"/>
+        <location line="+523"/>
         <source>Some internal error: no device selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+223"/>
         <location line="+4"/>
+        <location line="+96"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="-59"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-779"/>
+        <location line="+49"/>
+        <source>The following tracks are using bank %1:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>The bank cannot be deleted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-845"/>
         <source>&lt;new bank&gt;</source>
         <translation>&lt;nieuwe bank&gt;</translation>
     </message>
@@ -11385,7 +11627,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>&lt;nieuwe mapping %1&gt;</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+48"/>
         <source>Really delete this bank?</source>
         <translation>Deze bank echt verwijderen?</translation>
     </message>
@@ -11395,7 +11637,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation>Deze toetsen-mapping echt verwijderen?</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+58"/>
         <source>Really delete all banks for </source>
         <translation>Weet u zeker dat u al deze banken wilt verwijderen voor </translation>
     </message>
@@ -11954,7 +12196,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+248"/>
+        <location line="+255"/>
         <source>Nothing to undo</source>
         <translation>Niets om ongedaan te maken</translation>
     </message>
@@ -12557,7 +12799,7 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
 <context>
     <name>Rosegarden::DeleteRangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="+322"/>
+        <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="+323"/>
         <source>Delete Range</source>
         <translation>Verwijder bereik</translation>
     </message>
@@ -12581,19 +12823,34 @@ Selecteer welke u permanent van de harde schijf wilt verwijderen.
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+328"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+330"/>
         <location line="+11"/>
         <location line="+16"/>
         <source>New Device</source>
         <translation>Nieuw apparaat</translation>
     </message>
     <message>
-        <location line="+97"/>
+        <location line="+58"/>
+        <source>The following tracks are using this device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>The device cannot be deleted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location line="+80"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-823"/>
+        <location line="-875"/>
         <source>[ No port ]</source>
         <translation>[ geen poort ]</translation>
     </message>
@@ -13310,7 +13567,7 @@ Dit zou problemen kunnen veroorzaken als het later een andere berekende waarde o
 <context>
     <name>Rosegarden::EventView</name>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="+122"/>
+        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="+121"/>
         <source>Event filters</source>
         <translation>Gebeurtenisfilters</translation>
     </message>
@@ -13882,7 +14139,12 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+44"/>
+        <source>LV2 Plugin Support (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>Sequencer status</source>
         <translation>Sequencerstatus</translation>
     </message>
@@ -13932,12 +14194,12 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+142"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-586"/>
+        <location line="-598"/>
         <source>Behavior</source>
         <translation>Gedrag</translation>
     </message>
@@ -13946,7 +14208,7 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
         <translation type="vanished">Gebruik Thorn stijl</translation>
     </message>
     <message>
-        <location line="+347"/>
+        <location line="+358"/>
         <source>Show full path in window titles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13986,7 +14248,7 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+153"/>
         <location line="+5"/>
         <location line="+5"/>
         <source>Rosegarden</source>
@@ -13998,12 +14260,12 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-277"/>
+        <location line="-278"/>
         <source>Note name style</source>
         <translation>Notenbenaming</translation>
     </message>
     <message>
-        <location line="-103"/>
+        <location line="-114"/>
         <source>Jump to loop</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14018,7 +14280,7 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+76"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14123,7 +14385,7 @@ Wilt u proberen het bestand op het zoeken of het overslaan?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+181"/>
+        <location line="+182"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>Wijzigingen in de getextureerde achtergrond in het hoofdvenster worden pas van kracht nadat u Rosegarden opnieuw opstart.</translation>
     </message>
@@ -14617,7 +14879,7 @@ Voorbeeldtekst uit het bestand:</translation>
 <context>
     <name>Rosegarden::InsertRangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="+210"/>
+        <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="+211"/>
         <source>Insert Range</source>
         <translation>Voeg bereik in</translation>
     </message>
@@ -15063,14 +15325,8 @@ Voorbeeldtekst uit het bestand:</translation>
 <context>
     <name>Rosegarden::KorgNanoKontrol2</name>
     <message>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -15990,7 +16246,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-683"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-687"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16075,7 +16331,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+121"/>
         <source>No connection</source>
         <translation>Geen verbinding</translation>
     </message>
@@ -16694,7 +16950,7 @@ Dubbelklik om de marker-editor te openen.</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1539"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1536"/>
         <source>Unknown note insert action %1</source>
         <translation>Noot-invoegactie %1 onbekend</translation>
     </message>
@@ -16703,7 +16959,7 @@ Dubbelklik om de marker-editor te openen.</translation>
         <translation type="vanished">&lt;naamloos&gt;</translation>
     </message>
     <message>
-        <location line="-1402"/>
+        <location line="-1399"/>
         <source> Grid: </source>
         <translation>Rooster:</translation>
     </message>
@@ -16764,7 +17020,7 @@ Dubbelklik om de marker-editor te openen.</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location line="+236"/>
+        <location line="+233"/>
         <location line="+64"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -16780,7 +17036,7 @@ Dubbelklik om de marker-editor te openen.</translation>
         <translation>Geschatte maatsoort wordt getoond</translation>
     </message>
     <message>
-        <location line="-921"/>
+        <location line="-918"/>
         <source>Estimated time signature shown</source>
         <translation>Geschatte maatsoort getoond</translation>
     </message>
@@ -19852,7 +20108,7 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="+159"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
         <translation>Dit bestand heeft het bestandsformaat van Rosegarden %1.
@@ -19867,17 +20123,22 @@ There may be some incompatibilities with the file format.</source>
     </message>
     <message>
         <location line="+0"/>
-        <location line="+2297"/>
+        <location line="+2340"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-879"/>
+        <location line="-923"/>
         <source>Loading plugins...</source>
         <translation>Plugins laden...</translation>
     </message>
     <message>
-        <location line="+880"/>
+        <location line="+91"/>
+        <source>%1 (from %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+833"/>
         <source>Skipping a file will remove its audio segments from the composition.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19896,28 +20157,28 @@ There may be some incompatibilities with the file format.</source>
         <translation type="obsolete">Rosegarden - waarschuwing</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+496"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+497"/>
         <location line="+60"/>
         <location line="+12"/>
         <location line="+63"/>
         <location line="+32"/>
-        <location line="+343"/>
-        <location line="+646"/>
+        <location line="+346"/>
+        <location line="+649"/>
         <location line="+11"/>
         <location line="+22"/>
         <location line="+3"/>
         <location line="+35"/>
         <location line="+8"/>
-        <location line="+25"/>
+        <location line="+21"/>
         <location line="+11"/>
-        <location line="+992"/>
+        <location line="+993"/>
         <location line="+16"/>
         <location line="+223"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message numerus="yes">
-        <location line="-2548"/>
+        <location line="-2551"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -19981,7 +20242,7 @@ Selecteer de bestanden die u permanent van de harde schijf wilt wissen.
         <translation type="vanished">Samenvoegen</translation>
     </message>
     <message>
-        <location line="+520"/>
+        <location line="+523"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20046,28 +20307,28 @@ editing this file, you may press Ignore to open the file.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1671"/>
+        <location line="-1668"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-756"/>
+        <location line="-762"/>
         <source>Reading file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+2191"/>
+        <location line="+2194"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuleren</translation>
     </message>
     <message>
-        <location line="-2128"/>
+        <location line="-2131"/>
         <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+741"/>
+        <location line="+747"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20107,12 +20368,11 @@ editing this file, you may press Ignore to open the file.
         <translation>&lt;h3&gt;Plugins niet gevonden&lt;/h3&gt;&lt;p&gt;De volgende audioplugins konden niet geladen worden:&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
-        <translation>&lt;li&gt;%1 (van %2)&lt;/li&gt;</translation>
+        <translation type="vanished">&lt;li&gt;%1 (van %2)&lt;/li&gt;</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+16"/>
         <source>This file contains one or more old element types that are now deprecated.
 Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
@@ -20126,7 +20386,7 @@ Wij bevelen aan om dit bestand vanuit deze Rosegarden-versie opnieuw op te slaan
         <translation>Voeg Opgenomen MIDI in</translation>
     </message>
     <message>
-        <location line="+97"/>
+        <location line="+98"/>
         <location line="+80"/>
         <source>(recorded)</source>
         <translation>(opgenomen)</translation>
@@ -20139,7 +20399,7 @@ Wij bevelen aan om dit bestand vanuit deze Rosegarden-versie opnieuw op te slaan
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+276"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+277"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>Selectie moet alleen audio- of non-audio-segmenten bevatten</translation>
     </message>
@@ -20223,7 +20483,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+342"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+358"/>
         <source>Initializing plugin manager...</source>
         <translation>Plugin-beheerder initialiseren...</translation>
     </message>
@@ -20252,7 +20512,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Starten...</translation>
     </message>
     <message>
-        <location line="+484"/>
+        <location line="+498"/>
         <source>  Zoom:  </source>
         <translation>  Detail:  </translation>
     </message>
@@ -20283,13 +20543,13 @@ Do you want to open it instead ?</source>
 Wilt u dit bestand openen in plaats van het origineel?</translation>
     </message>
     <message>
-        <location line="+4901"/>
+        <location line="+4897"/>
         <location line="+19"/>
         <source>Untitled</source>
         <translation>Zonder titel</translation>
     </message>
     <message>
-        <location line="-4370"/>
+        <location line="-4366"/>
         <location line="+161"/>
         <source>Could not save document at %1
 Error was : %2</source>
@@ -20298,7 +20558,7 @@ Error was : %2</source>
     <message>
         <location line="-158"/>
         <location line="+161"/>
-        <location line="+6289"/>
+        <location line="+6286"/>
         <source>Could not save document at %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20307,7 +20567,7 @@ Error was : %2</source>
         <translation type="obsolete">Openen van een nieuw applicatie venster...</translation>
     </message>
     <message>
-        <location line="-6769"/>
+        <location line="-6766"/>
         <source>Creating new document...</source>
         <translation>Maken nieuw document...</translation>
     </message>
@@ -20326,12 +20586,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-116"/>
-        <location line="+6095"/>
+        <location line="+6092"/>
         <source>All supported files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-6094"/>
+        <location line="-6091"/>
         <location line="+72"/>
         <location line="+217"/>
         <source>Rosegarden files</source>
@@ -20339,16 +20599,16 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-288"/>
-        <location line="+2092"/>
+        <location line="+2088"/>
         <location line="+24"/>
         <source>MIDI files</source>
         <translation>MIDI-bestanden</translation>
     </message>
     <message>
-        <location line="-2115"/>
+        <location line="-2111"/>
         <location line="+71"/>
         <location line="+222"/>
-        <location line="+1759"/>
+        <location line="+1755"/>
         <location line="+40"/>
         <location line="+24"/>
         <location line="+260"/>
@@ -20363,12 +20623,12 @@ Error was : %2</source>
         <location line="+53"/>
         <location line="+48"/>
         <location line="+122"/>
-        <location line="+2525"/>
+        <location line="+2526"/>
         <source>All files</source>
         <translation>Alle bestanden</translation>
     </message>
     <message>
-        <location line="-6097"/>
+        <location line="-6094"/>
         <source>Open File</source>
         <translation>Open Bestand</translation>
     </message>
@@ -20478,12 +20738,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+57"/>
-        <location line="+2893"/>
+        <location line="+2889"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location line="-2892"/>
+        <location line="-2888"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -20600,7 +20860,7 @@ Segmenten-&gt;Samenvoegen.
         <translation>Het samenvoeg-gereedschap is nog niet geímplementeerd</translation>
     </message>
     <message>
-        <location line="+200"/>
+        <location line="+196"/>
         <source>Revert modified document to previous saved version?</source>
         <translation>Ga terug naar opgeslagen versie van gewijzigd document?</translation>
     </message>
@@ -20636,7 +20896,7 @@ Segmenten-&gt;Samenvoegen.
         <translation></translation>
     </message>
     <message>
-        <location line="-6407"/>
+        <location line="-6403"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -20658,15 +20918,15 @@ Segmenten-&gt;Samenvoegen.
         <location line="+344"/>
         <location line="+76"/>
         <location line="+25"/>
-        <location line="+791"/>
+        <location line="+787"/>
         <location line="+203"/>
         <location line="+19"/>
         <location line="+175"/>
         <location line="+20"/>
         <location line="+78"/>
         <location line="+19"/>
-        <location line="+81"/>
-        <location line="+20"/>
+        <location line="+82"/>
+        <location line="+19"/>
         <location line="+359"/>
         <location line="+239"/>
         <location line="+4"/>
@@ -20694,7 +20954,7 @@ Segmenten-&gt;Samenvoegen.
         <location line="+117"/>
         <location line="+13"/>
         <location line="+1174"/>
-        <location line="+123"/>
+        <location line="+124"/>
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
@@ -20704,7 +20964,7 @@ Segmenten-&gt;Samenvoegen.
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1799"/>
+        <location line="-1800"/>
         <source>Relabel Segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20719,7 +20979,7 @@ Segmenten-&gt;Samenvoegen.
         <translation></translation>
     </message>
     <message>
-        <location line="+434"/>
+        <location line="+435"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20729,7 +20989,7 @@ Segmenten-&gt;Samenvoegen.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4235"/>
+        <location line="-4236"/>
         <source>Open MIDI File</source>
         <translation>Open MIDI Bestand</translation>
     </message>
@@ -20786,12 +21046,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Sluit af en start Rosegarden opnieuw om geluidsmogelijkheden te herstellen.</translation>
     </message>
     <message>
-        <location line="-4844"/>
+        <location line="-4854"/>
         <source>Starting sequencer...</source>
         <translation>Sequencer starten...</translation>
     </message>
     <message>
-        <location line="+1122"/>
+        <location line="+1136"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20812,12 +21072,12 @@ Sluit af en start Rosegarden opnieuw om geluidsmogelijkheden te herstellen.</tra
     </message>
     <message>
         <location line="+151"/>
-        <location line="+2528"/>
+        <location line="+2524"/>
         <source>Select File(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2314"/>
+        <location line="-2310"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -20834,11 +21094,11 @@ Sluit af en start Rosegarden opnieuw om geluidsmogelijkheden te herstellen.</tra
     </message>
     <message>
         <location line="+101"/>
-        <location line="+1439"/>
+        <location line="+1435"/>
         <location line="+194"/>
         <location line="+98"/>
-        <location line="+100"/>
-        <location line="+692"/>
+        <location line="+101"/>
+        <location line="+691"/>
         <location line="+50"/>
         <location line="+48"/>
         <location line="+116"/>
@@ -20847,7 +21107,7 @@ Sluit af en start Rosegarden opnieuw om geluidsmogelijkheden te herstellen.</tra
         <translation type="unfinished">Annuleren</translation>
     </message>
     <message>
-        <location line="-2450"/>
+        <location line="-2446"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation type="unfinished"></translation>
@@ -20878,7 +21138,7 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+809"/>
+        <location line="+805"/>
         <source>Select MIDI File(s)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21015,7 +21275,7 @@ Voor hulp met de juiste audio- en MIDI-instellingen, ga naar http://rosegardenmu
         <translation>XML bestanden</translation>
     </message>
     <message numerus="yes">
-        <location line="-2412"/>
+        <location line="-2408"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -21029,17 +21289,17 @@ Voor hulp met de juiste audio- en MIDI-instellingen, ga naar http://rosegardenmu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1358"/>
+        <location line="+1354"/>
         <source>Open MusicXML File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+49"/>
         <source>Importing MusicXML file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+24"/>
         <source>Can&apos;t load MusicXML file:
 </source>
         <translation type="unfinished"></translation>
@@ -21140,7 +21400,7 @@ Wilt u het pad nu instellen?</translation>
         <translation type="obsolete">MIDI paniek-gebeurtenissen oplijnen voor versturing...</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+137"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Weet u zeker dat u dit wilt opslaan als uw standaard studio?</translation>
     </message>
@@ -23597,7 +23857,7 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
 <context>
     <name>Rosegarden::TimeWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/TimeWidget.cpp" line="+98"/>
+        <location filename="../../src/gui/widgets/TimeWidget.cpp" line="+104"/>
         <source>Note:</source>
         <translation>Noot:</translation>
     </message>
@@ -23687,7 +23947,7 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+365"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+374"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;geen instrument&gt;</translation>
     </message>
@@ -23702,7 +23962,7 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
         <translation>&lt;naamloos&gt;</translation>
     </message>
     <message>
-        <location line="+929"/>
+        <location line="+933"/>
         <source>Mute track</source>
         <translation>Demp Spoor</translation>
     </message>
@@ -24646,7 +24906,7 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
 <context>
     <name>Rosegarden::UnusedAudioSelectionDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="+47"/>
+        <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="+50"/>
         <source>Select Unused Audio Files</source>
         <translation>Selecteer ongebruikt audiobestanden</translation>
     </message>
@@ -24666,7 +24926,7 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
         <translation>Datum laatst gewijzigd</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source> (not found) </source>
         <translation>(niet gevonden)</translation>
     </message>

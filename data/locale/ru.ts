@@ -4087,7 +4087,7 @@
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+731"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+735"/>
         <location line="+131"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
@@ -6280,7 +6280,7 @@
     </message>
     <message>
         <location line="+1"/>
-        <source>Cu�ca</source>
+        <source>Cuíca</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9834,7 +9834,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+444"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+445"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -9848,9 +9848,9 @@
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1101"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+480"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+481"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1707"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1038"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1047"/>
         <source>%1 Controller %2 %3</source>
         <translation>Контроллер %1 — %2 %3</translation>
     </message>
@@ -9859,7 +9859,8 @@
         <translation type="obsolete">Rosegarden — секвенсер и нотный редактор</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+461"/>
+        <location filename="../../src/gui/application/main.cpp" line="+462"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -9972,7 +9973,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+143"/>
+        <location line="+144"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10039,7 +10040,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+285"/>
+        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+282"/>
         <source>This event is tied to another event.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10449,6 +10450,16 @@ Would you like to use
     <message>
         <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="+216"/>
         <source>Arbitrary grid unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/document/io/MusicXMLLoader.cpp" line="+45"/>
+        <source>Can&apos;t open file &apos;%1&apos;</source>
+        <translation type="unfinished">Не удалось открыть файл &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+1"/>
+        <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11205,12 +11216,12 @@ Would you like to use
         <translation type="vanished">Щёлкните для переименования этого инструмента</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+87"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+85"/>
         <source>Click to rename this instrument.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+129"/>
+        <location line="+134"/>
         <location line="+176"/>
         <source>&lt;no synth&gt;</source>
         <translation>&lt;нет вирт. инструмента&gt;</translation>
@@ -11548,9 +11559,57 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
 </context>
 <context>
+    <name>Rosegarden::AudioPluginConnectionDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/AudioPluginConnectionDialog.cpp" line="+43"/>
+        <source>Audio Plugin Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Plugin port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Instrument</source>
+        <translation type="unfinished">Инструмент</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Channel</source>
+        <translation type="unfinished">Канал</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>&lt;none&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+129"/>
+        <source>Mono</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Both</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::AudioPluginDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+81"/>
+        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+89"/>
         <source>Audio Plugin</source>
         <translation>Звуковой эффект</translation>
     </message>
@@ -11560,12 +11619,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>Эффект</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+34"/>
         <source>Category:</source>
         <translation>Категория:</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+19"/>
         <source>Plugin:</source>
         <translation>Эффект:</translation>
     </message>
@@ -11576,7 +11635,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
     <message>
         <location line="+9"/>
-        <location line="+301"/>
+        <location line="+412"/>
         <source>&lt;ports&gt;</source>
         <translation>&lt;порты&gt;</translation>
     </message>
@@ -11586,7 +11645,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>&lt;id&gt;</translation>
     </message>
     <message>
-        <location line="-279"/>
+        <location line="-386"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
@@ -11606,12 +11665,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>Параметры вставки эффекта</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+29"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location line="+85"/>
+        <location line="+129"/>
         <source>(any)</source>
         <translation>(любой)</translation>
     </message>
@@ -11626,18 +11685,48 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>(нет)</translation>
     </message>
     <message>
-        <location line="+142"/>
+        <location line="+190"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;нет эффекта&gt;</translation>
     </message>
     <message>
-        <location line="-317"/>
-        <location line="+321"/>
+        <location line="-428"/>
+        <location line="+432"/>
         <source>Select a plugin from this list</source>
         <translation>Выберите эффект из списка</translation>
     </message>
     <message>
-        <location line="-310"/>
+        <location line="-481"/>
+        <source>Search:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Architecture:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>all</source>
+        <translation type="unfinished">все</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ladspa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>dssi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>lv2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>Bypass this plugin</source>
         <translation>Обход этого эффекта</translation>
     </message>
@@ -11658,7 +11747,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>Уникальный идентификатор эффекта</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+34"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
@@ -11668,7 +11757,22 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+7"/>
+        <source>Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Edit connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+392"/>
         <source>&lt;qt&gt;&lt;p&gt;This plugin has too many controls to edit here.&lt;/p&gt;&lt;p&gt;Use the external editor, if available.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;У этого эффекта или инструмента слишком много регуляторов.&lt;/p&gt;&lt;p&gt;Используйте его собственный интерфейс, если он есть.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -11683,7 +11787,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>Id: %1</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+53"/>
         <source>mono</source>
         <translation>моно</translation>
     </message>
@@ -11699,23 +11803,31 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
     <message>
         <location line="+23"/>
-        <location line="+255"/>
+        <location line="+269"/>
         <source>Program:  </source>
         <translation>Программа:</translation>
     </message>
     <message>
-        <location line="-251"/>
+        <location line="-265"/>
         <location line="+7"/>
-        <location line="+248"/>
+        <location line="+262"/>
         <location line="+5"/>
         <location line="+29"/>
         <source>&lt;none selected&gt;</source>
         <translation>&lt;ничего не выделено&gt;</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+161"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::AudioPluginLV2GUI</name>
+    <message>
+        <location filename="../../src/gui/studio/AudioPluginLV2GUI.cpp" line="+82"/>
+        <source>Sub %1</source>
+        <translation type="unfinished">Суб %1</translation>
     </message>
 </context>
 <context>
@@ -11739,6 +11851,125 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="+1"/>
         <source>Plugin slot %1</source>
         <translation>Слот эффекта %1</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::AudioPluginParameterDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/AudioPluginParameterDialog.cpp" line="+57"/>
+        <source>Plugin Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>&lt;b&gt;Parameter&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;b&gt;Value&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;b&gt;Set value&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <location line="+87"/>
+        <source>&lt;not set&gt;</source>
+        <translation type="unfinished">&lt;не установлено&gt;</translation>
+    </message>
+    <message>
+        <location line="-83"/>
+        <source>Set value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Edit Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>false</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>true</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Select Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+139"/>
+        <source>&lt;b&gt;Editing parameter %1&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Select File</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::AudioPluginPresetDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/AudioPluginPresetDialog.cpp" line="+45"/>
+        <location line="+3"/>
+        <source>Plugin Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Predefined presets:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Set Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Load/Save state from/to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Load</source>
+        <translation type="unfinished">Загрузить</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+28"/>
+        <source>Load preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location line="+14"/>
+        <source>Preset files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-13"/>
+        <source>All files</source>
+        <translation type="unfinished">Все файлы</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Save preset</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12018,7 +12249,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioStrip</name>
     <message>
-        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+161"/>
+        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+165"/>
         <source>Record input source</source>
         <translation type="unfinished">Источник записи</translation>
     </message>
@@ -12096,7 +12327,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::BankEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+98"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+99"/>
         <source>Manage MIDI Banks and Programs</source>
         <translation>Управление банками и программами</translation>
     </message>
@@ -12220,23 +12451,34 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>&lt;новый банк %1&gt;</translation>
     </message>
     <message>
-        <location line="+513"/>
+        <location line="+523"/>
         <source>Some internal error: no device selected</source>
         <translation>Внутренняя ошибка: не выбрано устройство</translation>
     </message>
     <message>
         <location line="+223"/>
         <location line="+4"/>
+        <location line="+96"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="-59"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</translation>
     </message>
     <message>
-        <location line="-779"/>
+        <location line="+49"/>
+        <source>The following tracks are using bank %1:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>The bank cannot be deleted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-845"/>
         <source>&lt;new bank&gt;</source>
         <translation>&lt;новый банк&gt;</translation>
     </message>
@@ -12251,7 +12493,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>&lt;новая компоновка %1&gt;</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+48"/>
         <source>Really delete this bank?</source>
         <translation>Действительно удалить этот банк?</translation>
     </message>
@@ -12261,7 +12503,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>Действительно удалить эту компоновку?</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+58"/>
         <source>Really delete all banks for </source>
         <translation>Действительно удалить все банки для </translation>
     </message>
@@ -12820,7 +13062,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>Вернуть последнее отменённое действие</translation>
     </message>
     <message>
-        <location line="+248"/>
+        <location line="+255"/>
         <source>Nothing to undo</source>
         <translation>Нет отменяемых действий</translation>
     </message>
@@ -13423,7 +13665,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::DeleteRangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="+322"/>
+        <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="+323"/>
         <source>Delete Range</source>
         <translation>Удалить диапазон</translation>
     </message>
@@ -13452,14 +13694,29 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>[ Нет порта ]</translation>
     </message>
     <message>
-        <location line="+699"/>
+        <location line="+701"/>
         <location line="+11"/>
         <location line="+16"/>
         <source>New Device</source>
         <translation>Новое устройство</translation>
     </message>
     <message>
-        <location line="+97"/>
+        <location line="+58"/>
+        <source>The following tracks are using this device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>The device cannot be deleted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location line="+80"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:device-manager-en</translation>
     </message>
@@ -14177,7 +14434,7 @@ This could cause problems if it overrides a different computed value later on.</
 <context>
     <name>Rosegarden::EventView</name>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="+122"/>
+        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="+121"/>
         <source>Event filters</source>
         <translation>Фильтры событий</translation>
     </message>
@@ -14774,7 +15031,12 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+44"/>
+        <source>LV2 Plugin Support (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>Sequencer status</source>
         <translation>Статус секвенсера</translation>
     </message>
@@ -14824,12 +15086,12 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+142"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-586"/>
+        <location line="-598"/>
         <source>Behavior</source>
         <translation>Поведение</translation>
     </message>
@@ -14838,7 +15100,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="vanished">Использовать стиль «Шип»</translation>
     </message>
     <message>
-        <location line="+304"/>
+        <location line="+315"/>
         <source>Note name style</source>
         <translation>Стиль именования нот</translation>
     </message>
@@ -14907,7 +15169,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="vanished">HPLIP (Qt 4)</translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+153"/>
         <location line="+5"/>
         <location line="+5"/>
         <source>Rosegarden</source>
@@ -14923,12 +15185,12 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-251"/>
+        <location line="-252"/>
         <source>Notation</source>
         <translation>Партитура</translation>
     </message>
     <message>
-        <location line="-129"/>
+        <location line="-140"/>
         <source>Jump to loop</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14943,7 +15205,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+68"/>
         <source>Presentation</source>
         <translation>Внешний вид</translation>
     </message>
@@ -15027,7 +15289,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Внешние приложения</translation>
     </message>
     <message>
-        <location line="+181"/>
+        <location line="+182"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>Изменения касательно фонового рисунка не возымеют эффекта до перезапуска Rosegarden.</translation>
     </message>
@@ -15521,7 +15783,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::InsertRangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="+210"/>
+        <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="+211"/>
         <source>Insert Range</source>
         <translation>Вставить область</translation>
     </message>
@@ -15979,14 +16241,8 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::KorgNanoKontrol2</name>
     <message>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -16916,7 +17172,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-683"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-687"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17001,7 +17257,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>Получать извне</translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+121"/>
         <source>No connection</source>
         <translation>Нет связи</translation>
     </message>
@@ -17622,7 +17878,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1539"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1536"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Неизвестное действие %1 при вставке ноты</translation>
     </message>
@@ -17643,7 +17899,7 @@ Double-click to open the marker editor.</source>
         </translation>
     </message>
     <message>
-        <location line="-1402"/>
+        <location line="-1399"/>
         <source> Grid: </source>
         <translation> Сетка: </translation>
     </message>
@@ -17704,7 +17960,7 @@ Double-click to open the marker editor.</source>
     </message>
     <message>
         <location line="+13"/>
-        <location line="+236"/>
+        <location line="+233"/>
         <location line="+64"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -17720,7 +17976,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Рассчитанные ключевые знаки альтерации отображены вверху</translation>
     </message>
     <message>
-        <location line="-921"/>
+        <location line="-918"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Вычисленные ключевые знаки альтерации показаны вверху</translation>
     </message>
@@ -20814,7 +21070,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished">Читается файл...</translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="+159"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
         <translation type="unfinished">Это файл был создан при помощи Rosegarden %1; 
@@ -20831,17 +21087,22 @@ There may be some incompatibilities with the file format.</source>
     </message>
     <message>
         <location line="+0"/>
-        <location line="+2297"/>
+        <location line="+2340"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-879"/>
+        <location line="-923"/>
         <source>Loading plugins...</source>
         <translation>Загружаются эффекты...</translation>
     </message>
     <message>
-        <location line="+880"/>
+        <location line="+91"/>
+        <source>%1 (from %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+833"/>
         <source>Skipping a file will remove its audio segments from the composition.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20870,21 +21131,21 @@ There may be some incompatibilities with the file format.</source>
 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+496"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+497"/>
         <location line="+60"/>
         <location line="+12"/>
         <location line="+63"/>
         <location line="+32"/>
-        <location line="+343"/>
-        <location line="+646"/>
+        <location line="+346"/>
+        <location line="+649"/>
         <location line="+11"/>
         <location line="+22"/>
         <location line="+3"/>
         <location line="+35"/>
         <location line="+8"/>
-        <location line="+25"/>
+        <location line="+21"/>
         <location line="+11"/>
-        <location line="+992"/>
+        <location line="+993"/>
         <location line="+16"/>
         <location line="+223"/>
         <source>Rosegarden</source>
@@ -20895,7 +21156,7 @@ There may be some incompatibilities with the file format.</source>
         <translation type="obsolete">Не удалось сохранить документ в %1</translation>
     </message>
     <message numerus="yes">
-        <location line="-2548"/>
+        <location line="-2551"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>Удалить %n звуковой файл, записанный во время этого несохранённого сеанса?</numerusform>
@@ -20967,7 +21228,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="vanished">Объединить</translation>
     </message>
     <message>
-        <location line="+520"/>
+        <location line="+523"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21032,23 +21293,23 @@ editing this file, you may press Ignore to open the file.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1671"/>
+        <location line="-1668"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Ошибка при записи &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="-755"/>
-        <location line="+2191"/>
+        <location line="-761"/>
+        <location line="+2194"/>
         <source>Cancel</source>
         <translation type="unfinished">Отменить</translation>
     </message>
     <message>
-        <location line="-2128"/>
+        <location line="-2131"/>
         <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+741"/>
+        <location line="+747"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21088,12 +21349,11 @@ editing this file, you may press Ignore to open the file.
         <translation>&lt;h3&gt;Эффекты не найдены&lt;/h3&gt;&lt;p&gt;Следующие звуковые эффекты не удалось загрузить:&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
-        <translation>&lt;li&gt;%1 (из %2)&lt;/li&gt;</translation>
+        <translation type="vanished">&lt;li&gt;%1 (из %2)&lt;/li&gt;</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+16"/>
         <source>This file contains one or more old element types that are now deprecated.
 Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
@@ -21109,7 +21369,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation type="unfinished">Вставить записанное MIDI</translation>
     </message>
     <message>
-        <location line="+97"/>
+        <location line="+98"/>
         <location line="+80"/>
         <source>(recorded)</source>
         <translation type="unfinished">(записано)</translation>
@@ -21122,7 +21382,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+276"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+277"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation type="unfinished">Выделять можно либо звуковой, либо незвуковой сегмент</translation>
     </message>
@@ -21207,7 +21467,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+342"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+358"/>
         <source>Initializing plugin manager...</source>
         <translation>Инициализируется диспетчер эффектов...</translation>
     </message>
@@ -21236,7 +21496,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Ключ на старт...</translation>
     </message>
     <message>
-        <location line="+484"/>
+        <location line="+498"/>
         <source>  Zoom:  </source>
         <translation>  Масштаб:  </translation>
     </message>
@@ -21267,13 +21527,13 @@ Do you want to open it instead ?</source>
 Вы хотите загрузить её вместо указанного файла?</translation>
     </message>
     <message>
-        <location line="+4901"/>
+        <location line="+4897"/>
         <location line="+19"/>
         <source>Untitled</source>
         <translation>Без названия</translation>
     </message>
     <message>
-        <location line="-4370"/>
+        <location line="-4366"/>
         <location line="+161"/>
         <source>Could not save document at %1
 Error was : %2</source>
@@ -21283,7 +21543,7 @@ Error was : %2</source>
     <message>
         <location line="-158"/>
         <location line="+161"/>
-        <location line="+6289"/>
+        <location line="+6286"/>
         <source>Could not save document at %1</source>
         <translation>Не удалось сохранить документ в %1</translation>
     </message>
@@ -21292,7 +21552,7 @@ Error was : %2</source>
         <translation type="obsolete">Открывается новое окно приложения...</translation>
     </message>
     <message>
-        <location line="-6769"/>
+        <location line="-6766"/>
         <source>Creating new document...</source>
         <translation>Создаётся новый документ...</translation>
     </message>
@@ -21311,12 +21571,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-116"/>
-        <location line="+6095"/>
+        <location line="+6092"/>
         <source>All supported files</source>
         <translation>Все поддерживаемые файлы</translation>
     </message>
     <message>
-        <location line="-6094"/>
+        <location line="-6091"/>
         <location line="+72"/>
         <location line="+217"/>
         <source>Rosegarden files</source>
@@ -21324,16 +21584,16 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-288"/>
-        <location line="+2092"/>
+        <location line="+2088"/>
         <location line="+24"/>
         <source>MIDI files</source>
         <translation>Файлы MIDI</translation>
     </message>
     <message>
-        <location line="-2115"/>
+        <location line="-2111"/>
         <location line="+71"/>
         <location line="+222"/>
-        <location line="+1759"/>
+        <location line="+1755"/>
         <location line="+40"/>
         <location line="+24"/>
         <location line="+260"/>
@@ -21348,12 +21608,12 @@ Error was : %2</source>
         <location line="+53"/>
         <location line="+48"/>
         <location line="+122"/>
-        <location line="+2525"/>
+        <location line="+2526"/>
         <source>All files</source>
         <translation>Все файлы</translation>
     </message>
     <message>
-        <location line="-6097"/>
+        <location line="-6094"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
@@ -21472,12 +21732,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+57"/>
-        <location line="+2893"/>
+        <location line="+2889"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location line="-2892"/>
+        <location line="-2888"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21540,17 +21800,17 @@ No segment will be split.</source>
     </message>
     <message>
         <location line="+151"/>
-        <location line="+2528"/>
+        <location line="+2524"/>
         <source>Select File(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1806"/>
-        <location line="+1439"/>
+        <location line="-1802"/>
+        <location line="+1435"/>
         <location line="+194"/>
         <location line="+98"/>
-        <location line="+100"/>
-        <location line="+692"/>
+        <location line="+101"/>
+        <location line="+691"/>
         <location line="+50"/>
         <location line="+48"/>
         <location line="+116"/>
@@ -21559,7 +21819,7 @@ No segment will be split.</source>
         <translation type="unfinished">Отменить</translation>
     </message>
     <message numerus="yes">
-        <location line="-2434"/>
+        <location line="-2430"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -21655,7 +21915,7 @@ No segment will be split.</source>
         <translation type="unfinished">Инструмент &quot;Объединение&quot; пока не закончен</translation>
     </message>
     <message>
-        <location line="+200"/>
+        <location line="+196"/>
         <source>Revert modified document to previous saved version?</source>
         <translation type="unfinished">Восстановить изменённый документ до предыдущей версии?</translation>
     </message>
@@ -21742,12 +22002,12 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+49"/>
         <source>Importing MusicXML file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+24"/>
         <source>Can&apos;t load MusicXML file:
 </source>
         <translation type="unfinished"></translation>
@@ -21778,7 +22038,7 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+630"/>
+        <location line="+631"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21825,7 +22085,7 @@ No segment will be split.</source>
 (%2)</translation>
     </message>
     <message>
-        <location line="-3363"/>
+        <location line="-3364"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished">Секвенсер Rosgarden запустить не удалось, поэтому воспроизведение 
@@ -21833,7 +22093,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 настройке звука и MIDI обратитесь на www.rosegardenmusic.com.</translation>
     </message>
     <message>
-        <location line="-2003"/>
+        <location line="-1999"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21858,7 +22118,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+809"/>
+        <location line="+805"/>
         <source>Select MIDI File(s)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22080,7 +22340,7 @@ Would you like to set it now?</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location line="-6421"/>
+        <location line="-6417"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -22102,15 +22362,15 @@ Would you like to set it now?</source>
         <location line="+344"/>
         <location line="+76"/>
         <location line="+25"/>
-        <location line="+791"/>
+        <location line="+787"/>
         <location line="+203"/>
         <location line="+19"/>
         <location line="+175"/>
         <location line="+20"/>
         <location line="+78"/>
         <location line="+19"/>
-        <location line="+81"/>
-        <location line="+20"/>
+        <location line="+82"/>
+        <location line="+19"/>
         <location line="+359"/>
         <location line="+239"/>
         <location line="+4"/>
@@ -22138,7 +22398,7 @@ Would you like to set it now?</source>
         <location line="+117"/>
         <location line="+13"/>
         <location line="+1174"/>
-        <location line="+123"/>
+        <location line="+124"/>
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
@@ -22148,12 +22408,12 @@ Would you like to set it now?</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-8209"/>
+        <location line="-8220"/>
         <source>Starting sequencer...</source>
         <translation>Запускается секвенсер...</translation>
     </message>
     <message>
-        <location line="+1884"/>
+        <location line="+1898"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -22168,7 +22428,7 @@ Would you like to set it now?</source>
         <translation type="obsolete">В очередь на передачу ставятся события MIDI panic...</translation>
     </message>
     <message>
-        <location line="+5748"/>
+        <location line="+5745"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Вы действительно хотите сделать этот документ
 описанием студии, используемым по умолчанию?</translation>
@@ -22216,7 +22476,7 @@ Error was : %2</source>
         <translation>&lt;p&gt;Вы используете версию %1. В настоящее время доступна более новая версия %2.&lt;/p&gt;&lt;p&gt;Подробности можно узнать на сайте &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-2828"/>
+        <location line="-2829"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24622,7 +24882,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TimeWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/TimeWidget.cpp" line="+98"/>
+        <location filename="../../src/gui/widgets/TimeWidget.cpp" line="+104"/>
         <source>Note:</source>
         <translation>Нота:</translation>
     </message>
@@ -24712,7 +24972,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+365"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+374"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;нет инструмента&gt;</translation>
     </message>
@@ -24727,7 +24987,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;без имени&gt;</translation>
     </message>
     <message>
-        <location line="+929"/>
+        <location line="+933"/>
         <source>Mute track</source>
         <translation>Приглушить дорожку</translation>
     </message>
@@ -25671,7 +25931,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::UnusedAudioSelectionDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="+47"/>
+        <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="+50"/>
         <source>Select Unused Audio Files</source>
         <translation>Выберите неиспользуемые звуковые файлы</translation>
     </message>
@@ -25691,7 +25951,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>Дата последнего изменения</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source> (not found) </source>
         <translation> (не найдено) </translation>
     </message>
