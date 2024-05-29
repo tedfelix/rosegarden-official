@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A MIDI and audio sequencer and musical notation editor.
-  Copyright 2000-2023 the Rosegarden development team.
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2024 the Rosegarden development team.
 
   This file is Copyright 2002
   Hans Kieserman      <hkieserman@mail.com>
