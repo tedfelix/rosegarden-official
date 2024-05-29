@@ -1124,7 +1124,10 @@ void RosegardenDocument::setSequenceManager(SequenceManager *sm)
 //
 int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
 int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
-int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 9;
+// Version 10 introduces LV2 plugins and provides values that
+// older versions will interpret as plugins that weren't found.
+// Older versions will issue helpful "plugin not found" messages.
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 10;
 
 bool RosegardenDocument::saveDocument(const QString& filename,
                                     QString& errMsg,
