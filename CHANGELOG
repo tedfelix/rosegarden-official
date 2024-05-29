@@ -28,8 +28,15 @@ Included in this release...
   * Fix window focus problem when creating MIDI Devices.
     Bug #1686.  [7baaffde]
   * Fix track instrument reset when editing banks.  Bug #1688.
-    [d83d883b]
+    [d83d883b] [eab9b9a3]
   * Fix buffer overflow in notation editor.  Bug #1689.  [dd4549b0]
+  * Fix examples pointing to various audio paths causing unwanted
+    directories to be created.  Bug #1668.  [26b26e6e]
+  * Fix slow refresh of note names in matrix.  Bug #1626.  [de035bfe]
+  * Fix notation not selecting current segment notes on launch.
+    Bug #1672.  [ae27b0c6]
+  * Fix UnusedAudioSelectionDialog column widths.  Feature #520.
+    [5d198075]
 
 ===== New Features =====
 
@@ -38,8 +45,8 @@ Included in this release...
 
 ===== Additional Contributors =====
 
-  * Chuck Elliot
-
+  * Chuck Elliot - txt2rgd.py fix.
+  * Aere Greenway - ZynAddSubFX-2024.rgd updated device file.
 
 ====== ROSEGARDEN 23.12 RELEASED ======
 
