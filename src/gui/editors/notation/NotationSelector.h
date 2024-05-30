@@ -33,6 +33,7 @@ class QGraphicsRectItem;
 namespace Rosegarden
 {
 
+
 class ViewElement;
 class NotationWidget;
 class NotationElement;
@@ -40,6 +41,8 @@ class EventSelection;
 class Event;
 class NotationStaff;
 
+
+/// The Notation Arrow Tool
 /**
  * Rectangular note selection
  */
