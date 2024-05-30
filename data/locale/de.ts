@@ -512,7 +512,7 @@ a quarter sine wave contour</source>
         <location line="+592"/>
         <location line="+188"/>
         <source>&amp;Save</source>
-        <translation>&amp;Speichern</translation>
+        <translation>&amp;Sichern</translation>
     </message>
     <message>
         <location line="-1100"/>
@@ -1479,7 +1479,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="-756"/>
         <source>&amp;Settings</source>
-        <translation>Ein&amp;stellungen</translation>
+        <translation>Vorein&amp;stellungen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1726,7 +1726,7 @@ a quarter sine wave contour</source>
         <location line="+85"/>
         <location line="+273"/>
         <source>&amp;Reset Selection</source>
-        <translation>Auswahl &amp;rücksetzen</translation>
+        <translation>Auswahl &amp;zurücksetzen</translation>
     </message>
     <message>
         <location line="-171"/>
@@ -2635,7 +2635,7 @@ a quarter sine wave contour</source>
         <location line="-1042"/>
         <location line="+58"/>
         <source>Preferences...</source>
-        <translation>Einstellungen...</translation>
+        <translation>Voreinstellungen...</translation>
     </message>
     <message>
         <location line="+84"/>
@@ -2646,7 +2646,7 @@ a quarter sine wave contour</source>
         <location line="+190"/>
         <location line="+594"/>
         <source>&amp;Preferences...</source>
-        <translation>&amp;Einstellungen...</translation>
+        <translation>&amp;Voreinstellungen...</translation>
     </message>
     <message>
         <location line="-573"/>
@@ -2932,7 +2932,7 @@ a quarter sine wave contour</source>
         <location line="-225"/>
         <location line="+415"/>
         <source>&amp;Place a Controller for Each Note</source>
-        <translation>Kontroller für jede Note &amp;platzieren</translation>
+        <translation>Kontroller für jede Note set&amp;zen</translation>
     </message>
     <message>
         <source>Shift+Left</source>
@@ -2989,12 +2989,12 @@ a quarter sine wave contour</source>
     <message>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
-        <translation type="vanished">Left</translation>
+        <translation type="vanished">Links</translation>
     </message>
     <message>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
-        <translation type="vanished">Right</translation>
+        <translation type="vanished">Rechts</translation>
     </message>
     <message>
         <source>Ctrl+Left</source>
@@ -3542,7 +3542,7 @@ a quarter sine wave contour</source>
         <location line="-414"/>
         <location line="+415"/>
         <source>&amp;Set Controller Values</source>
-        <translation>Werte für die Kontroller ein&amp;stellen</translation>
+        <translation>Werte für Kontroller &amp;setzen</translation>
     </message>
     <message>
         <source>Insert C&amp;ontroller  Sequence...</source>
@@ -4341,7 +4341,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+3"/>
         <source>Save as &amp;Template...</source>
-        <translation>Als Vorla&amp;ge speichern...</translation>
+        <translation>Als Vorla&amp;ge sichern...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4531,7 +4531,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>&amp;Reset MIDI Network</source>
-        <translation>MIDI-Netzwerk zu&amp;rücksetzen</translation>
+        <translation>MIDI-Netzwerk &amp;zurücksetzen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4546,7 +4546,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>&amp;Save Current Document as Default Studio</source>
-        <translation>Aktuelles Dokument als &amp;Standardstudio speichern</translation>
+        <translation>Aktuelles Dokument als &amp;Standardstudio sichern</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -4968,7 +4968,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+7"/>
         <source>Save &amp;as...</source>
-        <translation>Speichern &amp;als...</translation>
+        <translation>Sichern &amp;als...</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -5068,7 +5068,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>&amp;Preferences</source>
-        <translation>&amp;Einstellungen</translation>
+        <translation>&amp;Voreinstellungen</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -7994,15 +7994,15 @@ a quarter sine wave contour</source>
         <translation>&amp;lt;keine&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/base/Studio.cpp" line="+68"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+748"/>
+        <location filename="../../src/base/Studio.cpp" line="+68"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
         <source>Synth plugin</source>
         <translation>Synthesizer-Plugin</translation>
     </message>
     <message>
-        <location line="-3"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+37"/>
+        <location line="+37"/>
+        <location filename="../../src/base/Studio.cpp" line="-3"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Audio</source>
         <translation>Audio</translation>
@@ -10204,10 +10204,10 @@ a quarter sine wave contour</source>
         <translation type="vanished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1101"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+481"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1707"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1101"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1047"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1707"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Kontroller %2 %3</translation>
     </message>
@@ -10216,13 +10216,13 @@ a quarter sine wave contour</source>
         <translation type="obsolete">Rosegarden - ein Sequenzer und Notensatz-Editor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+462"/>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
+        <location filename="../../src/gui/application/main.cpp" line="+462"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+295"/>
+        <location filename="../../src/gui/application/main.cpp" line="+295"/>
         <source>Welcome!</source>
         <translation>Willkommen!</translation>
     </message>
@@ -10341,7 +10341,7 @@ und erneut probieren&lt;/p&gt;&lt;/qt&gt;</translation>
     <message>
         <location line="+144"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Konnte Audioaufnahme nicht starten.&lt;/p&gt;&lt;p&gt;Stelle sicher, dass die Komposition gespeichert wurde und prüfe den Audio-Dateipfad in &lt;b&gt;Komposition -&gt; Dokumenteigenschaften bearbeiten... -&gt; Audio-Eigenschaften&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Konnte Audioaufnahme nicht starten.&lt;/p&gt;&lt;p&gt;Stelle sicher, dass die Komposition gesichert wurde und prüfe den Audio-Dateipfad in &lt;b&gt;Komposition -&gt; Dokumenteigenschaften bearbeiten... -&gt; Audio-Eigenschaften&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
@@ -10401,7 +10401,7 @@ Lesen erreicht</translation>
     </message>
     <message>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation type="vanished">Momentan unterstützt Rosegarden nur 16 oder 32-bit PCM oder IEEE Fließkomma RIFF Dateien bei der Ausgabe</translation>
+        <translation type="vanished">Aktuell unterstützt Rosegarden nur 16 oder 32-bit PCM oder IEEE Fließkomma RIFF Dateien bei der Ausgabe</translation>
     </message>
     <message>
         <source>Can&apos;t find RIFF identifier</source>
@@ -10417,7 +10417,7 @@ Lesen erreicht</translation>
     </message>
     <message>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation type="vanished">Momentan unterstützt Rosegarden nur PCM oder IEEE Fließkomma RIFF-Dateien</translation>
+        <translation type="vanished">Aktuell unterstützt Rosegarden nur PCM oder IEEE Fließkomma RIFF-Dateien</translation>
     </message>
     <message>
         <source>Unsupported number of channels</source>
@@ -10426,11 +10426,11 @@ Kanälen</translation>
     </message>
     <message>
         <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation type="vanished">Momentan unterstützt Rosegarden nur 8-, 16- oder 24-bit PCM in RIFF-Dateien</translation>
+        <translation type="vanished">Aktuell unterstützt Rosegarden nur 8-, 16- oder 24-bit PCM in RIFF-Dateien</translation>
     </message>
     <message>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation type="vanished">Momentan unterstützt Rosegarden nur 32 bit Fließkomma in RIFF-Dateien</translation>
+        <translation type="vanished">Aktuell unterstützt Rosegarden nur 32 bit Fließkomma in RIFF-Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/TranzportClient.cpp" line="+62"/>
@@ -10636,14 +10636,14 @@ abgeschnitten</translation>
         <translation>Wechselnd - %1-Werte wechselnd auf Max und Min setzen</translation>
     </message>
     <message>
+        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+38"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation>Maximum</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation>Minimum</translation>
     </message>
@@ -10915,12 +10915,12 @@ a quarter sine wave contour</source>
     <message>
         <location filename="../../src/document/io/MusicXMLLoader.cpp" line="+45"/>
         <source>Can&apos;t open file &apos;%1&apos;</source>
-        <translation type="unfinished">Datei %1&apos; kann nicht geöfnet werden</translation>
+        <translation>Datei %1&apos; kann nicht geöffnet werden</translation>
     </message>
     <message>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+1"/>
         <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
-        <translation type="unfinished">Der verbundene Korg nanoKontrol2 ist nicht optimal konfiguriert für Rosegarden.  Ihn Rekonfigurieren wird alle mit dem nanoKontrol2 Editor gemachten eigenen Einstellungen verlieren.  Rekonfigurieren?</translation>
+        <translation>Der verbundene Korg nanoKontrol2 ist nicht optimal konfiguriert für Rosegarden.  Ihn Rekonfigurieren wird alle mit dem nanoKontrol2 Editor gemachten eigenen Einstellungen verlieren.  Rekonfigurieren?</translation>
     </message>
 </context>
 <context>
@@ -10937,8 +10937,13 @@ a quarter sine wave contour</source>
     </message>
     <message>
         <location line="+7"/>
+        <source>&lt;p&gt;Copyright 2000-2024 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Copyright 2000-2024 Rosegarden Entwicklerteam&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Kompilierschlüssel: %3&lt;br&gt;Qt Version: %2&lt;/p&gt;&lt;p&gt;Rosegarden wurde dir zur Verfügung gestellt von einem Team 
+Freiwilliger aus aller Welt. Für eine Liste der Beitragenden besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Für mehr Information über Rosegarden, besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 oder später&lt;/p&gt; {2000-2024 ?} {1 ?} {4&quot;?} {3&lt;?} {2&lt;?} {2 ?}</translation>
+    </message>
+    <message>
         <source>&lt;p&gt;Copyright 2000-2023 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Copyright 2000-2023 Rosegarden Entwicklerteam&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Kompilierschlüssel: %3&lt;br&gt;Qt Version: %2&lt;/p&gt;&lt;p&gt;Rosegarden wurde dir zur Verfügung gestellt von einem Team 
+        <translation type="vanished">&lt;p&gt;Copyright 2000-2024 Rosegarden Entwicklerteam&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Kompilierschlüssel: %3&lt;br&gt;Qt Version: %2&lt;/p&gt;&lt;p&gt;Rosegarden wurde dir zur Verfügung gestellt von einem Team 
 Freiwilliger aus aller Welt. Für eine Liste der Beitragenden besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Für mehr Information über Rosegarden, besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 oder später&lt;/p&gt;</translation>
     </message>
     <message>
@@ -11339,12 +11344,12 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="+1"/>
         <source>Above the current selected track</source>
-        <translation>Ober der momentan gewählten Spur</translation>
+        <translation>Ober der aktuell gewählten Spur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Below the current selected track</source>
-        <translation>Unter der momentan gewählten Spur</translation>
+        <translation>Unter der aktuell gewählten Spur</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11400,7 +11405,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="+10"/>
         <source>Record audio files as</source>
-        <translation>Audio-Aufnahmen speichern als</translation>
+        <translation>Audio-Aufnahmen sichern als</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -11415,7 +11420,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="+12"/>
         <source>Show Audio File Location dialog when saving</source>
-        <translation>Beim Speichern Ort der Audio-Datei anzeigen</translation>
+        <translation>Beim Sichern Ort der Audio-Datei anzeigen</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -11440,7 +11445,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="+1"/>
         <source>Central repository (%1)</source>
-        <translation>Zentraler Speicherort (%1)</translation>
+        <translation>Zentraler Sicherungsort (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11601,29 +11606,29 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="+14"/>
         <source>Audio files have been introduced in this session.  Where would you like to save them?</source>
-        <translation>In dieser Sitzung wurden Audio-Dateien eingeführt.  Wo sollen sie gespeichert werden?</translation>
+        <translation>In dieser Sitzung wurden Audio-Dateien eingeführt.  Wo sollen sie gesichert werden?</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>To an &quot;audio&quot; directory where the document is saved.  (%1) (Recommended)</source>
-        <translation>In ein Verzeichnis &quot;Audio&quot; des Dokumentspeicherortes.  (%1) (Empfohlen)</translation>
+        <translation>In ein Verzeichnis &quot;Audio&quot;, wo das Dokument gesichert ist.  (%1) (Empfohlen)</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>To a directory named after the document where the document is saved.
 (%1)</source>
-        <translation>In ein Verzeichnis benannt nach dem Dokument des Dokumentspeicherortes.
+        <translation>In ein Verzeichnis benannt nach dem Dokument, wo es gesichert ist.
 (%1)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To the same directory where the document is saved.  (.)</source>
-        <translation>In dasselbe Verzeichnis des Dokumentspeicherortes.  (.)</translation>
+        <translation>In dasselbe Verzeichnis, wo das Dokument gesichert ist.  (.)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To a central audio file repository.  (%1)</source>
-        <translation>In den zentralen Speicherort für Audio-Dateien.  (%1)</translation>
+        <translation>In den zentralen Sicherungsort für Audio-Dateien.  (%1)</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -11802,7 +11807,7 @@ von der des JACK-Audioservers unterscheidet.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegar
     <message>
         <location line="+323"/>
         <source>Save File As</source>
-        <translation>Datei speichern als</translation>
+        <translation>Datei sichern als</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -11903,7 +11908,7 @@ Wollen Sie das tun?</translation>
 
 Please select the ones you wish to delete permanently from the hard disk.
 </source>
-        <translation>Die folgenden Audio-Dateien werden in der Komposition nicht verwendet.
+        <translation>Die folgenden Audio-Dateien werden in der aktuellen Komposition nicht verwendet.
 
 Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht werden sollen.
 </translation>
@@ -12086,47 +12091,47 @@ permission and re-add it</source>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginConnectionDialog.cpp" line="+43"/>
         <source>Audio Plugin Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-Plugin Verbindungen</translation>
     </message>
     <message>
         <location line="+40"/>
         <source>Plugin port</source>
-        <translation type="unfinished"></translation>
+        <translation>Anschluss für Plugin</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrument</translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Channel</source>
-        <translation type="unfinished">Kanal</translation>
+        <translation>Kanal</translation>
     </message>
     <message>
         <location line="+38"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;keine&gt;</translation>
+        <translation>&lt;keine&gt;</translation>
     </message>
     <message>
         <location line="+129"/>
         <source>Mono</source>
-        <translation type="unfinished"></translation>
+        <translation>Mono</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Links</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechts</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Both</source>
-        <translation type="unfinished"></translation>
+        <translation>Beide</translation>
     </message>
 </context>
 <context>
@@ -12175,32 +12180,32 @@ permission and re-add it</source>
     <message>
         <location line="-93"/>
         <source>Search:</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche:</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Architecture:</source>
-        <translation type="unfinished"></translation>
+        <translation>Architektur:</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>all</source>
-        <translation type="unfinished">Alle</translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ladspa</source>
-        <translation type="unfinished"></translation>
+        <translation>ladspa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>dssi</source>
-        <translation type="unfinished"></translation>
+        <translation>dssi</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>lv2</source>
-        <translation type="unfinished"></translation>
+        <translation>lv2</translation>
     </message>
     <message>
         <location line="+44"/>
@@ -12225,17 +12230,17 @@ permission and re-add it</source>
     <message>
         <location line="+14"/>
         <source>Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreinstellungen</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Edit connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungen bearbeiten</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -12265,7 +12270,7 @@ permission and re-add it</source>
     <message>
         <location line="+49"/>
         <source>This plugin does not have any controls that can be edited here.</source>
-        <translation>Dieses Plugin besitzt keine Kontroller, die hier bearbeitet werden können.</translation>
+        <translation>Dieses Plugin besitzt keine Bedienelemente, die hier bearbeitet werden können.</translation>
     </message>
     <message>
         <location line="-477"/>
@@ -12297,22 +12302,22 @@ input and output ports, such as &lt;b&gt;2 in, 1 out&lt;/b&gt;, which would take
     <message>
         <location line="+34"/>
         <source>Reset</source>
-        <translation>Reset</translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Reset plugin controls to factory defaults</source>
-        <translation>Plugin-Werte auf Werkseinstellungen zurücksetzen</translation>
+        <translation>Bedienelemente des Plugins auf Werkseinstellungen zurücksetzen</translation>
     </message>
     <message>
         <location line="+409"/>
         <source>&lt;qt&gt;&lt;p&gt;This plugin has too many controls to edit here.&lt;/p&gt;&lt;p&gt;Use the external editor, if available.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Dieses Plugin besitzt zu viele Kontroller um sie hier alle einzustellen.&lt;/p&gt;&lt;p&gt;Falls vorhanden, nutzen Sie den externen Editor.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Dieses Plugin besitzt zu viele Bedienelemente, um sie hier alle einzustellen.&lt;/p&gt;&lt;p&gt;Falls vorhanden, nutzen Sie den externen Editor.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>This plugin does not have any controls that can be edited 
 here.</source>
-        <translation type="vanished">Dieses Plugin besitzt keine Einstellungen, die an dieser Stelle verändert werden könnten.</translation>
+        <translation type="vanished">Dieses Plugin besitzt keine Bedienelemente, die an dieser Stelle verändert werden könnten.</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -12360,7 +12365,7 @@ here.</source>
     <message>
         <location filename="../../src/gui/studio/AudioPluginLV2GUI.cpp" line="+82"/>
         <source>Sub %1</source>
-        <translation type="unfinished">Grp %1</translation>
+        <translation>Grp %1</translation>
     </message>
 </context>
 <context>
@@ -12391,63 +12396,63 @@ here.</source>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginParameterDialog.cpp" line="+57"/>
         <source>Plugin Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin Parameter</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;b&gt;Parameter&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Parameter&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;b&gt;Value&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Wert&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;b&gt;Set value&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Wert setzen&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+19"/>
         <location line="+87"/>
         <source>&lt;not set&gt;</source>
-        <translation type="unfinished">&lt;keine&gt;</translation>
+        <translation>&lt;nicht gesetzt&gt;</translation>
     </message>
     <message>
         <location line="-83"/>
         <source>Set value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert setzen</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Edit Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter bearbeiten</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>false</source>
-        <translation type="unfinished"></translation>
+        <translation>falsch</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>true</source>
-        <translation type="unfinished"></translation>
+        <translation>wahr</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Select Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfad wählen</translation>
     </message>
     <message>
         <location line="+139"/>
         <source>&lt;b&gt;Editing parameter %1&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Parameter %1 bearbeiten&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei wählen</translation>
     </message>
 </context>
 <context>
@@ -12456,53 +12461,53 @@ here.</source>
         <location filename="../../src/gui/dialogs/AudioPluginPresetDialog.cpp" line="+45"/>
         <location line="+3"/>
         <source>Plugin Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreinstellungen für Plugin</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Predefined presets:</source>
-        <translation type="unfinished"></translation>
+        <translation>Festgelegte Voreinstellungen:</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Set Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreinstellung setzen</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Load/Save state from/to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Lade/Sichere Status von/zu Datei</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Load</source>
-        <translation type="unfinished">Laden</translation>
+        <translation>Laden</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichern</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Load preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreinstellung laden</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+14"/>
         <source>Preset files</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreinstellungsdateien</translation>
     </message>
     <message>
         <location line="-13"/>
         <source>All files</source>
-        <translation type="unfinished">Alle Dateien</translation>
+        <translation>Alle Dateien</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Save preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreinstellung sichern</translation>
     </message>
 </context>
 <context>
@@ -12548,7 +12553,7 @@ here.</source>
     <message>
         <location line="+1"/>
         <source>Central repository (%1)</source>
-        <translation>Zentraler Speicherort (%1)</translation>
+        <translation>Zentraler Sicherungsort (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -12559,7 +12564,7 @@ here.</source>
         <location line="+4"/>
         <location line="+22"/>
         <source>Save document first.</source>
-        <translation>Zuerst Dokument speichern.</translation>
+        <translation>Zuerst Dokument sichern.</translation>
     </message>
     <message>
         <location line="-15"/>
@@ -12594,7 +12599,7 @@ here.</source>
     <message>
         <location line="+1"/>
         <source>Document&apos;s audio files will now be moved to the new location.&lt;br /&gt;Please note that this will force a save of the file.</source>
-        <translation>Die Audio-Dateien des Dokumentes werden nicht zum neuen Ort verschoben.&lt;br /&gt;Bitte beachten sie, dass dies ein Speichern der Datei erzwingt.</translation>
+        <translation>Die Audio-Dateien des Dokumentes werden nicht zum neuen Ort verschoben.&lt;br /&gt;Bitte beachten sie, dass dies ein Sichern der Datei erzwingt.</translation>
     </message>
     <message>
         <source>Choose Audio File Path</source>
@@ -12610,7 +12615,7 @@ here.</source>
     </message>
     <message>
         <source>Would you like to move the document&apos;s audio files to the new path?  Please note that this will force a save of the file.</source>
-        <translation type="vanished">Möchten sie die Audio-Dateien des Dokumentes zum neuen Pfad verschieben? Bitte beachten sie, dass dies ein Speichern der Datei erzwingt.</translation>
+        <translation type="vanished">Möchten sie die Audio-Dateien des Dokumentes zum neuen Pfad verschieben? Bitte beachten sie, dass dies ein Sichern der Datei erzwingt.</translation>
     </message>
     <message>
         <source>Equivalent minutes of 16-bit stereo:</source>
@@ -13103,12 +13108,12 @@ Bank einfügen</translation>
     <message>
         <location line="+119"/>
         <source>The following tracks are using bank %1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Folgende Spuren verwenden Bank %1:</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>The bank cannot be deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Bank kann nicht gelöscht werden.</translation>
     </message>
 </context>
 <context>
@@ -13650,7 +13655,7 @@ machen</translation>
         <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="+77"/>
         <source>&lt;qt&gt;Notes inserted here will be stored in the .rg file along with the composition&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Hier eingefügte Anmerkungen sowie die 
-Komposition werden in der rg-Datei gespeichert&lt;/qt&gt;</translation>
+Komposition werden in der rg-Datei gesichert&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -13829,7 +13834,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="+47"/>
         <source>Rosegarden - Preferences</source>
-        <translation>Rosegarden Einstellungen</translation>
+        <translation>Rosegarden - Voreinstellungen</translation>
     </message>
 </context>
 <context>
@@ -14270,17 +14275,17 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+58"/>
         <source>The following tracks are using this device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Folgende Spuren verwenden dieses Gerät:</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>The device cannot be deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Gerät kann nicht gelöscht werden.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+80"/>
@@ -14739,7 +14744,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+5"/>
         <source>These are cached values, lost if the event is modified.</source>
-        <translation>Diese Werte sind nur zwischengespeichert und gehen verloren, wenn das Ereignis verändert wird.</translation>
+        <translation>Diese Werte sind nur zwischengesichert und gehen verloren, wenn das Ereignis verändert wird.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -15473,7 +15478,7 @@ für den Schriftnamen %1 (treffendste ist %2)</translation>
     <message>
         <location line="+1"/>
         <source>General Configuration</source>
-        <translation>Allgemeine Einstellungen</translation>
+        <translation>Allgemeine Konfiguration</translation>
     </message>
     <message>
         <source>Graphics performance</source>
@@ -15540,7 +15545,7 @@ für den Schriftnamen %1 (treffendste ist %2)</translation>
     <message>
         <location line="+9"/>
         <source>Auto-save interval</source>
-        <translation>Intervall für automatisches Speichern</translation>
+        <translation>Intervall für automatisches Sichern</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -15590,7 +15595,7 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;WARNING: Editing during playback can lead to instability, crashes, and data loss.  Save frequently.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;WARNUNG: Bearbeiten während Wiedergabe kann zu Instabilität, Abstürzen, und Datenverlust führen.  Regelmäßig speichern.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;WARNUNG: Bearbeiten während Wiedergabe kann zu Instabilität, Abstürzen, und Datenverlust führen.  Regelmäßig sichern.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -15676,7 +15681,7 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     </message>
     <message>
         <source>&lt;qt&gt;When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;Wenn der Haken gesetzt ist, wird Rosegarden den Thorn-Stil benutzen. Anderenfalls werden die normalen System-Einstellungen verwendet, sobald Rosegarden das nächste mal startet.&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;Wenn der Haken gesetzt ist, wird Rosegarden den Thorn-Stil benutzen. Anderenfalls werden die normalen Systemvoreinstellungen verwendet, sobald Rosegarden das nächste mal startet.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+209"/>
@@ -15840,7 +15845,7 @@ available on your path.  When choosing an application to use, please ensure that
     <message>
         <location line="+11"/>
         <source>LV2 Plugin Support (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>LV2-Plugin Unterstützung (experimentell)</translation>
     </message>
     <message>
         <location line="+65"/>
@@ -16936,7 +16941,7 @@ Es gibt keine Segmente auf den ausgewählten Spuren.</translation>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;Set the LilyPond version you have installed. If you have a newer version of LilyPond, choose the highest version Rosegarden supports.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Einstellen der installierten LilyPond Version. Falls Sie eine neuere Version von LilyPond haben, wählen Sie die höchste Version, die Rosegarden unterstützt.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Setzen der installierten LilyPond Version. Falls Sie eine neuere Version von LilyPond haben, wählen Sie die höchste Version, die Rosegarden unterstützt.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -17208,7 +17213,7 @@ you have a newer version of LilyPond, choose the highest version Rosegarden supp
     <message>
         <location line="+9"/>
         <source>Advanced options</source>
-        <translation>Experteneinstellungen</translation>
+        <translation>Erweiterte Optionen</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -17423,7 +17428,7 @@ feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/inde
     <message>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; 
 External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;&lt;p&gt;LilyPond konnte die Datei erfolgreich bearbeiten, aber &lt;b&gt;%1&lt;/b&gt; hat nicht funktioniert!&lt;/p&gt;&lt;p&gt;Bitte unter &lt;b&gt;Bearbeiten -&gt; Einstellungen -&gt; Allgemein -&gt; Externe Programme&lt;/b&gt; ein gültiges %2 konfigurieren und noch einmal probieren.&lt;/p&gt;&lt;p&gt;Verarbeitung auf Grund von fatalen Fehlern abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;LilyPond konnte die Datei erfolgreich bearbeiten, aber &lt;b&gt;%1&lt;/b&gt; hat nicht funktioniert!&lt;/p&gt;&lt;p&gt;Bitte unter &lt;b&gt;Bearbeiten -&gt; Voreinstellungen -&gt; Allgemein -&gt; Externe Programme&lt;/b&gt; ein gültiges %2 konfigurieren und noch einmal probieren.&lt;/p&gt;&lt;p&gt;Verarbeitung auf Grund von fatalen Fehlern abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-73"/>
@@ -17478,7 +17483,7 @@ mit ausgewählten Spuren die Klammern in dieser Auswahl einen Sinn ergeben, wenn
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;LilyPond konnte die Datei erfolgreich bearbeiten, aber &lt;b&gt;%1&lt;/b&gt; hat nicht funktioniert!&lt;/p&gt;&lt;p&gt;Bitte unter &lt;b&gt;Bearbeiten -&gt; Einstellungen -&gt; Allgemein -&gt; Externe Programme&lt;/b&gt; ein gültiges %2 konfigurieren und noch einmal probieren.&lt;/p&gt;&lt;p&gt;Verarbeitung auf Grund von fatalen Fehlern abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;LilyPond konnte die Datei erfolgreich bearbeiten, aber &lt;b&gt;%1&lt;/b&gt; hat nicht funktioniert!&lt;/p&gt;&lt;p&gt;Bitte unter &lt;b&gt;Bearbeiten -&gt; Voreinstellungen -&gt; Allgemein -&gt; Externe Programme&lt;/b&gt; ein gültiges %2 konfigurieren und noch einmal probieren.&lt;/p&gt;&lt;p&gt;Verarbeitung auf Grund von fatalen Fehlern abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -17620,12 +17625,12 @@ verursacht.</translation>
     <message>
         <location line="+90"/>
         <source>Allow Reset All Controllers (CC 121)</source>
-        <translation>Zurücksetzen aller Kontroller (CC 121) erlauben</translation>
+        <translation>Zurücksetzen aller Kontroller (MIDI CC 121) erlauben</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.</source>
-        <translation>Beim Anlegen eines Kanals kann Rosegarden ein Zurücksetzen-Aller-Kontroller-Ereignisse (CC 121) senden.</translation>
+        <translation>Beim Anlegen eines Kanals kann Rosegarden ein Zurücksetzen aller Kontroller (MIDI CC 121) senden.</translation>
     </message>
     <message>
         <location line="+48"/>
@@ -17696,7 +17701,7 @@ verursacht.</translation>
     <message>
         <location line="+16"/>
         <source>Accept transport CCs (116-118)</source>
-        <translation>Transport CCs (116-118) erlauben</translation>
+        <translation>Transport CCs (MIDI CC 116-118) erlauben</translation>
     </message>
     <message>
         <source>Rosegarden will discard these CCs, so disable this if you 
@@ -17918,7 +17923,7 @@ es auf sämtliche Perkussion Tabellen und Schlagzeuge, die im Studio konfigurier
     <message>
         <location line="+14"/>
         <source>&lt;qt&gt;Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Programmwechselbefehle externer Quellen benutzen um diese Kontroller zu verändern (gilt nur für die gerade aktive Spur) [Shift + P]&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Programmwechselbefehle externer Quellen benutzen um diese Bedienelemente zu verändern (gilt nur für die aktuell aktive Spur) [Shift + P]&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -18123,7 +18128,7 @@ not heard unless you are working in compound time.)&lt;/qt&gt;</source>
     <message>
         <location line="+32"/>
         <source>&lt;qt&gt;It is typical to use a percussion instrument for the metronome, so the pitch normally controls which sort of drum will sound for each tick.  You may configure a different pitch for each of the bar, beat, and sub-beat ticks.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Normalerweise wird ein Perkussionsinstrument als Metronom benutzt, so dass die Tonhöhe festlegt, welche Art von Trommel bei jedem Schlag ertönt. Für jeden Takt, Taktschlag und Taktschlagunterteilung können unterschiedliche Tonhöhen konfiguriert werden.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Normalerweise wird ein Perkussionsinstrument als Metronom benutzt, so dass die Tonhöhe steuert, welche Art von Trommel bei jedem Schlag ertönt. Für jeden Takt, Taktschlag und Taktschlagunterteilung können unterschiedliche Tonhöhen konfiguriert werden.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -19145,7 +19150,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location line="+6"/>
         <source>Advanced/Experimental options</source>
-        <translation>Experten-/Experimentelle Einstellungen</translation>
+        <translation>Erweiterte-/Experimentelle Optionen</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -19905,12 +19910,12 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message>
         <location line="-149"/>
         <source>LilyPond Preview Options</source>
-        <translation>LilyPond-Vorschau Einstellungen</translation>
+        <translation>LilyPond-Vorschauoptionen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LilyPond preview options</source>
-        <translation>LilyPond-Vorschau Einstellungen</translation>
+        <translation>LilyPond-Vorschauoptionen</translation>
     </message>
     <message>
         <location line="+338"/>
@@ -19956,7 +19961,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message>
         <location line="+25"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Speicherplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Festplattenplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all 
@@ -20033,7 +20038,7 @@ eingeschränkten wählen.&lt;/p&gt;&lt;/qt&gt;</translation>
         <location line="-1425"/>
         <location line="+59"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Der eingeschränkte Einfügetyp benötigt ausreichend Platz (nur Pausen beinhaltend) an der Einfügeposition, um alle einzufügenden Ereignisse zu behalten.&lt;/p&gt;&lt;p&gt;Es steht nicht ausreichend Platz zur Verfügung.&lt;/p&gt;&lt;p&gt;Wenn Sie auf jeden Fall einfügen möchten, erwägen Sie die Verwendung eines anderen Einfügetyps aus der &lt;b&gt;Einfügen...&lt;/b&gt; Option des Menüs Bearbeiten.  Wenn Sie möchten, können Sie den Standard-Einfügetyp auch auf einen anderen einstellen als eingeschränkt.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Der eingeschränkte Einfügetyp benötigt ausreichend Platz (nur Pausen beinhaltend) an der Einfügeposition, um alle einzufügenden Ereignisse zu behalten.&lt;/p&gt;&lt;p&gt;Es steht nicht ausreichend Platz zur Verfügung.&lt;/p&gt;&lt;p&gt;Wenn Sie auf jeden Fall einfügen möchten, erwägen Sie die Verwendung eines anderen Einfügetyps aus der &lt;b&gt;Einfügen...&lt;/b&gt; Option des Menüs Bearbeiten.  Wenn Sie möchten, können Sie den Einfügetyp Standard auch ändern auf einen anderen als Eingeschränkt.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+193"/>
@@ -20090,7 +20095,7 @@ eingeschränkten wählen.&lt;/p&gt;&lt;/qt&gt;</translation>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation>Für dieses Gerät ist kein Halten-Kontroller definiert.
-Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&quot; im Hauptfenster.</translation>
+Bitte stellen Sie sicher, dass das Gerät korrekt konfiguriert ist im Dialog &quot;MIDI-Geräte verwalten&quot; im Hauptfenster.</translation>
     </message>
     <message>
         <location line="+148"/>
@@ -20523,7 +20528,7 @@ Kontroller hinzu, ohne die vorhandenen zu beeinflussen.&lt;/qt&gt;</translation>
     <message>
         <location line="+30"/>
         <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Verwende diese gespeicherten, vom Nutzer veränderbaren Einstellungen.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Verwende diese gesicherte, vom Nutzer veränderbare Einstellung.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -20544,7 +20549,7 @@ Kontroller hinzu, ohne die vorhandenen zu beeinflussen.&lt;/qt&gt;</translation>
     <message>
         <location line="-123"/>
         <source>Saved setting %1</source>
-        <translation>Setting %1 abspeichern</translation>
+        <translation>Gesicherte Einstellung %1</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -20599,7 +20604,7 @@ Kontroller hinzu, ohne die vorhandenen zu beeinflussen.&lt;/qt&gt;</translation>
     <message>
         <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many 
 steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;Niedrigfrequenz Oszillator (LFO) für diesen Kontroller. Diese Einstellung ist nur möglich, falls der Verlaufsmodus &lt;i&gt;linear&lt;/i&gt; ist und &lt;i&gt;Schrittanzahl setzen&lt;/i&gt; eingestellt ist.&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;Niedrigfrequenz Oszillator (LFO) für diesen Kontroller. Dies ist nur möglich, wenn der Verlaufsmodus &lt;i&gt;linear&lt;/i&gt; ist und &lt;i&gt;Schrittanzahl setzen&lt;/i&gt; eingestellt ist.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-80"/>
@@ -20619,7 +20624,7 @@ steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
     <message>
         <location line="-12"/>
         <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Niedrigfrequenz Oszillator (LFO) für diesen Kontroller. Diese Einstellung ist nur möglich, falls der Verlaufsmodus linear  ist und &lt;i&gt;Schrittanzahl setzen&lt;/i&gt; eingestellt ist.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Niedrigfrequenz Oszillator (LFO) für diesen Kontroller. Dies ist nur möglich, wenn der Verlaufsmodus linear  ist und &lt;i&gt;Schrittanzahl setzen&lt;/i&gt; eingestellt ist.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -20685,7 +20690,7 @@ steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
     <message>
         <location line="+14"/>
         <source>How many steps</source>
-        <translation>Schritteinstellung</translation>
+        <translation>Anzahl der Schritte</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -20761,7 +20766,7 @@ enthalten. Vibrato ist möglich, falls der Verlaufsmodus &lt;i&gt;linear&lt;/i&g
     <message>
         <location filename="../../src/gui/dialogs/PitchDialog.cpp" line="+51"/>
         <source>Reset</source>
-        <translation>Reset</translation>
+        <translation>Zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -20795,7 +20800,7 @@ enthalten. Vibrato ist möglich, falls der Verlaufsmodus &lt;i&gt;linear&lt;/i&g
     <message>
         <location line="+4"/>
         <source>None available (check preferences)</source>
-        <translation>Nicht verfügbar (Einstellungen überprüfen)</translation>
+        <translation>Nicht verfügbar (Voreinstellungen überprüfen)</translation>
     </message>
 </context>
 <context>
@@ -20914,7 +20919,7 @@ no other tracker clients are open.</source>
     <message>
         <location filename="../../src/commands/edit/PlaceControllersCommand.cpp" line="+59"/>
         <source>Place Controllers</source>
-        <translation>Kontroller platzieren</translation>
+        <translation>Kontroller setzen</translation>
     </message>
 </context>
 <context>
@@ -21002,7 +21007,7 @@ no other tracker clients are open.</source>
     <message>
         <location line="+33"/>
         <source>Can&apos;t open preset file %1</source>
-        <translation>Datei mit Voreinstellungen %1 kann nicht geöffnet werden</translation>
+        <translation>Voreinstellungsdatei %1 kann nicht geöffnet werden</translation>
     </message>
 </context>
 <context>
@@ -21015,12 +21020,12 @@ no other tracker clients are open.</source>
     <message>
         <location line="+19"/>
         <source>Load track parameters preset</source>
-        <translation>Spur-Parametervoreinstellungen laden</translation>
+        <translation>Voreinstellungen der Spurparameter laden</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Select preset track parameters for:</source>
-        <translation>Spur-Parametervoreinstellungen wählen für:</translation>
+        <translation>Voreinstellungen der Spurparameter wählen für:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -21503,7 +21508,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="+63"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation>Momentan unterstützt Rosegarden nur 16 oder 32-bit PCM oder IEEE Fließkomma RIFF Dateien bei der Ausgabe</translation>
+        <translation>Aktuell unterstützt Rosegarden nur 16 oder 32-bit PCM oder IEEE Fließkomma RIFF Dateien bei der Ausgabe</translation>
     </message>
     <message>
         <location line="+312"/>
@@ -21523,7 +21528,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location line="+50"/>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation>Momentan unterstützt Rosegarden nur PCM oder IEEE Fließkomma RIFF-Dateien</translation>
+        <translation>Aktuell unterstützt Rosegarden nur PCM oder IEEE Fließkomma RIFF-Dateien</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -21533,12 +21538,12 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location line="+14"/>
         <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation>Momentan unterstützt Rosegarden nur 8-, 16- oder 24-bit PCM in RIFF-Dateien</translation>
+        <translation>Aktuell unterstützt Rosegarden nur 8-, 16- oder 24-bit PCM in RIFF-Dateien</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation>Momentan unterstützt Rosegarden nur 32 bit Fließkomma in RIFF-Dateien</translation>
+        <translation>Aktuell unterstützt Rosegarden nur 32 bit Fließkomma in RIFF-Dateien</translation>
     </message>
 </context>
 <context>
@@ -21851,7 +21856,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
     <message>
         <location line="+91"/>
         <source>%1 (from %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (von %2)</translation>
     </message>
     <message>
         <location line="+833"/>
@@ -21874,12 +21879,12 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Die aktuelle Datei wurde verändert.&lt;/p&gt;&lt;p&gt;Möchten Sie abspeichern?&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Die aktuelle Datei wurde verändert.&lt;/p&gt;&lt;p&gt;Möchten Sie sichern?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>Could not save document at %1
 (%2)</source>
-        <translation type="obsolete">Kann Dokument nicht unter %1 speichern
+        <translation type="obsolete">Kann Dokument nicht unter %1 sichern
 (%2)</translation>
     </message>
     <message>
@@ -21889,7 +21894,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
         <location line="+63"/>
         <location line="+32"/>
         <location line="+346"/>
-        <location line="+649"/>
+        <location line="+652"/>
         <location line="+11"/>
         <location line="+22"/>
         <location line="+3"/>
@@ -21905,14 +21910,14 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
     </message>
     <message>
         <source>Could not save document at %1</source>
-        <translation type="obsolete">Kann Dokument nicht unter %1 speichern</translation>
+        <translation type="obsolete">Kann Dokument nicht unter %1 sichern</translation>
     </message>
     <message numerus="yes">
-        <location line="-2551"/>
+        <location line="-2554"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
-            <numerusform>Soll %n Audio-Datei gelöscht werden, die während der nicht abgespeicherten Sitzung aufgenommen wurde?</numerusform>
-            <numerusform>Sollen %n Audio-Dateien gelöscht werden, die während der nicht abgespeicherten Sitzung aufgenommen wurden?</numerusform>
+            <numerusform>Soll %n Audio-Datei gelöscht werden, die während der nicht gesicherten Sitzung aufgenommen wurde?</numerusform>
+            <numerusform>Sollen %n Audio-Dateien gelöscht werden, die während der nicht gesicherten Sitzung aufgenommen wurden?</numerusform>
         </translation>
     </message>
     <message>
@@ -21927,9 +21932,9 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>Die folgenden Audio-Dateien wurden zwar während 
 dieser Sitzung
 aufgenommen, sind aber nicht mehr im Audio-Dateimanager geladen
-und werden daher vom zu speichernden Dokument nicht mehr verwendet.
+und werden daher vom zu sichernden Dokument nicht mehr verwendet.
 
-Sie können entscheiden diese Dateien zu löschen um Plattenplatz 
+Sie können entscheiden diese Dateien zu löschen, um Plattenplatz 
 zu sparen.
 
 Bitte wählen diejenigen aus, die Sie permanent von der Festplatte entfernen möchten.
@@ -21981,10 +21986,10 @@ Bitte wählen diejenigen aus, die Sie permanent von der Festplatte entfernen mö
         <translation type="vanished">Zusammenfügen</translation>
     </message>
     <message>
-        <location line="+523"/>
+        <location line="+526"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
         <translation>&apos;%1&apos; ist schreibgesichert.  Bitte in einer 
-anderen Datei speichern.</translation>
+anderen Datei sichern.</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -22004,7 +22009,7 @@ anderen Datei speichern.</translation>
     <message>
         <location line="+549"/>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Falsche Audio Sample Rate&lt;/h3&gt;&lt;p&gt;Diese Komposition enthält Audio-Dateien, die aufgenommen oder importiert wurden, als der Audioserver mit einer Sample Rate (%1 Hz) lief.die sich von der aktuellen Sample Rate (%2 Hz) des JACK-Servers unterscheidet.&lt;/p&gt;&lt;p&gt;Rosegarden spielt diese Komposition mit der korrekten Geschwindigkeit ab, wobei aber alle enthaltenen Audio-Dateien merkwürdig klingen können.&lt;/p&gt;&lt;p&gt;Bitte ziehen Sie in Betracht den JACK-Server mit der richtigen Rate (%3 Hz) neu zu starten und die Komposition erneut zu laden, bevor Sie damit arbeiten.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Falsche Audio Sample Rate&lt;/h3&gt;&lt;p&gt;Diese Komposition enthält Audio-Dateien, die aufgenommen oder importiert wurden, als der Audioserver mit einer Sample Rate (%1 Hz) lief, die sich von der aktuellen Sample Rate (%2 Hz) des JACK-Servers unterscheidet.&lt;/p&gt;&lt;p&gt;Rosegarden spielt diese Komposition mit der korrekten Geschwindigkeit ab, wobei aber alle enthaltenen Audio-Dateien merkwürdig klingen können.&lt;/p&gt;&lt;p&gt;Bitte ziehen Sie in Betracht den JACK-Server mit der korrekten Rate (%3 Hz) neu zu starten und die Komposition erneut zu laden, bevor Sie damit arbeiten.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -22013,7 +22018,7 @@ Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
         <translation>Diese Datei enthält mindestens einen veralteten Elementtyp.
 In Zukunft wird dieser Elementtyp vielleicht nicht mehr unterstützt.
-Empfehlung: speichern Sie diese Datei aus dieser Version von Rosegarden heraus um sicherzustellen, daß sie auch in Zukunft gelesen werden kann.</translation>
+Empfehlung: sichern Sie diese Datei aus dieser Version von Rosegarden heraus um sicherzustellen, daß sie auch in Zukunft gelesen werden kann.</translation>
     </message>
     <message>
         <location line="+1170"/>
@@ -22090,18 +22095,18 @@ die Datei bearbeitet, die Sperrdatei löschen und neu bversuchen.
         <translation>Fehler beim Schreiben auf %1&apos;</translation>
     </message>
     <message>
-        <location line="-761"/>
-        <location line="+2194"/>
+        <location line="-764"/>
+        <location line="+2197"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location line="-2131"/>
+        <location line="-2134"/>
         <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
         <translation>Fehler beim Parsen der Datei &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</translation>
     </message>
     <message>
-        <location line="+747"/>
+        <location line="+750"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
         <translation>Kann Datei %1 nicht zum Schreiben öffnen</translation>
     </message>
@@ -22114,23 +22119,23 @@ die Datei bearbeitet, die Sperrdatei löschen und neu bversuchen.
     <message>
         <location line="+22"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audio-Dateien oder Plugins, aber Rosegarden läuft zur Zeit ohne Audiounterstützung, weil der &apos;JACK-Audioserver&apos; bei Programstart nicht verfügbar war.&lt;/p&gt;&lt;p&gt;Bitte beenden Sie Rosegarden, starten Sie den &apos;JACK-Audio server&apos; und starten Sie Rosegarden danach neu, um die ganze Komposition zu laden.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition jetzt erneut speichern, gehen alle Audio- und Plugindaten verloren !.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audio-Dateien oder Plugins, aber Rosegarden läuft aktuell ohne Audiounterstützung, weil der &apos;JACK-Audioserver&apos; bei Programstart nicht verfügbar war.&lt;/p&gt;&lt;p&gt;Bitte beenden Sie Rosegarden, starten Sie den &apos;JACK-Audio server&apos; und starten Sie Rosegarden danach neu, um die ganze Komposition zu laden.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition jetzt erneut sichern, gehen alle Audio- und Plugindaten verloren !.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar.&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audio-Dateien oder Plugins, aber diese laufende Version von Rosegarden wurde ohne Unterstützung für Audio kompiliert.&lt;/p&gt;&lt;p&gt;&lt;b&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition mit dieser Version von Rosegarden 
-erneut speichern, dann gehen alle Audio- und Plugindaten verloren !.&lt;/p&gt;</translation>
+erneut sichern, dann gehen alle Audio- und Plugindaten verloren !.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with 
 the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;h3&gt;Falsche Audio Sample Rate&lt;/h3&gt;&lt;p&gt;Diese Komposition enthält Audio-Dateien, die aufgenommen oder importiert wurden, als der Audioserver mit einer Sample Rate (%1 Hz) lief.die sich von der aktuellen Sample Rate (%2 Hz) des JACK-Servers unterscheidet.&lt;/p&gt;&lt;p&gt;Rosegarden spielt diese Komposition mit der korrekten Geschwindigkeit ab, wobei aber alle enthaltenen Audio-Dateien merkwürdig klingen können.&lt;/p&gt;&lt;p&gt;Bitte ziehen Sie in Betracht den JACK-Server mit der richtigen Rate (%3 Hz) neu zu starten und die Komposition erneut zu laden, bevor Sie damit arbeiten.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;h3&gt;Falsche Audio Sample Rate&lt;/h3&gt;&lt;p&gt;Diese Komposition enthält Audio-Dateien, die aufgenommen oder importiert wurden, als der Audioserver mit einer Sample Rate (%1 Hz) lief, die sich von der aktuellen Sample Rate (%2 Hz) des JACK-Servers unterscheidet.&lt;/p&gt;&lt;p&gt;Rosegarden spielt diese Komposition mit der korrekten Geschwindigkeit ab, wobei aber alle enthaltenen Audio-Dateien merkwürdig klingen können.&lt;/p&gt;&lt;p&gt;Bitte ziehen Sie in Betracht den JACK-Server mit der korrektenen Rate (%3 Hz) neu zu starten und die Komposition erneut zu laden, bevor Sie damit arbeiten.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+43"/>
         <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Inkonsistente Audiosampleraten&lt;/h3&gt;&lt;p&gt;Diese Komposition enthält Audio-Dateien mit mehreren unterschiedlichen Sampleraten.&lt;/p&gt;&lt;p&gt;Rosegarden wird sie mit der korrekten Geschwindigkeit abspielen, aber alle Audio-Dateien, deren Raten sich von der aktuellen Einstellung des JACK-Servers (%1 Hz) unterscheiden, werden sich wahrscheinlich merkwürdig anhören.&lt;/p&gt;&lt;p&gt;Bitte schauen Sie im Audio-Dateimanagerdialog nach weiteren Informationen und erwägen Sie eine Änderung der Samplerate bei Dateien mit 
+        <translation>&lt;h3&gt;Inkonsistente Audiosampleraten&lt;/h3&gt;&lt;p&gt;Diese Komposition enthält Audio-Dateien mit mehreren unterschiedlichen Sampleraten.&lt;/p&gt;&lt;p&gt;Rosegarden wird sie mit der korrekten Geschwindigkeit abspielen, aber alle Audio-Dateien, deren Raten sich von der aktuellen Samplerate des JACK-Servers (%1 Hz) unterscheiden, werden sich wahrscheinlich merkwürdig anhören.&lt;/p&gt;&lt;p&gt;Bitte schauen Sie im Audio-Dateimanagerdialog nach weiteren Informationen und erwägen Sie eine Änderung der Samplerate bei Dateien mit 
 falschen Raten.&lt;/p&gt;</translation>
     </message>
     <message>
@@ -22154,7 +22159,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation type="vanished">Diese Datei enthält mindestens einen veralteten 
 Elementtyp.
 In Zukunft wird dieser Elementtyp vielleicht nicht mehr unterstützt.
-Empfehlung: speichern Sie diese Datei aus dieser Version von Rosegarden heraus
+Empfehlung: sichern Sie diese Datei aus dieser Version von Rosegarden heraus
 um sicherzustellen, daß sie auch in Zukunft gelesen werden kann.</translation>
     </message>
     <message>
@@ -22216,7 +22221,7 @@ enthalten</translation>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Sie haben bisher noch keinen Audio-Editor für Rosegarden festgelegt.
-Siehe: Bearbeiten -&gt; Einstellungen -&gt; Audio.</translation>
+Siehe: Bearbeiten -&gt; Voreinstellungen -&gt; Audio.</translation>
     </message>
     <message>
         <location line="+666"/>
@@ -22338,7 +22343,7 @@ Wollen Sie diese stattdessen öffnen?</translation>
         <location line="+161"/>
         <source>Could not save document at %1
 Error was : %2</source>
-        <translation>Kann Dokument nicht unter %1 speichern
+        <translation>Kann Dokument nicht unter %1 sichern
 Fehler war: %2</translation>
     </message>
     <message>
@@ -22346,7 +22351,7 @@ Fehler war: %2</translation>
         <location line="+161"/>
         <location line="+6286"/>
         <source>Could not save document at %1</source>
-        <translation>Kann Dokument nicht unter %1 speichern</translation>
+        <translation>Kann Dokument nicht unter %1 sichern</translation>
     </message>
     <message>
         <source>Opening a new application window...</source>
@@ -22435,7 +22440,7 @@ Fehler war: %2</translation>
     <message>
         <location line="+180"/>
         <source>Saving file...</source>
-        <translation>Datei speichern...</translation>
+        <translation>Datei sichern...</translation>
     </message>
     <message>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
@@ -22455,7 +22460,7 @@ Fehler war: %2</translation>
         <location line="+23"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
-        <translation>Datei%1 mit einem neuen Dateinamen speichern...</translation>
+        <translation>Datei%1 unter einem neuen Dateinamen sichern...</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -22465,12 +22470,12 @@ Fehler war: %2</translation>
     <message>
         <location line="+2"/>
         <source>Save as template...</source>
-        <translation>Als Vorlage speichern...</translation>
+        <translation>Als Vorlage sichern...</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Save as...</source>
-        <translation>Speichern als...</translation>
+        <translation>Sichern als...</translation>
     </message>
     <message>
         <location line="+65"/>
@@ -22690,7 +22695,7 @@ Segmente-&gt;Segmente zusammenfassen.
     <message>
         <location line="+196"/>
         <source>Revert modified document to previous saved version?</source>
-        <translation>Geändertes Dokument auf vorher gespeicherte Version zurücksetzen?</translation>
+        <translation>Geändertes Dokument auf vorher gesicherte Version zurücksetzen?</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -22706,7 +22711,7 @@ Segmente-&gt;Segmente zusammenfassen.
     <message>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see 
 the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Bevor Audio-Daten aufgezeichnet werden können muss ein Dateiname für die Komposition festgelegt werden.&lt;/p&gt;&lt;p&gt;Audio-Dateien werden unter &lt;b&gt;%1&lt;/b&gt; als &lt;b&gt;rg-[&lt;i&gt;Dateiname&lt;/i&gt;]-[&lt;i&gt;Instrument&lt;/i&gt;]-&lt;i&gt;Datum&lt;/i&gt;_&lt;i&gt;Uhrzeit&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt; abgespeichert.  Sie möchten daher vielleicht die Instrumente umbenennen. Weitere Informationen sind im &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Bevor Audio-Daten aufgezeichnet werden können muss ein Dateiname für die Komposition festgelegt werden.&lt;/p&gt;&lt;p&gt;Audio-Dateien werden unter &lt;b&gt;%1&lt;/b&gt; als &lt;b&gt;rg-[&lt;i&gt;Dateiname&lt;/i&gt;]-[&lt;i&gt;Instrument&lt;/i&gt;]-&lt;i&gt;Datum&lt;/i&gt;_&lt;i&gt;Uhrzeit&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt; gesichert.  Sie möchten daher vielleicht die Instrumente umbenennen. Weitere Informationen sind im &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>Input</source>
@@ -22858,7 +22863,7 @@ the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com
     <message>
         <location line="+1049"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Speicherplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Festplattenplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>The Rosegarden sequencer process has exited unexpectedly. 
@@ -22882,7 +22887,7 @@ Bitte Beenden und erneut Starten, damit der Ton wieder funktioniert.</translatio
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become 
 &apos; &apos; or &apos; as a template &apos; at runtime</comment>
-        <translation type="vanished">Datei%1 mit einem neuen Dateinamen speichern...</translation>
+        <translation type="vanished">Datei%1 mit einem neuen Dateinamen sichern...</translation>
     </message>
     <message>
         <location line="+764"/>
@@ -23000,7 +23005,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Der Rosegarden-Sequenzer konnte nicht gestartet werden. Damit stehen Aufnahme und Wiedergabe in dieser Sitzung nicht zur Verfügung.
-Für Hilfestellung bei den Audio- und MIDI-Einstellungen gehe nach http://rosegardenmusic.com.</translation>
+Für Hilfestellung bei der Audio- und MIDI-Konfiguration gehe nach http://rosegardenmusic.com.</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -23020,7 +23025,7 @@ Für Hilfestellung bei den Audio- und MIDI-Einstellungen gehe nach http://rosega
     <message>
         <location line="-288"/>
         <source>Saving Rosegarden file to package failed: %1</source>
-        <translation>Speichern der Rosegarden-Datei beim Komprimieren fehlgeschlagen: %1</translation>
+        <translation>Sichern der Rosegarden-Datei beim Komprimieren fehlgeschlagen: %1</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -23087,12 +23092,12 @@ Für Hilfestellung bei den Audio- und MIDI-Einstellungen gehe nach http://rosega
     <message>
         <location line="+42"/>
         <source>LilyPond Preview Options</source>
-        <translation>LilyPond-Vorschau Einstellungen</translation>
+        <translation>LilyPond-Vorschauoptionen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LilyPond preview options</source>
-        <translation>LilyPond-Vorschau Einstellungen</translation>
+        <translation>LilyPond-Vorschauoptionen</translation>
     </message>
     <message>
         <location line="+46"/>
@@ -23202,7 +23207,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location line="+178"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Bevor Audio-Daten aufgezeichnet werden können muss ein Dateiname für die Komposition festgelegt werden.&lt;/p&gt;&lt;p&gt;Audio-Dateien werden unter &lt;b&gt;%1&lt;/b&gt; als &lt;b&gt;rg-[&lt;i&gt;Dateiname&lt;/i&gt;]-[&lt;i&gt;Instrument&lt;/i&gt;]-&lt;i&gt;Datum&lt;/i&gt;_&lt;i&gt;Uhrzeit&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt; abgespeichert.  Sie möchten daher vielleicht die Instrumente umbenennen. Weitere Informationen sind im &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Bevor Audio-Daten aufgezeichnet werden können muss ein Dateiname für die Komposition festgelegt werden.&lt;/p&gt;&lt;p&gt;Audio-Dateien werden unter &lt;b&gt;%1&lt;/b&gt; als &lt;b&gt;rg-[&lt;i&gt;Dateiname&lt;/i&gt;]-[&lt;i&gt;Instrument&lt;/i&gt;]-&lt;i&gt;Datum&lt;/i&gt;_&lt;i&gt;Uhrzeit&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt; gesichert.  Sie möchten daher vielleicht die Instrumente umbenennen. Weitere Informationen sind im &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+210"/>
@@ -23247,24 +23252,24 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location line="+137"/>
         <source>Are you sure you want to save this as your default studio?</source>
-        <translation>Sind Sie sicher, dass Sie dies als Ihr Standardstudio speichern wollen?</translation>
+        <translation>Sind Sie sicher, dass Sie dies als Ihr Standardstudio sichern wollen?</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Saving current document as default studio...</source>
-        <translation>Aktuelles Dokument als Standardstudio speichern...</translation>
+        <translation>Aktuelles Dokument als Standardstudio sichern...</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
-        <translation>Kann das Dokument nicht automatisch unter %1 speichern
+        <translation>Kann das Dokument nicht automatisch unter %1 sichern
 Fehler: %2</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Could not auto-save document at %1</source>
-        <translation>Kann das Dokument nicht automatisch unter %1 speichern</translation>
+        <translation>Kann das Dokument nicht automatisch unter %1 sichern</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -23319,13 +23324,13 @@ drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; D
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Die aktuelle Datei wurde verändert.&lt;/p&gt;&lt;p&gt;Möchten Sie speichern?&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Die aktuelle Datei wurde verändert.&lt;/p&gt;&lt;p&gt;Möchten Sie sichern?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Could not save document at %1
 (%2)</source>
-        <translation>Kann Dokument nicht unter %1 speichern
+        <translation>Kann Dokument nicht unter %1 sichern
 (%2)</translation>
     </message>
 </context>
@@ -23581,7 +23586,12 @@ right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt
         <translation>&lt;qt&gt;&lt;p&gt;Wenn markiert,      jedes ausgewählte Segment wird wiederholt, bis es mit einem anderen Segment überlappt oder das Ende der Komposition erreicht ist.&lt;/p&gt;&lt;p&gt;Bei der Anzeige im Notensatzeditor oder beim Ausdruck mit LilyPond werden die Segmente mit Wiederholungszeichen geklammert.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;Diese können im Zusammenhang mit speziellen LilyPond Exportanweisungen benutzt werden um Wiederholungen mit erstem und zweiten alternativem Ende zu erzeugen. Siehe dazu auch das Tutorial auf rosegardenmusic.com.[Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+16"/>
+        <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Wiedergabe eines ausgewählten Segmentes um diese Anzahl von Halbtönen erhöhen oder vermindern&lt;/p&gt;&lt;p&gt;&lt;i&gt;BEACHTE: Dieser Regler ändert bereits existierende Segmente.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Transponierregler verwenden in &lt;b&gt;Spurparameter&lt;/b&gt; unter &lt;b&gt;Segment erzeugen mit&lt;/b&gt; Vorwahl dieser   Einstellung bevor neue Segmente gezeichnet oder aufgenommen werden.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location line="+16"/>
         <source>Quantize</source>
         <translation>Quantisieren</translation>
     </message>
@@ -23631,12 +23641,11 @@ mit erstem und zweiten alternativem Ende zu erzeugen. Siehe dazu auch das
 Tutorial auf rosegardenmusic.com.[Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+27"/>
-        <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Anheben oder senken der Wiedergabe von allen ausgewählten Segmenten um diese Anzahl von Halbtönen&lt;/p&gt;&lt;p&gt;&lt;i&gt;Achtung: Dieses Kontrollfeld ändert schon existierende Segmente.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Benutze das Transponier-Kontrollfeld in &lt;b&gt;Spur-Parameter&lt;/b&gt; unter &lt;b&gt;Segmente erzeugen mit&lt;/b&gt; um diesen Wert als Voreinstellung für neu komponierte oder neu aufgenommene Segmente zu wählen.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Anheben oder senken der Wiedergabe von allen ausgewählten Segmenten um diese Anzahl von Halbtönen&lt;/p&gt;&lt;p&gt;&lt;i&gt;Achtung: Dieses Kontrollfeld ändert schon existierende Segmente.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Benutze das Transponier-Kontrollfeld in &lt;b&gt;Spur-Parameter&lt;/b&gt; unter &lt;b&gt;Segmente erzeugen mit&lt;/b&gt; um diesen Wert als Einstellung für neu komponierte oder neu aufgenommene Segmente zu wählen.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+48"/>
         <source>&lt;qt&gt;&lt;p&gt;Quantize the selected segments using the Grid quantizer.  This quantization can be removed at any time in the future by setting it to off.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Quantisiere die ausgewählten 
 Segmente mit dem Rasterquantisierer.  Durch Deaktivieren kann diese Quantisierung jederzeit wieder entfernt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
@@ -23693,12 +23702,12 @@ verwenden (LilyPond).&lt;/p&gt;&lt;/qt&gt;</translation>
     <message>
         <location line="+5"/>
         <source>Reset</source>
-        <translation>Reset</translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Reset the relative transposition on the linked segment to zero&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Rücksetzen der relativen Transponierung des verlinkten Segments auf 0&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Zurücksetzen der relativen Transponierung des verlinkten Segments auf 0&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+700"/>
@@ -24266,7 +24275,7 @@ fortfahren.</translation>
     <message>
         <location line="+20"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK-Audioserver verbinden.  Dies bedeutet wahrscheinlich, das Rosegarden den Audioserver nicht starten konnte, weil entweder die Konfiguration, die Installation oder beides nicht korrekt ist.&lt;/p&gt;&lt;p&gt;Falls sie Audio-Dateien abspielen oder aufnehmen, bzw. Plugins benutzen wollen, müssen Sie Rosegarden verlassen und die Einstellungen von JACK z.B. mit qjackctl solange verändern, bis JACK gestartet werden kann.   Außerdem könnte die Installation eines Echtzeitkernels nötig sein, die Sicherheitseinstellungen des Systems verändert werden, etc.  Unglücklicherweise ist dies ein sehr komplexes Thema.&lt;/p&gt;&lt;p&gt;Sobald eine funktionierende Konfiguration von JACK gefunden wurde, kann Rosegarden den Audioserver in Zukunft automatisch starten.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK-Audioserver verbinden.  Dies bedeutet wahrscheinlich, das Rosegarden den Audioserver nicht starten konnte, weil entweder die Konfiguration, die Installation oder beides nicht korrekt ist.&lt;/p&gt;&lt;p&gt;Falls sie Audio-Dateien abspielen oder aufnehmen, bzw. Plugins benutzen wollen, müssen Sie Rosegarden verlassen und die Einstellungen von JACK z.B. mit qjackctl solange verändern, bis JACK gestartet werden kann. Außerdem könnte die Installation eines Echtzeitkernels nötig sein, die Sicherheitseinstellungen des Systems verändert werden, etc. Unglücklicherweise ist dies ein sehr komplexes Thema.&lt;/p&gt;&lt;p&gt;Sobald eine funktionierende Konfiguration von JACK gefunden wurde, kann Rosegarden den Audioserver in Zukunft automatisch starten.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  
@@ -24340,7 +24349,7 @@ the future.&lt;/p&gt;</source>
     <message>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio 
 server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK-Audioserver verbinden.  Dies bedeutet wahrscheinlich, das Rosegarden den Audioserver nicht starten konnte, weil entweder die Konfiguration, die Installation oder beides nicht korrekt ist.&lt;/p&gt;&lt;p&gt;Falls sie Audio-Dateien abspielen oder aufnehmen, bzw. Plugins benutzen wollen, müssen Sie Rosegarden verlassen und die Einstellungen von JACK z.B. mit qjackctl solange verändern, bis JACK gestartet werden kann.   Außerdem könnte die Installation eines Echtzeitkernels nötig sein, die Sicherheitseinstellungen des Systems verändert werden, etc.  Unglücklicherweise ist dies ein sehr komplexes Thema.&lt;/p&gt;&lt;p&gt;Sobald eine funktionierende Konfiguration von JACK gefunden wurde, kann Rosegarden den Audioserver in Zukunft automatisch starten.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK-Audioserver verbinden.  Dies bedeutet wahrscheinlich, das Rosegarden den Audioserver nicht starten konnte, weil entweder die Konfiguration, die Installation oder beides nicht korrekt ist.&lt;/p&gt;&lt;p&gt;Falls sie Audio-Dateien abspielen oder aufnehmen, bzw. Plugins benutzen wollen, müssen Sie Rosegarden verlassen und die Einstellungen von JACK z.B. mit qjackctl solange verändern, bis JACK gestartet werden kann.   Außerdem könnte die Installation eines Echtzeitkernels nötig sein, die Sicherheitskonfiguration des Systems verändert werden, etc.  Unglücklicherweise ist dies ein sehr komplexes Thema.&lt;/p&gt;&lt;p&gt;Sobald eine funktionierende Konfiguration von JACK gefunden wurde, kann Rosegarden den Audioserver in Zukunft automatisch starten.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="-266"/>
@@ -24445,12 +24454,12 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+21"/>
         <source>Reset Selected</source>
-        <translation>Ausgewählte rücksetzen</translation>
+        <translation>Ausgewählte zurücksetzen</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reset selected actions&apos; shortcuts to defaults</source>
-        <translation>Kürzel für die ausgewählten Maßnahmen zum Standard rücksetzen</translation>
+        <translation>Kürzel für die ausgewählten Maßnahmen zum Standard zurücksetzen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -24465,12 +24474,12 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+1"/>
         <source>Reset All</source>
-        <translation>Alles rücksetzen</translation>
+        <translation>Alles zurücksetzen</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reset all shortcuts for all actions</source>
-        <translation>Alle Kürzel für alle Maßnahmen rücksetzen</translation>
+        <translation>Alle Kürzel für alle Maßnahmen zurücksetzen</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -24521,7 +24530,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+1"/>
         <source>This will reset all shortcuts for all actions across all contexts. Are you sure?</source>
-        <translation>Dies wird alle Kürzel für alle Maßnahmen in allen Zuordnungen rücksetzen. Sind sie sicher?</translation>
+        <translation>Dies wird alle Kürzel für alle Maßnahmen in allen Zuordnungen zurücksetzen. Sind sie sicher?</translation>
     </message>
 </context>
 <context>
@@ -24637,7 +24646,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+2"/>
         <source>Save data</source>
-        <translation>Speichern als</translation>
+        <translation>Daten sichern</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -24808,7 +24817,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+21"/>
         <source>Save System Exclusive data to...</source>
-        <translation>Speichere exklusive System Daten nach...</translation>
+        <translation>Sichere exklusive System Daten nach...</translation>
     </message>
 </context>
 <context>
@@ -25111,7 +25120,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+25"/>
         <source>Controls</source>
-        <translation>Controls</translation>
+        <translation>Bedienelemente</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -25174,7 +25183,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+10"/>
         <source>The pointer is currently at </source>
-        <translation>Der Zeiger ist zur Zeit bei </translation>
+        <translation>Der Zeiger ist aktuell bei </translation>
     </message>
     <message>
         <location line="+27"/>
@@ -26396,7 +26405,7 @@ ausgefiltert&lt;/p&gt;&lt;/qt&gt;</translation>
     <message>
         <location line="+65"/>
         <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>f&lt;qt&gt;&lt;p&gt;Lade die Voreinstellungen für die Parameter eines Segmentes aus unserer umfassenden Datenbank mit reellen Instrumenten.&lt;/p&gt;&lt;p&gt;Wenn neue Segmente angelegt werden, bekommen diese Segmente bei der Erzeugung diese Parameter zugeordnet. Um diese Parameter bei vorhandenen Segmente zu benutzem (z.B. um einen vorhandenen Teil für die Wiedergabe auf einer B-Trompete zu konvertieren), kann der Menuepunkt &lt;b&gt;Segmente -&gt; Umwandeln des Notensatzes für&lt;/b&gt; im Notensatz-Editor benutzt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>f&lt;qt&gt;&lt;p&gt;Lade die Voreinstellungen für die Segmentparameter aus unserer umfassenden Datenbank mit reellen Instrumenten.&lt;/p&gt;&lt;p&gt;Wenn neue Segmente angelegt werden, bekommen diese Segmente bei der Erzeugung diese Parameter zugeordnet. Um diese Parameter bei vorhandenen Segmente zu benutzem (z.B. um einen vorhandenen Teil für die Wiedergabe auf einer B-Trompete zu konvertieren), kann der Menuepunkt &lt;b&gt;Segmente -&gt; Umwandeln des Notensatzes für&lt;/b&gt; im Notensatz-Editor benutzt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>treble</source>
@@ -26542,7 +26551,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+226"/>
         <source>Reset to Defaults</source>
-        <translation>Auf Standard zurücksetzen</translation>
+        <translation>Auf Standardwerte zurücksetzen</translation>
     </message>
     <message>
         <source>Default</source>
@@ -26580,7 +26589,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+72"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
-        <translation>Die Instrumentvoreinstellungen Datenbank ist korrupt. Überprüfen Sie Ihre Installation.</translation>
+        <translation>Die Datenbank der Instrumentvoreinstellungen ist korrupt. Überprüfen Sie Ihre Installation.</translation>
     </message>
     <message>
         <location line="-1"/>
@@ -26689,7 +26698,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+6"/>
         <source>As stored</source>
-        <translation>Wie gespeichert</translation>
+        <translation>Wie gesichert</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -27050,7 +27059,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+6"/>
         <source>As stored</source>
-        <translation>Wie gespeichert</translation>
+        <translation>Wie gesichert</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -27143,7 +27152,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Rosegarden verwendet einen sicheren Graphikmodus.  Dieser bietet zwar die größte Stabilität des Programmes, beinhaltet aber eine langsame Darstellung der Graphik.&lt;/p&gt;&lt;p&gt;Für eine höhere Geschwindigkeit können Sie unter &lt;b&gt;Editieren -&gt; Einstellungen -&gt; Geschwindigkeit der Graphik&lt;/b&gt; &quot;Normal&quot; oder &quot;Schnell&quot; ausprobieren&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Rosegarden verwendet einen sicheren Graphikmodus.  Dieser bietet zwar die größte Stabilität des Programmes, beinhaltet aber eine langsame Darstellung der Graphik.&lt;/p&gt;&lt;p&gt;Für eine höhere Geschwindigkeit können Sie unter &lt;b&gt;Editieren -&gt; Voreinstellungen -&gt; Geschwindigkeit der Graphik&lt;/b&gt; &quot;Normal&quot; oder &quot;Schnell&quot; ausprobieren&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -27156,7 +27165,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+31"/>
         <source>Hide additional controls</source>
-        <translation>Zusätzliche Kontrollelemente verbergen</translation>
+        <translation>Zusätzliche Bedienelemente verbergen</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -27277,7 +27286,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+33"/>
         <source>Show additional controls</source>
-        <translation>Weitere Kontrollelemente anzeigen</translation>
+        <translation>Weitere Bedienelemente anzeigen</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -27297,7 +27306,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
-        <translation>Versetzt den Zeiger zum Beginn des Stücks.  (Wenn sich der Zeiger bereits vor dem Beginn des Stücks befindet, wird der Zeiger entsprechend vorwärts versetzt.)</translation>
+        <translation>Versetzt den Zeiger zum Beginn des Stücks. (Wenn sich der Zeiger aktuell vor dem Beginn des Stücks befindet, wird der Zeiger entsprechend vorwärts versetzt.)</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -27355,7 +27364,7 @@ sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger en
     <name>S:</name>
     <message>
         <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
+        <comment>We recommend pointing help URLs to a wiki page in your native language.</comment>
         <translation></translation>
     </message>
 </context>
