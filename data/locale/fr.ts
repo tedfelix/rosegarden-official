@@ -9812,12 +9812,12 @@ Voulez-vous utiliser
     <message>
         <location filename="../../src/document/io/MusicXMLLoader.cpp" line="+45"/>
         <source>Can&apos;t open file &apos;%1&apos;</source>
-        <translation type="unfinished">Impossible d&apos;ouvrir le fichier &apos;%1&apos;</translation>
+        <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+1"/>
         <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
-        <translation type="unfinished">Le nanoKONTROL2 Korgn&apos;est pas configuré de façon optimale pour Rosegarden.  Sa reconfiguration entraînera la perte de tous les règlages précédemment effectués avec l&apos;éditeur nanoKONTROL2.  Reconfigurer quand même ?</translation>
+        <translation>Le nanoKONTROL2 Korgn&apos;est pas configuré de façon optimale pour Rosegarden.  Sa reconfiguration entraînera la perte de tous les règlages précédemment effectués avec l&apos;éditeur nanoKONTROL2.  Reconfigurer quand même ?</translation>
     </message>
 </context>
 <context>
@@ -10940,47 +10940,47 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginConnectionDialog.cpp" line="+43"/>
         <source>Audio Plugin Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Connexions des greffons audio</translation>
     </message>
     <message>
         <location line="+40"/>
         <source>Plugin port</source>
-        <translation type="unfinished"></translation>
+        <translation>E/S greffon</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrument</translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Channel</source>
-        <translation type="unfinished">Canal</translation>
+        <translation>Canal</translation>
     </message>
     <message>
         <location line="+38"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;Aucun&gt;</translation>
+        <translation>&lt;Aucun&gt;</translation>
     </message>
     <message>
         <location line="+129"/>
         <source>Mono</source>
-        <translation type="unfinished"></translation>
+        <translation>Mono</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Left</source>
-        <translation type="unfinished">Gauche</translation>
+        <translation>Gauche</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Right</source>
-        <translation type="unfinished">Droite</translation>
+        <translation>Droit</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Both</source>
-        <translation type="unfinished"></translation>
+        <translation>Les deux</translation>
     </message>
 </context>
 <context>
@@ -11014,7 +11014,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="+9"/>
         <location line="+412"/>
         <source>&lt;ports&gt;</source>
-        <translation>&lt;ports&gt;</translation>
+        <translation>&lt;E/S&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11049,17 +11049,17 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+129"/>
         <source>(any)</source>
-        <translation>(n&apos;importe)</translation>
+        <translation>(toutes)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>(unclassified)</source>
-        <translation>(non classifié)</translation>
+        <translation>(non classifiée)</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>(none)</source>
-        <translation>(rien)</translation>
+        <translation>(aucun)</translation>
     </message>
     <message>
         <location line="+190"/>
@@ -11070,37 +11070,37 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="-428"/>
         <location line="+432"/>
         <source>Select a plugin from this list</source>
-        <translation>Selectionner un greffon dans cette liste</translation>
+        <translation>Sélectionner un greffon dans cette liste</translation>
     </message>
     <message>
         <location line="-481"/>
         <source>Search:</source>
-        <translation type="unfinished"></translation>
+        <translation>Chercher :</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Architecture:</source>
-        <translation type="unfinished"></translation>
+        <translation>Architecture :</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>all</source>
-        <translation type="unfinished">tous</translation>
+        <translation>(toutes)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ladspa</source>
-        <translation type="unfinished"></translation>
+        <translation>LADSPA</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>dssi</source>
-        <translation type="unfinished"></translation>
+        <translation>DSSI</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>lv2</source>
-        <translation type="unfinished"></translation>
+        <translation>LV2</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -11136,17 +11136,17 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+7"/>
         <source>Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramétres</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Préconfigurations</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Edit connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Connexions</translation>
     </message>
     <message>
         <location line="+392"/>
@@ -11204,7 +11204,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/studio/AudioPluginLV2GUI.cpp" line="+82"/>
         <source>Sub %1</source>
-        <translation type="unfinished">Groupe %1</translation>
+        <translation>Groupe %1</translation>
     </message>
 </context>
 <context>
@@ -11235,63 +11235,63 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginParameterDialog.cpp" line="+57"/>
         <source>Plugin Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramétres du greffon</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;b&gt;Parameter&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Paramétre&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;b&gt;Value&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Valeur&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;b&gt;Set value&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Valeur fixée&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+19"/>
         <location line="+87"/>
         <source>&lt;not set&gt;</source>
-        <translation type="unfinished">&lt;Aucun&gt;</translation>
+        <translation>&lt;aucun&gt;</translation>
     </message>
     <message>
         <location line="-83"/>
         <source>Set value</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Edit Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier paramétre</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>false</source>
-        <translation type="unfinished"></translation>
+        <translation>faux</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>true</source>
-        <translation type="unfinished"></translation>
+        <translation>vrai</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Select Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner chemin</translation>
     </message>
     <message>
         <location line="+139"/>
         <source>&lt;b&gt;Editing parameter %1&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Edition du paramétre %1&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>Selection du fichier</translation>
     </message>
 </context>
 <context>
@@ -11300,53 +11300,53 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location filename="../../src/gui/dialogs/AudioPluginPresetDialog.cpp" line="+45"/>
         <location line="+3"/>
         <source>Plugin Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Préconfiguration d&apos;un greffon</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Predefined presets:</source>
-        <translation type="unfinished"></translation>
+        <translation>Préconfigurations prédéfinies :</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Set Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Load/Save state from/to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Charger/Sauver depuis/vers un fichier</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Load</source>
-        <translation type="unfinished">Charger</translation>
+        <translation>Charger</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauver</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Load preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Charger une préconfiguration</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+14"/>
         <source>Preset files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers de préconfiguration</translation>
     </message>
     <message>
         <location line="-13"/>
         <source>All files</source>
-        <translation type="unfinished">Tous les fichiers</translation>
+        <translation>Tous les fichiers</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Save preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder la préconfiguration</translation>
     </message>
 </context>
 <context>
@@ -11845,12 +11845,12 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+49"/>
         <source>The following tracks are using bank %1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Les pistes suivantes utilisent la banque %1 :</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>The bank cannot be deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>La banque ne peut pas être supprimée.</translation>
     </message>
     <message>
         <location line="-845"/>
@@ -13078,17 +13078,17 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+58"/>
         <source>The following tracks are using this device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Les pistes suivantes utilisent ce périphérique :</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>The device cannot be deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique ne peut pas être supprimé.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+80"/>
@@ -14602,7 +14602,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+11"/>
         <source>LV2 Plugin Support (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Support des greffons LV2 (expérimental)</translation>
     </message>
     <message>
         <location line="+65"/>
@@ -20447,7 +20447,7 @@ Il peut y avoir des incompatibilités avec ce format de fichier.</translation>
     <message>
         <location line="+91"/>
         <source>%1 (from %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (de %2)</translation>
     </message>
     <message>
         <location line="+833"/>
