@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright 2018-2024 Rosegarden development team -->
 <component type="desktop">
-    <id>com.rosegardenmusic.rosegarden.desktop</id>
+    <id>com.rosegardenmusic.rosegarden</id>
+    <provides>
+      <id>com.rosegardenmusic.rosegarden.desktop</id>
+    </provides>
+    <launchable type="desktop-id">com.rosegardenmusic.rosegarden.desktop</launchable>
     <name>Rosegarden</name>
     <name xml:lang="fr">Rosegarden</name>
     <summary xml:lang="fr">Séquenceur MIDI/audio et éditeur de partitions</summary>
