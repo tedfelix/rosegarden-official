@@ -66,18 +66,17 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                   parent,
                   true),  // showKeyMapButtons
     m_bankList(bankEditor->getBankList()),
-    //m_oldBank(false, 0, 0),
     m_programList(bankEditor->getProgramList())
 {
-    QWidget *additionalWidget = makeAdditionalWidget(m_topFrame);
-    if (additionalWidget) {
-        m_topLayout->addWidget(additionalWidget, 0, 0, 3, 3);
-    }
+    QWidget *frame = initWidgets(m_topFrame);
+    m_topLayout->addWidget(frame, 0, 0, 3, 3);
 }
 
-QWidget *
-MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
+QFrame *
+MidiProgramsEditor::initWidgets(QWidget *parent)
 {
+    // ??? Inline this into the ctor like every other dialog.
+
     QFrame *frame = new QFrame(parent);
 
     m_percussion = new QCheckBox(frame);
@@ -185,7 +184,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
 
     setEnabled(true);
 
-    setBankName(item->text(0));
+    setTitle(item->text(0));
 
     RG_DEBUG << "MidiProgramsEditor::populate : bankItem->getBank = "
     << bankItem->getBank();

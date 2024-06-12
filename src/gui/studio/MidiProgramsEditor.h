@@ -40,15 +40,30 @@ class BankEditorDialog;
 class MidiProgramsEditor : public NameSetEditor
 {
     Q_OBJECT
+
 public:
+
     MidiProgramsEditor(BankEditorDialog *bankEditor,
                        QWidget *parent);
 
+    /// Switch to the cleared and disabled state.
+    /**
+     * Called at the end of populateDeviceEditors() if no valid
+     * bank or program is selected in the tree.
+     */
     void clearAll();
+
+    /// Show the programs for the selected bank.
     void populate(QTreeWidgetItem *);
+
+    /// Limited undo in response to the Reset button in the lower left.
+    /**
+     * ??? But the caller calls populate right after this.  Why do we
+     *     need this?
+     */
     void reset();
 
-public slots:
+private slots:
 
     /// Check that any new MSB/LSB combination is unique for this device.
     /**
@@ -70,41 +85,67 @@ public slots:
 
 private:
 
+    /// Set the name (title) that appears at the top of the editor.
+    /**
+     * ??? Remove this wrapper.
+     */
     void setBankName(const QString &s);
 
-    QWidget *makeAdditionalWidget(QWidget *parent);
+    MidiDevice *m_device{nullptr};
+
+    // Widgets
+
+    QCheckBox *m_percussion;
+    QSpinBox *m_msb;
+    QSpinBox *m_lsb;
+    QFrame *initWidgets(QWidget *parent);
 
     // ??? There's usually a way to avoid this.  Like using the
     //     proper signals.  Ones that don't fire in response to
     //     API calls.  User interaction only.
     void blockAllSignals(bool block);
 
-    // Widgets
-    QCheckBox *m_percussion;
-    QSpinBox *m_msb;
-    QSpinBox *m_lsb;
+    // Banks
 
-    MidiDevice *m_device{nullptr};
-
+    /// The BankList we are editing.
+    /**
+     * We use this to check for dupes and make changes to the banks.
+     */
     BankList &m_bankList;
-    // Does the banklist contain this combination already?
+    // Does m_bankList contain this combination already?
     // Disregard percussion bool, we care only about msb / lsb
     // in these situations.
     bool banklistContains(const MidiBank &);
     int ensureUniqueMSB(int msb, bool ascending);
     int ensureUniqueLSB(int lsb, bool ascending);
 
-    MidiBank m_oldBank{false, 0, 0};
+    /// The bank we are editing right now.
     MidiBank *m_currentBank{nullptr};
+    // Set by populate to the current bank.  Used by reset() to restore
+    // the previous bank.
+    MidiBank m_oldBank{false, 0, 0};
 
+    // Programs
+
+    /// Programs for the bank being edited.
     ProgramList &m_programList;
-    // Get a program (pointer into program list) for modification
+    // Get a program (pointer into program list) for modification.
     MidiProgram *getProgram(const MidiBank &bank, int programNo);
     ProgramList getBankSubset(const MidiBank &);
     /// Set the currently loaded programs to new MSB and LSB
     void modifyCurrentPrograms(const MidiBank &oldBank,
                                const MidiBank &newBank);
 
+    /// For assigning keymaps to programs.
+    /**
+     * Holds the index of the keymap button that was pressed.  Set by
+     * slotKeyMapButtonPressed().
+     *
+     * Used by slotKeyMapMenuItemSelected() to make sure the keymap
+     * selection ends up associated with the right program.
+     *
+     * ??? rename: m_keymapButtonIndex?
+     */
     unsigned int m_currentMenuProgram;
 };
 
