@@ -177,6 +177,11 @@ void LV2Gtk::startUp()
 namespace Rosegarden
 {
 
+LV2Gtk* LV2Gtk::getInstance()
+{
+    return nullptr;
+}
+
 LV2Gtk::LV2Gtk() :
     m_active(false),
     m_argv(nullptr)
