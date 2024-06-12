@@ -19,22 +19,20 @@
 #ifndef RG_MIDIPROGRAMSEDITOR_H
 #define RG_MIDIPROGRAMSEDITOR_H
 
-#include "base/MidiProgram.h"
+#include "base/MidiProgram.h"  // BankList, ProgramList
 #include "NameSetEditor.h"
-
 
 class QWidget;
 class QString;
 class QSpinBox;
 class QTreeWidgetItem;
 class QCheckBox;
-class BankList;
 
 
 namespace Rosegarden
 {
 
-class MidiProgram;
+
 class MidiDevice;
 class BankEditorDialog;
 
@@ -47,65 +45,67 @@ public:
                        QWidget *parent);
 
     void clearAll();
-    void populate(QTreeWidgetItem*);
+    void populate(QTreeWidgetItem *);
     void reset();
 
 public slots:
 
-    // Check that any new MSB/LSB combination is unique for this device
-    //
+    /// Check that any new MSB/LSB combination is unique for this device.
+    /**
+     * ??? This is causing some usability concerns.  It can be tricky
+     *     to assign MSBs and LSBs when the UI keeps refusing to take
+     *     the value you are trying to assign.  Recommend making the
+     *     MSB/LSB fields read-only.  Clicking on either brings up a
+     *     dialog that allows changing both to whatever.  Dismissing
+     *     the dialog triggers the dupe check.
+     */
     void slotNewMSB(int value);
     void slotNewLSB(int value);
-    void slotNewPercussion(); // gets value from checkbox
+    void slotNewPercussion();
 
     void slotNameChanged(const QString &) override;
     void slotKeyMapButtonPressed() override;
     void slotKeyMapMenuItemSelected(QAction *);
     void slotKeyMapMenuItemSelected(int);
 
-protected:
+private:
 
-    MidiBank* getCurrentBank();
+    void setBankName(const QString &s);
 
-    int ensureUniqueMSB(int msb, bool ascending);
-    int ensureUniqueLSB(int lsb, bool ascending);
+    QWidget *makeAdditionalWidget(QWidget *parent);
 
+    // ??? There's usually a way to avoid this.  Like using the
+    //     proper signals.  Ones that don't fire in response to
+    //     API calls.  User interaction only.
+    void blockAllSignals(bool block);
+
+    // Widgets
+    QCheckBox *m_percussion;
+    QSpinBox *m_msb;
+    QSpinBox *m_lsb;
+
+    MidiDevice *m_device{nullptr};
+
+    BankList &m_bankList;
     // Does the banklist contain this combination already?
     // Disregard percussion bool, we care only about msb / lsb
     // in these situations.
-    //
     bool banklistContains(const MidiBank &);
+    int ensureUniqueMSB(int msb, bool ascending);
+    int ensureUniqueLSB(int lsb, bool ascending);
 
+    MidiBank m_oldBank{false, 0, 0};
+    MidiBank *m_currentBank{nullptr};
+
+    ProgramList &m_programList;
+    // Get a program (pointer into program list) for modification
+    MidiProgram *getProgram(const MidiBank &bank, int programNo);
     ProgramList getBankSubset(const MidiBank &);
-
     /// Set the currently loaded programs to new MSB and LSB
     void modifyCurrentPrograms(const MidiBank &oldBank,
                                const MidiBank &newBank);
 
-    // Get a program (pointer into program list) for modification
-    //
-    MidiProgram* getProgram(const MidiBank &bank, int programNo);
-
-    void setBankName(const QString& s);
-
-    virtual QWidget *makeAdditionalWidget(QWidget *parent);
-
-    void blockAllSignals(bool block);
-
-    //--------------- Data members ---------------------------------
-    QCheckBox                *m_percussion;
-    QSpinBox                 *m_msb;
-    QSpinBox                 *m_lsb;
-
-    MidiDevice   *m_device;
-
-    MidiBank     *m_currentBank;
-    BankList     &m_bankList;
-    ProgramList  &m_programList;
-
-    MidiBank      m_oldBank;
-
-    unsigned int              m_currentMenuProgram;
+    unsigned int m_currentMenuProgram;
 };
 
 

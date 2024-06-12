@@ -65,10 +65,9 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                   tr("Bank and Program details"),  // title
                   parent,
                   true),  // showKeyMapButtons
-    m_device(nullptr),
     m_bankList(bankEditor->getBankList()),
-    m_programList(bankEditor->getProgramList()),
-    m_oldBank(false, 0, 0)
+    //m_oldBank(false, 0, 0),
+    m_programList(bankEditor->getProgramList())
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_topFrame);
     if (additionalWidget) {
@@ -132,12 +131,6 @@ MidiProgramsEditor::getBankSubset(const MidiBank &bank)
     }
 
     return program;
-}
-
-MidiBank*
-MidiProgramsEditor::getCurrentBank()
-{
-    return m_currentBank;
 }
 
 void
@@ -292,14 +285,14 @@ MidiProgramsEditor::slotNewPercussion()
         RG_DEBUG << "MidiProgramsEditor::slotNewPercussion: calling setChecked(" << !percussion << ")";
         newBank = new MidiBank(m_percussion->isChecked(),
                          m_msb->value(),
-                         m_lsb->value(), getCurrentBank()->getName());
+                         m_lsb->value(), m_currentBank->getName());
     } else {
         newBank = new MidiBank(true,
                          m_msb->value(),
                          m_lsb->value());
     }
-    modifyCurrentPrograms(*getCurrentBank(), *newBank);
-    *getCurrentBank() = *newBank;
+    modifyCurrentPrograms(*m_currentBank, *newBank);
+    *m_currentBank = *newBank;
     m_bankEditor->slotApply();
 
     // Hack to force the percussion icons to switch state if needed.
@@ -323,19 +316,19 @@ MidiProgramsEditor::slotNewMSB(int value)
     int msb;
 
     try {
-        msb = ensureUniqueMSB(value, value > getCurrentBank()->getMSB());
+        msb = ensureUniqueMSB(value, value > m_currentBank->getMSB());
     } catch (bool) {
-        msb = getCurrentBank()->getMSB();
+        msb = m_currentBank->getMSB();
     }
 
     MidiBank newBank(m_percussion->isChecked(),
                      msb,
-                     m_lsb->value(), getCurrentBank()->getName());
+                     m_lsb->value(), m_currentBank->getName());
 
-    modifyCurrentPrograms(*getCurrentBank(), newBank);
+    modifyCurrentPrograms(*m_currentBank, newBank);
 
     m_msb->setValue(msb);
-    *getCurrentBank() = newBank;
+    *m_currentBank = newBank;
 
     m_msb->blockSignals(false);
 
@@ -352,19 +345,19 @@ MidiProgramsEditor::slotNewLSB(int value)
     int lsb;
 
     try {
-        lsb = ensureUniqueLSB(value, value > getCurrentBank()->getLSB());
+        lsb = ensureUniqueLSB(value, value > m_currentBank->getLSB());
     } catch (bool) {
-        lsb = getCurrentBank()->getLSB();
+        lsb = m_currentBank->getLSB();
     }
 
     MidiBank newBank(m_percussion->isChecked(),
                      m_msb->value(),
-                     lsb, getCurrentBank()->getName());
+                     lsb, m_currentBank->getName());
 
-    modifyCurrentPrograms(*getCurrentBank(), newBank);
+    modifyCurrentPrograms(*m_currentBank, newBank);
 
     m_lsb->setValue(lsb);
-    *getCurrentBank() = newBank;
+    *m_currentBank = newBank;
 
     m_lsb->blockSignals(false);
 
@@ -402,7 +395,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
 
     //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << id;
 
-    MidiBank *currBank = getCurrentBank();
+    MidiBank *currBank = m_currentBank;
 
     if (!currBank) {
         RG_WARNING << "slotNameChanged(): WARNING: currBank is nullptr.";
@@ -422,14 +415,14 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
             return;
 
         // Create a new MidiProgram and add it to m_programList.
-        MidiProgram newProgram(*getCurrentBank(), id);
+        MidiProgram newProgram(*m_currentBank, id);
         m_programList.push_back(newProgram);
 
         // Sort by program number.
         std::sort(m_programList.begin(), m_programList.end(), ProgramCmp());
 
         // Now, get the MidiProgram from the m_programList.
-        program = getProgram(*getCurrentBank(), id);
+        program = getProgram(*m_currentBank, id);
 
     } else {
         // If we've found a program and the label is now empty,
@@ -483,7 +476,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
 
     const unsigned id = button->property("index").toUInt();
 
-    MidiProgram *program = getProgram(*getCurrentBank(), id);
+    MidiProgram *program = getProgram(*m_currentBank, id);
     if (!program)
         return;
 
@@ -544,7 +537,7 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(int i)
     if (kml.empty())
         return ;
 
-    MidiProgram *program = getProgram(*getCurrentBank(), m_currentMenuProgram);
+    MidiProgram *program = getProgram(*m_currentBank, m_currentMenuProgram);
     if (!program)
         return ;
 
