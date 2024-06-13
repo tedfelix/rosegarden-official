@@ -69,10 +69,9 @@ private slots:
     /**
      * ??? This is causing some usability concerns.  It can be tricky
      *     to assign MSBs and LSBs when the UI keeps refusing to take
-     *     the value you are trying to assign.  Recommend making the
-     *     MSB/LSB fields read-only.  Clicking on either brings up a
-     *     dialog that allows changing both to whatever.  Dismissing
-     *     the dialog triggers the dupe check.
+     *     the value you are trying to assign.  Recommend reducing the
+     *     MSB/LSB fields to a single MSB:LSB edit box.  Perform
+     *     the dupe check when the user is done editing.  Tab or Enter.
      */
     void slotNewMSB(int value);
     void slotNewLSB(int value);

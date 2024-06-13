@@ -167,88 +167,105 @@ MidiProgramsEditor::clearAll()
 }
 
 void
-MidiProgramsEditor::populate(QTreeWidgetItem* item)
+MidiProgramsEditor::populate(QTreeWidgetItem *item)
 {
     RG_DEBUG << "populate()";
 
-    MidiBankTreeWidgetItem* bankItem = dynamic_cast<MidiBankTreeWidgetItem*>(item);
+    MidiBankTreeWidgetItem *bankItem =
+            dynamic_cast<MidiBankTreeWidgetItem*>(item);
     if (!bankItem) {
-        RG_DEBUG << "MidiProgramsEditor::populate : not a bank item - returning";
-        return ;
+        RG_DEBUG << "populate(): not a bank item - returning";
+        return;
     }
+
+    RG_DEBUG << "populate() : bankItem->getBank = " << bankItem->getBank();
+
+    //m_currentBank = m_device->getBankByIndex(bankItem->getBank());
+    m_currentBank = &(m_bankList[bankItem->getBank()]);
+    m_oldBank = *m_currentBank;
 
     DeviceId deviceId = bankItem->getDeviceId();
     m_device = m_bankEditor->getMidiDevice(deviceId);
     if (!m_device)
-        return ;
+        return;
 
     setEnabled(true);
 
-    setTitle(item->text(0));
+    setTitle(bankItem->text(0));
 
-    RG_DEBUG << "populate() : bankItem->getBank = " << bankItem->getBank();
-
-    m_currentBank = &(m_bankList[bankItem->getBank()]); // m_device->getBankByIndex(bankItem->getBank());
-
-    // set the bank values
+    // Percussion
     m_percussion->setChecked(m_currentBank->isPercussion());
+
+    // MSB Value
     m_msb->setValue(m_currentBank->getMSB());
+
+    // LSB Value
     m_lsb->setValue(m_currentBank->getLSB());
 
-    m_oldBank = *m_currentBank;
-
-    // Librarian details
-    //
+    // Provided By
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
     m_librarianEmail->setText(strtoqstr(m_device->getLibrarianEmail()));
 
+    // Program List
+
     ProgramList programSubset = getBankSubset(*m_currentBank);
-    ProgramList::iterator it;
 
-    QPixmap noKeyPixmap, keyPixmap;
+    // Use a white icon to indicate there is no keymap for this program.
+    static const QIcon noKeymapIcon(IconLoader::loadPixmap("key-white"));
+    // Use a green icon to indicate there *is* a keymap for this program.
+    static const QIcon keymapIcon(IconLoader::loadPixmap("key-green"));
 
-    noKeyPixmap = IconLoader::loadPixmap("key-white");
-    keyPixmap = IconLoader::loadPixmap("key-green");
-
-    bool haveKeyMappings = m_device->getKeyMappings().size() > 0;
+    const bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
 
     // Need this because NameSetEditor connects to each name
     // field's textChanged signal instead of textEdited.
     // ??? Fix NameSetEditor!
     blockAllSignals(true);
-    for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
 
-        m_names[i]->clear();
-        getKeyMapButton(i)->setEnabled(haveKeyMappings);
-        getKeyMapButton(i)->setIcon(QIcon(noKeyPixmap));
-        // QToolTip::remove
-        //    ( getKeyMapButton(i) );
-        getKeyMapButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
-        getKeyMapButton(i)->setMaximumHeight( 12 );
+    // For each name in the program list...
+    // programIndex is also the program change number.
+    for (size_t programIndex = 0; programIndex < m_names.size(); ++programIndex) {
 
-        for (it = programSubset.begin(); it != programSubset.end(); ++it) {
-            if (it->getProgram() == i) {
+        // ??? Restructure this as:
+        //       - find program in programSubset
+        //       - if not found, clear and continue.
+        //       - Set everything up.
 
-                // zero in on "Harpsichord" vs. "Coupled Harpsichord to cut down
-                // on noise (0-based)
-//                if (i == 6) std::cout << "it->getName(): " << it->getName() << std::endl;
-                QString programName = strtoqstr(it->getName());
-                m_completions << programName;
-                m_names[i]->setText(programName);
+        // Assume not found and clear everything.
 
-                if (m_device->getKeyMappingForProgram(*it)) {
-                    getKeyMapButton(i)->setIcon(QIcon(keyPixmap));
-                    getKeyMapButton(i)->setToolTip
-                        (tr("Key Mapping: %1")
-                              .arg(strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
-                }
+        m_names[programIndex]->clear();
 
-                break;
+        QToolButton *keyMapButton = getKeyMapButton(programIndex);
+
+        keyMapButton->setEnabled(haveKeyMappings);
+        keyMapButton->setIcon(noKeymapIcon);
+        keyMapButton->setToolTip("");
+        keyMapButton->setMaximumHeight(12);
+
+        // Find the program in programSubset...
+        for (ProgramList::const_iterator midiProgramIter = programSubset.begin();
+             midiProgramIter != programSubset.end();
+             ++midiProgramIter) {
+            // Not it?  Try the next.
+            if (midiProgramIter->getProgram() != programIndex)
+                continue;
+
+            QString programName = strtoqstr(midiProgramIter->getName());
+            m_completions << programName;
+            m_names[programIndex]->setText(programName);
+
+            if (m_device->getKeyMappingForProgram(*midiProgramIter)) {
+                keyMapButton->setIcon(QIcon(keymapIcon));
+                keyMapButton->setToolTip
+                    (tr("Key Mapping: %1")
+                          .arg(strtoqstr(m_device->getKeyMappingForProgram(*midiProgramIter)->getName())));
             }
+
+            break;
         }
 
         // show start of label
-        m_names[i]->setCursorPosition(0);
+        m_names[programIndex]->setCursorPosition(0);
     }
     blockAllSignals(false);
 }
