@@ -58,8 +58,8 @@ public:
 
     /// Limited undo in response to the Reset button in the lower left.
     /**
-     * ??? But the caller calls populate right after this.  Why do we
-     *     need this?
+     * This appears to be a very limited undo for just the MSB/LSB,
+     * and the percussion setting.
      */
     void reset();
 
@@ -75,7 +75,7 @@ private slots:
      */
     void slotNewMSB(int value);
     void slotNewLSB(int value);
-    void slotNewPercussion();
+    void slotPercussionClicked();
 
     void slotNameChanged(const QString &) override;
     void slotKeyMapButtonPressed() override;
@@ -120,8 +120,7 @@ private:
 
     /// The bank we are editing right now.
     MidiBank *m_currentBank{nullptr};
-    // Set by populate to the current bank.  Used by reset() to restore
-    // the previous bank.
+    /// Used by reset() to restore the original MSB/LSB/Percussion.
     MidiBank m_oldBank{false, 0, 0};
 
     // Programs

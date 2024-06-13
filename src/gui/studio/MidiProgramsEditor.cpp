@@ -83,7 +83,7 @@ MidiProgramsEditor::initWidgets(QWidget *parent)
                           0, 0, Qt::AlignLeft);
     m_percussion = new QCheckBox(frame);
     connect(m_percussion, &QAbstractButton::clicked,
-            this, &MidiProgramsEditor::slotNewPercussion);
+            this, &MidiProgramsEditor::slotPercussionClicked);
     gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
 
     // MSB Value
@@ -208,6 +208,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
 
     // Program List
 
+    // Get the programs for the current bank.
     ProgramList programSubset = getBankSubset(*m_currentBank);
 
     // Use a white icon to indicate there is no keymap for this program.
@@ -226,46 +227,51 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
     // programIndex is also the program change number.
     for (size_t programIndex = 0; programIndex < m_names.size(); ++programIndex) {
 
+        QToolButton *keyMapButton = getKeyMapButton(programIndex);
+        // ??? Seems like something NameSetEditor should take care of?
+        keyMapButton->setMaximumHeight(12);
+        keyMapButton->setEnabled(haveKeyMappings);
+
         // ??? Restructure this as:
         //       - find program in programSubset
         //       - if not found, clear and continue.
         //       - Set everything up.
 
         // Assume not found and clear everything.
-
         m_names[programIndex]->clear();
-
-        QToolButton *keyMapButton = getKeyMapButton(programIndex);
-
-        keyMapButton->setEnabled(haveKeyMappings);
         keyMapButton->setIcon(noKeymapIcon);
         keyMapButton->setToolTip("");
-        keyMapButton->setMaximumHeight(12);
 
         // Find the program in programSubset...
-        for (ProgramList::const_iterator midiProgramIter = programSubset.begin();
-             midiProgramIter != programSubset.end();
-             ++midiProgramIter) {
+        for (const MidiProgram &midiProgram : programSubset) {
             // Not it?  Try the next.
-            if (midiProgramIter->getProgram() != programIndex)
+            if (midiProgram.getProgram() != programIndex)
                 continue;
 
-            QString programName = strtoqstr(midiProgramIter->getName());
+            // Found it.
+
+            QString programName = strtoqstr(midiProgram.getName());
             m_completions << programName;
             m_names[programIndex]->setText(programName);
+            // show start of label
+            m_names[programIndex]->setCursorPosition(0);
 
-            if (m_device->getKeyMappingForProgram(*midiProgramIter)) {
-                keyMapButton->setIcon(QIcon(keymapIcon));
-                keyMapButton->setToolTip
-                    (tr("Key Mapping: %1")
-                          .arg(strtoqstr(m_device->getKeyMappingForProgram(*midiProgramIter)->getName())));
+            const MidiKeyMapping *midiKeyMapping =
+                    m_device->getKeyMappingForProgram(midiProgram);
+            if (midiKeyMapping) {
+                // Indicate that this program has a keymap.
+                keyMapButton->setIcon(keymapIcon);
+                // Put the name in the tool tip.
+                keyMapButton->setToolTip(tr("Key Mapping: %1").arg(
+                        strtoqstr(midiKeyMapping->getName())));
+            } else {  // No key mapping.
+                // Indicate that this program has no keymap.
+                keyMapButton->setIcon(noKeymapIcon);
+                keyMapButton->setToolTip("");
             }
 
             break;
         }
-
-        // show start of label
-        m_names[programIndex]->setCursorPosition(0);
     }
     blockAllSignals(false);
 }
@@ -273,10 +279,14 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
 void
 MidiProgramsEditor::reset()
 {
+    // Go back to m_oldBank's MSB/LSB and percussion setting.
+
     m_percussion->setChecked(m_oldBank.isPercussion());
     m_msb->setValue(m_oldBank.getMSB());
     m_lsb->setValue(m_oldBank.getLSB());
 
+    // Make sure all the programs in m_programList are set back to the m_oldBank
+    // MSB/LSB.
     if (m_currentBank) {
         modifyCurrentPrograms(*m_currentBank, m_oldBank);
         *m_currentBank = m_oldBank;
@@ -284,35 +294,24 @@ MidiProgramsEditor::reset()
 }
 
 void
-MidiProgramsEditor::slotNewPercussion()
+MidiProgramsEditor::slotPercussionClicked()
 {
-    RG_DEBUG << "slotNewPercussion()";
+    RG_DEBUG << "slotPercussionClicked()";
 
-    bool percussion = false; // Doesn't matter
-    MidiBank *newBank;
-    if (banklistContains(MidiBank(percussion, m_msb->value(), m_lsb->value()))) {
-        RG_DEBUG << "slotNewPercussion(): calling setChecked(" << !percussion << ")";
-        newBank = new MidiBank(m_percussion->isChecked(),
-                         m_msb->value(),
-                         m_lsb->value(), m_currentBank->getName());
-    } else {
-        newBank = new MidiBank(true,
-                         m_msb->value(),
-                         m_lsb->value());
-    }
-    modifyCurrentPrograms(*m_currentBank, *newBank);
-    *m_currentBank = *newBank;
+    MidiBank newBank(
+            m_percussion->isChecked(),
+            m_msb->value(),
+            m_lsb->value(),
+            m_currentBank->getName());
+
+    // Make sure the programs in m_programList have the new percussion setting.
+    modifyCurrentPrograms(*m_currentBank, newBank);
+
+    // Update the current bank.
+    *m_currentBank = newBank;
+
+    // Refresh the tree so that it shows "Percussion" or "Bank" as appropriate.
     m_bankEditor->slotApply();
-
-    // Hack to force the percussion icons to switch state if needed.
-    // code stole from populate.
-    if (m_device) {
-        bool haveKeyMappings = m_device->getKeyMappings().size() > 0;
-
-        for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
-            getKeyMapButton(i)->setEnabled(haveKeyMappings);
-        }
-    }
 }
 
 void
