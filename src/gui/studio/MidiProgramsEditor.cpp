@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-
 #define RG_MODULE_STRING "[MidiProgramsEditor]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MidiProgramsEditor.h"
 
@@ -145,32 +145,35 @@ MidiProgramsEditor::modifyCurrentPrograms(
 void
 MidiProgramsEditor::clearAll()
 {
-    blockAllSignals(true);
-
-    for (size_t i = 0; i < m_names.size(); ++i)
-        m_names[i]->clear();
-
     setTitle(tr("Bank and Program details"));
 
     m_percussion->setChecked(false);
     m_msb->setValue(0);
     m_lsb->setValue(0);
+    m_currentBank = nullptr;
+
     m_librarian->clear();
     m_librarianEmail->clear();
-    m_currentBank = nullptr;
-    setEnabled(false);
 
+    // Need this because NameSetEditor connects to each name
+    // field's textChanged signal instead of textEdited.
+    // ??? Fix NameSetEditor!
+    blockAllSignals(true);
+    for (size_t i = 0; i < m_names.size(); ++i)
+        m_names[i]->clear();
     blockAllSignals(false);
+
+    setEnabled(false);
 }
 
 void
 MidiProgramsEditor::populate(QTreeWidgetItem* item)
 {
-    RG_DEBUG << "MidiProgramsEditor::populate\n";
+    RG_DEBUG << "populate()";
 
     MidiBankTreeWidgetItem* bankItem = dynamic_cast<MidiBankTreeWidgetItem*>(item);
     if (!bankItem) {
-        RG_DEBUG << "MidiProgramsEditor::populate : not a bank item - returning\n";
+        RG_DEBUG << "MidiProgramsEditor::populate : not a bank item - returning";
         return ;
     }
 
@@ -183,12 +186,9 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
 
     setTitle(item->text(0));
 
-    RG_DEBUG << "MidiProgramsEditor::populate : bankItem->getBank = "
-    << bankItem->getBank();
+    RG_DEBUG << "populate() : bankItem->getBank = " << bankItem->getBank();
 
     m_currentBank = &(m_bankList[bankItem->getBank()]); // m_device->getBankByIndex(bankItem->getBank());
-
-    blockAllSignals(true);
 
     // set the bank values
     m_percussion->setChecked(m_currentBank->isPercussion());
@@ -212,6 +212,10 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
 
     bool haveKeyMappings = m_device->getKeyMappings().size() > 0;
 
+    // Need this because NameSetEditor connects to each name
+    // field's textChanged signal instead of textEdited.
+    // ??? Fix NameSetEditor!
+    blockAllSignals(true);
     for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
 
         m_names[i]->clear();
@@ -246,17 +250,12 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
         // show start of label
         m_names[i]->setCursorPosition(0);
     }
-
     blockAllSignals(false);
 }
 
 void
 MidiProgramsEditor::reset()
 {
-    m_percussion->blockSignals(true);
-    m_msb->blockSignals(true);
-    m_lsb->blockSignals(true);
-
     m_percussion->setChecked(m_oldBank.isPercussion());
     m_msb->setValue(m_oldBank.getMSB());
     m_lsb->setValue(m_oldBank.getLSB());
@@ -265,20 +264,17 @@ MidiProgramsEditor::reset()
         modifyCurrentPrograms(*m_currentBank, m_oldBank);
         *m_currentBank = m_oldBank;
     }
-
-    m_percussion->blockSignals(false);
-    m_msb->blockSignals(false);
-    m_lsb->blockSignals(false);
 }
 
 void
 MidiProgramsEditor::slotNewPercussion()
 {
-    RG_DEBUG << "MidiProgramsEditor::slotNewPercussion";
+    RG_DEBUG << "slotNewPercussion()";
+
     bool percussion = false; // Doesn't matter
     MidiBank *newBank;
     if (banklistContains(MidiBank(percussion, m_msb->value(), m_lsb->value()))) {
-        RG_DEBUG << "MidiProgramsEditor::slotNewPercussion: calling setChecked(" << !percussion << ")";
+        RG_DEBUG << "slotNewPercussion(): calling setChecked(" << !percussion << ")";
         newBank = new MidiBank(m_percussion->isChecked(),
                          m_msb->value(),
                          m_lsb->value(), m_currentBank->getName());
@@ -305,7 +301,7 @@ MidiProgramsEditor::slotNewPercussion()
 void
 MidiProgramsEditor::slotNewMSB(int value)
 {
-    RG_DEBUG << "MidiProgramsEditor::slotNewMSB(" << value << ")\n";
+    RG_DEBUG << "slotNewMSB(" << value << ")";
 
     int msb;
 
@@ -332,7 +328,7 @@ MidiProgramsEditor::slotNewMSB(int value)
 void
 MidiProgramsEditor::slotNewLSB(int value)
 {
-    RG_DEBUG << "MidiProgramsEditor::slotNewLSB(" << value << ")\n";
+    RG_DEBUG << "slotNewLSB(" << value << ")";
 
     int lsb;
 
@@ -633,7 +629,7 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
         if (it->getBank().partialCompare(bank)  &&
             it->getProgram() == programNo) {
 
-            //Only show hits to avoid overflow of console.
+            // Only show hits to avoid overflow of console.
             RG_DEBUG << "it->getBank() " << "== bank";
             return &(*it);
         }
@@ -650,6 +646,8 @@ MidiProgramsEditor::setBankName(const QString& s)
 
 void MidiProgramsEditor::blockAllSignals(bool block)
 {
+    // Blocks all LineEdit signals.
+
     QList<LineEdit *> allChildren =
         findChildren<LineEdit*>((QRegularExpression)"[0-9]+");
     QList<LineEdit *>::iterator it;
@@ -657,9 +655,7 @@ void MidiProgramsEditor::blockAllSignals(bool block)
     for (it = allChildren.begin(); it != allChildren.end(); ++it) {
         (*it)->blockSignals(block);
     }
-
-    m_msb->blockSignals(block);
-    m_lsb->blockSignals(block);
 }
+
 
 }
