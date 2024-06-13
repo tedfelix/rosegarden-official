@@ -19,6 +19,7 @@
 #define RG_MODULE_STRING "[MidiProgramsEditor]"
 
 #include "MidiProgramsEditor.h"
+
 #include "MidiBankTreeWidgetItem.h"
 #include "NameSetEditor.h"
 #include "BankEditorDialog.h"
@@ -33,34 +34,28 @@
 
 #include <QCheckBox>
 #include <QCursor>
-#include <QFile>
 #include <QFrame>
+#include <QGridLayout>
 #include <QLabel>
-#include <QLayout>
-#include <QVBoxLayout>
-#include <QObjectList>
 #include <QPixmap>
 #include <QIcon>
 #include <QPoint>
 #include <QMenu>
-#include <QPushButton>
 #include <QSpinBox>
 #include <QString>
-#include <QToolTip>
 #include <QToolButton>
-#include <QWidget>
-#include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QFile>
 
-#include <algorithm>
+#include <algorithm>  // std::sort
+#include <string>
 
 
 namespace Rosegarden
 {
 
-MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
-                                       QWidget* parent) :
+
+MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
+                                       QWidget *parent) :
     NameSetEditor(bankEditor,
                   tr("Bank and Program details"),  // title
                   parent,
@@ -68,7 +63,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
     m_bankList(bankEditor->getBankList()),
     m_programList(bankEditor->getProgramList())
 {
-    QWidget *frame = initWidgets(m_topFrame);
+    QFrame *frame = initWidgets(m_topFrame);
     m_topLayout->addWidget(frame, 0, 0, 3, 3);
 }
 
@@ -78,42 +73,44 @@ MidiProgramsEditor::initWidgets(QWidget *parent)
     // ??? Inline this into the ctor like every other dialog.
 
     QFrame *frame = new QFrame(parent);
-
-    m_percussion = new QCheckBox(frame);
-    m_msb = new QSpinBox(frame);
-    m_lsb = new QSpinBox(frame);
-
     frame->setContentsMargins(0, 0, 0, 0);
+
     QGridLayout *gridLayout = new QGridLayout(frame);
     gridLayout->setSpacing(0);
 
+    // Percussion
     gridLayout->addWidget(new QLabel(tr("Percussion"), frame),
                           0, 0, Qt::AlignLeft);
-    gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
+    m_percussion = new QCheckBox(frame);
     connect(m_percussion, &QAbstractButton::clicked,
             this, &MidiProgramsEditor::slotNewPercussion);
+    gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
 
+    // MSB Value
     gridLayout->addWidget(new QLabel(tr("MSB Value"), frame),
                           1, 0, Qt::AlignLeft);
+    m_msb = new QSpinBox(frame);
+    m_msb->setToolTip(tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
     m_msb->setMinimum(0);
     m_msb->setMaximum(127);
+    connect(m_msb,
+                //QOverload<int>::of(&QSpinBox::valueChanged),  // Qt5.7+
+                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &MidiProgramsEditor::slotNewMSB);
     gridLayout->addWidget(m_msb, 1, 1, Qt::AlignLeft);
 
-    m_msb->setToolTip(tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
-
-    m_lsb->setToolTip(tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
-
-    connect(m_msb, SIGNAL(valueChanged(int)),
-            this, SLOT(slotNewMSB(int)));
-
+    // LSB Value
     gridLayout->addWidget(new QLabel(tr("LSB Value"), frame),
                           2, 0, Qt::AlignLeft);
+    m_lsb = new QSpinBox(frame);
+    m_lsb->setToolTip(tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
     m_lsb->setMinimum(0);
     m_lsb->setMaximum(127);
+    connect(m_lsb,
+                //QOverload<int>::of(&QSpinBox::valueChanged),  // Qt5.7+
+                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &MidiProgramsEditor::slotNewLSB);
     gridLayout->addWidget(m_lsb, 2, 1, Qt::AlignLeft);
-
-    connect(m_lsb, SIGNAL(valueChanged(int)),
-            this, SLOT(slotNewLSB(int)));
 
     return frame;
 }
@@ -121,27 +118,27 @@ MidiProgramsEditor::initWidgets(QWidget *parent)
 ProgramList
 MidiProgramsEditor::getBankSubset(const MidiBank &bank)
 {
-    ProgramList program;
-    ProgramList::iterator it;
+    ProgramList programList;
 
-    for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-        if (it->getBank().partialCompare(bank))
-            program.push_back(*it);
+    // For each program, copy the ones for the requested bank to programList.
+    for (const MidiProgram &program : m_programList) {
+        if (program.getBank().partialCompare(bank))
+            programList.push_back(program);
     }
 
-    return program;
+    return programList;
 }
 
 void
-MidiProgramsEditor::modifyCurrentPrograms(const MidiBank &oldBank,
-        const MidiBank &newBank)
+MidiProgramsEditor::modifyCurrentPrograms(
+        const MidiBank &oldBank, const MidiBank &newBank)
 {
-    ProgramList::iterator it;
-
-    for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-        if (it->getBank().partialCompare(oldBank)) {
-            *it = MidiProgram(newBank, it->getProgram(), it->getName());
-        }
+    // For each program in m_programList...
+    for (MidiProgram &program : m_programList) {
+        // If this one is in the old bank, update it to the new.
+        if (program.getBank().partialCompare(oldBank))
+            program = MidiProgram(
+                    newBank, program.getProgram(), program.getName());
     }
 }
 
@@ -310,8 +307,6 @@ MidiProgramsEditor::slotNewMSB(int value)
 {
     RG_DEBUG << "MidiProgramsEditor::slotNewMSB(" << value << ")\n";
 
-    m_msb->blockSignals(true);
-
     int msb;
 
     try {
@@ -322,14 +317,14 @@ MidiProgramsEditor::slotNewMSB(int value)
 
     MidiBank newBank(m_percussion->isChecked(),
                      msb,
-                     m_lsb->value(), m_currentBank->getName());
+                     m_lsb->value(),
+                     m_currentBank->getName());
 
     modifyCurrentPrograms(*m_currentBank, newBank);
 
     m_msb->setValue(msb);
-    *m_currentBank = newBank;
 
-    m_msb->blockSignals(false);
+    *m_currentBank = newBank;
 
     m_bankEditor->slotApply();
 }
@@ -338,8 +333,6 @@ void
 MidiProgramsEditor::slotNewLSB(int value)
 {
     RG_DEBUG << "MidiProgramsEditor::slotNewLSB(" << value << ")\n";
-
-    m_lsb->blockSignals(true);
 
     int lsb;
 
@@ -351,14 +344,14 @@ MidiProgramsEditor::slotNewLSB(int value)
 
     MidiBank newBank(m_percussion->isChecked(),
                      m_msb->value(),
-                     lsb, m_currentBank->getName());
+                     lsb,
+                     m_currentBank->getName());
 
     modifyCurrentPrograms(*m_currentBank, newBank);
 
     m_lsb->setValue(lsb);
-    *m_currentBank = newBank;
 
-    m_lsb->blockSignals(false);
+    *m_currentBank = newBank;
 
     m_bankEditor->slotApply();
 }
@@ -462,7 +455,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     QToolButton *button = dynamic_cast<QToolButton *>(sender());
 
     if (!button) {
-        RG_WARNING << "slotKeyMapButtonPressed() : WARNING: Sender is not a QPushButton.";
+        RG_WARNING << "slotKeyMapButtonPressed() : WARNING: Sender is not a QToolButton.";
         return;
     }
 
