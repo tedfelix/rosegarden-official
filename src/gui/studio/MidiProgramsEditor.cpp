@@ -319,6 +319,8 @@ MidiProgramsEditor::slotNewMSB(int value)
 {
     RG_DEBUG << "slotNewMSB(" << value << ")";
 
+    // ??? Not sure we should clean this up since we are getting rid of it.
+
     int msb;
 
     try {
@@ -338,6 +340,7 @@ MidiProgramsEditor::slotNewMSB(int value)
 
     *m_currentBank = newBank;
 
+    // Refresh the tree so that it shows the new MSB.
     m_bankEditor->slotApply();
 }
 
@@ -345,6 +348,8 @@ void
 MidiProgramsEditor::slotNewLSB(int value)
 {
     RG_DEBUG << "slotNewLSB(" << value << ")";
+
+    // ??? Not sure we should clean this up since we are getting rid of it.
 
     int lsb;
 
@@ -365,29 +370,24 @@ MidiProgramsEditor::slotNewLSB(int value)
 
     *m_currentBank = newBank;
 
+    // Refresh the tree so that it shows the new MSB.
     m_bankEditor->slotApply();
 }
 
-struct ProgramCmp
-{
-    bool operator()(const Rosegarden::MidiProgram &p1,
-                    const Rosegarden::MidiProgram &p2) const
-    {
-        if (p1.getProgram() == p2.getProgram()) {
-            const Rosegarden::MidiBank &b1(p1.getBank());
-            const Rosegarden::MidiBank &b2(p2.getBank());
-            if (b1.getMSB() == b2.getMSB())
-                if (b1.getLSB() == b2.getLSB())
-                    return ((b1.isPercussion() ? 1 : 0) < (b2.isPercussion() ? 1 : 0));
-                else return (b1.getLSB() < b2.getLSB());
-            else return (b1.getMSB() < b2.getMSB());
-        } else return (p1.getProgram() < p2.getProgram());
-    }
-};
-
 void
-MidiProgramsEditor::slotNameChanged(const QString& programName)
+MidiProgramsEditor::slotNameChanged(const QString &programName)
 {
+    //RG_DEBUG << "slotNameChanged(" << programName << ")";
+
+    // This is called for every single change to the edit box.  E.g.
+    // If the user types "hi", this slot is called twice.  Once with
+    // "h" and again with "hi".
+
+    if (!m_currentBank) {
+        RG_WARNING << "slotNameChanged(): WARNING: m_currentBank is nullptr.";
+        return;
+    }
+
     const LineEdit *lineEdit = dynamic_cast<const LineEdit *>(sender());
 
     if (!lineEdit) {
@@ -395,51 +395,53 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
         return;
     }
 
-    const unsigned id = lineEdit->property("index").toUInt();
+    // Zero-based program number.  This is the same as the MIDI program change.
+    const unsigned programNumber = lineEdit->property("index").toUInt();
 
-    //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << id;
+    //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << programNumber;
 
-    MidiBank *currBank = m_currentBank;
+    MidiProgram *program = getProgram(*m_currentBank, programNumber);
 
-    if (!currBank) {
-        RG_WARNING << "slotNameChanged(): WARNING: currBank is nullptr.";
-        return;
-    }
-
-    //RG_DEBUG << "slotNameChanged(): currBank: " << currBank;
-
-    //RG_DEBUG << "slotNameChanged(): current bank name: " << currBank->getName();
-
-    MidiProgram *program = getProgram(*currBank, id);
-
-    // If the MidiProgram doesn't exist
+    // If the MidiProgram doesn't exist in m_programList, add it.
     if (!program) {
         // Do nothing if program name is empty
         if (programName.isEmpty())
             return;
 
         // Create a new MidiProgram and add it to m_programList.
-        MidiProgram newProgram(*m_currentBank, id);
+        MidiProgram newProgram(*m_currentBank, programNumber);
         m_programList.push_back(newProgram);
 
-        // Sort by program number.
-        std::sort(m_programList.begin(), m_programList.end(), ProgramCmp());
+        // Sort m_programList.
+        // ??? Why do we need this sorted?  Is it a Device requirement?
+        //     If it is a requirement, is there another std::sort() someplace?
+        //     Confusing.  And MidiProgram's op< is backwards.  It is
+        //     comparing program and then bank.  But bank is more important.
+        //     I have a feeling sorting and the op< are unnecessary.  Need to
+        //     do some digging.
+        // ??? Recommend seeing if we can remove this and remove the op<() in
+        //     MidiBank and MidiProgram.
+        //std::sort(m_programList.begin(), m_programList.end(), ProgramCmp());
+        std::sort(m_programList.begin(), m_programList.end());
 
-        // Now, get the MidiProgram from the m_programList.
-        program = getProgram(*m_currentBank, id);
+        // Get the MidiProgram from the m_programList.
+        program = getProgram(*m_currentBank, programNumber);
 
-    } else {
-        // If we've found a program and the label is now empty,
-        // remove it from the program list.
+    } else {  // The MidiProgram already exists in m_programList.
+
+        // If the label is now empty...
         if (programName.isEmpty()) {
+            // See if the program is in the program list.
             for (ProgramList::iterator it = m_programList.begin();
                  it != m_programList.end();
                  ++it) {
-                if (static_cast<unsigned>(it->getProgram()) == id) {
+                // Found it?  Remove it.
+                if (static_cast<unsigned>(it->getProgram()) == programNumber) {
                     m_programList.erase(it);
+                    // ??? Why?
                     m_bankEditor->slotApply();
 
-                    //RG_DEBUG << "slotNameChanged(): deleting empty program (" << id << ")";
+                    //RG_DEBUG << "slotNameChanged(): deleting empty program (" << programNumber << ")";
 
                     return;
                 }
@@ -457,6 +459,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     // If the name has actually changed
     if (qstrtostr(programName) != program->getName()) {
         program->setName(qstrtostr(programName));
+        // ??? Why?
         m_bankEditor->slotApply();
     }
 }
@@ -583,6 +586,8 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(int i)
 int
 MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
 {
+    // ??? Not sure we should clean this up since we are getting rid of it.
+
     bool percussion = false; // Doesn't matter
     int newMSB = msb;
     while (banklistContains(MidiBank(percussion,
@@ -603,6 +608,8 @@ MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
 int
 MidiProgramsEditor::ensureUniqueLSB(int lsb, bool ascending)
 {
+    // ??? Not sure we should clean this up since we are getting rid of it.
+
     bool percussion = false; // Doesn't matter
     int newLSB = lsb;
     while (banklistContains(MidiBank(percussion,

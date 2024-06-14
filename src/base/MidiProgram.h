@@ -63,6 +63,17 @@ public:
      * a partial comparison such as this is frequently needed.
      */
     bool partialCompare(const MidiBank &rhs) const;
+    /// Less
+    /**
+     * Note that this only looks at msb and lsb.  Those are the only
+     * things that really count when sorting.
+     */
+    bool operator<(const MidiBank &rhs) const
+    {
+        if (m_msb == rhs.m_msb)
+            return (m_lsb < rhs.m_lsb);
+        return (m_msb < rhs.m_msb);
+    }
 
 private:
     bool m_percussion;
@@ -95,6 +106,14 @@ public:
     // Only compares m_bank, m_program, and m_name.  Does not compare
     // m_keyMapping.
     bool partialCompareWithName(const MidiProgram &rhs) const;
+    bool operator<(const MidiProgram &rhs)
+    {
+        // ??? But bank is more important than program.  Why
+        //     is this comparing program first?  This makes no sense.
+        if (m_program == rhs.m_program)
+            return (m_bank < rhs.m_bank);
+        return (m_program < rhs.m_program);
+    }
 
 private:
     MidiBank m_bank;

@@ -77,6 +77,7 @@ private slots:
     void slotNewLSB(int value);
     void slotPercussionClicked();
 
+    /// One of the program names was changed by the user.
     void slotNameChanged(const QString &) override;
     void slotKeyMapButtonPressed() override;
     void slotKeyMapMenuItemSelected(QAction *);
@@ -126,6 +127,10 @@ private:
     // Programs
 
     /// Programs for the bank being edited.
+    /**
+     * ??? No, I think this is all of the programs for the device.
+     *     Otherwise there would be no need for getBankSubset().
+     */
     ProgramList &m_programList;
     // Get a program (pointer into program list) for modification.
     MidiProgram *getProgram(const MidiBank &bank, int programNo);
