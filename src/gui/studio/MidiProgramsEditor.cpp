@@ -463,19 +463,14 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
 void
 MidiProgramsEditor::slotKeyMapButtonPressed()
 {
-    QToolButton *button = dynamic_cast<QToolButton *>(sender());
-
-    if (!button) {
-        RG_WARNING << "slotKeyMapButtonPressed() : WARNING: Sender is not a QToolButton.";
-        return;
-    }
-
     if (!m_device)
         return;
 
-    const KeyMappingList &kml = m_device->getKeyMappings();
-    if (kml.empty())
+    QToolButton *button = dynamic_cast<QToolButton *>(sender());
+    if (!button) {
+        RG_WARNING << "slotKeyMapButtonPressed(): WARNING: Sender is not a QPushButton.";
         return;
+    }
 
     const unsigned id = button->property("index").toUInt();
 
@@ -483,24 +478,35 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     if (!program)
         return;
 
-    m_currentMenuProgram = id;
+    const KeyMappingList &keyMappingList = m_device->getKeyMappings();
+    if (keyMappingList.empty())
+        return;
+
+    // Save the program number we are editing for slotKeyMapMenuItemSelected().
+    m_keyMapProgramNumber = id;
 
     // Create a new popup menu.
     QMenu *menu = new QMenu(button);
 
     const MidiKeyMapping *currentMapping =
-        m_device->getKeyMappingForProgram(*program);
+            m_device->getKeyMappingForProgram(*program);
 
+    // Keep track of the current key map selection for
+    // popup menu positioning.
     int currentKeyMap = 0;
 
-    QAction *a = menu->addAction(tr("<no key mapping>"));
-    a->setObjectName("0");
+    // Add the initial "<no key mapping>".
+    QAction *action = menu->addAction(tr("<no key mapping>"));
+    action->setObjectName("0");
 
-    for (size_t i = 0; i < kml.size(); ++i) {
-        a = menu->addAction(strtoqstr(kml[i].getName()));
-        a->setObjectName(QString("%1").arg(i+1));
+    // For each key mapping...
+    for (size_t i = 0; i < keyMappingList.size(); ++i) {
+        // Add the mapping to the menu.
+        action = menu->addAction(strtoqstr(keyMappingList[i].getName()));
+        action->setObjectName(QString("%1").arg(i+1));
 
-        if (currentMapping  &&  (kml[i] == *currentMapping))
+        // If the current keymap for this program is found, keep track of it.
+        if (currentMapping  &&  (keyMappingList[i] == *currentMapping))
             currentKeyMap = static_cast<int>(i + 1);
     }
 
@@ -509,29 +515,32 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
 
     // Compute the position for the pop-up menu.
 
-    // QMenu::popup() can do this for us, but it doesn't place the
-    // cursor over top of the current selection.
+    // Make sure the menu will be positioned such that the mouse pointer
+    // is over the currently selected item.
 
-    // Get the QRect for the current entry.
     QRect actionRect =
             menu->actionGeometry(menu->actions().value(currentKeyMap));
-
-    QPoint pos = QCursor::pos();
-    pos.rx() -= 10;
-    pos.ry() -= actionRect.top() + actionRect.height() / 2;
+    QPoint menuPos = QCursor::pos();
+    // Adjust position so that the mouse will end up on top of
+    // the current selection.
+    menuPos.rx() -= 10;
+    menuPos.ry() -= actionRect.top() + actionRect.height() / 2;
 
     // Display the menu.
-    menu->popup(pos);
+    menu->popup(menuPos);
+
+    // slotKeyMapMenuItemSelected() is the next step in this process.
 }
 
 void
-MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *a)
+MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
 {
-    slotKeyMapMenuItemSelected(a->objectName().toInt());
+    // Extract the program number from the object name.
+    slotKeyMapMenuItemSelected(action->objectName().toInt());
 }
 
 void
-MidiProgramsEditor::slotKeyMapMenuItemSelected(int i)
+MidiProgramsEditor::slotKeyMapMenuItemSelected(int programNumber)
 {
     if (!m_device)
         return ;
@@ -540,18 +549,19 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(int i)
     if (kml.empty())
         return ;
 
-    MidiProgram *program = getProgram(*m_currentBank, m_currentMenuProgram);
+    MidiProgram *program = getProgram(*m_currentBank, m_keyMapProgramNumber);
     if (!program)
         return ;
 
     std::string newMapping;
 
-    if (i == 0) { // no key mapping
+    if (programNumber == 0) { // no key mapping
         newMapping = "";
     } else {
-        --i;
-        if (i < (int)kml.size()) {
-            newMapping = kml[i].getName();
+        // Convert from 1-based program number to 0-based.
+        --programNumber;
+        if (programNumber < (int)kml.size()) {
+            newMapping = kml[programNumber].getName();
         }
     }
 
@@ -560,7 +570,7 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(int i)
     QIcon icon;
 
     bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);  //@@@ JAS restored from before port/
-    QToolButton *btn = getKeyMapButton(m_currentMenuProgram);
+    QToolButton *btn = getKeyMapButton(m_keyMapProgramNumber);
 
     if (newMapping.empty()) {
         icon = IconLoader::load( "key-white" );

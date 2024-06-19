@@ -80,8 +80,8 @@ private slots:
     /// One of the program names was changed by the user.
     void slotNameChanged(const QString &) override;
     void slotKeyMapButtonPressed() override;
-    void slotKeyMapMenuItemSelected(QAction *);
-    void slotKeyMapMenuItemSelected(int);
+    void slotKeyMapMenuItemSelected(QAction *action);
+    void slotKeyMapMenuItemSelected(int programNumber);
 
 private:
 
@@ -148,10 +148,8 @@ private:
      *
      * Used by slotKeyMapMenuItemSelected() to make sure the keymap
      * selection ends up associated with the right program.
-     *
-     * ??? rename: m_keymapButtonIndex?
      */
-    unsigned int m_currentMenuProgram;
+    unsigned int m_keyMapProgramNumber;
 };
 
 
