@@ -134,19 +134,23 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     // Find the UI descriptor for uiUris.
 
     m_uilib = dlopen(bpath.toStdString().c_str(), RTLD_LOCAL | RTLD_LAZY);
-    void* vpdf = dlsym(m_uilib, "lv2ui_descriptor");
-    LV2UI_DescriptorFunction pdf = (LV2UI_DescriptorFunction)vpdf;
-    int ui_index = 0;
-    while(true) {
-        const LV2UI_Descriptor* uidesci = (*pdf)(ui_index);
-        if (uidesci == nullptr) break;
-        if (QString(uidesci->URI) == uiUris)
-            {
-                m_uidesc = uidesci;
-                break;
+    if (m_uilib) {
+        void* vpdf = dlsym(m_uilib, "lv2ui_descriptor");
+        if (vpdf) {
+            LV2UI_DescriptorFunction pdf = (LV2UI_DescriptorFunction)vpdf;
+            int ui_index = 0;
+            while(true) {
+                const LV2UI_Descriptor* uidesci = (*pdf)(ui_index);
+                if (uidesci == nullptr) break;
+                if (QString(uidesci->URI) == uiUris)
+                    {
+                        m_uidesc = uidesci;
+                        break;
+                    }
+                ui_index++;
+                RG_DEBUG << "descriptor: " << m_uidesc;
             }
-        ui_index++;
-        RG_DEBUG << "descriptor: " << m_uidesc;
+        }
     }
 }
 
