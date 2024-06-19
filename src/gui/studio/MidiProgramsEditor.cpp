@@ -54,6 +54,25 @@ namespace Rosegarden
 {
 
 
+// Load once for performance.
+static const QIcon &getNoKeyMapIcon()
+{
+    // Use a white icon to indicate there is no keymap for this program.
+    static const QIcon noKeyMapIcon(IconLoader::loadPixmap("key-white"));
+
+    return noKeyMapIcon;
+}
+
+// Load once for performance.
+static const QIcon &getKeyMapIcon()
+{
+    // Use a green icon to indicate there *is* a keymap for this program.
+    static const QIcon keyMapIcon(IconLoader::loadPixmap("key-green"));
+
+    return keyMapIcon;
+}
+
+
 MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
                                        QWidget *parent) :
     NameSetEditor(bankEditor,
@@ -211,11 +230,6 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
     // Get the programs for the current bank.
     ProgramList programSubset = getBankSubset(*m_currentBank);
 
-    // Use a white icon to indicate there is no keymap for this program.
-    static const QIcon noKeymapIcon(IconLoader::loadPixmap("key-white"));
-    // Use a green icon to indicate there *is* a keymap for this program.
-    static const QIcon keymapIcon(IconLoader::loadPixmap("key-green"));
-
     const bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
 
     // Need this because NameSetEditor connects to each name
@@ -239,7 +253,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
 
         // Assume not found and clear everything.
         m_names[programIndex]->clear();
-        keyMapButton->setIcon(noKeymapIcon);
+        keyMapButton->setIcon(getNoKeyMapIcon());
         keyMapButton->setToolTip("");
 
         // Find the program in programSubset...
@@ -260,13 +274,13 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
                     m_device->getKeyMappingForProgram(midiProgram);
             if (midiKeyMapping) {
                 // Indicate that this program has a keymap.
-                keyMapButton->setIcon(keymapIcon);
+                keyMapButton->setIcon(getKeyMapIcon());
                 // Put the name in the tool tip.
                 keyMapButton->setToolTip(tr("Key Mapping: %1").arg(
                         strtoqstr(midiKeyMapping->getName())));
             } else {  // No key mapping.
                 // Indicate that this program has no keymap.
-                keyMapButton->setIcon(noKeymapIcon);
+                keyMapButton->setIcon(getNoKeyMapIcon());
                 keyMapButton->setToolTip("");
             }
 
@@ -485,7 +499,8 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     // Save the program number we are editing for slotKeyMapMenuItemSelected().
     m_keyMapProgramNumber = id;
 
-    // Create a new popup menu.
+    // Create a pop-up menu filled with the available key mappings.
+
     QMenu *menu = new QMenu(button);
 
     const MidiKeyMapping *currentMapping =
@@ -535,58 +550,60 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
 void
 MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
 {
-    // Extract the program number from the object name.
+    // Extract the key map number from the object name.
     slotKeyMapMenuItemSelected(action->objectName().toInt());
 }
 
 void
-MidiProgramsEditor::slotKeyMapMenuItemSelected(int programNumber)
+MidiProgramsEditor::slotKeyMapMenuItemSelected(int keyMapNumber)
 {
-    if (!m_device)
-        return ;
+    // The user has selected an item from the menu presented
+    // by slotKeyMapButtonPressed().
 
-    const KeyMappingList &kml = m_device->getKeyMappings();
-    if (kml.empty())
-        return ;
+    if (!m_device)
+        return;
+
+    const KeyMappingList &keyMappingList = m_device->getKeyMappings();
+    if (keyMappingList.empty())
+        return;
 
     MidiProgram *program = getProgram(*m_currentBank, m_keyMapProgramNumber);
     if (!program)
-        return ;
+        return;
 
     std::string newMapping;
 
-    if (programNumber == 0) { // no key mapping
+    // Convert from 1-based key map number to 0-based.
+    // Simplifies keyMappingList[] vector access.
+    --keyMapNumber;
+
+    // No key mapping?
+    if (keyMapNumber <= -1) {
         newMapping = "";
     } else {
-        // Convert from 1-based program number to 0-based.
-        --programNumber;
-        if (programNumber < (int)kml.size()) {
-            newMapping = kml[programNumber].getName();
-        }
+        if (keyMapNumber < static_cast<int>(keyMappingList.size()))
+            newMapping = keyMappingList[keyMapNumber].getName();
     }
 
+    // Set the key mapping.
+    // ??? Only the name is used?  Then we need to disallow key mappings
+    //     with empty names.  The UI currently allows this.
     m_device->setKeyMappingForProgram(*program, newMapping);
-//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIcon icon;
 
-    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);  //@@@ JAS restored from before port/
-    QToolButton *btn = getKeyMapButton(m_keyMapProgramNumber);
+    // Update the key mapping icon.
 
-    if (newMapping.empty()) {
-        icon = IconLoader::load( "key-white" );
-        if( ! icon.isNull() ) {
-            btn->setIcon( icon );
-        }
-        // QToolTip::remove(btn);
-        btn->setToolTip(QString(""));       //@@@ Usefull ?
+    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
+    QToolButton *keyMapButton = getKeyMapButton(m_keyMapProgramNumber);
+
+    // <no key mapping> selected?
+    if (keyMapNumber == -1) {
+        keyMapButton->setIcon(getNoKeyMapIcon());
+        keyMapButton->setToolTip("");
     } else {
-        icon = IconLoader::load( "key-green" );
-        if( ! icon.isNull() ){
-            btn->setIcon( icon );
-        }
-        btn->setToolTip(tr("Key Mapping: %1").arg(strtoqstr(newMapping)));
+        keyMapButton->setIcon(getKeyMapIcon());
+        keyMapButton->setToolTip(tr("Key Mapping: %1").arg(strtoqstr(newMapping)));
     }
-    btn->setEnabled(haveKeyMappings);
+    keyMapButton->setEnabled(haveKeyMappings);
 }
 
 int
@@ -652,6 +669,9 @@ MidiProgramsEditor::banklistContains(const MidiBank &bank)
 MidiProgram*
 MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 {
+    // ??? Consider using getProgramIter() instead of this.  Would
+    //     that be better?  Can we get rid of this?
+
     ProgramList::iterator it = m_programList.begin();
 
     for (; it != m_programList.end(); ++it) {
