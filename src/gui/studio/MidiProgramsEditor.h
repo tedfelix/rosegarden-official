@@ -134,6 +134,8 @@ private:
     ProgramList &m_programList;
     // Get a program (pointer into program list) for modification.
     MidiProgram *getProgram(const MidiBank &bank, int programNo);
+    /// Get an iterator which is more flexible.
+    ProgramList::iterator getProgramIter(const MidiBank &bank, int programNo);
     ProgramList getBankSubset(const MidiBank &);
     /// Set the currently loaded programs to new MSB and LSB
     void modifyCurrentPrograms(const MidiBank &oldBank,

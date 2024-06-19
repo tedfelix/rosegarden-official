@@ -383,6 +383,9 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
     // If the user types "hi", this slot is called twice.  Once with
     // "h" and again with "hi".
 
+    // ??? Can we be more efficient?  E.g. only make the change when
+    //     the cursor leaves the edit box, or "Ok" is clicked?
+
     if (!m_currentBank) {
         RG_WARNING << "slotNameChanged(): WARNING: m_currentBank is nullptr.";
         return;
@@ -400,11 +403,13 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
 
     //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << programNumber;
 
-    MidiProgram *program = getProgram(*m_currentBank, programNumber);
+    // Get the MidiProgram that needs to be changed from m_programList.
+    ProgramList::iterator programIter =
+            getProgramIter(*m_currentBank, programNumber);
 
     // If the MidiProgram doesn't exist in m_programList, add it.
-    if (!program) {
-        // Do nothing if program name is empty
+    if (programIter == m_programList.end()) {
+        // If the program name is empty, do nothing.
         if (programName.isEmpty())
             return;
 
@@ -424,41 +429,32 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
         //std::sort(m_programList.begin(), m_programList.end(), ProgramCmp());
         std::sort(m_programList.begin(), m_programList.end());
 
-        // Get the MidiProgram from the m_programList.
-        program = getProgram(*m_currentBank, programNumber);
+        // Get the new MidiProgram from m_programList.
+        programIter = getProgramIter(*m_currentBank, programNumber);
 
     } else {  // The MidiProgram already exists in m_programList.
 
         // If the label is now empty...
         if (programName.isEmpty()) {
-            // See if the program is in the program list.
-            for (ProgramList::iterator it = m_programList.begin();
-                 it != m_programList.end();
-                 ++it) {
-                // Found it?  Remove it.
-                if (static_cast<unsigned>(it->getProgram()) == programNumber) {
-                    m_programList.erase(it);
-                    // ??? Why?
-                    m_bankEditor->slotApply();
+            //RG_DEBUG << "slotNameChanged(): deleting empty program (" << programNumber << ")";
+            m_programList.erase(programIter);
+            // ??? Why?
+            m_bankEditor->slotApply();
 
-                    //RG_DEBUG << "slotNameChanged(): deleting empty program (" << programNumber << ")";
-
-                    return;
-                }
-            }
+            return;
         }
     }
 
-    if (!program) {
-        RG_WARNING << "slotNameChanged(): WARNING: program is nullptr.";
+    if (programIter == m_programList.end()) {
+        RG_WARNING << "slotNameChanged(): WARNING: programIter is end().";
         return;
     }
 
     //RG_DEBUG << "slotNameChanged(): program: " << program;
 
     // If the name has actually changed
-    if (qstrtostr(programName) != program->getName()) {
-        program->setName(qstrtostr(programName));
+    if (qstrtostr(programName) != programIter->getName()) {
+        programIter->setName(qstrtostr(programName));
         // ??? Why?
         m_bankEditor->slotApply();
     }
@@ -659,6 +655,22 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
     }
 
     return nullptr;
+}
+
+ProgramList::iterator
+MidiProgramsEditor::getProgramIter(const MidiBank &bank, int programNo)
+{
+    // For each program in m_programList...
+    for (ProgramList::iterator programIter = m_programList.begin();
+         programIter != m_programList.end();
+         ++programIter) {
+        // Match?
+        if (programIter->getBank().partialCompare(bank)  &&
+            programIter->getProgram() == programNo)
+            return programIter;
+    }
+
+    return m_programList.end();
 }
 
 void
