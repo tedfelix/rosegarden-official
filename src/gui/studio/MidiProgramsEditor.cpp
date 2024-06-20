@@ -218,54 +218,58 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
 
     const bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
 
-    // For each name in the program list...
+    // For each name field (LineEdit) on the UI...
     // programIndex is also the program change number.
     for (size_t programIndex = 0; programIndex < m_names.size(); ++programIndex) {
 
         QToolButton *keyMapButton = getKeyMapButton(programIndex);
-        // ??? Seems like something NameSetEditor should take care of?
         keyMapButton->setMaximumHeight(12);
         keyMapButton->setEnabled(haveKeyMappings);
 
-        // ??? Restructure this as:
-        //       - find program in programSubset
-        //       - if not found, clear and continue.
-        //       - Set everything up.
+        bool found = false;
+        MidiProgram foundProgram;
 
-        // Assume not found and clear everything.
-        m_names[programIndex]->clear();
-        keyMapButton->setIcon(getNoKeyMapIcon());
-        keyMapButton->setToolTip("");
-
-        // Find the program in programSubset...
+        // Find the program in programSubset.
         for (const MidiProgram &midiProgram : programSubset) {
-            // Not it?  Try the next.
-            if (midiProgram.getProgram() != programIndex)
-                continue;
-
-            // Found it.
-
-            QString programName = strtoqstr(midiProgram.getName());
-            m_completions << programName;
-            m_names[programIndex]->setText(programName);
-            // show start of label
-            m_names[programIndex]->setCursorPosition(0);
-
-            const MidiKeyMapping *midiKeyMapping =
-                    m_device->getKeyMappingForProgram(midiProgram);
-            if (midiKeyMapping) {
-                // Indicate that this program has a keymap.
-                keyMapButton->setIcon(getKeyMapIcon());
-                // Put the name in the tool tip.
-                keyMapButton->setToolTip(tr("Key Mapping: %1").arg(
-                        strtoqstr(midiKeyMapping->getName())));
-            } else {  // No key mapping.
-                // Indicate that this program has no keymap.
-                keyMapButton->setIcon(getNoKeyMapIcon());
-                keyMapButton->setToolTip("");
+            // Found?  We're done.
+            if (midiProgram.getProgram() == programIndex) {
+                found = true;
+                foundProgram = midiProgram;
+                break;
             }
+        }
 
-            break;
+        // If not found, clear and continue.
+        if (!found) {
+            m_names[programIndex]->clear();
+            keyMapButton->setIcon(getNoKeyMapIcon());
+            keyMapButton->setToolTip("");
+            continue;
+        }
+
+        // Found it.
+
+        // Name
+
+        QString programName = strtoqstr(foundProgram.getName());
+        m_names[programIndex]->setText(programName);
+        // Show start of label.
+        m_names[programIndex]->setCursorPosition(0);
+
+        // Icon and ToolTip
+
+        const MidiKeyMapping *midiKeyMapping =
+                m_device->getKeyMappingForProgram(foundProgram);
+        if (midiKeyMapping) {
+            // Indicate that this program has a keymap.
+            keyMapButton->setIcon(getKeyMapIcon());
+            // Put the name in the tool tip.
+            keyMapButton->setToolTip(tr("Key Mapping: %1").arg(
+                    strtoqstr(midiKeyMapping->getName())));
+        } else {  // No key mapping.
+            // Indicate that this program has no keymap.
+            keyMapButton->setIcon(getNoKeyMapIcon());
+            keyMapButton->setToolTip("");
         }
     }
 }
@@ -420,7 +424,6 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
         //     do some digging.
         // ??? Recommend seeing if we can remove this and remove the op<() in
         //     MidiBank and MidiProgram.
-        //std::sort(m_programList.begin(), m_programList.end(), ProgramCmp());
         std::sort(m_programList.begin(), m_programList.end());
 
         // Get the new MidiProgram from m_programList.
@@ -631,8 +634,6 @@ MidiProgramsEditor::banklistContains(const MidiBank &bank)
     for (const MidiBank &currentBank : m_bankList)
     {
         // Just compare the MSB/LSB.
-        // ??? MidiBank has a partialCompare() but it checks percussion as
-        //     well.  Might need that in the next version of this.
         if (currentBank.getMSB() == bank.getMSB()  &&
             currentBank.getLSB() == bank.getLSB())
             return true;

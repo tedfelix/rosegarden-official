@@ -85,6 +85,8 @@ protected:
                   QWidget *parent,
                   bool showKeyMapButtons = false);
 
+    // ??? Key mappings are only used by one deriver (MidiProgramsEditor).
+    //     Push this down to there.
     QToolButton *getKeyMapButton(int n) { return m_keyMapButtons[n]; }
     const QToolButton *getKeyMapButton(int n) const { return m_keyMapButtons[n]; }
 
@@ -111,7 +113,6 @@ protected:
     QLabel *m_librarianEmail;
 
     std::vector<LineEdit *> m_names;
-    QStringList m_completions;
 
 private:
     QPushButton *m_numberingBaseButton;

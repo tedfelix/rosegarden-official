@@ -139,7 +139,6 @@ MidiKeyMappingEditor::reset()
 
             if ( (int)i == index) {
                 QString name = strtoqstr(it->second);
-                m_completions << name;
                 m_names[i]->setText(name);
                 m_names[i]->setCursorPosition(0);
             }
