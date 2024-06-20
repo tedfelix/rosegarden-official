@@ -22,6 +22,8 @@
 
 #include "base/Event.h"
 
+#include <memory>
+
 #include <QWidget>
 #include <QList>
 
@@ -59,7 +61,7 @@ protected:
     unsigned int    m_graphHeight;  // Height of graph (in cents)
     unsigned int    m_graphWidth;   // Width of graph (in milliseconds)
     bool            m_ignoreOctave; // Whether to ignore octave errors
-    
+
     std::shared_ptr<Accidentals::Tuning> m_tuning;  // Tuning in use in this widget
     PitchHistory&   m_history;      // structure of data to plot
 };
@@ -69,4 +71,3 @@ protected:
 /**\@}*/
 
 #endif
-

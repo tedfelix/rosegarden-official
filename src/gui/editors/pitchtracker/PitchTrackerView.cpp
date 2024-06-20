@@ -116,7 +116,7 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
                     availableTunings->end());
 #else
         m_availableTunings =
-            QVector<Accidentals::Tuning*>::fromStdVector(*availableTunings);
+            QVector<std::shared_ptr<Accidentals::Tuning>>::fromStdVector(*availableTunings);
 #endif
 
         if (tuning < 0 ||
