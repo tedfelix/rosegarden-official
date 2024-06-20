@@ -82,16 +82,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
     m_bankList(bankEditor->getBankList()),
     m_programList(bankEditor->getProgramList())
 {
-    QFrame *frame = initWidgets(m_topFrame);
-    m_topLayout->addWidget(frame, 0, 0, 3, 3);
-}
-
-QFrame *
-MidiProgramsEditor::initWidgets(QWidget *parent)
-{
-    // ??? Inline this into the ctor like every other dialog.
-
-    QFrame *frame = new QFrame(parent);
+    QFrame *frame = new QFrame(m_topFrame);
     frame->setContentsMargins(0, 0, 0, 0);
 
     QGridLayout *gridLayout = new QGridLayout(frame);
@@ -131,7 +122,7 @@ MidiProgramsEditor::initWidgets(QWidget *parent)
             this, &MidiProgramsEditor::slotNewLSB);
     gridLayout->addWidget(m_lsb, 2, 1, Qt::AlignLeft);
 
-    return frame;
+    m_topLayout->addWidget(frame, 0, 0, 3, 3);
 }
 
 ProgramList
@@ -514,8 +505,8 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
             currentKeyMap = static_cast<int>(i + 1);
     }
 
-    connect(menu, SIGNAL(triggered(QAction *)),
-            this, SLOT(slotKeyMapMenuItemSelected(QAction *)));
+    connect(menu, &QMenu::triggered,
+            this, &MidiProgramsEditor::slotKeyMapMenuItemSelected);
 
     // Compute the position for the pop-up menu.
 
@@ -539,13 +530,6 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
 void
 MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
 {
-    // Extract the key map number from the object name.
-    slotKeyMapMenuItemSelected(action->objectName().toInt());
-}
-
-void
-MidiProgramsEditor::slotKeyMapMenuItemSelected(int keyMapNumber)
-{
     // The user has selected an item from the menu presented
     // by slotKeyMapButtonPressed().
 
@@ -560,11 +544,12 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(int keyMapNumber)
     if (!program)
         return;
 
-    std::string newMapping;
-
-    // Convert from 1-based key map number to 0-based.
+    // Extract the key map number from the object name.
+    // Subtract one to convert from 1-based key map number to 0-based.
     // Simplifies keyMappingList[] vector access.
-    --keyMapNumber;
+    const int keyMapNumber = action->objectName().toInt() - 1;
+
+    std::string newMapping;
 
     // No key mapping?
     if (keyMapNumber <= -1) {

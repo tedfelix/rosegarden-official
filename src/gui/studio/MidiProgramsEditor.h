@@ -74,7 +74,6 @@ private slots:
     void slotNameChanged(const QString &) override;
     void slotKeyMapButtonPressed() override;
     void slotKeyMapMenuItemSelected(QAction *action);
-    void slotKeyMapMenuItemSelected(int programNumber);
 
 private:
 
@@ -85,7 +84,6 @@ private:
     QCheckBox *m_percussion;
     QSpinBox *m_msb;
     QSpinBox *m_lsb;
-    QFrame *initWidgets(QWidget *parent);
 
     // Banks
 
