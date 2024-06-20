@@ -420,13 +420,13 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
         // order.  That's how it displays them.
         // If we do not sort this, the .rg file is also mixed up.  But
         // that's not a serious issue since no one looks at that.
-        // ??? MidiProgram's op< is backwards.  It is
-        //     comparing program and then bank.  But bank is more important.
         // ??? Is there a better place to sort this?  What if we take
         //     the first steps toward moving to std::set?  Make it a
         //     std::set, but continue using it like a vector.  That
         //     way it is always sorted.
-        std::sort(m_programList.begin(), m_programList.end());
+        std::sort(m_programList.begin(),
+                  m_programList.end(),
+                  [](const MidiProgram &lhs, const MidiProgram &rhs){ return lhs.lessKey(rhs); });
 
         // Get the new MidiProgram from m_programList.
         programIter = getProgramIter(*m_currentBank, programNumber);

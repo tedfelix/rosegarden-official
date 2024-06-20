@@ -57,21 +57,16 @@ public:
      * detect changes that might require a repopulation of the bank combobox.
      *
      * See MidiBank::compareKey().
-     *
-     * ??? It's difficult to agree on what constitutes a proper comparison
-     *     for this class.  I think a complete compare is probably best
-     *     for op==().
      */
     bool operator==(const MidiBank &rhs) const;
     bool operator!=(const MidiBank &rhs) const  { return !operator==(rhs); }
-    /// Compare all fields except name.
+    /// Compare MSB:LSB:Percussion.
     /**
      * Since MidiProgram stores a partial MidiBank object (without name),
      * a partial comparison such as this is frequently needed.
      *
-     * ??? Would compareKey() be better?
      * ??? Should this really compare percussion?  I think that's wrong
-     *     right now.
+     *     right now.  See if we can cause bugs with it.  Then fix it.
      */
     bool compareKey(const MidiBank &rhs) const;
 
@@ -128,8 +123,7 @@ public:
     // This only compares bank and program.
     // Most useful for sorting and searching.
     // Currently this is only used by MidiProgramsEditor for sorting.
-    // ??? rename: lessKey()
-    bool operator<(const MidiProgram &rhs)
+    bool lessKey(const MidiProgram &rhs) const
     {
         if (m_bank.compareKey(rhs.m_bank))
             return (m_program < rhs.m_program);
