@@ -87,11 +87,6 @@ private:
     QSpinBox *m_lsb;
     QFrame *initWidgets(QWidget *parent);
 
-    // ??? There's usually a way to avoid this.  Like using the
-    //     proper signals.  Ones that don't fire in response to
-    //     API calls.  User interaction only.
-    void blockAllSignals(bool block);
-
     // Banks
 
     /// The BankList we are editing.

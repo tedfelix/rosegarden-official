@@ -174,13 +174,8 @@ MidiProgramsEditor::clearAll()
     m_librarian->clear();
     m_librarianEmail->clear();
 
-    // Need this because NameSetEditor connects to each name
-    // field's textChanged signal instead of textEdited.
-    // ??? Fix NameSetEditor!
-    blockAllSignals(true);
     for (size_t i = 0; i < m_names.size(); ++i)
         m_names[i]->clear();
-    blockAllSignals(false);
 
     setEnabled(false);
 }
@@ -232,11 +227,6 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
 
     const bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
 
-    // Need this because NameSetEditor connects to each name
-    // field's textChanged signal instead of textEdited.
-    // ??? Fix NameSetEditor!
-    blockAllSignals(true);
-
     // For each name in the program list...
     // programIndex is also the program change number.
     for (size_t programIndex = 0; programIndex < m_names.size(); ++programIndex) {
@@ -287,7 +277,6 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
             break;
         }
     }
-    blockAllSignals(false);
 }
 
 void
@@ -697,24 +686,6 @@ MidiProgramsEditor::getProgramIter(const MidiBank &bank, int programNo)
     }
 
     return m_programList.end();
-}
-
-void
-MidiProgramsEditor::blockAllSignals(bool block)
-{
-    // Blocks all LineEdit signals.
-
-    // ??? Get rid of this routine.  Make sure the LineEdit controls
-    //     do not send notifications on programmatic changes.  Then
-    //     this should no longer be necessary.
-
-    QList<LineEdit *> allChildren =
-        findChildren<LineEdit*>((QRegularExpression)"[0-9]+");
-    QList<LineEdit *>::iterator it;
-
-    for (it = allChildren.begin(); it != allChildren.end(); ++it) {
-        (*it)->blockSignals(block);
-    }
 }
 
 

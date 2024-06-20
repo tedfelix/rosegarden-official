@@ -158,10 +158,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
         lineEdit->setCompleter(new QCompleter(m_completions));
 
         m_names.push_back(lineEdit);
-        // ??? This should be textEdited.  Then we don't need to
-        //     block signals all the time.
         connect(m_names[index],
-                &QLineEdit::textChanged,
+                &QLineEdit::textEdited,
                 this, &NameSetEditor::slotNameChanged);
 
         rowLayout->addWidget(lineEdit, 1);
