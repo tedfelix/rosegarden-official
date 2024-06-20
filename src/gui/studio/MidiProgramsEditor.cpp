@@ -654,33 +654,28 @@ bool
 MidiProgramsEditor::banklistContains(const MidiBank &bank)
 {
     // For each bank
-    for (BankList::iterator it = m_bankList.begin();
-         it != m_bankList.end();
-         ++it)
+    for (const MidiBank &currentBank : m_bankList)
     {
         // Just compare the MSB/LSB.
-        if (it->getMSB() == bank.getMSB()  &&  it->getLSB() == bank.getLSB())
+        // ??? MidiBank has a partialCompare() but it checks percussion as
+        //     well.  Might need that in the next version of this.
+        if (currentBank.getMSB() == bank.getMSB()  &&
+            currentBank.getLSB() == bank.getLSB())
             return true;
     }
 
     return false;
 }
 
-MidiProgram*
+MidiProgram *
 MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 {
-    // ??? Consider using getProgramIter() instead of this.  Would
-    //     that be better?  Can we get rid of this?
-
-    ProgramList::iterator it = m_programList.begin();
-
-    for (; it != m_programList.end(); ++it) {
-        if (it->getBank().partialCompare(bank)  &&
-            it->getProgram() == programNo) {
-
-            // Only show hits to avoid overflow of console.
-            RG_DEBUG << "it->getBank() " << "== bank";
-            return &(*it);
+    for (MidiProgram &midiProgram : m_programList) {
+        // Match?
+        if (midiProgram.getBank().getMSB() == bank.getMSB()  &&
+            midiProgram.getBank().getLSB() == bank.getLSB()  &&
+            midiProgram.getProgram() == programNo) {
+            return &midiProgram;
         }
     }
 
@@ -695,7 +690,8 @@ MidiProgramsEditor::getProgramIter(const MidiBank &bank, int programNo)
          programIter != m_programList.end();
          ++programIter) {
         // Match?
-        if (programIter->getBank().partialCompare(bank)  &&
+        if (programIter->getBank().getMSB() == bank.getMSB()  &&
+            programIter->getBank().getLSB() == bank.getLSB()  &&
             programIter->getProgram() == programNo)
             return programIter;
     }
@@ -704,14 +700,13 @@ MidiProgramsEditor::getProgramIter(const MidiBank &bank, int programNo)
 }
 
 void
-MidiProgramsEditor::setBankName(const QString& s)
-{
-    setTitle(s);
-}
-
-void MidiProgramsEditor::blockAllSignals(bool block)
+MidiProgramsEditor::blockAllSignals(bool block)
 {
     // Blocks all LineEdit signals.
+
+    // ??? Get rid of this routine.  Make sure the LineEdit controls
+    //     do not send notifications on programmatic changes.  Then
+    //     this should no longer be necessary.
 
     QList<LineEdit *> allChildren =
         findChildren<LineEdit*>((QRegularExpression)"[0-9]+");

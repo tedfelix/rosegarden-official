@@ -66,13 +66,6 @@ public:
 private slots:
 
     /// Check that any new MSB/LSB combination is unique for this device.
-    /**
-     * ??? This is causing some usability concerns.  It can be tricky
-     *     to assign MSBs and LSBs when the UI keeps refusing to take
-     *     the value you are trying to assign.  Recommend reducing the
-     *     MSB/LSB fields to a single MSB:LSB edit box.  Perform
-     *     the dupe check when the user is done editing.  Tab or Enter.
-     */
     void slotNewMSB(int value);
     void slotNewLSB(int value);
     void slotPercussionClicked();
@@ -84,12 +77,6 @@ private slots:
     void slotKeyMapMenuItemSelected(int programNumber);
 
 private:
-
-    /// Set the name (title) that appears at the top of the editor.
-    /**
-     * ??? Remove this wrapper.
-     */
-    void setBankName(const QString &s);
 
     MidiDevice *m_device{nullptr};
 
@@ -126,16 +113,13 @@ private:
 
     // Programs
 
-    /// Programs for the bank being edited.
-    /**
-     * ??? No, I think this is all of the programs for the device.
-     *     Otherwise there would be no need for getBankSubset().
-     */
+    /// Programs for the device being edited.
     ProgramList &m_programList;
-    // Get a program (pointer into program list) for modification.
+    /// Get a pointer into the program list.
     MidiProgram *getProgram(const MidiBank &bank, int programNo);
     /// Get an iterator which is more flexible.
     ProgramList::iterator getProgramIter(const MidiBank &bank, int programNo);
+    /// Get a ProgramList containing only the programs in a bank.
     ProgramList getBankSubset(const MidiBank &);
     /// Set the currently loaded programs to new MSB and LSB
     void modifyCurrentPrograms(const MidiBank &oldBank,
