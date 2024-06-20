@@ -132,7 +132,7 @@ MidiProgramsEditor::getBankSubset(const MidiBank &bank)
 
     // For each program, copy the ones for the requested bank to programList.
     for (const MidiProgram &program : m_programList) {
-        if (program.getBank().partialCompare(bank))
+        if (program.getBank().compareKey(bank))
             programList.push_back(program);
     }
 
@@ -146,7 +146,7 @@ MidiProgramsEditor::modifyCurrentPrograms(
     // For each program in m_programList...
     for (MidiProgram &program : m_programList) {
         // If this one is in the old bank, update it to the new.
-        if (program.getBank().partialCompare(oldBank))
+        if (program.getBank().compareKey(oldBank))
             program = MidiProgram(
                     newBank, program.getProgram(), program.getName());
     }
@@ -416,14 +416,16 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
         m_programList.push_back(newProgram);
 
         // Sort m_programList.
-        // ??? Why do we need this sorted?  Is it a Device requirement?
-        //     If it is a requirement, is there another std::sort() someplace?
-        //     Confusing.  And MidiProgram's op< is backwards.  It is
+        // We need to sort this for the MIPP.  It just needs the PCs in
+        // order.  That's how it displays them.
+        // If we do not sort this, the .rg file is also mixed up.  But
+        // that's not a serious issue since no one looks at that.
+        // ??? MidiProgram's op< is backwards.  It is
         //     comparing program and then bank.  But bank is more important.
-        //     I have a feeling sorting and the op< are unnecessary.  Need to
-        //     do some digging.
-        // ??? Recommend seeing if we can remove this and remove the op<() in
-        //     MidiBank and MidiProgram.
+        // ??? Is there a better place to sort this?  What if we take
+        //     the first steps toward moving to std::set?  Make it a
+        //     std::set, but continue using it like a vector.  That
+        //     way it is always sorted.
         std::sort(m_programList.begin(), m_programList.end());
 
         // Get the new MidiProgram from m_programList.

@@ -463,7 +463,7 @@ MidiDevice::getPrograms(const MidiBank &bank) const
 
     for (ProgramList::const_iterator it = m_programList.begin();
          it != m_programList.end(); ++it) {
-        if (it->getBank().partialCompare(bank)) programs.push_back(*it);
+        if (it->getBank().compareKey(bank)) programs.push_back(*it);
     }
 
     return programs;
@@ -497,7 +497,7 @@ MidiDevice::getBankName(const MidiBank &bank) const
 {
     for (BankList::const_iterator it = m_bankList.begin();
          it != m_bankList.end(); ++it) {
-        if ((*it).partialCompare(bank)) return it->getName();
+        if ((*it).compareKey(bank)) return it->getName();
     }
     return "";
 }
@@ -606,7 +606,7 @@ MidiDevice::toXmlString() const
         //
         for (pt = m_programList.begin(); pt != m_programList.end(); ++pt)
         {
-            if (pt->getBank().partialCompare(*it))
+            if (pt->getBank().compareKey(*it))
             {
                 midiDevice << "            <program "
                            << "id=\"" << (int)pt->getProgram() << "\" "
@@ -740,7 +740,7 @@ MidiDevice::mergeBankList(const BankList &bankList)
     {
         for (oIt = m_bankList.begin(); oIt != m_bankList.end(); ++oIt)
         {
-            if ((*it).partialCompare(*oIt))
+            if ((*it).compareKey(*oIt))
             {
                 clash = true;
                 break;

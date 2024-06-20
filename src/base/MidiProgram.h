@@ -53,7 +53,14 @@ public:
 
     /// A full comparison of all fields.
     /**
-     * This probably isn't what you want.  See partialCompare().
+     * MIDIInstrumentParameterPanel::updateBankComboBox() uses this to
+     * detect changes that might require a repopulation of the bank combobox.
+     *
+     * See MidiBank::compareKey().
+     *
+     * ??? It's difficult to agree on what constitutes a proper comparison
+     *     for this class.  I think a complete compare is probably best
+     *     for op==().
      */
     bool operator==(const MidiBank &rhs) const;
     bool operator!=(const MidiBank &rhs) const  { return !operator==(rhs); }
@@ -61,24 +68,35 @@ public:
     /**
      * Since MidiProgram stores a partial MidiBank object (without name),
      * a partial comparison such as this is frequently needed.
+     *
+     * ??? Would compareKey() be better?
+     * ??? Should this really compare percussion?  I think that's wrong
+     *     right now.
      */
-    bool partialCompare(const MidiBank &rhs) const;
-    /// Less
-    /**
-     * Note that this only looks at msb and lsb.  Those are the only
-     * things that really count when sorting.
-     */
-    bool operator<(const MidiBank &rhs) const
+    bool compareKey(const MidiBank &rhs) const;
+
+    // Only compares (percussion), msb, and lsb.
+    // Most useful for sorting and searching.
+    // This is specifically NOT operator<() because it does not compare
+    // all fields.
+    bool lessKey(const MidiBank &rhs) const
     {
-        if (m_msb == rhs.m_msb)
-            return (m_lsb < rhs.m_lsb);
-        return (m_msb < rhs.m_msb);
+        // ??? We'll need percussion soon.
+        //if (m_percussion == rhs.m_percussion) {
+            if (m_msb == rhs.m_msb)
+                return (m_lsb < rhs.m_lsb);
+            return (m_msb < rhs.m_msb);
+        //}
+        //return (m_percussion < rhs.m_percussion);
     }
 
 private:
-    bool m_percussion;
+    // Key fields.
+    bool m_percussion;  // Not a key field yet.  But soon.
     MidiByte m_msb;
     MidiByte m_lsb;
+
+    // Data fields.
     std::string m_name;
 };
 
@@ -106,22 +124,32 @@ public:
     // Only compares m_bank, m_program, and m_name.  Does not compare
     // m_keyMapping.
     bool partialCompareWithName(const MidiProgram &rhs) const;
+
+    // This only compares bank and program.
+    // Most useful for sorting and searching.
+    // Currently this is only used by MidiProgramsEditor for sorting.
+    // ??? rename: lessKey()
     bool operator<(const MidiProgram &rhs)
     {
-        // ??? But bank is more important than program.  Why
-        //     is this comparing program first?  This makes no sense.
-        if (m_program == rhs.m_program)
-            return (m_bank < rhs.m_bank);
-        return (m_program < rhs.m_program);
+        if (m_bank.compareKey(rhs.m_bank))
+            return (m_program < rhs.m_program);
+        return m_bank.lessKey(rhs.m_bank);
     }
 
 private:
+    // Key fields.
     MidiBank m_bank;
     MidiByte m_program;
+
+    // Data fields.
     std::string m_name;
     std::string m_keyMapping;
 };
 
+// ??? std::vector?  This means all throughout rg we have to do linear
+//     searches.  Wouldn't a std::set<> indexed by MSB:LSB:Percussion:PC
+//     make a *lot* more sense in the long run?  Should reduce CPU usage
+//     and complexity significantly.
 typedef std::vector<MidiProgram> ProgramList;
 
 inline bool

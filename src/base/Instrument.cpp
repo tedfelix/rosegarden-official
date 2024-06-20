@@ -222,7 +222,7 @@ Instrument::isProgramValid() const
          oBankIter != validBanks.end();
          ++oBankIter)
     {
-        if (oBankIter->partialCompare(m_program.getBank())) {
+        if (oBankIter->compareKey(m_program.getBank())) {
             bankValid = true;
             break;
         }
