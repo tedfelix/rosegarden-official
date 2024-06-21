@@ -382,7 +382,8 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
     // "h" and again with "hi".
 
     // ??? Can we be more efficient?  E.g. only make the change when
-    //     the cursor leaves the edit box, or "Ok" is clicked?
+    //     the cursor leaves the edit box, or "Ok" is clicked?  That
+    //     would help with the command history spam issue.
 
     if (!m_currentBank) {
         RG_WARNING << "slotNameChanged(): WARNING: m_currentBank is nullptr.";
@@ -437,7 +438,20 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
         if (programName.isEmpty()) {
             //RG_DEBUG << "slotNameChanged(): deleting empty program (" << programNumber << ")";
             m_programList.erase(programIter);
-            // ??? Why?
+            // Call the parent's slotApply() to make the change to the
+            // document.
+            // ??? Command History SPAM.
+            // ??? This creates a command and adds it to the history.
+            //     Are we seeing a ton of things appear in the undo history?
+            //     Yes!  This spams the undo history until it is useless.
+            //     And there's no way to undo from within the editor.  So
+            //     adding to the command history seems pointless.
+            // ??? We should only call this on switching banks or
+            //     closing the BankEditorDialog.  We need to review
+            //     BankEditorDialog to make sure this is the best solution.
+            // ??? Other parts of the editor call this for an update.  But
+            //     program name changes do not appear on the tree.  So an
+            //     update of any kind has no value.
             m_bankEditor->slotApply();
 
             return;
@@ -454,7 +468,12 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
     // If the name has actually changed
     if (qstrtostr(programName) != programIter->getName()) {
         programIter->setName(qstrtostr(programName));
-        // ??? Why?
+        // Call the parent's slotApply() to make the change to the
+        // document.
+        // ??? Command History SPAM.  See comments above.
+        // ??? We should only call this on switching banks or
+        //     closing the BankEditorDialog.  We need to review
+        //     BankEditorDialog to make sure this is the best solution.
         m_bankEditor->slotApply();
     }
 }
@@ -566,7 +585,7 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
 
     // Set the key mapping.
     // ??? Only the name is used?  Then we need to disallow key mappings
-    //     with empty names.  The UI currently allows this.
+    //     with empty names.  BankEditorDialog currently allows this.
     m_device->setKeyMappingForProgram(*program, newMapping);
 
     // Update the key mapping icon.
