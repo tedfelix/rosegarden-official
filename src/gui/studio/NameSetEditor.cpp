@@ -51,7 +51,6 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     m_librarian(nullptr),
     m_librarianEmail(nullptr),
     m_names(),
-    m_completions(),
     m_numberingBaseButton(nullptr),
     m_numberingBase(1),
     m_labels(),
@@ -155,11 +154,10 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
         // sure why.
         lineEdit->setObjectName(QString("Line Edit %1").arg(index));
         lineEdit->setProperty("index", index);
-        lineEdit->setCompleter(new QCompleter(m_completions));
 
         m_names.push_back(lineEdit);
         connect(m_names[index],
-                &QLineEdit::textChanged,
+                &QLineEdit::textEdited,
                 this, &NameSetEditor::slotNameChanged);
 
         rowLayout->addWidget(lineEdit, 1);

@@ -54,7 +54,6 @@ public slots:
 
 protected:
     virtual QWidget *makeAdditionalWidget(QWidget *parent);
-    void blockAllSignals(bool block);
 
     //--------------- Data members ---------------------------------
 

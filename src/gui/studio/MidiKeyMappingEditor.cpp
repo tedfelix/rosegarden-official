@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MidiKeyMappingEditor]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MidiKeyMappingEditor.h"
 #include "NameSetEditor.h"
@@ -69,8 +70,6 @@ MidiKeyMappingEditor::makeAdditionalWidget(QWidget */* parent */)
 void
 MidiKeyMappingEditor::clearAll()
 {
-    blockAllSignals(true);
-
     for (size_t i = 0; i < m_names.size(); ++i)
         m_names[i]->clear();
 
@@ -79,9 +78,6 @@ MidiKeyMappingEditor::clearAll()
     m_librarian->clear();
     m_librarianEmail->clear();
     setEnabled(false);
-
-    blockAllSignals(false);
-    
 }
 
 void
@@ -126,8 +122,6 @@ MidiKeyMappingEditor::reset()
     m_mapping = *m;
 
     
-    blockAllSignals(true);
-
     // Librarian details
     //
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
@@ -145,14 +139,11 @@ MidiKeyMappingEditor::reset()
 
             if ( (int)i == index) {
                 QString name = strtoqstr(it->second);
-                m_completions << name;
                 m_names[i]->setText(name);
                 m_names[i]->setCursorPosition(0);
             }
         }
     }
-
-    blockAllSignals(false);
 }
 
 void
@@ -177,17 +168,8 @@ MidiKeyMappingEditor::slotNameChanged(const QString &name)
 
 void
 MidiKeyMappingEditor::slotKeyMapButtonPressed()
-{}
-
-void MidiKeyMappingEditor::blockAllSignals(bool block)
 {
-    QList<LineEdit *> allChildren =
-        findChildren<LineEdit*>((QRegularExpression)"[0-9]+");
-    QList<LineEdit *>::iterator it;
-
-    for (it = allChildren.begin(); it != allChildren.end(); ++it) {
-        (*it)->blockSignals(block);
-    }
 }
+
 
 }

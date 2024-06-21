@@ -1172,10 +1172,10 @@ BankEditorDialog::slotDelete()
                  it != m_programList.end();
                  ++it) {
                 // If this program isn't in the bank that is being deleted,
-                // add it to the new program list.  We use partialCompare()
+                // add it to the new program list.  We use compareKey()
                 // because the MidiBank objects in the program list do not
                 // have their name fields filled in.
-                if (!it->getBank().partialCompare(bank))
+                if (!it->getBank().compareKey(bank))
                     newProgramList.push_back(*it);
             }
 
@@ -1691,7 +1691,7 @@ BankEditorDialog::slotEditPaste()
         // Remove programs that will be overwritten
         //
         for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-            if (!(it->getBank().partialCompare(m_lastBank)))
+            if (!(it->getBank().compareKey(m_lastBank)))
                 tempProg.push_back(*it);
         }
         m_programList = tempProg;
@@ -1704,7 +1704,7 @@ BankEditorDialog::slotEditPaste()
         // Add the new programs
         //
         for (it = tempProg.begin(); it != tempProg.end(); ++it) {
-            if (it->getBank().partialCompare(sourceBank)) {
+            if (it->getBank().compareKey(sourceBank)) {
                 // Insert with new MSB and LSB
                 //
                 MidiProgram copyProgram(m_lastBank,
@@ -1895,7 +1895,7 @@ bool BankEditorDialog::tracksUsingBank(const MidiBank& bank,
 
         const MidiProgram& program = instrument->getProgram();
         const MidiBank& ibank = program.getBank();
-        if (bank.partialCompare(ibank)) {
+        if (bank.compareKey(ibank)) {
             // Found a Track using this bank
             trackPositions.push_back(track->getPosition());
         }
