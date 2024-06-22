@@ -149,10 +149,11 @@ LV2PluginInstance::LV2PluginInstance(
     setupFeatures();
 
     instantiate(sampleRate);
-    if (isOK()) {
-        connectPorts();
-        activate();
-    }
+    if (! isOK()) return;
+
+    connectPorts();
+    activate();
+
     m_workerInterface = (LV2_Worker_Interface*)
         lilv_instance_get_extension_data(m_instance, LV2_WORKER__interface);
     RG_DEBUG << "worker interface" << m_workerInterface;
