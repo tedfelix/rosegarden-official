@@ -1369,14 +1369,22 @@ AlsaDriver::setPlausibleConnection(
 
         // If we're looking for a playback device and this one is already
         // connected, skip.
-        if (!recordDevice  &&
-            portInUse(currentPort->m_client, currentPort->m_port))
-            continue;
+        // ??? But this doesn't differentiate play/record!
+        // ??? But then this means that we can't have multiple devices
+        //     connected to one port.  Why is this here?  Is it in case
+        //     there are mismatches and something needs to be connected?
+        //     Note that we check this again below which is confusing.
+        //if (!recordDevice  &&
+        //    portInUse(currentPort->m_client, currentPort->m_port))
+        //    continue;
 
         // If the matching should include the full ALSA port, then we will
         // select the first exact match that is encountered.
         QString currentConnectionFull = strtoqstr(currentPort->m_name);
         if (includeAlsaPortNumbers && currentConnectionFull == idealConnection) {
+            AUDIT << "  Port Number Match\n";
+            RG_DEBUG << "  Port Number Match\n";
+
             bestPort = currentPort;
             break;
         }
@@ -1399,8 +1407,9 @@ AlsaDriver::setPlausibleConnection(
             score += 25;
 
         // Not connected to anything: +25
-        if (!portInUse(currentPort->m_client, currentPort->m_port))
-            score += 25;
+        // ??? But this doesn't differentiate play/record!
+        //if (!portInUse(currentPort->m_client, currentPort->m_port))
+        //    score += 25;
 
         AUDIT << "  Final score: " << score << "\n";
         RG_DEBUG << "  Final score:" << score;
@@ -5243,7 +5252,9 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
                            "setRecordDevice - failed subscription of input port") < 0) {
             // Not the end of the world if this fails but we
             // have to flag it internally.
-            //
+            // ??? I'm seeing this and it appears to mean nothing in the
+            //     grand scheme of things.  I'm still able to record.
+            //     Why issue this misleading message?  Can we do better?
             AUDIT << "AlsaDriver::setRecordDevice() - "
                   << int(sender.client) << ":" << int(sender.port)
                   << " failed to subscribe device "
@@ -5726,11 +5737,17 @@ AlsaDriver::throttledDebug() const
     return false;
 }
 
+#if 0
 bool
 AlsaDriver::portInUse(int client, int port) const
 {
     // If the client/port is in m_devicePortMap, then it
     // is in use.  See setConnectionToDevice().
+
+    // ??? This has a serious bug.  It does not understand that some ports
+    //     are playback and some are record.  It just looks for the first
+    //     of either type.  That makes no sense.  It's probably better to
+    //     just not use this at all.
 
     for (DevicePortMap::const_iterator dpmi =
              m_devicePortMap.begin();
@@ -5745,6 +5762,7 @@ AlsaDriver::portInUse(int client, int port) const
     // Not found, so not in use.
     return false;
 }
+#endif
 
 bool
 AlsaDriver::isConnected(DeviceId deviceId) const

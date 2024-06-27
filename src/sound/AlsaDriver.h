@@ -659,7 +659,7 @@ private:
                                const QString& connection,
                                const ClientPortPair &pair);
     /// Return whether the client/port is in m_devicePortMap.
-    bool portInUse(int client, int port) const;
+    //bool portInUse(int client, int port) const;
     /// Is the given deviceId within m_devicePortMap connected?
     bool isConnected(DeviceId deviceId) const;
 
