@@ -2245,5 +2245,38 @@ NotationScene::dumpBarDataMap()
     m_hlayout->dumpBarDataMap();
 }
 
+#if 0
+void
+NotationScene::setCurrentStaff(const timeT t)
+{
+    // ??? This is an attempt to fix Bug #1672.  It is currently not being
+    //     used as it introduces new problems.  Need to come up with
+    //     a better solution if possible.
+    //
+    //     See NotationWidget::updatePointer() which has a commented out
+    //     call to this.
+
+    NotationStaff *currentStaff = getCurrentStaff();
+
+    // Get the pointer scene coords for t (regardless of staff).
+    const double pointerSX = m_hlayout->getXForTime(t);
+    // To avoid vertical jumps, use the current staff's Y.
+    const double pointerSY = currentStaff->getY();
+    // figure out which staff that is in
+    // ??? Does this do "nearest"?  Probably need to test some
+    //     wild staff arrangements to make sure this works for all.
+    NotationStaff *staff =
+            getStaffForSceneCoords(pointerSX, pointerSY);
+    // If this is a different staff from the current...
+    if (staff != currentStaff) {
+        // set this as the current staff
+        setCurrentStaff(staff);
+        // ??? Should we change the selection to indicate new current staff?
+        //     That's NotationView::slotEditSelectWholeStaff() that we
+        //     usually use.  So the caller will likely need to do that.
+    }
+}
+#endif
+
 
 }
