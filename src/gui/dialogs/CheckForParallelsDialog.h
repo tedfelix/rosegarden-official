@@ -29,9 +29,6 @@
 #include "base/Composition.h"
 #include "base/Studio.h"
 #include "document/RosegardenDocument.h"
-#include "gui/editors/notation/NotationStaff.h"
-#include "gui/editors/notation/NotationScene.h"
-#include "gui/editors/notation/NotationView.h"
 
 #include <QTextBrowser>
 #include <QDialog>
@@ -63,6 +60,11 @@
 
 namespace Rosegarden
 {
+
+
+class NotationView;
+class NotationScene;
+class NotationStaff;
 
 
 class CheckForParallelsDialog : public QDialog

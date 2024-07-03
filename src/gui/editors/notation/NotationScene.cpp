@@ -1099,29 +1099,30 @@ NotationScene::getInsertionTime(bool allowEndTime) const
 NotationScene::CursorCoordinates
 NotationScene::getCursorCoordinates(timeT t) const
 {
-    if (m_staffs.empty() || !m_hlayout) return CursorCoordinates();
+    if (m_staffs.empty() || !m_hlayout)
+        return CursorCoordinates();
 
-    NotationStaff *topStaff = nullptr;
-    NotationStaff *bottomStaff = nullptr;
+    const NotationStaff *topStaff = nullptr;
+    const NotationStaff *bottomStaff = nullptr;
+
+    // Find the topmost and bottom-most staves.
     for (uint i = 0; i < m_staffs.size(); ++i) {
-        if (!m_staffs[i]) continue;
-        if (!topStaff || m_staffs[i]->getY() < topStaff->getY()) {
-            topStaff = m_staffs[i];
-        }
-        if (!bottomStaff || m_staffs[i]->getY() > bottomStaff->getY()) {
-            bottomStaff = m_staffs[i];
-        }
+        const NotationStaff *staff = m_staffs[i];
+        if (!staff)
+            continue;
+
+        // If first or higher, save it.
+        if (!topStaff  ||  staff->getY() < topStaff->getY())
+            topStaff = staff;
+        // If first or lower, save it.
+        if (!bottomStaff  ||  staff->getY() > bottomStaff->getY())
+            bottomStaff = staff;
     }
 
-    NotationStaff *currentStaff = nullptr;
-    if (m_currentStaff < (int)m_staffs.size()) {
-        currentStaff = m_staffs[m_currentStaff];
-    }
+    const timeT snapped = snapTimeToNoteBoundary(t, true);
 
-    timeT snapped = snapTimeToNoteBoundary(t, true);
-
-    double x = m_hlayout->getXForTime(t);
-    double sx = m_hlayout->getXForTimeByEvent(snapped);
+    const double x = m_hlayout->getXForTime(t);
+    const double sx = m_hlayout->getXForTimeByEvent(snapped);
 
     StaffLayout::StaffLayoutCoords top =
         topStaff->getSceneCoordsForLayoutCoords
@@ -1133,6 +1134,10 @@ NotationScene::getCursorCoordinates(timeT t) const
 
     StaffLayout::StaffLayoutCoords singleTop = top;
     StaffLayout::StaffLayoutCoords singleBottom = bottom;
+
+    const NotationStaff *currentStaff = nullptr;
+    if (m_currentStaff < (int)m_staffs.size())
+        currentStaff = m_staffs[m_currentStaff];
 
     if (currentStaff) {
         singleTop =
@@ -2239,6 +2244,39 @@ NotationScene::dumpBarDataMap()
 {
     m_hlayout->dumpBarDataMap();
 }
+
+#if 0
+void
+NotationScene::setCurrentStaff(const timeT t)
+{
+    // ??? This is an attempt to fix Bug #1672.  It is currently not being
+    //     used as it introduces new problems.  Need to come up with
+    //     a better solution if possible.
+    //
+    //     See NotationWidget::updatePointer() which has a commented out
+    //     call to this.
+
+    NotationStaff *currentStaff = getCurrentStaff();
+
+    // Get the pointer scene coords for t (regardless of staff).
+    const double pointerSX = m_hlayout->getXForTime(t);
+    // To avoid vertical jumps, use the current staff's Y.
+    const double pointerSY = currentStaff->getY();
+    // figure out which staff that is in
+    // ??? Does this do "nearest"?  Probably need to test some
+    //     wild staff arrangements to make sure this works for all.
+    NotationStaff *staff =
+            getStaffForSceneCoords(pointerSX, pointerSY);
+    // If this is a different staff from the current...
+    if (staff != currentStaff) {
+        // set this as the current staff
+        setCurrentStaff(staff);
+        // ??? Should we change the selection to indicate new current staff?
+        //     That's NotationView::slotEditSelectWholeStaff() that we
+        //     usually use.  So the caller will likely need to do that.
+    }
+}
+#endif
 
 
 }

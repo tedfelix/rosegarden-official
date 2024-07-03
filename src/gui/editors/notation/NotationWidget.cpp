@@ -923,14 +923,24 @@ NotationWidget::updatePointer(timeT t)
 
     SequenceManager *seqMgr = m_document->getSequenceManager();
 
-    bool rolling =
+    const bool rolling =
             (seqMgr  &&
              (seqMgr->getTransportStatus() == PLAYING  ||
               seqMgr->getTransportStatus() == RECORDING));
 
     //RG_DEBUG << "updatePointer(" << t << "): rolling = " << rolling;
 
-    NotationScene::CursorCoordinates cursorPos =
+    // Avoid jumping around when stop is pressed.
+    // Bug #1672.
+    // ??? Unfortunately, this also breaks the current segment wheel.
+    //     Maybe we should only do it on stop?
+    //if (!rolling)
+    //    m_scene->setCurrentStaff(t);
+
+    // This limits the cursor to within the current staff.  That can
+    // cause the notation view to jump unexpectedly.
+    // Bug #1672.
+    const NotationScene::CursorCoordinates cursorPos =
             m_scene->getCursorCoordinates(t);
 
     // While rolling, display a playback position pointer that stretches
@@ -1460,6 +1470,7 @@ NotationWidget::setPointerPosition(timeT t)
     // Fixes problem with sustaining notes while adding notes with
     // the pencil tool.  Also avoids moving playback position in
     // playback mode, allowing editing of a loop in real-time.
+    // ??? A flag in RMW would be faster.  E.g. RMW::m_enableSetPointerPosition.
     disconnect(m_document, &RosegardenDocument::pointerPositionChanged,
                RosegardenMainWindow::self(),
                &RosegardenMainWindow::slotSetPointerPosition);

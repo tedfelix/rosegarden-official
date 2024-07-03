@@ -91,6 +91,8 @@ public:
     int getCurrentStaffNumber() { return m_currentStaff; }
     NotationStaff *getCurrentStaff();
     void setCurrentStaff(NotationStaff *);
+    /// Set current staff to the staff nearest time t.
+    void setCurrentStaff(timeT t);
 
     NotationStaff *getStaffAbove(timeT t);
     NotationStaff *getStaffBelow(timeT t);
@@ -374,7 +376,7 @@ private:
     bool m_editRepeated;   // Direct edition of repeated segments is allowed
     bool m_haveInittedCurrentStaff;
 
-    NotationStaff * m_previewNoteStaff;  // Remember where the preview note was
+    NotationStaff *m_previewNoteStaff;  // Remember where the preview note was
 
     // Remember current labels of tracks
     std::map<int, std::string> m_trackLabels;

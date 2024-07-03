@@ -30,6 +30,9 @@
 #include "base/BaseProperties.h"
 #include "gui/widgets/FileDialog.h"
 #include "misc/ConfigGroups.h"
+#include "gui/editors/notation/NotationView.h"
+#include "gui/editors/notation/NotationScene.h"
+#include "gui/editors/notation/NotationStaff.h"
 
 
 #include <QDialog>

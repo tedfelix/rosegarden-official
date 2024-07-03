@@ -403,7 +403,7 @@ void NotationSelector::slotMoveInsertionCursor()
     // and we don't want to see any move of the staves
     m_widget->setScroll(false);
 
-    ///! Warning, this short-circuits NotationView::setCurrentStaff...
+    // ! Warning, this short-circuits NotationView::setCurrentStaff...
     m_scene->setCurrentStaff(m_pointerStaff);
     m_widget->setPointerPosition(m_pointerTime);
 
