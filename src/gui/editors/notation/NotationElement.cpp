@@ -41,8 +41,7 @@ NotationElement::NotationElement(Event *event) :
     m_isColliding(false),
     m_item(nullptr),
     m_extraItems(nullptr),
-    m_editing(true),
-    m_nonEditingOpacity(0.3)
+    m_editing(true)
 {
     //RG_DEBUG << "ctor: " << this << " wrapping " << event;
 }
@@ -225,7 +224,7 @@ void NotationElement::setEditing(bool editing)
     if (editing) {
         m_item->setOpacity(1.0);
     } else {
-        m_item->setOpacity(m_nonEditingOpacity);
+        m_item->setOpacity(NONEDITINGOPACITY);
     }
     if (m_extraItems) {
         for (ItemList::iterator i = m_extraItems->begin();
@@ -233,7 +232,7 @@ void NotationElement::setEditing(bool editing)
             if (editing) {
                 (*i)->setOpacity(1.0);
             } else {
-                (*i)->setOpacity(m_nonEditingOpacity);
+                (*i)->setOpacity(NONEDITINGOPACITY);
             }
         }
     }

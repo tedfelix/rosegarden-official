@@ -27,6 +27,7 @@
 class QGraphicsItem;
 class ItemList;
 
+#define NONEDITINGOPACITY 0.3
 
 namespace Rosegarden
 {
@@ -195,7 +196,6 @@ protected:
 
  private:
     bool m_editing;
-    double m_nonEditingOpacity;
 };
 
 typedef ViewElementList NotationElementList;

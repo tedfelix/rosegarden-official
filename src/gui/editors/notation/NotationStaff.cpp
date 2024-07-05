@@ -168,6 +168,11 @@ NotationStaff::insertTimeSignature(double layoutX,
     getScene()->addItem(item);
     item->setPos(sigCoords.first, (double)sigCoords.second);
     item->show();
+    if (m_editing) {
+        item->setOpacity(1.0);
+    } else {
+        item->setOpacity(NONEDITINGOPACITY);
+    }
     m_timeSigs.insert(item);
 }
 
@@ -227,6 +232,11 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         getScene()->addItem(item);
         item->setPos(coords.first, coords.second);
         item->show();
+        if (m_editing) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONEDITINGOPACITY);
+        }
         m_repeatedClefsAndKeys.insert(item);
 
         dx += item->boundingRect().width() +
@@ -244,6 +254,11 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         getScene()->addItem(item);
         item->setPos(coords.first, coords.second);
         item->show();
+        if (m_editing) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONEDITINGOPACITY);
+        }
         m_repeatedClefsAndKeys.insert(item);
 
         dx += item->boundingRect().width();
@@ -2007,6 +2022,26 @@ void NotationStaff::setEditing(bool editing)
         ++it) {
         NotationElement *el = static_cast<NotationElement*>(*it);
         el->setEditing(editing);
+    }
+    for(ItemSet::iterator i = m_timeSigs.begin();
+        i != m_timeSigs.end();
+        ++i) {
+        QGraphicsItem* item = (*i);
+        if (editing) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONEDITINGOPACITY);
+        }
+    }
+    for(ItemSet::iterator i = m_repeatedClefsAndKeys.begin();
+        i != m_repeatedClefsAndKeys.end();
+        ++i) {
+        QGraphicsItem* item = (*i);
+        if (editing) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONEDITINGOPACITY);
+        }
     }
 }
 
