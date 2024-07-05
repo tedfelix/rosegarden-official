@@ -177,6 +177,8 @@ public:
 
     static NotationElement *getNotationElement(QGraphicsItem *);
 
+    void setEditing(bool editing);
+
 protected:
     double m_airX;
     double m_airWidth;
@@ -190,6 +192,10 @@ protected:
 
     typedef std::vector<QGraphicsItem *> ItemList;
     ItemList *m_extraItems;
+
+ private:
+    bool m_editing;
+    double m_nonEditingOpacity;
 };
 
 typedef ViewElementList NotationElementList;

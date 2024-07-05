@@ -96,7 +96,8 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
     m_hideRedundance(true),
     m_printPainter(nullptr),
     m_refreshStatusId(segment->getNewRefreshStatusId()),
-    m_segmentMarking(segment->getMarking())
+    m_segmentMarking(segment->getMarking()),
+    m_editing(false)
 {
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
@@ -804,6 +805,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
     static NotePixmapParameters restParams(Note::Crotchet, 0);
 
     NotationElement* elt = static_cast<NotationElement*>(*vli);
+    // set the editing status of the element
+    elt->setEditing(m_editing);
 
     bool invisible = false;
     if (elt->event()->get
@@ -1991,6 +1994,20 @@ timeT NotationStaff::getEndTime() const
     Composition *composition = getSegment().getComposition();
     return composition->getBarEndForTime
         (getSegment().getEndMarkerTime() - 1);
+}
+
+void NotationStaff::setEditing(bool editing)
+{
+    RG_DEBUG << "set staff editing" << editing << m_segment.getLabel();
+    m_editing = editing;
+    NotationElementList *elems = getViewElementList();
+
+    for(NotationElementList::iterator it = elems->begin();
+        it != elems->end();
+        ++it) {
+        NotationElement *el = static_cast<NotationElement*>(*it);
+        el->setEditing(editing);
+    }
 }
 
 }

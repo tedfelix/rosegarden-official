@@ -263,7 +263,11 @@ NotationScene::setCurrentStaff(NotationStaff *staff)
                 emit currentStaffChanged();
                 emit currentViewSegmentChanged(staff);
             }
-            return;
+            RG_DEBUG << "set editing staff";
+            m_staffs[i]->setEditing(true);
+        } else {
+            RG_DEBUG << "set non editing staff";
+            m_staffs[i]->setEditing(false);
         }
     }
 }
@@ -383,7 +387,6 @@ NotationScene::setStaffs(RosegardenDocument *document,
         layoutAll();
         initCurrentStaffIndex();
     }
-
 
     connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
             this, &NotationScene::slotCommandExecuted);

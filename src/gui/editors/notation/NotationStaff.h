@@ -268,6 +268,8 @@ public:
 
     QString getMarking() const { return m_segmentMarking; }
 
+    void setEditing(bool editing);
+
 protected:
 
     ViewElement* makeViewElement(Event*) override;
@@ -373,6 +375,9 @@ protected:
     unsigned int m_refreshStatusId;
 
     QString m_segmentMarking;
+
+ private:
+    bool m_editing;
 };
 
 

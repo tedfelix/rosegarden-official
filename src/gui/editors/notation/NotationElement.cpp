@@ -40,7 +40,9 @@ NotationElement::NotationElement(Event *event) :
     m_recentlyRegenerated(false),
     m_isColliding(false),
     m_item(nullptr),
-    m_extraItems(nullptr)
+    m_extraItems(nullptr),
+    m_editing(true),
+    m_nonEditingOpacity(0.3)
 {
     //RG_DEBUG << "ctor: " << this << " wrapping " << event;
 }
@@ -126,6 +128,7 @@ NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
     e->setPos(sceneX, sceneY);
     m_recentlyRegenerated = true;
     m_item = e;
+    setEditing(m_editing);
 }
 
 void
@@ -212,6 +215,27 @@ NotationElement::getNotationElement(QGraphicsItem *item)
     QVariant v = item->data(NotationElementData);
     if (v.isNull()) return nullptr;
     return static_cast<NotationElement *>(v.value<void *>());
+}
+
+void NotationElement::setEditing(bool editing)
+{
+    m_editing = editing;
+    if (! m_item) return;
+    if (editing) {
+        m_item->setOpacity(1.0);
+    } else {
+        m_item->setOpacity(m_nonEditingOpacity);
+    }
+    if (m_extraItems) {
+        for (ItemList::iterator i = m_extraItems->begin();
+             i != m_extraItems->end(); ++i) {
+            if (editing) {
+                (*i)->setOpacity(1.0);
+            } else {
+                (*i)->setOpacity(m_nonEditingOpacity);
+            }
+        }
+    }
 }
 
 }
