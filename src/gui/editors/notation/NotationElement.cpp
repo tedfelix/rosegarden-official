@@ -149,6 +149,7 @@ NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
     e->setData(NotationElementData, QVariant::fromValue((void *)this));
     e->setPos(sceneX, sceneY);
     m_extraItems->push_back(e);
+    setEditing(m_editing);
 }
 
 void
