@@ -28,6 +28,7 @@
 #include "base/ViewElement.h"
 #include "base/ViewSegment.h"
 #include "gui/editors/notation/BarLineItem.h"
+#include "gui/editors/notation/NotationElement.h"
 #include "gui/general/GUIPalette.h"
 #include "misc/Debug.h"
 
@@ -741,6 +742,11 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                                         barThickness, getLineSpacing(),
                                         (int)inset, style);
 
+    if (m_current) {
+        line->setOpacity(1.0);
+    } else {
+        line->setOpacity(NONCURRENTOPACITY);
+    }
     m_scene->addItem(line);
     line->setPos(int(x), y);
 
@@ -799,6 +805,11 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
         barNoText->setFont(font);
         barNoText->setPos(x, y - metrics.height() - m_resolution * 2);
         barNoText->setZValue( -1);
+        if (m_current) {
+            barNoText->setOpacity(1.0);
+        } else {
+            barNoText->setOpacity(NONCURRENTOPACITY);
+        }
         m_scene->addItem(barNoText);
         if (hidden)
             barNoText->hide();
@@ -836,6 +847,11 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
 
             rect->setPen(GUIPalette::getColour(GUIPalette::BeatLine));
             rect->setBrush(GUIPalette::getColour(GUIPalette::BeatLine));
+            if (m_current) {
+                rect->setOpacity(1.0);
+            } else {
+                rect->setOpacity(NONCURRENTOPACITY);
+            }
 
             // Reset to SubBeatLine colour if we're not a beat line - avoid div by zero!
             //
@@ -856,6 +872,11 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
 
         rect = new QGraphicsRectItem
                (0, 0, barThickness, m_connectingLineLength);
+        if (m_current) {
+            rect->setOpacity(1.0);
+        } else {
+            rect->setOpacity(NONCURRENTOPACITY);
+        }
         m_scene->addItem(rect);
 
         rect->setPos(x + .5, y + .5);
@@ -1037,6 +1058,11 @@ StaffLayout::resizeStaffLineRow(int row, double offset, double length)
         y = getSceneYForTopLine(row);
         QGraphicsRectItem *line = new QGraphicsRectItem
             (int(offset + length) + .5, y + .5, barThickness, m_connectingLineLength);
+        if (m_current) {
+            line->setOpacity(1.0);
+        } else {
+            line->setOpacity(NONCURRENTOPACITY);
+        }
         m_scene->addItem(line);
         line->setPen(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
         line->setBrush(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
@@ -1078,6 +1104,11 @@ StaffLayout::resizeStaffLineRow(int row, double offset, double length)
                 m_staffLines[row][lineIndex] = line = new QGraphicsRectItem;
                 line->setPen(QPen(lineColour, 0));
                 line->setBrush(lineColour);
+                if (m_current) {
+                    line->setOpacity(1.0);
+                } else {
+                    line->setOpacity(NONCURRENTOPACITY);
+                }
                 m_scene->addItem(line);
             }
 
@@ -1094,6 +1125,11 @@ StaffLayout::resizeStaffLineRow(int row, double offset, double length)
                 delete m_staffLines[row][lineIndex];
                 m_staffLines[row][lineIndex] = line = new QGraphicsLineItem;
                 line->setPen(QPen(lineColour, 0));
+                if (m_current) {
+                    line->setOpacity(1.0);
+                } else {
+                    line->setOpacity(NONCURRENTOPACITY);
+                }
                 m_scene->addItem(line);
             }
 
@@ -1115,7 +1151,74 @@ StaffLayout::resizeStaffLineRow(int row, double offset, double length)
 void
 StaffLayout::setCurrent(bool current)
 {
+    RG_DEBUG << "setCurrent" << current;
     m_current = current;
+    // update all graphical elements
+    for (int i = 0; i < (int)m_staffLines.size(); ++i) {
+        for (int h = 0; h < (int)m_staffLines[i].size(); ++h) {
+            QGraphicsItem* item = m_staffLines[i][h];
+            if (! item) continue;
+            if (current) {
+                item->setOpacity(1.0);
+            } else {
+                item->setOpacity(NONCURRENTOPACITY);
+            }
+        }
+    }
+
+    for(int i=0; i<(int)m_staffConnectingLines.size(); ++i) {
+        QGraphicsItem* item = m_staffConnectingLines[i];
+        if (! item) continue;
+        if (current) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONCURRENTOPACITY);
+        }
+    }
+
+    for (LineRecList::iterator i = m_beatLines.begin();
+         i != m_beatLines.end(); ++i) {
+        QGraphicsItem* item = i->second;
+        if (! item) continue;
+        if (current) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONCURRENTOPACITY);
+        }
+    }
+
+    for (LineRecList::iterator i = m_barConnectingLines.begin();
+         i != m_barConnectingLines.end(); ++i) {
+        QGraphicsItem* item = i->second;
+        if (! item) continue;
+        if (current) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONCURRENTOPACITY);
+        }
+    }
+
+    for(int i=0; i<(int)m_barNumbers.size(); ++i) {
+        QGraphicsItem* item = m_barNumbers[i];
+        if (! item) continue;
+        if (current) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONCURRENTOPACITY);
+        }
+    }
+
+    for (BarLineList::const_iterator i = m_barLines.begin();
+         i != m_barLines.end(); ++i) {
+        BarLineItem *item = *i;
+        if (! item) continue;
+        if (current) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONCURRENTOPACITY);
+        }
+    }
+
 }
 
 void

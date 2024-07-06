@@ -263,11 +263,11 @@ NotationScene::setCurrentStaff(NotationStaff *staff)
                 emit currentStaffChanged();
                 emit currentViewSegmentChanged(staff);
             }
-            RG_DEBUG << "set editing staff";
-            m_staffs[i]->setEditing(true);
+            RG_DEBUG << "set current staff";
+            m_staffs[i]->setCurrent(true);
         } else {
-            RG_DEBUG << "set non editing staff";
-            m_staffs[i]->setEditing(false);
+            RG_DEBUG << "set non current staff";
+            m_staffs[i]->setCurrent(false);
         }
     }
 }
@@ -1154,8 +1154,12 @@ NotationScene::getCursorCoordinates(timeT t) const
     CursorCoordinates cc;
     cc.allStaffs = QLineF(top.first, top.second,
                           bottom.first, bottom.second);
-    cc.currentStaff = QLineF(singleTop.first, singleTop.second,
-                             singleBottom.first, singleBottom.second);
+    //cc.currentStaff = QLineF(singleTop.first, singleTop.second,
+    //                       singleBottom.first, singleBottom.second);
+    //cc.currentStaff = QLineF(top.first, top.second,
+    //                       bottom.first, bottom.second);
+    cc.currentStaff = QLineF(top.first, singleTop.second,
+                             bottom.first, singleBottom.second);
     return cc;
 }
 

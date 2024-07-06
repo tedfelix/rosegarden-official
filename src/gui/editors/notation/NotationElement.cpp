@@ -41,7 +41,7 @@ NotationElement::NotationElement(Event *event) :
     m_isColliding(false),
     m_item(nullptr),
     m_extraItems(nullptr),
-    m_editing(true)
+    m_current(true)
 {
     //RG_DEBUG << "ctor: " << this << " wrapping " << event;
 }
@@ -127,7 +127,7 @@ NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
     e->setPos(sceneX, sceneY);
     m_recentlyRegenerated = true;
     m_item = e;
-    setEditing(m_editing);
+    setCurrent(m_current);
 }
 
 void
@@ -148,7 +148,7 @@ NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
     e->setData(NotationElementData, QVariant::fromValue((void *)this));
     e->setPos(sceneX, sceneY);
     m_extraItems->push_back(e);
-    setEditing(m_editing);
+    setCurrent(m_current);
 }
 
 void
@@ -217,22 +217,22 @@ NotationElement::getNotationElement(QGraphicsItem *item)
     return static_cast<NotationElement *>(v.value<void *>());
 }
 
-void NotationElement::setEditing(bool editing)
+void NotationElement::setCurrent(bool current)
 {
-    m_editing = editing;
+    m_current = current;
     if (! m_item) return;
-    if (editing) {
+    if (current) {
         m_item->setOpacity(1.0);
     } else {
-        m_item->setOpacity(NONEDITINGOPACITY);
+        m_item->setOpacity(NONCURRENTOPACITY);
     }
     if (m_extraItems) {
         for (ItemList::iterator i = m_extraItems->begin();
              i != m_extraItems->end(); ++i) {
-            if (editing) {
+            if (current) {
                 (*i)->setOpacity(1.0);
             } else {
-                (*i)->setOpacity(NONEDITINGOPACITY);
+                (*i)->setOpacity(NONCURRENTOPACITY);
             }
         }
     }

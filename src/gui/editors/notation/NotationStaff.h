@@ -268,7 +268,7 @@ public:
 
     QString getMarking() const { return m_segmentMarking; }
 
-    void setEditing(bool editing);
+    virtual void setCurrent(bool current) override;
 
 protected:
 
@@ -376,8 +376,6 @@ protected:
 
     QString m_segmentMarking;
 
- private:
-    bool m_editing;
 };
 
 

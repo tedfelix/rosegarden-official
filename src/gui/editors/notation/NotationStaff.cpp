@@ -96,8 +96,7 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
     m_hideRedundance(true),
     m_printPainter(nullptr),
     m_refreshStatusId(segment->getNewRefreshStatusId()),
-    m_segmentMarking(segment->getMarking()),
-    m_editing(false)
+    m_segmentMarking(segment->getMarking())
 {
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
@@ -168,10 +167,10 @@ NotationStaff::insertTimeSignature(double layoutX,
     getScene()->addItem(item);
     item->setPos(sigCoords.first, (double)sigCoords.second);
     item->show();
-    if (m_editing) {
+    if (m_current) {
         item->setOpacity(1.0);
     } else {
-        item->setOpacity(NONEDITINGOPACITY);
+        item->setOpacity(NONCURRENTOPACITY);
     }
     m_timeSigs.insert(item);
 }
@@ -232,10 +231,10 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         getScene()->addItem(item);
         item->setPos(coords.first, coords.second);
         item->show();
-        if (m_editing) {
+        if (m_current) {
             item->setOpacity(1.0);
         } else {
-            item->setOpacity(NONEDITINGOPACITY);
+            item->setOpacity(NONCURRENTOPACITY);
         }
         m_repeatedClefsAndKeys.insert(item);
 
@@ -254,10 +253,10 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         getScene()->addItem(item);
         item->setPos(coords.first, coords.second);
         item->show();
-        if (m_editing) {
+        if (m_current) {
             item->setOpacity(1.0);
         } else {
-            item->setOpacity(NONEDITINGOPACITY);
+            item->setOpacity(NONCURRENTOPACITY);
         }
         m_repeatedClefsAndKeys.insert(item);
 
@@ -820,8 +819,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
     static NotePixmapParameters restParams(Note::Crotchet, 0);
 
     NotationElement* elt = static_cast<NotationElement*>(*vli);
-    // set the editing status of the element
-    elt->setEditing(m_editing);
+    // set the current status of the element
+    elt->setCurrent(m_current);
 
     bool invisible = false;
     if (elt->event()->get
@@ -2011,38 +2010,40 @@ timeT NotationStaff::getEndTime() const
         (getSegment().getEndMarkerTime() - 1);
 }
 
-void NotationStaff::setEditing(bool editing)
+void NotationStaff::setCurrent(bool current)
 {
-    RG_DEBUG << "set staff editing" << editing << m_segment.getLabel();
-    m_editing = editing;
+    RG_DEBUG << "set staff current" << current << m_segment.getLabel();
+    m_current = current;
     NotationElementList *elems = getViewElementList();
 
     for(NotationElementList::iterator it = elems->begin();
         it != elems->end();
         ++it) {
         NotationElement *el = static_cast<NotationElement*>(*it);
-        el->setEditing(editing);
+        el->setCurrent(current);
     }
     for(ItemSet::iterator i = m_timeSigs.begin();
         i != m_timeSigs.end();
         ++i) {
         QGraphicsItem* item = (*i);
-        if (editing) {
+        if (current) {
             item->setOpacity(1.0);
         } else {
-            item->setOpacity(NONEDITINGOPACITY);
+            item->setOpacity(NONCURRENTOPACITY);
         }
     }
     for(ItemSet::iterator i = m_repeatedClefsAndKeys.begin();
         i != m_repeatedClefsAndKeys.end();
         ++i) {
         QGraphicsItem* item = (*i);
-        if (editing) {
+        if (current) {
             item->setOpacity(1.0);
         } else {
-            item->setOpacity(NONEDITINGOPACITY);
+            item->setOpacity(NONCURRENTOPACITY);
         }
     }
+    // and pass on to the StaffLayout
+    StaffLayout::setCurrent(current);
 }
 
 }
