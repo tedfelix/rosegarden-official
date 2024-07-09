@@ -170,7 +170,7 @@ getControlParameter2(const Segment &segment, int ccNumber)
 
     // Get the ControlParameter for the ccNumber.
 
-    Controllable *controllable = device->getControllable();
+    const Controllable *controllable = device->getControllable();
     if (!controllable)
         return nullptr;
 
@@ -282,7 +282,7 @@ namespace
         if (!instrument)
             return false;
 
-        Controllable *controllable = instrument->getDevice()->getControllable();
+        const Controllable *controllable = instrument->getDevice()->getControllable();
 
         if (!controllable)
             return false;

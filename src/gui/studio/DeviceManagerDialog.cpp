@@ -56,7 +56,7 @@ namespace Rosegarden
 
 DeviceManagerDialog::~DeviceManagerDialog()
 {
-    // destructor
+    m_studio->removeObserver(this);
 }
 
 
@@ -75,6 +75,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent) :
 
     //m_doc = 0;    // RG document
     m_studio = &RosegardenDocument::currentDocument->getStudio();
+    m_studio->addObserver(this);
 
     setupUi(this);
 
@@ -371,6 +372,11 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
     QList < MidiDevice * >midiDevices;
 
     DeviceList *devices = m_studio->getDevices();
+
+    // observe any devices we are not yet observing
+    for(Device* device : *devices) {
+        observeDevice(device);
+    }
 
 //         QStringList listEntries;
     QList <DeviceId> listEntries;
@@ -1101,5 +1107,41 @@ DeviceManagerDialog::connectSignalsToSlots()
             this, &DeviceManagerDialog::slotEditControllerDefinitions);
 }
 
+void DeviceManagerDialog::deviceAdded(Device* device)
+{
+    RG_DEBUG << "deviceAdded" << device;
+    observeDevice(device);
+    slotRefreshOutputPorts();
+    slotRefreshInputPorts();
+}
+
+void DeviceManagerDialog::deviceRemoved(Device* device)
+{
+    RG_DEBUG << "deviceRemoved" << device;
+    unobserveDevice(device);
+    slotRefreshOutputPorts();
+    slotRefreshInputPorts();
+}
+
+void DeviceManagerDialog::deviceModified(Device* device)
+{
+    RG_DEBUG << "deviceModified" << device;
+    slotRefreshOutputPorts();
+    slotRefreshInputPorts();
+}
+
+void DeviceManagerDialog::observeDevice(Device* device)
+{
+    if (m_observedDevices.find(device) != m_observedDevices.end()) return;
+    m_observedDevices.insert(device);
+    device->addObserver(this);
+}
+
+void DeviceManagerDialog::unobserveDevice(Device* device)
+{
+    if (m_observedDevices.find(device) == m_observedDevices.end()) return;
+    m_observedDevices.erase(device);
+    device->removeObserver(this);
+}
 
 } // namespace Rosegarden

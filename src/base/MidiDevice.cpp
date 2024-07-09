@@ -208,7 +208,7 @@ MidiDevice::~MidiDevice()
 }
 
 AllocateChannels *
-MidiDevice::getAllocator()
+MidiDevice::getAllocator() const
 { return m_allocator; }
 
 void
@@ -238,6 +238,7 @@ MidiDevice::renameInstruments()
              .arg(isPercussionNumber(i) ? "[D]" : "")
              .toUtf8().data());
     }
+    notifyDeviceModified();
 }
 
 void

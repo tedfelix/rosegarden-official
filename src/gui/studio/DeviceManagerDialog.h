@@ -30,6 +30,7 @@
 #include <QDialog>
 #include <QObject>
 
+#include <set>
 
 namespace Rosegarden
 {
@@ -38,13 +39,12 @@ namespace Rosegarden
 typedef std::vector<MidiDevice *> MidiDeviceList;
 
 class RosegardenDocument;
-class Studio;
 
 /// The Manage MIDI Devices dialog
 /**
  * \author Emanuel Rumpf
  */
-class DeviceManagerDialog : public QMainWindow, public Ui::DeviceManagerDialogUi
+class DeviceManagerDialog : public QMainWindow, public Ui::DeviceManagerDialogUi, public StudioObserver, public DeviceObserver
 {
     Q_OBJECT
 
@@ -152,6 +152,20 @@ protected:
 
 private slots:
     void slotCloseButtonPress();
+
+ private:
+    // studio observer interface
+    virtual void deviceAdded(Device* device) override;
+    virtual void deviceRemoved(Device* device) override;
+
+    // device observer interface
+    virtual void deviceModified(Device* device) override;
+
+    void observeDevice(Device* device);
+    void unobserveDevice(Device* device);
+
+    std::set<Device*> m_observedDevices;
+
 };
 
 

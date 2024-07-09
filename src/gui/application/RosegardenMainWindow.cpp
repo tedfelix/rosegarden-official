@@ -1788,6 +1788,9 @@ RosegardenMainWindow::queryClose()
     if (m_seqManager->getTransportStatus() == RECORDING)
         return false;
 
+    // do some cleaning up
+    emit documentAboutToChange();
+
     // Let the user save any unsaved changes.
     return saveIfModified();
 }

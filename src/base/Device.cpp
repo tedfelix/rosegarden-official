@@ -42,17 +42,26 @@ Device::~Device()
         (*it)->sendWholeDeviceDestroyed();
         delete (*it);
     }
-        
+
+    if (!m_observers.empty()) {
+        RG_WARNING << "dtor: Warning:" << m_observers.size() <<
+            "observers still extant";
+        RG_WARNING << "Observers are:";
+        for (ObserverList::const_iterator i = m_observers.begin();
+             i != m_observers.end(); ++i) {
+            RG_WARNING << (void *)(*i) << typeid(**i).name();
+        }
+    }
 }
 
 // Return a Controllable if we are a subtype that also inherits from
 // Controllable, otherwise return nullptr
-Controllable *
-Device::getControllable()
+const Controllable *
+Device::getControllable() const
 {
-    Controllable *c = dynamic_cast<MidiDevice *>(this);
+    const Controllable *c = dynamic_cast<const MidiDevice *>(this);
     if (!c) {
-        c = dynamic_cast<SoftSynthDevice *>(this);
+        c = dynamic_cast<const SoftSynthDevice *>(this);
     }
     // Even if it's zero, return it now.
     return c;
@@ -61,14 +70,14 @@ Device::getControllable()
 // Base case: Device itself doesn't know AllocateChannels so gives nullptr.
 // @author Tom Breton (Tehom)
 AllocateChannels *
-Device::getAllocator()
+Device::getAllocator() const
 { return nullptr; }
 
 void
-Device::sendChannelSetups()
+Device::sendChannelSetups() const
 {
     // For each Instrument, send channel setup
-    for (InstrumentList::iterator it = m_instruments.begin();
+    for (InstrumentList::const_iterator it = m_instruments.begin();
          it != m_instruments.end();
          ++it) {
         (*it)->sendChannelSetup();
@@ -109,5 +118,25 @@ Device::getAvailableInstrument(const Composition *composition) const
     return firstInstrumentID;
 }
 
+void Device::addObserver(DeviceObserver *obs)
+{
+    RG_DEBUG << "addObserver" << this << obs;
+    m_observers.push_back(obs);
+}
+
+void Device::removeObserver(DeviceObserver *obs)
+{
+    RG_DEBUG << "removeObserver" << this << obs;
+    m_observers.remove(obs);
+}
+
+void Device::notifyDeviceModified()
+{
+    for(ObserverList::iterator i = m_observers.begin();
+        i != m_observers.end(); ++i) {
+        (*i)->deviceModified(this);
+    }
+
+}
 
 }

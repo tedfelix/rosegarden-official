@@ -64,7 +64,7 @@ public:
     //           const std::string &label,
     //           DeviceDirection dir);
 
-    AllocateChannels *getAllocator() override;
+    AllocateChannels *getAllocator() const override;
 
     // Instrument must be on heap; I take ownership of it
     void addInstrument(Instrument*) override;
@@ -132,7 +132,7 @@ public:
         { m_librarian = std::pair<std::string, std::string>(name, email); }
 
     DeviceDirection getDirection() const { return m_direction; }
-    void setDirection(DeviceDirection dir) { m_direction = dir; }
+    void setDirection(DeviceDirection dir) { m_direction = dir; notifyDeviceModified(); }
     bool isOutput() const  override { return (m_direction == Play); }
     bool isInput() const  override { return (m_direction == Record); }
 
@@ -143,7 +143,7 @@ public:
     };
 
     VariationType getVariationType() const { return m_variationType; }
-    void setVariationType(VariationType v) { m_variationType = v; }
+    void setVariationType(VariationType v) { m_variationType = v; notifyDeviceModified(); }
 
     // Controllers - for mapping Controller names to values for use in
     // the InstrumentParameterBoxes (IPBs) and Control rulers.
@@ -212,7 +212,7 @@ public:
 
     /// See m_userConnection.
     void setUserConnection(const std::string& connection)
-            { m_userConnection = connection; }
+            { m_userConnection = connection; notifyDeviceModified(); }
     std::string getUserConnection() const
             { return m_userConnection; }
 
