@@ -46,11 +46,6 @@ Device::~Device()
     if (!m_observers.empty()) {
         RG_WARNING << "dtor: Warning:" << m_observers.size() <<
             "observers still extant";
-        RG_WARNING << "Observers are:";
-        for (ObserverList::const_iterator i = m_observers.begin();
-             i != m_observers.end(); ++i) {
-            RG_WARNING << (void *)(*i) << typeid(**i).name();
-        }
     }
 }
 

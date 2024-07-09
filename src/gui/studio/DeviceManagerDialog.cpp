@@ -57,6 +57,9 @@ namespace Rosegarden
 DeviceManagerDialog::~DeviceManagerDialog()
 {
     m_studio->removeObserver(this);
+    for(Device* device : m_observedDevices) {
+        unobserveDevice(device);
+    }
 }
 
 
@@ -400,6 +403,7 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
         if (!mdev) {    //== Device::NO_DEVICE ){
             twItem = treeWid->takeTopLevelItem(i); // remove list entry
             //
+            delete(twItem);
             cnt = treeWid->topLevelItemCount(); // update count
             continue;
         }
@@ -721,6 +725,7 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
 
             twItem = treeWid->takeTopLevelItem(i); // remove list entry
             //
+            delete(twItem);
             cnt = treeWid->topLevelItemCount(); // update count
             continue;
         }
@@ -1132,6 +1137,7 @@ void DeviceManagerDialog::deviceModified(Device* device)
 
 void DeviceManagerDialog::observeDevice(Device* device)
 {
+    RG_DEBUG << "observeDevice" << device;
     if (m_observedDevices.find(device) != m_observedDevices.end()) return;
     m_observedDevices.insert(device);
     device->addObserver(this);
@@ -1139,6 +1145,7 @@ void DeviceManagerDialog::observeDevice(Device* device)
 
 void DeviceManagerDialog::unobserveDevice(Device* device)
 {
+    RG_DEBUG << "unobserveDevice" << device;
     if (m_observedDevices.find(device) == m_observedDevices.end()) return;
     m_observedDevices.erase(device);
     device->removeObserver(this);

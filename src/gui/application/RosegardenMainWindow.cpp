@@ -665,6 +665,9 @@ void
 RosegardenMainWindow::closeEvent(QCloseEvent *event)
 {
     if (queryClose()) {
+        // do some cleaning up
+        emit documentAboutToChange();
+
         // Save window geometry and toolbar state
         //RG_DEBUG << "closeEvent(): Saving main window geometry...";
         QSettings settings;
@@ -1787,9 +1790,6 @@ RosegardenMainWindow::queryClose()
     // If we are recording, don't let the user close.
     if (m_seqManager->getTransportStatus() == RECORDING)
         return false;
-
-    // do some cleaning up
-    emit documentAboutToChange();
 
     // Let the user save any unsaved changes.
     return saveIfModified();
