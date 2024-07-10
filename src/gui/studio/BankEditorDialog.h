@@ -19,12 +19,14 @@
 #define RG_BANKEDITORDIALOG_H
 
 #include "base/Device.h"
+#include "base/Studio.h"
 #include "base/MidiProgram.h"
 #include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
 
 #include <map>
+#include <set>
 #include <string>
 #include <utility>
 
@@ -45,7 +47,6 @@ namespace Rosegarden
 {
 
 class Command;
-class Studio;
 class RosegardenDocument;
 class MidiProgramsEditor;
 class MidiKeyMappingEditor;
@@ -53,7 +54,8 @@ class MidiDeviceTreeWidgetItem;
 class MidiDevice;
 
 
-class BankEditorDialog : public QMainWindow, public ActionFileClient
+class BankEditorDialog : public QMainWindow, public ActionFileClient,
+    public StudioObserver, public DeviceObserver
 {
     Q_OBJECT
 
@@ -197,6 +199,18 @@ protected:
 
  private:
     bool tracksUsingBank(const MidiBank& bank, const MidiDevice& device);
+
+    // studio observer interface
+    virtual void deviceAdded(Device* device) override;
+    virtual void deviceRemoved(Device* device) override;
+
+    // device observer interface
+    virtual void deviceModified(Device* device) override;
+
+    void observeDevice(Device* device);
+    void unobserveDevice(Device* device);
+
+    std::set<Device*> m_observedDevices;
 };
 
 // ----------------------- RemapInstrumentDialog ------------------------

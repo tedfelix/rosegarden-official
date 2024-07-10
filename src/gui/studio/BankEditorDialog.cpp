@@ -32,7 +32,6 @@
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
-#include "base/Studio.h"
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
@@ -282,6 +281,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     connect(m_resetButton, &QAbstractButton::clicked, this, &BankEditorDialog::slotReset);
 
+    m_studio->addObserver(this);
+
     // Initialize the dialog
     //
     initDialog();
@@ -319,6 +320,11 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 BankEditorDialog::~BankEditorDialog()
 {
     RG_DEBUG << "~BankEditorDialog()\n";
+
+    m_studio->removeObserver(this);
+    for(Device* device : m_observedDevices) {
+        unobserveDevice(device);
+    }
 
 //     m_treeWidget->saveLayout(BankEditorConfigGroup);    //&&&
 
@@ -404,6 +410,8 @@ BankEditorDialog::initDialog()
             if (!midiDevice) continue;
             // skip read-only devices
             if (midiDevice->getDirection() == MidiDevice::Record) continue;
+
+            observeDevice(midiDevice);
 
             m_deviceNameMap[midiDevice->getId()] = midiDevice->getName();
             QString itemName = strtoqstr(midiDevice->getName());
@@ -552,14 +560,18 @@ BankEditorDialog::updateDialog()
 
 //     while (sibling) {
     cnt = m_treeWidget->topLevelItemCount();
-    for( i=0; i<cnt; i++ ){
-        sibling = dynamic_cast<MidiDeviceTreeWidgetItem*>( m_treeWidget->topLevelItem(i) );
-
-        if (m_deviceNameMap.find(sibling->getDeviceId()) == m_deviceNameMap.end())
+    for( i=0; i<cnt; i++ ) {
+        sibling = dynamic_cast<MidiDeviceTreeWidgetItem*>
+            (m_treeWidget->topLevelItem(i));
+        DeviceId devId = sibling->getDeviceId();
+        // check if the device really exists
+        Device* devicePtr = m_studio->getDevice(devId);
+        if (devicePtr == nullptr) {
+            m_deviceNameMap.erase(devId);
             itemsToDelete.push_back(sibling);
-        else
+        } else {
             updateDeviceItem(sibling);
-
+        }
     }
 
     for (size_t i = 0; i < itemsToDelete.size(); ++i)
@@ -1919,6 +1931,42 @@ bool BankEditorDialog::tracksUsingBank(const MidiBank& bank,
         return true;
     }
     return false;
+}
+
+void BankEditorDialog::deviceAdded(Device* device)
+{
+    RG_DEBUG << "deviceAdded" << device;
+    observeDevice(device);
+    updateDialog();
+}
+
+void BankEditorDialog::deviceRemoved(Device* device)
+{
+    RG_DEBUG << "deviceRemoved" << device;
+    unobserveDevice(device);
+    updateDialog();
+}
+
+void BankEditorDialog::deviceModified(Device* device)
+{
+    RG_DEBUG << "deviceModified" << device;
+    updateDialog();
+}
+
+void BankEditorDialog::observeDevice(Device* device)
+{
+    RG_DEBUG << "observeDevice" << device;
+    if (m_observedDevices.find(device) != m_observedDevices.end()) return;
+    m_observedDevices.insert(device);
+    device->addObserver(this);
+}
+
+void BankEditorDialog::unobserveDevice(Device* device)
+{
+    RG_DEBUG << "unobserveDevice" << device;
+    if (m_observedDevices.find(device) == m_observedDevices.end()) return;
+    m_observedDevices.erase(device);
+    device->removeObserver(this);
 }
 
 }
