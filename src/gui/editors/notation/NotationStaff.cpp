@@ -167,10 +167,10 @@ NotationStaff::insertTimeSignature(double layoutX,
     getScene()->addItem(item);
     item->setPos(sigCoords.first, (double)sigCoords.second);
     item->show();
-    if (m_current) {
+    if (m_highlight) {
         item->setOpacity(1.0);
     } else {
-        item->setOpacity(NONCURRENTOPACITY);
+        item->setOpacity(NONHIGHLIGHTOPACITY);
     }
     m_timeSigs.insert(item);
 }
@@ -231,10 +231,10 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         getScene()->addItem(item);
         item->setPos(coords.first, coords.second);
         item->show();
-        if (m_current) {
+        if (m_highlight) {
             item->setOpacity(1.0);
         } else {
-            item->setOpacity(NONCURRENTOPACITY);
+            item->setOpacity(NONHIGHLIGHTOPACITY);
         }
         m_repeatedClefsAndKeys.insert(item);
 
@@ -253,10 +253,10 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         getScene()->addItem(item);
         item->setPos(coords.first, coords.second);
         item->show();
-        if (m_current) {
+        if (m_highlight) {
             item->setOpacity(1.0);
         } else {
-            item->setOpacity(NONCURRENTOPACITY);
+            item->setOpacity(NONHIGHLIGHTOPACITY);
         }
         m_repeatedClefsAndKeys.insert(item);
 
@@ -819,8 +819,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
     static NotePixmapParameters restParams(Note::Crotchet, 0);
 
     NotationElement* elt = static_cast<NotationElement*>(*vli);
-    // set the current status of the element
-    elt->setCurrent(m_current);
+    // set the highlight status of the element
+    elt->setHighlight(m_highlight);
 
     bool invisible = false;
     if (elt->event()->get
@@ -2010,40 +2010,41 @@ timeT NotationStaff::getEndTime() const
         (getSegment().getEndMarkerTime() - 1);
 }
 
-void NotationStaff::setCurrent(bool current)
+void NotationStaff::setHighlight(bool highlight)
 {
-    RG_DEBUG << "set staff current" << current << m_segment.getLabel();
-    m_current = current;
+    if (highlight == m_highlight) return;
+    RG_DEBUG << "set staff highlight" << highlight << m_segment.getLabel();
+    m_highlight = highlight;
     NotationElementList *elems = getViewElementList();
 
     for(NotationElementList::iterator it = elems->begin();
         it != elems->end();
         ++it) {
         NotationElement *el = static_cast<NotationElement*>(*it);
-        el->setCurrent(current);
+        el->setHighlight(highlight);
     }
     for(ItemSet::iterator i = m_timeSigs.begin();
         i != m_timeSigs.end();
         ++i) {
         QGraphicsItem* item = (*i);
-        if (current) {
+        if (highlight) {
             item->setOpacity(1.0);
         } else {
-            item->setOpacity(NONCURRENTOPACITY);
+            item->setOpacity(NONHIGHLIGHTOPACITY);
         }
     }
     for(ItemSet::iterator i = m_repeatedClefsAndKeys.begin();
         i != m_repeatedClefsAndKeys.end();
         ++i) {
         QGraphicsItem* item = (*i);
-        if (current) {
+        if (highlight) {
             item->setOpacity(1.0);
         } else {
-            item->setOpacity(NONCURRENTOPACITY);
+            item->setOpacity(NONHIGHLIGHTOPACITY);
         }
     }
     // and pass on to the StaffLayout
-    StaffLayout::setCurrent(current);
+    StaffLayout::setHighlight(highlight);
 }
 
 }

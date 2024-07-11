@@ -27,7 +27,7 @@
 class QGraphicsItem;
 class ItemList;
 
-#define NONCURRENTOPACITY 0.3
+#define NONHIGHLIGHTOPACITY 0.3
 
 namespace Rosegarden
 {
@@ -178,7 +178,7 @@ public:
 
     static NotationElement *getNotationElement(QGraphicsItem *);
 
-    void setCurrent(bool current);
+    void setHighlight(bool highlight);
 
 protected:
     double m_airX;
@@ -195,7 +195,7 @@ protected:
     ItemList *m_extraItems;
 
  private:
-    bool m_current;
+    bool m_highlight;
 };
 
 typedef ViewElementList NotationElementList;

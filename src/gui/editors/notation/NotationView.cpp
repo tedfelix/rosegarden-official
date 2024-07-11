@@ -335,6 +335,20 @@ NotationView::NotationView(RosegardenDocument *doc,
         break;
     }
 
+    // Set initial highlighting
+    QString defaultHighlightMode = "highlight_current_on_track";
+    QString highlightMode =
+        settings.value("highlightmode",
+                       defaultHighlightMode).toString();
+    QAction* hlAction = findAction(highlightMode);
+    if (hlAction) {
+        hlAction->setChecked(true);
+    } else {
+        highlightMode = defaultHighlightMode;
+        findAction(highlightMode)->setChecked(true);
+    }
+    m_notationWidget->getScene()->setHighlightMode(highlightMode);
+
     // Set initial visibility of chord name ruler, ...
     visible = settings.value("Chords ruler shown",
                           findAction("show_chords_ruler")->isChecked()
@@ -668,6 +682,11 @@ NotationView::setupActions()
     createAction("linear_mode", SLOT(slotLinearMode()));
     createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
     createAction("multi_page_mode", SLOT(slotMultiPageMode()));
+
+    // highlighting menu
+    createAction("highlight_none", SLOT(slotHighlight()));
+    createAction("highlight_current", SLOT(slotHighlight()));
+    createAction("highlight_current_on_track", SLOT(slotHighlight()));
 
     createAction("lyric_editor", SLOT(slotEditLyrics()));
     createAction("show_track_headers", SLOT(slotShowHeadersGroup()));
@@ -1706,6 +1725,19 @@ NotationView::slotMultiPageMode()
 {
     leaveActionState("linear_mode");
     if (m_notationWidget) m_notationWidget->slotSetMultiPageMode();
+}
+
+void NotationView::slotHighlight()
+{
+    QObject *s = sender();
+    QString highlightMode = s->objectName();
+
+    RG_DEBUG << "slotHighlight" << highlightMode;
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+    settings.setValue("highlightmode", highlightMode);
+    settings.endGroup();
+    m_notationWidget->getScene()->setHighlightMode(highlightMode);
 }
 
 void

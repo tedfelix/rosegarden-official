@@ -268,7 +268,7 @@ public:
 
     QString getMarking() const { return m_segmentMarking; }
 
-    virtual void setCurrent(bool current) override;
+    virtual void setHighlight(bool highlight) override;
 
 protected:
 

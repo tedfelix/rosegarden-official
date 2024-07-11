@@ -250,6 +250,7 @@ NotationScene::getCurrentStaff()
 void
 NotationScene::setCurrentStaff(NotationStaff *staff)
 {
+    if (! staff) return;
     // To unallow the direct edition of a repeated segment do it never be
     // the current one
     if (m_showRepeated && !m_editRepeated) {
@@ -262,13 +263,31 @@ NotationScene::setCurrentStaff(NotationStaff *staff)
                 m_currentStaff = i;
                 emit currentStaffChanged();
                 emit currentViewSegmentChanged(staff);
+                break;
             }
-            RG_DEBUG << "set current staff";
-            m_staffs[i]->setCurrent(true);
-        } else {
-            RG_DEBUG << "set non current staff";
-            m_staffs[i]->setCurrent(false);
         }
+    }
+    // update highlighting
+    NotationStaff* currentStaff = getCurrentStaff();
+    Segment* currentSegment = &(currentStaff->getSegment());
+    TrackId currentTrack = currentSegment->getTrack();
+
+    RG_DEBUG << "highlight current" <<
+        currentStaff << currentSegment << currentTrack;
+    for (int i = 0; i < int(m_staffs.size()); ++i) {
+        NotationStaff* iStaff = m_staffs[i];
+        Segment* iSegment = &(iStaff->getSegment());
+        TrackId iTrack = iSegment->getTrack();
+        bool onSameTrack = (currentTrack == iTrack);
+        RG_DEBUG << "highlight iter" << iStaff << iSegment << onSameTrack;
+        bool highlight = true;
+        if (iSegment != currentSegment && onSameTrack &&
+            m_highlightMode == "highlight_current_on_track") highlight = false;
+        if (iStaff != currentStaff &&
+            m_highlightMode == "highlight_current") highlight = false;
+
+        RG_DEBUG << "highlight staff" << highlight;
+        m_staffs[i]->setHighlight(highlight);
     }
 }
 
@@ -2243,6 +2262,14 @@ void
 NotationScene::updatePageSize()
 {
     layout(nullptr, 0, 0);
+}
+
+void NotationScene::setHighlightMode(const QString& highlightMode)
+{
+    RG_DEBUG << "setHighlightMode" << highlightMode;
+    // update highlighting
+    m_highlightMode = highlightMode;
+    setCurrentStaff(getCurrentStaff());
 }
 
 ///YG: Only for debug

@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[NotationElement]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include <QGraphicsItem>
 #include "NotationElement.h"
@@ -41,7 +42,7 @@ NotationElement::NotationElement(Event *event) :
     m_isColliding(false),
     m_item(nullptr),
     m_extraItems(nullptr),
-    m_current(true)
+    m_highlight(true)
 {
     //RG_DEBUG << "ctor: " << this << " wrapping " << event;
 }
@@ -127,7 +128,11 @@ NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
     e->setPos(sceneX, sceneY);
     m_recentlyRegenerated = true;
     m_item = e;
-    setCurrent(m_current);
+    if (m_highlight) {
+        m_item->setOpacity(1.0);
+    } else {
+        m_item->setOpacity(NONHIGHLIGHTOPACITY);
+    }
 }
 
 void
@@ -148,7 +153,7 @@ NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
     e->setData(NotationElementData, QVariant::fromValue((void *)this));
     e->setPos(sceneX, sceneY);
     m_extraItems->push_back(e);
-    setCurrent(m_current);
+    setHighlight(m_highlight);
 }
 
 void
@@ -217,22 +222,25 @@ NotationElement::getNotationElement(QGraphicsItem *item)
     return static_cast<NotationElement *>(v.value<void *>());
 }
 
-void NotationElement::setCurrent(bool current)
+void NotationElement::setHighlight(bool highlight)
 {
-    m_current = current;
+    //RG_DEBUG << "setHighlight" << highlight << m_highlight << m_item;
+    if (highlight == m_highlight) return;
+    m_highlight = highlight;
     if (! m_item) return;
-    if (current) {
+    //RG_DEBUG << "set item opacity" << highlight << *event();
+    if (highlight) {
         m_item->setOpacity(1.0);
     } else {
-        m_item->setOpacity(NONCURRENTOPACITY);
+        m_item->setOpacity(NONHIGHLIGHTOPACITY);
     }
     if (m_extraItems) {
         for (ItemList::iterator i = m_extraItems->begin();
              i != m_extraItems->end(); ++i) {
-            if (current) {
+            if (highlight) {
                 (*i)->setOpacity(1.0);
             } else {
-                (*i)->setOpacity(NONCURRENTOPACITY);
+                (*i)->setOpacity(NONHIGHLIGHTOPACITY);
             }
         }
     }
