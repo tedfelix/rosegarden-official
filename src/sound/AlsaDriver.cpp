@@ -2753,7 +2753,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 // We shake out the two NOTE Ons after we've recorded
                 // them.
                 //
-                mappedEventList.insert(new MappedEvent(mE));
+                mappedEventList.insert(new MappedEvent(*mE));
                 m_noteOnMap[deviceId].insert(std::pair<unsigned int, MappedEvent*>(chanNoteKey, mE));
 
                 break;

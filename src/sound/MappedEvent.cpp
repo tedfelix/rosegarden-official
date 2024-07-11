@@ -34,24 +34,14 @@
 namespace Rosegarden
 {
 
-MappedEvent::MappedEvent(InstrumentId id,
+MappedEvent::MappedEvent(InstrumentId instrumentId,
                          const Event &e,
                          const RealTime &eventTime,
                          const RealTime &duration):
-        m_trackId((int)NoTrack),
-        m_instrument(id),
+        m_instrument(instrumentId),
         m_type(MidiNote),
-        m_data1(0),
-        m_data2(0),
         m_eventTime(eventTime),
-        m_duration(duration),
-        m_audioStartMarker(0, 0),
-        m_dataBlockId(0),
-        m_runtimeSegmentId( -1),
-        m_autoFade(false),
-        m_recordedChannel(0),
-        m_recordedDevice(0)
-
+        m_duration(duration)
 {
     try {
 
@@ -149,31 +139,6 @@ bool
 operator<(const MappedEvent &a, const MappedEvent &b)
 {
     return a.getEventTime() < b.getEventTime();
-}
-
-MappedEvent&
-MappedEvent::operator=(const MappedEvent &mE)
-{
-    if (&mE == this)
-        return * this;
-
-    m_trackId = mE.getTrackId();
-    m_instrument = mE.getInstrument();
-    m_type = mE.getType();
-    m_data1 = mE.getData1();
-    m_data2 = mE.getData2();
-    m_eventTime = mE.getEventTime();
-    m_duration = mE.getDuration();
-    m_audioStartMarker = mE.getAudioStartMarker();
-    m_dataBlockId = mE.getDataBlockId();
-    m_runtimeSegmentId = mE.getRuntimeSegmentId();
-    m_autoFade = mE.isAutoFading();
-    m_fadeInTime = mE.getFadeInTime();
-    m_fadeOutTime = mE.getFadeOutTime();
-    m_recordedChannel = mE.getRecordedChannel();
-    m_recordedDevice = mE.getRecordedDevice();
-
-    return *this;
 }
 
 void

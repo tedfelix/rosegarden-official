@@ -211,23 +211,7 @@ public:
         WarningImpreciseTimerTryRTC = 11
     } FailureCode;
 
-    MappedEvent(): m_trackId((int)NoTrack),
-                   m_instrument(0),
-                   m_type(InvalidMappedEvent),
-                   m_data1(0),
-                   m_data2(0),
-                   m_eventTime(0, 0),
-                   m_duration(0, 0),
-                   m_audioStartMarker(0, 0),
-                   m_dataBlockId(0),
-                   m_runtimeSegmentId(-1),
-                   m_autoFade(false),
-                   m_recordedChannel(0),
-                   m_recordedDevice(0) {}
-
-    // Construct from Events to Internal (MIDI) type MappedEvent
-    //
-    explicit MappedEvent(const Event &e);
+    MappedEvent()  { }
 
     // Another Internal constructor from Events
     MappedEvent(InstrumentId id,
@@ -237,68 +221,50 @@ public:
 
     // A general MappedEvent constructor for any MappedEvent type
     //
-    MappedEvent(InstrumentId id,
+    MappedEvent(InstrumentId instrumentId,
                 MappedEventType type,
                 MidiByte pitch,
                 MidiByte velocity,
                 const RealTime &absTime,
                 const RealTime &duration,
-                const RealTime &audioStartMarker):
-        m_trackId((int)NoTrack),
-        m_instrument(id),
+                const RealTime &audioStartMarker) :
+        m_instrument(instrumentId),
         m_type(type),
         m_data1(pitch),
         m_data2(velocity),
         m_eventTime(absTime),
         m_duration(duration),
-        m_audioStartMarker(audioStartMarker),
-        m_dataBlockId(0),
-        m_runtimeSegmentId(-1),
-        m_autoFade(false),
-        m_recordedChannel(0),
-        m_recordedDevice(0) {}
+        m_audioStartMarker(audioStartMarker)
+    { }
 
     // Audio MappedEvent shortcut constructor
     //
-    MappedEvent(InstrumentId id,
+    MappedEvent(InstrumentId instrumentId,
                 unsigned short audioID,
                 const RealTime &eventTime,
                 const RealTime &duration,
-                const RealTime &audioStartMarker):
-         m_trackId((int)NoTrack),
-         m_instrument(id),
+                const RealTime &audioStartMarker) :
+         m_instrument(instrumentId),
          m_type(Audio),
          m_data1(audioID % 256),
          m_data2(audioID / 256),
          m_eventTime(eventTime),
          m_duration(duration),
-         m_audioStartMarker(audioStartMarker),
-         m_dataBlockId(0),
-         m_runtimeSegmentId(-1),
-         m_autoFade(false),
-         m_recordedChannel(0),
-         m_recordedDevice(0) {}
+         m_audioStartMarker(audioStartMarker)
+    { }
 
     // More generalised MIDI event containers for
     // large and small events (one param, two param)
     //
-    MappedEvent(InstrumentId id,
+    MappedEvent(InstrumentId instrumentId,
                 MappedEventType type,
                 MidiByte data1,
-                MidiByte data2):
-         m_trackId((int)NoTrack),
-         m_instrument(id),
+                MidiByte data2) :
+         m_instrument(instrumentId),
          m_type(type),
          m_data1(data1),
-         m_data2(data2),
-         m_eventTime(RealTime(0, 0)),
-         m_duration(RealTime(0, 0)),
-         m_audioStartMarker(RealTime(0, 0)),
-         m_dataBlockId(0),
-         m_runtimeSegmentId(-1),
-         m_autoFade(false),
-         m_recordedChannel(0),
-         m_recordedDevice(0) {}
+         m_data2(data2)
+    { }
 
     /**
      * For SysEx...
@@ -308,82 +274,24 @@ public:
      *   - Set recorded device with the destination device.
      *   - Call addDataString() to add the SysEx data.
      */
-    MappedEvent(InstrumentId id,
-                MappedEventType type,
-                MidiByte data1):
-        m_trackId((int)NoTrack),
-        m_instrument(id),
-        m_type(type),
-        m_data1(data1),
-        m_data2(0),
-        m_eventTime(RealTime(0, 0)),
-        m_duration(RealTime(0, 0)),
-        m_audioStartMarker(RealTime(0, 0)),
-        m_dataBlockId(0),
-        m_runtimeSegmentId(-1),
-        m_autoFade(false),
-        m_recordedChannel(0),
-        m_recordedDevice(0) {}
-
     MappedEvent(InstrumentId instrumentId,
-                MappedEventType type):
-        m_trackId((int)NoTrack),
+                MappedEventType type,
+                MidiByte data1) :
         m_instrument(instrumentId),
         m_type(type),
-        m_data1(0),
-        m_data2(0),
-        m_eventTime(RealTime(0, 0)),
-        m_duration(RealTime(0, 0)),
-        m_audioStartMarker(RealTime(0, 0)),
-        m_dataBlockId(0),
-        m_runtimeSegmentId(-1),
-        m_autoFade(false),
-        m_recordedChannel(0),
-        m_recordedDevice(0) {}
+        m_data1(data1)
+    { }
 
-    // Copy constructor
-    //
-    // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
-    MappedEvent(const MappedEvent &mE):
-        m_trackId(mE.getTrackId()),
-        m_instrument(mE.getInstrument()),
-        m_type(mE.getType()),
-        m_data1(mE.getData1()),
-        m_data2(mE.getData2()),
-        m_eventTime(mE.getEventTime()),
-        m_duration(mE.getDuration()),
-        m_audioStartMarker(mE.getAudioStartMarker()),
-        m_dataBlockId(mE.getDataBlockId()),
-        m_runtimeSegmentId(mE.getRuntimeSegmentId()),
-        m_autoFade(mE.isAutoFading()),
-        m_fadeInTime(mE.getFadeInTime()),
-        m_fadeOutTime(mE.getFadeOutTime()),
-        m_recordedChannel(mE.getRecordedChannel()),
-        m_recordedDevice(mE.getRecordedDevice()) {}
-
-    // Copy from pointer
-    // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
-    explicit MappedEvent(MappedEvent *mE):
-        m_trackId(mE->getTrackId()),
-        m_instrument(mE->getInstrument()),
-        m_type(mE->getType()),
-        m_data1(mE->getData1()),
-        m_data2(mE->getData2()),
-        m_eventTime(mE->getEventTime()),
-        m_duration(mE->getDuration()),
-        m_audioStartMarker(mE->getAudioStartMarker()),
-        m_dataBlockId(mE->getDataBlockId()),
-        m_runtimeSegmentId(mE->getRuntimeSegmentId()),
-        m_autoFade(mE->isAutoFading()),
-        m_fadeInTime(mE->getFadeInTime()),
-        m_fadeOutTime(mE->getFadeOutTime()),
-        m_recordedChannel(mE->getRecordedChannel()),
-        m_recordedDevice(mE->getRecordedDevice()) {}
+    MappedEvent(InstrumentId instrumentId,
+                MappedEventType type) :
+        m_instrument(instrumentId),
+        m_type(type)
+    { }
 
     // Construct perhaps without initialising, for placement new or equivalent
-    explicit MappedEvent(bool initialise) {
-        if (initialise) *this = MappedEvent();
-    }
+    //explicit MappedEvent(bool initialise) {
+    //    if (initialise) *this = MappedEvent();
+    //}
 
     bool isValid() const { return m_type != InvalidMappedEvent; }
     // Event time
@@ -470,8 +378,6 @@ public:
 
     friend bool operator<(const MappedEvent &a, const MappedEvent &b);
 
-    MappedEvent& operator=(const MappedEvent &mE);
-
     /// Add several raw bytes to the event's SysEx datablock.
     /*
      * If the block doesn't exist, it is created.
@@ -512,35 +418,36 @@ public:
     void setRecordedDevice(const unsigned int device) { m_recordedDevice = device; }
 
 private:
-    TrackId          m_trackId;
-    InstrumentId     m_instrument;
-    MappedEventType  m_type;
-    MidiByte         m_data1;
-    MidiByte         m_data2;
-    RealTime         m_eventTime;
-    RealTime         m_duration;
-    RealTime         m_audioStartMarker;
+
+    TrackId m_trackId{NoTrack};
+    InstrumentId m_instrument{0};
+    MappedEventType m_type{InvalidMappedEvent};
+    MidiByte m_data1{0};
+    MidiByte m_data2{0};
+    RealTime m_eventTime;
+    RealTime m_duration;
+    RealTime m_audioStartMarker;
 
     // Use this when we want to store something in addition to the
     // other bytes in this type, e.g. System Exclusive.
     //
-    DataBlockRepository::blockid m_dataBlockId;
+    DataBlockRepository::blockid m_dataBlockId{0};
 
     // Id of the segment that this (audio) event is derived from
     //
-    int              m_runtimeSegmentId;
+    int m_runtimeSegmentId{-1};
 
     // Audio autofading
     //
-    bool                  m_autoFade;
-    RealTime  m_fadeInTime;
-    RealTime  m_fadeOutTime;
+    bool m_autoFade{false};
+    RealTime m_fadeInTime;
+    RealTime m_fadeOutTime;
 
     // For input events, original data, stored as it was recorded.
     // For output events, channel to play on.  m_recordedDevice is not
     // used for output.
-    unsigned int          m_recordedChannel;
-    unsigned int          m_recordedDevice;
+    unsigned int m_recordedChannel{0};
+    unsigned int m_recordedDevice{0};
 
     friend QDebug operator<<(QDebug, const MappedEvent &);
 };

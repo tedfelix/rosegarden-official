@@ -518,7 +518,7 @@ RosegardenSequencer::setMappedInstrument(int type, unsigned int id)
 }
 
 void
-RosegardenSequencer::processMappedEvent(MappedEvent mE)
+RosegardenSequencer::processMappedEvent(const MappedEvent &mE)
 {
     QMutexLocker locker(&m_asyncQueueMutex);
     m_asyncOutQueue.push_back(new MappedEvent(mE));
