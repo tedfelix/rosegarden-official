@@ -27,6 +27,7 @@
 class QGraphicsItem;
 class ItemList;
 
+#define NONHIGHLIGHTOPACITY 0.3
 
 namespace Rosegarden
 {
@@ -177,6 +178,8 @@ public:
 
     static NotationElement *getNotationElement(QGraphicsItem *);
 
+    void setHighlight(bool highlight);
+
 protected:
     double m_airX;
     double m_airWidth;
@@ -190,6 +193,9 @@ protected:
 
     typedef std::vector<QGraphicsItem *> ItemList;
     ItemList *m_extraItems;
+
+ private:
+    bool m_highlight;
 };
 
 typedef ViewElementList NotationElementList;

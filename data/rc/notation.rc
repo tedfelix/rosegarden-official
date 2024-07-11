@@ -84,6 +84,13 @@
       <Action name="multi_page_mode" text="&amp;Multiple Page Layout" icon="multi-page-mode" checked="false" group="score_layout" />
     </Menu>
   <Separator/>
+    <Menu name="highlighting">
+      <text>Highlighting</text>
+      <Action name="highlight_none" text="&amp;None" checked="false" group="highlight_group" />
+      <Action name="highlight_current" text="&amp;Current" checked="false" group="highlight_group" />
+      <Action name="highlight_current_on_track" text="Current on &amp;same track" checked="false" group="highlight_group" />
+    </Menu>
+  <Separator/>
     <Action name="lyric_editor" text="Open L&amp;yric Editor" />
   <Separator/>
     <!-- JAS 'show_track_headers' is determined by states -->

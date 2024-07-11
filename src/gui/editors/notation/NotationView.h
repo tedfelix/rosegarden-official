@@ -223,6 +223,8 @@ protected slots:
     void slotContinuousPageMode();
     void slotMultiPageMode();
 
+    void slotHighlight();
+
     void slotShowHeadersGroup();
 
     void slotChangeFontFromAction();

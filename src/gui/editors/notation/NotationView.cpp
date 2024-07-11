@@ -335,6 +335,20 @@ NotationView::NotationView(RosegardenDocument *doc,
         break;
     }
 
+    // Set initial highlighting
+    QString defaultHighlightMode = "highlight_current_on_track";
+    QString highlightMode =
+        settings.value("highlightmode",
+                       defaultHighlightMode).toString();
+    QAction* hlAction = findAction(highlightMode);
+    if (hlAction) {
+        hlAction->setChecked(true);
+    } else {
+        highlightMode = defaultHighlightMode;
+        findAction(highlightMode)->setChecked(true);
+    }
+    m_notationWidget->getScene()->setHighlightMode(highlightMode);
+
     // Set initial visibility of chord name ruler, ...
     visible = settings.value("Chords ruler shown",
                           findAction("show_chords_ruler")->isChecked()
@@ -446,15 +460,6 @@ NotationView::NotationView(RosegardenDocument *doc,
             getEditorFollowPlayback();
     RG_DEBUG << "set scroll_to_follow checked" << followPlayback;
     findAction("scroll_to_follow")->setChecked(followPlayback);
-
-    // More than one Segment?  Select the current Segment's notes to
-    // help make it clear which Segment is current.
-    // Note that for large compositions, this can take a very long time.
-    // But this is the only indicator we have of the current Segment.
-    // ??? Kludge.  We really need to gray the non-current Segment notes.
-    //     See slotCurrentSegmentPrior() and slotCurrentSegmentNext().
-    if (m_segments.size() > 1)
-        slotEditSelectWholeStaff();
 }
 
 NotationView::~NotationView()
@@ -677,6 +682,11 @@ NotationView::setupActions()
     createAction("linear_mode", SLOT(slotLinearMode()));
     createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
     createAction("multi_page_mode", SLOT(slotMultiPageMode()));
+
+    // highlighting menu
+    createAction("highlight_none", SLOT(slotHighlight()));
+    createAction("highlight_current", SLOT(slotHighlight()));
+    createAction("highlight_current_on_track", SLOT(slotHighlight()));
 
     createAction("lyric_editor", SLOT(slotEditLyrics()));
     createAction("show_track_headers", SLOT(slotShowHeadersGroup()));
@@ -1717,6 +1727,19 @@ NotationView::slotMultiPageMode()
     if (m_notationWidget) m_notationWidget->slotSetMultiPageMode();
 }
 
+void NotationView::slotHighlight()
+{
+    QObject *s = sender();
+    QString highlightMode = s->objectName();
+
+    RG_DEBUG << "slotHighlight" << highlightMode;
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+    settings.setValue("highlightmode", highlightMode);
+    settings.endGroup();
+    m_notationWidget->getScene()->setHighlightMode(highlightMode);
+}
+
 void
 NotationView::slotShowHeadersGroup()
 {
@@ -2274,12 +2297,6 @@ NotationView::slotCurrentSegmentPrior()
     }
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
-
-    // This can take a very long time.  But there is no other indicator
-    // of which notes are in the current Segment.  We should probably
-    // either gray the notes that aren't in the current Segment, or
-    // highlight the notes that are.
-    slotEditSelectWholeStaff();
 }
 
 void
@@ -2303,11 +2320,6 @@ NotationView::slotCurrentSegmentNext()
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
 
-    // This can take a very long time.  But there is no other indicator
-    // of which notes are in the current Segment.  We should probably
-    // either gray the notes that aren't in the current Segment, or
-    // highlight the notes that are.
-    slotEditSelectWholeStaff();
 }
 
 void
