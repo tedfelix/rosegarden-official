@@ -250,6 +250,7 @@ NotationScene::getCurrentStaff()
 void
 NotationScene::setCurrentStaff(NotationStaff *staff)
 {
+    if (! staff) return;
     // To unallow the direct edition of a repeated segment do it never be
     // the current one
     if (m_showRepeated && !m_editRepeated) {
@@ -262,9 +263,31 @@ NotationScene::setCurrentStaff(NotationStaff *staff)
                 m_currentStaff = i;
                 emit currentStaffChanged();
                 emit currentViewSegmentChanged(staff);
+                break;
             }
-            return;
         }
+    }
+    // update highlighting
+    NotationStaff* currentStaff = getCurrentStaff();
+    Segment* currentSegment = &(currentStaff->getSegment());
+    TrackId currentTrack = currentSegment->getTrack();
+
+    RG_DEBUG << "highlight current" <<
+        currentStaff << currentSegment << currentTrack;
+    for (int i = 0; i < int(m_staffs.size()); ++i) {
+        NotationStaff* iStaff = m_staffs[i];
+        Segment* iSegment = &(iStaff->getSegment());
+        TrackId iTrack = iSegment->getTrack();
+        bool onSameTrack = (currentTrack == iTrack);
+        RG_DEBUG << "highlight iter" << iStaff << iSegment << onSameTrack;
+        bool highlight = true;
+        if (iSegment != currentSegment && onSameTrack &&
+            m_highlightMode == "highlight_current_on_track") highlight = false;
+        if (iStaff != currentStaff &&
+            m_highlightMode == "highlight_current") highlight = false;
+
+        RG_DEBUG << "highlight staff" << highlight;
+        m_staffs[i]->setHighlight(highlight);
     }
 }
 
@@ -383,7 +406,6 @@ NotationScene::setStaffs(RosegardenDocument *document,
         layoutAll();
         initCurrentStaffIndex();
     }
-
 
     connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
             this, &NotationScene::slotCommandExecuted);
@@ -1151,8 +1173,12 @@ NotationScene::getCursorCoordinates(timeT t) const
     CursorCoordinates cc;
     cc.allStaffs = QLineF(top.first, top.second,
                           bottom.first, bottom.second);
-    cc.currentStaff = QLineF(singleTop.first, singleTop.second,
-                             singleBottom.first, singleBottom.second);
+    //cc.currentStaff = QLineF(singleTop.first, singleTop.second,
+    //                       singleBottom.first, singleBottom.second);
+    //cc.currentStaff = QLineF(top.first, top.second,
+    //                       bottom.first, bottom.second);
+    cc.currentStaff = QLineF(top.first, singleTop.second,
+                             bottom.first, singleBottom.second);
     return cc;
 }
 
@@ -2236,6 +2262,14 @@ void
 NotationScene::updatePageSize()
 {
     layout(nullptr, 0, 0);
+}
+
+void NotationScene::setHighlightMode(const QString& highlightMode)
+{
+    RG_DEBUG << "setHighlightMode" << highlightMode;
+    // update highlighting
+    m_highlightMode = highlightMode;
+    setCurrentStaff(getCurrentStaff());
 }
 
 ///YG: Only for debug

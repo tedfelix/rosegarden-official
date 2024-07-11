@@ -221,6 +221,8 @@ public:
 
     void updatePageSize();
 
+    void setHighlightMode(const QString& highlightMode);
+
     /// YG: Only for debug
     void dumpVectors();
     void dumpBarDataMap();
@@ -380,6 +382,8 @@ private:
 
     // Remember current labels of tracks
     std::map<int, std::string> m_trackLabels;
+
+    QString m_highlightMode;
 };
 
 }
