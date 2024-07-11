@@ -95,76 +95,82 @@ protected:
 class MappedEvent
 {
 public:
-    typedef enum
+    typedef enum : unsigned
     {
-        // INVALID
-        //
-        InvalidMappedEvent       = 0,
+        InvalidMappedEvent = 0,
 
-        // Keep the MidiNotes bit flaggable so that filtering works
-        //
-        MidiNote                 = 1 << 0,
-        MidiNoteOneShot          = 1 << 1,  // doesn't need NOTE OFFs
-        MidiProgramChange        = 1 << 2,
-        MidiKeyPressure          = 1 << 3,
-        MidiChannelPressure      = 1 << 4,
-        MidiPitchBend            = 1 << 5,
-        MidiController           = 1 << 6,
-        MidiSystemMessage        = 1 << 7,
+        // MIDI events.
+        // Use individual bits for bitmasking/filtering.
+        // See MidiFilterDialog's ctor.
+        MidiNote            = 1 << 0,
+        MidiProgramChange   = 1 << 1,
+        MidiKeyPressure     = 1 << 2,
+        MidiChannelPressure = 1 << 3,
+        MidiPitchBend       = 1 << 4,
+        MidiController      = 1 << 5,
+        MidiSystemMessage   = 1 << 6,
 
-        // Sent from the gui to play an audio file
-        Audio                    = 1 << 8,
+        // The remaining values do not need bitmask/filtering support.
+        // We start at bit 26 which gives us 25 bits we
+        // can use if we need more event types for filtering.  This
+        // gives us 127 possible values for the event types that do
+        // not need filtering.
+
+        MidiNoteOneShot          = 1 << 25,  // doesn't need NOTE OFFs
+
+        // Sent from the gui to play an audio file.
+        // ??? This is used for a comparison to detect MIDI event types.
+        //     That needs to be done in a safer way.  See
+        //     SequenceManager::processAsynchronousMidi() and
+        //     AlsaDriver::processMidiOut().
+        Audio                    = 2 << 25,
         // Sent from gui to cancel playing an audio file
-        AudioCancel              = 1 << 9,
+        AudioCancel              = 3 << 25,
         // Sent to the gui with audio level on Instrument
-        AudioLevel               = 1 << 10,
+        AudioLevel               = 4 << 25,
         // Sent to the gui to inform an audio file stopped
-        AudioStopped             = 1 << 11,
+        AudioStopped             = 5 << 25,
         // The gui is clear to generate a preview for a new audio file
-        AudioGeneratePreview     = 1 << 12,
+        AudioGeneratePreview     = 6 << 25,
 
         // Update Instruments - new ALSA client detected
-        SystemUpdateInstruments  = 1 << 13,
+        SystemUpdateInstruments  = 7 << 25,
         // Set RG as JACK source/follower
-        SystemJackTransport      = 1 << 14,
+        SystemJackTransport      = 8 << 25,
         // Set RG as MMC source/follower
-        SystemMMCTransport       = 1 << 15,
+        SystemMMCTransport       = 9 << 25,
         // Set System Messages and MIDI Clock
-        SystemMIDIClock          = 1 << 16,
-        // Set Record device -- no longer used (all input devices are set)
+        SystemMIDIClock          = 10 << 25,
         // Set Metronome device
-        SystemMetronomeDevice    = 1 << 18,
+        SystemMetronomeDevice    = 11 << 25,
         // Set Audio inputs/outputs: data1 num inputs, data2 num submasters
-        SystemAudioPortCounts    = 1 << 19,
+        SystemAudioPortCounts    = 12 << 25,
         // Set whether we create various Audio ports (data1 is an AudioOutMask)
-        SystemAudioPorts         = 1 << 20,
+        SystemAudioPorts         = 13 << 25,
         // Some failure has occurred: data1 contains FailureCode
-        SystemFailure            = 1 << 21,
+        SystemFailure            = 14 << 25,
 
         // Time sig. event (from time sig. composition reference segment)
-        TimeSignature            = 1 << 22,
+        TimeSignature            = 15 << 25,
         // Tempo event (from tempo composition reference segment)
-        Tempo                    = 1 << 23,
+        Tempo                    = 16 << 25,
 
         // Panic function
-        Panic                    = 1 << 24,
+        Panic                    = 17 << 25,
 
         // Set RG as MTC source/follower
-        SystemMTCTransport       = 1 << 25,
+        SystemMTCTransport       = 18 << 25,
         // Auto-connect sync outputs
-        SystemMIDISyncAuto       = 1 << 26,
+        SystemMIDISyncAuto       = 19 << 25,
         // File format used for audio recording (data1 is 0=PCM,1=float)
-        SystemAudioFileFormat    = 1 << 27,
-
-        // An alsa sequencer port-connection was established or removed
-        //AlsaSeqPortConnectionChanged = 1 << 28   // not required, handled with SystemUpdateInstruments event
+        SystemAudioFileFormat    = 20 << 25,
 
         // Marker (for MIDI export, not sound)
-        Marker                   = 1 << 28,
+        Marker                   = 21 << 25,
         // Text (for MIDI export, not sound)
-        Text                     = 1 << 29,
+        Text                     = 22 << 25,
         // Key signature (for MIDI export, not sound)
-        KeySignature             = 1 << 30
+        KeySignature             = 23 << 25
 
     } MappedEventType;
 
@@ -477,9 +483,6 @@ public:
      * added by AlsaDriver::processMidiOut().
      */
     void addDataString(const std::string &rawData);
-
-    /// Size of a MappedEvent in a stream
-    static const size_t streamedSize;
 
     // The runtime segment id of an audio file
     //
