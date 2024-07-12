@@ -280,7 +280,7 @@ ExternalController::sendSysExRaw(const std::string &rawString)
                       MappedEvent::MidiSystemMessage,
                       MIDI_SYSTEM_EXCLUSIVE);
     event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-    event.addDataString(rawString);
+    event.setDataBlock(rawString);
 
     // Send it out.
 

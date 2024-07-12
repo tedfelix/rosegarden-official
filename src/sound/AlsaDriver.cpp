@@ -3791,7 +3791,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                 (rgEvent->getRecordedDevice() == Device::EXTERNAL_CONTROLLER);
 
         bool isSoftSynth = (!isExternalController &&
-                            (rgEvent->getInstrument() >= SoftSynthInstrumentBase));
+                            (rgEvent->getInstrumentId() >= SoftSynthInstrumentBase));
 
         RealTime outputTime = rgEvent->getEventTime() - m_playStartPosition +
             m_alsaPlayStartTime;
@@ -3881,7 +3881,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             if (isExternalController) {
                 src = m_externalControllerPort;
             } else {
-                src = getOutputPortForMappedInstrument(rgEvent->getInstrument());
+                src = getOutputPortForMappedInstrument(rgEvent->getInstrumentId());
             }
 
             if (src < 0)
@@ -3895,7 +3895,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             alsaEvent.time.time = time;
         }
 
-        MappedInstrument *instrument = getMappedInstrument(rgEvent->getInstrument());
+        MappedInstrument *instrument = getMappedInstrument(rgEvent->getInstrumentId());
 
         // set the stop time for Note Off
         //
@@ -3967,10 +3967,10 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                 info.level = rgEvent->getVelocity();
                 info.levelRight = 0;
                 SequencerDataBlock::getInstance()->setInstrumentLevel
-                    (rgEvent->getInstrument(), info);
+                    (rgEvent->getInstrumentId(), info);
             }
 
-            weedRecentNoteOffs(rgEvent->getPitch(), channel, rgEvent->getInstrument());
+            weedRecentNoteOffs(rgEvent->getPitch(), channel, rgEvent->getInstrumentId());
             break;
 
         case MappedEvent::MidiProgramChange:
@@ -4111,7 +4111,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             if (debug)
                 RG_DEBUG << "  Calling processSoftSynthEventOut()...";
 
-            processSoftSynthEventOut(rgEvent->getInstrument(), &alsaEvent, now);
+            processSoftSynthEventOut(rgEvent->getInstrumentId(), &alsaEvent, now);
 
         } else {
             if (debug)
@@ -4143,7 +4143,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                 new NoteOffEvent(outputStopTime,  // already calculated
                                  rgEvent->getPitch(),
                                  channel,
-                                 rgEvent->getInstrument());
+                                 rgEvent->getInstrumentId());
 
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut(): Adding NOTE OFF at " << outputStopTime;
@@ -4431,15 +4431,15 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
             // we could make this just get the gui to reload our files
             // when (or before) this fails.
             //
-            audioFile = getAudioFile(mappedEvent->getAudioID());
+            audioFile = getAudioFile(mappedEvent->getAudioFileID());
 
             if (audioFile) {
                 MappedAudioFader *fader =
                     dynamic_cast<MappedAudioFader *>
-                    (m_studio->getAudioFader(mappedEvent->getInstrument()));
+                    (m_studio->getAudioFader(mappedEvent->getInstrumentId()));
 
                 if (!fader) {
-                    RG_WARNING << "processEventsOut(): WARNING: No fader for audio instrument " << mappedEvent->getInstrument();
+                    RG_WARNING << "processEventsOut(): WARNING: No fader for audio instrument " << mappedEvent->getInstrumentId();
                     continue;
                 }
 
@@ -4464,7 +4464,7 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
                 PlayableAudioFile *paf = nullptr;
 
                 try {
-                    paf = new PlayableAudioFile(mappedEvent->getInstrument(),
+                    paf = new PlayableAudioFile(mappedEvent->getInstrumentId(),
                                                 audioFile,
                                                 getSequencerTime() +
                                                 (RealTime(1, 0) / 4),
@@ -5939,9 +5939,9 @@ AlsaDriver::cancelAudioFile(const MappedEvent *mE)
         if (mE->getRuntimeSegmentId() == -1) {
 
             // ERROR? The comparison between file->getAudioFile()->getId() of type unsigned int
-            //        and mE->getAudioID() of type int.
-            if (file->getInstrument() == mE->getInstrument() &&
-                    int(file->getAudioFile()->getId()) == mE->getAudioID()) {
+            //        and mE->getAudioFileID() of type int.
+            if (file->getInstrument() == mE->getInstrumentId() &&
+                    int(file->getAudioFile()->getId()) == mE->getAudioFileID()) {
                 file->cancel();
             }
         } else {

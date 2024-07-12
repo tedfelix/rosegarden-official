@@ -260,7 +260,7 @@ insertCopy(const MappedEvent &evt)
                     m_ramping = (evt.getData1() > 0) ? true : false;
                     // Yes, we fetch it from "instrument" because
                     // that's what TempoSegmentMapper puts it in.
-                    tempoT tempo = evt.getInstrument();
+                    tempoT tempo = evt.getInstrumentId();
                     RG_DEBUG << "insertCopy tempo" << evt.getEventTime() <<
                         midiEventAbsoluteTime << tempo;
                     trackData.insertTempo(midiEventAbsoluteTime, tempo);

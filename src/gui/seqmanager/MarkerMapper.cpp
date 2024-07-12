@@ -56,7 +56,7 @@ void MarkerMapper::fillBuffer()
       MappedEvent e;
       e.setType(MappedEvent::Marker);
       e.setEventTime(eventTime);
-      e.addDataString(metaMessage);
+      e.setDataBlock(metaMessage);
       mapAnEvent(&e);
     }
 }

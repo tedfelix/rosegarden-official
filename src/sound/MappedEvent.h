@@ -237,25 +237,22 @@ public:
         m_audioStartMarker(audioStartMarker)
     { }
 
-    // Audio MappedEvent shortcut constructor
-    //
+    /// Construct an Audio MappedEvent.
     MappedEvent(InstrumentId instrumentId,
-                unsigned short audioID,
+                unsigned short audioFileID,
                 const RealTime &eventTime,
                 const RealTime &duration,
                 const RealTime &audioStartMarker) :
          m_instrument(instrumentId),
          m_type(Audio),
-         m_data1(audioID % 256),
-         m_data2(audioID / 256),
+         m_data1(audioFileID % 256),  // LSB
+         m_data2(audioFileID / 256),  // MSB
          m_eventTime(eventTime),
          m_duration(duration),
          m_audioStartMarker(audioStartMarker)
     { }
 
-    // More generalised MIDI event containers for
-    // large and small events (one param, two param)
-    //
+    /// Construct a MIDI event with data1 and data2 parameters.
     MappedEvent(InstrumentId instrumentId,
                 MappedEventType type,
                 MidiByte data1,
@@ -266,14 +263,7 @@ public:
          m_data2(data2)
     { }
 
-    /**
-     * For SysEx...
-     *   - Set instrumentId to NoInstrument.
-     *   - Set type to MidiSystemMessage.
-     *   - Set data1 to MIDI_SYSTEM_EXCLUSIVE.
-     *   - Set recorded device with the destination device.
-     *   - Call addDataString() to add the SysEx data.
-     */
+    /// Construct a MIDI event with a data1 parameter.
     MappedEvent(InstrumentId instrumentId,
                 MappedEventType type,
                 MidiByte data1) :
@@ -288,52 +278,48 @@ public:
         m_type(type)
     { }
 
-    // Construct perhaps without initialising, for placement new or equivalent
-    //explicit MappedEvent(bool initialise) {
-    //    if (initialise) *this = MappedEvent();
-    //}
+    bool isValid() const  { return m_type != InvalidMappedEvent; }
 
-    bool isValid() const { return m_type != InvalidMappedEvent; }
     // Event time
-    //
-    void setEventTime(const RealTime &a) { m_eventTime = a; }
-    RealTime getEventTime() const { return m_eventTime; }
+    void setEventTime(const RealTime &eventTime)  { m_eventTime = eventTime; }
+    RealTime getEventTime() const  { return m_eventTime; }
 
     // Duration
-    //
-    void setDuration(const RealTime &d) { m_duration = d; }
-    RealTime getDuration() const { return m_duration; }
+    void setDuration(const RealTime &duration)  { m_duration = duration; }
+    RealTime getDuration() const  { return m_duration; }
 
-    // Instrument
-    void setInstrument(InstrumentId id) { m_instrument = id; }
-    InstrumentId getInstrument() const { return m_instrument; }
+    // Instrument ID
+    void setInstrumentId(InstrumentId id)  { m_instrument = id; }
+    InstrumentId getInstrumentId() const  { return m_instrument; }
 
     // Track
     void setTrackId(TrackId id) { m_trackId = id; }
     TrackId getTrackId() const { return m_trackId; }
 
+    // Pitch
+    void setPitch(MidiByte pitch)
+    {
+        // Keep pitch within MIDI limits
+        if (pitch > MidiMaxValue)
+            m_data1 = MidiMaxValue;
+        else
+            m_data1 = pitch;
+    }
     MidiByte getPitch() const { return m_data1; }
 
-    // Keep pitch within MIDI limits
-    //
-    void setPitch(MidiByte p)
-    {
-        m_data1 = p;
-        if (m_data1 > MidiMaxValue) m_data1 = MidiMaxValue;
-    }
-
+    // Velocity
     void setVelocity(MidiByte v) { m_data2 = v; }
     MidiByte getVelocity() const { return m_data2; }
 
-    // And the trendy names for them
-    //
-    MidiByte getData1() const { return m_data1; }
-    MidiByte getData2() const { return m_data2; }
-    void setData1(MidiByte d1) { m_data1 = d1; }
-    void setData2(MidiByte d2) { m_data2 = d2; }
+    // data1
+    void setData1(MidiByte d1)  { m_data1 = d1; }
+    MidiByte getData1() const  { return m_data1; }
 
-    void setAudioID(unsigned short id) { m_data1 = id % 256; m_data2 = id / 256; }
-    int getAudioID() const { return m_data1 + 256 * m_data2; }
+    // data2
+    void setData2(MidiByte d2)  { m_data2 = d2; }
+    MidiByte getData2() const  { return m_data2; }
+
+    int getAudioFileID() const  { return m_data1 + 256 * m_data2; }
 
     // A sample doesn't have to be played from the beginning.  When
     // passing an Audio event this value may be set to indicate from
@@ -352,6 +338,22 @@ public:
     //
     DataBlockRepository::blockid getDataBlockId() const { return m_dataBlockId; }
     void setDataBlockId(DataBlockRepository::blockid dataBlockId) { m_dataBlockId = dataBlockId; }
+
+    /// Set data block for SysEx, markers, and text.
+    /*
+     * If the block doesn't exist, it is created.
+     *
+     * For SysEx, DO NOT include the F0/F7 SOX/EOX in the block.  Those will
+     * be added by AlsaDriver::processMidiOut().
+     *
+     * To set up a SysEx message:
+     *   - Set instrumentId to NoInstrument.
+     *   - Set type to MidiSystemMessage.
+     *   - Set data1 to MIDI_SYSTEM_EXCLUSIVE.
+     *   - Set recorded device with the destination device.
+     *   - Call setDataBlock() to add the SysEx data.
+     */
+    void setDataBlock(const std::string &rawData);
 
     // Whether the event is all done sounding at time t.
     /**
@@ -378,22 +380,9 @@ public:
 
     friend bool operator<(const MappedEvent &a, const MappedEvent &b);
 
-    /// Add several raw bytes to the event's SysEx datablock.
-    /*
-     * If the block doesn't exist, it is created.
-     *
-     * To set up a SysEx message, see the comments on the ctor that
-     * takes three parameters.
-     *
-     * DO NOT include the F0/F7 SOX/EOX in the block.  Those will be
-     * added by AlsaDriver::processMidiOut().
-     */
-    void addDataString(const std::string &rawData);
-
-    // The runtime segment id of an audio file
-    //
-    int getRuntimeSegmentId() const { return m_runtimeSegmentId; }
-    void setRuntimeSegmentId(int id) { m_runtimeSegmentId = id; }
+    /// The runtime Segment ID of an audio file.
+    void setRuntimeSegmentId(int id)  { m_runtimeSegmentId = id; }
+    int getRuntimeSegmentId() const  { return m_runtimeSegmentId; }
 
     bool isAutoFading() const { return m_autoFade; }
     void setAutoFade(bool value) { m_autoFade = value; }

@@ -99,7 +99,7 @@ MappedEvent::MappedEvent(InstrumentId instrumentId,
                 setData1(midiTextType);
 
                 std::string metaMessage = text.getText();
-                addDataString(metaMessage);
+                setDataBlock(metaMessage);
             }
         } else if (e.isa(Key::EventType)) {
             const Rosegarden::Key key(e);
@@ -142,7 +142,7 @@ operator<(const MappedEvent &a, const MappedEvent &b)
 }
 
 void
-MappedEvent::addDataString(const std::string& rawData)
+MappedEvent::setDataBlock(const std::string& rawData)
 {
     DataBlockRepository::getInstance()->
         setDataBlockForEvent(this, rawData, true);
@@ -287,6 +287,10 @@ QDebug operator<<(QDebug dbg, const MappedEvent &mE)
 
 //--------------------------------------------------
 
+/// Actual data storage for DataBlockRepository.
+/**
+ * ??? Files?  Really?  Wouldn't memory make more sense and be a lot faster?
+ */
 class DataBlockFile
 {
 public:

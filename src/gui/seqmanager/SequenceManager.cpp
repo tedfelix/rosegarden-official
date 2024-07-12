@@ -740,7 +740,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
             if ((*i)->getType() == MappedEvent::AudioStopped) {
                 //RG_DEBUG << "AUDIO FILE ID = " << int((*i)->getData1()) << " - FILE STOPPED - " << "INSTRUMENT = " << (*i)->getInstrument();
 
-                if (audioManagerDialog && (*i)->getInstrument() ==
+                if (audioManagerDialog && (*i)->getInstrumentId() ==
                         m_doc->getStudio().getAudioPreviewInstrument()) {
                     audioManagerDialog->
                     closePlayingDialog(
@@ -753,7 +753,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                 RG_DEBUG << "processAsynchronousMidi(): Received AudioGeneratePreview: data1 is "
                          << int((*i)->getData1()) << ", data2 "
                          << int((*i)->getData2()) << ", instrument is "
-                         << (*i)->getInstrument();
+                         << (*i)->getInstrumentId();
                 m_doc->finalizeAudioFile((int)(*i)->getData1() +
                                          (int)(*i)->getData2() * 256);
             }

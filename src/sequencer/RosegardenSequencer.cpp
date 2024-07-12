@@ -1038,7 +1038,7 @@ void RosegardenSequencer::dumpFirstSegment()
         if (!evt)
             continue;
 
-        SEQUENCER_DEBUG << i << " : inst = " << evt->getInstrument()
+        SEQUENCER_DEBUG << i << " : inst = " << evt->getInstrumentId()
                         << " - type = " << evt->getType()
                         << " - data1 = " << (unsigned int)evt->getData1()
                         << " - data2 = " << (unsigned int)evt->getData2()
@@ -1210,7 +1210,7 @@ RosegardenSequencer::applyLatencyCompensation(MappedEventList &mappedEventList)
             i != mappedEventList.end(); ++i) {
 
         RealTime instrumentLatency =
-            m_driver->getInstrumentPlayLatency((*i)->getInstrument());
+            m_driver->getInstrumentPlayLatency((*i)->getInstrumentId());
 
         //	SEQUENCER_DEBUG << "RosegardenSequencer::applyLatencyCompensation: maxLatency " << maxLatency << ", instrumentLatency " << instrumentLatency << ", moving " << (*i)->getEventTime() << " to " << (*i)->getEventTime() + maxLatency - instrumentLatency;
 
@@ -1411,7 +1411,7 @@ RosegardenSequencer::routeEvents(
                         event->getRecordedDevice(),
                         event->getRecordedChannel());
 
-        event->setInstrument(info.id);
+        event->setInstrumentId(info.id);
         event->setRecordedChannel(info.channel);
     }
 

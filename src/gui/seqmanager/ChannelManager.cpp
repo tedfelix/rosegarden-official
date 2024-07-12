@@ -316,7 +316,7 @@ void ChannelManager::insertEvent(
     if (!m_channelInterval.validChannel())
         return;
 
-    event.setInstrument(m_instrument->getId());
+    event.setInstrumentId(m_instrument->getId());
     event.setRecordedChannel(m_channelInterval.getChannelId());
     event.setTrackId(trackId);
     inserter.insertCopy(event);
