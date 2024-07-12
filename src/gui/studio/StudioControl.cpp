@@ -222,8 +222,7 @@ StudioControl::fillWithImmediateNote(
             pitch,
             velocity,
             RealTime::zero(),  // absTime
-            duration,
-            RealTime::zero());  // audioStartMarker
+            duration);
 
     // Since we're not going thru MappedBufMetaIterator::acceptEvent()
     // which checks tracks for muting, we needn't set a track.

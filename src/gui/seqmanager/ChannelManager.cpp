@@ -209,9 +209,10 @@ void ChannelManager::insertChannelSetup(
         if (!instrument->hasFixedChannel()  ||
             instrument->sendsProgramChange()) {
             // Program Change
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiProgramChange,
-                           instrument->getProgramChange());
+            MappedEvent mE;
+            mE.setInstrumentId(instrument->getId());
+            mE.setType(MappedEvent::MidiProgramChange);
+            mE.setData1(instrument->getProgramChange());
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
             mE.setTrackId(trackId);

@@ -211,30 +211,28 @@ public:
         WarningImpreciseTimerTryRTC = 11
     } FailureCode;
 
+    // ??? We should just use this one and get rid of the rest.
     MappedEvent()  { }
 
-    // Another Internal constructor from Events
+    /// Construct a MappedEvent from an Event.
     MappedEvent(InstrumentId id,
                 const Event &e,
                 const RealTime &eventTime,
                 const RealTime &duration);
 
-    // A general MappedEvent constructor for any MappedEvent type
-    //
+    /// Construct a MidiNote/MidiNoteOneShot MappedEvent.
     MappedEvent(InstrumentId instrumentId,
                 MappedEventType type,
                 MidiByte pitch,
                 MidiByte velocity,
                 const RealTime &absTime,
-                const RealTime &duration,
-                const RealTime &audioStartMarker) :
+                const RealTime &duration) :
         m_instrument(instrumentId),
         m_type(type),
         m_data1(pitch),
         m_data2(velocity),
         m_eventTime(absTime),
-        m_duration(duration),
-        m_audioStartMarker(audioStartMarker)
+        m_duration(duration)
     { }
 
     /// Construct an Audio MappedEvent.
@@ -272,12 +270,6 @@ public:
         m_data1(data1)
     { }
 
-    MappedEvent(InstrumentId instrumentId,
-                MappedEventType type) :
-        m_instrument(instrumentId),
-        m_type(type)
-    { }
-
     bool isValid() const  { return m_type != InvalidMappedEvent; }
 
     // Event time
@@ -292,9 +284,9 @@ public:
     void setInstrumentId(InstrumentId id)  { m_instrument = id; }
     InstrumentId getInstrumentId() const  { return m_instrument; }
 
-    // Track
-    void setTrackId(TrackId id) { m_trackId = id; }
-    TrackId getTrackId() const { return m_trackId; }
+    // Track ID
+    void setTrackId(TrackId id)  { m_trackId = id; }
+    TrackId getTrackId() const  { return m_trackId; }
 
     // Pitch
     void setPitch(MidiByte pitch)
@@ -319,13 +311,16 @@ public:
     void setData2(MidiByte d2)  { m_data2 = d2; }
     MidiByte getData2() const  { return m_data2; }
 
+    // Audio File ID
     int getAudioFileID() const  { return m_data1 + 256 * m_data2; }
 
-    // A sample doesn't have to be played from the beginning.  When
-    // passing an Audio event this value may be set to indicate from
-    // where in the sample it should be played.  Duration is measured
-    // against total sounding length (not absolute position).
-    //
+    // Audio Start Marker
+    /**
+     * A sample doesn't have to be played from the beginning.  When
+     * passing an Audio event this value may be set to indicate from
+     * where in the sample it should be played.  Duration is measured
+     * against total sounding length (not absolute position).
+     */
     void setAudioStartMarker(const RealTime &aS)
         { m_audioStartMarker = aS; }
     RealTime getAudioStartMarker() const
@@ -334,8 +329,7 @@ public:
     MappedEventType getType() const { return m_type; }
     void setType(const MappedEventType &value) { m_type = value; }
 
-    // Data block id
-    //
+    // Data Block ID
     DataBlockRepository::blockid getDataBlockId() const { return m_dataBlockId; }
     void setDataBlockId(DataBlockRepository::blockid dataBlockId) { m_dataBlockId = dataBlockId; }
 
@@ -368,8 +362,7 @@ public:
               getEventTime() != t));
     }
 
-    // How MappedEvents are ordered in the MappedEventList
-    //
+    /// How MappedEvents are ordered in a MappedEventList.
     struct MappedEventCmp
     {
         bool operator()(const MappedEvent *mE1, const MappedEvent *mE2) const
@@ -380,7 +373,7 @@ public:
 
     friend bool operator<(const MappedEvent &a, const MappedEvent &b);
 
-    /// The runtime Segment ID of an audio file.
+    /// The runtime Segment ID of an audio file.  Audio events only.
     void setRuntimeSegmentId(int id)  { m_runtimeSegmentId = id; }
     int getRuntimeSegmentId() const  { return m_runtimeSegmentId; }
 
@@ -395,14 +388,12 @@ public:
     void setFadeOutTime(const RealTime &time)
             { m_fadeOutTime = time; }
 
-    // Original event input channel as it was recorded
-    //
+    // Original event input channel as it was recorded.
     unsigned int getRecordedChannel() const { return m_recordedChannel; }
     void setRecordedChannel(const unsigned int channel)
             { m_recordedChannel = channel; }
 
-    // Original event record device as it was recorded
-    //
+    // Original event record device as it was recorded.
     unsigned int getRecordedDevice() const { return m_recordedDevice; }
     void setRecordedDevice(const unsigned int device) { m_recordedDevice = device; }
 
@@ -417,25 +408,21 @@ private:
     RealTime m_duration;
     RealTime m_audioStartMarker;
 
-    // Use this when we want to store something in addition to the
-    // other bytes in this type, e.g. System Exclusive.
-    //
+    /// SysEx, marker, and text info.
     DataBlockRepository::blockid m_dataBlockId{0};
 
-    // Id of the segment that this (audio) event is derived from
-    //
+    /// Audio Segment this Audio event is related to.
     int m_runtimeSegmentId{-1};
 
     // Audio autofading
-    //
     bool m_autoFade{false};
     RealTime m_fadeInTime;
     RealTime m_fadeOutTime;
 
-    // For input events, original data, stored as it was recorded.
-    // For output events, channel to play on.  m_recordedDevice is not
-    // used for output.
+    // For input events, original channel, stored as it was recorded.
+    // For output events, channel to play on.
     unsigned int m_recordedChannel{0};
+    // m_recordedDevice is not used for output.
     unsigned int m_recordedDevice{0};
 
     friend QDebug operator<<(QDebug, const MappedEvent &);

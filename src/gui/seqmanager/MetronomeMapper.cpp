@@ -196,8 +196,7 @@ void MetronomeMapper::fillBuffer()
         MappedEvent e;
 
         if (tick->second == MidiTimingClockTick) {
-            e = MappedEvent(0,  // Instrument ID is irrelevant
-                            MappedEvent::MidiSystemMessage);
+            e.setType(MappedEvent::MidiSystemMessage);
             e.setData1(MIDI_TIMING_CLOCK);
             e.setEventTime(eventTime);
         } else {
@@ -227,8 +226,7 @@ void MetronomeMapper::fillBuffer()
                             pitch,
                             velocity,
                             eventTime,
-                            tickDuration,
-                            RealTime::zero());  // audioStartMarker
+                            tickDuration);
         }
 
         // Add the event to the buffer.
