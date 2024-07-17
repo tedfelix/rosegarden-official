@@ -589,9 +589,10 @@ void GeneralConfigurationPage::apply()
 
     settings.setValue("jacktransport", jackTransport);
 
-    MappedEvent mEjackValue(MidiInstrumentBase,  // InstrumentId
-                            MappedEvent::SystemJackTransport,
-                            MidiByte(jackValue));
+    MappedEvent mEjackValue;
+    mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? Needed?
+    mEjackValue.setType(MappedEvent::SystemJackTransport);
+    mEjackValue.setData1(MidiByte(jackValue));
     StudioControl::sendMappedEvent(mEjackValue);
 
     settings.endGroup();

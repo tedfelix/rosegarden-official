@@ -532,28 +532,31 @@ MIDIConfigurationPage::apply()
 
     // Now send it (OLD METHOD - to be removed)
     // !!! No, don't remove -- this controls SPP as well doesn't it?
-    MappedEvent midiClockEvent(MidiInstrumentBase,  // InstrumentId
-                               MappedEvent::SystemMIDIClock,
-                               MidiByte(midiClock));
+    MappedEvent midiClockEvent;
+    midiClockEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    midiClockEvent.setType(MappedEvent::SystemMIDIClock);
+    midiClockEvent.setData1(MidiByte(midiClock));
     StudioControl::sendMappedEvent(midiClockEvent);
 
     settings.setValue("mmcmode", m_midiMachineControlMode->currentIndex());
-    MappedEvent mmcModeEvent(MidiInstrumentBase,  // InstrumentId
-                             MappedEvent::SystemMMCTransport,
-                             MidiByte(m_midiMachineControlMode->currentIndex()));
+    MappedEvent mmcModeEvent;
+    mmcModeEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mmcModeEvent.setType(MappedEvent::SystemMMCTransport);
+    mmcModeEvent.setData1(MidiByte(m_midiMachineControlMode->currentIndex()));
     StudioControl::sendMappedEvent(mmcModeEvent);
 
     settings.setValue("mtcmode", m_midiTimeCodeMode->currentIndex());
-    MappedEvent mtcModeEvent(MidiInstrumentBase,  // InstrumentId
-                             MappedEvent::SystemMTCTransport,
-                             MidiByte(m_midiTimeCodeMode->currentIndex()));
+    MappedEvent mtcModeEvent;
+    mtcModeEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mtcModeEvent.setType(MappedEvent::SystemMTCTransport);
+    mtcModeEvent.setData1(MidiByte(m_midiTimeCodeMode->currentIndex()));
     StudioControl::sendMappedEvent(mtcModeEvent);
 
     settings.setValue("midisyncautoconnect", m_autoConnectSyncOut->isChecked());
-    MappedEvent autoConnectSyncOutEvent(
-            MidiInstrumentBase,  // InstrumentId
-            MappedEvent::SystemMIDISyncAuto,
-            MidiByte(m_autoConnectSyncOut->isChecked() ? 1 : 0));
+    MappedEvent autoConnectSyncOutEvent;
+    autoConnectSyncOutEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    autoConnectSyncOutEvent.setType(MappedEvent::SystemMIDISyncAuto);
+    autoConnectSyncOutEvent.setData1(MidiByte(m_autoConnectSyncOut->isChecked() ? 1 : 0));
     StudioControl::sendMappedEvent(autoConnectSyncOutEvent);
 
     settings.endGroup();

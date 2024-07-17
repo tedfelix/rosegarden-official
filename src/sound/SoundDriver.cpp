@@ -71,15 +71,15 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
         // we could make this just get the gui to reload our files
         // when (or before) this fails.
         //
-        AudioFile *audioFile = getAudioFile(i->getAudioID());
+        AudioFile *audioFile = getAudioFile(i->getAudioFileID());
 
         if (audioFile) {
             MappedAudioFader *fader =
                 dynamic_cast<MappedAudioFader*>
-                (m_studio->getAudioFader(i->getInstrument()));
+                (m_studio->getAudioFader(i->getInstrumentId()));
 
             if (!fader) {
-                RG_DEBUG << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrument();
+                RG_DEBUG << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrumentId();
                 continue;
             }
 
@@ -99,7 +99,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
             PlayableAudioFile *paf = nullptr;
 
             try {
-                paf = new PlayableAudioFile(i->getInstrument(),
+                paf = new PlayableAudioFile(i->getInstrumentId(),
                                             audioFile,
                                             i->getEventTime(),
                                             i->getAudioStartMarker(),
@@ -138,7 +138,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
             newQueue->addScheduled(paf);
         } else {
             RG_DEBUG << "SoundDriver::initialiseAudioQueue - "
-            << "can't find audio file reference for id " << i->getAudioID();
+            << "can't find audio file reference for id " << i->getAudioFileID();
 
             RG_DEBUG << "SoundDriver::initialiseAudioQueue - "
             << "try reloading the current Rosegarden file";

@@ -238,11 +238,10 @@ void InternalSegmentMapper::fillBuffer()
                     try {
                         // Create mapped event and put it in buffer.
                         // The instrument will be set later by
-                        // ChannelManager, so we set it to zero here.
-                        MappedEvent e(0,
-                                      ***k,  // three stars! what an accolade
-                                      eventTime,
-                                      duration);
+                        // ChannelManager, so we do not set it here.
+                        MappedEvent e(***k);
+                        e.setEventTime(eventTime);
+                        e.setDuration(duration);
 
                         // Somewhat hacky: The MappedEvent ctor makes
                         // events that needn't be inserted invalid.
@@ -256,8 +255,14 @@ void InternalSegmentMapper::fillBuffer()
 
                             if ((**k)->isa(Note::EventType)) {
                                 if (m_segment->getTranspose() != 0) {
-                                    e.setPitch(e.getPitch() +
-                                               m_segment->getTranspose());
+                                    int pitch = e.getPitch() +
+                                            m_segment->getTranspose();
+                                    // Limit to [0, 127].
+                                    if (pitch < 0)
+                                        pitch = 0;
+                                    if (pitch > 127)
+                                        pitch = 127;
+                                    e.setPitch(pitch);
                                 }
                                 if (e.getType() != MappedEvent::MidiNoteOneShot) {
                                     enqueueNoteoff(playTime + playDuration,
@@ -369,7 +374,9 @@ popInsertNoteoff(int trackid, Composition &comp)
     // A noteoff looks like a note with velocity = 0.
     // Our noteoffs already have performance pitch, so
     // don't add segment's transpose.
-    MappedEvent event(0, MappedEvent::MidiNote, pitch, 0);
+    MappedEvent event;
+    event.setType(MappedEvent::MidiNote);
+    event.setData1(pitch);
     event.setEventTime(toRealTime(comp, internalTime));
     event.setTrackId(trackid);
     mapAnEvent(&event);

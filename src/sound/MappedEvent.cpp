@@ -34,24 +34,8 @@
 namespace Rosegarden
 {
 
-MappedEvent::MappedEvent(InstrumentId id,
-                         const Event &e,
-                         const RealTime &eventTime,
-                         const RealTime &duration):
-        m_trackId((int)NoTrack),
-        m_instrument(id),
-        m_type(MidiNote),
-        m_data1(0),
-        m_data2(0),
-        m_eventTime(eventTime),
-        m_duration(duration),
-        m_audioStartMarker(0, 0),
-        m_dataBlockId(0),
-        m_runtimeSegmentId( -1),
-        m_autoFade(false),
-        m_recordedChannel(0),
-        m_recordedDevice(0)
 
+MappedEvent::MappedEvent(const Event &e)
 {
     try {
 
@@ -62,6 +46,7 @@ MappedEvent::MappedEvent(InstrumentId id,
         // defaults set.
 
         if (e.isa(Note::EventType)) {
+            m_type = MidiNote;
             long v = MidiMaxValue;
             e.get<Int>(BaseProperties::VELOCITY, v);
             m_data2 = v;
@@ -98,9 +83,9 @@ MappedEvent::MappedEvent(InstrumentId id,
             // aren't to be output, so we make their MappedEvents invalid.
             // InternalSegmentMapper will then discard those.
             if (text.getTextType() == Text::Annotation || text.getTextType() == Text::LilyPondDirective) {
-                setType(InvalidMappedEvent);
+                m_type = InvalidMappedEvent;
             } else {
-                setType(MappedEvent::Text);
+                m_type = MappedEvent::Text;
 
                 MidiByte midiTextType =
                     (text.getTextType() == Text::Lyric) ?
@@ -109,7 +94,7 @@ MappedEvent::MappedEvent(InstrumentId id,
                 setData1(midiTextType);
 
                 std::string metaMessage = text.getText();
-                addDataString(metaMessage);
+                setDataBlock(metaMessage);
             }
         } else if (e.isa(Key::EventType)) {
             const Rosegarden::Key key(e);
@@ -151,33 +136,8 @@ operator<(const MappedEvent &a, const MappedEvent &b)
     return a.getEventTime() < b.getEventTime();
 }
 
-MappedEvent&
-MappedEvent::operator=(const MappedEvent &mE)
-{
-    if (&mE == this)
-        return * this;
-
-    m_trackId = mE.getTrackId();
-    m_instrument = mE.getInstrument();
-    m_type = mE.getType();
-    m_data1 = mE.getData1();
-    m_data2 = mE.getData2();
-    m_eventTime = mE.getEventTime();
-    m_duration = mE.getDuration();
-    m_audioStartMarker = mE.getAudioStartMarker();
-    m_dataBlockId = mE.getDataBlockId();
-    m_runtimeSegmentId = mE.getRuntimeSegmentId();
-    m_autoFade = mE.isAutoFading();
-    m_fadeInTime = mE.getFadeInTime();
-    m_fadeOutTime = mE.getFadeOutTime();
-    m_recordedChannel = mE.getRecordedChannel();
-    m_recordedDevice = mE.getRecordedDevice();
-
-    return *this;
-}
-
 void
-MappedEvent::addDataString(const std::string& rawData)
+MappedEvent::setDataBlock(const std::string& rawData)
 {
     DataBlockRepository::getInstance()->
         setDataBlockForEvent(this, rawData, true);
@@ -322,6 +282,10 @@ QDebug operator<<(QDebug dbg, const MappedEvent &mE)
 
 //--------------------------------------------------
 
+/// Actual data storage for DataBlockRepository.
+/**
+ * ??? Files?  Really?  Wouldn't memory make more sense and be a lot faster?
+ */
 class DataBlockFile
 {
 public:

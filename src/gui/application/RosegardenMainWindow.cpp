@@ -6655,15 +6655,16 @@ RosegardenMainWindow::slotPlayAudioFile(unsigned int id,
     if (aF == nullptr)
         return ;
 
-    MappedEvent mE(RosegardenDocument::currentDocument->getStudio().
-                   getAudioPreviewInstrument(),
-                   id,
-                   RealTime(-120, 0),
-                   duration,                   // duration
-                   startTime);                // start index
+    MappedEvent mE;
+    mE.setType(MappedEvent::Audio);
+    mE.setInstrumentId(RosegardenDocument::currentDocument->getStudio().
+            getAudioPreviewInstrument());
+    mE.setAudioFileID(id);
+    mE.setEventTime(RealTime(-120, 0));  // two minutes into the past
+    mE.setDuration(duration);
+    mE.setAudioStartMarker(startTime);
 
     StudioControl::sendMappedEvent(mE);
-
 }
 
 void
@@ -6702,17 +6703,20 @@ RosegardenMainWindow::slotDeleteSegments(const SegmentSelection &selection)
 }
 
 void
-RosegardenMainWindow::slotCancelAudioPlayingFile(AudioFileId id)
+RosegardenMainWindow::slotCancelAudioPlayingFile(AudioFileId audioFileID)
 {
-    AudioFile *aF = RosegardenDocument::currentDocument->getAudioFileManager().getAudioFile(id);
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
 
-    if (aF == nullptr)
-        return ;
+    // Make sure the audio file ID is valid.
+    if (!doc->getAudioFileManager().getAudioFile(audioFileID))
+        return;
 
-    MappedEvent mE(RosegardenDocument::currentDocument->getStudio().
-                   getAudioPreviewInstrument(),
-                   MappedEvent::AudioCancel,
-                   id);
+    MappedEvent mE;
+    mE.setInstrumentId(doc->getStudio().getAudioPreviewInstrument());
+    mE.setType(MappedEvent::AudioCancel);
+    mE.setData1(audioFileID);
 
     StudioControl::sendMappedEvent(mE);
 }

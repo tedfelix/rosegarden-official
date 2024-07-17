@@ -740,7 +740,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
             if ((*i)->getType() == MappedEvent::AudioStopped) {
                 //RG_DEBUG << "AUDIO FILE ID = " << int((*i)->getData1()) << " - FILE STOPPED - " << "INSTRUMENT = " << (*i)->getInstrument();
 
-                if (audioManagerDialog && (*i)->getInstrument() ==
+                if (audioManagerDialog && (*i)->getInstrumentId() ==
                         m_doc->getStudio().getAudioPreviewInstrument()) {
                     audioManagerDialog->
                     closePlayingDialog(
@@ -753,7 +753,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                 RG_DEBUG << "processAsynchronousMidi(): Received AudioGeneratePreview: data1 is "
                          << int((*i)->getData1()) << ", data2 "
                          << int((*i)->getData2()) << ", instrument is "
-                         << (*i)->getInstrument();
+                         << (*i)->getInstrumentId();
                 m_doc->finalizeAudioFile((int)(*i)->getData1() +
                                          (int)(*i)->getData2() * 256);
             }
@@ -1200,8 +1200,11 @@ SequenceManager::reinitialiseSequencerStudio()
     if (submasterOuts)
         ports |= MappedEvent::SubmasterOuts;
 
-    MappedEvent mEports(
-            MidiInstrumentBase, MappedEvent::SystemAudioPorts, ports);
+    MappedEvent mEports;
+    mEports.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEports.setType(MappedEvent::SystemAudioPorts);
+    mEports.setData1(ports);
+
     StudioControl::sendMappedEvent(mEports);
 
     // Audio File Format
@@ -1209,9 +1212,11 @@ SequenceManager::reinitialiseSequencerStudio()
     unsigned int audioFileFormat =
             settings.value("audiorecordfileformat", 1).toUInt() ;
 
-    MappedEvent mEff(
-            MidiInstrumentBase, MappedEvent::SystemAudioFileFormat,
-            audioFileFormat);
+    MappedEvent mEff;
+    mEff.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEff.setType(MappedEvent::SystemAudioFileFormat);
+    mEff.setData1(audioFileFormat);
+
     StudioControl::sendMappedEvent(mEff);
 
     settings.endGroup();
@@ -1224,7 +1229,9 @@ SequenceManager::panic()
 
     stop();
 
-    MappedEvent mE(MidiInstrumentBase, MappedEvent::Panic, 0, 0);
+    MappedEvent mE;
+    mE.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mE.setType(MappedEvent::Panic);
     StudioControl::sendMappedEvent(mE);
 }
 
@@ -1767,7 +1774,7 @@ SequenceManager::sendTransportControlStatuses()
 
     // Send JACK transport
     //
-    int jackValue = 0;
+    MidiByte jackValue{0};
     if (jackTransport && jackMaster)
         jackValue = 2;
     else {
@@ -1777,44 +1784,50 @@ SequenceManager::sendTransportControlStatuses()
             jackValue = 0;
     }
 
-    MappedEvent mEjackValue(MidiInstrumentBase,  // InstrumentId
-                            MappedEvent::SystemJackTransport,
-                            MidiByte(jackValue));
+    MappedEvent mEjackValue;
+    mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEjackValue.setType(MappedEvent::SystemJackTransport);
+    mEjackValue.setData1(jackValue);
+
     StudioControl::sendMappedEvent(mEjackValue);
 
 
     // Send MMC transport
     //
-    MappedEvent mEmmcValue(MidiInstrumentBase,  // InstrumentId
-                           MappedEvent::SystemMMCTransport,
-                           MidiByte(mmcMode));
+    MappedEvent mEmmcValue;
+    mEmmcValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEmmcValue.setType(MappedEvent::SystemMMCTransport);
+    mEmmcValue.setData1(mmcMode);
 
     StudioControl::sendMappedEvent(mEmmcValue);
 
 
     // Send MTC transport
     //
-    MappedEvent mEmtcValue(MidiInstrumentBase,  // InstrumentId
-                           MappedEvent::SystemMTCTransport,
-                           MidiByte(mtcMode));
+    MappedEvent mEmtcValue;
+    mEmtcValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEmtcValue.setType(MappedEvent::SystemMTCTransport);
+    mEmtcValue.setData1(mtcMode);
 
     StudioControl::sendMappedEvent(mEmtcValue);
 
 
     // Send MIDI Clock
     //
-    MappedEvent mEmidiClock(MidiInstrumentBase,  // InstrumentId
-                            MappedEvent::SystemMIDIClock,
-                            MidiByte(midiClock));
+    MappedEvent mEmidiClock;
+    mEmidiClock.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEmidiClock.setType(MappedEvent::SystemMIDIClock);
+    mEmidiClock.setData1(midiClock);
 
     StudioControl::sendMappedEvent(mEmidiClock);
 
 
     // Send MIDI Sync Auto-Connect
     //
-    MappedEvent mEmidiSyncAuto(MidiInstrumentBase,  // InstrumentId
-                               MappedEvent::SystemMIDISyncAuto,
-                               MidiByte(midiSyncAuto ? 1 : 0));
+    MappedEvent mEmidiSyncAuto;
+    mEmidiSyncAuto.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEmidiSyncAuto.setType(MappedEvent::SystemMIDISyncAuto);
+    mEmidiSyncAuto.setData1(midiSyncAuto ? 1 : 0);
 
     StudioControl::sendMappedEvent(mEmidiSyncAuto);
 

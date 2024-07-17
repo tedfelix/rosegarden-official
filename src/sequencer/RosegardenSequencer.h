@@ -120,7 +120,7 @@ public:
     void setMappedInstrument(int type, unsigned int id);
 
     /// Puts a mapped event on the m_asyncOutQueue
-    void processMappedEvent(MappedEvent mE);
+    void processMappedEvent(const MappedEvent &mE);
 
 
     // --- DEVICES ---

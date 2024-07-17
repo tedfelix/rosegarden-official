@@ -192,10 +192,10 @@ void ExternalController::send(
     if (!isEnabled())
         return;
 
-    MappedEvent event(NoInstrument,  // instrumentId is ignored
-                      MappedEvent::MidiController,
-                      controlNumber,
-                      MidiByte(value));
+    MappedEvent event;
+    event.setType(MappedEvent::MidiController);
+    event.setData1(controlNumber);
+    event.setData2(value);
     event.setRecordedChannel(channel);
     event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
 
@@ -280,7 +280,7 @@ ExternalController::sendSysExRaw(const std::string &rawString)
                       MappedEvent::MidiSystemMessage,
                       MIDI_SYSTEM_EXCLUSIVE);
     event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-    event.addDataString(rawString);
+    event.setDataBlock(rawString);
 
     // Send it out.
 
