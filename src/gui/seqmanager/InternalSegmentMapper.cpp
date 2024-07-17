@@ -255,8 +255,14 @@ void InternalSegmentMapper::fillBuffer()
 
                             if ((**k)->isa(Note::EventType)) {
                                 if (m_segment->getTranspose() != 0) {
-                                    e.setPitch(e.getPitch() +
-                                               m_segment->getTranspose());
+                                    int pitch = e.getPitch() +
+                                            m_segment->getTranspose();
+                                    // Limit to [0, 127].
+                                    if (pitch < 0)
+                                        pitch = 0;
+                                    if (pitch > 127)
+                                        pitch = 127;
+                                    e.setPitch(pitch);
                                 }
                                 if (e.getType() != MappedEvent::MidiNoteOneShot) {
                                     enqueueNoteoff(playTime + playDuration,

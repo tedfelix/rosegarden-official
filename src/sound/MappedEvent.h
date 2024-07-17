@@ -243,14 +243,7 @@ public:
     TrackId getTrackId() const  { return m_trackId; }
 
     // Pitch
-    void setPitch(MidiByte pitch)
-    {
-        // Keep pitch within MIDI limits
-        if (pitch > MidiMaxValue)
-            m_data1 = MidiMaxValue;
-        else
-            m_data1 = pitch;
-    }
+    void setPitch(MidiByte pitch)  { m_data1 = pitch; }
     MidiByte getPitch() const { return m_data1; }
 
     // Velocity
