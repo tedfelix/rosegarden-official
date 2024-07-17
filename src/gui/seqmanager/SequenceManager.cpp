@@ -735,8 +735,11 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
         break;
     }
 
+    // For each MappedEvent...
     for (i = mC.begin(); i != mC.end(); ++i ) {
-        if ((*i)->getType() >= MappedEvent::Audio) {
+        // Skip MIDI events.  Handle only non-MIDI events.
+        // ??? Use "continue" to reduce code walk/indent.
+        if (!(*i)->isMidi()) {
             if ((*i)->getType() == MappedEvent::AudioStopped) {
                 //RG_DEBUG << "AUDIO FILE ID = " << int((*i)->getData1()) << " - FILE STOPPED - " << "INSTRUMENT = " << (*i)->getInstrument();
 

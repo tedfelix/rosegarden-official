@@ -124,11 +124,12 @@ public:
 
         MidiNoteOneShot          = 1 << 25,  // doesn't need NOTE OFFs
 
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // NOTE: "Audio" is used by isMidi() to differentiate between
+        //       MIDI and non-MIDI events.  Be sure to check isMidi()
+        //       if anything changes here.
+
         // Sent from the gui to play an audio file.
-        // ??? This is used for a comparison to detect MIDI event types.
-        //     That needs to be done in a safer way.  See
-        //     SequenceManager::processAsynchronousMidi() and
-        //     AlsaDriver::processMidiOut().
         Audio                    = 2 << 25,
         // Sent from gui to cancel playing an audio file
         AudioCancel              = 3 << 25,
@@ -179,6 +180,8 @@ public:
         KeySignature             = 23 << 25
 
     } MappedEventType;
+
+    bool isMidi() const  { return (m_type < MappedEvent::Audio); }
 
     typedef enum
     {

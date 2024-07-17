@@ -3755,10 +3755,10 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 
     // NB the MappedEventList is implicitly ordered by time (std::multiset)
 
-    // For each incoming mapped (Rosegarden) event
+    // For each incoming MappedEvent...
     for (MappedEvent *rgEvent : rgEventList) {
         // Skip all non-MIDI events.
-        if (rgEvent->getType() >= MappedEvent::Audio)
+        if (!rgEvent->isMidi())
             continue;
 
         if (rgEvent->getType() == MappedEvent::MidiNote &&
@@ -4064,8 +4064,8 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                                       rgEvent->getData2());
             break;
 
-            // These types do nothing here, so go on to the
-            // next iteration.
+        // These types do nothing here, so go on to the
+        // next iteration.
         case MappedEvent::Audio:
         case MappedEvent::AudioCancel:
         case MappedEvent::AudioLevel:
@@ -4089,8 +4089,8 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
         case MappedEvent::Text:
              continue;
 
-        default:
         case MappedEvent::InvalidMappedEvent:
+        default:
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut() - skipping unrecognised or invalid MappedEvent type";
 #endif
