@@ -369,7 +369,9 @@ popInsertNoteoff(int trackid, Composition &comp)
     // A noteoff looks like a note with velocity = 0.
     // Our noteoffs already have performance pitch, so
     // don't add segment's transpose.
-    MappedEvent event(0, MappedEvent::MidiNote, pitch, 0);
+    MappedEvent event;
+    event.setType(MappedEvent::MidiNote);
+    event.setData1(pitch);
     event.setEventTime(toRealTime(comp, internalTime));
     event.setTrackId(trackid);
     mapAnEvent(&event);

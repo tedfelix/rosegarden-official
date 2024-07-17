@@ -84,11 +84,13 @@ AudioSegmentMapper::fillBuffer()
         RealTime audioStart = m_segment->getAudioStartTime();
         RealTime audioDuration = m_segment->getAudioEndTime() - audioStart;
 
-        MappedEvent e(track->getInstrument(),  // send instrument for audio
-                      m_segment->getAudioFileId(),
-                      eventTime,
-                      audioDuration,
-                      audioStart);
+        MappedEvent e;
+        e.setType(MappedEvent::Audio);
+        e.setInstrumentId(track->getInstrument());
+        e.setAudioFileID(m_segment->getAudioFileId());
+        e.setEventTime(eventTime);
+        e.setDuration(audioDuration);
+        e.setAudioStartMarker(audioStart);
 
         e.setTrackId(track->getId());
         e.setRuntimeSegmentId(m_segment->getRuntimeId());

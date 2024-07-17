@@ -155,10 +155,11 @@ void ChannelManager::insertController(
         MidiByte value,
         MappedInserterBase &inserter)
 {
-    MappedEvent mE(instrument->getId(),
-                   MappedEvent::MidiController,
-                   controller,
-                   value);
+    MappedEvent mE;
+    mE.setType(MappedEvent::MidiController);
+    mE.setInstrumentId(instrument->getId());
+    mE.setData1(controller);
+    mE.setData2(value);
     mE.setRecordedChannel(channel);
     mE.setEventTime(insertTime);
     mE.setTrackId(trackId);

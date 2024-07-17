@@ -219,51 +219,12 @@ public:
     MappedEvent()  { }
 
     /// Construct a MappedEvent from an Event.
+    // ??? Make this explicit and just take Event.  Then fill in the rest
+    //     with setter calls.
     MappedEvent(InstrumentId id,
                 const Event &e,
                 const RealTime &eventTime,
                 const RealTime &duration);
-
-    /// Construct a MidiNote/MidiNoteOneShot MappedEvent.
-    MappedEvent(InstrumentId instrumentId,
-                MappedEventType type,
-                MidiByte pitch,
-                MidiByte velocity,
-                const RealTime &absTime,
-                const RealTime &duration) :
-        m_instrument(instrumentId),
-        m_type(type),
-        m_data1(pitch),
-        m_data2(velocity),
-        m_eventTime(absTime),
-        m_duration(duration)
-    { }
-
-    /// Construct an Audio MappedEvent.
-    MappedEvent(InstrumentId instrumentId,
-                unsigned short audioFileID,
-                const RealTime &eventTime,
-                const RealTime &duration,
-                const RealTime &audioStartMarker) :
-         m_instrument(instrumentId),
-         m_type(Audio),
-         m_data1(audioFileID % 256),  // LSB
-         m_data2(audioFileID / 256),  // MSB
-         m_eventTime(eventTime),
-         m_duration(duration),
-         m_audioStartMarker(audioStartMarker)
-    { }
-
-    /// Construct a MIDI event with data1 and data2 parameters.
-    MappedEvent(InstrumentId instrumentId,
-                MappedEventType type,
-                MidiByte data1,
-                MidiByte data2) :
-         m_instrument(instrumentId),
-         m_type(type),
-         m_data1(data1),
-         m_data2(data2)
-    { }
 
     // Type
     MappedEventType getType() const { return m_type; }
@@ -410,9 +371,9 @@ public:
 
 private:
 
+    MappedEventType m_type{InvalidMappedEvent};
     TrackId m_trackId{NoTrack};
     InstrumentId m_instrument{0};
-    MappedEventType m_type{InvalidMappedEvent};
     MidiByte m_data1{0};
     MidiByte m_data2{0};
     RealTime m_eventTime;

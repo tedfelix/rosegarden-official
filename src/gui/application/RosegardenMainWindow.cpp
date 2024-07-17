@@ -6655,15 +6655,16 @@ RosegardenMainWindow::slotPlayAudioFile(unsigned int id,
     if (aF == nullptr)
         return ;
 
-    MappedEvent mE(RosegardenDocument::currentDocument->getStudio().
-                   getAudioPreviewInstrument(),
-                   id,
-                   RealTime(-120, 0),
-                   duration,                   // duration
-                   startTime);                // start index
+    MappedEvent mE;
+    mE.setType(MappedEvent::Audio);
+    mE.setInstrumentId(RosegardenDocument::currentDocument->getStudio().
+            getAudioPreviewInstrument());
+    mE.setAudioFileID(id);
+    mE.setEventTime(RealTime(-120, 0));  // two minutes into the past
+    mE.setDuration(duration);
+    mE.setAudioStartMarker(startTime);
 
     StudioControl::sendMappedEvent(mE);
-
 }
 
 void

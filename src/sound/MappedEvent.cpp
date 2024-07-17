@@ -37,11 +37,11 @@ namespace Rosegarden
 MappedEvent::MappedEvent(InstrumentId instrumentId,
                          const Event &e,
                          const RealTime &eventTime,
-                         const RealTime &duration):
-        m_instrument(instrumentId),
-        m_type(MidiNote),
-        m_eventTime(eventTime),
-        m_duration(duration)
+                         const RealTime &duration) :
+    m_type(MidiNote),
+    m_instrument(instrumentId),
+    m_eventTime(eventTime),
+    m_duration(duration)
 {
     try {
 

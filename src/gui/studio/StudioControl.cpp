@@ -216,13 +216,13 @@ StudioControl::fillWithImmediateNote(
             oneshot ? MappedEvent::MidiNoteOneShot : MappedEvent::MidiNote;
 
     // Make the event.
-    MappedEvent mappedEvent(
-            instrument->getId(),
-            type,
-            pitch,
-            velocity,
-            RealTime::zero(),  // absTime
-            duration);
+    MappedEvent mappedEvent;
+    mappedEvent.setInstrumentId(instrument->getId());
+    mappedEvent.setType(type);
+    mappedEvent.setData1(pitch);
+    mappedEvent.setData2(velocity);
+    mappedEvent.setDuration(duration);
+
 
     // Since we're not going thru MappedBufMetaIterator::acceptEvent()
     // which checks tracks for muting, we needn't set a track.

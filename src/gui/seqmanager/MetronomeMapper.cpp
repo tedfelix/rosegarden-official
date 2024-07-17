@@ -221,12 +221,13 @@ void MetronomeMapper::fillBuffer()
                 RG_WARNING << "fillBuffer(): Unexpected tick type";
             }
 
-            e = MappedEvent(m_metronome->getInstrument(),
-                            MappedEvent::MidiNoteOneShot,
-                            pitch,
-                            velocity,
-                            eventTime,
-                            tickDuration);
+            e = MappedEvent();
+            e.setInstrumentId(m_metronome->getInstrument());
+            e.setType(MappedEvent::MidiNoteOneShot);
+            e.setData1(pitch);
+            e.setData2(velocity);
+            e.setEventTime(eventTime);
+            e.setDuration(tickDuration);
         }
 
         // Add the event to the buffer.
