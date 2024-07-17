@@ -238,11 +238,10 @@ void InternalSegmentMapper::fillBuffer()
                     try {
                         // Create mapped event and put it in buffer.
                         // The instrument will be set later by
-                        // ChannelManager, so we set it to zero here.
-                        MappedEvent e(0,
-                                      ***k,  // three stars! what an accolade
-                                      eventTime,
-                                      duration);
+                        // ChannelManager, so we do not set it here.
+                        MappedEvent e(***k);
+                        e.setEventTime(eventTime);
+                        e.setDuration(duration);
 
                         // Somewhat hacky: The MappedEvent ctor makes
                         // events that needn't be inserted invalid.

@@ -219,16 +219,11 @@ public:
     MappedEvent()  { }
 
     /// Construct a MappedEvent from an Event.
-    // ??? Make this explicit and just take Event.  Then fill in the rest
-    //     with setter calls.
-    MappedEvent(InstrumentId id,
-                const Event &e,
-                const RealTime &eventTime,
-                const RealTime &duration);
+    explicit MappedEvent(const Event &e);
 
     // Type
-    MappedEventType getType() const { return m_type; }
-    void setType(const MappedEventType &value) { m_type = value; }
+    MappedEventType getType() const  { return m_type; }
+    void setType(const MappedEventType &value)  { m_type = value; }
     bool isValid() const  { return m_type != InvalidMappedEvent; }
 
     // Instrument ID

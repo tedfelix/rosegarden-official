@@ -34,14 +34,8 @@
 namespace Rosegarden
 {
 
-MappedEvent::MappedEvent(InstrumentId instrumentId,
-                         const Event &e,
-                         const RealTime &eventTime,
-                         const RealTime &duration) :
-    m_type(MidiNote),
-    m_instrument(instrumentId),
-    m_eventTime(eventTime),
-    m_duration(duration)
+
+MappedEvent::MappedEvent(const Event &e)
 {
     try {
 
@@ -52,6 +46,7 @@ MappedEvent::MappedEvent(InstrumentId instrumentId,
         // defaults set.
 
         if (e.isa(Note::EventType)) {
+            m_type = MidiNote;
             long v = MidiMaxValue;
             e.get<Int>(BaseProperties::VELOCITY, v);
             m_data2 = v;
@@ -88,9 +83,9 @@ MappedEvent::MappedEvent(InstrumentId instrumentId,
             // aren't to be output, so we make their MappedEvents invalid.
             // InternalSegmentMapper will then discard those.
             if (text.getTextType() == Text::Annotation || text.getTextType() == Text::LilyPondDirective) {
-                setType(InvalidMappedEvent);
+                m_type = InvalidMappedEvent;
             } else {
-                setType(MappedEvent::Text);
+                m_type = MappedEvent::Text;
 
                 MidiByte midiTextType =
                     (text.getTextType() == Text::Lyric) ?
