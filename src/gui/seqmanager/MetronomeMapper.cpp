@@ -196,8 +196,7 @@ void MetronomeMapper::fillBuffer()
         MappedEvent e;
 
         if (tick->second == MidiTimingClockTick) {
-            e = MappedEvent(0,  // Instrument ID is irrelevant
-                            MappedEvent::MidiSystemMessage);
+            e.setType(MappedEvent::MidiSystemMessage);
             e.setData1(MIDI_TIMING_CLOCK);
             e.setEventTime(eventTime);
         } else {
@@ -222,13 +221,13 @@ void MetronomeMapper::fillBuffer()
                 RG_WARNING << "fillBuffer(): Unexpected tick type";
             }
 
-            e = MappedEvent(m_metronome->getInstrument(),
-                            MappedEvent::MidiNoteOneShot,
-                            pitch,
-                            velocity,
-                            eventTime,
-                            tickDuration,
-                            RealTime::zero());  // audioStartMarker
+            e = MappedEvent();
+            e.setInstrumentId(m_metronome->getInstrument());
+            e.setType(MappedEvent::MidiNoteOneShot);
+            e.setData1(pitch);
+            e.setData2(velocity);
+            e.setEventTime(eventTime);
+            e.setDuration(tickDuration);
         }
 
         // Add the event to the buffer.

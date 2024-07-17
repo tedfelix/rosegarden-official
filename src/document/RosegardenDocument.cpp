@@ -741,10 +741,10 @@ void RosegardenDocument::sendChannelSetups(bool reset)
             //     then send the channel setups?  Some hardware might need
             //     time to respond to a reset.
 
-            const MappedEvent mappedEvent(
-                    instrumentId,
-                    MappedEvent::MidiSystemMessage,
-                    MIDI_SYSTEM_RESET);
+            MappedEvent mappedEvent;
+            mappedEvent.setInstrumentId(instrumentId);
+            mappedEvent.setType(MappedEvent::MidiSystemMessage);
+            mappedEvent.setData1(MIDI_SYSTEM_RESET);
 
             StudioControl::sendMappedEvent(mappedEvent);
 
@@ -1071,15 +1071,19 @@ void RosegardenDocument::initialiseStudio()
     if (submasterOuts)
         ports |= MappedEvent::SubmasterOuts;
 
-    MappedEvent mEports(
-            MidiInstrumentBase, MappedEvent::SystemAudioPorts, ports);
+    MappedEvent mEports;
+    mEports.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEports.setType(MappedEvent::SystemAudioPorts);
+    mEports.setData1(ports);
     StudioControl::sendMappedEvent(mEports);
 
     // Send System Audio File Format Event
 
-    MappedEvent mEff(MidiInstrumentBase,
-                     MappedEvent::SystemAudioFileFormat,
-                     audioFileFormat);
+    MappedEvent mEff;
+    mEff.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEff.setType(MappedEvent::SystemAudioFileFormat);
+    mEff.setData1(audioFileFormat);
+
     StudioControl::sendMappedEvent(mEff);
 }
 
