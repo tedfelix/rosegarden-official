@@ -899,7 +899,15 @@ TransportDialog::slotMidiInLabel(const MappedEvent *mE)
         ui->InDisplay->setText(tr("SYS MESSAGE"));
         break;
 
-        // Pacify compiler warnings about missed cases.
+    case MappedEvent::MidiRPN:
+        ui->InDisplay->setText(tr("RPN"));
+        break;
+
+    case MappedEvent::MidiNRPN:
+        ui->InDisplay->setText(tr("NRPN"));
+        break;
+
+    // Pacify compiler warnings about missed cases.
     case MappedEvent::InvalidMappedEvent:
     case MappedEvent::Audio:
     case MappedEvent::AudioCancel:
@@ -988,7 +996,15 @@ TransportDialog::slotMidiOutLabel(const MappedEvent *mE)
         ui->OutDisplay->setText(tr("SYS MESSAGE"));
         break;
 
-        // Pacify compiler warnings about missed cases.
+    case MappedEvent::MidiRPN:
+        ui->OutDisplay->setText(tr("RPN"));
+        break;
+
+    case MappedEvent::MidiNRPN:
+        ui->OutDisplay->setText(tr("NRPN"));
+        break;
+
+    // Pacify compiler warnings about missed cases.
     case MappedEvent::InvalidMappedEvent:
     case MappedEvent::Audio:
     case MappedEvent::AudioCancel:

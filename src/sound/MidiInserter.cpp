@@ -417,6 +417,22 @@ insertCopy(const MappedEvent &evt)
                     break;
                 }
 
+            case MappedEvent::MidiRPN:
+                {
+                    // ??? How do we implement this?  As a series of
+                    //     trackData.insertMidiEvent() calls for each piece?
+
+                    break;
+                }
+
+            case MappedEvent::MidiNRPN:
+                {
+                    // ??? How do we implement this?  As a series of
+                    //     trackData.insertMidiEvent() calls for each piece?
+
+                    break;
+                }
+
             case MappedEvent::Marker:
                 {
                     std::string metaMessage =
