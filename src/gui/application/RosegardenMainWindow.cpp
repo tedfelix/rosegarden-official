@@ -6702,17 +6702,20 @@ RosegardenMainWindow::slotDeleteSegments(const SegmentSelection &selection)
 }
 
 void
-RosegardenMainWindow::slotCancelAudioPlayingFile(AudioFileId id)
+RosegardenMainWindow::slotCancelAudioPlayingFile(AudioFileId audioFileID)
 {
-    AudioFile *aF = RosegardenDocument::currentDocument->getAudioFileManager().getAudioFile(id);
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
 
-    if (aF == nullptr)
-        return ;
+    // Make sure the audio file ID is valid.
+    if (!doc->getAudioFileManager().getAudioFile(audioFileID))
+        return;
 
-    MappedEvent mE(RosegardenDocument::currentDocument->getStudio().
-                   getAudioPreviewInstrument(),
-                   MappedEvent::AudioCancel,
-                   id);
+    MappedEvent mE;
+    mE.setInstrumentId(doc->getStudio().getAudioPreviewInstrument());
+    mE.setType(MappedEvent::AudioCancel);
+    mE.setData1(audioFileID);
 
     StudioControl::sendMappedEvent(mE);
 }

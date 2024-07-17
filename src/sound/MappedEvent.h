@@ -261,15 +261,6 @@ public:
          m_data2(data2)
     { }
 
-    /// Construct a MIDI event with a data1 parameter.
-    MappedEvent(InstrumentId instrumentId,
-                MappedEventType type,
-                MidiByte data1) :
-        m_instrument(instrumentId),
-        m_type(type),
-        m_data1(data1)
-    { }
-
     bool isValid() const  { return m_type != InvalidMappedEvent; }
 
     // Event time
