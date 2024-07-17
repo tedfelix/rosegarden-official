@@ -1229,7 +1229,9 @@ SequenceManager::panic()
 
     stop();
 
-    MappedEvent mE(MidiInstrumentBase, MappedEvent::Panic, 0, 0);
+    MappedEvent mE;
+    mE.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mE.setType(MappedEvent::Panic);
     StudioControl::sendMappedEvent(mE);
 }
 

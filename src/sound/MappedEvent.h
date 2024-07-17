@@ -20,11 +20,15 @@
 #include "base/RealTime.h"
 #include "base/Track.h"
 #include "base/Event.h"
+#include "sound/AudioFile.h"
 
 
 namespace Rosegarden
 {
+
+
 class MappedEvent;
+
 
 /// Used for storing data blocks for SysEx messages.
 /**
@@ -261,7 +265,14 @@ public:
          m_data2(data2)
     { }
 
+    // Type
+    MappedEventType getType() const { return m_type; }
+    void setType(const MappedEventType &value) { m_type = value; }
     bool isValid() const  { return m_type != InvalidMappedEvent; }
+
+    // Instrument ID
+    void setInstrumentId(InstrumentId id)  { m_instrument = id; }
+    InstrumentId getInstrumentId() const  { return m_instrument; }
 
     // Event time
     void setEventTime(const RealTime &eventTime)  { m_eventTime = eventTime; }
@@ -270,10 +281,6 @@ public:
     // Duration
     void setDuration(const RealTime &duration)  { m_duration = duration; }
     RealTime getDuration() const  { return m_duration; }
-
-    // Instrument ID
-    void setInstrumentId(InstrumentId id)  { m_instrument = id; }
-    InstrumentId getInstrumentId() const  { return m_instrument; }
 
     // Track ID
     void setTrackId(TrackId id)  { m_trackId = id; }
@@ -302,8 +309,24 @@ public:
     void setData2(MidiByte d2)  { m_data2 = d2; }
     MidiByte getData2() const  { return m_data2; }
 
+    /// MIDI word to data1/data2.
+    /**
+     * A MIDI word consists of two 7-bit "bytes" for 14-bits total.
+     * Used typically for pitchbend.
+     */
+    void setDataWord(int word)
+    {
+        m_data1 = (word >> 7) & 0x7f;  // MSB
+        m_data2 = word & 0x7f;  // LSB
+    }
+
     // Audio File ID
-    int getAudioFileID() const  { return m_data1 + 256 * m_data2; }
+    void setAudioFileID(AudioFileId id)
+    {
+        m_data1 = id % 256;  // LSB
+        m_data2 = id / 256;  // MSB
+    }
+    AudioFileId getAudioFileID() const  { return m_data1 + 256 * m_data2; }
 
     // Audio Start Marker
     /**
@@ -316,9 +339,6 @@ public:
         { m_audioStartMarker = aS; }
     RealTime getAudioStartMarker() const
         { return m_audioStartMarker; }
-
-    MappedEventType getType() const { return m_type; }
-    void setType(const MappedEventType &value) { m_type = value; }
 
     // Data Block ID
     DataBlockRepository::blockid getDataBlockId() const { return m_dataBlockId; }

@@ -182,10 +182,11 @@ void ChannelManager::insertChannelSetup(
             instrument->sendsBankSelect()) {
             {
                 // Bank Select MSB
-                MappedEvent mE(instrument->getId(),
-                               MappedEvent::MidiController,
-                               MIDI_CONTROLLER_BANK_MSB,
-                               instrument->getMSB());
+                MappedEvent mE;
+                mE.setType(MappedEvent::MidiController);
+                mE.setInstrumentId(instrument->getId());
+                mE.setData1(MIDI_CONTROLLER_BANK_MSB);
+                mE.setData2(instrument->getMSB());
                 mE.setRecordedChannel(channel);
                 mE.setEventTime(insertTime);
                 mE.setTrackId(trackId);
@@ -193,10 +194,11 @@ void ChannelManager::insertChannelSetup(
             }
             {
                 // Bank Select LSB
-                MappedEvent mE(instrument->getId(),
-                               MappedEvent::MidiController,
-                               MIDI_CONTROLLER_BANK_LSB,
-                               instrument->getLSB());
+                MappedEvent mE;
+                mE.setType(MappedEvent::MidiController);
+                mE.setInstrumentId(instrument->getId());
+                mE.setData1(MIDI_CONTROLLER_BANK_LSB);
+                mE.setData2(instrument->getLSB());
                 mE.setRecordedChannel(channel);
                 mE.setEventTime(insertTime);
                 mE.setTrackId(trackId);
@@ -230,10 +232,10 @@ void ChannelManager::insertChannelSetup(
         // In case some controllers are on that we don't know about, turn
         // all controllers off.  (Reset All Controllers)
         try {
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiController,
-                           MIDI_CONTROLLER_RESET,
-                           0);
+            MappedEvent mE;
+            mE.setType(MappedEvent::MidiController);
+            mE.setInstrumentId(instrument->getId());
+            mE.setData1(MIDI_CONTROLLER_RESET);
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
             mE.setTrackId(trackId);
@@ -268,14 +270,12 @@ void ChannelManager::insertChannelSetup(
     // We only do one type of pitchbend, though GM2 allows others.
     if (controllerAndPBList.m_havePitchbend) {
         const int pitchbend = controllerAndPBList.m_pitchbend;
-        const int d1 = (pitchbend >> 7) & 0x7f;
-        const int d2 = pitchbend & 0x7f;
 
         try {
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiPitchBend,
-                           d1,
-                           d2);
+            MappedEvent mE;
+            mE.setType(MappedEvent::MidiPitchBend);
+            mE.setInstrumentId(instrument->getId());
+            mE.setDataWord(pitchbend);
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
             mE.setTrackId(trackId);

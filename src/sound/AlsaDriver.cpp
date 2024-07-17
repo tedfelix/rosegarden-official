@@ -2192,11 +2192,10 @@ AlsaDriver::punchOut()
                     // so use audio id slot to pass back instrument id
                     // and handle accordingly in gui
                     try {
-                        MappedEvent *mE =
-                            new MappedEvent(id,
-                                            MappedEvent::AudioGeneratePreview,
-                                            id % 256,
-                                            id / 256);
+                        MappedEvent *mE = new MappedEvent;
+                        mE->setInstrumentId(id);
+                        mE->setType(MappedEvent::AudioGeneratePreview);
+                        mE->setAudioFileID(id);
 
                         // send completion event
                         insertMappedEventForReturn(mE);
@@ -2647,8 +2646,11 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
     while (failureReportReadIndex != failureReportWriteIndex) {
         MappedEvent::FailureCode code = failureReports[failureReportReadIndex];
         //RG_DEBUG << "getMappedEventList(): failure code: " << code;
-        MappedEvent *mE = new MappedEvent
-            (0, MappedEvent::SystemFailure, code, 0);
+
+        MappedEvent *mE = new MappedEvent;
+        mE->setType(MappedEvent::SystemFailure);
+        mE->setData1(code);
+
         m_returnComposition.insert(mE);
         failureReportReadIndex =
             (failureReportReadIndex + 1) % FAILURE_REPORT_COUNT;
@@ -5938,15 +5940,13 @@ AlsaDriver::cancelAudioFile(const MappedEvent *mE)
         if (! file) continue;
         if (mE->getRuntimeSegmentId() == -1) {
 
-            // ERROR? The comparison between file->getAudioFile()->getId() of type unsigned int
-            //        and mE->getAudioFileID() of type int.
-            if (file->getInstrument() == mE->getInstrumentId() &&
-                    int(file->getAudioFile()->getId()) == mE->getAudioFileID()) {
+            if (file->getInstrument() == mE->getInstrumentId()  &&
+                file->getAudioFile()->getId() == mE->getAudioFileID()) {
                 file->cancel();
             }
         } else {
-            if (file->getRuntimeSegmentId() == mE->getRuntimeSegmentId() &&
-                    file->getStartTime() == mE->getEventTime()) {
+            if (file->getRuntimeSegmentId() == mE->getRuntimeSegmentId()  &&
+                file->getStartTime() == mE->getEventTime()) {
                 file->cancel();
             }
         }
