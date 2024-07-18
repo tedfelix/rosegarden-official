@@ -46,7 +46,7 @@ public:
 
 private slots:
 
-    void slotSetModified(int foo);
+    void slotClicked(bool);
     void accept() override;
     void help();
     void slotApply();
@@ -75,7 +75,7 @@ private:
     QCheckBox *m_sysRecord;
 
     // Used to enable/disable the apply button.
-    bool m_modified{true};
+    bool m_modified{false};
     void setModified(bool modified);
 
     QDialogButtonBox *m_buttonBox;

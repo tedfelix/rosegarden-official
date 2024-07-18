@@ -181,44 +181,40 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
 
     m_applyButton = m_buttonBox->button(QDialogButtonBox::Apply);
     connect(m_applyButton, &QAbstractButton::clicked, this, &MidiFilterDialog::slotApply);
+    // No changes yet, so disable.
+    m_applyButton->setEnabled(false);
 
 
-    connect(m_noteThru, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_progThru, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_keyThru, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_chanThru, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_pitchThru, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_contThru, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_sysThru, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
+    connect(m_noteThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_progThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_keyThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_chanThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_pitchThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_contThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_sysThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
 
-    connect(m_noteRecord, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_progRecord, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_keyRecord, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_chanRecord, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_pitchRecord, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_contRecord, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
-    connect(m_sysRecord, &QCheckBox::stateChanged,
-            this, &MidiFilterDialog::slotSetModified);
+    connect(m_noteRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_progRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_keyRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_chanRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_pitchRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_contRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    connect(m_sysRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
 
-    // setting the thing up initially changes states and trips signals, so we
-    // have to do this to wipe the slate clean initially after all the false
-    // positives
-    // ??? Or we could hook up to clicked() which does not trigger on
-    //     programmatic changes.
-    setModified(false);
 }
 
 void
@@ -292,7 +288,7 @@ MidiFilterDialog::accept()
 }
 
 void
-MidiFilterDialog::slotSetModified(int)
+MidiFilterDialog::slotClicked(bool)
 {
     setModified(true);
 }
