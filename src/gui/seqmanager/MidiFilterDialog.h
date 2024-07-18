@@ -23,6 +23,7 @@
 class QWidget;
 class QGroupBox;
 class QDialogButtonBox;
+class QCheckBox;
 
 
 namespace Rosegarden
@@ -56,6 +57,22 @@ private:
 
     QGroupBox *m_thruBox;
     QGroupBox *m_recordBox;
+
+    QCheckBox *m_noteThru;
+    QCheckBox *m_progThru;
+    QCheckBox *m_keyThru;
+    QCheckBox *m_chanThru;
+    QCheckBox *m_pitchThru;
+    QCheckBox *m_contThru;
+    QCheckBox *m_sysThru;
+
+    QCheckBox *m_noteRecord;
+    QCheckBox *m_progRecord;
+    QCheckBox *m_keyRecord;
+    QCheckBox *m_chanRecord;
+    QCheckBox *m_pitchRecord;
+    QCheckBox *m_contRecord;
+    QCheckBox *m_sysRecord;
 
     // Used to enable/disable the apply button.
     bool m_modified{true};
