@@ -20,7 +20,6 @@
 
 #include <QDialog>
 
-
 class QWidget;
 class QGroupBox;
 class QDialogButtonBox;
@@ -29,9 +28,14 @@ class QDialogButtonBox;
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 
 
+/// The Modify MIDI Filters dialog.  Studio > Modify MIDI Filters...
+/**
+ * This dialog controls thru and record filtering.
+ */
 class MidiFilterDialog : public QDialog
 {
     Q_OBJECT
@@ -39,25 +43,26 @@ public:
     MidiFilterDialog(QWidget *parent,
                      RosegardenDocument *doc);
 
-    void setModified(bool value);
+private slots:
 
-public slots:
-
+    void slotSetModified(int foo);
     void accept() override;
     void help();
     void slotApply();
-    void slotSetModified(int foo = 42);
 
-protected:
+private:
 
     RosegardenDocument *m_doc;
 
-    QGroupBox        *m_thruBox;
-    QGroupBox        *m_recordBox;
+    QGroupBox *m_thruBox;
+    QGroupBox *m_recordBox;
 
-    bool              m_modified;
+    // Used to enable/disable the apply button.
+    bool m_modified{true};
+    void setModified(bool modified);
+
     QDialogButtonBox *m_buttonBox;
-    QPushButton      *m_applyButton;
+    QPushButton *m_applyButton;
 
 };
 

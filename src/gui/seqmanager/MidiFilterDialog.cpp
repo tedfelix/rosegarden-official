@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MidiFilterDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MidiFilterDialog.h"
 
@@ -25,12 +26,14 @@
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/MappedEvent.h"
 #include "misc/Debug.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QWidget>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QUrl>
@@ -42,27 +45,35 @@ namespace Rosegarden
 
 MidiFilterDialog::MidiFilterDialog(QWidget *parent,
                                    RosegardenDocument *doc):
-        QDialog(parent),
-        m_doc(doc),
-        m_modified(true),
-        m_buttonBox(nullptr)
+    QDialog(parent),
+    m_doc(doc),
+    m_buttonBox(nullptr)
 {
     //setHelp("studio-midi-filters");
 
     setModal(true);
-    setWindowTitle(tr("Modify MIDI filters..."));
+    setWindowTitle(tr("Modify MIDI Filters"));
 
+    // Grid Layout for the button box at the bottom.
+    // ??? metaGrid is only used for the button box at the bottom.
+    //     QVBoxLayout would suffice, I think.  Even better, use the
+    //     grid layout for the two group boxes and the button box.
+    //     That will remove one layout.
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
+    // HBox Layout for the two group boxes.
     QWidget *hBox = new QWidget(this);
     QHBoxLayout *hBoxLayout = new QHBoxLayout;
     metagrid->addWidget(hBox, 0, 0);
 
+    // THRU
 
-    m_thruBox = new QGroupBox(
-                         tr("THRU events to ignore"), hBox );
+    m_thruBox = new QGroupBox(tr("THRU events to ignore"), hBox );
+    // VBox Layout for the check boxes in the THRU group box.
     QVBoxLayout *thruBoxLayout = new QVBoxLayout;
     hBoxLayout->addWidget(m_thruBox);
+
+    // ??? Rearrange.
 
     QCheckBox *noteThru = new QCheckBox(tr("Note"), m_thruBox);
     QCheckBox *progThru = new QCheckBox(tr("Program Change"), m_thruBox);
@@ -112,10 +123,14 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     if (thruFilter & MappedEvent::MidiSystemMessage)
         sysThru->setChecked(true);
 
-    m_recordBox = new QGroupBox(
-                         tr("RECORD events to ignore"), hBox );
+    // RECORD
+
+    m_recordBox = new QGroupBox(tr("RECORD events to ignore"), hBox );
+    // VBox Layout for the check boxes in the RECORD group box.
     QVBoxLayout *recordBoxLayout = new QVBoxLayout;
     hBoxLayout->addWidget(m_recordBox);
+
+    // ??? Rearrange.
 
     QCheckBox *noteRecord = new QCheckBox(tr("Note"), m_recordBox);
     QCheckBox *progRecord = new QCheckBox(tr("Program Change"), m_recordBox);
@@ -168,6 +183,8 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
 
     hBox->setLayout(hBoxLayout);
 
+    // Button Box
+
     m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok    |
                                        QDialogButtonBox::Apply |
                                        QDialogButtonBox::Close |
@@ -182,7 +199,6 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     connect(m_applyButton, &QAbstractButton::clicked, this, &MidiFilterDialog::slotApply);
 
 
-    // changing the state of any checkbox sets modified true
     connect(noteThru, &QCheckBox::stateChanged,
             this, &MidiFilterDialog::slotSetModified);
     connect(progThru, &QCheckBox::stateChanged,
@@ -216,6 +232,8 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     // setting the thing up initially changes states and trips signals, so we
     // have to do this to wipe the slate clean initially after all the false
     // positives
+    // ??? Or we could hook up to clicked() which does not trigger on
+    //     programmatic changes.
     setModified(false);
 }
 
@@ -236,8 +254,12 @@ MidiFilterDialog::slotApply()
 {
     RG_DEBUG << "MidiFilterDialog::slotApply()";
 
-    MidiFilter thruFilter = 0,
-               recordFilter = 0;
+    MidiFilter thruFilter{0};
+    MidiFilter recordFilter{0};
+
+    // ??? Instead of all this findChild(), make them members.
+    //     That's a lot faster and less code.  No need to set
+    //     object name.
 
     if (m_thruBox->findChild<QCheckBox*>("Note")->isChecked())
         thruFilter |= MappedEvent::MidiNote;
@@ -281,12 +303,13 @@ MidiFilterDialog::slotApply()
     if (m_recordBox->findChild<QCheckBox*>("System Exclusive")->isChecked())
         recordFilter |= MappedEvent::MidiSystemMessage;
 
+    // Send to Studio
     m_doc->getStudio().setMIDIThruFilter(thruFilter);
     m_doc->getStudio().setMIDIRecordFilter(recordFilter);
 
-    if (m_doc->getSequenceManager()) {
+    // Send to Sequencer
+    if (m_doc->getSequenceManager())
         m_doc->getSequenceManager()->filtersChanged(thruFilter, recordFilter);
-    }
 
     setModified(false);
 }
@@ -305,20 +328,17 @@ MidiFilterDialog::slotSetModified(int)
 }
 
 void
-MidiFilterDialog::setModified(bool value)
+MidiFilterDialog::setModified(bool modified)
 {
-    if (m_modified == value)
-        return ;
+    // No change?  Bail.
+    if (m_modified == modified)
+        return;
 
-    if (! m_applyButton) return;
+    m_modified = modified;
 
-    if (value) {
-        m_applyButton->setEnabled(true);
-    } else {
-        m_applyButton->setEnabled(false);
-    }
+    if (m_applyButton)
+        m_applyButton->setEnabled(m_modified);
 
-    m_modified = value;
 }
 
 
