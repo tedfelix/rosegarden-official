@@ -46,14 +46,14 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     QDialog(parent),
     m_doc(doc)
 {
-    setModal(true);
     setWindowTitle(tr("Modify MIDI Filters"));
+    setModal(true);
 
     // Grid Layout for the button box at the bottom.
     // ??? metaGrid is only used for the button box at the bottom.
     //     QVBoxLayout would suffice, I think.  Even better, use the
     //     grid layout for the two group boxes and the button box.
-    //     That will remove one layout.
+    //     That will remove the HBox layout.
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     // HBox Layout for the two group boxes.
@@ -69,7 +69,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     m_thruBox->setLayout(thruBoxLayout);
     hBoxLayout->addWidget(m_thruBox);
 
-    MidiFilter thruFilter = m_doc->getStudio().getMIDIThruFilter();
+    const MidiFilter thruFilter = m_doc->getStudio().getMIDIThruFilter();
 
     // Note
     m_noteThru = new QCheckBox(tr("Note"), m_thruBox);
@@ -128,7 +128,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     m_recordBox->setLayout(recordBoxLayout);
     hBoxLayout->addWidget(m_recordBox);
 
-    MidiFilter recordFilter = m_doc->getStudio().getMIDIRecordFilter();
+    const MidiFilter recordFilter = m_doc->getStudio().getMIDIRecordFilter();
 
     // Note
     m_noteRecord = new QCheckBox(tr("Note"), m_recordBox);
@@ -189,6 +189,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
                                        QDialogButtonBox::Help);
     metagrid->addWidget(m_buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
+
     connect(m_buttonBox, &QDialogButtonBox::accepted,
             this, &MidiFilterDialog::accept);
     connect(m_buttonBox, &QDialogButtonBox::rejected,
@@ -196,13 +197,12 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     connect(m_buttonBox, &QDialogButtonBox::helpRequested,
             this, &MidiFilterDialog::help);
 
+    // Apply
     m_applyButton = m_buttonBox->button(QDialogButtonBox::Apply);
     connect(m_applyButton, &QAbstractButton::clicked,
             this, &MidiFilterDialog::slotApply);
     // No changes yet, so disable.
     m_applyButton->setEnabled(false);
-
-
 }
 
 void
@@ -292,7 +292,6 @@ MidiFilterDialog::setModified(bool modified)
 
     if (m_applyButton)
         m_applyButton->setEnabled(m_modified);
-
 }
 
 
