@@ -63,102 +63,121 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
 
     // THRU
 
-    m_thruBox = new QGroupBox(tr("THRU events to ignore"), hBox );
+    m_thruBox = new QGroupBox(tr("THRU events to ignore"), hBox);
     // VBox Layout for the check boxes in the THRU group box.
     QVBoxLayout *thruBoxLayout = new QVBoxLayout;
-    hBoxLayout->addWidget(m_thruBox);
-
-    // ??? Rearrange.
-
-    m_noteThru = new QCheckBox(tr("Note"), m_thruBox);
-    m_progThru = new QCheckBox(tr("Program Change"), m_thruBox);
-    m_keyThru = new QCheckBox(tr("Key Pressure"), m_thruBox);
-    m_chanThru = new QCheckBox(tr("Channel Pressure"), m_thruBox);
-    m_pitchThru = new QCheckBox(tr("Pitch Bend"), m_thruBox);
-    m_contThru = new QCheckBox(tr("Controller"), m_thruBox);
-    m_sysThru = new QCheckBox(tr("System Exclusive"), m_thruBox);
-
-    thruBoxLayout->addWidget(m_noteThru);
-    thruBoxLayout->addWidget(m_progThru);
-    thruBoxLayout->addWidget(m_keyThru);
-    thruBoxLayout->addWidget(m_chanThru);
-    thruBoxLayout->addWidget(m_pitchThru);
-    thruBoxLayout->addWidget(m_contThru);
-    thruBoxLayout->addWidget(m_sysThru);
     m_thruBox->setLayout(thruBoxLayout);
+    hBoxLayout->addWidget(m_thruBox);
 
     MidiFilter thruFilter = m_doc->getStudio().getMIDIThruFilter();
 
-    if (thruFilter & MappedEvent::MidiNote)
-        m_noteThru->setChecked(true);
+    // Note
+    m_noteThru = new QCheckBox(tr("Note"), m_thruBox);
+    m_noteThru->setChecked((thruFilter & MappedEvent::MidiNote) != 0);
+    connect(m_noteThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    thruBoxLayout->addWidget(m_noteThru);
 
-    if (thruFilter & MappedEvent::MidiProgramChange)
-        m_progThru->setChecked(true);
+    // Program Change
+    m_progThru = new QCheckBox(tr("Program Change"), m_thruBox);
+    m_progThru->setChecked((thruFilter & MappedEvent::MidiProgramChange) != 0);
+    connect(m_progThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    thruBoxLayout->addWidget(m_progThru);
 
-    if (thruFilter & MappedEvent::MidiKeyPressure)
-        m_keyThru->setChecked(true);
+    // Key Pressure
+    m_keyThru = new QCheckBox(tr("Key Pressure"), m_thruBox);
+    m_keyThru->setChecked((thruFilter & MappedEvent::MidiKeyPressure) != 0);
+    connect(m_keyThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    thruBoxLayout->addWidget(m_keyThru);
 
-    if (thruFilter & MappedEvent::MidiChannelPressure)
-        m_chanThru->setChecked(true);
+    // Channel Pressure
+    m_chanThru = new QCheckBox(tr("Channel Pressure"), m_thruBox);
+    m_chanThru->setChecked((thruFilter & MappedEvent::MidiChannelPressure) != 0);
+    connect(m_chanThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    thruBoxLayout->addWidget(m_chanThru);
 
-    if (thruFilter & MappedEvent::MidiPitchBend)
-        m_pitchThru->setChecked(true);
+    // Pitch Bend
+    m_pitchThru = new QCheckBox(tr("Pitch Bend"), m_thruBox);
+    m_pitchThru->setChecked((thruFilter & MappedEvent::MidiPitchBend) != 0);
+    connect(m_pitchThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    thruBoxLayout->addWidget(m_pitchThru);
 
-    if (thruFilter & MappedEvent::MidiController)
-        m_contThru->setChecked(true);
+    // Controller
+    m_contThru = new QCheckBox(tr("Controller"), m_thruBox);
+    m_contThru->setChecked((thruFilter & MappedEvent::MidiController) != 0);
+    connect(m_contThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    thruBoxLayout->addWidget(m_contThru);
 
-    if (thruFilter & MappedEvent::MidiSystemMessage)
-        m_sysThru->setChecked(true);
+    // System Exclusive
+    m_sysThru = new QCheckBox(tr("System Exclusive"), m_thruBox);
+    m_sysThru->setChecked((thruFilter & MappedEvent::MidiSystemMessage) != 0);
+    connect(m_sysThru, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
+    thruBoxLayout->addWidget(m_sysThru);
 
     // RECORD
 
     m_recordBox = new QGroupBox(tr("RECORD events to ignore"), hBox );
     // VBox Layout for the check boxes in the RECORD group box.
     QVBoxLayout *recordBoxLayout = new QVBoxLayout;
+    m_recordBox->setLayout(recordBoxLayout);
     hBoxLayout->addWidget(m_recordBox);
 
-    // ??? Rearrange.
+    MidiFilter recordFilter = m_doc->getStudio().getMIDIRecordFilter();
 
+    // Note
     m_noteRecord = new QCheckBox(tr("Note"), m_recordBox);
-    m_progRecord = new QCheckBox(tr("Program Change"), m_recordBox);
-    m_keyRecord = new QCheckBox(tr("Key Pressure"), m_recordBox);
-    m_chanRecord = new QCheckBox(tr("Channel Pressure"), m_recordBox);
-    m_pitchRecord = new QCheckBox(tr("Pitch Bend"), m_recordBox);
-    m_contRecord = new QCheckBox(tr("Controller"), m_recordBox);
-    m_sysRecord = new QCheckBox(tr("System Exclusive"), m_recordBox);
-
+    m_noteRecord->setChecked((recordFilter & MappedEvent::MidiNote) != 0);
+    connect(m_noteRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
     recordBoxLayout->addWidget(m_noteRecord);
+
+    // Program Change
+    m_progRecord = new QCheckBox(tr("Program Change"), m_recordBox);
+    m_progRecord->setChecked((recordFilter & MappedEvent::MidiProgramChange) != 0);
+    connect(m_progRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
     recordBoxLayout->addWidget(m_progRecord);
+
+    // Key Pressure
+    m_keyRecord = new QCheckBox(tr("Key Pressure"), m_recordBox);
+    m_keyRecord->setChecked((recordFilter & MappedEvent::MidiKeyPressure) != 0);
+    connect(m_keyRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
     recordBoxLayout->addWidget(m_keyRecord);
+
+    // Channel Pressure
+    m_chanRecord = new QCheckBox(tr("Channel Pressure"), m_recordBox);
+    m_chanRecord->setChecked((recordFilter & MappedEvent::MidiChannelPressure) != 0);
+    connect(m_chanRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
     recordBoxLayout->addWidget(m_chanRecord);
+
+    // Pitch Bend
+    m_pitchRecord = new QCheckBox(tr("Pitch Bend"), m_recordBox);
+    m_pitchRecord->setChecked((recordFilter & MappedEvent::MidiPitchBend) != 0);
+    connect(m_pitchRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
     recordBoxLayout->addWidget(m_pitchRecord);
+
+    // Controller
+    m_contRecord = new QCheckBox(tr("Controller"), m_recordBox);
+    m_contRecord->setChecked((recordFilter & MappedEvent::MidiController) != 0);
+    connect(m_contRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
     recordBoxLayout->addWidget(m_contRecord);
+
+    // System Exclusive
+    m_sysRecord = new QCheckBox(tr("System Exclusive"), m_recordBox);
+    m_sysRecord->setChecked((recordFilter & MappedEvent::MidiSystemMessage) != 0);
+    connect(m_sysRecord, &QCheckBox::clicked,
+            this, &MidiFilterDialog::slotClicked);
     recordBoxLayout->addWidget(m_sysRecord);
-    m_recordBox->setLayout(recordBoxLayout);
-
-    MidiFilter recordFilter =
-        m_doc->getStudio().getMIDIRecordFilter();
-
-    if (recordFilter & MappedEvent::MidiNote)
-        m_noteRecord->setChecked(true);
-
-    if (recordFilter & MappedEvent::MidiProgramChange)
-        m_progRecord->setChecked(true);
-
-    if (recordFilter & MappedEvent::MidiKeyPressure)
-        m_keyRecord->setChecked(true);
-
-    if (recordFilter & MappedEvent::MidiChannelPressure)
-        m_chanRecord->setChecked(true);
-
-    if (recordFilter & MappedEvent::MidiPitchBend)
-        m_pitchRecord->setChecked(true);
-
-    if (recordFilter & MappedEvent::MidiController)
-        m_contRecord->setChecked(true);
-
-    if (recordFilter & MappedEvent::MidiSystemMessage)
-        m_sysRecord->setChecked(true);
 
     hBox->setLayout(hBoxLayout);
 
@@ -183,36 +202,6 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     // No changes yet, so disable.
     m_applyButton->setEnabled(false);
 
-
-    connect(m_noteThru, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_progThru, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_keyThru, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_chanThru, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_pitchThru, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_contThru, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_sysThru, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-
-    connect(m_noteRecord, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_progRecord, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_keyRecord, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_chanRecord, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_pitchRecord, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_contRecord, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
-    connect(m_sysRecord, &QCheckBox::clicked,
-            this, &MidiFilterDialog::slotClicked);
 
 }
 
