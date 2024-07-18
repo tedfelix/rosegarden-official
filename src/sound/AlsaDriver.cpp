@@ -4022,8 +4022,8 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                 sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
                 sysExData += out;
 
-                // Note: sysExData needs to stay around until this event
-                //   is actually sent.  event has a pointer to its contents.
+                // Note: sysExData needs to stay around until this event is
+                //       actually sent.  event has a pointer to its contents.
                 snd_seq_ev_set_sysex(&alsaEvent,
                                      sysExData.length(),
                                      (char*)(sysExData.c_str()));
@@ -4062,6 +4062,26 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                                       channel,
                                       rgEvent->getData1(),
                                       rgEvent->getData2());
+            break;
+
+        case MappedEvent::MidiRPN:
+            // Based on snd_seq_ev_set_controller().
+            // There is no snd_seq_ev_set_regparam().
+            alsaEvent.type = SND_SEQ_EVENT_REGPARAM;
+            snd_seq_ev_set_fixed(&alsaEvent);
+            alsaEvent.data.control.channel = channel;
+            alsaEvent.data.control.param = rgEvent->getNumber();
+            alsaEvent.data.control.value = rgEvent->getValue();
+            break;
+
+        case MappedEvent::MidiNRPN:
+            // Based on snd_seq_ev_set_controller().
+            // There is no snd_seq_ev_set_nonregparam().
+            alsaEvent.type = SND_SEQ_EVENT_NONREGPARAM;
+            snd_seq_ev_set_fixed(&alsaEvent);
+            alsaEvent.data.control.channel = channel;
+            alsaEvent.data.control.param = rgEvent->getNumber();
+            alsaEvent.data.control.value = rgEvent->getValue();
             break;
 
         // These types do nothing here, so go on to the
