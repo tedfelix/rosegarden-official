@@ -46,12 +46,18 @@ class QTreeWidget;
 namespace Rosegarden
 {
 
+
 class Segment;
 class RosegardenDocument;
 class Event;
 
 
 /// The "Event List" window.
+/**
+ * This is the event list editor.
+ *
+ * Segment > Edit With > Open in Event List Editor.  Or just press "E".
+ */
 class EventView : public ListEditView, public SegmentObserver
 {
     Q_OBJECT
@@ -164,20 +170,23 @@ private:
                                timeT duration, int timeMode);
     Segment *getCurrentSegment() override;
 
-    QGroupBox   *m_filterGroup;  // Event filters
-    QCheckBox   *m_noteCheckBox;
-    QCheckBox   *m_programCheckBox;
-    QCheckBox   *m_controllerCheckBox;
-    QCheckBox   *m_pitchBendCheckBox;
-    QCheckBox   *m_sysExCheckBox;
-    QCheckBox   *m_keyPressureCheckBox;
-    QCheckBox   *m_channelPressureCheckBox;
-    QCheckBox   *m_restCheckBox;
-    QCheckBox   *m_indicationCheckBox;
-    QCheckBox   *m_textCheckBox;
-    QCheckBox   *m_generatedRegionCheckBox;
-    QCheckBox   *m_segmentIDCheckBox;
-    QCheckBox   *m_otherCheckBox;
+    // Event filters
+    QGroupBox *m_filterGroup;
+    QCheckBox *m_noteCheckBox;
+    QCheckBox *m_programCheckBox;
+    QCheckBox *m_controllerCheckBox;
+    QCheckBox *m_pitchBendCheckBox;
+    QCheckBox *m_sysExCheckBox;
+    QCheckBox *m_keyPressureCheckBox;
+    QCheckBox *m_channelPressureCheckBox;
+    QCheckBox *m_restCheckBox;
+    QCheckBox *m_indicationCheckBox;
+    QCheckBox *m_textCheckBox;
+    // ??? What is this?
+    QCheckBox *m_generatedRegionCheckBox;
+    // ??? What is this?
+    QCheckBox *m_segmentIDCheckBox;
+    QCheckBox *m_otherCheckBox;
 
     enum EventFilter
     {
@@ -196,7 +205,7 @@ private:
         GeneratedRegion    = 0x0800,
         SegmentID          = 0x1000,
     };
-    int          m_eventFilter;
+    int m_eventFilter{0x1FFF};
 
     // ??? Why is this a tree widget?  When are there ever sub-nodes?
     QTreeWidget *m_eventList;
@@ -207,12 +216,12 @@ private:
     std::set<Event *> m_deletedEvents; // deleted since last refresh
 
     // Pop-up menu for the event list.
-    QMenu       *m_menu;
+    QMenu *m_menu{nullptr};
 
-    bool         m_isTriggerSegment;
-    QLabel      *m_triggerName;
-    QLabel      *m_triggerPitch;
-    QLabel      *m_triggerVelocity;
+    bool m_isTriggerSegment{false};
+    QLabel *m_triggerName{nullptr};
+    QLabel *m_triggerPitch{nullptr};
+    QLabel *m_triggerVelocity{nullptr};
 
 };
 

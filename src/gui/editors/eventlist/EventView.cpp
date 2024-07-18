@@ -16,8 +16,10 @@
 */
 
 #define RG_MODULE_STRING "[EventView]"
+#define RG_NO_DEBUG_PRINT
 
 #include "EventView.h"
+
 #include "EventViewItem.h"
 #include "TrivialVelocityDialog.h"
 
@@ -83,7 +85,7 @@
 #include <QWidget>
 #include <QDesktopServices>
 
-#include <algorithm>
+#include <algorithm>  // std:find()
 
 
 namespace Rosegarden
@@ -91,18 +93,11 @@ namespace Rosegarden
 
 
 EventView::EventView(RosegardenDocument *doc,
-                     const std::vector<Segment *>& segments,
-                     QWidget *parent):
-        ListEditView(segments, 2, parent),
-        m_eventFilter(Note | Text | SystemExclusive | Controller |
-                      ProgramChange | PitchBend | Indication | Other |
-                      GeneratedRegion | SegmentID),
-        m_menu(nullptr)
+                     const std::vector<Segment *> &segments,
+                     QWidget *parent) :
+    ListEditView(segments, 2, parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-
-    m_isTriggerSegment = false;
-    m_triggerName = m_triggerPitch = m_triggerVelocity = nullptr;
 
     if (!segments.empty()) {
         Segment *s = *segments.begin();
@@ -171,6 +166,7 @@ EventView::EventView(RosegardenDocument *doc,
         QGridLayout *layout = new QGridLayout(frame);
         layout->setSpacing(5);
 
+        // Label
         layout->addWidget(new QLabel(tr("Label:  "), frame), 0, 0);
         QString label = strtoqstr(segments[0]->getLabel());
         if (label == "") label = tr("<no label>");
@@ -181,6 +177,7 @@ EventView::EventView(RosegardenDocument *doc,
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerName);
 
+        // Base pitch
         layout->addWidget(new QLabel(tr("Base pitch:  "), frame), 1, 0);
         m_triggerPitch = new QLabel(QString("%1").arg(rec->getBasePitch()), frame);
         layout->addWidget(m_triggerPitch, 1, 1);
@@ -189,6 +186,7 @@ EventView::EventView(RosegardenDocument *doc,
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerPitch);
 
+        // Base velocity
         layout->addWidget(new QLabel(tr("Base velocity:  "), frame), 2, 0);
         m_triggerVelocity = new QLabel(QString("%1").arg(rec->getBaseVelocity()), frame);
         layout->addWidget(m_triggerVelocity, 2, 1);
@@ -258,16 +256,16 @@ EventView::EventView(RosegardenDocument *doc,
     m_eventList->setAllColumnsShowFocus(true);
     m_eventList->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
-    QStringList sl;
-    sl << tr("Time  ");
-    sl << tr("Duration  ");
-    sl << tr("Event Type  ");
-    sl << tr("Pitch  ");
-    sl << tr("Velocity  ");
-    sl << tr("Type (Data1)  ");
-    sl << tr("Type (Data1)  ");
-    sl << tr("Value (Data2)  ");
-    m_eventList->setHeaderLabels(sl);
+    QStringList columnNames;
+    columnNames << tr("Time  ");
+    columnNames << tr("Duration  ");
+    columnNames << tr("Event Type  ");
+    columnNames << tr("Pitch  ");
+    columnNames << tr("Velocity  ");
+    columnNames << tr("Type (Data1)  ");
+    columnNames << tr("Type (Data1)  ");
+    columnNames << tr("Value (Data2)  ");
+    m_eventList->setHeaderLabels(columnNames);
 
     // Make sure time columns have the right amount of space.
     // ??? We should use the font size of "000-00-00-00" as the default size.
@@ -285,23 +283,33 @@ EventView::EventView(RosegardenDocument *doc,
     // Connect the checkboxes AFTER calling setButtonsToFilter() to set up the
     // initial states.  Otherwise, the first state change triggers
     // slotModifyFilter() prematurely, and it wrecks the filter.
-    //
-    // That took an astonishing amount of time to work out.
-    //
-    //
-    connect(m_noteCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_programCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_controllerCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_pitchBendCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_sysExCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_keyPressureCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_channelPressureCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_restCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_indicationCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_textCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_generatedRegionCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_segmentIDCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_otherCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    // ??? Use clicked() instead of stateChanged() to avoid this.
+    connect(m_noteCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_programCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_controllerCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_pitchBendCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_sysExCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_keyPressureCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_channelPressureCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_restCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_indicationCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_textCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_generatedRegionCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_segmentIDCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_otherCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
 
     makeInitialSelection(doc->getComposition().getPosition());
 
@@ -362,24 +370,20 @@ EventView::segmentDeleted(const Segment *s)
 bool
 EventView::applyLayout()
 {
-    // If no selection has already been set then we copy what's
-    // already set and try to replicate this after the rebuild
-    // of the view.
-    //
+    // If no selection, copy UI selection to m_listSelection.
+    // ??? What if it isn't empty, but it is out of sync?
     if (m_listSelection.size() == 0) {
 
-        QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+        QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
 
-        if( selection.count() ){
-
-            for( int i=0; i< selection.count(); i++ ) {
-
+        if (!selection.empty()) {
+            for (int i = 0; i < selection.count(); ++i) {
                 QTreeWidgetItem *listItem = selection.at(i);
-                m_listSelection.push_back( m_eventList->indexOfTopLevelItem(listItem) );
-
+                m_listSelection.push_back(
+                        m_eventList->indexOfTopLevelItem(listItem));
             }
-        }// end if selection.count()
-    }// end if m_listSel..
+        }
+    }
 
     // *** Create the event list.
 
