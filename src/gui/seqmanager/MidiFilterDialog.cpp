@@ -20,8 +20,6 @@
 
 #include "MidiFilterDialog.h"
 
-#include "base/MidiProgram.h"
-#include "base/NotationTypes.h"
 #include "document/RosegardenDocument.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/MappedEvent.h"
@@ -46,11 +44,8 @@ namespace Rosegarden
 MidiFilterDialog::MidiFilterDialog(QWidget *parent,
                                    RosegardenDocument *doc):
     QDialog(parent),
-    m_doc(doc),
-    m_buttonBox(nullptr)
+    m_doc(doc)
 {
-    //setHelp("studio-midi-filters");
-
     setModal(true);
     setWindowTitle(tr("Modify MIDI Filters"));
 
@@ -175,12 +170,16 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
                                        QDialogButtonBox::Help);
     metagrid->addWidget(m_buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(m_buttonBox, &QDialogButtonBox::helpRequested, this, &MidiFilterDialog::help);
+    connect(m_buttonBox, &QDialogButtonBox::accepted,
+            this, &MidiFilterDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected,
+            this, &QDialog::reject);
+    connect(m_buttonBox, &QDialogButtonBox::helpRequested,
+            this, &MidiFilterDialog::help);
 
     m_applyButton = m_buttonBox->button(QDialogButtonBox::Apply);
-    connect(m_applyButton, &QAbstractButton::clicked, this, &MidiFilterDialog::slotApply);
+    connect(m_applyButton, &QAbstractButton::clicked,
+            this, &MidiFilterDialog::slotApply);
     // No changes yet, so disable.
     m_applyButton->setEnabled(false);
 

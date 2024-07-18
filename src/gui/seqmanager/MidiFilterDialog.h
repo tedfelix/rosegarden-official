@@ -41,6 +41,7 @@ class MidiFilterDialog : public QDialog
 {
     Q_OBJECT
 public:
+
     MidiFilterDialog(QWidget *parent,
                      RosegardenDocument *doc);
 
@@ -54,6 +55,8 @@ private slots:
 private:
 
     RosegardenDocument *m_doc;
+
+    // Widgets
 
     QGroupBox *m_thruBox;
     QGroupBox *m_recordBox;
@@ -74,12 +77,13 @@ private:
     QCheckBox *m_contRecord;
     QCheckBox *m_sysRecord;
 
+    QDialogButtonBox *m_buttonBox;
+    QPushButton *m_applyButton;
+
+
     // Used to enable/disable the apply button.
     bool m_modified{false};
     void setModified(bool modified);
-
-    QDialogButtonBox *m_buttonBox;
-    QPushButton *m_applyButton;
 
 };
 
