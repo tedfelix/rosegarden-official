@@ -49,25 +49,17 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     setWindowTitle(tr("Modify MIDI Filters"));
     setModal(true);
 
-    // Grid Layout for the button box at the bottom.
-    // ??? metaGrid is only used for the button box at the bottom.
-    //     QVBoxLayout would suffice, I think.  Even better, use the
-    //     grid layout for the two group boxes and the button box.
-    //     That will remove the HBox layout.
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    // HBox Layout for the two group boxes.
-    QWidget *hBox = new QWidget(this);
-    QHBoxLayout *hBoxLayout = new QHBoxLayout;
-    metagrid->addWidget(hBox, 0, 0);
+    // Main Grid Layout.
+    QGridLayout *gridLayout = new QGridLayout;
+    setLayout(gridLayout);
 
     // THRU
 
-    m_thruBox = new QGroupBox(tr("THRU events to ignore"), hBox);
+    m_thruBox = new QGroupBox(tr("THRU events to ignore"), this);
     // VBox Layout for the check boxes in the THRU group box.
     QVBoxLayout *thruBoxLayout = new QVBoxLayout;
     m_thruBox->setLayout(thruBoxLayout);
-    hBoxLayout->addWidget(m_thruBox);
+    gridLayout->addWidget(m_thruBox, 0, 0);
 
     const MidiFilter thruFilter = m_doc->getStudio().getMIDIThruFilter();
 
@@ -122,11 +114,11 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
 
     // RECORD
 
-    m_recordBox = new QGroupBox(tr("RECORD events to ignore"), hBox );
+    m_recordBox = new QGroupBox(tr("RECORD events to ignore"), this);
     // VBox Layout for the check boxes in the RECORD group box.
     QVBoxLayout *recordBoxLayout = new QVBoxLayout;
     m_recordBox->setLayout(recordBoxLayout);
-    hBoxLayout->addWidget(m_recordBox);
+    gridLayout->addWidget(m_recordBox, 0, 1);
 
     const MidiFilter recordFilter = m_doc->getStudio().getMIDIRecordFilter();
 
@@ -179,16 +171,13 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
             this, &MidiFilterDialog::slotClicked);
     recordBoxLayout->addWidget(m_sysRecord);
 
-    hBox->setLayout(hBoxLayout);
-
     // Button Box
 
     m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok    |
                                        QDialogButtonBox::Apply |
                                        QDialogButtonBox::Close |
                                        QDialogButtonBox::Help);
-    metagrid->addWidget(m_buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    gridLayout->addWidget(m_buttonBox, 1, 0, 1, 2);
 
     connect(m_buttonBox, &QDialogButtonBox::accepted,
             this, &MidiFilterDialog::accept);
