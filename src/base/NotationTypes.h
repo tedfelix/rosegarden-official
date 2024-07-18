@@ -27,7 +27,7 @@
  * NotationTypes.h
  *
  * This file contains definitions of several classes to assist in
- * creating and manipulating certain event types.  The classes are:
+ * creating and manipulating certain Event types.  The classes are:
  *
  *   Accidental
  *   Clef
@@ -56,6 +56,9 @@
  *
  * This file also defines the event types and standard property names
  * for the basic events.
+ *
+ * See MidiTypes.h for MIDI-specific Event types like Controllers and
+ * Program Changes.
  */
 
 namespace Rosegarden

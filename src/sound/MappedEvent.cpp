@@ -59,6 +59,14 @@ MappedEvent::MappedEvent(const Event &e)
             m_type = MidiController;
             m_data1 = e.get<Int>(Controller::NUMBER);
             m_data2 = e.get<Int>(Controller::VALUE);
+        } else if (e.isa(RPN::EventType)) {
+            m_type = MidiRPN;
+            m_number = e.get<Int>(RPN::NUMBER);
+            m_value = e.get<Int>(RPN::VALUE);
+        } else if (e.isa(NRPN::EventType)) {
+            m_type = MidiNRPN;
+            m_number = e.get<Int>(NRPN::NUMBER);
+            m_value = e.get<Int>(NRPN::VALUE);
         } else if (e.isa(ProgramChange::EventType)) {
             m_type = MidiProgramChange;
             m_data1 = e.get<Int>(ProgramChange::PROGRAM);
@@ -190,6 +198,12 @@ QDebug operator<<(QDebug dbg, const MappedEvent &mE)
     case MappedEvent::MidiSystemMessage:
         type = "MidiSystemMessage";
         break;
+    case MappedEvent::MidiRPN:
+        type = "RPN";
+        break;
+    case MappedEvent::MidiNRPN:
+        type = "NRPN";
+        break;
     case MappedEvent::Audio:
         type = "Audio";
         break;
@@ -276,6 +290,8 @@ QDebug operator<<(QDebug dbg, const MappedEvent &mE)
     dbg << "  Fade Out Time:" << mE.m_fadeOutTime << "\n";
     dbg << "  Recorded Channel:" << mE.m_recordedChannel << "\n";
     dbg << "  Recorded Device:" << mE.m_recordedDevice << "\n";
+    dbg << "  Number:" << mE.m_number << "\n";
+    dbg << "  Value:" << mE.m_value << "\n";
 
     return dbg;
 }

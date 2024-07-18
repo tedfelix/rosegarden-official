@@ -45,15 +45,63 @@ Event *PitchBend::makeEvent(timeT absoluteTime, MidiByte msb, MidiByte lsb)
 // Controller
 //////////////////////////////////////////////////////////////////////
 
-const std::string Controller::EventType = "controller";
+const char *Controller::EventType{"controller"};
 
-const PropertyName Controller::NUMBER("number");
-const PropertyName Controller::VALUE("value");
+const PropertyName Controller::NUMBER{"number"};
+const PropertyName Controller::VALUE{"value"};
 
 Event *
 Controller::makeEvent(timeT absoluteTime, MidiByte number, MidiByte value)
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
+    e->set<Int>(NUMBER, number);
+    e->set<Int>(VALUE, value);
+
+    return e;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// RPN
+//////////////////////////////////////////////////////////////////////
+
+const char *RPN::EventType{"rpn"};
+
+const PropertyName RPN::NUMBER{"number"};
+const PropertyName RPN::VALUE{"value"};
+
+Event *
+RPN::makeEvent(timeT absoluteTime, int number, int value)
+{
+    Event *e = new Event(
+            EventType,
+            absoluteTime,
+            0,  // duration
+            EventSubOrdering);
+    e->set<Int>(NUMBER, number);
+    e->set<Int>(VALUE, value);
+
+    return e;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// NRPN
+//////////////////////////////////////////////////////////////////////
+
+const char *NRPN::EventType{"nrpn"};
+
+const PropertyName NRPN::NUMBER{"number"};
+const PropertyName NRPN::VALUE{"value"};
+
+Event *
+NRPN::makeEvent(timeT absoluteTime, int number, int value)
+{
+    Event *e = new Event(
+            EventType,
+            absoluteTime,
+            0,  // duration
+            EventSubOrdering);
     e->set<Int>(NUMBER, number);
     e->set<Int>(VALUE, value);
 

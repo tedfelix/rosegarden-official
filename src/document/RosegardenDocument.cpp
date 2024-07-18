@@ -1997,6 +1997,14 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
             break;
 
+        case MappedEvent::MidiRPN:
+            // ??? Need to implement once the caller is able to generate these.
+            break;
+
+        case MappedEvent::MidiNRPN:
+            // ??? Need to implement once the caller is able to generate these.
+            break;
+
         case MappedEvent::MidiNoteOneShot:
             RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
                      << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot";

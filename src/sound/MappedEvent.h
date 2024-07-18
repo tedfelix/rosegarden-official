@@ -113,6 +113,8 @@ public:
         MidiPitchBend       = 1 << 4,
         MidiController      = 1 << 5,
         MidiSystemMessage   = 1 << 6,
+        MidiRPN             = 1 << 7,
+        MidiNRPN            = 1 << 8,
 
         // The remaining values do not need bitmask/filtering support.
         // We start at bit 26 which gives us 25 bits we
@@ -122,11 +124,12 @@ public:
 
         MidiNoteOneShot          = 1 << 25,  // doesn't need NOTE OFFs
 
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // NOTE: "Audio" is used by isMidi() to differentiate between
+        //       MIDI and non-MIDI events.  Be sure to check isMidi()
+        //       if anything changes here.
+
         // Sent from the gui to play an audio file.
-        // ??? This is used for a comparison to detect MIDI event types.
-        //     That needs to be done in a safer way.  See
-        //     SequenceManager::processAsynchronousMidi() and
-        //     AlsaDriver::processMidiOut().
         Audio                    = 2 << 25,
         // Sent from gui to cancel playing an audio file
         AudioCancel              = 3 << 25,
@@ -178,6 +181,8 @@ public:
 
     } MappedEventType;
 
+    bool isMidi() const  { return (m_type < MappedEvent::Audio); }
+
     typedef enum
     {
         // These values are OR'd to produce the data2 field in a
@@ -215,7 +220,6 @@ public:
         WarningImpreciseTimerTryRTC = 11
     } FailureCode;
 
-    // ??? We should just use this one and get rid of the rest.
     MappedEvent()  { }
 
     /// Construct a MappedEvent from an Event.
@@ -357,6 +361,11 @@ public:
     unsigned int getRecordedDevice() const { return m_recordedDevice; }
     void setRecordedDevice(const unsigned int device) { m_recordedDevice = device; }
 
+    /// RPN/NRPN number.
+    int getNumber() const  { return m_number; }
+    /// RPN/NRPN value.
+    int getValue() const  { return m_value; }
+
 private:
 
     MappedEventType m_type{InvalidMappedEvent};
@@ -384,6 +393,11 @@ private:
     unsigned int m_recordedChannel{0};
     // m_recordedDevice is not used for output.
     unsigned int m_recordedDevice{0};
+
+    // RPN/NRPN number.
+    int m_number{0};
+    // RPN/NRPN value.
+    int m_value{0};
 
     friend QDebug operator<<(QDebug, const MappedEvent &);
 };

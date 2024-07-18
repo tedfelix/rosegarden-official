@@ -3755,10 +3755,10 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 
     // NB the MappedEventList is implicitly ordered by time (std::multiset)
 
-    // For each incoming mapped (Rosegarden) event
+    // For each incoming MappedEvent...
     for (MappedEvent *rgEvent : rgEventList) {
         // Skip all non-MIDI events.
-        if (rgEvent->getType() >= MappedEvent::Audio)
+        if (!rgEvent->isMidi())
             continue;
 
         if (rgEvent->getType() == MappedEvent::MidiNote &&
@@ -4022,8 +4022,8 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                 sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
                 sysExData += out;
 
-                // Note: sysExData needs to stay around until this event
-                //   is actually sent.  event has a pointer to its contents.
+                // Note: sysExData needs to stay around until this event is
+                //       actually sent.  event has a pointer to its contents.
                 snd_seq_ev_set_sysex(&alsaEvent,
                                      sysExData.length(),
                                      (char*)(sysExData.c_str()));
@@ -4064,8 +4064,28 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                                       rgEvent->getData2());
             break;
 
-            // These types do nothing here, so go on to the
-            // next iteration.
+        case MappedEvent::MidiRPN:
+            // Based on snd_seq_ev_set_controller().
+            // There is no snd_seq_ev_set_regparam().
+            alsaEvent.type = SND_SEQ_EVENT_REGPARAM;
+            snd_seq_ev_set_fixed(&alsaEvent);
+            alsaEvent.data.control.channel = channel;
+            alsaEvent.data.control.param = rgEvent->getNumber();
+            alsaEvent.data.control.value = rgEvent->getValue();
+            break;
+
+        case MappedEvent::MidiNRPN:
+            // Based on snd_seq_ev_set_controller().
+            // There is no snd_seq_ev_set_nonregparam().
+            alsaEvent.type = SND_SEQ_EVENT_NONREGPARAM;
+            snd_seq_ev_set_fixed(&alsaEvent);
+            alsaEvent.data.control.channel = channel;
+            alsaEvent.data.control.param = rgEvent->getNumber();
+            alsaEvent.data.control.value = rgEvent->getValue();
+            break;
+
+        // These types do nothing here, so go on to the
+        // next iteration.
         case MappedEvent::Audio:
         case MappedEvent::AudioCancel:
         case MappedEvent::AudioLevel:
@@ -4089,8 +4109,8 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
         case MappedEvent::Text:
              continue;
 
-        default:
         case MappedEvent::InvalidMappedEvent:
+        default:
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut() - skipping unrecognised or invalid MappedEvent type";
 #endif
