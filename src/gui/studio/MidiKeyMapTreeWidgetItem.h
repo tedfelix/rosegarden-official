@@ -41,10 +41,6 @@ public:
 
     int compare(QTreeWidgetItem *i, int col, bool ascending) const override;
 
-    QString getName() const { return m_name; }
-
-protected:
-    QString m_name;
 };
 
 

@@ -115,13 +115,13 @@ Device::getAvailableInstrument(const Composition *composition) const
 
 void Device::addObserver(DeviceObserver *obs)
 {
-    RG_DEBUG << "addObserver" << this << obs;
+    //RG_DEBUG << "addObserver" << this << obs;
     m_observers.push_back(obs);
 }
 
 void Device::removeObserver(DeviceObserver *obs)
 {
-    RG_DEBUG << "removeObserver" << this << obs;
+    //RG_DEBUG << "removeObserver" << this << obs;
     m_observers.remove(obs);
 }
 

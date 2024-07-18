@@ -39,7 +39,8 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     DeviceId device,
     const std::string &name,
     const std::string &librarianName,
-    const std::string &librarianEmail) :
+    const std::string &librarianEmail,
+    const QString& commandName) :
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_device(device),
@@ -56,7 +57,9 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         m_changeControls(false),
         m_changeKeyMappings(false),
         m_clearBankAndProgramList(false)
-{}
+{
+    if (commandName != "") setName(commandName);
+}
 
 void ModifyDeviceCommand::setVariation(MidiDevice::VariationType variationType)
 {

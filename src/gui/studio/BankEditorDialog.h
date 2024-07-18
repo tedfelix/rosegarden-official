@@ -95,11 +95,11 @@ public:
     // Select a device/bank combination
     //
     void selectDeviceBankItem(DeviceId deviceId, int bank);
+    void slotApply();
 
 public slots:
     void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
 
-    void slotApply();
     void slotReset();
 
     void slotUpdate();

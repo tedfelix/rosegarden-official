@@ -30,7 +30,8 @@ namespace Rosegarden
 MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
         QTreeWidget* parent, QString name)
         : QTreeWidgetItem(parent),
-        m_deviceId(deviceId)
+          m_deviceId(deviceId),
+          m_name(name)
 {
     setText( 0, name );
 }
@@ -44,7 +45,8 @@ MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
                                  << QString(percussion ? tr("Percussion Bank") : tr("Bank"))
                                  << QString().setNum(msb)
                                  << QString().setNum(lsb)),
-          m_deviceId(deviceId)
+          m_deviceId(deviceId),
+          m_name(name)
 {
 }
 

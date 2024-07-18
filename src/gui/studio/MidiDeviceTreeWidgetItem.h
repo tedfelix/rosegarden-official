@@ -51,10 +51,13 @@ public:
 
     virtual int compare(QTreeWidgetItem *i, int col, bool ascending) const;
 
+    QString getName() const { return m_name; }
+
 protected:
 
     //--------------- Data members ---------------------------------
     DeviceId m_deviceId;
+    QString m_name;
 };
 
 
