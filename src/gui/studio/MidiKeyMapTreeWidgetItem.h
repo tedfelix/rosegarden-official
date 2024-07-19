@@ -30,14 +30,14 @@ class QTreeWidgetItem;
 namespace Rosegarden
 {
 
-
+class MidiDevice;
 
 class MidiKeyMapTreeWidgetItem : public MidiDeviceTreeWidgetItem
 {
     //Q_OBJECT
 public:
-    MidiKeyMapTreeWidgetItem(DeviceId deviceId,
-                           QTreeWidgetItem* parent, QString name);
+    MidiKeyMapTreeWidgetItem(MidiDevice* device,
+                             QTreeWidgetItem* parent, QString name);
 
     int compare(QTreeWidgetItem *i, int col, bool ascending) const override;
 

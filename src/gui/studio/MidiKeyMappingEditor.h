@@ -50,6 +50,7 @@ public:
 
 public slots:
     void slotNameChanged(const QString &) override;
+    void slotEditingFinished() override;
     void slotKeyMapButtonPressed() override;
 
 protected:

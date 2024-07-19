@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2024 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -121,7 +121,7 @@ MidiKeyMappingEditor::reset()
 
     m_mapping = *m;
 
-    
+
     // Librarian details
     //
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
@@ -164,6 +164,11 @@ MidiKeyMappingEditor::slotNameChanged(const QString &name)
         m_mapping.getMap()[pitch] = qstrtostr(name);
         m_bankEditor->slotApply();
     }
+}
+
+void MidiKeyMappingEditor::slotEditingFinished()
+{
+    RG_DEBUG << "slotEditingFinished";
 }
 
 void

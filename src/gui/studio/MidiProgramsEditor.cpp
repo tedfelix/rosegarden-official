@@ -189,8 +189,8 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
     m_currentBank = &(m_bankList[bankItem->getBank()]);
     m_oldBank = *m_currentBank;
 
-    DeviceId deviceId = bankItem->getDeviceId();
-    m_device = m_bankEditor->getMidiDevice(deviceId);
+    MidiDevice* device = bankItem->getDevice();
+    m_device = device;
     if (!m_device)
         return;
 
@@ -317,6 +317,9 @@ MidiProgramsEditor::slotNewMSB(int value)
 {
     RG_DEBUG << "slotNewMSB(" << value << ")";
 
+    // temp
+    return;
+
     // ??? Not sure we should clean this up since we are getting rid of it.
 
     int msb;
@@ -345,6 +348,11 @@ MidiProgramsEditor::slotNewMSB(int value)
 void
 MidiProgramsEditor::slotNewLSB(int value)
 {
+
+    // temp
+    return;
+
+
     RG_DEBUG << "slotNewLSB(" << value << ")";
 
     // ??? Not sure we should clean this up since we are getting rid of it.
@@ -373,17 +381,15 @@ MidiProgramsEditor::slotNewLSB(int value)
 }
 
 void
-MidiProgramsEditor::slotNameChanged(const QString &programName)
+MidiProgramsEditor::slotNameChanged(const QString&)
 {
-    //RG_DEBUG << "slotNameChanged(" << programName << ")";
+    // no longer used - see slotEditingFinished
+    return;
+}
 
-    // This is called for every single change to the edit box.  E.g.
-    // If the user types "hi", this slot is called twice.  Once with
-    // "h" and again with "hi".
-
-    // ??? Can we be more efficient?  E.g. only make the change when
-    //     the cursor leaves the edit box, or "Ok" is clicked?  That
-    //     would help with the command history spam issue.
+void MidiProgramsEditor::slotEditingFinished()
+{
+    RG_DEBUG << "slotEditingFinished";
 
     if (!m_currentBank) {
         RG_WARNING << "slotNameChanged(): WARNING: m_currentBank is nullptr.";
@@ -397,10 +403,12 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
         return;
     }
 
+    QString programName = lineEdit->text();
+
     // Zero-based program number.  This is the same as the MIDI program change.
     const unsigned programNumber = lineEdit->property("index").toUInt();
 
-    //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << programNumber;
+    RG_DEBUG << "slotEditingFinsihed" << programName << programNumber;
 
     // Get the MidiProgram that needs to be changed from m_programList.
     ProgramList::iterator programIter =

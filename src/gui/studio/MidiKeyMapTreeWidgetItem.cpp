@@ -22,6 +22,7 @@
 #include "MidiDeviceTreeWidgetItem.h"
 #include "MidiBankTreeWidgetItem.h"
 #include "base/Device.h"
+#include "base/MidiDevice.h"
 
 #include <QString>
 #include <QTreeWidget>
@@ -32,10 +33,10 @@
 namespace Rosegarden
 {
 
-MidiKeyMapTreeWidgetItem::MidiKeyMapTreeWidgetItem(DeviceId deviceId,
+MidiKeyMapTreeWidgetItem::MidiKeyMapTreeWidgetItem(MidiDevice* device,
         QTreeWidgetItem* parent,
         QString name)
-        : MidiDeviceTreeWidgetItem(deviceId, parent, name)
+        : MidiDeviceTreeWidgetItem(device, parent, name)
 {
     m_name = name;
     setFlags(flags() | Qt::ItemIsEditable);  //qt4

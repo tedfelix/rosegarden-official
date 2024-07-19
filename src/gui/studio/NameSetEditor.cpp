@@ -156,9 +156,10 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
         lineEdit->setProperty("index", index);
 
         m_names.push_back(lineEdit);
-        connect(m_names[index],
-                &QLineEdit::textEdited,
+        connect(m_names[index], &QLineEdit::textEdited,
                 this, &NameSetEditor::slotNameChanged);
+        connect(m_names[index], &QLineEdit::editingFinished,
+                this, &NameSetEditor::slotEditingFinished);
 
         rowLayout->addWidget(lineEdit, 1);
 

@@ -71,6 +71,7 @@ private slots:
 
     /// One of the program names was changed by the user.
     void slotNameChanged(const QString &) override;
+    void slotEditingFinished() override;
     void slotKeyMapButtonPressed() override;
     void slotKeyMapMenuItemSelected(QAction *action);
 

@@ -38,7 +38,7 @@ class MidiBankTreeWidgetItem : public MidiDeviceTreeWidgetItem
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MidiBankTreeWidgetItem)
 
 public:
-    MidiBankTreeWidgetItem(DeviceId deviceId,
+    MidiBankTreeWidgetItem(MidiDevice* device,
                            int bankNb,
                            QTreeWidgetItem* parent, QString name,
                            bool percussion,

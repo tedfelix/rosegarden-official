@@ -27,6 +27,7 @@
 namespace Rosegarden
 {
 
+class MidiDevice;
 
 class MidiDeviceTreeWidgetItem : public QTreeWidgetItem
 {
@@ -34,20 +35,20 @@ class MidiDeviceTreeWidgetItem : public QTreeWidgetItem
 
 public:
     // Device
-    MidiDeviceTreeWidgetItem(DeviceId deviceId,
+    MidiDeviceTreeWidgetItem(MidiDevice* device,
                              QTreeWidget* parent, QString name);
 
     // Bank
-    MidiDeviceTreeWidgetItem(DeviceId deviceId,
+    MidiDeviceTreeWidgetItem(MidiDevice* device,
                              QTreeWidgetItem* parent, QString name,
                              bool percussion,
                              int msb, int lsb);
 
     // Key Mapping
-    MidiDeviceTreeWidgetItem(DeviceId deviceId,
+    MidiDeviceTreeWidgetItem(MidiDevice* device,
                              QTreeWidgetItem* parent, QString name);
 
-    DeviceId getDeviceId() const { return m_deviceId; }
+    MidiDevice* getDevice() const { return m_device; }
 
     virtual int compare(QTreeWidgetItem *i, int col, bool ascending) const;
 
@@ -56,7 +57,7 @@ public:
 protected:
 
     //--------------- Data members ---------------------------------
-    DeviceId m_deviceId;
+    MidiDevice* m_device;
     QString m_name;
 };
 

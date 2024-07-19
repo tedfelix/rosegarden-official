@@ -64,6 +64,15 @@ public slots:
      */
     virtual void slotNameChanged(const QString &) = 0;
 
+    /// Handler for edit completion in any of the line edit widgets.
+    /**
+     * Connected to LineEdit::editingFinished() for all line edits.
+     *
+     * This is virtual because NameSetEditor does the connect and wants
+     * the derived version.
+     */
+    virtual void slotEditingFinished() = 0;
+
     /// Handler for presses of any of the key map buttons.
     /**
      * Connected to QToolButton::clicked() for all key map buttons.

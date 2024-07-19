@@ -79,8 +79,6 @@ public:
 
     // Get a MidiDevice from an index number
     //
-    MidiDevice* getMidiDevice(DeviceId);
-    MidiDevice* getMidiDevice(QTreeWidgetItem*);
     MidiDevice* getCurrentMidiDevice();
     BankList&   getBankList()     { return m_bankList; }
     ProgramList&getProgramList()  { return m_programList; }

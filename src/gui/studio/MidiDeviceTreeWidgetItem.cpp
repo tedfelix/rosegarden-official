@@ -27,16 +27,16 @@
 namespace Rosegarden
 {
 
-MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
+    MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(MidiDevice* device,
         QTreeWidget* parent, QString name)
         : QTreeWidgetItem(parent),
-          m_deviceId(deviceId),
+          m_device(device),
           m_name(name)
 {
     setText( 0, name );
 }
 
-MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(MidiDevice* device,
         QTreeWidgetItem* parent, QString name,
         bool percussion,
         int msb, int lsb)
@@ -45,17 +45,17 @@ MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
                                  << QString(percussion ? tr("Percussion Bank") : tr("Bank"))
                                  << QString().setNum(msb)
                                  << QString().setNum(lsb)),
-          m_deviceId(deviceId),
+          m_device(device),
           m_name(name)
 {
 }
 
-MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(MidiDevice* device,
                                                    QTreeWidgetItem* parent,
                                                    QString name)
     : QTreeWidgetItem(parent, //name,
                         QStringList() << name << tr("Key Mapping") << "" << ""),
-      m_deviceId(deviceId)
+      m_device(device)
 {
 }
 
@@ -68,8 +68,8 @@ int MidiDeviceTreeWidgetItem::compare(QTreeWidgetItem *i, int col, bool ascendin
     }
     if (col == 0)
         return
-            getDeviceId() > item->getDeviceId() ? 1 :
-            getDeviceId() == item->getDeviceId() ? 0 :
+            getDevice() > item->getDevice() ? 1 :
+            getDevice() == item->getDevice() ? 0 :
             -1;
 
     int thisVal = text(col).toInt(),
