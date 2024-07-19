@@ -13,6 +13,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Device]"
+#define RG_NO_DEBUG_PRINT
+
 #include "Device.h"
 
 #include "base/Controllable.h"
@@ -21,9 +24,6 @@
 #include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
 #include "base/Composition.h"
-
-#define RG_MODULE_STRING "[Device]"
-#define RG_NO_DEBUG_PRINT
 
 namespace Rosegarden
 {
