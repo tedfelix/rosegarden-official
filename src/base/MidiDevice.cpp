@@ -65,6 +65,7 @@ MidiDevice::MidiDevice(DeviceId id,
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>")),
     m_allocator(new AllocateChannels(ChannelSetup::MIDI))
 {
+    //RG_DEBUG << "create midi device" << name << dir;
     createInstruments(ibase);
     generatePresentationList();
     generateDefaultControllers();

@@ -354,10 +354,12 @@ QTreeWidgetItem
 
 
 void
-DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
-                                     MidiDevice::DeviceDirection in_out_direction)
+DeviceManagerDialog::updateDevicesList
+(QTreeWidget * treeWid,
+ MidiDevice::DeviceDirection in_out_direction)
 {
-    RG_DEBUG << "DeviceManagerDialog::updateDevicesList(...)";
+    RG_DEBUG << "DeviceManagerDialog::updateDevicesList(...)" <<
+        in_out_direction;
 
     /**
      * This method:
@@ -400,7 +402,8 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
 
         // if the device does not exist (anymore),
         // auto-remove the device from the list
-        if (!mdev) {    //== Device::NO_DEVICE ){
+        // or if the direction has changed
+        if (!mdev || mdev->getDirection() != in_out_direction) {
             twItem = treeWid->takeTopLevelItem(i); // remove list entry
             //
             delete(twItem);
@@ -423,7 +426,9 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
             mdev = dynamic_cast < MidiDevice * >(device);
             if (mdev && mdev->getDirection() == in_out_direction) {
                 midiDevices << mdev; // append
-                RG_DEBUG << "DeviceManagerDialog: direction matches in_out_direction";
+                RG_DEBUG <<
+                    "DeviceManagerDialog: direction matches in_out_direction" <<
+                    in_out_direction << mdev->getName();
             } else {
                 //RG_DEBUG << "ERROR: mdev is nullptr in updateDevicesList() ";
                 //continue;
@@ -455,6 +460,7 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
             QString nameStr = QObject::tr("%1").arg(strtoqstr(name));
             nameStr = QObject::tr(nameStr.toStdString().c_str());
             // ??? LEAK
+            RG_DEBUG << "create item" << nameStr;
             QTreeWidgetItem *twItem = new QTreeWidgetItem(treeWid, QStringList() << nameStr);
             // set port text
             twItem->setText(1, outPort);
