@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[BankEditorDialog]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "BankEditorDialog.h"
 #include "MidiBankTreeWidgetItem.h"
@@ -81,12 +81,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         QMainWindow(parent),
         m_studio(&doc->getStudio()),
         m_doc(doc),
-        m_copyBank(Device::NO_DEVICE, -1),
         m_keepBankList(false),
         m_deleteAllReally(false),
         m_lastDevice(Device::NO_DEVICE),
         m_updateDeviceList(false)
 {
+    m_clipboard.itemType = ItemType::NONE;
+    m_clipboard.deviceId = Device::NO_DEVICE;
+    m_clipboard.bank = -1;
+    m_clipboard.keymapName = "";
+
     QWidget* mainFrame = new QWidget(this);
     mainFrame->setContentsMargins(1, 1, 1, 1);
     setCentralWidget(mainFrame);
@@ -179,9 +183,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Tips
     //
-    m_copyPrograms->setToolTip(tr("Copy all Program names from current Bank to clipboard"));
+    m_copyPrograms->setToolTip(tr("Copy all Program names from current Bank or Keymap to clipboard"));
 
-    m_pastePrograms->setToolTip(tr("Paste Program names from clipboard to current Bank"));
+    m_pastePrograms->setToolTip(tr("Paste Program names from clipboard to current Bank or Keymap"));
 
 //     connect(m_treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*)),
 //             this, SLOT(slotPopulateDeviceEditors(QTreeWidgetItem*)));
@@ -341,17 +345,8 @@ BankEditorDialog::setupActions()
     createAction("bank_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
-
-//     connect(m_treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*)),
-//             this, SLOT(slotPopulateDeviceEditors(QTreeWidgetItem*)));
-
-//     connect( m_treeWidget, SIGNAL(itemActivated(QTreeWidgetItem*, int)),  //twItem, column
-//              this, SLOT(slotPopulateDeviceEditors(QTreeWidgetItem*, int))  );
-
-
-//     currentItemChanged( QTreeWidgetItem* current, QTreeWidgetItem* previous )
-    connect( m_treeWidget, &QTreeWidget::currentItemChanged,  //twItemCurr, teItemPrev
-             this, &BankEditorDialog::slotPopulateDeviceEditors  );
+    connect(m_treeWidget, &QTreeWidget::currentItemChanged,
+            this, &BankEditorDialog::slotPopulateDeviceEditors);
 
     connect(m_treeWidget, &QTreeWidget::itemChanged, this,
             &BankEditorDialog::slotModifyDeviceOrBankName);
@@ -800,7 +795,8 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     if (!item)
         return ;
 
-    MidiKeyMapTreeWidgetItem *keyItem = dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
+    MidiKeyMapTreeWidgetItem *keyItem =
+        dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
 
     if (keyItem) {
 
@@ -808,6 +804,9 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         leaveActionState("on_bank_item");
 
         m_delete->setEnabled(true);
+        m_copyPrograms->setEnabled(true);
+
+        m_pastePrograms->setEnabled(m_clipboard.itemType == ItemType::KEYMAP);
 
         MidiDevice *device = keyItem->getDevice();
         if (!device)
@@ -837,9 +836,7 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         m_delete->setEnabled(true);
         m_copyPrograms->setEnabled(true);
 
-        m_rightSide->setEnabled(true);
-
-        if (m_copyBank.first != Device::NO_DEVICE) m_pastePrograms->setEnabled(true);
+        m_pastePrograms->setEnabled(m_clipboard.itemType == ItemType::BANK);
 
         MidiDevice *device = bankItem->getDevice();
         if (!device)
@@ -859,6 +856,8 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
 
         m_keyMappingEditor->hide();
         m_programEditor->show();
+
+        m_rightSide->setEnabled(true);
 
         return ;
     }
@@ -954,8 +953,9 @@ BankEditorDialog::slotApply()
                                           device->getLibrarianName(),
                                           device->getLibrarianEmail());
 
-        MidiKeyMapTreeWidgetItem *keyItem = dynamic_cast<MidiKeyMapTreeWidgetItem*>
-                                          (m_treeWidget->currentItem());
+        MidiKeyMapTreeWidgetItem *keyItem =
+            dynamic_cast<MidiKeyMapTreeWidgetItem*>
+            (m_treeWidget->currentItem());
         if (keyItem) {
             KeyMappingList kml(device->getKeyMappings());
             for (size_t i = 0; i < kml.size(); ++i) {
@@ -1199,11 +1199,15 @@ BankEditorDialog::slotDelete()
             // Don't allow pasting from this defunct device
             // do this check before bankItem is deleted
             //
-            if (m_copyBank.first == bankItem->getDevice()->getId() &&
-                    m_copyBank.second == bankItem->getBank()) {
+            if (m_clipboard.itemType == ItemType::BANK &&
+                m_clipboard.deviceId == bankItem->getDevice()->getId() &&
+                m_clipboard.bank == bankItem->getBank()) {
+
                 m_pastePrograms->setEnabled(false);
-                m_copyBank = std::pair<DeviceId, int>
-                             (Device::NO_DEVICE, -1);
+                m_clipboard.itemType = ItemType::NONE;
+                m_clipboard.deviceId = Device::NO_DEVICE;
+                m_clipboard.bank = -1;
+                m_clipboard.keymapName = "";
             }
 
             ModifyDeviceCommand *command = makeCommand(tr("delete MIDI bank"));
@@ -1293,10 +1297,12 @@ BankEditorDialog::slotDeleteAll()
 
         // reset copy/paste
         //
-        if (m_copyBank.first == device->getId()) {
+        if (m_clipboard.deviceId == device->getId()) {
             m_pastePrograms->setEnabled(false);
-            m_copyBank = std::pair<DeviceId, int>
-                (Device::NO_DEVICE, -1);
+            m_clipboard.itemType = ItemType::NONE;
+            m_clipboard.deviceId = Device::NO_DEVICE;
+            m_clipboard.bank = -1;
+            m_clipboard.keymapName = "";
         }
 
         BankList emptyBankList;
@@ -1359,9 +1365,11 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         MidiDeviceTreeWidgetItem* deviceItem =
             getParentDeviceItem(currentItem);
         MidiDevice *device = deviceItem->getDevice();
+        if (! device) return;
         int bankIndex = bankItem->getBank();
         BankList banks = device->getBanks();
-        banks[bankIndex].setName(qstrtostr(label));
+        QString uniqueName = makeUniqueBankName(label, banks);
+        banks[bankIndex].setName(qstrtostr(uniqueName));
 
         RG_DEBUG <<
             "slotModifyDeviceOrBankName : deviceItem->getDeviceId() = " <<
@@ -1383,26 +1391,26 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
             getParentDeviceItem(currentItem);
         MidiDevice *device = deviceItem->getDevice();
 
-        if (device) {
+        if (! device) return;
 
-            ModifyDeviceCommand *command =
-                makeCommand(tr("rename Key Mapping"));
-            if (! command) return;
-            KeyMappingList kml = device->getKeyMappings();
+        ModifyDeviceCommand *command =
+            makeCommand(tr("rename Key Mapping"));
+        if (! command) return;
+        KeyMappingList kml = device->getKeyMappings();
 
-            for (KeyMappingList::iterator i = kml.begin();
-                 i != kml.end(); ++i) {
-                if (i->getName() == qstrtostr(oldName)) {
-                    i->setName(qstrtostr(label));
-                    break;
-                }
+        QString uniqueName = makeUniqueKeymapName(label, kml);
+
+        for (KeyMappingList::iterator i = kml.begin();
+             i != kml.end(); ++i) {
+            if (i->getName() == qstrtostr(oldName)) {
+                i->setName(qstrtostr(uniqueName));
+                break;
             }
-
-            command->setKeyMappingList(kml);
-            command->setOverwrite(true);
-
-            addCommandToHistory(command);
         }
+
+        command->setKeyMappingList(kml);
+
+        addCommandToHistory(command);
 
     } else if (deviceItem) {
         // the device item is non-editable so a device rename cannot
@@ -1444,49 +1452,134 @@ void
 BankEditorDialog::selectDeviceBankItem(DeviceId deviceId,
                                        int bank)
 {
-    /**
-     * sets the device-TreeWidgetItem and bank-TreeWidgetItem with deviceId (visibly) selected
-    **/
-//     QTreeWidgetItem *deviceChild = m_treeWidget->topLevelItem(0);
     QTreeWidgetItem *bankChild;
-//     int deviceCount = 0, bankCount = 0;
-
 
     QTreeWidgetItem *twItemDevice = nullptr;
     MidiDeviceTreeWidgetItem *midiDeviceItem = nullptr;
 
-    int bankI;
     int devI = 0;
-//     while(n < m_treeWidget->childCount()){
-    while( devI < m_treeWidget->topLevelItemCount() ){
-//         bankChild = deviceChild->firstChild();
-
+    int bankI;
+    while (devI < m_treeWidget->topLevelItemCount()) {
         twItemDevice = m_treeWidget->topLevelItem(devI);
         midiDeviceItem = dynamic_cast<MidiDeviceTreeWidgetItem*>(twItemDevice);
-
-        if (midiDeviceItem){    // && bankChild) {
+        if (midiDeviceItem) {
+            if (deviceId != midiDeviceItem->getDevice()->getId()) {
+                devI++;
+                continue;
+            }
 
             bankI = 0;
-            while( bankI < twItemDevice->childCount() ){
+            while (bankI < twItemDevice->childCount()) {
                 bankChild = twItemDevice->child(bankI);
-
-                if ((deviceId == midiDeviceItem->getDevice()->getId()) &&
-                    (bank == bankI)) {
-//                     m_treeWidget->setSelected(bankChild, true);
-                    bankChild->setSelected(true);
-                    return ;
+                MidiBankTreeWidgetItem *bankItem =
+                    dynamic_cast<MidiBankTreeWidgetItem*>(bankChild);
+                if (! bankItem) {
+                    bankI++;
+                    continue;
                 }
-                bankI += 1;
-//             } while ((bankChild = bankChild->nextSibling()));
+
+                if (bank != bankI) {
+                    bankI++;
+                    continue;
+                }
+
+                // found the bank
+                bankChild->setSelected(true);
+                return ;
             }
         }
-
-//         deviceCount++;
-//         bankCount = 0;
         devI += 1;
-//     } while ((deviceChild = deviceChild->nextSibling()));
     }
 }
+
+void BankEditorDialog::selectDeviceKeymapItem
+(DeviceId deviceId, const QString& keymapName)
+{
+    QTreeWidgetItem *keymapChild;
+
+    QTreeWidgetItem *twItemDevice = nullptr;
+    MidiDeviceTreeWidgetItem *midiDeviceItem = nullptr;
+
+    int devI = 0;
+    int keymapI;
+    while (devI < m_treeWidget->topLevelItemCount()) {
+        twItemDevice = m_treeWidget->topLevelItem(devI);
+        midiDeviceItem = dynamic_cast<MidiDeviceTreeWidgetItem*>(twItemDevice);
+        if (midiDeviceItem) {
+            if (deviceId != midiDeviceItem->getDevice()->getId()) {
+                devI++;
+                continue;
+            }
+
+            keymapI = 0;
+            while (keymapI < twItemDevice->childCount()) {
+                keymapChild = twItemDevice->child(keymapI);
+                MidiKeyMapTreeWidgetItem *keyItem =
+                    dynamic_cast<MidiKeyMapTreeWidgetItem*>(keymapChild);
+                if (! keyItem) {
+                    keymapI++;
+                    continue;
+                }
+                if (keyItem->getName() != keymapName) {
+                    keymapI++;
+                    continue;
+                }
+
+                // found the keymap
+                keymapChild->setSelected(true);
+                return;
+            }
+        }
+        devI += 1;
+    }
+}
+
+QString BankEditorDialog::makeUniqueBankName(const QString& name,
+                                             const BankList& banks)
+{
+    QString uniqueName = name;
+    int suffix = 1;
+    while (true) {
+        bool foundName = false;
+        for (size_t i = 0; i < banks.size(); ++i) {
+            const MidiBank& ibank = banks[i];
+            QString iName = strtoqstr(ibank.getName());
+            if (uniqueName == iName) {
+                // not unique
+                foundName = true;
+                uniqueName = QString("%1_%2").arg(name).arg(suffix);
+                suffix++;
+                break;
+            }
+        }
+        if (! foundName) break; // unique
+    }
+    return uniqueName;
+}
+
+QString BankEditorDialog::makeUniqueKeymapName(const QString& name,
+                                               const KeyMappingList& keymaps)
+{
+    QString uniqueName = name;
+    int suffix = 1;
+    while (true) {
+        bool foundName = false;
+        for (size_t i = 0; i < keymaps.size(); ++i) {
+            const MidiKeyMapping& ikeymap = keymaps[i];
+            QString iName = strtoqstr(ikeymap.getName());
+            if (uniqueName == iName) {
+                // not unique
+                foundName = true;
+                uniqueName = QString("%1_%2").arg(name).arg(suffix);
+                suffix++;
+                break;
+            }
+        }
+        if (! foundName) break; // unique
+    }
+    return uniqueName;
+}
+
 
 void
 BankEditorDialog::slotVariationToggled()
@@ -1668,12 +1761,25 @@ BankEditorDialog::slotEdit(QTreeWidgetItem * item, int)
 void
 BankEditorDialog::slotEditCopy()
 {
-    MidiBankTreeWidgetItem* bankItem
-    = dynamic_cast<MidiBankTreeWidgetItem*>(m_treeWidget->currentItem());
+    MidiBankTreeWidgetItem* bankItem =
+        dynamic_cast<MidiBankTreeWidgetItem*>(m_treeWidget->currentItem());
 
     if (bankItem) {
-        m_copyBank = std::pair<DeviceId, int>(bankItem->getDevice()->getId(),
-                                              bankItem->getBank());
+        m_clipboard.itemType = ItemType::BANK;
+        m_clipboard.deviceId = bankItem->getDevice()->getId();
+        m_clipboard.bank = bankItem->getBank();
+        m_clipboard.keymapName = "";
+        m_pastePrograms->setEnabled(true);
+    }
+
+    MidiKeyMapTreeWidgetItem *keyItem =
+        dynamic_cast<MidiKeyMapTreeWidgetItem*>(m_treeWidget->currentItem());
+
+    if (keyItem) {
+        m_clipboard.itemType = ItemType::KEYMAP;
+        m_clipboard.deviceId = keyItem->getDevice()->getId();
+        m_clipboard.bank = -1;
+        m_clipboard.keymapName = keyItem->getName();
         m_pastePrograms->setEnabled(true);
     }
 }
@@ -1682,72 +1788,131 @@ void
 BankEditorDialog::slotEditPaste()
 {
     RG_DEBUG << "slotEditPaste";
-    MidiBankTreeWidgetItem* bankItem
-    = dynamic_cast<MidiBankTreeWidgetItem*>(m_treeWidget->currentItem());
+    MidiBankTreeWidgetItem* bankItem =
+        dynamic_cast<MidiBankTreeWidgetItem*>(m_treeWidget->currentItem());
 
-    if (! bankItem) return;
+    if (bankItem) {
 
-    // Get the full program and bank list for the source device
-    //
-    MidiDevice *device = bankItem->getDevice();
-    BankList bankList = device->getBanks();
+        if (m_clipboard.itemType != ItemType::BANK) return;
+        // Get the full program and bank list for the source device
+        //
+        MidiDevice *device = bankItem->getDevice();
+        BankList bankList = device->getBanks();
 
-    ProgramList::iterator it;
-    ProgramList newPrograms;
-    MidiBank currentBank = bankList[bankItem->getBank()];
+        ProgramList::iterator it;
+        ProgramList newPrograms;
+        MidiBank currentBank = bankList[bankItem->getBank()];
 
-    ProgramList oldPrograms = device->getPrograms(currentBank);
+        ProgramList oldPrograms = device->getPrograms(currentBank);
 
-    // Remove programs that will be overwritten
-    //
-    RG_DEBUG << "slotEditPaste remove programs";
-    for (it = oldPrograms.begin(); it != oldPrograms.end(); ++it) {
-        RG_DEBUG << "slotEditPaste check remove program" << (*it).getName();
-        if (!(it->getBank().compareKey(currentBank))) {
-            RG_DEBUG << "slotEditPaste add program" << (*it).getName();
-            newPrograms.push_back(*it);
+        // Remove programs that will be overwritten
+        //
+        RG_DEBUG << "slotEditPaste remove programs";
+        for (it = oldPrograms.begin(); it != oldPrograms.end(); ++it) {
+            RG_DEBUG << "slotEditPaste check remove program" << (*it).getName();
+            if (!(it->getBank().compareKey(currentBank))) {
+                RG_DEBUG << "slotEditPaste add program" << (*it).getName();
+                newPrograms.push_back(*it);
+            }
         }
+
+        // Now get source list and msb/lsb
+        //
+
+        MidiBank sourceBank = bankList[m_clipboard.bank];
+        Device *tmpDevice = m_studio->getDevice(m_clipboard.deviceId);
+        if (! tmpDevice) return;
+        MidiDevice *sourceDevice = dynamic_cast<MidiDevice *>(tmpDevice);
+        if (! sourceDevice) return;
+        ProgramList sourcePrograms = sourceDevice->getPrograms();
+
+        // Add the new programs
+        //
+        RG_DEBUG << "slotEditPaste copy programs";
+        for (it = sourcePrograms.begin(); it != sourcePrograms.end(); ++it) {
+            RG_DEBUG << "slotEditPaste check copy program" << (*it).getName();
+            if (it->getBank().compareKey(sourceBank)) {
+                // Insert with new MSB and LSB
+                //
+                RG_DEBUG << "slotEditPaste copy program" << (*it).getName();
+                MidiProgram copyProgram(m_lastBank,
+                                        it->getProgram(),
+                                        it->getName());
+
+                newPrograms.push_back(copyProgram);
+            }
+        }
+
+        // Save these for post-apply
+        //
+        DeviceId devPos = device->getId();
+        int bankPos = bankItem->getBank();
+
+        ModifyDeviceCommand *command = makeCommand(tr("paste bank"));
+        if (! command) return;
+        command->setProgramList(newPrograms);
+        addCommandToHistory(command);
+
+        // Select same bank
+        //
+        selectDeviceBankItem(devPos, bankPos);
+        return;
     }
 
-    // Now get source list and msb/lsb
-    //
-    MidiBank sourceBank = bankList[m_copyBank.second];
-    Device *tmpDevice = m_studio->getDevice(m_copyBank.first);
-    if (! tmpDevice) return;
-    MidiDevice *sourceDevice = dynamic_cast<MidiDevice *>(tmpDevice);
-    if (! sourceDevice) return;
-    ProgramList sourcePrograms = sourceDevice->getPrograms();
+    MidiKeyMapTreeWidgetItem *keyItem =
+        dynamic_cast<MidiKeyMapTreeWidgetItem*>(m_treeWidget->currentItem());
+    if (keyItem) {
 
-    // Add the new programs
-    //
-    RG_DEBUG << "slotEditPaste copy programs";
-    for (it = sourcePrograms.begin(); it != sourcePrograms.end(); ++it) {
-        RG_DEBUG << "slotEditPaste check copy program" << (*it).getName();
-        if (it->getBank().compareKey(sourceBank)) {
-            // Insert with new MSB and LSB
-            //
-            RG_DEBUG << "slotEditPaste copy program" << (*it).getName();
-            MidiProgram copyProgram(m_lastBank,
-                                    it->getProgram(),
-                                    it->getName());
+        if (m_clipboard.itemType != ItemType::KEYMAP) return;
 
-            newPrograms.push_back(copyProgram);
+        MidiDevice *device = keyItem->getDevice();
+        QString selectedKeyItemName = keyItem->getName();
+        const KeyMappingList &mappings = device->getKeyMappings();
+
+        RG_DEBUG << "slotEditPaste paste keymap";
+        Device *tmpDevice = m_studio->getDevice(m_clipboard.deviceId);
+        if (! tmpDevice) return;
+        MidiDevice *sourceDevice = dynamic_cast<MidiDevice *>(tmpDevice);
+        if (! sourceDevice) return;
+        const KeyMappingList &sourceMappings = sourceDevice->getKeyMappings();
+        int sourceIndex = -1;
+        for (size_t i = 0; i < sourceMappings.size(); ++i) {
+            if (sourceMappings[i].getName() ==
+                qstrtostr(m_clipboard.keymapName)) {
+                sourceIndex = i;
+                break;
+            }
         }
+        RG_DEBUG << "slotEditPaste sourceIndex" << sourceIndex;
+        if (sourceIndex == -1) return;
+        MidiKeyMapping sourceMap = sourceMappings[sourceIndex];
+        // keep the old name
+        sourceMap.setName(qstrtostr(selectedKeyItemName));
+
+        KeyMappingList newKeymapList;
+        for (size_t i = 0; i < mappings.size(); ++i) {
+            if (mappings[i].getName() == qstrtostr(selectedKeyItemName)) {
+                RG_DEBUG << "slotEditPaste add new keymap" << i;
+                newKeymapList.push_back(sourceMap);
+            } else {
+                RG_DEBUG << "slotEditPaste add old keymap" << i;
+                newKeymapList.push_back(mappings[i]);
+            }
+        }
+
+        DeviceId devPos = device->getId();
+        QString keymapName = m_clipboard.keymapName;
+
+        ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
+        if (! command) return;
+        command->setKeyMappingList(newKeymapList);
+        addCommandToHistory(command);
+
+        // Select same keymap
+        //
+        selectDeviceKeymapItem(devPos, keymapName);
+        return;
     }
-
-    // Save these for post-apply
-    //
-    DeviceId devPos = bankItem->getDevice()->getId();
-    int bankPos = bankItem->getBank();
-
-    ModifyDeviceCommand *command = makeCommand(tr("paste banks"));
-    if (! command) return;
-    command->setProgramList(newPrograms);
-    addCommandToHistory(command);
-
-    // Select same bank
-    //
-    selectDeviceBankItem(devPos, bankPos);
 }
 
 void

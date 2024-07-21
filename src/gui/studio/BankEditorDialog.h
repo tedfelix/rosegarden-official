@@ -94,7 +94,13 @@ public:
     // Select a device/bank combination
     //
     void selectDeviceBankItem(DeviceId deviceId, int bank);
+    void selectDeviceKeymapItem(DeviceId deviceId, const QString& keymapName);
     void slotApply();
+
+    QString makeUniqueBankName(const QString& name,
+                               const BankList& banks);
+    QString makeUniqueKeymapName(const QString& name,
+                                 const KeyMappingList& keymaps);
 
 public slots:
     void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
@@ -178,7 +184,16 @@ protected:
 
     QPushButton             *m_copyPrograms;
     QPushButton             *m_pastePrograms;
-    std::pair<DeviceId, int> m_copyBank;
+
+    enum class ItemType {NONE, DEVICE, BANK, KEYMAP};
+    struct Clipboard
+    {
+        ItemType itemType;
+        DeviceId deviceId;
+        int bank;
+        QString keymapName;
+    };
+    Clipboard m_clipboard;
 
     std::map<DeviceId,
              std::string>    m_deviceNameMap;
