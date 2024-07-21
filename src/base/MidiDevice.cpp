@@ -316,18 +316,21 @@ void
 MidiDevice::clearBankList()
 {
     m_bankList.clear();
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::clearProgramList()
 {
     m_programList.clear();
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::clearKeyMappingList()
 {
     m_keyMappingList.clear();
+    notifyDeviceModified();
 }
 
 void
@@ -342,6 +345,7 @@ MidiDevice::clearControlList()
     }
 
     m_controlList.clear();
+    notifyDeviceModified();
 }
 
 void
@@ -354,12 +358,14 @@ MidiDevice::addProgram(const MidiProgram &prog)
     }
 
     m_programList.push_back(prog);
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::addBank(const MidiBank &bank)
 {
     m_bankList.push_back(bank);
+    notifyDeviceModified();
 }
 
 void
@@ -367,6 +373,7 @@ MidiDevice::setMetronome(const MidiMetronome &metronome)
 {
     delete m_metronome;
     m_metronome = new MidiMetronome(metronome);
+    notifyDeviceModified();
 }
 
 BankList
@@ -509,6 +516,7 @@ MidiDevice::addKeyMapping(const MidiKeyMapping &mapping)
 {
     //!!! handle dup names
     m_keyMappingList.push_back(mapping);
+    notifyDeviceModified();
 }
 
 const MidiKeyMapping *
@@ -548,6 +556,7 @@ MidiDevice::setKeyMappingForProgram(const MidiProgram &program,
             it->setKeyMapping(mapping);
         }
     }
+    notifyDeviceModified();
 }
 
 
@@ -695,6 +704,7 @@ MidiDevice::addInstrument(Instrument *instrument)
 
     m_instruments.push_back(instrument);
     generatePresentationList();
+    notifyDeviceModified();
 }
 
 std::string
@@ -714,18 +724,21 @@ void
 MidiDevice::replaceBankList(const BankList &bankList)
 {
     m_bankList = bankList;
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::replaceProgramList(const ProgramList &programList)
 {
     m_programList = programList;
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::replaceKeyMappingList(const KeyMappingList &keyMappingList)
 {
     m_keyMappingList = keyMappingList;
+    notifyDeviceModified();
 }
 
 
@@ -754,7 +767,7 @@ MidiDevice::mergeBankList(const BankList &bankList)
         else
             clash = false;
     }
-
+    notifyDeviceModified();
 }
 
 void
@@ -780,6 +793,7 @@ MidiDevice::mergeProgramList(const ProgramList &programList)
         else
             clash = false;
     }
+    notifyDeviceModified();
 }
 
 void
@@ -805,6 +819,7 @@ MidiDevice::mergeKeyMappingList(const KeyMappingList &keyMappingList)
         else
             clash = false;
     }
+    notifyDeviceModified();
 }
 
 void
@@ -817,6 +832,7 @@ MidiDevice::addControlParameter(const ControlParameter &con,
             addControlToInstrument(con);
         }
     }
+    notifyDeviceModified();
 }
 
 // Add controller CON at INDEX, shifting further controllers one
@@ -851,6 +867,7 @@ MidiDevice::addControlParameter(const ControlParameter &con, int index,
 
     // Assign the ControlList we just made.
     m_controlList = controls;
+    notifyDeviceModified();
 }
 
 
@@ -871,6 +888,7 @@ MidiDevice::removeControlParameter(int index)
         i++;
     }
 
+    notifyDeviceModified();
     return false;
 }
 
@@ -881,6 +899,7 @@ MidiDevice::modifyControlParameter(const ControlParameter &con, int index)
     removeControlFromInstrument(m_controlList[index]);
     m_controlList[index] = con;
     addControlToInstrument(con);
+    notifyDeviceModified();
     return true;
 }
 
@@ -903,6 +922,7 @@ MidiDevice::replaceControlParameters(const ControlList &con)
     for(; cIt != con.end(); ++cIt) {
         addControlParameter(*cIt, true);
     }
+    notifyDeviceModified();
 }
 
 #if 0

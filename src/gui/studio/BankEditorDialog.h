@@ -52,7 +52,7 @@ class MidiProgramsEditor;
 class MidiKeyMappingEditor;
 class MidiDeviceTreeWidgetItem;
 class MidiDevice;
-
+class ModifyDeviceCommand;
 
 class BankEditorDialog : public QMainWindow, public ActionFileClient,
     public StudioObserver, public DeviceObserver
@@ -73,6 +73,7 @@ public:
 
     std::pair<int, int> getFirstFreeBank(QTreeWidgetItem*);
 
+    ModifyDeviceCommand* makeCommand(const QString& name);
     void addCommandToHistory(Command *command);
 
     void setCurrentDevice(DeviceId device);

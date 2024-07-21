@@ -264,11 +264,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &BankEditorDialog::slotVariationChanged);
 
-//     CommandHistory::getInstance()->attachView(actionCollection());    //&&&
-
-    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
-            this, &BankEditorDialog::slotUpdate);
-
     // Button box
     QDialogButtonBox *btnBox = new QDialogButtonBox(/*QDialogButtonBox::Apply  | */
                                                     QDialogButtonBox::Reset  |
@@ -1101,18 +1096,11 @@ BankEditorDialog::slotAddBank()
         RG_DEBUG <<
             "BankEditorDialog::slotAddBank() : deviceItem->getDeviceId() = " <<
             deviceItem->getDevice()->getId();
-        std::string deviceName = device->getName();
-        ModifyDeviceCommand *command =
-            new ModifyDeviceCommand(m_studio,
-                                    device->getId(),
-                                    deviceName,
-                                    device->getLibrarianName(),
-                                    device->getLibrarianEmail(),
-                                    tr("add MIDI Bank"));
+        ModifyDeviceCommand *command = makeCommand(tr("add MIDI Bank"));
+        if (! command) return;
         command->setBankList(banks);
         addCommandToHistory(command);
 
-        updateDialog();
     }
 }
 
@@ -1140,13 +1128,8 @@ BankEditorDialog::slotAddKeyMapping()
 
         MidiKeyMapping newKeyMapping(qstrtostr(name));
 
-        ModifyDeviceCommand *command = new ModifyDeviceCommand
-                                       (m_studio,
-                                        device->getId(),
-                                        device->getName(),
-                                        device->getLibrarianName(),
-                                        device->getLibrarianEmail());
-
+        ModifyDeviceCommand *command = makeCommand(tr("add Key Mapping"));
+        if (! command) return;
         KeyMappingList kml;
         kml.push_back(newKeyMapping);
         command->setKeyMappingList(kml);
@@ -1155,7 +1138,6 @@ BankEditorDialog::slotAddKeyMapping()
 
         addCommandToHistory(command);
 
-        updateDialog();
         selectDeviceItem(device);
     }
 }
@@ -1224,21 +1206,12 @@ BankEditorDialog::slotDelete()
                              (Device::NO_DEVICE, -1);
             }
 
-            ModifyDeviceCommand *command = new ModifyDeviceCommand
-                (m_studio,
-                 device->getId(),
-                 device->getName(),
-                 device->getLibrarianName(),
-                 device->getLibrarianEmail(),
-                 tr("delete MIDI bank"));
-
+            ModifyDeviceCommand *command = makeCommand(tr("delete MIDI bank"));
+            if (! command) return;
             command->setBankList(newBanks);
             command->setProgramList(newProgramList);
 
             addCommandToHistory(command);
-
-            updateDialog();
-
         }
 
         return ;
@@ -1262,14 +1235,9 @@ BankEditorDialog::slotDelete()
 
             std::string keyMappingName = qstrtostr(keyItem->getName());
 
-            ModifyDeviceCommand *command = new ModifyDeviceCommand
-                                           (m_studio,
-                                            device->getId(),
-                                            device->getName(),
-                                            device->getLibrarianName(),
-                                            device->getLibrarianEmail(),
-                                            tr("delete Key Mapping"));
-
+            ModifyDeviceCommand *command =
+                makeCommand(tr("delete Key Mapping"));
+            if (! command) return;
             KeyMappingList kml = device->getKeyMappings();
 
             for (KeyMappingList::iterator i = kml.begin();
@@ -1289,8 +1257,6 @@ BankEditorDialog::slotDelete()
 
             RG_DEBUG << "device has" <<
                 device->getKeyMappings().size() << "key mappings now";
-
-            updateDialog();
         }
 
         return ;
@@ -1337,22 +1303,13 @@ BankEditorDialog::slotDeleteAll()
         ProgramList emptyProgramList;
         KeyMappingList emptyKeymapList;
 
-        ModifyDeviceCommand *command = new ModifyDeviceCommand
-            (m_studio,
-             device->getId(),
-             device->getName(),
-             device->getLibrarianName(),
-             device->getLibrarianEmail(),
-             tr("delete all"));
-
+        ModifyDeviceCommand *command = makeCommand(tr("delete all"));
+        if (! command) return;
         command->setBankList(emptyBankList);
         command->setProgramList(emptyProgramList);
         command->setKeyMappingList(emptyKeymapList);
 
         addCommandToHistory(command);
-
-        updateDialog();
-
     }
 }
 
@@ -1410,18 +1367,10 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
             "slotModifyDeviceOrBankName : deviceItem->getDeviceId() = " <<
             deviceItem->getDevice()->getId();
         std::string deviceName = device->getName();
-        ModifyDeviceCommand *command =
-            new ModifyDeviceCommand(m_studio,
-                                    device->getId(),
-                                    deviceName,
-                                    device->getLibrarianName(),
-                                    device->getLibrarianEmail(),
-                                    tr("rename MIDI Bank"));
+        ModifyDeviceCommand *command = makeCommand(tr("rename MIDI Bank"));
+        if (! command) return;
         command->setBankList(banks);
         addCommandToHistory(command);
-
-        updateDialog();
-
     } else if (keyItem) {
 
         RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
@@ -1436,17 +1385,13 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
 
         if (device) {
 
-            ModifyDeviceCommand *command = new ModifyDeviceCommand
-                                           (m_studio,
-                                            device->getId(),
-                                            device->getName(),
-                                            device->getLibrarianName(),
-                                            device->getLibrarianEmail());
-
+            ModifyDeviceCommand *command =
+                makeCommand(tr("rename Key Mapping"));
+            if (! command) return;
             KeyMappingList kml = device->getKeyMappings();
 
             for (KeyMappingList::iterator i = kml.begin();
-                    i != kml.end(); ++i) {
+                 i != kml.end(); ++i) {
                 if (i->getName() == qstrtostr(oldName)) {
                     i->setName(qstrtostr(label));
                     break;
@@ -1457,8 +1402,6 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
             command->setOverwrite(true);
 
             addCommandToHistory(command);
-
-            updateDialog();
         }
 
     } else if (deviceItem) {
@@ -1548,14 +1491,67 @@ BankEditorDialog::selectDeviceBankItem(DeviceId deviceId,
 void
 BankEditorDialog::slotVariationToggled()
 {
-    slotApply();
+    if (!m_treeWidget->currentItem())
+        return ;
+
+    ModifyDeviceCommand *command = makeCommand(tr("variation toggled"));
+    if (! command) return;
+    MidiDevice::VariationType variation =
+        MidiDevice::NoVariations;
+    if (m_variationToggle->isChecked()) {
+        if (m_variationCombo->currentIndex() == 0) {
+            variation = MidiDevice::VariationFromLSB;
+        } else {
+            variation = MidiDevice::VariationFromMSB;
+        }
+    }
+
+    command->setVariation(variation);
+    addCommandToHistory(command);
+
     m_variationCombo->setEnabled(m_variationToggle->isChecked());
 }
 
 void
 BankEditorDialog::slotVariationChanged(int)
 {
-    slotApply();
+    if (!m_treeWidget->currentItem())
+        return ;
+
+    ModifyDeviceCommand *command = makeCommand(tr("variation changed"));
+    if (! command) return;
+    MidiDevice::VariationType variation =
+        MidiDevice::NoVariations;
+    if (m_variationToggle->isChecked()) {
+        if (m_variationCombo->currentIndex() == 0) {
+            variation = MidiDevice::VariationFromLSB;
+        } else {
+            variation = MidiDevice::VariationFromMSB;
+        }
+    }
+
+    command->setVariation(variation);
+    addCommandToHistory(command);
+}
+
+ModifyDeviceCommand* BankEditorDialog::makeCommand(const QString& name)
+{
+    if (!m_treeWidget->currentItem())
+        return nullptr;
+
+    QTreeWidgetItem* currentItem = m_treeWidget->currentItem();
+
+    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentItem);
+    if (!deviceItem) return nullptr;
+    MidiDevice *device = deviceItem->getDevice();
+    ModifyDeviceCommand *command =
+        new ModifyDeviceCommand(m_studio,
+                                device->getId(),
+                                device->getName(),
+                                device->getLibrarianName(),
+                                device->getLibrarianEmail(),
+                                name);
+    return command;
 }
 
 void
@@ -1614,7 +1610,6 @@ BankEditorDialog::slotImport()
         }
 
         MidiDevice *device = deviceItem->getDevice();
-        ModifyDeviceCommand *command = nullptr;
 
         BankList banks(dialog->getBanks());
         ProgramList programs(dialog->getPrograms());
@@ -1632,13 +1627,8 @@ BankEditorDialog::slotImport()
             librarianEmail = "";
         }
 
-        command = new ModifyDeviceCommand(m_studio,
-                                          deviceItem->getDevice()->getId(),
-                                          dialog->getDeviceName(),
-                                          librarianName,
-                                          librarianEmail,
-                                          tr("import device"));
-
+        ModifyDeviceCommand *command = makeCommand(tr("import device"));
+        if (! command) return;
         if (dialog->shouldOverwriteBanks()) {
             command->setVariation(variation);
         }
@@ -1657,8 +1647,6 @@ BankEditorDialog::slotImport()
 
         addCommandToHistory(command);
 
-        // No need to redraw the dialog, this is done by
-        // slotUpdate, signalled by the CommandHistory
         if (device) {
             selectDeviceItem(device);
         }
@@ -1693,56 +1681,73 @@ BankEditorDialog::slotEditCopy()
 void
 BankEditorDialog::slotEditPaste()
 {
+    RG_DEBUG << "slotEditPaste";
     MidiBankTreeWidgetItem* bankItem
     = dynamic_cast<MidiBankTreeWidgetItem*>(m_treeWidget->currentItem());
 
-    if (bankItem) {
-        // Get the full program and bank list for the source device
-        //
-        MidiDevice *device = bankItem->getDevice();
-        std::vector<MidiBank> tempBank = device->getBanks();
+    if (! bankItem) return;
 
-        ProgramList::iterator it;
-        std::vector<MidiProgram> tempProg;
+    // Get the full program and bank list for the source device
+    //
+    MidiDevice *device = bankItem->getDevice();
+    BankList bankList = device->getBanks();
 
-        // Remove programs that will be overwritten
-        //
-        for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-            if (!(it->getBank().compareKey(m_lastBank)))
-                tempProg.push_back(*it);
+    ProgramList::iterator it;
+    ProgramList newPrograms;
+    MidiBank currentBank = bankList[bankItem->getBank()];
+
+    ProgramList oldPrograms = device->getPrograms(currentBank);
+
+    // Remove programs that will be overwritten
+    //
+    RG_DEBUG << "slotEditPaste remove programs";
+    for (it = oldPrograms.begin(); it != oldPrograms.end(); ++it) {
+        RG_DEBUG << "slotEditPaste check remove program" << (*it).getName();
+        if (!(it->getBank().compareKey(currentBank))) {
+            RG_DEBUG << "slotEditPaste add program" << (*it).getName();
+            newPrograms.push_back(*it);
         }
-        m_programList = tempProg;
-
-        // Now get source list and msb/lsb
-        //
-        tempProg = device->getPrograms();
-        MidiBank sourceBank = tempBank[m_copyBank.second];
-
-        // Add the new programs
-        //
-        for (it = tempProg.begin(); it != tempProg.end(); ++it) {
-            if (it->getBank().compareKey(sourceBank)) {
-                // Insert with new MSB and LSB
-                //
-                MidiProgram copyProgram(m_lastBank,
-                                        it->getProgram(),
-                                        it->getName());
-
-                m_programList.push_back(copyProgram);
-            }
-        }
-
-        // Save these for post-apply
-        //
-        DeviceId devPos = bankItem->getDevice()->getId();
-        int bankPos = bankItem->getBank();
-
-        slotApply();
-
-        // Select same bank
-        //
-        selectDeviceBankItem(devPos, bankPos);
     }
+
+    // Now get source list and msb/lsb
+    //
+    MidiBank sourceBank = bankList[m_copyBank.second];
+    Device *tmpDevice = m_studio->getDevice(m_copyBank.first);
+    if (! tmpDevice) return;
+    MidiDevice *sourceDevice = dynamic_cast<MidiDevice *>(tmpDevice);
+    if (! sourceDevice) return;
+    ProgramList sourcePrograms = sourceDevice->getPrograms();
+
+    // Add the new programs
+    //
+    RG_DEBUG << "slotEditPaste copy programs";
+    for (it = sourcePrograms.begin(); it != sourcePrograms.end(); ++it) {
+        RG_DEBUG << "slotEditPaste check copy program" << (*it).getName();
+        if (it->getBank().compareKey(sourceBank)) {
+            // Insert with new MSB and LSB
+            //
+            RG_DEBUG << "slotEditPaste copy program" << (*it).getName();
+            MidiProgram copyProgram(m_lastBank,
+                                    it->getProgram(),
+                                    it->getName());
+
+            newPrograms.push_back(copyProgram);
+        }
+    }
+
+    // Save these for post-apply
+    //
+    DeviceId devPos = bankItem->getDevice()->getId();
+    int bankPos = bankItem->getBank();
+
+    ModifyDeviceCommand *command = makeCommand(tr("paste banks"));
+    if (! command) return;
+    command->setProgramList(newPrograms);
+    addCommandToHistory(command);
+
+    // Select same bank
+    //
+    selectDeviceBankItem(devPos, bankPos);
 }
 
 void
