@@ -835,15 +835,17 @@ void RosegardenMainViewWidget::slotEditSegmentEventList(Segment *p)
     slotEditSegmentsEventList(segmentsToEdit);
 }
 
-void RosegardenMainViewWidget::slotEditSegmentsEventList(const std::vector<Segment *>& segmentsToEdit)
+void RosegardenMainViewWidget::slotEditSegmentsEventList(
+        const std::vector<Segment *> &segmentsToEdit)
 {
     int count = 0;
-    for (std::vector<Segment *>::const_iterator i = segmentsToEdit.begin();
-            i != segmentsToEdit.end(); ++i) {
-        std::vector<Segment *> tmpvec;
-        tmpvec.push_back(*i);
-        EventView *view = createEventView(tmpvec);
+    for (std::vector<Segment *>::const_iterator segmentIter =
+             segmentsToEdit.begin();
+         segmentIter != segmentsToEdit.end();
+         ++segmentIter) {
+        EventView *view = createEventView(*segmentIter);
         if (view) {
+            // ??? Why does it start out hidden?
             view->show();
             if (++count == maxEditorsToOpen)
                 break;
@@ -1900,10 +1902,14 @@ RosegardenMainViewWidget::initChordNameRuler()
 }
 
 EventView *
-RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
+RosegardenMainViewWidget::createEventView(Segment *segment)
 {
+    // ??? EventView expects a vector for some reason.  Can we change that?
+    std::vector<Segment *> segments;
+    segments.push_back(segment);
+
     EventView *eventView = new EventView(RosegardenDocument::currentDocument,
-                                         segmentsToEdit,
+                                         segments,
                                          this);
 
     connect(eventView, &EditViewBase::selectTrack,
@@ -1912,18 +1918,18 @@ RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
     connect(eventView, &EditViewBase::openInNotation,
             this, &RosegardenMainViewWidget::slotEditSegmentsNotation);
-    connect(eventView, SIGNAL(openInMatrix(std::vector<Segment *>)),
-        this, SLOT(slotEditSegmentsMatrix(std::vector<Segment *>)));
-    connect(eventView, SIGNAL(openInPercussionMatrix(std::vector<Segment *>)),
-        this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
-    connect(eventView, SIGNAL(openInEventList(std::vector<Segment *>)),
-        this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
+    connect(eventView, &EditViewBase::openInMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsMatrix);
+    connect(eventView, &EditViewBase::openInPercussionMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix);
+    connect(eventView, &EditViewBase::openInEventList,
+            this, &RosegardenMainViewWidget::slotEditSegmentsEventList);
     connect(eventView, &EventView::editTriggerSegment,
-        this, &RosegardenMainViewWidget::slotEditTriggerSegment);
+            this, &RosegardenMainViewWidget::slotEditTriggerSegment);
     connect(this, &RosegardenMainViewWidget::compositionStateUpdate,
-        eventView, &EditViewBase::slotCompositionStateUpdate);
+            eventView, &EditViewBase::slotCompositionStateUpdate);
     connect(RosegardenMainWindow::self(), &RosegardenMainWindow::compositionStateUpdate,
-        eventView, &EditViewBase::slotCompositionStateUpdate);
+            eventView, &EditViewBase::slotCompositionStateUpdate);
     connect(eventView, &EditViewBase::toggleSolo,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 

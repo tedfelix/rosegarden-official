@@ -18,7 +18,6 @@
 #ifndef RG_ROSEGARDENMAINWINDOW_H
 #define RG_ROSEGARDENMAINWINDOW_H
 
-#include "gui/application/RosegardenMainViewWidget.h"
 #include "base/MidiProgram.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/widgets/ZoomSlider.h"
@@ -60,6 +59,7 @@ class QAction;
 namespace Rosegarden
 {
 
+class RosegardenMainViewWidget;
 class TriggerSegmentManager;
 class TransportDialog;
 class TrackParameterBox;

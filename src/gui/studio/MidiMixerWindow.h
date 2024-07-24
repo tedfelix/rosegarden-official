@@ -22,7 +22,6 @@
 #include "base/MidiDevice.h"
 #include "gui/general/ActionFileClient.h"
 #include "MixerWindow.h"
-#include "gui/application/RosegardenMainViewWidget.h"
 #include "sound/ExternalController.h"
 
 
