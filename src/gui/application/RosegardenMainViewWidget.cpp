@@ -1908,12 +1908,10 @@ RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
 
     connect(eventView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
-
     connect(eventView, &EditViewBase::saveFile,
-        RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
-
-    connect(eventView, SIGNAL(openInNotation(std::vector<Segment *>)),
-        this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
+            RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
+    connect(eventView, &EditViewBase::openInNotation,
+            this, &RosegardenMainViewWidget::slotEditSegmentsNotation);
     connect(eventView, SIGNAL(openInMatrix(std::vector<Segment *>)),
         this, SLOT(slotEditSegmentsMatrix(std::vector<Segment *>)));
     connect(eventView, SIGNAL(openInPercussionMatrix(std::vector<Segment *>)),

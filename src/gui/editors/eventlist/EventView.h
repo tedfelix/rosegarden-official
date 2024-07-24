@@ -19,16 +19,12 @@
 #ifndef RG_EVENTVIEW_H
 #define RG_EVENTVIEW_H
 
-#include "base/MidiTypes.h"
-#include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "gui/general/ListEditView.h"
-#include "base/Event.h"
 
 #include <set>
 #include <vector>
 
-#include <QSize>
 #include <QString>
 
 
@@ -40,14 +36,12 @@ class QTreeWidgetItem;
 class QLabel;
 class QCheckBox;
 class QGroupBox;
-class QTreeWidget;
 
 
 namespace Rosegarden
 {
 
 
-class Segment;
 class RosegardenDocument;
 class Event;
 
@@ -63,11 +57,18 @@ class EventView : public ListEditView, public SegmentObserver
     Q_OBJECT
 
 public:
+
     EventView(RosegardenDocument *doc,
-              const std::vector<Segment *>& segments,
+              const std::vector<Segment *> &segments,
               QWidget *parent);
 
     ~EventView() override;
+
+signals:
+
+    void editTriggerSegment(int);
+
+protected:
 
     void refreshSegment(Segment *segment,
                                 timeT startTime = 0,
@@ -75,18 +76,9 @@ public:
 
     void updateView() override;
 
-    void setupActions();
     void initStatusBar() override;
     // unused virtual QSize getViewSize();
     // unused virtual void setViewSize(QSize);
-
-    // Set the button states to the current filter positions
-    //
-    void setButtonsToFilter();
-
-    // Menu creation and show
-    //
-    void createMenu();
 
     // SegmentObserver overrides.
     void eventAdded(const Segment *, Event *) override { }
@@ -94,14 +86,19 @@ public:
     void endMarkerTimeChanged(const Segment *, bool) override { }
     void segmentDeleted(const Segment *) override;
 
-public slots:
+protected slots:
 
-    // standard slots
+    // EditViewBase overrides.
     void slotEditCut() override;
     void slotEditCopy() override;
     void slotEditPaste() override;
 
-    // other edit slots
+protected:
+    // QWidget override.
+    void closeEvent(QCloseEvent *event) override;
+
+private slots:
+
     void slotEditDelete();
     void slotEditInsert();
 
@@ -112,21 +109,11 @@ public slots:
     void slotRealTime();
     void slotRawTime();
 
-    // Change filter parameters
-    //
     void slotModifyFilter();
 
     void slotHelpRequested();
     void slotHelpAbout();
 
-signals:
-    void editTriggerSegment(int);
-
-protected:
-    // QWidget overrides.
-    void closeEvent(QCloseEvent *event) override;
-
-private slots:
     void slotSaveOptions() override;
 
     // Menu Handlers
@@ -140,7 +127,7 @@ private slots:
     void slotPopupEventEditor(QTreeWidgetItem *item, int column);
 
     /// Right-click context menu.
-    void slotPopupMenu(const QPoint&);
+    void slotPopupMenu(const QPoint &);
     /// Right-click context menu handler.
     void slotOpenInEventEditor(bool checked);
     /// Right-click context menu handler.
@@ -157,7 +144,15 @@ private slots:
 
 private:
 
-    bool applyLayout();
+    /// Create and show popup menu.
+    void createMenu();
+
+    /// Set the button states to the current filter positions
+    void setButtonsToFilter();
+
+    void setupActions();
+
+    bool updateTreeWidget();
 
     /// virtual function inherited from the base class, this implementation just
     /// calls updateWindowTitle() and avoids a refactoring job, even though

@@ -278,7 +278,7 @@ EventView::EventView(RosegardenDocument *doc,
 
     readOptions();
     setButtonsToFilter();
-    applyLayout();
+    updateTreeWidget();
 
     // Connect the checkboxes AFTER calling setButtonsToFilter() to set up the
     // initial states.  Otherwise, the first state change triggers
@@ -368,10 +368,9 @@ EventView::segmentDeleted(const Segment *s)
 }
 
 bool
-EventView::applyLayout()
+EventView::updateTreeWidget()
 {
     // If no selection, copy UI selection to m_listSelection.
-    // ??? What if it isn't empty, but it is out of sync?
     if (m_listSelection.size() == 0) {
 
         QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
@@ -386,9 +385,6 @@ EventView::applyLayout()
     }
 
     // *** Create the event list.
-
-    // ??? Why is this routine called applyLayout() if it is primarily
-    //     creating the event list?
 
     m_eventList->clear();
 
@@ -609,12 +605,12 @@ EventView::applyLayout()
 
             QStringList sl;
             sl << timeStr
-            << durationStr
-            << strtoqstr( (*it)->getType() )
-            << pitchStr
-            << velyStr
-            << data1Str
-            << data2Str;
+               << durationStr
+               << strtoqstr( (*it)->getType() )
+               << pitchStr
+               << velyStr
+               << data1Str
+               << data2Str;
 
             new EventViewItem(m_segments[i],
                               *it,
@@ -791,7 +787,7 @@ EventView::refreshSegment(Segment * /*segment*/,
                           timeT /*endTime*/)
 {
     RG_DEBUG << "EventView::refreshSegment";
-    applyLayout();
+    updateTreeWidget();
 }
 
 void
@@ -1393,7 +1389,7 @@ EventView::slotModifyFilter()
 
     if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
 
-    applyLayout();
+    updateTreeWidget();
 }
 
 void
@@ -1424,7 +1420,7 @@ EventView::slotMusicalTime()
     findAction("time_musical")->setChecked(true);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(false);
-    applyLayout();
+    updateTreeWidget();
 
     settings.endGroup();
 }
@@ -1439,7 +1435,7 @@ EventView::slotRealTime()
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(true);
     findAction("time_raw")->setChecked(false);
-    applyLayout();
+    updateTreeWidget();
 
     settings.endGroup();
 }
@@ -1454,7 +1450,7 @@ EventView::slotRawTime()
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(true);
-    applyLayout();
+    updateTreeWidget();
 
     settings.endGroup();
 }
