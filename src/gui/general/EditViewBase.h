@@ -93,42 +93,32 @@ protected slots:
     /// Edit > Paste.
     virtual void slotEditPaste() = 0;
     /// View > Show Statusbar
-    virtual void slotToggleStatusBar();
+    void slotToggleStatusBar();
 
+    /// Update clipboard action state.
     /**
      * A command has happened; check the clipboard in case we
-     * need to change state
+     * need to change action state.
+     *
+     * ??? rename: slotUpdateClipboardActionState()
      */
-    virtual void slotTestClipboard();
+    void slotTestClipboard();
 
     /// Move > Solo.  The "S" button.
-    virtual void slotToggleSolo();
-
-    virtual void slotOpenInMatrix();
-    virtual void slotOpenInPercussionMatrix();
-    virtual void slotOpenInNotation();
-    virtual void slotOpenInEventList();
-    // ??? This appears broken.  It emits a signal that no one connects to.
-    virtual void slotOpenInPitchTracker();
+    void slotToggleSolo();
 
 protected:
 
+    /// Display message in status bar.
     /**
+     * Wrapper around QStatusBar::showMessage().
+     *
      * Changes the status message of the whole statusbar for two
      * seconds, then restores the last status. This is used to display
      * statusbar messages that give information about actions for
-     * toolbar icons and menuentries.
-     *
-     * @param text the text that is displayed in the statusbar
+     * toolbar icons and menu entries.
      */
-    void slotStatusHelpMsg(const QString &text);
-
-    Clipboard *getClipboard();
-
-    /**
-     * @see #setInCtor
-     */
-    void closeEvent(QCloseEvent *e) override;
+    void showStatusBarMessage(const QString &text);
 
     /**
      * read general Options again and initialize all variables like the recent file list
@@ -189,6 +179,17 @@ private slots:
 
     void slotSetSegmentStartTime();
     void slotSetSegmentDuration();
+
+    /// Segment > Edit With > Open in Matrix Editor
+    void slotOpenInMatrix();
+    /// Segment > Edit With > Open in Percussion Matrix Editor
+    void slotOpenInPercussionMatrix();
+    /// Segment > Edit With > Open in Notation Editor
+    void slotOpenInNotation();
+    /// Segment > Edit With > Open in Event List Editor
+    void slotOpenInEventList();
+    /// Segment > Edit With > Open in Pitch Tracker
+    void slotOpenInPitchTracker();
 
     /// File > Close
     void slotCloseWindow();

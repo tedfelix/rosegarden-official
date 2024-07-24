@@ -1868,7 +1868,7 @@ NotationView::slotEditCut()
     CommandHistory::getInstance()->addCommand(
             new CutCommand(getSelection(),
                            getRulerSelection(),
-                           getClipboard()));
+                           Clipboard::mainClipboard()));
 }
 
 void
@@ -1901,7 +1901,7 @@ NotationView::slotEditCopy()
     CommandHistory::getInstance()->addCommand(
             new CopyCommand(getSelection(),
                             getRulerSelection(),
-                            getClipboard()));
+                            Clipboard::mainClipboard()));
 }
 
 void
@@ -1912,17 +1912,17 @@ NotationView::slotEditCutAndClose()
         return;
 
     CommandHistory::getInstance()->addCommand(
-            new CutAndCloseCommand(selection, getClipboard()));
+            new CutAndCloseCommand(selection, Clipboard::mainClipboard()));
 }
 
 void
 NotationView::slotEditPaste()
 {
-    Clipboard *clipboard = getClipboard();
+    Clipboard *clipboard = Clipboard::mainClipboard();
 
     if (clipboard->isEmpty()) return;
     if (!clipboard->isSingleSegment()) {
-        slotStatusHelpMsg(tr("Can't paste multiple Segments into one"));
+        showStatusBarMessage(tr("Can't paste multiple Segments into one"));
         return;
     }
 
@@ -1975,14 +1975,14 @@ NotationView::slotEditPaste()
 void
 NotationView::slotEditGeneralPaste()
 {
-    Clipboard *clipboard = getClipboard();
+    Clipboard *clipboard = Clipboard::mainClipboard();
 
     if (clipboard->isEmpty()) {
-        slotStatusHelpMsg(tr("Clipboard is empty"));
+        showStatusBarMessage(tr("Clipboard is empty"));
         return ;
     }
 
-    slotStatusHelpMsg(tr("Inserting clipboard contents..."));
+    showStatusBarMessage(tr("Inserting clipboard contents..."));
 
     Segment *segment = getCurrentSegment();
     if (!segment) return;

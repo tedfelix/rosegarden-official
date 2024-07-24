@@ -77,11 +77,6 @@ EditViewBase::~EditViewBase()
     slotSaveOptions();
 }
 
-Clipboard *EditViewBase::getClipboard()
-{
-    return Clipboard::mainClipboard();
-}
-
 void EditViewBase::slotSaveOptions()
 {
 }
@@ -89,7 +84,8 @@ void EditViewBase::slotSaveOptions()
 void EditViewBase::readOptions()
 {
     QAction *a = findAction("options_show_statusbar");
-    if (a) a->setChecked( ! statusBar()->isHidden() );
+    if (a)
+        a->setChecked(!statusBar()->isHidden());
 }
 
 void EditViewBase::setCheckBoxState(const QString& actionName,
@@ -165,20 +161,6 @@ EditViewBase::slotOpenInPitchTracker()
     emit openInPitchTracker(m_segments);
 }
 
-void EditViewBase::closeEvent(QCloseEvent* /* e */)
-{
-    RG_DEBUG << "EditViewBase::closeEvent()\n";
-/*!!!
-    if (isInCtor()) {
-        RG_DEBUG << "EditViewBase::closeEvent() : is in ctor, ignoring close event\n";
-        e->ignore();
-    } else {
-//         KMainWindow::closeEvent(e);
-		close(e);
-    }
-*/
-}
-
 void EditViewBase::slotCloseWindow()
 {
     close();
@@ -194,24 +176,22 @@ void EditViewBase::slotToggleStatusBar()
         statusBar()->show();
 }
 
-void EditViewBase::slotStatusHelpMsg(const QString &text)
+void EditViewBase::showStatusBarMessage(const QString &text)
 {
-    ///////////////////////////////////////////////////////////////////
-    // change status message of whole statusbar temporary (text, msec)
     statusBar()->showMessage(text, 2000);
 }
 
 void
 EditViewBase::slotTestClipboard()
 {
-    if (getClipboard()->isEmpty()) {
+    if (Clipboard::mainClipboard()->isEmpty()) {
         RG_DEBUG << "EditViewBase::slotTestClipboard(): empty";
         leaveActionState("have_clipboard");
         leaveActionState("have_clipboard_single_segment");
     } else {
         RG_DEBUG << "EditViewBase::slotTestClipboard(): not empty";
         enterActionState("have_clipboard");
-        if (getClipboard()->isSingleSegment()) {
+        if (Clipboard::mainClipboard()->isSingleSegment()) {
             enterActionState("have_clipboard_single_segment");
         } else {
             leaveActionState("have_clipboard_single_segment");

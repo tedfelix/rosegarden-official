@@ -958,7 +958,7 @@ MatrixView::slotEditCut()
     CommandHistory::getInstance()->addCommand(
             new CutCommand(getSelection(),
                            getRulerSelection(),
-                           getClipboard()));
+                           Clipboard::mainClipboard()));
 }
 
 void
@@ -975,17 +975,17 @@ MatrixView::slotEditCopy()
     CommandHistory::getInstance()->addCommand(
             new CopyCommand(getSelection(),
                            getRulerSelection(),
-                           getClipboard()));
+                           Clipboard::mainClipboard()));
 }
 
 void
 MatrixView::slotEditPaste()
 {
-    if (getClipboard()->isEmpty()) return;
+    if (Clipboard::mainClipboard()->isEmpty()) return;
 
     PasteEventsCommand *command = new PasteEventsCommand
         (*m_matrixWidget->getCurrentSegment(),
-         getClipboard(),
+         Clipboard::mainClipboard(),
          getInsertionTime(),
          PasteEventsCommand::MatrixOverlay);
 
