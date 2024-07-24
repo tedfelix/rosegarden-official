@@ -44,8 +44,7 @@ EditViewBase::EditViewBase(const std::vector<Segment *>& segments,
                            QWidget * /* parent */) :
     // QMainWindow(parent),   // See following comments
     QMainWindow(nullptr),
-    m_segments(segments),
-    m_configDialogPageIndex(0)
+    m_segments(segments)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     // Address #1508:  Show the edit windows without activating them, so either
@@ -167,7 +166,7 @@ EditViewBase::slotOpenInEventList()
 void
 EditViewBase::slotOpenInPitchTracker()
 {
-    emit slotOpenInPitchTracker(m_segments);
+    emit openInPitchTracker(m_segments);
 }
 
 void EditViewBase::closeEvent(QCloseEvent* /* e */)
@@ -317,11 +316,6 @@ EditViewBase::slotCompositionStateUpdate()
 {
     // update the window caption
     updateViewCaption();
-}
-
-void
-EditViewBase::handleEventRemoved(Event */* event */)
-{
 }
 
 QString

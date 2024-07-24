@@ -1904,7 +1904,7 @@ RosegardenMainViewWidget::initChordNameRuler()
 EventView *
 RosegardenMainViewWidget::createEventView(Segment *segment)
 {
-    // ??? EventView expects a vector for some reason.  Can we change that?
+    // EventView expects a vector because of EditViewBase.
     std::vector<Segment *> segments;
     segments.push_back(segment);
 

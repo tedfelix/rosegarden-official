@@ -47,65 +47,54 @@ class EditViewBase : public QMainWindow, public ActionFileClient
     Q_OBJECT
 
 public:
-    EditViewBase(const std::vector<Segment *>& segments,
+    EditViewBase(const std::vector<Segment *> &segments,
                  QWidget *parent);
 
     ~EditViewBase() override;
 
-    Clipboard *getClipboard();
-
-    /**
-     * Let tools know if their current element has gone
-     */
-    virtual void handleEventRemoved(Event *event);
-
 signals:
+    /// Tell the app to save the file.
     /**
-     * Tell the app to save the file.
+     * Sent by the menu File > Save.
      */
     void saveFile();
 
-    /**
-     * Reopen the given segments in another sort of editor.
-     */
+    /// Menu: Reopen the given segments in Notation.
     void openInNotation(std::vector<Segment *>);
+    /// Menu: Reopen the given segments in Matrix.
     void openInMatrix(std::vector<Segment *>);
+    /// Menu: Reopen the given segments in Percussion Matrix.
     void openInPercussionMatrix(std::vector<Segment *>);
+    /// Menu: Reopen the given segments in the Event Editor.
     void openInEventList(std::vector<Segment *>);
-    void slotOpenInPitchTracker(std::vector<Segment *>);
+    // ??? RMVW never connects to this.  This goes nowhere.
+    void openInPitchTracker(std::vector<Segment *>);
 
+    /// Tell RMVW we want a Track selected (by TrackId).
     /**
-     * Tell the main view that the track being edited is the
-     * current selected track
-     * This is used by #slotToggleSolo
+     * This is used by slotToggleSolo().
      */
-    void selectTrack(int);
+    void selectTrack(int trackId);
 
-    /**
-     * Tell the main view that the solo status has changed (the user clicked on the 'solo' toggle)
-     */
+    /// Tell RMW to toggle solo (the user clicked on the 'solo' toggle).
     void toggleSolo(bool);
 
 public slots:
-    /**
-     * close window
-     */
-    virtual void slotCloseWindow();
 
+    /// Handle Composition changes.
     /**
-     * put the indicationed text/object into the clipboard and remove * it
-     * from the document
+     * Responds to changes in the Composition by updating the modified star
+     * in the titlebar.
      */
+    virtual void slotCompositionStateUpdate();
+
+protected slots:
+
+    /// Edit > Cut.
     virtual void slotEditCut() = 0;
-
-    /**
-     * put the indicationed text/object into the clipboard
-     */
+    /// Edit > Copy.
     virtual void slotEditCopy() = 0;
-
-    /**
-     * paste the clipboard into the document
-     */
+    /// Edit > Paste.
     virtual void slotEditPaste() = 0;
 
     /**
@@ -151,29 +140,17 @@ public slots:
     virtual void slotOpenInPercussionMatrix();
     virtual void slotOpenInNotation();
     virtual void slotOpenInEventList();
+    // ??? This appears broken.  It emits a signal that no one connects to.
     virtual void slotOpenInPitchTracker();
 
-    /**
-     * Set the start time of the current segment
-     */
-    void slotSetSegmentStartTime();
-
-    /**
-     * Set the duration of the current segment
-     */
-    void slotSetSegmentDuration();
-
-    /**
-     * Global composition updates from the main view (track selection, solo, etc...)
-     */
-    virtual void slotCompositionStateUpdate();
-
 protected:
+
+    Clipboard *getClipboard();
 
     /**
      * @see #setInCtor
      */
-    void closeEvent(QCloseEvent* e) override;
+    void closeEvent(QCloseEvent *e) override;
 
     /**
      * read general Options again and initialize all variables like the recent file list
@@ -183,8 +160,8 @@ protected:
     /**
      * Helper to set checkboxes for visibility of toolbars
      */
-    void setCheckBoxState(const QString& actionName,
-                          const QString& toolbarName);
+    void setCheckBoxState(const QString &actionName,
+                          const QString &toolbarName);
 
     /**
      * create menus and toolbars
@@ -216,20 +193,12 @@ protected slots:
     virtual void slotConfigure();
 
 protected:
-    /**
-     * Set the page index of the config dialog which corresponds to
-     * this editview
-     */
-    void setConfigDialogPageIndex(int p) { m_configDialogPageIndex = p; }
-    int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
 
     /// form a suitable title string for the window
-    QString getTitle(const QString& view);
+    QString getTitle(const QString &view);
 
     /// The Segment(s) that are being edited.
     std::vector<Segment *> m_segments;
-
-    int m_configDialogPageIndex;
 
     /// We need this so that we can attach/detach from the same document.
     /**
@@ -237,6 +206,15 @@ protected:
      * if that makes sense.  Only use this for connection/disconnection.
      */
     RosegardenDocument *m_doc;
+
+private slots:
+
+    void slotSetSegmentStartTime();
+    void slotSetSegmentDuration();
+
+    /// File > Close
+    void slotCloseWindow();
+
 };
 
 

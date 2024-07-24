@@ -66,25 +66,8 @@ public:
 
 signals:
 
+    /// Connected to RosegardenMainViewWidget::slotEditTriggerSegment().
     void editTriggerSegment(int);
-
-protected:
-
-    void refreshSegment(Segment *segment,
-                                timeT startTime = 0,
-                                timeT endTime = 0) override;
-
-    void updateView() override;
-
-    void initStatusBar() override;
-    // unused virtual QSize getViewSize();
-    // unused virtual void setViewSize(QSize);
-
-    // SegmentObserver overrides.
-    void eventAdded(const Segment *, Event *) override { }
-    void eventRemoved(const Segment *, Event *) override;
-    void endMarkerTimeChanged(const Segment *, bool) override { }
-    void segmentDeleted(const Segment *) override;
 
 protected slots:
 
@@ -92,8 +75,33 @@ protected slots:
     void slotEditCut() override;
     void slotEditCopy() override;
     void slotEditPaste() override;
+    void slotSaveOptions() override;
 
 protected:
+
+    // EditViewBase overrides.
+    void initStatusBar() override;
+    /**
+     * virtual function inherited from the base class, this implementation just
+     * calls updateWindowTitle() and avoids a refactoring job, even though
+     * updateViewCaption is superfluous
+     */
+    void updateViewCaption() override;
+    void readOptions() override;
+    Segment *getCurrentSegment() override;
+
+    // ListEditView overrides.
+    void refreshSegment(Segment *segment,
+                        timeT startTime = 0,
+                        timeT endTime = 0) override;
+    void updateView() override;
+
+    // SegmentObserver overrides.
+    void eventAdded(const Segment *, Event *) override { }
+    void eventRemoved(const Segment *, Event *) override;
+    void endMarkerTimeChanged(const Segment *, bool) override { }
+    void segmentDeleted(const Segment *) override;
+
     // QWidget override.
     void closeEvent(QCloseEvent *event) override;
 
@@ -113,8 +121,6 @@ private slots:
 
     void slotHelpRequested();
     void slotHelpAbout();
-
-    void slotSaveOptions() override;
 
     // Menu Handlers
 
@@ -140,7 +146,7 @@ private slots:
     // unused void slotTriggerRetuneChanged();
 
     /// slot connected to signal RosegardenDocument::setModified(bool)
-    void updateWindowTitle(bool m = false);
+    void updateWindowTitle(bool modified);
 
 private:
 
@@ -154,16 +160,9 @@ private:
 
     bool updateTreeWidget();
 
-    /// virtual function inherited from the base class, this implementation just
-    /// calls updateWindowTitle() and avoids a refactoring job, even though
-    /// updateViewCaption is superfluous
-    void updateViewCaption() override;
-
-    void readOptions() override;
     QString makeTimeString(timeT time, int timeMode);
     QString makeDurationString(timeT time,
                                timeT duration, int timeMode);
-    Segment *getCurrentSegment() override;
 
     // Event filters
     QGroupBox *m_filterGroup;

@@ -99,6 +99,8 @@ EventView::EventView(RosegardenDocument *doc,
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
+    // Note: EditView only edits the first Segment in segments.
+
     if (!segments.empty()) {
         Segment *s = *segments.begin();
         if (s->getComposition()) {
@@ -1635,13 +1637,13 @@ EventView::updateViewCaption()
     // err on the side of not showing modified status here, rather than showing
     // a false positive, since we're kind of kludging this together with the
     // existing virtual updateViewCaption() method
-    updateWindowTitle();
+    updateWindowTitle(false);
 }
 
 void
-EventView::updateWindowTitle(bool m)
+EventView::updateWindowTitle(bool modified)
 {
-    QString indicator = (m ? "*" : "");
+    QString indicator = (modified ? "*" : "");
 
     if (m_isTriggerSegment) {
 
