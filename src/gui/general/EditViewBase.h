@@ -53,30 +53,26 @@ public:
     ~EditViewBase() override;
 
 signals:
-    /// Tell the app to save the file.
-    /**
-     * Sent by the menu File > Save.
-     */
+    /// File > Save
     void saveFile();
 
-    /// Menu: Reopen the given segments in Notation.
+    /// Segment > Edit With > Open in Notation Editor
     void openInNotation(std::vector<Segment *>);
-    /// Menu: Reopen the given segments in Matrix.
+    /// Segment > Edit With > Open in Matrix Editor
     void openInMatrix(std::vector<Segment *>);
-    /// Menu: Reopen the given segments in Percussion Matrix.
+    /// Segment > Edit With > Open in Percussion Matrix Editor
     void openInPercussionMatrix(std::vector<Segment *>);
-    /// Menu: Reopen the given segments in the Event Editor.
+    /// Segment > Edit With > Open in Event List Editor
     void openInEventList(std::vector<Segment *>);
-    // ??? RMVW never connects to this.  This goes nowhere.
+    /// Segment > Edit With > Open in Pitch Tracker
+    /**
+     * ??? RMVW never connects to this.  This goes nowhere.
+     */
     void openInPitchTracker(std::vector<Segment *>);
 
-    /// Tell RMVW we want a Track selected (by TrackId).
-    /**
-     * This is used by slotToggleSolo().
-     */
+    /// Tell RMVW we want a Track selected (by TrackId).  See slotToggleSolo().
     void selectTrack(int trackId);
-
-    /// Tell RMW to toggle solo (the user clicked on the 'solo' toggle).
+    /// Tell RMW to toggle solo.  See slotToggleSolo().
     void toggleSolo(bool);
 
 public slots:
@@ -84,7 +80,7 @@ public slots:
     /// Handle Composition changes.
     /**
      * Responds to changes in the Composition by updating the modified star
-     * in the titlebar.
+     * in the titlebar.  See updateViewCaption().
      */
     virtual void slotCompositionStateUpdate();
 
@@ -96,34 +92,8 @@ protected slots:
     virtual void slotEditCopy() = 0;
     /// Edit > Paste.
     virtual void slotEditPaste() = 0;
-
-    /**
-     * toggles the main toolbar
-     */
-//    virtual void slotToggleToolBar();
-
-    /**
-     * toggles the statusbar
-     */
+    /// View > Show Statusbar
     virtual void slotToggleStatusBar();
-
-    /**
-     * Changes the statusbar contents for the standard label permanently,
-     * used to indicate current actions.
-     *
-     * @param text the text that is displayed in the statusbar
-     */
-    virtual void slotStatusMsg(const QString &text);
-
-    /**
-     * Changes the status message of the whole statusbar for two
-     * seconds, then restores the last status. This is used to display
-     * statusbar messages that give information about actions for
-     * toolbar icons and menuentries.
-     *
-     * @param text the text that is displayed in the statusbar
-     */
-    virtual void slotStatusHelpMsg(const QString &text);
 
     /**
      * A command has happened; check the clipboard in case we
@@ -131,9 +101,7 @@ protected slots:
      */
     virtual void slotTestClipboard();
 
-    /**
-     * Connected to this view's toolbar 'solo' button
-     */
+    /// Move > Solo.  The "S" button.
     virtual void slotToggleSolo();
 
     virtual void slotOpenInMatrix();
@@ -144,6 +112,16 @@ protected slots:
     virtual void slotOpenInPitchTracker();
 
 protected:
+
+    /**
+     * Changes the status message of the whole statusbar for two
+     * seconds, then restores the last status. This is used to display
+     * statusbar messages that give information about actions for
+     * toolbar icons and menuentries.
+     *
+     * @param text the text that is displayed in the statusbar
+     */
+    void slotStatusHelpMsg(const QString &text);
 
     Clipboard *getClipboard();
 

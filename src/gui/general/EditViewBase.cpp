@@ -90,9 +90,6 @@ void EditViewBase::readOptions()
 {
     QAction *a = findAction("options_show_statusbar");
     if (a) a->setChecked( ! statusBar()->isHidden() );
-
-//    a = findAction("options_show_toolbar");
-//    if (a) a->setChecked( ! m_toolBar->isHidden());
 }
 
 void EditViewBase::setCheckBoxState(const QString& actionName,
@@ -109,7 +106,6 @@ void EditViewBase::setupBaseActions(bool haveClipboard)
 {
     // Actions all edit views will have
 
-//    createAction("options_show_toolbar", SLOT(slotToggleToolBar()));
     createAction("options_show_statusbar", SLOT(slotToggleStatusBar()));
     createAction("options_configure", SLOT(slotConfigure()));
 
@@ -187,17 +183,7 @@ void EditViewBase::slotCloseWindow()
 {
     close();
 }
-/*
-void EditViewBase::slotToggleToolBar()
-{
-    TmpStatusMsg msg(tr("Toggle the toolbar..."), this);
 
-    if (m_toolBar->isVisible())
-		m_toolBar->hide();
-    else
-		m_toolBar->show();
-}
-*/
 void EditViewBase::slotToggleStatusBar()
 {
     TmpStatusMsg msg(tr("Toggle the statusbar..."), this);
@@ -206,14 +192,6 @@ void EditViewBase::slotToggleStatusBar()
         statusBar()->hide();
     else
         statusBar()->show();
-}
-
-void EditViewBase::slotStatusMsg(const QString &text)
-{
-    ///////////////////////////////////////////////////////////////////
-    // change status message permanently
-    statusBar()->clearMessage();
-    statusBar()->showMessage(text);	//, ID_STATUS_MSG);
 }
 
 void EditViewBase::slotStatusHelpMsg(const QString &text)
