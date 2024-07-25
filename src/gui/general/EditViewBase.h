@@ -101,19 +101,6 @@ protected:
 
     virtual Segment *getCurrentSegment() = 0;
 
-    /// Override to write things to the conf file at close.
-    /**
-     * save general Options like all bar positions and status as well
-     * as the geometry and the recent file list to the configuration
-     * file
-     *
-     * ??? It looks like TempoView and EventView implement this and
-     *     call it on close.  There is no need for EventViewBase's
-     *     dtor to call this.  And there is no need for this virtual
-     *     function.  Get rid of this.
-     */
-    virtual void saveOptions()  { }
-
     /// Assemble a title for the window.
     /**
      * This assembles a combination of the modification star (*), the

@@ -140,20 +140,18 @@ TempoView::TempoView(
 
 TempoView::~TempoView()
 {
+    saveOptions();
+
     // We use m_doc instead of RosegardenDocument::currentDocument to
     // make sure that we disconnect from the old document when the
     // documents are switching.
-    if (m_doc  &&
-        !m_doc->isBeingDestroyed()  &&
-        !isCompositionDeleted()) {
+    if (m_doc  &&  !isCompositionDeleted())
         m_doc->getComposition().removeObserver(this);
-    }
 }
 
 void
 TempoView::closeEvent(QCloseEvent *e)
 {
-    saveOptions();
     emit closing();
 
     EditViewBase::closeEvent(e);

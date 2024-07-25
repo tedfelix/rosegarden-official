@@ -123,13 +123,14 @@ public slots:
 protected slots:
 
     void slotUpdateWindowTitle(bool modified);
-    void saveOptions() override;
 
 protected:
     void closeEvent(QCloseEvent *) override;
 
 private:
     void readOptions();
+    void saveOptions();
+
     void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
     Segment *getCurrentSegment() override;

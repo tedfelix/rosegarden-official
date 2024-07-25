@@ -74,7 +74,6 @@ protected slots:
     void slotEditCut() override;
     void slotEditCopy() override;
     void slotEditPaste() override;
-    void saveOptions() override;
 
 protected:
 
@@ -213,6 +212,7 @@ private:
     QLabel *m_triggerVelocity{nullptr};
 
     void readOptions();
+    void saveOptions();
 
 };
 

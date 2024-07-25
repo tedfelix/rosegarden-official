@@ -55,7 +55,6 @@ EditViewBase::~EditViewBase()
 {
     // Use m_doc to make sure we detach from the same document we attached to.
     m_doc->detachEditView(this);
-    saveOptions();
 }
 
 void EditViewBase::readOptions()

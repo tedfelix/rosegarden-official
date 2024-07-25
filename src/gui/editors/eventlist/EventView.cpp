@@ -325,6 +325,8 @@ EventView::EventView(RosegardenDocument *doc,
 
 EventView::~EventView()
 {
+    saveOptions();
+
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
         //RG_DEBUG << "dtor - removing this observer from " << m_segments[i];
         m_segments[i]->removeObserver(this);
@@ -334,15 +336,7 @@ EventView::~EventView()
 void
 EventView::closeEvent(QCloseEvent *event)
 {
-    // Save m_eventFilter for next time
-    saveOptions();
-
-    // Save window geometry and toolbar/dock state
-    QSettings settings;
-    settings.beginGroup(WindowGeometryConfigGroup);
-    settings.setValue("Event_List_View_Geometry", this->saveGeometry());
-    settings.setValue("Event_List_View_State", this->saveState());
-    settings.endGroup();
+    // ??? This does nothing.  Get rid of it.
 
     QWidget::closeEvent(event);
 }
@@ -1324,10 +1318,12 @@ EventView::setViewSize(QSize s)
 void
 EventView::readOptions()
 {
+    EditViewBase::readOptions();
+
     QSettings settings;
+
     settings.beginGroup(EventViewConfigGroup);
 
-    EditViewBase::readOptions();
     m_eventFilter = settings.value("event_list_filter", m_eventFilter).toInt();
 
     QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
@@ -1340,11 +1336,16 @@ void
 EventView::saveOptions()
 {
     QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
 
+    settings.beginGroup(EventViewConfigGroup);
     settings.setValue("event_list_filter", m_eventFilter);
     settings.setValue(EventViewLayoutConfigGroupName, m_eventList->saveGeometry());
+    settings.endGroup();
 
+    // Save window geometry and toolbar/dock state
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Event_List_View_Geometry", this->saveGeometry());
+    settings.setValue("Event_List_View_State", this->saveState());
     settings.endGroup();
 }
 
