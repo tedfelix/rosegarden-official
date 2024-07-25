@@ -338,7 +338,7 @@ void
 EventView::closeEvent(QCloseEvent *event)
 {
     // Save m_eventFilter for next time
-    slotSaveOptions();
+    saveOptions();
 
     // Save window geometry and toolbar/dock state
     QSettings settings;
@@ -1340,7 +1340,7 @@ EventView::readOptions()
 }
 
 void
-EventView::slotSaveOptions()
+EventView::saveOptions()
 {
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);

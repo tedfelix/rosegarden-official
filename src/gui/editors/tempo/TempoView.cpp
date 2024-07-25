@@ -153,7 +153,7 @@ TempoView::~TempoView()
 void
 TempoView::closeEvent(QCloseEvent *e)
 {
-    slotSaveOptions();
+    saveOptions();
     emit closing();
 
     EditViewBase::closeEvent(e);
@@ -647,7 +647,7 @@ TempoView::readOptions()
 }
 
 void
-TempoView::slotSaveOptions()
+TempoView::saveOptions()
 {
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);

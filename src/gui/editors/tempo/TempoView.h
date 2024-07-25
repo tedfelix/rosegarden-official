@@ -76,7 +76,7 @@ public:
     void updateView() override;
 
     virtual void setupActions();
-    void initStatusBar() override;
+    void initStatusBar();
     // unused virtual QSize getViewSize();
     // unused virtual void setViewSize(QSize);
 
@@ -123,13 +123,13 @@ public slots:
 
 protected slots:
 
-    void slotSaveOptions() override;
+    void saveOptions() override;
 
 protected:
     void closeEvent(QCloseEvent *) override;
 
 private:
-    void readOptions() override;
+    void readOptions();
     void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
     Segment *getCurrentSegment() override;

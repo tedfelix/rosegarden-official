@@ -75,19 +75,18 @@ protected slots:
     void slotEditCut() override;
     void slotEditCopy() override;
     void slotEditPaste() override;
-    void slotSaveOptions() override;
+    void saveOptions() override;
 
 protected:
 
-    // EditViewBase overrides.
-    void initStatusBar() override;
+    void initStatusBar();
+
     /**
      * virtual function inherited from the base class, this implementation just
      * calls updateWindowTitle() and avoids a refactoring job, even though
      * updateViewCaption is superfluous
      */
     void updateViewCaption() override;
-    void readOptions() override;
     Segment *getCurrentSegment() override;
 
     // ListEditView overrides.
@@ -216,6 +215,8 @@ private:
     QLabel *m_triggerName{nullptr};
     QLabel *m_triggerPitch{nullptr};
     QLabel *m_triggerVelocity{nullptr};
+
+    void readOptions();
 
 };
 

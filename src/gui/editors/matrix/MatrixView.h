@@ -269,7 +269,6 @@ protected slots:
 
 protected:
     const SnapGrid *getSnapGrid() const;
-    void readOptions() override;
     void insertControllerSequence(const ControlParameter &controlParameter);
 
 private:
@@ -310,7 +309,9 @@ private:
      */
     Device *getCurrentDevice();
 
-    void initStatusBar() override;
+    void initStatusBar();
+
+    void readOptions();
 
 };
 

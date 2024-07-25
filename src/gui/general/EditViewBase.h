@@ -120,47 +120,56 @@ protected:
      */
     void showStatusBarMessage(const QString &text);
 
-    /**
-     * read general Options again and initialize all variables like the recent file list
-     */
-    virtual void readOptions();
+    /// Update View (> Toolbars) > Show Statusbar checkbox
+    void readOptions();
 
-    /**
-     * Helper to set checkboxes for visibility of toolbars
-     */
+    /// Set check box for visibility of toolbar.
     void setCheckBoxState(const QString &actionName,
                           const QString &toolbarName);
 
-    /**
-     * create menus and toolbars
-     */
-    virtual void setupBaseActions(bool haveClipboard);
+    /// Create actions for menus and toolbars that are managed by this class.
+    void setupBaseActions(bool haveClipboard);
 
-    /**
-     * setup status bar
-     */
-    virtual void initStatusBar() = 0;
-
-    /**
-     * Abstract method to get current segment
-     */
     virtual Segment *getCurrentSegment() = 0;
 
+    /// Composition has changed.  Update the titlebar.
     /**
      * Set the caption of the view's window
+     *
+     * Called by slotCompositionStateUpdate().  Assumption is that something
+     * about the Composition has changed.  Modified state?
+     *
+     * - TempoView sets the window title and filename.  No modified star.
+     * - EventView sets the window title, filename, and modified star.
+     * - All others ignore this.
+     *
+     * ??? Get rid of purity (= 0).  Allow Matrix and Notation to ignore.
+     * ??? Can TempoView just set the titlebar in its ctor and ignore this?
+     *     Is that what MatrixView and NotationView are doing?
+     * ??? If EventView is the only user, can it get this info by some other
+     *     route?  Then we can get rid of this.
      */
     virtual void updateViewCaption() = 0;
 
 protected slots:
+
+    /// Edit > Preferences...
+    virtual void slotConfigure();
+
+protected:
+
+    /// Override to write things to the conf file at close.
     /**
      * save general Options like all bar positions and status as well
      * as the geometry and the recent file list to the configuration
      * file
+     *
+     * ??? It looks like TempoView and EventView implement this and
+     *     call it on close.  There is no need for EventViewBase's
+     *     dtor to call this.  And there is no need for this virtual
+     *     function.  Get rid of this.
      */
-    virtual void slotSaveOptions();
-    virtual void slotConfigure();
-
-protected:
+    virtual void saveOptions()  { }
 
     /// form a suitable title string for the window
     QString getTitle(const QString &view);

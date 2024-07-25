@@ -71,7 +71,7 @@ public:
 
     virtual void initLayoutToolbar();
     void initRulersToolbar();
-    void initStatusBar() override;
+    void initStatusBar();
     timeT getInsertionTime(bool allowEndTime = false) const;
 
     bool hasSegment(Segment * seg) const;
@@ -103,9 +103,6 @@ signals:
     void panic();
     void editTriggerSegment(int);
     void stepByStepTargetRequested(QObject *);
-
-protected:
-    void readOptions() override;
 
 protected slots:
     /// Some change occurs and the whole scene have to be redrawn.
@@ -493,6 +490,8 @@ private:
     SegmentVector::iterator findAdopted(Segment *s);
     void ForAllSelection(opOnEvent op);
     void setCurrentStaff(NotationStaff *staff);
+
+    void readOptions();
 
 // FIXME: likely to be debated. --gp     Used for subclassing in pitchtracker
 protected:
