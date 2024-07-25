@@ -281,12 +281,14 @@ EditViewBase::slotCompositionStateUpdate()
 }
 
 QString
-EditViewBase::getTitle(const QString& view)
+EditViewBase::getTitle(const QString &editorName)
 {
+    const QString modified =
+            (RosegardenDocument::currentDocument->isModified() ? "*" : "");
+
     QString title;
-    QString indicator = (RosegardenDocument::currentDocument->isModified() ? "*" : "");
-    int nsegs = m_segments.size();
-    RG_DEBUG << "getTitle segs:" << nsegs;
+
+    const int nsegs = m_segments.size();
     if (nsegs == 1) {
 
         TrackId trackId = m_segments[0]->getTrack();
@@ -314,24 +316,24 @@ EditViewBase::getTitle(const QString& view)
             trkLabel = QString(" \"%1\" ").arg(trkLabel);
         }
         title = tr("%1%2 - Segment%3Track%4#%5 - %6")
-            .arg(indicator)
+            .arg(modified)
             .arg(RosegardenDocument::currentDocument->getTitle())
             .arg(segLabel)
             .arg(trkLabel)
             .arg(trackPosition + 1)
-            .arg(view);
+            .arg(editorName);
     } else if (m_segments.size() ==
                RosegardenDocument::currentDocument->getComposition().getNbSegments()) {
         title = tr("%1%2 - All Segments - %3")
-            .arg(indicator)
+            .arg(modified)
             .arg(RosegardenDocument::currentDocument->getTitle())
-            .arg(view);
+            .arg(editorName);
     } else {
         title = tr("%1%2 - %3 Segment(s) - %4")
-            .arg(indicator)
+            .arg(modified)
             .arg(RosegardenDocument::currentDocument->getTitle())
             .arg(m_segments.size())
-            .arg(view);
+            .arg(editorName);
     }
 
     return title;

@@ -171,8 +171,13 @@ protected:
      */
     virtual void saveOptions()  { }
 
-    /// form a suitable title string for the window
-    QString getTitle(const QString &view);
+    /// Assemble a title for the window.
+    /**
+     * This assembles a combination of the modification star (*), the
+     * segments being edited, and the name of the editor into a string
+     * suitable for using as the window title.
+     */
+    QString getTitle(const QString &editorName);
 
     /// The Segment(s) that are being edited.
     std::vector<Segment *> m_segments;
@@ -186,7 +191,9 @@ protected:
 
 private slots:
 
+    /// Segment/Edit > Set Start Time...
     void slotSetSegmentStartTime();
+    /// Segment/Edit > Set Duration...
     void slotSetSegmentDuration();
 
     /// Segment > Edit With > Open in Matrix Editor
