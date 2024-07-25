@@ -19,16 +19,25 @@
 class QMainWindow;
 class QString;
 
+/// Change status bar message on construction and clear on destruction.
 /**
  * A class to create a temporary message on QMainWindow's status bar
  *
- * Use as follows :
- * { // some block of code starts here
- *  TmpStatusMsg tmpMsg("doing something...", mainWindow);
+ * Use as follows:
  *
- *  // do something
+ *     { // some block of code starts here
  *
- * } // the message goes away
+ *         TmpStatusMsg tmpMsg("doing something...", mainWindow);
+ *
+ *         // do something
+ *
+ *     } // the message goes away
+ *
+ * ??? In most cases where this is used, it is used incorrectly.  It is being
+ *     used in places where the status message will immediately be cleared.
+ *     Need to audit and remove ineffective usage of this class.  It's also
+ *     likely that this class will not work if we don't yield to the message
+ *     loop.  Check all usage and make sure this is actually doing something.
  *
  */
 class TmpStatusMsg

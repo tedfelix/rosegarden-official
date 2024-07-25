@@ -26,41 +26,22 @@
 #include "gui/dialogs/TimeDialog.h"
 #include "base/Clipboard.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
-
-#include "gui/widgets/TmpStatusMsg.h"
-
 #include "misc/Debug.h"
 
-#include <QTabWidget>
 #include <QAction>
 #include <QStatusBar>
-#include <QTabWidget>
 #include <QToolBar>
+
 
 namespace Rosegarden
 {
 
-EditViewBase::EditViewBase(const std::vector<Segment *>& segments,
-                           QWidget * /* parent */) :
-    // QMainWindow(parent),   // See following comments
+
+EditViewBase::EditViewBase(const std::vector<Segment *> &segments) :
     QMainWindow(nullptr),
     m_segments(segments)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    // Address #1508:  Show the edit windows without activating them, so either
-    // they or the main window can continue to have focus in Qt5.
-    //
-    // On my system (yg) and with parent passed to QMainWindow:
-    //   - With Qt5 Qt::WA_ShowWithoutActivating has no effect: the main
-    //     windows may always have focus but is always under the editors.
-    //   - With Qt4 and WA_ShowWithoutActivating the editors are always
-    //     opened under the main window.
-    //
-    // It seems that a Qt5 window is always under its child.
-    // So when passing 0 as parent to QMainWindow the editors are no more child
-    // of the main window and the problem is fixed.
-    //
-    // setAttribute(Qt::WA_ShowWithoutActivating);
 
     // Store so that we attach and detach from the same document.
     m_doc = RosegardenDocument::currentDocument;
@@ -172,8 +153,6 @@ void EditViewBase::slotCloseWindow()
 
 void EditViewBase::slotToggleStatusBar()
 {
-    TmpStatusMsg msg(tr("Toggle the statusbar..."), this);
-
     if (statusBar()->isVisible())
         statusBar()->hide();
     else

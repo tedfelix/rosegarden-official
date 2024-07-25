@@ -62,8 +62,7 @@ class TempoView : public ListEditView, public CompositionObserver
     };
 
 public:
-    TempoView(QWidget *parent,
-              EditTempoController *editTempoController,
+    TempoView(EditTempoController *editTempoController,
               timeT openTime);
     ~TempoView() override;
 

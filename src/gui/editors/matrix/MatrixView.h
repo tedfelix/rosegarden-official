@@ -65,8 +65,7 @@ class MatrixView : public EditViewBase,
 public:
     MatrixView(RosegardenDocument *doc,
                const std::vector<Segment *>& segments,
-               bool drumMode,
-               QWidget *parent = nullptr);
+               bool drumMode);
 
     ~MatrixView() override;
 

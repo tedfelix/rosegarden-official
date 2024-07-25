@@ -59,8 +59,7 @@ class EventView : public ListEditView, public SegmentObserver
 public:
 
     EventView(RosegardenDocument *doc,
-              const std::vector<Segment *> &segments,
-              QWidget *parent);
+              const std::vector<Segment *> &segments);
 
     ~EventView() override;
 

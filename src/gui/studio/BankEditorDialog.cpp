@@ -39,7 +39,6 @@
 #include "misc/ConfigGroups.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/FileDialog.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/ThornStyle.h"

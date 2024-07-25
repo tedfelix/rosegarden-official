@@ -390,7 +390,7 @@ void
 RosegardenMainViewWidget::createNotationView(const std::vector<Segment *>& segmentsToEdit)
 {
     NotationView *notationView =
-        new NotationView(RosegardenDocument::currentDocument, segmentsToEdit, this);
+        new NotationView(RosegardenDocument::currentDocument, segmentsToEdit);
 
     connect(notationView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -536,7 +536,7 @@ PitchTrackerView *
 RosegardenMainViewWidget::createPitchTrackerView(const std::vector<Segment *>& segmentsToEdit)
 {
     PitchTrackerView *pitchTrackerView =
-        new PitchTrackerView(RosegardenDocument::currentDocument, segmentsToEdit, this);
+        new PitchTrackerView(RosegardenDocument::currentDocument, segmentsToEdit);
 
     connect(pitchTrackerView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -730,8 +730,7 @@ RosegardenMainViewWidget::createMatrixView(const std::vector<Segment *>& segment
 {
     MatrixView *matrixView = new MatrixView(RosegardenDocument::currentDocument,
                                                   segmentsToEdit,
-                                                  drumMode,
-                                                  this);
+                                                  drumMode);
 
     connect(matrixView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -1909,8 +1908,7 @@ RosegardenMainViewWidget::createEventView(Segment *segment)
     segments.push_back(segment);
 
     EventView *eventView = new EventView(RosegardenDocument::currentDocument,
-                                         segments,
-                                         this);
+                                         segments);
 
     connect(eventView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);

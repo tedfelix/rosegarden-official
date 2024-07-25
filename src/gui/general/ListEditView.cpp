@@ -31,7 +31,6 @@
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/EditViewTimeSigNotifier.h"
 #include "misc/Strings.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "document/Command.h"
 
 #include <QSettings>
@@ -59,10 +58,9 @@ bool ListEditView::m_inPaintEvent = false;
 const unsigned int ListEditView::NbLayoutRows = 6;
 
 
-ListEditView::ListEditView(const std::vector<Segment *>& segments,
-                           unsigned int cols,
-                           QWidget *parent) :
-    EditViewBase(segments, parent),
+ListEditView::ListEditView(const std::vector<Segment *> &segments,
+                           unsigned int cols) :
+    EditViewBase(segments),
     m_viewNumber( -1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
     m_centralFrame(nullptr),

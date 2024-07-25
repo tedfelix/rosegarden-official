@@ -48,8 +48,7 @@ class EditViewBase : public QMainWindow, public ActionFileClient
 
 public:
 
-    EditViewBase(const std::vector<Segment *> &segments,
-                 QWidget *parent);
+    EditViewBase(const std::vector<Segment *> &segments);
 
     ~EditViewBase() override;
 
@@ -99,7 +98,7 @@ protected:
      */
     void showStatusBarMessage(const QString &text);
 
-    /// Update View (> Toolbars) > Show Statusbar checkbox
+    /// Update "View (> Toolbars) > Show Statusbar" checkbox.
     void readOptions();
 
     /// Set check box for visibility of toolbar.

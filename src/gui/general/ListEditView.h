@@ -64,9 +64,8 @@ public:
      * \arg cols : number of columns, main column is always rightmost
      *
      */
-    ListEditView(const std::vector<Segment *>& segments,
-                 unsigned int cols,
-                 QWidget *parent);
+    ListEditView(const std::vector<Segment *> &segments,
+                 unsigned int cols);
 
     ~ListEditView() override;
 

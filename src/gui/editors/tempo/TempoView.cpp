@@ -38,7 +38,6 @@
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/general/ListEditView.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "misc/Strings.h"
 
 #include <QAction>
@@ -63,10 +62,9 @@ namespace Rosegarden
 
 
 TempoView::TempoView(
-        QWidget *parent,
         EditTempoController *editTempoController,
         timeT openTime) :
-    ListEditView(std::vector<Segment *>(), 2, parent),
+    ListEditView(std::vector<Segment *>(), 2),
     m_editTempoController(editTempoController),
     m_filter(Tempo | TimeSignature),
     m_ignoreUpdates(true)

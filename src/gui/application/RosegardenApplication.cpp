@@ -22,7 +22,6 @@
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "RosegardenMainWindow.h"
 
 #include <QMainWindow>

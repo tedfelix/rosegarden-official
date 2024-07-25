@@ -58,8 +58,7 @@ public:
     typedef std::vector<Segment *> SegmentVector;
     typedef void (NotationView::*opOnEvent) (Event* e, Segment *containing);
     NotationView(RosegardenDocument *doc,
-                 const std::vector<Segment *>& segments,
-                 QWidget *parent = nullptr);
+                 const std::vector<Segment *>& segments);
 
     ~NotationView() override;
 
