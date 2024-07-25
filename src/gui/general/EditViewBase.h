@@ -67,7 +67,7 @@ signals:
     void openInEventList(std::vector<Segment *>);
     /// Segment > Edit With > Open in Pitch Tracker
     /**
-     * ??? RMVW never connects to this.  This goes nowhere.
+     * Only Notation and Pitch Tracker offer this menu item.
      */
     void openInPitchTracker(std::vector<Segment *>);
 
@@ -171,14 +171,12 @@ protected slots:
     /// View > Show Statusbar
     void slotToggleStatusBar();
 
-    /// Update clipboard action state.
     /**
-     * A command has happened; check the clipboard in case we
-     * need to change action state.
-     *
-     * ??? rename: slotUpdateClipboardActionState()
+     * Called whenever a command has happened.  Makes sure the clipboard-related
+     * actions (menu items and toolbar buttons) are appropriately
+     * enabled/disabled.
      */
-    void slotTestClipboard();
+    void slotUpdateClipboardActionState();
 
     /// Move > Solo.  The "S" button.
     void slotToggleSolo();

@@ -251,7 +251,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     setupActions();
     createMenusAndToolbars("notation.rc");
     slotUpdateMenuStates();
-    slotTestClipboard();
+    slotUpdateClipboardActionState();
 
     setWindowIcon(IconLoader::loadPixmap("window-notation"));
 

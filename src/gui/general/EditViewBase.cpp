@@ -48,7 +48,7 @@ EditViewBase::EditViewBase(const std::vector<Segment *> &segments) :
     RosegardenDocument::currentDocument->attachEditView(this);
 
     connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
-            this, &EditViewBase::slotTestClipboard);
+            this, &EditViewBase::slotUpdateClipboardActionState);
 }
 
 EditViewBase::~EditViewBase()
@@ -165,7 +165,7 @@ void EditViewBase::showStatusBarMessage(const QString &text)
 }
 
 void
-EditViewBase::slotTestClipboard()
+EditViewBase::slotUpdateClipboardActionState()
 {
     if (Clipboard::mainClipboard()->isEmpty()) {
         RG_DEBUG << "EditViewBase::slotTestClipboard(): empty";
@@ -326,7 +326,7 @@ EditViewBase::getTitle(const QString &editorName)
                 arg(editorName);
     } else {
         // More than one Segment, but not all.
-        // ??? No need for "(s)".  This is always more than one.
+        // ??? No need for "(s)".  This is always more than one.  "Segments".
         title = tr("%1%2 - %3 Segment(s) - %4").
                 arg(modified).
                 arg(doc->getTitle()).
