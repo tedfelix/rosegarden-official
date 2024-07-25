@@ -425,10 +425,6 @@ RosegardenMainViewWidget::createNotationView(const std::vector<Segment *>& segme
             this, &RosegardenMainViewWidget::stepByStepTargetRequested);
     connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
             notationView, SLOT(slotStepByStepTargetRequested(QObject *)));
-    connect(RosegardenMainWindow::self(), &RosegardenMainWindow::compositionStateUpdate,
-            notationView, &EditViewBase::slotCompositionStateUpdate);
-    connect(this, &RosegardenMainViewWidget::compositionStateUpdate,
-            notationView, &EditViewBase::slotCompositionStateUpdate);
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view.  Since scrollToTime is
@@ -576,10 +572,6 @@ RosegardenMainViewWidget::createPitchTrackerView(const std::vector<Segment *>& s
             this, &RosegardenMainViewWidget::stepByStepTargetRequested);
     connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
             pitchTrackerView, SLOT(slotStepByStepTargetRequested(QObject *)));
-    connect(RosegardenMainWindow::self(), &RosegardenMainWindow::compositionStateUpdate,
-            pitchTrackerView, &EditViewBase::slotCompositionStateUpdate);
-    connect(this, &RosegardenMainViewWidget::compositionStateUpdate,
-            pitchTrackerView, &EditViewBase::slotCompositionStateUpdate);
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view.  Since scrollToTime is
@@ -762,10 +754,6 @@ RosegardenMainViewWidget::createMatrixView(const std::vector<Segment *>& segment
             this, &RosegardenMainViewWidget::stepByStepTargetRequested);
     connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
             matrixView, SLOT(slotStepByStepTargetRequested(QObject *)));
-    connect(RosegardenMainWindow::self(), &RosegardenMainWindow::compositionStateUpdate,
-            matrixView, &EditViewBase::slotCompositionStateUpdate);
-    connect(this, &RosegardenMainViewWidget::compositionStateUpdate,
-            matrixView, &EditViewBase::slotCompositionStateUpdate);
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view.   Since scrollToTime is
@@ -1090,7 +1078,6 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
 
     // inform
     emit segmentsSelected(segments);
-    emit compositionStateUpdate();
 }
 
 void RosegardenMainViewWidget::slotPropagateSegmentSelection(const SegmentSelection &segments)
@@ -1912,10 +1899,6 @@ RosegardenMainViewWidget::createEventView(Segment *segment)
             this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
     connect(eventView, &EventView::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-    connect(this, &RosegardenMainViewWidget::compositionStateUpdate,
-            eventView, &EditViewBase::slotCompositionStateUpdate);
-    connect(RosegardenMainWindow::self(), &RosegardenMainWindow::compositionStateUpdate,
-            eventView, &EditViewBase::slotCompositionStateUpdate);
     connect(eventView, &EditViewBase::toggleSolo,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 

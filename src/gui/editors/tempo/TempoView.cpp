@@ -96,7 +96,9 @@ TempoView::TempoView(
 
     m_grid->addWidget(m_list, 2, 1);
 
-    updateViewCaption();
+    slotUpdateWindowTitle(false);
+    connect(m_doc, &RosegardenDocument::documentModified,
+            this, &TempoView::slotUpdateWindowTitle);
 
     m_doc->getComposition().addObserver(this);
 
@@ -770,7 +772,7 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
 }
 
 void
-TempoView::updateViewCaption()
+TempoView::slotUpdateWindowTitle(bool)
 {
     setWindowTitle(tr("%1 - Tempo and Time Signature Editor")
                 .arg(RosegardenDocument::currentDocument->getTitle()));

@@ -251,12 +251,6 @@ signals:
 
     void toggleSolo(bool);
 
-    /**
-     * Current used to dispatch things like track select changes, solo, etc...
-     * to edit views
-     */
-    void compositionStateUpdate();
-
 
     /**
      * This signal is used to dispatch a notification for a request to

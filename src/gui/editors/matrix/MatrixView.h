@@ -85,8 +85,6 @@ public:
     EventSelection *getSelection() const override;
     EventSelection *getRulerSelection() const;
 
-    void updateViewCaption() override { }//!!!
-
     virtual timeT getInsertionTime() const;
 
 signals:

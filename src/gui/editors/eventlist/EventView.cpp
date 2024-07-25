@@ -236,7 +236,7 @@ EventView::EventView(RosegardenDocument *doc,
 
     }
 
-    updateViewCaption();
+    updateWindowTitle(false);
     connect(RosegardenDocument::currentDocument, &RosegardenDocument::documentModified,
             this, &EventView::updateWindowTitle);
 
@@ -313,8 +313,6 @@ EventView::EventView(RosegardenDocument *doc,
             this, &EventView::slotModifyFilter);
 
     makeInitialSelection(doc->getComposition().getPosition());
-
-    slotCompositionStateUpdate();
 
 
     // Restore window geometry and toolbar/dock state
@@ -1628,15 +1626,6 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
                                  dialog.getEvent());
 
     addCommandToHistory(command);
-}
-
-void
-EventView::updateViewCaption()
-{
-    // err on the side of not showing modified status here, rather than showing
-    // a false positive, since we're kind of kludging this together with the
-    // existing virtual updateViewCaption() method
-    updateWindowTitle(false);
 }
 
 void

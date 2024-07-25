@@ -2296,9 +2296,6 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
 
     updateTitle();
 
-    // update the edit view's captions too
-    emit compositionStateUpdate();
-
     // Indicate success.
     return true;
 }

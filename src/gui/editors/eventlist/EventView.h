@@ -80,12 +80,6 @@ protected:
 
     void initStatusBar();
 
-    /**
-     * virtual function inherited from the base class, this implementation just
-     * calls updateWindowTitle() and avoids a refactoring job, even though
-     * updateViewCaption is superfluous
-     */
-    void updateViewCaption() override;
     Segment *getCurrentSegment() override;
 
     // ListEditView overrides.
@@ -144,6 +138,9 @@ private slots:
     // unused void slotTriggerRetuneChanged();
 
     /// slot connected to signal RosegardenDocument::setModified(bool)
+    /**
+     * ??? Rename: slotUpdateWindowTitle() like all others.
+     */
     void updateWindowTitle(bool modified);
 
 private:

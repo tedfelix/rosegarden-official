@@ -75,11 +75,6 @@ public:
 
     bool hasSegment(Segment * seg) const;
 
-    /** This turns out to be cruft that is rather annoying to eliminate.  We
-     * don't use this for anything, and provide an empty implementation.
-     */
-    void updateViewCaption() override { }
-
     // Adopt a segment that doesn't live in Composition.
     void adoptSegment(Segment *s);
     // Unadopt a segment that we previously adopted.

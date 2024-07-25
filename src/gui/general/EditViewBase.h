@@ -76,15 +76,6 @@ signals:
     /// Tell RMW to toggle solo.  See slotToggleSolo().
     void toggleSolo(bool);
 
-public slots:
-
-    /// Handle Composition changes.
-    /**
-     * Responds to changes in the Composition by updating the modified star
-     * in the titlebar.  See updateViewCaption().
-     */
-    virtual void slotCompositionStateUpdate();
-
 protected:
 
     /// Display message in status bar.
@@ -109,25 +100,6 @@ protected:
     void setupBaseActions(bool haveClipboard);
 
     virtual Segment *getCurrentSegment() = 0;
-
-    /// Composition has changed.  Update the titlebar.
-    /**
-     * Set the caption of the view's window
-     *
-     * Called by slotCompositionStateUpdate().  Assumption is that something
-     * about the Composition has changed.  Modified state?
-     *
-     * - TempoView sets the window title and filename.  No modified star.
-     * - EventView sets the window title, filename, and modified star.
-     * - All others ignore this.
-     *
-     * ??? Get rid of purity (= 0).  Allow Matrix and Notation to ignore.
-     * ??? Can TempoView just set the titlebar in its ctor and ignore this?
-     *     Is that what MatrixView and NotationView are doing?
-     * ??? If EventView is the only user, can it get this info by some other
-     *     route?  Then we can get rid of this.
-     */
-    virtual void updateViewCaption() = 0;
 
     /// Override to write things to the conf file at close.
     /**

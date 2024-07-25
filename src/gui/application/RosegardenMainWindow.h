@@ -493,9 +493,6 @@ signals:
     /// emitted when the set of selected segments changes (relayed from RosegardenMainViewWidget)
     void segmentsSelected(const SegmentSelection &);
 
-    /// emitted when the composition state (selected track, solo, etc...) changes
-    void compositionStateUpdate();
-
     /// emitted when a plugin dialog selects a plugin
     void pluginSelected(InstrumentId, int, int);
 

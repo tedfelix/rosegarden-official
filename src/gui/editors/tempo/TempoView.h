@@ -122,6 +122,7 @@ public slots:
 
 protected slots:
 
+    void slotUpdateWindowTitle(bool modified);
     void saveOptions() override;
 
 protected:
@@ -132,7 +133,6 @@ private:
     void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
     Segment *getCurrentSegment() override;
-    void updateViewCaption() override;
 
     //--------------- Data members ---------------------------------
 

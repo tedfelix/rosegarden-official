@@ -266,12 +266,6 @@ EditViewBase::slotSetSegmentDuration()
     }
 }
 
-void
-EditViewBase::slotCompositionStateUpdate()
-{
-    updateViewCaption();
-}
-
 QString
 EditViewBase::getTitle(const QString &editorName)
 {
