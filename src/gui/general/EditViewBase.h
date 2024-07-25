@@ -89,10 +89,6 @@ protected:
      */
     void showStatusBarMessage(const QString &text);
 
-    /// Set check box for visibility of toolbar.
-    void setCheckBoxState(const QString &actionName,
-                          const QString &toolbarName);
-
     /// Create actions for menus and toolbars that are managed by this class.
     void setupBaseActions(bool haveClipboard);
 

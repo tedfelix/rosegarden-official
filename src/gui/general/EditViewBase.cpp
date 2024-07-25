@@ -57,21 +57,6 @@ EditViewBase::~EditViewBase()
     m_doc->detachEditView(this);
 }
 
-void EditViewBase::setCheckBoxState(const QString &actionName,
-                                    const QString &toolbarName)
-{
-    // ??? This is called a lot, but it is trivial.  Inline into callers.
-    //     Is the state saved to the .conf file?  If so, then this might
-    //     be reducible to a single line once it is inlined.  Otherwise
-    //     we could just hard-code the initial state and again, this is
-    //     reduced to a single line.
-
-    // Use isHidden() for visibility since ancestors may not be visible
-    // since this is called during each view's constructor.
-    const bool visible = !findToolbar(toolbarName)->isHidden();
-    findAction(actionName)->setChecked(visible);
-}
-
 void EditViewBase::setupBaseActions(bool haveClipboard)
 {
     // Actions all edit views will have
