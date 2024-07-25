@@ -279,15 +279,8 @@ public:
     void jumpToQuickMarker();
     timeT getQuickMarkerTime() { return m_quickMarkerTime; }
 
-    /**
-     * returns the composition (the principal constituent of the document)
-     */
-    Composition&       getComposition()       { return m_composition; }
-
-    /**
-     * returns the composition (the principal constituent of the document)
-     */
-    const Composition& getComposition() const { return m_composition; }
+    Composition &getComposition()  { return m_composition; }
+    const Composition &getComposition() const  { return m_composition; }
 
     /*
      * return the Studio

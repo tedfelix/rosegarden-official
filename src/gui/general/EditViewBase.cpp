@@ -190,35 +190,47 @@ EditViewBase::slotToggleSolo()
             getCurrentSegment()->getTrack());
     RosegardenDocument::currentDocument->getComposition().notifyTrackSelectionChanged(
             getCurrentSegment()->getTrack());
-    // Old notification mechanism.
+    // Calls RosegardenMainViewWidget::slotSelectTrackSegments().
     emit selectTrack(getCurrentSegment()->getTrack());
+    // ??? Get rid of signal/slot.  Call directly.  It's faster and
+    //     easier to understand.
+    //RosegardenMainWindow::self()->getView()->slotSelectTrackSegments(
+    //        getCurrentSegment()->getTrack());
 
     // Toggle solo on the selected track.
     // The "false" is ignored.  It was used for the checked state.
+    // Calls RosegardenMainWindow::slotToggleSolo().
+    // ??? Can't we just call the routine directly and void the signal/slot?
+    //     Like we did for Track selection above.
     emit toggleSolo(false);
+    // ??? Get rid of signal/slot.  Call directly.  It's faster and
+    //     easier to understand.
+    //RosegardenMainWindow::self()->slotToggleSolo(false);
 }
 
 void
 EditViewBase::slotSetSegmentStartTime()
 {
-    Segment *s = getCurrentSegment();
-    if (!s)
-        return ;
+    Segment *segment = getCurrentSegment();
+    if (!segment)
+        return;
 
     TimeDialog dialog(this, tr("Segment Start Time"),
                       &RosegardenDocument::currentDocument->getComposition(),
-                      s->getStartTime(), false);
+                      segment->getStartTime(), false);
 
     if (dialog.exec() == QDialog::Accepted) {
 
-        SegmentReconfigureCommand *command =
-            new SegmentReconfigureCommand(tr("Set Segment Start Time"),
-                    &RosegardenDocument::currentDocument->getComposition());
+        SegmentReconfigureCommand *command = new SegmentReconfigureCommand(
+                tr("Set Segment Start Time"),
+                &RosegardenDocument::currentDocument->getComposition());
 
-        command->addSegment
-        (s, dialog.getTime(),
-         s->getEndMarkerTime() - s->getStartTime() + dialog.getTime(),
-         s->getTrack());
+        command->addSegment(
+                segment,
+                dialog.getTime(),
+                segment->getEndMarkerTime() - segment->getStartTime() +
+                        dialog.getTime(),
+                segment->getTrack());
 
         CommandHistory::getInstance()->addCommand(command);
     }
@@ -227,26 +239,28 @@ EditViewBase::slotSetSegmentStartTime()
 void
 EditViewBase::slotSetSegmentDuration()
 {
-    Segment *s = getCurrentSegment();
-    if (!s)
-        return ;
+    Segment *segment = getCurrentSegment();
+    if (!segment)
+        return;
 
     TimeDialog dialog(this, tr("Segment Duration"),
                       &RosegardenDocument::currentDocument->getComposition(),
-                      s->getStartTime(),
-                      s->getEndMarkerTime() - s->getStartTime(),
-                      Note(Note::Shortest).getDuration(), false);
+                      segment->getStartTime(),
+                      segment->getEndMarkerTime() - segment->getStartTime(),
+                      Note(Note::Shortest).getDuration(),
+                      false);  // constrainToCompositionDuration
 
     if (dialog.exec() == QDialog::Accepted) {
 
-        SegmentReconfigureCommand *command =
-            new SegmentReconfigureCommand(tr("Set Segment Duration"),
-                    &RosegardenDocument::currentDocument->getComposition());
+        SegmentReconfigureCommand *command = new SegmentReconfigureCommand(
+                tr("Set Segment Duration"),
+                &RosegardenDocument::currentDocument->getComposition());
 
-        command->addSegment
-        (s, s->getStartTime(),
-         s->getStartTime() + dialog.getTime(),
-         s->getTrack());
+        command->addSegment(
+                segment,
+                segment->getStartTime(),  // newStartTime
+                segment->getStartTime() + dialog.getTime(),  // newEndMarkerTime
+                segment->getTrack());  // newTrack
 
         CommandHistory::getInstance()->addCommand(command);
     }
@@ -255,67 +269,73 @@ EditViewBase::slotSetSegmentDuration()
 void
 EditViewBase::slotCompositionStateUpdate()
 {
-    // update the window caption
     updateViewCaption();
 }
 
 QString
 EditViewBase::getTitle(const QString &editorName)
 {
-    const QString modified =
-            (RosegardenDocument::currentDocument->isModified() ? "*" : "");
+    const RosegardenDocument *doc = RosegardenDocument::currentDocument;
+
+    const QString modified = (doc->isModified() ? "*" : "");
 
     QString title;
 
-    const int nsegs = m_segments.size();
-    if (nsegs == 1) {
+    const size_t segmentCount = m_segments.size();
 
-        TrackId trackId = m_segments[0]->getTrack();
-        Track *track =
-            m_segments[0]->getComposition()->getTrackById(trackId);
+    // Format the titlebar text based on the number of Segments.
+    if (segmentCount == 1) {
+        // For one Segment, provide Segment and Track info.
 
-        int trackPosition = -1;
-        if (track)
-            trackPosition = track->getPosition();
-        else {
+        const TrackId trackId = m_segments[0]->getTrack();
+        const Track *track =
+                m_segments[0]->getComposition()->getTrackById(trackId);
+        if (!track)
             return "";
-        }
 
+        const int trackPosition = track->getPosition();
+
+        // ??? Empty Segment name results in "...Segment Track..." which
+        //     looks bad.  Move "Segment" up here and eliminate it if
+        //     there is no Segment label.
         QString segLabel = strtoqstr(m_segments[0]->getLabel());
-        if (segLabel.isEmpty()) {
+        if (segLabel.isEmpty())
             segLabel = " ";
-        } else {
+        else
             segLabel = QString(" \"%1\" ").arg(segLabel);
-        }
 
         QString trkLabel = strtoqstr(track->getLabel());
-        if (trkLabel.isEmpty() || trkLabel == tr("<untitled>")) {
+        if (trkLabel.isEmpty()  ||  trkLabel == tr("<untitled>"))
             trkLabel = " ";
-        } else {
+        else
             trkLabel = QString(" \"%1\" ").arg(trkLabel);
-        }
-        title = tr("%1%2 - Segment%3Track%4#%5 - %6")
-            .arg(modified)
-            .arg(RosegardenDocument::currentDocument->getTitle())
-            .arg(segLabel)
-            .arg(trkLabel)
-            .arg(trackPosition + 1)
-            .arg(editorName);
-    } else if (m_segments.size() ==
-               RosegardenDocument::currentDocument->getComposition().getNbSegments()) {
-        title = tr("%1%2 - All Segments - %3")
-            .arg(modified)
-            .arg(RosegardenDocument::currentDocument->getTitle())
-            .arg(editorName);
+
+        title = tr("%1%2 - Segment%3Track%4#%5 - %6").
+                arg(modified).
+                arg(doc->getTitle()).
+                arg(segLabel).
+                arg(trkLabel).
+                arg(trackPosition + 1).
+                arg(editorName);
+
+    } else if (segmentCount == doc->getComposition().getNbSegments()) {
+        // All Segments.
+        title = tr("%1%2 - All Segments - %3").
+                arg(modified).
+                arg(doc->getTitle()).
+                arg(editorName);
     } else {
-        title = tr("%1%2 - %3 Segment(s) - %4")
-            .arg(modified)
-            .arg(RosegardenDocument::currentDocument->getTitle())
-            .arg(m_segments.size())
-            .arg(editorName);
+        // More than one Segment, but not all.
+        // ??? No need for "(s)".  This is always more than one.
+        title = tr("%1%2 - %3 Segment(s) - %4").
+                arg(modified).
+                arg(doc->getTitle()).
+                arg(segmentCount).
+                arg(editorName);
     }
 
     return title;
 }
+
 
 }
