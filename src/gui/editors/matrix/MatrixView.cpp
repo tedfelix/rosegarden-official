@@ -719,8 +719,6 @@ MatrixView::initRulersToolbar()
 void
 MatrixView::readOptions()
 {
-    EditViewBase::readOptions();
-
     setCheckBoxState("options_show_toolbar", "General Toolbar");
     setCheckBoxState("show_tools_toolbar", "Tools Toolbar");
     setCheckBoxState("show_transport_toolbar", "Transport Toolbar");

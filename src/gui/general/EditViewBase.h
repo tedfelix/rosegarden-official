@@ -89,9 +89,6 @@ protected:
      */
     void showStatusBarMessage(const QString &text);
 
-    /// Update "View (> Toolbars) > Show Statusbar" checkbox.
-    void readOptions();
-
     /// Set check box for visibility of toolbar.
     void setCheckBoxState(const QString &actionName,
                           const QString &toolbarName);

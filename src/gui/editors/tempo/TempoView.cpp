@@ -639,7 +639,6 @@ TempoView::readOptions()
 {
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
-    EditViewBase::readOptions();
     m_filter = settings.value("filter", m_filter).toInt();
     settings.endGroup();
 }
@@ -762,6 +761,8 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
                      (&composition, time, dialog.getTimeSignature()));
             }
         }
+
+        break;
     }
 
     default:

@@ -1318,15 +1318,13 @@ EventView::setViewSize(QSize s)
 void
 EventView::readOptions()
 {
-    EditViewBase::readOptions();
-
     QSettings settings;
 
     settings.beginGroup(EventViewConfigGroup);
 
     m_eventFilter = settings.value("event_list_filter", m_eventFilter).toInt();
 
-    QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
+    const QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
     m_eventList->restoreGeometry(qba);
 
     settings.endGroup();

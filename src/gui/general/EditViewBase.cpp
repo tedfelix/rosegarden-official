@@ -57,15 +57,6 @@ EditViewBase::~EditViewBase()
     m_doc->detachEditView(this);
 }
 
-void EditViewBase::readOptions()
-{
-    // ??? Trivial and confusing.  Inline into callers?
-
-    QAction *a = findAction("options_show_statusbar");
-    if (a)
-        a->setChecked(!statusBar()->isHidden());
-}
-
 void EditViewBase::setCheckBoxState(const QString &actionName,
                                     const QString &toolbarName)
 {
@@ -81,12 +72,14 @@ void EditViewBase::setCheckBoxState(const QString &actionName,
     findAction(actionName)->setChecked(visible);
 }
 
-
 void EditViewBase::setupBaseActions(bool haveClipboard)
 {
     // Actions all edit views will have
 
-    createAction("options_show_statusbar", SLOT(slotToggleStatusBar()));
+    QAction *showStatusBar = createAction(
+            "options_show_statusbar", SLOT(slotToggleStatusBar()));
+    showStatusBar->setChecked(!statusBar()->isHidden());
+
     createAction("options_configure", SLOT(slotConfigure()));
 
     createAction("file_save", SIGNAL(saveFile()));
