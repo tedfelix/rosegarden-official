@@ -47,12 +47,14 @@ class EditViewBase : public QMainWindow, public ActionFileClient
     Q_OBJECT
 
 public:
+
     EditViewBase(const std::vector<Segment *> &segments,
                  QWidget *parent);
 
     ~EditViewBase() override;
 
 signals:
+
     /// File > Save
     void saveFile();
 
@@ -83,29 +85,6 @@ public slots:
      * in the titlebar.  See updateViewCaption().
      */
     virtual void slotCompositionStateUpdate();
-
-protected slots:
-
-    /// Edit > Cut.
-    virtual void slotEditCut() = 0;
-    /// Edit > Copy.
-    virtual void slotEditCopy() = 0;
-    /// Edit > Paste.
-    virtual void slotEditPaste() = 0;
-    /// View > Show Statusbar
-    void slotToggleStatusBar();
-
-    /// Update clipboard action state.
-    /**
-     * A command has happened; check the clipboard in case we
-     * need to change action state.
-     *
-     * ??? rename: slotUpdateClipboardActionState()
-     */
-    void slotTestClipboard();
-
-    /// Move > Solo.  The "S" button.
-    void slotToggleSolo();
 
 protected:
 
@@ -151,13 +130,6 @@ protected:
      */
     virtual void updateViewCaption() = 0;
 
-protected slots:
-
-    /// Edit > Preferences...
-    virtual void slotConfigure();
-
-protected:
-
     /// Override to write things to the conf file at close.
     /**
      * save general Options like all bar positions and status as well
@@ -188,6 +160,32 @@ protected:
      * if that makes sense.  Only use this for connection/disconnection.
      */
     RosegardenDocument *m_doc;
+
+protected slots:
+
+    /// Edit > Cut.
+    virtual void slotEditCut() = 0;
+    /// Edit > Copy.
+    virtual void slotEditCopy() = 0;
+    /// Edit > Paste.
+    virtual void slotEditPaste() = 0;
+    /// View > Show Statusbar
+    void slotToggleStatusBar();
+
+    /// Update clipboard action state.
+    /**
+     * A command has happened; check the clipboard in case we
+     * need to change action state.
+     *
+     * ??? rename: slotUpdateClipboardActionState()
+     */
+    void slotTestClipboard();
+
+    /// Move > Solo.  The "S" button.
+    void slotToggleSolo();
+
+    /// Edit > Preferences...
+    virtual void slotConfigure();
 
 private slots:
 
