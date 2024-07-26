@@ -436,22 +436,22 @@ void MidiProgramsEditor::slotEditingFinished()
 
     RG_DEBUG << "slotEditingFinsihed" << programName << programNumber;
 
-    // Get the MidiProgram that needs to be changed from m_programList.
-    ProgramList::iterator programIter =
-            getProgramIter(*m_currentBank, programNumber);
-
+    // Get the MidiProgram that needs to be changed.
     ProgramList newProgramList = m_device->getPrograms();
+    ProgramList::iterator programIter =
+        getProgramIter(newProgramList, *m_currentBank, programNumber);
+
     // If the MidiProgram doesn't exist in m_programList, add it.
     if (programIter == newProgramList.end()) {
         // If the program name is empty, do nothing.
         if (programName.isEmpty())
             return;
 
-        // Create a new MidiProgram and add it to m_programList.
+        // Create a new MidiProgram and add it to newProgramList.
         MidiProgram newProgram(*m_currentBank, programNumber);
         newProgramList.push_back(newProgram);
 
-        // Sort m_programList.
+        // Sort newProgramList.
         // We need to sort this for the MIPP.  It just needs the PCs in
         // order.  That's how it displays them.
         // If we do not sort this, the .rg file is also mixed up.  But
@@ -465,52 +465,31 @@ void MidiProgramsEditor::slotEditingFinished()
                   [](const MidiProgram &lhs, const MidiProgram &rhs){ return lhs.lessKey(rhs); });
 
         // Get the new MidiProgram from m_programList.
-        programIter = getProgramIter(*m_currentBank, programNumber);
+        programIter = getProgramIter(newProgramList,
+                                     *m_currentBank,
+                                     programNumber);
 
-    } else {  // The MidiProgram already exists in newprogramList.
+    } else {  // The MidiProgram already exists in newProgramList.
 
         // If the label is now empty...
         if (programName.isEmpty()) {
             //RG_DEBUG << "slotNameChanged(): deleting empty program (" << programNumber << ")";
-            m_programList.erase(programIter);
-            // Call the parent's slotApply() to make the change to the
-            // document.
-            // ??? Command History SPAM.
-            // ??? This creates a command and adds it to the history.
-            //     Are we seeing a ton of things appear in the undo history?
-            //     Yes!  This spams the undo history until it is useless.
-            //     And there's no way to undo from within the editor.  So
-            //     adding to the command history seems pointless.
-            // ??? We should only call this on switching banks or
-            //     closing the BankEditorDialog.  We need to review
-            //     BankEditorDialog to make sure this is the best solution.
-            // ??? Other parts of the editor call this for an update.  But
-            //     program name changes do not appear on the tree.  So an
-            //     update of any kind has no value.
-            m_bankEditor->slotApply();
-
-            return;
+            newProgramList.erase(programIter);
         }
     }
-
-    if (programIter == m_programList.end()) {
-        RG_WARNING << "slotNameChanged(): WARNING: programIter is end().";
-        return;
-    }
-
-    //RG_DEBUG << "slotNameChanged(): program: " << program;
 
     // If the name has actually changed
     if (qstrtostr(programName) != programIter->getName()) {
         programIter->setName(qstrtostr(programName));
-        // Call the parent's slotApply() to make the change to the
-        // document.
-        // ??? Command History SPAM.  See comments above.
-        // ??? We should only call this on switching banks or
-        //     closing the BankEditorDialog.  We need to review
-        //     BankEditorDialog to make sure this is the best solution.
-        m_bankEditor->slotApply();
     }
+
+    // now make the change
+    ModifyDeviceCommand *command =
+        m_bankEditor->makeCommand(tr("program changed"));
+
+    command->setProgramList(newProgramList);
+    m_bankEditor->addCommandToHistory(command);
+
 }
 
 void
@@ -714,12 +693,13 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 }
 
 ProgramList::iterator
-MidiProgramsEditor::getProgramIter(const MidiBank &bank, int programNo)
+MidiProgramsEditor::getProgramIter(ProgramList& list,
+                                   const MidiBank &bank,
+                                   int programNo)
 {
-    ProgramList programList = m_device->getPrograms();
     // For each program in the programList...
-    for (ProgramList::iterator programIter = programList.begin();
-         programIter != programList.end();
+    for (ProgramList::iterator programIter = list.begin();
+         programIter != list.end();
          ++programIter) {
         // Match?
         if (programIter->getBank().getMSB() == bank.getMSB()  &&
@@ -729,7 +709,7 @@ MidiProgramsEditor::getProgramIter(const MidiBank &bank, int programNo)
             return programIter;
     }
 
-    return m_programList.end();
+    return list.end();
 }
 
 void MidiProgramsEditor::makeUnique

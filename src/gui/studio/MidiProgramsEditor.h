@@ -111,7 +111,9 @@ private:
     /// Get a pointer into the program list.
     MidiProgram *getProgram(const MidiBank &bank, int programNo);
     /// Get an iterator which is more flexible.
-    ProgramList::iterator getProgramIter(const MidiBank &bank, int programNo);
+    ProgramList::iterator getProgramIter(ProgramList& list,
+                                         const MidiBank &bank,
+                                         int programNo);
     /// Get a ProgramList containing only the programs in a bank.
     ProgramList getBankSubset(const MidiBank &);
     /// Set the currently loaded programs to new MSB and LSB
