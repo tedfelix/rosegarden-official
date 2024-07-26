@@ -62,8 +62,7 @@ class TempoView : public ListEditView, public CompositionObserver
     };
 
 public:
-    TempoView(QWidget *parent,
-              EditTempoController *editTempoController,
+    TempoView(EditTempoController *editTempoController,
               timeT openTime);
     ~TempoView() override;
 
@@ -76,7 +75,7 @@ public:
     void updateView() override;
 
     virtual void setupActions();
-    void initStatusBar() override;
+    void initStatusBar();
     // unused virtual QSize getViewSize();
     // unused virtual void setViewSize(QSize);
 
@@ -123,17 +122,18 @@ public slots:
 
 protected slots:
 
-    void slotSaveOptions() override;
+    void slotUpdateWindowTitle(bool modified);
 
 protected:
     void closeEvent(QCloseEvent *) override;
 
 private:
-    void readOptions() override;
+    void readOptions();
+    void saveOptions();
+
     void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
     Segment *getCurrentSegment() override;
-    void updateViewCaption() override;
 
     //--------------- Data members ---------------------------------
 

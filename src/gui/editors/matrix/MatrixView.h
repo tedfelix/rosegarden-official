@@ -65,8 +65,7 @@ class MatrixView : public EditViewBase,
 public:
     MatrixView(RosegardenDocument *doc,
                const std::vector<Segment *>& segments,
-               bool drumMode,
-               QWidget *parent = nullptr);
+               bool drumMode);
 
     ~MatrixView() override;
 
@@ -85,8 +84,6 @@ public:
     void setSelection(EventSelection *s, bool preview) override;
     EventSelection *getSelection() const override;
     EventSelection *getRulerSelection() const;
-
-    void updateViewCaption() override { }//!!!
 
     virtual timeT getInsertionTime() const;
 
@@ -269,7 +266,6 @@ protected slots:
 
 protected:
     const SnapGrid *getSnapGrid() const;
-    void readOptions() override;
     void insertControllerSequence(const ControlParameter &controlParameter);
 
 private:
@@ -310,7 +306,9 @@ private:
      */
     Device *getCurrentDevice();
 
-    void initStatusBar() override;
+    void initStatusBar();
+
+    void readOptions();
 
 };
 

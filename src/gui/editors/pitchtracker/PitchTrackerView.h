@@ -54,12 +54,11 @@ class PitchTrackerView : public NotationView
 public:
     // basic Rosegarden infrastructure
     PitchTrackerView(RosegardenDocument *doc,
-                     const std::vector<Segment *>& segments,
-                     QWidget *parent = nullptr);
+                     const std::vector<Segment *> &segments);
     ~PitchTrackerView() override;
 
     void setSegments(RosegardenDocument *document,
-                     const std::vector<Segment *>& segments);
+                     const std::vector<Segment *> &segments);
 
     bool getJackConnected() {
         return m_jackConnected;

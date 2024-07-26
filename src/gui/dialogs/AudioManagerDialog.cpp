@@ -42,7 +42,6 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/widgets/AudioListItem.h"
 #include "gui/widgets/AudioListView.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
 #include "gui/widgets/WarningGroupBox.h"

@@ -19,16 +19,12 @@
 #ifndef RG_EVENTVIEW_H
 #define RG_EVENTVIEW_H
 
-#include "base/MidiTypes.h"
-#include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "gui/general/ListEditView.h"
-#include "base/Event.h"
 
 #include <set>
 #include <vector>
 
-#include <QSize>
 #include <QString>
 
 
@@ -40,47 +36,56 @@ class QTreeWidgetItem;
 class QLabel;
 class QCheckBox;
 class QGroupBox;
-class QTreeWidget;
 
 
 namespace Rosegarden
 {
 
-class Segment;
+
 class RosegardenDocument;
 class Event;
 
 
 /// The "Event List" window.
+/**
+ * This is the event list editor.
+ *
+ * Segment > Edit With > Open in Event List Editor.  Or just press "E".
+ */
 class EventView : public ListEditView, public SegmentObserver
 {
     Q_OBJECT
 
 public:
+
     EventView(RosegardenDocument *doc,
-              const std::vector<Segment *>& segments,
-              QWidget *parent);
+              const std::vector<Segment *> &segments);
 
     ~EventView() override;
 
+signals:
+
+    /// Connected to RosegardenMainViewWidget::slotEditTriggerSegment().
+    void editTriggerSegment(int);
+
+protected slots:
+
+    // EditViewBase overrides.
+    void slotEditCut() override;
+    void slotEditCopy() override;
+    void slotEditPaste() override;
+
+protected:
+
+    void initStatusBar();
+
+    Segment *getCurrentSegment() override;
+
+    // ListEditView overrides.
     void refreshSegment(Segment *segment,
-                                timeT startTime = 0,
-                                timeT endTime = 0) override;
-
+                        timeT startTime = 0,
+                        timeT endTime = 0) override;
     void updateView() override;
-
-    void setupActions();
-    void initStatusBar() override;
-    // unused virtual QSize getViewSize();
-    // unused virtual void setViewSize(QSize);
-
-    // Set the button states to the current filter positions
-    //
-    void setButtonsToFilter();
-
-    // Menu creation and show
-    //
-    void createMenu();
 
     // SegmentObserver overrides.
     void eventAdded(const Segment *, Event *) override { }
@@ -88,14 +93,11 @@ public:
     void endMarkerTimeChanged(const Segment *, bool) override { }
     void segmentDeleted(const Segment *) override;
 
-public slots:
+    // QWidget override.
+    void closeEvent(QCloseEvent *event) override;
 
-    // standard slots
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
+private slots:
 
-    // other edit slots
     void slotEditDelete();
     void slotEditInsert();
 
@@ -106,22 +108,10 @@ public slots:
     void slotRealTime();
     void slotRawTime();
 
-    // Change filter parameters
-    //
     void slotModifyFilter();
 
     void slotHelpRequested();
     void slotHelpAbout();
-
-signals:
-    void editTriggerSegment(int);
-
-protected:
-    // QWidget overrides.
-    void closeEvent(QCloseEvent *event) override;
-
-private slots:
-    void slotSaveOptions() override;
 
     // Menu Handlers
 
@@ -134,7 +124,7 @@ private slots:
     void slotPopupEventEditor(QTreeWidgetItem *item, int column);
 
     /// Right-click context menu.
-    void slotPopupMenu(const QPoint&);
+    void slotPopupMenu(const QPoint &);
     /// Right-click context menu handler.
     void slotOpenInEventEditor(bool checked);
     /// Right-click context menu handler.
@@ -147,37 +137,44 @@ private slots:
     // unused void slotTriggerRetuneChanged();
 
     /// slot connected to signal RosegardenDocument::setModified(bool)
-    void updateWindowTitle(bool m = false);
+    /**
+     * ??? Rename: slotUpdateWindowTitle() like all others.
+     */
+    void updateWindowTitle(bool modified);
 
 private:
 
-    bool applyLayout();
+    /// Create and show popup menu.
+    void createMenu();
 
-    /// virtual function inherited from the base class, this implementation just
-    /// calls updateWindowTitle() and avoids a refactoring job, even though
-    /// updateViewCaption is superfluous
-    void updateViewCaption() override;
+    /// Set the button states to the current filter positions
+    void setButtonsToFilter();
 
-    void readOptions() override;
+    void setupActions();
+
+    bool updateTreeWidget();
+
     QString makeTimeString(timeT time, int timeMode);
     QString makeDurationString(timeT time,
                                timeT duration, int timeMode);
-    Segment *getCurrentSegment() override;
 
-    QGroupBox   *m_filterGroup;  // Event filters
-    QCheckBox   *m_noteCheckBox;
-    QCheckBox   *m_programCheckBox;
-    QCheckBox   *m_controllerCheckBox;
-    QCheckBox   *m_pitchBendCheckBox;
-    QCheckBox   *m_sysExCheckBox;
-    QCheckBox   *m_keyPressureCheckBox;
-    QCheckBox   *m_channelPressureCheckBox;
-    QCheckBox   *m_restCheckBox;
-    QCheckBox   *m_indicationCheckBox;
-    QCheckBox   *m_textCheckBox;
-    QCheckBox   *m_generatedRegionCheckBox;
-    QCheckBox   *m_segmentIDCheckBox;
-    QCheckBox   *m_otherCheckBox;
+    // Event filters
+    QGroupBox *m_filterGroup;
+    QCheckBox *m_noteCheckBox;
+    QCheckBox *m_programCheckBox;
+    QCheckBox *m_controllerCheckBox;
+    QCheckBox *m_pitchBendCheckBox;
+    QCheckBox *m_sysExCheckBox;
+    QCheckBox *m_keyPressureCheckBox;
+    QCheckBox *m_channelPressureCheckBox;
+    QCheckBox *m_restCheckBox;
+    QCheckBox *m_indicationCheckBox;
+    QCheckBox *m_textCheckBox;
+    // ??? What is this?
+    QCheckBox *m_generatedRegionCheckBox;
+    // ??? What is this?
+    QCheckBox *m_segmentIDCheckBox;
+    QCheckBox *m_otherCheckBox;
 
     enum EventFilter
     {
@@ -196,7 +193,7 @@ private:
         GeneratedRegion    = 0x0800,
         SegmentID          = 0x1000,
     };
-    int          m_eventFilter;
+    int m_eventFilter{0x1FFF};
 
     // ??? Why is this a tree widget?  When are there ever sub-nodes?
     QTreeWidget *m_eventList;
@@ -207,12 +204,15 @@ private:
     std::set<Event *> m_deletedEvents; // deleted since last refresh
 
     // Pop-up menu for the event list.
-    QMenu       *m_menu;
+    QMenu *m_menu{nullptr};
 
-    bool         m_isTriggerSegment;
-    QLabel      *m_triggerName;
-    QLabel      *m_triggerPitch;
-    QLabel      *m_triggerVelocity;
+    bool m_isTriggerSegment{false};
+    QLabel *m_triggerName{nullptr};
+    QLabel *m_triggerPitch{nullptr};
+    QLabel *m_triggerVelocity{nullptr};
+
+    void readOptions();
+    void saveOptions();
 
 };
 

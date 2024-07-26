@@ -16,8 +16,10 @@
 */
 
 #define RG_MODULE_STRING "[EventView]"
+#define RG_NO_DEBUG_PRINT
 
 #include "EventView.h"
+
 #include "EventViewItem.h"
 #include "TrivialVelocityDialog.h"
 
@@ -83,7 +85,7 @@
 #include <QWidget>
 #include <QDesktopServices>
 
-#include <algorithm>
+#include <algorithm>  // std:find()
 
 
 namespace Rosegarden
@@ -91,18 +93,12 @@ namespace Rosegarden
 
 
 EventView::EventView(RosegardenDocument *doc,
-                     const std::vector<Segment *>& segments,
-                     QWidget *parent):
-        ListEditView(segments, 2, parent),
-        m_eventFilter(Note | Text | SystemExclusive | Controller |
-                      ProgramChange | PitchBend | Indication | Other |
-                      GeneratedRegion | SegmentID),
-        m_menu(nullptr)
+                     const std::vector<Segment *> &segments) :
+    ListEditView(segments, 2)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    m_isTriggerSegment = false;
-    m_triggerName = m_triggerPitch = m_triggerVelocity = nullptr;
+    // Note: EditView only edits the first Segment in segments.
 
     if (!segments.empty()) {
         Segment *s = *segments.begin();
@@ -171,6 +167,7 @@ EventView::EventView(RosegardenDocument *doc,
         QGridLayout *layout = new QGridLayout(frame);
         layout->setSpacing(5);
 
+        // Label
         layout->addWidget(new QLabel(tr("Label:  "), frame), 0, 0);
         QString label = strtoqstr(segments[0]->getLabel());
         if (label == "") label = tr("<no label>");
@@ -181,6 +178,7 @@ EventView::EventView(RosegardenDocument *doc,
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerName);
 
+        // Base pitch
         layout->addWidget(new QLabel(tr("Base pitch:  "), frame), 1, 0);
         m_triggerPitch = new QLabel(QString("%1").arg(rec->getBasePitch()), frame);
         layout->addWidget(m_triggerPitch, 1, 1);
@@ -189,6 +187,7 @@ EventView::EventView(RosegardenDocument *doc,
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerPitch);
 
+        // Base velocity
         layout->addWidget(new QLabel(tr("Base velocity:  "), frame), 2, 0);
         m_triggerVelocity = new QLabel(QString("%1").arg(rec->getBaseVelocity()), frame);
         layout->addWidget(m_triggerVelocity, 2, 1);
@@ -237,7 +236,7 @@ EventView::EventView(RosegardenDocument *doc,
 
     }
 
-    updateViewCaption();
+    updateWindowTitle(false);
     connect(RosegardenDocument::currentDocument, &RosegardenDocument::documentModified,
             this, &EventView::updateWindowTitle);
 
@@ -258,16 +257,16 @@ EventView::EventView(RosegardenDocument *doc,
     m_eventList->setAllColumnsShowFocus(true);
     m_eventList->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
-    QStringList sl;
-    sl << tr("Time  ");
-    sl << tr("Duration  ");
-    sl << tr("Event Type  ");
-    sl << tr("Pitch  ");
-    sl << tr("Velocity  ");
-    sl << tr("Type (Data1)  ");
-    sl << tr("Type (Data1)  ");
-    sl << tr("Value (Data2)  ");
-    m_eventList->setHeaderLabels(sl);
+    QStringList columnNames;
+    columnNames << tr("Time  ");
+    columnNames << tr("Duration  ");
+    columnNames << tr("Event Type  ");
+    columnNames << tr("Pitch  ");
+    columnNames << tr("Velocity  ");
+    columnNames << tr("Type (Data1)  ");
+    columnNames << tr("Type (Data1)  ");
+    columnNames << tr("Value (Data2)  ");
+    m_eventList->setHeaderLabels(columnNames);
 
     // Make sure time columns have the right amount of space.
     // ??? We should use the font size of "000-00-00-00" as the default size.
@@ -280,32 +279,40 @@ EventView::EventView(RosegardenDocument *doc,
 
     readOptions();
     setButtonsToFilter();
-    applyLayout();
+    updateTreeWidget();
 
     // Connect the checkboxes AFTER calling setButtonsToFilter() to set up the
     // initial states.  Otherwise, the first state change triggers
     // slotModifyFilter() prematurely, and it wrecks the filter.
-    //
-    // That took an astonishing amount of time to work out.
-    //
-    //
-    connect(m_noteCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_programCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_controllerCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_pitchBendCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_sysExCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_keyPressureCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_channelPressureCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_restCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_indicationCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_textCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_generatedRegionCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_segmentIDCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
-    connect(m_otherCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    // ??? Use clicked() instead of stateChanged() to avoid this.
+    connect(m_noteCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_programCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_controllerCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_pitchBendCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_sysExCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_keyPressureCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_channelPressureCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_restCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_indicationCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_textCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_generatedRegionCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_segmentIDCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
+    connect(m_otherCheckBox, &QCheckBox::stateChanged,
+            this, &EventView::slotModifyFilter);
 
     makeInitialSelection(doc->getComposition().getPosition());
-
-    slotCompositionStateUpdate();
 
 
     // Restore window geometry and toolbar/dock state
@@ -318,6 +325,8 @@ EventView::EventView(RosegardenDocument *doc,
 
 EventView::~EventView()
 {
+    saveOptions();
+
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
         //RG_DEBUG << "dtor - removing this observer from " << m_segments[i];
         m_segments[i]->removeObserver(this);
@@ -327,15 +336,7 @@ EventView::~EventView()
 void
 EventView::closeEvent(QCloseEvent *event)
 {
-    // Save m_eventFilter for next time
-    slotSaveOptions();
-
-    // Save window geometry and toolbar/dock state
-    QSettings settings;
-    settings.beginGroup(WindowGeometryConfigGroup);
-    settings.setValue("Event_List_View_Geometry", this->saveGeometry());
-    settings.setValue("Event_List_View_State", this->saveState());
-    settings.endGroup();
+    // ??? This does nothing.  Get rid of it.
 
     QWidget::closeEvent(event);
 }
@@ -360,31 +361,23 @@ EventView::segmentDeleted(const Segment *s)
 }
 
 bool
-EventView::applyLayout()
+EventView::updateTreeWidget()
 {
-    // If no selection has already been set then we copy what's
-    // already set and try to replicate this after the rebuild
-    // of the view.
-    //
+    // If no selection, copy UI selection to m_listSelection.
     if (m_listSelection.size() == 0) {
 
-        QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+        QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
 
-        if( selection.count() ){
-
-            for( int i=0; i< selection.count(); i++ ) {
-
+        if (!selection.empty()) {
+            for (int i = 0; i < selection.count(); ++i) {
                 QTreeWidgetItem *listItem = selection.at(i);
-                m_listSelection.push_back( m_eventList->indexOfTopLevelItem(listItem) );
-
+                m_listSelection.push_back(
+                        m_eventList->indexOfTopLevelItem(listItem));
             }
-        }// end if selection.count()
-    }// end if m_listSel..
+        }
+    }
 
     // *** Create the event list.
-
-    // ??? Why is this routine called applyLayout() if it is primarily
-    //     creating the event list?
 
     m_eventList->clear();
 
@@ -605,12 +598,12 @@ EventView::applyLayout()
 
             QStringList sl;
             sl << timeStr
-            << durationStr
-            << strtoqstr( (*it)->getType() )
-            << pitchStr
-            << velyStr
-            << data1Str
-            << data2Str;
+               << durationStr
+               << strtoqstr( (*it)->getType() )
+               << pitchStr
+               << velyStr
+               << data1Str
+               << data2Str;
 
             new EventViewItem(m_segments[i],
                               *it,
@@ -787,7 +780,7 @@ EventView::refreshSegment(Segment * /*segment*/,
                           timeT /*endTime*/)
 {
     RG_DEBUG << "EventView::refreshSegment";
-    applyLayout();
+    updateTreeWidget();
 }
 
 void
@@ -943,7 +936,7 @@ EventView::slotEditCut()
         }
 
         addCommandToHistory(new CutCommand(cutSelection,
-                                           getClipboard()));
+                                           Clipboard::mainClipboard()));
     }
 }
 
@@ -987,15 +980,15 @@ EventView::slotEditCopy()
 
     if (copySelection) {
         addCommandToHistory(new CopyCommand(copySelection,
-                                            getClipboard()));
+                                            Clipboard::mainClipboard()));
     }
 }
 
 void
 EventView::slotEditPaste()
 {
-    if (getClipboard()->isEmpty()) {
-        slotStatusHelpMsg(tr("Clipboard is empty"));
+    if (Clipboard::mainClipboard()->isEmpty()) {
+        showStatusBarMessage(tr("Clipboard is empty"));
         return ;
     }
 
@@ -1028,11 +1021,11 @@ EventView::slotEditPaste()
 
 
     PasteEventsCommand *command = new PasteEventsCommand
-                                  (*m_segments[0], getClipboard(),
+                                  (*m_segments[0], Clipboard::mainClipboard(),
                                    insertionTime, PasteEventsCommand::MatrixOverlay);
 
     if (!command->isPossible()) {
-        slotStatusHelpMsg(tr("Couldn't paste at this point"));
+        showStatusBarMessage(tr("Couldn't paste at this point"));
     } else
         addCommandToHistory(command);
 
@@ -1326,26 +1319,31 @@ void
 EventView::readOptions()
 {
     QSettings settings;
+
     settings.beginGroup(EventViewConfigGroup);
 
-    EditViewBase::readOptions();
     m_eventFilter = settings.value("event_list_filter", m_eventFilter).toInt();
 
-    QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
+    const QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
     m_eventList->restoreGeometry(qba);
 
     settings.endGroup();
 }
 
 void
-EventView::slotSaveOptions()
+EventView::saveOptions()
 {
     QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
 
+    settings.beginGroup(EventViewConfigGroup);
     settings.setValue("event_list_filter", m_eventFilter);
     settings.setValue(EventViewLayoutConfigGroupName, m_eventList->saveGeometry());
+    settings.endGroup();
 
+    // Save window geometry and toolbar/dock state
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Event_List_View_Geometry", this->saveGeometry());
+    settings.setValue("Event_List_View_State", this->saveState());
     settings.endGroup();
 }
 
@@ -1389,7 +1387,7 @@ EventView::slotModifyFilter()
 
     if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
 
-    applyLayout();
+    updateTreeWidget();
 }
 
 void
@@ -1420,7 +1418,7 @@ EventView::slotMusicalTime()
     findAction("time_musical")->setChecked(true);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(false);
-    applyLayout();
+    updateTreeWidget();
 
     settings.endGroup();
 }
@@ -1435,7 +1433,7 @@ EventView::slotRealTime()
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(true);
     findAction("time_raw")->setChecked(false);
-    applyLayout();
+    updateTreeWidget();
 
     settings.endGroup();
 }
@@ -1450,7 +1448,7 @@ EventView::slotRawTime()
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(true);
-    applyLayout();
+    updateTreeWidget();
 
     settings.endGroup();
 }
@@ -1630,18 +1628,9 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
 }
 
 void
-EventView::updateViewCaption()
+EventView::updateWindowTitle(bool modified)
 {
-    // err on the side of not showing modified status here, rather than showing
-    // a false positive, since we're kind of kludging this together with the
-    // existing virtual updateViewCaption() method
-    updateWindowTitle();
-}
-
-void
-EventView::updateWindowTitle(bool m)
-{
-    QString indicator = (m ? "*" : "");
+    QString indicator = (modified ? "*" : "");
 
     if (m_isTriggerSegment) {
 

@@ -30,6 +30,8 @@
 #include "base/BaseProperties.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "misc/Debug.h"
+#include "base/Composition.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 
 #include <QRegularExpression>
 

@@ -30,6 +30,7 @@
 #include "misc/Debug.h"
 #include "base/StaffExportTypes.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 
 #include "rosegarden-version.h"
 

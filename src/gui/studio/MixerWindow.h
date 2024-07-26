@@ -20,7 +20,6 @@
 
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
-#include "gui/application/RosegardenMainViewWidget.h"
 
 #include <QMainWindow>
 

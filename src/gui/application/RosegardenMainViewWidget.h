@@ -251,12 +251,6 @@ signals:
 
     void toggleSolo(bool);
 
-    /**
-     * Current used to dispatch things like track select changes, solo, etc...
-     * to edit views
-     */
-    void compositionStateUpdate();
-
 
     /**
      * This signal is used to dispatch a notification for a request to
@@ -280,7 +274,7 @@ private:
 
     void createNotationView(const std::vector<Segment *>&);
     void createMatrixView(const std::vector<Segment *>&, bool drumMode);
-    EventView *createEventView(std::vector<Segment *>);
+    EventView *createEventView(Segment *);
     PitchTrackerView *createPitchTrackerView(const std::vector<Segment *>&);
 
     static bool hasNonAudioSegment(const SegmentSelection &segments);

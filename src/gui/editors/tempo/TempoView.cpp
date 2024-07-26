@@ -38,7 +38,6 @@
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/general/ListEditView.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "misc/Strings.h"
 
 #include <QAction>
@@ -63,10 +62,9 @@ namespace Rosegarden
 
 
 TempoView::TempoView(
-        QWidget *parent,
         EditTempoController *editTempoController,
         timeT openTime) :
-    ListEditView(std::vector<Segment *>(), 2, parent),
+    ListEditView(std::vector<Segment *>(), 2),
     m_editTempoController(editTempoController),
     m_filter(Tempo | TimeSignature),
     m_ignoreUpdates(true)
@@ -98,7 +96,9 @@ TempoView::TempoView(
 
     m_grid->addWidget(m_list, 2, 1);
 
-    updateViewCaption();
+    slotUpdateWindowTitle(false);
+    connect(m_doc, &RosegardenDocument::documentModified,
+            this, &TempoView::slotUpdateWindowTitle);
 
     m_doc->getComposition().addObserver(this);
 
@@ -140,20 +140,18 @@ TempoView::TempoView(
 
 TempoView::~TempoView()
 {
+    saveOptions();
+
     // We use m_doc instead of RosegardenDocument::currentDocument to
     // make sure that we disconnect from the old document when the
     // documents are switching.
-    if (m_doc  &&
-        !m_doc->isBeingDestroyed()  &&
-        !isCompositionDeleted()) {
+    if (m_doc  &&  !isCompositionDeleted())
         m_doc->getComposition().removeObserver(this);
-    }
 }
 
 void
 TempoView::closeEvent(QCloseEvent *e)
 {
-    slotSaveOptions();
     emit closing();
 
     EditViewBase::closeEvent(e);
@@ -641,13 +639,12 @@ TempoView::readOptions()
 {
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
-    EditViewBase::readOptions();
     m_filter = settings.value("filter", m_filter).toInt();
     settings.endGroup();
 }
 
 void
-TempoView::slotSaveOptions()
+TempoView::saveOptions()
 {
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
@@ -764,6 +761,8 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
                      (&composition, time, dialog.getTimeSignature()));
             }
         }
+
+        break;
     }
 
     default:
@@ -772,7 +771,7 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
 }
 
 void
-TempoView::updateViewCaption()
+TempoView::slotUpdateWindowTitle(bool)
 {
     setWindowTitle(tr("%1 - Tempo and Time Signature Editor")
                 .arg(RosegardenDocument::currentDocument->getTitle()));

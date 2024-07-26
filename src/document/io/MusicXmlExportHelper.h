@@ -31,24 +31,26 @@
 #include "base/NotationTypes.h"
 #include "base/Track.h"
 #include "base/Segment.h"
-#include "gui/application/RosegardenMainViewWidget.h"
 
-// MusicXML supports only 6 slurs at thesame time is a single part.
+// MusicXML supports only 6 slurs at the same time is a single part.
 #define MAXSLURS 6
 
 
 class QObject;
 
+
 namespace Rosegarden
 {
 
+
+class RosegardenMainViewWidget;
 class Key;
 class Clef;
+class TimeSignature;
+
 
 typedef std::vector<TrackId> TrackVector;
 
-/**
- */
 
 class MusicXmlExportHelper
 {

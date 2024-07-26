@@ -63,9 +63,8 @@ namespace Rosegarden
   CONSTRUCTOR, DESTRUCTOR, AND INIT
  *************************************/
 PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
-                                   const std::vector<Segment *>& segments,
-                                   QWidget *parent) :
-        NotationView(doc, segments, parent),
+                                   const std::vector<Segment *>& segments) :
+        NotationView(doc, segments),
         m_doc(doc),
         m_jackCaptureClient(nullptr),
         m_jackConnected(false),

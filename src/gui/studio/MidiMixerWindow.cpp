@@ -38,7 +38,6 @@
 #include "gui/widgets/VUMeter.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/ActionFileClient.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "MidiMixerVUMeter.h"
 #include "MixerWindow.h"

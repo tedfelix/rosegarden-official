@@ -194,7 +194,6 @@
 #include "sound/SequencerDataBlock.h"
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/studio/DeviceManagerDialog.h"
 #include "gui/widgets/InputDialog.h"
 #include "TranzportClient.h"
@@ -2299,9 +2298,6 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     setupRecentFilesMenu();
 
     updateTitle();
-
-    // update the edit view's captions too
-    emit compositionStateUpdate();
 
     // Indicate success.
     return true;
@@ -7165,7 +7161,7 @@ RosegardenMainWindow::slotEditTempos(timeT openAtTime)
         return ;
     }
 
-    m_tempoView = new TempoView(getView(), m_editTempoController, openAtTime);
+    m_tempoView = new TempoView(m_editTempoController, openAtTime);
 
     connect(m_tempoView, &TempoView::closing,
             this, &RosegardenMainWindow::slotTempoViewClosed);

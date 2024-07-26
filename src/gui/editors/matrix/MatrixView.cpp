@@ -127,9 +127,8 @@ namespace Rosegarden
 
 MatrixView::MatrixView(RosegardenDocument *doc,
                        const std::vector<Segment *>& segments,
-                       bool drumMode,
-                       QWidget *parent) :
-    EditViewBase(segments, parent),
+                       bool drumMode) :
+    EditViewBase(segments),
     m_quantizations(Quantizer::getQuantizations()),
     m_drumMode(drumMode),
     m_inChordMode(false)
@@ -162,7 +161,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
             this, &MatrixView::slotShowContextHelp);
 
     slotUpdateMenuStates();
-    slotTestClipboard();
+    slotUpdateClipboardActionState();
 
     connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
             this, &MatrixView::slotUpdateMenuStates);
@@ -254,9 +253,9 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     // Restore window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
     QString modeStr = (m_drumMode ? "Percussion_Matrix_View_Geometry" : "Matrix_View_Geometry");
-    this->restoreGeometry(settings.value(modeStr).toByteArray());
+    restoreGeometry(settings.value(modeStr).toByteArray());
     modeStr = (m_drumMode ? "Percussion_Matrix_View_State" : "Matrix_View_State");
-    this->restoreState(settings.value(modeStr).toByteArray());
+    restoreState(settings.value(modeStr).toByteArray());
     settings.endGroup();
 
     connect(m_matrixWidget, SIGNAL(segmentDeleted(Segment *)),
@@ -320,9 +319,9 @@ MatrixView::closeEvent(QCloseEvent *event)
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     QString modeStr = (m_drumMode ? "Percussion_Matrix_View_Geometry" : "Matrix_View_Geometry");
-    settings.setValue(modeStr, this->saveGeometry());
+    settings.setValue(modeStr, saveGeometry());
     modeStr = (m_drumMode ? "Percussion_Matrix_View_State" : "Matrix_View_State");
-    settings.setValue(modeStr, this->saveState());
+    settings.setValue(modeStr, saveState());
     settings.endGroup();
 
     QWidget::closeEvent(event);
@@ -720,13 +719,24 @@ MatrixView::initRulersToolbar()
 void
 MatrixView::readOptions()
 {
-    EditViewBase::readOptions();
+    // ??? Can we move these to setupActions()?  Is setupActions() called
+    //     after the toolbars are restored (restoreState())?  No.  It is called
+    //     in the ctor before restoreState().  Probably need to review and
+    //     reorganize the ctor.
 
-    setCheckBoxState("options_show_toolbar", "General Toolbar");
-    setCheckBoxState("show_tools_toolbar", "Tools Toolbar");
-    setCheckBoxState("show_transport_toolbar", "Transport Toolbar");
-    setCheckBoxState("show_actions_toolbar", "Actions Toolbar");
-    setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");
+    // ??? findAction() and findToolbar() are both in ActionFileClient.
+    //     Make this clumsy two-liner a member of ActionFileClient:
+    //       syncToolbarCheck(const QString &action, const QString &toolbar);
+    findAction("options_show_toolbar")->setChecked(
+            !findToolbar("General Toolbar")->isHidden());
+    findAction("show_tools_toolbar")->setChecked(
+            !findToolbar("Tools Toolbar")->isHidden());
+    findAction("show_transport_toolbar")->setChecked(
+            !findToolbar("Transport Toolbar")->isHidden());
+    findAction("show_actions_toolbar")->setChecked(
+            !findToolbar("Actions Toolbar")->isHidden());
+    findAction("show_rulers_toolbar")->setChecked(
+            !findToolbar("Rulers Toolbar")->isHidden());
 }
 
 void
@@ -958,7 +968,7 @@ MatrixView::slotEditCut()
     CommandHistory::getInstance()->addCommand(
             new CutCommand(getSelection(),
                            getRulerSelection(),
-                           getClipboard()));
+                           Clipboard::mainClipboard()));
 }
 
 void
@@ -975,17 +985,17 @@ MatrixView::slotEditCopy()
     CommandHistory::getInstance()->addCommand(
             new CopyCommand(getSelection(),
                            getRulerSelection(),
-                           getClipboard()));
+                           Clipboard::mainClipboard()));
 }
 
 void
 MatrixView::slotEditPaste()
 {
-    if (getClipboard()->isEmpty()) return;
+    if (Clipboard::mainClipboard()->isEmpty()) return;
 
     PasteEventsCommand *command = new PasteEventsCommand
         (*m_matrixWidget->getCurrentSegment(),
-         getClipboard(),
+         Clipboard::mainClipboard(),
          getInsertionTime(),
          PasteEventsCommand::MatrixOverlay);
 

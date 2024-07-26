@@ -29,9 +29,13 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 #include <QFileDialog>
+#include <QVBoxLayout>
+#include <QLabel>
+
 
 namespace Rosegarden
 {
+
 
 AudioPluginPresetDialog::AudioPluginPresetDialog
 (QWidget *parent,
