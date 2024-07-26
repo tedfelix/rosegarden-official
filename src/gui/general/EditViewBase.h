@@ -71,11 +71,6 @@ signals:
      */
     void openInPitchTracker(std::vector<Segment *>);
 
-    /// Tell RMVW we want a Track selected (by TrackId).  See slotToggleSolo().
-    void selectTrack(int trackId);
-    /// Tell RMW to toggle solo.  See slotToggleSolo().
-    void toggleSolo(bool);
-
 protected:
 
     /// Display message in status bar.
@@ -111,6 +106,9 @@ protected:
      * if that makes sense.  Only use this for connection/disconnection.
      */
     RosegardenDocument *m_doc;
+
+    /// Make sure the solo button matches the current Track's solo state.
+    void updateSoloButton();
 
 protected slots:
 

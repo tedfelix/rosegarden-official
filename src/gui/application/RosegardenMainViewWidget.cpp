@@ -376,9 +376,6 @@ RosegardenMainViewWidget::createNotationView(const std::vector<Segment *>& segme
     NotationView *notationView =
         new NotationView(RosegardenDocument::currentDocument, segmentsToEdit);
 
-    connect(notationView, &EditViewBase::selectTrack,
-            this, &RosegardenMainViewWidget::slotSelectTrackSegments);
-
     connect(notationView, &NotationView::play,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotPlay);
     connect(notationView, &NotationView::stop,
@@ -411,8 +408,6 @@ RosegardenMainViewWidget::createNotationView(const std::vector<Segment *>& segme
     // No such signal comes from NotationView
     //connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),
     //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
-    connect(notationView, &EditViewBase::toggleSolo,
-            RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
     SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
@@ -520,9 +515,6 @@ RosegardenMainViewWidget::createPitchTrackerView(const std::vector<Segment *>& s
     PitchTrackerView *pitchTrackerView =
         new PitchTrackerView(RosegardenDocument::currentDocument, segmentsToEdit);
 
-    connect(pitchTrackerView, &EditViewBase::selectTrack,
-            this, &RosegardenMainViewWidget::slotSelectTrackSegments);
-
     connect(pitchTrackerView, &NotationView::play,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotPlay);
     connect(pitchTrackerView, &NotationView::stop,
@@ -558,8 +550,6 @@ RosegardenMainViewWidget::createPitchTrackerView(const std::vector<Segment *>& s
     // No such signal comes from PitchTrackerView
     //connect(pitchTrackerView, SIGNAL(staffLabelChanged(TrackId, QString)),
     //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
-    connect(pitchTrackerView, &EditViewBase::toggleSolo,
-            RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
     SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
@@ -708,9 +698,6 @@ RosegardenMainViewWidget::createMatrixView(const std::vector<Segment *>& segment
                                                   segmentsToEdit,
                                                   drumMode);
 
-    connect(matrixView, &EditViewBase::selectTrack,
-            this, &RosegardenMainViewWidget::slotSelectTrackSegments);
-
     connect(matrixView, &MatrixView::play,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotPlay);
     connect(matrixView, &MatrixView::stop,
@@ -740,8 +727,6 @@ RosegardenMainViewWidget::createMatrixView(const std::vector<Segment *>& segment
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
     connect(matrixView, &MatrixView::openInPitchTracker,
             this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
-    connect(matrixView, &EditViewBase::toggleSolo,
-            RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
     SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
@@ -1883,8 +1868,6 @@ RosegardenMainViewWidget::createEventView(Segment *segment)
     EventView *eventView = new EventView(RosegardenDocument::currentDocument,
                                          segments);
 
-    connect(eventView, &EditViewBase::selectTrack,
-            this, &RosegardenMainViewWidget::slotSelectTrackSegments);
     connect(eventView, &EditViewBase::saveFile,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
     connect(eventView, &EditViewBase::openInNotation,
@@ -1899,8 +1882,6 @@ RosegardenMainViewWidget::createEventView(Segment *segment)
             this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
     connect(eventView, &EventView::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-    connect(eventView, &EditViewBase::toggleSolo,
-            RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
     return eventView;
 }

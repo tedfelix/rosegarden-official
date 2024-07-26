@@ -724,6 +724,9 @@ MatrixView::readOptions()
     //     in the ctor before restoreState().  Probably need to review and
     //     reorganize the ctor.
 
+    // ??? findAction() and findToolbar() are both in ActionFileClient.
+    //     Make this clumsy two-liner a member of ActionFileClient:
+    //       syncToolbarCheck(const QString &action, const QString &toolbar);
     findAction("options_show_toolbar")->setChecked(
             !findToolbar("General Toolbar")->isHidden());
     findAction("show_tools_toolbar")->setChecked(

@@ -20,6 +20,8 @@
 
 #include "EditViewBase.h"
 
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/dialogs/ConfigureDialog.h"
@@ -162,27 +164,47 @@ EditViewBase::slotUpdateClipboardActionState()
 void
 EditViewBase::slotToggleSolo()
 {
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
+
+    const TrackId trackID = getCurrentSegment()->getTrack();
+
     // Select the track for this segment.
-    RosegardenDocument::currentDocument->getComposition().setSelectedTrack(
-            getCurrentSegment()->getTrack());
-    RosegardenDocument::currentDocument->getComposition().notifyTrackSelectionChanged(
-            getCurrentSegment()->getTrack());
-    // Calls RosegardenMainViewWidget::slotSelectTrackSegments().
-    emit selectTrack(getCurrentSegment()->getTrack());
-    // ??? Get rid of signal/slot.  Call directly.  It's faster and
-    //     easier to understand.
-    //RosegardenMainWindow::self()->getView()->slotSelectTrackSegments(
-    //        getCurrentSegment()->getTrack());
+    composition.setSelectedTrack(trackID);
+    composition.notifyTrackSelectionChanged(trackID);
+    RosegardenMainWindow::self()->getView()->slotSelectTrackSegments(trackID);
 
     // Toggle solo on the selected track.
     // The "false" is ignored.  It was used for the checked state.
-    // Calls RosegardenMainWindow::slotToggleSolo().
-    // ??? Can't we just call the routine directly and void the signal/slot?
-    //     Like we did for Track selection above.
-    emit toggleSolo(false);
-    // ??? Get rid of signal/slot.  Call directly.  It's faster and
-    //     easier to understand.
-    //RosegardenMainWindow::self()->slotToggleSolo(false);
+    RosegardenMainWindow::self()->slotToggleSolo(false);
+
+    // Make sure the toggle button stays in sync with the actual
+    // toggle state.
+    updateSoloButton();
+}
+
+void
+EditViewBase::updateSoloButton()
+{
+    // ??? Still not working like we need it to.
+    //     Test cases that are failing:
+    //       - Notation: Clicking on a staff to make it current.  This
+    //         does not update the solo button.  There may be other cases.
+    //         Seems like the call to updateSoloButton() should originate
+    //         further down.  NotationWidget or NotationScene maybe.
+    //       - Matrix: There is no appropriate place to call updateSoloButton()
+    //         in MatrixView.  The call would need to originate further down.
+    //         MatrixWidget or MatrixScene maybe.
+
+    const TrackId trackID = getCurrentSegment()->getTrack();
+
+    QAction *toggleSoloAction = findAction("toggle_solo");
+    if (toggleSoloAction) {
+        Track *track = RosegardenDocument::currentDocument->getComposition().
+                getTrackById(trackID);
+        if (track)
+            toggleSoloAction->setChecked(track->isSolo());
+    }
 }
 
 void
