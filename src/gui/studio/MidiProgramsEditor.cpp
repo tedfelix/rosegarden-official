@@ -755,7 +755,7 @@ void MidiProgramsEditor::makeUnique
     if (unique) return;
     // try all lsbs
     if (preferLSBChange) {
-        for (MidiByte newLsb = 0; newLsb<255; newLsb++) {
+        for (MidiByte newLsb = MidiMinValue; newLsb<MidiMaxValue; newLsb++) {
             bool unique = true;
             for (size_t i = 0; i < banks.size(); ++i) {
                 if (banks[i].isPercussion() == isPercussion &&
@@ -774,7 +774,7 @@ void MidiProgramsEditor::makeUnique
         }
     }
     // try all msbs
-    for (MidiByte newMsb = 0; newMsb<255; newMsb++) {
+    for (MidiByte newMsb = MidiMinValue; newMsb<MidiMaxValue; newMsb++) {
         bool unique = true;
         for (size_t i = 0; i < banks.size(); ++i) {
             if (banks[i].isPercussion() == isPercussion &&
@@ -792,7 +792,7 @@ void MidiProgramsEditor::makeUnique
         }
     }
     if (preferLSBChange) return;
-    for (MidiByte newLsb = 0; newLsb<255; newLsb++) {
+    for (MidiByte newLsb = MidiMinValue; newLsb<MidiMaxValue; newLsb++) {
         bool unique = true;
         for (size_t i = 0; i < banks.size(); ++i) {
             if (banks[i].isPercussion() == isPercussion &&
