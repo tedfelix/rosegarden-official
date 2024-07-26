@@ -31,6 +31,7 @@
 #include "base/MidiProgram.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/general/IconLoader.h"
+#include "commands/studio/ModifyDeviceCommand.h"
 
 #include <QCheckBox>
 #include <QCursor>
@@ -198,6 +199,11 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
 
     setTitle(bankItem->text(0));
 
+    // block signals so the slots do not fire
+    m_percussion->blockSignals(true);
+    m_msb->blockSignals(true);
+    m_lsb->blockSignals(true);
+
     // Percussion
     m_percussion->setChecked(m_currentBank->isPercussion());
 
@@ -206,6 +212,11 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
 
     // LSB Value
     m_lsb->setValue(m_currentBank->getLSB());
+
+    // unblock signals
+    m_percussion->blockSignals(false);
+    m_msb->blockSignals(false);
+    m_lsb->blockSignals(false);
 
     // Provided By
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
@@ -296,20 +307,31 @@ MidiProgramsEditor::slotPercussionClicked()
 {
     RG_DEBUG << "slotPercussionClicked()";
 
-    MidiBank newBank(
-            m_percussion->isChecked(),
-            m_msb->value(),
-            m_lsb->value(),
-            m_currentBank->getName());
+    bool isPercussion = m_percussion->isChecked();
+    MidiByte msb = m_currentBank->getMSB();
+    MidiByte lsb = m_currentBank->getLSB();
+
+    makeUnique(isPercussion, msb, lsb);
+
+    MidiBank newBank(isPercussion,
+                     msb,
+                     lsb,
+                     m_currentBank->getName());
 
     // Make sure the programs in m_programList have the new percussion setting.
     modifyCurrentPrograms(*m_currentBank, newBank);
 
-    // Update the current bank.
-    *m_currentBank = newBank;
+    ModifyDeviceCommand *command =
+        m_bankEditor->makeCommand(tr("toggle bank percussion"));
 
-    // Refresh the tree so that it shows "Percussion" or "Bank" as appropriate.
-    m_bankEditor->slotApply();
+    const BankList banks = m_device->getBanks();
+    BankList newBanks;
+    for (size_t i = 0; i < banks.size(); ++i) {
+        if (banks[i] == *m_currentBank) newBanks.push_back(newBank);
+        else newBanks.push_back(banks[i]);
+    }
+    command->setBankList(newBanks);
+    m_bankEditor->addCommandToHistory(command);
 }
 
 void
@@ -317,67 +339,71 @@ MidiProgramsEditor::slotNewMSB(int value)
 {
     RG_DEBUG << "slotNewMSB(" << value << ")";
 
-    // temp
-    return;
+    bool isPercussion = m_currentBank->isPercussion();
+    MidiByte msb = value;
+    MidiByte lsb = m_currentBank->getLSB();
 
-    // ??? Not sure we should clean this up since we are getting rid of it.
+    makeUnique(isPercussion, msb, lsb, true);
 
-    int msb;
 
-    try {
-        msb = ensureUniqueMSB(value, value > m_currentBank->getMSB());
-    } catch (bool) {
-        msb = m_currentBank->getMSB();
-    }
-
-    MidiBank newBank(m_percussion->isChecked(),
+    MidiBank newBank(isPercussion,
                      msb,
-                     m_lsb->value(),
-                     m_currentBank->getName());
-
-    modifyCurrentPrograms(*m_currentBank, newBank);
-
-    m_msb->setValue(msb);
-
-    *m_currentBank = newBank;
-
-    // Refresh the tree so that it shows the new MSB.
-    m_bankEditor->slotApply();
-}
-
-void
-MidiProgramsEditor::slotNewLSB(int value)
-{
-
-    // temp
-    return;
-
-
-    RG_DEBUG << "slotNewLSB(" << value << ")";
-
-    // ??? Not sure we should clean this up since we are getting rid of it.
-
-    int lsb;
-
-    try {
-        lsb = ensureUniqueLSB(value, value > m_currentBank->getLSB());
-    } catch (bool) {
-        lsb = m_currentBank->getLSB();
-    }
-
-    MidiBank newBank(m_percussion->isChecked(),
-                     m_msb->value(),
                      lsb,
                      m_currentBank->getName());
 
     modifyCurrentPrograms(*m_currentBank, newBank);
 
+    m_msb->blockSignals(true);
+    m_msb->setValue(msb);
+    m_msb->blockSignals(false);
+
+    ModifyDeviceCommand *command =
+        m_bankEditor->makeCommand(tr("bank set msb"));
+
+    const BankList banks = m_device->getBanks();
+    BankList newBanks;
+    for (size_t i = 0; i < banks.size(); ++i) {
+        if (banks[i] == *m_currentBank) newBanks.push_back(newBank);
+        else newBanks.push_back(banks[i]);
+    }
+    command->setBankList(newBanks);
+    m_bankEditor->addCommandToHistory(command);
+}
+
+void
+MidiProgramsEditor::slotNewLSB(int value)
+{
+    RG_DEBUG << "slotNewLSB(" << value << ")";
+
+    bool isPercussion = m_currentBank->isPercussion();
+    MidiByte msb = m_currentBank->getMSB();
+    MidiByte lsb = value;
+
+    makeUnique(isPercussion, msb, lsb, false);
+
+
+    MidiBank newBank(isPercussion,
+                     msb,
+                     lsb,
+                     m_currentBank->getName());
+
+    modifyCurrentPrograms(*m_currentBank, newBank);
+
+    m_lsb->blockSignals(true);
     m_lsb->setValue(lsb);
+    m_lsb->blockSignals(false);
 
-    *m_currentBank = newBank;
+    ModifyDeviceCommand *command =
+        m_bankEditor->makeCommand(tr("bank set lsb"));
 
-    // Refresh the tree so that it shows the new MSB.
-    m_bankEditor->slotApply();
+    const BankList banks = m_device->getBanks();
+    BankList newBanks;
+    for (size_t i = 0; i < banks.size(); ++i) {
+        if (banks[i] == *m_currentBank) newBanks.push_back(newBank);
+        else newBanks.push_back(banks[i]);
+    }
+    command->setBankList(newBanks);
+    m_bankEditor->addCommandToHistory(command);
 }
 
 void
@@ -414,15 +440,16 @@ void MidiProgramsEditor::slotEditingFinished()
     ProgramList::iterator programIter =
             getProgramIter(*m_currentBank, programNumber);
 
+    ProgramList newProgramList = m_device->getPrograms();
     // If the MidiProgram doesn't exist in m_programList, add it.
-    if (programIter == m_programList.end()) {
+    if (programIter == newProgramList.end()) {
         // If the program name is empty, do nothing.
         if (programName.isEmpty())
             return;
 
         // Create a new MidiProgram and add it to m_programList.
         MidiProgram newProgram(*m_currentBank, programNumber);
-        m_programList.push_back(newProgram);
+        newProgramList.push_back(newProgram);
 
         // Sort m_programList.
         // We need to sort this for the MIPP.  It just needs the PCs in
@@ -433,14 +460,14 @@ void MidiProgramsEditor::slotEditingFinished()
         //     the first steps toward moving to std::set?  Make it a
         //     std::set, but continue using it like a vector.  That
         //     way it is always sorted.
-        std::sort(m_programList.begin(),
-                  m_programList.end(),
+        std::sort(newProgramList.begin(),
+                  newProgramList.end(),
                   [](const MidiProgram &lhs, const MidiProgram &rhs){ return lhs.lessKey(rhs); });
 
         // Get the new MidiProgram from m_programList.
         programIter = getProgramIter(*m_currentBank, programNumber);
 
-    } else {  // The MidiProgram already exists in m_programList.
+    } else {  // The MidiProgram already exists in newprogramList.
 
         // If the label is now empty...
         if (programName.isEmpty()) {
@@ -689,13 +716,15 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 ProgramList::iterator
 MidiProgramsEditor::getProgramIter(const MidiBank &bank, int programNo)
 {
-    // For each program in m_programList...
-    for (ProgramList::iterator programIter = m_programList.begin();
-         programIter != m_programList.end();
+    ProgramList programList = m_device->getPrograms();
+    // For each program in the programList...
+    for (ProgramList::iterator programIter = programList.begin();
+         programIter != programList.end();
          ++programIter) {
         // Match?
         if (programIter->getBank().getMSB() == bank.getMSB()  &&
             programIter->getBank().getLSB() == bank.getLSB()  &&
+            programIter->getBank().isPercussion() == bank.isPercussion() &&
             programIter->getProgram() == programNo)
             return programIter;
     }
@@ -703,5 +732,84 @@ MidiProgramsEditor::getProgramIter(const MidiBank &bank, int programNo)
     return m_programList.end();
 }
 
+void MidiProgramsEditor::makeUnique
+(bool& isPercussion, MidiByte& msb, MidiByte& lsb, bool preferLSBChange)
+{
+    RG_DEBUG << "makeUnique" << isPercussion << msb << lsb;
+    // The combination of the three variables must be unique. This
+    // routine should only be called when a change is made to one of
+    // the three variables so it does no harm to compare with the
+    // actual bank
+
+    const BankList& banks = m_device->getBanks();
+    // first check if the variables are already unique
+    bool unique = true;
+    for (size_t i = 0; i < banks.size(); ++i) {
+        if (banks[i].isPercussion() == isPercussion &&
+            banks[i].getMSB() == msb &&
+            banks[i].getLSB() == lsb) {
+            unique = false;
+            break;
+        }
+    }
+    if (unique) return;
+    // try all lsbs
+    if (preferLSBChange) {
+        for (MidiByte newLsb = 0; newLsb<255; newLsb++) {
+            bool unique = true;
+            for (size_t i = 0; i < banks.size(); ++i) {
+                if (banks[i].isPercussion() == isPercussion &&
+                    banks[i].getMSB() == msb &&
+                    banks[i].getLSB() == newLsb) {
+                    unique = false;
+                    break;
+                }
+            }
+            if (unique) {
+                lsb = newLsb;
+                RG_DEBUG << "makeUniqe changing to" <<
+                    isPercussion << msb << lsb;
+                return;
+            }
+        }
+    }
+    // try all msbs
+    for (MidiByte newMsb = 0; newMsb<255; newMsb++) {
+        bool unique = true;
+        for (size_t i = 0; i < banks.size(); ++i) {
+            if (banks[i].isPercussion() == isPercussion &&
+                banks[i].getMSB() == newMsb &&
+                banks[i].getLSB() == lsb) {
+            unique = false;
+            break;
+            }
+        }
+        if (unique) {
+            msb = newMsb;
+            RG_DEBUG << "makeUniqe changing to" <<
+                isPercussion << msb << lsb;
+            return;
+        }
+    }
+    if (preferLSBChange) return;
+    for (MidiByte newLsb = 0; newLsb<255; newLsb++) {
+        bool unique = true;
+        for (size_t i = 0; i < banks.size(); ++i) {
+            if (banks[i].isPercussion() == isPercussion &&
+                banks[i].getMSB() == msb &&
+                banks[i].getLSB() == newLsb) {
+                unique = false;
+                break;
+            }
+        }
+        if (unique) {
+            lsb = newLsb;
+            RG_DEBUG << "makeUniqe changing to" <<
+                isPercussion << msb << lsb;
+            return;
+        }
+    }
+    RG_DEBUG << "makeUnique giving up";
+}
 
 }

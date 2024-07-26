@@ -127,6 +127,13 @@ private:
      * selection ends up associated with the right program.
      */
     unsigned int m_keyMapProgramNumber;
+
+    /// ensure the combination is unique and adjust accordingly
+    void makeUnique(bool& isPercussion,
+                    MidiByte& msb,
+                    MidiByte& lsb,
+                    bool preferLSBChange = true);
+
 };
 
 

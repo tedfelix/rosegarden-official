@@ -65,29 +65,26 @@ public:
      * Since MidiProgram stores a partial MidiBank object (without name),
      * a partial comparison such as this is frequently needed.
      *
-     * ??? Should this really compare percussion?  I think that's wrong
-     *     right now.  See if we can cause bugs with it.  Then fix it.
      */
     bool compareKey(const MidiBank &rhs) const;
 
-    // Only compares (percussion), msb, and lsb.
+    // Only compares percussion, msb, and lsb.
     // Most useful for sorting and searching.
     // This is specifically NOT operator<() because it does not compare
     // all fields.
     bool lessKey(const MidiBank &rhs) const
     {
-        // ??? We'll need percussion soon.
-        //if (m_percussion == rhs.m_percussion) {
+        if (m_percussion == rhs.m_percussion) {
             if (m_msb == rhs.m_msb)
                 return (m_lsb < rhs.m_lsb);
             return (m_msb < rhs.m_msb);
-        //}
-        //return (m_percussion < rhs.m_percussion);
+        }
+        return (m_percussion < rhs.m_percussion);
     }
 
 private:
     // Key fields.
-    bool m_percussion;  // Not a key field yet.  But soon.
+    bool m_percussion;
     MidiByte m_msb;
     MidiByte m_lsb;
 
