@@ -29,6 +29,7 @@
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
 #include "gui/widgets/LineEdit.h"
+#include "commands/studio/ModifyDeviceCommand.h"
 
 #include <QObject>
 #include <QFrame>
@@ -92,7 +93,7 @@ MidiKeyMappingEditor::populate(QTreeWidgetItem* item)
         return ;
     }
 
-    MidiDevice* device = m_bankEditor->getCurrentMidiDevice();
+    MidiDevice* device = keyItem->getDevice();
     if (!device)
         return ;
 
@@ -147,28 +148,53 @@ MidiKeyMappingEditor::reset()
 }
 
 void
-MidiKeyMappingEditor::slotNameChanged(const QString &name)
+MidiKeyMappingEditor::slotNameChanged(const QString&)
 {
-    const LineEdit *lineEdit = dynamic_cast<const LineEdit *>(sender());
-    if (!lineEdit) {
-        RG_WARNING << "slotNameChanged(): WARNING: Sender is not a LineEdit.";
-        return;
-    }
-
-    const unsigned pitch = lineEdit->property("index").toUInt();
-
-    //RG_DEBUG << "slotNameChanged(" << name << ") : pitch = " << pitch;
-
-    // If the name has changed
-    if (qstrtostr(name) != m_mapping.getMap()[pitch]) {
-        m_mapping.getMap()[pitch] = qstrtostr(name);
-        m_bankEditor->slotApply();
-    }
+    // no longer used - see slotEditingFinished
+    return;
 }
 
 void MidiKeyMappingEditor::slotEditingFinished()
 {
     RG_DEBUG << "slotEditingFinished";
+
+    const LineEdit *lineEdit = dynamic_cast<const LineEdit *>(sender());
+    if (!lineEdit) {
+        RG_WARNING << "slotEditingFinished(): WARNING: Sender is not a LineEdit.";
+        return;
+    }
+
+    const unsigned pitch = lineEdit->property("index").toUInt();
+
+    //RG_DEBUG << "slotEditingFinished(" << name << ") : pitch = " << pitch;
+
+    QString name = lineEdit->text();
+    const MidiKeyMapping *m = m_device->getKeyMappingByName(m_mappingName);
+    MidiKeyMapping::KeyNameMap keyMap = m->getMap();
+    // Check if the name has changed
+    QString oldName = strtoqstr(keyMap[pitch]);
+    if (name == oldName) return;
+
+    MidiKeyMapping newKeyMapping = *m;
+    keyMap[pitch] = qstrtostr(name);
+    newKeyMapping.setMap(keyMap);
+
+    KeyMappingList oldKeymapList = m_device->getKeyMappings();
+    KeyMappingList newKeymapList;
+
+    for (unsigned int i=0; i<oldKeymapList.size(); i++) {
+        if (oldKeymapList[i].getName() == m_mappingName) {
+            newKeymapList.push_back(newKeyMapping);
+        } else {
+            newKeymapList.push_back(oldKeymapList[i]);
+        }
+    }
+
+    ModifyDeviceCommand *command =
+        m_bankEditor->makeCommand(tr("modify key mapping"));
+
+    command->setKeyMappingList(newKeymapList);
+    m_bankEditor->addCommandToHistory(command);
 }
 
 void

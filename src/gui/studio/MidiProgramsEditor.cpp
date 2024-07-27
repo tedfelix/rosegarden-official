@@ -431,14 +431,14 @@ void MidiProgramsEditor::slotEditingFinished()
     RG_DEBUG << "slotEditingFinished";
 
     if (!m_currentBank) {
-        RG_WARNING << "slotNameChanged(): WARNING: m_currentBank is nullptr.";
+        RG_WARNING << "slotEditingFinished(): WARNING: m_currentBank is nullptr.";
         return;
     }
 
     const LineEdit *lineEdit = dynamic_cast<const LineEdit *>(sender());
 
     if (!lineEdit) {
-        RG_WARNING << "slotNameChanged(): WARNING: Signal sender is not a LineEdit.";
+        RG_WARNING << "slotEditingFinished(): WARNING: Signal sender is not a LineEdit.";
         return;
     }
 
