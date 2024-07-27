@@ -55,13 +55,6 @@ public:
     /// Show the programs for the selected bank.
     void populate(QTreeWidgetItem *);
 
-    /// Limited undo in response to the Reset button in the lower left.
-    /**
-     * This appears to be a very limited undo for just the MSB/LSB,
-     * and the percussion setting.
-     */
-    void reset();
-
 private slots:
 
     /// Check that any new MSB/LSB combination is unique for this device.
@@ -96,8 +89,6 @@ private:
     // Disregard percussion bool, we care only about msb / lsb
     // in these situations.
     bool banklistContains(const MidiBank &);
-    int ensureUniqueMSB(int msb, bool ascending);
-    int ensureUniqueLSB(int lsb, bool ascending);
 
     /// The bank we are editing right now.
     MidiBank *m_currentBank{nullptr};
@@ -119,6 +110,10 @@ private:
     /// Set the currently loaded programs to new MSB and LSB
     void modifyCurrentPrograms(const MidiBank &oldBank,
                                const MidiBank &newBank);
+
+    void updatePrograms(ProgramList& programList,
+                        const MidiBank &oldBank,
+                        const MidiBank &newBank);
 
     /// For assigning keymaps to programs.
     /**

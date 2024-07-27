@@ -105,8 +105,6 @@ public:
 public slots:
     void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
 
-    void slotReset();
-
     void slotUpdate();
 
     void slotAddBank();
@@ -137,7 +135,6 @@ signals:
 protected:
     void closeEvent(QCloseEvent*) override;
 
-    void resetProgramList();
     void setProgramList(MidiDevice *device);
 
     void updateDialog();
@@ -152,7 +149,6 @@ protected:
     void clearItemChildren(QTreeWidgetItem* item);
 
     MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
-    void keepBankListForNextPopulate() { m_keepBankList = true; }
 
     void populateDeviceEditors(QTreeWidgetItem*);
 
@@ -171,7 +167,6 @@ protected:
     QComboBox               *m_variationCombo;
 
     QPushButton             *m_closeButton;
-    QPushButton             *m_resetButton;
     QPushButton             *m_applyButton;
 
     QPushButton             *m_addBank;
@@ -201,7 +196,6 @@ protected:
     ProgramList              m_programList;
     ProgramList              m_oldProgramList;
 
-    bool                     m_keepBankList;
     bool                     m_deleteAllReally;
 
     DeviceId                 m_lastDevice;

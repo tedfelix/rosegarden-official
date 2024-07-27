@@ -80,7 +80,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         QMainWindow(parent),
         m_studio(&doc->getStudio()),
         m_doc(doc),
-        m_keepBankList(false),
         m_deleteAllReally(false),
         m_lastDevice(Device::NO_DEVICE),
         m_updateDeviceList(false)
@@ -269,15 +268,11 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Button box
     QDialogButtonBox *btnBox = new QDialogButtonBox(/*QDialogButtonBox::Apply  | */
-                                                    QDialogButtonBox::Reset  |
                                                     QDialogButtonBox::Close);
 
     mainFrameLayout->addWidget(btnBox);
 
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
-    m_resetButton = btnBox->button(QDialogButtonBox::Reset);
-
-    connect(m_resetButton, &QAbstractButton::clicked, this, &BankEditorDialog::slotReset);
 
     m_studio->addObserver(this);
 
@@ -432,6 +427,7 @@ BankEditorDialog::initDialog()
 void
 BankEditorDialog::updateDialog()
 {
+    RG_DEBUG << "updateDialog";
     // Update list view
     //
     m_treeWidget->blockSignals(true);
@@ -631,103 +627,6 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
     }
 }
 
-void
-BankEditorDialog::updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem)
-{
-    MidiDevice* midiDevice = deviceItem->getDevice();
-    if (!midiDevice) {
-        RG_DEBUG << "BankEditorDialog::updateDeviceItem : WARNING no midi device for this item\n";
-        return ;
-    }
-
-    QString itemName = strtoqstr(midiDevice->getName());
-
-    BankList banks = midiDevice->getBanks();
-    KeyMappingList keymaps = midiDevice->getKeyMappings();
-
-    // add missing banks for this device
-    //
-    for (size_t i = 0; i < banks.size(); ++i) {
-        if (deviceItemHasBank(deviceItem, i))
-            continue;
-
-        RG_DEBUG << "BankEditorDialog::updateDeviceItem - adding "
-                 << itemName << " - " << strtoqstr(banks[i].getName());
-        new MidiBankTreeWidgetItem(midiDevice, i, deviceItem,
-                                 strtoqstr(banks[i].getName()),
-                                 banks[i].isPercussion(),
-                                 banks[i].getMSB(), banks[i].getLSB());
-    }
-
-    int cnt, i, n;
-
-    cnt = int(keymaps.size());
-    for ( i = 0; i < cnt; ++i) {
-
-//         QTreeWidgetItem *child = deviceItem->firstChild();
-        bool have = false;
-
-        n = 0;
-        while (n < deviceItem->childCount()) {
-            QTreeWidgetItem *child = deviceItem->child(n);
-
-            MidiKeyMapTreeWidgetItem *keyItem =
-                dynamic_cast<MidiKeyMapTreeWidgetItem*>(child);
-            if (keyItem) {
-                if (keyItem->getName() == strtoqstr(keymaps[i].getName())) {
-                    have = true;
-                }
-            }
-            n += 1;
-        }
-
-        if (have)
-            continue;
-
-        RG_DEBUG << "BankEditorDialog::updateDeviceItem - adding "
-                 << itemName << " - " << strtoqstr(keymaps[i].getName());
-        new MidiKeyMapTreeWidgetItem(midiDevice, deviceItem,
-                                   strtoqstr(keymaps[i].getName()));
-    }
-
-    // delete banks which are no longer present
-    //
-    std::vector<QTreeWidgetItem*> childrenToDelete;
-
-
-    n = 0;
-    while (n < deviceItem->childCount()) {
-
-        QTreeWidgetItem* child = deviceItem->child(n);
-
-        MidiBankTreeWidgetItem *bankItem =
-            dynamic_cast<MidiBankTreeWidgetItem *>(child);
-        if (bankItem) {
-            if (bankItem->getBank() >= int(banks.size()))
-                childrenToDelete.push_back(child);
-            else { // update the banks MSB/LSB which might have changed
-                bankItem->setPercussion(banks[bankItem->getBank()].isPercussion());
-                bankItem->setMSB(banks[bankItem->getBank()].getMSB());
-                bankItem->setLSB(banks[bankItem->getBank()].getLSB());
-            }
-        }
-
-        MidiKeyMapTreeWidgetItem *keyItem =
-            dynamic_cast<MidiKeyMapTreeWidgetItem *>(child);
-        if (keyItem) {
-            if (!midiDevice->getKeyMappingByName(qstrtostr(keyItem->getName()))) {
-                childrenToDelete.push_back(child);
-            }
-        }
-
-//         child = child->nextSibling();
-        n += 1;
-    }
-
-    for (size_t i = 0; i < childrenToDelete.size(); ++i)
-        delete childrenToDelete[i];
-}
-
 bool
 BankEditorDialog::deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb)
 {
@@ -843,12 +742,18 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
 
         setProgramList(device);
 
+        m_variationToggle->blockSignals(true);
         m_variationToggle->setChecked(device->getVariationType() !=
                                       MidiDevice::NoVariations);
+        m_variationToggle->blockSignals(false);
+
         m_variationCombo->setEnabled(m_variationToggle->isChecked());
+
+        m_variationCombo->blockSignals(true);
         m_variationCombo->setCurrentIndex
-        (device->getVariationType() ==
-         MidiDevice::VariationFromLSB ? 0 : 1);
+            (device->getVariationType() ==
+             MidiDevice::VariationFromLSB ? 0 : 1);
+        m_variationCombo->blockSignals(false);
 
         m_bankList = device->getBanks();
         m_programEditor->populate(item);
@@ -980,38 +885,6 @@ BankEditorDialog::slotApply()
         m_updateDeviceList = false;
     }
 
-}
-
-void
-BankEditorDialog::slotReset()
-{
-    resetProgramList();
-
-    m_programEditor->reset();
-    m_programEditor->populate(m_treeWidget->currentItem());
-    m_keyMappingEditor->reset();
-    m_keyMappingEditor->populate(m_treeWidget->currentItem());
-
-    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem
-                                         (m_treeWidget->currentItem());
-
-    if (deviceItem) {
-        MidiDevice *device = deviceItem->getDevice();
-        m_variationToggle->setChecked(device->getVariationType() !=
-                                      MidiDevice::NoVariations);
-        m_variationCombo->setEnabled(m_variationToggle->isChecked());
-        m_variationCombo->setCurrentIndex
-        (device->getVariationType() ==
-         MidiDevice::VariationFromLSB ? 0 : 1);
-    }
-
-    updateDialog();
-}
-
-void
-BankEditorDialog::resetProgramList()
-{
-    m_programList = m_oldProgramList;
 }
 
 void

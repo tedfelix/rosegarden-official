@@ -106,6 +106,9 @@ ModifyDeviceCommand::execute()
         return;
     }
 
+    // block notifactaions to avoid multiple updates
+    midiDevice->blockNotify(true);
+
     // Save Original Values for Undo
 
     // ??? Really wish we could just m_oldDevice = *(midiDevice).  See below.
@@ -205,6 +208,9 @@ ModifyDeviceCommand::execute()
         midiDevice->replaceControlParameters(m_controlList);
     }
 
+    // unblock notifactaions. This will trigger a notification
+    midiDevice->blockNotify(false);
+
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,
     //     would update themselves.
@@ -226,6 +232,9 @@ ModifyDeviceCommand::unexecute()
         return;
     }
 
+    // block notifactaions to avoid multiple updates
+    midiDevice->blockNotify(true);
+
     if (m_rename)
         midiDevice->setName(m_oldName);
     midiDevice->replaceBankList(m_oldBankList);
@@ -241,6 +250,9 @@ ModifyDeviceCommand::unexecute()
         instruments[i]->setProgram(m_oldInstrumentPrograms[i]);
         instruments[i]->sendChannelSetup();
     }
+
+    // unblock notifactaions. This will trigger a notification
+    midiDevice->blockNotify(false);
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,

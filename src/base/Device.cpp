@@ -129,11 +129,21 @@ void Device::removeObserver(DeviceObserver *obs)
 
 void Device::notifyDeviceModified()
 {
+    if (m_notificationsBlocked) return;
     for(ObserverList::iterator i = m_observers.begin();
         i != m_observers.end(); ++i) {
         (*i)->deviceModified(this);
     }
 
+}
+
+void Device::blockNotify(bool block)
+{
+    m_notificationsBlocked = block;
+    // if we are unblocking then notify
+    if (!block) {
+        notifyDeviceModified();
+    }
 }
 
 }

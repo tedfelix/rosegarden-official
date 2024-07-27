@@ -56,7 +56,7 @@ public:
     static const DeviceId EXTERNAL_CONTROLLER;
 
     Device(DeviceId id, const std::string &name, DeviceType type):
-        m_name(name), m_type(type), m_id(id) { }
+      m_name(name), m_type(type), m_id(id), m_notificationsBlocked(false) { }
 
     ~Device() override;
 
@@ -115,6 +115,8 @@ public:
     void addObserver(DeviceObserver *obs);
     void removeObserver(DeviceObserver *obs);
 
+    virtual void blockNotify(bool block);
+
 protected:
     virtual void addInstrument(Instrument *) = 0;
     virtual void renameInstruments() = 0;
@@ -125,6 +127,8 @@ protected:
     std::string        m_name;
     DeviceType         m_type;
     DeviceId           m_id;
+
+    bool m_notificationsBlocked;
 
  private:
     typedef std::list<DeviceObserver *> ObserverList;

@@ -130,9 +130,10 @@ ProgramList
 MidiProgramsEditor::getBankSubset(const MidiBank &bank)
 {
     ProgramList programList;
+    const ProgramList& fullProgramList = m_device->getPrograms();
 
     // For each program, copy the ones for the requested bank to programList.
-    for (const MidiProgram &program : m_programList) {
+    for (const MidiProgram &program : fullProgramList) {
         if (program.getBank().compareKey(bank))
             programList.push_back(program);
     }
@@ -153,14 +154,40 @@ MidiProgramsEditor::modifyCurrentPrograms(
     }
 }
 
+void MidiProgramsEditor::updatePrograms(ProgramList& programList,
+                                        const MidiBank &oldBank,
+                                        const MidiBank &newBank)
+{
+    // For each program in programList...
+    for (MidiProgram &program : programList) {
+        // If this one is in the old bank, update it to the new.
+        if (program.getBank().compareKey(oldBank)) {
+            program = MidiProgram(newBank,
+                                  program.getProgram(),
+                                  program.getName());
+        }
+    }
+}
+
 void
 MidiProgramsEditor::clearAll()
 {
     setTitle(tr("Bank and Program details"));
 
+    // block signals so the slots do not fire
+    m_percussion->blockSignals(true);
+    m_msb->blockSignals(true);
+    m_lsb->blockSignals(true);
+
     m_percussion->setChecked(false);
     m_msb->setValue(0);
     m_lsb->setValue(0);
+
+    // unblock signals
+    m_percussion->blockSignals(false);
+    m_msb->blockSignals(false);
+    m_lsb->blockSignals(false);
+
     m_currentBank = nullptr;
 
     m_librarian->clear();
@@ -286,23 +313,6 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
 }
 
 void
-MidiProgramsEditor::reset()
-{
-    // Go back to m_oldBank's MSB/LSB and percussion setting.
-
-    m_percussion->setChecked(m_oldBank.isPercussion());
-    m_msb->setValue(m_oldBank.getMSB());
-    m_lsb->setValue(m_oldBank.getLSB());
-
-    // Make sure all the programs in m_programList are set back to the m_oldBank
-    // MSB/LSB.
-    if (m_currentBank) {
-        modifyCurrentPrograms(*m_currentBank, m_oldBank);
-        *m_currentBank = m_oldBank;
-    }
-}
-
-void
 MidiProgramsEditor::slotPercussionClicked()
 {
     RG_DEBUG << "slotPercussionClicked()";
@@ -318,8 +328,10 @@ MidiProgramsEditor::slotPercussionClicked()
                      lsb,
                      m_currentBank->getName());
 
-    // Make sure the programs in m_programList have the new percussion setting.
-    modifyCurrentPrograms(*m_currentBank, newBank);
+    // Make sure the programs have the new percussion setting.
+    ProgramList programList = m_device->getPrograms();
+
+    updatePrograms(programList, *m_currentBank, newBank);
 
     ModifyDeviceCommand *command =
         m_bankEditor->makeCommand(tr("toggle bank percussion"));
@@ -331,6 +343,7 @@ MidiProgramsEditor::slotPercussionClicked()
         else newBanks.push_back(banks[i]);
     }
     command->setBankList(newBanks);
+    command->setProgramList(programList);
     m_bankEditor->addCommandToHistory(command);
 }
 
@@ -441,7 +454,7 @@ void MidiProgramsEditor::slotEditingFinished()
     ProgramList::iterator programIter =
         getProgramIter(newProgramList, *m_currentBank, programNumber);
 
-    // If the MidiProgram doesn't exist in m_programList, add it.
+    // If the MidiProgram doesn't exist, add it.
     if (programIter == newProgramList.end()) {
         // If the program name is empty, do nothing.
         if (programName.isEmpty())
@@ -464,7 +477,7 @@ void MidiProgramsEditor::slotEditingFinished()
                   newProgramList.end(),
                   [](const MidiProgram &lhs, const MidiProgram &rhs){ return lhs.lessKey(rhs); });
 
-        // Get the new MidiProgram from m_programList.
+        // Get the new MidiProgram
         programIter = getProgramIter(newProgramList,
                                      *m_currentBank,
                                      programNumber);
@@ -478,10 +491,10 @@ void MidiProgramsEditor::slotEditingFinished()
         }
     }
 
-    // If the name has actually changed
-    if (qstrtostr(programName) != programIter->getName()) {
-        programIter->setName(qstrtostr(programName));
-    }
+    // Has the name actually changed
+    if (qstrtostr(programName) == programIter->getName()) return;
+
+    programIter->setName(qstrtostr(programName));
 
     // now make the change
     ModifyDeviceCommand *command =
@@ -616,50 +629,6 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
         keyMapButton->setToolTip(tr("Key Mapping: %1").arg(strtoqstr(newMapping)));
     }
     keyMapButton->setEnabled(haveKeyMappings);
-}
-
-int
-MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
-{
-    // ??? Not sure we should clean this up since we are getting rid of it.
-
-    bool percussion = false; // Doesn't matter
-    int newMSB = msb;
-    while (banklistContains(MidiBank(percussion,
-                                     newMSB, m_lsb->value()))
-            && newMSB < 128
-            && newMSB > -1)
-        if (ascending)
-            newMSB++;
-        else
-            newMSB--;
-
-    if (newMSB == -1 || newMSB == 128)
-        throw false;
-
-    return newMSB;
-}
-
-int
-MidiProgramsEditor::ensureUniqueLSB(int lsb, bool ascending)
-{
-    // ??? Not sure we should clean this up since we are getting rid of it.
-
-    bool percussion = false; // Doesn't matter
-    int newLSB = lsb;
-    while (banklistContains(MidiBank(percussion,
-                                     m_msb->value(), newLSB))
-            && newLSB < 128
-            && newLSB > -1)
-        if (ascending)
-            newLSB++;
-        else
-            newLSB--;
-
-    if (newLSB == -1 || newLSB == 128)
-        throw false;
-
-    return newLSB;
 }
 
 bool
