@@ -95,7 +95,6 @@ public:
     //
     void selectDeviceBankItem(DeviceId deviceId, int bank);
     void selectDeviceKeymapItem(DeviceId deviceId, const QString& keymapName);
-    void slotApply();
 
     QString makeUniqueBankName(const QString& name,
                                const BankList& banks);
@@ -190,8 +189,6 @@ protected:
     };
     Clipboard m_clipboard;
 
-    std::map<DeviceId,
-             std::string>    m_deviceNameMap;
     BankList                 m_bankList;
     ProgramList              m_programList;
     ProgramList              m_oldProgramList;

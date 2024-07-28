@@ -85,10 +85,6 @@ private:
      * We use this to check for dupes and make changes to the banks.
      */
     BankList &m_bankList;
-    // Does m_bankList contain this combination already?
-    // Disregard percussion bool, we care only about msb / lsb
-    // in these situations.
-    bool banklistContains(const MidiBank &);
 
     /// The bank we are editing right now.
     MidiBank *m_currentBank{nullptr};

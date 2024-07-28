@@ -631,21 +631,6 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
     keyMapButton->setEnabled(haveKeyMappings);
 }
 
-bool
-MidiProgramsEditor::banklistContains(const MidiBank &bank)
-{
-    // For each bank
-    for (const MidiBank &currentBank : m_bankList)
-    {
-        // Just compare the MSB/LSB.
-        if (currentBank.getMSB() == bank.getMSB()  &&
-            currentBank.getLSB() == bank.getLSB())
-            return true;
-    }
-
-    return false;
-}
-
 MidiProgram *
 MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 {
