@@ -623,28 +623,6 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
     }
 }
 
-bool
-BankEditorDialog::deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb)
-{
-//     QTreeWidgetItem *child = deviceItem->firstChild();
-    MidiBankTreeWidgetItem *bankItem = nullptr;
-    QTreeWidgetItem *child = nullptr;
-
-    int n = 0;
-    while (n < deviceItem->childCount()) {
-        child = deviceItem->child(n);
-        bankItem = dynamic_cast<MidiBankTreeWidgetItem*>(child);
-        if (bankItem) {
-            if (bankItem->getBank() == bankNb)
-                return true;
-        }
-//         child = child->nextSibling();
-        n += 1;
-    }
-
-    return false;
-}
-
 void
 BankEditorDialog::clearItemChildren(QTreeWidgetItem* item)
 {
@@ -655,17 +633,6 @@ BankEditorDialog::clearItemChildren(QTreeWidgetItem* item)
     while ((item->childCount() > 0))
         delete item->child(0);
 }
-
-MidiDevice*
-BankEditorDialog::getCurrentMidiDevice()
-{
-    QTreeWidgetItem* item = m_treeWidget->currentItem();
-    MidiDeviceTreeWidgetItem *deviceItem =
-        dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
-    if (! deviceItem) return nullptr;
-    return deviceItem->getDevice();
-}
-
 
 void BankEditorDialog::slotPopulateDeviceEditors(QTreeWidgetItem* item, QTreeWidgetItem*)
 {

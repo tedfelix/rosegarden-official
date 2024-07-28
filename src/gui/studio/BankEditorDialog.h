@@ -78,9 +78,6 @@ public:
 
     void setCurrentDevice(DeviceId device);
 
-    // Get a MidiDevice from an index number
-    //
-    MidiDevice* getCurrentMidiDevice();
     BankList&   getBankList()     { return m_bankList; }
     ProgramList&getProgramList()  { return m_programList; }
 
@@ -142,8 +139,6 @@ protected:
                             MidiDevice* midiDevice);
 
     void updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem);
-
-    bool deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb);
 
     void clearItemChildren(QTreeWidgetItem* item);
 
