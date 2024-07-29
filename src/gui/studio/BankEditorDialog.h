@@ -101,8 +101,6 @@ public:
 public slots:
     void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
 
-    void slotUpdate();
-
     void slotAddBank();
     void slotAddKeyMapping();
     void slotDelete();
@@ -211,6 +209,8 @@ protected:
     void unobserveDevice(Device* device);
 
     std::set<Device*> m_observedDevices;
+
+    QString m_selectionName;
 };
 
 // ----------------------- RemapInstrumentDialog ------------------------

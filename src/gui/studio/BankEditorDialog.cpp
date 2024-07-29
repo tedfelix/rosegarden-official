@@ -438,9 +438,6 @@ BankEditorDialog::updateDialog()
     SelectedType selectedType = SelectedType::NONE;
     QString selectedName;
     Device* parentDevice = nullptr;
-    QModelIndex mIndex = m_treeWidget->currentIndex();
-    int row = mIndex.row();
-    int nrows = 0;
 
     QTreeWidgetItem* item = m_treeWidget->currentItem();
     if (item) {
@@ -461,8 +458,6 @@ BankEditorDialog::updateDialog()
         if (keyItem) {
             selectedType = SelectedType::KEYMAP;
             selectedName = keyItem->getName();
-            QTreeWidgetItem* parent = keyItem->parent();
-            nrows = parent->childCount();
             parentDevice = keyItem->getDevice();
         }
         MidiBankTreeWidgetItem *bankItem =
@@ -470,13 +465,16 @@ BankEditorDialog::updateDialog()
         if (bankItem) {
             selectedType = SelectedType::BANK;
             selectedName = bankItem->getName();
-            QTreeWidgetItem* parent = bankItem->parent();
-            nrows = parent->childCount();
             parentDevice = bankItem->getDevice();
         }
     }
+    // if m_selectioName is set - us it
+    if (m_selectionName != "") {
+        selectedName = m_selectionName;
+        m_selectionName = "";
+    }
     RG_DEBUG << "selected item:" << (int)selectedType << selectedName <<
-        parentDevice << row << nrows;
+        parentDevice;
 
     m_treeWidget->clear();
 
@@ -514,7 +512,7 @@ BankEditorDialog::updateDialog()
     m_treeWidget->blockSignals(false);
 
     // select item
-    // findd the device item
+    // find the device item
     MidiDeviceTreeWidgetItem* selectDeviceItem = nullptr;
     QTreeWidgetItem* root = m_treeWidget->invisibleRootItem();
     for (int i=0; i<root->childCount(); i++) {
@@ -543,34 +541,26 @@ BankEditorDialog::updateDialog()
     if (selectedType == SelectedType::BANK ||
         selectedType == SelectedType::KEYMAP) {
         int childCount = selectDeviceItem->childCount();
-        if (childCount == nrows) {
-            // the cild count has not changed - select by index
-            QTreeWidgetItem* indexItem = selectDeviceItem->child(row);
-            m_treeWidget->setCurrentItem(indexItem);
-        } else {
-            // the child count has changed - try to find one with the
-            // same name and type
-            for(int i=0; i<childCount; i++) {
-                QTreeWidgetItem* cItem = selectDeviceItem->child(i);
-                MidiKeyMapTreeWidgetItem *keyItem =
-                    dynamic_cast<MidiKeyMapTreeWidgetItem*>(cItem);
-                if (keyItem && selectedType == SelectedType::KEYMAP) {
-                    QString cName = keyItem->getName();
-                    if (cName == selectedName) {
-                        // found it
-                        m_treeWidget->setCurrentItem(cItem);
-                        return;
-                    }
+        for(int i=0; i<childCount; i++) {
+            QTreeWidgetItem* cItem = selectDeviceItem->child(i);
+            MidiKeyMapTreeWidgetItem *keyItem =
+                dynamic_cast<MidiKeyMapTreeWidgetItem*>(cItem);
+            if (keyItem && selectedType == SelectedType::KEYMAP) {
+                QString cName = keyItem->getName();
+                if (cName == selectedName) {
+                    // found it
+                    m_treeWidget->setCurrentItem(cItem);
+                    return;
                 }
-                MidiBankTreeWidgetItem *bankItem =
-                    dynamic_cast<MidiBankTreeWidgetItem*>(cItem);
-                if (bankItem && selectedType == SelectedType::BANK) {
-                    QString cName = bankItem->getName();
-                    if (cName == selectedName) {
-                        // found it
-                        m_treeWidget->setCurrentItem(cItem);
-                        return;
-                    }
+            }
+            MidiBankTreeWidgetItem *bankItem =
+                dynamic_cast<MidiBankTreeWidgetItem*>(cItem);
+            if (bankItem && selectedType == SelectedType::BANK) {
+                QString cName = bankItem->getName();
+                if (cName == selectedName) {
+                    // found it
+                    m_treeWidget->setCurrentItem(cItem);
+                    return;
                 }
             }
             // no suitable child item found - select device
@@ -778,12 +768,6 @@ BankEditorDialog::setProgramList(MidiDevice *device)
 {
     m_programList = device->getPrograms();
     m_oldProgramList = m_programList;
-}
-
-void
-BankEditorDialog::slotUpdate()
-{
-    updateDialog();
 }
 
 MidiDeviceTreeWidgetItem*
@@ -1119,6 +1103,11 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         dynamic_cast<MidiKeyMapTreeWidgetItem*>(item);
 
     QString label = item->text(0);
+    // do not allow blank names
+    if (label == "") {
+        updateDialog();
+        return;
+    }
     if (bankItem) {
 
         // renaming a bank item
@@ -1134,6 +1123,8 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         int bankIndex = bankItem->getBank();
         BankList banks = device->getBanks();
         QString uniqueName = makeUniqueBankName(label, banks);
+        // set m_selectionName to select this item in updateDialot
+        m_selectionName = uniqueName;
         banks[bankIndex].setName(qstrtostr(uniqueName));
 
         RG_DEBUG <<
@@ -1164,6 +1155,8 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         KeyMappingList kml = device->getKeyMappings();
 
         QString uniqueName = makeUniqueKeymapName(label, kml);
+        // set m_selectionName to select this item in updateDialot
+        m_selectionName = uniqueName;
 
         for (KeyMappingList::iterator i = kml.begin();
              i != kml.end(); ++i) {
@@ -1568,7 +1561,7 @@ BankEditorDialog::slotEditPaste()
         ProgramList newPrograms;
         MidiBank currentBank = bankList[bankItem->getBank()];
 
-        ProgramList oldPrograms = device->getPrograms(currentBank);
+        ProgramList oldPrograms = device->getPrograms();
 
         // Remove programs that will be overwritten
         //
@@ -1600,7 +1593,7 @@ BankEditorDialog::slotEditPaste()
                 // Insert with new MSB and LSB
                 //
                 RG_DEBUG << "slotEditPaste copy program" << (*it).getName();
-                MidiProgram copyProgram(m_lastBank,
+                MidiProgram copyProgram(currentBank,
                                         it->getProgram(),
                                         it->getName());
 
