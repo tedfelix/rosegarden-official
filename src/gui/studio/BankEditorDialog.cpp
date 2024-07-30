@@ -1478,8 +1478,15 @@ BankEditorDialog::slotImport()
             librarianEmail = "";
         }
 
-        ModifyDeviceCommand *command = makeCommand(tr("import device"));
-        if (! command) return;
+        // command with new device name
+        ModifyDeviceCommand *command =
+            new ModifyDeviceCommand(m_studio,
+                                    device->getId(),
+                                    dialog->getDeviceName(),
+                                    librarianName,
+                                    librarianEmail,
+                                    tr("import device"));
+
         if (dialog->shouldOverwriteBanks()) {
             command->setVariation(variation);
         }
