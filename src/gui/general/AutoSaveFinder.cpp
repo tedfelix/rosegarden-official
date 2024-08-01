@@ -15,8 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AutoSaveFinder]"
+#define RG_NO_DEBUG_PRINT
+
 #include "AutoSaveFinder.h"
+
 #include "ResourceFinder.h"
+#include "misc/Debug.h"
 
 #include <iostream>
 #include <QCryptographicHash>
@@ -35,22 +40,23 @@ AutoSaveFinder::getAutoSaveDir()
 QString
 AutoSaveFinder::getAutoSavePath(QString filename)
 {
-    QString dir = getAutoSaveDir();
-    if (dir == "") {
+    //RG_DEBUG << "getAutoSavePath(): " << filename;
+
+    const QString autoSaveDir = getAutoSaveDir();
+    if (autoSaveDir == "") {
         std::cerr << "WARNING: AutoSaveFinder::getAutoSavePath: No auto-save location located!?" << std::endl;
         return "";
     }
     
-    // This is just a simple (in terms of code present here, and
-    // trustworthiness) way of ensuring there are no unwanted
-    // characters in the filename -- although there may be advantages
-    // to the filename being readable, so we might want to consider
-    // something more like the old way
-    QString hashed = QString::fromLocal8Bit
-        (QCryptographicHash::hash(filename.toLocal8Bit(),
-                                  QCryptographicHash::Sha1).toHex());
+    // Use a hash to make sure the filename has no slashes.
+    // The incoming filename has the complete path of the file.  So we need
+    // to get rid of the slashes so we can save it here.  This is important
+    // if you have multiple files with the same name in different directories.
+    const QString hashed = QString::fromLocal8Bit(
+            QCryptographicHash::hash(filename.toLocal8Bit(),
+                                     QCryptographicHash::Sha1).toHex());
     
-    return dir + "/" + hashed;
+    return autoSaveDir + "/" + hashed;
 }
 
 QString
