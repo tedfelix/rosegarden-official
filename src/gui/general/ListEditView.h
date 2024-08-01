@@ -15,24 +15,25 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_LIST_EDIT_VIEW_H
-#define RG_LIST_EDIT_VIEW_H
+#ifndef RG_LISTEDITVIEW_H
+#define RG_LISTEDITVIEW_H
 
 #include "EditViewBase.h"
-#include "document/CommandRegistry.h"
 
-#include <QFrame>
-#include <QAction>
-#include <QWidget>
-
+class QFrame;
+class QWidget;
 class QPaintEvent;
 class QGridLayout;
+
 
 namespace Rosegarden
 {
 
+
 class EditViewTimeSigNotifier;
 
+
+/// Base class for EventView and TempoView.
 /**
  * ListEditView is a subclass of EditViewBase that contains some
  * functionality used by "old-style" EditView implementations but not
@@ -61,18 +62,23 @@ public:
     /**
      * Create an EditViewBase for the segments \a segments from document \a doc.
      *
-     * \arg cols : number of columns, main column is always rightmost
+     * \arg cols : number of columns, main column is always rightmost (really?)
      *
      */
     ListEditView(const std::vector<Segment *> &segments,
                  unsigned int cols);
-
     ~ListEditView() override;
 
-    /**
-     * Update the view
-     */
-    virtual void updateView() = 0;
+protected:
+
+    QFrame *getCentralWidget()  { return m_centralFrame; }
+
+    /// Create actions for menus and toolbars.
+    void setupActions(const QString &rcFileName, bool haveClipboard);
+
+    QString getRCFileName() const  { return m_rcFileName; }
+
+    QGridLayout *getGridLayout()  { return m_grid; }
 
     /**
      * Refresh part of a Segment following a modification made in this
@@ -90,36 +96,19 @@ public:
                                 timeT startTime = 0,
                                 timeT endTime = 0) = 0;
 
-    /**
-     * Add a Command to the history
-     */
     virtual void addCommandToHistory(Command *);
 
-    static const unsigned int NbLayoutRows;
+private:
 
-protected:
-    QWidget* getCentralWidget() { return dynamic_cast<QWidget*>(m_centralFrame); }
-
-    void initSegmentRefreshStatusIds();
+    QGridLayout *m_grid;
 
     bool isCompositionModified();
-    void setCompositionModified(bool);
+    void setCompositionModified(bool modified);
 
-    /**
-     * create menus and toolbars
-     */
-    void setupActions(const QString& rcFileName, bool haveClipboard = true);
+    // ??? Try to get rid of this per explanation above.
+    void paintEvent(QPaintEvent *e) override;
 
-    /**
-     * Make a widget visible depending on the state of a
-     * (toggle) QAction
-     */
-    // unused virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
-
-    void paintEvent(QPaintEvent* e) override;
-
-    void setRCFileName(const QString& s) { m_rcFileName = s; }
-    QString getRCFileName()       { return m_rcFileName; }
+    //void setRCFileName(const QString &s)  { m_rcFileName = s; }
 
     QString m_rcFileName;
 
@@ -129,9 +118,9 @@ protected:
     std::string m_viewLocalPropertyPrefix;
 
     std::vector<unsigned int> m_segmentsRefreshStatusIds;
+    void initSegmentRefreshStatusIds();
 
     QFrame      *m_centralFrame;
-    QGridLayout *m_grid;
 
     unsigned int m_mainCol;
     unsigned int m_compositionRefreshStatusId;
@@ -145,6 +134,7 @@ protected:
 
     EditViewTimeSigNotifier *m_timeSigNotifier;
 };
+
 
 }
 

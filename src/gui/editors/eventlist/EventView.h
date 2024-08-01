@@ -85,7 +85,6 @@ protected:
     void refreshSegment(Segment *segment,
                         timeT startTime = 0,
                         timeT endTime = 0) override;
-    void updateView() override;
 
     // SegmentObserver overrides.
     void eventAdded(const Segment *, Event *) override { }
@@ -152,6 +151,7 @@ private:
 
     void setupActions();
 
+    void updateView();
     bool updateTreeWidget();
 
     QString makeTimeString(timeT time, int timeMode);

@@ -88,13 +88,13 @@ TempoView::TempoView(
     filterGroupLayout->addSpacing(200);
 
     m_filterGroup->setLayout(filterGroupLayout);
-    m_grid->addWidget(m_filterGroup, 2, 0);
+    getGridLayout()->addWidget(m_filterGroup, 2, 0);
 
     m_list = new QTreeWidget(getCentralWidget());
 
 //     m_list->setItemsRenameable(true);    //&&&
 
-    m_grid->addWidget(m_list, 2, 1);
+    getGridLayout()->addWidget(m_list, 2, 1);
 
     slotUpdateWindowTitle(false);
     connect(m_doc, &RosegardenDocument::documentModified,
@@ -397,11 +397,13 @@ TempoView::refreshSegment(Segment * /*segment*/,
     applyLayout();
 }
 
+#if 0
 void
 TempoView::updateView()
 {
     m_list->update();
 }
+#endif
 
 void
 TempoView::slotEditCut()

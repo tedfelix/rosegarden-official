@@ -147,13 +147,13 @@ EventView::EventView(RosegardenDocument *doc,
     filterGroupLayout->addWidget(m_otherCheckBox);
     m_filterGroup->setLayout(filterGroupLayout);
 
-    m_grid->addWidget(m_filterGroup, 2, 0);
+    getGridLayout()->addWidget(m_filterGroup, 2, 0);
 
     m_eventList = new QTreeWidget(getCentralWidget());
 
     //m_eventList->setItemsRenameable(true); //&&& use item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable );
 
-    m_grid->addWidget(m_eventList, 2, 1);
+    getGridLayout()->addWidget(m_eventList, 2, 1);
 
     if (m_isTriggerSegment) {
 
@@ -232,7 +232,7 @@ EventView::EventView(RosegardenDocument *doc,
         */
 
         frame->setLayout(layout);
-        m_grid->addWidget(frame, 2, 2);
+        getGridLayout()->addWidget(frame, 2, 2);
 
     }
 
@@ -1251,7 +1251,7 @@ EventView::slotClearSelection()
 void
 EventView::setupActions()
 {
-    ListEditView::setupActions("eventlist.rc");
+    ListEditView::setupActions("eventlist.rc", true);
 
     createAction("insert", SLOT(slotEditInsert()));
     createAction("delete", SLOT(slotEditDelete()));

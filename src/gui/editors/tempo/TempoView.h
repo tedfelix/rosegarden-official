@@ -72,7 +72,7 @@ public:
                         timeT startTime = 0,
                         timeT endTime = 0) override;
 
-    void updateView() override;
+    //void updateView() override;
 
     virtual void setupActions();
     void initStatusBar();

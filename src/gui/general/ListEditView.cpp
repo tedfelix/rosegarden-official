@@ -54,8 +54,8 @@
 namespace Rosegarden
 {
 
+
 bool ListEditView::m_inPaintEvent = false;
-const unsigned int ListEditView::NbLayoutRows = 6;
 
 
 ListEditView::ListEditView(const std::vector<Segment *> &segments,
@@ -63,8 +63,6 @@ ListEditView::ListEditView(const std::vector<Segment *> &segments,
     EditViewBase(segments),
     m_viewNumber( -1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
-    m_centralFrame(nullptr),
-    m_grid(nullptr),
     m_mainCol(cols - 1),
     m_compositionRefreshStatusId(RosegardenDocument::currentDocument->getComposition().getNewRefreshStatusId()),
     m_needUpdate(false),
@@ -123,13 +121,16 @@ ListEditView::makeViewLocalPropertyPrefix()
 void
 ListEditView::setupActions(const QString& rcFileName, bool haveClipboard)
 {
-    setRCFileName(rcFileName);
+    m_rcFileName = rcFileName;
     setupBaseActions(haveClipboard);
 }
 
 void
 ListEditView::paintEvent(QPaintEvent* e)
 {
+    // ??? Comments in the header seem to indicate this is no longer
+    //     necessary.  Try to get rid of this routine.
+
 //    QMainWindow::paintEvent(e); return;//&&& //!!! for experimental purposes
 
     // It is possible for this function to be called re-entrantly,
@@ -291,19 +292,5 @@ void ListEditView::setCompositionModified(bool c)
     (m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 
-/* unused
-void ListEditView::toggleWidget(QWidget* widget,
-                                const QString& toggleActionName)
-{
-    QAction *toggleAction = findAction(toggleActionName);
-
-    if (!toggleAction) {
-        RG_DEBUG << "!!! Unknown toggle action : " << toggleActionName;
-        return ;
-    }
-
-    widget->setVisible(toggleAction->isChecked());
-}
-*/
 
 }
