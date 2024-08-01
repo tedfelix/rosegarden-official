@@ -150,7 +150,7 @@ protected:
 
     QString m_noPortName;
 
-private slots:
+ public slots:
     void slotCloseButtonPress();
 
  private:
@@ -165,6 +165,7 @@ private slots:
     void unobserveDevice(Device* device);
 
     std::set<Device*> m_observedDevices;
+    bool m_observingStudio;
 
 };
 

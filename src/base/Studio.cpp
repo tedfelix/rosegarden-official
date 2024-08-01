@@ -72,6 +72,7 @@ Studio::Studio() :
 
 Studio::~Studio()
 {
+    RG_DEBUG << "dtor";
     DeviceListIterator dIt = m_devices.begin();
 
     for (; dIt != m_devices.end(); ++dIt)

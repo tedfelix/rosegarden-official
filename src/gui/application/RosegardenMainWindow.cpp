@@ -1811,6 +1811,8 @@ RosegardenMainWindow::slotFileNew()
     }
 
     if (makeNew) {
+        // do some cleaning up
+        emit documentAboutToChange();
         setDocument(newDocument(
                 true));  // permanent
         leaveActionState("have_segments");
@@ -6901,7 +6903,7 @@ RosegardenMainWindow::slotManageMIDIDevices()
                 this, &RosegardenMainWindow::slotEditControlParameters);
 
         connect(this, &RosegardenMainWindow::documentAboutToChange,
-                m_deviceManager.data(), &QWidget::close);
+                m_deviceManager.data(), &DeviceManagerDialog::slotCloseButtonPress);
 
         if (m_midiMixer) {
              connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,

@@ -56,7 +56,11 @@ namespace Rosegarden
 
 DeviceManagerDialog::~DeviceManagerDialog()
 {
-    m_studio->removeObserver(this);
+    RG_DEBUG << "dtor";
+    if (m_observingStudio) {
+        m_observingStudio = false;
+        m_studio->removeObserver(this);
+    }
     for(Device* device : m_observedDevices) {
         unobserveDevice(device);
     }
@@ -79,6 +83,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent) :
     //m_doc = 0;    // RG document
     m_studio = &RosegardenDocument::currentDocument->getStudio();
     m_studio->addObserver(this);
+    m_observingStudio = true;
 
     setupUi(this);
 
@@ -132,6 +137,15 @@ DeviceManagerDialog::show()
 void
 DeviceManagerDialog::slotCloseButtonPress()
 {
+    // remove observers here to avoid crash on studio deletion
+    if (m_observingStudio) {
+        m_observingStudio = false;
+        m_studio->removeObserver(this);
+    }
+    for(Device* device : m_observedDevices) {
+        unobserveDevice(device);
+    }
+
     /*
        if (m_doc) {
        //CommandHistory::getInstance()->detachView(actionCollection());    //&&&
