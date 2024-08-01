@@ -70,9 +70,7 @@ protected:
 
     /// Create actions for menus and toolbars.
     // ??? This is far too trivial to pull up.  Inline into callers.
-    void setupActions(const QString &rcFileName, bool haveClipboard);
-
-    QString getRCFileName() const  { return m_rcFileName; }
+    void setupActions(bool haveClipboard);
 
     QGridLayout *getGridLayout()  { return m_gridLayout; }
 
@@ -95,7 +93,7 @@ protected:
     virtual void refreshList() = 0;
 
     /// ??? This is a one-line wrapper.  Inline into all callers.
-    void addCommandToHistory(Command *);
+    static void addCommandToHistory(Command *);
 
 private:
 
@@ -104,9 +102,6 @@ private:
     // ??? This is far too trivial to pull up.  Push down into derivers.
     /// Layout within m_frame.
     QGridLayout *m_gridLayout;
-
-    // ??? This is far too trivial to pull up.  Push down into derivers.
-    QString m_rcFileName;
 
     // *** paintEvent() Related
     // ??? We need to try to get rid of all this.  Or at least re-org so
@@ -122,8 +117,6 @@ private:
 
     // ??? paintEvent() related.
     std::vector<unsigned int> m_segmentsRefreshStatusIds;
-    // ??? paintEvent() related.
-    void initSegmentRefreshStatusIds();
 
     // ??? paintEvent() related.
     EditViewTimeSigNotifier *m_timeSigNotifier;

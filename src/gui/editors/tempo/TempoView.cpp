@@ -578,7 +578,7 @@ TempoView::slotClearSelection()
 void
 TempoView::setupActions()
 {
-    ListEditView::setupActions("tempoview.rc", false);
+    ListEditView::setupActions(false);
 
     createAction("insert_tempo", SLOT(slotEditInsertTempo()));
     createAction("insert_timesig", SLOT(slotEditInsertTimeSignature()));
@@ -607,7 +607,7 @@ TempoView::setupActions()
     a->setCheckable(true);
     if (timeMode == 2)  a->setChecked(true);
 
-    createMenusAndToolbars(getRCFileName());
+    createMenusAndToolbars("tempoview.rc");
 }
 
 void

@@ -44,19 +44,26 @@ ListEditView::ListEditView(const std::vector<Segment *> &segments) :
     m_timeSigNotifier =
             new EditViewTimeSigNotifier(RosegardenDocument::currentDocument);
 
+    // ??? Odd.  I think EditViewBase has some statusbar-related code.
+    //     Should we push this up or down?
     setStatusBar(new QStatusBar(this));
 
+    // Create frame and layout.
+    // ??? Push down to derivers.
     m_frame = new QFrame(this);
-    m_frame->setObjectName("centralframe");
-	m_frame->setMinimumSize(500, 300);
-	m_frame->setMaximumSize(2200, 1400);
+    m_frame->setMinimumSize(500, 300);
+    m_frame->setMaximumSize(2200, 1400);
+    m_gridLayout = new QGridLayout(m_frame);
+    m_frame->setLayout(m_gridLayout);
+    setCentralWidget(m_frame);
 
-	m_gridLayout = new QGridLayout(m_frame);
-	m_frame->setLayout(m_gridLayout);
-
-	setCentralWidget(m_frame);
-
-    initSegmentRefreshStatusIds();
+    // Init m_segmentsRefreshStatusIds.
+    // For each Segment...
+    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+        const unsigned int refreshStatusID =
+                m_segments[i]->getNewRefreshStatusId();
+        m_segmentsRefreshStatusIds.push_back(refreshStatusID);
+    }
 }
 
 ListEditView::~ListEditView()
@@ -65,9 +72,8 @@ ListEditView::~ListEditView()
 }
 
 void
-ListEditView::setupActions(const QString &rcFileName, bool haveClipboard)
+ListEditView::setupActions(bool haveClipboard)
 {
-    m_rcFileName = rcFileName;
     setupBaseActions(haveClipboard);
 }
 
@@ -80,9 +86,13 @@ ListEditView::paintEvent(QPaintEvent* e)
     //     modification handlers instead.
 
 
+    // Check if one of our Segments is no longer in the Composition.
+    // If so, close our window.
+
     // ??? This should not be done in paintEvent().  It should be handled
     //     in a document modified handler.  See how matrix does this and
     //     do the same (so long as it doesn't involve paintEvent()).
+
     if (isCompositionModified()) {
         for (unsigned int i = 0; i < m_segments.size(); ++i) {
             // If this Segment no longer has a Composition, close.
@@ -93,10 +103,12 @@ ListEditView::paintEvent(QPaintEvent* e)
         }
     }
 
+
+    // Scan all segments and check if they've been modified.  If they
+    // have, refresh the list.
+
     // ??? Again, do this in response to a document modification, not
     //     in paintEvent().  That makes no sense.
-
-    // Scan all segments and check if they've been modified.
 
     int segmentsToUpdate = 0;
 
@@ -147,25 +159,16 @@ void ListEditView::addCommandToHistory(Command *command)
     CommandHistory::getInstance()->addCommand(command);
 }
 
-void ListEditView::initSegmentRefreshStatusIds()
-{
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
-
-        unsigned int rid = m_segments[i]->getNewRefreshStatusId();
-        m_segmentsRefreshStatusIds.push_back(rid);
-    }
-}
-
 bool ListEditView::isCompositionModified()
 {
-    return RosegardenDocument::currentDocument->getComposition().getRefreshStatus
-           (m_compositionRefreshStatusId).needsRefresh();
+    return RosegardenDocument::currentDocument->getComposition().
+            getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
 }
 
-void ListEditView::setCompositionModified(bool c)
+void ListEditView::setCompositionModified(bool modified)
 {
-    RosegardenDocument::currentDocument->getComposition().getRefreshStatus
-    (m_compositionRefreshStatusId).setNeedsRefresh(c);
+    RosegardenDocument::currentDocument->getComposition().getRefreshStatus(
+            m_compositionRefreshStatusId).setNeedsRefresh(modified);
 }
 
 

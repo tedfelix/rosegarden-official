@@ -1248,7 +1248,7 @@ EventView::slotClearSelection()
 void
 EventView::setupActions()
 {
-    ListEditView::setupActions("eventlist.rc", true);
+    ListEditView::setupActions(true);
 
     createAction("insert", SLOT(slotEditInsert()));
     createAction("delete", SLOT(slotEditDelete()));
@@ -1268,7 +1268,7 @@ EventView::setupActions()
     QAction *raw = createAction("time_raw", SLOT(slotRawTime()));
     raw->setCheckable(true);
 
-    createMenusAndToolbars(getRCFileName());
+    createMenusAndToolbars("eventlist.rc");
 
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
