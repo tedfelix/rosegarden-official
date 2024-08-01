@@ -92,9 +92,7 @@ protected:
      * If the startTime and endTime are equal, refresh the whole of
      * the relevant segments.
      */
-    virtual void refreshSegment(Segment *segment,
-                                timeT startTime = 0,
-                                timeT endTime = 0) = 0;
+    virtual void refreshList() = 0;
 
     /// ??? This is a one-line wrapper.  Inline into all callers.
     void addCommandToHistory(Command *);
@@ -127,8 +125,6 @@ private:
     // ??? paintEvent() related.
     void initSegmentRefreshStatusIds();
 
-    // ??? paintEvent() related.
-    bool m_needUpdate{false};
     // ??? paintEvent() related.
     EditViewTimeSigNotifier *m_timeSigNotifier;
 };

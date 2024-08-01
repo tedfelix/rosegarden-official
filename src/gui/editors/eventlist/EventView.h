@@ -82,9 +82,7 @@ protected:
     Segment *getCurrentSegment() override;
 
     // ListEditView overrides.
-    void refreshSegment(Segment *segment,
-                        timeT startTime = 0,
-                        timeT endTime = 0) override;
+    void refreshList() override;
 
     // SegmentObserver overrides.
     void eventAdded(const Segment *, Event *) override { }

@@ -775,11 +775,8 @@ EventView::makeDurationString(timeT time,
 }
 
 void
-EventView::refreshSegment(Segment * /*segment*/,
-                          timeT /*startTime*/,
-                          timeT /*endTime*/)
+EventView::refreshList()
 {
-    RG_DEBUG << "EventView::refreshSegment";
     updateTreeWidget();
 }
 

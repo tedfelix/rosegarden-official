@@ -389,11 +389,8 @@ TempoView::makeTimeString(timeT time, int timeMode)
 }
 
 void
-TempoView::refreshSegment(Segment * /*segment*/,
-                          timeT /*startTime*/,
-                          timeT /*endTime*/)
+TempoView::refreshList()
 {
-    RG_DEBUG << "TempoView::refreshSegment";
     applyLayout();
 }
 

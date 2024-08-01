@@ -74,129 +74,62 @@ ListEditView::setupActions(const QString &rcFileName, bool haveClipboard)
 void
 ListEditView::paintEvent(QPaintEvent* e)
 {
+
     // ??? Comments in the header seem to indicate this is no longer
-    //     necessary.  Try to get rid of this routine.
+    //     necessary.  Try to get rid of this routine.  Use document
+    //     modification handlers instead.
 
-//    QMainWindow::paintEvent(e); return;//&&& //!!! for experimental purposes
-
-    // It is possible for this function to be called re-entrantly,
-    // because a re-layout procedure may deliberately ask the event
-    // loop to process some more events so as to keep the GUI looking
-    // responsive.  If that happens, we remember the events that came
-    // in in the middle of one paintEvent call and process their union
-    // again at the end of the call.
-
-    // Comment from David Faure: do NOT, I repeat, do NOT, relayout from within paintEvent.
-    // Do it before, i.e. all of this code here does not belong to a paintEvent.
-
-    /*
-        if (m_inPaintEvent) {
-    	NOTATION_DEBUG << "ListEditView::paintEvent: in paint event already";
-    	if (e) {
-    	    if (m_havePendingPaintEvent) {
-    		if (m_pendingPaintEvent) {
-    		    QRect r = m_pendingPaintEvent->rect().unite(e->rect());
-    		    *m_pendingPaintEvent = QPaintEvent(r);
-    		} else {
-    		    m_pendingPaintEvent = new QPaintEvent(*e);
-    		}
-    	    } else {
-    		m_pendingPaintEvent = new QPaintEvent(*e);
-    	    }
-    	}
-    	m_havePendingPaintEvent = true;
-    	return;
-        }
-    */
-    //!!!    m_inPaintEvent = true;
-
-    //RG_DEBUG << "paintEvent()";
 
     // ??? This should not be done in paintEvent().  It should be handled
     //     in a document modified handler.  See how matrix does this and
     //     do the same (so long as it doesn't involve paintEvent()).
     if (isCompositionModified()) {
-
-        // Check if one of the segments we display has been removed
-        // from the composition.
-        //
-        // For the moment we'll have to close the view if any of the
-        // segments we handle has been deleted.
-
         for (unsigned int i = 0; i < m_segments.size(); ++i) {
-
+            // If this Segment no longer has a Composition, close.
             if (!m_segments[i]->getComposition()) {
-                // oops, I think we've been deleted
                 close();
-                return ;
+                return;
             }
         }
     }
-
-
-    m_needUpdate = false;
 
     // ??? Again, do this in response to a document modification, not
     //     in paintEvent().  That makes no sense.
 
     // Scan all segments and check if they've been modified.
-    //
-    // If we have more than one segment modified, we need to update
-    // them all at once with the same time range, otherwise we can run
-    // into problems when the layout of one depends on the others.  So
-    // we use updateStart/End to calculate a bounding range for all
-    // modifications.
 
-    timeT updateStart = 0, updateEnd = 0;
     int segmentsToUpdate = 0;
-    Segment *singleSegment = nullptr;
 
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
+        Segment *segment = m_segments[i];
 
-        Segment* segment = m_segments[i];
         unsigned int refreshStatusId = m_segmentsRefreshStatusIds[i];
         SegmentRefreshStatus &refreshStatus =
-            segment->getRefreshStatus(refreshStatusId);
+                segment->getRefreshStatus(refreshStatusId);
 
         if (refreshStatus.needsRefresh() && isCompositionModified()) {
 
             // if composition is also modified, relayout everything
-            refreshSegment(nullptr);
+            refreshList();
             segmentsToUpdate = 0;
             break;
 
         } else if (m_timeSigNotifier->hasTimeSigChanged()) {
 
             // not exactly optimal!
-            refreshSegment(nullptr);
+            refreshList();
             segmentsToUpdate = 0;
             m_timeSigNotifier->reset();
             break;
 
         } else if (refreshStatus.needsRefresh()) {
-
-            timeT startTime = refreshStatus.from(),
-                              endTime = refreshStatus.to();
-
-            if (segmentsToUpdate == 0 || startTime < updateStart) {
-                updateStart = startTime;
-            }
-            if (segmentsToUpdate == 0 || endTime > updateEnd) {
-                updateEnd = endTime;
-            }
-            singleSegment = segment;
             ++segmentsToUpdate;
-
             refreshStatus.setNeedsRefresh(false);
-            m_needUpdate = true;
         }
     }
 
-    if (segmentsToUpdate > 1) {
-        refreshSegment(nullptr, updateStart, updateEnd);
-    } else if (segmentsToUpdate > 0) {
-        refreshSegment(singleSegment, updateStart, updateEnd);
-    }
+    if (segmentsToUpdate > 0)
+        refreshList();
 
     if (e)
         QMainWindow::paintEvent(e);

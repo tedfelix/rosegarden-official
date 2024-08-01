@@ -68,9 +68,7 @@ public:
 
     virtual bool applyLayout(int staffNo = -1);
 
-    void refreshSegment(Segment *segment,
-                        timeT startTime = 0,
-                        timeT endTime = 0) override;
+    void refreshList() override;
 
     //void updateView() override;
 
