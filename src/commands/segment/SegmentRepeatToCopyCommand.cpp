@@ -55,7 +55,7 @@ SegmentRepeatToCopyCommand::execute()
             m_segment->getEndMarkerTime() - m_segment->getStartTime();
         timeT repeatEndTime = m_segment->getRepeatEndTime();
 
-        while (newStartTime + newDuration < repeatEndTime) {
+        while (newStartTime + newDuration <= repeatEndTime) {
             // Create new segment, transpose and turn off repeat
             //
             Segment *newSegment = m_segment->clone();
