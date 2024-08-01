@@ -94,7 +94,7 @@ namespace Rosegarden
 
 EventView::EventView(RosegardenDocument *doc,
                      const std::vector<Segment *> &segments) :
-    ListEditView(segments, 2)
+    ListEditView(segments)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 

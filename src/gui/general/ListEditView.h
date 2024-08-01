@@ -20,6 +20,8 @@
 
 #include "EditViewBase.h"
 
+#include <QString>
+
 class QFrame;
 class QPaintEvent;
 class QGridLayout;
@@ -58,26 +60,21 @@ class ListEditView : public EditViewBase
     Q_OBJECT
 
 public:
-    /**
-     * Create an EditViewBase for the segments \a segments from document \a doc.
-     *
-     * \arg cols : number of columns, main column is always rightmost (really?)
-     *
-     */
-    ListEditView(const std::vector<Segment *> &segments,
-                 unsigned int cols);
+
+    ListEditView(const std::vector<Segment *> &segments);
     ~ListEditView() override;
 
 protected:
 
-    QFrame *getFrame()  { return m_centralFrame; }
+    QFrame *getFrame()  { return m_frame; }
 
     /// Create actions for menus and toolbars.
+    // ??? This is far too trivial to pull up.  Inline into callers.
     void setupActions(const QString &rcFileName, bool haveClipboard);
 
     QString getRCFileName() const  { return m_rcFileName; }
 
-    QGridLayout *getGridLayout()  { return m_grid; }
+    QGridLayout *getGridLayout()  { return m_gridLayout; }
 
     /**
      * ??? This is part of that paintEvent() thing.  REMOVE THIS.
@@ -104,15 +101,18 @@ protected:
 
 private:
 
-    QFrame *m_centralFrame;
-    /// Layout within m_centralFrame.
-    QGridLayout *m_grid;
+    // ??? This is far too trivial to pull up.  Push down into derivers.
+    QFrame *m_frame;
+    // ??? This is far too trivial to pull up.  Push down into derivers.
+    /// Layout within m_frame.
+    QGridLayout *m_gridLayout;
 
-    /// ??? Feels like a trivial pull-up that should be pushed down.
+    // ??? This is far too trivial to pull up.  Push down into derivers.
     QString m_rcFileName;
 
     // *** paintEvent() Related
-    // ??? We need to try to get rid of all this.
+    // ??? We need to try to get rid of all this.  Or at least re-org so
+    //     that it is all handled via document modified handlers.
 
     /// ??? Inline into only caller.  paintEvent() is going away.
     bool isCompositionModified();

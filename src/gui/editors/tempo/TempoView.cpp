@@ -64,7 +64,7 @@ namespace Rosegarden
 TempoView::TempoView(
         EditTempoController *editTempoController,
         timeT openTime) :
-    ListEditView(std::vector<Segment *>(), 2),
+    ListEditView(std::vector<Segment *>()),
     m_editTempoController(editTempoController),
     m_filter(Tempo | TimeSignature),
     m_ignoreUpdates(true)

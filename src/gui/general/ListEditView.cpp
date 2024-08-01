@@ -16,47 +16,27 @@
 */
 
 #define RG_MODULE_STRING "[ListEditView]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ListEditView.h"
 
 #include "misc/Debug.h"
-#include "base/Clipboard.h"
-#include "base/Event.h"
-#include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include "commands/segment/SegmentReconfigureCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "gui/dialogs/ConfigureDialog.h"
-#include "gui/dialogs/TimeDialog.h"
 #include "gui/general/EditViewTimeSigNotifier.h"
-#include "misc/Strings.h"
-#include "document/Command.h"
 
-#include <QSettings>
-#include <QAction>
-#include <QDialog>
 #include <QFrame>
-#include <QIcon>
-#include <QObject>
-#include <QPixmap>
-#include <QString>
-#include <QWidget>
 #include <QStatusBar>
 #include <QMainWindow>
-#include <QCloseEvent>
-#include <QLayout>
-#include <QApplication>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
+#include <QGridLayout>
 
 
 namespace Rosegarden
 {
 
 
-ListEditView::ListEditView(const std::vector<Segment *> &segments,
-                           unsigned int /*cols*/) :
+ListEditView::ListEditView(const std::vector<Segment *> &segments) :
     EditViewBase(segments)
 {
     m_compositionRefreshStatusId = RosegardenDocument::currentDocument->
@@ -66,15 +46,15 @@ ListEditView::ListEditView(const std::vector<Segment *> &segments,
 
     setStatusBar(new QStatusBar(this));
 
-    m_centralFrame = new QFrame(this);
-    m_centralFrame->setObjectName("centralframe");
-	m_centralFrame->setMinimumSize(500, 300);
-	m_centralFrame->setMaximumSize(2200, 1400);
+    m_frame = new QFrame(this);
+    m_frame->setObjectName("centralframe");
+	m_frame->setMinimumSize(500, 300);
+	m_frame->setMaximumSize(2200, 1400);
 
-	m_grid = new QGridLayout(m_centralFrame);
-	m_centralFrame->setLayout(m_grid);
+	m_gridLayout = new QGridLayout(m_frame);
+	m_frame->setLayout(m_gridLayout);
 
-	setCentralWidget(m_centralFrame);
+	setCentralWidget(m_frame);
 
     initSegmentRefreshStatusIds();
 }
@@ -218,7 +198,8 @@ ListEditView::paintEvent(QPaintEvent* e)
         refreshSegment(singleSegment, updateStart, updateEnd);
     }
 
-    if (e) QMainWindow::paintEvent(e);
+    if (e)
+        QMainWindow::paintEvent(e);
 
     // moved this to the end of the method so that things called
     // from this method can still test whether the composition had
