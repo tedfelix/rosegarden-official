@@ -285,6 +285,8 @@ NotationScene::setCurrentStaff(NotationStaff *staff)
             m_highlightMode == "highlight_current_on_track") highlight = false;
         if (iStaff != currentStaff &&
             m_highlightMode == "highlight_current") highlight = false;
+        // do not affect repeats
+        if (iSegment->isTmp()) highlight = true;
 
         RG_DEBUG << "highlight staff" << highlight;
         m_staffs[i]->setHighlight(highlight);
