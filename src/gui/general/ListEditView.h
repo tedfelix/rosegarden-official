@@ -21,7 +21,6 @@
 #include "EditViewBase.h"
 
 class QFrame;
-class QWidget;
 class QPaintEvent;
 class QGridLayout;
 
@@ -71,7 +70,7 @@ public:
 
 protected:
 
-    QFrame *getCentralWidget()  { return m_centralFrame; }
+    QFrame *getFrame()  { return m_centralFrame; }
 
     /// Create actions for menus and toolbars.
     void setupActions(const QString &rcFileName, bool haveClipboard);
@@ -81,6 +80,10 @@ protected:
     QGridLayout *getGridLayout()  { return m_grid; }
 
     /**
+     * ??? This is part of that paintEvent() thing.  REMOVE THIS.
+     *     EventView refreshes its tree widget.
+     *     TempoView refreshes the entire list.
+     *
      * Refresh part of a Segment following a modification made in this
      * or another view.  The startTime and endTime give the extents of
      * the modified region.  This method is called following a
@@ -96,42 +99,37 @@ protected:
                                 timeT startTime = 0,
                                 timeT endTime = 0) = 0;
 
-    virtual void addCommandToHistory(Command *);
+    /// ??? This is a one-line wrapper.  Inline into all callers.
+    void addCommandToHistory(Command *);
 
 private:
 
+    QFrame *m_centralFrame;
+    /// Layout within m_centralFrame.
     QGridLayout *m_grid;
 
-    bool isCompositionModified();
-    void setCompositionModified(bool modified);
+    /// ??? Feels like a trivial pull-up that should be pushed down.
+    QString m_rcFileName;
 
+    // *** paintEvent() Related
+    // ??? We need to try to get rid of all this.
+
+    /// ??? Inline into only caller.  paintEvent() is going away.
+    bool isCompositionModified();
+    /// ??? Inline into only caller.  paintEvent() is going away.
+    void setCompositionModified(bool modified);
+    unsigned int m_compositionRefreshStatusId;
     // ??? Try to get rid of this per explanation above.
     void paintEvent(QPaintEvent *e) override;
 
-    //void setRCFileName(const QString &s)  { m_rcFileName = s; }
-
-    QString m_rcFileName;
-
-    static std::set<int> m_viewNumberPool;
-    std::string makeViewLocalPropertyPrefix();
-    int m_viewNumber;
-    std::string m_viewLocalPropertyPrefix;
-
+    // ??? paintEvent() related.
     std::vector<unsigned int> m_segmentsRefreshStatusIds;
+    // ??? paintEvent() related.
     void initSegmentRefreshStatusIds();
 
-    QFrame      *m_centralFrame;
-
-    unsigned int m_mainCol;
-    unsigned int m_compositionRefreshStatusId;
-    bool         m_needUpdate;
-
-    QPaintEvent *m_pendingPaintEvent;
-    bool         m_havePendingPaintEvent;
-    static bool  m_inPaintEvent; // true if _any_ edit view is in a paint event
-
-    bool         m_inCtor;
-
+    // ??? paintEvent() related.
+    bool m_needUpdate{false};
+    // ??? paintEvent() related.
     EditViewTimeSigNotifier *m_timeSigNotifier;
 };
 

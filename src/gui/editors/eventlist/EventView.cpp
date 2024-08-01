@@ -114,7 +114,7 @@ EventView::EventView(RosegardenDocument *doc,
 
     // define some note filtering buttons in a group
     //
-    m_filterGroup = new QGroupBox( tr("Event filters"), getCentralWidget() );
+    m_filterGroup = new QGroupBox( tr("Event filters"), getFrame() );
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setAlignment( Qt::AlignHorizontal_Mask );
 
@@ -149,7 +149,7 @@ EventView::EventView(RosegardenDocument *doc,
 
     getGridLayout()->addWidget(m_filterGroup, 2, 0);
 
-    m_eventList = new QTreeWidget(getCentralWidget());
+    m_eventList = new QTreeWidget(getFrame());
 
     //m_eventList->setItemsRenameable(true); //&&& use item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable );
 
@@ -161,7 +161,7 @@ EventView::EventView(RosegardenDocument *doc,
         TriggerSegmentRec *rec =
             segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-        QGroupBox *frame = new QGroupBox( tr("Triggered Segment Properties"), getCentralWidget() );
+        QGroupBox *frame = new QGroupBox( tr("Triggered Segment Properties"), getFrame() );
         frame->setAlignment( Qt::AlignHorizontal_Mask );
         frame->setContentsMargins(5, 5, 5, 5);
         QGridLayout *layout = new QGridLayout(frame);

@@ -55,41 +55,26 @@ namespace Rosegarden
 {
 
 
-bool ListEditView::m_inPaintEvent = false;
-
-
 ListEditView::ListEditView(const std::vector<Segment *> &segments,
-                           unsigned int cols) :
-    EditViewBase(segments),
-    m_viewNumber( -1),
-    m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
-    m_mainCol(cols - 1),
-    m_compositionRefreshStatusId(RosegardenDocument::currentDocument->getComposition().getNewRefreshStatusId()),
-    m_needUpdate(false),
-    m_pendingPaintEvent(nullptr),
-    m_havePendingPaintEvent(false),
-    m_inCtor(true),
-    m_timeSigNotifier(new EditViewTimeSigNotifier(RosegardenDocument::currentDocument))
+                           unsigned int /*cols*/) :
+    EditViewBase(segments)
 {
-    setStatusBar( new QStatusBar(this) );
+    m_compositionRefreshStatusId = RosegardenDocument::currentDocument->
+            getComposition().getNewRefreshStatusId();
+    m_timeSigNotifier =
+            new EditViewTimeSigNotifier(RosegardenDocument::currentDocument);
+
+    setStatusBar(new QStatusBar(this));
 
     m_centralFrame = new QFrame(this);
     m_centralFrame->setObjectName("centralframe");
-	m_centralFrame->setMinimumSize( 500, 300 );
-	m_centralFrame->setMaximumSize( 2200, 1400 );
+	m_centralFrame->setMinimumSize(500, 300);
+	m_centralFrame->setMaximumSize(2200, 1400);
 
-	//
 	m_grid = new QGridLayout(m_centralFrame);
-	m_centralFrame->setLayout( m_grid );
+	m_centralFrame->setLayout(m_grid);
 
-	// Note: We add Widget bottom-right, so the grid gets the propper col,row count
-	// NbLayoutRows, cols
-	//m_grid->addWidget( new QWidget(this), NbLayoutRows, cols);
-
-
-	//this->setLayout( new QVBoxLayout(this) );
-	//this->layout()->addWidget( m_centralFrame );
-	setCentralWidget( m_centralFrame );
+	setCentralWidget(m_centralFrame);
 
     initSegmentRefreshStatusIds();
 }
@@ -97,29 +82,10 @@ ListEditView::ListEditView(const std::vector<Segment *> &segments,
 ListEditView::~ListEditView()
 {
     delete m_timeSigNotifier;
-
-//&&& Detact CommandHistory
-//    CommandHistory::getInstance()->detachView(actionCollection());
-    m_viewNumberPool.erase(m_viewNumber);
-}
-
-std::set<int> ListEditView::m_viewNumberPool;
-
-std::string
-ListEditView::makeViewLocalPropertyPrefix()
-{
-    static char buffer[100];
-    int i = 0;
-    while (m_viewNumberPool.find(i) != m_viewNumberPool.end())
-        ++i;
-    m_viewNumber = i;
-    m_viewNumberPool.insert(i);
-    sprintf(buffer, "View%d::", i);
-    return buffer;
 }
 
 void
-ListEditView::setupActions(const QString& rcFileName, bool haveClipboard)
+ListEditView::setupActions(const QString &rcFileName, bool haveClipboard)
 {
     m_rcFileName = rcFileName;
     setupBaseActions(haveClipboard);
@@ -166,6 +132,9 @@ ListEditView::paintEvent(QPaintEvent* e)
 
     //RG_DEBUG << "paintEvent()";
 
+    // ??? This should not be done in paintEvent().  It should be handled
+    //     in a document modified handler.  See how matrix does this and
+    //     do the same (so long as it doesn't involve paintEvent()).
     if (isCompositionModified()) {
 
         // Check if one of the segments we display has been removed
@@ -186,6 +155,9 @@ ListEditView::paintEvent(QPaintEvent* e)
 
 
     m_needUpdate = false;
+
+    // ??? Again, do this in response to a document modification, not
+    //     in paintEvent().  That makes no sense.
 
     // Scan all segments and check if they've been modified.
     //
@@ -254,16 +226,6 @@ ListEditView::paintEvent(QPaintEvent* e)
     // any time signatures have changed)
     setCompositionModified(false);
 
-    // !!! m_inPaintEvent = false;
-    /*
-        if (m_havePendingPaintEvent) {
-    	e = m_pendingPaintEvent;
-    	m_havePendingPaintEvent = false;
-    	m_pendingPaintEvent = 0;
-    	paintEvent(e);
-    	delete e;
-        }
-    */
 }
 
 void ListEditView::addCommandToHistory(Command *command)

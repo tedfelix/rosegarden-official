@@ -74,7 +74,7 @@ TempoView::TempoView(
 
     // define some note filtering buttons in a group
     //
-    m_filterGroup = new QGroupBox(tr("Filter"), getCentralWidget());
+    m_filterGroup = new QGroupBox(tr("Filter"), getFrame());
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setLayout(filterGroupLayout);
 
@@ -90,7 +90,7 @@ TempoView::TempoView(
     m_filterGroup->setLayout(filterGroupLayout);
     getGridLayout()->addWidget(m_filterGroup, 2, 0);
 
-    m_list = new QTreeWidget(getCentralWidget());
+    m_list = new QTreeWidget(getFrame());
 
 //     m_list->setItemsRenameable(true);    //&&&
 
