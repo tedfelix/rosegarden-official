@@ -69,7 +69,8 @@ DeviceManagerDialog::~DeviceManagerDialog()
 
 DeviceManagerDialog::DeviceManagerDialog(QWidget *parent) :
     QMainWindow(parent),
-    Ui::DeviceManagerDialogUi()
+    Ui::DeviceManagerDialogUi(),
+    m_isClosing(false)
 {
     RG_DEBUG << "DeviceManagerDialog::ctor";
 
@@ -113,6 +114,8 @@ void
 DeviceManagerDialog::show()
 {
     RG_DEBUG << "DeviceManagerDialog::show()";
+    // ignore if we are in the process of closing
+    if (m_isClosing) return;
 
     slotRefreshOutputPorts();
     slotRefreshInputPorts();
@@ -137,6 +140,8 @@ DeviceManagerDialog::show()
 void
 DeviceManagerDialog::slotCloseButtonPress()
 {
+    RG_DEBUG << "slotCloseButtonPress";
+    m_isClosing = true;
     // remove observers here to avoid crash on studio deletion
     if (m_observingStudio) {
         m_observingStudio = false;

@@ -275,6 +275,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
 
     m_studio->addObserver(this);
+    m_observingStudio = true;
 
     // Initialize the dialog
     //
@@ -314,7 +315,10 @@ BankEditorDialog::~BankEditorDialog()
 {
     RG_DEBUG << "~BankEditorDialog()\n";
 
-    m_studio->removeObserver(this);
+    if (m_observingStudio) {
+        m_observingStudio = false;
+        m_studio->removeObserver(this);
+    }
     for(Device* device : m_observedDevices) {
         unobserveDevice(device);
     }
@@ -1780,6 +1784,14 @@ void
 BankEditorDialog::slotFileClose()
 {
     RG_DEBUG << "BankEditorDialog::slotFileClose()\n";
+
+    if (m_observingStudio) {
+        m_observingStudio = false;
+        m_studio->removeObserver(this);
+    }
+    for(Device* device : m_observedDevices) {
+        unobserveDevice(device);
+    }
 
     // We need to do this because we might be here due to a
     // documentAboutToChange signal, in which case the document won't

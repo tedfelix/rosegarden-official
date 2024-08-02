@@ -166,6 +166,7 @@ protected:
 
     std::set<Device*> m_observedDevices;
     bool m_observingStudio;
+    bool m_isClosing;
 
 };
 

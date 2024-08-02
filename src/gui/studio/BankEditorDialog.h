@@ -211,6 +211,7 @@ protected:
     std::set<Device*> m_observedDevices;
 
     QString m_selectionName;
+    bool m_observingStudio;
 };
 
 // ----------------------- RemapInstrumentDialog ------------------------
