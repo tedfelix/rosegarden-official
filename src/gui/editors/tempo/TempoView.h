@@ -126,6 +126,10 @@ protected:
     void closeEvent(QCloseEvent *) override;
 
 private:
+
+    QFrame *m_frame{nullptr};
+    QGridLayout *m_gridLayout{nullptr};
+
     void readOptions();
     void saveOptions();
 

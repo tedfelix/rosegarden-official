@@ -48,15 +48,6 @@ ListEditView::ListEditView(const std::vector<Segment *> &segments) :
     //     Should we push this up or down?
     setStatusBar(new QStatusBar(this));
 
-    // Create frame and layout.
-    // ??? Push down to derivers.
-    m_frame = new QFrame(this);
-    m_frame->setMinimumSize(500, 300);
-    m_frame->setMaximumSize(2200, 1400);
-    m_gridLayout = new QGridLayout(m_frame);
-    m_frame->setLayout(m_gridLayout);
-    setCentralWidget(m_frame);
-
     // Init m_segmentsRefreshStatusIds.
     // For each Segment...
     for (unsigned int i = 0; i < m_segments.size(); ++i) {

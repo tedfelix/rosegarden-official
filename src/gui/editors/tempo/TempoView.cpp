@@ -73,9 +73,18 @@ TempoView::TempoView(
     initStatusBar();
     setupActions();
 
+    // Create frame and layout.
+    // ??? Push down to derivers.
+    m_frame = new QFrame(this);
+    m_frame->setMinimumSize(500, 300);
+    m_frame->setMaximumSize(2200, 1400);
+    m_gridLayout = new QGridLayout(m_frame);
+    m_frame->setLayout(m_gridLayout);
+    setCentralWidget(m_frame);
+
     // define some note filtering buttons in a group
     //
-    m_filterGroup = new QGroupBox(tr("Filter"), getFrame());
+    m_filterGroup = new QGroupBox(tr("Filter"), m_frame);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setLayout(filterGroupLayout);
 
@@ -89,13 +98,13 @@ TempoView::TempoView(
     filterGroupLayout->addSpacing(200);
 
     m_filterGroup->setLayout(filterGroupLayout);
-    getGridLayout()->addWidget(m_filterGroup, 2, 0);
+    m_gridLayout->addWidget(m_filterGroup, 2, 0);
 
-    m_list = new QTreeWidget(getFrame());
+    m_list = new QTreeWidget(m_frame);
 
 //     m_list->setItemsRenameable(true);    //&&&
 
-    getGridLayout()->addWidget(m_list, 2, 1);
+    m_gridLayout->addWidget(m_list, 2, 1);
 
     slotUpdateWindowTitle(false);
     connect(m_doc, &RosegardenDocument::documentModified,

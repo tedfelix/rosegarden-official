@@ -113,9 +113,18 @@ EventView::EventView(RosegardenDocument *doc,
     initStatusBar();
     setupActions();
 
+    // Create frame and layout.
+    // ??? Push down to derivers.
+    m_frame = new QFrame(this);
+    m_frame->setMinimumSize(500, 300);
+    m_frame->setMaximumSize(2200, 1400);
+    m_gridLayout = new QGridLayout(m_frame);
+    m_frame->setLayout(m_gridLayout);
+    setCentralWidget(m_frame);
+
     // define some note filtering buttons in a group
     //
-    m_filterGroup = new QGroupBox( tr("Event filters"), getFrame() );
+    m_filterGroup = new QGroupBox(tr("Event filters"), m_frame);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setAlignment( Qt::AlignHorizontal_Mask );
 
@@ -148,13 +157,13 @@ EventView::EventView(RosegardenDocument *doc,
     filterGroupLayout->addWidget(m_otherCheckBox);
     m_filterGroup->setLayout(filterGroupLayout);
 
-    getGridLayout()->addWidget(m_filterGroup, 2, 0);
+    m_gridLayout->addWidget(m_filterGroup, 2, 0);
 
-    m_eventList = new QTreeWidget(getFrame());
+    m_eventList = new QTreeWidget(m_frame);
 
     //m_eventList->setItemsRenameable(true); //&&& use item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable );
 
-    getGridLayout()->addWidget(m_eventList, 2, 1);
+    m_gridLayout->addWidget(m_eventList, 2, 1);
 
     if (m_isTriggerSegment) {
 
@@ -162,7 +171,8 @@ EventView::EventView(RosegardenDocument *doc,
         TriggerSegmentRec *rec =
             segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-        QGroupBox *frame = new QGroupBox( tr("Triggered Segment Properties"), getFrame() );
+        // ??? rename: groupBox
+        QGroupBox *frame = new QGroupBox(tr("Triggered Segment Properties"), m_frame);
         frame->setAlignment( Qt::AlignHorizontal_Mask );
         frame->setContentsMargins(5, 5, 5, 5);
         QGridLayout *layout = new QGridLayout(frame);
@@ -233,7 +243,7 @@ EventView::EventView(RosegardenDocument *doc,
         */
 
         frame->setLayout(layout);
-        getGridLayout()->addWidget(frame, 2, 2);
+        m_gridLayout->addWidget(frame, 2, 2);
 
     }
 

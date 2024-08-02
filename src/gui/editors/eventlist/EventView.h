@@ -141,6 +141,9 @@ private slots:
 
 private:
 
+    QFrame *m_frame{nullptr};
+    QGridLayout *m_gridLayout{nullptr};
+
     /// Create and show popup menu.
     void createMenu();
 

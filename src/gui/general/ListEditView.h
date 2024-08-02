@@ -66,22 +66,12 @@ public:
 
 protected:
 
-    QFrame *getFrame()  { return m_frame; }
-
-    QGridLayout *getGridLayout()  { return m_gridLayout; }
-
     /**
      * ??? This is part of that paintEvent() thing.  REMOVE THIS.
      */
     virtual void refreshList() = 0;
 
 private:
-
-    // ??? This is far too trivial to pull up.  Push down into derivers.
-    QFrame *m_frame;
-    // ??? This is far too trivial to pull up.  Push down into derivers.
-    /// Layout within m_frame.
-    QGridLayout *m_gridLayout;
 
     // *** paintEvent() Related
     // ??? We need to try to get rid of all this.  Or at least re-org so
