@@ -72,12 +72,6 @@ ListEditView::~ListEditView()
 }
 
 void
-ListEditView::setupActions(bool haveClipboard)
-{
-    setupBaseActions(haveClipboard);
-}
-
-void
 ListEditView::paintEvent(QPaintEvent* e)
 {
 
@@ -152,11 +146,6 @@ ListEditView::paintEvent(QPaintEvent* e)
     // any time signatures have changed)
     setCompositionModified(false);
 
-}
-
-void ListEditView::addCommandToHistory(Command *command)
-{
-    CommandHistory::getInstance()->addCommand(command);
 }
 
 bool ListEditView::isCompositionModified()

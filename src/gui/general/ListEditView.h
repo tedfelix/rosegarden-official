@@ -68,32 +68,12 @@ protected:
 
     QFrame *getFrame()  { return m_frame; }
 
-    /// Create actions for menus and toolbars.
-    // ??? This is far too trivial to pull up.  Inline into callers.
-    void setupActions(bool haveClipboard);
-
     QGridLayout *getGridLayout()  { return m_gridLayout; }
 
     /**
      * ??? This is part of that paintEvent() thing.  REMOVE THIS.
-     *     EventView refreshes its tree widget.
-     *     TempoView refreshes the entire list.
-     *
-     * Refresh part of a Segment following a modification made in this
-     * or another view.  The startTime and endTime give the extents of
-     * the modified region.  This method is called following a
-     * modification to any Segment; no attempt has been made to check
-     * that the given Segment is actually shown in this view, so take
-     * care.
-     *
-     * If segment is null, refresh all segments.
-     * If the startTime and endTime are equal, refresh the whole of
-     * the relevant segments.
      */
     virtual void refreshList() = 0;
-
-    /// ??? This is a one-line wrapper.  Inline into all callers.
-    static void addCommandToHistory(Command *);
 
 private:
 

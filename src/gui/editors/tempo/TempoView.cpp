@@ -33,6 +33,7 @@
 #include "commands/segment/RemoveTempoChangeCommand.h"
 #include "commands/segment/RemoveTimeSignatureCommand.h"
 #include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
 #include "misc/ConfigGroups.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/AboutDialog.h"
@@ -482,7 +483,7 @@ TempoView::slotEditDelete()
              /* decrement is inside */) {
             command->addCommand(*--i);
         }
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
     }
 
     applyLayout();
@@ -528,13 +529,17 @@ TempoView::slotEditInsertTimeSignature()
         insertTime = dialog.getTime();
 
         if (dialog.shouldNormalizeRests()) {
-            addCommandToHistory
-            (new AddTimeSignatureAndNormalizeCommand
-             (&composition, insertTime, dialog.getTimeSignature()));
+            CommandHistory::getInstance()->addCommand(
+                    new AddTimeSignatureAndNormalizeCommand(
+                            &composition,
+                            insertTime,
+                            dialog.getTimeSignature()));
         } else {
-            addCommandToHistory
-            (new AddTimeSignatureCommand
-             (&composition, insertTime, dialog.getTimeSignature()));
+            CommandHistory::getInstance()->addCommand(
+                    new AddTimeSignatureCommand(
+                            &composition,
+                            insertTime,
+                            dialog.getTimeSignature()));
         }
     }
 }
@@ -578,7 +583,7 @@ TempoView::slotClearSelection()
 void
 TempoView::setupActions()
 {
-    ListEditView::setupActions(false);
+    setupBaseActions(false);
 
     createAction("insert_tempo", SLOT(slotEditInsertTempo()));
     createAction("insert_timesig", SLOT(slotEditInsertTimeSignature()));
@@ -751,13 +756,17 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
             time = dialog.getTime();
 
             if (dialog.shouldNormalizeRests()) {
-                addCommandToHistory
-                    (new AddTimeSignatureAndNormalizeCommand
-                     (&composition, time, dialog.getTimeSignature()));
+                CommandHistory::getInstance()->addCommand(
+                        new AddTimeSignatureAndNormalizeCommand(
+                                &composition,
+                                time,
+                                dialog.getTimeSignature()));
             } else {
-                addCommandToHistory
-                    (new AddTimeSignatureCommand
-                     (&composition, time, dialog.getTimeSignature()));
+                CommandHistory::getInstance()->addCommand(
+                        new AddTimeSignatureCommand(
+                                &composition,
+                                time,
+                                dialog.getTimeSignature()));
             }
         }
 

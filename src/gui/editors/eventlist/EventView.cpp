@@ -49,6 +49,7 @@
 #include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
@@ -801,7 +802,7 @@ EventView::slotEditTriggerName()
         SegmentSelection selection;
         selection.insert(m_segments[0]);
         SegmentLabelCommand *cmd = new SegmentLabelCommand(selection, newLabel);
-        addCommandToHistory(cmd);
+        CommandHistory::getInstance()->addCommand(cmd);
         m_triggerName->setText(newLabel);
     }
 }
@@ -817,8 +818,11 @@ EventView::slotEditTriggerPitch()
     PitchDialog *dlg = new PitchDialog(this, tr("Base pitch"), rec->getBasePitch());
 
     if (dlg->exec() == QDialog::Accepted) {
-        addCommandToHistory(new SetTriggerSegmentBasePitchCommand
-                            (&RosegardenDocument::currentDocument->getComposition(), id, dlg->getPitch()));
+        CommandHistory::getInstance()->addCommand(
+                new SetTriggerSegmentBasePitchCommand(
+                        &RosegardenDocument::currentDocument->getComposition(),
+                        id,
+                        dlg->getPitch()));
         m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
     }
 }
@@ -835,8 +839,11 @@ EventView::slotEditTriggerVelocity()
                                  (this, tr("Base velocity"), rec->getBaseVelocity());
 
     if (dlg->exec() == QDialog::Accepted) {
-        addCommandToHistory(new SetTriggerSegmentBaseVelocityCommand
-                            (&RosegardenDocument::currentDocument->getComposition(), id, dlg->getVelocity()));
+        CommandHistory::getInstance()->addCommand(
+                new SetTriggerSegmentBaseVelocityCommand(
+                        &RosegardenDocument::currentDocument->getComposition(),
+                        id,
+                        dlg->getVelocity()));
         m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
     }
 }
@@ -932,8 +939,8 @@ EventView::slotEditCut()
             m_listSelection.push_back(itemIndex);
         }
 
-        addCommandToHistory(new CutCommand(cutSelection,
-                                           Clipboard::mainClipboard()));
+        CommandHistory::getInstance()->addCommand(
+                new CutCommand(cutSelection, Clipboard::mainClipboard()));
     }
 }
 
@@ -976,8 +983,8 @@ EventView::slotEditCopy()
     }
 
     if (copySelection) {
-        addCommandToHistory(new CopyCommand(copySelection,
-                                            Clipboard::mainClipboard()));
+        CommandHistory::getInstance()->addCommand(
+                new CopyCommand(copySelection, Clipboard::mainClipboard()));
     }
 }
 
@@ -1024,7 +1031,7 @@ EventView::slotEditPaste()
     if (!command->isPossible()) {
         showStatusBarMessage(tr("Couldn't paste at this point"));
     } else
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
     RG_DEBUG << "EventView::slotEditPaste - pasting "
     << selection.count() << " items";
@@ -1077,7 +1084,8 @@ EventView::slotEditDelete()
             m_listSelection.push_back(itemIndex);
         }
 
-        addCommandToHistory(new EraseCommand(deleteSelection));
+        CommandHistory::getInstance()->addCommand(
+                new EraseCommand(deleteSelection));
         updateView();
     }
 }
@@ -1126,7 +1134,7 @@ EventView::slotEditInsert()
                     *m_segments[0],
                     new Event(dialog.getEvent()));
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1176,7 +1184,7 @@ EventView::slotEditEvent()
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1221,7 +1229,7 @@ EventView::slotEditEventAdvanced()
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1248,7 +1256,7 @@ EventView::slotClearSelection()
 void
 EventView::setupActions()
 {
-    ListEditView::setupActions(true);
+    setupBaseActions(true);
 
     createAction("insert", SLOT(slotEditInsert()));
     createAction("delete", SLOT(slotEditDelete()));
@@ -1502,7 +1510,7 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1583,7 +1591,7 @@ EventView::slotOpenInEventEditor(bool /* checked */)
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1621,7 +1629,7 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
