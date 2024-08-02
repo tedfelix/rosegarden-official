@@ -516,6 +516,8 @@ BankEditorDialog::updateDialog()
     m_treeWidget->blockSignals(false);
 
     // select item
+    RG_DEBUG << "selecting item:" << (int)selectedType << selectedName <<
+        parentDevice;
     // find the device item
     MidiDeviceTreeWidgetItem* selectDeviceItem = nullptr;
     QTreeWidgetItem* root = m_treeWidget->invisibleRootItem();
@@ -553,6 +555,7 @@ BankEditorDialog::updateDialog()
                 QString cName = keyItem->getName();
                 if (cName == selectedName) {
                     // found it
+                    RG_DEBUG << "updateDialog setCurrent keymap" << cName;
                     m_treeWidget->setCurrentItem(cItem);
                     return;
                 }
@@ -563,13 +566,16 @@ BankEditorDialog::updateDialog()
                 QString cName = bankItem->getName();
                 if (cName == selectedName) {
                     // found it
+                    RG_DEBUG << "updateDialog setCurrent bank" << cName;
                     m_treeWidget->setCurrentItem(cItem);
                     return;
                 }
             }
-            // no suitable child item found - select device
-            m_treeWidget->setCurrentItem(selectDeviceItem);
         }
+        // no suitable child item found - select device
+        RG_DEBUG << "updateDialog setCurrent device" <<
+            selectDeviceItem->getName();
+        m_treeWidget->setCurrentItem(selectDeviceItem);
     }
 }
 
