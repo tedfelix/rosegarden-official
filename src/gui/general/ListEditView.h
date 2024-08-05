@@ -19,6 +19,7 @@
 #define RG_LISTEDITVIEW_H
 
 #include "EditViewBase.h"
+#include "base/Segment.h"
 
 #include <QString>
 
@@ -55,7 +56,7 @@ class EditViewTimeSigNotifier;
  * edit views, not because it provides anything particularly focused
  * on lists.
  */
-class ListEditView : public EditViewBase
+class ListEditView : public EditViewBase, public SegmentObserver
 {
     Q_OBJECT
 
@@ -63,6 +64,15 @@ public:
 
     ListEditView(const std::vector<Segment *> &segments);
     ~ListEditView() override;
+
+    // ??? Only one of the derivers (EventView) cares about Segments.
+    //     Move all Segment-related code either down into EventView or
+    //     up to EditViewBase if it would helpful to all the other
+    //     editors as well.  E.g. the "close on Segment delete" behavior
+    //     is needed by all.  That could be pushed up to EditViewBase.
+
+    // SegmentObserver
+    void segmentDeleted(const Segment *) override;
 
 protected:
 

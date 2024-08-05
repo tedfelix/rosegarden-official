@@ -48,18 +48,23 @@ ListEditView::ListEditView(const std::vector<Segment *> &segments) :
     //     Should we push this up or down?
     setStatusBar(new QStatusBar(this));
 
-    // Init m_segmentsRefreshStatusIds.
     // For each Segment...
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        const unsigned int refreshStatusID =
-                m_segments[i]->getNewRefreshStatusId();
-        m_segmentsRefreshStatusIds.push_back(refreshStatusID);
+    for (Segment *segment : m_segments) {
+        segment->addObserver(this);
+
+        m_segmentsRefreshStatusIds.push_back(segment->getNewRefreshStatusId());
     }
 }
 
 ListEditView::~ListEditView()
 {
     delete m_timeSigNotifier;
+
+    for (Segment *segment : m_segments) {
+        segment->removeObserver(this);
+    }
+
+    m_segments.clear();
 }
 
 void
@@ -69,25 +74,6 @@ ListEditView::paintEvent(QPaintEvent* e)
     // ??? Comments in the header seem to indicate this is no longer
     //     necessary.  Try to get rid of this routine.  Use document
     //     modification handlers instead.
-
-
-    // Check if one of our Segments is no longer in the Composition.
-    // If so, close our window.
-
-    // ??? This should not be done in paintEvent().  It should be handled
-    //     in a document modified handler.  See how matrix does this and
-    //     do the same (so long as it doesn't involve paintEvent()).
-
-    if (isCompositionModified()) {
-        for (unsigned int i = 0; i < m_segments.size(); ++i) {
-            // If this Segment no longer has a Composition, close.
-            if (!m_segments[i]->getComposition()) {
-                close();
-                return;
-            }
-        }
-    }
-
 
     // Scan all segments and check if they've been modified.  If they
     // have, refresh the list.
@@ -149,6 +135,15 @@ void ListEditView::setCompositionModified(bool modified)
 {
     RosegardenDocument::currentDocument->getComposition().getRefreshStatus(
             m_compositionRefreshStatusId).setNeedsRefresh(modified);
+}
+
+void ListEditView::segmentDeleted(const Segment *s)
+{
+    // ??? Bit of a design flaw.  Cast away const...
+    const_cast<Segment *>(s)->removeObserver(this);
+
+    // The editors cannot handle Segments that go away.  So just close.
+    close();
 }
 
 

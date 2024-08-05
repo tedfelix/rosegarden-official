@@ -68,16 +68,11 @@
 #include <QDialog>
 #include <QFrame>
 #include <QGroupBox>
-#include <QHBoxLayout>
-#include <QIcon>
 #include <QLabel>
-#include <QLayout>
 #include <QMenu>
-#include <QPixmap>
 #include <QPoint>
 #include <QPushButton>
 #include <QSettings>
-#include <QSize>
 #include <QStatusBar>
 #include <QString>
 #include <QTreeWidget>
@@ -337,11 +332,6 @@ EventView::EventView(RosegardenDocument *doc,
 EventView::~EventView()
 {
     saveOptions();
-
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        //RG_DEBUG << "dtor - removing this observer from " << m_segments[i];
-        m_segments[i]->removeObserver(this);
-    }
 }
 
 void
@@ -353,22 +343,11 @@ EventView::closeEvent(QCloseEvent *event)
 }
 
 void
-EventView::eventRemoved(const Segment *, Event *e)
+EventView::eventRemoved(const Segment *s, Event *e)
 {
     m_deletedEvents.insert(e);
-}
 
-void
-EventView::segmentDeleted(const Segment *s)
-{
-    std::vector<Segment *>::iterator i = std::find(m_segments.begin(), m_segments.end(), s);
-
-    if (i != m_segments.end()) {
-        m_segments.erase(i);
-    } else {
-        RG_DEBUG << "%%% WARNING - EventView::segmentDeleted() called on non-registered segment - should not happen\n";
-    }
-
+    ListEditView::eventRemoved(s, e);
 }
 
 bool

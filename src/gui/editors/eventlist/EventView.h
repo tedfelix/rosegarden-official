@@ -52,7 +52,7 @@ class Event;
  *
  * Segment > Edit With > Open in Event List Editor.  Or just press "E".
  */
-class EventView : public ListEditView, public SegmentObserver
+class EventView : public ListEditView
 {
     Q_OBJECT
 
@@ -85,10 +85,7 @@ protected:
     void refreshList() override;
 
     // SegmentObserver overrides.
-    void eventAdded(const Segment *, Event *) override { }
     void eventRemoved(const Segment *, Event *) override;
-    void endMarkerTimeChanged(const Segment *, bool) override { }
-    void segmentDeleted(const Segment *) override;
 
     // QWidget override.
     void closeEvent(QCloseEvent *event) override;
