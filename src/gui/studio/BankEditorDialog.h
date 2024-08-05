@@ -85,11 +85,6 @@ public:
     //
     void selectDeviceItem(MidiDevice *device);
 
-    // Select a device/bank combination
-    //
-    void selectDeviceBankItem(DeviceId deviceId, int bank);
-    void selectDeviceKeymapItem(DeviceId deviceId, const QString& keymapName);
-
     QString makeUniqueBankName(const QString& name,
                                const BankList& banks);
     QString makeUniqueKeymapName(const QString& name,

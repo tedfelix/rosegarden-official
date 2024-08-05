@@ -1191,92 +1191,6 @@ BankEditorDialog::selectDeviceItem(MidiDevice *device)
 
 }
 
-void
-BankEditorDialog::selectDeviceBankItem(DeviceId deviceId,
-                                       int bank)
-{
-    QTreeWidgetItem *bankChild;
-
-    QTreeWidgetItem *twItemDevice = nullptr;
-    MidiDeviceTreeWidgetItem *midiDeviceItem = nullptr;
-
-    int devI = 0;
-    int bankI;
-    while (devI < m_treeWidget->topLevelItemCount()) {
-        twItemDevice = m_treeWidget->topLevelItem(devI);
-        midiDeviceItem = dynamic_cast<MidiDeviceTreeWidgetItem*>(twItemDevice);
-        if (midiDeviceItem) {
-            if (deviceId != midiDeviceItem->getDevice()->getId()) {
-                devI++;
-                continue;
-            }
-
-            bankI = 0;
-            while (bankI < twItemDevice->childCount()) {
-                bankChild = twItemDevice->child(bankI);
-                MidiBankTreeWidgetItem *bankItem =
-                    dynamic_cast<MidiBankTreeWidgetItem*>(bankChild);
-                if (! bankItem) {
-                    bankI++;
-                    continue;
-                }
-
-                if (bank != bankI) {
-                    bankI++;
-                    continue;
-                }
-
-                // found the bank
-                bankChild->setSelected(true);
-                return ;
-            }
-        }
-        devI += 1;
-    }
-}
-
-void BankEditorDialog::selectDeviceKeymapItem
-(DeviceId deviceId, const QString& keymapName)
-{
-    QTreeWidgetItem *keymapChild;
-
-    QTreeWidgetItem *twItemDevice = nullptr;
-    MidiDeviceTreeWidgetItem *midiDeviceItem = nullptr;
-
-    int devI = 0;
-    int keymapI;
-    while (devI < m_treeWidget->topLevelItemCount()) {
-        twItemDevice = m_treeWidget->topLevelItem(devI);
-        midiDeviceItem = dynamic_cast<MidiDeviceTreeWidgetItem*>(twItemDevice);
-        if (midiDeviceItem) {
-            if (deviceId != midiDeviceItem->getDevice()->getId()) {
-                devI++;
-                continue;
-            }
-
-            keymapI = 0;
-            while (keymapI < twItemDevice->childCount()) {
-                keymapChild = twItemDevice->child(keymapI);
-                MidiKeyMapTreeWidgetItem *keyItem =
-                    dynamic_cast<MidiKeyMapTreeWidgetItem*>(keymapChild);
-                if (! keyItem) {
-                    keymapI++;
-                    continue;
-                }
-                if (keyItem->getName() != keymapName) {
-                    keymapI++;
-                    continue;
-                }
-
-                // found the keymap
-                keymapChild->setSelected(true);
-                return;
-            }
-        }
-        devI += 1;
-    }
-}
-
 QString BankEditorDialog::makeUniqueBankName(const QString& name,
                                              const BankList& banks)
 {
@@ -1592,19 +1506,11 @@ BankEditorDialog::slotEditPaste()
             }
         }
 
-        // Save these for post-apply
-        //
-        DeviceId devPos = device->getId();
-        int bankPos = bankItem->getBank();
-
         ModifyDeviceCommand *command = makeCommand(tr("paste bank"));
         if (! command) return;
         command->setProgramList(newPrograms);
         addCommandToHistory(command);
 
-        // Select same bank
-        //
-        selectDeviceBankItem(devPos, bankPos);
         return;
     }
 
@@ -1649,17 +1555,11 @@ BankEditorDialog::slotEditPaste()
             }
         }
 
-        DeviceId devPos = device->getId();
-        QString keymapName = m_clipboard.keymapName;
-
         ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
         if (! command) return;
         command->setKeyMappingList(newKeymapList);
         addCommandToHistory(command);
 
-        // Select same keymap
-        //
-        selectDeviceKeymapItem(devPos, keymapName);
         return;
     }
 }
