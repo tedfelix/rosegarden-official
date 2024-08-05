@@ -78,9 +78,6 @@ public:
 
     void setCurrentDevice(DeviceId device);
 
-    BankList&   getBankList()     { return m_bankList; }
-    ProgramList&getProgramList()  { return m_programList; }
-
     Studio *getStudio() { return m_studio; }
 
     // Set the listview to select a certain device - used after adding
@@ -128,8 +125,6 @@ signals:
 
 protected:
     void closeEvent(QCloseEvent*) override;
-
-    void setProgramList(MidiDevice *device);
 
     void updateDialog();
 
@@ -181,17 +176,6 @@ protected:
         QString keymapName;
     };
     Clipboard m_clipboard;
-
-    BankList                 m_bankList;
-    ProgramList              m_programList;
-    ProgramList              m_oldProgramList;
-
-    bool                     m_deleteAllReally;
-
-    DeviceId                 m_lastDevice;
-    MidiBank                 m_lastBank;
-
-    bool                     m_updateDeviceList;
 
     QFrame                  *m_rightSide;
 

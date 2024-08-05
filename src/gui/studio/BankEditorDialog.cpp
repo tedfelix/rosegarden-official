@@ -79,10 +79,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    DeviceId defaultDevice):
         QMainWindow(parent),
         m_studio(&doc->getStudio()),
-        m_doc(doc),
-        m_deleteAllReally(false),
-        m_lastDevice(Device::NO_DEVICE),
-        m_updateDeviceList(false)
+        m_doc(doc)
 {
     m_clipboard.itemType = ItemType::NONE;
     m_clipboard.deviceId = Device::NO_DEVICE;
@@ -673,9 +670,6 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         if (!device)
             return ;
 
-        setProgramList(device);
-
-        m_lastDevice = keyItem->getDevice()->getId();
         m_keyMappingEditor->populate(item);
 
         m_programEditor->hide();
@@ -703,8 +697,6 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         if (!device)
             return ;
 
-        setProgramList(device);
-
         m_variationToggle->blockSignals(true);
         m_variationToggle->setChecked(device->getVariationType() !=
                                       MidiDevice::NoVariations);
@@ -718,7 +710,6 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
              MidiDevice::VariationFromLSB ? 0 : 1);
         m_variationCombo->blockSignals(false);
 
-        m_bankList = device->getBanks();
         m_programEditor->populate(item);
 
         m_keyMappingEditor->hide();
@@ -738,20 +729,11 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
         return ;
     }
 
-
-    m_lastDevice = deviceItem->getDevice()->getId();
-
     MidiDevice *device = deviceItem->getDevice();
     if (!device) {
         RG_DEBUG << "BankEditorDialog::populateDeviceEditors - no device for this item\n";
         return ;
     }
-
-    // User must have selected a device (top level Widget)
-    // Fetch The chosen device and info.
-    // Deactivate the rightside panel and clear its contents.
-    m_bankList = device->getBanks();
-    setProgramList(device);
 
     RG_DEBUG << "BankEditorDialog::populateDeviceEditors : not a bank item - disabling";
     m_delete->setEnabled(false);
@@ -771,13 +753,6 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
 
     m_programEditor->clearAll();
     m_keyMappingEditor->clearAll();
-}
-
-void
-BankEditorDialog::setProgramList(MidiDevice *device)
-{
-    m_programList = device->getPrograms();
-    m_oldProgramList = m_programList;
 }
 
 MidiDeviceTreeWidgetItem*
@@ -1471,6 +1446,7 @@ BankEditorDialog::slotImport()
         }
 
         MidiDevice *device = deviceItem->getDevice();
+        if (!device) return;
 
         BankList banks(dialog->getBanks());
         ProgramList programs(dialog->getPrograms());
@@ -1515,9 +1491,7 @@ BankEditorDialog::slotImport()
 
         addCommandToHistory(command);
 
-        if (device) {
-            selectDeviceItem(device);
-        }
+        selectDeviceItem(device);
     }
 
     delete dialog;

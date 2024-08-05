@@ -80,33 +80,18 @@ private:
 
     // Banks
 
-    /// The BankList we are editing.
-    /**
-     * We use this to check for dupes and make changes to the banks.
-     */
-    BankList &m_bankList;
-
     /// The bank we are editing right now.
-    MidiBank *m_currentBank{nullptr};
-    /// Used by reset() to restore the original MSB/LSB/Percussion.
-    MidiBank m_oldBank{false, 0, 0};
+    MidiBank m_currentBank;
 
-    // Programs
-
-    /// Programs for the device being edited.
-    ProgramList &m_programList;
-    /// Get a pointer into the program list.
-    MidiProgram *getProgram(const MidiBank &bank, int programNo);
+    /// Get a pointer into a program list.
+    const MidiProgram *getProgram(const ProgramList& programList,
+                                  const MidiBank &bank,
+                                  int programNo);
     /// Get an iterator which is more flexible.
-    ProgramList::iterator getProgramIter(ProgramList& list,
+    ProgramList::iterator getProgramIter(ProgramList& programList,
                                          const MidiBank &bank,
                                          int programNo);
-    /// Get a ProgramList containing only the programs in a bank.
-    ProgramList getBankSubset(const MidiBank &);
-    /// Set the currently loaded programs to new MSB and LSB
-    void modifyCurrentPrograms(const MidiBank &oldBank,
-                               const MidiBank &newBank);
-
+    /// Update the programlist programs to new bank
     void updatePrograms(ProgramList& programList,
                         const MidiBank &oldBank,
                         const MidiBank &newBank);
