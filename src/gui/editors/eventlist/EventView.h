@@ -36,6 +36,8 @@ class QTreeWidgetItem;
 class QLabel;
 class QCheckBox;
 class QGroupBox;
+class QFrame;
+class QGridLayout;
 
 
 namespace Rosegarden

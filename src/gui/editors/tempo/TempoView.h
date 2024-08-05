@@ -31,6 +31,8 @@ class QCloseEvent;
 class QCheckBox;
 class QGroupBox;
 class QTreeWidget;
+class QFrame;
+class QGridLayout;
 
 #include <vector>
 

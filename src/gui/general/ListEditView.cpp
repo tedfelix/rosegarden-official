@@ -22,14 +22,9 @@
 
 #include "misc/Debug.h"
 #include "base/Segment.h"
-#include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "gui/general/EditViewTimeSigNotifier.h"
 
-#include <QFrame>
 #include <QStatusBar>
-#include <QMainWindow>
-#include <QGridLayout>
 
 
 namespace Rosegarden
@@ -39,10 +34,10 @@ namespace Rosegarden
 ListEditView::ListEditView(const std::vector<Segment *> &segments) :
     EditViewBase(segments)
 {
-    m_compositionRefreshStatusId = RosegardenDocument::currentDocument->
-            getComposition().getNewRefreshStatusId();
-    m_timeSigNotifier =
-            new EditViewTimeSigNotifier(RosegardenDocument::currentDocument);
+    // Connect for changes so we can update the list.
+    connect(RosegardenDocument::currentDocument,
+                &RosegardenDocument::documentModified,
+            this, &ListEditView::slotDocumentModified);
 
     // ??? Odd.  I think EditViewBase has some statusbar-related code.
     //     Should we push this up or down?
@@ -51,90 +46,16 @@ ListEditView::ListEditView(const std::vector<Segment *> &segments) :
     // For each Segment...
     for (Segment *segment : m_segments) {
         segment->addObserver(this);
-
-        m_segmentsRefreshStatusIds.push_back(segment->getNewRefreshStatusId());
     }
 }
 
 ListEditView::~ListEditView()
 {
-    delete m_timeSigNotifier;
-
     for (Segment *segment : m_segments) {
         segment->removeObserver(this);
     }
 
     m_segments.clear();
-}
-
-void
-ListEditView::paintEvent(QPaintEvent* e)
-{
-
-    // ??? Comments in the header seem to indicate this is no longer
-    //     necessary.  Try to get rid of this routine.  Use document
-    //     modification handlers instead.
-
-    // Scan all segments and check if they've been modified.  If they
-    // have, refresh the list.
-
-    // ??? Again, do this in response to a document modification, not
-    //     in paintEvent().  That makes no sense.
-
-    int segmentsToUpdate = 0;
-
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        Segment *segment = m_segments[i];
-
-        unsigned int refreshStatusId = m_segmentsRefreshStatusIds[i];
-        SegmentRefreshStatus &refreshStatus =
-                segment->getRefreshStatus(refreshStatusId);
-
-        if (refreshStatus.needsRefresh() && isCompositionModified()) {
-
-            // if composition is also modified, relayout everything
-            refreshList();
-            segmentsToUpdate = 0;
-            break;
-
-        } else if (m_timeSigNotifier->hasTimeSigChanged()) {
-
-            // not exactly optimal!
-            refreshList();
-            segmentsToUpdate = 0;
-            m_timeSigNotifier->reset();
-            break;
-
-        } else if (refreshStatus.needsRefresh()) {
-            ++segmentsToUpdate;
-            refreshStatus.setNeedsRefresh(false);
-        }
-    }
-
-    if (segmentsToUpdate > 0)
-        refreshList();
-
-    if (e)
-        QMainWindow::paintEvent(e);
-
-    // moved this to the end of the method so that things called
-    // from this method can still test whether the composition had
-    // been modified (it's sometimes useful to know whether e.g.
-    // any time signatures have changed)
-    setCompositionModified(false);
-
-}
-
-bool ListEditView::isCompositionModified()
-{
-    return RosegardenDocument::currentDocument->getComposition().
-            getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
-}
-
-void ListEditView::setCompositionModified(bool modified)
-{
-    RosegardenDocument::currentDocument->getComposition().getRefreshStatus(
-            m_compositionRefreshStatusId).setNeedsRefresh(modified);
 }
 
 void ListEditView::segmentDeleted(const Segment *s)
@@ -144,6 +65,11 @@ void ListEditView::segmentDeleted(const Segment *s)
 
     // The editors cannot handle Segments that go away.  So just close.
     close();
+}
+
+void ListEditView::slotDocumentModified(bool /*modified*/)
+{
+    refreshList();
 }
 
 

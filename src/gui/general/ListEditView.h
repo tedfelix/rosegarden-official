@@ -21,18 +21,9 @@
 #include "EditViewBase.h"
 #include "base/Segment.h"
 
-#include <QString>
-
-class QFrame;
-class QPaintEvent;
-class QGridLayout;
-
 
 namespace Rosegarden
 {
-
-
-class EditViewTimeSigNotifier;
 
 
 /// Base class for EventView and TempoView.
@@ -67,7 +58,7 @@ public:
 
     // ??? Only one of the derivers (EventView) cares about Segments.
     //     Move all Segment-related code either down into EventView or
-    //     up to EditViewBase if it would helpful to all the other
+    //     up to EditViewBase if it would be helpful to all the other
     //     editors as well.  E.g. the "close on Segment delete" behavior
     //     is needed by all.  That could be pushed up to EditViewBase.
 
@@ -76,30 +67,13 @@ public:
 
 protected:
 
-    /**
-     * ??? This is part of that paintEvent() thing.  REMOVE THIS.
-     */
     virtual void refreshList() = 0;
 
-private:
+private slots:
 
-    // *** paintEvent() Related
-    // ??? We need to try to get rid of all this.  Or at least re-org so
-    //     that it is all handled via document modified handlers.
+    /// Connected to RosegardenDocument::documentModified().
+    void slotDocumentModified(bool modified);
 
-    /// ??? Inline into only caller.  paintEvent() is going away.
-    bool isCompositionModified();
-    /// ??? Inline into only caller.  paintEvent() is going away.
-    void setCompositionModified(bool modified);
-    unsigned int m_compositionRefreshStatusId;
-    // ??? Try to get rid of this per explanation above.
-    void paintEvent(QPaintEvent *e) override;
-
-    // ??? paintEvent() related.
-    std::vector<unsigned int> m_segmentsRefreshStatusIds;
-
-    // ??? paintEvent() related.
-    EditViewTimeSigNotifier *m_timeSigNotifier;
 };
 
 
