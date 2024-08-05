@@ -33,7 +33,7 @@ namespace Rosegarden
  * edit views, not because it provides anything particularly focused
  * on lists.
  */
-class ListEditView : public EditViewBase, public SegmentObserver
+class ListEditView : public EditViewBase
 {
     Q_OBJECT
 
@@ -47,10 +47,6 @@ public:
     //     up to EditViewBase if it would be helpful to all the other
     //     editors as well.  E.g. the "close on Segment delete" behavior
     //     is needed by all.  That could be pushed up to EditViewBase.
-
-    // SegmentObserver
-    // ??? Push down to EventView along with ctor/dtor support.
-    void segmentDeleted(const Segment *) override;
 
 protected:
 

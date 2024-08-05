@@ -42,29 +42,10 @@ ListEditView::ListEditView(const std::vector<Segment *> &segments) :
     // ??? Odd.  I think EditViewBase has some statusbar-related code.
     //     Should we push this up or down?
     setStatusBar(new QStatusBar(this));
-
-    // For each Segment...
-    for (Segment *segment : m_segments) {
-        segment->addObserver(this);
-    }
 }
 
 ListEditView::~ListEditView()
 {
-    for (Segment *segment : m_segments) {
-        segment->removeObserver(this);
-    }
-
-    m_segments.clear();
-}
-
-void ListEditView::segmentDeleted(const Segment *s)
-{
-    // ??? Bit of a design flaw.  Cast away const...
-    const_cast<Segment *>(s)->removeObserver(this);
-
-    // The editors cannot handle Segments that go away.  So just close.
-    close();
 }
 
 void ListEditView::slotDocumentModified(bool /*modified*/)

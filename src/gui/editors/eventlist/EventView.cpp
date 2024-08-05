@@ -92,6 +92,11 @@ EventView::EventView(RosegardenDocument *doc,
                      const std::vector<Segment *> &segments) :
     ListEditView(segments)
 {
+    // For each Segment...
+    for (Segment *segment : m_segments) {
+        segment->addObserver(this);
+    }
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     // Note: EditView only edits the first Segment in segments.
@@ -332,6 +337,10 @@ EventView::EventView(RosegardenDocument *doc,
 EventView::~EventView()
 {
     saveOptions();
+
+    for (Segment *segment : m_segments) {
+        segment->removeObserver(this);
+    }
 }
 
 void
@@ -343,11 +352,9 @@ EventView::closeEvent(QCloseEvent *event)
 }
 
 void
-EventView::eventRemoved(const Segment *s, Event *e)
+EventView::eventRemoved(const Segment *, Event *e)
 {
     m_deletedEvents.insert(e);
-
-    ListEditView::eventRemoved(s, e);
 }
 
 bool
@@ -1670,6 +1677,16 @@ void
 EventView::slotHelpAbout()
 {
     new AboutDialog(this);
+}
+
+void
+EventView::segmentDeleted(const Segment *s)
+{
+    // ??? Bit of a design flaw.  Cast away const...
+    const_cast<Segment *>(s)->removeObserver(this);
+
+    // This editor cannot handle Segments that go away.  So just close.
+    close();
 }
 
 

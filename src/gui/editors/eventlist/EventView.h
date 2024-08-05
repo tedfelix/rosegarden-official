@@ -54,7 +54,7 @@ class Event;
  *
  * Segment > Edit With > Open in Event List Editor.  Or just press "E".
  */
-class EventView : public ListEditView
+class EventView : public ListEditView, public SegmentObserver
 {
     Q_OBJECT
 
@@ -64,6 +64,10 @@ public:
               const std::vector<Segment *> &segments);
 
     ~EventView() override;
+
+    // SegmentObserver overrides.
+    void eventRemoved(const Segment *, Event *) override;
+    void segmentDeleted(const Segment *) override;
 
 signals:
 
@@ -85,9 +89,6 @@ protected:
 
     // ListEditView overrides.
     void refreshList() override;
-
-    // SegmentObserver overrides.
-    void eventRemoved(const Segment *, Event *) override;
 
     // QWidget override.
     void closeEvent(QCloseEvent *event) override;
