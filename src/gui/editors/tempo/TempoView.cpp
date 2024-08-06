@@ -194,7 +194,7 @@ TempoView::timeSignatureChanged(const Composition *comp)
 }
 
 bool
-TempoView::applyLayout(int /*staffNo*/)
+TempoView::applyLayout()
 {
     // crashing selection garbage removed, and selection changed to single
     // selection, which is really the only sane thing to do with this anyway;
@@ -404,27 +404,6 @@ TempoView::makeTimeString(timeT time, int timeMode)
     }
 }
 
-#if 0
-void
-TempoView::updateView()
-{
-    m_list->update();
-}
-#endif
-
-void
-TempoView::slotEditCut()
-{
-    // not implemented yet -- can't use traditional clipboard (which
-    // only holds events from segments, or segments)
-}
-
-void
-TempoView::slotEditCopy()
-{
-    // likewise
-}
-
 void
 TempoView::slotEditPaste()
 {
@@ -630,22 +609,6 @@ TempoView::initStatusBar()
     QStatusBar* sb = statusBar();
     sb->showMessage(QString());
 }
-
-/* unused
-QSize
-TempoView::getViewSize()
-{
-    return m_list->size();
-}
-*/
-
-/* unused
-void
-TempoView::setViewSize(QSize s)
-{
-    m_list->setFixedSize(s);
-}
-*/
 
 void
 TempoView::readOptions()

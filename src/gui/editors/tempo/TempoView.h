@@ -22,10 +22,8 @@
 #include "gui/general/EditViewBase.h"
 #include "base/TimeT.h"
 
-#include <QSize>
 #include <QString>
 
-class QWidget;
 class QTreeWidgetItem;
 class QCloseEvent;
 class QCheckBox;
@@ -46,58 +44,29 @@ class EditTempoController;
 
 
 /// Tempo and Time Signature Editor
-/**
- * Tempo and time signature list-style editor.  This has some code
- * in common with EventView, but not enough to make them any more
- * sharable than simply through EditViewBase.  Hopefully this one
- * should prove considerably simpler, anyway.
- */
 class TempoView : public EditViewBase, public CompositionObserver
 {
     Q_OBJECT
-
-    enum Filter
-    {
-        None          = 0x0000,
-        Tempo         = 0x0001,
-        TimeSignature = 0x0002
-    };
 
 public:
     TempoView(EditTempoController *editTempoController,
               timeT openTime);
     ~TempoView() override;
 
-    virtual bool applyLayout(int staffNo = -1);
-
-    //void updateView() override;
-
-    virtual void setupActions();
-    void initStatusBar();
-    // unused virtual QSize getViewSize();
-    // unused virtual void setViewSize(QSize);
-
-    /// Set the button states to the current filter positions
-    void setButtonsToFilter();
-
-    /// Menu creation and show
-    void createMenu();
-
-    // Composition Observer callbacks
-
+    // CompositionObserver overrides
     void timeSignatureChanged(const Composition *) override;
     void tempoChanged(const Composition *) override;
 
 signals:
+
+    /// Connected to RosegardenMainWindow::slotTempoViewClosed().
     void closing();
 
 public slots:
-    // standard slots
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
 
-    // other edit slots
+    void slotEditCut() override  { }
+    void slotEditCopy() override  { }
+    void slotEditPaste() override;
     void slotEditDelete();
     void slotEditInsertTempo();
     void slotEditInsertTimeSignature();
@@ -123,6 +92,7 @@ protected slots:
     void slotUpdateWindowTitle(bool modified);
 
 protected:
+
     void closeEvent(QCloseEvent *) override;
 
 private slots:
@@ -131,17 +101,30 @@ private slots:
 
 private:
 
+    enum Filter
+    {
+        None          = 0x0000,
+        Tempo         = 0x0001,
+        TimeSignature = 0x0002
+    };
+
     QFrame *m_frame{nullptr};
     QGridLayout *m_gridLayout{nullptr};
+
+    void setupActions();
+    void initStatusBar();
+
+    bool applyLayout();
 
     void readOptions();
     void saveOptions();
 
+    /// Set the button states to the current filter positions
+    void setButtonsToFilter();
+
     void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
     Segment *getCurrentSegment() override;
-
-    //--------------- Data members ---------------------------------
 
     EditTempoController *m_editTempoController;
     QTreeWidget *m_list;
