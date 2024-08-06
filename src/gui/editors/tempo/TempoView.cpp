@@ -38,7 +38,6 @@
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/EditTempoController.h"
-#include "gui/general/ListEditView.h"
 #include "misc/Strings.h"
 
 #include <QAction>
@@ -65,11 +64,13 @@ namespace Rosegarden
 TempoView::TempoView(
         EditTempoController *editTempoController,
         timeT openTime) :
-    ListEditView(std::vector<Segment *>()),
+    EditViewBase(std::vector<Segment *>()),
     m_editTempoController(editTempoController),
     m_filter(Tempo | TimeSignature),
     m_ignoreUpdates(true)
 {
+    setStatusBar(new QStatusBar(this));
+
     // Connect for changes so we can update the list.
     connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,

@@ -54,7 +54,6 @@
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
 #include "gui/dialogs/AboutDialog.h"
-#include "gui/general/ListEditView.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/widgets/TmpStatusMsg.h"
@@ -90,8 +89,10 @@ namespace Rosegarden
 
 EventView::EventView(RosegardenDocument *doc,
                      const std::vector<Segment *> &segments) :
-    ListEditView(segments)
+    EditViewBase(segments)
 {
+    setStatusBar(new QStatusBar(this));
+
     // Connect for changes so we can update the list.
     connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,

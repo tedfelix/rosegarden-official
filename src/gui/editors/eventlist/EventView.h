@@ -20,7 +20,7 @@
 #define RG_EVENTVIEW_H
 
 #include "base/Segment.h"
-#include "gui/general/ListEditView.h"
+#include "gui/general/EditViewBase.h"
 
 #include <set>
 #include <vector>
@@ -54,7 +54,7 @@ class Event;
  *
  * Segment > Edit With > Open in Event List Editor.  Or just press "E".
  */
-class EventView : public ListEditView, public SegmentObserver
+class EventView : public EditViewBase, public SegmentObserver
 {
     Q_OBJECT
 

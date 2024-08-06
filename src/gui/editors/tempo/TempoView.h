@@ -19,7 +19,7 @@
 #define RG_TEMPOVIEW_H
 
 #include "base/Composition.h"
-#include "gui/general/ListEditView.h"
+#include "gui/general/EditViewBase.h"
 #include "base/TimeT.h"
 
 #include <QSize>
@@ -52,7 +52,7 @@ class EditTempoController;
  * sharable than simply through EditViewBase.  Hopefully this one
  * should prove considerably simpler, anyway.
  */
-class TempoView : public ListEditView, public CompositionObserver
+class TempoView : public EditViewBase, public CompositionObserver
 {
     Q_OBJECT
 
