@@ -212,11 +212,15 @@ TempoView::applyLayout()
 
     Composition *comp = &RosegardenDocument::currentDocument->getComposition();
 
+    // Time Signatures
     if (m_filter & TimeSignature) {
-        for (int i = 0; i < comp->getTimeSignatureCount(); ++i) {
+
+        for (int timeSignatureIndex = 0;
+             timeSignatureIndex < comp->getTimeSignatureCount();
+             ++timeSignatureIndex) {
 
             std::pair<timeT, Rosegarden::TimeSignature> sig =
-                comp->getTimeSignatureChange(i);
+                    comp->getTimeSignatureChange(timeSignatureIndex);
 
             QString properties;
             if (sig.second.isHidden()) {
@@ -231,66 +235,93 @@ TempoView::applyLayout()
 
             QString timeString = makeTimeString(sig.first, a_timeMode.get());
 
+            QStringList labels;
+            labels << timeString <<
+                      tr("Time Signature   ") <<
+                      QString("%1/%2   ").
+                              arg(sig.second.getNumerator()).
+                              arg(sig.second.getDenominator()) <<
+                      properties;
+
+            // Add to the list.
+            // ??? This doesn't look like an add.  Rearrange the code to
+            //     make it more "add" like.  Actually, QTreeWidgetItem takes
+            //     the widget as the first parameter.  Maybe move parent to
+            //     the first parameter.
             new TempoListItem(
                     comp,  // composition
                     TempoListItem::TimeSignature,  // type
                     sig.first,  // time
-                    i,  // index
+                    timeSignatureIndex,  // index
                     m_list,  // parent
-                    QStringList() << timeString <<  // labels
-                                     tr("Time Signature   ") <<
-                                     QString("%1/%2   ").
-                                             arg(sig.second.getNumerator()).
-                                             arg(sig.second.getDenominator()) <<
-                                     properties);
+                    labels);
         }
     }
 
+    // Tempos
     if (m_filter & Tempo) {
-        for (int i = 0; i < comp->getTempoChangeCount(); ++i) {
 
-            std::pair<timeT, tempoT> tempo =
-                comp->getTempoChange(i);
+        for (int tempoIndex = 0;
+             tempoIndex < comp->getTempoChangeCount();
+             ++tempoIndex) {
+
+            const std::pair<timeT, tempoT> tempoPair =
+                    comp->getTempoChange(tempoIndex);
+            const timeT time = tempoPair.first;
+            const tempoT &tempo = tempoPair.second;
 
             QString desc;
 
-            //!!! imprecise -- better to work from tempoT directly
+            const float qpm = comp->getTempoQpm(tempo);
+            const int qpmUnits = int(qpm + 0.001);
+            const int qpmTenths = int((qpm - qpmUnits) * 10 + 0.001);
+            const int qpmHundredths =
+                    int((qpm - qpmUnits - qpmTenths / 10.0) * 100 + 0.001);
 
-            float qpm = comp->getTempoQpm(tempo.second);
-            int qpmUnits = int(qpm + 0.001);
-            int qpmTenths = int((qpm - qpmUnits) * 10 + 0.001);
-            int qpmHundredths = int((qpm - qpmUnits - qpmTenths / 10.0) * 100 + 0.001);
+            const Rosegarden::TimeSignature sig =
+                    comp->getTimeSignatureAt(time);
 
-            Rosegarden::TimeSignature sig = comp->getTimeSignatureAt(tempo.first);
             if (sig.getBeatDuration() ==
                     Note(Note::Crotchet).getDuration()) {
                 desc = tr("%1.%2%3")
                        .arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths);
             } else {
-                float bpm = (qpm *
+                const float bpm = (qpm *
                              Note(Note::Crotchet).getDuration()) /
                             sig.getBeatDuration();
-                int bpmUnits = int(bpm + 0.001);
-                int bpmTenths = int((bpm - bpmUnits) * 10 + 0.001);
-                int bpmHundredths = int((bpm - bpmUnits - bpmTenths / 10.0) * 100 + 0.001);
+                const int bpmUnits = int(bpm + 0.001);
+                const int bpmTenths = int((bpm - bpmUnits) * 10 + 0.001);
+                const int bpmHundredths = int((bpm - bpmUnits - bpmTenths / 10.0) * 100 + 0.001);
 
                 desc = tr("%1.%2%3 qpm (%4.%5%6 bpm)   ")
                        .arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths)
                        .arg(bpmUnits).arg(bpmTenths).arg(bpmHundredths);
             }
 
-            QString timeString = makeTimeString(tempo.first, a_timeMode.get());
+            const QString timeString = makeTimeString(time, a_timeMode.get());
 
-            new TempoListItem(comp, TempoListItem::Tempo,
-                              tempo.first, i, m_list, QStringList() << timeString
-                              << tr("Tempo   ")
-                              << desc);
+            QStringList labels;
+            labels << timeString << tr("Tempo   ") << desc;
+
+            // Add to the list.
+            // ??? This doesn't look like an add.  Rearrange the code to
+            //     make it more "add" like.  Actually, QTreeWidgetItem takes
+            //     the widget as the first parameter.  Maybe move parent to
+            //     the first parameter.
+            new TempoListItem(
+                    comp,
+                    TempoListItem::Tempo,
+                    time,
+                    tempoIndex,
+                    m_list,
+                    labels);
         }
     }
 
-    //!!! the <nothing at this filter level> does not work, and I'm ignoring it
     if (m_list->topLevelItemCount() == 0) {
-        new QTreeWidgetItem(m_list, QStringList() << tr("<nothing at this filter level>"));
+        // ??? This is impossible to see due to the size of the first column.
+        //     Just leave the list empty.
+        //new QTreeWidgetItem(m_list, QStringList() << tr("<nothing at this filter level>"));
         m_list->setSelectionMode(QTreeWidget::NoSelection);
         leaveActionState("have_selection");
     } else {
@@ -376,6 +407,7 @@ TempoView::getCurrentSegment()
 QString
 TempoView::makeTimeString(timeT time, int timeMode)
 {
+    // ??? Need an enum for this.
     switch (timeMode) {
 
     case 0:  // musical time
@@ -404,8 +436,11 @@ TempoView::makeTimeString(timeT time, int timeMode)
             return QString("%1   ").arg(rt.toText().c_str());
         }
 
-    default:
+    case 2:  // raw time
         return QString("%1   ").arg(time);
+
+    default:
+        return "---";
     }
 }
 
@@ -619,11 +654,13 @@ TempoView::readOptions()
 void
 TempoView::slotModifyFilter(int)
 {
-    if (m_tempoCheckBox->isChecked()) m_filter |= Tempo;
-    else m_filter ^= Tempo;
+    m_filter = 0;
 
-    if (m_timeSigCheckBox->isChecked()) m_filter |= TimeSignature;
-    else m_filter ^= TimeSignature;
+    if (m_tempoCheckBox->isChecked())
+        m_filter |= Tempo;
+
+    if (m_timeSigCheckBox->isChecked())
+        m_filter |= TimeSignature;
 
     applyLayout();
 }
