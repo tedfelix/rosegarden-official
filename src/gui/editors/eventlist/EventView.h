@@ -87,9 +87,6 @@ protected:
 
     Segment *getCurrentSegment() override;
 
-    // ListEditView overrides.
-    void refreshList() override;
-
     // QWidget override.
     void closeEvent(QCloseEvent *event) override;
 
@@ -138,6 +135,8 @@ private slots:
      * ??? Rename: slotUpdateWindowTitle() like all others.
      */
     void updateWindowTitle(bool modified);
+
+    void slotDocumentModified(bool modified);
 
 private:
 

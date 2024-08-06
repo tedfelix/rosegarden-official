@@ -70,6 +70,11 @@ TempoView::TempoView(
     m_filter(Tempo | TimeSignature),
     m_ignoreUpdates(true)
 {
+    // Connect for changes so we can update the list.
+    connect(RosegardenDocument::currentDocument,
+                &RosegardenDocument::documentModified,
+            this, &TempoView::slotDocumentModified);
+
     initStatusBar();
     setupActions();
 
@@ -396,12 +401,6 @@ TempoView::makeTimeString(timeT time, int timeMode)
     default:
         return QString("%1   ").arg(time);
     }
-}
-
-void
-TempoView::refreshList()
-{
-    applyLayout();
 }
 
 #if 0
@@ -811,4 +810,12 @@ TempoView::slotHelpAbout()
 {
     new AboutDialog(this);
 }
+
+void
+TempoView::slotDocumentModified(bool /*modified*/)
+{
+    applyLayout();
+}
+
+
 }

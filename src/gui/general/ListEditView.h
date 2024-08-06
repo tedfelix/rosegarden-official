@@ -40,18 +40,6 @@ public:
 
     ListEditView(const std::vector<Segment *> &segments);
 
-protected:
-
-    virtual void refreshList() = 0;
-
-private slots:
-
-    /// Connected to RosegardenDocument::documentModified().
-    /**
-     * Push down to derivers.  It's only a few lines of code.
-     */
-    void slotDocumentModified(bool modified);
-
 };
 
 

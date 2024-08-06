@@ -70,8 +70,6 @@ public:
 
     virtual bool applyLayout(int staffNo = -1);
 
-    void refreshList() override;
-
     //void updateView() override;
 
     virtual void setupActions();
@@ -126,6 +124,10 @@ protected slots:
 
 protected:
     void closeEvent(QCloseEvent *) override;
+
+private slots:
+
+    void slotDocumentModified(bool modified);
 
 private:
 

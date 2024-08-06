@@ -21,7 +21,6 @@
 #include "ListEditView.h"
 
 #include "misc/Debug.h"
-#include "document/RosegardenDocument.h"
 
 #include <QStatusBar>
 
@@ -33,19 +32,9 @@ namespace Rosegarden
 ListEditView::ListEditView(const std::vector<Segment *> &segments) :
     EditViewBase(segments)
 {
-    // Connect for changes so we can update the list.
-    connect(RosegardenDocument::currentDocument,
-                &RosegardenDocument::documentModified,
-            this, &ListEditView::slotDocumentModified);
-
     // ??? Odd.  I think EditViewBase has some statusbar-related code.
     //     Should we push this up or down?
     setStatusBar(new QStatusBar(this));
-}
-
-void ListEditView::slotDocumentModified(bool /*modified*/)
-{
-    refreshList();
 }
 
 

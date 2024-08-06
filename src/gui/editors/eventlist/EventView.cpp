@@ -92,6 +92,11 @@ EventView::EventView(RosegardenDocument *doc,
                      const std::vector<Segment *> &segments) :
     ListEditView(segments)
 {
+    // Connect for changes so we can update the list.
+    connect(RosegardenDocument::currentDocument,
+                &RosegardenDocument::documentModified,
+            this, &EventView::slotDocumentModified);
+
     // For each Segment...
     for (Segment *segment : m_segments) {
         segment->addObserver(this);
@@ -769,12 +774,6 @@ EventView::makeDurationString(timeT time,
     default:
         return QString("%1  ").arg(duration);
     }
-}
-
-void
-EventView::refreshList()
-{
-    updateTreeWidget();
 }
 
 void
@@ -1687,6 +1686,12 @@ EventView::segmentDeleted(const Segment *s)
 
     // This editor cannot handle Segments that go away.  So just close.
     close();
+}
+
+void
+EventView::slotDocumentModified(bool /*modified*/)
+{
+    updateTreeWidget();
 }
 
 
