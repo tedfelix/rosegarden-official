@@ -21,7 +21,6 @@
 #include "ListEditView.h"
 
 #include "misc/Debug.h"
-#include "base/Segment.h"
 #include "document/RosegardenDocument.h"
 
 #include <QStatusBar>
@@ -42,10 +41,6 @@ ListEditView::ListEditView(const std::vector<Segment *> &segments) :
     // ??? Odd.  I think EditViewBase has some statusbar-related code.
     //     Should we push this up or down?
     setStatusBar(new QStatusBar(this));
-}
-
-ListEditView::~ListEditView()
-{
 }
 
 void ListEditView::slotDocumentModified(bool /*modified*/)

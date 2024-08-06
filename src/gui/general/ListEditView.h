@@ -19,19 +19,18 @@
 #define RG_LISTEDITVIEW_H
 
 #include "EditViewBase.h"
-#include "base/Segment.h"
 
 
 namespace Rosegarden
 {
 
 
+class Segment;
+
+
 /// Base class for EventView and TempoView.
 /**
- * Currently the subclasses of this class are EventView and TempoView,
- * which is why it is named ListEditView -- because it's used by list
- * edit views, not because it provides anything particularly focused
- * on lists.
+ * ??? Get rid of this.
  */
 class ListEditView : public EditViewBase
 {
@@ -40,13 +39,6 @@ class ListEditView : public EditViewBase
 public:
 
     ListEditView(const std::vector<Segment *> &segments);
-    ~ListEditView() override;
-
-    // ??? Only one of the derivers (EventView) cares about Segments.
-    //     Move all Segment-related code either down into EventView or
-    //     up to EditViewBase if it would be helpful to all the other
-    //     editors as well.  E.g. the "close on Segment delete" behavior
-    //     is needed by all.  That could be pushed up to EditViewBase.
 
 protected:
 
@@ -55,6 +47,9 @@ protected:
 private slots:
 
     /// Connected to RosegardenDocument::documentModified().
+    /**
+     * Push down to derivers.  It's only a few lines of code.
+     */
     void slotDocumentModified(bool modified);
 
 };
