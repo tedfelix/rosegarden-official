@@ -35,6 +35,7 @@
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/EditTempoController.h"
+#include "misc/PreferenceInt.h"
 
 #include <QAction>
 #include <QSettings>
@@ -48,6 +49,15 @@
 #include <QStatusBar>
 #include <QList>
 #include <QDesktopServices>
+
+
+namespace
+{
+
+    Rosegarden::PreferenceInt a_timeMode(
+            Rosegarden::TempoViewConfigGroup, "timemode", 0);
+
+}
 
 
 namespace Rosegarden
@@ -68,6 +78,8 @@ TempoView::TempoView(
     setStatusBar(new QStatusBar(this));
     // ??? inline this.
     initStatusBar();
+
+    m_doc->getComposition().addObserver(this);
 
     // Connect for changes so we can update the list.
     connect(RosegardenDocument::currentDocument,
@@ -137,14 +149,15 @@ TempoView::TempoView(
     applyLayout();
     makeInitialSelection(openTime);
 
-    m_doc->getComposition().addObserver(this);
-
     m_ignoreUpdates = false;
 }
 
 TempoView::~TempoView()
 {
-    saveOptions();
+    QSettings settings;
+    settings.beginGroup(TempoViewConfigGroup);
+    settings.setValue("filter", m_filter);
+    settings.endGroup();
 
     // We use m_doc instead of RosegardenDocument::currentDocument to
     // make sure that we disconnect from the old document when the
@@ -156,6 +169,7 @@ TempoView::~TempoView()
 void
 TempoView::closeEvent(QCloseEvent *e)
 {
+    // Let RosegardenMainWindow know we are going down.
     emit closing();
 
     EditViewBase::closeEvent(e);
@@ -165,41 +179,38 @@ void
 TempoView::tempoChanged(const Composition *comp)
 {
     if (m_ignoreUpdates)
-        return ;
-    if (comp == &RosegardenDocument::currentDocument->getComposition()) {
-        applyLayout();
-    }
+        return;
+
+    // Not the current Composition?  Bail.
+    // ??? I suspect this can never happen.  Can we safely get rid of this?
+    if (comp != &RosegardenDocument::currentDocument->getComposition())
+        return;
+
+    applyLayout();
 }
 
 void
 TempoView::timeSignatureChanged(const Composition *comp)
 {
     if (m_ignoreUpdates)
-        return ;
-    if (comp == &RosegardenDocument::currentDocument->getComposition()) {
-        applyLayout();
-    }
+        return;
+
+    // Not the current Composition?  Bail.
+    // ??? I suspect this can never happen.  Can we safely get rid of this?
+    if (comp != &RosegardenDocument::currentDocument->getComposition())
+        return;
+
+    applyLayout();
 }
 
 bool
 TempoView::applyLayout()
 {
-    // crashing selection garbage removed, and selection changed to single
-    // selection, which is really the only sane thing to do with this anyway;
-    // Classic had multiple selections for some reason, but you could only edit
-    // one event at a time.
+    // Recreate list.
 
-    // Ok, recreate list
-    //
     m_list->clear();
 
     Composition *comp = &RosegardenDocument::currentDocument->getComposition();
-
-    QSettings settings;
-    settings.beginGroup(TempoViewConfigGroup);
-
-    int timeMode = settings.value("timemode", 0).toInt() ;
-    settings.endGroup();
 
     if (m_filter & TimeSignature) {
         for (int i = 0; i < comp->getTimeSignatureCount(); ++i) {
@@ -218,7 +229,7 @@ TempoView::applyLayout()
                     properties = tr("Common");
             }
 
-            QString timeString = makeTimeString(sig.first, timeMode);
+            QString timeString = makeTimeString(sig.first, a_timeMode.get());
 
             new TempoListItem(
                     comp,  // composition
@@ -268,7 +279,7 @@ TempoView::applyLayout()
                        .arg(bpmUnits).arg(bpmTenths).arg(bpmHundredths);
             }
 
-            QString timeString = makeTimeString(tempo.first, timeMode);
+            QString timeString = makeTimeString(tempo.first, a_timeMode.get());
 
             new TempoListItem(comp, TempoListItem::Tempo,
                               tempo.first, i, m_list, QStringList() << timeString
@@ -570,23 +581,21 @@ TempoView::setupActions()
     createAction("tempo_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
-    QSettings settings;
-    settings.beginGroup(TempoViewConfigGroup);
-    int timeMode = settings.value("timemode", 0).toInt() ;
-    settings.endGroup();
-
     QAction *a;
     a = createAction("time_musical", SLOT(slotViewMusicalTimes()));
     a->setCheckable(true);
-    if (timeMode == 0)  a->setChecked(true);
+    if (a_timeMode.get() == 0)
+        a->setChecked(true);
 
     a = createAction("time_real", SLOT(slotViewRealTimes()));
     a->setCheckable(true);
-    if (timeMode == 1)  a->setChecked(true);
+    if (a_timeMode.get() == 1)
+        a->setChecked(true);
 
     a = createAction("time_raw", SLOT(slotViewRawTimes()));
     a->setCheckable(true);
-    if (timeMode == 2)  a->setChecked(true);
+    if (a_timeMode.get() == 2)
+        a->setChecked(true);
 
     createMenusAndToolbars("tempoview.rc");
 }
@@ -604,15 +613,6 @@ TempoView::readOptions()
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
     m_filter = settings.value("filter", m_filter).toInt();
-    settings.endGroup();
-}
-
-void
-TempoView::saveOptions()
-{
-    QSettings settings;
-    settings.beginGroup(TempoViewConfigGroup);
-    settings.setValue("filter", m_filter);
     settings.endGroup();
 }
 
@@ -645,46 +645,37 @@ TempoView::updateFilterCheckBoxes()
 void
 TempoView::slotViewMusicalTimes()
 {
-    QSettings settings;
-    settings.beginGroup(TempoViewConfigGroup);
-
-    settings.setValue("timemode", 0);
     findAction("time_musical")->setChecked(true);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(false);
-    applyLayout();
 
-    settings.endGroup();
+    a_timeMode.set(0);
+
+    applyLayout();
 }
 
 void
 TempoView::slotViewRealTimes()
 {
-    QSettings settings;
-    settings.beginGroup(TempoViewConfigGroup);
-
-    settings.setValue("timemode", 1);
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(true);
     findAction("time_raw")->setChecked(false);
-    applyLayout();
 
-    settings.endGroup();
+    a_timeMode.set(1);
+
+    applyLayout();
 }
 
 void
 TempoView::slotViewRawTimes()
 {
-    QSettings settings;
-    settings.beginGroup(TempoViewConfigGroup);
-
-    settings.setValue("timemode", 2);
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(true);
-    applyLayout();
 
-    settings.endGroup();
+    a_timeMode.set(2);
+
+    applyLayout();
 }
 
 void

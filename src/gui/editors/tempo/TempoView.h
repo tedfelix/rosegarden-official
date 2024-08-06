@@ -145,8 +145,6 @@ private:
 
     // ??? inline into ctor.
     void readOptions();
-    // ??? inline into dtor.
-    void saveOptions();
 
     /// Select the Event nearest the playback position pointer.
     void makeInitialSelection(timeT time);
