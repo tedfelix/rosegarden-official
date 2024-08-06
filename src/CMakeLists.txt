@@ -358,7 +358,6 @@ set(rg_CPPS
   gui/general/ActionFileClient.cpp
   gui/general/ActionData.cpp
   gui/general/BaseTool.cpp
-  gui/general/ListEditView.cpp
   gui/general/TempDirectory.cpp
   gui/general/DecoyAction.cpp
   gui/general/PresetGroup.cpp

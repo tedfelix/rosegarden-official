@@ -33,11 +33,11 @@
 #include "commands/segment/RemoveTempoChangeCommand.h"
 #include "commands/segment/RemoveTimeSignatureCommand.h"
 #include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
 #include "misc/ConfigGroups.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/EditTempoController.h"
-#include "gui/general/ListEditView.h"
 #include "misc/Strings.h"
 
 #include <QAction>
@@ -64,17 +64,33 @@ namespace Rosegarden
 TempoView::TempoView(
         EditTempoController *editTempoController,
         timeT openTime) :
-    ListEditView(std::vector<Segment *>(), 2),
+    EditViewBase(std::vector<Segment *>()),
     m_editTempoController(editTempoController),
     m_filter(Tempo | TimeSignature),
     m_ignoreUpdates(true)
 {
+    setStatusBar(new QStatusBar(this));
+
+    // Connect for changes so we can update the list.
+    connect(RosegardenDocument::currentDocument,
+                &RosegardenDocument::documentModified,
+            this, &TempoView::slotDocumentModified);
+
     initStatusBar();
     setupActions();
 
+    // Create frame and layout.
+    // ??? Push down to derivers.
+    m_frame = new QFrame(this);
+    m_frame->setMinimumSize(500, 300);
+    m_frame->setMaximumSize(2200, 1400);
+    m_gridLayout = new QGridLayout(m_frame);
+    m_frame->setLayout(m_gridLayout);
+    setCentralWidget(m_frame);
+
     // define some note filtering buttons in a group
     //
-    m_filterGroup = new QGroupBox(tr("Filter"), getCentralWidget());
+    m_filterGroup = new QGroupBox(tr("Filter"), m_frame);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setLayout(filterGroupLayout);
 
@@ -88,13 +104,13 @@ TempoView::TempoView(
     filterGroupLayout->addSpacing(200);
 
     m_filterGroup->setLayout(filterGroupLayout);
-    m_grid->addWidget(m_filterGroup, 2, 0);
+    m_gridLayout->addWidget(m_filterGroup, 2, 0);
 
-    m_list = new QTreeWidget(getCentralWidget());
+    m_list = new QTreeWidget(m_frame);
 
 //     m_list->setItemsRenameable(true);    //&&&
 
-    m_grid->addWidget(m_list, 2, 1);
+    m_gridLayout->addWidget(m_list, 2, 1);
 
     slotUpdateWindowTitle(false);
     connect(m_doc, &RosegardenDocument::documentModified,
@@ -388,20 +404,13 @@ TempoView::makeTimeString(timeT time, int timeMode)
     }
 }
 
-void
-TempoView::refreshSegment(Segment * /*segment*/,
-                          timeT /*startTime*/,
-                          timeT /*endTime*/)
-{
-    RG_DEBUG << "TempoView::refreshSegment";
-    applyLayout();
-}
-
+#if 0
 void
 TempoView::updateView()
 {
     m_list->update();
 }
+#endif
 
 void
 TempoView::slotEditCut()
@@ -483,7 +492,7 @@ TempoView::slotEditDelete()
              /* decrement is inside */) {
             command->addCommand(*--i);
         }
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
     }
 
     applyLayout();
@@ -529,13 +538,17 @@ TempoView::slotEditInsertTimeSignature()
         insertTime = dialog.getTime();
 
         if (dialog.shouldNormalizeRests()) {
-            addCommandToHistory
-            (new AddTimeSignatureAndNormalizeCommand
-             (&composition, insertTime, dialog.getTimeSignature()));
+            CommandHistory::getInstance()->addCommand(
+                    new AddTimeSignatureAndNormalizeCommand(
+                            &composition,
+                            insertTime,
+                            dialog.getTimeSignature()));
         } else {
-            addCommandToHistory
-            (new AddTimeSignatureCommand
-             (&composition, insertTime, dialog.getTimeSignature()));
+            CommandHistory::getInstance()->addCommand(
+                    new AddTimeSignatureCommand(
+                            &composition,
+                            insertTime,
+                            dialog.getTimeSignature()));
         }
     }
 }
@@ -579,7 +592,7 @@ TempoView::slotClearSelection()
 void
 TempoView::setupActions()
 {
-    ListEditView::setupActions("tempoview.rc", false);
+    setupBaseActions(false);
 
     createAction("insert_tempo", SLOT(slotEditInsertTempo()));
     createAction("insert_timesig", SLOT(slotEditInsertTimeSignature()));
@@ -608,7 +621,7 @@ TempoView::setupActions()
     a->setCheckable(true);
     if (timeMode == 2)  a->setChecked(true);
 
-    createMenusAndToolbars(getRCFileName());
+    createMenusAndToolbars("tempoview.rc");
 }
 
 void
@@ -752,13 +765,17 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
             time = dialog.getTime();
 
             if (dialog.shouldNormalizeRests()) {
-                addCommandToHistory
-                    (new AddTimeSignatureAndNormalizeCommand
-                     (&composition, time, dialog.getTimeSignature()));
+                CommandHistory::getInstance()->addCommand(
+                        new AddTimeSignatureAndNormalizeCommand(
+                                &composition,
+                                time,
+                                dialog.getTimeSignature()));
             } else {
-                addCommandToHistory
-                    (new AddTimeSignatureCommand
-                     (&composition, time, dialog.getTimeSignature()));
+                CommandHistory::getInstance()->addCommand(
+                        new AddTimeSignatureCommand(
+                                &composition,
+                                time,
+                                dialog.getTimeSignature()));
             }
         }
 
@@ -794,4 +811,12 @@ TempoView::slotHelpAbout()
 {
     new AboutDialog(this);
 }
+
+void
+TempoView::slotDocumentModified(bool /*modified*/)
+{
+    applyLayout();
+}
+
+
 }

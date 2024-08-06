@@ -288,14 +288,9 @@ EditViewBase::getTitle(const QString &editorName)
 
         const int trackPosition = track->getPosition();
 
-        // ??? Empty Segment name results in "...Segment Track..." which
-        //     looks bad.  Move "Segment" up here and eliminate it if
-        //     there is no Segment label.
         QString segLabel = strtoqstr(m_segments[0]->getLabel());
-        if (segLabel.isEmpty())
-            segLabel = " ";
-        else
-            segLabel = QString(" \"%1\" ").arg(segLabel);
+        if (!segLabel.isEmpty())
+            segLabel = tr("Segment \"%1\" ").arg(segLabel);
 
         QString trkLabel = strtoqstr(track->getLabel());
         if (trkLabel.isEmpty()  ||  trkLabel == tr("<untitled>"))
@@ -303,7 +298,7 @@ EditViewBase::getTitle(const QString &editorName)
         else
             trkLabel = QString(" \"%1\" ").arg(trkLabel);
 
-        title = tr("%1%2 - Segment%3Track%4#%5 - %6").
+        title = tr("%1%2 - %3Track%4#%5 - %6").
                 arg(modified).
                 arg(doc->getTitle()).
                 arg(segLabel).
@@ -319,8 +314,7 @@ EditViewBase::getTitle(const QString &editorName)
                 arg(editorName);
     } else {
         // More than one Segment, but not all.
-        // ??? No need for "(s)".  This is always more than one.  "Segments".
-        title = tr("%1%2 - %3 Segment(s) - %4").
+        title = tr("%1%2 - %3 Segments - %4").
                 arg(modified).
                 arg(doc->getTitle()).
                 arg(segmentCount).

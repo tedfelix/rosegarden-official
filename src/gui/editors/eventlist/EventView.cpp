@@ -49,11 +49,11 @@
 #include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
 #include "gui/dialogs/AboutDialog.h"
-#include "gui/general/ListEditView.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/widgets/TmpStatusMsg.h"
@@ -67,16 +67,11 @@
 #include <QDialog>
 #include <QFrame>
 #include <QGroupBox>
-#include <QHBoxLayout>
-#include <QIcon>
 #include <QLabel>
-#include <QLayout>
 #include <QMenu>
-#include <QPixmap>
 #include <QPoint>
 #include <QPushButton>
 #include <QSettings>
-#include <QSize>
 #include <QStatusBar>
 #include <QString>
 #include <QTreeWidget>
@@ -94,8 +89,20 @@ namespace Rosegarden
 
 EventView::EventView(RosegardenDocument *doc,
                      const std::vector<Segment *> &segments) :
-    ListEditView(segments, 2)
+    EditViewBase(segments)
 {
+    setStatusBar(new QStatusBar(this));
+
+    // Connect for changes so we can update the list.
+    connect(RosegardenDocument::currentDocument,
+                &RosegardenDocument::documentModified,
+            this, &EventView::slotDocumentModified);
+
+    // For each Segment...
+    for (Segment *segment : m_segments) {
+        segment->addObserver(this);
+    }
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     // Note: EditView only edits the first Segment in segments.
@@ -112,9 +119,18 @@ EventView::EventView(RosegardenDocument *doc,
     initStatusBar();
     setupActions();
 
+    // Create frame and layout.
+    // ??? Push down to derivers.
+    m_frame = new QFrame(this);
+    m_frame->setMinimumSize(500, 300);
+    m_frame->setMaximumSize(2200, 1400);
+    m_gridLayout = new QGridLayout(m_frame);
+    m_frame->setLayout(m_gridLayout);
+    setCentralWidget(m_frame);
+
     // define some note filtering buttons in a group
     //
-    m_filterGroup = new QGroupBox( tr("Event filters"), getCentralWidget() );
+    m_filterGroup = new QGroupBox(tr("Event filters"), m_frame);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setAlignment( Qt::AlignHorizontal_Mask );
 
@@ -147,13 +163,13 @@ EventView::EventView(RosegardenDocument *doc,
     filterGroupLayout->addWidget(m_otherCheckBox);
     m_filterGroup->setLayout(filterGroupLayout);
 
-    m_grid->addWidget(m_filterGroup, 2, 0);
+    m_gridLayout->addWidget(m_filterGroup, 2, 0);
 
-    m_eventList = new QTreeWidget(getCentralWidget());
+    m_eventList = new QTreeWidget(m_frame);
 
     //m_eventList->setItemsRenameable(true); //&&& use item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable );
 
-    m_grid->addWidget(m_eventList, 2, 1);
+    m_gridLayout->addWidget(m_eventList, 2, 1);
 
     if (m_isTriggerSegment) {
 
@@ -161,7 +177,8 @@ EventView::EventView(RosegardenDocument *doc,
         TriggerSegmentRec *rec =
             segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-        QGroupBox *frame = new QGroupBox( tr("Triggered Segment Properties"), getCentralWidget() );
+        // ??? rename: groupBox
+        QGroupBox *frame = new QGroupBox(tr("Triggered Segment Properties"), m_frame);
         frame->setAlignment( Qt::AlignHorizontal_Mask );
         frame->setContentsMargins(5, 5, 5, 5);
         QGridLayout *layout = new QGridLayout(frame);
@@ -232,7 +249,7 @@ EventView::EventView(RosegardenDocument *doc,
         */
 
         frame->setLayout(layout);
-        m_grid->addWidget(frame, 2, 2);
+        m_gridLayout->addWidget(frame, 2, 2);
 
     }
 
@@ -327,9 +344,8 @@ EventView::~EventView()
 {
     saveOptions();
 
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        //RG_DEBUG << "dtor - removing this observer from " << m_segments[i];
-        m_segments[i]->removeObserver(this);
+    for (Segment *segment : m_segments) {
+        segment->removeObserver(this);
     }
 }
 
@@ -345,19 +361,6 @@ void
 EventView::eventRemoved(const Segment *, Event *e)
 {
     m_deletedEvents.insert(e);
-}
-
-void
-EventView::segmentDeleted(const Segment *s)
-{
-    std::vector<Segment *>::iterator i = std::find(m_segments.begin(), m_segments.end(), s);
-
-    if (i != m_segments.end()) {
-        m_segments.erase(i);
-    } else {
-        RG_DEBUG << "%%% WARNING - EventView::segmentDeleted() called on non-registered segment - should not happen\n";
-    }
-
 }
 
 bool
@@ -775,15 +778,6 @@ EventView::makeDurationString(timeT time,
 }
 
 void
-EventView::refreshSegment(Segment * /*segment*/,
-                          timeT /*startTime*/,
-                          timeT /*endTime*/)
-{
-    RG_DEBUG << "EventView::refreshSegment";
-    updateTreeWidget();
-}
-
-void
 EventView::updateView()
 {
     m_eventList->update();
@@ -804,7 +798,7 @@ EventView::slotEditTriggerName()
         SegmentSelection selection;
         selection.insert(m_segments[0]);
         SegmentLabelCommand *cmd = new SegmentLabelCommand(selection, newLabel);
-        addCommandToHistory(cmd);
+        CommandHistory::getInstance()->addCommand(cmd);
         m_triggerName->setText(newLabel);
     }
 }
@@ -820,8 +814,11 @@ EventView::slotEditTriggerPitch()
     PitchDialog *dlg = new PitchDialog(this, tr("Base pitch"), rec->getBasePitch());
 
     if (dlg->exec() == QDialog::Accepted) {
-        addCommandToHistory(new SetTriggerSegmentBasePitchCommand
-                            (&RosegardenDocument::currentDocument->getComposition(), id, dlg->getPitch()));
+        CommandHistory::getInstance()->addCommand(
+                new SetTriggerSegmentBasePitchCommand(
+                        &RosegardenDocument::currentDocument->getComposition(),
+                        id,
+                        dlg->getPitch()));
         m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
     }
 }
@@ -838,8 +835,11 @@ EventView::slotEditTriggerVelocity()
                                  (this, tr("Base velocity"), rec->getBaseVelocity());
 
     if (dlg->exec() == QDialog::Accepted) {
-        addCommandToHistory(new SetTriggerSegmentBaseVelocityCommand
-                            (&RosegardenDocument::currentDocument->getComposition(), id, dlg->getVelocity()));
+        CommandHistory::getInstance()->addCommand(
+                new SetTriggerSegmentBaseVelocityCommand(
+                        &RosegardenDocument::currentDocument->getComposition(),
+                        id,
+                        dlg->getVelocity()));
         m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
     }
 }
@@ -935,8 +935,8 @@ EventView::slotEditCut()
             m_listSelection.push_back(itemIndex);
         }
 
-        addCommandToHistory(new CutCommand(cutSelection,
-                                           Clipboard::mainClipboard()));
+        CommandHistory::getInstance()->addCommand(
+                new CutCommand(cutSelection, Clipboard::mainClipboard()));
     }
 }
 
@@ -979,8 +979,8 @@ EventView::slotEditCopy()
     }
 
     if (copySelection) {
-        addCommandToHistory(new CopyCommand(copySelection,
-                                            Clipboard::mainClipboard()));
+        CommandHistory::getInstance()->addCommand(
+                new CopyCommand(copySelection, Clipboard::mainClipboard()));
     }
 }
 
@@ -1027,7 +1027,7 @@ EventView::slotEditPaste()
     if (!command->isPossible()) {
         showStatusBarMessage(tr("Couldn't paste at this point"));
     } else
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
     RG_DEBUG << "EventView::slotEditPaste - pasting "
     << selection.count() << " items";
@@ -1080,7 +1080,8 @@ EventView::slotEditDelete()
             m_listSelection.push_back(itemIndex);
         }
 
-        addCommandToHistory(new EraseCommand(deleteSelection));
+        CommandHistory::getInstance()->addCommand(
+                new EraseCommand(deleteSelection));
         updateView();
     }
 }
@@ -1129,7 +1130,7 @@ EventView::slotEditInsert()
                     *m_segments[0],
                     new Event(dialog.getEvent()));
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1179,7 +1180,7 @@ EventView::slotEditEvent()
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1224,7 +1225,7 @@ EventView::slotEditEventAdvanced()
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1251,7 +1252,7 @@ EventView::slotClearSelection()
 void
 EventView::setupActions()
 {
-    ListEditView::setupActions("eventlist.rc");
+    setupBaseActions(true);
 
     createAction("insert", SLOT(slotEditInsert()));
     createAction("delete", SLOT(slotEditDelete()));
@@ -1271,7 +1272,7 @@ EventView::setupActions()
     QAction *raw = createAction("time_raw", SLOT(slotRawTime()));
     raw->setCheckable(true);
 
-    createMenusAndToolbars(getRCFileName());
+    createMenusAndToolbars("eventlist.rc");
 
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
@@ -1505,7 +1506,7 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1586,7 +1587,7 @@ EventView::slotOpenInEventEditor(bool /* checked */)
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1624,7 +1625,7 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
                                  event,
                                  dialog.getEvent());
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1676,6 +1677,22 @@ void
 EventView::slotHelpAbout()
 {
     new AboutDialog(this);
+}
+
+void
+EventView::segmentDeleted(const Segment *s)
+{
+    // ??? Bit of a design flaw.  Cast away const...
+    const_cast<Segment *>(s)->removeObserver(this);
+
+    // This editor cannot handle Segments that go away.  So just close.
+    close();
+}
+
+void
+EventView::slotDocumentModified(bool /*modified*/)
+{
+    updateTreeWidget();
 }
 
 

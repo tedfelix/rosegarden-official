@@ -1100,6 +1100,10 @@ public:
      * Called from the segment dtor
      * All observers must implement this and call removeObserver() to
      * remove themselves as observers.
+     *
+     * ??? But this is a const pointer, so we cannot call removeObserver().
+     *     It's optional.  Most don't.  And you'll still get the extant
+     *     observers warning even if you do.
      */
     virtual void segmentDeleted(const Segment *) = 0;
 };

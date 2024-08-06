@@ -19,7 +19,7 @@
 #define RG_TEMPOVIEW_H
 
 #include "base/Composition.h"
-#include "gui/general/ListEditView.h"
+#include "gui/general/EditViewBase.h"
 #include "base/TimeT.h"
 
 #include <QSize>
@@ -31,6 +31,8 @@ class QCloseEvent;
 class QCheckBox;
 class QGroupBox;
 class QTreeWidget;
+class QFrame;
+class QGridLayout;
 
 #include <vector>
 
@@ -50,7 +52,7 @@ class EditTempoController;
  * sharable than simply through EditViewBase.  Hopefully this one
  * should prove considerably simpler, anyway.
  */
-class TempoView : public ListEditView, public CompositionObserver
+class TempoView : public EditViewBase, public CompositionObserver
 {
     Q_OBJECT
 
@@ -68,11 +70,7 @@ public:
 
     virtual bool applyLayout(int staffNo = -1);
 
-    void refreshSegment(Segment *segment,
-                        timeT startTime = 0,
-                        timeT endTime = 0) override;
-
-    void updateView() override;
+    //void updateView() override;
 
     virtual void setupActions();
     void initStatusBar();
@@ -127,7 +125,15 @@ protected slots:
 protected:
     void closeEvent(QCloseEvent *) override;
 
+private slots:
+
+    void slotDocumentModified(bool modified);
+
 private:
+
+    QFrame *m_frame{nullptr};
+    QGridLayout *m_gridLayout{nullptr};
+
     void readOptions();
     void saveOptions();
 

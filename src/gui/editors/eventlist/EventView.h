@@ -20,7 +20,7 @@
 #define RG_EVENTVIEW_H
 
 #include "base/Segment.h"
-#include "gui/general/ListEditView.h"
+#include "gui/general/EditViewBase.h"
 
 #include <set>
 #include <vector>
@@ -36,6 +36,8 @@ class QTreeWidgetItem;
 class QLabel;
 class QCheckBox;
 class QGroupBox;
+class QFrame;
+class QGridLayout;
 
 
 namespace Rosegarden
@@ -52,7 +54,7 @@ class Event;
  *
  * Segment > Edit With > Open in Event List Editor.  Or just press "E".
  */
-class EventView : public ListEditView, public SegmentObserver
+class EventView : public EditViewBase, public SegmentObserver
 {
     Q_OBJECT
 
@@ -62,6 +64,10 @@ public:
               const std::vector<Segment *> &segments);
 
     ~EventView() override;
+
+    // SegmentObserver overrides.
+    void eventRemoved(const Segment *, Event *) override;
+    void segmentDeleted(const Segment *) override;
 
 signals:
 
@@ -80,18 +86,6 @@ protected:
     void initStatusBar();
 
     Segment *getCurrentSegment() override;
-
-    // ListEditView overrides.
-    void refreshSegment(Segment *segment,
-                        timeT startTime = 0,
-                        timeT endTime = 0) override;
-    void updateView() override;
-
-    // SegmentObserver overrides.
-    void eventAdded(const Segment *, Event *) override { }
-    void eventRemoved(const Segment *, Event *) override;
-    void endMarkerTimeChanged(const Segment *, bool) override { }
-    void segmentDeleted(const Segment *) override;
 
     // QWidget override.
     void closeEvent(QCloseEvent *event) override;
@@ -142,7 +136,12 @@ private slots:
      */
     void updateWindowTitle(bool modified);
 
+    void slotDocumentModified(bool modified);
+
 private:
+
+    QFrame *m_frame{nullptr};
+    QGridLayout *m_gridLayout{nullptr};
 
     /// Create and show popup menu.
     void createMenu();
@@ -152,6 +151,7 @@ private:
 
     void setupActions();
 
+    void updateView();
     bool updateTreeWidget();
 
     QString makeTimeString(timeT time, int timeMode);
