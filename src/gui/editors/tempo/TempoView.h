@@ -64,59 +64,85 @@ signals:
 
 public slots:
 
+    // ??? That these three are pure virtual and empty here is suspicious.
     void slotEditCut() override  { }
     void slotEditCopy() override  { }
-    void slotEditPaste() override;
-    void slotEditDelete();
-    void slotEditInsertTempo();
-    void slotEditInsertTimeSignature();
-    void slotEdit();
+    void slotEditPaste() override  { }
 
+    /// Edit > Delete (or the delete key)
+    void slotEditDelete();
+    /// Edit > Add Tempo Change
+    void slotAddTempoChange();
+    /// Edit > Add Time Signature Change
+    void slotAddTimeSignatureChange();
+    /// Edit > Edit Item
+    /**
+     * See slotPopupEditor().
+     */
+    void slotEditItem();
+
+    /// Edit > Select All
     void slotSelectAll();
+    /// Edit > Clear Selection
     void slotClearSelection();
 
-    void slotMusicalTime();
-    void slotRealTime();
-    void slotRawTime();
+    /// View > Musical Times
+    void slotViewMusicalTimes();
+    /// View > Real Times
+    void slotViewRealTimes();
+    /// View > Raw Times
+    void slotViewRawTimes();
+
+    /// Help > Help
     void slotHelpRequested();
+    /// Help > About
     void slotHelpAbout();
 
-    /// on double click on the list
+    /// Double-click entry.
+    /**
+     * See slotEditItem().
+     */
     void slotPopupEditor(QTreeWidgetItem*, int col = 0);
 
-    /// Change filter parameters
+    /// Filter check box clicked.
     void slotModifyFilter(int);
 
 protected slots:
 
+    /// Connected to RosegardenDocument::documentModified().
+    /**
+     * ??? See slotDocumentModified() and combine.
+     */
     void slotUpdateWindowTitle(bool modified);
 
 protected:
 
+    // QWidget override.
     void closeEvent(QCloseEvent *) override;
 
 private slots:
 
+    /// Connected to RosegardenDocument::documentModified().
+    /**
+     * ??? See slotUpdateWindowTitle() and combine.
+     */
     void slotDocumentModified(bool modified);
 
 private:
 
-    enum Filter
-    {
-        None          = 0x0000,
-        Tempo         = 0x0001,
-        TimeSignature = 0x0002
-    };
-
-    QFrame *m_frame{nullptr};
-    QGridLayout *m_gridLayout{nullptr};
+    QFrame *m_frame;
+    QGridLayout *m_gridLayout;
 
     void setupActions();
+    // ??? Seems useless.
     void initStatusBar();
 
+    // ??? rename: refreshList(), updateList()
     bool applyLayout();
 
+    // ??? inline into ctor.
     void readOptions();
+    // ??? inline into dtor.
     void saveOptions();
 
     /// Set the button states to the current filter positions
@@ -126,17 +152,21 @@ private:
     QString makeTimeString(timeT time, int timeMode);
     Segment *getCurrentSegment() override;
 
+    // ??? Why keep a copy when it has a self()?
     EditTempoController *m_editTempoController;
+
     QTreeWidget *m_list;
-    int m_filter;
+    std::vector<int> m_listSelection;
 
-    static int m_lastSetFilter;
-
+    // Filter
     QGroupBox *m_filterGroup;
     QCheckBox *m_tempoCheckBox;
     QCheckBox *m_timeSigCheckBox;
-
-    std::vector<int> m_listSelection;
+    // ??? Why not just a couple of bools?
+    static constexpr int Tempo{0x0001};
+    static constexpr int TimeSignature{0x0002};
+    int m_filter{Tempo | TimeSignature};
+    //static int m_lastSetFilter;
 
     bool m_ignoreUpdates;
 };

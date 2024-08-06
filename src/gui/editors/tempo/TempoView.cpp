@@ -135,15 +135,13 @@ TempoView::TempoView(
     m_list->setColumnCount(4);
     m_list->setHeaderLabels(sl);
 
-
-//     for (int col = 0; col < m_list->columnCount(); ++col)
-//         m_list->setRenameable(col, true);    //&&&
-
     readOptions();
     setButtonsToFilter();
 
+    // ??? Use clicked() instead of stateChanged().
     connect(m_tempoCheckBox, &QCheckBox::stateChanged,
             this, &TempoView::slotModifyFilter);
+    // ??? Use clicked() instead of stateChanged().
     connect(m_timeSigCheckBox, &QCheckBox::stateChanged,
             this, &TempoView::slotModifyFilter);
 
@@ -232,14 +230,18 @@ TempoView::applyLayout()
 
             QString timeString = makeTimeString(sig.first, timeMode);
 
-            new TempoListItem(comp, TempoListItem::TimeSignature,
-                              sig.first, i, m_list,
-                            QStringList()
-                            << timeString
-                              << tr("Time Signature   ")
-                              << QString("%1/%2   ").arg(sig.second.getNumerator()).
-                                              arg(sig.second.getDenominator())
-                              << properties);
+            new TempoListItem(
+                    comp,  // composition
+                    TempoListItem::TimeSignature,  // type
+                    sig.first,  // time
+                    i,  // index
+                    m_list,  // parent
+                    QStringList() << timeString <<  // labels
+                                     tr("Time Signature   ") <<
+                                     QString("%1/%2   ").
+                                             arg(sig.second.getNumerator()).
+                                             arg(sig.second.getDenominator()) <<
+                                     properties);
         }
     }
 
@@ -405,12 +407,6 @@ TempoView::makeTimeString(timeT time, int timeMode)
 }
 
 void
-TempoView::slotEditPaste()
-{
-    // likewise
-}
-
-void
 TempoView::slotEditDelete()
 {
     QList<QTreeWidgetItem*> selection = m_list->selectedItems();
@@ -479,7 +475,7 @@ TempoView::slotEditDelete()
 }
 
 void
-TempoView::slotEditInsertTempo()
+TempoView::slotAddTempoChange()
 {
     timeT insertTime = 0;
     QList<QTreeWidgetItem*> selection = m_list->selectedItems();
@@ -495,7 +491,7 @@ TempoView::slotEditInsertTempo()
 }
 
 void
-TempoView::slotEditInsertTimeSignature()
+TempoView::slotAddTimeSignatureChange()
 {
     timeT insertTime = 0;
     QList<QTreeWidgetItem*> selection = m_list->selectedItems();
@@ -533,7 +529,7 @@ TempoView::slotEditInsertTimeSignature()
 }
 
 void
-TempoView::slotEdit()
+TempoView::slotEditItem()
 {
     RG_DEBUG << "TempoView::slotEdit";
 
@@ -573,10 +569,10 @@ TempoView::setupActions()
 {
     setupBaseActions(false);
 
-    createAction("insert_tempo", SLOT(slotEditInsertTempo()));
-    createAction("insert_timesig", SLOT(slotEditInsertTimeSignature()));
+    createAction("insert_tempo", SLOT(slotAddTempoChange()));
+    createAction("insert_timesig", SLOT(slotAddTimeSignatureChange()));
     createAction("delete", SLOT(slotEditDelete()));
-    createAction("edit", SLOT(slotEdit()));
+    createAction("edit", SLOT(slotEditItem()));
     createAction("select_all", SLOT(slotSelectAll()));
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("tempo_help", SLOT(slotHelpRequested()));
@@ -588,15 +584,15 @@ TempoView::setupActions()
     settings.endGroup();
 
     QAction *a;
-    a = createAction("time_musical", SLOT(slotMusicalTime()));
+    a = createAction("time_musical", SLOT(slotViewMusicalTimes()));
     a->setCheckable(true);
     if (timeMode == 0)  a->setChecked(true);
 
-    a = createAction("time_real", SLOT(slotRealTime()));
+    a = createAction("time_real", SLOT(slotViewRealTimes()));
     a->setCheckable(true);
     if (timeMode == 1)  a->setChecked(true);
 
-    a = createAction("time_raw", SLOT(slotRawTime()));
+    a = createAction("time_raw", SLOT(slotViewRawTimes()));
     a->setCheckable(true);
     if (timeMode == 2)  a->setChecked(true);
 
@@ -655,7 +651,7 @@ TempoView::setButtonsToFilter()
 }
 
 void
-TempoView::slotMusicalTime()
+TempoView::slotViewMusicalTimes()
 {
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
@@ -670,7 +666,7 @@ TempoView::slotMusicalTime()
 }
 
 void
-TempoView::slotRealTime()
+TempoView::slotViewRealTimes()
 {
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
@@ -685,7 +681,7 @@ TempoView::slotRealTime()
 }
 
 void
-TempoView::slotRawTime()
+TempoView::slotViewRawTimes()
 {
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
