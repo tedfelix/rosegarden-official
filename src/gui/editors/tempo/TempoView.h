@@ -134,7 +134,7 @@ private slots:
 private:
 
     QFrame *m_frame;
-    QGridLayout *m_gridLayout;
+    QGridLayout *m_mainLayout;
 
     void setupActions();
     // ??? Seems useless.

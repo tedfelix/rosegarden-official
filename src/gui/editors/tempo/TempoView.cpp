@@ -24,10 +24,7 @@
 
 #include "misc/Debug.h"
 #include "base/Composition.h"
-#include "base/NotationTypes.h"
 #include "base/RealTime.h"
-#include "base/Segment.h"
-#include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/RemoveTempoChangeCommand.h"
@@ -38,7 +35,6 @@
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/EditTempoController.h"
-#include "misc/Strings.h"
 
 #include <QAction>
 #include <QSettings>
@@ -46,11 +42,8 @@
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QDialog>
-#include <QIcon>
-#include <QPixmap>
-#include <QSize>
 #include <QString>
-#include <QLayout>
+#include <QStringList>
 #include <QVBoxLayout>
 #include <QStatusBar>
 #include <QList>
@@ -64,90 +57,87 @@ namespace Rosegarden
 TempoView::TempoView(
         EditTempoController *editTempoController,
         timeT openTime) :
-    EditViewBase(std::vector<Segment *>()),
-    m_editTempoController(editTempoController),
-    m_filter(Tempo | TimeSignature),
-    m_ignoreUpdates(true)
+    EditViewBase(std::vector<Segment *>()),  // ??? default ctor?
+    m_editTempoController(editTempoController)
 {
+
+    m_ignoreUpdates = true;
+
+    slotUpdateWindowTitle(false);
+
     setStatusBar(new QStatusBar(this));
+    // ??? inline this.
+    initStatusBar();
 
     // Connect for changes so we can update the list.
     connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,
             this, &TempoView::slotDocumentModified);
+    // ??? slotDocumentModified() is already connected to this.  Combine.
+    connect(m_doc, &RosegardenDocument::documentModified,
+            this, &TempoView::slotUpdateWindowTitle);
 
-    initStatusBar();
     setupActions();
 
     // Create frame and layout.
-    // ??? Push down to derivers.
     m_frame = new QFrame(this);
     m_frame->setMinimumSize(500, 300);
     m_frame->setMaximumSize(2200, 1400);
-    m_gridLayout = new QGridLayout(m_frame);
-    m_frame->setLayout(m_gridLayout);
+    // ??? QGridLayout is overkill.  This is a QHBoxLayout.
+    m_mainLayout = new QGridLayout(m_frame);
+    m_frame->setLayout(m_mainLayout);
     setCentralWidget(m_frame);
 
-    // define some note filtering buttons in a group
-    //
+    // Filter Group Box
     m_filterGroup = new QGroupBox(tr("Filter"), m_frame);
+    m_mainLayout->addWidget(m_filterGroup, 0, 0);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setLayout(filterGroupLayout);
 
+    // Tempo
     m_tempoCheckBox = new QCheckBox(tr("Tempo"), m_filterGroup);
     filterGroupLayout->addWidget(m_tempoCheckBox, 50, Qt::AlignTop);
 
+    // Time Signature
     m_timeSigCheckBox = new QCheckBox(tr("Time Signature"), m_filterGroup);
     filterGroupLayout->addWidget(m_timeSigCheckBox, 50, Qt::AlignTop);
 
     // hard coded spacers are evil, but I can't find any other way to fix this
+    // ??? Make a third row with a spacer and give it a stretch factor.
+    //     That's the usual way to take up extra space.
     filterGroupLayout->addSpacing(200);
-
-    m_filterGroup->setLayout(filterGroupLayout);
-    m_gridLayout->addWidget(m_filterGroup, 2, 0);
-
-    m_list = new QTreeWidget(m_frame);
-
-//     m_list->setItemsRenameable(true);    //&&&
-
-    m_gridLayout->addWidget(m_list, 2, 1);
-
-    slotUpdateWindowTitle(false);
-    connect(m_doc, &RosegardenDocument::documentModified,
-            this, &TempoView::slotUpdateWindowTitle);
-
-    m_doc->getComposition().addObserver(this);
-
-    // Connect double clicker
-    //
-    connect(m_list, &QTreeWidget::itemDoubleClicked,
-            this, &TempoView::slotPopupEditor);
-
-    m_list->setAllColumnsShowFocus(true);
-    m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-    QStringList sl;
-    sl << tr("Time  ")
-       << tr("Type  ")
-       << tr("Value  ")
-       << tr("Properties  ");
-
-    m_list->setColumnCount(4);
-    m_list->setHeaderLabels(sl);
 
     readOptions();
     updateFilterCheckBoxes();
 
-    // ??? Use clicked() instead of stateChanged().
+    // ??? Use clicked() instead of stateChanged().  Then move this up with
+    //     the code setting up the widget.
     connect(m_tempoCheckBox, &QCheckBox::stateChanged,
             this, &TempoView::slotModifyFilter);
-    // ??? Use clicked() instead of stateChanged().
+    // ??? Use clicked() instead of stateChanged().  Then move this up with
+    //     the code setting up the widget.
     connect(m_timeSigCheckBox, &QCheckBox::stateChanged,
             this, &TempoView::slotModifyFilter);
 
+    // Tempo/Time Signature List
+    m_list = new QTreeWidget(m_frame);
+    m_mainLayout->addWidget(m_list, 0, 1);
+    m_list->setAllColumnsShowFocus(true);
+    m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    QStringList headers;
+    headers << tr("Time  ") <<
+               tr("Type  ") <<
+               tr("Value  ") <<
+               tr("Properties  ");
+    m_list->setColumnCount(headers.size());
+    m_list->setHeaderLabels(headers);
+    connect(m_list, &QTreeWidget::itemDoubleClicked,
+            this, &TempoView::slotPopupEditor);
+    // Update the list.
     applyLayout();
-
     makeInitialSelection(openTime);
+
+    m_doc->getComposition().addObserver(this);
 
     m_ignoreUpdates = false;
 }
@@ -364,6 +354,8 @@ TempoView::makeInitialSelection(timeT time)
 Segment *
 TempoView::getCurrentSegment()
 {
+    // ??? It's always empty.  Just return nullptr.
+
     if (m_segments.empty())
         return nullptr;
     else
