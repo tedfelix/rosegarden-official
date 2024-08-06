@@ -141,7 +141,7 @@ private:
     void initStatusBar();
 
     // ??? rename: refreshList(), updateList()
-    bool applyLayout();
+    bool updateList();
 
     // ??? inline into ctor.
     void readOptions();
@@ -180,6 +180,8 @@ private:
     void updateFilterCheckBoxes();
 
     // List
+    // ??? QTreeWidget seems like overkill.  We never have sub items.
+    //     What can we replace this with?
     QTreeWidget *m_list;
     std::vector<int> m_listSelection;
 

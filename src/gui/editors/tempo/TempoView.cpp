@@ -146,7 +146,7 @@ TempoView::TempoView(
     connect(m_list, &QTreeWidget::itemDoubleClicked,
             this, &TempoView::slotPopupEditor);
     // Update the list.
-    applyLayout();
+    updateList();
     makeInitialSelection(openTime);
 
     m_ignoreUpdates = false;
@@ -186,7 +186,7 @@ TempoView::tempoChanged(const Composition *comp)
     if (comp != &RosegardenDocument::currentDocument->getComposition())
         return;
 
-    applyLayout();
+    updateList();
 }
 
 void
@@ -200,11 +200,11 @@ TempoView::timeSignatureChanged(const Composition *comp)
     if (comp != &RosegardenDocument::currentDocument->getComposition())
         return;
 
-    applyLayout();
+    updateList();
 }
 
 bool
-TempoView::applyLayout()
+TempoView::updateList()
 {
     // Recreate list.
 
@@ -319,9 +319,7 @@ TempoView::applyLayout()
     }
 
     if (m_list->topLevelItemCount() == 0) {
-        // ??? This is impossible to see due to the size of the first column.
-        //     Just leave the list empty.
-        //new QTreeWidgetItem(m_list, QStringList() << tr("<nothing at this filter level>"));
+        // Select nothing.
         m_list->setSelectionMode(QTreeWidget::NoSelection);
         leaveActionState("have_selection");
     } else {
@@ -330,29 +328,31 @@ TempoView::applyLayout()
         // If no selection then select the first event
         if (m_listSelection.size() == 0)
             m_listSelection.push_back(0);
+
         enterActionState("have_selection");
     }
 
-    // Set a selection from a range of indexes
-    //
-    std::vector<int>::iterator sIt = m_listSelection.begin();
+    // Set the selection from m_listSelection.
 
-    for (; sIt != m_listSelection.end(); ++sIt) {
-        int index = *sIt;
+    for (std::vector<int>::iterator selectionIter = m_listSelection.begin();
+         selectionIter != m_listSelection.end();
+         ++selectionIter) {
+        int index = *selectionIter;
 
-        while (index > 0 && !m_list->topLevelItem(index))
+        // Move back to the top level item.
+        while (index > 0  &&  !m_list->topLevelItem(index))
             index--;
 
-//         m_list->setSelected(m_list->topLevelItem(index), true);
         m_list->topLevelItem(index)->setSelected(true);
-//         m_list->setCurrentIndex(m_list->topLevelItem(index));
-        m_list->setCurrentItem( m_list->topLevelItem(index) );
+        m_list->setCurrentItem(m_list->topLevelItem(index));
 
         // ensure visible
-//         m_list->ensureItemVisible(m_list->topLevelItem(index));
         m_list->scrollToItem(m_list->topLevelItem(index));
     }
 
+    // ??? Why!?  Doesn't this lose the selection for next time?
+    //     I suspect there may have been code above to attempt to
+    //     preserve the selection.  But that became difficult.
     m_listSelection.clear();
 
     return true;
@@ -363,32 +363,42 @@ TempoView::makeInitialSelection(timeT time)
 {
     m_listSelection.clear();
 
+    // Select an item around the given time.
+
+    // Note that this is complicated by the fact that Time Signatures
+    // appear before Tempos.
+
     TempoListItem *goodItem = nullptr;
     int goodItemNo = 0;
 
-    for (int i = 0; (m_list->topLevelItem(i) != nullptr); ++i) {
-
+    // For each item...
+    // ??? Why not use topLevelItemCount()?
+    for (int itemIndex = 0; m_list->topLevelItem(itemIndex); ++itemIndex) {
         TempoListItem *item =
-                dynamic_cast<TempoListItem *>(m_list->topLevelItem(i));
+                dynamic_cast<TempoListItem *>(m_list->topLevelItem(itemIndex));
 
-        // Nothing found, try the next.  This might end the loop.
-        // ??? Any way to get the item count?
+        // Not a TempoListItem.  Try the next.
+        // ??? I don't see how this could ever happen.
         if (!item)
             continue;
 
+        // Deselect all the items prior.
+        // ??? Seems unnecessary.  Nothing is selected.  And this doesn't
+        //     deselect all the ones after.
         item->setSelected(false);
 
+        // Past the time we are looking for?  We're done.
         if (item->getTime() > time)
             break;
+
+        // Keep track of the last item we examined.
         goodItem = item;
-        goodItemNo = i;
+        goodItemNo = itemIndex;
     }
 
     if (goodItem) {
         m_listSelection.push_back(goodItemNo);
-//         m_list->setSelected(goodItem, true);
         goodItem->setSelected(true);
-//         m_list->ensureItemVisible(goodItem);
         m_list->scrollToItem(goodItem);
     }
 }
@@ -407,16 +417,27 @@ TempoView::getCurrentSegment()
 QString
 TempoView::makeTimeString(timeT time, int timeMode)
 {
+    // ??? A search on %1%2%3-%4%5 finds these:
+    //   - EventView::makeTimeString()
+    //   - MarkerEditor::makeTimeString()
+    //   - TriggerSegmentManager::makeDurationString()
+    //   - TempoRuler::showTextFloat()
+    //   Make a standard one in TimeT.h.
+
     // ??? Need an enum for this.
     switch (timeMode) {
 
     case 0:  // musical time
         {
-            int bar, beat, fraction, remainder;
-            RosegardenDocument::currentDocument->getComposition().getMusicalTimeForAbsoluteTime
-            (time, bar, beat, fraction, remainder);
+            int bar;
+            int beat;
+            int fraction;
+            int remainder;
+            RosegardenDocument::currentDocument->getComposition().
+                    getMusicalTimeForAbsoluteTime(
+                            time, bar, beat, fraction, remainder);
             ++bar;
-            return QString("%1%2%3-%4%5-%6%7-%8%9   ")
+            return QString("%1%2%3-%4%5-%6%7-%8%9")
                    .arg(bar / 100)
                    .arg((bar % 100) / 10)
                    .arg(bar % 10)
@@ -430,14 +451,13 @@ TempoView::makeTimeString(timeT time, int timeMode)
 
     case 1:  // real time
         {
-            RealTime rt =
-                RosegardenDocument::currentDocument->getComposition().getElapsedRealTime(time);
-            //    return QString("%1   ").arg(rt.toString().c_str());
-            return QString("%1   ").arg(rt.toText().c_str());
+            const RealTime rt = RosegardenDocument::currentDocument->
+                    getComposition().getElapsedRealTime(time);
+            return QString("%1").arg(rt.toText().c_str());
         }
 
     case 2:  // raw time
-        return QString("%1   ").arg(time);
+        return QString("%1").arg(time);
 
     default:
         return "---";
@@ -447,6 +467,8 @@ TempoView::makeTimeString(timeT time, int timeMode)
 void
 TempoView::slotEditDelete()
 {
+    // ??? Select All then Delete leaves one item behind.  Why?
+
     QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
     if (selection.count() == 0) return ;
@@ -508,7 +530,7 @@ TempoView::slotEditDelete()
         CommandHistory::getInstance()->addCommand(command);
     }
 
-    applyLayout();
+    updateList();
     m_ignoreUpdates = false;
 }
 
@@ -585,9 +607,9 @@ void
 TempoView::slotSelectAll()
 {
     m_listSelection.clear();
+
     for (int i = 0; m_list->topLevelItem(i); ++i) {
         m_listSelection.push_back(i);
-//         m_list->setSelected(m_list->topLevelItem(i), true);
         m_list->topLevelItem(i)->setSelected(true);
     }
 }
@@ -597,7 +619,6 @@ TempoView::slotClearSelection()
 {
     m_listSelection.clear();
     for (int i = 0; m_list->topLevelItem(i); ++i) {
-//         m_list->setSelected(m_list->topLevelItem(i), false);
         m_list->topLevelItem(i)->setSelected(false);
     }
 }
@@ -662,7 +683,7 @@ TempoView::slotModifyFilter(int)
     if (m_timeSigCheckBox->isChecked())
         m_filter |= TimeSignature;
 
-    applyLayout();
+    updateList();
 }
 
 void
@@ -688,7 +709,7 @@ TempoView::slotViewMusicalTimes()
 
     a_timeMode.set(0);
 
-    applyLayout();
+    updateList();
 }
 
 void
@@ -700,7 +721,7 @@ TempoView::slotViewRealTimes()
 
     a_timeMode.set(1);
 
-    applyLayout();
+    updateList();
 }
 
 void
@@ -712,7 +733,7 @@ TempoView::slotViewRawTimes()
 
     a_timeMode.set(2);
 
-    applyLayout();
+    updateList();
 }
 
 void
@@ -794,7 +815,7 @@ TempoView::slotHelpAbout()
 void
 TempoView::slotDocumentModified(bool /*modified*/)
 {
-    applyLayout();
+    updateList();
 }
 
 
