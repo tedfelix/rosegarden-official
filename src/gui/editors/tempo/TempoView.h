@@ -117,6 +117,9 @@ protected slots:
 
 protected:
 
+    // EditViewBase override.
+    Segment *getCurrentSegment() override;
+
     // QWidget override.
     void closeEvent(QCloseEvent *) override;
 
@@ -145,18 +148,24 @@ private:
     // ??? inline into dtor.
     void saveOptions();
 
-    /// Set the button states to the current filter positions
-    void setButtonsToFilter();
+    /// Select the Event nearest the playback position pointer.
+    void makeInitialSelection(timeT time);
 
-    void makeInitialSelection(timeT);
+    // ??? toString().  Seems useful.  See if there are multiple copies
+    //     and pull out into someplace handy.  Like TimeT.h.
     QString makeTimeString(timeT time, int timeMode);
-    Segment *getCurrentSegment() override;
 
-    // ??? Why keep a copy when it has a self()?
+    /// Used to launch the TempoDialog.
+    /**
+     * Used to launch the TempoDialog to get a tempo from the user when adding
+     * or editing a tempo change.
+     *
+     * ??? Why keep a copy when it has a self()?  Get rid of this and use
+     *     EditTempoController::self().
+     */
     EditTempoController *m_editTempoController;
 
-    QTreeWidget *m_list;
-    std::vector<int> m_listSelection;
+    // Widgets
 
     // Filter
     QGroupBox *m_filterGroup;
@@ -166,8 +175,21 @@ private:
     static constexpr int Tempo{0x0001};
     static constexpr int TimeSignature{0x0002};
     int m_filter{Tempo | TimeSignature};
-    //static int m_lastSetFilter;
+    /// State (m_filter) -> Filter Check Boxes.
+    /**
+     * ??? Inline into only caller, the ctor.
+     */
+    void updateFilterCheckBoxes();
 
+    // List
+    QTreeWidget *m_list;
+    std::vector<int> m_listSelection;
+
+    /// Turn off CompositionObserver handlers.
+    /**
+     * ??? See if we can get rid of this by simplifying how changes are
+     *     handled.
+     */
     bool m_ignoreUpdates;
 };
 

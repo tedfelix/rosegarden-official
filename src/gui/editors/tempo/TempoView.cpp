@@ -136,7 +136,7 @@ TempoView::TempoView(
     m_list->setHeaderLabels(sl);
 
     readOptions();
-    setButtonsToFilter();
+    updateFilterCheckBoxes();
 
     // ??? Use clicked() instead of stateChanged().
     connect(m_tempoCheckBox, &QCheckBox::stateChanged,
@@ -637,7 +637,7 @@ TempoView::slotModifyFilter(int)
 }
 
 void
-TempoView::setButtonsToFilter()
+TempoView::updateFilterCheckBoxes()
 {
     if (m_filter & Tempo)
         m_tempoCheckBox->setChecked(true);

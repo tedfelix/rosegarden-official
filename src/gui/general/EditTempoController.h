@@ -19,15 +19,26 @@
 #include <QObject>
 #include "gui/dialogs/TempoDialog.h"
 
+
 namespace Rosegarden
 {
+
 
 class RosegardenDocument;
 class Composition;
 
+
+/// A collection of tempo and time signature dialogs and commands.
 /**
  * @brief The EditTempoController class centralizes code for tempo edition
  * It is called both by the Tempo Ruler instances, by the main window (for shortcuts, and for the transport dialog)
+ *
+ * ??? It's hard to think of an appropriate name for this assorted collection of
+ *     dialogs and commands.  Therefore it is difficult to justify its
+ *     existence.  We should see if we can move these routines to the dialogs
+ *     and commands that they create.  E.g. editTempo() might become
+ *     TempoDialog::launch().  Or just inline these where they are used.  There
+ *     isn't much to them.
  */
 class EditTempoController : public QObject
 {
@@ -38,10 +49,18 @@ public:
      */
     explicit EditTempoController(QObject *parent = nullptr);
 
-    /// The user of this class *must* call this method.
+    /// Make sure the current document is used.
+    /**
+     * ??? Should be able to safely switch to RosgardenDocument::currentDocument
+     *     and get rid of this.
+     */
     void setDocument(RosegardenDocument *doc);
 
     /**
+     * ??? Make this a proper Singleton so that we don't have to jump
+     *     through so many hoops.  Create on first call to Self.  Maintain
+     *     the instance internally.  Private ctor.  Etc...
+     *
      * Returns the unique instance of EditTempoController, created by the mainwindow.
      * This is only an acceptable hack because the mainwindow itself is a singleton.
      * The alternative is to pass this down from the mainwindow to
@@ -53,9 +72,15 @@ public:
     static EditTempoController *self();
 
     void emitEditTempos(timeT time) { emit editTempos(time); }
+
+    /// Launches a TempoDialog.
     void editTempo(QWidget *parent, timeT atTime, bool timeEditable = false);
+    /// Launches a TimeSignatureDialog.
     void editTimeSignature(QWidget *parent, timeT time);
+    /// Assembles and executes a command to move the tempo at oldTime to newTime.
     void moveTempo(timeT oldTime, timeT newTime);
+
+    /// Creates and executes a RemoveTempoChangeCommand.
     void deleteTempoChange(timeT time);
 
 signals:
