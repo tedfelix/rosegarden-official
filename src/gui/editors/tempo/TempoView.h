@@ -136,15 +136,10 @@ private:
     QFrame *m_frame;
     QGridLayout *m_mainLayout;
 
-    void setupActions();
-    // ??? Seems useless.
-    void initStatusBar();
+    void initMenu();
 
     // ??? rename: refreshList(), updateList()
     bool updateList();
-
-    // ??? inline into ctor.
-    void readOptions();
 
     /// Select the Event nearest the playback position pointer.
     void makeInitialSelection(timeT time);
@@ -169,10 +164,9 @@ private:
     QGroupBox *m_filterGroup;
     QCheckBox *m_tempoCheckBox;
     QCheckBox *m_timeSigCheckBox;
-    // ??? Why not just a couple of bools?
-    static constexpr int Tempo{0x0001};
-    static constexpr int TimeSignature{0x0002};
-    int m_filter{Tempo | TimeSignature};
+    // ??? Why not just a couple of bools?  Then store as two settings in
+    //     the .conf file.  That would simplify so many things.
+    int m_filter;
     /// State (m_filter) -> Filter Check Boxes.
     /**
      * ??? Inline into only caller, the ctor.

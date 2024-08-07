@@ -54,8 +54,15 @@
 namespace
 {
 
+    constexpr int TempoFilter{0x0001};
+    constexpr int TimeSignatureFilter{0x0002};
+
     Rosegarden::PreferenceInt a_timeMode(
             Rosegarden::TempoViewConfigGroup, "timemode", 0);
+    Rosegarden::PreferenceInt a_filter(
+            Rosegarden::TempoViewConfigGroup,
+            "filter",
+            TempoFilter | TimeSignatureFilter);
 
 }
 
@@ -68,7 +75,8 @@ TempoView::TempoView(
         EditTempoController *editTempoController,
         timeT openTime) :
     EditViewBase(std::vector<Segment *>()),  // ??? default ctor?
-    m_editTempoController(editTempoController)
+    m_editTempoController(editTempoController),
+    m_filter(TempoFilter | TimeSignatureFilter)
 {
 
     m_ignoreUpdates = true;
@@ -76,8 +84,6 @@ TempoView::TempoView(
     slotUpdateWindowTitle(false);
 
     setStatusBar(new QStatusBar(this));
-    // ??? inline this.
-    initStatusBar();
 
     m_doc->getComposition().addObserver(this);
 
@@ -89,7 +95,7 @@ TempoView::TempoView(
     connect(m_doc, &RosegardenDocument::documentModified,
             this, &TempoView::slotUpdateWindowTitle);
 
-    setupActions();
+    initMenu();
 
     // Create frame and layout.
     m_frame = new QFrame(this);
@@ -119,7 +125,7 @@ TempoView::TempoView(
     //     That's the usual way to take up extra space.
     filterGroupLayout->addSpacing(200);
 
-    readOptions();
+    m_filter = a_filter.get();
     updateFilterCheckBoxes();
 
     // ??? Use clicked() instead of stateChanged().  Then move this up with
@@ -159,10 +165,7 @@ TempoView::TempoView(
 
 TempoView::~TempoView()
 {
-    QSettings settings;
-    settings.beginGroup(TempoViewConfigGroup);
-    settings.setValue("filter", m_filter);
-    settings.endGroup();
+    a_filter.set(m_filter);
 
     // We use m_doc instead of RosegardenDocument::currentDocument to
     // make sure that we disconnect from the old document when the
@@ -218,7 +221,7 @@ TempoView::updateList()
     Composition *comp = &RosegardenDocument::currentDocument->getComposition();
 
     // Time Signatures
-    if (m_filter & TimeSignature) {
+    if (m_filter & TimeSignatureFilter) {
 
         for (int timeSignatureIndex = 0;
              timeSignatureIndex < comp->getTimeSignatureCount();
@@ -264,7 +267,7 @@ TempoView::updateList()
     }
 
     // Tempos
-    if (m_filter & Tempo) {
+    if (m_filter & TempoFilter) {
 
         for (int tempoIndex = 0;
              tempoIndex < comp->getTempoChangeCount();
@@ -472,12 +475,13 @@ TempoView::makeTimeString(timeT time, int timeMode)
 void
 TempoView::slotEditDelete()
 {
-    // ??? Select All then Delete leaves one item behind.  Why?
+    // ??? Select All then Delete leaves one item behind.  Why?  Also
+    //     trying to delete that last one can cause a crash.
 
     QList<QTreeWidgetItem *> selection = m_list->selectedItems();
 
     // Nothing selected?  Nothing to delete.  Bail.
-    if (selection.count() == 0)
+    if (selection.empty())
         return;
 
     RG_DEBUG << "slotEditDelete() - deleting " << selection.count() << " items";
@@ -486,12 +490,12 @@ TempoView::slotEditDelete()
     typedef std::map<int /*index*/, TempoListItem *> ItemMap;
     ItemMap itemMap;
 
-    for (QTreeWidgetItem *it : selection) {
-        TempoListItem *item = dynamic_cast<TempoListItem *>(it);
-        if (!item)
+    for (QTreeWidgetItem *twi : selection) {
+        TempoListItem *tempoListItem = dynamic_cast<TempoListItem *>(twi);
+        if (!tempoListItem)
             continue;
 
-        itemMap[item->getIndex()] = item;
+        itemMap[tempoListItem->getIndex()] = tempoListItem;
     }
 
     // Nothing to delete?  Bail.
@@ -512,9 +516,7 @@ TempoView::slotEditDelete()
     for (ItemMap::iterator iter = itemMap.begin();
          iter != itemMap.end();
          ++iter) {
-        int index = (*iter).first;
-        RG_DEBUG << "deleting item with index" << index;
-        TempoListItem *item = (*iter).second;
+        TempoListItem *item = iter->second;
 
         // Add the appropriate command to the "commands" list.
 
@@ -534,20 +536,15 @@ TempoView::slotEditDelete()
         return;
 
     // Turn off updates while the commands are modifying the Composition.
-    // ??? What about undo?
+    // ??? What about undo?  It can't turn this off.  It must cause a
+    //     large number of unnecessary updates.
     m_ignoreUpdates = true;
 
     MacroCommand *macroCommand = new MacroCommand
                              (tr("Delete Tempo or Time Signature"));
+
     // For each command in reverse order which also happens to be
     // reverse index order, add the remove command to the macro.
-#if 0
-    for (std::vector<Command *>::iterator i = commands.end();
-         i != commands.begin();
-         /* decrement is inside */) {
-        macroCommand->addCommand(*--i);
-    }
-#endif
     for (int i = commands.size() - 1; i >= 0; --i) {
         macroCommand->addCommand(commands[i]);
     }
@@ -564,32 +561,41 @@ void
 TempoView::slotAddTempoChange()
 {
     timeT insertTime = 0;
-    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
-    if (selection.count() > 0) {
+    QList<QTreeWidgetItem *> selection = m_list->selectedItems();
+
+    // If something is selected, use the time of that item.
+    if (!selection.empty()) {
         TempoListItem *item =
-            dynamic_cast<TempoListItem*>(selection.first());
+            dynamic_cast<TempoListItem *>(selection.first());
         if (item)
             insertTime = item->getTime();
     }
 
-    m_editTempoController->editTempo(this, insertTime, true /* timeEditable */);
+    // Launch the TempoDialog.
+    m_editTempoController->editTempo(
+            this,  // parent
+            insertTime,  // atTime
+            true);  // timeEditable
 }
 
 void
 TempoView::slotAddTimeSignatureChange()
 {
     timeT insertTime = 0;
+
     QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
-    if (selection.count() > 0) {
+    // If something is selected, use the time of that item.
+    if (!selection.empty()) {
         TempoListItem *item =
-            dynamic_cast<TempoListItem*>(selection.first());
+            dynamic_cast<TempoListItem *>(selection.first());
         if (item)
             insertTime = item->getTime();
     }
 
-    Composition &composition(RosegardenDocument::currentDocument->getComposition());
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
     Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(insertTime);
 
     TimeSignatureDialog dialog(this, &composition, insertTime, sig, true);
@@ -617,16 +623,14 @@ TempoView::slotAddTimeSignatureChange()
 void
 TempoView::slotEditItem()
 {
-    RG_DEBUG << "TempoView::slotEdit";
+    QList<QTreeWidgetItem *> selection = m_list->selectedItems();
+    if (selection.empty())
+        return;
 
-    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
-
-    if (selection.count() > 0) {
-        TempoListItem *item =
-            dynamic_cast<TempoListItem*>(selection.first());
-        if (item)
-            slotPopupEditor(item);
-    }
+    // Edit the first one selected.
+    TempoListItem *item = dynamic_cast<TempoListItem *>(selection.first());
+    if (item)
+        slotPopupEditor(item);
 }
 
 void
@@ -644,13 +648,14 @@ void
 TempoView::slotClearSelection()
 {
     m_listSelection.clear();
+
     for (int i = 0; m_list->topLevelItem(i); ++i) {
         m_list->topLevelItem(i)->setSelected(false);
     }
 }
 
 void
-TempoView::setupActions()
+TempoView::initMenu()
 {
     setupBaseActions(false);
 
@@ -683,31 +688,15 @@ TempoView::setupActions()
 }
 
 void
-TempoView::initStatusBar()
-{
-    QStatusBar* sb = statusBar();
-    sb->showMessage(QString());
-}
-
-void
-TempoView::readOptions()
-{
-    QSettings settings;
-    settings.beginGroup(TempoViewConfigGroup);
-    m_filter = settings.value("filter", m_filter).toInt();
-    settings.endGroup();
-}
-
-void
 TempoView::slotModifyFilter(int)
 {
     m_filter = 0;
 
     if (m_tempoCheckBox->isChecked())
-        m_filter |= Tempo;
+        m_filter |= TempoFilter;
 
     if (m_timeSigCheckBox->isChecked())
-        m_filter |= TimeSignature;
+        m_filter |= TimeSignatureFilter;
 
     updateList();
 }
@@ -715,15 +704,8 @@ TempoView::slotModifyFilter(int)
 void
 TempoView::updateFilterCheckBoxes()
 {
-    if (m_filter & Tempo)
-        m_tempoCheckBox->setChecked(true);
-    else
-        m_tempoCheckBox->setChecked(false);
-
-    if (m_filter & TimeSignature)
-        m_timeSigCheckBox->setChecked(true);
-    else
-        m_timeSigCheckBox->setChecked(false);
+    m_tempoCheckBox->setChecked((m_filter & TempoFilter) != 0);
+    m_timeSigCheckBox->setChecked((m_filter & TimeSignatureFilter) != 0);
 }
 
 void
