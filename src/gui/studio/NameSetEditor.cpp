@@ -84,6 +84,12 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     m_librarianEmail = new QLabel(groupBox);
     groupBoxLayout->addWidget(m_librarianEmail, 1, 1);
 
+    QPushButton* editLibrarianButton =
+        new QPushButton(tr("Edit"), groupBox);
+    connect(editLibrarianButton, &QPushButton::clicked,
+            m_bankEditor, &BankEditorDialog::slotEditLibrarian);
+    groupBoxLayout->addWidget(editLibrarianButton, 2, 1);
+
     groupBox->setLayout(groupBoxLayout);
 
     // QScrollArea

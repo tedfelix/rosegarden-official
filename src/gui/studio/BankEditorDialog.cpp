@@ -38,6 +38,7 @@
 #include "misc/ConfigGroups.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
+#include "gui/dialogs/LibrarianDialog.h"
 #include "gui/widgets/FileDialog.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/ThornStyle.h"
@@ -1562,6 +1563,46 @@ BankEditorDialog::slotEditPaste()
 
         return;
     }
+}
+
+void BankEditorDialog::slotEditLibrarian()
+{
+    RG_DEBUG << "slotEditLibrarian";
+    if (!m_treeWidget->currentItem())
+        return;
+
+    QTreeWidgetItem* currentItem = m_treeWidget->currentItem();
+
+    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentItem);
+    if (!deviceItem) return;
+    MidiDevice *device = deviceItem->getDevice();
+    QString name = strtoqstr(device->getLibrarianName());
+    QString mail = strtoqstr(device->getLibrarianEmail());
+    LibrarianDialog dlg(this, name, mail);
+
+    if (dlg.exec() != QDialog::Accepted) return;
+    RG_DEBUG << "accepted";
+
+    QString newName;
+    QString newMail;
+    dlg.getLibrarian(newName, newMail);
+    if (newName == "") newName = "<none>";
+    if (newMail == "") newMail = "<none>";
+    RG_DEBUG << "librarian" << name << mail  << "->" <<
+        newName << newMail;
+    if (name == newName && mail == newMail) {
+        // no change
+        RG_DEBUG << "librarian unchanged";
+        return;
+    }
+    ModifyDeviceCommand *command =
+        new ModifyDeviceCommand(m_studio,
+                                device->getId(),
+                                device->getName(),
+                                qstrtostr(newName),
+                                qstrtostr(newMail),
+                                tr("change librarian"));
+    addCommandToHistory(command);
 }
 
 void

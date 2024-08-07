@@ -109,6 +109,8 @@ public slots:
     void slotEditCopy();
     void slotEditPaste();
 
+    void slotEditLibrarian();
+
     void slotVariationToggled();
     void slotVariationChanged(int);
     void slotHelpRequested();
