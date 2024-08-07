@@ -102,7 +102,7 @@ public slots:
     /**
      * See slotEditItem().
      */
-    void slotPopupEditor(QTreeWidgetItem*, int col = 0);
+    void slotPopupEditor(QTreeWidgetItem *twi, int column = 0);
 
     /// Filter check box clicked.
     void slotModifyFilter(int);

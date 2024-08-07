@@ -715,6 +715,8 @@ TempoView::slotViewMusicalTimes()
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(false);
 
+    // ??? We shouldn't set this over and over.  We should set this in the
+    //     dtor.  Like we do with a_filter.
     a_timeMode.set(0);
 
     updateList();
@@ -727,6 +729,8 @@ TempoView::slotViewRealTimes()
     findAction("time_real")->setChecked(true);
     findAction("time_raw")->setChecked(false);
 
+    // ??? We shouldn't set this over and over.  We should set this in the
+    //     dtor.  Like we do with a_filter.
     a_timeMode.set(1);
 
     updateList();
@@ -739,56 +743,59 @@ TempoView::slotViewRawTimes()
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(true);
 
+    // ??? We shouldn't set this over and over.  We should set this in the
+    //     dtor.  Like we do with a_filter.
     a_timeMode.set(2);
 
     updateList();
 }
 
 void
-TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
+TempoView::slotPopupEditor(QTreeWidgetItem *twi, int /*column*/)
 {
-    TempoListItem *item = dynamic_cast<TempoListItem *>(qitem);
+    TempoListItem *item = dynamic_cast<TempoListItem *>(twi);
     if (!item)
-        return ;
+        return;
 
     timeT time = item->getTime();
 
-    switch (item->getType()) {
+    switch (item->getType())
+    {
 
     case TempoListItem::Tempo:
-    {
+        // Launch the TempoDialog.
         m_editTempoController->editTempo(this, time, true /* timeEditable */);
         break;
-    }
 
     case TempoListItem::TimeSignature:
-    {
-        Composition &composition(RosegardenDocument::currentDocument->getComposition());
-        Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
+        {
+            Composition &composition =
+                    RosegardenDocument::currentDocument->getComposition();
+            Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
 
-        TimeSignatureDialog dialog(this, &composition, time, sig, true);
+            TimeSignatureDialog dialog(this, &composition, time, sig, true);
 
-        if (dialog.exec() == QDialog::Accepted) {
+            if (dialog.exec() == QDialog::Accepted) {
 
-            time = dialog.getTime();
+                time = dialog.getTime();
 
-            if (dialog.shouldNormalizeRests()) {
-                CommandHistory::getInstance()->addCommand(
-                        new AddTimeSignatureAndNormalizeCommand(
-                                &composition,
-                                time,
-                                dialog.getTimeSignature()));
-            } else {
-                CommandHistory::getInstance()->addCommand(
-                        new AddTimeSignatureCommand(
-                                &composition,
-                                time,
-                                dialog.getTimeSignature()));
+                if (dialog.shouldNormalizeRests()) {
+                    CommandHistory::getInstance()->addCommand(
+                            new AddTimeSignatureAndNormalizeCommand(
+                                    &composition,
+                                    time,
+                                    dialog.getTimeSignature()));
+                } else {
+                    CommandHistory::getInstance()->addCommand(
+                            new AddTimeSignatureCommand(
+                                    &composition,
+                                    time,
+                                    dialog.getTimeSignature()));
+                }
             }
-        }
 
-        break;
-    }
+            break;
+        }
 
     default:
         break;
@@ -798,8 +805,8 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
 void
 TempoView::slotUpdateWindowTitle(bool)
 {
-    setWindowTitle(tr("%1 - Tempo and Time Signature Editor")
-                .arg(RosegardenDocument::currentDocument->getTitle()));
+    setWindowTitle(tr("%1 - Tempo and Time Signature Editor").
+            arg(RosegardenDocument::currentDocument->getTitle()));
 }
 
 void
