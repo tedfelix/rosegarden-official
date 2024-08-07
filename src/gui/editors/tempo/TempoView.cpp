@@ -149,6 +149,11 @@ TempoView::TempoView(
     updateList();
     makeInitialSelection(openTime);
 
+    // ??? The list needs wider columns and column size persistence.
+    //     Search for "Event_List_View" in EventView.
+    // ??? This window needs size and position persistence.
+    //     Search for "Event_List_View" in EventView.
+
     m_ignoreUpdates = false;
 }
 
@@ -469,15 +474,29 @@ TempoView::slotEditDelete()
 {
     // ??? Select All then Delete leaves one item behind.  Why?
 
-    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_list->selectedItems();
 
-    if (selection.count() == 0) return ;
+    // Nothing selected?  Nothing to delete.  Bail.
+    if (selection.count() == 0)
+        return;
 
-    RG_DEBUG << "TempoView::slotEditDelete - deleting "
-    << selection.count() << " items";
+    RG_DEBUG << "slotEditDelete() - deleting " << selection.count() << " items";
 
-    m_ignoreUpdates = true;
-    bool haveSomething = false;
+    // Create a map of each selected item to sort them in index order.
+    typedef std::map<int /*index*/, TempoListItem *> ItemMap;
+    ItemMap itemMap;
+
+    for (QTreeWidgetItem *it : selection) {
+        TempoListItem *item = dynamic_cast<TempoListItem *>(it);
+        if (!item)
+            continue;
+
+        itemMap[item->getIndex()] = item;
+    }
+
+    // Nothing to delete?  Bail.
+    if (itemMap.empty())
+        return;
 
     // We want the Remove commands to be in reverse order, because
     // removing one item by index will affect the indices of
@@ -485,22 +504,17 @@ TempoView::slotEditDelete()
     // them off again.
     std::vector<Command *> commands;
 
-    // Create a map of each selected item in index order.
-    std::map<int, TempoListItem*> itemMap;
-    foreach(auto it, selection) {
-        TempoListItem *item = dynamic_cast<TempoListItem*>(it);
-        if (!item) continue;
-        int index = item->getIndex();
-        itemMap[index] = item;
-    }
-
-    if (itemMap.empty()) return;
-
-    // For each selected item in index order
-    for (auto iter = itemMap.begin(); iter != itemMap.end(); ++iter) {
+    // For each selected item in index order.
+    // ??? Why not just read the map backwards with reverse iterators?
+    //     rbegin() and rend().
+    //     Then the commands vector is not needed.  We can assemble the
+    //     macro command in this loop and be done with it.
+    for (ItemMap::iterator iter = itemMap.begin();
+         iter != itemMap.end();
+         ++iter) {
         int index = (*iter).first;
         RG_DEBUG << "deleting item with index" << index;
-        TempoListItem* item = (*iter).second;
+        TempoListItem *item = (*iter).second;
 
         // Add the appropriate command to the "commands" list.
 
@@ -508,30 +522,42 @@ TempoView::slotEditDelete()
             commands.push_back(new RemoveTimeSignatureCommand
                                (item->getComposition(),
                                 item->getIndex()));
-            haveSomething = true;
-        } else {
+        } else {  // Tempo
             commands.push_back(new RemoveTempoChangeCommand
                                (item->getComposition(),
                                 item->getIndex()));
-            haveSomething = true;
         }
     }
 
-    if (haveSomething) {
-        MacroCommand *command = new MacroCommand
-                                 (tr("Delete Tempo or Time Signature"));
-        // For each command in reverse order which also happens to be
-        // reverse index order, add the remove command to the macro.
-        for (std::vector<Command *>::iterator i = commands.end();
-             i != commands.begin();
-             /* decrement is inside */) {
-            command->addCommand(*--i);
-        }
-        CommandHistory::getInstance()->addCommand(command);
-    }
+    // No commands to run?  Bail.
+    if (commands.empty())
+        return;
 
-    updateList();
+    // Turn off updates while the commands are modifying the Composition.
+    // ??? What about undo?
+    m_ignoreUpdates = true;
+
+    MacroCommand *macroCommand = new MacroCommand
+                             (tr("Delete Tempo or Time Signature"));
+    // For each command in reverse order which also happens to be
+    // reverse index order, add the remove command to the macro.
+#if 0
+    for (std::vector<Command *>::iterator i = commands.end();
+         i != commands.begin();
+         /* decrement is inside */) {
+        macroCommand->addCommand(*--i);
+    }
+#endif
+    for (int i = commands.size() - 1; i >= 0; --i) {
+        macroCommand->addCommand(commands[i]);
+    }
+    CommandHistory::getInstance()->addCommand(macroCommand);
+
+    // Turn updates back on.  We are done modifying the Composition.
     m_ignoreUpdates = false;
+
+    // Do a full refresh.
+    updateList();
 }
 
 void
