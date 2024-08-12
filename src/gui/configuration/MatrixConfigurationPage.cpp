@@ -21,7 +21,6 @@
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
-#include "gui/editors/matrix/MatrixView.h"
 #include "TabbedConfigurationPage.h"
 #include <QSettings>
 #include <QFrame>

@@ -41,7 +41,6 @@
 #include "commands/edit/EraseCommand.h"
 #include "commands/edit/EventInsertionCommand.h"
 #include "commands/notation/EraseEventCommand.h"
-#include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"

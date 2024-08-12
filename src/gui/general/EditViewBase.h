@@ -85,7 +85,7 @@ protected:
     void showStatusBarMessage(const QString &text);
 
     /// Create actions for menus and toolbars that are managed by this class.
-    void setupBaseActions(bool haveClipboard);
+    void setupBaseActions();
 
     virtual Segment *getCurrentSegment() = 0;
 
@@ -112,12 +112,6 @@ protected:
 
 protected slots:
 
-    /// Edit > Cut.
-    virtual void slotEditCut() = 0;
-    /// Edit > Copy.
-    virtual void slotEditCopy() = 0;
-    /// Edit > Paste.
-    virtual void slotEditPaste() = 0;
     /// View > Show Statusbar
     void slotToggleStatusBar();
 

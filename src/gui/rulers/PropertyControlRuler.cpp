@@ -36,7 +36,6 @@
 #include "base/ViewElement.h"
 #include "commands/edit/SelectionPropertyCommand.h"
 #include "document/CommandHistory.h"
-#include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/TextFloat.h"
 

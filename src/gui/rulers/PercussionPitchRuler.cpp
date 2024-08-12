@@ -23,7 +23,6 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/MidiProgram.h"
-#include "gui/editors/matrix/MatrixView.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "PitchRuler.h"
 #include <QColor>

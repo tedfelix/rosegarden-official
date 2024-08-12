@@ -1252,7 +1252,11 @@ EventView::slotClearSelection()
 void
 EventView::setupActions()
 {
-    setupBaseActions(true);
+    setupBaseActions();
+
+    createAction("edit_cut", SLOT(slotEditCut()));
+    createAction("edit_copy", SLOT(slotEditCopy()));
+    createAction("edit_paste", SLOT(slotEditPaste()));
 
     createAction("insert", SLOT(slotEditInsert()));
     createAction("delete", SLOT(slotEditDelete()));

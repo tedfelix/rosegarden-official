@@ -64,14 +64,6 @@ signals:
 
 public slots:
 
-    // ??? That these three are pure virtual and empty here is suspicious.
-    //     Feels like a case of something in EditViewBase that doesn't
-    //     belong there.  Consider pushing everything related to these
-    //     down to the derivers.  Would that be a huge burden?
-    void slotEditCut() override  { }
-    void slotEditCopy() override  { }
-    void slotEditPaste() override  { }
-
     /// Edit > Delete (or the delete key)
     void slotEditDelete();
     /// Edit > Add Tempo Change

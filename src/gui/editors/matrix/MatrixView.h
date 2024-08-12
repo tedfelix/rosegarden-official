@@ -169,9 +169,9 @@ protected slots:
     void slotUpdateMenuStates();
     void slotRulerSelectionUpdate();
 
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
     void slotEditDelete();
 
     /// Show or hide rulers

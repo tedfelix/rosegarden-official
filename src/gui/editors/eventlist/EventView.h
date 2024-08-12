@@ -74,13 +74,6 @@ signals:
     /// Connected to RosegardenMainViewWidget::slotEditTriggerSegment().
     void editTriggerSegment(int);
 
-protected slots:
-
-    // EditViewBase overrides.
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
-
 protected:
 
     void initStatusBar();
@@ -92,6 +85,9 @@ protected:
 
 private slots:
 
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
     void slotEditDelete();
     void slotEditInsert();
 

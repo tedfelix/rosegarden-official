@@ -657,7 +657,7 @@ TempoView::slotClearSelection()
 void
 TempoView::initMenu()
 {
-    setupBaseActions(false);
+    setupBaseActions();
 
     createAction("insert_tempo", SLOT(slotAddTempoChange()));
     createAction("insert_timesig", SLOT(slotAddTimeSignatureChange()));

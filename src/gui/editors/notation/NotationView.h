@@ -114,9 +114,9 @@ protected slots:
     /// Preview with LilyPond (via Okular or the like)
     void slotPreviewLilyPond();
 
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
     void slotEditDelete();
     void slotEditCutAndClose();
     void slotEditGeneralPaste();
