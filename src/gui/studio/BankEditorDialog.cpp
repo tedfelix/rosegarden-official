@@ -912,7 +912,7 @@ BankEditorDialog::slotDelete()
             // Copy across all programs that aren't in the doomed bank
             //
             ProgramList newProgramList;
-            const ProgramList actualList = device->getPrograms(bank);
+            const ProgramList actualList = device->getPrograms();
             for (ProgramList::const_iterator it = actualList.begin();
                  it != actualList.end();
                  ++it) {
