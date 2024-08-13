@@ -205,6 +205,60 @@ TempoView::timeSignatureChanged(const Composition * /*comp*/)
 bool
 TempoView::updateList()
 {
+    // Preserve Selection.
+
+    struct Key {
+        timeT midiTicks;
+        TempoListItem::Type itemType;
+
+        bool operator<(const Key &rhs) const
+        {
+            if (midiTicks < rhs.midiTicks)
+                return true;
+            if (midiTicks > rhs.midiTicks)
+                return false;
+            return (itemType < rhs.itemType);
+        }
+    };
+    std::set<Key> selectionSet;
+
+    // For each item in the list...
+    for (int itemIndex = 0;
+         itemIndex < m_list->topLevelItemCount();
+         ++itemIndex) {
+        TempoListItem *item =
+                dynamic_cast<TempoListItem *>(m_list->topLevelItem(itemIndex));
+        if (!item)
+            continue;
+
+        // Not selected?  Try the next...
+        if (!item->isSelected())
+            continue;
+
+        // Create key.
+        Key key;
+        key.midiTicks = item->getTime();
+        key.itemType = item->getType();
+
+        // Add to set.
+        selectionSet.insert(key);
+    }
+
+    // ??? We also need to preserve the "current item".  I don't see how.
+    //     There is a setCurrentItem(), but no getCurrentItem().
+    //TempoListItem *item =
+    //        dynamic_cast<TempoListItem *>(m_list->???);
+
+    // ??? We also need to preserve the scroll position.  Otherwise we
+    //     pop to the top every time we change something.
+
+    // ??? Might be better to avoid a "clear and refill" approach and instead
+    //     work with whatever is in the list and detect adds/deletes.  That
+    //     would make the selection preservation automatic and would also
+    //     preserve the scroll position.  All while doing a lot less work.
+    //     Iterate through composition and add any that are missing to the list.
+    //     Iterate through list and remove any that are not in the composition.
+
     // Recreate list.
 
     m_list->clear();
@@ -312,53 +366,52 @@ TempoView::updateList()
         }
     }
 
-    if (m_list->topLevelItemCount() == 0) {
-        // Select nothing.
-        m_list->setSelectionMode(QTreeWidget::NoSelection);
-        leaveActionState("have_selection");
-    } else {
-        m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    // Restore Selection.
 
-        // If no selection then select the first event
-        if (m_listSelection.size() == 0)
-            m_listSelection.push_back(0);
+    bool haveSelection{false};
 
-        enterActionState("have_selection");
-    }
-
-    // Set the selection from m_listSelection.
-
-    for (std::vector<int>::iterator selectionIter = m_listSelection.begin();
-         selectionIter != m_listSelection.end();
-         ++selectionIter) {
-        int index = *selectionIter;
-
-        // Move back to the top level item.
-        while (index > 0  &&  !m_list->topLevelItem(index))
-            index--;
-
-        if (!m_list->topLevelItem(index))
+    // For each item in the list...
+    for (int itemIndex = 0;
+         itemIndex < m_list->topLevelItemCount();
+         ++itemIndex) {
+        TempoListItem *item =
+                dynamic_cast<TempoListItem *>(m_list->topLevelItem(itemIndex));
+        if (!item)
             continue;
 
-        m_list->topLevelItem(index)->setSelected(true);
-        m_list->setCurrentItem(m_list->topLevelItem(index));
+        // Create key.
+        Key key;
+        key.midiTicks = item->getTime();
+        key.itemType = item->getType();
 
-        // ensure visible
-        m_list->scrollToItem(m_list->topLevelItem(index));
+        // Not selected?  Try the next.
+        if (selectionSet.find(key) == selectionSet.end())
+            continue;
+
+        item->setSelected(true);
+        haveSelection = true;
     }
 
-    // ??? Why!?  Doesn't this lose the selection for next time?
-    //     I suspect there may have been code above to attempt to
-    //     preserve the selection.  But that became difficult.
-    m_listSelection.clear();
+    if (haveSelection)
+        enterActionState("have_selection");
+    else
+        leaveActionState("have_selection");
 
+    // ??? Need to restore current item.
+    //m_list->setCurrentItem(???);
+
+    // ??? We never return false.  Make this function return void.
     return true;
 }
 
 void
 TempoView::makeInitialSelection(timeT time)
 {
-    m_listSelection.clear();
+    // Start with nothing selected.
+    // updateList() is called before this routine and it selects
+    // the first item.  This clears it.
+    // ??? I think this is no longer the case.  Remove this.
+    slotClearSelection();
 
     // Select an item around the given time.
 
@@ -369,20 +422,13 @@ TempoView::makeInitialSelection(timeT time)
     int goodItemNo = 0;
 
     // For each item...
-    // ??? Why not use topLevelItemCount()?
-    for (int itemIndex = 0; m_list->topLevelItem(itemIndex); ++itemIndex) {
+    for (int itemIndex = 0;
+         itemIndex < m_list->topLevelItemCount();
+         ++itemIndex) {
         TempoListItem *item =
                 dynamic_cast<TempoListItem *>(m_list->topLevelItem(itemIndex));
-
-        // Not a TempoListItem.  Try the next.
-        // ??? I don't see how this could ever happen.
         if (!item)
             continue;
-
-        // Deselect all the items prior.
-        // ??? Seems unnecessary.  Nothing is selected.  And this doesn't
-        //     deselect all the ones after.
-        item->setSelected(false);
 
         // Past the time we are looking for?  We're done.
         if (item->getTime() > time)
@@ -627,8 +673,6 @@ TempoView::slotViewMusicalTimes()
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(false);
 
-    // ??? We shouldn't set this over and over.  We should set this in the
-    //     dtor.
     a_timeMode.set((int)Composition::TimeMode::MusicalTime);
 
     updateList();
@@ -641,8 +685,6 @@ TempoView::slotViewRealTimes()
     findAction("time_real")->setChecked(true);
     findAction("time_raw")->setChecked(false);
 
-    // ??? We shouldn't set this over and over.  We should set this in the
-    //     dtor.
     a_timeMode.set((int)Composition::TimeMode::RealTime);
 
     updateList();
@@ -655,8 +697,6 @@ TempoView::slotViewRawTimes()
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(true);
 
-    // ??? We shouldn't set this over and over.  We should set this in the
-    //     dtor.
     a_timeMode.set((int)Composition::TimeMode::RawTime);
 
     updateList();
