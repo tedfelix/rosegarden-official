@@ -150,7 +150,6 @@ private:
     void updateView();
     bool updateTreeWidget();
 
-    QString makeTimeString(timeT time, int timeMode);
     QString makeDurationString(timeT time,
                                timeT duration, int timeMode);
 

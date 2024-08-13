@@ -25,6 +25,7 @@
 
 #include "base/BaseProperties.h"
 #include "base/Clipboard.h"
+#include "base/Composition.h"
 #include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
@@ -597,7 +598,10 @@ EventView::updateTreeWidget()
                                                  timeMode);
             }
 
-            QString timeStr = makeTimeString(eventTime, timeMode);
+            const QString timeStr = RosegardenDocument::currentDocument->
+                    getComposition().makeTimeString(
+                            eventTime,
+                            static_cast<Composition::TimeMode>(timeMode));
 
             QStringList sl;
             sl << timeStr
@@ -705,45 +709,12 @@ EventView::makeInitialSelection(timeT time)
 }
 
 QString
-EventView::makeTimeString(timeT time, int timeMode)
-{
-    switch (timeMode) {
-
-    case 0:  // musical time
-        {
-            int bar, beat, fraction, remainder;
-            RosegardenDocument::currentDocument->getComposition().getMusicalTimeForAbsoluteTime
-            (time, bar, beat, fraction, remainder);
-            ++bar;
-            return QString("%1%2%3-%4%5-%6%7-%8%9   ")
-                   .arg(bar / 100)
-                   .arg((bar % 100) / 10)
-                   .arg(bar % 10)
-                   .arg(beat / 10)
-                   .arg(beat % 10)
-                   .arg(fraction / 10)
-                   .arg(fraction % 10)
-                   .arg(remainder / 10)
-                   .arg(remainder % 10);
-        }
-
-    case 1:  // real time
-        {
-            RealTime rt =
-                RosegardenDocument::currentDocument->getComposition().getElapsedRealTime(time);
-            //    return QString("%1  ").arg(rt.toString().c_str());
-            return QString("%1  ").arg(rt.toText().c_str());
-        }
-
-    default:
-        return QString("%1  ").arg(time);
-    }
-}
-
-QString
 EventView::makeDurationString(timeT time,
                               timeT duration, int timeMode)
 {
+    // ??? Same as TriggerSegmentManager::makeDurationString().  Move to
+    //     Composition like makeTimeString().
+
     switch (timeMode) {
 
     case 0:  // musical time

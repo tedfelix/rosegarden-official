@@ -81,7 +81,7 @@ TempoView::TempoView(
 
     m_ignoreUpdates = true;
 
-    slotUpdateWindowTitle(false);
+    updateWindowTitle();
 
     setStatusBar(new QStatusBar(this));
 
@@ -91,9 +91,6 @@ TempoView::TempoView(
     connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,
             this, &TempoView::slotDocumentModified);
-    // ??? slotDocumentModified() is already connected to this.  Combine.
-    connect(m_doc, &RosegardenDocument::documentModified,
-            this, &TempoView::slotUpdateWindowTitle);
 
     initMenu();
 
@@ -241,7 +238,9 @@ TempoView::updateList()
                     properties = tr("Common");
             }
 
-            QString timeString = makeTimeString(sig.first, a_timeMode.get());
+            QString timeString = comp->makeTimeString(
+                    sig.first,
+                    static_cast<Composition::TimeMode>(a_timeMode.get()));
 
             QStringList labels;
             labels << timeString <<
@@ -306,7 +305,8 @@ TempoView::updateList()
                        .arg(bpmUnits).arg(bpmTenths).arg(bpmHundredths);
             }
 
-            const QString timeString = makeTimeString(time, a_timeMode.get());
+            const QString timeString = comp->makeTimeString(
+                    time, static_cast<Composition::TimeMode>(a_timeMode.get()));
 
             QStringList labels;
             labels << timeString << tr("Tempo   ") << desc;
@@ -420,56 +420,6 @@ TempoView::getCurrentSegment()
         return nullptr;
     else
         return *m_segments.begin();
-}
-
-QString
-TempoView::makeTimeString(timeT time, int timeMode)
-{
-    // ??? A search on %1%2%3-%4%5 finds these:
-    //   - EventView::makeTimeString()
-    //   - MarkerEditor::makeTimeString()
-    //   - TriggerSegmentManager::makeDurationString()
-    //   - TempoRuler::showTextFloat()
-    //   Make a standard one in TimeT.h.
-
-    // ??? Need an enum for this.
-    switch (timeMode) {
-
-    case 0:  // musical time
-        {
-            int bar;
-            int beat;
-            int fraction;
-            int remainder;
-            RosegardenDocument::currentDocument->getComposition().
-                    getMusicalTimeForAbsoluteTime(
-                            time, bar, beat, fraction, remainder);
-            ++bar;
-            return QString("%1%2%3-%4%5-%6%7-%8%9")
-                   .arg(bar / 100)
-                   .arg((bar % 100) / 10)
-                   .arg(bar % 10)
-                   .arg(beat / 10)
-                   .arg(beat % 10)
-                   .arg(fraction / 10)
-                   .arg(fraction % 10)
-                   .arg(remainder / 10)
-                   .arg(remainder % 10);
-        }
-
-    case 1:  // real time
-        {
-            const RealTime rt = RosegardenDocument::currentDocument->
-                    getComposition().getElapsedRealTime(time);
-            return QString("%1").arg(rt.toText().c_str());
-        }
-
-    case 2:  // raw time
-        return QString("%1").arg(time);
-
-    default:
-        return "---";
-    }
 }
 
 void
@@ -671,17 +621,17 @@ TempoView::initMenu()
     QAction *a;
     a = createAction("time_musical", SLOT(slotViewMusicalTimes()));
     a->setCheckable(true);
-    if (a_timeMode.get() == 0)
+    if (a_timeMode.get() == (int)Composition::TimeMode::MusicalTime)
         a->setChecked(true);
 
     a = createAction("time_real", SLOT(slotViewRealTimes()));
     a->setCheckable(true);
-    if (a_timeMode.get() == 1)
+    if (a_timeMode.get() == (int)Composition::TimeMode::RealTime)
         a->setChecked(true);
 
     a = createAction("time_raw", SLOT(slotViewRawTimes()));
     a->setCheckable(true);
-    if (a_timeMode.get() == 2)
+    if (a_timeMode.get() == (int)Composition::TimeMode::RawTime)
         a->setChecked(true);
 
     createMenusAndToolbars("tempoview.rc");
@@ -717,7 +667,7 @@ TempoView::slotViewMusicalTimes()
 
     // ??? We shouldn't set this over and over.  We should set this in the
     //     dtor.  Like we do with a_filter.
-    a_timeMode.set(0);
+    a_timeMode.set((int)Composition::TimeMode::MusicalTime);
 
     updateList();
 }
@@ -731,7 +681,7 @@ TempoView::slotViewRealTimes()
 
     // ??? We shouldn't set this over and over.  We should set this in the
     //     dtor.  Like we do with a_filter.
-    a_timeMode.set(1);
+    a_timeMode.set((int)Composition::TimeMode::RealTime);
 
     updateList();
 }
@@ -745,7 +695,7 @@ TempoView::slotViewRawTimes()
 
     // ??? We shouldn't set this over and over.  We should set this in the
     //     dtor.  Like we do with a_filter.
-    a_timeMode.set(2);
+    a_timeMode.set((int)Composition::TimeMode::RawTime);
 
     updateList();
 }
@@ -803,7 +753,7 @@ TempoView::slotPopupEditor(QTreeWidgetItem *twi, int /*column*/)
 }
 
 void
-TempoView::slotUpdateWindowTitle(bool)
+TempoView::updateWindowTitle()
 {
     setWindowTitle(tr("%1 - Tempo and Time Signature Editor").
             arg(RosegardenDocument::currentDocument->getTitle()));
@@ -830,6 +780,9 @@ TempoView::slotHelpAbout()
 void
 TempoView::slotDocumentModified(bool /*modified*/)
 {
+    // Update the name in the window title in case we just did a Save As.
+    updateWindowTitle();
+
     updateList();
 }
 

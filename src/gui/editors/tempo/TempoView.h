@@ -102,14 +102,6 @@ public slots:
     /// Filter check box clicked.
     void slotModifyFilter(int);
 
-protected slots:
-
-    /// Connected to RosegardenDocument::documentModified().
-    /**
-     * ??? See slotDocumentModified() and combine.
-     */
-    void slotUpdateWindowTitle(bool modified);
-
 protected:
 
     // EditViewBase override.
@@ -121,9 +113,6 @@ protected:
 private slots:
 
     /// Connected to RosegardenDocument::documentModified().
-    /**
-     * ??? See slotUpdateWindowTitle() and combine.
-     */
     void slotDocumentModified(bool modified);
 
 private:
@@ -133,15 +122,12 @@ private:
 
     void initMenu();
 
-    // ??? rename: refreshList(), updateList()
+    void updateWindowTitle();
+
     bool updateList();
 
     /// Select the Event nearest the playback position pointer.
     void makeInitialSelection(timeT time);
-
-    // ??? toString().  Seems useful.  See if there are multiple copies
-    //     and pull out into someplace handy.  Like TimeT.h.
-    QString makeTimeString(timeT time, int timeMode);
 
     /// Used to launch the TempoDialog.
     /**

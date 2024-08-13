@@ -90,7 +90,6 @@ protected:
     void closeEvent(QCloseEvent *) override;
 
     void setupActions();
-    QString makeTimeString(timeT time, int timeMode);
 
     //--------------- Data members ---------------------------------
     RosegardenDocument        *m_doc;
