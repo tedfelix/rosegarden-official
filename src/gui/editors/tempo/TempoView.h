@@ -138,12 +138,6 @@ private:
     QTreeWidget *m_list;
     std::vector<int> m_listSelection;
 
-    /// Turn off CompositionObserver handlers.
-    /**
-     * ??? See if we can get rid of this by simplifying how changes are
-     *     handled.
-     */
-    bool m_ignoreUpdates;
 };
 
 

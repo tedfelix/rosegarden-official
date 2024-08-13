@@ -77,17 +77,12 @@ namespace Rosegarden
 {
 
 
-TempoView::TempoView(timeT openTime) :
-    EditViewBase(std::vector<Segment *>())  // ??? default ctor?
+TempoView::TempoView(timeT openTime)
 {
-
-    m_ignoreUpdates = true;
 
     updateWindowTitle();
 
     setStatusBar(new QStatusBar(this));
-
-    m_doc->getComposition().addObserver(this);
 
     // Connect for changes so we can update the list.
     connect(RosegardenDocument::currentDocument,
@@ -161,7 +156,8 @@ TempoView::TempoView(timeT openTime) :
     m_list->header()->restoreState(settings.value("Tempo_View_Header_State").toByteArray());
     settings.endGroup();
 
-    m_ignoreUpdates = false;
+    m_doc->getComposition().addObserver(this);
+
 }
 
 TempoView::~TempoView()
@@ -195,30 +191,14 @@ TempoView::closeEvent(QCloseEvent *e)
 }
 
 void
-TempoView::tempoChanged(const Composition *comp)
+TempoView::tempoChanged(const Composition * /*comp*/)
 {
-    if (m_ignoreUpdates)
-        return;
-
-    // Not the current Composition?  Bail.
-    // ??? I suspect this can never happen.  Can we safely get rid of this?
-    if (comp != &RosegardenDocument::currentDocument->getComposition())
-        return;
-
     updateList();
 }
 
 void
-TempoView::timeSignatureChanged(const Composition *comp)
+TempoView::timeSignatureChanged(const Composition * /*comp*/)
 {
-    if (m_ignoreUpdates)
-        return;
-
-    // Not the current Composition?  Bail.
-    // ??? I suspect this can never happen.  Can we safely get rid of this?
-    if (comp != &RosegardenDocument::currentDocument->getComposition())
-        return;
-
     updateList();
 }
 
@@ -264,17 +244,13 @@ TempoView::updateList()
                               arg(sig.second.getDenominator()) <<
                       properties;
 
-            // Add to the list.
-            // ??? This doesn't look like an add.  Rearrange the code to
-            //     make it more "add" like.  Actually, QTreeWidgetItem takes
-            //     the widget as the first parameter.  Maybe move parent to
-            //     the first parameter.
+            // Create a new TempoListItem and add to the list.
             new TempoListItem(
+                    m_list,  // treeWidget
                     comp,  // composition
                     TempoListItem::TimeSignature,  // type
                     sig.first,  // time
                     timeSignatureIndex,  // index
-                    m_list,  // parent
                     labels);
         }
     }
@@ -325,17 +301,13 @@ TempoView::updateList()
             QStringList labels;
             labels << timeString << tr("Tempo   ") << desc;
 
-            // Add to the list.
-            // ??? This doesn't look like an add.  Rearrange the code to
-            //     make it more "add" like.  Actually, QTreeWidgetItem takes
-            //     the widget as the first parameter.  Maybe move parent to
-            //     the first parameter.
+            // Create a new TempoListItem and add to the list.
             new TempoListItem(
-                    comp,
-                    TempoListItem::Tempo,
+                    m_list,  // treeWidget
+                    comp,  // composition
+                    TempoListItem::Tempo,  // type
                     time,
                     tempoIndex,
-                    m_list,
                     labels);
         }
     }
@@ -431,12 +403,8 @@ TempoView::makeInitialSelection(timeT time)
 Segment *
 TempoView::getCurrentSegment()
 {
-    // ??? It's always empty.  Just return nullptr.
-
-    if (m_segments.empty())
-        return nullptr;
-    else
-        return *m_segments.begin();
+    // TempoView does not deal in Segments.
+    return nullptr;
 }
 
 void
@@ -502,11 +470,6 @@ TempoView::slotEditDelete()
     if (commands.empty())
         return;
 
-    // Turn off updates while the commands are modifying the Composition.
-    // ??? What about undo?  It can't turn this off.  It must cause a
-    //     large number of unnecessary updates.
-    m_ignoreUpdates = true;
-
     MacroCommand *macroCommand = new MacroCommand
                              (tr("Delete Tempo or Time Signature"));
 
@@ -517,11 +480,8 @@ TempoView::slotEditDelete()
     }
     CommandHistory::getInstance()->addCommand(macroCommand);
 
-    // Turn updates back on.  We are done modifying the Composition.
-    m_ignoreUpdates = false;
-
-    // Do a full refresh.
-    updateList();
+    // No need to call updateList().  The CompositionObserver handlers
+    // will be notified of the changes.
 }
 
 void
@@ -668,7 +628,7 @@ TempoView::slotViewMusicalTimes()
     findAction("time_raw")->setChecked(false);
 
     // ??? We shouldn't set this over and over.  We should set this in the
-    //     dtor.  Like we do with a_filter.
+    //     dtor.
     a_timeMode.set((int)Composition::TimeMode::MusicalTime);
 
     updateList();
@@ -682,7 +642,7 @@ TempoView::slotViewRealTimes()
     findAction("time_raw")->setChecked(false);
 
     // ??? We shouldn't set this over and over.  We should set this in the
-    //     dtor.  Like we do with a_filter.
+    //     dtor.
     a_timeMode.set((int)Composition::TimeMode::RealTime);
 
     updateList();
@@ -696,7 +656,7 @@ TempoView::slotViewRawTimes()
     findAction("time_raw")->setChecked(true);
 
     // ??? We shouldn't set this over and over.  We should set this in the
-    //     dtor.  Like we do with a_filter.
+    //     dtor.
     a_timeMode.set((int)Composition::TimeMode::RawTime);
 
     updateList();
