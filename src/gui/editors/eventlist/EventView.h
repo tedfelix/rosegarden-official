@@ -190,7 +190,8 @@ private:
     };
     int m_eventFilter{0x1FFF};
 
-    // ??? Why is this a tree widget?  When are there ever sub-nodes?
+    // ??? QTreeWidget seems like overkill.  We never have sub items.
+    //     QTableWidget seems like a better choice.
     QTreeWidget *m_eventList;
 
     std::vector<int> m_listSelection;

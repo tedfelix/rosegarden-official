@@ -28,7 +28,7 @@ class QCheckBox;
 class QGroupBox;
 class QTreeWidget;
 class QFrame;
-class QGridLayout;
+class QHBoxLayout;
 
 #include <vector>
 
@@ -96,7 +96,7 @@ public slots:
     void slotPopupEditor(QTreeWidgetItem *twi, int column = 0);
 
     /// Filter check box clicked.
-    void slotModifyFilter(int);
+    void slotFilterClicked(bool);
 
 protected:
 
@@ -114,7 +114,7 @@ private slots:
 private:
 
     QFrame *m_frame;
-    QGridLayout *m_mainLayout;
+    QHBoxLayout *m_mainLayout;
 
     void initMenu();
 
@@ -134,7 +134,7 @@ private:
 
     // List
     // ??? QTreeWidget seems like overkill.  We never have sub items.
-    //     What can we replace this with?
+    //     QTableWidget seems like a better choice.
     QTreeWidget *m_list;
     std::vector<int> m_listSelection;
 

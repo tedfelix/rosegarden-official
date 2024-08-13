@@ -47,9 +47,12 @@
 #include <QString>
 #include <QStringList>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QStatusBar>
 #include <QList>
 #include <QDesktopServices>
+#include <QSettings>
+#include <QHeaderView>
 
 
 namespace
@@ -97,63 +100,66 @@ TempoView::TempoView(timeT openTime) :
     m_frame = new QFrame(this);
     m_frame->setMinimumSize(500, 300);
     m_frame->setMaximumSize(2200, 1400);
-    // ??? QGridLayout is overkill.  This is a QHBoxLayout.
-    m_mainLayout = new QGridLayout(m_frame);
+    m_mainLayout = new QHBoxLayout(m_frame);
     m_frame->setLayout(m_mainLayout);
     setCentralWidget(m_frame);
 
     // Filter Group Box
     m_filterGroup = new QGroupBox(tr("Filter"), m_frame);
-    m_mainLayout->addWidget(m_filterGroup, 0, 0);
+    m_mainLayout->addWidget(m_filterGroup);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setLayout(filterGroupLayout);
 
     // Tempo
     m_tempoCheckBox = new QCheckBox(tr("Tempo"), m_filterGroup);
     m_tempoCheckBox->setChecked(a_tempoFilter.get());
-    filterGroupLayout->addWidget(m_tempoCheckBox, 50, Qt::AlignTop);
+    connect(m_tempoCheckBox, &QCheckBox::clicked,
+            this, &TempoView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_tempoCheckBox);
 
     // Time Signature
     m_timeSigCheckBox = new QCheckBox(tr("Time Signature"), m_filterGroup);
     m_timeSigCheckBox->setChecked(a_timeSignatureFilter.get());
-    filterGroupLayout->addWidget(m_timeSigCheckBox, 50, Qt::AlignTop);
+    connect(m_timeSigCheckBox, &QCheckBox::clicked,
+            this, &TempoView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_timeSigCheckBox);
 
-    // hard coded spacers are evil, but I can't find any other way to fix this
-    // ??? Make a third row with a spacer and give it a stretch factor.
-    //     That's the usual way to take up extra space.
-    filterGroupLayout->addSpacing(200);
-
-    // ??? Use clicked() instead of stateChanged().  Then move this up with
-    //     the code setting up the widget.
-    connect(m_tempoCheckBox, &QCheckBox::stateChanged,
-            this, &TempoView::slotModifyFilter);
-    // ??? Use clicked() instead of stateChanged().  Then move this up with
-    //     the code setting up the widget.
-    connect(m_timeSigCheckBox, &QCheckBox::stateChanged,
-            this, &TempoView::slotModifyFilter);
+    // Fill the rest of the empty space to keep the widgets together.
+    filterGroupLayout->addStretch(1);
 
     // Tempo/Time Signature List
     m_list = new QTreeWidget(m_frame);
-    m_mainLayout->addWidget(m_list, 0, 1);
+    m_mainLayout->addWidget(m_list);
     m_list->setAllColumnsShowFocus(true);
     m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     QStringList headers;
+    // ??? The extra space at the end of each of these is probably an
+    //     attempt at getting the columns to be wider.  This does not
+    //     work.  Leaving this here to avoid creating work for the
+    //     translators.  For now.
     headers << tr("Time  ") <<
                tr("Type  ") <<
                tr("Value  ") <<
                tr("Properties  ");
     m_list->setColumnCount(headers.size());
     m_list->setHeaderLabels(headers);
+    // Make sure columns have a reasonable amount of space.
+    m_list->setColumnWidth(0, 133);
+    m_list->setColumnWidth(1, 125);
     connect(m_list, &QTreeWidget::itemDoubleClicked,
             this, &TempoView::slotPopupEditor);
+
     // Update the list.
     updateList();
     makeInitialSelection(openTime);
 
-    // ??? The list needs wider columns and column size persistence.
-    //     Search for "Event_List_View" in EventView.
-    // ??? This window needs size and position persistence.
-    //     Search for "Event_List_View" in EventView.
+    // Restore window geometry and header state.
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    restoreGeometry(settings.value("Tempo_View_Geometry").toByteArray());
+    //restoreState(settings.value("Tempo_View_State").toByteArray());
+    m_list->header()->restoreState(settings.value("Tempo_View_Header_State").toByteArray());
+    settings.endGroup();
 
     m_ignoreUpdates = false;
 }
@@ -163,6 +169,14 @@ TempoView::~TempoView()
     // Save state for next time.
     a_tempoFilter.set(m_tempoCheckBox->checkState() != Qt::Unchecked);
     a_timeSignatureFilter.set(m_timeSigCheckBox->checkState() != Qt::Unchecked);
+
+    // Save window geometry and header state.
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Tempo_View_Geometry", saveGeometry());
+    //settings.setValue("Tempo_View_State", saveState());
+    settings.setValue("Tempo_View_Header_State", m_list->header()->saveState());
+    settings.endGroup();
 
     // We use m_doc instead of RosegardenDocument::currentDocument to
     // make sure that we disconnect from the old document when the
@@ -641,7 +655,7 @@ TempoView::initMenu()
 }
 
 void
-TempoView::slotModifyFilter(int)
+TempoView::slotFilterClicked(bool)
 {
     updateList();
 }
