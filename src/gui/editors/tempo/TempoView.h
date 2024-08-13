@@ -131,16 +131,6 @@ private:
     QGroupBox *m_filterGroup;
     QCheckBox *m_tempoCheckBox;
     QCheckBox *m_timeSigCheckBox;
-    // ??? Why not just a couple of bools?  Then store as two settings in
-    //     the .conf file.  That would simplify so many things.
-    // ??? Even better, just use the QCheckBox objects as the state.  That
-    //     eliminates even more code.
-    int m_filter;
-    /// State (m_filter) -> Filter Check Boxes.
-    /**
-     * ??? Inline into only caller, the ctor.
-     */
-    void updateFilterCheckBoxes();
 
     // List
     // ??? QTreeWidget seems like overkill.  We never have sub items.

@@ -36,6 +36,7 @@
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/EditTempoController.h"
 #include "misc/PreferenceInt.h"
+#include "misc/PreferenceBool.h"
 
 #include <QAction>
 #include <QSettings>
@@ -54,15 +55,17 @@
 namespace
 {
 
-    constexpr int TempoFilter{0x0001};
-    constexpr int TimeSignatureFilter{0x0002};
-
     Rosegarden::PreferenceInt a_timeMode(
             Rosegarden::TempoViewConfigGroup, "timemode", 0);
-    Rosegarden::PreferenceInt a_filter(
+
+    Rosegarden::PreferenceBool a_tempoFilter(
             Rosegarden::TempoViewConfigGroup,
-            "filter",
-            TempoFilter | TimeSignatureFilter);
+            "tempofilter",
+            true);
+    Rosegarden::PreferenceBool a_timeSignatureFilter(
+            Rosegarden::TempoViewConfigGroup,
+            "timesignaturefilter",
+            true);
 
 }
 
@@ -72,8 +75,7 @@ namespace Rosegarden
 
 
 TempoView::TempoView(timeT openTime) :
-    EditViewBase(std::vector<Segment *>()),  // ??? default ctor?
-    m_filter(TempoFilter | TimeSignatureFilter)
+    EditViewBase(std::vector<Segment *>())  // ??? default ctor?
 {
 
     m_ignoreUpdates = true;
@@ -108,19 +110,18 @@ TempoView::TempoView(timeT openTime) :
 
     // Tempo
     m_tempoCheckBox = new QCheckBox(tr("Tempo"), m_filterGroup);
+    m_tempoCheckBox->setChecked(a_tempoFilter.get());
     filterGroupLayout->addWidget(m_tempoCheckBox, 50, Qt::AlignTop);
 
     // Time Signature
     m_timeSigCheckBox = new QCheckBox(tr("Time Signature"), m_filterGroup);
+    m_timeSigCheckBox->setChecked(a_timeSignatureFilter.get());
     filterGroupLayout->addWidget(m_timeSigCheckBox, 50, Qt::AlignTop);
 
     // hard coded spacers are evil, but I can't find any other way to fix this
     // ??? Make a third row with a spacer and give it a stretch factor.
     //     That's the usual way to take up extra space.
     filterGroupLayout->addSpacing(200);
-
-    m_filter = a_filter.get();
-    updateFilterCheckBoxes();
 
     // ??? Use clicked() instead of stateChanged().  Then move this up with
     //     the code setting up the widget.
@@ -159,7 +160,9 @@ TempoView::TempoView(timeT openTime) :
 
 TempoView::~TempoView()
 {
-    a_filter.set(m_filter);
+    // Save state for next time.
+    a_tempoFilter.set(m_tempoCheckBox->checkState() != Qt::Unchecked);
+    a_timeSignatureFilter.set(m_timeSigCheckBox->checkState() != Qt::Unchecked);
 
     // We use m_doc instead of RosegardenDocument::currentDocument to
     // make sure that we disconnect from the old document when the
@@ -215,7 +218,7 @@ TempoView::updateList()
     Composition *comp = &RosegardenDocument::currentDocument->getComposition();
 
     // Time Signatures
-    if (m_filter & TimeSignatureFilter) {
+    if (m_timeSigCheckBox->isChecked()) {
 
         for (int timeSignatureIndex = 0;
              timeSignatureIndex < comp->getTimeSignatureCount();
@@ -263,7 +266,7 @@ TempoView::updateList()
     }
 
     // Tempos
-    if (m_filter & TempoFilter) {
+    if (m_tempoCheckBox->isChecked()) {
 
         for (int tempoIndex = 0;
              tempoIndex < comp->getTempoChangeCount();
@@ -347,6 +350,9 @@ TempoView::updateList()
         // Move back to the top level item.
         while (index > 0  &&  !m_list->topLevelItem(index))
             index--;
+
+        if (!m_list->topLevelItem(index))
+            continue;
 
         m_list->topLevelItem(index)->setSelected(true);
         m_list->setCurrentItem(m_list->topLevelItem(index));
@@ -637,22 +643,7 @@ TempoView::initMenu()
 void
 TempoView::slotModifyFilter(int)
 {
-    m_filter = 0;
-
-    if (m_tempoCheckBox->isChecked())
-        m_filter |= TempoFilter;
-
-    if (m_timeSigCheckBox->isChecked())
-        m_filter |= TimeSignatureFilter;
-
     updateList();
-}
-
-void
-TempoView::updateFilterCheckBoxes()
-{
-    m_tempoCheckBox->setChecked((m_filter & TempoFilter) != 0);
-    m_timeSigCheckBox->setChecked((m_filter & TimeSignatureFilter) != 0);
 }
 
 void
