@@ -254,19 +254,24 @@ TempoView::updateList()
 
     // Preserve the "current item".
 
-    bool haveCurrentItem{false};
+    bool haveCurrentItem;
     Key currentItemKey;
+    // It's possible for the current item to not be selected.  Keep
+    // track of that so we can restore it exactly.
+    bool currentItemSelected;
 
     // Scope to avoid accidentally reusing currentItem after it is gone.
     {
-        // The "current item" is always selected and has the focus outline.
+        // The "current item" has the focus outline which is only
+        // visible if it happens to be selected.
         TempoListItem *currentItem =
                 dynamic_cast<TempoListItem *>(m_list->currentItem());
         haveCurrentItem = currentItem;
         if (haveCurrentItem) {
-            // Make a key so we can re-select it if it still exists.
+            // Make a key so we can make it current again if it still exists.
             currentItemKey.midiTicks = currentItem->getTime();
             currentItemKey.itemType = currentItem->getType();
+            currentItemSelected = currentItem->isSelected();
         }
     }
 
@@ -315,13 +320,24 @@ TempoView::updateList()
                       properties;
 
             // Create a new TempoListItem and add to the list.
-            new TempoListItem(
+            TempoListItem *item = new TempoListItem(
                     m_list,  // treeWidget
                     comp,  // composition
                     TempoListItem::TimeSignature,  // type
                     sig.first,  // time
                     timeSignatureIndex,  // index
                     labels);
+
+            // Set current if it is the right one.
+            // Setting current will clear any selection so we do it
+            // before we set the selection.
+            if (haveCurrentItem  &&
+                currentItemKey.itemType == TempoListItem::TimeSignature) {
+                if (sig.first == currentItemKey.midiTicks) {
+                    m_list->setCurrentItem(item);
+                    item->setSelected(currentItemSelected);
+                }
+            }
         }
     }
 
@@ -372,40 +388,27 @@ TempoView::updateList()
             labels << timeString << tr("Tempo   ") << desc;
 
             // Create a new TempoListItem and add to the list.
-            new TempoListItem(
+            TempoListItem *item = new TempoListItem(
                     m_list,  // treeWidget
                     comp,  // composition
                     TempoListItem::Tempo,  // type
                     time,
                     tempoIndex,
                     labels);
-        }
-    }
 
-    // Restore Current Item.
-
-    // This has to be done prior to restoring the selection or else it
-    // will clear the selection.
-    // ??? We could do this in the loops above and avoid another loop.
-
-    if (haveCurrentItem) {
-        // For each item in the list...
-        for (int itemIndex = 0;
-             itemIndex < m_list->topLevelItemCount();
-             ++itemIndex) {
-            TempoListItem *item =
-                    dynamic_cast<TempoListItem *>(m_list->topLevelItem(itemIndex));
-            if (!item)
-                continue;
-
-            // Found it?  Make it current and bail.
-            if (currentItemKey.midiTicks == item->getTime()  &&
-                currentItemKey.itemType == item->getType()) {
-                m_list->setCurrentItem(item);
-                break;
+            // Set current if it is the right one.
+            // Setting current will clear any selection so we do it
+            // before we set the selection.
+            if (haveCurrentItem  &&
+                currentItemKey.itemType == TempoListItem::Tempo) {
+                if (time == currentItemKey.midiTicks) {
+                    m_list->setCurrentItem(item);
+                    item->setSelected(currentItemSelected);
+                }
             }
         }
     }
+
 
     // Restore Selection.
 
