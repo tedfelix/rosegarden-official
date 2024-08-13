@@ -7158,7 +7158,7 @@ RosegardenMainWindow::slotEditTempos(timeT openAtTime)
         return ;
     }
 
-    m_tempoView = new TempoView(m_editTempoController, openAtTime);
+    m_tempoView = new TempoView(openAtTime);
 
     connect(m_tempoView, &TempoView::closing,
             this, &RosegardenMainWindow::slotTempoViewClosed);

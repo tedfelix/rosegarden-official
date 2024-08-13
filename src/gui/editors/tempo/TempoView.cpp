@@ -71,11 +71,8 @@ namespace Rosegarden
 {
 
 
-TempoView::TempoView(
-        EditTempoController *editTempoController,
-        timeT openTime) :
+TempoView::TempoView(timeT openTime) :
     EditViewBase(std::vector<Segment *>()),  // ??? default ctor?
-    m_editTempoController(editTempoController),
     m_filter(TempoFilter | TimeSignatureFilter)
 {
 
@@ -523,7 +520,7 @@ TempoView::slotAddTempoChange()
     }
 
     // Launch the TempoDialog.
-    m_editTempoController->editTempo(
+    EditTempoController::self()->editTempo(
             this,  // parent
             insertTime,  // atTime
             true);  // timeEditable
@@ -714,7 +711,8 @@ TempoView::slotPopupEditor(QTreeWidgetItem *twi, int /*column*/)
 
     case TempoListItem::Tempo:
         // Launch the TempoDialog.
-        m_editTempoController->editTempo(this, time, true /* timeEditable */);
+        EditTempoController::self()->editTempo(
+                this, time, true /* timeEditable */);
         break;
 
     case TempoListItem::TimeSignature:

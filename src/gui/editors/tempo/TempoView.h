@@ -22,8 +22,6 @@
 #include "gui/general/EditViewBase.h"
 #include "base/TimeT.h"
 
-#include <QString>
-
 class QTreeWidgetItem;
 class QCloseEvent;
 class QCheckBox;
@@ -40,7 +38,6 @@ namespace Rosegarden
 
 
 class Segment;
-class EditTempoController;
 
 
 /// Tempo and Time Signature Editor
@@ -49,8 +46,7 @@ class TempoView : public EditViewBase, public CompositionObserver
     Q_OBJECT
 
 public:
-    TempoView(EditTempoController *editTempoController,
-              timeT openTime);
+    TempoView(timeT openTime);
     ~TempoView() override;
 
     // CompositionObserver overrides
@@ -129,16 +125,6 @@ private:
     /// Select the Event nearest the playback position pointer.
     void makeInitialSelection(timeT time);
 
-    /// Used to launch the TempoDialog.
-    /**
-     * Used to launch the TempoDialog to get a tempo from the user when adding
-     * or editing a tempo change.
-     *
-     * ??? Why keep a copy when it has a self()?  Get rid of this and use
-     *     EditTempoController::self().
-     */
-    EditTempoController *m_editTempoController;
-
     // Widgets
 
     // Filter
@@ -147,6 +133,8 @@ private:
     QCheckBox *m_timeSigCheckBox;
     // ??? Why not just a couple of bools?  Then store as two settings in
     //     the .conf file.  That would simplify so many things.
+    // ??? Even better, just use the QCheckBox objects as the state.  That
+    //     eliminates even more code.
     int m_filter;
     /// State (m_filter) -> Filter Check Boxes.
     /**
