@@ -329,9 +329,9 @@ CommandHistory::updateActions()
             ActionData* adata = ActionData::getInstance();
             QString key = "rosegardenmainwindow.rc:";
             key += actionName;
-            std::set<QKeySequence> ksSet = adata->getShortcuts(key);
+            std::list<QKeySequence> ksList = adata->getShortcuts(key);
             QStringList kssl;
-            foreach(auto ks, ksSet) {
+            foreach(auto ks, ksList) {
                 kssl.append(ks.toString(QKeySequence::NativeText));
             }
             QString scString = kssl.join(", ");

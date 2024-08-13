@@ -226,13 +226,19 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     ActionData* adata = ActionData::getInstance();
     QString key = adata->getKey(row);
     RG_DEBUG << "setModelData" << key << ks;
-    std::set<QKeySequence> ksOld = adata->getShortcuts(key);
-    std::set<QKeySequence> ksSet;
+    std::list<QKeySequence> ksOld = adata->getShortcuts(key);
+    if (! ks.isEmpty()) {
+        // check for duplicates
+        for (auto& kso : ksOld) {
+            if (kso == ks) {
+                // duplicate - nothing to do
+                return;
+            }
+        }
+    }
+    std::list<QKeySequence> ksList;
     unsigned int editIndex = column - 4;
     RG_DEBUG << "setModelData editIndex:" << editIndex;
-    if (editIndex >= ksOld.size() && !ks.isEmpty()) {
-        ksSet.insert(ks);
-    }
     unsigned int kssIndex = 0;
     QKeySequence toRemove;
     foreach(auto dks, ksOld) {
@@ -241,15 +247,18 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
                 toRemove = dks;
             }
             if (! ks.isEmpty()) {
-                ksSet.insert(ks);
+                ksList.push_back(ks);
             }
         } else {
-            ksSet.insert(dks);
+            ksList.push_back(dks);
         }
         kssIndex++;
     }
+    if (editIndex >= ksOld.size() && !ks.isEmpty()) {
+        ksList.push_back(ks);
+    }
     if (! toRemove.isEmpty()) {
-        ksSet.erase(toRemove);
+        ksList.remove(toRemove);
     }
     // debug
     QStringList sl;
@@ -258,12 +267,12 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     }
     RG_DEBUG << "setModelData old:" << sl;
     sl.clear();
-    foreach(auto k, ksSet) {
+    foreach(auto k, ksList) {
         sl << k.toString();
     }
     RG_DEBUG << "setModelData new:" << sl;
     // debug end
-    if (ksSet == ksOld) {
+    if (ksList == ksOld) {
         RG_DEBUG << "setModelData no change";
         return;
     }
@@ -277,6 +286,10 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
         std::set<QString> keys;
         keys.insert(key);
         bool sameContext = (m_warnType == SameContext);
+        std::set<QKeySequence> ksSet;
+        for (auto& val : ksList) {
+            ksSet.insert(val);
+        }
         adata->getDuplicateShortcuts(keys, ksSet, false,
                                      sameContext, duplicates);
         if (! duplicates.empty()) {
@@ -291,7 +304,7 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     }
 
     // set the shortcuts
-    adata->setUserShortcuts(key, ksSet);
+    adata->setUserShortcuts(key, ksList);
     if (m_warnType != None) {
         // remove the duplicates
         foreach(auto pair, duplicates[key].duplicateMap) {
@@ -382,8 +395,8 @@ void ShortcutDialog::clearPBClicked()
     ActionData* adata = ActionData::getInstance();
     foreach(auto row, m_editRows) {
         QString key = adata->getKey(row);
-        std::set<QKeySequence> ksSet;
-        adata->setUserShortcuts(key, ksSet);
+        std::list<QKeySequence> ksList;
+        adata->setUserShortcuts(key, ksList);
     }
     // refresh edit data
     editRow();
@@ -456,11 +469,11 @@ void ShortcutDialog::editRow()
         QString key = adata->getKey(row);
         RG_DEBUG << "editing key" << key;
 
-        std::set<QKeySequence> ksSet = adata->getShortcuts(key);
-        if (! adata->isDefault(key, ksSet)) {
+        std::list<QKeySequence> ksList = adata->getShortcuts(key);
+        if (! adata->isDefault(key, ksList)) {
             m_defPB->setEnabled(true);
         }
-        if (! ksSet.empty()) {
+        if (! ksList.empty()) {
             m_clearPB->setEnabled(true);
         }
     }
