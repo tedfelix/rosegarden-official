@@ -53,6 +53,7 @@
 #include <QDesktopServices>
 #include <QSettings>
 #include <QHeaderView>
+#include <QScrollBar>
 
 
 namespace
@@ -162,6 +163,10 @@ TempoView::TempoView(timeT openTime)
 
 TempoView::~TempoView()
 {
+    // ??? This is not getting called if we close rg with this window
+    //     up.  We also get a "use after free" from Composition when it
+    //     is dumping its extant observers.
+
     // Save state for next time.
     a_tempoFilter.set(m_tempoCheckBox->checkState() != Qt::Unchecked);
     a_timeSignatureFilter.set(m_timeSigCheckBox->checkState() != Qt::Unchecked);
@@ -207,9 +212,12 @@ TempoView::updateList()
 {
     // Preserve Selection.
 
+    // We use a key instead of an index because indexes change.  Keys
+    // do not.  This guarantees that we recreate the original selection
+    // as closely as possible.
     struct Key {
-        timeT midiTicks;
-        TempoListItem::Type itemType;
+        timeT midiTicks{0};
+        TempoListItem::Type itemType{TempoListItem::TimeSignature};
 
         bool operator<(const Key &rhs) const
         {
@@ -244,20 +252,28 @@ TempoView::updateList()
         selectionSet.insert(key);
     }
 
-    // ??? We also need to preserve the "current item".  I don't see how.
-    //     There is a setCurrentItem(), but no getCurrentItem().
-    //TempoListItem *item =
-    //        dynamic_cast<TempoListItem *>(m_list->???);
+    // Preserve the "current item".
 
-    // ??? We also need to preserve the scroll position.  Otherwise we
-    //     pop to the top every time we change something.
+    bool haveCurrentItem{false};
+    Key currentItemKey;
 
-    // ??? Might be better to avoid a "clear and refill" approach and instead
-    //     work with whatever is in the list and detect adds/deletes.  That
-    //     would make the selection preservation automatic and would also
-    //     preserve the scroll position.  All while doing a lot less work.
-    //     Iterate through composition and add any that are missing to the list.
-    //     Iterate through list and remove any that are not in the composition.
+    // Scope to avoid accidentally reusing currentItem after it is gone.
+    {
+        // The "current item" is always selected and has the focus outline.
+        TempoListItem *currentItem =
+                dynamic_cast<TempoListItem *>(m_list->currentItem());
+        haveCurrentItem = currentItem;
+        if (haveCurrentItem) {
+            // Make a key so we can re-select it if it still exists.
+            currentItemKey.midiTicks = currentItem->getTime();
+            currentItemKey.itemType = currentItem->getType();
+        }
+    }
+
+    // Preserve scroll position.
+    int scrollPos{0};
+    if (m_list->verticalScrollBar())
+        scrollPos = m_list->verticalScrollBar()->value();
 
     // Recreate list.
 
@@ -366,6 +382,31 @@ TempoView::updateList()
         }
     }
 
+    // Restore Current Item.
+
+    // This has to be done prior to restoring the selection or else it
+    // will clear the selection.
+    // ??? We could do this in the loops above and avoid another loop.
+
+    if (haveCurrentItem) {
+        // For each item in the list...
+        for (int itemIndex = 0;
+             itemIndex < m_list->topLevelItemCount();
+             ++itemIndex) {
+            TempoListItem *item =
+                    dynamic_cast<TempoListItem *>(m_list->topLevelItem(itemIndex));
+            if (!item)
+                continue;
+
+            // Found it?  Make it current and bail.
+            if (currentItemKey.midiTicks == item->getTime()  &&
+                currentItemKey.itemType == item->getType()) {
+                m_list->setCurrentItem(item);
+                break;
+            }
+        }
+    }
+
     // Restore Selection.
 
     bool haveSelection{false};
@@ -397,8 +438,9 @@ TempoView::updateList()
     else
         leaveActionState("have_selection");
 
-    // ??? Need to restore current item.
-    //m_list->setCurrentItem(???);
+    // Restore scroll position.
+    if (scrollPos  &&  m_list->verticalScrollBar())
+        m_list->verticalScrollBar()->setValue(scrollPos);
 
     // ??? We never return false.  Make this function return void.
     return true;

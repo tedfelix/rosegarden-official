@@ -367,6 +367,11 @@ EventView::eventRemoved(const Segment *, Event *e)
 bool
 EventView::updateTreeWidget()
 {
+    // ??? This selection stuff is extremely buggy.  It stores the indices,
+    //     so if anything has changed, it will re-select the wrong items.
+    //     It also completely loses the scroll position.  Working on fixing
+    //     this in TempoView.  See that for the latest.
+
     // If no selection, copy UI selection to m_listSelection.
     if (m_listSelection.size() == 0) {
 
