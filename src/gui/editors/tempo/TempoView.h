@@ -120,7 +120,7 @@ private:
 
     void updateWindowTitle();
 
-    bool updateList();
+    void updateList();
 
     /// Select the Event nearest the playback position pointer.
     void makeInitialSelection(timeT time);
@@ -136,7 +136,6 @@ private:
     // ??? QTreeWidget seems like overkill.  We never have sub items.
     //     QTableWidget seems like a better choice.
     QTreeWidget *m_list;
-    std::vector<int> m_listSelection;
 
 };
 

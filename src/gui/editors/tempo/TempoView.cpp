@@ -203,7 +203,7 @@ TempoView::timeSignatureChanged(const Composition * /*comp*/)
     updateList();
 }
 
-bool
+void
 TempoView::updateList()
 {
     // Preserve Selection.
@@ -283,6 +283,8 @@ TempoView::updateList()
     Composition *comp = &RosegardenDocument::currentDocument->getComposition();
 
     // Time Signatures
+    // ??? This puts the time signatures before the tempos.  We need to turn
+    //     on sorting for this tree so that all items are sorted by time.
     if (m_timeSigCheckBox->isChecked()) {
 
         for (int timeSignatureIndex = 0;
@@ -440,27 +442,17 @@ TempoView::updateList()
     // Restore scroll position.
     if (scrollPos  &&  m_list->verticalScrollBar())
         m_list->verticalScrollBar()->setValue(scrollPos);
-
-    // ??? We never return false.  Make this function return void.
-    return true;
 }
 
 void
 TempoView::makeInitialSelection(timeT time)
 {
-    // Start with nothing selected.
-    // updateList() is called before this routine and it selects
-    // the first item.  This clears it.
-    // ??? I think this is no longer the case.  Remove this.
-    slotClearSelection();
-
     // Select an item around the given time.
 
     // Note that this is complicated by the fact that Time Signatures
     // appear before Tempos.
 
-    TempoListItem *goodItem = nullptr;
-    int goodItemNo = 0;
+    TempoListItem *goodItem{nullptr};
 
     // For each item...
     for (int itemIndex = 0;
@@ -477,11 +469,9 @@ TempoView::makeInitialSelection(timeT time)
 
         // Keep track of the last item we examined.
         goodItem = item;
-        goodItemNo = itemIndex;
     }
 
     if (goodItem) {
-        m_listSelection.push_back(goodItemNo);
         goodItem->setSelected(true);
         m_list->scrollToItem(goodItem);
     }
@@ -497,75 +487,37 @@ TempoView::getCurrentSegment()
 void
 TempoView::slotEditDelete()
 {
-    // ??? Select All then Delete leaves one item behind.  Why?  Also
-    //     trying to delete that last one can cause a crash.
+    MacroCommand *macroCommand = new MacroCommand(
+            tr("Delete Tempo or Time Signature"));
 
-    QList<QTreeWidgetItem *> selection = m_list->selectedItems();
-
-    // Nothing selected?  Nothing to delete.  Bail.
-    if (selection.empty())
-        return;
-
-    RG_DEBUG << "slotEditDelete() - deleting " << selection.count() << " items";
-
-    // Create a map of each selected item to sort them in index order.
-    typedef std::map<int /*index*/, TempoListItem *> ItemMap;
-    ItemMap itemMap;
-
-    for (QTreeWidgetItem *twi : selection) {
-        TempoListItem *tempoListItem = dynamic_cast<TempoListItem *>(twi);
-        if (!tempoListItem)
+    // For each item in the list in reverse order...
+    for (int itemIndex = m_list->topLevelItemCount() - 1;
+         itemIndex >= 0;
+         --itemIndex) {
+        TempoListItem *item = dynamic_cast<TempoListItem *>(
+                m_list->topLevelItem(itemIndex));
+        if (!item)
             continue;
 
-        itemMap[tempoListItem->getIndex()] = tempoListItem;
-    }
-
-    // Nothing to delete?  Bail.
-    if (itemMap.empty())
-        return;
-
-    // We want the Remove commands to be in reverse order, because
-    // removing one item by index will affect the indices of
-    // subsequent items.  So we'll stack them onto here and then pull
-    // them off again.
-    std::vector<Command *> commands;
-
-    // For each selected item in index order.
-    // ??? Why not just read the map backwards with reverse iterators?
-    //     rbegin() and rend().
-    //     Then the commands vector is not needed.  We can assemble the
-    //     macro command in this loop and be done with it.
-    for (ItemMap::iterator iter = itemMap.begin();
-         iter != itemMap.end();
-         ++iter) {
-        TempoListItem *item = iter->second;
-
-        // Add the appropriate command to the "commands" list.
+        // Skip any that aren't selected.
+        if (!item->isSelected())
+            continue;
 
         if (item->getType() == TempoListItem::TimeSignature) {
-            commands.push_back(new RemoveTimeSignatureCommand
-                               (item->getComposition(),
-                                item->getIndex()));
+            macroCommand->addCommand(new RemoveTimeSignatureCommand(
+                    item->getComposition(),
+                    item->getIndex()));
         } else {  // Tempo
-            commands.push_back(new RemoveTempoChangeCommand
-                               (item->getComposition(),
-                                item->getIndex()));
+            macroCommand->addCommand(new RemoveTempoChangeCommand(
+                    item->getComposition(),
+                    item->getIndex()));
         }
     }
 
-    // No commands to run?  Bail.
-    if (commands.empty())
-        return;
-
-    MacroCommand *macroCommand = new MacroCommand
-                             (tr("Delete Tempo or Time Signature"));
-
-    // For each command in reverse order which also happens to be
-    // reverse index order, add the remove command to the macro.
-    for (int i = commands.size() - 1; i >= 0; --i) {
-        macroCommand->addCommand(commands[i]);
-    }
-    CommandHistory::getInstance()->addCommand(macroCommand);
+    if (macroCommand->haveCommands())
+        CommandHistory::getInstance()->addCommand(macroCommand);
+    else
+        delete macroCommand;
 
     // No need to call updateList().  The CompositionObserver handlers
     // will be notified of the changes.
@@ -650,10 +602,7 @@ TempoView::slotEditItem()
 void
 TempoView::slotSelectAll()
 {
-    m_listSelection.clear();
-
-    for (int i = 0; m_list->topLevelItem(i); ++i) {
-        m_listSelection.push_back(i);
+    for (int i = 0; i < m_list->topLevelItemCount(); ++i) {
         m_list->topLevelItem(i)->setSelected(true);
     }
 }
@@ -661,9 +610,7 @@ TempoView::slotSelectAll()
 void
 TempoView::slotClearSelection()
 {
-    m_listSelection.clear();
-
-    for (int i = 0; m_list->topLevelItem(i); ++i) {
+    for (int i = 0; i < m_list->topLevelItemCount(); ++i) {
         m_list->topLevelItem(i)->setSelected(false);
     }
 }
