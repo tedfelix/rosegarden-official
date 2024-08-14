@@ -542,6 +542,9 @@ RosegardenMainWindow::~RosegardenMainWindow()
 {
     RG_DEBUG << "dtor...";
 
+    delete m_tempoView;
+    m_tempoView = nullptr;
+
     if (getView() &&
         getView()->getTrackEditor() &&
         getView()->getTrackEditor()->getCompositionView()) {

@@ -163,10 +163,6 @@ TempoView::TempoView(timeT openTime)
 
 TempoView::~TempoView()
 {
-    // ??? This is not getting called if we close rg with this window
-    //     up.  We also get a "use after free" from Composition when it
-    //     is dumping its extant observers.
-
     // Save state for next time.
     a_tempoFilter.set(m_tempoCheckBox->checkState() != Qt::Unchecked);
     a_timeSignatureFilter.set(m_timeSigCheckBox->checkState() != Qt::Unchecked);
