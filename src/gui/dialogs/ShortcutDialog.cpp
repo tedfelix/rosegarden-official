@@ -83,6 +83,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
                                   const QItemSelection&)));
 
     m_filterPatternLineEdit = new QLineEdit;
+    m_filterPatternLineEdit->setClearButtonEnabled(true);
     m_filterPatternLabel = new QLabel(tr("Filter pattern:"));
 
     connect(m_filterPatternLineEdit, SIGNAL(textChanged(const QString&)),
