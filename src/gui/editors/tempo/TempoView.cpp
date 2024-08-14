@@ -283,8 +283,6 @@ TempoView::updateList()
     Composition *comp = &RosegardenDocument::currentDocument->getComposition();
 
     // Time Signatures
-    // ??? This puts the time signatures before the tempos.  We need to turn
-    //     on sorting for this tree so that all items are sorted by time.
     if (m_timeSigCheckBox->isChecked()) {
 
         for (int timeSignatureIndex = 0;
@@ -406,6 +404,8 @@ TempoView::updateList()
             }
         }
     }
+
+    m_list->sortItems(0, Qt::AscendingOrder);
 
 
     // Restore Selection.
