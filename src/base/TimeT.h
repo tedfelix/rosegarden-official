@@ -20,6 +20,7 @@
 
 namespace Rosegarden
 {
+
     // Time in MIDI ticks (aka pulses as in ppqn, pulses per quarter note).
     // ??? rename: MidiTicks
     typedef long timeT;
@@ -30,6 +31,7 @@ namespace Rosegarden
     // by the timer resolution.  See AlsaDriver::setCurrentTimer().
     // 480 is used for MIDI file export.  See MidiFile::convertToMidi().
     constexpr timeT timebase = 960;  // PPQ, PPQN, TPQN
+
 }
 
 #endif

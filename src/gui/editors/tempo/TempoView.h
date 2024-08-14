@@ -22,17 +22,13 @@
 #include "gui/general/EditViewBase.h"
 #include "base/TimeT.h"
 
-#include <QSize>
-#include <QString>
-
-class QWidget;
 class QTreeWidgetItem;
 class QCloseEvent;
 class QCheckBox;
 class QGroupBox;
 class QTreeWidget;
 class QFrame;
-class QGridLayout;
+class QHBoxLayout;
 
 #include <vector>
 
@@ -42,120 +38,105 @@ namespace Rosegarden
 
 
 class Segment;
-class EditTempoController;
 
 
 /// Tempo and Time Signature Editor
-/**
- * Tempo and time signature list-style editor.  This has some code
- * in common with EventView, but not enough to make them any more
- * sharable than simply through EditViewBase.  Hopefully this one
- * should prove considerably simpler, anyway.
- */
 class TempoView : public EditViewBase, public CompositionObserver
 {
     Q_OBJECT
 
-    enum Filter
-    {
-        None          = 0x0000,
-        Tempo         = 0x0001,
-        TimeSignature = 0x0002
-    };
-
 public:
-    TempoView(EditTempoController *editTempoController,
-              timeT openTime);
+    TempoView(timeT openTime);
     ~TempoView() override;
 
-    virtual bool applyLayout(int staffNo = -1);
-
-    //void updateView() override;
-
-    virtual void setupActions();
-    void initStatusBar();
-    // unused virtual QSize getViewSize();
-    // unused virtual void setViewSize(QSize);
-
-    /// Set the button states to the current filter positions
-    void setButtonsToFilter();
-
-    /// Menu creation and show
-    void createMenu();
-
-    // Composition Observer callbacks
-
+    // CompositionObserver overrides
     void timeSignatureChanged(const Composition *) override;
     void tempoChanged(const Composition *) override;
 
 signals:
+
+    /// Connected to RosegardenMainWindow::slotTempoViewClosed().
     void closing();
 
 public slots:
-    // standard slots
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
 
-    // other edit slots
+    /// Edit > Delete (or the delete key)
     void slotEditDelete();
-    void slotEditInsertTempo();
-    void slotEditInsertTimeSignature();
-    void slotEdit();
+    /// Edit > Add Tempo Change
+    void slotAddTempoChange();
+    /// Edit > Add Time Signature Change
+    void slotAddTimeSignatureChange();
+    /// Edit > Edit Item
+    /**
+     * See slotPopupEditor().
+     */
+    void slotEditItem();
 
+    /// Edit > Select All
     void slotSelectAll();
+    /// Edit > Clear Selection
     void slotClearSelection();
 
-    void slotMusicalTime();
-    void slotRealTime();
-    void slotRawTime();
+    /// View > Musical Times
+    void slotViewMusicalTimes();
+    /// View > Real Times
+    void slotViewRealTimes();
+    /// View > Raw Times
+    void slotViewRawTimes();
+
+    /// Help > Help
     void slotHelpRequested();
+    /// Help > About
     void slotHelpAbout();
 
-    /// on double click on the list
-    void slotPopupEditor(QTreeWidgetItem*, int col = 0);
+    /// Double-click entry.
+    /**
+     * See slotEditItem().
+     */
+    void slotPopupEditor(QTreeWidgetItem *twi, int column = 0);
 
-    /// Change filter parameters
-    void slotModifyFilter(int);
-
-protected slots:
-
-    void slotUpdateWindowTitle(bool modified);
+    /// Filter check box clicked.
+    void slotFilterClicked(bool);
 
 protected:
+
+    // EditViewBase override.
+    Segment *getCurrentSegment() override;
+
+    // QWidget override.
     void closeEvent(QCloseEvent *) override;
 
 private slots:
 
+    /// Connected to RosegardenDocument::documentModified().
     void slotDocumentModified(bool modified);
 
 private:
 
-    QFrame *m_frame{nullptr};
-    QGridLayout *m_gridLayout{nullptr};
+    QFrame *m_frame;
+    QHBoxLayout *m_mainLayout;
 
-    void readOptions();
-    void saveOptions();
+    void initMenu();
 
-    void makeInitialSelection(timeT);
-    QString makeTimeString(timeT time, int timeMode);
-    Segment *getCurrentSegment() override;
+    void updateWindowTitle();
 
-    //--------------- Data members ---------------------------------
+    void updateList();
 
-    EditTempoController *m_editTempoController;
-    QTreeWidget *m_list;
-    int m_filter;
+    /// Select the Event nearest the playback position pointer.
+    void makeInitialSelection(timeT time);
 
-    static int m_lastSetFilter;
+    // Widgets
 
+    // Filter
     QGroupBox *m_filterGroup;
     QCheckBox *m_tempoCheckBox;
     QCheckBox *m_timeSigCheckBox;
 
-    std::vector<int> m_listSelection;
+    // List
+    // ??? QTreeWidget seems like overkill.  We never have sub items.
+    //     QTableWidget seems like a better choice.
+    QTreeWidget *m_list;
 
-    bool m_ignoreUpdates;
 };
 
 

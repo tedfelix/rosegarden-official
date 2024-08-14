@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[TempoDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TempoDialog.h"
 #include "misc/Debug.h"

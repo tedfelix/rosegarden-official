@@ -90,7 +90,6 @@ protected:
     void closeEvent(QCloseEvent *) override;
 
     void setupActions();
-    QString makeTimeString(timeT time, int timeMode);
 
     //--------------- Data members ---------------------------------
     RosegardenDocument        *m_doc;
@@ -106,6 +105,8 @@ protected:
     QPushButton             *m_deleteButton;
     QPushButton             *m_deleteAllButton;
 
+    // ??? QTreeWidget seems like overkill.  We never have sub items.
+    //     QTableWidget seems like a better choice.
     QTreeWidget               *m_listView;
 
     bool                     m_modified;

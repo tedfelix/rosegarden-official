@@ -617,7 +617,11 @@ void
 NotationView::setupActions()
 {
     //setup actions common to all views.
-    EditViewBase::setupBaseActions(true);
+    EditViewBase::setupBaseActions();
+
+    createAction("edit_cut", SLOT(slotEditCut()));
+    createAction("edit_copy", SLOT(slotEditCopy()));
+    createAction("edit_paste", SLOT(slotEditPaste()));
 
     //"file" MenuBar menu
     // "file_save"

@@ -30,14 +30,21 @@
 #include "Marker.h"
 
 // Qt
-#include <QtCore/QWeakPointer>
+#include <QString>
 
 // System
+#include <utility>  // std::pair
+#include <vector>
 #include <set>
 #include <map>
+#include <string>
+#include <list>
+
 
 namespace Rosegarden
 {
+
+
 // We store tempo in quarter-notes per minute * 10^5 (hundred
 // thousandths of a quarter-note per minute).  This means the maximum
 // tempo in a 32-bit integer is about 21400 qpm.  We use a signed int
@@ -51,6 +58,7 @@ class BasicQuantizer;
 class NotationQuantizer;
 
 class CompositionObserver;
+
 
 /// Composition contains a complete representation of a piece of music.
 /**
@@ -740,6 +748,14 @@ public:
     timeT getDurationForMusicalTime(timeT absTime,
                                     int bars, int beats,
                                     int fractions, int remainder) const;
+
+    enum class TimeMode {
+        MusicalTime,
+        RealTime,
+        RawTime
+    };
+    /// Convert a time in MIDI Ticks (timeT) to various human-readable formats.
+    QString makeTimeString(timeT midiTicks, TimeMode timeMode) const;
 
 
     /**
