@@ -42,7 +42,7 @@
     <message>
         <location line="-5"/>
         <source>Rosegarden playback device</source>
-        <translation>Urządzenie odtwarzania Rosegarden</translation>
+        <translation>Urządzenie odtwarzające Rosegarden</translation>
     </message>
     <message>
         <location line="+10"/>
