@@ -90,6 +90,8 @@ private:
     QComboBox *m_midiTimeCodeMode;
     QCheckBox *m_autoConnectSyncOut;
 
+    QSpinBox *m_ppqnSmfExport;
+
     void updateWidgets();
 
 };

@@ -311,6 +311,18 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     ++row;
 
+    // PPQN for MIDI File Export
+    layout->addWidget(new QLabel(tr("PPQN/Division for MIDI File Export")), row, 0);
+    m_ppqnSmfExport = new QSpinBox;
+    m_ppqnSmfExport->setMinimum(96);
+    m_ppqnSmfExport->setMaximum(960);
+    m_ppqnSmfExport->setValue(Preferences::getSMFExportPPQN());
+    connect(m_ppqnSmfExport,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this,
+            &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_ppqnSmfExport, row, 2, 1, 2);
+
     // Fill out the rest of the space so that we do not end up centered.
     layout->setRowStretch(row, 10);
 
@@ -523,6 +535,7 @@ MIDIConfigurationPage::apply()
     settings.setValue("sfxloadpath", m_pathToLoadCommand->text());
     settings.setValue("soundfontpath", m_soundFont->text());
 
+    Preferences::setSMFExportPPQN(m_ppqnSmfExport->value());
 
     // *** MIDI Sync tab
 
