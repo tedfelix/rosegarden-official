@@ -47,7 +47,7 @@
     <message>
         <location line="+10"/>
         <source>Default playback device</source>
-        <translation>Domyślne urządzenie odtwarzania</translation>
+        <translation>Domyślne urządzenie odtwarzające</translation>
     </message>
     <message>
         <location line="-23"/>
