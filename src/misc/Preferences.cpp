@@ -230,5 +230,15 @@ bool Preferences::getShowNoteNames()
     return showNoteNames.get();
 }
 
+PreferenceInt smfExportPPQN(GeneralOptionsConfigGroup, "smfExportPPQN", 480);
 
+void Preferences::setSMFExportPPQN(int value)
+{
+    smfExportPPQN.set(value);
+}
+
+int Preferences::getSMFExportPPQN()
+{
+    return smfExportPPQN.get();
+}
 }
