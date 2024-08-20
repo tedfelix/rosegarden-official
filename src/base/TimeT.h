@@ -29,7 +29,8 @@ namespace Rosegarden
     // But 960ppq appears to be the standard for Rosegarden notation anyway.
     // The sequencer deals in RealTime (nanosecond resolution) but is limited
     // by the timer resolution.  See AlsaDriver::setCurrentTimer().
-    // 480 is used for MIDI file export.  See MidiFile::convertToMidi().
+    // 480 is usually used for MIDI file export but can be changed.  See
+    // Preferences::getSMFExportPPQN().
     constexpr timeT timebase = 960;  // PPQ, PPQN, TPQN
 
 }
