@@ -227,7 +227,7 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     ActionData* adata = ActionData::getInstance();
     QString key = adata->getKey(row);
     RG_DEBUG << "setModelData" << key << ks;
-    std::list<QKeySequence> ksOld = adata->getShortcuts(key);
+    KeyList ksOld = adata->getShortcuts(key);
     if (! ks.isEmpty()) {
         // check for duplicates
         for (auto& kso : ksOld) {
@@ -237,7 +237,7 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
             }
         }
     }
-    std::list<QKeySequence> ksList;
+    KeyList ksList;
     unsigned int editIndex = column - 4;
     RG_DEBUG << "setModelData editIndex:" << editIndex;
     unsigned int kssIndex = 0;
@@ -396,7 +396,7 @@ void ShortcutDialog::clearPBClicked()
     ActionData* adata = ActionData::getInstance();
     foreach(auto row, m_editRows) {
         QString key = adata->getKey(row);
-        std::list<QKeySequence> ksList;
+        KeyList ksList;
         adata->setUserShortcuts(key, ksList);
     }
     // refresh edit data
@@ -470,7 +470,7 @@ void ShortcutDialog::editRow()
         QString key = adata->getKey(row);
         RG_DEBUG << "editing key" << key;
 
-        std::list<QKeySequence> ksList = adata->getShortcuts(key);
+        KeyList ksList = adata->getShortcuts(key);
         if (! adata->isDefault(key, ksList)) {
             m_defPB->setEnabled(true);
         }

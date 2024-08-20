@@ -482,7 +482,7 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
     // shortcuts get all from ActionData
     ActionData* adata = ActionData::getInstance();
     QString key = basefile + ":" + actionName;
-    std::list<QKeySequence> shortcuts = adata->getShortcuts(key);
+    KeyList shortcuts = adata->getShortcuts(key);
     QList<QKeySequence> shortcutList;
     foreach(auto ks, shortcuts) {
         shortcutList.append(ks);

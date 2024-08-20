@@ -28,8 +28,13 @@
 class QXmlStreamAttributes;
 class QStandardItemModel;
 
+
 namespace Rosegarden
 {
+
+
+typedef std::list<QKeySequence> KeyList;
+
 
 /// Singleton class for collecting data about all actions
 class ActionData : public XMLHandler
@@ -59,15 +64,15 @@ public:
     QStandardItemModel* getModel();
     QString getKey(int row) const;
     bool isDefault(const QString& key,
-                   const std::list<QKeySequence>& ksList) const;
+                   const KeyList& ksList) const;
     void saveUserShortcuts();
     void setUserShortcuts(const QString& key,
-                          const std::list<QKeySequence>& ksList);
+                          const KeyList& ksList);
     void removeUserShortcut(const QString& key,
                             const QKeySequence& ks);
     void removeUserShortcuts(const QString& key);
     void removeAllUserShortcuts();
-    std::list<QKeySequence> getShortcuts(const QString& key) const;
+    KeyList getShortcuts(const QString& key) const;
     void getDuplicateShortcuts(const std::set<QString>& keys,
                                std::set<QKeySequence> ksSet,
                                bool resetToDefault,
@@ -113,12 +118,10 @@ public:
         QString toolbar;
         QString text;
         QString icon;
-        std::list<QKeySequence> shortcuts;
+        KeyList shortcuts;
         QString tooltip;
         bool global;
     };
-
-    typedef std::list<QKeySequence> KeyList;
 
     std::map<QString, ActionInfo> m_actionMap;
     std::map<QString, ActionInfo> m_actionMapOriginal;

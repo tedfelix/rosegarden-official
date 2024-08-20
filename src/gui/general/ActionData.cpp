@@ -63,7 +63,7 @@ QString ActionData::getKey(int row) const
 }
 
 bool ActionData::isDefault(const QString& key,
-                           const std::list<QKeySequence>& ksList) const
+                           const KeyList& ksList) const
 {
     auto it = m_actionMap.find(key);
     if (it == m_actionMap.end()) {
@@ -103,7 +103,7 @@ void ActionData::saveUserShortcuts()
 }
 
 void ActionData::setUserShortcuts(const QString& key,
-                                  const std::list<QKeySequence>& ksList)
+                                  const KeyList& ksList)
 {
     QStringList kssl;
     foreach(auto ks, ksList) {
@@ -124,7 +124,7 @@ void ActionData::removeUserShortcut(const QString& key,
                                     const QKeySequence& ks)
 {
     RG_DEBUG << "remove shortcut" << ks << "from" << key;
-    std::list<QKeySequence> ksList = getShortcuts(key);
+    KeyList ksList = getShortcuts(key);
     ksList.remove(ks);
     setUserShortcuts(key, ksList);
 }
@@ -147,8 +147,8 @@ void ActionData::removeAllUserShortcuts()
     updateModel(""); // key empty updates the whole model
 }
 
-std::list<QKeySequence> ActionData::getShortcuts(const QString& key) const {
-    std::list<QKeySequence> ret;
+KeyList ActionData::getShortcuts(const QString& key) const {
+    KeyList ret;
     auto it = m_actionMap.find(key);
     if (it == m_actionMap.end()) {
         // action not found
@@ -187,7 +187,7 @@ void ActionData::getDuplicateShortcuts(const std::set<QString>& keys,
         ddatak.editActionText = etextAdj;
         ddatak.editContext = m_contextMap.at(efile);
         std::set<QKeySequence> newKS;
-        std::list<QKeySequence> shortcuts = getShortcuts(key);
+        KeyList shortcuts = getShortcuts(key);
         std::set<QKeySequence> oldKS;
         for (auto& val : shortcuts) {
             oldKS.insert(val);
@@ -195,7 +195,7 @@ void ActionData::getDuplicateShortcuts(const std::set<QString>& keys,
 
         if (resetToDefault) {
             // the new shortcuts are the defaults old ones are the present ones
-            std::list<QKeySequence> shortcuts = ainfo.shortcuts;
+            KeyList shortcuts = ainfo.shortcuts;
             for (auto& val : shortcuts) {
                 newKS.insert(val);
             }
@@ -227,7 +227,7 @@ void ActionData::getDuplicateShortcuts(const std::set<QString>& keys,
                 }
                 if (ainfo.global || mainfo.global) contextRelevant = true;
                 if (! contextRelevant) continue;
-                std::list<QKeySequence> shortcuts = getShortcuts(mkey);
+                KeyList shortcuts = getShortcuts(mkey);
                 std::set<QKeySequence> mKSL;
                 for (auto& val : shortcuts) {
                     mKSL.insert(val);
@@ -305,7 +305,7 @@ void ActionData::applyKeyboard(int index)
         for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
             const QString& mkey = (*i).first;
             const ActionInfo& mainfo = m_actionMap.at(mkey);
-            const std::list<QKeySequence>& defaultShortcuts = mainfo.shortcuts;
+            const KeyList& defaultShortcuts = mainfo.shortcuts;
             bool inList = false;
             for (auto& val : defaultShortcuts) {
                 if (val == ksSrc) {
@@ -318,7 +318,7 @@ void ActionData::applyKeyboard(int index)
                 continue;
             }
 
-            std::list<QKeySequence> scs = m_actionMapOriginal[mkey].shortcuts;
+            KeyList scs = m_actionMapOriginal[mkey].shortcuts;
             for (auto& val : scs) {
                 if (val == ksDest) {
                     inList = true;
