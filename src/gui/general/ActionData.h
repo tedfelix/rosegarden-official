@@ -19,8 +19,8 @@
 #define RG_ACTIONDATA_H
 
 #include <map>
-#include <set>
 #include <deque>
+#include <set>
 #include <list>
 
 #include "document/io/XMLHandler.h"
@@ -28,8 +28,13 @@
 class QXmlStreamAttributes;
 class QStandardItemModel;
 
+
 namespace Rosegarden
 {
+
+
+typedef std::list<QKeySequence> KeyList;
+
 
 /// Singleton class for collecting data about all actions
 class ActionData : public XMLHandler
@@ -59,15 +64,15 @@ public:
     QStandardItemModel* getModel();
     QString getKey(int row) const;
     bool isDefault(const QString& key,
-                   const std::set<QKeySequence>& ksSet) const;
+                   const KeyList& ksList) const;
     void saveUserShortcuts();
     void setUserShortcuts(const QString& key,
-                          const std::set<QKeySequence>& ksSet);
+                          const KeyList& ksList);
     void removeUserShortcut(const QString& key,
                             const QKeySequence& ks);
     void removeUserShortcuts(const QString& key);
     void removeAllUserShortcuts();
-    std::set<QKeySequence> getShortcuts(const QString& key) const;
+    KeyList getShortcuts(const QString& key) const;
     void getDuplicateShortcuts(const std::set<QString>& keys,
                                std::set<QKeySequence> ksSet,
                                bool resetToDefault,
@@ -113,12 +118,10 @@ public:
         QString toolbar;
         QString text;
         QString icon;
-        std::set<QKeySequence> shortcuts;
+        KeyList shortcuts;
         QString tooltip;
         bool global;
     };
-
-    typedef std::set<QKeySequence> KeySet;
 
     std::map<QString, ActionInfo> m_actionMap;
     std::map<QString, ActionInfo> m_actionMapOriginal;
@@ -145,8 +148,8 @@ public:
     QString m_currentFile;
     std::map<QString, QString> m_contextMap;
     std::deque<QString> m_keyStore;
-    std::map<QString, KeySet> m_userShortcuts;
-    std::map<QString, KeySet> m_userShortcutsCopy;
+    std::map<QString, KeyList> m_userShortcuts;
+    std::map<QString, KeyList> m_userShortcutsCopy;
     QStandardItemModel* m_model;
     KeyboardTranslations m_keyboardTranslations;
     std::map<QString, QString> m_translatedKeyboardNames;
