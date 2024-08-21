@@ -4,6 +4,13 @@
     <id>com.rosegardenmusic.rosegarden</id>
     <provides>
       <id>com.rosegardenmusic.rosegarden.desktop</id>
+      <!--
+           ic01: Interface Class 0x01: AUDIO
+           isc03: Interface Sub Class 0x03: MIDISTREAMING
+           See "Universal Serial Bus Device Class Definition for Audio
+           Devices" at usb.org.
+      -->
+      <modalias>usb:*ic01isc03ip*</modalias>
     </provides>
     <launchable type="desktop-id">com.rosegardenmusic.rosegarden.desktop</launchable>
     <name>Rosegarden</name>
