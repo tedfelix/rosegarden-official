@@ -327,7 +327,7 @@
         <location line="+180"/>
         <location line="+24"/>
         <source>&amp;Edit</source>
-        <translation>Edytuj</translation>
+        <translation>Edycja</translation>
     </message>
     <message>
         <location line="-1176"/>
@@ -854,7 +854,7 @@
     <message>
         <location line="+2"/>
         <source>Interpret &amp;Slurs and Marks</source>
-        <translation>Interpretuj łuki i znaczniki</translation>
+        <translation>Interpretuj łuki i artykulacje</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2248,7 +2248,7 @@
     <message>
         <location line="-69"/>
         <source>&amp;Cycle Slashes</source>
-        <translation>Cięcia cykliczne</translation>
+        <translation>Cykl tremolo</translation>
     </message>
     <message>
         <source>/</source>
@@ -2415,7 +2415,7 @@
         <location line="-400"/>
         <location line="+401"/>
         <source>&amp;Double Durations</source>
-        <translation>Podwójne długości</translation>
+        <translation>Dwukrotne długości</translation>
     </message>
     <message>
         <location line="-400"/>
@@ -2566,7 +2566,7 @@
         <location line="+16"/>
         <location line="+760"/>
         <source>T&amp;ransport</source>
-        <translation>Transport</translation>
+        <translation>Transportuj</translation>
     </message>
     <message>
         <location line="-880"/>
@@ -3011,7 +3011,7 @@
     <message>
         <location line="+1"/>
         <source>Mar&amp;ks</source>
-        <translation>Artykulacja</translation>
+        <translation>Artykulacje</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3106,7 +3106,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Remove All Marks</source>
-        <translation>Usuń wszystkie znaczniki</translation>
+        <translation>Usuń wszystkie artykulacje</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3267,12 +3267,12 @@
     <message>
         <location line="+1"/>
         <source>Stem &amp;Up</source>
-        <translation>Laseczka w górę</translation>
+        <translation>Laseczki w górę</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Stem &amp;Down</source>
-        <translation>Laseczka w dół</translation>
+        <translation>Laseczki w dół</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3283,7 +3283,7 @@
         <location line="-364"/>
         <location line="+365"/>
         <source>&amp;Phrase</source>
-        <translation>Wrażenie</translation>
+        <translation>Fraza</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3445,7 +3445,7 @@
     <message>
         <location line="+1"/>
         <source>Cycle &amp;Dots</source>
-        <translation>Cykle kropki</translation>
+        <translation>Cykl kropek</translation>
     </message>
     <message>
         <source>Ctrl+.</source>
@@ -3455,7 +3455,7 @@
     <message>
         <location line="+1"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
-        <translation>Cykle kropki bez zmiany długości</translation>
+        <translation>Cykl kropek bez zmiany długości</translation>
     </message>
     <message>
         <source>Ctrl+Alt+.</source>
@@ -3601,7 +3601,7 @@
     <message>
         <location line="-447"/>
         <source>&amp;Visibility</source>
-        <translation>Widoczne</translation>
+        <translation>Widoczność</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4081,7 +4081,7 @@
     <message>
         <location line="+1"/>
         <source>Show &amp;Marks Toolbar</source>
-        <translation>Pokaż pasek narzędzi znaczników</translation>
+        <translation>Pokaż pasek narzędzi artykulacji</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4132,7 +4132,7 @@
     <message>
         <location line="-1"/>
         <source>Marks Toolbar</source>
-        <translation>Pasek narzędzi znaczników</translation>
+        <translation>Pasek narzędzi artykulacji</translation>
     </message>
     <message>
         <location line="-768"/>
@@ -5041,17 +5041,17 @@
     <message>
         <location line="+1"/>
         <source>Soprano viola da gamba</source>
-        <translation>Sopranowa viola da gamba</translation>
+        <translation>Viola da gamba sopranowa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Alto viola da gamba</source>
-        <translation>Altowa viola da gamba</translation>
+        <translation>Viola da gamba altowa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tenor viola da gamba</source>
-        <translation>Tenorowa viola da gamba</translation>
+        <translation>Viola da gamba tenorowa</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5380,7 +5380,7 @@
     <message>
         <location line="+1"/>
         <source>Double reeds</source>
-        <translation>Podwójne dęte drewniane</translation>
+        <translation>Dwustroikowe</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5567,7 +5567,7 @@
     <message>
         <location line="+1"/>
         <source>Single reeds</source>
-        <translation>Pojedyncze dęte drewniane</translation>
+        <translation>Jednostroikowe</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5999,7 +5999,7 @@
     <message>
         <location line="+1"/>
         <source>Orff alto glockenspiel</source>
-        <translation> Altowe dzwonki Orffa</translation>
+        <translation>Altowe dzwonki Orffa</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6252,7 +6252,7 @@
     <message>
         <location line="+1"/>
         <source>Suspended cymbal</source>
-        <translation>Zawieszony talerz</translation>
+        <translation>Talerz podwieszany</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6639,7 +6639,7 @@
     <message>
         <location line="+1"/>
         <source>Free reeds</source>
-        <translation>Pozostałe dęte</translation>
+        <translation>Stroikowe</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10796,7 +10796,7 @@ zamiast tego?</translation>
     <message>
         <location line="+7"/>
         <source>&lt;p&gt;Copyright 2000-2023 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Prawa autorskie 2000-2023 zespół programistów Rosegarden&lt;/p&gt;&lt;p&gt;Wersja: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Klucz kompilacji: %3&lt;br&gt;Wersja Qt: %2&lt;/p&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby zobaczyć listę autorów, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Aby uzyskać więcej informacji o Rosegarden, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License wersja 2 lub nowsza&lt;/p&gt;&lt;p&gt;Polskie tłumaczenie Rosegarden: Grzegorz &quot;Gootector&quot; Pruchniakowski.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Prawa autorskie 2000-2023 zespół programistów Rosegarden&lt;/p&gt;&lt;p&gt;Wersja: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Wydanie: %3&lt;br&gt;Wersja Qt: %2&lt;/p&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby zobaczyć listę autorów, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Aby uzyskać więcej informacji o Rosegarden, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencja: GNU General Public License wersja 2 lub nowsza.&lt;/p&gt;&lt;p&gt;Polskie tłumaczenie Rosegarden: Grzegorz &quot;Gootector&quot; Pruchniakowski.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;A sequencer and musical notation editor&lt;/h3&gt;</source>
@@ -10873,7 +10873,7 @@ zamiast tego?</translation>
     <message>
         <location line="+2"/>
         <source>Add &amp;Phrasing Slur</source>
-        <translation>Dodaj przerywany łuk</translation>
+        <translation>Dodaj łuk frazowany</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -13976,7 +13976,7 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
     <message>
         <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="+38"/>
         <source>Cycle Slashes</source>
-        <translation>Cięcia cykliczne</translation>
+        <translation>Cykl tremolo</translation>
     </message>
 </context>
 <context>
@@ -15228,7 +15228,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="+70"/>
         <source>Double-click opens segment in</source>
-        <translation>Dwukrotne kliknięcie myszką otwiera segmentu w</translation>
+        <translation>Dwukrotne kliknięcie myszką otwiera segment w</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -15248,7 +15248,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+12"/>
         <source>Number of count-in measures when recording</source>
-        <translation>Ilość tatków nabitych przed nagraniem</translation>
+        <translation>Liczba wybijanych taktów podczas nagrywania</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -15581,7 +15581,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+141"/>
         <source>Command-line file printing utility</source>
-        <translation>Narzędzie wiersza polecenia drukowania pliku</translation>
+        <translation>Narzędzie wiersza poleceń do drukowania plików</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -15712,7 +15712,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+1"/>
         <source>Edit</source>
-        <translation>Edytuj</translation>
+        <translation>Edycja</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -16951,7 +16951,7 @@ zamiast tego?</translation>
     <message>
         <location line="+3"/>
         <source>Export tempo marks </source>
-        <translation>Eksportuj znaczniki tempa</translation>
+        <translation>Eksportuj oznaczenia tempa</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -16991,7 +16991,7 @@ zamiast tego?</translation>
     <message>
         <location line="-6"/>
         <source>&lt;qt&gt;Choose how often to show tempo marks in your score&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Wybierz, jak często pokazywać znaczniki tempa w partyturze&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Wybierz, jak często pokazywać oznaczenia tempa w partyturze&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -17118,7 +17118,7 @@ zamiast tego?</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;</source>
+        <source>&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosegarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Zdecydowałeś/aś się eksportować belkowanie Rosegarden i LilyPond nie mógł przetworzyć pliku. Prawdopodobnie pewne działania wykonywane w trakcie edycji pliku doprowadziły do ukrytych właściwości belkowania, a to prawdopodobnie spowodowało, że LilyPond zakończył z niepowodzeniem. Zalecanym rozwiązaniem jest albo pozostawić belkowanie LilyPond (którego automatyczne belkowanie jest o wiele lepsze niż te w Rosegarden) i usunąć zaznaczenie tej opcji, albo usunąć wszystkie belki i ponownie dodać je ręcznie wewnątrz Rosegarden. Pozostawienie belkowania LilyPond jest prawdopodobnie najlepszym rozwiązaniem.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -17156,7 +17156,7 @@ zamiast tego?</translation>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Przebieg &lt;b&gt;lilypond&lt;/b&gt; zakończony pomyślnie, ale z błędami.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosegarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Zdecydowałeś/aś się eksportować belkowanie Rosegarden i LilyPond nie mógł przetworzyć pliku. Prawdopodobnie pewne działania wykonywane w trakcie edycji pliku doprowadziły do ukrytych właściwości belkowania, a to prawdopodobnie spowodowało, że LilyPond zakończył z niepowodzeniem. Zalecanym rozwiązaniem jest albo pozostawić belkowanie LilyPond (którego automatyczne belkowanie jest o wiele lepsze niż te w Rosegarden) i usunąć zaznaczenie tej opcji, albo usunąć wszystkie belki i ponownie dodać je ręcznie wewnątrz Rosegarden. Pozostawienie belkowania LilyPond jest prawdopodobnie najlepszym rozwiązaniem.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -21237,7 +21237,7 @@ Sprawdź, czy urządzenie jest poprawnie skonfigurowane w oknie Zarządzania urz
     <message>
         <location filename="../../src/commands/notation/RemoveMarksCommand.h" line="+39"/>
         <source>&amp;Remove All Marks</source>
-        <translation>Usuń wszystkie znaczniki</translation>
+        <translation>Usuń wszystkie artykulacje</translation>
     </message>
 </context>
 <context>
@@ -23101,7 +23101,7 @@ Chcesz ją teraz ustawić?</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="vanished">Edytuj</translation>
+        <translation type="vanished">Edycja</translation>
     </message>
     <message>
         <source>&lt;qt&gt;Edit the segment label for any selected segments&lt;/qt&gt;</source>
@@ -25794,7 +25794,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+64"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose normal, \small or \tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.&lt;/p&gt;&lt;p&gt;This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Wybierz normalny, \mały lub \miniaturowy rozmiar czcionki dla elementów notacji na tej (normalnej-wielkości) pięciolinii podczas eksportowania do LilyPond.&lt;/p&gt;&lt;p&gt;This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Wybierz normalny, \mały lub \miniaturowy rozmiar czcionki dla elementów notacji na tej (normalnej wielkości) pięciolinii podczas eksportowania do LilyPond.&lt;/p&gt;&lt;p&gt;Jest to najbardziej zbliżone do drukowania partii w małym rozmiarze&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+65"/>
@@ -26421,7 +26421,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+7"/>
         <source>Text mark</source>
-        <translation>Znacznik tekstu</translation>
+        <translation>Oznaczenie tekstowe</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -26638,7 +26638,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+1031"/>
         <source>SIG</source>
-        <translation>ILOŚĆ MIAR</translation>
+        <translation>LICZBA MIAR</translation>
     </message>
     <message>
         <location line="+464"/>
@@ -26698,7 +26698,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+26"/>
         <source>Play/Pause</source>
-        <translation>Odtwarzaj/Zatrzymaj</translation>
+        <translation>Odtwarzaj/zatrzymaj</translation>
     </message>
     <message>
         <location line="+3"/>
