@@ -101,6 +101,9 @@ namespace Preferences
 
     void setIncludeAlsaPortNumbersWhenMatching(bool value);
     bool getIncludeAlsaPortNumbersWhenMatching();
+
+    void setSMFExportPPQN(int value);
+    int getSMFExportPPQN();
 }
 
 

@@ -59,7 +59,7 @@ EditViewBase::~EditViewBase()
     m_doc->detachEditView(this);
 }
 
-void EditViewBase::setupBaseActions(bool haveClipboard)
+void EditViewBase::setupBaseActions()
 {
     // Actions all edit views will have
 
@@ -71,12 +71,6 @@ void EditViewBase::setupBaseActions(bool haveClipboard)
 
     createAction("file_save", SIGNAL(saveFile()));
     createAction("file_close", SLOT(slotCloseWindow()));
-
-    if (haveClipboard) {
-        createAction("edit_cut", SLOT(slotEditCut()));
-        createAction("edit_copy", SLOT(slotEditCopy()));
-        createAction("edit_paste", SLOT(slotEditPaste()));
-    }
 
     createAction("open_in_matrix", SLOT(slotOpenInMatrix()));
     createAction("open_in_percussion_matrix", SLOT(slotOpenInPercussionMatrix()));

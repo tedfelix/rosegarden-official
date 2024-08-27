@@ -32,22 +32,19 @@ class TempoListItem : public QTreeWidgetItem
 public:
     enum Type { TimeSignature, Tempo };
 
-    TempoListItem(Composition *composition,
-		  Type type,
-		  timeT time,
-		  int index,
-		  QTreeWidget *parent,
-		QStringList labels
-// 		  QString label1,
-// 		  QString label2,
-// 		  QString label3,
-// 		  QString label4 = QString::null
-		) :
-	QTreeWidgetItem( parent, labels ), //label1, label2, label3, label4),
+    TempoListItem(
+            QTreeWidget *treeWidget,
+            Composition *composition,
+            Type type,
+            timeT time,
+            int index,
+            QStringList labels) :
+	QTreeWidgetItem(treeWidget, labels),
 	m_composition(composition),
 	m_type(type),
 	m_time(time),
-	m_index(index) { }
+	m_index(index)
+    { }
 
     Rosegarden::Composition *getComposition() { return m_composition; }
     Type getType() const { return m_type; }

@@ -2875,5 +2875,46 @@ Composition::dump() const
     }
 }
 
+QString
+Composition::makeTimeString(timeT midiTicks, TimeMode timeMode) const
+{
+    switch (timeMode) {
+
+    case TimeMode::MusicalTime:
+        {
+            int bar;
+            int beat;
+            int fraction;
+            int remainder;
+            getMusicalTimeForAbsoluteTime(
+                            midiTicks, bar, beat, fraction, remainder);
+            // Humans prefer a 1-based bar number.
+            ++bar;
+            return QString("%1%2%3-%4%5-%6%7-%8%9")
+                   .arg(bar / 100)
+                   .arg((bar % 100) / 10)
+                   .arg(bar % 10)
+                   .arg(beat / 10)
+                   .arg(beat % 10)
+                   .arg(fraction / 10)
+                   .arg(fraction % 10)
+                   .arg(remainder / 10)
+                   .arg(remainder % 10);
+        }
+
+    case TimeMode::RealTime:
+        {
+            const RealTime rt = getElapsedRealTime(midiTicks);
+            return QString("%1").arg(rt.toText().c_str());
+        }
+
+    case TimeMode::RawTime:
+        return QString("%1").arg(midiTicks);
+
+    default:
+        return "---";
+    }
+}
+
 
 }

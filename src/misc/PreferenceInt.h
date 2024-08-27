@@ -38,6 +38,8 @@ namespace Rosegarden
  *
  * Was thinking about doing a template, but there are finicky little
  * differences between the types (QVariant conversions).
+ *
+ * ??? rename: SettingsInt?  It's not just for preferences.
  */
 class PreferenceInt
 {

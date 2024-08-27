@@ -62,7 +62,7 @@
 #include "gui/dialogs/UnusedAudioSelectionDialog.h"
 #include "gui/editors/segment/compositionview/AudioPeaksThread.h"
 #include "gui/editors/segment/TrackLabel.h"
-#include "gui/general/EditViewBase.h"
+//#include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/widgets/StartupLogo.h"

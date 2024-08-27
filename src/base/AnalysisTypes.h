@@ -169,7 +169,7 @@ protected:
     typedef std::pair<double, ChordLabel> ChordPossibility;
     typedef std::vector<ChordPossibility> HarmonyGuess;
     typedef std::vector<std::pair<timeT, HarmonyGuess> > HarmonyGuessList;
-    struct cp_less : public std::binary_function<ChordPossibility, ChordPossibility, bool>
+    struct cp_less
     {
         bool operator()(ChordPossibility l, ChordPossibility r);
     };

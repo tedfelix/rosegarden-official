@@ -16783,7 +16783,7 @@ Would you like to use
     </message>
     <message>
         <location line="+3"/>
-        <source>&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;</source>
+        <source>&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosegarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -22088,7 +22088,7 @@ No segment will be split.</source>
         <location line="-3364"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
-        <translation type="unfinished">Секвенсер Rosgarden запустить не удалось, поэтому воспроизведение 
+        <translation type="unfinished">Секвенсер Rosegarden запустить не удалось, поэтому воспроизведение 
 и запись для этой сессии будут недоступны. За помощью о корректной 
 настройке звука и MIDI обратитесь на www.rosegardenmusic.com.</translation>
     </message>
@@ -22126,7 +22126,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <location line="+1133"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
-        <translation type="unfinished">Секвенсер Rosgarden запустить не удалось, поэтому воспроизведение 
+        <translation type="unfinished">Секвенсер Rosegarden запустить не удалось, поэтому воспроизведение 
 и запись для этой сессии будут недоступны. За помощью о корректной  
 настройке звука и MIDI обратитесь на www.rosegardenmusic.com.</translation>
     </message>

@@ -74,13 +74,6 @@ signals:
     /// Connected to RosegardenMainViewWidget::slotEditTriggerSegment().
     void editTriggerSegment(int);
 
-protected slots:
-
-    // EditViewBase overrides.
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
-
 protected:
 
     void initStatusBar();
@@ -92,6 +85,9 @@ protected:
 
 private slots:
 
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
     void slotEditDelete();
     void slotEditInsert();
 
@@ -154,7 +150,6 @@ private:
     void updateView();
     bool updateTreeWidget();
 
-    QString makeTimeString(timeT time, int timeMode);
     QString makeDurationString(timeT time,
                                timeT duration, int timeMode);
 
@@ -195,7 +190,8 @@ private:
     };
     int m_eventFilter{0x1FFF};
 
-    // ??? Why is this a tree widget?  When are there ever sub-nodes?
+    // ??? QTreeWidget seems like overkill.  We never have sub items.
+    //     QTableWidget seems like a better choice.
     QTreeWidget *m_eventList;
 
     std::vector<int> m_listSelection;

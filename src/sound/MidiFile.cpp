@@ -24,15 +24,16 @@
 #include "base/Segment.h"
 //#include "base/NotationTypes.h"
 #include "base/BaseProperties.h"
-#include "base/Track.h"
 #include "base/Instrument.h"
-#include "base/Studio.h"
 #include "base/MidiTypes.h"
 #include "base/Profiler.h"
+#include "base/Studio.h"
+#include "base/Track.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"
 #include "sound/MappedBufMetaIterator.h"
 #include "sound/MidiInserter.h"
@@ -1350,7 +1351,7 @@ MidiFile::convertToMidi(RosegardenDocument *doc, const QString &filename)
 
     delete metaIterator;
 
-    MidiInserter inserter(composition, 480, end);
+    MidiInserter inserter(composition, Preferences::getSMFExportPPQN(), end);
     // Copy the events from sorter to inserter.
     sorter.insertSorted(inserter);
     // Finally, copy the events from inserter to m_midiComposition.

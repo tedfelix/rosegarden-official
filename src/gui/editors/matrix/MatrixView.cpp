@@ -371,7 +371,11 @@ void
 MatrixView::setupActions()
 {
 
-    setupBaseActions(true);
+    setupBaseActions();
+
+    createAction("edit_cut", SLOT(slotEditCut()));
+    createAction("edit_copy", SLOT(slotEditCopy()));
+    createAction("edit_paste", SLOT(slotEditPaste()));
 
     createAction("select", SLOT(slotSetSelectTool()));
     createAction("draw", SLOT(slotSetPaintTool()));

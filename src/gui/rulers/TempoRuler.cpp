@@ -445,31 +445,13 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
 
     if (time >= 0) {
 
+        // ??? This is always false.
         if (showTime) {
-            int bar, beat, fraction, remainder;
-            m_composition->getMusicalTimeForAbsoluteTime
-            (time, bar, beat, fraction, remainder);
-            RealTime rt = m_composition->getElapsedRealTime(time);
-
-            // bars in user space start at 1, not 0
-            bar++;
-
-            // blargh -- duplicated with TempoView::makeTimeString
-            timeText = QString("%1%2%3-%4%5-%6%7-%8%9")
-                       .arg(bar / 100)
-                       .arg((bar % 100) / 10)
-                       .arg(bar % 10)
-                       .arg(beat / 10)
-                       .arg(beat % 10)
-                       .arg(fraction / 10)
-                       .arg(fraction % 10)
-                       .arg(remainder / 10)
-                       .arg(remainder % 10);
-
-            timeText = QString("%1\n%2")
-                       .arg(timeText)
-                       //        .arg(rt.toString().c_str());
-                       .arg(rt.toText(true).c_str());
+            timeText = m_composition->makeTimeString(
+                    time, Composition::TimeMode::MusicalTime);
+            timeText += "\n";
+            timeText += m_composition->makeTimeString(
+                    time, Composition::TimeMode::RealTime);
         }
 
         TimeSignature sig =

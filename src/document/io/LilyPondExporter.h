@@ -34,7 +34,6 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/io/LilyPondLanguage.h"
-#include "gui/editors/notation/NotationView.h"
 #include <fstream>
 #include <set>
 #include <string>

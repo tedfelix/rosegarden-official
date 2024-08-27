@@ -464,7 +464,8 @@ QString
 TriggerSegmentManager::makeDurationString(timeT startTime,
         timeT duration, int timeMode)
 {
-    //!!! duplication with EventView::makeDurationString -- merge somewhere?
+    // ??? Same as EventView::makeDurationString().  Move to Composition
+    //     like makeTimeString().
 
     switch (timeMode) {
 
