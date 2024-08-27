@@ -386,12 +386,15 @@ AlsaDriver::generateTimerList()
 
             //RG_DEBUG << "generateTimerList(): got timer: class " << info.clas;
 
-            char timerName[64];
-            sprintf(timerName, "hw:CLASS=%i,SCLASS=%i,CARD=%i,DEV=%i,SUBDEV=%i",
-                    info.clas, info.sclas, info.card, info.device, info.subdevice);
+            QString timerName2 = QString("hw:CLASS=%1,SCLASS=%2,CARD=%3,DEV=%4,SUBDEV=%5").
+                    arg(info.clas).
+                    arg(info.sclas).
+                    arg(info.card).
+                    arg(info.device).
+                    arg(info.subdevice);
 
-            if (snd_timer_open(&timerHandle, timerName, SND_TIMER_OPEN_NONBLOCK) < 0) {
-                RG_WARNING << "generateTimerList(): Failed to open timer: " << timerName;
+            if (snd_timer_open(&timerHandle, timerName2.toUtf8(), SND_TIMER_OPEN_NONBLOCK) < 0) {
+                RG_WARNING << "generateTimerList(): Failed to open timer: " << timerName2;
                 continue;
             }
 
