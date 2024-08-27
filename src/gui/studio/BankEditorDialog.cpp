@@ -183,10 +183,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_pastePrograms->setToolTip(tr("Paste Program names from clipboard to current Bank or Keymap"));
 
-//     connect(m_treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*)),
-//             this, SLOT(slotPopulateDeviceEditors(QTreeWidgetItem*)));
-    // note: above connection moved to setupActions
-
     // Right side layout
     m_rightSide = new QFrame;
 

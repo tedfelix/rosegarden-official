@@ -20,14 +20,11 @@
 
 #include "base/Device.h"
 #include "base/Studio.h"
-#include "base/MidiProgram.h"
 #include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
 
-#include <map>
 #include <set>
-#include <string>
 #include <utility>
 
 
@@ -46,6 +43,7 @@ class QFrame;
 namespace Rosegarden
 {
 
+
 class Command;
 class RosegardenDocument;
 class MidiProgramsEditor;
@@ -54,67 +52,31 @@ class MidiDeviceTreeWidgetItem;
 class MidiDevice;
 class ModifyDeviceCommand;
 
+
 class BankEditorDialog : public QMainWindow, public ActionFileClient,
-    public StudioObserver, public DeviceObserver
+                         public StudioObserver, public DeviceObserver
 {
     Q_OBJECT
 
 public:
+
     BankEditorDialog(QWidget *parent,
                      RosegardenDocument *doc,
-                     DeviceId defaultDevice =
-                     Device::NO_DEVICE);
-
+                     DeviceId defaultDevice);
     ~BankEditorDialog() override;
 
-    // Initialize the devices/banks and programs - the whole lot
-    //
-    void initDialog();
-
-    std::pair<int, int> getFirstFreeBank(QTreeWidgetItem*);
-
-    ModifyDeviceCommand* makeCommand(const QString& name);
+    ModifyDeviceCommand *makeCommand(const QString &name);
+    // ??? Trivial wrapper.  Inline into each caller.
     void addCommandToHistory(Command *command);
 
     void setCurrentDevice(DeviceId device);
 
-    Studio *getStudio() { return m_studio; }
-
-    // Set the listview to select a certain device - used after adding
-    // or deleting banks.
-    //
-    void selectDeviceItem(MidiDevice *device);
-
-    QString makeUniqueBankName(const QString& name,
-                               const BankList& banks);
-    QString makeUniqueKeymapName(const QString& name,
-                                 const KeyMappingList& keymaps);
+    // ??? HERE
 
 public slots:
-    void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
-
-    void slotAddBank();
-    void slotAddKeyMapping();
-    void slotDelete();
-    void slotDeleteAll();
-
-    void slotImport();
-    void slotExport();
-
-    void slotModifyDeviceOrBankName(QTreeWidgetItem*, int);
-
-    void slotFileClose();
-
-    void slotEdit(QTreeWidgetItem *item, int);
-    void slotEditCopy();
-    void slotEditPaste();
 
     void slotEditLibrarian();
-
-    void slotVariationToggled();
-    void slotVariationChanged(int);
-    void slotHelpRequested();
-    void slotHelpAbout();
+    void slotFileClose();
 
 signals:
     void closing();
@@ -176,7 +138,44 @@ protected:
 
     QFrame                  *m_rightSide;
 
- private:
+private slots:
+
+    void slotPopulateDeviceEditors(QTreeWidgetItem *, QTreeWidgetItem *);
+
+    void slotAddBank();
+    void slotAddKeyMapping();
+    void slotDelete();
+    void slotDeleteAll();
+
+    void slotImport();
+    void slotExport();
+
+    void slotModifyDeviceOrBankName(QTreeWidgetItem*, int);
+
+    void slotEdit(QTreeWidgetItem *item, int);
+    void slotEditCopy();
+    void slotEditPaste();
+
+    void slotVariationToggled();
+    void slotVariationChanged(int);
+    void slotHelpRequested();
+    void slotHelpAbout();
+
+private:
+    // Initialize the devices/banks and programs - the whole lot
+    void initDialog();
+
+    std::pair<int, int> getFirstFreeBank(QTreeWidgetItem *);
+
+    // Set the listview to select a certain device - used after adding
+    // or deleting banks.
+    void selectDeviceItem(MidiDevice *device);
+
+    QString makeUniqueBankName(const QString& name,
+                               const BankList& banks);
+    QString makeUniqueKeymapName(const QString& name,
+                                 const KeyMappingList& keymaps);
+
     bool tracksUsingBank(const MidiBank& bank, const MidiDevice& device);
 
     // studio observer interface
