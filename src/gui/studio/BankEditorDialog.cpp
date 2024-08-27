@@ -265,13 +265,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &BankEditorDialog::slotVariationChanged);
 
-    // Button box
-    QDialogButtonBox *btnBox = new QDialogButtonBox(/*QDialogButtonBox::Apply  | */
-                                                    QDialogButtonBox::Close);
-
-    mainFrameLayout->addWidget(btnBox);
-
+    // Button box.  Close button.
+    QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Close);
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
+    mainFrameLayout->addWidget(btnBox);
 
     m_studio->addObserver(this);
     m_observingStudio = true;
@@ -331,8 +328,6 @@ BankEditorDialog::~BankEditorDialog()
 void
 BankEditorDialog::setupActions()
 {
-//     KAction* close = KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
-
     createAction("file_close", SLOT(slotFileClose()));
 
     connect(m_closeButton, &QAbstractButton::clicked, this, &BankEditorDialog::slotFileClose);
@@ -348,23 +343,7 @@ BankEditorDialog::setupActions()
     connect(m_treeWidget, &QTreeWidget::itemChanged, this,
             &BankEditorDialog::slotModifyDeviceOrBankName);
 
-    // some adjustments
-
-/*
-    new KToolBarPopupAction(tr("Und&o"),
-                            "undo",
-                            KStandardShortcut::key(KStandardShortcut::Undo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Undo));
-
-    new KToolBarPopupAction(tr("Re&do"),
-                            "redo",
-                            KStandardShortcut::key(KStandardShortcut::Redo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Redo));
-    */
-
-    createMenusAndToolbars("bankeditor.rc"); //@@@ JAS orig. 0
+    createMenusAndToolbars("bankeditor.rc");
 }
 
 void
@@ -428,13 +407,11 @@ BankEditorDialog::initDialog()
 void
 BankEditorDialog::updateDialog()
 {
-    RG_DEBUG << "updateDialog";
-    // Update list view
-    //
-    m_treeWidget->blockSignals(true);
-    DeviceList *devices = m_studio->getDevices();
+    //RG_DEBUG << "updateDialog()";
 
-    MidiDevice* midiDevice = nullptr;
+    // Update list view
+
+    m_treeWidget->blockSignals(true);
 
     // get selected Item
     enum class SelectedType {NONE, DEVICE, BANK, KEYMAP};
@@ -471,31 +448,35 @@ BankEditorDialog::updateDialog()
             parentDevice = bankItem->getDevice();
         }
     }
-    // if m_selectioName is set - us it
+    // if m_selectioName is set - use it
     if (m_selectionName != "") {
         selectedName = m_selectionName;
         m_selectionName = "";
     }
-    RG_DEBUG << "selected item:" << (int)selectedType << selectedName <<
-        parentDevice;
+
+    //RG_DEBUG << "selected item:" << (int)selectedType << selectedName << parentDevice;
 
     m_treeWidget->clear();
 
-    for (DeviceListIterator it = devices->begin(); it != devices->end(); ++it) {
+    DeviceList *devices = m_studio->getDevices();
 
-        if ((*it)->getType() != Device::Midi){
-            continue;
-        }
+    // For each Device in the Studio...
+    for (std::vector<Device *>::iterator deviceIter = devices->begin();
+         deviceIter != devices->end();
+         ++deviceIter) {
+        Device *device = *deviceIter;
 
-        midiDevice = dynamic_cast<MidiDevice*>(*it);
-        if (!midiDevice){
+        // Not a MIDI device?  Try the next.
+        if (device->getType() != Device::Midi)
             continue;
-        }
 
-        // skip read-only devices
-        if (midiDevice->getDirection() == MidiDevice::Record){
+        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
+        if (!midiDevice)
             continue;
-        }
+
+        // Record device?  Try the next.
+        if (midiDevice->getDirection() == MidiDevice::Record)
+            continue;
 
         QString itemName = strtoqstr(midiDevice->getName());
 

@@ -139,28 +139,6 @@ private:
     RosegardenDocument *m_doc;
     Studio *m_studio;
 
-    // ??? HERE
-
-    void initDialog();
-    void setupActions();
-
-    void updateDialog();
-
-    void populateDeviceItem(QTreeWidgetItem* deviceItem,
-                            MidiDevice* midiDevice);
-
-    void updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem);
-
-    void clearItemChildren(QTreeWidgetItem* item);
-
-    MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
-
-    /// Show and update the program editor or the key mapping editor.
-    /**
-     * One or the other appear on the right side of the dialog.
-     */
-    void updateEditor(QTreeWidgetItem *);
-
     // Widgets
 
     QTreeWidget *m_treeWidget;
@@ -192,6 +170,30 @@ private:
     QPushButton *m_closeButton;
     // ??? Apply?  I've never seen this.
     //QPushButton *m_applyButton;
+
+    // ??? HERE
+
+    /// Init the tree and the bank/key mapping editor.
+    void initDialog();
+    /// Create actions and menus.
+    void setupActions();
+
+    void updateDialog();
+
+    void populateDeviceItem(QTreeWidgetItem* deviceItem,
+                            MidiDevice* midiDevice);
+
+    void updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem);
+
+    void clearItemChildren(QTreeWidgetItem* item);
+
+    MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
+
+    /// Show and update the program editor or the key mapping editor.
+    /**
+     * One or the other appear on the right side of the dialog.
+     */
+    void updateEditor(QTreeWidgetItem *);
 
     enum class ItemType {NONE, DEVICE, BANK, KEYMAP};
     struct Clipboard
