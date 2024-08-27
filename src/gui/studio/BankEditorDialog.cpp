@@ -338,7 +338,7 @@ BankEditorDialog::setupActions()
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
     connect(m_treeWidget, &QTreeWidget::currentItemChanged,
-            this, &BankEditorDialog::slotPopulateDeviceEditors);
+            this, &BankEditorDialog::slotUpdateEditor);
 
     connect(m_treeWidget, &QTreeWidget::itemChanged, this,
             &BankEditorDialog::slotModifyDeviceOrBankName);
@@ -412,7 +412,7 @@ BankEditorDialog::initDialog()
         }
     }
 
-    populateDeviceEditors(m_treeWidget->topLevelItem(0));
+    updateEditor(m_treeWidget->topLevelItem(0));
 
     // select the first device item
     m_treeWidget->topLevelItem(0)->setSelected(true);
@@ -628,23 +628,21 @@ BankEditorDialog::clearItemChildren(QTreeWidgetItem* item)
         delete item->child(0);
 }
 
-void BankEditorDialog::slotPopulateDeviceEditors(QTreeWidgetItem* item, QTreeWidgetItem*)
+void BankEditorDialog::slotUpdateEditor(QTreeWidgetItem* item, QTreeWidgetItem*)
 {
     RG_DEBUG << "BankEditorDialog::slotPopulateDeviceEditors";
 
     if (!item)
         return ;
 
-    populateDeviceEditors(item);
+    updateEditor(item);
 }
 
 
-void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
+void BankEditorDialog::updateEditor(QTreeWidgetItem* item)
 {
-    /**
-    *   shows the program and bank editors
-    *   and calls their populate( currentBank ) functions
-    **/
+    // Show and update the program editor or the key mapping editor.
+
     RG_DEBUG << "BankEditorDialog::populateDeviceEditors \n";
 
     if (!item)

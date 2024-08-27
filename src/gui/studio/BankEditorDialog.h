@@ -71,18 +71,59 @@ public:
 
     void setCurrentDevice(DeviceId device);
 
-    // ??? HERE
-
 public slots:
 
+    /// Librarian Edit button.  Called by NameSetEditor.
     void slotEditLibrarian();
+    /// Close button or when the document is about to change.
     void slotFileClose();
 
 signals:
+
+    /// Called by closeEvent().  Connected to RMW::slotBankEditorClosed().
     void closing();
+
+    /**
+     * RosegardenMainWindow::slotEditBanks() connects this to:
+     *   - RosegardenMainViewWidget::slotSynchroniseWithComposition()
+     *   - DeviceManagerDialog::slotResyncDevicesReceived()
+     *   - TrackParameterBox::devicesChanged()
+     * This makes sure all the names on the UI are correct.
+     */
     void deviceNamesChanged();
 
-protected:
+private slots:
+
+    /// Show and update the program editor or the key mapping editor.
+    /**
+     * Used to make sure the right portion of the dialog shows the proper
+     * editor and contents when a different item is selected in the tree.
+     *
+     * See updateEditor().
+     */
+    void slotUpdateEditor(QTreeWidgetItem *, QTreeWidgetItem *);
+
+    void slotAddBank();
+    void slotAddKeyMapping();
+    void slotDelete();
+    void slotDeleteAll();
+
+    void slotImport();
+    void slotExport();
+
+    void slotModifyDeviceOrBankName(QTreeWidgetItem*, int);
+
+    void slotEdit(QTreeWidgetItem *item, int);
+    void slotEditCopy();
+    void slotEditPaste();
+
+    void slotVariationToggled();
+    void slotVariationChanged(int);
+    void slotHelpRequested();
+    void slotHelpAbout();
+
+private:
+
     void closeEvent(QCloseEvent*) override;
 
     void updateDialog();
@@ -96,7 +137,11 @@ protected:
 
     MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
 
-    void populateDeviceEditors(QTreeWidgetItem*);
+    /// Show and update the program editor or the key mapping editor.
+    /**
+     * One or the other appear on the right side of the dialog.
+     */
+    void updateEditor(QTreeWidgetItem *);
 
     void setupActions();
 
@@ -138,30 +183,6 @@ protected:
 
     QFrame                  *m_rightSide;
 
-private slots:
-
-    void slotPopulateDeviceEditors(QTreeWidgetItem *, QTreeWidgetItem *);
-
-    void slotAddBank();
-    void slotAddKeyMapping();
-    void slotDelete();
-    void slotDeleteAll();
-
-    void slotImport();
-    void slotExport();
-
-    void slotModifyDeviceOrBankName(QTreeWidgetItem*, int);
-
-    void slotEdit(QTreeWidgetItem *item, int);
-    void slotEditCopy();
-    void slotEditPaste();
-
-    void slotVariationToggled();
-    void slotVariationChanged(int);
-    void slotHelpRequested();
-    void slotHelpAbout();
-
-private:
     // Initialize the devices/banks and programs - the whole lot
     void initDialog();
 
@@ -188,15 +209,11 @@ private:
     void observeDevice(Device* device);
     void unobserveDevice(Device* device);
 
-    std::set<Device*> m_observedDevices;
+    std::set<Device *> m_observedDevices;
 
     QString m_selectionName;
     bool m_observingStudio;
 };
-
-// ----------------------- RemapInstrumentDialog ------------------------
-//
-//
 
 
 }
