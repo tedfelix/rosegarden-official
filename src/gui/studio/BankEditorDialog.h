@@ -53,6 +53,7 @@ class MidiDevice;
 class ModifyDeviceCommand;
 
 
+/// Manage MIDI Banks and Programs dialog
 class BankEditorDialog : public QMainWindow, public ActionFileClient,
                          public StudioObserver, public DeviceObserver
 {
@@ -94,6 +95,11 @@ signals:
 
 private slots:
 
+    /// Tree item double-click to edit name.
+    void slotEdit(QTreeWidgetItem *item, int);
+    /// Handles name changes in the tree.
+    void slotModifyDeviceOrBankName(QTreeWidgetItem *, int);
+
     /// Show and update the program editor or the key mapping editor.
     /**
      * Used to make sure the right portion of the dialog shows the proper
@@ -103,28 +109,40 @@ private slots:
      */
     void slotUpdateEditor(QTreeWidgetItem *, QTreeWidgetItem *);
 
+    // Button Handlers
     void slotAddBank();
     void slotAddKeyMapping();
     void slotDelete();
     void slotDeleteAll();
-
     void slotImport();
     void slotExport();
+    void slotCopy();
+    void slotPaste();
 
-    void slotModifyDeviceOrBankName(QTreeWidgetItem*, int);
-
-    void slotEdit(QTreeWidgetItem *item, int);
-    void slotEditCopy();
-    void slotEditPaste();
-
+    /// "Show Variation list based on" check box handler.
     void slotVariationToggled();
+    /// "Show Variation list based on" combo box handler.
     void slotVariationChanged(int);
+
+    /// Help > Help
     void slotHelpRequested();
+    /// Help > About Rosegarden
     void slotHelpAbout();
+
+protected:
+
+    /// QWidget override.  Emits the closing() signal.
+    void closeEvent(QCloseEvent *) override;
 
 private:
 
-    void closeEvent(QCloseEvent*) override;
+    RosegardenDocument *m_doc;
+    Studio *m_studio;
+
+    // ??? HERE
+
+    void initDialog();
+    void setupActions();
 
     void updateDialog();
 
@@ -143,33 +161,37 @@ private:
      */
     void updateEditor(QTreeWidgetItem *);
 
-    void setupActions();
+    // Widgets
 
-    //--------------- Data members ---------------------------------
-    Studio                 *m_studio;
-    RosegardenDocument     *m_doc;
+    QTreeWidget *m_treeWidget;
 
-    MidiProgramsEditor      *m_programEditor;
-    MidiKeyMappingEditor    *m_keyMappingEditor;
-    QTreeWidget             *m_treeWidget;
+    QPushButton *m_addBank;
+    QPushButton *m_addKeyMapping;
+    QPushButton *m_delete;
+    QPushButton *m_deleteAll;
+    // ??? rename: m_import
+    QPushButton *m_importBanks;
+    // ??? rename: m_export
+    QPushButton *m_exportBanks;
+    // ??? rename: m_copy
+    QPushButton *m_copyPrograms;
+    // ??? rename: m_paste
+    QPushButton *m_pastePrograms;
 
-    QGroupBox               *m_optionBox;
-    QCheckBox               *m_variationToggle;
-    QComboBox               *m_variationCombo;
+    MidiProgramsEditor *m_programEditor;
+    MidiKeyMappingEditor *m_keyMappingEditor;
 
-    QPushButton             *m_closeButton;
-    QPushButton             *m_applyButton;
+    // Options
+    QGroupBox *m_optionBox;
+    // Show Variation list based on
+    // ??? rename: m_variationCheckBox
+    QCheckBox *m_variationToggle;
+    // Show Variation list based on
+    QComboBox *m_variationCombo;
 
-    QPushButton             *m_addBank;
-    QPushButton             *m_addKeyMapping;
-    QPushButton             *m_delete;
-    QPushButton             *m_deleteAll;
-
-    QPushButton             *m_importBanks;
-    QPushButton             *m_exportBanks;
-
-    QPushButton             *m_copyPrograms;
-    QPushButton             *m_pastePrograms;
+    QPushButton *m_closeButton;
+    // ??? Apply?  I've never seen this.
+    //QPushButton *m_applyButton;
 
     enum class ItemType {NONE, DEVICE, BANK, KEYMAP};
     struct Clipboard
@@ -182,9 +204,6 @@ private:
     Clipboard m_clipboard;
 
     QFrame                  *m_rightSide;
-
-    // Initialize the devices/banks and programs - the whole lot
-    void initDialog();
 
     std::pair<int, int> getFirstFreeBank(QTreeWidgetItem *);
 
@@ -206,10 +225,9 @@ private:
     // device observer interface
     virtual void deviceModified(Device* device) override;
 
+    std::set<Device *> m_observedDevices;
     void observeDevice(Device* device);
     void unobserveDevice(Device* device);
-
-    std::set<Device *> m_observedDevices;
 
     QString m_selectionName;
     bool m_observingStudio;

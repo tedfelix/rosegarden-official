@@ -79,8 +79,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    RosegardenDocument *doc,
                                    DeviceId defaultDevice):
         QMainWindow(parent),
-        m_studio(&doc->getStudio()),
-        m_doc(doc)
+        m_doc(doc),
+        m_studio(&doc->getStudio())
 {
     m_clipboard.itemType = ItemType::NONE;
     m_clipboard.deviceId = Device::NO_DEVICE;
@@ -140,6 +140,11 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     bankBox->setContentsMargins(1, 1, 1, 1);
     QGridLayout *gridLayout = new QGridLayout(bankBox);
     gridLayout->setSpacing(4);
+
+    // Buttons
+
+    // ??? Why do we have buttons when we have a menu?  Get rid of all
+    //     these buttons and move all functionality to the Edit menu.
 
     m_addBank = new QPushButton(tr("Add Bank"), bankBox);
     m_addKeyMapping = new QPushButton(tr("Add Key Mapping"), bankBox);
@@ -248,10 +253,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             this, &BankEditorDialog::slotExport);
 
     connect(m_copyPrograms, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotEditCopy);
+            this, &BankEditorDialog::slotCopy);
 
     connect(m_pastePrograms, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotEditPaste);
+            this, &BankEditorDialog::slotPaste);
 
     connect(m_variationToggle, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotVariationToggled);
@@ -332,8 +337,8 @@ BankEditorDialog::setupActions()
 
     connect(m_closeButton, &QAbstractButton::clicked, this, &BankEditorDialog::slotFileClose);
 
-    createAction("edit_copy", SLOT(slotEditCopy()));
-    createAction("edit_paste", SLOT(slotEditPaste()));
+    createAction("edit_copy", SLOT(slotCopy()));
+    createAction("edit_paste", SLOT(slotPaste()));
     createAction("bank_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
@@ -639,14 +644,12 @@ void BankEditorDialog::slotUpdateEditor(QTreeWidgetItem* item, QTreeWidgetItem*)
 }
 
 
-void BankEditorDialog::updateEditor(QTreeWidgetItem* item)
+void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 {
     // Show and update the program editor or the key mapping editor.
 
-    RG_DEBUG << "BankEditorDialog::populateDeviceEditors \n";
-
     if (!item)
-        return ;
+        return;
 
     MidiKeyMapTreeWidgetItem *keyItem =
         dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
@@ -1417,7 +1420,7 @@ BankEditorDialog::slotEdit(QTreeWidgetItem * item, int)
 }
 
 void
-BankEditorDialog::slotEditCopy()
+BankEditorDialog::slotCopy()
 {
     MidiBankTreeWidgetItem* bankItem =
         dynamic_cast<MidiBankTreeWidgetItem*>(m_treeWidget->currentItem());
@@ -1443,7 +1446,7 @@ BankEditorDialog::slotEditCopy()
 }
 
 void
-BankEditorDialog::slotEditPaste()
+BankEditorDialog::slotPaste()
 {
     RG_DEBUG << "slotEditPaste";
     MidiBankTreeWidgetItem* bankItem =
