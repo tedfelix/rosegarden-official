@@ -51,7 +51,7 @@ public:
 
     /// Make sure the current document is used.
     /**
-     * ??? Should be able to safely switch to RosgardenDocument::currentDocument
+     * ??? Should be able to safely switch to RosegardenDocument::currentDocument
      *     and get rid of this.
      */
     void setDocument(RosegardenDocument *doc);
