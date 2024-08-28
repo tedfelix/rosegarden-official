@@ -72,6 +72,13 @@ public:
 
     void setCurrentDevice(DeviceId device);
 
+    // StudioObserver interface
+    virtual void deviceAdded(Device* device) override;
+    virtual void deviceRemoved(Device* device) override;
+
+    // DeviceObserver interface
+    virtual void deviceModified(Device* device) override;
+
 public slots:
 
     /// Librarian Edit button.  Called by NameSetEditor.
@@ -99,6 +106,9 @@ private slots:
     void slotEdit(QTreeWidgetItem *item, int);
     /// Handles name changes in the tree.
     void slotModifyDeviceOrBankName(QTreeWidgetItem *, int);
+
+    // ??? General Comment: "Key Mapping" is too verbose.  Can we change that
+    //     to "Key Map" everywhere?
 
     /// Show and update the program editor or the key mapping editor.
     /**
@@ -142,6 +152,14 @@ private:
     // Widgets
 
     QTreeWidget *m_treeWidget;
+    void clearItemChildren(QTreeWidgetItem *item);
+    /// Add Banks and Key Mappings to the tree for a MidiDevice.
+    void populateDeviceItem(QTreeWidgetItem *deviceItem,
+                            MidiDevice *midiDevice);
+    /// Checks type of item and calls item->parent().
+    MidiDeviceTreeWidgetItem *getParentDeviceItem(QTreeWidgetItem *item);
+    /// Select a device in the tree.  Used after adding or importing banks.
+    void selectDeviceItem(MidiDevice *device);
 
     QPushButton *m_addBank;
     QPushButton *m_addKeyMapping;
@@ -155,6 +173,8 @@ private:
     QPushButton *m_copyPrograms;
     // ??? rename: m_paste
     QPushButton *m_pastePrograms;
+
+    QFrame *m_rightSide;
 
     MidiProgramsEditor *m_programEditor;
     MidiKeyMappingEditor *m_keyMappingEditor;
@@ -171,7 +191,11 @@ private:
     // ??? Apply?  I've never seen this.
     //QPushButton *m_applyButton;
 
-    // ??? HERE
+    /// Show and update the program editor or the key mapping editor.
+    /**
+     * One or the other appear on the right side of the dialog.
+     */
+    void updateEditor(QTreeWidgetItem *item);
 
     /// Init the tree and the bank/key mapping editor.
     void initDialog();
@@ -180,56 +204,39 @@ private:
 
     void updateDialog();
 
-    void populateDeviceItem(QTreeWidgetItem* deviceItem,
-                            MidiDevice* midiDevice);
-
-    void updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem);
-
-    void clearItemChildren(QTreeWidgetItem* item);
-
-    MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
-
-    /// Show and update the program editor or the key mapping editor.
-    /**
-     * One or the other appear on the right side of the dialog.
-     */
-    void updateEditor(QTreeWidgetItem *);
-
+    // Clipboard
     enum class ItemType {NONE, DEVICE, BANK, KEYMAP};
     struct Clipboard
     {
-        ItemType itemType;
-        DeviceId deviceId;
-        int bank;
+        ItemType itemType{ItemType::NONE};
+        DeviceId deviceId{Device::NO_DEVICE};
+        int bank{-1};
         QString keymapName;
     };
     Clipboard m_clipboard;
 
-    QFrame                  *m_rightSide;
+    /// Get first free bank to avoid conflicts.
+    /**
+     * ??? DO NOT use std::pair.  It is *obtuse*.  For this particular case, use
+     *     two more reference parameters: MidiByte &msb, MidiByte &lsb
+     */
+    std::pair<int /* MSB */, int /* LSB */> getFirstFreeBank(QTreeWidgetItem *item);
 
-    std::pair<int, int> getFirstFreeBank(QTreeWidgetItem *);
-
-    // Set the listview to select a certain device - used after adding
-    // or deleting banks.
-    void selectDeviceItem(MidiDevice *device);
-
+    /// Handle bank name conflicts by adding "_1".
     QString makeUniqueBankName(const QString& name,
                                const BankList& banks);
+    /// Handle key map name conflicts by adding "_1".
     QString makeUniqueKeymapName(const QString& name,
                                  const KeyMappingList& keymaps);
 
+    /// Identify Tracks using a bank to avoid deleting banks that are in use.
     bool tracksUsingBank(const MidiBank& bank, const MidiDevice& device);
 
-    // studio observer interface
-    virtual void deviceAdded(Device* device) override;
-    virtual void deviceRemoved(Device* device) override;
-
-    // device observer interface
-    virtual void deviceModified(Device* device) override;
+    // ??? HERE
 
     std::set<Device *> m_observedDevices;
-    void observeDevice(Device* device);
-    void unobserveDevice(Device* device);
+    void observeDevice(Device *device);
+    void unobserveDevice(Device *device);
 
     QString m_selectionName;
     bool m_observingStudio;

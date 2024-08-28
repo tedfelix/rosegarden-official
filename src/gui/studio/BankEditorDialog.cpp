@@ -82,11 +82,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         m_doc(doc),
         m_studio(&doc->getStudio())
 {
-    m_clipboard.itemType = ItemType::NONE;
-    m_clipboard.deviceId = Device::NO_DEVICE;
-    m_clipboard.bank = -1;
-    m_clipboard.keymapName = "";
-
     QWidget* mainFrame = new QWidget(this);
     mainFrame->setContentsMargins(1, 1, 1, 1);
     setCentralWidget(mainFrame);
@@ -349,8 +344,6 @@ BankEditorDialog::setupActions()
 void
 BankEditorDialog::initDialog()
 {
-    // Clear down
-    //
     m_treeWidget->clear();
 
     // Fill list view
@@ -392,6 +385,8 @@ BankEditorDialog::initDialog()
 
             twItemDevice->setExpanded(true);
 
+            // ??? updateDialog() does this as well.  Can we combine into a
+            //     single routine that does both or is used by both?
             populateDeviceItem(twItemDevice, midiDevice);
         }
     }
@@ -411,6 +406,8 @@ BankEditorDialog::updateDialog()
 
     // Update list view
 
+    // ??? Can we safely get rid of this?  Do the updates here actually
+    //     trigger signals?  If so, can we switch to different signals?
     m_treeWidget->blockSignals(true);
 
     // get selected Item
@@ -461,10 +458,7 @@ BankEditorDialog::updateDialog()
     DeviceList *devices = m_studio->getDevices();
 
     // For each Device in the Studio...
-    for (std::vector<Device *>::iterator deviceIter = devices->begin();
-         deviceIter != devices->end();
-         ++deviceIter) {
-        Device *device = *deviceIter;
+    for (Device *device : *devices) {
 
         // Not a MIDI device?  Try the next.
         if (device->getType() != Device::Midi)
@@ -480,24 +474,26 @@ BankEditorDialog::updateDialog()
 
         QString itemName = strtoqstr(midiDevice->getName());
 
-        RG_DEBUG << "BankEditorDialog::updateDialog - adding "
-        << itemName;
+        //RG_DEBUG << "BankEditorDialog::updateDialog - adding " << itemName;
 
-        QTreeWidgetItem* deviceItem =
-            new MidiDeviceTreeWidgetItem
-            (midiDevice, m_treeWidget, itemName);
+        QTreeWidgetItem *deviceItem = new MidiDeviceTreeWidgetItem(
+                midiDevice, m_treeWidget, itemName);
 
         deviceItem->setExpanded(true);
 
+        // ??? What is this doing?
+        // ??? initDialog() does this as well.  Can we combine into a
+        //     single routine that does both or is used by both?
         populateDeviceItem(deviceItem, midiDevice);
 
-    }// end for( it = device ...)
+    }
 
     m_treeWidget->blockSignals(false);
 
     // select item
-    RG_DEBUG << "selecting item:" << (int)selectedType << selectedName <<
-        parentDevice;
+
+    //RG_DEBUG << "selecting item:" << (int)selectedType << selectedName << parentDevice;
+
     // find the device item
     MidiDeviceTreeWidgetItem* selectDeviceItem = nullptr;
     QTreeWidgetItem* root = m_treeWidget->invisibleRootItem();
@@ -583,6 +579,8 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
 
     QString itemName = strtoqstr(midiDevice->getName());
 
+    // Banks
+
     BankList banks = midiDevice->getBanks();
     // add banks for this device
     for (size_t i = 0; i < banks.size(); ++i) {
@@ -593,6 +591,8 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
                                  banks[i].isPercussion(),
                                  banks[i].getMSB(), banks[i].getLSB());
     }
+
+    // Key Mappings
 
     const KeyMappingList &mappings = midiDevice->getKeyMappings();
     for (size_t i = 0; i < mappings.size(); ++i) {
@@ -734,37 +734,23 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
     m_keyMappingEditor->clearAll();
 }
 
-MidiDeviceTreeWidgetItem*
-BankEditorDialog::getParentDeviceItem(QTreeWidgetItem* item)
+MidiDeviceTreeWidgetItem *
+BankEditorDialog::getParentDeviceItem(QTreeWidgetItem *item)
 {
-    /**
-    *   return the parent t.w.Item of a bank or keymap (which is a MidiDeviceTreeWidgetItem )
-    **/
     if (!item)
         return nullptr;
 
-    if (dynamic_cast<MidiBankTreeWidgetItem*>(item)){
-        // go up to the parent device item
+    if (dynamic_cast<MidiBankTreeWidgetItem *>(item))
         item = item->parent();
-    }
-    else if (dynamic_cast<MidiKeyMapTreeWidgetItem*>(item)){
-        // go up to the parent device item
+    else if (dynamic_cast<MidiKeyMapTreeWidgetItem *>(item))
         item = item->parent();
-    }
 
     if (!item) {
-        RG_DEBUG << "BankEditorDialog::getParentDeviceItem : missing parent device item for bank item - this SHOULD NOT HAPPEN";
+        RG_WARNING << "getParentDeviceItem(): missing parent device item for bank item";
         return nullptr;
     }
 
-    return dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
-//    QTreeWidgetItem *parent = item->parent();
-//    if (!parent) {
-//        // item must have been a top level widget
-//        parent = item;
-//    }
-//
-//    return dynamic_cast<MidiDeviceTreeWidgetItem*>(parent);
+    return dynamic_cast<MidiDeviceTreeWidgetItem *>(item);
 }
 
 void
@@ -1099,6 +1085,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         if (! command) return;
         command->setBankList(banks);
         addCommandToHistory(command);
+
     } else if (keyItem) {
 
         RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
@@ -1119,7 +1106,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         KeyMappingList kml = device->getKeyMappings();
 
         QString uniqueName = makeUniqueKeymapName(label, kml);
-        // set m_selectionName to select this item in updateDialot
+        // set m_selectionName to select this item in updateDialog()
         m_selectionName = uniqueName;
 
         for (KeyMappingList::iterator i = kml.begin();
@@ -1147,22 +1134,23 @@ BankEditorDialog::selectDeviceItem(MidiDevice *device)
     /**
      * sets the device-TreeWidgetItem (visibly) selected
      **/
-    MidiDevice *midiDevice;
-    unsigned int i, cnt;
 
-    cnt = m_treeWidget->topLevelItemCount();
-    for( i=0; i<cnt; i++ ){
-        QTreeWidgetItem *child = m_treeWidget->topLevelItem( i );
+    // For each top-level item in the tree...
+    for (int itemIndex = 0;
+         itemIndex < m_treeWidget->topLevelItemCount();
+         ++itemIndex) {
+
+        QTreeWidgetItem *child = m_treeWidget->topLevelItem(itemIndex);
         MidiDeviceTreeWidgetItem *midiDeviceItem =
             dynamic_cast<MidiDeviceTreeWidgetItem*>(child);
 
         if (midiDeviceItem) {
-            midiDevice = midiDeviceItem->getDevice();
+            MidiDevice *midiDevice = midiDeviceItem->getDevice();
 
+            // Found the device?  Make it the current (selected) item and bail.
             if (midiDevice == device) {
-//                 m_treeWidget->setSelected(child, true);
                 m_treeWidget->setCurrentItem(child);
-                return ;
+                break;
             }
         }
 
