@@ -73,6 +73,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_doc(doc),
     m_studio(&doc->getStudio())
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     setWindowTitle(tr("Manage MIDI Banks and Programs"));
 
     // Main Frame
@@ -81,7 +83,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     setCentralWidget(mainFrame);
     // VBox layout holds most of the dialog at the top and the button box at
     // the bottom.
-    // ??? Seems like a grid layout would be simpler.
+    // ??? Seems like a grid layout would be simpler.  Get rid of the
+    //     command buttons then switch to a grid layout.
     QVBoxLayout *mainFrameLayout = new QVBoxLayout(mainFrame);
     mainFrameLayout->setContentsMargins(0, 0, 0, 0);
     mainFrameLayout->setSpacing(2);
@@ -107,6 +110,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_treeWidget = new QTreeWidget;
     leftPartLayout->addWidget(m_treeWidget);
+    m_treeWidget->setMinimumWidth(500);
     m_treeWidget->setColumnCount(4);
     QStringList sl;
     sl << tr("Device and Banks")
@@ -123,9 +127,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Buttons
 
-    // ??? Why do we have buttons when we have a menu?  Get rid of all
-    //     these buttons and move all functionality to the Edit menu.
-    //     Then add a toolbar.
+    // ??? Why do we have buttons when we have a menu?  Get all of this
+    //     button functionality into the menu.  Get rid of all
+    //     these buttons.  Then add a toolbar.
 
     QFrame *bankBox = new QFrame(leftPart);
     leftPartLayout->addWidget(bankBox);
@@ -185,56 +189,52 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     // Editor Right Side.  The Bank and Key Map editors.
 
     m_rightSide = new QFrame;
-
     m_rightSide->setContentsMargins(8, 8, 8, 8);
-    QVBoxLayout *rightSideLayout = new QVBoxLayout;
+    QVBoxLayout *rightSideLayout = new QVBoxLayout(m_rightSide);
     rightSideLayout->setContentsMargins(0, 0, 0, 0);
     rightSideLayout->setSpacing(6);
-    m_rightSide->setLayout(rightSideLayout);
+    //m_rightSide->setLayout(rightSideLayout);
 
     splitterLayout->addWidget(m_rightSide);
 
+    // MIDI Programs Editor
     m_programEditor = new MidiProgramsEditor(this, m_rightSide);
+    m_programEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
     rightSideLayout->addWidget(m_programEditor);
 
+    // MIDI Key Map Editor
     m_keyMappingEditor = new MidiKeyMappingEditor(this, m_rightSide);
-    rightSideLayout->addWidget(m_keyMappingEditor);
-    m_keyMappingEditor->hide();
-
-    m_programEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
     m_keyMappingEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
+    m_keyMappingEditor->hide();
+    // ??? These aren't on top of each other.  Should we use QStackedLayout?
+    //     That would be easier to understand.
+    rightSideLayout->addWidget(m_keyMappingEditor);
 
+    // Options
     m_optionBox = new QGroupBox(tr("Options"), m_rightSide);
-    QVBoxLayout *optionBoxLayout = new QVBoxLayout;
-    optionBoxLayout->setContentsMargins(0, 0, 0, 0);
     rightSideLayout->addWidget(m_optionBox);
 
-    QWidget *variationBox = new QWidget(m_optionBox);
-    QHBoxLayout *variationBoxLayout = new QHBoxLayout;
+    QHBoxLayout *variationBoxLayout = new QHBoxLayout(m_optionBox);
     variationBoxLayout->setContentsMargins(4, 4, 4, 4);
-    optionBoxLayout->addWidget(variationBox);
 
-    m_variationCheckBox = new QCheckBox(tr("Show Variation list based on "), variationBox);
-    variationBoxLayout->addWidget(m_variationCheckBox);
-    m_variationCombo = new QComboBox(variationBox);
-    variationBoxLayout->addWidget(m_variationCombo);
-    variationBox->setLayout(variationBoxLayout);
-    m_variationCombo->addItem(tr("LSB"));
-    m_variationCombo->addItem(tr("MSB"));
-
-    m_optionBox->setLayout(optionBoxLayout);
-
-    // device/bank modification
-
-
+    // Variation Check Box
+    m_variationCheckBox = new QCheckBox(tr("Show Variation list based on "), m_optionBox);
     connect(m_variationCheckBox, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotVariationToggled);
+    variationBoxLayout->addWidget(m_variationCheckBox);
 
+    // Variation Combo Box
+    m_variationCombo = new QComboBox(m_optionBox);
+    m_variationCombo->addItem(tr("LSB"));
+    m_variationCombo->addItem(tr("MSB"));
     connect(m_variationCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &BankEditorDialog::slotVariationChanged);
+    variationBoxLayout->addWidget(m_variationCombo);
+
 
     // Button box.  Close button.
+
     QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Close);
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
     // Bottom of the main vbox layout is the button box.
@@ -243,21 +243,18 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_studio->addObserver(this);
     m_observingStudio = true;
 
-    // Initialize the dialog
-    //
     initDialog();
-
     setupActions();
 
-    // Check for no Midi devices and disable everything
-    //
-    DeviceList *devices = m_studio->getDevices();
-    DeviceListIterator it;
+#if 0
+    // Check for no MIDI devices and disable everything
+    // ??? This code never does anything because we do not allow this
+    //     window to launch if there are no devices.
+    const DeviceList *devices = m_studio->getDevices();
     bool haveMidiPlayDevice = false;
-    for (it = devices->begin(); it != devices->end(); ++it) {
-        MidiDevice *md =
-            dynamic_cast<MidiDevice *>(*it);
-        if (md && md->getDirection() == MidiDevice::Play) {
+    for (const Device *device : *devices) {
+        const MidiDevice *md = dynamic_cast<const MidiDevice *>(device);
+        if (md  &&  md->getDirection() == MidiDevice::Play) {
             haveMidiPlayDevice = true;
             break;
         }
@@ -268,23 +265,23 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         m_keyMappingEditor->setDisabled(true);
         m_optionBox->setDisabled(true);
     }
+#endif
 
-    if (defaultDevice != Device::NO_DEVICE) {
+    if (defaultDevice != Device::NO_DEVICE)
         setCurrentDevice(defaultDevice);
-    }
-
-    setAttribute(Qt::WA_DeleteOnClose);
-//     setAutoSaveSettings(BankEditorConfigGroup, true);    //&&&
 }
 
 BankEditorDialog::~BankEditorDialog()
 {
-    RG_DEBUG << "~BankEditorDialog()\n";
+    RG_DEBUG << "dtor";
 
+    // Unsubscribe from Studio
     if (m_observingStudio) {
         m_observingStudio = false;
         m_studio->removeObserver(this);
     }
+
+    // Unsubscribe from Device(s) unsubscribe
     for (Device *device : m_observedDevices) {
         unobserveDevice(device);
     }
@@ -316,57 +313,55 @@ BankEditorDialog::initDialog()
 {
     m_treeWidget->clear();
 
-    // Fill list view
-    //
-    MidiDevice* midiDevice = nullptr;
-    QTreeWidgetItem* twItemDevice = nullptr;
-    DeviceList *devices = m_studio->getDevices();
-    DeviceListIterator it;
-//     unsigned int i = 0;
+    // Fill tree
 
+    DeviceList *devices = m_studio->getDevices();
+
+    // For each Device...
     // iterates over devices and create device-TreeWidgetItems (level: topLevelItem)
     // then calls populateDeviceItem() to create bank-TreeWidgetItems (level: topLevelItem-child)
-    for (it = devices->begin(); it != devices->end(); ++it) {
-        Device *devx = *it;
-//     for ( i=0; i < int(devices->size()); i++ ){
-//         devx = devices->at( i );
+    for (Device *device : *devices) {
 
-        if (devx->getType() == Device::Midi) {
+        // Not a MIDI Device?  Try the next.
+        if (device->getType() != Device::Midi)
+            continue;
 
-            midiDevice = dynamic_cast<MidiDevice*>(devx);
+        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
+        if (!midiDevice)
+            continue;
 
-            if (!midiDevice) continue;
-            // skip read-only devices
-            if (midiDevice->getDirection() == MidiDevice::Record) continue;
+        // Not a playback Device?  Try the next.
+        if (midiDevice->getDirection() != MidiDevice::Play)
+            continue;
 
-            observeDevice(midiDevice);
+        observeDevice(midiDevice);
 
-            QString itemName = strtoqstr(midiDevice->getName());
+        QString itemName = strtoqstr(midiDevice->getName());
 
-            RG_DEBUG << "BankEditorDialog::initDialog - adding " << itemName;
+        RG_DEBUG << "BankEditorDialog::initDialog - adding " << itemName;
 
-            twItemDevice =
-                new MidiDeviceTreeWidgetItem(midiDevice,
-                                             m_treeWidget,
-                                             itemName);
-            //twItemDevice->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable);
+        QTreeWidgetItem *twItemDevice = new MidiDeviceTreeWidgetItem(
+                midiDevice,
+                m_treeWidget,
+                itemName);
 
-            m_treeWidget->addTopLevelItem(twItemDevice);  //
+        m_treeWidget->addTopLevelItem(twItemDevice);
 
-            twItemDevice->setExpanded(true);
+        twItemDevice->setExpanded(true);
 
-            // ??? updateDialog() does this as well.  Can we combine into a
-            //     single routine that does both or is used by both?
-            populateDeviceItem(twItemDevice, midiDevice);
-        }
+        // ??? updateDialog() does this as well.  Can we combine into a
+        //     single routine that does both or is used by both?
+        populateDeviceItem(twItemDevice, midiDevice);
+
     }
 
+    // Select the first device item.
+    m_treeWidget->topLevelItem(0)->setSelected(true);
+    // Set up the right side for item 0.
     updateEditor(m_treeWidget->topLevelItem(0));
 
-    // select the first device item
-    m_treeWidget->topLevelItem(0)->setSelected(true);
+    // ??? Does this do anything?
     m_treeWidget->resizeColumnToContents(0);
-    m_treeWidget->setMinimumWidth(500);
 }
 
 void
