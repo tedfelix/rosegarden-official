@@ -68,7 +68,7 @@ public:
 
     ModifyDeviceCommand *makeCommand(const QString &name);
     // ??? Trivial wrapper.  Inline into each caller.
-    void addCommandToHistory(Command *command);
+    static void addCommandToHistory(Command *command);
 
     void setCurrentDevice(DeviceId device);
 
@@ -209,17 +209,13 @@ private:
     Clipboard m_clipboard;
 
     /// Get first free bank to avoid conflicts.
-    /**
-     * ??? DO NOT use std::pair.  It is *obtuse*.  For this particular case, use
-     *     two more reference parameters: MidiByte &msb, MidiByte &lsb
-     */
-    std::pair<int /* MSB */, int /* LSB */> getFirstFreeBank(QTreeWidgetItem *item);
+    static void getFirstFreeBank(MidiDevice *device, MidiByte &msb, MidiByte &lsb);
 
     /// Handle bank name conflicts by adding "_1".
-    QString makeUniqueBankName(const QString &name,
+    static QString makeUniqueBankName(const QString &name,
                                const BankList &banks);
     /// Handle key map name conflicts by adding "_1".
-    QString makeUniqueKeymapName(const QString &name,
+    static QString makeUniqueKeymapName(const QString &name,
                                  const KeyMappingList &keymaps);
 
     /// Identify Tracks using a bank to avoid deleting banks that are in use.

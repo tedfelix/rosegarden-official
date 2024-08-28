@@ -775,11 +775,12 @@ BankEditorDialog::slotAddBank()
             else
                 name = tr("<new bank %1>").arg(n);
         }
-        std::pair<int, int> bank =
-            getFirstFreeBank(m_treeWidget->currentItem());
+        MidiByte msb;
+        MidiByte lsb;
+        getFirstFreeBank(device, msb, lsb);
 
-        MidiBank newBank(false,
-                         bank.first, bank.second,
+        MidiBank newBank(false,  // percussion
+                         msb, lsb,
                          qstrtostr(name));
 
         BankList banks = device->getBanks();
@@ -1012,32 +1013,36 @@ BankEditorDialog::slotDeleteAll()
     }
 }
 
-std::pair<int, int>
-BankEditorDialog::getFirstFreeBank(QTreeWidgetItem* item)
+void
+BankEditorDialog::getFirstFreeBank(
+        MidiDevice *device, MidiByte &o_msb, MidiByte &o_lsb)
 {
-    //!!! percussion? this is actually only called in the expectation
-    // that percussion==false at the moment
+    // ??? This ignores percussion true/false.  Should it care?
 
-    MidiDeviceTreeWidgetItem *deviceItem =
-        dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
-    if (! deviceItem) return std::pair<int, int>(0, 0);
-    MidiDevice* device = deviceItem->getDevice();
+    o_msb = 0;
+    o_lsb = 0;
 
     BankList banks = device->getBanks();
+
+    // For all msb values...
     for (int msb = MidiMinValue; msb < MidiMaxValue; ++msb) {
+        // For all lsb values...
         for (int lsb = MidiMinValue; lsb < MidiMaxValue; ++lsb) {
-            BankList::iterator i = banks.begin();
+            BankList::const_iterator i = banks.begin();
+            // For all banks on this Device...
             for (; i != banks.end(); ++i) {
-                if (i->getLSB() == lsb && i->getMSB() == msb) {
+                // Conflict?  Try the next msb/lsb pair.
+                if (i->getLSB() == lsb  &&  i->getMSB() == msb)
                     break;
-                }
             }
-            if (i == banks.end())
-                return std::pair<int, int>(msb, lsb);
+            // No conflict?  Go with this.
+            if (i == banks.end()) {
+                o_msb = msb;
+                o_lsb = lsb;
+                return;
+            }
         }
     }
-
-    return std::pair<int, int>(0, 0);
 }
 
 void
