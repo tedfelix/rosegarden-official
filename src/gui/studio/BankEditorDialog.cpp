@@ -160,28 +160,28 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_deleteAll->setToolTip(tr("Delete all Banks and Key Mappings from the current Device"));
 
-    m_importBanks = new QPushButton(tr("Import..."), bankBox);
-    m_exportBanks = new QPushButton(tr("Export..."), bankBox);
-    gridLayout->addWidget(m_importBanks, 2, 0);
-    gridLayout->addWidget(m_exportBanks, 2, 1);
+    m_import = new QPushButton(tr("Import..."), bankBox);
+    m_export = new QPushButton(tr("Export..."), bankBox);
+    gridLayout->addWidget(m_import, 2, 0);
+    gridLayout->addWidget(m_export, 2, 1);
 
     // Tips
     //
-    m_importBanks->setToolTip(tr("Import Bank and Program data from a Rosegarden file to the current Device"));
-    m_exportBanks->setToolTip(tr("Export all Device and Bank information to a Rosegarden format  interchange file"));
+    m_import->setToolTip(tr("Import Bank and Program data from a Rosegarden file to the current Device"));
+    m_export->setToolTip(tr("Export all Device and Bank information to a Rosegarden format  interchange file"));
 
-    m_copyPrograms = new QPushButton(tr("Copy"), bankBox);
-    m_pastePrograms = new QPushButton(tr("Paste"), bankBox);
-    gridLayout->addWidget(m_copyPrograms, 3, 0);
-    gridLayout->addWidget(m_pastePrograms, 3, 1);
+    m_copy = new QPushButton(tr("Copy"), bankBox);
+    m_paste = new QPushButton(tr("Paste"), bankBox);
+    gridLayout->addWidget(m_copy, 3, 0);
+    gridLayout->addWidget(m_paste, 3, 1);
 
     bankBox->setLayout(gridLayout);
 
     // Tips
     //
-    m_copyPrograms->setToolTip(tr("Copy all Program names from current Bank or Keymap to clipboard"));
+    m_copy->setToolTip(tr("Copy all Program names from current Bank or Keymap to clipboard"));
 
-    m_pastePrograms->setToolTip(tr("Paste Program names from clipboard to current Bank or Keymap"));
+    m_paste->setToolTip(tr("Paste Program names from clipboard to current Bank or Keymap"));
 
     // Right side layout
     m_rightSide = new QFrame;
@@ -214,8 +214,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     variationBoxLayout->setContentsMargins(4, 4, 4, 4);
     optionBoxLayout->addWidget(variationBox);
 
-    m_variationToggle = new QCheckBox(tr("Show Variation list based on "), variationBox);
-    variationBoxLayout->addWidget(m_variationToggle);
+    m_variationCheckBox = new QCheckBox(tr("Show Variation list based on "), variationBox);
+    variationBoxLayout->addWidget(m_variationCheckBox);
     m_variationCombo = new QComboBox(variationBox);
     variationBoxLayout->addWidget(m_variationCombo);
     variationBox->setLayout(variationBoxLayout);
@@ -241,19 +241,19 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     connect(m_deleteAll, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotDeleteAll);
 
-    connect(m_importBanks, &QAbstractButton::clicked,
+    connect(m_import, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotImport);
 
-    connect(m_exportBanks, &QAbstractButton::clicked,
+    connect(m_export, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotExport);
 
-    connect(m_copyPrograms, &QAbstractButton::clicked,
+    connect(m_copy, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotCopy);
 
-    connect(m_pastePrograms, &QAbstractButton::clicked,
+    connect(m_paste, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotPaste);
 
-    connect(m_variationToggle, &QAbstractButton::clicked,
+    connect(m_variationCheckBox, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotVariationToggled);
 
     connect(m_variationCombo,
@@ -445,7 +445,7 @@ BankEditorDialog::updateDialog()
             parentDevice = bankItem->getDevice();
         }
     }
-    // if m_selectioName is set - use it
+    // if m_selectionName is set - use it
     if (m_selectionName != "") {
         selectedName = m_selectionName;
         m_selectionName = "";
@@ -641,9 +641,9 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
         leaveActionState("on_bank_item");
 
         m_delete->setEnabled(true);
-        m_copyPrograms->setEnabled(true);
+        m_copy->setEnabled(true);
 
-        m_pastePrograms->setEnabled(m_clipboard.itemType == ItemType::KEYMAP);
+        m_paste->setEnabled(m_clipboard.itemType == ItemType::KEYMAP);
 
         MidiDevice *device = keyItem->getDevice();
         if (!device)
@@ -668,20 +668,20 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
         leaveActionState("on_key_item");
 
         m_delete->setEnabled(true);
-        m_copyPrograms->setEnabled(true);
+        m_copy->setEnabled(true);
 
-        m_pastePrograms->setEnabled(m_clipboard.itemType == ItemType::BANK);
+        m_paste->setEnabled(m_clipboard.itemType == ItemType::BANK);
 
         MidiDevice *device = bankItem->getDevice();
         if (!device)
             return ;
 
-        m_variationToggle->blockSignals(true);
-        m_variationToggle->setChecked(device->getVariationType() !=
+        m_variationCheckBox->blockSignals(true);
+        m_variationCheckBox->setChecked(device->getVariationType() !=
                                       MidiDevice::NoVariations);
-        m_variationToggle->blockSignals(false);
+        m_variationCheckBox->blockSignals(false);
 
-        m_variationCombo->setEnabled(m_variationToggle->isChecked());
+        m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
 
         m_variationCombo->blockSignals(true);
         m_variationCombo->setCurrentIndex
@@ -716,13 +716,13 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
     RG_DEBUG << "BankEditorDialog::populateDeviceEditors : not a bank item - disabling";
     m_delete->setEnabled(false);
-    m_copyPrograms->setEnabled(false);
-    m_pastePrograms->setEnabled(false);
+    m_copy->setEnabled(false);
+    m_paste->setEnabled(false);
     m_rightSide->setEnabled(false);
 
-    m_variationToggle->setChecked(device->getVariationType() !=
+    m_variationCheckBox->setChecked(device->getVariationType() !=
                                   MidiDevice::NoVariations);
-    m_variationCombo->setEnabled(m_variationToggle->isChecked());
+    m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
     m_variationCombo->setCurrentIndex
                 (device->getVariationType() ==
                      MidiDevice::VariationFromLSB ? 0 : 1);
@@ -895,7 +895,7 @@ BankEditorDialog::slotDelete()
                 m_clipboard.deviceId == bankItem->getDevice()->getId() &&
                 m_clipboard.bank == bankItem->getBank()) {
 
-                m_pastePrograms->setEnabled(false);
+                m_paste->setEnabled(false);
                 m_clipboard.itemType = ItemType::NONE;
                 m_clipboard.deviceId = Device::NO_DEVICE;
                 m_clipboard.bank = -1;
@@ -991,7 +991,7 @@ BankEditorDialog::slotDeleteAll()
         // reset copy/paste
         //
         if (m_clipboard.deviceId == device->getId()) {
-            m_pastePrograms->setEnabled(false);
+            m_paste->setEnabled(false);
             m_clipboard.itemType = ItemType::NONE;
             m_clipboard.deviceId = Device::NO_DEVICE;
             m_clipboard.bank = -1;
@@ -1073,7 +1073,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         int bankIndex = bankItem->getBank();
         BankList banks = device->getBanks();
         QString uniqueName = makeUniqueBankName(label, banks);
-        // set m_selectionName to select this item in updateDialot
+        // set m_selectionName to select this item in updateDialog()
         m_selectionName = uniqueName;
         banks[bankIndex].setName(qstrtostr(uniqueName));
 
@@ -1215,7 +1215,7 @@ BankEditorDialog::slotVariationToggled()
     if (! command) return;
     MidiDevice::VariationType variation =
         MidiDevice::NoVariations;
-    if (m_variationToggle->isChecked()) {
+    if (m_variationCheckBox->isChecked()) {
         if (m_variationCombo->currentIndex() == 0) {
             variation = MidiDevice::VariationFromLSB;
         } else {
@@ -1226,7 +1226,7 @@ BankEditorDialog::slotVariationToggled()
     command->setVariation(variation);
     addCommandToHistory(command);
 
-    m_variationCombo->setEnabled(m_variationToggle->isChecked());
+    m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
 }
 
 void
@@ -1239,7 +1239,7 @@ BankEditorDialog::slotVariationChanged(int)
     if (! command) return;
     MidiDevice::VariationType variation =
         MidiDevice::NoVariations;
-    if (m_variationToggle->isChecked()) {
+    if (m_variationCheckBox->isChecked()) {
         if (m_variationCombo->currentIndex() == 0) {
             variation = MidiDevice::VariationFromLSB;
         } else {
@@ -1399,7 +1399,7 @@ BankEditorDialog::slotCopy()
         m_clipboard.deviceId = bankItem->getDevice()->getId();
         m_clipboard.bank = bankItem->getBank();
         m_clipboard.keymapName = "";
-        m_pastePrograms->setEnabled(true);
+        m_paste->setEnabled(true);
     }
 
     MidiKeyMapTreeWidgetItem *keyItem =
@@ -1410,7 +1410,7 @@ BankEditorDialog::slotCopy()
         m_clipboard.deviceId = keyItem->getDevice()->getId();
         m_clipboard.bank = -1;
         m_clipboard.keymapName = keyItem->getName();
-        m_pastePrograms->setEnabled(true);
+        m_paste->setEnabled(true);
     }
 }
 

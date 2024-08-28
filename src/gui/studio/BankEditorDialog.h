@@ -165,14 +165,10 @@ private:
     QPushButton *m_addKeyMapping;
     QPushButton *m_delete;
     QPushButton *m_deleteAll;
-    // ??? rename: m_import
-    QPushButton *m_importBanks;
-    // ??? rename: m_export
-    QPushButton *m_exportBanks;
-    // ??? rename: m_copy
-    QPushButton *m_copyPrograms;
-    // ??? rename: m_paste
-    QPushButton *m_pastePrograms;
+    QPushButton *m_import;
+    QPushButton *m_export;
+    QPushButton *m_copy;
+    QPushButton *m_paste;
 
     QFrame *m_rightSide;
 
@@ -182,14 +178,11 @@ private:
     // Options
     QGroupBox *m_optionBox;
     // Show Variation list based on
-    // ??? rename: m_variationCheckBox
-    QCheckBox *m_variationToggle;
+    QCheckBox *m_variationCheckBox;
     // Show Variation list based on
     QComboBox *m_variationCombo;
 
     QPushButton *m_closeButton;
-    // ??? Apply?  I've never seen this.
-    //QPushButton *m_applyButton;
 
     /// Show and update the program editor or the key mapping editor.
     /**
@@ -223,23 +216,29 @@ private:
     std::pair<int /* MSB */, int /* LSB */> getFirstFreeBank(QTreeWidgetItem *item);
 
     /// Handle bank name conflicts by adding "_1".
-    QString makeUniqueBankName(const QString& name,
-                               const BankList& banks);
+    QString makeUniqueBankName(const QString &name,
+                               const BankList &banks);
     /// Handle key map name conflicts by adding "_1".
-    QString makeUniqueKeymapName(const QString& name,
-                                 const KeyMappingList& keymaps);
+    QString makeUniqueKeymapName(const QString &name,
+                                 const KeyMappingList &keymaps);
 
     /// Identify Tracks using a bank to avoid deleting banks that are in use.
-    bool tracksUsingBank(const MidiBank& bank, const MidiDevice& device);
+    bool tracksUsingBank(const MidiBank &bank, const MidiDevice &device);
 
-    // ??? HERE
-
+    // Device Observer Management
     std::set<Device *> m_observedDevices;
     void observeDevice(Device *device);
     void unobserveDevice(Device *device);
 
-    QString m_selectionName;
+    // Studio Observer Management
     bool m_observingStudio;
+
+    /// Tells updateDialog() which item to select.
+    /**
+     * Used by slotModifyDeviceOrBankName() to let updateDialog() know which
+     * item to select.  We want the item that was just renamed to be selected.
+     */
+    QString m_selectionName;
 };
 
 
