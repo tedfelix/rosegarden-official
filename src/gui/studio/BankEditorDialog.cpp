@@ -19,6 +19,7 @@
 #define RG_NO_DEBUG_PRINT
 
 #include "BankEditorDialog.h"
+
 #include "MidiBankTreeWidgetItem.h"
 #include "MidiDeviceTreeWidgetItem.h"
 #include "MidiKeyMapTreeWidgetItem.h"
@@ -26,42 +27,32 @@
 #include "MidiProgramsEditor.h"
 
 #include "misc/Debug.h"
-#include "misc/Strings.h"
-#include "misc/ConfigGroups.h"
 #include "base/Device.h"
 #include "base/MidiDevice.h"
-#include "base/MidiProgram.h"
-#include "base/NotationTypes.h"
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "misc/ConfigGroups.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
 #include "gui/dialogs/LibrarianDialog.h"
 #include "gui/widgets/FileDialog.h"
 #include "gui/general/ResourceFinder.h"
-#include "gui/general/ThornStyle.h"
 #include "gui/dialogs/AboutDialog.h"
-#include "document/Command.h"
 
-#include <QLayout>
-#include <QApplication>
-#include <QAction>
 #include <QComboBox>
 #include <QTreeWidget>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QCheckBox>
 #include <QDialog>
-#include <QDir>
+#include <QDialogButtonBox>
 #include <QFileInfo>
 #include <QFrame>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QString>
-#include <QToolTip>
+#include <QStringList>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -69,39 +60,45 @@
 #if QT_VERSION >= 0x050000
 #include <QStandardPaths>
 #endif
-#include <QDialogButtonBox>
 
 
 namespace Rosegarden
 {
 
+
 BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    RosegardenDocument *doc,
-                                   DeviceId defaultDevice):
-        QMainWindow(parent),
-        m_doc(doc),
-        m_studio(&doc->getStudio())
+                                   DeviceId defaultDevice) :
+    QMainWindow(parent),
+    m_doc(doc),
+    m_studio(&doc->getStudio())
 {
-    QWidget* mainFrame = new QWidget(this);
-    mainFrame->setContentsMargins(1, 1, 1, 1);
-    setCentralWidget(mainFrame);
-    QVBoxLayout *mainFrameLayout = new QVBoxLayout;
-    mainFrameLayout->setContentsMargins(0, 0, 0, 0);
-    mainFrameLayout->setSpacing(2);
-    mainFrame->setLayout(mainFrameLayout);
-
     setWindowTitle(tr("Manage MIDI Banks and Programs"));
 
-    QWidget *splitter = new QWidget;
-    QHBoxLayout *splitterLayout = new QHBoxLayout;
-    splitterLayout->setContentsMargins(0, 0, 0, 0);
-    splitter->setLayout(splitterLayout);
+    // Main Frame
+    QWidget *mainFrame = new QWidget(this);
+    mainFrame->setContentsMargins(1, 1, 1, 1);
+    setCentralWidget(mainFrame);
+    // VBox layout holds most of the dialog at the top and the button box at
+    // the bottom.
+    // ??? Seems like a grid layout would be simpler.
+    QVBoxLayout *mainFrameLayout = new QVBoxLayout(mainFrame);
+    mainFrameLayout->setContentsMargins(0, 0, 0, 0);
+    mainFrameLayout->setSpacing(2);
+    //mainFrame->setLayout(mainFrameLayout);
 
+    // "Splitter" contains the left (tree) and right (editor) sides.
+    // ??? Rename: editor?  Or just use a grid layout.
+    QWidget *splitter = new QWidget;
+    QHBoxLayout *splitterLayout = new QHBoxLayout(splitter);
+    splitterLayout->setContentsMargins(0, 0, 0, 0);
+    //splitter->setLayout(splitterLayout);
+
+    // Top of the main vbox layout is the editor.
     mainFrameLayout->addWidget(splitter);
 
-    //
-    // Left-side list view
-    //
+    // Editor Left Side.  The Tree and Command Buttons.
+
     QWidget *leftPart = new QWidget;
     QVBoxLayout *leftPartLayout = new QVBoxLayout;
     leftPartLayout->setContentsMargins(2, 2, 2, 2);
@@ -110,7 +107,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_treeWidget = new QTreeWidget;
     leftPartLayout->addWidget(m_treeWidget);
-
     m_treeWidget->setColumnCount(4);
     QStringList sl;
     sl << tr("Device and Banks")
@@ -121,69 +117,73 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_treeWidget->setRootIsDecorated(true);
     m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);    //qt4
     m_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);    //qt4
-//    m_treeWidget->setAllColumnsShowFocus(true);
     m_treeWidget->setSortingEnabled(true);
+    connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
+            this, &BankEditorDialog::slotEdit);
 
-    /*
-    m_treeWidget->setShowSortIndicator(true);        //&&&
-    m_treeWidget->setItemsRenameable(true);
-    m_treeWidget->restoreLayout(BankEditorConfigGroup);
-    */
+    // Buttons
+
+    // ??? Why do we have buttons when we have a menu?  Get rid of all
+    //     these buttons and move all functionality to the Edit menu.
+    //     Then add a toolbar.
 
     QFrame *bankBox = new QFrame(leftPart);
     leftPartLayout->addWidget(bankBox);
     bankBox->setContentsMargins(1, 1, 1, 1);
     QGridLayout *gridLayout = new QGridLayout(bankBox);
     gridLayout->setSpacing(4);
-
-    // Buttons
-
-    // ??? Why do we have buttons when we have a menu?  Get rid of all
-    //     these buttons and move all functionality to the Edit menu.
+    //bankBox->setLayout(gridLayout);
 
     m_addBank = new QPushButton(tr("Add Bank"), bankBox);
-    m_addKeyMapping = new QPushButton(tr("Add Key Mapping"), bankBox);
-    m_delete = new QPushButton(tr("Delete"), bankBox);
-    m_deleteAll = new QPushButton(tr("Delete All"), bankBox);
+    m_addBank->setToolTip(tr("Add a Bank to the current device"));
+    connect(m_addBank, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotAddBank);
     gridLayout->addWidget(m_addBank, 0, 0);
+
+    m_addKeyMapping = new QPushButton(tr("Add Key Mapping"), bankBox);
+    m_addKeyMapping->setToolTip(tr("Add a Percussion Key Mapping to the current device"));
+    connect(m_addKeyMapping, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotAddKeyMapping);
     gridLayout->addWidget(m_addKeyMapping, 0, 1);
+
+    m_delete = new QPushButton(tr("Delete"), bankBox);
+    m_delete->setToolTip(tr("Delete the current Bank or Key Mapping"));
+    connect(m_delete, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotDelete);
     gridLayout->addWidget(m_delete, 1, 0);
+
+    m_deleteAll = new QPushButton(tr("Delete All"), bankBox);
+    m_deleteAll->setToolTip(tr("Delete all Banks and Key Mappings from the current Device"));
+    connect(m_deleteAll, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotDeleteAll);
     gridLayout->addWidget(m_deleteAll, 1, 1);
 
-    // Tips
-    //
-    m_addBank->setToolTip(tr("Add a Bank to the current device"));
-
-    m_addKeyMapping->setToolTip(tr("Add a Percussion Key Mapping to the current device"));
-
-    m_delete->setToolTip(tr("Delete the current Bank or Key Mapping"));
-
-    m_deleteAll->setToolTip(tr("Delete all Banks and Key Mappings from the current Device"));
-
     m_import = new QPushButton(tr("Import..."), bankBox);
-    m_export = new QPushButton(tr("Export..."), bankBox);
+    m_import->setToolTip(tr("Import Bank and Program data from a Rosegarden file to the current Device"));
+    connect(m_import, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotImport);
     gridLayout->addWidget(m_import, 2, 0);
+
+    m_export = new QPushButton(tr("Export..."), bankBox);
+    m_export->setToolTip(tr("Export all Device and Bank information to a Rosegarden format  interchange file"));
+    connect(m_export, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotExport);
     gridLayout->addWidget(m_export, 2, 1);
 
-    // Tips
-    //
-    m_import->setToolTip(tr("Import Bank and Program data from a Rosegarden file to the current Device"));
-    m_export->setToolTip(tr("Export all Device and Bank information to a Rosegarden format  interchange file"));
-
     m_copy = new QPushButton(tr("Copy"), bankBox);
-    m_paste = new QPushButton(tr("Paste"), bankBox);
+    m_copy->setToolTip(tr("Copy all Program names from current Bank or Keymap to clipboard"));
+    connect(m_copy, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotCopy);
     gridLayout->addWidget(m_copy, 3, 0);
+
+    m_paste = new QPushButton(tr("Paste"), bankBox);
+    m_paste->setToolTip(tr("Paste Program names from clipboard to current Bank or Keymap"));
+    connect(m_paste, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotPaste);
     gridLayout->addWidget(m_paste, 3, 1);
 
-    bankBox->setLayout(gridLayout);
+    // Editor Right Side.  The Bank and Key Map editors.
 
-    // Tips
-    //
-    m_copy->setToolTip(tr("Copy all Program names from current Bank or Keymap to clipboard"));
-
-    m_paste->setToolTip(tr("Paste Program names from clipboard to current Bank or Keymap"));
-
-    // Right side layout
     m_rightSide = new QFrame;
 
     m_rightSide->setContentsMargins(8, 8, 8, 8);
@@ -226,32 +226,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // device/bank modification
 
-    connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
-            this, &BankEditorDialog::slotEdit);
-
-    connect(m_addBank, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotAddBank);
-
-    connect(m_addKeyMapping, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotAddKeyMapping);
-
-    connect(m_delete, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotDelete);
-
-    connect(m_deleteAll, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotDeleteAll);
-
-    connect(m_import, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotImport);
-
-    connect(m_export, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotExport);
-
-    connect(m_copy, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotCopy);
-
-    connect(m_paste, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotPaste);
 
     connect(m_variationCheckBox, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotVariationToggled);
@@ -263,6 +237,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     // Button box.  Close button.
     QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Close);
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
+    // Bottom of the main vbox layout is the button box.
     mainFrameLayout->addWidget(btnBox);
 
     m_studio->addObserver(this);
@@ -310,14 +285,9 @@ BankEditorDialog::~BankEditorDialog()
         m_observingStudio = false;
         m_studio->removeObserver(this);
     }
-    for(Device* device : m_observedDevices) {
+    for (Device *device : m_observedDevices) {
         unobserveDevice(device);
     }
-
-//     m_treeWidget->saveLayout(BankEditorConfigGroup);    //&&&
-
-//     if (m_doc) // see slotFileClose() for an explanation on why we need to test m_doc
-//         CommandHistory::getInstance()->detachView(actionCollection());
 }
 
 void
