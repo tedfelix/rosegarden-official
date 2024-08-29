@@ -656,6 +656,11 @@ public slots:
     void slotExportMusicXml();
 
     /**
+     * Export (render) file to audio (only audio and synth plugins)
+     */
+    void slotExportToAudio();
+
+    /**
      * closes all open windows by calling close() on each memberList
      * item until the list is empty, then quits the application.  If
      * queryClose() returns false because the user canceled the

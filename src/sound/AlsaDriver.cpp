@@ -5490,6 +5490,16 @@ AlsaDriver::scavengePlugins()
     m_pluginScavenger.scavenge();
 }
 
+void
+AlsaDriver::installExporter(CompositionExportManager* exportManager)
+{
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) {
+        m_jackDriver->installExporter(exportManager);
+    }
+#endif
+}
+
 QString
 AlsaDriver::getStatusLog()
 {

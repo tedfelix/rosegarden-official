@@ -26,6 +26,7 @@
 #include "Audit.h"
 #include "PluginFactory.h"
 #include "SequencerDataBlock.h"
+#include "sound/CompositionExportManager.h"
 
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
@@ -73,7 +74,9 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
         m_haveAsyncAudioEvent(false),
         m_kickedOutAt(0),
         m_framesProcessed(0),
-        m_ok(false)
+        m_ok(false),
+        m_playing(false),
+        m_exportManager(nullptr)
 {
     initialise();
 }
@@ -854,6 +857,21 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     // receiving midi input so always process async audio
     bool asyncAudio = m_haveAsyncAudioEvent || (synthCount > 0);
 
+    if (playing && ! m_playing) {
+        if (m_exportManager) {
+            RG_DEBUG << "export start playing";
+            m_exportManager->start(m_sampleRate);
+        }
+
+    }
+    if (!playing && m_playing) {
+        if (m_exportManager) {
+            RG_DEBUG << "export stop playing";
+            m_exportManager->stop();
+        }
+    }
+    m_playing = playing;
+
 #ifdef DEBUG_JACK_PROCESS
     Profiler profiler("jackProcess", true);
 #else
@@ -1287,6 +1305,11 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         } else if (!doneRecord) {
             jackProcessRecord(id, nframes, nullptr, nullptr, clocksRunning);
         }
+    }
+
+
+    if (m_exportManager && playing) {
+        m_exportManager->addSamples(master[0], master[1], m_bufferSize);
     }
 
     if (playing) {
@@ -2534,6 +2557,12 @@ JackDriver::reportFailure(MappedEvent::FailureCode code)
 {
     if (m_alsaDriver)
         m_alsaDriver->reportFailure(code);
+}
+
+void
+JackDriver::installExporter(CompositionExportManager* exportManager)
+{
+    m_exportManager = exportManager;
 }
 
 

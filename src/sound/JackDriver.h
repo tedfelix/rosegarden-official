@@ -36,6 +36,7 @@ class AudioBussMixer;
 class AudioInstrumentMixer;
 class AudioFileReader;
 class AudioFileWriter;
+class CompositionExportManager;
 
 class JackDriver
 {
@@ -195,6 +196,8 @@ public:
     //
     void reportFailure(MappedEvent::FailureCode code);
 
+    void installExporter(CompositionExportManager* exportManager);
+
 protected:
 
     // static methods for JACK process thread:
@@ -290,8 +293,11 @@ protected:
     bool                         m_ok;
 
     bool m_checkLoad;
-};
 
+ private:
+    bool m_playing;
+    CompositionExportManager* m_exportManager;
+};
 
 }
 

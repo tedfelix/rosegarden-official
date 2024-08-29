@@ -1524,6 +1524,12 @@ RosegardenSequencer::initialiseStudio()
 }
 
 void
+RosegardenSequencer::installExporter(CompositionExportManager* exportManager)
+{
+    m_driver->installExporter(exportManager);
+}
+
+void
 RosegardenSequencer::checkForNewClients()
 {
     // Don't do this check if any of these conditions hold

@@ -55,6 +55,7 @@
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
+#include "sound/CompositionExportManager.h"
 #include "misc/Preferences.h"
 
 #include "rosegarden-version.h"  // for VERSION
@@ -95,8 +96,13 @@ SequenceManager::SequenceManager() :
     m_recordTime(new QElapsedTimer()),
     m_lastTransportStartPosition(0),
     m_sampleRate(0),
-    m_tempo(0)
+    m_tempo(0),
+    m_compositionExportManager(nullptr),
+    m_exportTimer(new QTimer(this))
 {
+    connect(m_exportTimer, &QTimer::timeout,
+            this, &SequenceManager::slotExportUpdate);
+    m_exportTimer->start(50);
 }
 
 SequenceManager::~SequenceManager()
@@ -1080,6 +1086,18 @@ void SequenceManager::slotLoopChanged()
     }
 }
 
+void SequenceManager::slotExportUpdate()
+{
+    if (m_compositionExportManager) {
+        m_compositionExportManager->update();
+        if (m_compositionExportManager->isComplete()) {
+            RG_DEBUG << "deleting completed export manager";
+            delete m_compositionExportManager;
+            m_compositionExportManager = nullptr;
+        }
+    }
+}
+
 bool SequenceManager::inCountIn(const RealTime &time) const
 {
     if (m_transportStatus == RECORDING  ||
@@ -1864,6 +1882,20 @@ SequenceManager::getSampleRate() const
     m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     return m_sampleRate;
+}
+
+void
+SequenceManager::setExportWavFile(const QString& fileName)
+{
+    RG_DEBUG << "setExportWavFile" << fileName;
+    if (m_compositionExportManager) {
+        RG_DEBUG << "replacing previous export manager";
+        delete m_compositionExportManager;
+    }
+    m_compositionExportManager = new CompositionExportManager(fileName);
+    // and install in the driver
+    RosegardenSequencer::getInstance()->
+        installExporter(m_compositionExportManager);
 }
 
 bool

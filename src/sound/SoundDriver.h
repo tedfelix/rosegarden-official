@@ -39,6 +39,7 @@ namespace Rosegarden
 {
 
 class PlayableData;
+class CompositionExportManager;
 
 // Current recording status - whether we're monitoring anything
 // or recording.
@@ -326,6 +327,9 @@ public:
     //
     unsigned int getDevices();
 */
+
+    // install the manager for rendering the composition to an audio file
+    virtual void installExporter(CompositionExportManager*) { }
 
 protected:
 

@@ -51,6 +51,7 @@ class CountdownDialog;
 class CompositionMapper;
 class AudioManagerDialog;
 class MappedBufMetaIterator;
+class CompositionExportManager;
 
 
 /**
@@ -261,6 +262,9 @@ public:
     /// Get sample rate from RosegardenSequencer.
     int getSampleRate() const;
 
+    /// set file for export of composition at next play
+    void setExportWavFile(const QString& fileName);
+
 public slots:
 
     /**
@@ -280,6 +284,8 @@ public slots:
     void fastForwardToEnd();
 
     void slotLoopChanged();
+
+    void slotExportUpdate();
 
 signals:
     /// A program change was received.
@@ -482,6 +488,8 @@ private:
     /// Used by setTempo() to detect tempo changes.
     tempoT m_tempo;
 
+    CompositionExportManager* m_compositionExportManager;
+    QTimer *m_exportTimer;
 };
 
 

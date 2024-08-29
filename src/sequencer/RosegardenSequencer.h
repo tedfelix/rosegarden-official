@@ -38,6 +38,7 @@ namespace Rosegarden {
 
 class MappedInstrument;
 class SoundDriver;
+class CompositionExportManager;
 
 
 /// MIDI and Audio recording and playback
@@ -434,6 +435,8 @@ public:
 
     /// Initialise the virtual studio at this end of the link.
     void initialiseStudio();
+
+    void installExporter(CompositionExportManager* exportManager);
 
 
     // --------- Transport Interface --------
