@@ -868,6 +868,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         if (m_exportManager) {
             RG_DEBUG << "export stop playing";
             m_exportManager->stop();
+            // finished with the exportManager - it is deleted elsewhere
+            m_exportManager = nullptr;
         }
     }
     m_playing = playing;
