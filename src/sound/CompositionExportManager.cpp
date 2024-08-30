@@ -30,9 +30,13 @@ namespace Rosegarden
 CompositionExportManager::CompositionExportManager
 (const QString& fileName) :
     m_fileName(fileName),
+    m_sampleRate(0),
     m_start(false),
     m_stop(false),
-    m_running(false)
+    m_leftChannelBuffer(nullptr),
+    m_rightChannelBuffer(nullptr),
+    m_running(false),
+    m_ws(nullptr)
 {
   RG_DEBUG << "ctor" << fileName;
 }
@@ -100,15 +104,14 @@ void CompositionExportManager::update()
             RG_DEBUG << "render frames" << toRead << ssq;
             m_ws->putInterleavedFrames(toRead,
                                        ileaveBuf);
-            if (m_stop) {
-                RG_DEBUG << "stop - delete write stream";
-                m_running = false;
-                delete m_ws;
-                delete m_leftChannelBuffer;
-                delete m_rightChannelBuffer;
-            }
         }
-
+        if (m_stop) {
+            RG_DEBUG << "stop - delete write stream";
+            delete m_ws;
+            delete m_leftChannelBuffer;
+            delete m_rightChannelBuffer;
+            m_running = false;
+        }
     } else {
         if (m_start) {
             m_start = false;

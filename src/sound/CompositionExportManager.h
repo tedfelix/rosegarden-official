@@ -30,7 +30,7 @@ class AudioWriteStream;
 class CompositionExportManager
 {
 public:
-    explicit CompositionExportManager(const QString& fileNament);
+    explicit CompositionExportManager(const QString& fileName);
 
     /// called by the audio thread on start playback
     void start(int sampleRate);
