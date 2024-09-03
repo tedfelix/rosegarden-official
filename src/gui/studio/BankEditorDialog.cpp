@@ -773,83 +773,90 @@ BankEditorDialog::getParentDeviceItem(QTreeWidgetItem *item)
 void
 BankEditorDialog::slotAddBank()
 {
-    if (!m_treeWidget->currentItem())
-        return ;
+    QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+    if (!currentItem)
+        return;
 
-    QTreeWidgetItem* currentItem = m_treeWidget->currentItem();
+    MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(currentItem);
+    if (!deviceItem)
+        return;
 
-    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentItem);
     MidiDevice *device = deviceItem->getDevice();
+    if (!device)
+        return;
 
-    if (device) {
-        QString name = "";
-        int n = 0;
-        while (name == "" ||
-               device->getBankByName(qstrtostr(name)) != nullptr) {
-            ++n;
-            if (n == 1)
-                name = tr("<new bank>");
-            else
-                name = tr("<new bank %1>").arg(n);
-        }
-        MidiByte msb;
-        MidiByte lsb;
-        getFirstFreeBank(device, msb, lsb);
+    BankList banks = device->getBanks();
 
-        MidiBank newBank(false,  // percussion
-                         msb, lsb,
-                         qstrtostr(name));
-
-        BankList banks = device->getBanks();
-        banks.push_back(newBank);
-
-        RG_DEBUG <<
-            "BankEditorDialog::slotAddBank() : deviceItem->getDeviceId() = " <<
-            deviceItem->getDevice()->getId();
-        ModifyDeviceCommand *command = makeCommand(tr("add MIDI Bank"));
-        if (! command) return;
-        command->setBankList(banks);
-        addCommandToHistory(command);
-
+    // Generate an unused "new bank" name.
+    // ??? Seems like this belongs in MidiDevice.
+    QString name = "";
+    for (size_t i = 1; i <= banks.size() + 1; ++i) {
+        if (i == 1)
+            name = tr("<new bank>");
+        else
+            name = tr("<new bank %1>").arg(i);
+        // No such bank?  Then we have our name.
+        if (device->getBankByName(qstrtostr(name)) == nullptr)
+            break;
     }
+
+    MidiByte msb;
+    MidiByte lsb;
+    getFirstFreeBank(device, msb, lsb);
+
+    MidiBank newBank(false,  // percussion
+                     msb, lsb,
+                     qstrtostr(name));
+
+    banks.push_back(newBank);
+
+    RG_DEBUG << "slotAddBank() : deviceItem->getDeviceId() = " << deviceItem->getDevice()->getId();
+
+    ModifyDeviceCommand *command = makeCommand(tr("add MIDI Bank"));
+    if (!command)
+        return;
+    command->setBankList(banks);
+    addCommandToHistory(command);
 }
 
 void
 BankEditorDialog::slotAddKeyMapping()
 {
-    if (!m_treeWidget->currentItem())
-        return ;
+    QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+    if (!currentItem)
+        return;
 
-    QTreeWidgetItem* currentItem = m_treeWidget->currentItem();
-    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentItem);
+    MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(currentItem);
+    if (!deviceItem)
+        return;
+
     MidiDevice *device = deviceItem->getDevice();
+    if (!device)
+        return;
 
-    if (device) {
-
-        QString name = "";
-        int n = 0;
-        while (name == "" || device->getKeyMappingByName(qstrtostr(name)) != nullptr) {
-            ++n;
-            if (n == 1)
-                name = tr("<new mapping>");
-            else
-                name = tr("<new mapping %1>").arg(n);
-        }
-
-        MidiKeyMapping newKeyMapping(qstrtostr(name));
-
-        ModifyDeviceCommand *command = makeCommand(tr("add Key Mapping"));
-        if (! command) return;
-        KeyMappingList kml;
-        kml.push_back(newKeyMapping);
-        command->setKeyMappingList(kml);
-        command->setOverwrite(false);
-        command->setRename(false);
-
-        addCommandToHistory(command);
-
-        selectDeviceItem(device);
+    QString name = "";
+    int n = 0;
+    while (name == "" || device->getKeyMappingByName(qstrtostr(name)) != nullptr) {
+        ++n;
+        if (n == 1)
+            name = tr("<new mapping>");
+        else
+            name = tr("<new mapping %1>").arg(n);
     }
+
+    MidiKeyMapping newKeyMapping(qstrtostr(name));
+
+    ModifyDeviceCommand *command = makeCommand(tr("add Key Mapping"));
+    if (! command) return;
+    KeyMappingList kml;
+    kml.push_back(newKeyMapping);
+    command->setKeyMappingList(kml);
+    command->setOverwrite(false);
+    command->setRename(false);
+
+    addCommandToHistory(command);
+
+    selectDeviceItem(device);
 }
 
 void
