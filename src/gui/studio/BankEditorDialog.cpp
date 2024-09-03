@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[BankEditorDialog]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "BankEditorDialog.h"
 
@@ -124,6 +124,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_treeWidget->setSortingEnabled(true);
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
             this, &BankEditorDialog::slotEdit);
+    connect(m_treeWidget, &QTreeWidget::currentItemChanged,
+            this, &BankEditorDialog::slotUpdateEditor);
+    connect(m_treeWidget, &QTreeWidget::itemChanged,
+            this, &BankEditorDialog::slotModifyDeviceOrBankName);
 
     // Buttons
 
@@ -299,12 +303,6 @@ BankEditorDialog::setupActions()
     createAction("bank_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
-    connect(m_treeWidget, &QTreeWidget::currentItemChanged,
-            this, &BankEditorDialog::slotUpdateEditor);
-
-    connect(m_treeWidget, &QTreeWidget::itemChanged, this,
-            &BankEditorDialog::slotModifyDeviceOrBankName);
-
     createMenusAndToolbars("bankeditor.rc");
 }
 
@@ -352,7 +350,6 @@ BankEditorDialog::initDialog()
         // ??? updateDialog() does this as well.  Can we combine into a
         //     single routine that does both or is used by both?
         populateDeviceItem(twItemDevice, midiDevice);
-
     }
 
     // Select the first device item.
@@ -360,7 +357,9 @@ BankEditorDialog::initDialog()
     // Set up the right side for item 0.
     updateEditor(m_treeWidget->topLevelItem(0));
 
-    // ??? Does this do anything?
+    // Make sure the first column is big enough for its contents.
+    // ??? We could really use this everywhere the columns come up the wrong
+    //     size.  Which seems like everywhere.
     m_treeWidget->resizeColumnToContents(0);
 }
 
@@ -371,20 +370,31 @@ BankEditorDialog::updateDialog()
 
     // Update list view
 
-    // ??? Can we safely get rid of this?  Do the updates here actually
-    //     trigger signals?  If so, can we switch to different signals?
-    m_treeWidget->blockSignals(true);
+    // Get selected Item.
 
-    // get selected Item
     enum class SelectedType {NONE, DEVICE, BANK, KEYMAP};
-    SelectedType selectedType = SelectedType::NONE;
+    SelectedType selectedType{SelectedType::NONE};
     QString selectedName;
-    Device* parentDevice = nullptr;
+    Device *parentDevice{nullptr};
 
-    QTreeWidgetItem* item = m_treeWidget->currentItem();
+    // ??? This is polymorphism.  Move this behavior to
+    //     MidiDeviceTreeWidgetItem and override as appropriate
+    //     in MidiKeyMapTreeWidgetItem and MidiBankTreeWidgetItem.
+    //     Then the code in the #else reduces to:
+#if 0
+    const QTreeWidgetItem *item = m_treeWidget->currentItem();
+    const MidiDeviceTreeWidgetItem *deviceItem =
+            dynamic_cast<const MidiDeviceTreeWidgetItem *>(item);
+    if (deviceItem) {
+        selectedType = deviceItem->getType();
+        selectedName = deviceItem->getName();
+        parentDevice = deviceItem->getDevice();
+    }
+#else
+    QTreeWidgetItem *item = m_treeWidget->currentItem();
     if (item) {
-        MidiDeviceTreeWidgetItem* deviceItem =
-            dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
+        const MidiDeviceTreeWidgetItem *deviceItem =
+                dynamic_cast<const MidiDeviceTreeWidgetItem *>(item);
         if (deviceItem) {
             selectedType = SelectedType::DEVICE;
             MidiDevice *device = deviceItem->getDevice();
@@ -395,22 +405,24 @@ BankEditorDialog::updateDialog()
                 selectedType = SelectedType::NONE;
             }
         }
-        MidiKeyMapTreeWidgetItem *keyItem =
-            dynamic_cast<MidiKeyMapTreeWidgetItem*>(item);
+        const MidiKeyMapTreeWidgetItem *keyItem =
+                dynamic_cast<const MidiKeyMapTreeWidgetItem *>(item);
         if (keyItem) {
             selectedType = SelectedType::KEYMAP;
             selectedName = keyItem->getName();
             parentDevice = keyItem->getDevice();
         }
-        MidiBankTreeWidgetItem *bankItem =
-            dynamic_cast<MidiBankTreeWidgetItem*>(item);
+        const MidiBankTreeWidgetItem *bankItem =
+            dynamic_cast<const MidiBankTreeWidgetItem *>(item);
         if (bankItem) {
             selectedType = SelectedType::BANK;
             selectedName = bankItem->getName();
             parentDevice = bankItem->getDevice();
         }
     }
-    // if m_selectionName is set - use it
+#endif
+
+    // The current item was renamed.  Make sure we use the new name to find it.
     if (m_selectionName != "") {
         selectedName = m_selectionName;
         m_selectionName = "";
@@ -418,6 +430,11 @@ BankEditorDialog::updateDialog()
 
     //RG_DEBUG << "selected item:" << (int)selectedType << selectedName << parentDevice;
 
+    // Have to block signals or else we will get itemChanged() while we are
+    // doing work.  QTreeWidget doesn't offer an itemChangedByUser().
+    m_treeWidget->blockSignals(true);
+
+    // Start from scratch.
     m_treeWidget->clear();
 
     DeviceList *devices = m_studio->getDevices();
@@ -441,16 +458,18 @@ BankEditorDialog::updateDialog()
 
         //RG_DEBUG << "BankEditorDialog::updateDialog - adding " << itemName;
 
+        // Create a new entry on the tree.
+        // ??? Reorg parameters so that m_treeWidget is first like
+        //     QTreeWidgetItem's ctor.
         QTreeWidgetItem *deviceItem = new MidiDeviceTreeWidgetItem(
                 midiDevice, m_treeWidget, itemName);
 
         deviceItem->setExpanded(true);
 
-        // ??? What is this doing?
+        // Add the banks and key maps for this device to the tree.
         // ??? initDialog() does this as well.  Can we combine into a
         //     single routine that does both or is used by both?
         populateDeviceItem(deviceItem, midiDevice);
-
     }
 
     m_treeWidget->blockSignals(false);
@@ -581,10 +600,10 @@ BankEditorDialog::clearItemChildren(QTreeWidgetItem* item)
 
 void BankEditorDialog::slotUpdateEditor(QTreeWidgetItem* item, QTreeWidgetItem*)
 {
-    RG_DEBUG << "BankEditorDialog::slotPopulateDeviceEditors";
+    RG_DEBUG << "slotUpdateEditor()";
 
     if (!item)
-        return ;
+        return;
 
     updateEditor(item);
 }
@@ -1011,16 +1030,14 @@ BankEditorDialog::getFirstFreeBank(
 }
 
 void
-BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
+BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem *item, int)
 {
-    RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName";
+    RG_DEBUG << "slotModifyDeviceOrBankName()";
 
-    MidiDeviceTreeWidgetItem* deviceItem =
-        dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
-    MidiBankTreeWidgetItem* bankItem =
-        dynamic_cast<MidiBankTreeWidgetItem*>(item);
+    MidiBankTreeWidgetItem *bankItem =
+            dynamic_cast<MidiBankTreeWidgetItem *>(item);
     MidiKeyMapTreeWidgetItem *keyItem =
-        dynamic_cast<MidiKeyMapTreeWidgetItem*>(item);
+            dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
 
     QString label = item->text(0);
     // do not allow blank names
@@ -1028,16 +1045,19 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         updateDialog();
         return;
     }
+
     if (bankItem) {
 
         // renaming a bank item
 
-        RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
-                 << "modify bank name to " << label;
+        RG_DEBUG << "  modify bank name to " << label;
 
-        QTreeWidgetItem* currentItem = m_treeWidget->currentItem();
-        MidiDeviceTreeWidgetItem* deviceItem =
-            getParentDeviceItem(currentItem);
+        // ??? Why are we using currentItem() when item is coming in?
+        QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+        MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(currentItem);
+        if (!deviceItem)
+            return;
+
         MidiDevice *device = deviceItem->getDevice();
         if (! device) return;
         int bankIndex = bankItem->getBank();
@@ -1047,9 +1067,8 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         m_selectionName = uniqueName;
         banks[bankIndex].setName(qstrtostr(uniqueName));
 
-        RG_DEBUG <<
-            "slotModifyDeviceOrBankName : deviceItem->getDeviceId() = " <<
-            deviceItem->getDevice()->getId();
+        RG_DEBUG << "  deviceItem->getDeviceId() = " << deviceItem->getDevice()->getId();
+
         std::string deviceName = device->getName();
         ModifyDeviceCommand *command = makeCommand(tr("rename MIDI Bank"));
         if (! command) return;
@@ -1058,14 +1077,16 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
 
     } else if (keyItem) {
 
-        RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
-        << "modify key mapping name to " << label;
+        RG_DEBUG << "  modify key mapping name to " << label;
 
         QString oldName = keyItem->getName();
 
-        QTreeWidgetItem* currentItem = m_treeWidget->currentItem();
-        MidiDeviceTreeWidgetItem* deviceItem =
-            getParentDeviceItem(currentItem);
+        // ??? Why are we using currentItem() when item is coming in?
+        QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+        MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(currentItem);
+        if (!deviceItem)
+            return;
+
         MidiDevice *device = deviceItem->getDevice();
 
         if (! device) return;
@@ -1091,11 +1112,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
 
         addCommandToHistory(command);
 
-    } else if (deviceItem) {
-        // the device item is non-editable so a device rename cannot
-        // happen here
     }
-
 }
 
 void
