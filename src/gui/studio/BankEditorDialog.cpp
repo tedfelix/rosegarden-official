@@ -883,7 +883,7 @@ BankEditorDialog::slotDelete()
     const MidiBankTreeWidgetItem *bankItem =
             dynamic_cast<const MidiBankTreeWidgetItem *>(currentItem);
     if (bankItem) {
-        MidiDevice *device = bankItem->getDevice();
+        const MidiDevice *device = bankItem->getDevice();
         if (!device)
             return;
 
@@ -912,45 +912,41 @@ BankEditorDialog::slotDelete()
                 QMessageBox::Yes | QMessageBox::No,  // buttons
                 QMessageBox::No);  // defaultButton
 
-        if (reply == QMessageBox::Yes) {
+        if (reply == QMessageBox::No)
+            return;
 
-            // Copy all programs that aren't in the doomed bank to
-            // newProgramList.
-            ProgramList newProgramList;
-            const ProgramList &actualList = device->getPrograms();
-//            for (ProgramList::const_iterator it = actualList.begin();
-//                 it != actualList.end();
-//                 ++it) {
-            for (const MidiProgram &midiProgram : actualList) {
-                // If this program isn't in the bank that is being deleted,
-                // add it to the new program list.  We use compareKey()
-                // because the MidiBank objects in the program list do not
-                // have their name fields filled in.
-                if (!midiProgram.getBank().compareKey(bank))
-                    newProgramList.push_back(midiProgram);
-            }
-
-            // Don't allow pasting from this defunct device
-            // do this check before bankItem is deleted
-            //
-            if (m_clipboard.itemType == ItemType::BANK &&
-                m_clipboard.deviceId == bankItem->getDevice()->getId() &&
-                m_clipboard.bank == bankItem->getBank()) {
-
-                m_paste->setEnabled(false);
-                m_clipboard.itemType = ItemType::NONE;
-                m_clipboard.deviceId = Device::NO_DEVICE;
-                m_clipboard.bank = -1;
-                m_clipboard.keymapName = "";
-            }
-
-            ModifyDeviceCommand *command = makeCommand(tr("delete MIDI bank"));
-            if (! command) return;
-            command->setBankList(newBanks);
-            command->setProgramList(newProgramList);
-
-            addCommandToHistory(command);
+        // Copy all programs that aren't in the doomed bank to
+        // newProgramList.
+        ProgramList newProgramList;
+        const ProgramList &oldProgramList = device->getPrograms();
+        for (const MidiProgram &midiProgram : oldProgramList) {
+            // If this program isn't in the bank that is being deleted,
+            // add it to the new program list.  We use compareKey()
+            // because the MidiBank objects in the program list do not
+            // have their name fields filled in.
+            if (!midiProgram.getBank().compareKey(bank))
+                newProgramList.push_back(midiProgram);
         }
+
+        // If the bank that is about to be deleted is in the clipboard...
+        if (m_clipboard.itemType == ItemType::BANK  &&
+            m_clipboard.deviceId == bankItem->getDevice()->getId()  &&
+            m_clipboard.bank == bankItem->getBank()) {
+
+            // Clear the clipboard to avoid pasting a non-existent bank.
+            m_paste->setEnabled(false);
+            m_clipboard.itemType = ItemType::NONE;
+            m_clipboard.deviceId = Device::NO_DEVICE;
+            m_clipboard.bank = -1;
+            m_clipboard.keymapName = "";
+        }
+
+        ModifyDeviceCommand *command = makeCommand(tr("delete MIDI bank"));
+        if (!command)
+            return;
+        command->setBankList(newBanks);
+        command->setProgramList(newProgramList);
+        addCommandToHistory(command);
 
         return;
     }
@@ -960,101 +956,108 @@ BankEditorDialog::slotDelete()
     const MidiKeyMapTreeWidgetItem *keyItem =
             dynamic_cast<const MidiKeyMapTreeWidgetItem *>(currentItem);
     if (keyItem) {
-        MidiDevice *device = keyItem->getDevice();
+        const MidiDevice *device = keyItem->getDevice();
         if (!device)
             return;
 
-        int reply =
-            QMessageBox::warning(
-              dynamic_cast<QWidget*>(this),
-              "", /* no title */
-              tr("Really delete this key mapping?"),
-              QMessageBox::Yes | QMessageBox::No,
-              QMessageBox::No);
+        const int reply = QMessageBox::warning(
+                this,  // parent
+                tr("Rosegarden"),  // title
+                tr("Really delete this key mapping?"),  // text
+                QMessageBox::Yes | QMessageBox::No,  // buttons
+                QMessageBox::No);  // defaultButton
 
-        if (reply == QMessageBox::Yes) {
+        if (reply == QMessageBox::No)
+            return;
 
-            std::string keyMappingName = qstrtostr(keyItem->getName());
+        const std::string keyMappingName = qstrtostr(keyItem->getName());
 
-            ModifyDeviceCommand *command =
-                makeCommand(tr("delete Key Mapping"));
-            if (! command) return;
-            KeyMappingList kml = device->getKeyMappings();
+        // Make a copy of the key map list so we can remove the deleted one.
+        KeyMappingList keyMapList = device->getKeyMappings();
 
-            for (KeyMappingList::iterator i = kml.begin();
-                 i != kml.end(); ++i) {
-                if (i->getName() == keyMappingName) {
-                    RG_DEBUG << "erasing " << keyMappingName;
-                    kml.erase(i);
-                    break;
-                }
+        for (KeyMappingList::iterator i = keyMapList.begin();
+             i != keyMapList.end();
+             ++i) {
+            if (i->getName() == keyMappingName) {
+                RG_DEBUG << "slotDelete(): erasing " << keyMappingName;
+                keyMapList.erase(i);
+                break;
             }
-
-            RG_DEBUG << "setting" << kml.size() << "key mappings to device";
-
-            command->setKeyMappingList(kml);
-
-            addCommandToHistory(command);
-
-            RG_DEBUG << "device has" <<
-                device->getKeyMappings().size() << "key mappings now";
         }
 
-        return ;
+        RG_DEBUG << "slotDelete(): setting" << keyMapList.size() << "key mappings to device";
+
+        ModifyDeviceCommand *command = makeCommand(tr("delete Key Mapping"));
+        if (!command)
+            return;
+        command->setKeyMappingList(keyMapList);
+        addCommandToHistory(command);
+
+        RG_DEBUG << "device has" << device->getKeyMappings().size() << "key mappings now";
+
+        return;
     }
 }
 
 void
 BankEditorDialog::slotDeleteAll()
 {
-    if (!m_treeWidget->currentItem())
-        return ;
+    QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+    if (!currentItem)
+        return;
 
-    QTreeWidgetItem* currentIndex = m_treeWidget->currentItem();
-    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentIndex);
+    MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(currentItem);
+    if (!deviceItem)
+        return;
+
     MidiDevice *device = deviceItem->getDevice();
-    BankList banks = device->getBanks();
+    if (!device)
+        return;
 
-    // check for used banks
-    for (const MidiBank& bank : banks) {
+    const BankList &banks = device->getBanks();
+
+    // Check for banks in use.
+    for (const MidiBank &bank : banks) {
         bool used = tracksUsingBank(bank, *device);
-        if (used) return;
+        if (used)
+            return;
     }
 
-    QString question = tr("Really delete all banks and keymaps for ") +
-                       strtoqstr(device->getName()) + QString(" ?");
+    const QString question = tr("Really delete all banks and keymaps for ") +
+                             strtoqstr(device->getName()) + QString(" ?");
 
-    int reply = QMessageBox::warning(
-                  dynamic_cast<QWidget*>(this),
-                  "", /* no title */
-                  question,
-                  QMessageBox::Yes | QMessageBox::No,
-                  QMessageBox::No);
+    const int reply = QMessageBox::warning(
+            this,  // parent
+            tr("Rosegarden"),  // title
+            question,  // text
+            QMessageBox::Yes | QMessageBox::No,  // buttons
+            QMessageBox::No);  // defaultButton
 
-    if (reply == QMessageBox::Yes) {
+    if (reply == QMessageBox::No)
+        return;
 
-        // reset copy/paste
-        //
-        if (m_clipboard.deviceId == device->getId()) {
-            m_paste->setEnabled(false);
-            m_clipboard.itemType = ItemType::NONE;
-            m_clipboard.deviceId = Device::NO_DEVICE;
-            m_clipboard.bank = -1;
-            m_clipboard.keymapName = "";
-        }
-
-        BankList emptyBankList;
-        ProgramList emptyProgramList;
-        KeyMappingList emptyKeymapList;
-
-        ModifyDeviceCommand *command = makeCommand(tr("delete all"));
-        if (! command) return;
-        command->setBankList(emptyBankList);
-        command->setProgramList(emptyProgramList);
-        command->setKeyMappingList(emptyKeymapList);
-
-        addCommandToHistory(command);
+    // Clear the clipboard if it refers to the device being cleared.
+    if (m_clipboard.deviceId == device->getId()) {
+        m_paste->setEnabled(false);
+        m_clipboard.itemType = ItemType::NONE;
+        m_clipboard.deviceId = Device::NO_DEVICE;
+        m_clipboard.bank = -1;
+        m_clipboard.keymapName = "";
     }
+
+
+    ModifyDeviceCommand *command = makeCommand(tr("delete all"));
+    if (!command)
+        return;
+
+    BankList emptyBankList;
+    command->setBankList(emptyBankList);
+    ProgramList emptyProgramList;
+    command->setProgramList(emptyProgramList);
+    KeyMappingList emptyKeymapList;
+    command->setKeyMappingList(emptyKeymapList);
+
+    addCommandToHistory(command);
 }
 
 void
