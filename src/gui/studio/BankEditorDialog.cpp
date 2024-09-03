@@ -382,6 +382,11 @@ BankEditorDialog::updateDialog()
     //     in MidiKeyMapTreeWidgetItem and MidiBankTreeWidgetItem.
     //     Then the code in the #else reduces to:
 #if 0
+    // ??? Problem is that the inheritance hierarchy is sus.
+    //     MidiKeyMapTreeWidgetItem is *not* a kind of
+    //     MidiDeviceTreeWidgetItem.  This looks like inheritance for
+    //     convenience rather than inheritance to express a model.
+    //     This will need to be addressed before any redesign.
     const QTreeWidgetItem *item = m_treeWidget->currentItem();
     const MidiDeviceTreeWidgetItem *deviceItem =
             dynamic_cast<const MidiDeviceTreeWidgetItem *>(item);
@@ -474,67 +479,91 @@ BankEditorDialog::updateDialog()
 
     m_treeWidget->blockSignals(false);
 
-    // select item
+    // ??? This does not restore scroll position.
+
+    // Restore the item selection.
+
+    // ??? Might want to pull this out into a function so that the returns can
+    //     be contained.  This will help when implementing scroll position
+    //     restoration.
+
+    // ??? Could we have searched for this in the last loop and saved the item
+    //     pointer for a call to setCurrentItem later?  That would mess up
+    //     pulling out the above loop to be shared by initDialog(), but it
+    //     would avoid a second scan of the tree.
 
     //RG_DEBUG << "selecting item:" << (int)selectedType << selectedName << parentDevice;
 
-    // find the device item
-    MidiDeviceTreeWidgetItem* selectDeviceItem = nullptr;
-    QTreeWidgetItem* root = m_treeWidget->invisibleRootItem();
-    for (int i=0; i<root->childCount(); i++) {
-        QTreeWidgetItem* item = root->child(i);
-        MidiDeviceTreeWidgetItem* deviceItem =
-            dynamic_cast<MidiDeviceTreeWidgetItem *>(item);
-        if (! deviceItem) continue;
+    if (selectedType == SelectedType::NONE)
+        return;
+
+    // Find the top level device item.
+    MidiDeviceTreeWidgetItem *selectDeviceItem{nullptr};
+    // ??? Use topLevelItemCount() and topLevelItem().
+    QTreeWidgetItem *root = m_treeWidget->invisibleRootItem();
+    // For each top level item...
+    for (int i=0; i < root->childCount(); ++i) {
+        QTreeWidgetItem *item = root->child(i);
+        MidiDeviceTreeWidgetItem *deviceItem =
+                dynamic_cast<MidiDeviceTreeWidgetItem *>(item);
+        if (!deviceItem)
+            continue;
+        // Found it?  Remember it.
         if (deviceItem->getDevice() == parentDevice) {
-            // found the device item
             selectDeviceItem = deviceItem;
             break;
         }
     }
 
-    if (selectDeviceItem == nullptr) {
-        // the device is gone - no selection
+    // Device is gone?  No selection.
+    if (!selectDeviceItem)
         return;
-    }
 
+    // The device itself is selected?
     if (selectedType == SelectedType::DEVICE) {
-        // the device itself is selected
         m_treeWidget->setCurrentItem(selectDeviceItem);
         return;
     }
 
-    if (selectedType == SelectedType::BANK ||
+    // Bank or Keymap?
+    if (selectedType == SelectedType::BANK  ||
         selectedType == SelectedType::KEYMAP) {
         int childCount = selectDeviceItem->childCount();
-        for(int i=0; i<childCount; i++) {
-            QTreeWidgetItem* cItem = selectDeviceItem->child(i);
+        for (int i=0; i < childCount; ++i) {
+            QTreeWidgetItem *childItem = selectDeviceItem->child(i);
+
+            // ??? This is polymorphism like above.  Express this in the
+            //     class hierarchy so we can reduce this to a single "if":
+            //     if (childItem->getName() == selectedName)
+            //         m_treeWidget->setCurrentItem(childItem);
+
             MidiKeyMapTreeWidgetItem *keyItem =
-                dynamic_cast<MidiKeyMapTreeWidgetItem*>(cItem);
-            if (keyItem && selectedType == SelectedType::KEYMAP) {
-                QString cName = keyItem->getName();
-                if (cName == selectedName) {
-                    // found it
-                    RG_DEBUG << "updateDialog setCurrent keymap" << cName;
-                    m_treeWidget->setCurrentItem(cItem);
+                    dynamic_cast<MidiKeyMapTreeWidgetItem *>(childItem);
+            if (keyItem  &&  selectedType == SelectedType::KEYMAP) {
+                const QString childName = keyItem->getName();
+                // Found it?
+                if (childName == selectedName) {
+                    RG_DEBUG << "updateDialog() setCurrent keymap" << childName;
+                    m_treeWidget->setCurrentItem(childItem);
                     return;
                 }
             }
             MidiBankTreeWidgetItem *bankItem =
-                dynamic_cast<MidiBankTreeWidgetItem*>(cItem);
-            if (bankItem && selectedType == SelectedType::BANK) {
-                QString cName = bankItem->getName();
-                if (cName == selectedName) {
-                    // found it
-                    RG_DEBUG << "updateDialog setCurrent bank" << cName;
-                    m_treeWidget->setCurrentItem(cItem);
+                    dynamic_cast<MidiBankTreeWidgetItem *>(childItem);
+            if (bankItem  &&  selectedType == SelectedType::BANK) {
+                const QString childName = bankItem->getName();
+                // Found it?
+                if (childName == selectedName) {
+                    RG_DEBUG << "updateDialog() setCurrent bank" << childName;
+                    m_treeWidget->setCurrentItem(childItem);
                     return;
                 }
             }
         }
-        // no suitable child item found - select device
-        RG_DEBUG << "updateDialog setCurrent device" <<
-            selectDeviceItem->getName();
+
+        RG_DEBUG << "updateDialog() punting, going with device" << selectDeviceItem->getName();
+
+        // No suitable child item found - select device.
         m_treeWidget->setCurrentItem(selectDeviceItem);
     }
 }
@@ -542,15 +571,15 @@ BankEditorDialog::updateDialog()
 void
 BankEditorDialog::setCurrentDevice(DeviceId device)
 {
-    unsigned int i, cnt;
+    const unsigned count = m_treeWidget->topLevelItemCount();
 
-    cnt = m_treeWidget->topLevelItemCount();
-    for( i = 0; i < cnt; i++ ){
-        QTreeWidgetItem *twItem = m_treeWidget->topLevelItem( i );
-        MidiDeviceTreeWidgetItem *deviceItem = dynamic_cast<MidiDeviceTreeWidgetItem *>(twItem);
-        if (deviceItem && deviceItem->getDevice()->getId() == device) {
-//             m_treeWidget->setSelected(item, true);
-            m_treeWidget->setCurrentItem(twItem);
+    // For each top level (Device) item...
+    for (unsigned i = 0; i < count; ++i) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(i);
+        MidiDeviceTreeWidgetItem *deviceItem =
+                dynamic_cast<MidiDeviceTreeWidgetItem *>(item);
+        if (deviceItem  &&  deviceItem->getDevice()->getId() == device) {
+            m_treeWidget->setCurrentItem(item);
             break;
         }
     }
