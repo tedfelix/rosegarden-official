@@ -44,7 +44,7 @@ public:
                            bool percussion,
                            int msb, int lsb);
 
-    int getBank()     { return m_bankNb; }
+    int getBank() const  { return m_bankNb; }
 
     void setPercussion(bool percussion);
     bool isPercussion() const { return m_percussion; }

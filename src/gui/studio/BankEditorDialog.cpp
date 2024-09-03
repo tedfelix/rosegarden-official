@@ -785,11 +785,12 @@ BankEditorDialog::slotAddBank()
     if (!device)
         return;
 
+    // Make a copy of the bank list so we can add the new one.
     BankList banks = device->getBanks();
 
     // Generate an unused "new bank" name.
     // ??? Seems like this belongs in MidiDevice.
-    QString name = "";
+    QString name;
     for (size_t i = 1; i <= banks.size() + 1; ++i) {
         if (i == 1)
             name = tr("<new bank>");
@@ -817,6 +818,9 @@ BankEditorDialog::slotAddBank()
         return;
     command->setBankList(banks);
     addCommandToHistory(command);
+
+    // ??? We should select the new item.  ModifyDeviceCommand is probably in
+    //     a better position to do that.
 }
 
 void
@@ -834,83 +838,96 @@ BankEditorDialog::slotAddKeyMapping()
     if (!device)
         return;
 
-    QString name = "";
-    int n = 0;
-    while (name == "" || device->getKeyMappingByName(qstrtostr(name)) != nullptr) {
-        ++n;
-        if (n == 1)
+    const KeyMappingList &keyMapList = device->getKeyMappings();
+
+    // Generate an unused "new mapping" name.
+    // ??? Seems like this belongs in MidiDevice.
+    QString name;
+    for (size_t i = 1; i <= keyMapList.size() + 1; ++i) {
+        if (i == 1)
             name = tr("<new mapping>");
         else
-            name = tr("<new mapping %1>").arg(n);
+            name = tr("<new mapping %1>").arg(i);
+        // No such bank?  Then we have our name.
+        if (device->getKeyMappingByName(qstrtostr(name)) == nullptr)
+            break;
     }
 
-    MidiKeyMapping newKeyMapping(qstrtostr(name));
+    KeyMappingList newKeyMapList;
+
+    MidiKeyMapping newKeyMap(qstrtostr(name));
+    newKeyMapList.push_back(newKeyMap);
 
     ModifyDeviceCommand *command = makeCommand(tr("add Key Mapping"));
-    if (! command) return;
-    KeyMappingList kml;
-    kml.push_back(newKeyMapping);
-    command->setKeyMappingList(kml);
+    if (!command)
+        return;
+    command->setKeyMappingList(newKeyMapList);
+    // Merge
     command->setOverwrite(false);
     command->setRename(false);
-
     addCommandToHistory(command);
 
-    selectDeviceItem(device);
+    // ??? We should select the new item.  ModifyDeviceCommand is probably in
+    //     a better position to do that.
 }
 
 void
 BankEditorDialog::slotDelete()
 {
-    if (!m_treeWidget->currentItem())
-        return ;
+    QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+    if (!currentItem)
+        return;
 
-    QTreeWidgetItem* currentItem = m_treeWidget->currentItem();
+    // Bank
 
-    MidiDevice* device = nullptr;
-    MidiBankTreeWidgetItem* bankItem =
-        dynamic_cast<MidiBankTreeWidgetItem*>(currentItem);
-    if (bankItem) device = bankItem->getDevice();
+    const MidiBankTreeWidgetItem *bankItem =
+            dynamic_cast<const MidiBankTreeWidgetItem *>(currentItem);
+    if (bankItem) {
+        MidiDevice *device = bankItem->getDevice();
+        if (!device)
+            return;
 
-    if (device && bankItem) {
-        int currentBank = bankItem->getBank();
-        BankList banks = device->getBanks();
-        MidiBank bank = banks[currentBank];
+        const BankList &banks = device->getBanks();
+        const MidiBank &bank = banks[bankItem->getBank()];
 
         BankList newBanks;
+        // Copy all banks except for the one we are deleting to newBanks.
         for (size_t i = 0; i < banks.size(); ++i) {
             MidiBank ibank = banks[i];
-            if (! ibank.compareKey(bank)) {
+            if (!ibank.compareKey(bank))
                 newBanks.push_back(ibank);
-            }
         }
 
-        bool used = tracksUsingBank(bank, *device);
-        if (used) return;
+        // Confirm the bank is not in use.
+        // ??? Shouldn't we do this before creating newBanks?
+        const bool used = tracksUsingBank(bank, *device);
+        if (used)
+            return;
 
-        int reply =
-            QMessageBox::warning(
-              dynamic_cast<QWidget*>(this),
-              "", /* no title */
-              tr("Really delete this bank?"),
-              QMessageBox::Yes | QMessageBox::No,
-              QMessageBox::No);
+        // Are You Sure?
+        const int reply = QMessageBox::warning(
+                this,  // parent
+                tr("Rosegarden"), // title
+                tr("Really delete this bank?"),  // text
+                QMessageBox::Yes | QMessageBox::No,  // buttons
+                QMessageBox::No);  // defaultButton
 
         if (reply == QMessageBox::Yes) {
 
-            // Copy across all programs that aren't in the doomed bank
-            //
+            // Copy all programs that aren't in the doomed bank to
+            // newProgramList.
             ProgramList newProgramList;
-            const ProgramList actualList = device->getPrograms();
-            for (ProgramList::const_iterator it = actualList.begin();
-                 it != actualList.end();
-                 ++it) {
+            const ProgramList &actualList = device->getPrograms();
+//            for (ProgramList::const_iterator it = actualList.begin();
+//                 it != actualList.end();
+//                 ++it) {
+            for (const MidiProgram &midiProgram : actualList) {
                 // If this program isn't in the bank that is being deleted,
                 // add it to the new program list.  We use compareKey()
                 // because the MidiBank objects in the program list do not
                 // have their name fields filled in.
-                if (!it->getBank().compareKey(bank))
-                    newProgramList.push_back(*it);
+                if (!midiProgram.getBank().compareKey(bank))
+                    newProgramList.push_back(midiProgram);
             }
 
             // Don't allow pasting from this defunct device
@@ -935,14 +952,17 @@ BankEditorDialog::slotDelete()
             addCommandToHistory(command);
         }
 
-        return ;
+        return;
     }
 
-    MidiKeyMapTreeWidgetItem* keyItem =
-        dynamic_cast<MidiKeyMapTreeWidgetItem*>(currentItem);
-    if (keyItem) device = keyItem->getDevice();
+    // Key Map
 
-    if (device && keyItem) {
+    const MidiKeyMapTreeWidgetItem *keyItem =
+            dynamic_cast<const MidiKeyMapTreeWidgetItem *>(currentItem);
+    if (keyItem) {
+        MidiDevice *device = keyItem->getDevice();
+        if (!device)
+            return;
 
         int reply =
             QMessageBox::warning(
