@@ -117,7 +117,8 @@ private slots:
      *
      * See updateEditor().
      */
-    void slotUpdateEditor(QTreeWidgetItem *, QTreeWidgetItem *);
+    void slotUpdateEditor(
+            QTreeWidgetItem *currentItem, QTreeWidgetItem *previousItem);
 
     // Button Handlers
     void slotAddBank();
@@ -152,7 +153,6 @@ private:
     // Widgets
 
     QTreeWidget *m_treeWidget;
-    void clearItemChildren(QTreeWidgetItem *item);
     /// Add Banks and Key Mappings to the tree for a MidiDevice.
     void populateDeviceItem(QTreeWidgetItem *deviceItem,
                             MidiDevice *midiDevice);
@@ -184,7 +184,7 @@ private:
 
     QPushButton *m_closeButton;
 
-    /// Show and update the program editor or the key mapping editor.
+    /// Show and update the program editor or the key map editor.
     /**
      * One or the other appear on the right side of the dialog.
      */

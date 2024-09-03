@@ -586,67 +586,62 @@ BankEditorDialog::setCurrentDevice(DeviceId device)
 }
 
 void
-BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* midiDevice)
+BankEditorDialog::populateDeviceItem(
+        QTreeWidgetItem *deviceItem, MidiDevice *midiDevice)
 {
-    clearItemChildren(deviceItem);
+    // Remove children from deviceItem.
+    // While there are items to remove...
+    while (deviceItem->childCount() > 0)
+        delete deviceItem->child(0);
 
-    QString itemName = strtoqstr(midiDevice->getName());
-
-    // Banks
+    // Add Banks
 
     BankList banks = midiDevice->getBanks();
     // add banks for this device
     for (size_t i = 0; i < banks.size(); ++i) {
-        RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding "
-                 << itemName << " - " << strtoqstr(banks[i].getName());
-        new MidiBankTreeWidgetItem(midiDevice, i, deviceItem,
-                                 strtoqstr(banks[i].getName()),
-                                 banks[i].isPercussion(),
-                                 banks[i].getMSB(), banks[i].getLSB());
+        RG_DEBUG << "populateDeviceItem() - adding bank " << strtoqstr(midiDevice->getName()) << " - " << strtoqstr(banks[i].getName());
+        new MidiBankTreeWidgetItem(
+                midiDevice,
+                i,  // bankNb
+                deviceItem,  // parent
+                strtoqstr(banks[i].getName()),  // name
+                banks[i].isPercussion(),
+                banks[i].getMSB(),
+                banks[i].getLSB());
     }
 
-    // Key Mappings
+    // Add Key Maps
 
     const KeyMappingList &mappings = midiDevice->getKeyMappings();
     for (size_t i = 0; i < mappings.size(); ++i) {
-        RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding key mapping "
-                 << itemName << " - " << strtoqstr(mappings[i].getName());
-        new MidiKeyMapTreeWidgetItem(midiDevice, deviceItem,
-                                   strtoqstr(mappings[i].getName()));
+        RG_DEBUG << "populateDeviceItem() - adding key map " << strtoqstr(midiDevice->getName()) << " - " << strtoqstr(mappings[i].getName());
+        new MidiKeyMapTreeWidgetItem(
+                midiDevice,
+                deviceItem,  // parent
+                strtoqstr(mappings[i].getName()));  // name
     }
 }
 
-void
-BankEditorDialog::clearItemChildren(QTreeWidgetItem* item)
-{
-//     QTreeWidgetItem* child = 0;
-
-//     while ((child = item->child(0)))
-//         delete child;
-    while ((item->childCount() > 0))
-        delete item->child(0);
-}
-
-void BankEditorDialog::slotUpdateEditor(QTreeWidgetItem* item, QTreeWidgetItem*)
+void BankEditorDialog::slotUpdateEditor(QTreeWidgetItem *currentItem, QTreeWidgetItem * /*previousItem*/)
 {
     RG_DEBUG << "slotUpdateEditor()";
 
-    if (!item)
+    if (!currentItem)
         return;
 
-    updateEditor(item);
+    // Show and update the program editor or the key map editor.
+    updateEditor(currentItem);
 }
-
 
 void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 {
-    // Show and update the program editor or the key mapping editor.
-
     if (!item)
         return;
 
-    MidiKeyMapTreeWidgetItem *keyItem =
-        dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
+    // Key Map Editor
+
+    const MidiKeyMapTreeWidgetItem *keyItem =
+            dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
 
     if (keyItem) {
 
@@ -655,12 +650,7 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
         m_delete->setEnabled(true);
         m_copy->setEnabled(true);
-
         m_paste->setEnabled(m_clipboard.itemType == ItemType::KEYMAP);
-
-        MidiDevice *device = keyItem->getDevice();
-        if (!device)
-            return ;
 
         m_keyMappingEditor->populate(item);
 
@@ -669,11 +659,13 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
         m_rightSide->setEnabled(true);
 
-        return ;
+        return;
     }
 
-    MidiBankTreeWidgetItem* bankItem =
-        dynamic_cast<MidiBankTreeWidgetItem*>(item);
+    // Program Editor
+
+    const MidiBankTreeWidgetItem *bankItem =
+            dynamic_cast<MidiBankTreeWidgetItem *>(item);
 
     if (bankItem) {
 
@@ -682,24 +674,30 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
         m_delete->setEnabled(true);
         m_copy->setEnabled(true);
-
         m_paste->setEnabled(m_clipboard.itemType == ItemType::BANK);
 
         MidiDevice *device = bankItem->getDevice();
         if (!device)
-            return ;
+            return;
 
+        // ??? Get rid of this.
         m_variationCheckBox->blockSignals(true);
-        m_variationCheckBox->setChecked(device->getVariationType() !=
-                                      MidiDevice::NoVariations);
+
+        m_variationCheckBox->setChecked(
+                device->getVariationType() != MidiDevice::NoVariations);
+
+        // ??? Get rid of this.
         m_variationCheckBox->blockSignals(false);
 
         m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
 
+        // ??? Get rid of this.
         m_variationCombo->blockSignals(true);
-        m_variationCombo->setCurrentIndex
-            (device->getVariationType() ==
-             MidiDevice::VariationFromLSB ? 0 : 1);
+
+        m_variationCombo->setCurrentIndex(
+                device->getVariationType() == MidiDevice::VariationFromLSB ? 0 : 1);
+
+        // ??? Get rid of this.
         m_variationCombo->blockSignals(false);
 
         m_programEditor->populate(item);
@@ -709,42 +707,48 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
         m_rightSide->setEnabled(true);
 
-        return ;
+        return;
     }
 
-    // Device, not bank or key mapping
-    // Ensure we fill these lists for the new device
-    //
-    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(item);
-    if (!deviceItem) {
-        RG_DEBUG << "BankEditorDialog::populateDeviceEditors - got no deviceItem (banks parent item) \n";
-        return ;
-    }
+    // Device, not bank or key mapping.
 
-    MidiDevice *device = deviceItem->getDevice();
-    if (!device) {
-        RG_DEBUG << "BankEditorDialog::populateDeviceEditors - no device for this item\n";
-        return ;
-    }
+    RG_DEBUG << "updateEditor() : not a bank item";
 
-    RG_DEBUG << "BankEditorDialog::populateDeviceEditors : not a bank item - disabling";
+    // Disable buttons.
     m_delete->setEnabled(false);
     m_copy->setEnabled(false);
     m_paste->setEnabled(false);
     m_rightSide->setEnabled(false);
 
-    m_variationCheckBox->setChecked(device->getVariationType() !=
-                                  MidiDevice::NoVariations);
-    m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
-    m_variationCombo->setCurrentIndex
-                (device->getVariationType() ==
-                     MidiDevice::VariationFromLSB ? 0 : 1);
-
+    // Leave all action states.
     leaveActionState("on_bank_item");
     leaveActionState("on_key_item");
 
+    // Clear the right side editors.
     m_programEditor->clearAll();
     m_keyMappingEditor->clearAll();
+
+    // Update Variation Widgets
+
+    // ??? This code is duplicated above.  Pull out an updateVariations().
+
+    MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(item);
+    if (!deviceItem) {
+        RG_DEBUG << "updateEditor() - no MidiDeviceTreeWidgetItem";
+        return;
+    }
+
+    MidiDevice *device = deviceItem->getDevice();
+    if (!device) {
+        RG_DEBUG << "updateEditor() - no MidiDevice for this item";
+        return;
+    }
+
+    m_variationCheckBox->setChecked(
+            device->getVariationType() != MidiDevice::NoVariations);
+    m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
+    m_variationCombo->setCurrentIndex(
+            device->getVariationType() == MidiDevice::VariationFromLSB ? 0 : 1);
 }
 
 MidiDeviceTreeWidgetItem *
