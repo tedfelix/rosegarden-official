@@ -101,7 +101,7 @@ signals:
 private slots:
 
     /// Tree item double-click to edit name.
-    void slotEdit(QTreeWidgetItem *item, int);
+    void slotEdit(QTreeWidgetItem *item, int column);
     /// Handles name changes in the tree.
     void slotItemChanged(QTreeWidgetItem *item, int column);
 
