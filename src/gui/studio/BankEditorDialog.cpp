@@ -39,6 +39,7 @@
 #include "gui/general/ResourceFinder.h"
 #include "gui/dialogs/AboutDialog.h"
 
+#include <QAction>
 #include <QComboBox>
 #include <QTreeWidget>
 #include <QMainWindow>
@@ -88,14 +89,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QVBoxLayout *mainFrameLayout = new QVBoxLayout(mainFrame);
     mainFrameLayout->setContentsMargins(0, 0, 0, 0);
     mainFrameLayout->setSpacing(2);
-    //mainFrame->setLayout(mainFrameLayout);
 
     // "Splitter" contains the left (tree) and right (editor) sides.
     // ??? Rename: editor?  Or just use a grid layout.
     QWidget *splitter = new QWidget;
     QHBoxLayout *splitterLayout = new QHBoxLayout(splitter);
     splitterLayout->setContentsMargins(0, 0, 0, 0);
-    //splitter->setLayout(splitterLayout);
 
     // Top of the main vbox layout is the editor.
     mainFrameLayout->addWidget(splitter);
@@ -103,6 +102,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     // Editor Left Side.  The Tree and Command Buttons.
 
     QWidget *leftPart = new QWidget;
+    // ??? There's only one thing in this layout now that the buttons
+    //     are gone.  No need for a layout at all.  Remove this.
     QVBoxLayout *leftPartLayout = new QVBoxLayout;
     leftPartLayout->setContentsMargins(2, 2, 2, 2);
     leftPart->setLayout(leftPartLayout);
@@ -129,66 +130,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     connect(m_treeWidget, &QTreeWidget::itemChanged,
             this, &BankEditorDialog::slotItemChanged);
 
-    // Buttons
-
-    // ??? Why do we have buttons when we have a menu?
-    //     - Get rid of all these buttons.
-
-    QFrame *bankBox = new QFrame(leftPart);
-    leftPartLayout->addWidget(bankBox);
-    bankBox->setContentsMargins(1, 1, 1, 1);
-    QGridLayout *gridLayout = new QGridLayout(bankBox);
-    gridLayout->setSpacing(4);
-    //bankBox->setLayout(gridLayout);
-
-    m_addBank = new QPushButton(tr("Add Bank"), bankBox);
-    m_addBank->setToolTip(tr("Add a Bank to the current device"));
-    connect(m_addBank, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotAddBank);
-    gridLayout->addWidget(m_addBank, 0, 0);
-
-    m_addKeyMapping = new QPushButton(tr("Add Key Mapping"), bankBox);
-    m_addKeyMapping->setToolTip(tr("Add a Percussion Key Mapping to the current device"));
-    connect(m_addKeyMapping, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotAddKeyMapping);
-    gridLayout->addWidget(m_addKeyMapping, 0, 1);
-
-    m_delete = new QPushButton(tr("Delete"), bankBox);
-    m_delete->setToolTip(tr("Delete the current Bank or Key Mapping"));
-    connect(m_delete, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotDelete);
-    gridLayout->addWidget(m_delete, 1, 0);
-
-    m_deleteAll = new QPushButton(tr("Delete All"), bankBox);
-    m_deleteAll->setToolTip(tr("Delete all Banks and Key Mappings from the current Device"));
-    connect(m_deleteAll, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotDeleteAll);
-    gridLayout->addWidget(m_deleteAll, 1, 1);
-
-    m_import = new QPushButton(tr("Import..."), bankBox);
-    m_import->setToolTip(tr("Import Bank and Program data from a Rosegarden file to the current Device"));
-    connect(m_import, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotImport);
-    gridLayout->addWidget(m_import, 2, 0);
-
-    m_export = new QPushButton(tr("Export..."), bankBox);
-    m_export->setToolTip(tr("Export all Device and Bank information to a Rosegarden format  interchange file"));
-    connect(m_export, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotExport);
-    gridLayout->addWidget(m_export, 2, 1);
-
-    m_copy = new QPushButton(tr("Copy"), bankBox);
-    m_copy->setToolTip(tr("Copy all Program names from current Bank or Keymap to clipboard"));
-    connect(m_copy, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotCopy);
-    gridLayout->addWidget(m_copy, 3, 0);
-
-    m_paste = new QPushButton(tr("Paste"), bankBox);
-    m_paste->setToolTip(tr("Paste Program names from clipboard to current Bank or Keymap"));
-    connect(m_paste, &QAbstractButton::clicked,
-            this, &BankEditorDialog::slotPaste);
-    gridLayout->addWidget(m_paste, 3, 1);
-
     // Editor Right Side.  The Bank and Key Map editors.
 
     m_rightSide = new QFrame;
@@ -196,7 +137,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QVBoxLayout *rightSideLayout = new QVBoxLayout(m_rightSide);
     rightSideLayout->setContentsMargins(0, 0, 0, 0);
     rightSideLayout->setSpacing(6);
-    //m_rightSide->setLayout(rightSideLayout);
 
     splitterLayout->addWidget(m_rightSide);
 
@@ -633,12 +573,9 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
     if (keyItem) {
 
-        enterActionState("on_key_item");
-        leaveActionState("on_bank_item");
-
-        m_delete->setEnabled(true);
-        m_copy->setEnabled(true);
-        m_paste->setEnabled(m_clipboard.itemType == ItemType::KEYMAP);
+        findAction("edit_copy")->setEnabled(true);
+        findAction("edit_paste")->setEnabled(m_clipboard.itemType == ItemType::KEYMAP);
+        findAction("edit_delete")->setEnabled(true);
 
         m_keyMappingEditor->populate(item);
 
@@ -657,12 +594,9 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
     if (bankItem) {
 
-        enterActionState("on_bank_item");
-        leaveActionState("on_key_item");
-
-        m_delete->setEnabled(true);
-        m_copy->setEnabled(true);
-        m_paste->setEnabled(m_clipboard.itemType == ItemType::BANK);
+        findAction("edit_copy")->setEnabled(true);
+        findAction("edit_paste")->setEnabled(m_clipboard.itemType == ItemType::BANK);
+        findAction("edit_delete")->setEnabled(true);
 
         MidiDevice *device = bankItem->getDevice();
         if (!device)
@@ -702,15 +636,11 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
     RG_DEBUG << "updateEditor() : not a bank item";
 
-    // Disable buttons.
-    m_delete->setEnabled(false);
-    m_copy->setEnabled(false);
-    m_paste->setEnabled(false);
-    m_rightSide->setEnabled(false);
+    findAction("edit_copy")->setEnabled(false);
+    findAction("edit_paste")->setEnabled(false);
+    findAction("edit_delete")->setEnabled(false);
 
-    // Leave all action states.
-    leaveActionState("on_bank_item");
-    leaveActionState("on_key_item");
+    m_rightSide->setEnabled(false);
 
     // Clear the right side editors.
     m_programEditor->clearAll();
@@ -922,7 +852,7 @@ BankEditorDialog::slotDelete()
             m_clipboard.bank == bankItem->getBank()) {
 
             // Clear the clipboard to avoid pasting a non-existent bank.
-            m_paste->setEnabled(false);
+            findAction("edit_paste")->setEnabled(false);
             m_clipboard.itemType = ItemType::NONE;
             m_clipboard.deviceId = Device::NO_DEVICE;
             m_clipboard.bank = -1;
@@ -1026,7 +956,7 @@ BankEditorDialog::slotDeleteAll()
 
     // Clear the clipboard if it refers to the device being cleared.
     if (m_clipboard.deviceId == device->getId()) {
-        m_paste->setEnabled(false);
+        findAction("edit_paste")->setEnabled(false);
         m_clipboard.itemType = ItemType::NONE;
         m_clipboard.deviceId = Device::NO_DEVICE;
         m_clipboard.bank = -1;
@@ -1461,7 +1391,7 @@ BankEditorDialog::slotCopy()
         m_clipboard.deviceId = bankItem->getDevice()->getId();
         m_clipboard.bank = bankItem->getBank();
         m_clipboard.keymapName = "";
-        m_paste->setEnabled(true);
+        findAction("edit_paste")->setEnabled(true);
         return;
     }
 
@@ -1475,7 +1405,7 @@ BankEditorDialog::slotCopy()
         m_clipboard.deviceId = keyItem->getDevice()->getId();
         m_clipboard.bank = -1;
         m_clipboard.keymapName = keyItem->getName();
-        m_paste->setEnabled(true);
+        findAction("edit_paste")->setEnabled(true);
         return;
     }
 }

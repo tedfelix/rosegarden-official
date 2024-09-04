@@ -156,15 +156,6 @@ private:
     /// Select a device in the tree.  Used after adding or importing banks.
     void selectDeviceItem(MidiDevice *device);
 
-    QPushButton *m_addBank;
-    QPushButton *m_addKeyMapping;
-    QPushButton *m_delete;
-    QPushButton *m_deleteAll;
-    QPushButton *m_import;
-    QPushButton *m_export;
-    QPushButton *m_copy;
-    QPushButton *m_paste;
-
     QFrame *m_rightSide;
 
     MidiProgramsEditor *m_programEditor;
