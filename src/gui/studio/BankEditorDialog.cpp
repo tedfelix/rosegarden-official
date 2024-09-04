@@ -1500,20 +1500,26 @@ BankEditorDialog::slotPaste()
     // ??? This is odd.  It requires that you paste a bank over another
     //     existing bank.  And then it gets the msb/lsb of that destination
     //     bank.  That doesn't seem very useful.
-    //     You can't simply paste a bank into a device
+    //     You can't paste a bank into a device
     //     that has no banks.  Very weird.  I don't think that is ideal.
+    //
     //     We should think through some use cases and figure out what
     //     is the best approach.  I don't like the fact that it clobbers
     //     the selected bank.  I think it should always add the bank unless
     //     there is an msb/lsb/percussion conflict.  If there is a conflict,
     //     pop up a window letting the user resolve it.
+    //
+    //     Given a simple "paste into" rather than "paste over" behavior,
+    //     we can do what this does by first deleting the bank we want to paste
+    //     over, then paste the bank from the clipboard, and adjust its msb/lsb
+    //     to match the one we deleted.
 
-    MidiBankTreeWidgetItem *bankItem =
-            dynamic_cast<MidiBankTreeWidgetItem *>(m_treeWidget->currentItem());
+    const MidiBankTreeWidgetItem *bankItem =
+            dynamic_cast<const MidiBankTreeWidgetItem *>(m_treeWidget->currentItem());
 
     if (bankItem) {
 
-        // Paste bank must be over top of an existing bank.
+        // Bank must be pasted over top of an existing bank.
         if (m_clipboard.itemType != ItemType::BANK)
             return;
 
@@ -1598,50 +1604,84 @@ BankEditorDialog::slotPaste()
 
     // Key Map
 
-    MidiKeyMapTreeWidgetItem *keyItem =
-        dynamic_cast<MidiKeyMapTreeWidgetItem*>(m_treeWidget->currentItem());
+    // ??? This is like pasting a bank.  It clobbers the selected key map in
+    //     the destination and takes its name.  Given a non-destructive paste,
+    //     this can be achieved by deleting the destination key map, pasting,
+    //     then renaming the key map to match the one that was deleted.
+
+    const MidiKeyMapTreeWidgetItem *keyItem =
+            dynamic_cast<MidiKeyMapTreeWidgetItem*>(m_treeWidget->currentItem());
 
     if (keyItem) {
 
-        if (m_clipboard.itemType != ItemType::KEYMAP) return;
+        // Key map must be pasted over top of an existing key map.
+        if (m_clipboard.itemType != ItemType::KEYMAP)
+            return;
 
-        MidiDevice *device = keyItem->getDevice();
-        QString selectedKeyItemName = keyItem->getName();
-        const KeyMappingList &mappings = device->getKeyMappings();
+        RG_DEBUG << "slotEditPaste() paste keymap";
 
-        RG_DEBUG << "slotEditPaste paste keymap";
-        Device *tmpDevice = m_studio->getDevice(m_clipboard.deviceId);
-        if (! tmpDevice) return;
-        MidiDevice *sourceDevice = dynamic_cast<MidiDevice *>(tmpDevice);
-        if (! sourceDevice) return;
-        const KeyMappingList &sourceMappings = sourceDevice->getKeyMappings();
+        // Find the source key map.
+
+        const MidiDevice *device = keyItem->getDevice();
+        const KeyMappingList &keyMapList = device->getKeyMappings();
+
+        const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
+        if (!sourceDevice)
+            return;
+
+        const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
+        if (!sourceMidiDevice)
+            return;
+
+        const KeyMappingList &sourceKeyMapList = sourceMidiDevice->getKeyMappings();
+
+        // Find the source key map by name.
         int sourceIndex = -1;
-        for (size_t i = 0; i < sourceMappings.size(); ++i) {
-            if (sourceMappings[i].getName() ==
-                qstrtostr(m_clipboard.keymapName)) {
+        for (size_t i = 0; i < sourceKeyMapList.size(); ++i) {
+            if (sourceKeyMapList[i].getName() ==
+                        qstrtostr(m_clipboard.keymapName)) {
                 sourceIndex = i;
                 break;
             }
         }
-        RG_DEBUG << "slotEditPaste sourceIndex" << sourceIndex;
-        if (sourceIndex == -1) return;
-        MidiKeyMapping sourceMap = sourceMappings[sourceIndex];
+
+        RG_DEBUG << "slotEditPaste() sourceIndex" << sourceIndex;
+
+        // Not found?  Bail.
+        if (sourceIndex == -1)
+            return;
+
+        // Combine the key maps from the destination with the key map
+        // from the clipboard.
+
+        // Make a copy so we can modify it.
+        MidiKeyMapping sourceMap = sourceKeyMapList[sourceIndex];
+
+        // Name of the key map in the destination that we are going to clobber.
+        const std::string selectedKeyItemName = qstrtostr(keyItem->getName());
+
         // keep the old name
-        sourceMap.setName(qstrtostr(selectedKeyItemName));
+        sourceMap.setName(selectedKeyItemName);
 
         KeyMappingList newKeymapList;
-        for (size_t i = 0; i < mappings.size(); ++i) {
-            if (mappings[i].getName() == qstrtostr(selectedKeyItemName)) {
-                RG_DEBUG << "slotEditPaste add new keymap" << i;
+
+        for (size_t i = 0; i < keyMapList.size(); ++i) {
+            // If this is the one we are pasting over top of, add the
+            // key map from the clipboard.
+            if (keyMapList[i].getName() == selectedKeyItemName) {
+                RG_DEBUG << "slotEditPaste() add new keymap" << i;
                 newKeymapList.push_back(sourceMap);
-            } else {
-                RG_DEBUG << "slotEditPaste add old keymap" << i;
-                newKeymapList.push_back(mappings[i]);
+            } else {  // Copy any key maps we are keeping from the destination.
+                RG_DEBUG << "slotEditPaste() add old keymap" << i;
+                newKeymapList.push_back(keyMapList[i]);
             }
         }
 
+        // Modify the Device.
+
         ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
-        if (! command) return;
+        if (!command)
+            return;
         command->setKeyMappingList(newKeymapList);
         CommandHistory::getInstance()->addCommand(command);
 
