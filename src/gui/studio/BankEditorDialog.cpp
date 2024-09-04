@@ -250,27 +250,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     initDialog();
     setupActions();
 
-#if 0
-    // Check for no MIDI devices and disable everything
-    // ??? This code never does anything because we do not allow this
-    //     window to launch if there are no devices.
-    const DeviceList *devices = m_studio->getDevices();
-    bool haveMidiPlayDevice = false;
-    for (const Device *device : *devices) {
-        const MidiDevice *md = dynamic_cast<const MidiDevice *>(device);
-        if (md  &&  md->getDirection() == MidiDevice::Play) {
-            haveMidiPlayDevice = true;
-            break;
-        }
-    }
-    if (!haveMidiPlayDevice) {
-        leftPart->setDisabled(true);
-        m_programEditor->setDisabled(true);
-        m_keyMappingEditor->setDisabled(true);
-        m_optionBox->setDisabled(true);
-    }
-#endif
-
     if (defaultDevice != Device::NO_DEVICE)
         setCurrentDevice(defaultDevice);
 }
@@ -612,13 +591,13 @@ BankEditorDialog::populateDeviceItem(
 
     // Add Key Maps
 
-    const KeyMappingList &mappings = midiDevice->getKeyMappings();
-    for (size_t i = 0; i < mappings.size(); ++i) {
-        RG_DEBUG << "populateDeviceItem() - adding key map " << strtoqstr(midiDevice->getName()) << " - " << strtoqstr(mappings[i].getName());
+    const KeyMappingList &keyMapList = midiDevice->getKeyMappings();
+    for (size_t i = 0; i < keyMapList.size(); ++i) {
+        RG_DEBUG << "populateDeviceItem() - adding key map " << strtoqstr(midiDevice->getName()) << " - " << strtoqstr(keyMapList[i].getName());
         new MidiKeyMapTreeWidgetItem(
                 midiDevice,
                 deviceItem,  // parent
-                strtoqstr(mappings[i].getName()));  // name
+                strtoqstr(keyMapList[i].getName()));  // name
     }
 }
 
@@ -710,7 +689,7 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
         return;
     }
 
-    // Device, not bank or key mapping.
+    // Device, not bank or key map.
 
     RG_DEBUG << "updateEditor() : not a bank item";
 
@@ -970,7 +949,7 @@ BankEditorDialog::slotDelete()
         if (reply == QMessageBox::No)
             return;
 
-        const std::string keyMappingName = qstrtostr(keyItem->getName());
+        const std::string keyMapName = qstrtostr(keyItem->getName());
 
         // Make a copy of the key map list so we can remove the deleted one.
         KeyMappingList keyMapList = device->getKeyMappings();
@@ -978,14 +957,14 @@ BankEditorDialog::slotDelete()
         for (KeyMappingList::iterator i = keyMapList.begin();
              i != keyMapList.end();
              ++i) {
-            if (i->getName() == keyMappingName) {
-                RG_DEBUG << "slotDelete(): erasing " << keyMappingName;
+            if (i->getName() == keyMapName) {
+                RG_DEBUG << "slotDelete(): erasing " << keyMapName;
                 keyMapList.erase(i);
                 break;
             }
         }
 
-        RG_DEBUG << "slotDelete(): setting" << keyMapList.size() << "key mappings to device";
+        RG_DEBUG << "slotDelete(): setting" << keyMapList.size() << "key maps to device";
 
         ModifyDeviceCommand *command = makeCommand(tr("delete Key Mapping"));
         if (!command)
@@ -1153,7 +1132,7 @@ BankEditorDialog::slotItemChanged(QTreeWidgetItem *item, int /* column */)
 
     if (keyItem) {
 
-        RG_DEBUG << "  modify key mapping name to " << label;
+        RG_DEBUG << "  modify key map name to " << label;
 
         const QString oldName = keyItem->getName();
 

@@ -105,10 +105,7 @@ private slots:
     /// Handles name changes in the tree.
     void slotItemChanged(QTreeWidgetItem *item, int column);
 
-    // ??? General Comment: "Key Mapping" is too verbose.  Can we change that
-    //     to "Key Map" everywhere?
-
-    /// Show and update the program editor or the key mapping editor.
+    /// Show and update the program editor or the key map editor.
     /**
      * Used to make sure the right portion of the dialog shows the proper
      * editor and contents when a different item is selected in the tree.
@@ -151,7 +148,7 @@ private:
     // Widgets
 
     QTreeWidget *m_treeWidget;
-    /// Add Banks and Key Mappings to the tree for a MidiDevice.
+    /// Add Banks and Key Maps to the tree for a MidiDevice.
     void populateDeviceItem(QTreeWidgetItem *deviceItem,
                             MidiDevice *midiDevice);
     /// Checks type of item and calls item->parent().
@@ -188,7 +185,7 @@ private:
      */
     void updateEditor(QTreeWidgetItem *item);
 
-    /// Init the tree and the bank/key mapping editor.
+    /// Init the tree and the bank/key map editor.
     void initDialog();
     /// Create actions and menus.
     void setupActions();

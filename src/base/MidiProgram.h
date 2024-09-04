@@ -158,6 +158,10 @@ partialCompareWithName(const ProgramList &lhs, const ProgramList &rhs)
     return true;
 }
 
+/**
+ * ??? "Key Mapping" is all throughout the code and the UI.  "Key Map" would
+ *     be simpler.  It's a lot of work to change, though.
+ */
 class MidiKeyMapping
 {
 public:
