@@ -817,7 +817,7 @@ BankEditorDialog::slotAddBank()
     if (!command)
         return;
     command->setBankList(banks);
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     // ??? We should select the new item.  ModifyDeviceCommand is probably in
     //     a better position to do that.  Or can we use m_selectionName?
@@ -865,7 +865,7 @@ BankEditorDialog::slotAddKeyMapping()
     // Merge
     command->setOverwrite(false);
     command->setRename(false);
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     // ??? We should select the new item.  ModifyDeviceCommand is probably in
     //     a better position to do that.  Or can we use m_selectionName?
@@ -946,7 +946,7 @@ BankEditorDialog::slotDelete()
             return;
         command->setBankList(newBanks);
         command->setProgramList(newProgramList);
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         return;
     }
@@ -991,7 +991,7 @@ BankEditorDialog::slotDelete()
         if (!command)
             return;
         command->setKeyMappingList(keyMapList);
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         RG_DEBUG << "device has" << device->getKeyMappings().size() << "key mappings now";
 
@@ -1057,7 +1057,7 @@ BankEditorDialog::slotDeleteAll()
     KeyMappingList emptyKeymapList;
     command->setKeyMappingList(emptyKeymapList);
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1140,7 +1140,7 @@ BankEditorDialog::slotItemChanged(QTreeWidgetItem *item, int /* column */)
         if (!command)
             return;
         command->setBankList(banks);
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         return;
 
@@ -1188,7 +1188,7 @@ BankEditorDialog::slotItemChanged(QTreeWidgetItem *item, int /* column */)
         if (!command)
             return;
         command->setKeyMappingList(keyMapList);
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         return;
 
@@ -1300,7 +1300,7 @@ BankEditorDialog::slotVariationToggled()
     if (!command)
         return;
     command->setVariation(variation);
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
 }
@@ -1320,7 +1320,7 @@ BankEditorDialog::slotVariationChanged(int)
     if (!command)
         return;
     command->setVariation(variation);
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 ModifyDeviceCommand *
@@ -1350,110 +1350,104 @@ BankEditorDialog::makeCommand(const QString &commandName)
 }
 
 void
-BankEditorDialog::addCommandToHistory(Command *command)
-{
-    CommandHistory::getInstance()->addCommand(command);
-}
-
-void
 BankEditorDialog::slotImport()
 {
 #if QT_VERSION >= 0x050000
-    QString home = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).path();
+    const QString home = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).path();
 #else
-    QString home = QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).path();
+    const QString home = QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).path();
 #endif
-    QString deviceDir = home + "/.local/share/rosegarden/library";
 
-    QString url_str = FileDialog::getOpenFileName(this, tr("Import Banks from Device in File"), deviceDir,
-                      tr("Rosegarden Device files") + " (*.rgd *.RGD)" + ";;" +
-                      tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
-                      tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
-                      tr("LinuxSampler configuration files") + " (*.lscp *.LSCP)" + ";;" +
-                      tr("All files") + " (*)", nullptr); ///!!! Should we allow 'All files' here since LinuxSampler files don't need to have an extension?!
+    const QString deviceDir = home + "/.local/share/rosegarden/library";
 
-    QUrl url(url_str);
+    QString urlString = FileDialog::getOpenFileName(
+            this,  // parent
+            tr("Import Banks from Device in File"),  // caption
+            deviceDir,  // dir
+            tr("Rosegarden Device files") + " (*.rgd *.RGD)" + ";;" +
+                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
+                tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
+                tr("LinuxSampler configuration files") + " (*.lscp *.LSCP)" + ";;" +
+                tr("All files") + " (*)",  // filter
+            nullptr);  // selectedFilter
 
+    QUrl url(urlString);
     if (url.isEmpty())
-        return ;
+        return;
 
-    ImportDeviceDialog *dialog = new ImportDeviceDialog(this, url);
-    if (dialog->doImport() && dialog->exec() == QDialog::Accepted) {
+    std::unique_ptr<ImportDeviceDialog> dialog{new ImportDeviceDialog(this, url)};
+    if (!dialog)
+        return;
 
-        MidiDeviceTreeWidgetItem* deviceItem =
-            dynamic_cast<MidiDeviceTreeWidgetItem*>
-            (m_treeWidget->currentItem());    //### was ->selectedItem()
+    // Set the dialog up for import.
+    if (!dialog->doImport())
+        return;
 
-        if (!deviceItem) {
-            QMessageBox::critical(
-              dynamic_cast<QWidget*>(this),
-              "", /* no title */
-              tr("Some internal error: cannot locate selected device"),
-              QMessageBox::Ok,
-              QMessageBox::Ok);
-            return ;
-        }
+    if (dialog->exec() == QDialog::Accepted) {
 
         if (!dialog->haveDevice()) {
             QMessageBox::critical(
-              dynamic_cast<QWidget*>(this),
-              "", /* no title */
-              tr("Some internal error: no device selected"),
-              QMessageBox::Ok,
-              QMessageBox::Ok);
-            return ;
+                    this,  // parent
+                    tr("Rosegarden"),  // title
+                    tr("Some internal error: no device selected"));  // text
+
+            return;
+        }
+
+        MidiDeviceTreeWidgetItem *deviceItem =
+                dynamic_cast<MidiDeviceTreeWidgetItem *>(
+                        m_treeWidget->currentItem());
+
+        if (!deviceItem) {
+            QMessageBox::critical(
+                    this,  // parent
+                    tr("Rosegarden"),  // title
+                    tr("Some internal error: cannot locate selected device"));  // text
+
+            return;
         }
 
         MidiDevice *device = deviceItem->getDevice();
-        if (!device) return;
+        if (!device)
+            return;
 
-        BankList banks(dialog->getBanks());
-        ProgramList programs(dialog->getPrograms());
-        ControlList controls(dialog->getControllers());
-        KeyMappingList keyMappings(dialog->getKeyMappings());
-        MidiDevice::VariationType variation(dialog->getVariationType());
         std::string librarianName(dialog->getLibrarianName());
         std::string librarianEmail(dialog->getLibrarianEmail());
 
         // don't record the librarian when
         // merging banks -- it's misleading.
-        // (also don't use variation type)
         if (!dialog->shouldOverwriteBanks()) {
             librarianName = "";
             librarianEmail = "";
         }
 
-        // command with new device name
-        ModifyDeviceCommand *command =
-            new ModifyDeviceCommand(m_studio,
-                                    device->getId(),
-                                    dialog->getDeviceName(),
-                                    librarianName,
-                                    librarianEmail,
-                                    tr("import device"));
+        ModifyDeviceCommand *command = new ModifyDeviceCommand(
+                m_studio,  // studio
+                device->getId(),  // device
+                dialog->getDeviceName(),  // name
+                librarianName,
+                librarianEmail,
+                tr("import device"));  // commandName
 
-        if (dialog->shouldOverwriteBanks()) {
-            command->setVariation(variation);
-        }
+        if (dialog->shouldOverwriteBanks())
+            command->setVariation(dialog->getVariationType());
         if (dialog->shouldImportBanks()) {
-            command->setBankList(banks);
-            command->setProgramList(programs);
+            command->setBankList(dialog->getBanks());
+            command->setProgramList(dialog->getPrograms());
         }
-        if (dialog->shouldImportControllers()) {
-            command->setControlList(controls);
-        }
-        if (dialog->shouldImportKeyMappings()) {
-            command->setKeyMappingList(keyMappings);
-        }
+        if (dialog->shouldImportControllers())
+            command->setControlList(dialog->getControllers());
+        if (dialog->shouldImportKeyMappings())
+            command->setKeyMappingList(dialog->getKeyMappings());
+
         command->setOverwrite(dialog->shouldOverwriteBanks());
         command->setRename(dialog->shouldRename());
 
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         selectDeviceItem(device);
     }
 
-    delete dialog;
     updateDialog();
 }
 
@@ -1554,7 +1548,7 @@ BankEditorDialog::slotPaste()
         ModifyDeviceCommand *command = makeCommand(tr("paste bank"));
         if (! command) return;
         command->setProgramList(newPrograms);
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         return;
     }
@@ -1603,7 +1597,7 @@ BankEditorDialog::slotPaste()
         ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
         if (! command) return;
         command->setKeyMappingList(newKeymapList);
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         return;
     }
@@ -1646,7 +1640,7 @@ void BankEditorDialog::slotEditLibrarian()
                                 qstrtostr(newName),
                                 qstrtostr(newMail),
                                 tr("change librarian"));
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void

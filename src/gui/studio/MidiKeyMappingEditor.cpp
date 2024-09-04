@@ -30,6 +30,7 @@
 #include "base/NotationTypes.h"
 #include "gui/widgets/LineEdit.h"
 #include "commands/studio/ModifyDeviceCommand.h"
+#include "document/CommandHistory.h"
 
 #include <QObject>
 #include <QFrame>
@@ -194,7 +195,7 @@ void MidiKeyMappingEditor::slotEditingFinished()
         m_bankEditor->makeCommand(tr("modify key mapping"));
 
     command->setKeyMappingList(newKeymapList);
-    m_bankEditor->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void

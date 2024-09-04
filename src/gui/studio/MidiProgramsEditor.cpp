@@ -32,6 +32,7 @@
 #include "gui/widgets/LineEdit.h"
 #include "gui/general/IconLoader.h"
 #include "commands/studio/ModifyDeviceCommand.h"
+#include "document/CommandHistory.h"
 
 #include <QCheckBox>
 #include <QCursor>
@@ -314,7 +315,7 @@ MidiProgramsEditor::slotPercussionClicked()
     }
     command->setBankList(newBanks);
     command->setProgramList(programList);
-    m_bankEditor->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     // and update the current bank
     m_currentBank = newBank;
@@ -354,7 +355,7 @@ MidiProgramsEditor::slotNewMSB(int value)
     }
     command->setBankList(newBanks);
     command->setProgramList(programList);
-    m_bankEditor->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     // and update the current bank
     m_currentBank = newBank;
@@ -394,7 +395,7 @@ MidiProgramsEditor::slotNewLSB(int value)
     }
     command->setBankList(newBanks);
     command->setProgramList(programList);
-    m_bankEditor->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     // and update the current bank
     m_currentBank = newBank;
@@ -477,7 +478,7 @@ void MidiProgramsEditor::slotEditingFinished()
         m_bankEditor->makeCommand(tr("program changed"));
 
     command->setProgramList(newProgramList);
-    m_bankEditor->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
 }
 

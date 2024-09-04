@@ -67,8 +67,6 @@ public:
     ~BankEditorDialog() override;
 
     ModifyDeviceCommand *makeCommand(const QString &commandName);
-    // ??? Trivial wrapper.  Inline into each caller.
-    static void addCommandToHistory(Command *command);
 
     void setCurrentDevice(DeviceId device);
 
