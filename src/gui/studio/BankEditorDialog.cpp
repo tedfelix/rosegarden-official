@@ -1692,19 +1692,27 @@ BankEditorDialog::slotPaste()
 void BankEditorDialog::slotEditLibrarian()
 {
     RG_DEBUG << "slotEditLibrarian";
-    if (!m_treeWidget->currentItem())
+
+    QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+    if (!currentItem)
         return;
 
-    QTreeWidgetItem* currentItem = m_treeWidget->currentItem();
+    const MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(currentItem);
+    if (!deviceItem)
+        return;
 
-    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentItem);
-    if (!deviceItem) return;
-    MidiDevice *device = deviceItem->getDevice();
-    QString name = strtoqstr(device->getLibrarianName());
-    QString mail = strtoqstr(device->getLibrarianEmail());
+    const MidiDevice *device = deviceItem->getDevice();
+    if (!device)
+        return;
+
+    const QString name = strtoqstr(device->getLibrarianName());
+    const QString mail = strtoqstr(device->getLibrarianEmail());
+
     LibrarianDialog dlg(this, name, mail);
 
-    if (dlg.exec() != QDialog::Accepted) return;
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
     RG_DEBUG << "accepted";
 
     QString newName;
@@ -1712,115 +1720,106 @@ void BankEditorDialog::slotEditLibrarian()
     dlg.getLibrarian(newName, newMail);
     if (newName == "") newName = "<none>";
     if (newMail == "") newMail = "<none>";
-    RG_DEBUG << "librarian" << name << mail  << "->" <<
-        newName << newMail;
-    if (name == newName && mail == newMail) {
-        // no change
+
+    RG_DEBUG << "librarian" << name << mail  << "->" << newName << newMail;
+
+    // No change?  Bail.
+    if (name == newName  &&  mail == newMail) {
         RG_DEBUG << "librarian unchanged";
         return;
     }
+
     ModifyDeviceCommand *command =
-        new ModifyDeviceCommand(m_studio,
-                                device->getId(),
-                                device->getName(),
-                                qstrtostr(newName),
-                                qstrtostr(newMail),
-                                tr("change librarian"));
+            new ModifyDeviceCommand(m_studio,
+                                    device->getId(),
+                                    device->getName(),
+                                    qstrtostr(newName),
+                                    qstrtostr(newMail),
+                                    tr("change librarian"));
     CommandHistory::getInstance()->addCommand(command);
 }
 
 void
 BankEditorDialog::slotExport()
 {
-    QString extension = "rgd";
+    const QString extension = "rgd";
 
-/*
- * Qt4:
- * QString getSaveFileName (QWidget * parent = 0, const QString & caption =
- * QString(), const QString & dir = QString(), const QString & filter =
- * QString(), QString * selectedFilter = 0, Options options = 0)
- *
- * KDE3:
- * QString KFileDialog::getSaveFileName   ( const QString &   startDir =
- * QString::null,
- *   const QString &   filter = QString::null,
- *     QWidget *   parent = 0,
- *       const QString &   caption = QString::null
- *        )   [static]
- *
- */
+    const QString dir = ResourceFinder().getResourceSaveDir("library");
 
-    QString dir = ResourceFinder().getResourceSaveDir("library");
-
-    QString name =
-        FileDialog::getSaveFileName(this,
-                                     tr("Export Device as..."),
-                                     dir,
-                                     (extension.isEmpty() ? QString("*") : ("*." + extension)));
-
-    // Check for the existence of the name
+    QString name = FileDialog::getSaveFileName(
+            this,  // parent
+            tr("Export Device as..."),  // caption
+            dir,
+            "*." + extension);  // defaultName
     if (name.isEmpty())
-        return ;
+        return;
 
-    // Append extension if we don't have one
-    //
-    if (!extension.isEmpty()) {
-        if (!name.endsWith("." + extension)) {
-            name += "." + extension;
-        }
-    }
+    // Append extension if needed.
+    if (!name.endsWith("." + extension))
+        name += "." + extension;
 
-    QFileInfo info(name);
+    const QFileInfo info(name);
 
+    // ??? Is this even possible?  I thought file save dialogs avoided this?
     if (info.isDir()) {
         QMessageBox::warning(
-          dynamic_cast<QWidget*>(this),
-          "", /* no title */
-          tr("You have specified a directory"),
-          QMessageBox::Ok,
-          QMessageBox::Ok);
-        return ;
+                this,  // parent
+                tr("Rosegarden"),  // title
+                tr("You have specified a directory"));  // text
+        return;
     }
 
     if (info.exists()) {
-        int overwrite = QMessageBox::question(
-                          dynamic_cast<QWidget*>(this),
-                          "", /* no title */
-                          tr("The specified file exists.  Overwrite?"),
-                          QMessageBox::Yes | QMessageBox::No,
-                          QMessageBox::No);
+        const int overwrite = QMessageBox::question(
+                this,  // parent
+                tr("Rosegarden"),  // title
+                tr("The specified file exists.  Overwrite?"),  // text
+                QMessageBox::Yes | QMessageBox::No,  // buttons
+                QMessageBox::No);  // defaultButton
 
         if (overwrite != QMessageBox::Yes)
-            return ;
+            return;
     }
 
-    MidiDeviceTreeWidgetItem* deviceItem =
-            dynamic_cast<MidiDeviceTreeWidgetItem*>
-                (m_treeWidget->currentItem());
+    // Note that this might actually be a bank or key map item.
+    // That's ok since getDevice() will get the containing Device.
+    const MidiDeviceTreeWidgetItem *deviceItem =
+            dynamic_cast<const MidiDeviceTreeWidgetItem *>(
+                    m_treeWidget->currentItem());
 
     std::vector<DeviceId> devices;
-    MidiDevice *md = deviceItem->getDevice();
 
-    if (md) {
-        ExportDeviceDialog *ed = new ExportDeviceDialog
-                                 (this, strtoqstr(md->getName()));
-        if (ed->exec() != QDialog::Accepted)
-            return ;
-        if (ed->getExportType() == ExportDeviceDialog::ExportOne) {
-            devices.push_back(md->getId());
-        }
+    // Get the selected Device or the Device that contains the selected
+    // bank or key map.
+    const MidiDevice *midiDevice = deviceItem->getDevice();
+
+    if (midiDevice) {
+        ExportDeviceDialog *exportDeviceDialog = new ExportDeviceDialog(
+                this, strtoqstr(midiDevice->getName()));
+        if (exportDeviceDialog->exec() != QDialog::Accepted)
+            return;
+
+        // Let exportStudio() know which device to export.  Otherwise it
+        // will export all devices.
+        if (exportDeviceDialog->getExportType() == ExportDeviceDialog::ExportOne)
+            devices.push_back(midiDevice->getId());
     }
+
+    // Export the Device file.
 
     QString errMsg;
     if (!m_doc->exportStudio(name, errMsg, devices)) {
         if (errMsg != "") {
-            QMessageBox::critical
-                (nullptr, tr("Rosegarden"), tr(QString("Could not export studio to file at %1\n(%2)")
-                           .arg(name).arg(errMsg).toStdString().c_str()));
+            QMessageBox::critical(
+                    this,
+                    tr("Rosegarden"),
+                    tr("Could not export studio to file at %1\n(%2)").
+                            arg(name).arg(errMsg));
         } else {
-            QMessageBox::critical
-                (nullptr, tr("Rosegarden"), tr(QString("Could not export studio to file at %1")
-                           .arg(name).toStdString().c_str()));
+            QMessageBox::critical(
+                    this,
+                    tr("Rosegarden"),
+                    tr("Could not export studio to file at %1").arg(name));
         }
     }
 }
