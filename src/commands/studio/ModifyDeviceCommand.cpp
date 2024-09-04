@@ -106,7 +106,7 @@ ModifyDeviceCommand::execute()
         return;
     }
 
-    // block notifactaions to avoid multiple updates
+    // block notifications to avoid multiple updates
     midiDevice->blockNotify(true);
 
     // Save Original Values for Undo

@@ -1198,18 +1198,14 @@ BankEditorDialog::slotItemChanged(QTreeWidgetItem *item, int /* column */)
 void
 BankEditorDialog::selectDeviceItem(MidiDevice *device)
 {
-    /**
-     * sets the device-TreeWidgetItem (visibly) selected
-     **/
-
     // For each top-level item in the tree...
     for (int itemIndex = 0;
          itemIndex < m_treeWidget->topLevelItemCount();
          ++itemIndex) {
 
         QTreeWidgetItem *child = m_treeWidget->topLevelItem(itemIndex);
-        MidiDeviceTreeWidgetItem *midiDeviceItem =
-            dynamic_cast<MidiDeviceTreeWidgetItem*>(child);
+        const MidiDeviceTreeWidgetItem *midiDeviceItem =
+                dynamic_cast<const MidiDeviceTreeWidgetItem *>(child);
 
         if (midiDeviceItem) {
             MidiDevice *midiDevice = midiDeviceItem->getDevice();
@@ -1222,52 +1218,69 @@ BankEditorDialog::selectDeviceItem(MidiDevice *device)
         }
 
     }
-
 }
 
-QString BankEditorDialog::makeUniqueBankName(const QString& name,
-                                             const BankList& banks)
+QString BankEditorDialog::makeUniqueBankName(const QString &name,
+                                             const BankList &banks)
 {
     QString uniqueName = name;
+
     int suffix = 1;
+
     while (true) {
+
         bool foundName = false;
-        for (size_t i = 0; i < banks.size(); ++i) {
-            const MidiBank& ibank = banks[i];
-            QString iName = strtoqstr(ibank.getName());
-            if (uniqueName == iName) {
-                // not unique
+
+        // For each bank in banks...
+        for (const MidiBank &midiBank : banks) {
+            QString bankName = strtoqstr(midiBank.getName());
+            // If found, we need to add a suffix.
+            if (uniqueName == bankName) {
                 foundName = true;
                 uniqueName = QString("%1_%2").arg(name).arg(suffix);
-                suffix++;
+                ++suffix;
                 break;
             }
         }
-        if (! foundName) break; // unique
+
+        // Not found, so this one is unique.
+        if (!foundName)
+            break;
+
     }
+
     return uniqueName;
 }
 
-QString BankEditorDialog::makeUniqueKeymapName(const QString& name,
-                                               const KeyMappingList& keymaps)
+QString BankEditorDialog::makeUniqueKeymapName(const QString &name,
+                                               const KeyMappingList &keyMaps)
 {
     QString uniqueName = name;
+
     int suffix = 1;
+
     while (true) {
+
         bool foundName = false;
-        for (size_t i = 0; i < keymaps.size(); ++i) {
-            const MidiKeyMapping& ikeymap = keymaps[i];
-            QString iName = strtoqstr(ikeymap.getName());
-            if (uniqueName == iName) {
-                // not unique
+
+        // For each key map in keyMaps...
+        for (const MidiKeyMapping &keyMap : keyMaps) {
+            const QString keyMapName = strtoqstr(keyMap.getName());
+            // If found, we need to add a suffix.
+            if (uniqueName == keyMapName) {
                 foundName = true;
                 uniqueName = QString("%1_%2").arg(name).arg(suffix);
-                suffix++;
+                ++suffix;
                 break;
             }
         }
-        if (! foundName) break; // unique
+
+        // Not found, so this one is unique.
+        if (!foundName)
+            break;
+
     }
+
     return uniqueName;
 }
 
@@ -1275,21 +1288,17 @@ QString BankEditorDialog::makeUniqueKeymapName(const QString& name,
 void
 BankEditorDialog::slotVariationToggled()
 {
-    if (!m_treeWidget->currentItem())
-        return ;
-
-    ModifyDeviceCommand *command = makeCommand(tr("variation toggled"));
-    if (! command) return;
-    MidiDevice::VariationType variation =
-        MidiDevice::NoVariations;
+    MidiDevice::VariationType variation = MidiDevice::NoVariations;
     if (m_variationCheckBox->isChecked()) {
-        if (m_variationCombo->currentIndex() == 0) {
+        if (m_variationCombo->currentIndex() == 0)
             variation = MidiDevice::VariationFromLSB;
-        } else {
+        else
             variation = MidiDevice::VariationFromMSB;
-        }
     }
 
+    ModifyDeviceCommand *command = makeCommand(tr("variation toggled"));
+    if (!command)
+        return;
     command->setVariation(variation);
     addCommandToHistory(command);
 
@@ -1299,42 +1308,44 @@ BankEditorDialog::slotVariationToggled()
 void
 BankEditorDialog::slotVariationChanged(int)
 {
-    if (!m_treeWidget->currentItem())
-        return ;
-
-    ModifyDeviceCommand *command = makeCommand(tr("variation changed"));
-    if (! command) return;
-    MidiDevice::VariationType variation =
-        MidiDevice::NoVariations;
+    MidiDevice::VariationType variation = MidiDevice::NoVariations;
     if (m_variationCheckBox->isChecked()) {
-        if (m_variationCombo->currentIndex() == 0) {
+        if (m_variationCombo->currentIndex() == 0)
             variation = MidiDevice::VariationFromLSB;
-        } else {
+        else
             variation = MidiDevice::VariationFromMSB;
-        }
     }
 
+    ModifyDeviceCommand *command = makeCommand(tr("variation changed"));
+    if (!command)
+        return;
     command->setVariation(variation);
     addCommandToHistory(command);
 }
 
-ModifyDeviceCommand* BankEditorDialog::makeCommand(const QString& name)
+ModifyDeviceCommand *
+BankEditorDialog::makeCommand(const QString &commandName)
 {
-    if (!m_treeWidget->currentItem())
+    QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+    if (!currentItem)
         return nullptr;
 
-    QTreeWidgetItem* currentItem = m_treeWidget->currentItem();
+    const MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(currentItem);
+    if (!deviceItem)
+        return nullptr;
 
-    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentItem);
-    if (!deviceItem) return nullptr;
-    MidiDevice *device = deviceItem->getDevice();
-    ModifyDeviceCommand *command =
-        new ModifyDeviceCommand(m_studio,
-                                device->getId(),
-                                device->getName(),
-                                device->getLibrarianName(),
-                                device->getLibrarianEmail(),
-                                name);
+    const MidiDevice *device = deviceItem->getDevice();
+    if (!device)
+        return nullptr;
+
+    ModifyDeviceCommand *command = new ModifyDeviceCommand(
+            m_studio,  // studio
+            device->getId(),  // device
+            device->getName(),  // name
+            device->getLibrarianName(),  // librarianName
+            device->getLibrarianEmail(),  // librarianEmail
+            commandName);
+
     return command;
 }
 
