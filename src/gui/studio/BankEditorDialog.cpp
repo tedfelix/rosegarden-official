@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[BankEditorDialog]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "BankEditorDialog.h"
 
@@ -1827,23 +1827,25 @@ BankEditorDialog::slotExport()
 void
 BankEditorDialog::slotFileClose()
 {
-    RG_DEBUG << "BankEditorDialog::slotFileClose()\n";
+    RG_DEBUG << "slotFileClose()";
 
+    // ??? The dtor already does some of this.  Is that redundant?  Can
+    //     we rely on the dtor to take care of this?  I would assume so.
+
+    // Remove Studio observer.
     if (m_observingStudio) {
         m_observingStudio = false;
         m_studio->removeObserver(this);
     }
-    for(Device* device : m_observedDevices) {
+
+    // Remove Device observer.
+    for (Device *device : m_observedDevices) {
         unobserveDevice(device);
     }
 
-    // We need to do this because we might be here due to a
-    // documentAboutToChange signal, in which case the document won't
-    // be valid by the time we reach the dtor, since it will be
-    // triggered when the closeEvent is actually processed.
-    //
-//     CommandHistory::getInstance()->detachView(actionCollection());    //&&&
     m_doc = nullptr;
+
+    // Close the window.
     close();
 }
 
@@ -1851,6 +1853,7 @@ void
 BankEditorDialog::closeEvent(QCloseEvent *e)
 {
     emit closing();
+
     QMainWindow::closeEvent(e);
 }
 
@@ -1876,8 +1879,8 @@ BankEditorDialog::slotHelpAbout()
 bool BankEditorDialog::tracksUsingBank(const MidiBank& bank,
                                        const MidiDevice& device)
 {
-    QString bankName = strtoqstr(bank.getName());
-    RG_DEBUG << "tracksUsingBank" << bankName << device.getId();
+    RG_DEBUG << "tracksUsingBank() " << bank.getName() << device.getId();
+
     std::vector<int> trackPositions;
 
     Composition &composition =
@@ -1897,23 +1900,26 @@ bool BankEditorDialog::tracksUsingBank(const MidiBank& bank,
         if (instrument->getType() != Instrument::Midi)
             continue;
 
-        Device *idevice = instrument->getDevice();
-        // if the bank is on a different device ignore it
-        if (idevice->getId() != device.getId()) continue;
+        const Device *trackDevice = instrument->getDevice();
+        if (!trackDevice)
+            continue;
 
-        const MidiProgram& program = instrument->getProgram();
-        const MidiBank& ibank = program.getBank();
-        if (bank.compareKey(ibank)) {
-            // Found a Track using this bank
+        // If this Track's Device is not the one we're looking for, try the next.
+        if (trackDevice->getId() != device.getId())
+            continue;
+
+        // If this Track (Instrument) is using the bank, add it to trackPositions.
+        if (bank.compareKey(instrument->getProgram().getBank()))
             trackPositions.push_back(track->getPosition());
-        }
     }
+
+    // At this point, trackPositions contains a list of the Tracks that are
+    // using the MidiDevice/MidiBank combination.
 
     // If there are Tracks using this Bank, issue a message and return true
     if (!trackPositions.empty()) {
-        QString msg =
-            QString(tr("The following tracks are using bank %1:")).
-            arg(bankName);
+        QString msg = tr("The following tracks are using bank %1:").
+                              arg(strtoqstr(bank.getName()));
         msg += '\n';
         for (const int &trackPos : trackPositions) {
             msg += QString::number(trackPos + 1) + " ";
@@ -1926,12 +1932,16 @@ bool BankEditorDialog::tracksUsingBank(const MidiBank& bank,
                 msg);
         return true;
     }
+
+    // We're clear.  No Tracks are using the device/bank combination
+    // in question.
     return false;
 }
 
 void BankEditorDialog::deviceAdded(Device* device)
 {
     RG_DEBUG << "deviceAdded" << device;
+
     observeDevice(device);
     updateDialog();
 }
@@ -1939,6 +1949,7 @@ void BankEditorDialog::deviceAdded(Device* device)
 void BankEditorDialog::deviceRemoved(Device* device)
 {
     RG_DEBUG << "deviceRemoved" << device;
+
     unobserveDevice(device);
     updateDialog();
 }
@@ -1946,13 +1957,18 @@ void BankEditorDialog::deviceRemoved(Device* device)
 void BankEditorDialog::deviceModified(Device* device)
 {
     RG_DEBUG << "deviceModified" << device;
+
     updateDialog();
 }
 
 void BankEditorDialog::observeDevice(Device* device)
 {
     RG_DEBUG << "observeDevice" << device;
-    if (m_observedDevices.find(device) != m_observedDevices.end()) return;
+
+    // Already observing?  Bail.
+    if (m_observedDevices.find(device) != m_observedDevices.end())
+        return;
+
     m_observedDevices.insert(device);
     device->addObserver(this);
 }
@@ -1960,9 +1976,14 @@ void BankEditorDialog::observeDevice(Device* device)
 void BankEditorDialog::unobserveDevice(Device* device)
 {
     RG_DEBUG << "unobserveDevice" << device;
-    if (m_observedDevices.find(device) == m_observedDevices.end()) return;
+
+    // Not observing?  Bail.
+    if (m_observedDevices.find(device) == m_observedDevices.end())
+        return;
+
     m_observedDevices.erase(device);
     device->removeObserver(this);
 }
+
 
 }
