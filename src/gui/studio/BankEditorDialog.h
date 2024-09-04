@@ -105,7 +105,7 @@ private slots:
     /// Tree item double-click to edit name.
     void slotEdit(QTreeWidgetItem *item, int);
     /// Handles name changes in the tree.
-    void slotModifyDeviceOrBankName(QTreeWidgetItem *, int);
+    void slotItemChanged(QTreeWidgetItem *item, int column);
 
     // ??? General Comment: "Key Mapping" is too verbose.  Can we change that
     //     to "Key Map" everywhere?

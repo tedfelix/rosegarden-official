@@ -127,7 +127,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     connect(m_treeWidget, &QTreeWidget::currentItemChanged,
             this, &BankEditorDialog::slotUpdateEditor);
     connect(m_treeWidget, &QTreeWidget::itemChanged,
-            this, &BankEditorDialog::slotModifyDeviceOrBankName);
+            this, &BankEditorDialog::slotItemChanged);
 
     // Buttons
 
@@ -820,7 +820,7 @@ BankEditorDialog::slotAddBank()
     addCommandToHistory(command);
 
     // ??? We should select the new item.  ModifyDeviceCommand is probably in
-    //     a better position to do that.
+    //     a better position to do that.  Or can we use m_selectionName?
 }
 
 void
@@ -868,7 +868,7 @@ BankEditorDialog::slotAddKeyMapping()
     addCommandToHistory(command);
 
     // ??? We should select the new item.  ModifyDeviceCommand is probably in
-    //     a better position to do that.
+    //     a better position to do that.  Or can we use m_selectionName?
 }
 
 void
@@ -1064,7 +1064,8 @@ void
 BankEditorDialog::getFirstFreeBank(
         MidiDevice *device, MidiByte &o_msb, MidiByte &o_lsb)
 {
-    // ??? This ignores percussion true/false.  Should it care?
+    // This ignores percussion true/false.  That's ok because the user can
+    // toggle percussion then adjust the msb/lsb to get the one they want.
 
     o_msb = 0;
     o_lsb = 0;
@@ -1093,87 +1094,103 @@ BankEditorDialog::getFirstFreeBank(
 }
 
 void
-BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem *item, int)
+BankEditorDialog::slotItemChanged(QTreeWidgetItem *item, int /* column */)
 {
-    RG_DEBUG << "slotModifyDeviceOrBankName()";
+    RG_DEBUG << "slotItemChanged()";
 
-    MidiBankTreeWidgetItem *bankItem =
-            dynamic_cast<MidiBankTreeWidgetItem *>(item);
-    MidiKeyMapTreeWidgetItem *keyItem =
-            dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
-
-    QString label = item->text(0);
+    const QString label = item->text(0);
     // do not allow blank names
     if (label == "") {
         updateDialog();
         return;
     }
 
-    if (bankItem) {
+    // Bank
 
-        // renaming a bank item
+    const MidiBankTreeWidgetItem *bankItem =
+            dynamic_cast<MidiBankTreeWidgetItem *>(item);
+
+    if (bankItem) {
 
         RG_DEBUG << "  modify bank name to " << label;
 
-        // ??? Why are we using currentItem() when item is coming in?
-        QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
-        MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(currentItem);
+        const MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(item);
         if (!deviceItem)
             return;
 
-        MidiDevice *device = deviceItem->getDevice();
-        if (! device) return;
-        int bankIndex = bankItem->getBank();
+        const MidiDevice *device = deviceItem->getDevice();
+        if (!device)
+            return;
+
+        // Make a copy of the bank list so we can change the name.
         BankList banks = device->getBanks();
-        QString uniqueName = makeUniqueBankName(label, banks);
-        // set m_selectionName to select this item in updateDialog()
+
+        // Make sure the new name is unique.
+        const QString uniqueName = makeUniqueBankName(label, banks);
+
+        // Let updateDialog() know it should select the item with this new name.
         m_selectionName = uniqueName;
+
+        const int bankIndex = bankItem->getBank();
         banks[bankIndex].setName(qstrtostr(uniqueName));
 
         RG_DEBUG << "  deviceItem->getDeviceId() = " << deviceItem->getDevice()->getId();
 
-        std::string deviceName = device->getName();
         ModifyDeviceCommand *command = makeCommand(tr("rename MIDI Bank"));
-        if (! command) return;
+        if (!command)
+            return;
         command->setBankList(banks);
         addCommandToHistory(command);
 
-    } else if (keyItem) {
+        return;
+
+    }
+
+    // Key Map
+
+    const MidiKeyMapTreeWidgetItem *keyItem =
+            dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
+
+    if (keyItem) {
 
         RG_DEBUG << "  modify key mapping name to " << label;
 
-        QString oldName = keyItem->getName();
+        const QString oldName = keyItem->getName();
 
-        // ??? Why are we using currentItem() when item is coming in?
-        QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
-        MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(currentItem);
+        const MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(item);
         if (!deviceItem)
             return;
 
-        MidiDevice *device = deviceItem->getDevice();
+        const MidiDevice *device = deviceItem->getDevice();
+        if (!device)
+            return;
 
-        if (! device) return;
+        // Make a copy of the key map list so we can change the name.
+        KeyMappingList keyMapList = device->getKeyMappings();
 
-        ModifyDeviceCommand *command =
-            makeCommand(tr("rename Key Mapping"));
-        if (! command) return;
-        KeyMappingList kml = device->getKeyMappings();
+        // Make sure the new name is unique.
+        const QString uniqueName = makeUniqueKeymapName(label, keyMapList);
 
-        QString uniqueName = makeUniqueKeymapName(label, kml);
-        // set m_selectionName to select this item in updateDialog()
+        // Let updateDialog() know it should select the item with this new name.
         m_selectionName = uniqueName;
 
-        for (KeyMappingList::iterator i = kml.begin();
-             i != kml.end(); ++i) {
-            if (i->getName() == qstrtostr(oldName)) {
-                i->setName(qstrtostr(uniqueName));
+        // For each key map...
+        for (MidiKeyMapping &keyMap : keyMapList) {
+            // Found it?  Change it.
+            if (keyMap.getName() == qstrtostr(oldName)) {
+                keyMap.setName(qstrtostr(uniqueName));
                 break;
             }
         }
 
-        command->setKeyMappingList(kml);
-
+        ModifyDeviceCommand *command =
+                makeCommand(tr("rename Key Mapping"));
+        if (!command)
+            return;
+        command->setKeyMappingList(keyMapList);
         addCommandToHistory(command);
+
+        return;
 
     }
 }
