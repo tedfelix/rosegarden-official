@@ -131,9 +131,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Buttons
 
-    // ??? Why do we have buttons when we have a menu?  Get all of this
-    //     button functionality into the menu.  Get rid of all
-    //     these buttons.  Then add a toolbar.
+    // ??? Why do we have buttons when we have a menu?
+    //     - Get rid of all these buttons.
 
     QFrame *bankBox = new QFrame(leftPart);
     leftPartLayout->addWidget(bankBox);
@@ -241,6 +240,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Close);
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
+    connect(m_closeButton, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotFileClose);
     // Bottom of the main vbox layout is the button box.
     mainFrameLayout->addWidget(btnBox);
 
@@ -273,12 +274,20 @@ BankEditorDialog::~BankEditorDialog()
 void
 BankEditorDialog::setupActions()
 {
+    // File
+    createAction("file_import", SLOT(slotImport()));
+    createAction("file_export", SLOT(slotExport()));
     createAction("file_close", SLOT(slotFileClose()));
 
-    connect(m_closeButton, &QAbstractButton::clicked, this, &BankEditorDialog::slotFileClose);
-
+    // Edit
+    createAction("add_bank", SLOT(slotAddBank()));
+    createAction("add_key_mapping", SLOT(slotAddKeyMapping()));
     createAction("edit_copy", SLOT(slotCopy()));
     createAction("edit_paste", SLOT(slotPaste()));
+    createAction("edit_delete", SLOT(slotDelete()));
+    createAction("edit_delete_all", SLOT(slotDeleteAll()));
+
+    // Help
     createAction("bank_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
