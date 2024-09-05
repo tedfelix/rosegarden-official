@@ -38,6 +38,7 @@ class QCheckBox;
 class QTreeWidget;
 class QComboBox;
 class QFrame;
+class QStackedLayout;
 
 
 namespace Rosegarden
@@ -156,7 +157,8 @@ private:
     /// Select a device in the tree.  Used after adding or importing banks.
     void selectDeviceItem(MidiDevice *device);
 
-    QFrame *m_rightSide;
+    QWidget *m_rightSide;
+    QStackedLayout *m_rightSideLayout;
 
     MidiProgramsEditor *m_programEditor;
     MidiKeyMappingEditor *m_keyMappingEditor;

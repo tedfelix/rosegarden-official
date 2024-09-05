@@ -56,8 +56,8 @@
 #include <QStringList>
 #include <QWidget>
 #include <QGridLayout>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QStackedLayout>
 #include <QDesktopServices>
 #if QT_VERSION >= 0x050000
 #include <QStandardPaths>
@@ -79,17 +79,17 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     setWindowTitle(tr("Manage MIDI Banks and Programs"));
 
-    // Main Frame
-    QWidget *mainFrame = new QWidget(this);
-    setCentralWidget(mainFrame);
-    QGridLayout *mainFrameLayout = new QGridLayout(mainFrame);
-    mainFrameLayout->setContentsMargins(0, 0, 10, 10);
-    mainFrameLayout->setSpacing(10);
+    // Main Widget
+    QWidget *mainWidget = new QWidget(this);
+    setCentralWidget(mainWidget);
+    QGridLayout *mainLayout = new QGridLayout(mainWidget);
+    mainLayout->setContentsMargins(0, 0, 10, 10);
+    mainLayout->setSpacing(10);
 
     // Editor Left Side.  The Tree and Command Buttons.
 
     m_treeWidget = new QTreeWidget;
-    mainFrameLayout->addWidget(m_treeWidget, 0, 0, 2, 1);
+    mainLayout->addWidget(m_treeWidget, 0, 0, 2, 1);
     m_treeWidget->setMinimumWidth(500);
     m_treeWidget->setColumnCount(4);
     QStringList sl;
@@ -99,8 +99,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
        << tr("LSB");
     m_treeWidget->setHeaderLabels(sl);
     m_treeWidget->setRootIsDecorated(true);
-    m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);    //qt4
-    m_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);    //qt4
+    m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     m_treeWidget->setSortingEnabled(true);
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
             this, &BankEditorDialog::slotEdit);
@@ -111,30 +111,28 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Editor Right Side.  The Bank and Key Map editors.
 
-    // ??? Get rid of this frame.  You can add a layout to a layout.
-    //     Use addLayout() directly and get rid of the frame.
-    m_rightSide = new QFrame;
-    // ??? Should we use QStackedLayout?  That would be easier to understand.
-    QVBoxLayout *rightSideLayout = new QVBoxLayout(m_rightSide);
-    // Default is not 0.
-    rightSideLayout->setContentsMargins(0, 0, 0, 0);
+    // Need a widget so we can enable/disable.
+    m_rightSide = new QWidget;
+    // Using a QStackedLayout since only one of the Bank or the Key Map editor
+    // is ever visible at one time.
+    m_rightSideLayout = new QStackedLayout(m_rightSide);
 
-    mainFrameLayout->addWidget(m_rightSide, 0, 1);
+    mainLayout->addWidget(m_rightSide, 0, 1);
 
     // MIDI Programs Editor
     m_programEditor = new MidiProgramsEditor(this, m_rightSide);
     m_programEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
-    rightSideLayout->addWidget(m_programEditor);
+    m_rightSideLayout->addWidget(m_programEditor);
 
     // MIDI Key Map Editor
     m_keyMappingEditor = new MidiKeyMappingEditor(this, m_rightSide);
     m_keyMappingEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
     m_keyMappingEditor->hide();
-    rightSideLayout->addWidget(m_keyMappingEditor);
+    m_rightSideLayout->addWidget(m_keyMappingEditor);
 
     // Options
     m_optionBox = new QGroupBox(tr("Options"), m_rightSide);
-    mainFrameLayout->addWidget(m_optionBox, 1, 1);
+    mainLayout->addWidget(m_optionBox, 1, 1);
 
     QHBoxLayout *variationBoxLayout = new QHBoxLayout(m_optionBox);
 
@@ -159,8 +157,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
     connect(m_closeButton, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotFileClose);
-    // Bottom of the main vbox layout is the button box.
-    mainFrameLayout->addWidget(btnBox, 2, 0, 1, 2);
+    // Bottom of the main layout is the button box.
+    mainLayout->addWidget(btnBox, 2, 0, 1, 2);
 
     m_studio->addObserver(this);
     m_observingStudio = true;
@@ -556,8 +554,8 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
         m_keyMappingEditor->populate(item);
 
-        m_programEditor->hide();
-        m_keyMappingEditor->show();
+        // Show the key map editor.
+        m_rightSideLayout->setCurrentIndex(1);
 
         m_rightSide->setEnabled(true);
 
@@ -601,8 +599,8 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
 
         m_programEditor->populate(item);
 
-        m_keyMappingEditor->hide();
-        m_programEditor->show();
+        // Show the program editor.
+        m_rightSideLayout->setCurrentIndex(0);
 
         m_rightSide->setEnabled(true);
 
