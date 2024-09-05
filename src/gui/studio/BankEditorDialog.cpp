@@ -98,6 +98,11 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
        << tr("MSB")
        << tr("LSB");
     m_treeWidget->setHeaderLabels(sl);
+    // Pick some sensible initial defaults.
+    m_treeWidget->setColumnWidth(0, 300);
+    m_treeWidget->setColumnWidth(1, 100);
+    m_treeWidget->setColumnWidth(2, 50);
+    m_treeWidget->setColumnWidth(3, 50);
     m_treeWidget->setRootIsDecorated(true);
     m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -170,10 +175,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     // Set up the right side for item 0.
     updateEditor(m_treeWidget->topLevelItem(0));
 
-    // Make sure the first column is big enough for its contents.
-    // ??? We could really use this everywhere the columns come up the wrong
-    //     size.  Which seems like everywhere.
-    m_treeWidget->resizeColumnToContents(0);
+    // ??? We should save/restore the column widths.
 
     setupActions();
 
