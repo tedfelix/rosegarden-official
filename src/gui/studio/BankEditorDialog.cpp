@@ -55,6 +55,7 @@
 #include <QString>
 #include <QStringList>
 #include <QWidget>
+#include <QGridLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDesktopServices>
@@ -80,37 +81,15 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Main Frame
     QWidget *mainFrame = new QWidget(this);
-    mainFrame->setContentsMargins(1, 1, 1, 1);
     setCentralWidget(mainFrame);
-    // VBox layout holds most of the dialog at the top and the button box at
-    // the bottom.
-    // ??? Seems like a grid layout would be simpler.  Get rid of the
-    //     command buttons then switch to a grid layout.
-    QVBoxLayout *mainFrameLayout = new QVBoxLayout(mainFrame);
-    mainFrameLayout->setContentsMargins(0, 0, 0, 0);
-    mainFrameLayout->setSpacing(2);
-
-    // "Splitter" contains the left (tree) and right (editor) sides.
-    // ??? Rename: editor?  Or just use a grid layout.
-    QWidget *splitter = new QWidget;
-    QHBoxLayout *splitterLayout = new QHBoxLayout(splitter);
-    splitterLayout->setContentsMargins(0, 0, 0, 0);
-
-    // Top of the main vbox layout is the editor.
-    mainFrameLayout->addWidget(splitter);
+    QGridLayout *mainFrameLayout = new QGridLayout(mainFrame);
+    mainFrameLayout->setContentsMargins(0, 0, 10, 10);
+    mainFrameLayout->setSpacing(10);
 
     // Editor Left Side.  The Tree and Command Buttons.
 
-    QWidget *leftPart = new QWidget;
-    // ??? There's only one thing in this layout now that the buttons
-    //     are gone.  No need for a layout at all.  Remove this.
-    QVBoxLayout *leftPartLayout = new QVBoxLayout;
-    leftPartLayout->setContentsMargins(2, 2, 2, 2);
-    leftPart->setLayout(leftPartLayout);
-    splitterLayout->addWidget(leftPart);
-
     m_treeWidget = new QTreeWidget;
-    leftPartLayout->addWidget(m_treeWidget);
+    mainFrameLayout->addWidget(m_treeWidget, 0, 0, 2, 1);
     m_treeWidget->setMinimumWidth(500);
     m_treeWidget->setColumnCount(4);
     QStringList sl;
@@ -132,13 +111,15 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Editor Right Side.  The Bank and Key Map editors.
 
+    // ??? Get rid of this frame.  You can add a layout to a layout.
+    //     Use addLayout() directly and get rid of the frame.
     m_rightSide = new QFrame;
-    m_rightSide->setContentsMargins(8, 8, 8, 8);
+    // ??? Should we use QStackedLayout?  That would be easier to understand.
     QVBoxLayout *rightSideLayout = new QVBoxLayout(m_rightSide);
+    // Default is not 0.
     rightSideLayout->setContentsMargins(0, 0, 0, 0);
-    rightSideLayout->setSpacing(6);
 
-    splitterLayout->addWidget(m_rightSide);
+    mainFrameLayout->addWidget(m_rightSide, 0, 1);
 
     // MIDI Programs Editor
     m_programEditor = new MidiProgramsEditor(this, m_rightSide);
@@ -149,16 +130,13 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_keyMappingEditor = new MidiKeyMappingEditor(this, m_rightSide);
     m_keyMappingEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
     m_keyMappingEditor->hide();
-    // ??? These aren't on top of each other.  Should we use QStackedLayout?
-    //     That would be easier to understand.
     rightSideLayout->addWidget(m_keyMappingEditor);
 
     // Options
     m_optionBox = new QGroupBox(tr("Options"), m_rightSide);
-    rightSideLayout->addWidget(m_optionBox);
+    mainFrameLayout->addWidget(m_optionBox, 1, 1);
 
     QHBoxLayout *variationBoxLayout = new QHBoxLayout(m_optionBox);
-    variationBoxLayout->setContentsMargins(4, 4, 4, 4);
 
     // Variation Check Box
     m_variationCheckBox = new QCheckBox(tr("Show Variation list based on "), m_optionBox);
@@ -175,7 +153,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             this, &BankEditorDialog::slotVariationChanged);
     variationBoxLayout->addWidget(m_variationCombo);
 
-
     // Button box.  Close button.
 
     QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Close);
@@ -183,7 +160,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     connect(m_closeButton, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotFileClose);
     // Bottom of the main vbox layout is the button box.
-    mainFrameLayout->addWidget(btnBox);
+    mainFrameLayout->addWidget(btnBox, 2, 0, 1, 2);
 
     m_studio->addObserver(this);
     m_observingStudio = true;
