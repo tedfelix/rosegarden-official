@@ -163,7 +163,18 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_studio->addObserver(this);
     m_observingStudio = true;
 
-    initDialog();
+    updateDialog();
+
+    // Select the first device item.
+    m_treeWidget->topLevelItem(0)->setSelected(true);
+    // Set up the right side for item 0.
+    updateEditor(m_treeWidget->topLevelItem(0));
+
+    // Make sure the first column is big enough for its contents.
+    // ??? We could really use this everywhere the columns come up the wrong
+    //     size.  Which seems like everywhere.
+    m_treeWidget->resizeColumnToContents(0);
+
     setupActions();
 
     if (defaultDevice != Device::NO_DEVICE)
@@ -207,63 +218,6 @@ BankEditorDialog::setupActions()
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
     createMenusAndToolbars("bankeditor.rc");
-}
-
-void
-BankEditorDialog::initDialog()
-{
-    m_treeWidget->clear();
-
-    // Fill tree
-
-    DeviceList *devices = m_studio->getDevices();
-
-    // For each Device...
-    // iterates over devices and create device-TreeWidgetItems (level: topLevelItem)
-    // then calls populateDeviceItem() to create bank-TreeWidgetItems (level: topLevelItem-child)
-    for (Device *device : *devices) {
-
-        // Not a MIDI Device?  Try the next.
-        if (device->getType() != Device::Midi)
-            continue;
-
-        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
-        if (!midiDevice)
-            continue;
-
-        // Not a playback Device?  Try the next.
-        if (midiDevice->getDirection() != MidiDevice::Play)
-            continue;
-
-        observeDevice(midiDevice);
-
-        QString itemName = strtoqstr(midiDevice->getName());
-
-        RG_DEBUG << "BankEditorDialog::initDialog - adding " << itemName;
-
-        QTreeWidgetItem *twItemDevice = new MidiDeviceTreeWidgetItem(
-                midiDevice,
-                m_treeWidget,
-                itemName);
-
-        m_treeWidget->addTopLevelItem(twItemDevice);
-
-        twItemDevice->setExpanded(true);
-
-        // ??? updateDialog() does this as well.  Can we combine into a
-        //     single routine that does both or is used by both?
-        populateDeviceItem(twItemDevice, midiDevice);
-    }
-
-    // Select the first device item.
-    m_treeWidget->topLevelItem(0)->setSelected(true);
-    // Set up the right side for item 0.
-    updateEditor(m_treeWidget->topLevelItem(0));
-
-    // Make sure the first column is big enough for its contents.
-    // ??? We could really use this everywhere the columns come up the wrong
-    //     size.  Which seems like everywhere.
-    m_treeWidget->resizeColumnToContents(0);
 }
 
 void
@@ -358,11 +312,14 @@ BankEditorDialog::updateDialog()
         if (!midiDevice)
             continue;
 
-        // Record device?  Try the next.
-        if (midiDevice->getDirection() == MidiDevice::Record)
+        // Not a playback Device?  Try the next.
+        if (midiDevice->getDirection() != MidiDevice::Play)
             continue;
 
-        QString itemName = strtoqstr(midiDevice->getName());
+        // In case we aren't already.  This should cover init and new Devices.
+        observeDevice(midiDevice);
+
+        const QString itemName = strtoqstr(midiDevice->getName());
 
         //RG_DEBUG << "BankEditorDialog::updateDialog - adding " << itemName;
 
@@ -375,8 +332,6 @@ BankEditorDialog::updateDialog()
         deviceItem->setExpanded(true);
 
         // Add the banks and key maps for this device to the tree.
-        // ??? initDialog() does this as well.  Can we combine into a
-        //     single routine that does both or is used by both?
         populateDeviceItem(deviceItem, midiDevice);
     }
 
@@ -391,9 +346,8 @@ BankEditorDialog::updateDialog()
     //     restoration.
 
     // ??? Could we have searched for this in the last loop and saved the item
-    //     pointer for a call to setCurrentItem later?  That would mess up
-    //     pulling out the above loop to be shared by initDialog(), but it
-    //     would avoid a second scan of the tree.
+    //     pointer for a call to setCurrentItem later?  That would avoid a
+    //     second scan of the tree.
 
     //RG_DEBUG << "selecting item:" << (int)selectedType << selectedName << parentDevice;
 

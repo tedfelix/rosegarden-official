@@ -178,8 +178,6 @@ private:
      */
     void updateEditor(QTreeWidgetItem *item);
 
-    /// Init the tree and the bank/key map editor.
-    void initDialog();
     /// Create actions and menus.
     void setupActions();
 
