@@ -690,24 +690,12 @@ BankEditorDialog::slotAddKeyMapping()
     if (!device)
         return;
 
-    const KeyMappingList &keyMapList = device->getKeyMappings();
-
     // Generate an unused "new mapping" name.
-    // ??? Seems like this belongs in MidiDevice.
-    QString name;
-    for (size_t i = 1; i <= keyMapList.size() + 1; ++i) {
-        if (i == 1)
-            name = tr("<new mapping>");
-        else
-            name = tr("<new mapping %1>").arg(i);
-        // No such bank?  Then we have our name.
-        if (device->getKeyMappingByName(qstrtostr(name)) == nullptr)
-            break;
-    }
+    std::string name = device->makeNewKeyMappingName();
 
     KeyMappingList newKeyMapList;
 
-    MidiKeyMapping newKeyMap(qstrtostr(name));
+    MidiKeyMapping newKeyMap(name);
     newKeyMapList.push_back(newKeyMap);
 
     ModifyDeviceCommand *command = makeCommand(tr("add Key Mapping"));
@@ -731,7 +719,7 @@ BankEditorDialog::slotAddKeyMapping()
     if (!deviceItem)
         return;
 
-    selectItem(deviceItem, name);
+    selectItem(deviceItem, strtoqstr(name));
 }
 
 void

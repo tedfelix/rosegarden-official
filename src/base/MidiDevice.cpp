@@ -1119,7 +1119,8 @@ MidiDevice::getControlParameterConst(
             getControlParameter(type, controllerNumber);
 }
 
-std::string MidiDevice::makeNewBankName() const
+std::string
+MidiDevice::makeNewBankName() const
 {
     // Generate an unused "new bank" name.
     std::string name;
@@ -1130,6 +1131,24 @@ std::string MidiDevice::makeNewBankName() const
             name = qstrtostr(QObject::tr("<new bank %1>").arg(i));
         // No such bank?  Then we have our name.
         if (getBankByName(name) == nullptr)
+            break;
+    }
+
+    return name;
+}
+
+std::string
+MidiDevice::makeNewKeyMappingName() const
+{
+    // Generate an unused "new mapping" name.
+    std::string name;
+    for (size_t i = 1; i <= m_keyMappingList.size() + 1; ++i) {
+        if (i == 1)
+            name = qstrtostr(QObject::tr("<new mapping>"));
+        else
+            name = qstrtostr(QObject::tr("<new mapping %1>").arg(i));
+        // No such key map?  Then we have our name.
+        if (getKeyMappingByName(name) == nullptr)
             break;
     }
 
