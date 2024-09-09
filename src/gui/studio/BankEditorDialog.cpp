@@ -526,29 +526,15 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
         findAction("edit_paste")->setEnabled(m_clipboard.itemType == ItemType::BANK);
         findAction("edit_delete")->setEnabled(true);
 
-        MidiDevice *device = bankItem->getDevice();
+        const MidiDevice *device = bankItem->getDevice();
         if (!device)
             return;
 
-        // ??? Get rid of this.
-        m_variationCheckBox->blockSignals(true);
-
         m_variationCheckBox->setChecked(
                 device->getVariationType() != MidiDevice::NoVariations);
-
-        // ??? Get rid of this.
-        m_variationCheckBox->blockSignals(false);
-
         m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
-
-        // ??? Get rid of this.
-        m_variationCombo->blockSignals(true);
-
         m_variationCombo->setCurrentIndex(
                 device->getVariationType() == MidiDevice::VariationFromLSB ? 0 : 1);
-
-        // ??? Get rid of this.
-        m_variationCombo->blockSignals(false);
 
         m_programEditor->populate(item);
 
@@ -1154,6 +1140,9 @@ BankEditorDialog::slotVariationToggled()
 void
 BankEditorDialog::slotVariationChanged(int)
 {
+    // ??? The activated() signal will allow non-changes through.  We should
+    //     detect a non-change (using a cache) and bail.
+
     MidiDevice::VariationType variation = MidiDevice::NoVariations;
     if (m_variationCheckBox->isChecked()) {
         if (m_variationCombo->currentIndex() == 0)
