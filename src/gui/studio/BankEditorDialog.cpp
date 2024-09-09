@@ -513,8 +513,9 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
     m_variationCheckBox->setChecked(
             device->getVariationType() != MidiDevice::NoVariations);
     m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
+    m_variationType = device->getVariationType();
     m_variationCombo->setCurrentIndex(
-            device->getVariationType() == MidiDevice::VariationFromLSB ? 0 : 1);
+            m_variationType == MidiDevice::VariationFromLSB ? 0 : 1);
 
     // Key Map Selected
 
@@ -741,6 +742,11 @@ BankEditorDialog::slotDelete()
         const BankList &banks = device->getBanks();
         const MidiBank &bank = banks[bankItem->getBank()];
 
+        // Confirm the bank is not in use.
+        const bool used = tracksUsingBank(bank, *device);
+        if (used)
+            return;
+
         BankList newBanks;
         // Copy all banks except for the one we are deleting to newBanks.
         for (size_t i = 0; i < banks.size(); ++i) {
@@ -748,12 +754,6 @@ BankEditorDialog::slotDelete()
             if (!ibank.compareKey(bank))
                 newBanks.push_back(ibank);
         }
-
-        // Confirm the bank is not in use.
-        // ??? Shouldn't we do this before creating newBanks?
-        const bool used = tracksUsingBank(bank, *device);
-        if (used)
-            return;
 
         // Are You Sure?
         const int reply = QMessageBox::warning(
@@ -1157,18 +1157,21 @@ BankEditorDialog::slotVariationToggled()
 }
 
 void
-BankEditorDialog::slotVariationChanged(int)
+BankEditorDialog::slotVariationChanged(int index)
 {
-    // ??? The activated() signal will allow non-changes through.  We should
-    //     detect a non-change (using a cache) and bail.
-
     MidiDevice::VariationType variation = MidiDevice::NoVariations;
     if (m_variationCheckBox->isChecked()) {
-        if (m_variationCombo->currentIndex() == 0)
+        if (index == 0)
             variation = MidiDevice::VariationFromLSB;
         else
             variation = MidiDevice::VariationFromMSB;
     }
+
+    // No change?
+    if (variation == m_variationType)
+        return;
+
+    m_variationType = variation;
 
     ModifyDeviceCommand *command = makeCommand(tr("variation changed"));
     if (!command)

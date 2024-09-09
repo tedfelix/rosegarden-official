@@ -19,6 +19,7 @@
 #define RG_BANKEDITORDIALOG_H
 
 #include "base/Device.h"
+#include "base/MidiDevice.h"
 #include "base/Studio.h"
 #include "gui/general/ActionFileClient.h"
 
@@ -129,7 +130,7 @@ private slots:
     /// "Show Variation list based on" check box handler.
     void slotVariationToggled();
     /// "Show Variation list based on" combo box handler.
-    void slotVariationChanged(int);
+    void slotVariationChanged(int index);
 
     /// Help > Help
     void slotHelpRequested();
@@ -171,6 +172,8 @@ private:
     QCheckBox *m_variationCheckBox;
     // Show Variation list based on
     QComboBox *m_variationCombo;
+    // Cache to detect changes.
+    MidiDevice::VariationType m_variationType;
 
     QPushButton *m_closeButton;
 
