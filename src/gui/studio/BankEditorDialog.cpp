@@ -616,18 +616,7 @@ BankEditorDialog::slotAddBank()
     // Make a copy of the bank list so we can add the new one.
     BankList banks = device->getBanks();
 
-    // Generate an unused "new bank" name.
-    // ??? Seems like this belongs in MidiDevice.
-    QString name;
-    for (size_t i = 1; i <= banks.size() + 1; ++i) {
-        if (i == 1)
-            name = tr("<new bank>");
-        else
-            name = tr("<new bank %1>").arg(i);
-        // No such bank?  Then we have our name.
-        if (device->getBankByName(qstrtostr(name)) == nullptr)
-            break;
-    }
+    std::string name = device->makeNewBankName();
 
     MidiByte msb;
     MidiByte lsb;
@@ -635,7 +624,7 @@ BankEditorDialog::slotAddBank()
 
     MidiBank newBank(false,  // percussion
                      msb, lsb,
-                     qstrtostr(name));
+                     name);
 
     banks.push_back(newBank);
 

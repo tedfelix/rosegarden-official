@@ -86,6 +86,9 @@ public:
     BankList getBanksByMSB(bool percussion, MidiByte msb) const;
     BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
     const MidiBank *getBankByName(const std::string &) const;
+    std::string getBankName(const MidiBank &bank) const;
+    // Generate an unused "new bank" name.
+    std::string makeNewBankName() const;
 
     MidiByteList getDistinctMSBs(bool percussion, int lsb = -1) const;
     MidiByteList getDistinctLSBs(bool percussion, int msb = -1) const;
@@ -100,7 +103,6 @@ public:
     const MidiKeyMapping *getKeyMappingForProgram(const MidiProgram &program) const;
     void setKeyMappingForProgram(const MidiProgram &program, std::string mapping);
 
-    std::string getBankName(const MidiBank &bank) const;
     std::string getProgramName(const MidiProgram &program) const;
 
     void replaceBankList(const BankList &bankList);

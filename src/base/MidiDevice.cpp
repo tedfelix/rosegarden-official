@@ -22,12 +22,13 @@
 #include "base/Instrument.h"
 #include "base/MidiTypes.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <set>
-
+#include <string>
 #include <sstream>
 
 #include <QString>
@@ -1117,5 +1118,23 @@ MidiDevice::getControlParameterConst(
     return const_cast<MidiDevice *>(this)->
             getControlParameter(type, controllerNumber);
 }
+
+std::string MidiDevice::makeNewBankName() const
+{
+    // Generate an unused "new bank" name.
+    std::string name;
+    for (size_t i = 1; i <= m_bankList.size() + 1; ++i) {
+        if (i == 1)
+            name = qstrtostr(QObject::tr("<new bank>"));
+        else
+            name = qstrtostr(QObject::tr("<new bank %1>").arg(i));
+        // No such bank?  Then we have our name.
+        if (getBankByName(name) == nullptr)
+            break;
+    }
+
+    return name;
+}
+
 
 }
