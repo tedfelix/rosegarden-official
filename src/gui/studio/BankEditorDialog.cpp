@@ -494,7 +494,31 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
     if (!item)
         return;
 
-    // Key Map Editor
+    // Update Variation Widgets
+
+    // Do this first so that it is always done in all cases.
+
+    const MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(item);
+    if (!deviceItem) {
+        RG_DEBUG << "updateEditor() - no MidiDeviceTreeWidgetItem";
+        return;
+    }
+
+    const MidiDevice *device = deviceItem->getDevice();
+    if (!device) {
+        RG_DEBUG << "updateEditor() - no MidiDevice for this item";
+        return;
+    }
+
+    m_variationCheckBox->setChecked(
+            device->getVariationType() != MidiDevice::NoVariations);
+    m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
+    m_variationCombo->setCurrentIndex(
+            device->getVariationType() == MidiDevice::VariationFromLSB ? 0 : 1);
+
+    // Key Map Selected
+
+    // Display the key map editor.
 
     const MidiKeyMapTreeWidgetItem *keyItem =
             dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
@@ -515,7 +539,9 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
         return;
     }
 
-    // Program Editor
+    // Bank Selected
+
+    // Display the program editor.
 
     const MidiBankTreeWidgetItem *bankItem =
             dynamic_cast<MidiBankTreeWidgetItem *>(item);
@@ -525,16 +551,6 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
         findAction("edit_copy")->setEnabled(true);
         findAction("edit_paste")->setEnabled(m_clipboard.itemType == ItemType::BANK);
         findAction("edit_delete")->setEnabled(true);
-
-        const MidiDevice *device = bankItem->getDevice();
-        if (!device)
-            return;
-
-        m_variationCheckBox->setChecked(
-                device->getVariationType() != MidiDevice::NoVariations);
-        m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
-        m_variationCombo->setCurrentIndex(
-                device->getVariationType() == MidiDevice::VariationFromLSB ? 0 : 1);
 
         m_programEditor->populate(item);
 
@@ -546,7 +562,9 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
         return;
     }
 
-    // Device, not bank or key map.
+    // Device Selected
+
+    // Clear and disable the right side.
 
     RG_DEBUG << "updateEditor() : not a bank item";
 
@@ -559,28 +577,6 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
     // Clear the right side editors.
     m_programEditor->clearAll();
     m_keyMappingEditor->clearAll();
-
-    // Update Variation Widgets
-
-    // ??? This code is duplicated above.  Pull out an updateVariations().
-
-    MidiDeviceTreeWidgetItem *deviceItem = getParentDeviceItem(item);
-    if (!deviceItem) {
-        RG_DEBUG << "updateEditor() - no MidiDeviceTreeWidgetItem";
-        return;
-    }
-
-    MidiDevice *device = deviceItem->getDevice();
-    if (!device) {
-        RG_DEBUG << "updateEditor() - no MidiDevice for this item";
-        return;
-    }
-
-    m_variationCheckBox->setChecked(
-            device->getVariationType() != MidiDevice::NoVariations);
-    m_variationCombo->setEnabled(m_variationCheckBox->isChecked());
-    m_variationCombo->setCurrentIndex(
-            device->getVariationType() == MidiDevice::VariationFromLSB ? 0 : 1);
 }
 
 MidiDeviceTreeWidgetItem *
