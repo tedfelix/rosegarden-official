@@ -175,12 +175,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     // Set up the right side for item 0.
     updateEditor(m_treeWidget->topLevelItem(0));
 
-    // ??? We should save/restore the column widths.
-
     setupActions();
 
     if (defaultDevice != Device::NO_DEVICE)
         setCurrentDevice(defaultDevice);
+
+    // ??? We should save/restore window geometry.
 }
 
 BankEditorDialog::~BankEditorDialog()
@@ -299,6 +299,8 @@ BankEditorDialog::updateDialog()
     m_treeWidget->blockSignals(true);
 
     // Start from scratch.
+    // Note: Somehow the tree remembers its scroll position even though we have
+    //       cleared it.  That's very helpful.
     m_treeWidget->clear();
 
     DeviceList *devices = m_studio->getDevices();
@@ -326,10 +328,8 @@ BankEditorDialog::updateDialog()
         //RG_DEBUG << "BankEditorDialog::updateDialog - adding " << itemName;
 
         // Create a new entry on the tree.
-        // ??? Reorg parameters so that m_treeWidget is first like
-        //     QTreeWidgetItem's ctor.
         QTreeWidgetItem *deviceItem = new MidiDeviceTreeWidgetItem(
-                midiDevice, m_treeWidget, itemName);
+                m_treeWidget, midiDevice, itemName);
 
         deviceItem->setExpanded(true);
 
@@ -339,13 +339,7 @@ BankEditorDialog::updateDialog()
 
     m_treeWidget->blockSignals(false);
 
-    // ??? This does not restore scroll position.
-
     // Restore the item selection.
-
-    // ??? Might want to pull this out into a function so that the returns can
-    //     be contained.  This will help when implementing scroll position
-    //     restoration.
 
     // ??? Could we have searched for this in the last loop and saved the item
     //     pointer for a call to setCurrentItem later?  That would avoid a

@@ -20,31 +20,43 @@
 
 #include "base/Device.h"
 
-#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QString>
-#include <QCoreApplication>
+#include <QCoreApplication>  // Q_DECLARE_TR_FUNCTIONS
+
 
 namespace Rosegarden
 {
 
+
 class MidiDevice;
+
 
 class MidiDeviceTreeWidgetItem : public QTreeWidgetItem
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MidiDeviceTreeWidgetItem)
 
 public:
-    // Device
-    MidiDeviceTreeWidgetItem(MidiDevice* device,
-                             QTreeWidget* parent, QString name);
 
-    // Bank
+    /// Construct an item and insert into parent.
+    MidiDeviceTreeWidgetItem(
+            QTreeWidget *parent, MidiDevice *device, const QString &name);
+
+    /// Bank
+    /**
+     * ??? But a Bank is not a kind of Device.  This ctor does not
+     *     belong here.
+     */
     MidiDeviceTreeWidgetItem(MidiDevice* device,
                              QTreeWidgetItem* parent, QString name,
                              bool percussion,
                              int msb, int lsb);
 
-    // Key Mapping
+    /// Key Mapping
+    /**
+     * ??? But a key map is not a kind of Device.  This ctor does not
+     *     belong here.
+     */
     MidiDeviceTreeWidgetItem(MidiDevice* device,
                              QTreeWidgetItem* parent, QString name);
 
@@ -56,9 +68,12 @@ public:
 
 protected:
 
-    //--------------- Data members ---------------------------------
-    MidiDevice* m_device;
     QString m_name;
+
+private:
+
+    MidiDevice *m_device;
+
 };
 
 

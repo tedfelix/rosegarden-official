@@ -27,35 +27,38 @@
 namespace Rosegarden
 {
 
-    MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(MidiDevice* device,
-        QTreeWidget* parent, QString name)
-        : QTreeWidgetItem(parent),
-          m_device(device),
-          m_name(name)
+
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(
+        QTreeWidget *parent, MidiDevice *device, const QString &name) :
+    QTreeWidgetItem(parent),
+    m_name(name),
+    m_device(device)
 {
-    setText( 0, name );
+    setText(0, name);
 }
 
-MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(MidiDevice* device,
-        QTreeWidgetItem* parent, QString name,
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(
+        MidiDevice *device,
+        QTreeWidgetItem *parent,
+        QString name,
         bool percussion,
-        int msb, int lsb)
-        : QTreeWidgetItem(parent, QStringList()
+        int msb,
+        int lsb) :
+    QTreeWidgetItem(parent, QStringList()
                                  << name
                                  << QString(percussion ? tr("Percussion Bank") : tr("Bank"))
                                  << QString().setNum(msb)
                                  << QString().setNum(lsb)),
-          m_device(device),
-          m_name(name)
+    m_name(name),
+    m_device(device)
 {
 }
 
-MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(MidiDevice* device,
-                                                   QTreeWidgetItem* parent,
-                                                   QString name)
-    : QTreeWidgetItem(parent, //name,
-                        QStringList() << name << tr("Key Mapping") << "" << ""),
-      m_device(device)
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(
+        MidiDevice *device, QTreeWidgetItem *parent, QString name) :
+    QTreeWidgetItem(parent,
+                    QStringList() << name << tr("Key Mapping") << "" << ""),
+    m_device(device)
 {
 }
 
