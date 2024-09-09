@@ -38,6 +38,7 @@
 #include "gui/widgets/FileDialog.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/dialogs/AboutDialog.h"
+#include "misc/ConfigGroups.h"
 
 #include <QAction>
 #include <QComboBox>
@@ -59,6 +60,7 @@
 #include <QHBoxLayout>
 #include <QStackedLayout>
 #include <QDesktopServices>
+#include <QSettings>
 #if QT_VERSION >= 0x050000
 #include <QStandardPaths>
 #endif
@@ -180,12 +182,26 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     if (defaultDevice != Device::NO_DEVICE)
         setCurrentDevice(defaultDevice);
 
-    // ??? We should save/restore window geometry.
+    // Restore window geometry and header state.
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    restoreGeometry(settings.value("Bank_Editor_Dialog_Geometry").toByteArray());
+    //restoreState(settings.value("Bank_Editor_Dialog_State").toByteArray());
+    //m_list->header()->restoreState(settings.value("Bank_Editor_Dialog_Header_State").toByteArray());
+    settings.endGroup();
 }
 
 BankEditorDialog::~BankEditorDialog()
 {
     RG_DEBUG << "dtor";
+
+    // Save window geometry and header state.
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Bank_Editor_Dialog_Geometry", saveGeometry());
+    //settings.setValue("Bank_Editor_Dialog_State", saveState());
+    //settings.setValue("Bank_Editor_Dialog_Header_State", m_list->header()->saveState());
+    settings.endGroup();
 
     // Unsubscribe from Studio
     if (m_observingStudio) {
