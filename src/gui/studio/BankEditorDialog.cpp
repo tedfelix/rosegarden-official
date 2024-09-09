@@ -598,6 +598,30 @@ BankEditorDialog::getParentDeviceItem(QTreeWidgetItem *item)
     return dynamic_cast<MidiDeviceTreeWidgetItem *>(item);
 }
 
+
+void
+BankEditorDialog::selectItem(MidiDeviceTreeWidgetItem *deviceItem, const QString &name)
+{
+    if (!deviceItem)
+        return;
+
+    // Only one can be selected.
+    deviceItem->setSelected(false);
+
+    // For each child item under deviceItem...
+    for (int childIndex = 0; childIndex < deviceItem->childCount(); ++childIndex)
+    {
+        QTreeWidgetItem *childItem = deviceItem->child(childIndex);
+        // if the name matches
+        if (childItem->text(0) == name) {
+            childItem->setSelected(true);
+            updateEditor(childItem);
+        } else {  // Only one can be selected.
+            childItem->setSelected(false);
+        }
+    }
+}
+
 void
 BankEditorDialog::slotAddBank()
 {
@@ -636,8 +660,19 @@ BankEditorDialog::slotAddBank()
     command->setBankList(banks);
     CommandHistory::getInstance()->addCommand(command);
 
-    // ??? We should select the new item.  ModifyDeviceCommand is probably in
-    //     a better position to do that.  Or can we use m_selectionName?
+    // Select the new bank.
+
+    // Refresh currentItem since the tree has changed.
+    currentItem = m_treeWidget->currentItem();
+    if (!currentItem)
+        return;
+
+    // Refresh deviceItem since the tree has changed.
+    deviceItem = getParentDeviceItem(currentItem);
+    if (!deviceItem)
+        return;
+
+    selectItem(deviceItem, strtoqstr(name));
 }
 
 void
@@ -684,8 +719,19 @@ BankEditorDialog::slotAddKeyMapping()
     command->setRename(false);
     CommandHistory::getInstance()->addCommand(command);
 
-    // ??? We should select the new item.  ModifyDeviceCommand is probably in
-    //     a better position to do that.  Or can we use m_selectionName?
+    // Select the new key map.
+
+    // Refresh currentItem since the tree has changed.
+    currentItem = m_treeWidget->currentItem();
+    if (!currentItem)
+        return;
+
+    // Refresh deviceItem since the tree has changed.
+    deviceItem = getParentDeviceItem(currentItem);
+    if (!deviceItem)
+        return;
+
+    selectItem(deviceItem, name);
 }
 
 void

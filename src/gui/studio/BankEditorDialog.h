@@ -156,6 +156,8 @@ private:
     MidiDeviceTreeWidgetItem *getParentDeviceItem(QTreeWidgetItem *item);
     /// Select a device in the tree.  Used after adding or importing banks.
     void selectDeviceItem(MidiDevice *device);
+    /// Select a bank or key map item by name under deviceItem.
+    void selectItem(MidiDeviceTreeWidgetItem *deviceItem, const QString &name);
 
     QWidget *m_rightSide;
     QStackedLayout *m_rightSideLayout;
