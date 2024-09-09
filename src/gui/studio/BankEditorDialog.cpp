@@ -231,7 +231,7 @@ BankEditorDialog::updateDialog()
 
     // Get selected Item.
 
-    enum class SelectedType {NONE, DEVICE, BANK, KEYMAP};
+    enum class SelectedType  { NONE, DEVICE, BANK, KEYMAP };
     SelectedType selectedType{SelectedType::NONE};
     QString selectedName;
     Device *parentDevice{nullptr};
@@ -303,6 +303,8 @@ BankEditorDialog::updateDialog()
     //       cleared it.  That's very helpful.
     m_treeWidget->clear();
 
+    MidiDeviceTreeWidgetItem *selectDeviceItem{nullptr};
+
     DeviceList *devices = m_studio->getDevices();
 
     // For each Device in the Studio...
@@ -328,45 +330,29 @@ BankEditorDialog::updateDialog()
         //RG_DEBUG << "BankEditorDialog::updateDialog - adding " << itemName;
 
         // Create a new entry on the tree.
-        QTreeWidgetItem *deviceItem = new MidiDeviceTreeWidgetItem(
+        MidiDeviceTreeWidgetItem *deviceItem = new MidiDeviceTreeWidgetItem(
                 m_treeWidget, midiDevice, itemName);
 
         deviceItem->setExpanded(true);
 
         // Add the banks and key maps for this device to the tree.
         populateDeviceItem(deviceItem, midiDevice);
+
+        // Is this the parent Device item of the selected item?
+        // Save it if so.
+        if (deviceItem->getDevice() == parentDevice)
+            selectDeviceItem = deviceItem;
     }
 
     m_treeWidget->blockSignals(false);
 
     // Restore the item selection.
 
-    // ??? Could we have searched for this in the last loop and saved the item
-    //     pointer for a call to setCurrentItem later?  That would avoid a
-    //     second scan of the tree.
-
     //RG_DEBUG << "selecting item:" << (int)selectedType << selectedName << parentDevice;
 
+    // Nothing was selected?  We're done.
     if (selectedType == SelectedType::NONE)
         return;
-
-    // Find the top level device item.
-    MidiDeviceTreeWidgetItem *selectDeviceItem{nullptr};
-    // ??? Use topLevelItemCount() and topLevelItem().
-    QTreeWidgetItem *root = m_treeWidget->invisibleRootItem();
-    // For each top level item...
-    for (int i=0; i < root->childCount(); ++i) {
-        QTreeWidgetItem *item = root->child(i);
-        MidiDeviceTreeWidgetItem *deviceItem =
-                dynamic_cast<MidiDeviceTreeWidgetItem *>(item);
-        if (!deviceItem)
-            continue;
-        // Found it?  Remember it.
-        if (deviceItem->getDevice() == parentDevice) {
-            selectDeviceItem = deviceItem;
-            break;
-        }
-    }
 
     // Device is gone?  No selection.
     if (!selectDeviceItem)
@@ -382,6 +368,7 @@ BankEditorDialog::updateDialog()
     if (selectedType == SelectedType::BANK  ||
         selectedType == SelectedType::KEYMAP) {
         int childCount = selectDeviceItem->childCount();
+        // For each child (bank and key map) of the selected Device item...
         for (int i=0; i < childCount; ++i) {
             QTreeWidgetItem *childItem = selectDeviceItem->child(i);
 
