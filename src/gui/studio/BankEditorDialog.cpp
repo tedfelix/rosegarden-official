@@ -1523,6 +1523,100 @@ BankEditorDialog::pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem)
 }
 
 void
+BankEditorDialog::pasteBankIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem)
+{
+    const MidiDevice *destDevice = deviceItem->getDevice();
+    if (!destDevice)
+        return;
+
+    // Check for msb/lsb/percussion conflicts and notify.
+
+    const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(
+            m_studio->getDevice(m_clipboard.deviceId));
+    if (!sourceMidiDevice)
+        return;
+
+    const BankList &sourceBankList = sourceMidiDevice->getBanks();
+
+    // Make a copy so we can modify the name if needed.
+    MidiBank sourceBank = sourceBankList[m_clipboard.bank];
+
+    BankList destBankList = destDevice->getBanks();
+
+    bool haveConflict{false};
+    std::string conflictName;
+
+    // See if the clipboard (source) MIDI bank is already in the
+    // destination device.
+    for (const MidiBank &midiBank : destBankList) {
+        // if this bank matches sourceBank, we have a conflict.
+        if (midiBank.compareKey(sourceBank)) {
+            haveConflict = true;
+            conflictName = midiBank.getName();
+            break;
+        }
+    }
+
+    if (haveConflict) {
+        // The other option would be to automatically pick a
+        // non-conflicting key.
+        QMessageBox::critical(
+                this,
+                tr("Rosegarden"),
+                tr("Unable to paste.\n"
+                   "Destination device already has a bank for\n"
+                   "%1:%2:%3 (%4)").arg(sourceBank.getMSB()).
+                                    arg(sourceBank.getLSB()).
+                                    arg(sourceBank.isPercussion()).
+                                    arg(strtoqstr(conflictName)));
+        return;
+    }
+
+    // Assemble the new program list.
+
+    // Get the full program and bank list for the destination device.
+    const ProgramList &originalPrograms = destDevice->getPrograms();
+
+    ProgramList newPrograms;
+
+    // Copy original programs to newPrograms.
+
+    for (const MidiProgram &program : originalPrograms) {
+        newPrograms.push_back(program);
+    }
+
+    // Add the clipboard programs to newPrograms.
+
+    const ProgramList &sourcePrograms = sourceMidiDevice->getPrograms();
+
+    // For each program from the source Device...
+    for (const MidiProgram &program : sourcePrograms) {
+        // If this is the bank from the clipboard, add it to newPrograms.
+        if (program.getBank().compareKey(sourceBank))
+            newPrograms.push_back(program);
+    }
+
+    // Add the bank to the bank list.
+
+    // Make sure the name doesn't conflict with any names in the
+    // destination Device.
+    const QString newBankName = makeUniqueBankName(
+            strtoqstr(sourceBank.getName()), destBankList);
+    sourceBank.setName(qstrtostr(newBankName));
+
+    destBankList.push_back(sourceBank);
+
+    // Modify the Device.
+
+    ModifyDeviceCommand *command = makeCommand(tr("paste bank"));
+    if (!command)
+        return;
+    command->setProgramList(newPrograms);
+    command->setBankList(destBankList);
+    CommandHistory::getInstance()->addCommand(command);
+}
+
+void
 BankEditorDialog::slotPaste()
 {
     // ??? Big routine.  Slice into pieces.  And since the *Item classes
@@ -1559,97 +1653,7 @@ BankEditorDialog::slotPaste()
         // Add the clipboard item to the device.
 
         if (m_clipboard.itemType == ItemType::BANK) {
-
-            const MidiDevice *destDevice = deviceItem->getDevice();
-            if (!destDevice)
-                return;
-
-            // Check for msb/lsb/percussion conflicts and notify.
-
-            const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(
-                    m_studio->getDevice(m_clipboard.deviceId));
-            if (!sourceMidiDevice)
-                return;
-
-            const BankList &sourceBankList = sourceMidiDevice->getBanks();
-
-            // Make a copy so we can modify the name if needed.
-            MidiBank sourceBank = sourceBankList[m_clipboard.bank];
-
-            BankList destBankList = destDevice->getBanks();
-
-            bool haveConflict{false};
-            std::string conflictName;
-
-            // See if the clipboard (source) MIDI bank is already in the
-            // destination device.
-            for (const MidiBank &midiBank : destBankList) {
-                // if this bank matches sourceBank, we have a conflict.
-                if (midiBank.compareKey(sourceBank)) {
-                    haveConflict = true;
-                    conflictName = midiBank.getName();
-                    break;
-                }
-            }
-
-            if (haveConflict) {
-                // The other option would be to automatically pick a
-                // non-conflicting key.
-                QMessageBox::critical(
-                        this,
-                        tr("Rosegarden"),
-                        tr("Unable to paste.\n"
-                           "Destination device already has a bank for\n"
-                           "%1:%2:%3 (%4)").arg(sourceBank.getMSB()).
-                                            arg(sourceBank.getLSB()).
-                                            arg(sourceBank.isPercussion()).
-                                            arg(strtoqstr(conflictName)));
-                return;
-            }
-
-            // Assemble the new program list.
-
-            // Get the full program and bank list for the destination device.
-            const ProgramList &originalPrograms = destDevice->getPrograms();
-
-            ProgramList newPrograms;
-
-            // Copy original programs to newPrograms.
-
-            for (const MidiProgram &program : originalPrograms) {
-                newPrograms.push_back(program);
-            }
-
-            // Add the clipboard programs to newPrograms.
-
-            const ProgramList &sourcePrograms = sourceMidiDevice->getPrograms();
-
-            // For each program from the source Device...
-            for (const MidiProgram &program : sourcePrograms) {
-                // If this is the bank from the clipboard, add it to newPrograms.
-                if (program.getBank().compareKey(sourceBank))
-                    newPrograms.push_back(program);
-            }
-
-            // Add the bank to the bank list.
-
-            // Make sure the name doesn't conflict with any names in the
-            // destination Device.
-            const QString newBankName = makeUniqueBankName(
-                    strtoqstr(sourceBank.getName()), destBankList);
-            sourceBank.setName(qstrtostr(newBankName));
-
-            destBankList.push_back(sourceBank);
-
-            // Modify the Device.
-
-            ModifyDeviceCommand *command = makeCommand(tr("paste bank"));
-            if (!command)
-                return;
-            command->setProgramList(newPrograms);
-            command->setBankList(destBankList);
-            CommandHistory::getInstance()->addCommand(command);
-
+            pasteBankIntoDevice(deviceItem);
             return;
         }
 
