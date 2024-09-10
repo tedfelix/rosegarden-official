@@ -570,7 +570,7 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
     RG_DEBUG << "updateEditor() : not a bank item";
 
     findAction("edit_copy")->setEnabled(false);
-    findAction("edit_paste")->setEnabled(false);
+    findAction("edit_paste")->setEnabled(true);
     findAction("edit_delete")->setEnabled(false);
 
     m_rightSide->setEnabled(false);
@@ -1352,27 +1352,12 @@ BankEditorDialog::slotCopy()
 void
 BankEditorDialog::slotPaste()
 {
+    QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+
     // Bank
 
-    // ??? This is odd.  It requires that you paste a bank over another
-    //     existing bank.  And then it gets the msb/lsb of that destination
-    //     bank.  That doesn't seem very useful.
-    //     You can't paste a bank into a device
-    //     that has no banks.  Very weird.  I don't think that is ideal.
-    //
-    //     We should think through some use cases and figure out what
-    //     is the best approach.  I don't like the fact that it clobbers
-    //     the selected bank.  I think it should always add the bank unless
-    //     there is an msb/lsb/percussion conflict.  If there is a conflict,
-    //     pop up a window letting the user resolve it.
-    //
-    //     Given a simple "paste into" rather than "paste over" behavior,
-    //     we can do what this does by first deleting the bank we want to paste
-    //     over, then paste the bank from the clipboard, and adjust its msb/lsb
-    //     to match the one we deleted.
-
     const MidiBankTreeWidgetItem *bankItem =
-            dynamic_cast<const MidiBankTreeWidgetItem *>(m_treeWidget->currentItem());
+            dynamic_cast<const MidiBankTreeWidgetItem *>(currentItem);
 
     if (bankItem) {
 
@@ -1383,9 +1368,12 @@ BankEditorDialog::slotPaste()
         // Remove the bank we are pasting over top of.
 
         const MidiDevice *device = bankItem->getDevice();
-        const BankList bankList = device->getBanks();
+        if (!device)
+            return;
 
-        const MidiBank currentBank = bankList[bankItem->getBank()];
+        const BankList oldBankList = device->getBanks();
+
+        const MidiBank currentBank = oldBankList[bankItem->getBank()];
 
         // Get the full program and bank list for the destination device.
         const ProgramList &oldPrograms = device->getPrograms();
@@ -1413,8 +1401,6 @@ BankEditorDialog::slotPaste()
 
         // Add the programs from the clipboard to newPrograms.
 
-        const MidiBank &sourceBank = bankList[m_clipboard.bank];
-
         const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
         if (!sourceDevice)
             return;
@@ -1422,6 +1408,10 @@ BankEditorDialog::slotPaste()
         const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
         if (!sourceMidiDevice)
             return;
+
+        const BankList &sourceBankList = sourceMidiDevice->getBanks();
+
+        const MidiBank &sourceBank = sourceBankList[m_clipboard.bank];
 
         const ProgramList &sourcePrograms = sourceMidiDevice->getPrograms();
 
@@ -1461,13 +1451,8 @@ BankEditorDialog::slotPaste()
 
     // Key Map
 
-    // ??? This is like pasting a bank.  It clobbers the selected key map in
-    //     the destination and takes its name.  Given a non-destructive paste,
-    //     this can be achieved by deleting the destination key map, pasting,
-    //     then renaming the key map to match the one that was deleted.
-
     const MidiKeyMapTreeWidgetItem *keyItem =
-            dynamic_cast<MidiKeyMapTreeWidgetItem*>(m_treeWidget->currentItem());
+            dynamic_cast<MidiKeyMapTreeWidgetItem*>(currentItem);
 
     if (keyItem) {
 
@@ -1544,6 +1529,113 @@ BankEditorDialog::slotPaste()
 
         return;
     }
+
+    // Device
+
+    const MidiDeviceTreeWidgetItem *deviceItem =
+            dynamic_cast<const MidiDeviceTreeWidgetItem *>(currentItem);
+
+    if (deviceItem) {
+        // Add the clipboard item to the device.
+
+        if (m_clipboard.itemType == ItemType::BANK) {
+
+            const MidiDevice *destDevice = deviceItem->getDevice();
+            if (!destDevice)
+                return;
+
+            // Check for msb/lsb/percussion conflicts and resolve.
+
+            const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(
+                    m_studio->getDevice(m_clipboard.deviceId));
+            if (!sourceMidiDevice)
+                return;
+
+            const BankList &sourceBankList = sourceMidiDevice->getBanks();
+
+            // Make a copy so we can modify the name if needed.
+            MidiBank sourceBank = sourceBankList[m_clipboard.bank];
+
+            BankList destBankList = destDevice->getBanks();
+
+            bool haveConflict{false};
+            std::string conflictName;
+
+            // See if the clipboard (source) MIDI bank is already in the
+            // destination device.
+            for (const MidiBank &midiBank : destBankList) {
+                // if this bank matches sourceBank, we have a conflict.
+                if (midiBank.compareKey(sourceBank)) {
+                    haveConflict = true;
+                    conflictName = midiBank.getName();
+                    break;
+                }
+            }
+
+            if (haveConflict) {
+                QMessageBox::critical(
+                        this,
+                        tr("Rosegarden"),
+                        tr("Unable to paste.\n"
+                           "Destination device already has a bank for\n"
+                           "%1:%2:%3 (%4)").arg(sourceBank.getMSB()).
+                                            arg(sourceBank.getLSB()).
+                                            arg(sourceBank.isPercussion()).
+                                            arg(strtoqstr(conflictName)));
+                return;
+            }
+
+            // Assemble the new program list.
+
+            // Get the full program and bank list for the destination device.
+            const ProgramList &originalPrograms = destDevice->getPrograms();
+
+            ProgramList newPrograms;
+
+            // Copy original programs to newPrograms.
+
+            for (const MidiProgram &program : originalPrograms) {
+                newPrograms.push_back(program);
+            }
+
+            // Add the clipboard programs to newPrograms.
+
+            const ProgramList &sourcePrograms = sourceMidiDevice->getPrograms();
+
+            // For each program from the source Device...
+            for (const MidiProgram &program : sourcePrograms) {
+                // If this is the bank from the clipboard, add it to newPrograms.
+                if (program.getBank().compareKey(sourceBank))
+                    newPrograms.push_back(program);
+            }
+
+            // Add the bank to the bank list.
+
+            // Make sure the name doesn't conflict with any names in the
+            // destination Device.
+            const QString newBankName = makeUniqueBankName(
+                    strtoqstr(sourceBank.getName()), destBankList);
+            sourceBank.setName(qstrtostr(newBankName));
+
+            destBankList.push_back(sourceBank);
+
+            // Modify the Device.
+
+            ModifyDeviceCommand *command = makeCommand(tr("paste bank"));
+            if (!command)
+                return;
+            command->setProgramList(newPrograms);
+            command->setBankList(destBankList);
+            CommandHistory::getInstance()->addCommand(command);
+
+            return;
+        }
+
+        if (m_clipboard.itemType == ItemType::KEYMAP) {
+            // ??? Implement like bank above.
+        }
+    }
+
 }
 
 void BankEditorDialog::slotEditLibrarian()
