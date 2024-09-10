@@ -210,7 +210,7 @@ BankEditorDialog::~BankEditorDialog()
         m_studio->removeObserver(this);
     }
 
-    // Unsubscribe from Device(s) unsubscribe
+    // Unsubscribe from Device(s)
     for (Device *device : m_observedDevices) {
         unobserveDevice(device);
     }
@@ -1776,15 +1776,6 @@ BankEditorDialog::slotExport()
 
     const QFileInfo info(name);
 
-    // ??? Is this even possible?  I thought file save dialogs avoided this?
-    if (info.isDir()) {
-        QMessageBox::warning(
-                this,  // parent
-                tr("Rosegarden"),  // title
-                tr("You have specified a directory"));  // text
-        return;
-    }
-
     if (info.exists()) {
         const int overwrite = QMessageBox::question(
                 this,  // parent
@@ -1845,22 +1836,6 @@ BankEditorDialog::slotFileClose()
 {
     RG_DEBUG << "slotFileClose()";
 
-    // ??? The dtor already does some of this.  Is that redundant?  Can
-    //     we rely on the dtor to take care of this?  I would assume so.
-
-    // Remove Studio observer.
-    if (m_observingStudio) {
-        m_observingStudio = false;
-        m_studio->removeObserver(this);
-    }
-
-    // Remove Device observer.
-    for (Device *device : m_observedDevices) {
-        unobserveDevice(device);
-    }
-
-    m_doc = nullptr;
-
     // Close the window.
     close();
 }
@@ -1872,7 +1847,6 @@ BankEditorDialog::closeEvent(QCloseEvent *e)
 
     QMainWindow::closeEvent(e);
 }
-
 
 void
 BankEditorDialog::slotHelpRequested()
