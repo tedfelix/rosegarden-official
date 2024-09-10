@@ -206,7 +206,7 @@ private:
     static QString makeUniqueBankName(const QString &name,
                                const BankList &banks);
     /// Handle key map name conflicts by adding "_1".
-    static QString makeUniqueKeymapName(const QString &name,
+    static QString makeUniqueKeyMapName(const QString &name,
                                  const KeyMappingList &keymaps);
 
     /// Identify Tracks using a bank to avoid deleting banks that are in use.

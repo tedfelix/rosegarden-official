@@ -1020,7 +1020,7 @@ BankEditorDialog::slotItemChanged(QTreeWidgetItem *item, int /* column */)
         KeyMappingList keyMapList = device->getKeyMappings();
 
         // Make sure the new name is unique.
-        const QString uniqueName = makeUniqueKeymapName(label, keyMapList);
+        const QString uniqueName = makeUniqueKeyMapName(label, keyMapList);
 
         // Let updateDialog() know it should select the item with this new name.
         m_selectionName = uniqueName;
@@ -1103,7 +1103,7 @@ QString BankEditorDialog::makeUniqueBankName(const QString &name,
     return uniqueName;
 }
 
-QString BankEditorDialog::makeUniqueKeymapName(const QString &name,
+QString BankEditorDialog::makeUniqueKeyMapName(const QString &name,
                                                const KeyMappingList &keyMaps)
 {
     QString uniqueName = name;
@@ -1352,6 +1352,9 @@ BankEditorDialog::slotCopy()
 void
 BankEditorDialog::slotPaste()
 {
+    // ??? Big routine.  Slice into pieces.  And since the *Item classes
+    //     are aware of the tree, perhaps move them there?
+
     QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
 
     // Bank
@@ -1460,12 +1463,7 @@ BankEditorDialog::slotPaste()
         if (m_clipboard.itemType != ItemType::KEYMAP)
             return;
 
-        RG_DEBUG << "slotEditPaste() paste keymap";
-
         // Find the source key map.
-
-        const MidiDevice *device = keyItem->getDevice();
-        const KeyMappingList &keyMapList = device->getKeyMappings();
 
         const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
         if (!sourceDevice)
@@ -1487,23 +1485,27 @@ BankEditorDialog::slotPaste()
             }
         }
 
-        RG_DEBUG << "slotEditPaste() sourceIndex" << sourceIndex;
-
         // Not found?  Bail.
         if (sourceIndex == -1)
             return;
 
-        // Combine the key maps from the destination with the key map
-        // from the clipboard.
-
         // Make a copy so we can modify it.
         MidiKeyMapping sourceMap = sourceKeyMapList[sourceIndex];
+
+        // Combine the key maps from the destination with the key map
+        // from the clipboard.
 
         // Name of the key map in the destination that we are going to clobber.
         const std::string selectedKeyItemName = qstrtostr(keyItem->getName());
 
         // keep the old name
         sourceMap.setName(selectedKeyItemName);
+
+        const MidiDevice *device = keyItem->getDevice();
+        if (!device)
+            return;
+
+        const KeyMappingList &keyMapList = device->getKeyMappings();
 
         KeyMappingList newKeymapList;
 
@@ -1544,7 +1546,7 @@ BankEditorDialog::slotPaste()
             if (!destDevice)
                 return;
 
-            // Check for msb/lsb/percussion conflicts and resolve.
+            // Check for msb/lsb/percussion conflicts and notify.
 
             const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(
                     m_studio->getDevice(m_clipboard.deviceId));
@@ -1573,6 +1575,8 @@ BankEditorDialog::slotPaste()
             }
 
             if (haveConflict) {
+                // The other option would be to automatically pick a
+                // non-conflicting key.
                 QMessageBox::critical(
                         this,
                         tr("Rosegarden"),
@@ -1632,7 +1636,60 @@ BankEditorDialog::slotPaste()
         }
 
         if (m_clipboard.itemType == ItemType::KEYMAP) {
-            // ??? Implement like bank above.
+
+            // Find the source key map.
+
+            const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
+            if (!sourceDevice)
+                return;
+
+            const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
+            if (!sourceMidiDevice)
+                return;
+
+            const KeyMappingList &sourceKeyMapList = sourceMidiDevice->getKeyMappings();
+
+            // Find the source key map by name.
+            int sourceIndex = -1;
+            for (size_t i = 0; i < sourceKeyMapList.size(); ++i) {
+                if (sourceKeyMapList[i].getName() ==
+                            qstrtostr(m_clipboard.keymapName)) {
+                    sourceIndex = i;
+                    break;
+                }
+            }
+
+            // Not found?  Bail.
+            if (sourceIndex == -1)
+                return;
+
+            const MidiDevice *destDevice = deviceItem->getDevice();
+            if (!destDevice)
+                return;
+
+            // Make a copy of the key map so we can change the name if needed.
+            MidiKeyMapping sourceMap = sourceKeyMapList[sourceIndex];
+
+            // Make a copy of the key map list so we can change the name.
+            KeyMappingList destKeyMapList = destDevice->getKeyMappings();
+
+            // Make sure the name doesn't conflict with any names in the
+            // destination Device.
+            const QString newKeyMapName = makeUniqueKeyMapName(
+                    strtoqstr(sourceMap.getName()), destKeyMapList);
+            sourceMap.setName(qstrtostr(newKeyMapName));
+
+            destKeyMapList.push_back(sourceMap);
+
+            // Add to destination.
+
+            ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
+            if (!command)
+                return;
+            command->setKeyMappingList(destKeyMapList);
+            CommandHistory::getInstance()->addCommand(command);
+
+            return;
         }
     }
 
