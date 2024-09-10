@@ -1365,21 +1365,23 @@ BankEditorDialog::slotPaste()
     if (bankItem) {
 
         // Bank must be pasted over top of an existing bank.
+        // ??? Silent failure is not good.  How about falling back on paste
+        //     into Device?
         if (m_clipboard.itemType != ItemType::BANK)
             return;
 
         // Remove the bank we are pasting over top of.
 
-        const MidiDevice *device = bankItem->getDevice();
-        if (!device)
+        const MidiDevice *destDevice = bankItem->getDevice();
+        if (!destDevice)
             return;
 
-        const BankList oldBankList = device->getBanks();
+        const BankList oldBankList = destDevice->getBanks();
 
         const MidiBank currentBank = oldBankList[bankItem->getBank()];
 
         // Get the full program and bank list for the destination device.
-        const ProgramList &oldPrograms = device->getPrograms();
+        const ProgramList &oldPrograms = destDevice->getPrograms();
 
         ProgramList newPrograms;
 
@@ -1460,6 +1462,8 @@ BankEditorDialog::slotPaste()
     if (keyItem) {
 
         // Key map must be pasted over top of an existing key map.
+        // ??? Silent failure is not good.  How about falling back on paste
+        //     into Device?
         if (m_clipboard.itemType != ItemType::KEYMAP)
             return;
 
@@ -1501,11 +1505,11 @@ BankEditorDialog::slotPaste()
         // keep the old name
         sourceMap.setName(selectedKeyItemName);
 
-        const MidiDevice *device = keyItem->getDevice();
-        if (!device)
+        const MidiDevice *destDevice = keyItem->getDevice();
+        if (!destDevice)
             return;
 
-        const KeyMappingList &keyMapList = device->getKeyMappings();
+        const KeyMappingList &keyMapList = destDevice->getKeyMappings();
 
         KeyMappingList newKeymapList;
 
@@ -1663,6 +1667,8 @@ BankEditorDialog::slotPaste()
             if (sourceIndex == -1)
                 return;
 
+            // Add to the key map list.
+
             const MidiDevice *destDevice = deviceItem->getDevice();
             if (!destDevice)
                 return;
@@ -1681,7 +1687,7 @@ BankEditorDialog::slotPaste()
 
             destKeyMapList.push_back(sourceMap);
 
-            // Add to destination.
+            // Modify the Device.
 
             ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
             if (!command)
