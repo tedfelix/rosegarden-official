@@ -53,6 +53,7 @@ class MidiKeyMappingEditor;
 class MidiDeviceTreeWidgetItem;
 class MidiDevice;
 class ModifyDeviceCommand;
+class MidiBankTreeWidgetItem;
 
 
 /// Manage MIDI Banks and Programs dialog
@@ -198,6 +199,7 @@ private:
         QString keymapName;
     };
     Clipboard m_clipboard;
+    bool pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem);
 
     /// Get first free bank to avoid conflicts.
     static void getFirstFreeBank(MidiDevice *device, MidiByte &msb, MidiByte &lsb);

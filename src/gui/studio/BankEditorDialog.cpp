@@ -1349,6 +1349,100 @@ BankEditorDialog::slotCopy()
     }
 }
 
+bool
+BankEditorDialog::pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem)
+{
+    // Bank must be pasted over top of an existing bank.
+    // ??? Silent failure is not good.  How about falling back on paste
+    //     into Device?
+    if (m_clipboard.itemType != ItemType::BANK)
+        return false;
+
+    // Remove the bank we are pasting over top of.
+
+    const MidiDevice *destDevice = bankItem->getDevice();
+    if (!destDevice)
+        return false;
+
+    const BankList oldBankList = destDevice->getBanks();
+
+    const MidiBank currentBank = oldBankList[bankItem->getBank()];
+
+    // Get the full program and bank list for the destination device.
+    const ProgramList &oldPrograms = destDevice->getPrograms();
+
+    ProgramList newPrograms;
+
+    RG_DEBUG << "slotEditPaste() copying programs we will keep";
+
+    // Copy the programs we will be keeping from oldPrograms to
+    // newPrograms.
+    for (ProgramList::const_iterator it = oldPrograms.begin();
+         it != oldPrograms.end();
+         ++it) {
+
+        RG_DEBUG << "slotEditPaste() check remove program" << (*it).getName();
+
+        // If this isn't one we need to remove, copy it to newPrograms.
+        if (!(it->getBank().compareKey(currentBank))) {
+
+            RG_DEBUG << "slotEditPaste() add program" << (*it).getName();
+
+            newPrograms.push_back(*it);
+        }
+    }
+
+    // Add the programs from the clipboard to newPrograms.
+
+    const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
+    if (!sourceDevice)
+        return false;
+
+    const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
+    if (!sourceMidiDevice)
+        return false;
+
+    const BankList &sourceBankList = sourceMidiDevice->getBanks();
+
+    const MidiBank &sourceBank = sourceBankList[m_clipboard.bank];
+
+    const ProgramList &sourcePrograms = sourceMidiDevice->getPrograms();
+
+    RG_DEBUG << "slotEditPaste copy programs";
+
+    // For each program from the clipboard...
+    for (ProgramList::const_iterator it = sourcePrograms.begin();
+         it != sourcePrograms.end();
+         ++it) {
+
+        RG_DEBUG << "slotEditPaste check copy program" << (*it).getName();
+
+        // If this is a bank from the clipboard...
+        if (it->getBank().compareKey(sourceBank)) {
+
+            RG_DEBUG << "slotEditPaste copy program" << (*it).getName();
+
+            // Assemble program for the destination (current) bank.
+            const MidiProgram copyProgram(currentBank,
+                                          it->getProgram(),
+                                          it->getName());
+
+            newPrograms.push_back(copyProgram);
+        }
+    }
+
+    // Modify the Device.
+
+    ModifyDeviceCommand *command = makeCommand(tr("paste bank"));
+    if (!command)
+        return false;
+    command->setProgramList(newPrograms);
+    CommandHistory::getInstance()->addCommand(command);
+
+    // Success
+    return true;
+}
+
 void
 BankEditorDialog::slotPaste()
 {
@@ -1363,94 +1457,7 @@ BankEditorDialog::slotPaste()
             dynamic_cast<const MidiBankTreeWidgetItem *>(currentItem);
 
     if (bankItem) {
-
-        // Bank must be pasted over top of an existing bank.
-        // ??? Silent failure is not good.  How about falling back on paste
-        //     into Device?
-        if (m_clipboard.itemType != ItemType::BANK)
-            return;
-
-        // Remove the bank we are pasting over top of.
-
-        const MidiDevice *destDevice = bankItem->getDevice();
-        if (!destDevice)
-            return;
-
-        const BankList oldBankList = destDevice->getBanks();
-
-        const MidiBank currentBank = oldBankList[bankItem->getBank()];
-
-        // Get the full program and bank list for the destination device.
-        const ProgramList &oldPrograms = destDevice->getPrograms();
-
-        ProgramList newPrograms;
-
-        RG_DEBUG << "slotEditPaste() copying programs we will keep";
-
-        // Copy the programs we will be keeping from oldPrograms to
-        // newPrograms.
-        for (ProgramList::const_iterator it = oldPrograms.begin();
-             it != oldPrograms.end();
-             ++it) {
-
-            RG_DEBUG << "slotEditPaste() check remove program" << (*it).getName();
-
-            // If this isn't one we need to remove, copy it to newPrograms.
-            if (!(it->getBank().compareKey(currentBank))) {
-
-                RG_DEBUG << "slotEditPaste() add program" << (*it).getName();
-
-                newPrograms.push_back(*it);
-            }
-        }
-
-        // Add the programs from the clipboard to newPrograms.
-
-        const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
-        if (!sourceDevice)
-            return;
-
-        const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
-        if (!sourceMidiDevice)
-            return;
-
-        const BankList &sourceBankList = sourceMidiDevice->getBanks();
-
-        const MidiBank &sourceBank = sourceBankList[m_clipboard.bank];
-
-        const ProgramList &sourcePrograms = sourceMidiDevice->getPrograms();
-
-        RG_DEBUG << "slotEditPaste copy programs";
-
-        // For each program from the clipboard...
-        for (ProgramList::const_iterator it = sourcePrograms.begin();
-             it != sourcePrograms.end();
-             ++it) {
-
-            RG_DEBUG << "slotEditPaste check copy program" << (*it).getName();
-
-            // If this is a bank from the clipboard...
-            if (it->getBank().compareKey(sourceBank)) {
-
-                RG_DEBUG << "slotEditPaste copy program" << (*it).getName();
-
-                // Assemble program for the destination (current) bank.
-                const MidiProgram copyProgram(currentBank,
-                                              it->getProgram(),
-                                              it->getName());
-
-                newPrograms.push_back(copyProgram);
-            }
-        }
-
-        // Modify the Device.
-
-        ModifyDeviceCommand *command = makeCommand(tr("paste bank"));
-        if (!command)
-            return;
-        command->setProgramList(newPrograms);
-        CommandHistory::getInstance()->addCommand(command);
-
+        pasteBankOverBank(bankItem);
         return;
     }
 
