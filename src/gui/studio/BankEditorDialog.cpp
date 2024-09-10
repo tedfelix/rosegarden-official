@@ -108,7 +108,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_treeWidget->setRootIsDecorated(true);
     m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    // ??? Ok, but why is the tree always sorted backwards?
+    m_treeWidget->sortItems(0, Qt::AscendingOrder);
     m_treeWidget->setSortingEnabled(true);
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
             this, &BankEditorDialog::slotEdit);
