@@ -203,6 +203,8 @@ private:
     bool pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem);
     bool pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem);
     void pasteBankIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem);
+    void pasteKeyMapIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem);
+
 
     /// Get first free bank to avoid conflicts.
     static void getFirstFreeBank(MidiDevice *device, MidiByte &msb, MidiByte &lsb);

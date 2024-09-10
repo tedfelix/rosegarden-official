@@ -1617,6 +1617,64 @@ BankEditorDialog::pasteBankIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem
 }
 
 void
+BankEditorDialog::pasteKeyMapIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem)
+{
+    // Find the source key map.
+
+    const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
+    if (!sourceDevice)
+        return;
+
+    const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
+    if (!sourceMidiDevice)
+        return;
+
+    const KeyMappingList &sourceKeyMapList = sourceMidiDevice->getKeyMappings();
+
+    // Find the source key map by name.
+    int sourceIndex = -1;
+    for (size_t i = 0; i < sourceKeyMapList.size(); ++i) {
+        if (sourceKeyMapList[i].getName() ==
+                    qstrtostr(m_clipboard.keymapName)) {
+            sourceIndex = i;
+            break;
+        }
+    }
+
+    // Not found?  Bail.
+    if (sourceIndex == -1)
+        return;
+
+    // Add to the key map list.
+
+    const MidiDevice *destDevice = deviceItem->getDevice();
+    if (!destDevice)
+        return;
+
+    // Make a copy of the key map so we can change the name if needed.
+    MidiKeyMapping sourceMap = sourceKeyMapList[sourceIndex];
+
+    // Make a copy of the key map list so we can change the name.
+    KeyMappingList destKeyMapList = destDevice->getKeyMappings();
+
+    // Make sure the name doesn't conflict with any names in the
+    // destination Device.
+    const QString newKeyMapName = makeUniqueKeyMapName(
+            strtoqstr(sourceMap.getName()), destKeyMapList);
+    sourceMap.setName(qstrtostr(newKeyMapName));
+
+    destKeyMapList.push_back(sourceMap);
+
+    // Modify the Device.
+
+    ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
+    if (!command)
+        return;
+    command->setKeyMappingList(destKeyMapList);
+    CommandHistory::getInstance()->addCommand(command);
+}
+
+void
 BankEditorDialog::slotPaste()
 {
     // ??? Big routine.  Slice into pieces.  And since the *Item classes
@@ -1658,61 +1716,7 @@ BankEditorDialog::slotPaste()
         }
 
         if (m_clipboard.itemType == ItemType::KEYMAP) {
-
-            // Find the source key map.
-
-            const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
-            if (!sourceDevice)
-                return;
-
-            const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
-            if (!sourceMidiDevice)
-                return;
-
-            const KeyMappingList &sourceKeyMapList = sourceMidiDevice->getKeyMappings();
-
-            // Find the source key map by name.
-            int sourceIndex = -1;
-            for (size_t i = 0; i < sourceKeyMapList.size(); ++i) {
-                if (sourceKeyMapList[i].getName() ==
-                            qstrtostr(m_clipboard.keymapName)) {
-                    sourceIndex = i;
-                    break;
-                }
-            }
-
-            // Not found?  Bail.
-            if (sourceIndex == -1)
-                return;
-
-            // Add to the key map list.
-
-            const MidiDevice *destDevice = deviceItem->getDevice();
-            if (!destDevice)
-                return;
-
-            // Make a copy of the key map so we can change the name if needed.
-            MidiKeyMapping sourceMap = sourceKeyMapList[sourceIndex];
-
-            // Make a copy of the key map list so we can change the name.
-            KeyMappingList destKeyMapList = destDevice->getKeyMappings();
-
-            // Make sure the name doesn't conflict with any names in the
-            // destination Device.
-            const QString newKeyMapName = makeUniqueKeyMapName(
-                    strtoqstr(sourceMap.getName()), destKeyMapList);
-            sourceMap.setName(qstrtostr(newKeyMapName));
-
-            destKeyMapList.push_back(sourceMap);
-
-            // Modify the Device.
-
-            ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
-            if (!command)
-                return;
-            command->setKeyMappingList(destKeyMapList);
-            CommandHistory::getInstance()->addCommand(command);
-
+            pasteKeyMapIntoDevice(deviceItem);
             return;
         }
     }
