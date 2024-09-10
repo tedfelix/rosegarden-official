@@ -1443,6 +1443,85 @@ BankEditorDialog::pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem)
     return true;
 }
 
+bool
+BankEditorDialog::pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem)
+{
+    // Key map must be pasted over top of an existing key map.
+    // ??? Silent failure is not good.  How about falling back on paste
+    //     into Device?
+    if (m_clipboard.itemType != ItemType::KEYMAP)
+        return false;
+
+    // Find the source key map.
+
+    const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
+    if (!sourceDevice)
+        return false;
+
+    const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
+    if (!sourceMidiDevice)
+        return false;
+
+    const KeyMappingList &sourceKeyMapList = sourceMidiDevice->getKeyMappings();
+
+    // Find the source key map by name.
+    int sourceIndex = -1;
+    for (size_t i = 0; i < sourceKeyMapList.size(); ++i) {
+        if (sourceKeyMapList[i].getName() ==
+                    qstrtostr(m_clipboard.keymapName)) {
+            sourceIndex = i;
+            break;
+        }
+    }
+
+    // Not found?  Bail.
+    if (sourceIndex == -1)
+        return false;
+
+    // Make a copy so we can modify it.
+    MidiKeyMapping sourceMap = sourceKeyMapList[sourceIndex];
+
+    // Combine the key maps from the destination with the key map
+    // from the clipboard.
+
+    // Name of the key map in the destination that we are going to clobber.
+    const std::string selectedKeyItemName = qstrtostr(keyItem->getName());
+
+    // keep the old name
+    sourceMap.setName(selectedKeyItemName);
+
+    const MidiDevice *destDevice = keyItem->getDevice();
+    if (!destDevice)
+        return false;
+
+    const KeyMappingList &keyMapList = destDevice->getKeyMappings();
+
+    KeyMappingList newKeymapList;
+
+    for (size_t i = 0; i < keyMapList.size(); ++i) {
+        // If this is the one we are pasting over top of, add the
+        // key map from the clipboard.
+        if (keyMapList[i].getName() == selectedKeyItemName) {
+            RG_DEBUG << "slotEditPaste() add new keymap" << i;
+            newKeymapList.push_back(sourceMap);
+        } else {  // Copy any key maps we are keeping from the destination.
+            RG_DEBUG << "slotEditPaste() add old keymap" << i;
+            newKeymapList.push_back(keyMapList[i]);
+        }
+    }
+
+    // Modify the Device.
+
+    ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
+    if (!command)
+        return false;
+    command->setKeyMappingList(newKeymapList);
+    CommandHistory::getInstance()->addCommand(command);
+
+    // Success
+    return true;
+}
+
 void
 BankEditorDialog::slotPaste()
 {
@@ -1467,79 +1546,7 @@ BankEditorDialog::slotPaste()
             dynamic_cast<MidiKeyMapTreeWidgetItem*>(currentItem);
 
     if (keyItem) {
-
-        // Key map must be pasted over top of an existing key map.
-        // ??? Silent failure is not good.  How about falling back on paste
-        //     into Device?
-        if (m_clipboard.itemType != ItemType::KEYMAP)
-            return;
-
-        // Find the source key map.
-
-        const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
-        if (!sourceDevice)
-            return;
-
-        const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
-        if (!sourceMidiDevice)
-            return;
-
-        const KeyMappingList &sourceKeyMapList = sourceMidiDevice->getKeyMappings();
-
-        // Find the source key map by name.
-        int sourceIndex = -1;
-        for (size_t i = 0; i < sourceKeyMapList.size(); ++i) {
-            if (sourceKeyMapList[i].getName() ==
-                        qstrtostr(m_clipboard.keymapName)) {
-                sourceIndex = i;
-                break;
-            }
-        }
-
-        // Not found?  Bail.
-        if (sourceIndex == -1)
-            return;
-
-        // Make a copy so we can modify it.
-        MidiKeyMapping sourceMap = sourceKeyMapList[sourceIndex];
-
-        // Combine the key maps from the destination with the key map
-        // from the clipboard.
-
-        // Name of the key map in the destination that we are going to clobber.
-        const std::string selectedKeyItemName = qstrtostr(keyItem->getName());
-
-        // keep the old name
-        sourceMap.setName(selectedKeyItemName);
-
-        const MidiDevice *destDevice = keyItem->getDevice();
-        if (!destDevice)
-            return;
-
-        const KeyMappingList &keyMapList = destDevice->getKeyMappings();
-
-        KeyMappingList newKeymapList;
-
-        for (size_t i = 0; i < keyMapList.size(); ++i) {
-            // If this is the one we are pasting over top of, add the
-            // key map from the clipboard.
-            if (keyMapList[i].getName() == selectedKeyItemName) {
-                RG_DEBUG << "slotEditPaste() add new keymap" << i;
-                newKeymapList.push_back(sourceMap);
-            } else {  // Copy any key maps we are keeping from the destination.
-                RG_DEBUG << "slotEditPaste() add old keymap" << i;
-                newKeymapList.push_back(keyMapList[i]);
-            }
-        }
-
-        // Modify the Device.
-
-        ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
-        if (!command)
-            return;
-        command->setKeyMappingList(newKeymapList);
-        CommandHistory::getInstance()->addCommand(command);
-
+        pasteKeyMapOverKeyMap(keyItem);
         return;
     }
 

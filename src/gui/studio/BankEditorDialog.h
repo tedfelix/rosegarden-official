@@ -54,6 +54,7 @@ class MidiDeviceTreeWidgetItem;
 class MidiDevice;
 class ModifyDeviceCommand;
 class MidiBankTreeWidgetItem;
+class MidiKeyMapTreeWidgetItem;
 
 
 /// Manage MIDI Banks and Programs dialog
@@ -200,6 +201,8 @@ private:
     };
     Clipboard m_clipboard;
     bool pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem);
+    bool pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem);
+
 
     /// Get first free bank to avoid conflicts.
     static void getFirstFreeBank(MidiDevice *device, MidiByte &msb, MidiByte &lsb);
