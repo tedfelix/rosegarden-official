@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[BankEditorDialog]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "BankEditorDialog.h"
 
@@ -108,6 +108,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_treeWidget->setRootIsDecorated(true);
     m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    // ??? Ok, but why is the tree always sorted backwards?
     m_treeWidget->setSortingEnabled(true);
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
             this, &BankEditorDialog::slotEdit);
@@ -527,7 +528,7 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
     if (keyItem) {
 
         findAction("edit_copy")->setEnabled(true);
-        findAction("edit_paste")->setEnabled(m_clipboard.itemType == ItemType::KEYMAP);
+        findAction("edit_paste")->setEnabled(true);
         findAction("edit_delete")->setEnabled(true);
 
         m_keyMappingEditor->populate(item);
@@ -550,7 +551,7 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
     if (bankItem) {
 
         findAction("edit_copy")->setEnabled(true);
-        findAction("edit_paste")->setEnabled(m_clipboard.itemType == ItemType::BANK);
+        findAction("edit_paste")->setEnabled(true);
         findAction("edit_delete")->setEnabled(true);
 
         m_programEditor->populate(item);
@@ -1349,20 +1350,17 @@ BankEditorDialog::slotCopy()
     }
 }
 
-bool
+void
 BankEditorDialog::pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem)
 {
-    // Bank must be pasted over top of an existing bank.
-    // ??? Silent failure is not good.  How about falling back on paste
-    //     into Device?
     if (m_clipboard.itemType != ItemType::BANK)
-        return false;
+        return;
 
     // Remove the bank we are pasting over top of.
 
     const MidiDevice *destDevice = bankItem->getDevice();
     if (!destDevice)
-        return false;
+        return;
 
     const BankList oldBankList = destDevice->getBanks();
 
@@ -1396,11 +1394,11 @@ BankEditorDialog::pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem)
 
     const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
     if (!sourceDevice)
-        return false;
+        return;
 
     const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
     if (!sourceMidiDevice)
-        return false;
+        return;
 
     const BankList &sourceBankList = sourceMidiDevice->getBanks();
 
@@ -1435,32 +1433,27 @@ BankEditorDialog::pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem)
 
     ModifyDeviceCommand *command = makeCommand(tr("paste bank"));
     if (!command)
-        return false;
+        return;
     command->setProgramList(newPrograms);
     CommandHistory::getInstance()->addCommand(command);
-
-    // Success
-    return true;
 }
 
-bool
+void
 BankEditorDialog::pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem)
 {
     // Key map must be pasted over top of an existing key map.
-    // ??? Silent failure is not good.  How about falling back on paste
-    //     into Device?
     if (m_clipboard.itemType != ItemType::KEYMAP)
-        return false;
+        return;
 
     // Find the source key map.
 
     const Device *sourceDevice = m_studio->getDevice(m_clipboard.deviceId);
     if (!sourceDevice)
-        return false;
+        return;
 
     const MidiDevice *sourceMidiDevice = dynamic_cast<const MidiDevice *>(sourceDevice);
     if (!sourceMidiDevice)
-        return false;
+        return;
 
     const KeyMappingList &sourceKeyMapList = sourceMidiDevice->getKeyMappings();
 
@@ -1476,7 +1469,7 @@ BankEditorDialog::pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem)
 
     // Not found?  Bail.
     if (sourceIndex == -1)
-        return false;
+        return;
 
     // Make a copy so we can modify it.
     MidiKeyMapping sourceMap = sourceKeyMapList[sourceIndex];
@@ -1492,7 +1485,7 @@ BankEditorDialog::pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem)
 
     const MidiDevice *destDevice = keyItem->getDevice();
     if (!destDevice)
-        return false;
+        return;
 
     const KeyMappingList &keyMapList = destDevice->getKeyMappings();
 
@@ -1514,18 +1507,16 @@ BankEditorDialog::pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem)
 
     ModifyDeviceCommand *command = makeCommand(tr("paste keymap"));
     if (!command)
-        return false;
+        return;
     command->setKeyMappingList(newKeymapList);
     CommandHistory::getInstance()->addCommand(command);
-
-    // Success
-    return true;
 }
 
 void
 BankEditorDialog::pasteBankIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem)
 {
-    const MidiDevice *destDevice = deviceItem->getDevice();
+    const MidiDevice *destDevice =
+            dynamic_cast<const MidiDevice *>(deviceItem->getDevice());
     if (!destDevice)
         return;
 
@@ -1647,7 +1638,8 @@ BankEditorDialog::pasteKeyMapIntoDevice(const MidiDeviceTreeWidgetItem *deviceIt
 
     // Add to the key map list.
 
-    const MidiDevice *destDevice = deviceItem->getDevice();
+    const MidiDevice *destDevice =
+            static_cast<const MidiDevice *>(deviceItem->getDevice());
     if (!destDevice)
         return;
 
@@ -1677,50 +1669,40 @@ BankEditorDialog::pasteKeyMapIntoDevice(const MidiDeviceTreeWidgetItem *deviceIt
 void
 BankEditorDialog::slotPaste()
 {
-    // ??? Big routine.  Slice into pieces.  And since the *Item classes
-    //     are aware of the tree, perhaps move them there?
+    QTreeWidgetItem * const currentItem = m_treeWidget->currentItem();
 
-    QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
-
-    // Bank
-
+    // Bank Over Bank
     const MidiBankTreeWidgetItem *bankItem =
             dynamic_cast<const MidiBankTreeWidgetItem *>(currentItem);
-
-    if (bankItem) {
+    if (bankItem  &&  m_clipboard.itemType == ItemType::BANK) {
         pasteBankOverBank(bankItem);
         return;
     }
 
-    // Key Map
-
+    // Key Map Over Key Map
     const MidiKeyMapTreeWidgetItem *keyItem =
-            dynamic_cast<MidiKeyMapTreeWidgetItem*>(currentItem);
-
-    if (keyItem) {
+            dynamic_cast<const MidiKeyMapTreeWidgetItem *>(currentItem);
+    if (keyItem  &&  m_clipboard.itemType == ItemType::KEYMAP) {
         pasteKeyMapOverKeyMap(keyItem);
         return;
     }
 
-    // Device
+    RG_DEBUG << "slotPaste(): Attempting to paste into device...";
 
+    // Paste into Device
     const MidiDeviceTreeWidgetItem *deviceItem =
-            dynamic_cast<const MidiDeviceTreeWidgetItem *>(currentItem);
-
+            dynamic_cast<const MidiDeviceTreeWidgetItem *>(
+                    getParentDeviceItem(currentItem));
     if (deviceItem) {
-        // Add the clipboard item to the device.
-
         if (m_clipboard.itemType == ItemType::BANK) {
             pasteBankIntoDevice(deviceItem);
             return;
         }
-
         if (m_clipboard.itemType == ItemType::KEYMAP) {
             pasteKeyMapIntoDevice(deviceItem);
             return;
         }
     }
-
 }
 
 void BankEditorDialog::slotEditLibrarian()

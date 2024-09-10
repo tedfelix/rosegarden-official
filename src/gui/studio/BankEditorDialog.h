@@ -200,8 +200,8 @@ private:
         QString keymapName;
     };
     Clipboard m_clipboard;
-    bool pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem);
-    bool pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem);
+    void pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem);
+    void pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem);
     void pasteBankIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem);
     void pasteKeyMapIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem);
 
