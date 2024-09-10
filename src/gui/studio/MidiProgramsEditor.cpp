@@ -21,14 +21,11 @@
 #include "MidiProgramsEditor.h"
 
 #include "MidiBankTreeWidgetItem.h"
-#include "NameSetEditor.h"
 #include "BankEditorDialog.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "base/Device.h"
 #include "base/MidiDevice.h"
-#include "base/MidiProgram.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/general/IconLoader.h"
 #include "commands/studio/ModifyDeviceCommand.h"
@@ -39,14 +36,12 @@
 #include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
-#include <QPixmap>
 #include <QIcon>
 #include <QPoint>
 #include <QMenu>
 #include <QSpinBox>
 #include <QString>
 #include <QToolButton>
-#include <QTreeWidgetItem>
 
 #include <algorithm>  // std::sort
 #include <string>
@@ -82,24 +77,24 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
                   parent,
                   true)  // showKeyMapButtons
 {
-    QFrame *frame = new QFrame(m_topFrame);
-    frame->setContentsMargins(0, 0, 0, 0);
+    QWidget *topWidget = new QWidget(m_topFrame);
+    topWidget->setContentsMargins(0, 0, 0, 0);
 
-    QGridLayout *gridLayout = new QGridLayout(frame);
+    QGridLayout *gridLayout = new QGridLayout(topWidget);
     gridLayout->setSpacing(0);
 
     // Percussion
-    gridLayout->addWidget(new QLabel(tr("Percussion"), frame),
+    gridLayout->addWidget(new QLabel(tr("Percussion"), topWidget),
                           0, 0, Qt::AlignLeft);
-    m_percussion = new QCheckBox(frame);
+    m_percussion = new QCheckBox(topWidget);
     connect(m_percussion, &QAbstractButton::clicked,
             this, &MidiProgramsEditor::slotPercussionClicked);
     gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
 
     // MSB Value
-    gridLayout->addWidget(new QLabel(tr("MSB Value"), frame),
+    gridLayout->addWidget(new QLabel(tr("MSB Value"), topWidget),
                           1, 0, Qt::AlignLeft);
-    m_msb = new QSpinBox(frame);
+    m_msb = new QSpinBox(topWidget);
     m_msb->setToolTip(tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
     m_msb->setMinimum(0);
     m_msb->setMaximum(127);
@@ -110,9 +105,9 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
     gridLayout->addWidget(m_msb, 1, 1, Qt::AlignLeft);
 
     // LSB Value
-    gridLayout->addWidget(new QLabel(tr("LSB Value"), frame),
+    gridLayout->addWidget(new QLabel(tr("LSB Value"), topWidget),
                           2, 0, Qt::AlignLeft);
-    m_lsb = new QSpinBox(frame);
+    m_lsb = new QSpinBox(topWidget);
     m_lsb->setToolTip(tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
     m_lsb->setMinimum(0);
     m_lsb->setMaximum(127);
@@ -122,12 +117,12 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
             this, &MidiProgramsEditor::slotNewLSB);
     gridLayout->addWidget(m_lsb, 2, 1, Qt::AlignLeft);
 
-    m_topLayout->addWidget(frame, 0, 0, 3, 3);
+    m_topLayout->addWidget(topWidget, 0, 0, 3, 3);
 }
 
-void MidiProgramsEditor::changeBank(ProgramList& programList,
-                                        const MidiBank &oldBank,
-                                        const MidiBank &newBank)
+void MidiProgramsEditor::changeBank(ProgramList &programList,
+                                    const MidiBank &oldBank,
+                                    const MidiBank &newBank)
 {
     // For each program in programList...
     for (MidiProgram &program : programList) {
@@ -144,27 +139,30 @@ void
 MidiProgramsEditor::clearAll()
 {
     RG_DEBUG << "clearAll";
+
+    // ??? This string is duplicated in the ctor.  Why?
     setTitle(tr("Bank and Program details"));
 
-    // block signals so the slots do not fire
-    m_percussion->blockSignals(true);
-    m_msb->blockSignals(true);
-    m_lsb->blockSignals(true);
-
     m_percussion->setChecked(false);
-    m_msb->setValue(0);
-    m_lsb->setValue(0);
 
-    // unblock signals
-    m_percussion->blockSignals(false);
+    // setValue() emits valueChanged().
+    m_msb->blockSignals(true);
+    m_msb->setValue(0);
     m_msb->blockSignals(false);
+
+    // setValue() emits valueChanged().
+    m_lsb->blockSignals(true);
+    m_lsb->setValue(0);
     m_lsb->blockSignals(false);
 
-    m_currentBank = MidiBank(0, 0, false, "");
+    m_currentBank = MidiBank();
 
     m_librarian->clear();
     m_librarianEmail->clear();
 
+    // Clear all name fields.
+    // ??? Seems like the baseclass (NameSetEditor) should offer this.
+    //     clearNames().  Or maybe an override-able clearAll()?
     for (size_t i = 0; i < m_names.size(); ++i)
         m_names[i]->clear();
 
@@ -191,23 +189,19 @@ MidiProgramsEditor::populate(const MidiBankTreeWidgetItem *bankItem)
 
     setTitle(bankItem->text(0));
 
-    // block signals so the slots do not fire
-    m_percussion->blockSignals(true);
-    m_msb->blockSignals(true);
-    m_lsb->blockSignals(true);
-
     // Percussion
     m_percussion->setChecked(m_currentBank.isPercussion());
 
     // MSB Value
+    // setValue() emits valueChanged().
+    m_msb->blockSignals(true);
     m_msb->setValue(m_currentBank.getMSB());
+    m_msb->blockSignals(false);
 
     // LSB Value
+    // setValue() emits valueChanged().
+    m_lsb->blockSignals(true);
     m_lsb->setValue(m_currentBank.getLSB());
-
-    // unblock signals
-    m_percussion->blockSignals(false);
-    m_msb->blockSignals(false);
     m_lsb->blockSignals(false);
 
     // Provided By
@@ -227,6 +221,7 @@ MidiProgramsEditor::populate(const MidiBankTreeWidgetItem *bankItem)
 
         QToolButton *keyMapButton = getKeyMapButton(programIndex);
         keyMapButton->setMaximumHeight(12);
+        // No sense enabling the button if there is nothing to select.
         keyMapButton->setEnabled(haveKeyMappings);
 
         bool found = false;
@@ -234,10 +229,12 @@ MidiProgramsEditor::populate(const MidiBankTreeWidgetItem *bankItem)
 
         // Find the program
         for (const MidiProgram &midiProgram : programList) {
-            if (! m_currentBank.compareKey(midiProgram.getBank())) continue;
+            // Not it?  Try the next.
+            if (!m_currentBank.compareKey(midiProgram.getBank()))
+                continue;
 
-            if (midiProgram.getProgram() == programIndex) {
             // Found?  We're done.
+            if (midiProgram.getProgram() == programIndex) {
                 found = true;
                 foundProgram = midiProgram;
                 break;
@@ -261,7 +258,7 @@ MidiProgramsEditor::populate(const MidiBankTreeWidgetItem *bankItem)
         // Show start of label.
         m_names[programIndex]->setCursorPosition(0);
 
-        // Icon and ToolTip
+        // Key map icon and ToolTip
 
         const MidiKeyMapping *midiKeyMapping =
                 m_device->getKeyMappingForProgram(foundProgram);
@@ -295,21 +292,26 @@ MidiProgramsEditor::slotPercussionClicked()
                      lsb,
                      m_currentBank.getName());
 
-    // Make sure the programs have the new percussion setting.
-    ProgramList programList = m_device->getPrograms();
-    changeBank(programList, m_currentBank, newBank);
+    // Create a new program list with the new percussion setting.
+
+    ProgramList newProgramList = m_device->getPrograms();
+    changeBank(newProgramList, m_currentBank, newBank);
+
+    // Create a new bank list with the new percussion setting.
+
+    const BankList &oldBankList = m_device->getBanks();
+    BankList newBankList;
+    for (size_t i = 0; i < oldBankList.size(); ++i) {
+        if (oldBankList[i] == m_currentBank) newBankList.push_back(newBank);
+        else newBankList.push_back(oldBankList[i]);
+    }
+
+    // Modify the Device.
 
     ModifyDeviceCommand *command =
         m_bankEditor->makeCommand(tr("toggle bank percussion"));
-
-    const BankList banks = m_device->getBanks();
-    BankList newBanks;
-    for (size_t i = 0; i < banks.size(); ++i) {
-        if (banks[i] == m_currentBank) newBanks.push_back(newBank);
-        else newBanks.push_back(banks[i]);
-    }
-    command->setBankList(newBanks);
-    command->setProgramList(programList);
+    command->setBankList(newBankList);
+    command->setProgramList(newProgramList);
     CommandHistory::getInstance()->addCommand(command);
 
     // and update the current bank
@@ -325,7 +327,8 @@ MidiProgramsEditor::slotNewMSB(int value)
     MidiByte msb = value;
     MidiByte lsb = m_currentBank.getLSB();
 
-    makeUnique(isPercussion, msb, lsb, true);
+    makeUnique(isPercussion, msb, lsb,
+               true);  // preferLSBChange
 
     MidiBank newBank(isPercussion,
                      msb,
@@ -335,6 +338,7 @@ MidiProgramsEditor::slotNewMSB(int value)
     ProgramList programList = m_device->getPrograms();
     changeBank(programList, m_currentBank, newBank);
 
+    // setValue() emits valueChanged().
     m_msb->blockSignals(true);
     m_msb->setValue(msb);
     m_msb->blockSignals(false);
@@ -365,7 +369,8 @@ MidiProgramsEditor::slotNewLSB(int value)
     MidiByte msb = m_currentBank.getMSB();
     MidiByte lsb = value;
 
-    makeUnique(isPercussion, msb, lsb, false);
+    makeUnique(isPercussion, msb, lsb,
+               false);  // preferLSBChange
 
     MidiBank newBank(isPercussion,
                      msb,
@@ -375,6 +380,7 @@ MidiProgramsEditor::slotNewLSB(int value)
     ProgramList programList = m_device->getPrograms();
     changeBank(programList, m_currentBank, newBank);
 
+    // setValue() emits valueChanged().
     m_lsb->blockSignals(true);
     m_lsb->setValue(lsb);
     m_lsb->blockSignals(false);

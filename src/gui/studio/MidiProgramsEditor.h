@@ -109,7 +109,7 @@ private:
      * Used by slotKeyMapMenuItemSelected() to make sure the keymap
      * selection ends up associated with the right program.
      */
-    unsigned int m_keyMapProgramNumber;
+    unsigned int m_keyMapProgramNumber{0};
 
     /// Ensure the msb:lsb:perc combination is unique to m_device.
     void makeUnique(bool &isPercussion,
