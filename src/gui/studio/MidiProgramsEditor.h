@@ -18,7 +18,7 @@
 #ifndef RG_MIDIPROGRAMSEDITOR_H
 #define RG_MIDIPROGRAMSEDITOR_H
 
-#include "base/MidiProgram.h"  // BankList, ProgramList
+#include "base/MidiProgram.h"  // MidiBank
 #include "NameSetEditor.h"
 
 class QWidget;
@@ -34,6 +34,7 @@ namespace Rosegarden
 
 class MidiDevice;
 class BankEditorDialog;
+class MidiBankTreeWidgetItem;
 
 
 class MidiProgramsEditor : public NameSetEditor
@@ -47,13 +48,13 @@ public:
 
     /// Switch to the cleared and disabled state.
     /**
-     * Called at the end of populateDeviceEditors() if no valid
+     * Called at the end of BankEditorDialog::updateEditor() if no valid
      * bank or program is selected in the tree.
      */
     void clearAll();
 
     /// Show the programs for the selected bank.
-    void populate(QTreeWidgetItem *);
+    void populate(const MidiBankTreeWidgetItem *bankItem);
 
 private slots:
 
@@ -81,24 +82,28 @@ private:
     // Banks
 
     /// The bank we are editing right now.
+    /**
+     * We edit the bank in place here, then commit the changes in
+     * slotEditingFinished().
+     */
     MidiBank m_currentBank;
 
-    /// Get a pointer into a program list.
-    const MidiProgram *getProgram(const ProgramList& programList,
-                                  const MidiBank &bank,
-                                  int programNo);
-    /// Get an iterator which is more flexible.
-    ProgramList::iterator getProgramIter(ProgramList& programList,
-                                         const MidiBank &bank,
-                                         int programNo);
-    /// Update the programlist programs to new bank
-    void updatePrograms(ProgramList& programList,
-                        const MidiBank &oldBank,
-                        const MidiBank &newBank);
+    /// Find bank and programNo in programList.
+    const MidiProgram *findProgram(const ProgramList &programList,
+                                   const MidiBank &bank,
+                                   int programNo);
+    /// Find bank and programNo in programList.
+    ProgramList::iterator findProgramIter(ProgramList &programList,
+                                          const MidiBank &bank,
+                                          int programNo);
+    /// Within programList, change all programs using oldBank to use newBank.
+    void changeBank(ProgramList &programList,
+                    const MidiBank &oldBank,
+                    const MidiBank &newBank);
 
-    /// For assigning keymaps to programs.
+    /// For assigning key maps to programs.
     /**
-     * Holds the index of the keymap button that was pressed.  Set by
+     * Holds the index of the key map button that was pressed.  Set by
      * slotKeyMapButtonPressed().
      *
      * Used by slotKeyMapMenuItemSelected() to make sure the keymap
@@ -106,10 +111,10 @@ private:
      */
     unsigned int m_keyMapProgramNumber;
 
-    /// ensure the combination is unique and adjust accordingly
-    void makeUnique(bool& isPercussion,
-                    MidiByte& msb,
-                    MidiByte& lsb,
+    /// Ensure the msb:lsb:perc combination is unique to m_device.
+    void makeUnique(bool &isPercussion,
+                    MidiByte &msb,
+                    MidiByte &lsb,
                     bool preferLSBChange = true);
 
 };

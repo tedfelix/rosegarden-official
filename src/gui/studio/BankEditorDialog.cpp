@@ -554,7 +554,7 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
         findAction("edit_paste")->setEnabled(true);
         findAction("edit_delete")->setEnabled(true);
 
-        m_programEditor->populate(item);
+        m_programEditor->populate(bankItem);
 
         // Show the program editor.
         m_rightSideLayout->setCurrentIndex(0);

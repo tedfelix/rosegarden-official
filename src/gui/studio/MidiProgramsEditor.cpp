@@ -125,7 +125,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
     m_topLayout->addWidget(frame, 0, 0, 3, 3);
 }
 
-void MidiProgramsEditor::updatePrograms(ProgramList& programList,
+void MidiProgramsEditor::changeBank(ProgramList& programList,
                                         const MidiBank &oldBank,
                                         const MidiBank &newBank)
 {
@@ -172,24 +172,18 @@ MidiProgramsEditor::clearAll()
 }
 
 void
-MidiProgramsEditor::populate(QTreeWidgetItem *item)
+MidiProgramsEditor::populate(const MidiBankTreeWidgetItem *bankItem)
 {
     RG_DEBUG << "populate()";
+    RG_DEBUG << "  bankItem->getBank = " << bankItem->getBank();
 
-    MidiBankTreeWidgetItem *bankItem =
-            dynamic_cast<MidiBankTreeWidgetItem*>(item);
-    if (!bankItem) {
-        RG_DEBUG << "populate(): not a bank item - returning";
+    MidiDevice *device = bankItem->getDevice();
+    if (!device)
         return;
-    }
 
-    RG_DEBUG << "populate() : bankItem->getBank = " << bankItem->getBank();
-
-    MidiDevice* device = bankItem->getDevice();
     m_device = device;
-    if (!m_device) return;
-    const BankList& bankList = device->getBanks();
-    ProgramList programs = device->getPrograms();
+
+    const BankList &bankList = device->getBanks();
 
     m_currentBank = bankList[bankItem->getBank()];
 
@@ -223,6 +217,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
     // Program List
 
     const bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
+    const ProgramList &programList = device->getPrograms();
 
     // For each name field (LineEdit) on the UI...
     // programIndex is also the program change number.
@@ -238,7 +233,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
         MidiProgram foundProgram;
 
         // Find the program
-        for (const MidiProgram &midiProgram : programs) {
+        for (const MidiProgram &midiProgram : programList) {
             if (! m_currentBank.compareKey(midiProgram.getBank())) continue;
 
             if (midiProgram.getProgram() == programIndex) {
@@ -302,7 +297,7 @@ MidiProgramsEditor::slotPercussionClicked()
 
     // Make sure the programs have the new percussion setting.
     ProgramList programList = m_device->getPrograms();
-    updatePrograms(programList, m_currentBank, newBank);
+    changeBank(programList, m_currentBank, newBank);
 
     ModifyDeviceCommand *command =
         m_bankEditor->makeCommand(tr("toggle bank percussion"));
@@ -338,7 +333,7 @@ MidiProgramsEditor::slotNewMSB(int value)
                      m_currentBank.getName());
 
     ProgramList programList = m_device->getPrograms();
-    updatePrograms(programList, m_currentBank, newBank);
+    changeBank(programList, m_currentBank, newBank);
 
     m_msb->blockSignals(true);
     m_msb->setValue(msb);
@@ -378,7 +373,7 @@ MidiProgramsEditor::slotNewLSB(int value)
                      m_currentBank.getName());
 
     ProgramList programList = m_device->getPrograms();
-    updatePrograms(programList, m_currentBank, newBank);
+    changeBank(programList, m_currentBank, newBank);
 
     m_lsb->blockSignals(true);
     m_lsb->setValue(lsb);
@@ -429,7 +424,7 @@ void MidiProgramsEditor::slotEditingFinished()
     // Get the MidiProgram that needs to be changed.
     ProgramList newProgramList = m_device->getPrograms();
     ProgramList::iterator programIter =
-        getProgramIter(newProgramList, m_currentBank, programNumber);
+        findProgramIter(newProgramList, m_currentBank, programNumber);
 
     // If the MidiProgram doesn't exist, add it.
     if (programIter == newProgramList.end()) {
@@ -455,7 +450,7 @@ void MidiProgramsEditor::slotEditingFinished()
                   [](const MidiProgram &lhs, const MidiProgram &rhs){ return lhs.lessKey(rhs); });
 
         // Get the new MidiProgram
-        programIter = getProgramIter(newProgramList,
+        programIter = findProgramIter(newProgramList,
                                      m_currentBank,
                                      programNumber);
 
@@ -497,7 +492,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     const unsigned id = button->property("index").toUInt();
     const ProgramList& programList = m_device->getPrograms();
 
-    const MidiProgram *program = getProgram(programList, m_currentBank, id);
+    const MidiProgram *program = findProgram(programList, m_currentBank, id);
     if (!program)
         return;
 
@@ -571,7 +566,7 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
 
     const ProgramList& programList = m_device->getPrograms();
     const MidiProgram *program =
-        getProgram(programList, m_currentBank, m_keyMapProgramNumber);
+        findProgram(programList, m_currentBank, m_keyMapProgramNumber);
     if (!program)
         return;
 
@@ -591,6 +586,7 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
     }
 
     // Set the key mapping.
+    // ??? EDIT!  Where's the command so we can undo?
     // ??? Only the name is used?  Then we need to disallow key mappings
     //     with empty names.  BankEditorDialog currently allows this.
     m_device->setKeyMappingForProgram(*program, newMapping);
@@ -612,7 +608,7 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
 }
 
 const MidiProgram *
-MidiProgramsEditor::getProgram(const ProgramList& programList,
+MidiProgramsEditor::findProgram(const ProgramList& programList,
                                const MidiBank &bank,
                                int programNo)
 {
@@ -628,7 +624,7 @@ MidiProgramsEditor::getProgram(const ProgramList& programList,
 }
 
 ProgramList::iterator
-MidiProgramsEditor::getProgramIter(ProgramList& programList,
+MidiProgramsEditor::findProgramIter(ProgramList& programList,
                                    const MidiBank &bank,
                                    int programNo)
 {
@@ -645,8 +641,8 @@ MidiProgramsEditor::getProgramIter(ProgramList& programList,
     return programList.end();
 }
 
-void MidiProgramsEditor::makeUnique
-(bool& isPercussion, MidiByte& msb, MidiByte& lsb, bool preferLSBChange)
+void MidiProgramsEditor::makeUnique(
+        bool &isPercussion, MidiByte &msb, MidiByte &lsb, bool preferLSBChange)
 {
     RG_DEBUG << "makeUnique" << isPercussion << msb << lsb;
     // The combination of the three variables must be unique. This
