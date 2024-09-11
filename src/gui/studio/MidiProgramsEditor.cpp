@@ -425,7 +425,7 @@ MidiProgramsEditor::slotNewLSB(int value)
 
 void MidiProgramsEditor::slotEditingFinished()
 {
-    RG_DEBUG << "slotEditingFinished";
+    RG_DEBUG << "slotEditingFinished()";
 
     const LineEdit *lineEdit = dynamic_cast<const LineEdit *>(sender());
 
@@ -434,17 +434,18 @@ void MidiProgramsEditor::slotEditingFinished()
         return;
     }
 
-    QString programName = lineEdit->text();
+    const QString programName = lineEdit->text();
 
     // Zero-based program number.  This is the same as the MIDI program change.
     const unsigned programNumber = lineEdit->property("index").toUInt();
 
-    RG_DEBUG << "slotEditingFinished" << programName << programNumber;
+    RG_DEBUG << "slotEditingFinished(): " << programName << programNumber;
 
-    // Get the MidiProgram that needs to be changed.
+    // Make a copy so we can change the name.
     ProgramList newProgramList = m_device->getPrograms();
+
     ProgramList::iterator programIter =
-        findProgramIter(newProgramList, m_currentBank, programNumber);
+            findProgramIter(newProgramList, m_currentBank, programNumber);
 
     // If the MidiProgram doesn't exist, add it.
     if (programIter == newProgramList.end()) {
@@ -454,6 +455,7 @@ void MidiProgramsEditor::slotEditingFinished()
 
         // Create a new MidiProgram and add it to newProgramList.
         MidiProgram newProgram(m_currentBank, programNumber);
+        newProgram.setName(qstrtostr(programName));
         newProgramList.push_back(newProgram);
 
         // Sort newProgramList.
@@ -471,27 +473,29 @@ void MidiProgramsEditor::slotEditingFinished()
 
         // Get the new MidiProgram
         programIter = findProgramIter(newProgramList,
-                                     m_currentBank,
-                                     programNumber);
+                                      m_currentBank,
+                                      programNumber);
 
     } else {  // The MidiProgram already exists in newProgramList.
+
+        // If the name hasn't changed, bail.
+        if (qstrtostr(programName) == programIter->getName())
+            return;
 
         // If the label is now empty...
         if (programName.isEmpty()) {
             //RG_DEBUG << "slotEditingFinished(): deleting empty program (" << programNumber << ")";
+            // Delete the program.
             newProgramList.erase(programIter);
+        } else {  // Rename the program.
+            programIter->setName(qstrtostr(programName));
         }
     }
 
-    // Has the name actually changed
-    if (qstrtostr(programName) == programIter->getName()) return;
+    // Modify the Device.
 
-    programIter->setName(qstrtostr(programName));
-
-    // now make the change
     ModifyDeviceCommand *command =
         m_bankEditor->makeCommand(tr("program changed"));
-
     command->setProgramList(newProgramList);
     CommandHistory::getInstance()->addCommand(command);
 
@@ -509,10 +513,21 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
         return;
     }
 
-    const unsigned id = button->property("index").toUInt();
-    const ProgramList& programList = m_device->getPrograms();
+    const unsigned programChange = button->property("index").toUInt();
 
-    const MidiProgram *program = findProgram(programList, m_currentBank, id);
+    // Save the program number we are editing for slotKeyMapMenuItemSelected().
+    m_keyMapProgramNumber = programChange;
+
+    // Create a pop-up menu filled with the available key mappings.
+
+    QMenu *menu = new QMenu(button);
+
+    // Add the initial "<no key mapping>".
+    QAction *action = menu->addAction(tr("<no key mapping>"));
+    action->setObjectName("0");
+
+    const MidiProgram *program = findProgram(
+            m_device->getPrograms(), m_currentBank, programChange);
     if (!program)
         return;
 
@@ -520,33 +535,25 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     if (keyMappingList.empty())
         return;
 
-    // Save the program number we are editing for slotKeyMapMenuItemSelected().
-    m_keyMapProgramNumber = id;
-
-    // Create a pop-up menu filled with the available key mappings.
-
-    QMenu *menu = new QMenu(button);
-
-    const MidiKeyMapping *currentMapping =
-            m_device->getKeyMappingForProgram(*program);
-
+    // To track down current key map index for menu positioning.
+    const std::string &currentKeyMapName = program->getKeyMapping();
     // Keep track of the current key map selection for
     // popup menu positioning.
-    int currentKeyMap = 0;
-
-    // Add the initial "<no key mapping>".
-    QAction *action = menu->addAction(tr("<no key mapping>"));
-    action->setObjectName("0");
+    int currentKeyMapIndex = -1;
 
     // For each key mapping...
-    for (size_t i = 0; i < keyMappingList.size(); ++i) {
+    for (size_t keyMapIndex = 0;
+         keyMapIndex < keyMappingList.size();
+         ++keyMapIndex) {
         // Add the mapping to the menu.
-        action = menu->addAction(strtoqstr(keyMappingList[i].getName()));
-        action->setObjectName(QString("%1").arg(i+1));
+        action = menu->addAction(strtoqstr(keyMappingList[keyMapIndex].getName()));
+        // ??? Why one-based?  We just reverse it later.  If we switch
+        //     to zero-based, be sure to set "<no key mapping>" to -1 above.
+        action->setObjectName(QString("%1").arg(keyMapIndex + 1));
 
         // If the current keymap for this program is found, keep track of it.
-        if (currentMapping  &&  (keyMappingList[i] == *currentMapping))
-            currentKeyMap = static_cast<int>(i + 1);
+        if (keyMappingList[keyMapIndex].getName() == currentKeyMapName)
+            currentKeyMapIndex = static_cast<int>(keyMapIndex);
     }
 
     connect(menu, &QMenu::triggered,
@@ -558,7 +565,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     // is over the currently selected item.
 
     QRect actionRect =
-            menu->actionGeometry(menu->actions().value(currentKeyMap));
+            menu->actionGeometry(menu->actions().value(currentKeyMapIndex + 1));
     QPoint menuPos = QCursor::pos();
     // Adjust position so that the mouse will end up on top of
     // the current selection.

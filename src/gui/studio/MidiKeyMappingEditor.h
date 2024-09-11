@@ -34,7 +34,17 @@ namespace Rosegarden
 class MidiDevice;
 class BankEditorDialog;
 
-
+/// Key map name editor on the right side of the BankEditorDialog.
+/**
+ * ??? This displays the key map entry numbers 1-based so these
+ *     are always off by one from the MIDI note number.  Need
+ *     to change NameSetEditor to offer the ability to display
+ *     0-based index numbers to the user just for key maps.
+ *     For Program Changes, 1-based is ok since that's the way
+ *     the user sees them.  Would there be any value to having
+ *     NameSetEditor show note names and octaves instead of
+ *     MIDI note numbers?
+ */
 class MidiKeyMappingEditor : public NameSetEditor
 {
     Q_OBJECT
