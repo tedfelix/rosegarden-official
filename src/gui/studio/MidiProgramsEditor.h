@@ -63,8 +63,8 @@ private slots:
     void slotNewLSB(int value);
     void slotPercussionClicked();
 
-    /// One of the program names was changed by the user.
-    void slotNameChanged(const QString &) override;
+    /// Not used - see slotEditingFinished().
+    void slotNameChanged(const QString &) override  { }
     void slotEditingFinished() override;
     void slotKeyMapButtonPressed() override;
     void slotKeyMapMenuItemSelected(QAction *action);

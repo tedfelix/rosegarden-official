@@ -281,6 +281,8 @@ MidiProgramsEditor::slotPercussionClicked()
 {
     RG_DEBUG << "slotPercussionClicked()";
 
+    // Create a new bank.
+
     bool isPercussion = m_percussion->isChecked();
     MidiByte msb = m_currentBank.getMSB();
     MidiByte lsb = m_currentBank.getLSB();
@@ -301,9 +303,12 @@ MidiProgramsEditor::slotPercussionClicked()
 
     const BankList &oldBankList = m_device->getBanks();
     BankList newBankList;
-    for (size_t i = 0; i < oldBankList.size(); ++i) {
-        if (oldBankList[i] == m_currentBank) newBankList.push_back(newBank);
-        else newBankList.push_back(oldBankList[i]);
+    for (const MidiBank &oldMidiBank : oldBankList) {
+        // If this is the one we want to change, add the new bank.
+        if (oldMidiBank == m_currentBank)
+            newBankList.push_back(newBank);
+        else  // Go with the old bank.
+            newBankList.push_back(oldMidiBank);
     }
 
     // Modify the Device.
@@ -323,10 +328,14 @@ MidiProgramsEditor::slotNewMSB(int value)
 {
     RG_DEBUG << "slotNewMSB(" << value << ")";
 
+    // Create a new bank.
+
     bool isPercussion = m_currentBank.isPercussion();
     MidiByte msb = value;
     MidiByte lsb = m_currentBank.getLSB();
 
+    // ??? Changing the LSB is not what the user is expecting.
+    //     They are changing the MSB.
     makeUnique(isPercussion, msb, lsb,
                true);  // preferLSBChange
 
@@ -335,25 +344,29 @@ MidiProgramsEditor::slotNewMSB(int value)
                      lsb,
                      m_currentBank.getName());
 
-    ProgramList programList = m_device->getPrograms();
-    changeBank(programList, m_currentBank, newBank);
+    // Create a new program list with the new MSB.
 
-    // setValue() emits valueChanged().
-    m_msb->blockSignals(true);
-    m_msb->setValue(msb);
-    m_msb->blockSignals(false);
+    ProgramList newProgramList = m_device->getPrograms();
+    changeBank(newProgramList, m_currentBank, newBank);
+
+    // Create a new bank list with the new MSB.
+
+    const BankList &oldBankList = m_device->getBanks();
+    BankList newBankList;
+    for (const MidiBank &oldMidiBank : oldBankList) {
+        // If this is the one we want to change, add the new bank.
+        if (oldMidiBank == m_currentBank)
+            newBankList.push_back(newBank);
+        else  // Go with the old bank.
+            newBankList.push_back(oldMidiBank);
+    }
+
+    // Modify the Device.
 
     ModifyDeviceCommand *command =
         m_bankEditor->makeCommand(tr("bank set msb"));
-
-    const BankList banks = m_device->getBanks();
-    BankList newBanks;
-    for (size_t i = 0; i < banks.size(); ++i) {
-        if (banks[i] == m_currentBank) newBanks.push_back(newBank);
-        else newBanks.push_back(banks[i]);
-    }
-    command->setBankList(newBanks);
-    command->setProgramList(programList);
+    command->setBankList(newBankList);
+    command->setProgramList(newProgramList);
     CommandHistory::getInstance()->addCommand(command);
 
     // and update the current bank
@@ -365,10 +378,14 @@ MidiProgramsEditor::slotNewLSB(int value)
 {
     RG_DEBUG << "slotNewLSB(" << value << ")";
 
+    // Create a new bank.
+
     bool isPercussion = m_currentBank.isPercussion();
     MidiByte msb = m_currentBank.getMSB();
     MidiByte lsb = value;
 
+    // ??? Changing the MSB is not what the user is expecting.
+    //     They are changing the LSB.
     makeUnique(isPercussion, msb, lsb,
                false);  // preferLSBChange
 
@@ -377,36 +394,33 @@ MidiProgramsEditor::slotNewLSB(int value)
                      lsb,
                      m_currentBank.getName());
 
-    ProgramList programList = m_device->getPrograms();
-    changeBank(programList, m_currentBank, newBank);
+    // Create a new program list with the new LSB.
 
-    // setValue() emits valueChanged().
-    m_lsb->blockSignals(true);
-    m_lsb->setValue(lsb);
-    m_lsb->blockSignals(false);
+    ProgramList newProgramList = m_device->getPrograms();
+    changeBank(newProgramList, m_currentBank, newBank);
+
+    // Create a new bank list with the new LSB.
+
+    const BankList &oldBankList = m_device->getBanks();
+    BankList newBankList;
+    for (const MidiBank &oldMidiBank : oldBankList) {
+        // If this is the one we want to change, add the new bank.
+        if (oldMidiBank == m_currentBank)
+            newBankList.push_back(newBank);
+        else  // Go with the old bank.
+            newBankList.push_back(oldMidiBank);
+    }
+
+    // Modify the Device.
 
     ModifyDeviceCommand *command =
         m_bankEditor->makeCommand(tr("bank set lsb"));
-
-    const BankList banks = m_device->getBanks();
-    BankList newBanks;
-    for (size_t i = 0; i < banks.size(); ++i) {
-        if (banks[i] == m_currentBank) newBanks.push_back(newBank);
-        else newBanks.push_back(banks[i]);
-    }
-    command->setBankList(newBanks);
-    command->setProgramList(programList);
+    command->setBankList(newBankList);
+    command->setProgramList(newProgramList);
     CommandHistory::getInstance()->addCommand(command);
 
     // and update the current bank
     m_currentBank = newBank;
-}
-
-void
-MidiProgramsEditor::slotNameChanged(const QString&)
-{
-    // no longer used - see slotEditingFinished
-    return;
 }
 
 void MidiProgramsEditor::slotEditingFinished()
@@ -464,7 +478,7 @@ void MidiProgramsEditor::slotEditingFinished()
 
         // If the label is now empty...
         if (programName.isEmpty()) {
-            //RG_DEBUG << "slotNameChanged(): deleting empty program (" << programNumber << ")";
+            //RG_DEBUG << "slotEditingFinished(): deleting empty program (" << programNumber << ")";
             newProgramList.erase(programIter);
         }
     }
