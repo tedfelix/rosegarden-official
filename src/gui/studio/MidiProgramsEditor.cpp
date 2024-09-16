@@ -583,9 +583,11 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
     if (keyMappingList.empty())
         return;
 
-    const ProgramList &programList = m_device->getPrograms();
-    const MidiProgram *program =
-            findProgram(programList, m_currentBank, m_keyMapProgramNumber);
+    // Make a copy so we can modify it.
+    ProgramList newProgramList = m_device->getPrograms();
+
+    MidiProgram *program =
+            findProgram(newProgramList, m_currentBank, m_keyMapProgramNumber);
     if (!program)
         return;
 
@@ -602,29 +604,14 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
             newMapping = keyMappingList[keyMapIndex].getName();
     }
 
-    // Set the key mapping.
-    // ??? EDIT!  Where's the command so we can undo?
-    //     ModifyDeviceCommand should be able to do this.
-    // ??? Only the name is used?  Then we need to disallow key mappings
-    //     with empty names.  BankEditorDialog currently allows this.
-    m_device->setKeyMappingForProgram(*program, newMapping);
+    program->setKeyMapping(newMapping);
 
-    // Update the key mapping icon.
-    // ??? If we use a command, the rest of this should be unnecessary.
+    // Modify the Device.
 
-    const bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
-    QToolButton *keyMapButton = getKeyMapButton(m_keyMapProgramNumber);
-
-    // <no key mapping> selected?
-    // ??? This code is duplicated in populate.  Pull out a routine.
-    if (keyMapIndex == -1) {
-        keyMapButton->setIcon(getNoKeyMapIcon());
-        keyMapButton->setToolTip("");
-    } else {
-        keyMapButton->setIcon(getKeyMapIcon());
-        keyMapButton->setToolTip(tr("Key Mapping: %1").arg(strtoqstr(newMapping)));
-    }
-    keyMapButton->setEnabled(haveKeyMappings);
+    ModifyDeviceCommand *command =
+        m_bankEditor->makeCommand(tr("change key mapping"));
+    command->setProgramList(newProgramList);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 const MidiProgram *
@@ -632,13 +619,25 @@ MidiProgramsEditor::findProgram(const ProgramList &programList,
                                 const MidiBank &bank,
                                 int programNo)
 {
-    // ??? A routine like this seems generally useful.  ProgramList isn't
-    //     a class, but perhaps we can put a collection of utility routines
-    //     like this near the typedef?
-
     for (const MidiProgram &midiProgram : programList) {
         // Match?
-        if (midiProgram.getBank().compareKey(bank) &&
+        if (midiProgram.getBank().compareKey(bank)  &&
+            midiProgram.getProgram() == programNo) {
+            return &midiProgram;
+        }
+    }
+
+    return nullptr;
+}
+
+MidiProgram *
+MidiProgramsEditor::findProgram(ProgramList &programList,
+                                const MidiBank &bank,
+                                int programNo)
+{
+    for (MidiProgram &midiProgram : programList) {
+        // Match?
+        if (midiProgram.getBank().compareKey(bank)  &&
             midiProgram.getProgram() == programNo) {
             return &midiProgram;
         }
@@ -648,14 +647,10 @@ MidiProgramsEditor::findProgram(const ProgramList &programList,
 }
 
 ProgramList::iterator
-MidiProgramsEditor::findProgramIter(ProgramList& programList,
+MidiProgramsEditor::findProgramIter(ProgramList &programList,
                                    const MidiBank &bank,
                                    int programNo)
 {
-    // ??? A routine like this seems generally useful.  ProgramList isn't
-    //     a class, but perhaps we can put a collection of utility routines
-    //     like this near the typedef?
-
     // For each program in the programList...
     for (ProgramList::iterator programIter = programList.begin();
          programIter != programList.end();

@@ -89,11 +89,15 @@ private:
     MidiBank m_currentBank;
 
     /// Find bank and programNo in programList.
-    const MidiProgram *findProgram(const ProgramList &programList,
-                                   const MidiBank &bank,
-                                   int programNo);
+    static const MidiProgram *findProgram(const ProgramList &programList,
+                                          const MidiBank &bank,
+                                          int programNo);
+    static MidiProgram *findProgram(ProgramList &programList,
+                                    const MidiBank &bank,
+                                    int programNo);
+
     /// Find bank and programNo in programList.
-    ProgramList::iterator findProgramIter(ProgramList &programList,
+    static ProgramList::iterator findProgramIter(ProgramList &programList,
                                           const MidiBank &bank,
                                           int programNo);
     /// Within programList, change all programs using oldBank to use newBank.

@@ -546,21 +546,6 @@ MidiDevice::getKeyMappingForProgram(const MidiProgram &program) const
     return nullptr;
 }
 
-void
-MidiDevice::setKeyMappingForProgram(const MidiProgram &program,
-                                    std::string mapping)
-{
-    ProgramList::iterator it;
-
-    for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-        if (it->partialCompare(program)) {
-            it->setKeyMapping(mapping);
-        }
-    }
-    notifyDeviceModified();
-}
-
-
 std::string
 MidiDevice::toXmlString() const
 {
