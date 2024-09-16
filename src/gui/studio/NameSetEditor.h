@@ -123,6 +123,8 @@ protected:
 
     std::vector<LineEdit *> m_names;
 
+    virtual void clearAll();
+
 private:
     QPushButton *m_numberingBaseButton;
     unsigned m_numberingBase;

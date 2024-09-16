@@ -69,11 +69,13 @@ static const QIcon &getKeyMapIcon()
     return keyMapIcon;
 }
 
+static const QString defaultTitle{QObject::tr("Bank and Program details")};
+
 
 MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
                                        QWidget *parent) :
     NameSetEditor(bankEditor,
-                  tr("Bank and Program details"),  // title
+                  defaultTitle,  // title
                   parent,
                   true)  // showKeyMapButtons
 {
@@ -140,8 +142,9 @@ MidiProgramsEditor::clearAll()
 {
     RG_DEBUG << "clearAll";
 
-    // ??? This string is duplicated in the ctor.  Why?
-    setTitle(tr("Bank and Program details"));
+    NameSetEditor::clearAll();
+
+    setTitle(defaultTitle);
 
     m_percussion->setChecked(false);
 
@@ -156,15 +159,6 @@ MidiProgramsEditor::clearAll()
     m_lsb->blockSignals(false);
 
     m_currentBank = MidiBank();
-
-    m_librarian->clear();
-    m_librarianEmail->clear();
-
-    // Clear all name fields.
-    // ??? Seems like the baseclass (NameSetEditor) should offer this.
-    //     clearNames().  Or maybe an override-able clearAll()?
-    for (size_t i = 0; i < m_names.size(); ++i)
-        m_names[i]->clear();
 
     setEnabled(false);
 }

@@ -51,7 +51,7 @@ public:
      * Called at the end of BankEditorDialog::updateEditor() if no valid
      * bank or program is selected in the tree.
      */
-    void clearAll();
+    void clearAll() override;
 
     /// Show the programs for the selected bank.
     void populate(const MidiBankTreeWidgetItem *bankItem);
@@ -111,7 +111,7 @@ private:
      */
     unsigned int m_keyMapProgramNumber{0};
 
-    /// Ensure the msb:lsb:perc combination is unique to m_device.
+    /// Ensure the perc:msb:lsb combination is unique to m_device.
     void makeUnique(bool &isPercussion,
                     MidiByte &msb,
                     MidiByte &lsb,

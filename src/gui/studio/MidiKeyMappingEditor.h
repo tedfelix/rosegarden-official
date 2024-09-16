@@ -53,7 +53,7 @@ public:
     MidiKeyMappingEditor(BankEditorDialog *bankEditor,
                          QWidget *parent);
 
-    void clearAll();
+    void clearAll() override;
     void populate(QTreeWidgetItem *);
     MidiKeyMapping &getMapping() { return m_mapping; }
     void reset();

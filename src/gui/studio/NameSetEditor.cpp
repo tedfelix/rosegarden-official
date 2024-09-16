@@ -205,5 +205,16 @@ NameSetEditor::updateLabels()
     }
 }
 
+void
+NameSetEditor::clearAll()
+{
+    m_librarian->clear();
+    m_librarianEmail->clear();
+
+    // Clear all name fields.
+    for (size_t i = 0; i < m_names.size(); ++i)
+        m_names[i]->clear();
+}
+
 
 }

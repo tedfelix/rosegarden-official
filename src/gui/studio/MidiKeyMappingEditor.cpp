@@ -72,13 +72,9 @@ MidiKeyMappingEditor::makeAdditionalWidget(QWidget */* parent */)
 void
 MidiKeyMappingEditor::clearAll()
 {
-    for (size_t i = 0; i < m_names.size(); ++i)
-        m_names[i]->clear();
+    NameSetEditor::clearAll();
 
     setTitle(tr("Key Mapping details"));
-
-    m_librarian->clear();
-    m_librarianEmail->clear();
     setEnabled(false);
 }
 
