@@ -591,9 +591,9 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
     if (keyMappingList.empty())
         return;
 
-    const ProgramList& programList = m_device->getPrograms();
+    const ProgramList &programList = m_device->getPrograms();
     const MidiProgram *program =
-        findProgram(programList, m_currentBank, m_keyMapProgramNumber);
+            findProgram(programList, m_currentBank, m_keyMapProgramNumber);
     if (!program)
         return;
 
@@ -620,10 +620,11 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
 
     // Update the key mapping icon.
 
-    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
+    const bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
     QToolButton *keyMapButton = getKeyMapButton(m_keyMapProgramNumber);
 
     // <no key mapping> selected?
+    // ??? This code is duplicated in populate.  Pull out a routine.
     if (keyMapNumber == -1) {
         keyMapButton->setIcon(getNoKeyMapIcon());
         keyMapButton->setToolTip("");
@@ -635,10 +636,14 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
 }
 
 const MidiProgram *
-MidiProgramsEditor::findProgram(const ProgramList& programList,
-                               const MidiBank &bank,
-                               int programNo)
+MidiProgramsEditor::findProgram(const ProgramList &programList,
+                                const MidiBank &bank,
+                                int programNo)
 {
+    // ??? A routine like this seems generally useful.  ProgramList isn't
+    //     a class, but perhaps we can put a collection of utility routines
+    //     like this near the typedef?
+
     for (const MidiProgram &midiProgram : programList) {
         // Match?
         if (midiProgram.getBank().compareKey(bank) &&
@@ -655,6 +660,10 @@ MidiProgramsEditor::findProgramIter(ProgramList& programList,
                                    const MidiBank &bank,
                                    int programNo)
 {
+    // ??? A routine like this seems generally useful.  ProgramList isn't
+    //     a class, but perhaps we can put a collection of utility routines
+    //     like this near the typedef?
+
     // For each program in the programList...
     for (ProgramList::iterator programIter = programList.begin();
          programIter != programList.end();
@@ -672,80 +681,95 @@ void MidiProgramsEditor::makeUnique(
         bool &isPercussion, MidiByte &msb, MidiByte &lsb, bool preferLSBChange)
 {
     RG_DEBUG << "makeUnique" << isPercussion << msb << lsb;
+
     // The combination of the three variables must be unique. This
     // routine should only be called when a change is made to one of
     // the three variables so it does no harm to compare with the
-    // actual bank
+    // actual bank.
 
-    const BankList& banks = m_device->getBanks();
+    const BankList &banks = m_device->getBanks();
+
     // first check if the variables are already unique
+
     bool unique = true;
-    for (size_t i = 0; i < banks.size(); ++i) {
-        if (banks[i].isPercussion() == isPercussion &&
-            banks[i].getMSB() == msb &&
-            banks[i].getLSB() == lsb) {
+
+    for (size_t bankIndex = 0; bankIndex < banks.size(); ++bankIndex) {
+        if (banks[bankIndex].isPercussion() == isPercussion  &&
+            banks[bankIndex].getMSB() == msb  &&
+            banks[bankIndex].getLSB() == lsb) {
             unique = false;
             break;
         }
     }
-    if (unique) return;
-    // try all lsbs
+    // Unique?  Then we're good.  Leave them alone.
+    if (unique)
+        return;
+
     if (preferLSBChange) {
-        for (MidiByte newLsb = MidiMinValue; newLsb<MidiMaxValue; newLsb++) {
+        // try all lsbs
+        for (MidiByte newLsb = MidiMinValue; newLsb <= MidiMaxValue; ++newLsb) {
             bool unique = true;
-            for (size_t i = 0; i < banks.size(); ++i) {
-                if (banks[i].isPercussion() == isPercussion &&
-                    banks[i].getMSB() == msb &&
-                    banks[i].getLSB() == newLsb) {
+            for (size_t bankIndex = 0; bankIndex < banks.size(); ++bankIndex) {
+                if (banks[bankIndex].isPercussion() == isPercussion  &&
+                    banks[bankIndex].getMSB() == msb  &&
+                    banks[bankIndex].getLSB() == newLsb) {
                     unique = false;
                     break;
                 }
             }
             if (unique) {
                 lsb = newLsb;
-                RG_DEBUG << "makeUniqe changing to" <<
-                    isPercussion << msb << lsb;
+                RG_DEBUG << "makeUniqe changing to" << isPercussion << msb << lsb;
                 return;
             }
         }
     }
+
     // try all msbs
-    for (MidiByte newMsb = MidiMinValue; newMsb<MidiMaxValue; newMsb++) {
+    for (MidiByte newMsb = MidiMinValue; newMsb <= MidiMaxValue; ++newMsb) {
         bool unique = true;
-        for (size_t i = 0; i < banks.size(); ++i) {
-            if (banks[i].isPercussion() == isPercussion &&
-                banks[i].getMSB() == newMsb &&
-                banks[i].getLSB() == lsb) {
-            unique = false;
-            break;
+        for (size_t bankIndex = 0; bankIndex < banks.size(); ++bankIndex) {
+            if (banks[bankIndex].isPercussion() == isPercussion  &&
+                banks[bankIndex].getMSB() == newMsb  &&
+                banks[bankIndex].getLSB() == lsb) {
+                unique = false;
+                break;
             }
         }
         if (unique) {
             msb = newMsb;
-            RG_DEBUG << "makeUniqe changing to" <<
-                isPercussion << msb << lsb;
+            RG_DEBUG << "makeUniqe changing to" << isPercussion << msb << lsb;
             return;
         }
     }
-    if (preferLSBChange) return;
-    for (MidiByte newLsb = MidiMinValue; newLsb<MidiMaxValue; newLsb++) {
+
+    // If an LSB change was preferred, we did all we could.  Bail.
+    if (preferLSBChange)
+        return;
+
+    // Caller prefers an MSB change.  We tried all MSBs and didn't find an
+    // available one.  Try the LSBs.
+
+    // For each LSB...
+    for (MidiByte newLsb = MidiMinValue; newLsb <= MidiMaxValue; ++newLsb) {
         bool unique = true;
-        for (size_t i = 0; i < banks.size(); ++i) {
-            if (banks[i].isPercussion() == isPercussion &&
-                banks[i].getMSB() == msb &&
-                banks[i].getLSB() == newLsb) {
+        for (size_t bankIndex = 0; bankIndex < banks.size(); ++bankIndex) {
+            if (banks[bankIndex].isPercussion() == isPercussion  &&
+                banks[bankIndex].getMSB() == msb  &&
+                banks[bankIndex].getLSB() == newLsb) {
                 unique = false;
                 break;
             }
         }
         if (unique) {
             lsb = newLsb;
-            RG_DEBUG << "makeUniqe changing to" <<
-                isPercussion << msb << lsb;
+            RG_DEBUG << "makeUnique changing to" << isPercussion << msb << lsb;
             return;
         }
     }
+
     RG_DEBUG << "makeUnique giving up";
 }
+
 
 }
