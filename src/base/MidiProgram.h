@@ -60,7 +60,7 @@ public:
      */
     bool operator==(const MidiBank &rhs) const;
     bool operator!=(const MidiBank &rhs) const  { return !operator==(rhs); }
-    /// Compare MSB:LSB:Percussion.
+    /// Compare Percussion:MSB:LSB.
     /**
      * Since MidiProgram stores a partial MidiBank object (without name),
      * a partial comparison such as this is frequently needed.
@@ -138,7 +138,7 @@ private:
 };
 
 // ??? std::vector?  This means all throughout rg we have to do linear
-//     searches.  Wouldn't a std::set<> indexed by MSB:LSB:Percussion:PC
+//     searches.  Wouldn't a std::set<> indexed by Percussion:MSB:LSB:PC
 //     make a *lot* more sense in the long run?  Should reduce CPU usage
 //     and complexity significantly.
 typedef std::vector<MidiProgram> ProgramList;

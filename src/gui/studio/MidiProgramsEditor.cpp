@@ -518,7 +518,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
 
     // Add the initial "<no key mapping>".
     QAction *action = menu->addAction(tr("<no key mapping>"));
-    action->setObjectName("0");
+    action->setObjectName("-1");
 
     const MidiProgram *program = findProgram(
             m_device->getPrograms(), m_currentBank, programChange);
@@ -541,9 +541,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
          ++keyMapIndex) {
         // Add the mapping to the menu.
         action = menu->addAction(strtoqstr(keyMappingList[keyMapIndex].getName()));
-        // ??? Why one-based?  We just reverse it later.  If we switch
-        //     to zero-based, be sure to set "<no key mapping>" to -1 above.
-        action->setObjectName(QString("%1").arg(keyMapIndex + 1));
+        action->setObjectName(QString("%1").arg(keyMapIndex));
 
         // If the current keymap for this program is found, keep track of it.
         if (keyMappingList[keyMapIndex].getName() == currentKeyMapName)
@@ -592,34 +590,34 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
         return;
 
     // Extract the key map number from the object name.
-    // Subtract one to convert from 1-based key map number to 0-based.
-    // Simplifies keyMappingList[] vector access.
-    const int keyMapNumber = action->objectName().toInt() - 1;
+    const int keyMapIndex = action->objectName().toInt();
 
     std::string newMapping;
 
     // No key mapping?
-    if (keyMapNumber <= -1) {
+    if (keyMapIndex <= -1) {
         newMapping = "";
     } else {
-        if (keyMapNumber < static_cast<int>(keyMappingList.size()))
-            newMapping = keyMappingList[keyMapNumber].getName();
+        if (keyMapIndex < static_cast<int>(keyMappingList.size()))
+            newMapping = keyMappingList[keyMapIndex].getName();
     }
 
     // Set the key mapping.
     // ??? EDIT!  Where's the command so we can undo?
+    //     ModifyDeviceCommand should be able to do this.
     // ??? Only the name is used?  Then we need to disallow key mappings
     //     with empty names.  BankEditorDialog currently allows this.
     m_device->setKeyMappingForProgram(*program, newMapping);
 
     // Update the key mapping icon.
+    // ??? If we use a command, the rest of this should be unnecessary.
 
     const bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
     QToolButton *keyMapButton = getKeyMapButton(m_keyMapProgramNumber);
 
     // <no key mapping> selected?
     // ??? This code is duplicated in populate.  Pull out a routine.
-    if (keyMapNumber == -1) {
+    if (keyMapIndex == -1) {
         keyMapButton->setIcon(getNoKeyMapIcon());
         keyMapButton->setToolTip("");
     } else {
