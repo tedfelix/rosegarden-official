@@ -83,46 +83,47 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
 {
     QWidget *topWidget = new QWidget(m_topFrame);
     topWidget->setContentsMargins(0, 0, 0, 0);
+    m_topLayout->addWidget(topWidget, 0, 0, 3, 3);
 
     QGridLayout *gridLayout = new QGridLayout(topWidget);
     gridLayout->setSpacing(0);
 
+    int row{0};
+
     // Percussion
-    gridLayout->addWidget(new QLabel(tr("Percussion"), topWidget),
-                          0, 0, Qt::AlignLeft);
-    // ??? CheckBox looks gray when disabled.  Switch to a QLabel, true/false?
-    m_percussion = new QCheckBox(topWidget);
-    m_percussion->setEnabled(false);
-    gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
+    gridLayout->addWidget(new QLabel(tr("Percussion"), topWidget), row, 0);
+    m_percussion = new QLabel(topWidget);
+    m_percussion->setAlignment(Qt::AlignHCenter);
+    gridLayout->addWidget(m_percussion, row, 1);
+
+    ++row;
 
     // MSB Value
-    gridLayout->addWidget(new QLabel(tr("MSB Value"), topWidget),
-                          1, 0, Qt::AlignLeft);
-    // ??? Switch to a QLabel.
-    m_msb = new QSpinBox(topWidget);
-    m_msb->setToolTip(tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
-    m_msb->setMinimum(0);
-    m_msb->setMaximum(127);
-    m_msb->setEnabled(false);
-    gridLayout->addWidget(m_msb, 1, 1, Qt::AlignLeft);
+    gridLayout->addWidget(new QLabel(tr("MSB Value"), topWidget), row, 0);
+    m_msb = new QLabel(topWidget);
+    m_msb->setAlignment(Qt::AlignHCenter);
+    gridLayout->addWidget(m_msb, row, 1);
+
+    ++row;
 
     // LSB Value
-    gridLayout->addWidget(new QLabel(tr("LSB Value"), topWidget),
-                          2, 0, Qt::AlignLeft);
-    // ??? Switch to a QLabel.
-    m_lsb = new QSpinBox(topWidget);
-    m_lsb->setToolTip(tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
-    m_lsb->setMinimum(0);
-    m_lsb->setMaximum(127);
-    m_lsb->setEnabled(false);
-    gridLayout->addWidget(m_lsb, 2, 1, Qt::AlignLeft);
+    gridLayout->addWidget(new QLabel(tr("LSB Value"), topWidget), row, 0);
+    m_lsb = new QLabel(topWidget);
+    m_lsb->setAlignment(Qt::AlignHCenter);
+    gridLayout->addWidget(m_lsb, row, 1);
 
+    ++row;
+
+    // Spacer
+    gridLayout->setRowMinimumHeight(row, 10);
+
+    ++row;
+
+    // Edit button
     QPushButton *editBank = new QPushButton(tr("Edit"), topWidget);
     connect(editBank, &QPushButton::clicked,
             this, &MidiProgramsEditor::slotBankEditClicked);
-    gridLayout->addWidget(editBank, 3, 0, 1, 2);
-
-    m_topLayout->addWidget(topWidget, 0, 0, 3, 3);
+    gridLayout->addWidget(editBank, row, 0, 1, 2);
 }
 
 void MidiProgramsEditor::changeBank(ProgramList &programList,
@@ -149,9 +150,9 @@ MidiProgramsEditor::clearAll()
 
     setTitle(defaultTitle);
 
-    m_percussion->setChecked(false);
-    m_msb->setValue(0);
-    m_lsb->setValue(0);
+    m_percussion->setText(tr("no"));
+    m_msb->setText("0");
+    m_lsb->setText("0");
 
     m_currentBank = MidiBank();
 
@@ -179,13 +180,13 @@ MidiProgramsEditor::populate(const MidiBankTreeWidgetItem *bankItem)
     setTitle(bankItem->text(0));
 
     // Percussion
-    m_percussion->setChecked(m_currentBank.isPercussion());
+    m_percussion->setText(m_currentBank.isPercussion() ? tr("yes") : tr("no"));
 
     // MSB Value
-    m_msb->setValue(m_currentBank.getMSB());
+    m_msb->setText(QString::number(m_currentBank.getMSB()));
 
     // LSB Value
-    m_lsb->setValue(m_currentBank.getLSB());
+    m_lsb->setText(QString::number(m_currentBank.getLSB()));
 
     // Provided By
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));

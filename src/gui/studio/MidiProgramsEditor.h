@@ -26,6 +26,7 @@ class QString;
 class QSpinBox;
 class QTreeWidgetItem;
 class QCheckBox;
+class QLabel;
 
 
 namespace Rosegarden
@@ -75,9 +76,9 @@ private:
 
     // Widgets
 
-    QCheckBox *m_percussion;
-    QSpinBox *m_msb;
-    QSpinBox *m_lsb;
+    QLabel *m_percussion;
+    QLabel *m_msb;
+    QLabel *m_lsb;
 
     // Banks
 
