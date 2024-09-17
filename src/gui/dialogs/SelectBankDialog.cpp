@@ -44,13 +44,11 @@ SelectBankDialog::SelectBankDialog(
     m_allowOriginal(allowOriginal),
     m_bankList(bankList)
 {
-    // ??? Window is too narrow to see this.
     setWindowTitle(tr("Select Bank"));
-#if 0
-    resize(350, 250);
-#endif
 
     QGridLayout *layout = new QGridLayout;
+    // Add some extra to the sides.  Otherwise window title is cut off.
+    layout->setContentsMargins(30, 15, 30, 15);
     setLayout(layout);
 
     int row{0};
@@ -68,7 +66,7 @@ SelectBankDialog::SelectBankDialog(
     ++row;
 
     // MSB
-    QLabel *msbLabel = new QLabel(tr("MSB"), this);
+    QLabel *msbLabel = new QLabel(tr("MSB Value"), this);
     layout->addWidget(msbLabel, row, 0);
     m_msb = new QSpinBox(this);
     m_msb->setToolTip(tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
@@ -82,7 +80,7 @@ SelectBankDialog::SelectBankDialog(
     ++row;
 
     // LSB
-    QLabel *lsbLabel = new QLabel(tr("LSB"), this);
+    QLabel *lsbLabel = new QLabel(tr("LSB Value"), this);
     layout->addWidget(lsbLabel, row, 0);
     m_lsb = new QSpinBox(this);
     m_lsb->setToolTip(tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
