@@ -53,23 +53,23 @@ SelectBankDialog::SelectBankDialog(
     QGridLayout *layout = new QGridLayout;
     setLayout(layout);
 
-    int iRow = 0;
+    int row{0};
 
     // Percussion
     QLabel *percussionLabel = new QLabel(tr("Percussion"), this);
-    layout->addWidget(percussionLabel, iRow, 0);
+    layout->addWidget(percussionLabel, row, 0);
 
     m_percussion = new QCheckBox(this);
     m_percussion->setChecked(m_originalBank.isPercussion());
     connect(m_percussion, &QCheckBox::clicked,
             this, &SelectBankDialog::slotPercussionClicked);
-    layout->addWidget(m_percussion, iRow, 1);
+    layout->addWidget(m_percussion, row, 1);
 
-    ++iRow;
+    ++row;
 
     // MSB
     QLabel *msbLabel = new QLabel(tr("MSB"), this);
-    layout->addWidget(msbLabel, iRow, 0);
+    layout->addWidget(msbLabel, row, 0);
     m_msb = new QSpinBox(this);
     m_msb->setToolTip(tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
     m_msb->setMinimum(0);
@@ -77,13 +77,13 @@ SelectBankDialog::SelectBankDialog(
     m_msb->setValue(m_originalBank.getMSB());
     connect(m_msb, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &SelectBankDialog::slotMSBChanged);
-    layout->addWidget(m_msb, iRow, 1);
+    layout->addWidget(m_msb, row, 1);
 
-    ++iRow;
+    ++row;
 
     // LSB
     QLabel *lsbLabel = new QLabel(tr("LSB"), this);
-    layout->addWidget(lsbLabel, iRow, 0);
+    layout->addWidget(lsbLabel, row, 0);
     m_lsb = new QSpinBox(this);
     m_lsb->setToolTip(tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
     m_lsb->setMinimum(0);
@@ -91,9 +91,9 @@ SelectBankDialog::SelectBankDialog(
     m_lsb->setValue(m_originalBank.getLSB());
     connect(m_lsb, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &SelectBankDialog::slotLSBChanged);
-    layout->addWidget(m_lsb, iRow, 1);
+    layout->addWidget(m_lsb, row, 1);
 
-    ++iRow;
+    ++row;
 
     // ??? We need an "available" indicator.
 
@@ -105,7 +105,7 @@ SelectBankDialog::SelectBankDialog(
             this, &QDialog::accept);
     connect(m_buttonBox, &QDialogButtonBox::rejected,
             this, &QDialog::reject);
-    layout->addWidget(m_buttonBox, iRow, 0, 1, 2);
+    layout->addWidget(m_buttonBox, row, 0, 1, 2);
 
     updateOkButton();
 }
