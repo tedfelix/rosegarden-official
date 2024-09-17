@@ -24,6 +24,7 @@
 
 class QCheckBox;
 class QDialogButtonBox;
+class QLabel;
 class QSpinBox;
 
 
@@ -60,14 +61,16 @@ private:
     QSpinBox *m_msb;
     QSpinBox *m_lsb;
 
+    QLabel *m_available;
+
     QDialogButtonBox *m_buttonBox;
-    void updateOkButton();
+    void updateWidgets();
 
 private slots:
 
-    void slotPercussionClicked()  { updateOkButton(); }
-    void slotMSBChanged(int /*value*/)  { updateOkButton(); }
-    void slotLSBChanged(int /*value*/)  { updateOkButton(); }
+    void slotPercussionClicked()  { updateWidgets(); }
+    void slotMSBChanged(int /*value*/)  { updateWidgets(); }
+    void slotLSBChanged(int /*value*/)  { updateWidgets(); }
 
 };
 

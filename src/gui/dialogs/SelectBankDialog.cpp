@@ -95,7 +95,13 @@ SelectBankDialog::SelectBankDialog(
 
     ++row;
 
-    // ??? We need an "available" indicator.
+    // Available
+    m_available = new QLabel(this);
+    m_available->setAlignment(Qt::AlignHCenter);
+    m_available->setAutoFillBackground(true);
+    layout->addWidget(m_available, row, 0, 1, 2);
+
+    ++row;
 
     // Button Box
 
@@ -107,11 +113,11 @@ SelectBankDialog::SelectBankDialog(
             this, &QDialog::reject);
     layout->addWidget(m_buttonBox, row, 0, 1, 2);
 
-    updateOkButton();
+    updateWidgets();
 }
 
 void
-SelectBankDialog::updateOkButton()
+SelectBankDialog::updateWidgets()
 {
     bool conflict{false};
 
@@ -133,6 +139,14 @@ SelectBankDialog::updateOkButton()
     }
 
     m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!conflict);
+
+    m_available->setText(conflict ? tr("IN USE") : tr("available"));
+    QPalette palette = m_available->palette();
+    if (conflict)
+        palette.setColor(QPalette::Window, QColor(0x70, 0x00, 0x00));
+    else
+        palette.setColor(QPalette::Window, QColor(0x00, 0x70, 0x00));
+    m_available->setPalette(palette);
 }
 
 MidiBank
