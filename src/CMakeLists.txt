@@ -165,6 +165,7 @@ set(rg_CPPS
   gui/dialogs/ShortcutWarnDialog.cpp
   gui/dialogs/OutOfProcessorPower.cpp
   gui/dialogs/LibrarianDialog.cpp
+  gui/dialogs/SelectBankDialog.cpp
   gui/widgets/IconStackedWidget.cpp
   gui/widgets/TristateCheckBox.cpp
   gui/widgets/FileDialog.cpp

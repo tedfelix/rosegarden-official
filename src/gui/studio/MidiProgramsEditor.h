@@ -59,12 +59,12 @@ public:
 private slots:
 
     /// Check that any new MSB/LSB combination is unique for this device.
-    void slotNewMSB(int value);
-    void slotNewLSB(int value);
-    void slotPercussionClicked();
+    void slotBankEditClicked(bool checked);
+
 
     /// Not used - see slotEditingFinished().
     void slotNameChanged(const QString &) override  { }
+    /// Handles a program name change from the base class, NameSetEditor.
     void slotEditingFinished() override;
     void slotKeyMapButtonPressed() override;
     void slotKeyMapMenuItemSelected(QAction *action);
@@ -82,10 +82,6 @@ private:
     // Banks
 
     /// The bank we are editing right now.
-    /**
-     * We edit the bank in place here, then commit the changes in
-     * slotEditingFinished().
-     */
     MidiBank m_currentBank;
 
     /// Find bank and programNo in programList.
@@ -114,12 +110,6 @@ private:
      * selection ends up associated with the right program.
      */
     unsigned int m_keyMapProgramNumber{0};
-
-    /// Ensure the perc:msb:lsb combination is unique to m_device.
-    void makeUnique(bool &isPercussion,
-                    MidiByte &msb,
-                    MidiByte &lsb,
-                    bool preferLSBChange = true);
 
 };
 
