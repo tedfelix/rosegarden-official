@@ -208,6 +208,11 @@ TempoView::updateList()
 {
     // Preserve Selection.
 
+    // ??? But in BankEditorDialog, the tree remembers its scroll position
+    //     without any special code at all.  Why does this forget it?
+    //     Does it actually forget it?  Can we rewrite to make sure it can
+    //     remember without additional code?
+
     // We use a key instead of an index because indexes change.  Keys
     // do not.  This guarantees that we recreate the original selection
     // as closely as possible.

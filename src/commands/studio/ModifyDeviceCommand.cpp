@@ -39,7 +39,8 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     DeviceId device,
     const std::string &name,
     const std::string &librarianName,
-    const std::string &librarianEmail) :
+    const std::string &librarianEmail,
+    const QString& commandName) :
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_device(device),
@@ -56,7 +57,9 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         m_changeControls(false),
         m_changeKeyMappings(false),
         m_clearBankAndProgramList(false)
-{}
+{
+    if (commandName != "") setName(commandName);
+}
 
 void ModifyDeviceCommand::setVariation(MidiDevice::VariationType variationType)
 {
@@ -102,6 +105,9 @@ ModifyDeviceCommand::execute()
         std::cerr << "ERROR: ModifyDeviceCommand::execute(): device " << m_device << " is not a MIDI device" << std::endl;
         return;
     }
+
+    // block notifications to avoid multiple updates
+    midiDevice->blockNotify(true);
 
     // Save Original Values for Undo
 
@@ -202,6 +208,9 @@ ModifyDeviceCommand::execute()
         midiDevice->replaceControlParameters(m_controlList);
     }
 
+    // unblock notifactaions. This will trigger a notification
+    midiDevice->blockNotify(false);
+
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,
     //     would update themselves.
@@ -223,6 +232,9 @@ ModifyDeviceCommand::unexecute()
         return;
     }
 
+    // block notifactaions to avoid multiple updates
+    midiDevice->blockNotify(true);
+
     if (m_rename)
         midiDevice->setName(m_oldName);
     midiDevice->replaceBankList(m_oldBankList);
@@ -238,6 +250,9 @@ ModifyDeviceCommand::unexecute()
         instruments[i]->setProgram(m_oldInstrumentPrograms[i]);
         instruments[i]->sendChannelSetup();
     }
+
+    // unblock notifactaions. This will trigger a notification
+    midiDevice->blockNotify(false);
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,

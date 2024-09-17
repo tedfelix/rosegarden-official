@@ -84,6 +84,12 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     m_librarianEmail = new QLabel(groupBox);
     groupBoxLayout->addWidget(m_librarianEmail, 1, 1);
 
+    QPushButton* editLibrarianButton =
+        new QPushButton(tr("Edit"), groupBox);
+    connect(editLibrarianButton, &QPushButton::clicked,
+            m_bankEditor, &BankEditorDialog::slotEditLibrarian);
+    groupBoxLayout->addWidget(editLibrarianButton, 2, 1);
+
     groupBox->setLayout(groupBoxLayout);
 
     // QScrollArea
@@ -156,9 +162,10 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
         lineEdit->setProperty("index", index);
 
         m_names.push_back(lineEdit);
-        connect(m_names[index],
-                &QLineEdit::textEdited,
+        connect(m_names[index], &QLineEdit::textEdited,
                 this, &NameSetEditor::slotNameChanged);
+        connect(m_names[index], &QLineEdit::editingFinished,
+                this, &NameSetEditor::slotEditingFinished);
 
         rowLayout->addWidget(lineEdit, 1);
 
@@ -196,6 +203,17 @@ NameSetEditor::updateLabels()
     for (size_t i = 0; i < m_labels.size(); ++i) {
         m_labels[i]->setText(QString("%1").arg(index++));
     }
+}
+
+void
+NameSetEditor::clearAll()
+{
+    m_librarian->clear();
+    m_librarianEmail->clear();
+
+    // Clear all name fields.
+    for (size_t i = 0; i < m_names.size(); ++i)
+        m_names[i]->clear();
 }
 
 

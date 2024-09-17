@@ -38,13 +38,13 @@ class MidiBankTreeWidgetItem : public MidiDeviceTreeWidgetItem
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MidiBankTreeWidgetItem)
 
 public:
-    MidiBankTreeWidgetItem(DeviceId deviceId,
+    MidiBankTreeWidgetItem(MidiDevice* device,
                            int bankNb,
                            QTreeWidgetItem* parent, QString name,
                            bool percussion,
                            int msb, int lsb);
 
-    int getBank()     { return m_bankNb; }
+    int getBank() const  { return m_bankNb; }
 
     void setPercussion(bool percussion);
     bool isPercussion() const { return m_percussion; }

@@ -21,30 +21,29 @@
 #include "MidiProgramsEditor.h"
 
 #include "MidiBankTreeWidgetItem.h"
-#include "NameSetEditor.h"
 #include "BankEditorDialog.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "base/Device.h"
 #include "base/MidiDevice.h"
-#include "base/MidiProgram.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/general/IconLoader.h"
+#include "gui/dialogs/SelectBankDialog.h"
+#include "commands/studio/ModifyDeviceCommand.h"
+#include "document/CommandHistory.h"
 
 #include <QCheckBox>
 #include <QCursor>
 #include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
-#include <QPixmap>
 #include <QIcon>
 #include <QPoint>
+#include <QPushButton>
 #include <QMenu>
 #include <QSpinBox>
 #include <QString>
 #include <QToolButton>
-#include <QTreeWidgetItem>
 
 #include <algorithm>  // std::sort
 #include <string>
@@ -72,140 +71,122 @@ static const QIcon &getKeyMapIcon()
     return keyMapIcon;
 }
 
+static const QString defaultTitle{QObject::tr("Bank and Program details")};
+
 
 MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog *bankEditor,
                                        QWidget *parent) :
     NameSetEditor(bankEditor,
-                  tr("Bank and Program details"),  // title
+                  defaultTitle,  // title
                   parent,
-                  true),  // showKeyMapButtons
-    m_bankList(bankEditor->getBankList()),
-    m_programList(bankEditor->getProgramList())
+                  true)  // showKeyMapButtons
 {
-    QFrame *frame = new QFrame(m_topFrame);
-    frame->setContentsMargins(0, 0, 0, 0);
+    QWidget *topWidget = new QWidget(m_topFrame);
+    topWidget->setContentsMargins(0, 0, 0, 0);
+    m_topLayout->addWidget(topWidget, 0, 0, 3, 3);
 
-    QGridLayout *gridLayout = new QGridLayout(frame);
+    QGridLayout *gridLayout = new QGridLayout(topWidget);
     gridLayout->setSpacing(0);
 
+    int row{0};
+
     // Percussion
-    gridLayout->addWidget(new QLabel(tr("Percussion"), frame),
-                          0, 0, Qt::AlignLeft);
-    m_percussion = new QCheckBox(frame);
-    connect(m_percussion, &QAbstractButton::clicked,
-            this, &MidiProgramsEditor::slotPercussionClicked);
-    gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
+    gridLayout->addWidget(new QLabel(tr("Percussion"), topWidget), row, 0);
+    m_percussion = new QLabel(topWidget);
+    m_percussion->setAlignment(Qt::AlignHCenter);
+    gridLayout->addWidget(m_percussion, row, 1);
+
+    ++row;
 
     // MSB Value
-    gridLayout->addWidget(new QLabel(tr("MSB Value"), frame),
-                          1, 0, Qt::AlignLeft);
-    m_msb = new QSpinBox(frame);
-    m_msb->setToolTip(tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
-    m_msb->setMinimum(0);
-    m_msb->setMaximum(127);
-    connect(m_msb,
-                //QOverload<int>::of(&QSpinBox::valueChanged),  // Qt5.7+
-                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            this, &MidiProgramsEditor::slotNewMSB);
-    gridLayout->addWidget(m_msb, 1, 1, Qt::AlignLeft);
+    gridLayout->addWidget(new QLabel(tr("MSB Value"), topWidget), row, 0);
+    m_msb = new QLabel(topWidget);
+    m_msb->setAlignment(Qt::AlignHCenter);
+    gridLayout->addWidget(m_msb, row, 1);
+
+    ++row;
 
     // LSB Value
-    gridLayout->addWidget(new QLabel(tr("LSB Value"), frame),
-                          2, 0, Qt::AlignLeft);
-    m_lsb = new QSpinBox(frame);
-    m_lsb->setToolTip(tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
-    m_lsb->setMinimum(0);
-    m_lsb->setMaximum(127);
-    connect(m_lsb,
-                //QOverload<int>::of(&QSpinBox::valueChanged),  // Qt5.7+
-                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            this, &MidiProgramsEditor::slotNewLSB);
-    gridLayout->addWidget(m_lsb, 2, 1, Qt::AlignLeft);
+    gridLayout->addWidget(new QLabel(tr("LSB Value"), topWidget), row, 0);
+    m_lsb = new QLabel(topWidget);
+    m_lsb->setAlignment(Qt::AlignHCenter);
+    gridLayout->addWidget(m_lsb, row, 1);
 
-    m_topLayout->addWidget(frame, 0, 0, 3, 3);
+    ++row;
+
+    // Spacer
+    gridLayout->setRowMinimumHeight(row, 10);
+
+    ++row;
+
+    // Edit button
+    QPushButton *editBank = new QPushButton(tr("Edit"), topWidget);
+    connect(editBank, &QPushButton::clicked,
+            this, &MidiProgramsEditor::slotBankEditClicked);
+    gridLayout->addWidget(editBank, row, 0, 1, 2);
 }
 
-ProgramList
-MidiProgramsEditor::getBankSubset(const MidiBank &bank)
+void MidiProgramsEditor::changeBank(ProgramList &programList,
+                                    const MidiBank &oldBank,
+                                    const MidiBank &newBank)
 {
-    ProgramList programList;
-
-    // For each program, copy the ones for the requested bank to programList.
-    for (const MidiProgram &program : m_programList) {
-        if (program.getBank().compareKey(bank))
-            programList.push_back(program);
-    }
-
-    return programList;
-}
-
-void
-MidiProgramsEditor::modifyCurrentPrograms(
-        const MidiBank &oldBank, const MidiBank &newBank)
-{
-    // For each program in m_programList...
-    for (MidiProgram &program : m_programList) {
+    // For each program in programList...
+    for (MidiProgram &program : programList) {
         // If this one is in the old bank, update it to the new.
-        if (program.getBank().compareKey(oldBank))
-            program = MidiProgram(
-                    newBank, program.getProgram(), program.getName());
+        if (program.getBank().compareKey(oldBank)) {
+            program = MidiProgram(newBank,
+                                  program.getProgram(),
+                                  program.getName());
+        }
     }
 }
 
 void
 MidiProgramsEditor::clearAll()
 {
-    setTitle(tr("Bank and Program details"));
+    RG_DEBUG << "clearAll";
 
-    m_percussion->setChecked(false);
-    m_msb->setValue(0);
-    m_lsb->setValue(0);
-    m_currentBank = nullptr;
+    NameSetEditor::clearAll();
 
-    m_librarian->clear();
-    m_librarianEmail->clear();
+    setTitle(defaultTitle);
 
-    for (size_t i = 0; i < m_names.size(); ++i)
-        m_names[i]->clear();
+    m_percussion->setText(tr("no"));
+    m_msb->setText("0");
+    m_lsb->setText("0");
+
+    m_currentBank = MidiBank();
 
     setEnabled(false);
 }
 
 void
-MidiProgramsEditor::populate(QTreeWidgetItem *item)
+MidiProgramsEditor::populate(const MidiBankTreeWidgetItem *bankItem)
 {
     RG_DEBUG << "populate()";
+    RG_DEBUG << "  bankItem->getBank = " << bankItem->getBank();
 
-    MidiBankTreeWidgetItem *bankItem =
-            dynamic_cast<MidiBankTreeWidgetItem*>(item);
-    if (!bankItem) {
-        RG_DEBUG << "populate(): not a bank item - returning";
+    MidiDevice *device = bankItem->getDevice();
+    if (!device)
         return;
-    }
 
-    RG_DEBUG << "populate() : bankItem->getBank = " << bankItem->getBank();
+    m_device = device;
 
-    //m_currentBank = m_device->getBankByIndex(bankItem->getBank());
-    m_currentBank = &(m_bankList[bankItem->getBank()]);
-    m_oldBank = *m_currentBank;
+    const BankList &bankList = device->getBanks();
 
-    DeviceId deviceId = bankItem->getDeviceId();
-    m_device = m_bankEditor->getMidiDevice(deviceId);
-    if (!m_device)
-        return;
+    m_currentBank = bankList[bankItem->getBank()];
 
     setEnabled(true);
 
     setTitle(bankItem->text(0));
 
     // Percussion
-    m_percussion->setChecked(m_currentBank->isPercussion());
+    m_percussion->setText(m_currentBank.isPercussion() ? tr("yes") : tr("no"));
 
     // MSB Value
-    m_msb->setValue(m_currentBank->getMSB());
+    m_msb->setText(QString::number(m_currentBank.getMSB()));
 
     // LSB Value
-    m_lsb->setValue(m_currentBank->getLSB());
+    m_lsb->setText(QString::number(m_currentBank.getLSB()));
 
     // Provided By
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
@@ -213,24 +194,29 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
 
     // Program List
 
-    // Get the programs for the current bank.
-    ProgramList programSubset = getBankSubset(*m_currentBank);
-
     const bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
+    const ProgramList &programList = device->getPrograms();
 
     // For each name field (LineEdit) on the UI...
     // programIndex is also the program change number.
-    for (size_t programIndex = 0; programIndex < m_names.size(); ++programIndex) {
+    for (size_t programIndex = 0;
+         programIndex < m_names.size();
+         ++programIndex) {
 
         QToolButton *keyMapButton = getKeyMapButton(programIndex);
         keyMapButton->setMaximumHeight(12);
+        // No sense enabling the button if there is nothing to select.
         keyMapButton->setEnabled(haveKeyMappings);
 
         bool found = false;
         MidiProgram foundProgram;
 
-        // Find the program in programSubset.
-        for (const MidiProgram &midiProgram : programSubset) {
+        // Find the program
+        for (const MidiProgram &midiProgram : programList) {
+            // Not it?  Try the next.
+            if (!m_currentBank.compareKey(midiProgram.getBank()))
+                continue;
+
             // Found?  We're done.
             if (midiProgram.getProgram() == programIndex) {
                 found = true;
@@ -256,7 +242,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
         // Show start of label.
         m_names[programIndex]->setCursorPosition(0);
 
-        // Icon and ToolTip
+        // Key map icon and ToolTip
 
         const MidiKeyMapping *midiKeyMapping =
                 m_device->getKeyMappingForProgram(foundProgram);
@@ -274,149 +260,42 @@ MidiProgramsEditor::populate(QTreeWidgetItem *item)
     }
 }
 
-void
-MidiProgramsEditor::reset()
+void MidiProgramsEditor::slotEditingFinished()
 {
-    // Go back to m_oldBank's MSB/LSB and percussion setting.
-
-    m_percussion->setChecked(m_oldBank.isPercussion());
-    m_msb->setValue(m_oldBank.getMSB());
-    m_lsb->setValue(m_oldBank.getLSB());
-
-    // Make sure all the programs in m_programList are set back to the m_oldBank
-    // MSB/LSB.
-    if (m_currentBank) {
-        modifyCurrentPrograms(*m_currentBank, m_oldBank);
-        *m_currentBank = m_oldBank;
-    }
-}
-
-void
-MidiProgramsEditor::slotPercussionClicked()
-{
-    RG_DEBUG << "slotPercussionClicked()";
-
-    MidiBank newBank(
-            m_percussion->isChecked(),
-            m_msb->value(),
-            m_lsb->value(),
-            m_currentBank->getName());
-
-    // Make sure the programs in m_programList have the new percussion setting.
-    modifyCurrentPrograms(*m_currentBank, newBank);
-
-    // Update the current bank.
-    *m_currentBank = newBank;
-
-    // Refresh the tree so that it shows "Percussion" or "Bank" as appropriate.
-    m_bankEditor->slotApply();
-}
-
-void
-MidiProgramsEditor::slotNewMSB(int value)
-{
-    RG_DEBUG << "slotNewMSB(" << value << ")";
-
-    // ??? Not sure we should clean this up since we are getting rid of it.
-
-    int msb;
-
-    try {
-        msb = ensureUniqueMSB(value, value > m_currentBank->getMSB());
-    } catch (bool) {
-        msb = m_currentBank->getMSB();
-    }
-
-    MidiBank newBank(m_percussion->isChecked(),
-                     msb,
-                     m_lsb->value(),
-                     m_currentBank->getName());
-
-    modifyCurrentPrograms(*m_currentBank, newBank);
-
-    m_msb->setValue(msb);
-
-    *m_currentBank = newBank;
-
-    // Refresh the tree so that it shows the new MSB.
-    m_bankEditor->slotApply();
-}
-
-void
-MidiProgramsEditor::slotNewLSB(int value)
-{
-    RG_DEBUG << "slotNewLSB(" << value << ")";
-
-    // ??? Not sure we should clean this up since we are getting rid of it.
-
-    int lsb;
-
-    try {
-        lsb = ensureUniqueLSB(value, value > m_currentBank->getLSB());
-    } catch (bool) {
-        lsb = m_currentBank->getLSB();
-    }
-
-    MidiBank newBank(m_percussion->isChecked(),
-                     m_msb->value(),
-                     lsb,
-                     m_currentBank->getName());
-
-    modifyCurrentPrograms(*m_currentBank, newBank);
-
-    m_lsb->setValue(lsb);
-
-    *m_currentBank = newBank;
-
-    // Refresh the tree so that it shows the new MSB.
-    m_bankEditor->slotApply();
-}
-
-void
-MidiProgramsEditor::slotNameChanged(const QString &programName)
-{
-    //RG_DEBUG << "slotNameChanged(" << programName << ")";
-
-    // This is called for every single change to the edit box.  E.g.
-    // If the user types "hi", this slot is called twice.  Once with
-    // "h" and again with "hi".
-
-    // ??? Can we be more efficient?  E.g. only make the change when
-    //     the cursor leaves the edit box, or "Ok" is clicked?  That
-    //     would help with the command history spam issue.
-
-    if (!m_currentBank) {
-        RG_WARNING << "slotNameChanged(): WARNING: m_currentBank is nullptr.";
-        return;
-    }
+    RG_DEBUG << "slotEditingFinished()";
 
     const LineEdit *lineEdit = dynamic_cast<const LineEdit *>(sender());
 
     if (!lineEdit) {
-        RG_WARNING << "slotNameChanged(): WARNING: Signal sender is not a LineEdit.";
+        RG_WARNING << "slotEditingFinished(): WARNING: Signal sender is not a LineEdit.";
         return;
     }
+
+    const QString programName = lineEdit->text();
 
     // Zero-based program number.  This is the same as the MIDI program change.
     const unsigned programNumber = lineEdit->property("index").toUInt();
 
-    //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << programNumber;
+    RG_DEBUG << "slotEditingFinished(): " << programName << programNumber;
 
-    // Get the MidiProgram that needs to be changed from m_programList.
+    // Make a copy so we can change the name.
+    ProgramList newProgramList = m_device->getPrograms();
+
     ProgramList::iterator programIter =
-            getProgramIter(*m_currentBank, programNumber);
+            findProgramIter(newProgramList, m_currentBank, programNumber);
 
-    // If the MidiProgram doesn't exist in m_programList, add it.
-    if (programIter == m_programList.end()) {
+    // If the MidiProgram doesn't exist, add it.
+    if (programIter == newProgramList.end()) {
         // If the program name is empty, do nothing.
         if (programName.isEmpty())
             return;
 
-        // Create a new MidiProgram and add it to m_programList.
-        MidiProgram newProgram(*m_currentBank, programNumber);
-        m_programList.push_back(newProgram);
+        // Create a new MidiProgram and add it to newProgramList.
+        MidiProgram newProgram(m_currentBank, programNumber);
+        newProgram.setName(qstrtostr(programName));
+        newProgramList.push_back(newProgram);
 
-        // Sort m_programList.
+        // Sort newProgramList.
         // We need to sort this for the MIPP.  It just needs the PCs in
         // order.  That's how it displays them.
         // If we do not sort this, the .rg file is also mixed up.  But
@@ -425,57 +304,38 @@ MidiProgramsEditor::slotNameChanged(const QString &programName)
         //     the first steps toward moving to std::set?  Make it a
         //     std::set, but continue using it like a vector.  That
         //     way it is always sorted.
-        std::sort(m_programList.begin(),
-                  m_programList.end(),
+        std::sort(newProgramList.begin(),
+                  newProgramList.end(),
                   [](const MidiProgram &lhs, const MidiProgram &rhs){ return lhs.lessKey(rhs); });
 
-        // Get the new MidiProgram from m_programList.
-        programIter = getProgramIter(*m_currentBank, programNumber);
+        // Get the new MidiProgram
+        programIter = findProgramIter(newProgramList,
+                                      m_currentBank,
+                                      programNumber);
 
-    } else {  // The MidiProgram already exists in m_programList.
+    } else {  // The MidiProgram already exists in newProgramList.
+
+        // If the name hasn't changed, bail.
+        if (qstrtostr(programName) == programIter->getName())
+            return;
 
         // If the label is now empty...
         if (programName.isEmpty()) {
-            //RG_DEBUG << "slotNameChanged(): deleting empty program (" << programNumber << ")";
-            m_programList.erase(programIter);
-            // Call the parent's slotApply() to make the change to the
-            // document.
-            // ??? Command History SPAM.
-            // ??? This creates a command and adds it to the history.
-            //     Are we seeing a ton of things appear in the undo history?
-            //     Yes!  This spams the undo history until it is useless.
-            //     And there's no way to undo from within the editor.  So
-            //     adding to the command history seems pointless.
-            // ??? We should only call this on switching banks or
-            //     closing the BankEditorDialog.  We need to review
-            //     BankEditorDialog to make sure this is the best solution.
-            // ??? Other parts of the editor call this for an update.  But
-            //     program name changes do not appear on the tree.  So an
-            //     update of any kind has no value.
-            m_bankEditor->slotApply();
-
-            return;
+            //RG_DEBUG << "slotEditingFinished(): deleting empty program (" << programNumber << ")";
+            // Delete the program.
+            newProgramList.erase(programIter);
+        } else {  // Rename the program.
+            programIter->setName(qstrtostr(programName));
         }
     }
 
-    if (programIter == m_programList.end()) {
-        RG_WARNING << "slotNameChanged(): WARNING: programIter is end().";
-        return;
-    }
+    // Modify the Device.
 
-    //RG_DEBUG << "slotNameChanged(): program: " << program;
+    ModifyDeviceCommand *command =
+        m_bankEditor->makeCommand(tr("program changed"));
+    command->setProgramList(newProgramList);
+    CommandHistory::getInstance()->addCommand(command);
 
-    // If the name has actually changed
-    if (qstrtostr(programName) != programIter->getName()) {
-        programIter->setName(qstrtostr(programName));
-        // Call the parent's slotApply() to make the change to the
-        // document.
-        // ??? Command History SPAM.  See comments above.
-        // ??? We should only call this on switching banks or
-        //     closing the BankEditorDialog.  We need to review
-        //     BankEditorDialog to make sure this is the best solution.
-        m_bankEditor->slotApply();
-    }
 }
 
 void
@@ -490,9 +350,21 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
         return;
     }
 
-    const unsigned id = button->property("index").toUInt();
+    const unsigned programChange = button->property("index").toUInt();
 
-    MidiProgram *program = getProgram(*m_currentBank, id);
+    // Save the program number we are editing for slotKeyMapMenuItemSelected().
+    m_keyMapProgramNumber = programChange;
+
+    // Create a pop-up menu filled with the available key mappings.
+
+    QMenu *menu = new QMenu(button);
+
+    // Add the initial "<no key mapping>".
+    QAction *action = menu->addAction(tr("<no key mapping>"));
+    action->setObjectName("-1");
+
+    const MidiProgram *program = findProgram(
+            m_device->getPrograms(), m_currentBank, programChange);
     if (!program)
         return;
 
@@ -500,33 +372,23 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     if (keyMappingList.empty())
         return;
 
-    // Save the program number we are editing for slotKeyMapMenuItemSelected().
-    m_keyMapProgramNumber = id;
-
-    // Create a pop-up menu filled with the available key mappings.
-
-    QMenu *menu = new QMenu(button);
-
-    const MidiKeyMapping *currentMapping =
-            m_device->getKeyMappingForProgram(*program);
-
+    // To track down current key map index for menu positioning.
+    const std::string &currentKeyMapName = program->getKeyMapping();
     // Keep track of the current key map selection for
     // popup menu positioning.
-    int currentKeyMap = 0;
-
-    // Add the initial "<no key mapping>".
-    QAction *action = menu->addAction(tr("<no key mapping>"));
-    action->setObjectName("0");
+    int currentKeyMapIndex = -1;
 
     // For each key mapping...
-    for (size_t i = 0; i < keyMappingList.size(); ++i) {
+    for (size_t keyMapIndex = 0;
+         keyMapIndex < keyMappingList.size();
+         ++keyMapIndex) {
         // Add the mapping to the menu.
-        action = menu->addAction(strtoqstr(keyMappingList[i].getName()));
-        action->setObjectName(QString("%1").arg(i+1));
+        action = menu->addAction(strtoqstr(keyMappingList[keyMapIndex].getName()));
+        action->setObjectName(QString("%1").arg(keyMapIndex));
 
         // If the current keymap for this program is found, keep track of it.
-        if (currentMapping  &&  (keyMappingList[i] == *currentMapping))
-            currentKeyMap = static_cast<int>(i + 1);
+        if (keyMappingList[keyMapIndex].getName() == currentKeyMapName)
+            currentKeyMapIndex = static_cast<int>(keyMapIndex);
     }
 
     connect(menu, &QMenu::triggered,
@@ -538,7 +400,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     // is over the currently selected item.
 
     QRect actionRect =
-            menu->actionGeometry(menu->actions().value(currentKeyMap));
+            menu->actionGeometry(menu->actions().value(currentKeyMapIndex + 1));
     QPoint menuPos = QCursor::pos();
     // Adjust position so that the mouse will end up on top of
     // the current selection.
@@ -564,112 +426,61 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(QAction *action)
     if (keyMappingList.empty())
         return;
 
-    MidiProgram *program = getProgram(*m_currentBank, m_keyMapProgramNumber);
+    // Make a copy so we can modify it.
+    ProgramList newProgramList = m_device->getPrograms();
+
+    MidiProgram *program =
+            findProgram(newProgramList, m_currentBank, m_keyMapProgramNumber);
     if (!program)
         return;
 
     // Extract the key map number from the object name.
-    // Subtract one to convert from 1-based key map number to 0-based.
-    // Simplifies keyMappingList[] vector access.
-    const int keyMapNumber = action->objectName().toInt() - 1;
+    const int keyMapIndex = action->objectName().toInt();
 
     std::string newMapping;
 
     // No key mapping?
-    if (keyMapNumber <= -1) {
+    if (keyMapIndex <= -1) {
         newMapping = "";
     } else {
-        if (keyMapNumber < static_cast<int>(keyMappingList.size()))
-            newMapping = keyMappingList[keyMapNumber].getName();
+        if (keyMapIndex < static_cast<int>(keyMappingList.size()))
+            newMapping = keyMappingList[keyMapIndex].getName();
     }
 
-    // Set the key mapping.
-    // ??? Only the name is used?  Then we need to disallow key mappings
-    //     with empty names.  BankEditorDialog currently allows this.
-    m_device->setKeyMappingForProgram(*program, newMapping);
+    program->setKeyMapping(newMapping);
 
-    // Update the key mapping icon.
+    // Modify the Device.
 
-    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
-    QToolButton *keyMapButton = getKeyMapButton(m_keyMapProgramNumber);
-
-    // <no key mapping> selected?
-    if (keyMapNumber == -1) {
-        keyMapButton->setIcon(getNoKeyMapIcon());
-        keyMapButton->setToolTip("");
-    } else {
-        keyMapButton->setIcon(getKeyMapIcon());
-        keyMapButton->setToolTip(tr("Key Mapping: %1").arg(strtoqstr(newMapping)));
-    }
-    keyMapButton->setEnabled(haveKeyMappings);
+    ModifyDeviceCommand *command =
+        m_bankEditor->makeCommand(tr("change key mapping"));
+    command->setProgramList(newProgramList);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
-int
-MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
+const MidiProgram *
+MidiProgramsEditor::findProgram(const ProgramList &programList,
+                                const MidiBank &bank,
+                                int programNo)
 {
-    // ??? Not sure we should clean this up since we are getting rid of it.
-
-    bool percussion = false; // Doesn't matter
-    int newMSB = msb;
-    while (banklistContains(MidiBank(percussion,
-                                     newMSB, m_lsb->value()))
-            && newMSB < 128
-            && newMSB > -1)
-        if (ascending)
-            newMSB++;
-        else
-            newMSB--;
-
-    if (newMSB == -1 || newMSB == 128)
-        throw false;
-
-    return newMSB;
-}
-
-int
-MidiProgramsEditor::ensureUniqueLSB(int lsb, bool ascending)
-{
-    // ??? Not sure we should clean this up since we are getting rid of it.
-
-    bool percussion = false; // Doesn't matter
-    int newLSB = lsb;
-    while (banklistContains(MidiBank(percussion,
-                                     m_msb->value(), newLSB))
-            && newLSB < 128
-            && newLSB > -1)
-        if (ascending)
-            newLSB++;
-        else
-            newLSB--;
-
-    if (newLSB == -1 || newLSB == 128)
-        throw false;
-
-    return newLSB;
-}
-
-bool
-MidiProgramsEditor::banklistContains(const MidiBank &bank)
-{
-    // For each bank
-    for (const MidiBank &currentBank : m_bankList)
-    {
-        // Just compare the MSB/LSB.
-        if (currentBank.getMSB() == bank.getMSB()  &&
-            currentBank.getLSB() == bank.getLSB())
-            return true;
+    for (const MidiProgram &midiProgram : programList) {
+        // Match?
+        if (midiProgram.getBank().compareKey(bank)  &&
+            midiProgram.getProgram() == programNo) {
+            return &midiProgram;
+        }
     }
 
-    return false;
+    return nullptr;
 }
 
 MidiProgram *
-MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
+MidiProgramsEditor::findProgram(ProgramList &programList,
+                                const MidiBank &bank,
+                                int programNo)
 {
-    for (MidiProgram &midiProgram : m_programList) {
+    for (MidiProgram &midiProgram : programList) {
         // Match?
-        if (midiProgram.getBank().getMSB() == bank.getMSB()  &&
-            midiProgram.getBank().getLSB() == bank.getLSB()  &&
+        if (midiProgram.getBank().compareKey(bank)  &&
             midiProgram.getProgram() == programNo) {
             return &midiProgram;
         }
@@ -679,20 +490,65 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 }
 
 ProgramList::iterator
-MidiProgramsEditor::getProgramIter(const MidiBank &bank, int programNo)
+MidiProgramsEditor::findProgramIter(ProgramList &programList,
+                                   const MidiBank &bank,
+                                   int programNo)
 {
-    // For each program in m_programList...
-    for (ProgramList::iterator programIter = m_programList.begin();
-         programIter != m_programList.end();
+    // For each program in the programList...
+    for (ProgramList::iterator programIter = programList.begin();
+         programIter != programList.end();
          ++programIter) {
         // Match?
-        if (programIter->getBank().getMSB() == bank.getMSB()  &&
-            programIter->getBank().getLSB() == bank.getLSB()  &&
+        if (programIter->getBank().compareKey(bank) &&
             programIter->getProgram() == programNo)
             return programIter;
     }
 
-    return m_programList.end();
+    return programList.end();
+}
+
+void MidiProgramsEditor::slotBankEditClicked(bool /*checked*/)
+{
+    SelectBankDialog selectBankDialog(
+            this,
+            m_device->getBanks(),
+            m_currentBank,
+            true);  // allowOriginal
+    if (selectBankDialog.exec() == QDialog::Rejected)
+        return;
+
+    const MidiBank newBank = selectBankDialog.getBank();
+    // No change?  Bail.
+    if (newBank.compareKey(m_currentBank))
+        return;
+
+    // Create a new program list with the new LSB.
+
+    ProgramList newProgramList = m_device->getPrograms();
+    changeBank(newProgramList, m_currentBank, newBank);
+
+    // Create a new bank list with the new LSB.
+
+    const BankList &oldBankList = m_device->getBanks();
+    BankList newBankList;
+    for (const MidiBank &oldMidiBank : oldBankList) {
+        // If this is the one we want to change, add the new bank.
+        if (oldMidiBank == m_currentBank)
+            newBankList.push_back(newBank);
+        else  // Go with the old bank.
+            newBankList.push_back(oldMidiBank);
+    }
+
+    // Modify the Device.
+
+    ModifyDeviceCommand *command =
+            m_bankEditor->makeCommand(tr("change bank"));
+    command->setBankList(newBankList);
+    command->setProgramList(newProgramList);
+    CommandHistory::getInstance()->addCommand(command);
+
+    // Update the current bank.
+    m_currentBank = newBank;
 }
 
 

@@ -37,6 +37,7 @@ class RecordIn;
 class MidiDevice;
 class Segment;
 class Track;
+class StudioObserver;
 
 typedef std::vector<Instrument *> InstrumentList;
 typedef std::vector<Device*> DeviceList;
@@ -120,7 +121,7 @@ public:
     }
 
     // Same again, but with bank select
-    // 
+    //
     Instrument* assignMidiProgramToInstrument(MidiByte program,
                                               int msb, int lsb,
                                               bool percussion);
@@ -143,7 +144,7 @@ public:
 
     void clearBusses();
     void clearRecordIns();
-    
+
     // Get a MIDI metronome from a given device
     //
     const MidiMetronome* getMetronomeFromDevice(DeviceId id);
@@ -217,6 +218,10 @@ public:
     DeviceId getMetronomeDevice() const { return m_metronomeDevice; }
     void setMetronomeDevice(DeviceId device) { m_metronomeDevice = device; }
 
+    // observer management
+    void addObserver(StudioObserver *obs);
+    void removeObserver(StudioObserver *obs);
+
 private:
 
     DeviceList        m_devices;
@@ -232,6 +237,20 @@ private:
     MidiFilter        m_midiRecordFilter;
 
     DeviceId          m_metronomeDevice;
+    typedef std::list<StudioObserver *> ObserverList;
+    ObserverList m_observers;
+
+};
+
+class StudioObserver
+{
+ public:
+    virtual ~StudioObserver() {}
+
+    // called after device has been created
+    virtual void deviceAdded(Device*) {}
+    // called after device has been removed but before it is deleted
+    virtual void deviceRemoved(Device*) {}
 };
 
 }

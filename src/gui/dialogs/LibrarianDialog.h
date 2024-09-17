@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,33 +15,32 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_MIDIKEYMAPLISTVIEWITEM_H
-#define RG_MIDIKEYMAPLISTVIEWITEM_H
+#ifndef LIBRARIANDIALOG_H
+#define LIBRARIANDIALOG_H
 
-#include "base/Device.h"
-#include "MidiDeviceTreeWidgetItem.h"
-#include <QString>
+#include <QDialog>
 
-
-class QTreeWidgetItem;
-
+class QLineEdit;
 
 namespace Rosegarden
 {
 
-class MidiDevice;
-
-class MidiKeyMapTreeWidgetItem : public MidiDeviceTreeWidgetItem
+class LibrarianDialog : public QDialog
 {
-    //Q_OBJECT
-public:
-    MidiKeyMapTreeWidgetItem(MidiDevice* device,
-                             QTreeWidgetItem* parent, QString name);
+    Q_OBJECT
 
-    int compare(QTreeWidgetItem *i, int col, bool ascending) const override;
+ public:
+    LibrarianDialog(QWidget *parent,
+                    const QString& librarianName,
+                    const QString& librarianEmail);
+
+    void getLibrarian(QString& name, QString& email);
+
+ private:
+    QLineEdit* m_nameEdit;
+    QLineEdit* m_mailEdit;
 
 };
-
 
 }
 

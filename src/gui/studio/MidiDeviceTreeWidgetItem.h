@@ -20,12 +20,16 @@
 
 #include "base/Device.h"
 
-#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QString>
-#include <QCoreApplication>
+#include <QCoreApplication>  // Q_DECLARE_TR_FUNCTIONS
+
 
 namespace Rosegarden
 {
+
+
+class MidiDevice;
 
 
 class MidiDeviceTreeWidgetItem : public QTreeWidgetItem
@@ -33,28 +37,43 @@ class MidiDeviceTreeWidgetItem : public QTreeWidgetItem
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MidiDeviceTreeWidgetItem)
 
 public:
-    // Device
-    MidiDeviceTreeWidgetItem(DeviceId deviceId,
-                             QTreeWidget* parent, QString name);
 
-    // Bank
-    MidiDeviceTreeWidgetItem(DeviceId deviceId,
+    /// Construct an item and insert into parent.
+    MidiDeviceTreeWidgetItem(
+            QTreeWidget *parent, MidiDevice *device, const QString &name);
+
+    /// Bank
+    /**
+     * ??? But a Bank is not a kind of Device.  This ctor does not
+     *     belong here.
+     */
+    MidiDeviceTreeWidgetItem(MidiDevice* device,
                              QTreeWidgetItem* parent, QString name,
                              bool percussion,
                              int msb, int lsb);
 
-    // Key Mapping
-    MidiDeviceTreeWidgetItem(DeviceId deviceId,
+    /// Key Mapping
+    /**
+     * ??? But a key map is not a kind of Device.  This ctor does not
+     *     belong here.
+     */
+    MidiDeviceTreeWidgetItem(MidiDevice* device,
                              QTreeWidgetItem* parent, QString name);
 
-    DeviceId getDeviceId() const { return m_deviceId; }
+    MidiDevice* getDevice() const { return m_device; }
 
     virtual int compare(QTreeWidgetItem *i, int col, bool ascending) const;
 
+    QString getName() const { return m_name; }
+
 protected:
 
-    //--------------- Data members ---------------------------------
-    DeviceId m_deviceId;
+    QString m_name;
+
+private:
+
+    MidiDevice *m_device;
+
 };
 
 
