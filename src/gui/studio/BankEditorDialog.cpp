@@ -212,7 +212,7 @@ BankEditorDialog::~BankEditorDialog()
 
     // Unsubscribe from Device(s)
     for (Device *device : m_observedDevices) {
-        unobserveDevice(device);
+        device->removeObserver(this);
     }
 }
 
