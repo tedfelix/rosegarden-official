@@ -76,6 +76,7 @@ namespace
 
     constexpr int TimeRole = Qt::UserRole;
     constexpr int TypeRole = Qt::UserRole + 1;
+    constexpr int IndexRole = Qt::UserRole + 2;
 
 }
 
@@ -333,6 +334,7 @@ TempoView2::updateList()
                     new QTableWidgetItem(timeString);
             item->setData(TimeRole, QVariant(qlonglong(sig.first)));
             item->setData(TypeRole, (int)Type::TimeSignature);
+            item->setData(IndexRole, timeSignatureIndex);
             m_tableWidget->setItem(row, 0, item);
 
             // Type
@@ -419,6 +421,7 @@ TempoView2::updateList()
                     new QTableWidgetItem(timeString);
             item->setData(TimeRole, QVariant(qlonglong(time)));
             item->setData(TypeRole, (int)Type::Tempo);
+            item->setData(IndexRole, tempoIndex);
             m_tableWidget->setItem(row, 0, item);
 
             // Type
@@ -533,16 +536,15 @@ TempoView2::getCurrentSegment()
 void
 TempoView2::slotEditDelete()
 {
+    Composition *composition =
+            &RosegardenDocument::currentDocument->getComposition();
+
     MacroCommand *macroCommand = new MacroCommand(
             tr("Delete Tempo or Time Signature"));
 
-#if broken  // ???
-    // For each item in the list in reverse order...
-    for (int itemIndex = m_tableWidget->topLevelItemCount() - 1;
-         itemIndex >= 0;
-         --itemIndex) {
-        TempoListItem *item = dynamic_cast<TempoListItem *>(
-                m_tableWidget->topLevelItem(itemIndex));
+    // For each row in reverse order...
+    for (int row = m_tableWidget->rowCount() - 1; row >= 0; --row) {
+        QTableWidgetItem *item = m_tableWidget->item(row, 0);
         if (!item)
             continue;
 
@@ -550,17 +552,24 @@ TempoView2::slotEditDelete()
         if (!item->isSelected())
             continue;
 
-        if (item->getType() == TempoListItem::TimeSignature) {
+        bool ok;
+        const Type type = (Type)item->data(TypeRole).toInt(&ok);
+        if (!ok)
+            continue;
+
+        const int index = item->data(IndexRole).toInt(&ok);
+        if (!ok)
+            continue;
+
+        if (type == Type::TimeSignature) {
             macroCommand->addCommand(new RemoveTimeSignatureCommand(
-                    item->getComposition(),
-                    item->getIndex()));
+                    composition, index));
         } else {  // Tempo
             macroCommand->addCommand(new RemoveTempoChangeCommand(
-                    item->getComposition(),
-                    item->getIndex()));
+                    composition, index));
         }
+
     }
-#endif
 
     if (macroCommand->haveCommands())
         CommandHistory::getInstance()->addCommand(macroCommand);
