@@ -150,6 +150,7 @@ TempoView2::TempoView2(timeT openTime)
     m_tableWidget->setColumnCount(headers.size());
     m_tableWidget->setHorizontalHeaderLabels(headers);
     // Make sure columns have a reasonable amount of space.
+    // ??? Widths are off now.  Re-adjust.
     m_tableWidget->setColumnWidth(0, 133);
     m_tableWidget->setColumnWidth(1, 125);
 #if broken  // ???
@@ -489,37 +490,37 @@ TempoView2::makeInitialSelection(timeT time)
 {
     // Select an item around the given time.
 
-    // Note that this is complicated by the fact that Time Signatures
-    // appear before Tempos.
+    QTableWidgetItem *foundItem{nullptr};
+    int foundRow{0};
 
-
-#if broken  // ???
-    TempoListItem *goodItem{nullptr};
-
-    // For each item...
-    for (int itemIndex = 0;
-         itemIndex < m_tableWidget->topLevelItemCount();
-         ++itemIndex) {
-        TempoListItem *item =
-                dynamic_cast<TempoListItem *>(m_tableWidget->topLevelItem(itemIndex));
-        if (!item)
+    // For each row...
+    for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
+        QTableWidgetItem *item = m_tableWidget->item(row, 0);
+        bool ok;
+        const timeT itemTime = item->data(TimeRole).toLongLong(&ok);
+        if (!ok)
             continue;
 
         // Past the time we are looking for?  We're done.
-        if (item->getTime() > time)
+        if (itemTime > time)
             break;
 
         // Keep track of the last item we examined.
-        goodItem = item;
+        foundItem = item;
+        foundRow = row;
     }
 
-    if (goodItem) {
-        goodItem->setSelected(true);
-        m_tableWidget->scrollToItem(goodItem);
+    // Found?  Select the entire row.
+    if (foundItem) {
+        // For each column, select the item.
+        for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+            QTableWidgetItem *item = m_tableWidget->item(foundRow, col);
+            if (!item)
+                continue;
+            item->setSelected(true);
+        }
+        m_tableWidget->scrollToItem(foundItem);
     }
-#else
-    (void)time;
-#endif
 }
 
 Segment *
