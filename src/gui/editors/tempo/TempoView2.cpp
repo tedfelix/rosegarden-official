@@ -131,17 +131,18 @@ TempoView2::TempoView2(timeT openTime)
     //m_tableWidget->setAllColumnsShowFocus(true);
     m_tableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    // Hide the vertical header
+    m_tableWidget->verticalHeader()->hide();
     QStringList headers;
     // ??? The extra space at the end of each of these is probably an
     //     attempt at getting the columns to be wider.  This does not
-    //     work.  Leaving this here to avoid creating work for the
+    //     work.  Leaving the space here to avoid creating work for the
     //     translators.  For now.
     headers << tr("Time  ") <<
                tr("Type  ") <<
                tr("Value  ") <<
                tr("Properties  ");
     m_tableWidget->setColumnCount(headers.size());
-    // ??? Not working.  Just getting "1", "2", "3", "4".
     m_tableWidget->setHorizontalHeaderLabels(headers);
     // Make sure columns have a reasonable amount of space.
     m_tableWidget->setColumnWidth(0, 133);
@@ -299,7 +300,7 @@ TempoView2::updateList()
              timeSignatureIndex < comp->getTimeSignatureCount();
              ++timeSignatureIndex) {
 
-            std::pair<timeT, Rosegarden::TimeSignature> sig =
+            const std::pair<timeT, Rosegarden::TimeSignature> sig =
                     comp->getTimeSignatureChange(timeSignatureIndex);
 
             QString properties;
@@ -313,27 +314,41 @@ TempoView2::updateList()
                     properties = tr("Common");
             }
 
-            QString timeString = comp->makeTimeString(
+            const QString timeString = comp->makeTimeString(
                     sig.first,
                     static_cast<Composition::TimeMode>(a_timeMode.get()));
 
-            QStringList labels;
-            labels << timeString <<
-                      tr("Time Signature   ") <<
-                      QString("%1/%2   ").
-                              arg(sig.second.getNumerator()).
-                              arg(sig.second.getDenominator()) <<
-                      properties;
-#if broken  // ???
-            // Create a new TempoListItem and add to the list.
-            TempoListItem *item = new TempoListItem(
-                    m_tableWidget,  // treeWidget
-                    comp,  // composition
-                    TempoListItem::TimeSignature,  // type
-                    sig.first,  // time
-                    timeSignatureIndex,  // index
-                    labels);
-#endif
+            // Add a row to the table
+            const int row = m_tableWidget->rowCount();
+            m_tableWidget->insertRow(row);
+
+            // Time
+            QTableWidgetItem *item =
+                    new QTableWidgetItem(timeString);
+            // ??? We need an ID of some sort to get back to the data.
+            //item->setData(Qt::UserRole, id);
+            m_tableWidget->setItem(row, 0, item);
+
+            // Type
+            item = new QTableWidgetItem(tr("Time Signature   "));
+            // ??? We need an ID of some sort to get back to the data.
+            //item->setData(Qt::UserRole, id);
+            m_tableWidget->setItem(row, 1, item);
+
+            // Value
+            item = new QTableWidgetItem(
+                    QString("%1/%2   ").
+                            arg(sig.second.getNumerator()).
+                            arg(sig.second.getDenominator()));
+            // ??? We need an ID of some sort to get back to the data.
+            //item->setData(Qt::UserRole, id);
+            m_tableWidget->setItem(row, 2, item);
+
+            // Properties
+            item = new QTableWidgetItem(properties);
+            // ??? We need an ID of some sort to get back to the data.
+            //item->setData(Qt::UserRole, id);
+            m_tableWidget->setItem(row, 3, item);
 
             // Set current if it is the right one.
             // Setting current will clear any selection so we do it
@@ -395,19 +410,28 @@ TempoView2::updateList()
             const QString timeString = comp->makeTimeString(
                     time, static_cast<Composition::TimeMode>(a_timeMode.get()));
 
-            QStringList labels;
-            labels << timeString << tr("Tempo   ") << desc;
+            // Add a row to the table
+            const int row = m_tableWidget->rowCount();
+            m_tableWidget->insertRow(row);
 
-#if broken  // ???
-            // Create a new TempoListItem and add to the list.
-            TempoListItem *item = new TempoListItem(
-                    m_tableWidget,  // treeWidget
-                    comp,  // composition
-                    TempoListItem::Tempo,  // type
-                    time,
-                    tempoIndex,
-                    labels);
-#endif
+            // Time
+            QTableWidgetItem *item =
+                    new QTableWidgetItem(timeString);
+            // ??? We need an ID of some sort to get back to the data.
+            //item->setData(Qt::UserRole, id);
+            m_tableWidget->setItem(row, 0, item);
+
+            // Type
+            item = new QTableWidgetItem(tr("Tempo   "));
+            // ??? We need an ID of some sort to get back to the data.
+            //item->setData(Qt::UserRole, id);
+            m_tableWidget->setItem(row, 1, item);
+
+            // Value
+            item = new QTableWidgetItem(desc);
+            // ??? We need an ID of some sort to get back to the data.
+            //item->setData(Qt::UserRole, id);
+            m_tableWidget->setItem(row, 2, item);
 
             // Set current if it is the right one.
             // Setting current will clear any selection so we do it
