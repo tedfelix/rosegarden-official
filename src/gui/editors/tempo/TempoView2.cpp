@@ -55,8 +55,9 @@
 #include <QHeaderView>
 #include <QScrollBar>
 
-
+// ??? Remove when done.
 #define broken 0
+
 
 namespace
 {
@@ -572,19 +573,16 @@ TempoView2::slotEditDelete()
 void
 TempoView2::slotAddTempoChange()
 {
-    timeT insertTime = 0;
+    timeT insertTime{0};
 
-#if broken  // ???
-    QList<QTreeWidgetItem *> selection = m_tableWidget->selectedItems();
-
-    // If something is selected, use the time of that item.
-    if (!selection.empty()) {
-        TempoListItem *item =
-            dynamic_cast<TempoListItem *>(selection.first());
-        if (item)
-            insertTime = item->getTime();
+    QList<QTableWidgetItem *> selectedItems = m_tableWidget->selectedItems();
+    if (!selectedItems.empty()) {
+        // These appear to be in order, so this will be the first column of
+        // the first selected row.
+        QTableWidgetItem *item = selectedItems[0];
+        if (item->data(TimeRole) != QVariant())
+            insertTime = item->data(TimeRole).toLongLong();
     }
-#endif
 
     // Launch the TempoDialog.
     EditTempoController::self()->editTempo(
@@ -596,19 +594,16 @@ TempoView2::slotAddTempoChange()
 void
 TempoView2::slotAddTimeSignatureChange()
 {
-    timeT insertTime = 0;
+    timeT insertTime{0};
 
-#if broken  // ???
-    QList<QTreeWidgetItem*> selection = m_tableWidget->selectedItems();
-
-    // If something is selected, use the time of that item.
-    if (!selection.empty()) {
-        TempoListItem *item =
-            dynamic_cast<TempoListItem *>(selection.first());
-        if (item)
-            insertTime = item->getTime();
+    QList<QTableWidgetItem *> selectedItems = m_tableWidget->selectedItems();
+    if (!selectedItems.empty()) {
+        // These appear to be in order, so this will be the first column of
+        // the first selected row.
+        QTableWidgetItem *item = selectedItems[0];
+        if (item->data(TimeRole) != QVariant())
+            insertTime = item->data(TimeRole).toLongLong();
     }
-#endif
 
     Composition &composition =
             RosegardenDocument::currentDocument->getComposition();
