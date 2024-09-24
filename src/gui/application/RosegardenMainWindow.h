@@ -55,15 +55,22 @@ class QTemporaryFile;
 class QProcess;
 class QAction;
 
+#define USE_TEMPOVIEW2 1
+
 
 namespace Rosegarden
 {
+
 
 class RosegardenMainViewWidget;
 class TriggerSegmentManager;
 class TransportDialog;
 class TrackParameterBox;
+#if USE_TEMPOVIEW2
+class TempoView2;
+#else
 class TempoView;
+#endif
 class SynthPluginManagerDialog;
 class StartupTester;
 class SequenceManager;
@@ -95,6 +102,7 @@ class TranzportClient;
 class WarningWidget;
 class DocumentConfigureDialog;
 class ConfigureDialog;
+
 
 /// The main Rosegarden application window.
 /**
@@ -1615,7 +1623,11 @@ private:
     MidiMixerWindow       *m_midiMixer;
     BankEditorDialog      *m_bankEditor;
     MarkerEditor          *m_markerEditor;
-    TempoView             *m_tempoView;
+#if USE_TEMPOVIEW2
+    TempoView2 *m_tempoView;
+#else
+    TempoView *m_tempoView;
+#endif
     TriggerSegmentManager *m_triggerSegmentManager;
     ConfigureDialog       *m_configDlg;
     DocumentConfigureDialog *m_docConfigDlg;

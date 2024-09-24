@@ -130,6 +130,7 @@ TempoView2::TempoView2(timeT openTime)
     m_mainLayout->addWidget(m_tableWidget);
     //m_tableWidget->setAllColumnsShowFocus(true);
     m_tableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     QStringList headers;
     // ??? The extra space at the end of each of these is probably an
     //     attempt at getting the columns to be wider.  This does not
@@ -140,11 +141,12 @@ TempoView2::TempoView2(timeT openTime)
                tr("Value  ") <<
                tr("Properties  ");
     m_tableWidget->setColumnCount(headers.size());
+    // ??? Not working.  Just getting "1", "2", "3", "4".
     m_tableWidget->setHorizontalHeaderLabels(headers);
     // Make sure columns have a reasonable amount of space.
     m_tableWidget->setColumnWidth(0, 133);
     m_tableWidget->setColumnWidth(1, 125);
-#if broken
+#if broken  // ???
     connect(m_tableWidget, &QTableWidget::itemDoubleClicked,
             this, &TempoView2::slotPopupEditor);
 #endif
@@ -156,9 +158,9 @@ TempoView2::TempoView2(timeT openTime)
     // Restore window geometry and header state.
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    restoreGeometry(settings.value("Tempo_View_Geometry").toByteArray());
-    //restoreState(settings.value("Tempo_View_State").toByteArray());
-    m_tableWidget->horizontalHeader()->restoreState(settings.value("Tempo_View_Header_State").toByteArray());
+    restoreGeometry(settings.value("Tempo_View2_Geometry").toByteArray());
+    //restoreState(settings.value("Tempo_View2_State").toByteArray());
+    m_tableWidget->horizontalHeader()->restoreState(settings.value("Tempo_View2_Header_State").toByteArray());
     settings.endGroup();
 
     m_doc->getComposition().addObserver(this);
@@ -174,9 +176,9 @@ TempoView2::~TempoView2()
     // Save window geometry and header state.
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    settings.setValue("Tempo_View_Geometry", saveGeometry());
-    //settings.setValue("Tempo_View_State", saveState());
-    settings.setValue("Tempo_View_Header_State", m_tableWidget->horizontalHeader()->saveState());
+    settings.setValue("Tempo_View2_Geometry", saveGeometry());
+    //settings.setValue("Tempo_View2_State", saveState());
+    settings.setValue("Tempo_View2_Header_State", m_tableWidget->horizontalHeader()->saveState());
     settings.endGroup();
 
     // We use m_doc instead of RosegardenDocument::currentDocument to
@@ -286,7 +288,7 @@ TempoView2::updateList()
 
     // Recreate list.
 
-    m_tableWidget->clear();
+    m_tableWidget->clearContents();
 
     Composition *comp = &RosegardenDocument::currentDocument->getComposition();
 
@@ -322,7 +324,7 @@ TempoView2::updateList()
                               arg(sig.second.getNumerator()).
                               arg(sig.second.getDenominator()) <<
                       properties;
-#if broken
+#if broken  // ???
             // Create a new TempoListItem and add to the list.
             TempoListItem *item = new TempoListItem(
                     m_tableWidget,  // treeWidget
@@ -339,7 +341,7 @@ TempoView2::updateList()
             if (haveCurrentItem  &&
                 currentItemKey.itemType == TempoListItem::TimeSignature) {
                 if (sig.first == currentItemKey.midiTicks) {
-#if broken
+#if broken  // ???
                     m_tableWidget->setCurrentItem(item);
                     item->setSelected(currentItemSelected);
 #else
@@ -396,7 +398,7 @@ TempoView2::updateList()
             QStringList labels;
             labels << timeString << tr("Tempo   ") << desc;
 
-#if broken
+#if broken  // ???
             // Create a new TempoListItem and add to the list.
             TempoListItem *item = new TempoListItem(
                     m_tableWidget,  // treeWidget
@@ -413,7 +415,7 @@ TempoView2::updateList()
             if (haveCurrentItem  &&
                 currentItemKey.itemType == TempoListItem::Tempo) {
                 if (time == currentItemKey.midiTicks) {
-#if broken
+#if broken  // ???
                     m_tableWidget->setCurrentItem(item);
                     item->setSelected(currentItemSelected);
 #endif
@@ -429,7 +431,7 @@ TempoView2::updateList()
 
     bool haveSelection{false};
 
-#if broken
+#if broken  // ???
     // For each item in the list...
     for (int itemIndex = 0;
          itemIndex < m_tableWidget->topLevelItemCount();
@@ -472,7 +474,7 @@ TempoView2::makeInitialSelection(timeT time)
     // appear before Tempos.
 
 
-#if broken
+#if broken  // ???
     TempoListItem *goodItem{nullptr};
 
     // For each item...
@@ -514,7 +516,7 @@ TempoView2::slotEditDelete()
     MacroCommand *macroCommand = new MacroCommand(
             tr("Delete Tempo or Time Signature"));
 
-#if broken
+#if broken  // ???
     // For each item in the list in reverse order...
     for (int itemIndex = m_tableWidget->topLevelItemCount() - 1;
          itemIndex >= 0;
@@ -554,7 +556,7 @@ TempoView2::slotAddTempoChange()
 {
     timeT insertTime = 0;
 
-#if broken
+#if broken  // ???
     QList<QTreeWidgetItem *> selection = m_tableWidget->selectedItems();
 
     // If something is selected, use the time of that item.
@@ -578,7 +580,7 @@ TempoView2::slotAddTimeSignatureChange()
 {
     timeT insertTime = 0;
 
-#if broken
+#if broken  // ???
     QList<QTreeWidgetItem*> selection = m_tableWidget->selectedItems();
 
     // If something is selected, use the time of that item.
@@ -619,7 +621,7 @@ TempoView2::slotAddTimeSignatureChange()
 void
 TempoView2::slotEditItem()
 {
-#if broken
+#if broken  // ???
     QList<QTreeWidgetItem *> selection = m_tableWidget->selectedItems();
     if (selection.empty())
         return;
@@ -634,7 +636,7 @@ TempoView2::slotEditItem()
 void
 TempoView2::slotSelectAll()
 {
-#if broken
+#if broken  // ???
     for (int i = 0; i < m_tableWidget->topLevelItemCount(); ++i) {
         m_tableWidget->topLevelItem(i)->setSelected(true);
     }
@@ -644,7 +646,7 @@ TempoView2::slotSelectAll()
 void
 TempoView2::slotClearSelection()
 {
-#if broken
+#if broken  // ???
     for (int i = 0; i < m_tableWidget->topLevelItemCount(); ++i) {
         m_tableWidget->topLevelItem(i)->setSelected(false);
     }

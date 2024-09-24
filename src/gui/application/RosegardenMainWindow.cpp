@@ -144,7 +144,11 @@
 #include "gui/editors/segment/compositionview/SegmentToolBox.h"
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/editors/segment/TriggerSegmentManager.h"
+#if USE_TEMPOVIEW2
+#include "gui/editors/tempo/TempoView2.h"
+#else
 #include "gui/editors/tempo/TempoView.h"
+#endif
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/general/FileSource.h"
@@ -7166,10 +7170,17 @@ RosegardenMainWindow::slotEditTempos(timeT openAtTime)
         return ;
     }
 
+#if USE_TEMPOVIEW2
+    m_tempoView = new TempoView2(openAtTime);
+
+    connect(m_tempoView, &TempoView2::closing,
+            this, &RosegardenMainWindow::slotTempoViewClosed);
+#else
     m_tempoView = new TempoView(openAtTime);
 
     connect(m_tempoView, &TempoView::closing,
             this, &RosegardenMainWindow::slotTempoViewClosed);
+#endif
 
     connect(m_tempoView, &EditViewBase::saveFile, this, &RosegardenMainWindow::slotFileSave);
 
