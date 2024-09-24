@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[TempoView2]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "TempoView2.h"
 
@@ -72,6 +72,9 @@ namespace
             Rosegarden::TempoViewConfigGroup,
             "timesignaturefilter",
             true);
+
+    constexpr int TimeRole = Qt::UserRole;
+    constexpr int TypeRole = Qt::UserRole + 1;
 
 }
 
@@ -129,6 +132,7 @@ TempoView2::TempoView2(timeT openTime)
     m_tableWidget = new QTableWidget(m_frame);
     m_mainLayout->addWidget(m_tableWidget);
     //m_tableWidget->setAllColumnsShowFocus(true);
+    // ??? Need to disable double-click editing of each field!
     m_tableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     // Hide the vertical header
@@ -325,14 +329,12 @@ TempoView2::updateList()
             // Time
             QTableWidgetItem *item =
                     new QTableWidgetItem(timeString);
-            // ??? We need an ID of some sort to get back to the data.
-            //item->setData(Qt::UserRole, id);
+            item->setData(TimeRole, QVariant(qlonglong(sig.first)));
+            item->setData(TypeRole, (int)Type::TimeSignature);
             m_tableWidget->setItem(row, 0, item);
 
             // Type
             item = new QTableWidgetItem(tr("Time Signature   "));
-            // ??? We need an ID of some sort to get back to the data.
-            //item->setData(Qt::UserRole, id);
             m_tableWidget->setItem(row, 1, item);
 
             // Value
@@ -340,14 +342,10 @@ TempoView2::updateList()
                     QString("%1/%2   ").
                             arg(sig.second.getNumerator()).
                             arg(sig.second.getDenominator()));
-            // ??? We need an ID of some sort to get back to the data.
-            //item->setData(Qt::UserRole, id);
             m_tableWidget->setItem(row, 2, item);
 
             // Properties
             item = new QTableWidgetItem(properties);
-            // ??? We need an ID of some sort to get back to the data.
-            //item->setData(Qt::UserRole, id);
             m_tableWidget->setItem(row, 3, item);
 
             // Set current if it is the right one.
@@ -417,20 +415,16 @@ TempoView2::updateList()
             // Time
             QTableWidgetItem *item =
                     new QTableWidgetItem(timeString);
-            // ??? We need an ID of some sort to get back to the data.
-            //item->setData(Qt::UserRole, id);
+            item->setData(TimeRole, QVariant(qlonglong(time)));
+            item->setData(TypeRole, (int)Type::Tempo);
             m_tableWidget->setItem(row, 0, item);
 
             // Type
             item = new QTableWidgetItem(tr("Tempo   "));
-            // ??? We need an ID of some sort to get back to the data.
-            //item->setData(Qt::UserRole, id);
             m_tableWidget->setItem(row, 1, item);
 
             // Value
             item = new QTableWidgetItem(desc);
-            // ??? We need an ID of some sort to get back to the data.
-            //item->setData(Qt::UserRole, id);
             m_tableWidget->setItem(row, 2, item);
 
             // Set current if it is the right one.
@@ -645,16 +639,26 @@ TempoView2::slotAddTimeSignatureChange()
 void
 TempoView2::slotEditItem()
 {
-#if broken  // ???
-    QList<QTreeWidgetItem *> selection = m_tableWidget->selectedItems();
-    if (selection.empty())
+    QList<QTableWidgetItem *> selectedItems = m_tableWidget->selectedItems();
+    if (selectedItems.empty())
         return;
 
-    // Edit the first one selected.
-    TempoListItem *item = dynamic_cast<TempoListItem *>(selection.first());
-    if (item)
-        slotPopupEditor(item);
-#endif
+    // These appear to be in order, so this will be the first column of
+    // the first selected row.
+    QTableWidgetItem *item = selectedItems[0];
+    if (item->data(TimeRole) == QVariant())
+        return;
+
+    bool ok;
+    const timeT time = item->data(TimeRole).toLongLong(&ok);
+    if (!ok)
+        return;
+
+    const Type type = (Type)item->data(TypeRole).toInt(&ok);
+    if (!ok)
+        return;
+
+    popupEditor(time, type);
 }
 
 void
@@ -753,24 +757,18 @@ TempoView2::slotViewRawTimes()
 }
 
 void
-TempoView2::slotPopupEditor(QTableWidgetItem *twi, int /*column*/)
+TempoView2::popupEditor(timeT time, const Type type)
 {
-    TempoListItem *item = dynamic_cast<TempoListItem *>(twi);
-    if (!item)
-        return;
-
-    timeT time = item->getTime();
-
-    switch (item->getType())
+    switch (type)
     {
 
-    case TempoListItem::Tempo:
+    case Type::Tempo:
         // Launch the TempoDialog.
         EditTempoController::self()->editTempo(
                 this, time, true /* timeEditable */);
         break;
 
-    case TempoListItem::TimeSignature:
+    case Type::TimeSignature:
         {
             Composition &composition =
                     RosegardenDocument::currentDocument->getComposition();

@@ -92,12 +92,6 @@ public slots:
     /// Help > About
     void slotHelpAbout();
 
-    /// Double-click entry.
-    /**
-     * See slotEditItem().
-     */
-    void slotPopupEditor(QTableWidgetItem *twi, int column = 0);
-
     /// Filter check box clicked.
     void slotFilterClicked(bool);
 
@@ -137,6 +131,11 @@ private:
 
     // List
     QTableWidget *m_tableWidget;
+
+    enum class Type  { TimeSignature, Tempo };
+
+    /// Launch editor for an entry.
+    void popupEditor(timeT time, Type type);
 
 };
 
