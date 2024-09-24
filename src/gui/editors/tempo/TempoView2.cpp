@@ -134,7 +134,8 @@ TempoView2::TempoView2(timeT openTime)
     m_tableWidget = new QTableWidget(m_frame);
     m_mainLayout->addWidget(m_tableWidget);
     //m_tableWidget->setAllColumnsShowFocus(true);
-    // ??? Need to disable double-click editing of each field!
+    // Disable double-click editing of each field.
+    m_tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_tableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     // Hide the vertical header
@@ -154,10 +155,8 @@ TempoView2::TempoView2(timeT openTime)
     // ??? Widths are off now.  Re-adjust.
     m_tableWidget->setColumnWidth(0, 133);
     m_tableWidget->setColumnWidth(1, 125);
-#if broken  // ???
-    connect(m_tableWidget, &QTableWidget::itemDoubleClicked,
+    connect(m_tableWidget, &QTableWidget::cellDoubleClicked,
             this, &TempoView2::slotPopupEditor);
-#endif
 
     // Update the list.
     updateList();
@@ -432,6 +431,11 @@ TempoView2::updateList()
             item = new QTableWidgetItem(desc);
             m_tableWidget->setItem(row, 2, item);
 
+            // Properties
+            // Put an empty one in or things get strange.
+            item = new QTableWidgetItem();
+            m_tableWidget->setItem(row, 3, item);
+
             // Set current if it is the right one.
             // Setting current will clear any selection so we do it
             // before we set the selection.
@@ -667,23 +671,50 @@ TempoView2::slotEditItem()
 }
 
 void
+TempoView2::slotPopupEditor(int row, int /*col*/)
+{
+    // Get the row,0 item
+    QTableWidgetItem *item = m_tableWidget->item(row, 0);
+    if (!item)
+        return;
+
+    // Get time and type
+    bool ok;
+    const timeT time = item->data(TimeRole).toLongLong(&ok);
+    if (!ok)
+        return;
+
+    const Type type = (Type)item->data(TypeRole).toInt(&ok);
+    if (!ok)
+        return;
+
+    popupEditor(time, type);
+}
+
+void
 TempoView2::slotSelectAll()
 {
-#if broken  // ???
-    for (int i = 0; i < m_tableWidget->topLevelItemCount(); ++i) {
-        m_tableWidget->topLevelItem(i)->setSelected(true);
+    for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
+        for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+            QTableWidgetItem *item = m_tableWidget->item(row, col);
+            if (!item)
+                continue;
+            item->setSelected(true);
+        }
     }
-#endif
 }
 
 void
 TempoView2::slotClearSelection()
 {
-#if broken  // ???
-    for (int i = 0; i < m_tableWidget->topLevelItemCount(); ++i) {
-        m_tableWidget->topLevelItem(i)->setSelected(false);
+    for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
+        for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+            QTableWidgetItem *item = m_tableWidget->item(row, col);
+            if (!item)
+                continue;
+            item->setSelected(false);
+        }
     }
-#endif
 }
 
 void

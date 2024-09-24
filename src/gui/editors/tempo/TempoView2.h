@@ -61,7 +61,18 @@ signals:
     /// Connected to RosegardenMainWindow::slotTempoViewClosed().
     void closing();
 
-public slots:
+protected:
+
+    // EditViewBase override.
+    Segment *getCurrentSegment() override;
+
+    // QWidget override.
+    void closeEvent(QCloseEvent *) override;
+
+private slots:
+
+    /// Connected to RosegardenDocument::documentModified().
+    void slotDocumentModified(bool modified);
 
     /// Edit > Delete (or the delete key)
     void slotEditDelete();
@@ -74,6 +85,7 @@ public slots:
      * See slotPopupEditor().
      */
     void slotEditItem();
+    void slotPopupEditor(int row, int col);
 
     /// Edit > Select All
     void slotSelectAll();
@@ -94,19 +106,6 @@ public slots:
 
     /// Filter check box clicked.
     void slotFilterClicked(bool);
-
-protected:
-
-    // EditViewBase override.
-    Segment *getCurrentSegment() override;
-
-    // QWidget override.
-    void closeEvent(QCloseEvent *) override;
-
-private slots:
-
-    /// Connected to RosegardenDocument::documentModified().
-    void slotDocumentModified(bool modified);
 
 private:
 
