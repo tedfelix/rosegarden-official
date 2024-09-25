@@ -20,8 +20,6 @@
 
 #include "TempoView2.h"
 
-#include "TempoListItem.h"
-
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
@@ -133,7 +131,6 @@ TempoView2::TempoView2(timeT openTime)
     // Tempo/Time Signature List
     m_tableWidget = new QTableWidget(m_frame);
     m_mainLayout->addWidget(m_tableWidget);
-    //m_tableWidget->setAllColumnsShowFocus(true);
     // Disable double-click editing of each field.
     m_tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_tableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -152,9 +149,8 @@ TempoView2::TempoView2(timeT openTime)
     m_tableWidget->setColumnCount(headers.size());
     m_tableWidget->setHorizontalHeaderLabels(headers);
     // Make sure columns have a reasonable amount of space.
-    // ??? Widths are off now.  Re-adjust.
-    m_tableWidget->setColumnWidth(0, 133);
-    m_tableWidget->setColumnWidth(1, 125);
+    m_tableWidget->setColumnWidth(0, 110);
+    m_tableWidget->setColumnWidth(1, 120);
     connect(m_tableWidget, &QTableWidget::cellDoubleClicked,
             this, &TempoView2::slotPopupEditor);
 
@@ -226,7 +222,7 @@ TempoView2::updateList()
     // as closely as possible.
     struct Key {
         timeT midiTicks{0};
-        TempoListItem::Type itemType{TempoListItem::TimeSignature};
+        Type itemType{Type::TimeSignature};
 
         bool operator<(const Key &rhs) const
         {
@@ -239,12 +235,9 @@ TempoView2::updateList()
     };
     std::set<Key> selectionSet;
 
-    // For each item in the list...
-    for (int itemIndex = 0;
-         itemIndex < m_tableWidget->rowCount();
-         ++itemIndex) {
-        TempoListItem *item =
-                dynamic_cast<TempoListItem *>(m_tableWidget->item(itemIndex, 0));
+    // For each row...
+    for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
+        QTableWidgetItem *item = m_tableWidget->item(row, 0);
         if (!item)
             continue;
 
@@ -254,8 +247,13 @@ TempoView2::updateList()
 
         // Create key.
         Key key;
-        key.midiTicks = item->getTime();
-        key.itemType = item->getType();
+        bool ok{false};
+        key.midiTicks = item->data(TimeRole).toLongLong(&ok);
+        if (!ok)
+            continue;
+        key.itemType = (Type)item->data(TypeRole).toInt(&ok);
+        if (!ok)
+            continue;
 
         // Add to set.
         selectionSet.insert(key);
@@ -265,22 +263,24 @@ TempoView2::updateList()
 
     bool haveCurrentItem;
     Key currentItemKey;
-    // It's possible for the current item to not be selected.  Keep
-    // track of that so we can restore it exactly.
-    bool currentItemSelected;
+    int currentItemColumn;
 
     // Scope to avoid accidentally reusing currentItem after it is gone.
     {
         // The "current item" has the focus outline which is only
         // visible if it happens to be selected.
-        TempoListItem *currentItem =
-                dynamic_cast<TempoListItem *>(m_tableWidget->currentItem());
+        QTableWidgetItem *currentItem = m_tableWidget->currentItem();
         haveCurrentItem = currentItem;
         if (haveCurrentItem) {
+            int row = m_tableWidget->row(currentItem);
+            currentItemColumn = m_tableWidget->column(currentItem);
+
+            // We need the column 0 item since it is the only one with data.
+            QTableWidgetItem *item0 = m_tableWidget->item(row, 0);
+
             // Make a key so we can make it current again if it still exists.
-            currentItemKey.midiTicks = currentItem->getTime();
-            currentItemKey.itemType = currentItem->getType();
-            currentItemSelected = currentItem->isSelected();
+            currentItemKey.midiTicks = item0->data(TimeRole).toLongLong();
+            currentItemKey.itemType = (Type)item0->data(TypeRole).toInt();
         }
     }
 
@@ -295,7 +295,8 @@ TempoView2::updateList()
 
     // Recreate list.
 
-    m_tableWidget->clearContents();
+    // Clear the list completely.
+    m_tableWidget->setRowCount(0);
 
     Composition *comp = &RosegardenDocument::currentDocument->getComposition();
 
@@ -352,18 +353,12 @@ TempoView2::updateList()
             m_tableWidget->setItem(row, 3, item);
 
             // Set current if it is the right one.
-            // Setting current will clear any selection so we do it
-            // before we set the selection.
             if (haveCurrentItem  &&
-                currentItemKey.itemType == TempoListItem::TimeSignature) {
-                if (sig.first == currentItemKey.midiTicks) {
-#if broken  // ???
+                currentItemKey.itemType == Type::TimeSignature  &&
+                currentItemKey.midiTicks == sig.first) {
+                item = m_tableWidget->item(row, currentItemColumn);
+                if (item)
                     m_tableWidget->setCurrentItem(item);
-                    item->setSelected(currentItemSelected);
-#else
-                    (void)currentItemSelected;
-#endif
-                }
             }
         }
     }
@@ -437,16 +432,12 @@ TempoView2::updateList()
             m_tableWidget->setItem(row, 3, item);
 
             // Set current if it is the right one.
-            // Setting current will clear any selection so we do it
-            // before we set the selection.
             if (haveCurrentItem  &&
-                currentItemKey.itemType == TempoListItem::Tempo) {
-                if (time == currentItemKey.midiTicks) {
-#if broken  // ???
+                currentItemKey.itemType == Type::Tempo  &&
+                currentItemKey.midiTicks == time) {
+                item = m_tableWidget->item(row, currentItemColumn);
+                if (item)
                     m_tableWidget->setCurrentItem(item);
-                    item->setSelected(currentItemSelected);
-#endif
-                }
             }
         }
     }
@@ -458,29 +449,32 @@ TempoView2::updateList()
 
     bool haveSelection{false};
 
-#if broken  // ???
-    // For each item in the list...
-    for (int itemIndex = 0;
-         itemIndex < m_tableWidget->topLevelItemCount();
-         ++itemIndex) {
-        TempoListItem *item =
-                dynamic_cast<TempoListItem *>(m_tableWidget->topLevelItem(itemIndex));
+    // For each row...
+    for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
+        QTableWidgetItem *item = m_tableWidget->item(row, 0);
         if (!item)
             continue;
 
         // Create key.
         Key key;
-        key.midiTicks = item->getTime();
-        key.itemType = item->getType();
+        key.midiTicks = item->data(TimeRole).toLongLong();
+        key.itemType = (Type)item->data(TypeRole).toInt();
 
         // Not selected?  Try the next.
         if (selectionSet.find(key) == selectionSet.end())
             continue;
 
-        item->setSelected(true);
+        // Select the entire row.
+        // For each column...
+        for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+            QTableWidgetItem *item = m_tableWidget->item(row, col);
+            if (!item)
+                continue;
+            item->setSelected(true);
+        }
+
         haveSelection = true;
     }
-#endif
 
     if (haveSelection)
         enterActionState("have_selection");
