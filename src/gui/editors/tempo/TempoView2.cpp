@@ -53,9 +53,6 @@
 #include <QHeaderView>
 #include <QScrollBar>
 
-// ??? Remove when done.
-#define broken 0
-
 
 namespace
 {
@@ -511,17 +508,25 @@ TempoView2::makeInitialSelection(timeT time)
         foundRow = row;
     }
 
-    // Found?  Select the entire row.
-    if (foundItem) {
-        // For each column, select the item.
-        for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
-            QTableWidgetItem *item = m_tableWidget->item(foundRow, col);
-            if (!item)
-                continue;
-            item->setSelected(true);
-        }
-        m_tableWidget->scrollToItem(foundItem);
+    // Nothing found?  Bail.
+    if (!foundItem)
+        return;
+
+    // Select the entire row.
+    // For each column...
+    for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+        QTableWidgetItem *item = m_tableWidget->item(foundRow, col);
+        if (!item)
+            continue;
+        item->setSelected(true);
     }
+
+    // Yield to the event loop so that the UI will be rendered before calling
+    // scrollToItem().
+    qApp->processEvents();
+
+    // Make sure the item is visible.
+    m_tableWidget->scrollToItem(foundItem);
 }
 
 Segment *
@@ -597,6 +602,8 @@ TempoView2::slotAddTempoChange()
             this,  // parent
             insertTime,  // atTime
             true);  // timeEditable
+
+    // ??? We need to select the new one and scroll to it.
 }
 
 void
@@ -619,24 +626,27 @@ TempoView2::slotAddTimeSignatureChange()
 
     TimeSignatureDialog dialog(this, &composition, insertTime, sig, true);
 
-    if (dialog.exec() == QDialog::Accepted) {
+    if (dialog.exec() != QDialog::Accepted)
+        return;
 
-        insertTime = dialog.getTime();
+    insertTime = dialog.getTime();
 
-        if (dialog.shouldNormalizeRests()) {
-            CommandHistory::getInstance()->addCommand(
-                    new AddTimeSignatureAndNormalizeCommand(
-                            &composition,
-                            insertTime,
-                            dialog.getTimeSignature()));
-        } else {
-            CommandHistory::getInstance()->addCommand(
-                    new AddTimeSignatureCommand(
-                            &composition,
-                            insertTime,
-                            dialog.getTimeSignature()));
-        }
+    if (dialog.shouldNormalizeRests()) {
+        CommandHistory::getInstance()->addCommand(
+                new AddTimeSignatureAndNormalizeCommand(
+                        &composition,
+                        insertTime,
+                        dialog.getTimeSignature()));
+    } else {
+        CommandHistory::getInstance()->addCommand(
+                new AddTimeSignatureCommand(
+                        &composition,
+                        insertTime,
+                        dialog.getTimeSignature()));
     }
+
+    // ??? We need to select the new one and scroll to it.
+
 }
 
 void
