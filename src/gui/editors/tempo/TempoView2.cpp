@@ -281,15 +281,6 @@ TempoView2::updateTable()
         }
     }
 
-    // Preserve scroll position.
-    // ??? But in BankEditorDialog, the tree remembers its scroll position
-    //     without any special code at all.  Why does this forget it?
-    //     Does it actually forget it?  Can we rewrite to make sure it can
-    //     remember without additional code?
-    int scrollPos{0};
-    if (m_tableWidget->verticalScrollBar())
-        scrollPos = m_tableWidget->verticalScrollBar()->value();
-
     // Recreate list.
 
     // Clear the list completely.
@@ -318,7 +309,8 @@ TempoView2::updateTable()
                     properties = tr("Common");
             }
 
-            const QString timeString = comp->makeTimeString(
+            // Use a QVariant so that the table sorts properly.
+            const QVariant timeVariant = comp->makeTimeVariant(
                     sig.first,
                     static_cast<Composition::TimeMode>(a_timeMode.get()));
 
@@ -327,8 +319,8 @@ TempoView2::updateTable()
             m_tableWidget->insertRow(row);
 
             // Time
-            QTableWidgetItem *item =
-                    new QTableWidgetItem(timeString);
+            QTableWidgetItem *item = new QTableWidgetItem;
+            item->setData(Qt::EditRole, timeVariant);
             item->setData(TimeRole, QVariant(qlonglong(sig.first)));
             item->setData(TypeRole, (int)Type::TimeSignature);
             item->setData(IndexRole, timeSignatureIndex);
@@ -400,7 +392,8 @@ TempoView2::updateTable()
                        .arg(bpmUnits).arg(bpmTenths).arg(bpmHundredths);
             }
 
-            const QString timeString = comp->makeTimeString(
+            // Use a QVariant so that the table sorts properly.
+            const QVariant timeVariant = comp->makeTimeVariant(
                     time, static_cast<Composition::TimeMode>(a_timeMode.get()));
 
             // Add a row to the table
@@ -408,8 +401,8 @@ TempoView2::updateTable()
             m_tableWidget->insertRow(row);
 
             // Time
-            QTableWidgetItem *item =
-                    new QTableWidgetItem(timeString);
+            QTableWidgetItem *item = new QTableWidgetItem;
+            item->setData(Qt::EditRole, timeVariant);
             item->setData(TimeRole, QVariant(qlonglong(time)));
             item->setData(TypeRole, (int)Type::Tempo);
             item->setData(IndexRole, tempoIndex);
@@ -477,10 +470,6 @@ TempoView2::updateTable()
         enterActionState("have_selection");
     else
         leaveActionState("have_selection");
-
-    // Restore scroll position.
-    if (scrollPos  &&  m_tableWidget->verticalScrollBar())
-        m_tableWidget->verticalScrollBar()->setValue(scrollPos);
 }
 
 void
