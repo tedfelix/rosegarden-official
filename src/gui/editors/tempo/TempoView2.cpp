@@ -152,7 +152,7 @@ TempoView2::TempoView2(timeT openTime)
             this, &TempoView2::slotPopupEditor);
 
     // Update the list.
-    updateList();
+    updateTable();
     makeInitialSelection(openTime);
 
     // Restore window geometry and header state.
@@ -200,17 +200,17 @@ TempoView2::closeEvent(QCloseEvent *e)
 void
 TempoView2::tempoChanged(const Composition * /*comp*/)
 {
-    updateList();
+    updateTable();
 }
 
 void
 TempoView2::timeSignatureChanged(const Composition * /*comp*/)
 {
-    updateList();
+    updateTable();
 }
 
 void
-TempoView2::updateList()
+TempoView2::updateTable()
 {
     // Preserve Selection.
 
@@ -512,6 +512,58 @@ TempoView2::makeInitialSelection(timeT time)
     if (!foundItem)
         return;
 
+    // Make it current so the keyboard works correctly.
+    m_tableWidget->setCurrentItem(foundItem);
+
+    // Select the entire row.
+    // For each column...
+    for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+        QTableWidgetItem *item = m_tableWidget->item(foundRow, col);
+        if (!item)
+            continue;
+        item->setSelected(true);
+    }
+
+    // Yield to the event loop so that the UI will be rendered before calling
+    // scrollToItem().
+    qApp->processEvents();
+
+    // Make sure the item is visible.
+    m_tableWidget->scrollToItem(foundItem);
+}
+
+void
+TempoView2::select(timeT time, Type type)
+{
+    QTableWidgetItem *foundItem{nullptr};
+    int foundRow{0};
+
+    // For each row...
+    for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
+        QTableWidgetItem *item = m_tableWidget->item(row, 0);
+        bool ok;
+        const timeT itemTime = item->data(TimeRole).toLongLong(&ok);
+        if (!ok)
+            continue;
+        Type itemType = (Type)item->data(TypeRole).toInt(&ok);
+        if (!ok)
+            continue;
+
+        // Found it?  We're done.
+        if (itemTime == time  &&  itemType == type) {
+            foundItem = item;
+            foundRow = row;
+            break;
+        }
+    }
+
+    // Nothing found?  Bail.
+    if (!foundItem)
+        return;
+
+    // Make it current so the keyboard works correctly.
+    m_tableWidget->setCurrentItem(foundItem);
+
     // Select the entire row.
     // For each column...
     for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
@@ -603,7 +655,7 @@ TempoView2::slotAddTempoChange()
             insertTime,  // atTime
             true);  // timeEditable
 
-    // ??? We need to select the new one and scroll to it.
+    select(insertTime, Type::Tempo);
 }
 
 void
@@ -645,7 +697,7 @@ TempoView2::slotAddTimeSignatureChange()
                         dialog.getTimeSignature()));
     }
 
-    // ??? We need to select the new one and scroll to it.
+    select(insertTime, Type::TimeSignature);
 
 }
 
@@ -757,7 +809,7 @@ TempoView2::initMenu()
 void
 TempoView2::slotFilterClicked(bool)
 {
-    updateList();
+    updateTable();
 }
 
 void
@@ -769,7 +821,7 @@ TempoView2::slotViewMusicalTimes()
 
     a_timeMode.set((int)Composition::TimeMode::MusicalTime);
 
-    updateList();
+    updateTable();
 }
 
 void
@@ -781,7 +833,7 @@ TempoView2::slotViewRealTimes()
 
     a_timeMode.set((int)Composition::TimeMode::RealTime);
 
-    updateList();
+    updateTable();
 }
 
 void
@@ -793,7 +845,7 @@ TempoView2::slotViewRawTimes()
 
     a_timeMode.set((int)Composition::TimeMode::RawTime);
 
-    updateList();
+    updateTable();
 }
 
 void
@@ -874,7 +926,7 @@ TempoView2::slotDocumentModified(bool /*modified*/)
     // Update the name in the window title in case we just did a Save As.
     updateWindowTitle();
 
-    updateList();
+    updateTable();
 }
 
 

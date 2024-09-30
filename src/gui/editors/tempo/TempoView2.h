@@ -116,11 +116,6 @@ private:
 
     void updateWindowTitle();
 
-    void updateList();
-
-    /// Select the Event nearest the playback position pointer.
-    void makeInitialSelection(timeT time);
-
     // Widgets
 
     // Filter
@@ -128,10 +123,15 @@ private:
     QCheckBox *m_tempoCheckBox;
     QCheckBox *m_timeSigCheckBox;
 
+    enum class Type  { TimeSignature, Tempo };
+
     // List
     QTableWidget *m_tableWidget;
-
-    enum class Type  { TimeSignature, Tempo };
+    void updateTable();
+    /// Select the item nearest the playback position pointer.
+    void makeInitialSelection(timeT time);
+    /// Select an item and make sure it is visible.
+    void select(timeT time, Type type);
 
     /// Launch editor for an entry.
     void popupEditor(timeT time, Type type);
