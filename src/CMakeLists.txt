@@ -277,7 +277,7 @@ set(rg_CPPS
   gui/editors/notation/NotePixmapParameters.cpp
   gui/editors/tempo/TempoListItem.cpp
   gui/editors/tempo/TempoView.cpp
-  gui/editors/tempo/TempoView2.cpp
+  gui/editors/tempo/TempoAndTimeSignatureEditor.cpp
   gui/editors/matrix/MatrixView.cpp
   gui/editors/matrix/MatrixElement.cpp
   gui/editors/matrix/PianoKeyboard.cpp

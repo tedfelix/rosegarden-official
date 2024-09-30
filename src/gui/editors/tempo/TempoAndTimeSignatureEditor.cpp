@@ -16,9 +16,9 @@
 */
 
 #define RG_MODULE_STRING "[TempoView2]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
-#include "TempoView2.h"
+#include "TempoAndTimeSignatureEditor.h"
 
 #include "misc/Debug.h"
 #include "base/Composition.h"

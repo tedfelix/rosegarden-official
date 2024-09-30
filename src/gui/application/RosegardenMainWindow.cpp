@@ -145,7 +145,7 @@
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/editors/segment/TriggerSegmentManager.h"
 #if USE_TEMPOVIEW2
-#include "gui/editors/tempo/TempoView2.h"
+#include "gui/editors/tempo/TempoAndTimeSignatureEditor.h"
 #else
 #include "gui/editors/tempo/TempoView.h"
 #endif
