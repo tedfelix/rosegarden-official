@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_TEMPOVIEW2_H
-#define RG_TEMPOVIEW2_H
+#ifndef RG_TEMPOANDTIMESIGNATUREEDITOR_H
+#define RG_TEMPOANDTIMESIGNATUREEDITOR_H
 
 #include "base/Composition.h"
 #include "gui/general/EditViewBase.h"
@@ -44,13 +44,13 @@ class Segment;
 /**
  * This "2" version uses QTableWidget instead of QTreeWidget.
  */
-class TempoView2 : public EditViewBase, public CompositionObserver
+class TempoAndTimeSignatureEditor : public EditViewBase, public CompositionObserver
 {
     Q_OBJECT
 
 public:
-    TempoView2(timeT openTime);
-    ~TempoView2() override;
+    TempoAndTimeSignatureEditor(timeT openTime);
+    ~TempoAndTimeSignatureEditor() override;
 
     // CompositionObserver overrides
     void timeSignatureChanged(const Composition *) override;

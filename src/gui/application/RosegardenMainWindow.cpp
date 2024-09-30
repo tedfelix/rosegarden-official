@@ -144,11 +144,7 @@
 #include "gui/editors/segment/compositionview/SegmentToolBox.h"
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/editors/segment/TriggerSegmentManager.h"
-#if USE_TEMPOVIEW2
 #include "gui/editors/tempo/TempoAndTimeSignatureEditor.h"
-#else
-#include "gui/editors/tempo/TempoView.h"
-#endif
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/general/FileSource.h"
@@ -295,7 +291,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_midiMixer(nullptr),
     m_bankEditor(nullptr),
     m_markerEditor(nullptr),
-    m_tempoView(nullptr),
+    m_tempoAndTimeSignatureEditor(nullptr),
     m_triggerSegmentManager(nullptr),
     m_configDlg(nullptr),
     m_docConfigDlg(nullptr),
@@ -546,8 +542,8 @@ RosegardenMainWindow::~RosegardenMainWindow()
 {
     RG_DEBUG << "dtor...";
 
-    delete m_tempoView;
-    m_tempoView = nullptr;
+    delete m_tempoAndTimeSignatureEditor;
+    m_tempoAndTimeSignatureEditor = nullptr;
 
     if (getView() &&
         getView()->getTrackEditor() &&
@@ -1134,8 +1130,8 @@ RosegardenMainWindow::initView()
     delete m_markerEditor;
     m_markerEditor = nullptr;
 
-    delete m_tempoView;
-    m_tempoView = nullptr;
+    delete m_tempoAndTimeSignatureEditor;
+    m_tempoAndTimeSignatureEditor = nullptr;
 
     delete m_triggerSegmentManager;
     m_triggerSegmentManager = nullptr;
@@ -1227,8 +1223,8 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     if (m_markerEditor)
         m_markerEditor->setDocument(RosegardenDocument::currentDocument);
 
-    delete m_tempoView;
-    m_tempoView = nullptr;
+    delete m_tempoAndTimeSignatureEditor;
+    m_tempoAndTimeSignatureEditor = nullptr;
 
     if (m_triggerSegmentManager)
         m_triggerSegmentManager->setDocument(RosegardenDocument::currentDocument);
@@ -7163,28 +7159,21 @@ RosegardenMainWindow::slotMarkerEditorClosed()
 void
 RosegardenMainWindow::slotEditTempos(timeT openAtTime)
 {
-    if (m_tempoView) {
-        m_tempoView->show();
-        m_tempoView->raise();
-        m_tempoView->activateWindow();
+    if (m_tempoAndTimeSignatureEditor) {
+        m_tempoAndTimeSignatureEditor->show();
+        m_tempoAndTimeSignatureEditor->raise();
+        m_tempoAndTimeSignatureEditor->activateWindow();
         return ;
     }
 
-#if USE_TEMPOVIEW2
-    m_tempoView = new TempoView2(openAtTime);
+    m_tempoAndTimeSignatureEditor = new TempoAndTimeSignatureEditor(openAtTime);
 
-    connect(m_tempoView, &TempoView2::closing,
+    connect(m_tempoAndTimeSignatureEditor, &TempoAndTimeSignatureEditor::closing,
             this, &RosegardenMainWindow::slotTempoViewClosed);
-#else
-    m_tempoView = new TempoView(openAtTime);
 
-    connect(m_tempoView, &TempoView::closing,
-            this, &RosegardenMainWindow::slotTempoViewClosed);
-#endif
+    connect(m_tempoAndTimeSignatureEditor, &EditViewBase::saveFile, this, &RosegardenMainWindow::slotFileSave);
 
-    connect(m_tempoView, &EditViewBase::saveFile, this, &RosegardenMainWindow::slotFileSave);
-
-    m_tempoView->show();
+    m_tempoAndTimeSignatureEditor->show();
 }
 
 void
@@ -7192,7 +7181,7 @@ RosegardenMainWindow::slotTempoViewClosed()
 {
     RG_DEBUG << "slotTempoViewClosed()";
 
-    m_tempoView = nullptr;
+    m_tempoAndTimeSignatureEditor = nullptr;
 }
 
 void

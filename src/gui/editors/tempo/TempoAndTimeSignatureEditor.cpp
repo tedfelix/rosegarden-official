@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[TempoView2]"
+#define RG_MODULE_STRING "[TempoAndTimeSignatureEditor]"
 #define RG_NO_DEBUG_PRINT
 
 #include "TempoAndTimeSignatureEditor.h"
@@ -80,7 +80,7 @@ namespace Rosegarden
 {
 
 
-TempoView2::TempoView2(timeT openTime)
+TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
 {
 
     updateWindowTitle();
@@ -90,7 +90,7 @@ TempoView2::TempoView2(timeT openTime)
     // Connect for changes so we can update the list.
     connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,
-            this, &TempoView2::slotDocumentModified);
+            this, &TempoAndTimeSignatureEditor::slotDocumentModified);
 
     initMenu();
 
@@ -112,14 +112,14 @@ TempoView2::TempoView2(timeT openTime)
     m_tempoCheckBox = new QCheckBox(tr("Tempo"), m_filterGroup);
     m_tempoCheckBox->setChecked(a_tempoFilter.get());
     connect(m_tempoCheckBox, &QCheckBox::clicked,
-            this, &TempoView2::slotFilterClicked);
+            this, &TempoAndTimeSignatureEditor::slotFilterClicked);
     filterGroupLayout->addWidget(m_tempoCheckBox);
 
     // Time Signature
     m_timeSigCheckBox = new QCheckBox(tr("Time Signature"), m_filterGroup);
     m_timeSigCheckBox->setChecked(a_timeSignatureFilter.get());
     connect(m_timeSigCheckBox, &QCheckBox::clicked,
-            this, &TempoView2::slotFilterClicked);
+            this, &TempoAndTimeSignatureEditor::slotFilterClicked);
     filterGroupLayout->addWidget(m_timeSigCheckBox);
 
     // Fill the rest of the empty space to keep the widgets together.
@@ -149,7 +149,7 @@ TempoView2::TempoView2(timeT openTime)
     m_tableWidget->setColumnWidth(0, 110);
     m_tableWidget->setColumnWidth(1, 120);
     connect(m_tableWidget, &QTableWidget::cellDoubleClicked,
-            this, &TempoView2::slotPopupEditor);
+            this, &TempoAndTimeSignatureEditor::slotPopupEditor);
 
     // Update the list.
     updateTable();
@@ -167,7 +167,7 @@ TempoView2::TempoView2(timeT openTime)
 
 }
 
-TempoView2::~TempoView2()
+TempoAndTimeSignatureEditor::~TempoAndTimeSignatureEditor()
 {
     // Save state for next time.
     a_tempoFilter.set(m_tempoCheckBox->checkState() != Qt::Unchecked);
@@ -189,7 +189,7 @@ TempoView2::~TempoView2()
 }
 
 void
-TempoView2::closeEvent(QCloseEvent *e)
+TempoAndTimeSignatureEditor::closeEvent(QCloseEvent *e)
 {
     // Let RosegardenMainWindow know we are going down.
     emit closing();
@@ -198,19 +198,19 @@ TempoView2::closeEvent(QCloseEvent *e)
 }
 
 void
-TempoView2::tempoChanged(const Composition * /*comp*/)
+TempoAndTimeSignatureEditor::tempoChanged(const Composition * /*comp*/)
 {
     updateTable();
 }
 
 void
-TempoView2::timeSignatureChanged(const Composition * /*comp*/)
+TempoAndTimeSignatureEditor::timeSignatureChanged(const Composition * /*comp*/)
 {
     updateTable();
 }
 
 void
-TempoView2::updateTable()
+TempoAndTimeSignatureEditor::updateTable()
 {
     // Preserve Selection.
 
@@ -473,7 +473,7 @@ TempoView2::updateTable()
 }
 
 void
-TempoView2::makeInitialSelection(timeT time)
+TempoAndTimeSignatureEditor::makeInitialSelection(timeT time)
 {
     // Select an item around the given time.
 
@@ -522,7 +522,7 @@ TempoView2::makeInitialSelection(timeT time)
 }
 
 void
-TempoView2::select(timeT time, Type type)
+TempoAndTimeSignatureEditor::select(timeT time, Type type)
 {
     QTableWidgetItem *foundItem{nullptr};
     int foundRow{0};
@@ -571,14 +571,14 @@ TempoView2::select(timeT time, Type type)
 }
 
 Segment *
-TempoView2::getCurrentSegment()
+TempoAndTimeSignatureEditor::getCurrentSegment()
 {
-    // TempoView2 does not deal in Segments.
+    // TempoAndTimeSignatureEditor does not deal in Segments.
     return nullptr;
 }
 
 void
-TempoView2::slotEditDelete()
+TempoAndTimeSignatureEditor::slotEditDelete()
 {
     Composition *composition =
             &RosegardenDocument::currentDocument->getComposition();
@@ -625,7 +625,7 @@ TempoView2::slotEditDelete()
 }
 
 void
-TempoView2::slotAddTempoChange()
+TempoAndTimeSignatureEditor::slotAddTempoChange()
 {
     timeT insertTime{0};
 
@@ -648,7 +648,7 @@ TempoView2::slotAddTempoChange()
 }
 
 void
-TempoView2::slotAddTimeSignatureChange()
+TempoAndTimeSignatureEditor::slotAddTimeSignatureChange()
 {
     timeT insertTime{0};
 
@@ -691,7 +691,7 @@ TempoView2::slotAddTimeSignatureChange()
 }
 
 void
-TempoView2::slotEditItem()
+TempoAndTimeSignatureEditor::slotEditItem()
 {
     QList<QTableWidgetItem *> selectedItems = m_tableWidget->selectedItems();
     if (selectedItems.empty())
@@ -716,7 +716,7 @@ TempoView2::slotEditItem()
 }
 
 void
-TempoView2::slotPopupEditor(int row, int /*col*/)
+TempoAndTimeSignatureEditor::slotPopupEditor(int row, int /*col*/)
 {
     // Get the row,0 item
     QTableWidgetItem *item = m_tableWidget->item(row, 0);
@@ -737,7 +737,7 @@ TempoView2::slotPopupEditor(int row, int /*col*/)
 }
 
 void
-TempoView2::slotSelectAll()
+TempoAndTimeSignatureEditor::slotSelectAll()
 {
     for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
         for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
@@ -750,7 +750,7 @@ TempoView2::slotSelectAll()
 }
 
 void
-TempoView2::slotClearSelection()
+TempoAndTimeSignatureEditor::slotClearSelection()
 {
     for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
         for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
@@ -763,7 +763,7 @@ TempoView2::slotClearSelection()
 }
 
 void
-TempoView2::initMenu()
+TempoAndTimeSignatureEditor::initMenu()
 {
     setupBaseActions();
 
@@ -796,13 +796,13 @@ TempoView2::initMenu()
 }
 
 void
-TempoView2::slotFilterClicked(bool)
+TempoAndTimeSignatureEditor::slotFilterClicked(bool)
 {
     updateTable();
 }
 
 void
-TempoView2::slotViewMusicalTimes()
+TempoAndTimeSignatureEditor::slotViewMusicalTimes()
 {
     findAction("time_musical")->setChecked(true);
     findAction("time_real")->setChecked(false);
@@ -814,7 +814,7 @@ TempoView2::slotViewMusicalTimes()
 }
 
 void
-TempoView2::slotViewRealTimes()
+TempoAndTimeSignatureEditor::slotViewRealTimes()
 {
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(true);
@@ -826,7 +826,7 @@ TempoView2::slotViewRealTimes()
 }
 
 void
-TempoView2::slotViewRawTimes()
+TempoAndTimeSignatureEditor::slotViewRawTimes()
 {
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(false);
@@ -838,7 +838,7 @@ TempoView2::slotViewRawTimes()
 }
 
 void
-TempoView2::popupEditor(timeT time, const Type type)
+TempoAndTimeSignatureEditor::popupEditor(timeT time, const Type type)
 {
     switch (type)
     {
@@ -885,14 +885,14 @@ TempoView2::popupEditor(timeT time, const Type type)
 }
 
 void
-TempoView2::updateWindowTitle()
+TempoAndTimeSignatureEditor::updateWindowTitle()
 {
     setWindowTitle(tr("%1 - Tempo and Time Signature Editor").
             arg(RosegardenDocument::currentDocument->getTitle()));
 }
 
 void
-TempoView2::slotHelpRequested()
+TempoAndTimeSignatureEditor::slotHelpRequested()
 {
     // TRANSLATORS: if the manual is translated into your language, you can
     // change the two-letter language code in this URL to point to your language
@@ -904,13 +904,13 @@ TempoView2::slotHelpRequested()
 }
 
 void
-TempoView2::slotHelpAbout()
+TempoAndTimeSignatureEditor::slotHelpAbout()
 {
     new AboutDialog(this);
 }
 
 void
-TempoView2::slotDocumentModified(bool /*modified*/)
+TempoAndTimeSignatureEditor::slotDocumentModified(bool /*modified*/)
 {
     // Update the name in the window title in case we just did a Save As.
     updateWindowTitle();
