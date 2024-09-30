@@ -275,8 +275,6 @@ set(rg_CPPS
   gui/editors/notation/NotePixmapFactory.cpp
   gui/editors/notation/SystemFont.cpp
   gui/editors/notation/NotePixmapParameters.cpp
-  gui/editors/tempo/TempoListItem.cpp
-  gui/editors/tempo/TempoView.cpp
   gui/editors/tempo/TempoAndTimeSignatureEditor.cpp
   gui/editors/matrix/MatrixView.cpp
   gui/editors/matrix/MatrixElement.cpp
