@@ -1521,15 +1521,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 QString keyMappingStr = (atts.value("keymapping").toString());
 
                 // Create a new program
-                bool k = !keyMappingStr.isEmpty();
 
-                MidiProgram program
-                (MidiBank(m_percussion,
-                          m_msb,
-                          m_lsb),
-                 pc,
-                 qstrtostr(nameStr),
-                 k ? qstrtostr(keyMappingStr) : "");
+                // ??? But an empty string is an empty string.  Why not
+                //     just always do qstrtostr(keyMappingStr) below?
+                const bool keyMapValid = !keyMappingStr.isEmpty();
+
+                MidiProgram program(
+                        MidiBank(m_percussion, m_msb, m_lsb),
+                        pc,
+                        qstrtostr(nameStr),
+                        keyMapValid ? qstrtostr(keyMappingStr) : "");
 
                 if (m_device->getType() == Device::Midi) {
                     // Insert the program
