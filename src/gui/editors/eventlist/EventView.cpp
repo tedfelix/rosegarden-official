@@ -141,42 +141,68 @@ EventView::EventView(RosegardenDocument *doc,
     m_filterGroup->setLayout(filterGroupLayout);
 
     m_noteCheckBox = new QCheckBox(tr("Note"), m_filterGroup);
+    connect(m_noteCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_noteCheckBox);
 
     m_programCheckBox = new QCheckBox(tr("Program Change"), m_filterGroup);
+    connect(m_programCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_programCheckBox);
 
     m_controllerCheckBox = new QCheckBox(tr("Controller"), m_filterGroup);
+    connect(m_controllerCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_controllerCheckBox);
 
     m_pitchBendCheckBox = new QCheckBox(tr("Pitch Bend"), m_filterGroup);
+    connect(m_pitchBendCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_pitchBendCheckBox);
 
     m_sysExCheckBox = new QCheckBox(tr("System Exclusive"), m_filterGroup);
+    connect(m_sysExCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_sysExCheckBox);
 
     m_keyPressureCheckBox = new QCheckBox(tr("Key Pressure"), m_filterGroup);
+    connect(m_keyPressureCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_keyPressureCheckBox);
 
     m_channelPressureCheckBox = new QCheckBox(tr("Channel Pressure"), m_filterGroup);
+    connect(m_channelPressureCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_channelPressureCheckBox);
 
     m_restCheckBox = new QCheckBox(tr("Rest"), m_filterGroup);
+    connect(m_restCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_restCheckBox);
 
     m_indicationCheckBox = new QCheckBox(tr("Indication"), m_filterGroup);
+    connect(m_indicationCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_indicationCheckBox);
 
     m_textCheckBox = new QCheckBox(tr("Text"), m_filterGroup);
+    connect(m_textCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_textCheckBox);
 
     m_generatedRegionCheckBox = new QCheckBox(tr("Generated regions"), m_filterGroup);
+    connect(m_generatedRegionCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_generatedRegionCheckBox);
 
     m_segmentIDCheckBox = new QCheckBox(tr("Segment ID"), m_filterGroup);
+    connect(m_segmentIDCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_segmentIDCheckBox);
 
     m_otherCheckBox = new QCheckBox(tr("Other"), m_filterGroup);
+    connect(m_otherCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_otherCheckBox);
 
     m_gridLayout->addWidget(m_filterGroup, 0, 0);
@@ -338,38 +364,6 @@ EventView::EventView(RosegardenDocument *doc,
     readOptions();
     updateFilterCheckBoxes();
     updateTreeWidget();
-
-    // Connect the checkboxes AFTER calling setButtonsToFilter() to set up the
-    // initial states.  Otherwise, the first state change triggers
-    // slotModifyFilter() prematurely, and it wrecks the filter.
-    // ??? Use clicked() instead of stateChanged() to avoid this.
-    // ??? Move these up to where they check boxes are created.
-    connect(m_noteCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_programCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_controllerCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_pitchBendCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_sysExCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_keyPressureCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_channelPressureCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_restCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_indicationCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_textCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_generatedRegionCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_segmentIDCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_otherCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
 
     makeInitialSelection(comp.getPosition());
 
@@ -1368,7 +1362,7 @@ EventView::getCurrentSegment()
 }
 
 void
-EventView::slotModifyFilter()
+EventView::slotFilterClicked(bool)
 {
     m_eventFilter = 0;
 

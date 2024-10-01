@@ -114,7 +114,7 @@ private slots:
     void slotHelpAbout();
 
     /// Filter check boxes.
-    void slotModifyFilter();
+    void slotFilterClicked(bool);
 
     /// Handle double-click on an event in the event list.
     void slotPopupEventEditor(QTreeWidgetItem *item, int column);
