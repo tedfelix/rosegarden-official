@@ -1340,31 +1340,44 @@ EventView::slotModifyFilter()
 {
     m_eventFilter = 0;
 
-    if (m_noteCheckBox->isChecked()) m_eventFilter |= EventView::Note;
+    if (m_noteCheckBox->isChecked())
+        m_eventFilter |= Note;
 
-    if (m_programCheckBox->isChecked()) m_eventFilter |= EventView::ProgramChange;
+    if (m_programCheckBox->isChecked())
+        m_eventFilter |= ProgramChange;
 
-    if (m_controllerCheckBox->isChecked()) m_eventFilter |= EventView::Controller;
+    if (m_controllerCheckBox->isChecked())
+        m_eventFilter |= Controller;
 
-    if (m_pitchBendCheckBox->isChecked()) m_eventFilter |= EventView::PitchBend;
+    if (m_pitchBendCheckBox->isChecked())
+        m_eventFilter |= PitchBend;
 
-    if (m_sysExCheckBox->isChecked()) m_eventFilter |= EventView::SystemExclusive;
+    if (m_sysExCheckBox->isChecked())
+        m_eventFilter |= SystemExclusive;
 
-    if (m_keyPressureCheckBox->isChecked()) m_eventFilter |= EventView::KeyPressure;
+    if (m_keyPressureCheckBox->isChecked())
+        m_eventFilter |= KeyPressure;
 
-    if (m_channelPressureCheckBox->isChecked()) m_eventFilter |= EventView::ChannelPressure;
+    if (m_channelPressureCheckBox->isChecked())
+        m_eventFilter |= ChannelPressure;
 
-    if (m_restCheckBox->isChecked()) m_eventFilter |= EventView::Rest;
+    if (m_restCheckBox->isChecked())
+        m_eventFilter |= Rest;
 
-    if (m_indicationCheckBox->isChecked()) m_eventFilter |= EventView::Indication;
+    if (m_indicationCheckBox->isChecked())
+        m_eventFilter |= Indication;
 
-    if (m_textCheckBox->isChecked()) m_eventFilter |= EventView::Text;
+    if (m_textCheckBox->isChecked())
+        m_eventFilter |= Text;
 
-    if (m_generatedRegionCheckBox->isChecked()) m_eventFilter |= EventView::GeneratedRegion;
+    if (m_generatedRegionCheckBox->isChecked())
+        m_eventFilter |= GeneratedRegion;
 
-    if (m_segmentIDCheckBox->isChecked()) m_eventFilter |= EventView::SegmentID;
+    if (m_segmentIDCheckBox->isChecked())
+        m_eventFilter |= SegmentID;
 
-    if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
+    if (m_otherCheckBox->isChecked())
+        m_eventFilter |= Other;
 
     updateTreeWidget();
 }
@@ -1499,28 +1512,28 @@ EventView::slotPopupMenu(const QPoint& pos)
     if (!eItem || !eItem->getEvent())
         return ;
 
-    if (!m_menu)
-        createMenu();
+    if (!m_popUpMenu)
+        createPopUpMenu();
 
-    if (m_menu)
+    if (m_popUpMenu)
         //m_menu->exec(QCursor::pos());
-        m_menu->exec(m_eventList->mapToGlobal(pos));
+        m_popUpMenu->exec(m_eventList->mapToGlobal(pos));
     else
         RG_DEBUG << "EventView::showMenu() : no menu to show\n";
 }
 
 void
-EventView::createMenu()
+EventView::createPopUpMenu()
 {
-    m_menu = new QMenu(this);
+    m_popUpMenu = new QMenu(this);
 
     QAction *eventEditorAction =
-            m_menu->addAction(tr("Open in Event Editor"));
+            m_popUpMenu->addAction(tr("Open in Event Editor"));
     connect(eventEditorAction, &QAction::triggered,
             this, &EventView::slotOpenInEventEditor);
 
     QAction *expertEventEditorAction =
-            m_menu->addAction(tr("Open in Expert Event Editor"));
+            m_popUpMenu->addAction(tr("Open in Expert Event Editor"));
     connect(expertEventEditorAction, &QAction::triggered,
             this, &EventView::slotOpenInExpertEventEditor);
 }

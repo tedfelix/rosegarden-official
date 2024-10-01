@@ -173,23 +173,21 @@ private:
     QCheckBox *m_segmentIDCheckBox;
     QCheckBox *m_otherCheckBox;
 
-    static constexpr int None = 0x0000;
-    enum EventFilter
-    {
-        Note            = 0x0001,
-        Rest            = 0x0002,
-        Text            = 0x0004,
-        SystemExclusive = 0x0008,
-        Controller      = 0x0010,
-        ProgramChange   = 0x0020,
-        PitchBend       = 0x0040,
-        ChannelPressure = 0x0080,
-        KeyPressure     = 0x0100,
-        Indication      = 0x0200,
-        Other           = 0x0400,
-        GeneratedRegion = 0x0800,
-        SegmentID       = 0x1000
-    };
+    // Filter bitmask.
+    // ??? Consider individual bools.
+    static constexpr int Note            = 0x0001;
+    static constexpr int Rest            = 0x0002;
+    static constexpr int Text            = 0x0004;
+    static constexpr int SystemExclusive = 0x0008;
+    static constexpr int Controller      = 0x0010;
+    static constexpr int ProgramChange   = 0x0020;
+    static constexpr int PitchBend       = 0x0040;
+    static constexpr int ChannelPressure = 0x0080;
+    static constexpr int KeyPressure     = 0x0100;
+    static constexpr int Indication      = 0x0200;
+    static constexpr int Other           = 0x0400;
+    static constexpr int GeneratedRegion = 0x0800;
+    static constexpr int SegmentID       = 0x1000;
     int m_eventFilter{0x1FFF};
 
     // ??? QTreeWidget seems like overkill.  We never have sub items.
@@ -201,10 +199,10 @@ private:
                                timeT duration, int timeMode);
     bool updateTreeWidget();
 
-    // Pop-up menu for the event list.
-    QMenu *m_menu{nullptr};
+    /// Pop-up menu for the event list.
+    QMenu *m_popUpMenu{nullptr};
     /// Create and show popup menu.
-    void createMenu();
+    void createPopUpMenu();
 
     std::vector<int> m_listSelection;
     void makeInitialSelection(timeT);
