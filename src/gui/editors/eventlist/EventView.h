@@ -133,11 +133,8 @@ private slots:
     // unused void slotTriggerTimeAdjustChanged(int);
     // unused void slotTriggerRetuneChanged();
 
-    /// slot connected to signal RosegardenDocument::setModified(bool)
-    /**
-     * ??? Rename: slotUpdateWindowTitle() like all others.
-     */
-    void updateWindowTitle(bool modified);
+    /// Connected to RosegardenDocument::setModified(bool)
+    void slotUpdateWindowTitle(bool modified);
 
     void slotDocumentModified(bool modified);
 
@@ -156,37 +153,31 @@ private:
     // Event filters
     QGroupBox *m_filterGroup;
     QCheckBox *m_noteCheckBox;
-    QCheckBox *m_programCheckBox;
-    QCheckBox *m_controllerCheckBox;
-    QCheckBox *m_pitchBendCheckBox;
-    QCheckBox *m_sysExCheckBox;
-    QCheckBox *m_keyPressureCheckBox;
-    QCheckBox *m_channelPressureCheckBox;
+    bool showNote{true};
     QCheckBox *m_restCheckBox;
+    bool showRest{true};
+    QCheckBox *m_programCheckBox;
+    bool showProgramChange{true};
+    QCheckBox *m_controllerCheckBox;
+    bool showController{true};
+    QCheckBox *m_pitchBendCheckBox;
+    bool showPitchBend{true};
+    QCheckBox *m_sysExCheckBox;
+    bool showSystemExclusive{true};
+    QCheckBox *m_keyPressureCheckBox;
+    bool showKeyPressure{true};
+    QCheckBox *m_channelPressureCheckBox;
+    bool showChannelPressure{true};
     QCheckBox *m_indicationCheckBox;
+    bool showIndication{true};
     QCheckBox *m_textCheckBox;
-    // ??? What is this?
+    bool showText{true};
     QCheckBox *m_generatedRegionCheckBox;
-    // ??? What is this?
+    bool showGeneratedRegion{true};
     QCheckBox *m_segmentIDCheckBox;
+    bool showSegmentID{true};
     QCheckBox *m_otherCheckBox;
-
-    // Filter bitmask.
-    // ??? Consider individual bools.
-    static constexpr int Note            = 0x0001;
-    static constexpr int Rest            = 0x0002;
-    static constexpr int Text            = 0x0004;
-    static constexpr int SystemExclusive = 0x0008;
-    static constexpr int Controller      = 0x0010;
-    static constexpr int ProgramChange   = 0x0020;
-    static constexpr int PitchBend       = 0x0040;
-    static constexpr int ChannelPressure = 0x0080;
-    static constexpr int KeyPressure     = 0x0100;
-    static constexpr int Indication      = 0x0200;
-    static constexpr int Other           = 0x0400;
-    static constexpr int GeneratedRegion = 0x0800;
-    static constexpr int SegmentID       = 0x1000;
-    int m_eventFilter{0x1FFF};
+    bool showOther{true};
 
     // ??? QTreeWidget seems like overkill.  We never have sub items.
     //     QTableWidget seems like a better choice.  See
