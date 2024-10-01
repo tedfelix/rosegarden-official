@@ -119,6 +119,7 @@ EventView::EventView(RosegardenDocument *doc,
 
     // Create frame and layout.
     m_frame = new QFrame(this);
+    // ??? Might not be wide enough for a trigger segment.
     m_frame->setMinimumSize(500, 300);
     m_gridLayout = new QGridLayout(m_frame);
     m_frame->setLayout(m_gridLayout);
@@ -171,10 +172,10 @@ EventView::EventView(RosegardenDocument *doc,
     m_gridLayout->addWidget(m_filterGroup, 0, 0);
 
     // Tree Widget
-    // ??? Initial size is not wide enough.
+    // ??? Initial size is not wide enough.  Need to test with a trigger segment.
     m_eventList = new QTreeWidget(m_frame);
 
-    m_gridLayout->addWidget(m_eventList, 0, 1);
+    m_gridLayout->addWidget(m_eventList, 0, 1, 2, 1);
 
     if (m_isTriggerSegment) {
 
@@ -191,7 +192,8 @@ EventView::EventView(RosegardenDocument *doc,
         // Label
         layout->addWidget(new QLabel(tr("Label:  "), groupBox), 0, 0);
         QString label = strtoqstr(segments[0]->getLabel());
-        if (label == "") label = tr("<no label>");
+        if (label == "")
+            label = tr("<no label>");
         m_triggerName = new QLabel(label, groupBox);
         layout->addWidget(m_triggerName, 0, 1);
         QPushButton *editButton = new QPushButton(tr("edit"), groupBox);
@@ -201,7 +203,8 @@ EventView::EventView(RosegardenDocument *doc,
 
         // Base pitch
         layout->addWidget(new QLabel(tr("Base pitch:  "), groupBox), 1, 0);
-        m_triggerPitch = new QLabel(QString("%1").arg(triggerSegment->getBasePitch()), groupBox);
+        m_triggerPitch = new QLabel(
+                QString("%1").arg(triggerSegment->getBasePitch()), groupBox);
         layout->addWidget(m_triggerPitch, 1, 1);
         editButton = new QPushButton(tr("edit"), groupBox);
         layout->addWidget(editButton, 1, 2);
@@ -210,29 +213,29 @@ EventView::EventView(RosegardenDocument *doc,
 
         // Base velocity
         layout->addWidget(new QLabel(tr("Base velocity:  "), groupBox), 2, 0);
-        m_triggerVelocity = new QLabel(QString("%1").arg(triggerSegment->getBaseVelocity()), groupBox);
+        m_triggerVelocity = new QLabel(
+                QString("%1").arg(triggerSegment->getBaseVelocity()), groupBox);
         layout->addWidget(m_triggerVelocity, 2, 1);
         editButton = new QPushButton(tr("edit"), groupBox);
         layout->addWidget(editButton, 2, 2);
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerVelocity);
 
-        /*!!! Comment out these two options, which are not yet used
-          anywhere else -- intended for use with library ornaments, not
-          yet implemented
+#if 0
+        // These two options are not yet used anywhere else.  Intended for use
+        // with library ornaments, not yet implemented
 
-          ??? Library Ornaments?  Is that the same as Figurations?  If
-              so, we have this.  But do we have these features?
+        // ??? Library Ornaments?  Is that the same as Figurations?  If
+        //     so, we have this.  But do we have these features?
 
+        // Default timing
         layout->addWidget(new QLabel(tr("Default timing:  "), frame), 3, 0);
-
         QComboBox *adjust = new QComboBox(frame);
         layout->addWidget(adjust, 3, 1, 1, 2);
         adjust->addItem(tr("As stored"));
         adjust->addItem(tr("Truncate if longer than note"));
         adjust->addItem(tr("End at same time as note"));
         adjust->addItem(tr("Stretch or squash segment to note duration"));
-
         std::string timing = triggerSegment->getDefaultTimeAdjust();
         if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
             adjust->setCurrentIndex(0);
@@ -243,25 +246,35 @@ EventView::EventView(RosegardenDocument *doc,
         } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
             adjust->setCurrentIndex(2);
         }
-
         connect(adjust,
                     static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
                 this, &EventView::slotTriggerTimeAdjustChanged);
 
+        // Adjust pitch to trigger note by default
         QCheckBox *retune = new QCheckBox(tr("Adjust pitch to trigger note by default"), frame);
         retune->setChecked(triggerSegment->getDefaultRetune());
         connect(retune, SIGNAL(clicked()), this, SLOT(slotTriggerRetuneChanged()));
         layout->addWidget(retune, 4, 1, 1, 2);
-
-        */
+#endif
 
         groupBox->setLayout(layout);
         m_gridLayout->addWidget(groupBox, 0, 2);
 
     }
 
+    // ??? Layout looks really bad.  The filter check boxes are all spread
+    //     out.  The trigger segment check boxes are worse.  Perhaps we should:
+    //     1. Move the filter check boxes to the menu.
+    //     2. Move the trigger segment property editing to the trigger segment
+    //        manager somehow.  I think it shows that info in its list.  Make
+    //        the list editable.
+    // ??? Doesn't work.  How do we fill the rest of the space?
+    //m_gridLayout->setRowStretch(0, 1);
+    //m_gridLayout->setRowStretch(1, 200);
+
     updateWindowTitle(false);
-    connect(RosegardenDocument::currentDocument, &RosegardenDocument::documentModified,
+    connect(RosegardenDocument::currentDocument,
+                &RosegardenDocument::documentModified,
             this, &EventView::updateWindowTitle);
 
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
