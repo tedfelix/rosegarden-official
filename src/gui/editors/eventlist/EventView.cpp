@@ -95,6 +95,16 @@ EventView::EventView(RosegardenDocument *doc,
             this, &EventView::slotDocumentModified);
 
     // For each Segment, subscribe for updates.
+    // ??? We are seeing observers that are still extant with trigger
+    //     segments.  This then causes a use after free when Segment's
+    //     dtor tries to dump the name of the observer since we are gone.
+    //     Our dtor does removeObserver(), but maybe there is an issue?
+    //
+    //     I was thinking that the fact that duplicates were in the observer
+    //     list might be it, but remove() removes all that it finds.
+    // ??? We do this again below.
+    // ??? AND why are we subscribing for all when we only work with the
+    //     first one?
     for (Segment *segment : m_segments) {
         segment->addObserver(this);
     }
@@ -172,10 +182,44 @@ EventView::EventView(RosegardenDocument *doc,
     m_gridLayout->addWidget(m_filterGroup, 0, 0);
 
     // Tree Widget
+
     // ??? Initial size is not wide enough.  Need to test with a trigger segment.
     m_eventList = new QTreeWidget(m_frame);
+    // Double-click to edit.
+    connect(m_eventList, &QTreeWidget::itemDoubleClicked,
+            this, &EventView::slotPopupEventEditor);
+
+    m_eventList->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_eventList,
+                &QWidget::customContextMenuRequested,
+            this, &EventView::slotPopupMenu);
+
+    m_eventList->setAllColumnsShowFocus(true);
+    m_eventList->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+    QStringList columnNames;
+    columnNames << tr("Time  ");
+    columnNames << tr("Duration  ");
+    columnNames << tr("Event Type  ");
+    columnNames << tr("Pitch  ");
+    columnNames << tr("Velocity  ");
+    columnNames << tr("Type (Data1)  ");
+    columnNames << tr("Type (Data1)  ");
+    columnNames << tr("Value (Data2)  ");
+    m_eventList->setHeaderLabels(columnNames);
+
+    // Make sure time columns have the right amount of space.
+    // ??? We should use the font size of "000-00-00-00" as the default size.
+    //     Then we should save and restore the column widths.  See
+    //     ShortcutDialog's ctor.
+    constexpr int timeWidth = 110;
+    // Plus a little for the tree diagram in the first column.
+    m_eventList->setColumnWidth(0, timeWidth + 23);
+    m_eventList->setColumnWidth(1, timeWidth);
 
     m_gridLayout->addWidget(m_eventList, 0, 1, 2, 1);
+
+    // Trigger Segment Group Box
 
     if (m_isTriggerSegment) {
 
@@ -225,8 +269,9 @@ EventView::EventView(RosegardenDocument *doc,
         // These two options are not yet used anywhere else.  Intended for use
         // with library ornaments, not yet implemented
 
-        // ??? Library Ornaments?  Is that the same as Figurations?  If
-        //     so, we have this.  But do we have these features?
+        // ??? All of this is implemented and stored with the trigger segment
+        //     along with pitch and velocity.  We can probably get this working,
+        //     but should we?
 
         // Default timing
         layout->addWidget(new QLabel(tr("Default timing:  "), frame), 3, 0);
@@ -277,45 +322,21 @@ EventView::EventView(RosegardenDocument *doc,
                 &RosegardenDocument::documentModified,
             this, &EventView::updateWindowTitle);
 
+    // ??? We are seeing observers that are still extant with trigger
+    //     segments.  This then causes a use after free when Segment's
+    //     dtor tries to dump the name of the observer since we are gone.
+    //     Our dtor does removeObserver(), but maybe there is an issue?
+    //
+    //     I was thinking that the fact that duplicates were in the observer
+    //     list might be it, but remove() removes all that it finds.
+    // ??? AND why are we subscribing for all when we only work with the
+    //     first one?
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
         m_segments[i]->addObserver(this);
     }
 
-    // Connect double clicker
-    //
-    connect(m_eventList, &QTreeWidget::itemDoubleClicked,
-            this, &EventView::slotPopupEventEditor);
-
-    m_eventList->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_eventList,
-            &QWidget::customContextMenuRequested,
-            this, &EventView::slotPopupMenu);
-
-    m_eventList->setAllColumnsShowFocus(true);
-    m_eventList->setSelectionMode( QAbstractItemView::ExtendedSelection );
-
-    QStringList columnNames;
-    columnNames << tr("Time  ");
-    columnNames << tr("Duration  ");
-    columnNames << tr("Event Type  ");
-    columnNames << tr("Pitch  ");
-    columnNames << tr("Velocity  ");
-    columnNames << tr("Type (Data1)  ");
-    columnNames << tr("Type (Data1)  ");
-    columnNames << tr("Value (Data2)  ");
-    m_eventList->setHeaderLabels(columnNames);
-
-    // Make sure time columns have the right amount of space.
-    // ??? We should use the font size of "000-00-00-00" as the default size.
-    //     Then we should save and restore the column widths.  See
-    //     ShortcutDialog's ctor.
-    constexpr int timeWidth = 110;
-    // Plus a little for the tree diagram in the first column.
-    m_eventList->setColumnWidth(0, timeWidth + 23);
-    m_eventList->setColumnWidth(1, timeWidth);
-
     readOptions();
-    setButtonsToFilter();
+    updateFilterCheckBoxes();
     updateTreeWidget();
 
     // Connect the checkboxes AFTER calling setButtonsToFilter() to set up the
@@ -356,8 +377,8 @@ EventView::EventView(RosegardenDocument *doc,
     // Restore window geometry and toolbar/dock state
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    this->restoreGeometry(settings.value("Event_List_View_Geometry").toByteArray());
-    this->restoreState(settings.value("Event_List_View_State").toByteArray());
+    restoreGeometry(settings.value("Event_List_View_Geometry").toByteArray());
+    restoreState(settings.value("Event_List_View_State").toByteArray());
     settings.endGroup();
 }
 
@@ -1332,8 +1353,8 @@ EventView::saveOptions()
 
     // Save window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
-    settings.setValue("Event_List_View_Geometry", this->saveGeometry());
-    settings.setValue("Event_List_View_State", this->saveState());
+    settings.setValue("Event_List_View_Geometry", saveGeometry());
+    settings.setValue("Event_List_View_State", saveState());
     settings.endGroup();
 }
 
@@ -1394,7 +1415,7 @@ EventView::slotModifyFilter()
 }
 
 void
-EventView::setButtonsToFilter()
+EventView::updateFilterCheckBoxes()
 {
     m_noteCheckBox->setChecked          (m_eventFilter & Note);
     m_programCheckBox->setChecked        (m_eventFilter & ProgramChange);

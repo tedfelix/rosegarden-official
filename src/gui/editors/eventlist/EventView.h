@@ -147,7 +147,7 @@ private:
     QGridLayout *m_gridLayout{nullptr};
 
     /// Set the button states to the current filter positions
-    void setButtonsToFilter();
+    void updateFilterCheckBoxes();
 
     void setupActions();
 
