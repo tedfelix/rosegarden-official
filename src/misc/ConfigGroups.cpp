@@ -42,7 +42,6 @@ namespace Rosegarden
     const char* const PlayListConfigGroup = "Playlist";
     const char* const MainWindowConfigGroup = "Main_Window";
     const char* const TransportDialogConfigGroup = "Transport_Controls";
-    const char* const TempoViewLayoutConfigGroupName = "TempoView_Layout";
     const char* const TempoViewConfigGroup = "TempoView_Options";
     const char* const TriggerManagerConfigGroup = "Trigger_Editor";
     const char* const EditViewConfigGroup = "Edit_View";

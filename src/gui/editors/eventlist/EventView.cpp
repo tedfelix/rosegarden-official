@@ -121,7 +121,6 @@ EventView::EventView(RosegardenDocument *doc,
     setupActions();
 
     // Create frame and layout.
-    // ??? Push down to derivers.
     m_frame = new QFrame(this);
     m_frame->setMinimumSize(500, 300);
     m_frame->setMaximumSize(2200, 1400);
@@ -129,8 +128,7 @@ EventView::EventView(RosegardenDocument *doc,
     m_frame->setLayout(m_gridLayout);
     setCentralWidget(m_frame);
 
-    // define some note filtering buttons in a group
-    //
+    // Filter
     m_filterGroup = new QGroupBox(tr("Event filters"), m_frame);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setAlignment( Qt::AlignHorizontal_Mask );
@@ -217,6 +215,9 @@ EventView::EventView(RosegardenDocument *doc,
         /*!!! Comment out these two options, which are not yet used
           anywhere else -- intended for use with library ornaments, not
           yet implemented
+
+          ??? Library Ornaments?  Is that the same as Figurations?  If
+              so, we have this.  But do we have these features?
 
         layout->addWidget(new QLabel(tr("Default timing:  "), frame), 3, 0);
 
@@ -370,7 +371,7 @@ EventView::updateTreeWidget()
     // ??? This selection stuff is extremely buggy.  It stores the indices,
     //     so if anything has changed, it will re-select the wrong items.
     //     It also completely loses the scroll position.  Working on fixing
-    //     this in TempoView.  See that for the latest.
+    //     this in TempoAndTimeSignatureEditor.  See that for the latest.
 
     // If no selection, copy UI selection to m_listSelection.
     if (m_listSelection.size() == 0) {
@@ -683,7 +684,7 @@ EventView::makeInitialSelection(timeT time)
     // ??? Performance: LINEAR SEARCH
     //     While we could speed this up with a binary search, it would be
     //     smarter to find the appropriate event while we are creating the
-    //     m_eventList in applyLayout().
+    //     m_eventList in updateTreeWidget().
     for (int itemNo = 0; itemNo < itemCount; ++itemNo) {
         EventViewItem *item =
                 dynamic_cast<EventViewItem *>(
@@ -751,12 +752,6 @@ EventView::makeDurationString(timeT time,
     default:
         return QString("%1  ").arg(duration);
     }
-}
-
-void
-EventView::updateView()
-{
-    m_eventList->update();
 }
 
 void
@@ -1058,7 +1053,10 @@ EventView::slotEditDelete()
 
         CommandHistory::getInstance()->addCommand(
                 new EraseCommand(deleteSelection));
-        updateView();
+
+        // ??? What does this do?  Wouldn't updateTreeWidget() be more
+        //     appropriate?
+        m_eventList->update();
     }
 }
 

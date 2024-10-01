@@ -19,7 +19,7 @@
 #ifndef RG_EVENTVIEW_H
 #define RG_EVENTVIEW_H
 
-#include "base/Segment.h"
+#include "base/Segment.h"  // SegmentObserver
 #include "gui/general/EditViewBase.h"
 
 #include <set>
@@ -72,12 +72,16 @@ public:
 signals:
 
     /// Connected to RosegardenMainViewWidget::slotEditTriggerSegment().
-    void editTriggerSegment(int);
+    /**
+     * ??? When is this ever emitted?  The other editors notice the user has
+     *     asked to edit a trigger Segment and then emit this.  This never
+     *     emits.
+     */
+    void editTriggerSegment(int id);
 
 protected:
 
-    void initStatusBar();
-
+    // EditViewBase override.
     Segment *getCurrentSegment() override;
 
     // QWidget override.
@@ -85,30 +89,32 @@ protected:
 
 private slots:
 
-    void slotEditCut();
-    void slotEditCopy();
-    void slotEditPaste();
-    void slotEditDelete();
-    void slotEditInsert();
-
-    void slotSelectAll();
-    void slotClearSelection();
-
-    void slotMusicalTime();
-    void slotRealTime();
-    void slotRawTime();
-
-    void slotModifyFilter();
-
-    void slotHelpRequested();
-    void slotHelpAbout();
-
     // Menu Handlers
 
+    // Edit
+    void slotEditInsert();
+    void slotEditDelete();
     /// Edit > Edit Event
     void slotEditEvent();
     /// Edit > Advanced Event Editor
     void slotEditEventAdvanced();
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
+    void slotSelectAll();
+    void slotClearSelection();
+
+    // View
+    void slotMusicalTime();
+    void slotRealTime();
+    void slotRawTime();
+
+    // Help
+    void slotHelpRequested();
+    void slotHelpAbout();
+
+    /// Filter check boxes.
+    void slotModifyFilter();
 
     /// Handle double-click on an event in the event list.
     void slotPopupEventEditor(QTreeWidgetItem *item, int column);
@@ -120,6 +126,7 @@ private slots:
     /// Right-click context menu handler.
     void slotOpenInExpertEventEditor(bool checked);
 
+    // Trigger Segments
     void slotEditTriggerName();
     void slotEditTriggerPitch();
     void slotEditTriggerVelocity();
@@ -139,19 +146,14 @@ private:
     QFrame *m_frame{nullptr};
     QGridLayout *m_gridLayout{nullptr};
 
-    /// Create and show popup menu.
-    void createMenu();
+    void initStatusBar();
 
     /// Set the button states to the current filter positions
     void setButtonsToFilter();
 
     void setupActions();
 
-    void updateView();
-    bool updateTreeWidget();
-
-    QString makeDurationString(timeT time,
-                               timeT duration, int timeMode);
+    // Widgets
 
     // Event filters
     QGroupBox *m_filterGroup;
@@ -171,36 +173,44 @@ private:
     QCheckBox *m_segmentIDCheckBox;
     QCheckBox *m_otherCheckBox;
 
+    static constexpr int None = 0x0000;
     enum EventFilter
     {
-        None               = 0x0000,
-        Note               = 0x0001,
-        Rest               = 0x0002,
-        Text               = 0x0004,
-        SystemExclusive    = 0x0008,
-        Controller         = 0x0010,
-        ProgramChange      = 0x0020,
-        PitchBend          = 0x0040,
-        ChannelPressure    = 0x0080,
-        KeyPressure        = 0x0100,
-        Indication         = 0x0200,
-        Other              = 0x0400,
-        GeneratedRegion    = 0x0800,
-        SegmentID          = 0x1000,
+        Note            = 0x0001,
+        Rest            = 0x0002,
+        Text            = 0x0004,
+        SystemExclusive = 0x0008,
+        Controller      = 0x0010,
+        ProgramChange   = 0x0020,
+        PitchBend       = 0x0040,
+        ChannelPressure = 0x0080,
+        KeyPressure     = 0x0100,
+        Indication      = 0x0200,
+        Other           = 0x0400,
+        GeneratedRegion = 0x0800,
+        SegmentID       = 0x1000
     };
     int m_eventFilter{0x1FFF};
 
     // ??? QTreeWidget seems like overkill.  We never have sub items.
-    //     QTableWidget seems like a better choice.
+    //     QTableWidget seems like a better choice.  See
+    //     TempoAndTimeSignatureEditor for a complete example of using
+    //     QTableWidget.
     QTreeWidget *m_eventList;
+    QString makeDurationString(timeT time,
+                               timeT duration, int timeMode);
+    bool updateTreeWidget();
+
+    // Pop-up menu for the event list.
+    QMenu *m_menu{nullptr};
+    /// Create and show popup menu.
+    void createMenu();
 
     std::vector<int> m_listSelection;
     void makeInitialSelection(timeT);
 
-    std::set<Event *> m_deletedEvents; // deleted since last refresh
-
-    // Pop-up menu for the event list.
-    QMenu *m_menu{nullptr};
+    // Events deleted since last refresh.
+    std::set<Event *> m_deletedEvents;
 
     bool m_isTriggerSegment{false};
     QLabel *m_triggerName{nullptr};
