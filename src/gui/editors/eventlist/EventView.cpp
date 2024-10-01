@@ -146,6 +146,16 @@ EventView::EventView(RosegardenDocument *doc,
                      const std::vector<Segment *> &segments) :
     EditViewBase(segments)
 {
+    // We only support a single Segment.
+    if (segments.size() != 1) {
+        RG_WARNING << "Segment count was not 1.  (" << segments.size() << ")  Giving up...";
+        return;
+    }
+    if (segments[0] == nullptr) {
+        RG_WARNING << "Segment pointer is null.";
+        return;
+    }
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     setStatusBar(new QStatusBar(this));
@@ -155,36 +165,19 @@ EventView::EventView(RosegardenDocument *doc,
                 &RosegardenDocument::documentModified,
             this, &EventView::slotDocumentModified);
 
-    // For each Segment, subscribe for updates.
-    // ??? We are seeing observers that are still extant with trigger
-    //     segments.  This then causes a use after free when Segment's
-    //     dtor tries to dump the name of the observer since we are gone.
-    //     Our dtor does removeObserver(), but maybe there is an issue?
+    // Subscribe for Segment updates.
+    // ??? We are seeing observers that are still extant if you close rg before
+    //     you close the Event Editor windows.
     //
-    //     I was thinking that the fact that duplicates were in the observer
-    //     list might be it, but remove() removes all that it finds.
-    // ??? We do this again below.
-    // ??? AND why are we subscribing for all when we only work with the
-    //     first one?
-    for (Segment *segment : m_segments) {
-        segment->addObserver(this);
-    }
+    //     This then causes a "use after free" when Segment's
+    //     dtor tries to dump the name of the observer since we are gone.
+    //     Our dtor does removeObserver(), but maybe the Segment goes away
+    //     before the editor does?
+    segments[0]->addObserver(this);
 
     Composition &comp = doc->getComposition();
 
-    // Note: We only edit the first Segment in segments.
-
-    if (!segments.empty()) {
-        Segment *s = *segments.begin();
-        int id = comp.getTriggerSegmentId(s);
-        if (id >= 0)
-            m_isTriggerSegment = true;
-    }
-
-    // Clear the statusbar.
-    // ??? I suspect it's always cleared at this point.  Don't think
-    //     we need this.
-    statusBar()->showMessage("");
+    m_isTriggerSegment = (comp.getTriggerSegmentId(segments[0]) >= 0);
 
     setupActions();
 
@@ -270,7 +263,8 @@ EventView::EventView(RosegardenDocument *doc,
 
     // Tree Widget
 
-    // ??? Initial size is not wide enough.  Need to test with a trigger segment.
+    // ??? Initial size is not wide enough.  Need to test with a trigger
+    //     segment.
     m_eventList = new QTreeWidget(m_frame);
     // Double-click to edit.
     connect(m_eventList, &QTreeWidget::itemDoubleClicked,
@@ -296,9 +290,6 @@ EventView::EventView(RosegardenDocument *doc,
     m_eventList->setHeaderLabels(columnNames);
 
     // Make sure time columns have the right amount of space.
-    // ??? We should use the font size of "000-00-00-00" as the default size.
-    //     Then we should save and restore the column widths.  See
-    //     ShortcutDialog's ctor.
     constexpr int timeWidth = 110;
     // Plus a little for the tree diagram in the first column.
     m_eventList->setColumnWidth(0, timeWidth + 23);
@@ -408,19 +399,6 @@ EventView::EventView(RosegardenDocument *doc,
     connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,
             this, &EventView::slotUpdateWindowTitle);
-
-    // ??? We are seeing observers that are still extant with trigger
-    //     segments.  This then causes a use after free when Segment's
-    //     dtor tries to dump the name of the observer since we are gone.
-    //     Our dtor does removeObserver(), but maybe there is an issue?
-    //
-    //     I was thinking that the fact that duplicates were in the observer
-    //     list might be it, but remove() removes all that it finds.
-    // ??? AND why are we subscribing for all when we only work with the
-    //     first one?
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        m_segments[i]->addObserver(this);
-    }
 
     readOptions();
     updateFilterCheckBoxes();
@@ -966,8 +944,7 @@ EventView::slotEditCut()
     if (selection.count() == 0)
         return ;
 
-    RG_DEBUG << "EventView::slotEditCut - cutting "
-    << selection.count() << " items";
+    RG_DEBUG << "slotEditCut() - cutting " << selection.count() << " items";
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     EventSelection *cutSelection = nullptr;
@@ -1013,8 +990,7 @@ EventView::slotEditCopy()
     if (selection.count() == 0)
         return ;
 
-    RG_DEBUG << "EventView::slotEditCopy - copying "
-    << selection.count() << " items";
+    RG_DEBUG << "slotEditCopy() - copying " << selection.count() << " items";
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     EventSelection *copySelection = nullptr;
@@ -1094,8 +1070,7 @@ EventView::slotEditPaste()
     } else
         CommandHistory::getInstance()->addCommand(command);
 
-    RG_DEBUG << "EventView::slotEditPaste - pasting "
-    << selection.count() << " items";
+    RG_DEBUG << "slotEditPaste() - pasting " << selection.count() << " items";
 }
 
 void
@@ -1105,8 +1080,7 @@ EventView::slotEditDelete()
     if (selection.count() == 0)
         return ;
 
-    RG_DEBUG << "EventView::slotEditDelete - deleting "
-    << selection.count() << " items";
+    RG_DEBUG << "slotEditDelete() - deleting " << selection.count() << " items";
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     EventSelection *deleteSelection = nullptr;
@@ -1602,7 +1576,7 @@ EventView::slotPopupMenu(const QPoint& pos)
         //m_menu->exec(QCursor::pos());
         m_popUpMenu->exec(m_eventList->mapToGlobal(pos));
     else
-        RG_DEBUG << "EventView::showMenu() : no menu to show\n";
+        RG_DEBUG << "showMenu() : no menu to show\n";
 }
 
 void

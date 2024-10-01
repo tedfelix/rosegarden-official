@@ -74,8 +74,8 @@ signals:
     /// Connected to RosegardenMainViewWidget::slotEditTriggerSegment().
     /**
      * ??? When is this ever emitted?  The other editors notice the user has
-     *     asked to edit a trigger Segment and then emit this.  This never
-     *     emits.
+     *     asked to edit a note that triggers a trigger Segment and then emit
+     *     this.  This never emits.
      */
     void editTriggerSegment(int id);
 
