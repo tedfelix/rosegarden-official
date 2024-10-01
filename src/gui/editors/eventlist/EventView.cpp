@@ -32,9 +32,6 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/SegmentPerformanceHelper.h"
-#include "base/Selection.h"
-#include "base/Track.h"
-#include "base/TriggerSegment.h"
 #include "base/figuration/GeneratedRegion.h"
 #include "base/figuration/SegmentID.h"
 #include "commands/edit/CopyCommand.h"
@@ -46,8 +43,8 @@
 #include "commands/segment/SegmentLabelCommand.h"
 #include "commands/segment/SetTriggerSegmentBasePitchCommand.h"
 #include "commands/segment/SetTriggerSegmentBaseVelocityCommand.h"
-#include "commands/segment/SetTriggerSegmentDefaultRetuneCommand.h"
-#include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
+//#include "commands/segment/SetTriggerSegmentDefaultRetuneCommand.h"
+//#include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
@@ -70,18 +67,14 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QMenu>
-#include <QPoint>
 #include <QPushButton>
 #include <QSettings>
 #include <QStatusBar>
-#include <QString>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QDesktopServices>
-
-#include <algorithm>  // std:find()
 
 
 namespace Rosegarden
@@ -92,6 +85,8 @@ EventView::EventView(RosegardenDocument *doc,
                      const std::vector<Segment *> &segments) :
     EditViewBase(segments)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     setStatusBar(new QStatusBar(this));
 
     // Connect for changes so we can update the list.
@@ -99,115 +94,125 @@ EventView::EventView(RosegardenDocument *doc,
                 &RosegardenDocument::documentModified,
             this, &EventView::slotDocumentModified);
 
-    // For each Segment...
+    // For each Segment, subscribe for updates.
     for (Segment *segment : m_segments) {
         segment->addObserver(this);
     }
 
-    setAttribute(Qt::WA_DeleteOnClose);
+    Composition &comp = doc->getComposition();
 
-    // Note: EditView only edits the first Segment in segments.
+    // Note: We only edit the first Segment in segments.
 
     if (!segments.empty()) {
         Segment *s = *segments.begin();
-        if (s->getComposition()) {
-            int id = s->getComposition()->getTriggerSegmentId(s);
-            if (id >= 0)
-                m_isTriggerSegment = true;
-        }
+        int id = comp.getTriggerSegmentId(s);
+        if (id >= 0)
+            m_isTriggerSegment = true;
     }
 
-    initStatusBar();
+    // Clear the statusbar.
+    // ??? I suspect it's always cleared at this point.  Don't think
+    //     we need this.
+    statusBar()->showMessage("");
+
     setupActions();
 
     // Create frame and layout.
     m_frame = new QFrame(this);
     m_frame->setMinimumSize(500, 300);
-    m_frame->setMaximumSize(2200, 1400);
     m_gridLayout = new QGridLayout(m_frame);
     m_frame->setLayout(m_gridLayout);
     setCentralWidget(m_frame);
 
-    // Filter
+    // Event filters
     m_filterGroup = new QGroupBox(tr("Event filters"), m_frame);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
-    m_filterGroup->setAlignment( Qt::AlignHorizontal_Mask );
-
-    m_noteCheckBox = new QCheckBox(tr("Note"), m_filterGroup);
-    m_programCheckBox = new QCheckBox(tr("Program Change"), m_filterGroup);
-    m_controllerCheckBox = new QCheckBox(tr("Controller"), m_filterGroup);
-    m_pitchBendCheckBox = new QCheckBox(tr("Pitch Bend"), m_filterGroup);
-    m_sysExCheckBox = new QCheckBox(tr("System Exclusive"), m_filterGroup);
-    m_keyPressureCheckBox = new QCheckBox(tr("Key Pressure"), m_filterGroup);
-    m_channelPressureCheckBox = new QCheckBox(tr("Channel Pressure"), m_filterGroup);
-    m_restCheckBox = new QCheckBox(tr("Rest"), m_filterGroup);
-    m_indicationCheckBox = new QCheckBox(tr("Indication"), m_filterGroup);
-    m_textCheckBox = new QCheckBox(tr("Text"), m_filterGroup);
-    m_generatedRegionCheckBox = new QCheckBox(tr("Generated regions"), m_filterGroup);
-    m_segmentIDCheckBox = new QCheckBox(tr("Segment ID"), m_filterGroup);
-    m_otherCheckBox = new QCheckBox(tr("Other"), m_filterGroup);
-
-    filterGroupLayout->addWidget(m_noteCheckBox);
-    filterGroupLayout->addWidget(m_programCheckBox);
-    filterGroupLayout->addWidget(m_controllerCheckBox);
-    filterGroupLayout->addWidget(m_pitchBendCheckBox);
-    filterGroupLayout->addWidget(m_sysExCheckBox);
-    filterGroupLayout->addWidget(m_keyPressureCheckBox);
-    filterGroupLayout->addWidget(m_channelPressureCheckBox);
-    filterGroupLayout->addWidget(m_restCheckBox);
-    filterGroupLayout->addWidget(m_indicationCheckBox);
-    filterGroupLayout->addWidget(m_textCheckBox);
-    filterGroupLayout->addWidget(m_generatedRegionCheckBox);
-    filterGroupLayout->addWidget(m_segmentIDCheckBox);
-    filterGroupLayout->addWidget(m_otherCheckBox);
     m_filterGroup->setLayout(filterGroupLayout);
 
-    m_gridLayout->addWidget(m_filterGroup, 2, 0);
+    m_noteCheckBox = new QCheckBox(tr("Note"), m_filterGroup);
+    filterGroupLayout->addWidget(m_noteCheckBox);
 
+    m_programCheckBox = new QCheckBox(tr("Program Change"), m_filterGroup);
+    filterGroupLayout->addWidget(m_programCheckBox);
+
+    m_controllerCheckBox = new QCheckBox(tr("Controller"), m_filterGroup);
+    filterGroupLayout->addWidget(m_controllerCheckBox);
+
+    m_pitchBendCheckBox = new QCheckBox(tr("Pitch Bend"), m_filterGroup);
+    filterGroupLayout->addWidget(m_pitchBendCheckBox);
+
+    m_sysExCheckBox = new QCheckBox(tr("System Exclusive"), m_filterGroup);
+    filterGroupLayout->addWidget(m_sysExCheckBox);
+
+    m_keyPressureCheckBox = new QCheckBox(tr("Key Pressure"), m_filterGroup);
+    filterGroupLayout->addWidget(m_keyPressureCheckBox);
+
+    m_channelPressureCheckBox = new QCheckBox(tr("Channel Pressure"), m_filterGroup);
+    filterGroupLayout->addWidget(m_channelPressureCheckBox);
+
+    m_restCheckBox = new QCheckBox(tr("Rest"), m_filterGroup);
+    filterGroupLayout->addWidget(m_restCheckBox);
+
+    m_indicationCheckBox = new QCheckBox(tr("Indication"), m_filterGroup);
+    filterGroupLayout->addWidget(m_indicationCheckBox);
+
+    m_textCheckBox = new QCheckBox(tr("Text"), m_filterGroup);
+    filterGroupLayout->addWidget(m_textCheckBox);
+
+    m_generatedRegionCheckBox = new QCheckBox(tr("Generated regions"), m_filterGroup);
+    filterGroupLayout->addWidget(m_generatedRegionCheckBox);
+
+    m_segmentIDCheckBox = new QCheckBox(tr("Segment ID"), m_filterGroup);
+    filterGroupLayout->addWidget(m_segmentIDCheckBox);
+
+    m_otherCheckBox = new QCheckBox(tr("Other"), m_filterGroup);
+    filterGroupLayout->addWidget(m_otherCheckBox);
+
+    m_gridLayout->addWidget(m_filterGroup, 0, 0);
+
+    // Tree Widget
+    // ??? Initial size is not wide enough.
     m_eventList = new QTreeWidget(m_frame);
 
-    //m_eventList->setItemsRenameable(true); //&&& use item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable );
-
-    m_gridLayout->addWidget(m_eventList, 2, 1);
+    m_gridLayout->addWidget(m_eventList, 0, 1);
 
     if (m_isTriggerSegment) {
 
-        int id = segments[0]->getComposition()->getTriggerSegmentId(segments[0]);
-        TriggerSegmentRec *rec =
-            segments[0]->getComposition()->getTriggerSegmentRec(id);
+        const int triggerSegmentID = comp.getTriggerSegmentId(segments[0]);
+        TriggerSegmentRec *triggerSegment =
+                comp.getTriggerSegmentRec(triggerSegmentID);
 
-        // ??? rename: groupBox
-        QGroupBox *frame = new QGroupBox(tr("Triggered Segment Properties"), m_frame);
-        frame->setAlignment( Qt::AlignHorizontal_Mask );
-        frame->setContentsMargins(5, 5, 5, 5);
-        QGridLayout *layout = new QGridLayout(frame);
+        QGroupBox *groupBox = new QGroupBox(
+                tr("Triggered Segment Properties"), m_frame);
+        groupBox->setContentsMargins(5, 5, 5, 5);
+        QGridLayout *layout = new QGridLayout(groupBox);
         layout->setSpacing(5);
 
         // Label
-        layout->addWidget(new QLabel(tr("Label:  "), frame), 0, 0);
+        layout->addWidget(new QLabel(tr("Label:  "), groupBox), 0, 0);
         QString label = strtoqstr(segments[0]->getLabel());
         if (label == "") label = tr("<no label>");
-        m_triggerName = new QLabel(label, frame);
+        m_triggerName = new QLabel(label, groupBox);
         layout->addWidget(m_triggerName, 0, 1);
-        QPushButton *editButton = new QPushButton(tr("edit"), frame);
+        QPushButton *editButton = new QPushButton(tr("edit"), groupBox);
         layout->addWidget(editButton, 0, 2);
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerName);
 
         // Base pitch
-        layout->addWidget(new QLabel(tr("Base pitch:  "), frame), 1, 0);
-        m_triggerPitch = new QLabel(QString("%1").arg(rec->getBasePitch()), frame);
+        layout->addWidget(new QLabel(tr("Base pitch:  "), groupBox), 1, 0);
+        m_triggerPitch = new QLabel(QString("%1").arg(triggerSegment->getBasePitch()), groupBox);
         layout->addWidget(m_triggerPitch, 1, 1);
-        editButton = new QPushButton(tr("edit"), frame);
+        editButton = new QPushButton(tr("edit"), groupBox);
         layout->addWidget(editButton, 1, 2);
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerPitch);
 
         // Base velocity
-        layout->addWidget(new QLabel(tr("Base velocity:  "), frame), 2, 0);
-        m_triggerVelocity = new QLabel(QString("%1").arg(rec->getBaseVelocity()), frame);
+        layout->addWidget(new QLabel(tr("Base velocity:  "), groupBox), 2, 0);
+        m_triggerVelocity = new QLabel(QString("%1").arg(triggerSegment->getBaseVelocity()), groupBox);
         layout->addWidget(m_triggerVelocity, 2, 1);
-        editButton = new QPushButton(tr("edit"), frame);
+        editButton = new QPushButton(tr("edit"), groupBox);
         layout->addWidget(editButton, 2, 2);
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerVelocity);
@@ -228,7 +233,7 @@ EventView::EventView(RosegardenDocument *doc,
         adjust->addItem(tr("End at same time as note"));
         adjust->addItem(tr("Stretch or squash segment to note duration"));
 
-        std::string timing = rec->getDefaultTimeAdjust();
+        std::string timing = triggerSegment->getDefaultTimeAdjust();
         if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
             adjust->setCurrentIndex(0);
         } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
@@ -244,14 +249,14 @@ EventView::EventView(RosegardenDocument *doc,
                 this, &EventView::slotTriggerTimeAdjustChanged);
 
         QCheckBox *retune = new QCheckBox(tr("Adjust pitch to trigger note by default"), frame);
-        retune->setChecked(rec->getDefaultRetune());
+        retune->setChecked(triggerSegment->getDefaultRetune());
         connect(retune, SIGNAL(clicked()), this, SLOT(slotTriggerRetuneChanged()));
         layout->addWidget(retune, 4, 1, 1, 2);
 
         */
 
-        frame->setLayout(layout);
-        m_gridLayout->addWidget(frame, 2, 2);
+        groupBox->setLayout(layout);
+        m_gridLayout->addWidget(groupBox, 0, 2);
 
     }
 
@@ -304,6 +309,7 @@ EventView::EventView(RosegardenDocument *doc,
     // initial states.  Otherwise, the first state change triggers
     // slotModifyFilter() prematurely, and it wrecks the filter.
     // ??? Use clicked() instead of stateChanged() to avoid this.
+    // ??? Move these up to where they check boxes are created.
     connect(m_noteCheckBox, &QCheckBox::stateChanged,
             this, &EventView::slotModifyFilter);
     connect(m_programCheckBox, &QCheckBox::stateChanged,
@@ -331,7 +337,7 @@ EventView::EventView(RosegardenDocument *doc,
     connect(m_otherCheckBox, &QCheckBox::stateChanged,
             this, &EventView::slotModifyFilter);
 
-    makeInitialSelection(doc->getComposition().getPosition());
+    makeInitialSelection(comp.getPosition());
 
 
     // Restore window geometry and toolbar/dock state
@@ -618,11 +624,10 @@ EventView::updateTreeWidget()
                << data1Str
                << data2Str;
 
-            new EventViewItem(m_segments[i],
-                              *it,
-                              m_eventList,
-                              sl
-                               );
+            new EventViewItem(m_segments[i],  // segment
+                              *it,  // event
+                              m_eventList,  // parent
+                              sl);  // strings
         }
     }
 
@@ -779,10 +784,10 @@ EventView::slotEditTriggerPitch()
 {
     int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-    TriggerSegmentRec *rec =
+    TriggerSegmentRec *triggerSegment =
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-    PitchDialog *dlg = new PitchDialog(this, tr("Base pitch"), rec->getBasePitch());
+    PitchDialog *dlg = new PitchDialog(this, tr("Base pitch"), triggerSegment->getBasePitch());
 
     if (dlg->exec() == QDialog::Accepted) {
         CommandHistory::getInstance()->addCommand(
@@ -799,11 +804,11 @@ EventView::slotEditTriggerVelocity()
 {
     int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-    TriggerSegmentRec *rec =
+    TriggerSegmentRec *triggerSegment =
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
     TrivialVelocityDialog *dlg = new TrivialVelocityDialog
-                                 (this, tr("Base velocity"), rec->getBaseVelocity());
+                                 (this, tr("Base velocity"), triggerSegment->getBaseVelocity());
 
     if (dlg->exec() == QDialog::Accepted) {
         CommandHistory::getInstance()->addCommand(
@@ -842,7 +847,7 @@ EventView::slotTriggerTimeAdjustChanged(int option)
 
     int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-//    TriggerSegmentRec *rec =  // remove warning
+//    TriggerSegmentRec *triggerSegment =  // remove warning
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
     addCommandToHistory(new SetTriggerSegmentDefaultTimeAdjustCommand
@@ -856,11 +861,11 @@ EventView::slotTriggerRetuneChanged()
 {
     int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-    TriggerSegmentRec *rec =
+    TriggerSegmentRec *triggerSegment =
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
     addCommandToHistory(new SetTriggerSegmentDefaultRetuneCommand
-                        (&RosegardenDocument::currentDocument->getComposition(), id, !rec->getDefaultRetune()));
+                        (&RosegardenDocument::currentDocument->getComposition(), id, !triggerSegment->getDefaultRetune()));
 }
 */
 
@@ -1269,13 +1274,6 @@ EventView::setupActions()
         action = findAction("open_in_notation");
         if (action) delete action;
     }
-}
-
-void
-EventView::initStatusBar()
-{
-    QStatusBar* sb = statusBar();
-    sb->showMessage(QString());
 }
 
 /* unused

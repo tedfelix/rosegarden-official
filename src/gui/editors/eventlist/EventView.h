@@ -146,8 +146,6 @@ private:
     QFrame *m_frame{nullptr};
     QGridLayout *m_gridLayout{nullptr};
 
-    void initStatusBar();
-
     /// Set the button states to the current filter positions
     void setButtonsToFilter();
 
