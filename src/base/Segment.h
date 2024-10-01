@@ -987,8 +987,8 @@ private:
 
 private: // stuff to support SegmentObservers
 
-    typedef std::list<SegmentObserver *> ObserverSet;
-    ObserverSet m_observers;
+    typedef std::list<SegmentObserver *> ObserverList;
+    ObserverList m_observers;
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;

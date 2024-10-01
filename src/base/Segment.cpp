@@ -169,7 +169,7 @@ Segment::~Segment()
     if (!m_observers.empty()) {
         RG_WARNING << "dtor: Warning: " << m_observers.size() << " observers still extant";
         RG_WARNING << "Observers are:";
-        for (ObserverSet::const_iterator i = m_observers.begin();
+        for (ObserverList::const_iterator i = m_observers.begin();
              i != m_observers.end(); ++i) {
             RG_WARNING << " " << (void *)(*i) << " [" << typeid(**i).name() << "]";
         }
@@ -460,7 +460,7 @@ Segment::setStartTime(timeT t)
     }
 
     // Handle updates and notifications just once.
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->allEventsChanged(this);
     }
@@ -1477,7 +1477,7 @@ Segment::notifyAdd(Event *e) const
     Profiler profiler("Segment::notifyAdd()");
     checkInsertAsClefKey(e);
 
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->eventAdded(this, e);
     }
@@ -1500,7 +1500,7 @@ Segment::notifyRemove(Event *e) const
         }
     }
 
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->eventRemoved(this, e);
     }
@@ -1510,7 +1510,7 @@ Segment::notifyRemove(Event *e) const
 void
 Segment::notifyAppearanceChange() const
 {
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->appearanceChanged(this);
     }
@@ -1522,7 +1522,7 @@ Segment::notifyStartChanged(timeT newTime)
     Profiler profiler("Segment::notifyStartChanged()");
     if (m_notifyResizeLocked) return;
 
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->startChanged(this, newTime);
     }
@@ -1540,7 +1540,7 @@ Segment::notifyEndMarkerChange(bool shorten)
 
     if (m_notifyResizeLocked) return;
 
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->endMarkerTimeChanged(this, shorten);
     }
@@ -1553,7 +1553,7 @@ Segment::notifyEndMarkerChange(bool shorten)
 void
 Segment::notifyTransposeChange()
 {
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->transposeChanged(this, m_transpose);
     }
@@ -1563,7 +1563,7 @@ Segment::notifyTransposeChange()
 void
 Segment::notifySourceDeletion() const
 {
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->segmentDeleted(this);
     }
@@ -1754,11 +1754,11 @@ void
 Segment::dumpObservers()
 {
     RG_DEBUG << "Observers of segment " << this << " are:";
-     for (ObserverSet::const_iterator i = m_observers.begin();
+     for (ObserverList::const_iterator i = m_observers.begin();
           i != m_observers.end(); ++i) {
         RG_DEBUG << "  " << (*i);
     }
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
           i != m_observers.end(); ++i) {
         Segment *seg = dynamic_cast<Segment *>(*i);
         if (seg)
