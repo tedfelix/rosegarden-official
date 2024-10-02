@@ -230,17 +230,20 @@ SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 {
     timeT t = 0;
 
-    timeT discard;
+    timeT durationUnused;
 
-//    std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
+    //std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
 
     if ((*i)->has(IS_GRACE_NOTE)) {
-//	std::cerr << "it's a grace note" << std::endl;
-	if (getGraceNoteTimeAndDuration(false, i, t, discard)) return t;
+        //std::cerr << "it's a grace note" << std::endl;
+        if (getGraceNoteTimeAndDuration(false, i, t, durationUnused))
+            return t;
     }
+
     if ((*i)->has(MAY_HAVE_GRACE_NOTES)) {
-//	std::cerr << "it's a candidate host note" << std::endl;
-	if (getGraceNoteTimeAndDuration(true, i, t, discard)) return t;
+        //std::cerr << "it's a candidate host note" << std::endl;
+        if (getGraceNoteTimeAndDuration(true, i, t, durationUnused))
+            return t;
     }
 
     return (*i)->getAbsoluteTime();
