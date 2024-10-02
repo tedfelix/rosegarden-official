@@ -470,15 +470,13 @@ EventView::updateTreeWidget()
         Event *event = *it;
         timeT eventTime = helper.getSoundingAbsoluteTime(it);
 
-        QString velyStr;
+        QString velocityStr;
         QString pitchStr;
-        QString data1Str = "";
-        QString data2Str = "";
+        QString data1Str;
+        QString data2Str;
         QString durationStr;
 
         // Event filters
-        //
-        //
 
         if (event->isa(Note::EventRestType)) {
             if (!showRest)
@@ -533,22 +531,51 @@ EventView::updateTreeWidget()
                 continue;
         }
 
-        // avoid debug stuff going to stderr if no properties found
+        // Format each column.
+
+        // Time
+
+        const QString timeStr = RosegardenDocument::currentDocument->
+                getComposition().makeTimeString(
+                        eventTime,
+                        static_cast<Composition::TimeMode>(timeMode));
+
+        // Duration
+
+        if (event->getDuration() > 0  ||
+            event->isa(Note::EventType)  ||
+            event->isa(Note::EventRestType)) {
+            durationStr = makeDurationString(
+                    eventTime, event->getDuration(), timeMode);
+        }
+
+        // Pitch
 
         if (event->has(BaseProperties::PITCH)) {
-            int p = event->get<Int>(BaseProperties::PITCH);
+            const int pitch = event->get<Int>(BaseProperties::PITCH);
             pitchStr = QString("%1 %2  ")
-                       .arg(p).arg(MidiPitchLabel(p).getQString());
+                       .arg(pitch).arg(MidiPitchLabel(pitch).getQString());
         } else if (event->isa(Note::EventType)) {
             pitchStr = tr("<not set>");
         }
 
+        // Velocity
+
         if (event->has(BaseProperties::VELOCITY)) {
-            velyStr = QString("%1  ").
+            velocityStr = QString("%1  ").
                       arg(event->get<Int>(BaseProperties::VELOCITY));
         } else if (event->isa(Note::EventType)) {
-            velyStr = tr("<not set>");
+            velocityStr = tr("<not set>");
         }
+
+        // ??? Consider rearranging this so that the event type checks
+        //     above also contain the code to format each column for that
+        //     event type.  Issue will be messages that share properties.
+        //     E.g. Controller, RPN, and NRPN all use Controller::NUMBER
+        //     and Controller::VALUE.  Also "other" events use this fallback
+        //     to get something in the columns.
+
+        // Data 1
 
         if (event->has(Controller::NUMBER)) {
             data1Str = QString("%1  ").
@@ -557,8 +584,7 @@ EventView::updateTreeWidget()
             data1Str = QString("%1  ").
                        arg(strtoqstr(event->get<String>(
                                Text::TextTypePropertyName)));
-        } else if (event->has(Indication::
-                              IndicationTypePropertyName)) {
+        } else if (event->has(Indication::IndicationTypePropertyName)) {
             data1Str = QString("%1  ").
                        arg(strtoqstr(event->get<String>(
                                Indication::IndicationTypePropertyName)));
@@ -585,6 +611,24 @@ EventView::updateTreeWidget()
             data1Str = QString("%1  ").
                        arg(event->get<Int>(SegmentID::IDPropertyName));
         }
+
+        if (event->has(ProgramChange::PROGRAM)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(ProgramChange::PROGRAM) + 1);
+        }
+
+        if (event->has(ChannelPressure::PRESSURE)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(ChannelPressure::PRESSURE));
+        }
+
+        if (event->isa(KeyPressure::EventType)  &&
+            event->has(KeyPressure::PITCH)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(KeyPressure::PITCH));
+        }
+
+        // Data 2
 
         if (event->has(Controller::VALUE)) {
             data2Str = QString("%1  ").
@@ -614,45 +658,17 @@ EventView::updateTreeWidget()
                                SegmentID::SubtypePropertyName)));
         }
 
-        if (event->has(ProgramChange::PROGRAM)) {
-            data1Str = QString("%1  ").
-                       arg(event->get<Int>(ProgramChange::PROGRAM) + 1);
-        }
-
-        if (event->has(ChannelPressure::PRESSURE)) {
-            data1Str = QString("%1  ").
-                       arg(event->get<Int>(ChannelPressure::PRESSURE));
-        }
-
-        if (event->isa(KeyPressure::EventType)  &&
-            event->has(KeyPressure::PITCH)) {
-            data1Str = QString("%1  ").
-                       arg(event->get<Int>(KeyPressure::PITCH));
-        }
-
         if (event->has(KeyPressure::PRESSURE)) {
             data2Str = QString("%1  ").
                        arg(event->get<Int>(KeyPressure::PRESSURE));
         }
-
-        if (event->getDuration() > 0  ||
-            event->isa(Note::EventType)  ||
-            event->isa(Note::EventRestType)) {
-            durationStr = makeDurationString(
-                    eventTime, event->getDuration(), timeMode);
-        }
-
-        const QString timeStr = RosegardenDocument::currentDocument->
-                getComposition().makeTimeString(
-                        eventTime,
-                        static_cast<Composition::TimeMode>(timeMode));
 
         QStringList values;
         values << timeStr <<
                   durationStr <<
                   strtoqstr(event->getType()) <<
                   pitchStr <<
-                  velyStr <<
+                  velocityStr <<
                   data1Str <<
                   data2Str;
 
