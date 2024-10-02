@@ -60,6 +60,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "misc/PreferenceBool.h"
+#include "misc/PreferenceInt.h"
 
 #include <QAction>
 #include <QCheckBox>
@@ -134,6 +135,11 @@ namespace
             Rosegarden::EventViewConfigGroup,
             "showOther",
             true);
+
+    Rosegarden::PreferenceInt a_timeModeSetting(
+            Rosegarden::EventViewConfigGroup,
+            "timemode",
+            0);
 
 }
 
@@ -453,239 +459,208 @@ EventView::updateTreeWidget()
 
     m_treeWidget->clear();
 
-    QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
+    const int timeMode = a_timeModeSetting.get();
 
-    int timeMode = settings.value("timemode", 0).toInt();
+    SegmentPerformanceHelper helper(*m_segments[0]);
 
-    settings.endGroup();
+    // For each Event in the Segment...
+    for (Segment::iterator it = m_segments[0]->begin();
+         m_segments[0]->isBeforeEndMarker(it);
+         ++it) {
+        Event *event = *it;
+        timeT eventTime = helper.getSoundingAbsoluteTime(it);
 
-    // For each Segment...
-    // ??? THERE'S ONLY ONE!!!  REMOVE THIS!!!
-    for (unsigned int i = 0; i < m_segments.size(); i++) {
-        SegmentPerformanceHelper helper(*m_segments[i]);
+        QString velyStr;
+        QString pitchStr;
+        QString data1Str = "";
+        QString data2Str = "";
+        QString durationStr;
 
-        // For each Event in the Segment...
-        for (Segment::iterator it = m_segments[i]->begin();
-                m_segments[i]->isBeforeEndMarker(it); ++it) {
-            timeT eventTime =
-                helper.getSoundingAbsoluteTime(it);
+        // Event filters
+        //
+        //
 
-            QString velyStr;
-            QString pitchStr;
-            QString data1Str = "";
-            QString data2Str = "";
-            QString durationStr;
+        if (event->isa(Note::EventRestType)) {
+            if (!showRest)
+                continue;
 
-            // Event filters
-            //
-            //
+        } else if (event->isa(Note::EventType)) {
+            if (!showNote)
+                continue;
 
-            if ((*it)->isa(Note::EventRestType)) {
-                if (!showRest)
-                    continue;
+        } else if (event->isa(Indication::EventType)) {
+            if (!showIndication)
+                continue;
 
-            } else if ((*it)->isa(Note::EventType)) {
-                if (!showNote)
-                    continue;
+        } else if (event->isa(PitchBend::EventType)) {
+            if (!showPitchBend)
+                continue;
 
-            } else if ((*it)->isa(Indication::EventType)) {
-                if (!showIndication)
-                    continue;
+        } else if (event->isa(SystemExclusive::EventType)) {
+            if (!showSystemExclusive)
+                continue;
 
-            } else if ((*it)->isa(PitchBend::EventType)) {
-                if (!showPitchBend)
-                    continue;
+        } else if (event->isa(ProgramChange::EventType)) {
+            if (!showProgramChange)
+                continue;
 
-            } else if ((*it)->isa(SystemExclusive::EventType)) {
-                if (!showSystemExclusive)
-                    continue;
+        } else if (event->isa(ChannelPressure::EventType)) {
+            if (!showChannelPressure)
+                continue;
 
-            } else if ((*it)->isa(ProgramChange::EventType)) {
-                if (!showProgramChange)
-                    continue;
+        } else if (event->isa(KeyPressure::EventType)) {
+            if (!showKeyPressure)
+                continue;
 
-            } else if ((*it)->isa(ChannelPressure::EventType)) {
-                if (!showChannelPressure)
-                    continue;
+        } else if (event->isa(Controller::EventType)) {
+            if (!showController)
+                continue;
 
-            } else if ((*it)->isa(KeyPressure::EventType)) {
-                if (!showKeyPressure)
-                    continue;
+        } else if (event->isa(Text::EventType)) {
+            if (!showText)
+                continue;
 
-            } else if ((*it)->isa(Controller::EventType)) {
-                if (!showController)
-                    continue;
+        } else if (event->isa(GeneratedRegion::EventType)) {
+            if (!showGeneratedRegion)
+                continue;
 
-            } else if ((*it)->isa(Text::EventType)) {
-                if (!showText)
-                    continue;
+        } else if (event->isa(SegmentID::EventType)) {
+            if (!showSegmentID)
+                continue;
 
-            } else if ((*it)->isa(GeneratedRegion::EventType)) {
-                if (!showGeneratedRegion)
-                    continue;
-
-            } else if ((*it)->isa(SegmentID::EventType)) {
-                if (!showSegmentID)
-                    continue;
-
-            } else {
-                if (!showOther)
-                    continue;
-            }
-
-            // avoid debug stuff going to stderr if no properties found
-
-            if ((*it)->has(BaseProperties::PITCH)) {
-                int p = (*it)->get
-                        <Int>(BaseProperties::PITCH);
-                pitchStr = QString("%1 %2  ")
-                           .arg(p).arg(MidiPitchLabel(p).getQString());
-            } else if ((*it)->isa(Note::EventType)) {
-                pitchStr = tr("<not set>");
-            }
-
-            if ((*it)->has(BaseProperties::VELOCITY)) {
-                velyStr = QString("%1  ").
-                          arg((*it)->get
-                              <Int>(BaseProperties::VELOCITY));
-            } else if ((*it)->isa(Note::EventType)) {
-                velyStr = tr("<not set>");
-            }
-
-            if ((*it)->has(Controller::NUMBER)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(Controller::NUMBER));
-            } else if ((*it)->has(Text::TextTypePropertyName)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (Text::TextTypePropertyName)));
-            } else if ((*it)->has(Indication::
-                                  IndicationTypePropertyName)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (Indication::
-                                          IndicationTypePropertyName)));
-            } else if ((*it)->has(::Rosegarden::Key::KeyPropertyName)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (::Rosegarden::Key::KeyPropertyName)));
-            } else if ((*it)->has(Clef::ClefPropertyName)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (Clef::ClefPropertyName)));
-            } else if ((*it)->has(PitchBend::MSB)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(PitchBend::MSB));
-            } else if ((*it)->has(BaseProperties::BEAMED_GROUP_TYPE)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (BaseProperties::BEAMED_GROUP_TYPE)));
-            } else if ((*it)->has(GeneratedRegion::FigurationPropertyName)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(GeneratedRegion::FigurationPropertyName));
-            } else if ((*it)->has(SegmentID::IDPropertyName)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(SegmentID::IDPropertyName));
-            }
-
-            if ((*it)->has(Controller::VALUE)) {
-                data2Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(Controller::VALUE));
-            } else if ((*it)->has(Text::TextPropertyName)) {
-                data2Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (Text::TextPropertyName)));
-                /*!!!
-                        } else if ((*it)->has(Indication::
-                                  IndicationTypePropertyName)) {
-                        data2Str = QString("%1  ").
-                            arg((*it)->get<Int>(Indication::
-                                    IndicationDurationPropertyName));
-                */
-            } else if ((*it)->has(PitchBend::LSB)) {
-                data2Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(PitchBend::LSB));
-            } else if ((*it)->has(BaseProperties::BEAMED_GROUP_ID)) {
-                data2Str = tr("(group %1)  ")
-                           .arg((*it)->get
-                               <Int>(BaseProperties::BEAMED_GROUP_ID));
-            } else if ((*it)->has(GeneratedRegion::ChordPropertyName)) {
-                data2Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(GeneratedRegion::ChordPropertyName));
-            } else if ((*it)->has(SegmentID::SubtypePropertyName)) {
-                data2Str = QString("%1  ").
-                    arg(strtoqstr((*it)->get
-                                  <String>
-                                  (SegmentID::SubtypePropertyName)));
-            }
-
-            if ((*it)->has(ProgramChange::PROGRAM)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(ProgramChange::PROGRAM) + 1);
-            }
-
-            if ((*it)->has(ChannelPressure::PRESSURE)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(ChannelPressure::PRESSURE));
-            }
-
-            if ((*it)->isa(KeyPressure::EventType) &&
-                    (*it)->has(KeyPressure::PITCH)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(KeyPressure::PITCH));
-            }
-
-            if ((*it)->has(KeyPressure::PRESSURE)) {
-                data2Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(KeyPressure::PRESSURE));
-            }
-
-
-            if ((*it)->getDuration() > 0 ||
-                    (*it)->isa(Note::EventType) ||
-                    (*it)->isa(Note::EventRestType)) {
-                durationStr = makeDurationString(eventTime,
-                                                 (*it)->getDuration(),
-                                                 timeMode);
-            }
-
-            const QString timeStr = RosegardenDocument::currentDocument->
-                    getComposition().makeTimeString(
-                            eventTime,
-                            static_cast<Composition::TimeMode>(timeMode));
-
-            QStringList sl;
-            sl << timeStr
-               << durationStr
-               << strtoqstr( (*it)->getType() )
-               << pitchStr
-               << velyStr
-               << data1Str
-               << data2Str;
-
-            new EventViewItem(m_segments[i],  // segment
-                              *it,  // event
-                              m_treeWidget,  // parent
-                              sl);  // strings
+        } else {
+            if (!showOther)
+                continue;
         }
+
+        // avoid debug stuff going to stderr if no properties found
+
+        if (event->has(BaseProperties::PITCH)) {
+            int p = event->get<Int>(BaseProperties::PITCH);
+            pitchStr = QString("%1 %2  ")
+                       .arg(p).arg(MidiPitchLabel(p).getQString());
+        } else if (event->isa(Note::EventType)) {
+            pitchStr = tr("<not set>");
+        }
+
+        if (event->has(BaseProperties::VELOCITY)) {
+            velyStr = QString("%1  ").
+                      arg(event->get<Int>(BaseProperties::VELOCITY));
+        } else if (event->isa(Note::EventType)) {
+            velyStr = tr("<not set>");
+        }
+
+        if (event->has(Controller::NUMBER)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(Controller::NUMBER));
+        } else if (event->has(Text::TextTypePropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Text::TextTypePropertyName)));
+        } else if (event->has(Indication::
+                              IndicationTypePropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Indication::IndicationTypePropertyName)));
+        } else if (event->has(Key::KeyPropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Key::KeyPropertyName)));
+        } else if (event->has(Clef::ClefPropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Clef::ClefPropertyName)));
+        } else if (event->has(PitchBend::MSB)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(PitchBend::MSB));
+        } else if (event->has(BaseProperties::BEAMED_GROUP_TYPE)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               BaseProperties::BEAMED_GROUP_TYPE)));
+        } else if (event->has(GeneratedRegion::FigurationPropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(
+                               GeneratedRegion::FigurationPropertyName));
+        } else if (event->has(SegmentID::IDPropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(SegmentID::IDPropertyName));
+        }
+
+        if (event->has(Controller::VALUE)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(Controller::VALUE));
+        } else if (event->has(Text::TextPropertyName)) {
+            data2Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Text::TextPropertyName)));
+#if 0
+        } else if (event->has(Indication::IndicationTypePropertyName)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(
+                               Indication::IndicationDurationPropertyName));
+#endif
+        } else if (event->has(PitchBend::LSB)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(PitchBend::LSB));
+        } else if (event->has(BaseProperties::BEAMED_GROUP_ID)) {
+            data2Str = tr("(group %1)  ").
+                       arg(event->get<Int>(BaseProperties::BEAMED_GROUP_ID));
+        } else if (event->has(GeneratedRegion::ChordPropertyName)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(GeneratedRegion::ChordPropertyName));
+        } else if (event->has(SegmentID::SubtypePropertyName)) {
+            data2Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               SegmentID::SubtypePropertyName)));
+        }
+
+        if (event->has(ProgramChange::PROGRAM)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(ProgramChange::PROGRAM) + 1);
+        }
+
+        if (event->has(ChannelPressure::PRESSURE)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(ChannelPressure::PRESSURE));
+        }
+
+        if (event->isa(KeyPressure::EventType)  &&
+            event->has(KeyPressure::PITCH)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(KeyPressure::PITCH));
+        }
+
+        if (event->has(KeyPressure::PRESSURE)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(KeyPressure::PRESSURE));
+        }
+
+        if (event->getDuration() > 0  ||
+            event->isa(Note::EventType)  ||
+            event->isa(Note::EventRestType)) {
+            durationStr = makeDurationString(
+                    eventTime, event->getDuration(), timeMode);
+        }
+
+        const QString timeStr = RosegardenDocument::currentDocument->
+                getComposition().makeTimeString(
+                        eventTime,
+                        static_cast<Composition::TimeMode>(timeMode));
+
+        QStringList values;
+        values << timeStr <<
+                  durationStr <<
+                  strtoqstr(event->getType()) <<
+                  pitchStr <<
+                  velyStr <<
+                  data1Str <<
+                  data2Str;
+
+        new EventViewItem(
+                m_segments[0],  // segment
+                event,  // event
+                m_treeWidget,  // parent
+                values);  // strings
     }
 
 
@@ -714,6 +689,8 @@ EventView::updateTreeWidget()
     // For each selected item index, select it.
     for (int itemIndex : selection) {
         QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
+        if (!item)
+            continue;
         item->setSelected(true);
     }
 
@@ -1303,7 +1280,7 @@ EventView::setupActions()
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
 
-    int timeMode = settings.value("timemode", 0).toInt() ;
+    int timeMode = a_timeModeSetting.get();
 
     settings.endGroup();
 
@@ -1444,7 +1421,7 @@ EventView::slotMusicalTime()
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
 
-    settings.setValue("timemode", 0);
+    a_timeModeSetting.set(0);
     findAction("time_musical")->setChecked(true);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(false);
@@ -1459,7 +1436,7 @@ EventView::slotRealTime()
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
 
-    settings.setValue("timemode", 1);
+    a_timeModeSetting.set(1);
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(true);
     findAction("time_raw")->setChecked(false);
@@ -1474,7 +1451,7 @@ EventView::slotRawTime()
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
 
-    settings.setValue("timemode", 2);
+    a_timeModeSetting.set(2);
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(true);
