@@ -265,18 +265,18 @@ EventView::EventView(RosegardenDocument *doc,
 
     // ??? Initial size is not wide enough.  Need to test with a trigger
     //     segment.
-    m_eventList = new QTreeWidget(m_frame);
+    m_treeWidget = new QTreeWidget(m_frame);
     // Double-click to edit.
-    connect(m_eventList, &QTreeWidget::itemDoubleClicked,
+    connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
             this, &EventView::slotPopupEventEditor);
 
-    m_eventList->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_eventList,
+    m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_treeWidget,
                 &QWidget::customContextMenuRequested,
             this, &EventView::slotPopupMenu);
 
-    m_eventList->setAllColumnsShowFocus(true);
-    m_eventList->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_treeWidget->setAllColumnsShowFocus(true);
+    m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     QStringList columnNames;
     columnNames << tr("Time  ");
@@ -287,15 +287,15 @@ EventView::EventView(RosegardenDocument *doc,
     columnNames << tr("Type (Data1)  ");
     columnNames << tr("Type (Data1)  ");
     columnNames << tr("Value (Data2)  ");
-    m_eventList->setHeaderLabels(columnNames);
+    m_treeWidget->setHeaderLabels(columnNames);
 
     // Make sure time columns have the right amount of space.
     constexpr int timeWidth = 110;
     // Plus a little for the tree diagram in the first column.
-    m_eventList->setColumnWidth(0, timeWidth + 23);
-    m_eventList->setColumnWidth(1, timeWidth);
+    m_treeWidget->setColumnWidth(0, timeWidth + 23);
+    m_treeWidget->setColumnWidth(1, timeWidth);
 
-    m_gridLayout->addWidget(m_eventList, 0, 1, 2, 1);
+    m_gridLayout->addWidget(m_treeWidget, 0, 1, 2, 1);
 
     // Trigger Segment Group Box
 
@@ -419,17 +419,7 @@ EventView::~EventView()
 {
     saveOptions();
 
-    for (Segment *segment : m_segments) {
-        segment->removeObserver(this);
-    }
-}
-
-void
-EventView::closeEvent(QCloseEvent *event)
-{
-    // ??? This does nothing.  Get rid of it.
-
-    QWidget::closeEvent(event);
+    m_segments[0]->removeObserver(this);
 }
 
 void
@@ -441,28 +431,27 @@ EventView::eventRemoved(const Segment *, Event *e)
 bool
 EventView::updateTreeWidget()
 {
+    // Store the selection.
+
     // ??? This selection stuff is extremely buggy.  It stores the indices,
     //     so if anything has changed, it will re-select the wrong items.
-    //     It also completely loses the scroll position.  Working on fixing
-    //     this in TempoAndTimeSignatureEditor.  See that for the latest.
+    //     See TempoAndTimeSignatureEditor for the latest approach.
 
-    // If no selection, copy UI selection to m_listSelection.
-    if (m_listSelection.size() == 0) {
+    std::vector<int> selection;
 
-        QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
-
-        if (!selection.empty()) {
-            for (int i = 0; i < selection.count(); ++i) {
-                QTreeWidgetItem *listItem = selection.at(i);
-                m_listSelection.push_back(
-                        m_eventList->indexOfTopLevelItem(listItem));
-            }
-        }
+    // For each item in the tree...
+    for (int itemIndex = 0;
+         itemIndex < m_treeWidget->topLevelItemCount();
+         ++itemIndex) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
+        // If this item is selected, add its index to the list.
+        if (item->isSelected())
+            selection.push_back(itemIndex);
     }
 
     // *** Create the event list.
 
-    m_eventList->clear();
+    m_treeWidget->clear();
 
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
@@ -472,6 +461,7 @@ EventView::updateTreeWidget()
     settings.endGroup();
 
     // For each Segment...
+    // ??? THERE'S ONLY ONE!!!  REMOVE THIS!!!
     for (unsigned int i = 0; i < m_segments.size(); i++) {
         SegmentPerformanceHelper helper(*m_segments[i]);
 
@@ -693,50 +683,40 @@ EventView::updateTreeWidget()
 
             new EventViewItem(m_segments[i],  // segment
                               *it,  // event
-                              m_eventList,  // parent
+                              m_treeWidget,  // parent
                               sl);  // strings
         }
     }
 
 
     // No Events?
-    if ( m_eventList->topLevelItemCount() == 0 ) {
+    if ( m_treeWidget->topLevelItemCount() == 0 ) {
         if (m_segments.size())
-            new QTreeWidgetItem(m_eventList,
+            new QTreeWidgetItem(m_treeWidget,
                                 QStringList() << tr("<no events at this filter level>"));
-        else
-            new QTreeWidgetItem(m_eventList, QStringList() << tr("<no events>"));
+        else  // ??? How can we possibly ever have zero Segments!?
+            new QTreeWidgetItem(m_treeWidget, QStringList() << tr("<no events>"));
 
-        m_eventList->setSelectionMode(QTreeWidget::NoSelection);
+        m_treeWidget->setSelectionMode(QTreeWidget::NoSelection);
         leaveActionState("have_selection");
     } else {  // We have Events.
 
-        m_eventList->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
         // If no selection then select the first event
-        if (m_listSelection.size() == 0)
-            m_listSelection.push_back(0);
+        if (selection.size() == 0)
+            selection.push_back(0);
 
         enterActionState("have_selection");
     }
 
-    // Set a selection from a range of indexes
-    //
-    std::vector<int>::iterator sIt = m_listSelection.begin();
-
-    for (; sIt != m_listSelection.end(); ++sIt) {
-        int index = *sIt;
-
-        while (index > 0 && !m_eventList->topLevelItem(index))        // was itemAtIndex
-            index--;
-
-        m_eventList->setCurrentItem( m_eventList->topLevelItem(index) );
-
-        // ensure visible
-        m_eventList->scrollToItem(m_eventList->topLevelItem(index));
+    // Restore selection
+    // For each selected item index, select it.
+    for (int itemIndex : selection) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
+        item->setSelected(true);
     }
 
-    m_listSelection.clear();
     m_deletedEvents.clear();
 
     return true;
@@ -747,7 +727,7 @@ EventView::makeInitialSelection(timeT time)
 {
     m_listSelection.clear();
 
-    const int itemCount = m_eventList->topLevelItemCount();
+    const int itemCount = m_treeWidget->topLevelItemCount();
 
     EventViewItem *goodItem = nullptr;
     int goodItemNo = 0;
@@ -756,11 +736,11 @@ EventView::makeInitialSelection(timeT time)
     // ??? Performance: LINEAR SEARCH
     //     While we could speed this up with a binary search, it would be
     //     smarter to find the appropriate event while we are creating the
-    //     m_eventList in updateTreeWidget().
+    //     m_treeWidget in updateTreeWidget().
     for (int itemNo = 0; itemNo < itemCount; ++itemNo) {
         EventViewItem *item =
                 dynamic_cast<EventViewItem *>(
-                        m_eventList->topLevelItem(itemNo));
+                        m_treeWidget->topLevelItem(itemNo));
 
         // Not an EventViewItem?  Try the next.
         if (!item)
@@ -782,8 +762,8 @@ EventView::makeInitialSelection(timeT time)
 
     // Select the item prior to the playback position pointer.
     m_listSelection.push_back(goodItemNo);
-    m_eventList->setCurrentItem(goodItem);
-    m_eventList->scrollToItem(goodItem);
+    m_treeWidget->setCurrentItem(goodItem);
+    m_treeWidget->scrollToItem(goodItem);
 }
 
 QString
@@ -939,7 +919,7 @@ EventView::slotTriggerRetuneChanged()
 void
 EventView::slotEditCut()
 {
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_treeWidget->selectedItems();
 
     if (selection.count() == 0)
         return ;
@@ -958,8 +938,8 @@ EventView::slotEditCut()
         EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
 
         if (itemIndex == -1)
-            itemIndex = m_eventList->indexOfTopLevelItem(listItem);
-            //itemIndex = m_eventList->itemIndex(*it);
+            itemIndex = m_treeWidget->indexOfTopLevelItem(listItem);
+            //itemIndex = m_treeWidget->itemIndex(*it);
 
         if (item) {
             if (cutSelection == nullptr)
@@ -985,7 +965,7 @@ EventView::slotEditCut()
 void
 EventView::slotEditCopy()
 {
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_treeWidget->selectedItems();
 
     if (selection.count() == 0)
         return ;
@@ -1006,8 +986,8 @@ EventView::slotEditCopy()
 //         item = dynamic_cast<EventViewItem*>((*it));
         EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
 
-//         m_listSelection.push_back(m_eventList->itemIndex(*it));
-        m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
+//         m_listSelection.push_back(m_treeWidget->itemIndex(*it));
+        m_listSelection.push_back(m_treeWidget->indexOfTopLevelItem(listItem));
 
         if (item) {
             if (copySelection == nullptr)
@@ -1037,7 +1017,7 @@ EventView::slotEditPaste()
 
     timeT insertionTime = 0;
 
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_treeWidget->selectedItems();
 
     if (selection.count()) {
         EventViewItem *item = dynamic_cast<EventViewItem*>(selection.at(0));
@@ -1055,7 +1035,7 @@ EventView::slotEditPaste()
         for( int i=0; i< selection.size(); i++ ){
             QTreeWidgetItem *listItem = selection.at(i);
 
-            m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
+            m_listSelection.push_back(m_treeWidget->indexOfTopLevelItem(listItem));
 //             ++it;
         }
     }
@@ -1076,7 +1056,7 @@ EventView::slotEditPaste()
 void
 EventView::slotEditDelete()
 {
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_treeWidget->selectedItems();
     if (selection.count() == 0)
         return ;
 
@@ -1094,8 +1074,8 @@ EventView::slotEditDelete()
         EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
 
         if (itemIndex == -1)
-            itemIndex = m_eventList->indexOfTopLevelItem(listItem);
-            //itemIndex = m_eventList->itemIndex(*it);
+            itemIndex = m_treeWidget->indexOfTopLevelItem(listItem);
+            //itemIndex = m_treeWidget->itemIndex(*it);
 
         if (item) {
             if (m_deletedEvents.find(item->getEvent()) != m_deletedEvents.end()) {
@@ -1124,7 +1104,7 @@ EventView::slotEditDelete()
 
         // ??? What does this do?  Wouldn't updateTreeWidget() be more
         //     appropriate?
-        m_eventList->update();
+        m_treeWidget->update();
     }
 }
 
@@ -1135,7 +1115,7 @@ EventView::slotEditInsert()
     // Go with a crotchet by default.
     timeT insertDuration = 960;
 
-    QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
     // If something is selected, use the time and duration from the
     // first selected event.
@@ -1181,7 +1161,7 @@ EventView::slotEditEvent()
     // See slotOpenInEventEditor().
 
     // ??? Why not use currentItem()?
-    QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
     if (selection.isEmpty())
         return;
@@ -1230,7 +1210,7 @@ EventView::slotEditEventAdvanced()
 {
     // See slotOpenInExpertEventEditor().
 
-    QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
     if (selection.isEmpty())
         return;
@@ -1274,10 +1254,10 @@ void
 EventView::slotSelectAll()
 {
     m_listSelection.clear();
-    for (int i = 0; m_eventList->topLevelItem(i); ++i) {
+    for (int i = 0; m_treeWidget->topLevelItem(i); ++i) {
         m_listSelection.push_back(i);
-        //m_eventList->setSelected(m_eventList->topLevelItem(i), true);
-        m_eventList->setCurrentItem(m_eventList->topLevelItem(i));
+        //m_treeWidget->setSelected(m_treeWidget->topLevelItem(i), true);
+        m_treeWidget->setCurrentItem(m_treeWidget->topLevelItem(i));
     }
 }
 
@@ -1285,9 +1265,9 @@ void
 EventView::slotClearSelection()
 {
     m_listSelection.clear();
-    for (int i = 0; m_eventList->topLevelItem(i); ++i) {
-        //m_eventList->setSelected(m_eventList->topLevelItem(i), false);
-        m_eventList->setCurrentItem(m_eventList->topLevelItem(i));
+    for (int i = 0; m_treeWidget->topLevelItem(i); ++i) {
+        //m_treeWidget->setSelected(m_treeWidget->topLevelItem(i), false);
+        m_treeWidget->setCurrentItem(m_treeWidget->topLevelItem(i));
     }
 }
 
@@ -1343,7 +1323,7 @@ EventView::setupActions()
 QSize
 EventView::getViewSize()
 {
-    return m_eventList->size();
+    return m_treeWidget->size();
 }
 */
 
@@ -1351,7 +1331,7 @@ EventView::getViewSize()
 void
 EventView::setViewSize(QSize s)
 {
-    m_eventList->setFixedSize(s);
+    m_treeWidget->setFixedSize(s);
 }
 */
 
@@ -1375,7 +1355,7 @@ EventView::readOptions()
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
     const QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
-    m_eventList->restoreGeometry(qba);
+    m_treeWidget->restoreGeometry(qba);
 }
 
 void
@@ -1398,7 +1378,7 @@ EventView::saveOptions()
     QSettings settings;
 
     settings.beginGroup(EventViewConfigGroup);
-    settings.setValue(EventViewLayoutConfigGroupName, m_eventList->saveGeometry());
+    settings.setValue(EventViewLayoutConfigGroupName, m_treeWidget->saveGeometry());
     settings.endGroup();
 
     // Save window geometry and toolbar/dock state
@@ -1412,6 +1392,7 @@ EventView::saveOptions()
 Segment *
 EventView::getCurrentSegment()
 {
+    // ??? This can never happen.  See preconditions in the ctor.
     if (m_segments.empty())
         return nullptr;
     else
@@ -1560,7 +1541,7 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
 void
 EventView::slotPopupMenu(const QPoint& pos)
 {
-    QTreeWidgetItem *item = m_eventList->itemAt(pos);
+    QTreeWidgetItem *item = m_treeWidget->itemAt(pos);
 
     if (!item)
         return ;
@@ -1574,7 +1555,7 @@ EventView::slotPopupMenu(const QPoint& pos)
 
     if (m_popUpMenu)
         //m_menu->exec(QCursor::pos());
-        m_popUpMenu->exec(m_eventList->mapToGlobal(pos));
+        m_popUpMenu->exec(m_treeWidget->mapToGlobal(pos));
     else
         RG_DEBUG << "showMenu() : no menu to show\n";
 }
@@ -1599,7 +1580,7 @@ void
 EventView::slotOpenInEventEditor(bool /* checked */)
 {
     EventViewItem *eventViewItem =
-            dynamic_cast<EventViewItem *>(m_eventList->currentItem());
+            dynamic_cast<EventViewItem *>(m_treeWidget->currentItem());
     if (!eventViewItem)
         return;
 
@@ -1641,7 +1622,7 @@ void
 EventView::slotOpenInExpertEventEditor(bool /* checked */)
 {
     EventViewItem *eventViewItem =
-            dynamic_cast<EventViewItem *>(m_eventList->currentItem());
+            dynamic_cast<EventViewItem *>(m_treeWidget->currentItem());
     if (!eventViewItem)
         return;
 
@@ -1689,6 +1670,7 @@ EventView::slotUpdateWindowTitle(bool modified)
 
 
     } else {
+        // ??? This is always true.
         if (m_segments.size() == 1) {
 
             // Fix bug #3007112

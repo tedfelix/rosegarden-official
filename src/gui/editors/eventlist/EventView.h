@@ -84,9 +84,6 @@ protected:
     // EditViewBase override.
     Segment *getCurrentSegment() override;
 
-    // QWidget override.
-    void closeEvent(QCloseEvent *event) override;
-
 private slots:
 
     // Menu Handlers
@@ -183,7 +180,7 @@ private:
     //     QTableWidget seems like a better choice.  See
     //     TempoAndTimeSignatureEditor for a complete example of using
     //     QTableWidget.
-    QTreeWidget *m_eventList;
+    QTreeWidget *m_treeWidget;
     QString makeDurationString(timeT time,
                                timeT duration, int timeMode);
     bool updateTreeWidget();
@@ -193,10 +190,14 @@ private:
     /// Create and show popup menu.
     void createPopUpMenu();
 
+    // updateTreeWidget() uses this.  It is set several other places.
     std::vector<int> m_listSelection;
     void makeInitialSelection(timeT);
 
-    // Events deleted since last refresh.
+    /// Events deleted since last updateTreeWidget().
+    /**
+     * slotEditDelete() uses this for some reason.
+     */
     std::set<Event *> m_deletedEvents;
 
     bool m_isTriggerSegment{false};
