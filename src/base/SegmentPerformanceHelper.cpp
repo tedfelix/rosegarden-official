@@ -28,7 +28,7 @@ SegmentPerformanceHelper::~SegmentPerformanceHelper() { }
 
 
 SegmentPerformanceHelper::iteratorcontainer
-SegmentPerformanceHelper::getTiedNotes(iterator i)
+SegmentPerformanceHelper::getTiedNotes(Segment::iterator i)
 {
     iteratorcontainer c;
     c.push_back(i);
@@ -118,7 +118,7 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 
 
 bool
-SegmentPerformanceHelper::getGraceAndHostNotes(iterator i,
+SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
 					       iteratorcontainer &graceNotes,
 					       iteratorcontainer &hostNotes,
 					       bool &isHostNote)
@@ -226,7 +226,7 @@ SegmentPerformanceHelper::getGraceAndHostNotes(iterator i,
 
 
 timeT
-SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
+SegmentPerformanceHelper::getSoundingAbsoluteTime(Segment::iterator i)
 {
     timeT t = 0;
 
@@ -250,7 +250,7 @@ SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 }
 
 timeT
-SegmentPerformanceHelper::getSoundingDuration(iterator i)
+SegmentPerformanceHelper::getSoundingDuration(Segment::iterator i)
 {
     timeT d = 0;
 
@@ -341,7 +341,7 @@ SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 */
 
 bool
-SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, iterator i,
+SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::iterator i,
 						      timeT &t, timeT &d)
 {
     // [This code currently assumes appoggiatura.  Acciaccatura later.]

@@ -1115,8 +1115,6 @@ protected:
     explicit SegmentHelper(Segment &t) : m_segment(t) { }
     virtual ~SegmentHelper();
 
-    typedef Segment::iterator iterator;
-
     Segment &segment() { return m_segment; }
 
     Segment::iterator begin() { return segment().begin(); }
