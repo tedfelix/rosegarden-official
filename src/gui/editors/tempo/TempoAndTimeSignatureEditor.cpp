@@ -96,8 +96,7 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
 
     // Create frame and layout.
     m_frame = new QFrame(this);
-    m_frame->setMinimumSize(500, 300);
-    m_frame->setMaximumSize(2200, 1400);
+    m_frame->setMinimumSize(700, 300);
     m_mainLayout = new QHBoxLayout(m_frame);
     m_frame->setLayout(m_mainLayout);
     setCentralWidget(m_frame);
@@ -148,6 +147,9 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
     // Make sure columns have a reasonable amount of space.
     m_tableWidget->setColumnWidth(0, 110);
     m_tableWidget->setColumnWidth(1, 120);
+    QHeaderView *header = m_tableWidget->horizontalHeader();
+    // Make sure the last column fills the widget.
+    header->setStretchLastSection(true);
     connect(m_tableWidget, &QTableWidget::cellDoubleClicked,
             this, &TempoAndTimeSignatureEditor::slotPopupEditor);
 
