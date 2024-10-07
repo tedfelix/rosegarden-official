@@ -464,17 +464,10 @@ EventView::updateTreeWidget()
     SegmentPerformanceHelper helper(*m_segments[0]);
 
     // For each Event in the Segment...
-    for (Segment::iterator it = m_segments[0]->begin();
-         m_segments[0]->isBeforeEndMarker(it);
-         ++it) {
-        Event *event = *it;
-        timeT eventTime = helper.getSoundingAbsoluteTime(it);
-
-        QString velocityStr;
-        QString pitchStr;
-        QString data1Str;
-        QString data2Str;
-        QString durationStr;
+    for (Segment::iterator eventIter = m_segments[0]->begin();
+         m_segments[0]->isBeforeEndMarker(eventIter);
+         ++eventIter) {
+        Event *event = *eventIter;
 
         // Event filters
 
@@ -535,12 +528,16 @@ EventView::updateTreeWidget()
 
         // Time
 
+        const timeT eventTime = helper.getSoundingAbsoluteTime(eventIter);
+
         const QString timeStr = RosegardenDocument::currentDocument->
                 getComposition().makeTimeString(
                         eventTime,
                         static_cast<Composition::TimeMode>(timeMode));
 
         // Duration
+
+        QString durationStr;
 
         if (event->getDuration() > 0  ||
             event->isa(Note::EventType)  ||
@@ -551,6 +548,8 @@ EventView::updateTreeWidget()
 
         // Pitch
 
+        QString pitchStr;
+
         if (event->has(BaseProperties::PITCH)) {
             const int pitch = event->get<Int>(BaseProperties::PITCH);
             pitchStr = QString("%1 %2  ")
@@ -560,6 +559,8 @@ EventView::updateTreeWidget()
         }
 
         // Velocity
+
+        QString velocityStr;
 
         if (event->has(BaseProperties::VELOCITY)) {
             velocityStr = QString("%1  ").
@@ -576,6 +577,8 @@ EventView::updateTreeWidget()
         //     to get something in the columns.
 
         // Data 1
+
+        QString data1Str;
 
         if (event->has(Controller::NUMBER)) {
             data1Str = QString("%1  ").
@@ -630,6 +633,8 @@ EventView::updateTreeWidget()
 
         // Data 2
 
+        QString data2Str;
+
         if (event->has(Controller::VALUE)) {
             data2Str = QString("%1  ").
                        arg(event->get<Int>(Controller::VALUE));
@@ -681,19 +686,13 @@ EventView::updateTreeWidget()
 
 
     // No Events?
-    if ( m_treeWidget->topLevelItemCount() == 0 ) {
-        if (m_segments.size())
-            new QTreeWidgetItem(m_treeWidget,
-                                QStringList() << tr("<no events at this filter level>"));
-        else  // ??? How can we possibly ever have zero Segments!?
-            new QTreeWidgetItem(m_treeWidget, QStringList() << tr("<no events>"));
+    if (m_treeWidget->topLevelItemCount() == 0) {
+        // ??? This message is too big for the time field.
+        new QTreeWidgetItem(m_treeWidget,
+                            QStringList() << tr("<no events at this filter level>"));
 
-        m_treeWidget->setSelectionMode(QTreeWidget::NoSelection);
         leaveActionState("have_selection");
     } else {  // We have Events.
-
-        m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
         // If no selection then select the first event
         if (selection.size() == 0)
             selection.push_back(0);
