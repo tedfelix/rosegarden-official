@@ -14,11 +14,14 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioWriteStreamFactory]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioWriteStreamFactory.h"
 #include "AudioWriteStream.h"
 
 #include "base/ThingFactory.h"
+#include "misc/Debug.h"
 
 #include <QFileInfo>
 
@@ -49,7 +52,19 @@ AudioWriteStreamFactory::createWriteStream(QString audioFileName,
     } catch (...) {
     }
 
-    if (s && s->isOK() && s->getError() == "") {
+    if (!s) {
+        RG_WARNING << "createWriteStream(): createFor() returned nullptr";
+        return nullptr;
+    }
+
+    if (!s->isOK()) {
+        RG_WARNING << "createWriteStream(): AudioWriteStream is not OK";
+    }
+    if (s->getError() != "") {
+        RG_WARNING << "createWriteStream(): AudioWriteStream error: " << s->getError();
+    }
+
+    if (s->isOK() && s->getError() == "") {
         return s;
     }
 

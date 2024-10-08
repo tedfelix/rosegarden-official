@@ -102,23 +102,30 @@ void CompositionExportManager::update()
                 ileaveBuf[is*2 + 1] = s1;
             }
             RG_DEBUG << "render frames" << toRead << ssq;
-            m_ws->putInterleavedFrames(toRead,
-                                       ileaveBuf);
+            if (m_ws)
+                m_ws->putInterleavedFrames(toRead, ileaveBuf);
         }
         if (m_stop) {
             RG_DEBUG << "stop - delete write stream";
-            delete m_ws;
-            delete m_leftChannelBuffer;
-            delete m_rightChannelBuffer;
             m_running = false;
+            delete m_ws;
+            m_ws = nullptr;
+            delete m_leftChannelBuffer;
+            m_leftChannelBuffer = nullptr;
+            delete m_rightChannelBuffer;
+            m_rightChannelBuffer = nullptr;
         }
     } else {
         if (m_start) {
             m_start = false;
-            m_running = true;
             RG_DEBUG << "update create audio stream";
             m_ws = AudioWriteStreamFactory::createWriteStream
                 (m_fileName, 2, m_sampleRate);
+            if (!m_ws) {
+                RG_WARNING << "Cannot create write stream.";
+                return;
+            }
+            m_running = true;
         }
     }
 }

@@ -5548,6 +5548,11 @@ RosegardenMainWindow::slotExportToAudio()
                                     "",
                                     "",
                                     tr("WAV files") + " (*.wav)");
+
+    // ??? @lman: If the user does not provide an extension, the
+    //     export silently fails.  Need to check for .wav at the end
+    //     and add if it isn't there.
+
     RG_DEBUG << "slotExportToAudio" << fileName;
     m_seqManager->setExportWavFile(fileName);
 }
