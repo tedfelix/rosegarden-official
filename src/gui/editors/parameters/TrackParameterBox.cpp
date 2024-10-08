@@ -465,6 +465,17 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
 
     m_doc = doc;
 
+    // ??? We never remove this observer.  Add a dtor.  Might need to consider
+    //     a virtual dtor.  Have this class's dtor call removeObserver().
+    //
+    //     If that works, do the same for the following:
+    //       - CompositionModelImpl
+    //       - TrackButtons
+    //       - NotationScene
+    //       - others?
+    //
+    //     Test by checking the output for
+    //       [Composition] dtor: WARNING: x observers still extant:
     m_doc->getComposition().addObserver(this);
 
     // Populate color combo from the document colors.
