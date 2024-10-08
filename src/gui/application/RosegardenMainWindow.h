@@ -59,11 +59,12 @@ class QAction;
 namespace Rosegarden
 {
 
+
 class RosegardenMainViewWidget;
 class TriggerSegmentManager;
 class TransportDialog;
 class TrackParameterBox;
-class TempoView;
+class TempoAndTimeSignatureEditor;
 class SynthPluginManagerDialog;
 class StartupTester;
 class SequenceManager;
@@ -95,6 +96,7 @@ class TranzportClient;
 class WarningWidget;
 class DocumentConfigureDialog;
 class ConfigureDialog;
+
 
 /// The main Rosegarden application window.
 /**
@@ -1620,7 +1622,7 @@ private:
     MidiMixerWindow       *m_midiMixer;
     BankEditorDialog      *m_bankEditor;
     MarkerEditor          *m_markerEditor;
-    TempoView             *m_tempoView;
+    TempoAndTimeSignatureEditor *m_tempoAndTimeSignatureEditor;
     TriggerSegmentManager *m_triggerSegmentManager;
     ConfigureDialog       *m_configDlg;
     DocumentConfigureDialog *m_docConfigDlg;

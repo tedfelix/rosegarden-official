@@ -56,13 +56,21 @@ namespace Rosegarden
 
 DeviceManagerDialog::~DeviceManagerDialog()
 {
-    // destructor
+    RG_DEBUG << "dtor";
+    if (m_observingStudio) {
+        m_observingStudio = false;
+        m_studio->removeObserver(this);
+    }
+    for(Device* device : m_observedDevices) {
+        unobserveDevice(device);
+    }
 }
 
 
 DeviceManagerDialog::DeviceManagerDialog(QWidget *parent) :
     QMainWindow(parent),
-    Ui::DeviceManagerDialogUi()
+    Ui::DeviceManagerDialogUi(),
+    m_isClosing(false)
 {
     RG_DEBUG << "DeviceManagerDialog::ctor";
 
@@ -75,6 +83,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent) :
 
     //m_doc = 0;    // RG document
     m_studio = &RosegardenDocument::currentDocument->getStudio();
+    m_studio->addObserver(this);
+    m_observingStudio = true;
 
     setupUi(this);
 
@@ -104,6 +114,8 @@ void
 DeviceManagerDialog::show()
 {
     RG_DEBUG << "DeviceManagerDialog::show()";
+    // ignore if we are in the process of closing
+    if (m_isClosing) return;
 
     slotRefreshOutputPorts();
     slotRefreshInputPorts();
@@ -128,6 +140,17 @@ DeviceManagerDialog::show()
 void
 DeviceManagerDialog::slotCloseButtonPress()
 {
+    RG_DEBUG << "slotCloseButtonPress";
+    m_isClosing = true;
+    // remove observers here to avoid crash on studio deletion
+    if (m_observingStudio) {
+        m_observingStudio = false;
+        m_studio->removeObserver(this);
+    }
+    for(Device* device : m_observedDevices) {
+        unobserveDevice(device);
+    }
+
     /*
        if (m_doc) {
        //CommandHistory::getInstance()->detachView(actionCollection());    //&&&
@@ -350,10 +373,12 @@ QTreeWidgetItem
 
 
 void
-DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
-                                     MidiDevice::DeviceDirection in_out_direction)
+DeviceManagerDialog::updateDevicesList
+(QTreeWidget * treeWid,
+ MidiDevice::DeviceDirection in_out_direction)
 {
-    RG_DEBUG << "DeviceManagerDialog::updateDevicesList(...)";
+    RG_DEBUG << "DeviceManagerDialog::updateDevicesList(...)" <<
+        in_out_direction;
 
     /**
      * This method:
@@ -371,6 +396,11 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
     QList < MidiDevice * >midiDevices;
 
     DeviceList *devices = m_studio->getDevices();
+
+    // observe any devices we are not yet observing
+    for(Device* device : *devices) {
+        observeDevice(device);
+    }
 
 //         QStringList listEntries;
     QList <DeviceId> listEntries;
@@ -391,9 +421,11 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
 
         // if the device does not exist (anymore),
         // auto-remove the device from the list
-        if (!mdev) {    //== Device::NO_DEVICE ){
+        // or if the direction has changed
+        if (!mdev || mdev->getDirection() != in_out_direction) {
             twItem = treeWid->takeTopLevelItem(i); // remove list entry
             //
+            delete(twItem);
             cnt = treeWid->topLevelItemCount(); // update count
             continue;
         }
@@ -413,7 +445,9 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
             mdev = dynamic_cast < MidiDevice * >(device);
             if (mdev && mdev->getDirection() == in_out_direction) {
                 midiDevices << mdev; // append
-                RG_DEBUG << "DeviceManagerDialog: direction matches in_out_direction";
+                RG_DEBUG <<
+                    "DeviceManagerDialog: direction matches in_out_direction" <<
+                    in_out_direction << mdev->getName();
             } else {
                 //RG_DEBUG << "ERROR: mdev is nullptr in updateDevicesList() ";
                 //continue;
@@ -445,6 +479,7 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
             QString nameStr = QObject::tr("%1").arg(strtoqstr(name));
             nameStr = QObject::tr(nameStr.toStdString().c_str());
             // ??? LEAK
+            RG_DEBUG << "create item" << nameStr;
             QTreeWidgetItem *twItem = new QTreeWidgetItem(treeWid, QStringList() << nameStr);
             // set port text
             twItem->setText(1, outPort);
@@ -715,6 +750,7 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
 
             twItem = treeWid->takeTopLevelItem(i); // remove list entry
             //
+            delete(twItem);
             cnt = treeWid->topLevelItemCount(); // update count
             continue;
         }
@@ -1101,5 +1137,43 @@ DeviceManagerDialog::connectSignalsToSlots()
             this, &DeviceManagerDialog::slotEditControllerDefinitions);
 }
 
+void DeviceManagerDialog::deviceAdded(Device* device)
+{
+    RG_DEBUG << "deviceAdded" << device;
+    observeDevice(device);
+    slotRefreshOutputPorts();
+    slotRefreshInputPorts();
+}
+
+void DeviceManagerDialog::deviceRemoved(Device* device)
+{
+    RG_DEBUG << "deviceRemoved" << device;
+    unobserveDevice(device);
+    slotRefreshOutputPorts();
+    slotRefreshInputPorts();
+}
+
+void DeviceManagerDialog::deviceModified(Device* device)
+{
+    RG_DEBUG << "deviceModified" << device;
+    slotRefreshOutputPorts();
+    slotRefreshInputPorts();
+}
+
+void DeviceManagerDialog::observeDevice(Device* device)
+{
+    RG_DEBUG << "observeDevice" << device;
+    if (m_observedDevices.find(device) != m_observedDevices.end()) return;
+    m_observedDevices.insert(device);
+    device->addObserver(this);
+}
+
+void DeviceManagerDialog::unobserveDevice(Device* device)
+{
+    RG_DEBUG << "unobserveDevice" << device;
+    if (m_observedDevices.find(device) == m_observedDevices.end()) return;
+    m_observedDevices.erase(device);
+    device->removeObserver(this);
+}
 
 } // namespace Rosegarden

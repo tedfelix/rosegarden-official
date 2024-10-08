@@ -164,6 +164,8 @@ set(rg_CPPS
   gui/dialogs/ShortcutDelegate.cpp
   gui/dialogs/ShortcutWarnDialog.cpp
   gui/dialogs/OutOfProcessorPower.cpp
+  gui/dialogs/LibrarianDialog.cpp
+  gui/dialogs/SelectBankDialog.cpp
   gui/widgets/IconStackedWidget.cpp
   gui/widgets/TristateCheckBox.cpp
   gui/widgets/FileDialog.cpp
@@ -273,8 +275,7 @@ set(rg_CPPS
   gui/editors/notation/NotePixmapFactory.cpp
   gui/editors/notation/SystemFont.cpp
   gui/editors/notation/NotePixmapParameters.cpp
-  gui/editors/tempo/TempoListItem.cpp
-  gui/editors/tempo/TempoView.cpp
+  gui/editors/tempo/TempoAndTimeSignatureEditor.cpp
   gui/editors/matrix/MatrixView.cpp
   gui/editors/matrix/MatrixElement.cpp
   gui/editors/matrix/PianoKeyboard.cpp

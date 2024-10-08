@@ -23706,7 +23706,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+26"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
-        <translation>Podsystem JACK Audio traci ramki sampli.</translation>
+        <translation>Podsystem JACK Audio traci ramki próbek.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -26698,7 +26698,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+26"/>
         <source>Play/Pause</source>
-        <translation>Odtwarzaj/zatrzymaj</translation>
+        <translation>Odtwarzaj/wstrzymaj</translation>
     </message>
     <message>
         <location line="+3"/>

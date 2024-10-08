@@ -15,18 +15,18 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_TEMPOVIEW_H
-#define RG_TEMPOVIEW_H
+#ifndef RG_TEMPOANDTIMESIGNATUREEDITOR_H
+#define RG_TEMPOANDTIMESIGNATUREEDITOR_H
 
 #include "base/Composition.h"
 #include "gui/general/EditViewBase.h"
 #include "base/TimeT.h"
 
-class QTreeWidgetItem;
 class QCloseEvent;
 class QCheckBox;
 class QGroupBox;
-class QTreeWidget;
+class QTableWidget;
+class QTableWidgetItem;
 class QFrame;
 class QHBoxLayout;
 
@@ -41,13 +41,16 @@ class Segment;
 
 
 /// Tempo and Time Signature Editor
-class TempoView : public EditViewBase, public CompositionObserver
+/**
+ * This "2" version uses QTableWidget instead of QTreeWidget.
+ */
+class TempoAndTimeSignatureEditor : public EditViewBase, public CompositionObserver
 {
     Q_OBJECT
 
 public:
-    TempoView(timeT openTime);
-    ~TempoView() override;
+    TempoAndTimeSignatureEditor(timeT openTime);
+    ~TempoAndTimeSignatureEditor() override;
 
     // CompositionObserver overrides
     void timeSignatureChanged(const Composition *) override;
@@ -58,7 +61,18 @@ signals:
     /// Connected to RosegardenMainWindow::slotTempoViewClosed().
     void closing();
 
-public slots:
+protected:
+
+    // EditViewBase override.
+    Segment *getCurrentSegment() override;
+
+    // QWidget override.
+    void closeEvent(QCloseEvent *) override;
+
+private slots:
+
+    /// Connected to RosegardenDocument::documentModified().
+    void slotDocumentModified(bool modified);
 
     /// Edit > Delete (or the delete key)
     void slotEditDelete();
@@ -71,6 +85,7 @@ public slots:
      * See slotPopupEditor().
      */
     void slotEditItem();
+    void slotPopupEditor(int row, int col);
 
     /// Edit > Select All
     void slotSelectAll();
@@ -89,27 +104,8 @@ public slots:
     /// Help > About
     void slotHelpAbout();
 
-    /// Double-click entry.
-    /**
-     * See slotEditItem().
-     */
-    void slotPopupEditor(QTreeWidgetItem *twi, int column = 0);
-
     /// Filter check box clicked.
     void slotFilterClicked(bool);
-
-protected:
-
-    // EditViewBase override.
-    Segment *getCurrentSegment() override;
-
-    // QWidget override.
-    void closeEvent(QCloseEvent *) override;
-
-private slots:
-
-    /// Connected to RosegardenDocument::documentModified().
-    void slotDocumentModified(bool modified);
 
 private:
 
@@ -120,11 +116,6 @@ private:
 
     void updateWindowTitle();
 
-    void updateList();
-
-    /// Select the Event nearest the playback position pointer.
-    void makeInitialSelection(timeT time);
-
     // Widgets
 
     // Filter
@@ -132,10 +123,18 @@ private:
     QCheckBox *m_tempoCheckBox;
     QCheckBox *m_timeSigCheckBox;
 
+    enum class Type  { TimeSignature, Tempo };
+
     // List
-    // ??? QTreeWidget seems like overkill.  We never have sub items.
-    //     QTableWidget seems like a better choice.
-    QTreeWidget *m_list;
+    QTableWidget *m_tableWidget;
+    void updateTable();
+    /// Select the item nearest the playback position pointer.
+    void makeInitialSelection(timeT time);
+    /// Select an item and make sure it is visible.
+    void select(timeT time, Type type);
+
+    /// Launch editor for an entry.
+    void popupEditor(timeT time, Type type);
 
 };
 

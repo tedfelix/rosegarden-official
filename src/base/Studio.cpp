@@ -72,6 +72,7 @@ Studio::Studio() :
 
 Studio::~Studio()
 {
+    RG_DEBUG << "dtor";
     DeviceListIterator dIt = m_devices.begin();
 
     for (; dIt != m_devices.end(); ++dIt)
@@ -85,6 +86,11 @@ Studio::~Studio()
 
     for (size_t i = 0; i < m_recordIns.size(); ++i) {
         delete m_recordIns[i];
+    }
+
+    if (!m_observers.empty()) {
+        RG_WARNING << "dtor: Warning:" << m_observers.size() <<
+            "observers still extant";
     }
 }
 
@@ -116,6 +122,12 @@ Studio::addDevice(const std::string &name,
     }
 
     m_devices.push_back(d);
+    // inform the observers
+    for(ObserverList::const_iterator i = m_observers.begin();
+        i != m_observers.end(); ++i) {
+        (*i)->deviceAdded(d);
+    }
+
 }
 
 void
@@ -124,8 +136,14 @@ Studio::removeDevice(DeviceId id)
     DeviceListIterator it;
     for (it = m_devices.begin(); it != m_devices.end(); it++) {
         if ((*it)->getId() == id) {
-            delete *it;
+            Device* d = *it;
             m_devices.erase(it);
+            // inform the observers
+            for(ObserverList::const_iterator i = m_observers.begin();
+                i != m_observers.end(); ++i) {
+                (*i)->deviceRemoved(d);
+            }
+            delete(d);
             return;
         }
     }
@@ -924,6 +942,18 @@ Studio::getAvailableMIDIInstrument(const Composition *composition) const
         return foundInstrumentID;
 
     return SoftSynthInstrumentBase;
+}
+
+void Studio::addObserver(StudioObserver *obs)
+{
+    RG_DEBUG << "addObserver" << this << obs;
+    m_observers.push_back(obs);
+}
+
+void Studio::removeObserver(StudioObserver *obs)
+{
+    RG_DEBUG << "removeObserver" << this << obs;
+    m_observers.remove(obs);
 }
 
 

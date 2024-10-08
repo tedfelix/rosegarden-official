@@ -47,7 +47,8 @@ public:
                         DeviceId device,
                         const std::string &name,
                         const std::string &librarianName,
-                        const std::string &librarianEmail);
+                        const std::string &librarianEmail,
+                        const QString& commandName = "");
 
     void setVariation  (MidiDevice::VariationType variationType);
     void setBankList   (const BankList    &bankList);

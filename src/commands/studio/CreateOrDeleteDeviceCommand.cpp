@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CreateOrDeleteDeviceCommand]"
+#define RG_NO_DEBUG_PRINT
 
 #include "CreateOrDeleteDeviceCommand.h"
 
@@ -40,6 +41,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
     m_baseInstrumentId(0),
     m_deviceCreated(true)  // We are doing delete.
 {
+    RG_DEBUG << "ctor" << m_deviceName << m_type << m_direction;
     Device *device = m_studio->getDevice(m_deviceId);
 
     if (!device) {
@@ -65,6 +67,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
 void
 CreateOrDeleteDeviceCommand::execute()
 {
+    RG_DEBUG << "execute" << m_deviceName << m_type << m_direction;
     // Create
     if (!m_deviceCreated) {
 

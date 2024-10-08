@@ -62,7 +62,10 @@
 #include "gui/dialogs/UnusedAudioSelectionDialog.h"
 #include "gui/editors/segment/compositionview/AudioPeaksThread.h"
 #include "gui/editors/segment/TrackLabel.h"
-//#include "gui/general/EditViewBase.h"
+// !!! DO NOT REMOVE THIS!
+//     qDeleteAll() needs this in order to do its work correctly.
+//     Without EditViewBase.h, we crash on close whenever an editor is up.
+#include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/widgets/StartupLogo.h"

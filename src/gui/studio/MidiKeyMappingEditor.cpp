@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2024 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,6 +29,8 @@
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
 #include "gui/widgets/LineEdit.h"
+#include "commands/studio/ModifyDeviceCommand.h"
+#include "document/CommandHistory.h"
 
 #include <QObject>
 #include <QFrame>
@@ -70,13 +72,9 @@ MidiKeyMappingEditor::makeAdditionalWidget(QWidget */* parent */)
 void
 MidiKeyMappingEditor::clearAll()
 {
-    for (size_t i = 0; i < m_names.size(); ++i)
-        m_names[i]->clear();
+    NameSetEditor::clearAll();
 
     setTitle(tr("Key Mapping details"));
-
-    m_librarian->clear();
-    m_librarianEmail->clear();
     setEnabled(false);
 }
 
@@ -92,7 +90,7 @@ MidiKeyMappingEditor::populate(QTreeWidgetItem* item)
         return ;
     }
 
-    MidiDevice* device = m_bankEditor->getCurrentMidiDevice();
+    MidiDevice* device = keyItem->getDevice();
     if (!device)
         return ;
 
@@ -121,7 +119,7 @@ MidiKeyMappingEditor::reset()
 
     m_mapping = *m;
 
-    
+
     // Librarian details
     //
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
@@ -147,23 +145,53 @@ MidiKeyMappingEditor::reset()
 }
 
 void
-MidiKeyMappingEditor::slotNameChanged(const QString &name)
+MidiKeyMappingEditor::slotNameChanged(const QString&)
 {
+    // no longer used - see slotEditingFinished
+    return;
+}
+
+void MidiKeyMappingEditor::slotEditingFinished()
+{
+    RG_DEBUG << "slotEditingFinished";
+
     const LineEdit *lineEdit = dynamic_cast<const LineEdit *>(sender());
     if (!lineEdit) {
-        RG_WARNING << "slotNameChanged(): WARNING: Sender is not a LineEdit.";
+        RG_WARNING << "slotEditingFinished(): WARNING: Sender is not a LineEdit.";
         return;
     }
 
     const unsigned pitch = lineEdit->property("index").toUInt();
 
-    //RG_DEBUG << "slotNameChanged(" << name << ") : pitch = " << pitch;
+    //RG_DEBUG << "slotEditingFinished(" << name << ") : pitch = " << pitch;
 
-    // If the name has changed
-    if (qstrtostr(name) != m_mapping.getMap()[pitch]) {
-        m_mapping.getMap()[pitch] = qstrtostr(name);
-        m_bankEditor->slotApply();
+    QString name = lineEdit->text();
+    const MidiKeyMapping *m = m_device->getKeyMappingByName(m_mappingName);
+    MidiKeyMapping::KeyNameMap keyMap = m->getMap();
+    // Check if the name has changed
+    QString oldName = strtoqstr(keyMap[pitch]);
+    if (name == oldName) return;
+
+    MidiKeyMapping newKeyMapping = *m;
+    keyMap[pitch] = qstrtostr(name);
+    newKeyMapping.setMap(keyMap);
+
+    KeyMappingList oldKeymapList = m_device->getKeyMappings();
+    KeyMappingList newKeymapList;
+
+    for (unsigned int i=0; i<oldKeymapList.size(); i++) {
+        if (oldKeymapList[i].getName() == m_mappingName) {
+            newKeymapList.push_back(newKeyMapping);
+        } else {
+            newKeymapList.push_back(oldKeymapList[i]);
+        }
     }
+
+    ModifyDeviceCommand *command =
+        m_bankEditor->makeCommand(tr("modify key mapping"));
+
+    command->setKeyMappingList(newKeymapList);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
