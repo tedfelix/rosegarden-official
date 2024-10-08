@@ -295,6 +295,7 @@ protected:
     bool m_checkLoad;
 
  private:
+    /// Previous play state for detecting state transition for export.
     bool m_playing;
     CompositionExportManager* m_exportManager;
 };

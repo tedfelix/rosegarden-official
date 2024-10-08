@@ -102,6 +102,9 @@ SequenceManager::SequenceManager() :
 {
     connect(m_exportTimer, &QTimer::timeout,
             this, &SequenceManager::slotExportUpdate);
+    // ??? @lman: Instead of leaving this running all the time, start it
+    //     when needed (setExportWavFile()) and stop it when not needed
+    //     (slotExportUpdate()).
     m_exportTimer->start(50);
 }
 
