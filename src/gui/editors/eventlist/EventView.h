@@ -150,31 +150,31 @@ private:
     // Event filters
     QGroupBox *m_filterGroup;
     QCheckBox *m_noteCheckBox;
-    bool showNote{true};
+    bool m_showNote{true};
     QCheckBox *m_restCheckBox;
-    bool showRest{true};
+    bool m_showRest{true};
     QCheckBox *m_programCheckBox;
-    bool showProgramChange{true};
+    bool m_showProgramChange{true};
     QCheckBox *m_controllerCheckBox;
-    bool showController{true};
+    bool m_showController{true};
     QCheckBox *m_pitchBendCheckBox;
-    bool showPitchBend{true};
+    bool m_showPitchBend{true};
     QCheckBox *m_sysExCheckBox;
-    bool showSystemExclusive{true};
+    bool m_showSystemExclusive{true};
     QCheckBox *m_keyPressureCheckBox;
-    bool showKeyPressure{true};
+    bool m_showKeyPressure{true};
     QCheckBox *m_channelPressureCheckBox;
-    bool showChannelPressure{true};
+    bool m_showChannelPressure{true};
     QCheckBox *m_indicationCheckBox;
-    bool showIndication{true};
+    bool m_showIndication{true};
     QCheckBox *m_textCheckBox;
-    bool showText{true};
+    bool m_showText{true};
     QCheckBox *m_generatedRegionCheckBox;
-    bool showGeneratedRegion{true};
+    bool m_showGeneratedRegion{true};
     QCheckBox *m_segmentIDCheckBox;
-    bool showSegmentID{true};
+    bool m_showSegmentID{true};
     QCheckBox *m_otherCheckBox;
-    bool showOther{true};
+    bool m_showOther{true};
 
     // ??? QTreeWidget seems like overkill.  We never have sub items.
     //     QTableWidget seems like a better choice.  See

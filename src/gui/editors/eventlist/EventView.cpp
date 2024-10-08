@@ -472,55 +472,55 @@ EventView::updateTreeWidget()
         // Event filters
 
         if (event->isa(Note::EventRestType)) {
-            if (!showRest)
+            if (!m_showRest)
                 continue;
 
         } else if (event->isa(Note::EventType)) {
-            if (!showNote)
+            if (!m_showNote)
                 continue;
 
         } else if (event->isa(Indication::EventType)) {
-            if (!showIndication)
+            if (!m_showIndication)
                 continue;
 
         } else if (event->isa(PitchBend::EventType)) {
-            if (!showPitchBend)
+            if (!m_showPitchBend)
                 continue;
 
         } else if (event->isa(SystemExclusive::EventType)) {
-            if (!showSystemExclusive)
+            if (!m_showSystemExclusive)
                 continue;
 
         } else if (event->isa(ProgramChange::EventType)) {
-            if (!showProgramChange)
+            if (!m_showProgramChange)
                 continue;
 
         } else if (event->isa(ChannelPressure::EventType)) {
-            if (!showChannelPressure)
+            if (!m_showChannelPressure)
                 continue;
 
         } else if (event->isa(KeyPressure::EventType)) {
-            if (!showKeyPressure)
+            if (!m_showKeyPressure)
                 continue;
 
         } else if (event->isa(Controller::EventType)) {
-            if (!showController)
+            if (!m_showController)
                 continue;
 
         } else if (event->isa(Text::EventType)) {
-            if (!showText)
+            if (!m_showText)
                 continue;
 
         } else if (event->isa(GeneratedRegion::EventType)) {
-            if (!showGeneratedRegion)
+            if (!m_showGeneratedRegion)
                 continue;
 
         } else if (event->isa(SegmentID::EventType)) {
-            if (!showSegmentID)
+            if (!m_showSegmentID)
                 continue;
 
         } else {
-            if (!showOther)
+            if (!m_showOther)
                 continue;
         }
 
@@ -1330,19 +1330,19 @@ EventView::setViewSize(QSize s)
 void
 EventView::readOptions()
 {
-    showNote = a_showNoteSetting.get();
-    showRest = a_showRestSetting.get();
-    showProgramChange = a_showProgramChangeSetting.get();
-    showController = a_showControllerSetting.get();
-    showPitchBend = a_showPitchBendSetting.get();
-    showSystemExclusive = a_showSystemExclusiveSetting.get();
-    showKeyPressure = a_showKeyPressureSetting.get();
-    showChannelPressure = a_showChannelPressureSetting.get();
-    showIndication = a_showIndicationSetting.get();
-    showText = a_showTextSetting.get();
-    showGeneratedRegion = a_showGeneratedRegionSetting.get();
-    showSegmentID = a_showSegmentIDSetting.get();
-    showOther = a_showOtherSetting.get();
+    m_showNote = a_showNoteSetting.get();
+    m_showRest = a_showRestSetting.get();
+    m_showProgramChange = a_showProgramChangeSetting.get();
+    m_showController = a_showControllerSetting.get();
+    m_showPitchBend = a_showPitchBendSetting.get();
+    m_showSystemExclusive = a_showSystemExclusiveSetting.get();
+    m_showKeyPressure = a_showKeyPressureSetting.get();
+    m_showChannelPressure = a_showChannelPressureSetting.get();
+    m_showIndication = a_showIndicationSetting.get();
+    m_showText = a_showTextSetting.get();
+    m_showGeneratedRegion = a_showGeneratedRegionSetting.get();
+    m_showSegmentID = a_showSegmentIDSetting.get();
+    m_showOther = a_showOtherSetting.get();
 
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
@@ -1353,19 +1353,19 @@ EventView::readOptions()
 void
 EventView::saveOptions()
 {
-    a_showNoteSetting.set(showNote);
-    a_showRestSetting.set(showRest);
-    a_showProgramChangeSetting.set(showProgramChange);
-    a_showControllerSetting.set(showController);
-    a_showPitchBendSetting.set(showPitchBend);
-    a_showSystemExclusiveSetting.set(showSystemExclusive);
-    a_showKeyPressureSetting.set(showKeyPressure);
-    a_showChannelPressureSetting.set(showChannelPressure);
-    a_showIndicationSetting.set(showIndication);
-    a_showTextSetting.set(showText);
-    a_showGeneratedRegionSetting.set(showGeneratedRegion);
-    a_showSegmentIDSetting.set(showSegmentID);
-    a_showOtherSetting.set(showOther);
+    a_showNoteSetting.set(m_showNote);
+    a_showRestSetting.set(m_showRest);
+    a_showProgramChangeSetting.set(m_showProgramChange);
+    a_showControllerSetting.set(m_showController);
+    a_showPitchBendSetting.set(m_showPitchBend);
+    a_showSystemExclusiveSetting.set(m_showSystemExclusive);
+    a_showKeyPressureSetting.set(m_showKeyPressure);
+    a_showChannelPressureSetting.set(m_showChannelPressure);
+    a_showIndicationSetting.set(m_showIndication);
+    a_showTextSetting.set(m_showText);
+    a_showGeneratedRegionSetting.set(m_showGeneratedRegion);
+    a_showSegmentIDSetting.set(m_showSegmentID);
+    a_showOtherSetting.set(m_showOther);
 
     QSettings settings;
 
@@ -1395,19 +1395,19 @@ void
 EventView::slotFilterClicked(bool)
 {
     // Update filter state.
-    showNote = m_noteCheckBox->isChecked();
-    showRest = m_restCheckBox->isChecked();
-    showText = m_textCheckBox->isChecked();
-    showSystemExclusive = m_sysExCheckBox->isChecked();
-    showController = m_controllerCheckBox->isChecked();
-    showProgramChange = m_programCheckBox->isChecked();
-    showPitchBend = m_pitchBendCheckBox->isChecked();
-    showChannelPressure = m_channelPressureCheckBox->isChecked();
-    showKeyPressure = m_keyPressureCheckBox->isChecked();
-    showIndication = m_indicationCheckBox->isChecked();
-    showOther = m_otherCheckBox->isChecked();
-    showGeneratedRegion = m_generatedRegionCheckBox->isChecked();
-    showSegmentID = m_segmentIDCheckBox->isChecked();
+    m_showNote = m_noteCheckBox->isChecked();
+    m_showRest = m_restCheckBox->isChecked();
+    m_showText = m_textCheckBox->isChecked();
+    m_showSystemExclusive = m_sysExCheckBox->isChecked();
+    m_showController = m_controllerCheckBox->isChecked();
+    m_showProgramChange = m_programCheckBox->isChecked();
+    m_showPitchBend = m_pitchBendCheckBox->isChecked();
+    m_showChannelPressure = m_channelPressureCheckBox->isChecked();
+    m_showKeyPressure = m_keyPressureCheckBox->isChecked();
+    m_showIndication = m_indicationCheckBox->isChecked();
+    m_showOther = m_otherCheckBox->isChecked();
+    m_showGeneratedRegion = m_generatedRegionCheckBox->isChecked();
+    m_showSegmentID = m_segmentIDCheckBox->isChecked();
 
     updateTreeWidget();
 }
@@ -1415,19 +1415,19 @@ EventView::slotFilterClicked(bool)
 void
 EventView::updateFilterCheckBoxes()
 {
-    m_noteCheckBox->setChecked(showNote);
-    m_restCheckBox->setChecked(showRest);
-    m_textCheckBox->setChecked(showText);
-    m_sysExCheckBox->setChecked(showSystemExclusive);
-    m_controllerCheckBox->setChecked(showController);
-    m_programCheckBox->setChecked(showProgramChange);
-    m_pitchBendCheckBox->setChecked(showPitchBend);
-    m_channelPressureCheckBox->setChecked(showChannelPressure);
-    m_keyPressureCheckBox->setChecked(showKeyPressure);
-    m_indicationCheckBox->setChecked(showIndication);
-    m_otherCheckBox->setChecked(showOther);
-    m_generatedRegionCheckBox->setChecked(showGeneratedRegion);
-    m_segmentIDCheckBox->setChecked(showSegmentID);
+    m_noteCheckBox->setChecked(m_showNote);
+    m_restCheckBox->setChecked(m_showRest);
+    m_textCheckBox->setChecked(m_showText);
+    m_sysExCheckBox->setChecked(m_showSystemExclusive);
+    m_controllerCheckBox->setChecked(m_showController);
+    m_programCheckBox->setChecked(m_showProgramChange);
+    m_pitchBendCheckBox->setChecked(m_showPitchBend);
+    m_channelPressureCheckBox->setChecked(m_showChannelPressure);
+    m_keyPressureCheckBox->setChecked(m_showKeyPressure);
+    m_indicationCheckBox->setChecked(m_showIndication);
+    m_otherCheckBox->setChecked(m_showOther);
+    m_generatedRegionCheckBox->setChecked(m_showGeneratedRegion);
+    m_segmentIDCheckBox->setChecked(m_showSegmentID);
 }
 
 void
