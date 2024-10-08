@@ -857,15 +857,14 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     // receiving midi input so always process async audio
     bool asyncAudio = m_haveAsyncAudioEvent || (synthCount > 0);
 
-    if (playing && ! m_playing) {
-        if (m_exportManager) {
+    if (m_exportManager) {
+        // Transitioning to play.
+        if (playing  &&  !m_playing) {
             RG_DEBUG << "export start playing";
             m_exportManager->start(m_sampleRate);
         }
-
-    }
-    if (!playing && m_playing) {
-        if (m_exportManager) {
+        // Transitioning to stop.
+        if (!playing  &&  m_playing) {
             RG_DEBUG << "export stop playing";
             m_exportManager->stop();
             // finished with the exportManager - it is deleted elsewhere
