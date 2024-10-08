@@ -426,12 +426,25 @@ int ThornStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *opti
         // QMenuBar::item { spacing: 3px; padding: 1px 4px; }
         return 4;
     case PM_ScrollBarExtent: {
-        QWidget *parent = widget ? widget->parentWidget() : nullptr;
-        QWidget *combo = parent ? parent->parentWidget() : nullptr;
+#if 0
+        // ??? This attempt at identifying combo boxes and using a narrower
+        //     scroll bar fails in every case.  We never get 12.
+
+        RG_DEBUG << "PM_ScrollBarExtent";
+        // If this is a scrollbar in a combo, I'm assuming the parent is
+        // the list?
+        QWidget *list = widget ? widget->parentWidget() : nullptr;
+        // If this is a scrollbar in a combo, the parent of the list should
+        // be the combobox.  But this never succeeds.
+        QWidget *combo = list ? list->parentWidget() : nullptr;
         if (qobject_cast<QComboBox *>(combo)) {
+            RG_DEBUG << "  Parent's parent is combobox";
+            RG_DEBUG << "  Going with 12";
             // QComboBox QAbstractItemView QScrollBar:vertical { width: 12px; }
             return 12;
         }
+        RG_DEBUG << "  Going with 16";
+#endif
         // QScrollBar:horizontal { height: 16px; }
         // QScrollBar:vertical { width: 16px; }
         return 16;
