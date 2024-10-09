@@ -39,7 +39,7 @@
       <Action name="file_export_mup" text="Export M&amp;up File..." />
       <Action name="file_export_musicxml" text="Export Music&amp;XML File..." />
       <Separator/>
-      <Action name="file_export_to_audio" text="Export Compositiont to audio" />
+      <Action name="file_export_to_audio" text="Export Composition to audio" />
     </Menu>
     <Action name="file_open" text="&amp;Open..." icon="fileopen" shortcut="Ctrl+O" />
     <Action name="file_open_example" text="Open Examp&amp;le..." />
