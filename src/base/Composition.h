@@ -31,6 +31,7 @@
 
 // Qt
 #include <QString>
+#include <QVariant>
 
 // System
 #include <utility>  // std::pair
