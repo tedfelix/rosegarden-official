@@ -747,7 +747,7 @@ RosegardenMainWindow::setupActions()
     createAction("file_export_midi", SLOT(slotExportMIDI()));
     createAction("file_export_lilypond", SLOT(slotExportLilyPond()));
     createAction("file_export_musicxml", SLOT(slotExportMusicXml()));
-    createAction("file_export_to_audio", SLOT(slotExportToAudio()));
+    createAction("file_export_wav", SLOT(slotExportWAV()));
     createAction("file_export_csound", SLOT(slotExportCsound()));
     createAction("file_export_mup", SLOT(slotExportMup()));
     createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
@@ -5537,9 +5537,11 @@ RosegardenMainWindow::slotExportMusicXml()
 }
 
 void
-RosegardenMainWindow::slotExportToAudio()
+RosegardenMainWindow::slotExportWAV()
 {
-    RG_DEBUG << "slotExportToAudio";
+    RG_DEBUG << "slotExportWAV()";
+
+    // ??? This is the caption.  We need a follow-up dialog instead.
     QString label = tr("Export composition to wav file on next play "
                        "(only audio and synth plugins)");
     QString fileName =
@@ -5552,9 +5554,10 @@ RosegardenMainWindow::slotExportToAudio()
     if (fileName.isEmpty())
         return;
 
-    if (fileName.contains(".") == 0) fileName += ".wav";
+    if (fileName.right(4).toLower() != ".wav")
+        fileName += ".wav";
 
-    RG_DEBUG << "slotExportToAudio" << fileName;
+    RG_DEBUG << "slotExportWAV()" << fileName;
     m_seqManager->setExportWavFile(fileName);
 }
 

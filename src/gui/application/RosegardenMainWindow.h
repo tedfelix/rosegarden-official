@@ -660,7 +660,7 @@ public slots:
     /**
      * Export (render) file to audio (only audio and synth plugins)
      */
-    void slotExportToAudio();
+    void slotExportWAV();
 
     /**
      * closes all open windows by calling close() on each memberList
