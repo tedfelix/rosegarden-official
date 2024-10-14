@@ -822,15 +822,14 @@ AlsaDriver::createMidiDevice(DeviceId deviceId,
             .arg(m_outputPorts.size() + 1)
             .arg(deviceName);
 
-        int outputPort = checkAlsaError(snd_seq_create_simple_port
-                                        (m_midiHandle,
-                                         portName.toLocal8Bit(),
-                                         SND_SEQ_PORT_CAP_READ |
-                                         SND_SEQ_PORT_CAP_SUBS_READ,
-                                         SND_SEQ_PORT_TYPE_APPLICATION |
-                                         SND_SEQ_PORT_TYPE_SOFTWARE |
-                                         SND_SEQ_PORT_TYPE_MIDI_GENERIC),
-                                        "createMidiDevice - can't create output port");
+        int outputPort = checkAlsaError(
+                snd_seq_create_simple_port(
+                        m_midiHandle,  // seq
+                        portName.toLocal8Bit(),  // name
+                        SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ,  // caps
+                        SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
+                            SND_SEQ_PORT_TYPE_MIDI_GENERIC),  // type
+                "createMidiDevice - can't create output port");
 
         if (outputPort >= 0) {
 
