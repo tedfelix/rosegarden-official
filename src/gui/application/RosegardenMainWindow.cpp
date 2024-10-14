@@ -5541,15 +5541,12 @@ RosegardenMainWindow::slotExportWAV()
 {
     RG_DEBUG << "slotExportWAV()";
 
-    // ??? This is the caption.  We need a follow-up dialog instead.
-    QString label = tr("Export composition to wav file on next play "
-                       "(only audio and synth plugins)");
-    QString fileName =
-        FileDialog::getSaveFileName(this,
-                                    label,
-                                    "",
-                                    "",
-                                    tr("WAV files") + " (*.wav)");
+    QString fileName = FileDialog::getSaveFileName(
+            this,  // parent
+            tr("Rosegarden"),  // caption
+            "",  // dir
+            "",  // defaultName
+            tr("WAV files") + " (*.wav)");  // filter
 
     if (fileName.isEmpty())
         return;
@@ -5557,7 +5554,17 @@ RosegardenMainWindow::slotExportWAV()
     if (fileName.right(4).toLower() != ".wav")
         fileName += ".wav";
 
-    RG_DEBUG << "slotExportWAV()" << fileName;
+    QString msg = tr(
+            "Press play to start exporting to\n"
+            "%1\n"
+            "Press stop to stop export.\n"
+            "Only audio and synth plugin tracks will be exported").arg(fileName);
+
+    QMessageBox::information(
+            this,  // parent
+            tr("Rosegarden"),  // title
+            msg);  // text
+
     m_seqManager->setExportWavFile(fileName);
 }
 
