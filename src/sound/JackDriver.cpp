@@ -26,7 +26,7 @@
 #include "Audit.h"
 #include "PluginFactory.h"
 #include "SequencerDataBlock.h"
-#include "sound/CompositionExportManager.h"
+#include "sound/WAVExporter.h"
 
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"

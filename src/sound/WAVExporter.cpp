@@ -18,7 +18,7 @@
 #define RG_MODULE_STRING "[CompositionExportManager]"
 #define RG_NO_DEBUG_PRINT 1
 
-#include "CompositionExportManager.h"
+#include "WAVExporter.h"
 
 #include "misc/Debug.h"
 #include "sound/audiostream/AudioWriteStream.h"

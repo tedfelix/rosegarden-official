@@ -579,7 +579,7 @@ set(rg_CPPS
   sound/Resampler.cpp
   sound/ExternalController.cpp
   sound/KorgNanoKontrol2.cpp
-  sound/CompositionExportManager.cpp
+  sound/WAVExporter.cpp
   commands/notation/ResetDisplacementsCommand.cpp
   commands/notation/RemoveNotationQuantizeCommand.cpp
   commands/notation/AddMarkCommand.cpp

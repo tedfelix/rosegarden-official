@@ -55,7 +55,7 @@
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
-#include "sound/CompositionExportManager.h"
+#include "sound/WAVExporter.h"
 #include "misc/Preferences.h"
 
 #include "rosegarden-version.h"  // for VERSION
