@@ -1898,9 +1898,12 @@ SequenceManager::setExportWavFile(const QString& fileName)
         delete m_wavExporter;
     }
     m_wavExporter = new WAVExporter(fileName);
+    // If creation of the WAVExporter has failed, bail.
+    if (m_wavExporter->isComplete())
+        return;
+
     // and install in the driver
-    RosegardenSequencer::getInstance()->
-        installExporter(m_wavExporter);
+    RosegardenSequencer::getInstance()->installExporter(m_wavExporter);
     // and start the timer
     m_exportTimer->start(50);
 }

@@ -37,7 +37,7 @@ public:
     explicit WAVExporter(const QString& fileName);
 
     /// called by the audio thread on start playback
-    void start(int sampleRate);
+    void start();
 
     /// called by the audio thread on stop playback
     void stop();
@@ -48,19 +48,28 @@ public:
     /// called by the gui thread to update the file data
     void update();
 
-    /// called by the gui thread to request completion status
+    /// Export is complete, or this object is not OK.
+    /**
+     * Called by the gui thread to request completion status.
+     *
+     * Call this after the ctor to determine whether the file was
+     * successfully created.
+     */
     bool isComplete() const;
 
 private:
 
-    QString m_fileName;
-    int m_sampleRate{0};
+    // Output File
+    AudioWriteStream *m_ws{nullptr};
+
+    // Processing state.
     bool m_start{false};
+    bool m_running{false};
     bool m_stop{false};
+
+    // Lock-free buffers written by the audio thread and read by the GUI thread.
     RingBuffer<sample_t>* m_leftChannelBuffer{nullptr};
     RingBuffer<sample_t>* m_rightChannelBuffer{nullptr};
-    bool m_running{false};
-    AudioWriteStream *m_ws{nullptr};
 
 };
 

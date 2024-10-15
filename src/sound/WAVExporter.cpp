@@ -23,26 +23,49 @@
 #include "misc/Debug.h"
 #include "sound/audiostream/AudioWriteStream.h"
 #include "sound/audiostream/AudioWriteStreamFactory.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "sequencer/RosegardenSequencer.h"
+
+#include <QMessageBox>
 
 
 namespace Rosegarden
 {
 
 
-WAVExporter::WAVExporter(const QString& fileName) :
-    m_fileName(fileName)
+WAVExporter::WAVExporter(const QString& fileName)
 {
-  RG_DEBUG << "ctor" << fileName;
+    RG_DEBUG << "ctor" << fileName;
+
+    m_ws = AudioWriteStreamFactory::createWriteStream(
+            fileName,
+            2,  // channelCount
+            RosegardenSequencer::getInstance()->getSampleRate());
+    if (!m_ws) {
+        QMessageBox::information(
+                    RosegardenMainWindow::self(),  // parent
+                    QObject::tr("Rosegarden"),  // title
+                    QObject::tr(
+                            "<p>WAV Export</p>"
+                            "<p>Unable to create WAV file.</p>"));  // text
+
+        return;
+    }
 }
 
-void WAVExporter::start(int sampleRate)
+void WAVExporter::start()
 {
+    if (!m_ws)
+        return;
+
     RG_DEBUG << "start";
-    m_sampleRate = sampleRate;
     // create the ring buffers
+    // ??? Should make these (sampleRate * .5).
+    // ??? Move to ctor and use std::unique_ptr.
     m_leftChannelBuffer = new RingBuffer<sample_t>(20000);
     m_rightChannelBuffer = new RingBuffer<sample_t>(20000);
 
+    // ??? Go straight to m_running=true?
     m_start = true;
 }
 
@@ -56,6 +79,13 @@ void WAVExporter::addSamples(sample_t *left,
                              sample_t *right,
                              size_t numSamples)
 {
+    if (!m_ws)
+        return;
+    if (!m_leftChannelBuffer)
+        return;
+    if (!m_rightChannelBuffer)
+        return;
+
     RG_DEBUG << "addSamples" << left << right << numSamples;
     if (! m_running) {
         RG_DEBUG << "addSamples not running";
@@ -73,6 +103,9 @@ void WAVExporter::addSamples(sample_t *left,
 
 void WAVExporter::update()
 {
+    if (!m_ws)
+        return;
+
     if (m_running) {
         size_t spacel = m_leftChannelBuffer->getReadSpace();
         size_t spacer = m_rightChannelBuffer->getReadSpace();
@@ -110,6 +143,10 @@ void WAVExporter::update()
         if (m_stop) {
             RG_DEBUG << "stop - delete write stream";
             m_running = false;
+            // ??? What if the client forgets to stop and deletes first
+            //     instead?  Or the timer doesn't arrive before the dtor
+            //     is called?  I think we need to either use unique_ptrs,
+            //     or add a dtor.
             delete m_ws;
             m_ws = nullptr;
             delete m_leftChannelBuffer;
@@ -120,15 +157,8 @@ void WAVExporter::update()
     } else {
         if (m_start) {
             m_start = false;
-            RG_DEBUG << "update create audio stream";
-            m_ws = AudioWriteStreamFactory::createWriteStream
-                (m_fileName, 2, m_sampleRate);
-            if (!m_ws) {
-                // ??? Elevate to a message box.  "Unable to create
-                //     write stream for <filename>."  Or similar.
-                RG_WARNING << "Cannot create write stream.";
-                return;
-            }
+            // ??? Since nothing happens here anymore, get rid of m_start
+            //     and just go directly to running state.
             m_running = true;
         }
     }
@@ -136,6 +166,10 @@ void WAVExporter::update()
 
 bool WAVExporter::isComplete() const
 {
+    // File creation failed?  We're done.
+    if (!m_ws)
+        return true;
+
     return (m_stop && ! m_running);
 }
 

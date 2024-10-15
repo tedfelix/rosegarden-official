@@ -861,7 +861,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         // Transitioning to play.
         if (playing  &&  !m_playing) {
             RG_DEBUG << "export start playing";
-            m_exportManager->start(m_sampleRate);
+            m_exportManager->start();
         }
         // Transitioning to stop.
         if (!playing  &&  m_playing) {
