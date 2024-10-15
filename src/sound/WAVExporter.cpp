@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[CompositionExportManager]"
+#define RG_MODULE_STRING "[WAVExporter]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "WAVExporter.h"
@@ -27,7 +27,7 @@
 namespace Rosegarden
 {
 
-CompositionExportManager::CompositionExportManager
+WAVExporter::WAVExporter
 (const QString& fileName) :
     m_fileName(fileName),
     m_sampleRate(0),
@@ -41,7 +41,7 @@ CompositionExportManager::CompositionExportManager
   RG_DEBUG << "ctor" << fileName;
 }
 
-void CompositionExportManager::start(int sampleRate)
+void WAVExporter::start(int sampleRate)
 {
     RG_DEBUG << "start";
     m_sampleRate = sampleRate;
@@ -52,13 +52,13 @@ void CompositionExportManager::start(int sampleRate)
     m_start = true;
 }
 
-void CompositionExportManager::stop()
+void WAVExporter::stop()
 {
     RG_DEBUG << "stop";
     m_stop = true;
 }
 
-void CompositionExportManager::addSamples(sample_t *left,
+void WAVExporter::addSamples(sample_t *left,
                                           sample_t *right,
                                           size_t numSamples)
 {
@@ -77,7 +77,7 @@ void CompositionExportManager::addSamples(sample_t *left,
     m_rightChannelBuffer->write(right, numSamples);
 }
 
-void CompositionExportManager::update()
+void WAVExporter::update()
 {
     if (m_running) {
         size_t spacel = m_leftChannelBuffer->getReadSpace();
@@ -130,7 +130,7 @@ void CompositionExportManager::update()
     }
 }
 
-bool CompositionExportManager::isComplete() const
+bool WAVExporter::isComplete() const
 {
     return (m_stop && ! m_running);
 }

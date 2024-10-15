@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_COMPOSITIONEXPORTMANAGER_H
-#define RG_COMPOSITIONEXPORTMANAGER_H
+#ifndef RG_WAVEXPORTER_H
+#define RG_WAVEXPORTER_H
 
 typedef float sample_t;
 #include "RingBuffer.h"
@@ -27,10 +27,10 @@ namespace Rosegarden
 class AudioWriteStream;
 
 // Manage export of composition to wav file
-class CompositionExportManager
+class WAVExporter
 {
 public:
-    explicit CompositionExportManager(const QString& fileName);
+    explicit WAVExporter(const QString& fileName);
 
     /// called by the audio thread on start playback
     void start(int sampleRate);
@@ -61,4 +61,4 @@ public:
 
 }
 
-#endif /* ifndef RG_COMPOSITIONEXPORTMANAGER_H */
+#endif /* ifndef RG_WAVExporter_H */

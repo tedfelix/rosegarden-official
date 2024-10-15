@@ -1524,9 +1524,9 @@ RosegardenSequencer::initialiseStudio()
 }
 
 void
-RosegardenSequencer::installExporter(CompositionExportManager* exportManager)
+RosegardenSequencer::installExporter(WAVExporter* wavExporter)
 {
-    m_driver->installExporter(exportManager);
+    m_driver->installExporter(wavExporter);
 }
 
 void

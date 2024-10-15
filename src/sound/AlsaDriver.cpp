@@ -5491,11 +5491,11 @@ AlsaDriver::scavengePlugins()
 }
 
 void
-AlsaDriver::installExporter(CompositionExportManager* exportManager)
+AlsaDriver::installExporter(WAVExporter* wavExporter)
 {
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
-        m_jackDriver->installExporter(exportManager);
+        m_jackDriver->installExporter(wavExporter);
     }
 #endif
 }

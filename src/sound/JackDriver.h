@@ -36,7 +36,7 @@ class AudioBussMixer;
 class AudioInstrumentMixer;
 class AudioFileReader;
 class AudioFileWriter;
-class CompositionExportManager;
+class WAVExporter;
 
 class JackDriver
 {
@@ -196,7 +196,7 @@ public:
     //
     void reportFailure(MappedEvent::FailureCode code);
 
-    void installExporter(CompositionExportManager* exportManager);
+    void installExporter(WAVExporter* wavExporter);
 
 protected:
 
@@ -297,7 +297,7 @@ protected:
  private:
     /// Previous play state for detecting state transition for export.
     bool m_playing;
-    CompositionExportManager* m_exportManager;
+    WAVExporter* m_exportManager;
 };
 
 }

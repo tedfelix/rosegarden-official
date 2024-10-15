@@ -2561,9 +2561,9 @@ JackDriver::reportFailure(MappedEvent::FailureCode code)
 }
 
 void
-JackDriver::installExporter(CompositionExportManager* exportManager)
+JackDriver::installExporter(WAVExporter* wavExporter)
 {
-    m_exportManager = exportManager;
+    m_exportManager = wavExporter;
 }
 
 

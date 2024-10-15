@@ -97,7 +97,7 @@ SequenceManager::SequenceManager() :
     m_lastTransportStartPosition(0),
     m_sampleRate(0),
     m_tempo(0),
-    m_compositionExportManager(nullptr),
+    m_wavExporter(nullptr),
     m_exportTimer(new QTimer(this))
 {
     // The timer is started when required
@@ -112,8 +112,8 @@ SequenceManager::~SequenceManager()
     if (m_doc)
         m_doc->getComposition().removeObserver(this);
 
-    if (m_compositionExportManager) {
-        delete m_compositionExportManager;
+    if (m_wavExporter) {
+        delete m_wavExporter;
     }
 }
 
@@ -1093,11 +1093,11 @@ void SequenceManager::slotLoopChanged()
 void SequenceManager::slotExportUpdate()
 {
     // The timer is only run when the m_compositionExportManager is set
-    m_compositionExportManager->update();
-    if (m_compositionExportManager->isComplete()) {
+    m_wavExporter->update();
+    if (m_wavExporter->isComplete()) {
         RG_DEBUG << "deleting completed export manager";
-        delete m_compositionExportManager;
-        m_compositionExportManager = nullptr;
+        delete m_wavExporter;
+        m_wavExporter = nullptr;
         // timer no longer needed
         m_exportTimer->stop();
     }
@@ -1893,14 +1893,14 @@ void
 SequenceManager::setExportWavFile(const QString& fileName)
 {
     RG_DEBUG << "setExportWavFile" << fileName;
-    if (m_compositionExportManager) {
+    if (m_wavExporter) {
         RG_DEBUG << "replacing previous export manager";
-        delete m_compositionExportManager;
+        delete m_wavExporter;
     }
-    m_compositionExportManager = new CompositionExportManager(fileName);
+    m_wavExporter = new WAVExporter(fileName);
     // and install in the driver
     RosegardenSequencer::getInstance()->
-        installExporter(m_compositionExportManager);
+        installExporter(m_wavExporter);
     // and start the timer
     m_exportTimer->start(50);
 }

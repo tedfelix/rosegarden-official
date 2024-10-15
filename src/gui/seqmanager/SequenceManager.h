@@ -51,7 +51,7 @@ class CountdownDialog;
 class CompositionMapper;
 class AudioManagerDialog;
 class MappedBufMetaIterator;
-class CompositionExportManager;
+class WAVExporter;
 
 
 /**
@@ -488,7 +488,7 @@ private:
     /// Used by setTempo() to detect tempo changes.
     tempoT m_tempo;
 
-    CompositionExportManager* m_compositionExportManager;
+    WAVExporter* m_wavExporter;
     QTimer *m_exportTimer;
 };
 
