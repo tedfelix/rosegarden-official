@@ -55,20 +55,22 @@ public:
     /**
      * Called by the gui thread to request completion status.
      *
+     * ??? update() could return a bool and then this could be changed to
+     *     an isOK() that checks m_audioWriteStream.
+     *
      * Call this after the ctor to determine whether the file was
-     * successfully created.
+     * successfully created.  true means failure.
      */
     bool isComplete() const;
 
 private:
 
     // Output File
-    std::shared_ptr<AudioWriteStream> m_ws;
+    std::shared_ptr<AudioWriteStream> m_audioWriteStream;
 
     // Processing state.
-    bool m_start{false};
     bool m_running{false};
-    bool m_stop{false};
+    bool m_stopRequested{false};
 
     // Lock-free buffers written by the audio thread and read by the GUI thread.
     std::unique_ptr<RingBuffer<sample_t>> m_leftChannelBuffer;

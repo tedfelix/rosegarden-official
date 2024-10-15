@@ -40,11 +40,12 @@ WAVExporter::WAVExporter(const QString& fileName)
     const unsigned sampleRate =
             RosegardenSequencer::getInstance()->getSampleRate();
 
-    m_ws.reset(AudioWriteStreamFactory::createWriteStream(
+    // Create the output file.
+    m_audioWriteStream.reset(AudioWriteStreamFactory::createWriteStream(
             fileName,
             2,  // channelCount
             sampleRate));
-    if (!m_ws) {
+    if (!m_audioWriteStream) {
         QMessageBox::information(
                     RosegardenMainWindow::self(),  // parent
                     QObject::tr("Rosegarden"),  // title
@@ -62,26 +63,25 @@ WAVExporter::WAVExporter(const QString& fileName)
 
 void WAVExporter::start()
 {
-    if (!m_ws)
+    if (!m_audioWriteStream)
         return;
 
     RG_DEBUG << "start";
 
-    // ??? Go straight to m_running=true?
-    m_start = true;
+    m_running = true;
 }
 
 void WAVExporter::stop()
 {
     RG_DEBUG << "stop";
-    m_stop = true;
+    m_stopRequested = true;
 }
 
 void WAVExporter::addSamples(sample_t *left,
                              sample_t *right,
                              size_t numSamples)
 {
-    if (!m_ws)
+    if (!m_audioWriteStream)
         return;
     if (!m_leftChannelBuffer)
         return;
@@ -105,7 +105,11 @@ void WAVExporter::addSamples(sample_t *left,
 
 void WAVExporter::update()
 {
-    if (!m_ws)
+    if (!m_audioWriteStream)
+        return;
+    if (!m_leftChannelBuffer)
+        return;
+    if (!m_rightChannelBuffer)
         return;
 
     if (m_running) {
@@ -139,23 +143,18 @@ void WAVExporter::update()
 #ifndef NDEBUG
             RG_DEBUG << "render frames" << toRead << ssq;
 #endif
-            if (m_ws)
-                m_ws->putInterleavedFrames(toRead, ileaveBuf);
+            if (m_audioWriteStream)
+                m_audioWriteStream->putInterleavedFrames(toRead, ileaveBuf);
         }
-        if (m_stop) {
-            RG_DEBUG << "stop - delete write stream";
+        if (m_stopRequested) {
+            RG_DEBUG << "stop requested - deleting write stream";
+
             m_running = false;
+
             // Free all the memory since we are done.
-            m_ws = nullptr;
+            m_audioWriteStream = nullptr;
             m_leftChannelBuffer = nullptr;
             m_rightChannelBuffer = nullptr;
-        }
-    } else {
-        if (m_start) {
-            m_start = false;
-            // ??? Since nothing happens here anymore, get rid of m_start
-            //     and just go directly to running state.
-            m_running = true;
         }
     }
 }
@@ -163,10 +162,10 @@ void WAVExporter::update()
 bool WAVExporter::isComplete() const
 {
     // File creation failed?  We're done.
-    if (!m_ws)
+    if (!m_audioWriteStream)
         return true;
 
-    return (m_stop && ! m_running);
+    return (m_stopRequested && ! m_running);
 }
 
 
