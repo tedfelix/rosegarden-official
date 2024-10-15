@@ -1899,7 +1899,7 @@ SequenceManager::setExportWavFile(const QString& fileName)
     }
     m_wavExporter = new WAVExporter(fileName);
     // If creation of the WAVExporter has failed, bail.
-    if (m_wavExporter->isComplete())
+    if (!m_wavExporter->isOK())
         return;
 
     // and install in the driver

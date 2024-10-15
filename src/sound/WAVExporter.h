@@ -38,6 +38,11 @@ class WAVExporter
 {
 public:
     explicit WAVExporter(const QString& fileName);
+    /*
+     * Call this after the ctor to determine whether the file was
+     * successfully created.
+     */
+    bool isOK() const  { return static_cast<bool>(m_audioWriteStream); }
 
     /// called by the audio thread on start playback
     void start();
@@ -54,12 +59,6 @@ public:
     /// Export is complete, or this object is not OK.
     /**
      * Called by the gui thread to request completion status.
-     *
-     * ??? update() could return a bool and then this could be changed to
-     *     an isOK() that checks m_audioWriteStream.
-     *
-     * Call this after the ctor to determine whether the file was
-     * successfully created.  true means failure.
      */
     bool isComplete() const;
 
