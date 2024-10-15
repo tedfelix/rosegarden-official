@@ -21,6 +21,8 @@
 typedef float sample_t;
 #include "RingBuffer.h"
 
+#include <memory>
+
 class QString;
 
 
@@ -29,6 +31,7 @@ namespace Rosegarden
 
 
 class AudioWriteStream;
+
 
 /// Export playback to wav file
 class WAVExporter
@@ -60,7 +63,7 @@ public:
 private:
 
     // Output File
-    AudioWriteStream *m_ws{nullptr};
+    std::shared_ptr<AudioWriteStream> m_ws;
 
     // Processing state.
     bool m_start{false};
@@ -68,8 +71,8 @@ private:
     bool m_stop{false};
 
     // Lock-free buffers written by the audio thread and read by the GUI thread.
-    RingBuffer<sample_t>* m_leftChannelBuffer{nullptr};
-    RingBuffer<sample_t>* m_rightChannelBuffer{nullptr};
+    std::unique_ptr<RingBuffer<sample_t>> m_leftChannelBuffer;
+    std::unique_ptr<RingBuffer<sample_t>> m_rightChannelBuffer;
 
 };
 

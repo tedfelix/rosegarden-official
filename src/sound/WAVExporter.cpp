@@ -37,10 +37,13 @@ WAVExporter::WAVExporter(const QString& fileName)
 {
     RG_DEBUG << "ctor" << fileName;
 
-    m_ws = AudioWriteStreamFactory::createWriteStream(
+    const unsigned sampleRate =
+            RosegardenSequencer::getInstance()->getSampleRate();
+
+    m_ws.reset(AudioWriteStreamFactory::createWriteStream(
             fileName,
             2,  // channelCount
-            RosegardenSequencer::getInstance()->getSampleRate());
+            sampleRate));
     if (!m_ws) {
         QMessageBox::information(
                     RosegardenMainWindow::self(),  // parent
@@ -51,6 +54,10 @@ WAVExporter::WAVExporter(const QString& fileName)
 
         return;
     }
+
+    // create the ring buffers
+    m_leftChannelBuffer.reset(new RingBuffer<sample_t>(sampleRate/2));
+    m_rightChannelBuffer.reset(new RingBuffer<sample_t>(sampleRate/2));
 }
 
 void WAVExporter::start()
@@ -59,11 +66,6 @@ void WAVExporter::start()
         return;
 
     RG_DEBUG << "start";
-    // create the ring buffers
-    // ??? Should make these (sampleRate * .5).
-    // ??? Move to ctor and use std::unique_ptr.
-    m_leftChannelBuffer = new RingBuffer<sample_t>(20000);
-    m_rightChannelBuffer = new RingBuffer<sample_t>(20000);
 
     // ??? Go straight to m_running=true?
     m_start = true;
@@ -143,15 +145,9 @@ void WAVExporter::update()
         if (m_stop) {
             RG_DEBUG << "stop - delete write stream";
             m_running = false;
-            // ??? What if the client forgets to stop and deletes first
-            //     instead?  Or the timer doesn't arrive before the dtor
-            //     is called?  I think we need to either use unique_ptrs,
-            //     or add a dtor.
-            delete m_ws;
+            // Free all the memory since we are done.
             m_ws = nullptr;
-            delete m_leftChannelBuffer;
             m_leftChannelBuffer = nullptr;
-            delete m_rightChannelBuffer;
             m_rightChannelBuffer = nullptr;
         }
     } else {
