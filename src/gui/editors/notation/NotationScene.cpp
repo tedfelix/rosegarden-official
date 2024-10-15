@@ -1179,8 +1179,10 @@ NotationScene::getCursorCoordinates(timeT t) const
     //                       singleBottom.first, singleBottom.second);
     //cc.currentStaff = QLineF(top.first, top.second,
     //                       bottom.first, bottom.second);
-    cc.currentStaff = QLineF(top.first, singleTop.second,
-                             bottom.first, singleBottom.second);
+    //cc.currentStaff = QLineF(top.first, singleTop.second,
+    //                       bottom.first, singleBottom.second);
+    cc.currentStaff = QLineF(singleTop.first, singleTop.second,
+                             singleBottom.first, singleBottom.second);
     return cc;
 }
 
