@@ -1572,10 +1572,6 @@ private:
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
 
-#ifdef HAVE_LIBJACK
-    QProcess *m_jackProcess;
-#endif // HAVE_LIBJACK
-
     /// CPU meter in the main window status bar.
     /**
      * This is NOT a general-purpose progress indicator.  You want to use

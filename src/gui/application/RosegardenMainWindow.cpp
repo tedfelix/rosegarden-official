@@ -271,9 +271,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_recentFiles(),
     m_sequencerThread(nullptr),
     m_sequencerCheckedIn(false),
-#ifdef HAVE_LIBJACK
-    m_jackProcess(nullptr),
-#endif
     m_cpuBar(nullptr),
     m_zoomSlider(nullptr),
     m_zoomLabel(nullptr),
@@ -5081,70 +5078,6 @@ RosegardenMainWindow::slotTestStartupTester()
         return ;
     }
 
-/*    QStringList missingFeatures;
-    QStringList allMissing;
-
-    QStringList missing;
-
-#ifdef HAVE_LIBJACK
-    if (m_seqManager && (m_seqManager->getSoundDriverStatus() & AUDIO_OK)) {
-
-        m_haveAudioImporter = m_startupTester->haveAudioFileImporter(&missing);
-
-        if (!m_haveAudioImporter) {
-            missingFeatures.push_back(tr("General audio file import and conversion"));
-            if (missing.count() == 0) {
-                allMissing.push_back(tr("The Rosegarden Audio File Importer helper script"));
-            } else {
-                for (int i = 0; i < missing.count(); ++i) {
-                    if (missingFeatures.count() > 1) {
-                        allMissing.push_back(tr("%1 - for audio file import").arg(missing[i]));
-                    } else {
-                        allMissing.push_back(missing[i]);
-                    }
-                }
-            }
-        }
-    }
-#endif
-
-    if (missingFeatures.count() > 0) {
-        QString message = tr("<h3>Helper programs not found</h3><p>Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:</p>");
-        message += tr("<ul>");
-        for (int i = 0; i < missingFeatures.count(); ++i) {
-            message += tr("<li>%1</li>").arg(missingFeatures[i]);
-        }
-        message += tr("</ul>");
-        message += tr("<p>To fix this, you should install the following additional programs:</p>");
-        message += tr("<ul>");
-        for (int i = 0; i < allMissing.count(); ++i) {
-            message += tr("<li>%1</li>").arg(allMissing[i]);
-        }
-        message += tr("</ul>");
-
-        awaitDialogClearance();
-
-        QString shortMessage = tr("Helper programs not found");
-
-//        QMessageBox info(m_view);
-//        info.setText(shortMessage);
-//        info.setInformativeText(message);
-//        info.setStandardButtons(QMessageBox::Ok);
-//        info.setDefaultButton(QMessageBox::Ok);
-//        info.setIcon(QMessageBox::Warning);
-//
-//        if (!DialogSuppressor::shouldSuppress
-//            (&info, "startuphelpersmissing")) {
-//            info.exec();
-//        }
-
-        // Looks like Thorn will have to keep the startup test for
-        // audiofile-importer around indefinitely, and so we need to move that
-        // irritating @#@^@#^ dialog into the warning widget, and get it out of
-        // my face before I punch it right in the nose.
-        m_warningWidget->queueMessage(shortMessage, message);
-    }*/
-
     m_startupTester->wait();
     delete m_startupTester;
     m_startupTester = nullptr;
@@ -5540,6 +5473,17 @@ void
 RosegardenMainWindow::slotExportWAV()
 {
     RG_DEBUG << "slotExportWAV()";
+
+    if (!m_seqManager)
+        return;
+
+    if (!(m_seqManager->getSoundDriverStatus() & AUDIO_OK)) {
+        QMessageBox::information(
+                    this,  // parent
+                    tr("Rosegarden"),  // title
+                    tr("Unable to export WAV without JACK running."));  // text
+        return;
+    }
 
     QString fileName = FileDialog::getSaveFileName(
             this,  // parent
