@@ -350,6 +350,8 @@ public:
     void claimUnwantedPlugin(void *plugin) override;
     void scavengePlugins() override;
 
+    void installExporter(WAVExporter* WAVExporter) override;
+
     /// Update Ports and Connections
     /**
      * Updates m_alsaPorts and m_devicePortMap to match the ports and

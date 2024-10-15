@@ -55,6 +55,7 @@
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
+#include "sound/WAVExporter.h"
 #include "misc/Preferences.h"
 
 #include "rosegarden-version.h"  // for VERSION
@@ -95,8 +96,13 @@ SequenceManager::SequenceManager() :
     m_recordTime(new QElapsedTimer()),
     m_lastTransportStartPosition(0),
     m_sampleRate(0),
-    m_tempo(0)
+    m_tempo(0),
+    m_wavExporter(nullptr),
+    m_exportTimer(new QTimer(this))
 {
+    // The timer is started when required
+    connect(m_exportTimer, &QTimer::timeout,
+            this, &SequenceManager::slotExportUpdate);
 }
 
 SequenceManager::~SequenceManager()
@@ -105,6 +111,10 @@ SequenceManager::~SequenceManager()
 
     if (m_doc)
         m_doc->getComposition().removeObserver(this);
+
+    if (m_wavExporter) {
+        delete m_wavExporter;
+    }
 }
 
 void
@@ -1080,6 +1090,19 @@ void SequenceManager::slotLoopChanged()
     }
 }
 
+void SequenceManager::slotExportUpdate()
+{
+    // The timer is only run when the m_compositionExportManager is set
+    m_wavExporter->update();
+    if (m_wavExporter->isComplete()) {
+        RG_DEBUG << "deleting completed export manager";
+        delete m_wavExporter;
+        m_wavExporter = nullptr;
+        // timer no longer needed
+        m_exportTimer->stop();
+    }
+}
+
 bool SequenceManager::inCountIn(const RealTime &time) const
 {
     if (m_transportStatus == RECORDING  ||
@@ -1864,6 +1887,25 @@ SequenceManager::getSampleRate() const
     m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     return m_sampleRate;
+}
+
+void
+SequenceManager::setExportWavFile(const QString& fileName)
+{
+    RG_DEBUG << "setExportWavFile" << fileName;
+    if (m_wavExporter) {
+        RG_DEBUG << "replacing previous export manager";
+        delete m_wavExporter;
+    }
+    m_wavExporter = new WAVExporter(fileName);
+    // If creation of the WAVExporter has failed, bail.
+    if (!m_wavExporter->isOK())
+        return;
+
+    // and install in the driver
+    RosegardenSequencer::getInstance()->installExporter(m_wavExporter);
+    // and start the timer
+    m_exportTimer->start(50);
 }
 
 bool

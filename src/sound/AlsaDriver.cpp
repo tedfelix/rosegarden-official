@@ -5489,6 +5489,16 @@ AlsaDriver::scavengePlugins()
     m_pluginScavenger.scavenge();
 }
 
+void
+AlsaDriver::installExporter(WAVExporter* wavExporter)
+{
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) {
+        m_jackDriver->installExporter(wavExporter);
+    }
+#endif
+}
+
 QString
 AlsaDriver::getStatusLog()
 {

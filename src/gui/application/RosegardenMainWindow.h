@@ -658,6 +658,11 @@ public slots:
     void slotExportMusicXml();
 
     /**
+     * Export (render) file to audio (only audio and synth plugins)
+     */
+    void slotExportWAV();
+
+    /**
      * closes all open windows by calling close() on each memberList
      * item until the list is empty, then quits the application.  If
      * queryClose() returns false because the user canceled the
@@ -1566,10 +1571,6 @@ private:
 
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
-
-#ifdef HAVE_LIBJACK
-    QProcess *m_jackProcess;
-#endif // HAVE_LIBJACK
 
     /// CPU meter in the main window status bar.
     /**
