@@ -24,19 +24,13 @@
 #include "sound/audiostream/AudioWriteStream.h"
 #include "sound/audiostream/AudioWriteStreamFactory.h"
 
+
 namespace Rosegarden
 {
 
-WAVExporter::WAVExporter
-(const QString& fileName) :
-    m_fileName(fileName),
-    m_sampleRate(0),
-    m_start(false),
-    m_stop(false),
-    m_leftChannelBuffer(nullptr),
-    m_rightChannelBuffer(nullptr),
-    m_running(false),
-    m_ws(nullptr)
+
+WAVExporter::WAVExporter(const QString& fileName) :
+    m_fileName(fileName)
 {
   RG_DEBUG << "ctor" << fileName;
 }
@@ -59,8 +53,8 @@ void WAVExporter::stop()
 }
 
 void WAVExporter::addSamples(sample_t *left,
-                                          sample_t *right,
-                                          size_t numSamples)
+                             sample_t *right,
+                             size_t numSamples)
 {
     RG_DEBUG << "addSamples" << left << right << numSamples;
     if (! m_running) {
@@ -91,17 +85,25 @@ void WAVExporter::update()
             RG_DEBUG << "update read" << toRead;
             m_leftChannelBuffer->read(lbuf, toRead);
             m_rightChannelBuffer->read(rbuf, toRead);
+#ifndef NDEBUG
+            // Gather samples squared for debugging.
             double ssq = 0.0;
+#endif
+            // For each interleaved sample...
             for (size_t is=0; is<toRead; is++) {
                 // interleave
                 sample_t s0 = lbuf[is];
                 sample_t s1 = rbuf[is];
+#ifndef NDEBUG
                 ssq += s0 * s0;
                 ssq += s1 * s1;
+#endif
                 ileaveBuf[is*2] = s0;
                 ileaveBuf[is*2 + 1] = s1;
             }
+#ifndef NDEBUG
             RG_DEBUG << "render frames" << toRead << ssq;
+#endif
             if (m_ws)
                 m_ws->putInterleavedFrames(toRead, ileaveBuf);
         }
@@ -122,6 +124,8 @@ void WAVExporter::update()
             m_ws = AudioWriteStreamFactory::createWriteStream
                 (m_fileName, 2, m_sampleRate);
             if (!m_ws) {
+                // ??? Elevate to a message box.  "Unable to create
+                //     write stream for <filename>."  Or similar.
                 RG_WARNING << "Cannot create write stream.";
                 return;
             }
@@ -134,5 +138,6 @@ bool WAVExporter::isComplete() const
 {
     return (m_stop && ! m_running);
 }
+
 
 }

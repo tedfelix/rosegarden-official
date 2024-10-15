@@ -21,12 +21,16 @@
 typedef float sample_t;
 #include "RingBuffer.h"
 
+class QString;
+
+
 namespace Rosegarden
 {
 
+
 class AudioWriteStream;
 
-// Manage export of composition to wav file
+/// Export playback to wav file
 class WAVExporter
 {
 public:
@@ -38,7 +42,7 @@ public:
     /// called by the audio thread on stop playback
     void stop();
 
-    /// called by the aduio thread to provide channel data
+    /// called by the audio thread to provide channel data
     void addSamples(sample_t *left, sample_t *right, size_t numSamples);
 
     /// called by the gui thread to update the file data
@@ -47,18 +51,20 @@ public:
     /// called by the gui thread to request completion status
     bool isComplete() const;
 
- private:
+private:
+
     QString m_fileName;
-    int m_sampleRate;
-    bool m_start;
-    bool m_stop;
-    RingBuffer<sample_t>* m_leftChannelBuffer;
-    RingBuffer<sample_t>* m_rightChannelBuffer;
-    bool m_running;
-    AudioWriteStream *m_ws;
+    int m_sampleRate{0};
+    bool m_start{false};
+    bool m_stop{false};
+    RingBuffer<sample_t>* m_leftChannelBuffer{nullptr};
+    RingBuffer<sample_t>* m_rightChannelBuffer{nullptr};
+    bool m_running{false};
+    AudioWriteStream *m_ws{nullptr};
 
 };
 
+
 }
 
-#endif /* ifndef RG_WAVExporter_H */
+#endif /* ifndef RG_WAVEXPORTER_H */
