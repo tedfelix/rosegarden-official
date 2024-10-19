@@ -1175,14 +1175,20 @@ NotationScene::getCursorCoordinates(timeT t) const
     CursorCoordinates cc;
     cc.allStaffs = QLineF(top.first, top.second,
                           bottom.first, bottom.second);
-    //cc.currentStaff = QLineF(singleTop.first, singleTop.second,
-    //                       singleBottom.first, singleBottom.second);
-    //cc.currentStaff = QLineF(top.first, top.second,
-    //                       bottom.first, bottom.second);
-    //cc.currentStaff = QLineF(top.first, singleTop.second,
-    //                       bottom.first, singleBottom.second);
-    cc.currentStaff = QLineF(singleTop.first, singleTop.second,
-                             singleBottom.first, singleBottom.second);
+
+    // if the time is within the current segment we take the
+    // singleTop/Bottom cursor for time accuracy within that
+    // segment. If the time is outside the current segment we just use
+    // the top/bottom x coordinate to avoid the cursor jumping to the
+    // current segment.
+    cc.currentStaff = QLineF(top.first, singleTop.second,
+                             bottom.first, singleBottom.second);
+    if (currentStaff && currentStaff->includesTime(t)) {
+        // take the cursor position caluclated from the layout
+        cc.currentStaff = QLineF(singleTop.first, singleTop.second,
+                                 singleBottom.first, singleBottom.second);
+    }
+
     return cc;
 }
 
