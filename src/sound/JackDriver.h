@@ -36,6 +36,7 @@ class AudioBussMixer;
 class AudioInstrumentMixer;
 class AudioFileReader;
 class AudioFileWriter;
+class WAVExporter;
 
 class JackDriver
 {
@@ -195,6 +196,8 @@ public:
     //
     void reportFailure(MappedEvent::FailureCode code);
 
+    void installExporter(WAVExporter* wavExporter);
+
 protected:
 
     // static methods for JACK process thread:
@@ -290,8 +293,12 @@ protected:
     bool                         m_ok;
 
     bool m_checkLoad;
-};
 
+ private:
+    /// Previous play state for detecting state transition for export.
+    bool m_playing;
+    WAVExporter* m_exportManager;
+};
 
 }
 
