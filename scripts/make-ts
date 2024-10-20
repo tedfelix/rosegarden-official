@@ -8,17 +8,22 @@
 PERL=perl
 
 # Get strings from presets.xml
-$PERL scripts/extract_instrument_tr_strings.pl data/presets/presets.xml \
-      >data/InstrumentStrings.cpp
+$PERL scripts/extract_instrument_tr_strings.pl \
+            -info=data/new_contexts_1.txt data/presets/presets.xml \
+            > data/InstrumentStrings.cpp
 
 # Get strings from the .rc files.
 $PERL scripts/extract_menu_tr_strings.pl data/rc/*.rc >data/QMenuStrings.cpp
 
 # Get strings from autoload.rg
 gunzip -c data/autoload/autoload.rg > data/autoload/autoload.xml
-$PERL scripts/extract_autoload_tr_strings.pl data/autoload/autoload.xml \
-      >data/AutoloadStrings.cpp
+$PERL scripts/extract_autoload_tr_strings.pl \
+            -info=data/new_contexts_2.txt data/autoload/autoload.xml \
+            > data/AutoloadStrings.cpp
 rm -f data/autoload/autoload.xml
+
+# Merge the new contexts info files
+cat data/new_contexts_1.txt data/new_contexts_2.txt > data/new_contexts.txt
 
 mkdir -p data/locale
 

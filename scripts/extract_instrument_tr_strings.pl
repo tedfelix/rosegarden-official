@@ -1,5 +1,15 @@
 #!/usr/bin/perl -w
 
+# Usage:
+#  perl extract_instrument_tr_strings.pl [-info=<outputInfoFile>]  \
+#      <inputFile1> [<inputFile2> ...] > <outPutFile.cpp>
+#
+#   "-info=" specify an optional file where the new translations source
+#            and context are written
+#   <inputFile1>, ... are the input .xml files
+#   The output Qt C++ code is written on stdout
+
+
 use strict;
 
 print qq{
@@ -34,36 +44,39 @@ print qq{
 
 };
 
-my $file = $ARGV[0];
-my $nextfile = $ARGV[1];
+
+# If asked for, output a file for writing the list of
+# translations with a new context
+my $wantInfo = 0;
+if ($ARGV[0] =~ /^-info=(.*)$/) {
+    open INFO, ">$1" or die "Can't open $1 for writing";
+    shift @ARGV;
+    $wantInfo = 1;
+}
+
+
+sub output
+{
+    my ($context, $name, $comment) = @_;
+    print 'QT_TRANSLATE_NOOP("', $context, '", "', $name, '");';
+    print ' /* ', $comment, " */\n";
+    print INFO $context, "\t", $name, "\n" if $wantInfo;
+}
+
+
 my $category_name = "";
 my $instrument_name = "";
 while (<>) {
-    if ($ARGV[0]) {
-        if ($nextfile ne $ARGV[0]) {
-            $file = $nextfile;
-            $nextfile = $ARGV[0];
-        }
-    }
     my $line = $_;
-
+    my $file = $ARGV;
 
     if ($line =~ /category name="([^"]*)"/) {
         $category_name = $1;
         $instrument_name = "";
-
-        print 'QObject::tr("' . $category_name . '");';
-        print ' /* ' . $file;
-        print ' */
-';
+        output "INSTRUMENT", $category_name, $file;
     } elsif ($line =~ /instrument name="([^"]*)"/) {
-	$instrument_name = $1;
-
-        print 'QObject::tr("' . $instrument_name . '");';
-        print ' /* ' . $file;
-        print ' : ' . $category_name;
-        print ' */
-';
+        $instrument_name = $1;
+        output "INSTRUMENT", $instrument_name, $file;
     }
 }
 

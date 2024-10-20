@@ -1,5 +1,15 @@
 #!/usr/bin/perl -w
 
+# Usage:
+#  perl extract_autoload_tr_strings.pl [-info=<outputInfoFile>]  \
+#      <inputFile1> [<inputFile2> ...] > <outPutFile.cpp>
+#
+#   "-info=" specify an optional file where the new translations source
+#            and context are written
+#   <inputFile1>, ... are the input .xml files
+#   The output Qt C++ code is written on stdout
+
+
 use strict;
 
 print qq{
@@ -42,17 +52,31 @@ print qq{
 
 };
 
-my $file = $ARGV[0];
-my $nextfile = $ARGV[1];
+
+# If asked for, output a file for writing the list of
+# translations with a new context
+my $wantInfo = 0;
+if ($ARGV[0] =~ /^-info=(.*)$/) {
+    open INFO, ">$1" or die "Can't open $1 for writing";
+    shift @ARGV;
+    $wantInfo = 1;
+}
+
+
+sub output
+{
+    my ($context, $name, $comment) = @_;
+    print 'QT_TRANSLATE_NOOP("', $context, '", "', $name, '");';
+    print ' /* ', $comment, " */\n";
+    print INFO $context, "\t", $name, "\n" if $wantInfo;
+}
+
+
 my $name = "";
 while (<>) {
-    if ($ARGV[0]) {
-        if ($nextfile ne $ARGV[0]) {
-            $file = $nextfile;
-            $nextfile = $ARGV[0];
-        }
-    }
     my $line = $_;
+    my $context = "";
+    my $file = $ARGV;
 
     if ($line =~ /name="([^"]*)"/) {
         $name = $1;
@@ -64,40 +88,69 @@ while (<>) {
             ($name ne "subtitle")         &&
             ($name ne "author")           &&
             ($name ne "Michael McIntyre") &&
+            ($name ne "colourmap")        &&
             ($name ne "segmentmap")) {
 
-                print 'QObject::tr("' . $name . '");';
-                print ' /* ' . $file;
-                print ' */
-';
+                # get more info about context
+                if ($line =~ /<key number=/) {
+                    $context = "INSTRUMENT";
+                } elsif ($line =~ /<keymapping/) {
+                    $context = "INSTRUMENT";
+                 } elsif ($line =~ /<program/) {
+                    $context = "INSTRUMENT";
+                } elsif ($line =~ /<bank name=/) {
+                    $context = "INSTRUMENT";
+                } elsif ($line =~ /<control name=/) {
+                    $context = "MIDI_CONTROLLER";
+                } elsif ($line =~ /<colourpair/) {
+                    $context = "COLOUR";
+                } else {
+                    # Keep QObject context
+                }
+
+                if ($context) {
+                    output $context, $name, $file;
+                } else {
+                    print 'QObject::tr("', $name, '");';
+                    print ' /* ', $file, " */\n";
+                }
         }
     }
 }
 
+
 # Some extra strings that didn't get extracted, probably due to a simple bug,
 # but should be included (remember folks, I don't speak Prle):
-print 'QObject::tr("Copyright (c) xxxx Copyright Holder"); /* default LilyPond/notation header */
-';
-print 'QObject::tr("Not Yet Titled");                      /* default LilyPond/notation header */
-';
-print 'QObject::tr("not yet subtitled");                   /* default LilyPond/notation header */
-';
-print 'QObject::tr("Unknown");                             /* default LilyPond/notation header */
-';
 
-print 'QObject::tr("Pan");                                 /* default MIDI controller */
-';
-print 'QObject::tr("Chorus");                              /* default MIDI controller */
-';
-print 'QObject::tr("Volume");                              /* default MIDI controller */
-';
-print 'QObject::tr("Reverb");                              /* default MIDI controller */
-';
-print 'QObject::tr("Sustain");                             /* default MIDI controller */
-';
-print 'QObject::tr("Expression");                          /* default MIDI controller */
-';
-print 'QObject::tr("Modulation");                          /* default MIDI controller */
-';
-print 'QObject::tr("PitchBend");                           /* default MIDI controller */
-';
+output "LILYPOND", "Copyright (c) xxxx Copyright Holder",
+                                "default LilyPond/notation header";
+
+output "LILYPOND", "Not Yet Titled", "default LilyPond/notation header";
+
+output "LILYPOND", "not yet subtitled", "default LilyPond/notation header";
+
+output "LILYPOND", "Unknown", "default LilyPond/notation header";
+
+
+# In spite of the preceding comment, the following ones seem correctly extracted
+
+# print 'QObject::tr("Pan");                                 /* default MIDI controller */
+# ';
+# print 'QObject::tr("Chorus");                              /* default MIDI controller */
+# ';
+# print 'QObject::tr("Volume");                              /* default MIDI controller */
+# ';
+# print 'QObject::tr("Reverb");                              /* default MIDI controller */
+# ';
+# print 'QObject::tr("Sustain");                             /* default MIDI controller */
+# ';
+# print 'QObject::tr("Expression");                          /* default MIDI controller */
+# ';
+# print 'QObject::tr("Modulation");                          /* default MIDI controller */
+# ';
+# print 'QObject::tr("PitchBend");                           /* default MIDI controller */
+# ';
+
+
+close INFO;
+

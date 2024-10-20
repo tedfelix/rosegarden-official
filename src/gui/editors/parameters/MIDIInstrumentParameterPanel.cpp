@@ -32,6 +32,7 @@
 #include "gui/widgets/Rotary.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "misc/Debug.h"
+#include "misc/InstrumentsTr.h"
 #include "misc/Preferences.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
@@ -734,9 +735,28 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         // Copy from m_programs to m_programComboBox.
         m_programComboBox->clear();
         for (unsigned i = 0; i < m_programs.size(); ++i) {
+            // m_programComboBox->addItem(instrTr("%1. %2")
+            //                            .arg(m_programs[i].getProgram() + 1)
+            //                            .arg(QObject::tr(m_programs[i].getName().c_str())));
+
+
+            // m_programComboBox->addItem(QObject::tr("%1. %2")
+            //                            .arg(m_programs[i].getProgram() + 1)
+            //                            .arg(QObject::tr(m_programs[i].getName().c_str())));
+
             m_programComboBox->addItem(QObject::tr("%1. %2")
                                        .arg(m_programs[i].getProgram() + 1)
-                                       .arg(QObject::tr(m_programs[i].getName().c_str())));
+                                       .arg(QCoreApplication::translate("INSTRMENTS", m_programs[i].getName().c_str())));
+
+
+
+
+            // m_programComboBox->addItem(QObject::tr(m_programs[i].getName().c_str()));
+
+
+            // m_programComboBox->addItem(QObject::tr("%1. %2")
+            //                            .arg(m_programs[i].getProgram() + 1)
+            //                            .arg(QObject::tr(m_programs[i].getName().c_str())));
         }
     }
 
