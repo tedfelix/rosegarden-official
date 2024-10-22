@@ -100,7 +100,7 @@ protected:
     QLabel               *m_tempoBeat;
     QLabel               *m_tempoBeatsPerMinute;
 
-    TimeWidget           *m_timeEditor;
+    TimeWidget           *m_timeEditor{nullptr};
 
     QLabel               *m_tempoTimeLabel;
     QLabel               *m_tempoBarLabel;

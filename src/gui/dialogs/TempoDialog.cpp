@@ -56,16 +56,12 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 {
     setModal(true);
     setWindowTitle(tr("Insert Tempo Change"));
-    // ??? This doesn't appear to be used anywhere.
-    setObjectName("MinorDialog");
 
-    // ??? Get rid of this.  Just use "this".
-    QWidget *vbox = dynamic_cast<QWidget *>(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    vbox->setLayout(vboxLayout);
+    setLayout(vboxLayout);
 
-    // group box for tempo
-    QGroupBox *tempoGroupBox = new QGroupBox(tr("Tempo"), vbox);
+    // Tempo group box
+    QGroupBox *tempoGroupBox = new QGroupBox(tr("Tempo"), this);
     tempoGroupBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *tempoLayout = new QGridLayout;
     tempoLayout->setSpacing(5);
@@ -100,13 +96,15 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
     tempoLayout->addWidget(m_tempoBeatsPerMinute, 0, 6);
 
     // Tempo is fixed...
-    m_tempoConstant = new QRadioButton(tr("Tempo is fixed until the following tempo change"), tempoGroupBox);
+    m_tempoConstant = new QRadioButton(
+            tr("Tempo is fixed until the following tempo change"), tempoGroupBox);
     connect(m_tempoConstant, &QAbstractButton::clicked,
             this, &TempoDialog::slotTempoConstantClicked);
     tempoLayout->addWidget(m_tempoConstant, 1, 1, 1, 2);
 
-    // Tempo ramps to the following...
-    m_tempoRampToNext = new QRadioButton(tr("Tempo ramps to the following tempo"), tempoGroupBox);
+    // Tempo ramps to the following tempo
+    m_tempoRampToNext = new QRadioButton(
+            tr("Tempo ramps to the following tempo"), tempoGroupBox);
     connect(m_tempoRampToNext, &QAbstractButton::clicked,
             this, &TempoDialog::slotTempoRampToNextClicked);
     tempoLayout->addWidget(m_tempoRampToNext, 2, 1, 1, 2);
@@ -129,22 +127,21 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
             SLOT(slotTargetChanged(double)));
     tempoLayout->addWidget(m_tempoTargetSpinBox, 3, 2);
 
-    m_timeEditor = nullptr;
-
     if (timeEditable) {
 
         m_timeEditor = new TimeWidget(
                 tr("Time of tempo change"),  // title
-                vbox,  // parent
+                this,  // parent
                 &m_doc->getComposition(),  // composition
                 0,  // initialTime
                 true);  // editable
+
         vboxLayout->addWidget(m_timeEditor);
 
     } else {
 
         // group box for scope (area)
-        QGroupBox *scopeGroup = new QGroupBox(tr("Scope"), vbox);
+        QGroupBox *scopeGroup = new QGroupBox(tr("Scope"), this);
         vboxLayout->addWidget(scopeGroup);
 
         QVBoxLayout * scopeBoxLayout = new QVBoxLayout(scopeGroup);
@@ -181,19 +178,23 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         changeWhereBox->setLayout(changeWhereBoxLayout);
         changeWhereBoxLayout->setStretchFactor(changeWhereVBox, 20);
 
-        m_tempoChangeHere = new QRadioButton(tr("Apply this tempo from here onwards"), changeWhereVBox);
+        m_tempoChangeHere = new QRadioButton(
+                tr("Apply this tempo from here onwards"), changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeHere);
 
-        m_tempoChangeBefore = new QRadioButton(tr("Replace the last tempo change"), changeWhereVBox);
+        m_tempoChangeBefore = new QRadioButton(
+                tr("Replace the last tempo change"), changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeBefore);
         m_tempoChangeBeforeAt = new QLabel(changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeBeforeAt);
         m_tempoChangeBeforeAt->hide();
 
-        m_tempoChangeStartOfBar = new QRadioButton(tr("Apply this tempo from the start of this bar"), changeWhereVBox);
+        m_tempoChangeStartOfBar = new QRadioButton(
+                tr("Apply this tempo from the start of this bar"), changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeStartOfBar);
 
-        m_tempoChangeGlobal = new QRadioButton(tr("Apply this tempo to the whole composition"), changeWhereVBox);
+        m_tempoChangeGlobal = new QRadioButton(
+                tr("Apply this tempo to the whole composition"), changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeGlobal);
 
         QWidget *optionHBox = new QWidget(changeWhereVBox);
@@ -202,7 +203,8 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         QHBoxLayout *optionHBoxLayout = new QHBoxLayout;
         QLabel *child_6 = new QLabel("         ", optionHBox);
         optionHBoxLayout->addWidget(child_6);
-        m_defaultBox = new QCheckBox(tr("Also make this the default tempo"), optionHBox);
+        m_defaultBox = new QCheckBox(
+                tr("Also make this the default tempo"), optionHBox);
         optionHBoxLayout->addWidget(m_defaultBox);
         spare = new QLabel(optionHBox);
         optionHBoxLayout->addWidget(spare);
@@ -224,12 +226,15 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         m_defaultBox->setEnabled(false);
     }
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel |
+            QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TempoDialog::slotHelpRequested);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &TempoDialog::slotHelpRequested);
 
     populateTempo();
 }
