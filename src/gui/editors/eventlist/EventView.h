@@ -190,8 +190,6 @@ private:
     /// Create and show popup menu.
     void createPopUpMenu();
 
-    // updateTreeWidget() uses this.  It is set several other places.
-    std::vector<int> m_listSelection;
     void makeInitialSelection(timeT);
 
     /// Events deleted since last updateTreeWidget().

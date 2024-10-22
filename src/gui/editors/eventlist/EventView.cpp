@@ -719,12 +719,11 @@ EventView::updateTreeWidget()
 void
 EventView::makeInitialSelection(timeT time)
 {
-    m_listSelection.clear();
-
     const int itemCount = m_treeWidget->topLevelItemCount();
 
     EventViewItem *foundItem{nullptr};
-    int foundRow{0};
+    // Unused for tree.  We'll likely need it for QTableWidget.
+    //int foundRow{0};
 
     // For each row in the event list.
     for (int row = 0; row < itemCount; ++row) {
@@ -743,7 +742,7 @@ EventView::makeInitialSelection(timeT time)
 
         // Remember the last good item.
         foundItem = item;
-        foundRow = row;
+        //foundRow = row;
     }
 
     // Nothing found?  Bail.
@@ -755,7 +754,6 @@ EventView::makeInitialSelection(timeT time)
 
     // Select the item
     foundItem->setSelected(true);
-    m_listSelection.push_back(foundRow);
 
     // Yield to the event loop so that the UI will be rendered before calling
     // scrollToItem().
@@ -938,47 +936,30 @@ EventView::slotTriggerRetuneChanged()
 void
 EventView::slotEditCut()
 {
-    QList<QTreeWidgetItem*> selection = m_treeWidget->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
-    if (selection.count() == 0)
-        return ;
+    if (selection.empty())
+        return;
 
     RG_DEBUG << "slotEditCut() - cutting " << selection.count() << " items";
 
-//    QPtrListIterator<QTreeWidgetItem> it(selection);
-    EventSelection *cutSelection = nullptr;
-    int itemIndex = -1;
+    EventSelection cutSelection(*m_segments[0]);
 
-//    while ((listItem = it.current()) != 0) {
-    for( int i=0; i< selection.size(); i++ ){
+    for (int i = 0; i < selection.size(); ++i) {
         QTreeWidgetItem *listItem = selection.at(i);
 
-//        item = dynamic_cast<EventViewItem*>((*it));
-        EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
+        EventViewItem *item = dynamic_cast<EventViewItem *>(listItem);
+        if (!item)
+            continue;
 
-        if (itemIndex == -1)
-            itemIndex = m_treeWidget->indexOfTopLevelItem(listItem);
-            //itemIndex = m_treeWidget->itemIndex(*it);
-
-        if (item) {
-            if (cutSelection == nullptr)
-                cutSelection =
-                    new EventSelection(*(item->getSegment()));
-
-            cutSelection->addEvent(item->getEvent());
-        }
-//        ++it;
+        cutSelection.addEvent(item->getEvent());
     }
 
-    if (cutSelection) {
-        if (itemIndex >= 0) {
-            m_listSelection.clear();
-            m_listSelection.push_back(itemIndex);
-        }
+    if (cutSelection.empty())
+        return;
 
-        CommandHistory::getInstance()->addCommand(
-                new CutCommand(cutSelection, Clipboard::mainClipboard()));
-    }
+    CommandHistory::getInstance()->addCommand(
+            new CutCommand(&cutSelection, Clipboard::mainClipboard()));
 }
 
 void
@@ -994,9 +975,6 @@ EventView::slotEditCopy()
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     EventSelection *copySelection = nullptr;
 
-    // clear the selection for post modification updating
-    //
-    m_listSelection.clear();
 
 //    while ((listItem = it.current()) != 0) {
     for( int i=0; i< selection.size(); i++ ){
@@ -1004,9 +982,6 @@ EventView::slotEditCopy()
 
 //         item = dynamic_cast<EventViewItem*>((*it));
         EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
-
-//         m_listSelection.push_back(m_treeWidget->itemIndex(*it));
-        m_listSelection.push_back(m_treeWidget->indexOfTopLevelItem(listItem));
 
         if (item) {
             if (copySelection == nullptr)
@@ -1043,20 +1018,6 @@ EventView::slotEditPaste()
 
         if (item)
             insertionTime = item->getEvent()->getAbsoluteTime();
-
-        // remember the selection
-        //
-        m_listSelection.clear();
-
-//        QPtrListIterator<QTreeWidgetItem> it(selection);
-
-//        while ((listItem = it.current()) != 0) {
-        for( int i=0; i< selection.size(); i++ ){
-            QTreeWidgetItem *listItem = selection.at(i);
-
-            m_listSelection.push_back(m_treeWidget->indexOfTopLevelItem(listItem));
-//             ++it;
-        }
     }
 
 
@@ -1083,7 +1044,6 @@ EventView::slotEditDelete()
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     EventSelection *deleteSelection = nullptr;
-    int itemIndex = -1;
 
 //    while ((listItem = it.current()) != 0) {
     for( int i=0; i< selection.size(); i++ ){
@@ -1091,10 +1051,6 @@ EventView::slotEditDelete()
 
 //         item = dynamic_cast<EventViewItem*>((*it));
         EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
-
-        if (itemIndex == -1)
-            itemIndex = m_treeWidget->indexOfTopLevelItem(listItem);
-            //itemIndex = m_treeWidget->itemIndex(*it);
 
         if (item) {
             if (m_deletedEvents.find(item->getEvent()) != m_deletedEvents.end()) {
@@ -1112,11 +1068,6 @@ EventView::slotEditDelete()
     }
 
     if (deleteSelection) {
-
-        if (itemIndex >= 0) {
-            m_listSelection.clear();
-            m_listSelection.push_back(itemIndex);
-        }
 
         CommandHistory::getInstance()->addCommand(
                 new EraseCommand(deleteSelection));
@@ -1272,9 +1223,7 @@ EventView::slotEditEventAdvanced()
 void
 EventView::slotSelectAll()
 {
-    m_listSelection.clear();
     for (int i = 0; m_treeWidget->topLevelItem(i); ++i) {
-        m_listSelection.push_back(i);
         //m_treeWidget->setSelected(m_treeWidget->topLevelItem(i), true);
         m_treeWidget->setCurrentItem(m_treeWidget->topLevelItem(i));
     }
@@ -1283,9 +1232,9 @@ EventView::slotSelectAll()
 void
 EventView::slotClearSelection()
 {
-    m_listSelection.clear();
     for (int i = 0; m_treeWidget->topLevelItem(i); ++i) {
         //m_treeWidget->setSelected(m_treeWidget->topLevelItem(i), false);
+        // ??? Set all to current!?  That's not the right way to do this.
         m_treeWidget->setCurrentItem(m_treeWidget->topLevelItem(i));
     }
 }
