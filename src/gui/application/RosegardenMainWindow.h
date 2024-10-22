@@ -431,7 +431,7 @@ protected:
      * good and that (if it exists) the user agrees to overwrite.
      * Return a null string if the write should not go ahead.
      */
-    QString getValidWriteFileName(QString descriptiveExtension, QString label);
+    QString launchSaveAsDialog(QString filter, QString label);
 
     /**
      * Find any non-ASCII strings in a composition that has been
@@ -656,6 +656,11 @@ public slots:
      * Let the user enter a MusicXml file to export to
      */
     void slotExportMusicXml();
+
+    /**
+     * Export (render) file to audio (only audio and synth plugins)
+     */
+    void slotExportWAV();
 
     /**
      * closes all open windows by calling close() on each memberList
@@ -1566,10 +1571,6 @@ private:
 
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
-
-#ifdef HAVE_LIBJACK
-    QProcess *m_jackProcess;
-#endif // HAVE_LIBJACK
 
     /// CPU meter in the main window status bar.
     /**

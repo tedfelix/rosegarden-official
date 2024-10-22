@@ -260,7 +260,7 @@ public:
      */
     timeT getTimeAtSceneCoords(double cx, int cy) const;
 
-    bool includesTime(timeT t);
+    bool includesTime(timeT t) const;
 
     timeT getStartTime() const;
 

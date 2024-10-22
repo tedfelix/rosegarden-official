@@ -246,6 +246,7 @@
 #include <QSharedPointer>
 #include <QInputDialog>
 #include <QThread>
+#include <QStandardPaths>
 
 // Ladish lv1 support
 #include <cerrno>   // for errno
@@ -271,9 +272,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_recentFiles(),
     m_sequencerThread(nullptr),
     m_sequencerCheckedIn(false),
-#ifdef HAVE_LIBJACK
-    m_jackProcess(nullptr),
-#endif
     m_cpuBar(nullptr),
     m_zoomSlider(nullptr),
     m_zoomLabel(nullptr),
@@ -747,6 +745,7 @@ RosegardenMainWindow::setupActions()
     createAction("file_export_midi", SLOT(slotExportMIDI()));
     createAction("file_export_lilypond", SLOT(slotExportLilyPond()));
     createAction("file_export_musicxml", SLOT(slotExportMusicXml()));
+    createAction("file_export_wav", SLOT(slotExportWAV()));
     createAction("file_export_csound", SLOT(slotExportCsound()));
     createAction("file_export_mup", SLOT(slotExportMup()));
     createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
@@ -2133,94 +2132,93 @@ RosegardenMainWindow::slotFileSave()
 }
 
 QString
-RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
-                                            QString label)
+RosegardenMainWindow::launchSaveAsDialog(QString filter,
+                                         QString label)
 {
-    // extract first extension listed in descriptiveExtension, for instance,
+
+    const QFileInfo originalFileInfo(
+            RosegardenDocument::currentDocument->getAbsFilePath());
+
+    // Extract first extension listed in filter, for instance,
     // ".rg" from "Rosegarden files (*.rg)", or ".mid" from
     // "MIDI Files (*.mid *.midi)"
-    //
-    int left = descriptiveExtension.indexOf("*.");
-    int right = descriptiveExtension.indexOf(QRegularExpression("[ ]"),left);
-    QString extension = descriptiveExtension.mid(left+1,right-left-1);
+    const int left = filter.indexOf("*.");
+    const int right = filter.indexOf(
+            QRegularExpression("[ ]"),left);
+    const QString filterExtension =
+            filter.mid(left + 1, right - left - 1);
 
-    // keep track of last place used to save, by type of file (this behavior is
-    // quite new and different, and should probably be considered experimental,
-    // although the more I think about the unexpected consequences of this idea
-    // that I didn't think through at the outset, the more I think the idea is
-    // just better than I realized, and this was a great idea)
-    QString path_key = "save_file";
-
-    if (extension == ".rgt")      path_key = "save_template";
-    else if (extension == ".mid") path_key = "export_midi";
-    else if (extension == ".xml") path_key = "export_music_xml";
-    else if (extension == ".ly")  path_key = "export_lilypond";
-    else if (extension == ".csd") path_key = "export_csound";
-    else if (extension == ".mup") path_key = "export_mup";
-
-//RG_DEBUG <<
-//    "getValidWriteFileName() : extension  = " <<
-//    extension << endl <<
-//    "                                                path key   = " <<
-//    path_key;
-
-    // Get the directory from the settings
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
-    QString directory = settings.value(path_key, QDir::homePath()).toString();
+    QString path_key = "save_file";
 
-    QFileInfo originalFileInfo(RosegardenDocument::currentDocument->getAbsFilePath());
+    QString directory;
+
+    // Set this to 1 for the original behavior where each extension had
+    // its own persistent path in the settings.
+#define PATH_BY_EXTENSION 0
+
+#if PATH_BY_EXTENSION
+
+    // Keep track of last place used to save, by type of file.
+    // This is useful for a workflow where different file types are
+    // kept in different directories.
+
+    if (filterExtension == ".rgt")      path_key = "save_template";
+    else if (filterExtension == ".mid") path_key = "export_midi";
+    else if (filterExtension == ".xml") path_key = "export_music_xml";
+    else if (filterExtension == ".ly")  path_key = "export_lilypond";
+    else if (filterExtension == ".csd") path_key = "export_csound";
+    else if (filterExtension == ".mup") path_key = "export_mup";
+
+    // Get the directory from the settings
+    directory = settings.value(path_key, QDir::homePath()).toString();
+
+#else
 
     // Most applications (e.g. OpenOffice.org and the GIMP) use the document's
     // directory for Save As... and Export rather than the last directory
-    // the user saved to.  To use the document's directory, replace
-    // "directory" in the FileDialog::getSaveFileName() call with
-    // originalFileInfo.absolutePath().
+    // the user saved to.  This code implements that approach along with
+    // remembering the previous save directory for unnamed files.
 
-    // Confirm the overwrite of the file later.
-    //
-    // (Hah, all these compiler warnings are useful for something after all.
-    // This used to not do anything with the label parameter, and always said
-    // "Save File" 100% of the time.)
+    const bool unnamed =
+            RosegardenDocument::currentDocument->getAbsFilePath().isEmpty();
+
+    if (unnamed) {
+        // Go with last save location, or DocumentsLocation if there is none.
+        directory = settings.value(
+                path_key,
+                QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
+    } else {
+        directory = originalFileInfo.absolutePath();
+    }
+
+#endif
+
+    // Launch the Save As dialog.
     QString name = FileDialog::getSaveFileName(
-        this, label, directory,
-        originalFileInfo.baseName(), descriptiveExtension, nullptr,
-        FileDialog::DontConfirmOverwrite);
-
-//RG_DEBUG << "getValidWriteFileName() : " <<
-//            "FileDialog::getSaveFileName returned " << name;
+            this,  // parent
+            label,  // caption
+            directory,  // dir
+            originalFileInfo.baseName(),  // defaultName
+            filter,  // filter
+            nullptr,  // selectedFilter
+            FileDialog::DontConfirmOverwrite);  // options
 
     if (name.isEmpty())
         return name;
 
-    // Append extension if we don't have one
-    //
-    if (!extension.isEmpty()) {
+    // If we have a filter extension...
+    if (!filterExtension.isEmpty()) {
         static QRegularExpression rgFile("\\..{1,4}$");
-        if (! rgFile.match(name).hasMatch()) {
-            name += extension;
-        }
+        // If the file name has no extension, add the filter extension.
+        if (!rgFile.match(name).hasMatch())
+            name += filterExtension;
     }
 
-    // if we get a string like "/tmp/~/foo.rg" assume the last saved path was
-    // /tmp and the desired new path is ~ and try to doctor the string up, which
-    // may well fail, but it's better to try
-    if (name.contains("~")) {
-        name = name.remove(0, name.indexOf("~") + 1);
-        name = name.prepend(QDir::homePath());
+    const QFileInfo info(name);
 
-//RG_DEBUG << "doctored filename after ~ swap: " << name;
-
-    }
-
-    QFileInfo info(name);
-
-    if (info.isDir()) {
-        QMessageBox::warning(this, tr("Rosegarden"),
-                             tr("You have specified a folder/directory."));
-        return "";
-    }
-
+    // Confirm overwrite.
     if (info.exists()) {
         int overwrite = QMessageBox::question(
                 this,
@@ -2234,9 +2232,7 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     }
 
     // Write the directory to the settings
-    QDir d = QFileInfo(name).dir();
-    directory = d.canonicalPath();
-    settings.setValue(path_key, directory);
+    settings.setValue(path_key, info.canonicalPath());
     settings.endGroup();
 
     return name;
@@ -2248,18 +2244,19 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     if (!RosegardenDocument::currentDocument)
         return false;
 
+    // Display a message on the status bar.
     TmpStatusMsg msg(tr("Saving file%1with a new filename...",
                         "'file%1with' is correct. %1 will either become ' ' or ' as a template ' at runtime").
-                        arg(asTemplate ? tr(" as a template ") : " "), this);
+                        arg(asTemplate ? tr(" as a template ") : " "),  // msg
+                     this);  // window
 
-    QString fileType(asTemplate ? tr("Rosegarden templates") : tr("Rosegarden files"));
-    QString fileExtension(asTemplate ? " (*.rgt *.RGT)" : " (*.rg *.RG)");
-    QString dialogMessage(asTemplate ? tr("Save as template...") : tr("Save as..."));
+    const QString fileType(asTemplate ? tr("Rosegarden templates") : tr("Rosegarden files"));
+    const QString fileExtension(asTemplate ? " (*.rgt *.RGT)" : " (*.rg *.RG)");
+    const QString dialogMessage(asTemplate ? tr("Save as template...") : tr("Save as..."));
 
-    QString newName = getValidWriteFileName
-                      (fileType + fileExtension + ";;" +
-                       tr("All files") + " (*)",
-                       dialogMessage);
+    const QString newName = launchSaveAsDialog(
+            fileType + fileExtension + ";;" + tr("All files") + " (*)",
+            dialogMessage);
     if (newName.isEmpty())
         return false;
 
@@ -5080,70 +5077,6 @@ RosegardenMainWindow::slotTestStartupTester()
         return ;
     }
 
-/*    QStringList missingFeatures;
-    QStringList allMissing;
-
-    QStringList missing;
-
-#ifdef HAVE_LIBJACK
-    if (m_seqManager && (m_seqManager->getSoundDriverStatus() & AUDIO_OK)) {
-
-        m_haveAudioImporter = m_startupTester->haveAudioFileImporter(&missing);
-
-        if (!m_haveAudioImporter) {
-            missingFeatures.push_back(tr("General audio file import and conversion"));
-            if (missing.count() == 0) {
-                allMissing.push_back(tr("The Rosegarden Audio File Importer helper script"));
-            } else {
-                for (int i = 0; i < missing.count(); ++i) {
-                    if (missingFeatures.count() > 1) {
-                        allMissing.push_back(tr("%1 - for audio file import").arg(missing[i]));
-                    } else {
-                        allMissing.push_back(missing[i]);
-                    }
-                }
-            }
-        }
-    }
-#endif
-
-    if (missingFeatures.count() > 0) {
-        QString message = tr("<h3>Helper programs not found</h3><p>Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:</p>");
-        message += tr("<ul>");
-        for (int i = 0; i < missingFeatures.count(); ++i) {
-            message += tr("<li>%1</li>").arg(missingFeatures[i]);
-        }
-        message += tr("</ul>");
-        message += tr("<p>To fix this, you should install the following additional programs:</p>");
-        message += tr("<ul>");
-        for (int i = 0; i < allMissing.count(); ++i) {
-            message += tr("<li>%1</li>").arg(allMissing[i]);
-        }
-        message += tr("</ul>");
-
-        awaitDialogClearance();
-
-        QString shortMessage = tr("Helper programs not found");
-
-//        QMessageBox info(m_view);
-//        info.setText(shortMessage);
-//        info.setInformativeText(message);
-//        info.setStandardButtons(QMessageBox::Ok);
-//        info.setDefaultButton(QMessageBox::Ok);
-//        info.setIcon(QMessageBox::Warning);
-//
-//        if (!DialogSuppressor::shouldSuppress
-//            (&info, "startuphelpersmissing")) {
-//            info.exec();
-//        }
-
-        // Looks like Thorn will have to keep the startup test for
-        // audiofile-importer around indefinitely, and so we need to move that
-        // irritating @#@^@#^ dialog into the warning widget, and get it out of
-        // my face before I punch it right in the nose.
-        m_warningWidget->queueMessage(shortMessage, message);
-    }*/
-
     m_startupTester->wait();
     delete m_startupTester;
     m_startupTester = nullptr;
@@ -5219,7 +5152,7 @@ RosegardenMainWindow::slotExportProject()
 {
     TmpStatusMsg msg(tr("Exporting Rosegarden Project file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5255,7 +5188,7 @@ RosegardenMainWindow::slotExportMIDI()
 {
     TmpStatusMsg msg(tr("Exporting MIDI file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("Standard MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5301,7 +5234,7 @@ RosegardenMainWindow::slotExportCsound()
 {
     TmpStatusMsg msg(tr("Exporting Csound score file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("Csound files") + " (*.csd *.CSD)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5354,7 +5287,7 @@ RosegardenMainWindow::slotExportMup()
 {
     TmpStatusMsg msg(tr("Exporting Mup file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("Mup files") + " (*.mup *.MUP)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5402,7 +5335,7 @@ RosegardenMainWindow::slotExportLilyPond()
 {
     TmpStatusMsg msg(tr("Exporting LilyPond file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("LilyPond files") + " (*.ly *.LY)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5524,7 +5457,7 @@ RosegardenMainWindow::slotExportMusicXml()
 {
     TmpStatusMsg msg(tr("Exporting MusicXML file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("XML files") + " (*.xml *.XML)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5533,6 +5466,49 @@ RosegardenMainWindow::slotExportMusicXml()
         return ;
 
     exportMusicXmlFile(fileName);
+}
+
+void
+RosegardenMainWindow::slotExportWAV()
+{
+    RG_DEBUG << "slotExportWAV()";
+
+    if (!m_seqManager)
+        return;
+
+    if (!(m_seqManager->getSoundDriverStatus() & AUDIO_OK)) {
+        QMessageBox::information(
+                    this,  // parent
+                    tr("Rosegarden"),  // title
+                    tr("Unable to export WAV without JACK running."));  // text
+        return;
+    }
+
+    QString fileName = FileDialog::getSaveFileName(
+            this,  // parent
+            tr("Rosegarden"),  // caption
+            "",  // dir
+            "",  // defaultName
+            tr("WAV files") + " (*.wav)");  // filter
+
+    if (fileName.isEmpty())
+        return;
+
+    if (fileName.right(4).toLower() != ".wav")
+        fileName += ".wav";
+
+    QString msg = tr(
+            "Press play to start exporting to\n"
+            "%1\n"
+            "Press stop to stop export.\n"
+            "Only audio and synth plugin tracks will be exported").arg(fileName);
+
+    QMessageBox::information(
+            this,  // parent
+            tr("Rosegarden"),  // title
+            msg);  // text
+
+    m_seqManager->setExportWavFile(fileName);
 }
 
 void

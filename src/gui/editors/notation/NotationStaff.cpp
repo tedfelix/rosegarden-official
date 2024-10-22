@@ -1979,7 +1979,7 @@ NotationStaff::makeViewElement(Rosegarden::Event* e)
 }
 
 bool
-NotationStaff::includesTime(timeT t)
+NotationStaff::includesTime(timeT t) const
 {
     Composition *composition = getSegment().getComposition();
 

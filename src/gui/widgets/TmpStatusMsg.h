@@ -46,9 +46,9 @@ public:
 
     /**
      * Creates a new temporary status message on the status bar
-     * of the specified KMainWindow.
+     * of the specified QMainWindow.
      */
-    TmpStatusMsg(const QString& msg, QMainWindow* window);
+    TmpStatusMsg(const QString &msg, QMainWindow *window);
 
     ~TmpStatusMsg();
 

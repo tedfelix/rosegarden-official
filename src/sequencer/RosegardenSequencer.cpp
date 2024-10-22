@@ -1524,6 +1524,12 @@ RosegardenSequencer::initialiseStudio()
 }
 
 void
+RosegardenSequencer::installExporter(WAVExporter* wavExporter)
+{
+    m_driver->installExporter(wavExporter);
+}
+
+void
 RosegardenSequencer::checkForNewClients()
 {
     // Don't do this check if any of these conditions hold
