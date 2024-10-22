@@ -945,9 +945,8 @@ EventView::slotEditCut()
 
     EventSelection cutSelection(*m_segments[0]);
 
-    for (int i = 0; i < selection.size(); ++i) {
-        QTreeWidgetItem *listItem = selection.at(i);
-
+    // For each QTreeWidgetItem in the selection...
+    for (QTreeWidgetItem *listItem : selection) {
         EventViewItem *item = dynamic_cast<EventViewItem *>(listItem);
         if (!item)
             continue;
@@ -965,38 +964,29 @@ EventView::slotEditCut()
 void
 EventView::slotEditCopy()
 {
-    QList<QTreeWidgetItem*> selection = m_treeWidget->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
-    if (selection.count() == 0)
-        return ;
+    if (selection.empty())
+        return;
 
     RG_DEBUG << "slotEditCopy() - copying " << selection.count() << " items";
 
-//    QPtrListIterator<QTreeWidgetItem> it(selection);
-    EventSelection *copySelection = nullptr;
+    EventSelection copySelection(*m_segments[0]);
 
+    // For each QTreeWidgetItem in the selection...
+    for (QTreeWidgetItem *listItem : selection) {
+        EventViewItem *item = dynamic_cast<EventViewItem *>(listItem);
+        if (!item)
+            continue;
 
-//    while ((listItem = it.current()) != 0) {
-    for( int i=0; i< selection.size(); i++ ){
-        QTreeWidgetItem *listItem = selection.at(i);
-
-//         item = dynamic_cast<EventViewItem*>((*it));
-        EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
-
-        if (item) {
-            if (copySelection == nullptr)
-                copySelection =
-                    new EventSelection(*(item->getSegment()));
-
-            copySelection->addEvent(item->getEvent());
-        }
-//         ++it;
+        copySelection.addEvent(item->getEvent());
     }
 
-    if (copySelection) {
-        CommandHistory::getInstance()->addCommand(
-                new CopyCommand(copySelection, Clipboard::mainClipboard()));
-    }
+    if (copySelection.empty())
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CopyCommand(&copySelection, Clipboard::mainClipboard()));
 }
 
 void

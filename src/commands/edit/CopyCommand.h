@@ -45,6 +45,10 @@ class CopyCommand : public NamedCommand
 
 public:
     /// Make a CopyCommand that copies events from within a Segment
+    /**
+     * ??? selection should be a const &.  It is copied.  Ownership is
+     *     not transferred.
+     */
     CopyCommand(EventSelection *selection,
                 Clipboard *clipboard);
 
