@@ -85,7 +85,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     RosegardenDocument     *m_doc;
-    timeT                 m_tempoTime;
+    timeT                 m_tempoTime{0};
     QDoubleSpinBox       *m_tempoValueSpinBox;
     QPushButton          *m_tempoTap;
     QTime                 m_tapMinusTwo;

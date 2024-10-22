@@ -51,92 +51,94 @@ namespace Rosegarden
 
 TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
                          bool timeEditable):
-        QDialog(parent),
-        m_doc(doc),
-        m_tempoTime(0)
+    QDialog(parent),
+    m_doc(doc)
 {
     setModal(true);
     setWindowTitle(tr("Insert Tempo Change"));
+    // ??? This doesn't appear to be used anywhere.
     setObjectName("MinorDialog");
 
-    QWidget* vbox = dynamic_cast<QWidget*>(this);
+    // ??? Get rid of this.  Just use "this".
+    QWidget *vbox = dynamic_cast<QWidget *>(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     vbox->setLayout(vboxLayout);
 
     // group box for tempo
-    QGroupBox *frame = new QGroupBox(tr("Tempo"), vbox);
-    frame->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *layout = new QGridLayout;
-    layout->setSpacing(5);
-    vboxLayout->addWidget(frame);
+    QGroupBox *tempoGroupBox = new QGroupBox(tr("Tempo"), vbox);
+    tempoGroupBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *tempoLayout = new QGridLayout;
+    tempoLayout->setSpacing(5);
+    tempoGroupBox->setLayout(tempoLayout);
+    vboxLayout->addWidget(tempoGroupBox);
 
-    // Set tempo
-    layout->addWidget(new QLabel(tr("New tempo:"), frame), 0, 1);
-    m_tempoValueSpinBox = new QDoubleSpinBox(frame);
+    // New tempo
+    tempoLayout->addWidget(new QLabel(tr("New tempo:"), tempoGroupBox), 0, 1);
+    m_tempoValueSpinBox = new QDoubleSpinBox(tempoGroupBox);
     m_tempoValueSpinBox->setDecimals(3);
     m_tempoValueSpinBox->setMaximum(1000);
     m_tempoValueSpinBox->setMinimum(1);
     m_tempoValueSpinBox->setSingleStep(1);
     m_tempoValueSpinBox->setValue(120); // will set properly below
-    layout->addWidget(m_tempoValueSpinBox, 0, 2);
-
     connect(m_tempoValueSpinBox, SIGNAL(valueChanged(double)),
             SLOT(slotTempoChanged(double)));
+    tempoLayout->addWidget(m_tempoValueSpinBox, 0, 2);
 
-    m_tempoTap= new QPushButton(tr("Tap"), frame);
-    layout->addWidget(m_tempoTap, 0, 3);
+    // Tap
+    m_tempoTap = new QPushButton(tr("Tap"), tempoGroupBox);
     connect(m_tempoTap, &QAbstractButton::clicked, this, &TempoDialog::slotTapClicked);
+    tempoLayout->addWidget(m_tempoTap, 0, 3);
 
+    // bpm
+    m_tempoBeatLabel = new QLabel(tempoGroupBox);
+    tempoLayout->addWidget(m_tempoBeatLabel, 0, 4);
 
-    m_tempoConstant = new QRadioButton(tr("Tempo is fixed until the following tempo change"), frame);
-    m_tempoRampToNext = new QRadioButton(tr("Tempo ramps to the following tempo"), frame);
-    m_tempoRampToTarget = new QRadioButton(tr("Tempo ramps to:"), frame);
+    m_tempoBeat = new QLabel(tempoGroupBox);
+    tempoLayout->addWidget(m_tempoBeat, 0, 5);
 
-    //    m_tempoTargetCheckBox = new QCheckBox(tr("Ramping to:"), frame);
-    m_tempoTargetSpinBox = new QDoubleSpinBox(frame);
+    m_tempoBeatsPerMinute = new QLabel(tempoGroupBox);
+    tempoLayout->addWidget(m_tempoBeatsPerMinute, 0, 6);
+
+    // Tempo is fixed...
+    m_tempoConstant = new QRadioButton(tr("Tempo is fixed until the following tempo change"), tempoGroupBox);
+    connect(m_tempoConstant, &QAbstractButton::clicked,
+            this, &TempoDialog::slotTempoConstantClicked);
+    tempoLayout->addWidget(m_tempoConstant, 1, 1, 1, 2);
+
+    // Tempo ramps to the following...
+    m_tempoRampToNext = new QRadioButton(tr("Tempo ramps to the following tempo"), tempoGroupBox);
+    connect(m_tempoRampToNext, &QAbstractButton::clicked,
+            this, &TempoDialog::slotTempoRampToNextClicked);
+    tempoLayout->addWidget(m_tempoRampToNext, 2, 1, 1, 2);
+
+    // Tempo ramps to:
+    // ??? This one is a bit confusing.  It ramps to the specified tempo, but
+    //     the ramp stops at the next tempo no matter what that tempo might be.
+    //     A tooltip might be helpful here.
+    m_tempoRampToTarget = new QRadioButton(tr("Tempo ramps to:"), tempoGroupBox);
+    connect(m_tempoRampToTarget, &QAbstractButton::clicked,
+            this, &TempoDialog::slotTempoRampToTargetClicked);
+    tempoLayout->addWidget(m_tempoRampToTarget, 3, 1);
+    m_tempoTargetSpinBox = new QDoubleSpinBox(tempoGroupBox);
     m_tempoTargetSpinBox->setDecimals(3);
     m_tempoTargetSpinBox->setMaximum(1000);
     m_tempoTargetSpinBox->setMinimum(1);
     m_tempoTargetSpinBox->setSingleStep(1);
     m_tempoTargetSpinBox->setValue(120);
-
-    //    layout->addWidget(m_tempoTargetCheckBox, 1, 0, 0+1, 1- 1, AlignRight);
-    //    layout->addWidget(m_tempoTargetSpinBox, 1, 2);
-
-    layout->addWidget(m_tempoConstant, 1, 1, 1, 2);
-    layout->addWidget(m_tempoRampToNext, 2, 1, 1, 2);
-    layout->addWidget(m_tempoRampToTarget, 3, 1);
-    layout->addWidget(m_tempoTargetSpinBox, 3, 2);
-
-    //    connect(m_tempoTargetCheckBox, SIGNAL(clicked()),
-    //            SLOT(slotTargetCheckBoxClicked()));
-    connect(m_tempoConstant, &QAbstractButton::clicked,
-            this, &TempoDialog::slotTempoConstantClicked);
-    connect(m_tempoRampToNext, &QAbstractButton::clicked,
-            this, &TempoDialog::slotTempoRampToNextClicked);
-    connect(m_tempoRampToTarget, &QAbstractButton::clicked,
-            this, &TempoDialog::slotTempoRampToTargetClicked);
     connect(m_tempoTargetSpinBox, SIGNAL(valueChanged(double)),
             SLOT(slotTargetChanged(double)));
-
-    m_tempoBeatLabel = new QLabel(frame);
-    layout->addWidget(m_tempoBeatLabel, 0, 4);
-
-    m_tempoBeat = new QLabel(frame);
-    layout->addWidget(m_tempoBeat, 0, 5);
-
-    m_tempoBeatsPerMinute = new QLabel(frame);
-    layout->addWidget(m_tempoBeatsPerMinute, 0, 6);
-
-    frame->setLayout(layout);
+    tempoLayout->addWidget(m_tempoTargetSpinBox, 3, 2);
 
     m_timeEditor = nullptr;
 
     if (timeEditable) {
 
-        m_timeEditor = new TimeWidget
-            (tr("Time of tempo change"),
-             vbox, &m_doc->getComposition(), 0, true);
+        m_timeEditor = new TimeWidget(
+                tr("Time of tempo change"),  // title
+                vbox,  // parent
+                &m_doc->getComposition(),  // composition
+                0,  // initialTime
+                true);  // editable
         vboxLayout->addWidget(m_timeEditor);
 
     } else {
