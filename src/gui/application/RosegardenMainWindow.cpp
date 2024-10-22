@@ -246,6 +246,7 @@
 #include <QSharedPointer>
 #include <QInputDialog>
 #include <QThread>
+#include <QStandardPaths>
 
 // Ladish lv1 support
 #include <cerrno>   // for errno
@@ -2134,6 +2135,10 @@ QString
 RosegardenMainWindow::launchSaveAsDialog(QString filter,
                                          QString label)
 {
+
+    const QFileInfo originalFileInfo(
+            RosegardenDocument::currentDocument->getAbsFilePath());
+
     // Extract first extension listed in filter, for instance,
     // ".rg" from "Rosegarden files (*.rg)", or ".mid" from
     // "MIDI Files (*.mid *.midi)"
@@ -2143,8 +2148,21 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
     const QString filterExtension =
             filter.mid(left + 1, right - left - 1);
 
-    // Keep track of last place used to save, by type of file.
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
     QString path_key = "save_file";
+
+    QString directory;
+
+    // Set this to 1 for the original behavior where each extension had
+    // its own persistent path in the settings.
+#define PATH_BY_EXTENSION 0
+
+#if PATH_BY_EXTENSION
+
+    // Keep track of last place used to save, by type of file.
+    // This is useful for a workflow where different file types are
+    // kept in different directories.
 
     if (filterExtension == ".rgt")      path_key = "save_template";
     else if (filterExtension == ".mid") path_key = "export_midi";
@@ -2153,21 +2171,29 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
     else if (filterExtension == ".csd") path_key = "export_csound";
     else if (filterExtension == ".mup") path_key = "export_mup";
 
-    //RG_DEBUG << "launchSaveAsDialog() : extension = " << extension;
-    //RG_DEBUG << "                       path key  = " << path_key;
-
     // Get the directory from the settings
-    QSettings settings;
-    settings.beginGroup(LastUsedPathsConfigGroup);
-    QString directory = settings.value(path_key, QDir::homePath()).toString();
+    directory = settings.value(path_key, QDir::homePath()).toString();
 
-    QFileInfo originalFileInfo(RosegardenDocument::currentDocument->getAbsFilePath());
+#else
 
     // Most applications (e.g. OpenOffice.org and the GIMP) use the document's
     // directory for Save As... and Export rather than the last directory
-    // the user saved to.  To use the document's directory, replace
-    // "directory" in the FileDialog::getSaveFileName() call with
-    // originalFileInfo.absolutePath().
+    // the user saved to.  This code implements that approach along with
+    // remembering the previous save directory for unnamed files.
+
+    const bool unnamed =
+            RosegardenDocument::currentDocument->getAbsFilePath().isEmpty();
+
+    if (unnamed) {
+        // Go with last save location, or DocumentsLocation if there is none.
+        directory = settings.value(
+                path_key,
+                QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
+    } else {
+        directory = originalFileInfo.absolutePath();
+    }
+
+#endif
 
     // Launch the Save As dialog.
     QString name = FileDialog::getSaveFileName(
@@ -2178,8 +2204,6 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
             filter,  // filter
             nullptr,  // selectedFilter
             FileDialog::DontConfirmOverwrite);  // options
-
-    //RG_DEBUG << "launchSaveAsDialog() : FileDialog::getSaveFileName() returned " << name;
 
     if (name.isEmpty())
         return name;
@@ -2227,7 +2251,7 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
     }
 
     // Write the directory to the settings
-    settings.setValue(path_key, info.dir().canonicalPath());
+    settings.setValue(path_key, info.canonicalPath());
     settings.endGroup();
 
     return name;
