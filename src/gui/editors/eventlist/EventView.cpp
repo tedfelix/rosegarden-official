@@ -291,7 +291,6 @@ EventView::EventView(RosegardenDocument *doc,
     columnNames << tr("Pitch  ");
     columnNames << tr("Velocity  ");
     columnNames << tr("Type (Data1)  ");
-    columnNames << tr("Type (Data1)  ");
     columnNames << tr("Value (Data2)  ");
     m_treeWidget->setHeaderLabels(columnNames);
 
@@ -575,6 +574,9 @@ EventView::updateTreeWidget()
         //     E.g. Controller, RPN, and NRPN all use Controller::NUMBER
         //     and Controller::VALUE.  Also "other" events use this fallback
         //     to get something in the columns.
+        //     I've seen beam groups on clefs and time signatures.  So
+        //     this fallback approach catches some things.  It's just
+        //     hard to read.
 
         // Data 1
 
