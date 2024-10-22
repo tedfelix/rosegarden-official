@@ -2216,26 +2216,7 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
             name += filterExtension;
     }
 
-    // if we get a string like "/tmp/~/foo.rg" assume the last saved path was
-    // /tmp and the desired new path is ~ and try to doctor the string up, which
-    // may well fail, but it's better to try
-    // ??? Is this possible?
-    if (name.contains("~")) {
-        name = name.remove(0, name.indexOf("~") + 1);
-        name = name.prepend(QDir::homePath());
-
-        //RG_DEBUG << "doctored filename after '~' swap: " << name;
-
-    }
-
     const QFileInfo info(name);
-
-    // ??? Is this possible?
-    if (info.isDir()) {
-        QMessageBox::warning(this, tr("Rosegarden"),
-                             tr("You have specified a folder/directory."));
-        return "";
-    }
 
     // Confirm overwrite.
     if (info.exists()) {
