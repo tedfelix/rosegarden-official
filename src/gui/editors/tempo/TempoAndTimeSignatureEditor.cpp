@@ -526,7 +526,7 @@ TempoAndTimeSignatureEditor::makeInitialSelection(timeT time)
     qApp->processEvents();
 
     // Make sure the item is visible.
-    m_tableWidget->scrollToItem(foundItem);
+    m_tableWidget->scrollToItem(foundItem, QAbstractItemView::PositionAtCenter);
 }
 
 void
@@ -575,7 +575,7 @@ TempoAndTimeSignatureEditor::select(timeT time, Type type)
     qApp->processEvents();
 
     // Make sure the item is visible.
-    m_tableWidget->scrollToItem(foundItem);
+    m_tableWidget->scrollToItem(foundItem, QAbstractItemView::PositionAtCenter);
 }
 
 Segment *

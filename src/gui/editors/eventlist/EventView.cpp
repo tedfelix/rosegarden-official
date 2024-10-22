@@ -832,45 +832,57 @@ EventView::slotEditTriggerName()
 void
 EventView::slotEditTriggerPitch()
 {
-    int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
+    const int triggerSegmentID =
+            m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-    TriggerSegmentRec *triggerSegment =
-        m_segments[0]->getComposition()->getTriggerSegmentRec(id);
+    const TriggerSegmentRec *triggerSegment =
+            m_segments[0]->getComposition()->getTriggerSegmentRec(triggerSegmentID);
 
-    PitchDialog *dlg = new PitchDialog(this, tr("Base pitch"), triggerSegment->getBasePitch());
+    PitchDialog *dlg = new PitchDialog(
+            this,  // parent
+            tr("Base pitch"),  // title
+            triggerSegment->getBasePitch());  // defaultPitch
 
-    if (dlg->exec() == QDialog::Accepted) {
-        CommandHistory::getInstance()->addCommand(
-                new SetTriggerSegmentBasePitchCommand(
-                        &RosegardenDocument::currentDocument->getComposition(),
-                        id,
-                        dlg->getPitch()));
-        m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
-    }
+    if (dlg->exec() != QDialog::Accepted)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new SetTriggerSegmentBasePitchCommand(
+                    &RosegardenDocument::currentDocument->getComposition(),
+                    triggerSegmentID,
+                    dlg->getPitch()));
+
+    m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
 }
 
 void
 EventView::slotEditTriggerVelocity()
 {
-    int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
+    const int triggerSegmentID =
+            m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-    TriggerSegmentRec *triggerSegment =
-        m_segments[0]->getComposition()->getTriggerSegmentRec(id);
+    const TriggerSegmentRec *triggerSegment =
+            m_segments[0]->getComposition()->getTriggerSegmentRec(triggerSegmentID);
 
-    TrivialVelocityDialog *dlg = new TrivialVelocityDialog
-                                 (this, tr("Base velocity"), triggerSegment->getBaseVelocity());
+    TrivialVelocityDialog *dlg = new TrivialVelocityDialog(
+            this,  // parent
+            tr("Base velocity"),  // label
+            triggerSegment->getBaseVelocity());  // velocity
 
-    if (dlg->exec() == QDialog::Accepted) {
-        CommandHistory::getInstance()->addCommand(
-                new SetTriggerSegmentBaseVelocityCommand(
-                        &RosegardenDocument::currentDocument->getComposition(),
-                        id,
-                        dlg->getVelocity()));
-        m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
-    }
+    if (dlg->exec() != QDialog::Accepted)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new SetTriggerSegmentBaseVelocityCommand(
+                    &RosegardenDocument::currentDocument->getComposition(),
+                    triggerSegmentID,
+                    dlg->getVelocity()));  // newVelocity
+
+    m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
 }
 
-/* unused
+#if 0
+// ??? This is unused, but seems like we should finish it.
 void
 EventView::slotTriggerTimeAdjustChanged(int option)
 {
@@ -900,12 +912,14 @@ EventView::slotTriggerTimeAdjustChanged(int option)
 //    TriggerSegmentRec *triggerSegment =  // remove warning
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-    addCommandToHistory(new SetTriggerSegmentDefaultTimeAdjustCommand
-                        (&RosegardenDocument::currentDocument->getComposition(), id, adjust));
+    addCommandToHistory(new SetTriggerSegmentDefaultTimeAdjustCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            id,
+            adjust));
 }
-*/
-
-/* unused
+#endif
+#if 0
+// ??? This is unused, but seems like we should finish it.
 void
 EventView::slotTriggerRetuneChanged()
 {
@@ -914,10 +928,12 @@ EventView::slotTriggerRetuneChanged()
     TriggerSegmentRec *triggerSegment =
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-    addCommandToHistory(new SetTriggerSegmentDefaultRetuneCommand
-                        (&RosegardenDocument::currentDocument->getComposition(), id, !triggerSegment->getDefaultRetune()));
+    addCommandToHistory(new SetTriggerSegmentDefaultRetuneCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            id,
+            !triggerSegment->getDefaultRetune()));
 }
-*/
+#endif
 
 void
 EventView::slotEditCut()

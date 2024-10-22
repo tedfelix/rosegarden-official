@@ -25,7 +25,8 @@
 
 namespace Rosegarden {
 
-TrivialVelocityDialog::TrivialVelocityDialog(QWidget *parent, QString label, int deft) :
+TrivialVelocityDialog::TrivialVelocityDialog(
+        QWidget *parent, QString label, int velocity) :
     QDialog(parent)
 {
     setModal(true);
@@ -43,7 +44,7 @@ TrivialVelocityDialog::TrivialVelocityDialog(QWidget *parent, QString label, int
     m_spin->setMaximum(127);
     hboxLayout->addWidget(m_spin);
     hbox->setLayout(hboxLayout);
-    m_spin->setValue(deft);
+    m_spin->setValue(velocity);
 
     QDialogButtonBox *buttonBox =
         new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
