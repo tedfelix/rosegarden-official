@@ -101,7 +101,7 @@ InputDialog::getText(QWidget *parent,
     InputDialog dlg(title, label, parent, le, f);
 
     QString result;
-    bool accepted = (dlg.exec() == QDialog::Accepted);
+    const bool accepted = (dlg.exec() == QDialog::Accepted);
     if (ok)
         *ok = accepted;
     if (accepted)

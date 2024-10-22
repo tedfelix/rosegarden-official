@@ -690,8 +690,8 @@ EventView::updateTreeWidget()
     // No Events?
     if (m_treeWidget->topLevelItemCount() == 0) {
         // ??? This message is too big for the time field.
-        new QTreeWidgetItem(m_treeWidget,
-                            QStringList() << tr("<no events at this filter level>"));
+        //new QTreeWidgetItem(m_treeWidget,
+        //                    QStringList() << tr("<no events at this filter level>"));
 
         leaveActionState("have_selection");
     } else {  // We have Events.
@@ -723,18 +723,14 @@ EventView::makeInitialSelection(timeT time)
 
     const int itemCount = m_treeWidget->topLevelItemCount();
 
-    EventViewItem *goodItem = nullptr;
-    int goodItemNo = 0;
+    EventViewItem *foundItem{nullptr};
+    int foundRow{0};
 
-    // For each item in the event list.
-    // ??? Performance: LINEAR SEARCH
-    //     While we could speed this up with a binary search, it would be
-    //     smarter to find the appropriate event while we are creating the
-    //     m_treeWidget in updateTreeWidget().
-    for (int itemNo = 0; itemNo < itemCount; ++itemNo) {
+    // For each row in the event list.
+    for (int row = 0; row < itemCount; ++row) {
         EventViewItem *item =
                 dynamic_cast<EventViewItem *>(
-                        m_treeWidget->topLevelItem(itemNo));
+                        m_treeWidget->topLevelItem(row));
 
         // Not an EventViewItem?  Try the next.
         if (!item)
@@ -746,18 +742,27 @@ EventView::makeInitialSelection(timeT time)
             break;
 
         // Remember the last good item.
-        goodItem = item;
-        goodItemNo = itemNo;
+        foundItem = item;
+        foundRow = row;
     }
 
     // Nothing found?  Bail.
-    if (!goodItem)
+    if (!foundItem)
         return;
 
-    // Select the item prior to the playback position pointer.
-    m_listSelection.push_back(goodItemNo);
-    m_treeWidget->setCurrentItem(goodItem);
-    m_treeWidget->scrollToItem(goodItem);
+    // Make it current so the keyboard works correctly.
+    m_treeWidget->setCurrentItem(foundItem);
+
+    // Select the item
+    foundItem->setSelected(true);
+    m_listSelection.push_back(foundRow);
+
+    // Yield to the event loop so that the UI will be rendered before calling
+    // scrollToItem().
+    qApp->processEvents();
+
+    // Make sure the item is visible.
+    m_treeWidget->scrollToItem(foundItem, QAbstractItemView::PositionAtCenter);
 }
 
 QString
@@ -803,21 +808,25 @@ EventView::makeDurationString(timeT time,
 void
 EventView::slotEditTriggerName()
 {
-    bool ok = false;
-    QString newLabel = InputDialog::getText(this,
-                                            tr("Segment label"),
-                                            tr("Label:"),
-                                            LineEdit::Normal,
-                                            strtoqstr(m_segments[0]->getLabel()),
-                                            &ok);
+    bool ok;
+    QString newLabel = InputDialog::getText(
+            this,  // parent
+            tr("Segment label"),  // title
+            tr("Label:"),  // label
+            LineEdit::Normal,  // mode
+            strtoqstr(m_segments[0]->getLabel()),  // text
+            &ok);  // ok
 
-    if (ok) {
-        SegmentSelection selection;
-        selection.insert(m_segments[0]);
-        SegmentLabelCommand *cmd = new SegmentLabelCommand(selection, newLabel);
-        CommandHistory::getInstance()->addCommand(cmd);
-        m_triggerName->setText(newLabel);
-    }
+    if (!ok)
+        return;
+
+    // Create SegmentLabelCommand and run.
+    SegmentSelection selection;
+    selection.insert(m_segments[0]);
+    CommandHistory::getInstance()->addCommand(
+            new SegmentLabelCommand(selection, newLabel));
+
+    m_triggerName->setText(newLabel);
 }
 
 void
