@@ -42,7 +42,7 @@ namespace Rosegarden
 class PreferenceBool
 {
 public:
-    PreferenceBool(QString group, QString key, bool defaultValue) :
+    PreferenceBool(const QString& group, const QString& key, bool defaultValue) :
         m_group(group),
         m_key(key),
         m_defaultValue(defaultValue)

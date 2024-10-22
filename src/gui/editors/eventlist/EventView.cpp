@@ -1514,7 +1514,6 @@ EventView::slotPopupMenu(const QPoint& pos)
 void
 EventView::createMenu()
 {
-    // cppcheck-suppress publicAllocationError
     m_menu = new QMenu(this);
 
     QAction *eventEditorAction =

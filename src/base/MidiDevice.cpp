@@ -502,6 +502,7 @@ MidiDevice::getPrograms0thVariation(bool percussion, const MidiBank &bank) const
     return ProgramList();
 }
 
+/* unused
 std::string
 MidiDevice::getBankName(const MidiBank &bank) const
 {
@@ -511,6 +512,7 @@ MidiDevice::getBankName(const MidiBank &bank) const
     }
     return "";
 }
+*/
 
 void
 MidiDevice::addKeyMapping(const MidiKeyMapping &mapping)

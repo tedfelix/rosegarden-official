@@ -86,7 +86,7 @@ public:
     BankList getBanksByMSB(bool percussion, MidiByte msb) const;
     BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
     const MidiBank *getBankByName(const std::string &) const;
-    std::string getBankName(const MidiBank &bank) const;
+    // unused std::string getBankName(const MidiBank &bank) const;
     // Generate an unused "new bank" name.
     std::string makeNewBankName() const;
 

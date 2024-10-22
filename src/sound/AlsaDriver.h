@@ -350,7 +350,7 @@ public:
     void claimUnwantedPlugin(void *plugin) override;
     void scavengePlugins() override;
 
-    void installExporter(WAVExporter* WAVExporter) override;
+    void installExporter(WAVExporter* wavExporter) override;
 
     /// Update Ports and Connections
     /**

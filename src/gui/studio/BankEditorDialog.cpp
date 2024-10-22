@@ -1362,7 +1362,7 @@ BankEditorDialog::pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem)
     if (!destDevice)
         return;
 
-    const BankList oldBankList = destDevice->getBanks();
+    const BankList& oldBankList = destDevice->getBanks();
 
     const MidiBank currentBank = oldBankList[bankItem->getBank()];
 

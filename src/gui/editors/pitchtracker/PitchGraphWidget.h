@@ -53,7 +53,7 @@ public:
     PitchGraphWidget(PitchHistory &history, QWidget *parent = nullptr);
     ~PitchGraphWidget() override;
 
-    void setTuning(std::shared_ptr<Accidentals::Tuning> tuning);
+    void setTuning(const std::shared_ptr<Accidentals::Tuning>& tuning);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
