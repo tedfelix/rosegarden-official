@@ -66,7 +66,7 @@ public:
     ~EventView() override;
 
     // SegmentObserver overrides.
-    void eventRemoved(const Segment *, Event *) override;
+    //void eventRemoved(const Segment *, Event *) override;
     void segmentDeleted(const Segment *) override;
 
 signals:
@@ -191,12 +191,6 @@ private:
     void createPopUpMenu();
 
     void makeInitialSelection(timeT);
-
-    /// Events deleted since last updateTreeWidget().
-    /**
-     * slotEditDelete() uses this for some reason.
-     */
-    std::set<Event *> m_deletedEvents;
 
     bool m_isTriggerSegment{false};
     QLabel *m_triggerName{nullptr};

@@ -427,11 +427,12 @@ EventView::~EventView()
     m_segments[0]->removeObserver(this);
 }
 
+#if 0
 void
 EventView::eventRemoved(const Segment *, Event *e)
 {
-    m_deletedEvents.insert(e);
 }
+#endif
 
 bool
 EventView::updateTreeWidget()
@@ -693,12 +694,14 @@ EventView::updateTreeWidget()
         //new QTreeWidgetItem(m_treeWidget,
         //                    QStringList() << tr("<no events at this filter level>"));
 
+        // ??? What does this even do?  Paste is always enabled in the menu.
         leaveActionState("have_selection");
     } else {  // We have Events.
         // If no selection then select the first event
         if (selection.size() == 0)
             selection.push_back(0);
 
+        // ??? What does this even do?  Paste is always enabled in the menu.
         enterActionState("have_selection");
     }
 
@@ -710,8 +713,6 @@ EventView::updateTreeWidget()
             continue;
         item->setSelected(true);
     }
-
-    m_deletedEvents.clear();
 
     return true;
 }
@@ -992,33 +993,53 @@ EventView::slotEditCopy()
 void
 EventView::slotEditPaste()
 {
+    // ??? This does nothing if a Segment or multiple Segments are
+    //     in the clipboard.  We should probably handle that better.
+    //     I assume PasteEventsCommand only handles the "partial
+    //     segment" clipboard mode?
+
+    // ??? We should check this and enable/disable paste appropriately.
+    //     Then this check is no longer needed.  Maybe tie it in
+    //     with the have_selection action state?  I guess the real
+    //     issue is monitoring the clipboard so that we can reflect
+    //     its state whenever it changes.  It doesn't allow that.
+    //     So we would need to update the menu when the menu is launched.
+    //     Does Qt support something like that?
     if (Clipboard::mainClipboard()->isEmpty()) {
         showStatusBarMessage(tr("Clipboard is empty"));
-        return ;
+        return;
     }
 
     TmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
 
+    // Compute the insertion time.
+
     timeT insertionTime = 0;
 
-    QList<QTreeWidgetItem*> selection = m_treeWidget->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
-    if (selection.count()) {
-        EventViewItem *item = dynamic_cast<EventViewItem*>(selection.at(0));
+    if (!selection.empty()) {
+        // Go with the time of the first selected item.
+        EventViewItem *item = dynamic_cast<EventViewItem *>(selection.at(0));
 
         if (item)
             insertionTime = item->getEvent()->getAbsoluteTime();
     }
 
+    PasteEventsCommand *command = new PasteEventsCommand(
+            *m_segments[0],  // segment
+            Clipboard::mainClipboard(),  // clipboard
+            insertionTime,  // pasteTime
+            PasteEventsCommand::MatrixOverlay);  // pasteType
 
-    PasteEventsCommand *command = new PasteEventsCommand
-                                  (*m_segments[0], Clipboard::mainClipboard(),
-                                   insertionTime, PasteEventsCommand::MatrixOverlay);
-
+    // Not possible?
     if (!command->isPossible()) {
         showStatusBarMessage(tr("Couldn't paste at this point"));
-    } else
-        CommandHistory::getInstance()->addCommand(command);
+        delete command;
+        return;
+    }
+
+    CommandHistory::getInstance()->addCommand(command);
 
     RG_DEBUG << "slotEditPaste() - pasting " << selection.count() << " items";
 }
@@ -1026,46 +1047,28 @@ EventView::slotEditPaste()
 void
 EventView::slotEditDelete()
 {
-    QList<QTreeWidgetItem*> selection = m_treeWidget->selectedItems();
-    if (selection.count() == 0)
-        return ;
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
+    if (selection.empty())
+        return;
 
     RG_DEBUG << "slotEditDelete() - deleting " << selection.count() << " items";
 
-//    QPtrListIterator<QTreeWidgetItem> it(selection);
-    EventSelection *deleteSelection = nullptr;
+    EventSelection deleteSelection(*m_segments[0]);
 
-//    while ((listItem = it.current()) != 0) {
-    for( int i=0; i< selection.size(); i++ ){
-        QTreeWidgetItem *listItem = selection.at(i);
+    // For each item in the list...
+    for (QTreeWidgetItem *listItem : selection) {
+        EventViewItem *item = dynamic_cast<EventViewItem *>(listItem);
+        if (!item)
+            continue;
 
-//         item = dynamic_cast<EventViewItem*>((*it));
-        EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
-
-        if (item) {
-            if (m_deletedEvents.find(item->getEvent()) != m_deletedEvents.end()) {
-//                ++it;
-                continue;
-            }
-
-            if (deleteSelection == nullptr)
-                deleteSelection =
-                    new EventSelection(*m_segments[0]);
-
-            deleteSelection->addEvent(item->getEvent());
-        }
-//         ++it;
+        deleteSelection.addEvent(item->getEvent());
     }
 
-    if (deleteSelection) {
+    if (deleteSelection.empty())
+        return;
 
-        CommandHistory::getInstance()->addCommand(
-                new EraseCommand(deleteSelection));
-
-        // ??? What does this do?  Wouldn't updateTreeWidget() be more
-        //     appropriate?
-        m_treeWidget->update();
-    }
+    CommandHistory::getInstance()->addCommand(
+            new EraseCommand(&deleteSelection));
 }
 
 void
