@@ -1074,35 +1074,21 @@ EventView::slotEditDelete()
 void
 EventView::slotEditInsert()
 {
-    timeT insertTime = m_segments[0]->getStartTime();
-    // Go with a crotchet by default.
-    timeT insertDuration = 960;
-
-    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
-
-    // If something is selected, use the time and duration from the
-    // first selected event.
-    if (!selection.isEmpty()) {
-        EventViewItem *item =
-            dynamic_cast<EventViewItem *>(selection.first());
-
-        if (item) {
-            insertTime = item->getEvent()->getAbsoluteTime();
-            insertDuration = item->getEvent()->getDuration();
-
-            // ??? Could check for a note event and copy pitch and velocity.
-        }
-    }
-
-    // Create default event
-    //
-    Event event(Note::EventType, insertTime, insertDuration);
-    event.set<Int>(BaseProperties::PITCH, 70);
+    // Create default event in case nothing is selected.
+    Event event(Note::EventType, m_segments[0]->getStartTime(), 960);
+    event.set<Int>(BaseProperties::PITCH, 60);
     event.set<Int>(BaseProperties::VELOCITY, 100);
 
+    // Copy new event from the first selected event.
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
+    if (!selection.isEmpty()) {
+        EventViewItem *item = dynamic_cast<EventViewItem *>(selection.first());
+        event = *(item->getEvent());
+    }
+
     SimpleEventEditDialog dialog(
-            this,
-            RosegardenDocument::currentDocument,
+            this,  // parent
+            RosegardenDocument::currentDocument,  // doc
             event,
             true);  // inserting
 
@@ -1110,12 +1096,10 @@ EventView::slotEditInsert()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    EventInsertionCommand *command =
+    CommandHistory::getInstance()->addCommand(
             new EventInsertionCommand(
                     *m_segments[0],
-                    new Event(dialog.getEvent()));
-
-    CommandHistory::getInstance()->addCommand(command);
+                    new Event(dialog.getEvent())));
 }
 
 void
@@ -1123,7 +1107,6 @@ EventView::slotEditEvent()
 {
     // See slotOpenInEventEditor().
 
-    // ??? Why not use currentItem()?
     QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
     if (selection.isEmpty())
@@ -1147,8 +1130,8 @@ EventView::slotEditEvent()
         return;
 
     SimpleEventEditDialog dialog(
-            this,
-            RosegardenDocument::currentDocument,
+            this,  // parent
+            RosegardenDocument::currentDocument,  // doc
             *event,
             false);  // inserting
 
@@ -1160,12 +1143,10 @@ EventView::slotEditEvent()
     if (!dialog.isModified())
         return;
 
-    EventEditCommand *command =
+    CommandHistory::getInstance()->addCommand(
             new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
-
-    CommandHistory::getInstance()->addCommand(command);
+                    event,
+                    dialog.getEvent()));
 }
 
 void
@@ -1174,7 +1155,6 @@ EventView::slotEditEventAdvanced()
     // See slotOpenInExpertEventEditor().
 
     QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
-
     if (selection.isEmpty())
         return;
 
@@ -1205,30 +1185,33 @@ EventView::slotEditEventAdvanced()
     if (!dialog.isModified())
         return;
 
-    EventEditCommand *command =
+    CommandHistory::getInstance()->addCommand(
             new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
-
-    CommandHistory::getInstance()->addCommand(command);
+                    event,
+                    dialog.getEvent()));
 }
 
 void
 EventView::slotSelectAll()
 {
-    for (int i = 0; m_treeWidget->topLevelItem(i); ++i) {
-        //m_treeWidget->setSelected(m_treeWidget->topLevelItem(i), true);
-        m_treeWidget->setCurrentItem(m_treeWidget->topLevelItem(i));
+    // For each item, select it.
+    for (int itemIndex = 0;
+         itemIndex < m_treeWidget->topLevelItemCount();
+         ++itemIndex) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
+        item->setSelected(true);
     }
 }
 
 void
 EventView::slotClearSelection()
 {
-    for (int i = 0; m_treeWidget->topLevelItem(i); ++i) {
-        //m_treeWidget->setSelected(m_treeWidget->topLevelItem(i), false);
-        // ??? Set all to current!?  That's not the right way to do this.
-        m_treeWidget->setCurrentItem(m_treeWidget->topLevelItem(i));
+    // For each item, deselect it.
+    for (int itemIndex = 0;
+         itemIndex < m_treeWidget->topLevelItemCount();
+         ++itemIndex) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
+        item->setSelected(false);
     }
 }
 

@@ -51,21 +51,22 @@
 #include <QSettings>
 
 
-
 namespace Rosegarden
 {
 
-SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
+
+SimpleEventEditDialog::SimpleEventEditDialog(
+        QWidget *parent,
         RosegardenDocument *doc,
         const Event &event,
         bool inserting) :
-        QDialog(parent),
-        m_event(event),
-        m_doc(doc),
-        m_type(event.getType()),
-        m_absoluteTime(event.getAbsoluteTime()),
-        m_duration(event.getDuration()),
-        m_modified(false)
+    QDialog(parent),
+    m_event(event),
+    m_doc(doc),
+    m_type(event.getType()),
+    m_absoluteTime(event.getAbsoluteTime()),
+    m_duration(event.getDuration()),
+    m_modified(false)
 {
     setModal(true);
     setWindowTitle(tr(inserting ?
