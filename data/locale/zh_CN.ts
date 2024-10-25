@@ -24207,137 +24207,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>拷贝全部文本(&amp;C)</translation>
     </message>
 </context>
-<context>
-    <name>Rosegarden::StaffHeader</name>
-    <message>
-        <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="vanished">音轨 %1 : &quot;%2&quot;</translation>
-    </message>
-    <message>
-        <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="obsolete">&lt;br&gt;Notate for: %1</translation>
-    </message>
-    <message>
-        <source>normal</source>
-        <translation type="vanished">正常</translation>
-    </message>
-    <message>
-        <source>small</source>
-        <translation type="vanished">较小</translation>
-    </message>
-    <message>
-        <source>tiny</source>
-        <translation type="vanished">微小</translation>
-    </message>
-    <message>
-        <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="obsolete">&lt;br&gt;大小: %1,  Bracket: %2 </translation>
-    </message>
-    <message>
-        <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="vanished">&lt;br&gt;小节 [%1-%2] 位于 %3 (tr=%4) : &quot;%5&quot;</translation>
-    </message>
-    <message>
-        <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="vanished">&lt;br&gt;小节 [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="vanished">...</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <comment>note name</comment>
-        <translation type="vanished">C</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <comment>note name</comment>
-        <translation type="vanished">C#</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <comment>note name</comment>
-        <translation type="vanished">D</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <comment>note name</comment>
-        <translation type="vanished">Eb</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <comment>note name</comment>
-        <translation type="vanished">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <comment>note name</comment>
-        <translation type="vanished">F</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <comment>note name</comment>
-        <translation type="vanished">F#</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <comment>note name</comment>
-        <translation type="vanished">G</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <comment>note name</comment>
-        <translation type="vanished">G#</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <comment>note name</comment>
-        <translation type="vanished">A</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <comment>note name</comment>
-        <translation type="vanished">Bb</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <comment>note name</comment>
-        <translation type="vanished">B</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;文件名: %1 &lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;音轨 %1: &quot;%2&quot;&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="vanished">片段 &quot;%1&quot;: %2 谱号</translation>
-    </message>
-    <message>
-        <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="vanished">片段 &quot;%1&quot;: %2 调号</translation>
-    </message>
-    <message>
-        <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="vanished">片段 &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="vanished">Rosegarden</translation>
-    </message>
-    <message>
-        <source>%1: %2</source>
-        <translation type="vanished">%1: %2</translation>
-    </message>
-    <message>
-        <source> in %1</source>
-        <translation type="vanished"> 在 %1 内</translation>
-    </message>
-</context>
+
 <context>
     <name>Rosegarden::SustainInsertionCommand</name>
     <message>
@@ -26580,7 +26450,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>StaffHeader</name>
+    <name>Rosegarden::StaffHeader</name>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+148"/>
         <source>Track %1 : &quot;%2&quot;</source>

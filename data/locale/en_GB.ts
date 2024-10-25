@@ -24386,7 +24386,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>StaffHeader</name>
+    <name>Rosegarden::StaffHeader</name>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+148"/>
         <source>Track %1 : &quot;%2&quot;</source>

@@ -22997,105 +22997,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>Salin Teks Penu&amp;h</translation>
     </message>
 </context>
-<context>
-    <name>Rosegarden::StaffHeader</name>
-    <message>
-        <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="vanished">Jalur %1 : &quot;%2&quot;</translation>
-    </message>
-    <message>
-        <source>normal</source>
-        <translation type="vanished">normal</translation>
-    </message>
-    <message>
-        <source>small</source>
-        <translation type="vanished">kecil</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="vanished">...</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <comment>note name</comment>
-        <translation type="vanished">C</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <comment>note name</comment>
-        <translation type="vanished">C#</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <comment>note name</comment>
-        <translation type="vanished">D</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <comment>note name</comment>
-        <translation type="vanished">Eb</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <comment>note name</comment>
-        <translation type="vanished">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <comment>note name</comment>
-        <translation type="vanished">F</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <comment>note name</comment>
-        <translation type="vanished">F#</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <comment>note name</comment>
-        <translation type="vanished">G</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <comment>note name</comment>
-        <translation type="vanished">G#</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <comment>note name</comment>
-        <translation type="vanished">A</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <comment>note name</comment>
-        <translation type="vanished">Bb</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <comment>note name</comment>
-        <translation type="vanished">B</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;Nama berkas: %1 &lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;Jalur %1: &quot;%2&quot;&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="vanished">Segmen &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="vanished">Rosegarden</translation>
-    </message>
-    <message>
-        <source>%1: %2</source>
-        <translation type="vanished">%1: %2</translation>
-    </message>
-</context>
+
 <context>
     <name>Rosegarden::SustainInsertionCommand</name>
     <message>
@@ -25318,7 +25220,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>StaffHeader</name>
+    <name>Rosegarden::StaffHeader</name>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+146"/>
         <source>Track %1 : &quot;%2&quot;</source>

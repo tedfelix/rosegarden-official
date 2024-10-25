@@ -24319,137 +24319,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>全部のテキストをコピー(&amp;C)</translation>
     </message>
 </context>
-<context>
-    <name>Rosegarden::StaffHeader</name>
-    <message>
-        <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="vanished">トラック %1 : &quot;%2&quot;</translation>
-    </message>
-    <message>
-        <source>normal</source>
-        <translation type="vanished">通常</translation>
-    </message>
-    <message>
-        <source>small</source>
-        <translation type="vanished">小</translation>
-    </message>
-    <message>
-        <source>tiny</source>
-        <translation type="vanished">極小</translation>
-    </message>
-    <message>
-        <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="vanished">&lt;br&gt;サイズ: %1,  Bracket: %2 </translation>
-    </message>
-    <message>
-        <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="vanished">&lt;br&gt;小節線 [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</translation>
-    </message>
-    <message>
-        <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="vanished">&lt;br&gt;小節線 [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;表記が一貫していません。&lt;/p&gt;&lt;p&gt;クリックして更なる情報を得る&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="vanished">...</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <comment>note name</comment>
-        <translation type="vanished">C</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <comment>note name</comment>
-        <translation type="vanished">C#</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <comment>note name</comment>
-        <translation type="vanished">D</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <comment>note name</comment>
-        <translation type="vanished">Eb</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <comment>note name</comment>
-        <translation type="vanished">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <comment>note name</comment>
-        <translation type="vanished">F</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <comment>note name</comment>
-        <translation type="vanished">F#</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <comment>note name</comment>
-        <translation type="vanished">G</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <comment>note name</comment>
-        <translation type="vanished">G#</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <comment>note name</comment>
-        <translation type="vanished">A</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <comment>note name</comment>
-        <translation type="vanished">Bb</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <comment>note name</comment>
-        <translation type="vanished">B</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;ファイル名: %1 &lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;トラック %1: &quot;%2&quot;&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="vanished">セグメント &quot;%1&quot;: %2 音部記号</translation>
-    </message>
-    <message>
-        <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="vanished">セグメント &quot;%1&quot;: %2 調</translation>
-    </message>
-    <message>
-        <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="vanished">セグメント &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="vanished">Rosegarden</translation>
-    </message>
-    <message>
-        <source>%1: %2</source>
-        <translation type="vanished">%1: %2</translation>
-    </message>
-    <message>
-        <source> in %1</source>
-        <translation type="vanished">%1 中</translation>
-    </message>
-</context>
+
 <context>
     <name>Rosegarden::SustainInsertionCommand</name>
     <message>
@@ -26691,7 +26561,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>StaffHeader</name>
+    <name>Rosegarden::StaffHeader</name>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+148"/>
         <source>Track %1 : &quot;%2&quot;</source>

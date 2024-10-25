@@ -22971,58 +22971,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
 </context>
-<context>
-    <name>Rosegarden::StaffHeader</name>
-    <message>
-        <source>normal</source>
-        <translation type="obsolete">Arferol</translation>
-    </message>
-    <message>
-        <source>small</source>
-        <translation type="obsolete">Popeth</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="obsolete">...</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <comment>note name</comment>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <comment>note name</comment>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <comment>note name</comment>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <comment>note name</comment>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <comment>note name</comment>
-        <translation type="obsolete">A4</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>%1: %2</source>
-        <translation type="obsolete">&amp;%1%2</translation>
-    </message>
-    <message>
-        <source> in %1</source>
-        <translation type="obsolete">Dat-&amp;wneud %1</translation>
-    </message>
-</context>
+
 <context>
     <name>Rosegarden::SustainInsertionCommand</name>
     <message>
@@ -25233,7 +25182,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>StaffHeader</name>
+    <name>Rosegarden::StaffHeader</name>
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+146"/>
         <source>Track %1 : &quot;%2&quot;</source>
