@@ -52,7 +52,7 @@ class Segment;
 class Clef;
 class Key;
 
-template<class T> class Inconsistencies;
+template<typename T> class Inconsistencies;
 
 
 // Class rename from TrackHeader to StaffHeader since paintEvent() method
