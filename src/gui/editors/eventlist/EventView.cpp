@@ -79,73 +79,73 @@
 #include <QDesktopServices>
 
 
+namespace Rosegarden
+{
+
+
 namespace
 {
 
     // Persistent filter settings.
-    Rosegarden::PreferenceBool a_showNoteSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showNoteSetting(
+            EventViewConfigGroup,
             "showNote",
             true);
-    Rosegarden::PreferenceBool a_showRestSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showRestSetting(
+            EventViewConfigGroup,
             "showRest",
             true);
-    Rosegarden::PreferenceBool a_showProgramChangeSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showProgramChangeSetting(
+            EventViewConfigGroup,
             "showProgramChange",
             true);
-    Rosegarden::PreferenceBool a_showControllerSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showControllerSetting(
+            EventViewConfigGroup,
             "showController",
             true);
-    Rosegarden::PreferenceBool a_showPitchBendSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showPitchBendSetting(
+            EventViewConfigGroup,
             "showPitchBend",
             true);
-    Rosegarden::PreferenceBool a_showSystemExclusiveSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showSystemExclusiveSetting(
+            EventViewConfigGroup,
             "showSystemExclusive",
             true);
-    Rosegarden::PreferenceBool a_showKeyPressureSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showKeyPressureSetting(
+            EventViewConfigGroup,
             "showKeyPressure",
             true);
-    Rosegarden::PreferenceBool a_showChannelPressureSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showChannelPressureSetting(
+            EventViewConfigGroup,
             "showChannelPressure",
             true);
-    Rosegarden::PreferenceBool a_showIndicationSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showIndicationSetting(
+            EventViewConfigGroup,
             "showIndication",
             true);
-    Rosegarden::PreferenceBool a_showTextSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showTextSetting(
+            EventViewConfigGroup,
             "showText",
             true);
-    Rosegarden::PreferenceBool a_showGeneratedRegionSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showGeneratedRegionSetting(
+            EventViewConfigGroup,
             "showGeneratedRegion",
             true);
-    Rosegarden::PreferenceBool a_showSegmentIDSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showSegmentIDSetting(
+            EventViewConfigGroup,
             "showSegmentID",
             true);
-    Rosegarden::PreferenceBool a_showOtherSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceBool a_showOtherSetting(
+            EventViewConfigGroup,
             "showOther",
             true);
 
-    Rosegarden::PreferenceInt a_timeModeSetting(
-            Rosegarden::EventViewConfigGroup,
+    PreferenceInt a_timeModeSetting(
+            EventViewConfigGroup,
             "timemode",
-            0);
+            int(Composition::TimeMode::MusicalTime));
 
 }
-
-
-namespace Rosegarden
-{
 
 
 EventView::EventView(RosegardenDocument *doc,
@@ -771,9 +771,9 @@ EventView::makeDurationString(timeT time,
     // ??? Same as TriggerSegmentManager::makeDurationString().  Move to
     //     Composition like makeTimeString().
 
-    switch (timeMode) {
+    switch (Composition::TimeMode(timeMode)) {
 
-    case 0:  // musical time
+    case Composition::TimeMode::MusicalTime:
         {
             int bar, beat, fraction, remainder;
             RosegardenDocument::currentDocument->getComposition().getMusicalTimeForDuration
@@ -790,7 +790,7 @@ EventView::makeDurationString(timeT time,
                    .arg(remainder % 10);
         }
 
-    case 1:  // real time
+    case Composition::TimeMode::RealTime:
         {
             RealTime rt =
                 RosegardenDocument::currentDocument->getComposition().getRealTimeDifference
@@ -799,6 +799,7 @@ EventView::makeDurationString(timeT time,
             return QString("%1  ").arg(rt.toText().c_str());
         }
 
+    case Composition::TimeMode::RawTime:
     default:
         return QString("%1  ").arg(duration);
     }
@@ -1244,22 +1245,20 @@ EventView::setupActions()
 
     createMenusAndToolbars("eventlist.rc");
 
-    QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
+    const Composition::TimeMode timeMode =
+            Composition::TimeMode(a_timeModeSetting.get());
+    if (timeMode == Composition::TimeMode::MusicalTime)
+        musical->setChecked(true);
+    else if (timeMode == Composition::TimeMode::RealTime)
+        real->setChecked(true);
+    else if (timeMode == Composition::TimeMode::RawTime)
+        raw->setChecked(true);
 
-    int timeMode = a_timeModeSetting.get();
-
-    settings.endGroup();
-
-    if (timeMode == 0) musical->setChecked(true);
-    else if (timeMode == 1) real->setChecked(true);
-    else if (timeMode == 2) raw->setChecked(true);
-
+    // For trigger segments, remove matrix and notation editor menu items.
+    // ??? Does this actually remove the items?  Or does it just disable them?
     if (m_isTriggerSegment) {
-        QAction *action = findAction("open_in_matrix");
-        if (action) delete action;
-        action = findAction("open_in_notation");
-        if (action) delete action;
+        delete findAction("open_in_matrix");
+        delete findAction("open_in_notation");
     }
 }
 
@@ -1388,7 +1387,7 @@ EventView::slotMusicalTime()
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
 
-    a_timeModeSetting.set(0);
+    a_timeModeSetting.set(int(Composition::TimeMode::MusicalTime));
     findAction("time_musical")->setChecked(true);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(false);
@@ -1403,7 +1402,7 @@ EventView::slotRealTime()
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
 
-    a_timeModeSetting.set(1);
+    a_timeModeSetting.set(int(Composition::TimeMode::RealTime));
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(true);
     findAction("time_raw")->setChecked(false);
@@ -1418,7 +1417,7 @@ EventView::slotRawTime()
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
 
-    a_timeModeSetting.set(2);
+    a_timeModeSetting.set(int(Composition::TimeMode::RawTime));
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(true);
