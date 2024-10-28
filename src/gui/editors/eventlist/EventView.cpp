@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[EventView]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "EventView.h"
 
@@ -276,12 +276,12 @@ EventView::EventView(RosegardenDocument *doc,
     m_treeWidget = new QTreeWidget(m_frame);
     // Double-click to edit.
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
-            this, &EventView::slotPopupEventEditor);
+            this, &EventView::slotItemDoubleClicked);
 
     m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_treeWidget,
                 &QWidget::customContextMenuRequested,
-            this, &EventView::slotPopupMenu);
+            this, &EventView::slotContextMenu);
 
     m_treeWidget->setAllColumnsShowFocus(true);
     m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -1321,17 +1321,16 @@ EventView::saveOptions()
 Segment *
 EventView::getCurrentSegment()
 {
-    // ??? This can never happen.  See preconditions in the ctor.
     if (m_segments.empty())
         return nullptr;
-    else
-        return *m_segments.begin();
+
+    return *m_segments.begin();
 }
 
 void
 EventView::slotFilterClicked(bool)
 {
-    // Update filter state.
+    // Copy from check boxes to state.
     m_showNote = m_noteCheckBox->isChecked();
     m_showRest = m_restCheckBox->isChecked();
     m_showText = m_textCheckBox->isChecked();
@@ -1352,6 +1351,7 @@ EventView::slotFilterClicked(bool)
 void
 EventView::updateFilterCheckBoxes()
 {
+    // Copy from state to check boxes.
     m_noteCheckBox->setChecked(m_showNote);
     m_restCheckBox->setChecked(m_showRest);
     m_textCheckBox->setChecked(m_showText);
@@ -1370,75 +1370,54 @@ EventView::updateFilterCheckBoxes()
 void
 EventView::slotMusicalTime()
 {
-    QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
-
     a_timeModeSetting.set(int(Composition::TimeMode::MusicalTime));
     findAction("time_musical")->setChecked(true);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(false);
-    updateTreeWidget();
 
-    settings.endGroup();
+    updateTreeWidget();
 }
 
 void
 EventView::slotRealTime()
 {
-    QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
-
     a_timeModeSetting.set(int(Composition::TimeMode::RealTime));
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(true);
     findAction("time_raw")->setChecked(false);
-    updateTreeWidget();
 
-    settings.endGroup();
+    updateTreeWidget();
 }
 
 void
 EventView::slotRawTime()
 {
-    QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
-
     a_timeModeSetting.set(int(Composition::TimeMode::RawTime));
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(true);
-    updateTreeWidget();
 
-    settings.endGroup();
+    updateTreeWidget();
 }
 
 void
-EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
+EventView::slotItemDoubleClicked(QTreeWidgetItem *item, int /* column */)
 {
     EventViewItem *eventViewItem = dynamic_cast<EventViewItem *>(item);
     if (!eventViewItem) {
-        RG_WARNING << "slotPopupEventEditor(): WARNING: No EventViewItem.";
+        RG_WARNING << "slotItemDoubleClicked(): WARNING: No EventViewItem.";
         return;
     }
 
-    // Get the Segment.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
-    // ??? Why is the QTreeWidgetItem going away?  It appears to be
-    //     happening as a result of the call to exec() below.  Is someone
-    //     refreshing the list?
     Segment *segment = eventViewItem->getSegment();
     if (!segment) {
-        RG_WARNING << "slotPopupEventEditor(): WARNING: No Segment.";
+        RG_WARNING << "slotItemDoubleClicked(): WARNING: No Segment.";
         return;
     }
 
-    // !!! trigger events
-
-    // Get the Event.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Event *event = eventViewItem->getEvent();
     if (!event) {
-        RG_WARNING << "slotPopupEventEditor(): WARNING: No Event.";
+        RG_WARNING << "slotItemDoubleClicked(): WARNING: No Event.";
         return;
     }
 
@@ -1456,53 +1435,49 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
     if (!dialog.isModified())
         return;
 
-    // Note: At this point, item and eventViewItem may be invalid.
-    //       Do not use them.
-
-    EventEditCommand *command =
-            new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
+    EventEditCommand *command = new EventEditCommand(
+            *segment,
+            event,  // eventToModify
+            dialog.getEvent());  // newEvent
 
     CommandHistory::getInstance()->addCommand(command);
 }
 
 void
-EventView::slotPopupMenu(const QPoint& pos)
+EventView::slotContextMenu(const QPoint &pos)
 {
+    // Make sure something is actually selected.
     QTreeWidgetItem *item = m_treeWidget->itemAt(pos);
-
     if (!item)
-        return ;
+        return;
 
+    // Make sure it is an EventViewItem connected to an Event.
     EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
-    if (!eItem || !eItem->getEvent())
-        return ;
+    if (!eItem  ||  !eItem->getEvent())
+        return;
 
-    if (!m_popUpMenu)
-        createPopUpMenu();
+    // If the context menu hasn't been created, create it.
+    if (!m_contextMenu) {
+        m_contextMenu = new QMenu(this);
 
-    if (m_popUpMenu)
-        //m_menu->exec(QCursor::pos());
-        m_popUpMenu->exec(m_treeWidget->mapToGlobal(pos));
-    else
-        RG_DEBUG << "showMenu() : no menu to show\n";
-}
+        QAction *eventEditorAction =
+                m_contextMenu->addAction(tr("Open in Event Editor"));
+        connect(eventEditorAction, &QAction::triggered,
+                this, &EventView::slotOpenInEventEditor);
 
-void
-EventView::createPopUpMenu()
-{
-    m_popUpMenu = new QMenu(this);
+        QAction *expertEventEditorAction =
+                m_contextMenu->addAction(tr("Open in Expert Event Editor"));
+        connect(expertEventEditorAction, &QAction::triggered,
+                this, &EventView::slotOpenInExpertEventEditor);
+    }
 
-    QAction *eventEditorAction =
-            m_popUpMenu->addAction(tr("Open in Event Editor"));
-    connect(eventEditorAction, &QAction::triggered,
-            this, &EventView::slotOpenInEventEditor);
+    if (!m_contextMenu) {
+        RG_WARNING << "slotContextMenu() : no menu to show";
+        return;
+    }
 
-    QAction *expertEventEditorAction =
-            m_popUpMenu->addAction(tr("Open in Expert Event Editor"));
-    connect(expertEventEditorAction, &QAction::triggered,
-            this, &EventView::slotOpenInExpertEventEditor);
+    // Launch the context menu.
+    m_contextMenu->exec(m_treeWidget->mapToGlobal(pos));
 }
 
 void

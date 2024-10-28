@@ -114,10 +114,10 @@ private slots:
     void slotFilterClicked(bool);
 
     /// Handle double-click on an event in the event list.
-    void slotPopupEventEditor(QTreeWidgetItem *item, int column);
+    void slotItemDoubleClicked(QTreeWidgetItem *item, int column);
 
     /// Right-click context menu.
-    void slotPopupMenu(const QPoint &);
+    void slotContextMenu(const QPoint &);
     /// Right-click context menu handler.
     void slotOpenInEventEditor(bool checked);
     /// Right-click context menu handler.
@@ -186,9 +186,7 @@ private:
     bool updateTreeWidget();
 
     /// Pop-up menu for the event list.
-    QMenu *m_popUpMenu{nullptr};
-    /// Create and show popup menu.
-    void createPopUpMenu();
+    QMenu *m_contextMenu{nullptr};
 
     void makeInitialSelection(timeT);
 
