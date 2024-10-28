@@ -145,6 +145,8 @@ namespace
             "timemode",
             int(Composition::TimeMode::MusicalTime));
 
+    const char * const EventListLayoutGroup = "EventList_Layout";
+
 }
 
 
@@ -410,14 +412,6 @@ EventView::EventView(RosegardenDocument *doc,
     updateTreeWidget();
 
     makeInitialSelection(comp.getPosition());
-
-
-    // Restore window geometry and toolbar/dock state
-    QSettings settings;
-    settings.beginGroup(WindowGeometryConfigGroup);
-    restoreGeometry(settings.value("Event_List_View_Geometry").toByteArray());
-    restoreState(settings.value("Event_List_View_State").toByteArray());
-    settings.endGroup();
 }
 
 EventView::~EventView()
@@ -1262,22 +1256,6 @@ EventView::setupActions()
     }
 }
 
-/* unused
-QSize
-EventView::getViewSize()
-{
-    return m_treeWidget->size();
-}
-*/
-
-/* unused
-void
-EventView::setViewSize(QSize s)
-{
-    m_treeWidget->setFixedSize(s);
-}
-*/
-
 void
 EventView::readOptions()
 {
@@ -1295,10 +1273,19 @@ EventView::readOptions()
     m_showSegmentID = a_showSegmentIDSetting.get();
     m_showOther = a_showOtherSetting.get();
 
+    // Note that Wayland does not allow top-level window positioning.
+
+    // Restore window geometry and toolbar/dock state
     QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    restoreGeometry(settings.value("Event_List_View_Geometry").toByteArray());
+    restoreState(settings.value("Event_List_View_State").toByteArray());
+    settings.endGroup();
+
+    // Restore list settings.
     settings.beginGroup(EventViewConfigGroup);
-    const QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
-    m_treeWidget->restoreGeometry(qba);
+    m_treeWidget->restoreGeometry(
+            settings.value(EventListLayoutGroup).toByteArray());
 }
 
 void
@@ -1318,14 +1305,13 @@ EventView::saveOptions()
     a_showSegmentIDSetting.set(m_showSegmentID);
     a_showOtherSetting.set(m_showOther);
 
+    // Save list settings.
     QSettings settings;
-
     settings.beginGroup(EventViewConfigGroup);
-    settings.setValue(EventViewLayoutConfigGroupName, m_treeWidget->saveGeometry());
+    settings.setValue(EventListLayoutGroup, m_treeWidget->saveGeometry());
     settings.endGroup();
 
     // Save window geometry and toolbar/dock state
-    // ??? These are read by the ctor.  Move to dtor for consistency?
     settings.beginGroup(WindowGeometryConfigGroup);
     settings.setValue("Event_List_View_Geometry", saveGeometry());
     settings.setValue("Event_List_View_State", saveState());

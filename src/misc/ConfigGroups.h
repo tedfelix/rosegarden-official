@@ -42,7 +42,6 @@ namespace Rosegarden
     extern const char* const ControlEditorConfigGroup;
     extern const char* const DeviceManagerConfigGroup;
     extern const char* const EventFilterDialogConfigGroup;
-    extern const char* const EventViewLayoutConfigGroupName;
     extern const char* const EventViewConfigGroup;
     extern const char* const MarkerEditorConfigGroup;
     extern const char* const MatrixViewConfigGroup;

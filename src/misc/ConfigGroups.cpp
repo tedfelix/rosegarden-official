@@ -35,7 +35,6 @@ namespace Rosegarden
     const char* const ControlEditorConfigGroup = "Control_Editor";
     const char* const DeviceManagerConfigGroup = "Device_Manager";
     const char* const EventFilterDialogConfigGroup = "EventFilter_Dialog";
-    const char* const EventViewLayoutConfigGroupName = "EventList_Layout";
     const char* const EventViewConfigGroup = "EventList_Options";
     const char* const MarkerEditorConfigGroup = "Marker_Editor";
     const char* const MatrixViewConfigGroup = "Matrix_Options";

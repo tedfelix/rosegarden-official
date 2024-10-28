@@ -197,6 +197,7 @@ private:
     QLabel *m_triggerPitch{nullptr};
     QLabel *m_triggerVelocity{nullptr};
 
+    // ??? read/save?  How about load/save or read/write?
     void readOptions();
     void saveOptions();
 
