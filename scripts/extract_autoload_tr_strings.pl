@@ -5,7 +5,8 @@
 #      <inputFile1> [<inputFile2> ...] > <outPutFile.cpp>
 #
 #   "-info=" specify an optional file where the new translations source
-#            and context are written
+#            and context are written (only useful to allow the postprocessing
+#            of ts files when some translation contexts are modified)
 #   <inputFile1>, ... are the input .xml files
 #   The output Qt C++ code is written on stdout
 
@@ -68,7 +69,13 @@ sub output
     my ($context, $name, $comment) = @_;
     print 'QT_TRANSLATE_NOOP("', $context, '", "', $name, '");';
     print ' /* ', $comment, " */\n";
-    print INFO $context, "\t", $name, "\n" if $wantInfo;
+
+    if ($wantInfo) {
+        # Remove any new line character from $context and $name before printing
+        $context =~ s/\n/€/g;
+        $name =~ s/\n/€/g;
+        print INFO $context, "\t", $name, "\n";
+    }
 }
 
 
