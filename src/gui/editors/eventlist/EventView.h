@@ -69,9 +69,7 @@ signals:
 
     /// Connected to RosegardenMainViewWidget::slotEditTriggerSegment().
     /**
-     * ??? When is this ever emitted?  The other editors notice the user has
-     *     asked to edit a note that triggers a trigger Segment and then emit
-     *     this.  This never emits.
+     * Emitted by context menu "Edit Triggered Segment".
      */
     void editTriggerSegment(int id);
 
@@ -118,6 +116,8 @@ private slots:
     void slotOpenInEventEditor(bool checked);
     /// Right-click context menu handler.
     void slotOpenInExpertEventEditor(bool checked);
+    /// Right-click context menu handler.
+    void slotEditTriggeredSegment(bool checked);
 
     // Trigger Segments
     void slotEditTriggerName();
@@ -182,6 +182,7 @@ private:
 
     /// Pop-up menu for the event list.
     QMenu *m_contextMenu{nullptr};
+    QAction *m_editTriggeredSegment{nullptr};
 
     void makeInitialSelection(timeT);
 

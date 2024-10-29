@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[EventView]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "EventView.h"
 
@@ -1427,18 +1427,27 @@ void
 EventView::slotContextMenu(const QPoint &pos)
 {
     // Make sure something is actually selected.
+    // ??? Shouldn't we check currentItem() instead?  That's what the
+    //     handlers do.
     QTreeWidgetItem *item = m_treeWidget->itemAt(pos);
     if (!item)
         return;
 
-    // Make sure it is an EventViewItem connected to an Event.
-    EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
-    if (!eItem  ||  !eItem->getEvent())
+    EventViewItem *eventViewItem = dynamic_cast<EventViewItem*>(item);
+    if (!eventViewItem)
+        return;
+
+    Event *event = eventViewItem->getEvent();
+    if (!event)
         return;
 
     // If the context menu hasn't been created, create it.
     if (!m_contextMenu) {
         m_contextMenu = new QMenu(this);
+        if (!m_contextMenu) {
+            RG_WARNING << "slotContextMenu() : Couldn't create context menu.";
+            return;
+        }
 
         QAction *eventEditorAction =
                 m_contextMenu->addAction(tr("Open in Event Editor"));
@@ -1449,12 +1458,18 @@ EventView::slotContextMenu(const QPoint &pos)
                 m_contextMenu->addAction(tr("Open in Expert Event Editor"));
         connect(expertEventEditorAction, &QAction::triggered,
                 this, &EventView::slotOpenInExpertEventEditor);
+
+        m_contextMenu->addSeparator();
+
+        m_editTriggeredSegment =
+                m_contextMenu->addAction(tr("Edit Triggered Segment"));
+        connect(m_editTriggeredSegment, &QAction::triggered,
+                this, &EventView::slotEditTriggeredSegment);
     }
 
-    if (!m_contextMenu) {
-        RG_WARNING << "slotContextMenu() : no menu to show";
-        return;
-    }
+    // Enable/disable triggered segment menu item.
+    const bool trigger = event->has(BaseProperties::TRIGGER_SEGMENT_ID);
+    m_editTriggeredSegment->setEnabled(trigger);
 
     // Launch the context menu.
     m_contextMenu->exec(m_treeWidget->mapToGlobal(pos));
@@ -1533,6 +1548,30 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
 }
 
 void
+EventView::slotEditTriggeredSegment(bool /*checked*/)
+{
+    // ??? This works well, but I think we need a clearer indication in the
+    //     list that an event has a TRIGGER_SEGMENT_ID.  The notation editor
+    //     colors the note dark red.  The matrix editor colors the note
+    //     cyan.  We should probably force something into the data1 or
+    //     data2 field.
+
+    EventViewItem *eventViewItem =
+            dynamic_cast<EventViewItem *>(m_treeWidget->currentItem());
+    if (!eventViewItem)
+        return;
+
+    Event *event = eventViewItem->getEvent();
+    if (!event)
+        return;
+
+    int triggeredSegmentID =
+            event->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID);
+
+    emit editTriggerSegment(triggeredSegmentID);
+}
+
+void
 EventView::updateWindowTitle(bool modified)
 {
     if (m_segments.size() != 1) {
@@ -1584,8 +1623,14 @@ EventView::slotDocumentModified(bool modified)
             getComposition().contains(m_segments[0]);
 
     // No longer in the Composition?  Close the window.
-    // ??? SegmentObserver::segmentRemoved() would be more direct.
-    //     Consider switching to that.
+    //
+    // I tried using CompositionObserver::segmentRemoved() to close the window
+    // in a simple and straightforward way and ended up completely wrapped
+    // around the axle as the order in which notifications are sent and things
+    // go away is unnecessarily complicated and unexpected.  It really
+    // shouldn't be.  This approach just happens to work, but doesn't seem
+    // ideal.  However, it is similar to the way all the other editors deal
+    // with segments going away.
     if (!inComposition) {
         close();
         return;
