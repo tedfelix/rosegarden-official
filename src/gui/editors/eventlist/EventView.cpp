@@ -182,16 +182,19 @@ EventView::EventView(RosegardenDocument *doc,
     setupActions();
 
     // Create frame and layout.
+    // ??? Why QFrame and not just QWidget?
     m_frame = new QFrame(this);
-    // ??? Might not be wide enough for a trigger segment.
-    m_frame->setMinimumSize(500, 300);
     m_gridLayout = new QGridLayout(m_frame);
     m_frame->setLayout(m_gridLayout);
     setCentralWidget(m_frame);
 
-    // Event filters
+    // *** Event filters
+
     m_filterGroup = new QGroupBox(tr("Event filters"), m_frame);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
+    // SetFixedSize - Make the layout exactly the size of its contents and
+    //                do not allow it to expand or contract.
+    filterGroupLayout->setSizeConstraint(QLayout::SetFixedSize);
     m_filterGroup->setLayout(filterGroupLayout);
 
     m_noteCheckBox = new QCheckBox(tr("Note"), m_filterGroup);
@@ -259,12 +262,11 @@ EventView::EventView(RosegardenDocument *doc,
             this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_otherCheckBox);
 
-    m_gridLayout->addWidget(m_filterGroup, 0, 0);
+    m_gridLayout->addWidget(m_filterGroup, 0, 0, Qt::AlignHCenter);
+    m_gridLayout->setRowMinimumHeight(0, m_filterGroup->height());
 
     // Tree Widget
 
-    // ??? Initial size is not wide enough.  Need to test with a trigger
-    //     segment.
     m_treeWidget = new QTreeWidget(m_frame);
     // Double-click to edit.
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
@@ -293,8 +295,9 @@ EventView::EventView(RosegardenDocument *doc,
     // Plus a little for the tree diagram in the first column.
     m_treeWidget->setColumnWidth(0, timeWidth + 23);
     m_treeWidget->setColumnWidth(1, timeWidth);
+    m_treeWidget->setMinimumWidth(700);
 
-    m_gridLayout->addWidget(m_treeWidget, 0, 1, 2, 1);
+    m_gridLayout->addWidget(m_treeWidget, 0, 1, 3, 1);
 
     // Trigger Segment Group Box
 
@@ -380,19 +383,17 @@ EventView::EventView(RosegardenDocument *doc,
 #endif
 
         groupBox->setLayout(layout);
-        m_gridLayout->addWidget(groupBox, 0, 2);
+        //m_gridLayout->addWidget(groupBox, 0, 2);
+        m_gridLayout->addWidget(groupBox, 1, 0);
 
     }
 
-    // ??? Layout looks really bad.  The filter check boxes are all spread
-    //     out.  The trigger segment check boxes are worse.  Perhaps we should:
-    //     1. Move the filter check boxes to the menu.
-    //     2. Move the trigger segment property editing to the trigger segment
-    //        manager somehow.  I think it shows that info in its list.  Make
-    //        the list editable.
-    // ??? Doesn't work.  How do we fill the rest of the space?
-    //m_gridLayout->setRowStretch(0, 1);
-    //m_gridLayout->setRowStretch(1, 200);
+    // Add a third row to expand to fill the remaining space and prevent
+    // expansion of the contents of the first column.
+    m_gridLayout->setRowStretch(2, 1);
+
+    // Make sure frame never gets too small.
+    m_frame->setMinimumSize(m_gridLayout->minimumSize());
 
     updateWindowTitle(false);
 
@@ -801,6 +802,12 @@ EventView::slotEditTriggerName()
             new SegmentLabelCommand(selection, newLabel));
 
     m_triggerName->setText(newLabel);
+
+    // ??? This causes the Event List editor to go away.  I assume it is
+    //     because the Segment object can't be edited and was replaced with a
+    //     new one?  That then triggers the documentModified() which sees
+    //     the old Segment is no longer in the composition and we close
+    //     the Event List editor.  Ridiculous.
 }
 
 void
@@ -827,6 +834,12 @@ EventView::slotEditTriggerPitch()
                     dlg->getPitch()));
 
     m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
+
+    // ??? This causes the Event List editor to go away.  I assume it is
+    //     because the Segment object can't be edited and was replaced with a
+    //     new one?  That then triggers the documentModified() which sees
+    //     the old Segment is no longer in the composition and we close
+    //     the Event List editor.  Ridiculous.
 }
 
 void
@@ -853,6 +866,12 @@ EventView::slotEditTriggerVelocity()
                     dlg->getVelocity()));  // newVelocity
 
     m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
+
+    // ??? This causes the Event List editor to go away.  I assume it is
+    //     because the Segment object can't be edited and was replaced with a
+    //     new one?  That then triggers the documentModified() which sees
+    //     the old Segment is no longer in the composition and we close
+    //     the Event List editor.  Ridiculous.
 }
 
 #if 0
