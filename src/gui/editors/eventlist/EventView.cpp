@@ -166,22 +166,14 @@ EventView::EventView(RosegardenDocument *doc,
 
     setAttribute(Qt::WA_DeleteOnClose);
 
+    setWindowIcon(IconLoader::loadPixmap("window-eventlist"));
+
     setStatusBar(new QStatusBar(this));
 
     // Connect for changes so we can update the list.
     connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,
             this, &EventView::slotDocumentModified);
-
-    // Subscribe for Segment updates.
-    // ??? We are seeing observers that are still extant if you close rg before
-    //     you close the Event Editor windows.
-    //
-    //     This then causes a "use after free" when Segment's
-    //     dtor tries to dump the name of the observer since we are gone.
-    //     Our dtor does removeObserver(), but maybe the Segment goes away
-    //     before the editor does?
-    segments[0]->addObserver(this);
 
     Composition &comp = doc->getComposition();
 
@@ -402,10 +394,7 @@ EventView::EventView(RosegardenDocument *doc,
     //m_gridLayout->setRowStretch(0, 1);
     //m_gridLayout->setRowStretch(1, 200);
 
-    slotUpdateWindowTitle(false);
-    connect(RosegardenDocument::currentDocument,
-                &RosegardenDocument::documentModified,
-            this, &EventView::slotUpdateWindowTitle);
+    updateWindowTitle(false);
 
     readOptions();
     updateFilterCheckBoxes();
@@ -417,16 +406,7 @@ EventView::EventView(RosegardenDocument *doc,
 EventView::~EventView()
 {
     saveOptions();
-
-    m_segments[0]->removeObserver(this);
 }
-
-#if 0
-void
-EventView::eventRemoved(const Segment *, Event *e)
-{
-}
-#endif
 
 bool
 EventView::updateTreeWidget()
@@ -1488,22 +1468,18 @@ EventView::slotOpenInEventEditor(bool /* checked */)
     if (!eventViewItem)
         return;
 
-    // Get the Segment.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Segment *segment = eventViewItem->getSegment();
     if (!segment)
         return;
 
-    // Get the Event.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Event *event = eventViewItem->getEvent();
     if (!event)
         return;
 
     SimpleEventEditDialog dialog(
-            this,
-            RosegardenDocument::currentDocument,
-            *event,
+            this,  // parent
+            RosegardenDocument::currentDocument,  // doc
+            *event,  // event
             false);  // inserting
 
     // Launch dialog.  Bail if canceled.
@@ -1516,8 +1492,8 @@ EventView::slotOpenInEventEditor(bool /* checked */)
 
     EventEditCommand *command =
             new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
+                                 event,  // eventToModify
+                                 dialog.getEvent());  // newEvent
 
     CommandHistory::getInstance()->addCommand(command);
 }
@@ -1530,14 +1506,10 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
     if (!eventViewItem)
         return;
 
-    // Get the Segment.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Segment *segment = eventViewItem->getSegment();
     if (!segment)
         return;
 
-    // Get the Event.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Event *event = eventViewItem->getEvent();
     if (!event)
         return;
@@ -1554,45 +1526,38 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
 
     EventEditCommand *command =
             new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
+                                 event,  // eventToModify
+                                 dialog.getEvent());  // newEvent
 
     CommandHistory::getInstance()->addCommand(command);
 }
 
 void
-EventView::slotUpdateWindowTitle(bool modified)
+EventView::updateWindowTitle(bool modified)
 {
+    if (m_segments.size() != 1) {
+        RG_WARNING << "updateWindowTitle(): m_segments size is not 1: " << m_segments.size();
+        return;
+    }
+
     QString indicator = (modified ? "*" : "");
 
     if (m_isTriggerSegment) {
 
-        setWindowTitle(tr("%1%2 - Triggered Segment: %3")
-                       .arg(indicator)
-                       .arg(RosegardenDocument::currentDocument->getTitle())
-                       .arg(strtoqstr(m_segments[0]->getLabel())));
+        setWindowTitle(
+                tr("%1%2 - Triggered Segment: %3").
+                        arg(indicator).
+                        arg(RosegardenDocument::currentDocument->getTitle()).
+                        arg(strtoqstr(m_segments[0]->getLabel())));
 
 
     } else {
-        // ??? This is always true.
-        if (m_segments.size() == 1) {
 
-            // Fix bug #3007112
-            if (!m_segments[0]->getComposition()) {
-                // The segment is no more in the composition.
-                // Nothing to edit : close the editor.
-                close();
-                return;
-            }
-        }
         QString view = tr("Event List");
         setWindowTitle(getTitle(view));
+
     }
-
-    setWindowIcon(IconLoader::loadPixmap("window-eventlist"));
-
 }
-
 
 void
 EventView::slotHelpRequested()
@@ -1613,18 +1578,21 @@ EventView::slotHelpAbout()
 }
 
 void
-EventView::segmentDeleted(const Segment *s)
+EventView::slotDocumentModified(bool modified)
 {
-    // ??? Bit of a design flaw.  Cast away const...
-    const_cast<Segment *>(s)->removeObserver(this);
+    const bool inComposition = RosegardenDocument::currentDocument->
+            getComposition().contains(m_segments[0]);
 
-    // This editor cannot handle Segments that go away.  So just close.
-    close();
-}
+    // No longer in the Composition?  Close the window.
+    // ??? SegmentObserver::segmentRemoved() would be more direct.
+    //     Consider switching to that.
+    if (!inComposition) {
+        close();
+        return;
+    }
 
-void
-EventView::slotDocumentModified(bool /*modified*/)
-{
+    updateWindowTitle(modified);
+
     updateTreeWidget();
 }
 

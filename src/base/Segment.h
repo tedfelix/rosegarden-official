@@ -1003,8 +1003,11 @@ private: // stuff to support SegmentObservers
     timeT *m_memoEndMarkerTime;
 
 signals:
+
     void contentsChanged(timeT start, timeT end);
- public:
+
+public:
+
     void signalChanged(timeT start, timeT end)
     { emit contentsChanged(start,end); }
 
@@ -1097,13 +1100,19 @@ public:
     virtual void transposeChanged(const Segment *, int /*transpose*/) { }
 
     /**
-     * Called from the segment dtor
+     * Called from the segment dtor.
      * All observers must implement this and call removeObserver() to
      * remove themselves as observers.
      *
      * ??? But this is a const pointer, so we cannot call removeObserver().
      *     It's optional.  Most don't.  And you'll still get the extant
      *     observers warning even if you do.
+     *
+     * ??? This doesn't appear to be used very much.  And it's a pure virtual
+     *     which is annoying.
+     *
+     * This seems very specialized and unreliable.  Consider using
+     * CompositionObserver::segmentRemoved() instead of this.
      */
     virtual void segmentDeleted(const Segment *) = 0;
 };

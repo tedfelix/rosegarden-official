@@ -54,7 +54,7 @@ class Event;
  *
  * Segment > Edit With > Open in Event List Editor.  Or just press "E".
  */
-class EventView : public EditViewBase, public SegmentObserver
+class EventView : public EditViewBase
 {
     Q_OBJECT
 
@@ -64,10 +64,6 @@ public:
               const std::vector<Segment *> &segments);
 
     ~EventView() override;
-
-    // SegmentObserver overrides.
-    //void eventRemoved(const Segment *, Event *) override;
-    void segmentDeleted(const Segment *) override;
 
 signals:
 
@@ -130,9 +126,6 @@ private slots:
     // unused void slotTriggerTimeAdjustChanged(int);
     // unused void slotTriggerRetuneChanged();
 
-    /// Connected to RosegardenDocument::setModified(bool)
-    void slotUpdateWindowTitle(bool modified);
-
     void slotDocumentModified(bool modified);
 
 private:
@@ -144,6 +137,8 @@ private:
     void updateFilterCheckBoxes();
 
     void setupActions();
+
+    void updateWindowTitle(bool modified);
 
     // Widgets
 
