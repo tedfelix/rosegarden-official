@@ -396,7 +396,7 @@ EventView::EventView(RosegardenDocument *doc,
 
     updateWindowTitle(false);
 
-    readOptions();
+    loadOptions();
     updateFilterCheckBoxes();
     updateTreeWidget();
 
@@ -1237,7 +1237,7 @@ EventView::setupActions()
 }
 
 void
-EventView::readOptions()
+EventView::loadOptions()
 {
     m_showNote = a_showNoteSetting.get();
     m_showRest = a_showRestSetting.get();
