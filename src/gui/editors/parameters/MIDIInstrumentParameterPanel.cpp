@@ -642,7 +642,9 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         m_bankComboBox->clear();
         for (BankList::const_iterator i = m_banks.begin();
                 i != m_banks.end(); ++i) {
-            m_bankComboBox->addItem(QObject::tr(i->getName().c_str()));
+            m_bankComboBox->addItem(
+                            QCoreApplication::translate("INSTRUMENT",
+                                                        i->getName().c_str()));
         }
     }
 
@@ -735,28 +737,12 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         // Copy from m_programs to m_programComboBox.
         m_programComboBox->clear();
         for (unsigned i = 0; i < m_programs.size(); ++i) {
-            // m_programComboBox->addItem(instrTr("%1. %2")
-            //                            .arg(m_programs[i].getProgram() + 1)
-            //                            .arg(QObject::tr(m_programs[i].getName().c_str())));
 
-
-            // m_programComboBox->addItem(QObject::tr("%1. %2")
-            //                            .arg(m_programs[i].getProgram() + 1)
-            //                            .arg(QObject::tr(m_programs[i].getName().c_str())));
-
-            m_programComboBox->addItem(QObject::tr("%1. %2")
-                                       .arg(m_programs[i].getProgram() + 1)
-                                       .arg(QCoreApplication::translate("INSTRMENTS", m_programs[i].getName().c_str())));
-
-
-
-
-            // m_programComboBox->addItem(QObject::tr(m_programs[i].getName().c_str()));
-
-
-            // m_programComboBox->addItem(QObject::tr("%1. %2")
-            //                            .arg(m_programs[i].getProgram() + 1)
-            //                            .arg(QObject::tr(m_programs[i].getName().c_str())));
+            m_programComboBox->addItem(
+                        QObject::tr("%1. %2")
+                        .arg(m_programs[i].getProgram() + 1)
+                        .arg(QCoreApplication::translate("INSTRUMENT",
+                                                 m_programs[i].getName().c_str())));
         }
     }
 
@@ -885,9 +871,11 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
             MidiBank bank = m_variations[i].getBank();
             MidiByte variationBank = useMSB ? bank.getMSB() : bank.getLSB();
 
-            m_variationComboBox->addItem(QObject::tr("%1. %2")
-                                         .arg(variationBank)
-                                         .arg(QObject::tr(programName.c_str())));
+            m_variationComboBox->addItem(
+                                QObject::tr("%1. %2")
+                                .arg(variationBank)
+                                .arg(QCoreApplication::translate("INSTRUMENT",
+                                                            programName.c_str())));
         }
     }
 
