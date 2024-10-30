@@ -114,8 +114,6 @@ private:
     bool m_small;
     int  m_illuminate;
     bool m_illuminatePoint;
-    bool m_illuminateTarget;
-    bool m_refreshLinesOnly;
 
     bool m_dragVert;
     bool m_dragTarget;
