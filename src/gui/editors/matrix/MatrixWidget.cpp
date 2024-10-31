@@ -1099,11 +1099,11 @@ MatrixWidget::addControlRuler(QAction *action)
 
         // strings extracted from data files and related to MIDI
         // controller are in MIDI_CONTROLLER translation context
-        QString itemStr = QObject::tr("%1 Controller %2 %3")
-                            .arg(QCoreApplication::translate("MIDI_CONTROLLER",
-                                                            it->getName().c_str()))
-                            .arg(it->getControllerNumber())
-                            .arg(hexValue);
+        QString itemStr = tr("%1 Controller %2 %3")
+                        .arg(QCoreApplication::translate("MIDI_CONTROLLER",
+                                                        it->getName().c_str()))
+                        .arg(it->getControllerNumber())
+                        .arg(hexValue);
 
         if (name != itemStr)
             continue;
