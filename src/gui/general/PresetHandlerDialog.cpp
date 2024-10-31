@@ -275,7 +275,9 @@ PresetHandlerDialog::populateCategoryCombo()
         RG_DEBUG << "    adding category: " << (*i).getName();
 #endif
 
-        m_categoryCombo->addItem(QObject::tr((*i).getName().toStdString().c_str()));
+        m_categoryCombo->addItem(
+            QCoreApplication::translate("INSTRUMENT",
+                                        (*i).getName().toStdString().c_str()));
     }
 }
 
@@ -296,7 +298,9 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
         RG_DEBUG << "    adding instrument: " << (*i).getName();
 #endif
 
-        m_instrumentCombo->addItem(QObject::tr((*i).getName().toStdString().c_str()));
+        m_instrumentCombo->addItem(
+            QCoreApplication::translate("INSTRUMENT",
+                                        (*i).getName().toStdString().c_str()));
     }
 
 }

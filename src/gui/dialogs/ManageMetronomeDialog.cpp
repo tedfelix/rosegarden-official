@@ -288,7 +288,9 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
             QString iname(QObject::tr((*iit)->getName().c_str()));
             QString ipname((*iit)->getLocalizedPresentationName());
-            QString programName(QObject::tr((*iit)->getProgramName().c_str()));
+            QString programName(
+                QCoreApplication::translate("INSTRUMENT",
+                                            (*iit)->getProgramName().c_str()));
 
             QString text;
 

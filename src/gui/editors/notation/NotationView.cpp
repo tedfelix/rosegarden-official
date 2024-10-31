@@ -1056,9 +1056,10 @@ NotationView::setupActions()
             const QString hexValue =
                 QString::asprintf("(0x%x)", it->getControllerNumber());
 
-            // strings extracted from data files must be QObject::tr()
+            // strings extracted from data files and related to MIDI
+            // controller are in MIDI_CONTROLLER translation context
             itemStr = QObject::tr("%1 Controller %2 %3")
-                .arg(QObject::tr(it->getName().c_str()))
+                .arg(QCoreApplication::translate("MIDI_CONTROLLER", it->getName().c_str()))
                 .arg(it->getControllerNumber())
                 .arg(hexValue);
 
