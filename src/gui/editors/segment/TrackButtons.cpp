@@ -366,7 +366,8 @@ TrackButtons::initInstrumentNames(Instrument *ins, TrackLabel *label)
 
         if (ins->sendsProgramChange()) {
             label->setProgramChangeName(
-                    QObject::tr(ins->getProgramName().c_str()));
+                    QCoreApplication::translate("INSTRUMENT",
+                                                ins->getProgramName().c_str()));
         } else {
             label->setProgramChangeName("");
         }
@@ -832,7 +833,9 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         // as possible to get it to compile, and not refactor this down to the
         // simplest way to call tr() on a C string.
         QString programName(strtoqstr((*instrumentIter)->getProgramName()));
-        programName = QObject::tr(programName.toStdString().c_str());
+        programName = QCoreApplication::translate(
+                                            "INSTRUMENT",
+                                            programName.toStdString().c_str());
 
         Device *device = (*instrumentIter)->getDevice();
         DeviceId devId = device->getId();
@@ -912,7 +915,9 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             //subMenu->menuAction()->setIconVisibleInMenu(true);
 
             // Menu title
-            QString deviceName = QObject::tr(device->getName().c_str());
+            QString deviceName = QCoreApplication::translate(
+                                                    "INSTRUMENT",
+                                                    device->getName().c_str());
             subMenu->setTitle(deviceName);
 
             // QObject name

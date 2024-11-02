@@ -296,7 +296,8 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
             if ((*iit)->getType() == Instrument::SoftSynth) {
 
-                iname.replace(QObject::tr("Synth plugin "), "");
+                iname.replace(QCoreApplication::translate("INSTRUMENT",
+                                                          "Synth plugin "), "");
                 programName = "";
 
                 AudioPluginInstance *plugin = (*iit)->getPlugin

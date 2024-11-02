@@ -62,10 +62,12 @@ Studio::Studio() :
     // And we always have one audio and one soft-synth device, whose
     // IDs match the base instrument numbers (for no good reason
     // except easy identifiability)
-    addDevice(QObject::tr("Audio").toUtf8().data(),
+    addDevice(QCoreApplication::translate("INSTRUMENT",
+                                          "Audio").toUtf8().data(),
               AudioInstrumentBase, AudioInstrumentBase,
               Device::Audio);
-    addDevice(QObject::tr("Synth plugin").toUtf8().data(),
+    addDevice(QCoreApplication::translate("INSTRUMENT",
+                                          "Synth plugin").toUtf8().data(),
               SoftSynthInstrumentBase, SoftSynthInstrumentBase,
               Device::SoftSynth);
 }
