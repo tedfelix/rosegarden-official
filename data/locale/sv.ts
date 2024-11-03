@@ -4941,11 +4941,49 @@
         <source>Open Triangle</source>
         <translation>Öppen triangel</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+299"/>
+        <source>Synth plugin </source>
+        <translation type="unfinished">Syntinsticksmodul </translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1069"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
+        <location filename="../../src/base/Studio.cpp" line="+69"/>
+        <source>Synth plugin</source>
+        <translation type="unfinished">Syntinsticksmodul</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
+        <location filename="../../src/base/Studio.cpp" line="-4"/>
+        <source>Audio</source>
+        <translation type="unfinished">Ljud</translation>
+    </message>
+    <message>
+        <location filename="../../src/base/MidiDevice.cpp" line="+1114"/>
+        <source>&lt;new bank&gt;</source>
+        <translation type="unfinished">&lt;ny bank&gt;</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;new bank %1&gt;</source>
+        <translation type="unfinished">&lt;ny bank %1&gt;</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>&lt;new mapping&gt;</source>
+        <translation type="unfinished">&lt;ny tonartsändring&gt;</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>&lt;new mapping %1&gt;</source>
+        <translation type="unfinished">&lt;ny tonartsändring %1&gt;</translation>
+    </message>
 </context>
 <context>
     <name>LILYPOND</name>
     <message>
-        <location line="+449"/>
+        <location filename="../AutoloadStrings.cpp" line="+449"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
         <translation>Kopieringsrättigheter © xxxx Upphovsrättsinnehavare</translation>
     </message>
@@ -7881,9 +7919,8 @@
         <source>Mensural</source>
         <translation>Mensural</translation>
     </message>
-    
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <location line="+145"/>
         <source>&amp;Accidentals</source>
         <translation>T&amp;illfälliga förtecken</translation>
@@ -9332,7 +9369,12 @@
         <translation>Ställ in n&amp;otvärde...</translation>
     </message>
     <message>
-        <location line="-233"/>
+        <location line="-550"/>
+        <source>Triangle</source>
+        <translation type="unfinished">Triangel</translation>
+    </message>
+    <message>
+        <location line="+317"/>
         <source>Double Whole Rest</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9816,348 +9858,6 @@
         <source>Font &quot;%1&quot; not available in size %2</source>
         <translation>Teckensnittet &quot;%1&quot; inte tillgängligt med storleken %2</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>Cb</source>
@@ -10216,121 +9916,6 @@
         <source>D. Michael McIntyre</source>
         <translation type="unfinished"></translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <source>Bank 0:8</source>
         <translation type="obsolete">Bank 0:8</translation>
@@ -10579,62 +10164,10 @@
         <source>Orchestra Kit</source>
         <translation type="obsolete">Orkesterset</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <source> </source>
         <translation type="obsolete"> </translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location line="+186"/>
         <source>MIDI input system device</source>
@@ -10646,453 +10179,23 @@
         <translation>&amp;lt;inget&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+751"/>
-        <location filename="../../src/base/Studio.cpp" line="+68"/>
-        <location filename="../AutoloadStrings.cpp" line="-189"/>
+        <location line="-189"/>
         <source>Synth plugin</source>
         <translation>Syntinsticksmodul</translation>
     </message>
     <message>
-        <location line="+37"/>
-        <location filename="../../src/base/Studio.cpp" line="-3"/>
-        <location filename="../AutoloadStrings.cpp" line="-1"/>
+        <location line="-1"/>
         <source>Audio</source>
         <translation>Ljud</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
-        <location filename="../AutoloadStrings.cpp" line="+617"/>
+        <location line="+617"/>
         <source>generalmap</source>
         <translation>allmän avbildning</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+747"/>
-        <location line="+141"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+742"/>
+        <location line="+133"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
@@ -11110,12 +10213,8 @@
         <translation type="vanished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+484"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1101"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1060"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1718"/>
         <source>%1 Controller %2 %3</source>
-        <translation>%1 effekt %2 %3</translation>
+        <translation type="vanished">%1 effekt %2 %3</translation>
     </message>
     <message>
         <source>Rosegarden - A sequencer and musical notation editor</source>
@@ -11369,9 +10468,8 @@
         <translation>dur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+297"/>
         <source>Synth plugin </source>
-        <translation>Syntinsticksmodul </translation>
+        <translation type="vanished">Syntinsticksmodul </translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="-811"/>
@@ -11803,24 +10901,20 @@ Vill du använda
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="+1114"/>
         <source>&lt;new bank&gt;</source>
-        <translation type="unfinished">&lt;ny bank&gt;</translation>
+        <translation type="obsolete">&lt;ny bank&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished">&lt;ny bank %1&gt;</translation>
+        <translation type="obsolete">&lt;ny bank %1&gt;</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished">&lt;ny tonartsändring&gt;</translation>
+        <translation type="obsolete">&lt;ny tonartsändring&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&lt;new mapping %1&gt;</source>
-        <translation type="unfinished">&lt;ny tonartsändring %1&gt;</translation>
+        <translation type="obsolete">&lt;ny tonartsändring %1&gt;</translation>
     </message>
 </context>
 <context>
@@ -14404,7 +13498,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ColorCombo</name>
     <message>
-        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+84"/>
+        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+86"/>
         <source>Default</source>
         <translation type="unfinished">Förval</translation>
     </message>
@@ -14956,7 +14050,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+506"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+508"/>
         <source>Velocity</source>
         <translation>Ljudstyrka</translation>
     </message>
@@ -16898,7 +15992,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Utskrivningsbara rubriker</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+40"/>
         <source>Dedication</source>
         <translation>Dedikation</translation>
     </message>
@@ -18683,7 +17777,7 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-707"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-694"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ställ in variationer av programmet ovan, om tillgängliga i studion&lt;/qt&gt;</translation>
     </message>
@@ -18841,7 +17935,7 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
 <context>
     <name>Rosegarden::ManageMetronomeDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="-230"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="-232"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
@@ -18986,7 +18080,7 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <translation>vid inspelning</translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+114"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
@@ -19391,7 +18485,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1547"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+2033"/>
         <source>Unknown note insert action %1</source>
         <translation>Okänd notinfogningsåtgärd %1</translation>
     </message>
@@ -19497,7 +18591,12 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Uppskattad taktart visas</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="-1015"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 effekt %2 %3</translation>
+    </message>
+    <message>
+        <location line="+1105"/>
         <source>Transpose</source>
         <translation>Transponera</translation>
     </message>
@@ -19517,7 +18616,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Ta bort utlösare</translation>
     </message>
     <message>
-        <location line="-874"/>
+        <location line="-876"/>
         <source>Matrix</source>
         <translation>Matris</translation>
     </message>
@@ -19525,7 +18624,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-882"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+219"/>
         <source>Zoom</source>
         <translation>Zooma</translation>
     </message>
@@ -19545,7 +18644,12 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Återställ zoom</translation>
     </message>
     <message>
-        <location line="+1218"/>
+        <location line="+842"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 effekt %2 %3</translation>
+    </message>
+    <message>
+        <location line="+378"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;namnlös&gt;</translation>
     </message>
@@ -19555,7 +18659,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1294"/>
+        <location line="-1296"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rotera hjulet för att byta aktivt segment&lt;/qt&gt;</translation>
     </message>
@@ -20661,7 +19765,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+121"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1183"/>
         <source>Note &amp;Font</source>
         <translation>Not&amp;teckensnitt</translation>
     </message>
@@ -20761,12 +19865,12 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Kan inte klistra in flera segment i ett</translation>
     </message>
     <message>
-        <location line="-916"/>
+        <location line="-918"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location line="+324"/>
+        <location line="+326"/>
         <source>  %n event(s) selected </source>
         <translation>
             <numerusform>%n händels markerad </numerusform>
@@ -20878,7 +19982,12 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Ornament spår %1 takt %2</translation>
     </message>
     <message>
-        <location line="-1167"/>
+        <location line="-2338"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 effekt %2 %3</translation>
+    </message>
+    <message>
+        <location line="+1171"/>
         <source>Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21033,7 +20142,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1486"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+232"/>
         <source>Zoom</source>
         <translation>Zooma</translation>
     </message>
@@ -21058,7 +20167,12 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Stäng spårnamn</translation>
     </message>
     <message>
-        <location line="+1496"/>
+        <location line="+1407"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 effekt %2 %3</translation>
+    </message>
+    <message>
+        <location line="+91"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;namnlös&gt;</translation>
     </message>
@@ -26717,12 +25831,12 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+374"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+376"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;inget instrument&gt;</translation>
     </message>
     <message>
-        <location line="-70"/>
+        <location line="-72"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;namnlöst ljud&gt;</translation>
     </message>
@@ -26732,7 +25846,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>&lt;namnlös&gt;</translation>
     </message>
     <message>
-        <location line="+933"/>
+        <location line="+941"/>
         <source>Mute track</source>
         <translation>Gör spår stumt</translation>
     </message>
@@ -26826,18 +25940,18 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation type="obsolete">Spår</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+76"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-993"/>
         <source>Track Parameters</source>
         <translation>Spårparametrar</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1121"/>
+        <location line="+1123"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;namnlös&gt;</translation>
     </message>
     <message>
-        <location line="-1113"/>
+        <location line="-1115"/>
         <source>Playback parameters</source>
         <translation>Uppspelningsparametrar</translation>
     </message>
@@ -27255,17 +26369,16 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
     </message>
     <message>
         <location line="-205"/>
-        <location line="+953"/>
+        <location line="+955"/>
         <source>All</source>
         <translation>Alla</translation>
     </message>
     <message>
-        <location line="-73"/>
         <source>Synth plugin</source>
-        <translation type="unfinished">Syntinsticksmodul</translation>
+        <translation type="obsolete">Syntinsticksmodul</translation>
     </message>
     <message>
-        <location line="+261"/>
+        <location line="+188"/>
         <location line="+8"/>
         <source> %1</source>
         <translation> %1</translation>
@@ -27276,7 +26389,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>[ Spår %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-819"/>
+        <location line="-821"/>
         <source>Reset to Defaults</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4874,11 +4874,49 @@
         <source>Open Triangle</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+299"/>
+        <source>Synth plugin </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1069"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
+        <location filename="../../src/base/Studio.cpp" line="+69"/>
+        <source>Synth plugin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
+        <location filename="../../src/base/Studio.cpp" line="-4"/>
+        <source>Audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/base/MidiDevice.cpp" line="+1114"/>
+        <source>&lt;new bank&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;new bank %1&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>&lt;new mapping&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>&lt;new mapping %1&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LILYPOND</name>
     <message>
-        <location line="+449"/>
+        <location filename="../AutoloadStrings.cpp" line="+449"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
         <translation></translation>
     </message>
@@ -7829,7 +7867,12 @@
         <translation></translation>
     </message>
     <message>
-        <location line="+332"/>
+        <location line="+91"/>
+        <source>Triangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+241"/>
         <source>Tuplet Insert Mo&amp;de</source>
         <translation></translation>
     </message>
@@ -8746,7 +8789,6 @@
         <source>Font &quot;%1&quot; not available in size %2</source>
         <translation></translation>
     </message>
-    
     <message>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>Cb</source>
@@ -8805,7 +8847,6 @@
         <source>D. Michael McIntyre</source>
         <translation></translation>
     </message>
-    
     <message>
         <location line="+186"/>
         <source>MIDI input system device</source>
@@ -8817,41 +8858,29 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+751"/>
-        <location filename="../../src/base/Studio.cpp" line="+68"/>
-        <location filename="../AutoloadStrings.cpp" line="-189"/>
+        <location line="-189"/>
         <source>Synth plugin</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+37"/>
-        <location filename="../../src/base/Studio.cpp" line="-3"/>
-        <location filename="../AutoloadStrings.cpp" line="-1"/>
+        <location line="-1"/>
         <source>Audio</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="+617"/>
+        <location line="+617"/>
         <source>generalmap</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+747"/>
-        <location line="+141"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+742"/>
+        <location line="+133"/>
         <source>%1. %2</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+479"/>
         <source>%1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+484"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1101"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1060"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1718"/>
-        <source>%1 Controller %2 %3</source>
         <translation></translation>
     </message>
     <message>
@@ -9013,11 +9042,6 @@
     <message>
         <location line="+1"/>
         <source>major</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+297"/>
-        <source>Synth plugin </source>
         <translation></translation>
     </message>
     <message>
@@ -9439,26 +9463,6 @@ Would you like to use &quot;%1&quot; instead?</translation>
     <message>
         <location filename="../../src/sound/WAVExporter.cpp" line="+1"/>
         <source>&lt;p&gt;WAV Export&lt;/p&gt;&lt;p&gt;Unable to create WAV file.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="+1114"/>
-        <source>&lt;new bank&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>&lt;new mapping %1&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11773,7 +11777,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ColorCombo</name>
     <message>
-        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+84"/>
+        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+86"/>
         <source>Default</source>
         <translation></translation>
     </message>
@@ -12310,7 +12314,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+506"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+508"/>
         <source>Velocity</source>
         <translation></translation>
     </message>
@@ -14143,7 +14147,7 @@ This could cause problems if it overrides a different computed value later on.</
         <translation></translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+40"/>
         <source>Dedication</source>
         <translation></translation>
     </message>
@@ -15837,7 +15841,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-707"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-694"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation></translation>
     </message>
@@ -15995,7 +15999,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
 <context>
     <name>Rosegarden::ManageMetronomeDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="-230"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="-232"/>
         <source>Metronome</source>
         <translation></translation>
     </message>
@@ -16140,7 +16144,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+114"/>
         <source>%1 (%2)</source>
         <translation></translation>
     </message>
@@ -16546,7 +16550,7 @@ Double-click to open the marker editor.</source>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+137"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+623"/>
         <source> Grid: </source>
         <translation></translation>
     </message>
@@ -16633,7 +16637,12 @@ Double-click to open the marker editor.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="-1015"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1105"/>
         <source>Transpose</source>
         <translation></translation>
     </message>
@@ -16653,7 +16662,7 @@ Double-click to open the marker editor.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-874"/>
+        <location line="-876"/>
         <source>Matrix</source>
         <translation></translation>
     </message>
@@ -16661,7 +16670,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-882"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+219"/>
         <source>Zoom</source>
         <translation></translation>
     </message>
@@ -16681,7 +16690,12 @@ Double-click to open the marker editor.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+1218"/>
+        <location line="+842"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+378"/>
         <source>&lt;untitled&gt;</source>
         <translation></translation>
     </message>
@@ -16691,7 +16705,7 @@ Double-click to open the marker editor.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1294"/>
+        <location line="-1296"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation></translation>
     </message>
@@ -17743,7 +17757,7 @@ This is a bug (the program would previously have crashed by now)</source>
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+121"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1183"/>
         <source>Note &amp;Font</source>
         <translation></translation>
     </message>
@@ -17892,12 +17906,17 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1008"/>
+        <location line="-1010"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+327"/>
+        <location line="+34"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+295"/>
         <source>  No selection </source>
         <translation></translation>
     </message>
@@ -18106,7 +18125,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1486"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+232"/>
         <source>Zoom</source>
         <translation></translation>
     </message>
@@ -18131,7 +18150,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation></translation>
     </message>
     <message>
-        <location line="+1496"/>
+        <location line="+1407"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+91"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23466,12 +23490,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+374"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+376"/>
         <source>&lt;no instrument&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-70"/>
+        <location line="-72"/>
         <source>&lt;untitled audio&gt;</source>
         <translation></translation>
     </message>
@@ -23481,7 +23505,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation></translation>
     </message>
     <message>
-        <location line="+933"/>
+        <location line="+941"/>
         <source>Mute track</source>
         <translation></translation>
     </message>
@@ -23571,18 +23595,18 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+76"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-993"/>
         <source>Track Parameters</source>
         <translation></translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1121"/>
+        <location line="+1123"/>
         <source>&lt;untitled&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1113"/>
+        <location line="-1115"/>
         <source>Playback parameters</source>
         <translation></translation>
     </message>
@@ -23932,17 +23956,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
     <message>
         <location line="-205"/>
-        <location line="+953"/>
+        <location line="+955"/>
         <source>All</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-73"/>
-        <source>Synth plugin</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+261"/>
+        <location line="+188"/>
         <location line="+8"/>
         <source> %1</source>
         <translation></translation>
@@ -23953,7 +23972,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation></translation>
     </message>
     <message>
-        <location line="-819"/>
+        <location line="-821"/>
         <source>Reset to Defaults</source>
         <translation></translation>
     </message>

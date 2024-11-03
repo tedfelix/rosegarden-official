@@ -4960,11 +4960,49 @@ a quarter sine wave contour</source>
         <source>Open Triangle</source>
         <translation>Offene Triangel</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+299"/>
+        <source>Synth plugin </source>
+        <translation type="unfinished">Synthesizer-Plugin </translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1069"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
+        <location filename="../../src/base/Studio.cpp" line="+69"/>
+        <source>Synth plugin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
+        <location filename="../../src/base/Studio.cpp" line="-4"/>
+        <source>Audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/base/MidiDevice.cpp" line="+1114"/>
+        <source>&lt;new bank&gt;</source>
+        <translation type="unfinished">&lt;Neue Bank&gt;</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;new bank %1&gt;</source>
+        <translation type="unfinished">&lt;Neue Bank %1&gt;</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>&lt;new mapping&gt;</source>
+        <translation type="unfinished">&lt;Neue Zuordnung&gt;</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>&lt;new mapping %1&gt;</source>
+        <translation type="unfinished">&lt;Neue Zuordnung %1&gt;</translation>
+    </message>
 </context>
 <context>
     <name>LILYPOND</name>
     <message>
-        <location line="+449"/>
+        <location filename="../AutoloadStrings.cpp" line="+449"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
         <translation>Copyright (c) xxxx Die Inhaber des Copyright</translation>
     </message>
@@ -6781,9 +6819,8 @@ a quarter sine wave contour</source>
         <source>Mensural</source>
         <translation>Mensural</translation>
     </message>
-    
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <location line="+145"/>
         <source>&amp;Accidentals</source>
         <translation>&amp;Vorzeichen</translation>
@@ -6927,7 +6964,12 @@ a quarter sine wave contour</source>
         <translation>Haltebogen &amp;lösen</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-28"/>
+        <source>Triangle</source>
+        <translation type="unfinished">Triangel</translation>
+    </message>
+    <message>
+        <location line="+29"/>
         <source>Tie &amp;Position</source>
         <translation>&amp;Position des Haltebogens</translation>
     </message>
@@ -9896,298 +9938,6 @@ a quarter sine wave contour</source>
         <source>Font &quot;%1&quot; not available in size %2</source>
         <translation>Font &quot;%1&quot; nicht in Größe %2 verfügbar</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>Cb</source>
@@ -10236,61 +9986,10 @@ a quarter sine wave contour</source>
         <comment>note name</comment>
         <translation>H#</translation>
     </message>
-    
     <message>
         <source>Cu�ca</source>
         <translation type="vanished">Cuica</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location filename="../AutoloadStrings.cpp" line="-196"/>
         <source>General MIDI Device</source>
@@ -10301,121 +10000,6 @@ a quarter sine wave contour</source>
         <source>D. Michael McIntyre</source>
         <translation></translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <source>Bank 0:8</source>
         <translation type="obsolete">Bank 0:8</translation>
@@ -10664,62 +10248,10 @@ a quarter sine wave contour</source>
         <source>Orchestra Kit</source>
         <translation type="obsolete">Orchester Ausstattung</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <source> </source>
         <translation type="obsolete">,</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location line="+186"/>
         <source>MIDI input system device</source>
@@ -10731,460 +10263,23 @@ a quarter sine wave contour</source>
         <translation>&amp;lt;keine&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+751"/>
-        <location filename="../../src/base/Studio.cpp" line="+68"/>
-        <location filename="../AutoloadStrings.cpp" line="-189"/>
+        <location line="-189"/>
         <source>Synth plugin</source>
         <translation>Synthesizer-Plugin</translation>
     </message>
     <message>
-        <location line="+37"/>
-        <location filename="../../src/base/Studio.cpp" line="-3"/>
-        <location filename="../AutoloadStrings.cpp" line="-1"/>
+        <location line="-1"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
-        <location filename="../AutoloadStrings.cpp" line="+617"/>
+        <location line="+617"/>
         <source>generalmap</source>
         <translation>allgemein</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+747"/>
-        <location line="+141"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+742"/>
+        <location line="+133"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
@@ -11202,12 +10297,8 @@ a quarter sine wave contour</source>
         <translation type="vanished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+484"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1101"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1060"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1718"/>
         <source>%1 Controller %2 %3</source>
-        <translation>%1 Kontroller %2 %3</translation>
+        <translation type="vanished">%1 Kontroller %2 %3</translation>
     </message>
     <message>
         <source>Rosegarden - A sequencer and musical notation editor</source>
@@ -11488,9 +10579,8 @@ Kanälen</translation>
         <translation>Dur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+297"/>
         <source>Synth plugin </source>
-        <translation>Synthesizer-Plugin </translation>
+        <translation type="vanished">Synthesizer-Plugin </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+282"/>
@@ -11932,24 +11022,20 @@ a quarter sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="+1114"/>
         <source>&lt;new bank&gt;</source>
-        <translation type="unfinished">&lt;Neue Bank&gt;</translation>
+        <translation type="obsolete">&lt;Neue Bank&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished">&lt;Neue Bank %1&gt;</translation>
+        <translation type="obsolete">&lt;Neue Bank %1&gt;</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished">&lt;Neue Zuordnung&gt;</translation>
+        <translation type="obsolete">&lt;Neue Zuordnung&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&lt;new mapping %1&gt;</source>
-        <translation type="unfinished">&lt;Neue Zuordnung %1&gt;</translation>
+        <translation type="obsolete">&lt;Neue Zuordnung %1&gt;</translation>
     </message>
 </context>
 <context>
@@ -14616,7 +13702,7 @@ das verlinkte Segment setzen...</translation>
 <context>
     <name>Rosegarden::ColorCombo</name>
     <message>
-        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+84"/>
+        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+86"/>
         <source>Default</source>
         <translation>Standardwert</translation>
     </message>
@@ -15176,7 +14262,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+506"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+508"/>
         <source>Velocity</source>
         <translation>Anschlagstärke</translation>
     </message>
@@ -17153,7 +16239,7 @@ available on your path.  When choosing an application to use, please ensure that
         <translation>Druckbarer Dateikopf</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+40"/>
         <source>Dedication</source>
         <translation>Widmung</translation>
     </message>
@@ -18992,7 +18078,7 @@ need CCs in this range for other things.</source>
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-707"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-694"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Bestimme Variationen des obigen Programmes, falls sie im Studio verfügbar sind&lt;/qt&gt;</translation>
     </message>
@@ -19152,7 +18238,7 @@ Verzierung als auch das getriggerte Segment, welches die Verzierungs-Noten enth�
 <context>
     <name>Rosegarden::ManageMetronomeDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="-230"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="-232"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
@@ -19308,7 +18394,7 @@ not heard unless you are working in compound time.)&lt;/qt&gt;</source>
         <translation>Aufnahme</translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+114"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
@@ -19719,7 +18805,7 @@ zu ändern</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1547"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+2033"/>
         <source>Unknown note insert action %1</source>
         <translation>Unbekannte Noten-Einfügeaktion %1</translation>
     </message>
@@ -19825,7 +18911,12 @@ zu ändern</translation>
         <translation>Ermittelte Taktart wird angezeigt</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="-1015"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Kontroller %2 %3</translation>
+    </message>
+    <message>
+        <location line="+1105"/>
         <source>Transpose</source>
         <translation>Transponieren</translation>
     </message>
@@ -19845,7 +18936,7 @@ zu ändern</translation>
         <translation>Trigger entfernen</translation>
     </message>
     <message>
-        <location line="-874"/>
+        <location line="-876"/>
         <source>Matrix</source>
         <translation>Matrix</translation>
     </message>
@@ -19853,7 +18944,7 @@ zu ändern</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-882"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+219"/>
         <source>Zoom</source>
         <translation>Vergößerung</translation>
     </message>
@@ -19873,7 +18964,12 @@ zu ändern</translation>
         <translation>Vergrößerung zurücksetzen</translation>
     </message>
     <message>
-        <location line="+1218"/>
+        <location line="+842"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Kontroller %2 %3</translation>
+    </message>
+    <message>
+        <location line="+378"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
@@ -19883,7 +18979,7 @@ zu ändern</translation>
         <translation>Spur %1 (%2) | %3</translation>
     </message>
     <message>
-        <location line="-1294"/>
+        <location line="-1296"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rad rotieren lassen, um das aktive Segment 
 zu ändern&lt;/qt&gt;</translation>
@@ -21002,7 +20098,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+121"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1183"/>
         <source>Note &amp;Font</source>
         <translation>Noten&amp;font</translation>
     </message>
@@ -21115,12 +20211,12 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Mehrere Segmente können nicht in Eines eingefügt werden</translation>
     </message>
     <message>
-        <location line="-916"/>
+        <location line="-918"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Entsprechend Auswahl interpretieren (bei keiner Auswahl werden alle Interpretationen angewandt).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+442"/>
+        <location line="+444"/>
         <location line="+192"/>
         <location line="+52"/>
         <location line="+70"/>
@@ -21222,7 +20318,12 @@ eingeschränkten wählen.&lt;/p&gt;&lt;/qt&gt;</translation>
         <translation>Verzierung auf Spur %1 Takt %2</translation>
     </message>
     <message>
-        <location line="-1419"/>
+        <location line="-2338"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Kontroller %2 %3</translation>
+    </message>
+    <message>
+        <location line="+919"/>
         <location line="+59"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Der eingeschränkte Einfügetyp benötigt ausreichend Platz (nur Pausen beinhaltend) an der Einfügeposition, um alle einzufügenden Ereignisse zu behalten.&lt;/p&gt;&lt;p&gt;Es steht nicht ausreichend Platz zur Verfügung.&lt;/p&gt;&lt;p&gt;Wenn Sie auf jeden Fall einfügen möchten, erwägen Sie die Verwendung eines anderen Einfügetyps aus der &lt;b&gt;Einfügen...&lt;/b&gt; Option des Menüs Bearbeiten.  Wenn Sie möchten, können Sie den Einfügetyp Standard auch ändern auf einen anderen als Eingeschränkt.&lt;/p&gt;&lt;/qt&gt;</translation>
@@ -21383,7 +20484,7 @@ Bitte stellen Sie sicher, dass das Gerät korrekt konfiguriert ist im Dialog &qu
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1486"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+232"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
@@ -21408,7 +20509,12 @@ Bitte stellen Sie sicher, dass das Gerät korrekt konfiguriert ist im Dialog &qu
         <translation>Spur-Beschriftungen schließen</translation>
     </message>
     <message>
-        <location line="+1496"/>
+        <location line="+1407"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Kontroller %2 %3</translation>
+    </message>
+    <message>
+        <location line="+91"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
@@ -27310,12 +26416,12 @@ server due to a problem with your configuration, your system installation, or bo
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+374"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+376"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;kein Instrument&gt;</translation>
     </message>
     <message>
-        <location line="-70"/>
+        <location line="-72"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;unbenanntes Audio&gt;</translation>
     </message>
@@ -27325,7 +26431,7 @@ server due to a problem with your configuration, your system installation, or bo
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
     <message>
-        <location line="+933"/>
+        <location line="+941"/>
         <source>Mute track</source>
         <translation>Spur stumm schalten</translation>
     </message>
@@ -27429,18 +26535,18 @@ eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
         <translation type="obsolete">Spur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+76"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-993"/>
         <source>Track Parameters</source>
         <translation>Spur-Parameter</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1121"/>
+        <location line="+1123"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
     <message>
-        <location line="-1113"/>
+        <location line="-1115"/>
         <source>Playback parameters</source>
         <translation>Wiedergabe-Parameter</translation>
     </message>
@@ -27872,22 +26978,21 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     </message>
     <message>
         <location line="-205"/>
-        <location line="+953"/>
+        <location line="+955"/>
         <source>All</source>
         <translation>Alle</translation>
     </message>
     <message>
-        <location line="-818"/>
+        <location line="-820"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this clef inserted at the beginning&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Neue Segmente werden mit diesem Schlüssel, der am Anfang eingefügt wird, erzeugt&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+745"/>
         <source>Synth plugin</source>
-        <translation>Synthesizer Plugin</translation>
+        <translation type="vanished">Synthesizer Plugin</translation>
     </message>
     <message>
-        <location line="+261"/>
+        <location line="+1008"/>
         <location line="+8"/>
         <source> %1</source>
         <translation> %1</translation>
@@ -27898,7 +27003,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>[ Spur %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-1045"/>
+        <location line="-1047"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Auf dieser Spur werden nur Audio/MIDI-Daten von dem ausgewählten Gerät aufgenommen. Alles andere wird ausgefiltert&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>

@@ -4925,11 +4925,49 @@
         <source>Open Triangle</source>
         <translation>Avoin triangeli</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+299"/>
+        <source>Synth plugin </source>
+        <translation type="unfinished">Synth-lisäosa </translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1069"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
+        <location filename="../../src/base/Studio.cpp" line="+69"/>
+        <source>Synth plugin</source>
+        <translation type="unfinished">Synth-lisäosa</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
+        <location filename="../../src/base/Studio.cpp" line="-4"/>
+        <source>Audio</source>
+        <translation type="unfinished">Ääni</translation>
+    </message>
+    <message>
+        <location filename="../../src/base/MidiDevice.cpp" line="+1114"/>
+        <source>&lt;new bank&gt;</source>
+        <translation type="unfinished">&lt;uusi pankki&gt;</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;new bank %1&gt;</source>
+        <translation type="unfinished">&lt;uusi pankki %1&gt;</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>&lt;new mapping&gt;</source>
+        <translation type="unfinished">&lt;uusi kartoitus&gt;</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>&lt;new mapping %1&gt;</source>
+        <translation type="unfinished">&lt;uusi kartoitus %1&gt;</translation>
+    </message>
 </context>
 <context>
     <name>LILYPOND</name>
     <message>
-        <location line="+449"/>
+        <location filename="../AutoloadStrings.cpp" line="+449"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
         <translation>Copyright (c) xxxx Tekijänoikeuden haltija</translation>
     </message>
@@ -6971,9 +7009,8 @@
         <source>Mensural</source>
         <translation>Mensuurinen</translation>
     </message>
-    
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <location line="+145"/>
         <source>&amp;Accidentals</source>
         <translation>&amp;Etumerkit</translation>
@@ -8599,7 +8636,12 @@
         <translation>&amp;Tue Rosegardenia</translation>
     </message>
     <message>
-        <location line="-287"/>
+        <location line="-604"/>
+        <source>Triangle</source>
+        <translation type="unfinished">Kolmio</translation>
+    </message>
+    <message>
+        <location line="+317"/>
         <source>Double Whole Rest</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8910,298 +8952,6 @@
         <source>Font &quot;%1&quot; not available in size %2</source>
         <translation>Kirjaisinta &quot;%1&quot; ei ole saatavilla koossa %2</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>Cb</source>
@@ -9250,56 +9000,6 @@
         <comment>note name</comment>
         <translation>B#</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location filename="../AutoloadStrings.cpp" line="-196"/>
         <source>General MIDI Device</source>
@@ -9310,120 +9010,6 @@
         <source>D. Michael McIntyre</source>
         <translation type="unfinished"></translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <source>Bank 0:8</source>
         <translation type="obsolete">Pankki 0:8</translation>
@@ -9668,62 +9254,10 @@
         <source>Orchestra Kit</source>
         <translation type="obsolete">Orkesterikitti</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <source> </source>
         <translation type="obsolete"> </translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location line="+186"/>
         <source>MIDI input system device</source>
@@ -9735,453 +9269,23 @@
         <translation>&amp;lt;ei mitään&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+751"/>
-        <location filename="../../src/base/Studio.cpp" line="+68"/>
-        <location filename="../AutoloadStrings.cpp" line="-189"/>
+        <location line="-189"/>
         <source>Synth plugin</source>
         <translation>Synth-lisäosa</translation>
     </message>
     <message>
-        <location line="+37"/>
-        <location filename="../../src/base/Studio.cpp" line="-3"/>
-        <location filename="../AutoloadStrings.cpp" line="-1"/>
+        <location line="-1"/>
         <source>Audio</source>
         <translation>Ääni</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
-        <location filename="../AutoloadStrings.cpp" line="+617"/>
+        <location line="+617"/>
         <source>generalmap</source>
         <translation>yleiskartta</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+747"/>
-        <location line="+141"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+742"/>
+        <location line="+133"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
@@ -10199,12 +9303,8 @@
         <translation type="vanished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+484"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1101"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1060"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1718"/>
         <source>%1 Controller %2 %3</source>
-        <translation>%1 Ohjain %2 %3</translation>
+        <translation type="vanished">%1 Ohjain %2 %3</translation>
     </message>
     <message>
         <source>Rosegarden - A sequencer and musical notation editor</source>
@@ -10454,9 +9554,8 @@
         <translation>duuri</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+297"/>
         <source>Synth plugin </source>
-        <translation>Synth-lisäosa </translation>
+        <translation type="vanished">Synth-lisäosa </translation>
     </message>
     <message>
         <source></source>
@@ -10878,24 +9977,20 @@ sen sijaan?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="+1114"/>
         <source>&lt;new bank&gt;</source>
-        <translation type="unfinished">&lt;uusi pankki&gt;</translation>
+        <translation type="obsolete">&lt;uusi pankki&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished">&lt;uusi pankki %1&gt;</translation>
+        <translation type="obsolete">&lt;uusi pankki %1&gt;</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished">&lt;uusi kartoitus&gt;</translation>
+        <translation type="obsolete">&lt;uusi kartoitus&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&lt;new mapping %1&gt;</source>
-        <translation type="unfinished">&lt;uusi kartoitus %1&gt;</translation>
+        <translation type="obsolete">&lt;uusi kartoitus %1&gt;</translation>
     </message>
 </context>
 <context>
@@ -12705,7 +11800,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location line="+15"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jako</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -13459,7 +12554,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ColorCombo</name>
     <message>
-        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+84"/>
+        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+86"/>
         <source>Default</source>
         <translation type="unfinished">Oletus  </translation>
     </message>
@@ -14003,7 +13098,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+506"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+508"/>
         <source>Velocity</source>
         <translation>Voimakkuus</translation>
     </message>
@@ -15937,7 +15032,7 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
         <translation>Tulostuvat otsikot</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+40"/>
         <source>Dedication</source>
         <translation>Omistus</translation>
     </message>
@@ -17718,7 +16813,7 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-707"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-694"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Aseta ylläolevan instrumentin variaatioita, jos saatavilla&lt;/qt&gt;</translation>
     </message>
@@ -17876,7 +16971,7 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
 <context>
     <name>Rosegarden::ManageMetronomeDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="-230"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="-232"/>
         <source>Metronome</source>
         <translation>Metronomi</translation>
     </message>
@@ -18021,7 +17116,7 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
         <translation>Nauhoitetaan</translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+114"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
@@ -18426,7 +17521,7 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1547"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+2033"/>
         <source>Unknown note insert action %1</source>
         <translation>Tuntematon nuotinsyöttötapahtuma %1</translation>
     </message>
@@ -18530,12 +17625,17 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
         <translation>Poista sysääjät</translation>
     </message>
     <message>
-        <location line="-874"/>
+        <location line="-876"/>
         <source>Matrix</source>
         <translation>Matriisi</translation>
     </message>
     <message>
-        <location line="+1348"/>
+        <location line="+126"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Ohjain %2 %3</translation>
+    </message>
+    <message>
+        <location line="+1224"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18560,7 +17660,7 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-882"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+219"/>
         <source>Zoom</source>
         <translation>Suurennos</translation>
     </message>
@@ -18580,7 +17680,12 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
         <translation>Nollaa suurennos</translation>
     </message>
     <message>
-        <location line="+1218"/>
+        <location line="+842"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Ohjain %2 %3</translation>
+    </message>
+    <message>
+        <location line="+378"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;ei nimeä&gt;</translation>
     </message>
@@ -18590,7 +17695,7 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1294"/>
+        <location line="-1296"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Kierrä kiekkoa valitaksesi aktiivisen osan&lt;/qt&gt;</translation>
     </message>
@@ -19696,7 +18801,7 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+121"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1183"/>
         <source>Note &amp;Font</source>
         <translation>Nuotin &amp;kirjasin</translation>
     </message>
@@ -19797,12 +18902,12 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
         <translation>Ei voitu liittää useita osia yhteen</translation>
     </message>
     <message>
-        <location line="-916"/>
+        <location line="-918"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+442"/>
+        <location line="+444"/>
         <location line="+192"/>
         <location line="+52"/>
         <location line="+70"/>
@@ -19890,7 +18995,12 @@ Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translatio
         <translation>Tuntematon nuotinsyöttötapahtuma %1</translation>
     </message>
     <message>
-        <location line="-758"/>
+        <location line="-1929"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Ohjain %2 %3</translation>
+    </message>
+    <message>
+        <location line="+1171"/>
         <source>Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20068,7 +19178,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1486"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+232"/>
         <source>Zoom</source>
         <translation>Suurennos</translation>
     </message>
@@ -20093,7 +19203,12 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation>Sulje raitojen otsikot</translation>
     </message>
     <message>
-        <location line="+1496"/>
+        <location line="+1407"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Ohjain %2 %3</translation>
+    </message>
+    <message>
+        <location line="+91"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;ei nimeä&gt;</translation>
     </message>
@@ -25747,12 +24862,12 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+374"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+376"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;ei instrumenttia&gt;</translation>
     </message>
     <message>
-        <location line="-70"/>
+        <location line="-72"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;nimeämätön ääni&gt;</translation>
     </message>
@@ -25762,7 +24877,7 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <translation>&lt;ei nimeä&gt;</translation>
     </message>
     <message>
-        <location line="+933"/>
+        <location line="+941"/>
         <source>Mute track</source>
         <translation>Vaienna raita</translation>
     </message>
@@ -25856,18 +24971,18 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <translation type="obsolete">Raita</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+76"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-993"/>
         <source>Track Parameters</source>
         <translation>Raidan ominaisuudet</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1121"/>
+        <location line="+1123"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ei nimeä&gt;</translation>
     </message>
     <message>
-        <location line="-1113"/>
+        <location line="-1115"/>
         <source>Playback parameters</source>
         <translation>Toiston ominaisuudet</translation>
     </message>
@@ -26285,17 +25400,16 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     </message>
     <message>
         <location line="-205"/>
-        <location line="+953"/>
+        <location line="+955"/>
         <source>All</source>
         <translation>Kaikki</translation>
     </message>
     <message>
-        <location line="-73"/>
         <source>Synth plugin</source>
-        <translation type="unfinished">Synth-lisäosa</translation>
+        <translation type="obsolete">Synth-lisäosa</translation>
     </message>
     <message>
-        <location line="+261"/>
+        <location line="+188"/>
         <location line="+8"/>
         <source> %1</source>
         <translation> %1</translation>
@@ -26306,7 +25420,7 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <translation>[ Raita %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-819"/>
+        <location line="-821"/>
         <source>Reset to Defaults</source>
         <translation type="unfinished"></translation>
     </message>

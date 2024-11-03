@@ -4943,6 +4943,44 @@
         <source>Open Triangle</source>
         <translation>Otevřený triangl</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="299"/>
+        <source>Synth plugin </source>
+        <translation type="unfinished">Přídavný modul syntetizátoru</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1069"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="752"/>
+        <location filename="../../src/base/Studio.cpp" line="69"/>
+        <source>Synth plugin</source>
+        <translation type="unfinished">Syntetizátorový přídavný modul</translation>
+    </message>
+    <message>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="790"/>
+        <location filename="../../src/base/Studio.cpp" line="65"/>
+        <source>Audio</source>
+        <translation type="unfinished">Zvuk</translation>
+    </message>
+    <message>
+        <location filename="../../src/base/MidiDevice.cpp" line="1114"/>
+        <source>&lt;new bank&gt;</source>
+        <translation type="unfinished">&lt;nová banka&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/base/MidiDevice.cpp" line="1117"/>
+        <source>&lt;new bank %1&gt;</source>
+        <translation type="unfinished">&lt;nová banka %1&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/base/MidiDevice.cpp" line="1134"/>
+        <source>&lt;new mapping&gt;</source>
+        <translation type="unfinished">&lt;nová tabulka přiřazení kláves&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/base/MidiDevice.cpp" line="1138"/>
+        <source>&lt;new mapping %1&gt;</source>
+        <translation type="unfinished">&lt;nová tabulka přiřazení kláves %1&gt;</translation>
+    </message>
 </context>
 <context>
     <name>LILYPOND</name>
@@ -7987,6 +8025,11 @@
         <translation>Menzurální</translation>
     </message>
     <message>
+        <location filename="../QMenuStrings.cpp" line="550"/>
+        <source>Triangle</source>
+        <translation type="unfinished">Trojúhelníkový</translation>
+    </message>
+    <message>
         <location filename="../QMenuStrings.cpp" line="594"/>
         <source>Mark Selection as Auto-Generated</source>
         <translation>Označit výběr jako automaticky vytvořený</translation>
@@ -9196,297 +9239,6 @@
         <source>Font &quot;%1&quot; not available in size %2</source>
         <translation>Písmo &quot;%1&quot; není ve velikosti %2 dostupné</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>Cb</source>
@@ -9535,57 +9287,6 @@
         <comment>note name</comment>
         <translation>His</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location filename="../AutoloadStrings.cpp" line="41"/>
         <source>General MIDI Device</source>
@@ -9596,121 +9297,6 @@
         <source>D. Michael McIntyre</source>
         <translation type="unfinished"></translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <source>Bank 0:8</source>
         <translation type="obsolete">Banka 0:8</translation>
@@ -9959,62 +9545,10 @@
         <source>Orchestra Kit</source>
         <translation type="obsolete">Vybavení orchestru</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <source> </source>
         <translation type="obsolete"> </translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location filename="../AutoloadStrings.cpp" line="228"/>
         <source>MIDI input system device</source>
@@ -10026,453 +9560,23 @@
         <translation>&amp;lt;žádné&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="751"/>
-        <location filename="../../src/base/Studio.cpp" line="68"/>
         <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>Synth plugin</source>
         <translation>Syntetizátorový přídavný modul</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="788"/>
-        <location filename="../../src/base/Studio.cpp" line="65"/>
         <location filename="../AutoloadStrings.cpp" line="39"/>
         <source>Audio</source>
         <translation>Zvuk</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
         <location filename="../AutoloadStrings.cpp" line="656"/>
         <source>generalmap</source>
         <translation>Obecné</translation>
     </message>
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="747"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="888"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="742"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="875"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
@@ -10490,12 +9594,8 @@
         <translation type="vanished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="484"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1101"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1060"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1718"/>
         <source>%1 Controller %2 %3</source>
-        <translation>%1 Ovládací prvek %2 %3</translation>
+        <translation type="vanished">%1 Ovládací prvek %2 %3</translation>
     </message>
     <message>
         <source>Rosegarden - A sequencer and musical notation editor</source>
@@ -10749,9 +9849,8 @@
         <translation>dur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="297"/>
         <source>Synth plugin </source>
-        <translation>Přídavný modul syntetizátoru</translation>
+        <translation type="vanished">Přídavný modul syntetizátoru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="282"/>
@@ -11183,24 +10282,20 @@ Chcete použít
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="1114"/>
         <source>&lt;new bank&gt;</source>
-        <translation type="unfinished">&lt;nová banka&gt;</translation>
+        <translation type="obsolete">&lt;nová banka&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="1116"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished">&lt;nová banka %1&gt;</translation>
+        <translation type="obsolete">&lt;nová banka %1&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="1132"/>
         <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished">&lt;nová tabulka přiřazení kláves&gt;</translation>
+        <translation type="obsolete">&lt;nová tabulka přiřazení kláves&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="1134"/>
         <source>&lt;new mapping %1&gt;</source>
-        <translation type="unfinished">&lt;nová tabulka přiřazení kláves %1&gt;</translation>
+        <translation type="obsolete">&lt;nová tabulka přiřazení kláves %1&gt;</translation>
     </message>
 </context>
 <context>
@@ -13785,12 +12880,12 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ColorCombo</name>
     <message>
-        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="84"/>
+        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="86"/>
         <source>Default</source>
         <translation type="unfinished">Výchozí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="100"/>
+        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="102"/>
         <source>Add New Color</source>
         <translation type="unfinished">Přidat novou barvu</translation>
     </message>
@@ -14337,7 +13432,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="506"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="508"/>
         <source>Velocity</source>
         <translation>Rychlost</translation>
     </message>
@@ -16279,107 +15374,107 @@ Chcete se pokusit nalézt soubor ručně nebo se má přeskočit?</translation>
         <translation>Tisknutelné hlavičky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="104"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="107"/>
         <source>Dedication</source>
         <translation>Věnování</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="108"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="111"/>
         <source>Title</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="112"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="115"/>
         <source>Subtitle</source>
         <translation>Podnázev</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="116"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="119"/>
         <source>Subsubtitle</source>
         <translation>Podpodnázev</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="120"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="123"/>
         <source>Poet</source>
         <translation>Básník</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="124"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="127"/>
         <source>Instrument</source>
         <translation>Nástroj</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="128"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="131"/>
         <source>Composer</source>
         <translation>Skladatel</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="132"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="135"/>
         <source>Meter</source>
         <translation>Metrum</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="136"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="139"/>
         <source>Arranger</source>
         <translation>Aranžmá</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="140"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="143"/>
         <source>Piece</source>
         <translation>Skladba</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="144"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="147"/>
         <source>Opus</source>
         <translation>Opus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="148"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="151"/>
         <source>Copyright</source>
         <translation>Autorské právo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="152"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="155"/>
         <source>Tagline</source>
         <translation>Motto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="169"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="172"/>
         <source>The composition comes here.</source>
         <translation>Sem přijde skladba.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="182"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="185"/>
         <source>Additional headers</source>
         <translation>Dodatečná hlavičky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="206"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="209"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="207"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="210"/>
         <source>Value</source>
         <translation>Hodnota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="236"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="239"/>
         <source>Add New Property</source>
         <translation>Přidat novou vlastnost</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="240"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="243"/>
         <source>Delete Property</source>
         <translation>Odstranit vlastnost</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="265"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="268"/>
         <source>{new property %1}</source>
         <translation>{nová vlastnost %1}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="265"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="268"/>
         <source>{new property}</source>
         <translation>{nová vlastnost}</translation>
     </message>
@@ -18371,7 +17466,7 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
         <translation>Probíhá záznam</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="311"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="314"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
@@ -18776,7 +17871,7 @@ Poklepáním otevřete editor značek.</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2031"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2033"/>
         <source>Unknown note insert action %1</source>
         <translation>Krok vložení neznámé noty %1</translation>
     </message>
@@ -18801,104 +17896,109 @@ Poklepáním otevřete editor značek.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="621"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="623"/>
         <source> Grid: </source>
         <translation> Mřížka: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="635"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="637"/>
         <source>None</source>
         <translation>Žádná</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="637"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="639"/>
         <source>Unit</source>
         <translation>Jednotka</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="639"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="641"/>
         <source>Beat</source>
         <translation>Doba</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="641"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="643"/>
         <source>Bar</source>
         <translation>Takt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="664"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="666"/>
         <source> Velocity: </source>
         <translation> Rychlost:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="681"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="683"/>
         <source> Quantize: </source>
         <translation> Kvantizovat: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="697"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="699"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1179"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1181"/>
         <source>Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1707"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1709"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1714"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1716"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1721"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1723"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1734"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1967"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2031"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1736"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1969"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2033"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1968"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1970"/>
         <source>Please select a control ruler first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2416"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2418"/>
         <source>Estimated key signature shown</source>
         <translation>Ukazuje se zjištěné předznamenání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1498"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1500"/>
         <source>Estimated time signature shown</source>
         <translation>Ukazuje se odhadované označení taktu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1588"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="485"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Ovládací prvek %2 %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1590"/>
         <source>Transpose</source>
         <translation>Převést</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1589"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1591"/>
         <source>By number of semitones: </source>
         <translation>Zadejte počet půltónů, o které se má převádět:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1223"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1225"/>
         <source>Trigger Segment</source>
         <translation>Spustit část</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1233"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1235"/>
         <source>Remove Triggers</source>
         <translation>Odebrat spouštěcí značky</translation>
     </message>
@@ -18931,12 +18031,17 @@ Poklepáním otevřete editor značek.</translation>
         <translation>Nastavit znovu zvětšení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1478"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1102"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Ovládací prvek %2 %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1480"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;bez názvu&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1480"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1482"/>
         <source>Track %1 (%2) | %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20047,22 +19152,22 @@ Jedná se o chybu programu (program již pravděpodobně v této chvíli havarov
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1181"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1183"/>
         <source>Note &amp;Font</source>
         <translation>Notové &amp;písmo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1209"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1211"/>
         <source>Si&amp;ze</source>
         <translation>V&amp;elikost</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1229"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1231"/>
         <source>S&amp;pacing</source>
         <translation>&amp;Rozestupy</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1221"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1223"/>
         <source>%n pixel(s)</source>
         <translation>
             <numerusform>obrazový bod</numerusform>
@@ -20071,79 +19176,79 @@ Jedná se o chybu programu (program již pravděpodobně v této chvíli havarov
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1442"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1444"/>
         <source>  Font:  </source>
         <translation>  Písmo:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1469"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1471"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
         <translation>Písmo &quot;%1&quot; je neznámé, použije se výchozí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1477"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1479"/>
         <source>  Size:  </source>
         <translation>  Velikost:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1499"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1501"/>
         <source>  Spacing:  </source>
         <translation>  Rozestupy:  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1354"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1356"/>
         <source>  No selection </source>
         <translation>  Žádný výběr </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4174"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4176"/>
         <source>Chord</source>
         <translation>Akord</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4175"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4177"/>
         <source>Grace</source>
         <translation>Příraz</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4182"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4186"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4190"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4184"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4188"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4192"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1834"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1836"/>
         <source>Unknown spacing action %1</source>
         <translation>Krok s neznámými rozestupy - %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1783"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1785"/>
         <source>Unknown font action %1</source>
         <translation>Krok s neznámým písmem - %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1809"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1811"/>
         <source>Unknown font size action %1</source>
         <translation>Krok s neznámou velikostí písma - %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1647"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1649"/>
         <source>LilyPond Preview Options</source>
         <translation>Možnosti zobrazení náhledu pro program LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1648"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1650"/>
         <source>LilyPond preview options</source>
         <translation>Možnosti zobrazení náhledu pro program LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1999"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2001"/>
         <source>Clipboard is empty</source>
         <translation>Schránka je prázdná</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1943"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1945"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation>Nelze vložit několik částí do jedné</translation>
     </message>
@@ -20153,7 +19258,7 @@ Jedná se o chybu programu (program již pravděpodobně v této chvíli havarov
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1351"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1353"/>
         <source>  %n event(s) selected </source>
         <translation>
             <numerusform>  událost vybrána </numerusform>
@@ -20162,168 +19267,173 @@ Jedná se o chybu programu (program již pravděpodobně v této chvíli havarov
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1469"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1661"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1713"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1783"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1809"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1834"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1974"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2033"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2907"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2988"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3734"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4804"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1471"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1663"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1715"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1785"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1811"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1836"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1976"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2035"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2909"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2990"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3736"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4806"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1671"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1673"/>
         <source>Printing with LilyPond...</source>
         <translation>Probíhá tisk s LilyPondem...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1689"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1691"/>
         <source>Previewing with LilyPond...</source>
         <translation>Probíhá náhled s LilyPondem...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1714"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1716"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nepodařilo se otevřít dočasný soubor pro vyvedení z LilyPondu.&lt;/p&gt;&lt;p&gt;Pravděpodobně to znamená, že ukládací prostor na disku &lt;pre&gt;%1&lt;/pre&gt;je zcela zaplněn.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1978"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2037"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1980"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2039"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Omezený typ vložení vyžaduje dostatek prázdného prostoru (obsahuje pouze pomlky) v poloze vložení kvůli držení všech událostí, které se vloží.&lt;/p&gt;&lt;p&gt;Nebylo nalezeno dost místa.&lt;/p&gt;&lt;p&gt;Jestliže přesto hodláte vložení provést, zvažte, zda nepoužít jiný z typů vložení z nabídky &lt;b&gt;Vložit...&lt;/b&gt; v nabídce Úpravy. Pokud byste si to přál, můžete rovněž změnit typ vložení z Omezený na nějaký jiný.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2003"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2005"/>
         <source>Inserting clipboard contents...</source>
         <translation>Probíhá vkládání obsahu schránky...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1976"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2035"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1978"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2037"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation>Nebylo možné provést vložení na tomto místě.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4891"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4893"/>
         <source>Move Events to Staff Above</source>
         <translation>Přesunout události na osnovu výše</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2200"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2202"/>
         <source>Raising velocities...</source>
         <translation>Probíhá zvětšování rychlostí...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2211"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2213"/>
         <source>Lowering velocities...</source>
         <translation>Probíhá zmenšování rychlostí...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4056"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4058"/>
         <source>Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5049"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5051"/>
         <source>Edit Text Event</source>
         <translation>Upravit textovou událost</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5097"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5099"/>
         <source>Normalizing rests...</source>
         <translation>Probíhá normalizace pomlk...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5110"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5112"/>
         <source>Collapsing notes...</source>
         <translation>Probíhá sjednocování not...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2988"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2990"/>
         <source>Unknown note insert action %1</source>
         <translation>Krok vložení neznámé noty %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2992"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2994"/>
         <source>Inserting note</source>
         <translation>Probíhá vložení noty</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5294"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5304"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5296"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5306"/>
         <source>Adding dot...</source>
         <translation>Probíhá přidání tečky...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3397"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3399"/>
         <source>Ornament track %1 bar %2</source>
         <translation>Melodická ozdoba - stopa %1, takt %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2230"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1061"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Ovládací prvek %2 %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2232"/>
         <source>Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2908"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2910"/>
         <source>Please select a control ruler first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3399"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3401"/>
         <source>Ornament bar %1</source>
         <translation>Takt melodické ozdoby %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3437"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3439"/>
         <source>Use Ornament</source>
         <translation>Použít melodickou ozdobu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3448"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3450"/>
         <source>Remove Ornaments</source>
         <translation>Odstranit melodické ozdoby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3484"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3486"/>
         <source>Edit ornament inline</source>
         <translation>Upravit ozdobu řadově</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3511"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3513"/>
         <source>Show ornament expansion</source>
         <translation>Ukázat rozklad ozdoby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3544"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3546"/>
         <source>Unadopt Segment</source>
         <translation>Zrušit přijetí části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3660"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3662"/>
         <source>Estimated key signature shown</source>
         <translation>Ukazuje se zjištěné předznamenání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3717"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3719"/>
         <source>Sustain</source>
         <translation>Držet tón</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3734"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3736"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation>Pro toto zařízení není určenn žádný ovládací prvek pro držení tónu.
 Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízení MIDI v hlavním okně.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3882"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3884"/>
         <source>Estimated time signature shown</source>
         <translation>Ukazuje se odhadované označení taktu</translation>
     </message>
@@ -20344,77 +19454,77 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4173"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4175"/>
         <source>Tuplet</source>
         <translation>Rytmická notová skupina</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4338"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4340"/>
         <source>Transpose</source>
         <translation>Převést</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4339"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4341"/>
         <source>By number of semitones: </source>
         <translation>Zadejte počet půltónů, o které se má převádět:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4695"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4697"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation>Čas: %1 (%2.%3s)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4777"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4779"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:notation-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4784"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4786"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4791"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4793"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4892"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4894"/>
         <source>Move Events to Staff Below</source>
         <translation>Posunout události na notovou osnovu dole</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4971"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4973"/>
         <source>Edit Generated region mark</source>
         <translation>Upravit značku vytvořené oblasti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4995"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4997"/>
         <source>Updated tags for aborted edit</source>
         <translation>Aktualizované značky pro zrušenou úpravu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5319"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5321"/>
         <source>Set Note Type...</source>
         <translation>Nastavit typ noty...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5343"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5345"/>
         <source>Set Note Type notation only...</source>
         <translation>Nastavit typ noty pouze pro notový zápis...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5363"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5365"/>
         <source>Cycling slashes...</source>
         <translation>Točení šikmých čar...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5381"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5383"/>
         <source>New Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5447"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5449"/>
         <source>New Layer from Selection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20447,23 +19557,28 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
         <translation>Uzavřít hlavičky stop</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1808"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1719"/>
+        <source>%1 Controller %2 %3</source>
+        <translation type="unfinished">%1 Ovládací prvek %2 %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1810"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;bez názvu&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1813"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1814"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1815"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1816"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Otáčet kolečkem kvůli změně činné části&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1815"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1817"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Část: &quot;%1&quot;&lt;br&gt;Stopa: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1821"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1823"/>
         <source>Track %1 (%2) | %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -26114,7 +25229,7 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="374"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="376"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;žádný nástroj&gt;</translation>
     </message>
@@ -26129,17 +25244,17 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
         <translation>&lt;bez názvu&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1239"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1247"/>
         <source>Mute track</source>
         <translation>Ztlumit stopu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1257"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1265"/>
         <source>Record on this track</source>
         <translation>Nahrát do této stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1273"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1281"/>
         <source>Solo track</source>
         <translation type="unfinished"></translation>
     </message>
@@ -26231,7 +25346,7 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="92"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1213"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1215"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;bez názvu&gt;</translation>
     </message>
@@ -26654,23 +25769,22 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="188"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1141"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1143"/>
         <source>All</source>
         <translation>Vše</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1068"/>
         <source>Synth plugin</source>
-        <translation type="unfinished">Syntetizátorový přídavný modul</translation>
+        <translation type="obsolete">Syntetizátorový přídavný modul</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1329"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1337"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1331"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1339"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1219"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1221"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ Stopa %1 - %2 ]</translation>
     </message>
