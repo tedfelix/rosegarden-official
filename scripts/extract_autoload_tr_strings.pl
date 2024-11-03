@@ -90,12 +90,13 @@ while (<>) {
 
         # strip out some special strings inside name="" fields that should not
         # be translated
-        if (($name ne "copyright")        &&
-            ($name ne "title")            &&
-            ($name ne "subtitle")         &&
-            ($name ne "author")           &&
-            ($name ne "Michael McIntyre") &&
-            ($name ne "colourmap")        &&
+        if (($name ne "copyright")              &&
+            ($name ne "title")                  &&
+            ($name ne "subtitle")               &&
+            ($name ne "author")                 &&
+            ($name ne "Michael McIntyre")       &&
+            ($name ne "D. Michael McIntyre")    &&
+            ($name ne "colourmap")              &&
             ($name ne "segmentmap")) {
 
                 # get more info about context
@@ -129,14 +130,14 @@ while (<>) {
 # Some extra strings that didn't get extracted, probably due to a simple bug,
 # but should be included (remember folks, I don't speak Prle):
 
-output "LILYPOND", "Copyright (c) xxxx Copyright Holder",
+output "METADATA", "Copyright (c) xxxx Copyright Holder",
                                 "default LilyPond/notation header";
 
-output "LILYPOND", "Not Yet Titled", "default LilyPond/notation header";
+output "METADATA", "Not Yet Titled", "default LilyPond/notation header";
 
-output "LILYPOND", "not yet subtitled", "default LilyPond/notation header";
+output "METADATA", "not yet subtitled", "default LilyPond/notation header";
 
-output "LILYPOND", "Unknown", "default LilyPond/notation header";
+output "METADATA", "Unknown", "default LilyPond/notation header";
 
 
 # In spite of the preceding comment, the following ones seem correctly extracted

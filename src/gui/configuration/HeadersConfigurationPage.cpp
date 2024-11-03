@@ -89,9 +89,9 @@ HeadersConfigurationPage::HeadersConfigurationPage(
         std::string header = qstrtostr(value);
         //@@@ dtb: tr() only works with char* now, so I'm going to try
         // using header directly instead of a QString version of header.
-        // Headers are mainly used with LilyPond, that's why the "LILYPOND"
+        // Headers are mainly used with LilyPond, that's why the "METADATA"
         // translation context is used.
-        QString headerStr = QCoreApplication::translate("LILYPOND",
+        QString headerStr = QCoreApplication::translate("METADATA",
                                                         header.c_str());
 
         unsigned int row = 0, col = 0, width = 1;

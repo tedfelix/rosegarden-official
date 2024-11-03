@@ -4964,7 +4964,7 @@
     </message>
 </context>
 <context>
-    <name>LILYPOND</name>
+    <name>METADATA</name>
     <message>
         <location filename="../AutoloadStrings.cpp" line="+449"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
