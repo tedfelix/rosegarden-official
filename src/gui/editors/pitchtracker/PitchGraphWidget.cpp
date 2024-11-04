@@ -50,11 +50,11 @@ PitchGraphWidget::PitchGraphWidget(PitchHistory &history, QWidget *parent) :
         settings.value("graphheight",
                        PitchTrackerConfigurationPage::defaultGraphHeight).
                        toInt();
-    m_graphWidth = 
+    m_graphWidth =
         settings.value("graphwidth",
                        PitchTrackerConfigurationPage::defaultGraphWidth).
                        toInt();
-                       
+
     m_ignoreOctave =
         settings.value("ignoreoctave",
                        PitchTrackerConfigurationPage::defaultIgnore8ve).
@@ -69,7 +69,7 @@ PitchGraphWidget::~PitchGraphWidget()
 }
 
 void
-PitchGraphWidget::setTuning(std::shared_ptr<Accidentals::Tuning> tuning)
+PitchGraphWidget::setTuning(const std::shared_ptr<Accidentals::Tuning>& tuning)
 {
     m_tuning = tuning;
     // If the tuning gets changed via a settings update,
@@ -84,11 +84,11 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
     const QColor noInputColor(Qt::red);
     const QColor normalPlotColor(Qt::green);
     const QColor noteBoundaryColor(Qt::blue);
-    
+
     QPainter painter(this);
     QString labelStg;
     QColor labelColor;
-    
+
     double targetFreq = 0;
     bool targetValid = false;
     double freq_err_cents = 0;
@@ -116,7 +116,7 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
     painter.drawText(0, 20, "Target freq:");
     painter.setPen(labelColor);
     painter.drawText(100, 20, labelStg);
-    
+
     // Same for the actual frequency, but must take the "error" conditions
     // into account. If actual freq is -ve, could be one of NOSIGNAL
     // or NONE (playing a rest) as defined in PitchDetector.
@@ -139,7 +139,7 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
     painter.setPen(labelColor);
     // If a valid tuning's defined, use its name. Otherwise behave well.
     QString tuningName = m_tuning ? QString(m_tuning->getName().c_str()) :
-                                    tr("None available (check preferences)");    
+                                    tr("None available (check preferences)");
     painter.drawText(100, 40, tuningName);
     painter.drawText(100, 70, labelStg);
     if (targetValid) {
@@ -155,7 +155,7 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
     }
     painter.drawText(100, 90, labelStg);
     painter.setPen(defaultColor);
-    
+
     RealTime nextBoundary;
     QList<RealTime> note_stack = m_history.m_targetChangeTimes;
     if (!note_stack.isEmpty()) {
@@ -175,10 +175,10 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
     // or the first pitch error is invalid (e.g. there was no signal),
     // start off in the first_err state. Otherwise begin in the first state.
     enum {first, subsequent, first_err, subseq_err} drawState =
-        (m_history.m_detectErrorsValid.isEmpty() || 
+        (m_history.m_detectErrorsValid.isEmpty() ||
 	 !m_history.m_detectErrorsValid[0]) ?
           first_err : first;
-    
+
     QPoint firstPoint;
     // Start plotting at the most recent point and work backwards
     bool lastPoint =  false;
@@ -216,7 +216,7 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
         // draw pitches
         switch (drawState) {
         // start of a valid line
-        case first:  
+        case first:
             firstPoint = QPoint(x, midY+y);
             drawState = valid ? subsequent : first_err;
             break;
@@ -257,4 +257,3 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
 }
 
 }
-

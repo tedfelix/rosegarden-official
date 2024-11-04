@@ -49,7 +49,7 @@ class TempoAndTimeSignatureEditor : public EditViewBase, public CompositionObser
     Q_OBJECT
 
 public:
-    TempoAndTimeSignatureEditor(timeT openTime);
+    explicit TempoAndTimeSignatureEditor(timeT openTime);
     ~TempoAndTimeSignatureEditor() override;
 
     // CompositionObserver overrides

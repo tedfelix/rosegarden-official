@@ -207,14 +207,16 @@ private:
 
 
     /// Get first free bank to avoid conflicts.
-    static void getFirstFreeBank(MidiDevice *device, MidiByte &msb, MidiByte &lsb);
+    static void getFirstFreeBank(MidiDevice *device,
+                                 MidiByte &o_msb,
+                                 MidiByte &o_lsb);
 
     /// Handle bank name conflicts by adding "_1".
     static QString makeUniqueBankName(const QString &name,
                                const BankList &banks);
     /// Handle key map name conflicts by adding "_1".
     static QString makeUniqueKeyMapName(const QString &name,
-                                 const KeyMappingList &keymaps);
+                                 const KeyMappingList &keyMaps);
 
     /// Identify Tracks using a bank to avoid deleting banks that are in use.
     bool tracksUsingBank(const MidiBank &bank, const MidiDevice &device);

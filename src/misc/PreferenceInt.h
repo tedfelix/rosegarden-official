@@ -44,7 +44,7 @@ namespace Rosegarden
 class PreferenceInt
 {
 public:
-    PreferenceInt(QString group, QString key, int defaultValue) :
+    PreferenceInt(const QString& group, const QString& key, int defaultValue) :
         m_group(group),
         m_key(key),
         m_defaultValue(defaultValue)
