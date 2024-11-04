@@ -36,6 +36,7 @@
 #include "base/Instrument.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
+#include "base/NotationQuantizer.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/QEvents.h"
@@ -54,6 +55,7 @@
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "commands/edit/RemoveMarkerCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
+#include "commands/notation/InterpretCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AudioSegmentAutoSplitCommand.h"
@@ -115,6 +117,7 @@
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/FileMergeDialog.h"
 #include "gui/dialogs/IdentifyTextCodecDialog.h"
+#include "gui/dialogs/InterpretDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/MusicXMLOptionsDialog.h"
@@ -816,6 +819,7 @@ RosegardenMainWindow::setupActions()
     createAction("transpose", SLOT(slotTransposeSegments()));
     createAction("transpose_semitones", SLOT(slotTransposeSemitones()));
     createAction("switch_preset", SLOT(slotSwitchPreset()));
+    createAction("interpret", SLOT(slotInterpret()));
     createAction("repeat_quantize", SLOT(slotRepeatQuantizeSelection()));
     createAction("rescale", SLOT(slotRescaleSelection()));
     createAction("auto_split", SLOT(slotAutoSplitSelection()));
@@ -8452,6 +8456,51 @@ RosegardenMainWindow::slotSwitchPreset()
     }
 
     RosegardenDocument::currentDocument->slotDocumentModified();
+}
+
+void RosegardenMainWindow::slotInterpret()
+{
+    InterpretDialog dialog(this);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        const int interpretations = dialog.getInterpretations();
+
+        const SegmentSelection segmentSelection = m_view->getSelection();
+
+        MacroCommand *command = new MacroCommand(tr("Interpret segments"));
+
+        // Keep track of these so we can delete them.
+        std::vector<EventSelection *> selections;
+
+        // For each Segment...
+        for (Segment *segment : segmentSelection) {
+
+            // Can't interpret an audio Segment.
+            if (segment->getType() == Segment::Audio) continue;
+
+            EventSelection *selection = new EventSelection(
+                    *segment,
+                    segment->getStartTime(),
+                    segment->getEndMarkerTime());
+            selections.push_back(selection);
+
+            const NotationQuantizer *quantizer =
+                    RosegardenDocument::currentDocument->getComposition().
+                            getNotationQuantizer();
+
+            command->addCommand(new InterpretCommand(
+                    *selection,
+                    quantizer,
+                    interpretations));
+        }
+
+        m_view->slotAddCommandToHistory(command);
+
+        // Should be safe to delete now.
+        for (EventSelection *selection : selections) {
+            delete selection;
+        }
+    }
 }
 
 void

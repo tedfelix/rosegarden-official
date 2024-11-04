@@ -1365,6 +1365,7 @@ public slots:
     void slotTransposeSegments();
     void slotTransposeSemitones();
     void slotSwitchPreset();
+    void slotInterpret();
 
     /// Panic button pressed
     void slotPanic();
