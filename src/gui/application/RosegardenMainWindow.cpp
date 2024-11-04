@@ -8461,32 +8461,43 @@ RosegardenMainWindow::slotSwitchPreset()
 void RosegardenMainWindow::slotInterpret()
 {
     InterpretDialog dialog(this);
+
     if (dialog.exec() == QDialog::Accepted) {
-        SegmentSelection selection = m_view->getSelection();
+        const int interpretations = dialog.getInterpretations();
+
+        const SegmentSelection segmentSelection = m_view->getSelection();
 
         MacroCommand *command = new MacroCommand(tr("Interpret segments"));
-        std::list<EventSelection*> selections;
 
-        for (SegmentSelection::iterator i = selection.begin();
-             i != selection.end(); ++i) {
-            // selection for entire segment
-            Segment &segment = **i;
-            Segment::SegmentType sType = segment.getType();
-            if (sType == Segment::Audio) continue;
-            EventSelection* selection =
-                new EventSelection(segment,
-                                   segment.getStartTime(),
-                                   segment.getEndMarkerTime());
+        // Keep track of these so we can delete them.
+        std::vector<EventSelection *> selections;
 
-            command->addCommand
-                (new InterpretCommand(*selection,
-                                      RosegardenDocument::currentDocument->
-                                      getComposition().getNotationQuantizer(),
-                                      dialog.getInterpretations()));
+        // For each Segment...
+        for (Segment *segment : segmentSelection) {
+
+            // Can't interpret an audio Segment.
+            if (segment->getType() == Segment::Audio) continue;
+
+            EventSelection *selection = new EventSelection(
+                    *segment,
+                    segment->getStartTime(),
+                    segment->getEndMarkerTime());
+            selections.push_back(selection);
+
+            const NotationQuantizer *quantizer =
+                    RosegardenDocument::currentDocument->getComposition().
+                            getNotationQuantizer();
+
+            command->addCommand(new InterpretCommand(
+                    *selection,
+                    quantizer,
+                    interpretations));
         }
 
         m_view->slotAddCommandToHistory(command);
-        for(auto& selection : selections) {
+
+        // Should be safe to delete now.
+        for (EventSelection *selection : selections) {
             delete selection;
         }
     }
