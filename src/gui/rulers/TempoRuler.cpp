@@ -561,9 +561,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
     // nothing in this part of the ruler that means anything anyway.  If we're
     // using Thorn, use a nice dark gray that just contrasts with the black
     // horizontal line here
-    QColor kuller(0x40, 0x40, 0x40);
-    if (!m_Thorn) kuller = palette().window().color();
-    m_buffer.fill(kuller);
+    QColor backgroundColor(0x40, 0x40, 0x40);
+    if (!m_Thorn) backgroundColor = palette().window().color();
+    m_buffer.fill(backgroundColor);
 
     QPainter paint(&m_buffer);
     paint.setPen(GUIPalette::getColour
@@ -572,9 +572,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
     paint.setClipRegion(e->region());
     paint.setClipRect(clipRect);
 
-    timeT from = m_rulerScale->getTimeForX
+    const timeT from = m_rulerScale->getTimeForX
                  (clipRect.x() - m_currentXOffset - 100);
-    timeT to = m_rulerScale->getTimeForX
+    const timeT to = m_rulerScale->getTimeForX
                (clipRect.x() + clipRect.width() - m_currentXOffset + 100);
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("019");
@@ -583,13 +583,12 @@ TempoRuler::paintEvent(QPaintEvent* e)
     // bmp text aligns better in temporuler now - is this font dependent?
     int textY = fontHeight - 3;
 
-    double prevEndX = -1000.0;
-    double prevTempo = 0.0;
-    long prevBpm = 0;
+    // Assemble a map of timePoints.
 
-    typedef std::map<timeT, int> TimePoints;
-    int tempoChangeHere = 1;
-    int timeSigChangeHere = 2;
+    typedef std::map<timeT, int /*changeMask*/> TimePoints;
+    // changeMask values.
+    constexpr int tempoChangeHere = 1;
+    constexpr int timeSigChangeHere = 2;
     TimePoints timePoints;
 
     for (int tempoNo = m_composition->getTempoChangeNumberAt(from);
@@ -616,10 +615,12 @@ TempoRuler::paintEvent(QPaintEvent* e)
         }
     }
 
+    // Draw the points, lines, and colored backgrounds.
+
+    // Keep track of whether we actually have any points.
     bool haveSome = false;
     //    tempoT minTempo = m_composition->getMinTempo();
     //    tempoT maxTempo = m_composition->getMaxTempo();
-    bool illuminate = false;
 
     //if (m_illuminate >= 0) {
     //    int tcn = m_composition->getTempoChangeNumberAt(from);
@@ -630,7 +631,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     for (TimePoints::iterator i = timePoints.begin(); ; ++i) {
 
-        timeT t0, t1;
+        // Compute the time of the previous point (t0).
+
+        timeT t0;
 
         if (i == timePoints.begin()) {
             t0 = from;
@@ -639,6 +642,10 @@ TempoRuler::paintEvent(QPaintEvent* e)
             --j;
             t0 = j->first;
         }
+
+        // Compute the time of the current point (t1).
+
+        timeT t1;
 
         if (i == timePoints.end()) {
             t1 = to;
@@ -649,10 +656,10 @@ TempoRuler::paintEvent(QPaintEvent* e)
         if (t1 <= t0)
             t1 = to;
 
-        int tcn = m_composition->getTempoChangeNumberAt(t0);
-        illuminate = (m_illuminate == tcn);
-        tempoT tempo0 = m_composition->getTempoAtTime(t0);
-        tempoT tempo1 = m_composition->getTempoAtTime(t1 - 1);
+        const int tcn = m_composition->getTempoChangeNumberAt(t0);
+        bool illuminate = (m_illuminate == tcn);
+        const tempoT tempo0 = m_composition->getTempoAtTime(t0);
+        const tempoT tempo1 = m_composition->getTempoAtTime(t1 - 1);
 
         RG_DEBUG << "time point" << t0 << t1 << tempo0 << tempo1 <<
             tcn << m_illuminate;
@@ -677,6 +684,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
         int y = getYForTempo(tempo0);
         y += 2;
 
+        // If we've determined that we have points, draw them.
         if (haveSome) {
 
             int x = int(x0) + 1;
@@ -705,12 +713,20 @@ TempoRuler::paintEvent(QPaintEvent* e)
             paint.drawPoint(x, y);
         }
 
+        // We want to go through this loop at least once.  Check for end here.
         if (i == timePoints.end())
             break;
+
+        // We have more than zero points to plot.  Go ahead and start
+        // plotting them.
         haveSome = true;
     }
 
-    if (! haveSome) {
+    // If there were no points to draw, just fill the ruler with the
+    // appropriate tempo color.
+    // ??? Seems like the code above would have already done this.  Is this
+    //     really necessary?
+    if (!haveSome) {
         tempoT tempo = m_composition->getTempoAtTime(from);
         QColor colour = TempoColour::getColour(m_composition->getTempoQpm(tempo));
         paint.setPen(colour);
@@ -718,9 +734,15 @@ TempoRuler::paintEvent(QPaintEvent* e)
         paint.drawRect(e->rect());
     }
 
+    // Draw the labels.
+
     paint.setPen(QColor(Qt::black));
     paint.setBrush(QColor(Qt::black));
     paint.drawLine(0, 0, width(), 0);
+
+    double prevEndX = -1000.0;
+    double prevTempo = 0.0;
+    long prevBpm = 0;
 
     for (TimePoints::iterator i = timePoints.begin();
             i != timePoints.end(); ++i) {
