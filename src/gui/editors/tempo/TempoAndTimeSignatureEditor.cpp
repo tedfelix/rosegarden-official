@@ -94,17 +94,14 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
 
     initMenu();
 
-    // Create frame and layout.
-    // ??? Why is this a QFrame?  QWidget should be enough.
-    m_frame = new QFrame(this);
-    m_frame->setMinimumSize(700, 300);
-    m_mainLayout = new QHBoxLayout(m_frame);
-    m_frame->setLayout(m_mainLayout);
-    setCentralWidget(m_frame);
+    // Create main widget and layout.
+    QWidget *mainWidget = new QWidget(this);
+    QHBoxLayout *mainLayout = new QHBoxLayout(mainWidget);
+    setCentralWidget(mainWidget);
 
     // Filter Group Box
-    m_filterGroup = new QGroupBox(tr("Filter"), m_frame);
-    m_mainLayout->addWidget(m_filterGroup);
+    m_filterGroup = new QGroupBox(tr("Filter"), mainWidget);
+    mainLayout->addWidget(m_filterGroup);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setLayout(filterGroupLayout);
 
@@ -126,8 +123,8 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
     filterGroupLayout->addStretch(1);
 
     // Tempo/Time Signature List
-    m_tableWidget = new QTableWidget(m_frame);
-    m_mainLayout->addWidget(m_tableWidget);
+    m_tableWidget = new QTableWidget(mainWidget);
+    mainLayout->addWidget(m_tableWidget);
     // Disable double-click editing of each field.
     m_tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_tableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -148,11 +145,11 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
     // Make sure columns have a reasonable amount of space.
     m_tableWidget->setColumnWidth(0, 110);
     m_tableWidget->setColumnWidth(1, 120);
-    //m_tableWidget->setMinimumWidth(700);
+    m_tableWidget->setMinimumWidth(500);
     connect(m_tableWidget, &QTableWidget::cellDoubleClicked,
             this, &TempoAndTimeSignatureEditor::slotPopupEditor);
 
-    //m_frame->setMinimumSize(m_mainLayout->minimumSize());
+    mainWidget->setMinimumSize(mainLayout->minimumSize());
 
     // Update the list.
     updateTable();

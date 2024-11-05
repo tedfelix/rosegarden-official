@@ -109,9 +109,6 @@ private slots:
 
 private:
 
-    QFrame *m_frame;
-    QHBoxLayout *m_mainLayout;
-
     void initMenu();
 
     void updateWindowTitle();
