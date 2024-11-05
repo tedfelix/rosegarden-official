@@ -32,7 +32,6 @@
 #include "gui/widgets/Rotary.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "misc/Debug.h"
-#include "misc/InstrumentsTr.h"
 #include "misc/Preferences.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
