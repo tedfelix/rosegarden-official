@@ -181,7 +181,7 @@ EventView::EventView(RosegardenDocument *doc,
 
     // Create main widget and layout.
     QWidget *mainWidget = new QWidget(this);
-    QGridLayout *gridLayout = new QGridLayout(mainWidget);
+    QGridLayout *mainLayout = new QGridLayout(mainWidget);
     setCentralWidget(mainWidget);
 
     // *** Event filters
@@ -258,8 +258,8 @@ EventView::EventView(RosegardenDocument *doc,
             this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_otherCheckBox);
 
-    gridLayout->addWidget(m_filterGroup, 0, 0, Qt::AlignHCenter);
-    gridLayout->setRowMinimumHeight(0, m_filterGroup->height());
+    mainLayout->addWidget(m_filterGroup, 0, 0, Qt::AlignHCenter);
+    mainLayout->setRowMinimumHeight(0, m_filterGroup->height());
 
     // Tree Widget
 
@@ -293,7 +293,7 @@ EventView::EventView(RosegardenDocument *doc,
     m_treeWidget->setColumnWidth(1, timeWidth);
     m_treeWidget->setMinimumWidth(700);
 
-    gridLayout->addWidget(m_treeWidget, 0, 1, 3, 1);
+    mainLayout->addWidget(m_treeWidget, 0, 1, 3, 1);
 
     // Trigger Segment Group Box
 
@@ -380,16 +380,16 @@ EventView::EventView(RosegardenDocument *doc,
 
         groupBox->setLayout(layout);
         //m_gridLayout->addWidget(groupBox, 0, 2);
-        gridLayout->addWidget(groupBox, 1, 0);
+        mainLayout->addWidget(groupBox, 1, 0);
 
     }
 
     // Add a third row to expand to fill the remaining space and prevent
     // expansion of the contents of the first column.
-    gridLayout->setRowStretch(2, 1);
+    mainLayout->setRowStretch(2, 1);
 
     // Make sure main widget never gets too small.
-    mainWidget->setMinimumSize(gridLayout->minimumSize());
+    mainWidget->setMinimumSize(mainLayout->minimumSize());
 
     updateWindowTitle(false);
 
@@ -800,7 +800,7 @@ EventView::slotEditTriggerName()
     m_triggerName->setText(newLabel);
 
     // ??? This causes the Event List editor to go away.  I assume it is
-    //     because the Segment object can't be edited and was replaced with a
+    //     because the Segment object can't be modified and was replaced with a
     //     new one?  That then triggers the documentModified() which sees
     //     the old Segment is no longer in the composition and we close
     //     the Event List editor.  Ridiculous.
