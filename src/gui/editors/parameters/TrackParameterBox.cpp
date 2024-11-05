@@ -1059,13 +1059,18 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
 
         instrumentIds.push_back(loopInstrument.getId());
 
-        QString instrumentName(QObject::tr(loopInstrument.getName().c_str()));
+        QString instrumentName(
+            QCoreApplication::translate("INSTRUMENT",
+                                        loopInstrument.getName().c_str()));
         QString programName(
-                QObject::tr(loopInstrument.getProgramName().c_str()));
+            QCoreApplication::translate("INSTRUMENT",
+                                        loopInstrument.getProgramName().c_str()));
 
         if (loopInstrument.getType() == Instrument::SoftSynth) {
 
-            instrumentName.replace(tr("Synth plugin"), "");
+            instrumentName.replace(
+                                QCoreApplication::translate("INSTRUMENT",
+                                                            "Synth plugin"), "");
 
             programName = "";
 

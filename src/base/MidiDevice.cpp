@@ -1113,9 +1113,11 @@ MidiDevice::makeNewBankName() const
     std::string name;
     for (size_t i = 1; i <= m_bankList.size() + 1; ++i) {
         if (i == 1)
-            name = qstrtostr(QObject::tr("<new bank>"));
+            name = qstrtostr(QCoreApplication::translate("INSTRUMENT",
+                                                         "<new bank>"));
         else
-            name = qstrtostr(QObject::tr("<new bank %1>").arg(i));
+            name = qstrtostr(QCoreApplication::translate("INSTRUMENT",
+                                                         "<new bank %1>").arg(i));
         // No such bank?  Then we have our name.
         if (getBankByName(name) == nullptr)
             break;
@@ -1131,9 +1133,12 @@ MidiDevice::makeNewKeyMappingName() const
     std::string name;
     for (size_t i = 1; i <= m_keyMappingList.size() + 1; ++i) {
         if (i == 1)
-            name = qstrtostr(QObject::tr("<new mapping>"));
+            name = qstrtostr(QCoreApplication::translate("INSTRUMENT",
+                                                         "<new mapping>"));
         else
-            name = qstrtostr(QObject::tr("<new mapping %1>").arg(i));
+            name = qstrtostr(
+                        QCoreApplication::translate("INSTRUMENT",
+                                                    "<new mapping %1>").arg(i));
         // No such key map?  Then we have our name.
         if (getKeyMappingByName(name) == nullptr)
             break;

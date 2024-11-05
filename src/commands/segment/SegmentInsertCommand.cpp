@@ -110,7 +110,9 @@ SegmentInsertCommand::execute()
 
                 // If possible, translate it
                 QString qname = QString::fromLocal8Bit(name.c_str());
-                QString translatedName = QObject::tr(qname.toLocal8Bit());
+                QString translatedName =
+                            QCoreApplication::translate("INSTRUMENT",
+                                                        qname.toLocal8Bit());
                 label = translatedName.toLocal8Bit().toStdString();
 
                 // If that failed, use the track name.

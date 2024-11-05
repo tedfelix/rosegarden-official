@@ -748,7 +748,9 @@ AlsaDriver::generateFixedInstruments()
 
     for (int i = 0; i < count; ++i) {
         sprintf(number, " #%d", i + 1);
-        std::string name = QObject::tr("Synth plugin").toStdString() + std::string(number);
+        std::string name =
+            QCoreApplication::translate("INSTRUMENT", "Synth plugin")
+                                            .toStdString() + std::string(number);
         instr = new MappedInstrument(Instrument::SoftSynth,
                                      i,
                                      first + i,
@@ -785,7 +787,8 @@ AlsaDriver::generateFixedInstruments()
 
     for (int i = 0; i < count; ++i) {
         sprintf(number, " #%d", i + 1);
-        audioName = QObject::tr("Audio").toStdString() + std::string(number);
+        audioName = QCoreApplication::translate("INSTRUMENT", "Audio")
+                                            .toStdString() + std::string(number);
         instr = new MappedInstrument(Instrument::Audio,
                                      i,
                                      first + i,

@@ -406,8 +406,10 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
 
     // Add to tabs.
     // (Controller names, if translatable, come from AutoLoadStrings.cpp and are
-    // in the QObject context/namespace/whatever.)
-    const int index = m_tabBar->addTab(QObject::tr(name.toStdString().c_str()));
+    // in the MIDI_CONTROLLER translation context.)
+    const int index = m_tabBar->addTab(
+                        QCoreApplication::translate("MIDI_CONTROLLER",
+                                                    name.toStdString().c_str()));
     m_tabBar->setCurrentIndex(index);
 
     // Add to ruler list.
