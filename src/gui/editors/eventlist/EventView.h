@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -129,9 +128,6 @@ private slots:
     void slotDocumentModified(bool modified);
 
 private:
-
-    QFrame *m_frame{nullptr};
-    QGridLayout *m_gridLayout{nullptr};
 
     /// Set the button states to the current filter positions
     void updateFilterCheckBoxes();

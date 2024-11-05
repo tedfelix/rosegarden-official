@@ -433,6 +433,21 @@ TriggerSegmentManager::slotEdit(QTreeWidgetItem *i)
 
     RG_DEBUG << "id is " << id;
 
+    // Launch the Event List editor.
+    // ??? Why do we only allow the event list editor?  The user should also be
+    //     allowed to launch the notation and matrix editors.  In fact, those
+    //     would probably be preferred.  We should use the "Double-click opens
+    //     segment in" editor preference ("doubleclickclient") and offer
+    //     context menu items for launching any of the three editors as
+    //     desired.  Does this cause problems?
+    //
+    //     The event list editor has code to prevent launching the notation
+    //     and matrix editors on triggered segments.  Why?
+    //
+    //     My only guess is that the matrix and notation editors do something
+    //     to a triggered segment that breaks it in some way.  Need to do some
+    //     testing and see if we can break things somehow.  Then document the
+    //     issues.
     emit editTriggerSegment(id);
 }
 

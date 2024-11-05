@@ -65,7 +65,6 @@
 #include <QAction>
 #include <QCheckBox>
 #include <QDialog>
-#include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
 #include <QMenu>
@@ -181,16 +180,15 @@ EventView::EventView(RosegardenDocument *doc,
 
     setupActions();
 
-    // Create frame and layout.
-    // ??? Why QFrame and not just QWidget?
-    m_frame = new QFrame(this);
-    m_gridLayout = new QGridLayout(m_frame);
-    m_frame->setLayout(m_gridLayout);
-    setCentralWidget(m_frame);
+    // Create main widget and layout.
+    QWidget *mainWidget = new QWidget(this);
+    QGridLayout *gridLayout = new QGridLayout(mainWidget);
+    mainWidget->setLayout(gridLayout);
+    setCentralWidget(mainWidget);
 
     // *** Event filters
 
-    m_filterGroup = new QGroupBox(tr("Event filters"), m_frame);
+    m_filterGroup = new QGroupBox(tr("Event filters"), mainWidget);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     // SetFixedSize - Make the layout exactly the size of its contents and
     //                do not allow it to expand or contract.
@@ -262,12 +260,12 @@ EventView::EventView(RosegardenDocument *doc,
             this, &EventView::slotFilterClicked);
     filterGroupLayout->addWidget(m_otherCheckBox);
 
-    m_gridLayout->addWidget(m_filterGroup, 0, 0, Qt::AlignHCenter);
-    m_gridLayout->setRowMinimumHeight(0, m_filterGroup->height());
+    gridLayout->addWidget(m_filterGroup, 0, 0, Qt::AlignHCenter);
+    gridLayout->setRowMinimumHeight(0, m_filterGroup->height());
 
     // Tree Widget
 
-    m_treeWidget = new QTreeWidget(m_frame);
+    m_treeWidget = new QTreeWidget(mainWidget);
     // Double-click to edit.
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
             this, &EventView::slotItemDoubleClicked);
@@ -297,7 +295,7 @@ EventView::EventView(RosegardenDocument *doc,
     m_treeWidget->setColumnWidth(1, timeWidth);
     m_treeWidget->setMinimumWidth(700);
 
-    m_gridLayout->addWidget(m_treeWidget, 0, 1, 3, 1);
+    gridLayout->addWidget(m_treeWidget, 0, 1, 3, 1);
 
     // Trigger Segment Group Box
 
@@ -308,7 +306,7 @@ EventView::EventView(RosegardenDocument *doc,
                 comp.getTriggerSegmentRec(triggerSegmentID);
 
         QGroupBox *groupBox = new QGroupBox(
-                tr("Triggered Segment Properties"), m_frame);
+                tr("Triggered Segment Properties"), mainWidget);
         groupBox->setContentsMargins(5, 5, 5, 5);
         QGridLayout *layout = new QGridLayout(groupBox);
         layout->setSpacing(5);
@@ -354,8 +352,8 @@ EventView::EventView(RosegardenDocument *doc,
         //     but should we?
 
         // Default timing
-        layout->addWidget(new QLabel(tr("Default timing:  "), frame), 3, 0);
-        QComboBox *adjust = new QComboBox(frame);
+        layout->addWidget(new QLabel(tr("Default timing:  "), mainWidget), 3, 0);
+        QComboBox *adjust = new QComboBox(mainWidget);
         layout->addWidget(adjust, 3, 1, 1, 2);
         adjust->addItem(tr("As stored"));
         adjust->addItem(tr("Truncate if longer than note"));
@@ -376,7 +374,7 @@ EventView::EventView(RosegardenDocument *doc,
                 this, &EventView::slotTriggerTimeAdjustChanged);
 
         // Adjust pitch to trigger note by default
-        QCheckBox *retune = new QCheckBox(tr("Adjust pitch to trigger note by default"), frame);
+        QCheckBox *retune = new QCheckBox(tr("Adjust pitch to trigger note by default"), mainWidget);
         retune->setChecked(triggerSegment->getDefaultRetune());
         connect(retune, SIGNAL(clicked()), this, SLOT(slotTriggerRetuneChanged()));
         layout->addWidget(retune, 4, 1, 1, 2);
@@ -384,16 +382,16 @@ EventView::EventView(RosegardenDocument *doc,
 
         groupBox->setLayout(layout);
         //m_gridLayout->addWidget(groupBox, 0, 2);
-        m_gridLayout->addWidget(groupBox, 1, 0);
+        gridLayout->addWidget(groupBox, 1, 0);
 
     }
 
     // Add a third row to expand to fill the remaining space and prevent
     // expansion of the contents of the first column.
-    m_gridLayout->setRowStretch(2, 1);
+    gridLayout->setRowStretch(2, 1);
 
-    // Make sure frame never gets too small.
-    m_frame->setMinimumSize(m_gridLayout->minimumSize());
+    // Make sure main widget never gets too small.
+    mainWidget->setMinimumSize(gridLayout->minimumSize());
 
     updateWindowTitle(false);
 
@@ -1247,12 +1245,14 @@ EventView::setupActions()
     else if (timeMode == Composition::TimeMode::RawTime)
         raw->setChecked(true);
 
-    // For trigger segments, remove matrix and notation editor menu items.
-    // ??? Does this actually remove the items?  Or does it just disable them?
-    if (m_isTriggerSegment) {
-        delete findAction("open_in_matrix");
-        delete findAction("open_in_notation");
-    }
+    // Disable launching of matrix and notation editors for triggered
+    // segments.
+    // ??? Why?  I've enabled this and it seems to work fine.  In fact, it
+    //     seems like a really handy feature.  TriggerSegmentManager also
+    //     only allows launching the event editor.  Why?  Do some testing
+    //     and see if we can break things.
+    findAction("open_in_matrix")->setEnabled(!m_isTriggerSegment);
+    findAction("open_in_notation")->setEnabled(!m_isTriggerSegment);
 }
 
 void
