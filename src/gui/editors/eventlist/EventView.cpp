@@ -170,8 +170,7 @@ EventView::EventView(RosegardenDocument *doc,
     setStatusBar(new QStatusBar(this));
 
     // Connect for changes so we can update the list.
-    connect(RosegardenDocument::currentDocument,
-                &RosegardenDocument::documentModified,
+    connect(doc, &RosegardenDocument::documentModified,
             this, &EventView::slotDocumentModified);
 
     Composition &comp = doc->getComposition();
@@ -183,7 +182,6 @@ EventView::EventView(RosegardenDocument *doc,
     // Create main widget and layout.
     QWidget *mainWidget = new QWidget(this);
     QGridLayout *gridLayout = new QGridLayout(mainWidget);
-    mainWidget->setLayout(gridLayout);
     setCentralWidget(mainWidget);
 
     // *** Event filters
