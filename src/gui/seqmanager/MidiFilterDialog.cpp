@@ -41,6 +41,7 @@
 namespace Rosegarden
 {
 
+
 MidiFilterDialog::MidiFilterDialog(QWidget *parent,
                                    RosegardenDocument *doc):
     QDialog(parent),
@@ -252,6 +253,8 @@ MidiFilterDialog::slotApply()
     // Send to Sequencer
     if (m_doc->getSequenceManager())
         m_doc->getSequenceManager()->filtersChanged(thruFilter, recordFilter);
+
+    m_doc->slotDocumentModified();
 
     // Disable the Apply button.
     setModified(false);
