@@ -95,6 +95,7 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
     initMenu();
 
     // Create frame and layout.
+    // ??? Why is this a QFrame?  QWidget should be enough.
     m_frame = new QFrame(this);
     m_frame->setMinimumSize(700, 300);
     m_mainLayout = new QHBoxLayout(m_frame);
@@ -147,11 +148,11 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
     // Make sure columns have a reasonable amount of space.
     m_tableWidget->setColumnWidth(0, 110);
     m_tableWidget->setColumnWidth(1, 120);
-    QHeaderView *header = m_tableWidget->horizontalHeader();
-    // Make sure the last column fills the widget.
-    header->setStretchLastSection(true);
+    //m_tableWidget->setMinimumWidth(700);
     connect(m_tableWidget, &QTableWidget::cellDoubleClicked,
             this, &TempoAndTimeSignatureEditor::slotPopupEditor);
+
+    //m_frame->setMinimumSize(m_mainLayout->minimumSize());
 
     // Update the list.
     updateTable();
@@ -162,8 +163,13 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
     settings.beginGroup(WindowGeometryConfigGroup);
     restoreGeometry(settings.value("Tempo_View2_Geometry").toByteArray());
     //restoreState(settings.value("Tempo_View2_State").toByteArray());
-    m_tableWidget->horizontalHeader()->restoreState(settings.value("Tempo_View2_Header_State").toByteArray());
+    m_tableWidget->horizontalHeader()->restoreState(
+            settings.value("Tempo_View2_Header_State").toByteArray());
     settings.endGroup();
+
+    // Make sure the last column fills the widget.
+    // Note: Must do this AFTER restoreState() or else it will not work.
+    m_tableWidget->horizontalHeader()->setStretchLastSection(true);
 
     m_doc->getComposition().addObserver(this);
 
