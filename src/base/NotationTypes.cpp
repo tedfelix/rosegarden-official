@@ -1517,8 +1517,17 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
 // WIP - DMM - munged up to explore #937389, which is temporarily deferred,
 // owing to its non-critical nature, having been hacked around in the LilyPond
 // code
+
+// This is a workaround to prevent lupdate complaining about
+// "Parenthesis/brace mismatch between #if and #else branches"
+#ifdef DEBUG_PITCH
+#define DP true
+#else
+#define DP false
+#endif
+
+    if (DP || (accidental == "")) {
 #ifndef DEBUG_PITCH
-    if (accidental == "") {
         std::cerr << "Pitch::rawPitchToDisplayPitch(): error! returning null accidental for:"
 #else
         std::cerr << "Pitch::rawPitchToDisplayPitch(): calculating: "
@@ -1526,9 +1535,7 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
                   << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct "
                   << octave << ")  userAcc: " << userAccidental
                   << "  clef: " << clef.getClefType() << "  key: " << key.getName() << std::endl;
-#ifndef DEBUG_PITCH
     }
-#endif
 
 
     // 6.  "Recenter" height in case it's been changed:
