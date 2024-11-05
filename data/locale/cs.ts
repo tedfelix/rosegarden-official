@@ -25,2154 +25,2154 @@
 <context>
     <name>COLOUR</name>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="239"/>
+        <location filename="../AutoloadStrings.cpp" line="238"/>
         <source>AudioDefault</source>
         <translation>Výchozí zvuk</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="240"/>
+        <location filename="../AutoloadStrings.cpp" line="239"/>
         <source>MidnightBlue</source>
         <translation>Tmavě modrá barva</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="241"/>
+        <location filename="../AutoloadStrings.cpp" line="240"/>
         <source>NavyBlue</source>
         <translation>Námořnická modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="242"/>
+        <location filename="../AutoloadStrings.cpp" line="241"/>
         <source>CornflowerBlue</source>
         <translation>Chrpová modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="243"/>
+        <location filename="../AutoloadStrings.cpp" line="242"/>
         <source>DarkSlateBlue</source>
         <translation>Tmavě břidlicově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="244"/>
+        <location filename="../AutoloadStrings.cpp" line="243"/>
         <source>SlateBlue</source>
         <translation>Břidlicově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="245"/>
+        <location filename="../AutoloadStrings.cpp" line="244"/>
         <source>MediumSlateBlue</source>
         <translation>Střední břidlicově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="246"/>
+        <location filename="../AutoloadStrings.cpp" line="245"/>
         <source>LightSlateBlue</source>
         <translation>Světle břidlicově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="247"/>
+        <location filename="../AutoloadStrings.cpp" line="246"/>
         <source>MediumBlue</source>
         <translation>Střední modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="248"/>
+        <location filename="../AutoloadStrings.cpp" line="247"/>
         <source>RoyalBlue</source>
         <translation>Královská modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="249"/>
-        <location filename="../AutoloadStrings.cpp" line="663"/>
+        <location filename="../AutoloadStrings.cpp" line="248"/>
+        <location filename="../AutoloadStrings.cpp" line="662"/>
         <source>blue</source>
         <translation>Modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="250"/>
+        <location filename="../AutoloadStrings.cpp" line="249"/>
         <source>DodgerBlue</source>
         <translation>Podraznická modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="251"/>
+        <location filename="../AutoloadStrings.cpp" line="250"/>
         <source>DeepSkyBlue</source>
         <translation>Sytá nebeská modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="252"/>
+        <location filename="../AutoloadStrings.cpp" line="251"/>
         <source>SkyBlue</source>
         <translation>Nebeská modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="253"/>
+        <location filename="../AutoloadStrings.cpp" line="252"/>
         <source>LightSkyBlue</source>
         <translation>Světlá nebeská modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="254"/>
+        <location filename="../AutoloadStrings.cpp" line="253"/>
         <source>SteelBlue</source>
         <translation>Ocelově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="255"/>
+        <location filename="../AutoloadStrings.cpp" line="254"/>
         <source>LightSteelBlue</source>
         <translation>Světlá ocelově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="256"/>
+        <location filename="../AutoloadStrings.cpp" line="255"/>
         <source>LightBlue</source>
         <translation>Světle modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="257"/>
+        <location filename="../AutoloadStrings.cpp" line="256"/>
         <source>PowderBlue</source>
         <translation>Světle šedomodrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="258"/>
+        <location filename="../AutoloadStrings.cpp" line="257"/>
         <source>PaleTurquoise</source>
         <translation>Bledě tyrkysová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="259"/>
+        <location filename="../AutoloadStrings.cpp" line="258"/>
         <source>DarkTurquoise</source>
         <translation>Tmavě tyrkysová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="260"/>
+        <location filename="../AutoloadStrings.cpp" line="259"/>
         <source>MediumTurquoise</source>
         <translation>Střední tyrkysová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="261"/>
+        <location filename="../AutoloadStrings.cpp" line="260"/>
         <source>turquoise</source>
         <translation>Tyrkysová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="262"/>
-        <location filename="../AutoloadStrings.cpp" line="667"/>
+        <location filename="../AutoloadStrings.cpp" line="261"/>
+        <location filename="../AutoloadStrings.cpp" line="666"/>
         <source>cyan</source>
         <translation>Modrozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="263"/>
+        <location filename="../AutoloadStrings.cpp" line="262"/>
         <source>LightCyan</source>
         <translation>Světle modrozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="264"/>
+        <location filename="../AutoloadStrings.cpp" line="263"/>
         <source>CadetBlue</source>
         <translation>Námořnická modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="265"/>
+        <location filename="../AutoloadStrings.cpp" line="264"/>
         <source>MediumAquamarine</source>
         <translation>Střední modrozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="266"/>
+        <location filename="../AutoloadStrings.cpp" line="265"/>
         <source>aquamarine</source>
         <translation>Modrozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="267"/>
+        <location filename="../AutoloadStrings.cpp" line="266"/>
         <source>DarkGreen</source>
         <translation>Tmavě zelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="268"/>
+        <location filename="../AutoloadStrings.cpp" line="267"/>
         <source>DarkOliveGreen</source>
         <translation>Tmavá olivová zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="269"/>
+        <location filename="../AutoloadStrings.cpp" line="268"/>
         <source>DarkSeaGreen</source>
         <translation>Tmavá mořská zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="270"/>
+        <location filename="../AutoloadStrings.cpp" line="269"/>
         <source>SeaGreen</source>
         <translation>Mořská zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="271"/>
+        <location filename="../AutoloadStrings.cpp" line="270"/>
         <source>MediumSeaGreen</source>
         <translation>Střední mořská zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="272"/>
+        <location filename="../AutoloadStrings.cpp" line="271"/>
         <source>LightSeaGreen</source>
         <translation>Světlá mořská zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="273"/>
+        <location filename="../AutoloadStrings.cpp" line="272"/>
         <source>PaleGreen</source>
         <translation>Bledě zelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="274"/>
+        <location filename="../AutoloadStrings.cpp" line="273"/>
         <source>SpringGreen</source>
         <translation>Jarní zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="275"/>
+        <location filename="../AutoloadStrings.cpp" line="274"/>
         <source>LawnGreen</source>
         <translation>Trávníková zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="276"/>
-        <location filename="../AutoloadStrings.cpp" line="665"/>
+        <location filename="../AutoloadStrings.cpp" line="275"/>
+        <location filename="../AutoloadStrings.cpp" line="664"/>
         <source>green</source>
         <translation>Zelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="277"/>
+        <location filename="../AutoloadStrings.cpp" line="276"/>
         <source>chartreuse</source>
         <translation>Světle žlutozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="278"/>
+        <location filename="../AutoloadStrings.cpp" line="277"/>
         <source>MediumSpringGreen</source>
         <translation>Střední jarní zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="279"/>
+        <location filename="../AutoloadStrings.cpp" line="278"/>
         <source>GreenYellow</source>
         <translation>Zelenožlutá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="280"/>
+        <location filename="../AutoloadStrings.cpp" line="279"/>
         <source>LimeGreen</source>
         <translation>Světle žlutozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="281"/>
+        <location filename="../AutoloadStrings.cpp" line="280"/>
         <source>YellowGreen</source>
         <translation>Žluto zelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="282"/>
+        <location filename="../AutoloadStrings.cpp" line="281"/>
         <source>ForestGreen</source>
         <translation>Listová zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="283"/>
+        <location filename="../AutoloadStrings.cpp" line="282"/>
         <source>OliveDrab</source>
         <translation>Šedozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="284"/>
+        <location filename="../AutoloadStrings.cpp" line="283"/>
         <source>DarkKhaki</source>
         <translation>Tmavá olivově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="285"/>
+        <location filename="../AutoloadStrings.cpp" line="284"/>
         <source>khaki</source>
         <translation>Olivově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="286"/>
+        <location filename="../AutoloadStrings.cpp" line="285"/>
         <source>PaleGoldenrod</source>
         <translation>Bledá zlatobýlová žluť</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="287"/>
+        <location filename="../AutoloadStrings.cpp" line="286"/>
         <source>LightGoldenrodYellow</source>
         <translation>Světlá zlatobýlová žluť</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="288"/>
+        <location filename="../AutoloadStrings.cpp" line="287"/>
         <source>LightYellow</source>
         <translation>Světležlutá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="289"/>
-        <location filename="../AutoloadStrings.cpp" line="673"/>
+        <location filename="../AutoloadStrings.cpp" line="288"/>
+        <location filename="../AutoloadStrings.cpp" line="672"/>
         <source>yellow</source>
         <translation>Žlutá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="290"/>
+        <location filename="../AutoloadStrings.cpp" line="289"/>
         <source>gold</source>
         <translation>Zlatá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="291"/>
+        <location filename="../AutoloadStrings.cpp" line="290"/>
         <source>LightGoldenrod</source>
         <translation>Světlá zlatobýlová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="292"/>
+        <location filename="../AutoloadStrings.cpp" line="291"/>
         <source>goldenrod</source>
         <translation>Zlatobýlová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="293"/>
+        <location filename="../AutoloadStrings.cpp" line="292"/>
         <source>DarkGoldenrod</source>
         <translation>Tmavá zlatobýlová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="294"/>
+        <location filename="../AutoloadStrings.cpp" line="293"/>
         <source>RosyBrown</source>
         <translation>Červenohnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="295"/>
+        <location filename="../AutoloadStrings.cpp" line="294"/>
         <source>IndianRed</source>
         <translation>Indická červeň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="296"/>
+        <location filename="../AutoloadStrings.cpp" line="295"/>
         <source>SaddleBrown</source>
         <translation>Sedlová hněď</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="297"/>
+        <location filename="../AutoloadStrings.cpp" line="296"/>
         <source>sienna</source>
         <translation>Žlutohnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="298"/>
+        <location filename="../AutoloadStrings.cpp" line="297"/>
         <source>peru</source>
         <translation>Peru</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="299"/>
+        <location filename="../AutoloadStrings.cpp" line="298"/>
         <source>burlywood</source>
         <translation>Hnědá barva vzrostlého lesa</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="300"/>
+        <location filename="../AutoloadStrings.cpp" line="299"/>
         <source>beige</source>
         <translation>Béžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="301"/>
+        <location filename="../AutoloadStrings.cpp" line="300"/>
         <source>wheat</source>
         <translation>Barva pšenice</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="302"/>
+        <location filename="../AutoloadStrings.cpp" line="301"/>
         <source>SandyBrown</source>
         <translation>Písková hnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="303"/>
+        <location filename="../AutoloadStrings.cpp" line="302"/>
         <source>tan</source>
         <translation>Světlehnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="304"/>
+        <location filename="../AutoloadStrings.cpp" line="303"/>
         <source>chocolate</source>
         <translation>Čokoládová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="305"/>
+        <location filename="../AutoloadStrings.cpp" line="304"/>
         <source>firebrick</source>
         <translation>Cihlová barva</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="306"/>
+        <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>brown</source>
         <translation>Hnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="307"/>
+        <location filename="../AutoloadStrings.cpp" line="306"/>
         <source>DarkSalmon</source>
         <translation>Tmavá lososově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="308"/>
+        <location filename="../AutoloadStrings.cpp" line="307"/>
         <source>salmon</source>
         <translation>Lososově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="309"/>
+        <location filename="../AutoloadStrings.cpp" line="308"/>
         <source>LightSalmon</source>
         <translation>Světlá lososově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="310"/>
+        <location filename="../AutoloadStrings.cpp" line="309"/>
         <source>orange</source>
         <translation>Oranžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="311"/>
+        <location filename="../AutoloadStrings.cpp" line="310"/>
         <source>DarkOrange</source>
         <translation>Tmavě oranžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="312"/>
+        <location filename="../AutoloadStrings.cpp" line="311"/>
         <source>coral</source>
         <translation>Korálově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="313"/>
+        <location filename="../AutoloadStrings.cpp" line="312"/>
         <source>LightCoral</source>
         <translation>Světlá korálově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="314"/>
+        <location filename="../AutoloadStrings.cpp" line="313"/>
         <source>tomato</source>
         <translation>Rajčatová červeň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="315"/>
+        <location filename="../AutoloadStrings.cpp" line="314"/>
         <source>OrangeRed</source>
         <translation>Oranžovočervená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="316"/>
-        <location filename="../AutoloadStrings.cpp" line="669"/>
+        <location filename="../AutoloadStrings.cpp" line="315"/>
+        <location filename="../AutoloadStrings.cpp" line="668"/>
         <source>red</source>
         <translation>Červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="317"/>
+        <location filename="../AutoloadStrings.cpp" line="316"/>
         <source>HotPink</source>
         <translation>Zářící růžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="318"/>
+        <location filename="../AutoloadStrings.cpp" line="317"/>
         <source>DeepPink</source>
         <translation>Plná růžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="319"/>
+        <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>pink</source>
         <translation>Růžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="320"/>
+        <location filename="../AutoloadStrings.cpp" line="319"/>
         <source>LightPink</source>
         <translation>Světlá růžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="321"/>
+        <location filename="../AutoloadStrings.cpp" line="320"/>
         <source>PaleVioletRed</source>
         <translation>Bledá fialově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="322"/>
+        <location filename="../AutoloadStrings.cpp" line="321"/>
         <source>maroon</source>
         <translation>Kaštanová hněď</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="323"/>
+        <location filename="../AutoloadStrings.cpp" line="322"/>
         <source>MediumVioletRed</source>
         <translation>Střední fialově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="324"/>
+        <location filename="../AutoloadStrings.cpp" line="323"/>
         <source>VioletRed</source>
         <translation>Fialově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="325"/>
-        <location filename="../AutoloadStrings.cpp" line="671"/>
+        <location filename="../AutoloadStrings.cpp" line="324"/>
+        <location filename="../AutoloadStrings.cpp" line="670"/>
         <source>magenta</source>
         <translation>Purpurová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="326"/>
+        <location filename="../AutoloadStrings.cpp" line="325"/>
         <source>violet</source>
         <translation>Fialová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="327"/>
+        <location filename="../AutoloadStrings.cpp" line="326"/>
         <source>plum</source>
         <translation>Švestková</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="328"/>
+        <location filename="../AutoloadStrings.cpp" line="327"/>
         <source>orchid</source>
         <translation>Fialová orchidej</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="329"/>
+        <location filename="../AutoloadStrings.cpp" line="328"/>
         <source>MediumOrchid</source>
         <translation>Střední fialová orchidej</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="330"/>
+        <location filename="../AutoloadStrings.cpp" line="329"/>
         <source>DarkOrchid</source>
         <translation>Tmavá fialová orchidej</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="331"/>
+        <location filename="../AutoloadStrings.cpp" line="330"/>
         <source>DarkViolet</source>
         <translation>Tmavě fialová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="332"/>
+        <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>BlueViolet</source>
         <translation>Modrofialová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="333"/>
+        <location filename="../AutoloadStrings.cpp" line="332"/>
         <source>purple</source>
         <translation>Nachová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="334"/>
+        <location filename="../AutoloadStrings.cpp" line="333"/>
         <source>MediumPurple</source>
         <translation>Střední purpurová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="335"/>
+        <location filename="../AutoloadStrings.cpp" line="334"/>
         <source>thistle</source>
         <translation>Barva bodláku</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="336"/>
+        <location filename="../AutoloadStrings.cpp" line="335"/>
         <source>snow1</source>
         <translation>Sněhobílá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="337"/>
+        <location filename="../AutoloadStrings.cpp" line="336"/>
         <source>snow2</source>
         <translation>Sněhobílá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="338"/>
+        <location filename="../AutoloadStrings.cpp" line="337"/>
         <source>snow3</source>
         <translation>Sněhobílá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="339"/>
+        <location filename="../AutoloadStrings.cpp" line="338"/>
         <source>snow4</source>
         <translation>Sněhobílá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="340"/>
+        <location filename="../AutoloadStrings.cpp" line="339"/>
         <source>seashell1</source>
         <translation>Lasturová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="341"/>
+        <location filename="../AutoloadStrings.cpp" line="340"/>
         <source>seashell2</source>
         <translation>Lasturová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="342"/>
+        <location filename="../AutoloadStrings.cpp" line="341"/>
         <source>seashell3</source>
         <translation>Lasturová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="343"/>
+        <location filename="../AutoloadStrings.cpp" line="342"/>
         <source>seashell4</source>
         <translation>Lasturová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="344"/>
+        <location filename="../AutoloadStrings.cpp" line="343"/>
         <source>AntiqueWhite1</source>
         <translation>Antická bílá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="345"/>
+        <location filename="../AutoloadStrings.cpp" line="344"/>
         <source>AntiqueWhite2</source>
         <translation>Antická bílá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="346"/>
+        <location filename="../AutoloadStrings.cpp" line="345"/>
         <source>AntiqueWhite3</source>
         <translation>Antická bílá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="347"/>
+        <location filename="../AutoloadStrings.cpp" line="346"/>
         <source>AntiqueWhite4</source>
         <translation>Antická bílá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="348"/>
+        <location filename="../AutoloadStrings.cpp" line="347"/>
         <source>bisque1</source>
         <translation>Světle béžová barva 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="349"/>
+        <location filename="../AutoloadStrings.cpp" line="348"/>
         <source>bisque2</source>
         <translation>Světle béžová barva 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="350"/>
+        <location filename="../AutoloadStrings.cpp" line="349"/>
         <source>bisque3</source>
         <translation>Světle béžová barva 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="351"/>
+        <location filename="../AutoloadStrings.cpp" line="350"/>
         <source>bisque4</source>
         <translation>Světle béžová barva 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="352"/>
+        <location filename="../AutoloadStrings.cpp" line="351"/>
         <source>PeachPuff1</source>
         <translation>Broskvová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="353"/>
+        <location filename="../AutoloadStrings.cpp" line="352"/>
         <source>PeachPuff2</source>
         <translation>Broskvová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="354"/>
+        <location filename="../AutoloadStrings.cpp" line="353"/>
         <source>PeachPuff3</source>
         <translation>Broskvová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="355"/>
+        <location filename="../AutoloadStrings.cpp" line="354"/>
         <source>PeachPuff4</source>
         <translation>Broskvová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="356"/>
+        <location filename="../AutoloadStrings.cpp" line="355"/>
         <source>NavajoWhite1</source>
         <translation>Navajská bílá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="357"/>
+        <location filename="../AutoloadStrings.cpp" line="356"/>
         <source>NavajoWhite2</source>
         <translation>Navajská bílá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="358"/>
+        <location filename="../AutoloadStrings.cpp" line="357"/>
         <source>NavajoWhite3</source>
         <translation>Navajská bílá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="359"/>
+        <location filename="../AutoloadStrings.cpp" line="358"/>
         <source>NavajoWhite4</source>
         <translation>Navajská bílá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="360"/>
+        <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>LemonChiffon1</source>
         <translation>Šifónová žluť 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="361"/>
+        <location filename="../AutoloadStrings.cpp" line="360"/>
         <source>LemonChiffon2</source>
         <translation>Šifónová žluť 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="362"/>
+        <location filename="../AutoloadStrings.cpp" line="361"/>
         <source>LemonChiffon3</source>
         <translation>Šifónová žluť 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="363"/>
+        <location filename="../AutoloadStrings.cpp" line="362"/>
         <source>LemonChiffon4</source>
         <translation>Šifónová žluť 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="364"/>
+        <location filename="../AutoloadStrings.cpp" line="363"/>
         <source>cornsilk1</source>
         <translation>Kukuřičná vlákna 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="365"/>
+        <location filename="../AutoloadStrings.cpp" line="364"/>
         <source>cornsilk2</source>
         <translation>Kukuřičná vlákna 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="366"/>
+        <location filename="../AutoloadStrings.cpp" line="365"/>
         <source>cornsilk3</source>
         <translation>Kukuřičná vlákna 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="367"/>
+        <location filename="../AutoloadStrings.cpp" line="366"/>
         <source>cornsilk4</source>
         <translation>Kukuřičná vlákna 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="368"/>
+        <location filename="../AutoloadStrings.cpp" line="367"/>
         <source>ivory1</source>
         <translation>Slonovinová kost 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="369"/>
+        <location filename="../AutoloadStrings.cpp" line="368"/>
         <source>ivory2</source>
         <translation>Slonovinová kost 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="370"/>
+        <location filename="../AutoloadStrings.cpp" line="369"/>
         <source>ivory3</source>
         <translation>Slonovinová kost 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="371"/>
+        <location filename="../AutoloadStrings.cpp" line="370"/>
         <source>ivory4</source>
         <translation>Slonovinová kost 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="372"/>
+        <location filename="../AutoloadStrings.cpp" line="371"/>
         <source>honeydew1</source>
         <translation>Zlatě hnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="373"/>
+        <location filename="../AutoloadStrings.cpp" line="372"/>
         <source>honeydew2</source>
         <translation>Zlatě hnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="374"/>
+        <location filename="../AutoloadStrings.cpp" line="373"/>
         <source>honeydew3</source>
         <translation>Zlatě hnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="375"/>
+        <location filename="../AutoloadStrings.cpp" line="374"/>
         <source>honeydew4</source>
         <translation>Zlatě hnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="376"/>
+        <location filename="../AutoloadStrings.cpp" line="375"/>
         <source>LavenderBlush1</source>
         <translation>Levandulová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="377"/>
+        <location filename="../AutoloadStrings.cpp" line="376"/>
         <source>LavenderBlush2</source>
         <translation>Levandulová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="378"/>
+        <location filename="../AutoloadStrings.cpp" line="377"/>
         <source>LavenderBlush3</source>
         <translation>Levandulová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="379"/>
+        <location filename="../AutoloadStrings.cpp" line="378"/>
         <source>LavenderBlush4</source>
         <translation>Levandulová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="380"/>
+        <location filename="../AutoloadStrings.cpp" line="379"/>
         <source>MistyRose1</source>
         <translation>Zamlžená růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="381"/>
+        <location filename="../AutoloadStrings.cpp" line="380"/>
         <source>MistyRose2</source>
         <translation>Zamlžená růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="382"/>
+        <location filename="../AutoloadStrings.cpp" line="381"/>
         <source>MistyRose3</source>
         <translation>Zamlžená růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="383"/>
+        <location filename="../AutoloadStrings.cpp" line="382"/>
         <source>MistyRose4</source>
         <translation>Zamlžená růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="384"/>
+        <location filename="../AutoloadStrings.cpp" line="383"/>
         <source>azure1</source>
         <translation>Blankytná 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="385"/>
+        <location filename="../AutoloadStrings.cpp" line="384"/>
         <source>azure2</source>
         <translation>Blankytná 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="386"/>
+        <location filename="../AutoloadStrings.cpp" line="385"/>
         <source>azure3</source>
         <translation>Blankytná 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="387"/>
+        <location filename="../AutoloadStrings.cpp" line="386"/>
         <source>azure4</source>
         <translation>Blankytná 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="388"/>
+        <location filename="../AutoloadStrings.cpp" line="387"/>
         <source>SlateBlue1</source>
         <translation>Břidlicově modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="389"/>
+        <location filename="../AutoloadStrings.cpp" line="388"/>
         <source>SlateBlue2</source>
         <translation>Břidlicově modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="390"/>
+        <location filename="../AutoloadStrings.cpp" line="389"/>
         <source>SlateBlue3</source>
         <translation>Břidlicově modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="391"/>
+        <location filename="../AutoloadStrings.cpp" line="390"/>
         <source>SlateBlue4</source>
         <translation>Břidlicově modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="392"/>
+        <location filename="../AutoloadStrings.cpp" line="391"/>
         <source>RoyalBlue1</source>
         <translation>Královská modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="393"/>
+        <location filename="../AutoloadStrings.cpp" line="392"/>
         <source>RoyalBlue2</source>
         <translation>Královská modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="394"/>
+        <location filename="../AutoloadStrings.cpp" line="393"/>
         <source>RoyalBlue3</source>
         <translation>Královská modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="395"/>
+        <location filename="../AutoloadStrings.cpp" line="394"/>
         <source>RoyalBlue4</source>
         <translation>Královská modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="396"/>
+        <location filename="../AutoloadStrings.cpp" line="395"/>
         <source>blue1</source>
         <translation>Modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="397"/>
+        <location filename="../AutoloadStrings.cpp" line="396"/>
         <source>blue2</source>
         <translation>Modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="398"/>
+        <location filename="../AutoloadStrings.cpp" line="397"/>
         <source>blue3</source>
         <translation>Modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="399"/>
+        <location filename="../AutoloadStrings.cpp" line="398"/>
         <source>blue4</source>
         <translation>Modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="400"/>
+        <location filename="../AutoloadStrings.cpp" line="399"/>
         <source>DodgerBlue1</source>
         <translation>Podraznická modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="401"/>
+        <location filename="../AutoloadStrings.cpp" line="400"/>
         <source>DodgerBlue2</source>
         <translation>Podraznická modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="402"/>
+        <location filename="../AutoloadStrings.cpp" line="401"/>
         <source>DodgerBlue3</source>
         <translation>Podraznická modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="403"/>
+        <location filename="../AutoloadStrings.cpp" line="402"/>
         <source>DodgerBlue4</source>
         <translation>Podraznická modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="404"/>
+        <location filename="../AutoloadStrings.cpp" line="403"/>
         <source>SteelBlue1</source>
         <translation>Ocelově modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="405"/>
+        <location filename="../AutoloadStrings.cpp" line="404"/>
         <source>SteelBlue2</source>
         <translation>Ocelově modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="406"/>
+        <location filename="../AutoloadStrings.cpp" line="405"/>
         <source>SteelBlue3</source>
         <translation>Ocelově modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="407"/>
+        <location filename="../AutoloadStrings.cpp" line="406"/>
         <source>SteelBlue4</source>
         <translation>Ocelově modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="408"/>
+        <location filename="../AutoloadStrings.cpp" line="407"/>
         <source>DeepSkyBlue1</source>
         <translation>Sytá nebeská modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="409"/>
+        <location filename="../AutoloadStrings.cpp" line="408"/>
         <source>DeepSkyBlue2</source>
         <translation>Sytá nebeská modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="410"/>
+        <location filename="../AutoloadStrings.cpp" line="409"/>
         <source>DeepSkyBlue3</source>
         <translation>Sytá nebeská modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="411"/>
+        <location filename="../AutoloadStrings.cpp" line="410"/>
         <source>DeepSkyBlue4</source>
         <translation>Sytá nebeská modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="412"/>
+        <location filename="../AutoloadStrings.cpp" line="411"/>
         <source>SkyBlue1</source>
         <translation>Nebeská modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="413"/>
+        <location filename="../AutoloadStrings.cpp" line="412"/>
         <source>SkyBlue2</source>
         <translation>Nebeská modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="414"/>
+        <location filename="../AutoloadStrings.cpp" line="413"/>
         <source>SkyBlue3</source>
         <translation>Nebeská modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="415"/>
+        <location filename="../AutoloadStrings.cpp" line="414"/>
         <source>SkyBlue4</source>
         <translation>Nebeská modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="416"/>
+        <location filename="../AutoloadStrings.cpp" line="415"/>
         <source>LightSkyBlue1</source>
         <translation>Světlá nebeská modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="417"/>
+        <location filename="../AutoloadStrings.cpp" line="416"/>
         <source>LightSkyBlue2</source>
         <translation>Světlá nebeská modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="418"/>
+        <location filename="../AutoloadStrings.cpp" line="417"/>
         <source>LightSkyBlue3</source>
         <translation>Světlá nebeská modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="419"/>
+        <location filename="../AutoloadStrings.cpp" line="418"/>
         <source>LightSkyBlue4</source>
         <translation>Světlá nebeská modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="420"/>
+        <location filename="../AutoloadStrings.cpp" line="419"/>
         <source>SlateGray1</source>
         <translation>Břidlicově šedá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="421"/>
+        <location filename="../AutoloadStrings.cpp" line="420"/>
         <source>SlateGray2</source>
         <translation>Břidlicově šedá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="422"/>
+        <location filename="../AutoloadStrings.cpp" line="421"/>
         <source>SlateGray3</source>
         <translation>Břidlicově šedá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="423"/>
+        <location filename="../AutoloadStrings.cpp" line="422"/>
         <source>SlateGray4</source>
         <translation>Břidlicově šedá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="424"/>
+        <location filename="../AutoloadStrings.cpp" line="423"/>
         <source>LightSteelBlue1</source>
         <translation>Světlá ocelově modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="425"/>
+        <location filename="../AutoloadStrings.cpp" line="424"/>
         <source>LightSteelBlue2</source>
         <translation>Světlá ocelově modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="426"/>
+        <location filename="../AutoloadStrings.cpp" line="425"/>
         <source>LightSteelBlue3</source>
         <translation>Světlá ocelově modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="427"/>
+        <location filename="../AutoloadStrings.cpp" line="426"/>
         <source>LightSteelBlue4</source>
         <translation>Světlá ocelově modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="428"/>
+        <location filename="../AutoloadStrings.cpp" line="427"/>
         <source>LightBlue1</source>
         <translation>Světle modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="429"/>
+        <location filename="../AutoloadStrings.cpp" line="428"/>
         <source>LightBlue2</source>
         <translation>Světle modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="430"/>
+        <location filename="../AutoloadStrings.cpp" line="429"/>
         <source>LightBlue3</source>
         <translation>Světle modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="431"/>
+        <location filename="../AutoloadStrings.cpp" line="430"/>
         <source>LightBlue4</source>
         <translation>Světle modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="432"/>
+        <location filename="../AutoloadStrings.cpp" line="431"/>
         <source>LightCyan1</source>
         <translation>Světle modrozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="433"/>
+        <location filename="../AutoloadStrings.cpp" line="432"/>
         <source>LightCyan2</source>
         <translation>Světle modrozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="434"/>
+        <location filename="../AutoloadStrings.cpp" line="433"/>
         <source>LightCyan3</source>
         <translation>Světle modrozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="435"/>
+        <location filename="../AutoloadStrings.cpp" line="434"/>
         <source>LightCyan4</source>
         <translation>Světle modrozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="436"/>
+        <location filename="../AutoloadStrings.cpp" line="435"/>
         <source>PaleTurquoise1</source>
         <translation>Bledě tyrkysová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="437"/>
+        <location filename="../AutoloadStrings.cpp" line="436"/>
         <source>PaleTurquoise2</source>
         <translation>Bledě tyrkysová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="438"/>
+        <location filename="../AutoloadStrings.cpp" line="437"/>
         <source>PaleTurquoise3</source>
         <translation>Bledě tyrkysová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="439"/>
+        <location filename="../AutoloadStrings.cpp" line="438"/>
         <source>PaleTurquoise4</source>
         <translation>Bledě tyrkysová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="440"/>
+        <location filename="../AutoloadStrings.cpp" line="439"/>
         <source>CadetBlue1</source>
         <translation>Námořnická modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="441"/>
+        <location filename="../AutoloadStrings.cpp" line="440"/>
         <source>CadetBlue2</source>
         <translation>Námořnická modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="442"/>
+        <location filename="../AutoloadStrings.cpp" line="441"/>
         <source>CadetBlue3</source>
         <translation>Námořnická modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="443"/>
+        <location filename="../AutoloadStrings.cpp" line="442"/>
         <source>CadetBlue4</source>
         <translation>Námořnická modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="444"/>
+        <location filename="../AutoloadStrings.cpp" line="443"/>
         <source>turquoise1</source>
         <translation>Tyrkysová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="445"/>
+        <location filename="../AutoloadStrings.cpp" line="444"/>
         <source>turquoise2</source>
         <translation>Tyrkysová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="446"/>
+        <location filename="../AutoloadStrings.cpp" line="445"/>
         <source>turquoise3</source>
         <translation>Tyrkysová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="447"/>
+        <location filename="../AutoloadStrings.cpp" line="446"/>
         <source>turquoise4</source>
         <translation>Tyrkysová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="448"/>
+        <location filename="../AutoloadStrings.cpp" line="447"/>
         <source>cyan1</source>
         <translation>Modrozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="449"/>
+        <location filename="../AutoloadStrings.cpp" line="448"/>
         <source>cyan2</source>
         <translation>Modrozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="450"/>
+        <location filename="../AutoloadStrings.cpp" line="449"/>
         <source>cyan3</source>
         <translation>Modrozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="451"/>
+        <location filename="../AutoloadStrings.cpp" line="450"/>
         <source>cyan4</source>
         <translation>Modrozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="452"/>
+        <location filename="../AutoloadStrings.cpp" line="451"/>
         <source>DarkSlateGray1</source>
         <translation>Tmavě břidlicově šedá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="453"/>
+        <location filename="../AutoloadStrings.cpp" line="452"/>
         <source>DarkSlateGray2</source>
         <translation>Tmavě břidlicově šedá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="454"/>
+        <location filename="../AutoloadStrings.cpp" line="453"/>
         <source>DarkSlateGray3</source>
         <translation>Tmavě břidlicově šedá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="455"/>
+        <location filename="../AutoloadStrings.cpp" line="454"/>
         <source>DarkSlateGray4</source>
         <translation>Tmavě břidlicově šedá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="456"/>
+        <location filename="../AutoloadStrings.cpp" line="455"/>
         <source>aquamarine1</source>
         <translation>Modrozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="457"/>
+        <location filename="../AutoloadStrings.cpp" line="456"/>
         <source>aquamarine2</source>
         <translation>Modrozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="458"/>
+        <location filename="../AutoloadStrings.cpp" line="457"/>
         <source>aquamarine3</source>
         <translation>Modrozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="459"/>
+        <location filename="../AutoloadStrings.cpp" line="458"/>
         <source>aquamarine4</source>
         <translation>Modrozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="460"/>
+        <location filename="../AutoloadStrings.cpp" line="459"/>
         <source>DarkSeaGreen1</source>
         <translation>Tmavá mořská zeleň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="461"/>
+        <location filename="../AutoloadStrings.cpp" line="460"/>
         <source>DarkSeaGreen2</source>
         <translation>Tmavá mořská zeleň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="462"/>
+        <location filename="../AutoloadStrings.cpp" line="461"/>
         <source>DarkSeaGreen3</source>
         <translation>Tmavá mořská zeleň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="463"/>
+        <location filename="../AutoloadStrings.cpp" line="462"/>
         <source>DarkSeaGreen4</source>
         <translation>Tmavá mořská zeleň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="464"/>
+        <location filename="../AutoloadStrings.cpp" line="463"/>
         <source>SeaGreen1</source>
         <translation>Mořská zeleň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="465"/>
+        <location filename="../AutoloadStrings.cpp" line="464"/>
         <source>SeaGreen2</source>
         <translation>Mořská zeleň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="466"/>
+        <location filename="../AutoloadStrings.cpp" line="465"/>
         <source>SeaGreen3</source>
         <translation>Mořská zeleň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="467"/>
+        <location filename="../AutoloadStrings.cpp" line="466"/>
         <source>SeaGreen4</source>
         <translation>Mořská zeleň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="468"/>
+        <location filename="../AutoloadStrings.cpp" line="467"/>
         <source>PaleGreen1</source>
         <translation>Bledě zelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="469"/>
+        <location filename="../AutoloadStrings.cpp" line="468"/>
         <source>PaleGreen2</source>
         <translation>Bledě zelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="470"/>
+        <location filename="../AutoloadStrings.cpp" line="469"/>
         <source>PaleGreen3</source>
         <translation>Bledě zelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="471"/>
+        <location filename="../AutoloadStrings.cpp" line="470"/>
         <source>PaleGreen4</source>
         <translation>Bledě zelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="472"/>
+        <location filename="../AutoloadStrings.cpp" line="471"/>
         <source>SpringGreen1</source>
         <translation>Jarní zeleň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="473"/>
+        <location filename="../AutoloadStrings.cpp" line="472"/>
         <source>SpringGreen2</source>
         <translation>Jarní zeleň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="474"/>
+        <location filename="../AutoloadStrings.cpp" line="473"/>
         <source>SpringGreen3</source>
         <translation>Jarní zeleň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="475"/>
+        <location filename="../AutoloadStrings.cpp" line="474"/>
         <source>SpringGreen4</source>
         <translation>Jarní zeleň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="476"/>
+        <location filename="../AutoloadStrings.cpp" line="475"/>
         <source>green1</source>
         <translation>Zelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="477"/>
+        <location filename="../AutoloadStrings.cpp" line="476"/>
         <source>green2</source>
         <translation>Zelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="478"/>
+        <location filename="../AutoloadStrings.cpp" line="477"/>
         <source>green3</source>
         <translation>Zelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="479"/>
+        <location filename="../AutoloadStrings.cpp" line="478"/>
         <source>green4</source>
         <translation>Zelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="480"/>
+        <location filename="../AutoloadStrings.cpp" line="479"/>
         <source>chartreuse1</source>
         <translation>Světle žlutozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="481"/>
+        <location filename="../AutoloadStrings.cpp" line="480"/>
         <source>chartreuse2</source>
         <translation>Světle žlutozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="482"/>
+        <location filename="../AutoloadStrings.cpp" line="481"/>
         <source>chartreuse3</source>
         <translation>Světle žlutozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="483"/>
+        <location filename="../AutoloadStrings.cpp" line="482"/>
         <source>chartreuse4</source>
         <translation>Světle žlutozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="484"/>
+        <location filename="../AutoloadStrings.cpp" line="483"/>
         <source>OliveDrab1</source>
         <translation>Šedozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="485"/>
+        <location filename="../AutoloadStrings.cpp" line="484"/>
         <source>OliveDrab2</source>
         <translation>Šedozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="486"/>
+        <location filename="../AutoloadStrings.cpp" line="485"/>
         <source>OliveDrab3</source>
         <translation>Šedozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="487"/>
+        <location filename="../AutoloadStrings.cpp" line="486"/>
         <source>OliveDrab4</source>
         <translation>Šedozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="488"/>
+        <location filename="../AutoloadStrings.cpp" line="487"/>
         <source>DarkOliveGreen1</source>
         <translation>Tmavá olivová zeleň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="489"/>
+        <location filename="../AutoloadStrings.cpp" line="488"/>
         <source>DarkOliveGreen2</source>
         <translation>Tmavá olivová zeleň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="490"/>
+        <location filename="../AutoloadStrings.cpp" line="489"/>
         <source>DarkOliveGreen3</source>
         <translation>Tmavá olivová zeleň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="491"/>
+        <location filename="../AutoloadStrings.cpp" line="490"/>
         <source>DarkOliveGreen4</source>
         <translation>Tmavá olivová zeleň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="492"/>
+        <location filename="../AutoloadStrings.cpp" line="491"/>
         <source>khaki1</source>
         <translation>Olivově šedá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="493"/>
+        <location filename="../AutoloadStrings.cpp" line="492"/>
         <source>khaki2</source>
         <translation>Olivově šedá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="494"/>
+        <location filename="../AutoloadStrings.cpp" line="493"/>
         <source>khaki3</source>
         <translation>Olivově šedá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="495"/>
+        <location filename="../AutoloadStrings.cpp" line="494"/>
         <source>khaki4</source>
         <translation>Olivově šedá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="496"/>
+        <location filename="../AutoloadStrings.cpp" line="495"/>
         <source>LightGoldenrod1</source>
         <translation>Světlá zlatobýlová žluť 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="497"/>
+        <location filename="../AutoloadStrings.cpp" line="496"/>
         <source>LightGoldenrod2</source>
         <translation>Světlá zlatobýlová žluť 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="498"/>
+        <location filename="../AutoloadStrings.cpp" line="497"/>
         <source>LightGoldenrod3</source>
         <translation>Světlá zlatobýlová žluť 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="499"/>
+        <location filename="../AutoloadStrings.cpp" line="498"/>
         <source>LightGoldenrod4</source>
         <translation>Světlá zlatobýlová žluť 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="500"/>
+        <location filename="../AutoloadStrings.cpp" line="499"/>
         <source>LightYellow1</source>
         <translation>Světležlutá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="501"/>
+        <location filename="../AutoloadStrings.cpp" line="500"/>
         <source>LightYellow2</source>
         <translation>Světležlutá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="502"/>
+        <location filename="../AutoloadStrings.cpp" line="501"/>
         <source>LightYellow3</source>
         <translation>Světležlutá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="503"/>
+        <location filename="../AutoloadStrings.cpp" line="502"/>
         <source>LightYellow4</source>
         <translation>Světležlutá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="504"/>
+        <location filename="../AutoloadStrings.cpp" line="503"/>
         <source>yellow1</source>
         <translation>Žlutá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="505"/>
+        <location filename="../AutoloadStrings.cpp" line="504"/>
         <source>yellow2</source>
         <translation>Žlutá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="506"/>
+        <location filename="../AutoloadStrings.cpp" line="505"/>
         <source>yellow3</source>
         <translation>Žlutá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="507"/>
+        <location filename="../AutoloadStrings.cpp" line="506"/>
         <source>yellow4</source>
         <translation>Žlutá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="508"/>
+        <location filename="../AutoloadStrings.cpp" line="507"/>
         <source>gold1</source>
         <translation>Zlatá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="509"/>
+        <location filename="../AutoloadStrings.cpp" line="508"/>
         <source>gold2</source>
         <translation>Zlatá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="510"/>
+        <location filename="../AutoloadStrings.cpp" line="509"/>
         <source>gold3</source>
         <translation>Zlatá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="511"/>
+        <location filename="../AutoloadStrings.cpp" line="510"/>
         <source>gold4</source>
         <translation>Zlatá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="512"/>
+        <location filename="../AutoloadStrings.cpp" line="511"/>
         <source>goldenrod1</source>
         <translation>Zlatobýlová žluť 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="513"/>
+        <location filename="../AutoloadStrings.cpp" line="512"/>
         <source>goldenrod2</source>
         <translation>Zlatobýlová žluť 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="514"/>
+        <location filename="../AutoloadStrings.cpp" line="513"/>
         <source>goldenrod3</source>
         <translation>Zlatobýlová žluť 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="515"/>
+        <location filename="../AutoloadStrings.cpp" line="514"/>
         <source>goldenrod4</source>
         <translation>Zlatobýlová žluť 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="516"/>
+        <location filename="../AutoloadStrings.cpp" line="515"/>
         <source>DarkGoldenrod1</source>
         <translation>Tmavá zlatobýlová žluť 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="517"/>
+        <location filename="../AutoloadStrings.cpp" line="516"/>
         <source>DarkGoldenrod2</source>
         <translation>Tmavá zlatobýlová žluť 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="518"/>
+        <location filename="../AutoloadStrings.cpp" line="517"/>
         <source>DarkGoldenrod3</source>
         <translation>Tmavá zlatobýlová žluť 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="519"/>
+        <location filename="../AutoloadStrings.cpp" line="518"/>
         <source>DarkGoldenrod4</source>
         <translation>Tmavá zlatobýlová žluť 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="520"/>
+        <location filename="../AutoloadStrings.cpp" line="519"/>
         <source>RosyBrown1</source>
         <translation>Červenohnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="521"/>
+        <location filename="../AutoloadStrings.cpp" line="520"/>
         <source>RosyBrown2</source>
         <translation>Červenohnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="522"/>
+        <location filename="../AutoloadStrings.cpp" line="521"/>
         <source>RosyBrown3</source>
         <translation>Červenohnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="523"/>
+        <location filename="../AutoloadStrings.cpp" line="522"/>
         <source>RosyBrown4</source>
         <translation>Červenohnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="524"/>
+        <location filename="../AutoloadStrings.cpp" line="523"/>
         <source>IndianRed1</source>
         <translation>Indická červeň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="525"/>
+        <location filename="../AutoloadStrings.cpp" line="524"/>
         <source>IndianRed2</source>
         <translation>Indická červeň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="526"/>
+        <location filename="../AutoloadStrings.cpp" line="525"/>
         <source>IndianRed3</source>
         <translation>Indická červeň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="527"/>
+        <location filename="../AutoloadStrings.cpp" line="526"/>
         <source>IndianRed4</source>
         <translation>Indická červeň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="528"/>
+        <location filename="../AutoloadStrings.cpp" line="527"/>
         <source>sienna1</source>
         <translation>Žlutohnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="529"/>
+        <location filename="../AutoloadStrings.cpp" line="528"/>
         <source>sienna2</source>
         <translation>Žlutohnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="530"/>
+        <location filename="../AutoloadStrings.cpp" line="529"/>
         <source>sienna3</source>
         <translation>Žlutohnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="531"/>
+        <location filename="../AutoloadStrings.cpp" line="530"/>
         <source>sienna4</source>
         <translation>Žlutohnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="532"/>
+        <location filename="../AutoloadStrings.cpp" line="531"/>
         <source>burlywood1</source>
         <translation>Hnědá barva vzrostlého lesa 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="533"/>
+        <location filename="../AutoloadStrings.cpp" line="532"/>
         <source>burlywood2</source>
         <translation>Hnědá barva vzrostlého lesa 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="534"/>
+        <location filename="../AutoloadStrings.cpp" line="533"/>
         <source>burlywood3</source>
         <translation>Hnědá barva vzrostlého lesa 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="535"/>
+        <location filename="../AutoloadStrings.cpp" line="534"/>
         <source>burlywood4</source>
         <translation>Hnědá barva vzrostlého lesa 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="536"/>
+        <location filename="../AutoloadStrings.cpp" line="535"/>
         <source>wheat1</source>
         <translation>Barva pšenice 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="537"/>
+        <location filename="../AutoloadStrings.cpp" line="536"/>
         <source>wheat2</source>
         <translation>Barva pšenice 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="538"/>
+        <location filename="../AutoloadStrings.cpp" line="537"/>
         <source>wheat3</source>
         <translation>Barva pšenice 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="539"/>
+        <location filename="../AutoloadStrings.cpp" line="538"/>
         <source>wheat4</source>
         <translation>Barva pšenice 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="540"/>
+        <location filename="../AutoloadStrings.cpp" line="539"/>
         <source>tan1</source>
         <translation>Světlehnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="541"/>
+        <location filename="../AutoloadStrings.cpp" line="540"/>
         <source>tan2</source>
         <translation>Světlehnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="542"/>
+        <location filename="../AutoloadStrings.cpp" line="541"/>
         <source>tan3</source>
         <translation>Světlehnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="543"/>
+        <location filename="../AutoloadStrings.cpp" line="542"/>
         <source>tan4</source>
         <translation>Světlehnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="544"/>
+        <location filename="../AutoloadStrings.cpp" line="543"/>
         <source>chocolate1</source>
         <translation>Čokoládová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="545"/>
+        <location filename="../AutoloadStrings.cpp" line="544"/>
         <source>chocolate2</source>
         <translation>Čokoládová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="546"/>
+        <location filename="../AutoloadStrings.cpp" line="545"/>
         <source>chocolate3</source>
         <translation>Čokoládová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="547"/>
+        <location filename="../AutoloadStrings.cpp" line="546"/>
         <source>chocolate4</source>
         <translation>Čokoládová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="548"/>
+        <location filename="../AutoloadStrings.cpp" line="547"/>
         <source>firebrick1</source>
         <translation>Cihlová barva 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="549"/>
+        <location filename="../AutoloadStrings.cpp" line="548"/>
         <source>firebrick2</source>
         <translation>Cihlová barva 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="550"/>
+        <location filename="../AutoloadStrings.cpp" line="549"/>
         <source>firebrick3</source>
         <translation>Cihlová barva 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="551"/>
+        <location filename="../AutoloadStrings.cpp" line="550"/>
         <source>firebrick4</source>
         <translation>Cihlová barva 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="552"/>
+        <location filename="../AutoloadStrings.cpp" line="551"/>
         <source>brown1</source>
         <translation>Hnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="553"/>
+        <location filename="../AutoloadStrings.cpp" line="552"/>
         <source>brown2</source>
         <translation>Hnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="554"/>
+        <location filename="../AutoloadStrings.cpp" line="553"/>
         <source>brown3</source>
         <translation>Hnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="555"/>
+        <location filename="../AutoloadStrings.cpp" line="554"/>
         <source>brown4</source>
         <translation>Hnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="556"/>
+        <location filename="../AutoloadStrings.cpp" line="555"/>
         <source>salmon1</source>
         <translation>Lososově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="557"/>
+        <location filename="../AutoloadStrings.cpp" line="556"/>
         <source>salmon2</source>
         <translation>Lososově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="558"/>
+        <location filename="../AutoloadStrings.cpp" line="557"/>
         <source>salmon3</source>
         <translation>Lososově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="559"/>
+        <location filename="../AutoloadStrings.cpp" line="558"/>
         <source>salmon4</source>
         <translation>Lososově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="560"/>
+        <location filename="../AutoloadStrings.cpp" line="559"/>
         <source>LightSalmon1</source>
         <translation>Světlá lososově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="561"/>
+        <location filename="../AutoloadStrings.cpp" line="560"/>
         <source>LightSalmon2</source>
         <translation>Světlá lososově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="562"/>
+        <location filename="../AutoloadStrings.cpp" line="561"/>
         <source>LightSalmon3</source>
         <translation>Světlá lososově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="563"/>
+        <location filename="../AutoloadStrings.cpp" line="562"/>
         <source>LightSalmon4</source>
         <translation>Světlá lososově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="564"/>
+        <location filename="../AutoloadStrings.cpp" line="563"/>
         <source>orange1</source>
         <translation>Oranžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="565"/>
+        <location filename="../AutoloadStrings.cpp" line="564"/>
         <source>orange2</source>
         <translation>Oranžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="566"/>
+        <location filename="../AutoloadStrings.cpp" line="565"/>
         <source>orange3</source>
         <translation>Oranžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="567"/>
+        <location filename="../AutoloadStrings.cpp" line="566"/>
         <source>orange4</source>
         <translation>Oranžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="568"/>
+        <location filename="../AutoloadStrings.cpp" line="567"/>
         <source>DarkOrange1</source>
         <translation>Tmavě oranžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="569"/>
+        <location filename="../AutoloadStrings.cpp" line="568"/>
         <source>DarkOrange2</source>
         <translation>Tmavě oranžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="570"/>
+        <location filename="../AutoloadStrings.cpp" line="569"/>
         <source>DarkOrange3</source>
         <translation>Tmavě oranžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="571"/>
+        <location filename="../AutoloadStrings.cpp" line="570"/>
         <source>DarkOrange4</source>
         <translation>Tmavě oranžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="572"/>
+        <location filename="../AutoloadStrings.cpp" line="571"/>
         <source>coral1</source>
         <translation>Korálově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="573"/>
+        <location filename="../AutoloadStrings.cpp" line="572"/>
         <source>coral2</source>
         <translation>Korálově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="574"/>
+        <location filename="../AutoloadStrings.cpp" line="573"/>
         <source>coral3</source>
         <translation>Korálově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="575"/>
+        <location filename="../AutoloadStrings.cpp" line="574"/>
         <source>coral4</source>
         <translation>Korálově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="576"/>
+        <location filename="../AutoloadStrings.cpp" line="575"/>
         <source>tomato1</source>
         <translation>Rajčatová červeň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="577"/>
+        <location filename="../AutoloadStrings.cpp" line="576"/>
         <source>tomato2</source>
         <translation>Rajčatová červeň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="578"/>
+        <location filename="../AutoloadStrings.cpp" line="577"/>
         <source>tomato3</source>
         <translation>Rajčatová červeň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="579"/>
+        <location filename="../AutoloadStrings.cpp" line="578"/>
         <source>tomato4</source>
         <translation>Rajčatová červeň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="580"/>
+        <location filename="../AutoloadStrings.cpp" line="579"/>
         <source>OrangeRed1</source>
         <translation>Oranžovočervená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="581"/>
+        <location filename="../AutoloadStrings.cpp" line="580"/>
         <source>OrangeRed2</source>
         <translation>Oranžovočervená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="582"/>
+        <location filename="../AutoloadStrings.cpp" line="581"/>
         <source>OrangeRed3</source>
         <translation>Oranžovočervená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="583"/>
+        <location filename="../AutoloadStrings.cpp" line="582"/>
         <source>OrangeRed4</source>
         <translation>Oranžovočervená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="584"/>
+        <location filename="../AutoloadStrings.cpp" line="583"/>
         <source>red1</source>
         <translation>Červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="585"/>
+        <location filename="../AutoloadStrings.cpp" line="584"/>
         <source>red2</source>
         <translation>Červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="586"/>
+        <location filename="../AutoloadStrings.cpp" line="585"/>
         <source>red3</source>
         <translation>Červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="587"/>
+        <location filename="../AutoloadStrings.cpp" line="586"/>
         <source>red4</source>
         <translation>Červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="588"/>
+        <location filename="../AutoloadStrings.cpp" line="587"/>
         <source>DeepPink1</source>
         <translation>Plná růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="589"/>
+        <location filename="../AutoloadStrings.cpp" line="588"/>
         <source>DeepPink2</source>
         <translation>Plná růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="590"/>
+        <location filename="../AutoloadStrings.cpp" line="589"/>
         <source>DeepPink3</source>
         <translation>Plná růžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="591"/>
+        <location filename="../AutoloadStrings.cpp" line="590"/>
         <source>DeepPink4</source>
         <translation>Plná růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="592"/>
+        <location filename="../AutoloadStrings.cpp" line="591"/>
         <source>HotPink1</source>
         <translation>Zářící růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="593"/>
+        <location filename="../AutoloadStrings.cpp" line="592"/>
         <source>HotPink2</source>
         <translation>Zářící růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="594"/>
+        <location filename="../AutoloadStrings.cpp" line="593"/>
         <source>HotPink3</source>
         <translation>Zářící růžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="595"/>
+        <location filename="../AutoloadStrings.cpp" line="594"/>
         <source>HotPink4</source>
         <translation>Zářící růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="596"/>
+        <location filename="../AutoloadStrings.cpp" line="595"/>
         <source>pink1</source>
         <translation>Růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="597"/>
+        <location filename="../AutoloadStrings.cpp" line="596"/>
         <source>pink2</source>
         <translation>Růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="598"/>
+        <location filename="../AutoloadStrings.cpp" line="597"/>
         <source>pink3</source>
         <translation>Růžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="599"/>
+        <location filename="../AutoloadStrings.cpp" line="598"/>
         <source>pink4</source>
         <translation>Růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="600"/>
+        <location filename="../AutoloadStrings.cpp" line="599"/>
         <source>LightPink1</source>
         <translation>Světlá růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="601"/>
+        <location filename="../AutoloadStrings.cpp" line="600"/>
         <source>LightPink2</source>
         <translation>Světlá růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="602"/>
+        <location filename="../AutoloadStrings.cpp" line="601"/>
         <source>LightPink3</source>
         <translation>Světlá růžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="603"/>
+        <location filename="../AutoloadStrings.cpp" line="602"/>
         <source>LightPink4</source>
         <translation>Světlá růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="604"/>
+        <location filename="../AutoloadStrings.cpp" line="603"/>
         <source>PaleVioletRed1</source>
         <translation>Bledá fialově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="605"/>
+        <location filename="../AutoloadStrings.cpp" line="604"/>
         <source>PaleVioletRed2</source>
         <translation>Bledá fialově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="606"/>
+        <location filename="../AutoloadStrings.cpp" line="605"/>
         <source>PaleVioletRed3</source>
         <translation>Bledá fialově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="607"/>
+        <location filename="../AutoloadStrings.cpp" line="606"/>
         <source>PaleVioletRed4</source>
         <translation>Bledá fialově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="608"/>
+        <location filename="../AutoloadStrings.cpp" line="607"/>
         <source>maroon1</source>
         <translation>Kaštanová hněď 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="609"/>
+        <location filename="../AutoloadStrings.cpp" line="608"/>
         <source>maroon2</source>
         <translation>Kaštanová hněď 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="610"/>
+        <location filename="../AutoloadStrings.cpp" line="609"/>
         <source>maroon3</source>
         <translation>Kaštanová hněď 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="611"/>
+        <location filename="../AutoloadStrings.cpp" line="610"/>
         <source>maroon4</source>
         <translation>Kaštanová hněď 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="612"/>
+        <location filename="../AutoloadStrings.cpp" line="611"/>
         <source>VioletRed1</source>
         <translation>Fialově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="613"/>
+        <location filename="../AutoloadStrings.cpp" line="612"/>
         <source>VioletRed2</source>
         <translation>Fialově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="614"/>
+        <location filename="../AutoloadStrings.cpp" line="613"/>
         <source>VioletRed3</source>
         <translation>Fialově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="615"/>
+        <location filename="../AutoloadStrings.cpp" line="614"/>
         <source>VioletRed4</source>
         <translation>Fialově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="616"/>
+        <location filename="../AutoloadStrings.cpp" line="615"/>
         <source>magenta1</source>
         <translation>Purpurová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="617"/>
+        <location filename="../AutoloadStrings.cpp" line="616"/>
         <source>magenta2</source>
         <translation>Purpurová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="618"/>
+        <location filename="../AutoloadStrings.cpp" line="617"/>
         <source>magenta3</source>
         <translation>Purpurová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="619"/>
+        <location filename="../AutoloadStrings.cpp" line="618"/>
         <source>magenta4</source>
         <translation>Purpurová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="620"/>
+        <location filename="../AutoloadStrings.cpp" line="619"/>
         <source>orchid1</source>
         <translation>Fialová orchidej 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="621"/>
+        <location filename="../AutoloadStrings.cpp" line="620"/>
         <source>orchid2</source>
         <translation>Fialová orchidej 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="622"/>
+        <location filename="../AutoloadStrings.cpp" line="621"/>
         <source>orchid3</source>
         <translation>Fialová orchidej 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="623"/>
+        <location filename="../AutoloadStrings.cpp" line="622"/>
         <source>orchid4</source>
         <translation>Fialová orchidej 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="624"/>
+        <location filename="../AutoloadStrings.cpp" line="623"/>
         <source>plum1</source>
         <translation>Švestková 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="625"/>
+        <location filename="../AutoloadStrings.cpp" line="624"/>
         <source>plum2</source>
         <translation>Švestková 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="626"/>
+        <location filename="../AutoloadStrings.cpp" line="625"/>
         <source>plum3</source>
         <translation>Švestková 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="627"/>
+        <location filename="../AutoloadStrings.cpp" line="626"/>
         <source>plum4</source>
         <translation>Švestková 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="628"/>
+        <location filename="../AutoloadStrings.cpp" line="627"/>
         <source>MediumOrchid1</source>
         <translation>Střední fialová orchidej 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="629"/>
+        <location filename="../AutoloadStrings.cpp" line="628"/>
         <source>MediumOrchid2</source>
         <translation>Střední fialová orchidej 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="630"/>
+        <location filename="../AutoloadStrings.cpp" line="629"/>
         <source>MediumOrchid3</source>
         <translation>Střední fialová orchidej 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="631"/>
+        <location filename="../AutoloadStrings.cpp" line="630"/>
         <source>MediumOrchid4</source>
         <translation>Střední fialová orchidej 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="632"/>
+        <location filename="../AutoloadStrings.cpp" line="631"/>
         <source>DarkOrchid1</source>
         <translation>Tmavá fialová orchidej 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="633"/>
+        <location filename="../AutoloadStrings.cpp" line="632"/>
         <source>DarkOrchid2</source>
         <translation>Tmavá fialová orchidej 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="634"/>
+        <location filename="../AutoloadStrings.cpp" line="633"/>
         <source>DarkOrchid3</source>
         <translation>Tmavá fialová orchidej 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="635"/>
+        <location filename="../AutoloadStrings.cpp" line="634"/>
         <source>DarkOrchid4</source>
         <translation>Tmavá fialová orchidej 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="636"/>
+        <location filename="../AutoloadStrings.cpp" line="635"/>
         <source>purple1</source>
         <translation>Nachová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="637"/>
+        <location filename="../AutoloadStrings.cpp" line="636"/>
         <source>purple2</source>
         <translation>Nachová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="638"/>
+        <location filename="../AutoloadStrings.cpp" line="637"/>
         <source>purple3</source>
         <translation>Nachová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="639"/>
+        <location filename="../AutoloadStrings.cpp" line="638"/>
         <source>purple4</source>
         <translation>Nachová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="640"/>
+        <location filename="../AutoloadStrings.cpp" line="639"/>
         <source>MediumPurple1</source>
         <translation>Střední purpurová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="641"/>
+        <location filename="../AutoloadStrings.cpp" line="640"/>
         <source>MediumPurple2</source>
         <translation>Střední purpurová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="642"/>
+        <location filename="../AutoloadStrings.cpp" line="641"/>
         <source>MediumPurple3</source>
         <translation>Střední purpurová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="643"/>
+        <location filename="../AutoloadStrings.cpp" line="642"/>
         <source>MediumPurple4</source>
         <translation>Střední purpurová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="644"/>
+        <location filename="../AutoloadStrings.cpp" line="643"/>
         <source>thistle1</source>
         <translation>Barva bodláku 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="645"/>
+        <location filename="../AutoloadStrings.cpp" line="644"/>
         <source>thistle2</source>
         <translation>Barva bodláku 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="646"/>
+        <location filename="../AutoloadStrings.cpp" line="645"/>
         <source>thistle3</source>
         <translation>Barva bodláku 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="647"/>
+        <location filename="../AutoloadStrings.cpp" line="646"/>
         <source>thistle4</source>
         <translation>Barva bodláku 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="648"/>
+        <location filename="../AutoloadStrings.cpp" line="647"/>
         <source>black</source>
         <translation>Černá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="649"/>
+        <location filename="../AutoloadStrings.cpp" line="648"/>
         <source>DarkSlateGray</source>
         <translation>Tmavě břidlicově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="650"/>
+        <location filename="../AutoloadStrings.cpp" line="649"/>
         <source>DimGray</source>
         <translation>Tmavě šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="651"/>
+        <location filename="../AutoloadStrings.cpp" line="650"/>
         <source>SlateGray</source>
         <translation>Břidlicově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="652"/>
+        <location filename="../AutoloadStrings.cpp" line="651"/>
         <source>LightSlateGray</source>
         <translation>Světle břidlicově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="653"/>
+        <location filename="../AutoloadStrings.cpp" line="652"/>
         <source>grey</source>
         <translation>Šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="654"/>
+        <location filename="../AutoloadStrings.cpp" line="653"/>
         <source>LightGray</source>
         <translation>Světle šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="655"/>
-        <location filename="../AutoloadStrings.cpp" line="675"/>
+        <location filename="../AutoloadStrings.cpp" line="654"/>
+        <location filename="../AutoloadStrings.cpp" line="674"/>
         <source>white</source>
         <translation>Bílá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="657"/>
+        <location filename="../AutoloadStrings.cpp" line="656"/>
         <source>default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="658"/>
+        <location filename="../AutoloadStrings.cpp" line="657"/>
         <source>Red pastel</source>
         <translation>Červená pastelová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="659"/>
+        <location filename="../AutoloadStrings.cpp" line="658"/>
         <source>Green pastel</source>
         <translation>Zelená pastelová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="660"/>
+        <location filename="../AutoloadStrings.cpp" line="659"/>
         <source>Orange pastel</source>
         <translation>Oranžová pastelová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="661"/>
+        <location filename="../AutoloadStrings.cpp" line="660"/>
         <source>Yellow pastel</source>
         <translation>Žlutá pastelová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="662"/>
+        <location filename="../AutoloadStrings.cpp" line="661"/>
         <source>gray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="664"/>
+        <location filename="../AutoloadStrings.cpp" line="663"/>
         <source>light blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="666"/>
+        <location filename="../AutoloadStrings.cpp" line="665"/>
         <source>light green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="668"/>
+        <location filename="../AutoloadStrings.cpp" line="667"/>
         <source>light cyan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="670"/>
+        <location filename="../AutoloadStrings.cpp" line="669"/>
         <source>light red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="672"/>
+        <location filename="../AutoloadStrings.cpp" line="671"/>
         <source>light magenta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="674"/>
+        <location filename="../AutoloadStrings.cpp" line="673"/>
         <source>light yellow</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2417,7 +2417,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="32"/>
-        <location filename="../AutoloadStrings.cpp" line="84"/>
+        <location filename="../AutoloadStrings.cpp" line="83"/>
         <source>Violin</source>
         <translation>Housle</translation>
     </message>
@@ -2428,7 +2428,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="34"/>
-        <location filename="../AutoloadStrings.cpp" line="85"/>
+        <location filename="../AutoloadStrings.cpp" line="84"/>
         <source>Viola</source>
         <translation>Viola</translation>
     </message>
@@ -2449,7 +2449,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="38"/>
-        <location filename="../AutoloadStrings.cpp" line="87"/>
+        <location filename="../AutoloadStrings.cpp" line="86"/>
         <source>Contrabass</source>
         <translation>Kontrabas (basa)</translation>
     </message>
@@ -2630,7 +2630,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="74"/>
-        <location filename="../AutoloadStrings.cpp" line="151"/>
+        <location filename="../AutoloadStrings.cpp" line="150"/>
         <source>Koto</source>
         <translation>Koto (japonská citera s třinácti hedvábnými strunami)</translation>
     </message>
@@ -2641,7 +2641,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="76"/>
-        <location filename="../AutoloadStrings.cpp" line="116"/>
+        <location filename="../AutoloadStrings.cpp" line="115"/>
         <source>Piccolo</source>
         <translation>Pikola</translation>
     </message>
@@ -2652,7 +2652,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="78"/>
-        <location filename="../AutoloadStrings.cpp" line="117"/>
+        <location filename="../AutoloadStrings.cpp" line="116"/>
         <source>Flute</source>
         <translation>Flétna</translation>
     </message>
@@ -2793,7 +2793,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="106"/>
-        <location filename="../AutoloadStrings.cpp" line="121"/>
+        <location filename="../AutoloadStrings.cpp" line="120"/>
         <source>Shakuhachi</source>
         <translation>Šakuhači (japonská bambusová flétna)</translation>
     </message>
@@ -2814,7 +2814,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="110"/>
-        <location filename="../AutoloadStrings.cpp" line="112"/>
+        <location filename="../AutoloadStrings.cpp" line="111"/>
         <source>Oboe</source>
         <translation>Hoboj</translation>
     </message>
@@ -2925,7 +2925,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="132"/>
-        <location filename="../AutoloadStrings.cpp" line="114"/>
+        <location filename="../AutoloadStrings.cpp" line="113"/>
         <source>Bassoon</source>
         <translation>Fagot</translation>
     </message>
@@ -3391,7 +3391,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="225"/>
-        <location filename="../AutoloadStrings.cpp" line="91"/>
+        <location filename="../AutoloadStrings.cpp" line="90"/>
         <source>Timpani</source>
         <translation>Tympán</translation>
     </message>
@@ -3407,7 +3407,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="228"/>
-        <location filename="../AutoloadStrings.cpp" line="53"/>
+        <location filename="../AutoloadStrings.cpp" line="52"/>
         <source>Glockenspiel</source>
         <translation>Zvonkohra</translation>
     </message>
@@ -3443,7 +3443,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="235"/>
-        <location filename="../AutoloadStrings.cpp" line="55"/>
+        <location filename="../AutoloadStrings.cpp" line="54"/>
         <source>Vibraphone</source>
         <translation>Vibrafon</translation>
     </message>
@@ -3534,7 +3534,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="253"/>
-        <location filename="../AutoloadStrings.cpp" line="57"/>
+        <location filename="../AutoloadStrings.cpp" line="56"/>
         <source>Xylophone</source>
         <translation>Xylofon</translation>
     </message>
@@ -3635,7 +3635,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="273"/>
-        <location filename="../AutoloadStrings.cpp" line="200"/>
+        <location filename="../AutoloadStrings.cpp" line="199"/>
         <source>Tambourine</source>
         <translation>Tamburína</translation>
     </message>
@@ -3776,7 +3776,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="301"/>
-        <location filename="../AutoloadStrings.cpp" line="221"/>
+        <location filename="../AutoloadStrings.cpp" line="220"/>
         <source>Claves</source>
         <translation>Kláves</translation>
     </message>
@@ -3792,13 +3792,13 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="304"/>
-        <location filename="../AutoloadStrings.cpp" line="216"/>
+        <location filename="../AutoloadStrings.cpp" line="215"/>
         <source>Maracas</source>
         <translation>Rumba koule</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="305"/>
-        <location filename="../AutoloadStrings.cpp" line="215"/>
+        <location filename="../AutoloadStrings.cpp" line="214"/>
         <source>Cabasa</source>
         <translation>Cabasa</translation>
     </message>
@@ -4034,7 +4034,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="352"/>
-        <location filename="../AutoloadStrings.cpp" line="66"/>
+        <location filename="../AutoloadStrings.cpp" line="65"/>
         <source>Harmonica</source>
         <translation>Foukací harmonika</translation>
     </message>
@@ -4149,797 +4149,797 @@
         <translation>Výstřel z pistole</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="43"/>
+        <location filename="../AutoloadStrings.cpp" line="42"/>
         <source>General MIDI</source>
         <translation>Obecné MIDI</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="44"/>
+        <location filename="../AutoloadStrings.cpp" line="43"/>
         <source>Acoustic Grand Piano</source>
         <translation>Akustické koncertní křídlo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="45"/>
+        <location filename="../AutoloadStrings.cpp" line="44"/>
         <source>Bright Acoustic Piano</source>
         <translation>Zvučný akustický klavír</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="46"/>
+        <location filename="../AutoloadStrings.cpp" line="45"/>
         <source>Electric Grand Piano</source>
         <translation>Elektrické koncertní křídlo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="47"/>
+        <location filename="../AutoloadStrings.cpp" line="46"/>
         <source>Honky-tonk Piano</source>
         <translation>Hra na klavír ve stylu ragtime (honky-tonk)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="48"/>
+        <location filename="../AutoloadStrings.cpp" line="47"/>
         <source>Electric Piano 1</source>
         <translation>Elektrický klavír 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="49"/>
+        <location filename="../AutoloadStrings.cpp" line="48"/>
         <source>Electric Piano 2</source>
         <translation>Elektrický klavír 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="50"/>
+        <location filename="../AutoloadStrings.cpp" line="49"/>
         <source>Harpsichord</source>
         <translation>Cembalo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="51"/>
+        <location filename="../AutoloadStrings.cpp" line="50"/>
         <source>Clavi</source>
         <translation>Kláves</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="52"/>
+        <location filename="../AutoloadStrings.cpp" line="51"/>
         <source>Celesta</source>
         <translation>Celesta</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="54"/>
+        <location filename="../AutoloadStrings.cpp" line="53"/>
         <source>Music Box</source>
         <translation>Hrací skříňka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="56"/>
+        <location filename="../AutoloadStrings.cpp" line="55"/>
         <source>Marimba</source>
         <translation>Marimba</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="58"/>
+        <location filename="../AutoloadStrings.cpp" line="57"/>
         <source>Tubular Bells</source>
         <translation>Trubkové zvonky</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="59"/>
+        <location filename="../AutoloadStrings.cpp" line="58"/>
         <source>Dulcimer</source>
         <translation>Cimbál, dulcimer</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="60"/>
+        <location filename="../AutoloadStrings.cpp" line="59"/>
         <source>Drawbar Organ</source>
         <translation>Varhany s táhly</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="61"/>
+        <location filename="../AutoloadStrings.cpp" line="60"/>
         <source>Percussive Organ</source>
         <translation>Dunivé varhany</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="62"/>
+        <location filename="../AutoloadStrings.cpp" line="61"/>
         <source>Rock Organ</source>
         <translation>Rockové varhany</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="63"/>
+        <location filename="../AutoloadStrings.cpp" line="62"/>
         <source>Church Organ</source>
         <translation>Kostelní varhany</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="64"/>
+        <location filename="../AutoloadStrings.cpp" line="63"/>
         <source>Reed Organ</source>
         <translation>Harmonium, harmonika</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="65"/>
+        <location filename="../AutoloadStrings.cpp" line="64"/>
         <source>Accordion</source>
         <translation>Tahací harmonika (akordeon)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="67"/>
+        <location filename="../AutoloadStrings.cpp" line="66"/>
         <source>Tango Accordion</source>
         <translation>Tango akordeon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="68"/>
+        <location filename="../AutoloadStrings.cpp" line="67"/>
         <source>Acoustic Guitar (nylon)</source>
         <translation>Akustická kytara (nylonové struny)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="69"/>
+        <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Acoustic Guitar (steel)</source>
         <translation>Akustická kytara (kovové struny)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="70"/>
+        <location filename="../AutoloadStrings.cpp" line="69"/>
         <source>Electric Guitar (jazz)</source>
         <translation>Elektrická kytara (džez)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="71"/>
+        <location filename="../AutoloadStrings.cpp" line="70"/>
         <source>Electric Guitar (clean)</source>
         <translation>Elektrická kytara (čistá)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="72"/>
+        <location filename="../AutoloadStrings.cpp" line="71"/>
         <source>Electric Guitar (muted)</source>
         <translation>Elektrická kytara (ztlumená)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="73"/>
+        <location filename="../AutoloadStrings.cpp" line="72"/>
         <source>Overdriven Guitar</source>
         <translation>Přemodulovaná kytara</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="74"/>
+        <location filename="../AutoloadStrings.cpp" line="73"/>
         <source>Distortion Guitar</source>
         <translation>Zkreslená kytara</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="75"/>
+        <location filename="../AutoloadStrings.cpp" line="74"/>
         <source>Guitar harmonics</source>
         <translation>Libozvučná kytara</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="76"/>
+        <location filename="../AutoloadStrings.cpp" line="75"/>
         <source>Acoustic Bass</source>
         <translation>Akustický bas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="77"/>
+        <location filename="../AutoloadStrings.cpp" line="76"/>
         <source>Fingered Bass</source>
         <translation>Brnkaný bas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="78"/>
+        <location filename="../AutoloadStrings.cpp" line="77"/>
         <source>Picked Bass</source>
         <translation>Vybrnkávaný bas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="79"/>
+        <location filename="../AutoloadStrings.cpp" line="78"/>
         <source>Fretless Bass</source>
         <translation>Bezpražcový bas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="80"/>
+        <location filename="../AutoloadStrings.cpp" line="79"/>
         <source>Slap Bass 1</source>
         <translation>Vyťukávaný bas 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="81"/>
+        <location filename="../AutoloadStrings.cpp" line="80"/>
         <source>Slap Bass 2</source>
         <translation>Vyťukávaný bas 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="82"/>
+        <location filename="../AutoloadStrings.cpp" line="81"/>
         <source>Synth Bass 1</source>
         <translation>Syntetizátorový bas 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="83"/>
+        <location filename="../AutoloadStrings.cpp" line="82"/>
         <source>Synth Bass 2</source>
         <translation>Syntetizátorový bas 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="86"/>
+        <location filename="../AutoloadStrings.cpp" line="85"/>
         <source>Cello</source>
         <translation>Violoncello</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="88"/>
+        <location filename="../AutoloadStrings.cpp" line="87"/>
         <source>Tremolo Strings</source>
         <translation>Chvění (tremolo) smyčcových nástrojů</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="89"/>
+        <location filename="../AutoloadStrings.cpp" line="88"/>
         <source>Pizzicato Strings</source>
         <translation>Drnkání (pizzicato) smyčcových nástrojů</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="90"/>
+        <location filename="../AutoloadStrings.cpp" line="89"/>
         <source>Orchestral Harp</source>
         <translation>Orchestrální harfa</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="92"/>
+        <location filename="../AutoloadStrings.cpp" line="91"/>
         <source>String Ensemble 1</source>
         <translation>Skupina smyčců 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="93"/>
+        <location filename="../AutoloadStrings.cpp" line="92"/>
         <source>String Ensemble 2</source>
         <translation>Skupina smyčců 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="94"/>
+        <location filename="../AutoloadStrings.cpp" line="93"/>
         <source>SynthStrings 1</source>
         <translation>Syntetizátorové smyčce 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="95"/>
+        <location filename="../AutoloadStrings.cpp" line="94"/>
         <source>SynthStrings 2</source>
         <translation>Syntetizátorové smyčce 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="96"/>
+        <location filename="../AutoloadStrings.cpp" line="95"/>
         <source>Choir Aahs</source>
         <translation>Sborové ááá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="97"/>
+        <location filename="../AutoloadStrings.cpp" line="96"/>
         <source>Voice Oohs</source>
         <translation>Sborové óóó</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="98"/>
+        <location filename="../AutoloadStrings.cpp" line="97"/>
         <source>Synth Voice</source>
         <translation>Syntetizátorový hlas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="99"/>
+        <location filename="../AutoloadStrings.cpp" line="98"/>
         <source>Orchestra Hit</source>
         <translation>Orchestr bicích</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="100"/>
+        <location filename="../AutoloadStrings.cpp" line="99"/>
         <source>Trumpet</source>
         <translation>Trubka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="101"/>
+        <location filename="../AutoloadStrings.cpp" line="100"/>
         <source>Trombone</source>
         <translation>Pozoun (trombón)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="102"/>
+        <location filename="../AutoloadStrings.cpp" line="101"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="103"/>
+        <location filename="../AutoloadStrings.cpp" line="102"/>
         <source>Muted Trumpet</source>
         <translation>Tlumená trubka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="104"/>
+        <location filename="../AutoloadStrings.cpp" line="103"/>
         <source>French Horn</source>
         <translation>Lesní roh</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="105"/>
+        <location filename="../AutoloadStrings.cpp" line="104"/>
         <source>Brass Section</source>
         <translation>Oddělení žesťových nástrojů</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="106"/>
+        <location filename="../AutoloadStrings.cpp" line="105"/>
         <source>SynthBrass 1</source>
         <translation>Syntetizátorové žestě 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="107"/>
+        <location filename="../AutoloadStrings.cpp" line="106"/>
         <source>SynthBrass 2</source>
         <translation>Syntetizátorové žestě 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="108"/>
+        <location filename="../AutoloadStrings.cpp" line="107"/>
         <source>Soprano Sax</source>
         <translation>Sopránový saxofon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="109"/>
+        <location filename="../AutoloadStrings.cpp" line="108"/>
         <source>Alto Sax</source>
         <translation>Altový saxofon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="110"/>
+        <location filename="../AutoloadStrings.cpp" line="109"/>
         <source>Tenor Sax</source>
         <translation>Tenorový saxofon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="111"/>
+        <location filename="../AutoloadStrings.cpp" line="110"/>
         <source>Baritone Sax</source>
         <translation>Barytonový saxofon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="113"/>
+        <location filename="../AutoloadStrings.cpp" line="112"/>
         <source>English Horn</source>
         <translation>Anglický roh</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="115"/>
+        <location filename="../AutoloadStrings.cpp" line="114"/>
         <source>Clarinet</source>
         <translation>Klarinet</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="118"/>
+        <location filename="../AutoloadStrings.cpp" line="117"/>
         <source>Recorder</source>
         <translation>Zobcová flétna</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="119"/>
+        <location filename="../AutoloadStrings.cpp" line="118"/>
         <source>Pan Flute</source>
         <translation>Panova flétna</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="120"/>
+        <location filename="../AutoloadStrings.cpp" line="119"/>
         <source>Blown Bottle</source>
         <translation>Hra na láhev</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="122"/>
+        <location filename="../AutoloadStrings.cpp" line="121"/>
         <source>Whistle</source>
         <translation>Píšťalka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="123"/>
+        <location filename="../AutoloadStrings.cpp" line="122"/>
         <source>Ocarina</source>
         <translation>Okarína</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="124"/>
+        <location filename="../AutoloadStrings.cpp" line="123"/>
         <source>Lead 1 (square)</source>
         <translation>Hlavní hlas 1 (pravoúhelník)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="125"/>
+        <location filename="../AutoloadStrings.cpp" line="124"/>
         <source>Lead 2 (sawtooth)</source>
         <translation>Hlavní hlas 2 (zub pily)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="126"/>
+        <location filename="../AutoloadStrings.cpp" line="125"/>
         <source>Lead 3 (calliope)</source>
         <translation>Hlavní hlas 3 (hvězdicovitý)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="127"/>
+        <location filename="../AutoloadStrings.cpp" line="126"/>
         <source>Lead 4 (chiff)</source>
         <translation>Hlavní hlas 4 (zřetelný projev)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="128"/>
+        <location filename="../AutoloadStrings.cpp" line="127"/>
         <source>Lead 5 (charang)</source>
         <translation>Hlavní hlas 5 (xyz)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="129"/>
+        <location filename="../AutoloadStrings.cpp" line="128"/>
         <source>Lead 6 (voice)</source>
         <translation>Hlavní hlas 6 (řeč)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="130"/>
+        <location filename="../AutoloadStrings.cpp" line="129"/>
         <source>Lead 7 (fifths)</source>
         <translation>Hlavní hlas 7 (kvinty)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="131"/>
+        <location filename="../AutoloadStrings.cpp" line="130"/>
         <source>Lead 8 (bass + lead)</source>
         <translation>Hlavní hlas 8 (bas + hlavní hlas)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="132"/>
+        <location filename="../AutoloadStrings.cpp" line="131"/>
         <source>Pad 1 (new age)</source>
         <translation>Poduška 1 (nový věk)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="133"/>
+        <location filename="../AutoloadStrings.cpp" line="132"/>
         <source>Pad 2 (warm)</source>
         <translation>Poduška 2 (teplá)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="134"/>
+        <location filename="../AutoloadStrings.cpp" line="133"/>
         <source>Pad 3 (polysynth)</source>
         <translation>Poduška 3 (vícekrát syntetizátor)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="135"/>
+        <location filename="../AutoloadStrings.cpp" line="134"/>
         <source>Pad 4 (choir)</source>
         <translation>Poduška 4 (sbor)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="136"/>
+        <location filename="../AutoloadStrings.cpp" line="135"/>
         <source>Pad 5 (bowed)</source>
         <translation>Poduška 5 (hráč na smyčcový nástroj)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="137"/>
+        <location filename="../AutoloadStrings.cpp" line="136"/>
         <source>Pad 6 (metallic)</source>
         <translation>Poduška 6 (kovová)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="138"/>
+        <location filename="../AutoloadStrings.cpp" line="137"/>
         <source>Pad 7 (halo)</source>
         <translation>Poduška 7 (světelný kruh)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="139"/>
+        <location filename="../AutoloadStrings.cpp" line="138"/>
         <source>Pad 8 (sweep)</source>
         <translation>Poduška 8 (mávnutí)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="140"/>
+        <location filename="../AutoloadStrings.cpp" line="139"/>
         <source>FX 1 (rain)</source>
         <translation>FX 1 (déšť)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="141"/>
+        <location filename="../AutoloadStrings.cpp" line="140"/>
         <source>FX 2 (soundtrack)</source>
         <translation>FX 2 (šelest)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="142"/>
+        <location filename="../AutoloadStrings.cpp" line="141"/>
         <source>FX 3 (crystal)</source>
         <translation>FX 3 (krystal)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="143"/>
+        <location filename="../AutoloadStrings.cpp" line="142"/>
         <source>FX 4 (atmosphere)</source>
         <translation>FX 4 (okolí)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="144"/>
+        <location filename="../AutoloadStrings.cpp" line="143"/>
         <source>FX 5 (brightness)</source>
         <translation>FX 5 (jasnost)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="145"/>
+        <location filename="../AutoloadStrings.cpp" line="144"/>
         <source>FX 6 (goblins)</source>
         <translation>FX 6 (skřeti)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="146"/>
+        <location filename="../AutoloadStrings.cpp" line="145"/>
         <source>FX 7 (echoes)</source>
         <translation>FX 7 (ozvěny)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="147"/>
+        <location filename="../AutoloadStrings.cpp" line="146"/>
         <source>FX 8 (sci-fi)</source>
         <translation>FX 8 (vědecké fantastično)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="148"/>
+        <location filename="../AutoloadStrings.cpp" line="147"/>
         <source>Sitar</source>
         <translation>Sitár</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="149"/>
+        <location filename="../AutoloadStrings.cpp" line="148"/>
         <source>Banjo</source>
         <translation>Bendžo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="150"/>
+        <location filename="../AutoloadStrings.cpp" line="149"/>
         <source>Shamisen</source>
         <translation>Šamisen</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="152"/>
+        <location filename="../AutoloadStrings.cpp" line="151"/>
         <source>Kalimba</source>
         <translation>Kalimba</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="153"/>
+        <location filename="../AutoloadStrings.cpp" line="152"/>
         <source>Bag pipe</source>
         <translation>Dudy</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="154"/>
+        <location filename="../AutoloadStrings.cpp" line="153"/>
         <source>Fiddle</source>
         <translation>Skřipky</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="155"/>
+        <location filename="../AutoloadStrings.cpp" line="154"/>
         <source>Shanai</source>
         <translation>Shanai</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="156"/>
+        <location filename="../AutoloadStrings.cpp" line="155"/>
         <source>Tinkle Bell</source>
         <translation>Zvoneček</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="157"/>
+        <location filename="../AutoloadStrings.cpp" line="156"/>
         <source>Agogo</source>
         <translation>Agogo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="158"/>
+        <location filename="../AutoloadStrings.cpp" line="157"/>
         <source>Steel Drums</source>
         <translation>Kovové bubny</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="159"/>
+        <location filename="../AutoloadStrings.cpp" line="158"/>
         <source>Woodblock</source>
         <translation>Dřevěný špalíček</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="160"/>
+        <location filename="../AutoloadStrings.cpp" line="159"/>
         <source>Taiko Drum</source>
         <translation>Buben Taiko</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="161"/>
+        <location filename="../AutoloadStrings.cpp" line="160"/>
         <source>Melodic Tom</source>
         <translation>Libozvučný buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="162"/>
+        <location filename="../AutoloadStrings.cpp" line="161"/>
         <source>Synth Drum</source>
         <translation>Syntetizátorový buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="163"/>
+        <location filename="../AutoloadStrings.cpp" line="162"/>
         <source>Reverse Cymbal</source>
         <translation>Obrácený činel</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="164"/>
+        <location filename="../AutoloadStrings.cpp" line="163"/>
         <source>Guitar Fret Noise</source>
         <translation>Zvuk spojený s přitisknutím strun k hmatníku při hře na kytaru</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="165"/>
+        <location filename="../AutoloadStrings.cpp" line="164"/>
         <source>Breath Noise</source>
         <translation>Zvuky nádechu a výdechu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="166"/>
+        <location filename="../AutoloadStrings.cpp" line="165"/>
         <source>Seashore</source>
         <translation>Příboj na mořském pobřeží</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="167"/>
+        <location filename="../AutoloadStrings.cpp" line="166"/>
         <source>Bird Tweet</source>
         <translation>Cvrlikání ptáků</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="168"/>
+        <location filename="../AutoloadStrings.cpp" line="167"/>
         <source>Telephone Ring</source>
         <translation>Vyzvánění telefonu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="169"/>
+        <location filename="../AutoloadStrings.cpp" line="168"/>
         <source>Helicopter</source>
         <translation>Vrtulník</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="170"/>
+        <location filename="../AutoloadStrings.cpp" line="169"/>
         <source>Applause</source>
         <translation>Potlesk</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="171"/>
+        <location filename="../AutoloadStrings.cpp" line="170"/>
         <source>Gunshot</source>
         <translation>Výstřel z ručnice</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="180"/>
+        <location filename="../AutoloadStrings.cpp" line="179"/>
         <source>General MIDI Percussion</source>
         <translation>Obecné bicí zařízení MIDI</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="181"/>
+        <location filename="../AutoloadStrings.cpp" line="180"/>
         <source>Acoustic Bass Drum</source>
         <translation>Akustický velký buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="182"/>
+        <location filename="../AutoloadStrings.cpp" line="181"/>
         <source>Bass Drum 1</source>
         <translation>Velký buben 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="183"/>
+        <location filename="../AutoloadStrings.cpp" line="182"/>
         <source>Side Stick</source>
         <translation>Další klacek</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="184"/>
+        <location filename="../AutoloadStrings.cpp" line="183"/>
         <source>Acoustic Snare</source>
         <translation>Akustický malý buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="185"/>
+        <location filename="../AutoloadStrings.cpp" line="184"/>
         <source>Hand Clap</source>
         <translation>Zatleskání</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="186"/>
+        <location filename="../AutoloadStrings.cpp" line="185"/>
         <source>Electric Snare</source>
         <translation>Elektrický malý buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="187"/>
+        <location filename="../AutoloadStrings.cpp" line="186"/>
         <source>Low Floor Tom</source>
         <translation>Polohlasný velký Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="188"/>
+        <location filename="../AutoloadStrings.cpp" line="187"/>
         <source>Closed Hi-Hat</source>
         <translation>Zavřená hajtka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="189"/>
+        <location filename="../AutoloadStrings.cpp" line="188"/>
         <source>High Floor Tom</source>
         <translation>Hlasitý velký Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="190"/>
+        <location filename="../AutoloadStrings.cpp" line="189"/>
         <source>Pedal Hi-Hat</source>
         <translation>Činely ovládané nožním pedálem (hajtka)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="191"/>
+        <location filename="../AutoloadStrings.cpp" line="190"/>
         <source>Low Tom</source>
         <translation>Polohlasný Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="192"/>
+        <location filename="../AutoloadStrings.cpp" line="191"/>
         <source>Open Hi-Hat</source>
         <translation>Otevřená hajtka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="193"/>
+        <location filename="../AutoloadStrings.cpp" line="192"/>
         <source>Low-Mid Tom</source>
         <translation>Polohlasný střední Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="194"/>
+        <location filename="../AutoloadStrings.cpp" line="193"/>
         <source>Hi-Mid Tom</source>
         <translation>Hlasitý střední Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="195"/>
+        <location filename="../AutoloadStrings.cpp" line="194"/>
         <source>Crash Cymbal 1</source>
         <translation>Třesk činel 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="196"/>
+        <location filename="../AutoloadStrings.cpp" line="195"/>
         <source>High Tom</source>
         <translation>Hlasitý Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="197"/>
+        <location filename="../AutoloadStrings.cpp" line="196"/>
         <source>Ride Cymbal 1</source>
         <translation>Jezdecké činely 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="198"/>
+        <location filename="../AutoloadStrings.cpp" line="197"/>
         <source>Chinese Cymbal</source>
         <translation>Čínské činely</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="199"/>
+        <location filename="../AutoloadStrings.cpp" line="198"/>
         <source>Ride Bell</source>
         <translation>Jezdecký zvonek</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="201"/>
+        <location filename="../AutoloadStrings.cpp" line="200"/>
         <source>Splash Cymbal</source>
         <translation>Plácající činely</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="202"/>
+        <location filename="../AutoloadStrings.cpp" line="201"/>
         <source>Cowbell</source>
         <translation>Kravský zvonec</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="203"/>
+        <location filename="../AutoloadStrings.cpp" line="202"/>
         <source>Crash Cymbal 2</source>
         <translation>Třesk činel 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="204"/>
+        <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Vibraslap</source>
         <translation>Vibraslap</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="205"/>
+        <location filename="../AutoloadStrings.cpp" line="204"/>
         <source>Ride Cymbal 2</source>
         <translation>Jezdecké činely 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="206"/>
+        <location filename="../AutoloadStrings.cpp" line="205"/>
         <source>Hi Bongo</source>
         <translation>Hlasitá bonga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="207"/>
+        <location filename="../AutoloadStrings.cpp" line="206"/>
         <source>Low Bongo</source>
         <translation>Polohlasá bonga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="208"/>
+        <location filename="../AutoloadStrings.cpp" line="207"/>
         <source>Mute Hi Conga</source>
         <translation>Ztlumená hlasitá konga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="209"/>
+        <location filename="../AutoloadStrings.cpp" line="208"/>
         <source>Open Hi Conga</source>
         <translation>Otevřená hlasitá konga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="210"/>
+        <location filename="../AutoloadStrings.cpp" line="209"/>
         <source>Low Conga</source>
         <translation>Polohlasá konga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="211"/>
+        <location filename="../AutoloadStrings.cpp" line="210"/>
         <source>High Timbale</source>
         <translation>Hlasitá timbále</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="212"/>
+        <location filename="../AutoloadStrings.cpp" line="211"/>
         <source>Low Timbale</source>
         <translation>Polohlasá timbále</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="213"/>
+        <location filename="../AutoloadStrings.cpp" line="212"/>
         <source>High Agogo</source>
         <translation>Hlasitá agoga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="214"/>
+        <location filename="../AutoloadStrings.cpp" line="213"/>
         <source>Low Agogo</source>
         <translation>Polohlasá agoga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="217"/>
+        <location filename="../AutoloadStrings.cpp" line="216"/>
         <source>Short Whistle</source>
         <translation>Krátký hvizd</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="218"/>
+        <location filename="../AutoloadStrings.cpp" line="217"/>
         <source>Long Whistle</source>
         <translation>Dlouhý hvizd</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="219"/>
+        <location filename="../AutoloadStrings.cpp" line="218"/>
         <source>Short Guiro</source>
         <translation>Krátké guiro</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="220"/>
+        <location filename="../AutoloadStrings.cpp" line="219"/>
         <source>Long Guiro</source>
         <translation>Dlouhé guiro</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="222"/>
+        <location filename="../AutoloadStrings.cpp" line="221"/>
         <source>Hi Wood Block</source>
         <translation>Hlasitý dřevěný špalíček</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="223"/>
+        <location filename="../AutoloadStrings.cpp" line="222"/>
         <source>Low Wood Block</source>
         <translation>Polohlasý dřevěný špalíček</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="224"/>
+        <location filename="../AutoloadStrings.cpp" line="223"/>
         <source>Mute Cuica</source>
         <translation>Ztlumená kuíka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="225"/>
+        <location filename="../AutoloadStrings.cpp" line="224"/>
         <source>Open Cuica</source>
         <translation>Otevřená kuíka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="226"/>
+        <location filename="../AutoloadStrings.cpp" line="225"/>
         <source>Mute Triangle</source>
         <translation>Ztlumený triangl</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="227"/>
+        <location filename="../AutoloadStrings.cpp" line="226"/>
         <source>Open Triangle</source>
         <translation>Otevřený triangl</translation>
     </message>
@@ -4949,7 +4949,7 @@
         <translation type="unfinished">Přídavný modul syntetizátoru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1069"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="752"/>
         <location filename="../../src/base/Studio.cpp" line="69"/>
         <source>Synth plugin</source>
@@ -4985,22 +4985,22 @@
 <context>
     <name>METADATA</name>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="676"/>
+        <location filename="../AutoloadStrings.cpp" line="675"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
         <translation>Copyright (c) xxxx Držitel autorských práv</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="677"/>
+        <location filename="../AutoloadStrings.cpp" line="676"/>
         <source>Not Yet Titled</source>
         <translation>Zatím bez názvu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="678"/>
+        <location filename="../AutoloadStrings.cpp" line="677"/>
         <source>not yet subtitled</source>
         <translation>Zatím bez podnázvu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="679"/>
+        <location filename="../AutoloadStrings.cpp" line="678"/>
         <source>Unknown</source>
         <translation></translation>
     </message>
@@ -5008,50 +5008,50 @@
 <context>
     <name>MIDI_CONTROLLER</name>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="172"/>
-        <location filename="../AutoloadStrings.cpp" line="230"/>
+        <location filename="../AutoloadStrings.cpp" line="171"/>
+        <location filename="../AutoloadStrings.cpp" line="229"/>
         <source>Pan</source>
         <translation>Vyvážení (Pan)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="173"/>
-        <location filename="../AutoloadStrings.cpp" line="231"/>
+        <location filename="../AutoloadStrings.cpp" line="172"/>
+        <location filename="../AutoloadStrings.cpp" line="230"/>
         <source>Chorus</source>
         <translation>Sbor</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="174"/>
-        <location filename="../AutoloadStrings.cpp" line="232"/>
+        <location filename="../AutoloadStrings.cpp" line="173"/>
+        <location filename="../AutoloadStrings.cpp" line="231"/>
         <source>Volume</source>
         <translation>Hlasitost</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="175"/>
-        <location filename="../AutoloadStrings.cpp" line="233"/>
+        <location filename="../AutoloadStrings.cpp" line="174"/>
+        <location filename="../AutoloadStrings.cpp" line="232"/>
         <source>Reverb</source>
         <translation>Dozvuk</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="176"/>
-        <location filename="../AutoloadStrings.cpp" line="234"/>
+        <location filename="../AutoloadStrings.cpp" line="175"/>
+        <location filename="../AutoloadStrings.cpp" line="233"/>
         <source>Sustain</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="177"/>
-        <location filename="../AutoloadStrings.cpp" line="235"/>
+        <location filename="../AutoloadStrings.cpp" line="176"/>
+        <location filename="../AutoloadStrings.cpp" line="234"/>
         <source>Expression</source>
         <translation>Výraz</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="178"/>
-        <location filename="../AutoloadStrings.cpp" line="236"/>
+        <location filename="../AutoloadStrings.cpp" line="177"/>
+        <location filename="../AutoloadStrings.cpp" line="235"/>
         <source>Modulation</source>
         <translation>Obměňování (modulace)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="179"/>
-        <location filename="../AutoloadStrings.cpp" line="237"/>
+        <location filename="../AutoloadStrings.cpp" line="178"/>
+        <location filename="../AutoloadStrings.cpp" line="236"/>
         <source>PitchBend</source>
         <translation>Změna výšky tónu</translation>
     </message>
@@ -9293,11 +9293,6 @@
         <translation>Obecné zařízení MIDI</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="42"/>
-        <source>D. Michael McIntyre</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Bank 0:8</source>
         <translation type="obsolete">Banka 0:8</translation>
     </message>
@@ -9550,12 +9545,12 @@
         <translation type="obsolete"> </translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="228"/>
+        <location filename="../AutoloadStrings.cpp" line="227"/>
         <source>MIDI input system device</source>
         <translation>Vstupní zařízení MIDI</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="229"/>
+        <location filename="../AutoloadStrings.cpp" line="228"/>
         <source>&amp;lt;none&amp;gt;</source>
         <translation>&amp;lt;žádné&amp;gt;</translation>
     </message>
@@ -9570,13 +9565,13 @@
         <translation>Zvuk</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="656"/>
+        <location filename="../AutoloadStrings.cpp" line="655"/>
         <source>generalmap</source>
         <translation>Obecné</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="742"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="875"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="747"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="880"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
@@ -25229,7 +25224,7 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="376"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="375"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;žádný nástroj&gt;</translation>
     </message>
@@ -25244,17 +25239,17 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
         <translation>&lt;bez názvu&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1247"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1244"/>
         <source>Mute track</source>
         <translation>Ztlumit stopu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1265"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1262"/>
         <source>Record on this track</source>
         <translation>Nahrát do této stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1281"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1278"/>
         <source>Solo track</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25346,7 +25341,7 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="92"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1215"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1218"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;bez názvu&gt;</translation>
     </message>
@@ -25769,7 +25764,7 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="188"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1143"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1146"/>
         <source>All</source>
         <translation>Vše</translation>
     </message>
@@ -25778,13 +25773,13 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
         <translation type="obsolete">Syntetizátorový přídavný modul</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1331"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1339"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1334"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1342"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1221"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1224"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ Stopa %1 - %2 ]</translation>
     </message>

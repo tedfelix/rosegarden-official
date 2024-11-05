@@ -25,7 +25,7 @@
 <context>
     <name>COLOUR</name>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="+239"/>
+        <location filename="../AutoloadStrings.cpp" line="+238"/>
         <source>AudioDefault</source>
         <translation>AudioPadrão</translation>
     </message>
@@ -4952,7 +4952,7 @@ red1</translation>
         <translation type="unfinished">Plugin synth</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1069"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
@@ -5134,7 +5134,7 @@ red1</translation>
         <translation>maior</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="-198"/>
+        <location filename="../AutoloadStrings.cpp" line="-197"/>
         <source>Audio</source>
         <translation>áudio</translation>
     </message>
@@ -5423,7 +5423,7 @@ red1</translation>
         <translation>Não é possível abrir o arquivo de mapeamento de fontes %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+742"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+747"/>
         <location line="+133"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
@@ -10420,11 +10420,6 @@ red1</translation>
         <location filename="../AutoloadStrings.cpp" line="+1"/>
         <source>General MIDI Device</source>
         <translation>Dispositivo General MIDI</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>D. Michael McIntyre</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Bank 0:8</source>
@@ -17946,7 +17941,7 @@ um atraso no início da reprodução devido à quantidade de dados a serem trans
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-740"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-745"/>
         <source>&lt;qt&gt;Set the MIDI bank from which to select programs&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Defina o banco MIDI a partir do qual selecionar os programas&lt;/qt&gt;</translation>
     </message>
@@ -26005,12 +26000,12 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+376"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+375"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;no instrument&gt;</translation>
     </message>
     <message>
-        <location line="-72"/>
+        <location line="-71"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;untitled audio&gt;</translation>
     </message>
@@ -26020,7 +26015,7 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
         <translation>&lt;semnome&gt;</translation>
     </message>
     <message>
-        <location line="+941"/>
+        <location line="+938"/>
         <source>Mute track</source>
         <translation>Silenciar faixa</translation>
     </message>
@@ -26114,18 +26109,18 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
         <translation type="obsolete">Faixa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-993"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-996"/>
         <source>Track Parameters</source>
         <translation>Parâmetros da Faixa</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1123"/>
+        <location line="+1126"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;semnome&gt;</translation>
     </message>
     <message>
-        <location line="-1115"/>
+        <location line="-1118"/>
         <source>Playback parameters</source>
         <translation>Parâmetros do Reprodutor</translation>
     </message>
@@ -26543,7 +26538,7 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
     </message>
     <message>
         <location line="-205"/>
-        <location line="+955"/>
+        <location line="+958"/>
         <source>All</source>
         <translation>Todos</translation>
     </message>
@@ -26563,7 +26558,7 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
         <translation>[ Faixa %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-821"/>
+        <location line="-824"/>
         <source>Reset to Defaults</source>
         <translation type="unfinished"></translation>
     </message>

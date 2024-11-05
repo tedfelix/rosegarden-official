@@ -33,7 +33,7 @@ sub USAGE
 
     say q:to/END/;
 
-        This script is a tool to show quickly some informations about the translations a .ts file contains.
+        This script shows informations about the translations a .ts file contains.
 
         Usage :
 
@@ -63,6 +63,23 @@ sub USAGE
                                    listed inside it are displayed.
                                    The contexts have only to be listed, separated with blanks, tabs and/or line feed.
 
+        Output :
+
+            One line for each translation, with up to three fields separated
+            with "|" :
+                - Context name (limited to 25 characters)
+                - Status (limited to 10 characters)
+                - Source text (limited to 40 characters)
+                - Translated text (limited to 40 characters)
+                -
+            In all fields, "\n" is replaced with "€" to avoid
+            unwanted ends of line.
+
+            Status field contains the translation status ("OK", "unfinished",
+            "vanished" or "obslolete") which can be preceded with 'E' if the
+            source is empty and 'U' (for Untranslated) if the translation is empty.
+
+            Statistics (if displayed), show various counts for each context.
 
         Examples :
 

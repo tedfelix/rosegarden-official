@@ -23,7 +23,7 @@
 <context>
     <name>COLOUR</name>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="+239"/>
+        <location filename="../AutoloadStrings.cpp" line="+238"/>
         <source>AudioDefault</source>
         <translation></translation>
     </message>
@@ -4880,7 +4880,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1069"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
@@ -8838,13 +8838,8 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="-196"/>
+        <location filename="../AutoloadStrings.cpp" line="-195"/>
         <source>General MIDI Device</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>D. Michael McIntyre</source>
         <translation></translation>
     </message>
     <message>
@@ -8858,7 +8853,7 @@
         <translation></translation>
     </message>
     <message>
-        <location line="-189"/>
+        <location line="-188"/>
         <source>Synth plugin</source>
         <translation></translation>
     </message>
@@ -8868,12 +8863,12 @@
         <translation></translation>
     </message>
     <message>
-        <location line="+617"/>
+        <location line="+616"/>
         <source>generalmap</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+742"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+747"/>
         <location line="+133"/>
         <source>%1. %2</source>
         <translation></translation>
@@ -15827,7 +15822,7 @@ Would you like to use
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-694"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-699"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation></translation>
     </message>
@@ -23476,12 +23471,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+376"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+375"/>
         <source>&lt;no instrument&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-72"/>
+        <location line="-71"/>
         <source>&lt;untitled audio&gt;</source>
         <translation></translation>
     </message>
@@ -23491,7 +23486,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation></translation>
     </message>
     <message>
-        <location line="+941"/>
+        <location line="+938"/>
         <source>Mute track</source>
         <translation></translation>
     </message>
@@ -23581,18 +23576,18 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-993"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-996"/>
         <source>Track Parameters</source>
         <translation></translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1123"/>
+        <location line="+1126"/>
         <source>&lt;untitled&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1115"/>
+        <location line="-1118"/>
         <source>Playback parameters</source>
         <translation></translation>
     </message>
@@ -23942,7 +23937,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
     <message>
         <location line="-205"/>
-        <location line="+955"/>
+        <location line="+958"/>
         <source>All</source>
         <translation></translation>
     </message>
@@ -23958,7 +23953,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation></translation>
     </message>
     <message>
-        <location line="-821"/>
+        <location line="-824"/>
         <source>Reset to Defaults</source>
         <translation type="unfinished"></translation>
     </message>

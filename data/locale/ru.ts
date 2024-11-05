@@ -24,7 +24,7 @@
 <context>
     <name>COLOUR</name>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="+239"/>
+        <location filename="../AutoloadStrings.cpp" line="+238"/>
         <source>AudioDefault</source>
         <translation>AudioDefault</translation>
     </message>
@@ -4932,7 +4932,7 @@
         <translation type="unfinished">Вирт. инструмент</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1069"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
@@ -8837,12 +8837,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="-198"/>
+        <location filename="../AutoloadStrings.cpp" line="-197"/>
         <source>Audio</source>
         <translation>Звук</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+742"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+747"/>
         <location line="+133"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
@@ -9898,11 +9898,6 @@
         <translation>Общее устройство MIDI</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>D. Michael McIntyre</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>TR-808</source>
         <translation type="obsolete">TR-808</translation>
     </message>
@@ -9917,12 +9912,12 @@
         <translation>&amp;lt;нет&amp;gt;</translation>
     </message>
     <message>
-        <location line="-189"/>
+        <location line="-188"/>
         <source>Synth plugin</source>
         <translation>Виртуальный инструмент</translation>
     </message>
     <message>
-        <location line="+616"/>
+        <location line="+615"/>
         <source>generalmap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17397,7 +17392,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-694"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-699"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25458,12 +25453,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+376"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+375"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;нет инструмента&gt;</translation>
     </message>
     <message>
-        <location line="-72"/>
+        <location line="-71"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;звук без имени&gt;</translation>
     </message>
@@ -25473,7 +25468,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;без имени&gt;</translation>
     </message>
     <message>
-        <location line="+941"/>
+        <location line="+938"/>
         <source>Mute track</source>
         <translation>Приглушить дорожку</translation>
     </message>
@@ -25569,18 +25564,18 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="obsolete">Дорожка</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-993"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-996"/>
         <source>Track Parameters</source>
         <translation>Параметры дорожки</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1123"/>
+        <location line="+1126"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;без имени&gt;</translation>
     </message>
     <message>
-        <location line="-1115"/>
+        <location line="-1118"/>
         <source>Playback parameters</source>
         <translation>Параметры воспроизведения</translation>
     </message>
@@ -25989,7 +25984,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
     <message>
         <location line="-205"/>
-        <location line="+955"/>
+        <location line="+958"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
@@ -26009,7 +26004,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>[ Дорожка %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-821"/>
+        <location line="-824"/>
         <source>Reset to Defaults</source>
         <translation type="unfinished"></translation>
     </message>

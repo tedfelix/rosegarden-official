@@ -23,7 +23,7 @@
 <context>
     <name>COLOUR</name>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="+239"/>
+        <location filename="../AutoloadStrings.cpp" line="+238"/>
         <source>AudioDefault</source>
         <translation>Standard Audio</translation>
     </message>
@@ -4966,7 +4966,7 @@ a quarter sine wave contour</source>
         <translation type="unfinished">Synthesizer-Plugin </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1069"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
@@ -9991,14 +9991,9 @@ a quarter sine wave contour</source>
         <translation type="vanished">Cuica</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="-196"/>
+        <location filename="../AutoloadStrings.cpp" line="-195"/>
         <source>General MIDI Device</source>
         <translation>General MIDI</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>D. Michael McIntyre</source>
-        <translation></translation>
     </message>
     <message>
         <source>Bank 0:8</source>
@@ -10263,7 +10258,7 @@ a quarter sine wave contour</source>
         <translation>&amp;lt;keine&amp;gt;</translation>
     </message>
     <message>
-        <location line="-189"/>
+        <location line="-188"/>
         <source>Synth plugin</source>
         <translation>Synthesizer-Plugin</translation>
     </message>
@@ -10273,12 +10268,12 @@ a quarter sine wave contour</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location line="+617"/>
+        <location line="+616"/>
         <source>generalmap</source>
         <translation>allgemein</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+742"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+747"/>
         <location line="+133"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
@@ -18078,7 +18073,7 @@ need CCs in this range for other things.</source>
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-694"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-699"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Bestimme Variationen des obigen Programmes, falls sie im Studio verfügbar sind&lt;/qt&gt;</translation>
     </message>
@@ -26416,12 +26411,12 @@ server due to a problem with your configuration, your system installation, or bo
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+376"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+375"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;kein Instrument&gt;</translation>
     </message>
     <message>
-        <location line="-72"/>
+        <location line="-71"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;unbenanntes Audio&gt;</translation>
     </message>
@@ -26431,7 +26426,7 @@ server due to a problem with your configuration, your system installation, or bo
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
     <message>
-        <location line="+941"/>
+        <location line="+938"/>
         <source>Mute track</source>
         <translation>Spur stumm schalten</translation>
     </message>
@@ -26535,18 +26530,18 @@ eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
         <translation type="obsolete">Spur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-993"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-996"/>
         <source>Track Parameters</source>
         <translation>Spur-Parameter</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1123"/>
+        <location line="+1126"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
     <message>
-        <location line="-1115"/>
+        <location line="-1118"/>
         <source>Playback parameters</source>
         <translation>Wiedergabe-Parameter</translation>
     </message>
@@ -26978,12 +26973,12 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     </message>
     <message>
         <location line="-205"/>
-        <location line="+955"/>
+        <location line="+958"/>
         <source>All</source>
         <translation>Alle</translation>
     </message>
     <message>
-        <location line="-820"/>
+        <location line="-823"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this clef inserted at the beginning&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Neue Segmente werden mit diesem Schlüssel, der am Anfang eingefügt wird, erzeugt&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -26992,7 +26987,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="vanished">Synthesizer Plugin</translation>
     </message>
     <message>
-        <location line="+1008"/>
+        <location line="+1011"/>
         <location line="+8"/>
         <source> %1</source>
         <translation> %1</translation>
@@ -27003,7 +26998,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>[ Spur %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-1047"/>
+        <location line="-1050"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Auf dieser Spur werden nur Audio/MIDI-Daten von dem ausgewählten Gerät aufgenommen. Alles andere wird ausgefiltert&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>

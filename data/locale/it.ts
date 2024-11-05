@@ -23,7 +23,7 @@
 <context>
     <name>COLOUR</name>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="+239"/>
+        <location filename="../AutoloadStrings.cpp" line="+238"/>
         <source>AudioDefault</source>
         <translation>AudioDefault</translation>
     </message>
@@ -4949,7 +4949,7 @@
         <translation type="unfinished">Modulo del sintetizzatore</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1069"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
@@ -9405,14 +9405,13 @@
         <translation>Si#</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="-196"/>
+        <location filename="../AutoloadStrings.cpp" line="-195"/>
         <source>General MIDI Device</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>D. Michael McIntyre</source>
-        <translation>D. Michael McIntyre</translation>
+        <translation type="vanished">D. Michael McIntyre</translation>
     </message>
     <message>
         <source>Bank 0:8</source>
@@ -9637,7 +9636,7 @@
         <translation>&amp;lt;nessuno&amp;gt;</translation>
     </message>
     <message>
-        <location line="-189"/>
+        <location line="-188"/>
         <source>Synth plugin</source>
         <translation>Modulo del sintetizzatore</translation>
     </message>
@@ -9647,12 +9646,12 @@
         <translation>Audio</translation>
     </message>
     <message>
-        <location line="+617"/>
+        <location line="+616"/>
         <source>generalmap</source>
         <translation>Mappa generale</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+742"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+747"/>
         <location line="+133"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
@@ -17246,7 +17245,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-694"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-699"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Seleziona le variazioni sul programma, se è possibile farlo nello studio&lt;/qt&gt;</translation>
     </message>
@@ -25327,12 +25326,12 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+376"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+375"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;nesssuno strumento&gt;</translation>
     </message>
     <message>
-        <location line="-72"/>
+        <location line="-71"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;audio senza titolo&gt;</translation>
     </message>
@@ -25342,7 +25341,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
         <translation>&lt;senza titolo&gt;</translation>
     </message>
     <message>
-        <location line="+941"/>
+        <location line="+938"/>
         <source>Mute track</source>
         <translation>Zittisci la traccia</translation>
     </message>
@@ -25436,18 +25435,18 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
         <translation type="obsolete">Traccia</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-993"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-996"/>
         <source>Track Parameters</source>
         <translation>Parametri di traccia</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1123"/>
+        <location line="+1126"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;senza titolo&gt;</translation>
     </message>
     <message>
-        <location line="-1115"/>
+        <location line="-1118"/>
         <source>Playback parameters</source>
         <translation>Parametri della riproduzione</translation>
     </message>
@@ -25866,7 +25865,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     </message>
     <message>
         <location line="-205"/>
-        <location line="+955"/>
+        <location line="+958"/>
         <source>All</source>
         <translation>Tutti</translation>
     </message>
@@ -25886,7 +25885,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
         <translation>[ Traccia %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-821"/>
+        <location line="-824"/>
         <source>Reset to Defaults</source>
         <translation type="unfinished">Reimposta ai default</translation>
     </message>
