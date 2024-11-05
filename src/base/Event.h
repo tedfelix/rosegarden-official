@@ -442,7 +442,8 @@ private:
     // ??? This is a reference counted smart pointer supporting Copy
     //     On Write.  We probably can't replace it with a QSharedPointer.
     //     It would be more interesting to make Copy On Write disable-able
-    //     and see if it makes any sort of performance or memory difference.
+    //     and see if it makes a noticeable performance or memory difference.
+    //     Especially with undo/redo.
     EventData *m_data;
     // ??? This doesn't seem to participate in Copy On Write, so a
     //     QSharedPointer should simplify managing this.
