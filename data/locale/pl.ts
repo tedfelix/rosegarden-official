@@ -4035,7 +4035,7 @@
     <message>
         <location line="+1"/>
         <source>Soprano</source>
-        <translation></translation>
+        <translation>Sopran</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4045,12 +4045,12 @@
     <message>
         <location line="+1"/>
         <source>Alto</source>
-        <translation></translation>
+        <translation>Alt</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tenor</source>
-        <translation></translation>
+        <translation>Tenor</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4060,7 +4060,7 @@
     <message>
         <location line="+1"/>
         <source>Bass</source>
-        <translation></translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4930,40 +4930,40 @@
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+299"/>
         <source>Synth plugin </source>
-        <translation type="unfinished">Wtyczka syntezatora</translation>
+        <translation>Wtyczka syntezatora</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
-        <translation type="unfinished">Wtyczka syntezatora</translation>
+        <translation>Wtyczka syntezatora</translation>
     </message>
     <message>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
         <location filename="../../src/base/Studio.cpp" line="-4"/>
         <source>Audio</source>
-        <translation type="unfinished">Dźwięk</translation>
+        <translation>Dźwięk</translation>
     </message>
     <message>
         <location filename="../../src/base/MidiDevice.cpp" line="+1114"/>
         <source>&lt;new bank&gt;</source>
-        <translation type="unfinished">&lt;nowy bank&gt;</translation>
+        <translation>&lt;nowy bank&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished">&lt;nowy bank %1&gt;</translation>
+        <translation>&lt;nowy bank %1&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished">&lt;nowe mapowanie&gt;</translation>
+        <translation>&lt;nowe mapowanie&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;new mapping %1&gt;</source>
-        <translation type="unfinished">&lt;nowe mapowanie %1&gt;</translation>
+        <translation>&lt;nowe mapowanie %1&gt;</translation>
     </message>
 </context>
 <context>
@@ -4986,7 +4986,7 @@
     <message>
         <location line="+1"/>
         <source>Unknown</source>
-        <translation></translation>
+        <translation>Nieznany</translation>
     </message>
 </context>
 <context>
@@ -6653,7 +6653,7 @@
     <message>
         <location line="+153"/>
         <source>Triangle</source>
-        <translation type="unfinished">Trójkąt</translation>
+        <translation>Trójkąt</translation>
     </message>
     <message>
         <location line="+317"/>
@@ -6748,7 +6748,7 @@
     <message>
         <location line="+1"/>
         <source>Export &amp;WAV File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksportuj plik WAV...</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -7775,32 +7775,32 @@
     <message>
         <location line="-439"/>
         <source>&amp;Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importuj...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksportuj...</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Add Bank</source>
-        <translation type="unfinished">Dodaj bank</translation>
+        <translation>Dodaj bank</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Add Key Mapping</source>
-        <translation type="unfinished">Dodaj mapowanie klawisza</translation>
+        <translation>Dodaj mapowanie klawisza</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Delete</source>
-        <translation type="unfinished">Usuń</translation>
+        <translation>Usuń</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Delete All</source>
-        <translation type="unfinished">Usuń wszystko</translation>
+        <translation>Usuń wszystko</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -7834,17 +7834,17 @@
     <message>
         <location line="-701"/>
         <source>Highlighting</source>
-        <translation type="unfinished"></translation>
+        <translation>Wypełnienie</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Bieżący</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Current on &amp;same track</source>
-        <translation type="unfinished"></translation>
+        <translation>Bieżący na tej samej ścieżce</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -10871,12 +10871,12 @@ zamiast tego?</translation>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+74"/>
         <source>Bank and Program details</source>
-        <translation type="unfinished">Szczegóły banku i programu</translation>
+        <translation>Szczegóły banku i programu</translation>
     </message>
     <message>
         <location filename="../../src/sound/WAVExporter.cpp" line="+1"/>
         <source>&lt;p&gt;WAV Export&lt;/p&gt;&lt;p&gt;Unable to create WAV file.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Eksport WAV&lt;/p&gt;&lt;p&gt;Nie można utworzyć pliku WAV.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;new bank&gt;</source>
@@ -10910,7 +10910,7 @@ zamiast tego?</translation>
     <message>
         <location line="+7"/>
         <source>&lt;p&gt;Copyright 2000-2024 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Prawa autorskie 2000-2023 zespół programistów Rosegarden&lt;/p&gt;&lt;p&gt;Wersja: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Wydanie: %3&lt;br&gt;Wersja Qt: %2&lt;/p&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby zobaczyć listę autorów, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Aby uzyskać więcej informacji o Rosegarden, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencja: GNU General Public License wersja 2 lub nowsza.&lt;/p&gt;&lt;p&gt;Polskie tłumaczenie Rosegarden: Grzegorz &quot;Gootector&quot; Pruchniakowski.&lt;/p&gt; {2000-2024 ?} {1 ?} {4&quot;?} {3&lt;?} {2&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Prawa autorskie 2000-2024 zespół programistów Rosegarden&lt;/p&gt;&lt;p&gt;Wersja: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Wydanie: %3&lt;br&gt;Wersja Qt: %2&lt;/p&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby zobaczyć listę autorów, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Aby uzyskać więcej informacji o Rosegarden, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencja: GNU General Public License wersja 2 lub nowsza.&lt;/p&gt;&lt;p&gt;Polskie tłumaczenie Rosegarden: Grzegorz &quot;Gootector&quot; Pruchniakowski.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2023 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -12870,7 +12870,7 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
     <message>
         <location line="+6"/>
         <source>Show Variation list based on </source>
-        <translation>Pokaż listę wariacji, bazując na</translation>
+        <translation>Pokaż listę wariacji, bazując na </translation>
     </message>
     <message>
         <source>&lt;new bank&gt;</source>
@@ -12973,92 +12973,95 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
     <message>
         <location line="-1262"/>
         <source>add MIDI Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>dodaj bank MIDI</translation>
     </message>
     <message>
         <location line="+44"/>
         <source>add Key Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>dodaj mapowanie klawisza</translation>
     </message>
     <message>
         <location line="+93"/>
         <source>delete MIDI bank</source>
-        <translation type="unfinished"></translation>
+        <translation>usuń bank MIDI</translation>
     </message>
     <message>
         <location line="+46"/>
         <source>delete Key Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>usuń mapowanie klawisza</translation>
     </message>
     <message>
         <location line="+36"/>
         <source>Really delete all banks and keymaps for </source>
-        <translation type="unfinished"></translation>
+        <translation>Naprawdę usunąć wszystkie banki i mapowania klawisza dla </translation>
     </message>
     <message>
         <location line="+23"/>
         <source>delete all</source>
-        <translation type="unfinished"></translation>
+        <translation>usuń wszystko</translation>
     </message>
     <message>
         <location line="+90"/>
         <source>rename MIDI Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień nazwę banku MIDI</translation>
     </message>
     <message>
         <location line="+48"/>
         <source>rename Key Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień nazwę mapowania klawisza</translation>
     </message>
     <message>
         <location line="+112"/>
         <source>variation toggled</source>
-        <translation type="unfinished"></translation>
+        <translation>przełączono wariację</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>variation changed</source>
-        <translation type="unfinished"></translation>
+        <translation>zmieniono wariację</translation>
     </message>
     <message>
         <location line="+111"/>
         <source>import device</source>
-        <translation type="unfinished"></translation>
+        <translation>importuj urządzenie</translation>
     </message>
     <message>
         <location line="+146"/>
         <location line="+168"/>
         <source>paste bank</source>
-        <translation type="unfinished"></translation>
+        <translation>wklej bank</translation>
     </message>
     <message>
         <location line="-94"/>
         <location line="+154"/>
         <source>paste keymap</source>
-        <translation type="unfinished"></translation>
+        <translation>wklej mapowanie klawisza</translation>
     </message>
     <message>
         <location line="-105"/>
         <source>Unable to paste.
 Destination device already has a bank for
 %1:%2:%3 (%4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można wkleić.
+Urządzenie docelowe ma już bank dla
+%1:%2:%3 (%4)</translation>
     </message>
     <message>
         <location line="+197"/>
         <source>change librarian</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień bibliotekarza</translation>
     </message>
     <message>
         <location line="+69"/>
         <source>Could not export studio to file at %1
 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można eksportować studia do pliku w %1
+(%2)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Could not export studio to file at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można eksportować studia do pliku w %1</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -14573,7 +14576,7 @@ Destination device already has a bank for
     <message>
         <location line="+38"/>
         <source>Segment &quot;%1&quot; </source>
-        <translation type="unfinished"></translation>
+        <translation>Segment &quot;%1&quot; </translation>
     </message>
     <message>
         <location line="+3"/>
@@ -14583,12 +14586,12 @@ Destination device already has a bank for
     <message>
         <location line="+5"/>
         <source>%1%2 - %3Track%4#%5 - %6</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3Ścieżka%4#%5 - %6</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>%1%2 - %3 Segments - %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3 Segmenty - %4</translation>
     </message>
     <message>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
@@ -16790,17 +16793,17 @@ Przykładowy tekst z pliku:</translation>
     <message>
         <location filename="../../src/gui/dialogs/LibrarianDialog.cpp" line="+36"/>
         <source>If a librarian is already set please try to contact them at the given email address or on the development mailing list. To publish the device please make a merge request or contact the development mailing list</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeśli bibliotekarz jest już ustawiony, spróbuj skontaktować się z nim pod podanym adresem e-mail lub na liście mailingowej ds. rozwoju. Aby opublikować urządzenie, złóż wniosek o scalenie lub skontaktuj się z listą mailingową ds. rozwoju</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Name:</source>
-        <translation type="unfinished">Nazwa:</translation>
+        <translation>Nazwa:</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Email:</source>
-        <translation type="unfinished"></translation>
+        <translation>E-mail:</translation>
     </message>
 </context>
 <context>
@@ -17655,7 +17658,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+98"/>
         <source>PPQN/Division for MIDI File Export</source>
-        <translation type="unfinished"></translation>
+        <translation>PPQN/Podział dla eksportu plików MIDI</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -18576,7 +18579,7 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location line="-1015"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Kontroler %2 %3</translation>
+        <translation>%1 Kontroler %2 %3</translation>
     </message>
     <message>
         <location line="+1105"/>
@@ -18629,7 +18632,7 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location line="+842"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Kontroler %2 %3</translation>
+        <translation>%1 Kontroler %2 %3</translation>
     </message>
     <message>
         <location line="+378"/>
@@ -18754,7 +18757,7 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="+49"/>
         <source>Modify MIDI Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Modyfikuj filtry MIDI</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -18825,7 +18828,7 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location line="+114"/>
         <source>modify key mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>modyfikuj mapowanie klawisza</translation>
     </message>
     <message>
         <source>Pitches</source>
@@ -18891,18 +18894,18 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location line="+13"/>
         <source>Edit</source>
-        <translation type="unfinished">Edycja</translation>
+        <translation>Edycja</translation>
     </message>
     <message>
         <location line="+30"/>
         <location line="+30"/>
         <source>no</source>
-        <translation type="unfinished"></translation>
+        <translation>nie</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>yes</source>
-        <translation type="unfinished"></translation>
+        <translation>tak</translation>
     </message>
     <message>
         <location line="+70"/>
@@ -18912,7 +18915,7 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location line="+82"/>
         <source>program changed</source>
-        <translation type="unfinished"></translation>
+        <translation>zmieniono program</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -18922,12 +18925,12 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location line="+92"/>
         <source>change key mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień mapowanie klawisza</translation>
     </message>
     <message>
         <location line="+90"/>
         <source>change bank</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień bank</translation>
     </message>
 </context>
 <context>
@@ -19163,7 +19166,7 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location line="+16"/>
         <source>Edit</source>
-        <translation type="unfinished">Edycja</translation>
+        <translation>Edycja</translation>
     </message>
 </context>
 <context>
@@ -19897,7 +19900,7 @@ Jest to błąd (program would previously have crashed by now)</translation>
     <message>
         <location line="-976"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Kontroler %2 %3</translation>
+        <translation>%1 Kontroler %2 %3</translation>
     </message>
     <message numerus="yes">
         <location line="+292"/>
@@ -20155,7 +20158,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location line="+1407"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Kontroler %2 %3</translation>
+        <translation>%1 Kontroler %2 %3</translation>
     </message>
     <message>
         <location line="+91"/>
@@ -20816,7 +20819,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+149"/>
         <source>Cannot connect to jack! Ensure jack server is running and no other tracker clients are open.</source>
-        <translation>Nie można połączyć się z JACK-iem! Upewnij się, że serwer działa i żaden inny klient trackera nie jest otwarty.</translation>
+        <translation>Nie można połączyć się z JACK-iem! Upewnij się, że serwer JACK jest uruchomiony i żaden inny klient trackera nie jest otwarty.</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -22651,12 +22654,12 @@ Segmenty -&gt; Scal segmenty.
     <message>
         <location line="+879"/>
         <source>Unable to export WAV without JACK running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można eksportować pliku WAV bez uruchomionego JACK-a.</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>WAV files</source>
-        <translation type="unfinished">Pliki WAV</translation>
+        <translation>Pliki WAV</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -22664,7 +22667,10 @@ Segmenty -&gt; Scal segmenty.
 %1
 Press stop to stop export.
 Only audio and synth plugin tracks will be exported</source>
-        <translation type="unfinished"></translation>
+        <translation>Naciśnij przycisk odtwarzania, aby rozpocząć eksportowanie do
+%1
+Naciśnij przycisk zatrzymania, aby zatrzymać eksport.
+Zostaną wyeksportowane tylko ścieżki dźwiękowe i wtyczki syntezatora</translation>
     </message>
     <message>
         <location line="+950"/>
@@ -23931,42 +23937,42 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location filename="../../src/gui/dialogs/SelectBankDialog.cpp" line="+47"/>
         <source>Select Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaznacz bank</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Percussion</source>
-        <translation type="unfinished">Perkusja</translation>
+        <translation>Perkusja</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>MSB Value</source>
-        <translation type="unfinished">Wartość MSB</translation>
+        <translation>Wartość MSB</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)</source>
-        <translation type="unfinished">Wybiera numer kontrolera banku MSB (pary MSB/LSB są zawsze unikalne dla każdego urządzenia)</translation>
+        <translation>Wybiera numer kontrolera banku MSB (pary MSB/LSB są zawsze unikalne dla każdego urządzenia)</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>LSB Value</source>
-        <translation type="unfinished">Wartość LSB</translation>
+        <translation>Wartość LSB</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)</source>
-        <translation type="unfinished">Wybiera numer kontrolera banku LSB (pary MSB/LSB są zawsze unikalne dla każdego urządzenia)</translation>
+        <translation>Wybiera numer kontrolera banku LSB (pary MSB/LSB są zawsze unikalne dla każdego urządzenia)</translation>
     </message>
     <message>
         <location line="+55"/>
         <source>IN USE</source>
-        <translation type="unfinished"></translation>
+        <translation>W UŻYCIU</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>available</source>
-        <translation type="unfinished"></translation>
+        <translation>dostępny</translation>
     </message>
 </context>
 <context>
@@ -24947,87 +24953,87 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location filename="../../src/gui/editors/tempo/TempoAndTimeSignatureEditor.cpp" line="+105"/>
         <source>Filter</source>
-        <translation type="unfinished">Filtr</translation>
+        <translation>Filtr</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Tempo</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Time Signature</source>
-        <translation type="unfinished">Oznaczenie metryczne</translation>
+        <translation>Oznaczenie metryczne</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Time  </source>
-        <translation type="unfinished"></translation>
+        <translation>Czas  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Type  </source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Value  </source>
-        <translation type="unfinished">Wartość</translation>
+        <translation>Wartość  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Properties  </source>
-        <translation type="unfinished">Właściwości</translation>
+        <translation>Właściwości  </translation>
     </message>
     <message>
         <location line="+162"/>
         <source>Common, hidden</source>
-        <translation type="unfinished">Wspólne, ukryte</translation>
+        <translation>Zwykłe, ukryte</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Hidden</source>
-        <translation type="unfinished">Ukryte</translation>
+        <translation>Ukryte</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Common</source>
-        <translation type="unfinished">Wspólne</translation>
+        <translation>Zwykłe</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Time Signature   </source>
-        <translation type="unfinished">Oznaczenie metryczne</translation>
+        <translation>Oznaczenie metryczne   </translation>
     </message>
     <message>
         <location line="+50"/>
         <source>%1.%2%3</source>
-        <translation type="unfinished">%1.%2%3</translation>
+        <translation>%1.%2%3</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>%1.%2%3 qpm (%4.%5%6 bpm)   </source>
-        <translation type="unfinished">%1.%2%3 qpm (%4.%5%6 bpm)</translation>
+        <translation>%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Tempo   </source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo   </translation>
     </message>
     <message>
         <location line="+175"/>
         <source>Delete Tempo or Time Signature</source>
-        <translation type="unfinished">Usuń tempo lub oznaczenie metryczne</translation>
+        <translation>Usuń tempo lub oznaczenie metryczne</translation>
     </message>
     <message>
         <location line="+303"/>
         <source>%1 - Tempo and Time Signature Editor</source>
-        <translation type="unfinished">%1 - Edytor tempa i oznaczenia metrycznego</translation>
+        <translation>%1 - Edytor tempa i oznaczenia metrycznego</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoView-en</source>
-        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:tempoView-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:tempoView-en</translation>
     </message>
 </context>
 <context>
@@ -26488,13 +26494,13 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
         <location line="-93"/>
         <location line="+97"/>
         <source>RPN</source>
-        <translation type="unfinished"></translation>
+        <translation>RPN</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+97"/>
         <source>NRPN</source>
-        <translation type="unfinished"></translation>
+        <translation>NRPN</translation>
     </message>
     <message>
         <location line="-52"/>
