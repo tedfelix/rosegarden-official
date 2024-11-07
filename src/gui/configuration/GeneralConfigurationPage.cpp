@@ -292,7 +292,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("LV2 Plugin Support (experimental)"),
+    layout->addWidget(new QLabel(tr("LV2 Plugin Support (beta)"),
                                  frame), row, 0);
     m_lv2 = new QCheckBox(frame);
     m_lv2->setChecked(Preferences::getLV2());
