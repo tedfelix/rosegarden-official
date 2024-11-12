@@ -241,7 +241,7 @@ LV2PluginInstance::init(int idealChannelCount)
                 if (portData.isInput) {
                     RG_DEBUG << "LV2PluginInstance::init: port" <<
                         i << "is control in";
-                    m_controlPortsIn[i] = 0.0;
+                    m_controlPortsIn[i] = portData.def;
                 } else {
                     RG_DEBUG << "LV2PluginInstance::init: port" <<
                         i << "is control out";

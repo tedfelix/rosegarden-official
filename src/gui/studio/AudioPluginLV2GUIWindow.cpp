@@ -54,6 +54,7 @@ namespace
     int LV2Resize (LV2UI_Feature_Handle handle, int width, int height )
     {
         RG_DEBUG << "resize" << width << height;
+        if (width == 0 || height == 0) return 0; // refuse zero values
         QWidget *widget = static_cast<QWidget *>(handle);
         if (widget) {
             widget->resize(width, height);
