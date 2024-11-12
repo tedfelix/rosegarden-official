@@ -442,6 +442,9 @@ TempoAndTimeSignatureEditor::updateTable()
 
     // Restore Selection.
 
+    // Note: We have to do this separately from the above loop because
+    //       setCurrentItem() clears the selection.
+
     bool haveSelection{false};
 
     // For each row...

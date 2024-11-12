@@ -415,8 +415,6 @@ EventView::updateTreeWidget()
     //     that.  It's odd since other lists seem to maintain scroll position
     //     just fine, especially when nothing really changes (time mode).
 
-    // ??? Current item is also lost.
-
     // Store the selection.
 
     std::set<QString /*key*/> selection;
@@ -430,6 +428,22 @@ EventView::updateTreeWidget()
         if (item->isSelected())
             selection.insert(item->data(0, Qt::UserRole).toString());
     }
+
+    // Store "current" item.
+
+    bool haveCurrentItem;
+    QString currentItemKey;
+
+    // Scope to avoid accidentally reusing currentItem after it is gone.
+    {
+        // The "current item" has the focus outline which is only
+        // visible if it happens to be selected.
+        QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+        haveCurrentItem = currentItem;
+        if (haveCurrentItem)
+            currentItemKey = currentItem->data(0, Qt::UserRole).toString();
+    }
+
 
     // *** Create the event list.
 
@@ -683,7 +697,19 @@ EventView::updateTreeWidget()
                 data1Str + data2Str;
         item->setData(0, Qt::UserRole, key);
 
-        // Restore selection
+        // Restore current item
+        if (key == currentItemKey)
+            m_treeWidget->setCurrentItem(item);
+    }
+
+    // Restore the selection.
+
+    // Note: We have to do this separately from the above loop because
+    //       setCurrentItem() clears the selection.
+
+    for (int row = 0; row < m_treeWidget->topLevelItemCount(); ++row) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(row);
+        const QString key = item->data(0, Qt::UserRole).toString();
         if (selection.find(key) != selection.end())
             item->setSelected(true);
     }
