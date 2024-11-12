@@ -1255,12 +1255,11 @@ EventView::setupActions()
 
     // Disable launching of matrix and notation editors for triggered
     // segments.
-    // ??? Why?  I've enabled this and it seems to work fine.  In fact, it
-    //     seems like a really handy feature.  TriggerSegmentManager also
-    //     only allows launching the event editor.  Why?  Do some testing
-    //     and see if we can break things.
-    findAction("open_in_matrix")->setEnabled(!m_isTriggerSegment);
-    findAction("open_in_notation")->setEnabled(!m_isTriggerSegment);
+    // Going with always enabled as it seems to be ok.  See
+    // TriggerSegmentManager which only allows the Event List editor.
+    // It should allow more.
+    //findAction("open_in_matrix")->setEnabled(!m_isTriggerSegment);
+    //findAction("open_in_notation")->setEnabled(!m_isTriggerSegment);
 }
 
 void

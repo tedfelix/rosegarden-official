@@ -439,15 +439,11 @@ TriggerSegmentManager::slotEdit(QTreeWidgetItem *i)
     //     would probably be preferred.  We should use the "Double-click opens
     //     segment in" editor preference ("doubleclickclient") and offer
     //     context menu items for launching any of the three editors as
-    //     desired.  Does this cause problems?
+    //     desired.
     //
-    //     The event list editor has code to prevent launching the notation
-    //     and matrix editors on triggered segments.  Why?
-    //
-    //     My only guess is that the matrix and notation editors do something
-    //     to a triggered segment that breaks it in some way.  Need to do some
-    //     testing and see if we can break things somehow.  Then document the
-    //     issues.
+    //     The event list editor used to have code to prevent launching the
+    //     notation and matrix editors on triggered segments.  That has been
+    //     removed.
     emit editTriggerSegment(id);
 }
 
