@@ -270,7 +270,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("Advanced Looping (beta)"),
+    layout->addWidget(new QLabel(tr("Advanced Looping"),
                                  frame), row, 0);
     m_advancedLooping = new QCheckBox(frame);
     m_advancedLooping->setChecked(Preferences::getAdvancedLooping());
