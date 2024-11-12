@@ -408,22 +408,27 @@ EventView::~EventView()
 bool
 EventView::updateTreeWidget()
 {
+    // ??? This has scrolling issues.  It seems to not maintain at least the
+    //     time position when filtering is changed.  Also when time mode is
+    //     changed it jumps when there is a selection.  There are no
+    //     scrollToItem() calls, so it isn't
+    //     that.  It's odd since other lists seem to maintain scroll position
+    //     just fine, especially when nothing really changes (time mode).
+
+    // ??? Current item is also lost.
+
     // Store the selection.
 
-    // ??? This selection stuff is extremely buggy.  It stores the indices,
-    //     so if anything has changed, it will re-select the wrong items.
-    //     See TempoAndTimeSignatureEditor for the latest approach.
-
-    std::vector<int> selection;
+    std::set<QString /*key*/> selection;
 
     // For each item in the tree...
     for (int itemIndex = 0;
          itemIndex < m_treeWidget->topLevelItemCount();
          ++itemIndex) {
         QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
-        // If this item is selected, add its index to the list.
+        // If this item is selected, add its key to the list.
         if (item->isSelected())
-            selection.push_back(itemIndex);
+            selection.insert(item->data(0, Qt::UserRole).toString());
     }
 
     // *** Create the event list.
@@ -509,12 +514,17 @@ EventView::updateTreeWidget()
         // Duration
 
         QString durationStr;
+        QString musicalDuration;
 
         if (event->getDuration() > 0  ||
             event->isa(Note::EventType)  ||
             event->isa(Note::EventRestType)) {
             durationStr = makeDurationString(
                     eventTime, event->getDuration(), timeMode);
+            // For the key.
+            musicalDuration = makeDurationString(
+                    eventTime, event->getDuration(),
+                    static_cast<int>(Composition::TimeMode::MusicalTime));
         }
 
         // Pitch
@@ -651,39 +661,39 @@ EventView::updateTreeWidget()
                   data1Str <<
                   data2Str;
 
-        new EventViewItem(
+        EventViewItem *item = new EventViewItem(
                 m_segments[0],  // segment
                 event,  // event
                 m_treeWidget,  // parent
                 values);  // strings
+
+        // Assemble a key so we can uniquely identify each row for selection
+        // persistence across updates.
+        // ??? Why not just use the Event pointer address?  It's dangerous,
+        //     but it should work well enough.  And it will be faster than a
+        //     string comparison.  It will also avoid needing to keep
+        //     musicalTime and musicalDuration.
+        // Always use musical time in case the time mode changes.
+        const QString musicalTime = RosegardenDocument::currentDocument->
+                        getComposition().makeTimeString(
+                                eventTime,
+                                Composition::TimeMode::MusicalTime);
+        const QString key = musicalTime + musicalDuration +
+                strtoqstr(event->getType()) + pitchStr + velocityStr +
+                data1Str + data2Str;
+        item->setData(0, Qt::UserRole, key);
+
+        // Restore selection
+        if (selection.find(key) != selection.end())
+            item->setSelected(true);
     }
 
-
-    // No Events?
-    if (m_treeWidget->topLevelItemCount() == 0) {
-        // ??? This message is too big for the time field.
-        //new QTreeWidgetItem(m_treeWidget,
-        //                    QStringList() << tr("<no events at this filter level>"));
-
-        // ??? What does this even do?  Paste is always enabled in the menu.
+    // ??? What does have_selection even do?  Paste is always enabled on
+    //     the menu.
+    if (selection.empty())
         leaveActionState("have_selection");
-    } else {  // We have Events.
-        // If no selection then select the first event
-        if (selection.size() == 0)
-            selection.push_back(0);
-
-        // ??? What does this even do?  Paste is always enabled in the menu.
+    else
         enterActionState("have_selection");
-    }
-
-    // Restore selection
-    // For each selected item index, select it.
-    for (int itemIndex : selection) {
-        QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
-        if (!item)
-            continue;
-        item->setSelected(true);
-    }
 
     return true;
 }
