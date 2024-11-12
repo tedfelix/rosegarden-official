@@ -429,6 +429,8 @@ EventView::updateTreeWidget()
             selection.insert(item->data(0, Qt::UserRole).toString());
     }
 
+    bool haveSelection{false};
+
     // Store "current" item.
 
     bool haveCurrentItem;
@@ -697,29 +699,23 @@ EventView::updateTreeWidget()
                 data1Str + data2Str;
         item->setData(0, Qt::UserRole, key);
 
-        // Restore current item
+        // Restore current item.
         if (key == currentItemKey)
-            m_treeWidget->setCurrentItem(item);
-    }
+            m_treeWidget->setCurrentItem(item, 0, QItemSelectionModel::NoUpdate);
 
-    // Restore the selection.
-
-    // Note: We have to do this separately from the above loop because
-    //       setCurrentItem() clears the selection.
-
-    for (int row = 0; row < m_treeWidget->topLevelItemCount(); ++row) {
-        QTreeWidgetItem *item = m_treeWidget->topLevelItem(row);
-        const QString key = item->data(0, Qt::UserRole).toString();
-        if (selection.find(key) != selection.end())
+        // Restore selection.
+        if (selection.find(key) != selection.end()) {
             item->setSelected(true);
+            haveSelection = true;
+        }
     }
 
     // ??? What does have_selection even do?  Paste is always enabled on
     //     the menu.
-    if (selection.empty())
-        leaveActionState("have_selection");
-    else
+    if (haveSelection)
         enterActionState("have_selection");
+    else
+        leaveActionState("have_selection");
 
     return true;
 }

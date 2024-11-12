@@ -432,7 +432,8 @@ TempoAndTimeSignatureEditor::updateTable()
                 currentItemKey.midiTicks == time) {
                 item = m_tableWidget->item(row, currentItemColumn);
                 if (item)
-                    m_tableWidget->setCurrentItem(item);
+                    m_tableWidget->setCurrentItem(
+                            item, QItemSelectionModel::NoUpdate);
             }
         }
     }
@@ -442,8 +443,9 @@ TempoAndTimeSignatureEditor::updateTable()
 
     // Restore Selection.
 
-    // Note: We have to do this separately from the above loop because
-    //       setCurrentItem() clears the selection.
+    // ??? Since we use QItemSelectionModel::NoUpdate above, we could do the
+    //     selection inside of the above loop instead of going through all
+    //     the items on this second pass.  See EventView.
 
     bool haveSelection{false};
 
