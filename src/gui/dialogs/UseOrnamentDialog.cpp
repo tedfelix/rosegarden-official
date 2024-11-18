@@ -121,7 +121,7 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
     layout->addWidget(m_ornament, 0, 1);
 
     int n = 1;
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
         m_ornament->addItem
@@ -204,7 +204,7 @@ UseOrnamentDialog::getId() const
 {
     int ix = m_ornament->currentIndex();
 
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
 

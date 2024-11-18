@@ -65,7 +65,7 @@ TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
     layout->addWidget(m_segment, 0, 1);
 
     int n = 1;
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
         m_segment->addItem
@@ -133,7 +133,7 @@ TriggerSegmentDialog::getId() const
 {
     int ix = m_segment->currentIndex();
 
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
 

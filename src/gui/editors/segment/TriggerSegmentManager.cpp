@@ -178,10 +178,10 @@ TriggerSegmentManager::slotUpdate()
 
     Composition &comp = m_doc->getComposition();
 
-    const Composition::triggersegmentcontainer &triggers =
+    const Composition::TriggerSegmentSet &triggers =
         comp.getTriggerSegments();
 
-    Composition::triggersegmentcontainerconstiterator it;
+    Composition::TriggerSegmentSet::const_iterator it;
 
     QSettings settings;
 

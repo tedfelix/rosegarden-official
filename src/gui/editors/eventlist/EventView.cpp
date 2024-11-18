@@ -342,9 +342,6 @@ EventView::EventView(RosegardenDocument *doc,
                 this, &EventView::slotEditTriggerVelocity);
 
 #if 0
-        // These two options are not yet used anywhere else.  Intended for use
-        // with library ornaments, not yet implemented
-
         // ??? All of this is implemented and stored with the trigger segment
         //     along with pitch and velocity.  We can probably get this working,
         //     but should we?
@@ -565,16 +562,6 @@ EventView::updateTreeWidget()
         } else if (event->isa(Note::EventType)) {
             velocityStr = tr("<not set>");
         }
-
-        // ??? Consider rearranging this so that the event type checks
-        //     above also contain the code to format each column for that
-        //     event type.  Issue will be messages that share properties.
-        //     E.g. Controller, RPN, and NRPN all use Controller::NUMBER
-        //     and Controller::VALUE.  Also "other" events use this fallback
-        //     to get something in the columns.
-        //     I've seen beam groups on clefs and time signatures.  So
-        //     this fallback approach catches some things.  It's just
-        //     hard to read.
 
         // Data 1
 
@@ -833,12 +820,6 @@ EventView::slotEditTriggerName()
             new SegmentLabelCommand(selection, newLabel));
 
     m_triggerName->setText(newLabel);
-
-    // ??? This causes the Event List editor to go away.  I assume it is
-    //     because the Segment object can't be modified and was replaced with a
-    //     new one?  That then triggers the documentModified() which sees
-    //     the old Segment is no longer in the composition and we close
-    //     the Event List editor.  Ridiculous.
 }
 
 void
@@ -865,12 +846,6 @@ EventView::slotEditTriggerPitch()
                     dlg->getPitch()));
 
     m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
-
-    // ??? This causes the Event List editor to go away.  I assume it is
-    //     because the Segment object can't be edited and was replaced with a
-    //     new one?  That then triggers the documentModified() which sees
-    //     the old Segment is no longer in the composition and we close
-    //     the Event List editor.  Ridiculous.
 }
 
 void
@@ -1662,8 +1637,18 @@ EventView::slotHelpAbout()
 void
 EventView::slotDocumentModified(bool modified)
 {
-    const bool inComposition = RosegardenDocument::currentDocument->
-            getComposition().contains(m_segments[0]);
+    // Determine whether the Segment is still in the Composition.
+
+    bool inComposition{false};
+
+    if (m_isTriggerSegment) {
+        const int triggerSegmentID = RosegardenDocument::currentDocument->
+                getComposition().getTriggerSegmentId(m_segments[0]);
+        inComposition = (triggerSegmentID != -1);
+    } else {
+        inComposition = RosegardenDocument::currentDocument->
+                getComposition().contains(m_segments[0]);
+    }
 
     // No longer in the Composition?  Close the window.
     //

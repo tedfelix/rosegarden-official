@@ -557,7 +557,7 @@ void
 Composition::deleteTriggerSegment(TriggerSegmentId id)
 {
     TriggerSegmentRec dummyRec(id, nullptr);
-    triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
+    TriggerSegmentSet::iterator i = m_triggerSegments.find(&dummyRec);
     if (i == m_triggerSegments.end()) return;
     (*i)->getSegment()->setComposition(nullptr);
     delete (*i)->getSegment();
@@ -570,7 +570,7 @@ void
 Composition::detachTriggerSegment(TriggerSegmentId id)
 {
     TriggerSegmentRec dummyRec(id, nullptr);
-    triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
+    TriggerSegmentSet::iterator i = m_triggerSegments.find(&dummyRec);
     if (i == m_triggerSegments.end()) return;
     (*i)->getSegment()->setComposition(nullptr);
     delete *i;
@@ -580,7 +580,7 @@ Composition::detachTriggerSegment(TriggerSegmentId id)
 void
 Composition::clearTriggerSegments()
 {
-    for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
+    for (TriggerSegmentSet::iterator i = m_triggerSegments.begin();
          i != m_triggerSegments.end(); ++i) {
         delete (*i)->getSegment();
         delete *i;
@@ -591,7 +591,7 @@ Composition::clearTriggerSegments()
 int
 Composition::getTriggerSegmentId(Segment *s)
 {
-    for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
+    for (TriggerSegmentSet::iterator i = m_triggerSegments.begin();
          i != m_triggerSegments.end(); ++i) {
         if ((*i)->getSegment() == s) return (*i)->getId();
     }
@@ -610,7 +610,7 @@ TriggerSegmentRec *
 Composition::getTriggerSegmentRec(TriggerSegmentId id)
 {
     TriggerSegmentRec dummyRec(id, nullptr);
-    triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
+    TriggerSegmentSet::iterator i = m_triggerSegments.find(&dummyRec);
     if (i == m_triggerSegments.end()) return nullptr;
     return *i;
 }

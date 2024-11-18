@@ -1248,7 +1248,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         totalEvents += (long)(*segitr)->size();
     }
 
-    for (Composition::triggersegmentcontaineriterator ci =
+    for (Composition::TriggerSegmentSet::iterator ci =
              m_composition.getTriggerSegments().begin();
          ci != m_composition.getTriggerSegments().end(); ++ci) {
         totalEvents += (long)(*ci)->getSegment()->size();
@@ -1298,7 +1298,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     outStream << "\n\n";
 
-    for (Composition::triggersegmentcontaineriterator ci =
+    for (Composition::TriggerSegmentSet::iterator ci =
                 m_composition.getTriggerSegments().begin();
             ci != m_composition.getTriggerSegments().end(); ++ci) {
 

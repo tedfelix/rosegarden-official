@@ -1306,7 +1306,7 @@ void SequenceManager::populateCompositionMapper()
         segmentAdded(*i);
     }
 
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
                 comp.getTriggerSegments().begin();
          i != comp.getTriggerSegments().end(); ++i) {
         m_triggerSegments.insert(SegmentRefreshMap::value_type
@@ -1420,7 +1420,7 @@ void SequenceManager::refresh()
     SegmentRefreshMap newTriggerMap;
 
     // For each trigger Segment in the composition
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
              comp.getTriggerSegments().begin();
          i != comp.getTriggerSegments().end(); ++i) {
 

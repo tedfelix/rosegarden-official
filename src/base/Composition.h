@@ -61,7 +61,7 @@ class NotationQuantizer;
 class CompositionObserver;
 
 
-/// Composition contains a complete representation of a piece of music.
+/// A complete representation of a piece of music.
 /**
  * It is a container for multiple Segment objects (m_segments), as well as
  * any associated non-Event data.
@@ -88,9 +88,7 @@ public:
     typedef markercontainer::iterator markeriterator;
     typedef markercontainer::const_iterator markerconstiterator;
 
-    typedef std::set<TriggerSegmentRec *, TriggerSegmentCmp> triggersegmentcontainer;
-    typedef triggersegmentcontainer::iterator triggersegmentcontaineriterator;
-    typedef triggersegmentcontainer::const_iterator triggersegmentcontainerconstiterator;
+    typedef std::set<TriggerSegmentRec *, TriggerSegmentCmp> TriggerSegmentSet;
 
     typedef std::set<TrackId> recordtrackcontainer;
     typedef recordtrackcontainer::iterator recordtrackiterator;
@@ -373,8 +371,8 @@ public:
     //
     //  TRIGGER SEGMENTS
 
-    triggersegmentcontainer &getTriggerSegments() { return m_triggerSegments; }
-    const triggersegmentcontainer &getTriggerSegments() const { return m_triggerSegments; }
+    TriggerSegmentSet &getTriggerSegments() { return m_triggerSegments; }
+    const TriggerSegmentSet &getTriggerSegments() const { return m_triggerSegments; }
 
     /**
      * Add a new trigger Segment with a given base pitch and base
@@ -1163,7 +1161,7 @@ protected:
 
     // Trigger segments (unsorted segments fired by events elsewhere)
     //
-    triggersegmentcontainer           m_triggerSegments;
+    TriggerSegmentSet           m_triggerSegments;
     TriggerSegmentId                  m_nextTriggerSegmentId;
 
     ColourMap                         m_segmentColourMap;
