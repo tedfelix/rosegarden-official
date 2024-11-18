@@ -1279,9 +1279,9 @@ LilyPondExporter::write()
         timeT prevMarkerTime = 0;
 
         // Need the markers sorted by time
-        Composition::markercontainer markers(m_composition->getMarkers()); // copy
+        Composition::MarkerVector markers(m_composition->getMarkers()); // copy
         std::sort(markers.begin(), markers.end(), MarkerComp());
-        Composition::markerconstiterator i_marker = markers.begin();
+        Composition::MarkerVector::const_iterator i_marker = markers.begin();
 
         while  (i_marker != markers.end()) {
             // Allow some oportunities for user to cancel

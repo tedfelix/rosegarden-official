@@ -387,10 +387,10 @@ SequenceManager::record(bool countIn)
     // a valid audio record path and a working audio subsystem before
     // we go any further
 
-    const Composition::recordtrackcontainer &recordTracks =
+    const Composition::TrackIdSet &recordTracks =
         comp.getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 recordTracks.begin();
             i != recordTracks.end(); ++i) {
 
@@ -485,7 +485,7 @@ punchin:
         bool haveMIDIInstrument = false;
         //TrackId recordMIDITrack = 0;
 
-        for (Composition::recordtrackcontainer::const_iterator i =
+        for (Composition::TrackIdSet::const_iterator i =
                     comp.getRecordTracks().begin();
                 i != comp.getRecordTracks().end(); ++i) {
 
@@ -555,7 +555,7 @@ punchin:
 
         if (haveMIDIInstrument) {
             // For each recording segment...
-            for (Composition::recordtrackcontainer::const_iterator i =
+            for (Composition::TrackIdSet::const_iterator i =
                         comp.getRecordTracks().begin(); i != comp.getRecordTracks().end(); ++i) {
                 // Get the Instrument for this Track
                 InstrumentId iid = comp.getTrackById(*i)->getInstrument();

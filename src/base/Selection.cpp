@@ -667,7 +667,7 @@ template class TimewiseSelection<MarkerElementInfo>;
 MarkerSelection::MarkerSelection(Composition &composition, timeT beginTime,
                                  timeT endTime)
 {
-    typedef Composition::markercontainer MarkerContainer;
+    typedef Composition::MarkerVector MarkerContainer;
     const MarkerContainer& markers = composition.getMarkers();
     for (MarkerContainer::const_iterator i = markers.begin();
          i != markers.end();

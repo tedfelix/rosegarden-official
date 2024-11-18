@@ -375,9 +375,9 @@ Composition::addAllSegments(SegmentMultiSet segments)
 }
 
 void
-Composition::addAllSegments(SegmentVec segments)
+Composition::addAllSegments(SegmentVector segments)
 {
-    for (SegmentVec::iterator i = segments.begin();
+    for (SegmentVector::iterator i = segments.begin();
          i != segments.end();
          ++i)
         { addSegment(*i); }
@@ -395,9 +395,9 @@ Composition::detachAllSegments(SegmentMultiSet segments)
 }
 
 void
-Composition::detachAllSegments(SegmentVec segments)
+Composition::detachAllSegments(SegmentVector segments)
 {
-    for (SegmentVec::iterator i = segments.begin();
+    for (SegmentVector::iterator i = segments.begin();
          i != segments.end();
          ++i)
         { detachSegment(*i); }
@@ -2093,11 +2093,11 @@ void Composition::checkSelectedAndRecordTracks()
     }
 
     // For each record track
-    for (recordtrackcontainer::iterator i = m_recordTracks.begin();
+    for (TrackIdSet::iterator i = m_recordTracks.begin();
          i != m_recordTracks.end(); ) {
         // Increment before use.  This way deleting the element does not
         // invalidate the iterator.
-        recordtrackcontainer::iterator j = i++;
+        TrackIdSet::iterator j = i++;
 
         // If the track is no longer in the composition
         if (m_tracks.find(*j) == m_tracks.end()) {
@@ -2346,7 +2346,7 @@ std::string Composition::toXmlString() const
                 << "</metadata>" << std::endl << std::endl;
 
     composition << "<markers>" << std::endl;
-    for (markerconstiterator mIt = m_markers.begin();
+    for (MarkerVector::const_iterator mIt = m_markers.begin();
          mIt != m_markers.end(); ++mIt)
     {
         composition << (*mIt)->toXmlString();
@@ -2735,7 +2735,7 @@ void breakpoint()
 void
 Composition::clearMarkers()
 {
-    markerconstiterator it = m_markers.begin();
+    MarkerVector::const_iterator it = m_markers.begin();
 
     for (; it != m_markers.end(); ++it)
     {
@@ -2761,7 +2761,7 @@ Composition::addMarker(Rosegarden::Marker *marker)
 bool
 Composition::detachMarker(Rosegarden::Marker *marker)
 {
-    markeriterator it = m_markers.begin();
+    MarkerVector::iterator it = m_markers.begin();
 
     for (; it != m_markers.end(); ++it)
     {
@@ -2795,7 +2795,7 @@ Composition::getSegmentByMarking(const QString& marking) const
 bool
 Composition::isMarkerAtPosition(Rosegarden::timeT time) const
 {
-    markerconstiterator it = m_markers.begin();
+    MarkerVector::const_iterator it = m_markers.begin();
 
     for (; it != m_markers.end(); ++it)
         if ((*it)->getTime() == time) return true;

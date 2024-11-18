@@ -49,10 +49,10 @@ RemoveMarkerCommand::~RemoveMarkerCommand()
 void
 RemoveMarkerCommand::execute()
 {
-    Composition::markercontainer markers =
+    Composition::MarkerVector markers =
         m_composition->getMarkers();
 
-    Composition::markerconstiterator it = markers.begin();
+    Composition::MarkerVector::const_iterator it = markers.begin();
 
     for (; it != markers.end(); ++it) {
         if ((*it)->getID() == m_id) {

@@ -1802,13 +1802,13 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
     //Track *midiRecordTrack = 0;
 
-    const Composition::recordtrackcontainer &recordTracks =
+    const Composition::TrackIdSet &recordTracks =
         getComposition().getRecordTracks();
 
     bool haveMIDIRecordTrack = false;
 
     // For each recording track
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
             recordTracks.begin(); i != recordTracks.end(); ++i) {
         TrackId tid = (*i);
         Track *track = getComposition().getTrackById(tid);
@@ -2584,10 +2584,10 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 
     Track *recordTrack = nullptr;
 
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
         TrackId tid = (*i);
         Track *track = getComposition().getTrackById(tid);
@@ -2655,10 +2655,10 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 void
 RosegardenDocument::updateRecordingAudioSegments()
 {
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
 
         TrackId tid = (*i);

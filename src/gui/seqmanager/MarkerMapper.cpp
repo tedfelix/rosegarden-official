@@ -39,9 +39,9 @@ void MarkerMapper::fillBuffer()
     resize(0);
 
     Composition& comp = m_doc->getComposition();
-    Composition::markercontainer &marks = comp.getMarkers();
+    Composition::MarkerVector &marks = comp.getMarkers();
 
-    for (Composition::markerconstiterator i = marks.begin();
+    for (Composition::MarkerVector::const_iterator i = marks.begin();
 	 i != marks.end(); ++i) {
 
       std::string metaMessage = (*i)->getName();

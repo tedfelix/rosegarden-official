@@ -78,21 +78,17 @@ public:
     typedef SegmentMultiSet::iterator iterator;
     typedef SegmentMultiSet::const_iterator const_iterator;
 
-    typedef std::vector<Segment *> SegmentVec;
+    typedef std::vector<Segment *> SegmentVector;
 
-    typedef std::map<TrackId, Track*> trackcontainer;
+    typedef std::map<TrackId, Track *> trackcontainer;
     typedef trackcontainer::iterator trackiterator;
     typedef trackcontainer::const_iterator trackconstiterator;
 
-    typedef std::vector<Marker*> markercontainer;
-    typedef markercontainer::iterator markeriterator;
-    typedef markercontainer::const_iterator markerconstiterator;
+    typedef std::vector<Marker *> MarkerVector;
 
     typedef std::set<TriggerSegmentRec *, TriggerSegmentCmp> TriggerSegmentSet;
 
-    typedef std::set<TrackId> recordtrackcontainer;
-    typedef recordtrackcontainer::iterator recordtrackiterator;
-    typedef recordtrackcontainer::const_iterator recordtrackconstiterator;
+    typedef std::set<TrackId> TrackIdSet;
 
     Composition();
     ~Composition() override;
@@ -151,7 +147,7 @@ public:
     TrackId getMinTrackId() const;
     TrackId getMaxTrackId() const;
 
-    const recordtrackcontainer &getRecordTracks() const { return m_recordTracks; }
+    const TrackIdSet &getRecordTracks() const { return m_recordTracks; }
     void setTrackRecording(TrackId trackId, bool recording);
     bool isTrackRecording(TrackId track) const;
     bool isInstrumentRecording(InstrumentId instrumentID) const;
@@ -232,8 +228,8 @@ public:
     //
     // MARKERS
 
-    markercontainer& getMarkers() { return m_markers; }
-    const markercontainer& getMarkers() const { return m_markers; }
+    MarkerVector& getMarkers() { return m_markers; }
+    const MarkerVector& getMarkers() const { return m_markers; }
 
     /**
      * Add a new Marker.  The Composition takes ownership of the
@@ -359,13 +355,13 @@ public:
      * Add every segment in SegmentMultiSet
      */
     void addAllSegments(SegmentMultiSet segments);
-    void addAllSegments(SegmentVec segments);
+    void addAllSegments(SegmentVector segments);
 
     /**
      * Detach every segment in SegmentMultiSet
      */
     void detachAllSegments(SegmentMultiSet segments);
-    void detachAllSegments(SegmentVec segments);
+    void detachAllSegments(SegmentVector segments);
 
     //////
     //
@@ -994,7 +990,7 @@ protected:
 
     // The tracks we are armed for record on
     //
-    recordtrackcontainer m_recordTracks;
+    TrackIdSet m_recordTracks;
 
     TrackId m_selectedTrackId;
 
@@ -1157,7 +1153,7 @@ protected:
 
     // User defined markers in the composition
     //
-    markercontainer                   m_markers;
+    MarkerVector                   m_markers;
 
     // Trigger segments (unsorted segments fired by events elsewhere)
     //
