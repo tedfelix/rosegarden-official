@@ -668,6 +668,9 @@ EventView::updateTreeWidget()
                        arg(event->get<Int>(KeyPressure::PRESSURE));
         }
 
+        if (event->has(BaseProperties::TRIGGER_SEGMENT_ID))
+            data2Str = "TRIGGER";
+
         QStringList values;
         values << timeStr <<
                   durationStr <<
@@ -1474,14 +1477,12 @@ EventView::slotItemDoubleClicked(QTreeWidgetItem *item, int /* column */)
 void
 EventView::slotContextMenu(const QPoint &pos)
 {
-    // Make sure something is actually selected.
-    // ??? Shouldn't we check currentItem() instead?  That's what the
-    //     handlers do.
+    // Use itemAt() which is more predictable than currentItem().
     QTreeWidgetItem *item = m_treeWidget->itemAt(pos);
     if (!item)
         return;
 
-    EventViewItem *eventViewItem = dynamic_cast<EventViewItem*>(item);
+    EventViewItem *eventViewItem = dynamic_cast<EventViewItem *>(item);
     if (!eventViewItem)
         return;
 
@@ -1598,12 +1599,6 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
 void
 EventView::slotEditTriggeredSegment(bool /*checked*/)
 {
-    // ??? This works well, but I think we need a clearer indication in the
-    //     list that an event has a TRIGGER_SEGMENT_ID.  The notation editor
-    //     colors the note dark red.  The matrix editor colors the note
-    //     cyan.  We should probably force something into the data1 or
-    //     data2 field.
-
     EventViewItem *eventViewItem =
             dynamic_cast<EventViewItem *>(m_treeWidget->currentItem());
     if (!eventViewItem)
