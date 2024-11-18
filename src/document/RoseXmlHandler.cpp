@@ -2374,7 +2374,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         // from "file" to "actual" IDs.  See discussion in
         // mapToActualInstrument() below.
 
-        for (Composition::trackcontainer::iterator i = comp.getTracks().begin();
+        for (Composition::TrackMap::iterator i = comp.getTracks().begin();
              i != comp.getTracks().end(); ++i) {
             InstrumentId iid = i->second->getInstrument();
             InstrumentId aid = mapToActualInstrument(iid);

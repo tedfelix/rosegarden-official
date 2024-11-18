@@ -43,9 +43,9 @@ ModifyInstrumentMappingCommand::ModifyInstrumentMappingCommand(
 void
 ModifyInstrumentMappingCommand::execute()
 {
-    Composition::trackcontainer &tracks =
+    Composition::TrackMap &tracks =
         m_composition->getTracks();
-    Composition::trackcontainer::iterator it = tracks.begin();
+    Composition::TrackMap::iterator it = tracks.begin();
 
     for (; it != tracks.end(); ++it) {
         if (it->second->getInstrument() == m_fromInstrument) {

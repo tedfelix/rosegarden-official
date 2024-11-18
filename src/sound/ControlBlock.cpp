@@ -99,7 +99,7 @@ ControlBlock::setDocument(RosegardenDocument *doc)
 
     Composition& comp = m_doc->getComposition();
 
-    for (Composition::trackiterator i = comp.getTracks().begin();
+    for (Composition::TrackMap::iterator i = comp.getTracks().begin();
 	 i != comp.getTracks().end(); ++i) {
         Track *track = i->second;
         if (!track) continue;

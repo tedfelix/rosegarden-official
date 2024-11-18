@@ -1152,7 +1152,7 @@ RosegardenMainViewWidget::updateMeters()
         i->second = unknownState;
     }
 
-    for (Composition::trackcontainer::iterator i =
+    for (Composition::TrackMap::iterator i =
              RosegardenDocument::currentDocument->getComposition().getTracks().begin();
          i != RosegardenDocument::currentDocument->getComposition().getTracks().end(); ++i) {
 
@@ -1487,7 +1487,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 
     TrackId bestSoFar = currentTrackId;
 
-    for (Composition::trackcontainer::const_iterator
+    for (Composition::TrackMap::const_iterator
             ti = comp.getTracks().begin();
             ti != comp.getTracks().end(); ++ti) {
 
@@ -1675,8 +1675,8 @@ RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
     */
     /* #ifdef NOT_DEFINED
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Composition::trackcontainer &tracks = comp.getTracks();
-    Composition::trackiterator it;
+    Composition::TrackMap &tracks = comp.getTracks();
+    Composition::TrackMap::iterator it;
 
     for (it = tracks.begin(); it != tracks.end(); ++it) {
         if (comp.getSelectedTrack() == (*it).second->getId()) {

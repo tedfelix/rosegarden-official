@@ -381,7 +381,7 @@ void CompositionModelImpl::getSegmentRect(
 void CompositionModelImpl::updateAllTrackHeights()
 {
     // For each track in the composition
-    for (Composition::trackcontainer::const_iterator i =
+    for (Composition::TrackMap::const_iterator i =
              m_composition.getTracks().begin();
          i != m_composition.getTracks().end();
          ++i) {

@@ -458,7 +458,7 @@ Composition::rebuildVoiceCaches() const
     m_trackVoiceCountCache.clear();
     m_segmentVoiceIndexCache.clear();
 
-    for (trackcontainer::const_iterator tci = m_tracks.begin();
+    for (TrackMap::const_iterator tci = m_tracks.begin();
          tci != m_tracks.end(); ++tci) {
 
         TrackId tid = tci->first;
@@ -1914,9 +1914,9 @@ void Composition::setRecordMetronome(bool value)
 // track debug convenience function
 //
 // cppcheck-suppress unusedFunction
-static void dumpTracks(Composition::trackcontainer& tracks)
+static void dumpTracks(Composition::TrackMap& tracks)
 {
-    Composition::trackiterator it = tracks.begin();
+    Composition::TrackMap::iterator it = tracks.begin();
     for (; it != tracks.end(); ++it) {
         RG_DEBUG << "tracks[" << (*it).first << "] = " << (*it).second;
     }
@@ -1925,14 +1925,14 @@ static void dumpTracks(Composition::trackcontainer& tracks)
 
 Track* Composition::getTrackById(TrackId track) const
 {
-    trackconstiterator i = m_tracks.find(track);
+    TrackMap::const_iterator i = m_tracks.find(track);
 
     if (i != m_tracks.end())
         return (*i).second;
 
     RG_WARNING << "getTrackById(" << track << "): WARNING: Track ID not found.";
     RG_WARNING << "  Available track ids are:";
-    for (trackconstiterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
+    for (TrackMap::const_iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
         RG_WARNING << "    " << (int)(*i).second->getId();
     }
 
@@ -1942,7 +1942,7 @@ Track* Composition::getTrackById(TrackId track) const
 bool
 Composition::haveTrack(TrackId track) const
 {
-    trackconstiterator i = m_tracks.find(track);
+    TrackMap::const_iterator i = m_tracks.find(track);
     return (i != m_tracks.end());
 }
 
@@ -1955,7 +1955,7 @@ Composition::haveTrack(TrackId track) const
 void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
                                           int position)
 {
-    trackiterator titerator = m_tracks.find(oldId);
+    TrackMap::iterator titerator = m_tracks.find(oldId);
 
     if (titerator != m_tracks.end())
     {
@@ -2033,7 +2033,7 @@ void Composition::addTrack(Track *track)
 // unused
 void Composition::deleteTrack(Rosegarden::TrackId track)
 {
-    trackiterator titerator = m_tracks.find(track);
+    TrackMap::iterator titerator = m_tracks.find(track);
 
     if (titerator == m_tracks.end()) {
 
@@ -2054,7 +2054,7 @@ void Composition::deleteTrack(Rosegarden::TrackId track)
 
 bool Composition::detachTrack(Rosegarden::Track *track)
 {
-    trackiterator it = m_tracks.begin();
+    TrackMap::iterator it = m_tracks.begin();
 
     for (; it != m_tracks.end(); ++it)
     {
@@ -2112,7 +2112,7 @@ void Composition::refreshRecordTracks()
     m_recordTracks.clear();
 
     // For each Track
-    for (const trackcontainer::value_type &trackPair : m_tracks) {
+    for (const TrackMap::value_type &trackPair : m_tracks) {
         // Armed?  Add to m_recordTracks.
         if (trackPair.second->isArmed())
             m_recordTracks.insert(trackPair.first);
@@ -2125,7 +2125,7 @@ Composition::getClosestValidTrackId(TrackId id) const
     long diff = LONG_MAX;
     TrackId closestValidTrackId = 0;
 
-    for (trackcontainer::const_iterator i = getTracks().begin();
+    for (TrackMap::const_iterator i = getTracks().begin();
          i != getTracks().end(); ++i) {
 
         long cdiff = labs(i->second->getId() - id);
@@ -2146,7 +2146,7 @@ Composition::getMinTrackId() const
 {
     if (getTracks().size() == 0) return 0;
 
-    trackcontainer::const_iterator i = getTracks().begin();
+    TrackMap::const_iterator i = getTracks().begin();
     return i->first;
 }
 
@@ -2155,7 +2155,7 @@ Composition::getMaxTrackId() const
 {
     if (getTracks().size() == 0) return 0;
 
-    trackcontainer::const_iterator i = getTracks().end();
+    TrackMap::const_iterator i = getTracks().end();
     --i;
 
     return i->first;
@@ -2191,7 +2191,7 @@ Composition::isInstrumentRecording(InstrumentId instrumentID) const
     // ??? Performance: LINEAR SEARCH
     //     I see no easy fix.  Each Instrument would need to keep a list
     //     of the Tracks it is on.  Or something equally complicated.
-    for (Composition::trackcontainer::const_iterator ti =
+    for (Composition::TrackMap::const_iterator ti =
              m_tracks.begin();
          ti != m_tracks.end();
          ++ti) {
@@ -2221,7 +2221,7 @@ std::string Composition::toXmlString() const
     composition << "<composition recordtracks=\"";
     bool first = true;
     // For each Track...
-    for (const trackcontainer::value_type &trackPair : m_tracks) {
+    for (const TrackMap::value_type &trackPair : m_tracks) {
         // If the Track isn't really armed, try the next.
         if (!trackPair.second->isReallyArmed())
             continue;
@@ -2281,7 +2281,7 @@ std::string Composition::toXmlString() const
 
     composition << std::endl;
 
-    for (trackconstiterator tit = getTracks().begin();
+    for (TrackMap::const_iterator tit = getTracks().begin();
          tit != getTracks().end();
          ++tit)
         {
@@ -2360,7 +2360,7 @@ std::string Composition::toXmlString() const
 void
 Composition::clearTracks()
 {
-    trackiterator it = m_tracks.begin();
+    TrackMap::iterator it = m_tracks.begin();
 
     for (; it != m_tracks.end(); ++it)
         delete ((*it).second);
@@ -2371,7 +2371,7 @@ Composition::clearTracks()
 Track*
 Composition::getTrackByPosition(int position) const
 {
-    trackconstiterator it = m_tracks.begin();
+    TrackMap::const_iterator it = m_tracks.begin();
 
     for (; it != m_tracks.end(); ++it)
     {
@@ -2402,7 +2402,7 @@ Composition::getNewTrackId() const
 
     TrackId highWater = 0;
 
-    trackconstiterator it = m_tracks.begin();
+    TrackMap::const_iterator it = m_tracks.begin();
 
     for (; it != m_tracks.end(); ++it)
     {
@@ -2421,7 +2421,7 @@ Composition::hasTrack(InstrumentId instrumentId) const
 
 
     // For each track...
-    for (const Composition::trackcontainer::value_type &pair : m_tracks) {
+    for (const Composition::TrackMap::value_type &pair : m_tracks) {
         const Track *track = pair.second;
         // if this track is using the instrumentId, return true
         if (track->getInstrument() == instrumentId)
@@ -2466,7 +2466,7 @@ Composition::enforceArmRule(const Track *track)
         return;
 
     // For each track...
-    for (trackcontainer::value_type &trackPair: m_tracks) {
+    for (TrackMap::value_type &trackPair: m_tracks) {
         Track *otherTrack = trackPair.second;
         // Not armed?  Skip.
         // Use "isReallyArmed()" to make sure we check archived tracks as well.

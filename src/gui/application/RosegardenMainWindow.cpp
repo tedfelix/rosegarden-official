@@ -4154,7 +4154,7 @@ RosegardenMainWindow::fixTextEncodings(Composition *c)
     if (codec)
         c->setCopyrightNote(convertFromCodec(c->getCopyrightNote(), codec));
 
-    for (Composition::trackcontainer::iterator i =
+    for (Composition::TrackMap::iterator i =
                 c->getTracks().begin(); i != c->getTracks().end(); ++i) {
         if (!codec)
             codec = guessTextCodec(i->second->getLabel());
@@ -5984,9 +5984,9 @@ RosegardenMainWindow::muteAllTracks(bool mute)
         return;
 
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Composition::trackcontainer tracks = comp.getTracks();
+    Composition::TrackMap tracks = comp.getTracks();
 
-    for (Composition::trackiterator trackIt = tracks.begin();
+    for (Composition::TrackMap::iterator trackIt = tracks.begin();
             trackIt != tracks.end(); ++trackIt) {
         Track *track = trackIt->second;
 

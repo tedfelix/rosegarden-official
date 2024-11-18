@@ -701,7 +701,7 @@ void RosegardenDocument::sendChannelSetups(bool reset)
     std::set<InstrumentId> instrumentsSeen;
 
     // For each track in the composition, send the channel setup
-    for (Composition::trackcontainer::const_iterator i =
+    for (Composition::TrackMap::const_iterator i =
              m_composition.getTracks().begin();
          i != m_composition.getTracks().end();
          ++i) {

@@ -80,9 +80,7 @@ public:
 
     typedef std::vector<Segment *> SegmentVector;
 
-    typedef std::map<TrackId, Track *> trackcontainer;
-    typedef trackcontainer::iterator trackiterator;
-    typedef trackcontainer::const_iterator trackconstiterator;
+    typedef std::map<TrackId, Track *> TrackMap;
 
     typedef std::vector<Marker *> MarkerVector;
 
@@ -136,9 +134,9 @@ public:
 
     int getTrackPositionById(TrackId id) const; // -1 if not found
 
-    trackcontainer& getTracks() { return m_tracks; }
+    TrackMap& getTracks() { return m_tracks; }
 
-    const trackcontainer& getTracks() const { return m_tracks; }
+    const TrackMap& getTracks() const { return m_tracks; }
 
     // Reset id and position
     // unused
@@ -985,7 +983,7 @@ protected:
 
     //--------------- Data members ---------------------------------
     //
-    trackcontainer m_tracks;
+    TrackMap m_tracks;
     SegmentMultiSet m_segments;
 
     // The tracks we are armed for record on
