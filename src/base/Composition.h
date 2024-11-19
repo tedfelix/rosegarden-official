@@ -270,7 +270,7 @@ public:
      * NOTE: The Segment is deleted from the Composition and
      * destroyed
      */
-    void deleteSegment(iterator);
+    void deleteSegment(iterator segmentIter);
 
     /**
      * Delete the Segment if it is part of the Composition
@@ -394,7 +394,7 @@ public:
      * Return the TriggerSegmentId for the given Segment, or -1 if it is
      * not a trigger Segment.
      */
-    int getTriggerSegmentId(Segment *);
+    int getTriggerSegmentId(const Segment *) const;
 
     /**
      * Return the Segment for a given TriggerSegmentId
@@ -1097,7 +1097,12 @@ protected:
     void notifySegmentAdded(Segment *) const;
     void notifySegmentRemoved(Segment *) const;
     void notifySegmentRepeatChanged(Segment *, bool) const;
-    void notifySegmentRepeatEndChanged(Segment *, timeT) const;
+    /**
+     * ??? This is always called with segment->getRepeatEndTime() for the
+     *     repeatEndTime argument.  Get rid of the second argument and call
+     *     getRepeatEndTime() within this routine instead.
+     */
+    void notifySegmentRepeatEndChanged(Segment *segment, timeT repeatEndTime) const;
     void notifySegmentEventsTimingChanged(Segment *s, timeT delay, RealTime rtDelay) const;
     void notifySegmentTransposeChanged(Segment *s, int transpose) const;
     void notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId) const;

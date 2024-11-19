@@ -313,25 +313,30 @@ TriggerSegmentManager::slotAdd()
 void
 TriggerSegmentManager::slotDelete()
 {
-    RG_DEBUG << "TriggerSegmentManager::slotDelete";
+    RG_DEBUG << "slotDelete()";
 
-    TriggerManagerItem *item =
-        dynamic_cast<TriggerManagerItem*>( m_listView->currentItem() );
+    // ??? If a triggered segment is deleted, it still appears to play just
+    //     fine.  It is never deleted.  Very odd.  I wonder if at some point
+    //     it will cause a crash.  Across a save/load it does indeed stop
+    //     working.  The sequencer must have some sort of memory of it.
+
+    const TriggerManagerItem *item =
+            dynamic_cast<TriggerManagerItem *>(m_listView->currentItem());
 
     if (!item)
-        return ;
+        return;
 
     if (item->getUsage() > 0) {
-        if (QMessageBox::warning(this, tr("Rosegarden"), tr("This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
-                                        QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
-                               ) != QMessageBox::Yes )
-            return ;
+        if (QMessageBox::warning(
+                this,
+                tr("Rosegarden"),
+                tr("This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
+                QMessageBox::Yes | QMessageBox::Cancel,
+                QMessageBox::Cancel) != QMessageBox::Yes)
+            return;
     }
 
-    DeleteTriggerSegmentCommand *command =
-        new DeleteTriggerSegmentCommand(m_doc, item->getId());
-
-    addCommandToHistory(command);
+    addCommandToHistory(new DeleteTriggerSegmentCommand(m_doc, item->getId()));
 }
 
 void

@@ -1507,21 +1507,26 @@ void SequenceManager::segmentAdded(const Composition*, Segment* s)
     m_addedSegments.push_back(s);
 }
 
-void SequenceManager::segmentRemoved(const Composition*, Segment* s)
+void SequenceManager::segmentRemoved(const Composition *comp, Segment *segment)
 {
-    RG_DEBUG << "segmentRemoved(" << s << ")";
+    RG_DEBUG << "segmentRemoved(" << segment << ")";
+
+    // Triggered Segment?
+    if (comp->getTriggerSegmentId(segment) != -1) {
+        m_triggerSegments.erase(segment);
+        return;
+    }
 
     // !!! WARNING !!!
-    // The segment pointer "s" is about to be deleted by
+    // The segment pointer "segment" is about to be deleted by
     // Composition::deleteSegment(Composition::iterator).  After this routine
     // ends, this pointer cannot be dereferenced.
-    m_removedSegments.push_back(s);
+    m_removedSegments.push_back(segment);
 
-    std::vector<Segment*>::iterator i =
-        find(m_addedSegments.begin(), m_addedSegments.end(), s);
-    if (i != m_addedSegments.end()) {
-        m_addedSegments.erase(i);
-    }
+    std::vector<Segment *>::const_iterator segmentIter =
+            find(m_addedSegments.begin(), m_addedSegments.end(), segment);
+    if (segmentIter != m_addedSegments.end())
+        m_addedSegments.erase(segmentIter);
 }
 
 void SequenceManager::segmentRepeatChanged(const Composition*, Segment* s, bool repeat)

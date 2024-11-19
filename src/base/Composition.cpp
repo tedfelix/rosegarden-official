@@ -307,21 +307,26 @@ Composition::weakAddSegment(Segment *segment)
 }
 
 void
-Composition::deleteSegment(Composition::iterator i)
+Composition::deleteSegment(Composition::iterator segmentIter)
 {
-    if (i == end()) return;
+    if (segmentIter == end())
+        return;
+
     clearVoiceCaches();
 
-    Segment *p = (*i);
-    p->setComposition(nullptr);
+    Segment *segment = (*segmentIter);
 
-    m_segments.erase(i);
+    segment->setComposition(nullptr);
+
+    m_segments.erase(segmentIter);
+
     distributeVerses();
-    notifySegmentRemoved(p);
+
+    notifySegmentRemoved(segment);
 
     // ??? If this delete occurs during playback, we may get a crash later in
     //     MappedBufMetaIterator::fetchEvents().
-    delete p;
+    delete segment;
 
     updateRefreshStatuses();
 }
@@ -569,12 +574,25 @@ Composition::deleteTriggerSegment(TriggerSegmentId id)
 void
 Composition::detachTriggerSegment(TriggerSegmentId id)
 {
-    TriggerSegmentRec dummyRec(id, nullptr);
-    TriggerSegmentSet::iterator i = m_triggerSegments.find(&dummyRec);
-    if (i == m_triggerSegments.end()) return;
-    (*i)->getSegment()->setComposition(nullptr);
-    delete *i;
-    m_triggerSegments.erase(i);
+    TriggerSegmentRec triggerSegmentFind(id, nullptr);
+    TriggerSegmentSet::const_iterator triggerSegmentIter =
+            m_triggerSegments.find(&triggerSegmentFind);
+    // Not found?  Bail.
+    if (triggerSegmentIter == m_triggerSegments.end())
+        return;
+
+    TriggerSegmentRec * const triggerSegment = *triggerSegmentIter;
+    Segment * const segment = triggerSegment->getSegment();
+
+    // We must call this before erase() to make sure it can tell
+    // we are deleting a trigger Segment.  If this order becomes
+    // problematic, we might need to pass a triggeredSegment flag.
+    notifySegmentRemoved(segment);
+
+    segment->setComposition(nullptr);
+
+    m_triggerSegments.erase(triggerSegmentIter);
+    delete triggerSegment;
 }
 
 void
@@ -589,7 +607,7 @@ Composition::clearTriggerSegments()
 }
 
 int
-Composition::getTriggerSegmentId(Segment *s)
+Composition::getTriggerSegmentId(const Segment *s) const
 {
     for (TriggerSegmentSet::iterator i = m_triggerSegments.begin();
          i != m_triggerSegments.end(); ++i) {
@@ -2511,24 +2529,36 @@ Composition::notifySegmentAdded(Segment *s) const
 
 
 void
-Composition::notifySegmentRemoved(Segment *s) const
+Composition::notifySegmentRemoved(Segment *segment) const
 {
-    // If there is an earlier repeating segment on the same track, we
-    // need to notify the change of its repeat end time
+    // If not a trigger segment...
+    if (getTriggerSegmentId(segment) == -1) {
 
-    for (const_iterator i = begin(); i != end(); ++i) {
+        // If there is an earlier repeating segment on the same track, we
+        // need to let observers know that the repeat end time has changed.
 
-        if (((*i)->getTrack() == s->getTrack())
-            && ((*i)->isRepeating())
-            && ((*i)->getStartTime() < s->getStartTime())) {
-
-            notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
+        // For each Segment...
+        for (const_iterator segmentIter = begin();
+             segmentIter != end();
+             ++segmentIter) {
+            Segment *currentSegment = *segmentIter;
+            // If this Segment is on the same track and it repeats and
+            // it is before the Segment being removed...
+            if (currentSegment->getTrack() == segment->getTrack()  &&
+                currentSegment->isRepeating()  &&
+                currentSegment->getStartTime() < segment->getStartTime()) {
+                notifySegmentRepeatEndChanged(
+                        currentSegment,
+                        currentSegment->getRepeatEndTime());
+            }
         }
+
     }
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-         i != m_observers.end(); ++i) {
-        (*i)->segmentRemoved(this, s);
+         i != m_observers.end();
+         ++i) {
+        (*i)->segmentRemoved(this, segment);
     }
 }
 
