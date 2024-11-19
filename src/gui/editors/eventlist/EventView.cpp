@@ -267,6 +267,8 @@ EventView::EventView(RosegardenDocument *doc,
     // Double-click to edit.
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
             this, &EventView::slotItemDoubleClicked);
+    connect(m_treeWidget, &QTreeWidget::itemSelectionChanged,
+            this, &EventView::slotItemSelectionChanged);
 
     m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_treeWidget,
@@ -425,8 +427,6 @@ EventView::updateTreeWidget()
         if (item->isSelected())
             selection.insert(item->data(0, Qt::UserRole).toString());
     }
-
-    bool haveSelection{false};
 
     // Store "current" item.
 
@@ -694,18 +694,9 @@ EventView::updateTreeWidget()
             m_treeWidget->setCurrentItem(item, 0, QItemSelectionModel::NoUpdate);
 
         // Restore selection.
-        if (selection.find(key) != selection.end()) {
+        if (selection.find(key) != selection.end())
             item->setSelected(true);
-            haveSelection = true;
-        }
     }
-
-    // ??? What does have_selection even do?  Paste is always enabled on
-    //     the menu.
-    if (haveSelection)
-        enterActionState("have_selection");
-    else
-        leaveActionState("have_selection");
 
     return true;
 }
@@ -872,12 +863,6 @@ EventView::slotEditTriggerVelocity()
                     dlg->getVelocity()));  // newVelocity
 
     m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
-
-    // ??? This causes the Event List editor to go away.  I assume it is
-    //     because the Segment object can't be edited and was replaced with a
-    //     new one?  That then triggers the documentModified() which sees
-    //     the old Segment is no longer in the composition and we close
-    //     the Event List editor.  Ridiculous.
 }
 
 #if 0
@@ -997,18 +982,6 @@ EventView::slotEditPaste()
     //     in the clipboard.  We should probably handle that better.
     //     I assume PasteEventsCommand only handles the "partial
     //     segment" clipboard mode?
-
-    // ??? We should check this and enable/disable paste appropriately.
-    //     Then this check is no longer needed.  Maybe tie it in
-    //     with the have_selection action state?  I guess the real
-    //     issue is monitoring the clipboard so that we can reflect
-    //     its state whenever it changes.  It doesn't allow that.
-    //     So we would need to update the menu when the menu is launched.
-    //     Does Qt support something like that?
-    if (Clipboard::mainClipboard()->isEmpty()) {
-        showStatusBarMessage(tr("Clipboard is empty"));
-        return;
-    }
 
     TmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
 
@@ -1243,6 +1216,8 @@ EventView::setupActions()
     raw->setCheckable(true);
 
     createMenusAndToolbars("eventlist.rc");
+
+    slotUpdateClipboardActionState();
 
     const Composition::TimeMode timeMode =
             Composition::TimeMode(a_timeModeSetting.get());
@@ -1667,6 +1642,17 @@ EventView::slotDocumentModified(bool modified)
     updateWindowTitle(modified);
 
     updateTreeWidget();
+}
+
+void
+EventView::slotItemSelectionChanged()
+{
+    bool haveSelection = !m_treeWidget->selectedItems().empty();
+
+    if (haveSelection)
+        enterActionState("have_selection");
+    else
+        leaveActionState("have_selection");
 }
 
 

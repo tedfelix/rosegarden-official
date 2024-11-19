@@ -108,6 +108,7 @@ private slots:
 
     /// Handle double-click on an event in the event list.
     void slotItemDoubleClicked(QTreeWidgetItem *item, int column);
+    void slotItemSelectionChanged();
 
     /// Right-click context menu.
     void slotContextMenu(const QPoint &);
