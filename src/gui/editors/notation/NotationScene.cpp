@@ -1314,71 +1314,69 @@ NotationScene::segmentRemoved(const Composition *comp, Segment *segment)
     if (comp != &m_document->getComposition())
         return;
 
+    // Determine whether we care about this Segment being deleted.
+
     std::vector<NotationStaff *>::iterator staffToDelete = m_staffs.end();
 
     // For each NotationStaff in the NotationScene...
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
          i != m_staffs.end();
          ++i) {
-
-        // Not the Segment we are looking for?  Try the next.
-        // ??? We should more aggressively check to see if we care about the
-        //     segment in question and bail from this routine if not.  Then
-        //     the rest of this is straight code with no indentation.
-        if (segment != &(*i)->getSegment())
-            continue;
-
-        // At this point we have found the NotationStaff/Segment that is
-        // being deleted.
-
-        staffToDelete = i;
-
-        // Remember segment to be deleted
-        m_segmentsDeleted.push_back(segment);
-
-        // The segmentDeleted() signal is about to be emitted.  Therefore
-        // the whole scene is going to be deleted then restored (from
-        // NotationView) and to continue processing at best is useless and
-        // at the worst may cause a crash when the segment is deleted.
-        disconnect(CommandHistory::getInstance(),
-                       &CommandHistory::commandExecuted,
-                   this, &NotationScene::slotCommandExecuted);
-        // Useful ???
-        suspendLayoutUpdates();
-
-        // All will be deleted?  Indicate empty.
-        if (m_segmentsDeleted.size() == m_externalSegments.size())
-            m_sceneIsEmpty = true;
-
-        // Signal must be emitted only once. Nevertheless, all removed
-        // segments have to be remembered.
-        if (!m_finished)
-            emit sceneNeedsRebuilding();
-
-        m_finished = true; // Stop further processing from this scene
-
-        break;
+        // Found it?
+        if (segment == &(*i)->getSegment()) {
+            staffToDelete = i;
+            break;
+        }
     }
+
+    // Not found?  Not a Segment we care about.  Bail.
+    if (staffToDelete == m_staffs.end())
+        return;
+
+    // This is one of our Segments being deleted.
+
+    // Remember segment to be deleted.
+    m_segmentsDeleted.push_back(segment);
+
+    // The segmentDeleted() signal is about to be emitted.  Therefore
+    // the whole scene is going to be deleted then restored (from
+    // NotationView) and to continue processing at best is useless and
+    // at the worst may cause a crash when the segment is deleted.
+    disconnect(CommandHistory::getInstance(),
+                   &CommandHistory::commandExecuted,
+               this, &NotationScene::slotCommandExecuted);
+    // Useful ???
+    suspendLayoutUpdates();
+
+    // All will be deleted?  Indicate empty.
+    if (m_segmentsDeleted.size() == m_externalSegments.size())
+        m_sceneIsEmpty = true;
+
+    // Signal must be emitted only once. Nevertheless, all removed
+    // segments have to be remembered.
+    if (!m_finished)
+        emit sceneNeedsRebuilding();
+
+    // Stop further processing from this scene
+    m_finished = true;
 
     // The sceneNeedsRebuilding signal will cause the scene to be
     // rebuilt.  However this uses a queued connection so the pointer
     // update after undo is done before this so we must remove the
     // deleted staff here.
-    if (staffToDelete != m_staffs.end()) {
-        NotationStaff *staff = *staffToDelete;
 
-        // If this happens to be the staff where the preview note is...
-        if (m_previewNoteStaff == staff)
-            clearPreviewNote();
+    NotationStaff *staff = *staffToDelete;
 
-        delete staff;
-        m_staffs.erase(staffToDelete);
-    }
+    // If this happens to be the staff where the preview note is...
+    if (m_previewNoteStaff == staff)
+        clearPreviewNote();
+
+    delete staff;
+
+    m_staffs.erase(staffToDelete);
 
     // Redo the layouts so that there aren't any stray pointers
     // to the removed staff.
-    // ??? We do this even if the removed segment is not one of ours.
-    //     Move this into the above "if".
     layout(nullptr, 0, 0);
 }
 
