@@ -3977,7 +3977,7 @@ NotationView::slotRegenerateScene()
                m_notationWidget->getScene(), &NotationScene::slotCommandExecuted);
 
     // Look for segments to be removed from vector
-    std::vector<Segment *> * segmentDeleted =
+    const std::vector<Segment *> *segmentDeleted =
         m_notationWidget->getScene()->getSegmentsDeleted();
 
     // If there is no such segment regenerate the notation widget directly
@@ -3994,8 +3994,10 @@ NotationView::slotRegenerateScene()
         }
 
         // then remove the deleted segments
-        for (std::vector<Segment *>::iterator isd = segmentDeleted->begin();
-            isd != segmentDeleted->end(); ++isd) {
+        for (std::vector<Segment *>::const_iterator isd =
+                     segmentDeleted->begin();
+             isd != segmentDeleted->end();
+             ++isd) {
             for (std::vector<Segment *>::iterator i = m_segments.begin();
                 i != m_segments.end(); ++i) {
                 if (*isd == *i) {

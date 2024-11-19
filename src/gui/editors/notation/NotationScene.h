@@ -200,8 +200,9 @@ public:
     bool isEventRedundant(Clef &clef, timeT time, Segment &seg) const;
     bool isEventRedundant(Key &key, timeT time, Segment &seg) const;
 
-    /// Return the segments about to be deleted if any
-    std::vector<Segment *> * getSegmentsDeleted() { return &m_segmentsDeleted; }
+    /// Return the segments about to be deleted if any.
+    const std::vector<Segment *> *getSegmentsDeleted()
+            { return &m_segmentsDeleted; }
 
     /// Return true if all segments in scene are about to be deleted
     /// (Editor needs to be closed)
