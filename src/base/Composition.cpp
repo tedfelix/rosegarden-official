@@ -2946,6 +2946,45 @@ Composition::makeTimeString(timeT midiTicks, TimeMode timeMode) const
     }
 }
 
+QString
+Composition::makeDurationString(
+        timeT time, timeT duration, TimeMode timeMode) const
+{
+    switch (Composition::TimeMode(timeMode)) {
+
+    case Composition::TimeMode::MusicalTime:
+        {
+            int bar;
+            int beat;
+            int fraction;
+            int remainder;
+
+            getMusicalTimeForDuration(time, duration, bar, beat, fraction, remainder);
+
+            return QString("%1%2%3-%4%5-%6%7-%8%9   ")
+                   .arg(bar / 100)
+                   .arg((bar % 100) / 10)
+                   .arg(bar % 10)
+                   .arg(beat / 10)
+                   .arg(beat % 10)
+                   .arg(fraction / 10)
+                   .arg(fraction % 10)
+                   .arg(remainder / 10)
+                   .arg(remainder % 10);
+        }
+
+    case Composition::TimeMode::RealTime:
+        {
+            RealTime rt = getRealTimeDifference(time, time + duration);
+            return QString("%1  ").arg(rt.toText().c_str());
+        }
+
+    case Composition::TimeMode::RawTime:
+    default:
+        return QString("%1  ").arg(duration);
+    }
+}
+
 QVariant
 Composition::makeTimeVariant(timeT midiTicks, TimeMode timeMode) const
 {

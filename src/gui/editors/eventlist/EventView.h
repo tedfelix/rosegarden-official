@@ -173,8 +173,6 @@ private:
     //     TempoAndTimeSignatureEditor for a complete example of using
     //     QTableWidget.
     QTreeWidget *m_treeWidget;
-    QString makeDurationString(timeT time,
-                               timeT duration, int timeMode);
     bool updateTreeWidget();
 
     /// Pop-up menu for the event list.

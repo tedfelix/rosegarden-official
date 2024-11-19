@@ -96,8 +96,6 @@ protected:
     void closeEvent(QCloseEvent *) override;
 
     void setupActions();
-    QString makeDurationString(timeT startTime,
-                               timeT duration, int timeMode);
 
     //--------------- Data members ---------------------------------
     RosegardenDocument        *m_doc;

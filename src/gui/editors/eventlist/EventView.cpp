@@ -448,9 +448,10 @@ EventView::updateTreeWidget()
 
     m_treeWidget->clear();
 
-    const int timeMode = a_timeModeSetting.get();
-
     SegmentPerformanceHelper helper(*m_segments[0]);
+
+    const Composition::TimeMode timeMode =
+            static_cast<Composition::TimeMode>(a_timeModeSetting.get());
 
     // For each Event in the Segment...
     for (Segment::iterator eventIter = m_segments[0]->begin();
@@ -517,12 +518,11 @@ EventView::updateTreeWidget()
 
         // Time
 
+        Composition &comp = RosegardenDocument::currentDocument->getComposition();
+
         const timeT eventTime = helper.getSoundingAbsoluteTime(eventIter);
 
-        const QString timeStr = RosegardenDocument::currentDocument->
-                getComposition().makeTimeString(
-                        eventTime,
-                        static_cast<Composition::TimeMode>(timeMode));
+        const QString timeStr = comp.makeTimeString(eventTime, timeMode);
 
         // Duration
 
@@ -532,12 +532,15 @@ EventView::updateTreeWidget()
         if (event->getDuration() > 0  ||
             event->isa(Note::EventType)  ||
             event->isa(Note::EventRestType)) {
-            durationStr = makeDurationString(
-                    eventTime, event->getDuration(), timeMode);
+            durationStr = comp.makeDurationString(
+                    eventTime,
+                    event->getDuration(),
+                    timeMode);
             // For the key.
-            musicalDuration = makeDurationString(
-                    eventTime, event->getDuration(),
-                    static_cast<int>(Composition::TimeMode::MusicalTime));
+            musicalDuration = comp.makeDurationString(
+                    eventTime,
+                    event->getDuration(),
+                    Composition::TimeMode::MusicalTime);
         }
 
         // Pitch
@@ -680,8 +683,7 @@ EventView::updateTreeWidget()
         //     string comparison.  It will also avoid needing to keep
         //     musicalTime and musicalDuration.
         // Always use musical time in case the time mode changes.
-        const QString musicalTime = RosegardenDocument::currentDocument->
-                        getComposition().makeTimeString(
+        const QString musicalTime = comp.makeTimeString(
                                 eventTime,
                                 Composition::TimeMode::MusicalTime);
         const QString key = musicalTime + musicalDuration +
@@ -746,47 +748,6 @@ EventView::makeInitialSelection(timeT time)
 
     // Make sure the item is visible.
     m_treeWidget->scrollToItem(foundItem, QAbstractItemView::PositionAtCenter);
-}
-
-QString
-EventView::makeDurationString(timeT time,
-                              timeT duration, int timeMode)
-{
-    // ??? Same as TriggerSegmentManager::makeDurationString().  Move to
-    //     Composition like makeTimeString().
-
-    switch (Composition::TimeMode(timeMode)) {
-
-    case Composition::TimeMode::MusicalTime:
-        {
-            int bar, beat, fraction, remainder;
-            RosegardenDocument::currentDocument->getComposition().getMusicalTimeForDuration
-            (time, duration, bar, beat, fraction, remainder);
-            return QString("%1%2%3-%4%5-%6%7-%8%9   ")
-                   .arg(bar / 100)
-                   .arg((bar % 100) / 10)
-                   .arg(bar % 10)
-                   .arg(beat / 10)
-                   .arg(beat % 10)
-                   .arg(fraction / 10)
-                   .arg(fraction % 10)
-                   .arg(remainder / 10)
-                   .arg(remainder % 10);
-        }
-
-    case Composition::TimeMode::RealTime:
-        {
-            RealTime rt =
-                RosegardenDocument::currentDocument->getComposition().getRealTimeDifference
-                (time, time + duration);
-            //    return QString("%1  ").arg(rt.toString().c_str());
-            return QString("%1  ").arg(rt.toText().c_str());
-        }
-
-    case Composition::TimeMode::RawTime:
-    default:
-        return QString("%1  ").arg(duration);
-    }
 }
 
 void

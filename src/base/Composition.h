@@ -749,6 +749,8 @@ public:
     };
     /// Convert a time in MIDI Ticks (timeT) to various human-readable formats.
     QString makeTimeString(timeT midiTicks, TimeMode timeMode) const;
+    /// Convert a duration to various human-readable formats.
+    QString makeDurationString(timeT time, timeT duration, TimeMode timeMode) const;
     /// Convert MIDI ticks to a QVariant suitable for a table key column.
     QVariant makeTimeVariant(timeT midiTicks, TimeMode timeMode) const;
 

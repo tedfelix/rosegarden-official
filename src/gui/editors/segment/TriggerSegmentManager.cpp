@@ -181,17 +181,16 @@ TriggerSegmentManager::slotUpdate()
     const Composition::TriggerSegmentSet &triggers =
         comp.getTriggerSegments();
 
-    Composition::TriggerSegmentSet::const_iterator it;
-
     QSettings settings;
-
-    settings.beginGroup( TriggerManagerConfigGroup );
-
-    int timeMode = settings.value("timemode", 0).toInt() ;
+    settings.beginGroup(TriggerManagerConfigGroup);
+    const Composition::TimeMode timeMode =
+            static_cast<Composition::TimeMode>(settings.value("timemode", 0).toInt());
 
     int i = 0;
 
-    for (it = triggers.begin(); it != triggers.end(); ++it) {
+    for (Composition::TriggerSegmentSet::const_iterator it = triggers.begin();
+         it != triggers.end();
+         ++it) {
 
         // duration is as of first usage, or 0
 
@@ -218,8 +217,7 @@ TriggerSegmentManager::slotUpdate()
             (*it)->getSegment()->getEndMarkerTime() -
             (*it)->getSegment()->getStartTime();
 
-        QString timeString = makeDurationString
-                             (first, duration, timeMode);
+        QString timeString = comp.makeDurationString(first, duration, timeMode);
 
         QString label = strtoqstr((*it)->getSegment()->getLabel());
         if (label == "")
@@ -474,46 +472,6 @@ void
 TriggerSegmentManager::slotItemClicked(QTreeWidgetItem */* item */)
 {
     RG_DEBUG << "TriggerSegmentManager::slotItemClicked";
-}
-
-QString
-TriggerSegmentManager::makeDurationString(timeT startTime,
-        timeT duration, int timeMode)
-{
-    // ??? Same as EventView::makeDurationString().  Move to Composition
-    //     like makeTimeString().
-
-    switch (timeMode) {
-
-    case 0:  // musical time
-        {
-            int bar, beat, fraction, remainder;
-            m_doc->getComposition().getMusicalTimeForDuration
-                (startTime, duration, bar, beat, fraction, remainder);
-            return QString("%1%2%3-%4%5-%6%7-%8%9   ")
-                   .arg(bar / 100)
-                   .arg((bar % 100) / 10)
-                   .arg(bar % 10)
-                   .arg(beat / 10)
-                   .arg(beat % 10)
-                   .arg(fraction / 10)
-                   .arg(fraction % 10)
-                   .arg(remainder / 10)
-                   .arg(remainder % 10);
-        }
-
-    case 1:  // real time
-        {
-            RealTime rt =
-                m_doc->getComposition().getRealTimeDifference
-                (startTime, startTime + duration);
-            //    return QString("%1  ").arg(rt.toString().c_str());
-            return QString("%1  ").arg(rt.toText().c_str());
-        }
-
-    default:
-        return QString("%1  ").arg(duration);
-    }
 }
 
 void
