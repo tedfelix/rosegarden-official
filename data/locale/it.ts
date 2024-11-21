@@ -5405,7 +5405,7 @@
         <location line="+171"/>
         <location line="+18"/>
         <source>&amp;View</source>
-        <translation>&amp;Vedi</translation>
+        <translation>&amp;Visualizza</translation>
     </message>
     <message>
         <location line="-1120"/>
@@ -8313,7 +8313,8 @@
     <message>
         <location line="+54"/>
         <source>Remove &amp;Triggers</source>
-        <translation>Rimuovi &amp;attivatori</translation>
+        <translatorcomment>lasciare trigger in inglese ha più senso - termine noto</translatorcomment>
+        <translation>Rimuovi &amp;trigger</translation>
     </message>
     <message>
         <location line="-53"/>
@@ -9065,7 +9066,7 @@
     <message>
         <location line="+2"/>
         <source>Manage Tri&amp;ggered Segments</source>
-        <translation>Gestisci Se&amp;gmenti attivati</translation>
+        <translation>Gestisci Se&amp;gmenti con trigger</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9344,7 +9345,7 @@
     <message>
         <location line="+18"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
-        <translation>Incoll&amp;a come nuovo segmento attivo</translation>
+        <translation>Incoll&amp;a come nuovo segmento con trigger</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+58"/>
@@ -10788,7 +10789,7 @@ Vuoi usare
     <message>
         <location filename="../../src/commands/segment/AddTriggerSegmentCommand.cpp" line="+34"/>
         <source>Add Triggered Segment</source>
-        <translation>Aggiungi segmento attivo</translation>
+        <translation>Aggiungi segmento con trigger</translation>
     </message>
 </context>
 <context>
@@ -16851,7 +16852,7 @@ Vuoi usare
     <message>
         <location line="+4"/>
         <source>&lt;p&gt;You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you&apos;ve selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Hai scelto di esportare le parentesi di raggruppamento dei pentagrammi, ma LilyPond non ha potuto processare il file. Purtroppo questa funzionalità è utile ma anche molto fargile. Controlla che tutte le parentesi selezionate abbiano senso logico, con particolare attenzione all&apos;annidamento. Inoltre controlla anche che se stai lavorando su un sottoinsieme di tracce che le parentesi abbiano senso per quel sottoinsieme estrapolate dal contesto. In caso di dubbio prova ad avviare l&apos;export delle parentsi per il raggruppamento e vedere se LilyPond riesce a rendere il risultato con successo.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -17718,12 +17719,12 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="+52"/>
         <source>&amp;Unmask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>Rim&amp;uovi Maschera abbellimento</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Mask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Maschera abbellimanto</translation>
     </message>
 </context>
 <context>
@@ -18097,7 +18098,7 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
     <message>
         <location line="+10"/>
         <source>Remove Triggers</source>
-        <translation>Rimuovi attivatori</translation>
+        <translation>Rimuovi trigger</translation>
     </message>
     <message>
         <location line="-876"/>
@@ -19594,12 +19595,12 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+79"/>
         <source>Edit Generated region mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica marcatore di regione generato</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Updated tags for aborted edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna i tag per la modifica abortita</translation>
     </message>
     <message>
         <location line="+324"/>
@@ -24467,77 +24468,77 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+7"/>
         <source>Time Signature</source>
-        <translation type="unfinished">Misura del tempo</translation>
+        <translation>Misura del tempo</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Time  </source>
-        <translation type="unfinished">Velocità  </translation>
+        <translation>Velocità  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Type  </source>
-        <translation type="unfinished">Tipo  </translation>
+        <translation>Tipo  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Value  </source>
-        <translation type="unfinished">Valore  </translation>
+        <translation>Valore  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Properties  </source>
-        <translation type="unfinished">Proprietà </translation>
+        <translation>Proprietà </translation>
     </message>
     <message>
         <location line="+162"/>
         <source>Common, hidden</source>
-        <translation type="unfinished">Comune, nascosto</translation>
+        <translation>Comune, nascosto</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Hidden</source>
-        <translation type="unfinished">Nascosto</translation>
+        <translation>Nascosto</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Common</source>
-        <translation type="unfinished">Comune</translation>
+        <translation>Comune</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Time Signature   </source>
-        <translation type="unfinished">Misura del tempo   </translation>
+        <translation>Misura del tempo   </translation>
     </message>
     <message>
         <location line="+50"/>
         <source>%1.%2%3</source>
-        <translation type="unfinished">%1.%2%3</translation>
+        <translation>%1.%2%3</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>%1.%2%3 qpm (%4.%5%6 bpm)   </source>
-        <translation type="unfinished">%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
+        <translation>%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Tempo   </source>
-        <translation type="unfinished">Ritmo</translation>
+        <translation>Ritmo</translation>
     </message>
     <message>
         <location line="+175"/>
         <source>Delete Tempo or Time Signature</source>
-        <translation type="unfinished">Cancella Tempo o Misura</translation>
+        <translation>Cancella Tempo o Misura</translation>
     </message>
     <message>
         <location line="+303"/>
         <source>%1 - Tempo and Time Signature Editor</source>
-        <translation type="unfinished">%1 - Editor di Tempo e Misura</translation>
+        <translation>%1 - Editor di Tempo e Misura</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoView-en</source>
-        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:tempoView-en</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -25372,7 +25373,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+16"/>
         <source>Solo track</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo traccia</translation>
     </message>
 </context>
 <context>
@@ -25385,7 +25386,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+148"/>
         <source>Delete Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina Segmenti</translation>
     </message>
     <message numerus="yes">
         <location line="+23"/>
@@ -25434,17 +25435,17 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Il nome della traccia è anche il nome del pentagramma, es. &amp;quot;Tromba.&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Il nome breve è un nome alternativo che appare ogni volta che il pentagramma va a capo, es. &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-2"/>
         <source>Enter short name</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci il nome breve</translation>
     </message>
 </context>
 <context>
@@ -25488,8 +25489,8 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+8"/>
         <source>Archive</source>
-        <translatorcomment>in inglese è sostantivo o verbo??</translatorcomment>
-        <translation type="unfinished">Archivio</translation>
+        <translatorcomment>in inglese è sostantivo o verbo?? verbo (è una check-box)</translatorcomment>
+        <translation>Archivia</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -25514,27 +25515,28 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+16"/>
         <source>Thru Routing</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Thru è terminologia MIDI - lasciamo in inglese</translatorcomment>
+        <translation>Instradamento Thru</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Auto</source>
-        <translation type="unfinished">Auto</translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>On</source>
-        <translation type="unfinished"></translation>
+        <translation>Acceso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Off</source>
-        <translation type="unfinished">Spento</translation>
+        <translation>Spento</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>When Armed</source>
-        <translation type="unfinished"></translation>
+        <translation>Quando armata</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -25645,103 +25647,103 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
         <location line="+2"/>
         <source>treble</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">alto</translation>
+        <translation>violino</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>bass</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">basso</translation>
+        <translation>basso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>crotales</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">cimbali</translation>
+        <translation>cimbali</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>xylophone</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">xilofono</translation>
+        <translation>xilofono</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>guitar</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">chitarra</translation>
+        <translation>chitarra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>contrabass</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">contrabbasso</translation>
+        <translation>contrabbasso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>celesta</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">celesta</translation>
+        <translation>celesta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>old celesta</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">celesta antica</translation>
+        <translation>celesta antica</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>french</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">francese</translation>
+        <translation>francese</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>soprano</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">soprano</translation>
+        <translation>soprano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>mezzosoprano</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">mezzosoprano</translation>
+        <translation>mezzosoprano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>alto</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">alto</translation>
+        <translation>alto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>tenor</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">tenore</translation>
+        <translation>tenore</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>baritone</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">baritono</translation>
+        <translation>baritono</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>varbaritone</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">varbaritone</translation>
+        <translation>varbaritone</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>subbass</source>
         <comment>Clef name</comment>
-        <translation type="unfinished">sottobasso</translation>
+        <translation>sottobasso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>twobar</source>
         <comment>Clef name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+32"/>
@@ -25906,7 +25908,7 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="-824"/>
         <source>Reset to Defaults</source>
-        <translation type="unfinished">Reimposta ai default</translation>
+        <translation>Reimposta ai default</translation>
     </message>
     <message>
         <source>Default</source>
@@ -25997,13 +25999,15 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
         <location line="-93"/>
         <location line="+97"/>
         <source>RPN</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>acronimo lasciare in inglese</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+97"/>
         <source>NRPN</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>acronimo lasciare in inglese</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location line="-52"/>
@@ -26123,7 +26127,8 @@ Fermare altre applicazioni attive può migliorare le prestazioni di Rosegarden.<
     <message>
         <location line="+1"/>
         <source>Triggers</source>
-        <translation>Attivatori</translation>
+        <translatorcomment>Meglio lasciare in ingles, termine noto</translatorcomment>
+        <translation>Trigger</translation>
     </message>
     <message>
         <location line="+14"/>
