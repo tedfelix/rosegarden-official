@@ -4949,15 +4949,15 @@
         <translation>Plugin Sintetizzatore</translation>
     </message>
     <message>
-        <location filename="../../src/base/Studio.cpp" line="+69"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
+        <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
         <translation>Plugin Sintetizzatore</translation>
     </message>
     <message>
-        <location line="-4"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
+        <location filename="../../src/base/Studio.cpp" line="-4"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
@@ -9685,8 +9685,8 @@
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="+462"/>
-        <location filename="../../src/sound/WAVExporter.cpp" line="+51"/>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
+        <location filename="../../src/sound/WAVExporter.cpp" line="+51"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
