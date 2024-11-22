@@ -4960,40 +4960,40 @@
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+299"/>
         <source>Synth plugin </source>
-        <translation type="unfinished">Greffon de synthétiseur</translation>
+        <translation>Greffon de synthétiseur</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
-        <translation type="unfinished">Greffon de synthétiseur</translation>
+        <translation>Greffon de synthétiseur</translation>
     </message>
     <message>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
         <location filename="../../src/base/Studio.cpp" line="-4"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/base/MidiDevice.cpp" line="+1116"/>
         <source>&lt;new bank&gt;</source>
-        <translation type="unfinished">&lt;nouvelle banque&gt;</translation>
+        <translation>&lt;nouvelle banque&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished">&lt;Nouvelle banque %1&gt;</translation>
+        <translation>&lt;Nouvelle banque %1&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished">&lt;nouvelle projection&gt;</translation>
+        <translation>&lt;nouvelle projection&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;new mapping %1&gt;</source>
-        <translation type="unfinished">&lt;nouvelle projection %1&gt;</translation>
+        <translation>&lt;nouvelle projection %1&gt;</translation>
     </message>
 </context>
 <context>
@@ -14773,7 +14773,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+22"/>
         <source>LV2 Plugin Support (beta)</source>
-        <translation type="unfinished"></translation>
+        <translation>Support des greffons LV2 (beta)</translation>
     </message>
     <message>
         <location line="+180"/>
@@ -15827,12 +15827,12 @@ Texte d&apos;exemple depuis le fichier:</translation>
     <message>
         <location line="+10"/>
         <source>Name:</source>
-        <translation type="unfinished">Nom :</translation>
+        <translation>Nom :</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Email:</source>
-        <translation type="unfinished"></translation>
+        <translation>Courriel :</translation>
     </message>
 </context>
 <context>
