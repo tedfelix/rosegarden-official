@@ -2185,7 +2185,7 @@
     <message>
         <location line="+26"/>
         <source>MIDI Playback</source>
-        <translation>MIDI Wiedergabe</translation>
+        <translation>MIDI-Wiedergabe</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -2210,7 +2210,7 @@
     <message>
         <location line="+44"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Mit der Definition einer Bank kann man Rosegarden mitteilen, welche Programme und Patches bei der angeschlossenen Ausrüstung (Hardware oder Software Synthesizer) verfügbar sind. &lt;/p&gt;&lt;p&gt;Da Rosegarden alle Bänke und Programme, die undefiniert sind, nicht anzeigt, muss für jedes Programm oder jede Bank etwas definiert sein, falls Daten übertragen werden sollen.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Mit der Definition einer Bank kann man Rosegarden mitteilen, welche Programme und Patches bei der angeschlossenen Ausrüstung (Hardware- oder Software-Synthesizer) verfügbar sind. &lt;/p&gt;&lt;p&gt;Da Rosegarden alle Bänke und Programme, die undefiniert sind, nicht anzeigt, muss für jedes Programm oder jede Bank etwas definiert sein, falls Daten übertragen werden sollen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2253,7 +2253,7 @@ müssen sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="+19"/>
         <source>MIDI outputs</source>
-        <translation>MIDI Ausgabe</translation>
+        <translation>MIDI-Ausgabe</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -2269,23 +2269,23 @@ müssen sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="-291"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Vorhandene MIDI Ausgabegeräte (Hardware oder Software)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Vorhandene MIDI-Ausgabegeräte (Hardware oder Software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+282"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Vorhandene MIDI Eingabegeräte (Hardware oder Software)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Vorhandene MIDI-Eingabegeräte (Hardware oder Software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-223"/>
         <location line="+278"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Anklicken um die Liste der Anschlüsse zu aktualisieren, nachdem ein neues Gerät angeschlossen oder ein neuer Software Synthesizer gestartet wurde.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Anklicken um die Liste der Anschlüsse zu aktualisieren, nachdem ein neues Gerät angeschlossen oder ein neuer Software-Synthesizer gestartet wurde.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-543"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Hier kann ein neues Wiedergabegerät angelegt werden. Doppelklicken um den Gerätenamen zu ändern. Durch Anklicken eines Ports auf der rechten Seite kann ein Gerät ausgewählt und mit einem MIDI-Ausgang verbunden werden.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Hier kann ein neues Wiedergabegerät angelegt werden. Doppelklicken um den Gerätenamen zu ändern. Durch Anklicken eines Anschlusses auf der rechten Seite kann ein Gerät ausgewählt und mit einem MIDI-Ausgang verbunden werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+268"/>
@@ -2296,7 +2296,7 @@ müssen sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="-241"/>
         <source>MIDI Recording</source>
-        <translation>MIDI Aufnahme</translation>
+        <translation>MIDI-Aufnahme</translation>
     </message>
     <message>
         <location line="+39"/>
@@ -2332,7 +2332,7 @@ müssen sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="+26"/>
         <source>MIDI inputs</source>
-        <translation>MIDI Eingabe</translation>
+        <translation>MIDI-Eingabe</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -3593,12 +3593,12 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Mallet synthesizer (treble)</source>
-        <translation>Knüpfel Synthesizer (Sopran)</translation>
+        <translation>Schlägel Synthesizer (Sopran)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mallet synthesizer (bass)</source>
-        <translation>Knüpfel Synthesizer (Bass)</translation>
+        <translation>Schlägel Synthesizer (Bass)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3912,7 +3912,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Percussion synthesizer</source>
-        <translation>Perkussiver Synthesizer</translation>
+        <translation>Perkussiv Synthesizer</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4168,7 +4168,7 @@ a quarter sine wave contour</source>
     <message>
         <location filename="../AutoloadStrings.cpp" line="-23"/>
         <source>General MIDI</source>
-        <translation>General MIDI</translation>
+        <translation>General-MIDI</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4743,7 +4743,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+9"/>
         <source>General MIDI Percussion</source>
-        <translation>General MIDI Perkussion</translation>
+        <translation>General-MIDI-Perkussion</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4963,40 +4963,40 @@ a quarter sine wave contour</source>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+299"/>
         <source>Synth plugin </source>
-        <translation type="unfinished">Synthesizer-Plugin </translation>
+        <translation>Synthesizer-Plugin </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthesizer Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
+        <location line="+38"/>
         <location filename="../../src/base/Studio.cpp" line="-4"/>
         <source>Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/base/MidiDevice.cpp" line="+1116"/>
         <source>&lt;new bank&gt;</source>
-        <translation type="unfinished">&lt;Neue Bank&gt;</translation>
+        <translation>&lt;Neue Bank&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;new bank %1&gt;</source>
-        <translation type="unfinished">&lt;Neue Bank %1&gt;</translation>
+        <translation>&lt;Neue Bank %1&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>&lt;new mapping&gt;</source>
-        <translation type="unfinished">&lt;Neue Zuordnung&gt;</translation>
+        <translation>&lt;Neue Zuordnung&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;new mapping %1&gt;</source>
-        <translation type="unfinished">&lt;Neue Zuordnung %1&gt;</translation>
+        <translation>&lt;Neue Zuordnung %1&gt;</translation>
     </message>
 </context>
 <context>
@@ -5756,32 +5756,32 @@ a quarter sine wave contour</source>
     <message>
         <location line="-119"/>
         <source>&amp;Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Importieren...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exportieren...</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Add Bank</source>
-        <translation type="unfinished">Bank hinzufügen</translation>
+        <translation>Bank hinzufügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Add Key Mapping</source>
-        <translation type="unfinished">Tastenzuordnung hinzufügen</translation>
+        <translation>Tastenzuordnung hinzufügen</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Delete All</source>
-        <translation type="unfinished">Alles löschen</translation>
+        <translation>Alles löschen</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -6352,37 +6352,37 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>No Submasters</source>
-        <translation>Keine Gruppenfader</translation>
+        <translation>Keine Gruppenregler</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;2 Submasters</source>
-        <translation>&amp;2 Gruppenfader</translation>
+        <translation>&amp;2 Gruppenregler</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;4 Submasters</source>
-        <translation>&amp;4 Gruppenfader</translation>
+        <translation>&amp;4 Gruppenregler</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;8 Submasters</source>
-        <translation>&amp;8 Gruppenfader</translation>
+        <translation>&amp;8 Gruppenregler</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Show &amp;Audio Faders</source>
-        <translation>Zeige &amp;Audio-Fader</translation>
+        <translation>Zeige &amp;Audio-Regler</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show &amp;Synth Faders</source>
-        <translation>Zeige &amp;Synthesizer-Fader</translation>
+        <translation>Zeige &amp;Synthesizer-Regler</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show Audio Su&amp;bmasters</source>
-        <translation>Zeige Audio &amp;Gruppenfader</translation>
+        <translation>Zeige Audio-&amp;Gruppenregler</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6392,7 +6392,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Show &amp;Unassigned Faders</source>
-        <translation>Nicht z&amp;ugeordnete Fader zeigen</translation>
+        <translation>Nicht z&amp;ugeordnete Regler zeigen</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -6571,17 +6571,17 @@ a quarter sine wave contour</source>
     <message>
         <location line="-702"/>
         <source>Highlighting</source>
-        <translation type="unfinished"></translation>
+        <translation>Hervorhebung</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Der&amp;zeitig</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Current on &amp;same track</source>
-        <translation type="unfinished"></translation>
+        <translation>Derzeitig auf &amp;gleicher Spur</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -6966,7 +6966,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="-28"/>
         <source>Triangle</source>
-        <translation type="unfinished">Triangel</translation>
+        <translation>Triangel</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -9164,7 +9164,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+7"/>
         <source>Export &amp;WAV File...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Wav-Datei exportieren...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9440,7 +9440,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Merge &amp;MIDI File(s)...</source>
-        <translation>&amp;MIDI Datei(en) zusammenfügen...</translation>
+        <translation>&amp;MIDI-Datei(en) zusammenfügen...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9460,7 +9460,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+103"/>
         <source>Interpret...</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpretieren...</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -9998,7 +9998,7 @@ a quarter sine wave contour</source>
     <message>
         <location filename="../AutoloadStrings.cpp" line="-195"/>
         <source>General MIDI Device</source>
-        <translation>General MIDI</translation>
+        <translation>General-MIDI-Gerät</translation>
     </message>
     <message>
         <source>Bank 0:8</source>
@@ -10305,14 +10305,14 @@ a quarter sine wave contour</source>
         <translation type="obsolete">Rosegarden - ein Sequenzer und Notensatz-Editor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+462"/>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
         <location filename="../../src/sound/WAVExporter.cpp" line="+51"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
+        <location filename="../../src/gui/application/main.cpp" line="+462"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+295"/>
+        <location filename="../../src/gui/application/main.cpp" line="+295"/>
         <source>Welcome!</source>
         <translation>Willkommen!</translation>
     </message>
@@ -10324,7 +10324,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Willkommen bei Rosegarden!&lt;/h2&gt;&lt;p&gt;Willkommen bei Rosegarden, einem Audio- und MIDI-Sequencer sowie Notensatzprogramm.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Sofern Sie es noch nicht getan haben, sollten Sie ein DSSI-Synthplugin oder ein separates Synthprogramm wie z.B. QSynth installieren.  Rosegarden selber erzeugt nämlich keine Klänge aus MIDI-Daten, daher hören Sie ohne diese Synthesizer Nichts.&lt;/li&gt;&lt;li&gt;Rosegarden verwendet den JACK-Audioserver für Aufnahme und Wiedergabe von Audio sowie DSSI-Synthplugins.  Diese Möglichkeiten stehen nur zur Verfügung, wenn der JACK-Audioserver läuft.&lt;/li&gt;&lt;li&gt;Rosegarden besitzt eine umfassende Dokumentation: besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden Webseite&lt;/a&gt; für das &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;Handbuch&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;Tutorials&lt;/a&gt;, und weitere Information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden wird dir zur Verfügung gestellt von einem Team Beitragender aus aller Welt.  Um mehr zu erfahren, besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;Willkommen bei Rosegarden!&lt;/h2&gt;&lt;p&gt;Willkommen bei Rosegarden, einem Audio- und MIDI- Sequencer sowie Notensatzprogramm.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Sofern Sie es noch nicht getan haben, sollten Sie ein DSSI-Synthesizer-Plugin oder ein separates Synthesizer-Programm wie z.B. QSynth installieren.  Rosegarden selber erzeugt nämlich keine Klänge aus MIDI-Daten, daher hören Sie ohne diese Synthesizer Nichts.&lt;/li&gt;&lt;li&gt;Rosegarden verwendet den JACK-Audio-Server für Aufnahme und Wiedergabe von Audio sowie DSSI-Synthesizer-Plugins.  Diese Möglichkeiten stehen nur zur Verfügung, wenn der JACK-Audio-Server läuft.&lt;/li&gt;&lt;li&gt;Rosegarden besitzt eine umfassende Dokumentation: besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden Webseite&lt;/a&gt; für das &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;Handbuch&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;Tutorials&lt;/a&gt;, und weitere Information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden wird dir zur Verfügung gestellt von einem Team Beitragender aus aller Welt.  Um mehr zu erfahren, besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may 
@@ -10431,7 +10431,7 @@ und erneut probieren&lt;/p&gt;&lt;/qt&gt;</translation>
     <message>
         <location line="+144"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Konnte Audioaufnahme nicht starten.&lt;/p&gt;&lt;p&gt;Stelle sicher, dass die Komposition gesichert wurde und prüfe den Audio-Dateipfad in &lt;b&gt;Komposition -&gt; Dokumenteigenschaften bearbeiten... -&gt; Audio-Eigenschaften&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Konnte Audio-Aufnahme nicht starten.&lt;/p&gt;&lt;p&gt;Stelle sicher, dass die Komposition gesichert wurde und prüfe den Audio-Dateipfad in &lt;b&gt;Komposition -&gt; Dokumenteigenschaften bearbeiten... -&gt; Audio-Eigenschaften&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
@@ -10551,7 +10551,7 @@ Kanälen</translation>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation>Ungültige Datei mit Höchstwerten (deformierte Datei?) </translation>
+        <translation>Ungültige Datei mit Höchstwerten (deformiertes Audio?) </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -10725,14 +10725,14 @@ abgeschnitten</translation>
         <translation>Wechselnd - %1-Werte wechselnd auf Max und Min setzen</translation>
     </message>
     <message>
+        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+38"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation>Maximum</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation>Minimum</translation>
     </message>
@@ -11014,12 +11014,12 @@ a quarter sine wave contour</source>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+74"/>
         <source>Bank and Program details</source>
-        <translation type="unfinished">Bank- und Programm-Details</translation>
+        <translation>Bank- und Programm-Details</translation>
     </message>
     <message>
         <location filename="../../src/sound/WAVExporter.cpp" line="+1"/>
         <source>&lt;p&gt;WAV Export&lt;/p&gt;&lt;p&gt;Unable to create WAV file.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;WAV Exportieren&lt;/p&gt;&lt;p&gt;WAV-Datei kann nicht erzeugt werden.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;new bank&gt;</source>
@@ -11595,7 +11595,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="+8"/>
         <source>for submasters</source>
-        <translation>für die Gruppenfader</translation>
+        <translation>für die Gruppenregler</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -11882,7 +11882,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
         <location line="+26"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Audio files marked with an asterisk (*) are encoded at a sample rate different from that of the JACK audio server.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but they will sound terrible.  Please consider resampling these files externally, or adjusting the sample rate of the JACK server.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Audio-Dateien, die mit einem Stern (*) markiert sind, sind mit einer Abtastrate encodiert, die sich 
-von der des JACK-Audioservers unterscheidet.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden spielt sie zwar mit der richtigen Geschwindigkeit, aber sie werden sich schrecklich anhören. Besser wäre es, diese Dateien extern neu zu samplen oder die Sample-Rate des JACK-Audioservers anzupassen.&lt;/p&gt;&lt;/qt&gt;</translation>
+von der des JACK-Audio-Servers unterscheidet.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden spielt sie zwar mit der richtigen Geschwindigkeit, aber sie werden sich schrecklich anhören. Besser wäre es, diese Dateien extern neu zu samplen oder die Sample-Rate des JACK-Audio-Servers anzupassen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -12206,7 +12206,7 @@ permission and re-add it</source>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginConnectionDialog.cpp" line="+43"/>
         <source>Audio Plugin Connections</source>
-        <translation>Audio-Plugin Verbindungen</translation>
+        <translation>Audio-Plugin-Verbindungen</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -12511,7 +12511,7 @@ here.</source>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginParameterDialog.cpp" line="+57"/>
         <source>Plugin Parameters</source>
-        <translation>Plugin Parameter</translation>
+        <translation>Plugin-Parameter</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -13124,92 +13124,95 @@ Bank einfügen</translation>
     <message>
         <location line="-1262"/>
         <source>add MIDI Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-Bank hinzufügen</translation>
     </message>
     <message>
         <location line="+44"/>
         <source>add Key Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenzuordnung hinzufügen</translation>
     </message>
     <message>
         <location line="+93"/>
         <source>delete MIDI bank</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-Bank löschen</translation>
     </message>
     <message>
         <location line="+46"/>
         <source>delete Key Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenzuordnung löschen</translation>
     </message>
     <message>
         <location line="+36"/>
         <source>Really delete all banks and keymaps for </source>
-        <translation type="unfinished"></translation>
+        <translation>Wirkliches Löschen aller Bänke und Tastenzuordnungen für </translation>
     </message>
     <message>
         <location line="+23"/>
         <source>delete all</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles löschen</translation>
     </message>
     <message>
         <location line="+90"/>
         <source>rename MIDI Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-Bank umbenennen</translation>
     </message>
     <message>
         <location line="+48"/>
         <source>rename Key Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenzuordnung umbenennen</translation>
     </message>
     <message>
         <location line="+112"/>
         <source>variation toggled</source>
-        <translation type="unfinished"></translation>
+        <translation>Variation umgeschaltet</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>variation changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Variation geändert</translation>
     </message>
     <message>
         <location line="+111"/>
         <source>import device</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerät importieren</translation>
     </message>
     <message>
         <location line="+146"/>
         <location line="+168"/>
         <source>paste bank</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank einfügen</translation>
     </message>
     <message>
         <location line="-94"/>
         <location line="+154"/>
         <source>paste keymap</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenzuordnung einfügen</translation>
     </message>
     <message>
         <location line="-105"/>
         <source>Unable to paste.
 Destination device already has a bank for
 %1:%2:%3 (%4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann nicht einfügen.
+Zielgerät hat bereits eine Bank für
+%1:%2:%3 (%4)</translation>
     </message>
     <message>
         <location line="+197"/>
         <source>change librarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Librarian ändern</translation>
     </message>
     <message>
         <location line="+69"/>
         <source>Could not export studio to file at %1
 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Konnte Studio nicht exportieren nach Datei zu %1
+(%2)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Could not export studio to file at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Konnte Studio nicht exportieren nach Datei zu %1</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -13770,7 +13773,7 @@ das verlinkte Segment setzen...</translation>
     <message>
         <location line="+18"/>
         <source>Modify Color Name</source>
-        <translation>Farbname verändern</translation>
+        <translation>Farbname ändern</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -14453,7 +14456,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="-397"/>
         <source>[ No port ]</source>
-        <translation>[ kein Anschluß ]</translation>
+        <translation>[ kein Anschluss ]</translation>
     </message>
     <message>
         <location line="+729"/>
@@ -14618,7 +14621,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="+49"/>
         <location line="+1"/>
         <source>About</source>
-        <translation>MIDI-Eigenschaften</translation>
+        <translation>Über</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -14818,7 +14821,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+38"/>
         <source>Segment &quot;%1&quot; </source>
-        <translation type="unfinished"></translation>
+        <translation>Segment &quot;%1&quot; </translation>
     </message>
     <message>
         <location line="+3"/>
@@ -14828,12 +14831,12 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+5"/>
         <source>%1%2 - %3Track%4#%5 - %6</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3Spur%4#%5 - %6</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>%1%2 - %3 Segments - %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3 Segmente - %4</translation>
     </message>
     <message>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
@@ -15812,7 +15815,7 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+22"/>
         <source>Use JACK transport</source>
-        <translation>JACK-Transportmodus verwenden</translation>
+        <translation>JACK-Transport verwenden</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -15836,17 +15839,17 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+7"/>
         <source>No MIDI, audio OK</source>
-        <translation>Kein MIDI, aber Audio</translation>
+        <translation>Kein MIDI, Audio OK</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>MIDI OK, no audio</source>
-        <translation>MIDI, aber kein Audio</translation>
+        <translation>MIDI OK, kein Audio</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>MIDI OK, audio OK</source>
-        <translation>MIDI und Audio OK</translation>
+        <translation>MIDI OK, Audio OK</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -16090,12 +16093,12 @@ available on your path.  When choosing an application to use, please ensure that
     <message>
         <location line="-242"/>
         <source>Advanced Looping</source>
-        <translation type="unfinished"></translation>
+        <translation>Erweiterte Wiedergabeschleife</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>LV2 Plugin Support (beta)</source>
-        <translation type="unfinished"></translation>
+        <translation>LV2-Plugin-Unterstützung (beta)</translation>
     </message>
     <message>
         <location line="+213"/>
@@ -17070,17 +17073,17 @@ transponieren</translation>
     <message>
         <location filename="../../src/gui/dialogs/LibrarianDialog.cpp" line="+36"/>
         <source>If a librarian is already set please try to contact them at the given email address or on the development mailing list. To publish the device please make a merge request or contact the development mailing list</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls ein Librarian bereits festgelegt ist, versuche über die angeführte E-Mail-Adresse oder über die E-Mail-Liste der Entwickler Kontakt aufzunehmen. Um das Gerät zu veröffentlichen, mache bitte eine Eingabe oder nimm Kontakt auf über die E-Mail-Liste der Entwickler</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Name:</source>
-        <translation type="unfinished">Name:</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Email:</source>
-        <translation type="unfinished"></translation>
+        <translation>E-Mail:</translation>
     </message>
 </context>
 <context>
@@ -17853,12 +17856,12 @@ verursacht.</translation>
     <message>
         <location line="+90"/>
         <source>Allow Reset All Controllers (CC 121)</source>
-        <translation>Zurücksetzen aller Kontroller (MIDI CC 121) erlauben</translation>
+        <translation>Zurücksetzen aller Kontroller (CC 121) erlauben</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.</source>
-        <translation>Beim Anlegen eines Kanals kann Rosegarden ein Zurücksetzen aller Kontroller (MIDI CC 121) senden.</translation>
+        <translation>Beim Anlegen eines Kanals kann Rosegarden ein MIDI-Ereignis &quot;Zurücksetzen aller Kontroller&quot; senden.</translation>
     </message>
     <message>
         <location line="+48"/>
@@ -17899,12 +17902,12 @@ verursacht.</translation>
     <message>
         <location line="+66"/>
         <source>External controller port</source>
-        <translation>Externer Kontrollerport</translation>
+        <translation>Externer Kontrolleranschluss</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enable the external controller port for control surfaces.</source>
-        <translation>Externen Kontrollerport für Steueroberflächen aktivieren.</translation>
+        <translation>Externen Kontrolleranschluss für Steueroberflächen aktivieren.</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -17914,7 +17917,7 @@ verursacht.</translation>
     <message>
         <location line="+1"/>
         <source>Select the type of control surface connected to the external controller port.</source>
-        <translation>Art der mit dem externen Kontrollerport verbundenen Steueroberfläche wählen.</translation>
+        <translation>Art der mit dem externen Kontrolleranschluss verbundenen Steueroberfläche wählen.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -17929,7 +17932,7 @@ verursacht.</translation>
     <message>
         <location line="+16"/>
         <source>Accept transport CCs (116-118)</source>
-        <translation>Transport CCs (MIDI CC 116-118) erlauben</translation>
+        <translation>Transport CCs (116-118) erlauben</translation>
     </message>
     <message>
         <source>Rosegarden will discard these CCs, so disable this if you 
@@ -17959,7 +17962,7 @@ need CCs in this range for other things.</source>
     <message>
         <location line="+125"/>
         <source>MIDI Clock and System messages</source>
-        <translation>MIDI-Clock- und System-Nachrichten</translation>
+        <translation>MIDI-Clock und Systemnachrichten</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -17971,7 +17974,7 @@ need CCs in this range for other things.</source>
     <message>
         <location line="-43"/>
         <source>Send MIDI Clock, Start and Stop</source>
-        <translation>MIDI-Clock-, Start und Stopp-Befehle senden</translation>
+        <translation>MIDI-Clock, Start und Stopp senden</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18017,12 +18020,12 @@ need CCs in this range for other things.</source>
     <message>
         <location line="-225"/>
         <source>Match ALSA port numbers</source>
-        <translation>ALSA-Portnummern anpassen</translation>
+        <translation>ALSA-Anschlussnummern anpassen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Include ALSA port numbers when trying to match and restore MIDI connections when loading a file.</source>
-        <translation>Beim Laden einer Datei ALSA-Portnummern mit einbeziehen, wenn versucht wird MIDI-Verbindungen anzupassen und wiederherzustellen.</translation>
+        <translation>Beim Laden einer Datei ALSA-Anschlussnummern mit einbeziehen, wenn versucht wird MIDI-Verbindungen anzupassen und wiederherzustellen.</translation>
     </message>
     <message>
         <location line="+55"/>
@@ -18032,7 +18035,7 @@ need CCs in this range for other things.</source>
     <message>
         <location line="+151"/>
         <source>PPQN/Division for MIDI File Export</source>
-        <translation type="unfinished"></translation>
+        <translation>PPQN/Unterteilung für Export einer MIDI-Datei</translation>
     </message>
     <message>
         <location line="+54"/>
@@ -18085,12 +18088,12 @@ need CCs in this range for other things.</source>
     <message>
         <location line="-46"/>
         <source>&lt;qt&gt;Set the MIDI bank from which to select programs&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;MIDI Bank definieren, von der Programme ausgewählt werden sollen.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;MIDI-Bank definieren, von der Programme ausgewählt werden sollen.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;MIDI Programm oder &amp;quot;patch&amp;quot; definieren&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;MIDI-Programm oder &amp;quot;patch&amp;quot; definieren&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-49"/>
@@ -18913,7 +18916,7 @@ zu ändern</translation>
     <message>
         <location line="-1015"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Kontroller %2 %3</translation>
+        <translation>%1 Kontroller %2 %3</translation>
     </message>
     <message>
         <location line="+1105"/>
@@ -18966,7 +18969,7 @@ zu ändern</translation>
     <message>
         <location line="+842"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Kontroller %2 %3</translation>
+        <translation>%1 Kontroller %2 %3</translation>
     </message>
     <message>
         <location line="+378"/>
@@ -19092,7 +19095,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="+50"/>
         <source>Modify MIDI Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-Filter ändern</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -19163,7 +19166,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location line="+114"/>
         <source>modify key mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenzuordnung ändern</translation>
     </message>
     <message>
         <source>Pitches</source>
@@ -19229,18 +19232,18 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location line="+13"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
     <message>
         <location line="+30"/>
         <location line="+30"/>
         <source>no</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location line="+70"/>
@@ -19250,7 +19253,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location line="+82"/>
         <source>program changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Programm gewechselt</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -19260,12 +19263,12 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location line="+92"/>
         <source>change key mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenzuordnung wechseln</translation>
     </message>
     <message>
         <location line="+90"/>
         <source>change bank</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank wechseln</translation>
     </message>
 </context>
 <context>
@@ -19273,7 +19276,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyControlParameterCommand.h" line="+56"/>
         <source>&amp;Modify Control Parameter</source>
-        <translation>Kontroller-Para&amp;meter verändern</translation>
+        <translation>Kontroller-Para&amp;meter ändern</translation>
     </message>
 </context>
 <context>
@@ -19281,7 +19284,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location filename="../../src/commands/segment/ModifyDefaultTempoCommand.h" line="+47"/>
         <source>Modify &amp;Default Tempo...</source>
-        <translation>Stan&amp;dardtempo verändern...</translation>
+        <translation>Stan&amp;dardtempo ändern...</translation>
     </message>
 </context>
 <context>
@@ -19289,7 +19292,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location filename="../../src/commands/studio/ModifyDeviceCommand.h" line="+64"/>
         <source>Modify &amp;MIDI Bank</source>
-        <translation>&amp;MIDI Bank ändern</translation>
+        <translation>&amp;MIDI-Bank ändern</translation>
     </message>
 </context>
 <context>
@@ -19513,7 +19516,7 @@ check transposing instruments carefully in both concert and notated pitch. When 
     <message>
         <location line="+16"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
 </context>
 <context>
@@ -20244,7 +20247,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message>
         <location line="+25"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Festplattenplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Es konnte keine temporäre Datei für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Festplattenplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all 
@@ -20320,7 +20323,7 @@ eingeschränkten wählen.&lt;/p&gt;&lt;/qt&gt;</translation>
     <message>
         <location line="-2338"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Kontroller %2 %3</translation>
+        <translation>%1 Kontroller %2 %3</translation>
     </message>
     <message>
         <location line="+919"/>
@@ -20511,7 +20514,7 @@ Bitte stellen Sie sicher, dass das Gerät korrekt konfiguriert ist im Dialog &qu
     <message>
         <location line="+1407"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Kontroller %2 %3</translation>
+        <translation>%1 Kontroller %2 %3</translation>
     </message>
     <message>
         <location line="+91"/>
@@ -21801,7 +21804,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="+63"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation>Aktuell unterstützt Rosegarden nur 16 oder 32-bit PCM oder IEEE Fließkomma RIFF Dateien bei der Ausgabe</translation>
+        <translation>Aktuell unterstützt Rosegarden nur 16 oder 32-bit PCM- oder IEEE-Fließkomma-RIFF-Dateien bei der Ausgabe</translation>
     </message>
     <message>
         <location line="+312"/>
@@ -21821,7 +21824,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location line="+50"/>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation>Aktuell unterstützt Rosegarden nur PCM oder IEEE Fließkomma RIFF-Dateien</translation>
+        <translation>Aktuell unterstützt Rosegarden nur PCM- oder IEEE-Fließkomma-RIFF-Dateien</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -22412,13 +22415,13 @@ die Datei bearbeitet, die Sperrdatei löschen und neu bversuchen.
     <message>
         <location line="+22"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audio-Dateien oder Plugins, aber Rosegarden läuft aktuell ohne Audiounterstützung, weil der &apos;JACK-Audioserver&apos; bei Programstart nicht verfügbar war.&lt;/p&gt;&lt;p&gt;Bitte beenden Sie Rosegarden, starten Sie den &apos;JACK-Audio server&apos; und starten Sie Rosegarden danach neu, um die ganze Komposition zu laden.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition jetzt erneut sichern, gehen alle Audio- und Plugindaten verloren !.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audio-Dateien oder Plugins, aber Rosegarden läuft aktuell ohne Audiounterstützung, weil der &apos;JACK-Audio-Server&apos; bei Programstart nicht verfügbar war.&lt;/p&gt;&lt;p&gt;Bitte beenden Sie Rosegarden, starten Sie den &apos;JACK-Audio-Server&apos; und starten Sie Rosegarden danach neu, um die ganze Komposition zu laden.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition jetzt erneut sichern, gehen alle Audio- und Plugin-Daten verloren !.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar.&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audio-Dateien oder Plugins, aber diese laufende Version von Rosegarden wurde ohne Unterstützung für Audio kompiliert.&lt;/p&gt;&lt;p&gt;&lt;b&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition mit dieser Version von Rosegarden 
-erneut sichern, dann gehen alle Audio- und Plugindaten verloren !.&lt;/p&gt;</translation>
+erneut sichern, dann gehen alle Audio- und Plugin-Daten verloren !.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with 
@@ -22438,7 +22441,7 @@ falschen Raten.&lt;/p&gt;</translation>
     <message>
         <location line="+12"/>
         <source>&lt;h3&gt;Plugins not found&lt;/h3&gt;&lt;p&gt;The following audio plugins could not be loaded:&lt;/p&gt;&lt;ul&gt;</source>
-        <translation>&lt;h3&gt;Plugins wurden nicht gefunden&lt;/h3&gt;&lt;p&gt;Die folgenden Plugins konnten nicht geladen werden:&lt;/p&gt;&lt;ul&gt;</translation>
+        <translation>&lt;h3&gt;Plugins wurden nicht gefunden&lt;/h3&gt;&lt;p&gt;Die folgenden Audio-Plugins konnten nicht geladen werden:&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
         <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
@@ -22458,7 +22461,7 @@ um sicherzustellen, daß sie auch in Zukunft gelesen werden kann.</translation>
     <message>
         <location line="+691"/>
         <source>Insert Recorded MIDI</source>
-        <translation>MIDI-Aufnahme einfügen</translation>
+        <translation>Aufgenommenes MIDI einfügen</translation>
     </message>
     <message>
         <location line="+98"/>
@@ -22519,7 +22522,7 @@ Siehe: Bearbeiten -&gt; Voreinstellungen -&gt; Audio.</translation>
     <message>
         <location line="+665"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
-        <translation>Kann abgelgte Datei nicht hinzufügen. JACK-Audioserver ist nicht verfügbar.</translation>
+        <translation>Kann abgelgte Datei nicht hinzufügen. JACK-Audio-Server ist nicht verfügbar.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -23174,8 +23177,7 @@ Bitte Beenden und erneut Starten, damit der Ton wieder funktioniert.</translatio
     <message>
         <location line="+1144"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
-        <translatorcomment>Datei &quot;%1&quot; ist ein Rosegardengerät und muss mittels MIDI-Gerätmanager importiert werden.</translatorcomment>
-        <translation></translation>
+        <translation>Datei &quot;%1&quot; ist ein Gerät für Rosegarden und muss mittels MIDI-Gerätmanager importiert werden.</translation>
     </message>
     <message>
         <source>Saving file%1with a new filename...</source>
@@ -23248,7 +23250,7 @@ one of the segments in your selection must start at the beginning of the composi
     <message>
         <location line="+282"/>
         <source>Select MIDI File(s)</source>
-        <translation>MIDI Datei(en) auswählen</translation>
+        <translation>MIDI-Datei(en) auswählen</translation>
     </message>
     <message>
         <location line="+284"/>
@@ -23330,7 +23332,7 @@ Für Hilfestellung bei der Audio- und MIDI-Konfiguration gehe nach http://rosega
     <message>
         <location line="-15"/>
         <source>Standard MIDI files</source>
-        <translation>Standard MIDI-Dateien</translation>
+        <translation>Standard-MIDI-Dateien</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -23401,12 +23403,12 @@ Für Hilfestellung bei der Audio- und MIDI-Konfiguration gehe nach http://rosega
     <message>
         <location line="+25"/>
         <source>Unable to export WAV without JACK running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ohne laufenden JACK-Audio-Server kann WAV nicht exportiert werden.</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>WAV files</source>
-        <translation type="unfinished">WAV-Dateien</translation>
+        <translation>WAV-Dateien</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -23414,7 +23416,10 @@ Für Hilfestellung bei der Audio- und MIDI-Konfiguration gehe nach http://rosega
 %1
 Press stop to stop export.
 Only audio and synth plugin tracks will be exported</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiedergabe drücken für Beginn des Exportes nach
+%1
+Stop drücken um Export zu beenden.
+Nur Audio- und Synth-Plugin-Spuren werden exportiert</translation>
     </message>
     <message>
         <location line="+1250"/>
@@ -23429,7 +23434,7 @@ Only audio and synth plugin tracks will be exported</source>
     <message>
         <location line="+1715"/>
         <source>Interpret segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmente interpretieren</translation>
     </message>
     <message>
         <location line="+42"/>
@@ -24121,7 +24126,7 @@ vermeiden</translation>
     <message>
         <location line="+19"/>
         <source>Record or drop audio here</source>
-        <translation>MIDI- oder Audio-Aufnahme in diesem Bereich. Drag&apos;n Drop wird unterstützt</translation>
+        <translation>Hier Audio aufnehmen oder reinziehen</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -24479,42 +24484,42 @@ it; Ctrl + Alt for a linked copy; double-click to edit</source>
     <message>
         <location filename="../../src/gui/dialogs/SelectBankDialog.cpp" line="+47"/>
         <source>Select Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank wählen</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Percussion</source>
-        <translation type="unfinished">Perkussion</translation>
+        <translation>Perkussion</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>MSB Value</source>
-        <translation type="unfinished">MSB-Wert</translation>
+        <translation>MSB-Wert</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)</source>
-        <translation type="unfinished">Wählt eine Banknummer des MSB-Kontrollers aus (MSB/LSB-Paare sind stets eindeutig für ein Gerät)</translation>
+        <translation>Wählt eine Banknummer des MSB-Kontrollers aus (MSB/LSB-Paare sind stets eindeutig für ein Gerät)</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>LSB Value</source>
-        <translation type="unfinished">LSB-Wert</translation>
+        <translation>LSB-Wert</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)</source>
-        <translation type="unfinished">Wählt eine Banknummer des LSB-Kontrollers aus (MSB/LSB-Paare sind stets eindeutig für ein Gerät)</translation>
+        <translation>Wählt eine Banknummer des LSB-Kontrollers aus (MSB/LSB-Paare sind stets eindeutig für ein Gerät)</translation>
     </message>
     <message>
         <location line="+55"/>
         <source>IN USE</source>
-        <translation type="unfinished"></translation>
+        <translation>IN VERWENDUNG</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>available</source>
-        <translation type="unfinished"></translation>
+        <translation>verfügbar</translation>
     </message>
 </context>
 <context>
@@ -24586,7 +24591,7 @@ it; Ctrl + Alt for a linked copy; double-click to edit</source>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
-        <translation>Das JACK-Audiosubsystem hat einen Fehler gemeldet oder Rosegarden anderweitig an der Verarbeitung von Audio gehindert.
+        <translation>Das JACK-Audio-Subsystem hat einen Fehler gemeldet oder Rosegarden anderweitig an der Verarbeitung von Audio gehindert.
 Bitte starten Sie Rosegarden erneut, wenn Sie mit Audio weiterarbeiten möchten.
 Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von 
 Rosegarden verbessern.</translation>
@@ -24597,8 +24602,8 @@ Rosegarden verbessern.</translation>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
-        <translation>Das JACK-Audiosubsystem hat einen Fehler gemeldet oder Rosegarden anderweitig an der Verarbeitung von Audio gehindert, möglicherweise wegen Überlastung.
-Der Audiodienst wurde neu gestartet, aber ev. sind damit nicht alle Probleme behoben.
+        <translation>Das JACK-Audio-Subsystem hat einen Fehler gemeldet oder Rosegarden anderweitig an der Verarbeitung von Audio gehindert, möglicherweise wegen Überlastung.
+Der Audio-Dienst wurde neu gestartet, aber ev. sind damit nicht alle Probleme behoben.
 Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von 
 Rosegarden verbessern.</translation>
     </message>
@@ -24615,12 +24620,12 @@ fortfahren.</translation>
     <message>
         <location line="+48"/>
         <source>Failed to write audio data to disk fast enough to service the audio subsystem.</source>
-        <translation>Die Audiodaten konnten nicht schnell genug auf die Festplatte geschrieben werden, um das Audiosubsystem zu bedienen.</translation>
+        <translation>Die Audio-Daten konnten nicht schnell genug auf die Festplatte geschrieben werden, um das Audio-Subsystem zu bedienen.</translation>
     </message>
     <message>
         <location line="+89"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegarden war nicht in der Lage eine hochauflösende Zeitgeberquelle für ausreichende MIDI- Leistung zu finden.&lt;/p&gt;&lt;p&gt;Dies könnte bedeuten, daß die Auflösung des Zeitgebers im Kernel zu gering ist. Bitte informieren Sie sich bei der Linux Distribution für weitere Informationen.&lt;/p&gt;&lt;p&gt;Einige Linux Distributoren bieten schon geeignete Kernel an.  Eine Anleitung dazu finden Sie auf der &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/lowow-latency_kernels&quot;&gt;Rosegarden Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Rosegarden war nicht in der Lage eine hochauflösende Zeitgeberquelle für ausreichende MIDI-Leistung zu finden.&lt;/p&gt;&lt;p&gt;Dies könnte bedeuten, daß die Auflösung des Zeitgebers im Kernel zu gering ist. Bitte informieren Sie sich bei der Linux Distribution für weitere Informationen.&lt;/p&gt;&lt;p&gt;Einige Linux Distributoren bieten schon geeignete Kernel an.  Eine Anleitung dazu finden Sie auf der &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/lowow-latency_kernels&quot;&gt;Rosegarden Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -24635,7 +24640,7 @@ fortfahren.</translation>
     <message>
         <location line="+20"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK-Audioserver verbinden.  Dies bedeutet wahrscheinlich, das Rosegarden den Audioserver nicht starten konnte, weil entweder die Konfiguration, die Installation oder beides nicht korrekt ist.&lt;/p&gt;&lt;p&gt;Falls sie Audio-Dateien abspielen oder aufnehmen, bzw. Plugins benutzen wollen, müssen Sie Rosegarden verlassen und die Einstellungen von JACK z.B. mit qjackctl solange verändern, bis JACK gestartet werden kann. Außerdem könnte die Installation eines Echtzeitkernels nötig sein, die Sicherheitseinstellungen des Systems verändert werden, etc. Unglücklicherweise ist dies ein sehr komplexes Thema.&lt;/p&gt;&lt;p&gt;Sobald eine funktionierende Konfiguration von JACK gefunden wurde, kann Rosegarden den Audioserver in Zukunft automatisch starten.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK-Audio-Server verbinden.  Dies bedeutet wahrscheinlich, das Rosegarden den Audio-Server nicht starten konnte, weil entweder die Konfiguration, die Installation oder beides nicht korrekt ist.&lt;/p&gt;&lt;p&gt;Falls sie Audio-Dateien abspielen oder aufnehmen, bzw. Plugins benutzen wollen, müssen Sie Rosegarden verlassen und die Einstellungen von JACK z.B. mit qjackctl solange verändern, bis JACK gestartet werden kann. Außerdem könnte die Installation eines Echtzeitkernels nötig sein, die Sicherheitseinstellungen des Systems verändert werden, etc. Unglücklicherweise ist dies ein sehr komplexes Thema.&lt;/p&gt;&lt;p&gt;Sobald eine funktionierende Konfiguration von JACK gefunden wurde, kann Rosegarden den Audio-Server in Zukunft automatisch starten.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  
@@ -24645,7 +24650,7 @@ It may not be possible to continue sequencing.  Please check console output for 
     <message>
         <location line="-306"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
-        <translation>Das JACK-Audiosubsystem verliert Sampleframes.</translation>
+        <translation>Das JACK-Audio-Subsystem verliert Sampleframes.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -24714,12 +24719,12 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="-279"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
-        <translation>Das Audio-Mischer-Subsystem kommt nicht mit (ist zu langsam).</translation>
+        <translation>Das Audio-Mischer-Subsystem kann nicht mithalten.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>The audio subsystem is failing to keep up.</source>
-        <translation>Das Audio Subsystem kommt nicht mit (ist zu langsam).</translation>
+        <translation>Das Audio Subsystem kann nicht mithalten.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -25533,87 +25538,87 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location filename="../../src/gui/editors/tempo/TempoAndTimeSignatureEditor.cpp" line="+106"/>
         <source>Filter</source>
-        <translation type="unfinished">Filter</translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Tempo</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Time Signature</source>
-        <translation type="unfinished">Taktart</translation>
+        <translation>Taktart</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Time  </source>
-        <translation type="unfinished">Zeit  </translation>
+        <translation>Zeit  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Type  </source>
-        <translation type="unfinished">Typ  </translation>
+        <translation>Typ  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Value  </source>
-        <translation type="unfinished">Wert  </translation>
+        <translation>Wert  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Properties  </source>
-        <translation type="unfinished">Eigenschaften  </translation>
+        <translation>Eigenschaften  </translation>
     </message>
     <message>
         <location line="+167"/>
         <source>Common, hidden</source>
-        <translation type="unfinished">Allgemein, versteckt</translation>
+        <translation>Allgemein, versteckt</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Hidden</source>
-        <translation type="unfinished">Versteckt</translation>
+        <translation>Versteckt</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Common</source>
-        <translation type="unfinished">Allgemein</translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Time Signature   </source>
-        <translation type="unfinished">Taktart   </translation>
+        <translation>Taktart   </translation>
     </message>
     <message>
         <location line="+50"/>
         <source>%1.%2%3</source>
-        <translation type="unfinished">%1.%2%3</translation>
+        <translation>%1.%2%3</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>%1.%2%3 qpm (%4.%5%6 bpm)   </source>
-        <translation type="unfinished">%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
+        <translation>%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Tempo   </source>
-        <translation type="unfinished">Tempo   </translation>
+        <translation>Tempo   </translation>
     </message>
     <message>
         <location line="+175"/>
         <source>Delete Tempo or Time Signature</source>
-        <translation type="unfinished">Tempo oder Taktart löschen</translation>
+        <translation>Tempo oder Taktart löschen</translation>
     </message>
     <message>
         <location line="+303"/>
         <source>%1 - Tempo and Time Signature Editor</source>
-        <translation type="unfinished">%1 - Tempo- und Taktart-Editor</translation>
+        <translation>%1 - Tempo- und Taktart-Editor</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoView-en</source>
-        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:tempoView-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:tempoView-en</translation>
     </message>
 </context>
 <context>
@@ -27106,13 +27111,13 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <location line="-93"/>
         <location line="+97"/>
         <source>RPN</source>
-        <translation type="unfinished"></translation>
+        <translation>RPN</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+97"/>
         <source>NRPN</source>
-        <translation type="unfinished"></translation>
+        <translation>NRPN</translation>
     </message>
     <message>
         <location line="-52"/>
@@ -27666,7 +27671,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+465"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation>Zeigt MIDI-Aktivitäten aus Rosegarden heraus und nach Rosegarden hinein</translation>
+        <translation>Zeigt ein- und ausgehende MIDI-Aktivitäten an</translation>
     </message>
     <message>
         <location line="+463"/>
@@ -27692,7 +27697,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+3"/>
         <source>Record either MIDI or audio</source>
-        <translation>MIDI- oder Audio-Aufnahme</translation>
+        <translation>Entweder MIDI oder Audio aufnehmen</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -27840,7 +27845,7 @@ sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger en
     <name>S:</name>
     <message>
         <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
+        <comment>We recommend pointing help URLs to a wiki page in your native language.</comment>
         <translation></translation>
     </message>
 </context>
