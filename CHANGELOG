@@ -33,6 +33,9 @@ Included in this release...
     signature change.  Bug #1706.  [6a7ef89e]
   * Fix "Modify MIDI Filters" dialog does not mark document as changed.
     Bug #1707.  [4e505977]
+  * Fix LV2 sfizz plugin support.  [8fce0614]
+  * Fix group box formatting issue in native/light theme.  Bug #1678.
+    [d2df6376]
 
 ===== New Features =====
 
@@ -42,6 +45,8 @@ Included in this release...
     File > Export > Export WAV File...  [5b4d109e]
   * Apply interpretations to more than one segment.
     Segment > Interpret...  Feature #517.  [b8a243a5]
+  * LV2 support has been promoted to beta.  [a602850c]
+  * Advanced Looping has been promoted out of beta.  [25bdbf69]
 
 ===== General Improvements =====
 
@@ -53,11 +58,11 @@ Included in this release...
 ===== Additional Contributors =====
 
   * Chuck Elliot - Korg-M3-Factory-ALL.rgd
+  * Chuck Elliot - Korg-M1.rgd
   * Grzegorz Pruchniakowski - Polish translation
   * Icenowy Zheng - Chinese translation
   * Icenowy Zheng - Yamaha-MM6-MM8.rgd
   * Huanyu Liu - Yamaha-PSR-SX600.rgd
-  * Chuck Elliot - Korg-M1.rgd
 
 ====== ROSEGARDEN 24.06 RELEASED ======
 
