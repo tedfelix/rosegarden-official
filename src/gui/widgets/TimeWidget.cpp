@@ -88,7 +88,7 @@ TimeWidget::init(bool editable)
     bool savedEditable = editable;
     editable = true;
 
-    QGridLayout *layout = new QGridLayout;
+    QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(5);
     QLabel *label = nullptr;
 
@@ -298,8 +298,6 @@ TimeWidget::init(bool editable)
     } else {
         m_tempo = nullptr;
     }
-
-    setLayout(layout);
 
     if (!savedEditable) {
         if (m_note)
