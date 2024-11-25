@@ -88,7 +88,6 @@ TimeWidget::init(bool editable)
     bool savedEditable = editable;
     editable = true;
 
-    setContentsMargins(5, 5, 5, 5);
     QGridLayout *layout = new QGridLayout;
     layout->setSpacing(5);
     QLabel *label = nullptr;

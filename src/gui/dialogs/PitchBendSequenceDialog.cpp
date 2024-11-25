@@ -224,7 +224,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         tr("Pre Bend") :
         tr("Pre Ramp");
     QGroupBox *prebendBox = new QGroupBox(prebendText);
-    prebendBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *prebendLayout = new QGridLayout(prebendBox);
     prebendLayout->setSpacing(5);
     mainLayout->addWidget(prebendBox);
@@ -266,7 +265,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         tr("Bend Sequence") :
         tr("Ramp Sequence");
     QGroupBox *sequenceBox = new QGroupBox(sequenceText);
-    sequenceBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *sequenceLayout = new QGridLayout(sequenceBox);
     sequenceLayout->setSpacing(5);
     mainLayout->addWidget(sequenceBox);
@@ -313,7 +311,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     QGroupBox *modulation = new QGroupBox(modulationText);
     modulation->
         setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
-    modulation->setContentsMargins(5, 5, 5, 5);
     QGridLayout *modulationLayout = new QGridLayout(modulation);
     modulationLayout->setSpacing(5);
     mainLayout->addWidget(modulation);
