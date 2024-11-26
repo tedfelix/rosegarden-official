@@ -205,14 +205,25 @@ private:
 
     /**
      * init() creates these and then the vector is never changed.
-     * connect() hooks these up to the plugin so it can read from them.
-     * run() just clears these.
      *
-     * The GUI and the sequencer write to atomSeq using
-     * lv2_atom_sequence_append_event(). This is not thread safe.
+     * connect() hooks these up to the plugin (audio thread) so it can read
+     * from them.
+     *
+     * run() (audio thread) activates the plugin which should read from these,
+     * then it clears these.
+     *
+     * sendPluginParameter() (GUI and sequencer) writes to these.
+     *
+     * setPortByteArray() (GUI and more?) writes to these.
+     *
+     * sendMidiData() (sequencer) writes to these.
+     *
+     * m_atomInputMutex is required to lock all this activity from all the
+     * threads.
      */
     std::vector<AtomPort> m_atomInputPorts;
     mutable QMutex m_atomInputMutex;
+
     /// Port updates come through here on their way to m_portValueQueue.
     /**
      * Thread Safe.  This is only touched by the audio thread.  Plugin

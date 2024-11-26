@@ -1411,6 +1411,9 @@ void LV2PluginInstance::sendMidiData(const QByteArray& rawMidi,
         midiBuf[ebs + ib] = rawMidi[ib];
     }
 
+    // Guard writing to m_atomInputPorts.
+    QMutexLocker lock(&m_atomInputMutex);
+
     for (const AtomPort &aip : m_atomInputPorts) {
         if (aip.isMidi) {
             LV2_Atom_Event* atom =
