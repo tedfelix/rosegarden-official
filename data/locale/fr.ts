@@ -16270,7 +16270,7 @@ Voulez-vous utiliser
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;If checked, Rosegarden&apos;s beamings will be exported.  Otherwise, LilyPond will calculate beams automatically.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Si coché les ligatures deRosegardenseront exportées.  Sinon les ligatures seront recalculées automatiquement par LilyPond.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Si coché les ligatures de Rosegarden seront exportées.  Sinon les ligatures seront recalculées automatiquement par LilyPond.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
