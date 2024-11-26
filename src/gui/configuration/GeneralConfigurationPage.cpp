@@ -445,7 +445,13 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     ++row;
 
     // Tack label width (after buttons, i.e. just the text)
-    layout->addWidget(new QLabel(tr("Track Label width"), frame), row, 0);
+    label = new QLabel(tr("Track Label width"), frame);
+    tipText = tr(
+            "<qt><p>Select the width of track labels names. This is the text "
+            "after the mute, record and solo buttons</p></qt>");
+    label->setToolTip(tipText);    
+    layout->addWidget(label, row, 0);
+
     m_trackLabelWidth = new QComboBox(frame);
     m_trackLabelWidth->addItem(tr("Tight"));
     m_trackLabelWidth->addItem(tr("Medium"));
