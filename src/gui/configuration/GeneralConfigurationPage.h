@@ -119,6 +119,7 @@ private:
     QCheckBox *m_notationBackgroundTextures;
     QCheckBox *m_longTitles;
     QComboBox *m_trackSize;
+    QComboBox *m_trackLabelWidth;
     QCheckBox *m_useNativeFileDialogs;
 
     // External Applications tab

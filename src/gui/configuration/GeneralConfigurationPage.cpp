@@ -444,6 +444,22 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
+    // Tack label width (after buttons, i.e. just the text)
+    layout->addWidget(new QLabel(tr("Track Label width"), frame), row, 0);
+    m_trackLabelWidth = new QComboBox(frame);
+    m_trackLabelWidth->addItem(tr("Tight"));
+    m_trackLabelWidth->addItem(tr("Medium"));
+    m_trackLabelWidth->addItem(tr("Wide"));
+
+    m_trackLabelWidth->setCurrentIndex(
+        settings.value("track_label_width", 0).toInt());
+    connect(m_trackLabelWidth, static_cast<void(QComboBox::*)(int)>(
+                    &QComboBox::activated),
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_trackLabelWidth, row, 1, 1, 3);
+
+    ++row;
+
     // Use native file dialogs
     layout->addWidget(
             new QLabel(tr("Use native file dialogs")),
@@ -630,6 +646,11 @@ void GeneralConfigurationPage::apply()
             (settings.value("track_size", 0).toInt() !=
              m_trackSize->currentIndex());
     settings.setValue("track_size", m_trackSize->currentIndex());
+    
+    const bool trackLabelWidthChanged =
+             (settings.value("track_label_width", 0).toInt() !=
+             m_trackLabelWidth->currentIndex());
+    settings.setValue("track_label_width", m_trackLabelWidth->currentIndex());    
     settings.endGroup();
 
     Preferences::setUseNativeFileDialogs(m_useNativeFileDialogs->isChecked());
@@ -659,6 +680,12 @@ void GeneralConfigurationPage::apply()
         QMessageBox::information(this, tr("Rosegarden"),
                 tr("You must restart Rosegarden or open a file for the track size change to take effect."));
     }
+
+    if (trackLabelWidthChanged) {
+        QMessageBox::information(this, tr("Rosegarden"),
+                tr("You must restart Rosegarden or open a file for the track label width change to take effect."));
+    }
+
 }
 
 
