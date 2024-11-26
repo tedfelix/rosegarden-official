@@ -209,10 +209,10 @@ private:
      * run() just clears these.
      *
      * The GUI and the sequencer write to atomSeq using
-     * lv2_atom_sequence_append_event().  I assume that does the appropriate
-     * locking (given the name "atom") and therefore this is thread safe.
+     * lv2_atom_sequence_append_event(). This is not thread safe.
      */
     std::vector<AtomPort> m_atomInputPorts;
+    mutable QMutex m_atomInputMutex;
     /// Port updates come through here on their way to m_portValueQueue.
     /**
      * Thread Safe.  This is only touched by the audio thread.  Plugin
@@ -319,10 +319,6 @@ private:
     /**
      * updatePortValue() adds items to this.
      * triggerPortUpdates() takes items off of this.
-     *
-     * Note that in the other, more common direction, LV2 offers
-     * lv2_atom_sequence_append_event() which I assume is already
-     * thread safe.
      */
     PortValueQueue m_portValueQueue;
     QMutex m_portValueQueueMutex;

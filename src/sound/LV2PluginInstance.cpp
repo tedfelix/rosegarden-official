@@ -865,6 +865,7 @@ LV2PluginInstance::setPortByteArray(unsigned int port,
 {
     RG_DEBUG << "setPortByteArray" << port << protocol;
     if (protocol == m_atomTransferUrid) {
+        QMutexLocker lock(&m_atomInputMutex);
         for (const AtomPort& ap : m_atomInputPorts) {
             if (ap.index == port) {
                 RG_DEBUG << "setPortByteArray send bytes" << ba.size() <<
@@ -1217,7 +1218,23 @@ LV2PluginInstance::run(const RealTime &rt)
     //
     //     See the "if" above for m_instance->lv2_descriptor.  Remove it
     //     to see the crashes.
-    lilv_instance_run(m_instance, m_blockSize);
+    {
+        QMutexLocker lock(&m_atomInputMutex);
+        lilv_instance_run(m_instance, m_blockSize);
+        // clear atom in buffers
+        for (const AtomPort &ap : m_atomInputPorts) {
+            lv2_atom_sequence_clear(ap.atomSeq);
+        }
+    }
+
+    for (const AtomPort &ap : m_atomOutputPorts) {
+        if (ap.atomSeq->atom.size == 8 * ABUFSIZED - 8) {
+            // if the plugin has not touched the output buffer it
+            // should be reset
+            RG_DEBUG << "run resetting unused buffer" << ap.index;
+            lv2_atom_sequence_clear(ap.atomSeq);
+        }
+    }
 
     /*
     // debug
@@ -1255,11 +1272,6 @@ LV2PluginInstance::run(const RealTime &rt)
         }
 
         if (m_workerInterface->end_run) m_workerInterface->end_run(m_instance);
-    }
-
-    // clear atom in buffers
-    for (const AtomPort &ap : m_atomInputPorts) {
-        lv2_atom_sequence_clear(ap.atomSeq);
     }
 
     // get atom out data
