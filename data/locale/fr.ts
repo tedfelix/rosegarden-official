@@ -3428,12 +3428,12 @@
     <message>
         <location line="+1"/>
         <source>Orff soprano glockenspiel</source>
-        <translation></translation>
+        <translation>Glockenspiel Orff soprano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orff alto glockenspiel</source>
-        <translation>Glockenspiel Orff alto </translation>
+        <translation>Glockenspiel Orff alto</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3999,7 +3999,7 @@
     <message>
         <location line="+1"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation></translation>
+        <translation>Orgue électronique (clavier) (aigus)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4029,22 +4029,22 @@
     <message>
         <location line="+1"/>
         <source>Accordion (treble)</source>
-        <translation>Accordéon (Aigu)</translation>
+        <translation>Accordéon (Aigus)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Accordion (bass)</source>
-        <translation>Accordéon (grave)</translation>
+        <translation>Accordéon (graves)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bandoneon (treble)</source>
-        <translation></translation>
+        <translation>Bandonéon (aigus)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bandoneon (bass)</source>
-        <translation></translation>
+        <translation>Bandonéon (graves)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4065,7 +4065,7 @@
     <message>
         <location line="+1"/>
         <source>Soprano</source>
-        <translation></translation>
+        <translation>Soprano</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4075,12 +4075,12 @@
     <message>
         <location line="+1"/>
         <source>Alto</source>
-        <translation></translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tenor</source>
-        <translation></translation>
+        <translation>Ténor</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4090,7 +4090,7 @@
     <message>
         <location line="+1"/>
         <source>Bass</source>
-        <translation></translation>
+        <translation>Basse</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4170,7 +4170,7 @@
     <message>
         <location line="+1"/>
         <source>Acoustic Grand Piano</source>
-        <translation>Grand piano (acoustique)</translation>
+        <translation>Piano à queue (acoustique)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4180,7 +4180,7 @@
     <message>
         <location line="+1"/>
         <source>Electric Grand Piano</source>
-        <translation>Grand piano (électrique)</translation>
+        <translation>Piano à queue (électrique)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4630,7 +4630,7 @@
     <message>
         <location line="+1"/>
         <source>Banjo</source>
-        <translation></translation>
+        <translation>Banjo</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4645,7 +4645,7 @@
     <message>
         <location line="+1"/>
         <source>Bag pipe</source>
-        <translation></translation>
+        <translation>Cornemuse</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5049,7 +5049,7 @@
         <location line="-57"/>
         <location line="+58"/>
         <source>Sustain</source>
-        <translation></translation>
+        <translation>Sustain</translation>
     </message>
     <message>
         <location line="-57"/>
@@ -5528,12 +5528,12 @@
     <message>
         <location line="+187"/>
         <source>&amp;Update all Figurations</source>
-        <translation>&amp;Mettre à jour tous les traits</translation>
+        <translation>&amp;Mettre à jour tous les motifs (figurations)</translation>
     </message>
     <message>
         <location line="+37"/>
         <source>&amp;Rosegarden Tutorials</source>
-        <translation></translation>
+        <translation>Tutoriels de &amp;Rosegarden</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -6112,7 +6112,7 @@
         <location line="-420"/>
         <location line="+423"/>
         <source>S&amp;olo</source>
-        <translation></translation>
+        <translation>&amp;Solo</translation>
     </message>
     <message>
         <location line="-422"/>
@@ -6480,17 +6480,17 @@
     <message>
         <location line="-702"/>
         <source>Highlighting</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre en évidence le segment actif</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Sur toutes les &amp;pistes</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Current on &amp;same track</source>
-        <translation type="unfinished"></translation>
+        <translation>Seulement sur sa &amp;piste</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -6823,7 +6823,7 @@
     <message>
         <location line="+1"/>
         <source>U&amp;ntuplet</source>
-        <translation>A&amp;nuler N-olet</translation>
+        <translation>A&amp;nnuler N-olet</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7590,7 +7590,7 @@
         <location line="+18"/>
         <location line="+18"/>
         <source>IV/fa sharp</source>
-        <translation>IV</translation>
+        <translation>IV dièse</translation>
     </message>
     <message>
         <location line="-497"/>
@@ -8098,7 +8098,8 @@
     <message>
         <location line="+42"/>
         <source>&amp;Figuration</source>
-        <translation>&amp;Trait</translation>
+        <translatorcomment>&quot;Figuration&quot; ne semble pas être un terme musical couramment utilisé en français. Je n&apos;ai pas trouvé son équivalent exact. Je l&apos;ai longtemps traduit par &quot;trait&quot;, mais ce n&apos;était pas satisfaisant, trait impliquant une certaine virtuosité. Dans le Wikipedia français, se trouve un parallèle entre figuration et &quot;voicing&quot;. Mais &quot;voicing&quot; ne me semble pas du tout correspondre à &quot;figuration&quot; dans RG. Finalement, je choisis &quot;motif&quot;, qui me semble le plus adapté, même si le Wikipedia anglais fait remarquer q&apos;une &quot;figuration&quot; n&apos;est qu&apos;un élément d&apos;un &quot;motif&quot;.</translatorcomment>
+        <translation>&amp;Motif (Figuration)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8108,7 +8109,7 @@
     <message>
         <location line="+1"/>
         <source>Mark Selection as &amp;Figuration</source>
-        <translation>Choisir la sélection comme &amp;Trait</translation>
+        <translation>Choisir la sélection comme &amp;Motif</translation>
     </message>
     <message>
         <source>`</source>
@@ -8738,7 +8739,7 @@
         <location line="-84"/>
         <location line="+83"/>
         <source>Repe&amp;at Last Quantize</source>
-        <translation>Ref&amp;aire la dernière quantification</translation>
+        <translation>&amp;Refaire la dernière quantification</translation>
     </message>
     <message>
         <location line="-78"/>
@@ -8792,7 +8793,7 @@
     <message>
         <location line="+93"/>
         <source>Transpos&amp;e by Semitones...</source>
-        <translation>Transposer par &amp;demi-tons...</translation>
+        <translation>Transposer par demi-&amp;tons...</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -8833,12 +8834,12 @@
     <message>
         <location line="+2"/>
         <source>E&amp;xpand Block Chord Segments by Figuration</source>
-        <translation>Transformer en traits les blocs-accords des segments</translation>
+        <translation>&amp;Transformer en motifs (figurations) les blocs-accords des segments</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Manage Tri&amp;ggered Segments</source>
-        <translation>Gérer les Se&amp;gments déclenchés</translation>
+        <translation>Gérer les Segments déc&amp;lenchés</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9118,31 +9119,31 @@
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>Cb</source>
         <comment>note name</comment>
-        <translation>Do bémol</translation>
+        <translation>Do b</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Db</source>
         <comment>note name</comment>
-        <translation>Ré bémol</translation>
+        <translation>Ré b</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation>Mi bémol</translation>
+        <translation>Mi b</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>E#</source>
         <comment>note name</comment>
-        <translation>Mi dièse</translation>
+        <translation>Mi #</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fb</source>
         <comment>note name</comment>
-        <translation>Fa bémol</translation>
+        <translation>Fa b</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -9160,7 +9161,7 @@
         <location line="+2"/>
         <source>B#</source>
         <comment>note name</comment>
-        <translation></translation>
+        <translation>Si #</translation>
     </message>
     <message>
         <source>Cu�ca</source>
@@ -9204,7 +9205,7 @@
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+746"/>
         <location line="+133"/>
         <source>%1. %2</source>
-        <translation></translation>
+        <translation>%1. %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+479"/>
@@ -9257,7 +9258,7 @@
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation>Do#</translation>
+        <translation>Do #</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9270,7 +9271,7 @@
         <location line="+0"/>
         <source>D#</source>
         <comment>note name</comment>
-        <translation>Ré#</translation>
+        <translation>Ré #</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9291,7 +9292,7 @@
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation>Fa#</translation>
+        <translation>Fa #</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -9305,7 +9306,7 @@
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation>Sol#</translation>
+        <translation>Sol #</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -9319,7 +9320,7 @@
         <location filename="../InstrumentStrings.cpp" line="-1"/>
         <source>A#</source>
         <comment>note name</comment>
-        <translation>La#</translation>
+        <translation>La #</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -9428,12 +9429,12 @@
         <location filename="../../src/sound/AudioFileManager.h" line="+288"/>
         <location line="+2"/>
         <source>Bad audio file path </source>
-        <translation></translation>
+        <translation>Mauvais chemin d&apos;accès au fichier audio </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad audio file path (malformed file?) </source>
-        <translation></translation>
+        <translation>Mauvais chemin d&apos;accès au fichier audio  (nom mal formé ?) </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -9539,7 +9540,7 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location line="+2"/>
         <source>Figuration Source Segment</source>
-        <translation>Segment source des traits</translation>
+        <translation>Segment source du motif</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -9569,7 +9570,7 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
         <source>Update Figurations</source>
-        <translation>Mettre à jour les traits</translation>
+        <translation>Mettre à jour les motifs (figurations)</translation>
     </message>
     <message>
         <source>LilyPond does not allow spaces or backslashes in filenames.
@@ -10105,7 +10106,7 @@ Voulez-vous utiliser
     <message>
         <location line="+2"/>
         <source>Add Figuration</source>
-        <translation>Ajouter un trait</translation>
+        <translation>Ajouter un motif</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -10525,7 +10526,7 @@ Voulez-vous utiliser
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="+78"/>
         <source>&lt;no plugin&gt;</source>
-        <translation>&lt;pas de module externe&gt;</translation>
+        <translation>&lt;pas de greffon&gt;</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -10735,7 +10736,7 @@ Voulez-vous utiliser
         <location line="-173"/>
         <location line="+177"/>
         <source>&lt;no plugin&gt;</source>
-        <translation>&lt;pas de module externe&gt;</translation>
+        <translation>&lt;pas de greffon&gt;</translation>
     </message>
     <message>
         <location line="+141"/>
@@ -11803,7 +11804,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+81"/>
         <source>&lt;no plugin&gt;</source>
-        <translation></translation>
+        <translation>&lt;pas de greffon&gt;</translation>
     </message>
     <message>
         <location line="+72"/>
@@ -11993,12 +11994,12 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+112"/>
         <source>variation toggled</source>
-        <translation type="unfinished"></translation>
+        <translation>variation basculée</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>variation changed</source>
-        <translation type="unfinished"></translation>
+        <translation>variation modifiée</translation>
     </message>
     <message>
         <location line="+111"/>
@@ -14253,7 +14254,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location filename="../../src/commands/segment/ExpandFigurationCommand.h" line="+45"/>
         <source>Expand Block Chords to Figurations</source>
-        <translation>Transformer les blocs-accords en traits</translation>
+        <translation>Transformer les blocs-accords en motifs</translation>
     </message>
 </context>
 <context>
@@ -14771,7 +14772,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="-79"/>
         <source>Advanced Looping</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisation des fonctions de bouclage avancées</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -14891,7 +14892,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+10"/>
         <source>Figuration source</source>
-        <translation>Source du trait</translation>
+        <translation>Source du motif</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -16719,7 +16720,8 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="-18"/>
         <source>PPQN/Division for MIDI File Export</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>PPQN = Pulses Per Quarter Note</translatorcomment>
+        <translation>PPQN (nombre d&apos;impulsions par noire) pour exportation en fichier MIDI</translation>
     </message>
     <message>
         <location line="+54"/>
@@ -17079,7 +17081,7 @@ répartis verticalement sur la page)</translation>
     <message>
         <location filename="../../src/commands/notation/MarkParallelCommand.h" line="+45"/>
         <source>Mark Parallel</source>
-        <translation></translation>
+        <translation>Marquer parallélisme</translation>
     </message>
 </context>
 <context>
@@ -17582,7 +17584,7 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message>
         <location line="-1015"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Contrôleur %2 %3</translation>
+        <translation>%1 Contrôleur %2 %3</translation>
     </message>
     <message>
         <location line="+1105"/>
@@ -17635,7 +17637,7 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message>
         <location line="+842"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Contrôleur %2 %3</translation>
+        <translation>%1 Contrôleur %2 %3</translation>
     </message>
     <message>
         <location line="+378"/>
@@ -17795,7 +17797,7 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
         <location line="-52"/>
         <location line="+59"/>
         <source>Pitch Bend</source>
-        <translation></translation>
+        <translation>Pitch Bend</translation>
     </message>
     <message>
         <location line="-52"/>
@@ -17905,12 +17907,12 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
         <location line="+30"/>
         <location line="+30"/>
         <source>no</source>
-        <translation type="unfinished"></translation>
+        <translation>non</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>yes</source>
-        <translation type="unfinished"></translation>
+        <translation>oui</translation>
     </message>
     <message>
         <location line="+70"/>
@@ -18172,7 +18174,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+16"/>
         <source>Edit</source>
-        <translation type="unfinished">Editer</translation>
+        <translation>Editer</translation>
     </message>
 </context>
 <context>
@@ -18972,7 +18974,7 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
     <message>
         <location line="-2338"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Contrôleur %2 %3</translation>
+        <translation>%1 Contrôleur %2 %3</translation>
     </message>
     <message>
         <location line="+1171"/>
@@ -19157,7 +19159,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+1407"/>
         <source>%1 Controller %2 %3</source>
-        <translation type="unfinished">%1 Contrôleur %2 %3</translation>
+        <translation>%1 Contrôleur %2 %3</translation>
     </message>
     <message>
         <location line="+91"/>
@@ -19954,7 +19956,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+8"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation>Orgue électronique (manuel) (aigu)</translation>
+        <translation>Orgue électronique (clavier) (aigus)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -21678,7 +21680,7 @@ Veuillez quitter puis relancer Rosegarden pour rétablir ces fonctionnalités.</
     <message>
         <location line="+402"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
-        <translation>Il n&apos;est pas possible de transformer un fichier audio avec des traits</translation>
+        <translation>Il n&apos;est pas possible de transformer un fichier audio avec des motifs</translation>
     </message>
     <message>
         <location line="+101"/>
@@ -21698,7 +21700,8 @@ Veuillez quitter puis relancer Rosegarden pour rétablir ces fonctionnalités.</
         <location line="-2425"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
-        <translation></translation>
+        <translation>L&apos;instant de coupure n&quot;est pas à l&apos;intérieur d&apos;un segment sélectionné.
+Aucun segment ne sera coupé.</translation>
     </message>
     <message>
         <location line="+101"/>
@@ -22873,7 +22876,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.h" line="+49"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation>Transposer par i&amp;ntervalle...</translation>
+        <translation>Transposer par inter&amp;valle...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="+37"/>
@@ -22895,7 +22898,8 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/gui/dialogs/SelectBankDialog.cpp" line="+47"/>
         <source>Select Bank</source>
-        <translation>Choisir un numéro de banque</translation>
+        <translatorcomment>&quot;Choisir un numéro de banque&quot; est trop long pour la largeur du dialogue (v24.12).</translatorcomment>
+        <translation>Num. banque</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -23967,7 +23971,9 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+10"/>
         <source>%1.%2%3 qpm (%4.%5%6 bpm)   </source>
-        <translation type="unfinished">%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
+        <translatorcomment>La traduction de qpm devrait être npm (quarter -&gt; noire), mais npm est-il compréhensible en français ?
+Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais la traduction.</translatorcomment>
+        <translation>%1.%2%3 npm (%4.%5%6 bpm)   </translation>
     </message>
     <message>
         <location line="+22"/>
@@ -23987,7 +23993,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+12"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoView-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -25370,13 +25376,15 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
         <location line="-93"/>
         <location line="+97"/>
         <source>RPN</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>&quot;Registered Parameter Number&quot; de la norme MIDI</translatorcomment>
+        <translation>RPN</translation>
     </message>
     <message>
         <location line="-93"/>
         <location line="+97"/>
         <source>NRPN</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>&quot;Non Registered Parameter Number&quot; de la norme MIDI</translatorcomment>
+        <translation>NRPN</translation>
     </message>
     <message>
         <location line="-52"/>
