@@ -21,15 +21,40 @@
 
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"  // For PluginPort
+#include "document/RosegardenDocument.h"
+#include "gui/seqmanager/SequenceManager.h"
 
 #include <lv2/midi/midi.h>
 #include <lv2/patch/patch.h>
 #include <lilv/lilv.h>
 
 #include <mutex>
+#include <unistd.h>
 
 namespace
 {
+
+static int sampleRate = 0;
+
+static void getSampleRate()
+{
+    RG_DEBUG << "getSampleRate";
+    while (true) {
+        Rosegarden::RosegardenDocument* doc =
+            Rosegarden::RosegardenDocument::currentDocument;
+        if (doc) {
+            Rosegarden::SequenceManager* seqManager =
+                doc->getSequenceManager();
+            if (seqManager) {
+                sampleRate = seqManager->getSampleRate();
+                if (sampleRate != 0) break;
+            }
+        }
+        RG_DEBUG << "getSampleRate waiting";
+        usleep(10000);
+    }
+    RG_DEBUG << "getSampleRate got" << sampleRate;
+}
 
 /**
  * Thread Safe.
@@ -53,6 +78,19 @@ initPluginData()
     LilvWorld * const world = Rosegarden::LV2World::get();
 
     const LilvPlugins *allPlugins = lilv_world_get_all_plugins(world);
+
+    LilvNode *cpn = lilv_new_uri(world, LILV_URI_CONTROL_PORT);
+    LilvNode *atn = lilv_new_uri(world, LILV_URI_ATOM_PORT);
+    LilvNode *ipn = lilv_new_uri(world, LILV_URI_INPUT_PORT);
+    LilvNode* midiNode = lilv_new_uri(world, LV2_MIDI__MidiEvent);
+    LilvNode* patchNode = lilv_new_uri(world, LV2_PATCH__Message);
+    LilvNode* portSampleRateNode = lilv_new_uri(world, LV2_CORE__sampleRate);
+    LilvNode* toggledNode =
+        lilv_new_uri(world, "http://lv2plug.in/ns/lv2core#toggled");
+    LilvNode* integerNode =
+        lilv_new_uri(world, "http://lv2plug.in/ns/lv2core#integer");
+    LilvNode* logarithmicNode =
+        lilv_new_uri(world, "http://lv2plug.in/ns/ext/port-props#logarithmic");
 
     LILV_FOREACH (plugins, i, allPlugins) {
         const LilvPlugin* plugin = lilv_plugins_get(allPlugins, i);
@@ -103,15 +141,9 @@ initPluginData()
             const LilvPort* port = lilv_plugin_get_port_by_index(plugin, p);
 
             Rosegarden::LV2PluginDatabase::LV2PortData portData;
-            LilvNode *cpn = lilv_new_uri(world, LILV_URI_CONTROL_PORT);
-            LilvNode *atn = lilv_new_uri(world, LILV_URI_ATOM_PORT);
-            LilvNode *ipn = lilv_new_uri(world, LILV_URI_INPUT_PORT);
             bool cntrl = lilv_port_is_a(plugin, port, cpn);
             bool atom = lilv_port_is_a(plugin, port, atn);
             bool inp = lilv_port_is_a(plugin, port, ipn);
-            lilv_node_free(cpn);
-            lilv_node_free(atn);
-            lilv_node_free(ipn);
             LilvNode* portNameNode = lilv_port_get_name(plugin, port);
             QString portName;
             if (portNameNode) {
@@ -125,14 +157,10 @@ initPluginData()
             portData.portType = Rosegarden::LV2PluginDatabase::LV2AUDIO;
             if (cntrl || atom) portData.portType = Rosegarden::LV2PluginDatabase::LV2CONTROL;
             if (atom && inp) {
-                LilvNode* midiNode = lilv_new_uri(world, LV2_MIDI__MidiEvent);
                 bool isMidi =
                     lilv_port_supports_event(plugin, port, midiNode);
-                lilv_node_free(midiNode);
-                LilvNode* patchNode = lilv_new_uri(world, LV2_PATCH__Message);
                 bool isPatch =
                     lilv_port_supports_event(plugin, port, patchNode);
-                lilv_node_free(patchNode);
                 if (isMidi) {
                     portData.portType = Rosegarden::LV2PluginDatabase::LV2MIDI;
                 }
@@ -153,6 +181,18 @@ initPluginData()
             float minVal = lilv_node_as_float(min);
             float maxVal = lilv_node_as_float(max);
 
+            bool portSampleRate =
+                lilv_port_has_property(plugin, port, portSampleRateNode);
+            if (portSampleRate) {
+                if (! sampleRate) getSampleRate();
+                // some plugins scale the defVal others don't !
+                if (defVal >= minVal && defVal <= maxVal) {
+                    // defVal is in range - scale it
+                    defVal *= sampleRate;
+                }
+                minVal *= sampleRate;
+                maxVal *= sampleRate;
+            }
             portData.def = defVal;
             portData.min = minVal;
             portData.max = maxVal;
@@ -165,25 +205,12 @@ initPluginData()
             lilv_node_free(max);
 
             // display hint
-            LilvNode* toggledNode =
-                lilv_new_uri(world,
-                             "http://lv2plug.in/ns/lv2core#toggled");
             bool isToggled =
                 lilv_port_has_property(plugin, port, toggledNode);
-            LilvNode* integerNode =
-                lilv_new_uri(world,
-                             "http://lv2plug.in/ns/lv2core#integer");
             bool isInteger =
                 lilv_port_has_property(plugin, port, integerNode);
-            LilvNode* logarithmicNode =
-                lilv_new_uri(world,
-                             "http://lv2plug.in/ns/ext/port-props#logarithmic");
             bool isLogarithmic =
                 lilv_port_has_property(plugin, port, logarithmicNode);
-
-            lilv_node_free(toggledNode);
-            lilv_node_free(integerNode);
-            lilv_node_free(logarithmicNode);
 
             RG_DEBUG << "displayHint:" <<
                 isToggled << isInteger << isLogarithmic;
@@ -202,6 +229,16 @@ initPluginData()
         }
         pluginDatabase[uri] = pluginData;
     }
+    lilv_node_free(cpn);
+    lilv_node_free(atn);
+    lilv_node_free(ipn);
+    lilv_node_free(midiNode);
+    lilv_node_free(patchNode);
+    lilv_node_free(portSampleRateNode);
+    lilv_node_free(toggledNode);
+    lilv_node_free(integerNode);
+    lilv_node_free(logarithmicNode);
+
     RG_DEBUG << "initPluginData done";
 }
 
