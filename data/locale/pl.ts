@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pl">
+<TS version="2.1" language="pl_PL">
 <context>
     <name>:</name>
     <message>
@@ -6778,7 +6778,7 @@
     <message>
         <location line="+35"/>
         <source>Interpret...</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpretuj...</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -7011,7 +7011,7 @@
     <message>
         <location line="-222"/>
         <source>Double Whole Note (Without Duration Change)</source>
-        <translation>Podwójna cała nuta (breve) (bez zmiany długości)</translation>
+        <translation>Podwójna cała nuta (breve) (bez zmiany wartości rytmicznej)</translation>
     </message>
     <message>
         <source>Ctrl+Alt+5</source>
@@ -7021,7 +7021,7 @@
     <message>
         <location line="+1"/>
         <source>Whole Note (Without Duration Change)</source>
-        <translation>Cała nuta (bez zmiany długości)</translation>
+        <translation>Cała nuta (bez zmiany wartości rytmicznej)</translation>
     </message>
     <message>
         <source>Ctrl+Alt+1</source>
@@ -7227,13 +7227,13 @@
         <location line="+1"/>
         <location line="+405"/>
         <source>&amp;Halve Durations</source>
-        <translation>Połowy długości</translation>
+        <translation>Połowy wartości rytmicznych</translation>
     </message>
     <message>
         <location line="-404"/>
         <location line="+405"/>
         <source>&amp;Double Durations</source>
-        <translation>Dwukrotne długości</translation>
+        <translation>Dwukrotne wartości rytmiczne</translation>
     </message>
     <message>
         <location line="-404"/>
@@ -8319,7 +8319,7 @@
     <message>
         <location line="+1"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
-        <translation>Cykl kropek bez zmiany długości</translation>
+        <translation>Cykl kropek bez zmiany wartości rytmicznej</translation>
     </message>
     <message>
         <source>Ctrl+Alt+.</source>
@@ -8329,7 +8329,7 @@
     <message>
         <location line="+11"/>
         <source>Half Note (Without Duration Change)</source>
-        <translation>Półnuta (bez zmiany długości)</translation>
+        <translation>Półnuta (bez zmiany wartości rytmicznej)</translation>
     </message>
     <message>
         <source>Ctrl+Alt+2</source>
@@ -8339,7 +8339,7 @@
     <message>
         <location line="+1"/>
         <source>Quarter Note (Without Duration Change)</source>
-        <translation>Ćwierćnuta (bez zmiany długości)</translation>
+        <translation>Ćwierćnuta (bez zmiany wartości rytmicznej)</translation>
     </message>
     <message>
         <source>Ctrl+Alt+4</source>
@@ -8349,7 +8349,7 @@
     <message>
         <location line="+1"/>
         <source>Eighth Note (Without Duration Change)</source>
-        <translation>Ósemka (bez zmiany długości)</translation>
+        <translation>Ósemka (bez zmiany wartości rytmicznej)</translation>
     </message>
     <message>
         <source>Ctrl+Alt+8</source>
@@ -8359,7 +8359,7 @@
     <message>
         <location line="+1"/>
         <source>Sixteenth Note (Without Duration Change)</source>
-        <translation>Szesnastka (bez zmiany długości)</translation>
+        <translation>Szesnastka (bez zmiany wartości rytmicznej)</translation>
     </message>
     <message>
         <source>Ctrl+Alt+6</source>
@@ -8369,7 +8369,7 @@
     <message>
         <location line="+1"/>
         <source>Thirty-Second Note (Without Duration Change)</source>
-        <translation>Trzydziestodwójka (bez zmiany długości)</translation>
+        <translation>Trzydziestodwójka (bez zmiany wartości rytmicznej)</translation>
     </message>
     <message>
         <source>Ctrl+Alt+3</source>
@@ -8379,7 +8379,7 @@
     <message>
         <location line="+1"/>
         <source>Sixty-Fourth Note (Without Duration Change)</source>
-        <translation>Sześćdziesięcioczwórka (bez zmiany długości)</translation>
+        <translation>Sześćdziesięcioczwórka (bez zmiany wartości rytmicznej)</translation>
     </message>
     <message>
         <source>Ctrl+Alt+0</source>
@@ -8767,7 +8767,7 @@
     <message>
         <location line="+38"/>
         <source>&amp;Durations</source>
-        <translation>Długości</translation>
+        <translation>Wartości rytmiczne</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -14816,7 +14816,7 @@ To może spowodować problemy, jeśli nadpisze się inne, później wyliczone wa
     <message>
         <location line="+3"/>
         <source>Duration:</source>
-        <translation>Długość:</translation>
+        <translation>Wartość rytmiczna:</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -14835,12 +14835,12 @@ To może spowodować problemy, jeśli nadpisze się inne, później wyliczone wa
     <message>
         <location line="-32"/>
         <source>Use notation duration</source>
-        <translation>Użyj długości notacji</translation>
+        <translation>Użyj wartości rytmicznej notacji</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Use Notation Editor note durations, not actual</source>
-        <translation>Użyj długości notacji edytora nutowego, nie aktualnej</translation>
+        <translation>Użyj wartości rytmicznej notacji edytora nutowego, nie aktualnej</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -15080,7 +15080,7 @@ To może spowodować problemy, jeśli nadpisze się inne, później wyliczone wa
     <message>
         <location line="+1"/>
         <source>Duration  </source>
-        <translation>Długość</translation>
+        <translation>Wartość rytmiczna</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -15729,7 +15729,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="-79"/>
         <source>Advanced Looping</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapętlanie zaawansowane</translation>
     </message>
     <message>
         <location line="+202"/>
@@ -15767,7 +15767,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     </message>
     <message>
         <source>Advanced Looping (beta)</source>
-        <translation type="vanished">Zaawansowane zapętlanie (beta)</translation>
+        <translation type="vanished">Zapętlanie zaawansowane (beta)</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -15777,7 +15777,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+11"/>
         <source>LV2 Plugin Support (beta)</source>
-        <translation type="unfinished"></translation>
+        <translation>Obsługa wtyczek LV2 (beta)</translation>
     </message>
     <message>
         <location line="+65"/>
@@ -19293,12 +19293,12 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location line="+10"/>
         <source>Split notes into ties to make durations match</source>
-        <translation>Podziel nuty łukami, aby dopasować długości</translation>
+        <translation>Podziel nuty łukami, aby dopasować wartości rytmiczne</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ignore existing durations</source>
-        <translation>Ignoruj istniejące długości</translation>
+        <translation>Ignoruj istniejące wartości rytmiczne</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -19338,7 +19338,7 @@ Kliknij dwukrotnie myszką, aby otworzyć edytor znaczników.</translation>
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Jeśli zaznaczysz, następujące funkcje są dostępne podczas wstawiania nut za pomocą myszki:&lt;ul&gt;&lt;li&gt;Rolka myszki zaznacza długość nuty.&lt;/li&gt;&lt;li&gt;Shift dodaje krzyżyk.&lt;/li&gt;&lt;li&gt;Ctrl dodaje bemol.&lt;/li&gt;&lt;li&gt;Shift+Ctrl dodaje nutę.&lt;/li&gt;&lt;li&gt;Kliknięcie środkowym przyciskiem myszki przełącza między nutami i pauzami.&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Jeśli zaznaczysz, następujące funkcje są dostępne podczas wstawiania nut za pomocą myszki:&lt;ul&gt;&lt;li&gt;Rolka myszki zaznacza wartość rytmiczną nuty.&lt;/li&gt;&lt;li&gt;Shift dodaje krzyżyk.&lt;/li&gt;&lt;li&gt;Ctrl dodaje bemol.&lt;/li&gt;&lt;li&gt;Shift+Ctrl dodaje nutę.&lt;/li&gt;&lt;li&gt;Kliknięcie środkowym przyciskiem myszki przełącza między nutami i pauzami.&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -21361,7 +21361,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location line="+19"/>
         <source>Quantize durations as well as start times</source>
-        <translation>Kwantyzuj długości oraz współrzędne początkowe</translation>
+        <translation>Kwantyzuj wartości rytmiczne oraz współrzędne początkowe</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -22709,7 +22709,7 @@ Zostaną wyeksportowane tylko ścieżki dźwiękowe i wtyczki syntezatora</trans
     <message>
         <location line="+635"/>
         <source>Interpret segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpretuj segmenty</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -23995,7 +23995,7 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+12"/>
         <source>Duration</source>
-        <translation>Długość</translation>
+        <translation>Wartość rytmiczna</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -24030,12 +24030,12 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+275"/>
         <source>Include notes with shorter performance durations</source>
-        <translation>Uwzględnij nuty z krótszą długością</translation>
+        <translation>Uwzględnij nuty z krótszą wartością rytmiczną</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Include notes with longer performance durations</source>
-        <translation>Uwzględnij nuty z dłuższą długością</translation>
+        <translation>Uwzględnij nuty z dłuższą wartością rytmiczną</translation>
     </message>
 </context>
 <context>
@@ -24395,7 +24395,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
         <location line="-102"/>
         <location line="+149"/>
         <source>Duration:</source>
-        <translation>Długość:</translation>
+        <translation>Wartość rytmiczna:</translation>
     </message>
     <message>
         <location line="-134"/>
@@ -24456,7 +24456,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+15"/>
         <source>Notation duration:</source>
-        <translation>Długość notacji:</translation>
+        <translation>Wartość rytmiczna notacji:</translation>
     </message>
     <message>
         <location line="+89"/>
@@ -24561,12 +24561,12 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+12"/>
         <source>Edit Duration</source>
-        <translation>Edytuj długość</translation>
+        <translation>Edytuj wartość rytmiczną</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Edit Notation Duration</source>
-        <translation>Edytuj długość notacji</translation>
+        <translation>Edytuj wartość rytmiczną notacji</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -26588,7 +26588,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+1"/>
         <source>Stretch or squash segment to note duration</source>
-        <translation>Skurcz lub zagęść segment do długości nuty</translation>
+        <translation>Skurcz lub zagęść segment do wartości rytmicznej nuty</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -26951,7 +26951,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+1"/>
         <source>Stretch or squash segment to note duration</source>
-        <translation>Skurcz lub zagęść segment do długości nuty</translation>
+        <translation>Skurcz lub zagęść segment do wartości rytmicznej nuty</translation>
     </message>
     <message>
         <location line="+2"/>
