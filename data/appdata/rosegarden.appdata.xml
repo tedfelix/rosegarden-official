@@ -15,15 +15,18 @@
     <launchable type="desktop-id">com.rosegardenmusic.rosegarden.desktop</launchable>
     <name>Rosegarden</name>
     <name xml:lang="fr">Rosegarden</name>
-    <summary xml:lang="fr">Séquenceur MIDI/audio et éditeur de partitions</summary>
     <summary>MIDI and Audio Sequencer and Notation Editor</summary>
-    <summary xml:lang="es">Secuenciador de MIDI y de audio y editor de partitura</summary>
+    <summary xml:lang="fr">Séquenceur MIDI/audio et éditeur de partitions</summary>
     <summary xml:lang="de">MIDI- und Audio-Sequencer und Notensatzprogramm</summary>
+    <summary xml:lang="es">Secuenciador de MIDI y de audio y editor de partitura</summary>
+    <summary xml:lang="ru">MIDI-секвенсер и нотный редактор</summary>
     <metadata_license>CC0</metadata_license>
     <project_license>GPL-2.0+</project_license>
     <content_rating type="oars-1.1" />
-    <summary xml:lang="ru">MIDI-секвенсер и нотный редактор</summary>
     <developer_name>Rosegarden development team</developer_name>
+    <developer id="com.rosegardenmusic">
+      <name>Rosegarden Development Team</name>
+    </developer>
     <update_contact>ted@tedfelix.com</update_contact>
     <!-- It's likely that this translation tag will not work.  We keep
          our translation files inside the binary.  We don't install them
@@ -31,6 +34,10 @@
          apps do.  Is there another way to specify a list of languages? -->
     <translation type="qt">rosegarden</translation>
     <url type="homepage">https://www.rosegardenmusic.com/</url>
+    <url type="bugtracker">https://sourceforge.net/p/rosegarden/bugs/</url>
+    <url type="contact">https://sourceforge.net/p/rosegarden/mailman/</url>
+    <url type="translate">https://www.rosegardenmusic.com/wiki/translator:add_or_update_translation</url>
+    <url type="contribute">https://www.rosegardenmusic.com/support/</url>
     <description>
         <p>
             Rosegarden is a general-purpose music composition and editing environment that offers a mixture of features inspired by MIDI sequencers, score editors, and DAWs.  Rosegarden offers a variety of extensions that work in conjunction with LilyPond to produce beautiful scores that often require little or no manual editing, and it generally does a good job of rendering human MIDI performances as legible notation.
@@ -53,6 +60,38 @@
     </categories>
 
     <releases>
+
+      <release type="stable" version="24.12" date="2024-12-04">
+        <url>https://rosegardenmusic.com/wiki/dev:24.12</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>LV2: Fix link problem with no gtk2.  [2e168f0d]</li>
+            <li>LV2: Add lv2 check for GUI library ok.  [9cb306b3]</li>
+            <li>Manage MIDI Banks and Programs dialog now allows the same bank MSB/LSB to be used for percussion and non-percussion banks on the same device.  Bug #1692.</li>
+            <li>Fix wrong ports being assigned on file load.  Bug #1687.  [663099cc]</li>
+            <li>Fix autoscroll and highlighting behavior with multiple segments on a track.  Bug #1672.</li>
+            <li>Fix missing scroll bar on Instrument Parameters Bank dropdown.  Bug #1695.  [295a2f7a]</li>
+            <li>Fix "turn repeats into copies" misses last segment.  Bug #1696.  [afcf2f0e]</li>
+            <li>Fix shortcut order ignored.  Bug #1702.  [b1272a6d]</li>
+            <li>Fix unexpected cursor position when moving from note to note on a bar with a clef or time signature.  Bug #1704.  [215b9d27]</li>
+            <li>Fix unexpected translation of bank and program names.  Bug #1705.  [6dbd6bcd]</li>
+            <li>Fix unexpected Save As... directory.  Feature #522.  [15db9d10]</li>
+            <li>Fix broken tempo line in tempo ruler after adding a time signature change.  Bug #1706.  [6a7ef89e]</li>
+            <li>Fix "Modify MIDI Filters" dialog does not mark document as changed.  Bug #1707.  [4e505977]</li>
+            <li>Fix LV2 sfizz plugin support.  [8fce0614]</li>
+            <li>Fix group box formatting issue in native/light theme.  Bug #1678.  [d2df6376]</li>
+            <li>LV2: Fix crashes and locking related to atom buffers.  [95b09722] [be37b31e]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>Make MIDI File Division value configurable for Export.  GH #9.  [991e4839]</li>
+            <li>WAV export of audio and soft synth tracks.  File > Export > Export WAV File...  [5b4d109e]</li>
+            <li>Apply interpretations to more than one segment.  Segment > Interpret...  Feature #517.  [b8a243a5]</li>
+          </ul>
+        </description>
+      </release>
 
       <release type="stable" version="24.06" date="2024-06-05">
         <url>https://rosegardenmusic.com/wiki/dev:24.06</url>
