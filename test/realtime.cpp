@@ -31,6 +31,7 @@ private Q_SLOTS:
 
 void TestRealTime::test()
 {
+    // These come out in the test output with "QDEBUG" on the front.
     //qDebug() << "Testing!\n";
 
     RealTime rt;
