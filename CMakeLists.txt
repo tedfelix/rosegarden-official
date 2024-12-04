@@ -5,9 +5,8 @@ cmake_minimum_required(VERSION 3.1)
 project(rosegarden)
 
 # Version
-set(ROSEGARDEN_VERSION "24.12")
-set(ROSEGARDEN_CODENAME "Incredible")
-#set(ROSEGARDEN_CODENAME "Joyfulness")
+set(ROSEGARDEN_VERSION "25.06")
+set(ROSEGARDEN_CODENAME "Joyfulness")
 #set(ROSEGARDEN_CODENAME "Keepsake")
 #set(ROSEGARDEN_CODENAME "Let Freedom Ring")
 #set(ROSEGARDEN_CODENAME "Mountain Music")
@@ -24,6 +23,9 @@ set(ROSEGARDEN_CODENAME "Incredible")
 #set(ROSEGARDEN_CODENAME "Xenophon")
 #set(ROSEGARDEN_CODENAME "Yellow Brick Road")
 #set(ROSEGARDEN_CODENAME "Zaïd")
+#set(ROSEGARDEN_CODENAME "Amadeus")
+#set(ROSEGARDEN_CODENAME "Blue Moon")
+#set(ROSEGARDEN_CODENAME "Cabaret")
 
 # Make the build type default to "Release"
 if(NOT CMAKE_BUILD_TYPE)
