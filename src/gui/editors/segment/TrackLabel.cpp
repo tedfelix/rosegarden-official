@@ -21,6 +21,7 @@
 #include "misc/Debug.h"
 #include "gui/dialogs/TrackLabelDialog.h"
 #include "misc/Preferences.h"
+#include "misc/ConfigGroups.h"
 
 #include <QFont>
 #include <QFrame>
@@ -28,6 +29,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <QMouseEvent>
+#include <QSettings>
 
 
 namespace
@@ -89,12 +91,37 @@ TrackLabel::TrackLabel(TrackId id,
 {
     setObjectName("TrackLabel");
 
+    // Compute Label Width
+
     QFont font;
     font.setPixelSize(trackHeight * 85 / 100);
     setFont(font);
 
     QFontMetrics fontMetrics(font);
-    setMinimumWidth(fontMetrics.boundingRect("XXXXXXXXXXXXXXXXXX").width());
+
+    // set the label width depending on the setting in Settings > Presentation
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    // Default to "2" for legacy wide.
+    const int trackLabelWidth = settings.value("track_label_width", 2).toInt();
+    // Write it back out so we can find it.
+    settings.setValue("track_label_width", trackLabelWidth);
+
+    int labelWidth{18};
+    if (trackLabelWidth == 0)       // Narrow: 8 char
+        labelWidth = 8;
+    else if (trackLabelWidth == 1)  // Medium: 12 char
+        labelWidth = 12;
+    else if (trackLabelWidth == 2)  // Wide: 18
+        labelWidth = 18;
+
+    QString labelWidthString;
+    // We use all "X" because the font is proportional and "X" is usually one
+    // of the wider characters in a proportional font.
+    labelWidthString.fill('X', labelWidth);
+
+    setFixedWidth(fontMetrics.boundingRect(labelWidthString).width());
+    
     setFixedHeight(trackHeight);
 
     setFrameShape(QFrame::NoFrame);
