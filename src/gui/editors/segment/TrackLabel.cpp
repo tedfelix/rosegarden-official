@@ -91,31 +91,36 @@ TrackLabel::TrackLabel(TrackId id,
 {
     setObjectName("TrackLabel");
 
+    // Compute Label Width
+
     QFont font;
     font.setPixelSize(trackHeight * 85 / 100);
     setFont(font);
 
     QFontMetrics fontMetrics(font);
 
-    // set the label length depending on the setting in Settings > Presentation
+    // set the label width depending on the setting in Settings > Presentation
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    int trackLabelWidth = settings.value("track_label_width", 0).toInt();
+    // Default to "2" for legacy wide.
+    const int trackLabelWidth = settings.value("track_label_width", 2).toInt();
     // Write it back out so we can find it.
     settings.setValue("track_label_width", trackLabelWidth);
-    
-    // Keeping the 'default' to 18 to be retro-compatible as this was the value
-    // used before this became a setting, so shouldn't break things
-    QString labelWidth = "123456789012345678";  // default (legacy): 18 
-    if (trackLabelWidth == 0)                   // Tight: 8 char
-        labelWidth = "12345678";
-    else if (trackLabelWidth == 1)              // Medium: 12 char
-        labelWidth = "123456789012";
-    else if (trackLabelWidth == 2)
-        labelWidth = "123456789012345678";      // Wide: 18
 
-    setMinimumWidth(fontMetrics.boundingRect(labelWidth).width());
-    // setMinimumWidth(fontMetrics.boundingRect("XXXXXXXXXXXXXXXXXX").width());
+    int labelWidth{18};
+    if (trackLabelWidth == 0)       // Narrow: 8 char
+        labelWidth = 8;
+    else if (trackLabelWidth == 1)  // Medium: 12 char
+        labelWidth = 12;
+    else if (trackLabelWidth == 2)  // Wide: 18
+        labelWidth = 18;
+
+    QString labelWidthString;
+    // We use all "X" because the font is proportional and "X" is usually one
+    // of the wider characters in a proportional font.
+    labelWidthString.fill('X', labelWidth);
+
+    setFixedWidth(fontMetrics.boundingRect(labelWidthString).width());
     
     setFixedHeight(trackHeight);
 

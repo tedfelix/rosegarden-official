@@ -444,7 +444,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    // Tack label width (after buttons, i.e. just the text)
+    // Track label width (after buttons, i.e. just the text)
     label = new QLabel(tr("Track Label width"), frame);
     tipText = tr(
             "<qt><p>Select the width of track labels names. This is the text "
@@ -453,12 +453,12 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     layout->addWidget(label, row, 0);
 
     m_trackLabelWidth = new QComboBox(frame);
-    m_trackLabelWidth->addItem(tr("Tight"));
+    m_trackLabelWidth->addItem(tr("Narrow"));
     m_trackLabelWidth->addItem(tr("Medium"));
     m_trackLabelWidth->addItem(tr("Wide"));
 
     m_trackLabelWidth->setCurrentIndex(
-        settings.value("track_label_width", 0).toInt());
+        settings.value("track_label_width", 2).toInt());
     connect(m_trackLabelWidth, static_cast<void(QComboBox::*)(int)>(
                     &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
@@ -654,8 +654,8 @@ void GeneralConfigurationPage::apply()
     settings.setValue("track_size", m_trackSize->currentIndex());
     
     const bool trackLabelWidthChanged =
-             (settings.value("track_label_width", 0).toInt() !=
-             m_trackLabelWidth->currentIndex());
+             (settings.value("track_label_width", 2).toInt() !=
+              m_trackLabelWidth->currentIndex());
     settings.setValue("track_label_width", m_trackLabelWidth->currentIndex());    
     settings.endGroup();
 

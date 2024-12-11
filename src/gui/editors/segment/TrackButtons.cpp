@@ -1315,6 +1315,10 @@ TrackButtons::makeButton(Track *track)
             m_clickedSigMapper, SLOT(map()));
 
 
+    // Squash it down to its smallest width.
+    trackHBox->setFixedWidth(hblayout->minimumSize().width());
+
+
     return trackHBox;
 }
 
