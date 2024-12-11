@@ -431,15 +431,22 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     // Track size
     layout->addWidget(new QLabel(tr("Track size"), frame), row, 0);
 
+    // The actual values are defined in ./editors/segment/TrackEditor.cpp
     m_trackSize = new QComboBox(frame);
     m_trackSize->addItem(tr("Small"));
     m_trackSize->addItem(tr("Medium"));
     m_trackSize->addItem(tr("Large"));
+    m_trackSize->addItem(tr("Extra Large"));
+    
     m_trackSize->setCurrentIndex(
             settings.value("track_size", 0).toInt());
     connect(m_trackSize, static_cast<void(QComboBox::*)(int)>(
                     &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
+    tipText = tr(
+            "<qt><p>Select the track size factor. Larger sizes are useful on "
+            "HDPI displays.</p></qt>");
+    m_trackSize->setToolTip(tipText);
     layout->addWidget(m_trackSize, row, 1, 1, 3);
 
     ++row;

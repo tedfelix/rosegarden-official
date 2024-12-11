@@ -36,6 +36,8 @@ Included in this release...
   * Fix LV2 sfizz plugin support.  [8fce0614]
   * Fix group box formatting issue in native/light theme.  Bug #1678.
     [d2df6376]
+  * LV2: Fix crashes and locking related to atom buffers.  [95b09722]
+    [be37b31e]
 
 ===== New Features =====
 
@@ -55,14 +57,14 @@ Included in this release...
     Studio > Manage MIDI Devices > Banks...
   * Tempo and Time Signature Editor has been rewritten and improved.
 
-===== Additional Contributors =====
+===== Additional Contributions =====
 
-  * Chuck Elliot - Korg-M3-Factory-ALL.rgd
-  * Chuck Elliot - Korg-M1.rgd
-  * Grzegorz Pruchniakowski - Polish translation
-  * Icenowy Zheng - Chinese translation
-  * Icenowy Zheng - Yamaha-MM6-MM8.rgd
-  * Huanyu Liu - Yamaha-PSR-SX600.rgd
+  * Korg-M3-Factory-ALL.rgd (Chuck Elliot) 
+  * Korg-M1.rgd (Chuck Elliot) 
+  * Updated Polish translation (Grzegorz Pruchniakowski) 
+  * Updated Chinese translation (Icenowy Zheng) 
+  * Yamaha-MM6-MM8.rgd (Icenowy Zheng) 
+  * Yamaha-PSR-SX600.rgd (Huanyu Liu) 
 
 ====== ROSEGARDEN 24.06 RELEASED ======
 

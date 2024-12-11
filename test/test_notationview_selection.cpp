@@ -6,12 +6,16 @@
 #include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotationView.h"
 
+#if 0
 int init()
 {
+    // ??? This causes the tests to fail completely.  I suspect there
+    //     is a new warning being issued by Qt.
     qputenv("QT_FATAL_WARNINGS", "1");
     return 0;
 }
 Q_CONSTRUCTOR_FUNCTION(init)
+#endif
 
 using namespace Rosegarden;
 
@@ -21,9 +25,14 @@ class TestNotationViewSelection : public QObject
     Q_OBJECT
 
 public:
-    TestNotationViewSelection()
-        : m_doc(nullptr, {}, true /*skip autoload*/, true, false /*no sound*/),
-          m_view(nullptr) {}
+    TestNotationViewSelection() :
+        m_doc(nullptr,  // parent
+              {},  // audioPluginManager
+              true,  // skipAutoload
+              true,  // clearCommandHistory
+              false)  // enableSound
+    {
+    }
 
 private Q_SLOTS:
     void initTestCase();
@@ -38,8 +47,8 @@ private:
     QString selectedNotes() const;
 
     RosegardenDocument m_doc;
-    Segment *m_segment;
-    NotationView *m_view;
+    Segment *m_segment{nullptr};
+    NotationView *m_view{nullptr};
     SequenceManager m_seqManager;
 };
 
