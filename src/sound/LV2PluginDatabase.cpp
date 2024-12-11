@@ -39,6 +39,10 @@ static int sampleRate = 0;
 static void getSampleRate()
 {
     RG_DEBUG << "getSampleRate";
+    // This function is called from the plugin enumeration thread
+    // which is started before the document and sequence manager are
+    // created. In most cases the main thread will be fast enough but
+    // this loop ensures that the sampleRate is correctly initialised.
     while (true) {
         Rosegarden::RosegardenDocument* doc =
             Rosegarden::RosegardenDocument::currentDocument;
