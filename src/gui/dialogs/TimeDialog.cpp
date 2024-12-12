@@ -76,13 +76,17 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     setWindowTitle(title);
     setObjectName("MinorDialog");
 
-    QWidget *vbox = new QWidget(this);
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
-    setLayout(vboxLayout);
+    QVBoxLayout *vboxLayout = new QVBoxLayout(this);
 
-    m_timeWidget = new TimeWidget(title, vbox, composition, startTime,
-                defaultDuration, minimumDuration, true, 
-                constrainToCompositionDuration);
+    m_timeWidget = new TimeWidget(
+            title,
+            this,  // parent
+            composition,
+            startTime,
+            defaultDuration,  // initialDuration
+            minimumDuration,
+            true,  // editable
+            constrainToCompositionDuration);
     vboxLayout->addWidget(m_timeWidget);
 
     // No such slot

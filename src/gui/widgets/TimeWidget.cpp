@@ -88,15 +88,9 @@ TimeWidget::init(bool editable)
     bool savedEditable = editable;
     editable = true;
 
-    QGridLayout *layout = new QGridLayout;
+    QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(5);
     QLabel *label = nullptr;
-
-    // When ThornStyle is not used, the title of the QGroupBox is
-    // misplaced (Bug #1678). The following line fixes it.
-    // This is more a hack than a real fix as I'm unable to find the cause
-    // of the problem, but it works.
-    setStyle(nullptr);
 
     if (m_isDuration) {
 
@@ -298,8 +292,6 @@ TimeWidget::init(bool editable)
     } else {
         m_tempo = nullptr;
     }
-
-    setLayout(layout);
 
     if (!savedEditable) {
         if (m_note)
