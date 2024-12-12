@@ -335,14 +335,16 @@ NotationView::NotationView(RosegardenDocument *doc,
     }
 
     // Set initial highlighting
-    QString defaultHighlightMode = "highlight_current_on_track";
+    const QString defaultHighlightMode = "highlight_within_track";
     QString highlightMode =
         settings.value("highlightmode",
                        defaultHighlightMode).toString();
-    QAction* hlAction = findAction(highlightMode);
+    // We can't use ActionFileClient::findAction() because it always returns a
+    // valid pointer.  We use QObject::findChild() instead.
+    QAction *hlAction = findChild<QAction *>(highlightMode);
     if (hlAction) {
         hlAction->setChecked(true);
-    } else {
+    } else {  // Not found, go with default.
         highlightMode = defaultHighlightMode;
         findAction(highlightMode)->setChecked(true);
     }
@@ -688,8 +690,8 @@ NotationView::setupActions()
 
     // highlighting menu
     createAction("highlight_none", SLOT(slotHighlight()));
-    createAction("highlight_current", SLOT(slotHighlight()));
-    createAction("highlight_current_on_track", SLOT(slotHighlight()));
+    createAction("highlight_within_track", SLOT(slotHighlight()));
+    createAction("highlight", SLOT(slotHighlight()));
 
     createAction("lyric_editor", SLOT(slotEditLyrics()));
     createAction("show_track_headers", SLOT(slotShowHeadersGroup()));

@@ -282,9 +282,9 @@ NotationScene::setCurrentStaff(NotationStaff *staff)
         RG_DEBUG << "highlight iter" << iStaff << iSegment << onSameTrack;
         bool highlight = true;
         if (iSegment != currentSegment && onSameTrack &&
-            m_highlightMode == "highlight_current_on_track") highlight = false;
+            m_highlightMode == "highlight_within_track") highlight = false;
         if (iStaff != currentStaff &&
-            m_highlightMode == "highlight_current") highlight = false;
+            m_highlightMode == "highlight") highlight = false;
         // do not affect repeats
         if (iSegment->isTmp()) highlight = true;
 
