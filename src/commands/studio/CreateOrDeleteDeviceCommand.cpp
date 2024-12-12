@@ -106,6 +106,26 @@ CreateOrDeleteDeviceCommand::execute()
             if (midiDevice) {
                 midiDevice->setDirection(m_direction);
                 midiDevice->setUserConnection(m_connection);
+                if (m_withData) {
+                    midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
+                    midiDevice->setVariationType(m_variationType);
+                    midiDevice->clearBankList();
+                    for(const MidiBank& bank : m_bankList) {
+                        midiDevice->addBank(bank);
+                    }
+                    midiDevice->clearProgramList();
+                    for(const MidiProgram& program : m_programList) {
+                        midiDevice->addProgram(program);
+                    }
+                    midiDevice->clearControlList();
+                    for(const ControlParameter& control : m_controlList) {
+                        midiDevice->addControlParameter(control, false);
+                    }
+                    midiDevice->clearKeyMappingList();
+                    for(const MidiKeyMapping& keyMapping : m_keyMappingList) {
+                        midiDevice->addKeyMapping(keyMapping);
+                    }
+                }
             }
         }
 
