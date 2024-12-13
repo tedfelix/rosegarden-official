@@ -103,6 +103,9 @@ public:
 
     NotationStaff *getStaffForSceneCoords(double x, int y) const;
 
+    // ??? The UI uses the term "Active" for this.  Evaluate each "current"
+    //     in here and see if it needs to be changed to "active" to match the
+    //     UI.  This one seems like it needs it.
     Segment *getCurrentSegment();
 
     bool segmentsContainNotes() const;

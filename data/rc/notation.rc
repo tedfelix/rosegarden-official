@@ -85,7 +85,7 @@
     </Menu>
   <Separator/>
     <Menu name="highlighting">
-      <text>Highlight Current Segment</text>
+      <text>Highlight Active Segment</text>
       <Action name="highlight_none" text="&amp;None" checked="false" group="highlight_group" />
       <Action name="highlight_within_track" text="Within &amp;Track" checked="false" group="highlight_group" />
       <Action name="highlight" text="Across &amp;All Tracks" checked="false" group="highlight_group" />
