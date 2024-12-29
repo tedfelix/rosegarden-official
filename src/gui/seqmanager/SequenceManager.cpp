@@ -387,10 +387,10 @@ SequenceManager::record(bool countIn)
     // a valid audio record path and a working audio subsystem before
     // we go any further
 
-    const Composition::recordtrackcontainer &recordTracks =
+    const Composition::TrackIdSet &recordTracks =
         comp.getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 recordTracks.begin();
             i != recordTracks.end(); ++i) {
 
@@ -485,7 +485,7 @@ punchin:
         bool haveMIDIInstrument = false;
         //TrackId recordMIDITrack = 0;
 
-        for (Composition::recordtrackcontainer::const_iterator i =
+        for (Composition::TrackIdSet::const_iterator i =
                     comp.getRecordTracks().begin();
                 i != comp.getRecordTracks().end(); ++i) {
 
@@ -555,7 +555,7 @@ punchin:
 
         if (haveMIDIInstrument) {
             // For each recording segment...
-            for (Composition::recordtrackcontainer::const_iterator i =
+            for (Composition::TrackIdSet::const_iterator i =
                         comp.getRecordTracks().begin(); i != comp.getRecordTracks().end(); ++i) {
                 // Get the Instrument for this Track
                 InstrumentId iid = comp.getTrackById(*i)->getInstrument();
@@ -1306,7 +1306,7 @@ void SequenceManager::populateCompositionMapper()
         segmentAdded(*i);
     }
 
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
                 comp.getTriggerSegments().begin();
          i != comp.getTriggerSegments().end(); ++i) {
         m_triggerSegments.insert(SegmentRefreshMap::value_type
@@ -1420,7 +1420,7 @@ void SequenceManager::refresh()
     SegmentRefreshMap newTriggerMap;
 
     // For each trigger Segment in the composition
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
              comp.getTriggerSegments().begin();
          i != comp.getTriggerSegments().end(); ++i) {
 
@@ -1507,21 +1507,26 @@ void SequenceManager::segmentAdded(const Composition*, Segment* s)
     m_addedSegments.push_back(s);
 }
 
-void SequenceManager::segmentRemoved(const Composition*, Segment* s)
+void SequenceManager::segmentRemoved(const Composition *comp, Segment *segment)
 {
-    RG_DEBUG << "segmentRemoved(" << s << ")";
+    RG_DEBUG << "segmentRemoved(" << segment << ")";
+
+    // Triggered Segment?
+    if (comp->getTriggerSegmentId(segment) != -1) {
+        m_triggerSegments.erase(segment);
+        return;
+    }
 
     // !!! WARNING !!!
-    // The segment pointer "s" is about to be deleted by
+    // The segment pointer "segment" is about to be deleted by
     // Composition::deleteSegment(Composition::iterator).  After this routine
     // ends, this pointer cannot be dereferenced.
-    m_removedSegments.push_back(s);
+    m_removedSegments.push_back(segment);
 
-    std::vector<Segment*>::iterator i =
-        find(m_addedSegments.begin(), m_addedSegments.end(), s);
-    if (i != m_addedSegments.end()) {
-        m_addedSegments.erase(i);
-    }
+    std::vector<Segment *>::const_iterator segmentIter =
+            find(m_addedSegments.begin(), m_addedSegments.end(), segment);
+    if (segmentIter != m_addedSegments.end())
+        m_addedSegments.erase(segmentIter);
 }
 
 void SequenceManager::segmentRepeatChanged(const Composition*, Segment* s, bool repeat)

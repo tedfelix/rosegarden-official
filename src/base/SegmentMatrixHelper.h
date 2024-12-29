@@ -26,7 +26,7 @@ class SegmentMatrixHelper : protected SegmentNotationHelper
 public:
     explicit SegmentMatrixHelper(Segment &t) : SegmentNotationHelper(t) { }
 
-    iterator insertNote(Event *);
+    Segment::iterator insertNote(Event *);
 
     /**
      * Returns true if event is colliding another note in percussion

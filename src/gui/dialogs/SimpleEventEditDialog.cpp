@@ -51,21 +51,22 @@
 #include <QSettings>
 
 
-
 namespace Rosegarden
 {
 
-SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
+
+SimpleEventEditDialog::SimpleEventEditDialog(
+        QWidget *parent,
         RosegardenDocument *doc,
         const Event &event,
         bool inserting) :
-        QDialog(parent),
-        m_event(event),
-        m_doc(doc),
-        m_type(event.getType()),
-        m_absoluteTime(event.getAbsoluteTime()),
-        m_duration(event.getDuration()),
-        m_modified(false)
+    QDialog(parent),
+    m_event(event),
+    m_doc(doc),
+    m_type(event.getType()),
+    m_absoluteTime(event.getAbsoluteTime()),
+    m_duration(event.getDuration()),
+    m_modified(false)
 {
     setModal(true);
     setWindowTitle(tr(inserting ?
@@ -785,6 +786,7 @@ SimpleEventEditDialog::getEvent()
     bool useSeparateNotationValues =
         (m_event.getType() == Note::EventType);
 
+    // If we are inserting a new Event...
     if (m_typeCombo) {
 
         int subordering = 0;
@@ -812,28 +814,27 @@ SimpleEventEditDialog::getEvent()
             subordering = SystemExclusive::EventSubOrdering;
         }
 
-        m_event = Event(m_type,
-                        m_absoluteTime,
-                        m_duration,
-                        subordering,
-                        (useSeparateNotationValues ?
-                         m_notationAbsoluteTime : m_absoluteTime),
-                        (useSeparateNotationValues ?
-                         m_notationDuration : m_duration));
+        m_event = Event(
+                m_type,
+                m_absoluteTime,
+                m_duration,
+                subordering,
+                useSeparateNotationValues ?
+                        m_notationAbsoluteTime : m_absoluteTime,
+                useSeparateNotationValues ? m_notationDuration : m_duration);
 
         // ensure these are set on m_event correctly
         slotPitchChanged(m_pitchSpinBox->value());
         slotVelocityChanged(m_velocitySpinBox->value());
     }
 
-    Event event(m_event,
-                m_absoluteTime,
-                m_duration,
-                m_event.getSubOrdering(),
-                (useSeparateNotationValues ?
-                 m_notationAbsoluteTime : m_absoluteTime),
-                (useSeparateNotationValues ?
-                 m_notationDuration : m_duration));
+    Event event(
+            m_event,
+            m_absoluteTime,
+            m_duration,
+            m_event.getSubOrdering(),
+            useSeparateNotationValues ? m_notationAbsoluteTime : m_absoluteTime,
+            useSeparateNotationValues ? m_notationDuration : m_duration);
 
     // Values from the pitch and velocity spin boxes should already
     // have been set on m_event (and thus on event) by slotPitchChanged

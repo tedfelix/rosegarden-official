@@ -4154,7 +4154,7 @@ RosegardenMainWindow::fixTextEncodings(Composition *c)
     if (codec)
         c->setCopyrightNote(convertFromCodec(c->getCopyrightNote(), codec));
 
-    for (Composition::trackcontainer::iterator i =
+    for (Composition::TrackMap::iterator i =
                 c->getTracks().begin(); i != c->getTracks().end(); ++i) {
         if (!codec)
             codec = guessTextCodec(i->second->getLabel());
@@ -5984,9 +5984,9 @@ RosegardenMainWindow::muteAllTracks(bool mute)
         return;
 
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Composition::trackcontainer tracks = comp.getTracks();
+    Composition::TrackMap tracks = comp.getTracks();
 
-    for (Composition::trackiterator trackIt = tracks.begin();
+    for (Composition::TrackMap::iterator trackIt = tracks.begin();
             trackIt != tracks.end(); ++trackIt) {
         Track *track = trackIt->second;
 
@@ -6508,10 +6508,10 @@ RosegardenMainWindow::getArmedInstruments()
     std::set
         <InstrumentId> iid;
 
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         RosegardenDocument::currentDocument->getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
         TrackId tid = (*i);
         Track *track = RosegardenDocument::currentDocument->getComposition().getTrackById(tid);
@@ -8287,7 +8287,7 @@ RosegardenMainWindow::slotAddMarker2()
 void
 RosegardenMainWindow::slotPreviousMarker()
 {
-    const Composition::markercontainer &markers =
+    const Composition::MarkerVector &markers =
             RosegardenDocument::currentDocument->getComposition().getMarkers();
 
     timeT currentTime = RosegardenDocument::currentDocument->getComposition().getPosition();
@@ -8308,7 +8308,7 @@ RosegardenMainWindow::slotPreviousMarker()
 void
 RosegardenMainWindow::slotNextMarker()
 {
-    const Composition::markercontainer &markers =
+    const Composition::MarkerVector &markers =
             RosegardenDocument::currentDocument->getComposition().getMarkers();
 
     timeT currentTime = RosegardenDocument::currentDocument->getComposition().getPosition();

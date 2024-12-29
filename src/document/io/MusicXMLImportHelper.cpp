@@ -63,8 +63,8 @@ MusicXMLImportHelper::setStaff(const QString &staff)
         int pos = id;
         if (!m_tracks.empty()) {
             pos = m_tracks["1"]->getPosition() + m_tracks.size();
-            Composition::trackcontainer tracks = composition.getTracks();
-            for (Composition::trackiterator t = tracks.begin(); t != tracks.end(); t++) {
+            Composition::TrackMap tracks = composition.getTracks();
+            for (Composition::TrackMap::iterator t = tracks.begin(); t != tracks.end(); t++) {
                 if (((*t).second)->getPosition() >= pos) {
                     ((*t).second)->setPosition(((*t).second)->getPosition()+1);
                 }

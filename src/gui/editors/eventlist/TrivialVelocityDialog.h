@@ -28,7 +28,7 @@ namespace Rosegarden {
 class TrivialVelocityDialog : public QDialog
 {
 public:
-    TrivialVelocityDialog(QWidget *parent, QString label, int deft);
+    TrivialVelocityDialog(QWidget *parent, QString label, int velocity);
 
     int getVelocity();
 

@@ -47,9 +47,9 @@ ModifyDeviceMappingCommand::ModifyDeviceMappingCommand(
 void
 ModifyDeviceMappingCommand::execute()
 {
-    Composition::trackcontainer &tracks =
+    Composition::TrackMap &tracks =
         m_composition->getTracks();
-    Composition::trackcontainer::iterator it = tracks.begin();
+    Composition::TrackMap::iterator it = tracks.begin();
     Instrument *instr = nullptr;
     int index = 0;
 

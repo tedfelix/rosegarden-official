@@ -1875,10 +1875,10 @@ bool BankEditorDialog::tracksUsingBank(const MidiBank& bank,
 
     Composition &composition =
             RosegardenDocument::currentDocument->getComposition();
-    const Composition::trackcontainer &tracks = composition.getTracks();
+    const Composition::TrackMap &tracks = composition.getTracks();
 
     // For each Track in the Composition...
-    for (const Composition::trackcontainer::value_type &pair : tracks) {
+    for (const Composition::TrackMap::value_type &pair : tracks) {
         const Track *track = pair.second;
         if (!track)
             continue;

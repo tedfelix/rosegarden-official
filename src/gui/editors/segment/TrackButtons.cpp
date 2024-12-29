@@ -881,7 +881,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
                 deviceUsedByAnyone = true;
             else {
                 // For each Track...
-                for (Composition::trackcontainer::iterator trackIter =
+                for (Composition::TrackMap::iterator trackIter =
                          comp.getTracks().begin();
                      trackIter != comp.getTracks().end();
                      ++trackIter) {
@@ -936,7 +936,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
             // Search the tracks to see if anyone else is using this
             // instrument.
-            for (Composition::trackcontainer::const_iterator trackIter =
+            for (Composition::TrackMap::const_iterator trackIter =
                      comp.getTracks().begin();
                  trackIter != comp.getTracks().end();
                  ++trackIter) {

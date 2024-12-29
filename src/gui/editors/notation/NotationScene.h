@@ -103,6 +103,9 @@ public:
 
     NotationStaff *getStaffForSceneCoords(double x, int y) const;
 
+    // ??? The UI uses the term "Active" for this.  Evaluate each "current"
+    //     in here and see if it needs to be changed to "active" to match the
+    //     UI.  This one seems like it needs it.
     Segment *getCurrentSegment();
 
     bool segmentsContainNotes() const;
@@ -197,8 +200,9 @@ public:
     bool isEventRedundant(Clef &clef, timeT time, Segment &seg) const;
     bool isEventRedundant(Key &key, timeT time, Segment &seg) const;
 
-    /// Return the segments about to be deleted if any
-    std::vector<Segment *> * getSegmentsDeleted() { return &m_segmentsDeleted; }
+    /// Return the segments about to be deleted if any.
+    const std::vector<Segment *> *getSegmentsDeleted()
+            { return &m_segmentsDeleted; }
 
     /// Return true if all segments in scene are about to be deleted
     /// (Editor needs to be closed)

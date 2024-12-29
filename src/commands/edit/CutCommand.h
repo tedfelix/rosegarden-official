@@ -41,6 +41,11 @@ class CutCommand : public MacroCommand
 
 public:
     /// Make a CutCommand that cuts events from within a Segment
+    /**
+     * ??? This should take selection as a const &.  This makes
+     *     a copy and the only reason to use a reference is to avoid
+     *     a copy when passing the argument.
+     */
     CutCommand(EventSelection *selection,
                Clipboard *clipboard);
 

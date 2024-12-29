@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,7 +18,7 @@
 #ifndef RG_EVENTVIEW_H
 #define RG_EVENTVIEW_H
 
-#include "base/Segment.h"
+#include "base/Segment.h"  // SegmentObserver
 #include "gui/general/EditViewBase.h"
 
 #include <set>
@@ -54,7 +53,7 @@ class Event;
  *
  * Segment > Edit With > Open in Event List Editor.  Or just press "E".
  */
-class EventView : public EditViewBase, public SegmentObserver
+class EventView : public EditViewBase
 {
     Q_OBJECT
 
@@ -65,149 +64,129 @@ public:
 
     ~EventView() override;
 
-    // SegmentObserver overrides.
-    void eventRemoved(const Segment *, Event *) override;
-    void segmentDeleted(const Segment *) override;
-
 signals:
 
     /// Connected to RosegardenMainViewWidget::slotEditTriggerSegment().
-    void editTriggerSegment(int);
+    /**
+     * Emitted by context menu "Edit Triggered Segment".
+     */
+    void editTriggerSegment(int id);
 
 protected:
 
-    void initStatusBar();
-
+    // EditViewBase override.
     Segment *getCurrentSegment() override;
-
-    // QWidget override.
-    void closeEvent(QCloseEvent *event) override;
 
 private slots:
 
-    void slotEditCut();
-    void slotEditCopy();
-    void slotEditPaste();
-    void slotEditDelete();
-    void slotEditInsert();
-
-    void slotSelectAll();
-    void slotClearSelection();
-
-    void slotMusicalTime();
-    void slotRealTime();
-    void slotRawTime();
-
-    void slotModifyFilter();
-
-    void slotHelpRequested();
-    void slotHelpAbout();
-
     // Menu Handlers
 
+    // Edit
+    void slotEditInsert();
+    void slotEditDelete();
     /// Edit > Edit Event
     void slotEditEvent();
     /// Edit > Advanced Event Editor
     void slotEditEventAdvanced();
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
+    void slotSelectAll();
+    void slotClearSelection();
+
+    // View
+    void slotMusicalTime();
+    void slotRealTime();
+    void slotRawTime();
+
+    // Help
+    void slotHelpRequested();
+    void slotHelpAbout();
+
+    /// Filter check boxes.
+    void slotFilterClicked(bool);
 
     /// Handle double-click on an event in the event list.
-    void slotPopupEventEditor(QTreeWidgetItem *item, int column);
+    void slotItemDoubleClicked(QTreeWidgetItem *item, int column);
+    void slotItemSelectionChanged();
 
     /// Right-click context menu.
-    void slotPopupMenu(const QPoint &);
+    void slotContextMenu(const QPoint &);
     /// Right-click context menu handler.
     void slotOpenInEventEditor(bool checked);
     /// Right-click context menu handler.
     void slotOpenInExpertEventEditor(bool checked);
+    /// Right-click context menu handler.
+    void slotEditTriggeredSegment(bool checked);
 
+    // Trigger Segments
     void slotEditTriggerName();
     void slotEditTriggerPitch();
     void slotEditTriggerVelocity();
     // unused void slotTriggerTimeAdjustChanged(int);
     // unused void slotTriggerRetuneChanged();
 
-    /// slot connected to signal RosegardenDocument::setModified(bool)
-    /**
-     * ??? Rename: slotUpdateWindowTitle() like all others.
-     */
-    void updateWindowTitle(bool modified);
-
     void slotDocumentModified(bool modified);
 
 private:
 
-    QFrame *m_frame{nullptr};
-    QGridLayout *m_gridLayout{nullptr};
-
-    /// Create and show popup menu.
-    void createMenu();
-
     /// Set the button states to the current filter positions
-    void setButtonsToFilter();
+    void updateFilterCheckBoxes();
 
     void setupActions();
 
-    void updateView();
-    bool updateTreeWidget();
+    void updateWindowTitle(bool modified);
 
-    QString makeDurationString(timeT time,
-                               timeT duration, int timeMode);
+    // Widgets
 
     // Event filters
     QGroupBox *m_filterGroup;
     QCheckBox *m_noteCheckBox;
-    QCheckBox *m_programCheckBox;
-    QCheckBox *m_controllerCheckBox;
-    QCheckBox *m_pitchBendCheckBox;
-    QCheckBox *m_sysExCheckBox;
-    QCheckBox *m_keyPressureCheckBox;
-    QCheckBox *m_channelPressureCheckBox;
+    bool m_showNote{true};
     QCheckBox *m_restCheckBox;
+    bool m_showRest{true};
+    QCheckBox *m_programCheckBox;
+    bool m_showProgramChange{true};
+    QCheckBox *m_controllerCheckBox;
+    bool m_showController{true};
+    QCheckBox *m_pitchBendCheckBox;
+    bool m_showPitchBend{true};
+    QCheckBox *m_sysExCheckBox;
+    bool m_showSystemExclusive{true};
+    QCheckBox *m_keyPressureCheckBox;
+    bool m_showKeyPressure{true};
+    QCheckBox *m_channelPressureCheckBox;
+    bool m_showChannelPressure{true};
     QCheckBox *m_indicationCheckBox;
+    bool m_showIndication{true};
     QCheckBox *m_textCheckBox;
-    // ??? What is this?
+    bool m_showText{true};
     QCheckBox *m_generatedRegionCheckBox;
-    // ??? What is this?
+    bool m_showGeneratedRegion{true};
     QCheckBox *m_segmentIDCheckBox;
+    bool m_showSegmentID{true};
     QCheckBox *m_otherCheckBox;
-
-    enum EventFilter
-    {
-        None               = 0x0000,
-        Note               = 0x0001,
-        Rest               = 0x0002,
-        Text               = 0x0004,
-        SystemExclusive    = 0x0008,
-        Controller         = 0x0010,
-        ProgramChange      = 0x0020,
-        PitchBend          = 0x0040,
-        ChannelPressure    = 0x0080,
-        KeyPressure        = 0x0100,
-        Indication         = 0x0200,
-        Other              = 0x0400,
-        GeneratedRegion    = 0x0800,
-        SegmentID          = 0x1000,
-    };
-    int m_eventFilter{0x1FFF};
+    bool m_showOther{true};
 
     // ??? QTreeWidget seems like overkill.  We never have sub items.
-    //     QTableWidget seems like a better choice.
-    QTreeWidget *m_eventList;
+    //     QTableWidget seems like a better choice.  See
+    //     TempoAndTimeSignatureEditor for a complete example of using
+    //     QTableWidget.
+    QTreeWidget *m_treeWidget;
+    bool updateTreeWidget();
 
-    std::vector<int> m_listSelection;
+    /// Pop-up menu for the event list.
+    QMenu *m_contextMenu{nullptr};
+    QAction *m_editTriggeredSegment{nullptr};
+
     void makeInitialSelection(timeT);
-
-    std::set<Event *> m_deletedEvents; // deleted since last refresh
-
-    // Pop-up menu for the event list.
-    QMenu *m_menu{nullptr};
 
     bool m_isTriggerSegment{false};
     QLabel *m_triggerName{nullptr};
     QLabel *m_triggerPitch{nullptr};
     QLabel *m_triggerVelocity{nullptr};
 
-    void readOptions();
+    void loadOptions();
     void saveOptions();
 
 };

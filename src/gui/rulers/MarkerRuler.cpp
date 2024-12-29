@@ -222,7 +222,7 @@ MarkerRuler::getMarkerAtClickPosition()
     }
 
     Composition &comp = m_doc->getComposition();
-    Composition::markercontainer markers = comp.getMarkers();
+    Composition::MarkerVector markers = comp.getMarkers();
 
     timeT start = comp.getBarStart(firstBar);
     timeT end = comp.getBarEnd(lastBar);
@@ -230,7 +230,7 @@ MarkerRuler::getMarkerAtClickPosition()
     // need these to calculate the visible extents of a marker tag
     QFontMetrics metrics = fontMetrics();
 
-    for (Composition::markerconstiterator i = markers.begin();
+    for (Composition::MarkerVector::const_iterator i = markers.begin();
             i != markers.end(); ++i) {
 
         if ((*i)->getTime() >= start && (*i)->getTime() < end) {
@@ -243,7 +243,7 @@ MarkerRuler::getMarkerAtClickPosition()
             int width = metrics.boundingRect(name).width() + 5;
 
             int nextX = -1;
-            Composition::markerconstiterator j = i;
+            Composition::MarkerVector::const_iterator j = i;
             ++j;
             if (j != markers.end()) {
                 nextX = m_rulerScale->getXForTime((*j)->getTime())
@@ -353,8 +353,8 @@ MarkerRuler::paintEvent(QPaintEvent*)
 
     if (m_doc) {
         Composition &comp = m_doc->getComposition();
-        Composition::markercontainer markers = comp.getMarkers();
-        Composition::markerconstiterator it;
+        Composition::MarkerVector markers = comp.getMarkers();
+        Composition::MarkerVector::const_iterator it;
 
         timeT start = comp.getBarStart(firstBar);
         timeT end = comp.getBarEnd(lastBar);
@@ -417,7 +417,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
 
         Composition &comp = m_doc->getComposition();
 
-        const Composition::markercontainer &markers = comp.getMarkers();
+        const Composition::MarkerVector &markers = comp.getMarkers();
         if (markers.empty())
             return;
 

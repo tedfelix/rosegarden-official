@@ -104,14 +104,14 @@ void DeleteTracksCommand::execute()
 
     // Adjust the track position numbers to remove any gaps.
 
-    Composition::trackcontainer &tracks = m_composition->getTracks();
+    Composition::TrackMap &tracks = m_composition->getTracks();
 
     // For each deleted track
     for (std::vector<Track*>::iterator oldTrackIter = m_oldTracks.begin();
          oldTrackIter != m_oldTracks.end();
          ++oldTrackIter) {
         // For each track left in the composition
-        for (Composition::trackiterator compTrackIter = tracks.begin();
+        for (Composition::TrackMap::iterator compTrackIter = tracks.begin();
              compTrackIter != tracks.end();
              ++compTrackIter) {
             // If the composition track was after the deleted track
@@ -137,7 +137,7 @@ void DeleteTracksCommand::unexecute()
     std::vector<TrackId> trackIds;
 
     // Alias for readability.
-    Composition::trackcontainer &tracks = m_composition->getTracks();
+    Composition::TrackMap &tracks = m_composition->getTracks();
 
     // For each track we need to add back in
     for (std::vector<Track*>::iterator oldTrackIter = m_oldTracks.begin();
@@ -147,7 +147,7 @@ void DeleteTracksCommand::unexecute()
         // From the back we shift the track positions in the composition
         // to allow the new (old) track some space to come back in.
 
-        Composition::trackiterator compTrackIter = tracks.end();
+        Composition::TrackMap::iterator compTrackIter = tracks.end();
         while (true) {
             --compTrackIter;
 

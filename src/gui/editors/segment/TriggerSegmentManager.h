@@ -26,19 +26,32 @@
 // #include <QTreeWidget>
 // #include <QTreeWidgetItem>
 
-
 class QWidget;
 class QPushButton;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QCloseEvent;
 
+
 namespace Rosegarden
 {
+
 
 class Command;
 class RosegardenDocument;
 
+/// The "Manage Trigger Segments" dialog.
+/**
+ * This and the Event List editor (EventView) work together to allow for
+ * editing of all aspects of triggered segments.
+ *
+ * ??? This is awkward.  The Event List editor UI becomes a bloated mess
+ *     when it is asked to edit a triggered Segment and it must show
+ *     Label, Base Pitch, and Base Velocity.  TriggerSegmentManager
+ *     should allow *editing* of the data it displays.  Then the Event
+ *     List would not need to offer editing of triggered segment
+ *     properties.
+ */
 class TriggerSegmentManager : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
@@ -83,8 +96,6 @@ protected:
     void closeEvent(QCloseEvent *) override;
 
     void setupActions();
-    QString makeDurationString(timeT startTime,
-                               timeT duration, int timeMode);
 
     //--------------- Data members ---------------------------------
     RosegardenDocument        *m_doc;

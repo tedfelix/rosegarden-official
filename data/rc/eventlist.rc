@@ -79,4 +79,21 @@
   <Action name="time_raw"/>
 </ToolBar>
 
+<State name="have_selection">
+  <enable>
+    <Action name="edit_simple" />
+    <Action name="edit_advanced" />
+    <Action name="edit_cut" />
+    <Action name="edit_copy" />
+    <Action name="delete" />
+    <Action name="clear_selection" />
+  </enable>
+</State>
+
+<State name="have_clipboard">
+  <enable>
+    <Action name="edit_paste"/>
+  </enable>
+</State>
+
 </kpartgui>

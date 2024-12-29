@@ -1409,7 +1409,7 @@ public slots:
     void slotMarkerEditorClosed();
 
     /**
-     * when TempoView is being closed
+     * when TempoAndTimeSignatureEditor is being closed
      */
     void slotTempoViewClosed();
 

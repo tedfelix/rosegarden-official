@@ -82,7 +82,7 @@ private:
     /**
      * Only valid after undo and used for redo.
      */
-    Composition::SegmentVec m_newSegments;
+    Composition::SegmentVector m_newSegments;
 
     void redo();
 

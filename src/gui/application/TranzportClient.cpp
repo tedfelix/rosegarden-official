@@ -479,10 +479,10 @@ TranzportClient::readData()
             if (current_buttons & Shift) {
             } else {
                 timeT currentTime = m_composition->getPosition();
-                Composition::markercontainer& mc = m_composition->getMarkers();
+                Composition::MarkerVector& mc = m_composition->getMarkers();
                 timeT closestPrevious = -1;
 
-                for (Composition::markerconstiterator it = mc.begin();
+                for (Composition::MarkerVector::const_iterator it = mc.begin();
                      it != mc.end();
                      ++it) {
                     timeT markerTime = (*it)->getTime();
@@ -508,10 +508,10 @@ TranzportClient::readData()
             if (current_buttons & Shift) {
             } else {
                 timeT currentTime = m_composition->getPosition();
-                Composition::markercontainer& mc = m_composition->getMarkers();
+                Composition::MarkerVector& mc = m_composition->getMarkers();
                 timeT closestNext = std::numeric_limits<long>::max();
                 
-                for (Composition::markerconstiterator it = mc.begin();
+                for (Composition::MarkerVector::const_iterator it = mc.begin();
                      it != mc.end();
                      ++it) {
                     timeT markerTime = (*it)->getTime();

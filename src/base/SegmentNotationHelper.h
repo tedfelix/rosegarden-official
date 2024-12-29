@@ -51,7 +51,7 @@ public:
      * completeness, but in most cases if you're about to call them
      * you should ask yourself why.)
      */
-    iterator findNotationAbsoluteTime(timeT t);
+    Segment::iterator findNotationAbsoluteTime(timeT t);
 
     /**
      * Return an iterator pointing at the last event in the segment
@@ -76,9 +76,10 @@ public:
      * considered adjacent so long as one does not completely enclose
      * the other.
      */
-    iterator getNextAdjacentNote(iterator i,
-                                 bool matchPitch = true,
-                                 bool allowOverlap = true);
+    Segment::iterator getNextAdjacentNote(
+            Segment::iterator i,
+            bool matchPitch = true,
+            bool allowOverlap = true);
 
 
     /**
@@ -99,10 +100,11 @@ public:
      * considered adjacent so long as one does not completely enclose
      * the other.
      */
-    iterator getPreviousAdjacentNote(iterator i,
-                                     timeT rangeStart = 0,
-                                     bool matchPitch = true,
-                                     bool allowOverlap = true);
+    Segment::iterator getPreviousAdjacentNote(
+            Segment::iterator i,
+            timeT rangeStart = 0,
+            bool matchPitch = true,
+            bool allowOverlap = true);
 
 
     /**
@@ -122,7 +124,7 @@ public:
      *
      * See also SegmentNotationHelper::getNextAdjacentNote.
      */
-    iterator findContiguousNext(iterator);
+    Segment::iterator findContiguousNext(Segment::iterator);
 
     /**
      * Returns an iterator pointing to the previous contiguous element
@@ -141,7 +143,7 @@ public:
      *
      * See also SegmentNotationHelper::getPreviousAdjacentNote.
      */
-    iterator findContiguousPrevious(iterator);
+    Segment::iterator findContiguousPrevious(Segment::iterator);
 
     /**
      * Returns true if the iterator points at a note in a chord
@@ -185,7 +187,8 @@ public:
      * modifies from to point at the first split event (the original
      * iterator would have been invalidated).
      */
-    iterator splitIntoTie(iterator &from, iterator to, timeT baseDuration);
+    Segment::iterator splitIntoTie(
+            Segment::iterator &from, Segment::iterator to, timeT baseDuration);
 
 
     /**
@@ -202,7 +205,7 @@ public:
      * modifies i to point at the first split event (the original
      * iterator would have been invalidated).
      */
-    iterator splitIntoTie(iterator &i, timeT baseDuration);
+    Segment::iterator splitIntoTie(Segment::iterator &i, timeT baseDuration);
 
 
     /**
@@ -234,8 +237,11 @@ public:
      * This method will only work correctly if there is a note or
      * rest event already starting at absoluteTime.
      */
-    iterator insertNote(timeT absoluteTime, Note note, int pitch,
-                        Accidental explicitAccidental);
+    Segment::iterator insertNote(
+            timeT absoluteTime,
+            Note note,
+            int pitch,
+            Accidental explicitAccidental);
 
     /**
      * Inserts a note, doing all the clever split/merge stuff as
@@ -251,7 +257,7 @@ public:
      * model event will be copied but not itself used; the caller
      * continues to own it and should release it after return.
      */
-    iterator insertNote(Event *modelEvent);
+    Segment::iterator insertNote(Event *modelEvent);
 
     /**
      * Inserts a rest, doing all the clever split/merge stuff as
@@ -262,31 +268,31 @@ public:
      * This method will only work correctly if there is a note or
      * rest event already starting at absoluteTime.
      */
-    iterator insertRest(timeT absoluteTime, Note note);
+    Segment::iterator insertRest(timeT absoluteTime, Note note);
 
     /**
      * Insert a clef.
      * Returns iterator pointing to clef.
      */
-    iterator insertClef(timeT absoluteTime, const Clef& clef);
+    Segment::iterator insertClef(timeT absoluteTime, const Clef& clef);
 
     /**
      * Insert a symbol.
      * Returns iterator pointing to symbol.
      */
-    iterator insertSymbol(timeT absoluteTime, const Symbol& symbol);
+    Segment::iterator insertSymbol(timeT absoluteTime, const Symbol& symbol);
 
     /**
      * Insert a key.
      * Returns iterator pointing to key.
      */
-    iterator insertKey(timeT absoluteTime, const Key& key);
+    Segment::iterator insertKey(timeT absoluteTime, const Key& key);
 
     /**
      * Insert a text event.
      * Returns iterator pointing to text event.
      */
-    iterator insertText(timeT absoluteTime, const Text& text);
+    Segment::iterator insertText(timeT absoluteTime, const Text& text);
 
     /**
      * Deletes a note, doing all the clever split/merge stuff as
@@ -349,7 +355,7 @@ public:
      * according to the durations returned by TimeSignature's
      * getDurationListForInterval
      */
-    void makeRestViable(iterator i);
+    void makeRestViable(Segment::iterator i);
 
     /**
      * Split a note or rest up into tied notes or shorter rests of
@@ -363,7 +369,7 @@ public:
      * Returns the original *noteItr Event if no split and tie occurs
      * or returns the first new event inserted if split and tie occurs
      */
-    Event * makeThisNoteViable(iterator noteItr, bool splitAtBars = true);
+    Event * makeThisNoteViable(Segment::iterator noteItr, bool splitAtBars = true);
 
     /**
      * Split notes and rests up into tied notes or shorter rests of
@@ -372,7 +378,7 @@ public:
      * optionally splits notes and rests at barlines -- this is
      * actually the most common user-visible use of this function.
      */
-    void makeNotesViable(iterator from, iterator to, bool splitAtBars = true);
+    void makeNotesViable(Segment::iterator from, Segment::iterator to, bool splitAtBars = true);
 
 
     /**
@@ -402,7 +408,7 @@ public:
      * in the group already have the other tuplet properties or you
      * intend to add those yourself.  Use makeTupletGroup instead.
      */
-    void makeBeamedGroup(iterator from, iterator to, std::string type);
+    void makeBeamedGroup(Segment::iterator from, Segment::iterator to, std::string type);
 
     /**
      * Give all events between from and to the same new group id and
@@ -416,7 +422,7 @@ public:
      * in the group already have the other tuplet properties or you
      * intend to add those yourself.
      */
-    void makeBeamedGroupExact(iterator from, iterator to, std::string type);
+    void makeBeamedGroupExact(Segment::iterator from, Segment::iterator to, std::string type);
 
 
     /**
@@ -450,7 +456,7 @@ public:
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires segment to be in a composition.
      */
-    void autoBeam(iterator from, iterator to, std::string type);
+    void autoBeam(Segment::iterator from, Segment::iterator to, std::string type);
 
 
     /**
@@ -465,13 +471,13 @@ public:
      * start of the timeslice containing from and the start of the
      * timeslice containing to
      */
-    void unbeam(iterator from, iterator to);
+    void unbeam(Segment::iterator from, Segment::iterator to);
 
     /**
      * Guess which clef a section of music is supposed to be in,
      * ignoring any clef events actually found in the section.
      */
-    static Clef guessClef(iterator from, iterator to);
+    static Clef guessClef(Segment::iterator from, Segment::iterator to);
 
 
     /**
@@ -518,7 +524,7 @@ public:
      * original one if a collapse happened, segment.end() if no
      * collapse or event not found
      */
-    iterator collapseNoteAggressively(Event *, timeT rangeEnd);
+    Segment::iterator collapseNoteAggressively(Event *, timeT rangeEnd);
 
 
 
@@ -564,37 +570,37 @@ protected:
      * Returns position at which the collapse ended (i.e. the first
      * uncollapsed event)
      */
-    iterator collapseRestsForInsert(iterator firstRest, timeT desiredDuration);
+    Segment::iterator collapseRestsForInsert(Segment::iterator firstRest, timeT desiredDuration);
 
 
     /// for use by insertNote and insertRest
-    iterator insertSomething(iterator i, int duration,
+    Segment::iterator insertSomething(Segment::iterator i, int duration,
                              Event *modelEvent, bool tiedBack);
 
     /// for use by insertSomething
-    iterator insertSingleSomething(iterator i, int duration,
+    Segment::iterator insertSingleSomething(Segment::iterator i, int duration,
                                    Event *modelEvent, bool tiedBack);
 
     /// for use by insertSingleSomething
-    void setInsertedNoteGroup(Event *e, iterator i);
+    void setInsertedNoteGroup(Event *e, Segment::iterator i);
 
     /// for use by makeBeamedGroup
-    void makeBeamedGroupAux(iterator from, iterator to, std::string type,
+    void makeBeamedGroupAux(Segment::iterator from, Segment::iterator to, std::string type,
 			    bool groupGraces);
 
     /// for use by unbeam
-    static void unbeamAux(iterator from, iterator to);
+    static void unbeamAux(Segment::iterator from, Segment::iterator to);
 
     /// for use by autoBeam
 
-    void autoBeamBar(iterator from, iterator to, TimeSignature timesig,
+    void autoBeamBar(Segment::iterator from, Segment::iterator to, TimeSignature timesig,
                      std::string type);
 
-    void autoBeamBar(iterator from, iterator to, timeT average,
+    void autoBeamBar(Segment::iterator from, Segment::iterator to, timeT average,
                      timeT minimum, timeT maximum, std::string type);
 
     /// used by autoBeamAux (duplicate of private method in Segment)
-    bool hasEffectiveDuration(iterator i);
+    bool hasEffectiveDuration(Segment::iterator i);
 
     typedef void (SegmentNotationHelper::*Reorganizer)(timeT, timeT,
                                                        std::vector<Event *>&);
@@ -609,7 +615,7 @@ protected:
     void mergeContiguousRests(timeT, timeT, std::vector<Event *>&);
 
     /// find border of tupled
-    int findBorderTuplet(iterator, iterator &start, iterator &end);
+    int findBorderTuplet(Segment::iterator, Segment::iterator &start, Segment::iterator &end);
 };
 
 }

@@ -257,9 +257,9 @@ MarkerEditor::slotUpdate()
 
     Composition &comp = m_doc->getComposition();
 
-    Composition::markercontainer markers = comp.getMarkers();
+    Composition::MarkerVector markers = comp.getMarkers();
 
-    Composition::markerconstiterator it;
+    Composition::MarkerVector::const_iterator it;
 
     QSettings settings;
     settings.beginGroup(MarkerEditorConfigGroup);

@@ -49,6 +49,9 @@ public:
      * DecoyAction will be returned.  Usage such as
      * findAction("action_name")->setChecked(true); is acceptable.
      *
+     * ??? This behavior is problematic if you want to find out whether an
+     *     action actually exists.  Probably need a bool hasAction().
+     *
      * ??? This function is public because it is used by:
      *     NotationTool::findActionInParentView()
      *     MatrixTool::findActionInParentView()

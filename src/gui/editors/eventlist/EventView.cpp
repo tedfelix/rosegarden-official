@@ -32,9 +32,6 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/SegmentPerformanceHelper.h"
-#include "base/Selection.h"
-#include "base/Track.h"
-#include "base/TriggerSegment.h"
 #include "base/figuration/GeneratedRegion.h"
 #include "base/figuration/SegmentID.h"
 #include "commands/edit/CopyCommand.h"
@@ -46,8 +43,8 @@
 #include "commands/segment/SegmentLabelCommand.h"
 #include "commands/segment/SetTriggerSegmentBasePitchCommand.h"
 #include "commands/segment/SetTriggerSegmentBaseVelocityCommand.h"
-#include "commands/segment/SetTriggerSegmentDefaultRetuneCommand.h"
-#include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
+//#include "commands/segment/SetTriggerSegmentDefaultRetuneCommand.h"
+//#include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
@@ -62,172 +59,304 @@
 #include "gui/widgets/InputDialog.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "misc/PreferenceBool.h"
+#include "misc/PreferenceInt.h"
 
 #include <QAction>
 #include <QCheckBox>
 #include <QDialog>
-#include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
 #include <QMenu>
-#include <QPoint>
 #include <QPushButton>
 #include <QSettings>
 #include <QStatusBar>
-#include <QString>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QDesktopServices>
 
-#include <algorithm>  // std:find()
-
 
 namespace Rosegarden
 {
+
+
+namespace
+{
+
+    // Persistent filter settings.
+    PreferenceBool a_showNoteSetting(
+            EventViewConfigGroup,
+            "showNote",
+            true);
+    PreferenceBool a_showRestSetting(
+            EventViewConfigGroup,
+            "showRest",
+            true);
+    PreferenceBool a_showProgramChangeSetting(
+            EventViewConfigGroup,
+            "showProgramChange",
+            true);
+    PreferenceBool a_showControllerSetting(
+            EventViewConfigGroup,
+            "showController",
+            true);
+    PreferenceBool a_showPitchBendSetting(
+            EventViewConfigGroup,
+            "showPitchBend",
+            true);
+    PreferenceBool a_showSystemExclusiveSetting(
+            EventViewConfigGroup,
+            "showSystemExclusive",
+            true);
+    PreferenceBool a_showKeyPressureSetting(
+            EventViewConfigGroup,
+            "showKeyPressure",
+            true);
+    PreferenceBool a_showChannelPressureSetting(
+            EventViewConfigGroup,
+            "showChannelPressure",
+            true);
+    PreferenceBool a_showIndicationSetting(
+            EventViewConfigGroup,
+            "showIndication",
+            true);
+    PreferenceBool a_showTextSetting(
+            EventViewConfigGroup,
+            "showText",
+            true);
+    PreferenceBool a_showGeneratedRegionSetting(
+            EventViewConfigGroup,
+            "showGeneratedRegion",
+            true);
+    PreferenceBool a_showSegmentIDSetting(
+            EventViewConfigGroup,
+            "showSegmentID",
+            true);
+    PreferenceBool a_showOtherSetting(
+            EventViewConfigGroup,
+            "showOther",
+            true);
+
+    PreferenceInt a_timeModeSetting(
+            EventViewConfigGroup,
+            "timemode",
+            int(Composition::TimeMode::MusicalTime));
+
+    const char * const EventListLayoutGroup = "EventList_Layout";
+
+}
 
 
 EventView::EventView(RosegardenDocument *doc,
                      const std::vector<Segment *> &segments) :
     EditViewBase(segments)
 {
-    setStatusBar(new QStatusBar(this));
-
-    // Connect for changes so we can update the list.
-    connect(RosegardenDocument::currentDocument,
-                &RosegardenDocument::documentModified,
-            this, &EventView::slotDocumentModified);
-
-    // For each Segment...
-    for (Segment *segment : m_segments) {
-        segment->addObserver(this);
+    // We only support a single Segment.
+    if (segments.size() != 1) {
+        RG_WARNING << "Segment count was not 1.  (" << segments.size() << ")  Giving up...";
+        return;
+    }
+    if (segments[0] == nullptr) {
+        RG_WARNING << "Segment pointer is null.";
+        return;
     }
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    // Note: EditView only edits the first Segment in segments.
+    setWindowIcon(IconLoader::loadPixmap("window-eventlist"));
 
-    if (!segments.empty()) {
-        Segment *s = *segments.begin();
-        if (s->getComposition()) {
-            int id = s->getComposition()->getTriggerSegmentId(s);
-            if (id >= 0)
-                m_isTriggerSegment = true;
-        }
-    }
+    setStatusBar(new QStatusBar(this));
 
-    initStatusBar();
+    // Connect for changes so we can update the list.
+    connect(doc, &RosegardenDocument::documentModified,
+            this, &EventView::slotDocumentModified);
+
+    Composition &comp = doc->getComposition();
+
+    m_isTriggerSegment = (comp.getTriggerSegmentId(segments[0]) >= 0);
+
     setupActions();
 
-    // Create frame and layout.
-    // ??? Push down to derivers.
-    m_frame = new QFrame(this);
-    m_frame->setMinimumSize(500, 300);
-    m_frame->setMaximumSize(2200, 1400);
-    m_gridLayout = new QGridLayout(m_frame);
-    m_frame->setLayout(m_gridLayout);
-    setCentralWidget(m_frame);
+    // Create main widget and layout.
+    QWidget *mainWidget = new QWidget(this);
+    QGridLayout *mainLayout = new QGridLayout(mainWidget);
+    setCentralWidget(mainWidget);
 
-    // define some note filtering buttons in a group
-    //
-    m_filterGroup = new QGroupBox(tr("Event filters"), m_frame);
+    // *** Event filters
+
+    m_filterGroup = new QGroupBox(tr("Event filters"), mainWidget);
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
-    m_filterGroup->setAlignment( Qt::AlignHorizontal_Mask );
-
-    m_noteCheckBox = new QCheckBox(tr("Note"), m_filterGroup);
-    m_programCheckBox = new QCheckBox(tr("Program Change"), m_filterGroup);
-    m_controllerCheckBox = new QCheckBox(tr("Controller"), m_filterGroup);
-    m_pitchBendCheckBox = new QCheckBox(tr("Pitch Bend"), m_filterGroup);
-    m_sysExCheckBox = new QCheckBox(tr("System Exclusive"), m_filterGroup);
-    m_keyPressureCheckBox = new QCheckBox(tr("Key Pressure"), m_filterGroup);
-    m_channelPressureCheckBox = new QCheckBox(tr("Channel Pressure"), m_filterGroup);
-    m_restCheckBox = new QCheckBox(tr("Rest"), m_filterGroup);
-    m_indicationCheckBox = new QCheckBox(tr("Indication"), m_filterGroup);
-    m_textCheckBox = new QCheckBox(tr("Text"), m_filterGroup);
-    m_generatedRegionCheckBox = new QCheckBox(tr("Generated regions"), m_filterGroup);
-    m_segmentIDCheckBox = new QCheckBox(tr("Segment ID"), m_filterGroup);
-    m_otherCheckBox = new QCheckBox(tr("Other"), m_filterGroup);
-
-    filterGroupLayout->addWidget(m_noteCheckBox);
-    filterGroupLayout->addWidget(m_programCheckBox);
-    filterGroupLayout->addWidget(m_controllerCheckBox);
-    filterGroupLayout->addWidget(m_pitchBendCheckBox);
-    filterGroupLayout->addWidget(m_sysExCheckBox);
-    filterGroupLayout->addWidget(m_keyPressureCheckBox);
-    filterGroupLayout->addWidget(m_channelPressureCheckBox);
-    filterGroupLayout->addWidget(m_restCheckBox);
-    filterGroupLayout->addWidget(m_indicationCheckBox);
-    filterGroupLayout->addWidget(m_textCheckBox);
-    filterGroupLayout->addWidget(m_generatedRegionCheckBox);
-    filterGroupLayout->addWidget(m_segmentIDCheckBox);
-    filterGroupLayout->addWidget(m_otherCheckBox);
+    // SetFixedSize - Make the layout exactly the size of its contents and
+    //                do not allow it to expand or contract.
+    filterGroupLayout->setSizeConstraint(QLayout::SetFixedSize);
     m_filterGroup->setLayout(filterGroupLayout);
 
-    m_gridLayout->addWidget(m_filterGroup, 2, 0);
+    m_noteCheckBox = new QCheckBox(tr("Note"), m_filterGroup);
+    connect(m_noteCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_noteCheckBox);
 
-    m_eventList = new QTreeWidget(m_frame);
+    m_restCheckBox = new QCheckBox(tr("Rest"), m_filterGroup);
+    connect(m_restCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_restCheckBox);
 
-    //m_eventList->setItemsRenameable(true); //&&& use item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable );
+    m_programCheckBox = new QCheckBox(tr("Program Change"), m_filterGroup);
+    connect(m_programCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_programCheckBox);
 
-    m_gridLayout->addWidget(m_eventList, 2, 1);
+    m_controllerCheckBox = new QCheckBox(tr("Controller"), m_filterGroup);
+    connect(m_controllerCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_controllerCheckBox);
+
+    m_pitchBendCheckBox = new QCheckBox(tr("Pitch Bend"), m_filterGroup);
+    connect(m_pitchBendCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_pitchBendCheckBox);
+
+    m_sysExCheckBox = new QCheckBox(tr("System Exclusive"), m_filterGroup);
+    connect(m_sysExCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_sysExCheckBox);
+
+    m_keyPressureCheckBox = new QCheckBox(tr("Key Pressure"), m_filterGroup);
+    connect(m_keyPressureCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_keyPressureCheckBox);
+
+    m_channelPressureCheckBox = new QCheckBox(tr("Channel Pressure"), m_filterGroup);
+    connect(m_channelPressureCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_channelPressureCheckBox);
+
+    m_indicationCheckBox = new QCheckBox(tr("Indication"), m_filterGroup);
+    connect(m_indicationCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_indicationCheckBox);
+
+    m_textCheckBox = new QCheckBox(tr("Text"), m_filterGroup);
+    connect(m_textCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_textCheckBox);
+
+    m_generatedRegionCheckBox = new QCheckBox(tr("Generated regions"), m_filterGroup);
+    connect(m_generatedRegionCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_generatedRegionCheckBox);
+
+    m_segmentIDCheckBox = new QCheckBox(tr("Segment ID"), m_filterGroup);
+    connect(m_segmentIDCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_segmentIDCheckBox);
+
+    m_otherCheckBox = new QCheckBox(tr("Other"), m_filterGroup);
+    connect(m_otherCheckBox, &QCheckBox::clicked,
+            this, &EventView::slotFilterClicked);
+    filterGroupLayout->addWidget(m_otherCheckBox);
+
+    mainLayout->addWidget(m_filterGroup, 0, 0, Qt::AlignHCenter);
+    mainLayout->setRowMinimumHeight(0, m_filterGroup->height());
+
+    // Tree Widget
+
+    m_treeWidget = new QTreeWidget(mainWidget);
+    // Double-click to edit.
+    connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
+            this, &EventView::slotItemDoubleClicked);
+    connect(m_treeWidget, &QTreeWidget::itemSelectionChanged,
+            this, &EventView::slotItemSelectionChanged);
+
+    m_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_treeWidget,
+                &QWidget::customContextMenuRequested,
+            this, &EventView::slotContextMenu);
+
+    m_treeWidget->setAllColumnsShowFocus(true);
+    m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+    QStringList columnNames;
+    columnNames << tr("Time  ");
+    columnNames << tr("Duration  ");
+    columnNames << tr("Event Type  ");
+    columnNames << tr("Pitch  ");
+    columnNames << tr("Velocity  ");
+    columnNames << tr("Type (Data1)  ");
+    columnNames << tr("Value (Data2)  ");
+    m_treeWidget->setHeaderLabels(columnNames);
+
+    // Make sure time columns have the right amount of space.
+    constexpr int timeWidth = 110;
+    // Plus a little for the tree diagram in the first column.
+    m_treeWidget->setColumnWidth(0, timeWidth + 23);
+    m_treeWidget->setColumnWidth(1, timeWidth);
+    m_treeWidget->setMinimumWidth(700);
+
+    mainLayout->addWidget(m_treeWidget, 0, 1, 3, 1);
+
+    // Trigger Segment Group Box
 
     if (m_isTriggerSegment) {
 
-        int id = segments[0]->getComposition()->getTriggerSegmentId(segments[0]);
-        TriggerSegmentRec *rec =
-            segments[0]->getComposition()->getTriggerSegmentRec(id);
+        const int triggerSegmentID = comp.getTriggerSegmentId(segments[0]);
+        TriggerSegmentRec *triggerSegment =
+                comp.getTriggerSegmentRec(triggerSegmentID);
 
-        // ??? rename: groupBox
-        QGroupBox *frame = new QGroupBox(tr("Triggered Segment Properties"), m_frame);
-        frame->setAlignment( Qt::AlignHorizontal_Mask );
-        frame->setContentsMargins(5, 5, 5, 5);
-        QGridLayout *layout = new QGridLayout(frame);
+        QGroupBox *groupBox = new QGroupBox(
+                tr("Triggered Segment Properties"), mainWidget);
+        groupBox->setContentsMargins(5, 5, 5, 5);
+        QGridLayout *layout = new QGridLayout(groupBox);
         layout->setSpacing(5);
 
         // Label
-        layout->addWidget(new QLabel(tr("Label:  "), frame), 0, 0);
+        layout->addWidget(new QLabel(tr("Label:  "), groupBox), 0, 0);
         QString label = strtoqstr(segments[0]->getLabel());
-        if (label == "") label = tr("<no label>");
-        m_triggerName = new QLabel(label, frame);
+        if (label == "")
+            label = tr("<no label>");
+        m_triggerName = new QLabel(label, groupBox);
         layout->addWidget(m_triggerName, 0, 1);
-        QPushButton *editButton = new QPushButton(tr("edit"), frame);
+        QPushButton *editButton = new QPushButton(tr("edit"), groupBox);
         layout->addWidget(editButton, 0, 2);
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerName);
 
         // Base pitch
-        layout->addWidget(new QLabel(tr("Base pitch:  "), frame), 1, 0);
-        m_triggerPitch = new QLabel(QString("%1").arg(rec->getBasePitch()), frame);
+        layout->addWidget(new QLabel(tr("Base pitch:  "), groupBox), 1, 0);
+        m_triggerPitch = new QLabel(
+                QString("%1").arg(triggerSegment->getBasePitch()), groupBox);
         layout->addWidget(m_triggerPitch, 1, 1);
-        editButton = new QPushButton(tr("edit"), frame);
+        editButton = new QPushButton(tr("edit"), groupBox);
         layout->addWidget(editButton, 1, 2);
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerPitch);
 
         // Base velocity
-        layout->addWidget(new QLabel(tr("Base velocity:  "), frame), 2, 0);
-        m_triggerVelocity = new QLabel(QString("%1").arg(rec->getBaseVelocity()), frame);
+        layout->addWidget(new QLabel(tr("Base velocity:  "), groupBox), 2, 0);
+        m_triggerVelocity = new QLabel(
+                QString("%1").arg(triggerSegment->getBaseVelocity()), groupBox);
         layout->addWidget(m_triggerVelocity, 2, 1);
-        editButton = new QPushButton(tr("edit"), frame);
+        editButton = new QPushButton(tr("edit"), groupBox);
         layout->addWidget(editButton, 2, 2);
         connect(editButton, &QAbstractButton::clicked,
                 this, &EventView::slotEditTriggerVelocity);
 
-        /*!!! Comment out these two options, which are not yet used
-          anywhere else -- intended for use with library ornaments, not
-          yet implemented
+#if 0
+        // ??? All of this is implemented and stored with the trigger segment
+        //     along with pitch and velocity.  We can probably get this working,
+        //     but should we?
 
-        layout->addWidget(new QLabel(tr("Default timing:  "), frame), 3, 0);
-
-        QComboBox *adjust = new QComboBox(frame);
+        // Default timing
+        layout->addWidget(new QLabel(tr("Default timing:  "), mainWidget), 3, 0);
+        QComboBox *adjust = new QComboBox(mainWidget);
         layout->addWidget(adjust, 3, 1, 1, 2);
         adjust->addItem(tr("As stored"));
         adjust->addItem(tr("Truncate if longer than note"));
         adjust->addItem(tr("End at same time as note"));
         adjust->addItem(tr("Stretch or squash segment to note duration"));
-
-        std::string timing = rec->getDefaultTimeAdjust();
+        std::string timing = triggerSegment->getDefaultTimeAdjust();
         if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
             adjust->setCurrentIndex(0);
         } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
@@ -237,434 +366,339 @@ EventView::EventView(RosegardenDocument *doc,
         } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
             adjust->setCurrentIndex(2);
         }
-
         connect(adjust,
                     static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
                 this, &EventView::slotTriggerTimeAdjustChanged);
 
-        QCheckBox *retune = new QCheckBox(tr("Adjust pitch to trigger note by default"), frame);
-        retune->setChecked(rec->getDefaultRetune());
+        // Adjust pitch to trigger note by default
+        QCheckBox *retune = new QCheckBox(tr("Adjust pitch to trigger note by default"), mainWidget);
+        retune->setChecked(triggerSegment->getDefaultRetune());
         connect(retune, SIGNAL(clicked()), this, SLOT(slotTriggerRetuneChanged()));
         layout->addWidget(retune, 4, 1, 1, 2);
+#endif
 
-        */
-
-        frame->setLayout(layout);
-        m_gridLayout->addWidget(frame, 2, 2);
+        groupBox->setLayout(layout);
+        //m_gridLayout->addWidget(groupBox, 0, 2);
+        mainLayout->addWidget(groupBox, 1, 0);
 
     }
+
+    // Add a third row to expand to fill the remaining space and prevent
+    // expansion of the contents of the first column.
+    mainLayout->setRowStretch(2, 1);
+
+    // Make sure main widget never gets too small.
+    mainWidget->setMinimumSize(mainLayout->minimumSize());
 
     updateWindowTitle(false);
-    connect(RosegardenDocument::currentDocument, &RosegardenDocument::documentModified,
-            this, &EventView::updateWindowTitle);
 
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        m_segments[i]->addObserver(this);
-    }
-
-    // Connect double clicker
-    //
-    connect(m_eventList, &QTreeWidget::itemDoubleClicked,
-            this, &EventView::slotPopupEventEditor);
-
-    m_eventList->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_eventList,
-            &QWidget::customContextMenuRequested,
-            this, &EventView::slotPopupMenu);
-
-    m_eventList->setAllColumnsShowFocus(true);
-    m_eventList->setSelectionMode( QAbstractItemView::ExtendedSelection );
-
-    QStringList columnNames;
-    columnNames << tr("Time  ");
-    columnNames << tr("Duration  ");
-    columnNames << tr("Event Type  ");
-    columnNames << tr("Pitch  ");
-    columnNames << tr("Velocity  ");
-    columnNames << tr("Type (Data1)  ");
-    columnNames << tr("Type (Data1)  ");
-    columnNames << tr("Value (Data2)  ");
-    m_eventList->setHeaderLabels(columnNames);
-
-    // Make sure time columns have the right amount of space.
-    // ??? We should use the font size of "000-00-00-00" as the default size.
-    //     Then we should save and restore the column widths.  See
-    //     ShortcutDialog's ctor.
-    constexpr int timeWidth = 110;
-    // Plus a little for the tree diagram in the first column.
-    m_eventList->setColumnWidth(0, timeWidth + 23);
-    m_eventList->setColumnWidth(1, timeWidth);
-
-    readOptions();
-    setButtonsToFilter();
+    loadOptions();
+    updateFilterCheckBoxes();
     updateTreeWidget();
 
-    // Connect the checkboxes AFTER calling setButtonsToFilter() to set up the
-    // initial states.  Otherwise, the first state change triggers
-    // slotModifyFilter() prematurely, and it wrecks the filter.
-    // ??? Use clicked() instead of stateChanged() to avoid this.
-    connect(m_noteCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_programCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_controllerCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_pitchBendCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_sysExCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_keyPressureCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_channelPressureCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_restCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_indicationCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_textCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_generatedRegionCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_segmentIDCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-    connect(m_otherCheckBox, &QCheckBox::stateChanged,
-            this, &EventView::slotModifyFilter);
-
-    makeInitialSelection(doc->getComposition().getPosition());
-
-
-    // Restore window geometry and toolbar/dock state
-    QSettings settings;
-    settings.beginGroup(WindowGeometryConfigGroup);
-    this->restoreGeometry(settings.value("Event_List_View_Geometry").toByteArray());
-    this->restoreState(settings.value("Event_List_View_State").toByteArray());
-    settings.endGroup();
+    makeInitialSelection(comp.getPosition());
 }
 
 EventView::~EventView()
 {
     saveOptions();
-
-    for (Segment *segment : m_segments) {
-        segment->removeObserver(this);
-    }
-}
-
-void
-EventView::closeEvent(QCloseEvent *event)
-{
-    // ??? This does nothing.  Get rid of it.
-
-    QWidget::closeEvent(event);
-}
-
-void
-EventView::eventRemoved(const Segment *, Event *e)
-{
-    m_deletedEvents.insert(e);
 }
 
 bool
 EventView::updateTreeWidget()
 {
-    // ??? This selection stuff is extremely buggy.  It stores the indices,
-    //     so if anything has changed, it will re-select the wrong items.
-    //     It also completely loses the scroll position.  Working on fixing
-    //     this in TempoView.  See that for the latest.
+    // ??? This has scrolling issues.  It seems to not maintain at least the
+    //     time position when filtering is changed.  Also when time mode is
+    //     changed it jumps when there is a selection.  There are no
+    //     scrollToItem() calls, so it isn't
+    //     that.  It's odd since other lists seem to maintain scroll position
+    //     just fine, especially when nothing really changes (time mode).
 
-    // If no selection, copy UI selection to m_listSelection.
-    if (m_listSelection.size() == 0) {
+    // Store the selection.
 
-        QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
+    std::set<QString /*key*/> selection;
 
-        if (!selection.empty()) {
-            for (int i = 0; i < selection.count(); ++i) {
-                QTreeWidgetItem *listItem = selection.at(i);
-                m_listSelection.push_back(
-                        m_eventList->indexOfTopLevelItem(listItem));
-            }
-        }
+    // For each item in the tree...
+    for (int itemIndex = 0;
+         itemIndex < m_treeWidget->topLevelItemCount();
+         ++itemIndex) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
+        // If this item is selected, add its key to the list.
+        if (item->isSelected())
+            selection.insert(item->data(0, Qt::UserRole).toString());
     }
+
+    // Store "current" item.
+
+    bool haveCurrentItem;
+    QString currentItemKey;
+
+    // Scope to avoid accidentally reusing currentItem after it is gone.
+    {
+        // The "current item" has the focus outline which is only
+        // visible if it happens to be selected.
+        QTreeWidgetItem *currentItem = m_treeWidget->currentItem();
+        haveCurrentItem = currentItem;
+        if (haveCurrentItem)
+            currentItemKey = currentItem->data(0, Qt::UserRole).toString();
+    }
+
 
     // *** Create the event list.
 
-    m_eventList->clear();
+    m_treeWidget->clear();
 
-    QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
+    SegmentPerformanceHelper helper(*m_segments[0]);
 
-    int timeMode = settings.value("timemode", 0).toInt();
+    const Composition::TimeMode timeMode =
+            static_cast<Composition::TimeMode>(a_timeModeSetting.get());
 
-    settings.endGroup();
+    // For each Event in the Segment...
+    for (Segment::iterator eventIter = m_segments[0]->begin();
+         m_segments[0]->isBeforeEndMarker(eventIter);
+         ++eventIter) {
+        Event *event = *eventIter;
 
-    // For each Segment...
-    for (unsigned int i = 0; i < m_segments.size(); i++) {
-        SegmentPerformanceHelper helper(*m_segments[i]);
+        // Event filters
 
-        // For each Event in the Segment...
-        for (Segment::iterator it = m_segments[i]->begin();
-                m_segments[i]->isBeforeEndMarker(it); ++it) {
-            timeT eventTime =
-                helper.getSoundingAbsoluteTime(it);
+        if (event->isa(Note::EventRestType)) {
+            if (!m_showRest)
+                continue;
 
-            QString velyStr;
-            QString pitchStr;
-            QString data1Str = "";
-            QString data2Str = "";
-            QString durationStr;
+        } else if (event->isa(Note::EventType)) {
+            if (!m_showNote)
+                continue;
 
-            // Event filters
-            //
-            //
+        } else if (event->isa(Indication::EventType)) {
+            if (!m_showIndication)
+                continue;
 
-            if ((*it)->isa(Note::EventRestType)) {
-                if (!(m_eventFilter & Rest))
-                    continue;
+        } else if (event->isa(PitchBend::EventType)) {
+            if (!m_showPitchBend)
+                continue;
 
-            } else if ((*it)->isa(Note::EventType)) {
-                if (!(m_eventFilter & Note))
-                    continue;
+        } else if (event->isa(SystemExclusive::EventType)) {
+            if (!m_showSystemExclusive)
+                continue;
 
-            } else if ((*it)->isa(Indication::EventType)) {
-                if (!(m_eventFilter & Indication))
-                    continue;
+        } else if (event->isa(ProgramChange::EventType)) {
+            if (!m_showProgramChange)
+                continue;
 
-            } else if ((*it)->isa(PitchBend::EventType)) {
-                if (!(m_eventFilter & PitchBend))
-                    continue;
+        } else if (event->isa(ChannelPressure::EventType)) {
+            if (!m_showChannelPressure)
+                continue;
 
-            } else if ((*it)->isa(SystemExclusive::EventType)) {
-                if (!(m_eventFilter & SystemExclusive))
-                    continue;
+        } else if (event->isa(KeyPressure::EventType)) {
+            if (!m_showKeyPressure)
+                continue;
 
-            } else if ((*it)->isa(ProgramChange::EventType)) {
-                if (!(m_eventFilter & ProgramChange))
-                    continue;
+        } else if (event->isa(Controller::EventType)) {
+            if (!m_showController)
+                continue;
 
-            } else if ((*it)->isa(ChannelPressure::EventType)) {
-                if (!(m_eventFilter & ChannelPressure))
-                    continue;
+        } else if (event->isa(Text::EventType)) {
+            if (!m_showText)
+                continue;
 
-            } else if ((*it)->isa(KeyPressure::EventType)) {
-                if (!(m_eventFilter & KeyPressure))
-                    continue;
+        } else if (event->isa(GeneratedRegion::EventType)) {
+            if (!m_showGeneratedRegion)
+                continue;
 
-            } else if ((*it)->isa(Controller::EventType)) {
-                if (!(m_eventFilter & Controller))
-                    continue;
+        } else if (event->isa(SegmentID::EventType)) {
+            if (!m_showSegmentID)
+                continue;
 
-            } else if ((*it)->isa(Text::EventType)) {
-                if (!(m_eventFilter & Text))
-                    continue;
-
-            } else if ((*it)->isa(GeneratedRegion::EventType)) {
-                if (!(m_eventFilter & GeneratedRegion))
-                    continue;
-
-            } else if ((*it)->isa(SegmentID::EventType)) {
-                if (!(m_eventFilter & SegmentID))
-                    continue;
-
-            } else {
-                if (!(m_eventFilter & Other))
-                    continue;
-            }
-
-            // avoid debug stuff going to stderr if no properties found
-
-            if ((*it)->has(BaseProperties::PITCH)) {
-                int p = (*it)->get
-                        <Int>(BaseProperties::PITCH);
-                pitchStr = QString("%1 %2  ")
-                           .arg(p).arg(MidiPitchLabel(p).getQString());
-            } else if ((*it)->isa(Note::EventType)) {
-                pitchStr = tr("<not set>");
-            }
-
-            if ((*it)->has(BaseProperties::VELOCITY)) {
-                velyStr = QString("%1  ").
-                          arg((*it)->get
-                              <Int>(BaseProperties::VELOCITY));
-            } else if ((*it)->isa(Note::EventType)) {
-                velyStr = tr("<not set>");
-            }
-
-            if ((*it)->has(Controller::NUMBER)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(Controller::NUMBER));
-            } else if ((*it)->has(Text::TextTypePropertyName)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (Text::TextTypePropertyName)));
-            } else if ((*it)->has(Indication::
-                                  IndicationTypePropertyName)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (Indication::
-                                          IndicationTypePropertyName)));
-            } else if ((*it)->has(::Rosegarden::Key::KeyPropertyName)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (::Rosegarden::Key::KeyPropertyName)));
-            } else if ((*it)->has(Clef::ClefPropertyName)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (Clef::ClefPropertyName)));
-            } else if ((*it)->has(PitchBend::MSB)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(PitchBend::MSB));
-            } else if ((*it)->has(BaseProperties::BEAMED_GROUP_TYPE)) {
-                data1Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (BaseProperties::BEAMED_GROUP_TYPE)));
-            } else if ((*it)->has(GeneratedRegion::FigurationPropertyName)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(GeneratedRegion::FigurationPropertyName));
-            } else if ((*it)->has(SegmentID::IDPropertyName)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(SegmentID::IDPropertyName));
-            }
-
-            if ((*it)->has(Controller::VALUE)) {
-                data2Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(Controller::VALUE));
-            } else if ((*it)->has(Text::TextPropertyName)) {
-                data2Str = QString("%1  ").
-                           arg(strtoqstr((*it)->get
-                                         <String>
-                                         (Text::TextPropertyName)));
-                /*!!!
-                        } else if ((*it)->has(Indication::
-                                  IndicationTypePropertyName)) {
-                        data2Str = QString("%1  ").
-                            arg((*it)->get<Int>(Indication::
-                                    IndicationDurationPropertyName));
-                */
-            } else if ((*it)->has(PitchBend::LSB)) {
-                data2Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(PitchBend::LSB));
-            } else if ((*it)->has(BaseProperties::BEAMED_GROUP_ID)) {
-                data2Str = tr("(group %1)  ")
-                           .arg((*it)->get
-                               <Int>(BaseProperties::BEAMED_GROUP_ID));
-            } else if ((*it)->has(GeneratedRegion::ChordPropertyName)) {
-                data2Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(GeneratedRegion::ChordPropertyName));
-            } else if ((*it)->has(SegmentID::SubtypePropertyName)) {
-                data2Str = QString("%1  ").
-                    arg(strtoqstr((*it)->get
-                                  <String>
-                                  (SegmentID::SubtypePropertyName)));
-            }
-
-            if ((*it)->has(ProgramChange::PROGRAM)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(ProgramChange::PROGRAM) + 1);
-            }
-
-            if ((*it)->has(ChannelPressure::PRESSURE)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(ChannelPressure::PRESSURE));
-            }
-
-            if ((*it)->isa(KeyPressure::EventType) &&
-                    (*it)->has(KeyPressure::PITCH)) {
-                data1Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(KeyPressure::PITCH));
-            }
-
-            if ((*it)->has(KeyPressure::PRESSURE)) {
-                data2Str = QString("%1  ").
-                           arg((*it)->get
-                               <Int>(KeyPressure::PRESSURE));
-            }
-
-
-            if ((*it)->getDuration() > 0 ||
-                    (*it)->isa(Note::EventType) ||
-                    (*it)->isa(Note::EventRestType)) {
-                durationStr = makeDurationString(eventTime,
-                                                 (*it)->getDuration(),
-                                                 timeMode);
-            }
-
-            const QString timeStr = RosegardenDocument::currentDocument->
-                    getComposition().makeTimeString(
-                            eventTime,
-                            static_cast<Composition::TimeMode>(timeMode));
-
-            QStringList sl;
-            sl << timeStr
-               << durationStr
-               << strtoqstr( (*it)->getType() )
-               << pitchStr
-               << velyStr
-               << data1Str
-               << data2Str;
-
-            new EventViewItem(m_segments[i],
-                              *it,
-                              m_eventList,
-                              sl
-                               );
+        } else {
+            if (!m_showOther)
+                continue;
         }
+
+        // Format each column.
+
+        // Time
+
+        Composition &comp = RosegardenDocument::currentDocument->getComposition();
+
+        const timeT eventTime = helper.getSoundingAbsoluteTime(eventIter);
+
+        const QString timeStr = comp.makeTimeString(eventTime, timeMode);
+
+        // Duration
+
+        QString durationStr;
+        QString musicalDuration;
+
+        if (event->getDuration() > 0  ||
+            event->isa(Note::EventType)  ||
+            event->isa(Note::EventRestType)) {
+            durationStr = comp.makeDurationString(
+                    eventTime,
+                    event->getDuration(),
+                    timeMode);
+            // For the key.
+            musicalDuration = comp.makeDurationString(
+                    eventTime,
+                    event->getDuration(),
+                    Composition::TimeMode::MusicalTime);
+        }
+
+        // Pitch
+
+        QString pitchStr;
+
+        if (event->has(BaseProperties::PITCH)) {
+            const int pitch = event->get<Int>(BaseProperties::PITCH);
+            pitchStr = QString("%1 %2  ")
+                       .arg(pitch).arg(MidiPitchLabel(pitch).getQString());
+        } else if (event->isa(Note::EventType)) {
+            pitchStr = tr("<not set>");
+        }
+
+        // Velocity
+
+        QString velocityStr;
+
+        if (event->has(BaseProperties::VELOCITY)) {
+            velocityStr = QString("%1  ").
+                      arg(event->get<Int>(BaseProperties::VELOCITY));
+        } else if (event->isa(Note::EventType)) {
+            velocityStr = tr("<not set>");
+        }
+
+        // Data 1
+
+        QString data1Str;
+
+        if (event->has(Controller::NUMBER)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(Controller::NUMBER));
+        } else if (event->has(Text::TextTypePropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Text::TextTypePropertyName)));
+        } else if (event->has(Indication::IndicationTypePropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Indication::IndicationTypePropertyName)));
+        } else if (event->has(Key::KeyPropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Key::KeyPropertyName)));
+        } else if (event->has(Clef::ClefPropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Clef::ClefPropertyName)));
+        } else if (event->has(PitchBend::MSB)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(PitchBend::MSB));
+        } else if (event->has(BaseProperties::BEAMED_GROUP_TYPE)) {
+            data1Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               BaseProperties::BEAMED_GROUP_TYPE)));
+        } else if (event->has(GeneratedRegion::FigurationPropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(
+                               GeneratedRegion::FigurationPropertyName));
+        } else if (event->has(SegmentID::IDPropertyName)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(SegmentID::IDPropertyName));
+        }
+
+        if (event->has(ProgramChange::PROGRAM)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(ProgramChange::PROGRAM) + 1);
+        }
+
+        if (event->has(ChannelPressure::PRESSURE)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(ChannelPressure::PRESSURE));
+        }
+
+        if (event->isa(KeyPressure::EventType)  &&
+            event->has(KeyPressure::PITCH)) {
+            data1Str = QString("%1  ").
+                       arg(event->get<Int>(KeyPressure::PITCH));
+        }
+
+        // Data 2
+
+        QString data2Str;
+
+        if (event->has(Controller::VALUE)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(Controller::VALUE));
+        } else if (event->has(Text::TextPropertyName)) {
+            data2Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               Text::TextPropertyName)));
+#if 0
+        } else if (event->has(Indication::IndicationTypePropertyName)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(
+                               Indication::IndicationDurationPropertyName));
+#endif
+        } else if (event->has(PitchBend::LSB)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(PitchBend::LSB));
+        } else if (event->has(BaseProperties::BEAMED_GROUP_ID)) {
+            data2Str = tr("(group %1)  ").
+                       arg(event->get<Int>(BaseProperties::BEAMED_GROUP_ID));
+        } else if (event->has(GeneratedRegion::ChordPropertyName)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(GeneratedRegion::ChordPropertyName));
+        } else if (event->has(SegmentID::SubtypePropertyName)) {
+            data2Str = QString("%1  ").
+                       arg(strtoqstr(event->get<String>(
+                               SegmentID::SubtypePropertyName)));
+        }
+
+        if (event->has(KeyPressure::PRESSURE)) {
+            data2Str = QString("%1  ").
+                       arg(event->get<Int>(KeyPressure::PRESSURE));
+        }
+
+        if (event->has(BaseProperties::TRIGGER_SEGMENT_ID))
+            data2Str = "TRIGGER";
+
+        QStringList values;
+        values << timeStr <<
+                  durationStr <<
+                  strtoqstr(event->getType()) <<
+                  pitchStr <<
+                  velocityStr <<
+                  data1Str <<
+                  data2Str;
+
+        EventViewItem *item = new EventViewItem(
+                m_segments[0],  // segment
+                event,  // event
+                m_treeWidget,  // parent
+                values);  // strings
+
+        // Assemble a key so we can uniquely identify each row for selection
+        // persistence across updates.
+        // ??? Why not just use the Event pointer address?  It's dangerous,
+        //     but it should work well enough.  And it will be faster than a
+        //     string comparison.  It will also avoid needing to keep
+        //     musicalTime and musicalDuration.
+        // Always use musical time in case the time mode changes.
+        const QString musicalTime = comp.makeTimeString(
+                                eventTime,
+                                Composition::TimeMode::MusicalTime);
+        const QString key = musicalTime + musicalDuration +
+                strtoqstr(event->getType()) + pitchStr + velocityStr +
+                data1Str + data2Str;
+        item->setData(0, Qt::UserRole, key);
+
+        // Restore current item.
+        if (key == currentItemKey)
+            m_treeWidget->setCurrentItem(item, 0, QItemSelectionModel::NoUpdate);
+
+        // Restore selection.
+        if (selection.find(key) != selection.end())
+            item->setSelected(true);
     }
-
-
-    // No Events?
-    if ( m_eventList->topLevelItemCount() == 0 ) {
-        if (m_segments.size())
-            new QTreeWidgetItem(m_eventList,
-                                QStringList() << tr("<no events at this filter level>"));
-        else
-            new QTreeWidgetItem(m_eventList, QStringList() << tr("<no events>"));
-
-        m_eventList->setSelectionMode(QTreeWidget::NoSelection);
-        leaveActionState("have_selection");
-    } else {  // We have Events.
-
-        m_eventList->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-        // If no selection then select the first event
-        if (m_listSelection.size() == 0)
-            m_listSelection.push_back(0);
-
-        enterActionState("have_selection");
-    }
-
-    // Set a selection from a range of indexes
-    //
-    std::vector<int>::iterator sIt = m_listSelection.begin();
-
-    for (; sIt != m_listSelection.end(); ++sIt) {
-        int index = *sIt;
-
-        while (index > 0 && !m_eventList->topLevelItem(index))        // was itemAtIndex
-            index--;
-
-        m_eventList->setCurrentItem( m_eventList->topLevelItem(index) );
-
-        // ensure visible
-        m_eventList->scrollToItem(m_eventList->topLevelItem(index));
-    }
-
-    m_listSelection.clear();
-    m_deletedEvents.clear();
 
     return true;
 }
@@ -672,22 +706,17 @@ EventView::updateTreeWidget()
 void
 EventView::makeInitialSelection(timeT time)
 {
-    m_listSelection.clear();
+    const int itemCount = m_treeWidget->topLevelItemCount();
 
-    const int itemCount = m_eventList->topLevelItemCount();
+    EventViewItem *foundItem{nullptr};
+    // Unused for tree.  We'll likely need it for QTableWidget.
+    //int foundRow{0};
 
-    EventViewItem *goodItem = nullptr;
-    int goodItemNo = 0;
-
-    // For each item in the event list.
-    // ??? Performance: LINEAR SEARCH
-    //     While we could speed this up with a binary search, it would be
-    //     smarter to find the appropriate event while we are creating the
-    //     m_eventList in applyLayout().
-    for (int itemNo = 0; itemNo < itemCount; ++itemNo) {
+    // For each row in the event list.
+    for (int row = 0; row < itemCount; ++row) {
         EventViewItem *item =
                 dynamic_cast<EventViewItem *>(
-                        m_eventList->topLevelItem(itemNo));
+                        m_treeWidget->topLevelItem(row));
 
         // Not an EventViewItem?  Try the next.
         if (!item)
@@ -699,128 +728,106 @@ EventView::makeInitialSelection(timeT time)
             break;
 
         // Remember the last good item.
-        goodItem = item;
-        goodItemNo = itemNo;
+        foundItem = item;
+        //foundRow = row;
     }
 
     // Nothing found?  Bail.
-    if (!goodItem)
+    if (!foundItem)
         return;
 
-    // Select the item prior to the playback position pointer.
-    m_listSelection.push_back(goodItemNo);
-    m_eventList->setCurrentItem(goodItem);
-    m_eventList->scrollToItem(goodItem);
-}
+    // Make it current so the keyboard works correctly.
+    m_treeWidget->setCurrentItem(foundItem);
 
-QString
-EventView::makeDurationString(timeT time,
-                              timeT duration, int timeMode)
-{
-    // ??? Same as TriggerSegmentManager::makeDurationString().  Move to
-    //     Composition like makeTimeString().
+    // Select the item
+    foundItem->setSelected(true);
 
-    switch (timeMode) {
+    // Yield to the event loop so that the UI will be rendered before calling
+    // scrollToItem().
+    qApp->processEvents();
 
-    case 0:  // musical time
-        {
-            int bar, beat, fraction, remainder;
-            RosegardenDocument::currentDocument->getComposition().getMusicalTimeForDuration
-            (time, duration, bar, beat, fraction, remainder);
-            return QString("%1%2%3-%4%5-%6%7-%8%9   ")
-                   .arg(bar / 100)
-                   .arg((bar % 100) / 10)
-                   .arg(bar % 10)
-                   .arg(beat / 10)
-                   .arg(beat % 10)
-                   .arg(fraction / 10)
-                   .arg(fraction % 10)
-                   .arg(remainder / 10)
-                   .arg(remainder % 10);
-        }
-
-    case 1:  // real time
-        {
-            RealTime rt =
-                RosegardenDocument::currentDocument->getComposition().getRealTimeDifference
-                (time, time + duration);
-            //    return QString("%1  ").arg(rt.toString().c_str());
-            return QString("%1  ").arg(rt.toText().c_str());
-        }
-
-    default:
-        return QString("%1  ").arg(duration);
-    }
-}
-
-void
-EventView::updateView()
-{
-    m_eventList->update();
+    // Make sure the item is visible.
+    m_treeWidget->scrollToItem(foundItem, QAbstractItemView::PositionAtCenter);
 }
 
 void
 EventView::slotEditTriggerName()
 {
-    bool ok = false;
-    QString newLabel = InputDialog::getText(this,
-                                            tr("Segment label"),
-                                            tr("Label:"),
-                                            LineEdit::Normal,
-                                            strtoqstr(m_segments[0]->getLabel()),
-                                            &ok);
+    bool ok;
+    QString newLabel = InputDialog::getText(
+            this,  // parent
+            tr("Segment label"),  // title
+            tr("Label:"),  // label
+            LineEdit::Normal,  // mode
+            strtoqstr(m_segments[0]->getLabel()),  // text
+            &ok);  // ok
 
-    if (ok) {
-        SegmentSelection selection;
-        selection.insert(m_segments[0]);
-        SegmentLabelCommand *cmd = new SegmentLabelCommand(selection, newLabel);
-        CommandHistory::getInstance()->addCommand(cmd);
-        m_triggerName->setText(newLabel);
-    }
+    if (!ok)
+        return;
+
+    // Create SegmentLabelCommand and run.
+    SegmentSelection selection;
+    selection.insert(m_segments[0]);
+    CommandHistory::getInstance()->addCommand(
+            new SegmentLabelCommand(selection, newLabel));
+
+    m_triggerName->setText(newLabel);
 }
 
 void
 EventView::slotEditTriggerPitch()
 {
-    int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
+    const int triggerSegmentID =
+            m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-    TriggerSegmentRec *rec =
-        m_segments[0]->getComposition()->getTriggerSegmentRec(id);
+    const TriggerSegmentRec *triggerSegment =
+            m_segments[0]->getComposition()->getTriggerSegmentRec(triggerSegmentID);
 
-    PitchDialog *dlg = new PitchDialog(this, tr("Base pitch"), rec->getBasePitch());
+    PitchDialog *dlg = new PitchDialog(
+            this,  // parent
+            tr("Base pitch"),  // title
+            triggerSegment->getBasePitch());  // defaultPitch
 
-    if (dlg->exec() == QDialog::Accepted) {
-        CommandHistory::getInstance()->addCommand(
-                new SetTriggerSegmentBasePitchCommand(
-                        &RosegardenDocument::currentDocument->getComposition(),
-                        id,
-                        dlg->getPitch()));
-        m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
-    }
+    if (dlg->exec() != QDialog::Accepted)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new SetTriggerSegmentBasePitchCommand(
+                    &RosegardenDocument::currentDocument->getComposition(),
+                    triggerSegmentID,
+                    dlg->getPitch()));
+
+    m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
 }
 
 void
 EventView::slotEditTriggerVelocity()
 {
-    int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
+    const int triggerSegmentID =
+            m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-    TriggerSegmentRec *rec =
-        m_segments[0]->getComposition()->getTriggerSegmentRec(id);
+    const TriggerSegmentRec *triggerSegment =
+            m_segments[0]->getComposition()->getTriggerSegmentRec(triggerSegmentID);
 
-    TrivialVelocityDialog *dlg = new TrivialVelocityDialog
-                                 (this, tr("Base velocity"), rec->getBaseVelocity());
+    TrivialVelocityDialog *dlg = new TrivialVelocityDialog(
+            this,  // parent
+            tr("Base velocity"),  // label
+            triggerSegment->getBaseVelocity());  // velocity
 
-    if (dlg->exec() == QDialog::Accepted) {
-        CommandHistory::getInstance()->addCommand(
-                new SetTriggerSegmentBaseVelocityCommand(
-                        &RosegardenDocument::currentDocument->getComposition(),
-                        id,
-                        dlg->getVelocity()));
-        m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
-    }
+    if (dlg->exec() != QDialog::Accepted)
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new SetTriggerSegmentBaseVelocityCommand(
+                    &RosegardenDocument::currentDocument->getComposition(),
+                    triggerSegmentID,
+                    dlg->getVelocity()));  // newVelocity
+
+    m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
 }
 
-/* unused
+#if 0
+// ??? This is unused, but seems like we should finish it.
 void
 EventView::slotTriggerTimeAdjustChanged(int option)
 {
@@ -847,253 +854,175 @@ EventView::slotTriggerTimeAdjustChanged(int option)
 
     int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-//    TriggerSegmentRec *rec =  // remove warning
+//    TriggerSegmentRec *triggerSegment =  // remove warning
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-    addCommandToHistory(new SetTriggerSegmentDefaultTimeAdjustCommand
-                        (&RosegardenDocument::currentDocument->getComposition(), id, adjust));
+    addCommandToHistory(new SetTriggerSegmentDefaultTimeAdjustCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            id,
+            adjust));
 }
-*/
-
-/* unused
+#endif
+#if 0
+// ??? This is unused, but seems like we should finish it.
 void
 EventView::slotTriggerRetuneChanged()
 {
     int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
 
-    TriggerSegmentRec *rec =
+    TriggerSegmentRec *triggerSegment =
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-    addCommandToHistory(new SetTriggerSegmentDefaultRetuneCommand
-                        (&RosegardenDocument::currentDocument->getComposition(), id, !rec->getDefaultRetune()));
+    addCommandToHistory(new SetTriggerSegmentDefaultRetuneCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            id,
+            !triggerSegment->getDefaultRetune()));
 }
-*/
+#endif
 
 void
 EventView::slotEditCut()
 {
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
-    if (selection.count() == 0)
-        return ;
+    if (selection.empty())
+        return;
 
-    RG_DEBUG << "EventView::slotEditCut - cutting "
-    << selection.count() << " items";
+    RG_DEBUG << "slotEditCut() - cutting " << selection.count() << " items";
 
-//    QPtrListIterator<QTreeWidgetItem> it(selection);
-    EventSelection *cutSelection = nullptr;
-    int itemIndex = -1;
+    EventSelection cutSelection(*m_segments[0]);
 
-//    while ((listItem = it.current()) != 0) {
-    for( int i=0; i< selection.size(); i++ ){
-        QTreeWidgetItem *listItem = selection.at(i);
+    // For each QTreeWidgetItem in the selection...
+    for (QTreeWidgetItem *listItem : selection) {
+        EventViewItem *item = dynamic_cast<EventViewItem *>(listItem);
+        if (!item)
+            continue;
 
-//        item = dynamic_cast<EventViewItem*>((*it));
-        EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
-
-        if (itemIndex == -1)
-            itemIndex = m_eventList->indexOfTopLevelItem(listItem);
-            //itemIndex = m_eventList->itemIndex(*it);
-
-        if (item) {
-            if (cutSelection == nullptr)
-                cutSelection =
-                    new EventSelection(*(item->getSegment()));
-
-            cutSelection->addEvent(item->getEvent());
-        }
-//        ++it;
+        cutSelection.addEvent(item->getEvent());
     }
 
-    if (cutSelection) {
-        if (itemIndex >= 0) {
-            m_listSelection.clear();
-            m_listSelection.push_back(itemIndex);
-        }
+    if (cutSelection.empty())
+        return;
 
-        CommandHistory::getInstance()->addCommand(
-                new CutCommand(cutSelection, Clipboard::mainClipboard()));
-    }
+    CommandHistory::getInstance()->addCommand(
+            new CutCommand(&cutSelection, Clipboard::mainClipboard()));
 }
 
 void
 EventView::slotEditCopy()
 {
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
-    if (selection.count() == 0)
-        return ;
+    if (selection.empty())
+        return;
 
-    RG_DEBUG << "EventView::slotEditCopy - copying "
-    << selection.count() << " items";
+    RG_DEBUG << "slotEditCopy() - copying " << selection.count() << " items";
 
-//    QPtrListIterator<QTreeWidgetItem> it(selection);
-    EventSelection *copySelection = nullptr;
+    EventSelection copySelection(*m_segments[0]);
 
-    // clear the selection for post modification updating
-    //
-    m_listSelection.clear();
+    // For each QTreeWidgetItem in the selection...
+    for (QTreeWidgetItem *listItem : selection) {
+        EventViewItem *item = dynamic_cast<EventViewItem *>(listItem);
+        if (!item)
+            continue;
 
-//    while ((listItem = it.current()) != 0) {
-    for( int i=0; i< selection.size(); i++ ){
-        QTreeWidgetItem *listItem = selection.at(i);
-
-//         item = dynamic_cast<EventViewItem*>((*it));
-        EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
-
-//         m_listSelection.push_back(m_eventList->itemIndex(*it));
-        m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
-
-        if (item) {
-            if (copySelection == nullptr)
-                copySelection =
-                    new EventSelection(*(item->getSegment()));
-
-            copySelection->addEvent(item->getEvent());
-        }
-//         ++it;
+        copySelection.addEvent(item->getEvent());
     }
 
-    if (copySelection) {
-        CommandHistory::getInstance()->addCommand(
-                new CopyCommand(copySelection, Clipboard::mainClipboard()));
-    }
+    if (copySelection.empty())
+        return;
+
+    CommandHistory::getInstance()->addCommand(
+            new CopyCommand(&copySelection, Clipboard::mainClipboard()));
 }
 
 void
 EventView::slotEditPaste()
 {
-    if (Clipboard::mainClipboard()->isEmpty()) {
-        showStatusBarMessage(tr("Clipboard is empty"));
-        return ;
-    }
+    // ??? This does nothing if a Segment or multiple Segments are
+    //     in the clipboard.  We should probably handle that better.
+    //     I assume PasteEventsCommand only handles the "partial
+    //     segment" clipboard mode?
 
     TmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
 
+    // Compute the insertion time.
+
     timeT insertionTime = 0;
 
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
-    if (selection.count()) {
-        EventViewItem *item = dynamic_cast<EventViewItem*>(selection.at(0));
+    if (!selection.empty()) {
+        // Go with the time of the first selected item.
+        EventViewItem *item = dynamic_cast<EventViewItem *>(selection.at(0));
 
         if (item)
             insertionTime = item->getEvent()->getAbsoluteTime();
-
-        // remember the selection
-        //
-        m_listSelection.clear();
-
-//        QPtrListIterator<QTreeWidgetItem> it(selection);
-
-//        while ((listItem = it.current()) != 0) {
-        for( int i=0; i< selection.size(); i++ ){
-            QTreeWidgetItem *listItem = selection.at(i);
-
-            m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
-//             ++it;
-        }
     }
 
+    PasteEventsCommand *command = new PasteEventsCommand(
+            *m_segments[0],  // segment
+            Clipboard::mainClipboard(),  // clipboard
+            insertionTime,  // pasteTime
+            PasteEventsCommand::MatrixOverlay);  // pasteType
 
-    PasteEventsCommand *command = new PasteEventsCommand
-                                  (*m_segments[0], Clipboard::mainClipboard(),
-                                   insertionTime, PasteEventsCommand::MatrixOverlay);
-
+    // Not possible?
     if (!command->isPossible()) {
         showStatusBarMessage(tr("Couldn't paste at this point"));
-    } else
-        CommandHistory::getInstance()->addCommand(command);
+        delete command;
+        return;
+    }
 
-    RG_DEBUG << "EventView::slotEditPaste - pasting "
-    << selection.count() << " items";
+    CommandHistory::getInstance()->addCommand(command);
+
+    RG_DEBUG << "slotEditPaste() - pasting " << selection.count() << " items";
 }
 
 void
 EventView::slotEditDelete()
 {
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
-    if (selection.count() == 0)
-        return ;
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
+    if (selection.empty())
+        return;
 
-    RG_DEBUG << "EventView::slotEditDelete - deleting "
-    << selection.count() << " items";
+    RG_DEBUG << "slotEditDelete() - deleting " << selection.count() << " items";
 
-//    QPtrListIterator<QTreeWidgetItem> it(selection);
-    EventSelection *deleteSelection = nullptr;
-    int itemIndex = -1;
+    EventSelection deleteSelection(*m_segments[0]);
 
-//    while ((listItem = it.current()) != 0) {
-    for( int i=0; i< selection.size(); i++ ){
-        QTreeWidgetItem *listItem = selection.at(i);
+    // For each item in the list...
+    for (QTreeWidgetItem *listItem : selection) {
+        EventViewItem *item = dynamic_cast<EventViewItem *>(listItem);
+        if (!item)
+            continue;
 
-//         item = dynamic_cast<EventViewItem*>((*it));
-        EventViewItem *item = dynamic_cast<EventViewItem*>(listItem);
-
-        if (itemIndex == -1)
-            itemIndex = m_eventList->indexOfTopLevelItem(listItem);
-            //itemIndex = m_eventList->itemIndex(*it);
-
-        if (item) {
-            if (m_deletedEvents.find(item->getEvent()) != m_deletedEvents.end()) {
-//                ++it;
-                continue;
-            }
-
-            if (deleteSelection == nullptr)
-                deleteSelection =
-                    new EventSelection(*m_segments[0]);
-
-            deleteSelection->addEvent(item->getEvent());
-        }
-//         ++it;
+        deleteSelection.addEvent(item->getEvent());
     }
 
-    if (deleteSelection) {
+    if (deleteSelection.empty())
+        return;
 
-        if (itemIndex >= 0) {
-            m_listSelection.clear();
-            m_listSelection.push_back(itemIndex);
-        }
-
-        CommandHistory::getInstance()->addCommand(
-                new EraseCommand(deleteSelection));
-        updateView();
-    }
+    CommandHistory::getInstance()->addCommand(
+            new EraseCommand(&deleteSelection));
 }
 
 void
 EventView::slotEditInsert()
 {
-    timeT insertTime = m_segments[0]->getStartTime();
-    // Go with a crotchet by default.
-    timeT insertDuration = 960;
-
-    QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
-
-    // If something is selected, use the time and duration from the
-    // first selected event.
-    if (!selection.isEmpty()) {
-        EventViewItem *item =
-            dynamic_cast<EventViewItem *>(selection.first());
-
-        if (item) {
-            insertTime = item->getEvent()->getAbsoluteTime();
-            insertDuration = item->getEvent()->getDuration();
-
-            // ??? Could check for a note event and copy pitch and velocity.
-        }
-    }
-
-    // Create default event
-    //
-    Event event(Note::EventType, insertTime, insertDuration);
-    event.set<Int>(BaseProperties::PITCH, 70);
+    // Create default event in case nothing is selected.
+    Event event(Note::EventType, m_segments[0]->getStartTime(), 960);
+    event.set<Int>(BaseProperties::PITCH, 60);
     event.set<Int>(BaseProperties::VELOCITY, 100);
 
+    // Copy new event from the first selected event.
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
+    if (!selection.isEmpty()) {
+        EventViewItem *item = dynamic_cast<EventViewItem *>(selection.first());
+        event = *(item->getEvent());
+    }
+
     SimpleEventEditDialog dialog(
-            this,
-            RosegardenDocument::currentDocument,
+            this,  // parent
+            RosegardenDocument::currentDocument,  // doc
             event,
             true);  // inserting
 
@@ -1101,12 +1030,10 @@ EventView::slotEditInsert()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    EventInsertionCommand *command =
+    CommandHistory::getInstance()->addCommand(
             new EventInsertionCommand(
                     *m_segments[0],
-                    new Event(dialog.getEvent()));
-
-    CommandHistory::getInstance()->addCommand(command);
+                    new Event(dialog.getEvent())));
 }
 
 void
@@ -1114,8 +1041,7 @@ EventView::slotEditEvent()
 {
     // See slotOpenInEventEditor().
 
-    // ??? Why not use currentItem()?
-    QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
 
     if (selection.isEmpty())
         return;
@@ -1138,8 +1064,8 @@ EventView::slotEditEvent()
         return;
 
     SimpleEventEditDialog dialog(
-            this,
-            RosegardenDocument::currentDocument,
+            this,  // parent
+            RosegardenDocument::currentDocument,  // doc
             *event,
             false);  // inserting
 
@@ -1151,12 +1077,10 @@ EventView::slotEditEvent()
     if (!dialog.isModified())
         return;
 
-    EventEditCommand *command =
+    CommandHistory::getInstance()->addCommand(
             new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
-
-    CommandHistory::getInstance()->addCommand(command);
+                    event,
+                    dialog.getEvent()));
 }
 
 void
@@ -1164,8 +1088,7 @@ EventView::slotEditEventAdvanced()
 {
     // See slotOpenInExpertEventEditor().
 
-    QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
-
+    QList<QTreeWidgetItem *> selection = m_treeWidget->selectedItems();
     if (selection.isEmpty())
         return;
 
@@ -1196,32 +1119,33 @@ EventView::slotEditEventAdvanced()
     if (!dialog.isModified())
         return;
 
-    EventEditCommand *command =
+    CommandHistory::getInstance()->addCommand(
             new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
-
-    CommandHistory::getInstance()->addCommand(command);
+                    event,
+                    dialog.getEvent()));
 }
 
 void
 EventView::slotSelectAll()
 {
-    m_listSelection.clear();
-    for (int i = 0; m_eventList->topLevelItem(i); ++i) {
-        m_listSelection.push_back(i);
-        //m_eventList->setSelected(m_eventList->topLevelItem(i), true);
-        m_eventList->setCurrentItem(m_eventList->topLevelItem(i));
+    // For each item, select it.
+    for (int itemIndex = 0;
+         itemIndex < m_treeWidget->topLevelItemCount();
+         ++itemIndex) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
+        item->setSelected(true);
     }
 }
 
 void
 EventView::slotClearSelection()
 {
-    m_listSelection.clear();
-    for (int i = 0; m_eventList->topLevelItem(i); ++i) {
-        //m_eventList->setSelected(m_eventList->topLevelItem(i), false);
-        m_eventList->setCurrentItem(m_eventList->topLevelItem(i));
+    // For each item, deselect it.
+    for (int itemIndex = 0;
+         itemIndex < m_treeWidget->topLevelItemCount();
+         ++itemIndex) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
+        item->setSelected(false);
     }
 }
 
@@ -1254,77 +1178,85 @@ EventView::setupActions()
 
     createMenusAndToolbars("eventlist.rc");
 
+    slotUpdateClipboardActionState();
+
+    const Composition::TimeMode timeMode =
+            Composition::TimeMode(a_timeModeSetting.get());
+    if (timeMode == Composition::TimeMode::MusicalTime)
+        musical->setChecked(true);
+    else if (timeMode == Composition::TimeMode::RealTime)
+        real->setChecked(true);
+    else if (timeMode == Composition::TimeMode::RawTime)
+        raw->setChecked(true);
+
+    // Disable launching of matrix and notation editors for triggered
+    // segments.
+    // Going with always enabled as it seems to be ok.  See
+    // TriggerSegmentManager which only allows the Event List editor.
+    // It should allow more.
+    //findAction("open_in_matrix")->setEnabled(!m_isTriggerSegment);
+    //findAction("open_in_notation")->setEnabled(!m_isTriggerSegment);
+}
+
+void
+EventView::loadOptions()
+{
+    m_showNote = a_showNoteSetting.get();
+    m_showRest = a_showRestSetting.get();
+    m_showProgramChange = a_showProgramChangeSetting.get();
+    m_showController = a_showControllerSetting.get();
+    m_showPitchBend = a_showPitchBendSetting.get();
+    m_showSystemExclusive = a_showSystemExclusiveSetting.get();
+    m_showKeyPressure = a_showKeyPressureSetting.get();
+    m_showChannelPressure = a_showChannelPressureSetting.get();
+    m_showIndication = a_showIndicationSetting.get();
+    m_showText = a_showTextSetting.get();
+    m_showGeneratedRegion = a_showGeneratedRegionSetting.get();
+    m_showSegmentID = a_showSegmentIDSetting.get();
+    m_showOther = a_showOtherSetting.get();
+
+    // Note that Wayland does not allow top-level window positioning.
+
+    // Restore window geometry and toolbar/dock state
     QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
-
-    int timeMode = settings.value("timemode", 0).toInt() ;
-
+    settings.beginGroup(WindowGeometryConfigGroup);
+    restoreGeometry(settings.value("Event_List_View_Geometry").toByteArray());
+    restoreState(settings.value("Event_List_View_State").toByteArray());
     settings.endGroup();
 
-    if (timeMode == 0) musical->setChecked(true);
-    else if (timeMode == 1) real->setChecked(true);
-    else if (timeMode == 2) raw->setChecked(true);
-
-    if (m_isTriggerSegment) {
-        QAction *action = findAction("open_in_matrix");
-        if (action) delete action;
-        action = findAction("open_in_notation");
-        if (action) delete action;
-    }
-}
-
-void
-EventView::initStatusBar()
-{
-    QStatusBar* sb = statusBar();
-    sb->showMessage(QString());
-}
-
-/* unused
-QSize
-EventView::getViewSize()
-{
-    return m_eventList->size();
-}
-*/
-
-/* unused
-void
-EventView::setViewSize(QSize s)
-{
-    m_eventList->setFixedSize(s);
-}
-*/
-
-void
-EventView::readOptions()
-{
-    QSettings settings;
-
+    // Restore list settings.
     settings.beginGroup(EventViewConfigGroup);
-
-    m_eventFilter = settings.value("event_list_filter", m_eventFilter).toInt();
-
-    const QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
-    m_eventList->restoreGeometry(qba);
-
-    settings.endGroup();
+    m_treeWidget->restoreGeometry(
+            settings.value(EventListLayoutGroup).toByteArray());
 }
 
 void
 EventView::saveOptions()
 {
-    QSettings settings;
+    a_showNoteSetting.set(m_showNote);
+    a_showRestSetting.set(m_showRest);
+    a_showProgramChangeSetting.set(m_showProgramChange);
+    a_showControllerSetting.set(m_showController);
+    a_showPitchBendSetting.set(m_showPitchBend);
+    a_showSystemExclusiveSetting.set(m_showSystemExclusive);
+    a_showKeyPressureSetting.set(m_showKeyPressure);
+    a_showChannelPressureSetting.set(m_showChannelPressure);
+    a_showIndicationSetting.set(m_showIndication);
+    a_showTextSetting.set(m_showText);
+    a_showGeneratedRegionSetting.set(m_showGeneratedRegion);
+    a_showSegmentIDSetting.set(m_showSegmentID);
+    a_showOtherSetting.set(m_showOther);
 
+    // Save list settings.
+    QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
-    settings.setValue("event_list_filter", m_eventFilter);
-    settings.setValue(EventViewLayoutConfigGroupName, m_eventList->saveGeometry());
+    settings.setValue(EventListLayoutGroup, m_treeWidget->saveGeometry());
     settings.endGroup();
 
     // Save window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
-    settings.setValue("Event_List_View_Geometry", this->saveGeometry());
-    settings.setValue("Event_List_View_State", this->saveState());
+    settings.setValue("Event_List_View_Geometry", saveGeometry());
+    settings.setValue("Event_List_View_State", saveState());
     settings.endGroup();
 }
 
@@ -1333,134 +1265,101 @@ EventView::getCurrentSegment()
 {
     if (m_segments.empty())
         return nullptr;
-    else
-        return *m_segments.begin();
+
+    return *m_segments.begin();
 }
 
 void
-EventView::slotModifyFilter()
+EventView::slotFilterClicked(bool)
 {
-    m_eventFilter = 0;
-
-    if (m_noteCheckBox->isChecked()) m_eventFilter |= EventView::Note;
-
-    if (m_programCheckBox->isChecked()) m_eventFilter |= EventView::ProgramChange;
-
-    if (m_controllerCheckBox->isChecked()) m_eventFilter |= EventView::Controller;
-
-    if (m_pitchBendCheckBox->isChecked()) m_eventFilter |= EventView::PitchBend;
-
-    if (m_sysExCheckBox->isChecked()) m_eventFilter |= EventView::SystemExclusive;
-
-    if (m_keyPressureCheckBox->isChecked()) m_eventFilter |= EventView::KeyPressure;
-
-    if (m_channelPressureCheckBox->isChecked()) m_eventFilter |= EventView::ChannelPressure;
-
-    if (m_restCheckBox->isChecked()) m_eventFilter |= EventView::Rest;
-
-    if (m_indicationCheckBox->isChecked()) m_eventFilter |= EventView::Indication;
-
-    if (m_textCheckBox->isChecked()) m_eventFilter |= EventView::Text;
-
-    if (m_generatedRegionCheckBox->isChecked()) m_eventFilter |= EventView::GeneratedRegion;
-
-    if (m_segmentIDCheckBox->isChecked()) m_eventFilter |= EventView::SegmentID;
-
-    if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
+    // Copy from check boxes to state.
+    m_showNote = m_noteCheckBox->isChecked();
+    m_showRest = m_restCheckBox->isChecked();
+    m_showText = m_textCheckBox->isChecked();
+    m_showSystemExclusive = m_sysExCheckBox->isChecked();
+    m_showController = m_controllerCheckBox->isChecked();
+    m_showProgramChange = m_programCheckBox->isChecked();
+    m_showPitchBend = m_pitchBendCheckBox->isChecked();
+    m_showChannelPressure = m_channelPressureCheckBox->isChecked();
+    m_showKeyPressure = m_keyPressureCheckBox->isChecked();
+    m_showIndication = m_indicationCheckBox->isChecked();
+    m_showOther = m_otherCheckBox->isChecked();
+    m_showGeneratedRegion = m_generatedRegionCheckBox->isChecked();
+    m_showSegmentID = m_segmentIDCheckBox->isChecked();
 
     updateTreeWidget();
 }
 
 void
-EventView::setButtonsToFilter()
+EventView::updateFilterCheckBoxes()
 {
-    m_noteCheckBox->setChecked          (m_eventFilter & Note);
-    m_programCheckBox->setChecked        (m_eventFilter & ProgramChange);
-    m_controllerCheckBox->setChecked     (m_eventFilter & Controller);
-    m_sysExCheckBox->setChecked          (m_eventFilter & SystemExclusive);
-    m_textCheckBox->setChecked           (m_eventFilter & Text);
-    m_restCheckBox->setChecked           (m_eventFilter & Rest);
-    m_pitchBendCheckBox->setChecked      (m_eventFilter & PitchBend);
-    m_channelPressureCheckBox->setChecked(m_eventFilter & ChannelPressure);
-    m_keyPressureCheckBox->setChecked    (m_eventFilter & KeyPressure);
-    m_indicationCheckBox->setChecked     (m_eventFilter & Indication);
-    m_generatedRegionCheckBox->setChecked(m_eventFilter & GeneratedRegion);
-    m_segmentIDCheckBox->setChecked      (m_eventFilter & SegmentID);
-    m_otherCheckBox->setChecked          (m_eventFilter & Other);
+    // Copy from state to check boxes.
+    m_noteCheckBox->setChecked(m_showNote);
+    m_restCheckBox->setChecked(m_showRest);
+    m_textCheckBox->setChecked(m_showText);
+    m_sysExCheckBox->setChecked(m_showSystemExclusive);
+    m_controllerCheckBox->setChecked(m_showController);
+    m_programCheckBox->setChecked(m_showProgramChange);
+    m_pitchBendCheckBox->setChecked(m_showPitchBend);
+    m_channelPressureCheckBox->setChecked(m_showChannelPressure);
+    m_keyPressureCheckBox->setChecked(m_showKeyPressure);
+    m_indicationCheckBox->setChecked(m_showIndication);
+    m_otherCheckBox->setChecked(m_showOther);
+    m_generatedRegionCheckBox->setChecked(m_showGeneratedRegion);
+    m_segmentIDCheckBox->setChecked(m_showSegmentID);
 }
 
 void
 EventView::slotMusicalTime()
 {
-    QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
-
-    settings.setValue("timemode", 0);
+    a_timeModeSetting.set(int(Composition::TimeMode::MusicalTime));
     findAction("time_musical")->setChecked(true);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(false);
-    updateTreeWidget();
 
-    settings.endGroup();
+    updateTreeWidget();
 }
 
 void
 EventView::slotRealTime()
 {
-    QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
-
-    settings.setValue("timemode", 1);
+    a_timeModeSetting.set(int(Composition::TimeMode::RealTime));
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(true);
     findAction("time_raw")->setChecked(false);
-    updateTreeWidget();
 
-    settings.endGroup();
+    updateTreeWidget();
 }
 
 void
 EventView::slotRawTime()
 {
-    QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
-
-    settings.setValue("timemode", 2);
+    a_timeModeSetting.set(int(Composition::TimeMode::RawTime));
     findAction("time_musical")->setChecked(false);
     findAction("time_real")->setChecked(false);
     findAction("time_raw")->setChecked(true);
-    updateTreeWidget();
 
-    settings.endGroup();
+    updateTreeWidget();
 }
 
 void
-EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
+EventView::slotItemDoubleClicked(QTreeWidgetItem *item, int /* column */)
 {
     EventViewItem *eventViewItem = dynamic_cast<EventViewItem *>(item);
     if (!eventViewItem) {
-        RG_WARNING << "slotPopupEventEditor(): WARNING: No EventViewItem.";
+        RG_WARNING << "slotItemDoubleClicked(): WARNING: No EventViewItem.";
         return;
     }
 
-    // Get the Segment.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
-    // ??? Why is the QTreeWidgetItem going away?  It appears to be
-    //     happening as a result of the call to exec() below.  Is someone
-    //     refreshing the list?
     Segment *segment = eventViewItem->getSegment();
     if (!segment) {
-        RG_WARNING << "slotPopupEventEditor(): WARNING: No Segment.";
+        RG_WARNING << "slotItemDoubleClicked(): WARNING: No Segment.";
         return;
     }
 
-    // !!! trigger events
-
-    // Get the Event.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Event *event = eventViewItem->getEvent();
     if (!event) {
-        RG_WARNING << "slotPopupEventEditor(): WARNING: No Event.";
+        RG_WARNING << "slotItemDoubleClicked(): WARNING: No Event.";
         return;
     }
 
@@ -1478,79 +1377,84 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
     if (!dialog.isModified())
         return;
 
-    // Note: At this point, item and eventViewItem may be invalid.
-    //       Do not use them.
-
-    EventEditCommand *command =
-            new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
+    EventEditCommand *command = new EventEditCommand(
+            *segment,
+            event,  // eventToModify
+            dialog.getEvent());  // newEvent
 
     CommandHistory::getInstance()->addCommand(command);
 }
 
 void
-EventView::slotPopupMenu(const QPoint& pos)
+EventView::slotContextMenu(const QPoint &pos)
 {
-    QTreeWidgetItem *item = m_eventList->itemAt(pos);
-
+    // Use itemAt() which is more predictable than currentItem().
+    QTreeWidgetItem *item = m_treeWidget->itemAt(pos);
     if (!item)
-        return ;
+        return;
 
-    EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
-    if (!eItem || !eItem->getEvent())
-        return ;
+    EventViewItem *eventViewItem = dynamic_cast<EventViewItem *>(item);
+    if (!eventViewItem)
+        return;
 
-    if (!m_menu)
-        createMenu();
+    Event *event = eventViewItem->getEvent();
+    if (!event)
+        return;
 
-    if (m_menu)
-        //m_menu->exec(QCursor::pos());
-        m_menu->exec(m_eventList->mapToGlobal(pos));
-    else
-        RG_DEBUG << "EventView::showMenu() : no menu to show\n";
-}
+    // If the context menu hasn't been created, create it.
+    if (!m_contextMenu) {
+        m_contextMenu = new QMenu(this);
+        if (!m_contextMenu) {
+            RG_WARNING << "slotContextMenu() : Couldn't create context menu.";
+            return;
+        }
 
-void
-EventView::createMenu()
-{
-    m_menu = new QMenu(this);
+        QAction *eventEditorAction =
+                m_contextMenu->addAction(tr("Open in Event Editor"));
+        connect(eventEditorAction, &QAction::triggered,
+                this, &EventView::slotOpenInEventEditor);
 
-    QAction *eventEditorAction =
-            m_menu->addAction(tr("Open in Event Editor"));
-    connect(eventEditorAction, &QAction::triggered,
-            this, &EventView::slotOpenInEventEditor);
+        QAction *expertEventEditorAction =
+                m_contextMenu->addAction(tr("Open in Expert Event Editor"));
+        connect(expertEventEditorAction, &QAction::triggered,
+                this, &EventView::slotOpenInExpertEventEditor);
 
-    QAction *expertEventEditorAction =
-            m_menu->addAction(tr("Open in Expert Event Editor"));
-    connect(expertEventEditorAction, &QAction::triggered,
-            this, &EventView::slotOpenInExpertEventEditor);
+        m_contextMenu->addSeparator();
+
+        m_editTriggeredSegment =
+                m_contextMenu->addAction(tr("Edit Triggered Segment"));
+        connect(m_editTriggeredSegment, &QAction::triggered,
+                this, &EventView::slotEditTriggeredSegment);
+    }
+
+    // Enable/disable triggered segment menu item.
+    const bool trigger = event->has(BaseProperties::TRIGGER_SEGMENT_ID);
+    m_editTriggeredSegment->setEnabled(trigger);
+
+    // Launch the context menu.
+    m_contextMenu->exec(m_treeWidget->mapToGlobal(pos));
 }
 
 void
 EventView::slotOpenInEventEditor(bool /* checked */)
 {
     EventViewItem *eventViewItem =
-            dynamic_cast<EventViewItem *>(m_eventList->currentItem());
+            dynamic_cast<EventViewItem *>(m_treeWidget->currentItem());
     if (!eventViewItem)
         return;
 
-    // Get the Segment.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Segment *segment = eventViewItem->getSegment();
     if (!segment)
         return;
 
-    // Get the Event.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Event *event = eventViewItem->getEvent();
     if (!event)
         return;
 
     SimpleEventEditDialog dialog(
-            this,
-            RosegardenDocument::currentDocument,
-            *event,
+            this,  // parent
+            RosegardenDocument::currentDocument,  // doc
+            *event,  // event
             false);  // inserting
 
     // Launch dialog.  Bail if canceled.
@@ -1563,8 +1467,8 @@ EventView::slotOpenInEventEditor(bool /* checked */)
 
     EventEditCommand *command =
             new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
+                                 event,  // eventToModify
+                                 dialog.getEvent());  // newEvent
 
     CommandHistory::getInstance()->addCommand(command);
 }
@@ -1573,18 +1477,14 @@ void
 EventView::slotOpenInExpertEventEditor(bool /* checked */)
 {
     EventViewItem *eventViewItem =
-            dynamic_cast<EventViewItem *>(m_eventList->currentItem());
+            dynamic_cast<EventViewItem *>(m_treeWidget->currentItem());
     if (!eventViewItem)
         return;
 
-    // Get the Segment.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Segment *segment = eventViewItem->getSegment();
     if (!segment)
         return;
 
-    // Get the Event.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
     Event *event = eventViewItem->getEvent();
     if (!event)
         return;
@@ -1601,44 +1501,56 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
 
     EventEditCommand *command =
             new EventEditCommand(*segment,
-                                 event,
-                                 dialog.getEvent());
+                                 event,  // eventToModify
+                                 dialog.getEvent());  // newEvent
 
     CommandHistory::getInstance()->addCommand(command);
 }
 
 void
+EventView::slotEditTriggeredSegment(bool /*checked*/)
+{
+    EventViewItem *eventViewItem =
+            dynamic_cast<EventViewItem *>(m_treeWidget->currentItem());
+    if (!eventViewItem)
+        return;
+
+    Event *event = eventViewItem->getEvent();
+    if (!event)
+        return;
+
+    int triggeredSegmentID =
+            event->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID);
+
+    emit editTriggerSegment(triggeredSegmentID);
+}
+
+void
 EventView::updateWindowTitle(bool modified)
 {
+    if (m_segments.size() != 1) {
+        RG_WARNING << "updateWindowTitle(): m_segments size is not 1: " << m_segments.size();
+        return;
+    }
+
     QString indicator = (modified ? "*" : "");
 
     if (m_isTriggerSegment) {
 
-        setWindowTitle(tr("%1%2 - Triggered Segment: %3")
-                       .arg(indicator)
-                       .arg(RosegardenDocument::currentDocument->getTitle())
-                       .arg(strtoqstr(m_segments[0]->getLabel())));
+        setWindowTitle(
+                tr("%1%2 - Triggered Segment: %3").
+                        arg(indicator).
+                        arg(RosegardenDocument::currentDocument->getTitle()).
+                        arg(strtoqstr(m_segments[0]->getLabel())));
 
 
     } else {
-        if (m_segments.size() == 1) {
 
-            // Fix bug #3007112
-            if (!m_segments[0]->getComposition()) {
-                // The segment is no more in the composition.
-                // Nothing to edit : close the editor.
-                close();
-                return;
-            }
-        }
         QString view = tr("Event List");
         setWindowTitle(getTitle(view));
+
     }
-
-    setWindowIcon(IconLoader::loadPixmap("window-eventlist"));
-
 }
-
 
 void
 EventView::slotHelpRequested()
@@ -1659,19 +1571,49 @@ EventView::slotHelpAbout()
 }
 
 void
-EventView::segmentDeleted(const Segment *s)
+EventView::slotDocumentModified(bool modified)
 {
-    // ??? Bit of a design flaw.  Cast away const...
-    const_cast<Segment *>(s)->removeObserver(this);
+    // Determine whether the Segment is still in the Composition.
 
-    // This editor cannot handle Segments that go away.  So just close.
-    close();
+    bool inComposition{false};
+
+    if (m_isTriggerSegment) {
+        const int triggerSegmentID = RosegardenDocument::currentDocument->
+                getComposition().getTriggerSegmentId(m_segments[0]);
+        inComposition = (triggerSegmentID != -1);
+    } else {
+        inComposition = RosegardenDocument::currentDocument->
+                getComposition().contains(m_segments[0]);
+    }
+
+    // No longer in the Composition?  Close the window.
+    //
+    // I tried using CompositionObserver::segmentRemoved() to close the window
+    // in a simple and straightforward way and ended up completely wrapped
+    // around the axle as the order in which notifications are sent and things
+    // go away is unnecessarily complicated and unexpected.  It really
+    // shouldn't be.  This approach just happens to work, but doesn't seem
+    // ideal.  However, it is similar to the way all the other editors deal
+    // with segments going away.
+    if (!inComposition) {
+        close();
+        return;
+    }
+
+    updateWindowTitle(modified);
+
+    updateTreeWidget();
 }
 
 void
-EventView::slotDocumentModified(bool /*modified*/)
+EventView::slotItemSelectionChanged()
 {
-    updateTreeWidget();
+    bool haveSelection = !m_treeWidget->selectedItems().empty();
+
+    if (haveSelection)
+        enterActionState("have_selection");
+    else
+        leaveActionState("have_selection");
 }
 
 

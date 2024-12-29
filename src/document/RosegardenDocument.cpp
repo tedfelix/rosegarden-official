@@ -701,7 +701,7 @@ void RosegardenDocument::sendChannelSetups(bool reset)
     std::set<InstrumentId> instrumentsSeen;
 
     // For each track in the composition, send the channel setup
-    for (Composition::trackcontainer::const_iterator i =
+    for (Composition::TrackMap::const_iterator i =
              m_composition.getTracks().begin();
          i != m_composition.getTracks().end();
          ++i) {
@@ -1248,7 +1248,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         totalEvents += (long)(*segitr)->size();
     }
 
-    for (Composition::triggersegmentcontaineriterator ci =
+    for (Composition::TriggerSegmentSet::iterator ci =
              m_composition.getTriggerSegments().begin();
          ci != m_composition.getTriggerSegments().end(); ++ci) {
         totalEvents += (long)(*ci)->getSegment()->size();
@@ -1298,7 +1298,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     outStream << "\n\n";
 
-    for (Composition::triggersegmentcontaineriterator ci =
+    for (Composition::TriggerSegmentSet::iterator ci =
                 m_composition.getTriggerSegments().begin();
             ci != m_composition.getTriggerSegments().end(); ++ci) {
 
@@ -1802,13 +1802,13 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
     //Track *midiRecordTrack = 0;
 
-    const Composition::recordtrackcontainer &recordTracks =
+    const Composition::TrackIdSet &recordTracks =
         getComposition().getRecordTracks();
 
     bool haveMIDIRecordTrack = false;
 
     // For each recording track
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
             recordTracks.begin(); i != recordTracks.end(); ++i) {
         TrackId tid = (*i);
         Track *track = getComposition().getTrackById(tid);
@@ -2584,10 +2584,10 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 
     Track *recordTrack = nullptr;
 
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
         TrackId tid = (*i);
         Track *track = getComposition().getTrackById(tid);
@@ -2655,10 +2655,10 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 void
 RosegardenDocument::updateRecordingAudioSegments()
 {
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
 
         TrackId tid = (*i);

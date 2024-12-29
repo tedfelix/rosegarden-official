@@ -29,6 +29,11 @@ class ControllerContextParams;
 class Event;
 class Segment;
 
+/// A Trigger Segment
+/**
+ * I assume "Rec" means "Record".  As in this is a bigger data structure
+ * around a Segment?  We can probably just drop the "Rec".
+ */
 class TriggerSegmentRec
 {
 public:

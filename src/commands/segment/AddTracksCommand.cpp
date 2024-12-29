@@ -136,7 +136,7 @@ void AddTracksCommand::execute()
     // Adjust the track positions
 
     // For each Track in the Composition
-    for (Composition::trackcontainer::value_type &trackPair :
+    for (Composition::TrackMap::value_type &trackPair :
          composition.getTracks()) {
         const TrackId trackId = trackPair.first;
         Track *track = trackPair.second;

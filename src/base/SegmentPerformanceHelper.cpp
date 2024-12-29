@@ -28,7 +28,7 @@ SegmentPerformanceHelper::~SegmentPerformanceHelper() { }
 
 
 SegmentPerformanceHelper::iteratorcontainer
-SegmentPerformanceHelper::getTiedNotes(iterator i)
+SegmentPerformanceHelper::getTiedNotes(Segment::iterator i)
 {
     iteratorcontainer c;
     c.push_back(i);
@@ -118,7 +118,7 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 
 
 bool
-SegmentPerformanceHelper::getGraceAndHostNotes(iterator i,
+SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
 					       iteratorcontainer &graceNotes,
 					       iteratorcontainer &hostNotes,
 					       bool &isHostNote)
@@ -226,28 +226,31 @@ SegmentPerformanceHelper::getGraceAndHostNotes(iterator i,
 
 
 timeT
-SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
+SegmentPerformanceHelper::getSoundingAbsoluteTime(Segment::iterator i)
 {
     timeT t = 0;
 
-    timeT discard;
+    timeT durationUnused;
 
-//    std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
+    //std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
 
     if ((*i)->has(IS_GRACE_NOTE)) {
-//	std::cerr << "it's a grace note" << std::endl;
-	if (getGraceNoteTimeAndDuration(false, i, t, discard)) return t;
+        //std::cerr << "it's a grace note" << std::endl;
+        if (getGraceNoteTimeAndDuration(false, i, t, durationUnused))
+            return t;
     }
+
     if ((*i)->has(MAY_HAVE_GRACE_NOTES)) {
-//	std::cerr << "it's a candidate host note" << std::endl;
-	if (getGraceNoteTimeAndDuration(true, i, t, discard)) return t;
+        //std::cerr << "it's a candidate host note" << std::endl;
+        if (getGraceNoteTimeAndDuration(true, i, t, durationUnused))
+            return t;
     }
 
     return (*i)->getAbsoluteTime();
 }
 
 timeT
-SegmentPerformanceHelper::getSoundingDuration(iterator i)
+SegmentPerformanceHelper::getSoundingDuration(Segment::iterator i)
 {
     timeT d = 0;
 
@@ -338,7 +341,7 @@ SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 */
 
 bool
-SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, iterator i,
+SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::iterator i,
 						      timeT &t, timeT &d)
 {
     // [This code currently assumes appoggiatura.  Acciaccatura later.]

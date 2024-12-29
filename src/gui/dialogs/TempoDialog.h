@@ -85,7 +85,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     RosegardenDocument     *m_doc;
-    timeT                 m_tempoTime;
+    timeT                 m_tempoTime{0};
     QDoubleSpinBox       *m_tempoValueSpinBox;
     QPushButton          *m_tempoTap;
     QTime                 m_tapMinusTwo;
@@ -100,7 +100,7 @@ protected:
     QLabel               *m_tempoBeat;
     QLabel               *m_tempoBeatsPerMinute;
 
-    TimeWidget           *m_timeEditor;
+    TimeWidget           *m_timeEditor{nullptr};
 
     QLabel               *m_tempoTimeLabel;
     QLabel               *m_tempoBarLabel;
