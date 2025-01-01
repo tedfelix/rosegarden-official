@@ -337,11 +337,10 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                         // if it's a link, copy as link
                         if (segment->isTrulyLinked())
                             command = new SegmentQuickLinkCommand(segment);
-                        else  // copy as a non-link segment
-                            command = new SegmentQuickCopyCommand(segment);
+                        // for segment copy do nothing here
                     }
 
-                    macroCommand->addCommand(command);
+                    if (command) macroCommand->addCommand(command);
                 }
             }
 
@@ -390,8 +389,19 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                         segment->getEndMarkerTime(false) -
                         segment->getStartTime();
 
-                segmentReconfigureCommand->addSegment(
-                        segment, startTime, endTime, newTrackId);
+                if (m_segmentCopyMode && ! m_segmentCopyingAsLink &&
+                    ! segment->isTrulyLinked()) {
+                    // make a true copy of the segment
+                    // tmp
+                    Command* qcommand = new SegmentQuickCopyCommand(segment);
+                    macroCommand->addCommand(qcommand);
+
+                    segmentReconfigureCommand->addSegment
+                        (segment, startTime, endTime, newTrackId);
+                } else {
+                    segmentReconfigureCommand->addSegment
+                        (segment, startTime, endTime, newTrackId);
+                }
             }
 
             macroCommand->addCommand(segmentReconfigureCommand);
