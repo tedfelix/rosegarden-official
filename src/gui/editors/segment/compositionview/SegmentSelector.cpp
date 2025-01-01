@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2024 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[SegmentSelector]"
+#define RG_NO_DEBUG_PRINT
 
 #include "SegmentSelector.h"
 
@@ -60,7 +61,10 @@ SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d) :
     m_segmentQuickCopyDone(false),
     m_selectionMoveStarted(false),
     m_changeMade(false),
-    m_dispatchTool(nullptr)
+    m_dispatchTool(nullptr),
+    m_modeTextMove(tr("Move")),
+    m_modeTextCopy(tr("Copy")),
+    m_modeTextCopyAsLink(tr("Copy as Link"))
 {
     //RG_DEBUG << "SegmentSelector()";
 }
@@ -198,6 +202,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
         if (m_canvas->getModel()->isSelected(item->getSegment())) {
             m_canvas->getModel()->startChange(
                     item, CompositionModelImpl::ChangeMove);
+            m_canvas->setModeText("");
         }
 
         setChangingSegment(item);
@@ -465,55 +470,6 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
 
-#if 0
-// ??? Moving to mouseReleaseEvent().
-    if (m_segmentCopyMode  &&  !m_segmentQuickCopyDone) {
-        // Make copies of the original Segment(s).  These copies will
-        // take the place of the originals as the user drags the
-        // the originals to a new location.
-
-        MacroCommand *macroCommand = 0;
-        
-        if (m_segmentCopyingAsLink) {
-            macroCommand = new MacroCommand(
-                    SegmentQuickLinkCommand::getGlobalName());
-        } else {
-            macroCommand = new MacroCommand(
-                    SegmentQuickCopyCommand::getGlobalName());
-        }
-
-        SegmentSelection selectedItems = m_canvas->getSelectedSegments();
-
-        // for each selected segment
-        for (SegmentSelection::iterator it = selectedItems.begin();
-             it != selectedItems.end();
-             ++it) {
-            Segment *segment = *it;
-
-            Command *command = 0;
-
-            if (m_segmentCopyingAsLink) {
-                command = new SegmentQuickLinkCommand(segment);
-            } else {
-                // if it's a link, copy as link
-                if (segment->isTrulyLinked())
-                    command = new SegmentQuickLinkCommand(segment);
-                else  // copy as a non-link segment
-                    command = new SegmentQuickCopyCommand(segment);
-            }
-
-            macroCommand->addCommand(command);
-        }
-
-        CommandHistory::getInstance()->addCommand(macroCommand);
-
-        m_canvas->update();
-
-        // Make sure we don't do it again.
-        m_segmentQuickCopyDone = true;
-    }
-#endif
-
     setSnapTime(e, SnapGrid::SnapToBeat);
 
     // start move on selected items only once
@@ -523,6 +479,10 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
         m_canvas->getModel()->startChangeSelection(
                 m_segmentCopyMode ? CompositionModelImpl::ChangeCopy :
                                     CompositionModelImpl::ChangeMove);
+        QString modeText = m_modeTextMove;
+        if (m_segmentCopyMode) modeText = m_modeTextCopy;
+        if (m_segmentCopyingAsLink) modeText = m_modeTextCopyAsLink;
+        m_canvas->setModeText(modeText);
 
         // The call to startChangeSelection() generates a new changing segment.
         // Get it.
@@ -618,6 +578,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
 void SegmentSelector::keyPressEvent(QKeyEvent *e)
 {
+    RG_DEBUG << "keyPressEvent" << m_dispatchTool << m_selectionMoveStarted;
     // If another tool has taken over, delegate.
     if (m_dispatchTool) {
         m_dispatchTool->keyPressEvent(e);
@@ -626,10 +587,19 @@ void SegmentSelector::keyPressEvent(QKeyEvent *e)
 
     // In case shift or ctrl were pressed, update the context help.
     setContextHelpFor(m_lastMousePos, e->modifiers());
+
+    // if Ctrl or Alt is pressed update drag function
+    if (m_selectionMoveStarted) {
+        bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
+        bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
+        RG_DEBUG << "keyPressEvent modifiers" << ctrl << alt;
+        updateMode(ctrl, alt);
+    }
 }
 
 void SegmentSelector::keyReleaseEvent(QKeyEvent *e)
 {
+    RG_DEBUG << "keyReleaseEvent" << m_dispatchTool;
     // If another tool has taken over, delegate.
     if (m_dispatchTool) {
         m_dispatchTool->keyReleaseEvent(e);
@@ -638,6 +608,14 @@ void SegmentSelector::keyReleaseEvent(QKeyEvent *e)
 
     // In case shift or ctrl were released, update the context help.
     setContextHelpFor(m_lastMousePos, e->modifiers());
+
+    // if Ctrl or Alt is released update drag function
+    if (m_selectionMoveStarted) {
+        bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
+        bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
+        RG_DEBUG << "keyReleaseEvent modifiers" << ctrl << alt;
+        updateMode(ctrl, alt);
+    }
 }
 
 void SegmentSelector::setContextHelpFor(QPoint pos,
@@ -694,6 +672,25 @@ void SegmentSelector::setContextHelpFor(QPoint pos,
             }
         }
     }
+}
+
+void SegmentSelector::updateMode(bool ctrl, bool alt)
+{
+    RG_DEBUG << "updateMode" << ctrl << alt;
+    bool segmentCopyMode = ctrl;
+    bool segmentCopyingAsLink = (alt && ctrl);
+    if (m_segmentCopyMode == segmentCopyMode &&
+        m_segmentCopyingAsLink == segmentCopyingAsLink) return; // no change
+    m_segmentCopyMode = segmentCopyMode;
+    m_segmentCopyingAsLink = segmentCopyingAsLink;
+    CompositionModelImpl::ChangeType changeType =
+        CompositionModelImpl::ChangeMove;
+    if (m_segmentCopyMode) changeType = CompositionModelImpl::ChangeCopy;
+    m_canvas->getModel()->updateChangeType(changeType);
+    QString modeText = m_modeTextMove;
+    if (m_segmentCopyMode) modeText = m_modeTextCopy;
+    if (m_segmentCopyingAsLink) modeText = m_modeTextCopyAsLink;
+    m_canvas->setModeText(modeText); // this will update the view
 }
 
 

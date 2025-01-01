@@ -67,6 +67,8 @@ private:
                            Qt::KeyboardModifiers modifiers =
                            Qt::KeyboardModifiers());
 
+    void updateMode(bool ctrl, bool alt);
+
     //--------------- Data members ---------------------------------
 
     /// Recorded by mousePressEvent().
@@ -95,6 +97,10 @@ private:
 
     /// Secondary tool for resizing or creating new segments.
     SegmentTool *m_dispatchTool;
+
+    QString m_modeTextMove;
+    QString m_modeTextCopy;
+    QString m_modeTextCopyAsLink;
 };
 
 

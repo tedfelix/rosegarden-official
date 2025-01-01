@@ -1335,6 +1335,11 @@ int CompositionModelImpl::getCompositionHeight()
     return m_grid.getYBinCoordinate(m_composition.getNbTracks());
 }
 
+void CompositionModelImpl::updateChangeType(ChangeType changeType)
+{
+    m_changeType = changeType;
+}
+
 CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(
         const QRect &clipRect)
 {
