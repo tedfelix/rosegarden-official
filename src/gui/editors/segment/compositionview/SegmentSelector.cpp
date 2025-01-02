@@ -26,6 +26,7 @@
 #include "base/RealTime.h"
 #include "base/SnapGrid.h"
 #include "base/Track.h"
+#include "commands/segment/CopySegmentCommand.h"
 #include "commands/segment/SegmentQuickCopyCommand.h"
 #include "commands/segment/SegmentQuickLinkCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
@@ -392,12 +393,22 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                 if (m_segmentCopyMode && ! m_segmentCopyingAsLink &&
                     ! segment->isTrulyLinked()) {
                     // make a true copy of the segment
+//#define oldcmd
+#ifdef oldcmd
                     // tmp
                     Command* qcommand = new SegmentQuickCopyCommand(segment);
                     macroCommand->addCommand(qcommand);
 
                     segmentReconfigureCommand->addSegment
                         (segment, startTime, endTime, newTrackId);
+#else
+                    Command* copySegCmnd =
+                        new CopySegmentCommand(&comp,
+                                               segment,
+                                               startTime,
+                                               newTrackId);
+                    macroCommand->addCommand(copySegCmnd);
+#endif
                 } else {
                     segmentReconfigureCommand->addSegment
                         (segment, startTime, endTime, newTrackId);

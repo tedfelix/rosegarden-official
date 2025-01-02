@@ -734,6 +734,7 @@ set(rg_CPPS
   commands/segment/CutRangeCommand.cpp
   commands/segment/SegmentEraseCommand.cpp
   commands/segment/SegmentExcludeFromPrintingCommand.cpp
+  commands/segment/CopySegmentCommand.cpp
   commands/studio/CreateOrDeleteDeviceCommand.cpp
   commands/studio/RemoveControlParameterCommand.cpp
   commands/studio/ModifyControlParameterCommand.cpp
