@@ -85,9 +85,6 @@ private:
     /// The mouse has moved enough that we can start moving segments.
     bool m_passedInertiaEdge;
 
-    /// Set to true after move makes copies.
-    bool m_segmentQuickCopyDone;
-
     /// Whether we've notified CompositionModelImpl that things are changing.
     bool m_selectionMoveStarted;
 

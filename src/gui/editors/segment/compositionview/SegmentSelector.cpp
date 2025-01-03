@@ -27,7 +27,6 @@
 #include "base/SnapGrid.h"
 #include "base/Track.h"
 #include "commands/segment/CopySegmentCommand.h"
-#include "commands/segment/SegmentQuickCopyCommand.h"
 #include "commands/segment/SegmentQuickLinkCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "CompositionModelImpl.h"
@@ -59,7 +58,6 @@ SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d) :
     m_segmentCopyMode(false),
     m_segmentCopyingAsLink(false),
     m_passedInertiaEdge(false),
-    m_segmentQuickCopyDone(false),
     m_selectionMoveStarted(false),
     m_changeMade(false),
     m_dispatchTool(nullptr),
@@ -393,22 +391,12 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                 if (m_segmentCopyMode && ! m_segmentCopyingAsLink &&
                     ! segment->isTrulyLinked()) {
                     // make a true copy of the segment
-//#define oldcmd
-#ifdef oldcmd
-                    // tmp
-                    Command* qcommand = new SegmentQuickCopyCommand(segment);
-                    macroCommand->addCommand(qcommand);
-
-                    segmentReconfigureCommand->addSegment
-                        (segment, startTime, endTime, newTrackId);
-#else
                     Command* copySegCmnd =
                         new CopySegmentCommand(&comp,
                                                segment,
                                                startTime,
                                                newTrackId);
                     macroCommand->addCommand(copySegCmnd);
-#endif
                 } else {
                     segmentReconfigureCommand->addSegment
                         (segment, startTime, endTime, newTrackId);
@@ -427,7 +415,6 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
     }
 
     // Get ready for the next button press.
-    m_segmentQuickCopyDone = false;
     m_changeMade = false;
     m_selectionMoveStarted = false;
     setChangingSegment(ChangingSegmentPtr());
