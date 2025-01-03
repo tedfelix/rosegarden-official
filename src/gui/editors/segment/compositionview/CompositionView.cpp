@@ -117,7 +117,9 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_currentTool(nullptr),
     //m_toolContextHelp(),
     m_contextHelpShown(false),
-    m_enableDrawing(true)
+    m_enableDrawing(true),
+    m_modeTextChanged(false),
+    m_modeTextWidth(0)
 {
     if (!doc)
         return;
@@ -338,9 +340,7 @@ void CompositionView::setModeText(const QString& modeText)
     if (modeText == m_modeText) return;
     RG_DEBUG << "setModeText" << modeText;
     m_modeText = modeText;
-    QPainter viewportPainter(viewport());
-    QFontMetrics fm(viewportPainter.font());
-    m_modeTextWidth = fm.horizontalAdvance(modeText);
+    m_modeTextChanged = true;
     updateAll();
 }
 
@@ -798,6 +798,12 @@ void CompositionView::drawArtifacts()
         viewportPainter.drawLine(m_guideX, 0, m_guideX, contentsHeight() - 1);
         // Horizontal Guide
         viewportPainter.drawLine(0, m_guideY, contentsWidth() - 1, m_guideY);
+        if (m_modeTextChanged) {
+            // get the new width
+            QFontMetrics fm(viewportPainter.font());
+            m_modeTextWidth = fm.horizontalAdvance(m_modeText);
+            m_modeTextChanged = false;
+        }
         viewportPainter.drawText(m_guideX - m_modeTextWidth - 5,
                                  m_guideY - 5,
                                  m_modeText);

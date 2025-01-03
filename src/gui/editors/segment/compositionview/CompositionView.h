@@ -614,6 +614,7 @@ private:
     /// Performance testing.
     bool m_enableDrawing;
     QString m_modeText;
+    bool m_modeTextChanged;
     int m_modeTextWidth;
 };
 
