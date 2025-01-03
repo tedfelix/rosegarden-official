@@ -494,6 +494,15 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     setSnapTime(e, SnapGrid::SnapToBeat);
 
     // start move on selected items only once
+    // update mode flags
+
+    bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
+    bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
+    // Ctrl and Alt+Ctrl are segment copy.
+    m_segmentCopyMode = ctrl;
+    // Alt+Ctrl is copy as link.
+    m_segmentCopyingAsLink = (alt && ctrl);
+
     if (!m_selectionMoveStarted) {
         m_selectionMoveStarted = true;
 
