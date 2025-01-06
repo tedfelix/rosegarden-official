@@ -21,7 +21,8 @@
 
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"  // For PluginPort
-#include "document/RosegardenDocument.h"
+//#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
 
 #include <lv2/midi/midi.h>
@@ -38,11 +39,15 @@ static int sampleRate = 0;
 
 static void getSampleRate()
 {
+#if 0
     RG_DEBUG << "getSampleRate";
     // This function is called from the plugin enumeration thread
     // which is started before the document and sequence manager are
     // created. In most cases the main thread will be fast enough but
     // this loop ensures that the sampleRate is correctly initialised.
+    // ??? INFINITE LOOP:  If the audio subsystem is not up because JACK isn't
+    //     running, this becomes an infinite loop.  We need to make sure JACK
+    //     is up before we do any of this.
     while (true) {
         Rosegarden::RosegardenDocument* doc =
             Rosegarden::RosegardenDocument::currentDocument;
@@ -58,6 +63,15 @@ static void getSampleRate()
         usleep(10000);
     }
     RG_DEBUG << "getSampleRate got" << sampleRate;
+#else
+    // This newer version goes directly through RMW to get the
+    // SequenceManager.  Does this still need the loop?  If so, then the
+    // infinite loop described above will need to be handled.
+    Rosegarden::SequenceManager *seqManager =
+            Rosegarden::RosegardenMainWindow::self()->getSequenceManager();
+    if (seqManager)
+        sampleRate = seqManager->getSampleRate();
+#endif
 }
 
 /**
