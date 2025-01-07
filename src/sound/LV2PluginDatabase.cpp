@@ -21,7 +21,6 @@
 
 #include "misc/Debug.h"
 #include "base/AudioPluginInstance.h"  // For PluginPort
-//#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
 
@@ -39,39 +38,19 @@ static int sampleRate = 0;
 
 static void getSampleRate()
 {
-#if 0
-    RG_DEBUG << "getSampleRate";
-    // This function is called from the plugin enumeration thread
-    // which is started before the document and sequence manager are
-    // created. In most cases the main thread will be fast enough but
-    // this loop ensures that the sampleRate is correctly initialised.
-    // ??? INFINITE LOOP:  If the audio subsystem is not up because JACK isn't
-    //     running, this becomes an infinite loop.  We need to make sure JACK
-    //     is up before we do any of this.
-    while (true) {
-        Rosegarden::RosegardenDocument* doc =
-            Rosegarden::RosegardenDocument::currentDocument;
-        if (doc) {
-            Rosegarden::SequenceManager* seqManager =
-                doc->getSequenceManager();
-            if (seqManager) {
-                sampleRate = seqManager->getSampleRate();
-                if (sampleRate != 0) break;
-            }
-        }
-        RG_DEBUG << "getSampleRate waiting";
-        usleep(10000);
-    }
-    RG_DEBUG << "getSampleRate got" << sampleRate;
-#else
-    // This newer version goes directly through RMW to get the
-    // SequenceManager.  Does this still need the loop?  If so, then the
-    // infinite loop described above will need to be handled.
+    // this function should be called late enough in the enumeration
+    // thread so that the creation of the SequenceManager and setting
+    // of the sampleRate has already occured. Note the LV2 plugins are
+    // initialised after the LADSPA and DSSI plugins. If this is not
+    // the case a plugin may get 0 sample rate. If this happens this
+    // code could be put in a loop until the sampleRate is non
+    // zero. Note the loop should not be infinite to take care of the
+    // case that jack is not running.
     Rosegarden::SequenceManager *seqManager =
             Rosegarden::RosegardenMainWindow::self()->getSequenceManager();
     if (seqManager)
         sampleRate = seqManager->getSampleRate();
-#endif
+    RG_DEBUG << "getSampleRate sampleRate:" << sampleRate;
 }
 
 /**
