@@ -8096,6 +8096,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
             MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
 
             if (md && (md->getDirection() == MidiDevice::Play)) {
+                RG_DEBUG << "newStudio device" << md->getName();
                 if (di != midiPlayDevices.end()) {
                     MidiDevice::VariationType variation
                     (md->getVariationType());
@@ -8103,6 +8104,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
                     ProgramList pl(md->getPrograms());
                     ControlList cl(md->getControlParameters());
 
+                    RG_DEBUG << "modify device" << md->getName() << *di;
                     ModifyDeviceCommand *mdCommand =
                         new ModifyDeviceCommand(&oldStudio,
                                                 *di,
@@ -8118,11 +8120,29 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 
                     command->addCommand(mdCommand);
                     ++di;
+                } else {
+                    RG_DEBUG << "new device" << md->getName();
+                    command->addCommand(new CreateOrDeleteDeviceCommand
+                                        (&oldStudio,
+                                         md->getName(),
+                                         md->getType(),
+                                         md->getDirection(),
+                                         "",
+                                         true,
+                                         md->getLibrarianName(),
+                                         md->getLibrarianEmail(),
+                                         md->getVariationType(),
+                                         md->getBanks(),
+                                         md->getPrograms(),
+                                         md->getControlParameters(),
+                                         md->getKeyMappings()
+                                         ));
                 }
             }
         }
 
         while (di != midiPlayDevices.end()) {
+            RG_DEBUG << "add device" << *di;
             command->addCommand(new CreateOrDeleteDeviceCommand
                                 (&oldStudio,
                                  *di));
