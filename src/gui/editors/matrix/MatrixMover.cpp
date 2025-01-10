@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixMover]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixMover.h"
 
@@ -513,12 +513,22 @@ void MatrixMover::removeDuplicates()
 
 void MatrixMover::keyPressEvent(QKeyEvent *e)
 {
-    RG_DEBUG << "keyPressEvent" << e->text();
+    bool ctrl = (e->key() == Qt::Key_Control);
+    RG_DEBUG << "keyPressEvent" << e->text() << ctrl;
+    if (ctrl && ! m_quickCopy) {
+        m_quickCopy = true;
+        createDuplicates();
+    }
 }
 
 void MatrixMover::keyReleaseEvent(QKeyEvent *e)
 {
-    RG_DEBUG << "keyPressRelease" << e->text();
+    bool ctrl = (e->key() == Qt::Key_Control);
+    RG_DEBUG << "keyPressRelease" << e->text() << ctrl;
+    if (ctrl && m_quickCopy) {
+        m_quickCopy = false;
+        removeDuplicates();
+    }
 }
 
 QString MatrixMover::ToolName() { return "mover"; }
