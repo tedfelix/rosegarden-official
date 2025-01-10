@@ -22,6 +22,7 @@
 #include <QString>
 #include "base/Event.h"
 
+class QGraphicsRectItem;
 
 namespace Rosegarden
 {
@@ -74,6 +75,12 @@ protected:
     bool m_quickCopy;
 
     int m_lastPlayedPitch;
+ private:
+    QPoint m_mousePressPos;
+    bool m_dragConstrained;
+    int m_constraintSize;
+    QGraphicsRectItem* m_constraintH;
+    QGraphicsRectItem* m_constraintV;
 };
 
 }

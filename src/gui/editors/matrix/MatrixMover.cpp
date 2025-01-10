@@ -38,8 +38,7 @@
 #include "MatrixViewSegment.h"
 #include "misc/Debug.h"
 
-#include <Qt>
-
+#include <QGraphicsRectItem>
 
 namespace Rosegarden
 {
@@ -52,7 +51,11 @@ MatrixMover::MatrixMover(MatrixWidget *parent) :
     m_clickSnappedLeftDeltaTime(0),
     m_duplicateElements(),
     m_quickCopy(false),
-    m_lastPlayedPitch(-1)
+    m_lastPlayedPitch(-1),
+    m_dragConstrained(true),
+    m_constraintSize(30),
+    m_constraintH(nullptr),
+    m_constraintV(nullptr)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("draw", SLOT(slotDrawSelected()));
@@ -82,6 +85,8 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     if (!e->element) return;
 
+    m_mousePressPos = e->viewpos;
+
     Segment *segment = m_scene->getCurrentSegment();
     if (!segment) return;
 
@@ -110,6 +115,31 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     timeT snappedAbsoluteLeftTime =
         getSnapGrid()->snapTime(m_currentElement->getViewAbsoluteTime());
     m_clickSnappedLeftDeltaTime = e->snappedLeftTime - snappedAbsoluteLeftTime;
+
+    m_dragConstrained = true;
+    if (! m_constraintH) {
+        m_constraintH = new QGraphicsRectItem;
+        m_constraintH->setBrush(QBrush(QColor(200,200,0)));
+        m_constraintH->setOpacity(0.4);
+        m_scene->addItem(m_constraintH);
+    }
+
+    if (! m_constraintV) {
+        m_constraintV = new QGraphicsRectItem;
+        m_constraintV->setBrush(QBrush(QColor(200,200,0)));
+        m_constraintV->setOpacity(0.4);
+        m_scene->addItem(m_constraintV);
+    }
+
+    m_constraintH->setRect
+        (0, e->sceneY - m_constraintSize,
+         m_scene->width(), 2 * m_constraintSize);
+    m_constraintV->setRect
+        (e->sceneX - m_constraintSize, 0,
+         2* m_constraintSize, m_scene->height());
+
+    m_constraintH->show();
+    m_constraintV->show();
 
     m_quickCopy = (e->modifiers & Qt::ControlModifier);
 
@@ -191,6 +221,24 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
     if (!e) return NO_FOLLOW;
 
     //RG_DEBUG << "handleMouseMove() snapped time = " << e->snappedLeftTime;
+    int dx = e->viewpos.x() - m_mousePressPos.x();
+    int dy = e->viewpos.y() - m_mousePressPos.y();
+
+    bool vertical = (abs(dy) > abs(dx));
+    // remove constraints
+    if (dx > m_constraintSize &&
+        dy > m_constraintSize) m_dragConstrained = false;
+
+    if (m_dragConstrained) {
+        m_constraintH->show();
+        m_constraintV->show();
+    } else {
+        m_constraintH->hide();
+        m_constraintV->hide();
+    }
+
+    RG_DEBUG << "handleMouseMove vertical" << vertical << m_dragConstrained <<
+        e->viewpos << m_mousePressPos;
 
     setBasicContextHelp(e->modifiers & Qt::ControlModifier);
 
@@ -204,6 +252,11 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 
     timeT newTime = e->snappedLeftTime - m_clickSnappedLeftDeltaTime;
     int newPitch = e->pitch;
+
+    if (m_dragConstrained) {
+        if (vertical) newTime = m_currentElement->getViewAbsoluteTime();
+        else newPitch = m_event->get<Int>(BaseProperties::PITCH);
+    }
 
     emit hoveredOverNoteChanged(newPitch, true, newTime);
 
@@ -236,13 +289,14 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 
         timeT diffTime = element->getViewAbsoluteTime() -
             m_currentElement->getViewAbsoluteTime();
+        timeT newElementTime = newTime + diffTime;
 
         int epitch = 0;
         if (element->event()->has(PITCH)) {
             epitch = element->event()->get<Int>(PITCH);
         }
 
-        element->reconfigure(newTime + diffTime,
+        element->reconfigure(newElementTime,
                              element->getViewDuration(),
                              epitch + diffPitch);
 
@@ -266,10 +320,22 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 
     RG_DEBUG << "handleMouseRelease() - newPitch = " << e->pitch;
 
+    int dx = e->viewpos.x() - m_mousePressPos.x();
+    int dy = e->viewpos.y() - m_mousePressPos.y();
+
+    bool vertical = (abs(dy) > abs(dx));
+
     if (!m_currentElement || !m_currentViewSegment) return;
 
     timeT newTime = e->snappedLeftTime - m_clickSnappedLeftDeltaTime;
     int newPitch = e->pitch;
+
+    if (m_dragConstrained) {
+        m_constraintH->hide();
+        m_constraintV->hide();
+        if (vertical) newTime = m_currentElement->getViewAbsoluteTime();
+        else newPitch = m_event->get<Int>(BaseProperties::PITCH);
+    }
 
     if (newPitch > 127) newPitch = 127;
     if (newPitch < 0) newPitch = 0;
@@ -437,4 +503,3 @@ void MatrixMover::setBasicContextHelp(bool ctrlPressed)
 QString MatrixMover::ToolName() { return "mover"; }
 
 }
-
