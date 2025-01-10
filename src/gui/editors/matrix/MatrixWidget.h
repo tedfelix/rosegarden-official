@@ -349,6 +349,9 @@ private:
     void zoomInFromPanner();
     void zoomOutFromPanner();
 
+    void keyPressEvent(QKeyEvent *e) override;
+    void keyReleaseEvent(QKeyEvent *e) override;
+
     QWidget *m_changerWidget;
     Thumbwheel *m_segmentChanger;
     int m_lastSegmentChangerValue;

@@ -23,6 +23,7 @@
 #include "base/Event.h"
 
 class QGraphicsRectItem;
+class QKeyEvent;
 
 namespace Rosegarden
 {
@@ -42,6 +43,9 @@ public:
     void handleLeftButtonPress(const MatrixMouseEvent *) override;
     FollowMode handleMouseMove(const MatrixMouseEvent *) override;
     void handleMouseRelease(const MatrixMouseEvent *) override;
+
+    void keyPressEvent(QKeyEvent *e) override;
+    void keyReleaseEvent(QKeyEvent *e) override;
 
     /**
      * Respond to an event being deleted -- it may be the one the tool
@@ -76,6 +80,10 @@ protected:
 
     int m_lastPlayedPitch;
  private:
+
+    void createDuplicates();
+    void removeDuplicates();
+
     QPoint m_mousePressPos;
     bool m_dragConstrained;
     int m_constraintSize;

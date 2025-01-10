@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixMover]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixMover.h"
 
@@ -39,6 +39,7 @@
 #include "misc/Debug.h"
 
 #include <QGraphicsRectItem>
+#include <QKeyEvent>
 
 namespace Rosegarden
 {
@@ -52,7 +53,7 @@ MatrixMover::MatrixMover(MatrixWidget *parent) :
     m_duplicateElements(),
     m_quickCopy(false),
     m_lastPlayedPitch(-1),
-    m_dragConstrained(true),
+    m_dragConstrained(false),
     m_constraintSize(30),
     m_constraintH(nullptr),
     m_constraintV(nullptr)
@@ -117,20 +118,6 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     m_clickSnappedLeftDeltaTime = e->snappedLeftTime - snappedAbsoluteLeftTime;
 
     m_dragConstrained = true;
-    if (! m_constraintH) {
-        m_constraintH = new QGraphicsRectItem;
-        m_constraintH->setBrush(QBrush(QColor(200,200,0)));
-        m_constraintH->setOpacity(0.4);
-        m_scene->addItem(m_constraintH);
-    }
-
-    if (! m_constraintV) {
-        m_constraintV = new QGraphicsRectItem;
-        m_constraintV->setBrush(QBrush(QColor(200,200,0)));
-        m_constraintV->setOpacity(0.4);
-        m_scene->addItem(m_constraintV);
-    }
-
     m_constraintH->setRect
         (0, e->sceneY - m_constraintSize,
          m_scene->width(), 2 * m_constraintSize);
@@ -143,13 +130,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     m_quickCopy = (e->modifiers & Qt::ControlModifier);
 
-    if (!m_duplicateElements.empty()) {
-        for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
-            delete m_duplicateElements[i]->event();
-            delete m_duplicateElements[i];
-        }
-        m_duplicateElements.clear();
-    }
+    if (!m_duplicateElements.empty()) removeDuplicates();
 
     // Add this element and allow movement
     //
@@ -185,8 +166,6 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     long velocity = m_widget->getCurrentVelocity();
     m_event->get<Int>(BaseProperties::VELOCITY, velocity);
 
-    long pitchOffset = m_currentViewSegment->getSegment().getTranspose();
-
     long pitch = 60;
     m_event->get<Int>(BaseProperties::PITCH, pitch);
 
@@ -200,19 +179,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     m_lastPlayedPitch = pitch;
 
-    if (m_quickCopy && selection) {
-        for (EventContainer::iterator i =
-                 selection->getSegmentEvents().begin();
-             i != selection->getSegmentEvents().end(); ++i) {
-
-            MatrixElement *duplicate = new MatrixElement
-                (m_scene, new Event(**i),
-                 m_widget->isDrumMode(), pitchOffset,
-                 m_scene->getCurrentSegment());
-
-            m_duplicateElements.push_back(duplicate);
-        }
-    }
+    if (m_quickCopy && selection) createDuplicates();
 }
 
 FollowMode
@@ -220,14 +187,19 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 {
     if (!e) return NO_FOLLOW;
 
+    bool quickCopy = (e->modifiers & Qt::ControlModifier);
+    if (quickCopy && ! m_quickCopy) createDuplicates();
+    if (!quickCopy && m_quickCopy) removeDuplicates();
+    m_quickCopy = quickCopy;
+
     //RG_DEBUG << "handleMouseMove() snapped time = " << e->snappedLeftTime;
     int dx = e->viewpos.x() - m_mousePressPos.x();
     int dy = e->viewpos.y() - m_mousePressPos.y();
 
     bool vertical = (abs(dy) > abs(dx));
     // remove constraints
-    if (dx > m_constraintSize &&
-        dy > m_constraintSize) m_dragConstrained = false;
+    if (abs(dx) > m_constraintSize &&
+        abs(dy) > m_constraintSize) m_dragConstrained = false;
 
     if (m_dragConstrained) {
         m_constraintH->show();
@@ -336,6 +308,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
         if (vertical) newTime = m_currentElement->getViewAbsoluteTime();
         else newPitch = m_event->get<Int>(BaseProperties::PITCH);
     }
+    m_dragConstrained = false;
 
     if (newPitch > 127) newPitch = 127;
     if (newPitch < 0) newPitch = 0;
@@ -357,11 +330,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
     diffPitch += (pitchOffset * -1);
 
     if ((diffTime == 0 && diffPitch == 0) || selection->getAddedEvents() == 0) {
-        for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
-            delete m_duplicateElements[i]->event();
-            delete m_duplicateElements[i];
-        }
-        m_duplicateElements.clear();
+        removeDuplicates();
         m_currentElement = nullptr;
         m_event = nullptr;
         return;
@@ -475,6 +444,20 @@ void MatrixMover::ready()
 {
     m_widget->setCanvasCursor(Qt::SizeAllCursor);
     setBasicContextHelp();
+
+    if (! m_constraintH) {
+        m_constraintH = new QGraphicsRectItem;
+        m_constraintH->setBrush(QBrush(QColor(200,200,0)));
+        m_constraintH->setOpacity(0.4);
+        m_scene->addItem(m_constraintH);
+    }
+
+    if (! m_constraintV) {
+        m_constraintV = new QGraphicsRectItem;
+        m_constraintV->setBrush(QBrush(QColor(200,200,0)));
+        m_constraintV->setOpacity(0.4);
+        m_scene->addItem(m_constraintV);
+    }
 }
 
 void MatrixMover::stow()
@@ -498,6 +481,44 @@ void MatrixMover::setBasicContextHelp(bool ctrlPressed)
             setContextHelp(tr("Click and drag to copy selected notes"));
         }
     }
+}
+
+void MatrixMover::createDuplicates()
+{
+    EventSelection* selection = m_scene->getSelection();
+    if (! selection) return;
+    if (! m_currentViewSegment) return;
+    long pitchOffset = m_currentViewSegment->getSegment().getTranspose();
+    for (EventContainer::iterator i =
+             selection->getSegmentEvents().begin();
+         i != selection->getSegmentEvents().end(); ++i) {
+
+        MatrixElement *duplicate = new MatrixElement
+            (m_scene, new Event(**i),
+             m_widget->isDrumMode(), pitchOffset,
+             m_scene->getCurrentSegment());
+
+        m_duplicateElements.push_back(duplicate);
+    }
+}
+
+void MatrixMover::removeDuplicates()
+{
+    for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
+        delete m_duplicateElements[i]->event();
+        delete m_duplicateElements[i];
+    }
+    m_duplicateElements.clear();
+}
+
+void MatrixMover::keyPressEvent(QKeyEvent *e)
+{
+    RG_DEBUG << "keyPressEvent" << e->text();
+}
+
+void MatrixMover::keyReleaseEvent(QKeyEvent *e)
+{
+    RG_DEBUG << "keyPressRelease" << e->text();
 }
 
 QString MatrixMover::ToolName() { return "mover"; }
