@@ -94,12 +94,16 @@ public:
      * that is no longer the case since Thorn.  We need to be able to avoid
      * clearing the command history here, or certain commands wipe out the
      * entire undo history needlessly.
+     *
+     * If the path is not empty the file will be loaded but the document will
+     * still be considered "new"
      */
     RosegardenDocument(QObject *parent,
                        QSharedPointer<AudioPluginManager> audioPluginManager,
                        bool skipAutoload = false,
                        bool clearCommandHistory = true,
-                       bool enableSound = true);
+                       bool enableSound = true,
+                       const QString& path = "");
 
     /// The current document.
     /**
@@ -576,7 +580,7 @@ private:
     /**
      * initializes the document generally
      */
-    void newDocument();
+    void newDocument(const QString& path = "");
 
     /**
      * Autoload

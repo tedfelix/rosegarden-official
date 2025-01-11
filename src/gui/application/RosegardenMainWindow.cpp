@@ -358,8 +358,47 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     emit startupStatusMessage(tr("Initializing plugin manager..."));
     m_pluginManager.reset(new AudioPluginManager(enableSound));
 
-    RosegardenDocument *doc = newDocument(
-            true);  // permanent
+    // check for autosaved untitled document
+    bool loadAutoSaveFile = false;
+    QString autoSaved = AutoSaveFinder().checkAutoSaveFile("");
+    if (autoSaved != "") {
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle(tr("Rosegarden"));
+        msgBox.setIcon(QMessageBox::Question);
+        msgBox.setText(tr("An auto-save file for Untitled document has been found\nWhat do you want to do ?"));
+        QAbstractButton* pButtonOpen =
+            msgBox.addButton(tr("Open it"), QMessageBox::YesRole);
+        QAbstractButton* pButtonDelete =
+            msgBox.addButton(tr("Delete it"), QMessageBox::YesRole);
+        QAbstractButton* pButtonLater =
+            msgBox.addButton(tr("Decide later"), QMessageBox::YesRole);
+        msgBox.setEscapeButton(pButtonLater);
+        msgBox.setDefaultButton((QPushButton*)pButtonLater);
+        msgBox.exec();
+        QAbstractButton* chosenButton = msgBox.clickedButton();
+        if (chosenButton == pButtonDelete) {
+            QString autoSaveFileName =
+                AutoSaveFinder().getAutoSavePath("");
+            RG_DEBUG << "ctor deleting autosave file" << autoSaveFileName;
+            QFile::remove(autoSaveFileName);
+        }
+        if (chosenButton == pButtonOpen) {
+            RG_DEBUG << "ctor loading autosave file";
+            loadAutoSaveFile = true;
+        }
+        // pButtonLater -> do nothing
+    }
+
+    QString autoSaveFileName;
+    if (loadAutoSaveFile) {
+        autoSaveFileName = AutoSaveFinder().getAutoSavePath("");
+        RG_DEBUG << "ctor loading autosave file" << autoSaveFileName;
+    }
+    RosegardenDocument *doc = newDocument(true, autoSaveFileName);  // permanent
+    if (loadAutoSaveFile) {
+        // autosave file has been loaded - delete it
+        QFile::remove(autoSaveFileName);
+    }
 
     m_seqManager = new SequenceManager();
 
@@ -8667,14 +8706,16 @@ RosegardenMainWindow::uiUpdateKludge()
                 RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
 }
 
-RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent)
+RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent,
+                                                      const QString& path)
 {
     return new RosegardenDocument(
             this,  // parent
             m_pluginManager,  // audioPluginManager
             false,  // skipAutoload
             true,  // clearCommandHistory
-            m_useSequencer && permanent);  // enableSound
+            m_useSequencer && permanent,  // enableSound
+            path); // file to load
 }
 
 void

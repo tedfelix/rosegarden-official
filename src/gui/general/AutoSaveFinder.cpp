@@ -40,22 +40,27 @@ AutoSaveFinder::getAutoSaveDir()
 QString
 AutoSaveFinder::getAutoSavePath(QString filename)
 {
-    //RG_DEBUG << "getAutoSavePath(): " << filename;
+    RG_DEBUG << "getAutoSavePath(): " << filename;
 
     const QString autoSaveDir = getAutoSaveDir();
     if (autoSaveDir == "") {
         std::cerr << "WARNING: AutoSaveFinder::getAutoSavePath: No auto-save location located!?" << std::endl;
         return "";
     }
-    
+
     // Use a hash to make sure the filename has no slashes.
     // The incoming filename has the complete path of the file.  So we need
     // to get rid of the slashes so we can save it here.  This is important
     // if you have multiple files with the same name in different directories.
-    const QString hashed = QString::fromLocal8Bit(
-            QCryptographicHash::hash(filename.toLocal8Bit(),
-                                     QCryptographicHash::Sha1).toHex());
-    
+    QString hashed;
+    if (filename.isEmpty()) { // unsaved file
+        hashed = "Untitled";
+    } else {
+        hashed = QString::fromLocal8Bit(QCryptographicHash::hash
+                                        (filename.toLocal8Bit(),
+                                         QCryptographicHash::Sha1).toHex());
+    }
+
     return autoSaveDir + "/" + hashed;
 }
 

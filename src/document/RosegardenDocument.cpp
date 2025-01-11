@@ -131,7 +131,8 @@ RosegardenDocument::RosegardenDocument(
         QSharedPointer<AudioPluginManager> audioPluginManager,
         bool skipAutoload,
         bool clearCommandHistory,
-        bool enableSound) :
+        bool enableSound,
+        const QString& path) :
     QObject(parent),
     m_modified(false),
     m_autoSaved(false),
@@ -158,7 +159,7 @@ RosegardenDocument::RosegardenDocument(
         performAutoload();
 
     // now set it up as a "new document"
-    newDocument();
+    newDocument(path);
 }
 
 RosegardenDocument::~RosegardenDocument()
@@ -324,9 +325,6 @@ RosegardenDocument::jumpToQuickMarker()
 QString RosegardenDocument::getAutoSaveFileName()
 {
     QString filename = getAbsFilePath();
-    if (filename.isEmpty())
-        filename = QDir::currentPath() + "/" + getTitle();
-
     //!!! NB this should _not_ use the new TempDirectory class -- that
     //!!! is for files that are more temporary than this.  Its files
     //!!! are cleaned up after a crash, the next time RG is started,
@@ -509,9 +507,13 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
     return true;
 }
 
-void RosegardenDocument::newDocument()
+void RosegardenDocument::newDocument(const QString& path)
 {
     m_modified = false;
+    if (path != "") {
+        openDocument(path);
+        m_modified = true;
+    }
     setAbsFilePath(QString());
     setTitle(tr("Untitled"));
     if (m_clearCommandHistory) CommandHistory::getInstance()->clear();
