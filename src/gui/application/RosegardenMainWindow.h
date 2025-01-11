@@ -1679,6 +1679,9 @@ private:
     // shortcuts for most recent file
     QList<QKeySequence> m_mostRecentShortcuts;
 
+    unsigned int m_autoSaveInterval;
+    QTime m_lastAutoSaveTime;
+
     void doStop(bool autoStop);
 
 private slots:

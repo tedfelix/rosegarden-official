@@ -311,7 +311,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_tranzport(nullptr),
 //  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(nullptr),
-    m_cpuMeterTimer(new QTimer(this))
+    m_cpuMeterTimer(new QTimer(this)),
+    m_autoSaveInterval(0)
 {
 #ifdef THREAD_DEBUG
     RG_WARNING << "UI Thread gettid(): " << gettid();
@@ -1317,7 +1318,10 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
             SLOT(slotUpdatePosition()), Qt::QueuedConnection);
 
     // start the autosave timer
-    m_autoSaveTimer->start(RosegardenDocument::currentDocument->getAutoSavePeriod() * 1000);
+    m_lastAutoSaveTime = QTime::currentTime();
+    m_autoSaveInterval =
+        RosegardenDocument::currentDocument->getAutoSavePeriod() * 1000;
+    m_autoSaveTimer->start(1000);
 
     connect(RosegardenDocument::currentDocument, &RosegardenDocument::devicesResyncd,
             this, &RosegardenMainWindow::slotDocumentDevicesResyncd);
@@ -8260,7 +8264,15 @@ RosegardenMainWindow::slotAutoSave()
     if (!settings.value("autosave", "true").toBool())
         return;
 
+    QTime now;
+    now.restart(); // resets to current time
+    unsigned int msecs = m_lastAutoSaveTime.msecsTo(now);
+    if (msecs <= m_autoSaveInterval) return;
+
+    RG_DEBUG << "slotAutoSave saving" << m_lastAutoSaveTime <<
+        m_autoSaveInterval << now;
     RosegardenDocument::currentDocument->slotAutoSave();
+    m_lastAutoSaveTime = now;
 }
 
 void
@@ -8268,7 +8280,7 @@ RosegardenMainWindow::slotUpdateAutoSaveInterval(unsigned int interval)
 {
     RG_DEBUG << "slotUpdateAutoSaveInterval - "
     << "changed interval to " << interval;
-    m_autoSaveTimer->setInterval(int(interval) * 1000);
+    m_autoSaveInterval = interval * 1000;
 }
 
 /* unused
