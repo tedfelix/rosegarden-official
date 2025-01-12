@@ -354,12 +354,12 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
         launchSequencer();
     }
 
-    // Plugin manager
-    //
-    emit startupStatusMessage(tr("Initializing plugin manager..."));
-    m_pluginManager.reset(new AudioPluginManager(enableSound));
-
     // check for autosaved untitled document
+
+    // note this must be done before the plugin manager is started as
+    // the messagebox will hold up the initialization process and
+    // plugins which require the saple rate for initialization will
+    // not work correctly.
     bool loadAutoSaveFile = false;
     QString autoSaved = AutoSaveFinder().checkAutoSaveFile("");
     if (autoSaved != "") {
@@ -389,6 +389,11 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
         }
         // pButtonLater -> do nothing
     }
+
+    // Plugin manager
+    //
+    emit startupStatusMessage(tr("Initializing plugin manager..."));
+    m_pluginManager.reset(new AudioPluginManager(enableSound));
 
     QString autoSaveFileName;
     if (loadAutoSaveFile) {
@@ -8721,10 +8726,13 @@ RosegardenMainWindow::uiUpdateKludge()
 RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent,
                                                       const QString& path)
 {
+    // if the path is set this will load a file so autolaod should be skipped
+    bool skipAutoLoad = false;
+    if (path != "") skipAutoLoad = true;
     return new RosegardenDocument(
             this,  // parent
             m_pluginManager,  // audioPluginManager
-            false,  // skipAutoload
+            skipAutoLoad,  // skipAutoload
             true,  // clearCommandHistory
             m_useSequencer && permanent,  // enableSound
             path); // file to load
