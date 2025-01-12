@@ -1681,6 +1681,7 @@ private:
 
     unsigned int m_autoSaveInterval;
     QTime m_lastAutoSaveTime;
+    bool m_autoSaveLoaded;
 
     void doStop(bool autoStop);
 

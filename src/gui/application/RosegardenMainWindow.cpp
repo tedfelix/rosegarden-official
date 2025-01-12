@@ -312,7 +312,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 //  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(nullptr),
     m_cpuMeterTimer(new QTimer(this)),
-    m_autoSaveInterval(0)
+    m_autoSaveInterval(0),
+    m_autoSaveLoaded(false)
 {
 #ifdef THREAD_DEBUG
     RG_WARNING << "UI Thread gettid(): " << gettid();
@@ -402,6 +403,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     }
     RosegardenDocument *doc = newDocument(true, autoSaveFileName);  // permanent
     if (loadAutoSaveFile) {
+        m_autoSaveLoaded = true;
         // autosave file has been loaded - delete it
         QFile::remove(autoSaveFileName);
     }
@@ -2352,6 +2354,14 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     setupRecentFilesMenu();
 
     updateTitle();
+
+    if (m_autoSaveLoaded) {
+        // Remove any autosave file for Untitled
+        QString autoSaveFileName =
+            AutoSaveFinder().checkAutoSaveFile("");
+        RG_DEBUG << "slotFileSaveAs deleting autosave file" << autoSaveFileName;
+        if (autoSaveFileName != "") QFile::remove(autoSaveFileName);
+    }
 
     // Indicate success.
     return true;
