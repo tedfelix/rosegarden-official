@@ -693,7 +693,6 @@ set(rg_CPPS
   commands/segment/MergeFileCommand.cpp
   commands/segment/SegmentColourMapCommand.cpp
   commands/segment/SegmentRecordCommand.cpp
-  commands/segment/SegmentQuickCopyCommand.cpp
   commands/segment/FitToBeatsCommand.cpp
   commands/segment/AudioSegmentInsertCommand.cpp
   commands/segment/AudioSegmentRescaleCommand.cpp
