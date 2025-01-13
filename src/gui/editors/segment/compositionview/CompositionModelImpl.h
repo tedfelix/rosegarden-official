@@ -323,6 +323,8 @@ public:
     /// Number of pixels needed vertically to render all tracks.
     int getCompositionHeight();
 
+    void updateChangeType(ChangeType changeType);
+
 signals:
     /// Connected to CompositionView::slotUpdateAll()
     void needUpdate();

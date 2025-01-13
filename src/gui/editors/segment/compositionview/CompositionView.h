@@ -63,7 +63,7 @@ class SegmentRect;
  * class works together with CompositionModelImpl to provide the composition
  * user interface (the segment canvas).
  */
-class CompositionView : public RosegardenScrollView 
+class CompositionView : public RosegardenScrollView
 {
     Q_OBJECT
 public:
@@ -214,6 +214,8 @@ public:
     void drawSplitLine(int x, int y);
     /// See drawSplitLine().
     void hideSplitLine();
+
+    void setModeText(const QString& modeText);
 
 public slots:
 
@@ -611,6 +613,9 @@ private:
 
     /// Performance testing.
     bool m_enableDrawing;
+    QString m_modeText;
+    bool m_modeTextChanged;
+    int m_modeTextWidth;
 };
 
 
