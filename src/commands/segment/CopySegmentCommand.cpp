@@ -21,6 +21,8 @@
 #include "CopySegmentCommand.h"
 
 #include "misc/Debug.h"
+#include "misc/Strings.h"  // qstrtostr()
+#include "misc/AppendLabel.h"  // appendLabel()
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/Track.h"
@@ -66,6 +68,9 @@ CopySegmentCommand::execute()
 
     RG_DEBUG << "execute cloning segment" << m_startTime << m_track;
     Segment *segment = m_segment->clone();
+    const std::string originalLabel = segment->getLabel();
+    segment->setLabel(
+            appendLabel(originalLabel, qstrtostr(tr("(copied)"))));
     segment->setStartTime(m_startTime);
     segment->setTrack(m_track);
     m_composition->addSegment(segment);
