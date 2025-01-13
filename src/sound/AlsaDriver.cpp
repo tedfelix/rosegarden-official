@@ -816,16 +816,15 @@ MappedDevice *
 AlsaDriver::createMidiDevice(DeviceId deviceId,
                              MidiDevice::DeviceDirection reqDirection)
 {
-    std::string connectionName = "";
     const char *deviceName = "unnamed";
 
     if (reqDirection == MidiDevice::Play) {
 
-        QString portName = QString("out %1 - %2")
-            .arg(m_outputPorts.size() + 1)
-            .arg(deviceName);
+        const QString portName = QString("out %1 - %2").
+                arg(m_outputPorts.size() + 1).
+                arg(deviceName);
 
-        int outputPort = checkAlsaError(
+        const int outputPort = checkAlsaError(
                 snd_seq_create_simple_port(
                         m_midiHandle,  // seq
                         portName.toLocal8Bit(),  // name
@@ -835,7 +834,6 @@ AlsaDriver::createMidiDevice(DeviceId deviceId,
                 "createMidiDevice - can't create output port");
 
         if (outputPort >= 0) {
-
             RG_DEBUG << "createMidiDevice(): CREATED OUTPUT PORT " << outputPort << ":" << portName << " for device " << deviceId;
 
             m_outputPorts[deviceId] = outputPort;
@@ -844,9 +842,9 @@ AlsaDriver::createMidiDevice(DeviceId deviceId,
 
     MappedDevice *device = new MappedDevice(deviceId,
                                             Device::Midi,
-                                            deviceName,
-                                            connectionName);
+                                            deviceName);
     device->setDirection(reqDirection);
+
     return device;
 }
 
