@@ -1679,7 +1679,7 @@ private:
     // shortcuts for most recent file
     QList<QKeySequence> m_mostRecentShortcuts;
 
-    unsigned int m_autoSaveInterval;
+    unsigned m_autoSaveInterval;
     QTime m_lastAutoSaveTime;
     bool m_autoSaveLoaded;
 

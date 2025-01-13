@@ -8276,10 +8276,10 @@ RosegardenMainWindow::slotAutoSave()
     if (!settings.value("autosave", "true").toBool())
         return;
 
-    QTime now;
-    now.restart(); // resets to current time
-    unsigned int msecs = m_lastAutoSaveTime.msecsTo(now);
-    if (msecs <= m_autoSaveInterval) return;
+    const QTime now{QTime::currentTime()};
+    // Not time to autosave?  Bail.
+    if (m_lastAutoSaveTime.msecsTo(now) <= (int)m_autoSaveInterval)
+        return;
 
     RG_DEBUG << "slotAutoSave saving" << m_lastAutoSaveTime <<
         m_autoSaveInterval << now;
