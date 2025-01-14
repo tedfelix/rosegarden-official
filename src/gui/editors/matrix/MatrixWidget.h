@@ -186,6 +186,9 @@ public:
     /// View > Rulers > Add Control Ruler
     void addControlRuler(QAction *);
 
+    void getZoomFactors(double& horizontalZoomFactor,
+                        double& verticalZoomFactor) const;
+
 signals:
     void toolChanged(QString);
 

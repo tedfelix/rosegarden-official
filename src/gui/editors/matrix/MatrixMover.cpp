@@ -118,12 +118,17 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     m_clickSnappedLeftDeltaTime = e->snappedLeftTime - snappedAbsoluteLeftTime;
 
     m_dragConstrained = true;
+    double horizontalZoomFactor;
+    double verticalZoomFactor;
+    m_widget->getZoomFactors(horizontalZoomFactor, verticalZoomFactor);
+    RG_DEBUG << "handleLeftButtonPress zoom factors" <<
+        horizontalZoomFactor << verticalZoomFactor;
     m_constraintH->setRect
-        (0, e->sceneY - m_constraintSize,
-         m_scene->width(), 2 * m_constraintSize);
+        (0, e->sceneY - m_constraintSize / verticalZoomFactor,
+         m_scene->width(), 2 * m_constraintSize / verticalZoomFactor);
     m_constraintV->setRect
-        (e->sceneX - m_constraintSize, 0,
-         2* m_constraintSize, m_scene->height());
+        (e->sceneX - m_constraintSize / horizontalZoomFactor, 0,
+         2* m_constraintSize / horizontalZoomFactor, m_scene->height());
 
     m_constraintH->show();
     m_constraintV->show();
@@ -447,6 +452,7 @@ void MatrixMover::ready()
 
     if (! m_constraintH) {
         m_constraintH = new QGraphicsRectItem;
+        m_constraintH->setPen(QPen(QColor(200,200,0)));
         m_constraintH->setBrush(QBrush(QColor(200,200,0)));
         m_constraintH->setOpacity(0.4);
         m_scene->addItem(m_constraintH);
@@ -454,6 +460,7 @@ void MatrixMover::ready()
 
     if (! m_constraintV) {
         m_constraintV = new QGraphicsRectItem;
+        m_constraintV->setPen(QPen(QColor(200,200,0)));
         m_constraintV->setBrush(QBrush(QColor(200,200,0)));
         m_constraintV->setOpacity(0.4);
         m_scene->addItem(m_constraintV);

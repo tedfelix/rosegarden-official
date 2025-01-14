@@ -1118,6 +1118,14 @@ MatrixWidget::addControlRuler(QAction *action)
 }
 
 void
+MatrixWidget::getZoomFactors(double& horizontalZoomFactor,
+                             double& verticalZoomFactor) const
+{
+    horizontalZoomFactor = m_hZoomFactor;
+    verticalZoomFactor = m_vZoomFactor;
+}
+
+void
 MatrixWidget::slotHScrollBarRangeChanged(int min, int max)
 {
     if (max > min)
