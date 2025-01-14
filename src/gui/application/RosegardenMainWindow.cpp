@@ -2352,13 +2352,11 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
 
     updateTitle();
 
-    if (m_autoSaveLoaded) {
-        // Remove any autosave file for Untitled
-        QString autoSaveFileName =
-            AutoSaveFinder().checkAutoSaveFile("");
-        RG_DEBUG << "slotFileSaveAs deleting autosave file" << autoSaveFileName;
-        if (autoSaveFileName != "") QFile::remove(autoSaveFileName);
-    }
+    // Remove any autosave file for Untitled
+    QString autoSaveFileName =
+        AutoSaveFinder().checkAutoSaveFile("");
+    RG_DEBUG << "slotFileSaveAs deleting autosave file" << autoSaveFileName;
+    if (autoSaveFileName != "") QFile::remove(autoSaveFileName);
 
     // Indicate success.
     return true;
