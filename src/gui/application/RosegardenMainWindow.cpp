@@ -358,33 +358,36 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     // note this must be done before the plugin manager is started as
     // the messagebox will hold up the initialization process and
-    // plugins which require the saple rate for initialization will
+    // plugins which require the sample rate for initialization will
     // not work correctly.
     bool loadAutoSaveFile = false;
     QString autoSaved = AutoSaveFinder().checkAutoSaveFile("");
     if (autoSaved != "") {
-        QMessageBox msgBox(this);
-        msgBox.setWindowTitle(tr("Rosegarden"));
-        msgBox.setIcon(QMessageBox::Question);
-        msgBox.setText(tr("An auto-save file for Untitled document has been found\nWhat do you want to do ?"));
-        QAbstractButton* pButtonOpen =
-            msgBox.addButton(tr("Open it"), QMessageBox::YesRole);
-        QAbstractButton* pButtonDelete =
-            msgBox.addButton(tr("Delete it"), QMessageBox::YesRole);
-        msgBox.setEscapeButton(pButtonOpen);
-        msgBox.setDefaultButton((QPushButton*)pButtonOpen);
-        msgBox.exec();
-        QAbstractButton* chosenButton = msgBox.clickedButton();
-        if (chosenButton == pButtonDelete) {
+
+        // At this point the splash screen is definitely up, hide it
+        // before showing the messagebox.
+        StartupLogo::hideIfStillThere();
+
+        // Ask the user if they want to use the auto-save file
+        QMessageBox::StandardButton reply = QMessageBox::question(
+                this,  // parent
+                tr("Rosegarden"),  // title
+                tr("An auto-save file for an unsaved document has been found.\n"
+                   "Do you want to open it?"),  // text
+                QMessageBox::Yes | QMessageBox::No,  // buttons
+                QMessageBox::Yes);  // defaultButton
+
+        if (reply == QMessageBox::Yes) {
+            loadAutoSaveFile = true;
+        } else {
+            // user doesn't want the auto-save, so delete it
+            // so it won't bother us again if we relaunch
             QString autoSaveFileName =
                 AutoSaveFinder().getAutoSavePath("");
             RG_DEBUG << "ctor deleting autosave file" << autoSaveFileName;
             QFile::remove(autoSaveFileName);
         }
-        if (chosenButton == pButtonOpen) {
-            RG_DEBUG << "ctor loading autosave file";
-            loadAutoSaveFile = true;
-        }
+
     }
 
     // Plugin manager
