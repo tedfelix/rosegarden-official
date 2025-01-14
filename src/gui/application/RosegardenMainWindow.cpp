@@ -312,8 +312,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 //  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(nullptr),
     m_cpuMeterTimer(new QTimer(this)),
-    m_autoSaveInterval(0),
-    m_autoSaveLoaded(false)
+    m_autoSaveInterval(0)
 {
 #ifdef THREAD_DEBUG
     RG_WARNING << "UI Thread gettid(): " << gettid();
@@ -399,11 +398,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
         RG_DEBUG << "ctor loading autosave file" << autoSaveFileName;
     }
     RosegardenDocument *doc = newDocument(true, autoSaveFileName);  // permanent
-    if (loadAutoSaveFile) {
-        m_autoSaveLoaded = true;
-        // autosave file has been loaded - delete it
-        QFile::remove(autoSaveFileName);
-    }
 
     m_seqManager = new SequenceManager();
 
