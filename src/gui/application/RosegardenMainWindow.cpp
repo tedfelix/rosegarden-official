@@ -372,10 +372,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
             msgBox.addButton(tr("Open it"), QMessageBox::YesRole);
         QAbstractButton* pButtonDelete =
             msgBox.addButton(tr("Delete it"), QMessageBox::YesRole);
-        QAbstractButton* pButtonLater =
-            msgBox.addButton(tr("Decide later"), QMessageBox::YesRole);
-        msgBox.setEscapeButton(pButtonLater);
-        msgBox.setDefaultButton((QPushButton*)pButtonLater);
+        msgBox.setEscapeButton(pButtonOpen);
+        msgBox.setDefaultButton((QPushButton*)pButtonOpen);
         msgBox.exec();
         QAbstractButton* chosenButton = msgBox.clickedButton();
         if (chosenButton == pButtonDelete) {
@@ -388,7 +386,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
             RG_DEBUG << "ctor loading autosave file";
             loadAutoSaveFile = true;
         }
-        // pButtonLater -> do nothing
     }
 
     // Plugin manager
