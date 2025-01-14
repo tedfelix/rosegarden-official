@@ -15,56 +15,47 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_PASTESEGMENTSCOMMAND_H
-#define RG_PASTESEGMENTSCOMMAND_H
+#ifndef RG_COPYSEGMENTCOMMAND_H
+#define RG_COPYSEGMENTCOMMAND_H
 
+#include "base/TimeT.h"
 #include "base/Track.h"
 #include "document/Command.h"
-#include <QString>
-#include <QCoreApplication>
-#include <vector>
-#include "base/Event.h"
-
-
-
 
 namespace Rosegarden
 {
 
+/// Copy a segment to a new position (track and time)
+
 class Segment;
 class Composition;
-class Clipboard;
 
-
-/// Paste one or more segments from the clipboard into the composition
-
-class PasteSegmentsCommand : public NamedCommand
+class CopySegmentCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::PasteSegmentsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CopySegmentCommand)
 
 public:
-    PasteSegmentsCommand(Composition *composition,
-                         Clipboard *clipboard,
-                         timeT pasteTime,
-                         TrackId baseTrack,
-                         bool useExactTracks);
+    CopySegmentCommand(Composition *composition,
+                       Segment* segment,
+                       timeT startTime,
+                       TrackId track);
 
-    ~PasteSegmentsCommand() override;
+    ~CopySegmentCommand() override;
 
-    static QString getGlobalName() { return tr("&Paste"); }
+    static QString getGlobalName() { return tr("&CopySegment"); }
 
     void execute() override;
     void unexecute() override;
 
-protected:
+private:
     Composition *m_composition;
-    Clipboard *m_clipboard;
-    timeT m_pasteTime;
-    TrackId m_baseTrack;
-    bool m_exactTracks;
-    std::vector<Segment *> m_addedSegments;
+    Segment* m_segment;
+    timeT m_startTime;
+    TrackId m_track;
     bool m_detached;
     timeT m_oldEndTime;
+    Segment* m_addedSegment;
+
 };
 
 

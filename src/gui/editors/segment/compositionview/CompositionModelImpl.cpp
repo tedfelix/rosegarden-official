@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CompositionModelImpl]"
+#define RG_NO_DEBUG_PRINT
 
 #include "CompositionModelImpl.h"
 #include "SegmentOrderer.h"
@@ -807,9 +808,10 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
 
     QRect originalRect;
     getSegmentQRect(*segment, originalRect);
+    RG_DEBUG << "makeNotationPreviewRangeCS originalRect" << originalRect;
 
     int moveXOffset = 0;
-    if (m_changeType == ChangeMove)
+    if (m_changeType == ChangeMove || m_changeType == ChangeCopy)
         moveXOffset = basePoint.x() - originalRect.x();
 
     int left;
@@ -851,6 +853,7 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
     interval.segmentTop = basePoint.y();
     interval.moveXOffset = moveXOffset;
     interval.color = segment->getPreviewColour();
+    RG_DEBUG << "makeNotationPreviewRangeCS interval" << moveXOffset;
 
     ranges->push_back(interval);
 }
@@ -1333,6 +1336,11 @@ int CompositionModelImpl::getCompositionHeight()
     updateAllTrackHeights();
 
     return m_grid.getYBinCoordinate(m_composition.getNbTracks());
+}
+
+void CompositionModelImpl::updateChangeType(ChangeType changeType)
+{
+    m_changeType = changeType;
 }
 
 CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(
