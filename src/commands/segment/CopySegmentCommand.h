@@ -38,7 +38,8 @@ public:
     CopySegmentCommand(Composition *composition,
                        Segment* segment,
                        timeT startTime,
-                       TrackId track);
+                       TrackId track,
+                       bool CopyAsLink);
 
     ~CopySegmentCommand() override;
 
@@ -52,10 +53,11 @@ private:
     Segment* m_segment;
     timeT m_startTime;
     TrackId m_track;
+    bool m_copyAsLink;
     bool m_detached;
     timeT m_oldEndTime;
     Segment* m_addedSegment;
-
+    bool m_originalSegmantisLinked;
 };
 
 

@@ -316,33 +316,6 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                         tr("Move %n Segment(s)", "", changingSegments.size()));
             }
 
-            if (m_segmentCopyMode) {
-                // Make copies of the original Segment(s).  These copies will
-                // take the place of the originals.
-
-                SegmentSelection selectedItems = m_canvas->getSelectedSegments();
-
-                // for each selected segment
-                for (SegmentSelection::iterator it = selectedItems.begin();
-                     it != selectedItems.end();
-                     ++it) {
-                    Segment *segment = *it;
-
-                    Command *command = nullptr;
-
-                    if (m_segmentCopyingAsLink) {
-                        command = new SegmentQuickLinkCommand(segment);
-                    } else {
-                        // if it's a link, copy as link
-                        if (segment->isTrulyLinked())
-                            command = new SegmentQuickLinkCommand(segment);
-                        // for segment copy do nothing here
-                    }
-
-                    if (command) macroCommand->addCommand(command);
-                }
-            }
-
             const int startDragTrackPos =
                     m_canvas->grid().getYBin(m_clickPoint.y());
             const int currentTrackPos = m_canvas->grid().getYBin(pos.y());
@@ -388,14 +361,17 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                         segment->getEndMarkerTime(false) -
                         segment->getStartTime();
 
-                if (m_segmentCopyMode && ! m_segmentCopyingAsLink &&
-                    ! segment->isTrulyLinked()) {
-                    // make a true copy of the segment
+                if (m_segmentCopyMode) {
+                    bool copyAsLink = m_segmentCopyingAsLink ||
+                        segment->isTrulyLinked();
+                    RG_DEBUG << "mouseReleaseEvent copy segment" << copyAsLink;
+                    // make a copyor link of the segment
                     Command* copySegCmnd =
                         new CopySegmentCommand(&comp,
                                                segment,
                                                startTime,
-                                               newTrackId);
+                                               newTrackId,
+                                               copyAsLink);
                     macroCommand->addCommand(copySegCmnd);
                 } else {
                     segmentReconfigureCommand->addSegment
