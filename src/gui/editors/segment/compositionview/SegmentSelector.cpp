@@ -27,7 +27,6 @@
 #include "base/SnapGrid.h"
 #include "base/Track.h"
 #include "commands/segment/CopySegmentCommand.h"
-#include "commands/segment/SegmentQuickLinkCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "CompositionModelImpl.h"
 #include "CompositionView.h"

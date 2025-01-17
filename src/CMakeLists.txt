@@ -717,7 +717,6 @@ set(rg_CPPS
   commands/segment/AddTimeSignatureAndNormalizeCommand.cpp
   commands/segment/EraseSegmentsStartingInRangeCommand.cpp
   commands/segment/SegmentRepeatToCopyCommand.cpp
-  commands/segment/SegmentQuickLinkCommand.cpp
   commands/segment/SegmentColourCommand.cpp
   commands/segment/InsertRangeCommand.cpp
   commands/segment/AudioSegmentAutoSplitCommand.cpp
