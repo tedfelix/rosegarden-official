@@ -296,8 +296,11 @@ protected:
      *   - false: This is a temporary document and is not allowed to make
      *            changes to ALSA and any audio or MIDI connections.
      *   - See RosegardenDocument::m_soundEnabled.
+     *
+     * If the path is not empty that file will be loaded but the document
+     * will still be considered "new" - no filename will be set
      */
-    RosegardenDocument *newDocument(bool permanent);
+    RosegardenDocument *newDocument(bool permanent, const QString& path = "");
 
     /**** File handling code that we don't want the outside world to use ****/
     /**/
@@ -1675,6 +1678,9 @@ private:
 
     // shortcuts for most recent file
     QList<QKeySequence> m_mostRecentShortcuts;
+
+    unsigned m_autoSaveInterval;
+    QTime m_lastAutoSaveTime;
 
     void doStop(bool autoStop);
 

@@ -311,7 +311,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_tranzport(nullptr),
 //  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(nullptr),
-    m_cpuMeterTimer(new QTimer(this))
+    m_cpuMeterTimer(new QTimer(this)),
+    m_autoSaveInterval(0)
 {
 #ifdef THREAD_DEBUG
     RG_WARNING << "UI Thread gettid(): " << gettid();
@@ -353,13 +354,53 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
         launchSequencer();
     }
 
+    // check for autosaved untitled document
+
+    // note this must be done before the plugin manager is started as
+    // the messagebox will hold up the initialization process and
+    // plugins which require the sample rate for initialization will
+    // not work correctly.
+    bool loadAutoSaveFile = false;
+    QString autoSaved = AutoSaveFinder().checkAutoSaveFile("");
+    if (autoSaved != "") {
+
+        // At this point the splash screen is definitely up, hide it
+        // before showing the messagebox.
+        StartupLogo::hideIfStillThere();
+
+        // Ask the user if they want to use the auto-save file
+        QMessageBox::StandardButton reply = QMessageBox::question(
+                this,  // parent
+                tr("Rosegarden"),  // title
+                tr("An auto-save file for an unsaved document has been found.\n"
+                   "Do you want to open it?"),  // text
+                QMessageBox::Yes | QMessageBox::No,  // buttons
+                QMessageBox::Yes);  // defaultButton
+
+        if (reply == QMessageBox::Yes) {
+            loadAutoSaveFile = true;
+        } else {
+            // user doesn't want the auto-save, so delete it
+            // so it won't bother us again if we relaunch
+            QString autoSaveFileName =
+                AutoSaveFinder().getAutoSavePath("");
+            RG_DEBUG << "ctor deleting autosave file" << autoSaveFileName;
+            QFile::remove(autoSaveFileName);
+        }
+
+    }
+
     // Plugin manager
     //
     emit startupStatusMessage(tr("Initializing plugin manager..."));
     m_pluginManager.reset(new AudioPluginManager(enableSound));
 
-    RosegardenDocument *doc = newDocument(
-            true);  // permanent
+    QString autoSaveFileName;
+    if (loadAutoSaveFile) {
+        autoSaveFileName = AutoSaveFinder().getAutoSavePath("");
+        RG_DEBUG << "ctor loading autosave file" << autoSaveFileName;
+    }
+    RosegardenDocument *doc = newDocument(true, autoSaveFileName);  // permanent
 
     m_seqManager = new SequenceManager();
 
@@ -1278,7 +1319,10 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
             SLOT(slotUpdatePosition()), Qt::QueuedConnection);
 
     // start the autosave timer
-    m_autoSaveTimer->start(RosegardenDocument::currentDocument->getAutoSavePeriod() * 1000);
+    m_lastAutoSaveTime = QTime::currentTime();
+    m_autoSaveInterval =
+        RosegardenDocument::currentDocument->getAutoSavePeriod() * 1000;
+    m_autoSaveTimer->start(1000);
 
     connect(RosegardenDocument::currentDocument, &RosegardenDocument::devicesResyncd,
             this, &RosegardenMainWindow::slotDocumentDevicesResyncd);
@@ -2304,6 +2348,12 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     setupRecentFilesMenu();
 
     updateTitle();
+
+    // Remove any autosave file for Untitled
+    QString autoSaveFileName =
+        AutoSaveFinder().checkAutoSaveFile("");
+    RG_DEBUG << "slotFileSaveAs deleting autosave file" << autoSaveFileName;
+    if (autoSaveFileName != "") QFile::remove(autoSaveFileName);
 
     // Indicate success.
     return true;
@@ -8221,7 +8271,15 @@ RosegardenMainWindow::slotAutoSave()
     if (!settings.value("autosave", "true").toBool())
         return;
 
+    const QTime now{QTime::currentTime()};
+    // Not time to autosave?  Bail.
+    if (m_lastAutoSaveTime.msecsTo(now) <= (int)m_autoSaveInterval)
+        return;
+
+    RG_DEBUG << "slotAutoSave saving" << m_lastAutoSaveTime <<
+        m_autoSaveInterval << now;
     RosegardenDocument::currentDocument->slotAutoSave();
+    m_lastAutoSaveTime = now;
 }
 
 void
@@ -8229,7 +8287,7 @@ RosegardenMainWindow::slotUpdateAutoSaveInterval(unsigned int interval)
 {
     RG_DEBUG << "slotUpdateAutoSaveInterval - "
     << "changed interval to " << interval;
-    m_autoSaveTimer->setInterval(int(interval) * 1000);
+    m_autoSaveInterval = interval * 1000;
 }
 
 /* unused
@@ -8667,14 +8725,19 @@ RosegardenMainWindow::uiUpdateKludge()
                 RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
 }
 
-RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent)
+RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent,
+                                                      const QString& path)
 {
+    // if the path is set this will load a file so autolaod should be skipped
+    bool skipAutoLoad = false;
+    if (path != "") skipAutoLoad = true;
     return new RosegardenDocument(
             this,  // parent
             m_pluginManager,  // audioPluginManager
-            false,  // skipAutoload
+            skipAutoLoad,  // skipAutoload
             true,  // clearCommandHistory
-            m_useSequencer && permanent);  // enableSound
+            m_useSequencer && permanent,  // enableSound
+            path); // file to load
 }
 
 void
