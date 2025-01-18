@@ -1335,6 +1335,21 @@ NotationScene::segmentRemoved(const Composition *comp, Segment *segment)
 
     // This is one of our Segments being deleted.
 
+    // check for staffs linked to the deleted segment
+    std::set<NotationStaff*> staffsToDelete;
+
+    for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
+         i != m_staffs.end();
+         ++i) {
+        Segment* sseg = &(*i)->getSegment();
+        if (sseg->isLinkedTo(segment)) {
+            staffsToDelete.insert(*i);
+            RG_DEBUG << "segmentRemoved linked" << (*i) << segment << sseg <<
+                sseg->isTmp() << sseg->isLinkedTo(segment) <<
+                staffsToDelete.size();
+        }
+    }
+
     // Remember segment to be deleted.
     m_segmentsDeleted.push_back(segment);
 
@@ -1365,15 +1380,23 @@ NotationScene::segmentRemoved(const Composition *comp, Segment *segment)
     // update after undo is done before this so we must remove the
     // deleted staff here.
 
-    NotationStaff *staff = *staffToDelete;
+    // Always clear preciew note
+    clearPreviewNote();
 
-    // If this happens to be the staff where the preview note is...
-    if (m_previewNoteStaff == staff)
-        clearPreviewNote();
-
-    delete staff;
-
-    m_staffs.erase(staffToDelete);
+    // If the segment repeats there will be additional staffs that
+    // need to be deleted
+    std::vector<NotationStaff *> staffsNew;
+    for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
+         i != m_staffs.end();
+         ++i) {
+        NotationStaff* staffi = (*i);
+        if (staffsToDelete.find(staffi) != staffsToDelete.end()) {
+            delete staffi;
+        } else {
+            staffsNew.push_back(staffi);
+        }
+    }
+    m_staffs = staffsNew;
 
     // Redo the layouts so that there aren't any stray pointers
     // to the removed staff.
