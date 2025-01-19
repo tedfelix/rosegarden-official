@@ -33,6 +33,7 @@
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/general/RosegardenScrollView.h"
+#include "misc/Preferences.h"
 #include "SegmentPencil.h"
 #include "SegmentResizer.h"
 #include "SegmentToolBox.h"
@@ -456,14 +457,16 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     setSnapTime(e, SnapGrid::SnapToBeat);
 
     // start move on selected items only once
-    // update mode flags
 
-    bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
-    bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
-    // Ctrl and Alt+Ctrl are segment copy.
-    m_segmentCopyMode = ctrl;
-    // Alt+Ctrl is copy as link.
-    m_segmentCopyingAsLink = (alt && ctrl);
+    if (Preferences::getDynamicDrag()) {
+        // update mode flags
+        bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
+        bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
+        // Ctrl and Alt+Ctrl are segment copy.
+        m_segmentCopyMode = ctrl;
+        // Alt+Ctrl is copy as link.
+        m_segmentCopyingAsLink = (alt && ctrl);
+    }
 
     if (!m_selectionMoveStarted) {
         m_selectionMoveStarted = true;
@@ -581,7 +584,7 @@ void SegmentSelector::keyPressEvent(QKeyEvent *e)
     setContextHelpFor(m_lastMousePos, e->modifiers());
 
     // if Ctrl or Alt is pressed update drag function
-    if (m_selectionMoveStarted) {
+    if (m_selectionMoveStarted && Preferences::getDynamicDrag()) {
         bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
         bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
         RG_DEBUG << "keyPressEvent modifiers" << ctrl << alt;
@@ -602,7 +605,7 @@ void SegmentSelector::keyReleaseEvent(QKeyEvent *e)
     setContextHelpFor(m_lastMousePos, e->modifiers());
 
     // if Ctrl or Alt is released update drag function
-    if (m_selectionMoveStarted) {
+    if (m_selectionMoveStarted && Preferences::getDynamicDrag()) {
         bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
         bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
         RG_DEBUG << "keyReleaseEvent modifiers" << ctrl << alt;

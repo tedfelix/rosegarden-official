@@ -111,6 +111,7 @@ private:
     QCheckBox *m_advancedLooping;
     QCheckBox *m_autoChannels;
     QCheckBox *m_lv2;
+    QCheckBox *m_dynamicDrag;
 
     // Presentation tab
     QComboBox *m_theme;
