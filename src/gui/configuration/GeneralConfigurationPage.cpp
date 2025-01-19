@@ -303,9 +303,15 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("Drag with dynamic modifiers"),
-                                 frame), row, 0);
+    label = new QLabel(tr("Drag with dynamic modifiers"), frame);
+    tipText = tr(
+            "<qt><p>If set, the modifiers CTRL and ALT can be changed "
+            "while a drag is in progress to update "
+            "copy/move behavior.</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
     m_dynamicDrag = new QCheckBox(frame);
+    m_dynamicDrag->setToolTip(tipText);
     m_dynamicDrag->setChecked(Preferences::getDynamicDrag());
     connect(m_dynamicDrag, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
