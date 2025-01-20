@@ -30,6 +30,7 @@
 #include "commands/matrix/MatrixInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
 #include "document/CommandHistory.h"
+#include "misc/Preferences.h"
 #include "MatrixElement.h"
 #include "MatrixScene.h"
 #include "MatrixWidget.h"
@@ -192,10 +193,12 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 {
     if (!e) return NO_FOLLOW;
 
-    bool quickCopy = (e->modifiers & Qt::ControlModifier);
-    if (quickCopy && ! m_quickCopy) createDuplicates();
-    if (!quickCopy && m_quickCopy) removeDuplicates();
-    m_quickCopy = quickCopy;
+    if (Preferences::getDynamicDrag()) {
+        bool quickCopy = (e->modifiers & Qt::ControlModifier);
+        if (quickCopy && ! m_quickCopy) createDuplicates();
+        if (!quickCopy && m_quickCopy) removeDuplicates();
+        m_quickCopy = quickCopy;
+    }
 
     //RG_DEBUG << "handleMouseMove() snapped time = " << e->snappedLeftTime;
     int dx = e->viewpos.x() - m_mousePressPos.x();
@@ -520,21 +523,25 @@ void MatrixMover::removeDuplicates()
 
 void MatrixMover::keyPressEvent(QKeyEvent *e)
 {
-    bool ctrl = (e->key() == Qt::Key_Control);
-    RG_DEBUG << "keyPressEvent" << e->text() << ctrl;
-    if (ctrl && ! m_quickCopy) {
-        m_quickCopy = true;
-        createDuplicates();
+    if (Preferences::getDynamicDrag()) {
+        bool ctrl = (e->key() == Qt::Key_Control);
+        RG_DEBUG << "keyPressEvent" << e->text() << ctrl;
+        if (ctrl && ! m_quickCopy) {
+            m_quickCopy = true;
+            createDuplicates();
+        }
     }
 }
 
 void MatrixMover::keyReleaseEvent(QKeyEvent *e)
 {
-    bool ctrl = (e->key() == Qt::Key_Control);
-    RG_DEBUG << "keyPressRelease" << e->text() << ctrl;
-    if (ctrl && m_quickCopy) {
-        m_quickCopy = false;
-        removeDuplicates();
+    if (Preferences::getDynamicDrag()) {
+        bool ctrl = (e->key() == Qt::Key_Control);
+        RG_DEBUG << "keyPressRelease" << e->text() << ctrl;
+        if (ctrl && m_quickCopy) {
+            m_quickCopy = false;
+            removeDuplicates();
+        }
     }
 }
 
