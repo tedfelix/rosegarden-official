@@ -125,7 +125,7 @@ public:
 
     // unused bool constrainToSegmentArea(QPointF &scenePos);
 
-    void playNote(Segment &segment, int pitch, int velocity = -1);
+    void playNote(const Segment &segment, int pitch, int velocity = -1);
 
     // SegmentObserver method forwarded from MatrixViewSegment
     void segmentEndMarkerTimeChanged(const Segment *s, bool shorten);
@@ -137,6 +137,10 @@ public:
 
     /// update all ViewSegments
     void updateAll();
+
+    // extra preview events
+    typedef std::map<const Event*, const Segment*> EventWithSegmentMap;
+    void setExtraPreviewEvents(const EventWithSegmentMap& events);
 
 signals:
     void mousePressed(const MatrixMouseEvent *e);
@@ -206,6 +210,8 @@ private:
     std::vector<QGraphicsLineItem *> m_horizontals;
     std::vector<QGraphicsLineItem *> m_verticals;
     std::vector<QGraphicsRectItem *> m_highlights;
+
+    EventWithSegmentMap m_additionalPreviewEvents;
 
     void setupMouseEvent(QGraphicsSceneMouseEvent *, MatrixMouseEvent &) const;
     void recreateLines();

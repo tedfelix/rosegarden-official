@@ -23,6 +23,9 @@
 #include <QString>
 #include <QList>
 #include "base/Event.h"
+#include "base/Segment.h"
+#include "MatrixScene.h"
+
 
 
 namespace Rosegarden
@@ -102,7 +105,9 @@ protected:
      * Return false if unchanged from last time.
      * The returned result is owned by the caller.
      */
-    bool getSelection(EventSelection *&selection);
+    bool getSelection
+        (EventSelection *&selection,
+         MatrixScene::EventWithSegmentMap* previewEvents = nullptr);
 
     //--------------- Data members ---------------------------------
 
