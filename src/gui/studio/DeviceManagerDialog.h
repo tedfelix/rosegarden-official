@@ -162,9 +162,9 @@ protected:
     virtual void deviceModified(Device* device) override;
 
     void observeDevice(Device* device);
-    void unobserveDevice(Device* device);
+    void unobserveAllDevices();
 
-    std::set<Device*> m_observedDevices;
+    std::set<Device *> m_observedDevices;
     bool m_observingStudio;
     bool m_isClosing;
 
