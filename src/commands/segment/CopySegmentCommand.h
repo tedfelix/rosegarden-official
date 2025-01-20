@@ -57,7 +57,7 @@ private:
     bool m_detached;
     timeT m_oldEndTime;
     Segment* m_addedSegment;
-    bool m_originalSegmantisLinked;
+    bool m_originalSegmentIsLinked;
 };
 
 

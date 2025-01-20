@@ -365,7 +365,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                     bool copyAsLink = m_segmentCopyingAsLink ||
                         segment->isTrulyLinked();
                     RG_DEBUG << "mouseReleaseEvent copy segment" << copyAsLink;
-                    // make a copyor link of the segment
+                    // make a copy or link of the segment
                     Command* copySegCmnd =
                         new CopySegmentCommand(&comp,
                                                segment,

@@ -47,7 +47,7 @@ CopySegmentCommand::CopySegmentCommand(Composition *composition,
     m_detached(false),
     m_oldEndTime(m_composition->getEndMarker()),
     m_addedSegment(nullptr),
-    m_originalSegmantisLinked(segment->isTrulyLinked())
+    m_originalSegmentIsLinked(segment->isTrulyLinked())
 {
     RG_DEBUG << "ctor" << startTime << track;
 }
@@ -66,13 +66,13 @@ CopySegmentCommand::execute()
     RG_DEBUG << "execute";
     if (m_addedSegment) {
         // been here before
-        RG_DEBUG << "execute add stroed segment";
+        RG_DEBUG << "execute add stored segment";
         m_composition->addSegment(m_addedSegment);
         return ;
     }
 
     Segment *segment;
-    if (m_copyAsLink || m_originalSegmantisLinked) {
+    if (m_copyAsLink || m_originalSegmentIsLinked) {
         RG_DEBUG << "execute linking segment" << m_startTime << m_track;
         segment = SegmentLinker::createLinkedSegment(m_segment);
     } else {
@@ -86,7 +86,7 @@ CopySegmentCommand::execute()
     }
 
     const std::string originalLabel = m_segment->getLabel();
-    if (m_copyAsLink || m_originalSegmantisLinked) {
+    if (m_copyAsLink || m_originalSegmentIsLinked) {
         RG_DEBUG << "execute set label linked";
         segment->setLabel(appendLabel
                           (originalLabel, qstrtostr(tr("(linked)"))));
