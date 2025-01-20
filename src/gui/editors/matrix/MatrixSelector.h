@@ -52,6 +52,9 @@ public:
     void handleMouseDoubleClick(const MatrixMouseEvent *) override;
     virtual void handleMouseTripleClick(const MatrixMouseEvent *);
 
+    void keyPressEvent(QKeyEvent *e) override;
+    void keyReleaseEvent(QKeyEvent *e) override;
+
     /**
      * Create the selection rect
      *

@@ -54,6 +54,9 @@ public:
     virtual void handleMouseDoubleClick(const MatrixMouseEvent *);
     virtual FollowMode handleMouseMove(const MatrixMouseEvent *);
 
+    virtual void keyPressEvent(QKeyEvent*) { }
+    virtual void keyReleaseEvent(QKeyEvent*) { }
+
 public slots:
     /**
      * Respond to an event being deleted -- it may be one that the

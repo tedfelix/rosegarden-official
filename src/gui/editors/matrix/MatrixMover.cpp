@@ -38,8 +38,8 @@
 #include "MatrixViewSegment.h"
 #include "misc/Debug.h"
 
-#include <Qt>
-
+#include <QGraphicsRectItem>
+#include <QKeyEvent>
 
 namespace Rosegarden
 {
@@ -52,7 +52,11 @@ MatrixMover::MatrixMover(MatrixWidget *parent) :
     m_clickSnappedLeftDeltaTime(0),
     m_duplicateElements(),
     m_quickCopy(false),
-    m_lastPlayedPitch(-1)
+    m_lastPlayedPitch(-1),
+    m_dragConstrained(false),
+    m_constraintSize(30),
+    m_constraintH(nullptr),
+    m_constraintV(nullptr)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("draw", SLOT(slotDrawSelected()));
@@ -81,6 +85,8 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     RG_DEBUG << "handleLeftButtonPress() : snapped time = " << e->snappedLeftTime << ", el = " << e->element;
 
     if (!e->element) return;
+
+    m_mousePressPos = e->viewpos;
 
     Segment *segment = m_scene->getCurrentSegment();
     if (!segment) return;
@@ -111,15 +117,25 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
         getSnapGrid()->snapTime(m_currentElement->getViewAbsoluteTime());
     m_clickSnappedLeftDeltaTime = e->snappedLeftTime - snappedAbsoluteLeftTime;
 
+    m_dragConstrained = true;
+    double horizontalZoomFactor;
+    double verticalZoomFactor;
+    m_widget->getZoomFactors(horizontalZoomFactor, verticalZoomFactor);
+    RG_DEBUG << "handleLeftButtonPress zoom factors" <<
+        horizontalZoomFactor << verticalZoomFactor;
+    m_constraintH->setRect
+        (0, e->sceneY - m_constraintSize / verticalZoomFactor,
+         m_scene->width(), 2 * m_constraintSize / verticalZoomFactor);
+    m_constraintV->setRect
+        (e->sceneX - m_constraintSize / horizontalZoomFactor, 0,
+         2* m_constraintSize / horizontalZoomFactor, m_scene->height());
+
+    m_constraintH->show();
+    m_constraintV->show();
+
     m_quickCopy = (e->modifiers & Qt::ControlModifier);
 
-    if (!m_duplicateElements.empty()) {
-        for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
-            delete m_duplicateElements[i]->event();
-            delete m_duplicateElements[i];
-        }
-        m_duplicateElements.clear();
-    }
+    if (!m_duplicateElements.empty()) removeDuplicates();
 
     // Add this element and allow movement
     //
@@ -155,8 +171,6 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     long velocity = m_widget->getCurrentVelocity();
     m_event->get<Int>(BaseProperties::VELOCITY, velocity);
 
-    long pitchOffset = m_currentViewSegment->getSegment().getTranspose();
-
     long pitch = 60;
     m_event->get<Int>(BaseProperties::PITCH, pitch);
 
@@ -170,19 +184,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     m_lastPlayedPitch = pitch;
 
-    if (m_quickCopy && selection) {
-        for (EventContainer::iterator i =
-                 selection->getSegmentEvents().begin();
-             i != selection->getSegmentEvents().end(); ++i) {
-
-            MatrixElement *duplicate = new MatrixElement
-                (m_scene, new Event(**i),
-                 m_widget->isDrumMode(), pitchOffset,
-                 m_scene->getCurrentSegment());
-
-            m_duplicateElements.push_back(duplicate);
-        }
-    }
+    if (m_quickCopy && selection) createDuplicates();
 }
 
 FollowMode
@@ -190,7 +192,30 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 {
     if (!e) return NO_FOLLOW;
 
+    bool quickCopy = (e->modifiers & Qt::ControlModifier);
+    if (quickCopy && ! m_quickCopy) createDuplicates();
+    if (!quickCopy && m_quickCopy) removeDuplicates();
+    m_quickCopy = quickCopy;
+
     //RG_DEBUG << "handleMouseMove() snapped time = " << e->snappedLeftTime;
+    int dx = e->viewpos.x() - m_mousePressPos.x();
+    int dy = e->viewpos.y() - m_mousePressPos.y();
+
+    bool vertical = (abs(dy) > abs(dx));
+    // remove constraints
+    if (abs(dx) > m_constraintSize &&
+        abs(dy) > m_constraintSize) m_dragConstrained = false;
+
+    if (m_dragConstrained) {
+        m_constraintH->show();
+        m_constraintV->show();
+    } else {
+        m_constraintH->hide();
+        m_constraintV->hide();
+    }
+
+    RG_DEBUG << "handleMouseMove vertical" << vertical << m_dragConstrained <<
+        e->viewpos << m_mousePressPos;
 
     setBasicContextHelp(e->modifiers & Qt::ControlModifier);
 
@@ -204,6 +229,11 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 
     timeT newTime = e->snappedLeftTime - m_clickSnappedLeftDeltaTime;
     int newPitch = e->pitch;
+
+    if (m_dragConstrained) {
+        if (vertical) newTime = m_currentElement->getViewAbsoluteTime();
+        else newPitch = m_event->get<Int>(BaseProperties::PITCH);
+    }
 
     emit hoveredOverNoteChanged(newPitch, true, newTime);
 
@@ -236,13 +266,14 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 
         timeT diffTime = element->getViewAbsoluteTime() -
             m_currentElement->getViewAbsoluteTime();
+        timeT newElementTime = newTime + diffTime;
 
         int epitch = 0;
         if (element->event()->has(PITCH)) {
             epitch = element->event()->get<Int>(PITCH);
         }
 
-        element->reconfigure(newTime + diffTime,
+        element->reconfigure(newElementTime,
                              element->getViewDuration(),
                              epitch + diffPitch);
 
@@ -266,10 +297,23 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 
     RG_DEBUG << "handleMouseRelease() - newPitch = " << e->pitch;
 
+    int dx = e->viewpos.x() - m_mousePressPos.x();
+    int dy = e->viewpos.y() - m_mousePressPos.y();
+
+    bool vertical = (abs(dy) > abs(dx));
+
     if (!m_currentElement || !m_currentViewSegment) return;
 
     timeT newTime = e->snappedLeftTime - m_clickSnappedLeftDeltaTime;
     int newPitch = e->pitch;
+
+    if (m_dragConstrained) {
+        m_constraintH->hide();
+        m_constraintV->hide();
+        if (vertical) newTime = m_currentElement->getViewAbsoluteTime();
+        else newPitch = m_event->get<Int>(BaseProperties::PITCH);
+    }
+    m_dragConstrained = false;
 
     if (newPitch > 127) newPitch = 127;
     if (newPitch < 0) newPitch = 0;
@@ -291,11 +335,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
     diffPitch += (pitchOffset * -1);
 
     if ((diffTime == 0 && diffPitch == 0) || selection->getAddedEvents() == 0) {
-        for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
-            delete m_duplicateElements[i]->event();
-            delete m_duplicateElements[i];
-        }
-        m_duplicateElements.clear();
+        removeDuplicates();
         m_currentElement = nullptr;
         m_event = nullptr;
         return;
@@ -409,6 +449,22 @@ void MatrixMover::ready()
 {
     m_widget->setCanvasCursor(Qt::SizeAllCursor);
     setBasicContextHelp();
+
+    if (! m_constraintH) {
+        m_constraintH = new QGraphicsRectItem;
+        m_constraintH->setPen(QPen(QColor(200,200,0)));
+        m_constraintH->setBrush(QBrush(QColor(200,200,0)));
+        m_constraintH->setOpacity(0.4);
+        m_scene->addItem(m_constraintH);
+    }
+
+    if (! m_constraintV) {
+        m_constraintV = new QGraphicsRectItem;
+        m_constraintV->setPen(QPen(QColor(200,200,0)));
+        m_constraintV->setBrush(QBrush(QColor(200,200,0)));
+        m_constraintV->setOpacity(0.4);
+        m_scene->addItem(m_constraintV);
+    }
 }
 
 void MatrixMover::stow()
@@ -434,7 +490,54 @@ void MatrixMover::setBasicContextHelp(bool ctrlPressed)
     }
 }
 
+void MatrixMover::createDuplicates()
+{
+    EventSelection* selection = m_scene->getSelection();
+    if (! selection) return;
+    if (! m_currentViewSegment) return;
+    long pitchOffset = m_currentViewSegment->getSegment().getTranspose();
+    for (EventContainer::iterator i =
+             selection->getSegmentEvents().begin();
+         i != selection->getSegmentEvents().end(); ++i) {
+
+        MatrixElement *duplicate = new MatrixElement
+            (m_scene, new Event(**i),
+             m_widget->isDrumMode(), pitchOffset,
+             m_scene->getCurrentSegment());
+
+        m_duplicateElements.push_back(duplicate);
+    }
+}
+
+void MatrixMover::removeDuplicates()
+{
+    for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
+        delete m_duplicateElements[i]->event();
+        delete m_duplicateElements[i];
+    }
+    m_duplicateElements.clear();
+}
+
+void MatrixMover::keyPressEvent(QKeyEvent *e)
+{
+    bool ctrl = (e->key() == Qt::Key_Control);
+    RG_DEBUG << "keyPressEvent" << e->text() << ctrl;
+    if (ctrl && ! m_quickCopy) {
+        m_quickCopy = true;
+        createDuplicates();
+    }
+}
+
+void MatrixMover::keyReleaseEvent(QKeyEvent *e)
+{
+    bool ctrl = (e->key() == Qt::Key_Control);
+    RG_DEBUG << "keyPressRelease" << e->text() << ctrl;
+    if (ctrl && m_quickCopy) {
+        m_quickCopy = false;
+        removeDuplicates();
+    }
+}
+
 QString MatrixMover::ToolName() { return "mover"; }
 
 }
-

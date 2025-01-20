@@ -430,6 +430,16 @@ MatrixSelector::handleMouseRelease(const MatrixMouseEvent *e)
     setContextHelpFor(e);
 }
 
+void MatrixSelector::keyPressEvent(QKeyEvent *e)
+{
+    if (m_dispatchTool) m_dispatchTool->keyPressEvent(e);
+}
+
+void MatrixSelector::keyReleaseEvent(QKeyEvent *e)
+{
+    if (m_dispatchTool) m_dispatchTool->keyReleaseEvent(e);
+}
+
 void
 MatrixSelector::ready()
 {
