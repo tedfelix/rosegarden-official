@@ -303,7 +303,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    label = new QLabel(tr("Drag with dynamic modifiers"), frame);
+    label = new QLabel(tr("Drag with dynamic modifiers (main window)"), frame);
     tipText = tr(
             "<qt><p>If set, the modifiers CTRL and ALT can be changed "
             "while a drag is in progress to update "
