@@ -214,6 +214,7 @@ BankEditorDialog::~BankEditorDialog()
     for (Device *device : m_observedDevices) {
         device->removeObserver(this);
     }
+    m_observedDevices.clear();
 }
 
 void
@@ -1835,6 +1836,21 @@ void
 BankEditorDialog::slotFileClose()
 {
     RG_DEBUG << "slotFileClose()";
+
+    // unsubscribe here. If the document is about to change this slot
+    // is called. The Studio is about to be deleted
+
+    // Unsubscribe from Studio
+    if (m_observingStudio) {
+        m_observingStudio = false;
+        m_studio->removeObserver(this);
+    }
+
+    // Unsubscribe from Device(s)
+    for (Device *device : m_observedDevices) {
+        device->removeObserver(this);
+    }
+    m_observedDevices.clear();
 
     // Close the window.
     close();
