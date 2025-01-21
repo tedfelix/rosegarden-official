@@ -471,7 +471,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     // Track label width (after buttons, i.e. just the text)
     label = new QLabel(tr("Track Label width"), frame);
     tipText = tr(
-            "<qt><p>Select the width of track labels names. This is the text "
+            "<qt><p>Select the width of track labels. This is the text "
             "after the mute, record and solo buttons</p></qt>");
     label->setToolTip(tipText);
     layout->addWidget(label, row, 0);
