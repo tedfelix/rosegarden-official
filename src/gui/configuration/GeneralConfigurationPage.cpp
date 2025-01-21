@@ -303,6 +303,23 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
+    label = new QLabel(tr("Drag with dynamic modifiers (main window)"), frame);
+    tipText = tr(
+            "<qt><p>If set, the modifiers CTRL and ALT can be changed "
+            "while a drag is in progress to update "
+            "copy/move behavior.</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+    m_dynamicDrag = new QCheckBox(frame);
+    m_dynamicDrag->setToolTip(tipText);
+    m_dynamicDrag->setChecked(Preferences::getDynamicDrag());
+    connect(m_dynamicDrag, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_dynamicDrag, row, 1, 1, 2);
+
+    ++row;
+
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     // Skip a row.  Leave some space for the next field.
@@ -437,7 +454,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_trackSize->addItem(tr("Medium"));
     m_trackSize->addItem(tr("Large"));
     m_trackSize->addItem(tr("Extra Large"));
-    
+
     m_trackSize->setCurrentIndex(
             settings.value("track_size", 0).toInt());
     connect(m_trackSize, static_cast<void(QComboBox::*)(int)>(
@@ -456,7 +473,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     tipText = tr(
             "<qt><p>Select the width of track labels names. This is the text "
             "after the mute, record and solo buttons</p></qt>");
-    label->setToolTip(tipText);    
+    label->setToolTip(tipText);
     layout->addWidget(label, row, 0);
 
     m_trackLabelWidth = new QComboBox(frame);
@@ -633,6 +650,7 @@ void GeneralConfigurationPage::apply()
     Preferences::setAdvancedLooping(m_advancedLooping->isChecked());
     Preferences::setAutoChannels(m_autoChannels->isChecked());
     Preferences::setLV2(m_lv2->isChecked());
+    Preferences::setDynamicDrag(m_dynamicDrag->isChecked());
 
     // Presentation tab
 
@@ -659,11 +677,11 @@ void GeneralConfigurationPage::apply()
             (settings.value("track_size", 0).toInt() !=
              m_trackSize->currentIndex());
     settings.setValue("track_size", m_trackSize->currentIndex());
-    
+
     const bool trackLabelWidthChanged =
              (settings.value("track_label_width", 2).toInt() !=
               m_trackLabelWidth->currentIndex());
-    settings.setValue("track_label_width", m_trackLabelWidth->currentIndex());    
+    settings.setValue("track_label_width", m_trackLabelWidth->currentIndex());
     settings.endGroup();
 
     Preferences::setUseNativeFileDialogs(m_useNativeFileDialogs->isChecked());

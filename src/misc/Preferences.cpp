@@ -193,6 +193,18 @@ bool Preferences::getLV2()
     return lv2.get();
 }
 
+PreferenceBool dynamicDrag(GeneralOptionsConfigGroup, "dynamicDrag", false);
+
+void Preferences::setDynamicDrag(bool value)
+{
+    dynamicDrag.set(value);
+}
+
+bool Preferences::getDynamicDrag()
+{
+    return dynamicDrag.get();
+}
+
 PreferenceBool autoChannels(ExperimentalConfigGroup, "autoChannels", false);
 
 void Preferences::setAutoChannels(bool value)

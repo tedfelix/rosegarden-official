@@ -693,7 +693,6 @@ set(rg_CPPS
   commands/segment/MergeFileCommand.cpp
   commands/segment/SegmentColourMapCommand.cpp
   commands/segment/SegmentRecordCommand.cpp
-  commands/segment/SegmentQuickCopyCommand.cpp
   commands/segment/FitToBeatsCommand.cpp
   commands/segment/AudioSegmentInsertCommand.cpp
   commands/segment/AudioSegmentRescaleCommand.cpp
@@ -718,7 +717,6 @@ set(rg_CPPS
   commands/segment/AddTimeSignatureAndNormalizeCommand.cpp
   commands/segment/EraseSegmentsStartingInRangeCommand.cpp
   commands/segment/SegmentRepeatToCopyCommand.cpp
-  commands/segment/SegmentQuickLinkCommand.cpp
   commands/segment/SegmentColourCommand.cpp
   commands/segment/InsertRangeCommand.cpp
   commands/segment/AudioSegmentAutoSplitCommand.cpp

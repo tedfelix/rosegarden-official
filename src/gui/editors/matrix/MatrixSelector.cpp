@@ -430,6 +430,16 @@ MatrixSelector::handleMouseRelease(const MatrixMouseEvent *e)
     setContextHelpFor(e);
 }
 
+void MatrixSelector::keyPressEvent(QKeyEvent *e)
+{
+    if (m_dispatchTool) m_dispatchTool->keyPressEvent(e);
+}
+
+void MatrixSelector::keyReleaseEvent(QKeyEvent *e)
+{
+    if (m_dispatchTool) m_dispatchTool->keyReleaseEvent(e);
+}
+
 void
 MatrixSelector::ready()
 {
@@ -506,8 +516,10 @@ MatrixSelector::setViewCurrentSelection(bool always)
 {
     if (always) m_previousCollisions.clear();
 
+    MatrixScene::EventWithSegmentMap previewEvents;
+
     EventSelection* selection = nullptr;
-    bool changed = getSelection(selection);
+    bool changed = getSelection(selection, &previewEvents);
     if (!changed) {
         delete selection;
         return;
@@ -523,12 +535,16 @@ MatrixSelector::setViewCurrentSelection(bool always)
 
         m_scene->setSelection(selection, true);
     }
+    m_scene->setExtraPreviewEvents(previewEvents);
 }
 
 bool
-MatrixSelector::getSelection(EventSelection *&selection)
+MatrixSelector::getSelection(EventSelection *&selection,
+                             MatrixScene::EventWithSegmentMap* previewEvents)
 {
     if (!m_selectionRect || !m_selectionRect->isVisible()) return 0;
+
+    if (previewEvents) previewEvents->clear();
 
     Segment& originalSegment = m_currentViewSegment->getSegment();
     selection = new EventSelection(originalSegment);
@@ -562,12 +578,24 @@ MatrixSelector::getSelection(EventSelection *&selection)
         for (int i = 0; i < l.size(); ++i) {
             QGraphicsItem *item = l[i];
             MatrixElement *element = MatrixElement::getMatrixElement(item);
-            if (element && element->getSegment() ==
-                           element->getScene()->getCurrentSegment()) {
-                //!!! NB. In principle, this element might not come
-                //!!! from the right segment (in practice we only have
-                //!!! one segment, but that may change)
-                selection->addEvent(element->event());
+            if (element) {
+                // The selection should only contain elements from the
+                // current segment however for preview play we should
+                // have all the elements
+                if (element->getSegment() ==
+                    element->getScene()->getCurrentSegment()) {
+                    selection->addEvent(element->event());
+                } else {
+                    // previewEvents contains events from other
+                    // segments which should also be preview played
+                    if (previewEvents) {
+                        if (previewEvents->find(element->event()) ==
+                            previewEvents->end()) {
+                            (*previewEvents)[element->event()] =
+                                element->getSegment();
+                        }
+                    }
+                }
             }
         }
     }

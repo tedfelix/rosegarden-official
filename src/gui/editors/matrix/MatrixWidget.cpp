@@ -1118,6 +1118,14 @@ MatrixWidget::addControlRuler(QAction *action)
 }
 
 void
+MatrixWidget::getZoomFactors(double& horizontalZoomFactor,
+                             double& verticalZoomFactor) const
+{
+    horizontalZoomFactor = m_hZoomFactor;
+    verticalZoomFactor = m_vZoomFactor;
+}
+
+void
 MatrixWidget::slotHScrollBarRangeChanged(int min, int max)
 {
     if (max > min)
@@ -1731,6 +1739,18 @@ MatrixWidget::slotZoomOut()
 
     m_Hzoom->setValue(v);
     slotHorizontalThumbwheelMoved(v);
+}
+
+void MatrixWidget::keyPressEvent(QKeyEvent *e)
+{
+    if (m_currentTool) m_currentTool->keyPressEvent(e);
+    QWidget::keyPressEvent(e);
+}
+
+void MatrixWidget::keyReleaseEvent(QKeyEvent *e)
+{
+    if (m_currentTool) m_currentTool->keyReleaseEvent(e);
+    QWidget::keyReleaseEvent(e);
 }
 
 }
