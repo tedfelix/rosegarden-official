@@ -1338,6 +1338,9 @@ NotationScene::segmentRemoved(const Composition *comp, Segment *segment)
     // check for staffs linked to the deleted segment
     std::set<NotationStaff*> staffsToDelete;
 
+    // always delete the staff for the deleted segment
+    staffsToDelete.insert(*staffToDelete);
+
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
          i != m_staffs.end();
          ++i) {
