@@ -27,13 +27,13 @@
 #include "base/SnapGrid.h"
 #include "base/Track.h"
 #include "commands/segment/CopySegmentCommand.h"
-#include "commands/segment/SegmentQuickLinkCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "CompositionModelImpl.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/general/RosegardenScrollView.h"
+#include "misc/Preferences.h"
 #include "SegmentPencil.h"
 #include "SegmentResizer.h"
 #include "SegmentToolBox.h"
@@ -316,33 +316,6 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                         tr("Move %n Segment(s)", "", changingSegments.size()));
             }
 
-            if (m_segmentCopyMode) {
-                // Make copies of the original Segment(s).  These copies will
-                // take the place of the originals.
-
-                SegmentSelection selectedItems = m_canvas->getSelectedSegments();
-
-                // for each selected segment
-                for (SegmentSelection::iterator it = selectedItems.begin();
-                     it != selectedItems.end();
-                     ++it) {
-                    Segment *segment = *it;
-
-                    Command *command = nullptr;
-
-                    if (m_segmentCopyingAsLink) {
-                        command = new SegmentQuickLinkCommand(segment);
-                    } else {
-                        // if it's a link, copy as link
-                        if (segment->isTrulyLinked())
-                            command = new SegmentQuickLinkCommand(segment);
-                        // for segment copy do nothing here
-                    }
-
-                    if (command) macroCommand->addCommand(command);
-                }
-            }
-
             const int startDragTrackPos =
                     m_canvas->grid().getYBin(m_clickPoint.y());
             const int currentTrackPos = m_canvas->grid().getYBin(pos.y());
@@ -388,14 +361,17 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                         segment->getEndMarkerTime(false) -
                         segment->getStartTime();
 
-                if (m_segmentCopyMode && ! m_segmentCopyingAsLink &&
-                    ! segment->isTrulyLinked()) {
-                    // make a true copy of the segment
+                if (m_segmentCopyMode) {
+                    bool copyAsLink = m_segmentCopyingAsLink ||
+                        segment->isTrulyLinked();
+                    RG_DEBUG << "mouseReleaseEvent copy segment" << copyAsLink;
+                    // make a copy or link of the segment
                     Command* copySegCmnd =
                         new CopySegmentCommand(&comp,
                                                segment,
                                                startTime,
-                                               newTrackId);
+                                               newTrackId,
+                                               copyAsLink);
                     macroCommand->addCommand(copySegCmnd);
                 } else {
                     segmentReconfigureCommand->addSegment
@@ -481,14 +457,16 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     setSnapTime(e, SnapGrid::SnapToBeat);
 
     // start move on selected items only once
-    // update mode flags
 
-    bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
-    bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
-    // Ctrl and Alt+Ctrl are segment copy.
-    m_segmentCopyMode = ctrl;
-    // Alt+Ctrl is copy as link.
-    m_segmentCopyingAsLink = (alt && ctrl);
+    if (Preferences::getDynamicDrag()) {
+        // update mode flags
+        bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
+        bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
+        // Ctrl and Alt+Ctrl are segment copy.
+        m_segmentCopyMode = ctrl;
+        // Alt+Ctrl is copy as link.
+        m_segmentCopyingAsLink = (alt && ctrl);
+    }
 
     if (!m_selectionMoveStarted) {
         m_selectionMoveStarted = true;
@@ -606,7 +584,7 @@ void SegmentSelector::keyPressEvent(QKeyEvent *e)
     setContextHelpFor(m_lastMousePos, e->modifiers());
 
     // if Ctrl or Alt is pressed update drag function
-    if (m_selectionMoveStarted) {
+    if (m_selectionMoveStarted && Preferences::getDynamicDrag()) {
         bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
         bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
         RG_DEBUG << "keyPressEvent modifiers" << ctrl << alt;
@@ -627,7 +605,7 @@ void SegmentSelector::keyReleaseEvent(QKeyEvent *e)
     setContextHelpFor(m_lastMousePos, e->modifiers());
 
     // if Ctrl or Alt is released update drag function
-    if (m_selectionMoveStarted) {
+    if (m_selectionMoveStarted && Preferences::getDynamicDrag()) {
         bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
         bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
         RG_DEBUG << "keyReleaseEvent modifiers" << ctrl << alt;

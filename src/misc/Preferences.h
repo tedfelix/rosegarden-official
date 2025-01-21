@@ -96,6 +96,9 @@ namespace Preferences
     void setLV2(bool value);
     bool getLV2();
 
+    void setDynamicDrag(bool value);
+    bool getDynamicDrag();
+
     void setAutoChannels(bool value);
     bool getAutoChannels();
 

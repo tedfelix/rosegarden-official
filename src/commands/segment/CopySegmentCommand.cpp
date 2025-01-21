@@ -25,6 +25,7 @@
 #include "misc/AppendLabel.h"  // appendLabel()
 #include "base/Composition.h"
 #include "base/Segment.h"
+#include "base/SegmentLinker.h"
 #include "base/Track.h"
 
 #include <QString>
@@ -35,15 +36,18 @@ namespace Rosegarden
 CopySegmentCommand::CopySegmentCommand(Composition *composition,
                                        Segment* segment,
                                        timeT startTime,
-                                       TrackId track) :
+                                       TrackId track,
+                                       bool copyAsLink) :
     NamedCommand(getGlobalName()),
     m_composition(composition),
     m_segment(segment),
     m_startTime(startTime),
     m_track(track),
+    m_copyAsLink(copyAsLink),
     m_detached(false),
     m_oldEndTime(m_composition->getEndMarker()),
-    m_addedSegment(nullptr)
+    m_addedSegment(nullptr),
+    m_originalSegmentIsLinked(segment->isTrulyLinked())
 {
     RG_DEBUG << "ctor" << startTime << track;
 }
@@ -62,15 +66,35 @@ CopySegmentCommand::execute()
     RG_DEBUG << "execute";
     if (m_addedSegment) {
         // been here before
+        RG_DEBUG << "execute add stored segment";
         m_composition->addSegment(m_addedSegment);
         return ;
     }
 
-    RG_DEBUG << "execute cloning segment" << m_startTime << m_track;
-    Segment *segment = m_segment->clone();
-    const std::string originalLabel = segment->getLabel();
-    segment->setLabel(
-            appendLabel(originalLabel, qstrtostr(tr("(copied)"))));
+    Segment *segment;
+    if (m_copyAsLink || m_originalSegmentIsLinked) {
+        RG_DEBUG << "execute linking segment" << m_startTime << m_track;
+        segment = SegmentLinker::createLinkedSegment(m_segment);
+    } else {
+        RG_DEBUG << "execute cloning segment" << m_startTime << m_track;
+        segment = m_segment->clone(true);
+        // make sure it´s not a link
+        SegmentLinker* linker = segment->getLinker();
+        if (linker) {
+            linker->removeLinkedSegment(m_segment);
+        }
+    }
+
+    const std::string originalLabel = m_segment->getLabel();
+    if (m_copyAsLink || m_originalSegmentIsLinked) {
+        RG_DEBUG << "execute set label linked";
+        segment->setLabel(appendLabel
+                          (originalLabel, qstrtostr(tr("(linked)"))));
+    } else {
+        RG_DEBUG << "execute set label copied";
+        segment->setLabel(appendLabel
+                          (originalLabel, qstrtostr(tr("(copied)"))));
+    }
     segment->setStartTime(m_startTime);
     segment->setTrack(m_track);
     m_composition->addSegment(segment);

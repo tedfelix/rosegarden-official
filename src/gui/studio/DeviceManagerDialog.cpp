@@ -61,11 +61,9 @@ DeviceManagerDialog::~DeviceManagerDialog()
         m_observingStudio = false;
         m_studio->removeObserver(this);
     }
-    for(Device* device : m_observedDevices) {
-        unobserveDevice(device);
-    }
-}
 
+    unobserveAllDevices();
+}
 
 DeviceManagerDialog::DeviceManagerDialog(QWidget *parent) :
     QMainWindow(parent),
@@ -142,14 +140,15 @@ DeviceManagerDialog::slotCloseButtonPress()
 {
     RG_DEBUG << "slotCloseButtonPress";
     m_isClosing = true;
+
     // remove observers here to avoid crash on studio deletion
+
     if (m_observingStudio) {
         m_observingStudio = false;
         m_studio->removeObserver(this);
     }
-    for(Device* device : m_observedDevices) {
-        unobserveDevice(device);
-    }
+
+    unobserveAllDevices();
 
     /*
        if (m_doc) {
@@ -1148,7 +1147,14 @@ void DeviceManagerDialog::deviceAdded(Device* device)
 void DeviceManagerDialog::deviceRemoved(Device* device)
 {
     RG_DEBUG << "deviceRemoved" << device;
-    unobserveDevice(device);
+
+    // Not found?  Bail.
+    if (m_observedDevices.find(device) == m_observedDevices.end())
+        return;
+
+    m_observedDevices.erase(device);
+    device->removeObserver(this);
+
     slotRefreshOutputPorts();
     slotRefreshInputPorts();
 }
@@ -1168,12 +1174,13 @@ void DeviceManagerDialog::observeDevice(Device* device)
     device->addObserver(this);
 }
 
-void DeviceManagerDialog::unobserveDevice(Device* device)
+void DeviceManagerDialog::unobserveAllDevices()
 {
-    RG_DEBUG << "unobserveDevice" << device;
-    if (m_observedDevices.find(device) == m_observedDevices.end()) return;
-    m_observedDevices.erase(device);
-    device->removeObserver(this);
+    for (Device *device : m_observedDevices) {
+        device->removeObserver(this);
+    }
+    m_observedDevices.clear();
 }
 
-} // namespace Rosegarden
+
+}
