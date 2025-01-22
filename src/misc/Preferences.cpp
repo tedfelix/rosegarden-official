@@ -193,7 +193,8 @@ bool Preferences::getLV2()
     return lv2.get();
 }
 
-PreferenceBool dynamicDrag(GeneralOptionsConfigGroup, "dynamicDrag", false);
+// NOTE: "dynamicDrag" is deprecated in the .conf as it had the wrong default.
+PreferenceBool dynamicDrag(GeneralOptionsConfigGroup, "dynamicDrag2", true);
 
 void Preferences::setDynamicDrag(bool value)
 {

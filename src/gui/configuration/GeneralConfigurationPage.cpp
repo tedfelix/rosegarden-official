@@ -303,11 +303,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    label = new QLabel(tr("Drag with dynamic modifiers (main window)"), frame);
+    label = new QLabel(tr("Drag with dynamic modifiers (main/matrix)"), frame);
     tipText = tr(
-            "<qt><p>If set, the modifiers CTRL and ALT can be changed "
-            "while a drag is in progress to update "
-            "copy/move behavior.</p></qt>");
+            "<qt><p>If set, the CTRL and ALT keys can be pressed or released "
+            "while a drag is in progress to change copy/move behavior.  "
+            "This applies to the main window and the matrix editor.</p></qt>");
     label->setToolTip(tipText);
     layout->addWidget(label, row, 0);
     m_dynamicDrag = new QCheckBox(frame);
