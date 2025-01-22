@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[FileDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "FileDialog.h"
 
