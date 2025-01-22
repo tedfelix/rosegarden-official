@@ -264,6 +264,27 @@ namespace Rosegarden
 {
 
 
+namespace
+{
+    // Like QFileInfo::canonicalFilePath(), but returns the largest directory
+    // path that actually exists.  E.g. if handed /a/b/c/d/e.txt and d does not
+    // exist, this returns /a/b/c.
+    QString existingDir(const QString &path)
+    {
+        RG_DEBUG << "existingDir" << path;
+
+        QFileInfo dirInfo(path);
+        // For each directory level...
+        while (true) {
+            RG_DEBUG << "existingDir" << dirInfo;
+            if (dirInfo.isDir())
+                return dirInfo.canonicalFilePath();
+            // Remove a level.
+            dirInfo.setFile(dirInfo.dir().path());
+        }
+    }
+}
+
 RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
                                            QObject *startupStatusMessageReceiver) :
     QMainWindow(nullptr),
@@ -5925,25 +5946,6 @@ RosegardenMainWindow::doStop(bool autoStop)
             m_seqManager->stop(autoStop);
     } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
-    }
-}
-
-QString
-RosegardenMainWindow::existingDir(const QString& path)
-{
-    RG_DEBUG << "existingDir" << path;
-    QFileInfo finfo(path);
-    if (finfo.exists() && finfo.isDir()) {
-        return finfo.canonicalFilePath();
-    }
-    QDir dir = finfo.dir();
-    QFileInfo dinfo;
-    dinfo.setFile(dir.path());
-    while (true) {
-        RG_DEBUG << "existingDir" << dinfo;
-        if (dinfo.exists()) return dinfo.canonicalFilePath();
-        dir = dinfo.dir();
-        dinfo.setFile(dir.path());
     }
 }
 

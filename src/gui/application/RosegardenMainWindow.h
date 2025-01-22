@@ -1684,8 +1684,6 @@ private:
 
     void doStop(bool autoStop);
 
-    static QString existingDir(const QString& path);
-
 private slots:
     void signalAction(int);
 
