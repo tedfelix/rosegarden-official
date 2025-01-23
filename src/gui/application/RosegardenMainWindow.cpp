@@ -269,6 +269,10 @@ namespace
     // Like QFileInfo::canonicalFilePath(), but returns the largest directory
     // path that actually exists.  E.g. if handed /a/b/c/d/e.txt and d does not
     // exist, this returns /a/b/c.
+    // ??? Callers who only call this on success can probably just call
+    //     QFileInfo::canonicalPath() instead.  existingDir() still makes sense
+    //     before the Open and Save As dialogs in case the directory was
+    //     deleted.
     QString existingDir(const QString &path)
     {
         RG_DEBUG << "existingDir" << path;
@@ -282,6 +286,23 @@ namespace
             // Remove a level.
             dirInfo.setFile(dirInfo.dir().path());
         }
+    }
+
+    void setFileSaveAsDirectory(const QString &directory)
+    {
+        QSettings settings;
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        settings.setValue("save_file", directory);
+    }
+
+    QString getFileSaveAsDirectory()
+    {
+        QSettings settings;
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        // Get the last Save As location, or DocumentsLocation if there is none.
+        return settings.value(
+                "save_file",
+                QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
     }
 }
 
@@ -2199,12 +2220,9 @@ RosegardenMainWindow::slotFileSave()
                                   .arg(docFilePath));
     }
 
-    // update the save path
-    QString directory = existingDir(docFilePath);
-    QSettings settings;
-    settings.beginGroup(LastUsedPathsConfigGroup);
-    settings.setValue("save_file", directory);
-    settings.endGroup();
+    // If save was successful, update the Save As directory.
+    if (success)
+        setFileSaveAsDirectory(existingDir(docFilePath));
 
     // Let the audio file manager know we've just saved so it can prompt the
     // user for an audio file location if it needs one.
@@ -2228,54 +2246,19 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
     const QString filterExtension =
             filter.mid(left + 1, right - left - 1);
 
-    QSettings settings;
-    settings.beginGroup(LastUsedPathsConfigGroup);
-    QString path_key = "save_file";
-
     QString directory;
-
-    // Set this to 1 for the original behavior where each extension had
-    // its own persistent path in the settings.
-#define PATH_BY_EXTENSION 0
-
-#if PATH_BY_EXTENSION
-
-    // Keep track of last place used to save, by type of file.
-    // This is useful for a workflow where different file types are
-    // kept in different directories.
-
-    if (filterExtension == ".rgt")      path_key = "save_template";
-    else if (filterExtension == ".mid") path_key = "export_midi";
-    else if (filterExtension == ".xml") path_key = "export_music_xml";
-    else if (filterExtension == ".ly")  path_key = "export_lilypond";
-    else if (filterExtension == ".csd") path_key = "export_csound";
-    else if (filterExtension == ".mup") path_key = "export_mup";
-
-    // Get the directory from the settings
-    directory = settings.value(path_key, QDir::homePath()).toString();
-    directory = existingDir(directory);
-
-#else
 
     // Most applications (e.g. OpenOffice.org and the GIMP) use the document's
     // directory for Save As... and Export rather than the last directory
     // the user saved to.  This code implements that approach along with
     // remembering the previous save directory for unnamed files.
 
-    const bool unnamed =
-            RosegardenDocument::currentDocument->getAbsFilePath().isEmpty();
-
-    if (unnamed) {
-        // Go with last save location, or DocumentsLocation if there is none.
-        directory = settings.value(
-                path_key,
-                QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
-        directory = existingDir(directory);
-    } else {
+    // If the file is unnamed...
+    if (RosegardenDocument::currentDocument->getAbsFilePath().isEmpty()) {
+        directory = existingDir(getFileSaveAsDirectory());
+    } else {  // File has a name.  Go with its directory.
         directory = originalFileInfo.absolutePath();
     }
-
-#endif
 
     // Launch the Save As dialog.
     QString name = FileDialog::getSaveFileName(
@@ -2314,9 +2297,9 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
     }
 
     // Write the directory to the settings
-    directory = existingDir(name);
-    settings.setValue(path_key, directory);
-    settings.endGroup();
+    // ??? We only want to do this on successful write.  We need to move
+    //     this out to all callers.
+    setFileSaveAsDirectory(existingDir(name));
 
     return name;
 }
