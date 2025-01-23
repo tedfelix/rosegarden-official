@@ -179,7 +179,7 @@ public:
     /// merge a file, explicitly specifying its type, allow multiple files
     void mergeFile(QStringList filePathList, ImportType type);
 
-    void openURL(const QUrl &url, bool replace);
+    bool openURL(const QUrl &url, bool replace);
 
     void exportMIDIFile(QString file);
 

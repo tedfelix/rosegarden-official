@@ -1966,7 +1966,7 @@ RosegardenMainWindow::openURL(const QString& url)
     openURL(QUrl(url), true);  // replace
 }
 
-void
+bool
 RosegardenMainWindow::openURL(const QUrl &url, bool replace)
 {
     SetWaitCursor waitCursor;
@@ -1977,7 +1977,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Malformed URL\n%1").arg(url.toString()));
 
-        return;
+        return false;
     }
 
     FileSource source(url);
@@ -1985,7 +1985,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     if (!source.isAvailable()) {
         QMessageBox::critical(this, tr("Rosegarden"),
                 tr("Cannot open file %1").arg(url.toString()));
-        return;
+        return false;
     }
 
     //RG_DEBUG << "openURL(): local filename =" << source.getLocalFilename();
@@ -1993,7 +1993,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     // Let the user save the current document if it's been modified.
     // ??? rename: safeToClobber()?  Might be too geared toward the result.
     if (!saveIfModified())
-        return;
+        return false;
 
     // In case the source is remote, wait for the file to be downloaded to
     // the local file.
@@ -2005,8 +2005,10 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     if (replace)
         openFile(source.getLocalFilename());
     else
-        // this only mergest the first file for now
+        // this only merges the first file for now
         mergeFile(fileList, ImportCheckType);
+
+    return true;
 }
 
 void
@@ -2040,14 +2042,6 @@ RosegardenMainWindow::openFileDialogAt(QString target)
     if (fname.isEmpty())
         return;
 
-    if (target.isEmpty()) {
-        // Update the last used path for File > Open.
-        directory = existingDir(fname);
-        settings.beginGroup(LastUsedPathsConfigGroup);
-        settings.setValue("open_file", directory);
-        settings.endGroup();
-    }
-
     // If a document is currently loaded
     if (RosegardenDocument::currentDocument) {
         // Check to see if the user needs/wants to save the current document.
@@ -2060,7 +2054,16 @@ RosegardenMainWindow::openFileDialogAt(QString target)
     }
 
     // Continue opening the file.
-    openURL(QUrl::fromLocalFile(fname), true);  // replace
+    const bool success = openURL(QUrl::fromLocalFile(fname), true);  // replace
+
+    // Only update the .conf directory if we were successful.
+    if (target.isEmpty()  &&  success) {
+        // Update the last used path for File > Open.
+        directory = existingDir(fname);
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        settings.setValue("open_file", directory);
+        settings.endGroup();
+    }
 }
 
 void
