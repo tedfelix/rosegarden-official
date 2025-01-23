@@ -1975,7 +1975,7 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 Rosegarden::ViewElement *
 NotationStaff::makeViewElement(Rosegarden::Event* e)
 {
-    return new NotationElement(e);
+    return new NotationElement(e, &getSegment());
 }
 
 bool

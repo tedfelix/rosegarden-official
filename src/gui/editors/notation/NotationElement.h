@@ -33,7 +33,7 @@ namespace Rosegarden
 {
 
 class Event;
-
+class Segment;
 
 /**
  * The Notation H and V layout is performed on a
@@ -54,7 +54,7 @@ public:
      * parameter.  NotationElement does not take ownership of the
      * event itself.
      */
-    explicit NotationElement(Event *event);
+    explicit NotationElement(Event *event, Segment *segment);
 
     /**
      * Only destroy the graphical representation of the Event, not the
@@ -180,6 +180,8 @@ public:
 
     void setHighlight(bool highlight);
 
+    Segment* getSegment() { return m_segment; }
+
 protected:
     double m_airX;
     double m_airWidth;
@@ -196,6 +198,7 @@ protected:
 
  private:
     bool m_highlight;
+    Segment *m_segment;
 };
 
 typedef ViewElementList NotationElementList;

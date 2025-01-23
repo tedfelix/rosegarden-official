@@ -34,7 +34,7 @@ namespace Rosegarden
 
 static const int NotationElementData = 1;
 
-NotationElement::NotationElement(Event *event) :
+NotationElement::NotationElement(Event *event, Segment *segment) :
     ViewElement(event),
     m_airX(0),
     m_airWidth(0),
@@ -42,7 +42,8 @@ NotationElement::NotationElement(Event *event) :
     m_isColliding(false),
     m_item(nullptr),
     m_extraItems(nullptr),
-    m_highlight(true)
+    m_highlight(true),
+    m_segment(segment)
 {
     //RG_DEBUG << "ctor: " << this << " wrapping " << event;
 }

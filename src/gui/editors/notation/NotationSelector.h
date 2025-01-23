@@ -20,6 +20,7 @@
 
 #include "NotationTool.h"
 #include "NotationMouseEvent.h"
+#include "NotationScene.h"
 #include "base/Event.h"
 
 #include <QString>
@@ -142,7 +143,8 @@ protected:
 
     void drag(int x, int y, bool final);
 
-    EventSelection *getEventsInSelectionRect();
+    EventSelection *getEventsInSelectionRect
+        (NotationScene::EventWithSegmentMap* previewEvents);
 
     //--------------- Data members ---------------------------------
 
