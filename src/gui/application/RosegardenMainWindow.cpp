@@ -2296,11 +2296,6 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
             return "";
     }
 
-    // Write the directory to the settings
-    // ??? We only want to do this on successful write.  We need to move
-    //     this out to all callers.
-    setFileSaveAsDirectory(existingDir(name));
-
     return name;
 }
 
@@ -2354,6 +2349,9 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
         return false;
 
     }
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(newName));
 
     if (!asTemplate) {
         // Let the audio file manager know we've just saved so it can prompt the
@@ -5253,6 +5251,10 @@ RosegardenMainWindow::slotExportProject()
     if (dialog->exec() != QDialog::Accepted) {
         return;
     }
+
+    // ProjectPackager has no success() routine.  Stick with existingDir()
+    // just in case we have a bad dir name by this point.
+    setFileSaveAsDirectory(existingDir(fileName));
 }
 
 void
@@ -5268,10 +5270,13 @@ RosegardenMainWindow::slotExportMIDI()
     if (fileName.isEmpty())
         return ;
 
-    exportMIDIFile(fileName);
+    const bool success = exportMIDIFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
-void
+bool
 RosegardenMainWindow::exportMIDIFile(QString file)
 {
     // Progress Dialog
@@ -5298,7 +5303,11 @@ RosegardenMainWindow::exportMIDIFile(QString file)
     if (!midiFile.convertToMidi(RosegardenDocument::currentDocument, file)) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5314,10 +5323,13 @@ RosegardenMainWindow::slotExportCsound()
     if (fileName.isEmpty())
         return ;
 
-    exportCsoundFile(fileName);
+    const bool success = exportCsoundFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
-void
+bool
 RosegardenMainWindow::exportCsoundFile(QString file)
 {
     // Progress Dialog
@@ -5351,7 +5363,10 @@ RosegardenMainWindow::exportCsoundFile(QString file)
     if (!csoundExporter.write()) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5366,10 +5381,13 @@ RosegardenMainWindow::slotExportMup()
     if (fileName.isEmpty())
         return ;
 
-    exportMupFile(fileName);
+    const bool success = exportMupFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
-void
+bool
 RosegardenMainWindow::exportMupFile(QString file)
 {
     // Progress Dialog
@@ -5399,7 +5417,11 @@ RosegardenMainWindow::exportMupFile(QString file)
     if (!mupExporter.write()) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5415,7 +5437,10 @@ RosegardenMainWindow::slotExportLilyPond()
     if (fileName.isEmpty())
         return ;
 
-    exportLilyPondFile(fileName);
+    const bool success = exportLilyPondFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
 
@@ -5474,7 +5499,7 @@ RosegardenMainWindow::getLilyPondTmpFilename()
 
 
 bool
-RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
+RosegardenMainWindow::exportLilyPondFile(const QString &file, bool forPreview)
 {
     QString caption;
     QString heading;
@@ -5537,7 +5562,10 @@ RosegardenMainWindow::slotExportMusicXml()
     if (fileName.isEmpty())
         return ;
 
-    exportMusicXmlFile(fileName);
+    const bool success = exportMusicXmlFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
 void
@@ -5583,13 +5611,13 @@ RosegardenMainWindow::slotExportWAV()
     m_seqManager->setExportWavFile(fileName);
 }
 
-void
+bool
 RosegardenMainWindow::exportMusicXmlFile(QString file)
 {
     MusicXMLOptionsDialog dialog(this, RosegardenDocument::currentDocument, "", "");
 
     if (dialog.exec() != QDialog::Accepted)
-        return;
+        return false;
 
     // Progress Dialog
     // Note: Label text will be set later in the process.
@@ -5622,7 +5650,11 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
         QMessageBox::warning(this,
                 tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+
+        return false;
     }
+
+    return true;
 }
 
 void

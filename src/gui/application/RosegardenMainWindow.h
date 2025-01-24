@@ -181,16 +181,16 @@ public:
 
     bool openURL(const QUrl &url, bool replace);
 
-    void exportMIDIFile(QString file);
+    bool exportMIDIFile(QString file);
 
     /// export a Csound scorefile
-    void exportCsoundFile(QString file);
+    bool exportCsoundFile(QString file);
 
-    void exportMupFile(QString file);
+    bool exportMupFile(QString file);
 
-    bool exportLilyPondFile(QString file, bool forPreview = false);
+    bool exportLilyPondFile(const QString &file, bool forPreview = false);
 
-    void exportMusicXmlFile(QString file);
+    bool exportMusicXmlFile(QString file);
 
     SequenceManager *getSequenceManager() { return m_seqManager; }
 
