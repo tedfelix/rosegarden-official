@@ -266,13 +266,9 @@ namespace Rosegarden
 
 namespace
 {
-    // Like QFileInfo::canonicalFilePath(), but returns the largest directory
+    // Like QFileInfo::canonicalPath(), but returns the largest directory
     // path that actually exists.  E.g. if handed /a/b/c/d/e.txt and d does not
     // exist, this returns /a/b/c.
-    // ??? Callers who only call this on success can probably just call
-    //     QFileInfo::canonicalPath() instead.  existingDir() still makes sense
-    //     before the Open and Save As dialogs in case the directory was
-    //     deleted.
     QString existingDir(const QString &path)
     {
         RG_DEBUG << "existingDir" << path;
@@ -2131,30 +2127,14 @@ RosegardenMainWindow::slotMerge()
             this, tr("Select File(s)"), directory,
                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                tr("All files") + " (*)", nullptr);
+    if (fileList.isEmpty())
+        return;
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    mergeFile(fileList, ImportCheckType);
 
-    /* Former behaviour for single file remove this block if accepted
-    const QString file = FileDialog::getOpenFileName(this, tr("Open File"), directory,
-               tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
-               tr("All files") + " (*)", nullptr);
-
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    */
-
-    // Assume same dir also for multiple file merge. Else use the first file's
     directory = existingDir(fileList[0]);
     settings.setValue("merge_file", directory);
     settings.endGroup();
-
-    // Milti-merge update: note now we pass a fileList to mergeFile function
-    mergeFile(fileList, ImportCheckType);
 }
 
 void
@@ -4080,15 +4060,14 @@ RosegardenMainWindow::slotImportProject()
                tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
-        return ;
-    }
+    if (file.isEmpty())
+        return;
+
+    importProject(file);
 
     directory = existingDir(file);
     settings.setValue("import_project", directory);
     settings.endGroup();
-
-    importProject(file);
 }
 
 void
@@ -4120,15 +4099,14 @@ RosegardenMainWindow::slotImportMIDI()
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
-        return ;
-    }
+    if (file.isEmpty())
+        return;
+
+    openFile(file, ImportMIDI); // does everything including setting the document
 
     directory = existingDir(file);
     settings.setValue("import_midi", directory);
     settings.endGroup();
-
-    openFile(file, ImportMIDI); // does everything including setting the document
 }
 
 void
@@ -4144,17 +4122,14 @@ RosegardenMainWindow::slotMergeMIDI()
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    if (fileList.isEmpty())
+        return;
 
-    // Assume same dir also for multiple file merge. Else use the first file's
+    mergeFile(fileList, ImportMIDI);
+
     settings.setValue("merge_midi", directory);
     directory = existingDir(fileList[0]);
     settings.endGroup();
-
-    // Milti-merge update: note now we pass a fileList to mergeFile function
-    mergeFile(fileList, ImportMIDI);
 }
 
 QTextCodec *
@@ -4404,15 +4379,14 @@ RosegardenMainWindow::slotImportRG21()
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
-        return ;
-    }
+    if (file.isEmpty())
+        return;
+
+    openFile(file, ImportRG21);
 
     directory = existingDir(file);
     settings.setValue("import_relic", directory);
     settings.endGroup();
-
-    openFile(file, ImportRG21);
 }
 
 void
@@ -4428,17 +4402,14 @@ RosegardenMainWindow::slotMergeRG21()
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    if (fileList.isEmpty())
+        return;
 
-    // Assume same dir also for multiple file merge. Else use the first file's
-    directory = existingDir(fileList[0]);
-    settings.setValue("import_relic", directory);
-    settings.endGroup();
-
-    // Milti-merge update: note now we pass a fileList to mergeFile function
     mergeFile(fileList, ImportRG21);
+
+    directory = existingDir(fileList[0]);
+    settings.setValue("merge_relic", directory);
+    settings.endGroup();
 }
 
 RosegardenDocument *
@@ -4504,16 +4475,14 @@ RosegardenMainWindow::slotImportHydrogen()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
+    if (file.isEmpty())
+        return;
 
-    if (file.isEmpty()) {
-        return ;
-    }
+    openFile(file, ImportHydrogen);
 
     directory = existingDir(file);
     settings.setValue("import_hydrogen", directory);
     settings.endGroup();
-
-    openFile(file, ImportHydrogen);
 }
 
 void
@@ -4526,16 +4495,14 @@ RosegardenMainWindow::slotMergeHydrogen()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
+    if (file.isEmpty())
+        return;
 
-    if (file.isEmpty()) {
-        return ;
-    }
+    mergeFile(file, ImportHydrogen);
 
     directory = existingDir(file);
     settings.setValue("merge_hydrogen", directory);
     settings.endGroup();
-
-    mergeFile(file, ImportHydrogen);
 }
 
 
@@ -4602,16 +4569,14 @@ RosegardenMainWindow::slotImportMusicXML()
     const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
                tr("All files") + " (*)", nullptr);
+    if (file.isEmpty())
+        return;
 
-    if (file.isEmpty()) {
-        return ;
-    }
+    openFile(file, ImportMusicXML);
 
     directory = existingDir(file);
     settings.setValue("import_musicxml", directory);
     settings.endGroup();
-
-    openFile(file, ImportMusicXML);
 }
 
 void
@@ -4626,17 +4591,14 @@ RosegardenMainWindow::slotMergeMusicXML()
             this, tr("Select File(s)"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
                tr("All files") + " (*)", nullptr);
+    if (fileList.isEmpty())
+        return;
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    mergeFile(fileList, ImportMusicXML);
 
-    // Assume same dir also for multiple file merge. Else use the first file's
     directory = existingDir(fileList[0]);
     settings.setValue("merge_musicxml", directory);
     settings.endGroup();
-
-    mergeFile(fileList, ImportMusicXML);
 }
 
 RosegardenDocument *
@@ -8132,20 +8094,20 @@ RosegardenMainWindow::slotImportStudio()
 
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
-    QString directory = settings.value("import_studio", ResourceFinder().getResourceDir("library")).toString();
+    QString directory = settings.value("import_studio",
+            ResourceFinder().getResourceDir("library")).toString();
 
     const QString file = FileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP)" + ";;" +
                     tr("All files") + " (*)", nullptr);
-
     if (file.isEmpty())
-        return ;
+        return;
+
+    slotImportStudioFromFile(file);
 
     directory = existingDir(file);
     settings.setValue("import_studio", directory);
     settings.endGroup();
-
-    slotImportStudioFromFile(file);
 }
 
 void
