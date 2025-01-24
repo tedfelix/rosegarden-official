@@ -264,6 +264,44 @@ namespace Rosegarden
 {
 
 
+namespace
+{
+    // Like QFileInfo::canonicalPath(), but returns the largest directory
+    // path that actually exists.  E.g. if handed /a/b/c/d/e.txt and d does not
+    // exist, this returns /a/b/c.
+    QString existingDir(const QString &path)
+    {
+        RG_DEBUG << "existingDir" << path;
+
+        QFileInfo dirInfo(path);
+        // For each directory level...
+        while (true) {
+            RG_DEBUG << "existingDir" << dirInfo;
+            if (dirInfo.isDir())
+                return dirInfo.canonicalFilePath();
+            // Remove a level.
+            dirInfo.setFile(dirInfo.dir().path());
+        }
+    }
+
+    void setFileSaveAsDirectory(const QString &directory)
+    {
+        QSettings settings;
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        settings.setValue("save_file", directory);
+    }
+
+    QString getFileSaveAsDirectory()
+    {
+        QSettings settings;
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        // Get the last Save As location, or DocumentsLocation if there is none.
+        return settings.value(
+                "save_file",
+                QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
+    }
+}
+
 RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
                                            QObject *startupStatusMessageReceiver) :
     QMainWindow(nullptr),
@@ -1945,7 +1983,7 @@ RosegardenMainWindow::openURL(const QString& url)
     openURL(QUrl(url), true);  // replace
 }
 
-void
+bool
 RosegardenMainWindow::openURL(const QUrl &url, bool replace)
 {
     SetWaitCursor waitCursor;
@@ -1956,7 +1994,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Malformed URL\n%1").arg(url.toString()));
 
-        return;
+        return false;
     }
 
     FileSource source(url);
@@ -1964,7 +2002,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     if (!source.isAvailable()) {
         QMessageBox::critical(this, tr("Rosegarden"),
                 tr("Cannot open file %1").arg(url.toString()));
-        return;
+        return false;
     }
 
     //RG_DEBUG << "openURL(): local filename =" << source.getLocalFilename();
@@ -1972,7 +2010,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     // Let the user save the current document if it's been modified.
     // ??? rename: safeToClobber()?  Might be too geared toward the result.
     if (!saveIfModified())
-        return;
+        return false;
 
     // In case the source is remote, wait for the file to be downloaded to
     // the local file.
@@ -1984,8 +2022,10 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     if (replace)
         openFile(source.getLocalFilename());
     else
-        // this only mergest the first file for now
+        // this only merges the first file for now
         mergeFile(fileList, ImportCheckType);
+
+    return true;
 }
 
 void
@@ -2002,6 +2042,7 @@ RosegardenMainWindow::openFileDialogAt(QString target)
         // Get the last used path for File > Open.
         settings.beginGroup(LastUsedPathsConfigGroup);
         directory = settings.value("open_file", QDir::homePath()).toString();
+        directory = existingDir(directory);
         settings.endGroup();
     } else {
         directory = target;
@@ -2018,14 +2059,6 @@ RosegardenMainWindow::openFileDialogAt(QString target)
     if (fname.isEmpty())
         return;
 
-    if (target.isEmpty()) {
-        // Update the last used path for File > Open.
-        directory = QFileInfo(fname).canonicalPath();
-        settings.beginGroup(LastUsedPathsConfigGroup);
-        settings.setValue("open_file", directory);
-        settings.endGroup();
-    }
-
     // If a document is currently loaded
     if (RosegardenDocument::currentDocument) {
         // Check to see if the user needs/wants to save the current document.
@@ -2038,7 +2071,16 @@ RosegardenMainWindow::openFileDialogAt(QString target)
     }
 
     // Continue opening the file.
-    openURL(QUrl::fromLocalFile(fname), true);  // replace
+    const bool success = openURL(QUrl::fromLocalFile(fname), true);  // replace
+
+    // Only update the .conf directory if we were successful.
+    if (target.isEmpty()  &&  success) {
+        // Update the last used path for File > Open.
+        directory = existingDir(fname);
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        settings.setValue("open_file", directory);
+        settings.endGroup();
+    }
 }
 
 void
@@ -2079,36 +2121,20 @@ RosegardenMainWindow::slotMerge()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_file", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QStringList fileList = FileDialog::getOpenFileNames(
             this, tr("Select File(s)"), directory,
                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                tr("All files") + " (*)", nullptr);
+    if (fileList.isEmpty())
+        return;
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    mergeFile(fileList, ImportCheckType);
 
-    /* Former behaviour for single file remove this block if accepted
-    const QString file = FileDialog::getOpenFileName(this, tr("Open File"), directory,
-               tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
-               tr("All files") + " (*)", nullptr);
-
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    */
-
-    // Assume same dir also for multiple file merge. Else use the first file's
-    QDir d = QFileInfo(fileList[0]).dir();
-    directory = d.canonicalPath();
+    directory = existingDir(fileList[0]);
     settings.setValue("merge_file", directory);
     settings.endGroup();
-
-    // Milti-merge update: note now we pass a fileList to mergeFile function
-    mergeFile(fileList, ImportCheckType);
 }
 
 void
@@ -2174,6 +2200,10 @@ RosegardenMainWindow::slotFileSave()
                                   .arg(docFilePath));
     }
 
+    // If save was successful, update the Save As directory.
+    if (success)
+        setFileSaveAsDirectory(existingDir(docFilePath));
+
     // Let the audio file manager know we've just saved so it can prompt the
     // user for an audio file location if it needs one.
     RosegardenDocument::currentDocument->getAudioFileManager().save();
@@ -2196,52 +2226,19 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
     const QString filterExtension =
             filter.mid(left + 1, right - left - 1);
 
-    QSettings settings;
-    settings.beginGroup(LastUsedPathsConfigGroup);
-    QString path_key = "save_file";
-
     QString directory;
-
-    // Set this to 1 for the original behavior where each extension had
-    // its own persistent path in the settings.
-#define PATH_BY_EXTENSION 0
-
-#if PATH_BY_EXTENSION
-
-    // Keep track of last place used to save, by type of file.
-    // This is useful for a workflow where different file types are
-    // kept in different directories.
-
-    if (filterExtension == ".rgt")      path_key = "save_template";
-    else if (filterExtension == ".mid") path_key = "export_midi";
-    else if (filterExtension == ".xml") path_key = "export_music_xml";
-    else if (filterExtension == ".ly")  path_key = "export_lilypond";
-    else if (filterExtension == ".csd") path_key = "export_csound";
-    else if (filterExtension == ".mup") path_key = "export_mup";
-
-    // Get the directory from the settings
-    directory = settings.value(path_key, QDir::homePath()).toString();
-
-#else
 
     // Most applications (e.g. OpenOffice.org and the GIMP) use the document's
     // directory for Save As... and Export rather than the last directory
     // the user saved to.  This code implements that approach along with
     // remembering the previous save directory for unnamed files.
 
-    const bool unnamed =
-            RosegardenDocument::currentDocument->getAbsFilePath().isEmpty();
-
-    if (unnamed) {
-        // Go with last save location, or DocumentsLocation if there is none.
-        directory = settings.value(
-                path_key,
-                QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
-    } else {
+    // If the file is unnamed...
+    if (RosegardenDocument::currentDocument->getAbsFilePath().isEmpty()) {
+        directory = existingDir(getFileSaveAsDirectory());
+    } else {  // File has a name.  Go with its directory.
         directory = originalFileInfo.absolutePath();
     }
-
-#endif
 
     // Launch the Save As dialog.
     QString name = FileDialog::getSaveFileName(
@@ -2278,10 +2275,6 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
         if (overwrite != QMessageBox::Yes)
             return "";
     }
-
-    // Write the directory to the settings
-    settings.setValue(path_key, info.canonicalPath());
-    settings.endGroup();
 
     return name;
 }
@@ -2336,6 +2329,9 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
         return false;
 
     }
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(newName));
 
     if (!asTemplate) {
         // Let the audio file manager know we've just saved so it can prompt the
@@ -4058,21 +4054,20 @@ RosegardenMainWindow::slotImportProject()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_project", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), directory,
                tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_project", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     importProject(file);
+
+    directory = existingDir(file);
+    settings.setValue("import_project", directory);
+    settings.endGroup();
 }
 
 void
@@ -4098,21 +4093,20 @@ RosegardenMainWindow::slotImportMIDI()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_midi", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_midi", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     openFile(file, ImportMIDI); // does everything including setting the document
+
+    directory = existingDir(file);
+    settings.setValue("import_midi", directory);
+    settings.endGroup();
 }
 
 void
@@ -4121,24 +4115,21 @@ RosegardenMainWindow::slotMergeMIDI()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_midi", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QStringList fileList = FileDialog::getOpenFileNames(
             this, tr("Select MIDI File(s)"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    if (fileList.isEmpty())
+        return;
 
-    // Assume same dir also for multiple file merge. Else use the first file's
-    QDir d = QFileInfo(fileList[0]).dir();
-    directory = d.canonicalPath();
-    settings.setValue("merge_midi", directory);
-    settings.endGroup();
-
-    // Milti-merge update: note now we pass a fileList to mergeFile function
     mergeFile(fileList, ImportMIDI);
+
+    settings.setValue("merge_midi", directory);
+    directory = existingDir(fileList[0]);
+    settings.endGroup();
 }
 
 QTextCodec *
@@ -4382,21 +4373,20 @@ RosegardenMainWindow::slotImportRG21()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_relic", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_relic", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     openFile(file, ImportRG21);
+
+    directory = existingDir(file);
+    settings.setValue("import_relic", directory);
+    settings.endGroup();
 }
 
 void
@@ -4405,24 +4395,21 @@ RosegardenMainWindow::slotMergeRG21()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_relic", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QStringList fileList = FileDialog::getOpenFileNames(
             this, tr("Select X11 Rosegarden File(s)"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    if (fileList.isEmpty())
+        return;
 
-    // Assume same dir also for multiple file merge. Else use the first file's
-    QDir d = QFileInfo(fileList[0]).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_relic", directory);
-    settings.endGroup();
-
-    // Milti-merge update: note now we pass a fileList to mergeFile function
     mergeFile(fileList, ImportRG21);
+
+    directory = existingDir(fileList[0]);
+    settings.setValue("merge_relic", directory);
+    settings.endGroup();
 }
 
 RosegardenDocument *
@@ -4484,20 +4471,18 @@ RosegardenMainWindow::slotImportHydrogen()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_hydrogen", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
-
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_hydrogen", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     openFile(file, ImportHydrogen);
+
+    directory = existingDir(file);
+    settings.setValue("import_hydrogen", directory);
+    settings.endGroup();
 }
 
 void
@@ -4506,20 +4491,18 @@ RosegardenMainWindow::slotMergeHydrogen()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_hydrogen", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
-
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("merge_hydrogen", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     mergeFile(file, ImportHydrogen);
+
+    directory = existingDir(file);
+    settings.setValue("merge_hydrogen", directory);
+    settings.endGroup();
 }
 
 
@@ -4581,21 +4564,19 @@ RosegardenMainWindow::slotImportMusicXML()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_musicxml", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
                tr("All files") + " (*)", nullptr);
-
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_musicxml", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     openFile(file, ImportMusicXML);
+
+    directory = existingDir(file);
+    settings.setValue("import_musicxml", directory);
+    settings.endGroup();
 }
 
 void
@@ -4604,23 +4585,20 @@ RosegardenMainWindow::slotMergeMusicXML()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_musicxml", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QStringList fileList = FileDialog::getOpenFileNames(
             this, tr("Select File(s)"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
                tr("All files") + " (*)", nullptr);
-
-    if (fileList.isEmpty()) {
-        return ;
-    }
-
-    // Assume same dir also for multiple file merge. Else use the first file's
-    QDir d = QFileInfo(fileList[0]).dir();
-    directory = d.canonicalPath();
-    settings.setValue("merge_musicxml", directory);
-    settings.endGroup();
+    if (fileList.isEmpty())
+        return;
 
     mergeFile(fileList, ImportMusicXML);
+
+    directory = existingDir(fileList[0]);
+    settings.setValue("merge_musicxml", directory);
+    settings.endGroup();
 }
 
 RosegardenDocument *
@@ -5235,6 +5213,10 @@ RosegardenMainWindow::slotExportProject()
     if (dialog->exec() != QDialog::Accepted) {
         return;
     }
+
+    // ProjectPackager has no success() routine.  Stick with existingDir()
+    // just in case we have a bad dir name by this point.
+    setFileSaveAsDirectory(existingDir(fileName));
 }
 
 void
@@ -5250,10 +5232,13 @@ RosegardenMainWindow::slotExportMIDI()
     if (fileName.isEmpty())
         return ;
 
-    exportMIDIFile(fileName);
+    const bool success = exportMIDIFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
-void
+bool
 RosegardenMainWindow::exportMIDIFile(QString file)
 {
     // Progress Dialog
@@ -5280,7 +5265,11 @@ RosegardenMainWindow::exportMIDIFile(QString file)
     if (!midiFile.convertToMidi(RosegardenDocument::currentDocument, file)) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5296,10 +5285,13 @@ RosegardenMainWindow::slotExportCsound()
     if (fileName.isEmpty())
         return ;
 
-    exportCsoundFile(fileName);
+    const bool success = exportCsoundFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
-void
+bool
 RosegardenMainWindow::exportCsoundFile(QString file)
 {
     // Progress Dialog
@@ -5333,7 +5325,10 @@ RosegardenMainWindow::exportCsoundFile(QString file)
     if (!csoundExporter.write()) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5348,10 +5343,13 @@ RosegardenMainWindow::slotExportMup()
     if (fileName.isEmpty())
         return ;
 
-    exportMupFile(fileName);
+    const bool success = exportMupFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
-void
+bool
 RosegardenMainWindow::exportMupFile(QString file)
 {
     // Progress Dialog
@@ -5381,7 +5379,11 @@ RosegardenMainWindow::exportMupFile(QString file)
     if (!mupExporter.write()) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5397,7 +5399,10 @@ RosegardenMainWindow::slotExportLilyPond()
     if (fileName.isEmpty())
         return ;
 
-    exportLilyPondFile(fileName);
+    const bool success = exportLilyPondFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
 
@@ -5456,7 +5461,7 @@ RosegardenMainWindow::getLilyPondTmpFilename()
 
 
 bool
-RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
+RosegardenMainWindow::exportLilyPondFile(const QString &file, bool forPreview)
 {
     QString caption;
     QString heading;
@@ -5519,7 +5524,10 @@ RosegardenMainWindow::slotExportMusicXml()
     if (fileName.isEmpty())
         return ;
 
-    exportMusicXmlFile(fileName);
+    const bool success = exportMusicXmlFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
 void
@@ -5565,13 +5573,13 @@ RosegardenMainWindow::slotExportWAV()
     m_seqManager->setExportWavFile(fileName);
 }
 
-void
+bool
 RosegardenMainWindow::exportMusicXmlFile(QString file)
 {
     MusicXMLOptionsDialog dialog(this, RosegardenDocument::currentDocument, "", "");
 
     if (dialog.exec() != QDialog::Accepted)
-        return;
+        return false;
 
     // Progress Dialog
     // Note: Label text will be set later in the process.
@@ -5604,7 +5612,11 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
         QMessageBox::warning(this,
                 tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -8082,21 +8094,20 @@ RosegardenMainWindow::slotImportStudio()
 
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
-    QString directory = settings.value("import_studio", ResourceFinder().getResourceDir("library")).toString();
+    QString directory = settings.value("import_studio",
+            ResourceFinder().getResourceDir("library")).toString();
 
     const QString file = FileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP)" + ";;" +
                     tr("All files") + " (*)", nullptr);
-
     if (file.isEmpty())
-        return ;
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_studio", directory);
-    settings.endGroup();
+        return;
 
     slotImportStudioFromFile(file);
+
+    directory = existingDir(file);
+    settings.setValue("import_studio", directory);
+    settings.endGroup();
 }
 
 void
