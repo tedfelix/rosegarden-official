@@ -1304,55 +1304,105 @@ NotationScene::dumpVectors()
 }
 
 void
-NotationScene::segmentRemoved(const Composition *c, Segment *s)
+NotationScene::segmentRemoved(const Composition *comp, Segment *segment)
 {
-    NOTATION_DEBUG << "NotationScene::segmentRemoved(" << c << "," << s << ")";
-    if (!m_document || !c || (c != &m_document->getComposition())) return;
+    NOTATION_DEBUG << "NotationScene::segmentRemoved(" << comp << "," << segment << ")";
+
+    if (!m_document)
+        return;
+    if (!comp)
+        return;
+    if (comp != &m_document->getComposition())
+        return;
+
+    // Determine whether we care about this Segment being deleted.
 
     std::vector<NotationStaff *>::iterator staffToDelete = m_staffs.end();
 
+    // For each NotationStaff in the NotationScene...
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
-         i != m_staffs.end(); ++i) {
-        if (s == &(*i)->getSegment()) {
+         i != m_staffs.end();
+         ++i) {
+        // Found it?
+        if (segment == &(*i)->getSegment()) {
             staffToDelete = i;
-
-            m_segmentsDeleted.push_back(s); // Remember segment to be deleted
-
-            // The segmentDeleted() signal is about to be emitted. Therefore
-            // the whole scene is going to be deleted then restored (from
-            // NotationView) and to continue processing at best is useless and
-            // at the worst may cause a crash when the segment is deleted.
-            disconnect(CommandHistory::getInstance(),
-                           &CommandHistory::commandExecuted,
-                       this, &NotationScene::slotCommandExecuted);
-            suspendLayoutUpdates();   // Useful ???
-
-            if (m_segmentsDeleted.size() == m_externalSegments.size()) {
-                // There will be no more segment in scene.
-                m_sceneIsEmpty = true;
-            }
-
-            // Signal must be emitted only once. Nevertheless, all removed
-            // segments have to be remembered.
-            if (!m_finished) emit sceneNeedsRebuilding();
-            m_finished = true; // Stop further processing from this scene
-
             break;
         }
     }
-    // the sceneNeedsRebuilding signal will cause the scene to be
-    // rebuilt. However this uses a queued connection so the pointer
+
+    // Not found?  Not a Segment we care about.  Bail.
+    if (staffToDelete == m_staffs.end())
+        return;
+
+    // This is one of our Segments being deleted.
+
+    // Collect all the staffs that need deleting into here.
+    std::set<NotationStaff *> staffsToDelete;
+
+    // Always delete the staff for the deleted segment.
+    staffsToDelete.insert(*staffToDelete);
+
+    // For each staff, check for staffs (repeats) linked to the deleted
+    // segment and add to staffsToDelete.
+    for (NotationStaff *staff : m_staffs) {
+        Segment *sseg = &staff->getSegment();
+        if (sseg->isLinkedTo(segment)) {
+            staffsToDelete.insert(staff);
+            RG_DEBUG << "segmentRemoved linked" << staff << segment << sseg <<
+                sseg->isTmp() << sseg->isLinkedTo(segment) <<
+                staffsToDelete.size();
+        }
+    }
+
+    // Remember segment to be deleted.
+    m_segmentsDeleted.push_back(segment);
+
+    // The segmentDeleted() signal is about to be emitted.  Therefore
+    // the whole scene is going to be deleted then restored (from
+    // NotationView) and to continue processing at best is useless and
+    // at the worst may cause a crash when the segment is deleted.
+    disconnect(CommandHistory::getInstance(),
+                   &CommandHistory::commandExecuted,
+               this, &NotationScene::slotCommandExecuted);
+    // Useful ???
+    suspendLayoutUpdates();
+
+    // All will be deleted?  Indicate empty.
+    if (m_segmentsDeleted.size() == m_externalSegments.size())
+        m_sceneIsEmpty = true;
+
+    // Signal must be emitted only once. Nevertheless, all removed
+    // segments have to be remembered.
+    if (!m_finished)
+        emit sceneNeedsRebuilding();
+
+    // Stop further processing from this scene
+    m_finished = true;
+
+    // The sceneNeedsRebuilding signal will cause the scene to be
+    // rebuilt.  However this uses a queued connection so the pointer
     // update after undo is done before this so we must remove the
     // deleted staff here.
-    if (staffToDelete != m_staffs.end()) {
-        NotationStaff* staff = *staffToDelete;
-        if (m_previewNoteStaff == staff) {
-            // clear the preview on the staff to be deleted
-            clearPreviewNote();
+
+    // Always clear preview note.
+    clearPreviewNote();
+
+
+    // Assemble the new list of staffs (m_staffs).
+
+    std::vector<NotationStaff *> staffsNew;
+
+    for (NotationStaff *staff : m_staffs) {
+        // If we need to delete it, do so.
+        if (staffsToDelete.find(staff) != staffsToDelete.end()) {
+            delete staff;
+        } else {  // Keep it in the staff list.
+            staffsNew.push_back(staff);
         }
-        delete staff;
-        m_staffs.erase(staffToDelete);
     }
+
+    m_staffs = staffsNew;
+
 
     // Redo the layouts so that there aren't any stray pointers
     // to the removed staff.
