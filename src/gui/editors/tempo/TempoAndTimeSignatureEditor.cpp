@@ -625,7 +625,7 @@ TempoAndTimeSignatureEditor::slotEditDelete()
 
     }
 
-    if (macroCommand->haveCommands())
+    if (macroCommand->hasCommands())
         CommandHistory::getInstance()->addCommand(macroCommand);
     else
         delete macroCommand;

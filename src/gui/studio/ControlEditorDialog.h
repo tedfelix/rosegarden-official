@@ -56,7 +56,14 @@ public:
 
     DeviceId getDevice()  { return m_device; }
 
-public slots:
+signals:
+    void closing();
+
+protected:
+    void closeEvent(QCloseEvent *) override;
+
+private slots:
+
     void slotUpdate(bool added);
     void slotUpdate()  { slotUpdate(false); }
 
@@ -68,13 +75,10 @@ public slots:
     void slotHelpRequested();
     void slotHelpAbout();
 
-signals:
-    void closing();
-
-protected:
-    void closeEvent(QCloseEvent *) override;
+    void slotRemoveAllFromInstrumentPanel();
 
 private:
+
     RosegardenDocument *m_doc;
     Studio *m_studio;
     DeviceId m_device;
@@ -88,6 +92,7 @@ private:
     QPushButton *m_deleteButton;
     QPushButton *m_closeButton;
 
+    // ??? Unused.
     bool m_modified;
 
     void setModified(bool modified);

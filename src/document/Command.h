@@ -66,7 +66,7 @@ public:
 
     virtual void addCommand(Command *command);
     // unused virtual void deleteCommand(Command *command);
-    virtual bool haveCommands() const;
+    virtual bool hasCommands() const;
 
     void execute() override;
     void unexecute() override;

@@ -55,7 +55,7 @@ MacroCommand::deleteCommand(Command *command)
 */
 
 bool
-MacroCommand::haveCommands() const
+MacroCommand::hasCommands() const
 {
     return !m_commands.empty();
 }

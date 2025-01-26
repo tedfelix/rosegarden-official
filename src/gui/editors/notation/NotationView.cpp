@@ -4997,7 +4997,7 @@ NotationView::slotEditElement(NotationStaff *staff,
                    because it may still contain legitimate commands
                    (eg to update tags). */
                 MacroCommand *macroCommand = dialog.extractCommand();
-                if (macroCommand->haveCommands()) {
+                if (macroCommand->hasCommands()) {
                     macroCommand->setName(tr("Updated tags for aborted edit"));
                     CommandHistory::getInstance()->addCommand(macroCommand);
                 }

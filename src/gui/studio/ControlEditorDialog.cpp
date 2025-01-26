@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlEditorDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ControlEditorDialog.h"
 
@@ -178,8 +179,8 @@ ControlEditorDialog::~ControlEditorDialog()
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     RG_DEBUG << "[geometry] storing window geometry for ControlEditorDialog";
-    settings.setValue("Control_Editor_Dialog_Geometry", this->saveGeometry());
-    settings.setValue("Control_Editor_Dialog_State", this->saveState());
+    settings.setValue("Control_Editor_Dialog_Geometry", saveGeometry());
+    settings.setValue("Control_Editor_Dialog_State", saveState());
     settings.endGroup();
 }
 
@@ -193,8 +194,8 @@ ControlEditorDialog::initDialog()
     RG_DEBUG << "[geometry] ControlEditorDialog - Restoring saved geometry...";
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    this->restoreGeometry(settings.value("Control_Editor_Dialog_Geometry").toByteArray());
-    this->restoreState(settings.value("Control_Editor_Dialog_State").toByteArray());
+    restoreGeometry(settings.value("Control_Editor_Dialog_Geometry").toByteArray());
+    restoreState(settings.value("Control_Editor_Dialog_State").toByteArray());
     settings.endGroup();
 }
 
@@ -371,6 +372,7 @@ ControlEditorDialog::setupActions()
     createAction("file_close", SLOT(slotClose()));
     m_closeButton->setText(tr("Close"));
     connect(m_closeButton, &QAbstractButton::released, this, &ControlEditorDialog::slotClose);
+    createAction("remove_all_from_ip", SLOT(slotRemoveAllFromInstrumentPanel()));
     createAction("control_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
@@ -387,10 +389,7 @@ ControlEditorDialog::addCommandToHistory(Command *command)
 void
 ControlEditorDialog::setModified(bool modified)
 {
-    RG_DEBUG << "ControlEditorDialog::setModified(" << modified << ")";
-
-    if (modified) {}
-    else {}
+    RG_DEBUG << "setModified(" << modified << ")";
 
     m_modified = modified;
 }
@@ -407,9 +406,10 @@ ControlEditorDialog::slotEdit(QTreeWidgetItem *i, int)
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
 
     if (item && md) {
-        ControlParameterEditDialog dialog
-        (this,
-         md->getControlParameter(item->getId()), m_doc);
+        ControlParameterEditDialog dialog(
+                this,  // parent
+                md->getControlParameter(item->getId()),  // control
+                m_doc);  // doc
 
         if (dialog.exec() == QDialog::Accepted) {
             ModifyControlParameterCommand *command =
@@ -447,4 +447,50 @@ ControlEditorDialog::slotHelpAbout()
 {
     new AboutDialog(this);
 }
+
+void ControlEditorDialog::slotRemoveAllFromInstrumentPanel()
+{
+    MacroCommand *macroCommand =
+            new MacroCommand("Remove All Controllers From Instrument Panel");
+
+    MidiDevice *md = dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
+    if (!md)
+        return;
+
+    const ControlList &controlList = md->getControlParameters();
+
+    // for each controller
+    for (size_t controllerIndex = 0;
+         controllerIndex < controlList.size();
+         ++controllerIndex) {
+
+        // If the controller is already not showing, try the next.
+        if (controlList[controllerIndex].getIPBPosition() == -1)
+            continue;
+
+        // Controller is showing.  Remove it.
+
+        // Make a copy to modify.
+        ControlParameter controlParameter = controlList[controllerIndex];
+        controlParameter.setIPBPosition(-1);
+
+        // Create a ModifyControlParameterCommand with ippos set to -1.
+        ModifyControlParameterCommand *command =
+                new ModifyControlParameterCommand(m_studio,  // studio
+                                                  m_device,  // device
+                                                  controlParameter,  // control
+                                                  controllerIndex);  // id
+
+        // Add the command to the macro command.
+        macroCommand->addCommand(command);
+    }
+
+    // If the macro command has more than 0 entries, send it off.
+    if (macroCommand->hasCommands())
+        addCommandToHistory(macroCommand);
+    else
+        delete macroCommand;
+}
+
+
 }
