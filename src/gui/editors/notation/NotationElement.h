@@ -197,6 +197,11 @@ protected:
     ItemList *m_extraItems;
 
  private:
+
+    // Remove copy ctor and op=.
+    NotationElement(const NotationElement &) = delete;
+    NotationElement &operator=(const NotationElement &) = delete;
+
     bool m_highlight;
     Segment *m_segment;
 };
