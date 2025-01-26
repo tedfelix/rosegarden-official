@@ -962,29 +962,12 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer &&
                                shouldWarnForImpreciseTimer()) {
 
+                        // This can only happen for ancient Linux (<2.6.20)
+                        // and/or ALSA (<1.0.14) circa 2007.  See the check in
+                        // AlsaDriver::getAutoTimer().
+                        // ??? Clean WarningImpreciseTimer up.
+
                         RG_WARNING << "Rosegarden: WARNING: No accurate sequencer timer available";
-
-#if 0
-                        //StartupLogo::hideIfStillThere();
-
-                        //RosegardenMainWindow::self()->awaitDialogClearance();
-
-                        // This is to avoid us ever showing the same
-                        // dialog more than once during a single run
-                        // of the program -- it's quite separate from
-                        // the suppression function
-                        static bool showTimerWarning = true;
-
-                        if (showTimerWarning) {
-                            // ??? Um.  Why?  This just goes out of scope.
-                            informativeText =
-                                    tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">Rosegarden website</a> for instructions.</p>");
-
-                            // Don't show again during this run.
-                            // ??? Don't show what?
-                            showTimerWarning = false;
-                        }
-#endif
 
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimerTryRTC &&
                                shouldWarnForImpreciseTimer()) {
@@ -1002,7 +985,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             emit sendWarning(
                                     WarningWidget::Timer,
                                     tr("<h3>System timer resolution is too low!</h3>"),
-                                    tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the <a style=\"color:gold\"  href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">Rosegarden website</a> for notes about this.</p>"));
+                                    tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>Check whether your Linux distribution provides a multimedia-optimized kernel.  See the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">Rosegarden website</a> for notes about this.</p>"));
 
                             // Don't show again during this run.
                             showAltTimerWarning = false;
