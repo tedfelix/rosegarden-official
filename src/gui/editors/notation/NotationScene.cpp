@@ -2181,7 +2181,7 @@ NotationScene::clearPreviewNote()
 }
 
 void
-NotationScene::playNote(Segment &segment, int pitch, int velocity)
+NotationScene::playNote(const Segment &segment, int pitch, int velocity)
 {
     if (!m_document) return;
 
@@ -2336,6 +2336,28 @@ void
 NotationScene::dumpBarDataMap()
 {
     m_hlayout->dumpBarDataMap();
+}
+
+void NotationScene::setExtraPreviewEvents(const EventWithSegmentMap& events)
+{
+    RG_DEBUG << "setExtraPreviewEvents" << events.size();
+    for (auto pair : events) {
+        const Event* e = pair.first;
+        const Segment* segment = pair.second;
+        if (m_additionalPreviewEvents.find(e) !=
+            m_additionalPreviewEvents.end()) continue; // already previewed
+
+        long pitch;
+        if (e->get<Int>(BaseProperties::PITCH, pitch)) {
+            long velocity = -1;
+            (void)(e->get<Int>(BaseProperties::VELOCITY, velocity));
+            if (!(e->has(BaseProperties::TIED_BACKWARD) &&
+                  e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
+                playNote(*segment, pitch, velocity);
+            }
+        }
+    }
+    m_additionalPreviewEvents = events;
 }
 
 #if 0

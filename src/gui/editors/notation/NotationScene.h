@@ -178,7 +178,7 @@ public:
     /// Remove any visible preview note
     void clearPreviewNote();
 
-    void playNote(Segment &segment, int pitch, int velocity = -1);
+    void playNote(const Segment &segment, int pitch, int velocity = -1);
 
     // unused bool constrainToSegmentArea(QPointF &scenePos);
 
@@ -230,6 +230,10 @@ public:
     /// YG: Only for debug
     void dumpVectors();
     void dumpBarDataMap();
+
+    // extra preview events
+    typedef std::map<const Event*, const Segment*> EventWithSegmentMap;
+    void setExtraPreviewEvents(const EventWithSegmentMap& events);
 
 signals:
     void sceneNeedsRebuilding();
@@ -388,6 +392,8 @@ private:
     std::map<int, std::string> m_trackLabels;
 
     QString m_highlightMode;
+
+    EventWithSegmentMap m_additionalPreviewEvents;
 };
 
 }
