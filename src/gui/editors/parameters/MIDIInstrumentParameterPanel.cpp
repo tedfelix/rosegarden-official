@@ -16,8 +16,6 @@
 */
 
 #define RG_MODULE_STRING "[MIDIInstrumentParameterPanel]"
-
-// Disable RG_DEBUG output.  Must be defined prior to including Debug.h.
 // Warnings are currently done with std::cerr to make sure they appear
 // even in a release build.
 #define RG_NO_DEBUG_PRINT
@@ -486,7 +484,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
                 QCoreApplication::translate("MIDI_CONTROLLER",
                                             it->getName().c_str()), hbox);
 
+            // ??? This has no effect on the font.
             label->setFont(font());
+
             hboxLayout->addWidget(label);
 
             RG_DEBUG << "setupControllers(): Adding new widget at " << (count / 2) << "," << (count % 2);
