@@ -82,7 +82,7 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
     QCheckBox *checkBox = new QCheckBox;
     bottomLayout->addWidget(checkBox);
     checkBox->setText(tr("Show next time"));
-    checkBox->setToolTip(tr("<qt>If checked, these notes will pop up the next"
+    checkBox->setToolTip(tr("<qt>If checked, these notes will pop up the next "
                             "time the document is loaded</qt>"));
     checkBox->setChecked(true);
     connect(checkBox, &QCheckBox::stateChanged,

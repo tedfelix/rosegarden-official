@@ -326,7 +326,7 @@ CheckForParallelsDialog::writeTransition(std::vector<Transition>::iterator it)
 
     composition->getMusicalTimeForAbsoluteTime((*it).time, bar, beat, fraction, remainder);
 
-    text += ", " + tr("bar") + tr(" ") + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction);
+    text += ", " + tr("bar") + " " + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction);
     qDebug() << text;
 }
 
@@ -512,7 +512,7 @@ CheckForParallelsDialog::startCheck()
 
                         text = tr("found multiple notes for") + " " + makeTrackString(currentTrackPosition, currentTrackLabel);
 
-                        text += ", " + tr("bar") + tr(" ") + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction) + "\n";
+                        text += ", " + tr("bar") + " " + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction) + "\n";
 
                         text += "    stopped checking for parallels in the current segment.\n\n";
 
