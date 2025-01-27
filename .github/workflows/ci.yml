@@ -19,13 +19,13 @@ jobs:
       run: |
            sudo apt-get update
            sudo apt-get install -y libsamplerate-dev
-           sudo apt-get install -y fftw3-dev
+           sudo apt-get install -y libfftw3-dev
            sudo apt-get install -y alsa-base
            sudo apt-get install -y dssi-dev
            sudo apt-get install -y ladspa-sdk
            sudo apt-get install -y libjack-dev
            sudo apt-get install -y liblo-dev
-           sudo apt-get install -y liblrdf-dev
+           sudo apt-get install -y liblrdf0-dev
 
 
     - name: Install Qt
