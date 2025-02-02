@@ -24,7 +24,7 @@
 #include "base/MidiDevice.h"
 
 #include <QMutex>
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 #include <QRecursiveMutex>
 #endif
 #include <QObject>
