@@ -69,7 +69,7 @@ RosegardenSequencer::RosegardenSequencer() :
     m_loopEnd(0, 0),
     m_studio(new MappedStudio()),
     m_transportToken(1),
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     m_isEndOfCompReached(false)
 #else
     m_isEndOfCompReached(false),
