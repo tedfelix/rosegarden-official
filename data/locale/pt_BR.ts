@@ -5383,7 +5383,7 @@
     <message>
         <location line="+144"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Não foi possível começar a gravar o áudio.&lt;/p&gt;&lt;p&gt;Certifique-se de que a composição foi salva e verifique o caminho do áudio em&lt;b&gt;Composição -&gt; Editar Propriedades do Documento... -&gt; Áudio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
@@ -5433,7 +5433,7 @@
         <location filename="../QMenuStrings.cpp" line="+30"/>
         <location line="+17"/>
         <location line="+17"/>
-        <location line="+23"/>
+        <location line="+24"/>
         <location line="+34"/>
         <location line="+27"/>
         <location line="+205"/>
@@ -5446,7 +5446,7 @@
         <translation>&amp;Arquivo</translation>
     </message>
     <message>
-        <location line="-1190"/>
+        <location line="-1191"/>
         <source>&amp;Add Audio File...</source>
         <translation>&amp;Adicionar Arquivo de Áudio ...</translation>
     </message>
@@ -5459,7 +5459,7 @@
         <location line="+1"/>
         <location line="+17"/>
         <location line="+16"/>
-        <location line="+23"/>
+        <location line="+24"/>
         <location line="+33"/>
         <location line="+28"/>
         <location line="+205"/>
@@ -5478,10 +5478,10 @@
         <translation type="vanished">Ctrl+W</translation>
     </message>
     <message>
-        <location line="-1188"/>
+        <location line="-1189"/>
         <location line="+17"/>
         <location line="+16"/>
-        <location line="+23"/>
+        <location line="+24"/>
         <location line="+33"/>
         <location line="+28"/>
         <location line="+264"/>
@@ -5492,7 +5492,7 @@
         <translation>&amp;Editar</translation>
     </message>
     <message>
-        <location line="-1188"/>
+        <location line="-1189"/>
         <source>&amp;Unload Audio File</source>
         <translation>&amp;Descarregar Arquivo de Áudio</translation>
     </message>
@@ -5535,7 +5535,7 @@
         <location line="+1"/>
         <location line="+15"/>
         <location line="+1"/>
-        <location line="+9"/>
+        <location line="+10"/>
         <location line="+1"/>
         <location line="+44"/>
         <location line="+1"/>
@@ -5556,7 +5556,7 @@
         <translation>&amp;Ajuda</translation>
     </message>
     <message>
-        <location line="-1186"/>
+        <location line="-1187"/>
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
@@ -5569,7 +5569,7 @@
     <message>
         <location line="+1"/>
         <location line="+15"/>
-        <location line="+10"/>
+        <location line="+11"/>
         <location line="+45"/>
         <location line="+15"/>
         <location line="+202"/>
@@ -5583,8 +5583,8 @@
         <translation>&amp;Sobre Rosegarden</translation>
     </message>
     <message>
-        <location line="-1185"/>
-        <location line="+289"/>
+        <location line="-1186"/>
+        <location line="+290"/>
         <location line="+466"/>
         <source>General Toolbar</source>
         <translation>Barra de Ferramentas Geral</translation>
@@ -5610,8 +5610,8 @@
         <translation type="vanished">Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location line="-747"/>
-        <location line="+42"/>
+        <location line="-748"/>
+        <location line="+43"/>
         <location line="+57"/>
         <location line="+264"/>
         <location line="+605"/>
@@ -5626,8 +5626,8 @@
         <translation type="vanished">Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
-        <location line="-1116"/>
-        <location line="+42"/>
+        <location line="-1117"/>
+        <location line="+43"/>
         <location line="+57"/>
         <location line="+264"/>
         <location line="+605"/>
@@ -5642,8 +5642,8 @@
         <translation type="vanished">Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
-        <location line="-1111"/>
-        <location line="+57"/>
+        <location line="-1112"/>
+        <location line="+58"/>
         <location line="+18"/>
         <location line="+4"/>
         <location line="+4"/>
@@ -5657,16 +5657,16 @@
         <translation>Mudar para Ferramenta Selecionada</translation>
     </message>
     <message>
-        <location line="-1156"/>
-        <location line="+57"/>
+        <location line="-1157"/>
+        <location line="+58"/>
         <location line="+1067"/>
         <location line="+33"/>
         <source>Switch to Inserting Notes</source>
         <translation>Mudar para Inserir Notas</translation>
     </message>
     <message>
-        <location line="-1156"/>
-        <location line="+57"/>
+        <location line="-1157"/>
+        <location line="+58"/>
         <location line="+22"/>
         <location line="+4"/>
         <location line="+197"/>
@@ -5680,8 +5680,8 @@
         <translation>Mudar para Apagar Ferramentas</translation>
     </message>
     <message>
-        <location line="-1155"/>
-        <location line="+23"/>
+        <location line="-1156"/>
+        <location line="+24"/>
         <location line="+61"/>
         <location line="+205"/>
         <location line="+16"/>
@@ -7675,7 +7675,7 @@
         <translation>Guia de Relatório de &amp;Erros</translation>
     </message>
     <message>
-        <location line="-1104"/>
+        <location line="-1105"/>
         <source>&amp;Import...</source>
         <translation>&amp;Importar...</translation>
     </message>
@@ -7705,7 +7705,12 @@
         <translation>Excluir Todos</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+11"/>
+        <source>Remove All From Instrument Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>From &amp;Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10869,17 +10874,17 @@ Você gostaria de usar
     <message>
         <location line="+12"/>
         <source>Low Value</source>
-        <translation type="unfinished">Menor Valor</translation>
+        <translation>Menor Valor</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>High Value</source>
-        <translation type="unfinished">Maior Valor</translation>
+        <translation>Maior Valor</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-11"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="unfinished">Tocar - definir %1 alternando de máximo ao mínimo com ambos caqindo a zero</translation>
+        <translation>Tocar - definir %1 alternando de máximo ao mínimo com ambos caqindo a zero</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ActionData.cpp" line="+394"/>
@@ -11039,7 +11044,7 @@ Você gostaria de usar
     <message>
         <location line="+1"/>
         <source>User defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Definido pelo usuário</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11552,42 +11557,42 @@ Você gostaria de usar
     <message>
         <location line="+12"/>
         <source>Show Audio File Location dialog when saving</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar diálogo de Localização do Arquivo de Áudio ao gravar</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Default audio location</source>
-        <translation type="unfinished"></translation>
+        <translation>Localização padrão de áudio</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Audio directory (%1)</source>
-        <translation type="unfinished">Diretório de áudio (%1)</translation>
+        <translation>Diretório de áudio (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document name directory (./DocumentName)</source>
-        <translation type="unfinished"></translation>
+        <translation>Diretório nome do documento (./DocumentName)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document directory (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Diretório do documento (.)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Central repository (%1)</source>
-        <translation type="unfinished">Repositório central (%1)</translation>
+        <translation>Repositório central (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Custom audio file location (specify below)</source>
-        <translation type="unfinished"></translation>
+        <translation>Localização de arquivo de áudio personalizada (especificar abaixo)</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Custom audio file location</source>
-        <translation type="unfinished"></translation>
+        <translation>Localização de arquivo de áudio personalizada</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -11632,12 +11637,12 @@ Você gostaria de usar
     <message>
         <location line="+6"/>
         <source>Start JACK automatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciar o JACK automaticamente</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Check for &quot;Out of processor power&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificar &quot;Sem poder de processamento&quot;</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -11733,48 +11738,49 @@ Você gostaria de usar
     <message>
         <location filename="../../src/gui/dialogs/AudioFileLocationDialog.cpp" line="+44"/>
         <source>Audio File Location</source>
-        <translation type="unfinished">Localização do Arquivo de Áudio</translation>
+        <translation>Localização do Arquivo de Áudio</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Audio files have been introduced in this session.  Where would you like to save them?</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos de áudio foram introduzidos nesta sessão.  Onde quer gravá-los?</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>To an &quot;audio&quot; directory where the document is saved.  (%1) (Recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>Para um diretório &quot;audio&quot; onde o documento é gravado.  (%1) (Recomendado)</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>To a directory named after the document where the document is saved.
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Para um diretório com o nome do documento onde o documento é gravado.
+(%1)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To the same directory where the document is saved.  (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Para o mesmo diretório onde o documento é gravado.  (.)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To a central audio file repository.  (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Para o repositório central de áudio.  (%1)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>To a custom audio file location:</source>
-        <translation type="unfinished"></translation>
+        <translation>Para uma localização personalizada de áudio:</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Note: You can always move the audio files later by setting the audio location in the document properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nota: Você sempre pode mover os arquivos de áudio depois, definindo a localização do áudio nas propriedades do documento.</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Use the above selection for all new files and don&apos;t display this dialog again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Use a seleção acima para todos os novos arquivos e não mostre este diálogo novamente.</translation>
     </message>
 </context>
 <context>
@@ -12652,12 +12658,12 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
     <message>
         <location line="+1"/>
         <source>Document name directory (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Diretório nome do documento (%1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Document directory (.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Diretório do documento (.)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -12667,7 +12673,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
     <message>
         <location line="+1"/>
         <source>Custom audio file location (specify below)</source>
-        <translation type="unfinished"></translation>
+        <translation>Localização personaliada do arquivo de áudio (especificar abaixo)</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -12678,7 +12684,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
     <message>
         <location line="-15"/>
         <source>Custom audio file location:</source>
-        <translation type="unfinished"></translation>
+        <translation>Localização personaliada do arquivo de áudio:</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -12688,7 +12694,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
     <message>
         <location line="+7"/>
         <source>Recording time:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo de gravação:</translation>
     </message>
     <message>
         <location line="+81"/>
@@ -12708,7 +12714,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
     <message>
         <location line="+1"/>
         <source>Document&apos;s audio files will now be moved to the new location.&lt;br /&gt;Please note that this will force a save of the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Os arquivos de áudio do documento serão movidos para a nova localização.&lt;br/&gt;Por favor tenha em mente que isto forçará uma gravação do arquivo.</translation>
     </message>
     <message>
         <source>Equivalent minutes of 16-bit stereo:</source>
@@ -13091,7 +13097,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
         <translation type="vanished">&lt;new mapping %1&gt;</translation>
     </message>
     <message>
-        <location line="+615"/>
+        <location line="+616"/>
         <source>Really delete this bank?</source>
         <translation>Realmente excluir este banco?</translation>
     </message>
@@ -13168,14 +13174,14 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
         <location line="+226"/>
         <location line="+40"/>
         <location line="+6"/>
-        <location line="+93"/>
+        <location line="+108"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1262"/>
+        <location line="-1277"/>
         <source>add MIDI Bank</source>
-        <translation>asicionar banco MIDI</translation>
+        <translation>adicionar banco MIDI</translation>
     </message>
     <message>
         <location line="+44"/>
@@ -13266,7 +13272,7 @@ O dispositivo destino já tem um banco para
         <translation>Não foi possível exportar estúdio para arquivo em %1</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+45"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-pt</translation>
     </message>
@@ -14006,7 +14012,7 @@ O dispositivo destino já tem um banco para
 <context>
     <name>Rosegarden::ControlEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="+79"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="+80"/>
         <source>Manage Controllers</source>
         <translation>Gerenciar Controles</translation>
     </message>
@@ -14112,7 +14118,7 @@ O dispositivo destino já tem um banco para
         <translation>&lt;nenhum&gt;</translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+150"/>
         <source>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-pt</translation>
     </message>
@@ -15813,17 +15819,7 @@ Gostaria de tentar localizar este arquivo ou ignorá-lo?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+55"/>
-        <source>Drag with dynamic modifiers (main window)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>&lt;qt&gt;&lt;p&gt;If set, the modifiers CTRL and ALT can be changed while a drag is in progress to update copy/move behavior.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+23"/>
+        <location line="+79"/>
         <source>Sequencer status</source>
         <translation>Status do seqüenciador</translation>
     </message>
@@ -15976,7 +15972,17 @@ Gostaria de tentar localizar este arquivo ou ignorá-lo?</translation>
         <translation>Suporte a Plugin LV2 (beta)</translation>
     </message>
     <message>
-        <location line="+82"/>
+        <location line="+11"/>
+        <source>Drag with dynamic modifiers (main/matrix)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;&lt;p&gt;If set, the CTRL and ALT keys can be pressed or released while a drag is in progress to change copy/move behavior.  This applies to the main window and the matrix editor.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+70"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
@@ -18560,7 +18566,7 @@ Clique duas vezes para abrir o editor de marcas.</translation>
 <context>
     <name>Rosegarden::MatrixMover</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+225"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+228"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>Segure Shift para evitar o encaixe da batida ba grade</translation>
     </message>
@@ -22398,7 +22404,7 @@ Consulte Editar -&gt; Preferências -&gt; Áudio.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+347"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+385"/>
         <source>Starting sequencer...</source>
         <translation>Iniciando sequenciador...</translation>
     </message>
@@ -22454,12 +22460,12 @@ Consulte Editar -&gt; Preferências -&gt; Áudio.</translation>
         <location line="+309"/>
         <location line="+30"/>
         <location line="+9"/>
-        <location line="+205"/>
+        <location line="+193"/>
         <location line="+3"/>
-        <location line="+100"/>
-        <location line="+56"/>
+        <location line="+71"/>
+        <location line="+52"/>
         <location line="+3"/>
-        <location line="+307"/>
+        <location line="+310"/>
         <location line="+17"/>
         <location line="+24"/>
         <location line="+25"/>
@@ -22468,33 +22474,33 @@ Consulte Editar -&gt; Preferências -&gt; Áudio.</translation>
         <location line="+76"/>
         <location line="+25"/>
         <location line="+787"/>
-        <location line="+203"/>
+        <location line="+198"/>
         <location line="+19"/>
-        <location line="+175"/>
+        <location line="+171"/>
         <location line="+20"/>
-        <location line="+78"/>
+        <location line="+74"/>
         <location line="+19"/>
-        <location line="+82"/>
+        <location line="+77"/>
         <location line="+19"/>
         <location line="+359"/>
         <location line="+175"/>
         <location line="+4"/>
         <location line="+34"/>
-        <location line="+36"/>
+        <location line="+43"/>
         <location line="+16"/>
-        <location line="+34"/>
+        <location line="+41"/>
         <location line="+19"/>
-        <location line="+29"/>
+        <location line="+35"/>
         <location line="+19"/>
-        <location line="+63"/>
+        <location line="+70"/>
         <location line="+34"/>
         <location line="+20"/>
-        <location line="+37"/>
+        <location line="+40"/>
         <location line="+7"/>
         <location line="+19"/>
         <location line="+21"/>
         <location line="+22"/>
-        <location line="+118"/>
+        <location line="+122"/>
         <location line="+22"/>
         <location line="+37"/>
         <location line="+13"/>
@@ -22510,13 +22516,13 @@ Consulte Editar -&gt; Preferências -&gt; Áudio.</translation>
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+615"/>
+        <location line="+614"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-7187"/>
+        <location line="-7160"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Arquivo &quot;%1&quot; não existe</translation>
     </message>
@@ -22543,23 +22549,23 @@ Do you want to open it instead ?</source>
 Você deseja abri-lo em vez disso?</translation>
     </message>
     <message>
-        <location line="+4879"/>
+        <location line="+4853"/>
         <location line="+19"/>
         <source>Untitled</source>
         <translation>Sem titulo</translation>
     </message>
     <message>
-        <location line="-4346"/>
-        <location line="+159"/>
+        <location line="-4332"/>
+        <location line="+126"/>
         <source>Could not save document at %1
 Error was : %2</source>
         <translation>Não foi possível salvar o documento em %1
 erro foi : %2</translation>
     </message>
     <message>
-        <location line="-156"/>
-        <location line="+159"/>
-        <location line="+6345"/>
+        <location line="-123"/>
+        <location line="+126"/>
+        <location line="+6363"/>
         <source>Could not save document at %1</source>
         <translation>Não foi possível salvar o documento em %1</translation>
     </message>
@@ -22568,7 +22574,7 @@ erro foi : %2</translation>
         <translation type="obsolete">Abrir aplicação em uma nova janela...</translation>
     </message>
     <message>
-        <location line="-6825"/>
+        <location line="-6798"/>
         <source>Creating new document...</source>
         <translation>Criando novo documento...</translation>
     </message>
@@ -22605,67 +22611,67 @@ erro foi : %2</translation>
         <translation>Não é possível abrir o arquivo %1</translation>
     </message>
     <message>
-        <location line="+28"/>
-        <location line="+134"/>
+        <location line="+30"/>
+        <location line="+120"/>
         <source>Opening file...</source>
         <translation>Abrindo arquivo...</translation>
     </message>
     <message>
-        <location line="-117"/>
+        <location line="-102"/>
         <source>Open File</source>
         <translation>Abrir arquivo</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+6076"/>
+        <location line="+6048"/>
         <source>All supported files</source>
         <translation>Todos os arquivos suportados</translation>
     </message>
     <message>
-        <location line="-6075"/>
-        <location line="+72"/>
-        <location line="+216"/>
+        <location line="-6047"/>
+        <location line="+74"/>
+        <location line="+166"/>
         <source>Rosegarden files</source>
         <translation>Arquivos Rosegarden</translation>
     </message>
     <message>
-        <location line="-287"/>
-        <location line="+2089"/>
-        <location line="+24"/>
+        <location line="-239"/>
+        <location line="+2044"/>
+        <location line="+23"/>
         <source>MIDI files</source>
         <translation>Arquivos MIDI</translation>
     </message>
     <message>
-        <location line="-2112"/>
-        <location line="+71"/>
-        <location line="+220"/>
-        <location line="+1758"/>
-        <location line="+40"/>
-        <location line="+24"/>
-        <location line="+260"/>
-        <location line="+24"/>
-        <location line="+77"/>
+        <location line="-2066"/>
+        <location line="+73"/>
+        <location line="+170"/>
+        <location line="+1762"/>
+        <location line="+39"/>
+        <location line="+23"/>
+        <location line="+257"/>
+        <location line="+23"/>
+        <location line="+74"/>
+        <location line="+20"/>
+        <location line="+74"/>
         <location line="+22"/>
-        <location line="+76"/>
-        <location line="+24"/>
-        <location line="+600"/>
-        <location line="+36"/>
-        <location line="+46"/>
+        <location line="+596"/>
+        <location line="+40"/>
         <location line="+53"/>
-        <location line="+48"/>
-        <location line="+122"/>
-        <location line="+2573"/>
+        <location line="+59"/>
+        <location line="+55"/>
+        <location line="+125"/>
+        <location line="+2581"/>
         <source>All files</source>
         <translation>Todos os arquivos</translation>
     </message>
     <message>
-        <location line="-6005"/>
-        <location line="+2525"/>
+        <location line="-5975"/>
+        <location line="+2464"/>
         <source>Select File(s)</source>
         <translation>Selecionar Arquivo(s)</translation>
     </message>
     <message>
-        <location line="-2463"/>
+        <location line="-2419"/>
         <source>Saving file...</source>
         <translation>Salvando arquivo...</translation>
     </message>
@@ -22678,12 +22684,12 @@ erro foi : %2</translation>
         <translation type="vanished">Você especificou uma pasta/diretório.</translation>
     </message>
     <message>
-        <location line="+128"/>
+        <location line="+99"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>O arquivo especificado já existe. Substituir?</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+18"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translatorcomment>&apos;arquivo com %1&apos; está correto. %1 vai tornar-se ou &apos; &apos; ou &apos; como um modelo &apos; em tempo de execução&quot;</translatorcomment>
@@ -22710,7 +22716,7 @@ erro foi : %2</translation>
         <translation>Salvar como...</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+70"/>
         <source>Closing file...</source>
         <translation>Fechando arquivo...</translation>
     </message>
@@ -22776,12 +22782,12 @@ erro foi : %2</translation>
     </message>
     <message>
         <location line="+57"/>
-        <location line="+2868"/>
+        <location line="+2884"/>
         <source>Warning</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location line="-2867"/>
+        <location line="-2883"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -22949,18 +22955,18 @@ Nenhum segmento será dividido.</translation>
         <translation>Reverter documento modificado para a versão anterior salva?</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+20"/>
         <source>Import Rosegarden Project File</source>
         <translation>Importação de Arquivos do Projeto Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1147"/>
+        <location line="+1128"/>
         <source>Rosegarden Project files</source>
         <translation>Aquivos do Projeto Rosegarden</translation>
     </message>
     <message>
-        <location line="-1108"/>
+        <location line="-1090"/>
         <source>Open MIDI File</source>
         <translation>Abrir Arquivo MIDI</translation>
     </message>
@@ -22969,7 +22975,7 @@ Nenhum segmento será dividido.</translation>
         <translation type="vanished">Mesclar Arquivi MIDI</translation>
     </message>
     <message>
-        <location line="+139"/>
+        <location line="+134"/>
         <source>Importing MIDI file...</source>
         <translation>Importar arquivo MIDI...</translation>
     </message>
@@ -22984,13 +22990,13 @@ Nenhum segmento será dividido.</translation>
         <translation>Calcular Notação</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+51"/>
         <source>Open X11 Rosegarden File</source>
         <translation>Abrir Arquivos Rosegarden X11</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+24"/>
+        <location line="+23"/>
         <source>X11 Rosegarden files</source>
         <translation>Arquivos X11 Rosegarden</translation>
     </message>
@@ -23000,7 +23006,7 @@ Nenhum segmento será dividido.</translation>
         <translation>Selecionar Arquivo(s) X11 Rosegarden</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+21"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation>Importar  arquivo X11 Rosegarden...</translation>
     </message>
@@ -23010,13 +23016,13 @@ Nenhum segmento será dividido.</translation>
         <translation>Não é possível carregar arquivo Rosegarden X11. Ele parece estar corrompido.</translation>
     </message>
     <message>
-        <location line="+28"/>
-        <location line="+22"/>
+        <location line="+29"/>
+        <location line="+20"/>
         <source>Open Hydrogen File</source>
         <translation>Abrir Arquivo Hydrogen</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+20"/>
         <source>Importing Hydrogen file...</source>
         <translation>Importando arquivo Hydrogen...</translation>
     </message>
@@ -23026,12 +23032,12 @@ Nenhum segmento será dividido.</translation>
         <translation>Não foi possível importar o arquivo Hydrogen. Ele parece estar corrompido.</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+29"/>
         <source>Open MusicXML File</source>
         <translation>Abrir Arquivo MusicXML</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+43"/>
         <source>Importing MusicXML file...</source>
         <translation>Importando Arquivo MusicXML...</translation>
     </message>
@@ -23063,73 +23069,73 @@ Para obter ajuda com áudio correto e configuração MIDI, vá para http://roseg
     </message>
     <message>
         <location line="+5"/>
-        <location line="+36"/>
-        <location line="+46"/>
+        <location line="+40"/>
         <location line="+53"/>
-        <location line="+48"/>
-        <location line="+122"/>
+        <location line="+59"/>
+        <location line="+55"/>
+        <location line="+125"/>
         <source>Export as...</source>
         <translation>Exportar como...</translation>
     </message>
     <message>
-        <location line="-288"/>
+        <location line="-315"/>
         <source>Saving Rosegarden file to package failed: %1</source>
         <translation>Salvar o arquivo Rosegarden para o pacote falhou: %1</translation>
     </message>
     <message>
-        <location line="+14"/>
         <location line="+18"/>
+        <location line="+21"/>
         <source>Exporting MIDI file...</source>
         <translation>Exportando arquivo MIDI...</translation>
     </message>
     <message>
-        <location line="-15"/>
+        <location line="-18"/>
         <source>Standard MIDI files</source>
         <translation>Arquivos padrão MIDI</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location line="+53"/>
-        <location line="+48"/>
-        <location line="+223"/>
+        <location line="+39"/>
+        <location line="+60"/>
+        <location line="+54"/>
+        <location line="+233"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Exportação falhou. O arquivo não pôde ser aberto para gravação.</translation>
     </message>
     <message>
-        <location line="-317"/>
-        <location line="+22"/>
+        <location line="-336"/>
+        <location line="+25"/>
         <source>Exporting Csound score file...</source>
         <translation>Exportando arquivo de Partitura Csound...</translation>
     </message>
     <message>
-        <location line="-19"/>
+        <location line="-22"/>
         <source>Csound files</source>
         <translation>Arquivos Csound</translation>
     </message>
     <message>
-        <location line="+50"/>
-        <location line="+17"/>
+        <location line="+56"/>
+        <location line="+20"/>
         <source>Exporting Mup file...</source>
         <translation>Exportando arquivo Mup...</translation>
     </message>
     <message>
-        <location line="-14"/>
+        <location line="-17"/>
         <source>Mup files</source>
         <translation>Arquivos Mup</translation>
     </message>
     <message>
-        <location line="+45"/>
-        <location line="+85"/>
+        <location line="+52"/>
+        <location line="+88"/>
         <source>Exporting LilyPond file...</source>
         <translation>Exportando arquivo LilyPond...</translation>
     </message>
     <message>
-        <location line="-82"/>
+        <location line="-85"/>
         <source>LilyPond files</source>
         <translation>Arquivo LilyPond</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+17"/>
         <source>Printing with LilyPond...</source>
         <translation>Imprimindo com LilyPond...</translation>
     </message>
@@ -23159,7 +23165,7 @@ Para obter ajuda com áudio correto e configuração MIDI, vá para http://roseg
         <translation>Exportando arquivo MusicXML...</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>Unable to export WAV without JACK running.</source>
         <translation>Não é possível exportar para WAV sem o JACK rodando.</translation>
     </message>
@@ -23177,7 +23183,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1250"/>
+        <location line="+1254"/>
         <source>Relabel Segment</source>
         <translation>Renomear Segmento</translation>
     </message>
@@ -23197,7 +23203,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation>Por número de semitons: </translation>
     </message>
     <message>
-        <location line="+1697"/>
+        <location line="+1696"/>
         <source>Interpret segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23219,40 +23225,40 @@ Only audio and synth plugin tracks will be exported</source>
 (%2)</translation>
     </message>
     <message>
-        <location line="-4089"/>
-        <location line="+24"/>
-        <location line="+905"/>
+        <location line="-4116"/>
+        <location line="+22"/>
+        <location line="+928"/>
         <source>XML files</source>
         <translation>Arquivo XML</translation>
     </message>
     <message>
-        <location line="-5140"/>
+        <location line="-5107"/>
         <source>An auto-save file for an unsaved document has been found.
 Do you want to open it?</source>
         <translation>Um arquivo de auto-gravação para um documento não salvo foi encontrado.
 Você quer abrí-lo?</translation>
     </message>
     <message>
-        <location line="+2432"/>
-        <location line="+1435"/>
-        <location line="+194"/>
-        <location line="+98"/>
-        <location line="+101"/>
-        <location line="+627"/>
-        <location line="+50"/>
-        <location line="+48"/>
-        <location line="+116"/>
-        <location line="+104"/>
+        <location line="+2390"/>
+        <location line="+1430"/>
+        <location line="+190"/>
+        <location line="+94"/>
+        <location line="+96"/>
+        <location line="+634"/>
+        <location line="+57"/>
+        <location line="+54"/>
+        <location line="+123"/>
+        <location line="+107"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location line="-1454"/>
+        <location line="-1467"/>
         <source>Select MIDI File(s)</source>
         <translation>Selecionar Arquivo(s) MIDI</translation>
     </message>
     <message>
-        <location line="+1606"/>
+        <location line="+1623"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -23393,12 +23399,12 @@ Erro foi %2</translation>
         <translation>Você tem certeza que deseja importar seu estúdio padrão e perder o atual?</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+28"/>
         <source>Import Studio from File</source>
         <translation>Importar Estúdio do arquivo</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+37"/>
         <source>Import Studio</source>
         <translation>Importar Estúdio</translation>
     </message>
@@ -23775,7 +23781,7 @@ Erro foi %2</translation>
     <message>
         <location line="+700"/>
         <source>Enter new name:</source>
-        <translation type="unfinished">Entre com o novo nome:</translation>
+        <translation>Entre com o novo nome:</translation>
     </message>
     <message>
         <location line="-811"/>
@@ -24390,19 +24396,22 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
         <translation>Anomalia desconhecido do sequenciador!</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+83"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Resolução do timer do sistema é muito baixo!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location line="-23"/>
-        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegarden foi incapaz de encontrar uma fonte de temporização de alta resolução para o desempenho MIDI.&lt;/p&gt;&lt;p&gt;Isso pode significar que você está usando um sistema Linux com a Resolução do timer do kernel muito baixo. Contacte o seu distribuidor Linux para mais informações.&lt;/p&gt;&lt;p&gt;Alguns distribuidores de Linux já oferecem kernels de baixa latência, consulte o &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Web-site Rosegarden&lt;/a&gt; para instruções.&lt;/p&gt;</translation>
+        <location line="+1"/>
+        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;Check whether your Linux distribution provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;O Rosegarden não conesgui uencontrar uma fonte de tempo com desempenho compatível com MIDI.&lt;/p&gt;&lt;p&gt;Verifique se sua distribuiçào Linux provê um kernel otimizado para multimidia.  Veja na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;página do Rosegarden&lt;/a&gt; notas sobre isso.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
+        <translation type="vanished">&lt;p&gt;Rosegarden foi incapaz de encontrar uma fonte de temporização de alta resolução para o desempenho MIDI.&lt;/p&gt;&lt;p&gt;Isso pode significar que você está usando um sistema Linux com a Resolução do timer do kernel muito baixo. Contacte o seu distribuidor Linux para mais informações.&lt;/p&gt;&lt;p&gt;Alguns distribuidores de Linux já oferecem kernels de baixa latência, consulte o &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Web-site Rosegarden&lt;/a&gt; para instruções.&lt;/p&gt;</translation>
+    </message>
+    <message>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegarden foi incapaz de encontrar uma fonte de temporização de alta resolução para o desempenho MIDI.&lt;/p&gt;&lt;p&gt;Você pode ser capaz de resolver este problema ao carregar o módulo do kernel RTC timer. Para fazer isso, tente executar&lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt;numa janela de terminal e depois reiniciar Rosegarden.&lt;/p&gt;&lt;p&gt;Alternativamente, verifique se o seu distribuidor Linux fornece um kernel otimizado multimídia. Veja o &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt; web-site Rosegarden&lt;/a&gt;para obter informações sobre isso.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Rosegarden foi incapaz de encontrar uma fonte de temporização de alta resolução para o desempenho MIDI.&lt;/p&gt;&lt;p&gt;Você pode ser capaz de resolver este problema ao carregar o módulo do kernel RTC timer. Para fazer isso, tente executar&lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt;numa janela de terminal e depois reiniciar Rosegarden.&lt;/p&gt;&lt;p&gt;Alternativamente, verifique se o seu distribuidor Linux fornece um kernel otimizado multimídia. Veja o &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt; web-site Rosegarden&lt;/a&gt;para obter informações sobre isso.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+144"/>
@@ -27511,7 +27520,7 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
 <context>
     <name>S:</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="-787"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="-798"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="+21"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="-186"/>
         <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="-14"/>
@@ -27531,7 +27540,7 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="-7"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="+17"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+1669"/>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="-69"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="-85"/>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="+40"/>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="-102"/>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="-7"/>
