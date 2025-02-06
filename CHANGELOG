@@ -1,3 +1,22 @@
+====== ROSEGARDEN 24.12.1 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 24.12.1
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fixed a crash when closing the Manage MIDI Devices window.  Debian
+    Bug #1091859. [544fbeea]
+  * Fixed a crash when creating a new document (File > New) while the
+    bank editor is up.  Bug #1712.  [77cd257d]
+  * Fixed a crash when deleting a repeating segment that is being
+    edited in notation.  Bug #1711.  [edff1c0a]
+
 ====== ROSEGARDEN 24.12 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 24.12

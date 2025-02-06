@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2018-2024 Rosegarden development team -->
+<!-- Copyright 2018-2025 Rosegarden development team -->
 <component type="desktop">
     <id>com.rosegardenmusic.rosegarden</id>
     <provides>
@@ -23,6 +23,7 @@
     <metadata_license>CC0</metadata_license>
     <project_license>GPL-2.0+</project_license>
     <content_rating type="oars-1.1" />
+    <!-- Deprecated.  Leaving here for older systems. -->
     <developer_name>Rosegarden development team</developer_name>
     <developer id="com.rosegardenmusic">
       <name>Rosegarden Development Team</name>
@@ -60,6 +61,18 @@
     </categories>
 
     <releases>
+
+      <release type="stable" version="24.12.1" date="2025-02-06">
+        <url>https://rosegardenmusic.com/wiki/dev:24.12.1</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Fixed a crash when closing the Manage MIDI Devices window.  Debian Bug #1091859. [544fbeea]</li>
+            <li>Fixed a crash when creating a new document (File > New) while the bank editor is up.  Bug #1712.  [77cd257d]</li>
+            <li>Fixed a crash when deleting a repeating segment that is being edited in notation.  Bug #1711.  [edff1c0a]</li>
+          </ul>
+        </description>
+      </release>
 
       <release type="stable" version="24.12" date="2024-12-04">
         <url>https://rosegardenmusic.com/wiki/dev:24.12</url>
