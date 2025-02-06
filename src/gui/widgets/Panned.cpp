@@ -118,6 +118,12 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
 
     // Draw the Playback Position Pointer
 
+    // ??? Why is the "pointer" drawn in drawForeground, after these complex
+    //     manual updates, instead of making the pointer a graphics item and
+    //     letting QGraphicsScene/QGraphicsView take care of updating correctly
+    //     for that item?  -- David Faure on the dev mailing list.
+    //     https://sourceforge.net/p/rosegarden/mailman/message/37663494/
+
     if (!m_pointerVisible)
         return;
 
