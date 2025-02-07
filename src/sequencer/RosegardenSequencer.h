@@ -547,7 +547,7 @@ private:
      */
     bool m_isEndOfCompReached;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     QRecursiveMutex m_mutex;
 #else
     QMutex m_mutex;

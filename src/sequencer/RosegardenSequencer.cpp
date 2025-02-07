@@ -973,7 +973,7 @@ RosegardenSequencer::disconnectMappedObject(int id)
 unsigned int
 RosegardenSequencer::getSampleRate() const
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     QMutexLocker locker(const_cast<QRecursiveMutex *>(&m_mutex));
 #else
     QMutexLocker locker(const_cast<QMutex *>(&m_mutex));
