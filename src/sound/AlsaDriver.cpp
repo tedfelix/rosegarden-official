@@ -550,7 +550,7 @@ AlsaDriver::getAutoTimer(bool &o_wantTimerChecks)
                         return timerIter->name;
                     } else {
                         AUDIT << "    PCM timer: \"" << timerIter->name << "\" inadequate resolution: " << hz << "Hz\n";
-                        RG_DEBUG << "getAutoTimer(): PCM timer: \"" << timerIter->name << "\" inadequate resolution: " << hz << "Hz";
+                        RG_DEBUG << "getAutoTimer(): PCM timer:" << timerIter->name << "inadequate resolution:" << hz << "Hz";
                     }
                 }
             }
@@ -1616,9 +1616,6 @@ AlsaDriver::getCurrentTimer()
 void
 AlsaDriver::setCurrentTimer(QString timerName)
 {
-    AUDIT << "\n";
-    AUDIT << "AlsaDriver::setCurrentTimer()\n";
-
     QSettings settings;
     bool skip = settings.value("ALSA/SkipSetCurrentTimer", false).toBool();
     // Write back out so we can find it.
@@ -1634,6 +1631,8 @@ AlsaDriver::setCurrentTimer(QString timerName)
     settings.setValue(QString(SequencerOptionsConfigGroup) + "/" + "timer",
                       m_currentTimerName);
 
+    AUDIT << "\n";
+    AUDIT << "AlsaDriver::setCurrentTimer(\"" << timerName << "\")\n";
     RG_DEBUG << "setCurrentTimer(" << timerName << ")";
 
     if (timerName == AUTO_TIMER_NAME) {
@@ -1680,18 +1679,21 @@ AlsaDriver::setCurrentTimer(QString timerName)
             snd_seq_queue_timer_set_id(queueTimer, timerid);
             checkAlsaError(snd_seq_set_queue_timer(m_midiHandle, m_queue, queueTimer), "snd_seq_set_queue_timer() failed");
 
+            long freq{0};
+            if (m_timers[i].resolution != 0)
+                freq = 1000000000 / m_timers[i].resolution;
+
+            AUDIT << "    Current timer set to \"" << timerName << "\" at " << freq << "Hz\n";
+            RG_DEBUG << "setCurrentTimer(): Current timer set to" << timerName << "at " << freq << "Hz";
+
             if (m_doTimerChecks) {
-                AUDIT << "    Current timer set to \"" << timerName << "\" with timer checks\n";
-                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << timerName << "\" with timer checks";
-            } else {
-                AUDIT << "    Current timer set to \"" << timerName << "\"\n";
-                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << timerName << "\"";
+                AUDIT << "    Timer checks enabled (JACK Available).\n";
+                RG_DEBUG << "setCurrentTimer(): Timer checks enabled (JACK available).";
             }
 
-            const long freq = 1000000000 / m_timers[i].resolution;
             if (freq < 750) {
                 AUDIT << "    WARNING: \"" << timerName << "\" has only " << freq << "Hz resolution!\n";
-                RG_WARNING << "setCurrentTimer(): WARNING: \"" << timerName << "\" has only " << freq << "Hz resolution!";
+                RG_WARNING << "setCurrentTimer(): WARNING:" << timerName << "has only " << freq << "Hz resolution!";
                 // Indicate problem in status bar.
                 reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
             }
