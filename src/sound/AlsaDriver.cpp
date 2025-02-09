@@ -18,7 +18,7 @@
 #endif
 
 #define RG_MODULE_STRING "[AlsaDriver]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT
 
 #include "misc/Debug.h"
 #include <cstdlib>
@@ -416,7 +416,7 @@ AlsaDriver::generateTimerList()
 
 
 QString
-AlsaDriver::getAutoTimer(bool &wantTimerChecks)
+AlsaDriver::getAutoTimer(bool &o_wantTimerChecks)
 {
     // Look for the apparent best-choice timer.
 
@@ -461,13 +461,13 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // a warning.
 
     bool pcmTimerAccepted = false;
-    wantTimerChecks = false; // for most options
 
-    bool rtcCouldBeOK = false;
+    // Assume no JACK so no drift correction.
+    o_wantTimerChecks = false;
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
-        wantTimerChecks = true;
+        o_wantTimerChecks = true;
         pcmTimerAccepted = true;
     }
 #endif
@@ -475,22 +475,28 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // Look for a high frequency (>=750Hz) system timer.
     // If we find one, return it.
 
+    const AlsaTimerInfo *systemTimer{nullptr};
+
     // For each timer...
-    for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-         i != m_timers.end(); ++i) {
+    for (std::vector<AlsaTimerInfo>::const_iterator timerIter =
+                 m_timers.begin();
+         timerIter != m_timers.end();
+         ++timerIter) {
         // Skip any with a slave class.
-        if (i->sclas != SND_TIMER_SCLASS_NONE)
+        if (timerIter->sclas != SND_TIMER_SCLASS_NONE)
             continue;
-        if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+        if (timerIter->clas == SND_TIMER_CLASS_GLOBAL) {
             // System timer?
-            if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
-                // Check the frequency.
-                long hz = 1000000000 / i->resolution;
-                if (hz >= 750) {
-                    return i->name;
-                }
-            }
+            if (timerIter->device == SND_TIMER_GLOBAL_SYSTEM)
+                systemTimer = &*timerIter;
         }
+    }
+
+    if (systemTimer) {
+        const long freq = 1000000000 / systemTimer->resolution;
+        // Probably 1000Hz?  Take it.
+        if (freq >= 750)
+            return systemTimer->name;
     }
 
     // At this point we know the system timer has a freq less than
@@ -501,23 +507,23 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // recent kernels are OK.  Avoid if the kernel is older than
     // 2.6.20 or the ALSA driver is older than 1.0.14.
 
-    if (versionIsAtLeast(getAlsaVersion(),
-                         1, 0, 14) &&
-        versionIsAtLeast(getKernelVersionString(),
-                         2, 6, 20)) {
+    // With newer kernels, SND_TIMER_GLOBAL_RTC no longer exists.
 
-        rtcCouldBeOK = true;
+    // Note that this is not the infamous "HR timer" (SND_TIMER_GLOBAL_HRTIMER)
+    // which always locks up the system.  See MIDIConfigurationPage which
+    // removes it from its list.
 
-        for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-             i != m_timers.end(); ++i) {
+    if (versionIsAtLeast(getAlsaVersion(), 1, 0, 14)  &&
+        versionIsAtLeast(getKernelVersionString(), 2, 6, 20)) {
+        for (std::vector<AlsaTimerInfo>::iterator timerIter = m_timers.begin();
+             timerIter != m_timers.end(); ++timerIter) {
             // Skip any that have a slave class.
-            if (i->sclas != SND_TIMER_SCLASS_NONE)
+            if (timerIter->sclas != SND_TIMER_SCLASS_NONE)
                 continue;
-            if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+            if (timerIter->clas == SND_TIMER_CLASS_GLOBAL) {
                 // Found the RTC timer?  Return it.
-                if (i->device == SND_TIMER_GLOBAL_RTC) {
-                    return i->name;
-                }
+                if (timerIter->device == SND_TIMER_GLOBAL_RTC)
+                    return timerIter->name;
             }
         }
     }
@@ -525,49 +531,39 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // look for the first PCM playback timer; that's all we know about
     // for now (until JACK becomes able to tell us which PCM it's on)
 
+    // Note that PCM timers are pretty slow.  I see "172Hz" on my machine.
+    // This must be a frame timer and not a sample timer.  So typically,
+    // this test will fail since it will never find anything better than
+    // 750Hz.
+
     // cppcheck-suppress knownConditionTrueFalse
     if (pcmTimerAccepted) {
-
-        for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-             i != m_timers.end(); ++i) {
-            if (i->sclas != SND_TIMER_SCLASS_NONE)
+        for (std::vector<AlsaTimerInfo>::iterator timerIter = m_timers.begin();
+             timerIter != m_timers.end(); ++timerIter) {
+            if (timerIter->sclas != SND_TIMER_SCLASS_NONE)
                 continue;
-            if (i->clas == SND_TIMER_CLASS_PCM) {
-                if (i->resolution != 0) {
-                    long hz = 1000000000 / i->resolution;
+            if (timerIter->clas == SND_TIMER_CLASS_PCM) {
+                if (timerIter->resolution != 0) {
+                    const long hz = 1000000000 / timerIter->resolution;
                     if (hz >= 750) {
-                        wantTimerChecks = false; // pointless with PCM timer
-                        return i->name;
+                        o_wantTimerChecks = false; // pointless with PCM timer
+                        return timerIter->name;
                     } else {
-                        AUDIT << "PCM timer: inadequate resolution " << i->resolution << '\n';
-                        RG_DEBUG << "getAutoTimer(): PCM timer: inadequate resolution " << i->resolution;
+                        AUDIT << "PCM timer: inadequate resolution " << timerIter->resolution << '\n';
+                        RG_DEBUG << "getAutoTimer(): PCM timer: inadequate resolution " << timerIter->resolution;
                     }
                 }
             }
         }
     }
 
-    // next look for slow, unpopular 100Hz (2.4) or 250Hz (2.6) system timer
+    // Fall back on the system timer.
 
-    // For each timer...
-    for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-         i != m_timers.end(); ++i) {
-        // If this has a slave class, skip it.
-        if (i->sclas != SND_TIMER_SCLASS_NONE)
-            continue;
-        if (i->clas == SND_TIMER_CLASS_GLOBAL) {
-            // System timer?
-            if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
-                AUDIT << "Using low-resolution system timer, sending a warning" << '\n';
-                RG_DEBUG << "getAutoTimer(): Using low-resolution system timer, sending a warning";
-                if (rtcCouldBeOK) {
-                    reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
-                } else {
-                    reportFailure(MappedEvent::WarningImpreciseTimer);
-                }
-                return i->name;
-            }
-        }
+    // If there is a low frequency system timer, go with it.
+    if (systemTimer) {
+        // Indicate problem in status bar.
+        reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
+        return systemTimer->name;
     }
 
     // falling back to something that almost certainly won't work,

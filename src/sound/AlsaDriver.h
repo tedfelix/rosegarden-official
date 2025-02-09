@@ -675,7 +675,7 @@ private:
         int device;
         int subdevice;
         QString name;
-        long resolution;
+        long resolution;  // usecs
     };
     std::vector<AlsaTimerInfo> m_timers;
     QString m_currentTimerName;
