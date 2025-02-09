@@ -29,14 +29,13 @@ namespace Rosegarden
 {
 
 
-
+/// Simple dialog to display the audit log.
 class ShowSequencerStatusDialog : public QDialog
 {
     Q_OBJECT
 public:
     explicit ShowSequencerStatusDialog(QWidget *parent);
 };
-
 
 
 }
