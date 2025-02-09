@@ -207,7 +207,7 @@ public:
         // Audio subsystem failed to mix instruments fast enough
         FailureMixUnderrun       = 5,
         // Using a timer that has too low a resolution (e.g. 100Hz system timer)
-        WarningImpreciseTimer    = 6,
+        WarningImpreciseTimer    = 6,  // unused, see WarningImpreciseTimerTryRTC
         // Too much CPU time spent in audio processing -- risk of xruns and lockup
         FailureCPUOverload       = 7,
         // JACK kicked us out, but we've reconnected

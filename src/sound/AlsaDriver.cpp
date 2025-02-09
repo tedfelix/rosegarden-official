@@ -549,30 +549,27 @@ AlsaDriver::getAutoTimer(bool &o_wantTimerChecks)
                         o_wantTimerChecks = false; // pointless with PCM timer
                         return timerIter->name;
                     } else {
-                        AUDIT << "PCM timer: inadequate resolution " << timerIter->resolution << '\n';
-                        RG_DEBUG << "getAutoTimer(): PCM timer: inadequate resolution " << timerIter->resolution;
+                        AUDIT << "    PCM timer: \"" << timerIter->name << "\" inadequate resolution: " << hz << "Hz\n";
+                        RG_DEBUG << "getAutoTimer(): PCM timer: \"" << timerIter->name << "\" inadequate resolution: " << hz << "Hz";
                     }
                 }
             }
         }
     }
 
-    // Fall back on the system timer.
+    // Couldn't find anything with a frequency above 750Hz.
 
-    // If there is a low frequency system timer, go with it.
-    if (systemTimer) {
-        // Indicate problem in status bar.
-        reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
+    // Fall back on the system timer if available.
+    if (systemTimer)
         return systemTimer->name;
-    }
 
-    // falling back to something that almost certainly won't work,
-    // if for any reason all of the above failed
+    // Fall back on the first timer if there is one.
+    if (!m_timers.empty())
+        return m_timers.begin()->name;
 
-    return m_timers.begin()->name;
+    // No hope.
+    return "";
 }
-
-
 
 void
 AlsaDriver::generatePortList()
@@ -1619,6 +1616,9 @@ AlsaDriver::getCurrentTimer()
 void
 AlsaDriver::setCurrentTimer(QString timerName)
 {
+    AUDIT << "\n";
+    AUDIT << "AlsaDriver::setCurrentTimer()\n";
+
     QSettings settings;
     bool skip = settings.value("ALSA/SkipSetCurrentTimer", false).toBool();
     // Write back out so we can find it.
@@ -1661,6 +1661,7 @@ AlsaDriver::setCurrentTimer(QString timerName)
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "setCurrentTimer(): draining output to control queue");
     m_alsaPlayStartTime = RealTime::zero();
 
+    // Find the timer by name.
     for (size_t i = 0; i < m_timers.size(); ++i) {
         if (m_timers[i].name == timerName) {
 
@@ -1687,13 +1688,12 @@ AlsaDriver::setCurrentTimer(QString timerName)
                 RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << timerName << "\"";
             }
 
-            if (m_timers[i].clas == SND_TIMER_CLASS_GLOBAL &&
-                m_timers[i].device == SND_TIMER_GLOBAL_SYSTEM) {
-                long hz = 1000000000 / m_timers[i].resolution;
-                if (hz < 900) {
-                    AUDIT << "    WARNING: using system timer with only " << hz << "Hz resolution!\n";
-                    RG_WARNING << "setCurrentTimer(): WARNING: using system timer with only " << hz << "Hz resolution!";
-                }
+            const long freq = 1000000000 / m_timers[i].resolution;
+            if (freq < 750) {
+                AUDIT << "    WARNING: \"" << timerName << "\" has only " << freq << "Hz resolution!\n";
+                RG_WARNING << "setCurrentTimer(): WARNING: \"" << timerName << "\" has only " << freq << "Hz resolution!";
+                // Indicate problem in status bar.
+                reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
             }
 
             break;

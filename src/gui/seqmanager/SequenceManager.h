@@ -443,9 +443,6 @@ private:
 
     // *** Async MIDI
 
-    /// When handling an async MappedEvent::WarningImpreciseTimer.
-    bool shouldWarnForImpreciseTimer();
-
     /// Prevents showing an overrun warning more than once.
     bool m_shownOverrunWarning;
 

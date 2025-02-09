@@ -959,18 +959,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             RosegardenMainWindow::self(), "",
                             tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
-                    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer &&
-                               shouldWarnForImpreciseTimer()) {
-
-                        // This can only happen for ancient Linux (<2.6.20)
-                        // and/or ALSA (<1.0.14) circa 2007.  See the check in
-                        // AlsaDriver::getAutoTimer().
-                        // ??? Clean WarningImpreciseTimer up.
-
-                        RG_WARNING << "Rosegarden: WARNING: No accurate sequencer timer available";
-
-                    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimerTryRTC &&
-                               shouldWarnForImpreciseTimer()) {
+                    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimerTryRTC) {
 
                         RG_WARNING << "WARNING: No accurate sequencer timer available.";
 
@@ -1894,19 +1883,6 @@ SequenceManager::setExportWavFile(const QString& fileName)
     RosegardenSequencer::getInstance()->installExporter(m_wavExporter);
     // and start the timer
     m_exportTimer->start(50);
-}
-
-bool
-SequenceManager::shouldWarnForImpreciseTimer()
-{
-    const QString timer =
-            RosegardenSequencer::getInstance()->getCurrentTimer();
-
-    // If no specific timer has been chosen by the user, do warnings
-    if (timer == "(auto)"  ||  timer == "")
-        return true;
-    else  // The user has chosen a specific timer, leave them alone.
-        return false;
 }
 
 // Return a new metaiterator on the current composition (suitable
