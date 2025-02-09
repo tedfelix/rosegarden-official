@@ -493,7 +493,9 @@ AlsaDriver::getAutoTimer(bool &o_wantTimerChecks)
     }
 
     if (systemTimer) {
-        const long freq = 1000000000 / systemTimer->resolution;
+        long freq{0};
+        if (systemTimer->resolution != 0)
+            freq = 1000000000 / systemTimer->resolution;
         // Probably 1000Hz?  Take it.
         if (freq >= 750)
             return systemTimer->name;
@@ -544,13 +546,15 @@ AlsaDriver::getAutoTimer(bool &o_wantTimerChecks)
                 continue;
             if (timerIter->clas == SND_TIMER_CLASS_PCM) {
                 if (timerIter->resolution != 0) {
-                    const long hz = 1000000000 / timerIter->resolution;
-                    if (hz >= 750) {
+                    long freq{0};
+                    if (timerIter->resolution != 0)
+                        freq = 1000000000 / timerIter->resolution;
+                    if (freq >= 750) {
                         o_wantTimerChecks = false; // pointless with PCM timer
                         return timerIter->name;
                     } else {
-                        AUDIT << "    PCM timer: \"" << timerIter->name << "\" inadequate resolution: " << hz << "Hz\n";
-                        RG_DEBUG << "getAutoTimer(): PCM timer:" << timerIter->name << "inadequate resolution:" << hz << "Hz";
+                        AUDIT << "    PCM timer: \"" << timerIter->name << "\" inadequate resolution: " << freq << "Hz\n";
+                        RG_DEBUG << "getAutoTimer(): PCM timer:" << timerIter->name << "inadequate resolution:" << freq << "Hz";
                     }
                 }
             }
