@@ -15,55 +15,79 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ShowSequencerStatusDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ShowSequencerStatusDialog.h"
 
+#include "misc/Debug.h"
 #include "sound/Audit.h"
 #include "misc/Strings.h"
+#include "misc/ConfigGroups.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QByteArray>
-#include <QDataStream>
 #include <QLabel>
+#include <QSettings>
 #include <QString>
 #include <QTextEdit>
-#include <QWidget>
 #include <QVBoxLayout>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
+
 ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
-        QDialog(parent)
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(tr("Sequencer status"));
 
-    QGridLayout *layout = new QGridLayout;
-    setLayout(layout);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0,0,0,0);
 
     int row = 0;
 
-    layout->addWidget(new QLabel(tr("Sequencer status:")), row, 0);
-
-    QString status = strtoqstr(AUDIT.str());
-
+    // Sequencer Status (Audit Log)
     QTextEdit *text = new QTextEdit;
     text->setReadOnly(true);
-    text->setMinimumWidth(500);
-    text->setMinimumHeight(200);
-    text->setPlainText(status);
 
-    layout->addWidget(text, ++row, 0);
-    layout->setRowStretch(row, 20);
+    text->setPlainText(strtoqstr(AUDIT.str()));
+
+    layout->addWidget(text, row);
+    layout->setStretch(row, 1);
+
+    ++row;
+
+    // Button Box
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
-    layout->addWidget(buttonBox, ++row, 0);
-
+    buttonBox->setContentsMargins(10,10,10,10);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    layout->addWidget(buttonBox, row);
+
+    ++row;
+
+    setMinimumSize(500, 200);
+
+    // Restore window geometry and toolbar/dock state
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    restoreGeometry(settings.value("Sequencer_Status_Dialog_Geometry").toByteArray());
+
 }
+
+ShowSequencerStatusDialog::~ShowSequencerStatusDialog()
+{
+    // Save window geometry and header state.
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Sequencer_Status_Dialog_Geometry", saveGeometry());
+}
+
 
 }

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,7 +20,6 @@
 
 #include <QDialog>
 
-
 class QWidget;
 
 
@@ -35,6 +33,9 @@ class ShowSequencerStatusDialog : public QDialog
     Q_OBJECT
 public:
     explicit ShowSequencerStatusDialog(QWidget *parent);
+    ~ShowSequencerStatusDialog();
+
+    QSize sizeHint() const override  { return QSize(700, 700); }
 };
 
 

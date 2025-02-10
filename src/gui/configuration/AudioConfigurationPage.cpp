@@ -24,7 +24,6 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "document/RosegardenDocument.h"
-#include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/studio/StudioControl.h"

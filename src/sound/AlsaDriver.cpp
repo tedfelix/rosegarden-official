@@ -18,7 +18,7 @@
 #endif
 
 #define RG_MODULE_STRING "[AlsaDriver]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "misc/Debug.h"
 #include <cstdlib>
@@ -177,7 +177,8 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 {
     // Create a log that the user can easily see through the preferences
     // even in a release build.
-    AUDIT << "Rosegarden " << VERSION << " - AlsaDriver " << m_name << '\n';
+    AUDIT << "Rosegarden " << VERSION << '\n';
+    AUDIT << m_name << '\n';
     RG_DEBUG << "ctor: Rosegarden " << VERSION << " - AlsaDriver " << m_name;
 
     m_pendSysExcMap = new DeviceEventMap();
@@ -622,7 +623,7 @@ AlsaDriver::generatePortList()
                       << client << ","
                       << port << " - ("
                       << snd_seq_client_info_get_name(cinfo) << ", "
-                      << snd_seq_port_info_get_name(pinfo) << ")";
+                      << snd_seq_port_info_get_name(pinfo) << ")\n";
                 RG_DEBUG << "    "
                       << client << ","
                       << port << " - ("
@@ -635,15 +636,15 @@ AlsaDriver::generatePortList()
                     ((capability & SND_SEQ_PORT_CAP_WRITE) &&
                      (capability & SND_SEQ_PORT_CAP_READ))) {
                     direction = Duplex;
-                    AUDIT << "\t\t\t(DUPLEX)";
+                    AUDIT << "\t(DUPLEX)";
                     RG_DEBUG << "        (DUPLEX)";
                 } else if (capability & SND_SEQ_PORT_CAP_WRITE) {
                     direction = WriteOnly;
-                    AUDIT << "\t\t(WRITE ONLY)";
+                    AUDIT << "\t(WRITE ONLY)";
                     RG_DEBUG << "        (WRITE ONLY)";
                 } else {
                     direction = ReadOnly;
-                    AUDIT << "\t\t(READ ONLY)";
+                    AUDIT << "\t(READ ONLY)";
                     RG_DEBUG << "        (READ ONLY)";
                 }
 
