@@ -34,8 +34,8 @@ namespace Rosegarden
 {
 
 
-SoundDriver::SoundDriver(MappedStudio *studio, const QString &name) :
-        m_name(name),
+SoundDriver::SoundDriver(MappedStudio *studio, const QString &versionInfo) :
+        m_versionInfo(versionInfo),
         m_driverStatus(NO_DRIVER),
         m_playStartPosition(0, 0),
         m_playing(false),

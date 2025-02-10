@@ -124,13 +124,12 @@ namespace {
 
 AlsaDriver::AlsaDriver(MappedStudio *studio):
     SoundDriver(studio,
-                QString("[ALSA library version ") +
+                QString("ALSA library version ") +
                 SND_LIB_VERSION_STR +
-                ", module version " +
+                "\nALSA module version " +
                 strtoqstr(getAlsaVersion()) +
-                ", kernel version " +
-                strtoqstr(getKernelVersionString()) +
-                "]"),
+                "\nKernel version " +
+                strtoqstr(getKernelVersionString())),
     m_startPlayback(false),
     m_midiHandle(nullptr),
     m_client( -1),
@@ -178,8 +177,8 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     // Create a log that the user can easily see through the preferences
     // even in a release build.
     AUDIT << "Rosegarden " << VERSION << '\n';
-    AUDIT << m_name << '\n';
-    RG_DEBUG << "ctor: Rosegarden " << VERSION << " - AlsaDriver " << m_name;
+    AUDIT << m_versionInfo << '\n';
+    RG_DEBUG << "ctor: Rosegarden " << VERSION << " - AlsaDriver " << m_versionInfo;
 
     m_pendSysExcMap = new DeviceEventMap();
 

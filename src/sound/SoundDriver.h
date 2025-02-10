@@ -79,7 +79,7 @@ class MappedStudio;
 class SoundDriver
 {
 public:
-    SoundDriver(MappedStudio *studio, const QString &name);
+    SoundDriver(MappedStudio *studio, const QString &versionInfo);
     virtual ~SoundDriver();
 
 
@@ -335,8 +335,8 @@ protected:
 
     // *** General ***
 
-    /// Driver name for the audit log.
-    QString m_name;
+    /// Traditionally used to dump version info to the audit log.
+    QString m_versionInfo;
 
     SoundDriverStatus m_driverStatus;
 
