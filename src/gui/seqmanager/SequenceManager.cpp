@@ -1756,35 +1756,25 @@ void SequenceManager::tempoChanged(const Composition *c)
 }
 
 void
-SequenceManager::sendTransportControlStatuses()
+SequenceManager::sendPreferences()
 {
-    // ??? static function.  Where does this really belong?  I suspect
-    //     RosegardenSequencer.
-
     QSettings settings;
-    settings.beginGroup( SequencerOptionsConfigGroup );
+    settings.beginGroup(SequencerOptionsConfigGroup);
 
-    // Get the settings values
-    //
-    bool jackTransport = qStrToBool( settings.value("jacktransport", "false" ) ) ;
-    bool jackMaster = qStrToBool( settings.value("jackmaster", "false" ) ) ;
-
-    int mmcMode = settings.value("mmcmode", 0).toInt() ;
-    int mtcMode = settings.value("mtcmode", 0).toInt() ;
-
-    int midiClock = settings.value("midiclock", 0).toInt() ;
-    bool midiSyncAuto = qStrToBool( settings.value("midisyncautoconnect", "false" ) ) ;
 
     // Send JACK transport
-    //
+
+    const bool jackTransport = qStrToBool(settings.value("jacktransport", "false"));
+    const bool jackSource = qStrToBool(settings.value("jackmaster", "false"));
+
     MidiByte jackValue{0};
-    if (jackTransport && jackMaster)
-        jackValue = 2;
+    if (jackTransport && jackSource)
+        jackValue = 2;  // On and source.
     else {
         if (jackTransport)
-            jackValue = 1;
+            jackValue = 1;  // On and follow.
         else
-            jackValue = 0;
+            jackValue = 0;  // Off.
     }
 
     MappedEvent mEjackValue;
@@ -1796,7 +1786,8 @@ SequenceManager::sendTransportControlStatuses()
 
 
     // Send MMC transport
-    //
+
+    const int mmcMode = settings.value("mmcmode", 0).toInt();
     MappedEvent mEmmcValue;
     mEmmcValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
     mEmmcValue.setType(MappedEvent::SystemMMCTransport);
@@ -1806,7 +1797,8 @@ SequenceManager::sendTransportControlStatuses()
 
 
     // Send MTC transport
-    //
+
+    const int mtcMode = settings.value("mtcmode", 0).toInt();
     MappedEvent mEmtcValue;
     mEmtcValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
     mEmtcValue.setType(MappedEvent::SystemMTCTransport);
@@ -1816,7 +1808,8 @@ SequenceManager::sendTransportControlStatuses()
 
 
     // Send MIDI Clock
-    //
+
+    const int midiClock = settings.value("midiclock", 0).toInt();
     MappedEvent mEmidiClock;
     mEmidiClock.setInstrumentId(MidiInstrumentBase);  // ??? needed?
     mEmidiClock.setType(MappedEvent::SystemMIDIClock);
@@ -1826,7 +1819,9 @@ SequenceManager::sendTransportControlStatuses()
 
 
     // Send MIDI Sync Auto-Connect
-    //
+
+    const bool midiSyncAuto =
+            qStrToBool(settings.value("midisyncautoconnect", "false"));
     MappedEvent mEmidiSyncAuto;
     mEmidiSyncAuto.setInstrumentId(MidiInstrumentBase);  // ??? needed?
     mEmidiSyncAuto.setType(MappedEvent::SystemMIDISyncAuto);
@@ -1834,7 +1829,6 @@ SequenceManager::sendTransportControlStatuses()
 
     StudioControl::sendMappedEvent(mEmidiSyncAuto);
 
-    settings.endGroup();
 }
 
 void

@@ -124,8 +124,14 @@ public:
      */
     static void reinitialiseSequencerStudio();
 
-    /// Send JACK and MMC transport control statuses
-    static void sendTransportControlStatuses();
+    /// Send preferences to various parts of the system using events.
+    /**
+     * Sends MappedEvent objects via StudioControl::sendMappedEvent().
+     *
+     * I assume this is being done for multithreading reasons.  Maybe the
+     * Event queue is thread safe?
+     */
+    static void sendPreferences();
 
     /// Align Instrument lists before playback starts.
     void preparePlayback();

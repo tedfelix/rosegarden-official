@@ -530,7 +530,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     // Send the transport control statuses for MMC and JACK
     //
-    m_seqManager->sendTransportControlStatuses();
+    m_seqManager->sendPreferences();
 
     // Now autoload
     //

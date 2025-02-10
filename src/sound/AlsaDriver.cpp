@@ -4611,7 +4611,7 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
             bool source = false;
 
             switch ((int)mappedEvent->getData1()) {
-            case 2:
+            case 2:  // JACK Transport Source
                 source = true;
                 enabled = true;
 #ifdef DEBUG_ALSA
@@ -4619,14 +4619,14 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 #endif
                 break;
 
-            case 1:
+            case 1:  // Follow JACK Transport
                 enabled = true;
 #ifdef DEBUG_ALSA
                 RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport";
 #endif
                 break;
 
-            case 0:
+            case 0:  // Ignore JACK Transport
             default:
 #ifdef DEBUG_ALSA
                 RG_DEBUG << "processEventsOut(): Rosegarden to ignore JACK transport";
