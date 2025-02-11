@@ -20,7 +20,6 @@
 
 #include "EventView2.h"
 
-#include "EventViewItem.h"
 #include "TrivialVelocityDialog.h"
 
 #include "base/BaseProperties.h"
@@ -686,16 +685,6 @@ EventView2::updateTableWidget()
                   data1Str <<
                   data2Str;
 
-#if 0
-        // ??? Should we use data() instead to embed a Segment and an Event
-        //     pointer?  Should be exactly the same.  Probably should have done
-        //     this before embarking on this project.
-        EventViewItem *item = new EventViewItem(
-                m_segments[0],  // segment
-                event,  // event
-                m_tableWidget,  // parent
-                values);  // strings
-#else
         // Use a QVariant so that the table sorts properly.
         const QVariant timeVariant = comp.makeTimeVariant(
                 eventTime,
@@ -733,7 +722,6 @@ EventView2::updateTableWidget()
 
         // Value (Data2)
         // ???
-#endif
 
         // Assemble a key so we can uniquely identify each row for selection
         // persistence across updates.
@@ -955,11 +943,15 @@ EventView2::slotEditCut()
 
     // For each QTreeWidgetItem in the selection...
     for (QTableWidgetItem *listItem : selection) {
-        EventViewItem *item = dynamic_cast<EventViewItem *>(listItem);
-        if (!item)
+        if (!listItem)
             continue;
 
-        cutSelection.addEvent(item->getEvent());
+        Event *event = static_cast<Event *>(
+                listItem->data(EventPtrRole).value<void *>());
+        if (!event)
+            continue;
+
+        cutSelection.addEvent(event);
     }
 
     if (cutSelection.empty())
@@ -983,11 +975,15 @@ EventView2::slotEditCopy()
 
     // For each QTreeWidgetItem in the selection...
     for (QTableWidgetItem *listItem : selection) {
-        EventViewItem *item = dynamic_cast<EventViewItem *>(listItem);
-        if (!item)
+        if (!listItem)
             continue;
 
-        copySelection.addEvent(item->getEvent());
+        Event *event = static_cast<Event *>(
+                listItem->data(EventPtrRole).value<void *>());
+        if (!event)
+            continue;
+
+        copySelection.addEvent(event);
     }
 
     if (copySelection.empty())
@@ -1121,21 +1117,21 @@ EventView2::slotEditEvent()
     if (selection.isEmpty())
         return;
 
-    QTableWidgetItem *eventViewItem = selection.first();
-    if (!eventViewItem)
+    QTableWidgetItem *item = selection.first();
+    if (!item)
         return;
 
     // Get the Segment.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
+    // the dialog since item might become invalid.
     Segment *segment = static_cast<Segment *>(
-            eventViewItem->data(SegmentPtrRole).value<void *>());
+            item->data(SegmentPtrRole).value<void *>());
     if (!segment)
         return;
 
     // Get the Event.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
+    // the dialog since item might become invalid.
     Event *event = static_cast<Event *>(
-            eventViewItem->data(EventPtrRole).value<void *>());
+            item->data(EventPtrRole).value<void *>());
     if (!event)
         return;
 
@@ -1168,21 +1164,21 @@ EventView2::slotEditEventAdvanced()
     if (selection.isEmpty())
         return;
 
-    QTableWidgetItem *eventViewItem = selection.first();
-    if (!eventViewItem)
+    QTableWidgetItem *item = selection.first();
+    if (!item)
         return;
 
     // Get the Segment.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
+    // the dialog since item might become invalid.
     Segment *segment = static_cast<Segment *>(
-            eventViewItem->data(SegmentPtrRole).value<void *>());
+            item->data(SegmentPtrRole).value<void *>());
     if (!segment)
         return;
 
     // Get the Event.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
+    // the dialog since item might become invalid.
     Event *event = static_cast<Event *>(
-            eventViewItem->data(EventPtrRole).value<void *>());
+            item->data(EventPtrRole).value<void *>());
     if (!event)
         return;
 
@@ -1419,21 +1415,21 @@ EventView2::slotRawTime()
 void
 EventView2::slotCellDoubleClicked(int row, int /* column */)
 {
-    QTableWidgetItem *eventViewItem = m_tableWidget->item(row, 0);
-    if (!eventViewItem) {
-        RG_WARNING << "slotItemDoubleClicked(): WARNING: No EventViewItem.";
+    QTableWidgetItem *item = m_tableWidget->item(row, 0);
+    if (!item) {
+        RG_WARNING << "slotItemDoubleClicked(): WARNING: No Item.";
         return;
     }
 
     Segment *segment = static_cast<Segment *>(
-            eventViewItem->data(SegmentPtrRole).value<void *>());
+            item->data(SegmentPtrRole).value<void *>());
     if (!segment) {
         RG_WARNING << "slotItemDoubleClicked(): WARNING: No Segment.";
         return;
     }
 
     Event *event = static_cast<Event *>(
-            eventViewItem->data(EventPtrRole).value<void *>());
+            item->data(EventPtrRole).value<void *>());
     if (!event) {
         RG_WARNING << "slotItemDoubleClicked(): WARNING: No Event.";
         return;
@@ -1469,11 +1465,8 @@ EventView2::slotContextMenu(const QPoint &pos)
     if (!item)
         return;
 
-    EventViewItem *eventViewItem = dynamic_cast<EventViewItem *>(item);
-    if (!eventViewItem)
-        return;
-
-    Event *event = eventViewItem->getEvent();
+    const Event *event = static_cast<const Event *>(
+            item->data(EventPtrRole).value<void *>());
     if (!event)
         return;
 
@@ -1514,16 +1507,17 @@ EventView2::slotContextMenu(const QPoint &pos)
 void
 EventView2::slotOpenInEventEditor(bool /* checked */)
 {
-    EventViewItem *eventViewItem =
-            dynamic_cast<EventViewItem *>(m_tableWidget->currentItem());
-    if (!eventViewItem)
+    QTableWidgetItem *item = m_tableWidget->currentItem();
+    if (!item)
         return;
 
-    Segment *segment = eventViewItem->getSegment();
+    Segment *segment = static_cast<Segment *>(
+            item->data(SegmentPtrRole).value<void *>());
     if (!segment)
         return;
 
-    Event *event = eventViewItem->getEvent();
+    Event *event = static_cast<Event *>(
+            item->data(EventPtrRole).value<void *>());
     if (!event)
         return;
 
@@ -1552,16 +1546,17 @@ EventView2::slotOpenInEventEditor(bool /* checked */)
 void
 EventView2::slotOpenInExpertEventEditor(bool /* checked */)
 {
-    EventViewItem *eventViewItem =
-            dynamic_cast<EventViewItem *>(m_tableWidget->currentItem());
-    if (!eventViewItem)
+    QTableWidgetItem *item = m_tableWidget->currentItem();
+    if (!item)
         return;
 
-    Segment *segment = eventViewItem->getSegment();
+    Segment *segment = static_cast<Segment *>(
+            item->data(SegmentPtrRole).value<void *>());
     if (!segment)
         return;
 
-    Event *event = eventViewItem->getEvent();
+    Event *event = static_cast<Event *>(
+            item->data(EventPtrRole).value<void *>());
     if (!event)
         return;
 
@@ -1586,12 +1581,12 @@ EventView2::slotOpenInExpertEventEditor(bool /* checked */)
 void
 EventView2::slotEditTriggeredSegment(bool /*checked*/)
 {
-    EventViewItem *eventViewItem =
-            dynamic_cast<EventViewItem *>(m_tableWidget->currentItem());
-    if (!eventViewItem)
+    QTableWidgetItem *item = m_tableWidget->currentItem();
+    if (!item)
         return;
 
-    Event *event = eventViewItem->getEvent();
+    const Event *event = static_cast<const Event *>(
+            item->data(EventPtrRole).value<void *>());
     if (!event)
         return;
 
