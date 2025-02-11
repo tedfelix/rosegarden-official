@@ -30,8 +30,8 @@
 class QWidget;
 class QMenu;
 class QPoint;
-class QTreeWidget;
-class QTreeWidgetItem;
+class QTableWidget;
+class QTableWidgetItem;
 class QLabel;
 class QCheckBox;
 class QGroupBox;
@@ -107,7 +107,7 @@ private slots:
     void slotFilterClicked(bool);
 
     /// Handle double-click on an event in the event list.
-    void slotItemDoubleClicked(QTreeWidgetItem *item, int column);
+    void slotCellDoubleClicked(int row, int column);
     void slotItemSelectionChanged();
 
     /// Right-click context menu.
@@ -168,14 +168,11 @@ private:
     QCheckBox *m_otherCheckBox;
     bool m_showOther{true};
 
-    // ??? QTreeWidget seems like overkill.  We never have sub items.
-    //     QTableWidget seems like a better choice.  See
-    //     TempoAndTimeSignatureEditor for a complete example of using
-    //     QTableWidget.
-    QTreeWidget *m_treeWidget;
-    bool updateTreeWidget();
+    // The Event table.
+    QTableWidget *m_tableWidget;
+    bool updateTableWidget();
 
-    /// Pop-up menu for the event list.
+    /// Pop-up menu for the event table.
     QMenu *m_contextMenu{nullptr};
     QAction *m_editTriggeredSegment{nullptr};
 
