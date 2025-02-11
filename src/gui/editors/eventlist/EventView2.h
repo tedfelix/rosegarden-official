@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#if 0
 #ifndef RG_EVENTVIEW2_H
 #define RG_EVENTVIEW2_H
 
@@ -54,16 +53,16 @@ class Event;
  *
  * Segment > Edit With > Open in Event List Editor.  Or just press "E".
  */
-class EventView : public EditViewBase
+class EventView2 : public EditViewBase
 {
     Q_OBJECT
 
 public:
 
-    EventView(RosegardenDocument *doc,
+    EventView2(RosegardenDocument *doc,
               const std::vector<Segment *> &segments);
 
-    ~EventView() override;
+    ~EventView2() override;
 
 signals:
 
@@ -195,5 +194,4 @@ private:
 
 }
 
-#endif
 #endif
