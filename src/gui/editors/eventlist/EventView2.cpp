@@ -435,18 +435,19 @@ EventView2::updateTableWidget()
 
     // For each row...
     for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
-        QTableWidgetItem *item = m_tableWidget->item(row, 0);
+        const QTableWidgetItem *item = m_tableWidget->item(row, 0);
         if (!item)
             continue;
         // If this item is selected, add its key to the list.
         if (item->isSelected())
-            selection.insert(item->data(Qt::UserRole).toString());
+            selection.insert(item->data(KeyRole).toString());
     }
 
     // Store "current" item.
 
     bool haveCurrentItem;
     QString currentItemKey;
+    int currentItemColumn;
 
     // Scope to avoid accidentally reusing currentItem after it is gone.
     {
@@ -454,14 +455,22 @@ EventView2::updateTableWidget()
         // visible if it happens to be selected.
         QTableWidgetItem *currentItem = m_tableWidget->currentItem();
         haveCurrentItem = currentItem;
-        if (haveCurrentItem)
-            currentItemKey = currentItem->data(Qt::UserRole).toString();
+        if (haveCurrentItem) {
+            const int row = m_tableWidget->row(currentItem);
+            currentItemColumn = m_tableWidget->column(currentItem);
+
+            // We need the column 0 item since it is the only one with data.
+            QTableWidgetItem *item0 = m_tableWidget->item(row, 0);
+
+            currentItemKey = item0->data(KeyRole).toString();
+        }
     }
 
 
     // *** Create the event list.
 
-    m_tableWidget->clear();
+    // Clear the list completely.
+    m_tableWidget->setRowCount(0);
 
     SegmentPerformanceHelper helper(*m_segments[0]);
 
@@ -686,6 +695,10 @@ EventView2::updateTableWidget()
                   data2Str;
 
         // Use a QVariant so that the table sorts properly.
+        // ??? But this table shouldn't be sorted, should it?  If it is
+        //     sorted, it should be sorted by time and then priority so that
+        //     the events don't get mixed up.  E.g. CC after note on.  This
+        //     timeVariant is not that.
         const QVariant timeVariant = comp.makeTimeVariant(
                 eventTime,
                 static_cast<Composition::TimeMode>(timeMode));
@@ -694,34 +707,38 @@ EventView2::updateTableWidget()
         const int row = m_tableWidget->rowCount();
         m_tableWidget->insertRow(row);
 
-        // ??? We'll need an item for each column.
+        int col{0};
 
         // Time
         QTableWidgetItem *timeItem = new QTableWidgetItem;
         timeItem->setData(Qt::EditRole, timeVariant);
         timeItem->setData(SegmentPtrRole, QVariant::fromValue((void *)(m_segments[0])));
         timeItem->setData(EventPtrRole, QVariant::fromValue((void *)event));
-        m_tableWidget->setItem(row, 0, timeItem);
+        m_tableWidget->setItem(row, col++, timeItem);
 
         // Duration
         QTableWidgetItem *item = new QTableWidgetItem(durationStr);
-        m_tableWidget->setItem(row, 1, item);
+        m_tableWidget->setItem(row, col++, item);
 
         // Type
         item = new QTableWidgetItem(strtoqstr(event->getType()));
-        m_tableWidget->setItem(row, 2, item);
+        m_tableWidget->setItem(row, col++, item);
 
         // Pitch
-        // ???
+        item = new QTableWidgetItem(pitchStr);
+        m_tableWidget->setItem(row, col++, item);
 
         // Velocity
-        // ???
+        item = new QTableWidgetItem(velocityStr);
+        m_tableWidget->setItem(row, col++, item);
 
         // Type (Data1)
-        // ???
+        item = new QTableWidgetItem(data1Str);
+        m_tableWidget->setItem(row, col++, item);
 
         // Value (Data2)
-        // ???
+        item = new QTableWidgetItem(data2Str);
+        m_tableWidget->setItem(row, col++, item);
 
         // Assemble a key so we can uniquely identify each row for selection
         // persistence across updates.
@@ -738,14 +755,24 @@ EventView2::updateTableWidget()
                 data1Str + data2Str;
         timeItem->setData(KeyRole, key);
 
-        // Restore current item.
-        // ??? Not correct.
-        if (key == currentItemKey)
-            m_tableWidget->setCurrentItem(item, QItemSelectionModel::NoUpdate);
+        // Set current if it is the right one.
+        if (haveCurrentItem  &&  key == currentItemKey) {
+            item = m_tableWidget->item(row, currentItemColumn);
+            if (item)
+                m_tableWidget->setCurrentItem(item, QItemSelectionModel::NoUpdate);
+        }
 
         // Restore selection.
-        if (selection.find(key) != selection.end())
-            timeItem->setSelected(true);
+        if (selection.find(key) != selection.end()) {
+            // Select the entire row.
+            // For each column...
+            for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+                QTableWidgetItem *item = m_tableWidget->item(row, col);
+                if (!item)
+                    continue;
+                item->setSelected(true);
+            }
+        }
     }
 
     return true;

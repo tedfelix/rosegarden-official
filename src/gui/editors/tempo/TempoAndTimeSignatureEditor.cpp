@@ -274,7 +274,7 @@ TempoAndTimeSignatureEditor::updateTable()
         QTableWidgetItem *currentItem = m_tableWidget->currentItem();
         haveCurrentItem = currentItem;
         if (haveCurrentItem) {
-            int row = m_tableWidget->row(currentItem);
+            const int row = m_tableWidget->row(currentItem);
             currentItemColumn = m_tableWidget->column(currentItem);
 
             // We need the column 0 item since it is the only one with data.
@@ -351,6 +351,8 @@ TempoAndTimeSignatureEditor::updateTable()
                 currentItemKey.itemType == Type::TimeSignature  &&
                 currentItemKey.midiTicks == sig.first) {
                 item = m_tableWidget->item(row, currentItemColumn);
+                // ??? The other loop uses QItemSelectionModel::NoUpdate.
+                //     Should this one as well?
                 if (item)
                     m_tableWidget->setCurrentItem(item);
             }
