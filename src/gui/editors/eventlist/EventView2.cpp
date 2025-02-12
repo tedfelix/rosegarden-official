@@ -974,6 +974,9 @@ EventView2::slotTriggerRetuneChanged()
 void
 EventView2::slotEditCut()
 {
+    // ??? Cut, copy, paste, and delete change the row height to be larger.
+    //     Actually, any change at all causes this.  Why?
+
     QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
 
     if (selection.empty())
@@ -986,6 +989,9 @@ EventView2::slotEditCut()
     // For each item in the selection...
     for (QTableWidgetItem *listItem : selection) {
         if (!listItem)
+            continue;
+        // Only interested in column 0.
+        if (listItem->column() != 0)
             continue;
 
         Event *event = static_cast<Event *>(
@@ -1018,6 +1024,9 @@ EventView2::slotEditCopy()
     // For each item in the selection...
     for (QTableWidgetItem *listItem : selection) {
         if (!listItem)
+            continue;
+        // Only interested in column 0.
+        if (listItem->column() != 0)
             continue;
 
         Event *event = static_cast<Event *>(
@@ -1096,6 +1105,9 @@ EventView2::slotEditDelete()
     for (QTableWidgetItem *listItem : selection) {
         if (!listItem)
             continue;
+        // Only interested in column 0.
+        if (listItem->column() != 0)
+            continue;
 
         Event *event = static_cast<Event *>(
                 listItem->data(EventPtrRole).value<void *>());
@@ -1124,12 +1136,14 @@ EventView2::slotEditInsert()
     QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
     if (!selection.isEmpty()) {
         QTableWidgetItem *item = selection.first();
-        const Event *selectedEvent = static_cast<const Event *>(
-                item->data(EventPtrRole).value<void *>());
-
-        if (selectedEvent) {
-            // Copy.
-            event = *selectedEvent;
+        if (item) {
+            // First one should always be column zero, so this should work.
+            const Event *selectedEvent = static_cast<const Event *>(
+                    item->data(EventPtrRole).value<void *>());
+            if (selectedEvent) {
+                // Copy.
+                event = *selectedEvent;
+            }
         }
     }
 
@@ -1152,14 +1166,18 @@ EventView2::slotEditInsert()
 void
 EventView2::slotEditEvent()
 {
-    // See slotOpenInEventEditor().
+    // ??? Seems like there are a lot of functions that do the same thing.
+    //     Can we combine them?  Maybe an editItem(const QTableWidgetItem *)?
+    //     Looks doable.
+    //     - slotEditEvent() handles Edit > Event in the menu.
+    //     - slotOpenInEventEditor() handles the context menu.
+    //     - slotCellDoubleClicked() handles double-click.
 
-    QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
-
+    const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
     if (selection.isEmpty())
         return;
 
-    QTableWidgetItem *item = selection.first();
+    const QTableWidgetItem *item = selection.first();
     if (!item)
         return;
 
@@ -1200,13 +1218,16 @@ EventView2::slotEditEvent()
 void
 EventView2::slotEditEventAdvanced()
 {
-    // See slotOpenInExpertEventEditor().
+    // ??? There are two routines that do the same thing.  Consider factoring
+    //     out an editItemAdvanced(QTableWidgetItem *).
+    //     - slotEditEventAdvanced()
+    //     - slotOpenInExpertEventEditor().
 
-    QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
+    const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
     if (selection.isEmpty())
         return;
 
-    QTableWidgetItem *item = selection.first();
+    const QTableWidgetItem *item = selection.first();
     if (!item)
         return;
 
@@ -1375,6 +1396,10 @@ EventView2::saveOptions()
     // Save list settings.
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);
+    // ??? Odd.  What does this actually save?  Try removing from loadOptions()
+    //     and see if it makes any difference.  I would think that the parent
+    //     geometry is all that matters.  The layout will make sure it
+    //     fills the space.
     settings.setValue(EventListLayoutGroup, m_tableWidget->saveGeometry());
     settings.endGroup();
 
@@ -1518,9 +1543,16 @@ void
 EventView2::slotContextMenu(const QPoint &pos)
 {
     // Use itemAt() which is more predictable than currentItem().
-    QTableWidgetItem *item = m_tableWidget->itemAt(pos);
+    const QTableWidgetItem *item = m_tableWidget->itemAt(pos);
     if (!item)
         return;
+
+    // Not the 0 column?  Get it.
+    if (item->column() != 0) {
+        item = m_tableWidget->item(item->row(), 0);
+        if (!item)
+            return;
+    }
 
     const Event *event = static_cast<const Event *>(
             item->data(EventPtrRole).value<void *>());
@@ -1568,6 +1600,13 @@ EventView2::slotOpenInEventEditor(bool /* checked */)
     if (!item)
         return;
 
+    // Not the 0 column?  Get it.
+    if (item->column() != 0) {
+        item = m_tableWidget->item(item->row(), 0);
+        if (!item)
+            return;
+    }
+
     Segment *segment = static_cast<Segment *>(
             item->data(SegmentPtrRole).value<void *>());
     if (!segment)
@@ -1607,6 +1646,13 @@ EventView2::slotOpenInExpertEventEditor(bool /* checked */)
     if (!item)
         return;
 
+    // Not the 0 column?  Get it.
+    if (item->column() != 0) {
+        item = m_tableWidget->item(item->row(), 0);
+        if (!item)
+            return;
+    }
+
     Segment *segment = static_cast<Segment *>(
             item->data(SegmentPtrRole).value<void *>());
     if (!segment)
@@ -1641,6 +1687,13 @@ EventView2::slotEditTriggeredSegment(bool /*checked*/)
     QTableWidgetItem *item = m_tableWidget->currentItem();
     if (!item)
         return;
+
+    // Not the 0 column?  Get it.
+    if (item->column() != 0) {
+        item = m_tableWidget->item(item->row(), 0);
+        if (!item)
+            return;
+    }
 
     const Event *event = static_cast<const Event *>(
             item->data(EventPtrRole).value<void *>());
