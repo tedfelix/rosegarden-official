@@ -18,8 +18,6 @@
 #ifndef RG_ROSEGARDENGUIVIEW_H
 #define RG_ROSEGARDENGUIVIEW_H
 
-#define EVENTVIEW2
-
 #include "base/Event.h"
 #include "base/MidiProgram.h"
 #include "base/Selection.h"
@@ -57,11 +55,7 @@ class PitchTrackerView;
 class MatrixView;
 class MappedEvent;
 class InstrumentParameterBox;
-#ifdef EVENTVIEW2
 class EventView2;
-#else
-class EventView;
-#endif
 class Composition;
 class LevelInfo;
 
@@ -281,11 +275,7 @@ private:
 
     void createNotationView(const std::vector<Segment *>&);
     void createMatrixView(const std::vector<Segment *>&, bool drumMode);
-#ifdef EVENTVIEW2
     EventView2 *createEventView(Segment *);
-#else
-    EventView *createEventView(Segment *);
-#endif
     PitchTrackerView *createPitchTrackerView(const std::vector<Segment *>&);
 
     static bool hasNonAudioSegment(const SegmentSelection &segments);

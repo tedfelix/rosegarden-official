@@ -447,7 +447,7 @@ TempoAndTimeSignatureEditor::updateTable()
 
     // ??? Since we use QItemSelectionModel::NoUpdate above, we could do the
     //     selection inside of the above loop instead of going through all
-    //     the items on this second pass.  See EventView.
+    //     the items on this second pass.  See EventView2.
 
     bool haveSelection{false};
 

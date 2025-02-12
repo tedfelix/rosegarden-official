@@ -292,9 +292,7 @@ set(rg_CPPS
   gui/editors/matrix/MatrixSelector.cpp
   gui/editors/matrix/MatrixToolBox.cpp
   gui/editors/eventlist/TrivialVelocityDialog.cpp
-  gui/editors/eventlist/EventView.cpp
   gui/editors/eventlist/EventView2.cpp
-  gui/editors/eventlist/EventViewItem.cpp
   gui/editors/segment/TriggerManagerItem.cpp
   gui/editors/segment/PlayListView.cpp
   gui/editors/segment/TrackButtons.cpp

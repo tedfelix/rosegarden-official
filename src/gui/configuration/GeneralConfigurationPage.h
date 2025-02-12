@@ -48,7 +48,7 @@ public:
     {
         NotationView,
         MatrixView,
-        EventView
+        EventListEditor
     };
 
     enum NoteNameStyle

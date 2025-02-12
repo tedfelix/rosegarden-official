@@ -52,11 +52,7 @@
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/TempoDialog.h"
-#ifdef EVENTVIEW2
 #include "gui/editors/eventlist/EventView2.h"
-#else
-#include "gui/editors/eventlist/EventView.h"
-#endif
 #include "gui/editors/matrix/MatrixView.h"
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
@@ -306,7 +302,7 @@ void RosegardenMainViewWidget::slotEditSegment(Segment *segment)
                 slotEditSegmentMatrix(segment);
             }
 
-        } else if (client == GeneralConfigurationPage::EventView) {
+        } else if (client == GeneralConfigurationPage::EventListEditor) {
             slotEditSegmentEventList(segment);
         } else {
             slotEditSegmentNotation(segment);
@@ -805,11 +801,7 @@ void RosegardenMainViewWidget::slotEditSegmentsEventList(
              segmentsToEdit.begin();
          segmentIter != segmentsToEdit.end();
          ++segmentIter) {
-#ifdef EVENTVIEW2
         EventView2 *view = createEventView(*segmentIter);
-#else
-        EventView *view = createEventView(*segmentIter);
-#endif
         if (view) {
             // ??? Why does it start out hidden?
             view->show();
@@ -1864,24 +1856,15 @@ RosegardenMainViewWidget::initChordNameRuler()
     getTrackEditor()->getChordNameRuler()->setReady();
 }
 
-#ifdef EVENTVIEW2
 EventView2 *
-#else
-EventView *
-#endif
 RosegardenMainViewWidget::createEventView(Segment *segment)
 {
-    // EventView expects a vector because of EditViewBase.
+    // EventView2 expects a vector because of EditViewBase.
     std::vector<Segment *> segments;
     segments.push_back(segment);
 
-#ifdef EVENTVIEW2
     EventView2 *eventView = new EventView2(RosegardenDocument::currentDocument,
                                            segments);
-#else
-    EventView *eventView = new EventView(RosegardenDocument::currentDocument,
-                                         segments);
-#endif
 
     connect(eventView, &EditViewBase::saveFile,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
@@ -1895,13 +1878,8 @@ RosegardenMainViewWidget::createEventView(Segment *segment)
             this, &RosegardenMainViewWidget::slotEditSegmentsEventList);
     connect(eventView, &EditViewBase::openInPitchTracker,
             this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
-#ifdef EVENTVIEW2
     connect(eventView, &EventView2::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-#else
-    connect(eventView, &EventView::editTriggerSegment,
-            this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-#endif
 
     return eventView;
 }
