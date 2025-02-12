@@ -18,7 +18,7 @@
 #define RG_MODULE_STRING "[EventView2]"
 #define RG_NO_DEBUG_PRINT
 
-#include "EventView2.h"
+#include "EventListEditor.h"
 
 #include "TrivialVelocityDialog.h"
 

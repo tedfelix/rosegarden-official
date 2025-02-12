@@ -52,7 +52,7 @@
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/TempoDialog.h"
-#include "gui/editors/eventlist/EventView2.h"
+#include "gui/editors/eventlist/EventListEditor.h"
 #include "gui/editors/matrix/MatrixView.h"
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
