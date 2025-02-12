@@ -188,6 +188,7 @@ private:
     void saveOptions();
 
     void editItem(const QTableWidgetItem *item);
+    void editItemAdvanced(const QTableWidgetItem *item);
 
 };
 

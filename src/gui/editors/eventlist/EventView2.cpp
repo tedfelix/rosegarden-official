@@ -1181,11 +1181,10 @@ EventView2::editItem(const QTableWidgetItem *item)
     if (!dialog.isModified())
         return;
 
-    CommandHistory::getInstance()->addCommand(
-            new EventEditCommand(
-                    *segment,
-                    event,  // eventToModify
-                    dialog.getEvent()));  // newEvent
+    CommandHistory::getInstance()->addCommand(new EventEditCommand(
+            *segment,
+            event,  // eventToModify
+            dialog.getEvent()));  // newEvent
 }
 
 void
@@ -1203,18 +1202,8 @@ EventView2::slotEditEvent()
 }
 
 void
-EventView2::slotEditEventAdvanced()
+EventView2::editItemAdvanced(const QTableWidgetItem *item)
 {
-    // ??? There are two routines that do the same thing.  Consider factoring
-    //     out an editItemAdvanced(QTableWidgetItem *).
-    //     - slotEditEventAdvanced()
-    //     - slotOpenInExpertEventEditor().
-
-    const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
-    if (selection.isEmpty())
-        return;
-
-    const QTableWidgetItem *item = selection.first();
     if (!item)
         return;
 
@@ -1242,10 +1231,24 @@ EventView2::slotEditEventAdvanced()
     if (!dialog.isModified())
         return;
 
-    CommandHistory::getInstance()->addCommand(
-            new EventEditCommand(*segment,
-                    event,
-                    dialog.getEvent()));
+    CommandHistory::getInstance()->addCommand(new EventEditCommand(
+            *segment,
+            event,  // eventToModify
+            dialog.getEvent()));  // newEvent
+}
+
+void
+EventView2::slotEditEventAdvanced()
+{
+    const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
+    if (selection.isEmpty())
+        return;
+
+    const QTableWidgetItem *item = selection.first();
+    if (!item)
+        return;
+
+    editItemAdvanced(item);
 }
 
 void
@@ -1564,32 +1567,7 @@ EventView2::slotOpenInExpertEventEditor(bool /* checked */)
             return;
     }
 
-    Segment *segment = static_cast<Segment *>(
-            item->data(SegmentPtrRole).value<void *>());
-    if (!segment)
-        return;
-
-    Event *event = static_cast<Event *>(
-            item->data(EventPtrRole).value<void *>());
-    if (!event)
-        return;
-
-    EventEditDialog dialog(this, *event);
-
-    // Launch dialog.  Bail if canceled.
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    // Not modified?  Bail.
-    if (!dialog.isModified())
-        return;
-
-    EventEditCommand *command =
-            new EventEditCommand(*segment,
-                                 event,  // eventToModify
-                                 dialog.getEvent());  // newEvent
-
-    CommandHistory::getInstance()->addCommand(command);
+    editItemAdvanced(item);
 }
 
 void
