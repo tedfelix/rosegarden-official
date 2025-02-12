@@ -265,10 +265,15 @@ EventView2::EventView2(RosegardenDocument *doc,
     mainLayout->addWidget(m_filterGroup, 0, 0, Qt::AlignHCenter);
     mainLayout->setRowMinimumHeight(0, m_filterGroup->height());
 
-    // Tree Widget
+    // Table Widget
 
     m_tableWidget = new QTableWidget(mainWidget);
-    // Double-click to edit.
+    m_tableWidget->setShowGrid(false);
+
+    // Disable double-click editing of each field.
+    m_tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    // Double-click handler.  This brings up our editor.
     connect(m_tableWidget, &QTableWidget::cellDoubleClicked,
             this, &EventView2::slotCellDoubleClicked);
     connect(m_tableWidget, &QTableWidget::itemSelectionChanged,
@@ -298,15 +303,10 @@ EventView2::EventView2(RosegardenDocument *doc,
     columnNames << tr("Value (Data2)  ");
     m_tableWidget->setColumnCount(columnNames.size());
     m_tableWidget->setHorizontalHeaderLabels(columnNames);
-    // ??? Need to tweak this for some good initial defaults.
-    //m_tableWidget->setColumnWidth(0, 110);
-    //m_tableWidget->setColumnWidth(1, 120);
-    //m_tableWidget->setMinimumWidth(500);
 
     // Make sure time columns have the right amount of space.
     constexpr int timeWidth = 110;
-    // Plus a little for the tree diagram in the first column.
-    m_tableWidget->setColumnWidth(0, timeWidth + 23);
+    m_tableWidget->setColumnWidth(0, timeWidth);
     m_tableWidget->setColumnWidth(1, timeWidth);
     m_tableWidget->setMinimumWidth(700);
 
@@ -408,6 +408,11 @@ EventView2::EventView2(RosegardenDocument *doc,
     updateWindowTitle(false);
 
     loadOptions();
+
+    // Make sure the last column fills the widget.
+    // Note: Must do this AFTER loadOptions() or else it will not work.
+    m_tableWidget->horizontalHeader()->setStretchLastSection(true);
+
     updateFilterCheckBoxes();
     updateTableWidget();
 
@@ -422,6 +427,11 @@ EventView2::~EventView2()
 bool
 EventView2::updateTableWidget()
 {
+    // ??? Performance.
+    //     This routine performs a complete clear and repopulate of the table.
+    //     That's really slow with large numbers of events.  Consider using
+    //     SegmentObserver to only make the changes that are needed.
+
     // ??? This has scrolling issues.  It seems to not maintain at least the
     //     time position when filtering is changed.  Also when time mode is
     //     changed it jumps when there is a selection.  There are no
@@ -706,10 +716,15 @@ EventView2::updateTableWidget()
         // Add a row to the table
         const int row = m_tableWidget->rowCount();
         m_tableWidget->insertRow(row);
+        // Pick something tiny.  Qt will not allow you to resize smaller than
+        // the contents.
+        m_tableWidget->setRowHeight(row, 1);
 
+        // Make all items read-only.
         int col{0};
 
         // Time
+        // ??? These items are allowing me to edit them with a double-click.
         QTableWidgetItem *timeItem = new QTableWidgetItem;
         timeItem->setData(Qt::EditRole, timeVariant);
         timeItem->setData(SegmentPtrRole, QVariant::fromValue((void *)(m_segments[0])));
@@ -784,7 +799,7 @@ EventView2::makeInitialSelection(timeT time)
     const int itemCount = m_tableWidget->rowCount();
 
     QTableWidgetItem *foundItem{nullptr};
-    // Unused for tree.  We'll likely need it for QTableWidget.
+    // ??? Unused for tree.  We'll likely need it for QTableWidget.
     //int foundRow{0};
 
     // For each row in the event list.
@@ -968,7 +983,7 @@ EventView2::slotEditCut()
 
     EventSelection cutSelection(*m_segments[0]);
 
-    // For each QTreeWidgetItem in the selection...
+    // For each item in the selection...
     for (QTableWidgetItem *listItem : selection) {
         if (!listItem)
             continue;
@@ -1000,7 +1015,7 @@ EventView2::slotEditCopy()
 
     EventSelection copySelection(*m_segments[0]);
 
-    // For each QTreeWidgetItem in the selection...
+    // For each item in the selection...
     for (QTableWidgetItem *listItem : selection) {
         if (!listItem)
             continue;
@@ -1228,21 +1243,32 @@ EventView2::slotEditEventAdvanced()
 void
 EventView2::slotSelectAll()
 {
-    // For each item, select it.
+    // For each row...
     for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
-        // ??? Need to selected all columns for the row!
-        QTableWidgetItem *item = m_tableWidget->item(row, 0);
-        item->setSelected(true);
+        // For each column...
+        for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+            QTableWidgetItem *item = m_tableWidget->item(row, col);
+            if (!item)
+                continue;
+            // Select it.
+            item->setSelected(true);
+        }
     }
 }
 
 void
 EventView2::slotClearSelection()
 {
-    // For each item, deselect it.
+    // For each row...
     for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
-        QTableWidgetItem *item = m_tableWidget->item(row, 0);
-        item->setSelected(false);
+        // For each column...
+        for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+            QTableWidgetItem *item = m_tableWidget->item(row, col);
+            if (!item)
+                continue;
+            // Deselect it.
+            item->setSelected(false);
+        }
     }
 }
 
@@ -1319,6 +1345,8 @@ EventView2::loadOptions()
     settings.beginGroup(WindowGeometryConfigGroup);
     restoreGeometry(settings.value("Event_List_View_Geometry").toByteArray());
     restoreState(settings.value("Event_List_View_State").toByteArray());
+    m_tableWidget->horizontalHeader()->restoreState(
+            settings.value("Event_List_View_Header_State").toByteArray());
     settings.endGroup();
 
     // Restore list settings.
@@ -1354,6 +1382,8 @@ EventView2::saveOptions()
     settings.beginGroup(WindowGeometryConfigGroup);
     settings.setValue("Event_List_View_Geometry", saveGeometry());
     settings.setValue("Event_List_View_State", saveState());
+    settings.setValue("Event_List_View_Header_State",
+            m_tableWidget->horizontalHeader()->saveState());
     settings.endGroup();
 }
 
