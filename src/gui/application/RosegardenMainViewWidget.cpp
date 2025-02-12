@@ -801,7 +801,7 @@ void RosegardenMainViewWidget::slotEditSegmentsEventList(
              segmentsToEdit.begin();
          segmentIter != segmentsToEdit.end();
          ++segmentIter) {
-        EventView2 *view = createEventView(*segmentIter);
+        EventListEditor *view = createEventView(*segmentIter);
         if (view) {
             // ??? Why does it start out hidden?
             view->show();
@@ -1856,15 +1856,15 @@ RosegardenMainViewWidget::initChordNameRuler()
     getTrackEditor()->getChordNameRuler()->setReady();
 }
 
-EventView2 *
+EventListEditor *
 RosegardenMainViewWidget::createEventView(Segment *segment)
 {
-    // EventView2 expects a vector because of EditViewBase.
+    // EventListEditor expects a vector because of EditViewBase.
     std::vector<Segment *> segments;
     segments.push_back(segment);
 
-    EventView2 *eventView = new EventView2(RosegardenDocument::currentDocument,
-                                           segments);
+    EventListEditor *eventView = new EventListEditor(
+            RosegardenDocument::currentDocument, segments);
 
     connect(eventView, &EditViewBase::saveFile,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
@@ -1878,7 +1878,7 @@ RosegardenMainViewWidget::createEventView(Segment *segment)
             this, &RosegardenMainViewWidget::slotEditSegmentsEventList);
     connect(eventView, &EditViewBase::openInPitchTracker,
             this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
-    connect(eventView, &EventView2::editTriggerSegment,
+    connect(eventView, &EventListEditor::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
 
     return eventView;

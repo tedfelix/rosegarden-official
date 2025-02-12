@@ -47,22 +47,20 @@ class RosegardenDocument;
 class Event;
 
 
-/// The "Event List" window.
+/// The Event List Editor
 /**
- * This is the event list editor.
- *
  * Segment > Edit With > Open in Event List Editor.  Or just press "E".
  */
-class EventView2 : public EditViewBase
+class EventListEditor : public EditViewBase
 {
     Q_OBJECT
 
 public:
 
-    EventView2(RosegardenDocument *doc,
-              const std::vector<Segment *> &segments);
+    EventListEditor(RosegardenDocument *doc,
+                    const std::vector<Segment *> &segments);
 
-    ~EventView2() override;
+    ~EventListEditor() override;
 
 signals:
 

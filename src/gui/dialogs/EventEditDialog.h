@@ -106,7 +106,7 @@ protected:
 };
 
 /*
- * A simpler event editor for use by EventView2 and MatrixView
+ * A simpler event editor for use by EventListEditor and MatrixView
  * and people who want to remain sane.
  */
 

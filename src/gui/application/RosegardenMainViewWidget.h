@@ -55,7 +55,7 @@ class PitchTrackerView;
 class MatrixView;
 class MappedEvent;
 class InstrumentParameterBox;
-class EventView2;
+class EventListEditor;
 class Composition;
 class LevelInfo;
 
@@ -275,7 +275,7 @@ private:
 
     void createNotationView(const std::vector<Segment *>&);
     void createMatrixView(const std::vector<Segment *>&, bool drumMode);
-    EventView2 *createEventView(Segment *);
+    EventListEditor *createEventView(Segment *);
     PitchTrackerView *createPitchTrackerView(const std::vector<Segment *>&);
 
     static bool hasNonAudioSegment(const SegmentSelection &segments);
