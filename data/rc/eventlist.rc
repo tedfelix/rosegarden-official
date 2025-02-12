@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::EventList" version="1230">
+<kpartgui name="Rosegarden::EventListEditor" version="1230">
 
 <MenuBar>
 

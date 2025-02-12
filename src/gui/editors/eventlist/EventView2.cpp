@@ -1616,7 +1616,7 @@ EventView2::updateWindowTitle(bool modified)
 
     } else {
 
-        QString view = tr("Event List");
+        QString view = tr("Event List Editor");
         setWindowTitle(getTitle(view));
 
     }
