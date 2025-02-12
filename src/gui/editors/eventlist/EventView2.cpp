@@ -1148,20 +1148,8 @@ EventView2::slotEditInsert()
 }
 
 void
-EventView2::slotEditEvent()
+EventView2::editItem(const QTableWidgetItem *item)
 {
-    // ??? Seems like there are a lot of functions that do the same thing.
-    //     Can we combine them?  Maybe an editItem(const QTableWidgetItem *)?
-    //     Looks doable.
-    //     - slotEditEvent() handles Edit > Event in the menu.
-    //     - slotOpenInEventEditor() handles the context menu.
-    //     - slotCellDoubleClicked() handles double-click.
-
-    const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
-    if (selection.isEmpty())
-        return;
-
-    const QTableWidgetItem *item = selection.first();
     if (!item)
         return;
 
@@ -1194,9 +1182,24 @@ EventView2::slotEditEvent()
         return;
 
     CommandHistory::getInstance()->addCommand(
-            new EventEditCommand(*segment,
-                    event,
-                    dialog.getEvent()));
+            new EventEditCommand(
+                    *segment,
+                    event,  // eventToModify
+                    dialog.getEvent()));  // newEvent
+}
+
+void
+EventView2::slotEditEvent()
+{
+    const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
+    if (selection.isEmpty())
+        return;
+
+    const QTableWidgetItem *item = selection.first();
+    if (!item)
+        return;
+
+    editItem(item);
 }
 
 void
@@ -1473,40 +1476,7 @@ EventView2::slotCellDoubleClicked(int row, int /* column */)
         return;
     }
 
-    Segment *segment = static_cast<Segment *>(
-            item->data(SegmentPtrRole).value<void *>());
-    if (!segment) {
-        RG_WARNING << "slotItemDoubleClicked(): WARNING: No Segment.";
-        return;
-    }
-
-    Event *event = static_cast<Event *>(
-            item->data(EventPtrRole).value<void *>());
-    if (!event) {
-        RG_WARNING << "slotItemDoubleClicked(): WARNING: No Event.";
-        return;
-    }
-
-    SimpleEventEditDialog dialog(
-                    this,  // parent
-                    RosegardenDocument::currentDocument,
-                    *event,
-                    false);  // inserting
-
-    // Launch dialog.  Bail if canceled.
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    // Not modified?  Bail.
-    if (!dialog.isModified())
-        return;
-
-    EventEditCommand *command = new EventEditCommand(
-            *segment,
-            event,  // eventToModify
-            dialog.getEvent());  // newEvent
-
-    CommandHistory::getInstance()->addCommand(command);
+    editItem(item);
 }
 
 void
@@ -1577,36 +1547,7 @@ EventView2::slotOpenInEventEditor(bool /* checked */)
             return;
     }
 
-    Segment *segment = static_cast<Segment *>(
-            item->data(SegmentPtrRole).value<void *>());
-    if (!segment)
-        return;
-
-    Event *event = static_cast<Event *>(
-            item->data(EventPtrRole).value<void *>());
-    if (!event)
-        return;
-
-    SimpleEventEditDialog dialog(
-            this,  // parent
-            RosegardenDocument::currentDocument,  // doc
-            *event,  // event
-            false);  // inserting
-
-    // Launch dialog.  Bail if canceled.
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    // Not modified?  Bail.
-    if (!dialog.isModified())
-        return;
-
-    EventEditCommand *command =
-            new EventEditCommand(*segment,
-                                 event,  // eventToModify
-                                 dialog.getEvent());  // newEvent
-
-    CommandHistory::getInstance()->addCommand(command);
+    editItem(item);
 }
 
 void

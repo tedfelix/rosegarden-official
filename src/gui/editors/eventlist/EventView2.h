@@ -183,8 +183,11 @@ private:
     QLabel *m_triggerPitch{nullptr};
     QLabel *m_triggerVelocity{nullptr};
 
+
     void loadOptions();
     void saveOptions();
+
+    void editItem(const QTableWidgetItem *item);
 
 };
 
