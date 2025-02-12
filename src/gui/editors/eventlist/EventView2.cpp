@@ -144,8 +144,6 @@ namespace
             "timemode",
             int(Composition::TimeMode::MusicalTime));
 
-    const char * const EventListLayoutGroup = "EventList_Layout";
-
     constexpr int KeyRole = Qt::UserRole;
     constexpr int SegmentPtrRole = Qt::UserRole + 1;
     constexpr int EventPtrRole = Qt::UserRole + 2;
@@ -269,6 +267,11 @@ EventView2::EventView2(RosegardenDocument *doc,
 
     m_tableWidget = new QTableWidget(mainWidget);
     m_tableWidget->setShowGrid(false);
+    // Hide the vertical header
+    m_tableWidget->verticalHeader()->hide();
+    // Set the row size.  Note that this requires a call to
+    // QTableWidget::setRowHeight(row, whatever) for every row.
+    m_tableWidget->verticalHeader()->setMaximumSectionSize(20);
 
     // Disable double-click editing of each field.
     m_tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -285,9 +288,6 @@ EventView2::EventView2(RosegardenDocument *doc,
 
     m_tableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    // Hide the vertical header
-    m_tableWidget->verticalHeader()->hide();
 
     QStringList columnNames;
     // ??? The extra space at the end of each of these is probably an
@@ -704,29 +704,19 @@ EventView2::updateTableWidget()
                   data1Str <<
                   data2Str;
 
-        // Use a QVariant so that the table sorts properly.
-        // ??? But this table shouldn't be sorted, should it?  If it is
-        //     sorted, it should be sorted by time and then priority so that
-        //     the events don't get mixed up.  E.g. CC after note on.  This
-        //     timeVariant is not that.
-        const QVariant timeVariant = comp.makeTimeVariant(
-                eventTime,
-                static_cast<Composition::TimeMode>(timeMode));
-
         // Add a row to the table
         const int row = m_tableWidget->rowCount();
         m_tableWidget->insertRow(row);
-        // Pick something tiny.  Qt will not allow you to resize smaller than
-        // the contents.
-        m_tableWidget->setRowHeight(row, 1);
+        // In order for setMaximumSectionSize() to work, setRowHeight() must
+        // be called.  The height here is irrelevant.  1 works.  50 works.
+        // Going with 20 to match the setMaximumSectionSize() call.
+        m_tableWidget->setRowHeight(row, 20);
 
         // Make all items read-only.
         int col{0};
 
         // Time
-        // ??? These items are allowing me to edit them with a double-click.
-        QTableWidgetItem *timeItem = new QTableWidgetItem;
-        timeItem->setData(Qt::EditRole, timeVariant);
+        QTableWidgetItem *timeItem = new QTableWidgetItem(timeStr);
         timeItem->setData(SegmentPtrRole, QVariant::fromValue((void *)(m_segments[0])));
         timeItem->setData(EventPtrRole, QVariant::fromValue((void *)event));
         m_tableWidget->setItem(row, col++, timeItem);
@@ -799,8 +789,6 @@ EventView2::makeInitialSelection(timeT time)
     const int itemCount = m_tableWidget->rowCount();
 
     QTableWidgetItem *foundItem{nullptr};
-    // ??? Unused for tree.  We'll likely need it for QTableWidget.
-    //int foundRow{0};
 
     // For each row in the event list.
     for (int row = 0; row < itemCount; ++row) {
@@ -820,7 +808,6 @@ EventView2::makeInitialSelection(timeT time)
 
         // Remember the last good item.
         foundItem = item;
-        //foundRow = row;
     }
 
     // Nothing found?  Bail.
@@ -974,9 +961,6 @@ EventView2::slotTriggerRetuneChanged()
 void
 EventView2::slotEditCut()
 {
-    // ??? Cut, copy, paste, and delete change the row height to be larger.
-    //     Actually, any change at all causes this.  Why?
-
     QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
 
     if (selection.empty())
@@ -1369,11 +1353,6 @@ EventView2::loadOptions()
     m_tableWidget->horizontalHeader()->restoreState(
             settings.value("Event_List_View_Header_State").toByteArray());
     settings.endGroup();
-
-    // Restore list settings.
-    settings.beginGroup(EventViewConfigGroup);
-    m_tableWidget->restoreGeometry(
-            settings.value(EventListLayoutGroup).toByteArray());
 }
 
 void
@@ -1393,15 +1372,7 @@ EventView2::saveOptions()
     a_showSegmentIDSetting.set(m_showSegmentID);
     a_showOtherSetting.set(m_showOther);
 
-    // Save list settings.
     QSettings settings;
-    settings.beginGroup(EventViewConfigGroup);
-    // ??? Odd.  What does this actually save?  Try removing from loadOptions()
-    //     and see if it makes any difference.  I would think that the parent
-    //     geometry is all that matters.  The layout will make sure it
-    //     fills the space.
-    settings.setValue(EventListLayoutGroup, m_tableWidget->saveGeometry());
-    settings.endGroup();
 
     // Save window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
@@ -1409,7 +1380,6 @@ EventView2::saveOptions()
     settings.setValue("Event_List_View_State", saveState());
     settings.setValue("Event_List_View_Header_State",
             m_tableWidget->horizontalHeader()->saveState());
-    settings.endGroup();
 }
 
 Segment *
