@@ -1050,7 +1050,7 @@ TransportDialog::slotClearMidiOutLabel()
 }
 
 void
-TransportDialog::closeEvent(QCloseEvent * /*e*/)
+TransportDialog::closeEvent(QCloseEvent * /*closeEvent*/)
 {
     emit closed();
 
@@ -1363,6 +1363,31 @@ void TransportDialog::updateMetronomeTimer()
 
     // If we are flashing, we need to let slotMetronomeTimer() clear the flash
     // for us and stop the timer.
+}
+
+void TransportDialog::keyPressEvent(QKeyEvent *keyEvent)
+{
+    if (!keyEvent)
+        return;
+
+    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
+    if (!rmw) {
+        QDialog::keyPressEvent(keyEvent);
+        return;
+    }
+
+    const int key = keyEvent->key();
+
+    if (key == Qt::Key_PageUp)
+        rmw->slotRewind();
+    else if (key == Qt::Key_PageDown)
+        rmw->slotFastforward();
+    else if (key == Qt::Key_Home)
+        rmw->slotRewindToBeginning();
+    else if (key == Qt::Key_End)
+        rmw->slotFastForwardToEnd();
+
+    QDialog::keyPressEvent(keyEvent);
 }
 
 
