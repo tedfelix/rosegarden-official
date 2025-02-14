@@ -107,7 +107,6 @@ AudioFileManager::AudioFileManager(RosegardenDocument *doc) :
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else
 #if defined(PTHREAD_MUTEX_RECURSIVE) || defined(__FreeBSD__)
-    // cppcheck-suppress ConfigurationNotChecked
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else
 

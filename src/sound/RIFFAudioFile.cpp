@@ -191,7 +191,6 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
         }
 
         // get the length of the data chunk, and scan past it as a side-effect
-        // cppcheck-suppress unreadVariable
 	chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 #ifdef DEBUG_RIFF
         RG_DEBUG << "RIFFAudioFile::scanTo() - data chunk size =" << chunkLength;

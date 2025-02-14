@@ -777,7 +777,6 @@ DSSIPluginInstance::configure(const QString& key,
 
     if (myKey == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
 #ifdef DSSI_PROJECT_DIRECTORY_KEY
-        // cppcheck-suppress ConfigurationNotChecked
         myKey = DSSI_PROJECT_DIRECTORY_KEY;
 #else
 
@@ -802,7 +801,6 @@ DSSIPluginInstance::configure(const QString& key,
     // as project directory
 #ifdef DSSI_RESERVED_CONFIGURE_PREFIX
 
-    // cppcheck-suppress ConfigurationNotChecked
     if (myKey.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX)) {
         return qm;
     }

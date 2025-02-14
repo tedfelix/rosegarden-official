@@ -180,7 +180,6 @@ SegmentLinker::slotUpdateLinkedSegments(Command *command)
                 linkedSegmentsUpdated = true;
             }
         } else {
-            // cppcheck-suppress ConfigurationNotChecked
             RG_WARNING << "oops, trying to update linked segment set twice!";
         }
 
