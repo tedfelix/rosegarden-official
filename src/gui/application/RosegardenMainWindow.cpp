@@ -792,8 +792,8 @@ RosegardenMainWindow::closeEvent(QCloseEvent *event)
 void
 RosegardenMainWindow::setupActions()
 {
-    createAction("file_new", SLOT(slotFileNew()));
-    createAction("file_open", SLOT(slotFileOpen()));
+    createAction("file_new", &RosegardenMainWindow::slotFileNew);
+    createAction("file_open", &RosegardenMainWindow::slotFileOpen);
     createAction("file_open_example", SLOT(slotFileOpenExample()));
     createAction("file_open_template", SLOT(slotFileOpenTemplate()));
     createAction("file_open_most_recent", SLOT(slotFileOpenRecent()));

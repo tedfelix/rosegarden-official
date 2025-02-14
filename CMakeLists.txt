@@ -237,7 +237,7 @@ set(CPPCHECK_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cppcheck.out)
 # dummy_file will never exist so "make cppcheck" always runs cppcheck
 
 add_custom_command(OUTPUT ${CPPCHECK_OUTPUT} dummy_file
-  COMMAND cppcheck -I${CMAKE_CURRENT_SOURCE_DIR}/src --force --enable=all --inconclusive --std=c++11 --inline-suppr --quiet --suppress=missingInclude ${CMAKE_CURRENT_SOURCE_DIR}/src >& ${CPPCHECK_OUTPUT})
+  COMMAND cppcheck -I${CMAKE_CURRENT_SOURCE_DIR}/src --force --enable=all --inconclusive --std=c++11 --library=qt --inline-suppr --quiet --suppress=missingInclude --suppress=missingIncludeSystem ${CMAKE_CURRENT_SOURCE_DIR}/src >& ${CPPCHECK_OUTPUT})
 
 add_custom_target(cppcheck DEPENDS ${CPPCHECK_OUTPUT} dummy_file)
 #########################
