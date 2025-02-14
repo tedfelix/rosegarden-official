@@ -26,14 +26,14 @@ namespace Rosegarden {
 class MidiMetronome
 {
 public:
-    MidiMetronome(InstrumentId instrument,
-                  MidiByte barPitch = 37,
-                  MidiByte beatPitch = 37,
-                  MidiByte subBeatPitch = 37,
-                  int depth = 2,
-                  MidiByte barVely = 120,
-                  MidiByte beatVely = 100,
-                  MidiByte subBeatVely = 80) :
+    explicit MidiMetronome(InstrumentId instrument,
+                           MidiByte barPitch = 37,
+                           MidiByte beatPitch = 37,
+                           MidiByte subBeatPitch = 37,
+                           int depth = 2,
+                           MidiByte barVely = 120,
+                           MidiByte beatVely = 100,
+                           MidiByte subBeatVely = 80) :
 	m_instrument(instrument),
 	m_barPitch(barPitch),
 	m_beatPitch(beatPitch),
@@ -78,4 +78,3 @@ private:
 }
 
 #endif
-

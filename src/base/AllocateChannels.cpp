@@ -123,7 +123,7 @@ allocateChannelInterval(RealTime startTime,
                      << (thisOverflow ? "the maximum plus" : "only")
                      << thisDuration;
 
-            if ((thisOverflow < leastOverflow) ||
+            if (((! thisOverflow && leastOverflow)) ||
                 ((thisOverflow == leastOverflow) &&
                  (thisDuration < leastDuration))) {
 

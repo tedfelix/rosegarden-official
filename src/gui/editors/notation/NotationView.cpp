@@ -3290,12 +3290,12 @@ NotationView::slotClefAction()
     QAction *a = dynamic_cast<QAction *>(s);
     QString n = s->objectName();
 
-    Clef type = Clef::Treble;
+    Clef type = Clef(Clef::Treble);
 
-    if (n == "treble_clef") type = Clef::Treble;
-    else if (n == "alto_clef") type = Clef::Alto;
-    else if (n == "tenor_clef") type = Clef::Tenor;
-    else if (n == "bass_clef") type = Clef::Bass;
+    if (n == "treble_clef") type = Clef(Clef::Treble);
+    else if (n == "alto_clef") type = Clef(Clef::Alto);
+    else if (n == "tenor_clef") type = Clef(Clef::Tenor);
+    else if (n == "bass_clef") type = Clef(Clef::Bass);
 
     setCurrentNotePixmapFrom(a);
 
