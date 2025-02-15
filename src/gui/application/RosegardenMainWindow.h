@@ -560,8 +560,8 @@ public slots:
      * be saved read-only, to make it harder to overwrite by accident in the
      * future
      */
-    bool slotFileSaveAs(bool asTemplate = false);
-    void slotFileSaveAsTemplate() { slotFileSaveAs(true); }
+    void slotFileSaveAs() { fileSaveAs(false); }
+    void slotFileSaveAsTemplate() { fileSaveAs(true); }
 
     /**
      * asks for saving if the file is modified, then closes the actual
@@ -1555,6 +1555,9 @@ private:
      * Initialise singletons in the correct order
      */
     void initStaticObjects();
+
+    bool fileSaveAs(bool asTemplate);
+
 
     //--------------- Data members ---------------------------------
 

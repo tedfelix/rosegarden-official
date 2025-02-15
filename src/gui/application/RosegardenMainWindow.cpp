@@ -794,178 +794,178 @@ RosegardenMainWindow::setupActions()
 {
     createAction("file_new", &RosegardenMainWindow::slotFileNew);
     createAction("file_open", &RosegardenMainWindow::slotFileOpen);
-    createAction("file_open_example", SLOT(slotFileOpenExample()));
-    createAction("file_open_template", SLOT(slotFileOpenTemplate()));
-    createAction("file_open_most_recent", SLOT(slotFileOpenRecent()));
-    createAction("file_save", SLOT(slotFileSave()));
-    createAction("file_save_as", SLOT(slotFileSaveAs()));
-    createAction("file_save_as_template", SLOT(slotFileSaveAsTemplate()));
-    createAction("file_revert", SLOT(slotRevertToSaved()));
-    createAction("file_close", SLOT(slotFileClose()));
-    createAction("file_quit", SLOT(slotQuit()));
+    createAction("file_open_example", &RosegardenMainWindow::slotFileOpenExample);
+    createAction("file_open_template", &RosegardenMainWindow::slotFileOpenTemplate);
+    createAction("file_open_most_recent", &RosegardenMainWindow::slotFileOpenRecent);
+    createAction("file_save", &RosegardenMainWindow::slotFileSave);
+    createAction("file_save_as", &RosegardenMainWindow::slotFileSaveAs);
+    createAction("file_save_as_template", &RosegardenMainWindow::slotFileSaveAsTemplate);
+    createAction("file_revert", &RosegardenMainWindow::slotRevertToSaved);
+    createAction("file_close", &RosegardenMainWindow::slotFileClose);
+    createAction("file_quit", &RosegardenMainWindow::slotQuit);
 
-    createAction("edit_cut", SLOT(slotEditCut()));
-    createAction("edit_copy", SLOT(slotEditCopy()));
-    createAction("edit_paste", SLOT(slotEditPaste()));
+    createAction("edit_cut", &RosegardenMainWindow::slotEditCut);
+    createAction("edit_copy", &RosegardenMainWindow::slotEditCopy);
+    createAction("edit_paste", &RosegardenMainWindow::slotEditPaste);
     //uncomment this when time comes to implement paste as links
-    //createAction("edit_paste_as_links", SLOT(slotEditPasteAsLinks()));
+    //createAction("edit_paste_as_links", &RosegardenMainWindow::slotEditPasteAsLinks);
 
-    createAction("shortcuts_configure", SLOT(slotConfigureShortcuts()));
-    createAction("options_configure", SLOT(slotConfigure()));
+    createAction("shortcuts_configure", &RosegardenMainWindow::slotConfigureShortcuts);
+    createAction("options_configure", &RosegardenMainWindow::slotConfigure);
 
-    createAction("file_import_project", SLOT(slotImportProject()));
-    createAction("file_import_midi", SLOT(slotImportMIDI()));
-    createAction("file_import_rg21", SLOT(slotImportRG21()));
-//    createAction("file_import_hydrogen", SLOT(slotImportHydrogen()));
-    createAction("file_import_musicxml", SLOT(slotImportMusicXML()));
-    createAction("file_merge", SLOT(slotMerge()));
-    createAction("file_merge_midi", SLOT(slotMergeMIDI()));
-    createAction("file_merge_rg21", SLOT(slotMergeRG21()));
-//    createAction("file_merge_hydrogen", SLOT(slotMergeHydrogen()));
-    createAction("file_merge_musicxml", SLOT(slotMergeMusicXML()));
-    createAction("file_export_project", SLOT(slotExportProject()));
-    createAction("file_export_midi", SLOT(slotExportMIDI()));
-    createAction("file_export_lilypond", SLOT(slotExportLilyPond()));
-    createAction("file_export_musicxml", SLOT(slotExportMusicXml()));
-    createAction("file_export_wav", SLOT(slotExportWAV()));
-    createAction("file_export_csound", SLOT(slotExportCsound()));
-    createAction("file_export_mup", SLOT(slotExportMup()));
-    createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
-    createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
-    createAction("file_show_playlist", SLOT(slotPlayList()));
+    createAction("file_import_project", &RosegardenMainWindow::slotImportProject);
+    createAction("file_import_midi", &RosegardenMainWindow::slotImportMIDI);
+    createAction("file_import_rg21", &RosegardenMainWindow::slotImportRG21);
+//    createAction("file_import_hydrogen", &RosegardenMainWindow::slotImportHydrogen);
+    createAction("file_import_musicxml", &RosegardenMainWindow::slotImportMusicXML);
+    createAction("file_merge", &RosegardenMainWindow::slotMerge);
+    createAction("file_merge_midi", &RosegardenMainWindow::slotMergeMIDI);
+    createAction("file_merge_rg21", &RosegardenMainWindow::slotMergeRG21);
+//    createAction("file_merge_hydrogen", &RosegardenMainWindow::slotMergeHydrogen);
+    createAction("file_merge_musicxml", &RosegardenMainWindow::slotMergeMusicXML);
+    createAction("file_export_project", &RosegardenMainWindow::slotExportProject);
+    createAction("file_export_midi", &RosegardenMainWindow::slotExportMIDI);
+    createAction("file_export_lilypond", &RosegardenMainWindow::slotExportLilyPond);
+    createAction("file_export_musicxml", &RosegardenMainWindow::slotExportMusicXml);
+    createAction("file_export_wav", &RosegardenMainWindow::slotExportWAV);
+    createAction("file_export_csound", &RosegardenMainWindow::slotExportCsound);
+    createAction("file_export_mup", &RosegardenMainWindow::slotExportMup);
+    createAction("file_print_lilypond", &RosegardenMainWindow::slotPrintLilyPond);
+    createAction("file_preview_lilypond", &RosegardenMainWindow::slotPreviewLilyPond);
+    createAction("file_show_playlist", &RosegardenMainWindow::slotPlayList);
 
     // Help menu
-    createAction("manual", SLOT(slotHelp()));
-    createAction("tutorial", SLOT(slotTutorial()));
-    createAction("guidelines", SLOT(slotBugGuidelines()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
-    createAction("help_about_qt", SLOT(slotHelpAboutQt()));
-    createAction("donate", SLOT(slotDonate()));
+    createAction("manual", &RosegardenMainWindow::slotHelp);
+    createAction("tutorial", &RosegardenMainWindow::slotTutorial);
+    createAction("guidelines", &RosegardenMainWindow::slotBugGuidelines);
+    createAction("help_about_app", &RosegardenMainWindow::slotHelpAbout);
+    createAction("help_about_qt", &RosegardenMainWindow::slotHelpAboutQt);
+    createAction("donate", &RosegardenMainWindow::slotDonate);
 
-    createAction("show_stock_toolbar", SLOT(slotToggleToolBar()));
-    createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
-    createAction("show_tracks_toolbar", SLOT(slotToggleTracksToolBar()));
-    createAction("show_editors_toolbar", SLOT(slotToggleEditorsToolBar()));
-    createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
-    createAction("show_zoom_toolbar", SLOT(slotToggleZoomToolBar()));
-    createAction("show_status_bar", SLOT(slotToggleStatusBar()));
-    createAction("show_transport", SLOT(slotUpdateTransportVisibility()));
-    createAction("show_tracklabels", SLOT(slotToggleTrackLabels()));
-    createAction("show_rulers", SLOT(slotToggleRulers()));
-    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
-    createAction("show_chord_name_ruler", SLOT(slotToggleChordNameRuler()));
-    createAction("show_previews", SLOT(slotTogglePreviews()));
-    createAction("show_inst_segment_parameters", SLOT(slotHideShowParameterArea()));
-    createAction("full_screen", SLOT(slotFullScreen()));
+    createAction("show_stock_toolbar", &RosegardenMainWindow::slotToggleToolBar);
+    createAction("show_tools_toolbar", &RosegardenMainWindow::slotToggleToolsToolBar);
+    createAction("show_tracks_toolbar", &RosegardenMainWindow::slotToggleTracksToolBar);
+    createAction("show_editors_toolbar", &RosegardenMainWindow::slotToggleEditorsToolBar);
+    createAction("show_transport_toolbar", &RosegardenMainWindow::slotToggleTransportToolBar);
+    createAction("show_zoom_toolbar", &RosegardenMainWindow::slotToggleZoomToolBar);
+    createAction("show_status_bar", &RosegardenMainWindow::slotToggleStatusBar);
+    createAction("show_transport", &RosegardenMainWindow::slotUpdateTransportVisibility);
+    createAction("show_tracklabels", &RosegardenMainWindow::slotToggleTrackLabels);
+    createAction("show_rulers", &RosegardenMainWindow::slotToggleRulers);
+    createAction("show_tempo_ruler", &RosegardenMainWindow::slotToggleTempoRuler);
+    createAction("show_chord_name_ruler", &RosegardenMainWindow::slotToggleChordNameRuler);
+    createAction("show_previews", &RosegardenMainWindow::slotTogglePreviews);
+    createAction("show_inst_segment_parameters", &RosegardenMainWindow::slotHideShowParameterArea);
+    createAction("full_screen", &RosegardenMainWindow::slotFullScreen);
 
-    createAction("select", SLOT(slotPointerSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
-    createAction("resize", SLOT(slotResizeSelected()));
-    createAction("split", SLOT(slotSplitSelected()));
-    createAction("join", SLOT(slotJoinSelected()));
-    createAction("harmonize_selection", SLOT(slotHarmonizeSelection()));
-    createAction("add_time_signature", SLOT(slotEditTimeSignature()));
-    createAction("edit_tempos", SLOT(slotEditTempos()));
-    createAction("cut_range", SLOT(slotCutRange()));
-    createAction("copy_range", SLOT(slotCopyRange()));
-    createAction("paste_range", SLOT(slotPasteRange()));
-    createAction("delete_range", SLOT(slotDeleteRange()));
-    createAction("insert_range", SLOT(slotInsertRange()));
-    createAction("paste_conductor_data", SLOT(slotPasteConductorData()));
-    createAction("erase_range_tempos", SLOT(slotEraseRangeTempos()));
-    createAction("delete", SLOT(slotDeleteSelectedSegments()));
-    createAction("select_all", SLOT(slotSelectAll()));
-    createAction("add_tempo", SLOT(slotEditTempo()));
-    createAction("change_composition_length", SLOT(slotChangeCompositionLength()));
-    createAction("edit_markers", SLOT(slotEditMarkers()));
-    createAction("edit_doc_properties", SLOT(slotEditDocumentProperties()));
+    createAction("select", &RosegardenMainWindow::slotPointerSelected);
+    createAction("draw", &RosegardenMainWindow::slotDrawSelected);
+    createAction("erase", &RosegardenMainWindow::slotEraseSelected);
+    createAction("move", &RosegardenMainWindow::slotMoveSelected);
+    createAction("resize", &RosegardenMainWindow::slotResizeSelected);
+    createAction("split", &RosegardenMainWindow::slotSplitSelected);
+    createAction("join", &RosegardenMainWindow::slotJoinSelected);
+    createAction("harmonize_selection", &RosegardenMainWindow::slotHarmonizeSelection);
+    createAction("add_time_signature", &RosegardenMainWindow::slotEditTimeSignature);
+    createAction("edit_tempos", &RosegardenMainWindow::slotEditTempos);
+    createAction("cut_range", &RosegardenMainWindow::slotCutRange);
+    createAction("copy_range", &RosegardenMainWindow::slotCopyRange);
+    createAction("paste_range", &RosegardenMainWindow::slotPasteRange);
+    createAction("delete_range", &RosegardenMainWindow::slotDeleteRange);
+    createAction("insert_range", &RosegardenMainWindow::slotInsertRange);
+    createAction("paste_conductor_data", &RosegardenMainWindow::slotPasteConductorData);
+    createAction("erase_range_tempos", &RosegardenMainWindow::slotEraseRangeTempos);
+    createAction("delete", &RosegardenMainWindow::slotDeleteSelectedSegments);
+    createAction("select_all", &RosegardenMainWindow::slotSelectAll);
+    createAction("add_tempo", &RosegardenMainWindow::slotEditTempo);
+    createAction("change_composition_length", &RosegardenMainWindow::slotChangeCompositionLength);
+    createAction("edit_markers", &RosegardenMainWindow::slotEditMarkers);
+    createAction("edit_doc_properties", &RosegardenMainWindow::slotEditDocumentProperties);
     // throw a redundant copy on the View menu; even though it edits too, we
     // just call it "View -> Document Properties"  (I got this idea when I
     // noticed that some piece of configuration in OO.o was on two different
     // menus, when I looked for it in two different places, and found it in
     // both.  It seems reasonable to me if not overdone.)
-    createAction("view_doc_properties", SLOT(slotEditDocumentProperties()));
-    createAction("edit_default", SLOT(slotEdit()));
-    createAction("edit_matrix", SLOT(slotEditInMatrix()));
-    createAction("edit_percussion_matrix", SLOT(slotEditInPercussionMatrix()));
-    createAction("edit_notation", SLOT(slotEditAsNotation()));
-    createAction("edit_event_list", SLOT(slotEditInEventList()));
-    createAction("edit_pitch_tracker", SLOT(slotEditInPitchTracker()));
-    createAction("quantize_selection", SLOT(slotQuantizeSelection()));
-    createAction("relabel_segment", SLOT(slotRelabelSegments()));
-    createAction("transpose", SLOT(slotTransposeSegments()));
-    createAction("transpose_semitones", SLOT(slotTransposeSemitones()));
-    createAction("switch_preset", SLOT(slotSwitchPreset()));
-    createAction("interpret", SLOT(slotInterpret()));
-    createAction("repeat_quantize", SLOT(slotRepeatQuantizeSelection()));
-    createAction("rescale", SLOT(slotRescaleSelection()));
-    createAction("auto_split", SLOT(slotAutoSplitSelection()));
-    createAction("split_by_pitch", SLOT(slotSplitSelectionByPitch()));
-    createAction("split_by_recording", SLOT(slotSplitSelectionByRecordedSrc()));
-    createAction("split_at_time", SLOT(slotSplitSelectionAtTime()));
-    createAction("split_by_drum", SLOT(slotSplitSelectionByDrum()));
-    createAction("jog_left", SLOT(slotJogLeft()));
-    createAction("jog_right", SLOT(slotJogRight()));
-    createAction("create_anacrusis", SLOT(slotCreateAnacrusis()));
-    createAction("set_segment_start", SLOT(slotSetSegmentStartTimes()));
-    createAction("set_segment_duration", SLOT(slotSetSegmentDurations()));
-    createAction("join_segments", SLOT(slotJoinSegments()));
-    createAction("expand_figuration", SLOT(slotExpandFiguration()));
-    createAction("update_figurations", SLOT(slotUpdateFigurations()));
-    createAction("repeats_to_real_copies", SLOT(slotRepeatingSegments()));
-    createAction("links_to_real_copies", SLOT(slotLinksToCopies()));
-    createAction("manage_trigger_segments", SLOT(slotManageTriggerSegments()));
-    createAction("groove_quantize", SLOT(slotGrooveQuantize()));
-    createAction("fit_beats", SLOT(slotFitToBeats()));
-    createAction("set_tempo_to_segment_length", SLOT(slotTempoToSegmentLength()));
-    createAction("audio_manager", SLOT(slotAudioManager()));
-    createAction("show_segment_labels", SLOT(slotToggleSegmentLabels()));
-    createAction("add_track", SLOT(slotAddTrack()));
-    createAction("add_tracks", SLOT(slotAddTracks()));
-    createAction("delete_track", SLOT(slotDeleteTrack()));
-    createAction("move_track_down", SLOT(slotMoveTrackDown()));
-    createAction("move_track_up", SLOT(slotMoveTrackUp()));
-    createAction("select_next_track", SLOT(slotSelectNextTrack()));
-    createAction("select_previous_track", SLOT(slotSelectPreviousTrack()));
-    createAction("toggle_mute_track", SLOT(slotToggleMute()));
-    createAction("toggle_arm_track", SLOT(slotToggleRecordCurrentTrack()));
-    createAction("toggle_solo_track", SLOT(slotToggleSoloCurrentTrack()));
-    createAction("mute_all_tracks", SLOT(slotMuteAllTracks()));
-    createAction("unmute_all_tracks", SLOT(slotUnmuteAllTracks()));
-    createAction("remap_instruments", SLOT(slotRemapInstruments()));
-    createAction("audio_mixer", SLOT(slotOpenAudioMixer()));
-    createAction("midi_mixer", SLOT(slotOpenMidiMixer()));
-    createAction("manage_midi_devices", SLOT(slotManageMIDIDevices()));
-    createAction("manage_synths", SLOT(slotManageSynths()));
-    createAction("modify_midi_filters", SLOT(slotModifyMIDIFilters()));
-    createAction("manage_metronome", SLOT(slotManageMetronome()));
-    createAction("toggle_metronome", SLOT(slotToggleMetronome()));
-    createAction("save_default_studio", SLOT(slotSaveDefaultStudio()));
-    createAction("load_default_studio", SLOT(slotImportDefaultStudio()));
-    createAction("load_studio", SLOT(slotImportStudio()));
-    createAction("reset_midi_network", SLOT(slotResetMidiNetwork()));
-    createAction("add_marker", SLOT(slotAddMarker2()));
-    createAction("previous_marker", SLOT(slotPreviousMarker()));
-    createAction("next_marker", SLOT(slotNextMarker()));
-    createAction("set_quick_marker", SLOT(slotSetQuickMarker()));
-    createAction("jump_to_quick_marker", SLOT(slotJumpToQuickMarker()));
+    createAction("view_doc_properties", &RosegardenMainWindow::slotEditDocumentProperties);
+    createAction("edit_default", &RosegardenMainWindow::slotEdit);
+    createAction("edit_matrix", &RosegardenMainWindow::slotEditInMatrix);
+    createAction("edit_percussion_matrix", &RosegardenMainWindow::slotEditInPercussionMatrix);
+    createAction("edit_notation", &RosegardenMainWindow::slotEditAsNotation);
+    createAction("edit_event_list", &RosegardenMainWindow::slotEditInEventList);
+    createAction("edit_pitch_tracker", &RosegardenMainWindow::slotEditInPitchTracker);
+    createAction("quantize_selection", &RosegardenMainWindow::slotQuantizeSelection);
+    createAction("relabel_segment", &RosegardenMainWindow::slotRelabelSegments);
+    createAction("transpose", &RosegardenMainWindow::slotTransposeSegments);
+    createAction("transpose_semitones", &RosegardenMainWindow::slotTransposeSemitones);
+    createAction("switch_preset", &RosegardenMainWindow::slotSwitchPreset);
+    createAction("interpret", &RosegardenMainWindow::slotInterpret);
+    createAction("repeat_quantize", &RosegardenMainWindow::slotRepeatQuantizeSelection);
+    createAction("rescale", &RosegardenMainWindow::slotRescaleSelection);
+    createAction("auto_split", &RosegardenMainWindow::slotAutoSplitSelection);
+    createAction("split_by_pitch", &RosegardenMainWindow::slotSplitSelectionByPitch);
+    createAction("split_by_recording", &RosegardenMainWindow::slotSplitSelectionByRecordedSrc);
+    createAction("split_at_time", &RosegardenMainWindow::slotSplitSelectionAtTime);
+    createAction("split_by_drum", &RosegardenMainWindow::slotSplitSelectionByDrum);
+    createAction("jog_left", &RosegardenMainWindow::slotJogLeft);
+    createAction("jog_right", &RosegardenMainWindow::slotJogRight);
+    createAction("create_anacrusis", &RosegardenMainWindow::slotCreateAnacrusis);
+    createAction("set_segment_start", &RosegardenMainWindow::slotSetSegmentStartTimes);
+    createAction("set_segment_duration", &RosegardenMainWindow::slotSetSegmentDurations);
+    createAction("join_segments", &RosegardenMainWindow::slotJoinSegments);
+    createAction("expand_figuration", &RosegardenMainWindow::slotExpandFiguration);
+    createAction("update_figurations", &RosegardenMainWindow::slotUpdateFigurations);
+    createAction("repeats_to_real_copies", &RosegardenMainWindow::slotRepeatingSegments);
+    createAction("links_to_real_copies", &RosegardenMainWindow::slotLinksToCopies);
+    createAction("manage_trigger_segments", &RosegardenMainWindow::slotManageTriggerSegments);
+    createAction("groove_quantize", &RosegardenMainWindow::slotGrooveQuantize);
+    createAction("fit_beats", &RosegardenMainWindow::slotFitToBeats);
+    createAction("set_tempo_to_segment_length", &RosegardenMainWindow::slotTempoToSegmentLength);
+    createAction("audio_manager", &RosegardenMainWindow::slotAudioManager);
+    createAction("show_segment_labels", &RosegardenMainWindow::slotToggleSegmentLabels);
+    createAction("add_track", &RosegardenMainWindow::slotAddTrack);
+    createAction("add_tracks", &RosegardenMainWindow::slotAddTracks);
+    createAction("delete_track", &RosegardenMainWindow::slotDeleteTrack);
+    createAction("move_track_down", &RosegardenMainWindow::slotMoveTrackDown);
+    createAction("move_track_up", &RosegardenMainWindow::slotMoveTrackUp);
+    createAction("select_next_track", &RosegardenMainWindow::slotSelectNextTrack);
+    createAction("select_previous_track", &RosegardenMainWindow::slotSelectPreviousTrack);
+    createAction("toggle_mute_track", &RosegardenMainWindow::slotToggleMute);
+    createAction("toggle_arm_track", &RosegardenMainWindow::slotToggleRecordCurrentTrack);
+    createAction("toggle_solo_track", &RosegardenMainWindow::slotToggleSoloCurrentTrack);
+    createAction("mute_all_tracks", &RosegardenMainWindow::slotMuteAllTracks);
+    createAction("unmute_all_tracks", &RosegardenMainWindow::slotUnmuteAllTracks);
+    createAction("remap_instruments", &RosegardenMainWindow::slotRemapInstruments);
+    createAction("audio_mixer", &RosegardenMainWindow::slotOpenAudioMixer);
+    createAction("midi_mixer", &RosegardenMainWindow::slotOpenMidiMixer);
+    createAction("manage_midi_devices", &RosegardenMainWindow::slotManageMIDIDevices);
+    createAction("manage_synths", &RosegardenMainWindow::slotManageSynths);
+    createAction("modify_midi_filters", &RosegardenMainWindow::slotModifyMIDIFilters);
+    createAction("manage_metronome", &RosegardenMainWindow::slotManageMetronome);
+    createAction("toggle_metronome", &RosegardenMainWindow::slotToggleMetronome);
+    createAction("save_default_studio", &RosegardenMainWindow::slotSaveDefaultStudio);
+    createAction("load_default_studio", &RosegardenMainWindow::slotImportDefaultStudio);
+    createAction("load_studio", &RosegardenMainWindow::slotImportStudio);
+    createAction("reset_midi_network", &RosegardenMainWindow::slotResetMidiNetwork);
+    createAction("add_marker", &RosegardenMainWindow::slotAddMarker2);
+    createAction("previous_marker", &RosegardenMainWindow::slotPreviousMarker);
+    createAction("next_marker", &RosegardenMainWindow::slotNextMarker);
+    createAction("set_quick_marker", &RosegardenMainWindow::slotSetQuickMarker);
+    createAction("jump_to_quick_marker", &RosegardenMainWindow::slotJumpToQuickMarker);
 
-    createAction("play", SLOT(slotPlay()));
-    createAction("stop", SLOT(slotStop()));
-    createAction("fast_forward", SLOT(slotFastforward()));
-    createAction("rewind", SLOT(slotRewind()));
-    createAction("recordtoggle", SLOT(slotToggleRecord()));
-    createAction("record", SLOT(slotRecord()));
-    createAction("rewindtobeginning", SLOT(slotRewindToBeginning()));
-    createAction("fastforwardtoend", SLOT(slotFastForwardToEnd()));
-    createAction("loop", SLOT(slotLoop()));
-    createAction("scroll_to_follow", SLOT(slotScrollToFollow()));
-    createAction("panic", SLOT(slotPanic()));
-    createAction("debug_dump_segments", SLOT(slotDebugDump()));
+    createAction("play", &RosegardenMainWindow::slotPlay);
+    createAction("stop", &RosegardenMainWindow::slotStop);
+    createAction("fast_forward", &RosegardenMainWindow::slotFastforward);
+    createAction("rewind", &RosegardenMainWindow::slotRewind);
+    createAction("recordtoggle", &RosegardenMainWindow::slotToggleRecord);
+    createAction("record", &RosegardenMainWindow::slotRecord);
+    createAction("rewindtobeginning", &RosegardenMainWindow::slotRewindToBeginning);
+    createAction("fastforwardtoend", &RosegardenMainWindow::slotFastForwardToEnd);
+    createAction("loop", &RosegardenMainWindow::slotLoop);
+    createAction("scroll_to_follow", &RosegardenMainWindow::slotScrollToFollow);
+    createAction("panic", &RosegardenMainWindow::slotPanic);
+    createAction("debug_dump_segments", &RosegardenMainWindow::slotDebugDump);
 
-    createAction("repeat_segment_onoff", SLOT(slotToggleRepeat()));
+    createAction("repeat_segment_onoff", &RosegardenMainWindow::slotToggleRepeat);
 
     createMenusAndToolbars("rosegardenmainwindow.rc");
 
@@ -2174,7 +2174,7 @@ RosegardenMainWindow::slotFileSave()
     // If it's a new file (no file path), or an imported file
     // (file path doesn't end with .rg), do a "save as".
     if (!RosegardenDocument::currentDocument->isRegularDotRGFile()) {
-        slotFileSaveAs();
+        fileSaveAs(false);
         return;
     }
 
@@ -2280,7 +2280,7 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
 }
 
 bool
-RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
+RosegardenMainWindow::fileSaveAs(bool asTemplate)
 {
     if (!RosegardenDocument::currentDocument)
         return false;
@@ -2348,7 +2348,7 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     // Remove any autosave file for Untitled
     QString autoSaveFileName =
         AutoSaveFinder().checkAutoSaveFile("");
-    RG_DEBUG << "slotFileSaveAs deleting autosave file" << autoSaveFileName;
+    RG_DEBUG << "fileSaveAs deleting autosave file" << autoSaveFileName;
     if (autoSaveFileName != "") QFile::remove(autoSaveFileName);
 
     // Indicate success.
@@ -8672,7 +8672,7 @@ bool RosegardenMainWindow::saveIfModified()
 
             //RG_DEBUG << "saveIfModified() : new or imported file";
 
-            completed = slotFileSaveAs();
+            completed = fileSaveAs(false);
 
         } else {
 
