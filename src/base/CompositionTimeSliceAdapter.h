@@ -56,9 +56,9 @@ public:
      * given section in time of the given composition.  If begin and
      * end are equal, the whole composition will be used.
      */
-    CompositionTimeSliceAdapter(Composition* c,
-                                timeT begin = 0,
-                                timeT end = 0);
+    explicit CompositionTimeSliceAdapter(Composition* c,
+                                         timeT begin = 0,
+                                         timeT end = 0);
 
     /**
      * Construct a CompositionTimeSliceAdapter that operates on the

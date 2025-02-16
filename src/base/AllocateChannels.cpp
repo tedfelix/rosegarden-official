@@ -345,7 +345,7 @@ isPercussion(ChannelId channel)
 // @author Tom Breton (Tehom)
 bool
 AllocateChannels::
-isPercussion(ChannelInterval &ci)
+isPercussion(const ChannelInterval &ci)
 {
     return isPercussion(ci.getChannelId());
 }
@@ -456,7 +456,7 @@ reserveFixedChannel(ChannelId channel)
 
 ChannelId
 AllocateChannels::
-reallocateThruChannel(Instrument& instrument, ChannelId channel)
+reallocateThruChannel(const Instrument& instrument, ChannelId channel)
 {
     // If we already have a valid channel and it has the right
     // percussion-ness, we're done.
@@ -477,7 +477,7 @@ reallocateThruChannel(Instrument& instrument, ChannelId channel)
 // @author Tom Breton (Tehom)
 ChannelId
 AllocateChannels::
-allocateThruChannel(Instrument& instrument)
+allocateThruChannel(const Instrument& instrument)
 {
     if (instrument.isPercussion()) { return getPercussionChannel(); }
 

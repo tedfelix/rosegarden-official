@@ -345,8 +345,6 @@ AbstractSet<Element, Container>::initialise()
         }
     }
 
-    j = m_baseIterator;
-
     // then scan forwards to find an element not in the desired set,
     // sampling everything as far forward as the one before it
 

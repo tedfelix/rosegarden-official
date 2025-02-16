@@ -689,10 +689,10 @@ AnalysisHelper::addProgressionToMap(Key k,
          ChordTypes::Minor, ChordTypes::Major, ChordTypes::Major,
          ChordTypes::Minor, ChordTypes::Diminished};
 
-    int offset = k.getTonicPitch();
-
     if (!k.isMinor())
     {
+        int offset = k.getTonicPitch();
+
         ChordLabel firstChord
         (
             majorDiationicTriadTypes[firstChordNumber],
@@ -905,12 +905,12 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
     int beatDuration = 0,
         bestScore = 0;
 
-    for (int j = 0; j < 4; ++j)
+    for (int j1 = 0; j1 < 4; ++j1)
     {
-        if (beatScores[j] >= bestScore)
+        if (beatScores[j1] >= bestScore)
         {
-            bestScore = beatScores[j];
-            beatDuration = commonBeatDurations[j];
+            bestScore = beatScores[j1];
+            beatDuration = commonBeatDurations[j1];
         }
     }
 
@@ -958,12 +958,12 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
 
     bestScore = 0;  // reused from earlier
 
-    for (int j = 2; j < 5; ++j)
+    for (int j1 = 2; j1 < 5; ++j1)
     {
-        if (measureLengthScores[j] >= bestScore)
+        if (measureLengthScores[j1] >= bestScore)
         {
-            bestScore = measureLengthScores[j];
-            measureLength = j;
+            bestScore = measureLengthScores[j1];
+            measureLength = j1;
         }
     }
 
