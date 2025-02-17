@@ -212,6 +212,8 @@ LV2PluginInstance::init(int idealChannelCount)
                     LV2_Atom_Sequence* atomIn =
                         reinterpret_cast<LV2_Atom_Sequence*>(dbuf);
                     lv2_atom_sequence_clear(atomIn);
+                    LV2_URID type = LV2URIDMapper::uridMap(LV2_ATOM__Sequence);
+                    atomIn->atom.type = type;
                     ap.atomSeq = atomIn;
                     RG_DEBUG << "created atom sequence" << atomIn;
                     m_atomInputPorts.push_back(ap);
