@@ -31,7 +31,6 @@ namespace Rosegarden
 EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
         timeT startTime,
         timeT endTime,
-        // cppcheck-suppress passedByValue
         std::shared_ptr<Quantizer> quantizer) :
     BasicCommand(tr("Unquantize Events"), segment, startTime, endTime,
                  true),  // bruteForceRedo
@@ -42,7 +41,6 @@ EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
 
 EventUnquantizeCommand::EventUnquantizeCommand(
         EventSelection &selection,
-        // cppcheck-suppress passedByValue
         std::shared_ptr<Quantizer> quantizer) :
     BasicCommand(tr("Unquantize Events"),
                  selection.getSegment(),

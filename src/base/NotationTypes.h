@@ -304,7 +304,7 @@ public:
      * exception if the given string does not match one of the above
      * clef name constants.
      */
-    Clef(const std::string &s, int octaveOffset = 0);
+    explicit Clef(const std::string &s, int octaveOffset = 0);
 
     Clef(const Clef &c) : m_clef(c.m_clef), m_octaveOffset(c.m_octaveOffset) {
     }
@@ -732,8 +732,8 @@ public:
 
     explicit Text(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
-    Text(const std::string &text,
-         const std::string &textType = UnspecifiedType);
+    explicit Text(const std::string &text,
+                  const std::string &textType = UnspecifiedType);
     Text(const Text &);
     Text &operator=(const Text &);
     ~Text();
@@ -794,8 +794,9 @@ public:
     /**
      * Construct a Pitch object based on the given performance (MIDI) pitch.
      */
-    Pitch(int performancePitch,
-          const Accidental &explicitAccidental = Accidentals::NoAccidental);
+    explicit Pitch
+    (int performancePitch,
+     const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
     /**
      * Construct a Pitch based on octave and pitch in octave.  The
@@ -1085,7 +1086,7 @@ public:
      * durational; they don't represent pitch, and may be as
      * relevant to rests as actual notes.
      */
-    Note(Type type, int dots = 0) :
+    explicit Note(Type type, int dots = 0) :
         m_type(type < Shortest ? Shortest :
                type >  Longest ?  Longest :
                type),

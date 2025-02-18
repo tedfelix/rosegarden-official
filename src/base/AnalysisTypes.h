@@ -210,9 +210,9 @@ protected:
     /// For use by guessHarmonies (refineHarmonyGuessList)
     // #### grep ProgressionMap to something else
     struct ChordProgression {
-        ChordProgression(const ChordLabel& first_,
-                         const ChordLabel& second_ = ChordLabel(),
-                         const Key& key_ = Key());
+        explicit ChordProgression(const ChordLabel& first_,
+                                  const ChordLabel& second_ = ChordLabel(),
+                                  const Key& key_ = Key());
         ChordLabel first;
         ChordLabel second;
         Key homeKey;

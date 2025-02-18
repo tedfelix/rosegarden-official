@@ -19,8 +19,8 @@
 #define RG_ACTIONFILECLIENT_H
 
 #include <QString>
+#include <QAction>
 
-class QAction;
 class QActionGroup;
 class QMenu;
 class QToolBar;
@@ -67,6 +67,30 @@ protected:
     /// Create a child QAction, set its object name, and connect its triggered().
     QAction *createAction(QString actionName, QObject *target, QString connection);
 
+    // template with implementation
+    template<typename ReceiverType>
+    QAction* createAction(const QString& actionName,
+                          void (ReceiverType::*slot)())
+    {
+        QAction *action = makeAction(actionName);
+        if (!action) return nullptr;
+        QObject::connect(action, &QAction::triggered,
+                         (ReceiverType*)this, slot);
+        return action;
+    }
+
+    // template with implementation
+    template<typename ReceiverType>
+    QAction* createAction(const QString& actionName,
+                          ReceiverType* target,
+                          void (ReceiverType::*slot)())
+    {
+        QAction *action = makeAction(actionName);
+        if (!action) return nullptr;
+        QObject::connect(action, &QAction::triggered, target, slot);
+        return action;
+    }
+
     /// Read the .rc file and create the QMenu and QToolBar objects.
     /**
      * The QAction child objects must be present before calling this function.
@@ -104,6 +128,8 @@ protected:
 private:
     // ActionCommandRegistry calls createAction().
     friend class ActionCommandRegistry;
+
+    QAction* makeAction(const QString& actionName);
 
     ActionFileParser *m_actionFileParser;
 };

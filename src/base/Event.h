@@ -671,7 +671,7 @@ Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type v
     unshare();
 
     PropertyMap::iterator i;
-    PropertyMap *map = find(name, i);
+    const PropertyMap *map = find(name, i);
 
     // If found, update only if not persistent
     if (map) {

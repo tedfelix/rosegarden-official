@@ -726,7 +726,6 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
     }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
-    // cppcheck-suppress knownConditionTrueFalse
     cout << "totalFrac " << totalFrac << ", totalFracCount " << totalFracCount << ", avg " << (totalFracCount > 0 ? (totalFrac / totalFracCount) : 0) << endl;
 #endif
 }

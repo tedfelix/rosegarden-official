@@ -57,8 +57,8 @@ public:
     //
     struct ControlPositionCmp
     {
-        bool operator()(ControlParameter *c1,
-                        ControlParameter *c2) const
+        bool operator()(const ControlParameter *c1,
+                        const ControlParameter *c2) const
         {
             return (c1->getIPBPosition() < c2->getIPBPosition());
         }

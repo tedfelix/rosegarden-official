@@ -540,7 +540,6 @@ AudioPluginOSCGUIManager::dispatch()
 #ifdef DSSI_PROJECT_DIRECTORY_KEY
 
                 if (key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
-                    // cppcheck-suppress ConfigurationNotChecked
                     key = DSSI_PROJECT_DIRECTORY_KEY;
                 }
 #endif
@@ -589,7 +588,6 @@ AudioPluginOSCGUIManager::dispatch()
 
 #ifdef DSSI_RESERVED_CONFIGURE_PREFIX
 
-            // cppcheck-suppress ConfigurationNotChecked
             if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX) ||
                     key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
                 RG_WARNING << "dispatch(): illegal reserved configure call from gui: " << key << " -> " << value;
@@ -601,7 +599,6 @@ AudioPluginOSCGUIManager::dispatch()
 
             m_mainWindow->slotChangePluginConfiguration(instrument, position,
 #ifdef DSSI_GLOBAL_CONFIGURE_PREFIX
-// cppcheck-suppress ConfigurationNotChecked
                                                  key.startsWith(DSSI_GLOBAL_CONFIGURE_PREFIX),
 #else
                                                  false,

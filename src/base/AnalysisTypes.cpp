@@ -689,10 +689,10 @@ AnalysisHelper::addProgressionToMap(Key k,
          ChordTypes::Minor, ChordTypes::Major, ChordTypes::Major,
          ChordTypes::Minor, ChordTypes::Diminished};
 
-    int offset = k.getTonicPitch();
-
     if (!k.isMinor())
     {
+        int offset = k.getTonicPitch();
+
         ChordLabel firstChord
         (
             majorDiationicTriadTypes[firstChordNumber],
@@ -866,10 +866,13 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
     // durations of quaver, dotted quaver, crotchet, dotted crotchet:
     static const int commonBeatDurations[4] = {48, 72, 96, 144};
 
-    int j = 0;
+    // This appears to be an iteration limiter.  It's never used other than
+    // to restrict the computation to no more than 100 iterations.
+    int iterations = 0;
+
     for (CompositionTimeSliceAdapter::iterator i = c.begin();
-         i != c.end() && j < 100;
-         ++i, ++j)
+         i != c.end() && iterations < 100;
+         ++i, ++iterations)
     {
 
         // Skip non-notes
@@ -905,12 +908,12 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
     int beatDuration = 0,
         bestScore = 0;
 
-    for (int j = 0; j < 4; ++j)
+    for (int i = 0; i < 4; ++i)
     {
-        if (beatScores[j] >= bestScore)
+        if (beatScores[i] >= bestScore)
         {
-            bestScore = beatScores[j];
-            beatDuration = commonBeatDurations[j];
+            bestScore = beatScores[i];
+            beatDuration = commonBeatDurations[i];
         }
     }
 
@@ -921,8 +924,8 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
     vector<int> measureLengthScores(5, 0);
 
     for (CompositionTimeSliceAdapter::iterator i = c.begin();
-         i != c.end() && j < 100;
-         ++i, ++j)
+         i != c.end() && iterations < 100;
+         ++i, ++iterations)
     {
 
         if (!(*i)->isa(Note::EventType)) continue;
@@ -958,12 +961,12 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
 
     bestScore = 0;  // reused from earlier
 
-    for (int j = 2; j < 5; ++j)
+    for (int i = 2; i < 5; ++i)
     {
-        if (measureLengthScores[j] >= bestScore)
+        if (measureLengthScores[i] >= bestScore)
         {
-            bestScore = measureLengthScores[j];
-            measureLength = j;
+            bestScore = measureLengthScores[i];
+            measureLength = i;
         }
     }
 

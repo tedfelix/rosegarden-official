@@ -26,7 +26,6 @@
 
 namespace {
     // C version of scheduleWork() for callback.
-    // cppcheck-suppress unusedFunction
     LV2_Worker_Status scheduleWorkC(LV2_Worker_Schedule_Handle handle,
                                     uint32_t                   size,
                                     const void*                data)

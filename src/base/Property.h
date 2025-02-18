@@ -49,7 +49,6 @@ typename PropertyDefn<P>::basic_type
 PropertyDefn<P>::parse(std::string)
 {
     throw(0);
-    return "";
 }
 
 template <PropertyType P>
@@ -57,7 +56,6 @@ std::string
 PropertyDefn<P>::unparse(typename PropertyDefn<P>::basic_type)
 {
     throw(0);
-    return "";
 }
 
 
@@ -126,7 +124,7 @@ public:
 };
 
 #ifndef NDEBUG
-inline std::ostream& operator<<(std::ostream &out, PropertyStoreBase &e)
+inline std::ostream& operator<<(std::ostream &out, const PropertyStoreBase &e)
 { e.dump(out); return out; }
 #endif
 

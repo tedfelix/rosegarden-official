@@ -31,7 +31,7 @@
 #include <QToolBar>
 #include <QToolButton>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 ActionFileClient::ActionFileClient() :
@@ -158,7 +158,7 @@ ActionFileClient::findMenu(QString menuName)
             RG_WARNING << "WARNING: ActionFileClient(\"" << obj->objectName()
                       << "\")::findMenu: No such menu (wrapper) as \"" << menuName << "\"";
         }
-    }            
+    }
     return m;
 }
 
@@ -227,6 +227,16 @@ ActionFileClient::enableAutoRepeat(
     button->setAutoRepeat(true);
 }
 
-
+QAction* ActionFileClient::makeAction(const QString& actionName)
+{
+    QObject *obj = dynamic_cast<QObject *>(this);
+    if (!obj) {
+        RG_WARNING << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QObject";
+        return nullptr;
+    }
+    QAction *action = new QAction(obj);
+    action->setObjectName(actionName);
+    return action;
 }
 
+}

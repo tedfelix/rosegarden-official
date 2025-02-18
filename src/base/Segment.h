@@ -117,8 +117,8 @@ public:
     /**
      * Construct a Segment of a given type with a given formal starting time.
      */
-    Segment(SegmentType segmentType = Internal,
-            timeT startTime = 0);
+    explicit Segment(SegmentType segmentType = Internal,
+                     timeT startTime = 0);
 
     /**
      * Virtual copy constructor interface, in case this is actually a linked segment
@@ -657,11 +657,11 @@ public:
      * a notation editor)
      */
     void setVerse (int verse) { m_verse = verse; }
-    
+
     /**
      * Return how many syllables of lyrics the segment can carry.
      */
-    int lyricsPositionsCount();    
+    int lyricsPositionsCount();
 
 
 

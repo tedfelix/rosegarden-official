@@ -296,7 +296,6 @@ DSSIPluginFactory::getLRDFPath(QString &baseUri)
     }
 
 #ifdef DSSI_BASE
-    // cppcheck-suppress ConfigurationNotChecked
     baseUri = DSSI_BASE;
 #else
 

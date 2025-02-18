@@ -3670,7 +3670,6 @@ restarted.  Reset it to a sane default when called with factor of 0
     RG_DEBUG << "tweakSkewForMTC(): RG MTC: skew: " << t_skew;
 #endif
 
-    // cppcheck-suppress redundantAssignment
     t_skew = 0x10000 + factor + bias_factor;
 
 #ifdef MTC_DEBUG

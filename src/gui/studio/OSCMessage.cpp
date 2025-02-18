@@ -76,7 +76,6 @@ OSCMessage::addArg(char type, lo_arg *arg)
     }
 
     m_args.push_back(OSCArg(type, newarg));
-    //cppcheck-suppress memleak
 }
 
 size_t

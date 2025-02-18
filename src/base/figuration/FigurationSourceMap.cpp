@@ -767,7 +767,6 @@ private:
         }
     }
 
-    // cppcheck-suppress unusedPrivateFunction
     UnsolvedNote add(Event *e) override
         {
             if (e->isa(Note::EventType)) {
