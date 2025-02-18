@@ -866,10 +866,13 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
     // durations of quaver, dotted quaver, crotchet, dotted crotchet:
     static const int commonBeatDurations[4] = {48, 72, 96, 144};
 
-    int j = 0;
+    // This appears to be an iteration limiter.  It's never used other than
+    // to restrict the computation to no more than 100 iterations.
+    int iterations = 0;
+
     for (CompositionTimeSliceAdapter::iterator i = c.begin();
-         i != c.end() && j < 100;
-         ++i, ++j)
+         i != c.end() && iterations < 100;
+         ++i, ++iterations)
     {
 
         // Skip non-notes
@@ -905,12 +908,12 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
     int beatDuration = 0,
         bestScore = 0;
 
-    for (int j1 = 0; j1 < 4; ++j1)
+    for (int i = 0; i < 4; ++i)
     {
-        if (beatScores[j1] >= bestScore)
+        if (beatScores[i] >= bestScore)
         {
-            bestScore = beatScores[j1];
-            beatDuration = commonBeatDurations[j1];
+            bestScore = beatScores[i];
+            beatDuration = commonBeatDurations[i];
         }
     }
 
@@ -921,8 +924,8 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
     vector<int> measureLengthScores(5, 0);
 
     for (CompositionTimeSliceAdapter::iterator i = c.begin();
-         i != c.end() && j < 100;
-         ++i, ++j)
+         i != c.end() && iterations < 100;
+         ++i, ++iterations)
     {
 
         if (!(*i)->isa(Note::EventType)) continue;
@@ -958,12 +961,12 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
 
     bestScore = 0;  // reused from earlier
 
-    for (int j1 = 2; j1 < 5; ++j1)
+    for (int i = 2; i < 5; ++i)
     {
-        if (measureLengthScores[j1] >= bestScore)
+        if (measureLengthScores[i] >= bestScore)
         {
-            bestScore = measureLengthScores[j1];
-            measureLength = j1;
+            bestScore = measureLengthScores[i];
+            measureLength = i;
         }
     }
 

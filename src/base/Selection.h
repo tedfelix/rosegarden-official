@@ -165,8 +165,7 @@ public:
     const Segment &getSegment() const { return m_originalSegment; }
     Segment &getSegment()             { return m_originalSegment; }
 
-    // SegmentObserver methods.  Use default methods for eventAdded
-    // endMarkerTimeChanged
+    // SegmentObserver overrides.
     void eventRemoved(const Segment *, Event *) override;
     void segmentDeleted(const Segment *) override;
 
