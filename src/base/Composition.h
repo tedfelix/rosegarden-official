@@ -891,6 +891,7 @@ public:
     void    addObserver(CompositionObserver *obs) { m_observers.push_back(obs); }
     /// Change notification mechanism.
     /// @see addObserver()
+    // cppcheck-suppress constParameterPointer
     void removeObserver(CompositionObserver *obs) { m_observers.remove(obs); }
 
     /// Change notification mechanism.

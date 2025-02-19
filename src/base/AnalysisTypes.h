@@ -66,7 +66,7 @@ class ChordLabel
 {
 public:
     ChordLabel();
-    ChordLabel(Key key, int mask, int bass);
+    ChordLabel(const Key& key, int mask, int bass);
     ChordLabel(const ChordType& type, int rootPitch, int inversion = 0) :
         m_data(type, rootPitch, inversion) { };
     int rootPitch() const;
@@ -122,7 +122,7 @@ public:
     /**
      * Returns the key in force during a given event.
      */
-    static Key getKeyForEvent(Event *e, Segment &s);
+    static Key getKeyForEvent(const Event *e, Segment &s);
 
     /**
      * Inserts in the given Segment labels for all of the chords found in
@@ -135,7 +135,7 @@ public:
      * Returns a time signature that is probably reasonable for the
      * given timeslice.
      */
-    TimeSignature guessTimeSignature(CompositionTimeSliceAdapter &c);
+    TimeSignature guessTimeSignature(const CompositionTimeSliceAdapter &c);
 
     /**
      * Returns a guess at the starting key of the given timeslice,
