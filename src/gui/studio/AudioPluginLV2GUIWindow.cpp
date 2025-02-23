@@ -30,6 +30,8 @@
 #include <QWindow>
 #include <QCloseEvent>
 
+#include <set>
+
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
 #include <lv2/instance-access/instance-access.h>
@@ -38,6 +40,11 @@
 
 namespace
 {
+
+    // some plugins call the writeFn even after a cleanup so keep a
+    // track of all objects to avoid calls for deleted windows
+    static std::set<Rosegarden::AudioPluginLV2GUIWindow*> activeWindows;
+
     /// For LV2UI_Descriptor::instantiate().
     void writeFn(LV2UI_Controller controller,
                  uint32_t port_index,
@@ -47,6 +54,7 @@ namespace
     {
         Rosegarden::AudioPluginLV2GUIWindow* ap =
             static_cast<Rosegarden::AudioPluginLV2GUIWindow*>(controller);
+        if (activeWindows.find(ap) == activeWindows.end()) return;
         ap->portChange(port_index, buffer_size, port_protocol, buffer);
     }
 
@@ -69,6 +77,7 @@ namespace
     {
         Rosegarden::AudioPluginLV2GUIWindow* ap =
             static_cast<Rosegarden::AudioPluginLV2GUIWindow*>(controller);
+        if (activeWindows.find(ap) == activeWindows.end()) return;
         ap->uiClosed();
     }
 
@@ -96,7 +105,9 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     m_titleStdString(title.toStdString()),
     m_shutdownRequested(false)
 {
-    RG_DEBUG << "create window" << id << m_uiType << m_title;
+    activeWindows.insert(this);
+    RG_DEBUG << "create window" <<
+        id << m_uiType << m_title << activeWindows.size();
     setWindowTitle(m_title);
 
     // Create the idle timer for this window.
@@ -223,6 +234,7 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
 AudioPluginLV2GUIWindow::~AudioPluginLV2GUIWindow()
 {
     RG_DEBUG << "~AudioPluginLV2GUIWindow";
+    activeWindows.erase(this);
     m_timer->stop();
     m_lv2II = nullptr;
 }
