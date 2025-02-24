@@ -2119,14 +2119,16 @@ AlsaDriver::stopPlayback(bool autoStop)
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
-        // if the stop was initiated by the user (eg press stop
-        // button) we should stop the jack transport. If the stop was
-        // automatically initiated from the roesgarden code (eg. at
-        // end of composition) then autoStop is true - we do not stop
-        // the jack transport as other jack clients may be running
-        if (! autoStop) {
+        // Normally we want to send out a JACK stop even when the stop is
+        // initiated by rg at the end of the composition (auto stop).
+        // The user can disable this via the preferences and JACK will
+        // continue to roll past the end of the rg composition, but this will
+        // introduce some strange behavior since JACK transport will be out of
+        // sync with the rg transport.
+        // See Bug #1693 for details.
+        if (Preferences::getJACKStopAtAutoStop()  ||  !autoStop)
             m_jackDriver->stopTransport();
-        }
+
         m_needJackStart = NeedNoJackStart;
     }
 #endif

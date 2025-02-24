@@ -246,6 +246,26 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     ++row;
 
     settings.endGroup();
+
+    // JACK stop at auto stop
+    label = new QLabel(tr("JACK stop at auto stop"), frame);
+    layout->addWidget(label, row, 0);
+    tipText = tr(
+            "<qt><p>Unchecking this will allow the JACK transport to roll past "
+            "the end of the Rosegarden composition.  This will lead to the "
+            "JACK transport being out of sync with Rosegarden's transport and "
+            "could cause unexpected starting and stopping of the transport."
+            "</p></qt>");
+    label->setToolTip(tipText);
+    m_jackStopAtAutoStop = new QCheckBox(frame);
+    m_jackStopAtAutoStop->setToolTip(tipText);
+    m_jackStopAtAutoStop->setChecked(Preferences::getJACKStopAtAutoStop());
+    connect(m_jackStopAtAutoStop, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_jackStopAtAutoStop, row, 1, 1, 2);
+
+    ++row;
+
 #endif
 
     layout->addWidget(new QLabel(tr("Stop playback at end of last segment"),
@@ -642,6 +662,9 @@ void GeneralConfigurationPage::apply()
     StudioControl::sendMappedEvent(mEjackValue);
 
     settings.endGroup();
+
+    Preferences::setJACKStopAtAutoStop(m_jackStopAtAutoStop->isChecked());
+
 #endif // HAVE_LIBJACK
 
 

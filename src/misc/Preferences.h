@@ -70,6 +70,9 @@ namespace Preferences
     void setAdvancedLooping(bool value);
     bool getAdvancedLooping();
 
+    void setJACKStopAtAutoStop(bool value);
+    bool getJACKStopAtAutoStop();
+
     // AudioFileLocationDialog settings
 
     void setAudioFileLocationDlgDontShow(bool value);
@@ -82,11 +85,14 @@ namespace Preferences
     void setCustomAudioLocation(const QString &location);
     QString getCustomAudioLocation();
 
+
+    // Enable/Disable CPU load checks.
     void setJACKLoadCheck(bool value);
     bool getJACKLoadCheck();
 
     void setShowNoteNames(bool value);
     bool getShowNoteNames();
+
 
     // Experimental
 
