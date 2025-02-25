@@ -43,7 +43,7 @@ namespace Rosegarden
 
 class RosegardenDocument;
 
-/// "Edit Event" dialog
+/// "Edit Event" and "Insert Event" dialog
 /**
  * AKA the "Event Editor".
  *
