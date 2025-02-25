@@ -40,9 +40,11 @@ class QComboBox;
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 
-/// "Edit Event" and "Insert Event" dialog
+
+/// "Edit Event" and "Insert Event" dialogs.
 /**
  * AKA the "Event Editor".
  *
@@ -133,9 +135,8 @@ private:
     LineEdit *m_metaEdit;
 
 
-    bool m_modified;
+    bool m_modified{false};
 };
-
 
 
 }

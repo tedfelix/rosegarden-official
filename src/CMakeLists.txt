@@ -214,6 +214,7 @@ set(rg_CPPS
   gui/widgets/WarningWidget.cpp
   gui/widgets/TextFloat.cpp
   gui/widgets/ColorCombo.cpp
+  gui/editors/event/EditEvent.cpp
   gui/editors/pitchtracker/PitchHistory.cpp
   gui/editors/pitchtracker/PitchTrackerView.cpp
   gui/editors/pitchtracker/PitchGraphWidget.cpp
