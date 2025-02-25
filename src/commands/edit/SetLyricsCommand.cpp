@@ -103,7 +103,7 @@ SetLyricsCommand::execute()
 
         std::pair<timeT, timeT> barRange = comp->getBarRange(barNo++);
         QString syllables = *bsi;
-        syllables.replace(QRegularExpression("\\[\\d+\\] "), " ");
+        syllables.replace(QRegularExpression("\\[\\-?\\d+\\] "), " ");
         syllables.replace(QRegularExpression("\n"), " ");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList syllableList = syllables.split(" ", Qt::SkipEmptyParts); // no empties
