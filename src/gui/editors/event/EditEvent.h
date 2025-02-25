@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_EVENTEDIT_H
-#define RG_EVENTEDIT_H
+#ifndef RG_EDITEVENT_H
+#define RG_EDITEVENT_H
 
 #include "base/Event.h"
 #include "gui/widgets/LineEdit.h"
@@ -46,24 +46,27 @@ class RosegardenDocument;
 /**
  * AKA the "Event Editor".
  *
- * See also EventEditDialog.
+ * This replaces SimpleEventEditDialog and EventEditDialog.
  */
-class SimpleEventEditDialog : public QDialog
+class EditEvent : public QDialog
 {
     Q_OBJECT
-public:
-    SimpleEventEditDialog(QWidget *parent,
-                          RosegardenDocument *doc,
-                          const Event &event,
-                          bool inserting = false); // inserting or editing
 
-    bool isModified() const { return m_modified; }
+public:
+
+    EditEvent(QWidget *parent,
+              RosegardenDocument *doc,
+              const Event &event,
+              bool inserting = false);  // Inserting or editing.
+
+    bool isModified() const  { return m_modified; }
     Event getEvent();
 
     // Setup the dialog for a new event type
     void setupForEvent();
 
 public slots:
+
     void slotEventTypeChanged(int value);
     void slotAbsoluteTimeChanged(int value);
     void slotDurationChanged(int value);
@@ -81,50 +84,56 @@ public slots:
     void slotSysexLoad();
     void slotSysexSave();
 
-protected:
-    Event        m_event;
-    RosegardenDocument        *m_doc;
+private:
 
-    std::string              m_type;
-    timeT        m_absoluteTime;
-    timeT        m_notationAbsoluteTime;
-    timeT        m_duration;
-    timeT        m_notationDuration;
+    RosegardenDocument *m_doc;
 
-    QComboBox               *m_typeCombo;
-    QLabel                  *m_typeLabel;
+    Event m_event;
 
-    QLabel                  *m_timeLabel;
-    QLabel                  *m_durationLabel;
-    QLabel                  *m_pitchLabel;
-    QLabel                  *m_velocityLabel;
-    QLabel                  *m_metaLabel;
-    QLabel                  *m_controllerLabel;
-    QLabel                  *m_controllerLabelValue;
+    std::string m_type;
+    timeT m_absoluteTime;
+    timeT m_notationAbsoluteTime;
+    timeT m_duration;
+    timeT m_notationDuration;
 
-    QSpinBox                *m_timeSpinBox;
-    QSpinBox                *m_durationSpinBox;
-    QSpinBox                *m_pitchSpinBox;
-    QSpinBox                *m_velocitySpinBox;
 
-    QPushButton             *m_timeEditButton;
-    QPushButton             *m_durationEditButton;
-    QPushButton             *m_pitchEditButton;
-    QPushButton             *m_sysexLoadButton;
-    QPushButton             *m_sysexSaveButton;
+    // Widgets
 
-    QGroupBox               *m_notationGroupBox;
-    QLabel                  *m_notationTimeLabel;
-    QLabel                  *m_notationDurationLabel;
-    QSpinBox                *m_notationTimeSpinBox;
-    QSpinBox                *m_notationDurationSpinBox;
-    QPushButton             *m_notationTimeEditButton;
-    QPushButton             *m_notationDurationEditButton;
-    QCheckBox               *m_lockNotationValues;
+    QComboBox *m_typeCombo;
+    QLabel *m_typeLabel;
 
-    LineEdit                *m_metaEdit;
+    QLabel *m_timeLabel;
+    QLabel *m_durationLabel;
+    QLabel *m_pitchLabel;
+    QLabel *m_velocityLabel;
+    QLabel *m_metaLabel;
+    QLabel *m_controllerLabel;
+    QLabel *m_controllerLabelValue;
 
-    bool                     m_modified;
+    QSpinBox *m_timeSpinBox;
+    QSpinBox *m_durationSpinBox;
+    QSpinBox *m_pitchSpinBox;
+    QSpinBox *m_velocitySpinBox;
+
+    QPushButton *m_timeEditButton;
+    QPushButton *m_durationEditButton;
+    QPushButton *m_pitchEditButton;
+    QPushButton *m_sysexLoadButton;
+    QPushButton *m_sysexSaveButton;
+
+    QGroupBox *m_notationGroupBox;
+    QLabel *m_notationTimeLabel;
+    QLabel *m_notationDurationLabel;
+    QSpinBox *m_notationTimeSpinBox;
+    QSpinBox *m_notationDurationSpinBox;
+    QPushButton *m_notationTimeEditButton;
+    QPushButton *m_notationDurationEditButton;
+    QCheckBox *m_lockNotationValues;
+
+    LineEdit *m_metaEdit;
+
+
+    bool m_modified;
 };
 
 
