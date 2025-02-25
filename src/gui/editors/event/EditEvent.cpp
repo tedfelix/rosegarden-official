@@ -141,23 +141,23 @@ EditEvent::EditEvent(
     setWindowTitle(inserting ? tr("Insert Event").toStdString().c_str() :
                                tr("Edit Event").toStdString().c_str());
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *vbox = new QWidget(this);
-    QVBoxLayout *vboxLayout = new QVBoxLayout(vbox);
-    metagrid->addWidget(vbox, 0, 0);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
 
-    // Event Properties Group
+    // Properties Group
 
-    QGroupBox *frame = new QGroupBox( tr("Event Properties"), vbox );
-    frame->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *layout = new QGridLayout(frame);
-    layout->setSpacing(5);
-    vboxLayout->addWidget(frame);
+    QGroupBox *propertiesGroup = new QGroupBox(tr("Properties"), this);
+    propertiesGroup->setContentsMargins(5, 5, 5, 5);
+
+    QGridLayout *propertiesLayout = new QGridLayout(propertiesGroup);
+    propertiesLayout->setSpacing(5);
+    mainLayout->addWidget(propertiesGroup);
+
+    int row{0};
 
     // Event type
-    layout->addWidget(new QLabel(tr("Event type:"), frame), 0, 0);
+    propertiesLayout->addWidget(
+            new QLabel(tr("Event type:"), propertiesGroup), row, 0);
 
     // If the user is inserting a new Event, provide them with a
     // combo box for selecting the event type.
@@ -165,8 +165,8 @@ EditEvent::EditEvent(
 
         m_typeLabel = nullptr;
 
-        m_typeCombo = new QComboBox(frame);
-        layout->addWidget(m_typeCombo, 0, 1);
+        m_typeCombo = new QComboBox(propertiesGroup);
+        propertiesLayout->addWidget(m_typeCombo, row, 1);
 
         m_typeCombo->addItem(strtoqstr(Note::EventType));
         m_typeCombo->addItem(strtoqstr(Controller::EventType));
@@ -189,52 +189,57 @@ EditEvent::EditEvent(
 
         m_typeCombo = nullptr;
 
-        m_typeLabel = new QLabel(frame);
-        layout->addWidget(m_typeLabel, 0, 1);
+        m_typeLabel = new QLabel(propertiesGroup);
+        propertiesLayout->addWidget(m_typeLabel, row, 1);
     }
 
+    ++row;
+
     // Absolute time
-    m_timeLabel = new QLabel(tr("Absolute time:"), frame);
-    layout->addWidget(m_timeLabel, 1, 0);
-    m_timeSpinBox = new QSpinBox(frame);
+    m_timeLabel = new QLabel(tr("Absolute time:"), propertiesGroup);
+    propertiesLayout->addWidget(m_timeLabel, row, 0);
+    m_timeSpinBox = new QSpinBox(propertiesGroup);
     m_timeSpinBox->setMinimum(INT_MIN);
     m_timeSpinBox->setMaximum(INT_MAX);
     m_timeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    m_timeEditButton = new QPushButton(tr("edit"), frame);
-    layout->addWidget(m_timeSpinBox, 1, 1);
-    layout->addWidget(m_timeEditButton, 1, 2);
-
     connect(m_timeSpinBox,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &EditEvent::slotAbsoluteTimeChanged);
+    propertiesLayout->addWidget(m_timeSpinBox, row, 1);
+
+    m_timeEditButton = new QPushButton(tr("edit"), propertiesGroup);
     connect(m_timeEditButton, &QAbstractButton::released,
             this, &EditEvent::slotEditAbsoluteTime);
+    propertiesLayout->addWidget(m_timeEditButton, row, 2);
+
+    ++row;
 
     // Duration
-    m_durationLabel = new QLabel(tr("Duration:"), frame);
-    layout->addWidget(m_durationLabel, 2, 0);
-    m_durationSpinBox = new QSpinBox(frame);
+    m_durationLabel = new QLabel(tr("Duration:"), propertiesGroup);
+    propertiesLayout->addWidget(m_durationLabel, row, 0);
+
+    m_durationSpinBox = new QSpinBox(propertiesGroup);
     m_durationSpinBox->setMinimum(0);
     m_durationSpinBox->setMaximum(INT_MAX);
     m_durationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    m_durationEditButton = new QPushButton(tr("edit"), frame);
-    layout->addWidget(m_durationSpinBox, 2, 1);
-    layout->addWidget(m_durationEditButton, 2, 2);
-
     connect(m_durationSpinBox,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &EditEvent::slotDurationChanged);
+    propertiesLayout->addWidget(m_durationSpinBox, row, 1);
+
+    m_durationEditButton = new QPushButton(tr("edit"), propertiesGroup);
     connect(m_durationEditButton, &QAbstractButton::released,
             this, &EditEvent::slotEditDuration);
+    propertiesLayout->addWidget(m_durationEditButton, row, 2);
 
 #if 0
     // Pitch
-    m_pitchLabel = new QLabel(tr("Pitch:"), frame);
-    layout->addWidget(m_pitchLabel, 3, 0);
-    m_pitchSpinBox = new QSpinBox(frame);
-    m_pitchEditButton = new QPushButton(tr("edit"), frame);
-    layout->addWidget(m_pitchSpinBox, 3, 1);
-    layout->addWidget(m_pitchEditButton, 3, 2);
+    m_pitchLabel = new QLabel(tr("Pitch:"), propertiesGroup);
+    propertiesLayout->addWidget(m_pitchLabel, 3, 0);
+    m_pitchSpinBox = new QSpinBox(propertiesGroup);
+    m_pitchEditButton = new QPushButton(tr("edit"), propertiesGroup);
+    propertiesLayout->addWidget(m_pitchSpinBox, 3, 1);
+    propertiesLayout->addWidget(m_pitchEditButton, 3, 2);
 
     connect(m_pitchSpinBox,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
@@ -245,17 +250,17 @@ EditEvent::EditEvent(
     m_pitchSpinBox->setMinimum(MidiMinValue);
     m_pitchSpinBox->setMaximum(MidiMaxValue);
 
-    m_controllerLabel = new QLabel(tr("Controller name:"), frame);
-    m_controllerLabelValue = new QLabel(tr("<none>"), frame);
+    m_controllerLabel = new QLabel(tr("Controller name:"), propertiesGroup);
+    m_controllerLabelValue = new QLabel(tr("<none>"), propertiesGroup);
     m_controllerLabelValue->setAlignment( Qt::AlignRight );
 
-    layout->addWidget(m_controllerLabel, 4, 0);
-    layout->addWidget(m_controllerLabelValue, 4, 1);
+    propertiesLayout->addWidget(m_controllerLabel, 4, 0);
+    propertiesLayout->addWidget(m_controllerLabelValue, 4, 1);
 
-    m_velocityLabel = new QLabel(tr("Velocity:"), frame);
-    layout->addWidget(m_velocityLabel, 5, 0);
-    m_velocitySpinBox = new QSpinBox(frame);
-    layout->addWidget(m_velocitySpinBox, 5, 1);
+    m_velocityLabel = new QLabel(tr("Velocity:"), propertiesGroup);
+    propertiesLayout->addWidget(m_velocityLabel, 5, 0);
+    m_velocitySpinBox = new QSpinBox(propertiesGroup);
+    propertiesLayout->addWidget(m_velocitySpinBox, 5, 1);
 
     connect(m_velocitySpinBox,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
@@ -264,17 +269,17 @@ EditEvent::EditEvent(
     m_velocitySpinBox->setMinimum(MidiMinValue);
     m_velocitySpinBox->setMaximum(MidiMaxValue);
 
-    m_metaLabel = new QLabel(tr("Meta string:"), frame);
-    layout->addWidget(m_metaLabel, 6, 0);
-    m_metaEdit = new LineEdit(frame);
-    layout->addWidget(m_metaEdit, 6, 1);
+    m_metaLabel = new QLabel(tr("Meta string:"), propertiesGroup);
+    propertiesLayout->addWidget(m_metaLabel, 6, 0);
+    m_metaEdit = new LineEdit(propertiesGroup);
+    propertiesLayout->addWidget(m_metaEdit, 6, 1);
 
-    m_sysexLoadButton = new QPushButton(tr("Load data"), frame);
-    layout->addWidget(m_sysexLoadButton, 6, 2);
-    m_sysexSaveButton = new QPushButton(tr("Save data"), frame);
-    layout->addWidget(m_sysexSaveButton, 4, 2);
+    m_sysexLoadButton = new QPushButton(tr("Load data"), propertiesGroup);
+    propertiesLayout->addWidget(m_sysexLoadButton, 6, 2);
+    m_sysexSaveButton = new QPushButton(tr("Save data"), propertiesGroup);
+    propertiesLayout->addWidget(m_sysexSaveButton, 4, 2);
 
-    frame->setLayout(layout);
+    propertiesGroup->setLayout(layout);
 
     connect(m_metaEdit, &QLineEdit::textChanged,
             this, &EditEvent::slotMetaChanged);
@@ -288,26 +293,26 @@ EditEvent::EditEvent(
 
     m_notationGroupBox = new QGroupBox( tr("Notation Properties"), vbox );
     m_notationGroupBox->setContentsMargins(5, 5, 5, 5);
-    layout = new QGridLayout(m_notationGroupBox);
-    layout->setSpacing(5);
-    vboxLayout->addWidget(m_notationGroupBox);
+    QGridLayout *npLayout = new QGridLayout(m_notationGroupBox);
+    npLayout->setSpacing(5);
+    mainLayout->addWidget(m_notationGroupBox);
 
     m_lockNotationValues = new QCheckBox(tr("Lock to changes in performed values"), m_notationGroupBox);
-    layout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2-0+ 1);
+    npLayout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2-0+ 1);
     m_lockNotationValues->setChecked(true);
 
     connect(m_lockNotationValues, &QAbstractButton::released,
             this, &EditEvent::slotLockNotationChanged);
 
     m_notationTimeLabel = new QLabel(tr("Notation time:"), m_notationGroupBox);
-    layout->addWidget(m_notationTimeLabel, 1, 0);
+    npLayout->addWidget(m_notationTimeLabel, 1, 0);
     m_notationTimeSpinBox = new QSpinBox(m_notationGroupBox);
     m_notationTimeSpinBox->setMinimum(INT_MIN);
     m_notationTimeSpinBox->setMaximum(INT_MAX);
     m_notationTimeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
     m_notationTimeEditButton = new QPushButton(tr("edit"), m_notationGroupBox);
-    layout->addWidget(m_notationTimeSpinBox, 1, 1);
-    layout->addWidget(m_notationTimeEditButton, 1, 2);
+    npLayout->addWidget(m_notationTimeSpinBox, 1, 1);
+    npLayout->addWidget(m_notationTimeEditButton, 1, 2);
 
     connect(m_notationTimeSpinBox,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
@@ -316,14 +321,14 @@ EditEvent::EditEvent(
             this, &EditEvent::slotEditNotationAbsoluteTime);
 
     m_notationDurationLabel = new QLabel(tr("Notation duration:"), m_notationGroupBox);
-    layout->addWidget(m_notationDurationLabel, 2, 0);
+    npLayout->addWidget(m_notationDurationLabel, 2, 0);
     m_notationDurationSpinBox = new QSpinBox(m_notationGroupBox);
     m_notationDurationSpinBox->setMinimum(0);
     m_notationDurationSpinBox->setMaximum(INT_MAX);
     m_notationDurationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
     m_notationDurationEditButton = new QPushButton(tr("edit"), m_notationGroupBox);
-    layout->addWidget(m_notationDurationSpinBox, 2, 1);
-    layout->addWidget(m_notationDurationEditButton, 2, 2);
+    npLayout->addWidget(m_notationDurationSpinBox, 2, 1);
+    npLayout->addWidget(m_notationDurationEditButton, 2, 2);
 
     m_notationGroupBox->setLayout(layout);
 
@@ -339,8 +344,7 @@ EditEvent::EditEvent(
 
     // Button Box
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    mainLayout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
