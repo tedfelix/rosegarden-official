@@ -367,74 +367,6 @@ SimpleEventEditDialog::setupForEvent()
         m_controllerLabelValue->show();
         m_controllerLabel->setText(tr("Controller name:"));
 
-#if 0
-        // ??? Why not just load these into a combo box?  Then there will be
-        //     no need for update trickery.
-        // ??? This whole dialog is pretty cumbersome.  Reusing each control
-        //     for various things is confusing.  Might want to consider using
-        //     a QStackedLayout of 13 small dialogs, one for each event type.
-        //     See if they can be reused by EventEditDialog.
-        //     Maybe consider combining the two using an "Advanced" button to
-        //     display the "advanced" stuff.
-        // ??? We should also show these on the ELE.
-        // ??? We should also consider using the controller list that is in the
-        //     Device.  That is probably more accurate in some cases and should
-        //     have higher priority than these names.  Maybe bold-face the names
-        //     we get from the Device to indicate "official".
-        // ??? Move this to a more central location.
-        static std::map<int, QString> controllerNames = {
-                { 0, "Bank Select MSB" },
-                { 1, "Mod Wheel MSB" },
-                { 2, "Breath Controller MSB" },
-                { 4, "Foot Pedal MSB" },
-                { 5, "Portamento Time MSB" },
-                { 6, "Data Entry MSB" },
-                { 7, "Volume MSB" },
-                { 8, "Stereo Balance MSB" },
-                { 10, "Pan MSB" },
-                { 11, "Expression MSB" },
-                { 12, "Effect 1 MSB" },
-                { 13, "Effect 2 MSB" },
-                { 32, "Bank Select LSB" },
-                { 33, "Mod Wheel LSB" },
-                { 34, "Breath Controller LSB" },
-                { 36, "Foot Pedal LSB" },
-                { 37, "Portamento Time LSB" },
-                { 38, "Data Entry LSB" },
-                { 39, "Volume LSB" },
-                { 40, "Stereo Balance LSB" },
-                { 42, "Pan LSB" },
-                { 43, "Expression LSB" },
-                { 44, "Effect 1 LSB" },
-                { 45, "Effect 2 LSB" },
-                { 64, "Sustain" },
-                { 65, "Portamento On/Off" },
-                { 66, "Sostenuto" },
-                { 67, "Soft Pedal" },
-                { 68, "Legato" },
-                { 69, "Hold Pedal 2" },
-                { 91, "Reverb" },
-                { 92, "Tremolo" },
-                { 93, "Chorus" },
-                { 94, "Detuning" },
-                { 95, "Phaser" },
-                { 96, "Data +" },
-                { 97, "Data -" },
-                { 98, "NRPN LSB" },
-                { 99, "NRPN MSB" },
-                { 100, "RPN LSB" },
-                { 101, "RPN MSB" },
-                { 120, "Channel Mute" },
-                { 121, "Reset All Controllers" },
-                { 122, "Local On/Off" },
-                { 123, "All MIDI Notes Off" },
-                { 124, "Omni Off" },
-                { 125, "Omni On" },
-                { 126, "Mono On/Off" },
-                { 127, "Poly On/Off" }
-            };
-#endif
-
         m_velocityLabel->show();
         m_velocityLabel->setText(tr("Controller value:"));
         m_velocitySpinBox->show();
@@ -448,15 +380,6 @@ SimpleEventEditDialog::setupForEvent()
             controllerNumber = m_event.get<Int>(Controller::NUMBER);
 
         m_pitchSpinBox->setValue(controllerNumber);
-
-#if 0
-        // ??? Ok, but this needs to change dynamically as the user changes
-        //     the controller number.
-        if (controllerNames.find(controllerNumber) != controllerNames.end())
-            m_controllerLabelValue->setText(controllerNames[controllerNumber]);
-        else
-            m_controllerLabelValue->setText(tr("<none>"));
-#endif
 
         try {
             m_velocitySpinBox->setValue(m_event.get<Int>
