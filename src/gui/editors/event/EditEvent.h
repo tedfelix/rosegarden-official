@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_SIMPLEEVENTEDITDIALOG_H
-#define RG_SIMPLEEVENTEDITDIALOG_H
+#ifndef RG_EVENTEDIT_H
+#define RG_EVENTEDIT_H
 
 #include "base/Event.h"
 #include "gui/widgets/LineEdit.h"
