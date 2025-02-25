@@ -49,7 +49,7 @@
 #include "document/CommandHistory.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/PitchDialog.h"
-#include "gui/dialogs/SimpleEventEditDialog.h"
+#include "gui/editors/event/EditEvent.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/MidiPitchLabel.h"
@@ -1131,7 +1131,7 @@ EventListEditor::slotEditInsert()
         }
     }
 
-    SimpleEventEditDialog dialog(
+    EditEvent dialog(
             this,  // parent
             RosegardenDocument::currentDocument,  // doc
             event,
@@ -1167,7 +1167,7 @@ EventListEditor::editItem(const QTableWidgetItem *item)
     if (!event)
         return;
 
-    SimpleEventEditDialog dialog(
+    EditEvent dialog(
             this,  // parent
             RosegardenDocument::currentDocument,  // doc
             *event,

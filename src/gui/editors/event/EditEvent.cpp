@@ -144,7 +144,7 @@ EditEvent::EditEvent(
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    QVBoxLayout *vboxLayout = new QVBoxLayout(vbox);
     metagrid->addWidget(vbox, 0, 0);
 
 
@@ -159,6 +159,8 @@ EditEvent::EditEvent(
     // Event type
     layout->addWidget(new QLabel(tr("Event type:"), frame), 0, 0);
 
+    // If the user is inserting a new Event, provide them with a
+    // combo box for selecting the event type.
     if (inserting) {
 
         m_typeLabel = nullptr;
@@ -183,7 +185,7 @@ EditEvent::EditEvent(
                     static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
                 this, &EditEvent::slotEventTypeChanged);
 
-    } else {
+    } else {  // Display event type read-only.
 
         m_typeCombo = nullptr;
 
@@ -202,8 +204,9 @@ EditEvent::EditEvent(
     layout->addWidget(m_timeSpinBox, 1, 1);
     layout->addWidget(m_timeEditButton, 1, 2);
 
-    connect(m_timeSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotAbsoluteTimeChanged(int)));
+    connect(m_timeSpinBox,
+                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &EditEvent::slotAbsoluteTimeChanged);
     connect(m_timeEditButton, &QAbstractButton::released,
             this, &EditEvent::slotEditAbsoluteTime);
 
@@ -218,11 +221,14 @@ EditEvent::EditEvent(
     layout->addWidget(m_durationSpinBox, 2, 1);
     layout->addWidget(m_durationEditButton, 2, 2);
 
-    connect(m_durationSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotDurationChanged(int)));
+    connect(m_durationSpinBox,
+                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &EditEvent::slotDurationChanged);
     connect(m_durationEditButton, &QAbstractButton::released,
             this, &EditEvent::slotEditDuration);
 
+#if 0
+    // Pitch
     m_pitchLabel = new QLabel(tr("Pitch:"), frame);
     layout->addWidget(m_pitchLabel, 3, 0);
     m_pitchSpinBox = new QSpinBox(frame);
@@ -230,8 +236,9 @@ EditEvent::EditEvent(
     layout->addWidget(m_pitchSpinBox, 3, 1);
     layout->addWidget(m_pitchEditButton, 3, 2);
 
-    connect(m_pitchSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotPitchChanged(int)));
+    connect(m_pitchSpinBox,
+                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &EditEvent::slotPitchChanged);
     connect(m_pitchEditButton, &QAbstractButton::released,
             this, &EditEvent::slotEditPitch);
 
@@ -250,8 +257,9 @@ EditEvent::EditEvent(
     m_velocitySpinBox = new QSpinBox(frame);
     layout->addWidget(m_velocitySpinBox, 5, 1);
 
-    connect(m_velocitySpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotVelocityChanged(int)));
+    connect(m_velocitySpinBox,
+                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &EditEvent::slotVelocityChanged);
 
     m_velocitySpinBox->setMinimum(MidiMinValue);
     m_velocitySpinBox->setMaximum(MidiMaxValue);
@@ -283,7 +291,6 @@ EditEvent::EditEvent(
     layout = new QGridLayout(m_notationGroupBox);
     layout->setSpacing(5);
     vboxLayout->addWidget(m_notationGroupBox);
-    vbox->setLayout(vboxLayout);
 
     m_lockNotationValues = new QCheckBox(tr("Lock to changes in performed values"), m_notationGroupBox);
     layout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2-0+ 1);
@@ -302,8 +309,9 @@ EditEvent::EditEvent(
     layout->addWidget(m_notationTimeSpinBox, 1, 1);
     layout->addWidget(m_notationTimeEditButton, 1, 2);
 
-    connect(m_notationTimeSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotNotationAbsoluteTimeChanged(int)));
+    connect(m_notationTimeSpinBox,
+                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &EditEvent::slotNotationAbsoluteTimeChanged);
     connect(m_notationTimeEditButton, &QAbstractButton::released,
             this, &EditEvent::slotEditNotationAbsoluteTime);
 
@@ -319,10 +327,13 @@ EditEvent::EditEvent(
 
     m_notationGroupBox->setLayout(layout);
 
-    connect(m_notationDurationSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotNotationDurationChanged(int)));
+    connect(m_notationDurationSpinBox,
+                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &EditEvent::slotNotationDurationChanged);
     connect(m_notationDurationEditButton, &QAbstractButton::released,
             this, &EditEvent::slotEditNotationDuration);
+
+#endif
 
     setupForEvent();
 
@@ -345,8 +356,9 @@ EditEvent::setupForEvent()
         m_typeCombo->blockSignals(true);
     }
     m_timeSpinBox->blockSignals(true);
-    m_notationTimeSpinBox->blockSignals(true);
     m_durationSpinBox->blockSignals(true);
+#if 0
+    m_notationTimeSpinBox->blockSignals(true);
     m_notationDurationSpinBox->blockSignals(true);
     m_pitchSpinBox->blockSignals(true);
     m_velocitySpinBox->blockSignals(true);
@@ -354,6 +366,7 @@ EditEvent::setupForEvent()
 
     m_pitchSpinBox->setMinimum(MidiMinValue);
     m_pitchSpinBox->setMaximum(MidiMaxValue);
+#endif
 
 
     // Common parameters
@@ -857,13 +870,15 @@ EditEvent::setupForEvent()
     if (m_typeCombo)
         m_typeCombo->blockSignals(false);
     m_timeSpinBox->blockSignals(false);
-    m_notationTimeSpinBox->blockSignals(false);
     m_durationSpinBox->blockSignals(false);
+
+#if 0
+    m_notationTimeSpinBox->blockSignals(false);
     m_notationDurationSpinBox->blockSignals(false);
     m_pitchSpinBox->blockSignals(false);
     m_velocitySpinBox->blockSignals(false);
     m_metaEdit->blockSignals(false);
-
+#endif
 
     slotLockNotationChanged();
 }
@@ -911,9 +926,11 @@ EditEvent::getEvent()
                         m_notationAbsoluteTime : m_absoluteTime,
                 useSeparateNotationValues ? m_notationDuration : m_duration);
 
+#if 0
         // ensure these are set on m_event correctly
         slotPitchChanged(m_pitchSpinBox->value());
         slotVelocityChanged(m_velocitySpinBox->value());
+#endif
     }
 
     Event event(
@@ -929,6 +946,7 @@ EditEvent::getEvent()
     // and slotVelocityChanged.  Absolute time and duration were set in
     // the event ctor above; that just leaves the meta values.
 
+#if 0
     if (m_type == Indication::EventType) {
 
         event.set<String>(Indication::IndicationTypePropertyName,
@@ -957,6 +975,7 @@ EditEvent::getEvent()
                           qstrtostr(m_metaEdit->text()));
 
     }
+#endif
 
     return event;
 }
@@ -972,11 +991,13 @@ EditEvent::slotEventTypeChanged(int value)
 
     setupForEvent();
 
+#if 0
     // update whatever pitch and velocity correspond to
     if (!m_pitchSpinBox->isHidden())
         slotPitchChanged(m_pitchSpinBox->value());
     if (!m_velocitySpinBox->isHidden())
         slotVelocityChanged(m_velocitySpinBox->value());
+#endif
 }
 
 void
@@ -984,12 +1005,14 @@ EditEvent::slotAbsoluteTimeChanged(int value)
 {
     m_absoluteTime = value;
 
+#if 0
     if (m_notationGroupBox->isHidden()) {
         m_notationAbsoluteTime = value;
     } else if (m_lockNotationValues->isChecked()) {
         m_notationAbsoluteTime = value;
         m_notationTimeSpinBox->setValue(value);
     }
+#endif
 
     m_modified = true;
 }
@@ -1006,12 +1029,14 @@ EditEvent::slotDurationChanged(int value)
 {
     m_duration = value;
 
+#if 0
     if (m_notationGroupBox->isHidden()) {
         m_notationDuration = value;
     } else if (m_lockNotationValues->isChecked()) {
         m_notationDuration = value;
         m_notationDurationSpinBox->setValue(value);
     }
+#endif
 
     m_modified = true;
 }
@@ -1080,13 +1105,14 @@ void
 EditEvent::slotLockNotationChanged()
 {
     // Enable/disable notation fields as appropriate.
-
+#if 0
     const bool enable = !m_lockNotationValues->isChecked();
 
     m_notationTimeSpinBox->setEnabled(enable);
     m_notationTimeEditButton->setEnabled(enable);
     m_notationDurationSpinBox->setEnabled(enable);
     m_notationDurationEditButton->setEnabled(enable);
+#endif
 }
 
 void
@@ -1104,6 +1130,7 @@ EditEvent::slotEditAbsoluteTime()
 void
 EditEvent::slotEditNotationAbsoluteTime()
 {
+#if 0
     TimeDialog dialog(this, tr("Edit Event Notation Time"),
                       &m_doc->getComposition(),
                       m_notationTimeSpinBox->value(),
@@ -1111,6 +1138,7 @@ EditEvent::slotEditNotationAbsoluteTime()
     if (dialog.exec() == QDialog::Accepted) {
         m_notationTimeSpinBox->setValue(dialog.getTime());
     }
+#endif
 }
 
 void
@@ -1130,6 +1158,7 @@ EditEvent::slotEditDuration()
 void
 EditEvent::slotEditNotationDuration()
 {
+#if 0
     TimeDialog dialog(this, tr("Edit Notation Duration"),
                       &m_doc->getComposition(),
                       m_notationTimeSpinBox->value(),
@@ -1139,15 +1168,18 @@ EditEvent::slotEditNotationDuration()
     if (dialog.exec() == QDialog::Accepted) {
         m_notationDurationSpinBox->setValue(dialog.getTime());
     }
+#endif
 }
 
 void
 EditEvent::slotEditPitch()
 {
+#if 0
     PitchDialog dialog(this, tr("Edit Pitch"), m_pitchSpinBox->value());
     if (dialog.exec() == QDialog::Accepted) {
         m_pitchSpinBox->setValue(dialog.getPitch());
     }
+#endif
 }
 
 void
@@ -1190,7 +1222,9 @@ EditEvent::slotSysexLoad()
     if (s.empty())
         QMessageBox::critical(this, tr("Rosegarden"), tr("Could not load SysEx file."));
 
+#if 0
     m_metaEdit->setText(strtoqstr(SystemExclusive::toHex(s)));
+#endif
 
     // Write the directory to the settings
     QDir d = QFileInfo(name).dir();

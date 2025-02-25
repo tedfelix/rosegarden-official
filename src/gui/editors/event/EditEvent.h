@@ -101,28 +101,38 @@ private:
 
     // Widgets
 
+    // Event type
     QComboBox *m_typeCombo;
     QLabel *m_typeLabel;
 
+    // Absolute time
     QLabel *m_timeLabel;
+    QSpinBox *m_timeSpinBox;
+    QPushButton *m_timeEditButton;
+
+    // Duration
     QLabel *m_durationLabel;
+    QSpinBox *m_durationSpinBox;
+    QPushButton *m_durationEditButton;
+
+#if 0
     QLabel *m_pitchLabel;
+    QSpinBox *m_pitchSpinBox;
+    QPushButton *m_pitchEditButton;
+
     QLabel *m_velocityLabel;
+    QSpinBox *m_velocitySpinBox;
+
     QLabel *m_metaLabel;
+    LineEdit *m_metaEdit;
+
     QLabel *m_controllerLabel;
     QLabel *m_controllerLabelValue;
 
-    QSpinBox *m_timeSpinBox;
-    QSpinBox *m_durationSpinBox;
-    QSpinBox *m_pitchSpinBox;
-    QSpinBox *m_velocitySpinBox;
-
-    QPushButton *m_timeEditButton;
-    QPushButton *m_durationEditButton;
-    QPushButton *m_pitchEditButton;
     QPushButton *m_sysexLoadButton;
     QPushButton *m_sysexSaveButton;
 
+    // Notation Group Box
     QGroupBox *m_notationGroupBox;
     QLabel *m_notationTimeLabel;
     QLabel *m_notationDurationLabel;
@@ -131,9 +141,7 @@ private:
     QPushButton *m_notationTimeEditButton;
     QPushButton *m_notationDurationEditButton;
     QCheckBox *m_lockNotationValues;
-
-    LineEdit *m_metaEdit;
-
+#endif
 
     bool m_modified{false};
 };
