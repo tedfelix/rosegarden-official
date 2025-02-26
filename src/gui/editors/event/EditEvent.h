@@ -19,7 +19,6 @@
 #define RG_EDITEVENT_H
 
 #include "base/Event.h"
-#include "gui/widgets/LineEdit.h"
 
 #include <QDialog>
 
@@ -30,7 +29,6 @@ class QWidget;
 class QString;
 class QSpinBox;
 class QPushButton;
-class LineEdit;
 class QLabel;
 class QGroupBox;
 class QCheckBox;
@@ -42,6 +40,9 @@ namespace Rosegarden
 
 
 class RosegardenDocument;
+class LineEdit;
+class EventWidgetStack;
+class EventWidget;
 
 
 /// "Edit Event" and "Insert Event" dialogs.
@@ -65,7 +66,7 @@ public:
     Event getEvent();
 
     // Setup the dialog for a new event type
-    void setupForEvent();
+    void updateWidgets();
 
 public slots:
 
@@ -94,16 +95,17 @@ private:
 
     std::string m_type;
     timeT m_absoluteTime;
-    timeT m_notationAbsoluteTime;
     timeT m_duration;
+
+    timeT m_notationAbsoluteTime;
     timeT m_notationDuration;
 
 
     // Widgets
 
     // Event type
-    QComboBox *m_typeCombo;
-    QLabel *m_typeLabel;
+    QComboBox *m_typeCombo{nullptr};
+    QLabel *m_typeLabel{nullptr};
 
     // Absolute time
     QLabel *m_timeLabel;
@@ -114,6 +116,10 @@ private:
     QLabel *m_durationLabel;
     QSpinBox *m_durationSpinBox;
     QPushButton *m_durationEditButton;
+
+    // Event
+    EventWidgetStack *m_eventWidgetStack{nullptr};  // For insert.
+    EventWidget *m_eventWidget{nullptr};  // For edit.
 
 #if 0
     QLabel *m_pitchLabel;

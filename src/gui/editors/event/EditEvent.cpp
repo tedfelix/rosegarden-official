@@ -16,8 +16,11 @@
 */
 
 #define RG_MODULE_STRING "[EditEvent]"
+#define RG_NO_DEBUG_PRINT
 
 #include "EditEvent.h"
+
+#include "EventWidget.h"
 
 #include "base/BaseProperties.h"
 #include "base/Event.h"
@@ -163,11 +166,7 @@ EditEvent::EditEvent(
     // combo box for selecting the event type.
     if (inserting) {
 
-        m_typeLabel = nullptr;
-
         m_typeCombo = new QComboBox(propertiesGroup);
-        propertiesLayout->addWidget(m_typeCombo, row, 1);
-
         m_typeCombo->addItem(strtoqstr(Note::EventType));
         m_typeCombo->addItem(strtoqstr(Controller::EventType));
         m_typeCombo->addItem(strtoqstr(KeyPressure::EventType));
@@ -184,13 +183,13 @@ EditEvent::EditEvent(
         connect(m_typeCombo,
                     static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
                 this, &EditEvent::slotEventTypeChanged);
+        propertiesLayout->addWidget(m_typeCombo, row, 1);
 
     } else {  // Display event type read-only.
 
-        m_typeCombo = nullptr;
-
         m_typeLabel = new QLabel(propertiesGroup);
         propertiesLayout->addWidget(m_typeLabel, row, 1);
+
     }
 
     ++row;
@@ -231,6 +230,27 @@ EditEvent::EditEvent(
     connect(m_durationEditButton, &QAbstractButton::released,
             this, &EditEvent::slotEditDuration);
     propertiesLayout->addWidget(m_durationEditButton, row, 2);
+
+
+    // Event Widget
+    if (inserting) {
+        // For insert mode we need a QWidget with a QStackedLayout and each
+        // of the event widgets loaded into that.
+//        m_eventWidgetStack = EventWidgetStack::create();
+//        mainLayout->addWidget(m_eventWidgetStack);
+    } else {  // editing
+        // For edit mode we only need the Event widget for the current
+        // event type.
+        // ??? Widget is not appearing because the window is too small.
+        //     Also the Widget is compressed and not stretching to fill
+        //     the space horizontally.  Probably has to do with the fact
+        //     that it is its own widget.
+        //     How do we create a QWidget that plays by the rules?
+        //     1. Be sure to set a minimum size or else the widget will
+        //        not take up any space at all.
+        m_eventWidget = EventWidget::create(this, event);
+        mainLayout->addWidget(m_eventWidget);
+    }
 
 #if 0
     // Pitch
@@ -340,7 +360,7 @@ EditEvent::EditEvent(
 
 #endif
 
-    setupForEvent();
+    updateWidgets();
 
     // Button Box
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -350,7 +370,7 @@ EditEvent::EditEvent(
 }
 
 void
-EditEvent::setupForEvent()
+EditEvent::updateWidgets()
 {
     // Block Signals
 
@@ -993,7 +1013,7 @@ EditEvent::slotEventTypeChanged(int value)
     if (m_type != m_event.getType())
         Event m_event(m_type, m_absoluteTime, m_duration);
 
-    setupForEvent();
+    updateWidgets();
 
 #if 0
     // update whatever pitch and velocity correspond to
