@@ -41,11 +41,21 @@ public:
 
     NoteWidget(QWidget *parent, const Event &event);
 
+    timeT getDuration() override;
+
+private slots:
+
+    void slotEditDuration(bool checked);
+    void slotEditPitch(bool checked);
+
 private:
 
-    QGroupBox *m_propertiesGroupDEBUG;
+    // Widgets
 
-    QLabel *m_pitchLabel;
+    // ??? Some of these don't need to be member variables.  Only the
+    //     ones that contain data do.
+
+    QSpinBox *m_durationSpinBox;
     QSpinBox *m_pitchSpinBox;
     QPushButton *m_pitchEditButton;
 

@@ -213,25 +213,6 @@ EditEvent::EditEvent(
 
     ++row;
 
-    // Duration
-    m_durationLabel = new QLabel(tr("Duration:"), propertiesGroup);
-    propertiesLayout->addWidget(m_durationLabel, row, 0);
-
-    m_durationSpinBox = new QSpinBox(propertiesGroup);
-    m_durationSpinBox->setMinimum(0);
-    m_durationSpinBox->setMaximum(INT_MAX);
-    m_durationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    connect(m_durationSpinBox,
-                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            this, &EditEvent::slotDurationChanged);
-    propertiesLayout->addWidget(m_durationSpinBox, row, 1);
-
-    m_durationEditButton = new QPushButton(tr("edit"), propertiesGroup);
-    connect(m_durationEditButton, &QAbstractButton::released,
-            this, &EditEvent::slotEditDuration);
-    propertiesLayout->addWidget(m_durationEditButton, row, 2);
-
-
     // Event Widget
     if (inserting) {
         // For insert mode we need a QWidget with a QStackedLayout and each
@@ -372,6 +353,8 @@ EditEvent::EditEvent(
 void
 EditEvent::updateWidgets()
 {
+    // ??? This routine needs to go away.
+
     // Block Signals
 
     // ??? Get rid of these.  Use the signal that doesn't fire on
@@ -380,8 +363,8 @@ EditEvent::updateWidgets()
         m_typeCombo->blockSignals(true);
     }
     m_timeSpinBox->blockSignals(true);
-    m_durationSpinBox->blockSignals(true);
 #if 0
+    m_durationSpinBox->blockSignals(true);
     m_notationTimeSpinBox->blockSignals(true);
     m_notationDurationSpinBox->blockSignals(true);
     m_pitchSpinBox->blockSignals(true);
@@ -400,19 +383,21 @@ EditEvent::updateWidgets()
         m_typeLabel->setText(strtoqstr(m_event.getType()));
 
     // Absolute time
-    m_durationLabel->setText(tr("Absolute time:"));
     m_timeLabel->show();
     m_timeSpinBox->show();
     m_timeEditButton->show();
     m_timeSpinBox->setValue(m_event.getAbsoluteTime());
     m_absoluteTime = m_event.getAbsoluteTime();
 
+#if 0
     // Duration
     m_durationLabel->setText(tr("Duration:"));
     m_durationLabel->show();
     m_durationSpinBox->show();
     m_durationEditButton->show();
     m_durationSpinBox->setValue(m_event.getDuration());
+#endif
+
     m_duration = m_event.getDuration();
 
 #if 0
@@ -894,9 +879,9 @@ EditEvent::updateWidgets()
     if (m_typeCombo)
         m_typeCombo->blockSignals(false);
     m_timeSpinBox->blockSignals(false);
-    m_durationSpinBox->blockSignals(false);
 
 #if 0
+    m_durationSpinBox->blockSignals(false);
     m_notationTimeSpinBox->blockSignals(false);
     m_notationDurationSpinBox->blockSignals(false);
     m_pitchSpinBox->blockSignals(false);
@@ -910,8 +895,15 @@ EditEvent::updateWidgets()
 Event
 EditEvent::getEvent()
 {
-    bool useSeparateNotationValues =
-        (m_event.getType() == Note::EventType);
+    // ??? Need to test this.
+    timeT duration{m_event.getDuration()};
+//    if (m_eventWidgetStack)
+//        duration = m_eventWidgetStack->getDuration();
+    if (m_eventWidget)
+        duration = m_eventWidget->getDuration();
+
+    const bool useSeparateNotationValues =
+            (m_event.getType() == Note::EventType);
 
     // If we are inserting a new Event...
     if (m_typeCombo) {
@@ -944,11 +936,11 @@ EditEvent::getEvent()
         m_event = Event(
                 m_type,
                 m_absoluteTime,
-                m_duration,
+                duration,
                 subordering,
                 useSeparateNotationValues ?
                         m_notationAbsoluteTime : m_absoluteTime,
-                useSeparateNotationValues ? m_notationDuration : m_duration);
+                useSeparateNotationValues ? m_notationDuration : duration);
 
 #if 0
         // ensure these are set on m_event correctly
@@ -960,17 +952,21 @@ EditEvent::getEvent()
     Event event(
             m_event,
             m_absoluteTime,
-            m_duration,
+            duration,
             m_event.getSubOrdering(),
-            useSeparateNotationValues ? m_notationAbsoluteTime : m_absoluteTime,
-            useSeparateNotationValues ? m_notationDuration : m_duration);
+            m_event.getNotationAbsoluteTime(),
+            m_event.getNotationDuration());
 
+    // ??? Set pitch...
+    // Get pitch from the event widget or stack.
+    // Set it on event.
+
+#if 0
     // Values from the pitch and velocity spin boxes should already
     // have been set on m_event (and thus on event) by slotPitchChanged
     // and slotVelocityChanged.  Absolute time and duration were set in
     // the event ctor above; that just leaves the meta values.
 
-#if 0
     if (m_type == Indication::EventType) {
 
         event.set<String>(Indication::IndicationTypePropertyName,
@@ -1163,20 +1159,6 @@ EditEvent::slotEditNotationAbsoluteTime()
         m_notationTimeSpinBox->setValue(dialog.getTime());
     }
 #endif
-}
-
-void
-EditEvent::slotEditDuration()
-{
-    TimeDialog dialog(this, tr("Edit Duration"),
-                      &m_doc->getComposition(),
-                      m_timeSpinBox->value(),
-                      m_durationSpinBox->value(),
-                      1,
-                      true);
-    if (dialog.exec() == QDialog::Accepted) {
-        m_durationSpinBox->setValue(dialog.getTime());
-    }
 }
 
 void

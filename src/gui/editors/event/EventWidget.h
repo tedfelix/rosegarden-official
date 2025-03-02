@@ -18,6 +18,8 @@
 #ifndef RG_EVENTWIDGET_H
 #define RG_EVENTWIDGET_H
 
+#include "base/TimeT.h"
+
 #include <QWidget>
 
 
@@ -41,6 +43,8 @@ public:
     EventWidget(QWidget *parent) :
         QWidget(parent)
     { }
+
+    virtual timeT getDuration()  { return 0; }
 
 };
 

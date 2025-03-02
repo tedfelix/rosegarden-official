@@ -80,7 +80,6 @@ public slots:
     void slotMetaChanged(const QString &);
     void slotEditAbsoluteTime();
     void slotEditNotationAbsoluteTime();
-    void slotEditDuration();
     void slotEditNotationDuration();
     void slotLockNotationChanged();
     void slotEditPitch();
@@ -113,9 +112,9 @@ private:
     QPushButton *m_timeEditButton;
 
     // Duration
-    QLabel *m_durationLabel;
-    QSpinBox *m_durationSpinBox;
-    QPushButton *m_durationEditButton;
+    //QLabel *m_durationLabel;
+    //QSpinBox *m_durationSpinBox;
+    //QPushButton *m_durationEditButton;
 
     // Event
     EventWidgetStack *m_eventWidgetStack{nullptr};  // For insert.
