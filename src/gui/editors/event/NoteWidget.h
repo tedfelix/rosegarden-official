@@ -41,7 +41,8 @@ public:
 
     NoteWidget(QWidget *parent, const Event &event);
 
-    timeT getDuration() override;
+    timeT getDuration() const override;
+    int getPitch() const override;
 
 private slots:
 

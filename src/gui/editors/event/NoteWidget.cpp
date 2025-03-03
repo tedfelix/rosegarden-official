@@ -140,7 +140,7 @@ NoteWidget::slotEditDuration(bool /*checked*/)
 #endif
 }
 
-timeT NoteWidget::getDuration()
+timeT NoteWidget::getDuration() const
 {
     return m_durationSpinBox->value();
 }
@@ -151,6 +151,11 @@ NoteWidget::slotEditPitch(bool /*checked*/)
     PitchDialog dialog(this, tr("Edit Pitch"), m_pitchSpinBox->value());
     if (dialog.exec() == QDialog::Accepted)
         m_pitchSpinBox->setValue(dialog.getPitch());
+}
+
+int NoteWidget::getPitch() const
+{
+    return m_pitchSpinBox->value();
 }
 
 

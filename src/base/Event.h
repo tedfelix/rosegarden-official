@@ -212,6 +212,15 @@ public:
     // check if the events are copies
     bool isCopyOf(const Event &e) const;
 
+    bool operator==(const Event &e) const
+    {
+        if (isCopyOf(e))
+            return true;
+
+        // Compare the objects.
+        return *m_data == *e.m_data;
+    }
+
     friend bool operator<(const Event&, const Event&);
 
     /// Type of the Event (E.g. Note, Accidental, Key, etc...)
@@ -427,6 +436,21 @@ private:
         void setNotationDuration(timeT d)
             { setTime(NotationDuration, d, m_duration); }
         timeT getNotationDuration() const;
+
+        bool operator==(const EventData &rhs) const
+        {
+            if (m_type != rhs.m_type)
+                return false;
+            if (m_absoluteTime != rhs.m_absoluteTime)
+                return false;
+            if (m_duration != rhs.m_duration)
+                return false;
+            if (m_subOrdering != rhs.m_subOrdering)
+                return false;
+            if (*m_properties != *rhs.m_properties)
+                return false;
+            return true;
+        }
 
     private:
         EventData(const EventData &);

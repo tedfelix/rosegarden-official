@@ -895,12 +895,15 @@ EditEvent::updateWidgets()
 Event
 EditEvent::getEvent()
 {
-    // ??? Need to test this.
+    RG_DEBUG << "getEvent()...";
+
     timeT duration{m_event.getDuration()};
 //    if (m_eventWidgetStack)
 //        duration = m_eventWidgetStack->getDuration();
     if (m_eventWidget)
         duration = m_eventWidget->getDuration();
+
+    RG_DEBUG << "  new duration: " << duration;
 
     const bool useSeparateNotationValues =
             (m_event.getType() == Note::EventType);
@@ -957,9 +960,28 @@ EditEvent::getEvent()
             m_event.getNotationAbsoluteTime(),
             m_event.getNotationDuration());
 
-    // ??? Set pitch...
+    // ??? For the rest of these, we should probably send the event into the
+    //     widget and have it make the necessary changes.  So something like
+    //     this:
+    //if (m_eventWidgetStack)
+    //    m_eventWidgetStack->updateEvent(event);
+    //if (m_eventWidget)
+    //    m_eventWidget->updateEvent(event);
+
+    // Pitch
     // Get pitch from the event widget or stack.
     // Set it on event.
+    int pitch{0};
+    if (event.has(BaseProperties::PITCH))
+        pitch = event.get<Int>(BaseProperties::PITCH);
+//    if (m_eventWidgetStack)
+//        pitch = m_eventWidgetStack->getPitch();
+    if (m_eventWidget)
+        pitch = m_eventWidget->getPitch();
+
+    RG_DEBUG << "  new pitch: " << pitch;
+
+    event.set<Int>(BaseProperties::PITCH, pitch);
 
 #if 0
     // Values from the pitch and velocity spin boxes should already
@@ -1004,7 +1026,6 @@ void
 EditEvent::slotEventTypeChanged(int value)
 {
     m_type = qstrtostr(m_typeCombo->itemText(value));
-    m_modified = true;
 
     if (m_type != m_event.getType())
         Event m_event(m_type, m_absoluteTime, m_duration);
@@ -1034,14 +1055,12 @@ EditEvent::slotAbsoluteTimeChanged(int value)
     }
 #endif
 
-    m_modified = true;
 }
 
 void
 EditEvent::slotNotationAbsoluteTimeChanged(int value)
 {
     m_notationAbsoluteTime = value;
-    m_modified = true;
 }
 
 void
@@ -1058,21 +1077,17 @@ EditEvent::slotDurationChanged(int value)
     }
 #endif
 
-    m_modified = true;
 }
 
 void
 EditEvent::slotNotationDurationChanged(int value)
 {
     m_notationDuration = value;
-    m_modified = true;
 }
 
 void
 EditEvent::slotPitchChanged(int value)
 {
-    m_modified = true;
-
     if (m_type == Note::EventType) {
         m_event.set<Int>(BaseProperties::PITCH, value);
 
@@ -1099,8 +1114,6 @@ EditEvent::slotPitchChanged(int value)
 void
 EditEvent::slotVelocityChanged(int value)
 {
-    m_modified = true;
-
     if (m_type == Note::EventType) {
         m_event.set<Int>(BaseProperties::VELOCITY, value);
 
@@ -1118,7 +1131,6 @@ EditEvent::slotVelocityChanged(int value)
 void
 EditEvent::slotMetaChanged(const QString &)
 {
-    m_modified = true;
 }
 
 void

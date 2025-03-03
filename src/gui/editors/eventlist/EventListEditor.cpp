@@ -1177,14 +1177,15 @@ EventListEditor::editItem(const QTableWidgetItem *item)
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    // Not modified?  Bail.
-    if (!dialog.isModified())
+    Event newEvent = dialog.getEvent();
+    // No changes?  Bail.
+    if (newEvent == *event)
         return;
 
     CommandHistory::getInstance()->addCommand(new EventEditCommand(
             *segment,
             event,  // eventToModify
-            dialog.getEvent()));  // newEvent
+            newEvent));  // newEvent
 }
 
 void

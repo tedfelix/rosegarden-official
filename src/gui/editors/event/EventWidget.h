@@ -44,7 +44,8 @@ public:
         QWidget(parent)
     { }
 
-    virtual timeT getDuration()  { return 0; }
+    virtual timeT getDuration() const  { return 0; }
+    virtual int getPitch() const  { return 0; }
 
 };
 

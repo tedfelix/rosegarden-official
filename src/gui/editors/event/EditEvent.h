@@ -62,7 +62,6 @@ public:
               const Event &event,
               bool inserting = false);  // Inserting or editing.
 
-    bool isModified() const  { return m_modified; }
     Event getEvent();
 
     // Setup the dialog for a new event type
@@ -148,7 +147,6 @@ private:
     QCheckBox *m_lockNotationValues;
 #endif
 
-    bool m_modified{false};
 };
 
 
