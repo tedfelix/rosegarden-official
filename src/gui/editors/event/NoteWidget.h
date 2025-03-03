@@ -20,6 +20,7 @@
 
 #include "EventWidget.h"
 
+class QCheckBox;
 class QGroupBox;
 class QLabel;
 class QPushButton;
@@ -49,6 +50,9 @@ private slots:
 
     void slotEditDuration(bool checked);
     void slotEditPitch(bool checked);
+    void slotLockNotationClicked(bool checked);
+    void slotNotationTimeEditClicked(bool checked);
+    void slotNotationDurationEditClicked(bool checked);
 
 private:
 
@@ -56,12 +60,16 @@ private:
 
     // Widgets
 
-    // ??? Some of these don't need to be member variables.  Only the
-    //     ones that contain data do.
-
     QSpinBox *m_durationSpinBox;
     QSpinBox *m_pitchSpinBox;
-    QPushButton *m_pitchEditButton;  // ??? This can go.
+    QSpinBox *m_velocitySpinBox;
+    QCheckBox *m_lockNotation;
+    QLabel *m_notationTimeLabel;
+    QSpinBox *m_notationTimeSpinBox;
+    QPushButton *m_notationTimeEditButton;
+    QLabel *m_notationDurationLabel;
+    QSpinBox *m_notationDurationSpinBox;
+    QPushButton *m_notationDurationEditButton;
 
 };
 

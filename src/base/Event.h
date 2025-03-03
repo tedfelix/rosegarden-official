@@ -240,7 +240,18 @@ public:
     bool isa(const std::string &type) const  { return (m_data->m_type == type); }
 
     timeT getAbsoluteTime() const  { return m_data->m_absoluteTime; }
+
     timeT getNotationAbsoluteTime() const  { return m_data->getNotationTime(); }
+    /// UNSAFE
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setNotationAbsoluteTime(timeT t)
+            { unshare(); m_data->setNotationTime(t); }
+
     /// Move Event in time without any ancillary coordination.
     /**
      * UNSAFE.  Don't call this unless you know exactly what you're doing.
@@ -266,6 +277,15 @@ public:
      * \author Tito Latini
      */
     timeT getGreaterDuration() const;
+    /// UNSAFE
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setNotationDuration(timeT d)
+            { unshare(); m_data->setNotationDuration(d); }
 
     short getSubOrdering() const  { return m_data->m_subOrdering; }
 
@@ -433,25 +453,6 @@ protected:
 
 private:
 
-    /**
-     * This field is immutable when the Event is in a Segment.  Changing it
-     * will cause serious problems.  DO NOT call this on an Event that is in a
-     * Segment.  Use this only to modify an Event before it is added to a
-     * Segment.
-     */
-    void setNotationAbsoluteTime(timeT t)
-            { unshare(); m_data->setNotationTime(t); }
-
-    /**
-     * This field is immutable when the Event is in a Segment.  Changing it
-     * will cause serious problems.  DO NOT call this on an Event that is in a
-     * Segment.  Use this only to modify an Event before it is added to a
-     * Segment.
-     */
-    void setNotationDuration(timeT d)
-            { unshare(); m_data->setNotationDuration(d); }
-
-private:
     friend QDebug operator<<(QDebug dbg, const Event &event);
 
     /// Data that are shared between shallow-copied instances

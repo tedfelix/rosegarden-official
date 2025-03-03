@@ -31,6 +31,7 @@
 #include "gui/dialogs/TimeDialog.h"
 
 #include <QApplication>
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
@@ -83,7 +84,9 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     QLabel *pitchLabel = new QLabel(tr("Pitch:"), propertiesGroup);
     propertiesLayout->addWidget(pitchLabel, row, 0);
 
-    // ??? Make this a combo box with the note names.
+    // ??? Make this a combo box with the note names.  Can we also allow direct
+    //     entry of a note number?  Otherwise perhaps add a separate label
+    //     showing the note name upon change.
     m_pitchSpinBox = new QSpinBox(propertiesGroup);
     m_pitchSpinBox->setMinimum(MidiMinValue);
     m_pitchSpinBox->setMaximum(MidiMaxValue);
@@ -93,10 +96,84 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     m_pitchSpinBox->setValue(pitch);
     propertiesLayout->addWidget(m_pitchSpinBox, row, 1);
 
-    m_pitchEditButton = new QPushButton(tr("edit"), propertiesGroup);
-    connect(m_pitchEditButton, &QPushButton::clicked,
+    QPushButton *pitchEditButton =
+            new QPushButton(tr("edit"), propertiesGroup);
+    connect(pitchEditButton, &QPushButton::clicked,
             this, &NoteWidget::slotEditPitch);
-    propertiesLayout->addWidget(m_pitchEditButton, row, 2);
+    propertiesLayout->addWidget(pitchEditButton, row, 2);
+
+    ++row;
+
+    // Velocity
+    QLabel *velocityLabel = new QLabel(tr("Velocity:"), propertiesGroup);
+    propertiesLayout->addWidget(velocityLabel, row, 0);
+
+    m_velocitySpinBox = new QSpinBox(propertiesGroup);
+    m_velocitySpinBox->setMinimum(MidiMinValue);
+    m_velocitySpinBox->setMaximum(MidiMaxValue);
+    int velocity{0};
+    if (event.has(BaseProperties::VELOCITY))
+        velocity = event.get<Int>(BaseProperties::VELOCITY);
+    m_velocitySpinBox->setValue(velocity);
+    propertiesLayout->addWidget(m_velocitySpinBox, row, 1);
+
+    ++row;
+
+    // Lock notation
+    m_lockNotation =
+            new QCheckBox(tr("Lock notation to performance"), propertiesGroup);
+    // ??? This seems less annoying since it prevents loss of notation
+    //     values.  However, if the user makes a big change, they will
+    //     probably just want locking.
+    //const bool lockNotation =
+    //        (event.getNotationAbsoluteTime() == event.getAbsoluteTime()  &&
+    //         event.getNotationDuration() == event.getDuration());
+    //m_lockNotationValues->setChecked(lockNotation);
+    m_lockNotation->setChecked(true);
+    connect(m_lockNotation, &QPushButton::clicked,
+            this, &NoteWidget::slotLockNotationClicked);
+    propertiesLayout->addWidget(m_lockNotation, row, 0, 1, 3);
+
+    ++row;
+
+    // Notation time
+    m_notationTimeLabel = new QLabel(tr("Notation time:"), propertiesGroup);
+    propertiesLayout->addWidget(m_notationTimeLabel, row, 0);
+
+    m_notationTimeSpinBox = new QSpinBox(propertiesGroup);
+    m_notationTimeSpinBox->setMinimum(INT_MIN);
+    m_notationTimeSpinBox->setMaximum(INT_MAX);
+    m_notationTimeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
+    m_notationTimeSpinBox->setValue(event.getNotationAbsoluteTime());
+    propertiesLayout->addWidget(m_notationTimeSpinBox, row, 1);
+
+    m_notationTimeEditButton = new QPushButton(tr("edit"), propertiesGroup);
+    connect(m_notationTimeEditButton, &QPushButton::clicked,
+            this, &NoteWidget::slotNotationTimeEditClicked);
+    propertiesLayout->addWidget(m_notationTimeEditButton, row, 2);
+
+    ++row;
+
+    // Notation duration
+    m_notationDurationLabel =
+            new QLabel(tr("Notation duration:"), propertiesGroup);
+    propertiesLayout->addWidget(m_notationDurationLabel, row, 0);
+
+    m_notationDurationSpinBox = new QSpinBox(propertiesGroup);
+    m_notationDurationSpinBox->setMinimum(0);
+    m_notationDurationSpinBox->setMaximum(INT_MAX);
+    m_notationDurationSpinBox->setSingleStep(
+            Note(Note::Shortest).getDuration());
+    m_notationDurationSpinBox->setValue(event.getNotationDuration());
+    propertiesLayout->addWidget(m_notationDurationSpinBox, row, 1);
+
+    m_notationDurationEditButton = new QPushButton(tr("edit"), propertiesGroup);
+    connect(m_notationDurationEditButton, &QPushButton::clicked,
+            this, &NoteWidget::slotNotationDurationEditClicked);
+    propertiesLayout->addWidget(m_notationDurationEditButton, row, 2);
+
+    // Sync up notation widget enable state.
+    slotLockNotationClicked(true);
 
 
     // Get the sizing correct...
@@ -150,10 +227,39 @@ NoteWidget::slotEditPitch(bool /*checked*/)
         m_pitchSpinBox->setValue(dialog.getPitch());
 }
 
+void
+NoteWidget::slotLockNotationClicked(bool checked)
+{
+    m_notationTimeLabel->setEnabled(!checked);
+    m_notationTimeSpinBox->setEnabled(!checked);
+    m_notationTimeEditButton->setEnabled(!checked);
+    m_notationDurationLabel->setEnabled(!checked);
+    m_notationDurationSpinBox->setEnabled(!checked);
+    m_notationDurationEditButton->setEnabled(!checked);
+}
+
+void NoteWidget::slotNotationTimeEditClicked(bool /*checked*/)
+{
+    // ???
+}
+
+void NoteWidget::slotNotationDurationEditClicked(bool /*checked*/)
+{
+    // ???
+}
+
 void NoteWidget::updateEvent(Event &event) const
 {
     event.setDuration(m_durationSpinBox->value());
     event.set<Int>(BaseProperties::PITCH, m_pitchSpinBox->value());
+    event.set<Int>(BaseProperties::VELOCITY, m_velocitySpinBox->value());
+    if (m_lockNotation->isChecked()) {
+        event.setNotationAbsoluteTime(m_parent->getAbsoluteTime());
+        event.setNotationDuration(m_durationSpinBox->value());
+    } else {
+        event.setNotationAbsoluteTime(m_notationTimeSpinBox->value());
+        event.setNotationDuration(m_notationDurationSpinBox->value());
+    }
 }
 
 
