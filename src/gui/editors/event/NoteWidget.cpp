@@ -20,6 +20,8 @@
 
 #include "NoteWidget.h"
 
+#include "EditEvent.h"
+
 #include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/MidiProgram.h"
@@ -41,8 +43,9 @@ namespace Rosegarden
 {
 
 
-NoteWidget::NoteWidget(QWidget *parent, const Event &event) :
-        EventWidget(parent)
+NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
+    EventWidget(parent),
+    m_parent(parent)
 {
     if (event.getType() != Note::EventType)
         return;
@@ -119,30 +122,24 @@ NoteWidget::NoteWidget(QWidget *parent, const Event &event) :
 void
 NoteWidget::slotEditDuration(bool /*checked*/)
 {
-#if 0
     Composition &composition =
             RosegardenDocument::currentDocument->getComposition();
 
-    // ??? We need to be able to ask EditEvent for the current time as
-    //     displayed on the absolute time spin box.
-    const timeT startTime = ???;
+    // ??? How to test?  Not sure exactly how durations change meaning.  I
+    //     tried 6/8 time, but a quarter was still 960.  Need to come up with
+    //     a test case to make sure this is working.
+    const timeT startTime = m_parent->getAbsoluteTime();
 
     TimeDialog dialog(
             this,  // parent
             tr("Edit Duration"),  // title
             &composition,  // composition
             startTime,  // startTime
-            m_durationSpinBox->value(),
-            1,
-            true);
+            m_durationSpinBox->value(),  // defaultDuration
+            1,  // minimumDuration
+            true);  // constrainToCompositionDuration
     if (dialog.exec() == QDialog::Accepted)
         m_durationSpinBox->setValue(dialog.getTime());
-#endif
-}
-
-timeT NoteWidget::getDuration() const
-{
-    return m_durationSpinBox->value();
 }
 
 void

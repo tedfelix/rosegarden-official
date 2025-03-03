@@ -20,7 +20,9 @@
 
 #include "EventWidget.h"
 
+#include "EditEvent.h"
 #include "NoteWidget.h"
+
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 
@@ -29,13 +31,17 @@ namespace Rosegarden
 {
 
 
-EventWidget *EventWidget::create(QWidget *parent, const Event &event)
+EventWidget *EventWidget::create(EditEvent *parent, const Event &event)
 {
     if (event.getType() == Note::EventType)
         return new NoteWidget(parent, event);
 
     return nullptr;
 }
+
+EventWidget::EventWidget(EditEvent *parent) :
+    QWidget(parent)
+{ }
 
 
 }

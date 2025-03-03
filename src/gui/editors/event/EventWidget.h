@@ -27,6 +27,7 @@ namespace Rosegarden
 {
 
 
+class EditEvent;
 class Event;
 
 
@@ -38,13 +39,9 @@ class EventWidget : public QWidget
 public:
 
     // Factory
-    static EventWidget *create(QWidget *parent, const Event &event);
+    static EventWidget *create(EditEvent *parent, const Event &event);
 
-    EventWidget(QWidget *parent) :
-        QWidget(parent)
-    { }
-
-    virtual timeT getDuration() const  { return 0; }
+    EventWidget(EditEvent *parent);
 
     virtual void updateEvent(Event & /*event*/) const  { }
 

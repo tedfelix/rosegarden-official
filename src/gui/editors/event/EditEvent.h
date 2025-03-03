@@ -62,10 +62,11 @@ public:
               const Event &event,
               bool inserting = false);  // Inserting or editing.
 
-    Event getEvent();
+    /// Used by NoteWidget for TimeDialog.
+    timeT getAbsoluteTime() const;
 
-    // Setup the dialog for a new event type
-    void updateWidgets();
+    /// Get the edited or new (for insertion) Event.
+    Event getEvent();
 
 public slots:
 
@@ -118,6 +119,9 @@ private:
     // Event
     EventWidgetStack *m_eventWidgetStack{nullptr};  // For insert.
     EventWidget *m_eventWidget{nullptr};  // For edit.
+
+    // Setup the dialog for a new event type
+    void updateWidgets();
 
 #if 0
     QLabel *m_pitchLabel;

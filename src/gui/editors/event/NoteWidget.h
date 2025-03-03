@@ -30,6 +30,7 @@ namespace Rosegarden
 {
 
 
+class EditEvent;
 class Event;
 
 
@@ -39,13 +40,7 @@ class NoteWidget : public EventWidget
 
 public:
 
-    NoteWidget(QWidget *parent, const Event &event);
-
-    /// Duration is handled separately because Event requires it in its ctor.
-    /**
-     * See EditEvent::getEvent().
-     */
-    timeT getDuration() const override;
+    NoteWidget(EditEvent *parent, const Event &event);
 
     /// Copy widget values to the Event.
     void updateEvent(Event &event) const override;
@@ -56,6 +51,8 @@ private slots:
     void slotEditPitch(bool checked);
 
 private:
+
+    EditEvent *m_parent;
 
     // Widgets
 

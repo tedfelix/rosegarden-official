@@ -217,7 +217,7 @@ EditEvent::EditEvent(
     if (inserting) {
         // For insert mode we need a QWidget with a QStackedLayout and each
         // of the event widgets loaded into that.
-//        m_eventWidgetStack = EventWidgetStack::create();
+//        m_eventWidgetStack = EventWidgetStack::create(this);
 //        mainLayout->addWidget(m_eventWidgetStack);
     } else {  // editing
         // For edit mode we only need the Event widget for the current
@@ -892,6 +892,12 @@ EditEvent::updateWidgets()
     slotLockNotationChanged();
 }
 
+timeT
+EditEvent::getAbsoluteTime() const
+{
+    return m_timeSpinBox->value();
+}
+
 Event
 EditEvent::getEvent()
 {
@@ -903,7 +909,8 @@ EditEvent::getEvent()
         //     sub orderings aren't actually used where they need to be used.
         //     E.g. a search on Controller::EventSubOrdering turns up far fewer
         //     places than expected.  Shouldn't it be used whenever a
-        //     controller Event is created?
+        //     controller Event is created?  Shouldn't this "if" be in Event's
+        //     ctors?
         if (m_type == Indication::EventType) {
             subordering = Indication::EventSubOrdering;
         } else if (m_type == Clef::EventType) {
