@@ -59,6 +59,41 @@ namespace Rosegarden
 {
 
 
+// ??? This seems really reusable, however, it also seems like these
+//     sub orderings aren't actually used where they need to be used.
+//     E.g. a search on Controller::EventSubOrdering turns up far fewer
+//     places than expected.  Shouldn't it be used whenever a
+//     controller Event is created?  Shouldn't this "if" be in Event's
+//     ctors?
+static int getSubOrdering(std::string eventType)
+{
+    if (eventType == Indication::EventType) {
+        return Indication::EventSubOrdering;
+    } else if (eventType == Clef::EventType) {
+        return Clef::EventSubOrdering;
+    } else if (eventType == ::Rosegarden::Key::EventType) {
+        return ::Rosegarden::Key::EventSubOrdering;
+    } else if (eventType == Text::EventType) {
+        return Text::EventSubOrdering;
+    } else if (eventType == Note::EventRestType) {
+        return Note::EventRestSubOrdering;
+    } else if (eventType == PitchBend::EventType) {
+        return PitchBend::EventSubOrdering;
+    } else if (eventType == Controller::EventType) {
+        return Controller::EventSubOrdering;
+    } else if (eventType == KeyPressure::EventType) {
+        return KeyPressure::EventSubOrdering;
+    } else if (eventType == ChannelPressure::EventType) {
+        return ChannelPressure::EventSubOrdering;
+    } else if (eventType == ProgramChange::EventType) {
+        return ProgramChange::EventSubOrdering;
+    } else if (eventType == SystemExclusive::EventType) {
+        return SystemExclusive::EventSubOrdering;
+    }
+
+    return 0;
+}
+
 #if 0
         // ??? Why not just load these into a combo box?  Then there will be
         //     no need for update trickery.
@@ -136,9 +171,7 @@ EditEvent::EditEvent(
     QDialog(parent),
     m_doc(doc),
     m_event(event),
-    m_type(event.getType()),
-    m_absoluteTime(event.getAbsoluteTime()),
-    m_duration(event.getDuration())
+    m_type(event.getType())
 {
     setModal(true);
     setWindowTitle(inserting ? tr("Insert Event").toStdString().c_str() :
@@ -201,17 +234,12 @@ EditEvent::EditEvent(
     m_timeSpinBox->setMinimum(INT_MIN);
     m_timeSpinBox->setMaximum(INT_MAX);
     m_timeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    connect(m_timeSpinBox,
-                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            this, &EditEvent::slotAbsoluteTimeChanged);
     propertiesLayout->addWidget(m_timeSpinBox, row, 1);
 
     m_timeEditButton = new QPushButton(tr("edit"), propertiesGroup);
     connect(m_timeEditButton, &QAbstractButton::released,
             this, &EditEvent::slotEditAbsoluteTime);
     propertiesLayout->addWidget(m_timeEditButton, row, 2);
-
-    ++row;
 
     // Event Widget
     if (inserting) {
@@ -232,6 +260,40 @@ EditEvent::EditEvent(
         m_eventWidget = EventWidget::create(this, event);
         mainLayout->addWidget(m_eventWidget);
     }
+
+
+    // Advanced Properties Group
+
+    QGroupBox *advancedPropertiesGroup =
+            new QGroupBox(tr("Advanced Properties"), this);
+    advancedPropertiesGroup->setContentsMargins(5, 5, 5, 5);
+
+    QGridLayout *advancedPropertiesLayout =
+            new QGridLayout(advancedPropertiesGroup);
+    advancedPropertiesLayout->setSpacing(5);
+    mainLayout->addWidget(advancedPropertiesGroup);
+
+    row = 0;
+
+    // Sub Ordering
+    advancedPropertiesLayout->addWidget(
+            new QLabel(tr("Sub-ordering: ")), row, 0);
+
+    m_subOrdering = new QSpinBox(advancedPropertiesGroup);
+    m_subOrdering->setRange(-100, 100);
+    m_subOrdering->setSingleStep(1);
+    // ??? Is this ok for insert mode?
+    m_subOrdering->setValue(event.getSubOrdering());
+    advancedPropertiesLayout->addWidget(m_subOrdering, row, 1);
+
+    ++row;
+
+    // Properties table.
+
+    // ??? See EventEditDialog::m_persistentGrid and m_nonPersistentGrid.
+    //     Recommend combining persistent and non-persistent into one table.
+    //     Maintain the rules for persistent and non-persistent on a property-
+    //     by-property basis.
 
 #if 0
     // Pitch
@@ -387,7 +449,6 @@ EditEvent::updateWidgets()
     m_timeSpinBox->show();
     m_timeEditButton->show();
     m_timeSpinBox->setValue(m_event.getAbsoluteTime());
-    m_absoluteTime = m_event.getAbsoluteTime();
 
 #if 0
     // Duration
@@ -396,9 +457,8 @@ EditEvent::updateWidgets()
     m_durationSpinBox->show();
     m_durationEditButton->show();
     m_durationSpinBox->setValue(m_event.getDuration());
-#endif
-
     m_duration = m_event.getDuration();
+#endif
 
 #if 0
     // Notation Group
@@ -903,96 +963,25 @@ EditEvent::getEvent()
 {
     // If we are inserting a new Event...
     if (m_typeCombo) {
-
-        int subordering = 0;
-        // ??? This seems really reusable, however, it also seems like these
-        //     sub orderings aren't actually used where they need to be used.
-        //     E.g. a search on Controller::EventSubOrdering turns up far fewer
-        //     places than expected.  Shouldn't it be used whenever a
-        //     controller Event is created?  Shouldn't this "if" be in Event's
-        //     ctors?
-        if (m_type == Indication::EventType) {
-            subordering = Indication::EventSubOrdering;
-        } else if (m_type == Clef::EventType) {
-            subordering = Clef::EventSubOrdering;
-        } else if (m_type == ::Rosegarden::Key::EventType) {
-            subordering = ::Rosegarden::Key::EventSubOrdering;
-        } else if (m_type == Text::EventType) {
-            subordering = Text::EventSubOrdering;
-        } else if (m_type == Note::EventRestType) {
-            subordering = Note::EventRestSubOrdering;
-        } else if (m_type == PitchBend::EventType) {
-            subordering = PitchBend::EventSubOrdering;
-        } else if (m_type == Controller::EventType) {
-            subordering = Controller::EventSubOrdering;
-        } else if (m_type == KeyPressure::EventType) {
-            subordering = KeyPressure::EventSubOrdering;
-        } else if (m_type == ChannelPressure::EventType) {
-            subordering = ChannelPressure::EventSubOrdering;
-        } else if (m_type == ProgramChange::EventType) {
-            subordering = ProgramChange::EventSubOrdering;
-        } else if (m_type == SystemExclusive::EventType) {
-            subordering = SystemExclusive::EventSubOrdering;
-        }
-
-        m_event = Event(
-                m_type,
-                m_absoluteTime,
-                0,  // duration
-                subordering,
-                m_notationAbsoluteTime,
-                m_notationDuration);
-
-#if 0
-        // ensure these are set on m_event correctly
-        slotPitchChanged(m_pitchSpinBox->value());
-        slotVelocityChanged(m_velocitySpinBox->value());
-#endif
+        // Create a new default Event of the right type.
+        // Just need the type, but there is no type-only ctor.
+        m_event = Event(m_type, m_timeSpinBox->value());
     }
 
-    // ??? Only sub-ordering needs to come in via the Event ctor.  The two
-    //     notation values are actually properties, so they can be set after
-    //     the Event object is created.
-    //
-    //     The notation properties are a little bit confusing.  Be sure to
-    //     analyze EventData::setNotationTime() and
-    //     EventData::setNotationDuration() before implementing the sets in
-    //     here.  Might just want to move the Event versions of those routines
-    //     (setNotationAbsoluteTime() and setNotationDuration()) to public and
-    //     be done with it.
-    //
-    //     Perhaps we should also move Event::setSubOrdering() and
-    //     setDuration() to public to make all of this even simpler.  Then
-    //     we just use the ctor that takes event and absolute time and let
-    //     the event widgets fill in the rest.  I guess the danger is that
-    //     someone might be tempted to directly change those values in an
-    //     Event that is in a Segment.  That would cause all sorts of problems.
-    //     I recommend some comments to explain that those are not safe to
-    //     change for an Event in a Segment.
-    //
-    //     I've already moved Event::setDuration() out to public.  Keep
-    //     moving in this direction.
+    Event event(m_event, m_timeSpinBox->value());
 
-    Event event(
-            m_event,
-            m_absoluteTime,
-            0,  // duration
-            m_event.getSubOrdering(),
-            m_event.getNotationAbsoluteTime(),
-            m_event.getNotationDuration());
-
-    // Let the widget make the remaining changes.
-    //if (m_eventWidgetStack)
+    // Let the widget make its changes.
+    //if (m_eventWidgetStack)  // inserting
     //    m_eventWidgetStack->updateEvent(event);
-    if (m_eventWidget)
+    if (m_eventWidget)  // editing
         m_eventWidget->updateEvent(event);
 
-#if 0
-    // Values from the pitch and velocity spin boxes should already
-    // have been set on m_event (and thus on event) by slotPitchChanged
-    // and slotVelocityChanged.  Absolute time and duration were set in
-    // the event ctor above; that just leaves the meta values.
+    // Changes from the Advanced Properties.
+    event.setSubOrdering(m_subOrdering->value());
 
+    // ??? Set the remaining properties from the table.
+
+#if 0
     if (m_type == Indication::EventType) {
 
         event.set<String>(Indication::IndicationTypePropertyName,
@@ -1031,8 +1020,12 @@ EditEvent::slotEventTypeChanged(int value)
 {
     m_type = qstrtostr(m_typeCombo->itemText(value));
 
-    if (m_type != m_event.getType())
-        Event m_event(m_type, m_absoluteTime, m_duration);
+    // Make sure the sub-ordering is appropriate.
+    m_subOrdering->setValue(getSubOrdering(m_type));
+
+    // ??? This does nothing!
+    //if (m_type != m_event.getType())
+    //    Event m_event(m_type, m_absoluteTime, m_duration);
 
     updateWidgets();
 
@@ -1045,43 +1038,41 @@ EditEvent::slotEventTypeChanged(int value)
 #endif
 }
 
+#if 0
 void
-EditEvent::slotAbsoluteTimeChanged(int value)
+EditEvent::slotAbsoluteTimeChanged(int /*value*/)
 {
     m_absoluteTime = value;
 
-#if 0
     if (m_notationGroupBox->isHidden()) {
         m_notationAbsoluteTime = value;
     } else if (m_lockNotationValues->isChecked()) {
         m_notationAbsoluteTime = value;
         m_notationTimeSpinBox->setValue(value);
     }
-#endif
-
 }
-
+#endif
+#if 0
 void
 EditEvent::slotNotationAbsoluteTimeChanged(int value)
 {
     m_notationAbsoluteTime = value;
 }
-
+#endif
+#if 0
 void
 EditEvent::slotDurationChanged(int value)
 {
     m_duration = value;
 
-#if 0
     if (m_notationGroupBox->isHidden()) {
         m_notationDuration = value;
     } else if (m_lockNotationValues->isChecked()) {
         m_notationDuration = value;
         m_notationDurationSpinBox->setValue(value);
     }
-#endif
-
 }
+#endif
 
 void
 EditEvent::slotNotationDurationChanged(int value)

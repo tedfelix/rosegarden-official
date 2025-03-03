@@ -287,7 +287,16 @@ public:
     void setNotationDuration(timeT d)
             { unshare(); m_data->setNotationDuration(d); }
 
+    // Sub-Ordering
     short getSubOrdering() const  { return m_data->m_subOrdering; }
+    /// UNSAFE
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setSubOrdering(short o)  { unshare(); m_data->m_subOrdering = o; }
 
     /**
      * Return whether this Event's section of a triggered ornament
@@ -442,14 +451,6 @@ protected:
      * Segment.
      */
     void setAbsoluteTime(timeT t)  { unshare(); m_data->m_absoluteTime = t; }
-
-    /**
-     * This field is immutable when the Event is in a Segment.  Changing it
-     * will cause serious problems.  DO NOT call this on an Event that is in a
-     * Segment.  Use this only to modify an Event before it is added to a
-     * Segment.
-     */
-    void setSubOrdering(short o)  { unshare(); m_data->m_subOrdering = o; }
 
 private:
 

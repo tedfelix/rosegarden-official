@@ -71,9 +71,9 @@ public:
 public slots:
 
     void slotEventTypeChanged(int value);
-    void slotAbsoluteTimeChanged(int value);
-    void slotDurationChanged(int value);
-    void slotNotationAbsoluteTimeChanged(int value);
+    //void slotAbsoluteTimeChanged(int value);
+    //void slotDurationChanged(int value);
+    //void slotNotationAbsoluteTimeChanged(int value);
     void slotNotationDurationChanged(int value);
     //void slotPitchChanged(int value);
     //void slotVelocityChanged(int value);
@@ -91,10 +91,9 @@ private:
     Event m_event;
 
     std::string m_type;
-    timeT m_absoluteTime;
-    timeT m_duration;
+    //timeT m_duration;
 
-    timeT m_notationAbsoluteTime;
+    //timeT m_notationAbsoluteTime;
     timeT m_notationDuration;
 
 
@@ -109,14 +108,12 @@ private:
     QSpinBox *m_timeSpinBox;
     QPushButton *m_timeEditButton;
 
-    // Duration
-    //QLabel *m_durationLabel;
-    //QSpinBox *m_durationSpinBox;
-    //QPushButton *m_durationEditButton;
-
     // Event
     EventWidgetStack *m_eventWidgetStack{nullptr};  // For insert.
     EventWidget *m_eventWidget{nullptr};  // For edit.
+
+    // Sub-ordering
+    QSpinBox *m_subOrdering;
 
     // Setup the dialog for a new event type
     void updateWidgets();
