@@ -887,9 +887,9 @@ EditEvent::updateWidgets()
     m_pitchSpinBox->blockSignals(false);
     m_velocitySpinBox->blockSignals(false);
     m_metaEdit->blockSignals(false);
+    slotLockNotationChanged();
 #endif
 
-    slotLockNotationChanged();
 }
 
 timeT
@@ -1089,6 +1089,7 @@ EditEvent::slotNotationDurationChanged(int value)
     m_notationDuration = value;
 }
 
+#if 0
 void
 EditEvent::slotPitchChanged(int value)
 {
@@ -1114,7 +1115,9 @@ EditEvent::slotPitchChanged(int value)
     }
     // !!! sysex?
 }
+#endif
 
+#if 0
 void
 EditEvent::slotVelocityChanged(int value)
 {
@@ -1131,25 +1134,26 @@ EditEvent::slotVelocityChanged(int value)
         m_event.set<Int>(PitchBend::LSB, value);
     }
 }
+#endif
 
 void
 EditEvent::slotMetaChanged(const QString &)
 {
 }
 
+#if 0
 void
 EditEvent::slotLockNotationChanged()
 {
     // Enable/disable notation fields as appropriate.
-#if 0
     const bool enable = !m_lockNotationValues->isChecked();
 
     m_notationTimeSpinBox->setEnabled(enable);
     m_notationTimeEditButton->setEnabled(enable);
     m_notationDurationSpinBox->setEnabled(enable);
     m_notationDurationEditButton->setEnabled(enable);
-#endif
 }
+#endif
 
 void
 EditEvent::slotEditAbsoluteTime()
@@ -1158,51 +1162,20 @@ EditEvent::slotEditAbsoluteTime()
                       &m_doc->getComposition(),
                       m_timeSpinBox->value(),
                       true);
-    if (dialog.exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted)
         m_timeSpinBox->setValue(dialog.getTime());
-    }
 }
 
-void
-EditEvent::slotEditNotationAbsoluteTime()
-{
 #if 0
-    TimeDialog dialog(this, tr("Edit Event Notation Time"),
-                      &m_doc->getComposition(),
-                      m_notationTimeSpinBox->value(),
-                      true);
-    if (dialog.exec() == QDialog::Accepted) {
-        m_notationTimeSpinBox->setValue(dialog.getTime());
-    }
-#endif
-}
-
-void
-EditEvent::slotEditNotationDuration()
-{
-#if 0
-    TimeDialog dialog(this, tr("Edit Notation Duration"),
-                      &m_doc->getComposition(),
-                      m_notationTimeSpinBox->value(),
-                      m_notationDurationSpinBox->value(),
-                      1,
-                      true);
-    if (dialog.exec() == QDialog::Accepted) {
-        m_notationDurationSpinBox->setValue(dialog.getTime());
-    }
-#endif
-}
-
 void
 EditEvent::slotEditPitch()
 {
-#if 0
     PitchDialog dialog(this, tr("Edit Pitch"), m_pitchSpinBox->value());
     if (dialog.exec() == QDialog::Accepted) {
         m_pitchSpinBox->setValue(dialog.getPitch());
     }
-#endif
 }
+#endif
 
 void
 EditEvent::slotSysexLoad()

@@ -240,12 +240,34 @@ NoteWidget::slotLockNotationClicked(bool checked)
 
 void NoteWidget::slotNotationTimeEditClicked(bool /*checked*/)
 {
-    // ???
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
+
+    TimeDialog dialog(
+            this,  // parent
+            tr("Edit Event Notation Time"),  // title
+            &composition,  // composition
+            m_notationTimeSpinBox->value(),  // defaultTime
+            true);  // constrainToCompositionDuration
+    if (dialog.exec() == QDialog::Accepted)
+        m_notationTimeSpinBox->setValue(dialog.getTime());
 }
 
 void NoteWidget::slotNotationDurationEditClicked(bool /*checked*/)
 {
-    // ???
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
+
+    TimeDialog dialog(
+            this,  // parent
+            tr("Edit Notation Duration"),  // title
+            &composition,  // composition
+            m_notationTimeSpinBox->value(),  // startTime
+            m_notationDurationSpinBox->value(),  // defaultDuration
+            1,  // minimumDuration
+            true);  // constrainToCompositionDuration
+    if (dialog.exec() == QDialog::Accepted)
+        m_notationDurationSpinBox->setValue(dialog.getTime());
 }
 
 void NoteWidget::updateEvent(Event &event) const

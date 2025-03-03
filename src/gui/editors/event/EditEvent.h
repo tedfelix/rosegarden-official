@@ -75,14 +75,12 @@ public slots:
     void slotDurationChanged(int value);
     void slotNotationAbsoluteTimeChanged(int value);
     void slotNotationDurationChanged(int value);
-    void slotPitchChanged(int value);
-    void slotVelocityChanged(int value);
+    //void slotPitchChanged(int value);
+    //void slotVelocityChanged(int value);
     void slotMetaChanged(const QString &);
     void slotEditAbsoluteTime();
-    void slotEditNotationAbsoluteTime();
-    void slotEditNotationDuration();
-    void slotLockNotationChanged();
-    void slotEditPitch();
+    //void slotLockNotationChanged();
+    //void slotEditPitch();
     void slotSysexLoad();
     void slotSysexSave();
 
