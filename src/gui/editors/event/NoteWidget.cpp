@@ -153,9 +153,9 @@ NoteWidget::slotEditPitch(bool /*checked*/)
         m_pitchSpinBox->setValue(dialog.getPitch());
 }
 
-int NoteWidget::getPitch() const
+void NoteWidget::updateEvent(Event &event) const
 {
-    return m_pitchSpinBox->value();
+    event.set<Int>(BaseProperties::PITCH, m_pitchSpinBox->value());
 }
 
 

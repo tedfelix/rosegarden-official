@@ -895,15 +895,14 @@ EditEvent::updateWidgets()
 Event
 EditEvent::getEvent()
 {
-    RG_DEBUG << "getEvent()...";
+    // Gather values we need for the Event ctor.
 
+    // Duration
     timeT duration{m_event.getDuration()};
 //    if (m_eventWidgetStack)
 //        duration = m_eventWidgetStack->getDuration();
     if (m_eventWidget)
         duration = m_eventWidget->getDuration();
-
-    RG_DEBUG << "  new duration: " << duration;
 
     const bool useSeparateNotationValues =
             (m_event.getType() == Note::EventType);
@@ -952,6 +951,26 @@ EditEvent::getEvent()
 #endif
     }
 
+    // ??? Only sub-ordering needs to come in via the Event ctor.  The two
+    //     notation values are actually properties, so they can be set after
+    //     the Event object is created.
+    //
+    //     The notation properties are a little bit confusing.  Be sure to
+    //     analyze EventData::setNotationTime() and
+    //     EventData::setNotationDuration() before implementing the sets in
+    //     here.  Might just want to move the Event versions of those routines
+    //     (setNotationAbsoluteTime() and setNotationDuration()) to public and
+    //     be done with it.
+    //
+    //     Perhaps we should also move Event::setSubOrdering() and
+    //     setDuration() to public to make all of this even simpler.  Then
+    //     we just use the ctor that takes event and absolute time and let
+    //     the event widgets fill in the rest.  I guess the danger is that
+    //     someone might be tempted to directly change those values in an
+    //     Event that is in a Segment.  That would cause all sorts of problems.
+    //     I recommend some comments to explain that those are not safe to
+    //     change for an Event in a Segment.
+
     Event event(
             m_event,
             m_absoluteTime,
@@ -960,28 +979,11 @@ EditEvent::getEvent()
             m_event.getNotationAbsoluteTime(),
             m_event.getNotationDuration());
 
-    // ??? For the rest of these, we should probably send the event into the
-    //     widget and have it make the necessary changes.  So something like
-    //     this:
+    // Let the widget make the remaining changes.
     //if (m_eventWidgetStack)
     //    m_eventWidgetStack->updateEvent(event);
-    //if (m_eventWidget)
-    //    m_eventWidget->updateEvent(event);
-
-    // Pitch
-    // Get pitch from the event widget or stack.
-    // Set it on event.
-    int pitch{0};
-    if (event.has(BaseProperties::PITCH))
-        pitch = event.get<Int>(BaseProperties::PITCH);
-//    if (m_eventWidgetStack)
-//        pitch = m_eventWidgetStack->getPitch();
     if (m_eventWidget)
-        pitch = m_eventWidget->getPitch();
-
-    RG_DEBUG << "  new pitch: " << pitch;
-
-    event.set<Int>(BaseProperties::PITCH, pitch);
+        m_eventWidget->updateEvent(event);
 
 #if 0
     // Values from the pitch and velocity spin boxes should already

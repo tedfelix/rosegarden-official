@@ -45,7 +45,8 @@ public:
     { }
 
     virtual timeT getDuration() const  { return 0; }
-    virtual int getPitch() const  { return 0; }
+
+    virtual void updateEvent(Event & /*event*/) const  { }
 
 };
 

@@ -41,8 +41,14 @@ public:
 
     NoteWidget(QWidget *parent, const Event &event);
 
+    /// Duration is handled separately because Event requires it in its ctor.
+    /**
+     * See EditEvent::getEvent().
+     */
     timeT getDuration() const override;
-    int getPitch() const override;
+
+    /// Copy widget values to the Event.
+    void updateEvent(Event &event) const override;
 
 private slots:
 
@@ -58,7 +64,7 @@ private:
 
     QSpinBox *m_durationSpinBox;
     QSpinBox *m_pitchSpinBox;
-    QPushButton *m_pitchEditButton;
+    QPushButton *m_pitchEditButton;  // ??? This can go.
 
 };
 
