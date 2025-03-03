@@ -247,7 +247,17 @@ public:
      */
     void unsafeChangeTime(timeT offset);
 
+    /// Duration
     timeT getDuration() const  { return m_data->m_duration; }
+    /// UNSAFE
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setDuration(timeT d)  { unshare(); m_data->m_duration = d; }
+
     timeT getNotationDuration() const  { return m_data->getNotationDuration(); }
     /**
      * Returns the greater of getDuration() or getNotationDuration() for Note
@@ -397,12 +407,49 @@ protected:
         m_nonPersistentProperties(nullptr)
     { }
 
-    void setType(const std::string &t) { unshare(); m_data->m_type = t; }
-    void setAbsoluteTime(timeT t)      { unshare(); m_data->m_absoluteTime = t; }
-    void setDuration(timeT d)          { unshare(); m_data->m_duration = d; }
-    void setSubOrdering(short o)       { unshare(); m_data->m_subOrdering = o; }
-    void setNotationAbsoluteTime(timeT t) { unshare(); m_data->setNotationTime(t); }
-    void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setType(const std::string &t)  { unshare(); m_data->m_type = t; }
+
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setAbsoluteTime(timeT t)  { unshare(); m_data->m_absoluteTime = t; }
+
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setSubOrdering(short o)  { unshare(); m_data->m_subOrdering = o; }
+
+private:
+
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setNotationAbsoluteTime(timeT t)
+            { unshare(); m_data->setNotationTime(t); }
+
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setNotationDuration(timeT d)
+            { unshare(); m_data->setNotationDuration(d); }
 
 private:
     friend QDebug operator<<(QDebug dbg, const Event &event);

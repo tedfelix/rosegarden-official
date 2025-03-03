@@ -155,6 +155,7 @@ NoteWidget::slotEditPitch(bool /*checked*/)
 
 void NoteWidget::updateEvent(Event &event) const
 {
+    event.setDuration(m_durationSpinBox->value());
     event.set<Int>(BaseProperties::PITCH, m_pitchSpinBox->value());
 }
 

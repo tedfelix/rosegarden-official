@@ -895,22 +895,15 @@ EditEvent::updateWidgets()
 Event
 EditEvent::getEvent()
 {
-    // Gather values we need for the Event ctor.
-
-    // Duration
-    timeT duration{m_event.getDuration()};
-//    if (m_eventWidgetStack)
-//        duration = m_eventWidgetStack->getDuration();
-    if (m_eventWidget)
-        duration = m_eventWidget->getDuration();
-
-    const bool useSeparateNotationValues =
-            (m_event.getType() == Note::EventType);
-
     // If we are inserting a new Event...
     if (m_typeCombo) {
 
         int subordering = 0;
+        // ??? This seems really reusable, however, it also seems like these
+        //     sub orderings aren't actually used where they need to be used.
+        //     E.g. a search on Controller::EventSubOrdering turns up far fewer
+        //     places than expected.  Shouldn't it be used whenever a
+        //     controller Event is created?
         if (m_type == Indication::EventType) {
             subordering = Indication::EventSubOrdering;
         } else if (m_type == Clef::EventType) {
@@ -938,11 +931,10 @@ EditEvent::getEvent()
         m_event = Event(
                 m_type,
                 m_absoluteTime,
-                duration,
+                0,  // duration
                 subordering,
-                useSeparateNotationValues ?
-                        m_notationAbsoluteTime : m_absoluteTime,
-                useSeparateNotationValues ? m_notationDuration : duration);
+                m_notationAbsoluteTime,
+                m_notationDuration);
 
 #if 0
         // ensure these are set on m_event correctly
@@ -970,11 +962,14 @@ EditEvent::getEvent()
     //     Event that is in a Segment.  That would cause all sorts of problems.
     //     I recommend some comments to explain that those are not safe to
     //     change for an Event in a Segment.
+    //
+    //     I've already moved Event::setDuration() out to public.  Keep
+    //     moving in this direction.
 
     Event event(
             m_event,
             m_absoluteTime,
-            duration,
+            0,  // duration
             m_event.getSubOrdering(),
             m_event.getNotationAbsoluteTime(),
             m_event.getNotationDuration());
