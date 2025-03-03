@@ -145,6 +145,9 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 
     intrinsicGrid->setLayout(intrinsicGridLay);
 
+
+    // Persistent Properties
+
     m_persistentGrid = new QGroupBox( tr("Persistent properties"), vbox );
     m_persistentGridLay = new QGridLayout(m_persistentGrid);
     vboxLayout->addWidget(m_persistentGrid);
@@ -173,12 +176,16 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 
     Event::PropertyNames p = event.getPersistentPropertyNames();
 
+    // For each property, add to dialog.
     for (Event::PropertyNames::iterator i = p.begin();
             i != p.end(); ++i) {
         addPersistentProperty(*i);
     }
 
     m_persistentGrid->setLayout(m_persistentGridLay);
+
+
+    // Non-Persistent Properties
 
     p = event.getNonPersistentPropertyNames();
 

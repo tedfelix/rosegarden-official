@@ -25,14 +25,15 @@
 #include <string>
 
 
-class QWidget;
-class QString;
-class QSpinBox;
-class QPushButton;
-class QLabel;
-class QGroupBox;
 class QCheckBox;
 class QComboBox;
+class QGroupBox;
+class QLabel;
+class QPushButton;
+class QSpinBox;
+class QString;
+class QWidget;
+class QTableWidget;
 
 
 namespace Rosegarden
@@ -74,7 +75,7 @@ public slots:
     //void slotAbsoluteTimeChanged(int value);
     //void slotDurationChanged(int value);
     //void slotNotationAbsoluteTimeChanged(int value);
-    void slotNotationDurationChanged(int value);
+    //void slotNotationDurationChanged(int value);
     //void slotPitchChanged(int value);
     //void slotVelocityChanged(int value);
     void slotMetaChanged(const QString &);
@@ -114,6 +115,12 @@ private:
 
     // Sub-ordering
     QSpinBox *m_subOrdering;
+
+    QTableWidget *m_propertyTable;
+    /// Add a single property to m_propertyTable.
+    void addProperty(const PropertyName &name);
+    /// Copy all properties from m_event to m_propertyTable.
+    void updatePropertyTable();
 
     // Setup the dialog for a new event type
     void updateWidgets();

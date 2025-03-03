@@ -44,11 +44,13 @@
 #include <QFile>
 #include <QGroupBox>
 #include <QGridLayout>
+#include <QHeaderView>
 #include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QString>
+#include <QTableWidget>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLayout>
@@ -288,12 +290,12 @@ EditEvent::EditEvent(
 
     ++row;
 
-    // Properties table.
+    // Property table.
 
-    // ??? See EventEditDialog::m_persistentGrid and m_nonPersistentGrid.
-    //     Recommend combining persistent and non-persistent into one table.
-    //     Maintain the rules for persistent and non-persistent on a property-
-    //     by-property basis.
+    m_propertyTable = new QTableWidget(advancedPropertiesGroup);
+    // Copy properties from m_event to the table.
+    updatePropertyTable();
+    advancedPropertiesLayout->addWidget(m_propertyTable, row, 0, 1, 2);
 
 #if 0
     // Pitch
@@ -1073,13 +1075,13 @@ EditEvent::slotDurationChanged(int value)
     }
 }
 #endif
-
+#if 0
 void
 EditEvent::slotNotationDurationChanged(int value)
 {
     m_notationDuration = value;
 }
-
+#endif
 #if 0
 void
 EditEvent::slotPitchChanged(int value)
@@ -1256,6 +1258,71 @@ EditEvent::slotSysexSave()
     directory = d.canonicalPath();
     settings.setValue(pathKey, directory);
     settings.endGroup();
+}
+
+void EditEvent::addProperty(const PropertyName &name)
+{
+    // Add a row to the table
+    const int row = m_propertyTable->rowCount();
+    m_propertyTable->insertRow(row);
+
+    int col{0};
+
+    // Name
+    QTableWidgetItem *nameItem = new QTableWidgetItem(name.getName().c_str());
+    m_propertyTable->setItem(row, col++, nameItem);
+
+    // Type
+    QTableWidgetItem *item = new QTableWidgetItem(
+            m_event.getPropertyTypeAsString(name).c_str());
+    m_propertyTable->setItem(row, col++, item);
+
+    // Value
+    item = new QTableWidgetItem(m_event.getAsString(name).c_str());
+    m_propertyTable->setItem(row, col++, item);
+}
+
+void EditEvent::updatePropertyTable()
+{
+    // See EventListEditor.
+
+    // Hide the vertical header
+    m_propertyTable->verticalHeader()->hide();
+
+    QStringList columnNames;
+    columnNames << tr("Name");
+    columnNames << tr("Type");
+    columnNames << tr("Value");
+    m_propertyTable->setColumnCount(columnNames.size());
+    m_propertyTable->setHorizontalHeaderLabels(columnNames);
+
+    // Add persistent properties to the table.
+
+    // ??? Need to differentiate persistent and non-persistent in the table.
+    // ??? Need to filter out properties that are already in the UI above.
+    //     E.g. for a Note, we should not show pitch or velocity here.
+
+    m_propertyTable->setRowCount(0);
+
+    Event::PropertyNames propertyNames = m_event.getPersistentPropertyNames();
+
+    // For each property, add to table.
+    for (Event::PropertyNames::iterator propertyIter = propertyNames.begin();
+         propertyIter != propertyNames.end();
+         ++propertyIter) {
+        addProperty(*propertyIter);
+    }
+
+    // Add non-persistent properties to the table.
+
+    propertyNames = m_event.getNonPersistentPropertyNames();
+
+    // For each property, add to table.
+    for (Event::PropertyNames::iterator propertyIter = propertyNames.begin();
+         propertyIter != propertyNames.end();
+         ++propertyIter) {
+        addProperty(*propertyIter);
+    }
 }
 
 

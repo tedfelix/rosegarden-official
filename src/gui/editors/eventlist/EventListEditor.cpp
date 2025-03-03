@@ -713,6 +713,8 @@ EventListEditor::updateTableWidget()
         m_tableWidget->setRowHeight(row, 20);
 
         // Make all items read-only.
+        // ??? Huh?
+
         int col{0};
 
         // Time
