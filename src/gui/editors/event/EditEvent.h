@@ -62,6 +62,7 @@ public:
     EditEvent(QWidget *parent,
               const Event &event,
               bool inserting = false);  // Inserting or editing.
+    ~EditEvent();
 
     /// Used by NoteWidget for TimeDialog.
     timeT getAbsoluteTime() const;
@@ -81,6 +82,9 @@ private slots:
     void slotDelete();
 
 private:
+
+    void saveOptions();
+    void loadOptions();
 
     // Copy of the original Event to use as a starting point for the edited
     // Event.

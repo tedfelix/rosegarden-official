@@ -230,7 +230,7 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     propertiesLayout->addWidget(m_timeSpinBox, row, 1);
 
     m_timeEditButton = new QPushButton(tr("edit"), propertiesGroup);
-    connect(m_timeEditButton, &QAbstractButton::released,
+    connect(m_timeEditButton, &QPushButton::clicked,
             this, &EditEvent::slotEditAbsoluteTime);
     propertiesLayout->addWidget(m_timeEditButton, row, 2);
 
@@ -314,7 +314,7 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     connect(m_pitchSpinBox,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &EditEvent::slotPitchChanged);
-    connect(m_pitchEditButton, &QAbstractButton::released,
+    connect(m_pitchEditButton, &QPushButton::clicked,
             this, &EditEvent::slotEditPitch);
 
     m_pitchSpinBox->setMinimum(MidiMinValue);
@@ -353,9 +353,9 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
 
     connect(m_metaEdit, &QLineEdit::textChanged,
             this, &EditEvent::slotMetaChanged);
-    connect(m_sysexLoadButton, &QAbstractButton::released,
+    connect(m_sysexLoadButton, &QPushButton::clicked,
             this, &EditEvent::slotSysexLoad);
-    connect(m_sysexSaveButton, &QAbstractButton::released,
+    connect(m_sysexSaveButton, &QPushButton::clicked,
             this, &EditEvent::slotSysexSave);
 
 
@@ -371,7 +371,7 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     npLayout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2-0+ 1);
     m_lockNotationValues->setChecked(true);
 
-    connect(m_lockNotationValues, &QAbstractButton::released,
+    connect(m_lockNotationValues, &QPushButton::clicked,
             this, &EditEvent::slotLockNotationChanged);
 
     m_notationTimeLabel = new QLabel(tr("Notation time:"), m_notationGroupBox);
@@ -387,7 +387,7 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     connect(m_notationTimeSpinBox,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &EditEvent::slotNotationAbsoluteTimeChanged);
-    connect(m_notationTimeEditButton, &QAbstractButton::released,
+    connect(m_notationTimeEditButton, &QPushButton::clicked,
             this, &EditEvent::slotEditNotationAbsoluteTime);
 
     m_notationDurationLabel = new QLabel(tr("Notation duration:"), m_notationGroupBox);
@@ -405,7 +405,7 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     connect(m_notationDurationSpinBox,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &EditEvent::slotNotationDurationChanged);
-    connect(m_notationDurationEditButton, &QAbstractButton::released,
+    connect(m_notationDurationEditButton, &QPushButton::clicked,
             this, &EditEvent::slotEditNotationDuration);
 
 #endif
@@ -417,6 +417,44 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     mainLayout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    loadOptions();
+
+    // Make sure the last column fills the widget.
+    // Note: Must do this AFTER loadOptions() or else it will not work.
+    m_propertyTable->horizontalHeader()->setStretchLastSection(true);
+}
+
+EditEvent::~EditEvent()
+{
+    saveOptions();
+}
+
+void
+EditEvent::saveOptions()
+{
+    QSettings settings;
+
+    // Save window geometry and toolbar/dock state
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Edit_Event_Geometry", saveGeometry());
+    //settings.setValue("Edit_Event_State", saveState());
+    settings.setValue("Edit_Event_Property_Table_Header_State",
+            m_propertyTable->horizontalHeader()->saveState());
+}
+
+void
+EditEvent::loadOptions()
+{
+    // Note that Wayland does not allow top-level window positioning.
+
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    restoreGeometry(settings.value("Edit_Event_Geometry").toByteArray());
+    //restoreState(settings.value("Edit_Event_State").toByteArray());
+    m_propertyTable->horizontalHeader()->restoreState(
+            settings.value("Edit_Event_Property_Table_Header_State").toByteArray());
+    settings.endGroup();
 }
 
 void
