@@ -46,6 +46,7 @@
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QLabel>
+#include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSpinBox>
@@ -280,9 +281,23 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
 
     ++row;
 
+    // Spacer
+    advancedPropertiesLayout->setRowMinimumHeight(row, 10);
+
+    ++row;
+
+    advancedPropertiesLayout->addWidget(
+            new QLabel(tr("Additional Properties")),
+            row, 0, 1, 2, Qt::AlignHCenter);
+
+    ++row;
+
     // Property table.
 
     m_propertyTable = new QTableWidget(advancedPropertiesGroup);
+    m_propertyTable->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_propertyTable, &QWidget::customContextMenuRequested,
+            this, &EditEvent::slotContextMenu);
     // Copy properties from m_event to the table.
     updatePropertyTable();
     advancedPropertiesLayout->addWidget(m_propertyTable, row, 0, 1, 2);
@@ -985,6 +1000,8 @@ EditEvent::getEvent()
         QTableWidgetItem *nameItem = m_propertyTable->item(row, 0);
         if (!nameItem)
             continue;
+        if (nameItem->text() == "")
+            continue;
         PropertyName propertyName(qstrtostr(nameItem->text()));
 
         QTableWidgetItem *typeItem = m_propertyTable->item(row, 1);
@@ -996,6 +1013,9 @@ EditEvent::getEvent()
         if (!valueItem)
             continue;
         QString value = valueItem->text();
+
+        // ??? This doesn't preserve persistent vs. non-persistent.  It
+        //     makes all properties persistent.
 
         // See Property.cpp for the type names.
         // See ConfigurationXmlSubHandler::characters() for similar code.
@@ -1380,6 +1400,118 @@ void EditEvent::updatePropertyTable()
             continue;
         addProperty(propertyName);
     }
+}
+
+void EditEvent::addProperty2(const QString &type, const QString &value)
+{
+    // Add a row to the table
+    const int row = m_propertyTable->rowCount();
+    m_propertyTable->insertRow(row);
+
+    // Assume persistent.
+
+    QFont boldFont;
+
+    int col{0};
+
+    // Name
+    QTableWidgetItem *nameItem = new QTableWidgetItem("newproperty");
+    boldFont = nameItem->font();
+    boldFont.setBold(true);
+    nameItem->setFont(boldFont);
+    m_propertyTable->setItem(row, col++, nameItem);
+
+    // Type
+    QTableWidgetItem *item = new QTableWidgetItem(type);
+    // ??? For now, make this read-only.  If we want to allow editing
+    //     of this, we need a combo box with the types in it.
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    item->setFont(boldFont);
+    m_propertyTable->setItem(row, col++, item);
+
+    // Value
+    item = new QTableWidgetItem(value);
+    item->setFont(boldFont);
+    m_propertyTable->setItem(row, col++, item);
+
+    m_propertyTable->scrollToBottom();
+}
+
+void EditEvent::slotAddInteger()
+{
+    addProperty2("Int", "0");
+}
+
+void EditEvent::slotAddString()
+{
+    addProperty2("String", "");
+}
+
+void EditEvent::slotAddBoolean()
+{
+    addProperty2("Bool", "false");
+}
+
+void EditEvent::slotDelete()
+{
+    QTableWidgetItem *item = m_propertyTable->currentItem();
+    if (!item)
+        return;
+
+    const int row = item->row();
+
+    if (item->column() != 0) {
+        item = m_propertyTable->item(row, 0);
+        if (!item)
+            return;
+    }
+
+    int reply = QMessageBox::warning(
+            this,
+            tr("Rosegarden"),
+            tr("About to delete property \"%1\".  Are you sure?").arg(item->text()),
+            QMessageBox::Yes | QMessageBox::No);
+    if (reply != QMessageBox::Yes)
+        return;
+
+    m_propertyTable->removeRow(row);
+}
+
+void EditEvent::slotContextMenu(const QPoint &pos)
+{
+    // If the context menu hasn't been created, create it.
+    if (!m_contextMenu) {
+        m_contextMenu = new QMenu(this);
+        if (!m_contextMenu) {
+            RG_WARNING << "slotContextMenu() : Couldn't create context menu.";
+            return;
+        }
+
+        // Add Integer
+        QAction *addIntegerAction = m_contextMenu->addAction(tr("Add Integer Property"));
+        connect(addIntegerAction, &QAction::triggered,
+                this, &EditEvent::slotAddInteger);
+
+        // Add String
+        QAction *addStringAction = m_contextMenu->addAction(tr("Add String Property"));
+        connect(addStringAction, &QAction::triggered,
+                this, &EditEvent::slotAddString);
+
+        // Add Boolean
+        QAction *addBooleanAction = m_contextMenu->addAction(tr("Add Boolean Property"));
+        connect(addBooleanAction, &QAction::triggered,
+                this, &EditEvent::slotAddBoolean);
+
+        m_contextMenu->addSeparator();
+
+        // Delete
+        QAction *deleteAction = m_contextMenu->addAction(tr("Delete"));
+        connect(deleteAction, &QAction::triggered,
+                this, &EditEvent::slotDelete);
+    }
+
+    // Launch the context menu.
+    m_contextMenu->exec(m_propertyTable->mapToGlobal(pos));
 }
 
 

@@ -29,6 +29,7 @@ class QCheckBox;
 class QComboBox;
 class QGroupBox;
 class QLabel;
+class QMenu;
 class QPushButton;
 class QSpinBox;
 class QString;
@@ -72,6 +73,12 @@ private slots:
 
     void slotEventTypeChanged(int value);
     void slotEditAbsoluteTime();
+    void slotContextMenu(const QPoint &pos);
+
+    void slotAddInteger();
+    void slotAddString();
+    void slotAddBoolean();
+    void slotDelete();
 
 private:
 
@@ -105,6 +112,9 @@ private:
     void addProperty(const PropertyName &name);
     /// Copy all properties from m_event to m_propertyTable.
     void updatePropertyTable();
+    QMenu *m_contextMenu;
+    /// For the context menu.
+    void addProperty2(const QString &type, const QString &value);
 
     // Setup the dialog for a new event type
     void updateWidgets();
