@@ -418,6 +418,9 @@ public:
      */
     std::string toXmlString(timeT expectedTime) const;
 
+    static const PropertyName NotationTime;
+    static const PropertyName NotationDuration;
+
     // *** DEBUG
 
     /// Approximate.  For debugging and inspection purposes.
@@ -503,9 +506,6 @@ private:
     private:
         EventData(const EventData &);
         EventData &operator=(const EventData &);
-
-        static PropertyName NotationTime;
-        static PropertyName NotationDuration;
 
         /// Add the time property unless (t == deft).
         void setTime(const PropertyName &name, timeT t, timeT deft);

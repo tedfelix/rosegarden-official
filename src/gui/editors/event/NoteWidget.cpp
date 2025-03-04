@@ -200,7 +200,8 @@ EventWidget::PropertyNameSet
 NoteWidget::getPropertyFilter() const
 {
     return PropertyNameSet{
-            BaseProperties::PITCH, BaseProperties::VELOCITY };
+            BaseProperties::PITCH, BaseProperties::VELOCITY,
+            Event::NotationTime, Event::NotationDuration};
 }
 
 void

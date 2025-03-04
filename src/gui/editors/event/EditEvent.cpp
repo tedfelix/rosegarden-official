@@ -978,7 +978,45 @@ EditEvent::getEvent()
     // Changes from the Advanced Properties.
     event.setSubOrdering(m_subOrdering->value());
 
-    // ??? Set the remaining properties from the table.
+    // Set the remaining properties from the table.
+
+    // For each row in the table...
+    for (int row = 0; row < m_propertyTable->rowCount(); ++row) {
+        QTableWidgetItem *nameItem = m_propertyTable->item(row, 0);
+        if (!nameItem)
+            continue;
+        PropertyName propertyName(qstrtostr(nameItem->text()));
+
+        QTableWidgetItem *typeItem = m_propertyTable->item(row, 1);
+        if (!typeItem)
+            continue;
+        QString type = typeItem->text();
+
+        QTableWidgetItem *valueItem = m_propertyTable->item(row, 2);
+        if (!valueItem)
+            continue;
+        QString value = valueItem->text();
+
+        // See Property.cpp for the type names.
+        // See ConfigurationXmlSubHandler::characters() for similar code.
+        if (type == "Int") {
+            event.set<Int>(propertyName, value.toInt());
+        } else if (type == "String") {
+            event.set<String>(propertyName, qstrtostr(value));
+        } else if (type == "Bool") {
+            event.set<Bool>(propertyName, value == "true");  // ??? Really?
+        } else if (type == "RealTimeT") {
+            // Unused.  Turns out this is only used for tempo segments which
+            // the user cannot edit.  TempoTimestampProperty is the only
+            // property that uses this.  See Composition::setTempoTimestamp().
+            // We can leave this disabled for now.  If we eventually need this,
+            // we will need to upgrade RealTime to be able to convert a string
+            // to a RealTime value.
+            //RealTime rt(value);
+            //event.set<RealTimeT>(propertyName, rt);
+        }
+    }
+
 
 #if 0
     if (m_type == Indication::EventType) {
@@ -1264,6 +1302,7 @@ void EditEvent::addProperty(const PropertyName &name)
     m_propertyTable->insertRow(row);
 
     // Go with bold for persistent properties.
+    // ??? Actually, bold is hard to read.
     const bool bold = m_event.isPersistent(name);
     QFont boldFont;
 
@@ -1281,6 +1320,9 @@ void EditEvent::addProperty(const PropertyName &name)
     // Type
     QTableWidgetItem *item = new QTableWidgetItem(
             m_event.getPropertyTypeAsString(name).c_str());
+    // ??? For now, make this read-only.  If we want to allow editing
+    //     of this, we need a combo box with the types in it.
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     if (bold)
         item->setFont(boldFont);
     m_propertyTable->setItem(row, col++, item);

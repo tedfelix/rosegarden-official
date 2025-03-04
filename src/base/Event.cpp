@@ -29,8 +29,8 @@ namespace Rosegarden
 using std::string;
 using std::ostream;
 
-PropertyName Event::EventData::NotationTime("!notationtime");
-PropertyName Event::EventData::NotationDuration("!notationduration");
+const PropertyName Event::NotationTime("!notationtime");
+const PropertyName Event::NotationDuration("!notationduration");
 
 
 Event::EventData::EventData(const std::string &type, timeT absoluteTime,
