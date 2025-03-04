@@ -1266,19 +1266,32 @@ void EditEvent::addProperty(const PropertyName &name)
     const int row = m_propertyTable->rowCount();
     m_propertyTable->insertRow(row);
 
+    // Go with bold for persistent properties.
+    const bool bold = m_event.isPersistent(name);
+    QFont boldFont;
+
     int col{0};
 
     // Name
     QTableWidgetItem *nameItem = new QTableWidgetItem(name.getName().c_str());
+    if (bold) {
+        boldFont = nameItem->font();
+        boldFont.setBold(true);
+        nameItem->setFont(boldFont);
+    }
     m_propertyTable->setItem(row, col++, nameItem);
 
     // Type
     QTableWidgetItem *item = new QTableWidgetItem(
             m_event.getPropertyTypeAsString(name).c_str());
+    if (bold)
+        item->setFont(boldFont);
     m_propertyTable->setItem(row, col++, item);
 
     // Value
     item = new QTableWidgetItem(m_event.getAsString(name).c_str());
+    if (bold)
+        item->setFont(boldFont);
     m_propertyTable->setItem(row, col++, item);
 }
 
@@ -1298,19 +1311,23 @@ void EditEvent::updatePropertyTable()
 
     // Add persistent properties to the table.
 
-    // ??? Need to differentiate persistent and non-persistent in the table.
-    // ??? Need to filter out properties that are already in the UI above.
-    //     E.g. for a Note, we should not show pitch or velocity here.
+    // Get the property filter.
+    std::set<PropertyName> propertyFilter;
+    //if (m_eventWidgetStack)
+    //    propertyFilter = m_eventWidgetStack->getPropertyFilter();
+    if (m_eventWidget)
+        propertyFilter = m_eventWidget->getPropertyFilter();
 
     m_propertyTable->setRowCount(0);
 
     Event::PropertyNames propertyNames = m_event.getPersistentPropertyNames();
 
     // For each property, add to table.
-    for (Event::PropertyNames::iterator propertyIter = propertyNames.begin();
-         propertyIter != propertyNames.end();
-         ++propertyIter) {
-        addProperty(*propertyIter);
+    for (const PropertyName &propertyName : propertyNames) {
+        // Skip any that need filtering.
+        if (propertyFilter.find(propertyName) != propertyFilter.end())
+            continue;
+        addProperty(propertyName);
     }
 
     // Add non-persistent properties to the table.
@@ -1318,10 +1335,11 @@ void EditEvent::updatePropertyTable()
     propertyNames = m_event.getNonPersistentPropertyNames();
 
     // For each property, add to table.
-    for (Event::PropertyNames::iterator propertyIter = propertyNames.begin();
-         propertyIter != propertyNames.end();
-         ++propertyIter) {
-        addProperty(*propertyIter);
+    for (const PropertyName &propertyName : propertyNames) {
+        // Skip any that need filtering.
+        if (propertyFilter.find(propertyName) != propertyFilter.end())
+            continue;
+        addProperty(propertyName);
     }
 }
 

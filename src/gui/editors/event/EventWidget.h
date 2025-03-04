@@ -18,9 +18,12 @@
 #ifndef RG_EVENTWIDGET_H
 #define RG_EVENTWIDGET_H
 
+#include "base/PropertyName.h"
 #include "base/TimeT.h"
 
 #include <QWidget>
+
+#include <set>
 
 
 namespace Rosegarden
@@ -42,6 +45,11 @@ public:
     static EventWidget *create(EditEvent *parent, const Event &event);
 
     EventWidget(EditEvent *parent);
+
+    typedef std::set<PropertyName> PropertyNameSet;
+    /// Set of properties this widget already displays.
+    virtual PropertyNameSet getPropertyFilter() const
+            { return PropertyNameSet(); }
 
     virtual void updateEvent(Event & /*event*/) const  { }
 

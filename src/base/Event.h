@@ -339,7 +339,6 @@ public:
      * when duplicating the Event) or not
      * \throws NoData
      */
-    template <PropertyType P>
     bool isPersistent(const PropertyName &name) const;
 
     /**
@@ -670,8 +669,7 @@ Event::get(const PropertyName &name) const
 }
 
 
-template <PropertyType P>
-bool
+inline bool
 Event::isPersistent(const PropertyName &name) const
     // throw (NoData)
 {

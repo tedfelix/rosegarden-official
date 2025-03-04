@@ -196,6 +196,13 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
 
 }
 
+EventWidget::PropertyNameSet
+NoteWidget::getPropertyFilter() const
+{
+    return PropertyNameSet{
+            BaseProperties::PITCH, BaseProperties::VELOCITY };
+}
+
 void
 NoteWidget::slotEditDuration(bool /*checked*/)
 {

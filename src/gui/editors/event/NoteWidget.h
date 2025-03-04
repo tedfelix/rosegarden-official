@@ -43,6 +43,8 @@ public:
 
     NoteWidget(EditEvent *parent, const Event &event);
 
+    PropertyNameSet getPropertyFilter() const override;
+
     /// Copy widget values to the Event.
     void updateEvent(Event &event) const override;
 
