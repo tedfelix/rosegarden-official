@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2024 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -59,7 +59,6 @@ class EditEvent : public QDialog
 public:
 
     EditEvent(QWidget *parent,
-              RosegardenDocument *doc,
               const Event &event,
               bool inserting = false);  // Inserting or editing.
 
@@ -69,33 +68,17 @@ public:
     /// Get the edited or new (for insertion) Event.
     Event getEvent();
 
-public slots:
+private slots:
 
     void slotEventTypeChanged(int value);
-    //void slotAbsoluteTimeChanged(int value);
-    //void slotDurationChanged(int value);
-    //void slotNotationAbsoluteTimeChanged(int value);
-    //void slotNotationDurationChanged(int value);
-    //void slotPitchChanged(int value);
-    //void slotVelocityChanged(int value);
-    void slotMetaChanged(const QString &);
     void slotEditAbsoluteTime();
-    //void slotLockNotationChanged();
-    //void slotEditPitch();
-    void slotSysexLoad();
-    void slotSysexSave();
 
 private:
 
-    RosegardenDocument *m_doc;
-
+    // Copy of the original Event to use as a starting point for the edited
+    // Event.
+    // ??? Probably should make this const so the code is easier to follow.
     Event m_event;
-
-    std::string m_type;
-    //timeT m_duration;
-
-    //timeT m_notationAbsoluteTime;
-    timeT m_notationDuration;
 
 
     // Widgets
@@ -116,6 +99,7 @@ private:
     // Sub-ordering
     QSpinBox *m_subOrdering;
 
+    // Property Table
     QTableWidget *m_propertyTable;
     /// Add a single property to m_propertyTable.
     void addProperty(const PropertyName &name);
@@ -125,7 +109,27 @@ private:
     // Setup the dialog for a new event type
     void updateWidgets();
 
+
 #if 0
+    // Unused code.  Clean this up at some point.
+
+    void slotSysexLoad();
+    void slotSysexSave();
+    void slotMetaChanged(const QString &);
+    //void slotAbsoluteTimeChanged(int value);
+    //void slotDurationChanged(int value);
+    //void slotNotationAbsoluteTimeChanged(int value);
+    //void slotNotationDurationChanged(int value);
+    //void slotPitchChanged(int value);
+    //void slotVelocityChanged(int value);
+    //void slotLockNotationChanged();
+    //void slotEditPitch();
+
+    std::string m_type;
+    //timeT m_duration;
+    //timeT m_notationAbsoluteTime;
+    timeT m_notationDuration;
+
     QLabel *m_pitchLabel;
     QSpinBox *m_pitchSpinBox;
     QPushButton *m_pitchEditButton;

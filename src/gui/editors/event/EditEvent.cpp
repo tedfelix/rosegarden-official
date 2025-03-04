@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2024 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -97,14 +97,10 @@ static int getSubOrdering(std::string eventType)
 }
 
 #if 0
+        // ??? Move this to ControllerWidget when it exists.  Then promote it
+        //     up someplace more common so ELE and others can use it.
         // ??? Why not just load these into a combo box?  Then there will be
         //     no need for update trickery.
-        // ??? This whole dialog is pretty cumbersome.  Reusing each control
-        //     for various things is confusing.  Might want to consider using
-        //     a QStackedLayout of 13 small dialogs, one for each event type.
-        //     See if they can be reused by EventEditDialog.
-        //     Maybe consider combining the two using an "Advanced" button to
-        //     display the "advanced" stuff.
         // ??? We should also show these on the ELE.
         // ??? We should also consider using the controller list that is in the
         //     Device.  That is probably more accurate in some cases and should
@@ -165,15 +161,9 @@ static int getSubOrdering(std::string eventType)
 #endif
 
 
-EditEvent::EditEvent(
-        QWidget *parent,
-        RosegardenDocument *doc,
-        const Event &event,
-        bool inserting) :
+EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     QDialog(parent),
-    m_doc(doc),
-    m_event(event),
-    m_type(event.getType())
+    m_event(event)
 {
     setModal(true);
     setWindowTitle(inserting ? tr("Insert Event").toStdString().c_str() :
@@ -417,7 +407,10 @@ EditEvent::EditEvent(
 void
 EditEvent::updateWidgets()
 {
-    // ??? This routine needs to go away.
+    // ??? This routine needs to go away.  Move init to the ctor.
+    // ??? The only "update" we are going to need will be flipping the
+    //     widget stack when the type changes.  That will be handled by
+    //     slotEventTypeChanged().
 
     // Block Signals
 
@@ -963,11 +956,15 @@ EditEvent::getAbsoluteTime() const
 Event
 EditEvent::getEvent()
 {
+    // ??? I suspect calling this routine twice is fatal since it modifies
+    //     m_event.  Need to fix that.  Or at least fail.  Maybe make m_event
+    //     const.
+
     // If we are inserting a new Event...
     if (m_typeCombo) {
         // Create a new default Event of the right type.
         // Just need the type, but there is no type-only ctor.
-        m_event = Event(m_type, m_timeSpinBox->value());
+        m_event = Event(qstrtostr(m_typeCombo->currentText()), m_timeSpinBox->value());
     }
 
     Event event(m_event, m_timeSpinBox->value());
@@ -1020,14 +1017,11 @@ EditEvent::getEvent()
 void
 EditEvent::slotEventTypeChanged(int value)
 {
-    m_type = qstrtostr(m_typeCombo->itemText(value));
+    // ??? Does QComboBox::currentText() work here?  It's simpler.
+    std::string type = qstrtostr(m_typeCombo->itemText(value));
 
     // Make sure the sub-ordering is appropriate.
-    m_subOrdering->setValue(getSubOrdering(m_type));
-
-    // ??? This does nothing!
-    //if (m_type != m_event.getType())
-    //    Event m_event(m_type, m_absoluteTime, m_duration);
+    m_subOrdering->setValue(getSubOrdering(type));
 
     updateWidgets();
 
@@ -1128,12 +1122,12 @@ EditEvent::slotVelocityChanged(int value)
     }
 }
 #endif
-
+#if 0
 void
 EditEvent::slotMetaChanged(const QString &)
 {
 }
-
+#endif
 #if 0
 void
 EditEvent::slotLockNotationChanged()
@@ -1151,8 +1145,11 @@ EditEvent::slotLockNotationChanged()
 void
 EditEvent::slotEditAbsoluteTime()
 {
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
+
     TimeDialog dialog(this, tr("Edit Event Time"),
-                      &m_doc->getComposition(),
+                      &composition,
                       m_timeSpinBox->value(),
                       true);
     if (dialog.exec() == QDialog::Accepted)
@@ -1169,7 +1166,7 @@ EditEvent::slotEditPitch()
     }
 }
 #endif
-
+#if 0
 void
 EditEvent::slotSysexLoad()
 {
@@ -1259,7 +1256,7 @@ EditEvent::slotSysexSave()
     settings.setValue(pathKey, directory);
     settings.endGroup();
 }
-
+#endif
 void EditEvent::addProperty(const PropertyName &name)
 {
     // Add a row to the table

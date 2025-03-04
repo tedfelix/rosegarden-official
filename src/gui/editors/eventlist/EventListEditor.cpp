@@ -1135,7 +1135,6 @@ EventListEditor::slotEditInsert()
 
     EditEvent dialog(
             this,  // parent
-            RosegardenDocument::currentDocument,  // doc
             event,
             true);  // inserting
 
@@ -1171,7 +1170,6 @@ EventListEditor::editItem(const QTableWidgetItem *item)
 
     EditEvent dialog(
             this,  // parent
-            RosegardenDocument::currentDocument,  // doc
             *event,
             false);  // inserting
 
