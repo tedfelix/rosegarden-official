@@ -184,6 +184,12 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     // ??? It would be nice if this thing's width would follow the parent's
     //     width.
 
+    // ??? I suspect the introduction of the QWidget has broken down
+    //     communication between the parent layout and the group box.
+    //     Perhaps we should make this just the group box?  Or maybe
+    //     the QWidget needs to have a layout and we need to add the group
+    //     box to that?  That would then give us a layout at every level.
+
     // Adjust the properties group box to be big enough to hold the
     // controls.
     propertiesGroup->adjustSize();

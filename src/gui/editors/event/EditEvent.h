@@ -22,12 +22,7 @@
 
 #include <QDialog>
 
-#include <string>
-
-
-class QCheckBox;
 class QComboBox;
-class QGroupBox;
 class QLabel;
 class QMenu;
 class QPushButton;
@@ -41,8 +36,6 @@ namespace Rosegarden
 {
 
 
-class RosegardenDocument;
-class LineEdit;
 class EventWidgetStack;
 class EventWidget;
 
@@ -89,7 +82,7 @@ private:
     // Copy of the original Event to use as a starting point for the edited
     // Event.
     // ??? Probably should make this const so the code is easier to follow.
-    Event m_event;
+    const Event m_event;
 
 
     // Widgets
@@ -99,7 +92,6 @@ private:
     QLabel *m_typeLabel{nullptr};
 
     // Absolute time
-    QLabel *m_timeLabel;
     QSpinBox *m_timeSpinBox;
     QPushButton *m_timeEditButton;
 
@@ -120,24 +112,16 @@ private:
     /// For the context menu.
     void addProperty2(const QString &type, const QString &value);
 
-    // Setup the dialog for a new event type
-    void updateWidgets();
-
-
 #if 0
     // Unused code.  Clean this up at some point.
 
+    // Setup the dialog for a new event type
+    void updateWidgets();
+
     void slotSysexLoad();
     void slotSysexSave();
-    void slotMetaChanged(const QString &);
-    //void slotAbsoluteTimeChanged(int value);
-    //void slotDurationChanged(int value);
-    //void slotNotationAbsoluteTimeChanged(int value);
-    //void slotNotationDurationChanged(int value);
     //void slotPitchChanged(int value);
     //void slotVelocityChanged(int value);
-    //void slotLockNotationChanged();
-    //void slotEditPitch();
 
     std::string m_type;
     //timeT m_duration;

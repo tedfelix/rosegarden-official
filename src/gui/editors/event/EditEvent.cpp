@@ -214,6 +214,7 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     } else {  // Display event type read-only.
 
         m_typeLabel = new QLabel(propertiesGroup);
+        m_typeLabel->setText(strtoqstr(m_event.getType()));
         propertiesLayout->addWidget(m_typeLabel, row, 1);
 
     }
@@ -221,12 +222,14 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     ++row;
 
     // Absolute time
-    m_timeLabel = new QLabel(tr("Absolute time:"), propertiesGroup);
-    propertiesLayout->addWidget(m_timeLabel, row, 0);
+    propertiesLayout->addWidget(
+            new QLabel(tr("Absolute time:"), propertiesGroup), row, 0);
+
     m_timeSpinBox = new QSpinBox(propertiesGroup);
     m_timeSpinBox->setMinimum(INT_MIN);
     m_timeSpinBox->setMaximum(INT_MAX);
     m_timeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
+    m_timeSpinBox->setValue(m_event.getAbsoluteTime());
     propertiesLayout->addWidget(m_timeSpinBox, row, 1);
 
     m_timeEditButton = new QPushButton(tr("edit"), propertiesGroup);
@@ -410,8 +413,6 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
 
 #endif
 
-    updateWidgets();
-
     // Button Box
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     mainLayout->addWidget(buttonBox);
@@ -457,6 +458,353 @@ EditEvent::loadOptions()
     settings.endGroup();
 }
 
+timeT
+EditEvent::getAbsoluteTime() const
+{
+    return m_timeSpinBox->value();
+}
+
+Event
+EditEvent::getEvent()
+{
+    // ??? I suspect calling this routine twice is fatal since it modifies
+    //     m_event.  Need to fix that.  Or at least fail.  Maybe make m_event
+    //     const.
+
+    // Start with the original.
+    Event event(m_event, m_timeSpinBox->value());
+
+    // If we are inserting a new Event...
+    if (m_typeCombo) {
+        // Create a new default Event of the right type.
+        // Just need the type, but there is no type-only ctor.
+        event = Event(qstrtostr(m_typeCombo->currentText()), m_timeSpinBox->value());
+    }
+
+    // Let the widget make its changes.
+    //if (m_eventWidgetStack)  // inserting
+    //    m_eventWidgetStack->updateEvent(event);
+    if (m_eventWidget)  // editing
+        m_eventWidget->updateEvent(event);
+
+    // Changes from the Advanced Properties.
+    event.setSubOrdering(m_subOrdering->value());
+
+    // Set the remaining properties from the table.
+
+    // For each row in the table...
+    for (int row = 0; row < m_propertyTable->rowCount(); ++row) {
+        QTableWidgetItem *nameItem = m_propertyTable->item(row, 0);
+        if (!nameItem)
+            continue;
+        if (nameItem->text() == "")
+            continue;
+        PropertyName propertyName(qstrtostr(nameItem->text()));
+
+        QTableWidgetItem *typeItem = m_propertyTable->item(row, 1);
+        if (!typeItem)
+            continue;
+        QString type = typeItem->text();
+
+        QTableWidgetItem *valueItem = m_propertyTable->item(row, 2);
+        if (!valueItem)
+            continue;
+        QString value = valueItem->text();
+
+        // ??? This doesn't preserve persistent vs. non-persistent.  It
+        //     makes all properties persistent.
+
+        // See Property.cpp for the type names.
+        // See ConfigurationXmlSubHandler::characters() for similar code.
+        if (type == "Int") {
+            event.set<Int>(propertyName, value.toInt());
+        } else if (type == "String") {
+            event.set<String>(propertyName, qstrtostr(value));
+        } else if (type == "Bool") {
+            event.set<Bool>(propertyName, value == "true");  // ??? Really?
+        } else if (type == "RealTimeT") {
+            // Unused.  Turns out this is only used for tempo segments which
+            // the user cannot edit.  TempoTimestampProperty is the only
+            // property that uses this.  See Composition::setTempoTimestamp().
+            // We can leave this disabled for now.  If we eventually need this,
+            // we will need to upgrade RealTime to be able to convert a string
+            // to a RealTime value.
+            //RealTime rt(value);
+            //event.set<RealTimeT>(propertyName, rt);
+        }
+    }
+
+
+#if 0
+    if (m_type == Indication::EventType) {
+
+        event.set<String>(Indication::IndicationTypePropertyName,
+                          qstrtostr(m_metaEdit->text()));
+
+    } else if (m_type == Text::EventType) {
+
+        event.set<String>(Text::TextTypePropertyName,
+                          qstrtostr(m_controllerLabelValue->text()));
+        event.set<String>(Text::TextPropertyName,
+                          qstrtostr(m_metaEdit->text()));
+
+    } else if (m_type == Clef::EventType) {
+
+        event.set<String>(Clef::ClefPropertyName,
+                          qstrtostr(m_controllerLabelValue->text()));
+
+    } else if (m_type == ::Rosegarden::Key::EventType) {
+
+        event.set<String>(::Rosegarden::Key::KeyPropertyName,
+                          qstrtostr(m_controllerLabelValue->text()));
+
+    } else if (m_type == SystemExclusive::EventType) {
+
+        event.set<String>(SystemExclusive::DATABLOCK,
+                          qstrtostr(m_metaEdit->text()));
+
+    }
+#endif
+
+    return event;
+}
+
+void
+EditEvent::slotEventTypeChanged(int value)
+{
+    // ??? I don't think we want to do this.
+
+    // ??? Does QComboBox::currentText() work here?  It's simpler.
+    std::string type = qstrtostr(m_typeCombo->itemText(value));
+
+    // Make sure the sub-ordering is appropriate.
+    m_subOrdering->setValue(getSubOrdering(type));
+
+    // ??? Flip the EventWidgetStack.
+
+#if 0
+    // update whatever pitch and velocity correspond to
+    if (!m_pitchSpinBox->isHidden())
+        slotPitchChanged(m_pitchSpinBox->value());
+    if (!m_velocitySpinBox->isHidden())
+        slotVelocityChanged(m_velocitySpinBox->value());
+#endif
+}
+
+void
+EditEvent::slotEditAbsoluteTime()
+{
+    Composition &composition =
+            RosegardenDocument::currentDocument->getComposition();
+
+    TimeDialog dialog(this, tr("Edit Event Time"),
+                      &composition,
+                      m_timeSpinBox->value(),
+                      true);
+    if (dialog.exec() == QDialog::Accepted)
+        m_timeSpinBox->setValue(dialog.getTime());
+}
+
+void EditEvent::addProperty(const PropertyName &name)
+{
+    // Add a row to the table
+    const int row = m_propertyTable->rowCount();
+    m_propertyTable->insertRow(row);
+
+    // Go with bold for persistent properties.
+    // ??? Actually, bold is hard to read.
+    const bool bold = m_event.isPersistent(name);
+    QFont boldFont;
+
+    int col{0};
+
+    // Name
+    QTableWidgetItem *nameItem = new QTableWidgetItem(name.getName().c_str());
+    if (bold) {
+        boldFont = nameItem->font();
+        boldFont.setBold(true);
+        nameItem->setFont(boldFont);
+    }
+    m_propertyTable->setItem(row, col++, nameItem);
+
+    // Type
+    QTableWidgetItem *item = new QTableWidgetItem(
+            m_event.getPropertyTypeAsString(name).c_str());
+    // ??? For now, make this read-only.  If we want to allow editing
+    //     of this, we need a combo box with the types in it.
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    if (bold)
+        item->setFont(boldFont);
+    m_propertyTable->setItem(row, col++, item);
+
+    // Value
+    item = new QTableWidgetItem(m_event.getAsString(name).c_str());
+    if (bold)
+        item->setFont(boldFont);
+    m_propertyTable->setItem(row, col++, item);
+}
+
+void EditEvent::updatePropertyTable()
+{
+    // See EventListEditor.
+
+    // Hide the vertical header
+    m_propertyTable->verticalHeader()->hide();
+
+    QStringList columnNames;
+    columnNames << tr("Name");
+    columnNames << tr("Type");
+    columnNames << tr("Value");
+    m_propertyTable->setColumnCount(columnNames.size());
+    m_propertyTable->setHorizontalHeaderLabels(columnNames);
+
+    // Add persistent properties to the table.
+
+    // Get the property filter.
+    std::set<PropertyName> propertyFilter;
+    //if (m_eventWidgetStack)
+    //    propertyFilter = m_eventWidgetStack->getPropertyFilter();
+    if (m_eventWidget)
+        propertyFilter = m_eventWidget->getPropertyFilter();
+
+    m_propertyTable->setRowCount(0);
+
+    Event::PropertyNames propertyNames = m_event.getPersistentPropertyNames();
+
+    // For each property, add to table.
+    for (const PropertyName &propertyName : propertyNames) {
+        // Skip any that need filtering.
+        if (propertyFilter.find(propertyName) != propertyFilter.end())
+            continue;
+        addProperty(propertyName);
+    }
+
+    // Add non-persistent properties to the table.
+
+    propertyNames = m_event.getNonPersistentPropertyNames();
+
+    // For each property, add to table.
+    for (const PropertyName &propertyName : propertyNames) {
+        // Skip any that need filtering.
+        if (propertyFilter.find(propertyName) != propertyFilter.end())
+            continue;
+        addProperty(propertyName);
+    }
+}
+
+void EditEvent::addProperty2(const QString &type, const QString &value)
+{
+    // Add a row to the table
+    const int row = m_propertyTable->rowCount();
+    m_propertyTable->insertRow(row);
+
+    // Assume persistent.
+
+    QFont boldFont;
+
+    int col{0};
+
+    // Name
+    QTableWidgetItem *nameItem = new QTableWidgetItem("newproperty");
+    boldFont = nameItem->font();
+    boldFont.setBold(true);
+    nameItem->setFont(boldFont);
+    m_propertyTable->setItem(row, col++, nameItem);
+
+    // Type
+    QTableWidgetItem *item = new QTableWidgetItem(type);
+    // ??? For now, make this read-only.  If we want to allow editing
+    //     of this, we need a combo box with the types in it.
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    item->setFont(boldFont);
+    m_propertyTable->setItem(row, col++, item);
+
+    // Value
+    item = new QTableWidgetItem(value);
+    item->setFont(boldFont);
+    m_propertyTable->setItem(row, col++, item);
+
+    m_propertyTable->scrollToBottom();
+}
+
+void EditEvent::slotAddInteger()
+{
+    addProperty2("Int", "0");
+}
+
+void EditEvent::slotAddString()
+{
+    addProperty2("String", "");
+}
+
+void EditEvent::slotAddBoolean()
+{
+    addProperty2("Bool", "false");
+}
+
+void EditEvent::slotDelete()
+{
+    QTableWidgetItem *item = m_propertyTable->currentItem();
+    if (!item)
+        return;
+
+    const int row = item->row();
+
+    if (item->column() != 0) {
+        item = m_propertyTable->item(row, 0);
+        if (!item)
+            return;
+    }
+
+    int reply = QMessageBox::warning(
+            this,
+            tr("Rosegarden"),
+            tr("About to delete property \"%1\".  Are you sure?").arg(item->text()),
+            QMessageBox::Yes | QMessageBox::No);
+    if (reply != QMessageBox::Yes)
+        return;
+
+    m_propertyTable->removeRow(row);
+}
+
+void EditEvent::slotContextMenu(const QPoint &pos)
+{
+    // If the context menu hasn't been created, create it.
+    if (!m_contextMenu) {
+        m_contextMenu = new QMenu(this);
+        if (!m_contextMenu) {
+            RG_WARNING << "slotContextMenu() : Couldn't create context menu.";
+            return;
+        }
+
+        // Add Integer
+        QAction *addIntegerAction = m_contextMenu->addAction(tr("Add Integer Property"));
+        connect(addIntegerAction, &QAction::triggered,
+                this, &EditEvent::slotAddInteger);
+
+        // Add String
+        QAction *addStringAction = m_contextMenu->addAction(tr("Add String Property"));
+        connect(addStringAction, &QAction::triggered,
+                this, &EditEvent::slotAddString);
+
+        // Add Boolean
+        QAction *addBooleanAction = m_contextMenu->addAction(tr("Add Boolean Property"));
+        connect(addBooleanAction, &QAction::triggered,
+                this, &EditEvent::slotAddBoolean);
+
+        m_contextMenu->addSeparator();
+
+        // Delete
+        QAction *deleteAction = m_contextMenu->addAction(tr("Delete"));
+        connect(deleteAction, &QAction::triggered,
+                this, &EditEvent::slotDelete);
+    }
+
+    // Launch the context menu.
+    m_contextMenu->exec(m_propertyTable->mapToGlobal(pos));
+}
+
+#if 0
 void
 EditEvent::updateWidgets()
 {
@@ -473,7 +821,7 @@ EditEvent::updateWidgets()
         m_typeCombo->blockSignals(true);
     }
     m_timeSpinBox->blockSignals(true);
-#if 0
+
     m_durationSpinBox->blockSignals(true);
     m_notationTimeSpinBox->blockSignals(true);
     m_notationDurationSpinBox->blockSignals(true);
@@ -483,7 +831,6 @@ EditEvent::updateWidgets()
 
     m_pitchSpinBox->setMinimum(MidiMinValue);
     m_pitchSpinBox->setMaximum(MidiMaxValue);
-#endif
 
 
     // Common parameters
@@ -493,70 +840,16 @@ EditEvent::updateWidgets()
         m_typeLabel->setText(strtoqstr(m_event.getType()));
 
     // Absolute time
-    m_timeLabel->show();
-    m_timeSpinBox->show();
-    m_timeEditButton->show();
+    //m_timeLabel->show();
+    //m_timeSpinBox->show();
+    //m_timeEditButton->show();
     m_timeSpinBox->setValue(m_event.getAbsoluteTime());
-
-#if 0
-    // Duration
-    m_durationLabel->setText(tr("Duration:"));
-    m_durationLabel->show();
-    m_durationSpinBox->show();
-    m_durationEditButton->show();
-    m_durationSpinBox->setValue(m_event.getDuration());
-    m_duration = m_event.getDuration();
-#endif
-
-#if 0
-    // Notation Group
-    m_notationGroupBox->hide();
-    m_lockNotationValues->setChecked(
-            m_event.getDuration() == m_event.getNotationDuration()  &&
-            m_event.getAbsoluteTime() == m_event.getNotationAbsoluteTime());
-    m_notationAbsoluteTime = m_event.getNotationAbsoluteTime();
-    m_notationDuration = m_event.getNotationDuration();
 
     // Sysex
     m_sysexLoadButton->hide();
     m_sysexSaveButton->hide();
 
-    if (m_type == Note::EventType) {
-        m_notationGroupBox->show();
-        m_notationTimeSpinBox->setValue(m_notationAbsoluteTime);
-        m_notationDurationSpinBox->setValue(m_notationDuration);
-
-        m_pitchLabel->show();
-        m_pitchLabel->setText(tr("Note pitch:"));
-        m_pitchSpinBox->show();
-        m_pitchEditButton->show();
-
-        m_controllerLabel->hide();
-        m_controllerLabelValue->hide();
-
-        m_velocityLabel->show();
-        m_velocityLabel->setText(tr("Note velocity:"));
-        m_velocitySpinBox->show();
-
-        m_metaLabel->hide();
-        m_metaEdit->hide();
-
-        try {
-            m_pitchSpinBox->setValue(m_event.get<Int>(BaseProperties::PITCH));
-        } catch (const Event::NoData &) {
-            m_pitchSpinBox->setValue(60);
-        }
-
-        try {
-            m_velocitySpinBox->setValue(m_event.get<Int>(BaseProperties::VELOCITY));
-        } catch (const Event::NoData &) {
-            m_velocitySpinBox->setValue(100);
-        }
-
-        if (m_typeCombo)
-            m_typeCombo->setCurrentIndex(0);
-
-    } else if (m_type == Controller::EventType) {
+    if (m_type == Controller::EventType) {
 
         m_durationLabel->hide();
         m_durationSpinBox->hide();
@@ -585,14 +878,12 @@ EditEvent::updateWidgets()
 
         m_pitchSpinBox->setValue(controllerNumber);
 
-#if 0
         // ??? Ok, but this needs to change dynamically as the user changes
         //     the controller number.
         if (controllerNames.find(controllerNumber) != controllerNames.end())
             m_controllerLabelValue->setText(controllerNames[controllerNumber]);
         else
             m_controllerLabelValue->setText(tr("<none>"));
-#endif
 
         try {
             m_velocitySpinBox->setValue(m_event.get<Int>
@@ -979,7 +1270,6 @@ EditEvent::updateWidgets()
         if (m_typeCombo)
             m_typeCombo->setEnabled(false);
     }
-#endif
 
 
     // Unblock signals.
@@ -988,7 +1278,6 @@ EditEvent::updateWidgets()
         m_typeCombo->blockSignals(false);
     m_timeSpinBox->blockSignals(false);
 
-#if 0
     m_durationSpinBox->blockSignals(false);
     m_notationTimeSpinBox->blockSignals(false);
     m_notationDurationSpinBox->blockSignals(false);
@@ -996,180 +1285,6 @@ EditEvent::updateWidgets()
     m_velocitySpinBox->blockSignals(false);
     m_metaEdit->blockSignals(false);
     slotLockNotationChanged();
-#endif
-
-}
-
-timeT
-EditEvent::getAbsoluteTime() const
-{
-    return m_timeSpinBox->value();
-}
-
-Event
-EditEvent::getEvent()
-{
-    // ??? I suspect calling this routine twice is fatal since it modifies
-    //     m_event.  Need to fix that.  Or at least fail.  Maybe make m_event
-    //     const.
-
-    // If we are inserting a new Event...
-    if (m_typeCombo) {
-        // Create a new default Event of the right type.
-        // Just need the type, but there is no type-only ctor.
-        m_event = Event(qstrtostr(m_typeCombo->currentText()), m_timeSpinBox->value());
-    }
-
-    Event event(m_event, m_timeSpinBox->value());
-
-    // Let the widget make its changes.
-    //if (m_eventWidgetStack)  // inserting
-    //    m_eventWidgetStack->updateEvent(event);
-    if (m_eventWidget)  // editing
-        m_eventWidget->updateEvent(event);
-
-    // Changes from the Advanced Properties.
-    event.setSubOrdering(m_subOrdering->value());
-
-    // Set the remaining properties from the table.
-
-    // For each row in the table...
-    for (int row = 0; row < m_propertyTable->rowCount(); ++row) {
-        QTableWidgetItem *nameItem = m_propertyTable->item(row, 0);
-        if (!nameItem)
-            continue;
-        if (nameItem->text() == "")
-            continue;
-        PropertyName propertyName(qstrtostr(nameItem->text()));
-
-        QTableWidgetItem *typeItem = m_propertyTable->item(row, 1);
-        if (!typeItem)
-            continue;
-        QString type = typeItem->text();
-
-        QTableWidgetItem *valueItem = m_propertyTable->item(row, 2);
-        if (!valueItem)
-            continue;
-        QString value = valueItem->text();
-
-        // ??? This doesn't preserve persistent vs. non-persistent.  It
-        //     makes all properties persistent.
-
-        // See Property.cpp for the type names.
-        // See ConfigurationXmlSubHandler::characters() for similar code.
-        if (type == "Int") {
-            event.set<Int>(propertyName, value.toInt());
-        } else if (type == "String") {
-            event.set<String>(propertyName, qstrtostr(value));
-        } else if (type == "Bool") {
-            event.set<Bool>(propertyName, value == "true");  // ??? Really?
-        } else if (type == "RealTimeT") {
-            // Unused.  Turns out this is only used for tempo segments which
-            // the user cannot edit.  TempoTimestampProperty is the only
-            // property that uses this.  See Composition::setTempoTimestamp().
-            // We can leave this disabled for now.  If we eventually need this,
-            // we will need to upgrade RealTime to be able to convert a string
-            // to a RealTime value.
-            //RealTime rt(value);
-            //event.set<RealTimeT>(propertyName, rt);
-        }
-    }
-
-
-#if 0
-    if (m_type == Indication::EventType) {
-
-        event.set<String>(Indication::IndicationTypePropertyName,
-                          qstrtostr(m_metaEdit->text()));
-
-    } else if (m_type == Text::EventType) {
-
-        event.set<String>(Text::TextTypePropertyName,
-                          qstrtostr(m_controllerLabelValue->text()));
-        event.set<String>(Text::TextPropertyName,
-                          qstrtostr(m_metaEdit->text()));
-
-    } else if (m_type == Clef::EventType) {
-
-        event.set<String>(Clef::ClefPropertyName,
-                          qstrtostr(m_controllerLabelValue->text()));
-
-    } else if (m_type == ::Rosegarden::Key::EventType) {
-
-        event.set<String>(::Rosegarden::Key::KeyPropertyName,
-                          qstrtostr(m_controllerLabelValue->text()));
-
-    } else if (m_type == SystemExclusive::EventType) {
-
-        event.set<String>(SystemExclusive::DATABLOCK,
-                          qstrtostr(m_metaEdit->text()));
-
-    }
-#endif
-
-    return event;
-}
-
-void
-EditEvent::slotEventTypeChanged(int value)
-{
-    // ??? Does QComboBox::currentText() work here?  It's simpler.
-    std::string type = qstrtostr(m_typeCombo->itemText(value));
-
-    // Make sure the sub-ordering is appropriate.
-    m_subOrdering->setValue(getSubOrdering(type));
-
-    updateWidgets();
-
-#if 0
-    // update whatever pitch and velocity correspond to
-    if (!m_pitchSpinBox->isHidden())
-        slotPitchChanged(m_pitchSpinBox->value());
-    if (!m_velocitySpinBox->isHidden())
-        slotVelocityChanged(m_velocitySpinBox->value());
-#endif
-}
-
-#if 0
-void
-EditEvent::slotAbsoluteTimeChanged(int /*value*/)
-{
-    m_absoluteTime = value;
-
-    if (m_notationGroupBox->isHidden()) {
-        m_notationAbsoluteTime = value;
-    } else if (m_lockNotationValues->isChecked()) {
-        m_notationAbsoluteTime = value;
-        m_notationTimeSpinBox->setValue(value);
-    }
-}
-#endif
-#if 0
-void
-EditEvent::slotNotationAbsoluteTimeChanged(int value)
-{
-    m_notationAbsoluteTime = value;
-}
-#endif
-#if 0
-void
-EditEvent::slotDurationChanged(int value)
-{
-    m_duration = value;
-
-    if (m_notationGroupBox->isHidden()) {
-        m_notationDuration = value;
-    } else if (m_lockNotationValues->isChecked()) {
-        m_notationDuration = value;
-        m_notationDurationSpinBox->setValue(value);
-    }
-}
-#endif
-#if 0
-void
-EditEvent::slotNotationDurationChanged(int value)
-{
-    m_notationDuration = value;
 }
 #endif
 #if 0
@@ -1218,50 +1333,7 @@ EditEvent::slotVelocityChanged(int value)
     }
 }
 #endif
-#if 0
-void
-EditEvent::slotMetaChanged(const QString &)
-{
-}
-#endif
-#if 0
-void
-EditEvent::slotLockNotationChanged()
-{
-    // Enable/disable notation fields as appropriate.
-    const bool enable = !m_lockNotationValues->isChecked();
 
-    m_notationTimeSpinBox->setEnabled(enable);
-    m_notationTimeEditButton->setEnabled(enable);
-    m_notationDurationSpinBox->setEnabled(enable);
-    m_notationDurationEditButton->setEnabled(enable);
-}
-#endif
-
-void
-EditEvent::slotEditAbsoluteTime()
-{
-    Composition &composition =
-            RosegardenDocument::currentDocument->getComposition();
-
-    TimeDialog dialog(this, tr("Edit Event Time"),
-                      &composition,
-                      m_timeSpinBox->value(),
-                      true);
-    if (dialog.exec() == QDialog::Accepted)
-        m_timeSpinBox->setValue(dialog.getTime());
-}
-
-#if 0
-void
-EditEvent::slotEditPitch()
-{
-    PitchDialog dialog(this, tr("Edit Pitch"), m_pitchSpinBox->value());
-    if (dialog.exec() == QDialog::Accepted) {
-        m_pitchSpinBox->setValue(dialog.getPitch());
-    }
-}
-#endif
 #if 0
 void
 EditEvent::slotSysexLoad()
@@ -1353,204 +1425,6 @@ EditEvent::slotSysexSave()
     settings.endGroup();
 }
 #endif
-void EditEvent::addProperty(const PropertyName &name)
-{
-    // Add a row to the table
-    const int row = m_propertyTable->rowCount();
-    m_propertyTable->insertRow(row);
-
-    // Go with bold for persistent properties.
-    // ??? Actually, bold is hard to read.
-    const bool bold = m_event.isPersistent(name);
-    QFont boldFont;
-
-    int col{0};
-
-    // Name
-    QTableWidgetItem *nameItem = new QTableWidgetItem(name.getName().c_str());
-    if (bold) {
-        boldFont = nameItem->font();
-        boldFont.setBold(true);
-        nameItem->setFont(boldFont);
-    }
-    m_propertyTable->setItem(row, col++, nameItem);
-
-    // Type
-    QTableWidgetItem *item = new QTableWidgetItem(
-            m_event.getPropertyTypeAsString(name).c_str());
-    // ??? For now, make this read-only.  If we want to allow editing
-    //     of this, we need a combo box with the types in it.
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    if (bold)
-        item->setFont(boldFont);
-    m_propertyTable->setItem(row, col++, item);
-
-    // Value
-    item = new QTableWidgetItem(m_event.getAsString(name).c_str());
-    if (bold)
-        item->setFont(boldFont);
-    m_propertyTable->setItem(row, col++, item);
-}
-
-void EditEvent::updatePropertyTable()
-{
-    // See EventListEditor.
-
-    // Hide the vertical header
-    m_propertyTable->verticalHeader()->hide();
-
-    QStringList columnNames;
-    columnNames << tr("Name");
-    columnNames << tr("Type");
-    columnNames << tr("Value");
-    m_propertyTable->setColumnCount(columnNames.size());
-    m_propertyTable->setHorizontalHeaderLabels(columnNames);
-
-    // Add persistent properties to the table.
-
-    // Get the property filter.
-    std::set<PropertyName> propertyFilter;
-    //if (m_eventWidgetStack)
-    //    propertyFilter = m_eventWidgetStack->getPropertyFilter();
-    if (m_eventWidget)
-        propertyFilter = m_eventWidget->getPropertyFilter();
-
-    m_propertyTable->setRowCount(0);
-
-    Event::PropertyNames propertyNames = m_event.getPersistentPropertyNames();
-
-    // For each property, add to table.
-    for (const PropertyName &propertyName : propertyNames) {
-        // Skip any that need filtering.
-        if (propertyFilter.find(propertyName) != propertyFilter.end())
-            continue;
-        addProperty(propertyName);
-    }
-
-    // Add non-persistent properties to the table.
-
-    propertyNames = m_event.getNonPersistentPropertyNames();
-
-    // For each property, add to table.
-    for (const PropertyName &propertyName : propertyNames) {
-        // Skip any that need filtering.
-        if (propertyFilter.find(propertyName) != propertyFilter.end())
-            continue;
-        addProperty(propertyName);
-    }
-}
-
-void EditEvent::addProperty2(const QString &type, const QString &value)
-{
-    // Add a row to the table
-    const int row = m_propertyTable->rowCount();
-    m_propertyTable->insertRow(row);
-
-    // Assume persistent.
-
-    QFont boldFont;
-
-    int col{0};
-
-    // Name
-    QTableWidgetItem *nameItem = new QTableWidgetItem("newproperty");
-    boldFont = nameItem->font();
-    boldFont.setBold(true);
-    nameItem->setFont(boldFont);
-    m_propertyTable->setItem(row, col++, nameItem);
-
-    // Type
-    QTableWidgetItem *item = new QTableWidgetItem(type);
-    // ??? For now, make this read-only.  If we want to allow editing
-    //     of this, we need a combo box with the types in it.
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setFont(boldFont);
-    m_propertyTable->setItem(row, col++, item);
-
-    // Value
-    item = new QTableWidgetItem(value);
-    item->setFont(boldFont);
-    m_propertyTable->setItem(row, col++, item);
-
-    m_propertyTable->scrollToBottom();
-}
-
-void EditEvent::slotAddInteger()
-{
-    addProperty2("Int", "0");
-}
-
-void EditEvent::slotAddString()
-{
-    addProperty2("String", "");
-}
-
-void EditEvent::slotAddBoolean()
-{
-    addProperty2("Bool", "false");
-}
-
-void EditEvent::slotDelete()
-{
-    QTableWidgetItem *item = m_propertyTable->currentItem();
-    if (!item)
-        return;
-
-    const int row = item->row();
-
-    if (item->column() != 0) {
-        item = m_propertyTable->item(row, 0);
-        if (!item)
-            return;
-    }
-
-    int reply = QMessageBox::warning(
-            this,
-            tr("Rosegarden"),
-            tr("About to delete property \"%1\".  Are you sure?").arg(item->text()),
-            QMessageBox::Yes | QMessageBox::No);
-    if (reply != QMessageBox::Yes)
-        return;
-
-    m_propertyTable->removeRow(row);
-}
-
-void EditEvent::slotContextMenu(const QPoint &pos)
-{
-    // If the context menu hasn't been created, create it.
-    if (!m_contextMenu) {
-        m_contextMenu = new QMenu(this);
-        if (!m_contextMenu) {
-            RG_WARNING << "slotContextMenu() : Couldn't create context menu.";
-            return;
-        }
-
-        // Add Integer
-        QAction *addIntegerAction = m_contextMenu->addAction(tr("Add Integer Property"));
-        connect(addIntegerAction, &QAction::triggered,
-                this, &EditEvent::slotAddInteger);
-
-        // Add String
-        QAction *addStringAction = m_contextMenu->addAction(tr("Add String Property"));
-        connect(addStringAction, &QAction::triggered,
-                this, &EditEvent::slotAddString);
-
-        // Add Boolean
-        QAction *addBooleanAction = m_contextMenu->addAction(tr("Add Boolean Property"));
-        connect(addBooleanAction, &QAction::triggered,
-                this, &EditEvent::slotAddBoolean);
-
-        m_contextMenu->addSeparator();
-
-        // Delete
-        QAction *deleteAction = m_contextMenu->addAction(tr("Delete"));
-        connect(deleteAction, &QAction::triggered,
-                this, &EditEvent::slotDelete);
-    }
-
-    // Launch the context menu.
-    m_contextMenu->exec(m_propertyTable->mapToGlobal(pos));
-}
 
 
 }
