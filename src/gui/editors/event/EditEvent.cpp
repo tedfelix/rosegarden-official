@@ -22,7 +22,6 @@
 
 #include "EventWidget.h"
 
-#include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
@@ -30,18 +29,14 @@
 #include "gui/editors/guitar/Chord.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-#include "misc/ConfigGroups.h"  // for LastUsedPathsConfigGroup
-#include "gui/dialogs/PitchDialog.h"
+#include "misc/ConfigGroups.h"  // for WindowGeometryConfigGroup
 #include "gui/dialogs/TimeDialog.h"
-#include "gui/widgets/LineEdit.h"
-#include "gui/widgets/FileDialog.h"
 #include "sound/Midi.h"
 
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QCheckBox>
-#include <QFile>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QHeaderView>
@@ -54,7 +49,6 @@
 #include <QTableWidget>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QLayout>
 #include <QSettings>
 
 
@@ -206,6 +200,8 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
         m_typeCombo->addItem(strtoqstr(Clef::EventType));
         m_typeCombo->addItem(strtoqstr(::Rosegarden::Key::EventType));
         m_typeCombo->addItem(strtoqstr(Guitar::Chord::EventType));
+        // NRPN::EventType
+        // RPN::EventType
         connect(m_typeCombo,
                     static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
                 this, &EditEvent::slotEventTypeChanged);
@@ -246,13 +242,6 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     } else {  // editing
         // For edit mode we only need the Event widget for the current
         // event type.
-        // ??? Widget is not appearing because the window is too small.
-        //     Also the Widget is compressed and not stretching to fill
-        //     the space horizontally.  Probably has to do with the fact
-        //     that it is its own widget.
-        //     How do we create a QWidget that plays by the rules?
-        //     1. Be sure to set a minimum size or else the widget will
-        //        not take up any space at all.
         m_eventWidget = EventWidget::create(this, event);
         mainLayout->addWidget(m_eventWidget);
     }
@@ -267,7 +256,8 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     QGridLayout *advancedPropertiesLayout =
             new QGridLayout(advancedPropertiesGroup);
     advancedPropertiesLayout->setSpacing(5);
-    mainLayout->addWidget(advancedPropertiesGroup);
+    // Make sure stretch is 1 so this will fill the rest of the dialog.
+    mainLayout->addWidget(advancedPropertiesGroup, 1);
 
     row = 0;
 
@@ -304,6 +294,8 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     // Copy properties from m_event to the table.
     updatePropertyTable();
     advancedPropertiesLayout->addWidget(m_propertyTable, row, 0, 1, 2);
+    // Make sure the table expands to fill any empty space.
+    advancedPropertiesLayout->setRowStretch(row, 1);
 
 #if 0
     // Pitch
@@ -467,10 +459,6 @@ EditEvent::getAbsoluteTime() const
 Event
 EditEvent::getEvent()
 {
-    // ??? I suspect calling this routine twice is fatal since it modifies
-    //     m_event.  Need to fix that.  Or at least fail.  Maybe make m_event
-    //     const.
-
     // Start with the original.
     Event event(m_event, m_timeSpinBox->value());
 
@@ -572,7 +560,10 @@ EditEvent::getEvent()
 void
 EditEvent::slotEventTypeChanged(int value)
 {
-    // ??? I don't think we want to do this.
+    // ??? I don't think we want to do this.  Instead, we should ask the user
+    //     for the Event type to insert, insert a default Event of that type
+    //     and then allow them to edit that default Event.  That would
+    //     remove the need for insert mode and a widget stack.
 
     // ??? Does QComboBox::currentText() work here?  It's simpler.
     std::string type = qstrtostr(m_typeCombo->itemText(value));
