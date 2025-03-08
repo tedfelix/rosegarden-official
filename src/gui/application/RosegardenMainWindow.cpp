@@ -673,7 +673,9 @@ void RosegardenMainWindow::initStaticObjects()
     LV2World::get();
     LV2Utils::getInstance();
     LV2Worker::getInstance();
+#ifdef HAVE_GTK2
     LV2Gtk::getInstance();
+#endif
 #endif
     RosegardenSequencer::getInstance();
 }

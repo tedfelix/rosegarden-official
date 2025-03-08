@@ -44,9 +44,9 @@ if(LIRCCLIENT_FOUND)
 endif()
 
 if(LILV_FOUND)
-    include_directories(${LILV_INCLUDE_DIR})
+    include_directories(${LILV_INCLUDE_DIRS})
     add_definitions(-DHAVE_LILV)
-    set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LILV_LIBRARY})
+    set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LILV_LIBRARIES})
 endif()
 
 if(ALSA_FOUND)
