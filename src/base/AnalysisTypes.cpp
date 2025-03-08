@@ -51,7 +51,7 @@ using std::partial_sort_copy;
 ///////////////////////////////////////////////////////////////////////////
 
 Key
-AnalysisHelper::getKeyForEvent(Event *e, Segment &s)
+AnalysisHelper::getKeyForEvent(const Event *e, Segment &s)
 {
     Segment::iterator i =
         e ? s.findNearestTime(e->getAbsoluteTime()) //cc
@@ -147,7 +147,7 @@ ChordLabel::ChordLabel()
     checkMap();
 }
 
-ChordLabel::ChordLabel(Key key, int mask, int /* bass */) :
+ChordLabel::ChordLabel(const Key& key, int mask, int /* bass */) :
     m_data()
 {
     checkMap();
@@ -853,7 +853,7 @@ AnalysisHelper::PitchProfile::operator+=(const PitchProfile& d)
 // should use constants for basic lengths, not numbers
 
 TimeSignature
-AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
+AnalysisHelper::guessTimeSignature(const CompositionTimeSliceAdapter &c)
 {
     bool haveNotes = false;
 
@@ -1028,7 +1028,7 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
         timeT time = (*i)->getAbsoluteTime();
 
         if (time >= nextSigTime) {
-            Composition *comp = c.getComposition();
+            const Composition *comp = c.getComposition();
             int sigNo = comp->getTimeSignatureNumberAt(time);
             if (sigNo >= 0) {
                 std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
@@ -1132,7 +1132,7 @@ AnalysisHelper::guessKeyAtTime(Composition &comp, timeT t,
     for (SegmentMultiSet::iterator i = segs.begin();
          i != segs.end();
          ++i) {
-        Segment *s = *i;
+        const Segment *s = *i;
         // If this segment is relevant...
         if ((s != segmentToSkip) &&
             (s->getStartTime() <= t) &&
