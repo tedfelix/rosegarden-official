@@ -109,7 +109,7 @@ private:
     void addProperty(const PropertyName &name);
     /// Copy all properties from m_event to m_propertyTable.
     void updatePropertyTable();
-    QMenu *m_contextMenu;
+    QMenu *m_contextMenu{nullptr};
     /// For the context menu.
     void addProperty2(const QString &type, const QString &value);
 
