@@ -25,7 +25,7 @@
 #include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/Event.h"
-#include "base/MidiProgram.h"
+#include "base/MidiProgram.h"  // For MidiMinValue, etc...
 #include "base/NotationTypes.h"
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/PitchDialog.h"
@@ -50,10 +50,18 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     if (event.getType() != Note::EventType)
         return;
 
+    // Main layout.
+    // This is a "fake" layout that is needed to make sure there is a
+    // layout at each parent/child level.  If we remove this layout, the
+    // resizing from the parent down to the widgets becomes a mess.
+    // Using QGridLayout because it is handy.  Any layout would do here.
+    QGridLayout *mainLayout = new QGridLayout(this);
+
     // Note Properties group box
 
     QGroupBox *propertiesGroup = new QGroupBox(tr("Note Properties"), this);
     propertiesGroup->setContentsMargins(5, 5, 5, 5);
+    mainLayout->addWidget(propertiesGroup);
 
     QGridLayout *propertiesLayout = new QGridLayout(propertiesGroup);
     propertiesLayout->setSpacing(5);
@@ -173,32 +181,6 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
 
     // Sync up notation widget enable state.
     slotLockNotationClicked(true);
-
-
-    // Get the sizing correct...
-
-    // ??? Why do we have to do this?  Usually all this stuff is automatic.
-    //     Putting things in a QWidget appears to break sizing.
-
-    // ??? It would be nice if this thing's width would follow the parent's
-    //     width.
-
-    // ??? I suspect the introduction of the QWidget has broken down
-    //     communication between the parent layout and the group box.
-    //     Perhaps we should make this just the group box?  Or maybe
-    //     the QWidget needs to have a layout and we need to add the group
-    //     box to that?  That would then give us a layout at every level.
-
-    // Adjust the properties group box to be big enough to hold the
-    // controls.
-    propertiesGroup->adjustSize();
-
-    // Adjust the NoteWidget to be big enough to hold the properties group box.
-    adjustSize();
-
-    // Make the current size the minimum size.
-    setMinimumSize(geometry().size());
-
 }
 
 EventWidget::PropertyNameSet
