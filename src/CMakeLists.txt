@@ -218,6 +218,7 @@ set(rg_CPPS
   gui/editors/event/EventWidget.cpp
   gui/editors/event/NoteWidget.cpp
   gui/editors/event/RestWidget.cpp
+  gui/editors/event/ControllerWidget.cpp
   gui/editors/pitchtracker/PitchHistory.cpp
   gui/editors/pitchtracker/PitchTrackerView.cpp
   gui/editors/pitchtracker/PitchGraphWidget.cpp
