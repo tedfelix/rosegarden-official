@@ -45,9 +45,7 @@ class TimeWidget : public QGroupBox
 {
     Q_OBJECT
 public:
-    /**
-     * Constructor for absolute time widget
-     */
+    /// Constructor for absolute time widget.
     TimeWidget(const QString& title,
                QWidget *parent,
                Composition *composition, // for bar/beat/msec
@@ -55,10 +53,12 @@ public:
                bool editable = true,
                bool constrainToCompositionDuration = true);
 
+    /// Constructor for duration widget.
     /**
-     * Constructor for duration widget.  startTime is the absolute time
-     * at which this duration begins, necessary so that we can show the
-     * correct real-time (based on tempo at startTime) etc.
+     * startTime is the absolute time at which this duration begins.
+     *
+     * startTime is needed to get the correct bar counts based on the current
+     * time signature.  E.g. in 4/4, 3840 is one bar, in 2/4, 3840 is two bars.
      */
     TimeWidget(const QString& title,
                QWidget *parent,

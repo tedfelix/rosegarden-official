@@ -93,10 +93,11 @@ static int getSubOrdering(std::string eventType)
 
 #if 0
         // ??? Move this to ControllerWidget when it exists.  Then promote it
-        //     up someplace more common so ELE and others can use it.
+        //     up someplace more common so EventListEditor and others can use
+        //     it.
         // ??? Why not just load these into a combo box?  Then there will be
         //     no need for update trickery.
-        // ??? We should also show these on the ELE.
+        // ??? We should also show these on the EventListEditor.
         // ??? We should also consider using the controller list that is in the
         //     Device.  That is probably more accurate in some cases and should
         //     have higher priority than these names.  Maybe bold-face the names
@@ -298,6 +299,9 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     advancedPropertiesLayout->setRowStretch(row, 1);
 
 #if 0
+    // ??? All of this is moving to the individual event widgets.  Keeping
+    //     here for reference.  This is all also in SimpleEventEditDialog.
+
     // Pitch
     m_pitchLabel = new QLabel(tr("Pitch:"), propertiesGroup);
     propertiesLayout->addWidget(m_pitchLabel, 3, 0);
@@ -406,7 +410,8 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
 #endif
 
     // Button Box
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     mainLayout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -476,6 +481,8 @@ EditEvent::getEvent()
         m_eventWidget->updateEvent(event);
 
     // Changes from the Advanced Properties.
+
+    // Sub-Ordering
     event.setSubOrdering(m_subOrdering->value());
 
     // Set the remaining properties from the table.
@@ -524,6 +531,9 @@ EditEvent::getEvent()
 
 
 #if 0
+    // ??? All of this is moving to the individual event widgets.  Keeping
+    //     here for reference.  This is all also in SimpleEventEditDialog.
+
     if (m_type == Indication::EventType) {
 
         event.set<String>(Indication::IndicationTypePropertyName,
@@ -574,6 +584,9 @@ EditEvent::slotEventTypeChanged(int value)
     // ??? Flip the EventWidgetStack.
 
 #if 0
+    // ??? All of this is moving to the individual event widgets.  Keeping
+    //     here for reference.  This is all also in SimpleEventEditDialog.
+
     // update whatever pitch and velocity correspond to
     if (!m_pitchSpinBox->isHidden())
         slotPitchChanged(m_pitchSpinBox->value());
@@ -769,17 +782,20 @@ void EditEvent::slotContextMenu(const QPoint &pos)
         }
 
         // Add Integer
-        QAction *addIntegerAction = m_contextMenu->addAction(tr("Add Integer Property"));
+        QAction *addIntegerAction = m_contextMenu->addAction(
+                tr("Add Integer Property"));
         connect(addIntegerAction, &QAction::triggered,
                 this, &EditEvent::slotAddInteger);
 
         // Add String
-        QAction *addStringAction = m_contextMenu->addAction(tr("Add String Property"));
+        QAction *addStringAction = m_contextMenu->addAction(
+                tr("Add String Property"));
         connect(addStringAction, &QAction::triggered,
                 this, &EditEvent::slotAddString);
 
         // Add Boolean
-        QAction *addBooleanAction = m_contextMenu->addAction(tr("Add Boolean Property"));
+        QAction *addBooleanAction = m_contextMenu->addAction(
+                tr("Add Boolean Property"));
         connect(addBooleanAction, &QAction::triggered,
                 this, &EditEvent::slotAddBoolean);
 
@@ -796,6 +812,9 @@ void EditEvent::slotContextMenu(const QPoint &pos)
 }
 
 #if 0
+// ??? All of this is moving to the individual event widgets.  Keeping
+//     here for reference.  This is all also in SimpleEventEditDialog.
+
 void
 EditEvent::updateWidgets()
 {
@@ -1277,8 +1296,7 @@ EditEvent::updateWidgets()
     m_metaEdit->blockSignals(false);
     slotLockNotationChanged();
 }
-#endif
-#if 0
+
 void
 EditEvent::slotPitchChanged(int value)
 {
@@ -1304,9 +1322,7 @@ EditEvent::slotPitchChanged(int value)
     }
     // !!! sysex?
 }
-#endif
 
-#if 0
 void
 EditEvent::slotVelocityChanged(int value)
 {
@@ -1323,9 +1339,7 @@ EditEvent::slotVelocityChanged(int value)
         m_event.set<Int>(PitchBend::LSB, value);
     }
 }
-#endif
 
-#if 0
 void
 EditEvent::slotSysexLoad()
 {

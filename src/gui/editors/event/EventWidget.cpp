@@ -41,7 +41,8 @@ EventWidget *EventWidget::create(EditEvent *parent, const Event &event)
 
 EventWidget::EventWidget(EditEvent *parent) :
     QWidget(parent)
-{ }
+{
+}
 
 
 }

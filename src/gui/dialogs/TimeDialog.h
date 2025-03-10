@@ -43,6 +43,10 @@ public:
                timeT defaultTime, bool constrainToCompositionDuration);
 
     /// for durations
+    /**
+     * startTime is needed to get the correct bar counts based on the current
+     * time signature.  E.g. in 4/4, 3840 is one bar, in 2/4, 3840 is two bars.
+     */
     TimeDialog(QWidget *parent, QString title, Composition *composition,
                timeT startTime, timeT defaultDuration, timeT minimumDuration,
                bool constrainToCompositionDuration);

@@ -21,7 +21,6 @@
 #include "EventWidget.h"
 
 class QCheckBox;
-class QGroupBox;
 class QLabel;
 class QPushButton;
 class QSpinBox;
@@ -37,8 +36,6 @@ class Event;
 
 class NoteWidget : public EventWidget
 {
-    //Q_OBJECT
-
 public:
 
     NoteWidget(EditEvent *parent, const Event &event);

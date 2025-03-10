@@ -19,7 +19,6 @@
 #define RG_EVENTWIDGET_H
 
 #include "base/PropertyName.h"
-#include "base/TimeT.h"
 
 #include <QWidget>
 

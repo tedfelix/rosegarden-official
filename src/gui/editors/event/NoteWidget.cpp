@@ -23,6 +23,7 @@
 #include "EditEvent.h"
 
 #include "base/BaseProperties.h"
+#include "base/Composition.h"
 #include "base/Event.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
@@ -30,13 +31,11 @@
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/TimeDialog.h"
 
-#include <QApplication>
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
-#include <QResizeEvent>
 #include <QSpinBox>
 
 
@@ -216,9 +215,8 @@ NoteWidget::slotEditDuration(bool /*checked*/)
     Composition &composition =
             RosegardenDocument::currentDocument->getComposition();
 
-    // ??? How to test?  Not sure exactly how durations change meaning.  I
-    //     tried 6/8 time, but a quarter was still 960.  Need to come up with
-    //     a test case to make sure this is working.
+    // This is needed to get the correct bar counts based on the current
+    // time signature.  E.g. in 4/4, 3840 is one bar, in 2/4, 3840 is two bars.
     const timeT startTime = m_parent->getAbsoluteTime();
 
     TimeDialog dialog(

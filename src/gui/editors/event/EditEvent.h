@@ -40,9 +40,11 @@ class EventWidgetStack;
 class EventWidget;
 
 
-/// "Edit Event" and "Insert Event" dialogs.
+/// The "Edit Event" dialog.
 /**
  * AKA the "Event Editor".
+ *
+ * ??? Still debating whether this should have an Insert mode.
  *
  * This replaces SimpleEventEditDialog and EventEditDialog.
  */
@@ -57,7 +59,7 @@ public:
               bool inserting = false);  // Inserting or editing.
     ~EditEvent();
 
-    /// Used by NoteWidget for TimeDialog.
+    /// Used by NoteWidget for editing durations with TimeDialog.
     timeT getAbsoluteTime() const;
 
     /// Get the edited or new (for insertion) Event.
@@ -81,15 +83,14 @@ private:
 
     // Copy of the original Event to use as a starting point for the edited
     // Event.
-    // ??? Probably should make this const so the code is easier to follow.
     const Event m_event;
 
 
     // Widgets
 
     // Event type
-    QComboBox *m_typeCombo{nullptr};
-    QLabel *m_typeLabel{nullptr};
+    QComboBox *m_typeCombo{nullptr};  // For insert.
+    QLabel *m_typeLabel{nullptr};  // For edit.
 
     // Absolute time
     QSpinBox *m_timeSpinBox;
@@ -113,7 +114,8 @@ private:
     void addProperty2(const QString &type, const QString &value);
 
 #if 0
-    // Unused code.  Clean this up at some point.
+    // Unused code.  Clean this up at some point.  Keeping for reference,
+    // though this is all in SimpleEventEditDialog.
 
     // Setup the dialog for a new event type
     void updateWidgets();
