@@ -83,7 +83,7 @@ searchSegment(const Segment *s, timeT noEarlierThan, timeT noLaterThan) const
 // first.  B may be nullptr but A must exist.
 ControllerSearch::Maybe
 ControllerSearch::
-doubleSearch(Segment *a, Segment *b, timeT noLaterThan) const
+doubleSearch(const Segment *a, const Segment *b, timeT noLaterThan) const
 {
     Profiler profiler("ControllerSearch::doubleSearch", false);
     ControllerSearch::Maybe runningResult =

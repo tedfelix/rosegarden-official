@@ -155,7 +155,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 
     if (s->getType() == Segment::Audio) {
 
-        Composition *c = copyFrom->getComposition();
+        const Composition *c = copyFrom->getComposition();
 
         for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
 

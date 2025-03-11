@@ -132,7 +132,7 @@ CompositionTimeSliceAdapter::iterator::operator=(const iterator &i)
     if (&i == this) return *this;
     m_segmentItrList.clear();
 
-    for (segmentitrlist::const_iterator j = i.m_segmentItrList.begin(); 
+    for (segmentitrlist::const_iterator j = i.m_segmentItrList.begin();
 	 j != i.m_segmentItrList.end(); ++j) {
 	m_segmentItrList.push_back(Segment::iterator(*j));
     }
@@ -150,7 +150,7 @@ CompositionTimeSliceAdapter::iterator::iterator(const iterator &i) :
     m_curTrack(i.m_curTrack),
     m_needFill(i.m_needFill)
 {
-    for (segmentitrlist::const_iterator j = i.m_segmentItrList.begin(); 
+    for (segmentitrlist::const_iterator j = i.m_segmentItrList.begin();
 	 j != i.m_segmentItrList.end(); ++j) {
 	m_segmentItrList.push_back(Segment::iterator(*j));
     }
@@ -266,7 +266,8 @@ CompositionTimeSliceAdapter::iterator::getTrack() const {
 }
 
 bool
-CompositionTimeSliceAdapter::iterator::strictLessThan(Event *e1, Event *e2) {
+CompositionTimeSliceAdapter::iterator::strictLessThan
+(const Event *e1, const Event *e2) {
     // We need a complete ordering of events -- we can't cope with two events
     // comparing equal.  i.e. one of e1 < e2 and e2 < e1 must be true.  The
     // ordering can be arbitrary -- we just compare addresses for events the

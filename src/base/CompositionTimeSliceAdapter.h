@@ -121,7 +121,7 @@ public:
         int     m_curTrack;
         bool    m_needFill;
 
-        static bool strictLessThan(Event *, Event *);
+        static bool strictLessThan(const Event *, const Event *);
     };
 
 

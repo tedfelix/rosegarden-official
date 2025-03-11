@@ -68,7 +68,9 @@ class ControllerSearch
     // Search Segments A and B for the latest controller value.  B may
     // be nullptr but A must exist.
     Maybe
-        doubleSearch(Segment *a, Segment *b, timeT noLaterThan) const;
+        doubleSearch(const Segment *a,
+                     const Segment *b,
+                     timeT noLaterThan) const;
 
  private:
     Maybe

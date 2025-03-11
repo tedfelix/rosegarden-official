@@ -28,8 +28,8 @@ class BasicQuantizer : public Quantizer
 public:
     // unit == -1 => Note::Shortest
     // unit == 0 => No quantization, call setUnit() to change.
-    BasicQuantizer(timeT unit = -1, bool doDurations = false,
-                   int swingPercent = 0, int iteratePercent = 100);
+    explicit BasicQuantizer(timeT unit = -1, bool doDurations = false,
+                            int swingPercent = 0, int iteratePercent = 100);
     BasicQuantizer(const std::string& source,
                    const std::string& target,
                    timeT unit, bool doDurations,

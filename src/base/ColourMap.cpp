@@ -72,7 +72,7 @@ ColourMap::getName(unsigned colourID) const
 }
 
 void
-ColourMap::addEntry(QColor colour, std::string name)
+ColourMap::addEntry(QColor colour, const std::string& name)
 {
     // Find the first unused ID.
 
