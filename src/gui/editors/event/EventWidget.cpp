@@ -27,6 +27,7 @@
 #include "ProgramChangeWidget.h"
 #include "PitchBendWidget.h"
 #include "ChannelPressureWidget.h"
+#include "KeyPressureWidget.h"
 
 #include "base/Event.h"
 #include "base/MidiTypes.h"
@@ -53,7 +54,8 @@ EventWidget *EventWidget::create(EditEvent *parent, const Event &event)
         return new PitchBendWidget(parent, event);
     if (type == ChannelPressure::EventType)
         return new ChannelPressureWidget(parent, event);
-    //KeyPressure::EventType
+    if (type == KeyPressure::EventType)
+        return new KeyPressureWidget(parent, event);
     //SystemExclusive::EventType
 
     // ??? Probably won't do these.  Notation editor handles these better.

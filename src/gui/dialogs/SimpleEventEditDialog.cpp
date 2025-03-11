@@ -153,6 +153,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(
     connect(m_durationEditButton, &QAbstractButton::released,
             this, &SimpleEventEditDialog::slotEditDuration);
 
+    // Pitch
     m_pitchLabel = new QLabel(tr("Pitch:"), frame);
     layout->addWidget(m_pitchLabel, 3, 0);
     m_pitchSpinBox = new QSpinBox(frame);
