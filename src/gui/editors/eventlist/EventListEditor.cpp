@@ -299,8 +299,8 @@ EventListEditor::EventListEditor(RosegardenDocument *doc,
     columnNames << tr("Event Type  ");
     columnNames << tr("Pitch  ");
     columnNames << tr("Velocity  ");
-    columnNames << tr("Type (Data1)  ");
-    columnNames << tr("Value (Data2)  ");
+    columnNames << tr("Data1");
+    columnNames << tr("Data2");
     m_tableWidget->setColumnCount(columnNames.size());
     m_tableWidget->setHorizontalHeaderLabels(columnNames);
 
@@ -648,16 +648,17 @@ EventListEditor::updateTableWidget()
                        arg(event->get<Int>(ProgramChange::PROGRAM) + 1);
         }
 
-        if (event->has(ChannelPressure::PRESSURE)) {
-            data1Str = QString("%1  ").
+        if (event->getType() == ChannelPressure::EventType  &&
+            event->has(ChannelPressure::PRESSURE)) {
+            data1Str = QString("%1").
                        arg(event->get<Int>(ChannelPressure::PRESSURE));
         }
-
-        if (event->isa(KeyPressure::EventType)  &&
-            event->has(KeyPressure::PITCH)) {
-            data1Str = QString("%1  ").
-                       arg(event->get<Int>(KeyPressure::PITCH));
+        if (event->getType() == KeyPressure::EventType  &&
+            event->has(KeyPressure::PRESSURE)) {
+            data1Str = QString("%1").
+                       arg(event->get<Int>(KeyPressure::PRESSURE));
         }
+
 
         // Data 2
 
@@ -686,11 +687,6 @@ EventListEditor::updateTableWidget()
             data2Str = QString("%1  ").
                        arg(strtoqstr(event->get<String>(
                                SegmentID::SubtypePropertyName)));
-        }
-
-        if (event->has(KeyPressure::PRESSURE)) {
-            data2Str = QString("%1  ").
-                       arg(event->get<Int>(KeyPressure::PRESSURE));
         }
 
         if (event->has(BaseProperties::TRIGGER_SEGMENT_ID))

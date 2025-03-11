@@ -864,11 +864,11 @@ Indication::isValid(const std::string &s)
 
 const std::string Text::EventType = "text";
 const int Text::EventSubOrdering = -70;
-const PropertyName Text::TextPropertyName("text");
-const PropertyName Text::TextTypePropertyName("type");
-const PropertyName Text::LyricVersePropertyName("verse");
 
-// text styles
+// Type of text, e.g. lyric, dynamic, tempo...  See Text::Lyric, etc... below
+// and TextPropertyName.
+const PropertyName Text::TextTypePropertyName("type");
+// Text types for TextTypePropertyName.
 const std::string Text::UnspecifiedType   = "unspecified";
 const std::string Text::StaffName         = "staffname";
 const std::string Text::ChordName         = "chordname";
@@ -882,6 +882,12 @@ const std::string Text::Tempo             = "tempo";
 const std::string Text::LocalTempo        = "local_tempo";
 const std::string Text::Annotation        = "annotation";
 const std::string Text::LilyPondDirective = "lilypond_directive";
+
+// The text.
+const PropertyName Text::TextPropertyName("text");
+
+// Verse number.
+const PropertyName Text::LyricVersePropertyName("verse");
 
 // special LilyPond directives
 const std::string Text::FakeSegno   = "Segno"; // DEPRECATED
