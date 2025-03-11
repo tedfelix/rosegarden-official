@@ -15,12 +15,11 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_CONTROLLERWIDGET_H
-#define RG_CONTROLLERWIDGET_H
+#ifndef RG_PROGRAMCHANGEWIDGET_H
+#define RG_PROGRAMCHANGEWIDGET_H
 
 #include "EventWidget.h"
 
-class QComboBox;
 class QSpinBox;
 
 
@@ -32,11 +31,11 @@ class EditEvent;
 class Event;
 
 
-class ControllerWidget : public EventWidget
+class ProgramChangeWidget : public EventWidget
 {
 public:
 
-    ControllerWidget(EditEvent *parent, const Event &event);
+    ProgramChangeWidget(EditEvent *parent, const Event &event);
 
     PropertyNameSet getPropertyFilter() const override;
 
@@ -49,8 +48,7 @@ private:
 
     // Widgets
 
-    QComboBox *m_numberComboBox;
-    QSpinBox *m_valueSpinBox;
+    QSpinBox *m_programSpinBox;
 
 };
 

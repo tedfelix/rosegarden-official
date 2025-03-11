@@ -24,6 +24,7 @@
 #include "NoteWidget.h"
 #include "RestWidget.h"
 #include "ControllerWidget.h"
+#include "ProgramChangeWidget.h"
 
 #include "base/Event.h"
 #include "base/MidiTypes.h"
@@ -42,6 +43,8 @@ EventWidget *EventWidget::create(EditEvent *parent, const Event &event)
         return new RestWidget(parent, event);
     if (event.getType() == Controller::EventType)
         return new ControllerWidget(parent, event);
+    if (event.getType() == ProgramChange::EventType)
+        return new ProgramChangeWidget(parent, event);
 
     return nullptr;
 }

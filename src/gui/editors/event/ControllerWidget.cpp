@@ -24,12 +24,10 @@
 #include "base/MidiProgram.h"  // For MidiMinValue, etc...
 #include "base/MidiTypes.h"  // For Controller::NUMBER...
 
-#include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QPushButton>
 #include <QSpinBox>
 
 
@@ -39,14 +37,11 @@ namespace Rosegarden
 
 // ??? Promote this up someplace more common so EventListEditor and
 //     others can use it.
-// ??? Why not just load these into a combo box?  Then there will be
-//     no need for update trickery.
 // ??? We should also show these on the EventListEditor.
 // ??? We should also consider using the controller list that is in the
 //     Device.  That is probably more accurate in some cases and should
-//     have higher priority than these names.  Maybe bold-face the names
-//     we get from the Device to indicate "official".
-// ??? Move this to a more central location.
+//     have higher priority than these names.  Maybe highlight the names
+//     we get from the Device to indicate "official".  (Add a "*"?)
 typedef std::map<int, QString> ControllerNames;
 static const ControllerNames controllerNames = {
     { 0, "Bank Select MSB" },
