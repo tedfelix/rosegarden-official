@@ -26,6 +26,7 @@
 #include "ControllerWidget.h"
 #include "ProgramChangeWidget.h"
 #include "PitchBendWidget.h"
+#include "ChannelPressureWidget.h"
 
 #include "base/Event.h"
 #include "base/MidiTypes.h"
@@ -50,16 +51,17 @@ EventWidget *EventWidget::create(EditEvent *parent, const Event &event)
         return new ProgramChangeWidget(parent, event);
     if (type == PitchBend::EventType)
         return new PitchBendWidget(parent, event);
-    //Indication::EventType
-    //Text::EventType
-    //Guitar::Chord::EventType
+    if (type == ChannelPressure::EventType)
+        return new ChannelPressureWidget(parent, event);
     //KeyPressure::EventType
-    //ChannelPressure::EventType
     //SystemExclusive::EventType
 
     // ??? Probably won't do these.  Notation editor handles these better.
     //Clef::EventType
     //Key::EventType
+    //Indication::EventType
+    //Text::EventType
+    //Guitar::Chord::EventType
 
     return nullptr;
 }

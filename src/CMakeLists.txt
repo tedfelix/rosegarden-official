@@ -221,6 +221,7 @@ set(rg_CPPS
   gui/editors/event/ControllerWidget.cpp
   gui/editors/event/ProgramChangeWidget.cpp
   gui/editors/event/PitchBendWidget.cpp
+  gui/editors/event/ChannelPressureWidget.cpp
   gui/editors/pitchtracker/PitchHistory.cpp
   gui/editors/pitchtracker/PitchTrackerView.cpp
   gui/editors/pitchtracker/PitchGraphWidget.cpp
