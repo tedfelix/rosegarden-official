@@ -207,6 +207,7 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
 
     RG_DEBUG << "handle:" << m_handle << "widget:" << m_widget;
 
+#ifdef HAVE_GTK2
     if (m_uiType == AudioPluginLV2GUI::GTK) {
         LV2Gtk* lv2gtk = LV2Gtk::getInstance();
         m_gwidget = lv2gtk->getWidget(m_widget, this);
@@ -229,6 +230,9 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
         RG_DEBUG << "got gtk window" << m_parentWindow <<
             m_parentWindow->parent();
     }
+#else
+    RG_DEBUG << "gtk2 UI not available";
+#endif
 }
 
 AudioPluginLV2GUIWindow::~AudioPluginLV2GUIWindow()
@@ -319,8 +323,10 @@ void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
     // tell the ui to tidy up
     if (m_parentWindow) m_parentWindow->setParent(nullptr);
 
+#ifdef HAVE_GTK2
     LV2Gtk* lv2gtk = LV2Gtk::getInstance();
     lv2gtk->deleteWidget(m_gwidget);
+#endif
 
     // this will cause this object to be deleted
     m_lv2Gui->closeUI();
