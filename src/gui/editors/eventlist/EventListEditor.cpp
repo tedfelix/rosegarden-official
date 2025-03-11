@@ -624,8 +624,12 @@ EventListEditor::updateTableWidget()
                        arg(strtoqstr(event->get<String>(
                                Clef::ClefPropertyName)));
         } else if (event->has(PitchBend::MSB)) {
-            data1Str = QString("%1  ").
-                       arg(event->get<Int>(PitchBend::MSB));
+            const int msb = event->get<Int>(PitchBend::MSB);
+            int lsb{0};
+            if (event->has(PitchBend::LSB))
+                lsb = event->get<Int>(PitchBend::LSB);
+            const int value = (msb << 7) + lsb;
+            data1Str = QString("%1").arg(value);
         } else if (event->has(BaseProperties::BEAMED_GROUP_TYPE)) {
             data1Str = QString("%1  ").
                        arg(strtoqstr(event->get<String>(
@@ -672,9 +676,6 @@ EventListEditor::updateTableWidget()
                        arg(event->get<Int>(
                                Indication::IndicationDurationPropertyName));
 #endif
-        } else if (event->has(PitchBend::LSB)) {
-            data2Str = QString("%1  ").
-                       arg(event->get<Int>(PitchBend::LSB));
         } else if (event->has(BaseProperties::BEAMED_GROUP_ID)) {
             data2Str = tr("(group %1)  ").
                        arg(event->get<Int>(BaseProperties::BEAMED_GROUP_ID));

@@ -25,6 +25,7 @@
 #include "RestWidget.h"
 #include "ControllerWidget.h"
 #include "ProgramChangeWidget.h"
+#include "PitchBendWidget.h"
 
 #include "base/Event.h"
 #include "base/MidiTypes.h"
@@ -37,14 +38,28 @@ namespace Rosegarden
 
 EventWidget *EventWidget::create(EditEvent *parent, const Event &event)
 {
-    if (event.getType() == Note::EventType)
+    const std::string type = event.getType();
+
+    if (type == Note::EventType)
         return new NoteWidget(parent, event);
-    if (event.getType() == Note::EventRestType)
+    if (type == Note::EventRestType)
         return new RestWidget(parent, event);
-    if (event.getType() == Controller::EventType)
+    if (type == Controller::EventType)
         return new ControllerWidget(parent, event);
-    if (event.getType() == ProgramChange::EventType)
+    if (type == ProgramChange::EventType)
         return new ProgramChangeWidget(parent, event);
+    if (type == PitchBend::EventType)
+        return new PitchBendWidget(parent, event);
+    //Indication::EventType
+    //Text::EventType
+    //Guitar::Chord::EventType
+    //KeyPressure::EventType
+    //ChannelPressure::EventType
+    //SystemExclusive::EventType
+
+    // ??? Probably won't do these.  Notation editor handles these better.
+    //Clef::EventType
+    //Key::EventType
 
     return nullptr;
 }
