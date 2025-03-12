@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -28,6 +28,7 @@
 #include "PitchBendWidget.h"
 #include "ChannelPressureWidget.h"
 #include "KeyPressureWidget.h"
+#include "SysExWidget.h"
 
 #include "base/Event.h"
 #include "base/MidiTypes.h"
@@ -56,7 +57,8 @@ EventWidget *EventWidget::create(EditEvent *parent, const Event &event)
         return new ChannelPressureWidget(parent, event);
     if (type == KeyPressure::EventType)
         return new KeyPressureWidget(parent, event);
-    //SystemExclusive::EventType
+    if (type == SystemExclusive::EventType)
+        return new SysExWidget(parent, event);
 
     // ??? Probably won't do these.  Notation editor handles these better.
     //Clef::EventType
