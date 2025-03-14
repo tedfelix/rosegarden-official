@@ -63,7 +63,7 @@ Exception::Exception(const std::string& message,
 #endif
 }
 
-Exception::Exception(QString message) :
+Exception::Exception(const QString& message) :
     m_message(message.toUtf8().data())
 {
 #ifndef NDEBUG
@@ -72,7 +72,7 @@ Exception::Exception(QString message) :
 #endif
 }
 
-Exception::Exception(QString message, QString file, int line) :
+Exception::Exception(const QString& message, QString file, int line) :
     m_message(message.toUtf8().data())
 {
     // Fix compiler warning.

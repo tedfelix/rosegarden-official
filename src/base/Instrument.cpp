@@ -209,7 +209,7 @@ setProgram(const MidiProgram &program)
 bool
 Instrument::isProgramValid() const
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    const MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md)
         return false;
 

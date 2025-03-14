@@ -120,7 +120,7 @@ matches(Event *e) const
 // @author Tom Breton (Tehom)
 int
 ControllerContextMap::
-getStaticValue(Instrument *instrument,
+getStaticValue(const Instrument *instrument,
                const std::string& eventType,
                int controllerId)
 {
@@ -135,7 +135,7 @@ getStaticValue(Instrument *instrument,
 // @author Tom Breton (Tehom)
 int
 ControllerContextMap::
-getControllerValue(Instrument *instrument, Segment *a, Segment *b,
+getControllerValue(Instrument *instrument, const Segment *a, const Segment *b,
                    timeT searchTime, const std::string& eventType,
                    int controllerId)
 {
@@ -222,7 +222,7 @@ getControllerValue(Instrument *instrument, Segment *a, Segment *b,
 // @author Tom Breton (Tehom)
 const ControlParameter *
 ControllerContextMap::
-getControlParameter(Instrument *instrument,
+getControlParameter(const Instrument *instrument,
                     const std::string& eventType,
                     const int controllerId)
 {
@@ -257,8 +257,8 @@ makeAbsolute(const ControlParameter * controlParameter, int value)
 // @author Tom Breton (Tehom)
 void
 ControllerContextMap::
-makeControlValueAbsolute(Instrument *instrument, Segment *a,
-                         Segment *b, Event *e, timeT at)
+makeControlValueAbsolute(Instrument *instrument, const Segment *a,
+                         const Segment *b, Event *e, timeT at)
 {
     Profiler profiler("ControllerContextMap::makeControlValueAbsolute", false);
     const std::string eventType = e->getType();

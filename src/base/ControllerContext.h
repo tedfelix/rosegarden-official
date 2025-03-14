@@ -96,8 +96,8 @@ struct ControllerContextMap
     m_PitchBendLatestValue(Maybe(false,ControllerSearchValue()))
     {};
 
-    void makeControlValueAbsolute(Instrument *instrument, Segment *a,
-                                  Segment *b, Event *e, timeT at);
+    void makeControlValueAbsolute(Instrument *instrument, const Segment *a,
+                                  const Segment *b, Event *e, timeT at);
 
     // Return the respective controller value at searchTime.  Segment
     // A is primary and governs timing and repitition.  Segment
@@ -105,7 +105,7 @@ struct ControllerContextMap
     // takes priority.  Defaults from Instrument will be used if
     // neccessary.
     int getControllerValue(Instrument *instrument,
-                           Segment *a, Segment *b,
+                           const Segment *a, const Segment *b,
                            timeT searchTime, const std::string& eventType,
                            int controllerId);
 
@@ -116,11 +116,11 @@ struct ControllerContextMap
     static int makeAbsolute(const ControlParameter * controlParameter,
                      int value);
     static const ControlParameter
-    *getControlParameter(Instrument *instrument,
+    *getControlParameter(const Instrument *instrument,
                          const std::string& eventType,
                          const int controllerId);
     static int
-    getStaticValue(Instrument *instrument,
+    getStaticValue(const Instrument *instrument,
                    const std::string& eventType, int controllerId);
 
     Cache             m_latestValues;
