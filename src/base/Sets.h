@@ -100,7 +100,8 @@ public:
     Iterator getHighestNote() const     { return m_highest;  }
     Iterator getLowestNote() const      { return m_lowest;   }
 
-    virtual bool contains(const Iterator &) const = 0;
+    // unused
+    //virtual bool contains(const Iterator &) const = 0;
 
     /// Return the pointed-to element, in Event form (public to work around gcc-2.95 bug)
     static Event *getAsEvent(const Iterator &i);
@@ -175,7 +176,8 @@ public:
     virtual int getMarkCountForChord() const;
     virtual std::vector<Mark> getMarksForChord() const;
     virtual std::vector<int> getPitches() const;
-    bool contains(const Iterator &) const override;
+    // unused
+    //bool contains(const Iterator &) const override;
 
     void initialiseFinish() override;
 
@@ -647,17 +649,18 @@ GenericChord<Element, Container, singleStaff>::getPitches() const
 }
 
 
-template <class Element, class Container, bool singleStaff>
-bool
-GenericChord<Element, Container, singleStaff>::contains(const Iterator &itr) const
-{
-    for (typename std::vector<typename Container::iterator>::const_iterator
-             i = std::vector<typename Container::iterator>::begin();
-         i != std::vector<typename Container::iterator>::end(); ++i) {
-        if (*i == itr) return true;
-    }
-    return false;
-}
+// unused
+// template <class Element, class Container, bool singleStaff>
+// bool
+// GenericChord<Element, Container, singleStaff>::contains(const Iterator &itr) const
+// {
+//     for (typename std::vector<typename Container::iterator>::const_iterator
+//              i = std::vector<typename Container::iterator>::begin();
+//          i != std::vector<typename Container::iterator>::end(); ++i) {
+//         if (*i == itr) return true;
+//     }
+//     return false;
+// }
 
 
 template <class Element, class Container, bool singleStaff>
