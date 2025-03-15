@@ -135,7 +135,8 @@ getStaticValue(const Instrument *instrument,
 // @author Tom Breton (Tehom)
 int
 ControllerContextMap::
-getControllerValue(Instrument *instrument, const Segment *a, const Segment *b,
+getControllerValue(const Instrument *instrument,
+                   const Segment *a, const Segment *b,
                    timeT searchTime, const std::string& eventType,
                    int controllerId)
 {
@@ -257,7 +258,7 @@ makeAbsolute(const ControlParameter * controlParameter, int value)
 // @author Tom Breton (Tehom)
 void
 ControllerContextMap::
-makeControlValueAbsolute(Instrument *instrument, const Segment *a,
+makeControlValueAbsolute(const Instrument *instrument, const Segment *a,
                          const Segment *b, Event *e, timeT at)
 {
     Profiler profiler("ControllerContextMap::makeControlValueAbsolute", false);

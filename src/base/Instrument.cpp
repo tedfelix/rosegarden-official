@@ -269,7 +269,7 @@ Instrument::sendsProgramChange() const
         //RG_DEBUG << "sendsProgramChange() percussion Instrument...";
         //RG_DEBUG << "  channel:" << getNaturalChannel();
 
-        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
+        const MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
         if (!midiDevice)
             return false;
 
@@ -322,7 +322,7 @@ Instrument::getLSB() const
 void
 Instrument::pickFirstProgram(bool percussion)
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    const MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md)
         return;
 
