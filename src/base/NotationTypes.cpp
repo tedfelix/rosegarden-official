@@ -131,7 +131,7 @@ namespace Marks
     const Mark MordentLong = "mordent-long";
     const Mark MordentLongInverted = "mordent-long-inverted";
 
-    ROSEGARDENPRIVATE_EXPORT string getTextMark(string text) {
+    ROSEGARDENPRIVATE_EXPORT string getTextMark(const string& text) {
         return string("text_") + text;
     }
 
@@ -144,7 +144,7 @@ namespace Marks
         else return string(mark).substr(5);
     }
 
-    ROSEGARDENPRIVATE_EXPORT string getFingeringMark(string fingering) {
+    ROSEGARDENPRIVATE_EXPORT string getFingeringMark(const string& fingering) {
         return string("finger_") + fingering;
     }
 
@@ -152,7 +152,7 @@ namespace Marks
         return string(mark).substr(0, 7) == "finger_";
     }
 
-    ROSEGARDENPRIVATE_EXPORT bool isApplicableToRests(Mark mark) {
+    ROSEGARDENPRIVATE_EXPORT bool isApplicableToRests(const Mark& mark) {
         if (mark == Marks::Pause) return true;
         if (isTextMark(mark)) return true;
         return false;
@@ -287,15 +287,15 @@ namespace Marks
 
     ROSEGARDENPRIVATE_EXPORT std::vector<Mark> getStandardMarks() {
 
-        static Mark a[] = {
-            NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato, Open,
-            Stopped, Harmonic, Sforzando, Rinforzando, Trill, LongTrill,
-            TrillLine, Turn, Pause, UpBow, DownBow, Mordent, MordentInverted,
-            MordentLong, MordentLongInverted
-        };
-
         static std::vector<Mark> v;
         if (v.size() == 0) {
+            static Mark a[] = {
+                NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato, Open,
+                Stopped, Harmonic, Sforzando, Rinforzando, Trill, LongTrill,
+                TrillLine, Turn, Pause, UpBow, DownBow, Mordent,
+                MordentInverted, MordentLong, MordentLongInverted
+            };
+
             for (size_t i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
                 v.push_back(a[i]);
         }
@@ -596,7 +596,7 @@ Key::KeyList Key::getKeys(bool minor)
     return result;
 }
 
-Key Key::transpose(int pitchDelta, int heightDelta)
+Key Key::transpose(int pitchDelta, int heightDelta) const
 {
     Pitch tonic(getTonicPitch(), getAccidentalForStep(0));
     Pitch newTonic = tonic.transpose(*this, pitchDelta, heightDelta);
@@ -1106,7 +1106,7 @@ resolveSpecifiedAccidental(int pitch,
                               const Key &key,
                               int &height,
                               int &octave,
-                              Accidental &inputAccidental,
+                              const Accidental &inputAccidental,
                               Accidental &outputAccidental)
 {
         // 4.  Get info from the Key
@@ -1906,6 +1906,8 @@ Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta) const
     if (newStep < 0 || newPitch < 0) {
         std::cerr << "Internal error in NotationTypes, Pitch::transpose()"
             << std::endl;
+        if (newStep < 0) newStep = 0;
+        if (newPitch < 0) newPitch = 0;
     }
 
     // calculate new accidental for step

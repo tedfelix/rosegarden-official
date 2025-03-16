@@ -224,9 +224,9 @@ MidiDevice::createInstruments(InstrumentId base)
         // ??? Since we don't have a connection yet, this makes
         //     little sense.
         //instrument->sendChannelSetup();
-        addInstrument(instrument);
+        MidiDevice::addInstrument(instrument);
     }
-    renameInstruments();
+    MidiDevice::renameInstruments();
 }
 
 void
@@ -883,7 +883,7 @@ MidiDevice::removeControlParameter(int index)
 bool
 MidiDevice::modifyControlParameter(const ControlParameter &con, int index)
 {
-    if (index < 0 || index > (int)m_controlList.size()) return false;
+    if (index < 0 || index >= (int)m_controlList.size()) return false;
     removeControlFromInstrument(m_controlList[index]);
     m_controlList[index] = con;
     addControlToInstrument(con);

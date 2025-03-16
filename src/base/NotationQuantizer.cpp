@@ -73,7 +73,7 @@ public:
         // and duration values from half-quantized events, so that we
         // can treat them using the normal Chord class
     public:
-        explicit ProvisionalQuantizer(Impl *i) : Quantizer("blah", "blahblah"), m_impl(i) { }
+        explicit ProvisionalQuantizer(const Impl *i) : Quantizer("blah", "blahblah"), m_impl(i) { }
         timeT getQuantizedDuration(const Event *e) const override {
             return m_impl->getProvisional(e, DurationValue);
         }
@@ -86,7 +86,7 @@ public:
         }
 
     private:
-        Impl *m_impl;
+        const Impl *m_impl;
     };
 
     void quantizeRange(Segment *,
@@ -268,7 +268,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 {
     Profiler profiler("NotationQuantizer::Impl::quantizeAbsoluteTime");
 
-    Composition *comp = s->getComposition();
+    const Composition *comp = s->getComposition();
 
     TimeSignature timeSig;
     timeT t = m_q->getFromSource(*i, AbsoluteTimeValue);
@@ -562,7 +562,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
     cout << "quantizeDuration: chord has " << c.size() << " notes" << endl;
 #endif
 
-    Composition *comp = s->getComposition();
+    const Composition *comp = s->getComposition();
 
     TimeSignature timeSig;
 //    timeT t = m_q->getFromSource(*c.getInitialElement(), AbsoluteTimeValue);
@@ -1029,7 +1029,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
                                        Segment::iterator from,
                                        Segment::iterator to) const
 {
-    Profiler *profiler = new Profiler("NotationQuantizer::Impl::quantizeRange");
+    Profiler profiler("NotationQuantizer::Impl::quantizeRange");
 
 /*
     clock_t start = clock();
@@ -1102,7 +1102,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 
     // now we've grouped into chords, look for tuplets next
 
-    Composition *comp = s->getComposition();
+    const Composition *comp = s->getComposition();
 
     if (m_maxTuplet >= 2) {
 
@@ -1122,7 +1122,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
         ++passes;
     }
 
-    ProvisionalQuantizer provisionalQuantizer((Impl *)this);
+    ProvisionalQuantizer provisionalQuantizer(this);
 
     for (i = from; i != to; ++i) {
 
@@ -1193,7 +1193,6 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 
         m_q->setToTarget(s, i, t, d);
     }
-    ++passes;
 /*
     cerr << "NotationQuantizer: " << events << " events ("
          << notes << " notes), " << passes << " passes, "
@@ -1204,10 +1203,6 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
     if (s->getEndTime() < segmentEndTime) {
         s->setEndMarkerTime(segmentEndTime);
     }
-
-    delete profiler; // on heap so it updates before the next line:
-    // ??? Removing.  Really noisy with huge files.
-    //Profiles::getInstance()->dump();
 
 }
 

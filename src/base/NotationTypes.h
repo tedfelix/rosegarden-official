@@ -180,7 +180,7 @@ namespace Marks
      * text mark containing that string.  For example, the Sforzando
      * mark is actually defined as getTextMark("sf").
      */
-    extern ROSEGARDENPRIVATE_EXPORT Mark getTextMark(std::string text);
+    extern ROSEGARDENPRIVATE_EXPORT Mark getTextMark(const std::string& text);
 
     /**
      * Return true if the given mark is a text mark.
@@ -198,7 +198,8 @@ namespace Marks
      * instead of a number to permit "fingering" marks containing
      * labels like "+".)
      */
-    extern ROSEGARDENPRIVATE_EXPORT Mark getFingeringMark(std::string fingering);
+    extern ROSEGARDENPRIVATE_EXPORT Mark getFingeringMark
+    (const std::string& fingering);
 
     /**
      * Return true if the given mark is a fingering mark.
@@ -213,7 +214,7 @@ namespace Marks
     /**
      * Return true if the given mark makes sense when applied to a rest.
      */
-    extern ROSEGARDENPRIVATE_EXPORT bool isApplicableToRests(Mark mark);
+    extern ROSEGARDENPRIVATE_EXPORT bool isApplicableToRests(const Mark& mark);
 
     /**
      * Extract the number of marks from an event.
@@ -242,7 +243,8 @@ namespace Marks
      * there to remove.  If the mark was not unique, removes only
      * the first instance of it.
      */
-    extern ROSEGARDENPRIVATE_EXPORT bool removeMark(Event &e, const Mark &mark);
+    extern ROSEGARDENPRIVATE_EXPORT bool removeMark
+    (Event &e, const Mark &markToRemove);
 
     /**
      * Returns true if the event has the given mark.
@@ -577,7 +579,7 @@ public:
      * For example: transposing F major by a major triad (4,2) yields
      *  A major.
      */
-    Key transpose(int pitchDelta, int heightDelta);
+    Key transpose(int pitchDelta, int heightDelta) const;
 
 private:
     std::string m_name;
