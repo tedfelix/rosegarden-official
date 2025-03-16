@@ -228,9 +228,9 @@ SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from,
 
         //now go through s from 'from' to 'to', inserting the equivalent
         //event in linkedSegToUpdate
-        for(Segment::const_iterator itr = s->findTime(from);
-                                    itr != s->findTime(to); ++itr) {
-            const Event *e = *itr;
+        for(Segment::const_iterator itr1 = s->findTime(from);
+                                    itr1 != s->findTime(to); ++itr1) {
+            const Event *e = *itr1;
 
             timeT eventT = (e->getAbsoluteTime() - sourceSegStartTime)
                            + segStartTime;
@@ -384,7 +384,7 @@ SegmentLinker::refreshSegment(Segment *seg)
     for (itr = m_linkedSegmentParamsList.begin();
         itr!= m_linkedSegmentParamsList.end(); ++itr) {
 
-        LinkedSegmentParams &linkedSegParams = *itr;
+        const LinkedSegmentParams &linkedSegParams = *itr;
         Segment *other = linkedSegParams.m_linkedSegment;
         if (other != seg) {
             sourceSeg = other;

@@ -194,11 +194,10 @@ void Profiles::dump() const
 
 Profiler::Profiler(const char* name, bool showOnDestruct) :
     m_c(name),
+    m_startCPU(clock()),
     m_showOnDestruct(showOnDestruct),
     m_ended(false)
 {
-    m_startCPU = clock();
-
     struct timeval tv;
     (void)gettimeofday(&tv, nullptr);
     m_startTime = RealTime::fromTimeval(tv);

@@ -228,7 +228,9 @@ public:
     int getBarForX(double x) const override;
     timeT getTimeForX(double x) const override;
     double getXForTime(timeT time) const override;
+    // cppcheck-suppress uselessOverride
     int getFirstVisibleBar() const override;
+    // cppcheck-suppress uselessOverride
     int getLastVisibleBar() const override;
 
     void setXZoomFactor(double f) { m_xfactor = f; }

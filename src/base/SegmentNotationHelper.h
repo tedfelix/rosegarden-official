@@ -332,7 +332,7 @@ public:
      * will be acceptable.  The default is whatever the segment's
      * quantizer considers acceptable (probably either 1 or 2 dots).
      */
-    static bool isViable(Event *e, int dots = -1) {
+    static bool isViable(const Event *e, int dots = -1) {
         return isViable(e->getDuration(), dots);
     }
 

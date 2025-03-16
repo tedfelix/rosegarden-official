@@ -40,13 +40,13 @@ public:
     typedef PropertyDefnNotDefined basic_type;
 
     static std::string typeName() { return "Undefined"; }
-    static basic_type parse(std::string);
+    static basic_type parse(const std::string&);
     static std::string unparse(basic_type);
 };
 
 template <PropertyType P>
 typename PropertyDefn<P>::basic_type
-PropertyDefn<P>::parse(std::string)
+PropertyDefn<P>::parse(const std::string&)
 {
     throw(0);
 }
@@ -66,7 +66,7 @@ public:
     typedef long basic_type;
 
     static std::string typeName();
-    static basic_type parse(std::string s);
+    static basic_type parse(const std::string& s);
     static std::string unparse(basic_type i);
 };
 
@@ -78,7 +78,7 @@ public:
     typedef std::string basic_type;
 
     static std::string typeName();
-    static basic_type parse(std::string s);
+    static basic_type parse(const std::string& s);
     static std::string unparse(basic_type i);
 };
 
@@ -89,7 +89,7 @@ public:
     typedef bool basic_type;
 
     static std::string typeName();
-    static basic_type parse(std::string s);
+    static basic_type parse(const std::string& s);
     static std::string unparse(basic_type i);
 };
 
@@ -100,7 +100,7 @@ public:
     typedef RealTime basic_type;
 
     static std::string typeName();
-    static basic_type parse(std::string s);
+    static basic_type parse(const std::string& s);
     static std::string unparse(basic_type i);
 };
 

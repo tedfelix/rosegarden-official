@@ -291,7 +291,7 @@ bool
 Segment::isLinkedTo(Segment * seg) const {
     if (!m_segmentLinker) return false;
 
-    SegmentLinker * otherSegmentLinker = seg->getLinker();
+    const SegmentLinker * otherSegmentLinker = seg->getLinker();
     if (!otherSegmentLinker) return false;
 
     return m_segmentLinker == otherSegmentLinker;
@@ -695,9 +695,9 @@ Segment::erase(iterator from, iterator to)
     }
 
     if (startTime == m_startTime && begin() != end()) {
-        timeT startTime = (*begin())->getAbsoluteTime();
-        if (m_composition) m_composition->setSegmentStartTime(this, startTime);
-        else m_startTime = startTime;
+        timeT startTime1 = (*begin())->getAbsoluteTime();
+        if (m_composition) m_composition->setSegmentStartTime(this, startTime1);
+        else m_startTime = startTime1;
         notifyStartChanged(m_startTime);
     }
 
@@ -844,7 +844,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     // the start and end times, consider separately each of the sections
     // they divide the range up into.
 
-    Composition *composition = getComposition();
+    const Composition *composition = getComposition();
     if (composition) {
         int timeSigNo = composition->getTimeSignatureNumberAt(startTime);
         if (timeSigNo < composition->getTimeSignatureCount() - 1) {

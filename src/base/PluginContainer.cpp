@@ -18,6 +18,7 @@
 #include "PluginContainer.h"
 
 #include "base/AudioPluginInstance.h"
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {
@@ -72,7 +73,7 @@ PluginContainer::clearPlugins()
     m_audioPlugins.erase(m_audioPlugins.begin(), m_audioPlugins.end());
 }
 
-void 
+void
 PluginContainer::emptyPlugins()
 {
     AudioPluginVector::iterator it = m_audioPlugins.begin();
@@ -90,16 +91,13 @@ PluginContainer::emptyPlugins()
 AudioPluginInstance *
 PluginContainer::getPlugin(unsigned int position) const
 {
-    // For each plugin
-    for (AudioPluginVector::const_iterator it = m_audioPlugins.begin();
-         it != m_audioPlugins.end();
-         ++it) {
-        // Found?  Return it.
-        if ((*it)->getPosition() == position)
-            return *it;
-    }
-
-    return nullptr;
+    AudioPluginVector::const_iterator iter =
+        find_if(m_audioPlugins.begin(),
+                m_audioPlugins.end(),
+                [position](const AudioPluginInstance* plugin)
+                {return plugin->getPosition() == position; } );
+    if (iter == m_audioPlugins.end()) return 0;
+    return (*iter);
 }
 
 

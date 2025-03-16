@@ -19,7 +19,7 @@
 namespace Rosegarden
 {
 
-Segment::iterator SegmentMatrixHelper::insertNote(Event* e)
+Segment::iterator SegmentMatrixHelper::matrixInsertNote(Event* e)
 {
     Segment::iterator i = segment().insert(e);
     segment().normalizeRests(e->getAbsoluteTime(),

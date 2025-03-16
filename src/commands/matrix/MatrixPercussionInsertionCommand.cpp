@@ -98,7 +98,7 @@ void MatrixPercussionInsertionCommand::modifySegment()
 
     SegmentMatrixHelper helper(s);
     m_lastInsertedEvent = new Event(*m_event);
-    helper.insertNote(m_lastInsertedEvent);
+    helper.matrixInsertNote(m_lastInsertedEvent);
 }
 
 timeT
