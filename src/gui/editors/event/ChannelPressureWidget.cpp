@@ -35,8 +35,7 @@ namespace Rosegarden
 
 
 ChannelPressureWidget::ChannelPressureWidget(EditEvent *parent, const Event &event) :
-    EventWidget(parent),
-    m_parent(parent)
+    EventWidget(parent)
 {
     if (event.getType() != ChannelPressure::EventType)
         return;

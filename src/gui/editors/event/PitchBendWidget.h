@@ -44,8 +44,6 @@ public:
 
 private:
 
-    EditEvent *m_parent;
-
     // Widgets
 
     QSpinBox *m_pitchBendSpinBox;

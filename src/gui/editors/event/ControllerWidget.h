@@ -45,8 +45,6 @@ public:
 
 private:
 
-    EditEvent *m_parent;
-
     // Widgets
 
     QComboBox *m_numberComboBox;

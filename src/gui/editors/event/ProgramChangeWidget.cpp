@@ -35,8 +35,7 @@ namespace Rosegarden
 
 
 ProgramChangeWidget::ProgramChangeWidget(EditEvent *parent, const Event &event) :
-    EventWidget(parent),
-    m_parent(parent)
+    EventWidget(parent)
 {
     if (event.getType() != ProgramChange::EventType)
         return;

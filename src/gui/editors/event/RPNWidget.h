@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_CHANNELPRESSUREWIDGET_H
-#define RG_CHANNELPRESSUREWIDGET_H
+#ifndef RG_RPNWIDGET_H
+#define RG_RPNWIDGET_H
 
 #include "EventWidget.h"
 
@@ -31,11 +31,11 @@ class EditEvent;
 class Event;
 
 
-class ChannelPressureWidget : public EventWidget
+class RPNWidget : public EventWidget
 {
 public:
 
-    ChannelPressureWidget(EditEvent *parent, const Event &event);
+    RPNWidget(EditEvent *parent, const Event &event);
 
     PropertyNameSet getPropertyFilter() const override;
 
@@ -46,7 +46,8 @@ private:
 
     // Widgets
 
-    QSpinBox *m_pressureSpinBox;
+    QSpinBox *m_rpnSpinBox;
+    QSpinBox *m_valueSpinBox;
 
 };
 

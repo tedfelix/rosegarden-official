@@ -37,8 +37,7 @@ namespace Rosegarden
 
 
 KeyPressureWidget::KeyPressureWidget(EditEvent *parent, const Event &event) :
-    EventWidget(parent),
-    m_parent(parent)
+    EventWidget(parent)
 {
     if (event.getType() != KeyPressure::EventType)
         return;

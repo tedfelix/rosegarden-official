@@ -96,8 +96,7 @@ static const ControllerNames controllerNames = {
 };
 
 ControllerWidget::ControllerWidget(EditEvent *parent, const Event &event) :
-    EventWidget(parent),
-    m_parent(parent)
+    EventWidget(parent)
 {
     if (event.getType() != Controller::EventType)
         return;

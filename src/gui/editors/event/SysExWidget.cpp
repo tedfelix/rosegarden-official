@@ -45,8 +45,7 @@ namespace Rosegarden
 
 
 SysExWidget::SysExWidget(EditEvent *parent, const Event &event) :
-    EventWidget(parent),
-    m_parent(parent)
+    EventWidget(parent)
 {
     if (event.getType() != SystemExclusive::EventType)
         return;

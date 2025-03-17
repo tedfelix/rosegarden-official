@@ -29,6 +29,7 @@
 #include "ChannelPressureWidget.h"
 #include "KeyPressureWidget.h"
 #include "SysExWidget.h"
+#include "RPNWidget.h"
 
 #include "base/Event.h"
 #include "base/MidiTypes.h"
@@ -59,6 +60,8 @@ EventWidget *EventWidget::create(EditEvent *parent, const Event &event)
         return new KeyPressureWidget(parent, event);
     if (type == SystemExclusive::EventType)
         return new SysExWidget(parent, event);
+    if (type == RPN::EventType)
+        return new RPNWidget(parent, event);
 
     // ??? Probably won't do these.  Notation editor handles these better.
     //Clef::EventType

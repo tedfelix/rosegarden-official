@@ -50,8 +50,6 @@ private slots:
 
 private:
 
-    EditEvent *m_parent;
-
     // Widgets
 
     LineEdit *m_dataEdit;
