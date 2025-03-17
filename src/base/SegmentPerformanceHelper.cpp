@@ -133,7 +133,6 @@ SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
 
         // i is a grace note.  Find the first host note following it
 
-        j = i;
         while (++j != end()) {
             if ((*j)->getNotationAbsoluteTime() >
                 (*i)->getNotationAbsoluteTime()) break;
@@ -423,7 +422,6 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::
         (**j)->set<Bool>(MAY_HAVE_GRACE_NOTES, true);
     }
 
-    timeT graceNoteTime = hostNoteEarliestTime;
     timeT graceNoteDuration = hostNoteNotationDuration / 4;
     if (graceNoteDuration > hostNoteShortestDuration / 2) {
         graceNoteDuration = hostNoteShortestDuration / 2;
@@ -434,6 +432,7 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::
         d = (*i)->getDuration() - graceNoteDuration;
     } else {
 
+        timeT graceNoteTime = hostNoteEarliestTime;
         int count = 0, index = 0;
         bool found = false;
         int prevSubOrdering = 0;
