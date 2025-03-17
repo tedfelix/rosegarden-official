@@ -323,6 +323,12 @@ EditEvent::getEvent()
         if (!typeItem)
             continue;
         QString type = typeItem->text();
+        // If non-persistent...
+        if (type.endsWith(" (n)")) {
+            type = type.left(type.length() - 4);
+            // ??? Probably want to preserve this and recreate below.
+            //persistent = false
+        }
 
         QTableWidgetItem *valueItem = m_propertyTable->item(row, 2);
         if (!valueItem)
@@ -393,36 +399,25 @@ void EditEvent::addProperty(const PropertyName &name)
     const int row = m_propertyTable->rowCount();
     m_propertyTable->insertRow(row);
 
-    // Go with bold for persistent properties.
-    // ??? Actually, bold is hard to read.
-    const bool bold = m_event.isPersistent(name);
-    QFont boldFont;
-
     int col{0};
 
     // Name
     QTableWidgetItem *nameItem = new QTableWidgetItem(name.getName().c_str());
-    if (bold) {
-        boldFont = nameItem->font();
-        boldFont.setBold(true);
-        nameItem->setFont(boldFont);
-    }
     m_propertyTable->setItem(row, col++, nameItem);
 
     // Type
-    QTableWidgetItem *item = new QTableWidgetItem(
-            m_event.getPropertyTypeAsString(name).c_str());
+    QString type = m_event.getPropertyTypeAsString(name).c_str();
+    // Not persistent?  Add "(n)".
+    if (!m_event.isPersistent(name))
+        type += " (n)";
+    QTableWidgetItem *item = new QTableWidgetItem(type);
     // ??? For now, make this read-only.  If we want to allow editing
     //     of this, we need a combo box with the types in it.
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    if (bold)
-        item->setFont(boldFont);
     m_propertyTable->setItem(row, col++, item);
 
     // Value
     item = new QTableWidgetItem(m_event.getAsString(name).c_str());
-    if (bold)
-        item->setFont(boldFont);
     m_propertyTable->setItem(row, col++, item);
 }
 
