@@ -15,13 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[RPNWidget]"
+#define RG_MODULE_STRING "[NRPNWidget]"
 #define RG_NO_DEBUG_PRINT
 
-#include "RPNWidget.h"
+#include "NRPNWidget.h"
 
 #include "base/Event.h"
-#include "base/MidiTypes.h"  // For RPN::NUMBER...
+#include "base/MidiTypes.h"  // For NRPN::NUMBER...
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -33,10 +33,10 @@ namespace Rosegarden
 {
 
 
-RPNWidget::RPNWidget(EditEvent *parent, const Event &event) :
+NRPNWidget::NRPNWidget(EditEvent *parent, const Event &event) :
     EventWidget(parent)
 {
-    if (event.getType() != RPN::EventType)
+    if (event.getType() != NRPN::EventType)
         return;
 
     // Main layout.
@@ -46,10 +46,10 @@ RPNWidget::RPNWidget(EditEvent *parent, const Event &event) :
     // Using QGridLayout because it is handy.  Any layout would do here.
     QGridLayout *mainLayout = new QGridLayout(this);
 
-    // RPN Properties group box
+    // NRPN Properties group box
 
     QGroupBox *propertiesGroup = new QGroupBox(
-            tr("RPN Properties"), this);
+            tr("NRPN Properties"), this);
     propertiesGroup->setContentsMargins(5, 5, 5, 5);
     mainLayout->addWidget(propertiesGroup);
 
@@ -58,28 +58,18 @@ RPNWidget::RPNWidget(EditEvent *parent, const Event &event) :
 
     int row{0};
 
-    // RPN
-    QLabel *rpnLabel = new QLabel(tr("RPN:"), propertiesGroup);
-    propertiesLayout->addWidget(rpnLabel, row, 0);
+    // NRPN
+    QLabel *nrpnLabel = new QLabel(tr("NRPN:"), propertiesGroup);
+    propertiesLayout->addWidget(nrpnLabel, row, 0);
 
-    m_rpnSpinBox = new QSpinBox(propertiesGroup);
-    m_rpnSpinBox->setMinimum(0);
-    m_rpnSpinBox->setMaximum(16383);
-    int rpn{0};
-    if (event.has(RPN::NUMBER))
-        rpn = event.get<Int>(RPN::NUMBER);
-    m_rpnSpinBox->setValue(rpn);
-    propertiesLayout->addWidget(m_rpnSpinBox, row, 1);
-
-    // There are only 6 of these.  A ComboBox makes a lot more sense.
-    // We could also provide more helpful support for the values.  But
-    // for now let's keep it simple.
-    //   0 – Pitch bend range
-    //   1 – Fine tuning
-    //   2 – Coarse tuning
-    //   3 – Tuning program change
-    //   4 – Tuning bank select
-    //   5 – Modulation depth range
+    m_nrpnSpinBox = new QSpinBox(propertiesGroup);
+    m_nrpnSpinBox->setMinimum(0);
+    m_nrpnSpinBox->setMaximum(16383);
+    int nrpn{0};
+    if (event.has(NRPN::NUMBER))
+        nrpn = event.get<Int>(NRPN::NUMBER);
+    m_nrpnSpinBox->setValue(nrpn);
+    propertiesLayout->addWidget(m_nrpnSpinBox, row, 1);
 
     ++row;
 
@@ -91,8 +81,8 @@ RPNWidget::RPNWidget(EditEvent *parent, const Event &event) :
     m_valueSpinBox->setMinimum(0);
     m_valueSpinBox->setMaximum(16383);
     int value{0};
-    if (event.has(RPN::VALUE))
-        value = event.get<Int>(RPN::VALUE);
+    if (event.has(NRPN::VALUE))
+        value = event.get<Int>(NRPN::VALUE);
     m_valueSpinBox->setValue(value);
     propertiesLayout->addWidget(m_valueSpinBox, row, 1);
 
@@ -101,15 +91,15 @@ RPNWidget::RPNWidget(EditEvent *parent, const Event &event) :
 }
 
 EventWidget::PropertyNameSet
-RPNWidget::getPropertyFilter() const
+NRPNWidget::getPropertyFilter() const
 {
-    return PropertyNameSet{RPN::NUMBER, RPN::VALUE};
+    return PropertyNameSet{NRPN::NUMBER, NRPN::VALUE};
 }
 
-void RPNWidget::updateEvent(Event &event) const
+void NRPNWidget::updateEvent(Event &event) const
 {
-    event.set<Int>(RPN::NUMBER, m_rpnSpinBox->value());
-    event.set<Int>(RPN::VALUE, m_valueSpinBox->value());
+    event.set<Int>(NRPN::NUMBER, m_nrpnSpinBox->value());
+    event.set<Int>(NRPN::VALUE, m_valueSpinBox->value());
 }
 
 
