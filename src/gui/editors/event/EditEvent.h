@@ -113,50 +113,6 @@ private:
     /// For the context menu.
     void addProperty2(const QString &type, const QString &value);
 
-#if 0
-    // Unused code.  Clean this up at some point.  Keeping for reference,
-    // though this is all in SimpleEventEditDialog.
-
-    // Setup the dialog for a new event type
-    void updateWidgets();
-
-    void slotSysexLoad();
-    void slotSysexSave();
-    //void slotPitchChanged(int value);
-    //void slotVelocityChanged(int value);
-
-    std::string m_type;
-    //timeT m_duration;
-    //timeT m_notationAbsoluteTime;
-    timeT m_notationDuration;
-
-    QLabel *m_pitchLabel;
-    QSpinBox *m_pitchSpinBox;
-    QPushButton *m_pitchEditButton;
-
-    QLabel *m_velocityLabel;
-    QSpinBox *m_velocitySpinBox;
-
-    QLabel *m_metaLabel;
-    LineEdit *m_metaEdit;
-
-    QLabel *m_controllerLabel;
-    QLabel *m_controllerLabelValue;
-
-    QPushButton *m_sysexLoadButton;
-    QPushButton *m_sysexSaveButton;
-
-    // Notation Group Box
-    QGroupBox *m_notationGroupBox;
-    QLabel *m_notationTimeLabel;
-    QLabel *m_notationDurationLabel;
-    QSpinBox *m_notationTimeSpinBox;
-    QSpinBox *m_notationDurationSpinBox;
-    QPushButton *m_notationTimeEditButton;
-    QPushButton *m_notationDurationEditButton;
-    QCheckBox *m_lockNotationValues;
-#endif
-
 };
 
 
