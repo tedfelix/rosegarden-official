@@ -103,14 +103,29 @@ public:
     // *** Constructors
 
     Event(const std::string &type,
-          timeT absoluteTime, timeT duration = 0, short subOrdering = 0) :
+          timeT absoluteTime,
+          timeT duration = 0) :
+        m_data(new EventData(type,
+                             absoluteTime,
+                             duration,
+                             getSubOrdering(type))),
+        m_nonPersistentProperties(nullptr)
+    { }
+
+    Event(const std::string &type,
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering) :
         m_data(new EventData(type, absoluteTime, duration, subOrdering)),
         m_nonPersistentProperties(nullptr)
     { }
 
     Event(const std::string &type,
-          timeT absoluteTime, timeT duration, short subOrdering,
-          timeT notationAbsoluteTime, timeT notationDuration) :
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering,
+          timeT notationAbsoluteTime,
+          timeT notationDuration) :
         m_data(new EventData(type, absoluteTime, duration, subOrdering)),
         m_nonPersistentProperties(nullptr)
     {
@@ -120,7 +135,8 @@ public:
 
     // these ctors can't use default args: default has to be obtained from e
 
-    Event(const Event &e, timeT absoluteTime) :
+    Event(const Event &e,
+          timeT absoluteTime) :
         m_nonPersistentProperties(nullptr)
     {
         share(e);
@@ -130,7 +146,9 @@ public:
         setNotationDuration(m_data->m_duration);
     }
 
-    Event(const Event &e, timeT absoluteTime, timeT duration) :
+    Event(const Event &e,
+          timeT absoluteTime,
+          timeT duration) :
         m_nonPersistentProperties(nullptr)
     {
         share(e);
@@ -141,8 +159,10 @@ public:
         setNotationDuration(duration);
     }
 
-    Event(const Event &e, timeT absoluteTime,
-          timeT duration, short subOrdering):
+    Event(const Event &e,
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering):
         m_nonPersistentProperties(nullptr)
     {
         share(e);
@@ -154,7 +174,10 @@ public:
         setNotationDuration(duration);
     }
 
-    Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
+    Event(const Event &e,
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering,
           timeT notationAbsoluteTime) :
         m_nonPersistentProperties(nullptr)
     {
@@ -167,8 +190,12 @@ public:
         setNotationDuration(duration);
     }
 
-    Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
-          timeT notationAbsoluteTime, timeT notationDuration) :
+    Event(const Event &e,
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering,
+          timeT notationAbsoluteTime,
+          timeT notationDuration) :
         m_nonPersistentProperties(nullptr)
     {
         share(e);
@@ -591,6 +618,8 @@ private:
 
         return (*map)->insert(pair).first;
     }
+
+    int getSubOrdering(std::string eventType);
 
 #ifndef NDEBUG
     static int m_getCount;

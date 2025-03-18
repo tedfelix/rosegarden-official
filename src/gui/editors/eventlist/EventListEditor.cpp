@@ -149,41 +149,6 @@ namespace
     constexpr int SegmentPtrRole = Qt::UserRole + 1;
     constexpr int EventPtrRole = Qt::UserRole + 2;
 
-    // ??? This seems really reusable, however, it also seems like these
-    //     sub orderings aren't actually used where they need to be used.
-    //     E.g. a search on Controller::EventSubOrdering turns up far fewer
-    //     places than expected.  Shouldn't it be used whenever a
-    //     controller Event is created?  Shouldn't this "if" be in Event's
-    //     ctors?
-    static int getSubOrdering(std::string eventType)
-    {
-        if (eventType == Indication::EventType) {
-            return Indication::EventSubOrdering;
-        } else if (eventType == Clef::EventType) {
-            return Clef::EventSubOrdering;
-        } else if (eventType == Key::EventType) {
-            return Key::EventSubOrdering;
-        } else if (eventType == Text::EventType) {
-            return Text::EventSubOrdering;
-        } else if (eventType == Note::EventRestType) {
-            return Note::EventRestSubOrdering;
-        } else if (eventType == PitchBend::EventType) {
-            return PitchBend::EventSubOrdering;
-        } else if (eventType == Controller::EventType) {
-            return Controller::EventSubOrdering;
-        } else if (eventType == KeyPressure::EventType) {
-            return KeyPressure::EventSubOrdering;
-        } else if (eventType == ChannelPressure::EventType) {
-            return ChannelPressure::EventSubOrdering;
-        } else if (eventType == ProgramChange::EventType) {
-            return ProgramChange::EventSubOrdering;
-        } else if (eventType == SystemExclusive::EventType) {
-            return SystemExclusive::EventSubOrdering;
-        }
-
-        return 0;
-    }
-
 }
 
 
@@ -1174,9 +1139,6 @@ EventListEditor::slotEditInsert()
 
     // Create the initial Event for editing.
     Event event(type, time);
-    // ??? This should be within Event's ctor.  If no sub-ordering is provided,
-    //     use the default from here.
-    event.setSubOrdering(getSubOrdering(type));
 
     EditEvent dialog(
             this,  // parent
