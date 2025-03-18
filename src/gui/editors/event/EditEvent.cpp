@@ -36,7 +36,6 @@
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QCheckBox>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QHeaderView>
@@ -55,41 +54,6 @@
 namespace Rosegarden
 {
 
-
-// ??? This seems really reusable, however, it also seems like these
-//     sub orderings aren't actually used where they need to be used.
-//     E.g. a search on Controller::EventSubOrdering turns up far fewer
-//     places than expected.  Shouldn't it be used whenever a
-//     controller Event is created?  Shouldn't this "if" be in Event's
-//     ctors?
-static int getSubOrdering(std::string eventType)
-{
-    if (eventType == Indication::EventType) {
-        return Indication::EventSubOrdering;
-    } else if (eventType == Clef::EventType) {
-        return Clef::EventSubOrdering;
-    } else if (eventType == ::Rosegarden::Key::EventType) {
-        return ::Rosegarden::Key::EventSubOrdering;
-    } else if (eventType == Text::EventType) {
-        return Text::EventSubOrdering;
-    } else if (eventType == Note::EventRestType) {
-        return Note::EventRestSubOrdering;
-    } else if (eventType == PitchBend::EventType) {
-        return PitchBend::EventSubOrdering;
-    } else if (eventType == Controller::EventType) {
-        return Controller::EventSubOrdering;
-    } else if (eventType == KeyPressure::EventType) {
-        return KeyPressure::EventSubOrdering;
-    } else if (eventType == ChannelPressure::EventType) {
-        return ChannelPressure::EventSubOrdering;
-    } else if (eventType == ProgramChange::EventType) {
-        return ProgramChange::EventSubOrdering;
-    } else if (eventType == SystemExclusive::EventType) {
-        return SystemExclusive::EventSubOrdering;
-    }
-
-    return 0;
-}
 
 EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     QDialog(parent),
@@ -133,13 +97,13 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
         m_typeCombo->addItem(strtoqstr(Text::EventType));
         m_typeCombo->addItem(strtoqstr(Note::EventRestType));
         m_typeCombo->addItem(strtoqstr(Clef::EventType));
-        m_typeCombo->addItem(strtoqstr(::Rosegarden::Key::EventType));
+        m_typeCombo->addItem(strtoqstr(Key::EventType));
         m_typeCombo->addItem(strtoqstr(Guitar::Chord::EventType));
         // NRPN::EventType
         // RPN::EventType
-        connect(m_typeCombo,
-                    static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
-                this, &EditEvent::slotEventTypeChanged);
+//        connect(m_typeCombo,
+//                    static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+//                this, &EditEvent::slotEventTypeChanged);
         propertiesLayout->addWidget(m_typeCombo, row, 1);
 
     } else {  // Display event type read-only.
@@ -361,6 +325,7 @@ EditEvent::getEvent()
     return event;
 }
 
+#if 0
 void
 EditEvent::slotEventTypeChanged(int value)
 {
@@ -378,6 +343,7 @@ EditEvent::slotEventTypeChanged(int value)
     // ??? Flip the EventWidgetStack.
 
 }
+#endif
 
 void
 EditEvent::slotEditAbsoluteTime()

@@ -67,7 +67,7 @@ public:
 
 private slots:
 
-    void slotEventTypeChanged(int value);
+    //void slotEventTypeChanged(int value);
     void slotEditAbsoluteTime();
     void slotContextMenu(const QPoint &pos);
 

@@ -226,6 +226,7 @@ set(rg_CPPS
   gui/editors/event/SysExWidget.cpp
   gui/editors/event/RPNWidget.cpp
   gui/editors/event/NRPNWidget.cpp
+  gui/editors/event/EventTypeDialog.cpp
   gui/editors/pitchtracker/PitchHistory.cpp
   gui/editors/pitchtracker/PitchTrackerView.cpp
   gui/editors/pitchtracker/PitchGraphWidget.cpp

@@ -50,6 +50,7 @@
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/editors/event/EditEvent.h"
+#include "gui/editors/event/EventTypeDialog.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/MidiPitchLabel.h"
@@ -147,6 +148,41 @@ namespace
     constexpr int KeyRole = Qt::UserRole;
     constexpr int SegmentPtrRole = Qt::UserRole + 1;
     constexpr int EventPtrRole = Qt::UserRole + 2;
+
+    // ??? This seems really reusable, however, it also seems like these
+    //     sub orderings aren't actually used where they need to be used.
+    //     E.g. a search on Controller::EventSubOrdering turns up far fewer
+    //     places than expected.  Shouldn't it be used whenever a
+    //     controller Event is created?  Shouldn't this "if" be in Event's
+    //     ctors?
+    static int getSubOrdering(std::string eventType)
+    {
+        if (eventType == Indication::EventType) {
+            return Indication::EventSubOrdering;
+        } else if (eventType == Clef::EventType) {
+            return Clef::EventSubOrdering;
+        } else if (eventType == Key::EventType) {
+            return Key::EventSubOrdering;
+        } else if (eventType == Text::EventType) {
+            return Text::EventSubOrdering;
+        } else if (eventType == Note::EventRestType) {
+            return Note::EventRestSubOrdering;
+        } else if (eventType == PitchBend::EventType) {
+            return PitchBend::EventSubOrdering;
+        } else if (eventType == Controller::EventType) {
+            return Controller::EventSubOrdering;
+        } else if (eventType == KeyPressure::EventType) {
+            return KeyPressure::EventSubOrdering;
+        } else if (eventType == ChannelPressure::EventType) {
+            return ChannelPressure::EventSubOrdering;
+        } else if (eventType == ProgramChange::EventType) {
+            return ProgramChange::EventSubOrdering;
+        } else if (eventType == SystemExclusive::EventType) {
+            return SystemExclusive::EventSubOrdering;
+        }
+
+        return 0;
+    }
 
 }
 
@@ -1110,30 +1146,42 @@ EventListEditor::slotEditDelete()
 void
 EventListEditor::slotEditInsert()
 {
-    // Create default event in case nothing is selected.
-    Event event(Note::EventType, m_segments[0]->getStartTime(), 960);
-    event.set<Int>(BaseProperties::PITCH, 60);
-    event.set<Int>(BaseProperties::VELOCITY, 100);
+    // Get the type of the item the user wants to insert.
+    EventTypeDialog eventTypeDialog(this);
+    // Launch dialog.  Bail if canceled.
+    if (eventTypeDialog.exec() != QDialog::Accepted)
+        return;
 
-    // Copy new event from the first selected event.
+    std::string type = eventTypeDialog.getType();
+
+    // Get the time of the first selected Event.
+
+    timeT time{0};
+
     QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
-    if (!selection.isEmpty()) {
+
+    // If something is selected...
+    if (!selection.empty()) {
+        // Get the first which should always be column 0.
         QTableWidgetItem *item = selection.first();
         if (item) {
-            // First one should always be column zero, so this should work.
             const Event *selectedEvent = static_cast<const Event *>(
                     item->data(EventPtrRole).value<void *>());
-            if (selectedEvent) {
-                // Copy.
-                event = *selectedEvent;
-            }
+            if (selectedEvent)
+                time = selectedEvent->getAbsoluteTime();
         }
     }
+
+    // Create the initial Event for editing.
+    Event event(type, time);
+    // ??? This should be within Event's ctor.  If no sub-ordering is provided,
+    //     use the default from here.
+    event.setSubOrdering(getSubOrdering(type));
 
     EditEvent dialog(
             this,  // parent
             event,
-            true);  // inserting
+            false);  // inserting
 
     // Launch dialog.  Bail if canceled.
     if (dialog.exec() != QDialog::Accepted)

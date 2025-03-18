@@ -5077,7 +5077,11 @@ NotationView::slotEditElement(NotationStaff *staff,
 
     } else {
 
-        SimpleEventEditDialog dialog(this, RosegardenDocument::currentDocument, *element->event(), false);
+        SimpleEventEditDialog dialog(
+                this,  // parent
+                RosegardenDocument::currentDocument,  // doc
+                *element->event(),  // event
+                false);  // inserting
 
         if (dialog.exec() == QDialog::Accepted &&
             dialog.isModified()) {

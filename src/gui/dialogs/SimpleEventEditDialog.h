@@ -56,7 +56,7 @@ public:
     SimpleEventEditDialog(QWidget *parent,
                           RosegardenDocument *doc,
                           const Event &event,
-                          bool inserting = false); // inserting or editing
+                          bool inserting);  // inserting or editing
 
     bool isModified() const { return m_modified; }
     Event getEvent();

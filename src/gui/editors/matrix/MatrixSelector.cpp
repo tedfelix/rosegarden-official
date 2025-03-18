@@ -271,8 +271,11 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
 
         } else {
 
-            SimpleEventEditDialog dialog
-                (m_widget, RosegardenDocument::currentDocument, *element->event(), false);
+            SimpleEventEditDialog dialog(
+                    m_widget,  // parent
+                    RosegardenDocument::currentDocument,  // doc
+                    *element->event(),  // event
+                    false);  // inserting
 
             if (dialog.exec() == QDialog::Accepted &&
                 dialog.isModified()) {
