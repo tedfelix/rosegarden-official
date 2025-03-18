@@ -44,8 +44,6 @@ class EventWidget;
 /**
  * AKA the "Event Editor".
  *
- * ??? Still debating whether this should have an Insert mode.
- *
  * This replaces SimpleEventEditDialog and EventEditDialog.
  */
 class EditEvent : public QDialog
@@ -54,20 +52,17 @@ class EditEvent : public QDialog
 
 public:
 
-    EditEvent(QWidget *parent,
-              const Event &event,
-              bool inserting = false);  // Inserting or editing.
+    EditEvent(QWidget *parent, const Event &event);
     ~EditEvent();
 
     /// Used by NoteWidget for editing durations with TimeDialog.
     timeT getAbsoluteTime() const;
 
-    /// Get the edited or new (for insertion) Event.
+    /// Get the edited Event.
     Event getEvent();
 
 private slots:
 
-    //void slotEventTypeChanged(int value);
     void slotEditAbsoluteTime();
     void slotContextMenu(const QPoint &pos);
 
@@ -89,16 +84,14 @@ private:
     // Widgets
 
     // Event type
-    QComboBox *m_typeCombo{nullptr};  // For insert.
-    QLabel *m_typeLabel{nullptr};  // For edit.
+    QLabel *m_typeLabel;
 
     // Absolute time
     QSpinBox *m_timeSpinBox;
     QPushButton *m_timeEditButton;
 
     // Event
-    EventWidgetStack *m_eventWidgetStack{nullptr};  // For insert.
-    EventWidget *m_eventWidget{nullptr};  // For edit.
+    EventWidget *m_eventWidget;
 
     // Sub-ordering
     QSpinBox *m_subOrdering;

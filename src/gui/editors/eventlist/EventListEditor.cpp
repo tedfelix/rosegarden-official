@@ -710,9 +710,6 @@ EventListEditor::updateTableWidget()
         // Going with 20 to match the setMaximumSectionSize() call.
         m_tableWidget->setRowHeight(row, 20);
 
-        // Make all items read-only.
-        // ??? Huh?
-
         int col{0};
 
         // Time
@@ -1140,10 +1137,7 @@ EventListEditor::slotEditInsert()
     // Create the initial Event for editing.
     Event event(type, time);
 
-    EditEvent dialog(
-            this,  // parent
-            event,
-            false);  // inserting
+    EditEvent dialog(this, event);
 
     // Launch dialog.  Bail if canceled.
     if (dialog.exec() != QDialog::Accepted)
@@ -1175,10 +1169,7 @@ EventListEditor::editItem(const QTableWidgetItem *item)
     if (!event)
         return;
 
-    EditEvent dialog(
-            this,  // parent
-            *event,
-            false);  // inserting
+    EditEvent dialog(this, *event);
 
     // Launch dialog.  Bail if canceled.
     if (dialog.exec() != QDialog::Accepted)

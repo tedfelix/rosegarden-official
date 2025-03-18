@@ -55,13 +55,12 @@ namespace Rosegarden
 {
 
 
-EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
+EditEvent::EditEvent(QWidget *parent, const Event &event) :
     QDialog(parent),
     m_event(event)
 {
     setModal(true);
-    setWindowTitle(inserting ? tr("Insert Event").toStdString().c_str() :
-                               tr("Edit Event").toStdString().c_str());
+    setWindowTitle(tr("Edit Event"));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
@@ -81,38 +80,9 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     propertiesLayout->addWidget(
             new QLabel(tr("Event type:"), propertiesGroup), row, 0);
 
-    // If the user is inserting a new Event, provide them with a
-    // combo box for selecting the event type.
-    if (inserting) {
-
-        m_typeCombo = new QComboBox(propertiesGroup);
-        m_typeCombo->addItem(strtoqstr(Note::EventType));
-        m_typeCombo->addItem(strtoqstr(Controller::EventType));
-        m_typeCombo->addItem(strtoqstr(KeyPressure::EventType));
-        m_typeCombo->addItem(strtoqstr(ChannelPressure::EventType));
-        m_typeCombo->addItem(strtoqstr(ProgramChange::EventType));
-        m_typeCombo->addItem(strtoqstr(SystemExclusive::EventType));
-        m_typeCombo->addItem(strtoqstr(PitchBend::EventType));
-        m_typeCombo->addItem(strtoqstr(Indication::EventType));
-        m_typeCombo->addItem(strtoqstr(Text::EventType));
-        m_typeCombo->addItem(strtoqstr(Note::EventRestType));
-        m_typeCombo->addItem(strtoqstr(Clef::EventType));
-        m_typeCombo->addItem(strtoqstr(Key::EventType));
-        m_typeCombo->addItem(strtoqstr(Guitar::Chord::EventType));
-        // NRPN::EventType
-        // RPN::EventType
-//        connect(m_typeCombo,
-//                    static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
-//                this, &EditEvent::slotEventTypeChanged);
-        propertiesLayout->addWidget(m_typeCombo, row, 1);
-
-    } else {  // Display event type read-only.
-
-        m_typeLabel = new QLabel(propertiesGroup);
-        m_typeLabel->setText(strtoqstr(m_event.getType()));
-        propertiesLayout->addWidget(m_typeLabel, row, 1);
-
-    }
+    m_typeLabel = new QLabel(propertiesGroup);
+    m_typeLabel->setText(strtoqstr(m_event.getType()));
+    propertiesLayout->addWidget(m_typeLabel, row, 1);
 
     ++row;
 
@@ -133,17 +103,8 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     propertiesLayout->addWidget(m_timeEditButton, row, 2);
 
     // Event Widget
-    if (inserting) {
-        // For insert mode we need a QWidget with a QStackedLayout and each
-        // of the event widgets loaded into that.
-//        m_eventWidgetStack = EventWidgetStack::create(this);
-//        mainLayout->addWidget(m_eventWidgetStack);
-    } else {  // editing
-        // For edit mode we only need the Event widget for the current
-        // event type.
-        m_eventWidget = EventWidget::create(this, event);
-        mainLayout->addWidget(m_eventWidget);
-    }
+    m_eventWidget = EventWidget::create(this, event);
+    mainLayout->addWidget(m_eventWidget);
 
 
     // Advanced Properties Group
@@ -167,7 +128,6 @@ EditEvent::EditEvent(QWidget *parent, const Event &event, bool inserting) :
     m_subOrdering = new QSpinBox(advancedPropertiesGroup);
     m_subOrdering->setRange(-100, 100);
     m_subOrdering->setSingleStep(1);
-    // ??? Is this ok for insert mode?
     m_subOrdering->setValue(event.getSubOrdering());
     advancedPropertiesLayout->addWidget(m_subOrdering, row, 1);
 
@@ -254,18 +214,8 @@ EditEvent::getEvent()
     // Start with the original.
     Event event(m_event, m_timeSpinBox->value());
 
-    // If we are inserting a new Event...
-    if (m_typeCombo) {
-        // Create a new default Event of the right type.
-        // Just need the type, but there is no type-only ctor.
-        event = Event(qstrtostr(m_typeCombo->currentText()), m_timeSpinBox->value());
-    }
-
     // Let the widget make its changes.
-    //if (m_eventWidgetStack)  // inserting
-    //    m_eventWidgetStack->updateEvent(event);
-    if (m_eventWidget)  // editing
-        m_eventWidget->updateEvent(event);
+    m_eventWidget->updateEvent(event);
 
     // Changes from the Advanced Properties.
 
@@ -324,26 +274,6 @@ EditEvent::getEvent()
 
     return event;
 }
-
-#if 0
-void
-EditEvent::slotEventTypeChanged(int value)
-{
-    // ??? I don't think we want to do this.  Instead, we should ask the user
-    //     for the Event type to insert, insert a default Event of that type
-    //     and then allow them to edit that default Event.  That would
-    //     remove the need for insert mode and a widget stack.
-
-    // ??? Does QComboBox::currentText() work here?  It's simpler.
-    std::string type = qstrtostr(m_typeCombo->itemText(value));
-
-    // Make sure the sub-ordering is appropriate.
-    m_subOrdering->setValue(getSubOrdering(type));
-
-    // ??? Flip the EventWidgetStack.
-
-}
-#endif
 
 void
 EditEvent::slotEditAbsoluteTime()
@@ -405,10 +335,7 @@ void EditEvent::updatePropertyTable()
 
     // Get the property filter.
     std::set<PropertyName> propertyFilter;
-    //if (m_eventWidgetStack)
-    //    propertyFilter = m_eventWidgetStack->getPropertyFilter();
-    if (m_eventWidget)
-        propertyFilter = m_eventWidget->getPropertyFilter();
+    propertyFilter = m_eventWidget->getPropertyFilter();
 
     m_propertyTable->setRowCount(0);
 
