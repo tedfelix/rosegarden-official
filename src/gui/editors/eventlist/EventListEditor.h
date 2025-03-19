@@ -84,8 +84,6 @@ private slots:
     void slotEditDelete();
     /// Edit > Edit Event
     void slotEditEvent();
-    /// Edit > Advanced Event Editor
-    void slotEditEventAdvanced();
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -112,8 +110,6 @@ private slots:
     void slotContextMenu(const QPoint &);
     /// Right-click context menu handler.
     void slotOpenInEventEditor(bool checked);
-    /// Right-click context menu handler.
-    void slotOpenInExpertEventEditor(bool checked);
     /// Right-click context menu handler.
     void slotEditTriggeredSegment(bool checked);
 
@@ -186,7 +182,6 @@ private:
     void saveOptions();
 
     void editItem(const QTableWidgetItem *item);
-    void editItemAdvanced(const QTableWidgetItem *item);
 
 };
 

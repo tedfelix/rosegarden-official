@@ -357,7 +357,7 @@ protected slots:
      * Triggered by the editElement() signal emitted by NotationSelector and
      * relayed through NotationWidget.
      */
-    void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
+    void slotEditElement(NotationStaff *, NotationElement *);
 
     void slotExtendSelectionBackward();
     void slotExtendSelectionForward();

@@ -47,7 +47,6 @@
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/editors/event/EditEvent.h"
 #include "gui/editors/event/EventTypeDialog.h"
@@ -1201,56 +1200,6 @@ EventListEditor::slotEditEvent()
 }
 
 void
-EventListEditor::editItemAdvanced(const QTableWidgetItem *item)
-{
-    if (!item)
-        return;
-
-    // Get the Segment.  Have to do this before launching
-    // the dialog since item might become invalid.
-    Segment *segment = static_cast<Segment *>(
-            item->data(SegmentPtrRole).value<void *>());
-    if (!segment)
-        return;
-
-    // Get the Event.  Have to do this before launching
-    // the dialog since item might become invalid.
-    Event *event = static_cast<Event *>(
-            item->data(EventPtrRole).value<void *>());
-    if (!event)
-        return;
-
-    EventEditDialog dialog(this, *event);
-
-    // Launch dialog.  Bail if canceled.
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    // Not modified?  Bail.
-    if (!dialog.isModified())
-        return;
-
-    CommandHistory::getInstance()->addCommand(new EventEditCommand(
-            *segment,
-            event,  // eventToModify
-            dialog.getEvent()));  // newEvent
-}
-
-void
-EventListEditor::slotEditEventAdvanced()
-{
-    const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
-    if (selection.isEmpty())
-        return;
-
-    const QTableWidgetItem *item = selection.first();
-    if (!item)
-        return;
-
-    editItemAdvanced(item);
-}
-
-void
 EventListEditor::slotSelectAll()
 {
     // For each row...
@@ -1294,7 +1243,6 @@ EventListEditor::setupActions()
     createAction("insert", SLOT(slotEditInsert()));
     createAction("delete", SLOT(slotEditDelete()));
     createAction("edit_simple", SLOT(slotEditEvent()));
-    createAction("edit_advanced", SLOT(slotEditEventAdvanced()));
     createAction("select_all", SLOT(slotSelectAll()));
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("event_help", SLOT(slotHelpRequested()));
@@ -1514,11 +1462,6 @@ EventListEditor::slotContextMenu(const QPoint &pos)
         connect(eventEditorAction, &QAction::triggered,
                 this, &EventListEditor::slotOpenInEventEditor);
 
-        QAction *expertEventEditorAction =
-                m_contextMenu->addAction(tr("Open in Expert Event Editor"));
-        connect(expertEventEditorAction, &QAction::triggered,
-                this, &EventListEditor::slotOpenInExpertEventEditor);
-
         m_contextMenu->addSeparator();
 
         m_editTriggeredSegment =
@@ -1550,23 +1493,6 @@ EventListEditor::slotOpenInEventEditor(bool /* checked */)
     }
 
     editItem(item);
-}
-
-void
-EventListEditor::slotOpenInExpertEventEditor(bool /* checked */)
-{
-    QTableWidgetItem *item = m_tableWidget->currentItem();
-    if (!item)
-        return;
-
-    // Not the 0 column?  Get it.
-    if (item->column() != 0) {
-        item = m_tableWidget->item(item->row(), 0);
-        if (!item)
-            return;
-    }
-
-    editItemAdvanced(item);
 }
 
 void

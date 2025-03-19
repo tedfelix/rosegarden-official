@@ -124,7 +124,6 @@ set(rg_CPPS
   gui/dialogs/BeatsBarsDialog.cpp
   gui/dialogs/PitchBendSequenceDialog.cpp
   gui/dialogs/TimeSignatureDialog.cpp
-  gui/dialogs/SimpleEventEditDialog.cpp
   gui/dialogs/TempoDialog.cpp
   gui/dialogs/AudioPlayingDialog.cpp
   gui/dialogs/TextEventDialog.cpp
@@ -144,7 +143,6 @@ set(rg_CPPS
   gui/dialogs/InsertTupletDialog.cpp
   gui/dialogs/TransportDialog.cpp
   gui/dialogs/ShowSequencerStatusDialog.cpp
-  gui/dialogs/EventEditDialog.cpp
   gui/dialogs/QuantizeDialog.cpp
   gui/dialogs/CheckForParallelsDialog.cpp
   gui/dialogs/FloatEdit.cpp
