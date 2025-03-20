@@ -294,10 +294,9 @@ SegmentPerformanceHelper::getSoundingDuration(Segment::iterator i)
 
         iteratorcontainer c(getTiedNotes(i));
 
-        for (iteratorcontainer::iterator ci = c.begin();
-             ci != c.end(); ++ci) {
-            d += (**ci)->getDuration();
-        }
+        d = std::accumulate(c.begin(), c.end(), d,
+                            [](int acc, const Segment::iterator ci)
+                            { return (acc + (*ci)->getDuration()); } );
     }
 
     return d;

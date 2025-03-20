@@ -304,6 +304,7 @@ EventSelection::addObserver(EventSelectionObserver *obs) {
 }
 
 void
+// cppcheck-suppress constParameterPointer
 EventSelection::removeObserver(EventSelectionObserver *obs) {
     m_observers.remove(obs);
 }
@@ -444,7 +445,7 @@ EventSelection::getRangeTimes() const
 
     for (RangeList::iterator i = ranges.begin(); i != ranges.end(); ++i) {
         timeT startTime = m_originalSegment.getEndTime();
-        timeT   endTime = m_originalSegment.getEndTime();
+        timeT   endTime = startTime;
         if (i->first != m_originalSegment.end()) {
             startTime = (*i->first)->getAbsoluteTime();
         }
@@ -511,7 +512,7 @@ TimewiseSelection<ElementInfo>::AddToComposition(Composition *composition) const
 
 TimeSignatureSelection::TimeSignatureSelection() { }
 
-TimeSignatureSelection::TimeSignatureSelection(Composition &composition,
+TimeSignatureSelection::TimeSignatureSelection(const Composition &composition,
                                                timeT beginTime,
                                                timeT endTime,
                                                bool includeOpeningTimeSig)
@@ -571,7 +572,7 @@ TimeSignatureSelection::AddToComposition(Composition *composition) const
 
 TempoSelection::TempoSelection() { }
 
-TempoSelection::TempoSelection(Composition &composition,
+TempoSelection::TempoSelection(const Composition &composition,
                                timeT beginTime,
                                timeT endTime,
                                bool includeOpeningTempo)
