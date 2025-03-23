@@ -73,9 +73,9 @@ SoftSynthDevice::createInstruments()
     for (uint i = 0; i < SoftSynthInstrumentCount; ++i) {
 	Instrument *instrument = new Instrument
 	    (SoftSynthInstrumentBase + i, Instrument::SoftSynth, "", this);
-	addInstrument(instrument);
+        SoftSynthDevice::addInstrument(instrument);
     }
-    renameInstruments();
+    SoftSynthDevice::renameInstruments();
 }
 
 void
@@ -93,18 +93,18 @@ SoftSynthDevice::checkControlList()
 {
     // Much as MidiDevice::generateDefaultControllers
 
-    static std::string controls[][9] = {
-        { "Pan", Rosegarden::Controller::EventType, "<none>", "0", "127", "64", "10", "2", "0" },
-        { "Chorus", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "93", "3", "1" },
-        { "Volume", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "7", "1", "2" },
-        { "Reverb", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "91", "3", "3" },
-        { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "-1" },
-        { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "127", "11", "2", "-1" },
-        { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
-        { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
-    };
-
     if (m_controlList.empty()) {
+
+        static std::string controls[][9] = {
+            { "Pan", Rosegarden::Controller::EventType, "<none>", "0", "127", "64", "10", "2", "0" },
+            { "Chorus", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "93", "3", "1" },
+            { "Volume", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "7", "1", "2" },
+            { "Reverb", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "91", "3", "3" },
+            { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "-1" },
+            { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "127", "11", "2", "-1" },
+            { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
+            { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
+        };
 
 	for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
 

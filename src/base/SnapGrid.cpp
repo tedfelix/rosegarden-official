@@ -34,7 +34,7 @@ SnapGrid::SnapGrid(const RulerScale *rulerScale, int ysnap) :
     m_snapTime(SnapToBeat),
     m_ysnap(ysnap)
 {
-    // nothing else 
+    // nothing else
 }
 
 void
@@ -66,21 +66,21 @@ SnapGrid::getSnapTime(timeT time) const
 {
     if (m_snapTime == NoSnap) return 0;
 
-    Rosegarden::Composition *composition = m_rulerScale->getComposition();
+    const Rosegarden::Composition *composition = m_rulerScale->getComposition();
     int barNo = composition->getBarNumber(time);
     std::pair<timeT, timeT> barRange = composition->getBarRange(barNo);
 
-    timeT snapTime = barRange.second - barRange.first;
+    timeT barSnapTime = barRange.second - barRange.first;
 
     if (m_snapTime == SnapToBeat) {
-        snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
+        barSnapTime = composition->getTimeSignatureAt(time).getBeatDuration();
     } else if (m_snapTime == SnapToUnit) {
-        snapTime = composition->getTimeSignatureAt(time).getUnitDuration();
-    } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
-        snapTime = m_snapTime;
+        barSnapTime = composition->getTimeSignatureAt(time).getUnitDuration();
+    } else if (m_snapTime != SnapToBar && m_snapTime < barSnapTime) {
+        barSnapTime = m_snapTime;
     }
 
-    return snapTime;
+    return barSnapTime;
 }
 
 timeT
@@ -94,7 +94,7 @@ SnapGrid::snapTime(timeT time, SnapDirection direction) const
 {
     if (m_snapTime == NoSnap) return time;
 
-    Rosegarden::Composition *composition = m_rulerScale->getComposition();
+    const Rosegarden::Composition *composition = m_rulerScale->getComposition();
     int barNo = composition->getBarNumber(time);
     std::pair<timeT, timeT> barRange = composition->getBarRange(barNo);
 

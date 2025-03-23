@@ -38,7 +38,7 @@ public:
      * x-coordinate mappings and the given ysnap for y-coords.
      * If ysnap is zero, y-coords are not snapped at all.
      */
-    SnapGrid(const RulerScale *rulerScale, int ysnap = 0);
+    explicit SnapGrid(const RulerScale *rulerScale, int ysnap = 0);
 
     static const timeT NoSnap;
     static const timeT SnapToBar;

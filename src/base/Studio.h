@@ -147,7 +147,7 @@ public:
 
     // Get a MIDI metronome from a given device
     //
-    const MidiMetronome* getMetronomeFromDevice(DeviceId id);
+    const MidiMetronome* getMetronomeFromDevice(DeviceId id) const;
 
     // Return the device list
     //

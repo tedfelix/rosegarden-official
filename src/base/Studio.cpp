@@ -216,7 +216,7 @@ Studio::getSpareDeviceId(InstrumentId &baseInstrumentId)
 InstrumentList
 Studio::getAllInstruments()
 {
-    InstrumentList list, subList;
+    InstrumentList list;
 
     DeviceListIterator it;
 
@@ -225,7 +225,7 @@ Studio::getAllInstruments()
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
         // get sub list
-        subList = (*it)->getAllInstruments();
+        InstrumentList subList = (*it)->getAllInstruments();
 
         // concetenate
         list.insert(list.end(), subList.begin(), subList.end());
@@ -538,7 +538,7 @@ Studio::toXmlString(const std::vector<DeviceId> &devices) const
 }
 
 const MidiMetronome *
-Studio::getMetronomeFromDevice(DeviceId id)
+Studio::getMetronomeFromDevice(DeviceId id) const
 {
     // For each Device
     for (std::vector<Device *>::const_iterator deviceIter = m_devices.begin();
