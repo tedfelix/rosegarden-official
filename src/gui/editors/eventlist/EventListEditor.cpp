@@ -604,23 +604,30 @@ EventListEditor::updateTableWidget()
 
         QString data1Str;
 
-        if (event->has(Controller::NUMBER)) {
-            data1Str = QString("%1  ").
+        if (event->getType() == Controller::EventType  &&
+            event->has(Controller::NUMBER)) {
+            int number = event->get<Int>(Controller::NUMBER);
+            data1Str = QString("%1  %2").
+                    arg(number).arg(Controller::getName(number));
+        } else if (event->has(Controller::NUMBER)) {
+            // This handles RPN and NRPN.  We should probably be more
+            // specific here.
+            data1Str = QString("%1").
                        arg(event->get<Int>(Controller::NUMBER));
         } else if (event->has(Text::TextTypePropertyName)) {
-            data1Str = QString("%1  ").
+            data1Str = QString("%1").
                        arg(strtoqstr(event->get<String>(
                                Text::TextTypePropertyName)));
         } else if (event->has(Indication::IndicationTypePropertyName)) {
-            data1Str = QString("%1  ").
+            data1Str = QString("%1").
                        arg(strtoqstr(event->get<String>(
                                Indication::IndicationTypePropertyName)));
         } else if (event->has(Key::KeyPropertyName)) {
-            data1Str = QString("%1  ").
+            data1Str = QString("%1").
                        arg(strtoqstr(event->get<String>(
                                Key::KeyPropertyName)));
         } else if (event->has(Clef::ClefPropertyName)) {
-            data1Str = QString("%1  ").
+            data1Str = QString("%1").
                        arg(strtoqstr(event->get<String>(
                                Clef::ClefPropertyName)));
         } else if (event->has(PitchBend::MSB)) {
@@ -631,20 +638,20 @@ EventListEditor::updateTableWidget()
             const int value = (msb << 7) + lsb;
             data1Str = QString("%1").arg(value);
         } else if (event->has(BaseProperties::BEAMED_GROUP_TYPE)) {
-            data1Str = QString("%1  ").
+            data1Str = QString("%1").
                        arg(strtoqstr(event->get<String>(
                                BaseProperties::BEAMED_GROUP_TYPE)));
         } else if (event->has(GeneratedRegion::FigurationPropertyName)) {
-            data1Str = QString("%1  ").
+            data1Str = QString("%1").
                        arg(event->get<Int>(
                                GeneratedRegion::FigurationPropertyName));
         } else if (event->has(SegmentID::IDPropertyName)) {
-            data1Str = QString("%1  ").
+            data1Str = QString("%1").
                        arg(event->get<Int>(SegmentID::IDPropertyName));
         }
 
         if (event->has(ProgramChange::PROGRAM)) {
-            data1Str = QString("%1  ").
+            data1Str = QString("%1").
                        arg(event->get<Int>(ProgramChange::PROGRAM) + 1);
         }
 

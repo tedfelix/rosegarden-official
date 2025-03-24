@@ -61,8 +61,8 @@ EventTypeDialog::EventTypeDialog(QWidget *parent) :
     m_typeCombo->addItem(strtoqstr(ProgramChange::EventType));
     m_typeCombo->addItem(strtoqstr(SystemExclusive::EventType));
     m_typeCombo->addItem(strtoqstr(PitchBend::EventType));
-    m_typeCombo->addItem(strtoqstr(NRPN::EventType));
     m_typeCombo->addItem(strtoqstr(RPN::EventType));
+    m_typeCombo->addItem(strtoqstr(NRPN::EventType));
     m_typeCombo->addItem(strtoqstr(Indication::EventType));
     m_typeCombo->addItem(strtoqstr(Text::EventType));
     m_typeCombo->addItem(strtoqstr(Note::EventRestType));
