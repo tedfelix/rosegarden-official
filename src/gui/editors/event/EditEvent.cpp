@@ -307,8 +307,7 @@ void EditEvent::addProperty(const PropertyName &name)
     if (!m_event.isPersistent(name))
         type += " (n)";
     QTableWidgetItem *item = new QTableWidgetItem(type);
-    // ??? For now, make this read-only.  If we want to allow editing
-    //     of this, we need a combo box with the types in it.
+    // Read-only
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     m_propertyTable->setItem(row, col++, item);
 
@@ -370,28 +369,20 @@ void EditEvent::addProperty2(const QString &type, const QString &value)
 
     // Assume persistent.
 
-    QFont boldFont;
-
     int col{0};
 
     // Name
     QTableWidgetItem *nameItem = new QTableWidgetItem("newproperty");
-    boldFont = nameItem->font();
-    boldFont.setBold(true);
-    nameItem->setFont(boldFont);
     m_propertyTable->setItem(row, col++, nameItem);
 
     // Type
     QTableWidgetItem *item = new QTableWidgetItem(type);
-    // ??? For now, make this read-only.  If we want to allow editing
-    //     of this, we need a combo box with the types in it.
+    // Read-only
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setFont(boldFont);
     m_propertyTable->setItem(row, col++, item);
 
     // Value
     item = new QTableWidgetItem(value);
-    item->setFont(boldFont);
     m_propertyTable->setItem(row, col++, item);
 
     m_propertyTable->scrollToBottom();
