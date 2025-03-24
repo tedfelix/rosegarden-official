@@ -226,6 +226,14 @@ TempoAndTimeSignatureEditor::updateTable()
         timeT midiTicks{0};
         Type itemType{Type::TimeSignature};
 
+        bool operator==(const Key &rhs) const
+        {
+            if (midiTicks != rhs.midiTicks)
+                return false;
+            if (itemType != rhs.itemType)
+                return false;
+            return true;
+        }
         bool operator<(const Key &rhs) const
         {
             if (midiTicks < rhs.midiTicks)
@@ -285,6 +293,8 @@ TempoAndTimeSignatureEditor::updateTable()
             currentItemKey.itemType = (Type)item0->data(TypeRole).toInt();
         }
     }
+
+    bool haveSelection{false};
 
     // Recreate list.
 
@@ -346,15 +356,31 @@ TempoAndTimeSignatureEditor::updateTable()
             item = new QTableWidgetItem(properties);
             m_tableWidget->setItem(row, 3, item);
 
+            // Create key.
+            Key key;
+            key.midiTicks = sig.first;
+            key.itemType = Type::TimeSignature;
+
             // Set current if it is the right one.
-            if (haveCurrentItem  &&
-                currentItemKey.itemType == Type::TimeSignature  &&
-                currentItemKey.midiTicks == sig.first) {
+            if (haveCurrentItem  &&  currentItemKey == key) {
                 item = m_tableWidget->item(row, currentItemColumn);
-                // ??? The other loop uses QItemSelectionModel::NoUpdate.
-                //     Should this one as well?
-                if (item)
-                    m_tableWidget->setCurrentItem(item);
+                if (item) {
+                    m_tableWidget->setCurrentItem(
+                            item, QItemSelectionModel::NoUpdate);
+                }
+            }
+
+            // If this one was selected, restore the selection.
+            if (selectionSet.find(key) != selectionSet.end()) {
+                // Select the entire row.
+                // For each column...
+                for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+                    QTableWidgetItem *item = m_tableWidget->item(row, col);
+                    if (!item)
+                        continue;
+                    item->setSelected(true);
+                }
+                haveSelection = true;
             }
         }
     }
@@ -428,55 +454,35 @@ TempoAndTimeSignatureEditor::updateTable()
             item = new QTableWidgetItem();
             m_tableWidget->setItem(row, 3, item);
 
+            // Create key.
+            Key key;
+            key.midiTicks = time;
+            key.itemType = Type::Tempo;
+
             // Set current if it is the right one.
-            if (haveCurrentItem  &&
-                currentItemKey.itemType == Type::Tempo  &&
-                currentItemKey.midiTicks == time) {
+            if (haveCurrentItem  &&  currentItemKey == key) {
                 item = m_tableWidget->item(row, currentItemColumn);
                 if (item)
                     m_tableWidget->setCurrentItem(
                             item, QItemSelectionModel::NoUpdate);
             }
+
+            // If this one was selected, restore the selection.
+            if (selectionSet.find(key) != selectionSet.end()) {
+                // Select the entire row.
+                // For each column...
+                for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+                    QTableWidgetItem *item = m_tableWidget->item(row, col);
+                    if (!item)
+                        continue;
+                    item->setSelected(true);
+                }
+                haveSelection = true;
+            }
         }
     }
 
     m_tableWidget->sortItems(0, Qt::AscendingOrder);
-
-
-    // Restore Selection.
-
-    // ??? Since we use QItemSelectionModel::NoUpdate above, we could do the
-    //     selection inside of the above loop instead of going through all
-    //     the items on this second pass.  See EventListEditor.
-
-    bool haveSelection{false};
-
-    // For each row...
-    for (int row = 0; row < m_tableWidget->rowCount(); ++row) {
-        QTableWidgetItem *item = m_tableWidget->item(row, 0);
-        if (!item)
-            continue;
-
-        // Create key.
-        Key key;
-        key.midiTicks = item->data(TimeRole).toLongLong();
-        key.itemType = (Type)item->data(TypeRole).toInt();
-
-        // Not selected?  Try the next.
-        if (selectionSet.find(key) == selectionSet.end())
-            continue;
-
-        // Select the entire row.
-        // For each column...
-        for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
-            QTableWidgetItem *item = m_tableWidget->item(row, col);
-            if (!item)
-                continue;
-            item->setSelected(true);
-        }
-
-        haveSelection = true;
-    }
 
     if (haveSelection)
         enterActionState("have_selection");
