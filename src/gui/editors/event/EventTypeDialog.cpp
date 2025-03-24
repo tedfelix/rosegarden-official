@@ -23,6 +23,8 @@
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/guitar/Chord.h"
+#include "misc/ConfigGroups.h"
+#include "misc/PreferenceInt.h"
 #include "misc/Strings.h"
 
 #include <QComboBox>
@@ -34,6 +36,10 @@
 
 namespace Rosegarden
 {
+
+
+// Remember the last event type selected for next time.
+static PreferenceInt eventType(GeneralOptionsConfigGroup, "eventtype", 0);
 
 
 EventTypeDialog::EventTypeDialog(QWidget *parent) :
@@ -63,16 +69,23 @@ EventTypeDialog::EventTypeDialog(QWidget *parent) :
     m_typeCombo->addItem(strtoqstr(Clef::EventType));
     m_typeCombo->addItem(strtoqstr(Key::EventType));
     m_typeCombo->addItem(strtoqstr(Guitar::Chord::EventType));
-    // ??? Might want to persist this?
-    m_typeCombo->setCurrentIndex(0);
+    m_typeCombo->setCurrentIndex(eventType.get());
     mainLayout->addWidget(m_typeCombo);
 
     // Button Box
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     mainLayout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &EventTypeDialog::slotAccept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+}
+
+void
+EventTypeDialog::slotAccept()
+{
+    eventType.set(m_typeCombo->currentIndex());
+
+    QDialog::accept();
 }
 
 std::string

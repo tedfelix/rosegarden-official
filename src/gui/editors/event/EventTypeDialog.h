@@ -41,6 +41,10 @@ public:
 
     std::string getType() const;
 
+private slots:
+
+    void slotAccept();
+
 private:
 
     // Event type

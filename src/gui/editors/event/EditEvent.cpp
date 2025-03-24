@@ -240,7 +240,10 @@ EditEvent::getEvent()
         // If non-persistent...
         if (type.endsWith(" (n)")) {
             type = type.left(type.length() - 4);
-            // ??? Probably want to preserve this and recreate below.
+            // ??? Probably want to preserve this and recreate below.  As it
+            //     is now, all properties end up persistent.  It is difficult
+            //     to track down non-persistent properties in the code, so I
+            //     have no test case to verify this.
             //persistent = false
         }
 
@@ -249,9 +252,6 @@ EditEvent::getEvent()
             continue;
         QString value = valueItem->text();
 
-        // ??? This doesn't preserve persistent vs. non-persistent.  It
-        //     makes all properties persistent.
-
         // See Property.cpp for the type names.
         // See ConfigurationXmlSubHandler::characters() for similar code.
         if (type == "Int") {
@@ -259,7 +259,7 @@ EditEvent::getEvent()
         } else if (type == "String") {
             event.set<String>(propertyName, qstrtostr(value));
         } else if (type == "Bool") {
-            event.set<Bool>(propertyName, value == "true");  // ??? Really?
+            event.set<Bool>(propertyName, value == "true");
         } else if (type == "RealTimeT") {
             // Unused.  Turns out this is only used for tempo segments which
             // the user cannot edit.  TempoTimestampProperty is the only
