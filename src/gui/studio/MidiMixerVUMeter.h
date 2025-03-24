@@ -38,12 +38,8 @@ public:
                      int width,
                      int height);
 
-protected:
-     void meterStart() override;
-     void meterStop() override;
-
 private:
-     int m_textHeight;
+    int m_textHeight;
 
 }; 
 

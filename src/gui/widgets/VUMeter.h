@@ -89,13 +89,15 @@ protected:
             VUAlignment alignment);
     ~VUMeter() override;
 
-    virtual void meterStart() = 0;
-    virtual void meterStop() = 0;
+    /// Used by TrackVUMeter to hide the text and show the meter.
+    virtual void meterStart()  { }
+    /// Used by TrackVUMeter to show the text and hide the meter.
+    virtual void meterStop()  { }
+    /// Used by TrackVUMeter to turn the meter on and off.
+    bool m_active{true};
 
     /// Height passed in via ctor.
     const int m_originalHeight;
-    /// Used by TrackVUMeter to turn the meter on and off.
-    bool m_active;
 
 private slots:
 
@@ -117,35 +119,43 @@ private:
 
     VUMeterType m_type;
     VUAlignment m_alignment;
+
+    /// Meter background color.
     QColor m_background;
 
     // The size of the meter in pixels.
-    short m_maxLevel;
-    // pixels per second
-    double m_decayRate;
+    int m_maxLevelPixels;
+    /// pixels per second, 1 pixel per 50msecs
+    static constexpr double m_decayRate{1/.05};
 
     // LEFT
+    // It appears as if pixels are the unit of measurement throughout this
+    // class.  The setLevel() routines handle conversion from dB or normalized
+    // to pixels.
     double m_levelLeft;
     double m_recordLevelLeft;
-    short m_peakLevelLeft;
+    int m_peakLevelLeft;
     QTimer *m_decayTimerLeft;
     QElapsedTimer *m_timeDecayLeft;
     QTimer *m_peakTimerLeft;
 
     // RIGHT
-    double      m_levelRight;
-    double      m_recordLevelRight;
-    short       m_peakLevelRight;
-    QTimer     *m_decayTimerRight;
+    // It appears as if pixels are the unit of measurement throughout this
+    // class.  The setLevel() routines handle conversion from dB or normalized
+    // to pixels.
+    double m_levelRight;
+    double m_recordLevelRight;
+    int m_peakLevelRight;
+    QTimer *m_decayTimerRight;
     QElapsedTimer *m_timeDecayRight;
-    QTimer     *m_peakTimerRight;
+    QTimer *m_peakTimerRight;
 
-    bool        m_showPeakLevel;
+    bool m_showPeakLevel;
 
-    void setLevel(double leftLevel, double rightLevel, bool record);
+    void setLevel(double leftLeveldB, double rightLeveldB, bool record);
 
-    bool        m_stereo;
-    bool        m_hasRecord;
+    bool m_stereo;
+    bool m_hasRecord;
 
     // We use this to work out our colours
     VelocityColour *m_velocityColour;
