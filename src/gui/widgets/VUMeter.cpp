@@ -467,7 +467,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
     int loud = m_velocityColour->getLoudKnee();
 
     if (m_stereo) {
-        if (m_alignment == VUMeter::Vertical) {
+        if (m_alignment == Vertical) {
             int hW = width() / 2;
 
             int midWidth = 1;
@@ -560,7 +560,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
     } else {  // monaural
         // Paint a vertical meter according to type
         //
-        if (m_alignment == VUMeter::Vertical) {
+        if (m_alignment == Vertical) {
             int y = height() - (m_levelLeft * height()) / m_maxLevel;
             drawColouredBar(paint, 0, 0, y, width(), height());
 
