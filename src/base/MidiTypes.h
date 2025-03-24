@@ -62,6 +62,8 @@ namespace Controller
 
     /// Returned Event is on heap; caller takes responsibility for ownership.
     Event *makeEvent(timeT absoluteTime, MidiByte number, MidiByte value);
+
+    const QString &getName(MidiByte number);
 }
 
 //////////////////////////////////////////////////////////////////////

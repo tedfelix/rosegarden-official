@@ -35,66 +35,6 @@ namespace Rosegarden
 {
 
 
-// ??? Promote this up someplace more common so EventListEditor and
-//     others can use it.
-// ??? We should also show these on the EventListEditor.
-// ??? We should also consider using the controller list that is in the
-//     Device.  That is probably more accurate in some cases and should
-//     have higher priority than these names.  Maybe highlight the names
-//     we get from the Device to indicate "official".  (Add a "*"?)
-typedef std::map<int, QString> ControllerNames;
-static const ControllerNames controllerNames = {
-    { 0, "Bank Select MSB" },
-    { 1, "Mod Wheel MSB" },
-    { 2, "Breath Controller MSB" },
-    { 4, "Foot Pedal MSB" },
-    { 5, "Portamento Time MSB" },
-    { 6, "Data Entry MSB" },
-    { 7, "Volume" },
-    { 8, "Stereo Balance MSB" },
-    { 10, "Pan" },
-    { 11, "Expression" },
-    { 12, "Effect 1 MSB" },
-    { 13, "Effect 2 MSB" },
-    { 32, "Bank Select LSB" },
-    { 33, "Mod Wheel LSB" },
-    { 34, "Breath Controller LSB" },
-    { 36, "Foot Pedal LSB" },
-    { 37, "Portamento Time LSB" },
-    { 38, "Data Entry LSB" },
-    { 39, "Volume LSB" },
-    { 40, "Stereo Balance LSB" },
-    { 42, "Pan LSB" },
-    { 43, "Expression LSB" },
-    { 44, "Effect 1 LSB" },
-    { 45, "Effect 2 LSB" },
-    { 64, "Sustain" },
-    { 65, "Portamento On/Off" },
-    { 66, "Sostenuto" },
-    { 67, "Soft Pedal" },
-    { 68, "Legato" },
-    { 69, "Hold Pedal 2" },
-    { 91, "Reverb" },
-    { 92, "Tremolo" },
-    { 93, "Chorus" },
-    { 94, "Detuning" },
-    { 95, "Phaser" },
-    { 96, "Data +" },
-    { 97, "Data -" },
-    { 98, "NRPN LSB" },
-    { 99, "NRPN MSB" },
-    { 100, "RPN LSB" },
-    { 101, "RPN MSB" },
-    { 120, "Channel Mute" },
-    { 121, "Reset All Controllers" },
-    { 122, "Local On/Off" },
-    { 123, "All MIDI Notes Off" },
-    { 124, "Omni Off" },
-    { 125, "Omni On" },
-    { 126, "Mono On/Off" },
-    { 127, "Poly On/Off" }
-};
-
 ControllerWidget::ControllerWidget(EditEvent *parent, const Event &event) :
     EventWidget(parent)
 {
@@ -125,12 +65,9 @@ ControllerWidget::ControllerWidget(EditEvent *parent, const Event &event) :
     propertiesLayout->addWidget(numberLabel, row, 0);
 
     m_numberComboBox = new QComboBox(propertiesGroup);
-    for (int i = MidiMinValue; i <= MidiMaxValue; ++i) {
-        QString name;
-        ControllerNames::const_iterator nameIter = controllerNames.find(i);
-        if (nameIter != controllerNames.end())
-            name = nameIter->second;
-        m_numberComboBox->addItem(QString("%1  %2").arg(i).arg(name));
+    for (int number = MidiMinValue; number <= MidiMaxValue; ++number) {
+        m_numberComboBox->addItem(
+                QString("%1  %2").arg(number).arg(Controller::getName(number)));
     }
     int controllerNumber{0};
     if (event.has(Controller::NUMBER))
