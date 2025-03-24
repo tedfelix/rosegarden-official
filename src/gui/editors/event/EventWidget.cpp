@@ -66,7 +66,7 @@ EventWidget *EventWidget::create(EditEvent *parent, const Event &event)
     if (type == NRPN::EventType)
         return new NRPNWidget(parent, event);
 
-    // ??? Probably won't do these.  Notation editor handles these better.
+    // Not doing these.  Notation editor handles these better.
     //Clef::EventType
     //Key::EventType
     //Indication::EventType

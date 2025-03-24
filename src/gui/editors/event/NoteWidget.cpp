@@ -91,9 +91,6 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     QLabel *pitchLabel = new QLabel(tr("Pitch:"), propertiesGroup);
     propertiesLayout->addWidget(pitchLabel, row, 0);
 
-    // ??? Make this a combo box with the note names.  Can we also allow direct
-    //     entry of a note number?  Otherwise perhaps add a separate label
-    //     showing the note name upon change.
     m_pitchSpinBox = new QSpinBox(propertiesGroup);
     m_pitchSpinBox->setMinimum(MidiMinValue);
     m_pitchSpinBox->setMaximum(MidiMaxValue);
@@ -129,9 +126,12 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     // Lock notation
     m_lockNotation =
             new QCheckBox(tr("Lock notation to performance"), propertiesGroup);
-    // ??? This seems less annoying since it prevents loss of notation
-    //     values.  However, if the user makes a big change, they will
-    //     probably just want locking.
+    // ??? What's the best way to handle locking?  The simplest is just to
+    //     lock and lose the performance/notation difference.  That's what
+    //     we've done here.  For big changes to the performance values, this
+    //     makes sense.  For small changes, the user might want to unlock and
+    //     leave the notation values alone.  The following commented-out lines
+    //     will do that.  Going with the simplest for now.
     //const bool lockNotation =
     //        (event.getNotationAbsoluteTime() == event.getAbsoluteTime()  &&
     //         event.getNotationDuration() == event.getDuration());
