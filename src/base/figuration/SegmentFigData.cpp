@@ -337,8 +337,6 @@ SegmentFigData::SegmentFigData(Segment* s) :
             m_needsTag = true;
             m_type = Target;
         }
-
-        continue;
     }
 
     // We got to the end without finding anything figuration-relevant,

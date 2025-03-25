@@ -136,7 +136,7 @@ class ProximityNote : public RelativeEvent
         }
         // Unused now.
         PitchNoOctave getPitch() const { return m_pitch; }
-        int getPenalty(PitchNoOctave pitch)
+        int getPenalty(PitchNoOctave pitch) const
         {
             // Direction of subtraction here isn't important since
             // we'll square it.  We must convert "round the corner"
@@ -144,9 +144,9 @@ class ProximityNote : public RelativeEvent
             int difference = doubleOctaveToBalanced(pitch - m_pitch);
             return difference * difference;
         }
-        static int getMovementPenalty(TonePressure &from,
-                                      TonePressure &to,
-                                      PitchNoOctaveVector &pitches,
+        static int getMovementPenalty(const TonePressure &from,
+                                      const TonePressure &to,
+                                      const PitchNoOctaveVector &pitches,
                                       bool forwards)
         {
             const int index =
@@ -340,6 +340,7 @@ class ProximityNote : public RelativeEvent
 
                 // Add this index to the best match.  TonePressure
                 // maintains the sorting invariant.
+                // cppcheck-suppress nullPointer
                 bestTonePressure->addIndex(*i);
             }
 
@@ -706,7 +707,7 @@ protected:
 class ParamaterizedRelativeEventAdder : public BaseRelativeEventAdder
 {
 public:
-    ParamaterizedRelativeEventAdder(timeT startTime, Segment *s,
+    ParamaterizedRelativeEventAdder(timeT startTime, const Segment *s,
                                     const FigChord *parameterChord) :
         BaseRelativeEventAdder(startTime),
         m_parameterChord(parameterChord),
@@ -736,7 +737,10 @@ public:
         BaseRelativeEventAdder(startTime),
         m_sharedData(new ProximityNote::SharedData)
         {}
-
+    UnparamaterizedRelativeEventAdder
+    (const UnparamaterizedRelativeEventAdder&) =delete;
+    UnparamaterizedRelativeEventAdder& operator=
+    (const UnparamaterizedRelativeEventAdder&) =delete;
     ~UnparamaterizedRelativeEventAdder() override
     {
         // Destroying the adder triggers setting up the shared data,

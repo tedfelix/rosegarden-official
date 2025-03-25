@@ -238,7 +238,7 @@ protected:
      *
      * @see getStartEnd()
      */
-    void setStartEnd(RealTime &start, RealTime &end) {
+    void setStartEnd(const RealTime &start, const RealTime &end) {
         m_start = start;
         m_end   = end;
     }
