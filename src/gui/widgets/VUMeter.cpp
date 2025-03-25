@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[VUMeter]"
+#define RG_NO_DEBUG_PRINT
 
 #include "VUMeter.h"
 
@@ -24,12 +26,11 @@
 #include "gui/rulers/VelocityColour.h"
 
 #include <QColor>
+#include <QElapsedTimer>
 #include <QLabel>
 #include <QPainter>
-#include <QTimer>
 #include <QTime>
-#include <QWidget>
-#include <QElapsedTimer>
+#include <QTimer>
 
 
 namespace Rosegarden
@@ -43,12 +44,12 @@ static constexpr int refreshInterval = 100;
 
 
 VUMeter::VUMeter(QWidget *parent,
-                 VUMeterType type,
-                 bool stereo,
-                 bool hasRecord,
+                 const VUMeterType type,
+                 const bool stereo,
+                 const bool hasRecord,
                  const int width,
                  const int height,
-                 VUAlignment alignment):
+                 const VUAlignment alignment):
     QLabel(parent),
     m_originalHeight(height),
     m_type(type),
