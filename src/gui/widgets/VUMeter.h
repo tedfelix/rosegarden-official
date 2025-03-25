@@ -50,7 +50,7 @@ public:
 
     typedef enum
     {
-        Plain,  // ??? unused
+        //Plain,  // ??? unused
         PeakHold,  // TrackButtons
         AudioPeakHoldShort,  // AudioVUMeter
         AudioPeakHoldLong,  // ??? unused
@@ -59,18 +59,17 @@ public:
         FixedHeightVisiblePeakHold  // MidiMixerWindow
     } VUMeterType;
 
-    // Mono and stereo level setting.  The AudioPeakHold meter types
-    // expect levels in dB; other types expect levels between 0 and 1.
+    /// For audio meters, level is in dB.  For others it is normalized 0-1.
     void setLevel(double level);
+    /// For audio meters, level is in dB.  For others it is normalized 0-1.
     void setLevel(double leftLevel, double rightLevel);
 
-    // Mono and stereo record level setting.  Same units.  Only
-    // applicable if hasRecord true in constructor.
-    //
+    /// For audio meters, level is in dB.  For others it is normalized 0-1.
     void setRecordLevel(double level);
+    /// For audio meters, level is in dB.  For others it is normalized 0-1.
     void setRecordLevel(double leftLevel, double rightLevel);
 
-    void paintEvent(QPaintEvent*) override;
+    void paintEvent(QPaintEvent *) override;
 
 protected:
 
@@ -117,47 +116,43 @@ private:
     VUMeter(const VUMeter &);
     VUMeter &operator=(const VUMeter &);
 
-    VUMeterType m_type;
-    VUAlignment m_alignment;
+    const VUMeterType m_type;
+    const VUAlignment m_alignment;
+    const bool m_stereo;
+    const bool m_hasRecord;
 
     /// Meter background color.
     QColor m_background;
+
+    // Note: All numeric variables use "pixels" for their units unless
+    //       otherwise specified.
 
     // The size of the meter in pixels.
     int m_maxLevelPixels;
     /// pixels per second, 1 pixel per 50msecs
     static constexpr double m_decayRate{1/.05};
 
+    bool m_showPeakLevel;
+
     // LEFT
-    // It appears as if pixels are the unit of measurement throughout this
-    // class.  The setLevel() routines handle conversion from dB or normalized
-    // to pixels.
-    double m_levelLeft;
-    double m_recordLevelLeft;
-    int m_peakLevelLeft;
-    QTimer *m_decayTimerLeft;
-    QElapsedTimer *m_timeDecayLeft;
-    QTimer *m_peakTimerLeft;
+    double m_levelLeft{0};
+    double m_recordLevelLeft{0};
+    QTimer *m_decayTimerLeft{nullptr};
+    QElapsedTimer *m_timeDecayLeft{nullptr};
+    int m_peakLevelLeft{0};
+    QTimer *m_peakTimerLeft{nullptr};
 
     // RIGHT
-    // It appears as if pixels are the unit of measurement throughout this
-    // class.  The setLevel() routines handle conversion from dB or normalized
-    // to pixels.
-    double m_levelRight;
-    double m_recordLevelRight;
-    int m_peakLevelRight;
-    QTimer *m_decayTimerRight;
-    QElapsedTimer *m_timeDecayRight;
-    QTimer *m_peakTimerRight;
-
-    bool m_showPeakLevel;
+    double m_levelRight{0};
+    double m_recordLevelRight{0};
+    QTimer *m_decayTimerRight{nullptr};
+    QElapsedTimer *m_timeDecayRight{nullptr};
+    int m_peakLevelRight{0};
+    QTimer *m_peakTimerRight{nullptr};
 
     void setLevel(double leftLeveldB, double rightLeveldB, bool record);
 
-    bool m_stereo;
-    bool m_hasRecord;
-
-    // We use this to work out our colours
+    /// Converts level to color.
     VelocityColour *m_velocityColour;
 
 

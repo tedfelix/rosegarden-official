@@ -22,6 +22,7 @@
 #include "base/AudioLevel.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/VelocityColour.h"
+
 #include <QColor>
 #include <QLabel>
 #include <QPainter>
@@ -30,39 +31,28 @@
 #include <QWidget>
 #include <QElapsedTimer>
 
+
 namespace Rosegarden
 {
+
 
 // VU Meter decay refresh interval in msecs.
 // 100 is a little jerky, but uses less CPU.
 // 50 is smooth, but uses more CPU.
-const int refreshInterval = 100;
+static constexpr int refreshInterval = 100;
 
 
 VUMeter::VUMeter(QWidget *parent,
                  VUMeterType type,
                  bool stereo,
                  bool hasRecord,
-                 int width,
-                 int height,
+                 const int width,
+                 const int height,
                  VUAlignment alignment):
     QLabel(parent),
     m_originalHeight(height),
     m_type(type),
     m_alignment(alignment),
-    m_levelLeft(0),
-    m_recordLevelLeft(0),
-    m_peakLevelLeft(0),
-    m_decayTimerLeft(nullptr),
-    m_timeDecayLeft(nullptr),
-    m_peakTimerLeft(nullptr),
-    m_levelRight(0),
-    m_recordLevelRight(0),
-    m_peakLevelRight(0),
-    m_decayTimerRight(nullptr),
-    m_timeDecayRight(nullptr),
-    m_peakTimerRight(nullptr),
-    m_showPeakLevel(true),
     m_stereo(stereo),
     m_hasRecord(hasRecord)
 {
@@ -81,7 +71,7 @@ VUMeter::VUMeter(QWidget *parent,
         break;
 
     default:
-    case Plain:
+    //case Plain:
         m_showPeakLevel = false;
         break;
     }
@@ -176,6 +166,7 @@ VUMeter::VUMeter(QWidget *parent,
 
 VUMeter::~VUMeter()
 {
+    // Shared Pointer?
     delete m_velocityColour;
     delete m_peakTimerRight;
     delete m_peakTimerLeft;
@@ -264,7 +255,7 @@ VUMeter::setLevel(double leftLeveldB, double rightLeveldB, bool record)
             (rightLeveldB, m_maxLevelPixels, AudioLevel::IEC268LongMeter);
         break;
 
-    case Plain:
+    //case Plain:
     case PeakHold:
     case FixedHeightVisiblePeakHold:
     default:
@@ -411,8 +402,8 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
         m_type == AudioPeakHoldIEC ||
         m_type == AudioPeakHoldIECLong) {
 
-        int medium = m_velocityColour->getMediumKnee(),
-            loud = m_velocityColour->getLoudKnee();
+        // Loud
+        const int loud = m_velocityColour->getLoudKnee();
 
         if (m_alignment == Vertical) {
             if (h > loud) {
@@ -425,6 +416,9 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
                                 m_velocityColour->getLoudColour());
             }
         }
+
+        // Medium
+        const int medium = m_velocityColour->getMediumKnee();
 
         if (m_alignment == Vertical) {
             if (h > medium) {
@@ -439,6 +433,8 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
                                 m_velocityColour->getMediumColour());
             }
         }
+
+        // Quiet
 
         if (m_alignment == Vertical) {
             paint->fillRect(x, y + (h > medium ? (h - medium) : 0),
@@ -466,10 +462,10 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 }
 
 void
-VUMeter::drawMeterLevel(QPainter* paint)
+VUMeter::drawMeterLevel(QPainter *paint)
 {
 //    int medium = m_velocityColour->getMediumKnee();
-    int loud = m_velocityColour->getLoudKnee();
+    const int loud = m_velocityColour->getLoudKnee();
 
     if (m_stereo) {
         if (m_alignment == Vertical) {
