@@ -215,7 +215,8 @@ EditEvent::getEvent()
     Event event(m_event, m_timeSpinBox->value());
 
     // Let the widget make its changes.
-    m_eventWidget->updateEvent(event);
+    if (m_eventWidget)
+        m_eventWidget->updateEvent(event);
 
     // Changes from the Advanced Properties.
 
@@ -334,7 +335,8 @@ void EditEvent::updatePropertyTable()
 
     // Get the property filter.
     std::set<PropertyName> propertyFilter;
-    propertyFilter = m_eventWidget->getPropertyFilter();
+    if (m_eventWidget)
+        propertyFilter = m_eventWidget->getPropertyFilter();
 
     m_propertyTable->setRowCount(0);
 
