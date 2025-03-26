@@ -159,6 +159,7 @@ EventSelection::eraseThisEvent(Event *event)
                      [event](const Event* e) { return (e == event); } );
 
     if (eventIter != interval.second) { // found
+        m_segmentEvents.erase(eventIter);
         // Notify observers
         for (ObserverSet::const_iterator observerIter = m_observers.begin();
              observerIter != m_observers.end();
