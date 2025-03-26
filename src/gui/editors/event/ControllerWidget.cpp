@@ -47,6 +47,8 @@ ControllerWidget::ControllerWidget(EditEvent *parent, const Event &event) :
     // resizing from the parent down to the widgets becomes a mess.
     // Using QGridLayout because it is handy.  Any layout would do here.
     QGridLayout *mainLayout = new QGridLayout(this);
+    // Get rid of any extra margins introduced by the layout.
+    mainLayout->setContentsMargins(0,0,0,0);
 
     // Controller Properties group box
 
