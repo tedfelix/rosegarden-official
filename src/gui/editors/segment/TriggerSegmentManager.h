@@ -42,7 +42,7 @@ class RosegardenDocument;
 
 /// The "Manage Trigger Segments" dialog.
 /**
- * This and the Event List editor (EventView) work together to allow for
+ * This and EventListEditor work together to allow for
  * editing of all aspects of triggered segments.
  *
  * ??? This is awkward.  The Event List editor UI becomes a bloated mess

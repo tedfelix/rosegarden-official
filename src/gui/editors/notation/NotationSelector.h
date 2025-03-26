@@ -100,7 +100,7 @@ public:
     static QString ToolName();
 
 signals:
-    void editElement(NotationStaff *, NotationElement *, bool advanced);
+    void editElement(NotationStaff *, NotationElement *);
 
 public slots:
     /**

@@ -31,8 +31,7 @@
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
-#include "gui/dialogs/EventEditDialog.h"
-#include "gui/dialogs/SimpleEventEditDialog.h"
+#include "gui/editors/event/EditEvent.h"
 #include "gui/general/GUIPalette.h"
 #include "MatrixElement.h"
 #include "MatrixMover.h"
@@ -255,42 +254,32 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
             return;
         }
 
-        if (e->modifiers & Qt::ShiftModifier) { // advanced edit
+        EditEvent dialog(m_widget, *element->event());
 
-            EventEditDialog dialog(m_widget, *element->event(), true);
+        // Launch dialog.  Bail if canceled.
+        if (dialog.exec() != QDialog::Accepted)
+            return;
 
-            if (dialog.exec() == QDialog::Accepted &&
-                dialog.isModified()) {
+        Event newEvent = dialog.getEvent();
+        // No changes?  Bail.
+        if (newEvent == *element->event())
+            return;
 
-                EventEditCommand *command = new EventEditCommand
-                    (vs->getSegment(), element->event(),
-                     dialog.getEvent());
+        CommandHistory::getInstance()->addCommand(new EventEditCommand(
+                vs->getSegment(),
+                element->event(),  // eventToModify
+                newEvent));  // newEvent
 
-                CommandHistory::getInstance()->addCommand(command);
-            }
+    }
 
-        } else {
+#if 0
+    // Feature Request #124: multiclick select methods shouldwork in matrix
+    // editor (was #988167)
 
-            SimpleEventEditDialog dialog
-                (m_widget, RosegardenDocument::currentDocument, *element->event(), false);
+    // Postponing this, as it falls foul of world-matrix transformation
+    // etiquette and other such niceties
 
-            if (dialog.exec() == QDialog::Accepted &&
-                dialog.isModified()) {
-
-                EventEditCommand *command = new EventEditCommand
-                    (vs->getSegment(), element->event(), dialog.getEvent());
-
-                CommandHistory::getInstance()->addCommand(command);
-            }
-        }
-
-    } /*
-
-          #988167: Matrix:Multiclick select methods don't work in matrix editor
-          Postponing this, as it falls foul of world-matrix transformation
-          etiquette and other such niceties
-
-          else {
+    else {
 
         QRect rect = staff->getBarExtents(ev->x(), ev->y());
 
@@ -304,7 +293,8 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
         m_justSelectedBar = true;
         QTimer::singleShot(QApplication::doubleClickInterval(), this,
                            SLOT(slotClickTimeout()));
-        } */
+    }
+#endif
 }
 
 void

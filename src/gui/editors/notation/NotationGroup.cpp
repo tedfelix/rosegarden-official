@@ -280,12 +280,12 @@ NotationGroup::applyStemProperties()
 
     /*!!!
         if ((*initialNote)->event()->has(STEM_UP) &&
-        (*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
+        (*initialNote)->event()->isPersistent(STEM_UP)) {
         aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
         }
 
         if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE) &&
-        (*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)) {
+        (*initialNote)->event()->isPersistent(NotationProperties::BEAM_ABOVE)) {
         aboveNotes = (*initialNote)->event()->get<Bool>
             (NotationProperties::BEAM_ABOVE);
         }

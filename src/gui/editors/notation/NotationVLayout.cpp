@@ -606,7 +606,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     bool above = true;
 
     if ((*i)->event()->has(NotationProperties::SLUR_ABOVE) &&
-            (*i)->event()->isPersistent<Bool>(NotationProperties::SLUR_ABOVE)) {
+            (*i)->event()->isPersistent(NotationProperties::SLUR_ABOVE)) {
 
         (*i)->event()->get
         <Bool>(NotationProperties::SLUR_ABOVE, above);

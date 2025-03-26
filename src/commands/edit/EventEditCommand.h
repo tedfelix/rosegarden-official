@@ -21,23 +21,19 @@
 
 #include "base/Event.h"
 #include "document/BasicCommand.h"
+
 #include <QString>
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class Segment;
 
 
-/**
- * Replace an event with another one (likely to be used in
- * conjunction with EventEditDialog)
- */
-
+/// Replace an Event with another one.
 class EventEditCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::EventEditCommand)

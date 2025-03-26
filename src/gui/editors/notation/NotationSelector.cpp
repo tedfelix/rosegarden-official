@@ -206,11 +206,9 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
     if (!staff) return;
     m_selectedStaff = staff;
 
-    bool advanced = (e->modifiers & Qt::ShiftModifier);
-
     if (e->element && e->exact) {
 
-        emit editElement(staff, e->element, advanced);
+        emit editElement(staff, e->element);
 
     } else {
 

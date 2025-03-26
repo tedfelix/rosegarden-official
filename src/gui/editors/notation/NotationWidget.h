@@ -270,7 +270,7 @@ private slots:
 
 signals :
     void adjustNeeded(bool last);
-    void editElement(NotationStaff *, NotationElement *, bool advanced);
+    void editElement(NotationStaff *, NotationElement *);
     void currentSegmentPrior();
     void currentSegmentNext();
 

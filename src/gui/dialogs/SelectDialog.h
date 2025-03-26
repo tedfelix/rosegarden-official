@@ -384,8 +384,8 @@ protected:
     //
     // ParameterChord and Figuration represent something Tom Breton said only
     // 2-3 people use, something obscure and impossible to figure out by
-    // accident, and something available for selection through the EventList
-    // event filter.  I think we'll skip those.
+    // accident, and something available for selection through the Event List
+    // Editor event filter.  I think we'll skip those.
     //
     // Glissando exists in NotationTypes for some reason, but probably never
     // will exist.  If it ever does, it should be included.

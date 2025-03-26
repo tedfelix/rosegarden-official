@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[VUMeter]"
+#define RG_NO_DEBUG_PRINT
 
 #include "VUMeter.h"
 
@@ -22,49 +24,36 @@
 #include "base/AudioLevel.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/VelocityColour.h"
+
 #include <QColor>
+#include <QElapsedTimer>
 #include <QLabel>
 #include <QPainter>
-#include <QTimer>
 #include <QTime>
-#include <QWidget>
-#include <QElapsedTimer>
+#include <QTimer>
+
 
 namespace Rosegarden
 {
 
+
 // VU Meter decay refresh interval in msecs.
 // 100 is a little jerky, but uses less CPU.
 // 50 is smooth, but uses more CPU.
-const int refreshInterval = 100;
+static constexpr int refreshInterval = 100;
 
 
 VUMeter::VUMeter(QWidget *parent,
-                 VUMeterType type,
-                 bool stereo,
-                 bool hasRecord,
-                 int width,
-                 int height,
-                 VUAlignment alignment):
+                 const VUMeterType type,
+                 const bool stereo,
+                 const bool hasRecord,
+                 const int width,
+                 const int height,
+                 const VUAlignment alignment):
     QLabel(parent),
     m_originalHeight(height),
-    m_active(true),
     m_type(type),
     m_alignment(alignment),
-    m_decayRate(1/.05),  // 1 pixel per 50msecs
-    m_levelLeft(0),
-    m_recordLevelLeft(0),
-    m_peakLevelLeft(0),
-    m_decayTimerLeft(nullptr),
-    m_timeDecayLeft(nullptr),
-    m_peakTimerLeft(nullptr),
-    m_levelRight(0),
-    m_recordLevelRight(0),
-    m_peakLevelRight(0),
-    m_decayTimerRight(nullptr),
-    m_timeDecayRight(nullptr),
-    m_peakTimerRight(nullptr),
-    m_showPeakLevel(true),
     m_stereo(stereo),
     m_hasRecord(hasRecord)
 {
@@ -83,7 +72,7 @@ VUMeter::VUMeter(QWidget *parent,
         break;
 
     default:
-    case Plain:
+    //case Plain:
         m_showPeakLevel = false;
         break;
     }
@@ -124,11 +113,11 @@ VUMeter::VUMeter(QWidget *parent,
     setMaximumSize(width, m_originalHeight);
 
     if (m_alignment == Vertical)
-        m_maxLevel = height;
+        m_maxLevelPixels = height;
     else
-        m_maxLevel = width;
+        m_maxLevelPixels = width;
 
-    int max = m_maxLevel;
+    int max = m_maxLevelPixels;
     int red, orange, green;
 
     if (m_type == AudioPeakHoldShort) {
@@ -178,6 +167,7 @@ VUMeter::VUMeter(QWidget *parent,
 
 VUMeter::~VUMeter()
 {
+    // Shared Pointer?
     delete m_velocityColour;
     delete m_peakTimerRight;
     delete m_peakTimerLeft;
@@ -212,7 +202,7 @@ VUMeter::setRecordLevel(double leftLevel, double rightLevel)
 }
 
 void
-VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
+VUMeter::setLevel(double leftLeveldB, double rightLeveldB, bool record)
 {
     if (!isVisible())
         return ;
@@ -222,62 +212,69 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
     if (record && !m_hasRecord)
         return ;
 
-    double &ll = (record ? m_recordLevelLeft : m_levelLeft);
-    double &lr = (record ? m_recordLevelRight : m_levelRight);
+    double &llPixels = (record ? m_recordLevelLeft : m_levelLeft);
+    double &lrPixels = (record ? m_recordLevelRight : m_levelRight);
 
     // Previous levels.  Used to detect a change.
-    short pll = ll;
-    short plr = lr;
+    // ??? Why aren't these double?  As they are, this will detect a "change"
+    //     whenever the doubles are not whole numbers.  And I'm guessing that's
+    //     frequently.  Switching these to doubles should improve performance
+    //     by reducing unnecessary updates.  However, I doubt that we ever
+    //     have cases where something doesn't change.  So, we should just
+    //     get rid of this "optimization".  Perhaps first do some measurements.
+    //     Are updates avoided frequently or rarely?
+    short previousLevelLeft = llPixels;
+    short previousLevelRight = lrPixels;
 
     switch (m_type) {
 
     case AudioPeakHoldShort:
-        ll = AudioLevel::dB_to_fader
-            (leftLevel, m_maxLevel, AudioLevel::ShortFader);
-        lr = AudioLevel::dB_to_fader
-            (rightLevel, m_maxLevel, AudioLevel::ShortFader);
+        llPixels = AudioLevel::dB_to_fader
+            (leftLeveldB, m_maxLevelPixels, AudioLevel::ShortFader);
+        lrPixels = AudioLevel::dB_to_fader
+            (rightLeveldB, m_maxLevelPixels, AudioLevel::ShortFader);
         break;
 
     case AudioPeakHoldLong:
-        ll = AudioLevel::dB_to_fader
-            (leftLevel, m_maxLevel, AudioLevel::LongFader);
-        lr = AudioLevel::dB_to_fader
-            (rightLevel, m_maxLevel, AudioLevel::LongFader);
+        llPixels = AudioLevel::dB_to_fader
+            (leftLeveldB, m_maxLevelPixels, AudioLevel::LongFader);
+        lrPixels = AudioLevel::dB_to_fader
+            (rightLeveldB, m_maxLevelPixels, AudioLevel::LongFader);
         break;
 
     case AudioPeakHoldIEC:
-        ll = AudioLevel::dB_to_fader
-            (leftLevel, m_maxLevel, AudioLevel::IEC268Meter);
-        lr = AudioLevel::dB_to_fader
-            (rightLevel, m_maxLevel, AudioLevel::IEC268Meter);
+        llPixels = AudioLevel::dB_to_fader
+            (leftLeveldB, m_maxLevelPixels, AudioLevel::IEC268Meter);
+        lrPixels = AudioLevel::dB_to_fader
+            (rightLeveldB, m_maxLevelPixels, AudioLevel::IEC268Meter);
         break;
 
     case AudioPeakHoldIECLong:
-        ll = AudioLevel::dB_to_fader
-            (leftLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
-        lr = AudioLevel::dB_to_fader
-            (rightLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
+        llPixels = AudioLevel::dB_to_fader
+            (leftLeveldB, m_maxLevelPixels, AudioLevel::IEC268LongMeter);
+        lrPixels = AudioLevel::dB_to_fader
+            (rightLeveldB, m_maxLevelPixels, AudioLevel::IEC268LongMeter);
         break;
 
-    case Plain:
+    //case Plain:
     case PeakHold:
     case FixedHeightVisiblePeakHold:
     default:
-        ll = (int)(double(m_maxLevel) * leftLevel);
-        lr = (int)(double(m_maxLevel) * rightLevel);
+        llPixels = (int)(double(m_maxLevelPixels) * leftLeveldB);
+        lrPixels = (int)(double(m_maxLevelPixels) * rightLeveldB);
     };
 
-    if (ll < 0)
-        ll = 0;
-    if (ll > m_maxLevel)
-        ll = m_maxLevel;
-    if (lr < 0)
-        lr = 0;
-    if (lr > m_maxLevel)
-        lr = m_maxLevel;
+    if (llPixels < 0)
+        llPixels = 0;
+    if (llPixels > m_maxLevelPixels)
+        llPixels = m_maxLevelPixels;
+    if (lrPixels < 0)
+        lrPixels = 0;
+    if (lrPixels > m_maxLevelPixels)
+        lrPixels = m_maxLevelPixels;
 
     // Only start the timer when we need it
-    if (ll > 0) {
+    if (llPixels > 0) {
         if (m_decayTimerLeft && m_decayTimerLeft->isActive() == false) {
             m_decayTimerLeft->start(refreshInterval);
             if (m_timeDecayLeft) {
@@ -287,7 +284,7 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
         }
     }
 
-    if (lr > 0) {
+    if (lrPixels > 0) {
         if (m_decayTimerRight && m_decayTimerRight->isActive() == false) {
             m_decayTimerRight->start(refreshInterval);
             if (m_timeDecayRight) {
@@ -302,8 +299,8 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
         // Reset level and reset timer if we're exceeding the
         // current peak
         //
-        if (ll >= m_peakLevelLeft && m_showPeakLevel) {
-            m_peakLevelLeft = ll;
+        if (llPixels >= m_peakLevelLeft && m_showPeakLevel) {
+            m_peakLevelLeft = llPixels;
 
             if (m_peakTimerLeft) {
                 if (m_peakTimerLeft->isActive())
@@ -313,8 +310,8 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
             }
         }
 
-        if (lr >= m_peakLevelRight && m_showPeakLevel) {
-            m_peakLevelRight = lr;
+        if (lrPixels >= m_peakLevelRight && m_showPeakLevel) {
+            m_peakLevelRight = lrPixels;
 
             if (m_peakTimerRight) {
                 if (m_peakTimerRight->isActive())
@@ -326,9 +323,9 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
     }
 
     // If we're active and there has been a change, redraw the meter
-    if (m_active && (ll != pll || lr != plr)) {
+    if (m_active  &&
+        (llPixels != previousLevelLeft  ||  lrPixels != previousLevelRight))
         update();
-    }
 }
 
 //###
@@ -406,8 +403,8 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
         m_type == AudioPeakHoldIEC ||
         m_type == AudioPeakHoldIECLong) {
 
-        int medium = m_velocityColour->getMediumKnee(),
-            loud = m_velocityColour->getLoudKnee();
+        // Loud
+        const int loud = m_velocityColour->getLoudKnee();
 
         if (m_alignment == Vertical) {
             if (h > loud) {
@@ -420,6 +417,9 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
                                 m_velocityColour->getLoudColour());
             }
         }
+
+        // Medium
+        const int medium = m_velocityColour->getMediumKnee();
 
         if (m_alignment == Vertical) {
             if (h > medium) {
@@ -434,6 +434,8 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
                                 m_velocityColour->getMediumColour());
             }
         }
+
+        // Quiet
 
         if (m_alignment == Vertical) {
             paint->fillRect(x, y + (h > medium ? (h - medium) : 0),
@@ -461,13 +463,13 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 }
 
 void
-VUMeter::drawMeterLevel(QPainter* paint)
+VUMeter::drawMeterLevel(QPainter *paint)
 {
 //    int medium = m_velocityColour->getMediumKnee();
-    int loud = m_velocityColour->getLoudKnee();
+    const int loud = m_velocityColour->getLoudKnee();
 
     if (m_stereo) {
-        if (m_alignment == VUMeter::Vertical) {
+        if (m_alignment == Vertical) {
             int hW = width() / 2;
 
             int midWidth = 1;
@@ -479,8 +481,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
             // Draw the left bar
             //
-            int y = height() - (m_levelLeft * height()) / m_maxLevel;
-            int ry = height() - (m_recordLevelLeft * height()) / m_maxLevel;
+            int y = height() - (m_levelLeft * height()) / m_maxLevelPixels;
+            int ry = height() - (m_recordLevelLeft * height()) / m_maxLevelPixels;
 
             drawColouredBar(paint, 0, 0, y, hW - midWidth, height() - y);
 
@@ -495,7 +497,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
             }
 
             if (m_showPeakLevel) {
-                int h = (m_peakLevelLeft * height()) / m_maxLevel;
+                int h = (m_peakLevelLeft * height()) / m_maxLevelPixels;
                 y = height() - h;
 
                 if (h > loud) {
@@ -510,8 +512,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
             // Draw the right bar
             //
-            y = height() - (m_levelRight * height()) / m_maxLevel;
-            ry = height() - (m_recordLevelRight * height()) / m_maxLevel;
+            y = height() - (m_levelRight * height()) / m_maxLevelPixels;
+            ry = height() - (m_recordLevelRight * height()) / m_maxLevelPixels;
             drawColouredBar(paint, 1, hW + midWidth, y, hW - midWidth, height() - y);
 
             if (m_hasRecord) {
@@ -525,7 +527,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
             }
 
             if (m_showPeakLevel) {
-                int h = (m_peakLevelRight * height()) / m_maxLevel;
+                int h = (m_peakLevelRight * height()) / m_maxLevelPixels;
                 y = height() - h;
 
                 if (h > loud) {
@@ -541,13 +543,13 @@ VUMeter::drawMeterLevel(QPainter* paint)
         {
             paint->fillRect(0, 0, width(), height(), m_background);
 
-            int x = (m_levelLeft * width()) / m_maxLevel;
+            int x = (m_levelLeft * width()) / m_maxLevelPixels;
             if (x > 0)
                 paint->fillRect(0, 0, x, height(), m_background);
 
             if (m_showPeakLevel) {
                 // show peak level
-                x = m_peakLevelLeft * width() / m_maxLevel;
+                x = m_peakLevelLeft * width() / m_maxLevelPixels;
                 if (x < (width() - 1))
                     x++;
                 else
@@ -560,8 +562,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
     } else {  // monaural
         // Paint a vertical meter according to type
         //
-        if (m_alignment == VUMeter::Vertical) {
-            int y = height() - (m_levelLeft * height()) / m_maxLevel;
+        if (m_alignment == Vertical) {
+            int y = height() - (m_levelLeft * height()) / m_maxLevelPixels;
             drawColouredBar(paint, 0, 0, y, width(), height());
 
             paint->fillRect(0, 0, width(), y, m_background);
@@ -572,13 +574,13 @@ VUMeter::drawMeterLevel(QPainter* paint)
             */
 
             if (m_showPeakLevel) {
-                y = height() - (m_peakLevelLeft * height()) / m_maxLevel;
+                y = height() - (m_peakLevelLeft * height()) / m_maxLevelPixels;
 
                 paint->setPen(Qt::white);
                 paint->drawLine(0, y, width(), y);
             }
         } else {  // Horizontal
-            int x = (m_levelLeft * width()) / m_maxLevel;
+            int x = (m_levelLeft * width()) / m_maxLevelPixels;
             if (x > 0)
                 drawColouredBar(paint, 0, 0, 0, x, height());
 
@@ -586,7 +588,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
             if (m_showPeakLevel) {
                 // show peak level
-                x = (m_peakLevelLeft * width()) / m_maxLevel;
+                x = (m_peakLevelLeft * width()) / m_maxLevelPixels;
                 if (x < (width() - 1))
                     x++;
                 else

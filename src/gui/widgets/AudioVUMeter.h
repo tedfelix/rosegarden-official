@@ -67,9 +67,6 @@ protected:
                          bool hasRecord,
                          int width,
                          int height);
-    protected:
-        void meterStart() override { }
-        void meterStop() override { }
     };
         
     AudioVUMeterImpl *m_meter;

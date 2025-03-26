@@ -60,6 +60,68 @@ Controller::makeEvent(timeT absoluteTime, MidiByte number, MidiByte value)
     return e;
 }
 
+const QString &Controller::getName(const MidiByte number)
+{
+    // Going with a std::vector for raw speed.
+    static std::vector<QString> controllerNames(128);
+    static bool initialized{false};
+    if (!initialized) {
+        // ??? Should these be translated?
+        controllerNames[0] = "Bank Select MSB";
+        controllerNames[1] = "Mod Wheel MSB";
+        controllerNames[2] = "Breath Controller MSB";
+        controllerNames[4] = "Foot Pedal MSB";
+        controllerNames[5] = "Portamento Time MSB";
+        controllerNames[6] = "Data Entry MSB";
+        controllerNames[7] = "Volume";
+        controllerNames[8] = "Stereo Balance MSB";
+        controllerNames[10] = "Pan";
+        controllerNames[11] = "Expression";
+        controllerNames[12] = "Effect 1 MSB";
+        controllerNames[13] = "Effect 2 MSB";
+        controllerNames[32] = "Bank Select LSB";
+        controllerNames[33] = "Mod Wheel LSB";
+        controllerNames[34] = "Breath Controller LSB";
+        controllerNames[36] = "Foot Pedal LSB";
+        controllerNames[37] = "Portamento Time LSB";
+        controllerNames[38] = "Data Entry LSB";
+        controllerNames[39] = "Volume LSB";
+        controllerNames[40] = "Stereo Balance LSB";
+        controllerNames[42] = "Pan LSB";
+        controllerNames[43] = "Expression LSB";
+        controllerNames[44] = "Effect 1 LSB";
+        controllerNames[45] = "Effect 2 LSB";
+        controllerNames[64] = "Sustain";
+        controllerNames[65] = "Portamento On/Off";
+        controllerNames[66] = "Sostenuto";
+        controllerNames[67] = "Soft Pedal";
+        controllerNames[68] = "Legato";
+        controllerNames[69] = "Hold Pedal 2";
+        controllerNames[91] = "Reverb";
+        controllerNames[92] = "Tremolo";
+        controllerNames[93] = "Chorus";
+        controllerNames[94] = "Detuning";
+        controllerNames[95] = "Phaser";
+        controllerNames[96] = "Data +";
+        controllerNames[97] = "Data -";
+        controllerNames[98] = "NRPN LSB";
+        controllerNames[99] = "NRPN MSB";
+        controllerNames[100] = "RPN LSB";
+        controllerNames[101] = "RPN MSB";
+        controllerNames[120] = "Channel Mute";
+        controllerNames[121] = "Reset All Controllers";
+        controllerNames[122] = "Local On/Off";
+        controllerNames[123] = "All MIDI Notes Off";
+        controllerNames[124] = "Omni Off";
+        controllerNames[125] = "Omni On";
+        controllerNames[126] = "Mono On/Off";
+        controllerNames[127] = "Poly On/Off";
+
+        initialized = true;
+    }
+
+    return controllerNames[number];
+}
 
 //////////////////////////////////////////////////////////////////////
 // RPN

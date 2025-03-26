@@ -35,12 +35,5 @@ MidiMixerVUMeter::MidiMixerVUMeter(QWidget *parent,
     setAlignment(Qt::AlignCenter);
 }
 
-void
-MidiMixerVUMeter::meterStart()
-{}
-
-void
-MidiMixerVUMeter::meterStop()
-{}
 
 }

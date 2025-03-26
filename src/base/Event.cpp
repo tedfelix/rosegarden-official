@@ -13,24 +13,26 @@
     COPYING included with this distribution for more information.
 */
 
-#include <cstdio>
-#include <cctype>
-#include <iostream>
 #include "Event.h"
 #include "XmlExportable.h"
+#include "MidiTypes.h"
 #include "NotationTypes.h"
 #include "BaseProperties.h"
+
 #include "misc/Debug.h"
 
 #include <sstream>
+#include <cstdio>
+#include <cctype>
+#include <iostream>
 
 namespace Rosegarden
 {
 using std::string;
 using std::ostream;
 
-PropertyName Event::EventData::NotationTime("!notationtime");
-PropertyName Event::EventData::NotationDuration("!notationduration");
+const PropertyName Event::NotationTime("!notationtime");
+const PropertyName Event::NotationDuration("!notationduration");
 
 
 Event::EventData::EventData(const std::string &type, timeT absoluteTime,
@@ -416,6 +418,36 @@ Event::isCopyOf(const Event &e) const
 
     return false;
 }
+
+int Event::getSubOrdering(std::string eventType)
+{
+    if (eventType == Indication::EventType) {
+        return Indication::EventSubOrdering;
+    } else if (eventType == Clef::EventType) {
+        return Clef::EventSubOrdering;
+    } else if (eventType == Key::EventType) {
+        return Key::EventSubOrdering;
+    } else if (eventType == Text::EventType) {
+        return Text::EventSubOrdering;
+    } else if (eventType == Note::EventRestType) {
+        return Note::EventRestSubOrdering;
+    } else if (eventType == PitchBend::EventType) {
+        return PitchBend::EventSubOrdering;
+    } else if (eventType == Controller::EventType) {
+        return Controller::EventSubOrdering;
+    } else if (eventType == KeyPressure::EventType) {
+        return KeyPressure::EventSubOrdering;
+    } else if (eventType == ChannelPressure::EventType) {
+        return ChannelPressure::EventSubOrdering;
+    } else if (eventType == ProgramChange::EventType) {
+        return ProgramChange::EventSubOrdering;
+    } else if (eventType == SystemExclusive::EventType) {
+        return SystemExclusive::EventSubOrdering;
+    }
+
+    return 0;
+}
+
 
 bool
 operator<(const Event &a, const Event &b)

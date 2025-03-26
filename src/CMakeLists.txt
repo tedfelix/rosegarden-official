@@ -124,7 +124,6 @@ set(rg_CPPS
   gui/dialogs/BeatsBarsDialog.cpp
   gui/dialogs/PitchBendSequenceDialog.cpp
   gui/dialogs/TimeSignatureDialog.cpp
-  gui/dialogs/SimpleEventEditDialog.cpp
   gui/dialogs/TempoDialog.cpp
   gui/dialogs/AudioPlayingDialog.cpp
   gui/dialogs/TextEventDialog.cpp
@@ -144,7 +143,6 @@ set(rg_CPPS
   gui/dialogs/InsertTupletDialog.cpp
   gui/dialogs/TransportDialog.cpp
   gui/dialogs/ShowSequencerStatusDialog.cpp
-  gui/dialogs/EventEditDialog.cpp
   gui/dialogs/QuantizeDialog.cpp
   gui/dialogs/CheckForParallelsDialog.cpp
   gui/dialogs/FloatEdit.cpp
@@ -214,6 +212,19 @@ set(rg_CPPS
   gui/widgets/WarningWidget.cpp
   gui/widgets/TextFloat.cpp
   gui/widgets/ColorCombo.cpp
+  gui/editors/event/EditEvent.cpp
+  gui/editors/event/EventWidget.cpp
+  gui/editors/event/NoteWidget.cpp
+  gui/editors/event/RestWidget.cpp
+  gui/editors/event/ControllerWidget.cpp
+  gui/editors/event/ProgramChangeWidget.cpp
+  gui/editors/event/PitchBendWidget.cpp
+  gui/editors/event/ChannelPressureWidget.cpp
+  gui/editors/event/KeyPressureWidget.cpp
+  gui/editors/event/SysExWidget.cpp
+  gui/editors/event/RPNWidget.cpp
+  gui/editors/event/NRPNWidget.cpp
+  gui/editors/event/EventTypeDialog.cpp
   gui/editors/pitchtracker/PitchHistory.cpp
   gui/editors/pitchtracker/PitchTrackerView.cpp
   gui/editors/pitchtracker/PitchGraphWidget.cpp
@@ -292,8 +303,7 @@ set(rg_CPPS
   gui/editors/matrix/MatrixSelector.cpp
   gui/editors/matrix/MatrixToolBox.cpp
   gui/editors/eventlist/TrivialVelocityDialog.cpp
-  gui/editors/eventlist/EventView.cpp
-  gui/editors/eventlist/EventViewItem.cpp
+  gui/editors/eventlist/EventListEditor.cpp
   gui/editors/segment/TriggerManagerItem.cpp
   gui/editors/segment/PlayListView.cpp
   gui/editors/segment/TrackButtons.cpp

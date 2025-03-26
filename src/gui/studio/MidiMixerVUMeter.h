@@ -33,17 +33,13 @@ namespace Rosegarden
 class MidiMixerVUMeter : public VUMeter
 {
 public:
-    MidiMixerVUMeter(QWidget *parent = nullptr,
-                     VUMeterType type = Plain,
-                     int width = 0,
-                     int height = 0);
-
-protected:
-     void meterStart() override;
-     void meterStop() override;
+    MidiMixerVUMeter(QWidget *parent,
+                     VUMeterType type,
+                     int width,
+                     int height);
 
 private:
-     int m_textHeight;
+    int m_textHeight;
 
 }; 
 

@@ -133,7 +133,7 @@ NoteInsertionCommand::modifySegment()
             (Note::EventType,
              m_insertionTime,
              m_note.getDuration(),
-             0,
+             0,  // sub-ordering  ??? Event should handle this.
              m_insertionTime,
              m_note.getDuration());
 

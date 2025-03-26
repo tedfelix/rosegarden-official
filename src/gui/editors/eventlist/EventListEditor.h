@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_EVENTVIEW_H
-#define RG_EVENTVIEW_H
+#ifndef RG_EVENTVIEW2_H
+#define RG_EVENTVIEW2_H
 
 #include "base/Segment.h"  // SegmentObserver
 #include "gui/general/EditViewBase.h"
@@ -30,8 +30,8 @@
 class QWidget;
 class QMenu;
 class QPoint;
-class QTreeWidget;
-class QTreeWidgetItem;
+class QTableWidget;
+class QTableWidgetItem;
 class QLabel;
 class QCheckBox;
 class QGroupBox;
@@ -47,22 +47,20 @@ class RosegardenDocument;
 class Event;
 
 
-/// The "Event List" window.
+/// The Event List Editor
 /**
- * This is the event list editor.
- *
  * Segment > Edit With > Open in Event List Editor.  Or just press "E".
  */
-class EventView : public EditViewBase
+class EventListEditor : public EditViewBase
 {
     Q_OBJECT
 
 public:
 
-    EventView(RosegardenDocument *doc,
-              const std::vector<Segment *> &segments);
+    EventListEditor(RosegardenDocument *doc,
+                    const std::vector<Segment *> &segments);
 
-    ~EventView() override;
+    ~EventListEditor() override;
 
 signals:
 
@@ -86,8 +84,6 @@ private slots:
     void slotEditDelete();
     /// Edit > Edit Event
     void slotEditEvent();
-    /// Edit > Advanced Event Editor
-    void slotEditEventAdvanced();
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -107,15 +103,13 @@ private slots:
     void slotFilterClicked(bool);
 
     /// Handle double-click on an event in the event list.
-    void slotItemDoubleClicked(QTreeWidgetItem *item, int column);
+    void slotCellDoubleClicked(int row, int column);
     void slotItemSelectionChanged();
 
     /// Right-click context menu.
     void slotContextMenu(const QPoint &);
     /// Right-click context menu handler.
     void slotOpenInEventEditor(bool checked);
-    /// Right-click context menu handler.
-    void slotOpenInExpertEventEditor(bool checked);
     /// Right-click context menu handler.
     void slotEditTriggeredSegment(bool checked);
 
@@ -168,14 +162,11 @@ private:
     QCheckBox *m_otherCheckBox;
     bool m_showOther{true};
 
-    // ??? QTreeWidget seems like overkill.  We never have sub items.
-    //     QTableWidget seems like a better choice.  See
-    //     TempoAndTimeSignatureEditor for a complete example of using
-    //     QTableWidget.
-    QTreeWidget *m_treeWidget;
-    bool updateTreeWidget();
+    // The Event table.
+    QTableWidget *m_tableWidget;
+    bool updateTableWidget();
 
-    /// Pop-up menu for the event list.
+    /// Pop-up menu for the event table.
     QMenu *m_contextMenu{nullptr};
     QAction *m_editTriggeredSegment{nullptr};
 
@@ -186,8 +177,11 @@ private:
     QLabel *m_triggerPitch{nullptr};
     QLabel *m_triggerVelocity{nullptr};
 
+
     void loadOptions();
     void saveOptions();
+
+    void editItem(const QTableWidgetItem *item);
 
 };
 

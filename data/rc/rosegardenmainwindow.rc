@@ -273,8 +273,8 @@
       <Action name="play" text="&amp;Play" icon="transport-play" shortcut="Ctrl+Enter, Enter, Media Play, Ctrl+Return" shortcut-context="application" />
       <Action name="stop" text="&amp;Stop" icon="transport-stop" shortcut="Insert, Media Stop" shortcut-context="application" />
       <!-- JAS swapped rewind / ffwd to match matrix.rc -->
-      <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Media Previous" shortcut-context="application" />
-      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Media Next" shortcut-context="application" />
+      <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Media Previous" />
+      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Media Next" />
       <Action name="record" text="&amp;Record" icon="transport-record" shortcut="Ctrl+Space, Media Record" shortcut-context="application" />
       <Action name="recordtoggle" text="P&amp;unch in Record" icon="transport-record" shortcut="Space" shortcut-context="application" />
       <Action name="loop" text="L&amp;oop" icon="button-loop-3" checked="false" shortcut="Ctrl+L" />
@@ -360,11 +360,11 @@
 
 <ToolBar name="Transport Toolbar">
   <text>Transport Toolbar</text>
-  <Action name="rewindtobeginning" text="Rewind to Beginning" icon="transport-rewind-end" shortcut="Home" shortcut-context="application" />
+  <Action name="rewindtobeginning" text="Rewind to Beginning" icon="transport-rewind-end" shortcut="Home" />
   <Action name="rewind" />
   <Action name="play" />
   <Action name="fast_forward" />
-  <Action name="fastforwardtoend" text="Fast Forward to End" icon="transport-ffwd-end" shortcut="End" shortcut-context="application" />
+  <Action name="fastforwardtoend" text="Fast Forward to End" icon="transport-ffwd-end" shortcut="End" />
   <Action name="stop" />
   <Action name="record" />
   <Action name="loop" />

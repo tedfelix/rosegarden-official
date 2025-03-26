@@ -187,19 +187,14 @@
       <Action name="cursor_prior_segment" text="Pre&amp;vious Segment" shortcut="Alt+PgUp" />
       <Action name="cursor_next_segment" text="Ne&amp;xt Segment" shortcut="Alt+PgDown" />
     <Separator/>
-      <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
       <Action name="play" text="&amp;Play" icon="transport-play" />
       <Action name="stop" text="&amp;Stop" icon="transport-stop" />
-      <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
       <Action name="cursor_back" text="Step &amp;Back" icon="step-back" shortcut="Left" />
       <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" shortcut="Right" />
-      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="Ctrl+Left" />
-      <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
-      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" />
-      <!-- JAS action called "rewindtobeginning" in rosegardenui.rc.  Is this a different call? -->
-      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
-      <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
-      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Ctrl+Left" />
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Ctrl+Right" />
+      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" shortcut="Home" />
+      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" shortcut="End" />
       <Action name="loop" text="L&amp;oop" icon="button-loop-3" checked="false" shortcut="Ctrl+L" />
       <Action name="toggle_solo" text="S&amp;olo" icon="transport-solo" checked="false" />
       <Action name="scroll_to_follow" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
@@ -212,14 +207,10 @@
     <Action name="draw" text="&amp;Draw" icon="pencil" shortcut="F3" group="tools_segment" checked="false" />
     <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
     <Action name="move" text="&amp;Move" icon="move" shortcut="F5" group="tools_segment" checked="false" />
-    <!-- JAS '&amp;' before the 'R' in rosegardenui.rc -->
     <Action name="resize" text="Resi&amp;ze" icon="resize" shortcut="F6" group="tools_segment" checked="false" />
 <!--    <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" /> -->
     <Action name="velocity" text="&amp;Velocity" icon="velocity" shortcut="F7" group="tools_segment" checked="false" />
   <Separator/>
-
-    <!-- JAS action names for "insert_note_actionmenu" derived from src/gui/general/EditView.cpp -->
-    <!-- JAS original line <Action name="insert_note_actionmenu" /> -->
     <Menu name="insert_note_actionmenu">
       <text>&amp;Insert Note</text>
       <Action name="insert_0" text="I/do" shortcut="A" />

@@ -126,11 +126,8 @@
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"
 #include "gui/dialogs/AboutDialog.h"
-#include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/TextEventDialog.h"
-#include "gui/dialogs/SimpleEventEditDialog.h"
 #include "gui/dialogs/ConfigureDialog.h"
-
 #include "gui/dialogs/CheckForParallelsDialog.h"
 
 #include "gui/general/EditTempoController.h"
@@ -146,6 +143,7 @@
 #include "gui/application/RosegardenMainViewWidget.h"
 
 #include "gui/editors/parameters/TrackParameterBox.h"
+#include "gui/editors/event/EditEvent.h"
 
 #include "document/io/LilyPondExporter.h"
 
@@ -207,8 +205,10 @@ namespace
     }
 }
 
+
 namespace Rosegarden
 {
+
 
 using namespace Accidentals;
 
@@ -4922,8 +4922,7 @@ NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
 
 void
 NotationView::slotEditElement(NotationStaff *staff,
-                              NotationElement *element,
-                              bool advanced)
+                              NotationElement *element)
 {
     NOTATION_DEBUG << "NotationView::slotEditElement()";
 
@@ -4932,22 +4931,7 @@ NotationView::slotEditElement(NotationStaff *staff,
 
     NotePixmapFactory *npf = scene->getNotePixmapFactory();
 
-    if (advanced) {
-
-        EventEditDialog dialog(this, *element->event(), true);
-
-        if (dialog.exec() == QDialog::Accepted &&
-            dialog.isModified()) {
-
-            EventEditCommand *command = new EventEditCommand
-                (staff->getSegment(),
-                 element->event(),
-                 dialog.getEvent());
-
-            CommandHistory::getInstance()->addCommand(command);
-        }
-
-    } else if (element->event()->isa(Clef::EventType)) {
+    if (element->event()->isa(Clef::EventType)) {
 
         try {
             ClefDialog dialog(this, npf,
@@ -5077,18 +5061,21 @@ NotationView::slotEditElement(NotationStaff *staff,
 
     } else {
 
-        SimpleEventEditDialog dialog(this, RosegardenDocument::currentDocument, *element->event(), false);
+        EditEvent dialog(this, *element->event());
 
-        if (dialog.exec() == QDialog::Accepted &&
-            dialog.isModified()) {
+        // Launch dialog.  Bail if canceled.
+        if (dialog.exec() != QDialog::Accepted)
+            return;
 
-            EventEditCommand *command = new EventEditCommand
-                (staff->getSegment(),
-                 element->event(),
-                 dialog.getEvent());
+        Event newEvent = dialog.getEvent();
+        // No changes?  Bail.
+        if (newEvent == *element->event())
+            return;
 
-            CommandHistory::getInstance()->addCommand(command);
-        }
+        CommandHistory::getInstance()->addCommand(new EventEditCommand(
+                staff->getSegment(),
+                element->event(),  // eventToModify
+                newEvent));  // newEvent
     }
 }
 

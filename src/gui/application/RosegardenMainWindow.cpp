@@ -2257,9 +2257,9 @@ RosegardenMainWindow::launchSaveAsDialog(QString filter,
 
     // If we have a filter extension...
     if (!filterExtension.isEmpty()) {
-        static QRegularExpression rgFile("\\..{1,4}$");
+        static QRegularExpression extensionRegEx("\\..{1,4}$");
         // If the file name has no extension, add the filter extension.
-        if (!rgFile.match(name).hasMatch())
+        if (!extensionRegEx.match(name).hasMatch())
             name += filterExtension;
     }
 

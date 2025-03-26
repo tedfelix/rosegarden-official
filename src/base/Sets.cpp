@@ -83,7 +83,7 @@ get__String(Event *e, const PropertyName &name, std::string &ref)
 extern bool
 isPersistent__Bool(Event *e, const PropertyName &name)
 {
-    return e->isPersistent<Bool>(name);
+    return e->isPersistent(name);
 }
 
 extern void
