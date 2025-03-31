@@ -19,27 +19,31 @@
 #define RG_MATRIXMOVER_H
 
 #include "MatrixTool.h"
+#include "base/TimeT.h"
+
 #include <QString>
-#include "base/Event.h"
 
 class QGraphicsRectItem;
 class QKeyEvent;
 
+
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class MatrixViewSegment;
 class MatrixElement;
 class Event;
+
 
 class MatrixMover : public MatrixTool
 {
     Q_OBJECT
 
-    friend class MatrixToolBox;
-
 public:
+
+    MatrixMover(MatrixWidget *);
+
     void handleLeftButtonPress(const MatrixMouseEvent *) override;
     FollowMode handleMouseMove(const MatrixMouseEvent *) override;
     void handleMouseRelease(const MatrixMouseEvent *) override;
@@ -59,37 +63,39 @@ public:
     static QString ToolName();
 
 signals:
+
     void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
 
-protected slots:
-//    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
-
-protected:
-    MatrixMover(MatrixWidget *);
+private:
 
     void setBasicContextHelp(bool ctrlPressed = false);
 
-    MatrixElement *m_currentElement;
+    MatrixElement *m_currentElement{nullptr};
+
     /// The Event associated with m_currentElement.
-    Event *m_event;
-    MatrixViewSegment *m_currentViewSegment;
-    timeT m_clickSnappedLeftDeltaTime;
+    Event *m_event{nullptr};
+    MatrixViewSegment *m_currentViewSegment{nullptr};
+
+    timeT m_clickSnappedLeftDeltaTime{0};
 
     std::vector<MatrixElement *> m_duplicateElements;
-    bool m_quickCopy;
+    bool m_quickCopy{false};
 
-    int m_lastPlayedPitch;
- private:
+    int m_lastPlayedPitch{-1};
 
     void createDuplicates();
     void removeDuplicates();
 
     QPoint m_mousePressPos;
-    bool m_dragConstrained;
-    int m_constraintSize;
-    QGraphicsRectItem* m_constraintH;
-    QGraphicsRectItem* m_constraintV;
+    bool m_dragConstrained{false};
+
+    static constexpr int m_constraintSize{30};
+
+    QGraphicsRectItem *m_constraintH{nullptr};
+    QGraphicsRectItem *m_constraintV{nullptr};
+
 };
+
 
 }
 

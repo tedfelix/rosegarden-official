@@ -46,18 +46,7 @@ namespace Rosegarden
 {
 
 MatrixMover::MatrixMover(MatrixWidget *parent) :
-    MatrixTool("matrixmover.rc", "MatrixMover", parent),
-    m_currentElement(nullptr),
-    m_event(nullptr),
-    m_currentViewSegment(nullptr),
-    m_clickSnappedLeftDeltaTime(0),
-    m_duplicateElements(),
-    m_quickCopy(false),
-    m_lastPlayedPitch(-1),
-    m_dragConstrained(false),
-    m_constraintSize(30),
-    m_constraintH(nullptr),
-    m_constraintV(nullptr)
+    MatrixTool("matrixmover.rc", "MatrixMover", parent)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("draw", SLOT(slotDrawSelected()));
