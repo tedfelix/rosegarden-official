@@ -269,70 +269,68 @@ MidiInserter::insertCopy(const MappedEvent &event)
 
                 break;
             }
+
         case MappedEvent::TimeSignature:
             {
-                int numerator   = event.getData1();
-                int denominator = event.getData2();
-                timeT beatDuration =
-                    TimeSignature(numerator, denominator).
-                    getBeatDuration();
+                const int numerator = event.getData1();
+                const int denominator = event.getData2();
+                const timeT beatDuration =
+                    TimeSignature(numerator, denominator).getBeatDuration();
 
                 std::string timeSigString;
-                timeSigString += (MidiByte) numerator;
-                int denPowerOf2 = 0;
+                timeSigString += MidiByte(numerator);
 
-                // Work out how many powers of two are in the denominator
-                //
+                // Work out how many powers of two are in the denominator.
+                // Log base 2.
+                int denPowerOf2 = 0;
                 {
                     int denominatorCopy = denominator;
-                    while (denominatorCopy >>= 1)
-                        { denPowerOf2++; }
+                    while (denominatorCopy >>= 1) {
+                        ++denPowerOf2;
+                    }
                 }
 
-                timeSigString += (MidiByte) denPowerOf2;
+                timeSigString += MidiByte(denPowerOf2);
 
                 // The third byte is the number of MIDI clocks per beat.
                 // There are 24 clocks per quarter-note (the MIDI clock
                 // is tempo-independent and is not related to the timebase).
-                //
-                int cpb = 24 * beatDuration / crotchetDuration;
-                timeSigString += (MidiByte) cpb;
+                const int cpb = 24 * beatDuration / crotchetDuration;
+                timeSigString += MidiByte(cpb);
 
                 // And the fourth byte is always 8, for us (it expresses
                 // the number of notated 32nd-notes in a MIDI quarter-note,
                 // for applications that may want to notate and perform
                 // in different units)
-                //
-                timeSigString += (MidiByte) 8;
+                timeSigString += MidiByte(8);
 
-                trackData.
-                    insertMidiEvent
-                    (new MidiEvent(midiEventAbsoluteTime,
-                                   MIDI_FILE_META_EVENT,
-                                   MIDI_TIME_SIGNATURE,
-                                   timeSigString));
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_FILE_META_EVENT,
+                        MIDI_TIME_SIGNATURE,
+                        timeSigString));
 
                 break;
             }
+
         case MappedEvent::MidiController:
-            {
-                trackData.
-                    insertMidiEvent
-                    (new MidiEvent(midiEventAbsoluteTime,
-                                   MIDI_CTRL_CHANGE | midiChannel,
-                                   event.getData1(), event.getData2()));
 
-                break;
-            }
+            trackData.insertMidiEvent(new MidiEvent(
+                    midiEventAbsoluteTime,
+                    MIDI_CTRL_CHANGE | midiChannel,
+                    event.getData1(),
+                    event.getData2()));
+
+            break;
+
         case MappedEvent::MidiProgramChange:
-            {
-                trackData.
-                    insertMidiEvent
-                    (new MidiEvent(midiEventAbsoluteTime,
-                                   MIDI_PROG_CHANGE | midiChannel,
-                                   event.getData1()));
-                break;
-            }
+
+            trackData.insertMidiEvent(new MidiEvent(
+                    midiEventAbsoluteTime,
+                    MIDI_PROG_CHANGE | midiChannel,
+                    event.getData1()));
+
+            break;
 
         case MappedEvent::MidiNote:
         case MappedEvent::MidiNoteOneShot:
@@ -340,10 +338,10 @@ MidiInserter::insertCopy(const MappedEvent &event)
                 const MidiByte pitch = event.getData1();
                 const MidiByte midiVelocity = event.getData2();
 
-                RG_DEBUG << "insertCopy note" << event.getEventTime() <<
-                    midiEventAbsoluteTime << pitch << midiVelocity;
-                if ((event.getType() == MappedEvent::MidiNote) &&
-                    (midiVelocity == 0)) {
+                RG_DEBUG << "insertCopy note" << event.getEventTime() << midiEventAbsoluteTime << pitch << midiVelocity;
+
+                if (event.getType() == MappedEvent::MidiNote  &&
+                    midiVelocity == 0) {
                     // It's actually a NOTE_OFF.
                     // "MIDI devices that can generate Note Off
                     // messages, but don't implement velocity
@@ -362,8 +360,10 @@ MidiInserter::insertCopy(const MappedEvent &event)
                             pitch,
                             midiVelocity));
                 }
+
                 break;
             }
+
         case MappedEvent::MidiPitchBend:
             {
                 trackData.insertMidiEvent(new MidiEvent(
@@ -371,28 +371,24 @@ MidiInserter::insertCopy(const MappedEvent &event)
                         MIDI_PITCH_BEND | midiChannel,
                         event.getData2(),
                         event.getData1()));
+
                 break;
             }
 
         case MappedEvent::MidiSystemMessage:
             {
-                std::string data =
-                    DataBlockRepository::getInstance()->
-                    getDataBlockForEvent(&event);
+                std::string data = DataBlockRepository::getInstance()->
+                        getDataBlockForEvent(&event);
 
-                // check for closing EOX and add one if none found
-                //
-                if (MidiByte(data[data.length() - 1]) != MIDI_END_OF_EXCLUSIVE) {
+                // No EOX, add it.
+                if (MidiByte(data[data.length() - 1]) != MIDI_END_OF_EXCLUSIVE)
                     data += (char)MIDI_END_OF_EXCLUSIVE;
-                }
 
                 // construct plain SYSEX event
-                //
-                trackData.
-                    insertMidiEvent
-                    (new MidiEvent(midiEventAbsoluteTime,
-                                   MIDI_SYSTEM_EXCLUSIVE,
-                                   data));
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_SYSTEM_EXCLUSIVE,
+                        data));
 
                 break;
             }
