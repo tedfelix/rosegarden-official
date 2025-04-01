@@ -28,7 +28,7 @@
 #include "sound/MidiFile.h"
 #include "sound/MappedEvent.h"
 
-#include <QtGlobal>
+//#include <QtGlobal>
 
 #include <string>
 
@@ -42,8 +42,7 @@ namespace Rosegarden
 /*** TrackData ***/
 
 void
-MidiInserter::TrackData::
-insertMidiEvent(MidiEvent *event)
+MidiInserter::TrackData::insertMidiEvent(MidiEvent *event)
 {
     const timeT absoluteTime = event->getTime();
 
@@ -63,8 +62,7 @@ insertMidiEvent(MidiEvent *event)
 }
 
 void
-MidiInserter::TrackData::
-endTrack(timeT t)
+MidiInserter::TrackData::endTrack(timeT t)
 {
     // Safe even if it is too early in timeT because insertMidiEvent
     // fixes it.
@@ -74,8 +72,7 @@ endTrack(timeT t)
 }
 
 void
-MidiInserter::TrackData::
-insertTempo(timeT t, long tempo)
+MidiInserter::TrackData::insertTempo(timeT t, long tempo)
 {
     double qpm = Composition::getTempoQpm(tempo);
     long tempoValue = long(60000000.0 / qpm + 0.01);
@@ -93,24 +90,19 @@ insertTempo(timeT t, long tempo)
                        tempoString));
 }
 
-    /*** MidiInserter ***/
-const timeT MidiInserter::crotchetDuration =
-    Note(Note::Crotchet).getDuration();
+/*** MidiInserter ***/
 
-MidiInserter::
-MidiInserter(Composition &composition, int timingDivision, RealTime trueEnd) :
-    m_comp(composition),
+static const timeT crotchetDuration = Note(Note::Crotchet).getDuration();
+
+MidiInserter::MidiInserter(
+        Composition &comp, int timingDivision, RealTime trueEnd) :
+    m_comp(comp),
     m_timingDivision(timingDivision),
-    m_finished(false),
-    m_trueEnd(trueEnd),
-    m_previousTime(0),
-    m_ramping(false)
-{ setup(); }
+    m_trueEnd(trueEnd)
+{
+    setup();
+}
 
-// Get the absolute RG time of evt.  We don't convert time to a delta
-// here because if we didn't end up inserting the event, the new
-// reference time that we made would be wrong.
-// @author Tom Breton (Tehom)
 timeT
 MidiInserter::
 getAbsoluteTime(RealTime realtime) const
@@ -118,6 +110,7 @@ getAbsoluteTime(RealTime realtime) const
     timeT time = m_comp.getElapsedTimeForRealTime(realtime);
     RG_DEBUG << "getAbsoluteTime" << realtime << time;
     timeT retVal = (time * m_timingDivision) / crotchetDuration;
+
 #ifdef MIDI_DEBUG
     RG_DEBUG << "Converting RealTime" << realtime
              << "to timeT" << retVal
@@ -207,7 +200,7 @@ finish()
 
     timeT endOfComp = getAbsoluteTime(m_trueEnd);
     m_conductorTrack.endTrack(endOfComp);
-    for (TrackIterator i = m_trackPosMap.begin();
+    for (TrackMap::iterator i = m_trackPosMap.begin();
          i != m_trackPosMap.end();
          ++i) {
         i->second.endTrack(endOfComp);
@@ -480,8 +473,10 @@ insertCopy(const MappedEvent &evt)
                                       MIDI_FILE_META_EVENT,
                                       MIDI_KEY_SIGNATURE,
                                       metaMessage));
+                    break;
                 }
-                // Pacify compiler warnings about missed cases.
+
+            // Pacify compiler warnings about missed cases.
             case MappedEvent::InvalidMappedEvent:
             case MappedEvent::Audio:
             case MappedEvent::AudioCancel:
@@ -522,27 +517,25 @@ insertCopy(const MappedEvent &evt)
     }
 }
 void
-MidiInserter::
-assignToMidiFile(MidiFile &midifile)
+MidiInserter::assignToMidiFile(MidiFile &midifile)
 {
     finish();
 
     midifile.clearMidiComposition();
 
     // We leave out fields that write doesn't look at.
-    //
     midifile.m_numberOfTracks = m_trackPosMap.size() + 1;
     midifile.m_timingDivision = m_timingDivision;
-    midifile.m_format         = MidiFile::MIDI_SIMULTANEOUS_TRACK_FILE;
+    midifile.m_format = MidiFile::MIDI_SIMULTANEOUS_TRACK_FILE;
 
     midifile.m_midiComposition[0] = m_conductorTrack.m_midiTrack;
     unsigned int index = 0;
-    for (TrackIterator i = m_trackPosMap.begin();
+    for (TrackMap::iterator i = m_trackPosMap.begin();
          i != m_trackPosMap.end();
          ++i, ++index) {
-        midifile.m_midiComposition[index + 1] =
-            i->second.m_midiTrack;
+        midifile.m_midiComposition[index + 1] = i->second.m_midiTrack;
     }
 }
+
 
 }

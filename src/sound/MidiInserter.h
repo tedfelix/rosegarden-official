@@ -42,9 +42,20 @@ class Composition;
  */
 class MidiInserter : public MappedInserterBase
 {
-    // @class MidiInserter::TrackData describes and contains a track
-    // that we insert MidiEvents onto.
-    // @author Tom Breton (Tehom)
+public:
+
+    MidiInserter(Composition &comp, int timingDivision, RealTime trueEnd);
+
+    void insertCopy(const MappedEvent &evt) override;
+
+    void assignToMidiFile(MidiFile &midifile);
+
+private:
+
+    /// Describes and contains a track that we insert MidiEvents onto.
+    /**
+     * @author Tom Breton (Tehom)
+     */
     struct TrackData
     {
         /// Insert and take ownership of a MidiEvent.
@@ -55,27 +66,24 @@ class MidiInserter : public MappedInserterBase
          * @author Tom Breton (Tehom)
          */
         void insertMidiEvent(MidiEvent *event);
-        // Make and insert a tempo event.
+        /// Make and insert a tempo event.
         void insertTempo(timeT t, long tempo);
         void endTrack(timeT t);
+
         MidiFile::MidiTrack m_midiTrack;
         timeT m_previousTime;
     };
 
-    typedef std::pair<TrackId, int> TrackKey;
+    typedef std::pair<TrackId, int /* channel */> TrackKey;
     typedef std::map<TrackKey, TrackData> TrackMap;
-    typedef TrackMap::iterator TrackIterator;
 
- public:
-    MidiInserter(Composition &composition, int timingDivision, RealTime trueEnd);
-
-    void insertCopy(const MappedEvent &evt) override;
-
-    void assignToMidiFile(MidiFile &midifile);
-
- private:
-
-    // Get the absolute time of evt
+    /// Convert RealTime to timeT.
+    /**
+     * We don't convert time to a delta here because if we didn't end up
+     * inserting the event, the new reference time that we made would be wrong.
+     *
+     * @author Tom Breton (Tehom)
+     */
     timeT getAbsoluteTime(RealTime realtime) const;
 
     // Initialize a normal track, ie not a conductor track.
@@ -96,7 +104,7 @@ class MidiInserter : public MappedInserterBase
     Composition &m_comp;
 
     // From RG track pos -> MIDI TrackData, the opposite direction
-    // from m_trackChannelMap.
+    // from MidiFile::m_trackChannelMap.
     TrackMap m_trackPosMap;
 
     // The conductor track, which is not part of the mapping.
@@ -105,15 +113,13 @@ class MidiInserter : public MappedInserterBase
     // pulses per quarter note (PPQN)
     int m_timingDivision;
 
-    bool m_finished;
+    bool m_finished{false};
     RealTime m_trueEnd;
 
     // To keep track of ramping.
     RealTime m_previousRealTime;
-    timeT m_previousTime;
-    bool m_ramping;
-
-    static const timeT crotchetDuration;
+    timeT m_previousTime{0};
+    bool m_ramping{false};
 
 };
 
