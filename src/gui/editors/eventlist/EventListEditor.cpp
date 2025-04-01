@@ -118,6 +118,10 @@ namespace
             EventViewConfigGroup,
             "showChannelPressure",
             true);
+    PreferenceBool a_showRPNNRPNSetting(
+            EventViewConfigGroup,
+            "showRPNNRPN",
+            true);
     PreferenceBool a_showIndicationSetting(
             EventViewConfigGroup,
             "showIndication",
@@ -220,20 +224,25 @@ EventListEditor::EventListEditor(RosegardenDocument *doc,
             this, &EventListEditor::slotFilterClicked);
     filterGroupLayout->addWidget(m_pitchBendCheckBox);
 
-    m_sysExCheckBox = new QCheckBox(tr("System Exclusive"), m_filterGroup);
-    connect(m_sysExCheckBox, &QCheckBox::clicked,
+    m_channelPressureCheckBox = new QCheckBox(tr("Channel Pressure"), m_filterGroup);
+    connect(m_channelPressureCheckBox, &QCheckBox::clicked,
             this, &EventListEditor::slotFilterClicked);
-    filterGroupLayout->addWidget(m_sysExCheckBox);
+    filterGroupLayout->addWidget(m_channelPressureCheckBox);
 
     m_keyPressureCheckBox = new QCheckBox(tr("Key Pressure"), m_filterGroup);
     connect(m_keyPressureCheckBox, &QCheckBox::clicked,
             this, &EventListEditor::slotFilterClicked);
     filterGroupLayout->addWidget(m_keyPressureCheckBox);
 
-    m_channelPressureCheckBox = new QCheckBox(tr("Channel Pressure"), m_filterGroup);
-    connect(m_channelPressureCheckBox, &QCheckBox::clicked,
+    m_rpnNRPNCheckBox = new QCheckBox(tr("RPN/NRPN"), m_filterGroup);
+    connect(m_rpnNRPNCheckBox, &QCheckBox::clicked,
             this, &EventListEditor::slotFilterClicked);
-    filterGroupLayout->addWidget(m_channelPressureCheckBox);
+    filterGroupLayout->addWidget(m_rpnNRPNCheckBox);
+
+    m_sysExCheckBox = new QCheckBox(tr("System Exclusive"), m_filterGroup);
+    connect(m_sysExCheckBox, &QCheckBox::clicked,
+            this, &EventListEditor::slotFilterClicked);
+    filterGroupLayout->addWidget(m_sysExCheckBox);
 
     m_indicationCheckBox = new QCheckBox(tr("Indication"), m_filterGroup);
     connect(m_indicationCheckBox, &QCheckBox::clicked,
@@ -495,12 +504,20 @@ EventListEditor::updateTableWidget()
 
         // Event filters
 
-        if (event->isa(Note::EventRestType)) {
+        if (event->isa(Note::EventType)) {
+            if (!m_showNote)
+                continue;
+
+        } else if (event->isa(Note::EventRestType)) {
             if (!m_showRest)
                 continue;
 
-        } else if (event->isa(Note::EventType)) {
-            if (!m_showNote)
+        } else if (event->isa(ProgramChange::EventType)) {
+            if (!m_showProgramChange)
+                continue;
+
+        } else if (event->isa(Controller::EventType)) {
+            if (!m_showController)
                 continue;
 
         } else if (event->isa(Indication::EventType)) {
@@ -515,10 +532,6 @@ EventListEditor::updateTableWidget()
             if (!m_showSystemExclusive)
                 continue;
 
-        } else if (event->isa(ProgramChange::EventType)) {
-            if (!m_showProgramChange)
-                continue;
-
         } else if (event->isa(ChannelPressure::EventType)) {
             if (!m_showChannelPressure)
                 continue;
@@ -527,8 +540,9 @@ EventListEditor::updateTableWidget()
             if (!m_showKeyPressure)
                 continue;
 
-        } else if (event->isa(Controller::EventType)) {
-            if (!m_showController)
+        } else if (event->isa(RPN::EventType)  ||
+                   event->isa(NRPN::EventType)) {
+            if (!m_showRPNNRPN)
                 continue;
 
         } else if (event->isa(Text::EventType)) {
@@ -1294,9 +1308,10 @@ EventListEditor::loadOptions()
     m_showProgramChange = a_showProgramChangeSetting.get();
     m_showController = a_showControllerSetting.get();
     m_showPitchBend = a_showPitchBendSetting.get();
-    m_showSystemExclusive = a_showSystemExclusiveSetting.get();
-    m_showKeyPressure = a_showKeyPressureSetting.get();
     m_showChannelPressure = a_showChannelPressureSetting.get();
+    m_showKeyPressure = a_showKeyPressureSetting.get();
+    m_showRPNNRPN = a_showRPNNRPNSetting.get();
+    m_showSystemExclusive = a_showSystemExclusiveSetting.get();
     m_showIndication = a_showIndicationSetting.get();
     m_showText = a_showTextSetting.get();
     m_showGeneratedRegion = a_showGeneratedRegionSetting.get();
@@ -1323,9 +1338,10 @@ EventListEditor::saveOptions()
     a_showProgramChangeSetting.set(m_showProgramChange);
     a_showControllerSetting.set(m_showController);
     a_showPitchBendSetting.set(m_showPitchBend);
-    a_showSystemExclusiveSetting.set(m_showSystemExclusive);
-    a_showKeyPressureSetting.set(m_showKeyPressure);
     a_showChannelPressureSetting.set(m_showChannelPressure);
+    a_showKeyPressureSetting.set(m_showKeyPressure);
+    a_showRPNNRPNSetting.set(m_showRPNNRPN);
+    a_showSystemExclusiveSetting.set(m_showSystemExclusive);
     a_showIndicationSetting.set(m_showIndication);
     a_showTextSetting.set(m_showText);
     a_showGeneratedRegionSetting.set(m_showGeneratedRegion);
@@ -1357,17 +1373,18 @@ EventListEditor::slotFilterClicked(bool)
     // Copy from check boxes to state.
     m_showNote = m_noteCheckBox->isChecked();
     m_showRest = m_restCheckBox->isChecked();
-    m_showText = m_textCheckBox->isChecked();
-    m_showSystemExclusive = m_sysExCheckBox->isChecked();
-    m_showController = m_controllerCheckBox->isChecked();
     m_showProgramChange = m_programCheckBox->isChecked();
+    m_showController = m_controllerCheckBox->isChecked();
     m_showPitchBend = m_pitchBendCheckBox->isChecked();
     m_showChannelPressure = m_channelPressureCheckBox->isChecked();
     m_showKeyPressure = m_keyPressureCheckBox->isChecked();
+    m_showRPNNRPN = m_rpnNRPNCheckBox->isChecked();
+    m_showSystemExclusive = m_sysExCheckBox->isChecked();
     m_showIndication = m_indicationCheckBox->isChecked();
-    m_showOther = m_otherCheckBox->isChecked();
+    m_showText = m_textCheckBox->isChecked();
     m_showGeneratedRegion = m_generatedRegionCheckBox->isChecked();
     m_showSegmentID = m_segmentIDCheckBox->isChecked();
+    m_showOther = m_otherCheckBox->isChecked();
 
     updateTableWidget();
 }
@@ -1378,17 +1395,18 @@ EventListEditor::updateFilterCheckBoxes()
     // Copy from state to check boxes.
     m_noteCheckBox->setChecked(m_showNote);
     m_restCheckBox->setChecked(m_showRest);
-    m_textCheckBox->setChecked(m_showText);
-    m_sysExCheckBox->setChecked(m_showSystemExclusive);
-    m_controllerCheckBox->setChecked(m_showController);
     m_programCheckBox->setChecked(m_showProgramChange);
+    m_controllerCheckBox->setChecked(m_showController);
     m_pitchBendCheckBox->setChecked(m_showPitchBend);
     m_channelPressureCheckBox->setChecked(m_showChannelPressure);
     m_keyPressureCheckBox->setChecked(m_showKeyPressure);
+    m_rpnNRPNCheckBox->setChecked(m_showRPNNRPN);
+    m_sysExCheckBox->setChecked(m_showSystemExclusive);
     m_indicationCheckBox->setChecked(m_showIndication);
-    m_otherCheckBox->setChecked(m_showOther);
+    m_textCheckBox->setChecked(m_showText);
     m_generatedRegionCheckBox->setChecked(m_showGeneratedRegion);
     m_segmentIDCheckBox->setChecked(m_showSegmentID);
+    m_otherCheckBox->setChecked(m_showOther);
 }
 
 void
