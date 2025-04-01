@@ -22,24 +22,28 @@
 #include "base/Track.h"
 #include "document/Command.h"
 
+
 namespace Rosegarden
 {
 
-/// Copy a segment to a new position (track and time)
 
-class Segment;
 class Composition;
+class CompositionModelImpl;
+class Segment;
 
+
+/// Copy a segment to a new position (track and time)
 class CopySegmentCommand : public NamedCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CopySegmentCommand)
 
 public:
     CopySegmentCommand(Composition *composition,
-                       Segment* segment,
+                       Segment *segment,
                        timeT startTime,
                        TrackId track,
-                       bool CopyAsLink);
+                       bool CopyAsLink,
+                       CompositionModelImpl *compositionModel);
 
     ~CopySegmentCommand() override;
 
@@ -50,14 +54,15 @@ public:
 
 private:
     Composition *m_composition;
-    Segment* m_segment;
+    Segment *m_segment;
     timeT m_startTime;
     TrackId m_track;
     bool m_copyAsLink;
     bool m_detached;
     timeT m_oldEndTime;
-    Segment* m_addedSegment;
+    Segment *m_addedSegment;
     bool m_originalSegmentIsLinked;
+    CompositionModelImpl *m_compositionModel;
 };
 
 

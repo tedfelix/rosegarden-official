@@ -304,6 +304,11 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                     m_canvas->getModel()->getChangingSegments();
 
             if (m_segmentCopyMode) {
+
+                // Clear the selection to prepare for selecting the new
+                // Segment(s) after the copy.
+                m_canvas->getModel()->clearSelected();
+
                 if (m_segmentCopyingAsLink) {
                     macroCommand = new MacroCommand(
                             tr("Copy %n Segment(s) as link(s)", "", changingSegments.size()));
@@ -366,12 +371,13 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                         segment->isTrulyLinked();
                     RG_DEBUG << "mouseReleaseEvent copy segment" << copyAsLink;
                     // make a copy or link of the segment
-                    Command* copySegCmnd =
-                        new CopySegmentCommand(&comp,
-                                               segment,
-                                               startTime,
-                                               newTrackId,
-                                               copyAsLink);
+                    Command *copySegCmnd = new CopySegmentCommand(
+                            &comp,
+                            segment,
+                            startTime,
+                            newTrackId,
+                            copyAsLink,
+                            m_canvas->getModel());
                     macroCommand->addCommand(copySegCmnd);
                 } else {
                     segmentReconfigureCommand->addSegment
@@ -384,6 +390,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
             CommandHistory::getInstance()->addCommand(macroCommand);
 
             m_canvas->update();
+            m_canvas->getModel()->selectionHasChanged();
         }
 
         m_canvas->getModel()->endChange();
