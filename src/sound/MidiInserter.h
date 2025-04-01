@@ -19,11 +19,20 @@
 #define RG_MIDIINSERTER_H
 
 #include "base/RealTime.h"
+#include "base/TimeT.h"
+#include "base/Track.h"
 #include "sound/MappedInserterBase.h"
 #include "sound/MidiFile.h"
 
+#include <map>
+
+
 namespace Rosegarden
 {
+
+
+class Composition;
+
 
 /// Inserter used to generate a standard MIDI file.
 /**
@@ -38,15 +47,19 @@ class MidiInserter : public MappedInserterBase
     // @author Tom Breton (Tehom)
     struct TrackData
     {
-        // Insert and take ownership of a MidiEvent.  The event's time
-        // is converted from an absolute time to a time delta relative
-        // to the previous time.
+        /// Insert and take ownership of a MidiEvent.
+        /**
+         * The event's time is converted from an absolute time to a time delta
+         * relative to the previous time.
+         *
+         * @author Tom Breton (Tehom)
+         */
         void insertMidiEvent(MidiEvent *event);
         // Make and insert a tempo event.
         void insertTempo(timeT t, long tempo);
         void endTrack(timeT t);
         MidiFile::MidiTrack m_midiTrack;
-        timeT     m_previousTime;
+        timeT m_previousTime;
     };
 
     typedef std::pair<TrackId, int> TrackKey;
@@ -80,27 +93,31 @@ class MidiInserter : public MappedInserterBase
     // returns.
     void finish();
 
-    Composition   &m_comp;
+    Composition &m_comp;
+
     // From RG track pos -> MIDI TrackData, the opposite direction
     // from m_trackChannelMap.
-    TrackMap       m_trackPosMap;
+    TrackMap m_trackPosMap;
 
     // The conductor track, which is not part of the mapping.
-    TrackData      m_conductorTrack;
-    int            m_timingDivision;   // pulses per quarter note
-    bool           m_finished;
-    RealTime       m_trueEnd;
+    TrackData m_conductorTrack;
+
+    // pulses per quarter note (PPQN)
+    int m_timingDivision;
+
+    bool m_finished;
+    RealTime m_trueEnd;
 
     // To keep track of ramping.
-    RealTime       m_previousRealTime;
-    timeT          m_previousTime;
-    bool           m_ramping;
-
-    /* Static constants */
+    RealTime m_previousRealTime;
+    timeT m_previousTime;
+    bool m_ramping;
 
     static const timeT crotchetDuration;
 
 };
+
+
 }
 
-#endif /* ifndef RG_MIDIINSERTER_H */
+#endif

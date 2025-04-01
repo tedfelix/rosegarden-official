@@ -21,6 +21,7 @@
 #include "MidiInserter.h"
 
 #include "MidiEvent.h"
+
 #include "base/Composition.h"
 #include "base/MidiTypes.h"
 #include "misc/Debug.h"
@@ -31,31 +32,33 @@
 
 #include <string>
 
-#define MIDI_DEBUG 1
+//#define MIDI_DEBUG
+
 
 namespace Rosegarden
 {
-    /*** TrackData ***/
 
-// Insert and take ownership of a MidiEvent.  The event's time is
-// converted from an absolute time to a time delta relative to the
-// previous time.
-// @author Tom Breton (Tehom)
+
+/*** TrackData ***/
+
 void
 MidiInserter::TrackData::
 insertMidiEvent(MidiEvent *event)
 {
-    timeT absoluteTime = event->getTime();
-    timeT delta        = absoluteTime - m_previousTime;
+    const timeT absoluteTime = event->getTime();
+
+    timeT delta = absoluteTime - m_previousTime;
     if (delta < 0)
-        { delta = 0; }
+        delta = 0;
     else
-        { m_previousTime = absoluteTime; }
+        m_previousTime = absoluteTime;
+
     event->setTime(delta);
+
 #ifdef MIDI_DEBUG
-    RG_DEBUG << "Converting absoluteTime" << (int)absoluteTime
-             << "to delta" << (int)delta;
+    RG_DEBUG << "Converting absoluteTime" << (int)absoluteTime << "to delta" << (int)delta;
 #endif
+
     m_midiTrack.push_back(event);
 }
 
@@ -63,7 +66,7 @@ void
 MidiInserter::TrackData::
 endTrack(timeT t)
 {
-    // Safe even if t is too early in timeT because insertMidiEvent
+    // Safe even if it is too early in timeT because insertMidiEvent
     // fixes it.
     insertMidiEvent
         (new MidiEvent(t, MIDI_FILE_META_EVENT,
@@ -157,7 +160,7 @@ getTrackData(TrackId RGTrackPos, int channelNb)
     // Otherwise we're looking it up.
     TrackKey key = TrackKey(RGTrackPos, channelNb);
     // If we are starting a new track, initialize it.
-   if (m_trackPosMap.find(key) == m_trackPosMap.end()) {
+    if (m_trackPosMap.find(key) == m_trackPosMap.end()) {
          initNormalTrack(m_trackPosMap[key], RGTrackPos);
     }
     return m_trackPosMap[key];
@@ -199,7 +202,9 @@ void
 MidiInserter::
 finish()
 {
-    if(m_finished) { return; }
+    if (m_finished)
+        return;
+
     timeT endOfComp = getAbsoluteTime(m_trueEnd);
     m_conductorTrack.endTrack(endOfComp);
     for (TrackIterator i = m_trackPosMap.begin();
@@ -219,9 +224,9 @@ insertCopy(const MappedEvent &evt)
 {
     Q_ASSERT(!m_finished);
 
-    MidiByte   midiChannel = evt.getRecordedChannel();
-    TrackData& trackData   = getTrackData(evt.getTrackId(), midiChannel);
-    timeT      midiEventAbsoluteTime = getAbsoluteTime(evt.getEventTime());
+    const MidiByte midiChannel = evt.getRecordedChannel();
+    TrackData &trackData = getTrackData(evt.getTrackId(), midiChannel);
+    timeT midiEventAbsoluteTime = getAbsoluteTime(evt.getEventTime());
 
 #ifdef BUG1627
     // to avoid negative times here we subtract the start time
@@ -236,12 +241,12 @@ insertCopy(const MappedEvent &evt)
     if (m_ramping && (midiEventAbsoluteTime != m_previousTime)) {
         RealTime diffReal = evt.getEventTime()    - m_previousRealTime;
         // We undo the scaling getAbsoluteTime does.
-        timeT    diffTime =
+        const timeT diffTime =
             (midiEventAbsoluteTime - m_previousTime) *
             crotchetDuration /
             m_timingDivision;
 
-        tempoT bridgingTempo =
+        const tempoT bridgingTempo =
             Composition::timeRatioToTempo(diffReal, diffTime, -1);
 
         trackData.insertTempo(m_previousTime, bridgingTempo);
@@ -334,8 +339,8 @@ insertCopy(const MappedEvent &evt)
             case MappedEvent::MidiNote:
             case MappedEvent::MidiNoteOneShot:
                 {
-                    MidiByte pitch         = evt.getData1();
-                    MidiByte midiVelocity  = evt.getData2();
+                    const MidiByte pitch = evt.getData1();
+                    const MidiByte midiVelocity = evt.getData2();
 
                     RG_DEBUG << "insertCopy note" << evt.getEventTime() <<
                         midiEventAbsoluteTime << pitch << midiVelocity;
@@ -346,30 +351,28 @@ insertCopy(const MappedEvent &evt)
                         // messages, but don't implement velocity
                         // features, will transmit Note Off messages
                         // with a preset velocity of 64"
-                        trackData.
-                            insertMidiEvent
-                            (new MidiEvent(midiEventAbsoluteTime,
-                                           MIDI_NOTE_OFF | midiChannel,
-                                           pitch,
-                                           64));
+                        trackData.insertMidiEvent(new MidiEvent(
+                                midiEventAbsoluteTime,
+                                MIDI_NOTE_OFF | midiChannel,
+                                pitch,
+                                64));
                     } else {
                         // It's a NOTE_ON.
-                        trackData.
-                            insertMidiEvent
-                            (new MidiEvent(midiEventAbsoluteTime,
-                                           MIDI_NOTE_ON | midiChannel,
-                                           pitch,
-                                           midiVelocity));
+                        trackData.insertMidiEvent(new MidiEvent(
+                                midiEventAbsoluteTime,
+                                MIDI_NOTE_ON | midiChannel,
+                                pitch,
+                                midiVelocity));
                     }
                     break;
                 }
             case MappedEvent::MidiPitchBend:
                 {
-                    trackData.
-                        insertMidiEvent
-                        (new MidiEvent(midiEventAbsoluteTime,
-                                       MIDI_PITCH_BEND | midiChannel,
-                                       evt.getData2(), evt.getData1()));
+                    trackData.insertMidiEvent(new MidiEvent(
+                            midiEventAbsoluteTime,
+                            MIDI_PITCH_BEND | midiChannel,
+                            evt.getData2(),
+                            evt.getData1()));
                     break;
                 }
 
