@@ -106,21 +106,21 @@ namespace
             EventViewConfigGroup,
             "showPitchBend",
             true);
-    PreferenceBool a_showSystemExclusiveSetting(
+    PreferenceBool a_showChannelPressureSetting(
             EventViewConfigGroup,
-            "showSystemExclusive",
+            "showChannelPressure",
             true);
     PreferenceBool a_showKeyPressureSetting(
             EventViewConfigGroup,
             "showKeyPressure",
             true);
-    PreferenceBool a_showChannelPressureSetting(
-            EventViewConfigGroup,
-            "showChannelPressure",
-            true);
     PreferenceBool a_showRPNNRPNSetting(
             EventViewConfigGroup,
             "showRPNNRPN",
+            true);
+    PreferenceBool a_showSystemExclusiveSetting(
+            EventViewConfigGroup,
+            "showSystemExclusive",
             true);
     PreferenceBool a_showIndicationSetting(
             EventViewConfigGroup,
@@ -520,16 +520,8 @@ EventListEditor::updateTableWidget()
             if (!m_showController)
                 continue;
 
-        } else if (event->isa(Indication::EventType)) {
-            if (!m_showIndication)
-                continue;
-
         } else if (event->isa(PitchBend::EventType)) {
             if (!m_showPitchBend)
-                continue;
-
-        } else if (event->isa(SystemExclusive::EventType)) {
-            if (!m_showSystemExclusive)
                 continue;
 
         } else if (event->isa(ChannelPressure::EventType)) {
@@ -543,6 +535,14 @@ EventListEditor::updateTableWidget()
         } else if (event->isa(RPN::EventType)  ||
                    event->isa(NRPN::EventType)) {
             if (!m_showRPNNRPN)
+                continue;
+
+        } else if (event->isa(SystemExclusive::EventType)) {
+            if (!m_showSystemExclusive)
+                continue;
+
+        } else if (event->isa(Indication::EventType)) {
+            if (!m_showIndication)
                 continue;
 
         } else if (event->isa(Text::EventType)) {
