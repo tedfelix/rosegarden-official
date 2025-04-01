@@ -39,7 +39,9 @@ namespace Rosegarden
 {
 
 
-/*** TrackData ***/
+// *********************************************************************
+// MidiInserter::TrackData
+// *********************************************************************
 
 void
 MidiInserter::TrackData::insertMidiEvent(MidiEvent *event)
@@ -62,35 +64,38 @@ MidiInserter::TrackData::insertMidiEvent(MidiEvent *event)
 }
 
 void
-MidiInserter::TrackData::endTrack(timeT t)
+MidiInserter::TrackData::endTrack(timeT time)
 {
-    // Safe even if it is too early in timeT because insertMidiEvent
+    // Safe even if it is too early in timeT because insertMidiEvent()
     // fixes it.
-    insertMidiEvent
-        (new MidiEvent(t, MIDI_FILE_META_EVENT,
-                       MIDI_END_OF_TRACK, ""));
+    insertMidiEvent(new MidiEvent(
+            time,
+            MIDI_FILE_META_EVENT,
+            MIDI_END_OF_TRACK,
+            ""));
 }
 
 void
-MidiInserter::TrackData::insertTempo(timeT t, long tempo)
+MidiInserter::TrackData::insertTempo(timeT time, long tempo)
 {
-    double qpm = Composition::getTempoQpm(tempo);
-    long tempoValue = long(60000000.0 / qpm + 0.01);
+    const double qpm = Composition::getTempoQpm(tempo);
+    const long tempoValue = long(60000000.0 / qpm + 0.01);
 
     std::string tempoString;
-    tempoString += (MidiByte) ( tempoValue >> 16 & 0xFF );
-    tempoString += (MidiByte) ( tempoValue >> 8 & 0xFF );
-    tempoString += (MidiByte) ( tempoValue & 0xFF );
+    tempoString += MidiByte(tempoValue >> 16 & 0xFF);
+    tempoString += MidiByte(tempoValue >> 8 & 0xFF);
+    tempoString += MidiByte(tempoValue & 0xFF);
 
-
-    insertMidiEvent
-        (new MidiEvent(t,
-                       MIDI_FILE_META_EVENT,
-                       MIDI_SET_TEMPO,
-                       tempoString));
+    insertMidiEvent(new MidiEvent(
+            time,
+            MIDI_FILE_META_EVENT,
+            MIDI_SET_TEMPO,
+            tempoString));
 }
 
-/*** MidiInserter ***/
+// *********************************************************************
+// MidiInserter
+// *********************************************************************
 
 static const timeT crotchetDuration = Note(Note::Crotchet).getDuration();
 
@@ -104,12 +109,13 @@ MidiInserter::MidiInserter(
 }
 
 timeT
-MidiInserter::
-getAbsoluteTime(RealTime realtime) const
+MidiInserter::getAbsoluteTime(RealTime realtime) const
 {
-    timeT time = m_comp.getElapsedTimeForRealTime(realtime);
-    RG_DEBUG << "getAbsoluteTime" << realtime << time;
-    timeT retVal = (time * m_timingDivision) / crotchetDuration;
+    const timeT time = m_comp.getElapsedTimeForRealTime(realtime);
+
+    RG_DEBUG << "getAbsoluteTime():" << realtime << time;
+
+    const timeT retVal = (time * m_timingDivision) / crotchetDuration;
 
 #ifdef MIDI_DEBUG
     RG_DEBUG << "Converting RealTime" << realtime
@@ -120,106 +126,103 @@ getAbsoluteTime(RealTime realtime) const
     return retVal;
 }
 
-// Initialize a normal track (not a conductor track)
-// @author Tom Breton (Tehom)
-// Adapted from MidiFile.cpp
 void
-MidiInserter::
-initNormalTrack(TrackData &trackData, TrackId RGTrackPos) const
+MidiInserter::initNormalTrack(TrackData &trackData, TrackId RGTrackPos) const
 {
-    Track *track = m_comp.getTrackById(RGTrackPos);
+    // Adapted from MidiFile.cpp
+
+    const Track *track = m_comp.getTrackById(RGTrackPos);
+
     trackData.m_previousTime = 0;
-    trackData.
-        insertMidiEvent
-        (new MidiEvent(0,
-                       MIDI_FILE_META_EVENT,
-                       MIDI_TRACK_NAME,
-                       track->getLabel()));
+    trackData.insertMidiEvent(new MidiEvent(
+            0,  // time
+            MIDI_FILE_META_EVENT,  // eventCode
+            MIDI_TRACK_NAME,  // metaEventCode
+            track->getLabel()));  // metaMessage
 }
 
-// Return the respective track data, creating it if needed.
-// @author Tom Breton (Tehom)
 MidiInserter::TrackData &
-MidiInserter::
-getTrackData(TrackId RGTrackPos, int channelNb)
+MidiInserter::getTrackData(TrackId trackID, int channelNb)
 {
 #ifdef MIDI_DEBUG
-    RG_DEBUG << "Getting track " << (int)RGTrackPos;
+    RG_DEBUG << "Getting track " << trackID;
 #endif
+
     // Some events like TimeSig and Tempo have invalid trackId and
     // should be written on the conductor track.
-    if (RGTrackPos == NoTrack)
-        { return m_conductorTrack; }
+    if (trackID == NoTrack)
+        return m_conductorTrack;
+
     // Otherwise we're looking it up.
-    TrackKey key = TrackKey(RGTrackPos, channelNb);
+    const TrackKey key = TrackKey(trackID, channelNb);
     // If we are starting a new track, initialize it.
-    if (m_trackPosMap.find(key) == m_trackPosMap.end()) {
-         initNormalTrack(m_trackPosMap[key], RGTrackPos);
-    }
+    if (m_trackPosMap.find(key) == m_trackPosMap.end())
+         initNormalTrack(m_trackPosMap[key], trackID);
+
     return m_trackPosMap[key];
 }
 
-// Get ready to receive events.  Assumes nothing is written to
-// tracks yet.
-// @author Tom Breton (Tehom)
-// Adapted from MidiFile.cpp
 void
-MidiInserter::
-setup()
+MidiInserter::setup()
 {
+    // Adapted from MidiFile.cpp
+
     m_conductorTrack.m_previousTime = 0;
 
     // Insert the Rosegarden Signature Track here and any relevant
     // file META information - this will get written out just like
     // any other MIDI track.
     //
-    m_conductorTrack.
-        insertMidiEvent
-        (new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_COPYRIGHT_NOTICE,
-                       m_comp.getCopyrightNote()));
+    m_conductorTrack.insertMidiEvent(new MidiEvent(
+            0,  // time
+            MIDI_FILE_META_EVENT,
+            MIDI_COPYRIGHT_NOTICE,
+            m_comp.getCopyrightNote()));
 
-    m_conductorTrack.
-        insertMidiEvent
-        (new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_CUE_POINT,
-                       "Created by Rosegarden"));
+    m_conductorTrack.insertMidiEvent(new MidiEvent(
+            0,  // time
+            MIDI_FILE_META_EVENT,
+            MIDI_CUE_POINT,
+            "Created by Rosegarden"));
 
-    m_conductorTrack.
-        insertMidiEvent
-        (new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_CUE_POINT,
-                       "http://www.rosegardenmusic.com/"));
+    m_conductorTrack.insertMidiEvent(new MidiEvent(
+            0,  // time
+            MIDI_FILE_META_EVENT,
+            MIDI_CUE_POINT,
+            "http://www.rosegardenmusic.com/"));
 }
 
-// Done receiving events.  Tracks will be complete when this returns.
-// @author Tom Breton (Tehom)
 void
-MidiInserter::
-finish()
+MidiInserter::finish()
 {
     if (m_finished)
         return;
 
-    timeT endOfComp = getAbsoluteTime(m_trueEnd);
+    const timeT endOfComp = getAbsoluteTime(m_trueEnd);
+
     m_conductorTrack.endTrack(endOfComp);
+
+    // For each track, end the track.
     for (TrackMap::iterator i = m_trackPosMap.begin();
          i != m_trackPosMap.end();
          ++i) {
         i->second.endTrack(endOfComp);
     }
+
     m_finished = true;
 }
 
-// Insert a (MidiEvent) copy of evt.
-// @author Tom Breton (Tehom)
-// Adapted from MidiFile.cpp
 void
-MidiInserter::
-insertCopy(const MappedEvent &evt)
+MidiInserter::insertCopy(const MappedEvent &event)
 {
-    Q_ASSERT(!m_finished);
+    // Adapted from MidiFile.cpp
 
-    const MidiByte midiChannel = evt.getRecordedChannel();
-    TrackData &trackData = getTrackData(evt.getTrackId(), midiChannel);
-    timeT midiEventAbsoluteTime = getAbsoluteTime(evt.getEventTime());
+    if (m_finished)
+        return;
+
+    const MidiByte midiChannel = event.getRecordedChannel();
+    TrackData &trackData = getTrackData(event.getTrackId(), midiChannel);
+    const timeT midiEventAbsoluteTime = getAbsoluteTime(event.getEventTime());
 
 #ifdef BUG1627
     // to avoid negative times here we subtract the start time
@@ -231,8 +234,8 @@ insertCopy(const MappedEvent &evt)
     // If we are ramping, calculate a previous tempo that would get us
     // to this event at this time and pre-insert it, unless this
     // event's time is the same as last.
-    if (m_ramping && (midiEventAbsoluteTime != m_previousTime)) {
-        RealTime diffReal = evt.getEventTime()    - m_previousRealTime;
+    if (m_ramping  &&  midiEventAbsoluteTime != m_previousTime) {
+        const RealTime diffReal = event.getEventTime() - m_previousRealTime;
         // We undo the scaling getAbsoluteTime does.
         const timeT diffTime =
             (midiEventAbsoluteTime - m_previousTime) *
@@ -243,261 +246,263 @@ insertCopy(const MappedEvent &evt)
             Composition::timeRatioToTempo(diffReal, diffTime, -1);
 
         trackData.insertTempo(m_previousTime, bridgingTempo);
-        m_previousRealTime = evt.getEventTime();
-        m_previousTime     = midiEventAbsoluteTime;
+        m_previousRealTime = event.getEventTime();
+        m_previousTime = midiEventAbsoluteTime;
     }
 #ifdef MIDI_DEBUG
     RG_DEBUG << "Inserting an event for channel " << (int)midiChannel + 1;
 #endif
 
     try {
-        switch (evt.getType())
+        switch (event.getType()) {
+        case MappedEvent::Tempo:
             {
-            case MappedEvent::Tempo:
-                {
-                    m_ramping = (evt.getData1() > 0) ? true : false;
-                    // Yes, we fetch it from "instrument" because
-                    // that's what TempoSegmentMapper puts it in.
-                    tempoT tempo = evt.getInstrumentId();
-                    RG_DEBUG << "insertCopy tempo" << evt.getEventTime() <<
-                        midiEventAbsoluteTime << tempo;
-                    trackData.insertTempo(midiEventAbsoluteTime, tempo);
-                    break;
-                }
-            case MappedEvent::TimeSignature:
-                {
-                    int numerator   = evt.getData1();
-                    int denominator = evt.getData2();
-                    timeT beatDuration =
-                        TimeSignature(numerator, denominator).
-                        getBeatDuration();
+                m_ramping = (event.getData1() > 0);
 
-                    std::string timeSigString;
-                    timeSigString += (MidiByte) numerator;
-                    int denPowerOf2 = 0;
+                // TempoSegmentMapper::mapATempo() puts the tempo in the
+                // instrument ID.
+                const tempoT tempo = event.getInstrumentId();
 
-                    // Work out how many powers of two are in the denominator
-                    //
-                    {
-                        int denominatorCopy = denominator;
-                        while (denominatorCopy >>= 1)
-                            { denPowerOf2++; }
-                    }
+                RG_DEBUG << "insertCopy tempo" << event.getEventTime() << midiEventAbsoluteTime << tempo;
 
-                    timeSigString += (MidiByte) denPowerOf2;
+                trackData.insertTempo(midiEventAbsoluteTime, tempo);
 
-                    // The third byte is the number of MIDI clocks per beat.
-                    // There are 24 clocks per quarter-note (the MIDI clock
-                    // is tempo-independent and is not related to the timebase).
-                    //
-                    int cpb = 24 * beatDuration / crotchetDuration;
-                    timeSigString += (MidiByte) cpb;
-
-                    // And the fourth byte is always 8, for us (it expresses
-                    // the number of notated 32nd-notes in a MIDI quarter-note,
-                    // for applications that may want to notate and perform
-                    // in different units)
-                    //
-                    timeSigString += (MidiByte) 8;
-
-                    trackData.
-                        insertMidiEvent
-                        (new MidiEvent(midiEventAbsoluteTime,
-                                       MIDI_FILE_META_EVENT,
-                                       MIDI_TIME_SIGNATURE,
-                                       timeSigString));
-
-                    break;
-                }
-            case MappedEvent::MidiController:
-                {
-                    trackData.
-                        insertMidiEvent
-                        (new MidiEvent(midiEventAbsoluteTime,
-                                       MIDI_CTRL_CHANGE | midiChannel,
-                                       evt.getData1(), evt.getData2()));
-
-                    break;
-                }
-            case MappedEvent::MidiProgramChange:
-                {
-                    trackData.
-                        insertMidiEvent
-                        (new MidiEvent(midiEventAbsoluteTime,
-                                       MIDI_PROG_CHANGE | midiChannel,
-                                       evt.getData1()));
-                    break;
-                }
-
-            case MappedEvent::MidiNote:
-            case MappedEvent::MidiNoteOneShot:
-                {
-                    const MidiByte pitch = evt.getData1();
-                    const MidiByte midiVelocity = evt.getData2();
-
-                    RG_DEBUG << "insertCopy note" << evt.getEventTime() <<
-                        midiEventAbsoluteTime << pitch << midiVelocity;
-                    if ((evt.getType() == MappedEvent::MidiNote) &&
-                        (midiVelocity == 0)) {
-                        // It's actually a NOTE_OFF.
-                        // "MIDI devices that can generate Note Off
-                        // messages, but don't implement velocity
-                        // features, will transmit Note Off messages
-                        // with a preset velocity of 64"
-                        trackData.insertMidiEvent(new MidiEvent(
-                                midiEventAbsoluteTime,
-                                MIDI_NOTE_OFF | midiChannel,
-                                pitch,
-                                64));
-                    } else {
-                        // It's a NOTE_ON.
-                        trackData.insertMidiEvent(new MidiEvent(
-                                midiEventAbsoluteTime,
-                                MIDI_NOTE_ON | midiChannel,
-                                pitch,
-                                midiVelocity));
-                    }
-                    break;
-                }
-            case MappedEvent::MidiPitchBend:
-                {
-                    trackData.insertMidiEvent(new MidiEvent(
-                            midiEventAbsoluteTime,
-                            MIDI_PITCH_BEND | midiChannel,
-                            evt.getData2(),
-                            evt.getData1()));
-                    break;
-                }
-
-            case MappedEvent::MidiSystemMessage:
-                {
-                    std::string data =
-                        DataBlockRepository::getInstance()->
-                        getDataBlockForEvent(&evt);
-
-                    // check for closing EOX and add one if none found
-                    //
-                    if (MidiByte(data[data.length() - 1]) != MIDI_END_OF_EXCLUSIVE) {
-                        data += (char)MIDI_END_OF_EXCLUSIVE;
-                    }
-
-                    // construct plain SYSEX event
-                    //
-                    trackData.
-                        insertMidiEvent
-                        (new MidiEvent(midiEventAbsoluteTime,
-                                       MIDI_SYSTEM_EXCLUSIVE,
-                                       data));
-
-                    break;
-                }
-
-            case MappedEvent::MidiChannelPressure:
-                {
-                    trackData.
-                        insertMidiEvent
-                        (new MidiEvent(midiEventAbsoluteTime,
-                                       MIDI_CHNL_AFTERTOUCH | midiChannel,
-                                       evt.getData1()));
-
-                    break;
-                }
-            case MappedEvent::MidiKeyPressure:
-                {
-                    trackData.
-                        insertMidiEvent
-                        (new MidiEvent(midiEventAbsoluteTime,
-                                       MIDI_POLY_AFTERTOUCH | midiChannel,
-                                       evt.getData1(), evt.getData2()));
-
-                    break;
-                }
-
-            case MappedEvent::MidiRPN:
-                {
-                    // ??? How do we implement this?  As a series of
-                    //     trackData.insertMidiEvent() calls for each piece?
-
-                    break;
-                }
-
-            case MappedEvent::MidiNRPN:
-                {
-                    // ??? How do we implement this?  As a series of
-                    //     trackData.insertMidiEvent() calls for each piece?
-
-                    break;
-                }
-
-            case MappedEvent::Marker:
-                {
-                    std::string metaMessage =
-                        DataBlockRepository::getInstance()->
-                        getDataBlockForEvent(&evt);
-
-                    trackData.
-                        insertMidiEvent
-                        (new MidiEvent(midiEventAbsoluteTime,
-                                       MIDI_FILE_META_EVENT,
-                                       MIDI_TEXT_MARKER,
-                                       metaMessage));
-
-                    break;
-                }
-
-            case MappedEvent::Text:
-                {
-                    MidiByte midiTextType = evt.getData1();
-
-                    std::string metaMessage =
-                        DataBlockRepository::getInstance()->
-                        getDataBlockForEvent(&evt);
-
-                    trackData.
-                        insertMidiEvent
-                        (new MidiEvent(midiEventAbsoluteTime,
-                                       MIDI_FILE_META_EVENT,
-                                       midiTextType,
-                                       metaMessage));
-                    break;
-                }
-
-            case MappedEvent::KeySignature:
-                {
-                    std::string metaMessage;
-                    metaMessage += MidiByte(evt.getData1());
-                    metaMessage += MidiByte(evt.getData2());
-
-                    trackData.insertMidiEvent(
-                        new MidiEvent(midiEventAbsoluteTime,
-                                      MIDI_FILE_META_EVENT,
-                                      MIDI_KEY_SIGNATURE,
-                                      metaMessage));
-                    break;
-                }
-
-            // Pacify compiler warnings about missed cases.
-            case MappedEvent::InvalidMappedEvent:
-            case MappedEvent::Audio:
-            case MappedEvent::AudioCancel:
-            case MappedEvent::AudioLevel:
-            case MappedEvent::AudioStopped:
-            case MappedEvent::AudioGeneratePreview:
-            case MappedEvent::SystemUpdateInstruments:
-            case MappedEvent::SystemJackTransport:
-            case MappedEvent::SystemMMCTransport:
-            case MappedEvent::SystemMIDIClock:
-            case MappedEvent::SystemMetronomeDevice:
-            case MappedEvent::SystemAudioPortCounts:
-            case MappedEvent::SystemAudioPorts:
-            case MappedEvent::SystemFailure:
-            case MappedEvent::Panic:
-            case MappedEvent::SystemMTCTransport:
-            case MappedEvent::SystemMIDISyncAuto:
-            case MappedEvent::SystemAudioFileFormat:
-            default:
                 break;
             }
+        case MappedEvent::TimeSignature:
+            {
+                int numerator   = event.getData1();
+                int denominator = event.getData2();
+                timeT beatDuration =
+                    TimeSignature(numerator, denominator).
+                    getBeatDuration();
+
+                std::string timeSigString;
+                timeSigString += (MidiByte) numerator;
+                int denPowerOf2 = 0;
+
+                // Work out how many powers of two are in the denominator
+                //
+                {
+                    int denominatorCopy = denominator;
+                    while (denominatorCopy >>= 1)
+                        { denPowerOf2++; }
+                }
+
+                timeSigString += (MidiByte) denPowerOf2;
+
+                // The third byte is the number of MIDI clocks per beat.
+                // There are 24 clocks per quarter-note (the MIDI clock
+                // is tempo-independent and is not related to the timebase).
+                //
+                int cpb = 24 * beatDuration / crotchetDuration;
+                timeSigString += (MidiByte) cpb;
+
+                // And the fourth byte is always 8, for us (it expresses
+                // the number of notated 32nd-notes in a MIDI quarter-note,
+                // for applications that may want to notate and perform
+                // in different units)
+                //
+                timeSigString += (MidiByte) 8;
+
+                trackData.
+                    insertMidiEvent
+                    (new MidiEvent(midiEventAbsoluteTime,
+                                   MIDI_FILE_META_EVENT,
+                                   MIDI_TIME_SIGNATURE,
+                                   timeSigString));
+
+                break;
+            }
+        case MappedEvent::MidiController:
+            {
+                trackData.
+                    insertMidiEvent
+                    (new MidiEvent(midiEventAbsoluteTime,
+                                   MIDI_CTRL_CHANGE | midiChannel,
+                                   event.getData1(), event.getData2()));
+
+                break;
+            }
+        case MappedEvent::MidiProgramChange:
+            {
+                trackData.
+                    insertMidiEvent
+                    (new MidiEvent(midiEventAbsoluteTime,
+                                   MIDI_PROG_CHANGE | midiChannel,
+                                   event.getData1()));
+                break;
+            }
+
+        case MappedEvent::MidiNote:
+        case MappedEvent::MidiNoteOneShot:
+            {
+                const MidiByte pitch = event.getData1();
+                const MidiByte midiVelocity = event.getData2();
+
+                RG_DEBUG << "insertCopy note" << event.getEventTime() <<
+                    midiEventAbsoluteTime << pitch << midiVelocity;
+                if ((event.getType() == MappedEvent::MidiNote) &&
+                    (midiVelocity == 0)) {
+                    // It's actually a NOTE_OFF.
+                    // "MIDI devices that can generate Note Off
+                    // messages, but don't implement velocity
+                    // features, will transmit Note Off messages
+                    // with a preset velocity of 64"
+                    trackData.insertMidiEvent(new MidiEvent(
+                            midiEventAbsoluteTime,
+                            MIDI_NOTE_OFF | midiChannel,
+                            pitch,
+                            64));
+                } else {
+                    // It's a NOTE_ON.
+                    trackData.insertMidiEvent(new MidiEvent(
+                            midiEventAbsoluteTime,
+                            MIDI_NOTE_ON | midiChannel,
+                            pitch,
+                            midiVelocity));
+                }
+                break;
+            }
+        case MappedEvent::MidiPitchBend:
+            {
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_PITCH_BEND | midiChannel,
+                        event.getData2(),
+                        event.getData1()));
+                break;
+            }
+
+        case MappedEvent::MidiSystemMessage:
+            {
+                std::string data =
+                    DataBlockRepository::getInstance()->
+                    getDataBlockForEvent(&event);
+
+                // check for closing EOX and add one if none found
+                //
+                if (MidiByte(data[data.length() - 1]) != MIDI_END_OF_EXCLUSIVE) {
+                    data += (char)MIDI_END_OF_EXCLUSIVE;
+                }
+
+                // construct plain SYSEX event
+                //
+                trackData.
+                    insertMidiEvent
+                    (new MidiEvent(midiEventAbsoluteTime,
+                                   MIDI_SYSTEM_EXCLUSIVE,
+                                   data));
+
+                break;
+            }
+
+        case MappedEvent::MidiChannelPressure:
+            {
+                trackData.
+                    insertMidiEvent
+                    (new MidiEvent(midiEventAbsoluteTime,
+                                   MIDI_CHNL_AFTERTOUCH | midiChannel,
+                                   event.getData1()));
+
+                break;
+            }
+        case MappedEvent::MidiKeyPressure:
+            {
+                trackData.
+                    insertMidiEvent
+                    (new MidiEvent(midiEventAbsoluteTime,
+                                   MIDI_POLY_AFTERTOUCH | midiChannel,
+                                   event.getData1(), event.getData2()));
+
+                break;
+            }
+
+        case MappedEvent::MidiRPN:
+            {
+                // ??? How do we implement this?  As a series of
+                //     trackData.insertMidiEvent() calls for each piece?
+
+                break;
+            }
+
+        case MappedEvent::MidiNRPN:
+            {
+                // ??? How do we implement this?  As a series of
+                //     trackData.insertMidiEvent() calls for each piece?
+
+                break;
+            }
+
+        case MappedEvent::Marker:
+            {
+                std::string metaMessage =
+                    DataBlockRepository::getInstance()->
+                    getDataBlockForEvent(&event);
+
+                trackData.
+                    insertMidiEvent
+                    (new MidiEvent(midiEventAbsoluteTime,
+                                   MIDI_FILE_META_EVENT,
+                                   MIDI_TEXT_MARKER,
+                                   metaMessage));
+
+                break;
+            }
+
+        case MappedEvent::Text:
+            {
+                MidiByte midiTextType = event.getData1();
+
+                std::string metaMessage =
+                    DataBlockRepository::getInstance()->
+                    getDataBlockForEvent(&event);
+
+                trackData.
+                    insertMidiEvent
+                    (new MidiEvent(midiEventAbsoluteTime,
+                                   MIDI_FILE_META_EVENT,
+                                   midiTextType,
+                                   metaMessage));
+                break;
+            }
+
+        case MappedEvent::KeySignature:
+            {
+                std::string metaMessage;
+                metaMessage += MidiByte(event.getData1());
+                metaMessage += MidiByte(event.getData2());
+
+                trackData.insertMidiEvent(
+                    new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_FILE_META_EVENT,
+                                  MIDI_KEY_SIGNATURE,
+                                  metaMessage));
+                break;
+            }
+
+        // Pacify compiler warnings about missed cases.
+        case MappedEvent::InvalidMappedEvent:
+        case MappedEvent::Audio:
+        case MappedEvent::AudioCancel:
+        case MappedEvent::AudioLevel:
+        case MappedEvent::AudioStopped:
+        case MappedEvent::AudioGeneratePreview:
+        case MappedEvent::SystemUpdateInstruments:
+        case MappedEvent::SystemJackTransport:
+        case MappedEvent::SystemMMCTransport:
+        case MappedEvent::SystemMIDIClock:
+        case MappedEvent::SystemMetronomeDevice:
+        case MappedEvent::SystemAudioPortCounts:
+        case MappedEvent::SystemAudioPorts:
+        case MappedEvent::SystemFailure:
+        case MappedEvent::Panic:
+        case MappedEvent::SystemMTCTransport:
+        case MappedEvent::SystemMIDISyncAuto:
+        case MappedEvent::SystemAudioFileFormat:
+        default:
+            break;
+        }
 
     } catch (const Event::NoData &d) {
 #ifdef MIDI_DEBUG

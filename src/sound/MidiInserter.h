@@ -46,7 +46,11 @@ public:
 
     MidiInserter(Composition &comp, int timingDivision, RealTime trueEnd);
 
-    void insertCopy(const MappedEvent &evt) override;
+    // Insert a (MidiEvent) copy of event.
+    /**
+     * @author Tom Breton (Tehom)
+     */
+    void insertCopy(const MappedEvent &event) override;
 
     void assignToMidiFile(MidiFile &midifile);
 
@@ -86,19 +90,30 @@ private:
      */
     timeT getAbsoluteTime(RealTime realtime) const;
 
-    // Initialize a normal track, ie not a conductor track.
+    /// Initialize a normal track (not a conductor track)
+    /**
+     * @author Tom Breton (Tehom)
+     */
     void initNormalTrack(TrackData &trackData, TrackId RGTrackPos) const;
 
-    // Get the relevant MIDI track data for a rosegarden track
-    // position, including the track itself.
-    TrackData &getTrackData(TrackId RGTrackPos, int channelNb);
+    /// Get the track data for an RG track ID.
+    /**
+     * @author Tom Breton (Tehom)
+     */
+    TrackData &getTrackData(TrackId trackID, int channelNb);
 
-    // Get ready to receive events.  Assumes nothing is written to
-    // tracks yet.
+    /// Get ready to receive events.
+    /**
+     * Assumes nothing is written to tracks yet.
+     *
+     * @author Tom Breton (Tehom)
+     */
     void setup();
 
-    // Done receiving events.  Tracks will be complete when this
-    // returns.
+    /// Done receiving events.  Tracks will be complete when this returns.
+    /**
+     * @author Tom Breton (Tehom)
+     */
     void finish();
 
     Composition &m_comp;
